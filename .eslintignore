@@ -1,0 +1,7 @@
+components.d.ts
+commitlint.config.js
+coverage
+generated
+loader
+node_modules
+validate-branch-name.config.js

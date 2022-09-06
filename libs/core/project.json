@@ -18,7 +18,7 @@
         "projectType": "library",
         "tsConfig": "libs/core/tsconfig.lib.json",
         "configPath": "libs/core/stencil.config.ts",
-        "outputPath": "generated/dist/libs/core"
+        "outputPath": "generated/dist/core"
       }
     },
     "build": {
@@ -30,7 +30,7 @@
         "projectType": "library",
         "tsConfig": "libs/core/tsconfig.lib.json",
         "configPath": "libs/core/stencil.config.ts",
-        "outputPath": "generated/dist/libs/core"
+        "outputPath": "generated/dist/core"
       },
       "configurations": {
         "production": {
@@ -48,7 +48,7 @@
         "projectType": "library",
         "tsConfig": "libs/core/tsconfig.lib.json",
         "configPath": "libs/core/stencil.config.ts",
-        "outputPath": "generated/dist/libs/core"
+        "outputPath": "generated/dist/core"
       }
     },
     "e2e": {
@@ -60,7 +60,7 @@
         "projectType": "library",
         "tsConfig": "libs/core/tsconfig.lib.json",
         "configPath": "libs/core/stencil.config.ts",
-        "outputPath": "generated/dist/libs/core"
+        "outputPath": "generated/dist/core"
       }
     },
     "lint": {
@@ -69,7 +69,9 @@
         "{options.outputFile}"
       ],
       "options": {
-        "lintFilePatterns": "libs/core/**/*.{ts,tsx}"
+        "lintFilePatterns": [
+          "libs/core/**/*.{ts,tsx}"
+        ]
       }
     }
   }

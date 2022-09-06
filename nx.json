@@ -9,7 +9,12 @@
     "default": {
       "runner": "@nrwl/nx-cloud",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"],
+        "cacheableOperations": [
+          "build",
+          "lint",
+          "test",
+          "e2e"
+        ],
         "accessToken": "ODFmZTk4Y2EtYmY1MC00NWY0LThjM2MtOWIyMzA0MGMwYzI0fHJlYWQtd3JpdGU="
       }
     }
@@ -20,5 +25,12 @@
   },
   "cli": {
     "defaultCollection": "@nxext/stencil"
+  },
+  "generators": {
+    "@nrwl/react": {
+      "application": {
+        "babel": true
+      }
+    }
   }
 }
