@@ -10,7 +10,9 @@
     "module": "esnext",
     "moduleResolution": "node",
     "paths": {
-      "@sage/core": ["libs/core/src/index.ts"]
+      "@sage/core": ["generated/dist/libs/core"],
+      "@sage/core/*": ["generated/dist/libs/core/dist/components/*"],
+      "@sage/core/loader": ["generated/dist/libs/core/loader"]
     },
     "rootDir": ".",
     "skipDefaultLibCheck": true,

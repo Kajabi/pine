@@ -1,0 +1,12 @@
+.github
+.gitignore
+.husky
+.npmignore
+.prettierrc
+libs
+node_modules
+scripts
+stencil.config.js
+tmp
+tsconfig.stencil.ts
+tsconfig.base.ts
