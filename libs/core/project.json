@@ -73,6 +73,19 @@
           "libs/core/**/*.{ts,tsx}"
         ]
       }
+    },
+    "stylelint": {
+      "executor": "nx-stylelint:lint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "libs/core/**/*.css",
+          "libs/core/**/*.scss"
+        ],
+        "formatter": "json"
+      }
     }
   }
 }

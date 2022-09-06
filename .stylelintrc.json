@@ -1,0 +1,29 @@
+{
+  "extends": [
+    "stylelint-config-recommended",
+    "stylelint-config-prettier"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "**/*.css"
+      ],
+      "extends": [
+        "stylelint-config-recommended",
+        "stylelint-config-prettier"
+      ],
+      "rules": {}
+    },
+    {
+      "files": [
+        "**/*.scss"
+      ],
+      "extends": [
+        "stylelint-config-sass-guidelines",
+        "stylelint-config-prettier"
+      ],
+      "rules": {}
+    }
+  ],
+  "rules": {}
+}
