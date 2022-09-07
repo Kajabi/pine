@@ -11,26 +11,22 @@
   "targets": {
     "test": {
       "executor": "@nxext/stencil:test",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "projectType": "library",
         "tsConfig": "libs/core/tsconfig.lib.json",
         "configPath": "libs/core/stencil.config.ts",
-        "outputPath": "generated/dist/core"
+        "outputPath": "_generated/core"
       }
     },
     "build": {
       "executor": "@nxext/stencil:build",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "projectType": "library",
         "tsConfig": "libs/core/tsconfig.lib.json",
         "configPath": "libs/core/stencil.config.ts",
-        "outputPath": "generated/dist/core"
+        "outputPath": "_generated/core"
       },
       "configurations": {
         "production": {
@@ -41,33 +37,27 @@
     },
     "serve": {
       "executor": "@nxext/stencil:serve",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "projectType": "library",
         "tsConfig": "libs/core/tsconfig.lib.json",
         "configPath": "libs/core/stencil.config.ts",
-        "outputPath": "generated/dist/core"
+        "outputPath": "_generated/core"
       }
     },
     "e2e": {
       "executor": "@nxext/stencil:e2e",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "projectType": "library",
         "tsConfig": "libs/core/tsconfig.lib.json",
         "configPath": "libs/core/stencil.config.ts",
-        "outputPath": "generated/dist/core"
+        "outputPath": "_generated/core"
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
           "libs/core/**/*.{ts,tsx}"
@@ -76,9 +66,7 @@
     },
     "stylelint": {
       "executor": "nx-stylelint:lint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
           "libs/core/**/*.css",

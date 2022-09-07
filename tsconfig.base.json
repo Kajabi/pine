@@ -10,10 +10,10 @@
     "module": "esnext",
     "moduleResolution": "node",
     "paths": {
-      "@sage/core": ["generated/dist/core"],
+      "@sage/core": ["_generated/core/"],
       "@sage/core-react": ["libs/core-react/src/index.ts"],
-      "@sage/core/*": ["generated/dist/core/components/*"],
-      "@sage/core/loader": ["generated/dist/core/loader"]
+      "@sage/core/*": ["_generated/core/dist/components/*"],
+      "@sage/core/loader": ["_generated/core/loader"]
     },
     "rootDir": ".",
     "skipDefaultLibCheck": true,
@@ -21,5 +21,5 @@
     "sourceMap": true,
     "target": "es2015"
   },
-  "exclude": ["node_modules", "tmp", "generated"]
+  "exclude": ["node_modules", "tmp", "_generated/"]
 }

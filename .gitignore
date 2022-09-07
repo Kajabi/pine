@@ -6,7 +6,7 @@ dist_docs/
 tmp/
 loader/
 out-tsc/
-generated/
+_generated/
 
 # dependencies
 node_modules

@@ -1,1 +1,1 @@
-export * from '../../../generated/dist/core-react/proxies';
+export * from '../../../_generated/core-react/components';

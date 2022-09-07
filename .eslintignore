@@ -1,7 +1,7 @@
 components.d.ts
 commitlint.config.js
 coverage
-generated
+_generated/
 loader
 node_modules
 validate-branch-name.config.js
