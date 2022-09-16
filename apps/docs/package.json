@@ -1,0 +1,9 @@
+{
+  "name": "docs",
+  "description": "Sage doc site",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "eleventy --input=../../libs/core/src --output=../../_generated/doc-site",
+    "serve": "live-server --port=8080 ../../_generated/doc-site --no-browser --no-css-inject --quiet"
+  }
+}

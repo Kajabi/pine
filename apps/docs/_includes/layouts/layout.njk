@@ -1,0 +1,19 @@
+---
+title: Home
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ env.base }}/{{ buildstamp }}docs.css" />
+    <script type="module" src="{{ env.base }}/{{ buildstamp }}dist/build/sage-core.esm.js"></script>
+    <script nomodule src="{{ env.base }}/{{ buildstamp }}dist/build/sage-core.js"></script>
+  </head>
+  <docs-layout id="docs-layout">
+    <docs-nav> </docs-nav>
+    <docs-main>
+      {{ content | safe }}
+    </docs-main>
+  </docs-layout>
+</html>

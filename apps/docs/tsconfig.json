@@ -1,0 +1,8 @@
+{
+  "extends": "../../tsconfig.stencil.json",
+  "references": [
+    {
+      "path": "./tsconfig.docs.json"
+    }
+  ]
+}

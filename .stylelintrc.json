@@ -6,7 +6,9 @@
   "overrides": [
     {
       "files": [
-        "**/*.css"
+        "**/*.css",
+        "**/*.scss",
+        "**/*.{ts,tsx}"
       ],
       "extends": [
         "stylelint-config-recommended",
