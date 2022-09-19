@@ -72,7 +72,7 @@
           "libs/core/**/*.css",
           "libs/core/**/*.scss"
         ],
-        "formatter": "json"
+        "formatter": "string"
       }
     }
   }

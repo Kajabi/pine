@@ -37,7 +37,7 @@
           "apps/docs/**/*css",
           "apps/docs/**/*scss"
         ],
-        "formatter": "json"
+        "formatter": "string"
       }
     }
   }
