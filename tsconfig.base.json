@@ -21,5 +21,10 @@
     "sourceMap": true,
     "target": "es2015"
   },
-  "exclude": ["node_modules", "tmp", "_generated/"]
+  "exclude": ["node_modules", "tmp", "_generated/"],
+  "references": [
+    {
+      "path": "./.storybook/tsconfig.json"
+    }
+  ]
 }
