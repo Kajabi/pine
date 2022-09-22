@@ -1,0 +1,46 @@
+name: Lint-Test-Build
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  lint_test_build:
+    name: Lint, Test, Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Show refs
+        run: git show-ref
+
+      - name: Set Node Version
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install Yarn
+        run: npm install -g yarn
+
+      - name: Yarn Install without Upgrades
+        run: yarn install --frozen-lockfile
+
+      - name: Lint Workspace
+        run: yarn nx workspace-lint
+
+      - name: Check for unformatted files
+        run: yarn nx format:check
+
+      - name: Lint Styles
+        run: yarn nx affected --target=stylelint --parallel=3
+
+      - name: Lint
+        run: yarn nx affected --target=lint --parallel=3
+
+      - name: Test
+        run: yarn nx affected --target=test --parallel=3 --ci --code-coverage
+
+      - name: Build
+        run: yarn nx affected --target=build --parallel=3
