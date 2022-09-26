@@ -20,6 +20,16 @@ export namespace Components {
          */
         "middle": string;
     }
+    interface SageLink {
+        /**
+          * The URL that the hyperlink points to.
+         */
+        "href": string;
+        /**
+          * The text content that is rendered.
+         */
+        "text": string;
+    }
 }
 declare global {
     interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
@@ -28,8 +38,15 @@ declare global {
         prototype: HTMLMyComponentElement;
         new (): HTMLMyComponentElement;
     };
+    interface HTMLSageLinkElement extends Components.SageLink, HTMLStencilElement {
+    }
+    var HTMLSageLinkElement: {
+        prototype: HTMLSageLinkElement;
+        new (): HTMLSageLinkElement;
+    };
     interface HTMLElementTagNameMap {
         "my-component": HTMLMyComponentElement;
+        "sage-link": HTMLSageLinkElement;
     }
 }
 declare namespace LocalJSX {
@@ -47,8 +64,19 @@ declare namespace LocalJSX {
          */
         "middle"?: string;
     }
+    interface SageLink {
+        /**
+          * The URL that the hyperlink points to.
+         */
+        "href": string;
+        /**
+          * The text content that is rendered.
+         */
+        "text": string;
+    }
     interface IntrinsicElements {
         "my-component": MyComponent;
+        "sage-link": SageLink;
     }
 }
 export { LocalJSX as JSX };
@@ -56,6 +84,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            "sage-link": LocalJSX.SageLink & JSXBase.HTMLAttributes<HTMLSageLinkElement>;
         }
     }
 }
