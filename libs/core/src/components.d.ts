@@ -22,6 +22,11 @@ export namespace Components {
     }
     interface SageLink {
         /**
+          * When enabled, opens link in a new tab.
+          * @defaultValue false
+         */
+        "external": boolean;
+        /**
           * The URL that the hyperlink points to.
          */
         "href": string;
@@ -65,6 +70,11 @@ declare namespace LocalJSX {
         "middle"?: string;
     }
     interface SageLink {
+        /**
+          * When enabled, opens link in a new tab.
+          * @defaultValue false
+         */
+        "external"?: boolean;
         /**
           * The URL that the hyperlink points to.
          */
