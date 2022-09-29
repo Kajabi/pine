@@ -29,7 +29,7 @@ export const config: Config = {
     reactOutputTarget({
       componentCorePackage: '@sage/core',
       includeDefineCustomElements: true,
-      proxiesFile: '../../../_generated/core-react/components.ts',
+      proxiesFile: '../../_generated/core-react/components.ts',
     }),
   ],
   devServer: {
