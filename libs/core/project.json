@@ -60,7 +60,7 @@
         "projectType": "library",
         "tsConfig": "libs/core/tsconfig.lib.json",
         "configPath": "libs/core/stencil.config.ts",
-        "outputPath": "_generated/core"
+        "outputPath": "../.." /* This is needed to trick the dev server to look for path _generated/core/dist */
       }
     },
     "lint": {

@@ -32,6 +32,10 @@ export const config: Config = {
       proxiesFile: '../../../_generated/core-react/components.ts',
     }),
   ],
+  devServer: {
+    port: 4600,
+    root: '../../_generated/core',
+  },
   testing: {
     allowableMismatchedPixels: 200,
   },
