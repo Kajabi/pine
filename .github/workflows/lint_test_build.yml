@@ -30,9 +30,6 @@ jobs:
       - name: Lint Workspace
         run: yarn nx workspace-lint
 
-      - name: Check for unformatted files
-        run: yarn nx format:check
-
       - name: Lint Styles
         run: yarn nx affected --target=stylelint --parallel=3
 
