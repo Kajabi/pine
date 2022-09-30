@@ -3,7 +3,7 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "npmScope": "sage",
   "affected": {
-    "defaultBase": "main"
+    "defaultBase": "origin/main"
   },
   "tasksRunnerOptions": {
     "default": {

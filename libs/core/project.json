@@ -11,7 +11,9 @@
   "targets": {
     "test": {
       "executor": "@nxext/stencil:test",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "projectType": "library",
         "tsConfig": "libs/core/tsconfig.lib.json",
@@ -21,7 +23,9 @@
     },
     "build": {
       "executor": "@nxext/stencil:build",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "projectType": "library",
         "tsConfig": "libs/core/tsconfig.lib.json",
@@ -37,7 +41,9 @@
     },
     "serve": {
       "executor": "@nxext/stencil:serve",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "projectType": "library",
         "tsConfig": "libs/core/tsconfig.lib.json",
@@ -47,33 +53,47 @@
     },
     "e2e": {
       "executor": "@nxext/stencil:e2e",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "projectType": "library",
         "tsConfig": "libs/core/tsconfig.lib.json",
         "configPath": "libs/core/stencil.config.ts",
-        "outputPath": "_generated/core"
+        "outputPath": "../.." /* This is needed to trick the dev server to look for path _generated/core/dist */
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["libs/core/**/*.{ts,tsx}"]
+        "lintFilePatterns": [
+          "libs/core/**/*.{ts,tsx}"
+        ]
       }
     },
     "stylelint": {
       "executor": "nx-stylelint:lint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["libs/core/**/*.css", "libs/core/**/*.scss"],
+        "lintFilePatterns": [
+          "libs/core/**/*.css",
+          "libs/core/**/*.scss"
+        ],
         "formatter": "string"
       }
     },
     "storybook": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": ["nx run core:serve", "nx run core:serve-storybook"],
+        "commands": [
+          "nx run core:serve",
+          "nx run core:serve-storybook"
+        ],
         "parallel": true
       }
     },
@@ -94,7 +114,9 @@
     },
     "build-storybook": {
       "executor": "@nrwl/storybook:build",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "uiFramework": "@storybook/html",
         "outputPath": "dist/storybook/core",

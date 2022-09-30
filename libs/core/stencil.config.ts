@@ -29,9 +29,13 @@ export const config: Config = {
     reactOutputTarget({
       componentCorePackage: '@sage/core',
       includeDefineCustomElements: true,
-      proxiesFile: '../../../_generated/core-react/components.ts',
+      proxiesFile: '../../_generated/core-react/components.ts',
     }),
   ],
+  devServer: {
+    port: 4600,
+    root: '../../_generated/core',
+  },
   testing: {
     allowableMismatchedPixels: 200,
   },

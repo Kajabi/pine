@@ -37,6 +37,7 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+**/package.e2e.json
 
 # System Files
 .DS_Store
