@@ -30,6 +30,10 @@ export namespace Components {
           * The URL that the hyperlink points to.
          */
         "href": string;
+        /**
+          * The size of the link.
+         */
+        "size": 'sm' | 'md' | 'lg';
     }
 }
 declare global {
@@ -75,6 +79,10 @@ declare namespace LocalJSX {
           * The URL that the hyperlink points to.
          */
         "href": string;
+        /**
+          * The size of the link.
+         */
+        "size"?: 'sm' | 'md' | 'lg';
     }
     interface IntrinsicElements {
         "my-component": MyComponent;

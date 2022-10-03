@@ -9,3 +9,18 @@
     margin-left: 4px;
   }
 }
+
+// We have a small consensus stating that
+// fonts will be REMs, box-model will be
+// discussed later px or (r)em's
+.sage-link--sm {
+  font-size: 12px;
+}
+
+.sage-link--md {
+  font-size: 14px;
+}
+
+.sage-link--lg {
+  font-size: 16px;
+}
