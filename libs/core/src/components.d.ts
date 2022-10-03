@@ -30,10 +30,6 @@ export namespace Components {
           * The URL that the hyperlink points to.
          */
         "href": string;
-        /**
-          * The text content that is rendered.
-         */
-        "text": string;
     }
 }
 declare global {
@@ -79,10 +75,6 @@ declare namespace LocalJSX {
           * The URL that the hyperlink points to.
          */
         "href": string;
-        /**
-          * The text content that is rendered.
-         */
-        "text": string;
     }
     interface IntrinsicElements {
         "my-component": MyComponent;

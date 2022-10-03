@@ -11,6 +11,7 @@ describe('sage-link', () => {
       <sage-link>
         <mock:shadow-root>
           <a>
+            <slot name="text"></slot>
           </a>
         </mock:shadow-root>
       </sage-link>
@@ -20,13 +21,15 @@ describe('sage-link', () => {
   it('renders with values', async () => {
     const { root } = await newSpecPage({
       components: [SageLink],
-      html: `<sage-link href="#" text="'Don't call me a framework' JS"></sage-link>`,
+      html: `<sage-link href="#"></sage-link>`,
     });
     expect(root).toEqualHtml(`
-      <sage-link href="#" text="'Don't call me a framework' JS">
+      <sage-link href="#">
         <mock:shadow-root>
           <a href="#">
-            'Don't call me a framework' JS
+            <slot name="text">
+              #
+            </slot>
           </a>
         </mock:shadow-root>
       </sage-link>
@@ -36,7 +39,7 @@ describe('sage-link', () => {
   it('renders the svg when external is true', async () => {
     const { root } = await newSpecPage({
       components: [SageLink],
-      html: `<sage-link href="#" text="'Don't call me a framework' JS" external="true"></sage-link>`,
+      html: `<sage-link href="#" external="true"></sage-link>`,
     });
 
     const svg = root.shadowRoot.querySelector('svg');
