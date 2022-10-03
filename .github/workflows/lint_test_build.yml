@@ -37,7 +37,7 @@ jobs:
         run: yarn nx affected --target=lint --parallel=3
 
       - name: Test
-        run: yarn nx affected --target=test --parallel=3 --ci --code-coverage
+        run: yarn nx affected --target=test --parallel=3 --ci --coverage
 
       - name: Build
         run: yarn nx affected --target=build --parallel=3

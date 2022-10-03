@@ -38,5 +38,6 @@ export const config: Config = {
   },
   testing: {
     allowableMismatchedPixels: 200,
+    coverageDirectory: '../../_generated/coverage/libs/core',
   },
 };
