@@ -16,6 +16,12 @@ export class SageLink {
    */
   @Prop() href!: string;
 
+  /**
+   *
+   * The size of the link.
+   */
+  @Prop() size: 'sm' | 'md' | 'lg' = 'lg';
+
   render() {
     const externalIcon = (
       <svg role="presentation" width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -29,7 +35,7 @@ export class SageLink {
     );
 
     return (
-      <a href={this.href} target={this.external ? '_blank' : undefined}>
+      <a href={this.href} class={`sage-link--${this.size}`} target={this.external ? '_blank' : undefined}>
         <slot name="text">{this.href}</slot>
         {this.external == true && externalIcon}
       </a>
