@@ -1,5 +1,4 @@
 import { Component, h, Prop } from '@stencil/core';
-
 @Component({
   tag: 'sage-link',
   styleUrl: 'sage-link.scss',
@@ -17,11 +16,6 @@ export class SageLink {
    */
   @Prop() href!: string;
 
-  /**
-   * The text content that is rendered.
-   */
-  @Prop() text!: string;
-
   render() {
     const externalIcon = (
       <svg role="presentation" width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -33,10 +27,10 @@ export class SageLink {
         />
       </svg>
     );
-    console.log(this.external);
+
     return (
       <a href={this.href} target={this.external ? '_blank' : undefined}>
-        {this.text}
+        <slot name="text">{this.href}</slot>
         {this.external == true && externalIcon}
       </a>
     );
