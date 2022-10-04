@@ -5,7 +5,7 @@ export default {
   title: 'webcomponents/Link',
   component: SageLink,
   argTypes: {
-    size: {
+    fontSize: {
       description: 'Size variant',
       control: 'select',
       options: ['sm', 'md', 'lg'],
@@ -20,27 +20,21 @@ Plain.args = {
   href: 'https://www.google.com',
 };
 
-export const ExtenalLink = Template.bind({});
-ExtenalLink.args = {
+export const External = Template.bind({});
+External.args = {
   ...Plain.args,
   external: true,
 };
 
 const TemplateWithSlot = args => <sage-link {...args}>{args.slot}</sage-link>;
 
-export const LinkWithSlot = TemplateWithSlot.bind({});
-LinkWithSlot.args = {
+export const WithCustomText = TemplateWithSlot.bind({});
+WithCustomText.args = {
   ...Plain.args,
   slot: 'Overrides default use of href',
 };
 
-export const LinkWithNoSlot = TemplateWithSlot.bind({});
-LinkWithNoSlot.args = {
+export const WithNoSlot = TemplateWithSlot.bind({});
+WithNoSlot.args = {
   ...Plain.args,
-};
-
-export const LinkSize = Template.bind({});
-LinkSize.args = {
-  ...Plain.args,
-  size: 'sm',
 };

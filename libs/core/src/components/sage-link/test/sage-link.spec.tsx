@@ -1,5 +1,5 @@
 import { newSpecPage } from '@stencil/core/testing';
-import { SageLink } from './sage-link';
+import { SageLink } from '../sage-link';
 
 describe('sage-link', () => {
   it('renders', async () => {
@@ -56,7 +56,7 @@ describe('sage-link', () => {
   it('renders class name when size is assigned', async () => {
     const { root } = await newSpecPage({
       components: [SageLink],
-      html: `<sage-link href="#" size="md" external="true" />`,
+      html: `<sage-link href="#" font-size="md" external="true" />`,
     });
 
     const linkTag = root.shadowRoot.querySelector('a.sage-link--md');
