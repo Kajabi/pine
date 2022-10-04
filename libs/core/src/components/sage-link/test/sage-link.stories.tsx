@@ -11,30 +11,32 @@ export default {
       options: ['sm', 'md', 'lg'],
     },
   },
+  args: {
+    href: '#some-anchor',
+  },
 };
 
 const Template = args => <sage-link {...args}></sage-link>;
-
-export const Plain = Template.bind({});
-Plain.args = {
-  href: 'https://www.google.com',
-};
+const TemplateWithSlot = args => <sage-link {...args}>{args.slot}</sage-link>;
 
 export const External = Template.bind({});
 External.args = {
-  ...Plain.args,
   external: true,
 };
 
-const TemplateWithSlot = args => <sage-link {...args}>{args.slot}</sage-link>;
+export const Inline = Template.bind({});
+Inline.args = {
+  href: 'https://www.google.com',
+};
+
+export const Plain = Template.bind({});
+Plain.args = {
+  variant: 'plain',
+};
 
 export const WithCustomText = TemplateWithSlot.bind({});
 WithCustomText.args = {
-  ...Plain.args,
   slot: 'Overrides default use of href',
 };
 
 export const WithNoSlot = TemplateWithSlot.bind({});
-WithNoSlot.args = {
-  ...Plain.args,
-};
