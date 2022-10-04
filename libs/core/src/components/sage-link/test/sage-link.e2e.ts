@@ -27,11 +27,11 @@ describe('sage-link', () => {
   it('renders the slot when used', async () => {
     const page = await newE2EPage();
 
-    await page.setContent('<sage-link href="#some-bookmark-link"><p slot="text">This is slot content</p></sage-link>');
+    await page.setContent('<sage-link href="#some-bookmark-link">This is slot content</sage-link>');
     const component = await page.find('sage-link');
     expect(component).toHaveClass('hydrated');
 
-    const element = await page.find('sage-link p[slot="text"]');
+    const element = await page.find('sage-link p[slot]');
     expect(element.textContent).toEqual(`This is slot content`);
   });
 });

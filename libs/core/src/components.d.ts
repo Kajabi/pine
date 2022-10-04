@@ -27,13 +27,14 @@ export namespace Components {
          */
         "external": boolean;
         /**
+          * The Font size follows t-shirt model sm: 12px md: 14px lg: 16px
+          * @defaultValue lg
+         */
+        "fontSize": 'sm' | 'md' | 'lg';
+        /**
           * The URL that the hyperlink points to.
          */
         "href": string;
-        /**
-          * The size of the link.
-         */
-        "size": 'sm' | 'md' | 'lg';
     }
 }
 declare global {
@@ -76,13 +77,14 @@ declare namespace LocalJSX {
          */
         "external"?: boolean;
         /**
+          * The Font size follows t-shirt model sm: 12px md: 14px lg: 16px
+          * @defaultValue lg
+         */
+        "fontSize"?: 'sm' | 'md' | 'lg';
+        /**
           * The URL that the hyperlink points to.
          */
         "href": string;
-        /**
-          * The size of the link.
-         */
-        "size"?: 'sm' | 'md' | 'lg';
     }
     interface IntrinsicElements {
         "my-component": MyComponent;

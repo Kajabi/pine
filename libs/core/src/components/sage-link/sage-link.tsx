@@ -1,4 +1,8 @@
 import { Component, h, Prop } from '@stencil/core';
+
+/**
+ * @slot - Content is placed between the opening closing tags
+ */
 @Component({
   tag: 'sage-link',
   styleUrl: 'sage-link.scss',
@@ -12,15 +16,19 @@ export class SageLink {
   @Prop() external = false;
 
   /**
+   *
+   * The Font size follows t-shirt model
+   * sm: 12px
+   * md: 14px
+   * lg: 16px
+   * @defaultValue lg
+   */
+  @Prop() fontSize: 'sm' | 'md' | 'lg' = 'lg';
+
+  /**
    * The URL that the hyperlink points to.
    */
   @Prop() href!: string;
-
-  /**
-   *
-   * The size of the link.
-   */
-  @Prop() size: 'sm' | 'md' | 'lg' = 'lg';
 
   render() {
     const externalIcon = (
@@ -35,7 +43,7 @@ export class SageLink {
     );
 
     return (
-      <a href={this.href} class={`sage-link--${this.size}`} target={this.external ? '_blank' : undefined}>
+      <a href={this.href} class={`sage-link--${this.fontSize}`} target={this.external ? '_blank' : undefined}>
         <slot>{this.href}</slot>
         {this.external == true && externalIcon}
       </a>
