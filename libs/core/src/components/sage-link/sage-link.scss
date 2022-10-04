@@ -3,6 +3,13 @@
 
   a {
     color: #202327;
+    font-weight: inherit;
+
+    &:focus {
+      border-radius: 6px;
+      outline: 4px solid #8ecafb;
+      outline-offset: 4px;
+    }
   }
 
   svg {
@@ -23,4 +30,22 @@
 
 .sage-link--lg {
   font-size: 16px;
+}
+
+.sage-link--plain {
+  font-weight: 500;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// inline
+.sage-link--default {
+  text-decoration: underline;
+
+  &:hover {
+    text-decoration: none;
+  }
 }
