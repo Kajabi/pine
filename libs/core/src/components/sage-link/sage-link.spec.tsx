@@ -11,7 +11,7 @@ describe('sage-link', () => {
       <sage-link>
         <mock:shadow-root>
           <a class="sage-link--lg">
-            <slot name="text"></slot>
+            <slot></slot>
           </a>
         </mock:shadow-root>
       </sage-link>
@@ -27,7 +27,7 @@ describe('sage-link', () => {
       <sage-link href="#">
         <mock:shadow-root>
           <a class="sage-link--lg" href="#">
-            <slot name="text">
+            <slot>
               #
             </slot>
           </a>

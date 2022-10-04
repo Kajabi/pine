@@ -26,11 +26,7 @@ ExtenalLink.args = {
   external: true,
 };
 
-const TemplateWithSlot = args => (
-  <sage-link {...args}>
-    <p slot="text">{args.slot}</p>
-  </sage-link>
-);
+const TemplateWithSlot = args => <sage-link {...args}>{args.slot}</sage-link>;
 
 export const LinkWithSlot = TemplateWithSlot.bind({});
 LinkWithSlot.args = {
