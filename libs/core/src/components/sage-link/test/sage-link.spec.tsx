@@ -10,7 +10,7 @@ describe('sage-link', () => {
     expect(root).toEqualHtml(`
       <sage-link>
         <mock:shadow-root>
-          <a class="sage-link--lg">
+          <a class="sage-link--inline sage-link--lg">
             <slot></slot>
           </a>
         </mock:shadow-root>
@@ -26,7 +26,7 @@ describe('sage-link', () => {
     expect(root).toEqualHtml(`
       <sage-link href="#">
         <mock:shadow-root>
-          <a class="sage-link--lg" href="#">
+          <a class="sage-link--inline sage-link--lg" href="#">
             <slot>
               #
             </slot>
@@ -60,6 +60,16 @@ describe('sage-link', () => {
     });
 
     const linkTag = root.shadowRoot.querySelector('a.sage-link--md');
+    expect(linkTag).not.toBeNull();
+  });
+
+  it('renders "variant" class name when variant property is assigned', async () => {
+    const { root } = await newSpecPage({
+      components: [SageLink],
+      html: `<sage-link href="#" variant="plain" />`,
+    });
+
+    const linkTag = root.shadowRoot.querySelector('a.sage-link--plain');
     expect(linkTag).not.toBeNull();
   });
 });
