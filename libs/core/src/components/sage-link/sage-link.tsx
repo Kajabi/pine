@@ -36,7 +36,7 @@ export class SageLink {
 
     return (
       <a href={this.href} class={`sage-link--${this.size}`} target={this.external ? '_blank' : undefined}>
-        <slot name="text">{this.href}</slot>
+        <slot>{this.href}</slot>
         {this.external == true && externalIcon}
       </a>
     );
