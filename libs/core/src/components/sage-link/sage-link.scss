@@ -1,20 +1,22 @@
 :host {
-  display: block;
-
-  a {
-    color: #202327;
-    font-weight: inherit;
-
-    &:focus {
-      border-radius: 6px;
-      outline: 4px solid #8ecafb;
-      outline-offset: 4px;
-    }
-  }
+  display: inline;
 
   svg {
     margin-left: 4px;
   }
+}
+
+:host(:focus) {
+  border-radius: 6px;
+  outline: 4px solid #8ecafb;
+  outline-offset: 4px;
+}
+
+a {
+  align-items: center;
+  color: #202327;
+  display: inline-flex;
+  font-weight: inherit;
 }
 
 // We have a small consensus stating that
@@ -22,14 +24,29 @@
 // discussed later px or (r)em's
 .sage-link--sm {
   font-size: 12px;
+
+  svg {
+    height: 11px;
+    width: 11px;
+  }
 }
 
 .sage-link--md {
   font-size: 14px;
+
+  svg {
+    height: 13px;
+    width: 13px;
+  }
 }
 
 .sage-link--lg {
   font-size: 16px;
+
+  svg {
+    height: 15px;
+    width: 15px;
+  }
 }
 
 .sage-link--plain {
@@ -41,7 +58,7 @@
   }
 }
 
-// inline
+// Default = inline link
 .sage-link--default {
   text-decoration: underline;
 
