@@ -88,7 +88,7 @@
     "*.{js,ts,tsx}": [
       "nx affected --target lint --uncommitted"
     ],
-    "*.css": "nx affected --target sylelint"
+    "*.{csss,scss}": "nx affected --target sylelint"
   },
   "workspaces": [
     "apps/**",
