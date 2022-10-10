@@ -10,7 +10,7 @@ describe('sage-link', () => {
     expect(root).toEqualHtml(`
       <sage-link>
         <mock:shadow-root>
-          <a class="sage-link--inline sage-link--lg">
+          <a class="sage-link sage-link--inline sage-link--lg">
             <slot></slot>
           </a>
         </mock:shadow-root>
@@ -26,7 +26,7 @@ describe('sage-link', () => {
     expect(root).toEqualHtml(`
       <sage-link href="#">
         <mock:shadow-root>
-          <a class="sage-link--inline sage-link--lg" href="#">
+          <a class="sage-link sage-link--inline sage-link--lg" href="#">
             <slot>
               #
             </slot>
