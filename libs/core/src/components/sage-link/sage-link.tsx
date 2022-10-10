@@ -49,7 +49,7 @@ export class SageLink {
     );
 
     return (
-      <a href={this.href} class={`sage-link--${this.variant} sage-link--${this.fontSize} `} target={this.external ? '_blank' : undefined}>
+      <a href={this.href} class={`sage-link sage-link--${this.variant} sage-link--${this.fontSize} `} target={this.external ? '_blank' : undefined}>
         <slot>{this.href}</slot>
         {this.external == true && externalIcon}
       </a>
