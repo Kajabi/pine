@@ -7,8 +7,11 @@
   ],
   "scripts": {
     "bootstrap": "lerna bootstrap",
+    "build.all": "nx run-many --target=build",
     "prepare": "husky install",
-    "setup": "yarn install && yarn bootstrap"
+    "setup": "yarn install && yarn bootstrap",
+    "start": "nx run core:start",
+    "test.all": "nx run-many --target=test"
   },
   "devDependencies": {
     "@nrwl/nx-cloud": "^14.7.0",

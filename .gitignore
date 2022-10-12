@@ -1,1 +1,43 @@
 node_modules/
+
+
+# Stencil Generated
+.stencil/
+dist/
+docs.json
+loader/
+www/
+
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+*.log
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+**/package.e2e.json
+
+# System Files
+.DS_Store
+Thumbs.db
