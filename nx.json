@@ -1,0 +1,20 @@
+{
+  "affected": {
+    "defaultBase": "origin/main"
+  },
+  "npmScope": "sage",
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/nx-cloud",
+      "options": {
+        "cacheableOperations": [
+          "build",
+          "e2e",
+          "lint",
+          "test"
+        ],
+        "accessToken": "OTljYTlkYjEtYzk5Ni00ZWZkLTkyYTItNGMzZTM2NDRmZjdmfHJlYWQtd3JpdGU="
+      }
+    }
+  }
+}
