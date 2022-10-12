@@ -1,0 +1,17 @@
+{
+  "name": "sage",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "libs/*"
+  ],
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "setup": "yarn install && yarn bootstrap"
+  },
+  "devDependencies": {
+    "lerna": "^5.6.2",
+    "nx": "^15.0.0",
+    "semver": "^7.3.8"
+  }
+}
