@@ -1,5 +1,5 @@
 {
-  "extends": ["plugin:@stencil/recommended", "plugin:@typescript-eslint/recommended"],
+  "extends": ["plugin:@stencil/recommended", "plugin:@typescript-eslint/recommended", "prettier"],
   "parserOptions": {
     "project": ["./tsconfig.json"]
   },

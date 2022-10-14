@@ -38,7 +38,8 @@
     "build:stencil": "stencil build --docs",
     "generate": "stencil generate",
     "lint": "yarn lint:eslint",
-    "lint:eslint": "eslint src",
+    "lint.eslint": "eslint src",
+    "prettier": "prettier \"./src/**/*.{html,ts,tsx,js,jsx}\"",
     "start": "yarn start:stencil",
     "start:stencil": "stencil build --dev --watch --serve",
     "test": "stencil test --spec --e2e",
@@ -55,10 +56,12 @@
     "@typescript-eslint/eslint-plugin": "^5.40.0",
     "@typescript-eslint/parser": "^5.40.0",
     "eslint": "^8.25.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-react": "^7.31.10",
     "jest": "^27.4.5",
     "jest-cli": "^27.4.5",
     "lit-html": "^2.4.0",
+    "prettier": "^2.7.1",
     "puppeteer": "^15.5.0",
     "typescript": "^4.8.4"
   }

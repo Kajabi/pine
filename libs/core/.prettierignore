@@ -1,0 +1,10 @@
+dist
+loader
+www
+*.mdx
+*.mdx
+*readme.md
+
+// Ignore Stencil Build files
+**/*/components.d.ts
+**/*/globals.d.ts
