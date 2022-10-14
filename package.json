@@ -8,6 +8,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "build.all": "nx run-many --target=build",
+    "lint.all": "nx run-many --target=lint",
     "prepare": "husky install",
     "setup": "yarn install && yarn bootstrap",
     "start": "nx run core:start",
