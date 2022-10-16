@@ -17,6 +17,10 @@ export const config: Config = {
       generateTypeDeclarations: true,
     },
     {
+      type: 'docs-json',
+      file: './dist/docs.json', // Used to extract documentation data for Storybook
+    },
+    {
       type: 'docs-readme',
       footer: '',
     },

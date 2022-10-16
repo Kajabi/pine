@@ -1,5 +1,6 @@
 dist
 loader
+storybook-static
 www
 *.mdx
 *.mdx
