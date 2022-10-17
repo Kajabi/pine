@@ -1,0 +1,84 @@
+name: "Sage Build"
+
+on:
+  push:
+    branches: [main, next]
+  pull_request:
+    branches: ["**"]
+
+# When pushing a new commit lets cancel
+# the previous run
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    env:
+      NX_BRANCH: ${{ github.ref_name }}'
+
+    steps:
+      - name: Check out latest
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        id: core-node-modules
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os}}-build-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Set SHA
+        uses: nrwl/nx-set-shas@v3
+
+      - name: Install Dependencies
+        if: steps.cache-node-modules.ouputs.cache-hit != true || steps.changed-files.outputs.any_changed == 'true'
+        run: lerna bootstrap -- --frozen-lockfile --immutable
+
+      - name: Build
+        run: yarn nx build.stencil core --ci
+
+  lint:
+    needs: setup
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Restore node_modules
+        uses: actions/cache@v3
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os}}-build-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Lint
+        run: yarn nx affected --target=lint --parallel=3
+
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Restore node_modules
+        uses: actions/cache@v3
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os}}-build-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Test
+        run: yarn nx affected --target=test --parallel=3 --ci --coverage
