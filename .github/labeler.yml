@@ -1,0 +1,5 @@
+"package: core":
+  - libs/core/**/*
+
+"package: react":
+  - libs/react/**/*
