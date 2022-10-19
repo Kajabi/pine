@@ -1,0 +1,66 @@
+name: "Sage Release"
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+        type: choice
+        description: Which version should be published?
+        options:
+          - patch
+          - minor
+          - major
+      tag:
+        required: true
+        type: choice
+        description: Which npm tag should this be publish to?
+        options:
+          - latest
+          - next
+          - dev
+
+jobs:
+  build-sage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        id: core-node-modules
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os}}-build-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Configure user
+        run: |
+          git config user.name "Kajabi Automation Bot"
+          git config user.email "dev+github-bot@kajabi.com"
+
+      - name: Install Dependencies
+        if: steps.cache-node-modules.ouputs.cache-hit != true || steps.changed-files.outputs.any_changed == 'true'
+        run: lerna bootstrap --ignore-scripts
+        shell: bash
+
+      - name: Set NPM Token
+        run: |
+          npm config set '@sage:registry=https://npm.pkg.github.com/ju-skinner'
+          npm config set '//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN}}'
+        shell: bash
+
+      - name: Version Bump package files
+        run: "lerna version ${{ github.event.inputs.version }} --yes --conventional-commits --create-release github --message 'chore(release): publish' --no-commit-hooks"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release
+        run: HUSKY=0 lerna publish from-package --registry https://npm.pkg.github.com --yes --force-publish='*' --dist-tag ${{ github.event.inputs.tag }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
