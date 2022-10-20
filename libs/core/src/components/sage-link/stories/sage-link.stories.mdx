@@ -1,0 +1,60 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+import { html, render } from 'lit-html';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+<Meta title="webcomponents/sage-link" component="sage-link" argTypes={extractArgTypes('sage-link')} args={{ href: '#some-anchor' }} />
+
+export const Template = (args) => html`<sage-link external=${args.external} font-size=${args.fontSize} href=${args.href} variant=${args.variant}></sage-link>`;
+export const TemplateWithSlot = (args) => html` <sage-link external=${args.external} font-size=${args.fontSize} href=${args.href} variant=${args.variant}>${args.slot}</sage-link>`;
+
+# Sage link
+
+<p>
+  Link is mainly used as navigational element and usually appear within or directly following a paragraph or sentence. The "plain link" is used for interactive user generated text
+  like product, post, and offer titles.
+</p>
+
+## Properties
+
+<ArgsTable of="sage-link" />
+
+## Variants
+
+### External
+
+<Canvas>
+  <Story name="External" args={{ external: true }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+### Inline
+
+<Canvas>
+  <Story name="Inline" args={{ href: 'https://www.google.com' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+### Plain
+
+<Canvas>
+  <Story name="Plain" args={{ variant: 'plain' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+### With Custom Text (uses slot)
+
+<Canvas>
+  <Story name="WithCustomText" args={{ slot: 'Overrides default use of href' }}>
+    {TemplateWithSlot.bind()}
+  </Story>
+</Canvas>
+
+### Without custom text in slot
+
+<Canvas>
+  <Story name="WithNoSlot">{TemplateWithSlot.bind({})}</Story>
+</Canvas>
