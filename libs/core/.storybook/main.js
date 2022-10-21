@@ -4,8 +4,6 @@ module.exports = {
     "../src/**/*.stories.@(js|jsx|ts|tsx)"
   ],
   addons: [
-    "@storybook/addon-links",
-    "@storybook/addon-essentials",
     {
       name: '@storybook/addon-docs',
       options: {
@@ -13,7 +11,10 @@ module.exports = {
         transcludeMarkdown: true
       },
     },
-    '@pxtrn/storybook-addon-docs-stencil'
+    "@storybook/addon-essentials",
+    "@storybook/addon-links",
+    "@storybook/addon-a11y",
+    '@pxtrn/storybook-addon-docs-stencil',
   ],
   framework: "@storybook/web-components",
   core: {
