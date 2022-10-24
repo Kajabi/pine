@@ -1,0 +1,22 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+import { html, render } from 'lit-html';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+<Meta title="Example/Atoms/Image" component="sage-image" argTypes={extractArgTypes('sage-image')} />
+
+export const Template = (args) => html`<sage-image alt="${args.alt}" src="${args.src}" />`;
+
+# Image
+
+A standard image. Can be rendered as an html image or a CSS background image.
+
+## Properties
+
+<ArgsTable of="sage-image" />
+
+<Canvas>
+  <Story name="Default" args={{ alt: 'Placeholder', src: 'https://via.placeholder.com/150' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
