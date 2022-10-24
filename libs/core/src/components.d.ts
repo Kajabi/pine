@@ -26,6 +26,10 @@ export namespace Components {
          */
         "alt"?: string;
         /**
+          * Indicates how the browser should load the image. Defaults to "eager".
+         */
+        "loading": 'eager' | 'lazy';
+        /**
           * The image's source.
          */
         "src": string;
@@ -96,6 +100,10 @@ declare namespace LocalJSX {
           * The image's alt tag. If none is provided, it will default to an empty string.
          */
         "alt"?: string;
+        /**
+          * Indicates how the browser should load the image. Defaults to "eager".
+         */
+        "loading"?: 'eager' | 'lazy';
         /**
           * The image's source.
          */

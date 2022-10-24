@@ -10,7 +10,7 @@ describe('sage-image', () => {
     expect(page.root).toEqualHtml(`
       <sage-image class="sage-image">
         <mock:shadow-root>
-          <img alt="" />
+          <img alt="" loading="eager" />
         </mock:shadow-root>
       </sage-image>
     `);

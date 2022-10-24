@@ -13,6 +13,12 @@ export class SageImage {
  @Prop() alt? = '';
 
  /**
+  * Indicates how the browser should load the image.
+  * Defaults to "eager".
+  */
+ @Prop() loading: 'eager' | 'lazy' = 'eager';
+
+ /**
   * The image's source.
   */
  @Prop() src: string;
@@ -24,7 +30,11 @@ export class SageImage {
           'sage-image': true,
         }}
       >
-        <img alt={this.alt} src={this.src} />
+        <img 
+          alt={this.alt}
+          loading={this.loading}
+          src={this.src}
+        />
       </Host>
     );
   }
