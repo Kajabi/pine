@@ -26,13 +26,21 @@ export namespace Components {
          */
         "alt"?: string;
         /**
+          * The height of the image in pixels. Setting this will devote space in the layout to prevent layout shifts when the image is loaded.
+         */
+        "height"?: number;
+        /**
           * Indicates how the browser should load the image. Defaults to "eager".
          */
-        "loading": 'eager' | 'lazy';
+        "loading"?: 'eager' | 'lazy';
         /**
           * The image's source.
          */
         "src": string;
+        /**
+          * The width of the image in pixels. Setting this will devote space in the layout to prevent layout shifts when the image is loaded.
+         */
+        "width"?: number;
     }
     interface SageLink {
         /**
@@ -101,6 +109,10 @@ declare namespace LocalJSX {
          */
         "alt"?: string;
         /**
+          * The height of the image in pixels. Setting this will devote space in the layout to prevent layout shifts when the image is loaded.
+         */
+        "height"?: number;
+        /**
           * Indicates how the browser should load the image. Defaults to "eager".
          */
         "loading"?: 'eager' | 'lazy';
@@ -108,6 +120,10 @@ declare namespace LocalJSX {
           * The image's source.
          */
         "src"?: string;
+        /**
+          * The width of the image in pixels. Setting this will devote space in the layout to prevent layout shifts when the image is loaded.
+         */
+        "width"?: number;
     }
     interface SageLink {
         /**
