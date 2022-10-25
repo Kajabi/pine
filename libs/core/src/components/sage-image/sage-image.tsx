@@ -26,9 +26,21 @@ export class SageImage {
  @Prop() loading?: 'eager' | 'lazy' = 'eager';
 
  /**
+  * Determines the intended display size of an image
+  * within certian breakpoints. Has no effect if `srcset`
+  * is not set or value has no width descriptor
+  */
+ @Prop() sizes?: string;
+
+ /**
   * The image's source.
   */
  @Prop() src: string;
+
+ /**
+  * A set of image sources for the browser to use.
+  */
+ @Prop() srcset?: string
 
  /**
   * The width of the image in pixels. Setting this will
@@ -48,7 +60,9 @@ export class SageImage {
           alt={this.alt}
           height={this.height}
           loading={this.loading}
+          sizes={this.sizes}
           src={this.src}
+          srcset={this.srcset}
           width={this.width}
         />
       </Host>
