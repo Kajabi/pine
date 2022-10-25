@@ -34,7 +34,7 @@ export namespace Components {
          */
         "loading"?: 'eager' | 'lazy';
         /**
-          * Determines the intended display size of an image within certian breakpoints. Has no effect if `srcset` is not set or value has no width descriptor
+          * Determines the intended display size of an image within certian breakpoints. Has no effect if `srcset` is not set or value has no width descriptor.
          */
         "sizes"?: string;
         /**
@@ -125,7 +125,7 @@ declare namespace LocalJSX {
          */
         "loading"?: 'eager' | 'lazy';
         /**
-          * Determines the intended display size of an image within certian breakpoints. Has no effect if `srcset` is not set or value has no width descriptor
+          * Determines the intended display size of an image within certian breakpoints. Has no effect if `srcset` is not set or value has no width descriptor.
          */
         "sizes"?: string;
         /**

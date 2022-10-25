@@ -28,7 +28,7 @@ export class SageImage {
  /**
   * Determines the intended display size of an image
   * within certian breakpoints. Has no effect if `srcset`
-  * is not set or value has no width descriptor
+  * is not set or value has no width descriptor.
   */
  @Prop() sizes?: string;
 
