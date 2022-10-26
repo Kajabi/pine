@@ -2,7 +2,7 @@
   "*.{css,scss}": [
     "stylelint"
   ],
-  "*.{js,jsx,ts,tsx}": [
+  "(!libs/react/**/*)*.{js,jsx,ts,tsx}": [
     "eslint "
   ]
 }

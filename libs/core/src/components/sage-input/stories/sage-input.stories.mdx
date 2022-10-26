@@ -1,0 +1,32 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+import { html, render } from 'lit-html';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+<Meta title="webcomponents/sage-input" component="sage-input" argTypes={extractArgTypes('sage-input')} args={{ type: 'text' }} />
+
+export const Template = (args) => html`<sage-input type="${args.type}" value="${args.value}"> </sage-input>`;
+
+# Sage input
+
+<p>
+</p>
+
+## Properties
+<ArgsTable of="sage-input" />
+
+## Variants
+
+### Text
+<Canvas>
+  <Story name="Text" args={{ type: 'text', value: 'First name' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+### Email
+<Canvas>
+  <Story name="Email" args={{ type: 'email', value: 'user123@test.com' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
