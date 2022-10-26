@@ -1,0 +1,6 @@
+{
+  "branchName": "reorg",
+  "pageName": "Icons",
+  "outputPath": "src/svg",
+  "ignoreFrames": ["_Countries", "Docs"]
+}
