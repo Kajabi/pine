@@ -1,0 +1,22 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+import { html, render } from 'lit-html';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+<Meta title="Example/Atoms/sage-button" component="sage-button" argTypes={extractArgTypes('sage-button')} />
+
+export const Template = (args) => html` <sage-button variant=${args.variant} icon=${args.icon} disabled=${args.disabled}> test </sage-button> `;
+
+# sage-button
+
+This is a sample of using MDX with Web Components.
+
+## Properties
+
+<ArgsTable of="sage-button" />
+
+<Canvas>
+  <Story name="Primary" args={{ variant: 'primary', icon: '', disabled: true }}>
+    {Template.bind()}
+  </Story>
+</Canvas>

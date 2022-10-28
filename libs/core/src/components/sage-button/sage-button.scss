@@ -1,0 +1,38 @@
+.sage-button {
+  --button-background-color: var(--button-variant-background-color, #202327);
+  --button-background-color--disabled: var(--button-variant-background-color--disabled, #4f5358);
+  --button-color: var(--button-variant-color, #fff);
+  --button-color--disabled: var(--button-variant-color--disabled, #fff);
+
+  background-color: var(--button-background-color);
+  border: 1px solid transparent;
+  border-radius: 5px;
+  color: var(--button-color);
+  font-weight: 900;
+  padding: 0.625rem 1rem;
+
+  svg {
+    fill: currentColor;
+  }
+
+  &:disabled {
+    background-color: var(--button-background-color--disabled);
+  }
+}
+
+.sage-button--accent {
+  --button-variant-background-color: #0072ef;
+  --button-variant-background-color--disabled: #73b0f2;
+}
+
+.sage-button--destructive {
+  --button-variant-background-color: #cf3c32;
+  --button-variant-background-color--disabled: #e48079;
+}
+
+.sage-button--secondary {
+  --button-variant-background-color: transparent;
+  --button-variant-background-color--disabled: #c6c6c6;
+  --button-variant-color: #202327;
+  border-color: #ddd;
+}

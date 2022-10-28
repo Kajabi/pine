@@ -20,6 +20,23 @@ export namespace Components {
          */
         "middle": string;
     }
+    interface SageButton {
+        /**
+          * When set to true, buttons are disabled
+          * @defaultValue false
+         */
+        "disabled": true;
+        /**
+          * When set to true, icon is added to button
+          * @defaultValue false
+         */
+        "icon": string;
+        /**
+          * Button type
+          * @defaultValue primary
+         */
+        "variant": 'accent' | 'secondary' | 'disclosure' | 'destructive' | 'primary';
+    }
 }
 declare global {
     interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
@@ -28,8 +45,15 @@ declare global {
         prototype: HTMLMyComponentElement;
         new (): HTMLMyComponentElement;
     };
+    interface HTMLSageButtonElement extends Components.SageButton, HTMLStencilElement {
+    }
+    var HTMLSageButtonElement: {
+        prototype: HTMLSageButtonElement;
+        new (): HTMLSageButtonElement;
+    };
     interface HTMLElementTagNameMap {
         "my-component": HTMLMyComponentElement;
+        "sage-button": HTMLSageButtonElement;
     }
 }
 declare namespace LocalJSX {
@@ -47,8 +71,26 @@ declare namespace LocalJSX {
          */
         "middle"?: string;
     }
+    interface SageButton {
+        /**
+          * When set to true, buttons are disabled
+          * @defaultValue false
+         */
+        "disabled"?: true;
+        /**
+          * When set to true, icon is added to button
+          * @defaultValue false
+         */
+        "icon"?: string;
+        /**
+          * Button type
+          * @defaultValue primary
+         */
+        "variant"?: 'accent' | 'secondary' | 'disclosure' | 'destructive' | 'primary';
+    }
     interface IntrinsicElements {
         "my-component": MyComponent;
+        "sage-button": SageButton;
     }
 }
 export { LocalJSX as JSX };
@@ -56,6 +98,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            "sage-button": LocalJSX.SageButton & JSXBase.HTMLAttributes<HTMLSageButtonElement>;
         }
     }
 }
