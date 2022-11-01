@@ -36,8 +36,7 @@ export class SageButton {
    * When set to true, buttons are disabled
    * @defaultValue false
    */
-  @Prop({ reflect: true }) disabled: true;
-  /** TODO talk about relect */
+  @Prop() disabled: true;
   
   render() {
     const trashIcon = (

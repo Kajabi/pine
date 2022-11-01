@@ -10,7 +10,9 @@ describe('sage-button', () => {
     expect(page.root).toEqualHtml(`
       <sage-button>
         <mock:shadow-root>
-          <slot></slot>
+          <button class="sage-button sage-button--primary">
+            <slot></slot>
+          </button>
         </mock:shadow-root>
       </sage-button>
     `);
