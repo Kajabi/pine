@@ -6,17 +6,17 @@ import { Component, Host, h, Prop } from '@stencil/core';
   shadow: true,
 })
 export class SageButton {
-
-  // alignEnd: false,
-  // className: '',
-  // customContentClassName: null,
-  // disclosure: false,
-  // fullWidth: false,
-  // hasCustomContent: false,
-  // icon: null,
-  // iconOnly: false,
-  // iconPosition: Button.ICON_POSITIONS.LEFT,
-  // loading: false,
+  // Other props currently in React button
+    // alignEnd: false,
+    // className: '',
+    // customContentClassName: null,
+    // disclosure: false,
+    // fullWidth: false,
+    // hasCustomContent: false,
+    // icon: null,
+    // iconOnly: false,
+    // iconPosition: Button.ICON_POSITIONS.LEFT,
+    // loading: false,
 
 
   /**
