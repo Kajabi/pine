@@ -18,22 +18,6 @@ describe('sage-button', () => {
     `);
   });
 
-  it('renders primary button', async () => {
-    const {root} = await newSpecPage({
-      components: [SageButton],
-      html: `<sage-button variant="primary"></sage-button>`,
-    });
-    expect(root).toEqualHtml(`
-      <sage-button variant="primary">
-        <mock:shadow-root>
-          <button class="sage-button sage-button--primary">
-            <slot></slot>
-          </button>
-        </mock:shadow-root>
-      </sage-button>
-    `);
-  });
-
   it('renders accent button', async () => {
     const {root} = await newSpecPage({
       components: [SageButton],
