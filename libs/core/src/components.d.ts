@@ -20,6 +20,26 @@ export namespace Components {
          */
         "middle": string;
     }
+    interface SageLink {
+        /**
+          * When enabled, opens link in a new tab.
+          * @defaultValue false
+         */
+        "external": boolean;
+        /**
+          * The Font size follows t-shirt model sm: 12px md: 14px lg: 16px
+          * @defaultValue lg
+         */
+        "fontSize": 'sm' | 'md' | 'lg';
+        /**
+          * The URL that the hyperlink points to.
+         */
+        "href": string;
+        /**
+          * Modifies the look of the link
+         */
+        "variant": 'inline' | 'plain';
+    }
 }
 declare global {
     interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
@@ -28,8 +48,15 @@ declare global {
         prototype: HTMLMyComponentElement;
         new (): HTMLMyComponentElement;
     };
+    interface HTMLSageLinkElement extends Components.SageLink, HTMLStencilElement {
+    }
+    var HTMLSageLinkElement: {
+        prototype: HTMLSageLinkElement;
+        new (): HTMLSageLinkElement;
+    };
     interface HTMLElementTagNameMap {
         "my-component": HTMLMyComponentElement;
+        "sage-link": HTMLSageLinkElement;
     }
 }
 declare namespace LocalJSX {
@@ -47,8 +74,29 @@ declare namespace LocalJSX {
          */
         "middle"?: string;
     }
+    interface SageLink {
+        /**
+          * When enabled, opens link in a new tab.
+          * @defaultValue false
+         */
+        "external"?: boolean;
+        /**
+          * The Font size follows t-shirt model sm: 12px md: 14px lg: 16px
+          * @defaultValue lg
+         */
+        "fontSize"?: 'sm' | 'md' | 'lg';
+        /**
+          * The URL that the hyperlink points to.
+         */
+        "href": string;
+        /**
+          * Modifies the look of the link
+         */
+        "variant"?: 'inline' | 'plain';
+    }
     interface IntrinsicElements {
         "my-component": MyComponent;
+        "sage-link": SageLink;
     }
 }
 export { LocalJSX as JSX };
@@ -56,6 +104,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            "sage-link": LocalJSX.SageLink & JSXBase.HTMLAttributes<HTMLSageLinkElement>;
         }
     }
 }
