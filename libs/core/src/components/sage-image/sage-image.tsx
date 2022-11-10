@@ -21,7 +21,6 @@ export class SageImage {
 
   /**
    * Indicates how the browser should load the image.
-   * Defaults to "eager".
    */
   @Prop() loading?: 'eager' | 'lazy' = 'eager';
 

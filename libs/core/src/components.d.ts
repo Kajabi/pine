@@ -30,7 +30,7 @@ export namespace Components {
          */
         "height"?: number;
         /**
-          * Indicates how the browser should load the image. Defaults to "eager".
+          * Indicates how the browser should load the image.
          */
         "loading"?: 'eager' | 'lazy';
         /**
@@ -121,7 +121,7 @@ declare namespace LocalJSX {
          */
         "height"?: number;
         /**
-          * Indicates how the browser should load the image. Defaults to "eager".
+          * Indicates how the browser should load the image.
          */
         "loading"?: 'eager' | 'lazy';
         /**
