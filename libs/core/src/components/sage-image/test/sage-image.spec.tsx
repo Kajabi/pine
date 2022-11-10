@@ -81,4 +81,19 @@ describe('sage-image', () => {
       </sage-image>
     `)
   })
+  it('renders with correct aspect ratio when custom property is set', async () => {
+    const page = await newSpecPage({
+      components: [SageImage],
+      html: `
+        <sage-image class="sage-image" src="//source.unsplash.com/100x100" style="--image-aspect-ratio: 16 / 9"></sage-image>
+      `
+    })
+    expect(page.root).toEqualHtml(`
+      <sage-image class="sage-image" src="//source.unsplash.com/100x100" style="--image-aspect-ratio: 16 / 9">
+        <mock:shadow-root>
+          <img alt="" loading="eager" src="//source.unsplash.com/100x100" />
+        </mock:shadow-root>
+      </sage-image>
+    `);
+  })
 });
