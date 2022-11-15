@@ -27,14 +27,16 @@
     "url": "https://github.com/kajab/sage/issues"
   },
   "scripts": {
-    "build": "run-s build.ts",
-    "build.ts": "tsc -p scripts/tsconfig.json",
-    "build.files": "",
+    "build": "run-s build.ts build.icons build.component collection.copy",
     "build.component": "stencil build --docs",
-    "figma.export": "yarn build  && node scripts/figma-icon-export.js",
+    "build.icons": "node scripts/optimizeSvg.js",
+    "build.ts": "tsc -p scripts/tsconfig.json",
+    "collection.copy": "node scripts/collection-copy.js",
+    "figma.export": "node scripts/figma-icon-export.js",
     "start": "stencil build --dev --watch --serve",
     "test": "stencil test --spec --e2e",
-    "test.spec": "stencil test --spec"
+    "test.spec": "stencil test --spec",
+    "update": "run-s build.ts figma.export"
   },
   "files": [
     "components/",
@@ -45,6 +47,7 @@
     "@stencil/core": "^2.18.0"
   },
   "devDependencies": {
+    "@types/fs-extra": "^9.0.13",
     "@types/jest": "^27.0.3",
     "@types/mkdirp": "^1.0.2",
     "@types/svgo": "^2.6.4",
