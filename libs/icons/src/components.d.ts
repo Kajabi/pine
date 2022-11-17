@@ -8,17 +8,22 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     interface SageIcon {
         /**
-          * The first name
+          * The color to be use for the background
          */
-        "first": string;
+        "color"?: string;
         /**
-          * The last name
+          * The name of the icon to use from the built-in set.
          */
-        "last": string;
+        "name"?: string;
         /**
-          * The middle name
+          * The size of the icon. This can be 'small', 'normal', 'medium', large, or a custom value (40px, 1rem, etc)
          */
-        "middle": string;
+        "size"?: | 'small'   // 12px
+    | 'normal'  // 16px
+    | 'medium'  // 20px
+    | 'large'   // 24px
+    | 'auto'
+    | string;
     }
 }
 declare global {
@@ -35,17 +40,22 @@ declare global {
 declare namespace LocalJSX {
     interface SageIcon {
         /**
-          * The first name
+          * The color to be use for the background
          */
-        "first"?: string;
+        "color"?: string;
         /**
-          * The last name
+          * The name of the icon to use from the built-in set.
          */
-        "last"?: string;
+        "name"?: string;
         /**
-          * The middle name
+          * The size of the icon. This can be 'small', 'normal', 'medium', large, or a custom value (40px, 1rem, etc)
          */
-        "middle"?: string;
+        "size"?: | 'small'   // 12px
+    | 'normal'  // 16px
+    | 'medium'  // 20px
+    | 'large'   // 24px
+    | 'auto'
+    | string;
     }
     interface IntrinsicElements {
         "sage-icon": SageIcon;

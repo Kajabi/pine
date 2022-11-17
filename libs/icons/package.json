@@ -18,7 +18,10 @@
   "types": "dist/types/index.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
-  "unpkg": "dist/icons/icons.esm.js",
+  "unpkg": "dist/sage-icons/icons.esm.js",
+  "publishConfig": {
+    "directory": "dist"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/kajabi/sage/libs/icons"
@@ -28,7 +31,9 @@
   },
   "scripts": {
     "build": "run-s build.ts build.icons build.component collection.copy",
+    "build.dev": "run-s build.ts build.icons build.component.dev collection.copy",
     "build.component": "stencil build --docs",
+    "build.component.dev": "stencil build --dev --docs --watch --serve",
     "build.icons": "node scripts/optimizeSvg.js",
     "build.ts": "tsc -p scripts/tsconfig.json",
     "collection.copy": "node scripts/collection-copy.js",
@@ -50,6 +55,7 @@
   },
   "devDependencies": {
     "@stencil/eslint-plugin": "^0.4.0",
+    "@stencil/sass": "^2.0.0",
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "^27.0.3",
     "@types/mkdirp": "^1.0.2",
