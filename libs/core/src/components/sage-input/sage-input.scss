@@ -1,3 +1,22 @@
 :host {
   display: inline;
 }
+
+.sage-input {
+  display: flex;
+  flex-direction: column;
+}
+
+input {
+  border: 1px solid #d3d5d9;
+  border-radius: 8px;
+  padding: 8px 16px;
+}
+
+input:hover {
+  border-color: #b5bac0;
+}
+
+input:focus {
+  box-shadow: 0 0 0 4px #8ECAFB;
+}

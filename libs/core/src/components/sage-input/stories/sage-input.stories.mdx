@@ -5,7 +5,7 @@ import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 <Meta title="webcomponents/sage-input" component="sage-input" argTypes={extractArgTypes('sage-input')} args={{ type: 'text' }} />
 
-export const Template = (args) => html`<sage-input type="${args.type}" value="${args.value}"> </sage-input>`;
+export const Template = (args) => html`<sage-input label=${args.label} type="${args.type}" value="${args.value}"> </sage-input>`;
 
 # Sage input
 
@@ -19,7 +19,7 @@ export const Template = (args) => html`<sage-input type="${args.type}" value="${
 
 ### Text
 <Canvas>
-  <Story name="Text" args={{ type: 'text', value: 'First name' }}>
+  <Story name="Text" args={{ label: 'Name', type: 'text', value: 'Frank Dux' }}>
     {Template.bind()}
   </Story>
 </Canvas>
