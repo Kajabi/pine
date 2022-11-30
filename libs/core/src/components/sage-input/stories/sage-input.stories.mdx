@@ -5,7 +5,14 @@ import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 <Meta title="webcomponents/sage-input" component="sage-input" argTypes={extractArgTypes('sage-input')} args={{ type: 'text' }} />
 
-export const Template = (args) => html`<sage-input label=${args.label} type="${args.type}" value="${args.value}"> </sage-input>`;
+export const Template = (args) => html`<sage-input
+  disabled="${args.disabled}"
+  hint="${args.hint}"
+  label="${args.label}"
+  readonly="${args.readonly}"
+  type="${args.type}"
+  value="${args.value}">
+</sage-input>`;
 
 # Sage input
 
@@ -26,7 +33,28 @@ export const Template = (args) => html`<sage-input label=${args.label} type="${a
 
 ### Email
 <Canvas>
-  <Story name="Email" args={{ type: 'email', value: 'user123@test.com' }}>
+  <Story name="Email" args={{ label: 'Email', type: 'email', value: 'user123@test.com' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+### Disabled
+<Canvas>
+  <Story name="Disabled" args={{ label: 'Email', disabled: true, type: 'email', value: 'user123@test.com' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+### Readonly
+<Canvas>
+  <Story name="Readonly" args={{ label: 'Email', readonly: true, type: 'email', value: 'user123@test.com' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+### Readonly
+<Canvas>
+  <Story name="Hint" args={{ hint: 'Please use the correct format', label: 'Email', type: 'email', value: 'user123@test.com' }}>
     {Template.bind()}
   </Story>
 </Canvas>
