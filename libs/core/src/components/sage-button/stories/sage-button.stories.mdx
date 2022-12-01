@@ -9,11 +9,17 @@ export const Template = (args) => html` <sage-button variant=${args.variant} ico
 
 # sage-button
 
-This is a sample of using MDX with Web Components.
+A button component to generate all versions of `sage-button` as outlined in Figma.
 
 ## Properties
 
 <ArgsTable of="sage-button" />
+
+## Variant
+
+Accepts `primary`, `secondary`, `accent`, `disclosure`, `destructive`
+
+Default: `primary`
 
 <Canvas>
   <Story name="Primary" args={{ variant: 'primary', icon: '', disabled: false }}>

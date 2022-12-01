@@ -22,20 +22,20 @@ export namespace Components {
     }
     interface SageButton {
         /**
-          * When set to true, buttons are disabled
+          * Toggles disabled state
           * @defaultValue false
          */
-        "disabled": true;
+        "disabled": boolean;
         /**
-          * When set to true, icon is added to button
+          * Toggles icon to be added in front of text in the button
           * @defaultValue false
          */
         "icon": string;
         /**
-          * Button type
+          * Sets button variant styles as outlined in Figma
           * @defaultValue primary
          */
-        "variant": 'accent' | 'secondary' | 'disclosure' | 'destructive' | 'primary';
+        "variant": 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
     }
 }
 declare global {
@@ -73,20 +73,20 @@ declare namespace LocalJSX {
     }
     interface SageButton {
         /**
-          * When set to true, buttons are disabled
+          * Toggles disabled state
           * @defaultValue false
          */
-        "disabled"?: true;
+        "disabled"?: boolean;
         /**
-          * When set to true, icon is added to button
+          * Toggles icon to be added in front of text in the button
           * @defaultValue false
          */
         "icon"?: string;
         /**
-          * Button type
+          * Sets button variant styles as outlined in Figma
           * @defaultValue primary
          */
-        "variant"?: 'accent' | 'secondary' | 'disclosure' | 'destructive' | 'primary';
+        "variant"?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
     }
     interface IntrinsicElements {
         "my-component": MyComponent;
