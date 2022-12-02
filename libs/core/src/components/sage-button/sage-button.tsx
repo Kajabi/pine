@@ -7,22 +7,21 @@ import { Component, Host, h, Prop } from '@stencil/core';
 })
 export class SageButton {
   /**
-   * Sets button variant styles as outlined in Figma
+   * Sets button variant styles as outlined in Figma documentation
    * @defaultValue primary
    */
-  @Prop() variant: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' = 'primary';
+  @Prop() variant?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' = 'primary';
 
   /**
-   * Toggles icon to be added in front of text in the button
-   * @defaultValue false
+   * Displays icon before text when icon string matches an icon name
    */
-  @Prop() icon: string;
+  @Prop() icon?: string = null;
 
   /**
-   * Toggles disabled state
+   * Toggles disabled state of button
    * @defaultValue false
    */
-  @Prop() disabled: boolean;
+  @Prop() disabled? = false;
 
   render() {
     const trashIcon = (

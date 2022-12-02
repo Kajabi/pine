@@ -22,20 +22,19 @@ export namespace Components {
     }
     interface SageButton {
         /**
-          * Toggles disabled state
+          * Toggles disabled state of button
           * @defaultValue false
          */
-        "disabled": boolean;
+        "disabled"?: boolean;
         /**
-          * Toggles icon to be added in front of text in the button
-          * @defaultValue false
+          * Displays icon before text when icon string matches an icon name
          */
-        "icon": string;
+        "icon"?: string;
         /**
-          * Sets button variant styles as outlined in Figma
+          * Sets button variant styles as outlined in Figma documentation
           * @defaultValue primary
          */
-        "variant": 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
+        "variant"?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
     }
 }
 declare global {
@@ -73,17 +72,16 @@ declare namespace LocalJSX {
     }
     interface SageButton {
         /**
-          * Toggles disabled state
+          * Toggles disabled state of button
           * @defaultValue false
          */
         "disabled"?: boolean;
         /**
-          * Toggles icon to be added in front of text in the button
-          * @defaultValue false
+          * Displays icon before text when icon string matches an icon name
          */
         "icon"?: string;
         /**
-          * Sets button variant styles as outlined in Figma
+          * Sets button variant styles as outlined in Figma documentation
           * @defaultValue primary
          */
         "variant"?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
