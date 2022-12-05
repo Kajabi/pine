@@ -4,18 +4,21 @@
   --button-color: var(--button-variant-color, #fff);
   --button-color--disabled: var(--button-variant-color--disabled, #fff);
 
+  align-items: center;
   background-color: var(--button-background-color);
   border: 1px solid transparent;
-  border-radius: 5px;
+  border-radius: 10px;
   color: var(--button-color);
-  font-weight: 900;
-  padding: 0.625rem 1rem;
+  display: flex;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  min-height: 40px;
+  padding: 0.5rem 1rem;
 
   svg {
     fill: currentColor;
-    height: 13px;
-    margin-inline-end: 4px;
-    width: 13px;
+    margin-inline-end: 0.5rem;
   }
 
   &:disabled {
