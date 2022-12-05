@@ -4,6 +4,7 @@
 /// @group sage
 ////
 
+$sage-font-cdn-root: 'https://sage.kajabi-cdn.com/fonts';
 /* stylelint-disable-next-line annotation-no-unknown */
 $body-font-path: '#{$sage-font-cdn-root}/circular' !default; // pathname of font directory
 $body-font-name: 'CircularXXWeb';
