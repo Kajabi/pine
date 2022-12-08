@@ -1,4 +1,5 @@
-import { Component, Host, h, Prop } from '@stencil/core';
+import { Component, Element, Host, h, Prop } from '@stencil/core';
+import { hasShadowDom } from '../../utils/utils';
 
 @Component({
   tag: 'sage-button',
@@ -6,11 +7,12 @@ import { Component, Host, h, Prop } from '@stencil/core';
   shadow: true,
 })
 export class SageButton {
+  @Element() el: HTMLSageButtonElement;
+
   /**
    * Sets button variant styles as outlined in Figma documentation
-   * @defaultValue primary
-   */
-  @Prop() variant?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' = 'primary';
+    */
+  @Prop() variant?: 'secondary' | 'accent' | 'disclosure' | 'destructive';
 
   /**
    * Displays icon before text when icon string matches an icon name
@@ -22,6 +24,48 @@ export class SageButton {
    * @defaultValue false
    */
   @Prop() disabled? = false;
+
+  /**
+   * Provides button with a submittable name
+   */
+  @Prop() name?: string;
+
+  /**
+   * Provides button with a submittable value
+   */
+  @Prop() value?: string;
+
+  /**
+   * Provides button with a type 
+   * todo: make sure there is info in the story
+   * @defaultValue button
+   */
+  @Prop() type?: 'button' | 'reset' | 'submit' = 'button';
+
+
+  // todo build out e2e test to confirm form submission 
+  private handleClick = (ev: Event) => {
+    if (this.type === 'button') {
+      // If button clicked IS NOT associated with a form
+      if (hasShadowDom(this.el)) {
+        const form = this.el.closest('form')
+        if (form) {
+          ev.preventDefault()
+
+          const fakeButton = document.createElement('button')
+          fakeButton.type = this.type
+          fakeButton.style.display = 'none'
+          form.appendChild(fakeButton)
+          fakeButton.click()
+          fakeButton.remove()
+        }
+      }
+    } else {
+      // If button clicked IS associated with a form
+    }
+  }
+
+  private buttonClassNames = `sage-button` + (this.variant && ` sage-button--${this.variant}`);
   
   render() {
     const trashIcon = (
@@ -33,8 +77,8 @@ export class SageButton {
     );
 
     return (
-      <Host aria-disabled={this.disabled ? 'true' : null}>
-        <button class={`sage-button sage-button--${this.variant}`} disabled={this.disabled}>
+      <Host variant={this.variant} aria-disabled={this.disabled ? 'true' : null} onClick={this.handleClick}>
+        <button class={this.buttonClassNames} disabled={this.disabled} type={this.type} name={this.name} value={this.value} >
           {this.icon == 'trashIcon' && trashIcon}
           <slot />
         </button>

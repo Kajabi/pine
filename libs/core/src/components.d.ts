@@ -31,10 +31,22 @@ export namespace Components {
          */
         "icon"?: string;
         /**
-          * Sets button variant styles as outlined in Figma documentation
-          * @defaultValue primary
+          * Provides button with a submittable name
          */
-        "variant"?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
+        "name"?: string;
+        /**
+          * Provides button with a type  todo: make sure there is info in the story
+          * @defaultValue button
+         */
+        "type"?: 'button' | 'reset' | 'submit';
+        /**
+          * Provides button with a submittable value
+         */
+        "value"?: string;
+        /**
+          * Sets button variant styles as outlined in Figma documentation
+         */
+        "variant"?: 'secondary' | 'accent' | 'disclosure' | 'destructive';
     }
     interface SageLink {
         /**
@@ -108,10 +120,22 @@ declare namespace LocalJSX {
          */
         "icon"?: string;
         /**
-          * Sets button variant styles as outlined in Figma documentation
-          * @defaultValue primary
+          * Provides button with a submittable name
          */
-        "variant"?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
+        "name"?: string;
+        /**
+          * Provides button with a type  todo: make sure there is info in the story
+          * @defaultValue button
+         */
+        "type"?: 'button' | 'reset' | 'submit';
+        /**
+          * Provides button with a submittable value
+         */
+        "value"?: string;
+        /**
+          * Sets button variant styles as outlined in Figma documentation
+         */
+        "variant"?: 'secondary' | 'accent' | 'disclosure' | 'destructive';
     }
     interface SageLink {
         /**

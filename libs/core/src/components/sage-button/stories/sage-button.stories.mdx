@@ -5,7 +5,8 @@ import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 <Meta title="Example/Atoms/sage-button" component="sage-button" argTypes={extractArgTypes('sage-button')} />
 
-export const Template = (args) => html` <sage-button variant=${args.variant} icon=${args.icon} disabled=${args.disabled}>${args.slot}</sage-button> `;
+export const Template = (args) =>
+  html` <sage-button value=${args.value} variant=${args.variant} name=${args.name} icon=${args.icon} disabled=${args.disabled} type=${args.type}> ${args.slot} </sage-button> `;
 
 # sage-button
 
@@ -23,8 +24,10 @@ A button component to generate all versions of `sage-button` as outlined in [Fig
     </td>
   </tr>
   <tr>
-    <td>To trigger on-page interactivity</td>
-    <td>To send a user to another URL</td>
+    <td>
+      To trigger on-page interactivity <br /> To submit a form
+    </td>
+    <td>To send a user to another URL or anchor</td>
   </tr>
 </table>
 
@@ -34,30 +37,32 @@ A button component to generate all versions of `sage-button` as outlined in [Fig
 
 ## Variant
 
-### Primary
+### Default (Primary)
 
 <Canvas>
-  <Story name="Primary" args={{ variant: 'primary', icon: '', disabled: false, slot: 'Default' }}>
+  <Story name="Primary" args={{ icon: '', disabled: false, slot: 'Default', type: 'button' }}>
     {Template.bind()}
   </Story>
-  <Story name="PrimaryDisabled" args={{ variant: 'primary', icon: '', disabled: true, slot: 'Disabled' }}>
+  <Story name="PrimaryDisabled" args={{ icon: '', disabled: true, slot: 'Disabled', type: 'button' }}>
     {Template.bind()}
   </Story>
-  <Story name="PrimaryIcon" args={{ variant: 'primary', icon: 'trashIcon', disabled: false, slot: 'Icon' }}>
+  <Story name="PrimaryIcon" args={{ icon: 'trashIcon', disabled: false, slot: 'Icon', type: 'submit' }}>
     {Template.bind()}
   </Story>
 </Canvas>
 
 ### Secondary
 
+// Todo define variants
+
 <Canvas>
-  <Story name="Secondary" args={{ variant: 'secondary', icon: '', disabled: false, slot: 'Default' }}>
+  <Story name="Secondary" args={{ variant: 'secondary', icon: '', disabled: false, slot: 'Default', type: 'button' }}>
     {Template.bind()}
   </Story>
-  <Story name="SecondaryDisabled" args={{ variant: 'secondary', icon: '', disabled: true, slot: 'Disabled' }}>
+  <Story name="SecondaryDisabled" args={{ variant: 'secondary', icon: '', disabled: true, slot: 'Disabled', type: 'button' }}>
     {Template.bind()}
   </Story>
-  <Story name="SecondaryIcon" args={{ variant: 'secondary', icon: 'trashIcon', disabled: false, slot: 'Icon' }}>
+  <Story name="SecondaryIcon" args={{ variant: 'secondary', icon: 'trashIcon', disabled: false, slot: 'Icon', type: 'button' }}>
     {Template.bind()}
   </Story>
 </Canvas>
@@ -65,13 +70,13 @@ A button component to generate all versions of `sage-button` as outlined in [Fig
 ### Accent
 
 <Canvas>
-  <Story name="Accent" args={{ variant: 'accent', icon: '', disabled: false, slot: 'Default' }}>
+  <Story name="Accent" args={{ variant: 'accent', icon: '', disabled: false, slot: 'Default', type: 'button' }}>
     {Template.bind()}
   </Story>
-  <Story name="AccentDisabled" args={{ variant: 'accent', icon: '', disabled: true, slot: 'Disabled' }}>
+  <Story name="AccentDisabled" args={{ variant: 'accent', icon: '', disabled: true, slot: 'Disabled', type: 'button' }}>
     {Template.bind()}
   </Story>
-  <Story name="AccentIcon" args={{ variant: 'accent', icon: 'trashIcon', disabled: false, slot: 'Icon' }}>
+  <Story name="AccentIcon" args={{ variant: 'accent', icon: 'trashIcon', disabled: false, slot: 'Icon', type: 'button' }}>
     {Template.bind()}
   </Story>
 </Canvas>
@@ -79,13 +84,13 @@ A button component to generate all versions of `sage-button` as outlined in [Fig
 ### Disclosure
 
 <Canvas>
-  <Story name="Disclosure" args={{ variant: 'disclosure', icon: '', disabled: false, slot: 'Default' }}>
+  <Story name="Disclosure" args={{ variant: 'disclosure', icon: '', disabled: false, slot: 'Default', type: 'button' }}>
     {Template.bind()}
   </Story>
-  <Story name="DisclosureDisabled" args={{ variant: 'disclosure', icon: '', disabled: true, slot: 'Disabled' }}>
+  <Story name="DisclosureDisabled" args={{ variant: 'disclosure', icon: '', disabled: true, slot: 'Disabled', type: 'button' }}>
     {Template.bind()}
   </Story>
-  <Story name="DisclosureIcon" args={{ variant: 'disclosure', icon: 'trashIcon', disabled: false, slot: 'Icon' }}>
+  <Story name="DisclosureIcon" args={{ variant: 'disclosure', icon: 'trashIcon', disabled: false, slot: 'Icon', type: 'button' }}>
     {Template.bind()}
   </Story>
 </Canvas>
@@ -93,13 +98,13 @@ A button component to generate all versions of `sage-button` as outlined in [Fig
 ### Destructive
 
 <Canvas>
-  <Story name="Destructive" args={{ variant: 'destructive', icon: '', disabled: false, slot: 'Default' }}>
+  <Story name="Destructive" args={{ variant: 'destructive', icon: '', disabled: false, slot: 'Default', type: 'button' }}>
     {Template.bind()}
   </Story>
-  <Story name="DestructiveDisabled" args={{ variant: 'destructive', icon: '', disabled: true, slot: 'Disabled' }}>
+  <Story name="DestructiveDisabled" args={{ variant: 'destructive', icon: '', disabled: true, slot: 'Disabled', type: 'button' }}>
     {Template.bind()}
   </Story>
-  <Story name="DestructiveIcon" args={{ variant: 'destructive', icon: 'trashIcon', disabled: false, slot: 'Icon' }}>
+  <Story name="DestructiveIcon" args={{ variant: 'destructive', icon: 'trashIcon', disabled: false, slot: 'Icon', type: 'button' }}>
     {Template.bind()}
   </Story>
 </Canvas>
