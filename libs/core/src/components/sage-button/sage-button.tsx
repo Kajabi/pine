@@ -12,7 +12,7 @@ export class SageButton {
   /**
    * Sets button variant styles as outlined in Figma documentation
     */
-  @Prop() variant?: 'secondary' | 'accent' | 'disclosure' | 'destructive';
+  @Prop() variant: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' = 'primary';
 
   /**
    * Displays icon before text when icon string matches an icon name
@@ -45,7 +45,7 @@ export class SageButton {
 
   // todo build out e2e test to confirm form submission 
   private handleClick = (ev: Event) => {
-    if (this.type === 'button') {
+    if (this.type != 'button') {
       // If button clicked IS NOT associated with a form
       if (hasShadowDom(this.el)) {
         const form = this.el.closest('form')
@@ -64,9 +64,19 @@ export class SageButton {
       // If button clicked IS associated with a form
     }
   }
-
-  private buttonClassNames = `sage-button` + (this.variant && ` sage-button--${this.variant}`);
   
+  private buttonClassNames = () => {
+    let className = `sage-button`;
+    // console.log(className);
+    if (this.variant && this.variant != 'primary') {
+      const variantClassName = `sage-button--${this.variant}`;
+      className += ' ' + variantClassName;
+    }
+    // return className;
+    return className;
+    // console.log(className);
+  };
+
   render() {
     const trashIcon = (
       <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
@@ -78,7 +88,7 @@ export class SageButton {
 
     return (
       <Host variant={this.variant} aria-disabled={this.disabled ? 'true' : null} onClick={this.handleClick}>
-        <button class={this.buttonClassNames} disabled={this.disabled} type={this.type} name={this.name} value={this.value} >
+        <button class={this.buttonClassNames()} disabled={this.disabled} type={this.type} name={this.name} value={this.value} >
           {this.icon == 'trashIcon' && trashIcon}
           <slot />
         </button>

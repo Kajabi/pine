@@ -8,9 +8,9 @@ describe('sage-button', () => {
       html: `<sage-button></sage-button>`,
     });
     expect(root).toEqualHtml(`
-      <sage-button>
+      <sage-button variant="primary">
         <mock:shadow-root>
-          <button class="sage-button sage-button--primary">
+          <button class="sage-button" type="button">
             <slot></slot>
           </button>
         </mock:shadow-root>
@@ -26,7 +26,7 @@ describe('sage-button', () => {
     expect(root).toEqualHtml(`
       <sage-button variant="accent">
         <mock:shadow-root>
-          <button class="sage-button sage-button--accent">
+          <button class="sage-button sage-button--accent" type="button">
             <slot></slot>
           </button>
         </mock:shadow-root>
@@ -40,9 +40,9 @@ describe('sage-button', () => {
       html: `<sage-button disabled="true"></sage-button>`,
     });
     expect(root).toEqualHtml(`
-      <sage-button disabled="true" aria-disabled="true">
+      <sage-button disabled="true" aria-disabled="true" variant="primary">
         <mock:shadow-root>
-          <button class="sage-button sage-button--primary" disabled>
+          <button class="sage-button" type="button" disabled>
             <slot></slot>
           </button>
         </mock:shadow-root>

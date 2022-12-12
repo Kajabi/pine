@@ -8,6 +8,49 @@ describe('sage-button', () => {
     expect(element).toHaveClass('hydrated');
   });
 
+  it('submits form', async () => {
+    const page = await newE2EPage({
+      html: `
+        <form>
+          <sage-button type="submit"></sage-button>
+        </form>
+      `
+    });
+    
+    const elementForm = await page.find('form');
+    const elementFormEvent = await elementForm.spyOnEvent('submit');
+    await page.evaluate(() => document.querySelector('sage-button').click());
+    await page.waitForChanges();
+
+    // Confirm onClick has been called
+    expect(elementFormEvent).toHaveReceivedEvent();
+  });
+
+
+  it('resets form', async () => {
+    const page = await newE2EPage({
+      html: `
+        <form>
+          <input></input>
+          <sage-button type="reset"></sage-button>
+        </form>
+      `
+    });
+    
+    const elementForm = await page.find('form');
+    const elementFormEvent = await elementForm.spyOnEvent('reset');
+    page.evaluate(() => document.querySelector('input').value = 'test');
+    await page.evaluate(() => document.querySelector('sage-button').click());    
+    await page.waitForChanges();
+
+    // Confirm form received reset event
+    expect(elementFormEvent).toHaveReceivedEvent();
+
+    // Confirm input value was reset
+    const updatedFormInputValue = await page.evaluate(() => document.querySelector('input').value);
+    expect(updatedFormInputValue).toBe('');
+  });
+
   it('renders when slot is used', async () => {
     const page = await newE2EPage();
     await page.setContent('<sage-button>Test Content</sage-button>');

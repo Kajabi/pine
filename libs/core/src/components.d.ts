@@ -46,7 +46,7 @@ export namespace Components {
         /**
           * Sets button variant styles as outlined in Figma documentation
          */
-        "variant"?: 'secondary' | 'accent' | 'disclosure' | 'destructive';
+        "variant": 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
     }
     interface SageLink {
         /**
@@ -135,7 +135,7 @@ declare namespace LocalJSX {
         /**
           * Sets button variant styles as outlined in Figma documentation
          */
-        "variant"?: 'secondary' | 'accent' | 'disclosure' | 'destructive';
+        "variant"?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
     }
     interface SageLink {
         /**
