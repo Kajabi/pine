@@ -60,21 +60,16 @@ export class SageButton {
           fakeButton.remove()
         }
       }
-    } else {
-      // If button clicked IS associated with a form
     }
   }
   
   private buttonClassNames = () => {
     let className = `sage-button`;
-    // console.log(className);
     if (this.variant && this.variant != 'primary') {
       const variantClassName = `sage-button--${this.variant}`;
       className += ' ' + variantClassName;
     }
-    // return className;
     return className;
-    // console.log(className);
   };
 
   render() {
