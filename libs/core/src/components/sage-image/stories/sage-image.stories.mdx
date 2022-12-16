@@ -5,7 +5,15 @@ import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 <Meta title="webcomponents/Image" component="sage-image" argTypes={extractArgTypes('sage-image')} />
 
-export const Template = (args) => html`<sage-image alt="${args.alt}" src="${args.src}" />`;
+export const Template = (args) => html` <sage-image
+  alt="${args.alt}"
+  height="${args.height}"
+  loading="${args.loading}"
+  sizes="${args.sizes}"
+  src="${args.src}"
+  srcset="${args.srcset}"
+  width="${args.width}"
+/>`;
 export const SizesAndSrcset = (args) => html`<sage-image alt="${args.alt}" sizes="${args.sizes}" src="${args.src}" srcset="${args.srcset}" />`;
 
 # Image
