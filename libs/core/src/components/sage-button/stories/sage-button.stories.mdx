@@ -3,7 +3,7 @@ import { html, render } from 'lit-html';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
-<Meta title="Example/Atoms/sage-button" component="sage-button" argTypes={extractArgTypes('sage-button')} />
+<Meta title="webcomponents/sage-button" component="sage-button" argTypes={extractArgTypes('sage-button')} />
 
 export const Template = (args) =>
   html` <sage-button value=${args.value} variant=${args.variant} name=${args.name} icon=${args.icon} disabled=${args.disabled} type=${args.type}> ${args.slot} </sage-button> `;
@@ -14,22 +14,16 @@ A button component to generate all versions of `sage-button` as outlined in [Fig
 
 ## Usage Guidelines
 
-<table>
-  <tr>
-    <td>
-      <h3>When to use a Button</h3>
-    </td>
-    <td>
-      <h3>When to use a Link</h3>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      To trigger on-page interactivity <br /> To submit a form
-    </td>
-    <td>To send a user to another URL or anchor</td>
-  </tr>
-</table>
+### When to use
+
+- Communicating an action that will occur. (e.g. saving a page)
+- Triggering or enabling an action, such as submitting requested information. (e.g. forms)
+- Progressing or regressing a user through a step in a flow. (e.g. modals)
+
+### When not to use
+
+- Directing users to a new page or different part within the same page. Instead, use [sage-link](/docs/webcomponents-sage-link--external).
+- Limited space available. Instead consider an IconButton.
 
 ## Properties
 
