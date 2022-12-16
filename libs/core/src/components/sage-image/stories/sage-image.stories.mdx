@@ -5,9 +5,7 @@ import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 <Meta title="webcomponents/Image" component="sage-image" argTypes={extractArgTypes('sage-image')} />
 
-export const Template = (args) =>
-  html`<div style="height: 3500px;">aksjdbk</div>
-    <sage-image alt="${args.alt}" loading="lazy" src="${args.src}" />`;
+export const Template = (args) => html`<sage-image alt="${args.alt}" src="${args.src}" />`;
 export const SizesAndSrcset = (args) => html`<sage-image alt="${args.alt}" sizes="${args.sizes}" src="${args.src}" srcset="${args.srcset}" />`;
 
 # Image
@@ -58,6 +56,6 @@ An image with `srcset` and `sizes` props set. Refresh the browser at `400px` and
 
 ## References
 
-[MDN - Image](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img)
+[MDN: Image](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img)
 
-[HTML Standard - Image](https://html.spec.whatwg.org/multipage/images.html)
+[HTML Standard: Image](https://html.spec.whatwg.org/multipage/images.html)
