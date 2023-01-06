@@ -12,42 +12,42 @@ export class SageInput {
   /**
    * Indicates whether or not the input field is disabled
    */
-  @Prop() disabled? = false;
+  @Prop() disabled?: boolean;
 
   /**
    * Displays a hint or description of the input field
    */
-  @Prop() hint?;
+  @Prop() hint?: string;
 
   /**
    * Indicates whether or not the input field is invalid or throws an error
    */
-  @Prop() invalid?;
+  @Prop() invalid?: boolean;
 
   /**
    * A unique identifier for the input field
    */
-  @Prop() id = '';
+  @Prop() id: string;
 
   /**
    * Text to be displayed as the form label
    */
-  @Prop() label?;
+  @Prop() label?: string;
 
   /**
    * Specifies a short hint that describes the expected value of the input field
    */
-  @Prop() placeholder?;
+  @Prop() placeholder?: string;
 
   /**
    * Indicates whether or not the input field is readonly
    */
-  @Prop() readonly?;
+  @Prop() readonly?: boolean;
 
   /**
    * Indicates whether or not the input field is required
    */
-  @Prop() required?;
+  @Prop() required?: boolean;
 
   /**
    * Determines the type of control that will be displayed
@@ -60,7 +60,7 @@ export class SageInput {
    * The value of the input
    * "text"
    */
-  @Prop() value?;
+  @Prop() value?: string;
 
   private handleChange(event) {
     console.log(event.value)
@@ -68,12 +68,13 @@ export class SageInput {
   }
 
   render() {
+    const {disabled} = this;
     return (
       <Host>
         <div class="sage-input">
           <label htmlFor={this.id}>{this.label}</label>
           <input class="sage-input__field"
-            disabled={this.disabled ? true : false}
+            disabled={disabled}
             id={this.id}
             placeholder={this.placeholder}
             readOnly={this.readonly}

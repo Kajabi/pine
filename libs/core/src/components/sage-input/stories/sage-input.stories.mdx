@@ -3,7 +3,16 @@ import { html, render } from 'lit-html';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
-<Meta title="webcomponents/sage-input" component="sage-input" argTypes={extractArgTypes('sage-input')} args={{ type: 'text' }} />
+<Meta
+  title="webcomponents/sage-input"
+  component="sage-input"
+  argTypes={extractArgTypes('sage-input')}
+  args={{
+    disabled: false,
+    readonly: false,
+    type: 'text'
+}}
+/>
 
 export const Template = (args) => html`<sage-input
   disabled="${args.disabled}"
@@ -58,3 +67,12 @@ export const Template = (args) => html`<sage-input
     {Template.bind()}
   </Story>
 </Canvas>
+
+## Accessibility Guidelines
+
+## Usage
+
+## Component Quality Checklist
+- [ ] Figma
+- [ ] Accessibility
+- [ ] Responsive
