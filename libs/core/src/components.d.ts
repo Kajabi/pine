@@ -35,7 +35,7 @@ export namespace Components {
          */
         "name"?: string;
         /**
-          * Provides button with a type  todo: make sure there is info in the story
+          * Provides button with a type
           * @defaultValue button
          */
         "type"?: 'button' | 'reset' | 'submit';
@@ -124,7 +124,7 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Provides button with a type  todo: make sure there is info in the story
+          * Provides button with a type
           * @defaultValue button
          */
         "type"?: 'button' | 'reset' | 'submit';

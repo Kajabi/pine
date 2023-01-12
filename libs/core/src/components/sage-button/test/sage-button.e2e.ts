@@ -58,7 +58,6 @@ describe('sage-button', () => {
     expect(component).toHaveClass('hydrated');
 
     const element = await page.find('sage-button');
-    // Question: When should I use `toBe` and when should I use `toEqual`?
     expect(element.textContent).toMatch('Test Content');
   });
 

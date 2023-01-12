@@ -37,13 +37,10 @@ export class SageButton {
 
   /**
    * Provides button with a type 
-   * todo: make sure there is info in the story
    * @defaultValue button
    */
   @Prop() type?: 'button' | 'reset' | 'submit' = 'button';
 
-
-  // todo build out e2e test to confirm form submission 
   private handleClick = (ev: Event) => {
     if (this.type != 'button') {
       // If button clicked IS NOT associated with a form
