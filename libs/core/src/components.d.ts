@@ -20,6 +20,36 @@ export namespace Components {
          */
         "middle": string;
     }
+    interface SageImage {
+        /**
+          * The image's alt tag. If none is provided, it will default to an empty string.
+         */
+        "alt"?: string;
+        /**
+          * The height of the image in pixels. Setting this will devote space in the layout to prevent layout shifts when the image is loaded.
+         */
+        "height"?: number;
+        /**
+          * Indicates how the browser should load the image.
+         */
+        "loading"?: 'eager' | 'lazy';
+        /**
+          * Determines the intended display size of an image within certian breakpoints. Has no effect if `srcset` is not set or value has no width descriptor.
+         */
+        "sizes"?: string;
+        /**
+          * The image's source.
+         */
+        "src": string;
+        /**
+          * A set of image sources for the browser to use.
+         */
+        "srcset"?: string;
+        /**
+          * The width of the image in pixels. Setting this will devote space in the layout to prevent layout shifts when the image is loaded.
+         */
+        "width"?: number;
+    }
     interface SageLink {
         /**
           * When enabled, opens link in a new tab.
@@ -48,6 +78,12 @@ declare global {
         prototype: HTMLMyComponentElement;
         new (): HTMLMyComponentElement;
     };
+    interface HTMLSageImageElement extends Components.SageImage, HTMLStencilElement {
+    }
+    var HTMLSageImageElement: {
+        prototype: HTMLSageImageElement;
+        new (): HTMLSageImageElement;
+    };
     interface HTMLSageLinkElement extends Components.SageLink, HTMLStencilElement {
     }
     var HTMLSageLinkElement: {
@@ -56,6 +92,7 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "my-component": HTMLMyComponentElement;
+        "sage-image": HTMLSageImageElement;
         "sage-link": HTMLSageLinkElement;
     }
 }
@@ -73,6 +110,36 @@ declare namespace LocalJSX {
           * The middle name
          */
         "middle"?: string;
+    }
+    interface SageImage {
+        /**
+          * The image's alt tag. If none is provided, it will default to an empty string.
+         */
+        "alt"?: string;
+        /**
+          * The height of the image in pixels. Setting this will devote space in the layout to prevent layout shifts when the image is loaded.
+         */
+        "height"?: number;
+        /**
+          * Indicates how the browser should load the image.
+         */
+        "loading"?: 'eager' | 'lazy';
+        /**
+          * Determines the intended display size of an image within certian breakpoints. Has no effect if `srcset` is not set or value has no width descriptor.
+         */
+        "sizes"?: string;
+        /**
+          * The image's source.
+         */
+        "src"?: string;
+        /**
+          * A set of image sources for the browser to use.
+         */
+        "srcset"?: string;
+        /**
+          * The width of the image in pixels. Setting this will devote space in the layout to prevent layout shifts when the image is loaded.
+         */
+        "width"?: number;
     }
     interface SageLink {
         /**
@@ -96,6 +163,7 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "my-component": MyComponent;
+        "sage-image": SageImage;
         "sage-link": SageLink;
     }
 }
@@ -104,6 +172,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            "sage-image": LocalJSX.SageImage & JSXBase.HTMLAttributes<HTMLSageImageElement>;
             "sage-link": LocalJSX.SageLink & JSXBase.HTMLAttributes<HTMLSageLinkElement>;
         }
     }

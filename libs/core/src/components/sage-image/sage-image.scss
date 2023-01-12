@@ -1,0 +1,14 @@
+:host {
+  /**
+   * @prop --image-aspect-ratio: The image's aspect ratio.
+  */
+
+  --image-aspect-ratio: auto;
+  display: inline-block;
+}
+
+img {
+  aspect-ratio: var(--image-aspect-ratio);
+  height: auto;
+  width: 100%;
+}

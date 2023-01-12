@@ -9,4 +9,5 @@ import { applyPolyfills, defineCustomElements } from '@sage/core/loader';
 
 applyPolyfills().then(() => defineCustomElements());
 export const MyComponent = /*@__PURE__*/createReactComponent<JSX.MyComponent, HTMLMyComponentElement>('my-component');
+export const SageImage = /*@__PURE__*/createReactComponent<JSX.SageImage, HTMLSageImageElement>('sage-image');
 export const SageLink = /*@__PURE__*/createReactComponent<JSX.SageLink, HTMLSageLinkElement>('sage-link');
