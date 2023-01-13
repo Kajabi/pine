@@ -5,14 +5,89 @@ describe('sage-input', () => {
   it('renders a value when prop is set', async () => {
     const { root } = await newSpecPage({
       components: [SageInput],
-      html: '<sage-input label="Name" value="Frank Dux"></sage-input>'
+      html: `<sage-input id="field-1" value="Frank Dux"></sage-input>`
     });
     expect(root).toEqualHtml(`
-    <sage-input>
-      <mock:shadow-root>=
+    <sage-input id="field-1" value="Frank Dux">
+      <mock:shadow-root>
         <div class="sage-input">
-          <label htmlFor={this.id}>Name</label>
-          <input class="sage-input__field" type="text" value="Frank Dux" />
+          <label htmlFor="field-1">
+          </label>
+          <input id="field-1" class="sage-input__field" type="text" value="Frank Dux" />
+        </div>
+      </mock:shadow-root>
+    </sage-input>
+    `);
+  });
+
+  it('renders a label', async () => {
+    const { root } = await newSpecPage({
+      components: [SageInput],
+      html: `<sage-input id="field-1" label="Name" value="Frank Dux"></sage-input>`
+    });
+    expect(root).toEqualHtml(`
+    <sage-input id="field-1" label="Name" value="Frank Dux">
+      <mock:shadow-root>
+        <div class="sage-input">
+          <label htmlFor="field-1">
+            Name
+          </label>
+          <input id="field-1" class="sage-input__field" type="text" value="Frank Dux" />
+        </div>
+      </mock:shadow-root>
+    </sage-input>
+    `);
+  });
+
+  it('renders disabled input', async () => {
+    const { root } = await newSpecPage({
+      components: [SageInput],
+      html: `<sage-input disabled="true" id="field-1" value="Frank Dux"></sage-input>`
+    });
+    expect(root).toEqualHtml(`
+    <sage-input id="field-1" disabled="true" value="Frank Dux">
+      <mock:shadow-root>
+        <div class="sage-input">
+          <label htmlFor="field-1">
+          </label>
+          <input disabled id="field-1" class="sage-input__field" type="text" value="Frank Dux" />
+        </div>
+      </mock:shadow-root>
+    </sage-input>
+    `);
+  });
+
+  it('renders readonly input', async () => {
+    const { root } = await newSpecPage({
+      components: [SageInput],
+      html: `<sage-input readonly="true" id="field-1" value="Frank Dux"></sage-input>`
+    });
+    expect(root).toEqualHtml(`
+    <sage-input id="field-1" readonly="true" value="Frank Dux">
+      <mock:shadow-root>
+        <div class="sage-input">
+          <label htmlFor="field-1">
+          </label>
+          <input readonly id="field-1" class="sage-input__field" type="text" value="Frank Dux" />
+        </div>
+      </mock:shadow-root>
+    </sage-input>
+    `);
+  });
+
+  it('renders a hint', async () => {
+    const { root } = await newSpecPage({
+      components: [SageInput],
+      html: `<sage-input hint="Use the correct syntax" id="field-1" value="Frank Dux"></sage-input>`
+    });
+    expect(root).toEqualHtml(`
+    <sage-input hint="Use the correct syntax" id="field-1" value="Frank Dux">
+      <mock:shadow-root>
+        <div class="sage-input">
+          <label htmlFor="field-1">
+          </label>
+          <input id="field-1" class="sage-input__field" type="text" value="Frank Dux" />
+          <p>Use the correct syntax</p>
         </div>
       </mock:shadow-root>
     </sage-input>
