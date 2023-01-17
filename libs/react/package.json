@@ -37,7 +37,8 @@
     "rollup": "rollup -c"
   },
   "dependencies": {
-    "@sage/core": "^0.0.1-alpha"
+    "@sage/core": "^0.0.1-alpha",
+    "@sage/icons": "*"
   },
   "devDependencies": {
     "@types/jest": "^29.1.2",
