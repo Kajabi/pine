@@ -5,7 +5,7 @@ const libraryName = 'sage-icons';
 
 const collectionCopy = async (rootDir: string) => {
   const optimizedSrc = join(rootDir, 'dist', libraryName, 'svg');
-  const collectionDest = join(rootDir, 'dist', 'collection', 'components', 'icon', 'svg');
+  const collectionDest = join(rootDir, 'dist', 'collection', 'components', 'sage-icon', 'svg');
 
   await fs.copy(optimizedSrc, collectionDest);
 
