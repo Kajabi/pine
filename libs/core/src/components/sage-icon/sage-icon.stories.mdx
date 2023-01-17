@@ -1,0 +1,20 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+import {html, render} from 'lit-html';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+<Meta title="webcomponents/Icon" component="sage-icon" argTypes={extractArgTypes('sage-icon')} />
+
+export const Template = (args) => html`<sage-icon name=${args.name} size=${args.size}></sage-icon>`;
+
+# Sage icon
+
+<Canvas>
+  <Story name="Default" args={{name: "upload"}}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+## Properties
+
+<ArgsTable of="sage-icon" />

@@ -20,7 +20,8 @@
   "collection:main": "dist/collection/index.js",
   "unpkg": "dist/core/core.esm.js",
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
+    "registry": "https://npm.pkg.github.com/",
+    "directory": "dist"
   },
   "repository": {
     "type": "git",
@@ -49,7 +50,8 @@
     "test.watch": "stencil test --spec --e2e --watchAll"
   },
   "dependencies": {
-    "@stencil/core": "^2.18.0"
+    "@stencil/core": "^2.18.0",
+    "@sage/icons": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
