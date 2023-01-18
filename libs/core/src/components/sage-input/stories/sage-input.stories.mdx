@@ -19,7 +19,7 @@ import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 export const Template = (args) => html`<sage-input
   disabled="${args.disabled}"
-  errorText="${args.errorText}"
+  error-text="${args.errorText}"
   hint="${args.hint}"
   label="${args.label}"
   name="${args.name}"
@@ -75,7 +75,7 @@ export const Template = (args) => html`<sage-input
 
 ### Error
 <Canvas>
-  <Story name="Error" args={{ errorText:'Please provide descriptive error text', hint: 'Please use the correct format', label: 'Email', type: 'email', value: 'user123@test.com' }}>
+  <Story name="Error" args={{ errortext:'Please provide descriptive error text', label: 'Email', type: 'email', value: 'user123@test.com' }}>
     {Template.bind()}
   </Story>
 </Canvas>

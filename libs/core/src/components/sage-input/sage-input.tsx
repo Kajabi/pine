@@ -78,7 +78,7 @@ export class SageInput {
   }
 
   render() {
-    const {disabled} = this;
+    // const {disabled} = this;
     return (
       <Host
         aria-disabled={this.disabled ? 'true' : null}
@@ -97,7 +97,7 @@ export class SageInput {
             onInput={(event) => this.handleChange(event)}
           />
           {this.hint
-            ? <p class="sage-input__hint1">{this.hint}</p>
+            ? <p class="sage-input__hint">{this.hint}</p>
             : ''
           }
           {/* TODO: why is this not showing in the DOM? */}

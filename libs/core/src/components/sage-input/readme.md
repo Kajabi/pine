@@ -30,6 +30,24 @@
 |      | Content is placed between the opening closing tags |
 
 
+## CSS Custom Properties
+
+| Name                    | Description                                   |
+| ----------------------- | --------------------------------------------- |
+| `--background`          | Background of the input                       |
+| `--background-disabled` | Background color of a disabled input          |
+| `--border-default`      | Border color of the input text                |
+| `--color`               | Color of the input text                       |
+| `--color-error`         | Color of the input text when error is present |
+| `--color-hover`         | Border color of the input text when hovered   |
+| `--field-font-size`     | Font size of the field text                   |
+| `--field-font-weight`   | Font weight of the field text                 |
+| `--field-line-height`   | Line height of the field text                 |
+| `--label-font-size`     | Font size of the label text                   |
+| `--label-font-weight`   | Font weight of the label text                 |
+| `--label-line-height`   | Line height of the label text                 |
+
+
 ----------------------------------------------
 
 

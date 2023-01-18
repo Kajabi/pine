@@ -66,7 +66,7 @@ input {
     background-color: #f9fafa;
   }
 
-  &:has(~.sage-input__hint1) {
+  &:has(~.sage-input__error-text) {
     border-color: #cf3c32;
   }
 }
@@ -79,7 +79,7 @@ input:focus {
   box-shadow: 0 0 0 4px #8ecafb;
 }
 
-.sage-input__hint1,
+.sage-input__error-text,
 .sage-input__hint {
   font-size: 14px;
   line-height: 20px;
@@ -87,6 +87,6 @@ input:focus {
   margin-top: 8px;
 }
 
-.sage-input__hint1 {
+.sage-input__error-text {
   color: #cf3c32;
 }
