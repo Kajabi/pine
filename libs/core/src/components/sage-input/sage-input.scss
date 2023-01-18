@@ -1,5 +1,45 @@
 :host {
   display: inline;
+
+  :host {
+    /**
+
+     * @prop --background: Background of the input
+     * @prop --background-disabled: Background color of a disabled input
+     *
+     * @prop --color: Color of the input text
+     * @prop --color-error: Color of the input text when error is present
+     *
+     * @prop --border-default: Border color of the input text
+     * @prop --color-hover: Border color of the input text when hovered
+     *
+     * @prop --label-font-size: Font size of the label text
+     * @prop --label-font-weight: Font weight of the label text
+     * @prop --label-line-height: Line height of the label text
+     *
+     * @prop --field-font-size: Font size of the field text
+     * @prop --field-font-weight: Font weight of the field text
+     * @prop --field-line-height: Line height of the field text
+     */
+    --background: #fff;
+    --background-disabled: #f9fafa;
+
+    --color: #60666c;
+    --color-error: #cf3c32;
+
+    --border-default: #d3d5d9;
+    --border-hover: #b5bac0;
+
+    --focus-box-shadow: 0 0 0 4px #8ecafb;
+
+    --label-font-size: 16px;
+    --label-font-weight: 400;
+    --label-line-height: 24px;
+
+    --field-font-size: 16px;
+    --field-font-weight: 400;
+    --field-line-height: 24px;
+  }
 }
 
 .sage-input {
@@ -7,10 +47,28 @@
   flex-direction: column;
 }
 
+label {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  margin-bottom: 8px;
+}
+
 input {
   border: 1px solid #d3d5d9;
-  border-radius: 8px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
   padding: 8px 16px;
+
+  &:disabled {
+    background-color: #f9fafa;
+  }
+
+  &:has(~.sage-input__hint1) {
+    border-color: #cf3c32;
+  }
 }
 
 input:hover {
@@ -18,5 +76,17 @@ input:hover {
 }
 
 input:focus {
-  box-shadow: 0 0 0 4px #8ECAFB;
+  box-shadow: 0 0 0 4px #8ecafb;
+}
+
+.sage-input__hint1,
+.sage-input__hint {
+  font-size: 14px;
+  line-height: 20px;
+  margin-bottom: 0;
+  margin-top: 8px;
+}
+
+.sage-input__hint1 {
+  color: #cf3c32;
 }

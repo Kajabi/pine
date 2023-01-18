@@ -15,6 +15,11 @@ export class SageInput {
   @Prop() disabled?: boolean;
 
   /**
+   * Specifies the error text and provides an error-themed treatment to the field
+   */
+  @Prop() errorText?: string;
+
+  /**
    * Displays a hint or description of the input field
    */
   @Prop() hint?: string;
@@ -33,6 +38,11 @@ export class SageInput {
    * Text to be displayed as the form label
    */
   @Prop() label?: string;
+
+  /**
+   * Specifies the name. Submitted with the form name/value pair
+   */
+  @Prop() name?: string;
 
   /**
    * Specifies a short hint that describes the expected value of the input field
@@ -70,12 +80,15 @@ export class SageInput {
   render() {
     const {disabled} = this;
     return (
-      <Host>
+      <Host
+        aria-disabled={this.disabled ? 'true' : null}
+      >
         <div class="sage-input">
           <label htmlFor={this.id}>{this.label}</label>
           <input class="sage-input__field"
-            disabled={disabled}
+            disabled={this.disabled}
             id={this.id}
+            name={this.name}
             placeholder={this.placeholder}
             readOnly={this.readonly}
             required={this.required}
@@ -84,7 +97,12 @@ export class SageInput {
             onInput={(event) => this.handleChange(event)}
           />
           {this.hint
-            ? <p>{this.hint}</p>
+            ? <p class="sage-input__hint1">{this.hint}</p>
+            : ''
+          }
+          {/* TODO: why is this not showing in the DOM? */}
+          {this.errorText
+            ? <p class="sage-input__error-text">{this.errorText}</p>
             : ''
           }
         </div>
