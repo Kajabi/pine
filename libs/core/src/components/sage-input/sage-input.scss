@@ -79,6 +79,7 @@ input {
 
   &:disabled {
     background-color: var(--background-disabled);
+    cursor: not-allowed;
   }
 
   &:has(~.sage-input__error-text) {
