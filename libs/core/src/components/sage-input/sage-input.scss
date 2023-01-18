@@ -1,45 +1,60 @@
 :host {
+  /**
+
+    * @prop --background: Background of the input
+    * @prop --background-disabled: Background color of a disabled input
+    *
+    * @prop --color: Color of the input text
+    * @prop --color-error: Color of the input text when error is present
+    *
+    * @prop --border-color-default: Border color of the input text
+    * @prop --color-hover: Border color of the input text when hovered
+    *
+    * @prop --label-font-size: Font size of the label text
+    * @prop --label-font-weight: Font weight of the label text
+    * @prop --label-line-height: Line height of the label text
+    * @prop --label-margin-bottom: Bottom margin of the label
+    *
+    * @prop --field-font-size: Font size of the field text
+    * @prop --field-font-weight: Font weight of the field text
+    * @prop --field-line-height: Line height of the field text
+    * @prop --field-padding-block: Block padding for the field text
+    * @prop --field-padding-inline: Inline padding for the field text
+    *
+    * @prop --hint-font-size: Font size of the hint text
+    * @prop --hint-font-weight: Font weight of the hint text
+    * @prop --hint-line-height: Line height of the hint text
+    * @prop --hint-margin-top: Bottom margin of the hint
+    */
+  --background: #fff;
+  --background-disabled: #f9fafa;
+
+  --color: #60666c;
+  --color-error: #cf3c32;
+
+  --border-color-default: #d3d5d9;
+  --border-color-hover: #b5bac0;
+
+  --focus-box-shadow: 0 0 0 4px #8ecafb;
+
+  --label-font-size: 16px;
+  --label-font-weight: 500;
+  --label-line-height: 24px;
+  --label-margin-bottom: 8px;
+
+  --field-font-size: 16px;
+  --field-font-weight: 400;
+  --field-line-height: 24px;
+  --field-padding-block: 8px;
+  --field-padding-inline: 16px;
+
+  --hint-font-size: 12px;
+  --hint-font-weight: 400;
+  --hint-line-height: 20px;
+  --hint-margin-top: 8px;
+
+
   display: inline;
-
-  :host {
-    /**
-
-     * @prop --background: Background of the input
-     * @prop --background-disabled: Background color of a disabled input
-     *
-     * @prop --color: Color of the input text
-     * @prop --color-error: Color of the input text when error is present
-     *
-     * @prop --border-default: Border color of the input text
-     * @prop --color-hover: Border color of the input text when hovered
-     *
-     * @prop --label-font-size: Font size of the label text
-     * @prop --label-font-weight: Font weight of the label text
-     * @prop --label-line-height: Line height of the label text
-     *
-     * @prop --field-font-size: Font size of the field text
-     * @prop --field-font-weight: Font weight of the field text
-     * @prop --field-line-height: Line height of the field text
-     */
-    --background: #fff;
-    --background-disabled: #f9fafa;
-
-    --color: #60666c;
-    --color-error: #cf3c32;
-
-    --border-default: #d3d5d9;
-    --border-hover: #b5bac0;
-
-    --focus-box-shadow: 0 0 0 4px #8ecafb;
-
-    --label-font-size: 16px;
-    --label-font-weight: 400;
-    --label-line-height: 24px;
-
-    --field-font-size: 16px;
-    --field-font-weight: 400;
-    --field-line-height: 24px;
-  }
 }
 
 .sage-input {
@@ -48,45 +63,46 @@
 }
 
 label {
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 24px;
-  margin-bottom: 8px;
+  font-size: var(--label-font-size);
+  font-weight: var(--label-font-weight);
+  line-height: var(--label-line-height);
+  margin-bottom: var(--label-margin-bottom);
 }
 
 input {
-  border: 1px solid #d3d5d9;
+  border: 1px solid var(--border-color-default);
   border-radius: 10px;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 24px;
-  padding: 8px 16px;
+  font-size: var(--field-font-size);
+  font-weight: var(--field-font-weight);
+  line-height: var(--field-line-height);
+  padding: var(--field-padding-block) var(--field-padding-inline);
 
   &:disabled {
-    background-color: #f9fafa;
+    background-color: var(--background-disabled);
   }
 
   &:has(~.sage-input__error-text) {
-    border-color: #cf3c32;
+    border-color: var(--color-error);
   }
 }
 
 input:hover {
-  border-color: #b5bac0;
+  border-color: var(--border-color-hover);
 }
 
 input:focus {
-  box-shadow: 0 0 0 4px #8ecafb;
+  box-shadow: var(--focus-box-shadow);
 }
 
 .sage-input__error-text,
 .sage-input__hint {
-  font-size: 14px;
-  line-height: 20px;
+  font-size: var(--hint-font-size);
+  font-weight: var(--hint-font-weight);
+  line-height: var(--hint-line-height);
   margin-bottom: 0;
-  margin-top: 8px;
+  margin-top: var(--hint-margin-top);
 }
 
 .sage-input__error-text {
-  color: #cf3c32;
+  color: var(--color-error);
 }
