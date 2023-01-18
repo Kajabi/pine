@@ -31,6 +31,7 @@ export const Template = (args) => html`<sage-input
 # Sage input
 
 <p>
+  A input field coupled with a label that allows a user to type into.
 </p>
 
 ## Properties
@@ -53,6 +54,8 @@ export const Template = (args) => html`<sage-input
 </Canvas>
 
 ### Disabled
+<p>Removes all interactive behavior from the text field and provides a visual treatment.</p>
+
 <Canvas>
   <Story name="Disabled" args={{ label: 'Email', disabled: true, type: 'email', value: 'user123@test.com' }}>
     {Template.bind()}
@@ -60,6 +63,8 @@ export const Template = (args) => html`<sage-input
 </Canvas>
 
 ### Readonly
+<p>Removes the ability to interact with the text field. If a value is present, that is still passed to the form.</p>
+
 <Canvas>
   <Story name="Readonly" args={{ label: 'Email', readonly: true, type: 'email', value: 'user123@test.com' }}>
     {Template.bind()}
@@ -67,6 +72,8 @@ export const Template = (args) => html`<sage-input
 </Canvas>
 
 ### Hint
+<p>A `hint` is used to provide additional information about to complete the text field.</p>
+
 <Canvas>
   <Story name="Hint" args={{ hint: 'Please use the correct format', label: 'Email', type: 'email', value: 'user123@test.com' }}>
     {Template.bind()}
@@ -74,8 +81,10 @@ export const Template = (args) => html`<sage-input
 </Canvas>
 
 ### Error
+<p>When `errorText` is present, the input displays the error message and provides a visual treatment.</p>
+
 <Canvas>
-  <Story name="Error" args={{ errorText:'Please provide descriptive error text', label: 'Email', type: 'email', value: 'user123@test.com' }}>
+  <Story name="Error" args={{ errorText:'Please provide a valid Email address', label: 'Email', type: 'email', value: 'user123test' }}>
     {Template.bind()}
   </Story>
 </Canvas>

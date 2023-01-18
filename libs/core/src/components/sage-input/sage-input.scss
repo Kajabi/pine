@@ -82,17 +82,19 @@ input {
     cursor: not-allowed;
   }
 
+
+  &:hover {
+    border-color: var(--border-color-hover);
+  }
+
+  &:focus {
+    box-shadow: var(--focus-box-shadow);
+    outline: none;
+  }
+
   &:has(~.sage-input__error-text) {
     border-color: var(--color-error);
   }
-}
-
-input:hover {
-  border-color: var(--border-color-hover);
-}
-
-input:focus {
-  box-shadow: var(--focus-box-shadow);
 }
 
 .sage-input__error-text,
