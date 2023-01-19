@@ -97,16 +97,16 @@ describe('sage-input', () => {
   it('renders a error', async () => {
     const { root } = await newSpecPage({
       components: [SageInput],
-      html: `<sage-input errorText="Please provide a helpful error message" id="field-1" value="Frank Dux"></sage-input>`
+      html: `<sage-input error-text="Please provide a helpful error message" id="field-1" value="Frank Dux"></sage-input>`
     });
     expect(root).toEqualHtml(`
-    <sage-input errorText="Please provide a helpful error message" id="field-1" value="Frank Dux">
+    <sage-input error-text="Please provide a helpful error message" id="field-1" value="Frank Dux">
       <mock:shadow-root>
         <div class="sage-input">
           <label htmlFor="field-1">
           </label>
           <input id="field-1" class="sage-input__field" type="text" value="Frank Dux" />
-          <p class="sage-input__error-text">Use the correct syntax</p>
+          <p class="sage-input__error-text">Please provide a helpful error message</p>
         </div>
       </mock:shadow-root>
     </sage-input>
