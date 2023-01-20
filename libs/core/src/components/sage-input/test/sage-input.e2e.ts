@@ -28,4 +28,25 @@ describe('sage-input', () => {
     const element = await page.find('sage-input >>> .sage-input__error-text');
     expect(element.textContent).toEqual(`This is error text`);
   });
+
+  it('renders a value onInput', async () => {
+    const page = await newE2EPage();
+
+    await page.setContent('<sage-input></sage-input>');
+    const input = await page.find('sage-input >>> input');
+
+    let value = await input.getProperty('value');
+    expect(value).toBe('');
+
+
+    await input.focus();
+    await page.waitForChanges();
+
+    const inputSpy = await page.spyOnEvent('onInput');
+    await page.keyboard.type('Hello');
+    await page.waitForChanges();
+    value = await input.getProperty('value');
+    console.log('value: ', value);
+    expect(inputSpy).toHaveReceivedEvent();
+  });
 });

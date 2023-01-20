@@ -1,4 +1,4 @@
-import { Component, h, Host, Prop } from '@stencil/core';
+import { Component, Event, EventEmitter, h, Host, Prop } from '@stencil/core';
 
 /**
  * @slot - Content is placed between the opening closing tags
@@ -70,12 +70,20 @@ export class SageInput {
    * The value of the input
    * "text"
    */
-  @Prop() value?: string;
+  @Prop({mutable: true}) value?: string;
 
-  private handleChange(event) {
-    console.log(event.value)
-    this.value = event.target.value;
-  }
+  /**
+   * Emitted when a keyboard input occurred
+   */
+  @Event() onInput :EventEmitter<InputEvent>;
+
+  private onInputEvent = (ev: Event) => {
+    const input = ev.target as HTMLInputElement | null;
+    if (input) {
+      this.value = input.value || '';
+    }
+    this.onInput.emit(ev as InputEvent);
+  };
 
   render() {
     // const {disabled} = this;
@@ -94,7 +102,7 @@ export class SageInput {
             required={this.required}
             type={this.type}
             value={this.value}
-            onInput={(event) => this.handleChange(event)}
+            onInput={this.onInputEvent}
           />
           {this.hint
             ? <p class="sage-input__hint">{this.hint}</p>

@@ -23,6 +23,13 @@
 | `value`       | `value`       | The value of the input "text"                                                                                | `string`  | `undefined` |
 
 
+## Events
+
+| Event     | Description                            | Type                      |
+| --------- | -------------------------------------- | ------------------------- |
+| `onInput` | Emitted when a keyboard input occurred | `CustomEvent<InputEvent>` |
+
+
 ## Slots
 
 | Slot | Description                                        |

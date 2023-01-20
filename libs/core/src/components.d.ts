@@ -150,6 +150,10 @@ export namespace Components {
         "variant": 'inline' | 'plain';
     }
 }
+export interface SageInputCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSageInputElement;
+}
 declare global {
     interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
     }
@@ -291,6 +295,10 @@ declare namespace LocalJSX {
           * Specifies the name. Submitted with the form name/value pair
          */
         "name"?: string;
+        /**
+          * Emitted when a keyboard input occurred
+         */
+        "onOnInput"?: (event: SageInputCustomEvent<InputEvent>) => void;
         /**
           * Specifies a short hint that describes the expected value of the input field
          */
