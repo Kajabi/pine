@@ -1,0 +1,87 @@
+:host {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.sage-button {
+  // Background Color
+  --background-color: #202327;
+  --background-color-hover: #040506;
+  --background-color-disabled: #4f5358;
+
+  // Border Color
+  --border-color: transparent;
+  --border-color-hover: transparent;
+  --border-color-focus: transparent;
+  --border-color-disabled: transparent;
+
+  // Color
+  --color: #fff;
+  --color-disabled: #fff;
+
+  // Outline Color
+  --outline-color: #8ecafb;
+
+  align-items: center;
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  color: var(--color);
+  display: flex;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  min-height: 40px;
+  padding: 0.5rem 1rem;
+
+  svg {
+    fill: currentColor;
+    margin-inline-end: 0.5rem;
+  }
+
+  &:hover {
+    background-color: var(--background-color-hover);
+    border-color: var(--border-color-hover);
+  }
+
+  &:focus {
+    border-color: var(--border-color-focus);
+    outline: 4px solid var(--outline-color);
+  }
+
+  &:disabled {
+    background-color: var(--background-color-disabled);
+    border-color: var(--border-color-disabled);
+    color: var(--color-disabled);
+  }
+}
+
+.sage-button--accent {
+  --background-color: #0072ef;
+  --background-color-hover: #054fb8;
+  --background-color-disabled: #e6f4fe;
+
+  --color-disabled: #8ecafb;
+}
+
+.sage-button--destructive {
+  --background-color: #cf3c32;
+  --background-color-hover: #99221e;
+  --background-color-disabled: #e48079;
+
+  --outline-color: #fdb0aa;
+}
+
+.sage-button--secondary {
+  --background-color: transparent;
+  --background-color-hover: transparent;
+  --background-color-disabled: transparent;
+
+  --border-color: #ddd;
+  --border-color-hover: #b5bac0;
+  --border-color-focus: #eceeef;
+  --border-color-disabled: #eceeef;
+
+  --color: #202327;
+  --color-disabled: #8d939a;
+}

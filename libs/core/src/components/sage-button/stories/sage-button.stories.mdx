@@ -1,0 +1,142 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+import { html, render } from 'lit-html';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+<Meta title="webcomponents/sage-button" component="sage-button" argTypes={extractArgTypes('sage-button')} />
+
+export const Template = (args) =>
+  html` <sage-button value=${args.value} variant=${args.variant} name=${args.name} icon=${args.icon} disabled=${args.disabled} type=${args.type}> ${args.slot} </sage-button> `;
+
+# sage-button
+
+A button component to generate all versions of `sage-button` as outlined in [Figma](https://www.figma.com/file/sMbtLUHSt2vfKgKjyQ3052/%F0%9F%A7%A9-Sage-components?node-id=3%3A15&t=dIcvX1VtOu0FL0VE-0).
+
+## Usage Guidelines
+
+### When to use
+
+- Communicating an action that will occur. (e.g. saving a page)
+- Triggering or enabling an action, such as submitting requested information. (e.g. forms)
+- Progressing or regressing a user through a step in a flow. (e.g. modals)
+
+### When not to use
+
+- Directing users to a new page or different part within the same page. Instead, use [sage-link](/docs/webcomponents-sage-link--external).
+- When space is limited consider an IconButton.
+
+## Accessibility
+
+When following our usage guidelines, sage-button should be accessible right out of the box but there are still a few general accessibility best practices to make sure you follow:
+
+- Buttons should always contain helpful text about what they do even if this text is expected to be visually hidden. (e.g. "submit form" or "delete account")
+- Buttons should not disable tabbing or keyboard navigation.
+- Buttons should always pass [color contrast best practices](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html).
+
+## Properties
+
+<ArgsTable of="sage-button" />
+
+## Variant
+
+### Default (Primary)
+
+Default button styles, used with affirmative actions such as submitting, continuing, and saving
+
+<Canvas>
+  <Story name="Primary" args={{ icon: '', disabled: false, slot: 'Default', type: 'button' }}>
+    {Template.bind()}
+  </Story>
+  <Story name="PrimaryDisabled" args={{ icon: '', disabled: true, slot: 'Disabled', type: 'button' }}>
+    {Template.bind()}
+  </Story>
+  <Story name="PrimaryIcon" args={{ icon: 'trashIcon', disabled: false, slot: 'Icon', type: 'submit' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+### Secondary
+
+Secondary button styles, used with neutral actions such as going back, saving as draft, and cancelling
+
+<Canvas>
+  <Story name="Secondary" args={{ variant: 'secondary', icon: '', disabled: false, slot: 'Default', type: 'button' }}>
+    {Template.bind()}
+  </Story>
+  <Story name="SecondaryDisabled" args={{ variant: 'secondary', icon: '', disabled: true, slot: 'Disabled', type: 'button' }}>
+    {Template.bind()}
+  </Story>
+  <Story name="SecondaryIcon" args={{ variant: 'secondary', icon: 'trashIcon', disabled: false, slot: 'Icon', type: 'button' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+### Accent
+
+Accent button styles, used for tertiary actions or when more contrast is needed
+
+<Canvas>
+  <Story name="Accent" args={{ variant: 'accent', icon: '', disabled: false, slot: 'Default', type: 'button' }}>
+    {Template.bind()}
+  </Story>
+  <Story name="AccentDisabled" args={{ variant: 'accent', icon: '', disabled: true, slot: 'Disabled', type: 'button' }}>
+    {Template.bind()}
+  </Story>
+  <Story name="AccentIcon" args={{ variant: 'accent', icon: 'trashIcon', disabled: false, slot: 'Icon', type: 'button' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+### Disclosure
+
+Disclosure button styles, used to provide multiple options or more information within a button
+
+<Canvas>
+  <Story name="Disclosure" args={{ variant: 'disclosure', icon: '', disabled: false, slot: 'Default', type: 'button' }}>
+    {Template.bind()}
+  </Story>
+  <Story name="DisclosureDisabled" args={{ variant: 'disclosure', icon: '', disabled: true, slot: 'Disabled', type: 'button' }}>
+    {Template.bind()}
+  </Story>
+  <Story name="DisclosureIcon" args={{ variant: 'disclosure', icon: 'trashIcon', disabled: false, slot: 'Icon', type: 'button' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+### Destructive
+
+Destructive button styles, used with actions that delete information such as deleting an item or removing a contact
+
+<Canvas>
+  <Story name="Destructive" args={{ variant: 'destructive', icon: '', disabled: false, slot: 'Default', type: 'button' }}>
+    {Template.bind()}
+  </Story>
+  <Story name="DestructiveDisabled" args={{ variant: 'destructive', icon: '', disabled: true, slot: 'Disabled', type: 'button' }}>
+    {Template.bind()}
+  </Story>
+  <Story name="DestructiveIcon" args={{ variant: 'destructive', icon: 'trashIcon', disabled: false, slot: 'Icon', type: 'button' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+## Type
+
+The type prop allows a `sage-button` to set [button type attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type).
+
+### Default (Button)
+
+The button has no default behavior, and does nothing when pressed by default. It can have client-side scripts listen to the element's events, which are triggered when the events occur.
+
+This is our default button type.
+
+### Submit
+
+The button submits the form data to the server.
+
+### Reset
+
+The button resets all the controls to their initial values. [As noted on MDN, this behavior tends to annoy users](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type).
+
+## Additional Resources
+
+[CSS Tricks - Buttons vs. Links](https://css-tricks.com/buttons-vs-links/)

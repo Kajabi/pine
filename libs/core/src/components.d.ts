@@ -20,6 +20,34 @@ export namespace Components {
          */
         "middle": string;
     }
+    interface SageButton {
+        /**
+          * Toggles disabled state of button
+          * @defaultValue false
+         */
+        "disabled"?: boolean;
+        /**
+          * Displays icon before text when icon string matches an icon name
+         */
+        "icon"?: string;
+        /**
+          * Provides button with a submittable name
+         */
+        "name"?: string;
+        /**
+          * Provides button with a type
+          * @defaultValue button
+         */
+        "type"?: 'button' | 'reset' | 'submit';
+        /**
+          * Provides button with a submittable value
+         */
+        "value"?: string;
+        /**
+          * Sets button variant styles as outlined in Figma documentation
+         */
+        "variant": 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
+    }
     interface SageImage {
         /**
           * The image's alt tag. If none is provided, it will default to an empty string.
@@ -78,6 +106,12 @@ declare global {
         prototype: HTMLMyComponentElement;
         new (): HTMLMyComponentElement;
     };
+    interface HTMLSageButtonElement extends Components.SageButton, HTMLStencilElement {
+    }
+    var HTMLSageButtonElement: {
+        prototype: HTMLSageButtonElement;
+        new (): HTMLSageButtonElement;
+    };
     interface HTMLSageImageElement extends Components.SageImage, HTMLStencilElement {
     }
     var HTMLSageImageElement: {
@@ -92,6 +126,7 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "my-component": HTMLMyComponentElement;
+        "sage-button": HTMLSageButtonElement;
         "sage-image": HTMLSageImageElement;
         "sage-link": HTMLSageLinkElement;
     }
@@ -110,6 +145,34 @@ declare namespace LocalJSX {
           * The middle name
          */
         "middle"?: string;
+    }
+    interface SageButton {
+        /**
+          * Toggles disabled state of button
+          * @defaultValue false
+         */
+        "disabled"?: boolean;
+        /**
+          * Displays icon before text when icon string matches an icon name
+         */
+        "icon"?: string;
+        /**
+          * Provides button with a submittable name
+         */
+        "name"?: string;
+        /**
+          * Provides button with a type
+          * @defaultValue button
+         */
+        "type"?: 'button' | 'reset' | 'submit';
+        /**
+          * Provides button with a submittable value
+         */
+        "value"?: string;
+        /**
+          * Sets button variant styles as outlined in Figma documentation
+         */
+        "variant"?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
     }
     interface SageImage {
         /**
@@ -163,6 +226,7 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "my-component": MyComponent;
+        "sage-button": SageButton;
         "sage-image": SageImage;
         "sage-link": SageLink;
     }
@@ -172,6 +236,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            "sage-button": LocalJSX.SageButton & JSXBase.HTMLAttributes<HTMLSageButtonElement>;
             "sage-image": LocalJSX.SageImage & JSXBase.HTMLAttributes<HTMLSageImageElement>;
             "sage-link": LocalJSX.SageLink & JSXBase.HTMLAttributes<HTMLSageLinkElement>;
         }

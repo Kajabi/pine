@@ -6,6 +6,7 @@ import { sass } from '@stencil/sass';
 
 export const config: Config = {
   namespace: 'sage-core',
+  globalStyle: 'src/global/styles/app.scss',
   outputTargets: [
     {
       type: 'dist',
