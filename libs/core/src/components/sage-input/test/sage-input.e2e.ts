@@ -38,7 +38,6 @@ describe('sage-input', () => {
     let value = await input.getProperty('value');
     expect(value).toBe('');
 
-
     await input.focus();
     await page.waitForChanges();
 
@@ -46,7 +45,6 @@ describe('sage-input', () => {
     await page.keyboard.type('Hello');
     await page.waitForChanges();
     value = await input.getProperty('value');
-    console.log('value: ', value);
     expect(inputSpy).toHaveReceivedEvent();
   });
 });

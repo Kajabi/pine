@@ -86,7 +86,6 @@ export class SageInput {
   };
 
   render() {
-    // const {disabled} = this;
     return (
       <Host
         aria-disabled={this.disabled ? 'true' : null}
