@@ -1,12 +1,14 @@
 import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
 import { html, render } from 'lit-html';
+import { spread, spreadProps } from '@open-wc/lit-helpers';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 <Meta title="webcomponents/sage-link" component="sage-link" argTypes={extractArgTypes('sage-link')} args={{ href: '#some-anchor' }} />
 
-export const Template = (args) => html`<sage-link external=${args.external} font-size=${args.fontSize} href=${args.href} variant=${args.variant}></sage-link>`;
-export const TemplateWithSlot = (args) => html` <sage-link external=${args.external} font-size=${args.fontSize} href=${args.href} variant=${args.variant}>${args.slot}</sage-link>`;
+export const Template = (args) => html`<sage-link ${spreadProps(args)}></sage-link>`;
+
+export const TemplateWithSlot = (args) => html` <sage-link ${spreadProps(args)}>${args.slot}</sage-link>`;
 
 # Sage link
 
@@ -24,9 +26,7 @@ export const TemplateWithSlot = (args) => html` <sage-link external=${args.exter
 ### External
 
 <Canvas>
-  <Story name="External" args={{ external: true }}>
-    {Template.bind()}
-  </Story>
+  <Story name="External">{Template.bind()}</Story>
 </Canvas>
 
 ### Inline
