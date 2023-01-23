@@ -26,7 +26,9 @@ export const TemplateWithSlot = (args) => html` <sage-link ${spread(args)}>${arg
 ### External
 
 <Canvas>
-  <Story name="External">{Template.bind()}</Story>
+  <Story name="External" args={{ external: true }}>
+    {Template.bind()}
+  </Story>
 </Canvas>
 
 ### Inline
