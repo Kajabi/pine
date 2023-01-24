@@ -1,0 +1,22 @@
+name: 'Sage Archive Upload'
+description: 'Zips and uploads an archive to be reused. Leverages Github upload-artifact'
+
+inputs:
+  paths:
+    description: 'Paths to files or directories to archive'
+  output:
+    description: 'The name of the output file'
+  name:
+    description: 'Zip filename'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Create Archive
+      run: zip -q -r ${{ inputs.output }} ${{ inputs.paths }}
+      shell: bash
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: ${{ inputs.name }}
+        path: ${{ inputs.output }}
