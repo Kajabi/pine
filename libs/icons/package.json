@@ -40,7 +40,7 @@
     "figma.export": "node scripts/figma-icon-export.js",
     "lint": "run-p lint.*",
     "lint.eslint": "eslint src/**/*.{ts,tsx}",
-    "start": "stencil build --dev --watch --serve",
+    "start": "run-s build.dev",
     "test": "stencil test --spec --e2e",
     "test.spec": "stencil test --spec",
     "test.spec.watch": "stencil test --spec --watch",

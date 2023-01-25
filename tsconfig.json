@@ -29,7 +29,7 @@
         "./react"
       ],
       "@sage/icons": [
-        "./icons"
+        "./libs/icons"
       ]
     },
     "target": "es2017",

@@ -13,7 +13,7 @@
     "lint.all": "nx run-many --target=lint",
     "prepare": "husky install",
     "setup": "yarn install && yarn bootstrap",
-    "start": "nx run-many --target=start",
+    "start": "nx run core:start",
     "test.all": "nx run-many --target=test"
   },
   "devDependencies": {
