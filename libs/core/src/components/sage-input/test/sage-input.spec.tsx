@@ -95,4 +95,28 @@ describe('sage-input', () => {
     const errorText = root.shadowRoot.querySelector('.sage-input__error-text');
     expect(errorText).not.toBeNull();
   });
+
+  it('updates value prop on value change', async () => {
+    const page = await newSpecPage({
+      components: [SageInput],
+      html: `<sage-input value="yada-yada" />`,
+    })
+    const sageInput = page.root
+    expect(sageInput.value).toBe('yada-yada')
+
+    const input = sageInput.shadowRoot.querySelector('input')
+    expect(input.value).toBe('yada-yada')
+
+    input.value = 'yoda-yoda'
+    input.dispatchEvent(new Event('input'))
+    await page.waitForChanges()
+
+    expect(input?.value).toEqual('yoda-yoda')
+
+    input.value = '';
+    input.dispatchEvent(new Event('input'));
+    await page.waitForChanges();
+
+    expect(input?.value).toEqual('');
+  })
 });
