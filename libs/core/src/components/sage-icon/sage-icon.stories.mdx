@@ -2,12 +2,28 @@ import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
 import {html, render} from 'lit-html';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+import sageIconsJson from '../../../../icons/dist/sage-icons.json';
 
-<Meta title="webcomponents/Icon" component="sage-icon" argTypes={extractArgTypes('sage-icon')} />
+export const argTypes = () => {
+  const extractedArgs = extractArgTypes('sage-icon');
+  extractedArgs.name.control.type = 'select';
+  extractedArgs.name.options = Object.values(sageIconsJson["icons"]).map((icon) => (icon.name));
+  return extractedArgs;
+}
+
+<Meta title="webcomponents/Icon" component="sage-icon" argTypes={argTypes()}/>
 
 export const Template = (args) => html`<sage-icon name=${args.name} size=${args.size}></sage-icon>`;
 
 # Sage icon
+Displays Icons used with the Sage Design System
+
+## Guidelines
+
+Icons are an effective way to enforce the purpose of an experience. Icons are broken out into two main
+categories: Actions and Features. In order to ensure that the icons are adding to the clarity of an experience
+and not creating confusion, we adhere to two principles.
+
 
 <Canvas>
   <Story name="Default" args={{name: "upload"}}>
@@ -18,3 +34,93 @@ export const Template = (args) => html`<sage-icon name=${args.name} size=${args.
 ## Properties
 
 <ArgsTable of="sage-icon" />
+
+### name
+The `name` property is the name of the svg filename.
+
+### size
+The `size` property includes several pre-defined values for ease of use:
+
+```
+<sage-icon name="upload" size="small"></sage-icon>
+<sage-icon name="upload" size="normal"></sage-icon>
+<sage-icon name="upload" size="medium"></sage-icon>
+<sage-icon name="upload" size="large"></sage-icon>
+```
+
+It also accepts any custom size attribute. For example:
+```
+<sage-icon name="upload" size="60px"></sage-icon>
+<sage-icon name="upload" size="2rem"></sage-icon>
+```
+
+## All icons
+
+export const AllIcons = (args) => {
+  return html `
+    <style>
+      .icon {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+      }
+      .icon-label {
+          margin-top: 1rem;
+          font-size: 0.75rem;
+          text-align: center;
+      }
+      .icon-style {
+          font-size: 1.5rem;
+          margin-left: auto;
+      }
+      .icon-group__header {
+          display: flex;
+          align-items: center;
+          font-size: 3rem;
+          font-weight: 400;
+          text-align: left;
+          text-transform: capitalize;
+          margin-bottom: 1rem;
+      }
+      .icon-list {
+          display: grid;
+          grid-template-columns: repeat(6, minmax(0, 1fr));
+          grid-auto-rows: minmax(70px, auto);
+          grid-gap: 1rem;
+          padding-bottom: 60px;
+      }
+      .icon__wrapper {
+          padding: 1rem;
+      }
+    </style>
+    <div>
+      <div class="icon-list">
+       ${Object.values(sageIconsJson["icons"]).map((icon) => {
+          const name = icon.name;
+          return html`
+            <div class="icon">
+              <sage-icon name="${name}" size="${args.size}"></sage-icon>
+              <div class="icon-label">
+                ${name}
+            </div>
+          `
+       })}
+      </div>
+    </div>
+  `
+}
+
+<Canvas withSource="none">
+    <Story
+        args={{
+            size: 'normal',
+        }}
+        argTypes={{
+            size: { table: { disable: true } },
+            icon: { table: { disable: true } }
+        }}
+        name="All Icons"
+    >
+        {AllIcons.bind()}
+    </Story>
+</Canvas>
