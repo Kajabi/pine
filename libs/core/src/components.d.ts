@@ -94,7 +94,7 @@ export namespace Components {
         /**
           * A unique identifier for the input field
          */
-        "id": string;
+        "inputId": string;
         /**
           * Indicates whether or not the input field is invalid or throws an error
          */
@@ -282,7 +282,7 @@ declare namespace LocalJSX {
         /**
           * A unique identifier for the input field
          */
-        "id"?: string;
+        "inputId"?: string;
         /**
           * Indicates whether or not the input field is invalid or throws an error
          */
@@ -298,7 +298,7 @@ declare namespace LocalJSX {
         /**
           * Emitted when a keyboard input occurred
          */
-        "onOnInput"?: (event: SageInputCustomEvent<InputEvent>) => void;
+        "onSageInput"?: (event: SageInputCustomEvent<InputEvent>) => void;
         /**
           * Specifies a short hint that describes the expected value of the input field
          */

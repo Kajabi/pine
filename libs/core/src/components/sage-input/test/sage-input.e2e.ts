@@ -29,7 +29,7 @@ describe('sage-input', () => {
     expect(element.textContent).toEqual(`This is error text`);
   });
 
-  it('renders a value onInput', async () => {
+  it('renders a value sageInput', async () => {
     const page = await newE2EPage();
 
     await page.setContent('<sage-input></sage-input>');
@@ -41,7 +41,7 @@ describe('sage-input', () => {
     await input.focus();
     await page.waitForChanges();
 
-    const inputSpy = await page.spyOnEvent('onInput');
+    const inputSpy = await page.spyOnEvent('sageInput');
     await page.keyboard.type('Hello');
     await page.waitForChanges();
     value = await input.getProperty('value');

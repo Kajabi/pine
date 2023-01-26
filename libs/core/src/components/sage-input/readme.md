@@ -12,7 +12,7 @@
 | `disabled`    | `disabled`    | Indicates whether or not the input field is disabled                                                         | `boolean` | `undefined` |
 | `errorText`   | `error-text`  | Specifies the error text and provides an error-themed treatment to the field                                 | `string`  | `undefined` |
 | `hint`        | `hint`        | Displays a hint or description of the input field                                                            | `string`  | `undefined` |
-| `id`          | `id`          | A unique identifier for the input field                                                                      | `string`  | `undefined` |
+| `inputId`     | `input-id`    | A unique identifier for the input field                                                                      | `string`  | `undefined` |
 | `invalid`     | `invalid`     | Indicates whether or not the input field is invalid or throws an error                                       | `boolean` | `undefined` |
 | `label`       | `label`       | Text to be displayed as the form label                                                                       | `string`  | `undefined` |
 | `name`        | `name`        | Specifies the name. Submitted with the form name/value pair                                                  | `string`  | `undefined` |
@@ -25,9 +25,9 @@
 
 ## Events
 
-| Event     | Description                            | Type                      |
-| --------- | -------------------------------------- | ------------------------- |
-| `onInput` | Emitted when a keyboard input occurred | `CustomEvent<InputEvent>` |
+| Event       | Description                            | Type                      |
+| ----------- | -------------------------------------- | ------------------------- |
+| `sageInput` | Emitted when a keyboard input occurred | `CustomEvent<InputEvent>` |
 
 
 ## Slots

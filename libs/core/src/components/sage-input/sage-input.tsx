@@ -32,7 +32,7 @@ export class SageInput {
   /**
    * A unique identifier for the input field
    */
-  @Prop() id: string;
+  @Prop() inputId: string;
 
   /**
    * Text to be displayed as the form label
@@ -75,14 +75,14 @@ export class SageInput {
   /**
    * Emitted when a keyboard input occurred
    */
-  @Event() onInput :EventEmitter<InputEvent>;
+  @Event() sageInput :EventEmitter<InputEvent>;
 
   private onInputEvent = (ev: Event) => {
     const input = ev.target as HTMLInputElement | null;
     if (input) {
       this.value = input.value || '';
     }
-    this.onInput.emit(ev as InputEvent);
+    this.sageInput.emit(ev as InputEvent);
   };
 
   render() {
@@ -91,10 +91,10 @@ export class SageInput {
         aria-disabled={this.disabled ? 'true' : null}
       >
         <div class="sage-input">
-          <label htmlFor={this.id}>{this.label}</label>
+          <label htmlFor={this.inputId}>{this.label}</label>
           <input class="sage-input__field"
             disabled={this.disabled}
-            id={this.id}
+            id={this.inputId}
             name={this.name}
             placeholder={this.placeholder}
             readOnly={this.readonly}
