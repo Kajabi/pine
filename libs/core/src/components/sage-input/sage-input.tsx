@@ -75,7 +75,7 @@ export class SageInput {
   /**
    * Emitted when a keyboard input occurred
    */
-  @Event() sageInput :EventEmitter<InputEvent>;
+  @Event() sageInput: EventEmitter<InputEvent>;
 
   private onInputEvent = (ev: Event) => {
     const input = ev.target as HTMLInputElement | null;
