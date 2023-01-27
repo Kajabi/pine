@@ -19,11 +19,6 @@ export class SageIcon {
   @State() private svgContent?: string;
 
   /**
-   * The color to be use for the background
-   */
-  @Prop() color?: string;
-
-  /**
    * The name of the icon to use from
    * the built-in set.
    */

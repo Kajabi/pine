@@ -8,10 +8,6 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     interface SageIcon {
         /**
-          * The color to be use for the background
-         */
-        "color"?: string;
-        /**
           * The name of the icon to use from the built-in set.
          */
         "name"?: string;
@@ -39,10 +35,6 @@ declare global {
 }
 declare namespace LocalJSX {
     interface SageIcon {
-        /**
-          * The color to be use for the background
-         */
-        "color"?: string;
         /**
           * The name of the icon to use from the built-in set.
          */
