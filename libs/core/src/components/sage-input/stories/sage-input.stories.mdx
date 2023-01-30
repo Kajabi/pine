@@ -1,0 +1,136 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+import { html, render } from 'lit-html';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+<Meta
+  title="webcomponents/Input"
+  component="sage-input"
+  argTypes={extractArgTypes('sage-input')}
+  args={{
+    disabled: false,
+    errorText: null,
+    hint: null,
+    name: null,
+    placeholder: null,
+    readonly: false,
+    required: false,
+    type: 'text'
+}}
+/>
+
+export const Template = (args) => html`<sage-input
+  disabled="${args.disabled}"
+  error-text="${args.errorText}"
+  hint="${args.hint}"
+  id="${args.inputId}"
+  label="${args.label}"
+  name="${args.name}"
+  placeholder="${args.placeholder}"
+  readonly="${args.readonly}"
+  required="${args.required}"
+  type="${args.type}"
+  value="${args.value}">
+</sage-input>`;
+
+# Input
+
+<p>
+  An input field coupled with a label and error text which allows for user input and feedback.
+</p>
+
+## Guidelines
+
+### Usage
+#### When to use
+
+- To gather basic usage information
+- You want a response that is one line of text
+
+#### When not to use
+- You want a response longer than one line, use a textarea (TODO: create textarea and link here)
+- You want a response from a predefined list, use a select (TODO: create select and link here)
+
+### Accessibility
+- The input component comes with a built-in label through the `label` property.   It is strongly encouraged that you include it
+- Please provide clear and descriptive error messages
+
+## Properties
+<ArgsTable of="sage-input" />
+
+## Variants
+
+### Text
+<p>The type of input used varies based on the type of information you look to capture. The `text` default type allows for any type of single line data.</p>
+
+<Canvas>
+  <Story name="Text" args={{ label: 'Name', type: 'text', value: 'Frank Dux' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+### Email
+<p>This is used when the input type is `email`.</p>
+
+<Canvas>
+  <Story name="Email" args={{ label: 'Email', type: 'email', value: 'user123@test.com' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+### Required
+<p>Indicates that the user must specify a value for the input before the owning form can be submitted.</p>
+
+<Canvas>
+  <Story name="Required" args={{ label: 'Email', required: true, type: 'email', value: 'user123@test.com' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+### Placeholder
+<p>Provides a short, non-essential hint about the expected input.</p>
+
+<Canvas>
+  <Story name="Placeholder" args={{ label: 'Email', placeholder: "123@email.com", type: 'email', value: 'user123@test.com' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+### Disabled
+<p>Removes all interactive behavior from the text field and provides a visual treatment.</p>
+
+<Canvas>
+  <Story name="Disabled" args={{ label: 'Email', disabled: true, type: 'email', value: 'user123@test.com' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+### Readonly
+<p>Removes the ability to interact with the text field. If a value is present, that is still passed to the form.</p>
+
+<Canvas>
+  <Story name="Readonly" args={{ label: 'Email', readonly: true, type: 'email', value: 'user123@test.com' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+### Hint
+<p>A `hint` is used to provide additional information about how to complete the text field.</p>
+
+<Canvas>
+  <Story name="Hint" args={{ hint: 'Please use the correct format', label: 'Email', type: 'email', value: 'user123@test.com' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+### Error
+<p>When `errorText` is present, the input displays the error message and provides a visual treatment.</p>
+
+<Canvas>
+  <Story name="Error" args={{ errorText:'Please provide a valid Email address', label: 'Email', type: 'email', value: 'user123test' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+## Additional Links
+

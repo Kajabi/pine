@@ -78,6 +78,57 @@ export namespace Components {
          */
         "width"?: number;
     }
+    interface SageInput {
+        /**
+          * Indicates whether or not the input field is disabled
+         */
+        "disabled"?: boolean;
+        /**
+          * Specifies the error text and provides an error-themed treatment to the field
+         */
+        "errorText"?: string;
+        /**
+          * Displays a hint or description of the input field
+         */
+        "hint"?: string;
+        /**
+          * A unique identifier for the input field
+         */
+        "inputId": string;
+        /**
+          * Indicates whether or not the input field is invalid or throws an error
+         */
+        "invalid"?: boolean;
+        /**
+          * Text to be displayed as the form label
+         */
+        "label"?: string;
+        /**
+          * Specifies the name. Submitted with the form name/value pair
+         */
+        "name"?: string;
+        /**
+          * Specifies a short hint that describes the expected value of the input field
+         */
+        "placeholder"?: string;
+        /**
+          * Indicates whether or not the input field is readonly
+         */
+        "readonly"?: boolean;
+        /**
+          * Indicates whether or not the input field is required
+         */
+        "required"?: boolean;
+        /**
+          * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`
+          * @defaultValue "text"
+         */
+        "type": string;
+        /**
+          * The value of the input "text"
+         */
+        "value"?: string;
+    }
     interface SageLink {
         /**
           * When enabled, opens link in a new tab.
@@ -99,6 +150,10 @@ export namespace Components {
         "variant": 'inline' | 'plain';
     }
 }
+export interface SageInputCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSageInputElement;
+}
 declare global {
     interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
     }
@@ -118,6 +173,12 @@ declare global {
         prototype: HTMLSageImageElement;
         new (): HTMLSageImageElement;
     };
+    interface HTMLSageInputElement extends Components.SageInput, HTMLStencilElement {
+    }
+    var HTMLSageInputElement: {
+        prototype: HTMLSageInputElement;
+        new (): HTMLSageInputElement;
+    };
     interface HTMLSageLinkElement extends Components.SageLink, HTMLStencilElement {
     }
     var HTMLSageLinkElement: {
@@ -128,6 +189,7 @@ declare global {
         "my-component": HTMLMyComponentElement;
         "sage-button": HTMLSageButtonElement;
         "sage-image": HTMLSageImageElement;
+        "sage-input": HTMLSageInputElement;
         "sage-link": HTMLSageLinkElement;
     }
 }
@@ -204,6 +266,61 @@ declare namespace LocalJSX {
          */
         "width"?: number;
     }
+    interface SageInput {
+        /**
+          * Indicates whether or not the input field is disabled
+         */
+        "disabled"?: boolean;
+        /**
+          * Specifies the error text and provides an error-themed treatment to the field
+         */
+        "errorText"?: string;
+        /**
+          * Displays a hint or description of the input field
+         */
+        "hint"?: string;
+        /**
+          * A unique identifier for the input field
+         */
+        "inputId"?: string;
+        /**
+          * Indicates whether or not the input field is invalid or throws an error
+         */
+        "invalid"?: boolean;
+        /**
+          * Text to be displayed as the form label
+         */
+        "label"?: string;
+        /**
+          * Specifies the name. Submitted with the form name/value pair
+         */
+        "name"?: string;
+        /**
+          * Emitted when a keyboard input occurred
+         */
+        "onSageInput"?: (event: SageInputCustomEvent<InputEvent>) => void;
+        /**
+          * Specifies a short hint that describes the expected value of the input field
+         */
+        "placeholder"?: string;
+        /**
+          * Indicates whether or not the input field is readonly
+         */
+        "readonly"?: boolean;
+        /**
+          * Indicates whether or not the input field is required
+         */
+        "required"?: boolean;
+        /**
+          * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`
+          * @defaultValue "text"
+         */
+        "type"?: string;
+        /**
+          * The value of the input "text"
+         */
+        "value"?: string;
+    }
     interface SageLink {
         /**
           * When enabled, opens link in a new tab.
@@ -228,6 +345,7 @@ declare namespace LocalJSX {
         "my-component": MyComponent;
         "sage-button": SageButton;
         "sage-image": SageImage;
+        "sage-input": SageInput;
         "sage-link": SageLink;
     }
 }
@@ -238,6 +356,7 @@ declare module "@stencil/core" {
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
             "sage-button": LocalJSX.SageButton & JSXBase.HTMLAttributes<HTMLSageButtonElement>;
             "sage-image": LocalJSX.SageImage & JSXBase.HTMLAttributes<HTMLSageImageElement>;
+            "sage-input": LocalJSX.SageInput & JSXBase.HTMLAttributes<HTMLSageInputElement>;
             "sage-link": LocalJSX.SageLink & JSXBase.HTMLAttributes<HTMLSageLinkElement>;
         }
     }
