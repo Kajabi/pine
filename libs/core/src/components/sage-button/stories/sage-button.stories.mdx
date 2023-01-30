@@ -35,6 +35,13 @@ When following our usage guidelines, sage-button should be accessible right out 
 
 ## Properties
 
+
+<Canvas>
+  <Story name="Default" args={{ icon: '', disabled: false, slot: 'Default', type: 'button' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
 <ArgsTable of="sage-button" />
 
 ## Variant
@@ -43,80 +50,50 @@ When following our usage guidelines, sage-button should be accessible right out 
 
 Default button styles, used with affirmative actions such as submitting, continuing, and saving
 
-<Canvas>
-  <Story name="Primary" args={{ icon: '', disabled: false, slot: 'Default', type: 'button' }}>
-    {Template.bind()}
-  </Story>
-  <Story name="PrimaryDisabled" args={{ icon: '', disabled: true, slot: 'Disabled', type: 'button' }}>
-    {Template.bind()}
-  </Story>
-  <Story name="PrimaryIcon" args={{ icon: 'trashIcon', disabled: false, slot: 'Icon', type: 'submit' }}>
-    {Template.bind()}
-  </Story>
+<Canvas withSource="none">
+  <sage-button>Default</sage-button>
+  <sage-button disabled="true">Disabled</sage-button>
+  <sage-button icon="trashIcon">Icon</sage-button>
 </Canvas>
 
 ### Secondary
 
 Secondary button styles, used with neutral actions such as going back, saving as draft, and cancelling
 
-<Canvas>
-  <Story name="Secondary" args={{ variant: 'secondary', icon: '', disabled: false, slot: 'Default', type: 'button' }}>
-    {Template.bind()}
-  </Story>
-  <Story name="SecondaryDisabled" args={{ variant: 'secondary', icon: '', disabled: true, slot: 'Disabled', type: 'button' }}>
-    {Template.bind()}
-  </Story>
-  <Story name="SecondaryIcon" args={{ variant: 'secondary', icon: 'trashIcon', disabled: false, slot: 'Icon', type: 'button' }}>
-    {Template.bind()}
-  </Story>
+<Canvas withSource="none">
+  <sage-button variant="secondary">Default</sage-button>
+  <sage-button variant="secondary" disabled="true">Disabled</sage-button>
+  <sage-button variant="secondary" icon="trashIcon">Icon</sage-button>
 </Canvas>
 
 ### Accent
 
 Accent button styles, used for tertiary actions or when more contrast is needed
 
-<Canvas>
-  <Story name="Accent" args={{ variant: 'accent', icon: '', disabled: false, slot: 'Default', type: 'button' }}>
-    {Template.bind()}
-  </Story>
-  <Story name="AccentDisabled" args={{ variant: 'accent', icon: '', disabled: true, slot: 'Disabled', type: 'button' }}>
-    {Template.bind()}
-  </Story>
-  <Story name="AccentIcon" args={{ variant: 'accent', icon: 'trashIcon', disabled: false, slot: 'Icon', type: 'button' }}>
-    {Template.bind()}
-  </Story>
+<Canvas withSource="none">
+  <sage-button variant="accent">Default</sage-button>
+  <sage-button variant="accent" disabled="true">Disabled</sage-button>
+  <sage-button variant="accent" icon="trashIcon">Icon</sage-button>
 </Canvas>
 
 ### Disclosure
 
 Disclosure button styles, used to provide multiple options or more information within a button
 
-<Canvas>
-  <Story name="Disclosure" args={{ variant: 'disclosure', icon: '', disabled: false, slot: 'Default', type: 'button' }}>
-    {Template.bind()}
-  </Story>
-  <Story name="DisclosureDisabled" args={{ variant: 'disclosure', icon: '', disabled: true, slot: 'Disabled', type: 'button' }}>
-    {Template.bind()}
-  </Story>
-  <Story name="DisclosureIcon" args={{ variant: 'disclosure', icon: 'trashIcon', disabled: false, slot: 'Icon', type: 'button' }}>
-    {Template.bind()}
-  </Story>
+<Canvas withSource="none">
+  <sage-button variant="disclosure">Default</sage-button>
+  <sage-button variant="disclosure" disabled="true">Disabled</sage-button>
+  <sage-button variant="disclosure" icon="trashIcon">Icon</sage-button>
 </Canvas>
 
 ### Destructive
 
 Destructive button styles, used with actions that delete information such as deleting an item or removing a contact
 
-<Canvas>
-  <Story name="Destructive" args={{ variant: 'destructive', icon: '', disabled: false, slot: 'Default', type: 'button' }}>
-    {Template.bind()}
-  </Story>
-  <Story name="DestructiveDisabled" args={{ variant: 'destructive', icon: '', disabled: true, slot: 'Disabled', type: 'button' }}>
-    {Template.bind()}
-  </Story>
-  <Story name="DestructiveIcon" args={{ variant: 'destructive', icon: 'trashIcon', disabled: false, slot: 'Icon', type: 'button' }}>
-    {Template.bind()}
-  </Story>
+<Canvas withSource="none">
+  <sage-button variant="destructive">Default</sage-button>
+  <sage-button variant="destructive" disabled="true">Disabled</sage-button>
+  <sage-button variant="destructive" icon="trashIcon">Icon</sage-button>
 </Canvas>
 
 ## Type
