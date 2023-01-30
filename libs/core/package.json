@@ -89,5 +89,12 @@
     "stylelint-config-sass-guidelines": "^9.0.1",
     "typescript": "^4.8.4",
     "webpack": "^5.74.0"
+  },
+  "nx": {
+    "targets": {
+      "start.stencil": {
+        "dependsOn":  [{ "projects": "dependencies", "target": "build" }]
+      }
+    }
   }
 }
