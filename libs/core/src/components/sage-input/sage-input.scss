@@ -2,10 +2,11 @@
   /**
 
     * @prop --background: Background of the input
-    * @prop --background-disabled: Background color of a disabled input
+    * @prop --background-disabled: Background of a disabled input
     *
     * @prop --color: Color of the input text
     * @prop --color-error: Color of the input text when error is present
+    * @prop --color-placeholder: Color of the placeholder text
     *
     * @prop --border-color-default: Border color of the input text
     * @prop --color-hover: Border color of the input text when hovered
@@ -24,13 +25,14 @@
     * @prop --hint-font-size: Font size of the hint text
     * @prop --hint-font-weight: Font weight of the hint text
     * @prop --hint-line-height: Line height of the hint text
-    * @prop --hint-margin-top: Bottom margin of the hint
+    * @prop --hint-margin-top: Top margin of the hint
     */
   --background: #fff;
   --background-disabled: #f9fafa;
 
-  --color: #60666c;
+  --color: #040506;
   --color-error: #cf3c32;
+  --color-placeholder: #60666c;
 
   --border-color-default: #d3d5d9;
   --border-color-hover: #b5bac0;
@@ -92,9 +94,27 @@ input {
     outline: none;
   }
 
+  /* stylelint-disable */
+  &::-webkit-input-placeholder {
+    color: var(--color-placeholder);
+  }
+
+  &::-moz-placeholder {
+    color: var(--color-placeholder);
+  }
+
+  &::-moz-placeholder {
+    color: var(--color-placeholder);
+  }
+
+  &:-ms-input-placeholder {
+    color: var(--color-placeholder);
+  }
+
   &:has(~.sage-input__error-text) {
     border-color: var(--color-error);
   }
+  /* stylelint-enable */
 }
 
 .sage-input__error-text,

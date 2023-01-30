@@ -12,7 +12,9 @@ import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
     errorText: null,
     hint: null,
     name: null,
+    placeholder: null,
     readonly: false,
+    required: false,
     type: 'text'
 }}
 />
@@ -24,7 +26,9 @@ export const Template = (args) => html`<sage-input
   id="${args.inputId}"
   label="${args.label}"
   name="${args.name}"
+  placeholder="${args.placeholder}"
   readonly="${args.readonly}"
+  required="${args.required}"
   type="${args.type}"
   value="${args.value}">
 </sage-input>`;
@@ -32,7 +36,7 @@ export const Template = (args) => html`<sage-input
 # Input
 
 <p>
-  A input field coupled with a label that allows a user to type into.
+  An input field coupled with a label and error text which allows for user input and feedback.
 </p>
 
 ## Guidelines
@@ -57,7 +61,7 @@ export const Template = (args) => html`<sage-input
 ## Variants
 
 ### Text
-<p>The type of input used varies based on the type of information you look to capture. The `text` default type allows for any type of sinle line data.</p>
+<p>The type of input used varies based on the type of information you look to capture. The `text` default type allows for any type of single line data.</p>
 
 <Canvas>
   <Story name="Text" args={{ label: 'Name', type: 'text', value: 'Frank Dux' }}>
@@ -66,10 +70,28 @@ export const Template = (args) => html`<sage-input
 </Canvas>
 
 ### Email
-<p>There are several type, `text`, `email`, `file`, `number`, `password`, etc. Email is provided as a common example here.</p>
+<p>This is used when the input type is `email`.</p>
 
 <Canvas>
   <Story name="Email" args={{ label: 'Email', type: 'email', value: 'user123@test.com' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+### Required
+<p></p>
+
+<Canvas>
+  <Story name="Required" args={{ label: 'Email', required: true, type: 'email', value: 'user123@test.com' }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+### Placeholder
+<p>Provides a short, non-essential hint about the expected input.</p>
+
+<Canvas>
+  <Story name="Placeholder" args={{ label: 'Email', placeholder: "123@email.com", type: 'email', value: 'user123@test.com' }}>
     {Template.bind()}
   </Story>
 </Canvas>
@@ -84,7 +106,7 @@ export const Template = (args) => html`<sage-input
 </Canvas>
 
 ### Readonly
-<p class="my-readonly">Removes the ability to interact with the text field. If a value is present, that is still passed to the form.</p>
+<p>Removes the ability to interact with the text field. If a value is present, that is still passed to the form.</p>
 
 <Canvas>
   <Story name="Readonly" args={{ label: 'Email', readonly: true, type: 'email', value: 'user123@test.com' }}>
@@ -109,11 +131,6 @@ export const Template = (args) => html`<sage-input
     {Template.bind()}
   </Story>
 </Canvas>
-
-## Component Quality Checklist
-- [ ] Figma
-- [ ] Accessibility
-- [ ] Responsive
 
 ## Additional Links
 

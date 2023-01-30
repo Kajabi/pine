@@ -107,7 +107,6 @@ export class SageInput {
             ? <p class="sage-input__hint">{this.hint}</p>
             : ''
           }
-          {/* TODO: why is this not showing in the DOM? */}
           {this.errorText
             ? <p class="sage-input__error-text">{this.errorText}</p>
             : ''

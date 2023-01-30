@@ -39,6 +39,44 @@ describe('sage-input', () => {
     `);
   });
 
+  it('renders placeholder text', async () => {
+    const { root } = await newSpecPage({
+      components: [SageInput],
+      html: `<sage-input placeholder="placeholder text" input-id="field-1" value="Frank Dux"></sage-input>`
+    });
+
+    expect(root).toEqualHtml(`
+    <sage-input input-id="field-1" placeholder="placeholder text" value="Frank Dux">
+      <mock:shadow-root>
+        <div class="sage-input">
+          <label htmlFor="field-1">
+          </label>
+          <input placeholder="placeholder text" id="field-1" class="sage-input__field" type="text" value="Frank Dux" />
+        </div>
+      </mock:shadow-root>
+    </sage-input>
+    `);
+  });
+
+  it('renders readonly input', async () => {
+    const { root } = await newSpecPage({
+      components: [SageInput],
+      html: `<sage-input required="true" input-id="field-1" value="Frank Dux"></sage-input>`
+    });
+
+    expect(root).toEqualHtml(`
+    <sage-input input-id="field-1" required="true" value="Frank Dux">
+      <mock:shadow-root>
+        <div class="sage-input">
+          <label htmlFor="field-1">
+          </label>
+          <input required id="field-1" class="sage-input__field" type="text" value="Frank Dux" />
+        </div>
+      </mock:shadow-root>
+    </sage-input>
+    `);
+  });
+
   it('renders disabled input', async () => {
     const { root } = await newSpecPage({
       components: [SageInput],
