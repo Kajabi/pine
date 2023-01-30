@@ -12,10 +12,10 @@ export namespace Components {
          */
         "name"?: string;
         /**
-          * The size of the icon. This can be 'small', 'normal', 'medium', large, or a custom value (40px, 1rem, etc)
+          * The size of the icon. This can be 'small', 'regular', 'medium', large, or a custom value (40px, 1rem, etc)
          */
         "size"?: | 'small'   // 12px
-    | 'normal'  // 16px
+    | 'regular'  // 16px
     | 'medium'  // 20px
     | 'large'   // 24px
     | 'auto'
@@ -40,10 +40,10 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * The size of the icon. This can be 'small', 'normal', 'medium', large, or a custom value (40px, 1rem, etc)
+          * The size of the icon. This can be 'small', 'regular', 'medium', large, or a custom value (40px, 1rem, etc)
          */
         "size"?: | 'small'   // 12px
-    | 'normal'  // 16px
+    | 'regular'  // 16px
     | 'medium'  // 20px
     | 'large'   // 24px
     | 'auto'

@@ -26,22 +26,22 @@ export class SageIcon {
 
   /**
    * The size of the icon. This can be
-   * 'small', 'normal', 'medium', large, or a
+   * 'small', 'regular', 'medium', large, or a
    * custom value (40px, 1rem, etc)
    *
    */
   @Prop({ reflect: true }) size?:
     | 'small'   // 12px
-    | 'normal'  // 16px
+    | 'regular'  // 16px
     | 'medium'  // 20px
     | 'large'   // 24px
     | 'auto'
-    | string = 'normal'
+    | string = 'regular'
 
   private iconSize() {
     const sizes: { [key: string]: any } = {
       small: '12px',
-      normal: '16px',
+      regular: '16px',
       medium: '20px',
       large: '24px',
     }

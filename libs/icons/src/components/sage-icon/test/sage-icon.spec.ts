@@ -8,7 +8,7 @@ describe('sage-icon', () => {
       html: '<sage-icon></sage-icon>',
     });
     expect(root).toEqualHtml(`
-      <sage-icon role="img" size="normal" style="height: 16px; width: 16px;">
+      <sage-icon role="img" size="regular" style="height: 16px; width: 16px;">
         <mock:shadow-root>
           <div></div>
         </mock:shadow-root>
@@ -50,7 +50,7 @@ describe('sage-icon', () => {
       html: '<sage-icon name="archive"></sage-icon>',
     });
     expect(root).toEqualHtml(`
-      <sage-icon aria-label="archive" name="archive" role="img" size="normal" style="height: 16px; width: 16px;">
+      <sage-icon aria-label="archive" name="archive" role="img" size="regular" style="height: 16px; width: 16px;">
         <mock:shadow-root>
           <div></div>
         </mock:shadow-root>
