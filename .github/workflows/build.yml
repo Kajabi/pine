@@ -1,84 +1,43 @@
-name: "Sage Build"
+name: 'Sage Framework Build'
 
 on:
   push:
     branches: [main, next]
   pull_request:
-    branches: ["**"]
+    branches: [ "**" ]
 
-# When pushing a new commit lets cancel
+# When pushing a new commit we should cancel
 # the previous run
 concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  setup:
+  build-icons:
     runs-on: ubuntu-latest
-    env:
-      NX_BRANCH: ${{ github.ref_name }}'
-
     steps:
-      - name: Check out latest
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
-          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: ./.github/workflows/actions/build-icons
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18.x
-
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        id: core-node-modules
-        with:
-          path: "**/node_modules"
-          key: ${{ runner.os}}-build-${{ hashFiles('**/yarn.lock') }}
-
-      - name: Set SHA
-        uses: nrwl/nx-set-shas@v3
-
-      - name: Install Dependencies
-        if: steps.cache-node-modules.ouputs.cache-hit != true || steps.changed-files.outputs.any_changed == 'true'
-        run: lerna bootstrap -- --frozen-lockfile --immutable
-
-      - name: Build
-        run: yarn nx build.stencil core --ci
-
-  lint:
-    needs: setup
+  build-core:
+    needs: [build-icons]
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/actions/build-core
 
-      - name: Restore node_modules
-        uses: actions/cache@v3
-        with:
-          path: "**/node_modules"
-          key: ${{ runner.os}}-build-${{ hashFiles('**/yarn.lock') }}
-
-      - name: Lint
-        run: yarn nx affected --target=lint --parallel=3
-
-  test:
-    needs: setup
+  test-lint:
+    needs: [build-core]
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/actions/test-lint
 
-      - name: Restore node_modules
-        uses: actions/cache@v3
-        with:
-          path: "**/node_modules"
-          key: ${{ runner.os}}-build-${{ hashFiles('**/yarn.lock') }}
-
-      - name: Test
-        run: yarn nx affected --target=test --parallel=3 --ci --coverage
+  test-specs:
+    needs: [build-core]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/actions/test-spec

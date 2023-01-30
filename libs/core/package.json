@@ -1,6 +1,6 @@
 {
   "name": "@sage/core",
-  "version": "0.0.1-alpha",
+  "version": "0.0.1",
   "license": "MIT",
   "description": "Base components for Sage Design System",
   "author": "Kajabi Design System Services",
@@ -20,7 +20,8 @@
   "collection:main": "dist/collection/index.js",
   "unpkg": "dist/core/core.esm.js",
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
+    "registry": "https://npm.pkg.github.com/",
+    "directory": "dist"
   },
   "repository": {
     "type": "git",
@@ -49,7 +50,8 @@
     "test.watch": "stencil test --spec --e2e --watchAll"
   },
   "dependencies": {
-    "@stencil/core": "^2.18.0"
+    "@stencil/core": "^2.18.0",
+    "@sage/icons": "*"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
@@ -87,5 +89,12 @@
     "stylelint-config-sass-guidelines": "^9.0.1",
     "typescript": "^4.8.4",
     "webpack": "^5.74.0"
+  },
+  "nx": {
+    "targets": {
+      "start.stencil": {
+        "dependsOn":  [{ "projects": "dependencies", "target": "build" }]
+      }
+    }
   }
 }

@@ -1,0 +1,46 @@
+:host {
+  display: inline-block;
+
+  width: 1em;
+  height: 1em;
+
+  contain: strict;
+
+  fill: currentColor;
+
+  box-sizing: content-box;
+}
+
+:host .sage-icon {
+  stroke: currentColor;
+}
+
+.sage-icon,
+svg {
+  display: block;
+
+  height: 100%;
+  width: 100%;
+}
+
+/* Icon Sizes
+ * -----------------------------------------------------------
+ */
+
+ :host(.sage-icon-small) {
+  font-size: 12px !important;
+}
+
+
+:host(.sage-icon-normal) {
+  font-size: 16px !important;
+}
+
+:host(.sage-icon-medium) {
+  font-size: 20px !important;
+}
+
+
+:host(.sage-icon-large){
+  font-size: 24px !important;
+}

@@ -1,0 +1,12 @@
+{
+  "extends": ["plugin:@stencil/recommended", "plugin:@typescript-eslint/recommended", "prettier"],
+  "parserOptions": {
+    "project": ["./tsconfig.json"]
+  },
+  "plugins": ["@typescript-eslint"],
+  "rules": {
+    "@stencil/decorators-context": "off", // This is set to off until support for ESLINT 8, othwerise remove rule
+    "@stencil/strict-boolean-conditions": "off", // This is set to off until support for ESLINT 8, othwerise remove rule
+    "@stencil/no-unused-watch": "off" // This is set to off until support for ESLINT 8, othwerise remove rule
+  }
+}

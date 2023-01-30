@@ -1,0 +1,43 @@
+name: 'Build Sage Core'
+description: 'Builds Sage Core library'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check out latest
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        ref: ${{ github.event.pull_request.head.sha }}
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+
+    - name: Cache Node modules
+      uses: actions/cache@v3
+      id: sage-core-node-modules
+      env:
+        cache-name: sage-core-node-modules
+      with:
+        path: ./libs/core/node_modules
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}-v1
+
+    - name: Set SHA
+      uses: nrwl/nx-set-shas@v3
+
+    - name: Install Dependencies
+      run: yarn install
+      working-directory: './libs/core'
+      shell: bash
+
+    - name: Build Core
+      run: yarn nx run core:build  --ci
+      shell: bash
+
+    - name: Upload artifacts
+      uses: ./.github/workflows/actions/upload-archive
+      with:
+        name: sage-core-build
+        output: libs/core/SageCoreBuild.zip
+        paths: libs/core/css libs/core/dist libs/core/loader libs/core/src/components.d.ts

@@ -1,0 +1,23 @@
+name: 'Test Specs'
+descriptions: 'Runs specs for affected projects'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check out latest
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        ref: ${{ github.event.pull_request.head.sha }}
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+
+    - name: Install Dependencies
+      run: lerna bootstrap -- --frozen-lockfile --immutable
+      shell: bash
+
+    - name: Lint
+      run : yarn nx affected --target=test --parallel=3 --ci --coverage
+      shell: bash

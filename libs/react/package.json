@@ -1,6 +1,6 @@
 {
   "name": "@sage/react",
-  "version": "0.0.1-alpha",
+  "version": "0.0.1",
   "license": "MIT",
   "description": "Sage Web Components React Wrapper",
   "author": "Kajabi Design System Services",
@@ -37,7 +37,8 @@
     "rollup": "rollup -c"
   },
   "dependencies": {
-    "@sage/core": "^0.0.1-alpha"
+    "@sage/core": "*",
+    "@sage/icons": "*"
   },
   "devDependencies": {
     "@types/jest": "^29.1.2",

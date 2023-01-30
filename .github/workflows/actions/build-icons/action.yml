@@ -1,0 +1,50 @@
+name: 'Build Sage/Icons'
+description: 'Build Sage Icon library'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check out latest
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        ref: ${{ github.event.pull_request.head.sha }}
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+
+    - name: Cache Node modules
+      uses: actions/cache@v3
+      id: sage-icons-node-modules
+      env:
+        cache-name: sage-icons-node-modules
+      with:
+        path: ./libs/icons/node_modules
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}-v1
+
+    - name: Set SHA
+      uses: nrwl/nx-set-shas@v3
+
+    - name: Install Dependencies
+      if: steps.cache-node-modules.ouputs.cache-hit != true || steps.changed-files.outputs.any_changed == 'true'
+      run: lerna bootstrap -- --frozen-lockfile --immutable
+      shell: bash
+
+    - name: Build Icons
+      run: yarn nx run icons:build --ci
+      shell: bash
+
+    - name: Upload Sage Icons Build Archive
+      uses: ./.github/workflows/actions/upload-archive
+      with:
+        name: sage-icons-build
+        output: SageIconsBuild.zip
+        paths: libs/icons/dist libs/icons/components lib/icons/icons lib/icons/www
+
+    - name: Upload Sage Icons Source
+      uses: ./.github/workflows/actions/upload-archive
+      with:
+        name: sage-icons-src
+        output: SageIconsSrc.zip
+        paths: libs/icons/src

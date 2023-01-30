@@ -1,0 +1,22 @@
+name: 'Download Archive'
+description: 'Downloads and unzips an archive that was uploaded'
+
+inputs:
+  path:
+    description: 'Input archive name'
+  filename:
+    description: 'Input the name of the file'
+  name:
+    description: 'Zip file name'
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/download-artifact@v3
+      with:
+        name: ${{ inputs.name }}
+        path: ${{ inputs. path }}
+
+    - name:  Extract the Archive
+      run: unzip -q -o ${{ inputs.path }}/${{ inputs.filename }}
+      shel: bash
