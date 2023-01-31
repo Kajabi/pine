@@ -35,13 +35,6 @@ When following our usage guidelines, sage-button should be accessible right out 
 
 ## Properties
 
-
-<Canvas>
-  <Story name="Default" args={{ icon: '', disabled: false, slot: 'Default', type: 'button' }}>
-    {Template.bind()}
-  </Story>
-</Canvas>
-
 <ArgsTable of="sage-button" />
 
 ## Variant
@@ -50,8 +43,10 @@ When following our usage guidelines, sage-button should be accessible right out 
 
 Default button styles, used with affirmative actions such as submitting, continuing, and saving
 
-<Canvas withSource="none">
-  <sage-button>Default</sage-button>
+<Canvas>
+  <Story name="Primary" args={{ icon: '', disabled: false, slot: 'Default', type: 'button' }}>
+    {Template.bind()}
+  </Story>
   <sage-button disabled="true">Disabled</sage-button>
   <sage-button icon="trashIcon">Icon</sage-button>
 </Canvas>
@@ -60,8 +55,10 @@ Default button styles, used with affirmative actions such as submitting, continu
 
 Secondary button styles, used with neutral actions such as going back, saving as draft, and cancelling
 
-<Canvas withSource="none">
-  <sage-button variant="secondary">Default</sage-button>
+<Canvas>
+  <Story name="Secondary" args={{ variant: 'secondary', icon: '', disabled: false, slot: 'Default', type: 'button' }}>
+    {Template.bind()}
+  </Story>
   <sage-button variant="secondary" disabled="true">Disabled</sage-button>
   <sage-button variant="secondary" icon="trashIcon">Icon</sage-button>
 </Canvas>
@@ -70,8 +67,10 @@ Secondary button styles, used with neutral actions such as going back, saving as
 
 Accent button styles, used for tertiary actions or when more contrast is needed
 
-<Canvas withSource="none">
-  <sage-button variant="accent">Default</sage-button>
+<Canvas>
+  <Story name="Accent" args={{ variant: 'accent', icon: '', disabled: false, slot: 'Default', type: 'button' }}>
+    {Template.bind()}
+  </Story>
   <sage-button variant="accent" disabled="true">Disabled</sage-button>
   <sage-button variant="accent" icon="trashIcon">Icon</sage-button>
 </Canvas>
@@ -80,8 +79,10 @@ Accent button styles, used for tertiary actions or when more contrast is needed
 
 Disclosure button styles, used to provide multiple options or more information within a button
 
-<Canvas withSource="none">
-  <sage-button variant="disclosure">Default</sage-button>
+<Canvas>
+  <Story name="Disclosure" args={{ variant: 'disclosure', icon: '', disabled: false, slot: 'Default', type: 'button' }}>
+    {Template.bind()}
+  </Story>
   <sage-button variant="disclosure" disabled="true">Disabled</sage-button>
   <sage-button variant="disclosure" icon="trashIcon">Icon</sage-button>
 </Canvas>
@@ -90,8 +91,10 @@ Disclosure button styles, used to provide multiple options or more information w
 
 Destructive button styles, used with actions that delete information such as deleting an item or removing a contact
 
-<Canvas withSource="none">
-  <sage-button variant="destructive">Default</sage-button>
+<Canvas>
+  <Story name="Destructive" args={{ variant: 'destructive', icon: '', disabled: false, slot: 'Default', type: 'button' }}>
+    {Template.bind()}
+  </Story>
   <sage-button variant="destructive" disabled="true">Disabled</sage-button>
   <sage-button variant="destructive" icon="trashIcon">Icon</sage-button>
 </Canvas>
