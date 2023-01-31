@@ -4,6 +4,7 @@ if (process.env.NODE_ENV !== 'prod') {
   dotenv.config({ path: `${process.cwd()}/libs/icons/.env` })
 }
 
+/* eslint-disable @typescript-eslint/no-var-requires */
 const axios = require('axios');
 import chalk from 'chalk'; // Terminal string styling done right
 import path from 'path';
@@ -103,8 +104,8 @@ const createOutputDirectory = () => {
  * @returns a object with the name and size of the svg
  */
 const downloadImage = (url: string, name: string) => {
-  let nameClean = name.toLowerCase();;
-  let directory = config.outputPath;
+  const nameClean = name.toLowerCase();;
+  const directory = config.outputPath;
 
   const imagePath = path.resolve(directory, `${nameClean}.svg`);
   const writer = fs.createWriteStream(imagePath);
@@ -163,12 +164,18 @@ const processData = (rootDir: string) => {
         fetchFigmaData(branchFileId)
           .then((branchData: any) => {
             const page = findPage(branchData.document, config.pageName);
-            fetchAndDownloadIcons(page, branchFileId);
+            fs.emptyDir(config.outputPath)
+              .then(() => {
+                fetchAndDownloadIcons(page, branchFileId);
+              })
           });
       }
       else {
         const page = findPage(data.document, config.pageName);
-        fetchAndDownloadIcons(page, config.figmaFileId)
+        fs.emptyDir(config.outputPath)
+          .then(() => {
+            fetchAndDownloadIcons(page, config.figmaFileId)
+          })
       }
     })
     .catch((err) => {
@@ -185,7 +192,7 @@ const processData = (rootDir: string) => {
 const extractIcons = (pageData) => {
   const iconArray = pageData.children;
 
-  let iconLibrary: Array<FigmaIcon> = [];
+  const iconLibrary: Array<FigmaIcon> = [];
 
   iconArray.forEach((obj) => {
 
