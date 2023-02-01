@@ -25,11 +25,14 @@
       "@sage/core": [
         "./libs/core"
       ],
-      "@sage/react": [
-        "./react"
+      "@sage/doc-site": [
+        "./apps/doc-site"
       ],
       "@sage/icons": [
         "./libs/icons"
+      ],
+      "@sage/react": [
+        "./libs/react"
       ]
     },
     "target": "es2017",
