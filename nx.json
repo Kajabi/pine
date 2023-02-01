@@ -3,6 +3,10 @@
     "defaultBase": "origin/main"
   },
   "npmScope": "sage",
+  "workspaceLayout": {
+    "appsDir": "apps",
+    "libsDir": "libs"
+  },
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/nx-cloud",
