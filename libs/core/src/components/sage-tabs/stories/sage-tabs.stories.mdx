@@ -1,0 +1,38 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+import { html, render } from 'lit-html';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+<Meta title="webcomponents/tabs" component="sage-tabs" argTypes={extractArgTypes('sage-tabs')} />
+
+export const Template = (args) => html` <sage-tabs tabs=${args.tabs}> ${args.slot} </sage-tabs> `;
+
+# sage-tabs
+
+ 
+## Usage Guidelines
+
+### When to use
+
+### When not to use
+
+
+## Accessibility
+
+## Properties
+
+<ArgsTable of="sage-tabs" />
+
+## Title
+
+<Canvas>
+  <Story name="Default" args={{ 
+    slot: "tabs story",
+    
+  }}>
+    {Template.bind()}
+  </Story>
+</Canvas>
+
+## Additional Resources
+

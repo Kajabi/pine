@@ -149,6 +149,12 @@ export namespace Components {
          */
         "variant": 'inline' | 'plain';
     }
+    interface SageTabs {
+        /**
+          * Provides button with a submittable value
+         */
+        "tabs"?: { id: string; label: string; content: string; }[];
+    }
 }
 export interface SageInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -185,12 +191,19 @@ declare global {
         prototype: HTMLSageLinkElement;
         new (): HTMLSageLinkElement;
     };
+    interface HTMLSageTabsElement extends Components.SageTabs, HTMLStencilElement {
+    }
+    var HTMLSageTabsElement: {
+        prototype: HTMLSageTabsElement;
+        new (): HTMLSageTabsElement;
+    };
     interface HTMLElementTagNameMap {
         "my-component": HTMLMyComponentElement;
         "sage-button": HTMLSageButtonElement;
         "sage-image": HTMLSageImageElement;
         "sage-input": HTMLSageInputElement;
         "sage-link": HTMLSageLinkElement;
+        "sage-tabs": HTMLSageTabsElement;
     }
 }
 declare namespace LocalJSX {
@@ -341,12 +354,19 @@ declare namespace LocalJSX {
          */
         "variant"?: 'inline' | 'plain';
     }
+    interface SageTabs {
+        /**
+          * Provides button with a submittable value
+         */
+        "tabs"?: { id: string; label: string; content: string; }[];
+    }
     interface IntrinsicElements {
         "my-component": MyComponent;
         "sage-button": SageButton;
         "sage-image": SageImage;
         "sage-input": SageInput;
         "sage-link": SageLink;
+        "sage-tabs": SageTabs;
     }
 }
 export { LocalJSX as JSX };
@@ -358,6 +378,7 @@ declare module "@stencil/core" {
             "sage-image": LocalJSX.SageImage & JSXBase.HTMLAttributes<HTMLSageImageElement>;
             "sage-input": LocalJSX.SageInput & JSXBase.HTMLAttributes<HTMLSageInputElement>;
             "sage-link": LocalJSX.SageLink & JSXBase.HTMLAttributes<HTMLSageLinkElement>;
+            "sage-tabs": LocalJSX.SageTabs & JSXBase.HTMLAttributes<HTMLSageTabsElement>;
         }
     }
 }
