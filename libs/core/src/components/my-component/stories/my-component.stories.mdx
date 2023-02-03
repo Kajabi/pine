@@ -1,18 +1,15 @@
 import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
 import { html, render } from 'lit-html';
-
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 <Meta title="Example/Atoms/my-component" component="my-component" argTypes={extractArgTypes('my-component')} />
-
-export const Template = (args) => html`<my-component first="${args.first}" middle="${args.middle}" last="${args.last}"> </my-component>`;
 
 # my-component
 
 This is a sample of using MDX with Web Components.
 
 ## Properties
-
+```
 <ArgsTable of="my-component" />
 
 <Canvas>
@@ -20,3 +17,4 @@ This is a sample of using MDX with Web Components.
     {Template.bind()}
   </Story>
 </Canvas>
+```

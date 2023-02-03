@@ -1,10 +1,19 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Card from '../components/Card.astro';
+
+import { Content as Input } from '../../../../libs/core/src/components/sage-input/readme.md';
+
+const { frontmatter } = Astro.props;
+// console.log("frontmatter: ", input.frontmatter);
 ---
 
+<Input />
 <Layout title="Welcome to Astro.">
 	<main>
+
+
+		<!-- <p>{input.frontmatter.title}</p> -->
 		<h1>Welcome to <span class="text-gradient">Astro</span></h1>
 		<p class="instructions">
 			To get started, open the directory <code>src/pages</code> in your project.<br />

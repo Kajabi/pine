@@ -28,6 +28,9 @@
       "@sage/doc-site": [
         "./apps/doc-site"
       ],
+      "@sage/my-website": [
+        "./apps/my-website"
+      ],
       "@sage/icons": [
         "./libs/icons"
       ],

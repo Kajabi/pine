@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "astro": "^2.0.5",
-    "@sage/core": "*"
+    "@sage/core": "*",
+    "@astrojs/mdx": "0.16.0"
   }
 }

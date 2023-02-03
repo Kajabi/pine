@@ -1,3 +1,6 @@
+---
+title: "sage-input"
+---
 # sage-input
 
 
