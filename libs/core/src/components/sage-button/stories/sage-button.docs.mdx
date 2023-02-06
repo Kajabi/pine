@@ -1,15 +1,3 @@
-import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
-import { html, render } from 'lit-html';
-
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
-
-import * as stories from './sage-button.stories.js';
-
-<Meta title="webcomponents/Button" component="sage-button" argTypes={extractArgTypes('sage-button')} />
-
-export const Template = (args) =>
-  html` <sage-button value=${args.value} variant=${args.variant} name=${args.name} icon=${args.icon} disabled=${args.disabled} type=${args.type}> ${args.slot} </sage-button> `;
-
 # sage-button
 
 A button component to generate all versions of `sage-button` as outlined in [Figma](https://www.figma.com/file/sMbtLUHSt2vfKgKjyQ3052/%F0%9F%A7%A9-Sage-components?node-id=3%3A15&t=dIcvX1VtOu0FL0VE-0).
@@ -37,7 +25,6 @@ When following our usage guidelines, sage-button should be accessible right out 
 
 ## Properties
 
-<ArgsTable of="sage-button" />
 
 ## Variant
 
@@ -45,61 +32,51 @@ When following our usage guidelines, sage-button should be accessible right out 
 
 Default button styles, used with affirmative actions such as submitting, continuing, and saving
 
-<Story story={stories.Primary} />
 
-<Canvas>
+
   <sage-button>Default</sage-button>
   <sage-button disabled="true">Disabled</sage-button>
   <sage-button icon="trashIcon">Icon</sage-button>
-</Canvas>
 
+```
+  <sage-button>Default</sage-button>
+  <sage-button disabled="true">Disabled</sage-button>
+  <sage-button icon="trashIcon">Icon</sage-button>
+```
 ### Secondary
 
 Secondary button styles, used with neutral actions such as going back, saving as draft, and cancelling
 
-<Story story={stories.Secondary} />
 
-<Canvas>
   <sage-button variant="secondary">Secondary</sage-button>
   <sage-button variant="secondary" disabled="true">Disabled</sage-button>
   <sage-button variant="secondary" icon="trashIcon">Icon</sage-button>
-</Canvas>
+
 
 ### Accent
 
 Accent button styles, used for tertiary actions or when more contrast is needed
 
-<Story story={stories.Accent} />
 
-<Canvas>
   <sage-button variant="accent">Default</sage-button>
   <sage-button variant="accent" disabled="true">Disabled</sage-button>
   <sage-button variant="accent" icon="trashIcon">Icon</sage-button>
-</Canvas>
+
 
 ### Disclosure
 
 Disclosure button styles, used to provide multiple options or more information within a button
 
-<Story story={stories.Disclosure} />
-
-<Canvas>
   <sage-button variant="disclosure">Default</sage-button>
   <sage-button variant="disclosure" disabled="true">Disabled</sage-button>
   <sage-button variant="disclosure" icon="trashIcon">Icon</sage-button>
-</Canvas>
 
 ### Destructive
 
 Destructive button styles, used with actions that delete information such as deleting an item or removing a contact
-
-<Story story={stories.Destructive} />
-
-<Canvas>
   <sage-button variant="destructive">Default</sage-button>
   <sage-button variant="destructive" disabled="true">Disabled</sage-button>
   <sage-button variant="destructive" icon="trashIcon">Icon</sage-button>
-</Canvas>
 
 ## Type
 

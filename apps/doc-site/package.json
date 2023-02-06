@@ -11,8 +11,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^2.0.5",
-    "@sage/core": "*",
-    "@astrojs/mdx": "0.16.0"
+    "@astrojs/mdx": "0.16.0",
+    "@sage/core": "^0.0.1",
+    "astro": "^2.0.5"
   }
 }
