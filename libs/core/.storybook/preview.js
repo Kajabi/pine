@@ -25,5 +25,21 @@ export const parameters = {
   docs: {
     extractArgTypes,
     extractComponentDescription,
+  },
+  options: {
+    storySort: {
+      order: [
+        'Welcome',
+        'Example',
+        'Foundations',
+        [
+          'Design Principles',
+          'Colors',
+          'Typography'
+        ],
+        'Webcomponents',
+        'Get Support'
+      ],
+    },
   }
 }
