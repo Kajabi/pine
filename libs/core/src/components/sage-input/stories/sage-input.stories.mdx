@@ -3,6 +3,8 @@ import { html, render } from 'lit-html';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
+import * as stories from './sage-input.stories.js';
+
 <Meta
   title="webcomponents/Input"
   component="sage-input"
@@ -67,73 +69,75 @@ export const Template = (args) => html`<sage-input
 ### Text
 <p>The type of input used varies based on the type of information you look to capture. The `text` default type allows for any type of single line data.</p>
 
+<Story story={stories.Text} />
+
 <Canvas>
-  <Story name="Text" args={{ label: 'Name', type: 'text', value: 'Frank Dux' }}>
-    {Template.bind()}
-  </Story>
+  <sage-input label="Name" type="text" value="Frank Dux"></sage-input>
 </Canvas>
+
 
 ### Email
 <p>This is used when the input type is `email`.</p>
 
+
+<Story story={stories.Email} />
+
 <Canvas>
-  <Story name="Email" args={{ label: 'Email', type: 'email', value: 'user123@test.com' }}>
-    {Template.bind()}
-  </Story>
+  <sage-input label="Name" type="email" value="Frank Dux"></sage-input>
 </Canvas>
 
 ### Required
 <p>Indicates that the user must specify a value for the input before the owning form can be submitted.</p>
 
+<Story story={stories.Required} />
+
 <Canvas>
-  <Story name="Required" args={{ label: 'Email', required: true, type: 'email', value: 'user123@test.com' }}>
-    {Template.bind()}
-  </Story>
+  <sage-input label="Name" type="email" required="true" value="Frank Dux"></sage-input>
 </Canvas>
 
 ### Placeholder
 <p>Provides a short, non-essential hint about the expected input.</p>
 
+<Story story={stories.Placeholder} />
+
 <Canvas>
-  <Story name="Placeholder" args={{ label: 'Email', placeholder: "123@email.com", type: 'email', value: 'user123@test.com' }}>
-    {Template.bind()}
-  </Story>
+  <sage-input label="Name" type="email" placeholder="123@email.com" value="Frank Dux"></sage-input>
 </Canvas>
 
 ### Disabled
 <p>Removes all interactive behavior from the text field and provides a visual treatment.</p>
 
+<Story story={stories.Disabled} />
+
 <Canvas>
-  <Story name="Disabled" args={{ label: 'Email', disabled: true, type: 'email', value: 'user123@test.com' }}>
-    {Template.bind()}
-  </Story>
+  <sage-input label="Name" type="email" disabled="true" value="Frank Dux"></sage-input>
 </Canvas>
 
 ### Readonly
 <p>Removes the ability to interact with the text field. If a value is present, that is still passed to the form.</p>
 
+<Story story={stories.Readonly} />
+
 <Canvas>
-  <Story name="Readonly" args={{ label: 'Email', readonly: true, type: 'email', value: 'user123@test.com' }}>
-    {Template.bind()}
-  </Story>
+  <sage-input label="Name" type="email" readonly="true" value="Frank Dux"></sage-input>
 </Canvas>
 
 ### Hint
 <p>A `hint` is used to provide additional information about how to complete the text field.</p>
 
+<Story story={stories.Hint} />
+
 <Canvas>
-  <Story name="Hint" args={{ hint: 'Please use the correct format', label: 'Email', type: 'email', value: 'user123@test.com' }}>
-    {Template.bind()}
-  </Story>
+  <sage-input label="Name" type="email" hint="" value="Frank Dux"></sage-input>
 </Canvas>
 
 ### Error
 <p>When `errorText` is present, the input displays the error message and provides a visual treatment.</p>
 
+<Story story={stories.Error} />
+
 <Canvas>
-  <Story name="Error" args={{ errorText:'Please provide a valid Email address', label: 'Email', type: 'email', value: 'user123test' }}>
-    {Template.bind()}
-  </Story>
+  <sage-input label="Name" type="email" error-text="Please provide a valid Email address" value="Frank Dux"></sage-input>
 </Canvas>
 
 ## Additional Links
