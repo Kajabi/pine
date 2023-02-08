@@ -44,6 +44,20 @@ export const Template = (args) => html`<sage-input
 ## Anatomy
 <img src="/images/input-anatomy.jpg" alt="" />
 
+| Key | Description |
+| --- | ----------- |
+| 1 | Label |
+| 2 | Required indicator |
+| 3 | Optional indicator |
+| 4 | Tooltip |
+| 5 | Actions |
+| 6 | Prefix |
+| 7 | Input field |
+| 8 | Suffix |
+| 9 | Hint text |
+| 10 | Character count |
+
+
 ## Guidelines
 ### Usage
 
@@ -75,6 +89,16 @@ export const Template = (args) => html`<sage-input
   <sage-input label="Name" type="text" value="Frank Dux"></sage-input>
 </Canvas>
 
+
+### Webcomponents
+``` html
+<sage-input label="Name" type="text" value="Frank Dux"></sage-input>
+```
+
+### React
+``` js
+<SageInput label="Name" type="text" value="Frank Dux" />
+```
 
 ### Email
 <p>This is used when the input type is `email`.</p>
