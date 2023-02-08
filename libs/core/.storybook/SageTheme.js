@@ -4,7 +4,7 @@ export default create({
   base: 'light',
 
   colorPrimary: 'white',
-  colorSecondary: '#86d5bc',
+  colorSecondary: '#040506',
 
   // UI
   appBg: '#f9fafa',
@@ -21,9 +21,9 @@ export default create({
   textInverseColor: 'rgba(255,255,255,0.9)',
 
   // Toolbar default and active colors
-  barTextColor: 'white',
+  barTextColor: 'black',
   barSelectedColor: 'black',
-  barBg: '#86d5bc',
+  barBg: 'white',
 
   // Form colors
   inputBg: 'white',
@@ -33,6 +33,6 @@ export default create({
 
   brandTitle: 'My custom storybook',
   brandUrl: 'https://example.com',
-  brandImage: 'https://sage.kajabi.com/assets/sage-9181479df32f89419639c8fe4d56618dffb23657ba578afa8f766913d10f1c5a.svg',
+  brandImage: '/images/sage-logo.png',
   brandTarget: '_self',
 });
