@@ -149,16 +149,26 @@ export namespace Components {
          */
         "variant": 'inline' | 'plain';
     }
+    interface SageTab {
+        "activeTab": string;
+        "tab": string;
+    }
+    interface SageTabPanel {
+        "activeTab": string;
+        "ariaControlledBy": string;
+        "tab": string;
+    }
     interface SageTabs {
-        /**
-          * Provides button with a submittable value
-         */
-        "tabs"?: { id: string; label: string; content: string; }[];
+        "tablistLabel": string;
     }
 }
 export interface SageInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSageInputElement;
+}
+export interface SageTabCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSageTabElement;
 }
 declare global {
     interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
@@ -191,6 +201,18 @@ declare global {
         prototype: HTMLSageLinkElement;
         new (): HTMLSageLinkElement;
     };
+    interface HTMLSageTabElement extends Components.SageTab, HTMLStencilElement {
+    }
+    var HTMLSageTabElement: {
+        prototype: HTMLSageTabElement;
+        new (): HTMLSageTabElement;
+    };
+    interface HTMLSageTabPanelElement extends Components.SageTabPanel, HTMLStencilElement {
+    }
+    var HTMLSageTabPanelElement: {
+        prototype: HTMLSageTabPanelElement;
+        new (): HTMLSageTabPanelElement;
+    };
     interface HTMLSageTabsElement extends Components.SageTabs, HTMLStencilElement {
     }
     var HTMLSageTabsElement: {
@@ -203,6 +225,8 @@ declare global {
         "sage-image": HTMLSageImageElement;
         "sage-input": HTMLSageInputElement;
         "sage-link": HTMLSageLinkElement;
+        "sage-tab": HTMLSageTabElement;
+        "sage-tab-panel": HTMLSageTabPanelElement;
         "sage-tabs": HTMLSageTabsElement;
     }
 }
@@ -354,11 +378,18 @@ declare namespace LocalJSX {
          */
         "variant"?: 'inline' | 'plain';
     }
+    interface SageTab {
+        "activeTab"?: string;
+        "onTabClick"?: (event: SageTabCustomEvent<string>) => void;
+        "tab"?: string;
+    }
+    interface SageTabPanel {
+        "activeTab"?: string;
+        "ariaControlledBy"?: string;
+        "tab"?: string;
+    }
     interface SageTabs {
-        /**
-          * Provides button with a submittable value
-         */
-        "tabs"?: { id: string; label: string; content: string; }[];
+        "tablistLabel"?: string;
     }
     interface IntrinsicElements {
         "my-component": MyComponent;
@@ -366,6 +397,8 @@ declare namespace LocalJSX {
         "sage-image": SageImage;
         "sage-input": SageInput;
         "sage-link": SageLink;
+        "sage-tab": SageTab;
+        "sage-tab-panel": SageTabPanel;
         "sage-tabs": SageTabs;
     }
 }
@@ -378,6 +411,8 @@ declare module "@stencil/core" {
             "sage-image": LocalJSX.SageImage & JSXBase.HTMLAttributes<HTMLSageImageElement>;
             "sage-input": LocalJSX.SageInput & JSXBase.HTMLAttributes<HTMLSageInputElement>;
             "sage-link": LocalJSX.SageLink & JSXBase.HTMLAttributes<HTMLSageLinkElement>;
+            "sage-tab": LocalJSX.SageTab & JSXBase.HTMLAttributes<HTMLSageTabElement>;
+            "sage-tab-panel": LocalJSX.SageTabPanel & JSXBase.HTMLAttributes<HTMLSageTabPanelElement>;
             "sage-tabs": LocalJSX.SageTabs & JSXBase.HTMLAttributes<HTMLSageTabsElement>;
         }
     }

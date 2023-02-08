@@ -1,0 +1,12 @@
+:host {
+    display: block;
+}
+
+.sage-tabs__tabpanel {
+    background: #add8e6;
+    display: none;
+    
+    &.is-active {
+        display: block;
+    }
+}

@@ -7,10 +7,25 @@
 
 ## Properties
 
-| Property | Attribute | Description                              | Type                                                | Default                                                                                                                                                                                                                                                                                  |
-| -------- | --------- | ---------------------------------------- | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tabs`   | --        | Provides button with a submittable value | `{ id: string; label: string; content: string; }[]` | `[     {       id: 'tab-1',       label: 'Tab 1',       content: 'Tab 1 Pane Content',     },     {       id: 'tab-2',       label: 'Tab 2',       content: 'Tab 2 Pane Content',     },     {       id: 'tab-3',       label: 'Tab 3',       content: 'Tab 3 Pane Content',     },   ]` |
+| Property       | Attribute       | Description | Type     | Default           |
+| -------------- | --------------- | ----------- | -------- | ----------------- |
+| `tablistLabel` | `tablist-label` |             | `string` | `"tablist label"` |
 
+
+## Dependencies
+
+### Depends on
+
+- [sage-tab](../sage-tab)
+- [sage-tab-panel](../sage-tab-panel)
+
+### Graph
+```mermaid
+graph TD;
+  sage-tabs --> sage-tab
+  sage-tabs --> sage-tab-panel
+  style sage-tabs fill:#f9f,stroke:#333,stroke-width:4px
+```
 
 ----------------------------------------------
 

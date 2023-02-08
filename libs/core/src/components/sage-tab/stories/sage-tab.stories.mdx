@@ -1,22 +1,22 @@
 import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
 import { html, render } from 'lit-html';
 
+
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
-<Meta title="webcomponents/tabs" component="sage-tabs" argTypes={extractArgTypes('sage-tabs')} />
+<Meta title="webcomponents/tab" component="sage-tab" argTypes={extractArgTypes('sage-tab')} />
 
-export const Template = (args) => html`
-  <sage-tabs>
-  </sage-tabs>
-`;
+export const Template = (args) => html` <sage-tab tabs="['Julian','Christopher']"></sage-tab> `;
 
 # sage-tabs
+
  
 ## Usage Guidelines
 
 ### When to use
 
 ### When not to use
+
 
 ## Accessibility
 
@@ -27,7 +27,9 @@ export const Template = (args) => html`
 ## Title
 
 <Canvas>
-  <Story name="Default" args={{
+  <Story name="Default" args={{ 
+    slot: "tabs story",
+    tabs: [ 'tab 1', 'tab 2'],
   }}>
     {Template.bind()}
   </Story>

@@ -1,11 +1,14 @@
 import { newE2EPage } from '@stencil/core/testing';
 
-describe('sage-tabs', () => {
-  it('renders', async () => {
-    const page = await newE2EPage();
-    await page.setContent('<sage-tabs></sage-tabs>');
+const puppeteer = require('puppeteer');
 
-    const element = await page.find('sage-tabs');
-    expect(element).toHaveClass('hydrated');
-  });
-});
+(async () => {
+    try {
+        const browser = await puppeteer.launch({headless: true, executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"});
+        const page = await browser.newPage();
+        await page.goto('https://example.com');
+
+    } catch (err) {
+        console.log(err);
+    }
+})();

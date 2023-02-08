@@ -1,5 +1,5 @@
 :host {
-    display: block;
+    display: inline-block;
 }
 
 // delete later
@@ -10,7 +10,7 @@
 .sage-tabs__tab {
     background: #ffc0cb;
 
-    &[aria-selected="true"] {
+    &.is-active {
         background: #e55656;
     }
 }
