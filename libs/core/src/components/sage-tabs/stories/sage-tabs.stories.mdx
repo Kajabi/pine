@@ -6,7 +6,7 @@ import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 <Meta title="webcomponents/tabs" component="sage-tabs" argTypes={extractArgTypes('sage-tabs')} />
 
 export const Template = (args) => html`
-  <sage-tabs>
+  <sage-tabs active-tab=${args.activeTab}>
   </sage-tabs>
 `;
 
@@ -28,6 +28,7 @@ export const Template = (args) => html`
 
 <Canvas>
   <Story name="Default" args={{
+    activeTab: "two",
   }}>
     {Template.bind()}
   </Story>

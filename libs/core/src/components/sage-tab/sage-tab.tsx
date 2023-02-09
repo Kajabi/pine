@@ -1,4 +1,4 @@
-import { Component, Element, Host, h, Prop, Event, EventEmitter, State } from '@stencil/core';
+import { Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 @Component({
   tag: 'sage-tab',
   styleUrl: 'sage-tab.scss',
@@ -9,10 +9,10 @@ export class SageTab {
 
   @Prop() tab: string;
   @Prop({mutable: true}) activeTab: string;
-  @State() selected = false;
+  @Prop({mutable: true}) selected = false;
  
-  @Event() tabClick: EventEmitter<string>;
-  onTabClick(tab:string) {
+  @Event() tabClick: EventEmitter<any>;
+  onTabClick(tab) {
     this.activeTab = tab;
     this.tabClick.emit(tab);
   }
@@ -39,6 +39,7 @@ export class SageTab {
           tabindex={this.selected ? "0" : "-1"}
           aria-selected={this.selected ? "true" : "false"}
           class="sage-tabs__tab"
+          // onClick={this.onTabClick.bind(this, this.tab)}
           onClick={this.onTabClick.bind(this, this.tab)}
         >
           <slot />

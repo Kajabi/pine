@@ -7,11 +7,12 @@
 
 ## Properties
 
-| Property           | Attribute            | Description | Type     | Default     |
-| ------------------ | -------------------- | ----------- | -------- | ----------- |
-| `activeTab`        | `active-tab`         |             | `string` | `undefined` |
-| `ariaControlledBy` | `aria-controlled-by` |             | `string` | `undefined` |
-| `tab`              | `tab`                |             | `string` | `undefined` |
+| Property           | Attribute            | Description | Type      | Default     |
+| ------------------ | -------------------- | ----------- | --------- | ----------- |
+| `activeTab`        | `active-tab`         |             | `string`  | `undefined` |
+| `ariaControlledBy` | `aria-controlled-by` |             | `string`  | `undefined` |
+| `selected`         | `selected`           |             | `boolean` | `false`     |
+| `tab`              | `tab`                |             | `string`  | `undefined` |
 
 
 ## Dependencies

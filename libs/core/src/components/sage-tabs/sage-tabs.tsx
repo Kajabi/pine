@@ -1,8 +1,9 @@
-import { Component, Element, Host, h, Prop, State, Listen } from '@stencil/core';
+import { Component, Element, Host, h, Prop, Listen } from '@stencil/core';
 @Component({
   tag: 'sage-tabs',
   styleUrl: 'sage-tabs.scss',
   shadow: true,
+  // scoped: true,
 })
 export class SageTabs {
   private tabs;
@@ -10,7 +11,7 @@ export class SageTabs {
   @Element() el: HTMLDivElement;
 
   @Prop() tablistLabel = "tablist label";
-  @State() activeTab = "one";
+  @Prop({mutable: true}) activeTab: string;
 
   @Listen('tabClick', {
     passive: true,
@@ -38,30 +39,48 @@ export class SageTabs {
     const tabList = Array.from(this.el.shadowRoot.querySelectorAll('[role="tab"]'));
     const activeEl = this.getActiveElement();
     const tabLocations = this.getTabLocations(tabList);
-    this.getActiveElement();
+    const firstTabNumber = 0;
+    const lastTabNumber = tabLocations.length - 1;
+
     if (ev.key === 'ArrowLeft') {
       if (activeEl.id === tabLocations[0].id) {
-        const lastTabNumber = tabLocations.length - 1;
         tabLocations[lastTabNumber].focus();
+        this.activeTab = tabLocations[lastTabNumber].id;
       } else {
         for (let i = 0; i < tabLocations.length; i += 1) {
           if(tabLocations[i].id === activeEl.id ) {
             tabLocations[i - 1].focus();
+            this.activeTab = tabLocations[i - 1].id;
           }
         }
       }
     }
 
     if (ev.key === 'ArrowRight') {
-      const lastTabNumber = tabLocations.length - 1;
       if (activeEl.id === tabLocations[lastTabNumber].id) {
-        tabLocations[0].focus();
+        tabLocations[firstTabNumber].focus();
+        this.activeTab = tabLocations[firstTabNumber].id;
       } else {
         for (let i = 0; i < tabLocations.length; i += 1) {
           if(tabLocations[i].id === activeEl.id ) {
             tabLocations[i + 1].focus();
+            this.activeTab = tabLocations[i + 1].id;
           }
         }
+      }
+    }
+
+    if (ev.key === 'Home') {
+      if (activeEl.id != tabLocations[firstTabNumber].id) {
+        tabLocations[firstTabNumber].focus();
+        this.activeTab = tabLocations[firstTabNumber].id;
+      }
+    }
+
+    if (ev.key === 'End') {
+      if (activeEl.id != tabLocations[lastTabNumber].id) {
+        tabLocations[lastTabNumber].focus();
+        this.activeTab = tabLocations[lastTabNumber].id;
       }
     }
   }
@@ -95,10 +114,9 @@ export class SageTabs {
     this.passPropsToChildren()
   }
 
-  render() {    
+  render() {
     return (
-      <Host>
-        {this.activeTab}
+      <Host active-tab={this.activeTab}>
         <div role="tablist" aria-label={this.tablistLabel}>
           <sage-tab tab="one">Test</sage-tab>
           <sage-tab tab="two">Test</sage-tab>

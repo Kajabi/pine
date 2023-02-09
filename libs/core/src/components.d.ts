@@ -151,14 +151,17 @@ export namespace Components {
     }
     interface SageTab {
         "activeTab": string;
+        "selected": boolean;
         "tab": string;
     }
     interface SageTabPanel {
         "activeTab": string;
         "ariaControlledBy": string;
+        "selected": boolean;
         "tab": string;
     }
     interface SageTabs {
+        "activeTab": string;
         "tablistLabel": string;
     }
 }
@@ -380,15 +383,18 @@ declare namespace LocalJSX {
     }
     interface SageTab {
         "activeTab"?: string;
-        "onTabClick"?: (event: SageTabCustomEvent<string>) => void;
+        "onTabClick"?: (event: SageTabCustomEvent<any>) => void;
+        "selected"?: boolean;
         "tab"?: string;
     }
     interface SageTabPanel {
         "activeTab"?: string;
         "ariaControlledBy"?: string;
+        "selected"?: boolean;
         "tab"?: string;
     }
     interface SageTabs {
+        "activeTab"?: string;
         "tablistLabel"?: string;
     }
     interface IntrinsicElements {

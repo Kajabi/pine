@@ -9,14 +9,14 @@ export class SageTabPanel {
 
   @Prop() tab: string;
   @Prop({mutable: true}) activeTab: string;
-  @State() selected = false;
+  @Prop({mutable: true}) selected = false;
   
   @State() generatedClassName: string;
   @Prop() ariaControlledBy: string;
-  @State() currentTabId;
 
   @Listen('tabClick', {
-    target: 'body'
+    passive: true,
+    target: 'body',
   }) 
   tabClickHandler(event: CustomEvent<string>) {
     this.activeTab = event.detail;
