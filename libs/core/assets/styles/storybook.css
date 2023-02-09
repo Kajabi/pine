@@ -14,3 +14,23 @@
 .demos-dont {
   border-top: 4px solid #CF3C32;
 } */
+p {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.docs-hero {
+  background-image: url("/images/hero-background.svg");
+  background-size: cover;
+  padding: 12.5rem 1.5rem 14.25rem;
+}
+
+.docs-hero h1,
+.docs-hero p {
+  color: #fff;
+}
+
+.docs-hero h1 {
+  font-size: 64px;
+  line-height: 64px;
+}
