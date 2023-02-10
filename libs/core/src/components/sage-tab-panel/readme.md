@@ -15,19 +15,6 @@
 | `tab`              | `tab`                |             | `string`  | `undefined` |
 
 
-## Dependencies
-
-### Used by
-
- - [sage-tabs](../sage-tabs)
-
-### Graph
-```mermaid
-graph TD;
-  sage-tabs --> sage-tab-panel
-  style sage-tab-panel fill:#f9f,stroke:#333,stroke-width:4px
-```
-
 ----------------------------------------------
 
 

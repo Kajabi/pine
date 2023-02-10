@@ -10,7 +10,7 @@ export class SageTabs {
   private tabPanels;
   @Element() el: HTMLDivElement;
 
-  @Prop() tablistLabel = "tablist label";
+  @Prop() tablistLabel: string;
   @Prop({mutable: true}) activeTab: string;
 
   @Listen('tabClick', {
@@ -118,23 +118,9 @@ export class SageTabs {
     return (
       <Host active-tab={this.activeTab}>
         <div role="tablist" aria-label={this.tablistLabel}>
-          <sage-tab tab="one">Test</sage-tab>
-          <sage-tab tab="two">Test</sage-tab>
-          <sage-tab tab="three">Test</sage-tab>
+          <slot name="tabs" />
         </div>
-
-        <sage-tab-panel tab="one">
-          <b>testing 1</b>
-          <p>testing string</p>
-        </sage-tab-panel>
-
-        <sage-tab-panel tab="two">
-          Content 2
-        </sage-tab-panel>
-
-        <sage-tab-panel tab="three">
-          Content 3
-        </sage-tab-panel>
+        <slot name="tabpanels" />
       </Host>
       
     );

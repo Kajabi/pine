@@ -9,7 +9,7 @@ describe('sage-tabs', () => {
     });
     expect(page.root).toEqualHtml(`
       <sage-tab>
-        <button aria-controls="undefined-panel" class="sage-tabs__tab" role="tab"></button>
+        <button aria-controls="undefined-panel" aria-selected="false" class="sage-tabs__tab" role="tab" tabindex="-1"></button>
       </sage-tab>
     `);
   });

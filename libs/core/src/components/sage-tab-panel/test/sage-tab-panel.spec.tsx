@@ -9,7 +9,7 @@ describe('sage-tabs', () => {
     });
     expect(page.root).toEqualHtml(`
       <sage-tab-panel>
-        <div aria-selected="false" class="sage-tabs__tabpanel" id="undefined-panel" role="tabpanel"></div>
+        <div class="sage-tabs__tabpanel" id="undefined-panel" role="tabpanel"></div>
       </sage-tab-panel>
     `);
   });

@@ -10,25 +10,10 @@ describe('sage-tabs', () => {
     expect(page.root).toEqualHtml(`
       <sage-tabs>
         <mock:shadow-root>
-          <div aria-label="tablist label" role="tablist">
-            <sage-tab tab="one">
-              Test
-            </sage-tab>
-            <sage-tab tab="two">
-              Test
-            </sage-tab>
+          <div role="tablist">
+            <slot name="tabs"></slot>
           </div>
-          <sage-tab-panel tab="one">
-            <b>
-              testing 1
-            </b>
-            <p>
-              testing string
-            </p>
-          </sage-tab-panel>
-          <sage-tab-panel tab="two">
-            Content 2
-          </sage-tab-panel>
+          <slot name="tabpanels"></slot>
         </mock:shadow-root>
       </sage-tabs>
     `);
