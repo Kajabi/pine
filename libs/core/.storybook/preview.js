@@ -37,7 +37,7 @@ export const parameters = {
           'Colors',
           'Typography'
         ],
-        'Webcomponents',
+        'Components',
         'Get Support'
       ],
     },
