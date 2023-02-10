@@ -3,7 +3,7 @@ import { html, render } from 'lit-html';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
-<Meta title="Example/Atoms/my-component" component="my-component" argTypes={extractArgTypes('my-component')} />
+<Meta title="Patterns/my-component" component="my-component" argTypes={extractArgTypes('my-component')} />
 
 export const Template = (args) => html`<my-component first="${args.first}" middle="${args.middle}" last="${args.last}"> </my-component>`;
 
