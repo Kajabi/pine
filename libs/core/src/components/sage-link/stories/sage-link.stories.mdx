@@ -3,7 +3,7 @@ import { html, render } from 'lit-html';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
-<Meta title="webcomponents/sage-link" component="sage-link" argTypes={extractArgTypes('sage-link')} args={{ href: '#some-anchor' }} />
+<Meta title="components/Link" component="sage-link" argTypes={extractArgTypes('sage-link')} args={{ href: '#some-anchor' }} />
 
 export const Template = (args) => html`<sage-link external=${args.external} font-size=${args.fontSize} href=${args.href} variant=${args.variant}></sage-link>`;
 export const TemplateWithSlot = (args) => html` <sage-link external=${args.external} font-size=${args.fontSize} href=${args.href} variant=${args.variant}>${args.slot}</sage-link>`;
