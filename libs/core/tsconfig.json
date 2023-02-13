@@ -12,8 +12,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "target": "es2017",
-    "outDir": "../../_generated/core"
   },
-  "include": ["src"],
+  "include": ["src", "scripts"],
   "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx", "**/*.e2e.ts", "**/*.stories.mdx", "**/*.stories.ts", "**/*.stories.tsx"]
 }
