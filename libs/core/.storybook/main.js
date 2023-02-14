@@ -8,12 +8,14 @@ module.exports = {
       name: '@storybook/addon-docs',
       options: {
         configureJSX: true,
+        babelOptions: {},
         transcludeMarkdown: true
       },
     },
     "@storybook/addon-essentials",
     "@storybook/addon-links",
     "@storybook/addon-a11y",
+    "storybook-dark-mode",
     '@pxtrn/storybook-addon-docs-stencil',
   ],
   framework: "@storybook/web-components",

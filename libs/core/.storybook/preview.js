@@ -1,7 +1,14 @@
 import { extractArgTypes, extractComponentDescription, setStencilDocJson } from '@pxtrn/storybook-addon-docs-stencil';
 
+import { themes } from '@storybook/theming';
+
 import docsJson from '../dist/docs.json';
 import iconDocsJson from '../../icons/dist/docs.json';
+
+import { ThemedDocsContainer } from '../src/utils/ThemedDocsContainer';
+
+import SageTheme from './SageTheme';
+import SageThemeDark from './SageThemeDark';
 
 /*
 *
@@ -25,5 +32,26 @@ export const parameters = {
   docs: {
     extractArgTypes,
     extractComponentDescription,
+    container: ThemedDocsContainer
+  },
+  darkMode: {
+    dark: SageThemeDark,
+    light: SageTheme
+  },
+  options: {
+    storySort: {
+      order: [
+        'Welcome',
+        'Resources',
+        'Foundations',
+        [
+          'Design Principles',
+          'Colors',
+          'Typography'
+        ],
+        'Components',
+        'Get Support'
+      ],
+    },
   }
 }
