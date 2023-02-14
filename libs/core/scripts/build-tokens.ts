@@ -1,6 +1,13 @@
 import fs from 'fs-extra';
 import * as tokens from '../tokens/tokens.json';
 
+// Convert all JSON tokens into CSS custom properties
+/**
+ * 
+ * @param tokens Tokens data in JSON format
+ * @param base Base string to format custom properties
+ * @returns Formatted CSS with all custom properties
+ */
 const tokensToCss = (tokens: object, base = `-`) =>
   Object.entries(tokens).reduce((css, [key, value]) => {
 		let newBase = base + `-${key}`;
@@ -12,19 +19,14 @@ const tokensToCss = (tokens: object, base = `-`) =>
 			return css + tokensToCss(value, newBase)
 		} 
 		return css
-  }, ``)
+  }, ``);
 
-const saveTokens = async (categoryName: string, tokens: string) => {
-  try {
-		const path = `${process.cwd()}/src/global/styles/tokens`;
-		
-    await fs.writeFile(`${path}/_${categoryName}.scss`, tokens);
-		await formatIndexFile(categoryName);
-  } catch (e) {
-		console.log("There was an error while saving a file.\n", e)
-  }
-}
-
+/**
+ * Reads the index.scss file if it exists and adds an import statement per category name.
+ * If the file doesn't exist, it will be created.
+ * 
+ * @param categoryName The name of the token category.
+ */
 const formatIndexFile = (categoryName: string) => {
 	const indexFile = `${process.cwd()}/src/global/styles/tokens/index.scss`;
 	const importLine = `@use '${categoryName}';\n`;
@@ -42,6 +44,27 @@ const formatIndexFile = (categoryName: string) => {
 	}
 }
 
+/**
+ * Saves formatted tokens to their own SCSS partial files.
+ * 
+ * @param categoryName The name of the token category.
+ * @param tokens Formatted tokens data as CSS custom properties.
+ */
+const saveTokens = async (categoryName: string, tokens: string) => {
+  try {
+		const path = `${process.cwd()}/src/global/styles/tokens`;
+		
+    await fs.writeFile(`${path}/_${categoryName}.scss`, tokens);
+		await formatIndexFile(categoryName);
+  } catch (e) {
+		console.log("There was an error while saving a file.\n", e)
+  }
+}
+
+/**
+ * 
+ * @param data Tokens data in JSON format
+ */
 const build = (data: object) => {
 
 	try {
@@ -49,7 +72,6 @@ const build = (data: object) => {
 			const cssVariables = tokensToCss(tokens[tokenFile], `--${tokenFile}`);
 			const cssClass = `:root {\n${cssVariables.replaceAll("--", "  --")}}\n`
 			saveTokens(tokenFile, cssClass)
-			// console.log(cssClass);
 		})
 		
 	} catch (e) {
