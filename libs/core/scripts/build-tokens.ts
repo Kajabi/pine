@@ -1,12 +1,11 @@
 import fs from 'fs-extra';
 import * as tokens from '../tokens/tokens.json';
 
-// Convert all JSON tokens into CSS custom properties
 /**
  * 
- * @param tokens Tokens data in JSON format
- * @param base Base string to format custom properties
- * @returns Formatted CSS with all custom properties
+ * @param tokens Tokens data in JSON format.
+ * @param base Base string to format custom properties.
+ * @returns Formatted CSS with all custom properties.
  */
 const tokensToCss = (tokens: object, base = `-`) =>
   Object.entries(tokens).reduce((css, [key, value]) => {
@@ -63,7 +62,7 @@ const saveTokens = async (categoryName: string, tokens: string) => {
 
 /**
  * 
- * @param data Tokens data in JSON format
+ * @param data Tokens data in JSON format.
  */
 const build = (data: object) => {
 
