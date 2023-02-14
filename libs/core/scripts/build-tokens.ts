@@ -17,26 +17,39 @@ const tokensToCss = (tokens: object, base = `-`) =>
 const saveTokens = async (categoryName: string, tokens: string) => {
   try {
 		const path = `${process.cwd()}/src/global/styles/tokens`;
-
+		
     await fs.writeFile(`${path}/_${categoryName}.scss`, tokens);
-		await fs.appendFile(`${path}/index.scss`, `@use '${categoryName}';\n`);
+		await formatIndexFile(categoryName);
   } catch (e) {
-    console.log("There was an error while saving a file.\n", e)
+		console.log("There was an error while saving a file.\n", e)
   }
+}
+
+const formatIndexFile = (categoryName: string) => {
+	const indexFile = `${process.cwd()}/src/global/styles/tokens/index.scss`;
+	const importLine = `@use '${categoryName}';\n`;
+	if (!fs.existsSync(indexFile)) {
+		fs.writeFileSync(indexFile, importLine);
+	} else {
+		fs.readFile(indexFile, (err, data) => {
+			if (err) throw err;
+			if (data.includes(importLine)) {
+				return;
+			} else {
+				fs.appendFileSync(indexFile, importLine);
+			}
+		});
+	}
 }
 
 const build = (data: object) => {
 
 	try {
-		// const tokensPath = format({ root: "./", base: normalize(args[0]) })
-		// const tokens = require(tokensPath)
-		// const { name } = parse(tokensPath)
-
 		Object.keys(data).map((tokenFile) => {
 			const cssVariables = tokensToCss(tokens[tokenFile], `--${tokenFile}`);
 			const cssClass = `:root {\n${cssVariables.replaceAll("--", "  --")}}\n`
 			saveTokens(tokenFile, cssClass)
-			console.log(cssClass);
+			// console.log(cssClass);
 		})
 		
 	} catch (e) {
