@@ -3,3 +3,4 @@ src/components.d.ts
 **/*.spec.tsx
 **/*.e2e.ts
 **/*.stories.*
+babel.config.js
