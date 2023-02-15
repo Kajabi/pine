@@ -12,10 +12,6 @@ export default create({
   appBorderColor: '#eceeef',
   appBorderRadius: 6,
 
-  // Typography
-  fontBase: '"Open Sans", sans-serif',
-  fontCode: 'monospace',
-
   // Text colors
   textColor: 'black',
   textInverseColor: 'rgba(255,255,255,0.9)',
