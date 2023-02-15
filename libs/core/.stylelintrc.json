@@ -6,7 +6,6 @@
   ],
   "rules": {
     "at-rule-no-unknown": null,
-    "color-hex-length": "long",
     "length-zero-no-unit": [
       true,
       {
