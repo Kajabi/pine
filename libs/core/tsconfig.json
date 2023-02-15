@@ -11,6 +11,7 @@
     "module": "esnext",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "resolveJsonModule": true,
     "target": "es2017",
   },
   "include": ["src", "scripts"],
