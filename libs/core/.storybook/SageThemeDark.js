@@ -12,10 +12,6 @@ export default create({
   appBorderColor: '#60666C',
   appBorderRadius: 6,
 
-  // Typography
-  fontBase: '"Open Sans", sans-serif',
-  fontCode: 'monospace',
-
   // Text colors
   textColor: 'white',
   textInverseColor: 'rgba(255,255,255,0.9)',
@@ -31,8 +27,8 @@ export default create({
   inputTextColor: '#ECEEEF',
   inputBorderRadius: 10,
 
-  brandTitle: 'My custom storybook',
-  brandUrl: 'https://example.com',
+  brandTitle: 'Sage Design System',
+  brandUrl: 'https://sage.kajabi.com/pages/index',
   brandImage: '/images/sage-logo-dark-mode.png',
   brandTarget: '_self',
 });
