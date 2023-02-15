@@ -26,13 +26,13 @@ export default create({
   barBg: '#040506',
 
   // Form colors
-  inputBg: 'white',
-  inputBorder: '#4B9611',
-  inputTextColor: 'white',
-  inputBorderRadius: 6,
+  inputBg: '#202327',
+  inputBorder: '#43474B',
+  inputTextColor: '#ECEEEF',
+  inputBorderRadius: 10,
 
   brandTitle: 'My custom storybook',
   brandUrl: 'https://example.com',
-  brandImage: '/images/sage-logo-white.png',
+  brandImage: '/images/sage-logo-dark-mode.png',
   brandTarget: '_self',
 });
