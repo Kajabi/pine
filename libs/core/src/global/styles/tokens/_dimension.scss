@@ -1,0 +1,8 @@
+:root {
+  --dimension-scale: 2;
+  --dimension-xs: 4;
+  --dimension-sm: {dimension.xs} * {dimension.scale};
+  --dimension-md: {dimension.sm} * {dimension.scale};
+  --dimension-lg: {dimension.md} * {dimension.scale};
+  --dimension-xl: {dimension.lg} * {dimension.scale};
+}

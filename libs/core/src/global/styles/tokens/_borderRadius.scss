@@ -1,0 +1,6 @@
+:root {
+  --borderRadius-sm: 4;
+  --borderRadius-lg: 8;
+  --borderRadius-xl: 16;
+  --borderRadius-multi: {borderRadius.sm} {borderRadius.lg};
+}

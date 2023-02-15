@@ -2,7 +2,7 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "module": "commonjs",
+    "resolveJsonModule": true,
     "target": "es2017",
-    "resolveJsonModule": true
   }
 }
