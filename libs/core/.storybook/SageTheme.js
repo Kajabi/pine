@@ -32,7 +32,7 @@ export default create({
   inputBorderRadius: 6,
 
   brandTitle: 'My custom storybook',
-  brandUrl: 'https://example.com',
+  brandUrl: 'https://sage.kajabi.com/pages/index',
   brandImage: '/images/sage-logo.png',
   brandTarget: '_self',
 });
