@@ -151,18 +151,23 @@ export namespace Components {
     }
     interface SageTab {
         "activeTab": string;
+        "parentComponent": string;
         "selected": boolean;
         "tab": string;
+        "variant": string;
     }
     interface SageTabPanel {
         "activeTab": string;
         "ariaControlledBy": string;
+        "parentComponent": string;
         "selected": boolean;
         "tab": string;
     }
     interface SageTabs {
         "activeTab": string;
+        "id": string;
         "tablistLabel": string;
+        "variant": 'primary' | 'availability' | 'filter';
     }
 }
 export interface SageInputCustomEvent<T> extends CustomEvent<T> {
@@ -383,19 +388,24 @@ declare namespace LocalJSX {
     }
     interface SageTab {
         "activeTab"?: string;
-        "onTabClick"?: (event: SageTabCustomEvent<any>) => void;
+        "onTabClick"?: (event: SageTabCustomEvent<object>) => void;
+        "parentComponent"?: string;
         "selected"?: boolean;
         "tab"?: string;
+        "variant"?: string;
     }
     interface SageTabPanel {
         "activeTab"?: string;
         "ariaControlledBy"?: string;
+        "parentComponent"?: string;
         "selected"?: boolean;
         "tab"?: string;
     }
     interface SageTabs {
         "activeTab"?: string;
+        "id"?: string;
         "tablistLabel"?: string;
+        "variant"?: 'primary' | 'availability' | 'filter';
     }
     interface IntrinsicElements {
         "my-component": MyComponent;

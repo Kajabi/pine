@@ -1,16 +1,23 @@
 :host {
-    display: block;
+  display: block;
 }
 
 // delete later
 *:focus {
-    outline: 2px solid #046c98;
+  outline: 2px solid #046c98;
 }
 
-.sage-tabs__tab {
-    background: #ffc0cb;
 
-    &[aria-selected="true"] {
-        background: #e55656;
-    }
+.sage-tabs__tablist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+:host(.sage-tabs--availability) .sage-tabs__tablist {
+  gap: 8px;
+}
+
+:host(.sage-tabs--filter) .sage-tabs__tablist {
+  gap: 16px;
 }

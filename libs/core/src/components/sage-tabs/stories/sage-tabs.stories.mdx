@@ -5,8 +5,54 @@ import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 <Meta title="webcomponents/tabs" component="sage-tabs" argTypes={extractArgTypes('sage-tabs')} />
 
-export const Template = (args) => html`
-  <sage-tabs active-tab=${args.activeTab}>
+export const Primary = (args) => html`
+  <sage-tabs active-tab=${args.activeTab} variant=${args.variant} id="primary">
+    <sage-tab slot="tabs" tab="one">Test</sage-tab>
+    <sage-tab slot="tabs" tab="two">Test</sage-tab>
+    <sage-tab slot="tabs" tab="three">Test</sage-tab>
+    <sage-tab-panel slot="tab-panels" tab="one">
+      <p>Content 1</p>
+    </sage-tab-panel>
+    <sage-tab-panel slot="tab-panels" tab="two">
+      <p>Content 2</p>
+    </sage-tab-panel>
+    <sage-tab-panel slot="tab-panels" tab="three">
+      <p>Content 3</p>
+    </sage-tab-panel>
+  </sage-tabs>
+`;
+
+export const Availability = (args) => html`
+  <div style="background-color: #ddd; padding: 20px;">
+    <sage-tabs active-tab=${args.activeTab} variant=${args.variant} id="availability">
+      <sage-tab slot="tabs" tab="sunday">Sun</sage-tab>
+      <sage-tab slot="tabs" tab="monday">Mon</sage-tab>
+      <sage-tab slot="tabs" tab="tuesday">Tue</sage-tab>
+      <sage-tab slot="tabs" tab="wednesday">Wed</sage-tab>
+      <sage-tab slot="tabs" tab="thursday">Thur</sage-tab>
+      <sage-tab slot="tabs" tab="friday">Fri</sage-tab>
+      <sage-tab slot="tabs" tab="saturday">Sat</sage-tab>
+      <sage-tab-panel slot="tab-panels" tab="sunday">Sunday</sage-tab-panel>
+      <sage-tab-panel slot="tab-panels" tab="monday">Monday</sage-tab-panel>
+      <sage-tab-panel slot="tab-panels" tab="tuesday">Tuesday</sage-tab-panel>
+      <sage-tab-panel slot="tab-panels" tab="wednesday">Wednesday</sage-tab-panel>
+      <sage-tab-panel slot="tab-panels" tab="thursday">Thursday</sage-tab-panel>
+      <sage-tab-panel slot="tab-panels" tab="friday">Friday</sage-tab-panel>
+      <sage-tab-panel slot="tab-panels" tab="saturday">Saturday</sage-tab-panel>
+    </sage-tabs>
+  </div>
+`;
+
+export const Filter = (args) => html`
+  <sage-tabs active-tab=${args.activeTab} variant=${args.variant} id="filter">
+    <sage-tab slot="tabs" tab="first">First</sage-tab>
+    <sage-tab slot="tabs" tab="second">Second</sage-tab>
+    <sage-tab slot="tabs" tab="third">Third</sage-tab>
+    <sage-tab slot="tabs" tab="fourth">Fourth</sage-tab>
+    <sage-tab-panel slot="tab-panels" tab="first">First</sage-tab-panel>
+    <sage-tab-panel slot="tab-panels" tab="second">Second</sage-tab-panel>
+    <sage-tab-panel slot="tab-panels" tab="third">Third</sage-tab-panel>
+    <sage-tab-panel slot="tab-panels" tab="fourth">Fourth</sage-tab-panel>
   </sage-tabs>
 `;
 
@@ -27,10 +73,29 @@ export const Template = (args) => html`
 ## Title
 
 <Canvas>
-  <Story name="Default" args={{
+  <Story name="primary" args={{
     activeTab: "two",
+    variant: 'primary',
   }}>
-    {Template.bind()}
+    {Primary.bind()}
+  </Story>
+</Canvas>
+
+<Canvas>
+  <Story name="availability" args={{
+    activeTab: "monday",
+    variant: 'availability',
+  }}>
+    {Availability.bind()}
+  </Story>
+</Canvas>
+
+<Canvas>
+  <Story name="filter" args={{
+    activeTab: "second",
+    variant: 'filter',
+  }}>
+    {Filter.bind()}
   </Story>
 </Canvas>
 

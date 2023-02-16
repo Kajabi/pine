@@ -9,6 +9,7 @@ export class SageTabPanel {
 
   @Prop() tab: string;
   @Prop({mutable: true}) activeTab: string;
+  @Prop({mutable: true}) parentComponent: string;
   @Prop({mutable: true}) selected = false;
   
   @State() generatedClassName: string;
@@ -18,11 +19,13 @@ export class SageTabPanel {
     passive: true,
     target: 'body',
   }) 
-  tabClickHandler(event: CustomEvent<string>) {
-    this.activeTab = event.detail;
+  private tabClickHandler(event: CustomEvent<string>) {
+    if (this.parentComponent === event.detail[1]) {
+      this.activeTab = event.detail[0];
+    }
   }
 
-  matchActiveTab() {
+  private matchActiveTab() {
     if (this.tab === this.activeTab) {
       this.selected = true;
     } else {
@@ -41,7 +44,7 @@ export class SageTabPanel {
           role="tabpanel"
           id={this.tab + '-panel'}
           aria-labelledby={this.tab}
-          class={this.selected ? "sage-tabs__tabpanel is-active" : "sage-tabs__tabpanel"}
+          class={this.selected ? "sage-tabpanel is-active" : "sage-tabpanel"}
         >
           <slot />
         </div>

@@ -10,33 +10,41 @@ export class SageTabs {
   private tabPanels;
   @Element() el: HTMLDivElement;
 
+  @Prop() variant: 'primary' | 'availability' | 'filter' = 'primary';
   @Prop() tablistLabel: string;
   @Prop({mutable: true}) activeTab: string;
+  @Prop() id: string;
 
   @Listen('tabClick', {
     passive: true,
     target: 'body',
   }) 
-  tabClickHandler(event: CustomEvent<string>) {
-    this.activeTab = event.detail;
+  private tabClickHandler(event: CustomEvent<string>) {
+    if (this.id === event.detail[1]) {
+      this.activeTab = event.detail[0];
+    }
   }
 
   private passPropsToChildren = () => {
-    this.tabs = this.el.shadowRoot.querySelectorAll('sage-tab');
-    this.tabPanels = this.el.shadowRoot.querySelectorAll('sage-tab-panel');
+    this.tabs = this.el.querySelectorAll('sage-tab');
+    this.tabPanels = this.el.querySelectorAll('sage-tab-panel');
     this.tabs.forEach(child => {
       child['activeTab'] = this.activeTab.toString();
+      child['parentComponent'] = this.id.toString();
+      child['variant'] = this.variant.toString();
     });
     this.tabPanels.forEach(child => {
       child['activeTab'] = this.activeTab.toString();
+      child['parentComponent'] = this.id.toString();
+      child['variant'] = this.variant.toString();
     });
   }
 
   @Listen('keydown', {
     passive: true,
   })
-  handleKeyDown(ev: KeyboardEvent){
-    const tabList = Array.from(this.el.shadowRoot.querySelectorAll('[role="tab"]'));
+  private handleKeyDown(ev: KeyboardEvent){
+    const tabList = Array.from(this.el.querySelectorAll('[role="tab"]'));
     const activeEl = this.getActiveElement();
     const tabLocations = this.getTabLocations(tabList);
     const firstTabNumber = 0;
@@ -85,7 +93,16 @@ export class SageTabs {
     }
   }
 
-  getTabLocations(tabList) {
+  private classNames = () => {
+    let className = `sage-tabs`;
+    if (this.variant && this.variant != 'primary') {
+      const variantClassName = `sage-tabs--${this.variant}`;
+      className += ' ' + variantClassName;
+    }
+    return className;
+  };
+
+  private getTabLocations(tabList) {
     const tabs = [];
     for (let i = 0; i < tabList.length; i += 1) {
       const tab = tabList[i];
@@ -96,7 +113,7 @@ export class SageTabs {
   }
 
   // Copied code - might be overkill or ideal to make global?
-  getActiveElement(root: Document | ShadowRoot = document): Element | null {
+  private getActiveElement(root: Document | ShadowRoot = document): Element | null {
     const activeEl = root.activeElement;
   
     if (!activeEl) {
@@ -116,13 +133,12 @@ export class SageTabs {
 
   render() {
     return (
-      <Host active-tab={this.activeTab}>
-        <div role="tablist" aria-label={this.tablistLabel}>
+      <Host active-tab={this.activeTab} class={this.classNames()}>
+        <div class="sage-tabs__tablist" role="tablist" aria-label={this.tablistLabel}>
           <slot name="tabs" />
         </div>
-        <slot name="tabpanels" />
+        <slot name="tab-panels" />
       </Host>
-      
     );
   }
 }

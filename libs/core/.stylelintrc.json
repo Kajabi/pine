@@ -26,6 +26,7 @@
           "custom-elements"
         ]
       }
-    ]
+    ],
+    "max-nesting-depth": 3
   }
 }

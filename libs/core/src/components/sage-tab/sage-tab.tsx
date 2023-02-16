@@ -9,15 +9,17 @@ export class SageTab {
 
   @Prop() tab: string;
   @Prop({mutable: true}) activeTab: string;
+  @Prop({mutable: true}) parentComponent: string;
+  @Prop({mutable: true}) variant: string;
   @Prop({mutable: true}) selected = false;
  
-  @Event() tabClick: EventEmitter<any>;
-  onTabClick(tab) {
+  @Event({composed: false}) tabClick: EventEmitter<object>;
+  private onTabClick(tab, parentComponent) {
     this.activeTab = tab;
-    this.tabClick.emit(tab);
+    this.tabClick.emit([tab, parentComponent]);
   }
 
-  matchActiveTab() {
+  private matchActiveTab() {
     if (this.tab === this.activeTab) {
       this.selected = true;
     } else {
@@ -28,21 +30,30 @@ export class SageTab {
   componentWillUpdate() {
     this.matchActiveTab();
   }
-  
+
   render() {
+    const availabilityTabEdgeInlineStart = (
+      <span class="sage-tab-edge"></span>
+    )
+
+    const availabilityTabEdgeInlineEnd = (
+      <span class="sage-tab-edge sage-tab-edge--end"></span>
+    )
+
     return (
-      <Host>
+      <Host variant={this.variant}>
         <button 
           role="tab"
           id={this.tab}
           aria-controls={this.tab + "-panel"}
           tabindex={this.selected ? "0" : "-1"}
           aria-selected={this.selected ? "true" : "false"}
-          class="sage-tabs__tab"
-          // onClick={this.onTabClick.bind(this, this.tab)}
-          onClick={this.onTabClick.bind(this, this.tab)}
+          class={this.selected ? "sage-tab is-active" : "sage-tab"}
+          onClick={this.onTabClick.bind(this, this.tab, this.parentComponent)}
         >
-          <slot />
+          {(this.variant && this.variant === "availability") && availabilityTabEdgeInlineStart}
+          <div class="sage-tab__content"><slot/></div>
+          {(this.variant && this.variant === "availability") && availabilityTabEdgeInlineEnd}
         </button>
       </Host>
     );
