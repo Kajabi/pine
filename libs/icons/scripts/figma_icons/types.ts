@@ -87,3 +87,15 @@ export type FigmaIcon = {
    */
   tags?: string;
 }
+
+
+export interface SvgDiffResult {
+
+  filename: string;
+
+  status: string;
+
+  before: string | null;
+
+  after: string | null;
+}
