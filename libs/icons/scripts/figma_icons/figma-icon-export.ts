@@ -41,7 +41,6 @@ const run = async (rootDir: string) => {
     createJsonIconList(data.icons, config.outputPath);
 
     createChangelogHTML();
-
   }
   catch (e) {
     log(error(e));
@@ -50,7 +49,6 @@ const run = async (rootDir: string) => {
 }
 
 /**
- *
  * Reads the file contents to read the Svg File and stores
  * into a property to be used later
  *
@@ -88,12 +86,11 @@ const buildBeforeAndAfterSvg = async (status: string, filePath: string):  Promis
 }
 
 /**
- *
  * Generates a Header and table
  *
  * @param sectionName - name used for the Header
  * @param data  - an array of {@link SVGDiffResult}
- * @returns
+ * @returns The string of html used to represent a section e.g Added in the Changelog
  */
 const buildHTMLSection = (sectionName: string, data: Array<SvgDiffResult>) => {
   const content = `<h2>${sectionName}</h2>`
@@ -103,11 +100,10 @@ const buildHTMLSection = (sectionName: string, data: Array<SvgDiffResult>) => {
 }
 
 /**
- *
  * Generates a HTML Table
  *
  * @param data  an array of {@link SvgDiffResult}
- * @returns string - html table markup
+ * @returns - The html table markup
  */
 const buildHTMLTable = (data: Array<SvgDiffResult>) => {
   const tableRows = data.map((diff) => `<tr>
@@ -246,7 +242,6 @@ const createJsonIconList = (icons: Array<FigmaIcon>, outputDir: string) => {
 }
 
 /**
- *
  * Creates the directory that will
  * contain the SVGs
  *
@@ -271,7 +266,6 @@ const createOutputDirectory = async (outputDir: string) => {
 }
 
 /**
- *
  * Downloads the images
  *
  * @param icon - The FigmaIcon object
@@ -355,7 +349,6 @@ const extractIcons = (pageData, ignoreFrames: string[], componentMetadata) => {
 }
 
 /**
- *
  * Process that finds and downloads SVGs
  *
  * @param page - Page object in figma
@@ -391,7 +384,7 @@ const fetchAndDownloadIcons = async (page, fileId: string, config: FigmaIconConf
  * the FigmaFile data
  *
  * @oaram fileId - string: the fileId of the Figma File / Branch
- * @returns - JSON data
+ * @returns - JSON data from Figma API - See  {@link https://www.figma.com/developers/api#get-files-endpoint | GET File}
  */
 const fetchFigmaData = (fileId: string) => {
   const requestPath = `files/${fileId}?branch_data=true`;
@@ -408,12 +401,11 @@ const fetchFigmaData = (fileId: string) => {
 }
 
 /**
- *
  * Sends a request to get a collection
  * icon urls to download
  *
  * @param fileId - The FileId that contains the icons
- * @param icons - An array of @see FigmaIcon
+ * @param icons - An array of @see {@link FigmaIcon}
  * @returns - Array<FigmaIcon> with urls
  */
 const fetchImageUrls = (fileId: string, icons: Array<FigmaIcon>) => {
@@ -458,7 +450,6 @@ const findPage = (document, pageName: string,) => {
 };
 
 /**
- *
  * Reads the file contents using git cat-file
  * See {@link https://git-scm.com/docs/git-cat-file} for more details
  *
@@ -470,9 +461,7 @@ const getFileContentsFromGit = async (filePath: string) => {
 }
 
 /**
- *
  * Reads the file contents located on disk
- *
  * @param filename - the name of the file
  * @returns string
  */
@@ -481,7 +470,7 @@ const getFileContentsFromDisk = async (filename: string) => {
 }
 
 /**
- *
+ * Creates an instance of the SimpleGit object
  * @param options - list of SimpleGitOptions
  * @returns SimpleGit client
  */
@@ -566,7 +555,6 @@ const processData = async (rootDir: string, config: FigmaIconConfig) => {
 }
 
 /**
- *
  * Processes the SimpleGit status results and builds
  * the HTML Section data
  *
@@ -608,7 +596,6 @@ run(path.join(__dirname, '../..'));
  */
 
 /**
- *
  * Generates a string that represents the number
  * of KiB
  *
@@ -620,7 +607,6 @@ const formatSize = (size) => {
 }
 
 /**
- *
  * Logs an error message
  * @param methodName - the name of the method the error occurred in
  * @param err - the error
@@ -630,12 +616,10 @@ const logErrorMessage = (methodName: string, err) => {
 }
 
 /**
- *
  * Outputs a table of Name and Filesize for each
  * file downloaded
  *
  * @param results - Collection of name and filesize
- *
  */
 const makeResultsTable = (results) => {
   ui.div(
@@ -661,7 +645,6 @@ const makeRow = (a, b) => {
  * Reads and Sets the Figma access token
  *
  * @params config - FigmaIconConfig object
- *
  * @returns boolean - hasError occurred
  */
 const setFigmaAccessToken = (config: FigmaIconConfig) => {
