@@ -22,8 +22,9 @@ const log = console.log;
 
 const ui = cliui({width: 80});
 
-const srcDir = process.cwd();
-const scriptsDir = path.join(srcDir, 'scripts');
+const baseDir = process.cwd();
+const srcDir = path.join(baseDir, 'src');
+const scriptsDir = path.join(baseDir, 'scripts');
 const srcSvgBasePath = path.join(process.cwd(), 'src', 'svg');
 
 let figmaClient;
@@ -40,7 +41,11 @@ const run = async (rootDir: string) => {
     console.log('Icon Count: ', data.icons.length, 'Result Count: ', data.downloaded.length);
     createJsonIconList(data.icons, config.outputPath);
 
-    createChangelogHTML();
+    const gitStatusResults = createChangelogHTML();
+
+    await gitClient().add((await gitStatusResults).files.map(file => `${path.basename(file.path)}`))
+    await gitClient({ baseDir: srcDir}).add(['icon-data.json']);
+    await gitClient().commit(`ci(nightly): figma icons update`);
   }
   catch (e) {
     log(error(e));
@@ -160,6 +165,8 @@ const client = (apiToken) => {
 /**
  * Creates the Changelog.html file based on the
  * latest data pulled from Figma
+ *
+ * @returns The results from SimpleGit.status()
  */
 const createChangelogHTML = async () => {
   const statusResults: StatusResult = await gitClient().status([srcSvgBasePath]);
@@ -179,7 +186,9 @@ const createChangelogHTML = async () => {
     .replace(/{{created}}/g, statusResults.not_added.length.toString())
     .replace(/{{content}}/g, [created, modified, deleted].join('\n'));
 
-  fs.writeFileSync(path.join(srcDir, 'dist', `${strDate}-changelog.html`), html);
+  fs.writeFileSync(path.join(baseDir, 'dist', `${strDate}-changelog.html`), html);
+
+  return statusResults;
 }
 
 /**
@@ -227,7 +236,7 @@ const createJsonIconList = (icons: Array<FigmaIcon>, outputDir: string) => {
           return {
             name: icon.name,
             category: icon.frame || null,
-            tags: tags,
+            tags: tags.sort(),
           }
         }
       )};
