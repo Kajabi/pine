@@ -11,9 +11,9 @@ import path from 'path';
 import fs from 'fs-extra';
 import mkdirp from 'mkdirp';
 import cliui  from 'cliui';
-import { simpleGit, SimpleGit } from 'simple-git';
+import { simpleGit, SimpleGitOptions, StatusResult } from 'simple-git';
 
-import { FigmaIcon, FigmaIconConfig } from './types';
+import { FigmaIcon, FigmaIconConfig, SvgDiffResult } from './types';
 
 const info = chalk.white;
 const error = chalk.red.bold;
@@ -21,6 +21,10 @@ const detail = chalk.yellowBright;
 const log = console.log;
 
 const ui = cliui({width: 80});
+
+const srcDir = process.cwd();
+const scriptsDir = path.join(srcDir, 'scripts');
+const srcSvgBasePath = path.join(process.cwd(), 'src', 'svg');
 
 let figmaClient;
 
@@ -35,12 +39,101 @@ const run = async (rootDir: string) => {
 
     console.log('Icon Count: ', data.icons.length, 'Result Count: ', data.downloaded.length);
     createJsonIconList(data.icons, config.outputPath);
+
+    createChangelogHTML();
+
   }
   catch (e) {
     log(error(e));
     process.exit(1);
   }
 }
+
+/**
+ *
+ * Reads the file contents to read the Svg File and stores
+ * into a property to be used later
+ *
+ * @param status - staus indicator, this could be D - deleted, M - modified, or empty - new
+ * @param filePath - relattive path to the file
+ * @returns - SvgDiffResult
+ */
+const buildBeforeAndAfterSvg = async (status: string, filePath: string):  Promise<SvgDiffResult> => {
+  const filename = path.basename(filePath);
+  let beforeSvg = null;
+  let afterSvg = null;
+
+  switch(status) {
+    case 'D':
+      beforeSvg = await getFileContentsFromGit(filePath);
+      break;
+
+      case 'M':
+      beforeSvg = await getFileContentsFromGit(filePath);
+      afterSvg = await getFileContentsFromDisk(filename)
+      break;
+
+    case '':
+      afterSvg = await getFileContentsFromDisk(filename);
+      break;
+  }
+
+
+  return {
+    filename,
+    status,
+    before: beforeSvg,
+    after: afterSvg,
+  }
+}
+
+/**
+ *
+ * Generates a Header and table
+ *
+ * @param sectionName - name used for the Header
+ * @param data  - an array of {@link SVGDiffResult}
+ * @returns
+ */
+const buildHTMLSection = (sectionName: string, data: Array<SvgDiffResult>) => {
+  const content = `<h2>${sectionName}</h2>`
+  const table: string = buildHTMLTable(data);
+
+  return [content, table].join('\n')
+}
+
+/**
+ *
+ * Generates a HTML Table
+ *
+ * @param data  an array of {@link SvgDiffResult}
+ * @returns string - html table markup
+ */
+const buildHTMLTable = (data: Array<SvgDiffResult>) => {
+  const tableRows = data.map((diff) => `<tr>
+  <td>${diff.filename}</td>
+  <td>${diff.before || ''}</td>
+  <td>${diff.after || ''}</td>
+</tr>`);
+
+  const tableBody = `<tbody>
+    ${tableRows.join('')}
+  </tbody>`
+
+  const table = `<table>
+  <thead>
+    <tr>
+      <td>Filename</td>
+      <td>Before</td>
+      <td>After</td>
+    </tr>
+  </thead>
+  ${tableBody}
+</table>`
+
+  return table;
+}
+
 
 /**
  * Creates the axios client with the appropriate
@@ -67,6 +160,31 @@ const client = (apiToken) => {
 
   return instance;
 };
+
+/**
+ * Creates the Changelog.html file based on the
+ * latest data pulled from Figma
+ */
+const createChangelogHTML = async () => {
+  const statusResults: StatusResult = await gitClient().status([srcSvgBasePath]);
+
+  const date = new Date();
+  const strDate = [date.getFullYear().toString(), (date.getMonth() + 1).toString().padStart(2,'0'), date.getDate().toString()].join('-');
+
+  const {modified, created, deleted} =  await processStatusResults(statusResults);
+
+  // Adding or Deleting will be Major version bump
+  // Modifying will be a MINOR version bump
+
+  const html = fs.readFileSync(path.join(scriptsDir, 'figma_icons', 'changelog-template.html'), 'utf8')
+    .replace(/{{date}}/g, strDate)
+    .replace(/{{modified}}/g, statusResults.modified.length.toString())
+    .replace(/{{deleted}}/g, statusResults.deleted.length.toString())
+    .replace(/{{created}}/g, statusResults.not_added.length.toString())
+    .replace(/{{content}}/g, [created, modified, deleted].join('\n'));
+
+  fs.writeFileSync(path.join(srcDir, 'dist', `${strDate}-changelog.html`), html);
+}
 
 /**
  * Creates JSON data file that contains additional
@@ -113,7 +231,7 @@ const createJsonIconList = (icons: Array<FigmaIcon>, outputDir: string) => {
           return {
             name: icon.name,
             category: icon.frame || null,
-            tags: tags.sort(),
+            tags: tags,
           }
         }
       )};
@@ -340,6 +458,38 @@ const findPage = (document, pageName: string,) => {
 };
 
 /**
+ *
+ * Reads the file contents using git cat-file
+ * See {@link https://git-scm.com/docs/git-cat-file} for more details
+ *
+ * @param filePath - the relative path to the file on disk
+ * @returns string
+ */
+const getFileContentsFromGit = async (filePath: string) => {
+  return await gitClient().catFile(['blob', `head:${filePath}`]);
+}
+
+/**
+ *
+ * Reads the file contents located on disk
+ *
+ * @param filename - the name of the file
+ * @returns string
+ */
+const getFileContentsFromDisk = async (filename: string) => {
+  return await fs.readFileSync(path.join(srcSvgBasePath, filename), 'utf8');
+}
+
+/**
+ *
+ * @param options - list of SimpleGitOptions
+ * @returns SimpleGit client
+ */
+ const gitClient = (options: Partial<SimpleGitOptions> = {baseDir: srcSvgBasePath, binary: 'git'} ) => {
+  return simpleGit(options);
+ }
+
+/**
  * Loads the figma-icon-config
  *
  * @params rootDir - The source directory
@@ -413,6 +563,36 @@ const processData = async (rootDir: string, config: FigmaIconConfig) => {
   } catch (e) {
     logErrorMessage('processData', e);
   }
+}
+
+/**
+ *
+ * Processes the SimpleGit status results and builds
+ * the HTML Section data
+ *
+ * @param results - list of results from SimpleGit.status
+ * @returns object - string html data for modifed, created, deleted
+ */
+const processStatusResults = async (results: StatusResult) => {
+  const { modified: m, not_added: n, deleted: d } = results;
+  let not_added, deleted, modified;
+
+  if (n.length > 0) {
+    not_added = await Promise.all(n.map((path) => { return buildBeforeAndAfterSvg('', path)}));
+    not_added = buildHTMLSection('Added', not_added);
+  }
+
+  if (d.length > 0) {
+    deleted = await Promise.all(d.map((path) => ( buildBeforeAndAfterSvg('D', path))));
+    deleted = buildHTMLSection('Deleted', deleted);
+  }
+
+  if (m.length > 0) {
+    modified = await Promise.all(m.map((path) => ( buildBeforeAndAfterSvg('M', path))));
+    modified = buildHTMLSection('Modified', modified);
+  }
+
+  return { created: not_added, deleted, modified }
 }
 
 /***************************/
