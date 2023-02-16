@@ -56,6 +56,23 @@ export type FigmaIcon = {
   id: string;
 
   /**
+   * The name of the file stored on disk
+   */
+  filename?: string;
+
+  /**
+   * The name of the file stored on disk
+   */
+  filesize?: number;
+
+  /**
+   * The frame the icon is located inside
+   * of Figma
+   *
+   */
+  frame?: string;
+
+  /**
    * Name of the component
    */
   name: string;
@@ -64,4 +81,9 @@ export type FigmaIcon = {
    * Url to download the icon
    */
   url?: string;
+
+  /**
+   * Tags
+   */
+  tags?: string;
 }
