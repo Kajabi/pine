@@ -3,6 +3,8 @@ import { html, render } from 'lit-html';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
+import * as stories from './sage-link.stories.js';
+
 <Meta title="components/Link" component="sage-link" argTypes={extractArgTypes('sage-link')} args={{ href: '#some-anchor' }} />
 
 export const Template = (args) => html`<sage-link external=${args.external} font-size=${args.fontSize} href=${args.href} variant=${args.variant}></sage-link>`;
@@ -23,38 +25,40 @@ export const TemplateWithSlot = (args) => html` <sage-link external=${args.exter
 
 ### External
 
+<Story story={stories.External} />
+
 <Canvas>
-  <Story name="External" args={{ external: true }}>
-    {Template.bind()}
-  </Story>
+  <sage-link href="#some-anchor" external="true"></sage-link>
 </Canvas>
 
 ### Inline
 
+<Story story={stories.Inline} />
+
 <Canvas>
-  <Story name="Inline" args={{ href: 'https://www.google.com' }}>
-    {Template.bind()}
-  </Story>
+  <sage-link href="https://www.google.com"></sage-link>
 </Canvas>
 
 ### Plain
 
+<Story story={stories.Plain} />
+
 <Canvas>
-  <Story name="Plain" args={{ variant: 'plain' }}>
-    {Template.bind()}
-  </Story>
+  <sage-link href="#some-anchor" variant="plain"></sage-link>
 </Canvas>
 
 ### With Custom Text (uses slot)
 
+<Story story={stories.WithCustomText} />
+
 <Canvas>
-  <Story name="WithCustomText" args={{ slot: 'Overrides default use of href' }}>
-    {TemplateWithSlot.bind()}
-  </Story>
+  <sage-link href="#some-anchor">Overrides default use of href</sage-link>
 </Canvas>
 
 ### Without custom text in slot
 
+<Story story={stories.WithoutCustomTextInSlot} />
+
 <Canvas>
-  <Story name="WithNoSlot">{TemplateWithSlot.bind({})}</Story>
+  <sage-link href="#some-anchor"></sage-link>
 </Canvas>
