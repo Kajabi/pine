@@ -90,6 +90,10 @@ sage-tab {
       .sage-tab__content::after {
         opacity: 1;
       }
+
+      .sage-tab-edge {
+        z-index: 1;
+      }
     }
 
     &:hover:not(.is-active, [aria-selected='true']) {

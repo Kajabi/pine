@@ -13,14 +13,14 @@ export class SageTabs {
   @Prop() variant: 'primary' | 'availability' | 'filter' = 'primary';
   @Prop() tablistLabel: string;
   @Prop({mutable: true}) activeTab: string;
-  @Prop() id: string;
+  @Prop() componentId: string;
 
   @Listen('tabClick', {
     passive: true,
     target: 'body',
   }) 
-  private tabClickHandler(event: CustomEvent<string>) {
-    if (this.id === event.detail[1]) {
+  tabClickHandler(event: CustomEvent<string>) {
+    if (this.componentId === event.detail[1]) {
       this.activeTab = event.detail[0];
     }
   }
@@ -30,12 +30,12 @@ export class SageTabs {
     this.tabPanels = this.el.querySelectorAll('sage-tab-panel');
     this.tabs.forEach(child => {
       child['activeTab'] = this.activeTab.toString();
-      child['parentComponent'] = this.id.toString();
+      child['parentComponent'] = this.componentId.toString();
       child['variant'] = this.variant.toString();
     });
     this.tabPanels.forEach(child => {
       child['activeTab'] = this.activeTab.toString();
-      child['parentComponent'] = this.id.toString();
+      child['parentComponent'] = this.componentId.toString();
       child['variant'] = this.variant.toString();
     });
   }
@@ -43,7 +43,7 @@ export class SageTabs {
   @Listen('keydown', {
     passive: true,
   })
-  private handleKeyDown(ev: KeyboardEvent){
+  handleKeyDown(ev: KeyboardEvent){
     const tabList = Array.from(this.el.querySelectorAll('[role="tab"]'));
     const activeEl = this.getActiveElement();
     const tabLocations = this.getTabLocations(tabList);

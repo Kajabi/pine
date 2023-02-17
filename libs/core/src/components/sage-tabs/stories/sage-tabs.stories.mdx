@@ -6,7 +6,7 @@ import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 <Meta title="webcomponents/tabs" component="sage-tabs" argTypes={extractArgTypes('sage-tabs')} />
 
 export const Primary = (args) => html`
-  <sage-tabs active-tab=${args.activeTab} variant=${args.variant} id="primary">
+  <sage-tabs active-tab=${args.activeTab} variant=${args.variant} component-id="primary">
     <sage-tab slot="tabs" tab="one">Test</sage-tab>
     <sage-tab slot="tabs" tab="two">Test</sage-tab>
     <sage-tab slot="tabs" tab="three">Test</sage-tab>
@@ -24,7 +24,7 @@ export const Primary = (args) => html`
 
 export const Availability = (args) => html`
   <div style="background-color: #ddd; padding: 20px;">
-    <sage-tabs active-tab=${args.activeTab} variant=${args.variant} id="availability">
+    <sage-tabs active-tab=${args.activeTab} variant=${args.variant} component-id="availability">
       <sage-tab slot="tabs" tab="sunday">Sun</sage-tab>
       <sage-tab slot="tabs" tab="monday">Mon</sage-tab>
       <sage-tab slot="tabs" tab="tuesday">Tue</sage-tab>
@@ -44,7 +44,7 @@ export const Availability = (args) => html`
 `;
 
 export const Filter = (args) => html`
-  <sage-tabs active-tab=${args.activeTab} variant=${args.variant} id="filter">
+  <sage-tabs active-tab=${args.activeTab} variant=${args.variant} component-id="filter">
     <sage-tab slot="tabs" tab="first">First</sage-tab>
     <sage-tab slot="tabs" tab="second">Second</sage-tab>
     <sage-tab slot="tabs" tab="third">Third</sage-tab>

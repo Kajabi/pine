@@ -165,7 +165,7 @@ export namespace Components {
     }
     interface SageTabs {
         "activeTab": string;
-        "id": string;
+        "componentId": string;
         "tablistLabel": string;
         "variant": 'primary' | 'availability' | 'filter';
     }
@@ -403,7 +403,7 @@ declare namespace LocalJSX {
     }
     interface SageTabs {
         "activeTab"?: string;
-        "id"?: string;
+        "componentId"?: string;
         "tablistLabel"?: string;
         "variant"?: 'primary' | 'availability' | 'filter';
     }

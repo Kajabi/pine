@@ -19,7 +19,7 @@ export class SageTabPanel {
     passive: true,
     target: 'body',
   }) 
-  private tabClickHandler(event: CustomEvent<string>) {
+  tabClickHandler(event: CustomEvent<string>) {
     if (this.parentComponent === event.detail[1]) {
       this.activeTab = event.detail[0];
     }
