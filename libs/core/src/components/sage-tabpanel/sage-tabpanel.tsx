@@ -1,4 +1,4 @@
-import { Component, Element, Host, h, Prop, Listen, State } from '@stencil/core';
+import { Component, Element, Host, h, Prop, Listen } from '@stencil/core';
 @Component({
   tag: 'sage-tabpanel',
   styleUrl: 'sage-tabpanel.scss',
