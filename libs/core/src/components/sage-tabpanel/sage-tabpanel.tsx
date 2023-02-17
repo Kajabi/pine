@@ -7,14 +7,24 @@ import { Component, Element, Host, h, Prop, Listen, State } from '@stencil/core'
 export class SageTabPanel {
   @Element() el: HTMLElement;
 
+  /**
+   * Sets the related tab name, this name must match a `sage-tab`'s tab property, required
+  */
   @Prop() tab: string;
+
+  /**
+   * Keeps track of the activeTab, this property is passed in by parent component
+  */
   @Prop({mutable: true}) activeTab: string;
+  /**
+   * Keeps track of the parentComponent unique id, this property is passed in by parent component
+  */
   @Prop({mutable: true}) parentComponent: string;
+  /**
+   * Keeps track of if the tabpanel is selected, this property is computed on `componentWillUpdate()`
+  */
   @Prop({mutable: true}) selected = false;
   
-  @State() generatedClassName: string;
-  @Prop() ariaControlledBy: string;
-
   @Listen('tabClick', {
     passive: true,
     target: 'body',
@@ -39,7 +49,7 @@ export class SageTabPanel {
 
   render() {
     return (
-      <Host>
+      <Host slot="tabpanels">
         <div 
           role="tabpanel"
           id={this.tab + '-panel'}

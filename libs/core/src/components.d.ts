@@ -150,17 +150,43 @@ export namespace Components {
         "variant": 'inline' | 'plain';
     }
     interface SageTab {
+        /**
+          * Keeps track of the activeTab, this property is passed in by parent component
+         */
         "activeTab": string;
+        /**
+          * Keeps track of the parentComponent unique id, this property is passed in by parent component
+         */
         "parentComponent": string;
+        /**
+          * Keeps track of if the tabpanel is selected, this property is computed on `componentWillUpdate()`
+         */
         "selected": boolean;
+        /**
+          * Sets the related tab name, this name must match a `sage-tabpanel`'s tab property, required
+         */
         "tab": string;
+        /**
+          * Keeps track of if the expected tab variant, this property is passed in by parent component
+         */
         "variant": string;
     }
     interface SageTabpanel {
+        /**
+          * Keeps track of the activeTab, this property is passed in by parent component
+         */
         "activeTab": string;
-        "ariaControlledBy": string;
+        /**
+          * Keeps track of the parentComponent unique id, this property is passed in by parent component
+         */
         "parentComponent": string;
+        /**
+          * Keeps track of if the tabpanel is selected, this property is computed on `componentWillUpdate()`
+         */
         "selected": boolean;
+        /**
+          * Sets the related tab name, this name must match a `sage-tab`'s tab property, required
+         */
         "tab": string;
     }
     interface SageTabs {
@@ -400,18 +426,47 @@ declare namespace LocalJSX {
         "variant"?: 'inline' | 'plain';
     }
     interface SageTab {
+        /**
+          * Keeps track of the activeTab, this property is passed in by parent component
+         */
         "activeTab"?: string;
+        /**
+          * Emits an event upon tab click for `sage-tab` and `sage-tabpanel` to listen for
+         */
         "onTabClick"?: (event: SageTabCustomEvent<object>) => void;
+        /**
+          * Keeps track of the parentComponent unique id, this property is passed in by parent component
+         */
         "parentComponent"?: string;
+        /**
+          * Keeps track of if the tabpanel is selected, this property is computed on `componentWillUpdate()`
+         */
         "selected"?: boolean;
+        /**
+          * Sets the related tab name, this name must match a `sage-tabpanel`'s tab property, required
+         */
         "tab"?: string;
+        /**
+          * Keeps track of if the expected tab variant, this property is passed in by parent component
+         */
         "variant"?: string;
     }
     interface SageTabpanel {
+        /**
+          * Keeps track of the activeTab, this property is passed in by parent component
+         */
         "activeTab"?: string;
-        "ariaControlledBy"?: string;
+        /**
+          * Keeps track of the parentComponent unique id, this property is passed in by parent component
+         */
         "parentComponent"?: string;
+        /**
+          * Keeps track of if the tabpanel is selected, this property is computed on `componentWillUpdate()`
+         */
         "selected"?: boolean;
+        /**
+          * Sets the related tab name, this name must match a `sage-tab`'s tab property, required
+         */
         "tab"?: string;
     }
     interface SageTabs {

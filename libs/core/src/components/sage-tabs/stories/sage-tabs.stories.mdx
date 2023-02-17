@@ -6,65 +6,71 @@ import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 <Meta title="webcomponents/tabs" component="sage-tabs" argTypes={extractArgTypes('sage-tabs')} />
 
 export const Primary = (args) => html`
-  <sage-tabs active-tab=${args.activeTab} variant=${args.variant} component-id="primary">
-    <sage-tab slot="tabs" tab="one">Test</sage-tab>
-    <sage-tab slot="tabs" tab="two">Test</sage-tab>
-    <sage-tab slot="tabs" tab="three">Test</sage-tab>
-    <sage-tabpanel slot="tabpanels" tab="one">
-      <p>Content 1</p>
-    </sage-tabpanel>
-    <sage-tabpanel slot="tabpanels" tab="two">
-      <p>Content 2</p>
-    </sage-tabpanel>
-    <sage-tabpanel slot="tabpanels" tab="three">
-      <p>Content 3</p>
-    </sage-tabpanel>
-  </sage-tabs>
+<sage-tabs active-tab=${args.activeTab} variant=${args.variant} component-id="primary">
+  <sage-tab tab="one">One</sage-tab>
+  <sage-tab tab="two">Two</sage-tab>
+  <sage-tab tab="three">Three</sage-tab>
+  <sage-tabpanel tab="one">Content 1</sage-tabpanel>
+  <sage-tabpanel tab="two">Content 2</sage-tabpanel>
+  <sage-tabpanel tab="three">Content 3</sage-tabpanel>
+</sage-tabs>
 `;
 
 export const Availability = (args) => html`
-  <div style="background-color: #ddd; padding: 20px;">
-    <sage-tabs active-tab=${args.activeTab} variant=${args.variant} component-id="availability">
-      <sage-tab slot="tabs" tab="sunday">Sun</sage-tab>
-      <sage-tab slot="tabs" tab="monday">Mon</sage-tab>
-      <sage-tab slot="tabs" tab="tuesday">Tue</sage-tab>
-      <sage-tab slot="tabs" tab="wednesday">Wed</sage-tab>
-      <sage-tab slot="tabs" tab="thursday">Thur</sage-tab>
-      <sage-tab slot="tabs" tab="friday">Fri</sage-tab>
-      <sage-tab slot="tabs" tab="saturday">Sat</sage-tab>
-      <sage-tabpanel slot="tabpanels" tab="sunday">Sunday</sage-tabpanel>
-      <sage-tabpanel slot="tabpanels" tab="monday">Monday</sage-tabpanel>
-      <sage-tabpanel slot="tabpanels" tab="tuesday">Tuesday</sage-tabpanel>
-      <sage-tabpanel slot="tabpanels" tab="wednesday">Wednesday</sage-tabpanel>
-      <sage-tabpanel slot="tabpanels" tab="thursday">Thursday</sage-tabpanel>
-      <sage-tabpanel slot="tabpanels" tab="friday">Friday</sage-tabpanel>
-      <sage-tabpanel slot="tabpanels" tab="saturday">Saturday</sage-tabpanel>
-    </sage-tabs>
-  </div>
+<div style="background-color: #ddd; padding: 20px;">
+  <sage-tabs active-tab=${args.activeTab} variant=${args.variant} component-id="availability">
+    <sage-tab tab="sunday">Sun</sage-tab>
+    <sage-tab tab="monday">Mon</sage-tab>
+    <sage-tab tab="tuesday">Tue</sage-tab>
+    <sage-tab tab="wednesday">Wed</sage-tab>
+    <sage-tab tab="thursday">Thur</sage-tab>
+    <sage-tab tab="friday">Fri</sage-tab>
+    <sage-tab tab="saturday">Sat</sage-tab>
+    <sage-tabpanel tab="sunday">Sunday</sage-tabpanel>
+    <sage-tabpanel tab="monday">Monday</sage-tabpanel>
+    <sage-tabpanel tab="tuesday">Tuesday</sage-tabpanel>
+    <sage-tabpanel tab="wednesday">Wednesday</sage-tabpanel>
+    <sage-tabpanel tab="thursday">Thursday</sage-tabpanel>
+    <sage-tabpanel tab="friday">Friday</sage-tabpanel>
+    <sage-tabpanel tab="saturday">Saturday</sage-tabpanel>
+  </sage-tabs>
+</div>
 `;
 
 export const Filter = (args) => html`
-  <sage-tabs active-tab=${args.activeTab} variant=${args.variant} component-id="filter">
-    <sage-tab slot="tabs" tab="first">First</sage-tab>
-    <sage-tab slot="tabs" tab="second">Second</sage-tab>
-    <sage-tab slot="tabs" tab="third">Third</sage-tab>
-    <sage-tab slot="tabs" tab="fourth">Fourth</sage-tab>
-    <sage-tabpanel slot="tabpanels" tab="first">First</sage-tabpanel>
-    <sage-tabpanel slot="tabpanels" tab="second">Second</sage-tabpanel>
-    <sage-tabpanel slot="tabpanels" tab="third">Third</sage-tabpanel>
-    <sage-tabpanel slot="tabpanels" tab="fourth">Fourth</sage-tabpanel>
-  </sage-tabs>
+<sage-tabs active-tab=${args.activeTab} variant=${args.variant} component-id="filter">
+  <sage-tab tab="first">First</sage-tab>
+  <sage-tab tab="second">Second</sage-tab>
+  <sage-tab tab="third">Third</sage-tab>
+  <sage-tab tab="fourth">Fourth</sage-tab>
+  <sage-tabpanel tab="first">
+    <p>First</p>
+  </sage-tabpanel>
+  <sage-tabpanel tab="second">
+    <p>Second</p>
+  </sage-tabpanel>
+  <sage-tabpanel tab="third">
+    <p>Third</p>
+  </sage-tabpanel>
+  <sage-tabpanel tab="fourth">
+    <p>Fourth</p>
+  </sage-tabpanel>
+</sage-tabs>
 `;
 
-# Sage Tabs
+# Tabs
 
-A tab component to generate all versions of `sage-tab` as outlined in [Figma](https://www.figma.com/file/sMbtLUHSt2vfKgKjyQ3052/%F0%9F%A7%A9-Sage-components?node-id=488%3A43471&t=5FtThY98rugq7hGi-1).
+A tabs component to generate all versions of `sage-tab` as outlined in [Figma](https://www.figma.com/file/sMbtLUHSt2vfKgKjyQ3052/%F0%9F%A7%A9-Sage-components?node-id=488%3A43471&t=5FtThY98rugq7hGi-1).
 
 ## Sub Components
 
-### sage-tab
+### [sage-tab](/docs/webcomponents-tab--default-story)
 
-### sage-tabpanel
+Handles tab logic, requires a unique `tab` property to be passed
+
+### [sage-tabpanel](/docs/webcomponents-tabpanel--default-story)
+
+Handles tabpanel logic, requires a matching `tab` property to be passed
 
 ## Accessibility
 

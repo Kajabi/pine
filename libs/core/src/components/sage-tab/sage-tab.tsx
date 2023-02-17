@@ -7,12 +7,34 @@ import { Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil
 export class SageTab {
   @Element() el: HTMLElement;
 
+  /**
+   * Sets the related tab name, this name must match a `sage-tabpanel`'s tab property, required
+  */
   @Prop() tab: string;
+
+  /**
+   * Keeps track of the activeTab, this property is passed in by parent component
+  */
   @Prop({mutable: true}) activeTab: string;
+
+  /**
+   * Keeps track of the parentComponent unique id, this property is passed in by parent component
+  */
   @Prop({mutable: true}) parentComponent: string;
+
+  /**
+   * Keeps track of if the expected tab variant, this property is passed in by parent component
+  */
   @Prop({mutable: true}) variant: string;
+
+  /**
+   * Keeps track of if the tabpanel is selected, this property is computed on `componentWillUpdate()`
+  */
   @Prop({mutable: true}) selected = false;
  
+  /**
+   * Emits an event upon tab click for `sage-tab` and `sage-tabpanel` to listen for
+   */
   @Event({composed: false}) tabClick: EventEmitter<object>;
   private onTabClick(tab, parentComponent) {
     this.activeTab = tab;
@@ -41,7 +63,7 @@ export class SageTab {
     )
 
     return (
-      <Host variant={this.variant}>
+      <Host variant={this.variant} slot="tabs">
         <button 
           role="tab"
           id={this.tab}

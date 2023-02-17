@@ -6,34 +6,31 @@ import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 <Meta title="webcomponents/tab" component="sage-tab" argTypes={extractArgTypes('sage-tab')} />
 
-export const Template = (args) => html` <sage-tab tabs="['Julian','Christopher']"></sage-tab> `;
+export const Template = (args) => html`
+<sage-tabs component-id="tabpanel-example" active-tab="tab-one">
+  <sage-tab tab="tab-one">Tab</sage-tab>
+  <sage-tabpanel tab="tab-one">Tab Panel</sage-tabpanel>
+</sage-tabs>
+`;
 
-# sage-tabs
+# Tab (subcomponent)
 
- 
+A subcomponent of [sage-tabs](/docs/webcomponents-tabs--primary). Expected to be used exclusively within `sage-tabs`
+
 ## Usage Guidelines
 
-### When to use
+This component expects a `tab` property to be passed into the component. This property must match a corresponding [sage-tabpanel](/docs/webcomponents-tabpanel--default-story).
 
-### When not to use
-
-
-## Accessibility
+This component accepts strings and/or HTML elements.
 
 ## Properties
 
-<ArgsTable of="sage-tabs" />
+<ArgsTable of="sage-tab" />
 
 ## Title
 
 <Canvas>
-  <Story name="Default" args={{ 
-    slot: "tabs story",
-    tabs: [ 'tab 1', 'tab 2'],
-  }}>
+  <Story name="Default">
     {Template.bind()}
   </Story>
 </Canvas>
-
-## Additional Resources
-
