@@ -43,7 +43,7 @@ export class SageTabs {
 
   private passPropsToChildren = () => {
     this.tabs = this.el.querySelectorAll('sage-tab');
-    this.tabPanels = this.el.querySelectorAll('sage-tab-panel');
+    this.tabPanels = this.el.querySelectorAll('sage-tabpanel');
     this.tabs.forEach(child => {
       child['activeTab'] = this.activeTab.toString();
       child['parentComponent'] = this.componentId.toString();
@@ -153,7 +153,7 @@ export class SageTabs {
         <div class="sage-tabs__tablist" role="tablist" aria-label={this.tablistLabel}>
           <slot name="tabs" />
         </div>
-        <slot name="tab-panels" />
+        <slot name="tabpanels" />
       </Host>
     );
   }

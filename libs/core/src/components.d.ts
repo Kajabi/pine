@@ -156,7 +156,7 @@ export namespace Components {
         "tab": string;
         "variant": string;
     }
-    interface SageTabPanel {
+    interface SageTabpanel {
         "activeTab": string;
         "ariaControlledBy": string;
         "parentComponent": string;
@@ -228,11 +228,11 @@ declare global {
         prototype: HTMLSageTabElement;
         new (): HTMLSageTabElement;
     };
-    interface HTMLSageTabPanelElement extends Components.SageTabPanel, HTMLStencilElement {
+    interface HTMLSageTabpanelElement extends Components.SageTabpanel, HTMLStencilElement {
     }
-    var HTMLSageTabPanelElement: {
-        prototype: HTMLSageTabPanelElement;
-        new (): HTMLSageTabPanelElement;
+    var HTMLSageTabpanelElement: {
+        prototype: HTMLSageTabpanelElement;
+        new (): HTMLSageTabpanelElement;
     };
     interface HTMLSageTabsElement extends Components.SageTabs, HTMLStencilElement {
     }
@@ -247,7 +247,7 @@ declare global {
         "sage-input": HTMLSageInputElement;
         "sage-link": HTMLSageLinkElement;
         "sage-tab": HTMLSageTabElement;
-        "sage-tab-panel": HTMLSageTabPanelElement;
+        "sage-tabpanel": HTMLSageTabpanelElement;
         "sage-tabs": HTMLSageTabsElement;
     }
 }
@@ -407,7 +407,7 @@ declare namespace LocalJSX {
         "tab"?: string;
         "variant"?: string;
     }
-    interface SageTabPanel {
+    interface SageTabpanel {
         "activeTab"?: string;
         "ariaControlledBy"?: string;
         "parentComponent"?: string;
@@ -440,7 +440,7 @@ declare namespace LocalJSX {
         "sage-input": SageInput;
         "sage-link": SageLink;
         "sage-tab": SageTab;
-        "sage-tab-panel": SageTabPanel;
+        "sage-tabpanel": SageTabpanel;
         "sage-tabs": SageTabs;
     }
 }
@@ -454,7 +454,7 @@ declare module "@stencil/core" {
             "sage-input": LocalJSX.SageInput & JSXBase.HTMLAttributes<HTMLSageInputElement>;
             "sage-link": LocalJSX.SageLink & JSXBase.HTMLAttributes<HTMLSageLinkElement>;
             "sage-tab": LocalJSX.SageTab & JSXBase.HTMLAttributes<HTMLSageTabElement>;
-            "sage-tab-panel": LocalJSX.SageTabPanel & JSXBase.HTMLAttributes<HTMLSageTabPanelElement>;
+            "sage-tabpanel": LocalJSX.SageTabpanel & JSXBase.HTMLAttributes<HTMLSageTabpanelElement>;
             "sage-tabs": LocalJSX.SageTabs & JSXBase.HTMLAttributes<HTMLSageTabsElement>;
         }
     }
