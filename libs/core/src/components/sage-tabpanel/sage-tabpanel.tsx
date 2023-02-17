@@ -52,8 +52,8 @@ export class SageTabPanel {
       <Host slot="tabpanels">
         <div 
           role="tabpanel"
-          id={this.parentComponent + "-" + this.tab + '-panel'}
-          aria-labelledby={this.parentComponent + "-" + this.tab}
+          id={this.tab + '-panel'}
+          aria-labelledby={this.tab}
           class={this.selected ? "sage-tabpanel is-active" : "sage-tabpanel"}
         >
           <slot />

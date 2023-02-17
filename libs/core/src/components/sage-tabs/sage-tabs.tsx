@@ -66,6 +66,8 @@ export class SageTabs {
     const firstTabNumber = 0;
     const lastTabNumber = tabLocations.length - 1;
 
+    console.log(activeEl.id);
+
     if (ev.key === 'ArrowLeft') {
       if (activeEl.id === tabLocations[0].id) {
         tabLocations[lastTabNumber].focus();
