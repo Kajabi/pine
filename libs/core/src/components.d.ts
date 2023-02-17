@@ -164,10 +164,23 @@ export namespace Components {
         "tab": string;
     }
     interface SageTabs {
-        "activeTab": string;
+        /**
+          * Sets default active tab, optional
+         */
+        "activeTab"?: string;
+        /**
+          * Sets unique id on tabs component, required
+         */
         "componentId": string;
+        /**
+          * Sets the aria-label attached to the tablist element, required
+         */
         "tablistLabel": string;
-        "variant": 'primary' | 'availability' | 'filter';
+        /**
+          * Sets tabs variant styles as outlined in Figma documentation, optional
+          * @defaultValue primary
+         */
+        "variant"?: 'primary' | 'availability' | 'filter';
     }
 }
 export interface SageInputCustomEvent<T> extends CustomEvent<T> {
@@ -402,9 +415,22 @@ declare namespace LocalJSX {
         "tab"?: string;
     }
     interface SageTabs {
+        /**
+          * Sets default active tab, optional
+         */
         "activeTab"?: string;
+        /**
+          * Sets unique id on tabs component, required
+         */
         "componentId"?: string;
+        /**
+          * Sets the aria-label attached to the tablist element, required
+         */
         "tablistLabel"?: string;
+        /**
+          * Sets tabs variant styles as outlined in Figma documentation, optional
+          * @defaultValue primary
+         */
         "variant"?: 'primary' | 'availability' | 'filter';
     }
     interface IntrinsicElements {

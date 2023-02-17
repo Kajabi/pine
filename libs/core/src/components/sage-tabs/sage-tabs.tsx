@@ -10,10 +10,26 @@ export class SageTabs {
   private tabPanels;
   @Element() el: HTMLDivElement;
 
-  @Prop() variant: 'primary' | 'availability' | 'filter' = 'primary';
+  /**
+   * Sets the aria-label attached to the tablist element, required
+  */
   @Prop() tablistLabel: string;
-  @Prop({mutable: true}) activeTab: string;
+ 
+  /**
+    * Sets unique id on tabs component, required
+  */
   @Prop() componentId: string;
+  
+  /**
+   * Sets tabs variant styles as outlined in Figma documentation, optional
+   * @defaultValue primary
+    */
+  @Prop() variant?: 'primary' | 'availability' | 'filter' = 'primary';
+
+  /**
+   * Sets default active tab, optional
+   */
+  @Prop({mutable: true}) activeTab?: string;
 
   @Listen('tabClick', {
     passive: true,

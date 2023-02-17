@@ -56,21 +56,35 @@ export const Filter = (args) => html`
   </sage-tabs>
 `;
 
-# sage-tabs
- 
-## Usage Guidelines
+# Sage Tabs
 
-### When to use
+A tab component to generate all versions of `sage-tab` as outlined in [Figma](https://www.figma.com/file/sMbtLUHSt2vfKgKjyQ3052/%F0%9F%A7%A9-Sage-components?node-id=488%3A43471&t=5FtThY98rugq7hGi-1).
 
-### When not to use
+## Sub Components
+
+### sage-tab
+
+### sage-tabpanel
 
 ## Accessibility
+
+This component has been built to align with the [W3C Aria best practices for tabs](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/). You get all tabbing, keyboard navigation, focus states, and aria information applied automatically.
+
+In order for all accessibility to properly compile, you must provide a few required properties to the component. 
+
+**1. A well named `tablist-label`:** Provides context to screen readers about what kind of tablist information is being presented
+
+**2. A unique `component-id`:** Provides a unique `id` to the tabs component, be sure it doesn't match any other `id`'s on the page
 
 ## Properties
 
 <ArgsTable of="sage-tabs" />
 
-## Title
+## Variant
+
+### Default (Primary)
+
+Default tabs styles
 
 <Canvas>
   <Story name="primary" args={{
@@ -81,6 +95,10 @@ export const Filter = (args) => html`
   </Story>
 </Canvas>
 
+### Availability
+
+Tabs with a more literal tab feeling, used for things like picking a date or time
+
 <Canvas>
   <Story name="availability" args={{
     activeTab: "monday",
@@ -89,6 +107,12 @@ export const Filter = (args) => html`
     {Availability.bind()}
   </Story>
 </Canvas>
+
+### Filter
+
+Pill shaped tabs for filtering data or content
+
+Note: Tabs are likely not a good component to add filtered data to on tab click as each tab has a unique tabpanel associated with it and all content within that panel will change upon tab click.
 
 <Canvas>
   <Story name="filter" args={{
@@ -101,3 +125,4 @@ export const Filter = (args) => html`
 
 ## Additional Resources
 
+[W3C Aria best practices for tabs](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/)
