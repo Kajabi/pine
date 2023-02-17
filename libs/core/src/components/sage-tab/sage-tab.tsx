@@ -66,8 +66,8 @@ export class SageTab {
       <Host variant={this.variant} slot="tabs">
         <button 
           role="tab"
-          id={this.tab}
-          aria-controls={this.tab + "-panel"}
+          id={this.parentComponent + "-" + this.tab}
+          aria-controls={this.parentComponent + "-" + this.tab + "-panel"}
           tabindex={this.selected ? "0" : "-1"}
           aria-selected={this.selected ? "true" : "false"}
           class={this.selected ? "sage-tab is-active" : "sage-tab"}
