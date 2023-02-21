@@ -3,87 +3,39 @@ import { Meta, Story } from '@storybook/addon-docs';
 
 <Meta title="Resources/Contributing to Sage"  parameters={{ previewTabs: { canvas: { hidden: true }, } }} />
 
-# How to work with Sage
-Guidelines on how to engage with the Sage team, when to work with us, and how to contribute.
+# Introduction
+The Sage Design System is built using Stencil JS web components, providing a standardized set of UI components and guidelines for making consistent user interfaces across products. The purpose of this guide is to outline how Developers and Designers can contribute to the Sage Design System.
 
-**Team Charters**
-Refer to our team charters to understand the core values and guiding principles of each team.
-- [Product Design Team Charter](https://docs.google.com/document/d/1aVcj0tIB0PZ3gwPxIZGKXWUZwKxckV20Jf_5Y9iy75Q/edit?usp=sharing)
-- [Design System Services Team Charter](https://kajabi.atlassian.net/wiki/spaces/DSS/pages/1504903258/2022+Charter)
+## Getting Started
+Before contributing to the Sage Design System, Developers and Designers should familiarize themselves with its architecture, components, and design guidelines.
 
-## What goes into Sage
-The goal of Sage is to create a shared library of design and development best practices, components, and documentation. Our goal is to add to Sage designs and components that benefit multiple teams and have a high likelihood of reuse throughout our products.
+## Architecture
+Sage is built on the Stencil JS web component library. Developers should understand how web components work and how to use Stencil JS to create them.
 
-### Requesting a new component or changes to an existing component
-We ask that any ideas that change the functionality of an existing Sage component or introduce a new component go through the following process:
+## Components
+Sage includes a set of UI components used to build consistent user interfaces. Developers should familiarize themselves with the components available in Sage and how to use them.
 
-1. **Present work early in meetings with our team**
-What we build into Sage comes from the teams across Kajabi, so we'd love to pair with you early and often! Seeing early mocks, wireframes, or even product roadmaps helps inform our team of potential new components. The earlier we see the work, the better we're able to plan and the higher the likelihood we'll be able to get ahead of requests.
-2. **Iterate on solutions**
-We love to see more iteration from the product designer requesting the component, if they have the time, ensuring all edge cases have been considered. If this is not possible, the component will follow our prioritization process.
-3. **Prioritization by the Sage team** If our team takes on the work, we will add it to our backlog and prioritize it appropriately. Typically, the determining factor for taking on work is capacity: if your designers or engineers have the capacity, we'd love for them to contribute to Sage with our support. Otherwise, the Sage designers and engineers will prioritize the work against our current workload based on the following criteria. Some questions we consider when prioritizing:
-    1. How many products/surfaces will benefit?
-        - Ideally, we build things into Sage that have a high likelihood of reusability,   therefore a higher priority.
-    2. How easy or difficult is it to build?
-        - How many engineering hours will it take to build?
-        - Are there accessibility concerns that Sage should ideally handle?
-    3. Is it a dependency to other future work we need to do within Sage?
-        - Will this unlock additional functionality that other teams need? Knowing other teams' needs before prioritization starts will help inform our roadmap. If we do not have the capacity for work but believe we should add it to Sage, we may ask if the product team can continue the work. Otherwise, it will go into our backlog.
-4. **Build or follow along**
-Our team will pair directly with your engineer and designer if they are the ones who will be taking on the work and help them follow the Contributing to Sage process described in this document. If the Sage team is building the component, we take on the work and follow the same process. As we develop the documentation, Figma files, and code for the updated component, we'd love for you to help review and be part of a final check.
+## Design Guidelines
+Sage has a set of design guidelines defined as Tokens, which outline how components should be used and how they should look. Designers should familiarize themselves with these guidelines to ensure they align with the system's visual language.
 
-## Contributing to Sage
+## Contributing as a Developer
+As a Developer, you can contribute to Sage by creating new components, improving existing components, or fixing bugs. Here are the steps you can take to contribute:
+1. Fork the Sage repository on GitHub.
+2. Create a new branch for your changes.
+3. Make your changes to the code.
+4. Test your changes locally to ensure they work as expected.
+5. Submit a pull request to the Sage repository.
 
-### Making a design contribution
-We love the help and contributions of other designers across Kajabi, and we ask that any ideas that change the functionality of an existing Sage component or introduce a net-new component go through the following process:
+When submitting a pull request, include a detailed description of your changes and any relevant documentation or tests.
 
-**Design request process**
-1. **Present your idea or suggestion during our Office Hours meetings**
-Show your ideas in Design Huddle! Explain project goals and show multiple options explored with and without Sage components. It does not need to be a polished presentation but should have enough detail to help us understand the request and why it is needed.
-2. **Create a Figma branch in our design library**
-Create a Figma branch file in our main library adding your design updates and component addition. Name your branch something related to your design and sign your name. For example: “New stepper component - Jane”. Reach out to #sage-design-system and the Design team will be happy to help! See [Branching in Figma](https://www.figma.com/best-practices/branching-in-figma/) for more details on this process.
-3. **Present your work in the Design Huddle meeting**
-Our Design team will coordinate a time with you to present your work to other designers and engineers and collect feedback.
-4. **Send your Branch to review**
-After your branch is ready, add a Sage reviewer (Cam Simony or Sam Croswell) to your branch. Our Design team will approve and merge your updates when prepared to implement them in our [Sage docs](https://sage-design-system.kajabi.com/pages/index). We will follow up with you!
+## Contributing as a Designer
+As a Designer, you can contribute to Sage by designing new components, improving existing components, or providing feedback on the design guidelines. Here are the steps you can take to contribute:
+1. Familiarize yourself with the Sage design guidelines.
+2. Review the existing components in the Sage Design System and identify areas where improvements can be made.
+3. Create new designs for components or update existing designs to align with the design guidelines.
+4. Submit your designs to the Design team for review.
 
-### Making an engineering contribution
-We always appreciate the help and contributions of other engineers across Kajabi, whether it's new variants, simple bug fixes, or building out entire components. Before any code changes happen, be sure to follow the request process.
+When submitting designs, include detailed specifications and any necessary assets or files.
 
-**Engineering request process**
-1. **Talk to your designer**
-Check-in with your designer and make sure the changes have been approved by the Sage team, via the Design request process. We don’t recommend starting a PR on new functionality — no matter how small — without confirming this, as you may spend time on changes that won’t be approved to merge into Sage.
-2. **Commit process**
-When contributing to [this repository](https://github.com/Kajabi/sage-lib/), please discuss the change you wish to make via a [Jira issue](https://kajabi.atlassian.net/jira/software/projects/DSS/boards/216/backlog), an [email](design-system-services@kajabi.com), or in [#sage-support](https://app.slack.com/client/T026K7YCY/C01A424HY8Y). Please note we have a [code of conduct](https://github.com/Kajabi/sage-lib/blob/develop/CONTRIBUTING.md#code-of-conduct), please follow it in all your interactions with the project.
-This repository utilizes the Conventional Commits Standard which provides an easy set of rules for creating an explicit commit history and in-turn makes it easier to write automated tools on top of. This convention works with SeVer, by describing features, fixes, and breaking changes made in commit messages. View the [documentation](https://github.com/Kajabi/sage-lib/blob/develop/README.md) on the repository for more information.
-3. **Pull request**
-  - Create a branch off of develop on which to add your changes. Push the branch and open a PR.
-  - Once approval has been given, merge the PR into develop. Ensure your commit history accurately represents the changes made to the individual packages.
-  - Do not “quash and Merge” your history into one commit. Automated Changelogs are generated based on the commit messages you supply to individual package directories. If you squash the changes, the changelog will no longer reflect accurate adjustments to the system.
-4. **Release**
-Now the fun part: releasing your component! After a Sage team member merges your change, feel free to announce your component/changes on the #sage-engineering Slack channel.
-
-### Other ways to contribute
-**Bugs**
-If you think you’ve found a bug with Sage components or documentation you can report it in #sage-support and a Sage team member will look into it and start a thread to keep you in the loop.
-
-**Surveys**
-The Sage team will occasionally send out surveys to the design and engineering orgs. Filling out this survey is one way to help inform our team on what is working and what is not working about our design system.
-
-## Support you can expect from the team
-We are always happy to help answer questions regarding Sage component design and usage, design system best practices, accessibility, icons,colors, and more. If it’s part of Sage, we’re here to help! If it’s outside of the realm of our design system, we’ll try our best to answer and/or point you to the person who can help.
-
-## Resources, Slack, and meetings
-### Jira and confluence
-If you’re curious what we’re working on, you can check out our [Sage Design Board](https://kajabi.atlassian.net/jira/software/c/projects/DS/boards/205) or the [Design Systems Services Board](https://kajabi.atlassian.net/jira/software/projects/DSS/boards/216).
-
-To see the bigger picture, you can view [our roadmap](https://kajabi.atlassian.net/jira/software/projects/DSS/boards/216/roadmap) and priorities for each quarter. These priorities are determined through partnership meetings, which we use to learn about component needs and coordinate with designers to determine timelines.
-
-### Slack channels
-Before reaching out, take a look at [our documentation](https://sage.kajabi.com/) to see if it answers your question, because it will likely get you the fastest answer. Still need help? Try searching Slack for your question, and then feel free to ask if your question hasn’t been answered in the past.
-
-[#sage-support](https://app.slack.com/client/T026K7YCY/C01A424HY8Y) is for Sage-focused questions.
-[#sage-design-system](https://app.slack.com/client/T026K7YCY/C046HHS5KTN) is for all Sage-focused discussion.
-
-### Meetings and events [TBD]
-We are exploring offering new types of meetings for the community to bring questions, comments, ideas, and feedback:
+## Conclusion
+The Sage Design System is a collaborative effort that relies on the contributions of developers and designers to maintain and improve. By following these guidelines, developers, and designers can work together to create a robust and user-friendly design system.
