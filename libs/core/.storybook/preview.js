@@ -1,4 +1,8 @@
+import React from 'react';
 import { extractArgTypes, extractComponentDescription, setStencilDocJson } from '@pxtrn/storybook-addon-docs-stencil';
+
+import { BackToTop, TableOfContents } from 'storybook-docs-toc';
+import { DocsContainer } from '@storybook/addon-docs';
 
 import docsJson from '../dist/docs.json';
 import iconDocsJson from '../../icons/dist/docs.json';
@@ -25,5 +29,13 @@ export const parameters = {
   docs: {
     extractArgTypes,
     extractComponentDescription,
+    container: ({ children, ...rest }) => (
+      <DocsContainer {...rest}>
+        <TableOfContents className="sbdocs sbdocs-toc--custom" />
+        {children}
+        <BackToTop className="sbdocs sbdocs-top--custom" />
+      </DocsContainer>
+    )
   }
 }
+
