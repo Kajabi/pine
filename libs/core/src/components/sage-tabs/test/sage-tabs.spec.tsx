@@ -8,9 +8,9 @@ describe('sage-tabs', () => {
       html: `<sage-tabs></sage-tabs>`,
     });
     expect(page.root).toEqualHtml(`
-      <sage-tabs>
+      <sage-tabs class="sage-tabs">
         <mock:shadow-root>
-          <div role="tablist">
+          <div class="sage-tabs__tablist" role="tablist">
             <slot name="tabs"></slot>
           </div>
           <slot name="tabpanels"></slot>

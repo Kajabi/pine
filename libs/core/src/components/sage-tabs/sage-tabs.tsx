@@ -27,9 +27,9 @@ export class SageTabs {
   @Prop() variant?: 'primary' | 'availability' | 'filter' = 'primary';
 
   /**
-   * Sets default active tab, optional
+   * Sets default active tab, required
    */
-  @Prop({mutable: true}) activeTab?: string;
+  @Prop({mutable: true}) activeTab: string;
 
   @Listen('tabClick', {
     passive: true,
@@ -41,9 +41,12 @@ export class SageTabs {
     }
   }
 
-  private passPropsToChildren = () => {
+  private findAllChildren = () => {
     this.tabs = this.el.querySelectorAll('sage-tab');
     this.tabPanels = this.el.querySelectorAll('sage-tabpanel');
+  }
+
+  private passPropsToChildren = () => {
     this.tabs.forEach(child => {
       child['activeTab'] = this.activeTab.toString();
       child['parentComponent'] = this.componentId.toString();
@@ -65,8 +68,6 @@ export class SageTabs {
     const tabLocations = this.getTabLocations(tabList);
     const firstTabNumber = 0;
     const lastTabNumber = tabLocations.length - 1;
-
-    console.log(activeEl.id);
 
     if (ev.key === 'ArrowLeft') {
       if (activeEl.id === tabLocations[0].id) {
@@ -146,6 +147,7 @@ export class SageTabs {
   }
   
   componentDidRender() {
+    this.findAllChildren()
     this.passPropsToChildren()
   }
 

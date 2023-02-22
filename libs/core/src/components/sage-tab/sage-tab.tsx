@@ -25,7 +25,7 @@ export class SageTab {
   /**
    * Keeps track of if the expected tab variant, this property is passed in by parent component
   */
-  @Prop({mutable: true}) variant: string;
+  @Prop() variant: string;
 
   /**
    * Keeps track of if the tabpanel is selected, this property is computed on `componentWillUpdate()`
@@ -73,9 +73,9 @@ export class SageTab {
           class={this.selected ? "sage-tab is-active" : "sage-tab"}
           onClick={this.onTabClick.bind(this, this.tab, this.parentComponent)}
         >
-          {(this.variant && this.variant === "availability") && availabilityTabEdgeInlineStart}
+          {this.variant === "availability" && availabilityTabEdgeInlineStart}
           <div class="sage-tab__content"><slot/></div>
-          {(this.variant && this.variant === "availability") && availabilityTabEdgeInlineEnd}
+          {this.variant === "availability" && availabilityTabEdgeInlineEnd}
         </button>
       </Host>
     );

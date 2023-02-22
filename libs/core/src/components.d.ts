@@ -191,9 +191,9 @@ export namespace Components {
     }
     interface SageTabs {
         /**
-          * Sets default active tab, optional
+          * Sets default active tab, required
          */
-        "activeTab"?: string;
+        "activeTab": string;
         /**
           * Sets unique id on tabs component, required
          */
@@ -471,7 +471,7 @@ declare namespace LocalJSX {
     }
     interface SageTabs {
         /**
-          * Sets default active tab, optional
+          * Sets default active tab, required
          */
         "activeTab"?: string;
         /**

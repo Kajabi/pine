@@ -4,7 +4,7 @@ import { Component, Element, Host, h, Prop, Listen } from '@stencil/core';
   styleUrl: 'sage-tabpanel.scss',
   shadow: false,
 })
-export class SageTabPanel {
+export class SageTabpanel {
   @Element() el: HTMLElement;
 
   /**

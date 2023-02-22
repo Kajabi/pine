@@ -8,8 +8,10 @@ describe('sage-tabs', () => {
       html: `<sage-tab></sage-tab>`,
     });
     expect(page.root).toEqualHtml(`
-      <sage-tab>
-        <button aria-controls="undefined-panel" aria-selected="false" class="sage-tabs__tab" role="tab" tabindex="-1"></button>
+      <sage-tab slot="tabs">
+        <button aria-controls="undefined-panel" aria-selected="false" class="sage-tab" role="tab" tabindex="-1">
+          <div class="sage-tab__content"></div>
+        </button>
       </sage-tab>
     `);
   });
