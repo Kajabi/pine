@@ -34,14 +34,12 @@ const formatIndexFile = (categoryName: string) => {
 	if (!fs.existsSync(indexFile)) {
 		fs.writeFileSync(indexFile, importLine);
 	} else {
-		fs.readFile(indexFile, (err, data) => {
-			if (err) throw err;
-			if (data.includes(importLine)) {
-				return;
-			} else {
-				fs.appendFileSync(indexFile, importLine);
-			}
-		});
+		const data = fs.readFileSync(indexFile);
+		if (data.includes(importLine)) {
+			return;
+		} else {
+			fs.appendFileSync(indexFile, importLine);
+		}
 	}
 }
 
