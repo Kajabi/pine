@@ -1,40 +1,6 @@
 import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
 import { html, render } from 'lit-html';
 
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
-
-import * as stories from './sage-input.stories.js';
-
-<Meta
-  title="components/Input"
-  component="sage-input"
-  argTypes={extractArgTypes('sage-input')}
-  args={{
-    disabled: false,
-    errorText: null,
-    hint: null,
-    name: null,
-    placeholder: null,
-    readonly: false,
-    required: false,
-    type: 'text'
-}}
-/>
-
-export const Template = (args) => html`<sage-input
-  disabled="${args.disabled}"
-  error-text="${args.errorText}"
-  hint="${args.hint}"
-  id="${args.inputId}"
-  label="${args.label}"
-  name="${args.name}"
-  placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="${args.required}"
-  type="${args.type}"
-  value="${args.value}">
-</sage-input>`;
-
 # Input
 
 <p>
@@ -66,7 +32,7 @@ export const Template = (args) => html`<sage-input
 ### Text
 <p>The type of input used varies based on the type of information you look to capture. The `text` default type allows for any type of single line data.</p>
 
-<Story story={stories.Text} />
+<Story id="components-input--text" />
 
 <Canvas>
   <sage-input label="Name" type="text" value="Frank Dux"></sage-input>
@@ -86,8 +52,7 @@ export const Template = (args) => html`<sage-input
 ### Email
 <p>This is used when the input type is `email`.</p>
 
-
-<Story story={stories.Email} />
+<Story id="components-input--email" />
 
 <Canvas>
   <sage-input label="Name" type="email" value="Frank Dux"></sage-input>
@@ -96,7 +61,7 @@ export const Template = (args) => html`<sage-input
 ### Required
 <p>Indicates that the user must specify a value for the input before the owning form can be submitted.</p>
 
-<Story story={stories.Required} />
+<Story id="components-input--required" />
 
 <Canvas>
   <sage-input label="Name" type="email" required="true" value="Frank Dux"></sage-input>
@@ -105,7 +70,7 @@ export const Template = (args) => html`<sage-input
 ### Placeholder
 <p>Provides a short, non-essential hint about the expected input.</p>
 
-<Story story={stories.Placeholder} />
+<Story id="components-input--placeholder" />
 
 <Canvas>
   <sage-input label="Name" type="email" placeholder="123@email.com" value="Frank Dux"></sage-input>
@@ -114,7 +79,7 @@ export const Template = (args) => html`<sage-input
 ### Disabled
 <p>Removes all interactive behavior from the text field and provides a visual treatment.</p>
 
-<Story story={stories.Disabled} />
+<Story id="components-input--disabled" />
 
 <Canvas>
   <sage-input label="Name" type="email" disabled="true" value="Frank Dux"></sage-input>
@@ -123,7 +88,7 @@ export const Template = (args) => html`<sage-input
 ### Readonly
 <p>Removes the ability to interact with the text field. If a value is present, that is still passed to the form.</p>
 
-<Story story={stories.Readonly} />
+<Story id="components-input--readonly" />
 
 <Canvas>
   <sage-input label="Name" type="email" readonly="true" value="Frank Dux"></sage-input>
@@ -132,7 +97,7 @@ export const Template = (args) => html`<sage-input
 ### Hint
 <p>A `hint` is used to provide additional information about how to complete the text field.</p>
 
-<Story story={stories.Hint} />
+<Story id="components-input--hint" />
 
 <Canvas>
   <sage-input label="Name" type="email" hint="" value="Frank Dux"></sage-input>
@@ -141,7 +106,7 @@ export const Template = (args) => html`<sage-input
 ### Error
 <p>When `errorText` is present, the input displays the error message and provides a visual treatment.</p>
 
-<Story story={stories.Error} />
+<Story id="components-input--error" />
 
 <Canvas>
   <sage-input label="Name" type="email" error-text="Please provide a valid Email address" value="Frank Dux"></sage-input>

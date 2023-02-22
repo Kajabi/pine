@@ -1,5 +1,30 @@
 import { html } from 'lit-html';
 
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+import mdx from './sage-input.mdx';
+
+export default {
+  title: 'Components/Input',
+  parameters: {
+    docs: {
+      page: mdx,
+    },
+  },
+  component: 'sage-input',
+  argTypes: extractArgTypes('sage-input'),
+  args: {
+    disabled: false,
+    errorText: null,
+    hint: null,
+    name: null,
+    placeholder: null,
+    readonly: false,
+    required: false,
+    type: 'text'
+  }
+};
+
 const Template = (args) => html`<sage-input
   disabled="${args.disabled}"
   error-text="${args.errorText}"

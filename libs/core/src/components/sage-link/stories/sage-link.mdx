@@ -1,15 +1,6 @@
 import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
 import { html, render } from 'lit-html';
 
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
-
-import * as stories from './sage-link.stories.js';
-
-<Meta title="components/Link" component="sage-link" argTypes={extractArgTypes('sage-link')} args={{ href: '#some-anchor' }} />
-
-export const Template = (args) => html`<sage-link external=${args.external} font-size=${args.fontSize} href=${args.href} variant=${args.variant}></sage-link>`;
-export const TemplateWithSlot = (args) => html` <sage-link external=${args.external} font-size=${args.fontSize} href=${args.href} variant=${args.variant}>${args.slot}</sage-link>`;
-
 # Sage link
 
 <p>
@@ -25,7 +16,7 @@ export const TemplateWithSlot = (args) => html` <sage-link external=${args.exter
 
 ### External
 
-<Story story={stories.External} />
+<Story id="components-link--external" />
 
 <Canvas>
   <sage-link href="#some-anchor" external="true"></sage-link>
@@ -33,7 +24,7 @@ export const TemplateWithSlot = (args) => html` <sage-link external=${args.exter
 
 ### Inline
 
-<Story story={stories.Inline} />
+<Story id="components-link--inline" />
 
 <Canvas>
   <sage-link href="https://www.google.com"></sage-link>
@@ -41,7 +32,7 @@ export const TemplateWithSlot = (args) => html` <sage-link external=${args.exter
 
 ### Plain
 
-<Story story={stories.Plain} />
+<Story id="components-link--plain" />
 
 <Canvas>
   <sage-link href="#some-anchor" variant="plain"></sage-link>
@@ -49,7 +40,7 @@ export const TemplateWithSlot = (args) => html` <sage-link external=${args.exter
 
 ### With Custom Text (uses slot)
 
-<Story story={stories.WithCustomText} />
+<Story id="components-link--with-custom-text" />
 
 <Canvas>
   <sage-link href="#some-anchor">Overrides default use of href</sage-link>
@@ -57,7 +48,7 @@ export const TemplateWithSlot = (args) => html` <sage-link external=${args.exter
 
 ### Without custom text in slot
 
-<Story story={stories.WithoutCustomTextInSlot} />
+<Story id="components-link--without-custom-text-in-slot" />
 
 <Canvas>
   <sage-link href="#some-anchor"></sage-link>
