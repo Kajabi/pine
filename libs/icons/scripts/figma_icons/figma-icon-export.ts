@@ -20,12 +20,13 @@ const error = chalk.red.bold;
 const detail = chalk.yellowBright;
 const log = console.log;
 
-const ui = cliui({width: 80});
-
 const baseDir = process.cwd();
 const srcDir = path.join(baseDir, 'src');
 const scriptsDir = path.join(baseDir, 'scripts');
 const srcSvgBasePath = path.join(process.cwd(), 'src', 'svg');
+
+const date = new Date();
+const strDate = [date.getFullYear().toString(), (date.getMonth() + 1).toString().padStart(2,'0'), date.getDate().toString()].join('-');
 
 let figmaClient;
 
@@ -41,11 +42,18 @@ const run = async (rootDir: string) => {
     console.log('Icon Count: ', data.icons.length, 'Result Count: ', data.downloaded.length);
     createJsonIconList(data.icons, config.outputPath);
 
-    const gitStatusResults = createChangelogHTML();
+    const git = gitClient();
 
-    await gitClient().add((await gitStatusResults).files.map(file => `${path.basename(file.path)}`))
-    await gitClient({ baseDir: srcDir}).add(['icon-data.json']);
-    await gitClient().commit(`ci(nightly): figma icons update`);
+    const statusResults: StatusResult = await git.status([srcSvgBasePath]);
+    const filesChanged = statusResults.files;
+
+    if (filesChanged.length <= 0)
+      return;
+
+    await createChangelogHTML(statusResults);
+
+    await commitChanges(filesChanged);
+
   }
   catch (e) {
     log(error(e));
@@ -163,17 +171,29 @@ const client = (apiToken) => {
 };
 
 /**
+ * Commits the files to a newly created branch
+ * @param files - a list of files from GitStatus
+ */
+const commitChanges = async (files) => {
+  const git = gitClient();
+  const branchName = `nightly/${strDate}-icon-update`;
+
+  await git.checkoutLocalBranch(branchName);
+
+  await git.add(files.map(file => `${path.basename(file.path)}`));
+  await gitClient({ baseDir: srcDir}).add(['icon-data.json']);
+
+  await git.commit(['ci(nightly): figma icons update', `number of icons updated: ${files.length}`]);
+  await git.push('origin', branchName, ['--no-verify']);
+}
+
+/**
  * Creates the Changelog.html file based on the
  * latest data pulled from Figma
  *
  * @returns The results from SimpleGit.status()
  */
-const createChangelogHTML = async () => {
-  const statusResults: StatusResult = await gitClient().status([srcSvgBasePath]);
-
-  const date = new Date();
-  const strDate = [date.getFullYear().toString(), (date.getMonth() + 1).toString().padStart(2,'0'), date.getDate().toString()].join('-');
-
+const createChangelogHTML = async (statusResults: StatusResult) => {
   const {modified, created, deleted} =  await processStatusResults(statusResults);
 
   // Adding or Deleting will be Major version bump
@@ -631,6 +651,8 @@ const logErrorMessage = (methodName: string, err) => {
  * @param results - Collection of name and filesize
  */
 const makeResultsTable = (results) => {
+  const ui = cliui({width: 80});
+
   ui.div(
     makeRow(
       chalk.cyan.bold(`File`),
