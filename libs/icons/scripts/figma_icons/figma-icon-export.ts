@@ -182,7 +182,7 @@ const commitChanges = async (files) => {
 
   await git.add(files.map(file => `${path.basename(file.path)}`));
   await gitClient({ baseDir: srcDir}).add(['icon-data.json']);
-
+  await gitClient().add(`${baseDir}/changelogs`);
   await git.commit(['ci(nightly): figma icons update', `number of icons updated: ${files.length}`]);
   await git.push('origin', branchName, ['--no-verify']);
 }
@@ -206,7 +206,7 @@ const createChangelogHTML = async (statusResults: StatusResult) => {
     .replace(/{{created}}/g, statusResults.not_added.length.toString())
     .replace(/{{content}}/g, [created, modified, deleted].join('\n'));
 
-  fs.writeFileSync(path.join(baseDir, 'dist', `${strDate}-changelog.html`), html);
+  fs.writeFileSync(path.join(baseDir, 'changelogs', `${strDate}-changelog.html`), html);
 
   return statusResults;
 }
