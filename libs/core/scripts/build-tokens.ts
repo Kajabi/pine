@@ -2,6 +2,8 @@ import fs from 'fs-extra';
 import * as tokens from '../tokens/tokens.json';
 
 /**
+ * Takes the JSON data and converts it to formatted CSS
+ * custom properties.
  * 
  * @param tokens Tokens data in JSON format.
  * @param base Base string to format custom properties.
@@ -61,6 +63,8 @@ const saveTokens = async (categoryName: string, tokens: string) => {
 }
 
 /**
+ * Runs the process to build tokens from JSON and save them to their
+ * appropriate files.
  * 
  * @param data Tokens data in JSON format.
  */
