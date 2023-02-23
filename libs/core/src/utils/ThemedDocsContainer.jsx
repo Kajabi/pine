@@ -2,7 +2,7 @@
 // see https://github.com/storybookjs/storybook/issues/10523 for further details
 import React from 'react';
 import { DocsContainer, DocsContextProps } from '@storybook/addon-docs';
-import { BackToTop, TableOfContents } from 'storybook-docs-toc';
+import { TableOfContents } from 'storybook-docs-toc';
 import { useDarkMode } from 'storybook-dark-mode';
 
 import SageTheme from '../../.storybook/SageTheme';
@@ -33,7 +33,6 @@ export const ThemedDocsContainer = ({ children, context, ...rest }) => {
     >
       <TableOfContents className="sbdocs sbdocs-toc--custom" />
       {children}
-      <BackToTop className="sbdocs sbdocs-top--custom" />
     </DocsContainer>
   );
 };

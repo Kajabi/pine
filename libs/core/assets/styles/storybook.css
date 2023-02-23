@@ -5,24 +5,48 @@
   --toc-indicator-color--active: #040506;
 }
 
-.sbdocs.sbdocs-top--custom {
-  --toc-button-color: #fff;
-  --toc-button-color--hover: #fff;
-  --toc-button-color--active: #fff;
-  --toc-button-background: #0072ef;
-  --toc-button-background--hover: #054fb8;
-  --toc-button-background--active: #054fb8;
-
-  border-radius: 8px;
+.dark .sbdocs.sbdocs-toc--custom {
+  --toc-color: #fff;
+  --toc-background: #000;
+  --toc-indicator-color: #202327;
+  --toc-indicator-color--active: #60666c;
 }
 
-.sbdocs .js-toc .toc-list-item {
-  /* padding-bottom: 12px; */
+.sbdocs .js-toc .toc-list-item:not(:last-of-type) {
+  padding-bottom: 14px;
 }
 
-.sbdocs .js-toc .toc-link,
-.sbdocs .js-toc .sbdocs-toc__header {
+.sbdocs .js-toc .toc-list-item::before {
+  bottom: inherit;
+  height: 14px;
+  top: 1px;
+  z-index: 1;
+}
+
+.sbdocs .js-toc .toc-list-item::after {
+  background: var(--toc-indicator-color);
+  bottom: 0;
+  content: " ";
+  display: inline-block;
+  left: 0;
+  position: absolute;
+  top: 1px;
+  width: 3px;
+}
+
+.sbdocs .js-toc .toc-link {
   font-size: 12px;
   font-weight: 500;
   line-height: 16px;
+}
+
+.sbdocs .sbdocs-toc__header {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }
