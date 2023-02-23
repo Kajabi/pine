@@ -1,14 +1,10 @@
 import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
-import { html, render } from 'lit-html';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 import * as stories from './sage-button.stories.js';
 
 <Meta title="components/Button" component="sage-button" argTypes={extractArgTypes('sage-button')} />
-
-export const Template = (args) =>
-  html` <sage-button value=${args.value} variant=${args.variant} name=${args.name} icon=${args.icon} disabled=${args.disabled} type=${args.type}> ${args.slot} </sage-button> `;
 
 # sage-button
 

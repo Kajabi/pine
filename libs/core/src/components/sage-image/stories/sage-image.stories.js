@@ -1,20 +1,5 @@
 import { html, render } from 'lit-html';
 
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
-
-import mdx from './sage-image.mdx';
-
-export default {
-  title: 'Components/Image',
-  parameters: {
-    docs: {
-      page: mdx,
-    },
-  },
-  component: 'sage-image',
-  argTypes: extractArgTypes('sage-image')
-};
-
 const BaseTemplate = (args) => html` <sage-image
   alt="${args.alt}"
   height="${args.height}"
