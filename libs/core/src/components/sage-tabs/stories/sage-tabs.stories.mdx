@@ -3,7 +3,7 @@ import { html, render } from 'lit-html';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
-<Meta title="webcomponents/tabs" component="sage-tabs" argTypes={extractArgTypes('sage-tabs')} />
+<Meta title="components/tabs" component="sage-tabs" argTypes={extractArgTypes('sage-tabs')} />
 
 export const Primary = (args) => html`
 <sage-tabs active-tab=${args.activeTab} variant=${args.variant} component-id="primary">
@@ -64,11 +64,11 @@ A tabs component to generate all versions of `sage-tab` as outlined in [Figma](h
 
 ## Sub Components
 
-### [sage-tab](/docs/webcomponents-tab--default-story)
+### [sage-tab](/docs/components-tabs-tab--default-story)
 
 Handles tab logic, requires a unique `tab` property to be passed
 
-### [sage-tabpanel](/docs/webcomponents-tabpanel--default-story)
+### [sage-tabpanel](/docs/components-tabs-tabpanel--default-story)
 
 Handles tabpanel logic, requires a matching `tab` property to be passed
 

@@ -1,4 +1,5 @@
 import { Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
+
 @Component({
   tag: 'sage-tab',
   styleUrl: 'sage-tab.scss',
@@ -35,7 +36,7 @@ export class SageTab {
   /**
    * Emits an event upon tab click for `sage-tab` and `sage-tabpanel` to listen for
    */
-  @Event({composed: false}) tabClick: EventEmitter<object>;
+  @Event() tabClick: EventEmitter<object>;
   private onTabClick(tab, parentComponent) {
     this.activeTab = tab;
     this.tabClick.emit([tab, parentComponent]);

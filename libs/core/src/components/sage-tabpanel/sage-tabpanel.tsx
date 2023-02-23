@@ -1,4 +1,5 @@
 import { Component, Element, Host, h, Prop, Listen } from '@stencil/core';
+
 @Component({
   tag: 'sage-tabpanel',
   styleUrl: 'sage-tabpanel.scss',
@@ -16,19 +17,20 @@ export class SageTabpanel {
    * Keeps track of the activeTab, this property is passed in by parent component
   */
   @Prop({mutable: true}) activeTab: string;
+  
   /**
    * Keeps track of the parentComponent unique id, this property is passed in by parent component
   */
   @Prop({mutable: true}) parentComponent: string;
+
   /**
    * Keeps track of if the tabpanel is selected, this property is computed on `componentWillUpdate()`
   */
   @Prop({mutable: true}) selected = false;
   
   @Listen('tabClick', {
-    passive: true,
     target: 'body',
-  }) 
+  })
   tabClickHandler(event: CustomEvent<string>) {
     if (this.parentComponent === event.detail[1]) {
       this.activeTab = event.detail[0];

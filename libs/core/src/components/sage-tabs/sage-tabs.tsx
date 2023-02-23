@@ -1,9 +1,9 @@
 import { Component, Element, Host, h, Prop, Listen } from '@stencil/core';
+
 @Component({
   tag: 'sage-tabs',
   styleUrl: 'sage-tabs.scss',
   shadow: true,
-  // scoped: true,
 })
 export class SageTabs {
   private tabs;
@@ -32,9 +32,8 @@ export class SageTabs {
   @Prop({mutable: true}) activeTab: string;
 
   @Listen('tabClick', {
-    passive: true,
     target: 'body',
-  }) 
+  })
   tabClickHandler(event: CustomEvent<string>) {
     if (this.componentId === event.detail[1]) {
       this.activeTab = event.detail[0];

@@ -8,7 +8,7 @@
   "rules": {
     "@stencil/decorators-context": "off", // This is set to off until support for ESLINT 8, othwerise remove rule
     "@stencil/strict-boolean-conditions": "off", // This is set to off until support for ESLINT 8, othwerise remove rule
-    "@stencil/decorators-style": "off",
+    // "@stencil/decorators-style": "off",
     "@stencil/own-methods-must-be-private": "off"
   }
 }

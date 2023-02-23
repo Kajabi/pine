@@ -4,7 +4,7 @@ import { html, render } from 'lit-html';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
-<Meta title="webcomponents/tabpanel" component="sage-tabpanel" argTypes={extractArgTypes('sage-tabpanel')} />
+<Meta title="components/tabs/tabpanel" component="sage-tabpanel" argTypes={extractArgTypes('sage-tabpanel')} />
 
 export const Template = (args) => html`
 <sage-tabs component-id="tabpanel-example" active-tab="tab-one">
@@ -15,11 +15,11 @@ export const Template = (args) => html`
 
 # Tabpanel (subcomponent)
 
-A subcomponent of [sage-tabs](/docs/webcomponents-tabs--primary). Expected to be used exclusively within `sage-tabs`
+A subcomponent of [sage-tabs](/docs/components-tabs--primary). Expected to be used exclusively within `sage-tabs`
 
 ## Usage Guidelines
 
-This component expects a `tab` property to be passed into the component. This property must match a corresponding [sage-tab](/docs/webcomponents-tab--default-story).
+This component expects a `tab` property to be passed into the component. This property must match a corresponding [sage-tab](/docs/components-tabs-tab--default-story).
 
 This component accepts strings and/or HTML elements.
 
