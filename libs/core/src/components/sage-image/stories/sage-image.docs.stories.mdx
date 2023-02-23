@@ -7,17 +7,6 @@ import * as stories from './sage-image.stories.js';
 
 <Meta title="components/Image" component="sage-image" argTypes={extractArgTypes('sage-image')} />
 
-export const Template = (args) => html` <sage-image
-  alt="${args.alt}"
-  height="${args.height}"
-  loading="${args.loading}"
-  sizes="${args.sizes}"
-  src="${args.src}"
-  srcset="${args.srcset}"
-  width="${args.width}"
-/>`;
-export const SizesAndSrcset = (args) => html`<sage-image alt="${args.alt}" sizes="${args.sizes}" src="${args.src}" srcset="${args.srcset}" />`;
-
 # Image
 
 An image can be used to convey supplemental information to the user or as decoration.

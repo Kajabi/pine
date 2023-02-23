@@ -1,6 +1,6 @@
 import { html } from 'lit-html';
 
-const Template = (args) => html`<sage-input
+const BaseTemplate = (args) => html`<sage-input
   disabled="${args.disabled}"
   error-text="${args.errorText}"
   hint="${args.hint}"
@@ -20,7 +20,7 @@ const defaultParameters = {
   }
 };
 
-export const Text = Template.bind({});
+export const Text = BaseTemplate.bind({});
 Text.args = {
   label: 'Name',
   type: 'text',
@@ -28,7 +28,7 @@ Text.args = {
 };
 Text.parameters = { ...defaultParameters };
 
-export const Email = Template.bind({});
+export const Email = BaseTemplate.bind({});
 Email.args = {
   label: 'Email',
   type: 'email',
@@ -36,7 +36,7 @@ Email.args = {
 };
 Email.parameters = { ...defaultParameters };
 
-export const Required = Template.bind({});
+export const Required = BaseTemplate.bind({});
 Required.args = {
   label: 'Email',
   type: 'email',
@@ -45,7 +45,7 @@ Required.args = {
 };
 Required.parameters = { ...defaultParameters };
 
-export const Placeholder = Template.bind({});
+export const Placeholder = BaseTemplate.bind({});
 Placeholder.args = {
   label: 'Email',
   placeholder: '123@email.com',
@@ -54,7 +54,7 @@ Placeholder.args = {
 };
 Placeholder.parameters = { ...defaultParameters };
 
-export const Disabled = Template.bind({});
+export const Disabled = BaseTemplate.bind({});
 Disabled.args = {
   label: 'Email',
   type: 'email',
@@ -63,7 +63,7 @@ Disabled.args = {
 };
 Disabled.parameters = { ...defaultParameters };
 
-export const Readonly = Template.bind({});
+export const Readonly = BaseTemplate.bind({});
 Readonly.args = {
   label: 'Email',
   readonly: true,
@@ -72,7 +72,7 @@ Readonly.args = {
 };
 Readonly.parameters = { ...defaultParameters };
 
-export const Hint = Template.bind({});
+export const Hint = BaseTemplate.bind({});
 Hint.args = {
   label: 'Email',
   hint: 'Please use the correct format',
@@ -81,7 +81,7 @@ Hint.args = {
 };
 Hint.parameters = { ...defaultParameters };
 
-export const Error = Template.bind({});
+export const Error = BaseTemplate.bind({});
 Error.args = {
   label: 'Email',
   errorText: "Please provide a valid Email address",

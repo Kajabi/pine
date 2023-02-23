@@ -7,9 +7,6 @@ import * as stories from './sage-link.stories.js';
 
 <Meta title="components/Link" component="sage-link" argTypes={extractArgTypes('sage-link')} args={{ href: '#some-anchor' }} />
 
-export const Template = (args) => html`<sage-link external=${args.external} font-size=${args.fontSize} href=${args.href} variant=${args.variant}></sage-link>`;
-export const TemplateWithSlot = (args) => html` <sage-link external=${args.external} font-size=${args.fontSize} href=${args.href} variant=${args.variant}>${args.slot}</sage-link>`;
-
 # Sage link
 
 <p>
