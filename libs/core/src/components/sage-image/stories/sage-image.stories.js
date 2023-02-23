@@ -1,4 +1,4 @@
-import { html, render } from 'lit-html';
+import { html } from 'lit-html';
 
 const BaseTemplate = (args) => html` <sage-image
   alt="${args.alt}"

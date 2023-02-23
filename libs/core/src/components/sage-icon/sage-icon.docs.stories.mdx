@@ -1,5 +1,5 @@
 import { ArgsTable, Canvas, IconGallery, IconItem, Meta, Story } from '@storybook/addon-docs';
-import {html, render} from 'lit-html';
+import { html } from 'lit-html';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 import sageIconsJson from '../../../../icons/dist/sage-icons.json';
@@ -14,8 +14,6 @@ export const argTypes = () => {
 }
 
 <Meta title="components/Icon" component="sage-icon" argTypes={argTypes()}/>
-
-export const Template = (args) => html`<sage-icon name=${args.name} size=${args.size}></sage-icon>`;
 
 # Sage icon
 Displays Icons used with the Sage Design System
@@ -69,10 +67,9 @@ will render the following output:
   <sage-icon name="upload" size="2rem"></sage-icon>
 </Canvas>
 
-
 export const IconItems = (args) => (
-  Object.values(sageIconsJson["icons"]).map((icon) => (
-    <IconItem name={icon.name}>
+  Object.values(sageIconsJson["icons"]).map((icon, index) => (
+    <IconItem key={index} name={icon.name}>
       <sage-icon name={icon.name}></sage-icon>
     </IconItem>
   ))
