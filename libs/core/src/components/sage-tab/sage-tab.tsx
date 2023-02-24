@@ -16,17 +16,17 @@ export class SageTab {
   /**
    * Keeps track of the activeTab, this property is passed in by parent component
   */
-  @Prop({mutable: true}) activeTab: string;
+  @Prop({mutable: true}) activeTab: string = null;
 
   /**
    * Keeps track of the parentComponent unique id, this property is passed in by parent component
   */
-  @Prop({mutable: true}) parentComponent: string;
+  @Prop({mutable: true}) parentComponent: string = null;
 
   /**
    * Keeps track of if the expected tab variant, this property is passed in by parent component
   */
-  @Prop() variant: string;
+  @Prop() variant: string = null;
 
   /**
    * Keeps track of if the tabpanel is selected, this property is computed on `componentWillUpdate()`
@@ -50,17 +50,17 @@ export class SageTab {
     }
   }
 
-  componentWillUpdate() {
+  componentWillRender() {
     this.matchActiveTab();
   }
 
   render() {
     const availabilityTabEdgeInlineStart = (
-      <span class="sage-tab-edge"></span>
+      <span class="sage-tab-edge" role="presentation"></span>
     )
 
     const availabilityTabEdgeInlineEnd = (
-      <span class="sage-tab-edge sage-tab-edge--end"></span>
+      <span class="sage-tab-edge sage-tab-edge--end" role="presentation"></span>
     )
 
     return (

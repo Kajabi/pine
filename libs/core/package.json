@@ -46,8 +46,8 @@
     "start": "run-p start.*",
     "start.stencil": "stencil build --docs --dev --watch --serve",
     "start.storybook": "start-storybook -p 6006",
-    "test": "stencil test --spec --e2e",
-    "test.watch": "stencil test --spec --e2e --watchAll"
+    "test": "stencil test --spec --e2e --coverage",
+    "test.watch": "stencil test --spec --e2e --watchAll --coverage"
   },
   "dependencies": {
     "@stencil/core": "^2.18.0",

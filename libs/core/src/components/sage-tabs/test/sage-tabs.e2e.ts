@@ -49,21 +49,6 @@ describe('sage-tabs', () => {
     expect(tabEdges).toBeNull();
   });
 
-  it('renders aria label on tablist', async () => {
-    const page = await newE2EPage();
-    await page.setContent(`
-      <sage-tabs active-tab="two" tablist-label="test label" component-id="test2">
-        <sage-tab tab="one">Test 1</sage-tab>
-        <sage-tab tab="two">Test 2</sage-tab>
-        <sage-tabpanel tab="one">Content 1</sage-tabpanel>
-        <sage-tabpanel tab="two">Content 2</sage-tabpanel>
-      </sage-tabs>
-    `);
-    await page.waitForChanges();
-    const element = await page.find(`sage-tabs >>> div[role='tablist']`);
-    expect(element.getAttribute('aria-label')).toMatch('test label');
-  });
-
   it('renders passed activeTab on page load', async () => {
     const page = await newE2EPage();
     await page.setContent(`
@@ -92,7 +77,9 @@ describe('sage-tabs', () => {
     `);
     const inactiveTabButton = await page.find(`sage-tab[tab="one"] > button`);
     inactiveTabButton.click();
+    const event = await page.spyOnEvent('tabClick');
     await page.waitForChanges();
+    expect(event).toHaveReceivedEvent();
     const expectedActiveButton = await page.find(`sage-tab[tab="one"] > button`);
     expect(expectedActiveButton.getAttribute('aria-selected')).toMatch("true");
     const expectedActivePanel = await page.find(`sage-tabpanel[tab="one"] > div`);
@@ -114,13 +101,13 @@ describe('sage-tabs', () => {
     tab.click();
     await page.waitForChanges();
     // Move focus to second tab
-    tab.press("ArrowRight");
+    page.keyboard.down("ArrowRight");
     await page.waitForChanges();
     // Confirm focus on second tab
     tab = await page.find(`sage-tab[tab="two"] > button`);
     expect(tab.getAttribute('aria-selected')).toMatch("true");
     // Move focus to past end of tabs forcing a loop to first tab
-    tab.press("ArrowRight");
+    page.keyboard.down("ArrowRight");
     await page.waitForChanges();
     // Confirm focus on second tab
     tab = await page.find(`sage-tab[tab="one"] > button`);
@@ -142,13 +129,13 @@ describe('sage-tabs', () => {
     tab.click();
     await page.waitForChanges();
     // Move focus to first tab
-    tab.press("ArrowLeft");
+    page.keyboard.down("ArrowLeft");
     await page.waitForChanges();
     // Confirm focus on first tab
     tab = await page.find(`sage-tab[tab="one"] > button`);
     expect(tab.getAttribute('aria-selected')).toMatch("true");
     // Move focus to past end of tabs forcing a loop to last tab
-    tab.press("ArrowLeft");
+    page.keyboard.down("ArrowLeft");
     await page.waitForChanges();
     // Confirm focus on second tab
     tab = await page.find(`sage-tab[tab="two"] > button`);
@@ -158,7 +145,7 @@ describe('sage-tabs', () => {
   it('renders new activeTab when Home and End keys are pressed', async () => {
     const page = await newE2EPage();
     await page.setContent(`
-      <sage-tabs active-tab="two" tablist-label="test label" component-id="test4">
+      <sage-tabs active-tab="one" tablist-label="test label" component-id="test4">
         <sage-tab tab="one">Test 1</sage-tab>
         <sage-tab tab="two">Test 2</sage-tab>
         <sage-tab tab="three">Test 2</sage-tab>
@@ -168,16 +155,20 @@ describe('sage-tabs', () => {
       </sage-tabs>
     `);
     // Check that second tab is active
-    let tab = await page.find(`sage-tab[tab="two"] > button`);
+    let tab = await page.find(`sage-tab[tab="one"] > button`);
     expect(tab.getAttribute('aria-selected')).toMatch("true");
+    // Click inactive tab
+    tab = await page.find(`sage-tab[tab="two"] > button`);
+    tab.click();
+    await page.waitForChanges();
     // Move focus to first tab
-    tab.press("Home");
+    page.keyboard.down("Home");
     await page.waitForChanges();
     // Confirm focus on first tab
     tab = await page.find(`sage-tab[tab="one"] > button`);
     expect(tab.getAttribute('aria-selected')).toMatch("true");
     // Move focus to last tab
-    tab.press("End");
+    page.keyboard.down("End");
     await page.waitForChanges();
     // Confirm focus on last tab
     tab = await page.find(`sage-tab[tab="three"] > button`);

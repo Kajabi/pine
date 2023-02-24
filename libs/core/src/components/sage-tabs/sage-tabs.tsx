@@ -13,12 +13,12 @@ export class SageTabs {
   /**
    * Sets the aria-label attached to the tablist element, required
   */
-  @Prop() tablistLabel: string;
+  @Prop() tablistLabel: string = null;
  
   /**
     * Sets unique id on tabs component, required
   */
-  @Prop() componentId: string;
+  @Prop() componentId: string  = null;
   
   /**
    * Sets tabs variant styles as outlined in Figma documentation, optional
@@ -29,7 +29,7 @@ export class SageTabs {
   /**
    * Sets default active tab, required
    */
-  @Prop({mutable: true}) activeTab: string;
+  @Prop({mutable: true}) activeTab: string = null;
 
   @Listen('tabClick', {
     target: 'body',

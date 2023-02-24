@@ -16,12 +16,12 @@ export class SageTabpanel {
   /**
    * Keeps track of the activeTab, this property is passed in by parent component
   */
-  @Prop({mutable: true}) activeTab: string;
+  @Prop({mutable: true}) activeTab: string = null;
   
   /**
    * Keeps track of the parentComponent unique id, this property is passed in by parent component
   */
-  @Prop({mutable: true}) parentComponent: string;
+  @Prop({mutable: true}) parentComponent: string = null;
 
   /**
    * Keeps track of if the tabpanel is selected, this property is computed on `componentWillUpdate()`
@@ -45,7 +45,7 @@ export class SageTabpanel {
     }
   }
 
-  componentWillUpdate() {
+  componentWillRender() {
     this.matchActiveTab();
   }
 

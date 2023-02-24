@@ -13,4 +13,32 @@ describe('sage-tabpanel', () => {
       </sage-tabpanel>
     `);
   });
+
+  it('renders inactive tabpanel with passed props', async () => {
+    const page = await newSpecPage({
+      components: [SageTabpanel],
+      html: `<sage-tabpanel active-tab="one" parent-id="foo" tab="two">Content</sage-tabpanel>`,
+    });
+    expect(page.root).toEqualHtml(`
+      <sage-tabpanel slot="tabpanels" tab="two" parent-id="foo" active-tab="one">
+        <div aria-labelledby="two" class="sage-tabpanel" role="tabpanel" id="two-panel">
+          Content
+        </div>
+      </sage-tabpanel>
+    `);
+  });
+
+  it('renders active tabpanel with passed props', async () => {
+    const page = await newSpecPage({
+      components: [SageTabpanel],
+      html: `<sage-tabpanel active-tab="two" parent-id="foo" tab="two">Content</sage-tabpanel>`,
+    });
+    expect(page.root).toEqualHtml(`
+      <sage-tabpanel slot="tabpanels" tab="two" parent-id="foo" active-tab="two">
+        <div aria-labelledby="two" class="sage-tabpanel is-active" role="tabpanel" id="two-panel">
+          Content
+        </div>
+      </sage-tabpanel>
+    `);
+  });
 });
