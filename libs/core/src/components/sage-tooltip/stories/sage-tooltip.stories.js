@@ -1,6 +1,6 @@
 import { html } from 'lit-html';
 
-const BaseTemplate = (args) => html`<sage-tooltip hasArrow=${args.hasArrow}>${args.slot}</sage-tooltip>`;
+const BaseTemplate = (args) => html`<sage-tooltip content=${args.content} hasArrow=${args.hasArrow} placement=${args.placement} open=${args.open}>${args.slot}</sage-tooltip>`;
 
 const defaultParameters = {
   docs: {

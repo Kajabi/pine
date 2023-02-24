@@ -7,16 +7,20 @@
 
 ## Properties
 
-| Property   | Attribute   | Description                                         | Type      | Default     |
-| ---------- | ----------- | --------------------------------------------------- | --------- | ----------- |
-| `hasArrow` | `has-arrow` | Determines whether or not the tooltip have an arrow | `boolean` | `undefined` |
+| Property    | Attribute   | Description                                                        | Type                                                                                                                                                                 | Default     |
+| ----------- | ----------- | ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `content`   | `content`   | Content for the tooltip. If HTML is required, use the content slot | `""`                                                                                                                                                                 | `undefined` |
+| `hasArrow`  | `has-arrow` | Determines whether or not the tooltip have an arrow                | `boolean`                                                                                                                                                            | `undefined` |
+| `open`      | `open`      | Determines whether or not the tooltip is open.                     | `boolean`                                                                                                                                                            | `undefined` |
+| `placement` | `placement` | Determines the preferred position of the tooltip                   | `"bottom" \| "bottom-end" \| "bottom-start" \| "left" \| "left-end" \| "left-start" \| "right" \| "right-end" \| "right-start" \| "top" \| "top-end" \| "top-start"` | `'top'`     |
 
 
 ## Slots
 
-| Slot | Description                |
-| ---- | -------------------------- |
-|      | Content inside the tooltip |
+| Slot        | Description                  |
+| ----------- | ---------------------------- |
+| `"content"` | Content inside the tooltip   |
+| `"target"`  | The tooltip's target element |
 
 
 ----------------------------------------------
