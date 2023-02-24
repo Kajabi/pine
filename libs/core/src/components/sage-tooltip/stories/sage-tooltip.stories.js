@@ -4,11 +4,11 @@ const BaseTemplate = (args) => html`<sage-tooltip hasArrow=${args.hasArrow}>${ar
 
 const defaultParameters = {
   docs: {
-    disabled: true
+    disable: true
   }
 };
 
-export const Default = BaseTemplate({});
+export const Default = BaseTemplate.bind({});
 Default.args = {
   hasArrow: true,
   slot: 'This is tooltip text'
