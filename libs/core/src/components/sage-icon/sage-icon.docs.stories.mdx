@@ -69,7 +69,7 @@ will render the following output:
 
 export const IconItems = (args) => (
   Object.values(sageIconsJson["icons"]).map((icon, index) => (
-    <IconItem key={index} name={icon.name}>
+    <IconItem key={`item-${index}`} name={icon.name}>
       <sage-icon name={icon.name}></sage-icon>
     </IconItem>
   ))

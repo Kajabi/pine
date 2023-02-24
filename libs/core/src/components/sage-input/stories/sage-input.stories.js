@@ -16,7 +16,7 @@ const BaseTemplate = (args) => html`<sage-input
 
 const defaultParameters = {
   docs: {
-    disabled: true
+    disable: true
   }
 };
 
