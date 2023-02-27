@@ -1,4 +1,4 @@
-import { Component, Host, Prop, h } from '@stencil/core';
+import { Component, Element, Host, Prop, State, h } from '@stencil/core';
 
 /**
  * @slot content - Content inside the tooltip
@@ -13,6 +13,11 @@ import { Component, Host, Prop, h } from '@stencil/core';
 export class SageTooltip {
 
   /**
+   * Reference to the Host element
+   */
+  @Element() el: HTMLDivElement;
+
+  /**
    * Content for the tooltip. If HTML is required, use the content slot
    */
   @Prop() content: '';
@@ -21,6 +26,11 @@ export class SageTooltip {
    * Determines whether or not the tooltip have an arrow
    */
   @Prop() hasArrow?: boolean;
+
+  /**
+   * Determines whether or not the tooltip is visible
+   */
+  @Prop({mutable: true, reflect: true}) isVisible = false;
 
   /**
    * Determines the preferred position of the tooltip
@@ -39,23 +49,20 @@ export class SageTooltip {
     | 'left-start'
     | 'left-end' = 'top';
 
-  /**
-   * Determines whether or not the tooltip is open.
-   */
-  @Prop({ reflect: true }) open: boolean;
+    // hide the tooltip
 
-  // private getText(): string {
-  //   return format(this.first, this.middle, this.last);
-  // }
+  // show the tooltip
 
   render() {
     return (
       <Host hasArrow={this.hasArrow}>
         <div class="sage-tooltip">
-          <slot name="target" aria-describedby="tooltip"></slot>
+          <slot name="target" aria-describedby="tooltip" />
           <slot
             name="content"
-            aria-live={this.open ? 'polite' : 'off'}
+            part="content"
+            class="sage-tooltip__content"
+            aria-live={this.isVisible ? 'polite' : 'off'}
           >
             {this.content}
           </slot>

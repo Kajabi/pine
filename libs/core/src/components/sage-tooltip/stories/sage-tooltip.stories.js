@@ -1,16 +1,34 @@
 import { html } from 'lit-html';
 
-const BaseTemplate = (args) => html`<sage-tooltip content=${args.content} hasArrow=${args.hasArrow} placement=${args.placement} open=${args.open}>${args.slot}</sage-tooltip>`;
-
 const defaultParameters = {
   docs: {
     disable: true
   }
 };
 
-export const Default = BaseTemplate.bind({});
+const BaseTemplate = (args) => html`
+<sage-tooltip content=${args.content} hasArrow=${args.hasArrow} placement=${args.placement} open=${args.open}>
+  ${args.slot}
+</sage-tooltip>`;
+
+const SlottedTemplate = (args) => html`
+<sage-tooltip content=${args.content} hasArrow=${args.hasArrow} placement=${args.placement} open=${args.open}>
+  <div slot="content">
+    <p>this is s a</p>
+    <p>this is s a</p>
+  </div>
+  <sage-button slot="target" variant="accent">Hey there</sage-button>
+</sage-tooltip>`;
+
+
+export const Default = SlottedTemplate.bind({});
 Default.args = {
-  hasArrow: true,
-  slot: 'This is tooltip text'
+
 };
 Default.parameters = { ...defaultParameters }
+
+// export const Slotted = SlottedTemplate.bind({});
+// Slotted.args = {
+//   // TODO Find way to return 10 - 13 in args <- slot="content"
+// };
+// Slotted.parameters = { ...defaultParameters }
