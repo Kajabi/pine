@@ -66,8 +66,8 @@ describe('sage-tabs', () => {
       <sage-tab slot="tabs" variant="availability" tab="two" parent-id="foo" active-tab="two">
         <button aria-controls="two-panel" aria-selected="true" class="sage-tab is-active" role="tab" tabindex="0" id="two">
           <span class="sage-tab-edge" role="presentation"></span>  
-          <div class="sage-tab__content">Content</div>
           <span class="sage-tab-edge sage-tab-edge--end" role="presentation"></span>
+          <div class="sage-tab__content">Content</div>
         </button>
       </sage-tab>
     `);
