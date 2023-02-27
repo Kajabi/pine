@@ -58,9 +58,7 @@ export class SageTabs {
     });
   }
 
-  @Listen('keydown', {
-    passive: true,
-  })
+  @Listen('keydown', {})
   handleKeyDown(ev: KeyboardEvent){
     const tabList = Array.from(this.el.querySelectorAll('[role="tab"]'));
     const activeEl = this.getActiveElement();
