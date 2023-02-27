@@ -13,12 +13,12 @@ export class SageTabs {
   /**
    * Sets the aria-label attached to the tablist element, required
   */
-  @Prop() tablistLabel: string = null;
+  @Prop() tablistLabel: string;
  
   /**
     * Sets unique id on tabs component, required
   */
-  @Prop() componentId: string  = null;
+  @Prop() componentId: string;
   
   /**
    * Sets tabs variant styles as outlined in Figma documentation, optional
@@ -29,7 +29,7 @@ export class SageTabs {
   /**
    * Sets default active tab, required
    */
-  @Prop({mutable: true}) activeTab: string = null;
+  @Prop({mutable: true}) activeTab: string;
 
   @Listen('tabClick', {
     target: 'body',
@@ -47,14 +47,14 @@ export class SageTabs {
 
   private passPropsToChildren = () => {
     this.tabs.forEach(child => {
-      child['activeTab'] = this.activeTab.toString();
-      child['parentComponent'] = this.componentId.toString();
-      child['variant'] = this.variant.toString();
+      if (this.activeTab) { child['activeTab'] = this.activeTab.toString()};
+      if (this.componentId) {child['parentComponent'] = this.componentId.toString()};
+      if (this.variant) {child['variant'] = this.variant.toString()};
     });
     this.tabPanels.forEach(child => {
-      child['activeTab'] = this.activeTab.toString();
-      child['parentComponent'] = this.componentId.toString();
-      child['variant'] = this.variant.toString();
+      if (this.activeTab) { child['activeTab'] = this.activeTab.toString()};
+      if (this.componentId) {child['parentComponent'] = this.componentId.toString()};
+      if (this.variant) {child['variant'] = this.variant.toString()};
     });
   }
 
@@ -143,7 +143,7 @@ export class SageTabs {
     }
   }
   
-  componentDidRender() {
+  componentWillRender() {
     this.findAllChildren()
     this.passPropsToChildren()
   }

@@ -1,4 +1,4 @@
-import { Component, Element, Host, h, Prop, Listen } from '@stencil/core';
+import { Component, Element, Host, h, Prop, Listen, State } from '@stencil/core';
 
 @Component({
   tag: 'sage-tabpanel',
@@ -16,17 +16,17 @@ export class SageTabpanel {
   /**
    * Keeps track of the activeTab, this property is passed in by parent component
   */
-  @Prop({mutable: true}) activeTab: string = null;
+  @Prop({mutable: true}) activeTab: string;
   
   /**
    * Keeps track of the parentComponent unique id, this property is passed in by parent component
   */
-  @Prop({mutable: true}) parentComponent: string = null;
+  @Prop({mutable: true}) parentComponent: string;
 
   /**
    * Keeps track of if the tabpanel is selected, this property is computed on `componentWillUpdate()`
   */
-  @Prop({mutable: true}) selected = false;
+  @State() selected = false;
   
   @Listen('tabClick', {
     target: 'body',
@@ -38,7 +38,7 @@ export class SageTabpanel {
   }
 
   private matchActiveTab() {
-    if (this.tab === this.activeTab) {
+    if (this.activeTab && this.activeTab === this.tab) {
       this.selected = true;
     } else {
       this.selected = false;

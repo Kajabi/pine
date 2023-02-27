@@ -159,10 +159,6 @@ export namespace Components {
          */
         "parentComponent": string;
         /**
-          * Keeps track of if the tabpanel is selected, this property is computed on `componentWillUpdate()`
-         */
-        "selected": boolean;
-        /**
           * Sets the related tab name, this name must match a `sage-tabpanel`'s tab property, required
          */
         "tab": string;
@@ -180,10 +176,6 @@ export namespace Components {
           * Keeps track of the parentComponent unique id, this property is passed in by parent component
          */
         "parentComponent": string;
-        /**
-          * Keeps track of if the tabpanel is selected, this property is computed on `componentWillUpdate()`
-         */
-        "selected": boolean;
         /**
           * Sets the related tab name, this name must match a `sage-tab`'s tab property, required
          */
@@ -439,10 +431,6 @@ declare namespace LocalJSX {
          */
         "parentComponent"?: string;
         /**
-          * Keeps track of if the tabpanel is selected, this property is computed on `componentWillUpdate()`
-         */
-        "selected"?: boolean;
-        /**
           * Sets the related tab name, this name must match a `sage-tabpanel`'s tab property, required
          */
         "tab"?: string;
@@ -460,10 +448,6 @@ declare namespace LocalJSX {
           * Keeps track of the parentComponent unique id, this property is passed in by parent component
          */
         "parentComponent"?: string;
-        /**
-          * Keeps track of if the tabpanel is selected, this property is computed on `componentWillUpdate()`
-         */
-        "selected"?: boolean;
         /**
           * Sets the related tab name, this name must match a `sage-tab`'s tab property, required
          */
