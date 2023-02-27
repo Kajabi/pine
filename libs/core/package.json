@@ -38,6 +38,8 @@
     "build": "yarn build.stencil",
     "build.stencil": "stencil build --docs",
     "build.storybook": "build-storybook",
+    "build.ts": "tsc -p scripts/tsconfig.json",
+    "build.tokens": "yarn run build.ts && node scripts/build-tokens.js",
     "generate": "stencil generate",
     "lint": "run-p lint.*",
     "lint.eslint": "eslint src",
@@ -50,8 +52,8 @@
     "test.watch": "stencil test --spec --e2e --watchAll --coverage"
   },
   "dependencies": {
-    "@stencil/core": "^2.18.0",
-    "@sage/icons": "*"
+    "@sage/icons": "*",
+    "@stencil/core": "^2.18.0"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
@@ -74,6 +76,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-react": "^7.31.10",
     "eslint-plugin-storybook": "^0.6.6",
+    "fs-extra": "^11.1.0",
     "jest": "^27.4.5",
     "jest-cli": "^27.4.5",
     "lit-html": "^2.4.0",
@@ -93,7 +96,12 @@
   "nx": {
     "targets": {
       "start.stencil": {
-        "dependsOn":  [{ "projects": "dependencies", "target": "build" }]
+        "dependsOn": [
+          {
+            "projects": "dependencies",
+            "target": "build"
+          }
+        ]
       }
     }
   }
