@@ -41,22 +41,4 @@ describe('sage-tabpanel', () => {
       </sage-tabpanel>
     `);
   });
-
-  // it('listen decorator working as expected', async () => {
-  //   const page = await newSpecPage({
-  //     components: [SageTabpanel],
-  //     html: `<sage-tabpanel active-tab="one" parent-id="foo" tab="two">Content</sage-tabpanel>`,
-  //   });
-  //   document.dispatchEvent(new MouseEvent("two", {
-  //     bubbles: true,
-  //     cancelable: true
-  //   }));
-  //   expect(page.root).toEqualHtml(`
-  //     <sage-tabpanel slot="tabpanels" tab="two" parent-id="foo" active-tab="two">
-  //       <div aria-labelledby="two" class="sage-tabpanel is-active" role="tabpanel" id="two-panel">
-  //         Content
-  //       </div>
-  //     </sage-tabpanel>
-  //   `);
-  // });
 });
