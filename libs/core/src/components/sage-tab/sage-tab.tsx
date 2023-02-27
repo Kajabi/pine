@@ -75,8 +75,8 @@ export class SageTab {
           onClick={this.onTabClick.bind(this, this.tab, this.parentComponent)}
         >
           {this.variant === "availability" && availabilityTabEdgeInlineStart}
-          <div class="sage-tab__content"><slot/></div>
           {this.variant === "availability" && availabilityTabEdgeInlineEnd}
+          <div class="sage-tab__content"><slot/></div>
         </button>
       </Host>
     );
