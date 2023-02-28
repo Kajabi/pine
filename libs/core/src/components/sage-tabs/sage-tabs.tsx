@@ -1,5 +1,9 @@
 import { Component, Element, Host, h, Prop, Listen } from '@stencil/core';
 
+  /**
+ * @slot tabs - Content is placed within the `div[role="tablist"]` element as children
+ * @slot tabpanels - Content is placed directly after the `div[role="tablist"]` element as siblings
+ */
 @Component({
   tag: 'sage-tabs',
   styleUrl: 'sage-tabs.scss',
@@ -8,28 +12,29 @@ import { Component, Element, Host, h, Prop, Listen } from '@stencil/core';
 export class SageTabs {
   private tabs;
   private tabPanels;
+
   @Element() el: HTMLDivElement;
 
   /**
-   * Sets the aria-label attached to the tablist element, required
+   * Sets the aria-label attached to the tablist element
   */
-  @Prop() tablistLabel: string;
+  @Prop() tablistLabel!: string;
  
   /**
-    * Sets unique id on tabs component, required
+    * Sets unique id on tabs component
   */
-  @Prop() componentId: string;
+  @Prop() componentId!: string;
   
   /**
-   * Sets tabs variant styles as outlined in Figma documentation, optional
+   * Sets tabs variant styles as outlined in Figma documentation
    * @defaultValue primary
     */
   @Prop() variant?: 'primary' | 'availability' | 'filter' = 'primary';
 
   /**
-   * Sets default active tab, required
+   * Sets default active tab
    */
-  @Prop({mutable: true}) activeTab: string;
+  @Prop({mutable: true}) activeTab!: string;
 
   @Listen('tabClick', {
     target: 'body',
@@ -40,26 +45,36 @@ export class SageTabs {
     }
   }
 
-  private findAllChildren = () => {
+  private matchActiveTab(activeTab, tab) {
+    if (activeTab && activeTab === tab) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  private findAllChildren() {
     this.tabs = this.el.querySelectorAll('sage-tab');
     this.tabPanels = this.el.querySelectorAll('sage-tabpanel');
   }
 
-  private passPropsToChildren = () => {
+  private propGeneration(child) {
+    child['selected'] = this.matchActiveTab(this.activeTab, child.tab);
+    if (this.componentId) {child.parentComponent = this.componentId.toString()};
+    if (this.variant) {child['variant'] = this.variant.toString()};
+  }
+
+  private passPropsToChildren() {
     this.tabs.forEach(child => {
-      if (this.activeTab) { child['activeTab'] = this.activeTab.toString()};
-      if (this.componentId) {child['parentComponent'] = this.componentId.toString()};
-      if (this.variant) {child['variant'] = this.variant.toString()};
+      this.propGeneration(child);
     });
     this.tabPanels.forEach(child => {
-      if (this.activeTab) { child['activeTab'] = this.activeTab.toString()};
-      if (this.componentId) {child['parentComponent'] = this.componentId.toString()};
-      if (this.variant) {child['variant'] = this.variant.toString()};
+      this.propGeneration(child);
     });
   }
 
   @Listen('keydown', {})
-  handleKeyDown(ev: KeyboardEvent){
+  handleKeyDown(ev: KeyboardEvent) {
     const tabList = Array.from(this.el.querySelectorAll('[role="tab"]'));
     const activeEl = this.getActiveElement();
     const tabLocations = this.getTabLocations(tabList);
@@ -109,7 +124,7 @@ export class SageTabs {
     }
   }
 
-  private classNames = () => {
+  private classNames() {
     let className = `sage-tabs`;
     if (this.variant && this.variant != 'primary') {
       const variantClassName = `sage-tabs--${this.variant}`;

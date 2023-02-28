@@ -7,12 +7,20 @@
 
 ## Properties
 
-| Property       | Attribute       | Description                                                           | Type                                      | Default     |
-| -------------- | --------------- | --------------------------------------------------------------------- | ----------------------------------------- | ----------- |
-| `activeTab`    | `active-tab`    | Sets default active tab, required                                     | `string`                                  | `undefined` |
-| `componentId`  | `component-id`  | Sets unique id on tabs component, required                            | `string`                                  | `undefined` |
-| `tablistLabel` | `tablist-label` | Sets the aria-label attached to the tablist element, required         | `string`                                  | `undefined` |
-| `variant`      | `variant`       | Sets tabs variant styles as outlined in Figma documentation, optional | `"availability" \| "filter" \| "primary"` | `'primary'` |
+| Property                    | Attribute       | Description                                                 | Type                                      | Default     |
+| --------------------------- | --------------- | ----------------------------------------------------------- | ----------------------------------------- | ----------- |
+| `activeTab` _(required)_    | `active-tab`    | Sets default active tab                                     | `string`                                  | `undefined` |
+| `componentId` _(required)_  | `component-id`  | Sets unique id on tabs component                            | `string`                                  | `undefined` |
+| `tablistLabel` _(required)_ | `tablist-label` | Sets the aria-label attached to the tablist element         | `string`                                  | `undefined` |
+| `variant`                   | `variant`       | Sets tabs variant styles as outlined in Figma documentation | `"availability" \| "filter" \| "primary"` | `'primary'` |
+
+
+## Slots
+
+| Slot          | Description                                                                    |
+| ------------- | ------------------------------------------------------------------------------ |
+| `"tabpanels"` | Content is placed directly after the `div[role="tablist"]` element as siblings |
+| `"tabs"`      | Content is placed within the `div[role="tablist"]` element as children         |
 
 
 ----------------------------------------------

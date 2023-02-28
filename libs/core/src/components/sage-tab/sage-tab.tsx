@@ -1,4 +1,4 @@
-import { Component, Element, Host, h, Prop, Event, EventEmitter, State } from '@stencil/core';
+import { Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 
 @Component({
   tag: 'sage-tab',
@@ -11,47 +11,33 @@ export class SageTab {
   /**
    * Sets the related tab name, this name must match a `sage-tabpanel`'s tab property, required
   */
-  @Prop() tab: string;
-
-  /**
-   * Keeps track of the activeTab, this property is passed in by parent component
-  */
-  @Prop({mutable: true}) activeTab: string;
+  @Prop() tab!: string;
 
   /**
    * Keeps track of the parentComponent unique id, this property is passed in by parent component
   */
+  /** @internal */
   @Prop({mutable: true}) parentComponent: string;
 
   /**
    * Keeps track of if the expected tab variant, this property is passed in by parent component
   */
+   /** @internal */
   @Prop() variant: string;
 
   /**
    * Keeps track of if the tabpanel is selected, this property is computed on `componentWillUpdate()`
   */
-  @State() selected = false;
+   /** @internal */
+  @Prop({mutable: true}) selected = false;
  
   /**
    * Emits an event upon tab click for `sage-tab` and `sage-tabpanel` to listen for
    */
+  /** @internal */
   @Event() tabClick: EventEmitter<object>;
   private onTabClick(tab, parentComponent) {
-    this.activeTab = tab;
     this.tabClick.emit([tab, parentComponent]);
-  }
-
-  private matchActiveTab() {
-    if (this.activeTab && this.activeTab === this.tab) {
-      this.selected = true;
-    } else {
-      this.selected = false;
-    }
-  }
-
-  componentWillRender() {
-    this.matchActiveTab();
   }
 
   render() {

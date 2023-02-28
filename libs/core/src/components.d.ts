@@ -150,52 +150,38 @@ export namespace Components {
         "variant": 'inline' | 'plain';
     }
     interface SageTab {
-        /**
-          * Keeps track of the activeTab, this property is passed in by parent component
-         */
-        "activeTab": string;
-        /**
-          * Keeps track of the parentComponent unique id, this property is passed in by parent component
-         */
         "parentComponent": string;
+        "selected": boolean;
         /**
           * Sets the related tab name, this name must match a `sage-tabpanel`'s tab property, required
          */
         "tab": string;
-        /**
-          * Keeps track of if the expected tab variant, this property is passed in by parent component
-         */
         "variant": string;
     }
     interface SageTabpanel {
-        /**
-          * Keeps track of the activeTab, this property is passed in by parent component
-         */
-        "activeTab": string;
-        /**
-          * Keeps track of the parentComponent unique id, this property is passed in by parent component
-         */
         "parentComponent": string;
+        "selected": boolean;
         /**
           * Sets the related tab name, this name must match a `sage-tab`'s tab property, required
          */
         "tab": string;
+        "variant": string;
     }
     interface SageTabs {
         /**
-          * Sets default active tab, required
+          * Sets default active tab
          */
         "activeTab": string;
         /**
-          * Sets unique id on tabs component, required
+          * Sets unique id on tabs component
          */
         "componentId": string;
         /**
-          * Sets the aria-label attached to the tablist element, required
+          * Sets the aria-label attached to the tablist element
          */
         "tablistLabel": string;
         /**
-          * Sets tabs variant styles as outlined in Figma documentation, optional
+          * Sets tabs variant styles as outlined in Figma documentation
           * @defaultValue primary
          */
         "variant"?: 'primary' | 'availability' | 'filter';
@@ -418,56 +404,39 @@ declare namespace LocalJSX {
         "variant"?: 'inline' | 'plain';
     }
     interface SageTab {
-        /**
-          * Keeps track of the activeTab, this property is passed in by parent component
-         */
-        "activeTab"?: string;
-        /**
-          * Emits an event upon tab click for `sage-tab` and `sage-tabpanel` to listen for
-         */
         "onTabClick"?: (event: SageTabCustomEvent<object>) => void;
-        /**
-          * Keeps track of the parentComponent unique id, this property is passed in by parent component
-         */
         "parentComponent"?: string;
+        "selected"?: boolean;
         /**
           * Sets the related tab name, this name must match a `sage-tabpanel`'s tab property, required
          */
-        "tab"?: string;
-        /**
-          * Keeps track of if the expected tab variant, this property is passed in by parent component
-         */
+        "tab": string;
         "variant"?: string;
     }
     interface SageTabpanel {
-        /**
-          * Keeps track of the activeTab, this property is passed in by parent component
-         */
-        "activeTab"?: string;
-        /**
-          * Keeps track of the parentComponent unique id, this property is passed in by parent component
-         */
         "parentComponent"?: string;
+        "selected"?: boolean;
         /**
           * Sets the related tab name, this name must match a `sage-tab`'s tab property, required
          */
-        "tab"?: string;
+        "tab": string;
+        "variant"?: string;
     }
     interface SageTabs {
         /**
-          * Sets default active tab, required
+          * Sets default active tab
          */
-        "activeTab"?: string;
+        "activeTab": string;
         /**
-          * Sets unique id on tabs component, required
+          * Sets unique id on tabs component
          */
-        "componentId"?: string;
+        "componentId": string;
         /**
-          * Sets the aria-label attached to the tablist element, required
+          * Sets the aria-label attached to the tablist element
          */
-        "tablistLabel"?: string;
+        "tablistLabel": string;
         /**
-          * Sets tabs variant styles as outlined in Figma documentation, optional
+          * Sets tabs variant styles as outlined in Figma documentation
           * @defaultValue primary
          */
         "variant"?: 'primary' | 'availability' | 'filter';
