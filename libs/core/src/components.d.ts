@@ -153,7 +153,7 @@ export namespace Components {
         "parentComponent": string;
         "selected": boolean;
         /**
-          * Sets the related tab name, this name must match a `sage-tabpanel`'s tab property, required
+          * Sets the related tab name, this name must match a `sage-tabpanel`'s tab property
          */
         "tab": string;
         "variant": string;
@@ -162,14 +162,14 @@ export namespace Components {
         "parentComponent": string;
         "selected": boolean;
         /**
-          * Sets the related tab name, this name must match a `sage-tab`'s tab property, required
+          * Sets the related tab name, this name must match a `sage-tab`'s tab property
          */
         "tab": string;
         "variant": string;
     }
     interface SageTabs {
         /**
-          * Sets default active tab
+          * Sets starting active tab and maintains active tab as component re-renders
          */
         "activeTab": string;
         /**
@@ -182,9 +182,8 @@ export namespace Components {
         "tablistLabel": string;
         /**
           * Sets tabs variant styles as outlined in Figma documentation
-          * @defaultValue primary
          */
-        "variant"?: 'primary' | 'availability' | 'filter';
+        "variant": 'primary' | 'availability' | 'filter';
     }
 }
 export interface SageInputCustomEvent<T> extends CustomEvent<T> {
@@ -408,7 +407,7 @@ declare namespace LocalJSX {
         "parentComponent"?: string;
         "selected"?: boolean;
         /**
-          * Sets the related tab name, this name must match a `sage-tabpanel`'s tab property, required
+          * Sets the related tab name, this name must match a `sage-tabpanel`'s tab property
          */
         "tab": string;
         "variant"?: string;
@@ -417,14 +416,14 @@ declare namespace LocalJSX {
         "parentComponent"?: string;
         "selected"?: boolean;
         /**
-          * Sets the related tab name, this name must match a `sage-tab`'s tab property, required
+          * Sets the related tab name, this name must match a `sage-tab`'s tab property
          */
         "tab": string;
         "variant"?: string;
     }
     interface SageTabs {
         /**
-          * Sets default active tab
+          * Sets starting active tab and maintains active tab as component re-renders
          */
         "activeTab": string;
         /**
@@ -437,9 +436,8 @@ declare namespace LocalJSX {
         "tablistLabel": string;
         /**
           * Sets tabs variant styles as outlined in Figma documentation
-          * @defaultValue primary
          */
-        "variant"?: 'primary' | 'availability' | 'filter';
+        "variant": 'primary' | 'availability' | 'filter';
     }
     interface IntrinsicElements {
         "my-component": MyComponent;

@@ -9,24 +9,24 @@ export class SageTabpanel {
   @Element() el: HTMLElement;
 
   /**
-   * Sets the related tab name, this name must match a `sage-tab`'s tab property, required
+   * Sets the related tab name, this name must match a `sage-tab`'s tab property
   */
   @Prop() tab!: string;
   
   /**
-   * Keeps track of the parentComponent unique id, this property is passed in by parent component
+   * Keeps track of the parentComponent unique id, this property is passed by parent component
   */
   /** @internal */
   @Prop({mutable: true}) parentComponent: string;
 
   /**
-   * Keeps track of if the expected tab variant, this property is passed in by parent component
+   * Keeps track of if the expected tab variant, this property is passed by parent component
   */
    /** @internal */
    @Prop() variant: string;
 
   /**
-   * Keeps track of if the tabpanel is selected, this property is computed on `componentWillUpdate()`
+   * Keeps track of the tabpanel selected state, this property is passed by parent component 
   */
   /** @internal */
   @Prop({mutable: true}) selected = false;

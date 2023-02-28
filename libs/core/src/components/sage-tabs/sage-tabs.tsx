@@ -27,38 +27,37 @@ export class SageTabs {
   
   /**
    * Sets tabs variant styles as outlined in Figma documentation
-   * @defaultValue primary
-    */
-  @Prop() variant?: 'primary' | 'availability' | 'filter' = 'primary';
+  */
+  @Prop() variant!: 'primary' | 'availability' | 'filter';
 
   /**
-   * Sets default active tab
+   * Sets starting active tab and maintains active tab as component re-renders
    */
   @Prop({mutable: true}) activeTab!: string;
 
   @Listen('tabClick', {
     target: 'body',
   })
-  tabClickHandler(event: CustomEvent<string>) {
+  tabClickHandler(event: CustomEvent<any>) {
     if (this.componentId === event.detail[1]) {
       this.activeTab = event.detail[0];
     }
   }
 
-  private matchActiveTab(activeTab, tab) {
-    if (activeTab && activeTab === tab) {
+  matchActiveTab(activeTab, tab) {
+    if (activeTab === tab) {
       return true;
     } else {
       return false;
     }
   }
 
-  private findAllChildren() {
+  findAllChildren() {
     this.tabs = this.el.querySelectorAll('sage-tab');
     this.tabPanels = this.el.querySelectorAll('sage-tabpanel');
   }
 
-  private propGeneration(child) {
+  propGeneration(child) {
     child['selected'] = this.matchActiveTab(this.activeTab, child.tab);
     if (this.componentId) {child.parentComponent = this.componentId.toString()};
     if (this.variant) {child['variant'] = this.variant.toString()};
@@ -143,7 +142,6 @@ export class SageTabs {
     return(tabs);
   }
 
-  // Copied code - might be overkill or ideal to make global?
   private getActiveElement(root: Document | ShadowRoot = document): Element | null {
     const activeEl = root.activeElement;
   

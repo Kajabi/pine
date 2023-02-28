@@ -52,4 +52,10 @@ it('renders variant prop', async () => {
       </sage-tabs>
     `);
   });
+
+  it('matched tab method returns expected true and false values', async () => {
+    const sageTabs = new SageTabs();
+    expect(sageTabs.matchActiveTab("two", "two")).toBeTruthy();
+    expect(sageTabs.matchActiveTab("two", "one")).toBeFalsy();
+  });
 });

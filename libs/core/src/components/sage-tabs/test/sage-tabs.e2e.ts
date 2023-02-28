@@ -33,7 +33,7 @@ describe('sage-tabs', () => {
     expect(tabEdges).not.toBeNull();
   });
 
-  it('renders availability filter', async () => {
+  it('renders filter variant', async () => {
     const page = await newE2EPage();
     await page.setContent(`
       <sage-tabs active-tab="two" tablist-label="test label" component-id="test" variant="filter">
