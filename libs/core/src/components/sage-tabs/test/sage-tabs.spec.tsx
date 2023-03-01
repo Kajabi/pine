@@ -1,6 +1,7 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { SageTabs } from '../sage-tabs';
 import { SageTab } from '../../sage-tab/sage-tab';
+import { SageTabpanel } from '../../sage-tabpanel/sage-tabpanel';
 
 describe('sage-tabs', () => {
   it('renders', async () => {
@@ -62,11 +63,13 @@ it('renders variant prop', async () => {
 
   it('sage-tabs catches `tabClick` event', async () => {
     const page = await newSpecPage({
-      components: [SageTabs, SageTab],
+      components: [SageTabs, SageTab, SageTabpanel],
       html: `
         <sage-tabs active-tab="two" tablist-label="test label" component-id="test">
           <sage-tab tab="one" id="test-one">One</sage-tab>
           <sage-tab tab="two" id="test-two">Two</sage-tab>
+          <sage-tabpanel tab="one" id="test-one">One</sage-tabpanel>
+          <sage-tabpanel tab="two" id="test-two">Two</sage-tabpanel>
         </sage-tabs>`,
     });
     
@@ -126,7 +129,7 @@ it('renders variant prop', async () => {
     const page = await newSpecPage({
       components: [SageTabs, SageTab],
       html: `
-        <sage-tabs active-tab="two" tablist-label="test label" component-id="test">
+        <sage-tabs active-tab="two" tablist-label="test label" component-id="test" variant="filter">
           <sage-tab tab="one" id="test-one">One</sage-tab>
           <sage-tab tab="two" id="test-two">Two</sage-tab>
         </sage-tabs>`,
