@@ -109,16 +109,20 @@ export class SageTabs {
     }
 
     if (ev.key === 'Home') {
-      if (activeEl.id != tabLocations[firstTabNumber].id) {
-        tabLocations[firstTabNumber].focus();
-        this.activeTab = tabLocations[firstTabNumber].id;
+      if (activeEl) {
+        if (activeEl.id != tabLocations[firstTabNumber].id) {
+          tabLocations[firstTabNumber].focus();
+          this.activeTab = tabLocations[firstTabNumber].id;
+        }
       }
     }
 
     if (ev.key === 'End') {
-      if (activeEl.id != tabLocations[lastTabNumber].id) {
-        tabLocations[lastTabNumber].focus();
-        this.activeTab = tabLocations[lastTabNumber].id;
+      if (activeEl) {
+        if (activeEl.id != tabLocations[lastTabNumber].id) {
+          tabLocations[lastTabNumber].focus();
+          this.activeTab = tabLocations[lastTabNumber].id;
+        }
       }
     }
   }
