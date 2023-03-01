@@ -9,7 +9,7 @@ describe('sage-tabpanel', () => {
     });
     expect(page.root).toEqualHtml(`
       <sage-tabpanel slot="tabpanels">
-        <div class="sage-tabpanel" id="undefined-panel" role="tabpanel"></div>
+        <div class="sage-tabpanel" id="undefined-panel" role="tabpanel" tabindex="-1"></div>
       </sage-tabpanel>
     `);
   });
@@ -21,7 +21,7 @@ describe('sage-tabpanel', () => {
     });
     expect(page.root).toEqualHtml(`
       <sage-tabpanel slot="tabpanels" tab="two" parent-id="foo" selected="false">
-        <div aria-labelledby="two" class="sage-tabpanel" role="tabpanel" id="two-panel">
+        <div aria-labelledby="two" class="sage-tabpanel" role="tabpanel" id="two-panel" tabindex="-1">
           Content
         </div>
       </sage-tabpanel>
@@ -36,7 +36,7 @@ describe('sage-tabpanel', () => {
     await page.waitForChanges();
     expect(page.root).toEqualHtml(`
       <sage-tabpanel slot="tabpanels" tab="two" parent-id="foo" selected="true">
-        <div aria-labelledby="two" class="sage-tabpanel is-active" role="tabpanel" id="two-panel">
+        <div aria-labelledby="two" class="sage-tabpanel is-active" role="tabpanel" id="two-panel" tabindex="0">
           Content
         </div>
       </sage-tabpanel>
