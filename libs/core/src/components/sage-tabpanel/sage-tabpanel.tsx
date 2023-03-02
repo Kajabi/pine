@@ -37,7 +37,7 @@ export class SageTabpanel {
         <div 
           role="tabpanel"
           id={this.tab + '-panel'}
-          tabindex={this.selected ? "0" : "-1"}
+          tabindex="0"
           aria-labelledby={this.tab}
           class={this.selected ? "sage-tabpanel is-active" : "sage-tabpanel"}
         >
