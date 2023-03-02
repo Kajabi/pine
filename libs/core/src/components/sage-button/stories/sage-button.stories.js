@@ -1,4 +1,4 @@
-import { html, render } from 'lit-html';
+import { html } from 'lit-html';
 
 const BaseTemplate = (args) => html`<sage-button  disabled=${args.disabled} icon=${args.icon} name=${args.name} type=${args.type} value=${args.value} variant=${args.variant}>${args.slot}</sage-button> `;
 const defaultParameters = { docs: { disable: true } };
