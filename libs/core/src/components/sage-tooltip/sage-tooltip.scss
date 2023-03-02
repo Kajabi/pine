@@ -1,3 +1,23 @@
 :host {
   display: block;
+
+  position: absolute;
+  z-index: 1;
+}
+
+// .sage-tooltip__content {
+//   display: none;
+// }
+
+// .sage-tooltip--open .sage-tooltip__content {
+//   display: block;
+// }
+
+sage-tooltip {
+  position: absolute;
+  z-index: 1;
+}
+
+:has(> sage-tooltip) {
+  position: relative;
 }
