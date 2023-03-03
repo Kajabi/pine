@@ -27,8 +27,8 @@
 
 | Slot        | Description                  |
 | ----------- | ---------------------------- |
+|             | The tooltip's target element |
 | `"content"` | Content inside the tooltip   |
-| `"target"`  | The tooltip's target element |
 
 
 ## Shadow Parts

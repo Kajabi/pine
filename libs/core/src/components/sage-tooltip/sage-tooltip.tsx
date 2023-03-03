@@ -1,8 +1,8 @@
 import { Component, Element, Event, Host, Listen, Prop, State, h, EventEmitter } from '@stencil/core';
 
 /**
+ * @slot - The tooltip's target element
  * @slot content - Content inside the tooltip
- * @slot target - The tooltip's target element
  */
 
 @Component({
@@ -93,7 +93,7 @@ export class SageTooltip {
         hasArrow={this.hasArrow}
       >
         <div class="sage-tooltip">
-          <slot name="target" aria-describedby="tooltip" />
+          <slot aria-describedby="tooltip" />
           <div class="sage-tooltip__content" part="content">
             <slot
               name="content"
@@ -102,7 +102,7 @@ export class SageTooltip {
               {this.content}
             </slot>
           </div>
-          {this.hasArrow && <div class="sage=tooltip__arrow" part="arrow">arrow</div>}
+          {this.hasArrow && <div class="sage-tooltip__arrow" part="arrow">arrow</div>}
         </div>
       </Host>
     );
