@@ -150,6 +150,7 @@ export namespace Components {
         "variant": 'inline' | 'plain';
     }
     interface SageTab {
+        "index": number;
         "parentComponent": string;
         "selected": boolean;
         /**
@@ -172,6 +173,7 @@ export namespace Components {
           * Sets starting active tab and maintains active tab as component re-renders
          */
         "activeTab": string;
+        "activeTabIndex": number;
         /**
           * Sets unique id on tabs component
          */
@@ -403,6 +405,7 @@ declare namespace LocalJSX {
         "variant"?: 'inline' | 'plain';
     }
     interface SageTab {
+        "index"?: number;
         "onTabClick"?: (event: SageTabCustomEvent<object>) => void;
         "parentComponent"?: string;
         "selected"?: boolean;
@@ -426,6 +429,7 @@ declare namespace LocalJSX {
           * Sets starting active tab and maintains active tab as component re-renders
          */
         "activeTab": string;
+        "activeTabIndex": number;
         /**
           * Sets unique id on tabs component
          */

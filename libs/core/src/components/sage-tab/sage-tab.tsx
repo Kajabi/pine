@@ -23,7 +23,13 @@ export class SageTab {
    * Keeps track of if the expected tab variant, this property is passed by parent component
   */
    /** @internal */
-  @Prop() variant: string;
+   @Prop() variant: string;
+
+  /**
+   * Keeps track of if the expected tab variant, this property is passed by parent component
+  */
+   /** @internal */
+  @Prop() index: number;
 
   /**
    * Keeps track of the tabpanel selected state, this property is passed by parent component 
@@ -36,8 +42,8 @@ export class SageTab {
    */
   /** @internal */
   @Event() tabClick: EventEmitter<object>;
-  private onTabClick(tab, parentComponent) {
-    this.tabClick.emit([tab, parentComponent]);
+  private onTabClick(index, parentComponent) {
+    this.tabClick.emit([index, parentComponent]);
   }
 
   render() {
@@ -50,7 +56,7 @@ export class SageTab {
     )
 
     return (
-      <Host variant={this.variant} slot="tabs">
+      <Host variant={this.variant} slot="tabs" index={this.index}>
         <button 
           role="tab"
           id={this.tab}
@@ -58,7 +64,7 @@ export class SageTab {
           tabindex={this.selected ? "0" : "-1"}
           aria-selected={this.selected ? "true" : "false"}
           class={this.selected ? "sage-tab is-active" : "sage-tab"}
-          onClick={this.onTabClick.bind(this, this.tab, this.parentComponent)}
+          onClick={this.onTabClick.bind(this, this.index, this.parentComponent)}
         >
           {this.variant === "availability" && availabilityTabEdgeInlineStart}
           {this.variant === "availability" && availabilityTabEdgeInlineEnd}

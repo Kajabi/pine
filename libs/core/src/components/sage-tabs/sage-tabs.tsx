@@ -1,4 +1,5 @@
 import { Component, Element, Host, h, Prop, Listen } from '@stencil/core';
+import { move } from 'fs-extra';
 
   /**
  * @slot tabs - Content is placed within the `div[role="tablist"]` element as children
@@ -34,98 +35,114 @@ export class SageTabs {
    * Sets starting active tab and maintains active tab as component re-renders
    */
   @Prop({mutable: true}) activeTab!: string;
+  
+  @Prop({mutable: true}) activeTabIndex!: number;
 
   @Listen('tabClick', {
     target: 'body',
   })
   tabClickHandler(event: CustomEvent<any>) {
     if (this.componentId === event.detail[1]) {
-      this.activeTab = event.detail[0];
+      this.activeTabIndex = event.detail[0];
+      this.activeTab = this.tabs[this.activeTabIndex].children[0].id;
     }
   }
 
-  matchActiveTab(activeTab, tab) {
+  private matchActiveTab(activeTab, tab) {
     if (activeTab === tab) {
       return true;
-    } else {
-      return false;
     }
+
+    return false;
   }
 
-  findAllChildren() {
+  private findAllChildren() {
     this.tabs = this.el.querySelectorAll('sage-tab');
     this.tabPanels = this.el.querySelectorAll('sage-tabpanel');
   }
 
-  propGeneration(child) {
+  private propGeneration(child, index = 0) {
     child['selected'] = this.matchActiveTab(this.activeTab, child.tab);
     if (this.componentId) {child.parentComponent = this.componentId.toString()};
     if (this.variant) {child['variant'] = this.variant.toString()};
+    child['index'] = index;
   }
 
   private passPropsToChildren() {
-    this.tabs.forEach(child => {
-      this.propGeneration(child);
+    this.tabs.forEach((child, idx) => {
+      this.propGeneration(child, idx);
     });
-    this.tabPanels.forEach(child => {
-      this.propGeneration(child);
+    this.tabPanels.forEach((child, idx) => {
+      this.propGeneration(child, idx);
     });
   }
 
-  @Listen('keydown', {})
+  @Listen('keydown', {passive: true, target: 'window'})
   handleKeyDown(ev: KeyboardEvent) {
-    const tabList = Array.from(this.el.querySelectorAll('[role="tab"]'));
-    const activeEl = this.getActiveElement();
-    const tabLocations = this.getTabLocations(tabList);
-    const firstTabNumber = 0;
-    const lastTabNumber = tabLocations.length - 1;
-
-    if (ev.key === 'ArrowLeft') {
-      if (activeEl.id === tabLocations[0].id) {
-        tabLocations[lastTabNumber].focus();
-        this.activeTab = tabLocations[lastTabNumber].id;
-      } else {
-        for (let i = 0; i < tabLocations.length; i += 1) {
-          if(tabLocations[i].id === activeEl.id ) {
-            tabLocations[i - 1].focus();
-            this.activeTab = tabLocations[i - 1].id;
-          }
-        }
-      }
-    }
-
-    if (ev.key === 'ArrowRight') {
-      if (activeEl.id === tabLocations[lastTabNumber].id) {
-        tabLocations[firstTabNumber].focus();
-        this.activeTab = tabLocations[firstTabNumber].id;
-      } else {
-        for (let i = 0; i < tabLocations.length; i += 1) {
-          if(tabLocations[i].id === activeEl.id ) {
-            tabLocations[i + 1].focus();
-            this.activeTab = tabLocations[i + 1].id;
-          }
-        }
-      }
-    }
-
-    if (ev.key === 'Home') {
-      if (activeEl) {
-        if (activeEl.id != tabLocations[firstTabNumber].id) {
-          tabLocations[firstTabNumber].focus();
-          this.activeTab = tabLocations[firstTabNumber].id;
-        }
-      }
-    }
-
-    if (ev.key === 'End') {
-      if (activeEl) {
-        if (activeEl.id != tabLocations[lastTabNumber].id) {
-          tabLocations[lastTabNumber].focus();
-          this.activeTab = tabLocations[lastTabNumber].id;
-        }
-      }
+    const keySet = ["ArrowLeft", "ArrowRight", "Home", "End"];
+    if (keySet.includes(ev.key)) {
+      this.moveActiveTab(ev.key);
     }
   }
+
+  private moveActiveTab(key) {
+    this.findAllChildren()
+    const firstTabNumber = 0;
+    const lastTabNumber = this.tabs.length - 1;
+    
+    let moveFocusTo = null;
+
+    switch (key) {
+      case 'ArrowLeft':
+        moveFocusTo = (this.activeTabIndex === firstTabNumber) ? lastTabNumber : (this.activeTabIndex + (-1));
+        break;
+      case 'ArrowRight':
+        moveFocusTo = (this.activeTabIndex === lastTabNumber) ? firstTabNumber : (this.activeTabIndex + 1);
+        break;
+      case 'Home':
+        moveFocusTo = firstTabNumber;
+        break;
+      case 'End':
+        moveFocusTo = lastTabNumber;
+        break;
+    }
+  
+    // Move focus to the button element within `sage-tab`
+    this.tabs[moveFocusTo].children[0].focus();
+    this.activeTab = this.tabs[moveFocusTo].children[0].id;
+    this.activeTabIndex = moveFocusTo;
+  }
+
+    
+    // if (key === "ArrowLeft" || key === "ArrowRight") {
+    //   const loopFocusLocation = (key === "ArrowLeft") ? firstTabNumber : lastTabNumber;
+    //   const loopFocusNewTarget = (key === "ArrowLeft") ? lastTabNumber : firstTabNumber;
+    //   const moveFocusTo = (key === "ArrowLeft") ? -1 : 1;
+
+    //   if (this.activeTab === tabLocations[loopFocusLocation].id) {}
+
+    //   if (this.activeTab === tabLocations[loopFocusLocation].id) {
+    //     tabLocations[loopFocusNewTarget].focus();
+    //     this.activeTab = tabLocations[loopFocusNewTarget].id;
+    //   } else {
+    //     for (let i = 0; i < tabLocations.length; i += 1) {
+    //       if(tabLocations[i].id === this.activeTab ) {
+    //         tabLocations[i + moveFocusTo].focus();
+    //         this.activeTab = tabLocations[i +  moveFocusTo].id;
+    //         break;
+    //       }
+    //     }
+    //   }
+    // } else {
+    //   const loopFocusNewTarget = (key === "Home") ? firstTabNumber : lastTabNumber;
+    //   if (this.activeTab) {
+    //     if (this.activeTab != tabLocations[loopFocusNewTarget].id) {
+    //       tabLocations[loopFocusNewTarget].focus();
+    //       this.activeTab = tabLocations[loopFocusNewTarget].id;
+    //     }
+    //   }
+    // }
+  // }
 
   private classNames() {
     let className = `sage-tabs`;
@@ -136,30 +153,6 @@ export class SageTabs {
     return className;
   };
 
-  private getTabLocations(tabList) {
-    const tabs = [];
-    for (let i = 0; i < tabList.length; i += 1) {
-      const tab = tabList[i];
-
-      tabs.push(tab);
-    }
-    return(tabs);
-  }
-
-  private getActiveElement(root: Document | ShadowRoot = document): Element | null {
-    const activeEl = root.activeElement;
-  
-    if (!activeEl) {
-      return null;
-    }
-  
-    if (activeEl.shadowRoot) {
-      return this.getActiveElement(activeEl.shadowRoot);
-    } else {
-      return activeEl;
-    }
-  }
-  
   componentWillRender() {
     this.findAllChildren()
     this.passPropsToChildren()
