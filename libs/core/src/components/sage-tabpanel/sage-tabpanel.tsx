@@ -9,7 +9,7 @@ export class SageTabpanel {
   @Element() el: HTMLElement;
 
   /**
-   * Sets the related tab name, this name must match a `sage-tab`'s tab property
+   * Sets the related tab name, this name must match a `sage-tab`'s tab name property
   */
   @Prop() name!: string;
   
