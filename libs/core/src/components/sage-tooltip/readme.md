@@ -23,6 +23,29 @@
 | `sageShow` | Emitted after a tooltip is shown  | `CustomEvent<any>` |
 
 
+## Methods
+
+### `hideTooltip() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `showTooltip() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+
 ## Slots
 
 | Slot        | Description                  |

@@ -1,4 +1,5 @@
-import { Component, Element, Event, Host, Listen, Prop, State, h, EventEmitter } from '@stencil/core';
+// import { computePosition, flip, shift, offset, arrow, inline, autoUpdate } from '@floating-ui/dom';
+import { Component, Element, Event, Host, Listen, Prop, State, h, EventEmitter, Method } from '@stencil/core';
 
 /**
  * @slot - The tooltip's target element
@@ -73,6 +74,29 @@ export class SageTooltip {
     tooltipContent.classList.add('is-open');
   }
 
+  // private initTooltip = async () => {
+  //   this.isOpen = true;
+  // };
+
+  private handleShow = () => {
+    console.log('entered');
+    this.showTooltip;
+  };
+
+  private handleHide = () => {
+    console.log('left');
+    this.hideTooltip;
+  };
+
+  @Method()
+  async hideTooltip() {
+    this.isOpen = true;
+  }
+
+  @Method()
+  async showTooltip() {
+    this.isOpen = false;
+  }
   // show the tooltip
   open() {
     // ...
@@ -91,6 +115,8 @@ export class SageTooltip {
           'is-open': this.isOpen
         }}
         hasArrow={this.hasArrow}
+        onMouseEnter={this.handleShow}
+        onMouseLeave={this.handleHide}
       >
         <div class="sage-tooltip">
           <slot aria-describedby="tooltip" />
