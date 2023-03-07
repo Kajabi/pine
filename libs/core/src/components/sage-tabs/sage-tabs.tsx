@@ -34,12 +34,12 @@ export class SageTabs {
    * Sets the starting active tab name and maintains the name as the component re-renders
   */
   @Prop({mutable: true}) activeTabName!: string;
-  
+
   /**
    * Sets the starting active tab index number and maintains the index number as the component re-renders
   */
  /** @internal */
-  @Prop({mutable: true}) activeTabIndex!: number;
+  @Prop({mutable: true}) activeTabIndex: number;
 
   @Listen('tabClick', {
     target: 'body',
@@ -100,8 +100,10 @@ export class SageTabs {
 
   private passPropsToChildren() {
     this.tabs.forEach((child, index) => {
+      if (this.activeTabName === child.name) this.activeTabIndex = index;
       this.propGeneration(child, index);
     });
+
     this.tabPanels.forEach((child) => {
       this.propGeneration(child);
     });
@@ -117,8 +119,11 @@ export class SageTabs {
     return className;
   };
 
-  componentWillRender() {
+  componentWillLoad() {
     this.findAllChildren();
+  }
+
+  componentWillRender() {
     this.passPropsToChildren();
   }
 

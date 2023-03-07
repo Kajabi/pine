@@ -425,7 +425,7 @@ declare namespace LocalJSX {
         "variant"?: string;
     }
     interface SageTabs {
-        "activeTabIndex": number;
+        "activeTabIndex"?: number;
         /**
           * Sets the starting active tab name and maintains the name as the component re-renders
          */
