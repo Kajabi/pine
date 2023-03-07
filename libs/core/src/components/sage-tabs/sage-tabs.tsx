@@ -19,12 +19,12 @@ export class SageTabs {
    * Sets the aria-label attached to the tablist element
   */
   @Prop() tablistLabel!: string;
- 
+
   /**
     * Sets unique id on tabs component
   */
   @Prop() componentId!: string;
-  
+
   /**
    * Sets tabs variant styles as outlined in Figma documentation
   */
@@ -62,7 +62,7 @@ export class SageTabs {
   private moveActiveTab(key) {
     const firstTabNumber = 0;
     const lastTabNumber = this.tabs.length - 1;
-    
+
     let moveFocusTo = null;
 
     switch (key) {
@@ -79,7 +79,7 @@ export class SageTabs {
         moveFocusTo = lastTabNumber;
         break;
     }
-  
+
     // Move focus to the button element within `sage-tab`
     this.tabs[moveFocusTo].children[0].focus();
     this.activeTabName = this.tabs[moveFocusTo].name;

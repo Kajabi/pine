@@ -12,7 +12,7 @@ export class SageTabpanel {
    * Sets the related tab name, this name must match a `sage-tab`'s tab name property
   */
   @Prop() name!: string;
-  
+
   /**
    * Keeps track of the parentComponentId unique id, this property is passed by parent component
   */
