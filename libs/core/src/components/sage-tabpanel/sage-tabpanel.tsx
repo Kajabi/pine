@@ -11,7 +11,7 @@ export class SageTabpanel {
   /**
    * Sets the related tab name, this name must match a `sage-tab`'s tab property
   */
-  @Prop() tab!: string;
+  @Prop() name!: string;
   
   /**
    * Keeps track of the parentComponentId unique id, this property is passed by parent component
@@ -36,9 +36,9 @@ export class SageTabpanel {
       <Host slot="tabpanels">
         <div 
           role="tabpanel"
-          id={this.parentComponentId + "__" + this.tab + '-panel'}
+          id={this.parentComponentId + "__" + this.name + '-panel'}
           tabindex="0"
-          aria-labelledby={this.parentComponentId + "__" + this.tab}
+          aria-labelledby={this.parentComponentId + "__" + this.name}
           class={this.selected ? "sage-tabpanel is-active" : "sage-tabpanel"}
         >
           <slot />

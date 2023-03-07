@@ -151,29 +151,29 @@ export namespace Components {
     }
     interface SageTab {
         "index": number;
-        "parentComponentId": string;
-        "selected": boolean;
         /**
           * Sets the related tab name, this name must match a `sage-tabpanel`'s tab property
          */
-        "tab": string;
+        "name": string;
+        "parentComponentId": string;
+        "selected": boolean;
         "variant": string;
     }
     interface SageTabpanel {
-        "parentComponentId": string;
-        "selected": boolean;
         /**
           * Sets the related tab name, this name must match a `sage-tab`'s tab property
          */
-        "tab": string;
+        "name": string;
+        "parentComponentId": string;
+        "selected": boolean;
         "variant": string;
     }
     interface SageTabs {
-        /**
-          * Sets starting active tab and maintains active tab as component re-renders
-         */
-        "activeTab": string;
         "activeTabIndex": number;
+        /**
+          * Sets the starting active tab name and maintains the name as the component re-renders
+         */
+        "activeTabName": string;
         /**
           * Sets unique id on tabs component
          */
@@ -406,30 +406,30 @@ declare namespace LocalJSX {
     }
     interface SageTab {
         "index"?: number;
-        "onTabClick"?: (event: SageTabCustomEvent<object>) => void;
-        "parentComponentId"?: string;
-        "selected"?: boolean;
         /**
           * Sets the related tab name, this name must match a `sage-tabpanel`'s tab property
          */
-        "tab": string;
+        "name": string;
+        "onTabClick"?: (event: SageTabCustomEvent<object>) => void;
+        "parentComponentId"?: string;
+        "selected"?: boolean;
         "variant"?: string;
     }
     interface SageTabpanel {
-        "parentComponentId"?: string;
-        "selected"?: boolean;
         /**
           * Sets the related tab name, this name must match a `sage-tab`'s tab property
          */
-        "tab": string;
+        "name": string;
+        "parentComponentId"?: string;
+        "selected"?: boolean;
         "variant"?: string;
     }
     interface SageTabs {
-        /**
-          * Sets starting active tab and maintains active tab as component re-renders
-         */
-        "activeTab": string;
         "activeTabIndex": number;
+        /**
+          * Sets the starting active tab name and maintains the name as the component re-renders
+         */
+        "activeTabName": string;
         /**
           * Sets unique id on tabs component
          */

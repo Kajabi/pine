@@ -11,7 +11,7 @@ export class SageTab {
   /**
    * Sets the related tab name, this name must match a `sage-tabpanel`'s tab property
   */
-  @Prop() tab!: string;
+  @Prop() name!: string;
 
   /**
    * Keeps track of the parentComponentId unique id, this property is passed by parent component
@@ -26,7 +26,7 @@ export class SageTab {
   @Prop() variant: string;
 
   /**
-   * Keeps track of if the expected tab variant, this property is passed by parent component
+   * Keeps track of if the tab index number, this property is passed by parent component
   */
   /** @internal */
   @Prop() index: number;
@@ -59,8 +59,8 @@ export class SageTab {
       <Host variant={this.variant} slot="tabs" index={this.index}>
         <button 
           role="tab"
-          id={this.parentComponentId + "__" + this.tab}
-          aria-controls={this.parentComponentId + "__" + this.tab + "-panel"}
+          id={this.parentComponentId + "__" + this.name}
+          aria-controls={this.parentComponentId + "__" + this.name + "-panel"}
           tabindex={this.selected ? "0" : "-1"}
           aria-selected={this.selected ? "true" : "false"}
           class={this.selected ? "sage-tab is-active" : "sage-tab"}

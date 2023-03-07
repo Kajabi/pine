@@ -1,5 +1,4 @@
 import { Component, Element, Host, h, Prop, Listen } from '@stencil/core';
-import { move } from 'fs-extra';
 
   /**
  * @slot tabs - Content is placed within the `div[role="tablist"]` element as children
@@ -32,9 +31,9 @@ export class SageTabs {
   @Prop() variant!: 'primary' | 'availability' | 'filter';
 
   /**
-   * Sets starting active tab and maintains active tab as component re-renders
+   * Sets the starting active tab name and maintains the name as the component re-renders
    */
-  @Prop({mutable: true}) activeTab!: string;
+  @Prop({mutable: true}) activeTabName!: string;
   
   @Prop({mutable: true}) activeTabIndex!: number;
 
@@ -44,7 +43,7 @@ export class SageTabs {
   tabClickHandler(event: CustomEvent<any>) {
     if (this.componentId === event.detail[1]) {
       this.activeTabIndex = event.detail[0];
-      this.activeTab = this.tabs[this.activeTabIndex].tab;
+      this.activeTabName = this.tabs[this.activeTabIndex].name;
     }
   }
 
@@ -79,7 +78,7 @@ export class SageTabs {
   
     // Move focus to the button element within `sage-tab`
     this.tabs[moveFocusTo].children[0].focus();
-    this.activeTab = this.tabs[moveFocusTo].tab;
+    this.activeTabName = this.tabs[moveFocusTo].name;
     this.activeTabIndex = moveFocusTo;
   }
 
@@ -91,7 +90,7 @@ export class SageTabs {
   private propGeneration(child, index) {
     child.parentComponentId = this.componentId.toString();
     child.variant = this.variant.toString();
-    child.selected = (this.activeTab === child.tab) ? true : false;
+    child.selected = (this.activeTabName === child.name) ? true : false;
     child['index'] = index;
   }
 
@@ -121,7 +120,7 @@ export class SageTabs {
 
   render() {
     return (
-      <Host active-tab={this.activeTab} class={this.classNames()} id={this.componentId}>
+      <Host active-tab-name={this.activeTabName} class={this.classNames()} id={this.componentId}>
         <div class="sage-tabs__tablist" role="tablist" aria-label={this.tablistLabel}>
           <slot name="tabs" />
         </div>

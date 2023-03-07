@@ -1,7 +1,7 @@
 import { html, render } from 'lit-html';
 
 const BaseTemplate = (args) => html`
-<sage-tabs active-tab=${args.activeTab} variant=${args.variant} component-id=${args.componentId} tablist-label=${args.tablistLabel}>
+<sage-tabs active-tab-name=${args.activeTab} variant=${args.variant} component-id=${args.componentId} tablist-label=${args.tablistLabel}>
   <sage-tab tab="One">One</sage-tab>
   <sage-tab tab="Three">Three</sage-tab>
   <sage-tab tab="Two">Two</sage-tab>
@@ -13,7 +13,7 @@ const BaseTemplate = (args) => html`
 
 const AvailabilityTemplate = (args) => html`
 <div style="background-color: #ddd; padding: 20px;">
-  <sage-tabs active-tab=${args.activeTab} variant=${args.variant} component-id=${args.componentId} tablist-label=${args.tablistLabel}>
+  <sage-tabs active-tab-name=${args.activeTab} variant=${args.variant} component-id=${args.componentId} tablist-label=${args.tablistLabel}>
     <sage-tab tab="one">One</sage-tab>
     <sage-tab tab="two">Two</sage-tab>
     <sage-tab tab="three">Three</sage-tab>
