@@ -87,7 +87,7 @@ export class SageTabs {
     this.tabPanels = this.el.querySelectorAll('sage-tabpanel');
   }
 
-  private propGeneration(child, index) {
+  private propGeneration(child, index = 0) {
     child.parentComponentId = this.componentId.toString();
     child.variant = this.variant.toString();
     child.selected = (this.activeTabName === child.name) ? true : false;
@@ -98,8 +98,8 @@ export class SageTabs {
     this.tabs.forEach((child, index) => {
       this.propGeneration(child, index);
     });
-    this.tabPanels.forEach((child, index) => {
-      this.propGeneration(child, index);
+    this.tabPanels.forEach((child) => {
+      this.propGeneration(child);
     });
   }
 
