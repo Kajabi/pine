@@ -1,8 +1,9 @@
 import { ArgsTable, Canvas, IconGallery, IconItem, Meta, Story } from '@storybook/addon-docs';
-import {html, render} from 'lit-html';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 import sageIconsJson from '../../../../icons/dist/sage-icons.json';
+
+import * as stories from './sage-icon.stories.js';
 
 export const argTypes = () => {
   const extractedArgs = extractArgTypes('sage-icon');
@@ -13,8 +14,11 @@ export const argTypes = () => {
 
 <Meta title="components/Icon" component="sage-icon" argTypes={argTypes()}/>
 
+<<<<<<< HEAD:libs/core/src/components/sage-icon/sage-icon.stories.mdx
 export const Template = (args) => html`<sage-icon name=${args.name} size=${args.size}></sage-icon>`;
 
+=======
+>>>>>>> origin/next:libs/core/src/components/sage-icon/sage-icon.docs.stories.mdx
 # Icon
 Displays Icons used with the Sage Design System
 
@@ -24,11 +28,10 @@ Icons are an effective way to enforce the purpose of an experience. Icons are br
 categories: Actions and Features. In order to ensure that the icons are adding to the clarity of an experience
 and not creating confusion, we adhere to two principles.
 
+<Story story={stories.Default} />
 
 <Canvas>
-  <Story name="Default" args={{name: "upload"}}>
-    {Template.bind()}
-  </Story>
+  <sage-icon name="upload"></sage-icon>
 </Canvas>
 
 ## Properties
@@ -68,10 +71,9 @@ will render the following output:
   <sage-icon name="upload" size="2rem"></sage-icon>
 </Canvas>
 
-
 export const IconItems = (args) => (
-  Object.values(sageIconsJson["icons"]).map((icon) => (
-    <IconItem name={icon.name}>
+  Object.values(sageIconsJson["icons"]).map((icon, index) => (
+    <IconItem key={`item-${index}`} name={icon.name}>
       <sage-icon name={icon.name}></sage-icon>
     </IconItem>
   ))
@@ -83,4 +85,3 @@ export const IconItems = (args) => (
     <IconItems />
   </IconGallery>
 </Canvas>
-
