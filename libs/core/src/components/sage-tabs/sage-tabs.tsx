@@ -32,9 +32,13 @@ export class SageTabs {
 
   /**
    * Sets the starting active tab name and maintains the name as the component re-renders
-   */
+  */
   @Prop({mutable: true}) activeTabName!: string;
   
+  /**
+   * Sets the starting active tab index number and maintains the index number as the component re-renders
+  */
+ /** @internal */
   @Prop({mutable: true}) activeTabIndex!: number;
 
   @Listen('tabClick', {

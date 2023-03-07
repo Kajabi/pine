@@ -1,7 +1,7 @@
 import { html, render } from 'lit-html';
 
 const BaseTemplate = (args) => html`
-<sage-tabs active-tab-name=${args.activeTab} variant=${args.variant} component-id=${args.componentId} tablist-label=${args.tablistLabel}>
+<sage-tabs active-tab-name=${args.activeTabName} variant=${args.variant} component-id=${args.componentId} tablist-label=${args.tablistLabel}>
   <sage-tab name="One">One</sage-tab>
   <sage-tab name="Three">Three</sage-tab>
   <sage-tab name="Two">Two</sage-tab>
@@ -13,7 +13,7 @@ const BaseTemplate = (args) => html`
 
 const AvailabilityTemplate = (args) => html`
 <div style="background-color: #ddd; padding: 20px;">
-  <sage-tabs active-tab-name=${args.activeTab} variant=${args.variant} component-id=${args.componentId} tablist-label=${args.tablistLabel}>
+  <sage-tabs active-tab-name=${args.activeTabName} variant=${args.variant} component-id=${args.componentId} tablist-label=${args.tablistLabel}>
     <sage-tab name="one">One</sage-tab>
     <sage-tab name="two">Two</sage-tab>
     <sage-tab name="three">Three</sage-tab>
@@ -26,7 +26,7 @@ const AvailabilityTemplate = (args) => html`
 
 export const Primary = BaseTemplate.bind({});
 Primary.args = {
-  activeTab: "Two",
+  activeTabName: "Two",
   componentId: "primary",
   variant: "primary",
   tablistLabel: "Foo",
@@ -34,7 +34,7 @@ Primary.args = {
 
 export const Availability = AvailabilityTemplate.bind({});
 Availability.args = {
-  activeTab: "two",
+  activeTabName: "two",
   componentId: "availability",
   variant: 'availability',
   tablistLabel: "Foo",
@@ -42,7 +42,7 @@ Availability.args = {
 
 export const Filter = BaseTemplate.bind({});
 Filter.args = {
-  activeTab: "Two",
+  activeTabName: "Two",
   componentId: "filter",
   variant: 'filter',
   tablistLabel: "Foo",
