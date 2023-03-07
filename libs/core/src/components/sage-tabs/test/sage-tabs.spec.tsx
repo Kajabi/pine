@@ -27,7 +27,7 @@ it('renders variant prop', async () => {
       html: `<sage-tabs active-tab="two" component-id="test" variant="availability"></sage-tabs>`,
     });
     expect(page.root).toEqualHtml(`
-      <sage-tabs active-tab="two" class="sage-tabs sage-tabs--availability" component-id="test" variant="availability">
+      <sage-tabs active-tab="two" class="sage-tabs sage-tabs--availability" component-id="test" id="test" variant="availability">
         <mock:shadow-root>
           <div class="sage-tabs__tablist" role="tablist">
             <slot name="tabs"></slot>
@@ -44,7 +44,7 @@ it('renders variant prop', async () => {
       html: `<sage-tabs active-tab="two" tablist-label="test label" component-id="test"></sage-tabs>`,
     });
     expect(page.root).toEqualHtml(`
-      <sage-tabs active-tab="two" class="sage-tabs" component-id="test" tablist-label="test label">
+      <sage-tabs active-tab="two" class="sage-tabs" component-id="test" id="test" tablist-label="test label">
         <mock:shadow-root>
           <div class="sage-tabs__tablist" role="tablist" aria-label="test label">
             <slot name="tabs"></slot>
@@ -55,21 +55,15 @@ it('renders variant prop', async () => {
     `);
   });
 
-  it('matched tab method returns expected true and false values', async () => {
-    const sageTabs = new SageTabs();
-    expect(sageTabs.matchActiveTab("two", "two")).toBeTruthy();
-    expect(sageTabs.matchActiveTab("two", "one")).toBeFalsy();
-  });
-
   it('sage-tabs catches `tabClick` event', async () => {
     const page = await newSpecPage({
       components: [SageTabs, SageTab, SageTabpanel],
       html: `
-        <sage-tabs active-tab="two" tablist-label="test label" component-id="test">
-          <sage-tab tab="one" id="test-one">One</sage-tab>
-          <sage-tab tab="two" id="test-two">Two</sage-tab>
-          <sage-tabpanel tab="one" id="test-one">One</sage-tabpanel>
-          <sage-tabpanel tab="two" id="test-two">Two</sage-tabpanel>
+        <sage-tabs active-tab="two" tablist-label="test label" component-id="test" variant="primary">
+          <sage-tab tab="one">One</sage-tab>
+          <sage-tab tab="two">Two</sage-tab>
+          <sage-tabpanel tab="one">One</sage-tabpanel>
+          <sage-tabpanel tab="two">Two</sage-tabpanel>
         </sage-tabs>`,
     });
     
@@ -83,109 +77,173 @@ it('renders variant prop', async () => {
     const page = await newSpecPage({
       components: [SageTabs, SageTab],
       html: `
-        <sage-tabs active-tab="two" tablist-label="test label" component-id="test">
-          <sage-tab tab="one" id="test-one">One</sage-tab>
-          <sage-tab tab="two" id="test-two">Two</sage-tab>
+        <sage-tabs active-tab="three" tablist-label="test label" component-id="test" variant="primary">
+          <sage-tab tab="one">One</sage-tab>
+          <sage-tab tab="two">Two</sage-tab>
+          <sage-tab tab="three">Three</sage-tab>
         </sage-tabs>`,
-    });    
-    expect(page.body.querySelector('sage-tabs[active-tab="two"]'));
+    });
+
+    // Move focus to tab by clicking on second activeTabIndex (1)
+    page.body.dispatchEvent(new CustomEvent('tabClick', {'detail': [1, 'test']}));
     await page.waitForChanges();
     expect(page.body.querySelector('sage-tab[tab="one"] > button')).not.toHaveClass('is-active');
     expect(page.body.querySelector('sage-tab[tab="two"] > button')).toHaveClass('is-active');
-
-    await page.waitForChanges();
+    expect(page.body.querySelector('sage-tab[tab="three"] > button')).not.toHaveClass('is-active');
     
-    page.body.dispatchEvent(new CustomEvent('tabClick', {'detail': [0, 'test']}));
-    await page.waitForChanges();
-    expect(page.body.querySelector('sage-tab[tab="two"] > button')).not.toHaveClass('is-active');
-    expect(page.body.querySelector('sage-tab[tab="one"] > button')).toHaveClass('is-active');
-    
-    // const tabs = page.body.querySelector('sage-tabs');
-    // const test = page.body.querySelector('sage-tab[tab="one"] > button.is-active');
-    let event = new KeyboardEvent('keydown', {'key': 'ArrowLeft'});
+    // Create and dispatch `ArrowLeft` keydown
+    const event = new KeyboardEvent('keydown', {'key': 'ArrowLeft'});
     window.dispatchEvent(event);
     await page.waitForChanges();
-    // console.log(page.body.innerHTML)
-    expect(page.body.querySelector('sage-tab[tab="one"] > button')).not.toHaveClass('is-active');
-    expect(page.body.querySelector('sage-tab[tab="two"] > button')).toHaveClass('is-active');
 
-    await page.waitForChanges();
-
-    window.dispatchEvent(event);
-    await page.waitForChanges();
-    // console.log(page.body.innerHTML)
+    // Expect active tab to have shifted
     expect(page.body.querySelector('sage-tab[tab="one"] > button')).toHaveClass('is-active');
     expect(page.body.querySelector('sage-tab[tab="two"] > button')).not.toHaveClass('is-active');
-    // if (!activeTab) {
-    //   throw new Error("activeTab is null");
-    // }
-    // tabs = page.body.querySelector('sage-tabs[active-tab="one"]');
-    // expect(tabs).toBeTruthy();
+    expect(page.body.querySelector('sage-tab[tab="three"] > button')).not.toHaveClass('is-active');
   });
 
-  // it('sets new active tab when ArrowRight is pressed', async () => {
-  //   const page = await newSpecPage({
-  //     components: [SageTabs, SageTab],
-  //     html: `
-  //       <sage-tabs active-tab="one" tablist-label="test label" component-id="test">
-  //         <sage-tab tab="one" id="test-one">One</sage-tab>
-  //         <sage-tab tab="two" id="test-two">Two</sage-tab>
-  //       </sage-tabs>`,
-  //   });
-  //   page.body.dispatchEvent(new CustomEvent('tabClick', {'detail': ['two', 'test']}));
-  //   await page.waitForChanges();
-  //   let tabs = page.body.querySelector('sage-tabs');
-  //   const activeTab = page.body.querySelector('sage-tab[tab="one"]');
-  //   const event = new KeyboardEvent('keydown', {'key': 'ArrowRight'});
-  //   if (!activeTab) {
-  //     throw new Error("activeTab is null");
-  //   }
-  //   activeTab.dispatchEvent(event);
-  //   await page.waitForChanges();
-  //   tabs = page.body.querySelector('sage-tabs[active-tab="two"]');
-  //   expect(tabs).toBeTruthy();
-  // });
+  it('loops new active tab to end when ArrowLeft is pressed on first tab', async () => {
+    const page = await newSpecPage({
+      components: [SageTabs, SageTab],
+      html: `
+        <sage-tabs active-tab="three" tablist-label="test label" component-id="test" variant="primary">
+          <sage-tab tab="one">One</sage-tab>
+          <sage-tab tab="two">Two</sage-tab>
+          <sage-tab tab="three">Three</sage-tab>
+        </sage-tabs>`,
+    });
 
-  // it('sets new active tab when Home is pressed', async () => {
-  //   const page = await newSpecPage({
-  //     components: [SageTabs, SageTab],
-  //     html: `
-  //       <sage-tabs active-tab="two" tablist-label="test label" component-id="test" variant="filter">
-  //         <sage-tab tab="one" id="test-one">One</sage-tab>
-  //         <sage-tab tab="two" id="test-two">Two</sage-tab>
-  //       </sage-tabs>`,
-  //   });    
-  //   page.body.dispatchEvent(new CustomEvent('tabClick', {'detail': ['one', 'test']}));
-  //   await page.waitForChanges();
-  //   let tabs = page.body.querySelector('sage-tabs');
-  //   const activeTab = page.body.querySelector('sage-tab[tab="two"]');
-  //   await page.waitForChanges();
-  //   const event = new KeyboardEvent('keydown', {'key': 'Home', bubbles: true, composed: true});
-  //   if (!activeTab) {throw new Error("activeTab is null");}
-  //   activeTab.dispatchEvent(event);
-  //   await page.waitForChanges();
-  //   tabs = page.body.querySelector('sage-tabs[active-tab="one"]');
-  //   expect(tabs).toBeTruthy();
-  // });
+    // Move focus to tab by clicking on first activeTabIndex (0)
+    page.body.dispatchEvent(new CustomEvent('tabClick', {'detail': [0, 'test']}));
+    await page.waitForChanges();
+    expect(page.body.querySelector('sage-tab[tab="one"] > button')).toHaveClass('is-active');
+    expect(page.body.querySelector('sage-tab[tab="two"] > button')).not.toHaveClass('is-active');
+    expect(page.body.querySelector('sage-tab[tab="three"] > button')).not.toHaveClass('is-active');
+    
+    // Create and dispatch `ArrowLeft` keydown
+    const event = new KeyboardEvent('keydown', {'key': 'ArrowLeft'});
+    window.dispatchEvent(event);
+    await page.waitForChanges();
 
-  // it('sets new active tab when End is pressed', async () => {
-  //   const page = await newSpecPage({
-  //     components: [SageTabs, SageTab],
-  //     html: `
-  //       <sage-tabs active-tab="one" tablist-label="test label" component-id="test">
-  //         <sage-tab tab="one" id="test-one">One</sage-tab>
-  //         <sage-tab tab="two" id="test-two">Two</sage-tab>
-  //       </sage-tabs>`,
-  //   });
-  //   page.body.dispatchEvent(new CustomEvent('tabClick', {'detail': ['two', 'test']}));
-  //   await page.waitForChanges();
-  //   let tabs = page.body.querySelector('sage-tabs');
-  //   const activeTab = page.body.querySelector('sage-tab[tab="one"]');
-  //   const event = new KeyboardEvent('keydown', {'key': 'End'});
-  //   if (!activeTab) {throw new Error("activeTab is null");}
-  //   activeTab.dispatchEvent(event);
-  //   await page.waitForChanges();
-  //   tabs = page.body.querySelector('sage-tabs[active-tab="two"]');
-  //   expect(tabs).toBeTruthy();
-  // });
+    // Expect active tab to have shifted
+    expect(page.body.querySelector('sage-tab[tab="one"] > button')).not.toHaveClass('is-active');
+    expect(page.body.querySelector('sage-tab[tab="two"] > button')).not.toHaveClass('is-active');
+    expect(page.body.querySelector('sage-tab[tab="three"] > button')).toHaveClass('is-active');
+  });
+
+  it('sets new active tab when ArrowRight is pressed', async () => {
+    const page = await newSpecPage({
+      components: [SageTabs, SageTab],
+      html: `
+        <sage-tabs active-tab="one" tablist-label="test label" component-id="test" variant="primary">
+          <sage-tab tab="one">One</sage-tab>
+          <sage-tab tab="two">Two</sage-tab>
+          <sage-tab tab="three">Three</sage-tab>
+        </sage-tabs>`,
+    });
+
+    // Move focus to tab by clicking on second activeTabIndex (1)
+    page.body.dispatchEvent(new CustomEvent('tabClick', {'detail': [1, 'test']}));
+    await page.waitForChanges();
+    expect(page.body.querySelector('sage-tab[tab="one"] > button')).not.toHaveClass('is-active');
+    expect(page.body.querySelector('sage-tab[tab="two"] > button')).toHaveClass('is-active');
+    expect(page.body.querySelector('sage-tab[tab="three"] > button')).not.toHaveClass('is-active');
+    
+    // Create and dispatch `ArrowLeft` keydown
+    const event = new KeyboardEvent('keydown', {'key': 'ArrowRight'});
+    window.dispatchEvent(event);
+    await page.waitForChanges();
+
+    // Expect active tab to have shifted
+    expect(page.body.querySelector('sage-tab[tab="one"] > button')).not.toHaveClass('is-active');
+    expect(page.body.querySelector('sage-tab[tab="two"] > button')).not.toHaveClass('is-active');
+    expect(page.body.querySelector('sage-tab[tab="three"] > button')).toHaveClass('is-active');
+  });
+
+  it('loops new active tab to end when ArrowRight is pressed on last tab', async () => {
+    const page = await newSpecPage({
+      components: [SageTabs, SageTab],
+      html: `
+        <sage-tabs active-tab="two" tablist-label="test label" component-id="test" variant="primary">
+          <sage-tab tab="one">One</sage-tab>
+          <sage-tab tab="two">Two</sage-tab>
+          <sage-tab tab="three">Three</sage-tab>
+        </sage-tabs>`,
+    });
+
+    // Move focus to tab by clicking on last activeTabIndex (2)
+    page.body.dispatchEvent(new CustomEvent('tabClick', {'detail': [2, 'test']}));
+    await page.waitForChanges();
+    expect(page.body.querySelector('sage-tab[tab="one"] > button')).not.toHaveClass('is-active');
+    expect(page.body.querySelector('sage-tab[tab="two"] > button')).not.toHaveClass('is-active');
+    expect(page.body.querySelector('sage-tab[tab="three"] > button')).toHaveClass('is-active');
+    
+    // Create and dispatch `ArrowLeft` keydown
+    const event = new KeyboardEvent('keydown', {'key': 'ArrowRight'});
+    window.dispatchEvent(event);
+    await page.waitForChanges();
+
+    // Expect active tab to have shifted
+    expect(page.body.querySelector('sage-tab[tab="one"] > button')).toHaveClass('is-active');
+    expect(page.body.querySelector('sage-tab[tab="two"] > button')).not.toHaveClass('is-active');
+    expect(page.body.querySelector('sage-tab[tab="three"] > button')).not.toHaveClass('is-active');
+  });
+
+  it('moves active tab to first tab when Home is pressed', async () => {
+    const page = await newSpecPage({
+      components: [SageTabs, SageTab],
+      html: `
+        <sage-tabs active-tab="three" tablist-label="test label" component-id="test" variant="primary">
+          <sage-tab tab="one">One</sage-tab>
+          <sage-tab tab="two">Two</sage-tab>
+          <sage-tab tab="three">Three</sage-tab>
+        </sage-tabs>`,
+    });
+
+    // Move focus to tab by clicking on last activeTabIndex (2)
+    page.body.dispatchEvent(new CustomEvent('tabClick', {'detail': [1, 'test']}));
+    await page.waitForChanges();
+    expect(page.body.querySelector('sage-tab[tab="one"] > button')).not.toHaveClass('is-active');
+    expect(page.body.querySelector('sage-tab[tab="two"] > button')).toHaveClass('is-active');
+    expect(page.body.querySelector('sage-tab[tab="three"] > button')).not.toHaveClass('is-active');
+    
+    // Create and dispatch `ArrowLeft` keydown
+    const event = new KeyboardEvent('keydown', {'key': 'Home'});
+    window.dispatchEvent(event);
+    await page.waitForChanges();
+
+    // Expect active tab to have shifted
+    expect(page.body.querySelector('sage-tab[tab="one"] > button')).toHaveClass('is-active');
+    expect(page.body.querySelector('sage-tab[tab="two"] > button')).not.toHaveClass('is-active');
+    expect(page.body.querySelector('sage-tab[tab="three"] > button')).not.toHaveClass('is-active');
+  });
+
+  it('moves active tab to first tab when End is pressed', async () => {
+    const page = await newSpecPage({
+      components: [SageTabs, SageTab],
+      html: `
+        <sage-tabs active-tab="one" tablist-label="test label" component-id="test" variant="primary">
+          <sage-tab tab="one">One</sage-tab>
+          <sage-tab tab="two">Two</sage-tab>
+          <sage-tab tab="three">Three</sage-tab>
+        </sage-tabs>`,
+    });
+
+    // Move focus to tab by clicking on last activeTabIndex (2)
+    page.body.dispatchEvent(new CustomEvent('tabClick', {'detail': [1, 'test']}));
+    await page.waitForChanges();
+    expect(page.body.querySelector('sage-tab[tab="one"] > button')).not.toHaveClass('is-active');
+    expect(page.body.querySelector('sage-tab[tab="two"] > button')).toHaveClass('is-active');
+    expect(page.body.querySelector('sage-tab[tab="three"] > button')).not.toHaveClass('is-active');
+    
+    // Create and dispatch `ArrowLeft` keydown
+    const event = new KeyboardEvent('keydown', {'key': 'End'});
+    window.dispatchEvent(event);
+    await page.waitForChanges();
+
+    // Expect active tab to have shifted
+    expect(page.body.querySelector('sage-tab[tab="one"] > button')).not.toHaveClass('is-active');
+    expect(page.body.querySelector('sage-tab[tab="two"] > button')).not.toHaveClass('is-active');
+    expect(page.body.querySelector('sage-tab[tab="three"] > button')).toHaveClass('is-active');
+  });
 });

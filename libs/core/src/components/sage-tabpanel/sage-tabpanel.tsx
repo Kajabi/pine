@@ -14,10 +14,10 @@ export class SageTabpanel {
   @Prop() tab!: string;
   
   /**
-   * Keeps track of the parentComponent unique id, this property is passed by parent component
+   * Keeps track of the parentComponentId unique id, this property is passed by parent component
   */
   /** @internal */
-  @Prop({mutable: true}) parentComponent: string;
+  @Prop({mutable: true}) parentComponentId: string;
 
   /**
    * Keeps track of if the expected tab variant, this property is passed by parent component
@@ -36,9 +36,9 @@ export class SageTabpanel {
       <Host slot="tabpanels">
         <div 
           role="tabpanel"
-          id={this.tab + '-panel'}
+          id={this.parentComponentId + "__" + this.tab + '-panel'}
           tabindex="0"
-          aria-labelledby={this.tab}
+          aria-labelledby={this.parentComponentId + "__" + this.tab}
           class={this.selected ? "sage-tabpanel is-active" : "sage-tabpanel"}
         >
           <slot />

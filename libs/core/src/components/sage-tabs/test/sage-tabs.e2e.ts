@@ -4,7 +4,7 @@ describe('sage-tabs', () => {
   it('renders', async () => {
     const page = await newE2EPage();
     await page.setContent(`
-      <sage-tabs active-tab="two" tablist-label="test label" component-id="test">
+      <sage-tabs active-tab="two" tablist-label="test label" component-id="test" variant="primary">
         <sage-tab tab="one">Test 1</sage-tab>
         <sage-tab tab="two">Test 2</sage-tab>
         <sage-tabpanel tab="one">Content 1</sage-tabpanel>
@@ -52,7 +52,7 @@ describe('sage-tabs', () => {
   it('renders passed activeTab on page load', async () => {
     const page = await newE2EPage();
     await page.setContent(`
-      <sage-tabs active-tab="two" tablist-label="test label" component-id="testthree">
+      <sage-tabs active-tab="two" tablist-label="test label" component-id="testthree" variant="primary">
         <sage-tab tab="one">Test 1</sage-tab>
         <sage-tab tab="two">Test 2</sage-tab>
         <sage-tabpanel tab="one">Content 1</sage-tabpanel>
@@ -68,7 +68,7 @@ describe('sage-tabs', () => {
   it('renders new activeTab on button click', async () => {
     const page = await newE2EPage();
     await page.setContent(`
-      <sage-tabs active-tab="two" tablist-label="test label" component-id="test3">
+      <sage-tabs active-tab="two" tablist-label="test label" component-id="test3" variant="primary">
         <sage-tab tab="one">Test 1</sage-tab>
         <sage-tab tab="two">Test 2</sage-tab>
         <sage-tabpanel tab="one">Content 1</sage-tabpanel>
@@ -89,7 +89,7 @@ describe('sage-tabs', () => {
   it('renders new activeTab when arrows move focus to right', async () => {
     const page = await newE2EPage();
     await page.setContent(`
-      <sage-tabs active-tab="two" tablist-label="test label" component-id="test3">
+      <sage-tabs active-tab="two" tablist-label="test label" component-id="test3" variant="primary">
         <sage-tab tab="one">Test 1</sage-tab>
         <sage-tab tab="two">Test 2</sage-tab>
         <sage-tabpanel tab="one">Content 1</sage-tabpanel>
@@ -117,7 +117,7 @@ describe('sage-tabs', () => {
   it('renders new activeTab when arrows move focus to left', async () => {
     const page = await newE2EPage();
     await page.setContent(`
-      <sage-tabs active-tab="one" tablist-label="test label" component-id="test3">
+      <sage-tabs active-tab="one" tablist-label="test label" component-id="test3" variant="primary">
         <sage-tab tab="one">Test 1</sage-tab>
         <sage-tab tab="two">Test 2</sage-tab>
         <sage-tabpanel tab="one">Content 1</sage-tabpanel>
@@ -145,7 +145,7 @@ describe('sage-tabs', () => {
   it('renders new activeTab when Home and End keys are pressed', async () => {
     const page = await newE2EPage();
     await page.setContent(`
-      <sage-tabs active-tab="one" tablist-label="test label" component-id="test4">
+      <sage-tabs active-tab="one" tablist-label="test label" component-id="test4" variant="primary">
         <sage-tab tab="one">Test 1</sage-tab>
         <sage-tab tab="two">Test 2</sage-tab>
         <sage-tab tab="three">Test 2</sage-tab>
@@ -178,7 +178,7 @@ describe('sage-tabs', () => {
   it('renders a11y correctly', async () => {
     const page = await newE2EPage();
     await page.setContent(`
-      <sage-tabs active-tab="two" tablist-label="test label" component-id="test4">
+      <sage-tabs active-tab="two" tablist-label="test label" component-id="test4" variant="primary">
         <sage-tab tab="one">Test 1</sage-tab>
         <sage-tab tab="two">Test 2</sage-tab>
         <sage-tabpanel tab="two">Content 2</sage-tabpanel>

@@ -14,27 +14,27 @@ export class SageTab {
   @Prop() tab!: string;
 
   /**
-   * Keeps track of the parentComponent unique id, this property is passed by parent component
+   * Keeps track of the parentComponentId unique id, this property is passed by parent component
   */
   /** @internal */
-  @Prop({mutable: true}) parentComponent: string;
+  @Prop({mutable: true}) parentComponentId: string;
 
   /**
    * Keeps track of if the expected tab variant, this property is passed by parent component
   */
-   /** @internal */
-   @Prop() variant: string;
+  /** @internal */
+  @Prop() variant: string;
 
   /**
    * Keeps track of if the expected tab variant, this property is passed by parent component
   */
-   /** @internal */
+  /** @internal */
   @Prop() index: number;
 
   /**
    * Keeps track of the tabpanel selected state, this property is passed by parent component 
   */
-   /** @internal */
+  /** @internal */
   @Prop({mutable: true}) selected = false;
  
   /**
@@ -42,8 +42,8 @@ export class SageTab {
    */
   /** @internal */
   @Event() tabClick: EventEmitter<object>;
-  private onTabClick(index, parentComponent) {
-    this.tabClick.emit([index, parentComponent]);
+  private onTabClick(index, parentComponentId) {
+    this.tabClick.emit([index, parentComponentId]);
   }
 
   render() {
@@ -59,12 +59,12 @@ export class SageTab {
       <Host variant={this.variant} slot="tabs" index={this.index}>
         <button 
           role="tab"
-          id={this.tab}
-          aria-controls={this.tab + "-panel"}
+          id={this.parentComponentId + "__" + this.tab}
+          aria-controls={this.parentComponentId + "__" + this.tab + "-panel"}
           tabindex={this.selected ? "0" : "-1"}
           aria-selected={this.selected ? "true" : "false"}
           class={this.selected ? "sage-tab is-active" : "sage-tab"}
-          onClick={this.onTabClick.bind(this, this.index, this.parentComponent)}
+          onClick={this.onTabClick.bind(this, this.index, this.parentComponentId)}
         >
           {this.variant === "availability" && availabilityTabEdgeInlineStart}
           {this.variant === "availability" && availabilityTabEdgeInlineEnd}

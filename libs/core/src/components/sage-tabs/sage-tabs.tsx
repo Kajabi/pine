@@ -44,37 +44,8 @@ export class SageTabs {
   tabClickHandler(event: CustomEvent<any>) {
     if (this.componentId === event.detail[1]) {
       this.activeTabIndex = event.detail[0];
-      this.activeTab = this.tabs[this.activeTabIndex].children[0].id;
+      this.activeTab = this.tabs[this.activeTabIndex].tab;
     }
-  }
-
-  private matchActiveTab(activeTab, tab) {
-    if (activeTab === tab) {
-      return true;
-    }
-
-    return false;
-  }
-
-  private findAllChildren() {
-    this.tabs = this.el.querySelectorAll('sage-tab');
-    this.tabPanels = this.el.querySelectorAll('sage-tabpanel');
-  }
-
-  private propGeneration(child, index = 0) {
-    child['selected'] = this.matchActiveTab(this.activeTab, child.tab);
-    if (this.componentId) {child.parentComponent = this.componentId.toString()};
-    if (this.variant) {child['variant'] = this.variant.toString()};
-    child['index'] = index;
-  }
-
-  private passPropsToChildren() {
-    this.tabs.forEach((child, idx) => {
-      this.propGeneration(child, idx);
-    });
-    this.tabPanels.forEach((child, idx) => {
-      this.propGeneration(child, idx);
-    });
   }
 
   @Listen('keydown', {passive: true, target: 'window'})
@@ -86,7 +57,6 @@ export class SageTabs {
   }
 
   private moveActiveTab(key) {
-    this.findAllChildren()
     const firstTabNumber = 0;
     const lastTabNumber = this.tabs.length - 1;
     
@@ -109,40 +79,30 @@ export class SageTabs {
   
     // Move focus to the button element within `sage-tab`
     this.tabs[moveFocusTo].children[0].focus();
-    this.activeTab = this.tabs[moveFocusTo].children[0].id;
+    this.activeTab = this.tabs[moveFocusTo].tab;
     this.activeTabIndex = moveFocusTo;
   }
 
-    
-    // if (key === "ArrowLeft" || key === "ArrowRight") {
-    //   const loopFocusLocation = (key === "ArrowLeft") ? firstTabNumber : lastTabNumber;
-    //   const loopFocusNewTarget = (key === "ArrowLeft") ? lastTabNumber : firstTabNumber;
-    //   const moveFocusTo = (key === "ArrowLeft") ? -1 : 1;
+  private findAllChildren() {
+    this.tabs = this.el.querySelectorAll('sage-tab');
+    this.tabPanels = this.el.querySelectorAll('sage-tabpanel');
+  }
 
-    //   if (this.activeTab === tabLocations[loopFocusLocation].id) {}
+  private propGeneration(child, index) {
+    child.parentComponentId = this.componentId.toString();
+    child.variant = this.variant.toString();
+    child.selected = (this.activeTab === child.tab) ? true : false;
+    child['index'] = index;
+  }
 
-    //   if (this.activeTab === tabLocations[loopFocusLocation].id) {
-    //     tabLocations[loopFocusNewTarget].focus();
-    //     this.activeTab = tabLocations[loopFocusNewTarget].id;
-    //   } else {
-    //     for (let i = 0; i < tabLocations.length; i += 1) {
-    //       if(tabLocations[i].id === this.activeTab ) {
-    //         tabLocations[i + moveFocusTo].focus();
-    //         this.activeTab = tabLocations[i +  moveFocusTo].id;
-    //         break;
-    //       }
-    //     }
-    //   }
-    // } else {
-    //   const loopFocusNewTarget = (key === "Home") ? firstTabNumber : lastTabNumber;
-    //   if (this.activeTab) {
-    //     if (this.activeTab != tabLocations[loopFocusNewTarget].id) {
-    //       tabLocations[loopFocusNewTarget].focus();
-    //       this.activeTab = tabLocations[loopFocusNewTarget].id;
-    //     }
-    //   }
-    // }
-  // }
+  private passPropsToChildren() {
+    this.tabs.forEach((child, index) => {
+      this.propGeneration(child, index);
+    });
+    this.tabPanels.forEach((child, index) => {
+      this.propGeneration(child, index);
+    });
+  }
 
   private classNames() {
     let className = `sage-tabs`;
@@ -150,17 +110,18 @@ export class SageTabs {
       const variantClassName = `sage-tabs--${this.variant}`;
       className += ' ' + variantClassName;
     }
+
     return className;
   };
 
   componentWillRender() {
-    this.findAllChildren()
-    this.passPropsToChildren()
+    this.findAllChildren();
+    this.passPropsToChildren();
   }
 
   render() {
     return (
-      <Host active-tab={this.activeTab} class={this.classNames()}>
+      <Host active-tab={this.activeTab} class={this.classNames()} id={this.componentId}>
         <div class="sage-tabs__tablist" role="tablist" aria-label={this.tablistLabel}>
           <slot name="tabs" />
         </div>

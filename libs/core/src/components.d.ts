@@ -151,7 +151,7 @@ export namespace Components {
     }
     interface SageTab {
         "index": number;
-        "parentComponent": string;
+        "parentComponentId": string;
         "selected": boolean;
         /**
           * Sets the related tab name, this name must match a `sage-tabpanel`'s tab property
@@ -160,7 +160,7 @@ export namespace Components {
         "variant": string;
     }
     interface SageTabpanel {
-        "parentComponent": string;
+        "parentComponentId": string;
         "selected": boolean;
         /**
           * Sets the related tab name, this name must match a `sage-tab`'s tab property
@@ -407,7 +407,7 @@ declare namespace LocalJSX {
     interface SageTab {
         "index"?: number;
         "onTabClick"?: (event: SageTabCustomEvent<object>) => void;
-        "parentComponent"?: string;
+        "parentComponentId"?: string;
         "selected"?: boolean;
         /**
           * Sets the related tab name, this name must match a `sage-tabpanel`'s tab property
@@ -416,7 +416,7 @@ declare namespace LocalJSX {
         "variant"?: string;
     }
     interface SageTabpanel {
-        "parentComponent"?: string;
+        "parentComponentId"?: string;
         "selected"?: boolean;
         /**
           * Sets the related tab name, this name must match a `sage-tab`'s tab property
