@@ -39,7 +39,7 @@ figma-icon-config.json
 |branchName|string|false||Name of the branch|
 |pageName|string|true||Name of the page the icons can be found|
 |ouputPath|string|true||Location which the raw svgs should be saved|
-|ignoreFrames|array|false||Name(s) of frames that may be located in the page you wish to ignore. If there is only one frame, please add it in array format e.g ['Frame to Ignore']
+|ignoreFrames|array|false||Name of the frame(s) that may be located in the page you wish to ignore. Frames that are prefixed with `_` are automatically ignored. If there is only one frame, please add it in array format e.g ['Frame to Ignore']
 
 **NOTE**: The `figmaAccessToken` and `figmaFileId` can be set in either the configuration file or as an environment variable. The environment variable will take precedence over the configuration file.
 

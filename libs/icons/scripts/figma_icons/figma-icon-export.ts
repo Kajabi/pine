@@ -351,7 +351,7 @@ const extractIcons = (pageData, ignoreFrames: string[], componentMetadata) => {
   const iconLibrary: Array<FigmaIcon> = [];
 
   iconFrames.forEach((frame) => {
-    if ( ['COMPONENT_SET', 'FRAME'].includes(frame.type) && (!ignoreFrames.includes(frame.name)) ) {
+    if ( ['COMPONENT_SET', 'FRAME'].includes(frame.type) && (!frame.name.startsWith('_') && !ignoreFrames?.includes(frame.name)) ) {
       const components = frame.children;
 
       components.forEach( (component) => {
