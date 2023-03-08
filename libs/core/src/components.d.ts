@@ -149,10 +149,52 @@ export namespace Components {
          */
         "variant": 'inline' | 'plain';
     }
+    interface SageTab {
+        "index": number;
+        /**
+          * Sets the related tab name, this name must match a `sage-tabpanel`'s tab name property
+         */
+        "name": string;
+        "parentComponentId": string;
+        "selected": boolean;
+        "variant": string;
+    }
+    interface SageTabpanel {
+        /**
+          * Sets the related tab name, this name must match a `sage-tab`'s tab name property
+         */
+        "name": string;
+        "parentComponentId": string;
+        "selected": boolean;
+        "variant": string;
+    }
+    interface SageTabs {
+        "activeTabIndex": number;
+        /**
+          * Sets the starting active tab name and maintains the name as the component re-renders
+         */
+        "activeTabName": string;
+        /**
+          * Sets unique id on tabs component
+         */
+        "componentId": string;
+        /**
+          * Sets the aria-label attached to the tablist element
+         */
+        "tablistLabel": string;
+        /**
+          * Sets tabs variant styles as outlined in Figma documentation
+         */
+        "variant": 'primary' | 'availability' | 'filter';
+    }
 }
 export interface SageInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSageInputElement;
+}
+export interface SageTabCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSageTabElement;
 }
 declare global {
     interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
@@ -185,12 +227,33 @@ declare global {
         prototype: HTMLSageLinkElement;
         new (): HTMLSageLinkElement;
     };
+    interface HTMLSageTabElement extends Components.SageTab, HTMLStencilElement {
+    }
+    var HTMLSageTabElement: {
+        prototype: HTMLSageTabElement;
+        new (): HTMLSageTabElement;
+    };
+    interface HTMLSageTabpanelElement extends Components.SageTabpanel, HTMLStencilElement {
+    }
+    var HTMLSageTabpanelElement: {
+        prototype: HTMLSageTabpanelElement;
+        new (): HTMLSageTabpanelElement;
+    };
+    interface HTMLSageTabsElement extends Components.SageTabs, HTMLStencilElement {
+    }
+    var HTMLSageTabsElement: {
+        prototype: HTMLSageTabsElement;
+        new (): HTMLSageTabsElement;
+    };
     interface HTMLElementTagNameMap {
         "my-component": HTMLMyComponentElement;
         "sage-button": HTMLSageButtonElement;
         "sage-image": HTMLSageImageElement;
         "sage-input": HTMLSageInputElement;
         "sage-link": HTMLSageLinkElement;
+        "sage-tab": HTMLSageTabElement;
+        "sage-tabpanel": HTMLSageTabpanelElement;
+        "sage-tabs": HTMLSageTabsElement;
     }
 }
 declare namespace LocalJSX {
@@ -341,12 +404,54 @@ declare namespace LocalJSX {
          */
         "variant"?: 'inline' | 'plain';
     }
+    interface SageTab {
+        "index"?: number;
+        /**
+          * Sets the related tab name, this name must match a `sage-tabpanel`'s tab name property
+         */
+        "name": string;
+        "onTabClick"?: (event: SageTabCustomEvent<object>) => void;
+        "parentComponentId"?: string;
+        "selected"?: boolean;
+        "variant"?: string;
+    }
+    interface SageTabpanel {
+        /**
+          * Sets the related tab name, this name must match a `sage-tab`'s tab name property
+         */
+        "name": string;
+        "parentComponentId"?: string;
+        "selected"?: boolean;
+        "variant"?: string;
+    }
+    interface SageTabs {
+        "activeTabIndex"?: number;
+        /**
+          * Sets the starting active tab name and maintains the name as the component re-renders
+         */
+        "activeTabName": string;
+        /**
+          * Sets unique id on tabs component
+         */
+        "componentId": string;
+        /**
+          * Sets the aria-label attached to the tablist element
+         */
+        "tablistLabel": string;
+        /**
+          * Sets tabs variant styles as outlined in Figma documentation
+         */
+        "variant": 'primary' | 'availability' | 'filter';
+    }
     interface IntrinsicElements {
         "my-component": MyComponent;
         "sage-button": SageButton;
         "sage-image": SageImage;
         "sage-input": SageInput;
         "sage-link": SageLink;
+        "sage-tab": SageTab;
+        "sage-tabpanel": SageTabpanel;
+        "sage-tabs": SageTabs;
     }
 }
 export { LocalJSX as JSX };
@@ -358,6 +463,9 @@ declare module "@stencil/core" {
             "sage-image": LocalJSX.SageImage & JSXBase.HTMLAttributes<HTMLSageImageElement>;
             "sage-input": LocalJSX.SageInput & JSXBase.HTMLAttributes<HTMLSageInputElement>;
             "sage-link": LocalJSX.SageLink & JSXBase.HTMLAttributes<HTMLSageLinkElement>;
+            "sage-tab": LocalJSX.SageTab & JSXBase.HTMLAttributes<HTMLSageTabElement>;
+            "sage-tabpanel": LocalJSX.SageTabpanel & JSXBase.HTMLAttributes<HTMLSageTabpanelElement>;
+            "sage-tabs": LocalJSX.SageTabs & JSXBase.HTMLAttributes<HTMLSageTabsElement>;
         }
     }
 }
