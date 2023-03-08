@@ -33,7 +33,7 @@ export interface FigmaIconConfig {
    * or
    * @example
    * ```json
-   * ignoreFrames: ['Docs', 'Navgigation']
+   * ignoreFrames: ['Docs', 'Navigation']
    */
   ignoreFrames: string[]
 
@@ -88,14 +88,41 @@ export type FigmaIcon = {
   tags?: string;
 }
 
+export type IconFileDetail = {
+  /**
+   * The name of the svg file
+   */
+  name: string;
+
+  /**
+   * The numeric size of the file in kB
+   */
+  size: number;
+}
 
 export interface SvgDiffResult {
 
+  /**
+   * The name of the file
+   */
   filename: string;
 
+  /**
+   * Git status provided from SimpleGit
+   * Will be 'D', 'M', or ''.
+   * D: Deleted
+   * M: Modified
+   * '': Added
+   */
   status: string;
 
+  /**
+   * What the svg content looked like before it was modified or deleted
+   */
   before: string | null;
 
+  /**
+   * What the svg content looked like AFTER it was modified or deleted
+   */
   after: string | null;
 }

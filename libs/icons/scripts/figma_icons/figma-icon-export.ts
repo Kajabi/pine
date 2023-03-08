@@ -13,7 +13,7 @@ import mkdirp from 'mkdirp';
 import cliui  from 'cliui';
 import { simpleGit, SimpleGitOptions, StatusResult } from 'simple-git';
 
-import { FigmaIcon, FigmaIconConfig, SvgDiffResult } from './types';
+import { FigmaIcon, FigmaIconConfig, IconFileDetail, SvgDiffResult } from './types';
 
 const info = chalk.white;
 const error = chalk.red.bold;
@@ -321,7 +321,7 @@ const downloadImage = (icon: FigmaIcon, outputDir: string) => {
       log(chalk.red.bold('Something went wrong fetching the image from S3, please try again'),)
     });
 
-  return new Promise((resolve, reject) => {
+  return new Promise<IconFileDetail>((resolve, reject) => {
     writer.on('finish', () => {
       // log(info(`Saved ${name}.svg`, fs.statSync(imagePath).size))
       icon.filesize = fs.statSync(imagePath).size;
@@ -329,7 +329,8 @@ const downloadImage = (icon: FigmaIcon, outputDir: string) => {
         name: `${icon.name}.svg`,
         size: fs.statSync(imagePath).size
       })
-    })
+    });
+
     writer.on('error', (err) => {
       console.log('error writting file', err)
       reject(err)
