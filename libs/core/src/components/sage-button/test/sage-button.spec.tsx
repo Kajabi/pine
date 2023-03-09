@@ -68,10 +68,10 @@ describe('sage-button', () => {
         </form>  
       `,
     });
-    const form = root.doc.querySelector("form");
+    const form = root.doc.querySelector<HTMLFormElement>("form");
     const eventSpy = jest.fn(); 
     form?.addEventListener("reset", eventSpy());
-    const button = document.querySelector<HTMLElement>('sage-button');
+    const button = document.querySelector<HTMLSageButtonElement>('sage-button');
     button?.click();
     await root.waitForChanges();
     expect(eventSpy).toHaveBeenCalled();
