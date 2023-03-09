@@ -21,13 +21,17 @@ A tabs component to generate all versions of `sage-tab` as outlined in [Figma](h
 
 ## Sub Components
 
-### [Tab](/docs/components-tabs-tab--default)
+### Tab
 
-Handles tab logic, requires a unique `name` property to be passed
+A subcomponent which handles tab logic. This subcomponent is expected to be used exclusively within `sage-tab`.
 
-### [Tabpanel](/docs/components-tabs-tabpanel--default)
+Requires a unique `name` property to be passed, e.g. `<sage-tab name="foo">Tab Content</sage-tab>`
 
-Handles tabpanel logic, requires a matching `name` property to be passed
+### Tabpanel
+
+A subcomponent which handles tabpanel logic. This subcomponent is expected to be used exclusively within `sage-tab`.
+
+Requires a matching `name` property to be passed, e.g. `<sage-tabpanel name="foo">Tabpanel Content</sage-tabpanel>`
 
 ## Accessibility
 
