@@ -5,7 +5,15 @@ import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 import * as stories from './sage-tabs.stories.js';
 
-<Meta title="components/Tabs" component="sage-tabs" argTypes={extractArgTypes('sage-tabs')} />
+<Meta
+  title="components/Tabs"
+  component="sage-tabs"
+  argTypes={extractArgTypes('sage-tabs')}
+  subcomponents={{
+    SageTab: 'sage-tab',
+    SageTabPanel: 'sage-tabpanel',
+  }}
+/>
 
 # Tabs
 
@@ -25,7 +33,7 @@ Handles tabpanel logic, requires a matching `name` property to be passed
 
 This component has been built to align with the [W3C Aria best practices for tabs](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/). You get all tabbing, keyboard navigation, focus states, and aria information applied automatically.
 
-In order for all accessibility to properly compile, you must provide a few required properties to the component. 
+In order for all accessibility to properly compile, you must provide a few required properties to the component.
 
 **1. A descriptive `tablist-label`:** Provides context to screen readers about what kind of tablist information is being presented
 
@@ -44,7 +52,6 @@ Default tabs styles
 <Canvas>
   <Story story={stories.Primary} />
 </Canvas>
-
 
 ### Availability
 
