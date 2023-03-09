@@ -53,9 +53,15 @@ export class SageTabs {
 
   @Listen('keydown', {passive: true, target: 'window'})
   handleKeyDown(ev: KeyboardEvent) {
+    const targetTab = ev.target as HTMLElement;
+    const targetParent = targetTab.closest('sage-tabs') as HTMLElement;
+    
     const keySet = ["ArrowLeft", "ArrowRight", "Home", "End"];
+    
     if (keySet.includes(ev.key)) {
-      this.moveActiveTab(ev.key);
+      if (this.componentId === targetParent.id) {
+        this.moveActiveTab(ev.key);
+      }
     }
   }
 
