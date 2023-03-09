@@ -1,7 +1,7 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { SageTabs } from '../sage-tabs';
-import { SageTab } from '../../sage-tab/sage-tab';
-import { SageTabpanel } from '../../sage-tabpanel/sage-tabpanel';
+import { SageTab } from '../sage-tab/sage-tab';
+import { SageTabpanel } from '../sage-tabpanel/sage-tabpanel';
 
 describe('sage-tabs', () => {
   it('renders', async () => {
