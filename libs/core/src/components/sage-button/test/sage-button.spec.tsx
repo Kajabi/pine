@@ -59,7 +59,7 @@ describe('sage-button', () => {
     expect(svg).not.toBeNull();
   });
 
-  it('clicking on sage-button from inside a form calls `handleClick` method', async () => {
+  it('runs `handleClick` method when clicked on from inside a form', async () => {
     const root = await newSpecPage({
       components: [SageButton],
       html: `
