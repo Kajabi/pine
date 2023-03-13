@@ -2,40 +2,73 @@
   "icons": [
     {
       "name": "access-key",
+      "category": "features",
       "tags": [
         "access",
-        "key"
+        "key",
+        "license",
+        "object",
+        "password",
+        "secure"
       ]
     },
     {
       "name": "add",
+      "category": "actions",
       "tags": [
-        "add"
+        "add",
+        "addition",
+        "create",
+        "expand",
+        "increase",
+        "new",
+        "plus",
+        "positive"
       ]
     },
     {
       "name": "add-circle",
+      "category": "actions",
       "tags": [
         "add",
-        "circle"
+        "addition",
+        "create",
+        "expand",
+        "increase",
+        "new",
+        "plus",
+        "positive"
       ]
     },
     {
       "name": "add-image",
+      "category": "actions",
       "tags": [
         "add",
-        "image"
+        "image",
+        "media",
+        "multimedia",
+        "photo",
+        "picture"
       ]
     },
     {
       "name": "add-small",
+      "category": "actions",
       "tags": [
         "add",
-        "small"
+        "addition",
+        "create",
+        "expand",
+        "increase",
+        "new",
+        "plus",
+        "positive"
       ]
-    },
+    },},
     {
       "name": "align-justify",
+      "category": "text-editor",
       "tags": [
         "align",
         "justify"
@@ -43,6 +76,7 @@
     },
     {
       "name": "align-left",
+      "category": "text-editor",
       "tags": [
         "align",
         "left"
@@ -50,6 +84,7 @@
     },
     {
       "name": "align-right",
+      "category": "text-editor",
       "tags": [
         "align",
         "right"
@@ -57,6 +92,7 @@
     },
     {
       "name": "aling-center",
+      "category": "text-editor",
       "tags": [
         "aling",
         "center"
@@ -64,67 +100,165 @@
     },
     {
       "name": "analytics-filled",
+      "category": "navigation",
       "tags": [
         "analytics",
-        "filled"
+        "bar",
+        "business",
+        "chart",
+        "data",
+        "diagram",
+        "finance",
+        "graph",
+        "report",
+        "statistics"
       ]
     },
     {
       "name": "analytics-outline",
+      "category": "navigation",
       "tags": [
         "analytics",
-        "outline"
+        "bar",
+        "business",
+        "chart",
+        "data",
+        "diagram",
+        "finance",
+        "graph",
+        "report",
+        "statistics"
       ]
     },
     {
       "name": "archive",
+      "category": "actions",
       "tags": [
-        "archive"
+        "archive",
+        "available",
+        "box",
+        "check",
+        "collection",
+        "container",
+        "document",
+        "drawer",
+        "editor",
+        "file",
+        "folder",
+        "storage",
+        "success"
       ]
     },
     {
       "name": "arrow-corner",
+      "category": "features",
       "tags": [
         "arrow",
-        "corner"
+        "arrows",
+        "corner",
+        "curved",
+        "direction",
+        "forward",
+        "keyboard",
+        "move",
+        "navigation",
+        "next",
+        "onward",
+        "onwards",
+        "out",
+        "position",
+        "right",
+        "top",
+        "up",
+        "upward",
+        "upwards"
       ]
     },
     {
       "name": "arrow-down",
+      "category": "actions",
       "tags": [
         "arrow",
-        "down"
+        "bottom",
+        "descend",
+        "down",
+        "downward"
       ]
     },
     {
       "name": "arrow-left",
+      "category": "actions",
       "tags": [
         "arrow",
-        "left"
+        "back",
+        "backward",
+        "backwards",
+        "direction",
+        "keyboard",
+        "left",
+        "move",
+        "navigation",
+        "out",
+        "position",
+        "previous"
       ]
     },
     {
       "name": "arrow-right",
+      "category": "actions",
       "tags": [
         "arrow",
+        "direction",
+        "forward",
+        "keyboard",
+        "move",
+        "navigation",
+        "next",
+        "onward",
+        "onwards",
+        "out",
+        "position",
         "right"
       ]
     },
     {
       "name": "arrow-up",
+      "category": "actions",
       "tags": [
         "arrow",
-        "up"
+        "direction",
+        "keyboard",
+        "move",
+        "navigation",
+        "out",
+        "position",
+        "top",
+        "up",
+        "upward",
+        "upwards"
       ]
     },
     {
       "name": "assessment",
+      "category": "actions",
       "tags": [
-        "assessment"
+        "all",
+        "check",
+        "check-all",
+        "checked",
+        "completed",
+        "done",
+        "filter",
+        "filtering",
+        "list",
+        "mark",
+        "select",
+        "todo"
       ]
     },
     {
       "name": "at-sign",
+      "category": "site-settings",
       "tags": [
         "at",
         "sign"
@@ -132,75 +266,170 @@
     },
     {
       "name": "attach",
+      "category": "actions",
       "tags": [
-        "attach"
+        "attach",
+        "attached",
+        "attaching",
+        "attachment",
+        "clip",
+        "collate",
+        "contact",
+        "copy",
+        "editing",
+        "email",
+        "file",
+        "inbox",
+        "include",
+        "mail",
+        "paper",
+        "paperclip",
+        "text"
       ]
     },
     {
       "name": "automations",
+      "category": "actions",
       "tags": [
-        "automations"
+        "arrow",
+        "arrows",
+        "direction",
+        "directions",
+        "divide",
+        "fork",
+        "organize",
+        "separate",
+        "share",
+        "split",
+        "splitter"
       ]
     },
     {
       "name": "ban",
+      "category": "actions",
       "tags": [
-        "ban"
+        "ban",
+        "banned",
+        "block",
+        "blocked",
+        "cancel",
+        "forbidden",
+        "none",
+        "not",
+        "prevent",
+        "private",
+        "sign",
+        "stop"
       ]
     },
     {
       "name": "bank",
+      "category": "features",
       "tags": [
-        "bank"
+        "account",
+        "bank",
+        "business",
+        "columns",
+        "finance",
+        "landmark",
+        "museum",
+        "temple",
+        "travel"
       ]
     },
     {
       "name": "bell",
+      "category": "site-settings",
       "tags": [
         "bell"
       ]
     },
     {
       "name": "blog",
+      "category": "site-settings",
       "tags": [
         "blog"
       ]
     },
     {
       "name": "bold",
+      "category": "text-editor",
       "tags": [
         "bold"
       ]
     },
     {
       "name": "broadcast",
+      "category": "actions",
       "tags": [
-        "broadcast"
+        "alert",
+        "announcement",
+        "audio",
+        "loudspeaker",
+        "media",
+        "megaphone",
+        "multimedia",
+        "notification",
+        "speaker",
+        "voice"
       ]
     },
     {
       "name": "calendar-date",
+      "category": "features",
       "tags": [
+        "appointment",
         "calendar",
-        "date"
+        "date",
+        "day",
+        "event",
+        "grid",
+        "holidays",
+        "month",
+        "plan",
+        "planning",
+        "schedule",
+        "time",
+        "timetable",
+        "year"
       ]
     },
     {
       "name": "calendar-schedule",
+      "category": "actions",
       "tags": [
+        "alarm",
+        "appointment",
         "calendar",
-        "schedule"
+        "event",
+        "hours",
+        "opening",
+        "schedule",
+        "time",
+        "times"
       ]
     },
     {
       "name": "calendar-simple",
+      "category": "actions",
       "tags": [
+        "appointment",
         "calendar",
-        "simple"
+        "date",
+        "day",
+        "even",
+        "month",
+        "plan",
+        "planning",
+        "schedule",
+        "time",
+        "timetable",
+        "year"
       ]
     },
     {
       "name": "card-amex",
+      "category": "payment-methods",
       "tags": [
         "amex",
         "card"
@@ -208,6 +437,7 @@
     },
     {
       "name": "card-android-card",
+      "category": "payment-methods",
       "tags": [
         "android",
         "card",
@@ -216,6 +446,7 @@
     },
     {
       "name": "card-apple-card",
+      "category": "payment-methods",
       "tags": [
         "apple",
         "card",
@@ -224,6 +455,7 @@
     },
     {
       "name": "card-credit-card",
+      "category": "payment-methods",
       "tags": [
         "card",
         "card",
@@ -232,6 +464,7 @@
     },
     {
       "name": "card-diners-club",
+      "category": "payment-methods",
       "tags": [
         "card",
         "club",
@@ -240,6 +473,7 @@
     },
     {
       "name": "card-discover",
+      "category": "payment-methods",
       "tags": [
         "card",
         "discover"
@@ -247,6 +481,7 @@
     },
     {
       "name": "card-mastercard",
+      "category": "payment-methods",
       "tags": [
         "card",
         "mastercard"
@@ -254,6 +489,7 @@
     },
     {
       "name": "card-paypal",
+      "category": "payment-methods",
       "tags": [
         "card",
         "paypal"
@@ -261,6 +497,7 @@
     },
     {
       "name": "card-stripe",
+      "category": "payment-methods",
       "tags": [
         "card",
         "stripe"
@@ -268,6 +505,7 @@
     },
     {
       "name": "card-update",
+      "category": "site-settings",
       "tags": [
         "card",
         "update"
@@ -275,6 +513,7 @@
     },
     {
       "name": "card-visa",
+      "category": "payment-methods",
       "tags": [
         "card",
         "visa"
@@ -282,60 +521,137 @@
     },
     {
       "name": "caret-down",
+      "category": "actions",
       "tags": [
-        "caret",
-        "down"
+        "arrow",
+        "bottom",
+        "descent",
+        "down",
+        "downward"
       ]
     },
     {
       "name": "caret-left",
+      "category": "actions",
       "tags": [
-        "caret",
-        "left"
+        "arrow",
+        "back",
+        "backward",
+        "backwards",
+        "direction",
+        "keyboard",
+        "left",
+        "move",
+        "navigation",
+        "out",
+        "position",
+        "previous"
       ]
     },
     {
       "name": "caret-right",
+      "category": "actions",
       "tags": [
-        "caret",
+        "arrow",
+        "direction",
+        "forward",
+        "keyboard",
+        "move",
+        "navigation",
+        "next",
+        "onward",
+        "onwards",
+        "out",
+        "position",
         "right"
       ]
     },
     {
       "name": "caret-up",
+      "category": "actions",
       "tags": [
-        "caret",
-        "up"
+        "arrow",
+        "direction",
+        "keyboard",
+        "move",
+        "navigation",
+        "out",
+        "position",
+        "top",
+        "up",
+        "upward",
+        "upwards"
       ]
     },
     {
       "name": "cart",
+      "category": "features",
       "tags": [
-        "cart"
+        "bag",
+        "basket",
+        "but",
+        "cart",
+        "checkout",
+        "ecommerce",
+        "retail",
+        "sale",
+        "shop",
+        "shopping",
+        "trolley"
       ]
     },
     {
       "name": "cart-add",
+      "category": "features",
       "tags": [
         "add",
-        "cart"
+        "bag",
+        "basket",
+        "but",
+        "cart",
+        "checkout",
+        "ecommerce",
+        "new",
+        "plus",
+        "retail",
+        "sale",
+        "shop",
+        "shopping",
+        "trolley"
       ]
     },
     {
       "name": "check",
+      "category": "actions",
       "tags": [
-        "check"
+        "accept",
+        "approve",
+        "approved",
+        "check",
+        "checkbox",
+        "checked",
+        "checkmark",
+        "complete",
+        "completed",
+        "done",
+        "mark",
+        "ok",
+        "select",
+        "selected",
+        "success",
+        "tick"
       ]
     },
     {
       "name": "check-circle",
+      "category": "dialogues",
       "tags": [
-        "check",
-        "circle"
+        "sage-icon-check-circle"
       ]
     },
     {
       "name": "check-circle-filled",
+      "category": "dialogues",
       "tags": [
         "check",
         "circle",
@@ -344,118 +660,196 @@
     },
     {
       "name": "circle-1",
+      "category": "number",
       "tags": [
-        "1",
-        "circle"
+        "sage-icon-one"
       ]
     },
     {
       "name": "circle-2",
+      "category": "number",
       "tags": [
-        "2",
-        "circle"
+        "sage-icon-two"
       ]
     },
     {
       "name": "circle-3",
+      "category": "number",
       "tags": [
-        "3",
-        "circle"
+        "sage-icon-three"
       ]
     },
     {
       "name": "circle-4",
+      "category": "number",
       "tags": [
-        "4",
-        "circle"
+        "sage-icon-four"
       ]
     },
     {
       "name": "circle-5",
+      "category": "number",
       "tags": [
-        "5",
-        "circle"
+        "sage-icon-five"
       ]
     },
     {
       "name": "circle-6",
+      "category": "number",
       "tags": [
-        "6",
-        "circle"
+        "sage-icon-six"
       ]
     },
     {
       "name": "circle-7",
+      "category": "number",
       "tags": [
-        "7",
-        "circle"
+        "sage-icon-seven"
       ]
     },
     {
       "name": "circle-8",
+      "category": "number",
       "tags": [
-        "8",
-        "circle"
+        "sage-icon-eight"
       ]
     },
     {
       "name": "circle-9",
+      "category": "number",
       "tags": [
-        "9",
-        "circle"
+        "sage-icon-nine"
       ]
     },
     {
       "name": "clock",
+      "category": "actions",
       "tags": [
-        "clock"
+        "alarm",
+        "alert",
+        "appointment",
+        "availability",
+        "available",
+        "clock",
+        "countdown",
+        "daily",
+        "day",
+        "deadline",
+        "event",
+        "hostory",
+        "hour",
+        "monthly",
+        "progress",
+        "schedule",
+        "time",
+        "timer",
+        "track",
+        "tracking",
+        "wait",
+        "watch",
+        "weekly",
+        "yearly"
       ]
     },
     {
       "name": "closed-captions",
+      "category": "actions",
       "tags": [
-        "captions",
-        "closed"
+        "accessibility",
+        "accessible",
+        "captioning",
+        "cc",
+        "closed",
+        "information",
+        "interpretive",
+        "subtitles",
+        "television",
+        "text"
       ]
     },
     {
       "name": "code",
+      "category": "text-editor",
       "tags": [
         "code"
       ]
     },
     {
       "name": "color",
+      "category": "text-editor",
       "tags": [
         "color"
       ]
     },
     {
       "name": "columns",
+      "category": "actions",
       "tags": [
         "columns"
       ]
     },
     {
       "name": "comment",
+      "category": "features",
       "tags": [
-        "comment"
+        "answer",
+        "bubble",
+        "bubbles",
+        "chat",
+        "comment",
+        "comments",
+        "communication",
+        "conversation",
+        "dialog",
+        "forum",
+        "message",
+        "messages",
+        "reply",
+        "speaking",
+        "talk"
       ]
     },
     {
       "name": "connect",
+      "category": "features",
       "tags": [
-        "connect"
+        "attachment",
+        "chain",
+        "connection",
+        "connections",
+        "hyperlink",
+        "link",
+        "linked",
+        "links",
+        "share",
+        "url",
+        "web"
       ]
     },
     {
       "name": "contact",
+      "category": "features",
       "tags": [
-        "contact"
+        "access",
+        "badge",
+        "card",
+        "contact",
+        "document",
+        "human",
+        "identification",
+        "identity",
+        "login",
+        "man",
+        "member",
+        "profile",
+        "tag",
+        "user",
+        "users"
       ]
     },
     {
       "name": "contacts-filled",
+      "category": "navigation",
       "tags": [
         "contacts",
         "filled"
@@ -463,37 +857,110 @@
     },
     {
       "name": "contacts-outline",
+      "category": "navigation",
       "tags": [
-        "contacts",
-        "outline"
+        "sage-icon-user-circle"
       ]
     },
     {
       "name": "conversation",
+      "category": "actions",
       "tags": [
-        "conversation"
+        "bubble",
+        "bubbles",
+        "chat",
+        "comment",
+        "comments",
+        "communication",
+        "conversation",
+        "dialog",
+        "forum",
+        "message",
+        "messages",
+        "speaking",
+        "talk"
       ]
     },
     {
       "name": "copy",
+      "category": "actions",
       "tags": [
-        "copy"
+        "backup",
+        "clone",
+        "copies",
+        "copy",
+        "document",
+        "duplicate",
+        "file",
+        "files",
+        "group",
+        "layer",
+        "layers",
+        "note",
+        "paper",
+        "paste",
+        "report",
+        "separate",
+        "split",
+        "ungroup"
       ]
     },
     {
       "name": "coupon",
+      "category": "features",
       "tags": [
-        "coupon"
+        "coupon",
+        "deal",
+        "discount",
+        "ecommerce",
+        "offer",
+        "reduction",
+        "sale",
+        "shop",
+        "shopping",
+        "ticket"
       ]
     },
     {
       "name": "course",
+      "category": "features",
       "tags": [
-        "course"
+        "app",
+        "boxes",
+        "browser",
+        "content",
+        "description",
+        "design",
+        "development",
+        "document",
+        "grid",
+        "header",
+        "image",
+        "internet",
+        "layout",
+        "list",
+        "masonry",
+        "mockup",
+        "page",
+        "paragraph",
+        "photo",
+        "picture",
+        "sidebar",
+        "site",
+        "tab",
+        "table",
+        "text",
+        "tile",
+        "view",
+        "web",
+        "webpage",
+        "website",
+        "wireframe"
       ]
     },
     {
       "name": "credit-card",
+      "category": "site-settings",
       "tags": [
         "card",
         "credit"
@@ -501,25 +968,47 @@
     },
     {
       "name": "custom-field",
+      "category": "actions",
       "tags": [
-        "custom",
-        "field"
+        "bookmarks",
+        "collection",
+        "favorite",
+        "favourites",
+        "group",
+        "list",
+        "star",
+        "watchlist"
       ]
     },
     {
       "name": "customize",
+      "category": "actions",
       "tags": [
-        "customize"
+        "art",
+        "artist",
+        "brush",
+        "color",
+        "colors",
+        "design",
+        "draw",
+        "paint",
+        "painter",
+        "painting",
+        "palette",
+        "swatches",
+        "tool"
       ]
     },
     {
       "name": "danger",
+      "category": "dialogues",
       "tags": [
-        "danger"
+        "sage-icons-danger"
       ]
     },
     {
       "name": "danger-filled",
+      "category": "dialogues",
       "tags": [
         "danger",
         "filled"
@@ -527,6 +1016,7 @@
     },
     {
       "name": "dashboard-filled",
+      "category": "navigation",
       "tags": [
         "dashboard",
         "filled"
@@ -534,118 +1024,320 @@
     },
     {
       "name": "dashboard-outline",
+      "category": "navigation",
       "tags": [
+        "address",
+        "apartment",
+        "building",
         "dashboard",
-        "outline"
+        "estate",
+        "home",
+        "homepage",
+        "house",
+        "office"
       ]
     },
     {
       "name": "delete-circle",
+      "category": "actions",
       "tags": [
-        "circle",
-        "delete"
+        "cancel",
+        "close",
+        "decrease",
+        "delete",
+        "deletion",
+        "exit",
+        "less",
+        "minus",
+        "removal",
+        "remove",
+        "subtract"
       ]
     },
     {
       "name": "delete-key",
+      "category": "actions",
       "tags": [
+        "arrow",
+        "back",
+        "backward",
         "delete",
-        "key"
+        "direction",
+        "key",
+        "keyboard",
+        "left",
+        "previous",
+        "remove"
       ]
     },
     {
       "name": "delete-x",
+      "category": "actions",
       "tags": [
+        "arrow",
+        "back",
+        "backward",
+        "cross",
         "delete",
-        "x"
+        "direction",
+        "key",
+        "keyboard",
+        "left",
+        "previous",
+        "remove"
       ]
     },
     {
       "name": "dollar-sign",
+      "category": "actions",
       "tags": [
+        "business",
+        "cash",
+        "currency",
         "dollar",
-        "sign"
+        "finance",
+        "funding",
+        "investment",
+        "money",
+        "shopping"
       ]
     },
     {
       "name": "dot-menu-horizontal",
+      "category": "actions",
       "tags": [
+        "circle",
+        "circles",
         "dot",
-        "horizontal",
-        "menu"
+        "dot",
+        "dots",
+        "gallery",
+        "interface",
+        "list",
+        "menu",
+        "more",
+        "navigation",
+        "options",
+        "overflow",
+        "settings"
       ]
     },
     {
       "name": "down-small",
+      "category": "actions",
       "tags": [
+        "arrow",
+        "bottom",
+        "descend",
         "down",
-        "small"
+        "downward"
       ]
     },
     {
       "name": "download",
+      "category": "actions",
       "tags": [
-        "download"
+        "arrow",
+        "bottom",
+        "data",
+        "descend",
+        "down",
+        "download",
+        "downward",
+        "export",
+        "file",
+        "input",
+        "save",
+        "share",
+        "storage",
+        "transfer"
       ]
     },
     {
       "name": "downsell",
+      "category": "actions",
       "tags": [
-        "downsell"
+        "arrow",
+        "corner",
+        "direction",
+        "keyboard",
+        "move",
+        "navigation",
+        "next",
+        "out",
+        "position",
+        "right"
       ]
     },
     {
       "name": "draft",
+      "category": "features",
       "tags": [
-        "draft"
+        "article",
+        "blog",
+        "content",
+        "document",
+        "draft",
+        "file",
+        "folded",
+        "folder",
+        "item",
+        "letter",
+        "note",
+        "page",
+        "paper",
+        "post",
+        "report",
+        "sheet",
+        "single",
+        "text"
       ]
     },
     {
       "name": "drop",
+      "category": "features",
       "tags": [
-        "drop"
+        "animal",
+        "blood",
+        "drip",
+        "dripping",
+        "drop",
+        "droplet",
+        "energy",
+        "environment",
+        "health",
+        "healthcare",
+        "humid",
+        "ink",
+        "liquid",
+        "medical",
+        "nature",
+        "oil",
+        "petroleum",
+        "rain",
+        "tear",
+        "water",
+        "weather",
+        "wet"
       ]
     },
     {
       "name": "duplicate",
+      "category": "actions",
       "tags": [
-        "duplicate"
+        "content",
+        "copy",
+        "document",
+        "documents",
+        "draft",
+        "duplicate",
+        "file",
+        "files",
+        "folder",
+        "group",
+        "item",
+        "letter",
+        "note",
+        "page",
+        "paper",
+        "report",
+        "sheet",
+        "single",
+        "text"
       ]
     },
     {
       "name": "email-activity",
+      "category": "actions",
       "tags": [
-        "activity",
-        "email"
+        "business",
+        "chart",
+        "computer",
+        "finance",
+        "graph",
+        "laptop",
+        "progress"
+      ]
+    },
+    {
+      "name": "emoji",
+      "category": "actions",
+      "tags": [
+        "cheerful",
+        "emoticon",
+        "happy",
+        "laugh",
+        "mouth",
+        "open",
+        "positive",
+        "smile",
+        "smiley"
       ]
     },
     {
       "name": "enlarge",
+      "category": "actions",
       "tags": [
-        "enlarge"
-      ]
-    },
-    {
-      "name": "enlarge-vertical",
-      "tags": [
+        "arrow",
+        "arrows",
+        "direction",
+        "down",
         "enlarge",
+        "expand",
+        "increase",
+        "maximize",
+        "select",
+        "up",
         "vertical"
       ]
     },
     {
-      "name": "expand",
+      "name": "enlarge-vertical",
+      "category": "actions",
       "tags": [
-        "expand"
+        "arrow",
+        "direction",
+        "enlarge",
+        "expand",
+        "fullscreen",
+        "increase",
+        "maximize",
+        "move",
+        "out",
+        "reach",
+        "vertical",
+        "window",
+        "zoom"
+      ]
+    },
+    {
+      "name": "expand",
+      "category": "actions",
+      "tags": [
+        "arrow",
+        "disperse",
+        "enlarge",
+        "expand",
+        "fullscreen",
+        "increase",
+        "maximize",
+        "move",
+        "out",
+        "reach",
+        "window",
+        "zoom"
       ]
     },
     {
       "name": "facebook",
+      "category": "social",
       "tags": [
         "facebook"
       ]
     },
     {
       "name": "facebook-2",
+      "category": "social",
       "tags": [
         "2",
         "facebook"
@@ -653,24 +1345,69 @@
     },
     {
       "name": "favorite",
+      "category": "actions",
       "tags": [
-        "favorite"
+        "award",
+        "dating",
+        "day",
+        "favorite",
+        "favourite",
+        "health",
+        "healthcare",
+        "heart",
+        "like",
+        "love",
+        "medical",
+        "relationship",
+        "romance",
+        "romantic",
+        "valentine",
+        "wishlist"
       ]
     },
     {
       "name": "feedback",
+      "category": "features",
       "tags": [
-        "feedback"
+        "bubble",
+        "chat",
+        "comment",
+        "customer",
+        "feedback",
+        "message",
+        "opinion",
+        "rating",
+        "review",
+        "talk"
       ]
     },
     {
       "name": "file",
+      "category": "actions",
       "tags": [
-        "file"
+        "article",
+        "blog",
+        "content",
+        "document",
+        "draft",
+        "file",
+        "folded",
+        "folder",
+        "item",
+        "letter",
+        "note",
+        "page",
+        "paper",
+        "post",
+        "report",
+        "sheet",
+        "single",
+        "text"
       ]
     },
     {
       "name": "file-money",
+      "category": "site-settings",
       "tags": [
         "file",
         "money"
@@ -678,90 +1415,205 @@
     },
     {
       "name": "filter",
+      "category": "actions",
       "tags": [
-        "filter"
+        "categories",
+        "category",
+        "filter",
+        "filtering",
+        "filters",
+        "funnel",
+        "refine",
+        "search",
+        "seo",
+        "settings",
+        "sort",
+        "tool"
       ]
     },
     {
       "name": "flag",
+      "category": "dialogues",
       "tags": [
         "flag"
       ]
     },
     {
       "name": "folder",
+      "category": "features",
       "tags": [
-        "folder"
+        "archive",
+        "catalog",
+        "document",
+        "documents",
+        "envelope",
+        "file",
+        "files",
+        "folder",
+        "format",
+        "office",
+        "paper"
       ]
     },
     {
       "name": "folder-group",
+      "category": "features",
       "tags": [
+        "archive",
+        "catalog",
+        "document",
+        "documents",
+        "envelope",
+        "file",
+        "files",
         "folder",
-        "group"
+        "folders",
+        "format",
+        "office",
+        "paper"
       ]
     },
     {
       "name": "form",
+      "category": "actions",
       "tags": [
-        "form"
+        "article",
+        "blog",
+        "clipboard",
+        "content",
+        "document",
+        "draft",
+        "file",
+        "folded",
+        "folder",
+        "item",
+        "letter",
+        "note",
+        "notebook",
+        "notepad",
+        "notes",
+        "pad",
+        "page",
+        "paper",
+        "post",
+        "report",
+        "sheet",
+        "single",
+        "text"
       ]
     },
     {
       "name": "form-field",
+      "category": "features",
       "tags": [
-        "field",
-        "form"
+        "backup",
+        "cloud",
+        "data",
+        "ftp",
+        "hosting",
+        "rack",
+        "server",
+        "storage",
+        "sync"
       ]
     },
     {
       "name": "fullscreen",
+      "category": "text-editor",
       "tags": [
         "fullscreen"
       ]
     },
     {
       "name": "funnel",
+      "category": "features",
       "tags": [
-        "funnel"
+        "categories",
+        "category",
+        "filter",
+        "filtering",
+        "filters",
+        "funnel",
+        "interface",
+        "refine",
+        "search",
+        "seo",
+        "settings",
+        "sort",
+        "tool",
+        "ui"
       ]
     },
     {
       "name": "grant-offer",
+      "category": "actions",
       "tags": [
-        "grant",
-        "offer"
+        "box",
+        "christmas",
+        "exchange",
+        "gift",
+        "gift",
+        "holidays",
+        "package",
+        "present"
       ]
     },
     {
       "name": "handle",
+      "category": "actions",
       "tags": [
-        "handle"
+        "bars",
+        "grab",
+        "grabber",
+        "handle",
+        "lines",
+        "list",
+        "menu",
+        "options"
       ]
     },
     {
       "name": "handle-2",
+      "category": "actions",
       "tags": [
-        "2",
-        "handle"
+        "dots",
+        "grab",
+        "grabber",
+        "handle",
+        "menu",
+        "options"
       ]
     },
     {
       "name": "handle-2-vertical",
+      "category": "actions",
       "tags": [
-        "2",
+        "dots",
+        "grab",
+        "grabber",
         "handle",
-        "vertical"
+        "menu",
+        "options"
       ]
     },
     {
       "name": "hashtag",
+      "category": "actions",
       "tags": [
-        "hashtag"
+        "hash",
+        "hashtag",
+        "href",
+        "link",
+        "mark",
+        "number",
+        "pound",
+        "sign",
+        "trending"
       ]
     },
     {
       "name": "heading-large",
+      "category": "text-editor",
       "tags": [
         "heading",
         "large"
@@ -769,6 +1621,7 @@
     },
     {
       "name": "heading-small",
+      "category": "text-editor",
       "tags": [
         "heading",
         "small"
@@ -776,12 +1629,29 @@
     },
     {
       "name": "headset",
+      "category": "features",
       "tags": [
-        "headset"
+        "answer",
+        "audio",
+        "communication",
+        "conversation",
+        "customer",
+        "dialog",
+        "headphone",
+        "headphones",
+        "headset",
+        "help",
+        "listen",
+        "service",
+        "speaking",
+        "support",
+        "talk",
+        "tech"
       ]
     },
     {
       "name": "help-filled",
+      "category": "navigation",
       "tags": [
         "filled",
         "help"
@@ -789,6 +1659,7 @@
     },
     {
       "name": "help-outline",
+      "category": "navigation",
       "tags": [
         "help",
         "outline"
@@ -796,6 +1667,7 @@
     },
     {
       "name": "home-alt",
+      "category": "site-settings",
       "tags": [
         "alt",
         "home"
@@ -803,6 +1675,7 @@
     },
     {
       "name": "horizontal-line",
+      "category": "text-editor",
       "tags": [
         "horizontal",
         "line"
@@ -810,12 +1683,25 @@
     },
     {
       "name": "image",
+      "category": "actions",
       "tags": [
-        "image"
+        "album",
+        "canvas",
+        "format",
+        "gallery",
+        "graphic",
+        "image",
+        "landscape",
+        "media",
+        "multimedia",
+        "photo",
+        "photography",
+        "picture"
       ]
     },
     {
       "name": "info-circle-filled",
+      "category": "dialogues",
       "tags": [
         "circle",
         "filled",
@@ -824,18 +1710,21 @@
     },
     {
       "name": "instagram",
+      "category": "social",
       "tags": [
         "instagram"
       ]
     },
     {
       "name": "italic",
+      "category": "text-editor",
       "tags": [
         "italic"
       ]
     },
     {
       "name": "kajabi-filled",
+      "category": "site-settings",
       "tags": [
         "filled",
         "kajabi"
@@ -843,6 +1732,7 @@
     },
     {
       "name": "kajabi-outlined",
+      "category": "site-settings",
       "tags": [
         "kajabi",
         "outlined"
@@ -850,6 +1740,7 @@
     },
     {
       "name": "kajabi-payments",
+      "category": "payment-methods",
       "tags": [
         "kajabi",
         "payments"
@@ -857,45 +1748,116 @@
     },
     {
       "name": "lab",
+      "category": "features",
       "tags": [
-        "lab"
+        "beaker",
+        "chemical",
+        "drug",
+        "education",
+        "equipment",
+        "experiment",
+        "flask",
+        "glass",
+        "healthcare",
+        "laboratory",
+        "medical",
+        "research",
+        "school",
+        "science",
+        "study",
+        "test",
+        "tube"
       ]
     },
     {
       "name": "launch",
+      "category": "actions",
       "tags": [
-        "launch"
+        "arrow",
+        "connection",
+        "export",
+        "file",
+        "launch",
+        "network",
+        "outbox",
+        "output",
+        "share",
+        "sharing",
+        "social",
+        "start",
+        "storage",
+        "transfer",
+        "up",
+        "upload"
       ]
     },
     {
       "name": "layout-grid",
+      "category": "actions",
       "tags": [
+        "boxes",
+        "column",
+        "gallery",
         "grid",
-        "layout"
+        "layout",
+        "row",
+        "shape",
+        "square",
+        "squares",
+        "table",
+        "tile",
+        "view"
       ]
     },
     {
       "name": "layout-list",
+      "category": "actions",
       "tags": [
+        "bars",
+        "content",
+        "description",
+        "document",
         "layout",
-        "list"
+        "lines",
+        "list",
+        "listing",
+        "organize",
+        "page",
+        "paragraph",
+        "tasks",
+        "text",
+        "text",
+        "todo"
       ]
     },
     {
       "name": "left-small",
+      "category": "actions",
       "tags": [
+        "arrow",
+        "back",
+        "backward",
+        "backwards",
+        "direction",
+        "keyboard",
         "left",
-        "small"
+        "move",
+        "navigation",
+        "out",
+        "position",
+        "previous"
       ]
     },
     {
       "name": "linkedin",
+      "category": "social",
       "tags": [
         "linkedin"
       ]
     },
     {
       "name": "list-bullet",
+      "category": "text-editor",
       "tags": [
         "bullet",
         "list"
@@ -903,6 +1865,7 @@
     },
     {
       "name": "list-numbers",
+      "category": "text-editor",
       "tags": [
         "list",
         "numbers"
@@ -910,18 +1873,45 @@
     },
     {
       "name": "location",
+      "category": "features",
       "tags": [
-        "location"
+        "direction",
+        "gps",
+        "location",
+        "map",
+        "marker",
+        "navigation",
+        "pin",
+        "pin",
+        "place",
+        "position"
       ]
     },
     {
       "name": "lock",
+      "category": "features",
       "tags": [
-        "lock"
+        "closed",
+        "encryption",
+        "lock",
+        "locked",
+        "login",
+        "padlock",
+        "password",
+        "policy",
+        "privacy",
+        "protect",
+        "protected",
+        "protection",
+        "safe",
+        "safety",
+        "secure",
+        "security"
       ]
     },
     {
       "name": "lock-alt",
+      "category": "site-settings",
       "tags": [
         "alt",
         "lock"
@@ -929,24 +1919,70 @@
     },
     {
       "name": "loop",
+      "category": "actions",
       "tags": [
-        "loop"
+        "arrow",
+        "arrows",
+        "infinite",
+        "infinity",
+        "load",
+        "loading",
+        "loop",
+        "process",
+        "refresh",
+        "reload",
+        "repeat",
+        "replay",
+        "sync",
+        "update"
       ]
     },
     {
       "name": "mail",
+      "category": "features",
       "tags": [
-        "mail"
+        "communication",
+        "contact",
+        "email",
+        "envelope",
+        "letter",
+        "mail",
+        "mailbox",
+        "message",
+        "messages",
+        "news",
+        "newsletter",
+        "post",
+        "send",
+        "write"
       ]
     },
     {
       "name": "mapped",
+      "category": "features",
       "tags": [
-        "mapped"
+        "address",
+        "approved",
+        "check",
+        "checked",
+        "complete",
+        "completed",
+        "direction",
+        "done",
+        "gps",
+        "location",
+        "map",
+        "mark",
+        "navigation",
+        "position",
+        "route",
+        "street",
+        "tick"
       ]
     },
     {
       "name": "margin-left",
+      "category": "text-editor",
       "tags": [
         "left",
         "margin"
@@ -954,6 +1990,7 @@
     },
     {
       "name": "margin-right",
+      "category": "text-editor",
       "tags": [
         "margin",
         "right"
@@ -961,6 +1998,7 @@
     },
     {
       "name": "marketing-filled",
+      "category": "navigation",
       "tags": [
         "filled",
         "marketing"
@@ -968,6 +2006,7 @@
     },
     {
       "name": "marketing-outline",
+      "category": "navigation",
       "tags": [
         "marketing",
         "outline"
@@ -975,12 +2014,23 @@
     },
     {
       "name": "menu",
+      "category": "actions",
       "tags": [
-        "menu"
+        "bars",
+        "burger",
+        "gallery",
+        "hamburger",
+        "lines",
+        "list",
+        "menu",
+        "navigation",
+        "options",
+        "settings"
       ]
     },
     {
       "name": "menu-2",
+      "category": "site-settings",
       "tags": [
         "2",
         "menu"
@@ -988,80 +2038,168 @@
     },
     {
       "name": "menu-alt",
+      "category": "actions",
       "tags": [
-        "alt",
-        "menu"
+        "bars",
+        "burger",
+        "gallery",
+        "hamburger",
+        "lines",
+        "list",
+        "menu",
+        "navigation",
+        "options",
+        "settings"
       ]
     },
     {
       "name": "merge",
+      "category": "actions",
       "tags": [
-        "merge"
+        "arrow",
+        "combine",
+        "control",
+        "direction",
+        "expand",
+        "git",
+        "join",
+        "merge",
+        "pointing",
+        "together",
+        "unify",
+        "unite",
+        "version"
       ]
     },
     {
       "name": "microphone",
+      "category": "features",
       "tags": [
-        "microphone"
+        "audio",
+        "media",
+        "mic",
+        "microphone",
+        "multimedia",
+        "speaker"
       ]
     },
     {
       "name": "microphone-off",
+      "category": "actions",
       "tags": [
+        "audio",
+        "media",
+        "mic",
         "microphone",
-        "off"
+        "multimedia",
+        "mute",
+        "off",
+        "speaker"
       ]
     },
     {
       "name": "move-left",
+      "category": "actions",
       "tags": [
+        "arrow",
+        "back",
+        "backward",
+        "backwards",
+        "direction",
+        "keyboard",
         "left",
-        "move"
+        "move",
+        "navigation",
+        "out",
+        "position",
+        "previous"
       ]
     },
     {
       "name": "move-right",
+      "category": "actions",
       "tags": [
+        "arrow",
+        "direction",
+        "forward",
+        "keyboard",
         "move",
+        "navigation",
+        "next",
+        "onward",
+        "onwards",
+        "out",
+        "position",
         "right"
       ]
     },
     {
       "name": "multi-pay",
+      "category": "actions",
       "tags": [
-        "multi",
-        "pay"
+        "banknotes",
+        "business",
+        "cash",
+        "dollar",
+        "finance",
+        "money",
+        "payment"
       ]
     },
     {
       "name": "newsletter",
+      "category": "site-settings",
       "tags": [
         "newsletter"
       ]
     },
     {
       "name": "one-off-session",
+      "category": "features",
       "tags": [
-        "off",
-        "one",
-        "session"
+        "sage-icon-session"
       ]
     },
     {
       "name": "one-time",
+      "category": "actions",
       "tags": [
-        "one",
-        "time"
+        "banknotes",
+        "business",
+        "cash",
+        "dollar",
+        "finance",
+        "money",
+        "payment"
       ]
     },
     {
       "name": "package",
+      "category": "features",
       "tags": [
-        "package"
+        "backup",
+        "clone",
+        "copies",
+        "copy",
+        "document",
+        "duplicate",
+        "file",
+        "files",
+        "group",
+        "layer",
+        "layers",
+        "note",
+        "paper",
+        "paste",
+        "report",
+        "separate",
+        "split",
+        "ungroup"
       ]
     },
     {
       "name": "partners-filled",
+      "category": "navigation",
       "tags": [
         "filled",
         "partners"
@@ -1069,44 +2207,89 @@
     },
     {
       "name": "partners-outline",
+      "category": "navigation",
       "tags": [
-        "outline",
-        "partners"
+        "sage-icon-user-star"
       ]
     },
     {
       "name": "pause",
+      "category": "actions",
       "tags": [
+        "button",
+        "control",
+        "multimedia",
         "pause"
       ]
     },
     {
       "name": "payout",
+      "category": "features",
       "tags": [
-        "payout"
+        "business",
+        "cash",
+        "currency",
+        "dollar",
+        "dollar",
+        "finance",
+        "funding",
+        "investment",
+        "money",
+        "shopping"
       ]
     },
     {
       "name": "paypal",
+      "category": "payment-methods",
       "tags": [
         "paypal"
       ]
     },
     {
       "name": "pen",
+      "category": "actions",
       "tags": [
-        "pen"
+        "compose",
+        "create",
+        "design",
+        "development",
+        "draft",
+        "draw",
+        "edit",
+        "editing",
+        "editor",
+        "education",
+        "message",
+        "note",
+        "pen",
+        "pencil",
+        "school",
+        "text",
+        "write"
       ]
     },
     {
       "name": "phone-portrait",
+      "category": "actions",
       "tags": [
+        "android",
+        "call",
+        "communication",
+        "device",
+        "iOS",
+        "iPhone",
+        "mobile",
         "phone",
-        "portrait"
+        "smartphone",
+        "tech",
+        "technology",
+        "telephone",
+        "touchscreen"
       ]
     },
     {
       "name": "phone-toolbar",
+      "category": "site-settings",
       "tags": [
         "phone",
         "toolbar"
@@ -1114,281 +2297,647 @@
     },
     {
       "name": "play",
+      "category": "actions",
       "tags": [
+        "button",
+        "control",
+        "media",
+        "multimedia",
         "play"
       ]
     },
     {
       "name": "play-circle",
+      "category": "actions",
       "tags": [
-        "circle",
+        "button",
+        "control",
+        "media",
+        "multimedia",
         "play"
       ]
     },
     {
       "name": "play-outline",
+      "category": "actions",
       "tags": [
-        "outline",
+        "button",
+        "control",
+        "media",
+        "multimedia",
         "play"
       ]
     },
     {
       "name": "plug",
+      "category": "site-settings",
       "tags": [
         "plug"
       ]
     },
     {
       "name": "present",
+      "category": "features",
       "tags": [
-        "present"
+        "birthday",
+        "box",
+        "christmas",
+        "donation",
+        "exchange",
+        "gift",
+        "package",
+        "present",
+        "shopping",
+        "surprise",
+        "wrapped"
       ]
     },
     {
       "name": "preview-off",
+      "category": "actions",
       "tags": [
-        "off",
-        "preview"
+        "blind",
+        "disabled",
+        "eye",
+        "hidden",
+        "hide",
+        "invisible",
+        "look",
+        "observe",
+        "overview",
+        "preview",
+        "search",
+        "see",
+        "sight",
+        "view",
+        "visibility",
+        "visible",
+        "vision",
+        "watch"
       ]
     },
     {
       "name": "preview-on",
+      "category": "actions",
       "tags": [
-        "on",
-        "preview"
+        "eye",
+        "look",
+        "observe",
+        "overview",
+        "preview",
+        "search",
+        "see",
+        "sight",
+        "view",
+        "visibility",
+        "visible",
+        "vision",
+        "watch"
       ]
     },
     {
       "name": "products-filled",
+      "category": "navigation",
       "tags": [
-        "filled",
-        "products"
+        "block",
+        "box",
+        "component",
+        "cube",
+        "delivery",
+        "geometry",
+        "module",
+        "note",
+        "package",
+        "parcel",
+        "product",
+        "shape"
       ]
     },
     {
       "name": "products-outline",
+      "category": "navigation",
       "tags": [
-        "outline",
-        "products"
+        "block",
+        "box",
+        "component",
+        "cube",
+        "delivery",
+        "geometry",
+        "module",
+        "note",
+        "package",
+        "parcel",
+        "product",
+        "shape"
       ]
     },
     {
       "name": "question-circle",
+      "category": "dialogues",
       "tags": [
-        "circle",
-        "question"
+        "sage-icon-question-circle"
       ]
     },
     {
       "name": "quote",
+      "category": "text-editor",
       "tags": [
         "quote"
       ]
     },
     {
       "name": "redo",
+      "category": "text-editor",
       "tags": [
         "redo"
       ]
     },
     {
       "name": "refresh",
+      "category": "actions",
       "tags": [
-        "refresh"
+        "",
+        "arrow",
+        "arrows",
+        "infinite",
+        "infinity",
+        "load",
+        "loader",
+        "loading",
+        "loop",
+        "process",
+        "progress",
+        "refresh",
+        "reload",
+        "repeat",
+        "replay",
+        "spinner",
+        "sync",
+        "update",
+        "wait"
       ]
     },
     {
       "name": "remove",
+      "category": "actions",
       "tags": [
-        "remove"
+        "cancel",
+        "close",
+        "cross",
+        "delete",
+        "deletion",
+        "denied",
+        "discard",
+        "dismiss",
+        "exit",
+        "removal",
+        "remove",
+        "wrong"
       ]
     },
     {
       "name": "remove-circle",
+      "category": "actions",
       "tags": [
-        "circle",
-        "remove"
+        "cancel",
+        "close",
+        "cross",
+        "delete",
+        "deletion",
+        "denied",
+        "discard",
+        "dismiss",
+        "exit",
+        "removal",
+        "remove",
+        "wrong"
       ]
     },
     {
       "name": "rename",
+      "category": "actions",
       "tags": [
-        "rename"
+        "compose",
+        "create",
+        "design",
+        "development",
+        "draft",
+        "draw",
+        "edit",
+        "editing",
+        "editor",
+        "education",
+        "message",
+        "note",
+        "pen",
+        "pencil",
+        "school",
+        "text",
+        "write"
       ]
     },
     {
       "name": "reset-password",
+      "category": "actions",
       "tags": [
+        "clean",
+        "clear",
+        "lock",
         "password",
+        "remove",
         "reset"
       ]
     },
     {
       "name": "restore",
+      "category": "actions",
       "tags": [
-        "restore"
+        "arrow",
+        "back",
+        "backup",
+        "cloud",
+        "data",
+        "fix",
+        "machine",
+        "refresh",
+        "restore",
+        "revert",
+        "save",
+        "storage",
+        "time",
+        "up",
+        "watch"
       ]
     },
     {
       "name": "right-small",
+      "category": "actions",
       "tags": [
-        "right",
-        "small"
+        "arrow",
+        "direction",
+        "forward",
+        "keyboard",
+        "move",
+        "navigation",
+        "next",
+        "onward",
+        "onwards",
+        "out position",
+        "right"
       ]
     },
     {
       "name": "round-dollar",
+      "category": "features",
       "tags": [
+        "business",
+        "cashier",
+        "currency",
         "dollar",
-        "round"
+        "finance",
+        "money",
+        "shopping"
       ]
     },
     {
       "name": "rows",
+      "category": "actions",
       "tags": [
         "rows"
       ]
     },
     {
       "name": "sales-filled",
+      "category": "navigation",
       "tags": [
-        "filled",
-        "sales"
+        "attribute",
+        "category",
+        "discount",
+        "ecommerce",
+        "label",
+        "organize",
+        "price",
+        "sale",
+        "shopping",
+        "store",
+        "tag"
       ]
     },
     {
       "name": "sales-outline",
+      "category": "navigation",
       "tags": [
-        "outline",
-        "sales"
+        "attribute",
+        "category",
+        "discount",
+        "ecommerce",
+        "label",
+        "organize",
+        "price",
+        "sale",
+        "shopping",
+        "store",
+        "tag"
       ]
     },
     {
       "name": "screen-share-off",
+      "category": "actions",
       "tags": [
+        "arrow",
+        "computer",
+        "connection",
+        "device",
+        "disable",
+        "display",
+        "monitor",
+        "network",
         "off",
+        "pc",
+        "projection",
+        "projector",
         "screen",
-        "share"
+        "share",
+        "sharing"
       ]
     },
     {
       "name": "screen-share-on",
+      "category": "actions",
       "tags": [
-        "on",
+        "arrow",
+        "computer",
+        "connection",
+        "device",
+        "disable",
+        "display",
+        "monitor",
+        "network",
+        "pc",
+        "projection",
+        "projector",
         "screen",
-        "share"
+        "share",
+        "sharing"
       ]
     },
     {
       "name": "search",
+      "category": "actions",
       "tags": [
-        "search"
+        "explore",
+        "find",
+        "glass",
+        "lens",
+        "lookup",
+        "magnifier",
+        "magnify",
+        "magnifying",
+        "search",
+        "view",
+        "zoom"
       ]
     },
     {
       "name": "search-small",
+      "category": "actions",
       "tags": [
+        "explore",
+        "find",
+        "glass",
+        "lens",
+        "lookup",
+        "magnifier",
+        "magnify",
+        "magnifying",
         "search",
-        "small"
+        "view",
+        "zoom"
       ]
     },
     {
       "name": "send-message",
+      "category": "actions",
       "tags": [
+        "airplane",
+        "communication",
+        "contact",
+        "email",
+        "flight",
+        "fly",
+        "letter",
+        "mail",
         "message",
-        "send"
+        "messages",
+        "news",
+        "paper",
+        "plane",
+        "send",
+        "sending",
+        "write"
       ]
     },
     {
       "name": "sequences",
+      "category": "features",
       "tags": [
-        "sequences"
+        "sage-icon-sequences"
       ]
     },
     {
       "name": "settings-filled",
+      "category": "navigation",
       "tags": [
-        "filled",
-        "settings"
+        "adjust",
+        "adjustment",
+        "cog",
+        "cogwheel",
+        "configuration",
+        "configure",
+        "edit",
+        "filter",
+        "gear",
+        "option",
+        "options",
+        "setting",
+        "settings",
+        "setup",
+        "system",
+        "tolls",
+        "tool",
+        "wheel"
       ]
     },
     {
       "name": "settings-outline",
+      "category": "navigation",
       "tags": [
-        "outline",
-        "settings"
+        "adjust",
+        "adjustment",
+        "cog",
+        "cogwheel",
+        "configuration",
+        "configure",
+        "edit",
+        "filter",
+        "gear",
+        "option",
+        "options",
+        "setting",
+        "settings",
+        "setup",
+        "system",
+        "tolls",
+        "tool",
+        "wheel"
       ]
     },
     {
       "name": "share-arrow",
+      "category": "actions",
       "tags": [
         "arrow",
-        "share"
+        "connection",
+        "direction",
+        "forward",
+        "keyboard",
+        "move",
+        "navigation",
+        "next",
+        "onward",
+        "onwards",
+        "out",
+        "position",
+        "right",
+        "share",
+        "social"
       ]
     },
     {
       "name": "skipped",
+      "category": "features",
       "tags": [
-        "skipped"
+        "address",
+        "approved",
+        "cancel",
+        "check",
+        "checked",
+        "complete",
+        "completed",
+        "direction",
+        "done",
+        "gps",
+        "location",
+        "map",
+        "mark",
+        "navigation",
+        "position",
+        "route",
+        "street",
+        "tick"
       ]
     },
     {
       "name": "slash-divider",
+      "category": "actions",
       "tags": [
         "divider",
         "slash"
       ]
     },
-    {
+   {
       "name": "speaker",
+      "category": "site-settings",
       "tags": [
         "speaker"
       ]
     },
     {
       "name": "stack",
+      "category": "actions",
       "tags": [
-        "stack"
+        "archive",
+        "layer",
+        "layering",
+        "layers",
+        "order",
+        "overlay",
+        "sheet",
+        "sheets",
+        "stack",
+        "stackable",
+        "stacking"
       ]
     },
     {
       "name": "star",
+      "category": "actions",
       "tags": [
-        "star"
+        "achievement",
+        "best",
+        "bookmark",
+        "favorite",
+        "important",
+        "like",
+        "rank",
+        "rate",
+        "rating",
+        "scoring",
+        "star",
+        "win review",
+        "winner"
       ]
     },
     {
       "name": "stop",
+      "category": "actions",
       "tags": [
+        "button",
+        "control",
+        "multimedia",
         "stop"
       ]
     },
     {
       "name": "strikethrough",
+      "category": "text-editor",
       "tags": [
         "strikethrough"
       ]
     },
     {
       "name": "stripe",
+      "category": "payment-methods",
       "tags": [
         "stripe"
       ]
     },
     {
       "name": "subscript",
+      "category": "text-editor",
       "tags": [
         "subscript"
       ]
     },
     {
       "name": "subscriptions",
+      "category": "actions",
       "tags": [
-        "subscriptions"
+        "arrow",
+        "back",
+        "currency",
+        "dollar",
+        "exchange",
+        "money",
+        "payment",
+        "refund",
+        "refundable",
+        "revery"
       ]
     },
     {
       "name": "super-admin",
+      "category": "features",
       "tags": [
         "admin",
         "super"
@@ -1396,32 +2945,75 @@
     },
     {
       "name": "superscript",
+      "category": "text-editor",
       "tags": [
         "superscript"
       ]
     },
     {
       "name": "sync",
+      "category": "actions",
       "tags": [
-        "sync"
+        "arrow",
+        "arrows",
+        "energy",
+        "environment",
+        "exchange",
+        "infinite",
+        "infinity",
+        "load",
+        "loading",
+        "loop",
+        "process",
+        "refresh",
+        "reload",
+        "repeat",
+        "replay",
+        "sync",
+        "update"
       ]
     },
     {
       "name": "tablet-landscape",
+      "category": "actions",
       "tags": [
-        "landscape",
-        "tablet"
+        "amazon",
+        "book",
+        "device",
+        "ebook",
+        "ereader",
+        "iPad",
+        "kindle",
+        "mobile",
+        "read",
+        "reader",
+        "tablet",
+        "touch",
+        "touchscreen"
       ]
     },
     {
       "name": "tablet-portrait",
+      "category": "actions",
       "tags": [
-        "portrait",
-        "tablet"
+        "amazon",
+        "book",
+        "device",
+        "ebook",
+        "ereader",
+        "iPad",
+        "kindle",
+        "mobile",
+        "read",
+        "reader",
+        "tablet",
+        "touch",
+        "touchscreen"
       ]
     },
     {
       "name": "text-styles",
+      "category": "text-editor",
       "tags": [
         "styles",
         "text"
@@ -1429,80 +3021,200 @@
     },
     {
       "name": "theme-store",
+      "category": "features",
       "tags": [
-        "store",
-        "theme"
+        "commerce",
+        "commercial",
+        "ecommerce",
+        "food",
+        "home",
+        "mall",
+        "market",
+        "online",
+        "property",
+        "retail",
+        "retailer",
+        "shop",
+        "shopping",
+        "store"
       ]
     },
     {
       "name": "tiktok",
+      "category": "social",
       "tags": [
         "tiktok"
       ]
     },
     {
       "name": "trash",
+      "category": "actions",
       "tags": [
-        "trash"
+        "bin",
+        "delete",
+        "dump",
+        "garbage",
+        "rubbish",
+        "trash",
+        "trashcan",
+        "waste"
       ]
     },
     {
       "name": "twitter",
+      "category": "social",
       "tags": [
         "twitter"
       ]
     },
     {
       "name": "underline",
+      "category": "text-editor",
       "tags": [
         "underline"
       ]
     },
     {
       "name": "undo",
+      "category": "text-editor",
       "tags": [
         "undo"
       ]
     },
     {
       "name": "unlock",
+      "category": "features",
       "tags": [
-        "unlock"
+        "closed",
+        "encryption",
+        "lock",
+        "locked",
+        "login",
+        "padlock",
+        "password",
+        "policy",
+        "privacy",
+        "protect",
+        "protected",
+        "protection",
+        "safe",
+        "safety",
+        "secure",
+        "security",
+        "theft",
+        "unlock",
+        "unlocked",
+        "unsafe",
+        "unsecure"
       ]
     },
     {
       "name": "unmapped",
+      "category": "features",
       "tags": [
-        "unmapped"
+        "address",
+        "approved",
+        "check",
+        "checked",
+        "complete",
+        "completed",
+        "direction",
+        "done",
+        "edit",
+        "gps",
+        "location",
+        "map",
+        "mark",
+        "modify",
+        "navigation",
+        "position",
+        "route",
+        "street",
+        "tick"
       ]
     },
     {
       "name": "up-small",
+      "category": "actions",
       "tags": [
-        "small",
-        "up"
+        "arrow",
+        "direction",
+        "keyboard",
+        "move",
+        "navigation",
+        "out",
+        "position",
+        "top",
+        "up",
+        "upward",
+        "upwards"
       ]
     },
     {
       "name": "upload",
+      "category": "actions",
       "tags": [
-        "upload"
+        "arrow",
+        "backup",
+        "cloud",
+        "data",
+        "direction",
+        "file",
+        "ftp",
+        "hosting",
+        "import",
+        "input",
+        "save",
+        "server",
+        "share",
+        "storage",
+        "top",
+        "transfer",
+        "up",
+        "upload",
+        "upward"
       ]
     },
     {
       "name": "url",
+      "category": "actions",
       "tags": [
-        "url"
+        "chain",
+        "connection",
+        "connections",
+        "editing",
+        "hyperlink",
+        "link",
+        "linked",
+        "links",
+        "share",
+        "text",
+        "url",
+        "web"
       ]
     },
     {
       "name": "user",
+      "category": "actions",
       "tags": [
-        "user"
+        "account",
+        "avatar",
+        "contact",
+        "follower",
+        "friend",
+        "human",
+        "man",
+        "member",
+        "person",
+        "profile",
+        "user",
+        "users",
+        "woman"
       ]
     },
     {
       "name": "user-filled",
+      "category": "actions",
       "tags": [
         "filled",
         "user"
@@ -1510,12 +3222,29 @@
     },
     {
       "name": "users",
+      "category": "features",
       "tags": [
-        "users"
+        "account",
+        "avatar",
+        "contact",
+        "follower",
+        "friend",
+        "group",
+        "human",
+        "man",
+        "member",
+        "network",
+        "person",
+        "profile",
+        "team",
+        "user",
+        "users",
+        "woman"
       ]
     },
     {
       "name": "users-wm",
+      "category": "site-settings",
       "tags": [
         "users",
         "wm"
@@ -1523,26 +3252,43 @@
     },
     {
       "name": "video-off",
+      "category": "actions",
       "tags": [
+        "ban",
+        "camera",
+        "film",
+        "media",
+        "movie",
+        "not allowed",
         "off",
+        "play",
+        "show",
         "video"
       ]
     },
     {
       "name": "video-on",
+      "category": "actions",
       "tags": [
-        "on",
+        "camera",
+        "film",
+        "media",
+        "movie",
+        "play",
+        "show",
         "video"
       ]
     },
     {
       "name": "warning",
+      "category": "dialogues",
       "tags": [
-        "warning"
+        "sage-icon-warning"
       ]
     },
     {
       "name": "warning-filled",
+      "category": "dialogues",
       "tags": [
         "filled",
         "warning"
@@ -1550,20 +3296,47 @@
     },
     {
       "name": "website-filled",
+      "category": "navigation",
       "tags": [
-        "filled",
-        "website"
+        "apple",
+        "computer",
+        "desktop",
+        "device",
+        "display",
+        "imac",
+        "mac",
+        "monitor",
+        "pc",
+        "personal",
+        "screen",
+        "tech",
+        "technology",
+        "workstation"
       ]
     },
     {
       "name": "website-outline",
+      "category": "navigation",
       "tags": [
-        "outline",
-        "website"
+        "apple",
+        "computer",
+        "desktop",
+        "device",
+        "display",
+        "imac",
+        "mac",
+        "monitor",
+        "pc",
+        "personal",
+        "screen",
+        "tech",
+        "technology",
+        "workstation"
       ]
     },
     {
       "name": "window-paragraph",
+      "category": "site-settings",
       "tags": [
         "paragraph",
         "window"
@@ -1571,12 +3344,14 @@
     },
     {
       "name": "world",
+      "category": "site-settings",
       "tags": [
         "world"
       ]
     },
     {
       "name": "youtube",
+      "category": "social",
       "tags": [
         "youtube"
       ]
