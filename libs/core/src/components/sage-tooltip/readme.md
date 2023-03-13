@@ -7,12 +7,13 @@
 
 ## Properties
 
-| Property    | Attribute    | Description                                                        | Type                                                                                                                                                                 | Default     |
-| ----------- | ------------ | ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `content`   | `content`    | Content for the tooltip. If HTML is required, use the content slot | `""`                                                                                                                                                                 | `undefined` |
-| `hasArrow`  | `has-arrow`  | Determines whether or not the tooltip have an arrow                | `boolean`                                                                                                                                                            | `undefined` |
-| `isVisible` | `is-visible` | Determines whether or not the tooltip is visible                   | `boolean`                                                                                                                                                            | `false`     |
-| `placement` | `placement`  | Determines the preferred position of the tooltip                   | `"bottom" \| "bottom-end" \| "bottom-start" \| "left" \| "left-end" \| "left-start" \| "right" \| "right-end" \| "right-start" \| "top" \| "top-end" \| "top-start"` | `'top'`     |
+| Property      | Attribute      | Description                                                        | Type                                                                                                                                                                 | Default     |
+| ------------- | -------------- | ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `componentId` | `component-id` | Id used to reference the component                                 | `""`                                                                                                                                                                 | `undefined` |
+| `content`     | `content`      | Content for the tooltip. If HTML is required, use the content slot | `""`                                                                                                                                                                 | `undefined` |
+| `hasArrow`    | `has-arrow`    | Determines whether or not the tooltip have an arrow                | `boolean`                                                                                                                                                            | `undefined` |
+| `opened`      | `opened`       | Determines whether or not the tooltip is visible                   | `boolean`                                                                                                                                                            | `false`     |
+| `placement`   | `placement`    | Determines the preferred position of the tooltip                   | `"bottom" \| "bottom-end" \| "bottom-start" \| "left" \| "left-end" \| "left-start" \| "right" \| "right-end" \| "right-start" \| "top" \| "top-end" \| "top-start"` | `'top'`     |
 
 
 ## Events
@@ -56,10 +57,21 @@ Type: `Promise<void>`
 
 ## Shadow Parts
 
-| Part        | Description |
-| ----------- | ----------- |
-| `"arrow"`   |             |
-| `"content"` |             |
+| Part        | Description                                |
+| ----------- | ------------------------------------------ |
+| `"arrow"`   | The arrow attached to the tooltip content. |
+| `"content"` | The tooltip content.                       |
+| `"trigger"` | The tooltip trigger.                       |
+
+
+## CSS Custom Properties
+
+| Name            | Description                |
+| --------------- | -------------------------- |
+| `--background`  | Background of the tooltip  |
+| `--color`       | Text color of the tooltip  |
+| `--font-size`   | font-size of the tooltip   |
+| `--line-height` | line-height of the tooltip |
 
 
 ----------------------------------------------
