@@ -1,23 +1,32 @@
 :host {
-  display: block;
+  /**
 
-  position: absolute;
-  z-index: 1;
-}
+    * @prop --background: Background of the tooltip
+    * @prop --color: Text color of the tooltip
+    * @prop --font-size: font-size of the tooltip
+    * @prop --line-height: line-height of the tooltip
+    */
 
-// .sage-tooltip__content {
-//   display: none;
-// }
+  --background: #000;
+  --color: #fff;
 
-// .sage-tooltip--open .sage-tooltip__content {
-//   display: block;
-// }
+  display: inline-block;
 
-sage-tooltip {
-  position: absolute;
-  z-index: 1;
-}
+  &::part(arrow) {
+    background-color: var(--background);
+    height: 10px;
+    position: absolute;
+    transform: rotate(45deg);
+    width: 10px;
+  }
 
-:has(> sage-tooltip) {
-  position: relative;
+  &::part(content) {
+    background-color: var(--background);
+    border-radius: 10px;
+    color: var(--color);
+    font-size: 14px;
+    line-height: 20px;
+    padding: 8px 12px;
+    position: absolute;
+  }
 }
