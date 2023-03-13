@@ -32,7 +32,7 @@ runs:
       shell: bash
 
     - name: Build Icons
-      run: yarn nx run icons:build --ci
+      run: yarn nx run icons:build
       shell: bash
 
     - name: Upload Sage Icons Build Archive
