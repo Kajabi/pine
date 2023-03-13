@@ -21,7 +21,6 @@ const detail = chalk.yellowBright;
 const log = console.log;
 
 const baseDir = process.cwd();
-const srcDir = path.join(baseDir, 'src');
 const scriptsDir = path.join(baseDir, 'scripts');
 const srcSvgBasePath = path.join(process.cwd(), 'src', 'svg');
 
@@ -51,9 +50,6 @@ const run = async (rootDir: string) => {
       return;
 
     await createChangelogHTML(statusResults);
-
-    await commitChanges(filesChanged);
-
   }
   catch (e) {
     log(error(e));
@@ -169,23 +165,6 @@ const client = (apiToken) => {
 
   return instance;
 };
-
-/**
- * Commits the files to a newly created branch
- * @param files - a list of files from GitStatus
- */
-const commitChanges = async (files) => {
-  const git = gitClient();
-  const branchName = `nightly/${strDate}-icon-update`;
-
-  await git.checkoutLocalBranch(branchName);
-
-  await git.add(files.map(file => `${path.basename(file.path)}`));
-  await gitClient({ baseDir: srcDir}).add(['icon-data.json']);
-  await gitClient().add(`${baseDir}/changelogs`);
-  await git.commit(['ci(nightly): figma icons update', `number of icons updated: ${files.length}`]);
-  await git.push('origin', branchName, ['--no-verify']);
-}
 
 /**
  * Creates the Changelog.html file based on the
