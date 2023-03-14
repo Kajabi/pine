@@ -56,6 +56,7 @@ export class SageTabs {
     const keySet = ["ArrowLeft", "ArrowRight", "Home", "End"];
 
     if (keySet.includes(ev.key)) {
+      ev.preventDefault();
       this.moveActiveTab(ev.key);
     }
   }
