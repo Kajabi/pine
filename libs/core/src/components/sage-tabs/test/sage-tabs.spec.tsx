@@ -66,7 +66,7 @@ it('renders variant prop', async () => {
           <sage-tabpanel name="two">Two</sage-tabpanel>
         </sage-tabs>`,
     });
-    
+
     page.body.dispatchEvent(new CustomEvent('tabClick', {'detail': [0, 'test']}));
     await page.waitForChanges();
     const tabs = page.body.querySelector('sage-tabs[active-tab-name="one"]');
@@ -90,10 +90,11 @@ it('renders variant prop', async () => {
     expect(page.body.querySelector('sage-tab[name="one"] > button')).not.toHaveClass('is-active');
     expect(page.body.querySelector('sage-tab[name="two"] > button')).toHaveClass('is-active');
     expect(page.body.querySelector('sage-tab[name="three"] > button')).not.toHaveClass('is-active');
-    
+
     // Create and dispatch `ArrowLeft` keydown
     const event = new KeyboardEvent('keydown', {'key': 'ArrowLeft'});
-    window.dispatchEvent(event);
+    const tabs = page.body.querySelector('sage-tabs');
+    tabs?.dispatchEvent(event);
     await page.waitForChanges();
 
     // Expect active tab to have shifted
@@ -119,10 +120,11 @@ it('renders variant prop', async () => {
     expect(page.body.querySelector('sage-tab[name="one"] > button')).toHaveClass('is-active');
     expect(page.body.querySelector('sage-tab[name="two"] > button')).not.toHaveClass('is-active');
     expect(page.body.querySelector('sage-tab[name="three"] > button')).not.toHaveClass('is-active');
-    
+
     // Create and dispatch `ArrowLeft` keydown
     const event = new KeyboardEvent('keydown', {'key': 'ArrowLeft'});
-    window.dispatchEvent(event);
+    const tabs = page.body.querySelector('sage-tabs');
+    tabs?.dispatchEvent(event);
     await page.waitForChanges();
 
     // Expect active tab to have shifted
@@ -148,10 +150,11 @@ it('renders variant prop', async () => {
     expect(page.body.querySelector('sage-tab[name="one"] > button')).not.toHaveClass('is-active');
     expect(page.body.querySelector('sage-tab[name="two"] > button')).toHaveClass('is-active');
     expect(page.body.querySelector('sage-tab[name="three"] > button')).not.toHaveClass('is-active');
-    
+
     // Create and dispatch `ArrowLeft` keydown
     const event = new KeyboardEvent('keydown', {'key': 'ArrowRight'});
-    window.dispatchEvent(event);
+    const tabs = page.body.querySelector('sage-tabs');
+    tabs?.dispatchEvent(event);
     await page.waitForChanges();
 
     // Expect active tab to have shifted
@@ -177,10 +180,11 @@ it('renders variant prop', async () => {
     expect(page.body.querySelector('sage-tab[name="one"] > button')).not.toHaveClass('is-active');
     expect(page.body.querySelector('sage-tab[name="two"] > button')).not.toHaveClass('is-active');
     expect(page.body.querySelector('sage-tab[name="three"] > button')).toHaveClass('is-active');
-    
+
     // Create and dispatch `ArrowLeft` keydown
     const event = new KeyboardEvent('keydown', {'key': 'ArrowRight'});
-    window.dispatchEvent(event);
+    const tabs = page.body.querySelector('sage-tabs');
+    tabs?.dispatchEvent(event);
     await page.waitForChanges();
 
     // Expect active tab to have shifted
@@ -206,10 +210,11 @@ it('renders variant prop', async () => {
     expect(page.body.querySelector('sage-tab[name="one"] > button')).not.toHaveClass('is-active');
     expect(page.body.querySelector('sage-tab[name="two"] > button')).toHaveClass('is-active');
     expect(page.body.querySelector('sage-tab[name="three"] > button')).not.toHaveClass('is-active');
-    
+
     // Create and dispatch `ArrowLeft` keydown
     const event = new KeyboardEvent('keydown', {'key': 'Home'});
-    window.dispatchEvent(event);
+    const tabs = page.body.querySelector('sage-tabs');
+    tabs?.dispatchEvent(event);
     await page.waitForChanges();
 
     // Expect active tab to have shifted
@@ -235,10 +240,11 @@ it('renders variant prop', async () => {
     expect(page.body.querySelector('sage-tab[name="one"] > button')).not.toHaveClass('is-active');
     expect(page.body.querySelector('sage-tab[name="two"] > button')).toHaveClass('is-active');
     expect(page.body.querySelector('sage-tab[name="three"] > button')).not.toHaveClass('is-active');
-    
+
     // Create and dispatch `ArrowLeft` keydown
     const event = new KeyboardEvent('keydown', {'key': 'End'});
-    window.dispatchEvent(event);
+    const tabs = page.body.querySelector('sage-tabs');
+    tabs?.dispatchEvent(event);
     await page.waitForChanges();
 
     // Expect active tab to have shifted
