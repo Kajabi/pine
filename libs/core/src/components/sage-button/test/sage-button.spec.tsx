@@ -58,7 +58,22 @@ describe('sage-button', () => {
     const svg = root.shadowRoot.querySelector('svg');
     expect(svg).not.toBeNull();
   });
+
+  it('runs `handleClick` method when clicked on from inside a form', async () => {
+    const root = await newSpecPage({
+      components: [SageButton],
+      html: `
+        <form id="#test">
+          <sage-button type="reset"></sage-button>
+        </form>  
+      `,
+    });
+    const form = root.doc.querySelector<HTMLFormElement>("form");
+    const eventSpy = jest.fn(); 
+    form?.addEventListener("reset", eventSpy());
+    const button = document.querySelector<HTMLSageButtonElement>('sage-button');
+    button?.click();
+    await root.waitForChanges();
+    expect(eventSpy).toHaveBeenCalled();
+  });
 });
-
-
-
