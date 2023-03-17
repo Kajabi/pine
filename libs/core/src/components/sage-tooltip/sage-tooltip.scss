@@ -11,13 +11,24 @@
   --color: #fff;
 
   display: inline-block;
+  position: relative;
 
   &::part(arrow) {
-    background-color: var(--background);
-    height: 10px;
-    position: absolute;
-    transform: rotate(45deg);
-    width: 10px;
+    // background-color: var(--background);
+    // height: 10px;
+    // position: absolute;
+    // transform: rotate(45deg);
+    // width: 10px;
+    // width: 0;
+    // height: 0;
+
+    // &.sage-tooltip--bottom {
+    //   top: 0;
+    //   left: 50%;
+    //   margin-left: -5px;
+    //   border-width: 0 5px 5px;
+    //   border-bottom-color: #000;
+    // }
   }
 
   &::part(content) {
@@ -28,5 +39,69 @@
     line-height: 20px;
     padding: 8px 12px;
     position: absolute;
+    z-index: 1;
+
+    // NOTE: can't put display here and toggle, it doesn't update in the DOM.
+    // Needs to go on a normal selector
+    // display: none;
+  }
+}
+
+.sage-tooltip__content {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.sage-tooltip__arrow {
+  border-color: transparent;
+  border-right-color: transparent;
+  border-style: solid;
+  border-width: 5px 5px 5px 0;
+  height: 0;
+  left: 0;
+  margin-top: -5px;
+  position: absolute;
+  top: 50%;
+  width: 0;
+
+  .sage-tooltip {
+    border-right-color: #000;
+    border-width: 5px 5px 5px 0;
+    left: 0;
+    margin-top: -5px;
+    top: 50%;
+  }
+
+  .sage-tooltip--right & {
+    border-right-color: #000;
+    border-width: 5px 5px 5px 0;
+    margin-left: -5px;
+    top: 50%;
+  }
+
+  .sage-tooltip--top & {
+    border-top-color: #000;
+    border-width: 5px 5px 0;
+    bottom: -5px;
+    left: 50%;
+    margin-left: -5px;
+    top: auto;
+  }
+
+  .sage-tooltip--left & {
+    border-left-color: #000;
+    border-width: 5px 0 5px 5px;
+    left: auto;
+    margin-top: -5px;
+    right: -5px;
+    top: 50%;
+  }
+
+  .sage-tooltip--bottom & {
+    border-bottom-color: #000;
+    border-width: 0 5px 5px;
+    left: 50%;
+    margin-left: -5px;
+    top: 0;
   }
 }

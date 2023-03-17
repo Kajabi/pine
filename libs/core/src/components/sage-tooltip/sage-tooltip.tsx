@@ -1,5 +1,3 @@
-// import { computePosition, flip, shift, offset, arrow, inline, autoUpdate } from '@floating-ui/dom';
-import { computePosition, arrow, flip, offset, shift } from '@floating-ui/dom';
 import { Component, Element, Event, Host, Listen, Prop, State, h, EventEmitter, Method, Watch } from '@stencil/core';
 
 /**
@@ -17,9 +15,9 @@ import { Component, Element, Event, Host, Listen, Prop, State, h, EventEmitter, 
   shadow: true,
 })
 export class SageTooltip {
-  private arrowEl: HTMLElement | null;
-  private triggerEl: HTMLElement | null;
-  private tooltipEl: HTMLElement | null;
+  // private arrowEl: HTMLElement | null;
+  // private triggerEl: HTMLElement | null;
+  private contentEl: HTMLElement | null;
 
   /**
    * Reference to the Host element
@@ -49,7 +47,7 @@ export class SageTooltip {
   /**
    * Determines the preferred position of the tooltip
    */
-  @Prop() placement:
+  @Prop({ mutable: true }) placement:
     | 'top'
     | 'top-start'
     | 'top-end'
@@ -119,82 +117,112 @@ export class SageTooltip {
   @Method()
   async showTooltip() {
     this.opened = true;
-    this.tooltipEl.style.display = 'block';
+    // TODO: need to use block / none but the tooltip content width and height are needed for calculations
+    // this.contentEl.style.display = 'block';
+    this.contentEl.style.opacity = '1';
+    this.contentEl.style.visibility = 'visible';
     this.positionTooltip();
   }
 
   @Method()
   async hideTooltip() {
     this.opened = false;
-    this.tooltipEl.style.display = '';
+    // TODO: need to use block / none but the tooltip content width and height are needed for calculations
+    // this.contentEl.style.display = '';
+    this.contentEl.style.opacity = '0';
+    this.contentEl.style.visibility = 'hidden';
     this.positionTooltip();
   }
 
   private handleShow = () => {
-    console.log('entered');
     this.showTooltip();
   };
 
   private handleHide = () => {
-    console.log('left');
     this.hideTooltip();
   };
 
   private positionTooltip() {
-    console.log('position');
-    console.log(this.triggerEl);
-    console.log(this.tooltipEl);
-    console.log(this.arrowEl);
-    computePosition(this.triggerEl, this.tooltipEl, {
-      placement: this.placement,
-      strategy: 'fixed',
-      middleware: [
-        offset(22),
-        shift({padding: 22}),
-        flip(),
-        arrow({element: this.arrowEl}),
-      ]
-    }).then(({ x, y, placement, middlewareData }) => {
-      Object.assign(this.tooltipEl.style, {
-        left: `${x}px`,
-        top: `${y}px`,
-      });
+    const rect = this.el.getBoundingClientRect();
+    const contentRect = this.contentEl.getBoundingClientRect();
+    const panelNewLoc = {
+      top: (rect.height / 2) + contentRect.height
+    };
 
-      // Accessing the data
-      const {x: arrowX, y: arrowY} = middlewareData.arrow;
+    if (this.placement.includes("right")) {
+      this.contentEl.style.top = '50%';
+      this.contentEl.style.left = `calc(${rect.width}px + 8px)`;
+      this.contentEl.style.transform = 'translateY(-50%)';
+    }
 
-      const staticSide = {
-        top: 'bottom',
-        right: 'left',
-        bottom: 'top',
-        left: 'right',
-      }[placement.split('-')[0]];
+    if (this.placement.includes("left")) {
+      this.contentEl.style.top = '50%';
+      this.contentEl.style.left = `calc((${rect.width}px + 8px) * -1)`;
+      this.contentEl.style.transform = 'translateY(-50%)';
+    }
 
-      Object.assign(this.arrowEl.style, {
-        left: arrowX != null ? `${arrowX}px` : '',
-        top: arrowY != null ? `${arrowY}px` : '',
-        right: '',
-        bottom: '',
-        [staticSide]: '-4px',
-      });
-    });
+    if (this.placement.includes("bottom")) {
+      this.contentEl.style.top = `calc(${rect.height}px + 8px)`;
+      this.contentEl.style.left = '50%';
+      this.contentEl.style.transform = 'translateX(-50%)';
+    }
+
+    if (this.placement.includes("top")) {
+      this.contentEl.style.top = `calc((${contentRect.height}px + 8px) * -1)`;
+      this.contentEl.style.left = '50%';
+      this.contentEl.style.transform = 'translateX(-50%)';
+    }
+
+    const win = this.contentEl.ownerDocument.defaultView;
+    const docEl = window.document.documentElement;
+
+    const viewport = {
+      top: docEl.scrollTop,
+      bottom: window.pageYOffset + docEl.clientHeight,
+    };
+
+    const offset = {
+      top: contentRect.top + win.pageYOffset,
+      left: contentRect.left + win.pageXOffset,
+      bottom: (contentRect.top + win.pageYOffset)
+    };
+
+    const panelHeight = contentRect.height;
+    const enoughSpaceAbove = viewport.top < (offset.top + panelHeight);
+    const enoughSpaceBelow = viewport.bottom > (offset.bottom + panelHeight);
+
+    if (!enoughSpaceBelow && enoughSpaceAbove) {
+      this.placement = 'top';
+    } else if (!enoughSpaceAbove && enoughSpaceBelow) {
+      this.placement = 'bottom';
+    }
+
+    if (this.placement === 'top') {
+      this.contentEl.style.top = `-${panelNewLoc.top}px`;
+    }
   }
 
   render() {
     return (
       <Host
-        class={{
-          'is-open': this.opened
-        }}
         hasArrow={this.hasArrow}
         onMouseEnter={this.handleShow}
         onMouseLeave={this.handleHide}
+        // onFocus={this.handleFocus} TODO
+        // onBlur={this.handleBlur} TODO
+        // onClick={this.handleClick} TODO
       >
-        <div class="sage-tooltip">
+        <div
+          class={`
+            sage-tooltip
+            sage-tooltip--${this.placement}
+            ${this.opened ? 'is-open' : ''}
+          `}
+        >
           <span
             aria-describedby={this.componentId}
             part="trigger"
-            ref={(el) => (this.triggerEl = el)}
+            // ref={(el) => (this.triggerEl = el)}
           >
             <slot />
           </span>
@@ -203,8 +231,9 @@ export class SageTooltip {
             aria-hidden={this.opened ? 'false' : 'true'}
             id={this.componentId}
             part="content"
-            ref={(el) => (this.tooltipEl = el)}
+            ref={(el) => (this.contentEl = el)}
             role="tooltip"
+            // style={styles}
           >
             <slot
               name="content"
@@ -212,13 +241,15 @@ export class SageTooltip {
             >
               {this.content}
             </slot>
-            <div
-              aria-hidden="true"
-              part="arrow"
-              ref={(el) => (this.arrowEl = el)}
-            ></div>
+            {this.hasArrow && (
+              <div
+                class="sage-tooltip__arrow"
+                aria-hidden="true"
+                part="arrow"
+                // ref={(el) => (this.arrowEl = el)}
+              ></div>
+            )}
           </div>
-          {/* {this.hasArrow && <div class="sage-tooltip__arrow" part="arrow">arrow</div>} */}
         </div>
       </Host>
     );

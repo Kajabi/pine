@@ -11,8 +11,10 @@ describe('sage-tooltip', () => {
     <sage-tooltip>
       <mock:shadow-root>
       <div class="sage-tooltip">
-        <slot aria-describedby="tooltip"></slot>
-        <div class="sage-tooltip__content" part="content">
+        <span part="trigger">
+          <slot></slot>
+        </span>
+        <div class="sage-tooltip__content" aria-hidden="true" part="content" role="tooltip">
           <slot name="content" aria-live="off"></slot>
         </div>
       </div>
@@ -21,25 +23,27 @@ describe('sage-tooltip', () => {
     `);
   });
 
-  it('renders the target', async () => {
+  it('renders the trigger', async () => {
     const { root } = await newSpecPage({
       components: [SageTooltip],
       html: `
-      <sage-tooltip content="this is the tooltip content">
-        <a href="#"> Target</a>
+      <sage-tooltip>
+        <a href="#">Trigger</a>
       </sage-tooltip>`
     });
     expect(root).toEqualHtml(`
-    <sage-tooltip content="this is the tooltip content">
+    <sage-tooltip>
       <mock:shadow-root>
       <div class="sage-tooltip">
-        <slot aria-describedby="tooltip"></slot>
-        <div class="sage-tooltip__content" part="content">
-          <slot name="content" aria-live="off">this is the tooltip content</slot>
+        <span part="trigger">
+          <slot></slot>
+        </span>
+        <div class="sage-tooltip__content" aria-hidden="true" part="content" role="tooltip">
+          <slot name="content" aria-live="off"></slot>
         </div>
       </div>
       </mock:shadow-root>
-      <a href="#">Target</a>
+      <a href="#">Trigger</a>
     </sage-tooltip>
     `);
   });
@@ -56,32 +60,11 @@ describe('sage-tooltip', () => {
     <sage-tooltip>
       <mock:shadow-root>
       <div class="sage-tooltip">
-        <slot aria-describedby="tooltip"></slot>
-        <div class="sage-tooltip__content" part="content">
+        <span part="trigger">
+          <slot></slot>
+        </span>
+        <div class="sage-tooltip__content" aria-hidden="true" part="content" role="tooltip">
           <slot name="content" aria-live="off"></slot>
-        </div>
-      </div>
-      </mock:shadow-root>
-      <p slot="content">this is the slotted tooltip content</p>
-    </sage-tooltip>
-    `);
-  });
-
-  it('renders only the slot content if both slot and property exist', async () => {
-    const { root } = await newSpecPage({
-      components: [SageTooltip],
-      html: `
-      <sage-tooltip content="this is content property tooltip content">
-        <p slot="content">this is the slotted tooltip content</p>
-      </sage-tooltip>`
-    });
-    expect(root).toEqualHtml(`
-    <sage-tooltip content="this is content property tooltip content">
-      <mock:shadow-root>
-      <div class="sage-tooltip">
-        <slot aria-describedby="tooltip"></slot>
-        <div class="sage-tooltip__content" part="content">
-          <slot name="content" aria-live="off">this is content property tooltip content</slot>
         </div>
       </div>
       </mock:shadow-root>

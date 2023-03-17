@@ -64,16 +64,6 @@ Type: `Promise<void>`
 | `"trigger"` | The tooltip trigger.                       |
 
 
-## CSS Custom Properties
-
-| Name            | Description                |
-| --------------- | -------------------------- |
-| `--background`  | Background of the tooltip  |
-| `--color`       | Text color of the tooltip  |
-| `--font-size`   | font-size of the tooltip   |
-| `--line-height` | line-height of the tooltip |
-
-
 ----------------------------------------------
 
 
