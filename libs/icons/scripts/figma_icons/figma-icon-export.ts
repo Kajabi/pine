@@ -466,7 +466,7 @@ const findPage = (document, pageName: string,) => {
  * @returns string
  */
 const getFileContentsFromGit = async (filePath: string) => {
-  return await gitClient().catFile(['blob', `head:${filePath}`]);
+  return await gitClient().catFile(['blob', `HEAD:${filePath}`]);
 }
 
 /**
