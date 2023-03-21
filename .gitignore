@@ -22,10 +22,10 @@ storybook-static/
 
 # IDE - VSCode
 .vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
+.vscode/extensions.json
 
 # misc
 *.log
@@ -38,6 +38,7 @@ yarn-error.log
 testem.log
 /typings
 **/package.e2e.json
+.env
 
 # System Files
 .DS_Store
