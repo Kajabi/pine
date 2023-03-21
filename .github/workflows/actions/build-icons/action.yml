@@ -1,4 +1,4 @@
-name: 'Build Sage/Icons'
+name: 'Build Sage Icons'
 description: 'Build Sage Icon library'
 
 runs:

@@ -1,0 +1,15 @@
+name: "Sage Nightly Automations"
+
+on:
+  # schedule:
+  #   - cron: '00 06 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  figma-icon-export:
+    steps:
+      - name: Export Figma Icons
+        uses: ./.github/workflows/actions/figma-icon-export
+        secrets:
+          FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }}
+          FIGMA_FILE_ID: ${{ secrets.FIGMA_FILE_ID }}
