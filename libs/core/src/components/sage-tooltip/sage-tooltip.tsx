@@ -47,7 +47,7 @@ export class SageTooltip {
   /**
    * Determines the preferred position of the tooltip
    */
-  @Prop({ mutable: true }) placement:
+  @Prop() placement:
     | 'top'
     | 'top-start'
     | 'top-end'
@@ -69,6 +69,7 @@ export class SageTooltip {
   // @Watch('opened')
   handleOpenToggle() {
     this.opened ? this.showTooltip() : this.hideTooltip();
+    console.log('after isOpened', this.opened);
   }
 
   // TODO Q: make better events, maybe before and after hide and show
@@ -95,7 +96,7 @@ export class SageTooltip {
   // componentWillUpdate() {}
 
   componentDidUpdate() {
-    this.positionTooltip();
+    // this.positionTooltip();
 
     if (this.opened) {
       this.showTooltip();
@@ -110,7 +111,7 @@ export class SageTooltip {
   @Listen('click', { capture: true })
   handleClick() {
     const tooltipContent = this.el.shadowRoot.querySelector('sage-tooltip__content');
-    this.isOpen = !this.isOpen;
+    // this.isOpen = !this.isOpen;
     tooltipContent.classList.add('is-open');
   }
 
@@ -121,7 +122,7 @@ export class SageTooltip {
     // this.contentEl.style.display = 'block';
     this.contentEl.style.opacity = '1';
     this.contentEl.style.visibility = 'visible';
-    this.positionTooltip();
+    // this.positionTooltip();
   }
 
   @Method()
@@ -131,7 +132,7 @@ export class SageTooltip {
     // this.contentEl.style.display = '';
     this.contentEl.style.opacity = '0';
     this.contentEl.style.visibility = 'hidden';
-    this.positionTooltip();
+    // this.positionTooltip();
   }
 
   private handleShow = () => {
@@ -153,53 +154,166 @@ export class SageTooltip {
       this.contentEl.style.top = '50%';
       this.contentEl.style.left = `calc(${rect.width}px + 8px)`;
       this.contentEl.style.transform = 'translateY(-50%)';
+
+      if (this.placement.includes("start")) {
+        this.contentEl.style.top = '0';
+        this.contentEl.style.transform = 'translateY(0)';
+      }
+
+      if (this.placement.includes("end")) {
+        this.contentEl.style.bottom = '0';
+        this.contentEl.style.top = 'initial';
+        this.contentEl.style.transform = 'translateY(0)';
+      }
     }
 
     if (this.placement.includes("left")) {
       this.contentEl.style.top = '50%';
-      this.contentEl.style.left = `calc((${rect.width}px + 8px) * -1)`;
+      this.contentEl.style.right = `calc((${rect.width}px + 8px))`;
       this.contentEl.style.transform = 'translateY(-50%)';
+
+      console.log('rect: ', rect);
+      console.log('contentRect: ', contentRect);
+
+      if (this.placement.includes("start")) {
+        this.contentEl.style.top = '0';
+        this.contentEl.style.transform = 'translateY(0)';
+      }
+
+      if (this.placement.includes("end")) {
+        this.contentEl.style.bottom = '0';
+        this.contentEl.style.top = 'initial';
+        this.contentEl.style.transform = 'translateY(0)';
+      }
     }
 
     if (this.placement.includes("bottom")) {
       this.contentEl.style.top = `calc(${rect.height}px + 8px)`;
       this.contentEl.style.left = '50%';
       this.contentEl.style.transform = 'translateX(-50%)';
+
+      if (this.placement.includes("start")) {
+        console.log('start');
+        this.contentEl.style.left = '0';
+        this.contentEl.style.transform = 'translateX(0)';
+      }
+
+      if (this.placement.includes("end")) {
+        console.log('start');
+        this.contentEl.style.left = 'initial';
+        this.contentEl.style.right = '0';
+        this.contentEl.style.transform = 'translateX(0)';
+      }
     }
 
     if (this.placement.includes("top")) {
       this.contentEl.style.top = `calc((${contentRect.height}px + 8px) * -1)`;
       this.contentEl.style.left = '50%';
       this.contentEl.style.transform = 'translateX(-50%)';
+
+      if (this.placement.includes("start")) {
+        this.contentEl.style.left = '0';
+        this.contentEl.style.transform = 'translateX(0)';
+      }
+      if (this.placement.includes("end")) {
+        this.contentEl.style.left = 'initial';
+        this.contentEl.style.right = '0';
+        this.contentEl.style.transform = 'translateX(0)';
+      }
     }
 
-    const win = this.contentEl.ownerDocument.defaultView;
-    const docEl = window.document.documentElement;
+    // ARROW
 
-    const viewport = {
-      top: docEl.scrollTop,
-      bottom: window.pageYOffset + docEl.clientHeight,
+    // const win = this.contentEl.ownerDocument.defaultView;
+    // const docEl = window.document.documentElement;
+
+    // const viewport = {
+    //   top: docEl.scrollTop,
+    //   bottom: window.pageYOffset + docEl.clientHeight,
+    // };
+
+    // const offset = {
+    //   top: contentRect.top + win.pageYOffset,
+    //   left: contentRect.left + win.pageXOffset,
+    //   bottom: (contentRect.top + win.pageYOffset)
+    // };
+
+    // const panelHeight = contentRect.height;
+    // const enoughSpaceAbove = viewport.top < (offset.top + panelHeight);
+    // const enoughSpaceBelow = viewport.bottom > (offset.bottom + panelHeight);
+
+    // console.log('outside');
+    // console.log('placement: ', this.placement);
+    // console.log('below: ', enoughSpaceBelow, 'above: ', enoughSpaceAbove);
+    // if (!enoughSpaceBelow && enoughSpaceAbove) {
+    //   console.log('inside 1');
+    //   switch(this.placement) {
+    //     case 'bottom-end':
+    //       this.placement = 'top-end';
+    //       this.contentEl.style.left = 'initial';
+    //       this.contentEl.style.right = '0'
+    //       this.contentEl.style.transform = 'translateX(0)';
+    //     case 'bottom':
+    //       this.placement = 'top';
+    //       break;
+    //     case 'bottom-start':
+    //       this.placement = 'top-start';
+    //       this.contentEl.style.left = '0';
+    //       this.contentEl.style.transform = 'translateX(0)';
+    //   }
+    // } else if (enoughSpaceAbove && enoughSpaceBelow) {
+    //   switch(this.placement) {
+    //     case 'top-end':
+    //       this.placement = 'bottom-end';
+    //       this.contentEl.style.left = 'initial';
+    //       this.contentEl.style.right = '0'
+    //       this.contentEl.style.transform = 'translateX(0)';
+    //       console.log('last');
+    //       break;
+    //     case 'top':
+    //       this.placement = 'bottom';
+    //       break;
+    //     case 'top-start':
+    //       this.placement = 'bottom-start';
+    //       this.contentEl.style.left = '0';
+    //       this.contentEl.style.transform = 'translateX(0)';
+    //       break;
+    //   }
+    //   // this.placement = this.placement.replace("top", "bottom");
+    //   console.log('inside 2');
+    // }
+
+    // if (this.placement.includes('top')) {
+    //   console.log('inside 3');
+    //   this.contentEl.style.top = `-${panelNewLoc.top}px`;
+    // }
+  }
+
+  private intersectViewport() {
+    const options = {
+      root: null,
+      rootMargin: "0px",
+      threshold: 1.0,
     };
 
-    const offset = {
-      top: contentRect.top + win.pageYOffset,
-      left: contentRect.left + win.pageXOffset,
-      bottom: (contentRect.top + win.pageYOffset)
-    };
+    const observer = new IntersectionObserver(callback, options);
+  }
 
-    const panelHeight = contentRect.height;
-    const enoughSpaceAbove = viewport.top < (offset.top + panelHeight);
-    const enoughSpaceBelow = viewport.bottom > (offset.bottom + panelHeight);
+  private createObserver() {
+    // let observer;
 
-    if (!enoughSpaceBelow && enoughSpaceAbove) {
-      this.placement = 'top';
-    } else if (!enoughSpaceAbove && enoughSpaceBelow) {
-      this.placement = 'bottom';
-    }
+    // let options = {
+    //   root: null,
+    //   rootMargin: "0px",
+    //   threshold: 1,
+    // };
 
-    if (this.placement === 'top') {
-      this.contentEl.style.top = `-${panelNewLoc.top}px`;
-    }
+    // observer = new IntersectionObserver(handleIntersect, options);
+    // observer.observe(boxElement);
+  }
+
+  private handleIntersect(entries, observer) {
+    console.log('test');
   }
 
   render() {

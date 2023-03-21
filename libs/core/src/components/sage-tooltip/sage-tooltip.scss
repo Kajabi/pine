@@ -9,6 +9,8 @@
 
   --background: #000;
   --color: #fff;
+  --arrow-size: 6px;
+  --arrow-offset: 14px;
 
   display: inline-block;
   position: relative;
@@ -25,8 +27,8 @@
     // &.sage-tooltip--bottom {
     //   top: 0;
     //   left: 50%;
-    //   margin-left: -5px;
-    //   border-width: 0 5px 5px;
+    //   margin-inline-start: -6px;
+    //   border-width: 0 6px 6px;
     //   border-bottom-color: #000;
     // }
   }
@@ -56,52 +58,124 @@
   border-color: transparent;
   border-right-color: transparent;
   border-style: solid;
-  border-width: 5px 5px 5px 0;
+  border-width: var(--arrow-size) var(--arrow-size) var(--arrow-size) 0;
   height: 0;
   left: 0;
-  margin-top: -5px;
+  margin-block-start: -6px;
   position: absolute;
   top: 50%;
   width: 0;
 
   .sage-tooltip {
-    border-right-color: #000;
-    border-width: 5px 5px 5px 0;
+    border-right-color: var(--background);
+    border-width: var(--arrow-size) var(--arrow-size) var(--arrow-size) 0;
     left: 0;
-    margin-top: -5px;
+    margin-block-start: -6px;
     top: 50%;
   }
 
   .sage-tooltip--right & {
-    border-right-color: #000;
-    border-width: 5px 5px 5px 0;
-    margin-left: -5px;
+    border-right-color: var(--background);
+    border-width: var(--arrow-size) var(--arrow-size) var(--arrow-size) 0;
+    margin-inline-start: -6px;
     top: 50%;
+  }
+
+  .sage-tooltip--right-end & {
+    border-right-color: var(--background);
+    border-width: var(--arrow-size) var(--arrow-size) var(--arrow-size) 0;
+    bottom: var(--arrow-offset);
+    margin-inline-start: -6px;
+    top: initial;
+  }
+
+  .sage-tooltip--right-start & {
+    border-right-color: var(--background);
+    border-width: var(--arrow-size) var(--arrow-size) var(--arrow-size) 0;
+    margin-block-start: 0;
+    margin-inline-start: -6px;
+    top: var(--arrow-offset);
   }
 
   .sage-tooltip--top & {
-    border-top-color: #000;
-    border-width: 5px 5px 0;
-    bottom: -5px;
+    border-top-color: var(--background);
+    border-width: var(--arrow-size) var(--arrow-size) 0;
+    bottom: -6px;
     left: 50%;
-    margin-left: -5px;
+    margin-inline-start: -6px;
     top: auto;
   }
 
+  .sage-tooltip--top-start & {
+    border-top-color: var(--background);
+    border-width: var(--arrow-size) var(--arrow-size) 0;
+    bottom: -6px;
+    left: var(--arrow-offset);
+    margin-inline-start: 0;
+    top: auto;
+  }
+
+  .sage-tooltip--top-end & {
+    border-top-color: var(--background);
+    border-width: var(--arrow-size) var(--arrow-size) 0;
+    bottom: -6px;
+    left: initial;
+    margin-inline-end: 0;
+    right: var(--arrow-offset);
+    top: initial;
+  }
+
   .sage-tooltip--left & {
-    border-left-color: #000;
-    border-width: 5px 0 5px 5px;
+    border-left-color: var(--background);
+    border-width: var(--arrow-size) 0 var(--arrow-size) var(--arrow-size);
     left: auto;
-    margin-top: -5px;
-    right: -5px;
+    margin-block-start: -6px;
+    right: -6px;
     top: 50%;
   }
 
+  .sage-tooltip--left-end & {
+    border-left-color: var(--background);
+    border-width: var(--arrow-size) 0 var(--arrow-size) var(--arrow-size);
+    bottom: var(--arrow-offset);
+    left: auto;
+    margin-block-start: -6px;
+    right: -6px;
+    top: initial;
+  }
+
+  .sage-tooltip--left-start & {
+    border-left-color: var(--background);
+    border-width: var(--arrow-size) 0 var(--arrow-size) var(--arrow-size);
+    left: auto;
+    margin-block-start: 0;
+    right: -6px;
+    top: var(--arrow-offset);
+  }
+
+  // Arrow
   .sage-tooltip--bottom & {
-    border-bottom-color: #000;
-    border-width: 0 5px 5px;
+    border-bottom-color: var(--background);
+    border-width: 0 var(--arrow-size) var(--arrow-size);
     left: 50%;
-    margin-left: -5px;
+    margin-inline-start: -6px;
+    top: 0;
+  }
+
+  .sage-tooltip--bottom-end & {
+    border-bottom-color: var(--background);
+    border-width: 0 var(--arrow-size) var(--arrow-size);
+    left: initial;
+    margin-inline-end: 0;
+    right: var(--arrow-offset);
+    top: 0;
+  }
+
+  .sage-tooltip--bottom-start & {
+    border-bottom-color: var(--background);
+    border-width: 0 var(--arrow-size) var(--arrow-size);
+    left: var(--arrow-offset);
+    margin-inline-start: 0;
     top: 0;
   }
 }
