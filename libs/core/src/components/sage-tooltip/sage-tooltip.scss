@@ -3,8 +3,13 @@
 
     * @prop --background: Background of the tooltip
     * @prop --color: Text color of the tooltip
-    * @prop --font-size: font-size of the tooltip
-    * @prop --line-height: line-height of the tooltip
+    * @prop --arrow-size: width and height of the arrow
+    * @prop --arrow-offset: arrow offset position
+    *
+    * @prop --arrow-pointing-down: shape for downward facing arrow
+    * @prop --arrow-pointing-to-the-right: shape for right facing arrow
+    * @prop --arrow-pointing-to-the-left: shape for left facing arrow
+    * @prop --arrow-pointing-up: shape for upward facing arrow
     */
 
   --background: #000;
@@ -12,25 +17,16 @@
   --arrow-size: 6px;
   --arrow-offset: 14px;
 
+  --arrow-pointing-down: var(--arrow-size) var(--arrow-size) 0;
+  --arrow-pointing-to-the-right: var(--arrow-size) 0 var(--arrow-size) var(--arrow-size);
+  --arrow-pointing-to-the-left: var(--arrow-size) var(--arrow-size) var(--arrow-size) 0;
+  --arrow-pointing-up: 0 var(--arrow-size) var(--arrow-size);
+
   display: inline-block;
   position: relative;
 
   &::part(arrow) {
-    // background-color: var(--background);
-    // height: 10px;
-    // position: absolute;
-    // transform: rotate(45deg);
-    // width: 10px;
-    // width: 0;
-    // height: 0;
-
-    // &.sage-tooltip--bottom {
-    //   top: 0;
-    //   left: 50%;
-    //   margin-inline-start: -6px;
-    //   border-width: 0 6px 6px;
-    //   border-bottom-color: #000;
-    // }
+    // Note: is there value to using css parts?
   }
 
   &::part(content) {
@@ -58,124 +54,109 @@
   border-color: transparent;
   border-right-color: transparent;
   border-style: solid;
-  border-width: var(--arrow-size) var(--arrow-size) var(--arrow-size) 0;
+  border-width: var(--arrow-pointing-to-the-left);
   height: 0;
-  left: 0;
-  margin-block-start: -6px;
+  // left: 0;
   position: absolute;
-  top: 50%;
+  // top: 50%;
   width: 0;
-
-  .sage-tooltip {
-    border-right-color: var(--background);
-    border-width: var(--arrow-size) var(--arrow-size) var(--arrow-size) 0;
-    left: 0;
-    margin-block-start: -6px;
-    top: 50%;
-  }
 
   .sage-tooltip--right & {
     border-right-color: var(--background);
-    border-width: var(--arrow-size) var(--arrow-size) var(--arrow-size) 0;
-    margin-inline-start: -6px;
+    border-width: var(--arrow-pointing-to-the-left);
+    left: calc(var(--arrow-size) * -1);
     top: 50%;
+    transform: translateY(-50%);
   }
 
   .sage-tooltip--right-end & {
     border-right-color: var(--background);
-    border-width: var(--arrow-size) var(--arrow-size) var(--arrow-size) 0;
+    border-width: var(--arrow-pointing-to-the-left);
     bottom: var(--arrow-offset);
-    margin-inline-start: -6px;
+    left: calc(var(--arrow-size) * -1);
     top: initial;
   }
 
   .sage-tooltip--right-start & {
     border-right-color: var(--background);
-    border-width: var(--arrow-size) var(--arrow-size) var(--arrow-size) 0;
-    margin-block-start: 0;
-    margin-inline-start: -6px;
+    border-width: var(--arrow-pointing-to-the-left);
+    left: calc(var(--arrow-size) * -1);
     top: var(--arrow-offset);
   }
 
   .sage-tooltip--top & {
     border-top-color: var(--background);
-    border-width: var(--arrow-size) var(--arrow-size) 0;
-    bottom: -6px;
+    border-width: var(--arrow-pointing-down);
+    bottom: calc(var(--arrow-size) * -1);
     left: 50%;
-    margin-inline-start: -6px;
-    top: auto;
+    top: initial;
+    transform: translateX(-50%);
   }
 
   .sage-tooltip--top-start & {
     border-top-color: var(--background);
-    border-width: var(--arrow-size) var(--arrow-size) 0;
-    bottom: -6px;
+    border-width: var(--arrow-pointing-down);
+    bottom: calc(var(--arrow-size) * -1);
     left: var(--arrow-offset);
-    margin-inline-start: 0;
-    top: auto;
+    top: initial;
   }
 
   .sage-tooltip--top-end & {
     border-top-color: var(--background);
-    border-width: var(--arrow-size) var(--arrow-size) 0;
-    bottom: -6px;
+    border-width: var(--arrow-pointing-down);
+    bottom: calc(var(--arrow-size) * -1);
     left: initial;
-    margin-inline-end: 0;
     right: var(--arrow-offset);
     top: initial;
   }
 
   .sage-tooltip--left & {
     border-left-color: var(--background);
-    border-width: var(--arrow-size) 0 var(--arrow-size) var(--arrow-size);
-    left: auto;
-    margin-block-start: -6px;
-    right: -6px;
+    border-width: var(--arrow-pointing-to-the-right);
+    left: initial;
+    right: calc(var(--arrow-size) * -1);
     top: 50%;
+    transform: translateY(-50%);
   }
 
   .sage-tooltip--left-end & {
     border-left-color: var(--background);
-    border-width: var(--arrow-size) 0 var(--arrow-size) var(--arrow-size);
+    border-width: var(--arrow-pointing-to-the-right);
     bottom: var(--arrow-offset);
-    left: auto;
-    margin-block-start: -6px;
-    right: -6px;
+    left: initial;
+    right: calc(var(--arrow-size) * -1);
     top: initial;
   }
 
   .sage-tooltip--left-start & {
     border-left-color: var(--background);
-    border-width: var(--arrow-size) 0 var(--arrow-size) var(--arrow-size);
-    left: auto;
-    margin-block-start: 0;
-    right: -6px;
+    border-width: var(--arrow-pointing-to-the-right);
+    left: initial;
+    right: calc(var(--arrow-size) * -1);
     top: var(--arrow-offset);
   }
 
   // Arrow
   .sage-tooltip--bottom & {
     border-bottom-color: var(--background);
-    border-width: 0 var(--arrow-size) var(--arrow-size);
+    border-width: var(--arrow-pointing-up);
     left: 50%;
-    margin-inline-start: -6px;
-    top: 0;
+    top: calc(var(--arrow-size) * -1);
+    transform: translateX(-50%);
   }
 
   .sage-tooltip--bottom-end & {
     border-bottom-color: var(--background);
-    border-width: 0 var(--arrow-size) var(--arrow-size);
+    border-width: var(--arrow-pointing-up);
     left: initial;
-    margin-inline-end: 0;
     right: var(--arrow-offset);
-    top: 0;
+    top: calc(var(--arrow-size) * -1);
   }
 
   .sage-tooltip--bottom-start & {
     border-bottom-color: var(--background);
-    border-width: 0 var(--arrow-size) var(--arrow-size);
+    border-width: var(--arrow-pointing-up);
     left: var(--arrow-offset);
-    margin-inline-start: 0;
-    top: 0;
+    top: calc(var(--arrow-size) * -1);
   }
 }
