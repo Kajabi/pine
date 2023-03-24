@@ -1,0 +1,64 @@
+name: 'Run Figma Icon Update'
+
+on:
+  workflow_call:
+    secrets:
+      FIGMA_ACCESS_TOKEN:
+        description: "The personal access token created in Figma"
+        required: true
+
+      FIGMA_FILE_ID:
+        description: "The file id for the Figma file"
+        required: true
+
+jobs:
+  figma-icon-export:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Configure user
+        run: |
+          git config user.name "Kajabi Automation Bot"
+          git config user.email "dev+github-bot@kajabi.com"
+
+      - name: Get current date
+        id: date
+        run: echo "current_date=$(date --rfc-3339=date)" >> $GITHUB_ENV
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile --immutable
+        shell: bash
+
+      - name: Bootstrap
+        run: lerna bootstrap  -- --frozen-lockfile --immutable
+        shell: bash
+
+      - name: Running Figma Icon Export
+        run: yarn nx run icons:update
+        env:
+          FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }}
+          FIGMA_FILE_ID: ${{ secrets.FIGMA_FILE_ID }}
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v35.7.2
+        with:
+          since_last_remote_commit: true
+          files: |
+            libs/icons/src/svg/*.svg
+
+      - name: Major version chnage
+        if: steps.changed-files.ouputs.any_deleted == 'true' || steps.changed-files.outputs.renamed_files != ''
+        run: echo 'Run MAJOR semantic version changed'
+
+      - name: Minor version change
+        if: steps.changed-files.outputs.any_deleted != 'true' && steps.changed-files.outputs.any_changed == 'true'
+        run: echo 'Run MINOR semantic version changed'
