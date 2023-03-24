@@ -7,23 +7,22 @@ const defaultParameters = {
 };
 
 const BaseTemplate = (args) => html`
-<sage-tooltip content=${args.content} has-arrow=${args.hasArrow} placement=${args.placement} open=${args.open}>
-</sage-tooltip>`;
+<sage-tooltip content=${args.content} has-arrow=${args.hasArrow} placement=${args.placement} open=${args.open}>${args.slot}</sage-tooltip>`;
 
 const SlottedTemplate = (args) => html`
-<sage-tooltip content=${args.content} has-arrow=${args.hasArrow} placement=${args.placement} open=${args.open}>
+<sage-tooltip content=${args.content} has-arrow=${args.hasArrow} placement=${args.placement} open=${args.open} html-content=${args.htmlContent}>
   <div slot="content">
-    <p>this is s a</p>
-    <p>this is s a</p>
+    <p>this is s a sentence in a tooltip. this is s a sentence in a tooltip</p>
+    <p>this is s a sentence in a tooltip</p>
   </div>
-  <sage-button slot="target" variant="accent">Hey there</sage-button>
+  <sage-button variant="secondary">Hover</sage-button>
 </sage-tooltip>`;
 
 const PositionTemplate = (args) => html`
 <div class="demo-container" style="min-height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center;">
 <div>
-<sage-tooltip content="content 1" has-arrow=${args.hasArrow} placement="top-start" open=${args.open}>
-  <sage-button variant="accent">ts</sage-button>
+<sage-tooltip content="content 2" has-arrow=${args.hasArrow} placement="top-start" open=${args.open}>
+  <sage-button variant="accent">t</sage-button>
 </sage-tooltip>
 <sage-tooltip content="content 2" has-arrow=${args.hasArrow} placement="top" open=${args.open}>
   <sage-button variant="accent">t</sage-button>
@@ -65,22 +64,23 @@ const PositionTemplate = (args) => html`
 </div>
 </div>`;
 
-export const Default = PositionTemplate.bind({});
+export const Default = BaseTemplate.bind({});
 Default.args = {
   content: "The tooltip content",
-  // hasArrow: true,
-  // placement: "top"
+  placement: "bottom-start",
+  slot: "target text"
 };
 Default.parameters = { ...defaultParameters };
 
 export const Slotted = SlottedTemplate.bind({});
 Slotted.args = {
-  // TODO Find way to return 10 - 13 in args <- slot="content"
+  htmlContent: true,
+  placement: "bottom-start",
 };
 Slotted.parameters = { ...defaultParameters }
 
 
-
+export const Positioning = PositionTemplate.bind({});
 PositionTemplate.args = {
   content: "Trigger"
 };

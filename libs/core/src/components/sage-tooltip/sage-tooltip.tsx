@@ -1,4 +1,8 @@
 import { Component, Element, Event, Host, Listen, Prop, State, h, EventEmitter, Method, Watch } from '@stencil/core';
+import {
+  // createObserver,
+  positionTooltip
+} from '../../utils/overlay';
 
 /**
  * @slot - The tooltip's target element
@@ -18,6 +22,7 @@ export class SageTooltip {
   // private arrowEl: HTMLElement | null;
   // private triggerEl: HTMLElement | null;
   private contentEl: HTMLElement | null;
+  // private overlayObserver!: IntersectionObserver;
 
   /**
    * Reference to the Host element
@@ -30,9 +35,19 @@ export class SageTooltip {
   @State() isOpen = false;
 
   /**
+   * Determines if the overlay is being observed
+   */
+  // @State() private intersectionObserver: IntersectionObserver;
+
+  /**
    * Content for the tooltip. If HTML is required, use the content slot
    */
   @Prop() content: '';
+
+  /**
+   * If populated, this will be the tooltip content's width
+   */
+  @Prop() customWidth?: number;
 
   /**
    * Id used to reference the component
@@ -45,10 +60,15 @@ export class SageTooltip {
   @Prop() hasArrow?: boolean;
 
   /**
+   * Enable this option when using the content slot
+   */
+  @Prop() htmlContent?: boolean;
+
+  /**
    * Determines the preferred position of the tooltip
    */
   @Prop() placement:
-    | 'top'
+    'top'
     | 'top-start'
     | 'top-end'
     | 'right'
@@ -84,6 +104,19 @@ export class SageTooltip {
   @Event() sageShow: EventEmitter;
 
   // connectedCallback() {}
+  // TODO Q: not working as expected, revisit before putting in review
+  // connectedCallback(): void {
+  //   console.log('connected callback enter: ', this.intersectionObserver );
+  //   createObserver(
+  //     this.intersectionObserver,
+  //     '0px',
+  //     this.contentEl,
+  //     () => {
+  //       // this.opened = true;
+  //       console.log('connected callback');
+  //     }
+  //   );
+  // }
 
   // disconnectedCallback() {}
 
@@ -96,15 +129,13 @@ export class SageTooltip {
   // componentWillUpdate() {}
 
   componentDidUpdate() {
-    // this.positionTooltip();
-
     if (this.opened) {
       this.showTooltip();
     }
   }
 
   componentDidRender() {
-    this.positionTooltip();
+    positionTooltip(this.el, this.placement, this.contentEl);
   }
 
   // Note to self: Should be click by `mouseover` is causing too many repaints. May need to debounce?
@@ -122,7 +153,6 @@ export class SageTooltip {
     // this.contentEl.style.display = 'block';
     this.contentEl.style.opacity = '1';
     this.contentEl.style.visibility = 'visible';
-    // this.positionTooltip();
   }
 
   @Method()
@@ -130,9 +160,8 @@ export class SageTooltip {
     this.opened = false;
     // TODO: need to use block / none but the tooltip content width and height are needed for calculations
     // this.contentEl.style.display = '';
-    this.contentEl.style.opacity = '0';
-    this.contentEl.style.visibility = 'hidden';
-    // this.positionTooltip();
+    // this.contentEl.style.opacity = '0';
+    // this.contentEl.style.visibility = 'hidden';
   }
 
   private handleShow = () => {
@@ -143,187 +172,25 @@ export class SageTooltip {
     this.hideTooltip();
   };
 
-  private positionTooltip() {
-    const rect = this.el.getBoundingClientRect();
-    const contentRect = this.contentEl.getBoundingClientRect();
-    const panelNewLoc = {
-      top: (rect.height / 2) + contentRect.height
-    };
+  private handleFocus = () => {
+    // TODO Q: add focus functionality
+    this.showTooltip();
+  };
 
-    if (this.placement.includes("right")) {
-      this.contentEl.style.top = '50%';
-      this.contentEl.style.left = `calc(${rect.width}px + 8px)`;
-      this.contentEl.style.transform = 'translateY(-50%)';
-
-      if (this.placement.includes("start")) {
-        this.contentEl.style.top = '0';
-        this.contentEl.style.transform = 'translateY(0)';
-      }
-
-      if (this.placement.includes("end")) {
-        this.contentEl.style.bottom = '0';
-        this.contentEl.style.top = 'initial';
-        this.contentEl.style.transform = 'translateY(0)';
-      }
-    }
-
-    if (this.placement.includes("left")) {
-      this.contentEl.style.top = '50%';
-      this.contentEl.style.right = `calc((${rect.width}px + 8px))`;
-      this.contentEl.style.transform = 'translateY(-50%)';
-
-      console.log('rect: ', rect);
-      console.log('contentRect: ', contentRect);
-
-      if (this.placement.includes("start")) {
-        this.contentEl.style.top = '0';
-        this.contentEl.style.transform = 'translateY(0)';
-      }
-
-      if (this.placement.includes("end")) {
-        this.contentEl.style.bottom = '0';
-        this.contentEl.style.top = 'initial';
-        this.contentEl.style.transform = 'translateY(0)';
-      }
-    }
-
-    if (this.placement.includes("bottom")) {
-      this.contentEl.style.top = `calc(${rect.height}px + 8px)`;
-      this.contentEl.style.left = '50%';
-      this.contentEl.style.transform = 'translateX(-50%)';
-
-      if (this.placement.includes("start")) {
-        console.log('start');
-        this.contentEl.style.left = '0';
-        this.contentEl.style.transform = 'translateX(0)';
-      }
-
-      if (this.placement.includes("end")) {
-        console.log('start');
-        this.contentEl.style.left = 'initial';
-        this.contentEl.style.right = '0';
-        this.contentEl.style.transform = 'translateX(0)';
-      }
-    }
-
-    if (this.placement.includes("top")) {
-      this.contentEl.style.top = `calc((${contentRect.height}px + 8px) * -1)`;
-      this.contentEl.style.left = '50%';
-      this.contentEl.style.transform = 'translateX(-50%)';
-
-      if (this.placement.includes("start")) {
-        this.contentEl.style.left = '0';
-        this.contentEl.style.transform = 'translateX(0)';
-      }
-      if (this.placement.includes("end")) {
-        this.contentEl.style.left = 'initial';
-        this.contentEl.style.right = '0';
-        this.contentEl.style.transform = 'translateX(0)';
-      }
-    }
-
-    // ARROW
-
-    // const win = this.contentEl.ownerDocument.defaultView;
-    // const docEl = window.document.documentElement;
-
-    // const viewport = {
-    //   top: docEl.scrollTop,
-    //   bottom: window.pageYOffset + docEl.clientHeight,
-    // };
-
-    // const offset = {
-    //   top: contentRect.top + win.pageYOffset,
-    //   left: contentRect.left + win.pageXOffset,
-    //   bottom: (contentRect.top + win.pageYOffset)
-    // };
-
-    // const panelHeight = contentRect.height;
-    // const enoughSpaceAbove = viewport.top < (offset.top + panelHeight);
-    // const enoughSpaceBelow = viewport.bottom > (offset.bottom + panelHeight);
-
-    // console.log('outside');
-    // console.log('placement: ', this.placement);
-    // console.log('below: ', enoughSpaceBelow, 'above: ', enoughSpaceAbove);
-    // if (!enoughSpaceBelow && enoughSpaceAbove) {
-    //   console.log('inside 1');
-    //   switch(this.placement) {
-    //     case 'bottom-end':
-    //       this.placement = 'top-end';
-    //       this.contentEl.style.left = 'initial';
-    //       this.contentEl.style.right = '0'
-    //       this.contentEl.style.transform = 'translateX(0)';
-    //     case 'bottom':
-    //       this.placement = 'top';
-    //       break;
-    //     case 'bottom-start':
-    //       this.placement = 'top-start';
-    //       this.contentEl.style.left = '0';
-    //       this.contentEl.style.transform = 'translateX(0)';
-    //   }
-    // } else if (enoughSpaceAbove && enoughSpaceBelow) {
-    //   switch(this.placement) {
-    //     case 'top-end':
-    //       this.placement = 'bottom-end';
-    //       this.contentEl.style.left = 'initial';
-    //       this.contentEl.style.right = '0'
-    //       this.contentEl.style.transform = 'translateX(0)';
-    //       console.log('last');
-    //       break;
-    //     case 'top':
-    //       this.placement = 'bottom';
-    //       break;
-    //     case 'top-start':
-    //       this.placement = 'bottom-start';
-    //       this.contentEl.style.left = '0';
-    //       this.contentEl.style.transform = 'translateX(0)';
-    //       break;
-    //   }
-    //   // this.placement = this.placement.replace("top", "bottom");
-    //   console.log('inside 2');
-    // }
-
-    // if (this.placement.includes('top')) {
-    //   console.log('inside 3');
-    //   this.contentEl.style.top = `-${panelNewLoc.top}px`;
-    // }
-  }
-
-  private intersectViewport() {
-    const options = {
-      root: null,
-      rootMargin: "0px",
-      threshold: 1.0,
-    };
-
-    const observer = new IntersectionObserver(callback, options);
-  }
-
-  private createObserver() {
-    // let observer;
-
-    // let options = {
-    //   root: null,
-    //   rootMargin: "0px",
-    //   threshold: 1,
-    // };
-
-    // observer = new IntersectionObserver(handleIntersect, options);
-    // observer.observe(boxElement);
-  }
-
-  private handleIntersect(entries, observer) {
-    console.log('test');
-  }
+  private handleBlur = () => {
+    // TODO Q: add blure functionality
+    this.showTooltip();
+  };
 
   render() {
     return (
       <Host
+        class={{'sage-tooltip--has-html-content': true}}
         hasArrow={this.hasArrow}
         onMouseEnter={this.handleShow}
         onMouseLeave={this.handleHide}
-        // onFocus={this.handleFocus} TODO
-        // onBlur={this.handleBlur} TODO
+        onFocus={this.handleFocus}
+        onBlur={this.handleBlur}
         // onClick={this.handleClick} TODO
       >
         <div
@@ -343,18 +210,16 @@ export class SageTooltip {
 
           <div class="sage-tooltip__content"
             aria-hidden={this.opened ? 'false' : 'true'}
+            aria-live={this.opened ? 'polite' : 'off'}
             id={this.componentId}
             part="content"
             ref={(el) => (this.contentEl = el)}
             role="tooltip"
-            // style={styles}
           >
             <slot
               name="content"
-              aria-live={this.opened ? 'polite' : 'off'}
-            >
-              {this.content}
-            </slot>
+            ></slot>
+            {this.content}
             {this.hasArrow && (
               <div
                 class="sage-tooltip__arrow"
