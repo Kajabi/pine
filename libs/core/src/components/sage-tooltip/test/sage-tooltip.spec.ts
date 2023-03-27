@@ -10,12 +10,12 @@ describe('sage-tooltip', () => {
     expect(root).toEqualHtml(`
     <sage-tooltip>
       <mock:shadow-root>
-      <div class="sage-tooltip">
+      <div class="sage-tooltip sage-tooltip--top">
         <span part="trigger">
           <slot></slot>
         </span>
-        <div class="sage-tooltip__content" aria-hidden="true" part="content" role="tooltip">
-          <slot name="content" aria-live="off"></slot>
+        <div class="sage-tooltip__content" aria-hidden="true"  aria-live="off" part="content" role="tooltip"  style="top: calc((0px + 8px) * -1); left: 50%; transform: translateX(-50%);">
+          <slot name="content"></slot>
         </div>
       </div>
       </mock:shadow-root>

@@ -86,7 +86,8 @@ export class SageTooltip {
    */
   @Prop({mutable: true, reflect: true}) opened = false;
 
-  // @Watch('opened')
+  // eslint-disable-next-line @stencil/no-unused-watch
+  @Watch('opened')
   handleOpenToggle() {
     this.opened ? this.showTooltip() : this.hideTooltip();
     console.log('after isOpened', this.opened);
@@ -124,6 +125,13 @@ export class SageTooltip {
 
   // componentDidLoad() {}
 
+  componentWillRender() {
+    console.log('opened: ', this.opened);
+    if (this.opened) {
+      this.showTooltip();
+    }
+  }
+
   // componentShouldUpdate(newVal: any, oldVal: any, propName: string) {}
 
   // componentWillUpdate() {}
@@ -148,11 +156,14 @@ export class SageTooltip {
 
   @Method()
   async showTooltip() {
+    console.log('showTooltip');
     this.opened = true;
     // TODO: need to use block / none but the tooltip content width and height are needed for calculations
     // this.contentEl.style.display = 'block';
-    this.contentEl.style.opacity = '1';
-    this.contentEl.style.visibility = 'visible';
+    if(this.contentEl) {
+      this.contentEl.style.opacity = '1';
+      this.contentEl.style.visibility = 'visible';
+    }
   }
 
   @Method()
@@ -185,13 +196,13 @@ export class SageTooltip {
   render() {
     return (
       <Host
-        class={{'sage-tooltip--has-html-content': true}}
+        class={{'sage-tooltip--has-html-content': this.htmlContent}}
         hasArrow={this.hasArrow}
         onMouseEnter={this.handleShow}
         onMouseLeave={this.handleHide}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
-        // onClick={this.handleClick} TODO
+        // onClick={this.handleClick}
       >
         <div
           class={`
