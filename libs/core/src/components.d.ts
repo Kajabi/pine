@@ -240,6 +240,49 @@ export namespace Components {
          */
         "variant": 'primary' | 'availability' | 'filter';
     }
+    interface SageTooltip {
+        /**
+          * Id used to reference the component
+         */
+        "componentId": '';
+        /**
+          * Content for the tooltip. If HTML is required, use the content slot
+         */
+        "content": '';
+        /**
+          * If populated, this will be the tooltip content's width
+         */
+        "customWidth"?: number;
+        /**
+          * Determines whether or not the tooltip have an arrow
+         */
+        "hasArrow"?: boolean;
+        "hideTooltip": () => Promise<void>;
+        /**
+          * Enable this option when using the content slot
+         */
+        "htmlContent"?: boolean;
+        /**
+          * Determines whether or not the tooltip is visible
+         */
+        "opened": boolean;
+        /**
+          * Determines the preferred position of the tooltip
+         */
+        "placement": 'top'
+    | 'top-start'
+    | 'top-end'
+    | 'right'
+    | 'right-start'
+    | 'right-end'
+    | 'bottom'
+    | 'bottom-start'
+    | 'bottom-end'
+    | 'left'
+    | 'left-start'
+    | 'left-end';
+        "showTooltip": () => Promise<void>;
+    }
 }
 export interface SageCheckboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -252,6 +295,10 @@ export interface SageInputCustomEvent<T> extends CustomEvent<T> {
 export interface SageTabCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSageTabElement;
+}
+export interface SageTooltipCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSageTooltipElement;
 }
 declare global {
     interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
@@ -314,6 +361,12 @@ declare global {
         prototype: HTMLSageTabsElement;
         new (): HTMLSageTabsElement;
     };
+    interface HTMLSageTooltipElement extends Components.SageTooltip, HTMLStencilElement {
+    }
+    var HTMLSageTooltipElement: {
+        prototype: HTMLSageTooltipElement;
+        new (): HTMLSageTooltipElement;
+    };
     interface HTMLElementTagNameMap {
         "my-component": HTMLMyComponentElement;
         "sage-button": HTMLSageButtonElement;
@@ -325,6 +378,7 @@ declare global {
         "sage-tab": HTMLSageTabElement;
         "sage-tabpanel": HTMLSageTabpanelElement;
         "sage-tabs": HTMLSageTabsElement;
+        "sage-tooltip": HTMLSageTooltipElement;
     }
 }
 declare namespace LocalJSX {
@@ -571,6 +625,55 @@ declare namespace LocalJSX {
          */
         "variant": 'primary' | 'availability' | 'filter';
     }
+    interface SageTooltip {
+        /**
+          * Id used to reference the component
+         */
+        "componentId"?: '';
+        /**
+          * Content for the tooltip. If HTML is required, use the content slot
+         */
+        "content"?: '';
+        /**
+          * If populated, this will be the tooltip content's width
+         */
+        "customWidth"?: number;
+        /**
+          * Determines whether or not the tooltip have an arrow
+         */
+        "hasArrow"?: boolean;
+        /**
+          * Enable this option when using the content slot
+         */
+        "htmlContent"?: boolean;
+        /**
+          * Emitted after a tooltip is closed
+         */
+        "onSageHide"?: (event: SageTooltipCustomEvent<any>) => void;
+        /**
+          * Emitted after a tooltip is shown
+         */
+        "onSageShow"?: (event: SageTooltipCustomEvent<any>) => void;
+        /**
+          * Determines whether or not the tooltip is visible
+         */
+        "opened"?: boolean;
+        /**
+          * Determines the preferred position of the tooltip
+         */
+        "placement"?: 'top'
+    | 'top-start'
+    | 'top-end'
+    | 'right'
+    | 'right-start'
+    | 'right-end'
+    | 'bottom'
+    | 'bottom-start'
+    | 'bottom-end'
+    | 'left'
+    | 'left-start'
+    | 'left-end';
+    }
     interface IntrinsicElements {
         "my-component": MyComponent;
         "sage-button": SageButton;
@@ -582,6 +685,7 @@ declare namespace LocalJSX {
         "sage-tab": SageTab;
         "sage-tabpanel": SageTabpanel;
         "sage-tabs": SageTabs;
+        "sage-tooltip": SageTooltip;
     }
 }
 export { LocalJSX as JSX };
@@ -598,6 +702,7 @@ declare module "@stencil/core" {
             "sage-tab": LocalJSX.SageTab & JSXBase.HTMLAttributes<HTMLSageTabElement>;
             "sage-tabpanel": LocalJSX.SageTabpanel & JSXBase.HTMLAttributes<HTMLSageTabpanelElement>;
             "sage-tabs": LocalJSX.SageTabs & JSXBase.HTMLAttributes<HTMLSageTabsElement>;
+            "sage-tooltip": LocalJSX.SageTooltip & JSXBase.HTMLAttributes<HTMLSageTooltipElement>;
         }
     }
 }
