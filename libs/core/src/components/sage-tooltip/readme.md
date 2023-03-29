@@ -12,6 +12,7 @@
 | `componentId` | `component-id` | Id used to reference the component                                 | `""`                                                                                                                                                                 | `undefined` |
 | `content`     | `content`      | Content for the tooltip. If HTML is required, use the content slot | `""`                                                                                                                                                                 | `undefined` |
 | `customWidth` | `custom-width` | If populated, this will be the tooltip content's width             | `number`                                                                                                                                                             | `undefined` |
+| `disabled`    | `disabled`     | Determines whether or not the tooltip have an arrow                | `boolean`                                                                                                                                                            | `false`     |
 | `hasArrow`    | `has-arrow`    | Determines whether or not the tooltip have an arrow                | `boolean`                                                                                                                                                            | `undefined` |
 | `htmlContent` | `html-content` | Enable this option when using the content slot                     | `boolean`                                                                                                                                                            | `undefined` |
 | `opened`      | `opened`       | Determines whether or not the tooltip is visible                   | `boolean`                                                                                                                                                            | `false`     |
@@ -51,10 +52,10 @@ Type: `Promise<void>`
 
 ## Slots
 
-| Slot        | Description                  |
-| ----------- | ---------------------------- |
-|             | The tooltip's target element |
-| `"content"` | Content inside the tooltip   |
+| Slot          | Description                  |
+| ------------- | ---------------------------- |
+| `"(default)"` | The tooltip's target element |
+| `"content"`   | HTML content for the tooltip |
 
 
 ## Shadow Parts

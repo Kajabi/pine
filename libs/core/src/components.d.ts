@@ -256,6 +256,10 @@ export namespace Components {
         /**
           * Determines whether or not the tooltip have an arrow
          */
+        "disabled": boolean;
+        /**
+          * Determines whether or not the tooltip have an arrow
+         */
         "hasArrow"?: boolean;
         "hideTooltip": () => Promise<void>;
         /**
@@ -638,6 +642,10 @@ declare namespace LocalJSX {
           * If populated, this will be the tooltip content's width
          */
         "customWidth"?: number;
+        /**
+          * Determines whether or not the tooltip have an arrow
+         */
+        "disabled"?: boolean;
         /**
           * Determines whether or not the tooltip have an arrow
          */

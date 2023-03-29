@@ -5,8 +5,8 @@ import {
 } from '../../utils/overlay';
 
 /**
- * @slot - The tooltip's target element
- * @slot content - Content inside the tooltip
+ * @slot (default) - The tooltip's target element
+ * @slot content - HTML content for the tooltip
  *
  * @part arrow - The arrow attached to the tooltip content.
  * @part content - The tooltip content.
@@ -59,6 +59,7 @@ export class SageTooltip {
    */
   @Prop() hasArrow?: boolean;
 
+
   /**
    * Enable this option when using the content slot
    */
@@ -89,8 +90,28 @@ export class SageTooltip {
   // eslint-disable-next-line @stencil/no-unused-watch
   @Watch('opened')
   handleOpenToggle() {
-    this.opened ? this.showTooltip() : this.hideTooltip();
+    if(this.opened) {
+      this.showTooltip();
+      this.sageShow.emit();
+      const testing = this.sageShow.emit();
+      console.log('testing: ', testing);
+    } else {
+      this.hideTooltip();
+      this.sageHide.emit();
+    }
     console.log('after isOpened', this.opened);
+  }
+
+  /**
+   * Determines whether or not the tooltip have an arrow
+   */
+  @Prop() disabled = false;
+
+  // TODO Q update this state prop
+  // eslint-disable-next-line @stencil/no-unused-watch
+  @Watch('disabled')
+  handleDisabled() {
+    console.log('disabled')
   }
 
   // TODO Q: make better events, maybe before and after hide and show
@@ -104,7 +125,10 @@ export class SageTooltip {
    */
   @Event() sageShow: EventEmitter;
 
-  // connectedCallback() {}
+  connectedCallback() {
+    this.el.addEventListener('focus', this.handleFocus);
+
+  }
   // TODO Q: not working as expected, revisit before putting in review
   // connectedCallback(): void {
   //   console.log('connected callback enter: ', this.intersectionObserver );
@@ -119,7 +143,9 @@ export class SageTooltip {
   //   );
   // }
 
-  // disconnectedCallback() {}
+  disconnectedCallback() {
+    this.el.removeEventListener('focus', this.handleFocus);
+  }
 
   // componentWillLoad() {}
 
@@ -157,12 +183,15 @@ export class SageTooltip {
   @Method()
   async showTooltip() {
     console.log('showTooltip');
-    this.opened = true;
-    // TODO: need to use block / none but the tooltip content width and height are needed for calculations
-    // this.contentEl.style.display = 'block';
-    if(this.contentEl) {
-      this.contentEl.style.opacity = '1';
-      this.contentEl.style.visibility = 'visible';
+
+    if(!this.disabled) {
+      this.opened = true;
+      // TODO: need to use block / none but the tooltip content width and height are needed for calculations
+      // this.contentEl.style.display = 'block';
+      if(this.contentEl) {
+        this.contentEl.style.opacity = '1';
+        this.contentEl.style.visibility = 'visible';
+      }
     }
   }
 
@@ -171,11 +200,17 @@ export class SageTooltip {
     this.opened = false;
     // TODO: need to use block / none but the tooltip content width and height are needed for calculations
     // this.contentEl.style.display = '';
-    // this.contentEl.style.opacity = '0';
-    // this.contentEl.style.visibility = 'hidden';
+    this.contentEl.style.opacity = '0';
+    this.contentEl.style.visibility = 'hidden';
   }
 
   private handleShow = () => {
+    // Do not show the overlay if disabled
+    if(this.disabled) {
+      console.log('inside disabled');
+      return
+    }
+    console.log('disabled');
     this.showTooltip();
   };
 
@@ -185,6 +220,7 @@ export class SageTooltip {
 
   private handleFocus = () => {
     // TODO Q: add focus functionality
+    console.log('handle focus');
     this.showTooltip();
   };
 
@@ -197,11 +233,12 @@ export class SageTooltip {
     return (
       <Host
         class={{'sage-tooltip--has-html-content': this.htmlContent}}
+        disabled={this.disabled}
         hasArrow={this.hasArrow}
         onMouseEnter={this.handleShow}
         onMouseLeave={this.handleHide}
-        onFocus={this.handleFocus}
-        onBlur={this.handleBlur}
+        onFocusIn={this.handleFocus}
+        onFocusOut={this.handleBlur}
         // onClick={this.handleClick}
       >
         <div
