@@ -21,10 +21,10 @@
 
 ## Events
 
-| Event      | Description                       | Type               |
-| ---------- | --------------------------------- | ------------------ |
-| `sageHide` | Emitted after a tooltip is closed | `CustomEvent<any>` |
-| `sageShow` | Emitted after a tooltip is shown  | `CustomEvent<any>` |
+| Event             | Description                       | Type               |
+| ----------------- | --------------------------------- | ------------------ |
+| `sageTooltipHide` | Emitted after a tooltip is closed | `CustomEvent<any>` |
+| `sageTooltipShow` | Emitted after a tooltip is shown  | `CustomEvent<any>` |
 
 
 ## Methods

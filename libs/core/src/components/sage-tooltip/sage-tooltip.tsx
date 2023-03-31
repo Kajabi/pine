@@ -1,4 +1,4 @@
-import { Component, Element, Event, Host, Listen, Prop, State, h, EventEmitter, Method, Watch } from '@stencil/core';
+import { Component, Element, Event, Host, Prop, State, h, EventEmitter, Method, Watch } from '@stencil/core';
 import {
   // createObserver,
   positionTooltip
@@ -90,14 +90,16 @@ export class SageTooltip {
   // eslint-disable-next-line @stencil/no-unused-watch
   @Watch('opened')
   handleOpenToggle() {
+    console.log('before isOpened', this.opened);
+
     if(this.opened) {
-      this.showTooltip();
-      this.sageShow.emit();
-      const testing = this.sageShow.emit();
+      this.handleShow();
+      this.sageTooltipShow.emit();
+      const testing = this.sageTooltipShow.emit();
       console.log('testing: ', testing);
     } else {
-      this.hideTooltip();
-      this.sageHide.emit();
+      this.handleHide();
+      this.sageTooltipHide.emit();
     }
     console.log('after isOpened', this.opened);
   }
@@ -118,12 +120,12 @@ export class SageTooltip {
   /**
    * Emitted after a tooltip is closed
    */
-  @Event() sageHide: EventEmitter;
+  @Event() sageTooltipHide: EventEmitter;
 
   /**
    * Emitted after a tooltip is shown
    */
-  @Event() sageShow: EventEmitter;
+  @Event() sageTooltipShow: EventEmitter;
 
   // connectedCallback() {}
   // TODO Q: not working as expected, revisit before putting in review
@@ -144,16 +146,16 @@ export class SageTooltip {
     this.el.removeEventListener('focus', this.handleFocus);
   }
 
-  // componentWillLoad() {}
-
-  // componentDidLoad() {}
-
-  componentWillRender() {
+  componentWillLoad() {
     console.log('opened: ', this.opened);
     if (this.opened) {
       this.showTooltip();
     }
   }
+
+  // componentDidLoad() {}
+
+  // componentWillRender() {}
 
   // componentShouldUpdate(newVal: any, oldVal: any, propName: string) {}
 
@@ -166,16 +168,17 @@ export class SageTooltip {
   }
 
   componentDidRender() {
+    console.log('didRender');
     positionTooltip(this.el, this.placement, this.contentEl);
   }
 
   // Note to self: Should be click by `mouseover` is causing too many repaints. May need to debounce?
-  @Listen('click', { capture: true })
-  handleClick() {
-    const tooltipContent = this.el.shadowRoot.querySelector('sage-tooltip__content');
-    // this.isOpen = !this.isOpen;
-    tooltipContent.classList.add('is-open');
-  }
+  // @Listen('click', { capture: true })
+  // handleClick() {
+  //   const tooltipContent = this.el.shadowRoot.querySelector('sage-tooltip__content');
+  //   // this.isOpen = !this.isOpen;
+  //   tooltipContent.classList.add('is-open');
+  // }
 
   @Method()
   async showTooltip() {
@@ -222,7 +225,7 @@ export class SageTooltip {
   };
 
   private handleBlur = () => {
-    // TODO Q: add blure functionality
+    // TODO Q: add blur functionality
     this.showTooltip();
   };
 
@@ -249,6 +252,7 @@ export class SageTooltip {
           <span
             aria-describedby={this.componentId}
             part="trigger"
+            class="sage-tooltip__trigger"
             // ref={(el) => (this.triggerEl = el)}
           >
             <slot />

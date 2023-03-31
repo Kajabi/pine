@@ -657,11 +657,11 @@ declare namespace LocalJSX {
         /**
           * Emitted after a tooltip is closed
          */
-        "onSageHide"?: (event: SageTooltipCustomEvent<any>) => void;
+        "onSageTooltipHide"?: (event: SageTooltipCustomEvent<any>) => void;
         /**
           * Emitted after a tooltip is shown
          */
-        "onSageShow"?: (event: SageTooltipCustomEvent<any>) => void;
+        "onSageTooltipShow"?: (event: SageTooltipCustomEvent<any>) => void;
         /**
           * Determines whether or not the tooltip is visible
          */

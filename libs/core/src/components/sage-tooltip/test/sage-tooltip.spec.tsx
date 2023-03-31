@@ -11,7 +11,7 @@ describe('sage-tooltip', () => {
     <sage-tooltip>
       <mock:shadow-root>
       <div class="sage-tooltip>
-        <span part="trigger">
+        <span class="sage-tooltip__trigger" part="trigger">
           <slot></slot>
         </span>
         <div class="sage-tooltip__content" aria-hidden="true" aria-live="off" part="content" role="tooltip">
@@ -35,7 +35,7 @@ describe('sage-tooltip', () => {
     <sage-tooltip>
       <mock:shadow-root>
       <div class="sage-tooltip">
-        <span part="trigger">
+        <span class="sage-tooltip__trigger" part="trigger">
           <slot></slot>
         </span>
         <div class="sage-tooltip__content" aria-hidden="true" aria-live="off" part="content" role="tooltip">
@@ -60,7 +60,7 @@ describe('sage-tooltip', () => {
     <sage-tooltip>
       <mock:shadow-root>
       <div class="sage-tooltip">
-        <span part="trigger">
+        <span class="sage-tooltip__trigger" part="trigger">
           <slot></slot>
         </span>
         <div class="sage-tooltip__content" aria-hidden="true" aria-live="off" part="content" role="tooltip">

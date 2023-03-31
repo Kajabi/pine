@@ -111,6 +111,7 @@ Disabled.parameters = { ...defaultParameters }
 export const Opened = BaseTemplate.bind({});
 Opened.args = {
   content: "The tooltip content",
+  disabled: false,
   opened: true,
   placement: "bottom-start",
   slot: "target text"
