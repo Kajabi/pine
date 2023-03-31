@@ -4,6 +4,10 @@ export const positionTooltip = (elem, elemPlacement, overlay, offset = 8) => {
   // const panelNewLoc = {
   //   top: (rect.height / 2) + contentRect.height
   // };
+  console.log('elemPlacement: ', elemPlacement);
+
+  // Exit the function if the placement is not set
+  if (!elemPlacement || elemPlacement == "") return;
 
   if (elemPlacement.includes("right")) {
     overlay.style.top = '50%';

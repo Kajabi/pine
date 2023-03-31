@@ -71,7 +71,6 @@ export const Default = BaseTemplate.bind({});
 Default.args = {
   content: "The tooltip content",
   disabled: false,
-  placement: "bottom-start",
   slot: "target text"
 };
 Default.parameters = { ...defaultParameters };

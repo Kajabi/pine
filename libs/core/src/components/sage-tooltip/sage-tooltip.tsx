@@ -80,7 +80,7 @@ export class SageTooltip {
     | 'bottom-end'
     | 'left'
     | 'left-start'
-    | 'left-end' = 'top';
+    | 'left-end';
 
   /**
    * Determines whether or not the tooltip is visible
@@ -125,10 +125,7 @@ export class SageTooltip {
    */
   @Event() sageShow: EventEmitter;
 
-  connectedCallback() {
-    this.el.addEventListener('focus', this.handleFocus);
-
-  }
+  // connectedCallback() {}
   // TODO Q: not working as expected, revisit before putting in review
   // connectedCallback(): void {
   //   console.log('connected callback enter: ', this.intersectionObserver );
@@ -237,15 +234,16 @@ export class SageTooltip {
         hasArrow={this.hasArrow}
         onMouseEnter={this.handleShow}
         onMouseLeave={this.handleHide}
-        onFocusIn={this.handleFocus}
-        onFocusOut={this.handleBlur}
+        onFocusin={this.handleFocus}
+        onFocusout={this.handleBlur}
         // onClick={this.handleClick}
       >
         <div
           class={`
             sage-tooltip
-            sage-tooltip--${this.placement}
+            ${this.placement ? (`sage-tooltip--${this.placement}`) : ''}
             ${this.opened ? 'is-open' : ''}
+
           `}
         >
           <span

@@ -16,7 +16,7 @@
 | `hasArrow`    | `has-arrow`    | Determines whether or not the tooltip have an arrow                | `boolean`                                                                                                                                                            | `undefined` |
 | `htmlContent` | `html-content` | Enable this option when using the content slot                     | `boolean`                                                                                                                                                            | `undefined` |
 | `opened`      | `opened`       | Determines whether or not the tooltip is visible                   | `boolean`                                                                                                                                                            | `false`     |
-| `placement`   | `placement`    | Determines the preferred position of the tooltip                   | `"bottom" \| "bottom-end" \| "bottom-start" \| "left" \| "left-end" \| "left-start" \| "right" \| "right-end" \| "right-start" \| "top" \| "top-end" \| "top-start"` | `'top'`     |
+| `placement`   | `placement`    | Determines the preferred position of the tooltip                   | `"bottom" \| "bottom-end" \| "bottom-start" \| "left" \| "left-end" \| "left-start" \| "right" \| "right-end" \| "right-start" \| "top" \| "top-end" \| "top-start"` | `undefined` |
 
 
 ## Events
@@ -65,6 +65,20 @@ Type: `Promise<void>`
 | `"arrow"`   | The arrow attached to the tooltip content. |
 | `"content"` | The tooltip content.                       |
 | `"trigger"` | The tooltip trigger.                       |
+
+
+## CSS Custom Properties
+
+| Name                            | Description                     |
+| ------------------------------- | ------------------------------- |
+| `--arrow-offset`                | arrow offset position           |
+| `--arrow-pointing-down`         | shape for downward facing arrow |
+| `--arrow-pointing-to-the-left`  | shape for left facing arrow     |
+| `--arrow-pointing-to-the-right` | shape for right facing arrow    |
+| `--arrow-pointing-up`           | shape for upward facing arrow   |
+| `--arrow-size`                  | width and height of the arrow   |
+| `--background`                  | Background of the tooltip       |
+| `--color`                       | Text color of the tooltip       |
 
 
 ----------------------------------------------

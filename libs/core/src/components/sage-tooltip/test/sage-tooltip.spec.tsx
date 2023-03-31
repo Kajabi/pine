@@ -10,11 +10,11 @@ describe('sage-tooltip', () => {
     expect(root).toEqualHtml(`
     <sage-tooltip>
       <mock:shadow-root>
-      <div class="sage-tooltip sage-tooltip--top">
+      <div class="sage-tooltip>
         <span part="trigger">
           <slot></slot>
         </span>
-        <div class="sage-tooltip__content" aria-hidden="true"  aria-live="off" part="content" role="tooltip"  style="top: calc((0px + 8px) * -1); left: 50%; transform: translateX(-50%);">
+        <div class="sage-tooltip__content" aria-hidden="true" aria-live="off" part="content" role="tooltip">
           <slot name="content"></slot>
         </div>
       </div>
@@ -38,8 +38,8 @@ describe('sage-tooltip', () => {
         <span part="trigger">
           <slot></slot>
         </span>
-        <div class="sage-tooltip__content" aria-hidden="true" part="content" role="tooltip">
-          <slot name="content" aria-live="off"></slot>
+        <div class="sage-tooltip__content" aria-hidden="true" aria-live="off" part="content" role="tooltip">
+          <slot name="content"></slot>
         </div>
       </div>
       </mock:shadow-root>
@@ -63,14 +63,24 @@ describe('sage-tooltip', () => {
         <span part="trigger">
           <slot></slot>
         </span>
-        <div class="sage-tooltip__content" aria-hidden="true" part="content" role="tooltip">
-          <slot name="content" aria-live="off"></slot>
+        <div class="sage-tooltip__content" aria-hidden="true" aria-live="off" part="content" role="tooltip">
+          <slot name="content"></slot>
         </div>
       </div>
       </mock:shadow-root>
       <p slot="content">this is the slotted tooltip content</p>
     </sage-tooltip>
     `);
+  });
+
+  it('renders the placement', async () => {
+    const { root } = await newSpecPage({
+      components: [SageTooltip],
+      html: `<sage-tooltip placement="right-start"></sage-tooltip>`
+    });
+
+    const placement = root.shadowRoot.querySelector('.sage-tooltip--right-start');
+    expect(placement).not.toBeNull();
   });
 
   it('renders arrow', async () => {
