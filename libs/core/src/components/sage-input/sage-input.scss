@@ -55,7 +55,6 @@
   --hint-line-height: 20px;
   --hint-margin-top: 8px;
 
-
   display: inline;
 }
 
@@ -84,7 +83,6 @@ input {
     cursor: not-allowed;
   }
 
-
   &:hover {
     border-color: var(--border-color-hover);
   }
@@ -111,7 +109,7 @@ input {
     color: var(--color-placeholder);
   }
 
-  &:has(~.sage-input__error-text) {
+  &:has(~ .sage-input__error-text) {
     border-color: var(--color-error);
   }
   /* stylelint-enable */

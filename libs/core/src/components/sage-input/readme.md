@@ -14,7 +14,7 @@
 | `hint`        | `hint`        | Displays a hint or description of the input field                                                            | `string`  | `undefined` |
 | `inputId`     | `input-id`    | A unique identifier for the input field                                                                      | `string`  | `undefined` |
 | `invalid`     | `invalid`     | Indicates whether or not the input field is invalid or throws an error                                       | `boolean` | `undefined` |
-| `label`       | `label`       | Text to be displayed as the form label                                                                       | `string`  | `undefined` |
+| `label`       | `label`       | Text to be displayed as the input label                                                                      | `string`  | `undefined` |
 | `name`        | `name`        | Specifies the name. Submitted with the form name/value pair                                                  | `string`  | `undefined` |
 | `placeholder` | `placeholder` | Specifies a short hint that describes the expected value of the input field                                  | `string`  | `undefined` |
 | `readonly`    | `readonly`    | Indicates whether or not the input field is readonly                                                         | `boolean` | `undefined` |

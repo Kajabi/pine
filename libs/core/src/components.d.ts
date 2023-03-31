@@ -153,7 +153,7 @@ export namespace Components {
          */
         "invalid"?: boolean;
         /**
-          * Text to be displayed as the form label
+          * Text to be displayed as the input label
          */
         "label"?: string;
         /**
@@ -597,7 +597,7 @@ declare namespace LocalJSX {
          */
         "invalid"?: boolean;
         /**
-          * Text to be displayed as the form label
+          * Text to be displayed as the input label
          */
         "label"?: string;
         /**
