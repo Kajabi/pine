@@ -1,0 +1,114 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+import * as stories from './sage-textarea.stories.js';
+
+<Meta
+  title="components/Textarea"
+  component="sage-textarea"
+  argTypes={extractArgTypes('sage-textarea')}
+  args={{
+    disabled: false,
+    errorText: null,
+    hint: null,
+    invalid: false,
+    label: null,
+    name: null,
+    placeholder: null,
+    readonly: false,
+    required: false,
+    textareaId: null,
+    value: null,
+  }}
+/>
+
+# Textarea
+
+## Guidelines
+### Usage
+
+#### When to use
+- You want a response longer than one line
+- You want to capture rich text input
+
+#### When not to use
+- To gather basic usage information, use an [Input](/docs/components-input--text)
+- You want a response that is one line of text, use an [Input](/docs/components-input--text)
+
+### Accessibility
+- The textarea component comes with a built-in label through the `label` property, it is strongly encouraged that you include it.
+- Please provide clear and descriptive error, hint, and placeholder messages
+
+## Properties
+<ArgsTable of="sage-textarea" />
+
+## Variants
+
+### Default
+Basic textarea example
+<Story story={stories.Default} />
+
+<Canvas>
+  <sage-textarea name="Default" label="Name"></sage-textarea>
+</Canvas>
+
+### Rows
+The rows property is used to pass a number of expected rows visible within the textarea
+<Story story={stories.Rows} />
+
+<Canvas>
+  <sage-textarea name="Rows" label="Name" rows="4"></sage-textarea>
+</Canvas>
+
+### Required
+It's recommended you pass `error-text` on any required fields
+<Story story={stories.Required} />
+
+<Canvas>
+  <sage-textarea name="Required" label="Name" required="true" textarea-id="uniqueIdDefault"></sage-textarea>
+</Canvas>
+
+### Error
+Error messages are passed using the `error-text` property, textareas will calculate their validity based on their required property
+
+You can also manually pass in an invalid state by setting the `invalid` property to true
+<Story story={stories.Error} />
+
+<Canvas>
+  <sage-textarea name="Error" label="Name" error-text="Error" invalid="true" required="true" textarea-id="uniqueIdError" ></sage-textarea>
+</Canvas>
+
+### Placeholder
+Placeholders should be examples of content that can be filled into the textarea
+
+Do not use placeholders to provide hints to users, please use the `hint` property instead
+<Story story={stories.Placeholder} />
+
+<Canvas>
+  <sage-textarea name="Placeholder" label="Name" placeholder="Placeholder..." textarea-id="uniqueIdPlaceholder"></sage-textarea>
+</Canvas>
+
+### Disabled
+Disabled states can be set by the `disabled` property
+<Story story={stories.Disabled} />
+
+<Canvas>
+  <sage-textarea name="Disabled" label="Name" disabled="true" textarea-id="uniqueIdDisabled"></sage-textarea>
+</Canvas>
+
+### Readonly
+Readonly textareas can be used to display static content while preventing the user from editing
+<Story story={stories.Readonly} />
+
+<Canvas>
+  <sage-textarea name="Readonly" label="Name" readonly="true" value="Readonly Value" textarea-id="uniqueIdReadonly"></sage-textarea>
+</Canvas>
+
+### Hint
+Hints are used to provide context about what is expected from the users
+<Story story={stories.Hint} />
+
+<Canvas>
+  <sage-textarea name="Hint" label="Name" hint="Hint" textarea-id="uniqueIdHint"></sage-textarea>
+</Canvas>
