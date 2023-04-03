@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import * as tokens from '../tokens/tokens.json';
+import tokens from '../tokens/tokens.json';
 
 /**
  * Takes the JSON data and converts it to formatted CSS
