@@ -20,6 +20,7 @@
   "collection:main": "dist/collection/index.js",
   "unpkg": "dist/sage-icons/icons.esm.js",
   "publishConfig": {
+    "access": "public",
     "directory": "dist"
   },
   "repository": {

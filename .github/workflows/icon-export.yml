@@ -1,0 +1,76 @@
+name: 'Run Icon Update'
+
+on:
+  workflow_call:
+    secrets:
+      FIGMA_ACCESS_TOKEN:
+        description: "The personal access token created in Figma"
+        required: true
+
+      FIGMA_FILE_ID:
+        description: "The file id for the Figma file"
+        required: true
+
+jobs:
+  update-icons:
+    runs-on: ubuntu-latest
+    outputs:
+      bumpType: ${{ steps.version-bump.outputs.VERSION_BUMP_TYPE}}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Configure user
+        run: |
+          git config user.name "Kajabi Automation Bot"
+          git config user.email "dev+github-bot@kajabi.com"
+
+      - name: Cache Node modules
+        uses: actions/cache@v3
+        id: icons-node-modules
+        env:
+          cache-name: icons-node-modules
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}-v1
+
+      - name: Set SHA
+        uses: nrwl/nx-set-shas@v3
+
+      - name: Install Dependencies
+        if: steps.icons-node-modules.outputs.cache-hit != 'true'
+        run: lerna bootstrap -- --frozen-lockfile --immutable
+        shell: bash
+
+      - name: Get current date
+        id: date
+        run: echo "current_date=$(date --rfc-3339=date)" >> $GITHUB_ENV
+
+      - name: Running Icon Export
+        run: yarn nx run icons:update
+        env:
+          FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }}
+          FIGMA_FILE_ID: ${{ secrets.FIGMA_FILE_ID }}
+
+      - name: Determine Major or Minor version bump
+        id: version-bump
+        run: |
+          echo "VERSION_BUMP_TYPE=$(node ./.scripts/determine-bump-type.js)" >> $GITHUB_OUTPUT
+        shell: bash
+
+  release:
+    needs: update-icons
+    uses: ./.github/workflows/release-icons.yml
+    if: needs.update-icons.outputs.bumpType != 'undefined'
+    with:
+      tag: 'nightly'
+      version: ${{ needs.update-icons.outputs.bumpType }}
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
