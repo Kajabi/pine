@@ -1,4 +1,4 @@
-import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+import { Meta, Story, Canvas, Source, ArgsTable } from '@storybook/addon-docs';
 import { html, render } from 'lit-html';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
@@ -9,15 +9,15 @@ import * as stories from './sage-divider.stories.js';
 
 # Divider
 
-<p>
-  Use the divider to separate sections of content. You can also use them to override auto-layout padding.
-</p>
+Use the divider to separate sections of content. You can also use them to override auto-layout padding.
 
 ## Properties
 
 <ArgsTable of="sage-divider" />
 
 ### Default
+
+The default divider displays a horizontal line.
 
 <Story story={stories.Default} />
 
@@ -27,27 +27,29 @@ import * as stories from './sage-divider.stories.js';
 
 ### Vertical
 
+To display the divider vertically, the `vertical` prop can be set to `true`.
+
 <Story story={stories.Vertical} />
 
 <Canvas>
-  <div style={{height: "200px"}}>
+  <div style={{ height: '150px' }}>
     <sage-divider vertical="true" />
   </div>
 </Canvas>
 
-### Horizontal Offset
+### Offsets
+
+To expand the width or height in order to create a full-bleed or full height appearance the `offset` property can be set to one of the preset sizes.
+
+Offset sizes follow the global spacing sizes: `xxs`:4px, `xs`:8px, `sm`:12px,`md`:24px, `lg`:32px, `xl`:48px, `xxl`:64px
+
 
 <Canvas>
   <sage-divider offset="lg" />
 </Canvas>
 
-### Vertical Offset
-
 <Canvas>
-  <div style={{height: "200px"}}>
+  <div style={{ height: '150px' }}>
     <sage-divider offset="lg" vertical="true" />
   </div>
 </Canvas>
-
-
-

@@ -14,14 +14,7 @@ export class SageDivider {
 
   /**
    *
-   * The offset size follows the t-shirt model
-   * xxs: 4px
-   * xs: 8px
-   * sm: 12px
-   * md: 24px
-   * lg: 32px
-   * xl: 48px
-   * xxl: 64px
+   * Adds offset margin/padding to expand the width (horizontal) or the height (vertical) of divider.
    */
   @Prop() offset: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 

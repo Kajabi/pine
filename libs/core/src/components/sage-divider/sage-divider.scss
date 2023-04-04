@@ -1,3 +1,8 @@
+/*
+TODO: update offset values to use
+our spacing tokens when available.
+*/
+
 $sage-divider-offsets: (
   xxs: 4px,
   xs: 8px,
@@ -22,8 +27,7 @@ $sage-divider-offsets: (
   }
 }
 
-@each $key,
-$value in $sage-divider-offsets {
+@each $key, $value in $sage-divider-offsets {
   $offset: "#{$key}";
 
   .sage-divider--offset-#{$offset} {
