@@ -90,6 +90,17 @@ export namespace Components {
          */
         "value": string;
     }
+    interface SageDivider {
+        /**
+          * The offset size follows the t-shirt model xxs: 4px xs: 8px sm: 12px md: 24px lg: 32px xl: 48px xxl: 64px
+         */
+        "offset": 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+        /**
+          * Sets divider to display vertically
+          * @defaultValue false
+         */
+        "vertical": boolean;
+    }
     interface SageImage {
         /**
           * The image's alt tag. If none is provided, it will default to an empty string.
@@ -260,6 +271,12 @@ declare global {
     var HTMLSageCheckboxElement: {
         prototype: HTMLSageCheckboxElement;
         new (): HTMLSageCheckboxElement;
+    }
+    interface HTMLSageDividerElement extends Components.SageDivider, HTMLStencilElement {
+    }
+    var HTMLSageDividerElement: {
+        prototype: HTMLSageDividerElement;
+        new (): HTMLSageDividerElement;
     };
     interface HTMLSageImageElement extends Components.SageImage, HTMLStencilElement {
     }
@@ -301,6 +318,7 @@ declare global {
         "my-component": HTMLMyComponentElement;
         "sage-button": HTMLSageButtonElement;
         "sage-checkbox": HTMLSageCheckboxElement;
+        "sage-divider": HTMLSageDividerElement;
         "sage-image": HTMLSageImageElement;
         "sage-input": HTMLSageInputElement;
         "sage-link": HTMLSageLinkElement;
@@ -397,6 +415,17 @@ declare namespace LocalJSX {
           * The value of the checkbox that is submitted with a form.
          */
         "value"?: string;
+    }
+    interface SageDivider {
+        /**
+          * The offset size follows the t-shirt model xxs: 4px xs: 8px sm: 12px md: 24px lg: 32px xl: 48px xxl: 64px
+         */
+        "offset"?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+        /**
+          * Sets divider to display vertically
+          * @defaultValue false
+         */
+        "vertical"?: boolean;
     }
     interface SageImage {
         /**
@@ -546,6 +575,7 @@ declare namespace LocalJSX {
         "my-component": MyComponent;
         "sage-button": SageButton;
         "sage-checkbox": SageCheckbox;
+        "sage-divider": SageDivider;
         "sage-image": SageImage;
         "sage-input": SageInput;
         "sage-link": SageLink;
@@ -561,6 +591,7 @@ declare module "@stencil/core" {
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
             "sage-button": LocalJSX.SageButton & JSXBase.HTMLAttributes<HTMLSageButtonElement>;
             "sage-checkbox": LocalJSX.SageCheckbox & JSXBase.HTMLAttributes<HTMLSageCheckboxElement>;
+            "sage-divider": LocalJSX.SageDivider & JSXBase.HTMLAttributes<HTMLSageDividerElement>;
             "sage-image": LocalJSX.SageImage & JSXBase.HTMLAttributes<HTMLSageImageElement>;
             "sage-input": LocalJSX.SageInput & JSXBase.HTMLAttributes<HTMLSageInputElement>;
             "sage-link": LocalJSX.SageLink & JSXBase.HTMLAttributes<HTMLSageLinkElement>;
