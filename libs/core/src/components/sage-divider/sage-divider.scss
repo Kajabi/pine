@@ -27,9 +27,7 @@ $sage-divider-offsets: (
   }
 }
 
-@each $key, $value in $sage-divider-offsets {
-  $offset: "#{$key}";
-
+@each $offset, $value in $sage-divider-offsets {
   .sage-divider--offset-#{$offset} {
     margin: 0 (-$value);
     padding: 0 $value;
