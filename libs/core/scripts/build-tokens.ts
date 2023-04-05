@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import * as tokens from '../tokens/tokens.json';
+import tokens from '../tokens/tokens.json';
 
 /**
  * Takes the JSON data and converts it to formatted CSS
@@ -71,7 +71,7 @@ const build = (data: object) => {
 	try {
 		Object.keys(data).map((tokenFile) => {
 			const cssVariables = tokensToCss(tokens[tokenFile], `--${tokenFile}`);
-			const cssClass = `:root {\n${cssVariables.replaceAll("--", "  --")}}\n`
+			const cssClass = `:root {\n${cssVariables.replaceAll("--", "  --sage-")}}\n`
 			saveTokens(tokenFile, cssClass)
 		})
 		
