@@ -29,6 +29,8 @@ The default divider displays a horizontal line.
 
 To display the divider vertically, the `vertical` prop can be set to `true`.
 
+**Note**: Vertical dividers are not displayed on small screen sizes less than 767px.
+
 <Story story={stories.Vertical} />
 
 <Canvas>
@@ -39,7 +41,7 @@ To display the divider vertically, the `vertical` prop can be set to `true`.
 
 ### Offsets
 
-To expand the width or height in order to create a full-bleed or a full-height appearance the `offset` property can be set to one of the preset sizes.
+Both horizontal and vertical dividers can be offset to create a full width/height bleed appearance.
 
 Offset sizes follow the global spacing sizes: `xxs`:4px, `xs`:8px, `sm`:12px,`md`:24px, `lg`:32px, `xl`:48px, `xxl`:64px.
 
