@@ -1,0 +1,121 @@
+import { Component, h, Prop, State, Event, EventEmitter, Host } from '@stencil/core';
+
+@Component({
+  tag: 'sage-checkbox',
+  styleUrl: 'sage-checkbox.scss',
+  shadow: true,
+})
+export class SageCheckbox {
+  /**
+   * Whether or not the checkbox is checked.
+   * @defaultValue false
+   */
+  @Prop() checked: boolean;
+
+  /**
+   * Whether or not the checkbox is disabled.
+   * @defaultValue false
+   */
+  @Prop() disabled: boolean;
+
+  /**
+   * Whether or not the checkbox is invalid.
+   * @defaultValue false
+   */
+  @Prop() error: boolean;
+
+  /**
+   * String used for checkbox ID and label `for` attribute.
+   */
+  @Prop() id: string;
+
+  /**
+   * String used for label next to checkbox
+   */
+  @Prop() label: string;
+
+  /**
+   * String used for message below checkbox
+   */
+  @Prop() message: string;
+
+  /**
+   * String used for checkbox `name` attribute.
+   */
+  @Prop() name: string;
+
+  /**
+   * Whether or not the checkbox is indeterminate.
+   * @defaultValue false
+   */
+  @Prop() indeterminate: boolean;
+
+  /**
+   * Whether or not the checkbox is required.
+   * @defaultValue false
+   */
+  @Prop() required: boolean;
+
+  /**
+   * The value of the checkbox that is submitted with a form.
+   */
+  @Prop() value: string;
+
+  @State() checkboxState: 'checked' | 'indeterminate' | 'unchecked' = 'unchecked';
+
+  @Event() checkedChanged: EventEmitter<boolean>;
+
+  private handleCheckboxChange(event: Event) {
+    if (this.disabled) {
+      return;
+    }
+
+    const target = event.target as HTMLInputElement;
+    const isChecked = target.checked;
+
+    this.checkedChanged.emit(isChecked);
+  }
+
+  private classNames() {
+    let className = `sage-checkbox`;
+
+    if (this.error) {
+      const errorClassName = 'sage-checkbox--error';
+      className += ' ' + errorClassName;
+    }
+
+    if (this.indeterminate) {
+      const indeterminateClassName = 'sage-checkbox--indeterminate';
+      className += ' ' + indeterminateClassName;
+    }
+
+    return className;
+  }
+
+  render() {
+    let message;
+
+    if (this.message) {
+      message = <div class={'sage-checkbox__message'}>{this.message}</div>;
+    }
+
+    return (
+      <Host>
+        <div class={this.classNames()}>
+          <input
+            type="checkbox"
+            id={this.id}
+            name={this.name}
+            value={this.value}
+            checked={this.checked}
+            onChange={(event) => this.handleCheckboxChange(event)}
+            required={this.required}
+            disabled={this.disabled}
+          />
+          <label htmlFor={this.id}>{this.label}</label>
+          {message}
+        </div>
+      </Host>
+    );
+  }
+}
