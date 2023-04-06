@@ -10,24 +10,22 @@ export class SageCheckbox {
    * Whether or not the checkbox is checked.
    * @defaultValue false
    */
-  @Prop() checked: boolean;
+  @Prop() checked: false;
 
   /**
    * Whether or not the checkbox is disabled.
-   * @defaultValue false
    */
-  @Prop() disabled: boolean;
+  @Prop() disabled: false;
 
   /**
    * Whether or not the checkbox is invalid.
-   * @defaultValue false
    */
-  @Prop() error: boolean;
+  @Prop() error: false;
 
   /**
-   * String used for checkbox ID and label `for` attribute.
+   * String used for checkbox `id` attribute and label `for` attribute.
    */
-  @Prop() id: string;
+  @Prop() checkboxId: string;
 
   /**
    * String used for label next to checkbox
@@ -46,15 +44,13 @@ export class SageCheckbox {
 
   /**
    * Whether or not the checkbox is indeterminate.
-   * @defaultValue false
    */
-  @Prop() indeterminate: boolean;
+  @Prop() indeterminate: false;
 
   /**
    * Whether or not the checkbox is required.
-   * @defaultValue false
    */
-  @Prop() required: boolean;
+  @Prop() required: false;
 
   /**
    * The value of the checkbox that is submitted with a form.
@@ -104,7 +100,7 @@ export class SageCheckbox {
         <div class={this.classNames()}>
           <input
             type="checkbox"
-            id={this.id}
+            id={this.checkboxId}
             name={this.name}
             value={this.value}
             checked={this.checked}
@@ -112,7 +108,7 @@ export class SageCheckbox {
             required={this.required}
             disabled={this.disabled}
           />
-          <label htmlFor={this.id}>{this.label}</label>
+          <label htmlFor={this.checkboxId}>{this.label}</label>
           {message}
         </div>
       </Host>

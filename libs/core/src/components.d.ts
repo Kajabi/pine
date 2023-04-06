@@ -50,29 +50,26 @@ export namespace Components {
     }
     interface SageCheckbox {
         /**
+          * String used for checkbox `id` attribute and label `for` attribute.
+         */
+        "checkboxId": string;
+        /**
           * Whether or not the checkbox is checked.
           * @defaultValue false
          */
-        "checked": boolean;
+        "checked": false;
         /**
           * Whether or not the checkbox is disabled.
-          * @defaultValue false
          */
-        "disabled": boolean;
+        "disabled": false;
         /**
           * Whether or not the checkbox is invalid.
-          * @defaultValue false
          */
-        "error": boolean;
-        /**
-          * String used for checkbox ID and label `for` attribute.
-         */
-        "id": string;
+        "error": false;
         /**
           * Whether or not the checkbox is indeterminate.
-          * @defaultValue false
          */
-        "indeterminate": boolean;
+        "indeterminate": false;
         /**
           * String used for label next to checkbox
          */
@@ -87,9 +84,8 @@ export namespace Components {
         "name": string;
         /**
           * Whether or not the checkbox is required.
-          * @defaultValue false
          */
-        "required": boolean;
+        "required": false;
         /**
           * The value of the checkbox that is submitted with a form.
          */
@@ -359,29 +355,26 @@ declare namespace LocalJSX {
     }
     interface SageCheckbox {
         /**
+          * String used for checkbox `id` attribute and label `for` attribute.
+         */
+        "checkboxId"?: string;
+        /**
           * Whether or not the checkbox is checked.
           * @defaultValue false
          */
-        "checked"?: boolean;
+        "checked"?: false;
         /**
           * Whether or not the checkbox is disabled.
-          * @defaultValue false
          */
-        "disabled"?: boolean;
+        "disabled"?: false;
         /**
           * Whether or not the checkbox is invalid.
-          * @defaultValue false
          */
-        "error"?: boolean;
-        /**
-          * String used for checkbox ID and label `for` attribute.
-         */
-        "id"?: string;
+        "error"?: false;
         /**
           * Whether or not the checkbox is indeterminate.
-          * @defaultValue false
          */
-        "indeterminate"?: boolean;
+        "indeterminate"?: false;
         /**
           * String used for label next to checkbox
          */
@@ -397,9 +390,8 @@ declare namespace LocalJSX {
         "onCheckedChanged"?: (event: SageCheckboxCustomEvent<boolean>) => void;
         /**
           * Whether or not the checkbox is required.
-          * @defaultValue false
          */
-        "required"?: boolean;
+        "required"?: false;
         /**
           * The value of the checkbox that is submitted with a form.
          */
