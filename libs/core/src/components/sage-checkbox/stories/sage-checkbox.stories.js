@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 
 const BaseTemplate = (args) =>
   html` <sage-checkbox
-    id=${args.id}
+    id=${args.checkboxId}
     label=${args.label}
     checked=${args.checked}
     disabled=${args.disabled}
@@ -17,14 +17,14 @@ const defaultParameters = { docs: { disable: true } };
 
 export const Default = BaseTemplate.bind();
 Default.args = {
-  id: 'default',
+  checkboxId: 'default',
   label: 'Label text',
 };
 Default.parameters = { ...defaultParameters };
 
 export const Checked = BaseTemplate.bind();
 Checked.args = {
-  id: 'checked',
+  checkboxId: 'checked',
   label: 'Label text',
   checked: true,
 };
@@ -32,7 +32,7 @@ Checked.parameters = { ...defaultParameters };
 
 export const Disabled = BaseTemplate.bind();
 Disabled.args = {
-  id: 'disabled',
+  checkboxId: 'disabled',
   label: 'Label text',
   disabled: true,
 };
@@ -40,17 +40,24 @@ Disabled.parameters = { ...defaultParameters };
 
 export const Indeterminate = BaseTemplate.bind();
 Indeterminate.args = {
-  id: 'indeterminate',
+  checkboxId: 'indeterminate',
   label: 'Label text',
   indeterminate: true,
 };
 Indeterminate.parameters = { ...defaultParameters };
 
-
 export const withMessage = BaseTemplate.bind();
 withMessage.args = {
-  id: 'indeterminite',
+  checkboxId: 'indeterminite',
   label: 'Label text',
   message: "This is short message text",
 };
 withMessage.parameters = { ...defaultParameters };
+
+export const withError = BaseTemplate.bind();
+withError.args = {
+  checkboxId: 'errors',
+  label: 'Label text',
+  error: true,
+};
+withError.parameters = { ...defaultParameters };

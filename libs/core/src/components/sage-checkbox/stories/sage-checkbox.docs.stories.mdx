@@ -20,7 +20,7 @@ Checkboxes provide users with selectable options like toggling a single setting 
 <Story story={stories.Default} />
 
 <Canvas>
-  <sage-checkbox id="default" label="Label" />
+  <sage-checkbox checkbox-id="default" label="Label" />
 </Canvas>
 
 
@@ -29,7 +29,7 @@ Checkboxes provide users with selectable options like toggling a single setting 
 <Story story={stories.Checked} />
 
 <Canvas>
-  <sage-checkbox id="checked" checked="true" label="Label" />
+  <sage-checkbox checkbox-id="checked" label="Label" checked />
 </Canvas>
 
 
@@ -38,7 +38,7 @@ Checkboxes provide users with selectable options like toggling a single setting 
 <Story story={stories.Indeterminate} />
 
 <Canvas>
-  <sage-checkbox id="indeterminate" indeterminate="true" checked="true" label="Label" />
+  <sage-checkbox checkbox-id="indeterminate" label="Label" indeterminate checked />
 </Canvas>
 
 ### Disabled
@@ -46,11 +46,11 @@ Checkboxes provide users with selectable options like toggling a single setting 
 <Story story={stories.Disabled} />
 
 <Canvas>
-  <sage-checkbox id="disabled" disabled="true" label="Label" />
+  <sage-checkbox checkbox-id="disabled" label="Label" disabled />
 </Canvas>
 
 <Canvas>
-<sage-checkbox id="disabled-checked" disabled="true" checked="true" label="Label" />
+<sage-checkbox checkbox-id="disabled-checked" label="Label" disabled checked />
 </Canvas>
 
 
@@ -59,5 +59,21 @@ Checkboxes provide users with selectable options like toggling a single setting 
 <Story story={stories.withMessage} />
 
 <Canvas>
-  <sage-checkbox id="message" label="Label" message="This is short message text."></sage-checkbox>
+  <sage-checkbox checkbox-id="message" label="Label" message="This is short message text." />
+</Canvas>
+
+### Error
+
+<Story story={stories.withError} />
+
+<Canvas>
+  <sage-checkbox checkbox-id="error" label="Label" error />
+</Canvas>
+
+<Canvas>
+  <sage-checkbox checkbox-id="error2" label="Label" checked error  />
+</Canvas>
+
+<Canvas>
+  <sage-checkbox checkbox-id="error2" label="Label" message="This is short message text." error  />
 </Canvas>

@@ -51,7 +51,7 @@ input {
 
     }
 
-    +label {
+    + label {
       color: #B5BAC0;
       cursor: not-allowed;
     }
@@ -66,8 +66,15 @@ input {
 label {
   cursor: pointer;
   display: inline-block;
-  flex: 1 1;
   margin-left: 10px;
+}
+
+.sage-checkbox__message {
+  color: #60666c;
+  font-size: 14px;
+  margin-left: 34px;
+  margin-top: 6px;
+  width: 100%;
 }
 
 .sage-checkbox--indeterminate {
@@ -79,10 +86,23 @@ label {
   }
 }
 
-.sage-checkbox__message {
-  color: #60666c;
-  font-size: 14px;
-  margin-left: 28px;
-  margin-top: 6px;
-  width: 100%;
+.sage-checkbox--error {
+  input {
+    border-color: #cf3c32;
+
+    &:checked {
+      background: #cf3c32;
+      border-color: #cf3c32;
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 4px #fdb0aa;
+      outline: none;
+    }
+  }
+
+  label,
+  .sage-checkbox__message {
+    color: #cf3c32;
+  }
 }
