@@ -1,0 +1,63 @@
+import { Meta, Story, Canvas, Source, ArgsTable } from '@storybook/addon-docs';
+import { html, render } from 'lit-html';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+import * as stories from './sage-checkbox.stories.js';
+
+<Meta title="components/Checkbox" component="sage-checkbox" argTypes={extractArgTypes('sage-checkbox')} />
+
+# Checkbox
+
+Checkboxes provide users with selectable options like toggling a single setting or selecting multiple options from a list.
+
+## Properties
+
+<ArgsTable of="sage-checkbox" />
+
+### Default
+
+<Story story={stories.Default} />
+
+<Canvas>
+  <sage-checkbox id="default" label="Label" />
+</Canvas>
+
+
+### Checked
+
+<Story story={stories.Checked} />
+
+<Canvas>
+  <sage-checkbox id="checked" checked="true" label="Label" />
+</Canvas>
+
+
+### Indeterminate
+
+<Story story={stories.Indeterminate} />
+
+<Canvas>
+  <sage-checkbox id="indeterminate" indeterminate="true" checked="true" label="Label" />
+</Canvas>
+
+### Disabled
+
+<Story story={stories.Disabled} />
+
+<Canvas>
+  <sage-checkbox id="disabled" disabled="true" label="Label" />
+</Canvas>
+
+<Canvas>
+<sage-checkbox id="disabled-checked" disabled="true" checked="true" label="Label" />
+</Canvas>
+
+
+### Message
+
+<Story story={stories.withMessage} />
+
+<Canvas>
+  <sage-checkbox id="message" label="Label" message="This is short message text."></sage-checkbox>
+</Canvas>
