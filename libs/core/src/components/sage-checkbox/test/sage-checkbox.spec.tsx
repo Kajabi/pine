@@ -5,12 +5,15 @@ describe('sage-checkbox', () => {
   it('renders', async () => {
     const page = await newSpecPage({
       components: [SageCheckbox],
-      html: `<sage-checkbox></sage-checkbox>`,
+      html: `<sage-checkbox />`,
     });
     expect(page.root).toEqualHtml(`
       <sage-checkbox>
         <mock:shadow-root>
-          <slot></slot>
+        <div class="sage-checkbox">
+          <input type="checkbox">
+          <label></label>
+        </div>
         </mock:shadow-root>
       </sage-checkbox>
     `);
