@@ -1,0 +1,88 @@
+.sage-checkbox {
+  align-items: flex-start;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+input {
+  appearance: none;
+  border: 1px solid #D3D5D9;
+  border-radius: 4px;
+  height: 16px;
+  position: relative;
+  width: 16px;
+
+  &:hover {
+    background: #F9FAFA;
+    border-color: #B5BAC0;
+  }
+
+  &:checked {
+    background: #040506;
+    border-color: #040506;
+
+    &::after {
+      border: 1px solid #fff;
+      border-left: 0;
+      border-top: 0;
+      content: "";
+      display: block;
+      height: 7px;
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: rotate(43deg) translate3d(-110%, -30%, 0);
+      width: 4px;
+    }
+  }
+
+  &:disabled {
+    background: #F6F8F8;
+    border-color: #ECEEEF;
+    cursor: not-allowed;
+
+    &:checked {
+      background: #ECEEEF;
+      border-color: #ECEEEF;
+
+      &::after {
+        border-color: #8D939A
+      }
+
+    }
+
+    +label {
+      color: #B5BAC0;
+      cursor: not-allowed;
+    }
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 4px #8ecafb;
+    outline: none;
+  }
+}
+
+label {
+  cursor: pointer;
+  display: inline-block;
+  flex: 1 1;
+  margin-left: 10px;
+}
+
+.sage-checkbox--indeterminate {
+  input:checked {
+    &::after {
+      border-bottom: 0;
+      transform: rotate(87deg) translate3d(-114%, 25%, 0);
+    }
+  }
+}
+
+.sage-checkbox__message {
+  color: #60666c;
+  font-size: 14px;
+  margin-left: 28px;
+  margin-top: 6px;
+  width: 100%;
+}
