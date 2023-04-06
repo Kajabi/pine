@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`sage-tooltip renders with arrow 1`] = `
+<sage-tooltip has-arrow="true" hasarrow="">
+  <mock:shadow-root>
+    <div class="sage-tooltip">
+      <span class="sage-tooltip__trigger" part="trigger">
+        <slot></slot>
+      </span>
+      <div aria-hidden="true" aria-live="off" class="sage-tooltip__content" part="content" role="tooltip">
+        <slot name="content"></slot>
+        <div aria-hidden="true" class="sage-tooltip__arrow" part="arrow"></div>
+      </div>
+    </div>
+  </mock:shadow-root>
+</sage-tooltip>
+`;
+
+exports[`sage-tooltip renders with disabled 1`] = `
+<sage-tooltip>
+  <mock:shadow-root>
+    <div class="sage-tooltip">
+      <span class="sage-tooltip__trigger" part="trigger">
+        <slot></slot>
+      </span>
+      <div aria-hidden="true" aria-live="off" class="sage-tooltip__content" part="content" role="tooltip">
+        <slot name="content"></slot>
+      </div>
+    </div>
+  </mock:shadow-root>
+  <a href="#">
+    Trigger
+  </a>
+</sage-tooltip>
+`;

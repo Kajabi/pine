@@ -85,7 +85,7 @@ export class SageTooltip {
   /**
    * Determines whether or not the tooltip is visible
    */
-  @Prop({mutable: true, reflect: true}) opened = false;
+  @Prop({reflect: true}) opened = false;
 
   // eslint-disable-next-line @stencil/no-unused-watch
   @Watch('opened')
@@ -94,12 +94,8 @@ export class SageTooltip {
 
     if(this.opened) {
       this.handleShow();
-      this.sageTooltipShow.emit();
-      const testing = this.sageTooltipShow.emit();
-      console.log('testing: ', testing);
     } else {
       this.handleHide();
-      this.sageTooltipHide.emit();
     }
     console.log('after isOpened', this.opened);
   }
@@ -212,20 +208,20 @@ export class SageTooltip {
     }
     console.log('disabled');
     this.showTooltip();
+    this.sageTooltipShow.emit();
   };
 
   private handleHide = () => {
     this.hideTooltip();
+    this.sageTooltipHide.emit();
   };
 
   private handleFocus = () => {
-    // TODO Q: add focus functionality
     console.log('handle focus');
     this.showTooltip();
   };
 
   private handleBlur = () => {
-    // TODO Q: add blur functionality
     this.showTooltip();
   };
 
