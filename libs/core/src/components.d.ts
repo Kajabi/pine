@@ -67,11 +67,11 @@ export namespace Components {
          */
         "error": false;
         /**
-          * Whether or not the checkbox is indeterminate.
+          * Whether or not checkbox should display as indeterminate. Prop is for visual styling only. Only JavaScript can et the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes)
          */
         "indeterminate": false;
         /**
-          * String used for label next to checkbox
+          * String used for label text next to checkbox
          */
         "label": string;
         /**
@@ -231,10 +231,6 @@ export namespace Components {
         "variant": 'primary' | 'availability' | 'filter';
     }
 }
-export interface SageCheckboxCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLSageCheckboxElement;
-}
 export interface SageInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSageInputElement;
@@ -372,11 +368,11 @@ declare namespace LocalJSX {
          */
         "error"?: false;
         /**
-          * Whether or not the checkbox is indeterminate.
+          * Whether or not checkbox should display as indeterminate. Prop is for visual styling only. Only JavaScript can et the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes)
          */
         "indeterminate"?: false;
         /**
-          * String used for label next to checkbox
+          * String used for label text next to checkbox
          */
         "label"?: string;
         /**
@@ -387,7 +383,6 @@ declare namespace LocalJSX {
           * String used for checkbox `name` attribute.
          */
         "name"?: string;
-        "onCheckedChanged"?: (event: SageCheckboxCustomEvent<boolean>) => void;
         /**
           * Whether or not the checkbox is required.
          */

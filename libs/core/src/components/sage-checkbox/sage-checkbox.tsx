@@ -1,4 +1,4 @@
-import { Component, h, Prop, State, Event, EventEmitter, Host } from '@stencil/core';
+import { Component, h, Prop, Host } from '@stencil/core';
 
 @Component({
   tag: 'sage-checkbox',
@@ -28,7 +28,7 @@ export class SageCheckbox {
   @Prop() checkboxId: string;
 
   /**
-   * String used for label next to checkbox
+   * String used for label text next to checkbox
    */
   @Prop() label: string;
 
@@ -43,7 +43,8 @@ export class SageCheckbox {
   @Prop() name: string;
 
   /**
-   * Whether or not the checkbox is indeterminate.
+   * Whether or not checkbox should display as indeterminate. Prop is for visual styling only.
+   * Only JavaScript can et the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes)
    */
   @Prop() indeterminate: false;
 
@@ -56,21 +57,6 @@ export class SageCheckbox {
    * The value of the checkbox that is submitted with a form.
    */
   @Prop() value: string;
-
-  @State() checkboxState: 'checked' | 'indeterminate' | 'unchecked' = 'unchecked';
-
-  @Event() checkedChanged: EventEmitter<boolean>;
-
-  private handleCheckboxChange(event: Event) {
-    if (this.disabled) {
-      return;
-    }
-
-    const target = event.target as HTMLInputElement;
-    const isChecked = target.checked;
-
-    this.checkedChanged.emit(isChecked);
-  }
 
   private classNames() {
     let className = `sage-checkbox`;
@@ -104,7 +90,6 @@ export class SageCheckbox {
             name={this.name}
             value={this.value}
             checked={this.checked}
-            onChange={(event) => this.handleCheckboxChange(event)}
             required={this.required}
             disabled={this.disabled}
           />
