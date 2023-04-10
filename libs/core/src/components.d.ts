@@ -55,21 +55,20 @@ export namespace Components {
         "checkboxId": string;
         /**
           * Whether or not the checkbox is checked.
-          * @defaultValue false
          */
-        "checked": false;
+        "checked": boolean;
         /**
           * Whether or not the checkbox is disabled.
          */
-        "disabled": false;
+        "disabled": boolean;
         /**
           * Whether or not the checkbox is invalid.
          */
-        "error": false;
+        "error": boolean;
         /**
-          * Whether or not checkbox should display as indeterminate. Prop is for visual styling only. Only JavaScript can et the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes)
+          * Whether or not checkbox should display as indeterminate. Prop is for visual styling only. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes)
          */
-        "indeterminate": false;
+        "indeterminate": boolean;
         /**
           * String used for label text next to checkbox
          */
@@ -85,7 +84,7 @@ export namespace Components {
         /**
           * Whether or not the checkbox is required.
          */
-        "required": false;
+        "required": boolean;
         /**
           * The value of the checkbox that is submitted with a form.
          */
@@ -356,21 +355,20 @@ declare namespace LocalJSX {
         "checkboxId"?: string;
         /**
           * Whether or not the checkbox is checked.
-          * @defaultValue false
          */
-        "checked"?: false;
+        "checked"?: boolean;
         /**
           * Whether or not the checkbox is disabled.
          */
-        "disabled"?: false;
+        "disabled"?: boolean;
         /**
           * Whether or not the checkbox is invalid.
          */
-        "error"?: false;
+        "error"?: boolean;
         /**
-          * Whether or not checkbox should display as indeterminate. Prop is for visual styling only. Only JavaScript can et the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes)
+          * Whether or not checkbox should display as indeterminate. Prop is for visual styling only. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes)
          */
-        "indeterminate"?: false;
+        "indeterminate"?: boolean;
         /**
           * String used for label text next to checkbox
          */
@@ -386,7 +384,7 @@ declare namespace LocalJSX {
         /**
           * Whether or not the checkbox is required.
          */
-        "required"?: false;
+        "required"?: boolean;
         /**
           * The value of the checkbox that is submitted with a form.
          */

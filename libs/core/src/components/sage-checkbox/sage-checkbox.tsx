@@ -8,19 +8,18 @@ import { Component, h, Prop, Host } from '@stencil/core';
 export class SageCheckbox {
   /**
    * Whether or not the checkbox is checked.
-   * @defaultValue false
    */
-  @Prop() checked: false;
+  @Prop() checked: boolean;
 
   /**
    * Whether or not the checkbox is disabled.
    */
-  @Prop() disabled: false;
+  @Prop() disabled: boolean;
 
   /**
    * Whether or not the checkbox is invalid.
    */
-  @Prop() error: false;
+  @Prop() error: boolean;
 
   /**
    * String used for checkbox `id` attribute and label `for` attribute.
@@ -44,14 +43,14 @@ export class SageCheckbox {
 
   /**
    * Whether or not checkbox should display as indeterminate. Prop is for visual styling only.
-   * Only JavaScript can et the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes)
+   * Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes)
    */
-  @Prop() indeterminate: false;
+  @Prop() indeterminate: boolean;
 
   /**
    * Whether or not the checkbox is required.
    */
-  @Prop() required: false;
+  @Prop() required: boolean;
 
   /**
    * The value of the checkbox that is submitted with a form.

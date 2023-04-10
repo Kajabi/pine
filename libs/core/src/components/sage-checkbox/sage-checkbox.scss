@@ -1,28 +1,43 @@
+:host {
+  --border-color: #D3D5D9;
+  --checked-color: #040506;
+  --disabled-color: #ECEEEF;
+  --disabled-background-color: #F6F8F8;
+  --disabled-border-color: #8D939A;
+  --hover-background-color: #F9FAFA;
+  --hover-border-color: #B5BAC0;
+  --error-color: #CF3C32;
+  --error-focus-color: #FDB0AA;
+  --focus-color: #8ECAFB;
+  --message-color: #60666C;
+}
+
 .sage-checkbox {
-  align-items: flex-start;
+  align-items: center;
   display: flex;
   flex-flow: row wrap;
 }
 
 input {
   appearance: none;
-  border: 1px solid #D3D5D9;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   height: 16px;
+  margin: 0;
   position: relative;
   width: 16px;
 
   &:hover {
-    background: #F9FAFA;
-    border-color: #B5BAC0;
+    background: var(--hover-background-color);
+    border-color: var(--hover-border-color);
   }
 
   &:checked {
-    background: #040506;
-    border-color: #040506;
+    background: var(--checked-color);
+    border-color: var(--checked-color);
 
     &::after {
-      border: 1px solid #fff;
+      border: 1px solid #FFF;
       border-left: 0;
       border-top: 0;
       content: "";
@@ -37,41 +52,39 @@ input {
   }
 
   &:disabled {
-    background: #F6F8F8;
-    border-color: #ECEEEF;
+    background: var(--disabled-background-color);
+    border-color: var(--disabled-color);
     cursor: not-allowed;
 
     &:checked {
-      background: #ECEEEF;
-      border-color: #ECEEEF;
+      background: var(--disabled-color);
+      border-color: var(--disabled-color);
 
       &::after {
-        border-color: #8D939A
+        border-color: var(--disabled-border-color);
       }
-
     }
 
     + label {
-      color: #B5BAC0;
+      color: var(--hover-border-color);
       cursor: not-allowed;
     }
   }
 
   &:focus-visible {
-    box-shadow: 0 0 0 4px #8ecafb;
+    box-shadow: 0 0 0 4px var(--focus-color);
     outline: none;
   }
 }
 
 label {
-  display: inline-block;
   margin-left: 10px;
 }
 
 .sage-checkbox__message {
-  color: #60666c;
+  color: var(--message-color);
   font-size: 14px;
-  margin-left: 34px;
+  margin-left: 26px;
   margin-top: 6px;
   width: 100%;
 }
@@ -87,21 +100,21 @@ label {
 
 .sage-checkbox--error {
   input {
-    border-color: #cf3c32;
+    border-color: var(--error-color);
 
     &:checked {
-      background: #cf3c32;
-      border-color: #cf3c32;
+      background: var(--error-color);
+      border-color: var(--error-color);
     }
 
     &:focus-visible {
-      box-shadow: 0 0 0 4px #fdb0aa;
+      box-shadow: 0 0 0 4px var(--error-focus-color);
       outline: none;
     }
   }
 
   label,
   .sage-checkbox__message {
-    color: #cf3c32;
+    color: var(--error-color);
   }
 }
