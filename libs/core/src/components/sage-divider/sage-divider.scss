@@ -20,11 +20,11 @@ $sage-divider-offsets: (
   height: 1px;
   margin: 0;
   width: 100%;
+}
 
-  &--vertical {
-    height: 100%;
-    width: 1px;
-  }
+.sage-divider--vertical {
+  height: 100%;
+  width: 1px;
 }
 
 @each $offset, $value in $sage-divider-offsets {
