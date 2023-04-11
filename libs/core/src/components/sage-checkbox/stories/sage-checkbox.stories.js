@@ -2,7 +2,7 @@ import { html } from 'lit-html';
 
 const BaseTemplate = (args) =>
   html` <sage-checkbox
-    id=${args.checkboxId}
+    checkbox-id=${args.checkboxId}
     label=${args.label}
     checked=${args.checked}
     disabled=${args.disabled}
