@@ -1,4 +1,5 @@
-import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
+import { Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
+import { ChangeEvent } from 'react';
 
 @Component({
   tag: 'sage-textarea',
@@ -6,11 +7,13 @@ import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
   shadow: true,
 })
 export class SageTextarea {
-    /**
+  @Element() el: HTMLDivElement;
+
+  /**
    * Indicates whether or not the textarea is disabled
    * @defaultValue false
    */
-    @Prop() disabled? = false;
+  @Prop() disabled? = false;
 
       /**
    * Specifies the error text and provides an error-themed treatment to the field
@@ -22,7 +25,7 @@ export class SageTextarea {
    * Displays a hint or description of the textarea
    * @defaultValue null
    */
-  @Prop() hint?: string = null;
+  @Prop() hintText?: string = null;
 
   /**
    * Indicates whether or not the textarea is invalid or throws an error
@@ -34,13 +37,13 @@ export class SageTextarea {
    * A unique identifier for the textarea
    * @defaultValue null
    */
-  @Prop() textareaId?: string = null;
+  @Prop() componentId?: string = null;
 
   /**
    * Text to be displayed as the textarea label
    * @defaultValue null
    */
-  @Prop() label?: string = null;
+  @Prop() labelText?: string = null;
 
   /**
    * Specifies the name, submitted with the form name/value pair
@@ -51,7 +54,7 @@ export class SageTextarea {
    * Specifies a short hint that describes the expected value of the textarea
    * @defaultValue null
    */
-  @Prop() placeholder?: string = null;
+  @Prop() placeholderText?: string = null;
 
   /**
    * Indicates whether or not the textarea is readonly
@@ -72,21 +75,24 @@ export class SageTextarea {
   @Prop() rows?: number = null;
 
   /**
-   * The value of the texarea
+   * The value of the textarea
    * @defaultValue null
    */
   @Prop({mutable: true}) value?: string = null;
 
   /**
-   * Emitted when a keyboard input occurred
    */
-  @Event() sageTextarea: EventEmitter<InputEvent>;
-
+  @Event() sageTextareaInput: EventEmitter<ChangeEvent>;
   private onTextareaInputEvent = (ev: Event) => {
-    const input = ev.target as HTMLInputElement | null;
-    if (input) this.value = input.value || '';
-    (input.checkValidity() === false) ? this.invalid = true : this.invalid = false;
-    this.sageTextarea.emit(ev as InputEvent);
+    const textarea = ev.target as HTMLTextAreaElement;
+    if (this.required === true) {
+      const validity = textarea.checkValidity();
+      (validity === false) ? this.invalid = true : this.invalid = false;
+    }
+    if (textarea) {
+      this.value = textarea.innerHTML;
+    }
+    this.sageTextareaInput.emit();
   };
 
   render() {
@@ -95,19 +101,18 @@ export class SageTextarea {
         aria-disabled={this.disabled ? 'true' : null}
       >
         <div class="sage-textarea">
-          <label htmlFor={this.textareaId}>{this.label}</label>
+          {this.labelText && <label htmlFor={this.componentId}>{this.labelText}</label>}
           <textarea class="sage-textarea__field"
             disabled={this.disabled}
-            id={this.textareaId}
+            id={this.componentId}
             name={this.name}
-            placeholder={this.placeholder}
+            placeholder={this.placeholderText}
             readOnly={this.readonly}
             required={this.required}
             rows={this.rows}
-            value={this.value}
-            onInput={this.onTextareaInputEvent}
-          />
-          {this.hint && <p class="sage-textarea__hint">{this.hint}</p>}
+            onChange={this.onTextareaInputEvent}
+          >{this.value}</textarea>
+          {this.hintText && <p class="sage-textarea__hint-text">{this.hintText}</p>}
           {this.invalid && <p class="sage-textarea__error-text">{this.errorText}</p>}
         </div>
       </Host>

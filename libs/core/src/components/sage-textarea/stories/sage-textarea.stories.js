@@ -3,15 +3,15 @@ import { html } from 'lit-html';
 const BaseTemplate = (args) => html`<sage-textarea
   disabled="${args.disabled}"
   error-text="${args.errorText}"
-  hint="${args.hint}"
+  hint-text="${args.hintText}"
   invalid="${args.invalid}"
-  label="${args.label}"
+  label-text="${args.labelText}"
   name="${args.name}"
-  placeholder="${args.placeholder}"
+  placeholder-text="${args.placeholderText}"
   readonly="${args.readonly}"
   required="${args.required}"
   rows="${args.rows}"
-  textarea-id="${args.textareaId}"
+  component-id="${args.componentId}"
   value="${args.value}"
   >
 </sage-textarea>`;
@@ -25,25 +25,25 @@ const defaultParameters = {
 export const Default = BaseTemplate.bind({});
 Default.args = {
   name: 'Default',
-  label: 'Name',
-  textareaId: 'uniqueIdDefault'
+  labelText: 'Name',
+  componentId: 'uniqueIdDefault'
 };
 Default.parameters = { ...defaultParameters };
 
 export const Rows = BaseTemplate.bind({});
 Rows.args = {
   name: 'Rows',
-  label: 'Name',
+  labelText: 'Name',
   rows: 4,
-  textareaId: 'uniqueIdRows'
+  componentId: 'uniqueIdRows'
 };
 Rows.parameters = { ...defaultParameters };
 
 export const Required = BaseTemplate.bind({});
 Required.args = {
   name: 'Required',
-  label: 'Name',
-  textareaId: 'uniqueIdRequired',
+  labelText: 'Name',
+  componentId: 'uniqueIdRequired',
   required: true
 };
 Required.parameters = { ...defaultParameters };
@@ -51,17 +51,17 @@ Required.parameters = { ...defaultParameters };
 export const Placeholder = BaseTemplate.bind({});
 Placeholder.args = {
   name: 'Placeholder',
-  label: 'Name',
-  textareaId: 'uniqueIdPlaceholder',
-  placeholder: 'Placeholder...'
+  labelText: 'Name',
+  componentId: 'uniqueIdPlaceholder',
+  placeholderText: 'Placeholder...'
 };
 Placeholder.parameters = { ...defaultParameters };
 
 export const Disabled = BaseTemplate.bind({});
 Disabled.args = {
   name: 'Disabled',
-  label: 'Name',
-  textareaId: 'uniqueIdDisabled',
+  labelText: 'Name',
+  componentId: 'uniqueIdDisabled',
   disabled: true
 };
 Disabled.parameters = { ...defaultParameters };
@@ -69,8 +69,8 @@ Disabled.parameters = { ...defaultParameters };
 export const Readonly = BaseTemplate.bind({});
 Readonly.args = {
   name: 'Readonly',
-  label: 'Name',
-  textareaId: 'uniqueIdReadonly',
+  labelText: 'Name',
+  componentId: 'uniqueIdReadonly',
   readonly: true,
   value: 'Readonly Value'
 };
@@ -79,17 +79,17 @@ Readonly.parameters = { ...defaultParameters };
 export const Hint = BaseTemplate.bind({});
 Hint.args = {
   name: 'Hint',
-  label: 'Name',
-  textareaId: 'uniqueIdHint',
-  hint: 'Hint'
+  labelText: 'Name',
+  componentId: 'uniqueIdHint',
+  hintText: 'Hint'
 };
 Hint.parameters = { ...defaultParameters };
 
 export const Error = BaseTemplate.bind({});
 Error.args = {
   name: 'Error',
-  label: 'Name',
-  textareaId: 'uniqueIdError',
+  labelText: 'Name',
+  componentId: 'uniqueIdError',
   required: true,
   errorText: 'Error',
   invalid: true
