@@ -19,7 +19,7 @@ export class SageCheckbox {
   /**
    * Whether or not the checkbox is invalid.
    */
-  @Prop() error: boolean;
+  @Prop() invalid: boolean;
 
   /**
    * String used for checkbox `id` attribute and label `for` attribute.
@@ -60,7 +60,7 @@ export class SageCheckbox {
   private classNames() {
     let className = `sage-checkbox`;
 
-    if (this.error) {
+    if (this.invalid) {
       const errorClassName = 'sage-checkbox--error';
       className += ' ' + errorClassName;
     }
@@ -68,6 +68,11 @@ export class SageCheckbox {
     if (this.indeterminate) {
       const indeterminateClassName = 'sage-checkbox--indeterminate';
       className += ' ' + indeterminateClassName;
+    }
+
+    if (this.disabled) {
+      const disabledClassName = 'sage-checkbox--disabled';
+      className += ' ' + disabledClassName;
     }
 
     return className;

@@ -62,13 +62,13 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Whether or not the checkbox is invalid.
-         */
-        "error": boolean;
-        /**
           * Whether or not checkbox should display as indeterminate. Prop is for visual styling only. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes)
          */
         "indeterminate": boolean;
+        /**
+          * Whether or not the checkbox is invalid.
+         */
+        "invalid": boolean;
         /**
           * String used for label text next to checkbox
          */
@@ -362,13 +362,13 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Whether or not the checkbox is invalid.
-         */
-        "error"?: boolean;
-        /**
           * Whether or not checkbox should display as indeterminate. Prop is for visual styling only. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes)
          */
         "indeterminate"?: boolean;
+        /**
+          * Whether or not the checkbox is invalid.
+         */
+        "invalid"?: boolean;
         /**
           * String used for label text next to checkbox
          */

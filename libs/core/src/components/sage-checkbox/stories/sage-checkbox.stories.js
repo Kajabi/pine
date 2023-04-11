@@ -11,6 +11,7 @@ const BaseTemplate = (args) =>
     indeterminate=${args.indeterminate}
     required=${args.required}
     value=${args.value}
+    invalid=${args.invalid}
   />`;
 
 const defaultParameters = { docs: { disable: true } };
@@ -43,6 +44,7 @@ Indeterminate.args = {
   checkboxId: 'indeterminate',
   label: 'Label text',
   indeterminate: true,
+  checked: true,
 };
 Indeterminate.parameters = { ...defaultParameters };
 
@@ -54,10 +56,10 @@ withMessage.args = {
 };
 withMessage.parameters = { ...defaultParameters };
 
-export const withError = BaseTemplate.bind();
-withError.args = {
+export const Invalid = BaseTemplate.bind();
+Invalid.args = {
   checkboxId: 'errors',
   label: 'Label text',
-  error: true,
+  invalid: true,
 };
-withError.parameters = { ...defaultParameters };
+Invalid.parameters = { ...defaultParameters };

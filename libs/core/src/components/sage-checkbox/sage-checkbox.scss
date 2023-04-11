@@ -4,6 +4,7 @@
   --disabled-color: #ECEEEF;
   --disabled-background-color: #F6F8F8;
   --disabled-border-color: #8D939A;
+  --disabled-message-color: #B5BAC0;
   --hover-background-color: #F9FAFA;
   --hover-border-color: #B5BAC0;
   --error-color: #CF3C32;
@@ -116,5 +117,11 @@ label {
   label,
   .sage-checkbox__message {
     color: var(--error-color);
+  }
+}
+
+.sage-checkbox--disabled {
+  .sage-checkbox__message {
+    color: var(--disabled-message-color);
   }
 }
