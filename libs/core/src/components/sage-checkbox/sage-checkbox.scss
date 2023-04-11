@@ -7,8 +7,8 @@
   --disabled-message-color: #B5BAC0;
   --hover-background-color: #F9FAFA;
   --hover-border-color: #B5BAC0;
-  --error-color: #CF3C32;
-  --error-focus-color: #FDB0AA;
+  --invalid-color: #CF3C32;
+  --invalid-focus-color: #FDB0AA;
   --focus-color: #8ECAFB;
   --message-color: #60666C;
 }
@@ -99,24 +99,24 @@ label {
   }
 }
 
-.sage-checkbox--error {
+.sage-checkbox--invalid {
   input {
-    border-color: var(--error-color);
+    border-color: var(--invalid-color);
 
     &:checked {
-      background: var(--error-color);
-      border-color: var(--error-color);
+      background: var(--invalid-color);
+      border-color: var(--invalid-color);
     }
 
     &:focus-visible {
-      box-shadow: 0 0 0 4px var(--error-focus-color);
+      box-shadow: 0 0 0 4px var(--invalid-focus-color);
       outline: none;
     }
   }
 
   label,
   .sage-checkbox__message {
-    color: var(--error-color);
+    color: var(--invalid-color);
   }
 }
 

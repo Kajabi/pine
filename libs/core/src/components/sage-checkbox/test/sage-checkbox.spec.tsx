@@ -50,15 +50,15 @@ describe('sage-checkbox', () => {
     const input = root?.shadowRoot?.querySelector('input');
     expect(input?.disabled).toBe(true);
   });
-  it('renders with error when error prop is set', async () => {
+  it('renders with error when invalid prop is set', async () => {
     const page = await newSpecPage({
       components: [SageCheckbox],
-      html: `<sage-checkbox checkbox-id="default" label="Label text" error />`,
+      html: `<sage-checkbox checkbox-id="default" label="Label text" invalid />`,
     });
     expect(page.root).toEqualHtml(`
-      <sage-checkbox checkbox-id="default" label="Label text" error>
+      <sage-checkbox checkbox-id="default" label="Label text" invalid>
         <mock:shadow-root>
-          <div class="sage-checkbox sage-checkbox--error">
+          <div class="sage-checkbox sage-checkbox--invalid">
             <input type="checkbox" id="default">
             <label htmlfor="default">Label text</label>
           </div>

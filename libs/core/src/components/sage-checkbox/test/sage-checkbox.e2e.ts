@@ -56,15 +56,15 @@ describe('sage-checkbox', () => {
     expect(await disabled).toEqual(true);
   });
 
-  it('renders checkbox in error state', async () => {
+  it('renders checkbox in invalid state', async () => {
     const page = await newE2EPage();
-    await page.setContent('<sage-checkbox checkbox-id="default" error />');
+    await page.setContent('<sage-checkbox checkbox-id="default" invalid />');
 
     const element = await page.find('sage-checkbox');
     expect(element).toHaveClass('hydrated');
 
     const checkbox = await page.find('sage-checkbox >>> div');
-    expect(await checkbox).toHaveClass('sage-checkbox--error');
+    expect(await checkbox).toHaveClass('sage-checkbox--invalid');
   });
 
   it('renders checkbox in indeterminate state', async () => {
