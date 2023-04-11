@@ -15,7 +15,7 @@ export class SageTextarea {
    */
   @Prop() disabled? = false;
 
-      /**
+  /**
    * Specifies the error text and provides an error-themed treatment to the field
    * @defaultValue null
    */
@@ -81,6 +81,7 @@ export class SageTextarea {
   @Prop({mutable: true}) value?: string = null;
 
   /**
+   * Event emitted whenever the value of the textarea changes
    */
   @Event() sageTextareaInput: EventEmitter<ChangeEvent>;
   private onTextareaInputEvent = (ev: Event) => {

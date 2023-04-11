@@ -24,7 +24,6 @@ import * as stories from './sage-textarea.stories.js';
 />
 
 # Textarea
-
 A textarea field coupled with a label and error text which allows for user input and feedback.
 
 ## Guidelines
@@ -64,15 +63,15 @@ The rows property is used to pass a number of expected rows visible within the t
 </Canvas>
 
 ### Required
-It's recommended you pass `error-text` on any required fields
+It's recommended you also pass `error-text` on any required fields
 <Story story={stories.Required} />
 
 <Canvas>
   <sage-textarea name="Required" label-text="Name" required="true" component-id="uniqueIdRequired"></sage-textarea>
 </Canvas>
 
-### Error
-Error messages are passed using the `error-text` property, textareas will calculate their validity based on their required property
+### Error Text
+Error messages are passed using the `error-text` property, textareas will calculate their validity based on their `required` property
 
 You can also manually pass in an invalid state by setting the `invalid` property to true
 <Story story={stories.Error} />
@@ -81,7 +80,7 @@ You can also manually pass in an invalid state by setting the `invalid` property
   <sage-textarea name="Error" label-text="Name" error-text="Error" invalid="true" required="true" component-id="uniqueIdError" ></sage-textarea>
 </Canvas>
 
-### Placeholder
+### Placeholder Text
 Placeholders should be examples of content that can be filled into the textarea
 
 Do not use placeholders to provide hints to users, please use the `hint-text` property instead
@@ -100,15 +99,17 @@ Disabled states can be set by the `disabled` property
 </Canvas>
 
 ### Readonly
-Readonly textareas can be used to display static content while preventing the user from editing
+Readonly states can be used to display static content while preventing the user from editing
 <Story story={stories.Readonly} />
 
 <Canvas>
   <sage-textarea name="Readonly" label-text="Name" readonly="true" value="Readonly Value" component-id="uniqueIdReadonly"></sage-textarea>
 </Canvas>
 
-### Hint
+### Hint Text
 Hints are used to provide context about what is expected from the users
+
+Do not use hint text to provide examples to users, please use the `placeholder-text` property instead
 <Story story={stories.Hint} />
 
 <Canvas>
