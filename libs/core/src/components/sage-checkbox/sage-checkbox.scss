@@ -100,6 +100,10 @@ input {
       color: var(--hover-border-color);
       cursor: not-allowed;
     }
+
+    ~ .sage-checkbox__message {
+      color: var(--disabled-message-color);
+    }
   }
 
   &:focus-visible {
@@ -118,10 +122,4 @@ label {
   margin-left: 26px;
   margin-top: 6px;
   width: 100%;
-}
-
-.sage-checkbox--disabled {
-  .sage-checkbox__message {
-    color: var(--disabled-message-color);
-  }
 }
