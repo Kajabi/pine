@@ -58,7 +58,7 @@ describe('sage-checkbox', () => {
     expect(page.root).toEqualHtml(`
       <sage-checkbox checkbox-id="default" label="Label text" invalid>
         <mock:shadow-root>
-          <div class="sage-checkbox sage-checkbox--invalid">
+          <div class="sage-checkbox is-invalid">
             <input type="checkbox" id="default">
             <label htmlfor="default">Label text</label>
           </div>
@@ -74,7 +74,7 @@ describe('sage-checkbox', () => {
     expect(page.root).toEqualHtml(`
       <sage-checkbox checkbox-id="default" label="Label text" indeterminate>
         <mock:shadow-root>
-          <div class="sage-checkbox sage-checkbox--indeterminate">
+          <div class="sage-checkbox is-indeterminate">
             <input type="checkbox" id="default">
             <label htmlfor="default">Label text</label>
           </div>

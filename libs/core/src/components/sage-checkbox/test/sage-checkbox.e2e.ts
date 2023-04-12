@@ -64,7 +64,7 @@ describe('sage-checkbox', () => {
     expect(element).toHaveClass('hydrated');
 
     const checkbox = await page.find('sage-checkbox >>> div');
-    expect(await checkbox).toHaveClass('sage-checkbox--invalid');
+    expect(await checkbox).toHaveClass('is-invalid');
   });
 
   it('renders checkbox in indeterminate state', async () => {
@@ -75,7 +75,7 @@ describe('sage-checkbox', () => {
     expect(await element).toHaveClass('hydrated');
 
     const checkbox = await page.find('sage-checkbox >>> div');
-    expect(await checkbox).toHaveClass('sage-checkbox--indeterminate');
+    expect(await checkbox).toHaveClass('is-indeterminate');
   });
 
   it('renders label text', async () => {
