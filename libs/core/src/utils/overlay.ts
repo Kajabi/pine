@@ -31,7 +31,7 @@ export const positionTooltip = (elem, elemPlacement, overlay, offset = 8) => {
 
   if (elemPlacement.includes("left")) {
     overlay.style.top = '50%';
-    overlay.style.right = `calc((${rect.width}px + ${offset}px))`;
+    overlay.style.right = `calc(${rect.width}px + ${offset}px)`;
     overlay.style.transform = 'translateY(-50%)';
 
     // console.log('rect: ', rect);
