@@ -61,17 +61,17 @@ export class SageCheckbox {
     let className = `sage-checkbox`;
 
     if (this.invalid) {
-      const invalidClassName = 'sage-checkbox--invalid';
+      const invalidClassName = 'is-invalid';
       className += ' ' + invalidClassName;
     }
 
     if (this.indeterminate) {
-      const indeterminateClassName = 'sage-checkbox--indeterminate';
+      const indeterminateClassName = 'is-indeterminate';
       className += ' ' + indeterminateClassName;
     }
 
     if (this.disabled) {
-      const disabledClassName = 'sage-checkbox--disabled';
+      const disabledClassName = 'is-disabled';
       className += ' ' + disabledClassName;
     }
 

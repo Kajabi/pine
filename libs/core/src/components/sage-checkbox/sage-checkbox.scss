@@ -17,6 +17,36 @@
   align-items: center;
   display: flex;
   flex-flow: row wrap;
+
+  &.is-invalid {
+    input {
+      border-color: var(--invalid-color);
+
+      &:checked {
+        background: var(--invalid-color);
+        border-color: var(--invalid-color);
+      }
+
+      &:focus-visible {
+        box-shadow: 0 0 0 4px var(--invalid-focus-color);
+        outline: none;
+      }
+    }
+
+    label,
+    .sage-checkbox__message {
+      color: var(--invalid-color);
+    }
+  }
+
+  &.is-indeterminate {
+    input:checked {
+      &::after {
+        border-bottom: 0;
+        transform: rotate(87deg) translate3d(-114%, 25%, 0);
+      }
+    }
+  }
 }
 
 input {
@@ -88,36 +118,6 @@ label {
   margin-left: 26px;
   margin-top: 6px;
   width: 100%;
-}
-
-.sage-checkbox--indeterminate {
-  input:checked {
-    &::after {
-      border-bottom: 0;
-      transform: rotate(87deg) translate3d(-114%, 25%, 0);
-    }
-  }
-}
-
-.sage-checkbox--invalid {
-  input {
-    border-color: var(--invalid-color);
-
-    &:checked {
-      background: var(--invalid-color);
-      border-color: var(--invalid-color);
-    }
-
-    &:focus-visible {
-      box-shadow: 0 0 0 4px var(--invalid-focus-color);
-      outline: none;
-    }
-  }
-
-  label,
-  .sage-checkbox__message {
-    color: var(--invalid-color);
-  }
 }
 
 .sage-checkbox--disabled {
