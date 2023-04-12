@@ -27,12 +27,12 @@ export class SageCheckbox {
   @Prop() checkboxId: string;
 
   /**
-   * String used for label text next to checkbox
+   * String used for label text next to checkbox.
    */
   @Prop() label: string;
 
   /**
-   * String used for message below checkbox
+   * String used for message below checkbox.
    */
   @Prop() message: string;
 
@@ -43,7 +43,7 @@ export class SageCheckbox {
 
   /**
    * Whether or not checkbox should display as indeterminate. Prop is for visual styling only.
-   * Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes)
+   * Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
    */
   @Prop() indeterminate: boolean;
 
@@ -79,12 +79,6 @@ export class SageCheckbox {
   }
 
   render() {
-    let message;
-
-    if (this.message) {
-      message = <div class={'sage-checkbox__message'}>{this.message}</div>;
-    }
-
     return (
       <Host>
         <div class={this.classNames()}>
@@ -98,7 +92,7 @@ export class SageCheckbox {
             disabled={this.disabled}
           />
           <label htmlFor={this.checkboxId}>{this.label}</label>
-          {message}
+          {this.message && <div class={'sage-checkbox__message'}>{this.message}</div>}
         </div>
       </Host>
     );

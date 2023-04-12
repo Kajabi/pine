@@ -62,7 +62,7 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Whether or not checkbox should display as indeterminate. Prop is for visual styling only. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes)
+          * Whether or not checkbox should display as indeterminate. Prop is for visual styling only. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
          */
         "indeterminate": boolean;
         /**
@@ -70,11 +70,11 @@ export namespace Components {
          */
         "invalid": boolean;
         /**
-          * String used for label text next to checkbox
+          * String used for label text next to checkbox.
          */
         "label": string;
         /**
-          * String used for message below checkbox
+          * String used for message below checkbox.
          */
         "message": string;
         /**
@@ -362,7 +362,7 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Whether or not checkbox should display as indeterminate. Prop is for visual styling only. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes)
+          * Whether or not checkbox should display as indeterminate. Prop is for visual styling only. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
          */
         "indeterminate"?: boolean;
         /**
@@ -370,11 +370,11 @@ declare namespace LocalJSX {
          */
         "invalid"?: boolean;
         /**
-          * String used for label text next to checkbox
+          * String used for label text next to checkbox.
          */
         "label"?: string;
         /**
-          * String used for message below checkbox
+          * String used for message below checkbox.
          */
         "message"?: string;
         /**

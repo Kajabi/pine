@@ -50,7 +50,7 @@ describe('sage-checkbox', () => {
     const input = root?.shadowRoot?.querySelector('input');
     expect(input?.disabled).toBe(true);
   });
-  it('renders with error when invalid prop is set', async () => {
+  it('renders in invalid state when invalid prop is set', async () => {
     const page = await newSpecPage({
       components: [SageCheckbox],
       html: `<sage-checkbox checkbox-id="default" label="Label text" invalid />`,
@@ -66,7 +66,7 @@ describe('sage-checkbox', () => {
       </sage-checkbox>
     `);
   });
-  it('renders indeterminate when indeterminate prop is set', async () => {
+  it('renders in indeterminate state when indeterminate prop is set', async () => {
     const page = await newSpecPage({
       components: [SageCheckbox],
       html: `<sage-checkbox checkbox-id="default" label="Label text" indeterminate />`,
