@@ -42,7 +42,7 @@ describe('sage-checkbox', () => {
     const input = root?.shadowRoot?.querySelector('input');
     expect(input?.checked).toBe(true);
   });
-  it('renders disabled input when checked prop is set', async () => {
+  it('renders disabled input when disabled prop is set', async () => {
     const { root } = await newSpecPage({
       components: [SageCheckbox],
       html: `<sage-checkbox checkbox-id="default" label="Label text" disabled />`,
