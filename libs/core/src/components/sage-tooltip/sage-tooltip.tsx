@@ -123,21 +123,6 @@ export class SageTooltip {
    */
   @Event() sageTooltipShow: EventEmitter;
 
-  // connectedCallback() {}
-  // TODO Q: not working as expected, revisit before putting in review
-  // connectedCallback(): void {
-  //   console.log('connected callback enter: ', this.intersectionObserver );
-  //   createObserver(
-  //     this.intersectionObserver,
-  //     '0px',
-  //     this.contentEl,
-  //     () => {
-  //       // this.opened = true;
-  //       console.log('connected callback');
-  //     }
-  //   );
-  // }
-
   disconnectedCallback() {
     // this.el.removeEventListener('focus', this.handleFocus);
   }
@@ -149,14 +134,6 @@ export class SageTooltip {
     }
   }
 
-  // componentDidLoad() {}
-
-  // componentWillRender() {}
-
-  // componentShouldUpdate(newVal: any, oldVal: any, propName: string) {}
-
-  // componentWillUpdate() {}
-
   componentDidUpdate() {
     if (this.opened) {
       this.showTooltip();
@@ -167,14 +144,6 @@ export class SageTooltip {
     // console.log('didRender');
     positionTooltip(this.el, this.placement, this.contentEl);
   }
-
-  // Note to self: Should be click by `mouseover` is causing too many repaints. May need to debounce?
-  // @Listen('click', { capture: true })
-  // handleClick() {
-  //   const tooltipContent = this.el.shadowRoot.querySelector('sage-tooltip__content');
-  //   // this.isOpen = !this.isOpen;
-  //   tooltipContent.classList.add('is-open');
-  // }
 
   @Method()
   async showTooltip() {

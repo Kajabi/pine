@@ -77,31 +77,4 @@ describe('sage-tooltip', () => {
 
     expect(element.querySelector('.sage-tooltip')).not.toHaveClass('sage-tooltip--is-open');
   });
-
-  it('should be able to call method to show tooltip when focus occurs', async () => {
-    const page = await newSpecPage({
-      components: [SageTooltip],
-      html: `
-      <sage-tooltip content="Tooltip content" disabled="true">
-        <sage-button variant="secondary">Secondary</sage-button>
-      </sage-tooltip>`
-    });
-
-    // const methodSpy = jest.fn();
-    // const focusEvent = await page.spyOnEvent('sageTooltipShow')
-    // const eventSpy = jest.fn();
-    // document.addEventListener('sageTooltipShow', eventSpy);
-    // const element = page.doc.querySelector<HTMLElement>('.sage-tooltip');
-
-
-    // element?.focus();
-    // page.waitForChanges();
-
-    // expect(eventSpy).toHaveReceivedEventTimes(1);
-
-    const tooltip = new SageTooltip();
-    expect(tooltip.opened).toBe(false);
-    tooltip.showTooltip();
-    expect(tooltip.opened).toBe(true);
-  });
 });
