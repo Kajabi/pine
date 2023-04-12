@@ -3,7 +3,6 @@ import { positionTooltip } from './overlay';
 let mockButton = document.createElement('button');
 
 let mockOverlay = document.createElement('div');
-let mockContentRect = mockOverlay.getBoundingClientRect();
 
 describe('positionTooltip', () => {
   it('returns false if no arguments are defined', async () => {
@@ -22,6 +21,7 @@ describe('positionTooltip', () => {
     positionTooltip(mockButton, 'right-start', mockOverlay);
 
     expect(mockOverlay.style.top).toEqual('0');
+    expect(mockOverlay.style.left).toEqual('calc(0px + 8px)');
     expect(mockOverlay.style.transform).toEqual('translateY(0)');
   })
 
@@ -29,6 +29,7 @@ describe('positionTooltip', () => {
     positionTooltip(mockButton, 'right-end', mockOverlay);
 
     expect(mockOverlay.style.bottom).toEqual('0');
+    expect(mockOverlay.style.left).toEqual('calc(0px + 8px)');
     expect(mockOverlay.style.top).toEqual('initial');
     expect(mockOverlay.style.transform).toEqual('translateY(0)');
   })
@@ -44,6 +45,7 @@ describe('positionTooltip', () => {
   it('positions the overlay to the left-start of the target', async () => {
     positionTooltip(mockButton, 'left-start', mockOverlay);
 
+    expect(mockOverlay.style.right).toEqual('calc(0px + 8px)');
     expect(mockOverlay.style.top).toEqual('0');
     expect(mockOverlay.style.transform).toEqual('translateY(0)');
   })
@@ -52,6 +54,7 @@ describe('positionTooltip', () => {
     positionTooltip(mockButton, 'left-end', mockOverlay);
 
     expect(mockOverlay.style.bottom).toEqual('0');
+    expect(mockOverlay.style.right).toEqual('calc(0px + 8px)');
     expect(mockOverlay.style.top).toEqual('initial');
     expect(mockOverlay.style.transform).toEqual('translateY(0)');
   })
@@ -68,6 +71,7 @@ describe('positionTooltip', () => {
     positionTooltip(mockButton, 'bottom-start', mockOverlay);
 
     expect(mockOverlay.style.left).toEqual('0');
+    expect(mockOverlay.style.top).toEqual('calc(0px + 8px)');
     expect(mockOverlay.style.transform).toEqual('translateX(0)');
   })
 
@@ -76,6 +80,7 @@ describe('positionTooltip', () => {
 
     expect(mockOverlay.style.left).toEqual('initial');
     expect(mockOverlay.style.right).toEqual('0');
+    expect(mockOverlay.style.top).toEqual('calc(0px + 8px)');
     expect(mockOverlay.style.transform).toEqual('translateX(0)');
   })
 
@@ -91,6 +96,7 @@ describe('positionTooltip', () => {
     positionTooltip(mockButton, 'top-start', mockOverlay);
 
     expect(mockOverlay.style.left).toEqual('0');
+    expect(mockOverlay.style.top).toEqual('calc((0px + 8px) * -1)');
     expect(mockOverlay.style.transform).toEqual('translateX(0)');
   })
 
@@ -99,6 +105,7 @@ describe('positionTooltip', () => {
 
     expect(mockOverlay.style.left).toEqual('initial');
     expect(mockOverlay.style.right).toEqual('0');
+    expect(mockOverlay.style.top).toEqual('calc((0px + 8px) * -1)');
     expect(mockOverlay.style.transform).toEqual('translateX(0)');
   })
 });
