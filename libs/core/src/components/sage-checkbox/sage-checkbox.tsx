@@ -1,4 +1,4 @@
-import { Component, h, Prop, Host } from '@stencil/core';
+import { Component, h, Prop, Host, Event, EventEmitter } from '@stencil/core';
 
 @Component({
   tag: 'sage-checkbox',
@@ -57,6 +57,22 @@ export class SageCheckbox {
    */
   @Prop() value: string;
 
+  /**
+   * Emits a boolean indicating whether the checkbox is currently checked or unchecked.
+   */
+  @Event() sageCheckbox: EventEmitter<boolean>;
+
+  private handleCheckboxChange(event: Event) {
+    if (this.disabled) {
+      return;
+    }
+
+    const target = event.target as HTMLInputElement;
+    const isChecked = target.checked;
+
+    this.sageCheckbox.emit(isChecked);
+  }
+
   private classNames() {
     let className = `sage-checkbox`;
 
@@ -90,6 +106,7 @@ export class SageCheckbox {
             checked={this.checked}
             required={this.required}
             disabled={this.disabled}
+            onChange={event => this.handleCheckboxChange(event)}
           />
           <label htmlFor={this.checkboxId}>{this.label}</label>
           {this.message && <div class={'sage-checkbox__message'}>{this.message}</div>}

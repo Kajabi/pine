@@ -21,6 +21,13 @@
 | `value`         | `value`         | The value of the checkbox that is submitted with a form.                                                                                                                                                                                                                             | `string`  | `undefined` |
 
 
+## Events
+
+| Event          | Description                                                                        | Type                   |
+| -------------- | ---------------------------------------------------------------------------------- | ---------------------- |
+| `sageCheckbox` | Emits a boolean indicating whether the checkbox is currently checked or unchecked. | `CustomEvent<boolean>` |
+
+
 ----------------------------------------------
 
 

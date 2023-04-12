@@ -230,6 +230,10 @@ export namespace Components {
         "variant": 'primary' | 'availability' | 'filter';
     }
 }
+export interface SageCheckboxCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSageCheckboxElement;
+}
 export interface SageInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSageInputElement;
@@ -381,6 +385,10 @@ declare namespace LocalJSX {
           * String used for checkbox `name` attribute.
          */
         "name"?: string;
+        /**
+          * Emits a boolean indicating whether the checkbox is currently checked or unchecked.
+         */
+        "onSageCheckbox"?: (event: SageCheckboxCustomEvent<boolean>) => void;
         /**
           * Whether or not the checkbox is required.
          */
