@@ -8,7 +8,8 @@ Fixes #(issue)
 
 ## Type of change
 
-Please delete options that are not relevant.
+Please delete options that are not relevant. 
+If your type of change is not present, add that option.
 
 - [ ] Bug fix (non-breaking change which fixes an issue)
 - [ ] New feature (non-breaking change which adds functionality)
@@ -17,8 +18,8 @@ Please delete options that are not relevant.
 
 # How Has This Been Tested?
 
-Please describe the tests that you've added and run to verify your changes.
-Provide instructions, so we can reproduce.
+Please describe the tests you've added and run to verify your changes.
+Provide instructions so that we can reproduce.
 Please also list any relevant details for your test configuration.
 
 - [ ] unit tests
@@ -29,18 +30,21 @@ Please also list any relevant details for your test configuration.
 
 **Test Configuration**:
 
-- sage versions:
-- os:
-- browsers:
-- screen readers:
-- misc:
+- Sage versions:
+- OS:
+- Browsers:
+- Screen readers:
+- Misc:
 
 # Checklist:
 
+If not applicable, leave options unchecked.
+
 - [ ] My code follows the style guidelines of this project
-- [ ] I have performed a self-review of my own code
+- [ ] I have performed a self-review of my code
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] I have made corresponding changes to the documentation
 - [ ] My changes generate no new warnings
 - [ ] I have added tests that prove my fix is effective or that my feature works
 - [ ] New and existing tests pass locally with my changes
+- [ ] Design has QA'ed and approved this PR
