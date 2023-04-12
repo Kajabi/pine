@@ -285,6 +285,10 @@ export namespace Components {
     | 'left'
     | 'left-start'
     | 'left-end';
+        /**
+          * Sets element as focused
+         */
+        "setFocus": (options?: FocusOptions) => Promise<void>;
         "showTooltip": () => Promise<void>;
     }
 }

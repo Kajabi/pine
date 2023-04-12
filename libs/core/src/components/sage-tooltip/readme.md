@@ -39,6 +39,16 @@ Type: `Promise<void>`
 
 
 
+### `setFocus(options?: FocusOptions) => Promise<void>`
+
+Sets element as focused
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
 ### `showTooltip() => Promise<void>`
 
 
@@ -65,20 +75,6 @@ Type: `Promise<void>`
 | `"arrow"`   | The arrow attached to the tooltip content. |
 | `"content"` | The tooltip content.                       |
 | `"trigger"` | The tooltip trigger.                       |
-
-
-## CSS Custom Properties
-
-| Name                            | Description                     |
-| ------------------------------- | ------------------------------- |
-| `--arrow-offset`                | arrow offset position           |
-| `--arrow-pointing-down`         | shape for downward facing arrow |
-| `--arrow-pointing-to-the-left`  | shape for left facing arrow     |
-| `--arrow-pointing-to-the-right` | shape for right facing arrow    |
-| `--arrow-pointing-up`           | shape for upward facing arrow   |
-| `--arrow-size`                  | width and height of the arrow   |
-| `--background`                  | Background of the tooltip       |
-| `--color`                       | Text color of the tooltip       |
 
 
 ----------------------------------------------

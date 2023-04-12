@@ -3,6 +3,7 @@ export const positionTooltip = (elem, elemPlacement, overlay, offset = 8) => {
 
   const rect = elem.getBoundingClientRect();
   const contentRect = overlay.getBoundingClientRect();
+
   // const panelNewLoc = {
   //   top: (rect.height / 2) + contentRect.height
   // };
@@ -150,29 +151,29 @@ export const positionTooltip = (elem, elemPlacement, overlay, offset = 8) => {
   // }
 }
 
-export const createObserver = (
-  // TODO Q: why is IntersectionObserver not working?
-  intersectionObserver: any,
-  xRootMargin: string,
-  el: HTMLElement,
-  callback: () => void
-): void => {
-  intersectionObserver = new IntersectionObserver(
-    (entries) => {
-      console.log('yo');
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          console.log('entry: ', entry);
-          intersectionObserver.disconnect();
-          intersectionObserver = undefined;
-          callback();
-        }
-      });
-    },
-    { rootMargin: xRootMargin }
-  );
+// export const createObserver = (
+//   // TODO Q: why is IntersectionObserver not working?
+//   intersectionObserver: any,
+//   xRootMargin: string,
+//   el: HTMLElement,
+//   callback: () => void
+// ): void => {
+//   intersectionObserver = new IntersectionObserver(
+//     (entries) => {
+//       console.log('yo');
+//       entries.forEach((entry) => {
+//         if (entry.isIntersecting) {
+//           console.log('entry: ', entry);
+//           intersectionObserver.disconnect();
+//           intersectionObserver = undefined;
+//           callback();
+//         }
+//       });
+//     },
+//     { rootMargin: xRootMargin }
+//   );
 
-  intersectionObserver.observe(el);
-};
+//   intersectionObserver.observe(el);
+// };
 
 

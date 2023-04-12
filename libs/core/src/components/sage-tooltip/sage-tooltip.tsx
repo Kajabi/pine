@@ -20,7 +20,7 @@ import {
 })
 export class SageTooltip {
   // private arrowEl: HTMLElement | null;
-  // private triggerEl: HTMLElement | null;
+  private triggerEl: HTMLElement | null;
   private contentEl: HTMLElement | null;
   // private overlayObserver!: IntersectionObserver;
 
@@ -85,31 +85,31 @@ export class SageTooltip {
   /**
    * Determines whether or not the tooltip is visible
    */
-  @Prop({reflect: true}) opened = false;
+  @Prop({mutable: true, reflect: true}) opened = false;
 
   // eslint-disable-next-line @stencil/no-unused-watch
   @Watch('opened')
   handleOpenToggle() {
-    console.log('before isOpened', this.opened);
+    // console.log('before isOpened', this.opened);
 
     if(this.opened) {
       this.handleShow();
     } else {
       this.handleHide();
     }
-    console.log('after isOpened', this.opened);
+    // console.log('after isOpened', this.opened);
   }
 
   /**
    * Determines whether or not the tooltip have an arrow
    */
-  @Prop() disabled = false;
+  @Prop({mutable: true}) disabled = false;
 
   // TODO Q update this state prop
   // eslint-disable-next-line @stencil/no-unused-watch
   @Watch('disabled')
   handleDisabled() {
-    console.log('disabled')
+    // console.log('disabled')
   }
 
   // TODO Q: make better events, maybe before and after hide and show
@@ -139,11 +139,11 @@ export class SageTooltip {
   // }
 
   disconnectedCallback() {
-    this.el.removeEventListener('focus', this.handleFocus);
+    // this.el.removeEventListener('focus', this.handleFocus);
   }
 
   componentWillLoad() {
-    console.log('opened: ', this.opened);
+    // console.log('opened: ', this.opened);
     if (this.opened) {
       this.showTooltip();
     }
@@ -164,7 +164,7 @@ export class SageTooltip {
   }
 
   componentDidRender() {
-    console.log('didRender');
+    // console.log('didRender');
     positionTooltip(this.el, this.placement, this.contentEl);
   }
 
@@ -178,7 +178,7 @@ export class SageTooltip {
 
   @Method()
   async showTooltip() {
-    console.log('showTooltip');
+    // console.log('showTooltip');
 
     if(!this.disabled) {
       this.opened = true;
@@ -200,13 +200,21 @@ export class SageTooltip {
     this.contentEl.style.visibility = 'hidden';
   }
 
+  /**
+     * Sets element as focused
+     */
+  @Method()
+  async setFocus(options?: FocusOptions) {
+      this.triggerEl.focus(options)
+  }
+
   private handleShow = () => {
     // Do not show the overlay if disabled
     if(this.disabled) {
-      console.log('inside disabled');
+      // console.log('inside disabled');
       return
     }
-    console.log('disabled');
+    // console.log('disabled');
     this.showTooltip();
     this.sageTooltipShow.emit();
   };
@@ -219,6 +227,7 @@ export class SageTooltip {
   private handleFocus = () => {
     console.log('handle focus');
     this.showTooltip();
+    this.sageTooltipShow.emit();
   };
 
   private handleBlur = () => {
@@ -241,7 +250,7 @@ export class SageTooltip {
           class={`
             sage-tooltip
             ${this.placement ? (`sage-tooltip--${this.placement}`) : ''}
-            ${this.opened ? 'is-open' : ''}
+            ${this.opened ? 'sage-tooltip--is-open' : ''}
 
           `}
         >
@@ -249,7 +258,7 @@ export class SageTooltip {
             aria-describedby={this.componentId}
             part="trigger"
             class="sage-tooltip__trigger"
-            // ref={(el) => (this.triggerEl = el)}
+            ref={(el) => (this.triggerEl = el)}
           >
             <slot />
           </span>
