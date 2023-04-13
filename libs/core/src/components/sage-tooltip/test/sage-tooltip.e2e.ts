@@ -39,23 +39,22 @@ describe('sage-tooltip', () => {
     const page = await newE2EPage();
     await page.setContent('<sage-tooltip content="tooltip content"><button id="trigger">Secondary</button></sage-tooltip>');
 
-    const component = await page.find('sage-tooltip');
     const trigger = await page.find('#trigger');
     const overlay = await page.find('sage-tooltip >>> .sage-tooltip');
     // console.log('page: ', page);
     // const eventSpy = await page.spyOnEvent('sageTooltipShow');
 
-    console.log('component: ', component);
-    component.focus();
+    // console.log('component: ', component);
     trigger.focus();
     await page.waitForChanges();
 
     // const medthodSpy = await component.callMethod('showTooltip');
 
     // expect(eventSpy).toHaveReceivedEventTimes(1);
-    console.log('component: ', component);
     expect(overlay).toHaveClass('sage-tooltip--is-open');
-    expect(component).toHaveAttribute('opened');
+    const c = await page.find('sage-tooltip');
+    expect(await c.getProperty('opened')).toEqual(true);
+    // expect(await page.eval(component).toHaveProperty('opened');
 
 
     // const el = await page.find('sage-tooltip');

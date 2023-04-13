@@ -9,6 +9,10 @@ describe('positionTooltip', () => {
     expect(positionTooltip(undefined, undefined, undefined)).toBeFalsy();
   })
 
+  it('returns false if no placement is not defined', async () => {
+    expect(positionTooltip(mockButton, undefined, mockOverlay)).toBeFalsy();
+  })
+
   it('positions the overlay to the right of the target', async () => {
     positionTooltip(mockButton, 'right', mockOverlay);
 
