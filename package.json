@@ -1,10 +1,12 @@
 {
-  "name": "sage",
   "private": true,
   "workspaces": [
     "apps/*",
     "libs/*"
   ],
+  "engines": {
+    "node": ">= 16"
+  },
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "build.all": "nx run-many --target=build",
