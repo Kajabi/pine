@@ -10,15 +10,14 @@ describe('sage-tooltip', () => {
         <sage-button variant="secondary">Secondary</sage-button>
        </sage-tooltip>`
     });
-    // TODO: update test to not use toEqualHtml, maybe toBeTruthy()
     expect(root).toEqualHtml(`
       <sage-tooltip>
         <mock:shadow-root>
         <div class="sage-tooltip">
-          <span part="trigger" class="sage-tooltip__trigger">
+          <span class="sage-tooltip__trigger">
             <slot></slot>
           </span>
-          <div class="sage-tooltip__content" aria-hidden="true" aria-live="off" part="content" role="tooltip">
+          <div class="sage-tooltip__content" aria-hidden="true" aria-live="off" role="tooltip">
             <slot name="content"></slot>
           </div>
         </div>
@@ -36,12 +35,12 @@ describe('sage-tooltip', () => {
         <sage-button variant="secondary">Secondary</sage-button>
       </sage-tooltip>`
     });
-    await page.root.showTooltip();
+    await page.root?.showTooltip();
     await page.waitForChanges();
 
-    const element = page.root.shadowRoot;
+    const element = page.root?.shadowRoot;
 
-    expect(element.querySelector('.sage-tooltip')).toHaveClass('sage-tooltip--is-open');
+    expect(element?.querySelector('.sage-tooltip')).toHaveClass('sage-tooltip--is-open');
   });
 
   it('should be able to call method to hide tooltip', async () => {
@@ -52,14 +51,14 @@ describe('sage-tooltip', () => {
         <sage-button variant="secondary">Secondary</sage-button>
       </sage-tooltip>`
     });
-    await page.root.showTooltip();
+    await page.root?.showTooltip();
     await page.waitForChanges();
-    await page.root.hideTooltip();
+    await page.root?.hideTooltip();
     await page.waitForChanges();
 
-    const element = page.root.shadowRoot;
+    const element = page.root?.shadowRoot;
 
-    expect(element.querySelector('.sage-tooltip')).not.toHaveClass('sage-tooltip--is-open');
+    expect(element?.querySelector('.sage-tooltip')).not.toHaveClass('sage-tooltip--is-open');
   });
 
   it('should show arrow when hasArrow is true', async () => {
@@ -71,9 +70,10 @@ describe('sage-tooltip', () => {
       </sage-tooltip>`
     });
 
-    const element = page.root.shadowRoot;
+    const element = page.root?.shadowRoot;
 
-    expect(element.querySelector('.sage-tooltip__arrow')).toBeTruthy();
+    expect(element?.querySelector('.sage-tooltip__arrow')).not.toBeNull();
+  })
 
   it('disabled', async () => {
     const page = await newSpecPage({
@@ -108,9 +108,9 @@ describe('sage-tooltip', () => {
 
     await page.waitForChanges();
 
-    const element = page.root.shadowRoot;
+    const element = page.root?.shadowRoot;
 
-    expect(element.querySelector('.sage-tooltip')).toHaveClass('sage-tooltip--is-open');
+    expect(element?.querySelector('.sage-tooltip')).toHaveClass('sage-tooltip--is-open');
   });
 
   it('should show the tooltip on focus', async () => {

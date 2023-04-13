@@ -250,10 +250,6 @@ export namespace Components {
          */
         "content": '';
         /**
-          * If populated, this will be the tooltip content's width
-         */
-        "customWidth"?: number;
-        /**
           * Determines whether or not the tooltip have an arrow
          */
         "disabled": boolean;
@@ -285,10 +281,6 @@ export namespace Components {
     | 'left'
     | 'left-start'
     | 'left-end';
-        /**
-          * Sets element as focused
-         */
-        "setFocus": (options?: FocusOptions) => Promise<void>;
         "showTooltip": () => Promise<void>;
     }
 }
@@ -642,10 +634,6 @@ declare namespace LocalJSX {
           * Content for the tooltip. If HTML is required, use the content slot
          */
         "content"?: '';
-        /**
-          * If populated, this will be the tooltip content's width
-         */
-        "customWidth"?: number;
         /**
           * Determines whether or not the tooltip have an arrow
          */
