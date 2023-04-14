@@ -60,7 +60,7 @@ export class SageCheckbox {
   /**
    * Emits a boolean indicating whether the checkbox is currently checked or unchecked.
    */
-  @Event() sageCheckbox: EventEmitter<boolean>;
+  @Event() sageCheckboxChange: EventEmitter<boolean>;
 
   private handleCheckboxChange(event: Event) {
     if (this.disabled) {
@@ -70,7 +70,7 @@ export class SageCheckbox {
     const target = event.target as HTMLInputElement;
     const isChecked = target.checked;
 
-    this.sageCheckbox.emit(isChecked);
+    this.sageCheckboxChange.emit(isChecked);
   }
 
   private classNames() {

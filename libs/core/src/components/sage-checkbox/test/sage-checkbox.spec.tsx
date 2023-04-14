@@ -131,26 +131,26 @@ describe('sage-checkbox', () => {
     const input = root?.shadowRoot?.querySelector('input');
     expect(input?.value).toEqual('This is the input value');
   });
-  it('emits "sageCheckbox" event when checkbox is changed', async () => {
+  it('emits "sageCheckboxChange" event when checkbox is changed', async () => {
     const page = await newSpecPage({
       components: [SageCheckbox],
       html: '<sage-checkbox checkbox-id="default" label="Label text" />',
     });
     const checkbox = page.root?.shadowRoot?.querySelector('input[type="checkbox"]');
     const eventSpy = jest.fn();
-    page.root?.addEventListener('sageCheckbox', eventSpy);
+    page.root?.addEventListener('sageCheckboxChange', eventSpy);
     checkbox?.dispatchEvent(new Event('change'));
     await page.waitForChanges();
     expect(eventSpy).toHaveBeenCalled();
   });
-  it('does not emit "sageCheckbox" event when checkbox is changed and disabled', async () => {
+  it('does not emit "sageCheckboxChange" event when checkbox is changed and disabled', async () => {
     const page = await newSpecPage({
       components: [SageCheckbox],
       html: '<sage-checkbox checkbox-id="default" label="Label text" disabled />',
     });
     const checkbox = page.root?.shadowRoot?.querySelector('input[type="checkbox"]');
     const eventSpy = jest.fn();
-    page.root?.addEventListener('sageCheckbox', eventSpy);
+    page.root?.addEventListener('sageCheckboxChange', eventSpy);
     checkbox?.dispatchEvent(new Event('change'));
     await page.waitForChanges();
     expect(eventSpy).not.toHaveBeenCalled();

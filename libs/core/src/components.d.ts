@@ -388,7 +388,7 @@ declare namespace LocalJSX {
         /**
           * Emits a boolean indicating whether the checkbox is currently checked or unchecked.
          */
-        "onSageCheckbox"?: (event: SageCheckboxCustomEvent<boolean>) => void;
+        "onSageCheckboxChange"?: (event: SageCheckboxCustomEvent<boolean>) => void;
         /**
           * Whether or not the checkbox is required.
          */

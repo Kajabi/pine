@@ -23,9 +23,9 @@
 
 ## Events
 
-| Event          | Description                                                                        | Type                   |
-| -------------- | ---------------------------------------------------------------------------------- | ---------------------- |
-| `sageCheckbox` | Emits a boolean indicating whether the checkbox is currently checked or unchecked. | `CustomEvent<boolean>` |
+| Event                | Description                                                                        | Type                   |
+| -------------------- | ---------------------------------------------------------------------------------- | ---------------------- |
+| `sageCheckboxChange` | Emits a boolean indicating whether the checkbox is currently checked or unchecked. | `CustomEvent<boolean>` |
 
 
 ----------------------------------------------

@@ -124,23 +124,23 @@ describe('sage-checkbox', () => {
     expect(await value).toBe('This is the input value');
   });
 
-  it('emits "sageCheckbox" event when checkbox is changed', async () => {
+  it('emits "sageCheckboxChange" event when checkbox is changed', async () => {
     const page = await newE2EPage();
     await page.setContent('<sage-checkbox checkbox-id="default" label="Label text" />');
     const checkbox = await page.find('sage-checkbox >>> input');
 
-    const eventSpy = await page.spyOnEvent('sageCheckbox');
+    const eventSpy = await page.spyOnEvent('sageCheckboxChange');
     await checkbox.press('Space');
 
     expect(eventSpy).toHaveReceivedEvent();
   });
 
-  it('does not emit "sageCheckbox" event when checkbox is changed and disabled', async () => {
+  it('does not emit "sageCheckboxChange" event when checkbox is changed and disabled', async () => {
     const page = await newE2EPage();
     await page.setContent('<sage-checkbox checkbox-id="default" label="Label text" disabled />');
     const checkbox = await page.find('sage-checkbox >>> input');
 
-    const eventSpy = await page.spyOnEvent('sageCheckbox');
+    const eventSpy = await page.spyOnEvent('sageCheckboxChange');
     await checkbox.press('Space');
 
     expect(eventSpy).not.toHaveReceivedEvent();
