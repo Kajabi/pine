@@ -42,7 +42,7 @@ export class SageCheckbox {
   @Prop() name: string;
 
   /**
-   * Whether or not checkbox should display as indeterminate. Prop is for visual styling only.
+   * If `true`, the checkbox will visually appear as indeterminate.
    * Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
    */
   @Prop() indeterminate: boolean;
