@@ -1,15 +1,18 @@
 :host {
   --border-color: #D3D5D9;
+  --border-radius: 4px;
+  --checkbox-size: 16px;
   --checked-color: #040506;
-  --disabled-color: #ECEEEF;
   --disabled-background-color: #F6F8F8;
   --disabled-border-color: #8D939A;
+  --disabled-color: #ECEEEF;
   --disabled-message-color: #B5BAC0;
+  --focus-color: #8ECAFB;
   --hover-background-color: #F9FAFA;
   --hover-border-color: #B5BAC0;
+  --icon-color: #FFF;
   --invalid-color: #CF3C32;
   --invalid-focus-color: #FDB0AA;
-  --focus-color: #8ECAFB;
   --message-color: #60666C;
 }
 
@@ -52,11 +55,11 @@
 input {
   appearance: none;
   border: 1px solid var(--border-color);
-  border-radius: 4px;
-  height: 16px;
+  border-radius: var(--border-radius);
+  height: var(--checkbox-size);
   margin: 0;
   position: relative;
-  width: 16px;
+  width: var(--checkbox-size);
 
   &:hover {
     background: var(--hover-background-color);
@@ -68,7 +71,7 @@ input {
     border-color: var(--checked-color);
 
     &::after {
-      border: 1px solid #FFF;
+      border: 1px solid var(--icon-color);
       border-left: 0;
       border-top: 0;
       content: "";
