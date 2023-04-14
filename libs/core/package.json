@@ -52,7 +52,6 @@
     "test.watch": "stencil test --spec --e2e --watchAll --coverage"
   },
   "dependencies": {
-    "@floating-ui/dom": "^0.5.4",
     "@sage/icons": "*",
     "@stencil/core": "^2.18.0"
   },
