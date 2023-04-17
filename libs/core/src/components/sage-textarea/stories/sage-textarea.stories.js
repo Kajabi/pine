@@ -7,7 +7,7 @@ const BaseTemplate = (args) => html`<sage-textarea
   invalid="${args.invalid}"
   label="${args.label}"
   name="${args.name}"
-  placeholderMessage="${args.placeholderMessage}"
+  placeholder-message="${args.placeholderMessage}"
   readonly="${args.readonly}"
   required="${args.required}"
   rows="${args.rows}"
