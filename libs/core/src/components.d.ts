@@ -202,6 +202,30 @@ export namespace Components {
          */
         "variant": 'inline' | 'plain';
     }
+    interface SageSwitch {
+        /**
+          * A unique identifier for this input. Associates the input with its label
+         */
+        "componentId": string;
+        /**
+          * Disables input control
+          * @defaultValue false
+         */
+        "disabled"?: boolean;
+        /**
+          * Text to be displayed as the switch label
+         */
+        "label"?: string;
+        /**
+          * Used for identifying form data. Unifies a group of radio inputs for toggling a single property/value
+         */
+        "name": string;
+        /**
+          * Specifies the underlying input type
+          * @defaultValue 'checkbox'
+         */
+        "type"?: 'checkbox' | 'radio';
+    }
     interface SageTab {
         "index": number;
         /**
@@ -345,6 +369,12 @@ declare global {
         prototype: HTMLSageLinkElement;
         new (): HTMLSageLinkElement;
     };
+    interface HTMLSageSwitchElement extends Components.SageSwitch, HTMLStencilElement {
+    }
+    var HTMLSageSwitchElement: {
+        prototype: HTMLSageSwitchElement;
+        new (): HTMLSageSwitchElement;
+    };
     interface HTMLSageTabElement extends Components.SageTab, HTMLStencilElement {
     }
     var HTMLSageTabElement: {
@@ -377,6 +407,7 @@ declare global {
         "sage-image": HTMLSageImageElement;
         "sage-input": HTMLSageInputElement;
         "sage-link": HTMLSageLinkElement;
+        "sage-switch": HTMLSageSwitchElement;
         "sage-tab": HTMLSageTabElement;
         "sage-tabpanel": HTMLSageTabpanelElement;
         "sage-tabs": HTMLSageTabsElement;
@@ -588,6 +619,30 @@ declare namespace LocalJSX {
          */
         "variant"?: 'inline' | 'plain';
     }
+    interface SageSwitch {
+        /**
+          * A unique identifier for this input. Associates the input with its label
+         */
+        "componentId"?: string;
+        /**
+          * Disables input control
+          * @defaultValue false
+         */
+        "disabled"?: boolean;
+        /**
+          * Text to be displayed as the switch label
+         */
+        "label"?: string;
+        /**
+          * Used for identifying form data. Unifies a group of radio inputs for toggling a single property/value
+         */
+        "name"?: string;
+        /**
+          * Specifies the underlying input type
+          * @defaultValue 'checkbox'
+         */
+        "type"?: 'checkbox' | 'radio';
+    }
     interface SageTab {
         "index"?: number;
         /**
@@ -680,6 +735,7 @@ declare namespace LocalJSX {
         "sage-image": SageImage;
         "sage-input": SageInput;
         "sage-link": SageLink;
+        "sage-switch": SageSwitch;
         "sage-tab": SageTab;
         "sage-tabpanel": SageTabpanel;
         "sage-tabs": SageTabs;
@@ -697,6 +753,7 @@ declare module "@stencil/core" {
             "sage-image": LocalJSX.SageImage & JSXBase.HTMLAttributes<HTMLSageImageElement>;
             "sage-input": LocalJSX.SageInput & JSXBase.HTMLAttributes<HTMLSageInputElement>;
             "sage-link": LocalJSX.SageLink & JSXBase.HTMLAttributes<HTMLSageLinkElement>;
+            "sage-switch": LocalJSX.SageSwitch & JSXBase.HTMLAttributes<HTMLSageSwitchElement>;
             "sage-tab": LocalJSX.SageTab & JSXBase.HTMLAttributes<HTMLSageTabElement>;
             "sage-tabpanel": LocalJSX.SageTabpanel & JSXBase.HTMLAttributes<HTMLSageTabpanelElement>;
             "sage-tabs": LocalJSX.SageTabs & JSXBase.HTMLAttributes<HTMLSageTabsElement>;

@@ -1,0 +1,54 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+import * as stories from './sage-switch.stories.js';
+
+<Meta
+  title="components/Switch"
+  component="sage-switch"
+  argTypes={extractArgTypes('sage-switch')}
+  args={{
+    disabled: false,
+  }}
+/>
+
+# Switch
+
+<p>
+  Checkbox or radio component styled to appear as a toggle.
+</p>
+
+## Guidelines
+### Usage
+
+#### When to use
+- Remember to check that the id of the input and the label's for attribute match
+- Radio button switches each must have a unique value to accurately represent the selection
+
+#### When not to use
+- Combine the checked & disabled states with caution! Clearly describe why this item cannot be unselected.
+
+
+### Accessibility
+
+## Properties
+<ArgsTable of="sage-switch" />
+
+
+## Variant
+
+### Checkbox (Default)
+
+Default switch style, using a checkbox input
+
+<Story story={stories.Default} />
+
+<Canvas>
+  <sage-switch
+    component-id="sage-switch-default-example"
+    label="Switch Default"
+    name="sage-switch-default"
+    type="checkbox"
+  ></sage-switch>
+</Canvas>
