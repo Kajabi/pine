@@ -50,13 +50,13 @@ export namespace Components {
     }
     interface SageCheckbox {
         /**
-          * String used for checkbox `id` attribute and label `for` attribute.
-         */
-        "checkboxId": string;
-        /**
           * Whether or not the checkbox is checked.
          */
         "checked": boolean;
+        /**
+          * String used for checkbox `id` attribute and label `for` attribute.
+         */
+        "componentId": string;
         /**
           * Whether or not the checkbox is disabled.
          */
@@ -354,13 +354,13 @@ declare namespace LocalJSX {
     }
     interface SageCheckbox {
         /**
-          * String used for checkbox `id` attribute and label `for` attribute.
-         */
-        "checkboxId"?: string;
-        /**
           * Whether or not the checkbox is checked.
          */
         "checked"?: boolean;
+        /**
+          * String used for checkbox `id` attribute and label `for` attribute.
+         */
+        "componentId"?: string;
         /**
           * Whether or not the checkbox is disabled.
          */

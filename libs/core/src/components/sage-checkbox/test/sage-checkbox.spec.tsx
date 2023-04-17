@@ -18,13 +18,13 @@ describe('sage-checkbox', () => {
       </sage-checkbox>
     `);
   });
-  it('renders with id when checkboxId prop is set', async () => {
+  it('renders with id when componentId prop is set', async () => {
     const page = await newSpecPage({
       components: [SageCheckbox],
-      html: `<sage-checkbox checkbox-id="default" label="Label text" />`,
+      html: `<sage-checkbox component-id="default" label="Label text" />`,
     });
     expect(page.root).toEqualHtml(`
-      <sage-checkbox checkbox-id="default" label="Label text">
+      <sage-checkbox component-id="default" label="Label text">
         <mock:shadow-root>
           <div class="sage-checkbox">
             <input type="checkbox" id="default">
@@ -37,7 +37,7 @@ describe('sage-checkbox', () => {
   it('renders checked input when checked prop is set', async () => {
     const { root } = await newSpecPage({
       components: [SageCheckbox],
-      html: `<sage-checkbox checkbox-id="default" label="Label text" checked />`,
+      html: `<sage-checkbox component-id="default" label="Label text" checked />`,
     });
     const input = root?.shadowRoot?.querySelector('input');
     expect(input?.checked).toBe(true);
@@ -45,7 +45,7 @@ describe('sage-checkbox', () => {
   it('renders disabled input when disabled prop is set', async () => {
     const { root } = await newSpecPage({
       components: [SageCheckbox],
-      html: `<sage-checkbox checkbox-id="default" label="Label text" disabled />`,
+      html: `<sage-checkbox component-id="default" label="Label text" disabled />`,
     });
     const input = root?.shadowRoot?.querySelector('input');
     expect(input?.disabled).toBe(true);
@@ -53,10 +53,10 @@ describe('sage-checkbox', () => {
   it('renders in invalid state when invalid prop is set', async () => {
     const page = await newSpecPage({
       components: [SageCheckbox],
-      html: `<sage-checkbox checkbox-id="default" label="Label text" invalid />`,
+      html: `<sage-checkbox component-id="default" label="Label text" invalid />`,
     });
     expect(page.root).toEqualHtml(`
-      <sage-checkbox checkbox-id="default" label="Label text" invalid>
+      <sage-checkbox component-id="default" label="Label text" invalid>
         <mock:shadow-root>
           <div class="sage-checkbox is-invalid">
             <input type="checkbox" id="default">
@@ -69,10 +69,10 @@ describe('sage-checkbox', () => {
   it('renders in indeterminate state when indeterminate prop is set', async () => {
     const page = await newSpecPage({
       components: [SageCheckbox],
-      html: `<sage-checkbox checkbox-id="default" label="Label text" indeterminate />`,
+      html: `<sage-checkbox component-id="default" label="Label text" indeterminate />`,
     });
     expect(page.root).toEqualHtml(`
-      <sage-checkbox checkbox-id="default" label="Label text" indeterminate>
+      <sage-checkbox component-id="default" label="Label text" indeterminate>
         <mock:shadow-root>
           <div class="sage-checkbox is-indeterminate">
             <input type="checkbox" id="default">
@@ -85,10 +85,10 @@ describe('sage-checkbox', () => {
   it('renders label text when label prop is set', async () => {
     const page = await newSpecPage({
       components: [SageCheckbox],
-      html: `<sage-checkbox checkbox-id="default" label="This is label text" />`,
+      html: `<sage-checkbox component-id="default" label="This is label text" />`,
     });
     expect(page.root).toEqualHtml(`
-      <sage-checkbox checkbox-id="default" label="This is label text">
+      <sage-checkbox component-id="default" label="This is label text">
         <mock:shadow-root>
           <div class="sage-checkbox">
             <input type="checkbox" id="default">
@@ -101,10 +101,10 @@ describe('sage-checkbox', () => {
   it('renders message when message prop is set', async () => {
     const page = await newSpecPage({
       components: [SageCheckbox],
-      html: `<sage-checkbox checkbox-id="default" label="Label text" message="This is short message text." />`,
+      html: `<sage-checkbox component-id="default" label="Label text" message="This is short message text." />`,
     });
     expect(page.root).toEqualHtml(`
-      <sage-checkbox checkbox-id="default" label="Label text" message="This is short message text.">
+      <sage-checkbox component-id="default" label="Label text" message="This is short message text.">
         <mock:shadow-root>
           <div class="sage-checkbox">
             <input type="checkbox" id="default">
@@ -118,7 +118,7 @@ describe('sage-checkbox', () => {
   it('renders required input when required prop is set', async () => {
     const { root } = await newSpecPage({
       components: [SageCheckbox],
-      html: `<sage-checkbox checkbox-id="default" label="Label text" required />`,
+      html: `<sage-checkbox component-id="default" label="Label text" required />`,
     });
     const input = root?.shadowRoot?.querySelector('input');
     expect(input?.required).toBe(true);
@@ -126,7 +126,7 @@ describe('sage-checkbox', () => {
   it('sets input value attribute when value prop is set', async () => {
     const { root } = await newSpecPage({
       components: [SageCheckbox],
-      html: `<sage-checkbox checkbox-id="default" label="Label text" value="This is the input value" />`,
+      html: `<sage-checkbox component-id="default" label="Label text" value="This is the input value" />`,
     });
     const input = root?.shadowRoot?.querySelector('input');
     expect(input?.value).toEqual('This is the input value');
@@ -134,7 +134,7 @@ describe('sage-checkbox', () => {
   it('emits "sageCheckboxChange" event when checkbox is changed', async () => {
     const page = await newSpecPage({
       components: [SageCheckbox],
-      html: '<sage-checkbox checkbox-id="default" label="Label text" />',
+      html: '<sage-checkbox component-id="default" label="Label text" />',
     });
     const checkbox = page.root?.shadowRoot?.querySelector('input[type="checkbox"]');
     const eventSpy = jest.fn();
@@ -146,7 +146,7 @@ describe('sage-checkbox', () => {
   it('does not emit "sageCheckboxChange" event when checkbox is changed and disabled', async () => {
     const page = await newSpecPage({
       components: [SageCheckbox],
-      html: '<sage-checkbox checkbox-id="default" label="Label text" disabled />',
+      html: '<sage-checkbox component-id="default" label="Label text" disabled />',
     });
     const checkbox = page.root?.shadowRoot?.querySelector('input[type="checkbox"]');
     const eventSpy = jest.fn();

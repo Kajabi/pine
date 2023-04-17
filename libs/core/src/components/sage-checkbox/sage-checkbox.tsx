@@ -24,7 +24,7 @@ export class SageCheckbox {
   /**
    * String used for checkbox `id` attribute and label `for` attribute.
    */
-  @Prop() checkboxId: string;
+  @Prop() componentId: string;
 
   /**
    * String used for label text next to checkbox.
@@ -100,7 +100,7 @@ export class SageCheckbox {
         <div class={this.classNames()}>
           <input
             type="checkbox"
-            id={this.checkboxId}
+            id={this.componentId}
             name={this.name}
             value={this.value}
             checked={this.checked}
@@ -108,7 +108,7 @@ export class SageCheckbox {
             disabled={this.disabled}
             onChange={event => this.handleCheckboxChange(event)}
           />
-          <label htmlFor={this.checkboxId}>{this.label}</label>
+          <label htmlFor={this.componentId}>{this.label}</label>
           {this.message && <div class={'sage-checkbox__message'}>{this.message}</div>}
         </div>
       </Host>
