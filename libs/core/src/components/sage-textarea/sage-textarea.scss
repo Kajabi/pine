@@ -2,8 +2,8 @@
   // display: block;
   /**
 
-    * @prop --background: Background of the textarea
-    * @prop --background-disabled: Background of a disabled textarea
+    * @prop --background-color-color: Background color of the textarea
+    * @prop --background-color-color-disabled: Background color of a disabled textarea
     *
     * @prop --color: Color of the textarea text
     * @prop --color-error: Color of the textarea text when error is present
@@ -15,7 +15,7 @@
     * @prop --label-font-size: Font size of the label text
     * @prop --label-font-weight: Font weight of the label text
     * @prop --label-line-height: Line height of the label text
-    * @prop --label-margin-bottom: Bottom margin of the label
+    * @prop --label-margin-block-end: Bottom margin of the label
     *
     * @prop --field-font-size: Font size of the textarea text
     * @prop --field-font-weight: Font weight of the textarea text
@@ -26,13 +26,13 @@
     * @prop --hint-font-size: Font size of the hint text
     * @prop --hint-font-weight: Font weight of the hint text
     * @prop --hint-line-height: Line height of the hint text
-    * @prop --hint-margin-top: Top margin of the hint
+    * @prop --hint-margin-block-start: Top margin of the hint
     */
 
   --error-color: #cf3c32;
 
-  --background: #fff;
-  --background-disabled: #f6f8f8;
+  --background-color-color: #fff;
+  --background-color-color-disabled: #f6f8f8;
 
   --color: #202327;
   --color-error: var(--error-color);
@@ -50,7 +50,7 @@
   --label-font-size: 16px;
   --label-font-weight: 500;
   --label-line-height: 24px;
-  --label-margin-bottom: 8px;
+  --label-margin-block-end: 8px;
 
   --field-font-size: 16px;
   --field-font-weight: 400;
@@ -61,7 +61,7 @@
   --hint-font-size: 12px;
   --hint-font-weight: 400;
   --hint-line-height: 20px;
-  --hint-margin-top: 8px;
+  --hint-margin-block-start: 8px;
 
   display: inline;
 }
@@ -76,10 +76,10 @@ label {
   font-size: var(--label-font-size);
   font-weight: var(--label-font-weight);
   line-height: var(--label-line-height);
-  margin-bottom: var(--label-margin-bottom);
+  margin-block-end: var(--label-margin-block-end);
 }
 
-textarea {
+.sage-textarea__field {
   border: 1px solid var(--border-color-default);
   border-radius: 10px;
   font-family: inherit;
@@ -88,12 +88,12 @@ textarea {
   line-height: var(--field-line-height);
   padding: var(--field-padding-block) var(--field-padding-inline);
 
-  &:hover:not(:disabled) {
+  &:hover:not(:disabled, .is-invalid) {
     border-color: var(--border-color-hover);
   }
 
   &:disabled {
-    background-color: var(--background-disabled);
+    background-color: var(--background-color-disabled);
     color: var(--color-disabled);
     cursor: not-allowed;
   }
@@ -108,21 +108,29 @@ textarea {
     font-style: italic;
   }
 
-  &:has(~ .sage-textarea__error-text) {
+  // Fallback fix for FF until `:has` is fully supported
+  &.is-invalid {
     border-color: var(--color-error);
     outline-color: var(--focus-visible-outline-color-error);
   }
+
+  @supports selector(:has(*)) {
+    &:has(~ .sage-textarea__error-message) {
+      border-color: var(--color-error);
+      outline-color: var(--focus-visible-outline-color-error);
+    }
+  }
 }
 
-.sage-textarea__error-text,
-.sage-textarea__hint-text {
+.sage-textarea__error-message,
+.sage-textarea__hint-message {
   font-size: var(--hint-font-size);
   font-weight: var(--hint-font-weight);
   line-height: var(--hint-line-height);
-  margin-bottom: 0;
-  margin-top: var(--hint-margin-top);
+  margin-block-end: 0;
+  margin-block-start: var(--hint-margin-block-start);
 }
 
-.sage-textarea__error-text {
+.sage-textarea__error-message {
   color: var(--color-error);
 }

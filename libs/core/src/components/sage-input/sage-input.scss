@@ -1,8 +1,8 @@
 :host {
   /**
 
-    * @prop --background: Background of the input
-    * @prop --background-disabled: Background of a disabled input
+    * @prop --background-color-color: Background color of the input
+    * @prop --background-color-color-disabled: Background color of a disabled input
     *
     * @prop --color: Color of the input text
     * @prop --color-error: Color of the input text when error is present
@@ -14,7 +14,7 @@
     * @prop --label-font-size: Font size of the label text
     * @prop --label-font-weight: Font weight of the label text
     * @prop --label-line-height: Line height of the label text
-    * @prop --label-margin-bottom: Bottom margin of the label
+    * @prop --label-margin-block-end: Bottom margin of the label
     *
     * @prop --field-font-size: Font size of the field text
     * @prop --field-font-weight: Font weight of the field text
@@ -25,10 +25,10 @@
     * @prop --hint-font-size: Font size of the hint text
     * @prop --hint-font-weight: Font weight of the hint text
     * @prop --hint-line-height: Line height of the hint text
-    * @prop --hint-margin-top: Top margin of the hint
+    * @prop --hint-margin-block-start: Top margin of the hint
     */
-  --background: #fff;
-  --background-disabled: #f9fafa;
+  --background-color: #fff;
+  --background-color-disabled: #f9fafa;
 
   --color: #040506;
   --color-error: #cf3c32;
@@ -42,7 +42,7 @@
   --label-font-size: 16px;
   --label-font-weight: 500;
   --label-line-height: 24px;
-  --label-margin-bottom: 8px;
+  --label-margin-block-end: 8px;
 
   --field-font-size: 16px;
   --field-font-weight: 400;
@@ -53,7 +53,7 @@
   --hint-font-size: 12px;
   --hint-font-weight: 400;
   --hint-line-height: 20px;
-  --hint-margin-top: 8px;
+  --hint-margin-block-start: 8px;
 
   display: inline;
 }
@@ -67,7 +67,7 @@ label {
   font-size: var(--label-font-size);
   font-weight: var(--label-font-weight);
   line-height: var(--label-line-height);
-  margin-bottom: var(--label-margin-bottom);
+  margin-block-end: var(--label-margin-block-end);
 }
 
 input {
@@ -79,7 +79,7 @@ input {
   padding: var(--field-padding-block) var(--field-padding-inline);
 
   &:disabled {
-    background-color: var(--background-disabled);
+    background-color: var(--background-color-disabled);
     cursor: not-allowed;
   }
 
@@ -120,8 +120,8 @@ input {
   font-size: var(--hint-font-size);
   font-weight: var(--hint-font-weight);
   line-height: var(--hint-line-height);
-  margin-bottom: 0;
-  margin-top: var(--hint-margin-top);
+  margin-block-end: 0;
+  margin-block-start: var(--hint-margin-block-start);
 }
 
 .sage-input__error-text {

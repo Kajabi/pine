@@ -37,14 +37,14 @@ describe('sage-textarea', () => {
   it('renders error text', async () => {
     const {root} = await newSpecPage({
       components: [SageTextarea],
-      html: `<sage-textarea invalid="true" error-text="error"></sage-textarea>`,
+      html: `<sage-textarea invalid="true" error-message="error"></sage-textarea>`,
     });
     expect(root).toEqualHtml(`
-      <sage-textarea invalid="true" error-text="error">
+      <sage-textarea invalid="true" error-message="error">
         <mock:shadow-root>
           <div class="sage-textarea">
-            <textarea class="sage-textarea__field"></textarea>
-            <p class="sage-textarea__error-text">error</p>
+            <textarea class="sage-textarea__field is-invalid"></textarea>
+            <p class="sage-textarea__error-message">error</p>
           </div>
         </mock:shadow-root>
       </sage-textarea>
@@ -54,10 +54,10 @@ describe('sage-textarea', () => {
   it('does not render error text when invalid prop is set to false', async () => {
     const {root} = await newSpecPage({
       components: [SageTextarea],
-      html: `<sage-textarea invalid="false" error-text="error"></sage-textarea>`,
+      html: `<sage-textarea invalid="false" error-message="error"></sage-textarea>`,
     });
     expect(root).toEqualHtml(`
-      <sage-textarea invalid="false" error-text="error">
+      <sage-textarea invalid="false" error-message="error">
         <mock:shadow-root>
           <div class="sage-textarea">
             <textarea class="sage-textarea__field"></textarea>
@@ -70,14 +70,14 @@ describe('sage-textarea', () => {
   it('renders hint text', async () => {
     const {root} = await newSpecPage({
       components: [SageTextarea],
-      html: `<sage-textarea hint-text="hint"></sage-textarea>`,
+      html: `<sage-textarea hint-message="hint"></sage-textarea>`,
     });
     expect(root).toEqualHtml(`
-      <sage-textarea hint-text="hint">
+      <sage-textarea hint-message="hint">
         <mock:shadow-root>
           <div class="sage-textarea">
             <textarea class="sage-textarea__field"></textarea>
-            <p class="sage-textarea__hint-text">hint</p>
+            <p class="sage-textarea__hint-message">hint</p>
           </div>
         </mock:shadow-root>
       </sage-textarea>
@@ -87,10 +87,10 @@ describe('sage-textarea', () => {
   it('renders label text', async () => {
     const {root} = await newSpecPage({
       components: [SageTextarea],
-      html: `<sage-textarea label-text="label"></sage-textarea>`,
+      html: `<sage-textarea label="label"></sage-textarea>`,
     });
     expect(root).toEqualHtml(`
-      <sage-textarea label-text="label">
+      <sage-textarea label="label">
         <mock:shadow-root>
           <div class="sage-textarea">
             <label>label</label>
@@ -120,10 +120,10 @@ describe('sage-textarea', () => {
   it('renders placeholder text', async () => {
     const {root} = await newSpecPage({
       components: [SageTextarea],
-      html: `<sage-textarea placeholder-text="Placeholder..."></sage-textarea>`,
+      html: `<sage-textarea placeholder-message="Placeholder..."></sage-textarea>`,
     });
     expect(root).toEqualHtml(`
-      <sage-textarea placeholder-text="Placeholder...">
+      <sage-textarea placeholder-message="Placeholder...">
         <mock:shadow-root>
           <div class="sage-textarea">
             <textarea class="sage-textarea__field" placeholder="Placeholder..."></textarea>
@@ -168,10 +168,10 @@ describe('sage-textarea', () => {
   it('renders textarea id and for attribute on label when property is passed', async () => {
     const {root} = await newSpecPage({
       components: [SageTextarea],
-      html: `<sage-textarea component-id="testId" label-text="label"></sage-textarea>`,
+      html: `<sage-textarea component-id="testId" label="label"></sage-textarea>`,
     });
     expect(root).toEqualHtml(`
-      <sage-textarea component-id="testId" label-text="label">
+      <sage-textarea component-id="testId" label="label">
         <mock:shadow-root>
           <div class="sage-textarea">
             <label htmlFor="testId">label</label>
@@ -181,7 +181,6 @@ describe('sage-textarea', () => {
       </sage-textarea>
     `);
   });
-
 
   it('renders textarea value when property is passed', async () => {
     const {root} = await newSpecPage({

@@ -1,5 +1,7 @@
 import { Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 import { ChangeEvent } from 'react';
+import { isRequired } from '../../utils/utils';
+
 
 @Component({
   tag: 'sage-textarea',
@@ -19,13 +21,13 @@ export class SageTextarea {
    * Specifies the error text and provides an error-themed treatment to the field
    * @defaultValue null
    */
-  @Prop() errorText?: string = null;
+  @Prop() errorMessage?: string = null;
 
   /**
    * Displays a hint or description of the textarea
    * @defaultValue null
    */
-  @Prop() hintText?: string = null;
+  @Prop() hintMessage?: string = null;
 
   /**
    * Indicates whether or not the textarea is invalid or throws an error
@@ -43,7 +45,7 @@ export class SageTextarea {
    * Text to be displayed as the textarea label
    * @defaultValue null
    */
-  @Prop() labelText?: string = null;
+  @Prop() label?: string = null;
 
   /**
    * Specifies the name, submitted with the form name/value pair
@@ -54,7 +56,7 @@ export class SageTextarea {
    * Specifies a short hint that describes the expected value of the textarea
    * @defaultValue null
    */
-  @Prop() placeholderText?: string = null;
+  @Prop() placeholderMessage?: string = null;
 
   /**
    * Indicates whether or not the textarea is readonly
@@ -86,14 +88,20 @@ export class SageTextarea {
   @Event() sageTextareaInput: EventEmitter<ChangeEvent>;
   private onTextareaInputEvent = (ev: Event) => {
     const textarea = ev.target as HTMLTextAreaElement;
-    if (this.required === true) {
-      const validity = textarea.checkValidity();
-      (validity === false) ? this.invalid = true : this.invalid = false;
-    }
+    isRequired(textarea, this);
     if (textarea) {
       this.value = textarea.innerHTML;
     }
     this.sageTextareaInput.emit();
+  };
+
+  private textareaClassNames = () => {
+    let className = `sage-textarea__field`;
+    if (this.invalid && this.invalid === true) {
+      const invalidClassName = `is-invalid`;
+      className += ' ' + invalidClassName;
+    }
+    return className;
   };
 
   render() {
@@ -102,19 +110,20 @@ export class SageTextarea {
         aria-disabled={this.disabled ? 'true' : null}
       >
         <div class="sage-textarea">
-          {this.labelText && <label htmlFor={this.componentId}>{this.labelText}</label>}
-          <textarea class="sage-textarea__field"
+          {this.label && <label htmlFor={this.componentId}>{this.label}</label>}
+          <textarea
+            class={this.textareaClassNames()}
             disabled={this.disabled}
             id={this.componentId}
             name={this.name}
-            placeholder={this.placeholderText}
+            placeholder={this.placeholderMessage}
             readOnly={this.readonly}
             required={this.required}
             rows={this.rows}
             onChange={this.onTextareaInputEvent}
           >{this.value}</textarea>
-          {this.hintText && <p class="sage-textarea__hint-text">{this.hintText}</p>}
-          {this.invalid && <p class="sage-textarea__error-text">{this.errorText}</p>}
+          {this.hintMessage && <p class="sage-textarea__hint-message">{this.hintMessage}</p>}
+          {this.invalid && <p class="sage-textarea__error-message">{this.errorMessage}</p>}
         </div>
       </Host>
     );
