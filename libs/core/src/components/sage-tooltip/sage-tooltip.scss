@@ -1,7 +1,7 @@
 :host {
   /**
 
-    * @prop --background: Background of the tooltip
+    * @prop --background-color: Background-color of the tooltip
     * @prop --color: Text color of the tooltip
     * @prop --arrow-size: width and height of the arrow
     * @prop --arrow-offset: arrow offset position
@@ -17,7 +17,7 @@
     * @prop --arrow-pointing-up: shape for upward facing arrow
     */
 
-  --background: #000;
+  --background-color: #000;
   --color: #fff;
   --width: 236px;
   --arrow-size: 6px;
@@ -46,7 +46,7 @@
 }
 
 .sage-tooltip__content {
-  background-color: var(--background);
+  background-color: var(--background-color);
   border-radius: var(--overlay-border-radius);
   color: var(--color);
   font-size: var(--overlay-font-size);
@@ -73,7 +73,7 @@
   width: 0;
 
   .sage-tooltip--right & {
-    border-right-color: var(--background);
+    border-right-color: var(--background-color);
     border-width: var(--arrow-pointing-to-the-left);
     left: calc(var(--arrow-size) * -1);
     top: 50%;
@@ -81,7 +81,7 @@
   }
 
   .sage-tooltip--right-end & {
-    border-right-color: var(--background);
+    border-right-color: var(--background-color);
     border-width: var(--arrow-pointing-to-the-left);
     bottom: var(--arrow-offset);
     left: calc(var(--arrow-size) * -1);
@@ -89,14 +89,14 @@
   }
 
   .sage-tooltip--right-start & {
-    border-right-color: var(--background);
+    border-right-color: var(--background-color);
     border-width: var(--arrow-pointing-to-the-left);
     left: calc(var(--arrow-size) * -1);
     top: var(--arrow-offset);
   }
 
   .sage-tooltip--top & {
-    border-top-color: var(--background);
+    border-top-color: var(--background-color);
     border-width: var(--arrow-pointing-down);
     bottom: calc(var(--arrow-size) * -1);
     left: 50%;
@@ -105,7 +105,7 @@
   }
 
   .sage-tooltip--top-start & {
-    border-top-color: var(--background);
+    border-top-color: var(--background-color);
     border-width: var(--arrow-pointing-down);
     bottom: calc(var(--arrow-size) * -1);
     left: var(--arrow-offset);
@@ -113,7 +113,7 @@
   }
 
   .sage-tooltip--top-end & {
-    border-top-color: var(--background);
+    border-top-color: var(--background-color);
     border-width: var(--arrow-pointing-down);
     bottom: calc(var(--arrow-size) * -1);
     left: initial;
@@ -122,7 +122,7 @@
   }
 
   .sage-tooltip--left & {
-    border-left-color: var(--background);
+    border-left-color: var(--background-color);
     border-width: var(--arrow-pointing-to-the-right);
     left: initial;
     right: calc(var(--arrow-size) * -1);
@@ -131,7 +131,7 @@
   }
 
   .sage-tooltip--left-end & {
-    border-left-color: var(--background);
+    border-left-color: var(--background-color);
     border-width: var(--arrow-pointing-to-the-right);
     bottom: var(--arrow-offset);
     left: initial;
@@ -140,7 +140,7 @@
   }
 
   .sage-tooltip--left-start & {
-    border-left-color: var(--background);
+    border-left-color: var(--background-color);
     border-width: var(--arrow-pointing-to-the-right);
     left: initial;
     right: calc(var(--arrow-size) * -1);
@@ -148,7 +148,7 @@
   }
 
   .sage-tooltip--bottom & {
-    border-bottom-color: var(--background);
+    border-bottom-color: var(--background-color);
     border-width: var(--arrow-pointing-up);
     left: 50%;
     top: calc(var(--arrow-size) * -1);
@@ -156,7 +156,7 @@
   }
 
   .sage-tooltip--bottom-end & {
-    border-bottom-color: var(--background);
+    border-bottom-color: var(--background-color);
     border-width: var(--arrow-pointing-up);
     left: initial;
     right: var(--arrow-offset);
@@ -164,7 +164,7 @@
   }
 
   .sage-tooltip--bottom-start & {
-    border-bottom-color: var(--background);
+    border-bottom-color: var(--background-color);
     border-width: var(--arrow-pointing-up);
     left: var(--arrow-offset);
     top: calc(var(--arrow-size) * -1);

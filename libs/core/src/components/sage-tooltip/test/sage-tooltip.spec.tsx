@@ -73,7 +73,7 @@ describe('sage-tooltip', () => {
     const element = page.root?.shadowRoot;
 
     expect(element?.querySelector('.sage-tooltip__arrow')).not.toBeNull();
-  })
+  });
 
   it('opened', async () => {
     const page = await newSpecPage({
