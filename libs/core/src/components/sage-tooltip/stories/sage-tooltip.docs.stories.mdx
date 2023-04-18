@@ -27,12 +27,12 @@ Whether your trigger is text or an HTML element, it will be placed in the defaul
 <Story story={stories.Default} />
 
 <Canvas>
-<sage-tooltip content="this is tooltip content" has-arrow="true" placement="bottom-start">
-  text
-</sage-tooltip>
-<sage-tooltip content="this is tooltip content" has-arrow="true" placement="right-start">
-  <sage-button variant="secondary">Button</sage-button>
-</sage-tooltip>
+  <sage-tooltip content="this is tooltip content" has-arrow="true" placement="bottom-start">
+    text
+  </sage-tooltip>
+  <sage-tooltip content="this is tooltip content" has-arrow="true" placement="right-start">
+    <sage-button variant="secondary">Button</sage-button>
+  </sage-tooltip>
 </Canvas>
 
 ### Content
@@ -41,7 +41,7 @@ Text-based content are generated using the `content` prop. Use this option only 
 tooltip content is expected to be a string.
 
 <Canvas>
-<sage-tooltip content="this is tooltip content" has-arrow="true" placement="right">text</sage-tooltip>
+  <sage-tooltip content="this is tooltip content" has-arrow="true" placement="right">text</sage-tooltip>
 </Canvas>
 
 #### HTML Element Content
@@ -51,13 +51,13 @@ enable the `htmlContent` property and provide your element in the `content` slot
 <Story story={stories.Slotted} />
 
 <Canvas>
-<sage-tooltip content="this is tooltip content" has-arrow="true" placement="right">
-  text
-  <div slot="content">
-    <p>this is s a sentence in a tooltip.</p>
-    <p>this is s a sentence in a tooltip.</p>
-  </div>
-</sage-tooltip>
+  <sage-tooltip content="this is tooltip content" has-arrow="true" placement="right">
+    text
+    <div slot="content">
+      <p>this is s a sentence in a tooltip.</p>
+      <p>this is s a sentence in a tooltip.</p>
+    </div>
+  </sage-tooltip>
 </Canvas>
 
 ### Positioning
@@ -71,7 +71,7 @@ By default the arrow is visible but it can be hidden by disabling it when `disab
 <Story story={stories.NoArrow} />
 
 <Canvas>
-<sage-tooltip content="this is tooltip content" has-arrow="false" placement="right">text</sage-tooltip>
+  <sage-tooltip content="this is tooltip content" has-arrow="false" placement="right">text</sage-tooltip>
 </Canvas>
 
 ### Disabled
@@ -80,5 +80,5 @@ In cases where you'd want a disabled tooltip, set `disabled` property should to 
 <Story story={stories.Disabled} />
 
 <Canvas>
-<sage-tooltip content="this is tooltip content" has-arrow="true" disabled="true" placement="right">text</sage-tooltip>
+  <sage-tooltip content="this is tooltip content" has-arrow="true" disabled="true" placement="right">text</sage-tooltip>
 </Canvas>
