@@ -7,7 +7,7 @@ const defaultParameters = {
 };
 
 const BaseTemplate = (args) => html`
-<sage-tooltip content=${args.content} disabled=${args.disabled} has-arrow=${args.hasArrow} placement=${args.placement} opened=${args.opened}>${args.slot}</sage-tooltip>`;
+<sage-tooltip content=${args.content} has-arrow=${args.hasArrow} placement=${args.placement} opened=${args.opened}>${args.slot}</sage-tooltip>`;
 
 const SlottedTemplate = (args) => html`
 <sage-tooltip has-arrow=${args.hasArrow} placement=${args.placement} html-content=${args.htmlContent}>
@@ -70,7 +70,6 @@ const PositionTemplate = (args) => html`
 export const Default = BaseTemplate.bind({});
 Default.args = {
   content: "The tooltip content",
-  disabled: false,
   placement: "right",
   slot: "target text"
 };
@@ -93,18 +92,8 @@ PositionTemplate.parameters = { ...defaultParameters }
 export const NoArrow = BaseTemplate.bind({});
 NoArrow.args = {
   content: "The tooltip content",
-  disabled: false,
   hasArrow: false,
   placement: "bottom-start",
   slot: "target text"
 };
 NoArrow.parameters = { ...defaultParameters }
-
-export const Disabled = BaseTemplate.bind({});
-Disabled.args = {
-  content: "The tooltip content",
-  disabled: true,
-  placement: "bottom-start",
-  slot: "target text"
-};
-Disabled.parameters = { ...defaultParameters }

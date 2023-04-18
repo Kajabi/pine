@@ -75,28 +75,6 @@ describe('sage-tooltip', () => {
     expect(element?.querySelector('.sage-tooltip__arrow')).not.toBeNull();
   })
 
-  it('disabled', async () => {
-    const page = await newSpecPage({
-      components: [SageTooltip],
-      html: `
-      <sage-tooltip content="Tooltip content" disabled="true">
-        <sage-button variant="secondary">Secondary</sage-button>
-      </sage-tooltip>`
-    });
-
-    const tooltip = new SageTooltip();
-
-    const element = page.root;
-    element?.dispatchEvent(new FocusEvent('focus'));
-    await page.waitForChanges();
-
-    expect(tooltip).not.toHaveBeenCalled();
-
-    // const element = page.root.shadowRoot;
-
-    // expect(element.querySelector('.sage-tooltip')).not.toHaveClass('sage-tooltip--is-open');
-  });
-
   it('opened', async () => {
     const page = await newSpecPage({
       components: [SageTooltip],

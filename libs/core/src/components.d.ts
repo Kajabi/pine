@@ -250,10 +250,6 @@ export namespace Components {
          */
         "content": '';
         /**
-          * Determines whether or not the tooltip is disabled
-         */
-        "disabled": boolean;
-        /**
           * Determines whether or not the tooltip have an arrow
          */
         "hasArrow"?: boolean;
@@ -634,10 +630,6 @@ declare namespace LocalJSX {
           * Content for the tooltip. If HTML is required, use the content slot
          */
         "content"?: '';
-        /**
-          * Determines whether or not the tooltip is disabled
-         */
-        "disabled"?: boolean;
         /**
           * Determines whether or not the tooltip have an arrow
          */

@@ -80,17 +80,6 @@ export class SageTooltip {
   }
 
   /**
-   * Determines whether or not the tooltip is disabled
-   */
-  @Prop({mutable: true}) disabled = false;
-
-  // eslint-disable-next-line @stencil/no-unused-watch
-  @Watch('disabled')
-  handleDisabled() {
-    // console.log('disabled')
-  }
-
-  /**
    * Emitted after a tooltip is closed
    */
   @Event() sageTooltipHide: EventEmitter;
@@ -121,15 +110,13 @@ export class SageTooltip {
 
   @Method()
   async showTooltip() {
-    if(!this.disabled) {
-      this.opened = true;
+    this.opened = true;
 
-      if(this.contentEl) {
-        // TODO: need to use block / none but the tooltip content width and height are needed for calculations
-        // this.contentEl.style.display = 'block';
-        this.contentEl.style.opacity = '1';
-        this.contentEl.style.visibility = 'visible';
-      }
+    if(this.contentEl) {
+      // TODO: need to use block / none but the tooltip content width and height are needed for calculations
+      // this.contentEl.style.display = 'block';
+      this.contentEl.style.opacity = '1';
+      this.contentEl.style.visibility = 'visible';
     }
   }
 
@@ -148,9 +135,6 @@ export class SageTooltip {
   };
 
   private handleShow = () => {
-    if(this.disabled) {
-      return
-    }
     this.showTooltip();
     this.sageTooltipShow.emit();
   };
@@ -159,7 +143,6 @@ export class SageTooltip {
     return (
       <Host
         class={{'sage-tooltip--has-html-content': this.htmlContent}}
-        disabled={this.disabled}
         hasArrow={this.hasArrow}
         onMouseEnter={this.handleShow}
         onMouseLeave={this.handleHide}

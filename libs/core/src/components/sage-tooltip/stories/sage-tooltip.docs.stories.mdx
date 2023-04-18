@@ -66,19 +66,10 @@ Using the placement prop you can adjust where your tooltip will be displayed.
 <Story story={stories.Positioning} />
 
 ### `has-arrow`
-By default the arrow is visible but it can be hidden by disabling it when `disabled` is `true`.
+By default the arrow is visible but it can be hidden by disabling it when `has-arrow` is `true`.
 
 <Story story={stories.NoArrow} />
 
 <Canvas>
   <sage-tooltip content="this is tooltip content" has-arrow="false" placement="right">text</sage-tooltip>
-</Canvas>
-
-### Disabled
-In cases where you'd want a disabled tooltip, set `disabled` property should to `true`.
-
-<Story story={stories.Disabled} />
-
-<Canvas>
-  <sage-tooltip content="this is tooltip content" has-arrow="true" disabled="true" placement="right">text</sage-tooltip>
 </Canvas>
