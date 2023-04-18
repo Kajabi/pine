@@ -9,20 +9,15 @@ export class SageSwitch {
   @Element() el: HTMLSageSwitchElement;
 
   /**
-   * Disables input control
-   * @defaultValue false
-   */
-  @Prop() disabled? = false;
-
-  /**
    * A unique identifier for this input. Associates the input with its label
    */
   @Prop() componentId: string;
 
   /**
-   * Used for identifying form data. Unifies a group of radio inputs for toggling a single property/value
+   * Disables input control
+   * @defaultValue false
    */
-  @Prop() name: string;
+  @Prop() disabled? = false;
 
   /**
    * Text to be displayed as the switch label
@@ -30,10 +25,21 @@ export class SageSwitch {
   @Prop() label?: string;
 
   /**
-   * Specifies the underlying input type
+   * Used for identifying form data. Unifies a group of radio inputs for toggling a single property/value
+   */
+  @Prop() name: string;
+
+  /**
+   * Forces the input to be required
+   * @defaultValue false
+   */
+  @Prop() required? = false;
+
+  /**
+   * Specifies the underlying input element type
    * @defaultValue 'checkbox'
    */
-  @Prop() type?: 'checkbox' | 'radio';
+  @Prop() type: 'checkbox' | 'radio' = 'checkbox';
 
 
   render() {
