@@ -35,7 +35,7 @@ export class SageInput {
   @Prop() inputId: string;
 
   /**
-   * Text to be displayed as the input label
+   * Text to be displayed as the form label
    */
   @Prop() label?: string;
 
@@ -61,7 +61,7 @@ export class SageInput {
 
   /**
    * Determines the type of control that will be displayed
-   * `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`
+   `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`
    * @defaultValue "text"
    */
   @Prop() type = 'text';
