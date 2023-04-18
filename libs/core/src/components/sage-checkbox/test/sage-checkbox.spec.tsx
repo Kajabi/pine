@@ -101,10 +101,10 @@ describe('sage-checkbox', () => {
   it('renders message when message prop is set', async () => {
     const page = await newSpecPage({
       components: [SageCheckbox],
-      html: `<sage-checkbox component-id="default" label="Label text" message="This is short message text." />`,
+      html: `<sage-checkbox component-id="default" label="Label text" helper-message="This is short message text." />`,
     });
     expect(page.root).toEqualHtml(`
-      <sage-checkbox component-id="default" label="Label text" message="This is short message text.">
+      <sage-checkbox component-id="default" label="Label text" helper-message="This is short message text.">
         <mock:shadow-root>
           <div class="sage-checkbox">
             <input type="checkbox" id="default">

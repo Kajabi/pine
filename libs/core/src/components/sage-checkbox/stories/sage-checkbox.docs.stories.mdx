@@ -30,16 +30,15 @@ Checkboxes provide users with selectable options like toggling a single setting 
 <Story story={stories.Default} />
 
 <Canvas>
-  <sage-checkbox checkbox-id="default" label="Label" />
+  <sage-checkbox component-id="default" label="Label" />
 </Canvas>
-
 
 ### Checked
 
 <Story story={stories.Checked} />
 
 <Canvas>
-  <sage-checkbox checkbox-id="checked" label="Label" checked />
+  <sage-checkbox component-id="checked" label="Label" checked />
 </Canvas>
 
 
@@ -52,73 +51,37 @@ Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs]
 <Story story={stories.Indeterminate} />
 
 <Canvas>
-  <sage-checkbox checkbox-id="indeterminate" label="Label" indeterminate checked />
+  <sage-checkbox component-id="indeterminate" label="Label" indeterminate checked />
 </Canvas>
 
 ### Disabled
 
+Disabled visually indicates and functionally prevents interaction with the checkbox.
+
 <Story story={stories.Disabled} />
 
 <Canvas>
-  <sage-checkbox checkbox-id="disabled" label="Label" disabled />
-</Canvas>
-
-Disabled and Indeterminate
-
-<Canvas>
-<sage-checkbox checkbox-id="disabled-indeterminate" label="Label" disabled checked indeterminate />
-</Canvas>
-
-Disabled and Checked
-<Canvas>
-<sage-checkbox checkbox-id="disabled-checked" label="Label" disabled checked />
+  <sage-checkbox component-id="disabled" label="Label" disabled />
 </Canvas>
 
 ### Message
 
 Message is a string of text that displays below the label text.
+
 <Story story={stories.withMessage} />
 
 <Canvas>
-  <sage-checkbox checkbox-id="message1" label="Label" message="This is short message text." />
-</Canvas>
-
-Message and Indeterminate
-<Canvas>
-  <sage-checkbox checkbox-id="message2" label="Label" message="This is short message text." checked indeterminate />
-</Canvas>
-
-Message and Checked
-<Canvas>
-  <sage-checkbox checkbox-id="message3" label="Label" message="This is short message text." checked />
-</Canvas>
-
-Message and Disabled
-<Canvas>
-  <sage-checkbox checkbox-id="message3" label="Label" message="This is short message text." checked disabled />
+  <sage-checkbox component-id="message1" label="Label" helper-message="This is short message text." />
 </Canvas>
 
 ### Invalid
 
+Invalid displays the checkbox in  invalid state such as when required but is not checked.
+
 <Story story={stories.Invalid} />
 
 <Canvas>
-  <sage-checkbox checkbox-id="invalid" label="Label" invalid />
-</Canvas>
-
-Invalid and Indeterminate
-<Canvas>
-  <sage-checkbox checkbox-id="invalid2" label="Label" checked indeterminate invalid  />
-</Canvas>
-
-Invalid and Checked
-<Canvas>
-  <sage-checkbox checkbox-id="invalid3" label="Label" checked invalid  />
-</Canvas>
-
-Invalid with a Label and Message
-<Canvas>
-  <sage-checkbox checkbox-id="invalid4" label="Label" message="This is short message text." invalid  />
+  <sage-checkbox component-id="invalid" label="Label" invalid />
 </Canvas>
 
 ## Additional Resources

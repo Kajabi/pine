@@ -32,9 +32,9 @@ export class SageCheckbox {
   @Prop() label: string;
 
   /**
-   * String used for message below checkbox.
+   * String used for helper message below checkbox.
    */
-  @Prop() message: string;
+  @Prop() helperMessage: string;
 
   /**
    * String used for checkbox `name` attribute.
@@ -109,7 +109,7 @@ export class SageCheckbox {
             onChange={event => this.handleCheckboxChange(event)}
           />
           <label htmlFor={this.componentId}>{this.label}</label>
-          {this.message && <div class={'sage-checkbox__message'}>{this.message}</div>}
+          {this.helperMessage && <div class={'sage-checkbox__message'}>{this.helperMessage}</div>}
         </div>
       </Host>
     );

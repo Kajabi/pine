@@ -62,6 +62,10 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
+          * String used for helper message below checkbox.
+         */
+        "helperMessage": string;
+        /**
           * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
          */
         "indeterminate": boolean;
@@ -73,10 +77,6 @@ export namespace Components {
           * String used for label text next to checkbox.
          */
         "label": string;
-        /**
-          * String used for message below checkbox.
-         */
-        "message": string;
         /**
           * String used for checkbox `name` attribute.
          */
@@ -366,6 +366,10 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
+          * String used for helper message below checkbox.
+         */
+        "helperMessage"?: string;
+        /**
           * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
          */
         "indeterminate"?: boolean;
@@ -377,10 +381,6 @@ declare namespace LocalJSX {
           * String used for label text next to checkbox.
          */
         "label"?: string;
-        /**
-          * String used for message below checkbox.
-         */
-        "message"?: string;
         /**
           * String used for checkbox `name` attribute.
          */
