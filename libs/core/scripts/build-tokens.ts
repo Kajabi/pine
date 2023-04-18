@@ -12,7 +12,7 @@ const propertyOrder = {
  * Runs the process to build tokens from JSON and save them to their
  * appropriate files.
  *
- * @param data Tokens data in JSON format.
+ * @param data Tokens data in JSON format
  */
 const build = (data: object) => {
 
@@ -36,7 +36,7 @@ build(tokens);
 /*** Helper Methods ***/
 
 /**
- * Generates the custom shorthand for the CSS Custom Property
+ * Generates the custom shorthand for the CSS Custom Property.
  *
  * @param customPropName Name of the Custom Property
  * @param cssPropertyName Name of the CSS Property
@@ -93,7 +93,7 @@ const determinePropertyOrder = (cssProperty, data) => {
  * Reads the index.scss file if it exists and adds an import statement per category name.
  * If the file doesn't exist, it will be created.
  *
- * @param categoryName The name of the token category.
+ * @param categoryName The name of the token category
  */
 const formatIndexFile = (categoryName: string) => {
 	const indexFile = `${process.cwd()}/src/global/styles/tokens/index.scss`;
@@ -111,6 +111,7 @@ const formatIndexFile = (categoryName: string) => {
 }
 
 /**
+ * Receives values of CSS property names and joins them.
  * 
  * @param data Array data to be joined
  * @returns CSS property values joined by a space
@@ -120,8 +121,8 @@ const getValues = (data) => Object.values(data).join(' ');
 /**
  * Saves formatted tokens to their own SCSS partial files.
  *
- * @param categoryName The name of the token category.
- * @param tokens Formatted tokens data as CSS custom properties.
+ * @param categoryName The name of the token category
+ * @param tokens Formatted tokens data as CSS custom properties
  */
 const saveTokens = async (categoryName: string, tokens: string) => {
   try {
@@ -139,10 +140,10 @@ const saveTokens = async (categoryName: string, tokens: string) => {
  * Takes the JSON data and converts it to formatted CSS
  * custom properties.
  *
- * @param tokens Tokens data in JSON format.
+ * @param tokens Tokens data in JSON format
  * @param cssPropertyName Name of the css property
- * @param base Base string to format custom properties.
- * @returns Formatted CSS with all custom properties.z
+ * @param base Base string to format custom properties
+ * @returns Formatted CSS with all custom properties
  */
 const tokensToCss = (tokens: object, cssPropertyName, base = `-`, prevBase = '') =>
   Object.entries(tokens).reduce((css, [key, value]) => {
