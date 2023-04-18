@@ -29,9 +29,6 @@ export const positionTooltip = (elem, elemPlacement, overlay, offset = 8) => {
     overlay.style.right = `calc(${rect.width}px + ${offset}px)`;
     overlay.style.transform = 'translateY(-50%)';
 
-    // console.log('rect: ', rect);
-    // console.log('contentRect: ', contentRect);
-
     if (elemPlacement.includes("start")) {
       overlay.style.top = '0';
       overlay.style.transform = 'translateY(0)';

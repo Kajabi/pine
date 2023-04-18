@@ -80,7 +80,7 @@ export class SageTooltip {
   }
 
   /**
-   * Determines whether or not the tooltip have an arrow
+   * Determines whether or not the tooltip is disabled
    */
   @Prop({mutable: true}) disabled = false;
 
