@@ -21,11 +21,8 @@
 
   ::slotted([slot="content"]) {
     white-space: normal;
+    width: var(--width);
   }
-}
-
-:host(.sage-tooltip--has-html-content) {
-  width: var(--width);
 }
 
 .sage-tooltip__content {
