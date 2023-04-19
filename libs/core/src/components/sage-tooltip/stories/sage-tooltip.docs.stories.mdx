@@ -12,9 +12,17 @@ import * as stories from './sage-tooltip.stories';
 />
 
 # Tooltip
-<p>Tooltips display helpful popup text when users hover over an element.</p>
+<p>Tooltips display helpful popup text when users hover over or keyboard focus an element.</p>
 
 ## Guidelines
+### Usage
+#### When to use
+- To describe icon-only buttons
+- When an elements adding more context or explanation is helpful, but not essential
+
+#### When not to use
+- Do not use a tooltip when information is essential to task completion.
+That information should remain visible.
 
 ## Properties
 
@@ -73,3 +81,7 @@ By default the arrow is visible but it can be hidden by disabling it when `has-a
 <Canvas>
   <sage-tooltip content="this is tooltip content" has-arrow="false" placement="right">text</sage-tooltip>
 </Canvas>
+
+## Additional Resources
+
+[W3 Aria Tooltip Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/)
