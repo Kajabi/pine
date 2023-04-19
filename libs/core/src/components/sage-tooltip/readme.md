@@ -56,24 +56,6 @@ Type: `Promise<void>`
 | `"content"`   | HTML content for the tooltip |
 
 
-## CSS Custom Properties
-
-| Name                            | Description                     |
-| ------------------------------- | ------------------------------- |
-| `--arrow-offset`                | arrow offset position           |
-| `--arrow-pointing-down`         | shape for downward facing arrow |
-| `--arrow-pointing-to-the-left`  | shape for left facing arrow     |
-| `--arrow-pointing-to-the-right` | shape for right facing arrow    |
-| `--arrow-pointing-up`           | shape for upward facing arrow   |
-| `--arrow-size`                  | width and height of the arrow   |
-| `--background-color`            | Background-color of the tooltip |
-| `--color`                       | Text color of the tooltip       |
-| `--overlay-border-radius`       | overlay border-radius           |
-| `--overlay-font-size`           | overlay font-size               |
-| `--overlay-line-height`         | overlay line-height             |
-| `--overlay-padding`             | overlay padding                 |
-
-
 ----------------------------------------------
 
 
