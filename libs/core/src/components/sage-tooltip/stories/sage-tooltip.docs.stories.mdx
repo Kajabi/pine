@@ -18,7 +18,7 @@ import * as stories from './sage-tooltip.stories';
 ### Usage
 #### When to use
 - To describe icon-only buttons
-- When an elements adding more context or explanation is helpful, but not essential
+- When adding more context or explanation to an element is helpful, but not essential
 
 #### When not to use
 - Do not use a tooltip when information is essential to task completion.
@@ -56,7 +56,7 @@ tooltip content is expected to be a string.
 Tooptip content may contain HTML elements. In these cases,
 enable the `htmlContent` property and provide your element in the `content` slot.
 
-<Story story={stories.Slotted} />
+<Story story={stories.HTMLContent} />
 
 <Canvas>
   <sage-tooltip content="this is tooltip content" has-arrow="true" placement="right">
