@@ -31,8 +31,6 @@ const build = (data: object) => {
 	}
 }
 
-build(tokens);
-
 /*** Helper Methods ***/
 
 /**
@@ -167,3 +165,5 @@ const tokensToCss = (tokens: object, cssPropertyName, base = `-`, prevBase = '')
 		}
 		return css
   }, ``);
+
+build(tokens);
