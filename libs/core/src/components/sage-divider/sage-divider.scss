@@ -1,20 +1,19 @@
-/*
-TODO: update offset values to use
-our spacing tokens when available.
-*/
+:host {
+  --divider-background-color: var(--sage-color-neutral-grey-400);
+}
 
 $sage-divider-offsets: (
-  xxs: 4px,
-  xs: 8px,
-  sm: 16px,
-  md: 24px,
-  lg: 32px,
-  xl: 48px,
-  xxl: 64px,
+  xxs: #{var(--sage-spacing-xxs)},
+  xs: #{var(--sage-spacing-xs)},
+  sm: #{var(--sage-spacing-sm)},
+  md: #{var(--sage-spacing-md)},
+  lg: #{var(--sage-spacing-lg)},
+  xl: #{var(--sage-spacing-xl)},
+  xxl: #{var(--sage-spacing-xxl)},
 );
 
 .sage-divider {
-  background: #D3D5D9;
+  background: var(--divider-background-color);
   border: 0;
   display: flex;
   height: 1px;
@@ -29,11 +28,11 @@ $sage-divider-offsets: (
 
 @each $offset, $value in $sage-divider-offsets {
   .sage-divider--offset-#{$offset} {
-    margin: 0 (-$value);
+    margin: 0 calc($value * -1);
     padding: 0 $value;
 
     &.sage-divider--vertical {
-      margin: (-$value) 0;
+      margin: calc($value * -1) 0;
       padding: $value 0;
     }
   }
