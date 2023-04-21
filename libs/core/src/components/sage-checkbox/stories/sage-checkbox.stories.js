@@ -6,7 +6,7 @@ const BaseTemplate = (args) =>
     label=${args.label}
     checked=${args.checked}
     disabled=${args.disabled}
-    message=${args.message}
+    helper-message=${args.helperMessage}
     name=${args.name}
     indeterminate=${args.indeterminate}
     required=${args.required}
@@ -52,7 +52,7 @@ export const withMessage = BaseTemplate.bind();
 withMessage.args = {
   componentId: 'with-message',
   label: 'Label text',
-  message: "This is short message text",
+  helperMessage: "This is short message text",
 };
 withMessage.parameters = { ...defaultParameters };
 
