@@ -1,15 +1,21 @@
 :host {
   --divider-background-color: var(--sage-color-neutral-grey-400);
+  --divider-offset-xxs: var(--sage-spacing-xxs);
+  --divider-offset-xs: var(--sage-spacing-xs);
+  --divider-offset-sm: var(--sage-spacing-sm);
+  --divider-offset-md: var(--sage-spacing-md);
+  --divider-offset-lg: var(--sage-spacing-lg);
+  --divider-offset-xxl: var(--sage-spacing-2xl);
 }
 
 $sage-divider-offsets: (
-  xxs: #{var(--sage-spacing-xxs)},
-  xs: #{var(--sage-spacing-xs)},
-  sm: #{var(--sage-spacing-sm)},
-  md: #{var(--sage-spacing-md)},
-  lg: #{var(--sage-spacing-lg)},
-  xl: #{var(--sage-spacing-xl)},
-  xxl: #{var(--sage-spacing-xxl)},
+  xxs: var(--divider-offset-xxs),
+  xs: var(--divider-offset-xs),
+  sm: var(--divider-offset-sm),
+  md: var(--divider-offset-md),
+  lg: var(--divider-offset-lg),
+  xl: var(--divider-offset-xl),
+  xxl: var(--divider-offset-xxl),
 );
 
 .sage-divider {
