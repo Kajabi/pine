@@ -221,10 +221,15 @@ export namespace Components {
          */
         "name": string;
         /**
-          * Specifies the underlying input type
+          * Forces the input to be required
+          * @defaultValue false
+         */
+        "required"?: boolean;
+        /**
+          * Specifies the underlying input element type
           * @defaultValue 'checkbox'
          */
-        "type"?: 'checkbox' | 'radio';
+        "type": 'checkbox' | 'radio';
     }
     interface SageTab {
         "index": number;
@@ -638,7 +643,12 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Specifies the underlying input type
+          * Forces the input to be required
+          * @defaultValue false
+         */
+        "required"?: boolean;
+        /**
+          * Specifies the underlying input element type
           * @defaultValue 'checkbox'
          */
         "type"?: 'checkbox' | 'radio';

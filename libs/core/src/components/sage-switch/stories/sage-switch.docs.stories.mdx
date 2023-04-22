@@ -10,6 +10,7 @@ import * as stories from './sage-switch.stories.js';
   argTypes={extractArgTypes('sage-switch')}
   args={{
     disabled: false,
+    required: false,
   }}
 />
 
@@ -22,12 +23,10 @@ import * as stories from './sage-switch.stories.js';
 ## Guidelines
 ### Usage
 
-#### When to use
-- Remember to check that the id of the input and the label's for attribute match
-- Radio button switches each must have a unique value to accurately represent the selection
-
-#### When not to use
-- Combine the checked & disabled states with caution! Clearly describe why this item cannot be unselected.
+#### Checkbox or Radio
+- If only one Switch is needed for users to enable/disable a value, use a `checkbox`
+- Like radio buttons in forms, a `radio` Switch requires **at least two** related `radio` Switch inputs for users to 'toggle' between the different values
+- `radio` Switches require a shared `name` along with an individual `component-id` for each Switch
 
 
 ### Accessibility
@@ -36,7 +35,7 @@ import * as stories from './sage-switch.stories.js';
 <ArgsTable of="sage-switch" />
 
 
-## Variant
+## Variants
 
 ### Checkbox (Default)
 
@@ -47,8 +46,23 @@ Default switch style, using a checkbox input
 <Canvas>
   <sage-switch
     component-id="sage-switch-default-example"
-    label="Switch Default"
+    label="Default Switch"
     name="sage-switch-default"
     type="checkbox"
+  ></sage-switch>
+</Canvas>
+
+### Radio
+
+Renders a switch using a radio button input
+
+<Story story={stories.Radio} />
+
+<Canvas>
+  <sage-switch
+    component-id="sage-switch-radio-example"
+    label="Radio Switch"
+    name="sage-switch-default"
+    type="radio"
   ></sage-switch>
 </Canvas>
