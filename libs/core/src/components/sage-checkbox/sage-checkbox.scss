@@ -14,40 +14,38 @@
   --checkbox-message-color-disabled: var(--sage-color-neutral-grey-500);
   --checkbox-message-color: var(--sage-color-neutral-charcoal-200);
   --checkbox-input-size: 16px;
-}
 
-.sage-checkbox {
   align-items: center;
   display: flex;
   flex-flow: row wrap;
+}
 
-  &.is-invalid {
-    input {
+:host(.is-invalid) {
+  input {
+    border-color: var(--checkbox-color-invalid);
+
+    &:checked {
+      background: var(--checkbox-color-invalid);
       border-color: var(--checkbox-color-invalid);
-
-      &:checked {
-        background: var(--checkbox-color-invalid);
-        border-color: var(--checkbox-color-invalid);
-      }
-
-      &:focus-visible {
-        box-shadow: 0 0 0 4px var(--checkbox-color-invalid-focus);
-        outline: none;
-      }
     }
 
-    label,
-    .sage-checkbox__message {
-      color: var(--checkbox-color-invalid);
+    &:focus-visible {
+      box-shadow: 0 0 0 4px var(--checkbox-color-invalid-focus);
+      outline: none;
     }
   }
 
-  &.is-indeterminate {
-    input:checked {
-      &::after {
-        border-bottom: 0;
-        transform: rotate(87deg) translate3d(-114%, 25%, 0);
-      }
+  label,
+  .sage-checkbox__message {
+    color: var(--checkbox-color-invalid);
+  }
+}
+
+:host(.is-indeterminate) {
+  input:checked {
+    &::after {
+      border-bottom: 0;
+      transform: rotate(87deg) translate3d(-114%, 25%, 0);
     }
   }
 }

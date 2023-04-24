@@ -74,7 +74,7 @@ export class SageCheckbox {
   }
 
   private classNames() {
-    const classNames = ['sage-checkbox'];
+    const classNames = [];
 
     if (this.invalid) { classNames.push('is-invalid'); }
     if (this.indeterminate) { classNames.push('is-indeterminate'); }
@@ -85,21 +85,19 @@ export class SageCheckbox {
 
   render() {
     return (
-      <Host>
-        <div class={this.classNames()}>
-          <input
-            type="checkbox"
-            id={this.componentId}
-            name={this.name}
-            value={this.value}
-            checked={this.checked}
-            required={this.required}
-            disabled={this.disabled}
-            onChange={event => this.handleCheckboxChange(event)}
-          />
-          <label htmlFor={this.componentId}>{this.label}</label>
-          {this.helperMessage && <div class={'sage-checkbox__message'}>{this.helperMessage}</div>}
-        </div>
+      <Host class={this.classNames()}>
+        <input
+          type="checkbox"
+          id={this.componentId}
+          name={this.name}
+          value={this.value}
+          checked={this.checked}
+          required={this.required}
+          disabled={this.disabled}
+          onChange={event => this.handleCheckboxChange(event)}
+        />
+        <label htmlFor={this.componentId}>{this.label}</label>
+        {this.helperMessage && <div class={'sage-checkbox__message'}>{this.helperMessage}</div>}
       </Host>
     );
   }
