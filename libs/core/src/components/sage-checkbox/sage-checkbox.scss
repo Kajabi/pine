@@ -26,7 +26,6 @@
 
     &:checked {
       background: var(--checkbox-color-invalid);
-      border-color: var(--checkbox-color-invalid);
     }
 
     &:focus-visible {
