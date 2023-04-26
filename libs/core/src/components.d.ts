@@ -7,6 +7,8 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
+    interface PdsAvatar {
+    }
     interface PdsButton {
         /**
           * Toggles disabled state of button
@@ -479,6 +481,12 @@ export interface PdsTooltipCustomEvent<T> extends CustomEvent<T> {
     target: HTMLPdsTooltipElement;
 }
 declare global {
+    interface HTMLPdsAvatarElement extends Components.PdsAvatar, HTMLStencilElement {
+    }
+    var HTMLPdsAvatarElement: {
+        prototype: HTMLPdsAvatarElement;
+        new (): HTMLPdsAvatarElement;
+    };
     interface HTMLPdsButtonElement extends Components.PdsButton, HTMLStencilElement {
     }
     var HTMLPdsButtonElement: {
@@ -564,6 +572,7 @@ declare global {
         new (): HTMLPdsTooltipElement;
     };
     interface HTMLElementTagNameMap {
+        "pds-avatar": HTMLPdsAvatarElement;
         "pds-button": HTMLPdsButtonElement;
         "pds-checkbox": HTMLPdsCheckboxElement;
         "pds-chip": HTMLPdsChipElement;
@@ -581,6 +590,8 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    interface PdsAvatar {
+    }
     interface PdsButton {
         /**
           * Toggles disabled state of button
@@ -1045,6 +1056,7 @@ declare namespace LocalJSX {
     | 'left-end';
     }
     interface IntrinsicElements {
+        "pds-avatar": PdsAvatar;
         "pds-button": PdsButton;
         "pds-checkbox": PdsCheckbox;
         "pds-chip": PdsChip;
@@ -1065,6 +1077,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "pds-avatar": LocalJSX.PdsAvatar & JSXBase.HTMLAttributes<HTMLPdsAvatarElement>;
             "pds-button": LocalJSX.PdsButton & JSXBase.HTMLAttributes<HTMLPdsButtonElement>;
             "pds-checkbox": LocalJSX.PdsCheckbox & JSXBase.HTMLAttributes<HTMLPdsCheckboxElement>;
             "pds-chip": LocalJSX.PdsChip & JSXBase.HTMLAttributes<HTMLPdsChipElement>;
