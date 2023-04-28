@@ -7,6 +7,7 @@ describe('sage-checkbox', () => {
       components: [SageCheckbox],
       html: `<sage-checkbox />`,
     });
+
     expect(page.root).toEqualHtml(`
       <sage-checkbox>
         <mock:shadow-root>
@@ -22,6 +23,7 @@ describe('sage-checkbox', () => {
       components: [SageCheckbox],
       html: `<sage-checkbox component-id="default" label="Label text" />`,
     });
+
     expect(page.root).toEqualHtml(`
       <sage-checkbox component-id="default" label="Label text">
         <mock:shadow-root>
@@ -57,6 +59,7 @@ describe('sage-checkbox', () => {
       components: [SageCheckbox],
       html: `<sage-checkbox component-id="default" label="Label text" invalid />`,
     });
+
     expect(page.root).toEqualHtml(`
       <sage-checkbox class="is-invalid" component-id="default" label="Label text" invalid>
         <mock:shadow-root>
@@ -72,6 +75,7 @@ describe('sage-checkbox', () => {
       components: [SageCheckbox],
       html: `<sage-checkbox component-id="default" label="Label text" indeterminate />`,
     });
+
     expect(page.root).toEqualHtml(`
       <sage-checkbox class="is-indeterminate" component-id="default" label="Label text" indeterminate>
         <mock:shadow-root>
@@ -87,6 +91,7 @@ describe('sage-checkbox', () => {
       components: [SageCheckbox],
       html: `<sage-checkbox component-id="default" label="This is label text" />`,
     });
+
     expect(page.root).toEqualHtml(`
       <sage-checkbox component-id="default" label="This is label text">
         <mock:shadow-root>
@@ -102,6 +107,7 @@ describe('sage-checkbox', () => {
       components: [SageCheckbox],
       html: `<sage-checkbox component-id="default" label="Label text" helper-message="This is short message text." />`,
     });
+
     expect(page.root).toEqualHtml(`
       <sage-checkbox component-id="default" label="Label text" helper-message="This is short message text.">
         <mock:shadow-root>
