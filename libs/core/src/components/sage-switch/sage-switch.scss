@@ -5,6 +5,7 @@
 
   --switch-color-default: var(--sage-color-neutral-grey-400);
   --switch-color-default-hover: var(--sage-color-neutral-grey-500);
+  --switch-color-default-focus: var(--sage-color-primary-200);
   --switch-color-default-text: var(--sage-color-neutral-charcoal-300);
   --switch-color-checked: var(--sage-color-neutral-charcoal-400);
   --switch-color-checked-hover: var(--sage-color-neutral-charcoal-500);
@@ -16,6 +17,7 @@
   --switch-focus-outline-error-color: var(--sage-color-red-200);
 
   --switch-label-left-spacing: var(--sage-spacing-xs);
+  --switch-line-height: var(--sage-line-height-md);
   --switch-border-radius: var(--sage-border-radius-lg);
   --switch-height: 20px;
   --switch-width: 36px;
@@ -23,7 +25,7 @@
 
   align-items: flex-start;
   color: var(--switch-color-default-text);
-  display: flex;
+  display: inline-flex;
   flex-flow: row wrap;
   margin-bottom: var(--sage-spacing-md);
   position: relative;
@@ -42,15 +44,15 @@
   padding: 0;
   position: relative;
   transform: translateY(2px);
-  transition: background 0.3s ease-out;
+  transition: 0.3s ease-out;
+  transition-property: background, border, color;
   vertical-align: top;
   width: var(--switch-width);
-  z-index: 1;
 
   &::after {
     background: var(--sage-color-base-white);
     border-radius: 50%;
-    // box-shadow: var(--sage-box-shadow-sm);
+    // box-shadow: var(--sage-box-shadow-sm); // TODO: replace with corrected token
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12), 0 0 2px 0 rgba(0, 0, 0, 0.08);
     content: "";
     display: block;
@@ -67,6 +69,7 @@
 .sage-switch__input ~ .sage-switch__label {
   display: inline-block;
   flex: 1;
+  line-height: var(--switch-line-height);
   margin-left: 12px;
 
   &::after {
@@ -76,6 +79,44 @@
     position: absolute;
     top: 0;
     width: 100%;
-    z-index: 1;
   }
 }
+
+// Disabled state
+.sage-switch__input:disabled {
+  background-color: var(--switch-color-disabled);
+  cursor: not-allowed;
+
+  ~ .sage-switch__label {
+    color: var(--switch-color-disabled-checked-text);
+    cursor: inherit;
+  }
+}
+
+// Hover state
+.sage-switch__input:hover:not(:disabled) {
+  background-color: var(--switch-color-default-hover);
+}
+
+ // Focus & active state
+.sage-switch__input:focus-visible:not(:disabled) {
+  box-shadow: 0 0 0 4px var(--switch-color-default-focus);
+  outline: none;
+}
+
+// Checked input state
+.sage-switch__input:checked:not(:disabled) {
+  background: currentColor;
+  color: var(--switch-color-checked);
+
+  &::after {
+    transform: translate3d(0, -50%, 0);
+  }
+
+  &:hover {
+    // background-color: currentColor;
+    border-color: currentColor;
+    color: var(--switch-color-checked-hover);
+  }
+}
+
