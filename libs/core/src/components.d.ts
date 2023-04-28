@@ -50,7 +50,7 @@ export namespace Components {
     }
     interface SageCheckbox {
         /**
-          * Determines whether or not the checkbox is checked.
+          * It determines whether or not the checkbox is checked.
          */
         "checked": boolean;
         /**
@@ -58,7 +58,7 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Determines whether or not the checkbox is disabled.
+          * It determines whether or not the checkbox is disabled.
          */
         "disabled": boolean;
         /**
@@ -70,7 +70,7 @@ export namespace Components {
          */
         "indeterminate": boolean;
         /**
-          * Determines whether or not the checkbox is invalid.
+          * It determines whether or not the checkbox is invalid.
          */
         "invalid": boolean;
         /**
@@ -82,7 +82,7 @@ export namespace Components {
          */
         "name": string;
         /**
-          * Determines whether or not the checkbox is required.
+          * It determines whether or not the checkbox is required.
          */
         "required": boolean;
         /**
@@ -354,7 +354,7 @@ declare namespace LocalJSX {
     }
     interface SageCheckbox {
         /**
-          * Determines whether or not the checkbox is checked.
+          * It determines whether or not the checkbox is checked.
          */
         "checked"?: boolean;
         /**
@@ -362,7 +362,7 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
-          * Determines whether or not the checkbox is disabled.
+          * It determines whether or not the checkbox is disabled.
          */
         "disabled"?: boolean;
         /**
@@ -374,7 +374,7 @@ declare namespace LocalJSX {
          */
         "indeterminate"?: boolean;
         /**
-          * Determines whether or not the checkbox is invalid.
+          * It determines whether or not the checkbox is invalid.
          */
         "invalid"?: boolean;
         /**
@@ -390,7 +390,7 @@ declare namespace LocalJSX {
          */
         "onSageCheckboxChange"?: (event: SageCheckboxCustomEvent<boolean>) => void;
         /**
-          * Determines whether or not the checkbox is required.
+          * It determines whether or not the checkbox is required.
          */
         "required"?: boolean;
         /**

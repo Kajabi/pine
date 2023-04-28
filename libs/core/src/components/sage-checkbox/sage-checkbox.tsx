@@ -7,17 +7,17 @@ import { Component, h, Prop, Host, Event, EventEmitter } from '@stencil/core';
 })
 export class SageCheckbox {
   /**
-   * Determines whether or not the checkbox is checked.
+   * It determines whether or not the checkbox is checked.
    */
   @Prop() checked: boolean;
 
   /**
-   * Determines whether or not the checkbox is disabled.
+   * It determines whether or not the checkbox is disabled.
    */
   @Prop() disabled: boolean;
 
   /**
-   * Determines whether or not the checkbox is invalid.
+   * It determines whether or not the checkbox is invalid.
    */
   @Prop() invalid: boolean;
 
@@ -48,7 +48,7 @@ export class SageCheckbox {
   @Prop() indeterminate: boolean;
 
   /**
-   * Determines whether or not the checkbox is required.
+   * It determines whether or not the checkbox is required.
    */
   @Prop() required: boolean;
 
