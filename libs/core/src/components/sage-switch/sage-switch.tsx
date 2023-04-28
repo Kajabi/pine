@@ -11,18 +11,22 @@ export class SageSwitch {
   /**
    * A unique identifier for this input. Associates the input with its label
    */
-  @Prop() componentId: string;
+  @Prop() componentId!: string;
 
   /**
    * Disables input control
-   * @defaultValue false
    */
   @Prop() disabled? = false;
 
   /**
+   * Indicates when user input is not valid
+   */
+  @Prop() invalid? = false;
+
+  /**
    * Text to be displayed as the switch label
    */
-  @Prop() label?: string;
+  @Prop() label!: string;
 
   /**
    * Used for identifying form data. Unifies a group of radio inputs for toggling a single property/value
@@ -31,7 +35,6 @@ export class SageSwitch {
 
   /**
    * Forces the input to be required
-   * @defaultValue false
    */
   @Prop() required? = false;
 
@@ -45,8 +48,16 @@ export class SageSwitch {
   render() {
     return (
       <Host class="sage-switch" aria-disabled={this.disabled ? 'true' : null}>
-        <label class="sage-switch__label" htmlFor={this.componentId}>{this.label}</label>
-        <input class="sage-switch__input" id={this.componentId} name={this.name} disabled={this.disabled} type={this.type} ></input>
+        <input
+          class="sage-switch__input"
+          disabled={this.disabled}
+          id={this.componentId}
+          name={this.name}
+          type={this.type}
+        />
+        <label class="sage-switch__label" htmlFor={this.componentId}>
+          {this.label}
+        </label>
       </Host>
     );
   }

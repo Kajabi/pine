@@ -209,20 +209,22 @@ export namespace Components {
         "componentId": string;
         /**
           * Disables input control
-          * @defaultValue false
          */
         "disabled"?: boolean;
         /**
+          * Indicates when user input is not valid
+         */
+        "invalid"?: boolean;
+        /**
           * Text to be displayed as the switch label
          */
-        "label"?: string;
+        "label": string;
         /**
           * Used for identifying form data. Unifies a group of radio inputs for toggling a single property/value
          */
         "name": string;
         /**
           * Forces the input to be required
-          * @defaultValue false
          */
         "required"?: boolean;
         /**
@@ -628,23 +630,25 @@ declare namespace LocalJSX {
         /**
           * A unique identifier for this input. Associates the input with its label
          */
-        "componentId"?: string;
+        "componentId": string;
         /**
           * Disables input control
-          * @defaultValue false
          */
         "disabled"?: boolean;
         /**
+          * Indicates when user input is not valid
+         */
+        "invalid"?: boolean;
+        /**
           * Text to be displayed as the switch label
          */
-        "label"?: string;
+        "label": string;
         /**
           * Used for identifying form data. Unifies a group of radio inputs for toggling a single property/value
          */
         "name"?: string;
         /**
           * Forces the input to be required
-          * @defaultValue false
          */
         "required"?: boolean;
         /**
