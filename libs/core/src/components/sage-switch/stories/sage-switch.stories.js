@@ -3,7 +3,7 @@ import { html } from 'lit-html';
 const BaseTemplate = (args) => html`
   <sage-switch
     disabled=${args.disabled}
-    id=${args.componentId}
+    component-id=${args.componentId}
     label=${args.label}
     name=${args.name}
     required=${args.required}
