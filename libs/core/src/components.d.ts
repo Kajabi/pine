@@ -48,6 +48,48 @@ export namespace Components {
          */
         "variant": 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
     }
+    interface SageCheckbox {
+        /**
+          * It determines whether or not the checkbox is checked.
+         */
+        "checked": boolean;
+        /**
+          * String used for checkbox `id` attribute and label `for` attribute.
+         */
+        "componentId": string;
+        /**
+          * It determines whether or not the checkbox is disabled.
+         */
+        "disabled": boolean;
+        /**
+          * String used for helper message below checkbox.
+         */
+        "helperMessage": string;
+        /**
+          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
+         */
+        "indeterminate": boolean;
+        /**
+          * It determines whether or not the checkbox is invalid.
+         */
+        "invalid": boolean;
+        /**
+          * String used for label text next to checkbox.
+         */
+        "label": string;
+        /**
+          * String used for checkbox `name` attribute.
+         */
+        "name": string;
+        /**
+          * It determines whether or not the checkbox is required.
+         */
+        "required": boolean;
+        /**
+          * The value of the checkbox that is submitted with a form.
+         */
+        "value": string;
+    }
     interface SageImage {
         /**
           * The image's alt tag. If none is provided, it will default to an empty string.
@@ -188,6 +230,10 @@ export namespace Components {
         "variant": 'primary' | 'availability' | 'filter';
     }
 }
+export interface SageCheckboxCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSageCheckboxElement;
+}
 export interface SageInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSageInputElement;
@@ -208,6 +254,12 @@ declare global {
     var HTMLSageButtonElement: {
         prototype: HTMLSageButtonElement;
         new (): HTMLSageButtonElement;
+    };
+    interface HTMLSageCheckboxElement extends Components.SageCheckbox, HTMLStencilElement {
+    }
+    var HTMLSageCheckboxElement: {
+        prototype: HTMLSageCheckboxElement;
+        new (): HTMLSageCheckboxElement;
     };
     interface HTMLSageImageElement extends Components.SageImage, HTMLStencilElement {
     }
@@ -248,6 +300,7 @@ declare global {
     interface HTMLElementTagNameMap {
         "my-component": HTMLMyComponentElement;
         "sage-button": HTMLSageButtonElement;
+        "sage-checkbox": HTMLSageCheckboxElement;
         "sage-image": HTMLSageImageElement;
         "sage-input": HTMLSageInputElement;
         "sage-link": HTMLSageLinkElement;
@@ -298,6 +351,52 @@ declare namespace LocalJSX {
           * Sets button variant styles as outlined in Figma documentation
          */
         "variant"?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
+    }
+    interface SageCheckbox {
+        /**
+          * It determines whether or not the checkbox is checked.
+         */
+        "checked"?: boolean;
+        /**
+          * String used for checkbox `id` attribute and label `for` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * It determines whether or not the checkbox is disabled.
+         */
+        "disabled"?: boolean;
+        /**
+          * String used for helper message below checkbox.
+         */
+        "helperMessage"?: string;
+        /**
+          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
+         */
+        "indeterminate"?: boolean;
+        /**
+          * It determines whether or not the checkbox is invalid.
+         */
+        "invalid"?: boolean;
+        /**
+          * String used for label text next to checkbox.
+         */
+        "label"?: string;
+        /**
+          * String used for checkbox `name` attribute.
+         */
+        "name"?: string;
+        /**
+          * Emits a boolean indicating whether the checkbox is currently checked or unchecked.
+         */
+        "onSageCheckboxChange"?: (event: SageCheckboxCustomEvent<boolean>) => void;
+        /**
+          * It determines whether or not the checkbox is required.
+         */
+        "required"?: boolean;
+        /**
+          * The value of the checkbox that is submitted with a form.
+         */
+        "value"?: string;
     }
     interface SageImage {
         /**
@@ -446,6 +545,7 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "my-component": MyComponent;
         "sage-button": SageButton;
+        "sage-checkbox": SageCheckbox;
         "sage-image": SageImage;
         "sage-input": SageInput;
         "sage-link": SageLink;
@@ -460,6 +560,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
             "sage-button": LocalJSX.SageButton & JSXBase.HTMLAttributes<HTMLSageButtonElement>;
+            "sage-checkbox": LocalJSX.SageCheckbox & JSXBase.HTMLAttributes<HTMLSageCheckboxElement>;
             "sage-image": LocalJSX.SageImage & JSXBase.HTMLAttributes<HTMLSageImageElement>;
             "sage-input": LocalJSX.SageInput & JSXBase.HTMLAttributes<HTMLSageInputElement>;
             "sage-link": LocalJSX.SageLink & JSXBase.HTMLAttributes<HTMLSageLinkElement>;
