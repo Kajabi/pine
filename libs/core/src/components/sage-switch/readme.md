@@ -19,6 +19,13 @@
 | `type`                     | `type`         | Specifies the underlying input element type                                                          | `"checkbox" \| "radio"` | `'checkbox'` |
 
 
+## CSS Custom Properties
+
+| Name                   | Description                        |
+| ---------------------- | ---------------------------------- |
+| `--switch-toggle-size` | Size of the switch toggle control. |
+
+
 ----------------------------------------------
 
 

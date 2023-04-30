@@ -98,23 +98,24 @@
   background-color: var(--switch-color-default-hover);
 }
 
- // Focus & active state
+ // Focus state
 .sage-switch__input:focus-visible:not(:disabled) {
   box-shadow: 0 0 0 4px var(--switch-color-default-focus);
   outline: none;
 }
 
 // Checked input state
-.sage-switch__input:checked:not(:disabled) {
-  background: currentColor;
-  color: var(--switch-color-checked);
-
+.sage-switch__input:checked {
   &::after {
     transform: translate3d(0, -50%, 0);
   }
+}
+
+.sage-switch__input:checked:not(:disabled) {
+  background-color: currentColor;
+  color: var(--switch-color-checked);
 
   &:hover {
-    // background-color: currentColor;
     border-color: currentColor;
     color: var(--switch-color-checked-hover);
   }
