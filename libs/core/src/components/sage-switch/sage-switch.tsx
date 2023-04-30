@@ -14,6 +14,11 @@ export class SageSwitch {
   @Prop() componentId!: string;
 
   /**
+   * Sets state of input control
+   */
+  @Prop() checked = false;
+
+  /**
    * Disables input control
    */
   @Prop() disabled? = false;
@@ -49,6 +54,7 @@ export class SageSwitch {
     return (
       <Host class="sage-switch" aria-disabled={this.disabled ? 'true' : null}>
         <input
+          checked={this.checked}
           class="sage-switch__input"
           disabled={this.disabled}
           id={this.componentId}

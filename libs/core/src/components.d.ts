@@ -204,6 +204,10 @@ export namespace Components {
     }
     interface SageSwitch {
         /**
+          * Sets state of input control
+         */
+        "checked": boolean;
+        /**
           * A unique identifier for this input. Associates the input with its label
          */
         "componentId": string;
@@ -627,6 +631,10 @@ declare namespace LocalJSX {
         "variant"?: 'inline' | 'plain';
     }
     interface SageSwitch {
+        /**
+          * Sets state of input control
+         */
+        "checked"?: boolean;
         /**
           * A unique identifier for this input. Associates the input with its label
          */
