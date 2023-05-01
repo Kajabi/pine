@@ -1,7 +1,6 @@
 import { html } from 'lit-html';
 
-const BaseTemplate = (args) =>
-  html` <sage-card></sage-card>`;
+const BaseTemplate = (args) => html` <sage-card compact=${args.compact}></sage-card>`;
 
 const defaultParameters = { docs: { disable: true } };
 
@@ -10,7 +9,6 @@ Default.args = {
   compact: false,
 };
 Default.parameters = { ...defaultParameters };
-
 
 export const Compact = BaseTemplate.bind();
 Compact.args = {
