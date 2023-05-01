@@ -1,0 +1,16 @@
+:host {
+
+  --card-border: var(--sage-border-interactive);
+  --card-border-radius: var(--sage-border-radius-xs);
+  --card-padding: var(--sage-spacing-md);
+  --card-compact-padding: var(--sage-spacing-sm);
+
+  border: var(--card-border);
+  border-radius: 12px;
+  display: block;
+  padding: var(--card-padding);
+}
+
+:host(.is-compact) {
+  padding: var(--card-compact-padding);
+}

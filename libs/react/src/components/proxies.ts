@@ -10,6 +10,7 @@ import { applyPolyfills, defineCustomElements } from '@sage/core/loader';
 applyPolyfills().then(() => defineCustomElements());
 export const MyComponent = /*@__PURE__*/createReactComponent<JSX.MyComponent, HTMLMyComponentElement>('my-component');
 export const SageButton = /*@__PURE__*/createReactComponent<JSX.SageButton, HTMLSageButtonElement>('sage-button');
+export const SageCard = /*@__PURE__*/createReactComponent<JSX.SageCard, HTMLSageCardElement>('sage-card');
 export const SageCheckbox = /*@__PURE__*/createReactComponent<JSX.SageCheckbox, HTMLSageCheckboxElement>('sage-checkbox');
 export const SageChip = /*@__PURE__*/createReactComponent<JSX.SageChip, HTMLSageChipElement>('sage-chip');
 export const SageDivider = /*@__PURE__*/createReactComponent<JSX.SageDivider, HTMLSageDividerElement>('sage-divider');

@@ -49,6 +49,12 @@ export namespace Components {
          */
         "variant": 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
     }
+    interface SageCard {
+        /**
+          * It determines whether or not the card has reduced padding.
+         */
+        "compact": boolean;
+    }
     interface SageCheckbox {
         /**
           * It determines whether or not the checkbox is checked.
@@ -459,6 +465,12 @@ declare global {
         prototype: HTMLSageButtonElement;
         new (): HTMLSageButtonElement;
     };
+    interface HTMLSageCardElement extends Components.SageCard, HTMLStencilElement {
+    }
+    var HTMLSageCardElement: {
+        prototype: HTMLSageCardElement;
+        new (): HTMLSageCardElement;
+    };
     interface HTMLSageCheckboxElement extends Components.SageCheckbox, HTMLStencilElement {
     }
     var HTMLSageCheckboxElement: {
@@ -534,6 +546,7 @@ declare global {
     interface HTMLElementTagNameMap {
         "my-component": HTMLMyComponentElement;
         "sage-button": HTMLSageButtonElement;
+        "sage-card": HTMLSageCardElement;
         "sage-checkbox": HTMLSageCheckboxElement;
         "sage-chip": HTMLSageChipElement;
         "sage-divider": HTMLSageDividerElement;
@@ -590,6 +603,12 @@ declare namespace LocalJSX {
           * Sets button variant styles as outlined in Figma documentation
          */
         "variant"?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
+    }
+    interface SageCard {
+        /**
+          * It determines whether or not the card has reduced padding.
+         */
+        "compact"?: boolean;
     }
     interface SageCheckbox {
         /**
@@ -983,6 +1002,7 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "my-component": MyComponent;
         "sage-button": SageButton;
+        "sage-card": SageCard;
         "sage-checkbox": SageCheckbox;
         "sage-chip": SageChip;
         "sage-divider": SageDivider;
@@ -1003,6 +1023,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
             "sage-button": LocalJSX.SageButton & JSXBase.HTMLAttributes<HTMLSageButtonElement>;
+            "sage-card": LocalJSX.SageCard & JSXBase.HTMLAttributes<HTMLSageCardElement>;
             "sage-checkbox": LocalJSX.SageCheckbox & JSXBase.HTMLAttributes<HTMLSageCheckboxElement>;
             "sage-chip": LocalJSX.SageChip & JSXBase.HTMLAttributes<HTMLSageChipElement>;
             "sage-divider": LocalJSX.SageDivider & JSXBase.HTMLAttributes<HTMLSageDividerElement>;
