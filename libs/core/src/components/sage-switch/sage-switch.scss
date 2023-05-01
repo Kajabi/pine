@@ -42,7 +42,8 @@
   color: var(--switch-color-error);
 
   .sage-switch__input,
-  .sage-switch__input:hover:not(:checked) {
+  .sage-switch__input:checked,
+  .sage-switch__input:hover:not(:disabled):not(:checked) {
     background-color: var(--switch-color-error);
   }
 
@@ -102,6 +103,7 @@
   color: var(--switch-color-default-message-text);
   flex: 1 0 100%;
   font-size: var(--sage-font-size-body-sm);
+  line-height: var(--sage-line-height-sm);
   margin-left: var(--switch-message-offset);
 
   + .sage-switch__message {

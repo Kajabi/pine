@@ -64,7 +64,7 @@ Invalid.args = {
   checked: false,
   disabled: false,
   componentId: 'sage-switch-invalid-example',
-  errorMessage: 'Terms and conditions must be accepted 😔',
+  errorMessage: 'Terms and conditions must be accepted to continue',
   invalid: true,
   label: 'I agree to the terms and conditions',
   name: 'sage-switch-invalid',

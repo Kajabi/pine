@@ -244,6 +244,10 @@ export namespace Components {
           * @defaultValue 'checkbox'
          */
         "type": 'checkbox' | 'radio';
+        /**
+          * Attribute sent in form data. Mainly used to distinguish radio inputs
+         */
+        "value": string;
     }
     interface SageTab {
         "index": number;
@@ -680,6 +684,10 @@ declare namespace LocalJSX {
           * @defaultValue 'checkbox'
          */
         "type"?: 'checkbox' | 'radio';
+        /**
+          * Attribute sent in form data. Mainly used to distinguish radio inputs
+         */
+        "value"?: string;
     }
     interface SageTab {
         "index"?: number;

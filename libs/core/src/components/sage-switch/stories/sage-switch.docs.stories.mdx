@@ -19,6 +19,8 @@ Checkbox or radio component styled to appear as a toggle.
 
 ## Guidelines
 ### Usage
+- Specify a unique `component-id` and `value` for **each** Radio variant. This will ensure the label and radio group selection (respectively) are correctly identified.
+- Use caution when enabling `required` and `disabled` together. Reasons for disallowing input should be made clear to the user.
 
 #### Checkbox or Radio?
 When only one Switch is needed for users to turn on/off a value, use a `checkbox`. [From MDN:](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio)
@@ -36,7 +38,7 @@ When only one Switch is needed for users to turn on/off a value, use a `checkbox
 ## Variants
 
 ### Checkbox (Default)
-Default switch style, using a checkbox input
+The default switch style uses a checkbox input.
 
 <Story story={stories.Default} />
 
@@ -51,7 +53,7 @@ Default switch style, using a checkbox input
 
 
 ### Radio
-Renders a switch using a radio button input. Just like a [standard radio button](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio), toggling a single value requires at least a pair of inputs.
+Renders a switch using a radio button input. Just like a [standard radio button](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio), toggling a single value on/off requires (at minimum) a pair of inputs to represent each state.
 
 <Story story={stories.Radio} />
 
@@ -61,6 +63,7 @@ Renders a switch using a radio button input. Just like a [standard radio button]
     label="Radio Switch"
     name="sage-switch-radio"
     type="radio"
+    value="sage-switch-radio"
   ></sage-switch>
 </Canvas>
 
@@ -80,14 +83,14 @@ Displays additional descriptive text underneath the main label.
 </Canvas>
 
 ### Invalid state
-An optional error message can be displayed for additional instructions.
+An optional error message can be displayed for additional instructions, displayed independently from the helper message.
 
 <Story story={stories.Invalid} />
 
 <Canvas>
   <sage-switch
     component-id="sage-switch-invalid-example"
-    error-message="Terms and conditions must be accepted 😔"
+    error-message="Terms and conditions must be accepted to continue"
     invalid="true"
     label="I agree to the terms and conditions"
     name="sage-switch-invalid"

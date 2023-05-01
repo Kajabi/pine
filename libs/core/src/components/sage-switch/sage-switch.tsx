@@ -54,6 +54,11 @@ export class SageSwitch {
   @Prop() required? = false;
 
   /**
+   * Attribute sent in form data. Mainly used to distinguish radio inputs
+   */
+  @Prop() value: string;
+
+  /**
    * Specifies the underlying input element type
    * @defaultValue 'checkbox'
    */
@@ -69,7 +74,6 @@ export class SageSwitch {
     if (this.invalid === true) {
       switchClasses += " sage-switch--error";
     }
-
     if (this.helperMessage !== undefined) {
       switchClasses += " sage-switch--message";
     }
@@ -87,13 +91,16 @@ export class SageSwitch {
     return (
       <Host class={this.switchClassNames()} aria-disabled={this.disabled ? 'true' : null}>
         <input
-          aria-describedby={this.helperMessage ? this.helperMessageId(this.componentId) : undefined}
+          aria-describedby={this.helperMessage || this.invalid ? this.helperMessageId(this.componentId) : undefined}
+          aria-invalid={this.invalid}
           checked={this.checked}
           class="sage-switch__input"
           disabled={this.disabled}
           id={this.componentId}
           name={this.name ? this.name : this.componentId}
+          required={this.required}
           type={this.type}
+          value={this.value}
         />
         <label class="sage-switch__label" htmlFor={this.componentId}>
           {this.label}
