@@ -1,0 +1,41 @@
+import { Meta, Story, Canvas, Source, ArgsTable } from '@storybook/addon-docs';
+import { html, render } from 'lit-html';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+import * as stories from './sage-card.stories.js';
+
+<Meta
+  title="components/Card"
+  component="sage-card"
+  argTypes={extractArgTypes('sage-card')}
+  args={{
+    compact: false
+}} />
+
+# Card
+
+A block container that provides styling for elevation, border, and background.
+
+## Properties
+
+<ArgsTable of="sage-card" />
+
+### Default
+
+<Story story={stories.Default} />
+
+<Canvas>
+  <sage-card>Default card</sage-card>
+</Canvas>
+
+
+### Compact
+
+Compact cards appear with reduced padding.
+
+<Story story={stories.Compact} />
+
+<Canvas>
+  <sage-card compact>Compact card</sage-card>
+</Canvas>
