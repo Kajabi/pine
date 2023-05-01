@@ -6,15 +6,17 @@
   --switch-color-default: var(--sage-color-neutral-grey-400);
   --switch-color-default-hover: var(--sage-color-neutral-grey-500);
   --switch-color-default-focus: var(--sage-color-primary-200);
-  --switch-color-default-text: var(--sage-color-neutral-charcoal-300);
+  --switch-color-default-text: var(--sage-color-neutral-charcoal-400);
   --switch-color-checked: var(--sage-color-neutral-charcoal-400);
-  --switch-color-checked-hover: var(--sage-color-neutral-charcoal-500);
+  --switch-color-checked-hover: var(--sage-color-neutral-charcoal-400);
   --switch-color-disabled: var(--sage-color-neutral-grey-300);
-  --switch-color-disabled-text: var(--sage-color-neutral-charcoal-300);
+  --switch-color-disabled-text: var(--sage-color-neutral-grey-500);
   --switch-color-disabled-checked: var(--sage-color-neutral-grey-300);
-  --switch-color-disabled-checked-text: var(--sage-color-neutral-charcoal-100);
+  --switch-color-disabled-checked-text: var(--sage-color-neutral-grey-500);
   --switch-color-error: var(--sage-color-red-300);
-  --switch-focus-outline-error-color: var(--sage-color-red-200);
+  --switch-color-error-focus-color: var(--sage-color-red-200);
+
+  --switch-transition-timing: 0.15s ease-out;
 
   --switch-label-left-spacing: var(--sage-spacing-xs);
   --switch-line-height: var(--sage-line-height-md);
@@ -44,7 +46,7 @@
   padding: 0;
   position: relative;
   transform: translateY(2px);
-  transition: 0.3s ease-out;
+  transition: var(--switch-transition-timing);
   transition-property: background, border, color;
   vertical-align: top;
   width: var(--switch-width);
@@ -61,7 +63,7 @@
     position: absolute;
     top: 50%;
     transform: translate3d(-100%, -50%, 0);
-    transition: transform 0.2s ease-in-out;
+    transition: transform var(--switch-transition-timing);
     width: var(--switch-toggle-size);
   }
 }
