@@ -24,6 +24,11 @@ export class SageSwitch {
   @Prop() disabled? = false;
 
   /**
+   * Text used for additional control description
+   */
+  @Prop() helperMessage: string;
+
+  /**
    * Indicates when user input is not valid
    */
   @Prop() invalid? = false;
@@ -49,6 +54,14 @@ export class SageSwitch {
    */
   @Prop() type: 'checkbox' | 'radio' = 'checkbox';
 
+  private labelClassNames = () => {
+    let labelClasses = `sage-switch__label`;
+
+    if (this.helperMessage !== undefined) {
+      labelClasses += " sage-switch__label--stack";
+    }
+    return labelClasses;
+  };
 
   render() {
     return (
@@ -61,8 +74,13 @@ export class SageSwitch {
           name={this.name}
           type={this.type}
         />
-        <label class="sage-switch__label" htmlFor={this.componentId}>
+        <label class={this.labelClassNames()} htmlFor={this.componentId}>
           {this.label}
+          {this.helperMessage &&
+            <span class={"sage-switch__message"}>
+              {this.helperMessage}
+            </span>
+          }
         </label>
       </Host>
     );

@@ -216,6 +216,10 @@ export namespace Components {
          */
         "disabled"?: boolean;
         /**
+          * Text used for additional control description
+         */
+        "helperMessage": string;
+        /**
           * Indicates when user input is not valid
          */
         "invalid"?: boolean;
@@ -643,6 +647,10 @@ declare namespace LocalJSX {
           * Disables input control
          */
         "disabled"?: boolean;
+        /**
+          * Text used for additional control description
+         */
+        "helperMessage"?: string;
         /**
           * Indicates when user input is not valid
          */

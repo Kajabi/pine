@@ -1,12 +1,14 @@
 :host {
   /**
-   * @prop --switch-toggle-size: Size of the switch toggle control.
+   * @prop --switch-toggle-offset: Offset for the toggle control from its container
+   * @prop --switch-toggle-size: Calculated size of the toggle control
   */
 
   --switch-color-default: var(--sage-color-neutral-grey-400);
   --switch-color-default-hover: var(--sage-color-neutral-grey-500);
   --switch-color-default-focus: var(--sage-color-primary-200);
   --switch-color-default-text: var(--sage-color-neutral-charcoal-400);
+  --switch-color-default-message-text: var(--sage-color-neutral-charcoal-200);
   --switch-color-checked: var(--sage-color-neutral-charcoal-400);
   --switch-color-checked-hover: var(--sage-color-neutral-charcoal-400);
   --switch-color-disabled: var(--sage-color-neutral-grey-300);
@@ -23,7 +25,9 @@
   --switch-border-radius: var(--sage-border-radius-lg);
   --switch-height: 20px;
   --switch-width: 36px;
-  --switch-toggle-size: 16px;
+  --switch-toggle-offset: 2px;
+
+  --switch-toggle-size: calc(var(--switch-height) - (var(--switch-toggle-offset) * 2));
 
   align-items: flex-start;
   color: var(--switch-color-default-text);
@@ -69,19 +73,20 @@
 }
 
 .sage-switch__input ~ .sage-switch__label {
-  display: inline-block;
+  cursor: pointer;
+  display: inline-flex;
   flex: 1;
   line-height: var(--switch-line-height);
   margin-left: 12px;
 
-  &::after {
-    content: "" ;
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
+  &.sage-switch__label--stack {
+    flex-flow: column wrap;
   }
+}
+
+.sage-switch__message {
+  color: var(--switch-color-default-message-text);
+  font-size: var(--sage-font-size-body-sm);
 }
 
 // Disabled state
@@ -91,7 +96,11 @@
 
   ~ .sage-switch__label {
     color: var(--switch-color-disabled-checked-text);
-    cursor: inherit;
+    cursor: initial;
+  }
+
+  .sage-switch__message {
+    color: initial;
   }
 }
 

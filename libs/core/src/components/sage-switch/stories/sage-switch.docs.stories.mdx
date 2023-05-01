@@ -24,8 +24,12 @@ import * as stories from './sage-switch.stories.js';
 ### Usage
 
 #### Checkbox or Radio
-- If only one Switch is needed for users to enable/disable a value, use a `checkbox`
-- Like radio buttons in forms, a `radio` Switch requires **at least two** related `radio` Switch inputs for users to 'toggle' between the different values
+
+- When only one Switch is needed for users to turn on/off a value, use a `checkbox`. [From MDN:](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio)
+
+  > Note: Checkboxes are similar to radio buttons, but with an important distinction: radio buttons are designed for selecting one value out of a set, whereas checkboxes let you turn individual values on and off. Where multiple controls exist, radio buttons allow one to be selected out of them all, whereas checkboxes allow multiple values to be selected.
+
+
 - `radio` Switches require a shared `name` along with an individual `component-id` for each Switch
 
 
@@ -54,7 +58,7 @@ Default switch style, using a checkbox input
 
 ### Radio
 
-Renders a switch using a radio button input
+Renders a switch using a radio button input. Just like a [standard radio button](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio), toggling a single value requires at least a pair of inputs
 
 <Story story={stories.Radio} />
 
@@ -62,7 +66,22 @@ Renders a switch using a radio button input
   <sage-switch
     component-id="sage-switch-radio-example"
     label="Radio Switch"
-    name="sage-switch-default"
+    name="sage-switch-radio"
     type="radio"
+  ></sage-switch>
+</Canvas>
+
+
+### Helper message
+
+<Story story={stories.HelperMessage} />
+
+<Canvas>
+  <sage-switch
+    component-id="sage-switch-helper-example"
+    helper-message="Save my login details for next time."
+    label="Remember me"
+    name="sage-switch-helper"
+    type="checkbox"
   ></sage-switch>
 </Canvas>
