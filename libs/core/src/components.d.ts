@@ -216,6 +216,10 @@ export namespace Components {
          */
         "disabled"?: boolean;
         /**
+          * Text displayed with invalid state
+         */
+        "errorMessage"?: string;
+        /**
           * Text used for additional control description
          */
         "helperMessage": string;
@@ -647,6 +651,10 @@ declare namespace LocalJSX {
           * Disables input control
          */
         "disabled"?: boolean;
+        /**
+          * Text displayed with invalid state
+         */
+        "errorMessage"?: string;
         /**
           * Text used for additional control description
          */

@@ -16,18 +16,19 @@
   --switch-color-disabled-checked: var(--sage-color-neutral-grey-300);
   --switch-color-disabled-checked-text: var(--sage-color-neutral-grey-500);
   --switch-color-error: var(--sage-color-red-300);
-  --switch-color-error-focus-color: var(--sage-color-red-200);
+  --switch-color-error-focus: var(--sage-color-red-200);
 
   --switch-transition-timing: 0.15s ease-out;
 
-  --switch-label-left-spacing: var(--sage-spacing-xs);
+  --switch-label-left-spacing: 12px;
   --switch-line-height: var(--sage-line-height-md);
   --switch-border-radius: var(--sage-border-radius-lg);
   --switch-height: 20px;
   --switch-width: 36px;
   --switch-toggle-offset: 2px;
-
   --switch-toggle-size: calc(var(--switch-height) - (var(--switch-toggle-offset) * 2));
+  --switch-message-offset: calc(var(--switch-width) + var(--switch-label-left-spacing));
+
 
   align-items: flex-start;
   color: var(--switch-color-default-text);
@@ -35,6 +36,19 @@
   flex-flow: row wrap;
   margin-bottom: var(--sage-spacing-md);
   position: relative;
+}
+
+:host(.sage-switch--error) {
+  color: var(--switch-color-error);
+
+  .sage-switch__input,
+  .sage-switch__input:hover:not(:checked) {
+    background-color: var(--switch-color-error);
+  }
+
+  .sage-switch__input:focus-visible:not(:disabled):not(:checked) {
+    box-shadow: 0 0 0 4px var(--switch-color-error-focus);
+  }
 }
 
 .sage-switch__input {
@@ -72,21 +86,31 @@
   }
 }
 
-.sage-switch__input ~ .sage-switch__label {
+.sage-switch__label {
   cursor: pointer;
   display: inline-flex;
-  flex: 1;
+  flex-grow: 1;
   line-height: var(--switch-line-height);
-  margin-left: 12px;
+  margin-left: var(--switch-label-left-spacing);
 
-  &.sage-switch__label--stack {
-    flex-flow: column wrap;
+  .sage-switch--error & {
+    color: inherit;
   }
 }
 
 .sage-switch__message {
   color: var(--switch-color-default-message-text);
+  flex: 1 0 100%;
   font-size: var(--sage-font-size-body-sm);
+  margin-left: var(--switch-message-offset);
+
+  + .sage-switch__message {
+    margin-top: var(--sage-spacing-xxs);
+  }
+}
+
+.sage-switch__error-message {
+  color: inherit;
 }
 
 // Disabled state

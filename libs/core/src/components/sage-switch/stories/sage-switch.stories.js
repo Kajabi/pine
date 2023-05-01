@@ -5,7 +5,9 @@ const BaseTemplate = (args) => html`
     checked=${args.checked}
     component-id=${args.componentId}
     disabled=${args.disabled}
+    error-message=${args.errorMessage}
     helper-message=${args.helperMessage}
+    invalid=${args.invalid}
     label=${args.label}
     name=${args.name}
     required=${args.required}
@@ -23,7 +25,7 @@ Default.args = {
   disabled: false,
   componentId: 'sage-switch-checkbox-example',
   label: 'checkbox switch',
-  name: 'form-input-checkbox',
+  name: 'sage-switch-checkbox',
   required: false,
   type: 'checkbox',
 };
@@ -36,7 +38,7 @@ Radio.args = {
   disabled: false,
   componentId: 'sage-switch-radio-example',
   label: 'radio switch',
-  name: 'form-input-radio',
+  name: 'sage-switch-radio',
   required: false,
   type: 'radio',
 };
@@ -50,9 +52,23 @@ HelperMessage.args = {
   componentId: 'sage-switch-helper-example',
   helperMessage: 'Save my login details for next time.',
   label: 'Remember me!',
-  name: 'form-input-message',
+  name: 'sage-switch-message',
   required: false,
   type: 'checkbox',
 };
 HelperMessage.parameters = { ...defaultParameters };
 
+export const Invalid = BaseTemplate.bind({});
+
+Invalid.args = {
+  checked: false,
+  disabled: false,
+  componentId: 'sage-switch-invalid-example',
+  errorMessage: 'Terms and conditions must be accepted 😔',
+  invalid: true,
+  label: 'I agree to the terms and conditions',
+  name: 'sage-switch-invalid',
+  required: true,
+  type: 'checkbox',
+};
+Invalid.parameters = { ...defaultParameters };

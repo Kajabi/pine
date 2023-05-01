@@ -12,6 +12,7 @@
 | `checked`                  | `checked`        | Sets state of input control                                                                          | `boolean`               | `false`      |
 | `componentId` _(required)_ | `component-id`   | A unique identifier for this input. Associates the input with its label                              | `string`                | `undefined`  |
 | `disabled`                 | `disabled`       | Disables input control                                                                               | `boolean`               | `false`      |
+| `errorMessage`             | `error-message`  | Text displayed with invalid state                                                                    | `string`                | `undefined`  |
 | `helperMessage`            | `helper-message` | Text used for additional control description                                                         | `string`                | `undefined`  |
 | `invalid`                  | `invalid`        | Indicates when user input is not valid                                                               | `boolean`               | `false`      |
 | `label` _(required)_       | `label`          | Text to be displayed as the switch label                                                             | `string`                | `undefined`  |

@@ -15,25 +15,19 @@ import * as stories from './sage-switch.stories.js';
 />
 
 # Switch
-
-<p>
-  Checkbox or radio component styled to appear as a toggle.
-</p>
+Checkbox or radio component styled to appear as a toggle.
 
 ## Guidelines
 ### Usage
 
-#### Checkbox or Radio
-
-- When only one Switch is needed for users to turn on/off a value, use a `checkbox`. [From MDN:](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio)
+#### Checkbox or Radio?
+When only one Switch is needed for users to turn on/off a value, use a `checkbox`. [From MDN:](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio)
 
   > Note: Checkboxes are similar to radio buttons, but with an important distinction: radio buttons are designed for selecting one value out of a set, whereas checkboxes let you turn individual values on and off. Where multiple controls exist, radio buttons allow one to be selected out of them all, whereas checkboxes allow multiple values to be selected.
 
 
-- `radio` Switches require a shared `name` along with an individual `component-id` for each Switch
-
-
 ### Accessibility
+- `radio` Switches require a shared `name` along with an individual `component-id` for each Switch
 
 ## Properties
 <ArgsTable of="sage-switch" />
@@ -42,7 +36,6 @@ import * as stories from './sage-switch.stories.js';
 ## Variants
 
 ### Checkbox (Default)
-
 Default switch style, using a checkbox input
 
 <Story story={stories.Default} />
@@ -56,9 +49,9 @@ Default switch style, using a checkbox input
   ></sage-switch>
 </Canvas>
 
-### Radio
 
-Renders a switch using a radio button input. Just like a [standard radio button](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio), toggling a single value requires at least a pair of inputs
+### Radio
+Renders a switch using a radio button input. Just like a [standard radio button](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio), toggling a single value requires at least a pair of inputs.
 
 <Story story={stories.Radio} />
 
@@ -71,8 +64,8 @@ Renders a switch using a radio button input. Just like a [standard radio button]
   ></sage-switch>
 </Canvas>
 
-
 ### Helper message
+Displays additional descriptive text underneath the main label.
 
 <Story story={stories.HelperMessage} />
 
@@ -82,6 +75,23 @@ Renders a switch using a radio button input. Just like a [standard radio button]
     helper-message="Save my login details for next time."
     label="Remember me"
     name="sage-switch-helper"
+    type="checkbox"
+  ></sage-switch>
+</Canvas>
+
+### Invalid state
+An optional error message can be displayed for additional instructions.
+
+<Story story={stories.Invalid} />
+
+<Canvas>
+  <sage-switch
+    component-id="sage-switch-invalid-example"
+    error-message="Terms and conditions must be accepted 😔"
+    invalid="true"
+    label="I agree to the terms and conditions"
+    name="sage-switch-invalid"
+    required="true"
     type="checkbox"
   ></sage-switch>
 </Canvas>

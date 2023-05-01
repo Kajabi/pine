@@ -24,6 +24,11 @@ export class SageSwitch {
   @Prop() disabled? = false;
 
   /**
+   * Text displayed with invalid state
+   */
+  @Prop() errorMessage?: string;
+
+  /**
    * Text used for additional control description
    */
   @Prop() helperMessage: string;
@@ -54,34 +59,62 @@ export class SageSwitch {
    */
   @Prop() type: 'checkbox' | 'radio' = 'checkbox';
 
-  private labelClassNames = () => {
-    let labelClasses = `sage-switch__label`;
+
+  /**
+   * Generate switch classes
+   */
+  private switchClassNames = () => {
+    let switchClasses = `sage-switch`;
+
+    if (this.invalid === true) {
+      switchClasses += " sage-switch--error";
+    }
 
     if (this.helperMessage !== undefined) {
-      labelClasses += " sage-switch__label--stack";
+      switchClasses += " sage-switch--message";
     }
-    return labelClasses;
+    return switchClasses;
+  };
+
+  /**
+   * Unique id to relate helper message with input
+   */
+  private helperMessageId = (id: string) => {
+    return id + '__helper-message';
   };
 
   render() {
     return (
-      <Host class="sage-switch" aria-disabled={this.disabled ? 'true' : null}>
+      <Host class={this.switchClassNames()} aria-disabled={this.disabled ? 'true' : null}>
         <input
+          aria-describedby={this.helperMessage ? this.helperMessageId(this.componentId) : undefined}
           checked={this.checked}
           class="sage-switch__input"
           disabled={this.disabled}
           id={this.componentId}
-          name={this.name}
+          name={this.name ? this.name : this.componentId}
           type={this.type}
         />
-        <label class={this.labelClassNames()} htmlFor={this.componentId}>
+        <label class="sage-switch__label" htmlFor={this.componentId}>
           {this.label}
-          {this.helperMessage &&
-            <span class={"sage-switch__message"}>
-              {this.helperMessage}
-            </span>
-          }
         </label>
+        {this.helperMessage &&
+          <div
+            class={`sage-switch__message`}
+            id={this.helperMessageId(this.componentId)}
+          >
+            {this.helperMessage}
+          </div>
+        }
+        {this.errorMessage &&
+          <div
+            class={`sage-switch__message sage-switch__error-message`}
+            id={this.helperMessageId(this.componentId)}
+            aria-live="assertive"
+          >
+            {this.errorMessage}
+          </div>
+        }
       </Host>
     );
   }
