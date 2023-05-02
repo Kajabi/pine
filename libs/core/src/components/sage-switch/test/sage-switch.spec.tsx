@@ -17,16 +17,31 @@ describe('sage-switch', () => {
     `);
   });
 
-  it('renders a radio input with label', async () => {
+  it('renders a radio input with label and name defaulting to id', async () => {
     const page = await newSpecPage({
       components: [SageSwitch],
-      html: `<sage-switch component-id="sage-switch-radio" label="Switch radio" type="radio"></sage-switch>`,
+      html: `<sage-switch component-id="sage-switch-radio" label="Switch radio" type="radio" value="on"></sage-switch>`,
     });
     expect(page.root).toEqualHtml(`
-      <sage-switch component-id="sage-switch-radio" class="sage-switch" label="Switch radio" type="radio">
+      <sage-switch component-id="sage-switch-radio" class="sage-switch" label="Switch radio" type="radio" value="on">
         <mock:shadow-root>
-          <input id="sage-switch-radio" name="sage-switch-radio" class="sage-switch__input" type="radio">
+          <input id="sage-switch-radio" class="sage-switch__input" type="radio" name="sage-switch-radio" value="on">
           <label htmlFor="sage-switch-radio" class="sage-switch__label">Switch radio</label>
+        </mock:shadow-root>
+      </sage-switch>
+    `);
+  });
+
+  it('renders a radio input with label and associated group name', async () => {
+    const page = await newSpecPage({
+      components: [SageSwitch],
+      html: `<sage-switch component-id="sage-switch-radio-id" label="Switch radio" type="radio" name="sage-radio-group-name" value="on"></sage-switch>`,
+    });
+    expect(page.root).toEqualHtml(`
+      <sage-switch component-id="sage-switch-radio-id" class="sage-switch" label="Switch radio" type="radio" name="sage-radio-group-name" value="on">
+        <mock:shadow-root>
+          <input id="sage-switch-radio-id" class="sage-switch__input" type="radio" name="sage-radio-group-name" value="on">
+          <label htmlFor="sage-switch-radio-id" class="sage-switch__label">Switch radio</label>
         </mock:shadow-root>
       </sage-switch>
     `);
@@ -42,6 +57,21 @@ describe('sage-switch', () => {
         <mock:shadow-root>
           <input id="sage-switch-disabled" name="sage-switch-disabled" class="sage-switch__input" type="checkbox" disabled>
           <label htmlFor="sage-switch-disabled" class="sage-switch__label">Switch disabled</label>
+        </mock:shadow-root>
+      </sage-switch>
+    `);
+  });
+
+  it('renders a required input', async () => {
+    const page = await newSpecPage({
+      components: [SageSwitch],
+      html: `<sage-switch component-id="sage-switch-required" label="Switch required" required="true"></sage-switch>`,
+    });
+    expect(page.root).toEqualHtml(`
+      <sage-switch component-id="sage-switch-required" class="sage-switch" label="Switch required" required="true">
+        <mock:shadow-root>
+          <input id="sage-switch-required" name="sage-switch-required" class="sage-switch__input" type="checkbox" required>
+          <label htmlFor="sage-switch-required" class="sage-switch__label">Switch required</label>
         </mock:shadow-root>
       </sage-switch>
     `);
@@ -78,6 +108,4 @@ describe('sage-switch', () => {
       </sage-switch>
     `);
   });
-
-
 });
