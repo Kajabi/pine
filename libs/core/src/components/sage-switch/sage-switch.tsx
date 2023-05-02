@@ -104,7 +104,7 @@ export class SageSwitch {
       <Host class={this.switchClassNames()} aria-disabled={this.disabled ? 'true' : null}>
         <input
           aria-describedby={this.assignDescription()}
-          aria-invalid={this.invalid}
+          aria-invalid={this.invalid ? "true" : undefined}
           checked={this.checked}
           class="sage-switch__input"
           disabled={this.disabled}

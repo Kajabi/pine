@@ -22,6 +22,14 @@
 | `value`                    | `value`          | Attribute sent in form data. Mainly used to distinguish radio inputs                                 | `string`                | `undefined`  |
 
 
+## CSS Custom Properties
+
+| Name                     | Description                                      |
+| ------------------------ | ------------------------------------------------ |
+| `--switch-toggle-offset` | Offset for the toggle control from its container |
+| `--switch-toggle-size`   | Calculated size of the toggle control            |
+
+
 ----------------------------------------------
 
 
