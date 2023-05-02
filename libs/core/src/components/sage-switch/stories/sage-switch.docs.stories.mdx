@@ -19,8 +19,9 @@ Checkbox or radio component styled to appear as a toggle.
 
 ## Guidelines
 ### Usage
+- Radio Switches require a shared `name` for grouping.
 - Specify a unique `component-id` and `value` for **each** Radio variant. This will ensure the label and radio group selection (respectively) are correctly identified.
-- Use caution when enabling `required` and `disabled` together. Reasons for disallowing input should be made clear to the user.
+- Use caution when enabling `required` and `disabled` on a control. Reasons for disallowing input should be made clear to the user.
 
 #### Checkbox or Radio?
 When only one Switch is needed for users to turn on/off a value, use a `checkbox`. [From MDN:](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio)
@@ -29,7 +30,6 @@ When only one Switch is needed for users to turn on/off a value, use a `checkbox
 
 
 ### Accessibility
-- `radio` Switches require a shared `name` along with an individual `component-id` for each Switch
 
 ## Properties
 <ArgsTable of="sage-switch" />
@@ -64,6 +64,21 @@ Renders a switch using a radio button input. Just like a [standard radio button]
     name="sage-switch-radio"
     type="radio"
     value="sage-switch-radio"
+  ></sage-switch>
+</Canvas>
+
+### Disabled
+Prevents user interaction on the input.
+
+<Story story={stories.Disabled} />
+
+<Canvas>
+  <sage-switch
+    component-id="sage-switch-disabled-example"
+    disabled="true"
+    label="Can't touch this"
+    name="sage-switch-disabled"
+    type="checkbox"
   ></sage-switch>
 </Canvas>
 

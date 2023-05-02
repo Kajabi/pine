@@ -24,6 +24,7 @@ Default.args = {
   checked: false,
   disabled: false,
   componentId: 'sage-switch-checkbox-example',
+  invalid: false,
   label: 'checkbox switch',
   name: 'sage-switch-checkbox',
   required: false,
@@ -37,12 +38,27 @@ Radio.args = {
   checked: false,
   disabled: false,
   componentId: 'sage-switch-radio-example',
+  invalid: false,
   label: 'radio switch',
   name: 'sage-switch-radio',
   required: false,
   type: 'radio',
 };
 Radio.parameters = { ...defaultParameters };
+
+export const Disabled = BaseTemplate.bind({});
+
+Disabled.args = {
+  checked: false,
+  disabled: true,
+  componentId: 'sage-switch-disabled-example',
+  invalid: false,
+  label: 'Can\'t touch this',
+  name: 'sage-switch-disabled',
+  required: false,
+  type: 'checkbox',
+};
+Disabled.parameters = { ...defaultParameters };
 
 export const HelperMessage = BaseTemplate.bind({});
 
@@ -51,6 +67,7 @@ HelperMessage.args = {
   disabled: false,
   componentId: 'sage-switch-helper-example',
   helperMessage: 'Save my login details for next time.',
+  invalid: false,
   label: 'Remember me!',
   name: 'sage-switch-message',
   required: false,
