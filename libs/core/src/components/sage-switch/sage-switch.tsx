@@ -81,17 +81,29 @@ export class SageSwitch {
   };
 
   /**
-   * Unique id to relate helper message with input
+   * Create id for messaging
    */
-  private helperMessageId = (id: string) => {
-    return id + '__helper-message';
+  private messageId = (id: string, messageType: string) => {
+    return id + `__${messageType}-message`;
+  };
+
+  /**
+   * Assign aria-description id to relate messages with input
+   */
+  private assignDescription = () => {
+    let relatedId = this.messageId(this.componentId, 'helper')
+
+    if (!this.invalid || !this.helperMessage) return;
+    if (this.invalid) relatedId = this.messageId(this.componentId, 'error');
+
+    return relatedId;
   };
 
   render() {
     return (
       <Host class={this.switchClassNames()} aria-disabled={this.disabled ? 'true' : null}>
         <input
-          aria-describedby={this.helperMessage || this.invalid ? this.helperMessageId(this.componentId) : undefined}
+          aria-describedby={this.assignDescription()}
           aria-invalid={this.invalid}
           checked={this.checked}
           class="sage-switch__input"
@@ -108,7 +120,7 @@ export class SageSwitch {
         {this.helperMessage &&
           <div
             class={`sage-switch__message`}
-            id={this.helperMessageId(this.componentId)}
+            id={this.messageId(this.componentId, 'helper')}
           >
             {this.helperMessage}
           </div>
@@ -116,7 +128,7 @@ export class SageSwitch {
         {this.errorMessage &&
           <div
             class={`sage-switch__message sage-switch__error-message`}
-            id={this.helperMessageId(this.componentId)}
+            id={this.messageId(this.componentId, 'error')}
             aria-live="assertive"
           >
             {this.errorMessage}
