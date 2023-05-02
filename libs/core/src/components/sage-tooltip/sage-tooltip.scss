@@ -42,112 +42,113 @@
   :host(.sage-tooltip--has-html-content) & {
     width: auto;
   }
-}
 
-.sage-tooltip__arrow {
-  border-color: transparent;
-  border-right-color: transparent;
-  border-style: solid;
-  border-width: var(--arrow-pointing-to-the-left);
-  height: 0;
-  position: absolute;
-  width: 0;
-
-  .sage-tooltip--right & {
-    border-inline-end-color: var(--background-color);
+  &::after {
+    border-color: transparent;
+    border-right-color: transparent;
+    border-style: solid;
     border-width: var(--arrow-pointing-to-the-left);
-    left: calc(var(--arrow-size) * -1);
-    top: 50%;
-    transform: translateY(-50%);
-  }
+    content: '';
+    height: 0;
+    position: absolute;
+    width: 0;
 
-  .sage-tooltip--right-end & {
-    border-inline-end-color: var(--background-color);
-    border-width: var(--arrow-pointing-to-the-left);
-    bottom: var(--arrow-offset);
-    left: calc(var(--arrow-size) * -1);
-    top: initial;
-  }
+    .sage-tooltip--right & {
+      border-inline-end-color: var(--background-color);
+      border-width: var(--arrow-pointing-to-the-left);
+      left: calc(var(--arrow-size) * -1);
+      top: 50%;
+      transform: translateY(-50%);
+    }
 
-  .sage-tooltip--right-start & {
-    border-inline-end-color: var(--background-color);
-    border-width: var(--arrow-pointing-to-the-left);
-    left: calc(var(--arrow-size) * -1);
-    top: var(--arrow-offset);
-  }
+    .sage-tooltip--right-end & {
+      border-inline-end-color: var(--background-color);
+      border-width: var(--arrow-pointing-to-the-left);
+      bottom: var(--arrow-offset);
+      left: calc(var(--arrow-size) * -1);
+      top: initial;
+    }
 
-  .sage-tooltip--top & {
-    border-block-start-color: var(--background-color);
-    border-width: var(--arrow-pointing-down);
-    bottom: calc(var(--arrow-size) * -1);
-    left: 50%;
-    top: initial;
-    transform: translateX(-50%);
-  }
+    .sage-tooltip--right-start & {
+      border-inline-end-color: var(--background-color);
+      border-width: var(--arrow-pointing-to-the-left);
+      left: calc(var(--arrow-size) * -1);
+      top: var(--arrow-offset);
+    }
 
-  .sage-tooltip--top-start & {
-    border-block-start-color: var(--background-color);
-    border-width: var(--arrow-pointing-down);
-    bottom: calc(var(--arrow-size) * -1);
-    left: var(--arrow-offset);
-    top: initial;
-  }
+    .sage-tooltip--top & {
+      border-block-start-color: var(--background-color);
+      border-width: var(--arrow-pointing-down);
+      bottom: calc(var(--arrow-size) * -1);
+      left: 50%;
+      top: initial;
+      transform: translateX(-50%);
+    }
 
-  .sage-tooltip--top-end & {
-    border-block-start-color: var(--background-color);
-    border-width: var(--arrow-pointing-down);
-    bottom: calc(var(--arrow-size) * -1);
-    left: initial;
-    right: var(--arrow-offset);
-    top: initial;
-  }
+    .sage-tooltip--top-start & {
+      border-block-start-color: var(--background-color);
+      border-width: var(--arrow-pointing-down);
+      bottom: calc(var(--arrow-size) * -1);
+      left: var(--arrow-offset);
+      top: initial;
+    }
 
-  .sage-tooltip--left & {
-    border-inline-start-color: var(--background-color);
-    border-width: var(--arrow-pointing-to-the-right);
-    left: initial;
-    right: calc(var(--arrow-size) * -1);
-    top: 50%;
-    transform: translateY(-50%);
-  }
+    .sage-tooltip--top-end & {
+      border-block-start-color: var(--background-color);
+      border-width: var(--arrow-pointing-down);
+      bottom: calc(var(--arrow-size) * -1);
+      left: initial;
+      right: var(--arrow-offset);
+      top: initial;
+    }
 
-  .sage-tooltip--left-end & {
-    border-inline-start-color: var(--background-color);
-    border-width: var(--arrow-pointing-to-the-right);
-    bottom: var(--arrow-offset);
-    left: initial;
-    right: calc(var(--arrow-size) * -1);
-    top: initial;
-  }
+    .sage-tooltip--left & {
+      border-inline-start-color: var(--background-color);
+      border-width: var(--arrow-pointing-to-the-right);
+      left: initial;
+      right: calc(var(--arrow-size) * -1);
+      top: 50%;
+      transform: translateY(-50%);
+    }
 
-  .sage-tooltip--left-start & {
-    border-inline-start-color: var(--background-color);
-    border-width: var(--arrow-pointing-to-the-right);
-    left: initial;
-    right: calc(var(--arrow-size) * -1);
-    top: var(--arrow-offset);
-  }
+    .sage-tooltip--left-end & {
+      border-inline-start-color: var(--background-color);
+      border-width: var(--arrow-pointing-to-the-right);
+      bottom: var(--arrow-offset);
+      left: initial;
+      right: calc(var(--arrow-size) * -1);
+      top: initial;
+    }
 
-  .sage-tooltip--bottom & {
-    border-block-end-color: var(--background-color);
-    border-width: var(--arrow-pointing-up);
-    left: 50%;
-    top: calc(var(--arrow-size) * -1);
-    transform: translateX(-50%);
-  }
+    .sage-tooltip--left-start & {
+      border-inline-start-color: var(--background-color);
+      border-width: var(--arrow-pointing-to-the-right);
+      left: initial;
+      right: calc(var(--arrow-size) * -1);
+      top: var(--arrow-offset);
+    }
 
-  .sage-tooltip--bottom-end & {
-    border-block-end-color: var(--background-color);
-    border-width: var(--arrow-pointing-up);
-    left: initial;
-    right: var(--arrow-offset);
-    top: calc(var(--arrow-size) * -1);
-  }
+    .sage-tooltip--bottom & {
+      border-block-end-color: var(--background-color);
+      border-width: var(--arrow-pointing-up);
+      left: 50%;
+      top: calc(var(--arrow-size) * -1);
+      transform: translateX(-50%);
+    }
 
-  .sage-tooltip--bottom-start & {
-    border-block-end-color: var(--background-color);
-    border-width: var(--arrow-pointing-up);
-    left: var(--arrow-offset);
-    top: calc(var(--arrow-size) * -1);
+    .sage-tooltip--bottom-end & {
+      border-block-end-color: var(--background-color);
+      border-width: var(--arrow-pointing-up);
+      left: initial;
+      right: var(--arrow-offset);
+      top: calc(var(--arrow-size) * -1);
+    }
+
+    .sage-tooltip--bottom-start & {
+      border-block-end-color: var(--background-color);
+      border-width: var(--arrow-pointing-up);
+      left: var(--arrow-offset);
+      top: calc(var(--arrow-size) * -1);
+    }
   }
 }
