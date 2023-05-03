@@ -127,7 +127,7 @@ export class SageSwitch {
         }
         {this.errorMessage &&
           <div
-            class={`sage-switch__message sage-switch__error-message`}
+            class={`sage-switch__message sage-switch__message--error`}
             id={this.messageId(this.componentId, 'error')}
             aria-live="assertive"
           >

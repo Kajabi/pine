@@ -103,7 +103,7 @@ describe('sage-switch', () => {
         <mock:shadow-root>
           <input aria-invalid="true" id="sage-switch-err" name="sage-switch-err" class="sage-switch__input" type="checkbox">
           <label htmlFor="sage-switch-err" class="sage-switch__label">Switch error message</label>
-          <div aria-live="assertive" id="sage-switch-err__error-message"  class="sage-switch__message sage-switch__error-message">La croix blue bottle narwhal fam</div>
+          <div aria-live="assertive" id="sage-switch-err__error-message"  class="sage-switch__message sage-switch__message--error">La croix blue bottle narwhal fam</div>
         </mock:shadow-root>
       </sage-switch>
     `);

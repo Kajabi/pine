@@ -56,11 +56,11 @@ describe('sage-switch', () => {
     expect(component).toHaveClass('hydrated');
 
     const el = await page.find('sage-switch >>> input');
-    const errText = await page.find('sage-switch >>> .sage-switch__error-message');
+    const errText = await page.find('sage-switch >>> .sage-switch__message--error');
     const ariaDesc = el.getAttribute('aria-describedby');
     const ariaInvalid = el.getAttribute('aria-invalid');
     expect(ariaInvalid).toBe("true");
-    expect(ariaDesc).toBe(null);
+    expect(ariaDesc).toBeNull();
     expect(errText.textContent).toEqual(`Please correct this item`);
   });
 
