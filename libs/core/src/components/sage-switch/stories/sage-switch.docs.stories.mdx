@@ -21,7 +21,7 @@ Checkbox or radio component styled to appear as a toggle.
 ### Usage
 - Radio Switches require a shared `name` for grouping.
 - Specify a unique `component-id` and `value` for **each** Radio variant. This will ensure the label and radio group selection (respectively) are correctly identified.
-- Use caution when enabling `required` and `disabled` on a control. Reasons for disallowing input should be made clear to the user.
+- Use caution when enabling both `checked` and `disabled` on a control. Clearly describe why this item cannot be unselected.
 
 #### Checkbox or Radio?
 When only one Switch is needed for users to turn on/off a value, use a `checkbox`. [From MDN:](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio)
@@ -30,6 +30,8 @@ When only one Switch is needed for users to turn on/off a value, use a `checkbox
 
 
 ### Accessibility
+- The component will [append `aria-describedby` to the input](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-describedby) when an `error-message` is included.
+- With screen readers, the `error-message` will be read *after* the label. Consider reading the combined error message and label out loud to ensure instructions are clear to the user.
 
 ## Properties
 <ArgsTable of="sage-switch" />
