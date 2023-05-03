@@ -1,5 +1,9 @@
 :host {
   /**
+   * @prop --switch-label-gap: Space between switch input and label
+   * @prop --switch-height: Vertical height of switch input
+   * @prop --switch-width: Horizontal width of switch input
+   * @prop --switch-message-offset: Calculated space used to align message with label
    * @prop --switch-toggle-offset: Offset for the toggle control from its container
    * @prop --switch-toggle-size: Calculated size of the toggle control
   */
@@ -18,16 +22,16 @@
   --switch-color-error: var(--sage-color-red-300);
   --switch-color-error-focus: var(--sage-color-red-200);
 
-  --switch-transition-timing: 0.15s ease-out;
-
-  --switch-label-left-spacing: 12px;
+  --switch-label-gap: 12px;
   --switch-line-height: var(--sage-line-height-md);
   --switch-border-radius: var(--sage-border-radius-lg);
   --switch-height: 20px;
   --switch-width: 36px;
+  --switch-transition-timing: 0.15s ease-out;
+  --switch-message-offset: calc(var(--switch-width) + var(--switch-label-gap));
+
   --switch-toggle-offset: 2px;
   --switch-toggle-size: calc(var(--switch-height) - (var(--switch-toggle-offset) * 2));
-  --switch-message-offset: calc(var(--switch-width) + var(--switch-label-left-spacing));
 
 
   align-items: flex-start;
@@ -41,18 +45,19 @@
 :host(.sage-switch--error) {
   color: var(--switch-color-error);
 
-  .sage-switch__input,
-  .sage-switch__input:checked,
-  .sage-switch__input:hover:not(:disabled):not(:checked) {
+  input,
+  input:checked,
+  input:hover:not(:disabled):not(:checked) {
     background-color: var(--switch-color-error);
   }
 
-  .sage-switch__input:focus-visible:not(:disabled):not(:checked) {
+  input:focus-visible:not(:disabled):not(:checked) {
     box-shadow: 0 0 0 4px var(--switch-color-error-focus);
   }
 }
 
-.sage-switch__input {
+// switch container
+input {
   appearance: none;
   background: var(--switch-color-default);
   border: 0;
@@ -70,10 +75,10 @@
   vertical-align: top;
   width: var(--switch-width);
 
+  // switch toggle
   &::after {
     background: var(--sage-color-base-white);
     border-radius: 50%;
-    // box-shadow: var(--sage-box-shadow-sm); // TODO: replace with corrected token
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12), 0 0 2px 0 rgba(0, 0, 0, 0.08);
     content: "";
     display: block;
@@ -87,18 +92,19 @@
   }
 }
 
-.sage-switch__label {
+label {
   cursor: pointer;
   display: inline-flex;
   flex-grow: 1;
   line-height: var(--switch-line-height);
-  margin-left: var(--switch-label-left-spacing);
+  margin-left: var(--switch-label-gap);
 
   .sage-switch--error & {
     color: inherit;
   }
 }
 
+// Help and error messages
 .sage-switch__message {
   color: var(--switch-color-default-message-text);
   flex: 1 0 100%;
@@ -116,11 +122,11 @@
 }
 
 // Disabled state
-.sage-switch__input:disabled {
+input:disabled {
   background-color: var(--switch-color-disabled);
   cursor: not-allowed;
 
-  ~ .sage-switch__label {
+  ~ label {
     color: var(--switch-color-disabled-checked-text);
     cursor: initial;
   }
@@ -131,24 +137,24 @@
 }
 
 // Hover state
-.sage-switch__input:hover:not(:disabled) {
+input:hover:not(:disabled) {
   background-color: var(--switch-color-default-hover);
 }
 
  // Focus state
-.sage-switch__input:focus-visible:not(:disabled) {
+input:focus-visible:not(:disabled) {
   box-shadow: 0 0 0 4px var(--switch-color-default-focus);
   outline: none;
 }
 
-// Checked input state
-.sage-switch__input:checked {
-  &::after {
-    transform: translate3d(0, -50%, 0);
-  }
+// 'Checked' state
+// switch toggle
+input:checked::after {
+  transform: translate3d(0, -50%, 0);
 }
 
-.sage-switch__input:checked:not(:disabled) {
+// switch container
+input:checked:not(:disabled) {
   background-color: currentColor;
   color: var(--switch-color-checked);
 
@@ -157,4 +163,3 @@
     color: var(--switch-color-checked-hover);
   }
 }
-
