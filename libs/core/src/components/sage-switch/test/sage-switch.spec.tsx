@@ -5,7 +5,12 @@ describe('sage-switch', () => {
   it('renders an input as a checkbox with label', async () => {
     const page = await newSpecPage({
       components: [SageSwitch],
-      html: `<sage-switch component-id="sage-switch-e1" label="Switch label"></sage-switch>`,
+      html: `
+        <sage-switch
+          component-id="sage-switch-e1"
+          label="Switch label">
+        </sage-switch>
+      `
     });
     expect(page.root).toEqualHtml(`
       <sage-switch component-id="sage-switch-e1" class="sage-switch" label="Switch label">
@@ -20,7 +25,14 @@ describe('sage-switch', () => {
   it('renders a radio input with label and name defaulting to id', async () => {
     const page = await newSpecPage({
       components: [SageSwitch],
-      html: `<sage-switch component-id="sage-switch-radio" label="Switch radio" type="radio" value="on"></sage-switch>`,
+      html: `
+        <sage-switch
+          component-id="sage-switch-radio"
+          label="Switch radio"
+          type="radio"
+          value="on">
+        </sage-switch>
+      `
     });
     expect(page.root).toEqualHtml(`
       <sage-switch component-id="sage-switch-radio" class="sage-switch" label="Switch radio" type="radio" value="on">
@@ -35,7 +47,15 @@ describe('sage-switch', () => {
   it('renders a radio input with label and associated group name', async () => {
     const page = await newSpecPage({
       components: [SageSwitch],
-      html: `<sage-switch component-id="sage-switch-radio-id" label="Switch radio" type="radio" name="sage-radio-group-name" value="on"></sage-switch>`,
+      html: `
+        <sage-switch
+          component-id="sage-switch-radio-id"
+          label="Switch radio"
+          type="radio"
+          name="sage-radio-group-name"
+          value="on">
+        </sage-switch>
+      `
     });
     expect(page.root).toEqualHtml(`
       <sage-switch component-id="sage-switch-radio-id" class="sage-switch" label="Switch radio" type="radio" name="sage-radio-group-name" value="on">
@@ -50,7 +70,13 @@ describe('sage-switch', () => {
   it('renders a disabled input', async () => {
     const page = await newSpecPage({
       components: [SageSwitch],
-      html: `<sage-switch component-id="sage-switch-disabled" label="Switch disabled" disabled="true"></sage-switch>`,
+      html: `
+        <sage-switch
+          component-id="sage-switch-disabled"
+          label="Switch disabled"
+          disabled="true">
+        </sage-switch>
+      `
     });
     expect(page.root).toEqualHtml(`
       <sage-switch component-id="sage-switch-disabled" class="sage-switch" label="Switch disabled" aria-disabled="true" disabled="true">
@@ -65,7 +91,13 @@ describe('sage-switch', () => {
   it('renders a required input', async () => {
     const page = await newSpecPage({
       components: [SageSwitch],
-      html: `<sage-switch component-id="sage-switch-required" label="Switch required" required="true"></sage-switch>`,
+      html: `
+        <sage-switch
+          component-id="sage-switch-required"
+          label="Switch required"
+          required="true">
+        </sage-switch>
+      `
     });
     expect(page.root).toEqualHtml(`
       <sage-switch component-id="sage-switch-required" class="sage-switch" label="Switch required" required="true">
@@ -80,7 +112,13 @@ describe('sage-switch', () => {
   it('renders a helper message', async () => {
     const page = await newSpecPage({
       components: [SageSwitch],
-      html: `<sage-switch component-id="sage-switch-msg" label="Switch helper message" helper-message="Direct trade next level slow-carb, hashtag distillery"></sage-switch>`,
+      html: `
+        <sage-switch
+          component-id="sage-switch-msg"
+          label="Switch helper message"
+          helper-message="Direct trade next level slow-carb, hashtag distillery">
+        </sage-switch>
+      `
     });
     expect(page.root).toEqualHtml(`
       <sage-switch component-id="sage-switch-msg" class="sage-switch sage-switch--message" label="Switch helper message" helper-message="Direct trade next level slow-carb, hashtag distillery">
@@ -96,7 +134,14 @@ describe('sage-switch', () => {
   it('renders an error message', async () => {
     const page = await newSpecPage({
       components: [SageSwitch],
-      html: `<sage-switch component-id="sage-switch-err" label="Switch error message" error-message="La croix blue bottle narwhal fam" invalid="true" ></sage-switch>`,
+      html: `
+        <sage-switch
+          component-id="sage-switch-err"
+          label="Switch error message"
+          error-message="La croix blue bottle narwhal fam"
+          invalid="true">
+        </sage-switch>
+      `
     });
     expect(page.root).toEqualHtml(`
       <sage-switch component-id="sage-switch-err" class="sage-switch sage-switch--error" label="Switch error message" error-message="La croix blue bottle narwhal fam" invalid="true">
@@ -104,6 +149,32 @@ describe('sage-switch', () => {
           <input aria-invalid="true" id="sage-switch-err" name="sage-switch-err" class="sage-switch__input" type="checkbox">
           <label htmlFor="sage-switch-err" class="sage-switch__label">Switch error message</label>
           <div aria-live="assertive" id="sage-switch-err__error-message"  class="sage-switch__message sage-switch__message--error">La croix blue bottle narwhal fam</div>
+        </mock:shadow-root>
+      </sage-switch>
+    `);
+  });
+
+  it('renders a helper and error message and assigns aria-description to the input', async () => {
+    const page = await newSpecPage({
+      components: [SageSwitch],
+      html:`
+        <sage-switch
+          component-id="switch-with-description"
+          invalid="true"
+          label="Switch with description"
+          helper-message="This is a helper message"
+          error-message="This is an error message">
+        </sage-switch>
+      `
+    });
+
+    expect(page.root).toEqualHtml(`
+      <sage-switch component-id="switch-with-description" class="sage-switch sage-switch--message sage-switch--error" label="Switch with description" helper-message="This is a helper message" error-message="This is an error message" invalid="true">
+        <mock:shadow-root>
+          <input aria-describedby="switch-with-description__error-message" aria-invalid="true" id="switch-with-description" name="switch-with-description" class="sage-switch__input" type="checkbox">
+          <label htmlFor="switch-with-description" class="sage-switch__label">Switch with description</label>
+          <div id="switch-with-description__helper-message"  class="sage-switch__message">This is a helper message</div>
+          <div aria-live="assertive" id="switch-with-description__error-message"  class="sage-switch__message sage-switch__message--error">This is an error message</div>
         </mock:shadow-root>
       </sage-switch>
     `);
