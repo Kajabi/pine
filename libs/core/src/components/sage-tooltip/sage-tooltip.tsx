@@ -39,7 +39,7 @@ export class SageTooltip {
   /**
    * Determines whether or not the tooltip have an arrow
    */
-  @Prop() hasArrow?: boolean;
+  @Prop() hasArrow? = true;
 
 
   /**
@@ -143,7 +143,6 @@ export class SageTooltip {
     return (
       <Host
         class={{'sage-tooltip--has-html-content': this.htmlContent}}
-        hasArrow={this.hasArrow}
         onMouseEnter={this.handleShow}
         onMouseLeave={this.handleHide}
         onFocusin={this.handleShow}
@@ -154,6 +153,7 @@ export class SageTooltip {
             sage-tooltip
             ${this.placement ? (`sage-tooltip--${this.placement}`) : ''}
             ${this.opened ? 'sage-tooltip--is-open' : ''}
+            ${this.hasArrow ? '' : 'sage-tooltip--no-arrow'}
           `}
         >
           <span
@@ -174,12 +174,6 @@ export class SageTooltip {
               name="content"
             ></slot>
             {this.content}
-            {this.hasArrow && (
-              <div
-                class="sage-tooltip__arrow"
-                aria-hidden="true"
-              ></div>
-            )}
           </div>
         </div>
       </Host>

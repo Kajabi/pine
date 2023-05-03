@@ -75,18 +75,18 @@ describe('sage-tooltip', () => {
     expect(element?.querySelector('.sage-tooltip--right')).not.toBeNull();
   });
 
-  it('should show arrow when has-arrow is true', async () => {
+  it('should hide arrow when has-arrow is false', async () => {
     const page = await newSpecPage({
       components: [SageTooltip],
       html: `
-      <sage-tooltip has-arrow="true" content="Tooltip content">
+      <sage-tooltip has-arrow="false" content="Tooltip content">
         <sage-button variant="secondary">Secondary</sage-button>
       </sage-tooltip>`
     });
 
     const element = page.root?.shadowRoot;
 
-    expect(element?.querySelector('.sage-tooltip__arrow')).not.toBeNull();
+    expect(element?.querySelector('.sage-tooltip--no-arrow')).not.toBeNull();
   });
 
   it('opened', async () => {
