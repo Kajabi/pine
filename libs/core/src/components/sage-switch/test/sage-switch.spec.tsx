@@ -12,6 +12,7 @@ describe('sage-switch', () => {
         </sage-switch>
       `
     });
+
     expect(page.root).toEqualHtml(`
       <sage-switch component-id="sage-switch-e1" class="sage-switch" label="Switch label">
         <mock:shadow-root>
@@ -34,6 +35,7 @@ describe('sage-switch', () => {
         </sage-switch>
       `
     });
+
     expect(page.root).toEqualHtml(`
       <sage-switch component-id="sage-switch-radio" class="sage-switch" label="Switch radio" type="radio" value="on">
         <mock:shadow-root>
@@ -57,6 +59,7 @@ describe('sage-switch', () => {
         </sage-switch>
       `
     });
+
     expect(page.root).toEqualHtml(`
       <sage-switch component-id="sage-switch-radio-id" class="sage-switch" label="Switch radio" type="radio" name="sage-radio-group-name" value="on">
         <mock:shadow-root>
@@ -78,6 +81,7 @@ describe('sage-switch', () => {
         </sage-switch>
       `
     });
+
     expect(page.root).toEqualHtml(`
       <sage-switch component-id="sage-switch-disabled" class="sage-switch" label="Switch disabled" aria-disabled="true" disabled="true">
         <mock:shadow-root>
@@ -99,6 +103,7 @@ describe('sage-switch', () => {
         </sage-switch>
       `
     });
+
     expect(page.root).toEqualHtml(`
       <sage-switch component-id="sage-switch-required" class="sage-switch" label="Switch required" required="true">
         <mock:shadow-root>
@@ -120,6 +125,7 @@ describe('sage-switch', () => {
         </sage-switch>
       `
     });
+
     expect(page.root).toEqualHtml(`
       <sage-switch component-id="sage-switch-msg" class="sage-switch sage-switch--message" label="Switch helper message" helper-message="Direct trade next level slow-carb, hashtag distillery">
         <mock:shadow-root>
@@ -143,6 +149,7 @@ describe('sage-switch', () => {
         </sage-switch>
       `
     });
+
     expect(page.root).toEqualHtml(`
       <sage-switch component-id="sage-switch-err" class="sage-switch sage-switch--error" label="Switch error message" error-message="La croix blue bottle narwhal fam" invalid="true">
         <mock:shadow-root>
