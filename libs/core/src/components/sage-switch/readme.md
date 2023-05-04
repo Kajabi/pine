@@ -22,18 +22,6 @@
 | `value`                    | `value`          | Attribute sent in form data. Mainly used to distinguish radio inputs                                 | `string`                | `undefined`  |
 
 
-## CSS Custom Properties
-
-| Name                      | Description                                       |
-| ------------------------- | ------------------------------------------------- |
-| `--switch-height`         | Vertical height of switch input                   |
-| `--switch-label-gap`      | Space between switch input and label              |
-| `--switch-message-offset` | Calculated space used to align message with label |
-| `--switch-toggle-offset`  | Offset for the toggle control from its container  |
-| `--switch-toggle-size`    | Calculated size of the toggle control             |
-| `--switch-width`          | Horizontal width of switch input                  |
-
-
 ----------------------------------------------
 
 
