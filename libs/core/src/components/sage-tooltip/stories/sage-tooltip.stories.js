@@ -12,8 +12,8 @@ const BaseTemplate = (args) => html`
 const HTMLContentTemplate = (args) => html`
 <sage-tooltip has-arrow=${args.hasArrow} placement=${args.placement} html-content=${args.htmlContent}>
   <div slot="content">
-    <p>this is s a sentence in a tooltip. this is s a sentence in a tooltip</p>
-    <p>this is s a sentence in a tooltip</p>
+    <p><strong>This is a tooltip<strong></p>
+    <p>Tooltips are used to describe or identify an element. In most scenarios, tooltips help the user understand the meaning, function or alt-text of an element.</p>
   </div>
   <sage-button variant="secondary">Hover</sage-button>
 </sage-tooltip>`;

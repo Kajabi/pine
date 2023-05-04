@@ -2,7 +2,7 @@
   --background-color: #000;
   --box-shadow: 0 8px 14px rgba(0,0,0,0.16), 0 0 4px rgba(0,0,0,0.08);
   --color: #fff;
-  --width: 236px;
+  --width: 320px;
   --arrow-size: 6px;
   --arrow-offset: 14px;
 
@@ -37,7 +37,10 @@
   position: absolute;
   visibility: hidden;
   width: max-content;
-  z-index: 1;
+
+  .sage-tooltip--is-open & {
+    z-index: 1;
+  }
 
   :host(.sage-tooltip--has-html-content) & {
     width: auto;

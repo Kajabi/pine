@@ -9,7 +9,7 @@ describe('positionTooltip', () => {
     expect(positionTooltip(undefined, undefined, undefined)).toBeFalsy();
   })
 
-  it('returns false if no placement is not defined', async () => {
+  it('returns false if no placement is defined', async () => {
     expect(positionTooltip(mockButton, undefined, mockOverlay)).toBeFalsy();
   })
 

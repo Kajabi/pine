@@ -61,7 +61,7 @@ describe('sage-tooltip', () => {
     expect(element?.querySelector('.sage-tooltip')).not.toHaveClass('sage-tooltip--is-open');
   });
 
-  it('should the placement', async () => {
+  it('should update the placement', async () => {
     const page = await newSpecPage({
       components: [SageTooltip],
       html: `

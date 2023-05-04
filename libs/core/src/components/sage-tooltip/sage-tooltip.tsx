@@ -72,7 +72,7 @@ export class SageTooltip {
   // eslint-disable-next-line @stencil/no-unused-watch
   @Watch('opened')
   handleOpenToggle() {
-    if(this.opened) {
+    if (this.opened) {
       this.handleShow();
     } else {
       this.handleHide();
@@ -112,7 +112,7 @@ export class SageTooltip {
   async showTooltip() {
     this.opened = true;
 
-    if(this.contentEl) {
+    if (this.contentEl) {
       // TODO: need to use block / none but the tooltip content width and height are needed for calculations
       // this.contentEl.style.display = 'block';
       this.contentEl.style.opacity = '1';
