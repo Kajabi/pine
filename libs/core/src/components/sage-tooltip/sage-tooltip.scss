@@ -150,5 +150,9 @@
       left: var(--arrow-offset);
       top: calc(var(--arrow-size) * -1);
     }
+
+    .sage-tooltip--no-arrow & {
+      border-width: 0;
+    }
   }
 }
