@@ -12,8 +12,7 @@ const BaseTemplate = (args) => html`
     name=${args.name}
     required=${args.required}
     type=${args.type}
-  >
-  </sage-switch>
+  />
 `;
 
 const defaultParameters = { docs: { disable: true } };
