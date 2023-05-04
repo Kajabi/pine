@@ -244,11 +244,11 @@ export namespace Components {
         /**
           * Id used to reference the component
          */
-        "componentId": '';
+        "componentId": string;
         /**
           * Content for the tooltip. If HTML is required, use the content slot
          */
-        "content": '';
+        "content": string;
         /**
           * Determines whether or not the tooltip have an arrow
          */
@@ -625,11 +625,11 @@ declare namespace LocalJSX {
         /**
           * Id used to reference the component
          */
-        "componentId"?: '';
+        "componentId"?: string;
         /**
           * Content for the tooltip. If HTML is required, use the content slot
          */
-        "content"?: '';
+        "content"?: string;
         /**
           * Determines whether or not the tooltip have an arrow
          */

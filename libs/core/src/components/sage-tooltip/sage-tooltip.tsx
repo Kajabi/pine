@@ -29,12 +29,12 @@ export class SageTooltip {
   /**
    * Content for the tooltip. If HTML is required, use the content slot
    */
-  @Prop() content: '';
+  @Prop() content: string;
 
   /**
    * Id used to reference the component
    */
-  @Prop() componentId: '';
+  @Prop() componentId: string;
 
   /**
    * Determines whether or not the tooltip have an arrow
