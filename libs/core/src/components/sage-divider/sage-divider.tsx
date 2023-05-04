@@ -7,31 +7,29 @@ import { Component, Prop, Host, h } from '@stencil/core';
 })
 export class SageDivider {
   /**
+   * Adds offset margin/padding to expand the width (horizontal) or the height (vertical) of divider.
+   */
+  @Prop() offset: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+
+  /**
    * Sets divider to display vertically
    * @defaultValue false
    */
   @Prop() vertical = false;
 
-  /**
-   *
-   * Adds offset margin/padding to expand the width (horizontal) or the height (vertical) of divider.
-   */
-  @Prop() offset: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
-
   private classNames() {
-    let className = `sage-divider`;
+    const classNames = ['sage-divider'];
 
     if (this.vertical) {
-      const verticalClassName = 'sage-divider--vertical';
-      className += ' ' + verticalClassName;
+      classNames.push('sage-divider--vertical');
     }
 
     if (this.offset) {
       const offsetClassName = 'sage-divider--offset-' + this.offset;
-      className += ' ' + offsetClassName;
+      classNames.push(offsetClassName);
     }
 
-    return className;
+    return classNames.join(' ');
   }
 
   render() {
