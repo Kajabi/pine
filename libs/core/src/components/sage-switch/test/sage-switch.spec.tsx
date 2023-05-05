@@ -186,4 +186,47 @@ describe('sage-switch', () => {
       </sage-switch>
     `);
   });
+
+  it('emits a `sageSwitchChange` event when the input is changed', async () => {
+    const page = await newSpecPage({
+      components: [SageSwitch],
+      html: `
+        <sage-switch
+          component-id="switch-with-event"
+          label="Switch with event">
+        </sage-switch>
+      `
+    });
+
+    const component = page.root?.shadowRoot?.querySelector('input');
+    const eventSpy = jest.fn();
+
+    page.root?.addEventListener('sageSwitchChange', eventSpy);
+    component?.dispatchEvent(new Event('change'));
+    await page.waitForChanges();
+
+    expect(eventSpy).toHaveBeenCalled();
+  });
+
+  it('will not emit a `sageSwitchChange` event when the input is disabled', async () => {
+    const page = await newSpecPage({
+      components: [SageSwitch],
+      html: `
+        <sage-switch
+          component-id="switch-with-event"
+          disabled="true"
+          label="Switch with event">
+        </sage-switch>
+      `
+    });
+
+    const component = page.root?.shadowRoot?.querySelector('input');
+    const eventSpy = jest.fn();
+
+    page.root?.addEventListener('sageSwitchChange', eventSpy);
+    component?.dispatchEvent(new Event('change'));
+    await page.waitForChanges();
+
+    expect(eventSpy).not.toHaveBeenCalled();
+  });
 });
