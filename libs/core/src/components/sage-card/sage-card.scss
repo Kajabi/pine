@@ -1,14 +1,15 @@
 :host {
-  --card-border: var(--sage-border-interactive);
-  --card-padding: var(--sage-spacing-md);
-  --card-padding-compact: var(--sage-spacing-sm);
+  --border: var(--sage-border-interactive);
+  --border-radius: var(--sage-border-radius-lg);
+  --padding: var(--sage-spacing-md);
+  --padding-compact: var(--sage-spacing-sm);
 
-  border: var(--card-border);
-  border-radius: 12px; // TODO: There is no 12px border-radius token.
+  border: var(--border);
+  border-radius: var(--border-radius);
   display: block;
-  padding: var(--card-padding);
+  padding: var(--padding);
 }
 
 :host(.is-compact) {
-  padding: var(--card-padding-compact);
+  padding: var(--padding-compact);
 }
