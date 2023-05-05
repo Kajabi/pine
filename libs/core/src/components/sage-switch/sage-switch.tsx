@@ -119,7 +119,7 @@ export class SageSwitch {
           disabled={this.disabled}
           id={this.componentId}
           name={this.name ? this.name : this.componentId}
-          onChange={e => this.onSwitchUpdate(e)}
+          onChange={this.onSwitchUpdate}
           required={this.required}
           type={this.type}
           value={this.value}
