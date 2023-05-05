@@ -6,7 +6,7 @@ let mockOverlay = document.createElement('div');
 
 describe('positionTooltip', () => {
   it('returns false if no arguments are defined', async () => {
-    expect(positionTooltip(undefined, undefined, undefined)).toBeFalsy();
+    expect(positionTooltip(undefined, undefined, undefined)).toEqual(false);
   })
 
   it('returns false if no placement is defined', async () => {
