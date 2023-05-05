@@ -37,7 +37,7 @@ export class SageTooltip {
   @Prop() componentId: string;
 
   /**
-   * Determines whether or not the tooltip have an arrow
+   * Determines whether or not the tooltip has an arrow
    */
   @Prop() hasArrow? = true;
 
