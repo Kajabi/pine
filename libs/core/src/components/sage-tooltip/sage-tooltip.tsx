@@ -41,7 +41,6 @@ export class SageTooltip {
    */
   @Prop() hasArrow? = true;
 
-
   /**
    * Enable this option when using the content slot
    */
