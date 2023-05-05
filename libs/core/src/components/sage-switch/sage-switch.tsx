@@ -1,4 +1,4 @@
-import { Component, Element, Host, h, Prop } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
 
 @Component({
   tag: 'sage-switch',
@@ -54,16 +54,25 @@ export class SageSwitch {
   @Prop() required? = false;
 
   /**
-   * Attribute sent in form data. Mainly used to distinguish radio inputs
-   */
-  @Prop() value: string;
-
-  /**
    * Specifies the underlying input element type
    * @defaultValue 'checkbox'
    */
   @Prop() type: 'checkbox' | 'radio' = 'checkbox';
 
+  /**
+   * Attribute sent in form data. Mainly used to distinguish radio inputs
+   */
+  @Prop() value: string;
+
+  /**
+   * Event emitted on input change
+  */
+  @Event() sageSwitchChange: EventEmitter<InputEvent>;
+
+  private onSwitchUpdate = (e: Event) => {
+    if (this.disabled) return;
+    this.sageSwitchChange.emit(e as InputEvent);
+  };
 
   /**
    * Generate switch classes
@@ -110,6 +119,7 @@ export class SageSwitch {
           disabled={this.disabled}
           id={this.componentId}
           name={this.name ? this.name : this.componentId}
+          onChange={e => this.onSwitchUpdate(e)}
           required={this.required}
           type={this.type}
           value={this.value}

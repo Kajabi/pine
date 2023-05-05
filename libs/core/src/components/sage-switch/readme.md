@@ -22,6 +22,13 @@
 | `value`                    | `value`          | Attribute sent in form data. Mainly used to distinguish radio inputs                                 | `string`                | `undefined`  |
 
 
+## Events
+
+| Event              | Description                   | Type                      |
+| ------------------ | ----------------------------- | ------------------------- |
+| `sageSwitchChange` | Event emitted on input change | `CustomEvent<InputEvent>` |
+
+
 ----------------------------------------------
 
 

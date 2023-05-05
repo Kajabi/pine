@@ -10,12 +10,23 @@ const BaseTemplate = (args) => html`
     invalid=${args.invalid}
     label=${args.label}
     name=${args.name}
+    onChange=${args.onChange}
     required=${args.required}
     type=${args.type}
   />
 `;
 
 const defaultParameters = { docs: { disable: true } };
+
+const switchEventExample = () => {
+  document.addEventListener('sageSwitchChange', function(e) {
+    const input = e.target.shadowRoot.querySelector(".sage-switch__input");
+    const inputState = input.checked ? '✅ checked' : '😭 not checked';
+
+    console.info('sageSwitchChange event', e);
+    console.info(`#${input.id} switch is: ${inputState}`);
+  });
+};
 
 export const Default = BaseTemplate.bind({});
 
@@ -26,6 +37,7 @@ Default.args = {
   invalid: false,
   label: 'checkbox switch',
   name: 'sage-switch-checkbox',
+  onChange: switchEventExample(),
   required: false,
   type: 'checkbox',
 };

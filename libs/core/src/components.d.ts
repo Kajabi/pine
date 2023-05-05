@@ -341,6 +341,10 @@ export interface SageInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSageInputElement;
 }
+export interface SageSwitchCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSageSwitchElement;
+}
 export interface SageTabCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSageTabElement;
@@ -675,6 +679,10 @@ declare namespace LocalJSX {
           * Used for identifying form data. Unifies a group of radio inputs for toggling a single property/value
          */
         "name"?: string;
+        /**
+          * Event emitted on input change
+         */
+        "onSageSwitchChange"?: (event: SageSwitchCustomEvent<InputEvent>) => void;
         /**
           * Forces the input to be required
          */
