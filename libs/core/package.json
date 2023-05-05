@@ -72,7 +72,7 @@
     "@typescript-eslint/eslint-plugin": "^5.40.0",
     "@typescript-eslint/parser": "^5.40.0",
     "babel-loader": "^8.2.5",
-    "eslint": "^7.32.0",
+    "eslint": "^8.25.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-react": "^7.31.10",
     "eslint-plugin-storybook": "^0.6.6",
