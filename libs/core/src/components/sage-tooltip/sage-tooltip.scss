@@ -32,6 +32,7 @@
   color: var(--color);
   font-size: var(--overlay-font-size);
   line-height: var(--overlay-line-height);
+  // TODO: need to use block / none but the tooltip content width and height are needed for calculations
   opacity: 0;
   padding: var(--overlay-padding);
   position: absolute;
@@ -39,6 +40,9 @@
   width: max-content;
 
   .sage-tooltip--is-open & {
+    // TODO: need to use block / none but the tooltip content width and height are needed for calculations
+    opacity: 1;
+    visibility: visible;
     z-index: 1;
   }
 

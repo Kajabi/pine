@@ -110,22 +110,11 @@ export class SageTooltip {
   @Method()
   async showTooltip() {
     this.opened = true;
-
-    if (this.contentEl) {
-      // TODO: need to use block / none but the tooltip content width and height are needed for calculations
-      // this.contentEl.style.display = 'block';
-      this.contentEl.style.opacity = '1';
-      this.contentEl.style.visibility = 'visible';
-    }
   }
 
   @Method()
   async hideTooltip() {
     this.opened = false;
-    // TODO: need to use block / none but the tooltip content width and height are needed for calculations
-    // this.contentEl.style.display = '';
-    this.contentEl.style.opacity = '0';
-    this.contentEl.style.visibility = 'hidden';
   }
 
   private handleHide = () => {
