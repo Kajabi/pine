@@ -29,7 +29,7 @@
 
 ### `hideTooltip() => Promise<void>`
 
-
+Hides the tooltip by disabling the opened property
 
 #### Returns
 
@@ -39,7 +39,7 @@ Type: `Promise<void>`
 
 ### `showTooltip() => Promise<void>`
 
-
+Shows the tooltip by enabling the opened property
 
 #### Returns
 

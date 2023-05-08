@@ -253,6 +253,9 @@ export namespace Components {
           * Determines whether or not the tooltip has an arrow
          */
         "hasArrow"?: boolean;
+        /**
+          * Hides the tooltip by disabling the opened property
+         */
         "hideTooltip": () => Promise<void>;
         /**
           * Enable this option when using the content slot
@@ -277,6 +280,9 @@ export namespace Components {
     | 'left'
     | 'left-start'
     | 'left-end';
+        /**
+          * Shows the tooltip by enabling the opened property
+         */
         "showTooltip": () => Promise<void>;
     }
 }

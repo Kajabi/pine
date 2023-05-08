@@ -108,11 +108,17 @@ export class SageTooltip {
     positionTooltip({elem: this.el, elemPlacement: this.placement, overlay: this.contentEl});
   }
 
+  /**
+   * Shows the tooltip by enabling the opened property
+   */
   @Method()
   async showTooltip() {
     this.opened = true;
   }
 
+  /**
+   * Hides the tooltip by disabling the opened property
+   */
   @Method()
   async hideTooltip() {
     this.opened = false;
