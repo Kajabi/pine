@@ -263,7 +263,7 @@ export namespace Components {
          */
         "opened": boolean;
         /**
-          * Determines the preferred position of the tooltip
+          * Determines the preferred position of the tooltip * @defaultValue "right"
          */
         "placement": 'top'
     | 'top-start'
@@ -651,7 +651,7 @@ declare namespace LocalJSX {
          */
         "opened"?: boolean;
         /**
-          * Determines the preferred position of the tooltip
+          * Determines the preferred position of the tooltip * @defaultValue "right"
          */
         "placement"?: 'top'
     | 'top-start'

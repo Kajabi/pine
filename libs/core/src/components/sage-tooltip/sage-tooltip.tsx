@@ -48,8 +48,9 @@ export class SageTooltip {
 
   /**
    * Determines the preferred position of the tooltip
+   * * @defaultValue "right"
    */
-  @Prop() placement:
+  @Prop({ reflect: true }) placement:
     'top'
     | 'top-start'
     | 'top-end'
@@ -61,7 +62,7 @@ export class SageTooltip {
     | 'bottom-end'
     | 'left'
     | 'left-start'
-    | 'left-end';
+    | 'left-end' = 'right';
 
   /**
    * Determines whether or not the tooltip is visible
@@ -104,7 +105,7 @@ export class SageTooltip {
   }
 
   componentDidRender() {
-    positionTooltip(this.el, this.placement, this.contentEl);
+    positionTooltip({elem: this.el, elemPlacement: this.placement, overlay: this.contentEl});
   }
 
   @Method()
@@ -139,7 +140,7 @@ export class SageTooltip {
         <div
           class={`
             sage-tooltip
-            ${this.placement ? (`sage-tooltip--${this.placement}`) : ''}
+            sage-tooltip--${this.placement}
             ${this.opened ? 'sage-tooltip--is-open' : ''}
             ${this.hasArrow ? '' : 'sage-tooltip--no-arrow'}
           `}

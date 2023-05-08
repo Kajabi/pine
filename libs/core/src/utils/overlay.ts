@@ -1,4 +1,12 @@
-export const positionTooltip = (elem, elemPlacement, overlay, offset = 8) => {
+interface OverlayArgs {
+  elem: HTMLElement;
+  elemPlacement: string;
+  overlay: HTMLElement;
+  offset?: number;
+  initialLoad?: boolean;
+}
+
+export const positionTooltip = ({elem, elemPlacement, overlay, offset = 8}: OverlayArgs) => {
   if (elem == undefined) return;
 
   const rect = elem.getBoundingClientRect();

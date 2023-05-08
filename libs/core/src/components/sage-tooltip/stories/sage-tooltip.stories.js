@@ -85,10 +85,10 @@ HTMLContent.parameters = { ...defaultParameters }
 
 
 export const Positioning = PositionTemplate.bind({});
-PositionTemplate.args = {
-  content: "Trigger"
+Positioning.args = {
+  content: "Trigger",
 };
-PositionTemplate.parameters = { ...defaultParameters }
+Positioning.parameters = { ...defaultParameters }
 
 export const NoArrow = BaseTemplate.bind({});
 NoArrow.args = {
