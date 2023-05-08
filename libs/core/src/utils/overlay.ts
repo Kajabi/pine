@@ -3,7 +3,6 @@ interface OverlayArgs {
   elemPlacement: string;
   overlay: HTMLElement;
   offset?: number;
-  initialLoad?: boolean;
 }
 
 export const positionTooltip = ({elem, elemPlacement, overlay, offset = 8}: OverlayArgs) => {
