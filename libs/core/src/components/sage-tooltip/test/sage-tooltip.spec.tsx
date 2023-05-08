@@ -6,18 +6,18 @@ describe('sage-tooltip', () => {
     const { root } = await newSpecPage({
       components: [SageTooltip],
       html: `
-       <sage-tooltip>
+       <sage-tooltip placement="right">
         <sage-button variant="secondary">Secondary</sage-button>
        </sage-tooltip>`
     });
     expect(root).toEqualHtml(`
-      <sage-tooltip>
+      <sage-tooltip placement="right">
         <mock:shadow-root>
-        <div class="sage-tooltip">
+        <div class="sage-tooltip sage-tooltip--right">
           <span class="sage-tooltip__trigger">
             <slot></slot>
           </span>
-          <div class="sage-tooltip__content" aria-hidden="true" aria-live="off" role="tooltip">
+          <div class="sage-tooltip__content" aria-hidden="true" aria-live="off" role="tooltip" style="top: 50%; left: calc(0px + 8px); transform: translateY(-50%);">
             <slot name="content"></slot>
           </div>
         </div>
