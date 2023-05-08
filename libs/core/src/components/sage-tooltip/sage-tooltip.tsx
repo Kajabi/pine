@@ -137,7 +137,6 @@ export class SageTooltip {
   render() {
     return (
       <Host
-        class={{'sage-tooltip--has-html-content': this.htmlContent}}
         onMouseEnter={this.handleShow}
         onMouseLeave={this.handleHide}
         onFocusin={this.handleShow}
@@ -147,6 +146,7 @@ export class SageTooltip {
           class={`
             sage-tooltip
             sage-tooltip--${this.placement}
+            ${this.htmlContent ? 'sage-tooltip--has-html-content' : ''}
             ${this.opened ? 'sage-tooltip--is-open' : ''}
             ${this.hasArrow ? '' : 'sage-tooltip--no-arrow'}
           `}
