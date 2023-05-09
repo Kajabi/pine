@@ -7,11 +7,11 @@ const BaseTemplate = (args) => html`<sage-textarea
   invalid="${args.invalid}"
   label="${args.label}"
   name="${args.name}"
-  placeholder-message="${args.placeholderMessage}"
+  placeholder="${args.placeholder}"
   readonly="${args.readonly}"
   required="${args.required}"
   rows="${args.rows}"
-  component-id="${args.componentId}"
+  id="${args.componentId}"
   value="${args.value}"
   >
 </sage-textarea>`;
@@ -53,7 +53,7 @@ Placeholder.args = {
   name: 'Placeholder',
   label: 'Name',
   componentId: 'uniqueIdPlaceholder',
-  placeholderMessage: 'Placeholder...'
+  placeholder: 'Placeholder...'
 };
 Placeholder.parameters = { ...defaultParameters };
 
