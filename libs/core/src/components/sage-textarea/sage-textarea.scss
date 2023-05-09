@@ -1,67 +1,35 @@
 :host {
-  // display: block;
-  /**
+  --background-color: #fff;
+  --background-color-disabled: var(--sage-color-neutral-grey-200);
 
-    * @prop --background-color-color: Background color of the textarea
-    * @prop --background-color-color-disabled: Background color of a disabled textarea
-    *
-    * @prop --color: Color of the textarea text
-    * @prop --color-error: Color of the textarea text when error is present
-    * @prop --color-placeholder: Color of the placeholder text
-    *
-    * @prop --border-color-default: Border color of the textarea text
-    * @prop --color-hover: Border color of the textarea text when hovered
-    *
-    * @prop --label-font-size: Font size of the label text
-    * @prop --label-font-weight: Font weight of the label text
-    * @prop --label-line-height: Line height of the label text
-    * @prop --label-margin-block-end: Bottom margin of the label
-    *
-    * @prop --field-font-size: Font size of the textarea text
-    * @prop --field-font-weight: Font weight of the textarea text
-    * @prop --field-line-height: Line height of the textarea text
-    * @prop --field-padding-block: Block padding for the textarea text
-    * @prop --field-padding-inline: Inline padding for the textarea text
-    *
-    * @prop --hint-font-size: Font size of the hint text
-    * @prop --hint-font-weight: Font weight of the hint text
-    * @prop --hint-line-height: Line height of the hint text
-    * @prop --hint-margin-block-start: Top margin of the hint
-    */
+  --color: var(--sage-color-neutral-charcoal-400);
+  --color-error: var(--sage-color-red-300);
+  --color-placeholder: var(--sage-color-neutral-charcoal-200);
+  --color-disabled: var(--sage-color-neutral-charcoal-200);
 
-  --error-color: #cf3c32;
+  --border-color-default: var(--sage-color-neutral-grey-400);
+  --border-color-hover: var(--sage-color-neutral-grey-500);
+  --border-color-focus-visible: var(--sage-color-neutral-grey-300);
+  --border-color-error: var(--sage-color-red-300);
 
-  --background-color-color: #fff;
-  --background-color-color-disabled: #f6f8f8;
+  --focus-visible-outline-color: var(--sage-color-primary-200);
+  --focus-visible-outline-color-error: var(--sage-color-red-200);
 
-  --color: #202327;
-  --color-error: var(--error-color);
-  --color-placeholder: #60666c;
-  --color-disabled: #60666c;
+  --label-font-size: var(--sage-font-size-body);
+  --label-font-weight: var(--sage-font-weight-medium);
+  --label-line-height: var(--sage-line-height-md);
+  --label-margin-block-end: var(--sage-spacing-xs);
 
-  --border-color-default: #d3d5d9;
-  --border-color-hover: #b5bac0;
-  --border-color-focus-visible: #eceeef;
-  --border-color-error: var(--error-color);
+  --field-font-size: var(--sage-font-size-body);
+  --field-font-weight: var(--sage-font-weight-regular);
+  --field-line-height: var(--sage-line-height-md);
+  --field-padding-block: var(--sage-spacing-xs);
+  --field-padding-inline: var(--sage-spacing-sm);
 
-  --focus-visible-outline-color: #8ecafb;
-  --focus-visible-outline-color-error: #fdb0aa;
-
-  --label-font-size: 16px;
-  --label-font-weight: 500;
-  --label-line-height: 24px;
-  --label-margin-block-end: 8px;
-
-  --field-font-size: 16px;
-  --field-font-weight: 400;
-  --field-line-height: 24px;
-  --field-padding-block: 8px;
-  --field-padding-inline: 16px;
-
-  --hint-font-size: 12px;
-  --hint-font-weight: 400;
-  --hint-line-height: 20px;
-  --hint-margin-block-start: 8px;
+  --hint-font-size: var(--sage-font-size-body-xs);
+  --hint-font-weight: var(--sage-font-weight-regular);
+  --hint-line-height: var(--sage-line-height-sm);
+  --hint-margin-block-start: var(--sage-spacing-xs);
 
   display: inline;
 }
@@ -80,8 +48,9 @@ label {
 }
 
 .sage-textarea__field {
+  background-color: var(--background-color);
   border: 1px solid var(--border-color-default);
-  border-radius: 10px;
+  border-radius: var(--sage-border-radius-md);
   font-family: inherit;
   font-size: var(--field-font-size);
   font-weight: var(--field-font-weight);
@@ -105,7 +74,6 @@ label {
 
   &::placeholder {
     color: var(--color-placeholder);
-    font-style: italic;
   }
 
   // Fallback fix for FF until `:has` is fully supported
