@@ -204,39 +204,39 @@ export namespace Components {
     }
     interface SageSwitch {
         /**
-          * Sets state of input control
+          * Determines the input 'checked' state
          */
         "checked": boolean;
         /**
-          * A unique identifier for this input. Associates the input with its label
+          * Identifies this input with a unique string, and associates the input with its label
          */
         "componentId": string;
         /**
-          * Disables input control
+          * Determines the input 'disabled' state, preventing user interaction
          */
         "disabled"?: boolean;
         /**
-          * Text displayed with invalid state
+          * Displays message text describing an invalid state
          */
         "errorMessage"?: string;
         /**
-          * Text used for additional control description
+          * Displays help text for additional description of an input
          */
         "helperMessage": string;
         /**
-          * Indicates when user input is not valid
+          * Determines the input 'invalid' state, signifying an error is present
          */
         "invalid"?: boolean;
         /**
-          * Text to be displayed as the switch label
+          * Displays text to describe the input
          */
         "label": string;
         /**
-          * Used for identifying form data. Unifies a group of radio inputs for toggling a single property/value
+          * Identifies form data and unifies a group of radio inputs for toggling a single property/value
          */
         "name": string;
         /**
-          * Forces the input to be required
+          * Determines the 'required' state of the input
          */
         "required"?: boolean;
         /**
@@ -245,7 +245,7 @@ export namespace Components {
          */
         "type": 'checkbox' | 'radio';
         /**
-          * Attribute sent in form data. Mainly used to distinguish radio inputs
+          * Provides input with a string submitted in form data, and can be used to distinguish radio inputs
          */
         "value": string;
     }
@@ -371,7 +371,7 @@ declare global {
     var HTMLSageCheckboxElement: {
         prototype: HTMLSageCheckboxElement;
         new (): HTMLSageCheckboxElement;
-    }
+    };
     interface HTMLSageDividerElement extends Components.SageDivider, HTMLStencilElement {
     }
     var HTMLSageDividerElement: {
@@ -648,43 +648,43 @@ declare namespace LocalJSX {
     }
     interface SageSwitch {
         /**
-          * Sets state of input control
+          * Determines the input 'checked' state
          */
         "checked"?: boolean;
         /**
-          * A unique identifier for this input. Associates the input with its label
+          * Identifies this input with a unique string, and associates the input with its label
          */
         "componentId": string;
         /**
-          * Disables input control
+          * Determines the input 'disabled' state, preventing user interaction
          */
         "disabled"?: boolean;
         /**
-          * Text displayed with invalid state
+          * Displays message text describing an invalid state
          */
         "errorMessage"?: string;
         /**
-          * Text used for additional control description
+          * Displays help text for additional description of an input
          */
         "helperMessage"?: string;
         /**
-          * Indicates when user input is not valid
+          * Determines the input 'invalid' state, signifying an error is present
          */
         "invalid"?: boolean;
         /**
-          * Text to be displayed as the switch label
+          * Displays text to describe the input
          */
         "label": string;
         /**
-          * Used for identifying form data. Unifies a group of radio inputs for toggling a single property/value
+          * Identifies form data and unifies a group of radio inputs for toggling a single property/value
          */
         "name"?: string;
         /**
-          * Event emitted on input change
+          * Emits an event on input change
          */
         "onSageSwitchChange"?: (event: SageSwitchCustomEvent<InputEvent>) => void;
         /**
-          * Forces the input to be required
+          * Determines the 'required' state of the input
          */
         "required"?: boolean;
         /**
@@ -693,7 +693,7 @@ declare namespace LocalJSX {
          */
         "type"?: 'checkbox' | 'radio';
         /**
-          * Attribute sent in form data. Mainly used to distinguish radio inputs
+          * Provides input with a string submitted in form data, and can be used to distinguish radio inputs
          */
         "value"?: string;
     }

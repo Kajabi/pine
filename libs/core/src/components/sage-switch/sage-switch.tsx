@@ -9,47 +9,47 @@ export class SageSwitch {
   @Element() el: HTMLSageSwitchElement;
 
   /**
-   * A unique identifier for this input. Associates the input with its label
+   * Identifies this input with a unique string, and associates the input with its label
    */
   @Prop() componentId!: string;
 
   /**
-   * Sets state of input control
+   * Determines the input 'checked' state
    */
   @Prop() checked = false;
 
   /**
-   * Disables input control
+   * Determines the input 'disabled' state, preventing user interaction
    */
   @Prop() disabled? = false;
 
   /**
-   * Text displayed with invalid state
+   * Displays message text describing an invalid state
    */
   @Prop() errorMessage?: string;
 
   /**
-   * Text used for additional control description
+   * Displays help text for additional description of an input
    */
   @Prop() helperMessage: string;
 
   /**
-   * Indicates when user input is not valid
+   * Determines the input 'invalid' state, signifying an error is present
    */
   @Prop() invalid? = false;
 
   /**
-   * Text to be displayed as the switch label
+   * Displays text to describe the input
    */
   @Prop() label!: string;
 
   /**
-   * Used for identifying form data. Unifies a group of radio inputs for toggling a single property/value
+   * Identifies form data and unifies a group of radio inputs for toggling a single property/value
    */
   @Prop() name: string;
 
   /**
-   * Forces the input to be required
+   * Determines the 'required' state of the input
    */
   @Prop() required? = false;
 
@@ -60,12 +60,12 @@ export class SageSwitch {
   @Prop() type: 'checkbox' | 'radio' = 'checkbox';
 
   /**
-   * Attribute sent in form data. Mainly used to distinguish radio inputs
+   * Provides input with a string submitted in form data, and can be used to distinguish radio inputs
    */
   @Prop() value: string;
 
   /**
-   * Event emitted on input change
+   * Emits an event on input change
   */
   @Event() sageSwitchChange: EventEmitter<InputEvent>;
 
