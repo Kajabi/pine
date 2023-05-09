@@ -46,7 +46,7 @@ export class SageTextarea {
   /**
    * Specifies the name, submitted with the form name/value pair
    */
-  @Prop() name: string;
+  @Prop() name: string = this.componentId;
 
   /**
    * Specifies a short hint that describes the expected value of the textarea
