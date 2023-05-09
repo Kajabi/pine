@@ -15,37 +15,33 @@ export class SageTextarea {
    * Indicates whether or not the textarea is disabled
    * @defaultValue false
    */
-  @Prop() disabled? = false;
+  @Prop() disabled = false;
 
   /**
    * Specifies the error text and provides an error-themed treatment to the field
-   * @defaultValue null
    */
-  @Prop() errorMessage?: string = null;
+  @Prop() errorMessage?: string;
 
   /**
    * Displays a hint or description of the textarea
-   * @defaultValue null
    */
-  @Prop() hintMessage?: string = null;
+  @Prop() hintMessage?: string;
 
   /**
    * Indicates whether or not the textarea is invalid or throws an error
-   * @defaultValue null
+   * @defaultValue false
    */
-  @Prop({mutable: true}) invalid?: boolean = null;
+  @Prop({mutable: true}) invalid = false;
 
   /**
    * A unique identifier for the textarea
-   * @defaultValue null
    */
-  @Prop() componentId?: string = null;
+  @Prop() componentId?: string;
 
   /**
    * Text to be displayed as the textarea label
-   * @defaultValue null
    */
-  @Prop() label?: string = null;
+  @Prop() label?: string;
 
   /**
    * Specifies the name, submitted with the form name/value pair
@@ -54,33 +50,30 @@ export class SageTextarea {
 
   /**
    * Specifies a short hint that describes the expected value of the textarea
-   * @defaultValue null
    */
-  @Prop() placeholderMessage?: string = null;
+  @Prop() placeholder?: string;
 
   /**
    * Indicates whether or not the textarea is readonly
    * @defaultValue false
    */
-  @Prop() readonly?: boolean = false;
+  @Prop() readonly = false;
 
   /**
    * Indicates whether or not the textarea is required
    * @defaultValue false
    */
-  @Prop() required?: boolean = false;
+  @Prop() required = false;
 
   /**
    * Sets number of rows of text visible without needing to scroll in the textarea
-   * @defaultValue null
    */
-  @Prop() rows?: number = null;
+  @Prop() rows?: number;
 
   /**
    * The value of the textarea
-   * @defaultValue null
    */
-  @Prop({mutable: true}) value?: string = null;
+  @Prop({mutable: true}) value?: string;
 
   /**
    * Event emitted whenever the value of the textarea changes
@@ -116,7 +109,7 @@ export class SageTextarea {
             disabled={this.disabled}
             id={this.componentId}
             name={this.name}
-            placeholder={this.placeholderMessage}
+            placeholder={this.placeholder}
             readOnly={this.readonly}
             required={this.required}
             rows={this.rows}
