@@ -12,6 +12,11 @@ export class SageTextarea {
   @Element() el: HTMLDivElement;
 
   /**
+   * A unique identifier for the textarea
+   */
+  @Prop() componentId?: string;
+
+  /**
    * Indicates whether or not the textarea is disabled
    * @defaultValue false
    */
@@ -34,17 +39,12 @@ export class SageTextarea {
   @Prop({mutable: true}) invalid = false;
 
   /**
-   * A unique identifier for the textarea
-   */
-  @Prop() componentId?: string;
-
-  /**
    * Text to be displayed as the textarea label
    */
   @Prop() label?: string;
 
   /**
-   * Specifies the name, submitted with the form name/value pair
+   * Specifies the name, submitted with the form name/value pair. This value will mirror the componentId
    */
   @Prop() name: string = this.componentId;
 
