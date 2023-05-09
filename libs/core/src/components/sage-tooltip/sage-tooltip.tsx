@@ -22,7 +22,8 @@ export class SageTooltip {
   @Element() el: HTMLDivElement;
 
   /**
-   * Determines where the tooltip is open
+   * Determines when the tooltip is open
+   * @defaultValue false
    */
   @State() isOpen = false;
 
@@ -38,13 +39,15 @@ export class SageTooltip {
 
   /**
    * Determines whether or not the tooltip has an arrow
+   * * @defaultValue true
    */
   @Prop() hasArrow? = true;
 
   /**
    * Enable this option when using the content slot
+   * * @defaultValue false
    */
-  @Prop() htmlContent?: boolean;
+  @Prop() htmlContent = false;
 
   /**
    * Determines the preferred position of the tooltip
@@ -66,6 +69,7 @@ export class SageTooltip {
 
   /**
    * Determines whether or not the tooltip is visible
+   * @defaultValue false
    */
   @Prop({mutable: true, reflect: true}) opened = false;
 
