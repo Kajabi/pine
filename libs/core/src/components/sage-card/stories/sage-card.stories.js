@@ -10,7 +10,7 @@ Default.parameters = { ...defaultParameters };
 
 export const Border = BaseTemplate.bind();
 Border.args = {
-  border: true,
+  border: false,
 };
 Border.parameters = { ...defaultParameters };
 

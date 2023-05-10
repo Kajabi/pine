@@ -50,9 +50,21 @@ export namespace Components {
         "variant": 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
     }
     interface SageCard {
+        /**
+          * Determines the background color of the card.
+         */
         "bgColor": string;
+        /**
+          * Determines whether the card should have a border.
+         */
         "border": boolean;
+        /**
+          * Sets the padding size for the card.
+         */
         "padding": 'sm' | 'md' | 'none';
+        /**
+          * Determines the shadow size for the card.
+         */
         "shadow": 'sm' | 'md' | 'lg' | 'none';
     }
     interface SageCheckbox {
@@ -605,9 +617,21 @@ declare namespace LocalJSX {
         "variant"?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
     }
     interface SageCard {
+        /**
+          * Determines the background color of the card.
+         */
         "bgColor"?: string;
+        /**
+          * Determines whether the card should have a border.
+         */
         "border"?: boolean;
+        /**
+          * Sets the padding size for the card.
+         */
         "padding"?: 'sm' | 'md' | 'none';
+        /**
+          * Determines the shadow size for the card.
+         */
         "shadow"?: 'sm' | 'md' | 'lg' | 'none';
     }
     interface SageCheckbox {
