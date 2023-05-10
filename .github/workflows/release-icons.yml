@@ -1,0 +1,35 @@
+name: 'Release Icons'
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        description: 'The tag to publish on NPM.'
+        required: true
+        type: string
+
+      version:
+        description: 'The type of version to release.'
+        required: true
+        type: string
+
+    secrets:
+      NPM_TOKEN:
+        required: true
+
+jobs:
+  release-icons:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Publish Icons
+        uses: ./.github/workflows/actions/publish-npm
+        with:
+          project: 'icons'
+          scope: '@sage/icons'
+          tag: ${{ inputs.tag }}
+          token: ${{ secrets.NPM_TOKEN }}
+          version: ${{ inputs.version }}
+          working-directory: 'libs/icons'
