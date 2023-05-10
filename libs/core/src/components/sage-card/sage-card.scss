@@ -3,13 +3,43 @@
   --border-radius: var(--sage-border-radius-lg);
   --padding: var(--sage-spacing-md);
   --padding-compact: var(--sage-spacing-sm);
+  --box-shadow-sm: var(--sage-box-shadow-sm);
+  --box-shadow-md: var(--sage-box-shadow-md);
+  --box-shadow-lg: var(--sage-box-shadow-sm);
 
-  border: var(--border);
   border-radius: var(--border-radius);
   display: block;
-  padding: var(--padding);
+  position: relative;
 }
 
-:host(.is-compact) {
-  padding: var(--padding-compact);
+:host(.has-border) {
+  border: var(--border);
+}
+
+:host(.sage-card--padding-none) {
+  padding: 0
+}
+
+:host(.sage-card--padding-sm) {
+  padding: var(--padding-compact)
+}
+
+:host(.sage-card--padding-md) {
+  padding: var(--padding)
+}
+
+:host(.sage-card--shadow-none) {
+  box-shadow: none;
+}
+
+:host(.sage-card--shadow-sm) {
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.12);
+}
+
+:host(.sage-card--shadow-md) {
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.08), 0 8px 14px rgba(0, 0, 0, 0.16);
+}
+
+:host(.sage-card--shadow-lg) {
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.24);
 }

@@ -50,10 +50,10 @@ export namespace Components {
         "variant": 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
     }
     interface SageCard {
-        /**
-          * It determines whether or not the card has reduced padding.
-         */
-        "compact": boolean;
+        "bgColor": string;
+        "border": boolean;
+        "padding": 'sm' | 'md' | 'none';
+        "shadow": 'sm' | 'md' | 'lg' | 'none';
     }
     interface SageCheckbox {
         /**
@@ -605,10 +605,10 @@ declare namespace LocalJSX {
         "variant"?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
     }
     interface SageCard {
-        /**
-          * It determines whether or not the card has reduced padding.
-         */
-        "compact"?: boolean;
+        "bgColor"?: string;
+        "border"?: boolean;
+        "padding"?: 'sm' | 'md' | 'none';
+        "shadow"?: 'sm' | 'md' | 'lg' | 'none';
     }
     interface SageCheckbox {
         /**

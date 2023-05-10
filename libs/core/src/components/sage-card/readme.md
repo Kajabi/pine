@@ -7,9 +7,12 @@
 
 ## Properties
 
-| Property  | Attribute | Description                                                | Type      | Default     |
-| --------- | --------- | ---------------------------------------------------------- | --------- | ----------- |
-| `compact` | `compact` | It determines whether or not the card has reduced padding. | `boolean` | `undefined` |
+| Property  | Attribute  | Description | Type                             | Default     |
+| --------- | ---------- | ----------- | -------------------------------- | ----------- |
+| `bgColor` | `bg-color` |             | `string`                         | `undefined` |
+| `border`  | `border`   |             | `boolean`                        | `true`      |
+| `padding` | `padding`  |             | `"md" \| "none" \| "sm"`         | `'md'`      |
+| `shadow`  | `shadow`   |             | `"lg" \| "md" \| "none" \| "sm"` | `'none'`    |
 
 
 ----------------------------------------------

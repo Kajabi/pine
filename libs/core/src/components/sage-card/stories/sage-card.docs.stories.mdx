@@ -10,7 +10,9 @@ import * as stories from './sage-card.stories.js';
   component="sage-card"
   argTypes={extractArgTypes('sage-card')}
   args={{
-    compact: false,
+    padding: 'md',
+    border: true,
+    shadow: 'none',
   }}
 />
 
@@ -27,15 +29,37 @@ A block container that provides styling for elevation, border, and background.
 <Story story={stories.Default} />
 
 <Canvas>
-  <sage-card>Default card</sage-card>
+  <sage-card>Card content</sage-card>
 </Canvas>
 
-### Compact
+### Padding
 
-Compact cards appear with reduced padding.
-
-<Story story={stories.Compact} />
+<Story story={stories.Padding} />
 
 <Canvas>
-  <sage-card compact>Compact card</sage-card>
+  <sage-card padding="sm">Card content</sage-card>
+</Canvas>
+
+### Border
+
+<Story story={stories.Border} />
+
+<Canvas>
+  <sage-card border="false">Card content</sage-card>
+</Canvas>
+
+### Background Color
+
+<Story story={stories.background} />
+
+<Canvas>
+  <sage-card border="false" bg-color="var(--sage-color-primary-100)">Card content</sage-card>
+</Canvas>
+
+### Shadow
+
+<Story story={stories.shadow} />
+
+<Canvas>
+  <sage-card shadow="md">Card content</sage-card>
 </Canvas>
