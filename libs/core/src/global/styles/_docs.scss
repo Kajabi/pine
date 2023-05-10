@@ -1,0 +1,24 @@
+.usage-chart {
+  display: flex;
+  gap: 30px;
+}
+
+.usage-chart__list {
+  flex-basis: 50%;
+}
+
+.usage-chart__title {
+  font-weight: 500;
+  padding-block-start: 12px;
+  padding-top: 12px !important;
+}
+
+.usage-chart__title--do {
+  border-top: 4px solid var(--sage-color-sage-400);
+  color: var(--sage-color-sage-400) !important;
+}
+
+.usage-chart__title--dont {
+  border-top: 4px solid var(--sage-color-red-400);
+  color: var(--sage-color-red-400) !important;
+}
