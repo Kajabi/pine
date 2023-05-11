@@ -77,8 +77,8 @@ describe('sage-switch', () => {
     await page.setContent('<sage-switch component-id="switch-with-description" invalid="true" helper-message="This is a helper message" error-message="This is an error message"></sage-switch>');
 
     const component = await page.find('sage-switch');
-    expect(component).toHaveClass('hydrated');
     const el = await page.find('sage-switch >>> input');
+    expect(component).toHaveClass('hydrated');
 
     const helperMessage = await page.find('sage-switch >>> #switch-with-description__helper-message');
     const errorMessage = await page.find('sage-switch >>> #switch-with-description__error-message');
