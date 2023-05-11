@@ -93,7 +93,7 @@ export class SageSwitch {
    * Create id for messaging
    */
   private messageId = (id: string, messageType: string) => {
-    return id + `__${messageType}-message`;
+    return `${id}__${messageType}-message`;
   };
 
   /**
