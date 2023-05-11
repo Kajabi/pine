@@ -9,6 +9,7 @@
     "bootstrap": "lerna bootstrap",
     "build.all": "nx run-many --target=build",
     "commit": "npx cz",
+    "coverage": "open libs/core/coverage/lcov-report/index.html",
     "stencil.generate": "yarn nx run core:generate",
     "lint.all": "nx run-many --target=lint",
     "prepare": "husky install",

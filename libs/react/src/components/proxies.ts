@@ -19,3 +19,4 @@ export const SageLink = /*@__PURE__*/createReactComponent<JSX.SageLink, HTMLSage
 export const SageTab = /*@__PURE__*/createReactComponent<JSX.SageTab, HTMLSageTabElement>('sage-tab');
 export const SageTabpanel = /*@__PURE__*/createReactComponent<JSX.SageTabpanel, HTMLSageTabpanelElement>('sage-tabpanel');
 export const SageTabs = /*@__PURE__*/createReactComponent<JSX.SageTabs, HTMLSageTabsElement>('sage-tabs');
+export const SageTooltip = /*@__PURE__*/createReactComponent<JSX.SageTooltip, HTMLSageTooltipElement>('sage-tooltip');
