@@ -34,6 +34,8 @@ A block container that provides styling for elevation, border, and background.
 
 ### Padding
 
+Padding is the space between a card's content and its border.
+
 <Story story={stories.Padding} />
 
 <Canvas>
@@ -41,6 +43,10 @@ A block container that provides styling for elevation, border, and background.
 </Canvas>
 
 ### Border
+
+A border is an outline that displays around a card and is visible by default.
+
+Set `border="false"` to remove the border.
 
 <Story story={stories.Border} />
 
@@ -52,11 +58,28 @@ A block container that provides styling for elevation, border, and background.
 
 <Story story={stories.background} />
 
+To change a card's appearance, apply a background color using the `bg-color` prop.
+
+When using a background color, it is recommended to also use `border="false"` in order to improve the overall appearance of the card.
+
+***Note:*** `bg-color` can accept the following color syntax types:
+
+- Hexadecimal: `#ff0000`
+- RGB: `rgb(255, 0, 0)`
+- RGBA: `rgba(255, 0, 0, 0.3)`
+- HSL: `hsl(120, 100%, 50%)`
+- HSLA: `hsla(120, 100%, 50%, 0.3)`
+- Named:  `red`, `orange`, `yellow`
+- Custom properties: `var(--sage-color-primary-100)`
+- Keyword: `currentcolor`
+
 <Canvas>
   <sage-card border="false" bg-color="var(--sage-color-primary-100)">Card content</sage-card>
 </Canvas>
 
 ### Shadow
+
+Adds a shadow effect to the card, which can be used to create the appearance of elevation.
 
 <Story story={stories.shadow} />
 
