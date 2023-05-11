@@ -166,4 +166,4 @@ const tokensToCss = (tokens: object, cssPropertyName, base = `-`, prevBase = '')
 		return css
   }, ``);
 
-build(tokens);
+build(tokens['core']);
