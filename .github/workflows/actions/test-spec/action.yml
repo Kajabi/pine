@@ -1,6 +1,11 @@
 name: 'Test Specs'
 descriptions: 'Runs specs for affected projects'
 
+inputs:
+  node-version:
+    description: 'The version of node to use'
+    required: true
+
 runs:
   using: 'composite'
   steps:
@@ -12,7 +17,7 @@ runs:
 
     - uses: actions/setup-node@v3
       with:
-        node-version: 18.x
+        node-version: ${{ inputs.node-version }}
 
     - name: Install Dependencies
       run: lerna bootstrap -- --frozen-lockfile --immutable
