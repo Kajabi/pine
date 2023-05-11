@@ -76,7 +76,6 @@ label {
     color: var(--color-placeholder);
   }
 
-  // Fallback fix for FF until `:has` is fully supported
   &.is-invalid {
     border-color: var(--color-error);
     outline-color: var(--focus-visible-outline-color-error);
