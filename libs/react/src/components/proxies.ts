@@ -20,4 +20,5 @@ export const SageSwitch = /*@__PURE__*/createReactComponent<JSX.SageSwitch, HTML
 export const SageTab = /*@__PURE__*/createReactComponent<JSX.SageTab, HTMLSageTabElement>('sage-tab');
 export const SageTabpanel = /*@__PURE__*/createReactComponent<JSX.SageTabpanel, HTMLSageTabpanelElement>('sage-tabpanel');
 export const SageTabs = /*@__PURE__*/createReactComponent<JSX.SageTabs, HTMLSageTabsElement>('sage-tabs');
+export const SageTextarea = /*@__PURE__*/createReactComponent<JSX.SageTextarea, HTMLSageTextareaElement>('sage-textarea');
 export const SageTooltip = /*@__PURE__*/createReactComponent<JSX.SageTooltip, HTMLSageTooltipElement>('sage-tooltip');

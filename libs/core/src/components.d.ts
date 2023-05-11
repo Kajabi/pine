@@ -288,6 +288,60 @@ export namespace Components {
          */
         "variant": 'primary' | 'availability' | 'filter';
     }
+    interface SageTextarea {
+        /**
+          * A unique identifier for the textarea
+         */
+        "componentId"?: string;
+        /**
+          * Indicates whether or not the textarea is disabled
+          * @defaultValue false
+         */
+        "disabled": boolean;
+        /**
+          * Specifies the error text and provides an error-themed treatment to the field
+         */
+        "errorMessage"?: string;
+        /**
+          * Displays a hint or description of the textarea
+         */
+        "hintMessage"?: string;
+        /**
+          * Indicates whether or not the textarea is invalid or throws an error
+          * @defaultValue false
+         */
+        "invalid": boolean;
+        /**
+          * Text to be displayed as the textarea label
+         */
+        "label"?: string;
+        /**
+          * Specifies the name, submitted with the form name/value pair. This value will mirror the componentId
+         */
+        "name": string;
+        /**
+          * Specifies a short hint that describes the expected value of the textarea
+         */
+        "placeholder"?: string;
+        /**
+          * Indicates whether or not the textarea is readonly
+          * @defaultValue false
+         */
+        "readonly": boolean;
+        /**
+          * Indicates whether or not the textarea is required
+          * @defaultValue false
+         */
+        "required": boolean;
+        /**
+          * Sets number of rows of text visible without needing to scroll in the textarea
+         */
+        "rows"?: number;
+        /**
+          * The value of the textarea
+         */
+        "value"?: string;
+    }
     interface SageTooltip {
         /**
           * Id used to reference the component
@@ -353,6 +407,10 @@ export interface SageSwitchCustomEvent<T> extends CustomEvent<T> {
 export interface SageTabCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSageTabElement;
+}
+export interface SageTextareaCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSageTextareaElement;
 }
 export interface SageTooltipCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -425,6 +483,12 @@ declare global {
         prototype: HTMLSageTabsElement;
         new (): HTMLSageTabsElement;
     };
+    interface HTMLSageTextareaElement extends Components.SageTextarea, HTMLStencilElement {
+    }
+    var HTMLSageTextareaElement: {
+        prototype: HTMLSageTextareaElement;
+        new (): HTMLSageTextareaElement;
+    };
     interface HTMLSageTooltipElement extends Components.SageTooltip, HTMLStencilElement {
     }
     var HTMLSageTooltipElement: {
@@ -443,6 +507,7 @@ declare global {
         "sage-tab": HTMLSageTabElement;
         "sage-tabpanel": HTMLSageTabpanelElement;
         "sage-tabs": HTMLSageTabsElement;
+        "sage-textarea": HTMLSageTextareaElement;
         "sage-tooltip": HTMLSageTooltipElement;
     }
 }
@@ -741,6 +806,64 @@ declare namespace LocalJSX {
          */
         "variant": 'primary' | 'availability' | 'filter';
     }
+    interface SageTextarea {
+        /**
+          * A unique identifier for the textarea
+         */
+        "componentId"?: string;
+        /**
+          * Indicates whether or not the textarea is disabled
+          * @defaultValue false
+         */
+        "disabled"?: boolean;
+        /**
+          * Specifies the error text and provides an error-themed treatment to the field
+         */
+        "errorMessage"?: string;
+        /**
+          * Displays a hint or description of the textarea
+         */
+        "hintMessage"?: string;
+        /**
+          * Indicates whether or not the textarea is invalid or throws an error
+          * @defaultValue false
+         */
+        "invalid"?: boolean;
+        /**
+          * Text to be displayed as the textarea label
+         */
+        "label"?: string;
+        /**
+          * Specifies the name, submitted with the form name/value pair. This value will mirror the componentId
+         */
+        "name"?: string;
+        /**
+          * Event emitted whenever the value of the textarea changes
+         */
+        "onSageTextareaInput"?: (event: SageTextareaCustomEvent<ChangeEvent>) => void;
+        /**
+          * Specifies a short hint that describes the expected value of the textarea
+         */
+        "placeholder"?: string;
+        /**
+          * Indicates whether or not the textarea is readonly
+          * @defaultValue false
+         */
+        "readonly"?: boolean;
+        /**
+          * Indicates whether or not the textarea is required
+          * @defaultValue false
+         */
+        "required"?: boolean;
+        /**
+          * Sets number of rows of text visible without needing to scroll in the textarea
+         */
+        "rows"?: number;
+        /**
+          * The value of the textarea
+         */
+        "value"?: string;
+    }
     interface SageTooltip {
         /**
           * Id used to reference the component
@@ -802,6 +925,7 @@ declare namespace LocalJSX {
         "sage-tab": SageTab;
         "sage-tabpanel": SageTabpanel;
         "sage-tabs": SageTabs;
+        "sage-textarea": SageTextarea;
         "sage-tooltip": SageTooltip;
     }
 }
@@ -820,6 +944,7 @@ declare module "@stencil/core" {
             "sage-tab": LocalJSX.SageTab & JSXBase.HTMLAttributes<HTMLSageTabElement>;
             "sage-tabpanel": LocalJSX.SageTabpanel & JSXBase.HTMLAttributes<HTMLSageTabpanelElement>;
             "sage-tabs": LocalJSX.SageTabs & JSXBase.HTMLAttributes<HTMLSageTabsElement>;
+            "sage-textarea": LocalJSX.SageTextarea & JSXBase.HTMLAttributes<HTMLSageTextareaElement>;
             "sage-tooltip": LocalJSX.SageTooltip & JSXBase.HTMLAttributes<HTMLSageTooltipElement>;
         }
     }
