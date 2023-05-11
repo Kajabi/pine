@@ -202,6 +202,53 @@ export namespace Components {
          */
         "variant": 'inline' | 'plain';
     }
+    interface SageSwitch {
+        /**
+          * Determines the input 'checked' state
+         */
+        "checked": boolean;
+        /**
+          * Identifies this input with a unique string, and associates the input with its label
+         */
+        "componentId": string;
+        /**
+          * Determines the input 'disabled' state, preventing user interaction
+         */
+        "disabled"?: boolean;
+        /**
+          * Displays message text describing an invalid state
+         */
+        "errorMessage"?: string;
+        /**
+          * Displays help text for additional description of an input
+         */
+        "helperMessage": string;
+        /**
+          * Determines the input 'invalid' state, signifying an error is present
+         */
+        "invalid"?: boolean;
+        /**
+          * Displays text to describe the input
+         */
+        "label": string;
+        /**
+          * Identifies form data and unifies a group of radio inputs for toggling a single property/value
+         */
+        "name": string;
+        /**
+          * Determines the 'required' state of the input
+         */
+        "required"?: boolean;
+        /**
+          * Specifies the underlying input element type
+          * @defaultValue 'checkbox'
+         */
+        "type": 'checkbox' | 'radio';
+        /**
+          * Provides input with a string submitted in form data, and can be used to distinguish radio inputs
+         */
+        "value": string;
+    }
     interface SageTab {
         "index": number;
         /**
@@ -294,6 +341,10 @@ export interface SageInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSageInputElement;
 }
+export interface SageSwitchCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSageSwitchElement;
+}
 export interface SageTabCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSageTabElement;
@@ -320,7 +371,7 @@ declare global {
     var HTMLSageCheckboxElement: {
         prototype: HTMLSageCheckboxElement;
         new (): HTMLSageCheckboxElement;
-    }
+    };
     interface HTMLSageDividerElement extends Components.SageDivider, HTMLStencilElement {
     }
     var HTMLSageDividerElement: {
@@ -344,6 +395,12 @@ declare global {
     var HTMLSageLinkElement: {
         prototype: HTMLSageLinkElement;
         new (): HTMLSageLinkElement;
+    };
+    interface HTMLSageSwitchElement extends Components.SageSwitch, HTMLStencilElement {
+    }
+    var HTMLSageSwitchElement: {
+        prototype: HTMLSageSwitchElement;
+        new (): HTMLSageSwitchElement;
     };
     interface HTMLSageTabElement extends Components.SageTab, HTMLStencilElement {
     }
@@ -377,6 +434,7 @@ declare global {
         "sage-image": HTMLSageImageElement;
         "sage-input": HTMLSageInputElement;
         "sage-link": HTMLSageLinkElement;
+        "sage-switch": HTMLSageSwitchElement;
         "sage-tab": HTMLSageTabElement;
         "sage-tabpanel": HTMLSageTabpanelElement;
         "sage-tabs": HTMLSageTabsElement;
@@ -588,6 +646,57 @@ declare namespace LocalJSX {
          */
         "variant"?: 'inline' | 'plain';
     }
+    interface SageSwitch {
+        /**
+          * Determines the input 'checked' state
+         */
+        "checked"?: boolean;
+        /**
+          * Identifies this input with a unique string, and associates the input with its label
+         */
+        "componentId": string;
+        /**
+          * Determines the input 'disabled' state, preventing user interaction
+         */
+        "disabled"?: boolean;
+        /**
+          * Displays message text describing an invalid state
+         */
+        "errorMessage"?: string;
+        /**
+          * Displays help text for additional description of an input
+         */
+        "helperMessage"?: string;
+        /**
+          * Determines the input 'invalid' state, signifying an error is present
+         */
+        "invalid"?: boolean;
+        /**
+          * Displays text to describe the input
+         */
+        "label": string;
+        /**
+          * Identifies form data and unifies a group of radio inputs for toggling a single property/value
+         */
+        "name"?: string;
+        /**
+          * Emits an event on input change
+         */
+        "onSageSwitchChange"?: (event: SageSwitchCustomEvent<InputEvent>) => void;
+        /**
+          * Determines the 'required' state of the input
+         */
+        "required"?: boolean;
+        /**
+          * Specifies the underlying input element type
+          * @defaultValue 'checkbox'
+         */
+        "type"?: 'checkbox' | 'radio';
+        /**
+          * Provides input with a string submitted in form data, and can be used to distinguish radio inputs
+         */
+        "value"?: string;
+    }
     interface SageTab {
         "index"?: number;
         /**
@@ -680,6 +789,7 @@ declare namespace LocalJSX {
         "sage-image": SageImage;
         "sage-input": SageInput;
         "sage-link": SageLink;
+        "sage-switch": SageSwitch;
         "sage-tab": SageTab;
         "sage-tabpanel": SageTabpanel;
         "sage-tabs": SageTabs;
@@ -697,6 +807,7 @@ declare module "@stencil/core" {
             "sage-image": LocalJSX.SageImage & JSXBase.HTMLAttributes<HTMLSageImageElement>;
             "sage-input": LocalJSX.SageInput & JSXBase.HTMLAttributes<HTMLSageInputElement>;
             "sage-link": LocalJSX.SageLink & JSXBase.HTMLAttributes<HTMLSageLinkElement>;
+            "sage-switch": LocalJSX.SageSwitch & JSXBase.HTMLAttributes<HTMLSageSwitchElement>;
             "sage-tab": LocalJSX.SageTab & JSXBase.HTMLAttributes<HTMLSageTabElement>;
             "sage-tabpanel": LocalJSX.SageTabpanel & JSXBase.HTMLAttributes<HTMLSageTabpanelElement>;
             "sage-tabs": LocalJSX.SageTabs & JSXBase.HTMLAttributes<HTMLSageTabsElement>;

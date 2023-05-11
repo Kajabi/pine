@@ -1,0 +1,126 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+import * as stories from './sage-switch.stories.js';
+
+<Meta
+  title="components/Switch"
+  component="sage-switch"
+  argTypes={extractArgTypes('sage-switch')}
+  args={{
+    disabled: false,
+    required: false,
+  }}
+/>
+
+# Switch
+
+Checkbox or radio component styled to appear as a toggle.
+
+## Guidelines
+
+### Usage
+
+- Radio Switches require a shared `name` for grouping.
+- Specify a unique `component-id` and `value` for **each** Radio variant. This will ensure the label and radio group selection (respectively) are correctly identified.
+- Use caution when enabling both `checked` and `disabled` on a control. Clearly describe why this item cannot be unselected.
+- `sageSwitchChange` is a custom event emitted on input change. View the browser console on this page for an example.
+
+#### Checkbox or Radio?
+
+When only one Switch is needed for users to turn on/off a value, use a `checkbox`. [From MDN:](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio)
+  > Note: Checkboxes are similar to radio buttons, but with an important distinction: radio buttons are designed for selecting one value out of a set, whereas checkboxes let you turn individual values on and off. Where multiple controls exist, radio buttons allow one to be selected out of them all, whereas checkboxes allow multiple values to be selected.
+
+### Accessibility
+
+- The component will [append `aria-describedby` to the input](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-describedby) when an `error-message` is included.
+- With screen readers, the `error-message` using `aria-describedby` will be read *after* the label. Consider reading the combined error message and label out loud to ensure instructions are clear to the user.
+
+## Properties
+
+<ArgsTable of="sage-switch" />
+
+## Variants
+
+### Checkbox (Default)
+
+The default switch style uses a checkbox input.
+
+<Story story={stories.Default} />
+
+<Canvas>
+  <sage-switch
+    component-id="sage-switch-default-example"
+    label="Default Switch"
+    name="sage-switch-default"
+    type="checkbox"
+  />
+</Canvas>
+
+
+### Radio
+
+Renders a switch using a radio button input. Just like a [standard radio button](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio), toggling a single value on/off requires (at minimum) a pair of inputs to represent each state.
+
+<Story story={stories.Radio} />
+
+<Canvas>
+  <sage-switch
+    component-id="sage-switch-radio-example"
+    label="Radio Switch"
+    name="sage-switch-radio"
+    type="radio"
+    value="sage-switch-radio"
+  />
+</Canvas>
+
+### Disabled
+
+Prevents user interaction on the input.
+
+<Story story={stories.Disabled} />
+
+<Canvas>
+  <sage-switch
+    component-id="sage-switch-disabled-example"
+    disabled="true"
+    label="Can't touch this"
+    name="sage-switch-disabled"
+    type="checkbox"
+  />
+</Canvas>
+
+### Helper message
+
+Displays additional descriptive text underneath the main label.
+
+<Story story={stories.HelperMessage} />
+
+<Canvas>
+  <sage-switch
+    component-id="sage-switch-helper-example"
+    helper-message="Save my login details for next time."
+    label="Remember me"
+    name="sage-switch-helper"
+    type="checkbox"
+  />
+</Canvas>
+
+### Invalid state
+
+An optional error message can be displayed for additional instructions, displayed independently from the helper message.
+
+<Story story={stories.Invalid} />
+
+<Canvas>
+  <sage-switch
+    component-id="sage-switch-invalid-example"
+    error-message="Terms and conditions must be accepted to continue"
+    invalid="true"
+    label="I agree to the terms and conditions"
+    name="sage-switch-invalid"
+    required="true"
+    type="checkbox"
+  />
+</Canvas>
