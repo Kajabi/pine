@@ -39,19 +39,19 @@ export class SageTooltip {
 
   /**
    * Determines whether or not the tooltip has an arrow
-   * * @defaultValue true
+   * @defaultValue true
    */
   @Prop() hasArrow? = true;
 
   /**
    * Enable this option when using the content slot
-   * * @defaultValue false
+   * @defaultValue false
    */
   @Prop() htmlContent = false;
 
   /**
    * Determines the preferred position of the tooltip
-   * * @defaultValue "right"
+   * @defaultValue "right"
    */
   @Prop({ reflect: true }) placement:
     'top'
