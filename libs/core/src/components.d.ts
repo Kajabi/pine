@@ -298,6 +298,7 @@ export namespace Components {
         "content": string;
         /**
           * Determines whether or not the tooltip has an arrow
+          * @defaultValue true
          */
         "hasArrow"?: boolean;
         /**
@@ -306,14 +307,17 @@ export namespace Components {
         "hideTooltip": () => Promise<void>;
         /**
           * Enable this option when using the content slot
+          * @defaultValue false
          */
-        "htmlContent"?: boolean;
+        "htmlContent": boolean;
         /**
           * Determines whether or not the tooltip is visible
+          * @defaultValue false
          */
         "opened": boolean;
         /**
-          * Determines the preferred position of the tooltip * @defaultValue "right"
+          * Determines the preferred position of the tooltip
+          * @defaultValue "right"
          */
         "placement": 'top'
     | 'top-start'
@@ -747,10 +751,12 @@ declare namespace LocalJSX {
         "content"?: string;
         /**
           * Determines whether or not the tooltip has an arrow
+          * @defaultValue true
          */
         "hasArrow"?: boolean;
         /**
           * Enable this option when using the content slot
+          * @defaultValue false
          */
         "htmlContent"?: boolean;
         /**
@@ -763,10 +769,12 @@ declare namespace LocalJSX {
         "onSageTooltipShow"?: (event: SageTooltipCustomEvent<any>) => void;
         /**
           * Determines whether or not the tooltip is visible
+          * @defaultValue false
          */
         "opened"?: boolean;
         /**
-          * Determines the preferred position of the tooltip * @defaultValue "right"
+          * Determines the preferred position of the tooltip
+          * @defaultValue "right"
          */
         "placement"?: 'top'
     | 'top-start'
