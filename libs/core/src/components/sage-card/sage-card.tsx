@@ -43,9 +43,11 @@ export class SageCard {
   }
 
   render() {
-    const style = this.bgColor ? { backgroundColor: this.bgColor } : {};
     return (
-      <Host class={this.classNames()} style={style}>
+      <Host
+        class={ this.classNames() }
+        style={ this.bgColor ? { backgroundColor: this.bgColor } : {} }
+      >
         <slot></slot>
       </Host>
     );
