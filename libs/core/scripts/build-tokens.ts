@@ -18,7 +18,7 @@ const build = (data: object) => {
 
 	try {
 		Object.keys(data).map((cssPropertyName) => {
-			const cssVariables = tokensToCss(tokens[cssPropertyName], cssPropertyName, `--${cssPropertyName}`, ).replaceAll('', '');
+			const cssVariables = tokensToCss(data[cssPropertyName], cssPropertyName, `--${cssPropertyName}`, ).replaceAll('', '');
 			const cssClass = `:root {\n${cssVariables.replaceAll("--", "  --sage-")}}\n`
 			saveTokens(cssPropertyName, cssClass)
 		})
@@ -166,4 +166,4 @@ const tokensToCss = (tokens: object, cssPropertyName, base = `-`, prevBase = '')
 		return css
   }, ``);
 
-build(tokens);
+build(tokens['core']);
