@@ -7,7 +7,7 @@ import { Component, Host, h, Prop } from '@stencil/core';
 })
 export class SageCard {
   /**
-  * Determines the background color of the card.
+  * Sets a background color on the card.
   */
   @Prop() bgColor: string;
 
@@ -24,7 +24,7 @@ export class SageCard {
   /**
   * Determines the shadow size for the card.
   */
-  @Prop() shadow: 'sm' | 'md' | 'lg' | 'none' = 'none';
+  @Prop() shadow: 'sm' | 'md' | 'lg' = null;
 
   private classNames() {
     const classNames = ['sage-card'];

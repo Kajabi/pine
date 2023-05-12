@@ -9,7 +9,7 @@ describe('sage-card', () => {
     });
 
     expect(page.root).toEqualHtml(`
-    <sage-card class="sage-card has-border sage-card--padding-md sage-card--shadow-none">
+    <sage-card class="sage-card has-border sage-card--padding-md">
         <mock:shadow-root>
           <slot></slot>
         </mock:shadow-root>
@@ -24,7 +24,7 @@ describe('sage-card', () => {
     });
 
     expect(page.root).toEqualHtml(`
-    <sage-card padding="sm" class="sage-card has-border sage-card--padding-sm sage-card--shadow-none">
+    <sage-card padding="sm" class="sage-card has-border sage-card--padding-sm">
       <mock:shadow-root>
         <slot></slot>
       </mock:shadow-root>
@@ -39,7 +39,7 @@ describe('sage-card', () => {
     });
 
     expect(page.root).toEqualHtml(`
-    <sage-card border="false" class="sage-card sage-card--padding-md sage-card--shadow-none">
+    <sage-card border="false" class="sage-card sage-card--padding-md">
       <mock:shadow-root>
         <slot></slot>
       </mock:shadow-root>
@@ -69,7 +69,7 @@ describe('sage-card', () => {
     });
 
     expect(page.root).toEqualHtml(`
-    <sage-card bg-color="#CCCCCC" border="false" class="sage-card sage-card--padding-md sage-card--shadow-none" style="background-color: #CCCCCC;">
+    <sage-card bg-color="#CCCCCC" border="false" class="sage-card sage-card--padding-md" style="background-color: #CCCCCC;">
       <mock:shadow-root>
         <slot></slot>
       </mock:shadow-root>

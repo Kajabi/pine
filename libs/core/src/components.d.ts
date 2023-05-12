@@ -51,7 +51,7 @@ export namespace Components {
     }
     interface SageCard {
         /**
-          * Determines the background color of the card.
+          * Sets a background color on the card.
          */
         "bgColor": string;
         /**
@@ -65,7 +65,7 @@ export namespace Components {
         /**
           * Determines the shadow size for the card.
          */
-        "shadow": 'sm' | 'md' | 'lg' | 'none';
+        "shadow": 'sm' | 'md' | 'lg';
     }
     interface SageCheckbox {
         /**
@@ -618,7 +618,7 @@ declare namespace LocalJSX {
     }
     interface SageCard {
         /**
-          * Determines the background color of the card.
+          * Sets a background color on the card.
          */
         "bgColor"?: string;
         /**
@@ -632,7 +632,7 @@ declare namespace LocalJSX {
         /**
           * Determines the shadow size for the card.
          */
-        "shadow"?: 'sm' | 'md' | 'lg' | 'none';
+        "shadow"?: 'sm' | 'md' | 'lg';
     }
     interface SageCheckbox {
         /**
