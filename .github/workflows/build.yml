@@ -14,10 +14,11 @@ concurrency:
 
 jobs:
   build-icons:
+
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [16, 18]
+        node: ${{ fromJSON(vars.NODE_VERSIONS) }}
 
     steps:
       - uses: actions/checkout@v3
@@ -32,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [16, 18]
+        node: ${{ fromJSON(vars.NODE_VERSIONS) }}
 
     steps:
       - uses: actions/checkout@v3
@@ -45,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [16, 18]
+        node: ${{ fromJSON(vars.NODE_VERSIONS) }}
 
     steps:
       - uses: actions/checkout@v3
@@ -58,7 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [16, 18]
+        node: ${{ fromJSON(vars.NODE_VERSIONS) }}
 
     steps:
       - uses: actions/checkout@v3
