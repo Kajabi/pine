@@ -44,9 +44,11 @@ export class SageCard {
 
   private customBackground() {
     const style = {};
+
     if (this.bgColor) {
       style['--background-custom'] = this.bgColor;
     }
+
     return style;
   }
 
