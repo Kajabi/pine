@@ -1,0 +1,87 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+import { html, render } from 'lit-html';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+import * as stories from './sage-tooltip.stories';
+
+<Meta
+  title="components/Tooltip"
+  component="sage-tooltip"
+  argTypes={extractArgTypes('sage-tooltip')}
+/>
+
+# Tooltip
+Tooltips display helpful popup text when users hover over or keyboard focus on an element.
+
+## Guidelines
+### Usage
+#### When to use
+- To describe icon-only buttons
+- When adding more context or explanation to an element is helpful, but not essential
+
+#### When not to use
+- Do not use a tooltip when information is essential to task completion.
+That information should remain visible.
+
+## Properties
+
+<ArgsTable of="sage-tooltip" />
+
+## Variants
+### Trigger
+Whether your trigger is text or an HTML element, it will be placed in the default slot between the opening and closing tags.
+
+<Story story={stories.Default} />
+
+<Canvas>
+  <sage-tooltip content="this is tooltip content" has-arrow="true" placement="bottom-start">
+    text
+  </sage-tooltip>
+  <sage-tooltip content="this is tooltip content" has-arrow="true" placement="right-start">
+    <sage-button variant="secondary">Button</sage-button>
+  </sage-tooltip>
+</Canvas>
+
+### Content
+#### Text Content
+Text-based content is generated using the `content` prop. Use this option only when the
+tooltip content is expected to be a string.
+
+<Canvas>
+  <sage-tooltip content="this is tooltip content" has-arrow="true" placement="right">text</sage-tooltip>
+</Canvas>
+
+#### HTML Element Content
+Tooltip content may contain HTML elements. In these cases,
+enable the `htmlContent` property and provide your element in the `content` slot.
+
+<Story story={stories.HTMLContent} />
+
+<Canvas>
+  <sage-tooltip has-arrow="true" placement="right">
+    text
+    <div slot="content">
+      <p>this is s a sentence in a tooltip.</p>
+      <p>this is s a sentence in a tooltip.</p>
+    </div>
+  </sage-tooltip>
+</Canvas>
+
+### Positioning
+Using the placement prop you can adjust where your tooltip will be displayed.
+
+<Story story={stories.Positioning} />
+
+### Arrow
+By default the arrow is visible but it can be hidden by disabling it when `has-arrow` is `false`.
+
+<Story story={stories.NoArrow} />
+
+<Canvas>
+  <sage-tooltip content="this is tooltip content" has-arrow="false" placement="right">text</sage-tooltip>
+</Canvas>
+
+## Additional Resources
+
+[W3 Aria Tooltip Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/)

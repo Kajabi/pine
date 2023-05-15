@@ -48,6 +48,59 @@ export namespace Components {
          */
         "variant": 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
     }
+    interface SageCheckbox {
+        /**
+          * It determines whether or not the checkbox is checked.
+         */
+        "checked": boolean;
+        /**
+          * String used for checkbox `id` attribute and label `for` attribute.
+         */
+        "componentId": string;
+        /**
+          * It determines whether or not the checkbox is disabled.
+         */
+        "disabled": boolean;
+        /**
+          * String used for helper message below checkbox.
+         */
+        "helperMessage": string;
+        /**
+          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
+         */
+        "indeterminate": boolean;
+        /**
+          * It determines whether or not the checkbox is invalid.
+         */
+        "invalid": boolean;
+        /**
+          * String used for label text next to checkbox.
+         */
+        "label": string;
+        /**
+          * String used for checkbox `name` attribute.
+         */
+        "name": string;
+        /**
+          * It determines whether or not the checkbox is required.
+         */
+        "required": boolean;
+        /**
+          * The value of the checkbox that is submitted with a form.
+         */
+        "value": string;
+    }
+    interface SageDivider {
+        /**
+          * Adds offset margin/padding to expand the width (horizontal) or the height (vertical) of divider.
+         */
+        "offset": 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+        /**
+          * Sets divider to display vertically
+          * @defaultValue false
+         */
+        "vertical": boolean;
+    }
     interface SageImage {
         /**
           * The image's alt tag. If none is provided, it will default to an empty string.
@@ -149,6 +202,53 @@ export namespace Components {
          */
         "variant": 'inline' | 'plain';
     }
+    interface SageSwitch {
+        /**
+          * Determines the input 'checked' state
+         */
+        "checked": boolean;
+        /**
+          * Identifies this input with a unique string, and associates the input with its label
+         */
+        "componentId": string;
+        /**
+          * Determines the input 'disabled' state, preventing user interaction
+         */
+        "disabled"?: boolean;
+        /**
+          * Displays message text describing an invalid state
+         */
+        "errorMessage"?: string;
+        /**
+          * Displays help text for additional description of an input
+         */
+        "helperMessage": string;
+        /**
+          * Determines the input 'invalid' state, signifying an error is present
+         */
+        "invalid"?: boolean;
+        /**
+          * Displays text to describe the input
+         */
+        "label": string;
+        /**
+          * Identifies form data and unifies a group of radio inputs for toggling a single property/value
+         */
+        "name": string;
+        /**
+          * Determines the 'required' state of the input
+         */
+        "required"?: boolean;
+        /**
+          * Specifies the underlying input element type
+          * @defaultValue 'checkbox'
+         */
+        "type": 'checkbox' | 'radio';
+        /**
+          * Provides input with a string submitted in form data, and can be used to distinguish radio inputs
+         */
+        "value": string;
+    }
     interface SageTab {
         "index": number;
         /**
@@ -187,14 +287,75 @@ export namespace Components {
          */
         "variant": 'primary' | 'availability' | 'filter';
     }
+    interface SageTooltip {
+        /**
+          * Id used to reference the component
+         */
+        "componentId": string;
+        /**
+          * Content for the tooltip. If HTML is required, use the content slot
+         */
+        "content": string;
+        /**
+          * Determines whether or not the tooltip has an arrow
+          * @defaultValue true
+         */
+        "hasArrow"?: boolean;
+        /**
+          * Hides the tooltip by disabling the opened property
+         */
+        "hideTooltip": () => Promise<void>;
+        /**
+          * Enable this option when using the content slot
+          * @defaultValue false
+         */
+        "htmlContent": boolean;
+        /**
+          * Determines whether or not the tooltip is visible
+          * @defaultValue false
+         */
+        "opened": boolean;
+        /**
+          * Determines the preferred position of the tooltip
+          * @defaultValue "right"
+         */
+        "placement": 'top'
+    | 'top-start'
+    | 'top-end'
+    | 'right'
+    | 'right-start'
+    | 'right-end'
+    | 'bottom'
+    | 'bottom-start'
+    | 'bottom-end'
+    | 'left'
+    | 'left-start'
+    | 'left-end';
+        /**
+          * Shows the tooltip by enabling the opened property
+         */
+        "showTooltip": () => Promise<void>;
+    }
+}
+export interface SageCheckboxCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSageCheckboxElement;
 }
 export interface SageInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSageInputElement;
 }
+export interface SageSwitchCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSageSwitchElement;
+}
 export interface SageTabCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSageTabElement;
+}
+export interface SageTooltipCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSageTooltipElement;
 }
 declare global {
     interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
@@ -208,6 +369,18 @@ declare global {
     var HTMLSageButtonElement: {
         prototype: HTMLSageButtonElement;
         new (): HTMLSageButtonElement;
+    };
+    interface HTMLSageCheckboxElement extends Components.SageCheckbox, HTMLStencilElement {
+    }
+    var HTMLSageCheckboxElement: {
+        prototype: HTMLSageCheckboxElement;
+        new (): HTMLSageCheckboxElement;
+    };
+    interface HTMLSageDividerElement extends Components.SageDivider, HTMLStencilElement {
+    }
+    var HTMLSageDividerElement: {
+        prototype: HTMLSageDividerElement;
+        new (): HTMLSageDividerElement;
     };
     interface HTMLSageImageElement extends Components.SageImage, HTMLStencilElement {
     }
@@ -227,6 +400,12 @@ declare global {
         prototype: HTMLSageLinkElement;
         new (): HTMLSageLinkElement;
     };
+    interface HTMLSageSwitchElement extends Components.SageSwitch, HTMLStencilElement {
+    }
+    var HTMLSageSwitchElement: {
+        prototype: HTMLSageSwitchElement;
+        new (): HTMLSageSwitchElement;
+    };
     interface HTMLSageTabElement extends Components.SageTab, HTMLStencilElement {
     }
     var HTMLSageTabElement: {
@@ -245,15 +424,25 @@ declare global {
         prototype: HTMLSageTabsElement;
         new (): HTMLSageTabsElement;
     };
+    interface HTMLSageTooltipElement extends Components.SageTooltip, HTMLStencilElement {
+    }
+    var HTMLSageTooltipElement: {
+        prototype: HTMLSageTooltipElement;
+        new (): HTMLSageTooltipElement;
+    };
     interface HTMLElementTagNameMap {
         "my-component": HTMLMyComponentElement;
         "sage-button": HTMLSageButtonElement;
+        "sage-checkbox": HTMLSageCheckboxElement;
+        "sage-divider": HTMLSageDividerElement;
         "sage-image": HTMLSageImageElement;
         "sage-input": HTMLSageInputElement;
         "sage-link": HTMLSageLinkElement;
+        "sage-switch": HTMLSageSwitchElement;
         "sage-tab": HTMLSageTabElement;
         "sage-tabpanel": HTMLSageTabpanelElement;
         "sage-tabs": HTMLSageTabsElement;
+        "sage-tooltip": HTMLSageTooltipElement;
     }
 }
 declare namespace LocalJSX {
@@ -298,6 +487,63 @@ declare namespace LocalJSX {
           * Sets button variant styles as outlined in Figma documentation
          */
         "variant"?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
+    }
+    interface SageCheckbox {
+        /**
+          * It determines whether or not the checkbox is checked.
+         */
+        "checked"?: boolean;
+        /**
+          * String used for checkbox `id` attribute and label `for` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * It determines whether or not the checkbox is disabled.
+         */
+        "disabled"?: boolean;
+        /**
+          * String used for helper message below checkbox.
+         */
+        "helperMessage"?: string;
+        /**
+          * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
+         */
+        "indeterminate"?: boolean;
+        /**
+          * It determines whether or not the checkbox is invalid.
+         */
+        "invalid"?: boolean;
+        /**
+          * String used for label text next to checkbox.
+         */
+        "label"?: string;
+        /**
+          * String used for checkbox `name` attribute.
+         */
+        "name"?: string;
+        /**
+          * Emits a boolean indicating whether the checkbox is currently checked or unchecked.
+         */
+        "onSageCheckboxChange"?: (event: SageCheckboxCustomEvent<boolean>) => void;
+        /**
+          * It determines whether or not the checkbox is required.
+         */
+        "required"?: boolean;
+        /**
+          * The value of the checkbox that is submitted with a form.
+         */
+        "value"?: string;
+    }
+    interface SageDivider {
+        /**
+          * Adds offset margin/padding to expand the width (horizontal) or the height (vertical) of divider.
+         */
+        "offset"?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+        /**
+          * Sets divider to display vertically
+          * @defaultValue false
+         */
+        "vertical"?: boolean;
     }
     interface SageImage {
         /**
@@ -404,6 +650,57 @@ declare namespace LocalJSX {
          */
         "variant"?: 'inline' | 'plain';
     }
+    interface SageSwitch {
+        /**
+          * Determines the input 'checked' state
+         */
+        "checked"?: boolean;
+        /**
+          * Identifies this input with a unique string, and associates the input with its label
+         */
+        "componentId": string;
+        /**
+          * Determines the input 'disabled' state, preventing user interaction
+         */
+        "disabled"?: boolean;
+        /**
+          * Displays message text describing an invalid state
+         */
+        "errorMessage"?: string;
+        /**
+          * Displays help text for additional description of an input
+         */
+        "helperMessage"?: string;
+        /**
+          * Determines the input 'invalid' state, signifying an error is present
+         */
+        "invalid"?: boolean;
+        /**
+          * Displays text to describe the input
+         */
+        "label": string;
+        /**
+          * Identifies form data and unifies a group of radio inputs for toggling a single property/value
+         */
+        "name"?: string;
+        /**
+          * Emits an event on input change
+         */
+        "onSageSwitchChange"?: (event: SageSwitchCustomEvent<InputEvent>) => void;
+        /**
+          * Determines the 'required' state of the input
+         */
+        "required"?: boolean;
+        /**
+          * Specifies the underlying input element type
+          * @defaultValue 'checkbox'
+         */
+        "type"?: 'checkbox' | 'radio';
+        /**
+          * Provides input with a string submitted in form data, and can be used to distinguish radio inputs
+         */
+        "value"?: string;
+    }
     interface SageTab {
         "index"?: number;
         /**
@@ -443,15 +740,68 @@ declare namespace LocalJSX {
          */
         "variant": 'primary' | 'availability' | 'filter';
     }
+    interface SageTooltip {
+        /**
+          * Id used to reference the component
+         */
+        "componentId"?: string;
+        /**
+          * Content for the tooltip. If HTML is required, use the content slot
+         */
+        "content"?: string;
+        /**
+          * Determines whether or not the tooltip has an arrow
+          * @defaultValue true
+         */
+        "hasArrow"?: boolean;
+        /**
+          * Enable this option when using the content slot
+          * @defaultValue false
+         */
+        "htmlContent"?: boolean;
+        /**
+          * Emitted after a tooltip is closed
+         */
+        "onSageTooltipHide"?: (event: SageTooltipCustomEvent<any>) => void;
+        /**
+          * Emitted after a tooltip is shown
+         */
+        "onSageTooltipShow"?: (event: SageTooltipCustomEvent<any>) => void;
+        /**
+          * Determines whether or not the tooltip is visible
+          * @defaultValue false
+         */
+        "opened"?: boolean;
+        /**
+          * Determines the preferred position of the tooltip
+          * @defaultValue "right"
+         */
+        "placement"?: 'top'
+    | 'top-start'
+    | 'top-end'
+    | 'right'
+    | 'right-start'
+    | 'right-end'
+    | 'bottom'
+    | 'bottom-start'
+    | 'bottom-end'
+    | 'left'
+    | 'left-start'
+    | 'left-end';
+    }
     interface IntrinsicElements {
         "my-component": MyComponent;
         "sage-button": SageButton;
+        "sage-checkbox": SageCheckbox;
+        "sage-divider": SageDivider;
         "sage-image": SageImage;
         "sage-input": SageInput;
         "sage-link": SageLink;
+        "sage-switch": SageSwitch;
         "sage-tab": SageTab;
         "sage-tabpanel": SageTabpanel;
         "sage-tabs": SageTabs;
+        "sage-tooltip": SageTooltip;
     }
 }
 export { LocalJSX as JSX };
@@ -460,12 +810,16 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
             "sage-button": LocalJSX.SageButton & JSXBase.HTMLAttributes<HTMLSageButtonElement>;
+            "sage-checkbox": LocalJSX.SageCheckbox & JSXBase.HTMLAttributes<HTMLSageCheckboxElement>;
+            "sage-divider": LocalJSX.SageDivider & JSXBase.HTMLAttributes<HTMLSageDividerElement>;
             "sage-image": LocalJSX.SageImage & JSXBase.HTMLAttributes<HTMLSageImageElement>;
             "sage-input": LocalJSX.SageInput & JSXBase.HTMLAttributes<HTMLSageInputElement>;
             "sage-link": LocalJSX.SageLink & JSXBase.HTMLAttributes<HTMLSageLinkElement>;
+            "sage-switch": LocalJSX.SageSwitch & JSXBase.HTMLAttributes<HTMLSageSwitchElement>;
             "sage-tab": LocalJSX.SageTab & JSXBase.HTMLAttributes<HTMLSageTabElement>;
             "sage-tabpanel": LocalJSX.SageTabpanel & JSXBase.HTMLAttributes<HTMLSageTabpanelElement>;
             "sage-tabs": LocalJSX.SageTabs & JSXBase.HTMLAttributes<HTMLSageTabsElement>;
+            "sage-tooltip": LocalJSX.SageTooltip & JSXBase.HTMLAttributes<HTMLSageTooltipElement>;
         }
     }
 }

@@ -103,6 +103,11 @@ export type IconFileDetail = {
 export interface SvgDiffResult {
 
   /**
+   * The name of the Previous file
+   */
+  previousFileName?: string;
+
+  /**
    * The name of the file
    */
   filename: string;

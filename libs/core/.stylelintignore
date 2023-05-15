@@ -1,6 +1,3 @@
 node_modules
 
 **/*/docs.d.ts
-
-# Remove when final tokens are added
-**/tokens/_*.scss

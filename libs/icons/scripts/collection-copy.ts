@@ -14,10 +14,11 @@ const collectionCopy = async (rootDir: string) => {
 
   // don't want to copy the test svgs to the collection either
   await fs.remove(join(rootDir, 'dist', 'collection', 'components', 'test'));
+  await fs.remove(join(rootDir, 'dist', 'svg'));
 
-  const cePackaageDir = join(rootDir, 'components');
-  const cePackageJsonPath = join(cePackaageDir, 'package.json');
-  const ceCjsPath = join(cePackaageDir, 'index.cjs.js');
+  const cePackageDir = join(rootDir, 'components');
+  const cePackageJsonPath = join(cePackageDir, 'package.json');
+  const ceCjsPath = join(cePackageDir, 'index.cjs.js');
 
   const emptyCjs = `/*empty cjs*/`;
   await fs.writeFile(ceCjsPath, emptyCjs);

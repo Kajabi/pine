@@ -42,6 +42,7 @@ const run = async (rootDir: string) => {
     createJsonIconList(data.icons, config.outputPath);
 
     const git = gitClient();
+    await git.add(srcSvgBasePath);
 
     const statusResults: StatusResult = await git.status([srcSvgBasePath]);
     const filesChanged = statusResults.files;
@@ -50,6 +51,10 @@ const run = async (rootDir: string) => {
       return;
 
     await createChangelogHTML(statusResults);
+
+    // restore staged files in case of failure
+    const { exec } = require('node:child_process')
+    exec(`git restore --staged ${srcSvgBasePath}`)
   }
   catch (e) {
     log(error(e));
@@ -65,8 +70,10 @@ const run = async (rootDir: string) => {
  * @param filePath - relattive path to the file
  * @returns - SvgDiffResult
  */
-const buildBeforeAndAfterSvg = async (status: string, filePath: string):  Promise<SvgDiffResult> => {
+const buildBeforeAndAfterSvg = async (status: string, filePath: string, previousFilePath: string = null):  Promise<SvgDiffResult> => {
   const filename = path.basename(filePath);
+  const previousFileName = previousFilePath && path.basename(previousFilePath);
+
   let beforeSvg = null;
   let afterSvg = null;
 
@@ -75,10 +82,15 @@ const buildBeforeAndAfterSvg = async (status: string, filePath: string):  Promis
       beforeSvg = await getFileContentsFromGit(filePath);
       break;
 
-      case 'M':
+    case 'M':
       beforeSvg = await getFileContentsFromGit(filePath);
       afterSvg = await getFileContentsFromDisk(filename)
       break;
+
+    case 'R':
+        beforeSvg = await getFileContentsFromGit(previousFilePath);
+        afterSvg = await getFileContentsFromDisk(filename)
+        break;
 
     case '':
       afterSvg = await getFileContentsFromDisk(filename);
@@ -87,6 +99,7 @@ const buildBeforeAndAfterSvg = async (status: string, filePath: string):  Promis
 
 
   return {
+    previousFileName,
     filename,
     status,
     before: beforeSvg,
@@ -103,7 +116,7 @@ const buildBeforeAndAfterSvg = async (status: string, filePath: string):  Promis
  */
 const buildHTMLSection = (sectionName: string, data: Array<SvgDiffResult>) => {
   const content = `<h2>${sectionName}</h2>`
-  const table: string = buildHTMLTable(data);
+  const table: string = buildHTMLTable(data, sectionName == 'Renamed');
 
   return [content, table].join('\n')
 }
@@ -114,8 +127,9 @@ const buildHTMLSection = (sectionName: string, data: Array<SvgDiffResult>) => {
  * @param data  an array of {@link SvgDiffResult}
  * @returns - The html table markup
  */
-const buildHTMLTable = (data: Array<SvgDiffResult>) => {
+const buildHTMLTable = (data: Array<SvgDiffResult>, isRenamed = false) => {
   const tableRows = data.map((diff) => `<tr>
+  ${ isRenamed ? `<td>${diff.previousFileName}</td>` : ''}
   <td>${diff.filename}</td>
   <td>${diff.before || ''}</td>
   <td>${diff.after || ''}</td>
@@ -128,7 +142,8 @@ const buildHTMLTable = (data: Array<SvgDiffResult>) => {
   const table = `<table>
   <thead>
     <tr>
-      <td>Filename</td>
+      ${ isRenamed ? `<td>Previous Filename</td>` : ''}
+      <td>${ isRenamed ? `New Filename</td>` : 'FileName'}</td>
       <td>Before</td>
       <td>After</td>
     </tr>
@@ -173,7 +188,7 @@ const client = (apiToken) => {
  * @returns The results from SimpleGit.status()
  */
 const createChangelogHTML = async (statusResults: StatusResult) => {
-  const {modified, created, deleted} =  await processStatusResults(statusResults);
+  const {modified, created, deleted, renamed} =  await processStatusResults(statusResults);
 
   // Adding or Deleting will be Major version bump
   // Modifying will be a MINOR version bump
@@ -182,8 +197,9 @@ const createChangelogHTML = async (statusResults: StatusResult) => {
     .replace(/{{date}}/g, strDate)
     .replace(/{{modified}}/g, statusResults.modified.length.toString())
     .replace(/{{deleted}}/g, statusResults.deleted.length.toString())
-    .replace(/{{created}}/g, statusResults.not_added.length.toString())
-    .replace(/{{content}}/g, [created, modified, deleted].join('\n'));
+    .replace(/{{created}}/g, statusResults.created.length.toString())
+    .replace(/{{renamed}}/g, statusResults.renamed.length.toString())
+    .replace(/{{content}}/g, [created, modified, deleted, renamed].join('\n'));
 
   fs.writeFileSync(path.join(baseDir, 'changelogs', `${strDate}-changelog.html`), html);
 
@@ -571,12 +587,13 @@ const processData = async (rootDir: string, config: FigmaIconConfig) => {
  * @returns object - string html data for modifed, created, deleted
  */
 const processStatusResults = async (results: StatusResult) => {
-  const { modified: m, not_added: n, deleted: d } = results;
-  let not_added, deleted, modified;
+  const { modified: m, created: n, deleted: d, renamed: r } = results;
+
+  let created, deleted, modified, renamed
 
   if (n.length > 0) {
-    not_added = await Promise.all(n.map((path) => { return buildBeforeAndAfterSvg('', path)}));
-    not_added = buildHTMLSection('Added', not_added);
+    created = await Promise.all(n.map((path) => { return buildBeforeAndAfterSvg('', path)}));
+    created = buildHTMLSection('Added', created);
   }
 
   if (d.length > 0) {
@@ -589,7 +606,12 @@ const processStatusResults = async (results: StatusResult) => {
     modified = buildHTMLSection('Modified', modified);
   }
 
-  return { created: not_added, deleted, modified }
+  if (r.length > 0) {
+    renamed = await Promise.all(r.map((path) => ( buildBeforeAndAfterSvg('R', path.to, path.from))));
+    renamed = buildHTMLSection('Renamed', renamed);
+  }
+
+  return { created, deleted, modified, renamed }
 }
 
 /***************************/
