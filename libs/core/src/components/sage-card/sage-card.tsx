@@ -7,23 +7,23 @@ import { Component, Host, h, Prop } from '@stencil/core';
 })
 export class SageCard {
   /**
-  * Sets a background color on the card.
-  */
+   * Sets a background color on the card.
+   */
   @Prop() bgColor: string;
 
   /**
-  * Determines whether the card should have a border.
-  */
+   * Determines whether the card should have a border.
+   */
   @Prop() border = true;
 
   /**
-  * Sets the padding size for the card.
-  */
+   * Sets the padding size for the card.
+   */
   @Prop() padding: 'sm' | 'md' | 'none' = 'md';
 
   /**
-  * Determines the shadow size for the card.
-  */
+   * Sets the shadow size for the card.
+   */
   @Prop() shadow: 'sm' | 'md' | 'lg' = null;
 
   private classNames() {
@@ -42,12 +42,17 @@ export class SageCard {
     return classNames.join('  ');
   }
 
+  private customBackground() {
+    const style = {};
+    if (this.bgColor) {
+      style['--background-custom'] = this.bgColor;
+    }
+    return style;
+  }
+
   render() {
     return (
-      <Host
-        class={ this.classNames() }
-        style={ this.bgColor ? { backgroundColor: this.bgColor } : {} }
-      >
+      <Host class={this.classNames()} style={this.customBackground()}>
         <slot></slot>
       </Host>
     );

@@ -8,7 +8,7 @@
   --box-shadow-md: var(--sage-box-shadow-md);
   --box-shadow-lg: var(--sage-box-shadow-lg);
 
-  background: var(--background);
+  background: var(--background-custom, var(--background));
   border-radius: var(--border-radius);
   display: block;
   position: relative;

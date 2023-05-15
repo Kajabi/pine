@@ -69,7 +69,7 @@ describe('sage-card', () => {
     });
 
     expect(page.root).toEqualHtml(`
-    <sage-card bg-color="#CCCCCC" border="false" class="sage-card sage-card--padding-md" style="background-color: #CCCCCC;">
+    <sage-card bg-color="#CCCCCC" border="false" class="sage-card sage-card--padding-md" style="--background-custom: #CCCCCC;">
       <mock:shadow-root>
         <slot></slot>
       </mock:shadow-root>

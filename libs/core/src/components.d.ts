@@ -63,7 +63,7 @@ export namespace Components {
          */
         "padding": 'sm' | 'md' | 'none';
         /**
-          * Determines the shadow size for the card.
+          * Sets the shadow size for the card.
          */
         "shadow": 'sm' | 'md' | 'lg';
     }
@@ -630,7 +630,7 @@ declare namespace LocalJSX {
          */
         "padding"?: 'sm' | 'md' | 'none';
         /**
-          * Determines the shadow size for the card.
+          * Sets the shadow size for the card.
          */
         "shadow"?: 'sm' | 'md' | 'lg';
     }
