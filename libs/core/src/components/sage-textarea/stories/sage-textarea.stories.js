@@ -11,7 +11,7 @@ const BaseTemplate = (args) => html`<sage-textarea
   readonly="${args.readonly}"
   required="${args.required}"
   rows="${args.rows}"
-  id="${args.componentId}"
+  component-id="${args.componentId}"
   value="${args.value}"
   >
 </sage-textarea>`;
@@ -79,8 +79,8 @@ Readonly.parameters = { ...defaultParameters };
 export const Hint = BaseTemplate.bind({});
 Hint.args = {
   name: 'Hint',
-  label: 'Name',
   componentId: 'uniqueIdHint',
+  label: 'Name',
   hintMessage: 'Hint'
 };
 Hint.parameters = { ...defaultParameters };

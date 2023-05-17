@@ -97,14 +97,41 @@ export class SageTextarea {
     return className;
   };
 
+  /**
+   * Create id for messaging
+   */
+  private messageId = (id: string, messageType: string) => {
+    return `${id}__${messageType}-message`;
+  };
+
+  /**
+   * Assign aria-description id to relate messages with input
+   */
+  private assignDescription = () => {
+    let relatedId = this.messageId(this.componentId, 'helper')
+
+    console.log('componentId: ', this.componentId);
+    console.log('relatedId: ', relatedId);
+    if (!this.invalid || !this.hintMessage) return;
+    if (this.invalid) relatedId = this.messageId(this.componentId, 'error');
+
+    return relatedId;
+  };
+
   render() {
     return (
       <Host
         aria-disabled={this.disabled ? 'true' : null}
       >
         <div class="sage-textarea">
-          {this.label && <label htmlFor={this.componentId}>{this.label}</label>}
+          {this.label &&
+            <label htmlFor={this.componentId}>
+              {this.label}
+            </label>
+          }
           <textarea
+            aria-describedby={this.assignDescription()}
+            aria-invalid={this.invalid ? "true" : undefined}
             class={this.textareaClassNames()}
             disabled={this.disabled}
             id={this.componentId}
@@ -115,8 +142,23 @@ export class SageTextarea {
             rows={this.rows}
             onChange={this.onTextareaInputEvent}
           >{this.value}</textarea>
-          {this.hintMessage && <p class="sage-textarea__hint-message">{this.hintMessage}</p>}
-          {this.invalid && <p class="sage-textarea__error-message">{this.errorMessage}</p>}
+          {this.hintMessage &&
+            <p
+              class="sage-textarea__hint-message"
+              id={this.messageId(this.componentId, 'helper')}
+            >
+              {this.hintMessage}
+            </p>
+          }
+          {this.invalid &&
+            <p
+              aria-live="assertive"
+              class="sage-textarea__error-message"
+              id={this.messageId(this.componentId, 'error')}
+            >
+              {this.errorMessage}
+            </p>
+          }
         </div>
       </Host>
     );
