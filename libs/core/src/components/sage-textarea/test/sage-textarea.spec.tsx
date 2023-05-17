@@ -44,7 +44,7 @@ describe('sage-textarea', () => {
         <mock:shadow-root>
           <div class="sage-textarea">
             <textarea aria-invalid="true" class="sage-textarea__field is-invalid" id="testId" name="testId"></textarea>
-            <p aria-live="assertive" class="sage-textarea__error-message" id="testId__error-message"">error</p>
+            <p aria-live="assertive" class="sage-textarea__error-message" id="testId__error-message">error</p>
           </div>
         </mock:shadow-root>
       </sage-textarea>
