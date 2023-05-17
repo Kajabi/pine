@@ -198,6 +198,38 @@ describe('sage-textarea', () => {
     `);
   });
 
+  it('renders a helper and error message and assigns aria-description to the input', async () => {
+    const {root} = await newSpecPage({
+      components: [SageTextarea],
+      html:`
+        <sage-textarea
+          component-id="textarea-with-description"
+          invalid="true"
+          label="Textarea with description"
+          hint-message="This is a helper message"
+          error-message="This is an error message">
+        </sage-textarea>
+      `
+    });
+
+    expect(root).toEqualHtml(`
+      <sage-textarea component-id="textarea-with-description" label="Textarea with description" hint-message="This is a helper message" error-message="This is an error message" invalid="true">
+        <mock:shadow-root>
+          <div class="sage-textarea">
+            <label htmlFor="textarea-with-description">Textarea with description</label>
+            <textarea aria-describedby="textarea-with-description__error-message" aria-invalid="true"  class="is-invalid sage-textarea__field" id="textarea-with-description" name="textarea-with-description"></textarea>
+            <p id="textarea-with-description__helper-message"  class="sage-textarea__hint-message">
+              This is a helper message
+            </p>
+            <p aria-live="assertive" id="textarea-with-description__error-message" class="sage-textarea__error-message">
+              This is an error message
+            </p>
+          </div>
+        </mock:shadow-root>
+      </sage-textarea>
+    `);
+  });
+
   it('updates value prop on value change', async () => {
     const page = await newSpecPage({
       components: [SageTextarea],
