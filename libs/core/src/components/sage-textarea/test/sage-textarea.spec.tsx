@@ -37,14 +37,14 @@ describe('sage-textarea', () => {
   it('renders error text', async () => {
     const {root} = await newSpecPage({
       components: [SageTextarea],
-      html: `<sage-textarea invalid="true" error-message="error"></sage-textarea>`,
+      html: `<sage-textarea component-id="testId" invalid="true" error-message="error"></sage-textarea>`,
     });
     expect(root).toEqualHtml(`
-      <sage-textarea invalid="true" error-message="error">
+      <sage-textarea component-id="testId" invalid="true" error-message="error">
         <mock:shadow-root>
           <div class="sage-textarea">
-            <textarea class="sage-textarea__field is-invalid"></textarea>
-            <p class="sage-textarea__error-message">error</p>
+            <textarea aria-invalid="true" class="sage-textarea__field is-invalid" id="testId" name="testId"></textarea>
+            <p aria-live="assertive" class="sage-textarea__error-message" id="testId__error-message"">error</p>
           </div>
         </mock:shadow-root>
       </sage-textarea>
@@ -70,14 +70,14 @@ describe('sage-textarea', () => {
   it('renders hint text', async () => {
     const {root} = await newSpecPage({
       components: [SageTextarea],
-      html: `<sage-textarea hint-message="hint"></sage-textarea>`,
+      html: `<sage-textarea component-id="testId" hint-message="hint"></sage-textarea>`,
     });
     expect(root).toEqualHtml(`
-      <sage-textarea hint-message="hint">
+      <sage-textarea component-id="testId" hint-message="hint">
         <mock:shadow-root>
           <div class="sage-textarea">
-            <textarea class="sage-textarea__field"></textarea>
-            <p class="sage-textarea__hint-message">hint</p>
+            <textarea class="sage-textarea__field" id="testId" name="testId"></textarea>
+            <p class="sage-textarea__hint-message" id="testId__helper-message">hint</p>
           </div>
         </mock:shadow-root>
       </sage-textarea>
@@ -120,10 +120,10 @@ describe('sage-textarea', () => {
   it('renders placeholder text', async () => {
     const {root} = await newSpecPage({
       components: [SageTextarea],
-      html: `<sage-textarea placeholder-message="Placeholder..."></sage-textarea>`,
+      html: `<sage-textarea placeholder="Placeholder..."></sage-textarea>`,
     });
     expect(root).toEqualHtml(`
-      <sage-textarea placeholder-message="Placeholder...">
+      <sage-textarea placeholder="Placeholder...">
         <mock:shadow-root>
           <div class="sage-textarea">
             <textarea class="sage-textarea__field" placeholder="Placeholder..."></textarea>
@@ -175,7 +175,7 @@ describe('sage-textarea', () => {
         <mock:shadow-root>
           <div class="sage-textarea">
             <label htmlFor="testId">label</label>
-            <textarea class="sage-textarea__field" id="testId"></textarea>
+            <textarea class="sage-textarea__field" id="testId" name="testId"></textarea>
           </div>
         </mock:shadow-root>
       </sage-textarea>
