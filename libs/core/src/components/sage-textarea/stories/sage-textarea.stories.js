@@ -1,6 +1,7 @@
 import { html } from 'lit-html';
 
 const BaseTemplate = (args) => html`<sage-textarea
+  component-id="${args.componentId}"
   disabled="${args.disabled}"
   error-message="${args.errorMessage}"
   hint-message="${args.hintMessage}"
@@ -11,7 +12,6 @@ const BaseTemplate = (args) => html`<sage-textarea
   readonly="${args.readonly}"
   required="${args.required}"
   rows="${args.rows}"
-  component-id="${args.componentId}"
   value="${args.value}"
   >
 </sage-textarea>`;
@@ -24,53 +24,53 @@ const defaultParameters = {
 
 export const Default = BaseTemplate.bind({});
 Default.args = {
-  name: 'Default',
+  componentId: 'uniqueIdDefault',
   label: 'Name',
-  componentId: 'uniqueIdDefault'
+  name: 'Default',
 };
 Default.parameters = { ...defaultParameters };
 
 export const Rows = BaseTemplate.bind({});
 Rows.args = {
-  name: 'Rows',
+  componentId: 'uniqueIdRows',
   label: 'Name',
+  name: 'Rows',
   rows: 4,
-  componentId: 'uniqueIdRows'
 };
 Rows.parameters = { ...defaultParameters };
 
 export const Required = BaseTemplate.bind({});
 Required.args = {
-  name: 'Required',
-  label: 'Name',
   componentId: 'uniqueIdRequired',
-  required: true
+  label: 'Name',
+  name: 'Required',
+  required: true,
 };
 Required.parameters = { ...defaultParameters };
 
 export const Placeholder = BaseTemplate.bind({});
 Placeholder.args = {
-  name: 'Placeholder',
-  label: 'Name',
   componentId: 'uniqueIdPlaceholder',
+  label: 'Name',
+  name: 'Placeholder',
   placeholder: 'Placeholder...'
 };
 Placeholder.parameters = { ...defaultParameters };
 
 export const Disabled = BaseTemplate.bind({});
 Disabled.args = {
-  name: 'Disabled',
-  label: 'Name',
   componentId: 'uniqueIdDisabled',
-  disabled: true
+  disabled: true,
+  label: 'Name',
+  name: 'Disabled',
 };
 Disabled.parameters = { ...defaultParameters };
 
 export const Readonly = BaseTemplate.bind({});
 Readonly.args = {
-  name: 'Readonly',
-  label: 'Name',
   componentId: 'uniqueIdReadonly',
+  label: 'Name',
+  name: 'Readonly',
   readonly: true,
   value: 'Readonly Value'
 };
@@ -78,20 +78,20 @@ Readonly.parameters = { ...defaultParameters };
 
 export const Hint = BaseTemplate.bind({});
 Hint.args = {
-  name: 'Hint',
   componentId: 'uniqueIdHint',
+  hintMessage: 'Hint',
   label: 'Name',
-  hintMessage: 'Hint'
+  name: 'Hint',
 };
 Hint.parameters = { ...defaultParameters };
 
 export const Error = BaseTemplate.bind({});
 Error.args = {
-  name: 'Error',
-  label: 'Name',
   componentId: 'uniqueIdError',
-  required: true,
   errorMessage: 'Error',
-  invalid: true
+  invalid: true,
+  label: 'Name',
+  name: 'Error',
+  required: true,
 };
 Error.parameters = { ...defaultParameters };

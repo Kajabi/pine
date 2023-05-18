@@ -74,7 +74,7 @@ You can also manually pass in an invalid state by setting the `invalid` property
 ### Hint Message
 Hints are used to provide context about what is expected from the users
 
-Do not use hint messages to provide examples to users, please use the `placeholder-message` property instead
+Do not use hint messages to provide examples to users, please use the `placeholder` property instead
 <Story story={stories.Hint} />
 
 <Canvas>
@@ -88,7 +88,7 @@ Do not use placeholders to provide hints to users, please use the `hint-message`
 <Story story={stories.Placeholder} />
 
 <Canvas>
-  <sage-textarea name="Placeholder" label="Name" placeholder-message="Placeholder..." component-id="uniqueIdPlaceholder"></sage-textarea>
+  <sage-textarea name="Placeholder" label="Name" placeholder="Placeholder..." component-id="uniqueIdPlaceholder"></sage-textarea>
 </Canvas>
 
 ### Readonly
