@@ -1,6 +1,6 @@
 import { Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
-import { ChangeEvent } from 'react';
 import { isRequired } from '../../utils/utils';
+import { TextareaEvent, TextareaChangeEventDetail } from './textarea-interface';
 
 
 @Component({
@@ -78,14 +78,18 @@ export class SageTextarea {
   /**
    * Event emitted whenever the value of the textarea changes
    */
-  @Event() sageTextareaChange: EventEmitter<ChangeEvent>;
-  private onTextareaInputEvent = (ev: Event) => {
+  @Event() sageTextareaChange: EventEmitter<TextareaChangeEventDetail>;
+
+
+  private onTextareaChange = (ev: Event) => {
     const textarea = ev.target as HTMLTextAreaElement;
     isRequired(textarea, this);
+
     if (textarea) {
       this.value = textarea.innerHTML;
     }
-    this.sageTextareaChange.emit();
+
+    this.sageTextareaChange.emit({value: this.value, event: ev});
   };
 
   private textareaClassNames = () => {
@@ -138,7 +142,7 @@ export class SageTextarea {
             readOnly={this.readonly}
             required={this.required}
             rows={this.rows}
-            onChange={this.onTextareaInputEvent}
+            onChange={this.onTextareaChange}
           >{this.value}</textarea>
           {this.hintMessage &&
             <p

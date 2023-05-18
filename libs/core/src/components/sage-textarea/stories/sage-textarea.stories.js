@@ -8,6 +8,7 @@ const BaseTemplate = (args) => html`<sage-textarea
   invalid="${args.invalid}"
   label="${args.label}"
   name="${args.name}"
+  onChange=${args.onChange}"
   placeholder="${args.placeholder}"
   readonly="${args.readonly}"
   required="${args.required}"
@@ -22,17 +23,27 @@ const defaultParameters = {
   },
 };
 
+const textareaEventExample = () => {
+  document.addEventListener('sageTextareaChange', function(e) {
+    const textarea = e.target.shadowRoot.querySelector(".sage-textarea__field");
+
+    console.log('e: ', textarea);
+    console.log(`The value has been update to #${textarea.value}`);
+  });
+};
+
 export const Default = BaseTemplate.bind({});
 Default.args = {
-  componentId: 'uniqueIdDefault',
+  componentId: 'sage-textarea-default-example',
   label: 'Name',
+  onChange: textareaEventExample(),
   name: 'Default',
 };
 Default.parameters = { ...defaultParameters };
 
 export const Rows = BaseTemplate.bind({});
 Rows.args = {
-  componentId: 'uniqueIdRows',
+  componentId: 'sage-textarea-rows-example',
   label: 'Name',
   name: 'Rows',
   rows: 4,
@@ -41,7 +52,7 @@ Rows.parameters = { ...defaultParameters };
 
 export const Required = BaseTemplate.bind({});
 Required.args = {
-  componentId: 'uniqueIdRequired',
+  componentId: 'sage-textarea-required-example',
   label: 'Name',
   name: 'Required',
   required: true,
@@ -50,7 +61,7 @@ Required.parameters = { ...defaultParameters };
 
 export const Placeholder = BaseTemplate.bind({});
 Placeholder.args = {
-  componentId: 'uniqueIdPlaceholder',
+  componentId: 'sage-textarea-placeholder-example',
   label: 'Name',
   name: 'Placeholder',
   placeholder: 'Placeholder...'
@@ -59,7 +70,7 @@ Placeholder.parameters = { ...defaultParameters };
 
 export const Disabled = BaseTemplate.bind({});
 Disabled.args = {
-  componentId: 'uniqueIdDisabled',
+  componentId: 'sage-textarea-disabled-example',
   disabled: true,
   label: 'Name',
   name: 'Disabled',
@@ -68,7 +79,7 @@ Disabled.parameters = { ...defaultParameters };
 
 export const Readonly = BaseTemplate.bind({});
 Readonly.args = {
-  componentId: 'uniqueIdReadonly',
+  componentId: 'sage-textarea-readonly-example',
   label: 'Name',
   name: 'Readonly',
   readonly: true,
@@ -78,7 +89,7 @@ Readonly.parameters = { ...defaultParameters };
 
 export const Hint = BaseTemplate.bind({});
 Hint.args = {
-  componentId: 'uniqueIdHint',
+  componentId: 'sage-textarea-hint-example',
   hintMessage: 'Hint',
   label: 'Name',
   name: 'Hint',
@@ -87,7 +98,7 @@ Hint.parameters = { ...defaultParameters };
 
 export const Error = BaseTemplate.bind({});
 Error.args = {
-  componentId: 'uniqueIdError',
+  componentId: 'sage-textarea-error-example',
   errorMessage: 'Error',
   invalid: true,
   label: 'Name',

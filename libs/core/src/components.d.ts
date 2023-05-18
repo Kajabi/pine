@@ -5,7 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { ChangeEvent } from "react";
+import { TextareaChangeEventDetail } from "./components/sage-textarea/textarea-interface";
 export namespace Components {
     interface MyComponent {
         /**
@@ -840,7 +840,7 @@ declare namespace LocalJSX {
         /**
           * Event emitted whenever the value of the textarea changes
          */
-        "onSageTextareaChange"?: (event: SageTextareaCustomEvent<ChangeEvent>) => void;
+        "onSageTextareaChange"?: (event: SageTextareaCustomEvent<TextareaChangeEventDetail>) => void;
         /**
           * Specifies a short hint that describes the expected value of the textarea
          */
