@@ -16,7 +16,7 @@
   --font-weight: var(--sage-font-weight-medium);
   --line-height: var(--sage-line-height-sm);
   --padding-inline: var(--sage-spacing-xs);
-  --padding-inline-xxs: var(--sage-spacing-xxs);
+  --margin-inline-xxs: var(--sage-spacing-xxs);
   --status-size: 6px;
 
   align-items: center;
@@ -46,12 +46,19 @@ $sage-chip-status-colors: (
   warning: var(--background-warning-status),
 );
 
+
+
 .sage-chip__status {
     border-radius: 50%;
     display: inline-block;
     height: var(--status-size);
-    margin-inline-end: var(--padding-inline-xxs);
+    margin-inline-end: var(--margin-inline-xxs);
     width: var(--status-size);
+}
+
+.sage-chip__dropdown
+sage-icon {
+  margin-inline-start: var(--margin-inline-xxs);
 }
 
 @each $color,

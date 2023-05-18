@@ -12,23 +12,39 @@ const defaultParameters = { docs: { disable: true } };
 
 export const Default = BaseTemplate.bind();
 Default.args = {
-
+  color: "draft",
+  label: "label",
+  status: false,
+  variant: "text",
 }
 Default.parameters = { ...defaultParameters };
 
 
 export const Colors = BaseTemplate.bind();
 Colors.args = {
+  color: "success",
+  label: "label",
+  status: false,
   variant: "text",
-  color: "draft",
 }
 Colors.parameters = { ...defaultParameters };
 
 
 export const Status = BaseTemplate.bind();
 Status.args = {
-  variant: "text",
   color: "draft",
+  label: "label",
   status: true,
+  variant: "text",
 }
 Status.parameters = { ...defaultParameters };
+
+
+export const Dropdown = BaseTemplate.bind();
+Dropdown.args = {
+  color: "draft",
+  label: "label",
+  status: false,
+  variant: "dropdown",
+}
+Dropdown.parameters = { ...defaultParameters };

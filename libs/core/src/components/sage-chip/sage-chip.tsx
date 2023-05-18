@@ -21,7 +21,7 @@ export class SageChip {
         {this.variant === 'dropdown' && (
           <span class="sage-chip__dropdown">
             {this.label}
-            <i class="sage-chip__dropdown-icon"></i>
+            <sage-icon name="caret-down" size="10px"></sage-icon>
           </span>
         )}
       </Host>
