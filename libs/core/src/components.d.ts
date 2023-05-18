@@ -92,7 +92,7 @@ export namespace Components {
         "value": string;
     }
     interface SageChip {
-        "color": 'danger' | 'draft' | 'info' | 'locked' | 'published' | 'success' | 'warning';
+        "color": 'danger' | 'draft' | 'info' | 'locked' | 'success' | 'warning';
         "label": string;
         "status": boolean;
         "variant": 'text' | 'tag' | 'dropdown';
@@ -614,7 +614,7 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     interface SageChip {
-        "color"?: 'danger' | 'draft' | 'info' | 'locked' | 'published' | 'success' | 'warning';
+        "color"?: 'danger' | 'draft' | 'info' | 'locked' | 'success' | 'warning';
         "label"?: string;
         "status"?: boolean;
         "variant"?: 'text' | 'tag' | 'dropdown';

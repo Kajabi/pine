@@ -12,7 +12,23 @@ const defaultParameters = { docs: { disable: true } };
 
 export const Default = BaseTemplate.bind();
 Default.args = {
+
+}
+Default.parameters = { ...defaultParameters };
+
+
+export const Colors = BaseTemplate.bind();
+Colors.args = {
   variant: "text",
   color: "draft",
 }
-Default.parameters = { ...defaultParameters };
+Colors.parameters = { ...defaultParameters };
+
+
+export const Status = BaseTemplate.bind();
+Status.args = {
+  variant: "text",
+  color: "draft",
+  status: true,
+}
+Status.parameters = { ...defaultParameters };

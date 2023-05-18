@@ -1,20 +1,29 @@
 :host {
   --background-danger: var(--sage-color-red-100);
+  --background-danger-status: var(--sage-color-red-300);
   --background-draft: var(--sage-color-neutral-grey-300);
+  --background-draft-status: var(--sage-color-neutral-charcoal-100);
   --background-info: var(--sage-color-primary-100);
+  --background-info-status: var(--sage-color-primary-300);
   --background-locked: var(--sage-color-purple-100);
+  --background-locked-status: var(--sage-color-purple-300);
   --background-success: var(--sage-color-sage-100);
-  --background-warning: var(--sage-color-yellow-10);
+  --background-success-status: var(--sage-color-sage-300);
+  --background-warning: var(--sage-color-yellow-100);
+  --background-warning-status: var(--sage-color-yellow-300);
   --border-radius: var(--sage-border-radius-lg);
   --font-size: var(--sage-font-size-body-sm);
   --font-weight: var(--sage-font-weight-medium);
   --line-height: var(--sage-line-height-sm);
   --padding-inline: var(--sage-spacing-xs);
+  --padding-inline-xxs: var(--sage-spacing-xxs);
+  --status-size: 6px;
 
+  align-items: center;
   border-radius: var(--border-radius);
-  font-size:  var(--font-size);
+  display: inline-flex;
+  font-size: var(--font-size);
   font-weight: var(--font-weight);
-  line-height: var(--line-height);
   padding-block: 2px;
   padding-inline: var(--padding-inline);
 }
@@ -28,12 +37,31 @@ $sage-chip-colors: (
   warning: var(--background-warning),
 );
 
+$sage-chip-status-colors: (
+  danger: var(--background-danger-status),
+  draft: var(--background-draft-status),
+  info: var(--background-info-status),
+  locked: var(--background-locked-status),
+  success: var(--background-success-status),
+  warning: var(--background-warning-status),
+);
 
-
-@each $color, $value in $sage-chip-colors {
-  :host(.sage-chip--#{$color}) {
-    background: $value;
-  }
+.sage-chip__status {
+    border-radius: 50%;
+    display: inline-block;
+    height: var(--status-size);
+    margin-inline-end: var(--padding-inline-xxs);
+    width: var(--status-size);
 }
 
+@each $color,
+$value in $sage-chip-colors {
+  :host(.sage-chip--#{$color}) {
+    background: $value;
 
+    .sage-chip__status {
+      /* stylelint-disable -- TODO: ask about unknown function */
+        background: map-get($sage-chip-status-colors, $color);
+      }
+    }
+}
