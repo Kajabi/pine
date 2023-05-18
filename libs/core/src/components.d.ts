@@ -91,6 +91,12 @@ export namespace Components {
          */
         "value": string;
     }
+    interface SageChip {
+        "color": 'danger' | 'draft' | 'info' | 'locked' | 'published' | 'success' | 'warning';
+        "label": string;
+        "status": boolean;
+        "variant": 'text' | 'tag' | 'dropdown';
+    }
     interface SageDivider {
         /**
           * Adds offset margin/padding to expand the width (horizontal) or the height (vertical) of divider.
@@ -435,6 +441,12 @@ declare global {
         prototype: HTMLSageCheckboxElement;
         new (): HTMLSageCheckboxElement;
     };
+    interface HTMLSageChipElement extends Components.SageChip, HTMLStencilElement {
+    }
+    var HTMLSageChipElement: {
+        prototype: HTMLSageChipElement;
+        new (): HTMLSageChipElement;
+    };
     interface HTMLSageDividerElement extends Components.SageDivider, HTMLStencilElement {
     }
     var HTMLSageDividerElement: {
@@ -499,6 +511,7 @@ declare global {
         "my-component": HTMLMyComponentElement;
         "sage-button": HTMLSageButtonElement;
         "sage-checkbox": HTMLSageCheckboxElement;
+        "sage-chip": HTMLSageChipElement;
         "sage-divider": HTMLSageDividerElement;
         "sage-image": HTMLSageImageElement;
         "sage-input": HTMLSageInputElement;
@@ -599,6 +612,12 @@ declare namespace LocalJSX {
           * The value of the checkbox that is submitted with a form.
          */
         "value"?: string;
+    }
+    interface SageChip {
+        "color"?: 'danger' | 'draft' | 'info' | 'locked' | 'published' | 'success' | 'warning';
+        "label"?: string;
+        "status"?: boolean;
+        "variant"?: 'text' | 'tag' | 'dropdown';
     }
     interface SageDivider {
         /**
@@ -917,6 +936,7 @@ declare namespace LocalJSX {
         "my-component": MyComponent;
         "sage-button": SageButton;
         "sage-checkbox": SageCheckbox;
+        "sage-chip": SageChip;
         "sage-divider": SageDivider;
         "sage-image": SageImage;
         "sage-input": SageInput;
@@ -936,6 +956,7 @@ declare module "@stencil/core" {
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
             "sage-button": LocalJSX.SageButton & JSXBase.HTMLAttributes<HTMLSageButtonElement>;
             "sage-checkbox": LocalJSX.SageCheckbox & JSXBase.HTMLAttributes<HTMLSageCheckboxElement>;
+            "sage-chip": LocalJSX.SageChip & JSXBase.HTMLAttributes<HTMLSageChipElement>;
             "sage-divider": LocalJSX.SageDivider & JSXBase.HTMLAttributes<HTMLSageDividerElement>;
             "sage-image": LocalJSX.SageImage & JSXBase.HTMLAttributes<HTMLSageImageElement>;
             "sage-input": LocalJSX.SageInput & JSXBase.HTMLAttributes<HTMLSageInputElement>;

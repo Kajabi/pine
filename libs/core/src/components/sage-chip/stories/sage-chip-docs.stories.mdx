@@ -1,0 +1,27 @@
+import { Meta, Story, Canvas, Source, ArgsTable } from '@storybook/addon-docs';
+import { html, render } from 'lit-html';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+import * as stories from './sage-chip.stories.js';
+
+<Meta title="components/Chip" component="sage-chip" argTypes={extractArgTypes('sage-chip')} />
+
+# Chip
+
+TODO: Add chip description when provided by design
+
+## Properties
+
+<ArgsTable of="sage-chip" />
+
+### Default
+
+<Story story={stories.Default} />
+
+<Canvas>
+  <sage-chip label="Label" />
+</Canvas>
+
+
+
