@@ -7,6 +7,7 @@ describe('sage-textarea', () => {
       components: [SageTextarea],
       html: `<sage-textarea></sage-textarea>`,
     });
+
     expect(root).toEqualHtml(`
       <sage-textarea>
         <mock:shadow-root>
@@ -23,6 +24,7 @@ describe('sage-textarea', () => {
       components: [SageTextarea],
       html: `<sage-textarea disabled="true"></sage-textarea>`,
     });
+
     expect(root).toEqualHtml(`
       <sage-textarea aria-disabled="true" disabled="true">
         <mock:shadow-root>
@@ -39,6 +41,7 @@ describe('sage-textarea', () => {
       components: [SageTextarea],
       html: `<sage-textarea component-id="testId" invalid="true" error-message="error"></sage-textarea>`,
     });
+
     expect(root).toEqualHtml(`
       <sage-textarea component-id="testId" invalid="true" error-message="error">
         <mock:shadow-root>
@@ -56,6 +59,7 @@ describe('sage-textarea', () => {
       components: [SageTextarea],
       html: `<sage-textarea invalid="false" error-message="error"></sage-textarea>`,
     });
+
     expect(root).toEqualHtml(`
       <sage-textarea invalid="false" error-message="error">
         <mock:shadow-root>
@@ -72,6 +76,7 @@ describe('sage-textarea', () => {
       components: [SageTextarea],
       html: `<sage-textarea component-id="testId" hint-message="hint"></sage-textarea>`,
     });
+
     expect(root).toEqualHtml(`
       <sage-textarea component-id="testId" hint-message="hint">
         <mock:shadow-root>
@@ -89,6 +94,7 @@ describe('sage-textarea', () => {
       components: [SageTextarea],
       html: `<sage-textarea label="label"></sage-textarea>`,
     });
+
     expect(root).toEqualHtml(`
       <sage-textarea label="label">
         <mock:shadow-root>
@@ -106,6 +112,7 @@ describe('sage-textarea', () => {
       components: [SageTextarea],
       html: `<sage-textarea name="foo"></sage-textarea>`,
     });
+
     expect(root).toEqualHtml(`
       <sage-textarea name="foo">
         <mock:shadow-root>
@@ -122,6 +129,7 @@ describe('sage-textarea', () => {
       components: [SageTextarea],
       html: `<sage-textarea placeholder="Placeholder..."></sage-textarea>`,
     });
+
     expect(root).toEqualHtml(`
       <sage-textarea placeholder="Placeholder...">
         <mock:shadow-root>
@@ -138,6 +146,7 @@ describe('sage-textarea', () => {
       components: [SageTextarea],
       html: `<sage-textarea readonly="true"></sage-textarea>`,
     });
+
     expect(root).toEqualHtml(`
       <sage-textarea readonly="true">
         <mock:shadow-root>
@@ -154,6 +163,7 @@ describe('sage-textarea', () => {
       components: [SageTextarea],
       html: `<sage-textarea required="true"></sage-textarea>`,
     });
+
     expect(root).toEqualHtml(`
       <sage-textarea required="true">
         <mock:shadow-root>
@@ -170,6 +180,7 @@ describe('sage-textarea', () => {
       components: [SageTextarea],
       html: `<sage-textarea component-id="testId" label="label"></sage-textarea>`,
     });
+
     expect(root).toEqualHtml(`
       <sage-textarea component-id="testId" label="label">
         <mock:shadow-root>
@@ -187,6 +198,7 @@ describe('sage-textarea', () => {
       components: [SageTextarea],
       html: `<sage-textarea value="foo"></sage-textarea>`,
     });
+
     expect(root).toEqualHtml(`
       <sage-textarea value="foo">
         <mock:shadow-root>
@@ -262,7 +274,7 @@ describe('sage-textarea', () => {
     });
     const sageTextarea = page.root;
     const eventSpy = jest.fn();
-    document.addEventListener('sageTextareaInput', eventSpy);
+    document.addEventListener('sageTextareaChange', eventSpy);
 
     const textarea = sageTextarea?.shadowRoot?.querySelector<HTMLTextAreaElement>('textarea');
     expect(sageTextarea?.value).toEqual('initial');
@@ -283,10 +295,13 @@ describe('sage-textarea', () => {
       components: [SageTextarea],
       html: `<sage-textarea value="initial" required="true"></sage-textarea>`,
     });
+
     const sageTextarea = page.root;
     const textarea = sageTextarea?.shadowRoot?.querySelector<HTMLTextAreaElement>('textarea');
     const eventSpy = jest.fn();
-    document.addEventListener('sageTextareaInput', eventSpy);
+
+    document.addEventListener('sageTextareaChange', eventSpy);
+
     expect(sageTextarea?.value).toEqual('initial');
     expect(textarea?.innerHTML).toEqual('initial');
 

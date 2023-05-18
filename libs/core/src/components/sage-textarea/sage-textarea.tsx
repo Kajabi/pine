@@ -78,14 +78,14 @@ export class SageTextarea {
   /**
    * Event emitted whenever the value of the textarea changes
    */
-  @Event() sageTextareaInput: EventEmitter<ChangeEvent>;
+  @Event() sageTextareaChange: EventEmitter<ChangeEvent>;
   private onTextareaInputEvent = (ev: Event) => {
     const textarea = ev.target as HTMLTextAreaElement;
     isRequired(textarea, this);
     if (textarea) {
       this.value = textarea.innerHTML;
     }
-    this.sageTextareaInput.emit();
+    this.sageTextareaChange.emit();
   };
 
   private textareaClassNames = () => {
@@ -110,8 +110,6 @@ export class SageTextarea {
   private assignDescription = () => {
     let relatedId = this.messageId(this.componentId, 'helper')
 
-    console.log('componentId: ', this.componentId);
-    console.log('relatedId: ', relatedId);
     if (!this.invalid || !this.hintMessage) return;
     if (this.invalid) relatedId = this.messageId(this.componentId, 'error');
 

@@ -840,7 +840,7 @@ declare namespace LocalJSX {
         /**
           * Event emitted whenever the value of the textarea changes
          */
-        "onSageTextareaInput"?: (event: SageTextareaCustomEvent<ChangeEvent>) => void;
+        "onSageTextareaChange"?: (event: SageTextareaCustomEvent<ChangeEvent>) => void;
         /**
           * Specifies a short hint that describes the expected value of the textarea
          */

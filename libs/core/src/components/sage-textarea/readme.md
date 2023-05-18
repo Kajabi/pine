@@ -25,9 +25,9 @@
 
 ## Events
 
-| Event               | Description                                              | Type                                |
-| ------------------- | -------------------------------------------------------- | ----------------------------------- |
-| `sageTextareaInput` | Event emitted whenever the value of the textarea changes | `CustomEvent<ChangeEvent<Element>>` |
+| Event                | Description                                              | Type                                |
+| -------------------- | -------------------------------------------------------- | ----------------------------------- |
+| `sageTextareaChange` | Event emitted whenever the value of the textarea changes | `CustomEvent<ChangeEvent<Element>>` |
 
 
 ----------------------------------------------
