@@ -5,12 +5,12 @@ describe('sage-chip', () => {
   it('renders', async () => {
     const page = await newSpecPage({
       components: [SageChip],
-      html: `<sage-chip></sage-chip>`,
+      html: `<sage-chip />`,
     });
     expect(page.root).toEqualHtml(`
-      <sage-chip>
+    <sage-chip class="sage-chip sage-chip--draft sage-chip--text">
         <mock:shadow-root>
-          <slot></slot>
+          <span class="sage-chip__text"></span>
         </mock:shadow-root>
       </sage-chip>
     `);
