@@ -96,8 +96,8 @@ Hint.args = {
 };
 Hint.parameters = { ...defaultParameters };
 
-export const Error = BaseTemplate.bind({});
-Error.args = {
+export const Invalid = BaseTemplate.bind({});
+Invalid.args = {
   componentId: 'sage-textarea-error-example',
   errorMessage: 'Error',
   invalid: true,
@@ -105,4 +105,4 @@ Error.args = {
   name: 'Error',
   required: true,
 };
-Error.parameters = { ...defaultParameters };
+Invalid.parameters = { ...defaultParameters };

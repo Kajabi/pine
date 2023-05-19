@@ -50,7 +50,7 @@ Basic textarea example
 <Story story={stories.Default} />
 
 <Canvas>
-  <sage-textarea name="Default" label="Name" component-id="uniqueIdDefault"></sage-textarea>
+  <sage-textarea name="Default" label="Name" component-id="textarea-default"></sage-textarea>
 </Canvas>
 
 ### Disabled
@@ -58,17 +58,17 @@ Disabled states can be set by the `disabled` property
 <Story story={stories.Disabled} />
 
 <Canvas>
-  <sage-textarea name="Disabled" label="Name" disabled="true" component-id="uniqueIdDisabled"></sage-textarea>
+  <sage-textarea name="Disabled" label="Name" disabled="true" component-id="textarea-disabled"></sage-textarea>
 </Canvas>
 
 ### Error Message
 Error messages are passed using the `error-message` property, textareas will only calculate their validity when on their `required` property is set to true
 
 You can also manually pass in an invalid state by setting the `invalid` property to true but this property will be update whenever the `onChange` event is triggered
-<Story story={stories.Error} />
+<Story story={stories.Invalid} />
 
 <Canvas>
-  <sage-textarea name="Error" label="Name" error-message="Error" invalid="true" required="true" component-id="uniqueIdError" ></sage-textarea>
+  <sage-textarea name="Invalid" label="Name" error-message="Error" invalid="true" required="true" component-id="textarea-invalid" ></sage-textarea>
 </Canvas>
 
 ### Hint Message
@@ -78,7 +78,7 @@ Do not use hint messages to provide examples to users, please use the `placehold
 <Story story={stories.Hint} />
 
 <Canvas>
-  <sage-textarea name="Hint" label="Name" hint-message="Hint" component-id="uniqueIdHint"></sage-textarea>
+  <sage-textarea name="Hint" label="Name" hint-message="Hint" component-id="textarea-hint-message"></sage-textarea>
 </Canvas>
 
 ### Placeholder
@@ -88,7 +88,7 @@ Do not use placeholders to provide hints to users, please use the `hint-message`
 <Story story={stories.Placeholder} />
 
 <Canvas>
-  <sage-textarea name="Placeholder" label="Name" placeholder="Placeholder..." component-id="uniqueIdPlaceholder"></sage-textarea>
+  <sage-textarea name="Placeholder" label="Name" placeholder="Placeholder..." component-id="textarea-placeholder"></sage-textarea>
 </Canvas>
 
 ### Readonly
@@ -96,7 +96,7 @@ Readonly states can be used to display static content while preventing the user 
 <Story story={stories.Readonly} />
 
 <Canvas>
-  <sage-textarea name="Readonly" label="Name" readonly="true" value="Readonly Value" component-id="uniqueIdReadonly"></sage-textarea>
+  <sage-textarea name="Readonly" label="Name" readonly="true" value="Readonly Value" component-id="textarea-readonly"></sage-textarea>
 </Canvas>
 
 ### Required
@@ -104,7 +104,7 @@ It's recommended you also pass `error-message` on any required fields
 <Story story={stories.Required} />
 
 <Canvas>
-  <sage-textarea name="Required" label="Name" required="true" component-id="uniqueIdRequired"></sage-textarea>
+  <sage-textarea name="Required" label="Name" required="true" component-id="textarea-required"></sage-textarea>
 </Canvas>
 
 ### Rows
@@ -112,5 +112,5 @@ The rows property is used to pass a number of expected rows visible within the t
 <Story story={stories.Rows} />
 
 <Canvas>
-  <sage-textarea name="Rows" label="Name" rows="4" component-id="uniqueIdRows"></sage-textarea>
+  <sage-textarea name="Rows" label="Name" rows="4" component-id="textarea-rows"></sage-textarea>
 </Canvas>
