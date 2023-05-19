@@ -21,16 +21,18 @@
   --font-size: var(--sage-font-size-body-sm);
   --font-weight: var(--sage-font-weight-medium);
   --line-height: var(--sage-line-height-sm);
+  --padding-block: 2px;
   --padding-inline: var(--sage-spacing-xs);
   --margin-inline-xxs: var(--sage-spacing-xxs);
   --status-size: 6px;
+  --close-size: 10px;
 
   align-items: center;
   border-radius: var(--border-radius);
   display: inline-flex;
   font-size: var(--font-size);
   font-weight: var(--font-weight);
-  padding-block: 2px;
+  padding-block: var(--padding-block);
   padding-inline: var(--padding-inline);
 }
 
@@ -61,38 +63,8 @@ $sage-chip-colors-interactive: (
   warning: var(--background-warning-interactive),
 );
 
-.sage-chip__status {
-  border-radius: 50%;
-  height: var(--status-size);
-  margin-inline-end: var(--margin-inline-xxs);
-  width: var(--status-size);
-}
-
-.sage-chip__dropdown sage-icon {
-  margin-inline-start: var(--margin-inline-xxs);
-}
-
-.sage-chip__close {
-  appearance: none;
-  background: transparent;
-  border: 0;
-  border-radius: 50%;
-  height: 10px;
-  margin-inline-end: -6px;
-  margin-inline-start: var(--margin-inline-xxs);
-  padding: 10px;
-  position: relative;
-  width: 10px;
-
-  sage-icon {
-    left: 50%;
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
-  }
-}
-
-@each $color, $value in $sage-chip-colors {
+@each $color,
+$value in $sage-chip-colors {
   :host(.sage-chip--#{$color}) {
     background: $value;
 
@@ -108,5 +80,62 @@ $sage-chip-colors-interactive: (
 
   :host(.sage-chip--#{$color}.sage-chip--dropdown:hover) {
     background: map-get($sage-chip-colors-interactive, $color);
+  }
+}
+
+:host(.sage-chip--dropdown) {
+  padding: 0;
+}
+
+.sage-chip__status {
+  border-radius: 50%;
+  height: var(--status-size);
+  margin-inline-end: var(--margin-inline-xxs);
+  width: var(--status-size);
+}
+
+.sage-chip__button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  font-size: var(--font-size);
+  font-weight: var(--font-weight);
+  padding-block: var(--padding-block);
+  padding-inline: var(--padding-inline);
+  font-family: inherit;
+  border-radius: var(--border-radius);
+
+  &:focus-visible {
+    box-shadow: 0 0 0 4px var(--sage-color-primary-200);
+    outline: none;
+  }
+
+  sage-icon {
+    margin-inline-start: var(--margin-inline-xxs);
+  }
+}
+
+.sage-chip__close {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  height: var(--close-size);
+  margin-inline-end: -6px;
+  margin-inline-start: var(--margin-inline-xxs);
+  padding: var(--close-size);
+  position: relative;
+  width: var(--close-size);
+
+  sage-icon {
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 4px var(--sage-color-primary-200);
+    outline: none;
   }
 }
