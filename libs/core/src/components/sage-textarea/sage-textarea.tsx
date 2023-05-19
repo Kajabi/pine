@@ -2,7 +2,6 @@ import { Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil
 import { isRequired } from '../../utils/utils';
 import { TextareaChangeEventDetail } from './textarea-interface';
 
-
 @Component({
   tag: 'sage-textarea',
   styleUrl: 'sage-textarea.scss',
@@ -79,7 +78,6 @@ export class SageTextarea {
    * Event emitted whenever the value of the textarea changes
    */
   @Event() sageTextareaChange: EventEmitter<TextareaChangeEventDetail>;
-
 
   private onTextareaChange = (ev: Event) => {
     const textarea = ev.target as HTMLTextAreaElement;
