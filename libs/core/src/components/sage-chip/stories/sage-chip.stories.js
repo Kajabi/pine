@@ -12,7 +12,7 @@ const defaultParameters = { docs: { disable: true } };
 
 export const Default = BaseTemplate.bind();
 Default.args = {
-  color: "draft",
+  color: "neutral",
   label: "label",
   status: false,
   variant: "text",
@@ -32,7 +32,7 @@ Colors.parameters = { ...defaultParameters };
 
 export const Status = BaseTemplate.bind();
 Status.args = {
-  color: "draft",
+  color: "neutral",
   label: "label",
   status: true,
   variant: "text",
@@ -42,9 +42,18 @@ Status.parameters = { ...defaultParameters };
 
 export const Dropdown = BaseTemplate.bind();
 Dropdown.args = {
-  color: "draft",
+  color: "neutral",
   label: "label",
   status: false,
   variant: "dropdown",
 }
 Dropdown.parameters = { ...defaultParameters };
+
+export const Tag = BaseTemplate.bind();
+Tag.args = {
+  color: "neutral",
+  label: "label",
+  status: false,
+  variant: "tag",
+}
+Tag.parameters = { ...defaultParameters };

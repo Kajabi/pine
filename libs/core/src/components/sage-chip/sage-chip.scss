@@ -1,16 +1,22 @@
 :host {
   --background-danger: var(--sage-color-red-100);
   --background-danger-status: var(--sage-color-red-300);
-  --background-draft: var(--sage-color-neutral-grey-300);
-  --background-draft-status: var(--sage-color-neutral-charcoal-100);
+  --background-danger-interactive: var(--sage-color-red-200);
+  --background-neutral: var(--sage-color-neutral-grey-300);
+  --background-neutral-status: var(--sage-color-neutral-charcoal-100);
+  --background-neutral-interactive: var(--sage-color-neutral-grey-400);
   --background-info: var(--sage-color-primary-100);
   --background-info-status: var(--sage-color-primary-300);
-  --background-locked: var(--sage-color-purple-100);
-  --background-locked-status: var(--sage-color-purple-300);
+  --background-info-interactive: var(--sage-color-primary-200);
+  --background-accent: var(--sage-color-purple-100);
+  --background-accent-status: var(--sage-color-purple-300);
+  --background-accent-interactive: var(--sage-color-purple-200);
   --background-success: var(--sage-color-sage-100);
   --background-success-status: var(--sage-color-sage-300);
+  --background-success-interactive: var(--sage-color-sage-200);
   --background-warning: var(--sage-color-yellow-100);
   --background-warning-status: var(--sage-color-yellow-300);
+  --background-warning-interactive: var(--sage-color-yellow-200);
   --border-radius: var(--sage-border-radius-lg);
   --font-size: var(--sage-font-size-body-sm);
   --font-weight: var(--sage-font-weight-medium);
@@ -29,46 +35,78 @@
 }
 
 $sage-chip-colors: (
+  accent: var(--background-accent),
   danger: var(--background-danger),
-  draft: var(--background-draft),
   info: var(--background-info),
-  locked: var(--background-locked),
+  neutral: var(--background-neutral),
   success: var(--background-success),
   warning: var(--background-warning),
 );
 
-$sage-chip-status-colors: (
+$sage-chip-colors-status: (
+  accent: var(--background-accent-status),
   danger: var(--background-danger-status),
-  draft: var(--background-draft-status),
   info: var(--background-info-status),
-  locked: var(--background-locked-status),
+  neutral: var(--background-neutral-status),
   success: var(--background-success-status),
   warning: var(--background-warning-status),
 );
 
-
+$sage-chip-colors-interactive: (
+  accent: var(--background-accent-interactive),
+  danger: var(--background-danger-interactive),
+  info: var(--background-info-interactive),
+  neutral: var(--background-neutral-interactive),
+  success: var(--background-success-interactive),
+  warning: var(--background-warning-interactive),
+);
 
 .sage-chip__status {
-    border-radius: 50%;
-    display: inline-block;
-    height: var(--status-size);
-    margin-inline-end: var(--margin-inline-xxs);
-    width: var(--status-size);
+  border-radius: 50%;
+  height: var(--status-size);
+  margin-inline-end: var(--margin-inline-xxs);
+  width: var(--status-size);
 }
 
-.sage-chip__dropdown
-sage-icon {
+.sage-chip__dropdown sage-icon {
   margin-inline-start: var(--margin-inline-xxs);
 }
 
-@each $color,
-$value in $sage-chip-colors {
+.sage-chip__close {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  height: 10px;
+  margin-inline-end: -6px;
+  margin-inline-start: var(--margin-inline-xxs);
+  padding: 10px;
+  position: relative;
+  width: 10px;
+
+  sage-icon {
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@each $color, $value in $sage-chip-colors {
   :host(.sage-chip--#{$color}) {
     background: $value;
 
     .sage-chip__status {
       /* stylelint-disable -- TODO: ask about unknown function */
-        background: map-get($sage-chip-status-colors, $color);
-      }
+      background: map-get($sage-chip-colors-status, $color);
     }
+
+    .sage-chip__close:hover {
+      background: map-get($sage-chip-colors-interactive, $color);
+    }
+  }
+
+  :host(.sage-chip--#{$color}.sage-chip--dropdown:hover) {
+    background: map-get($sage-chip-colors-interactive, $color);
+  }
 }

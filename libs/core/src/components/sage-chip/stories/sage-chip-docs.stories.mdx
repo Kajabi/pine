@@ -9,7 +9,7 @@ import * as stories from './sage-chip.stories.js';
 
 # Chip
 
-TODO: Add chip description when provided by design
+Chips are used to inform users of the status of an object or to relate properties to a parent. Commonly used in tabular data to indicate status.
 
 ## Properties
 
@@ -28,36 +28,49 @@ TODO: Add chip description when provided by design
 <Story story={stories.Colors} />
 
 <Canvas>
+  <sage-chip label="Accent" color="accent" />
   <sage-chip label="Danger" color="danger" />
-  <sage-chip label="Draft" color="draft" />
   <sage-chip label="Info" color="info" />
-  <sage-chip label="Locked" color="locked" />
+  <sage-chip label="Neutral" color="neutral" />
   <sage-chip label="Success" color="success" />
   <sage-chip label="Warning" color="warning" />
 </Canvas>
-
 
 ### Status
 
 <Story story={stories.Status} />
 
 <Canvas>
+  <sage-chip label="Accent" color="accent" status="true" />
   <sage-chip label="Danger" color="danger" status="true" />
-  <sage-chip label="Draft" color="draft" status="true" />
   <sage-chip label="Info" color="info" status="true" />
-  <sage-chip label="Locked" color="locked" status="true" />
+  <sage-chip label="Neutral" color="neutral" status="true" />
   <sage-chip label="Success" color="success" status="true" />
   <sage-chip label="Warning" color="warning" status="true" />
 </Canvas>
-
 
 ### Dropdown
 
 <Story story={stories.Dropdown} />
 
 <Canvas>
-  <sage-chip label="Dropdown" color="draft" variant="dropdown" />
+  <sage-chip label="Accent" color="accent" variant="dropdown" />
+  <sage-chip label="Danger" color="danger" variant="dropdown" />
+  <sage-chip label="Info" color="info" variant="dropdown" />
+  <sage-chip label="Neutral" color="neutral" variant="dropdown" />
+  <sage-chip label="Success" color="success" variant="dropdown" />
+  <sage-chip label="Warning" color="warning" variant="dropdown" />
 </Canvas>
 
+### Tag
 
+<Story story={stories.Tag} />
 
+<Canvas>
+  <sage-chip label="Accent" color="accent" variant="tag" />
+  <sage-chip label="Danger" color="danger" variant="tag" />
+  <sage-chip label="Info" color="info" variant="tag" />
+  <sage-chip label="Neutral" color="neutral" variant="tag" />
+  <sage-chip label="Success" color="success" variant="tag" />
+  <sage-chip label="Warning" color="warning" variant="tag" />
+</Canvas>

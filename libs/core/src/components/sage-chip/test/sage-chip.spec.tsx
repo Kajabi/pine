@@ -8,7 +8,7 @@ describe('sage-chip', () => {
       html: `<sage-chip />`,
     });
     expect(page.root).toEqualHtml(`
-    <sage-chip class="sage-chip sage-chip--draft sage-chip--text">
+    <sage-chip class="sage-chip sage-chip--neutral sage-chip--text">
         <mock:shadow-root>
           <span class="sage-chip__text"></span>
         </mock:shadow-root>

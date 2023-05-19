@@ -7,12 +7,12 @@
 
 ## Properties
 
-| Property  | Attribute | Description | Type                                                                  | Default     |
-| --------- | --------- | ----------- | --------------------------------------------------------------------- | ----------- |
-| `color`   | `color`   |             | `"danger" \| "draft" \| "info" \| "locked" \| "success" \| "warning"` | `'draft'`   |
-| `label`   | `label`   |             | `string`                                                              | `undefined` |
-| `status`  | `status`  |             | `boolean`                                                             | `undefined` |
-| `variant` | `variant` |             | `"dropdown" \| "tag" \| "text"`                                       | `'text'`    |
+| Property  | Attribute | Description | Type                                                                    | Default     |
+| --------- | --------- | ----------- | ----------------------------------------------------------------------- | ----------- |
+| `color`   | `color`   |             | `"accent" \| "danger" \| "info" \| "neutral" \| "success" \| "warning"` | `'neutral'` |
+| `label`   | `label`   |             | `string`                                                                | `undefined` |
+| `status`  | `status`  |             | `boolean`                                                               | `undefined` |
+| `variant` | `variant` |             | `"dropdown" \| "tag" \| "text"`                                         | `'text'`    |
 
 
 ## Dependencies
