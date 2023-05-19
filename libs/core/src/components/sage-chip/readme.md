@@ -10,8 +10,8 @@
 | Property  | Attribute | Description | Type                                                                    | Default     |
 | --------- | --------- | ----------- | ----------------------------------------------------------------------- | ----------- |
 | `color`   | `color`   |             | `"accent" \| "danger" \| "info" \| "neutral" \| "success" \| "warning"` | `'neutral'` |
+| `dot`     | `dot`     |             | `boolean`                                                               | `undefined` |
 | `label`   | `label`   |             | `string`                                                                | `undefined` |
-| `status`  | `status`  |             | `boolean`                                                               | `undefined` |
 | `variant` | `variant` |             | `"dropdown" \| "tag" \| "text"`                                         | `'text'`    |
 
 

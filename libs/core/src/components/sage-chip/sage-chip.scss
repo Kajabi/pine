@@ -1,30 +1,32 @@
 :host {
   --background-danger: var(--sage-color-red-100);
-  --background-danger-status: var(--sage-color-red-300);
+  --background-danger-dot: var(--sage-color-red-300);
   --background-danger-interactive: var(--sage-color-red-200);
   --background-neutral: var(--sage-color-neutral-grey-300);
-  --background-neutral-status: var(--sage-color-neutral-charcoal-100);
+  --background-neutral-dot: var(--sage-color-neutral-charcoal-100);
   --background-neutral-interactive: var(--sage-color-neutral-grey-400);
   --background-info: var(--sage-color-primary-100);
-  --background-info-status: var(--sage-color-primary-300);
+  --background-info-dot: var(--sage-color-primary-300);
   --background-info-interactive: var(--sage-color-primary-200);
   --background-accent: var(--sage-color-purple-100);
-  --background-accent-status: var(--sage-color-purple-300);
+  --background-accent-dot: var(--sage-color-purple-300);
   --background-accent-interactive: var(--sage-color-purple-200);
   --background-success: var(--sage-color-sage-100);
-  --background-success-status: var(--sage-color-sage-300);
+  --background-success-dot: var(--sage-color-sage-300);
   --background-success-interactive: var(--sage-color-sage-200);
   --background-warning: var(--sage-color-yellow-100);
-  --background-warning-status: var(--sage-color-yellow-300);
+  --background-warning-dot: var(--sage-color-yellow-300);
   --background-warning-interactive: var(--sage-color-yellow-200);
+
   --border-radius: var(--sage-border-radius-lg);
   --font-size: var(--sage-font-size-body-sm);
   --font-weight: var(--sage-font-weight-medium);
   --line-height: var(--sage-line-height-sm);
-  --padding-block: 2px;
+  --padding-block: 5px;
   --padding-inline: var(--sage-spacing-xs);
   --margin-inline-xxs: var(--sage-spacing-xxs);
-  --status-size: 6px;
+
+  --dot-size: 6px;
   --close-size: 10px;
 
   align-items: center;
@@ -32,6 +34,7 @@
   display: inline-flex;
   font-size: var(--font-size);
   font-weight: var(--font-weight);
+  line-height: 1;
   padding-block: var(--padding-block);
   padding-inline: var(--padding-inline);
 }
@@ -45,13 +48,13 @@ $sage-chip-colors: (
   warning: var(--background-warning),
 );
 
-$sage-chip-colors-status: (
-  accent: var(--background-accent-status),
-  danger: var(--background-danger-status),
-  info: var(--background-info-status),
-  neutral: var(--background-neutral-status),
-  success: var(--background-success-status),
-  warning: var(--background-warning-status),
+$sage-chip-dot-colors: (
+  accent: var(--background-accent-dot),
+  danger: var(--background-danger-dot),
+  info: var(--background-info-dot),
+  neutral: var(--background-neutral-dot),
+  success: var(--background-success-dot),
+  warning: var(--background-warning-dot),
 );
 
 $sage-chip-colors-interactive: (
@@ -68,9 +71,9 @@ $value in $sage-chip-colors {
   :host(.sage-chip--#{$color}) {
     background: $value;
 
-    .sage-chip__status {
+    .sage-chip__dot {
       /* stylelint-disable -- TODO: ask about unknown function */
-      background: map-get($sage-chip-colors-status, $color);
+      background: map-get($sage-chip-dot-colors, $color);
     }
 
     .sage-chip__close:hover {
@@ -87,11 +90,20 @@ $value in $sage-chip-colors {
   padding: 0;
 }
 
-.sage-chip__status {
+:host(.sage-chip--tag) {
+  padding-block: 2px;
+}
+
+.sage-chip__label {
+  display: flex;
+  align-items: center;
+}
+
+.sage-chip__dot {
   border-radius: 50%;
-  height: var(--status-size);
+  height: var(--dot-size);
   margin-inline-end: var(--margin-inline-xxs);
-  width: var(--status-size);
+  width: var(--dot-size);
 }
 
 .sage-chip__button {
@@ -104,6 +116,9 @@ $value in $sage-chip-colors {
   padding-inline: var(--padding-inline);
   font-family: inherit;
   border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  line-height: 1;
 
   &:focus-visible {
     box-shadow: 0 0 0 4px var(--sage-color-primary-200);

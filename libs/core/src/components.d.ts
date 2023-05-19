@@ -93,8 +93,8 @@ export namespace Components {
     }
     interface SageChip {
         "color": 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
+        "dot": boolean;
         "label": string;
-        "status": boolean;
         "variant": 'text' | 'tag' | 'dropdown';
     }
     interface SageDivider {
@@ -615,8 +615,8 @@ declare namespace LocalJSX {
     }
     interface SageChip {
         "color"?: 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
+        "dot"?: boolean;
         "label"?: string;
-        "status"?: boolean;
         "variant"?: 'text' | 'tag' | 'dropdown';
     }
     interface SageDivider {
