@@ -8,6 +8,7 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
     interface PdsAvatar {
+        "size": string;
     }
     interface PdsButton {
         /**
@@ -591,6 +592,7 @@ declare global {
 }
 declare namespace LocalJSX {
     interface PdsAvatar {
+        "size"?: string;
     }
     interface PdsButton {
         /**

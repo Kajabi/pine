@@ -1,4 +1,4 @@
-import { Component, Host, h } from '@stencil/core';
+import { Component, Host, h, Prop } from '@stencil/core';
 
 @Component({
   tag: 'pds-avatar',
@@ -7,10 +7,12 @@ import { Component, Host, h } from '@stencil/core';
 })
 export class PdsAvatar {
 
+  @Prop() size: string;
+
   render() {
     return (
       <Host>
-        <slot></slot>
+        <pds-icon name="user-filled" size="normal"></pds-icon>
       </Host>
     );
   }

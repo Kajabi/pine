@@ -1,3 +1,19 @@
 :host {
-  display: block;
+  --size: var(--pine-spacing-md);
+
+  align-items: center;
+  background-color: var(--pine-color-primary-200);
+  block-size: var(--size);
+  border: var(--pine-border-default);
+  border-color: transparent;
+  border-radius: 100px;
+  display: inline-flex;
+  inline-size: var(--size);
+  justify-content: center;
+}
+
+pds-icon {
+  height: 33.53%;
+  width: 33.53%; // Average size of icon in relation to total avatar size of all available non-custom sizes
+  //width: 34.36%; Percent of smallest icon at 24px
 }
