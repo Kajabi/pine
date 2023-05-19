@@ -92,14 +92,15 @@ export class SageTextarea {
     this.sageTextareaChange.emit({value: this.value, event: ev});
   };
 
-  private textareaClassNames = () => {
-    let className = `sage-textarea__field`;
+  private textareaClassNames() {
+    const classNames = ['sage-textarea__field'];
+
     if (this.invalid && this.invalid === true) {
-      const invalidClassName = `is-invalid`;
-      className += ' ' + invalidClassName;
+      classNames.push('is-invalid');
     }
-    return className;
-  };
+
+    return classNames.join('  ');
+  }
 
   /**
    * Create id for messaging
