@@ -1,4 +1,7 @@
-import { format } from './utils';
+import {
+  format,
+  isRequired
+} from './utils';
 
 describe('format', () => {
   it('returns empty string for no names defined', () => {
@@ -15,5 +18,11 @@ describe('format', () => {
 
   it('formats first, middle and last names', () => {
     expect(format('Joseph', 'Quincy', 'Publique')).toEqual('Joseph Quincy Publique');
+  });
+});
+
+describe('isRequired', () => {
+  it('returns empty string when no target or component defined', () => {
+    expect(isRequired(undefined, undefined)).toEqual(undefined);
   });
 });

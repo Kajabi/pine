@@ -35,7 +35,7 @@ export class SageInput {
   @Prop() inputId: string;
 
   /**
-   * Text to be displayed as the form label
+   * Text to be displayed as the input label
    */
   @Prop() label?: string;
 

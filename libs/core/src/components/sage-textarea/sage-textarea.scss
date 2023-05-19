@@ -1,0 +1,96 @@
+:host {
+  --background-color: #fff;
+  --background-color-disabled: var(--sage-color-neutral-grey-200);
+
+  --color: var(--sage-color-neutral-charcoal-400);
+  --color-error: var(--sage-color-red-300);
+  --color-placeholder: var(--sage-color-neutral-charcoal-200);
+  --color-disabled: var(--sage-color-neutral-charcoal-200);
+
+  --border-color-default: var(--sage-color-neutral-grey-400);
+  --border-color-hover: var(--sage-color-neutral-grey-500);
+  --border-color-focus-visible: var(--sage-color-neutral-grey-300);
+  --border-color-error: var(--sage-color-red-300);
+
+  --focus-visible-outline-color: var(--sage-color-primary-200);
+  --focus-visible-outline-color-error: var(--sage-color-red-200);
+
+  --label-font-size: var(--sage-font-size-body);
+  --label-font-weight: var(--sage-font-weight-medium);
+  --label-line-height: var(--sage-line-height-md);
+  --label-margin-block-end: var(--sage-spacing-xs);
+
+  --field-font-size: var(--sage-font-size-body);
+  --field-font-weight: var(--sage-font-weight-regular);
+  --field-line-height: var(--sage-line-height-md);
+  --field-padding-block: var(--sage-spacing-xs);
+  --field-padding-inline: var(--sage-spacing-sm);
+
+  --hint-font-size: var(--sage-font-size-body-xs);
+  --hint-font-weight: var(--sage-font-weight-regular);
+  --hint-line-height: var(--sage-line-height-sm);
+  --hint-margin-block-start: var(--sage-spacing-xs);
+
+  display: inline;
+}
+
+.sage-textarea {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  display: block;
+  font-size: var(--label-font-size);
+  font-weight: var(--label-font-weight);
+  line-height: var(--label-line-height);
+  margin-block-end: var(--label-margin-block-end);
+}
+
+.sage-textarea__field {
+  background-color: var(--background-color);
+  border: var(--sage-border-interactive);
+  border-radius: var(--sage-border-radius-md);
+  font-family: inherit;
+  font-size: var(--field-font-size);
+  font-weight: var(--field-font-weight);
+  line-height: var(--field-line-height);
+  padding: var(--field-padding-block) var(--field-padding-inline);
+
+  &:hover:not(:disabled, .is-invalid) {
+    border-color: var(--border-color-hover);
+  }
+
+  &:disabled {
+    background-color: var(--background-color-disabled);
+    color: var(--color-disabled);
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    border-color: var(--border-color-focus-visible);
+    outline: 4px solid var(--focus-visible-outline-color);
+  }
+
+  &::placeholder {
+    color: var(--color-placeholder);
+  }
+
+  &.is-invalid {
+    border-color: var(--color-error);
+    outline-color: var(--focus-visible-outline-color-error);
+  }
+}
+
+.sage-textarea__error-message,
+.sage-textarea__hint-message {
+  font-size: var(--hint-font-size);
+  font-weight: var(--hint-font-weight);
+  line-height: var(--hint-line-height);
+  margin-block-end: 0;
+  margin-block-start: var(--hint-margin-block-start);
+}
+
+.sage-textarea__error-message {
+  color: var(--color-error);
+}
