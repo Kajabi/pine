@@ -12,6 +12,7 @@
 | `color`   | `color`   |             | `"accent" \| "danger" \| "info" \| "neutral" \| "success" \| "warning"` | `'neutral'` |
 | `dot`     | `dot`     |             | `boolean`                                                               | `undefined` |
 | `label`   | `label`   |             | `string`                                                                | `undefined` |
+| `large`   | `large`   |             | `boolean`                                                               | `undefined` |
 | `variant` | `variant` |             | `"dropdown" \| "tag" \| "text"`                                         | `'text'`    |
 
 

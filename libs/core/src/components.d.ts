@@ -95,6 +95,7 @@ export namespace Components {
         "color": 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
         "dot": boolean;
         "label": string;
+        "large": boolean;
         "variant": 'text' | 'tag' | 'dropdown';
     }
     interface SageDivider {
@@ -617,6 +618,7 @@ declare namespace LocalJSX {
         "color"?: 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
         "dot"?: boolean;
         "label"?: string;
+        "large"?: boolean;
         "variant"?: 'text' | 'tag' | 'dropdown';
     }
     interface SageDivider {

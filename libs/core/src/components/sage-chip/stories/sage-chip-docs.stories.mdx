@@ -41,12 +41,12 @@ Chips are used to inform users of the status of an object or to relate propertie
 <Story story={stories.Dots} />
 
 <Canvas>
-  <sage-chip label="Accent" color="accent" dot="true" />
-  <sage-chip label="Danger" color="danger" dot="true" />
-  <sage-chip label="Info" color="info" dot="true" />
-  <sage-chip label="Neutral" color="neutral" dot="true" />
-  <sage-chip label="Success" color="success" dot="true" />
-  <sage-chip label="Warning" color="warning" dot="true" />
+  <sage-chip label="Accent" color="accent" dot />
+  <sage-chip label="Danger" color="danger" dot />
+  <sage-chip label="Info" color="info" dot />
+  <sage-chip label="Neutral" color="neutral" dot/>
+  <sage-chip label="Success" color="success" dot />
+  <sage-chip label="Warning" color="warning" dot />
 </Canvas>
 
 ### Dropdown
@@ -73,4 +73,16 @@ Chips are used to inform users of the status of an object or to relate propertie
   <sage-chip label="Neutral" color="neutral" variant="tag" />
   <sage-chip label="Success" color="success" variant="tag" />
   <sage-chip label="Warning" color="warning" variant="tag" />
+</Canvas>
+
+
+### Large
+
+<Story story={stories.Large} />
+
+<Canvas>
+  <sage-chip label="Accent" color="accent" variant="text" large />
+  <sage-chip label="Danger" color="danger" dot large />
+  <sage-chip label="Info" color="info" variant="dropdown" large />
+  <sage-chip label="Success" color="success" variant="tag" large />
 </Canvas>

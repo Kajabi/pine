@@ -4,6 +4,7 @@ const BaseTemplate = (args) => html`
 <sage-chip
   color="${args.color}"
   label="${args.label}"
+  large="${args.large}"
   dot="${args.dot}"
   variant="${args.variant}"
 />`;
@@ -56,3 +57,13 @@ Tag.args = {
   variant: "tag",
 }
 Tag.parameters = { ...defaultParameters };
+
+export const Large = BaseTemplate.bind();
+Large.args = {
+  color: "neutral",
+  dot: false,
+  label: "label",
+  large: true,
+  variant: "tag",
+}
+Large.parameters = { ...defaultParameters };
