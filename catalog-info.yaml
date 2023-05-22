@@ -1,0 +1,39 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: pine
+  description: The Pine Design System
+  tags:
+    - design
+    - ux
+spec:
+  owner: design-system-services
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: pine
+  description: The Pine Design System Library
+  tags:
+    - design
+    - ux
+    - javascript
+  annotations:
+    # TODO: Change these to `pine` once the repo has been changed
+    backstage.io/source-location: url:https://github.com/Kajabi/sage/tree/next
+    github.com/project-slug: Kajabi/sage
+spec:
+  type: library
+  lifecycle: production
+  owner: design-system-services
+  system: pine
+---
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: pine.mono-repo
+spec:
+  targets:
+    - ./libs/core/catalog-info.yaml
+    - ./libs/icons/catalog-info.yaml
+    - ./libs/react/catalog-info.yaml

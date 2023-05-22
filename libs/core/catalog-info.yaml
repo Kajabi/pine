@@ -1,0 +1,13 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: pine-core
+  description: The core library for the Pine design system
+  tags:
+    - javascript
+spec:
+  type: library
+  lifecycle: production
+  owner: design-system-services
+  system: pine
+  subcomponentOf: pine
