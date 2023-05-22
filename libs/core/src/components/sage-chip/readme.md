@@ -7,13 +7,20 @@
 
 ## Properties
 
-| Property  | Attribute | Description | Type                                                                    | Default     |
-| --------- | --------- | ----------- | ----------------------------------------------------------------------- | ----------- |
-| `color`   | `color`   |             | `"accent" \| "danger" \| "info" \| "neutral" \| "success" \| "warning"` | `'neutral'` |
-| `dot`     | `dot`     |             | `boolean`                                                               | `undefined` |
-| `label`   | `label`   |             | `string`                                                                | `undefined` |
-| `large`   | `large`   |             | `boolean`                                                               | `undefined` |
-| `variant` | `variant` |             | `"dropdown" \| "tag" \| "text"`                                         | `'text'`    |
+| Property  | Attribute | Description                                                                                   | Type                                                                    | Default     |
+| --------- | --------- | --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | ----------- |
+| `color`   | `color`   | Determines the color scheme of the chip.                                                      | `"accent" \| "danger" \| "info" \| "neutral" \| "success" \| "warning"` | `'neutral'` |
+| `dot`     | `dot`     | Determines whether a dot should be displayed on the chip.                                     | `boolean`                                                               | `undefined` |
+| `label`   | `label`   | Sets the text or label content of the chip.                                                   | `string`                                                                | `undefined` |
+| `large`   | `large`   | Determines whether the chip should be rendered in a larger size.                              | `boolean`                                                               | `undefined` |
+| `variant` | `variant` | Determines the style variant of the chip. It accepts values from a predefined set of options. | `"dropdown" \| "tag" \| "text"`                                         | `'text'`    |
+
+
+## Events
+
+| Event               | Description                                        | Type               |
+| ------------------- | -------------------------------------------------- | ------------------ |
+| `sageTagCloseClick` | Event when close button is clicked on tag variant. | `CustomEvent<any>` |
 
 
 ## Dependencies

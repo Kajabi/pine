@@ -92,10 +92,25 @@ export namespace Components {
         "value": string;
     }
     interface SageChip {
+        /**
+          * Determines the color scheme of the chip.
+         */
         "color": 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
+        /**
+          * Determines whether a dot should be displayed on the chip.
+         */
         "dot": boolean;
+        /**
+          * Sets the text or label content of the chip.
+         */
         "label": string;
+        /**
+          * Determines whether the chip should be rendered in a larger size.
+         */
         "large": boolean;
+        /**
+          * Determines the style variant of the chip. It accepts values from a predefined set of options.
+         */
         "variant": 'text' | 'tag' | 'dropdown';
     }
     interface SageDivider {
@@ -403,6 +418,10 @@ export interface SageCheckboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSageCheckboxElement;
 }
+export interface SageChipCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSageChipElement;
+}
 export interface SageInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSageInputElement;
@@ -615,10 +634,29 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     interface SageChip {
+        /**
+          * Determines the color scheme of the chip.
+         */
         "color"?: 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
+        /**
+          * Determines whether a dot should be displayed on the chip.
+         */
         "dot"?: boolean;
+        /**
+          * Sets the text or label content of the chip.
+         */
         "label"?: string;
+        /**
+          * Determines whether the chip should be rendered in a larger size.
+         */
         "large"?: boolean;
+        /**
+          * Event when close button is clicked on tag variant.
+         */
+        "onSageTagCloseClick"?: (event: SageChipCustomEvent<any>) => void;
+        /**
+          * Determines the style variant of the chip. It accepts values from a predefined set of options.
+         */
         "variant"?: 'text' | 'tag' | 'dropdown';
     }
     interface SageDivider {
