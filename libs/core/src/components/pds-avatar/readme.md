@@ -7,9 +7,12 @@
 
 ## Properties
 
-| Property | Attribute | Description | Type     | Default     |
-| -------- | --------- | ----------- | -------- | ----------- |
-| `size`   | `size`    |             | `string` | `undefined` |
+| Property  | Attribute | Description | Type                    | Default      |
+| --------- | --------- | ----------- | ----------------------- | ------------ |
+| `badge`   | `badge`   |             | `boolean`               | `false`      |
+| `image`   | `image`   |             | `string`                | `undefined`  |
+| `size`    | `size`    |             | `string`                | `undefined`  |
+| `variant` | `variant` |             | `"admin" \| "customer"` | `'customer'` |
 
 
 ## Dependencies
