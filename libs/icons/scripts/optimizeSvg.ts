@@ -41,10 +41,10 @@ export const build = async(rootDir: string) => {
     const packageData = await fs.readJson(packageJsonPath);
     const version = packageData.version as string;
 
-    log(info('Getting SVGs'));
+    log('Getting SVGs...');
     const srcSvgData = await getSvgs(srcSvgDir, distSvgDir, distSageIconsDir, outputSvgDir);
 
-    log(info('calling optimizeSvgs'));
+    log('Optimizing SVGs...');
     await optimizeSvgs(srcSvgData);
 
     await Promise.all([

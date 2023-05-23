@@ -1,8 +1,6 @@
 import fs from 'fs-extra';
 import { join } from 'path';
 
-const libraryName = 'sage-icons';
-
 export const collectionCopy = async (rootDir: string) => {
   const optimizedSrc = join(rootDir, 'src', 'svg');
   const collectionDest = join(rootDir, 'dist', 'collection', 'components', 'sage-icon', 'svg');

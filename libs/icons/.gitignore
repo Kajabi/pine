@@ -2,7 +2,6 @@ dist/
 www/
 /components/
 icons/
-
 scripts/**/*.js
 
 *~
