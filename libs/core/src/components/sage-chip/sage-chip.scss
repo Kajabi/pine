@@ -85,29 +85,31 @@ $sage-chip-sentiment-interactive: (
 
     // dot colors
     .sage-chip__dot {
-      /* stylelint-disable -- TODO: ask about unknown function error */
+      /* stylelint-disable-next-line */
       background: map-get($sage-chip-sentiment-dots, $sentiment);
     }
 
     // tag close hover colors
     .sage-chip__close:hover {
+      /* stylelint-disable-next-line */
       background: map-get($sage-chip-sentiment-interactive, $sentiment);
     }
   }
   // dropdown hover colors
   :host(.sage-chip--#{$sentiment}.sage-chip--dropdown:hover) {
+    /* stylelint-disable-next-line */
     background: map-get($sage-chip-sentiment-interactive, $sentiment);
   }
 }
 
 .sage-chip__dot {
-  border-radius: 50%;
   border: 1px solid transparent;
+  border-radius: 50%;
   display: inline-block;
   height: var(--dot-size);
-  width: var(--dot-size);
   margin-block-end:  var(--margin-block-xs);
   margin-inline-end: var(--margin-inline-sm);
+  width: var(--dot-size);
 }
 
 // dropdown
@@ -122,18 +124,18 @@ $sage-chip-sentiment-interactive: (
 }
 
 .sage-chip__button {
+  align-items: center;
   appearance: none;
-  border: 0;
   background: transparent;
-  font-size: var(--font-size);
-  font-weight: var(--font-weight);
-  padding-block: var(--padding-block-sm);
-  padding-inline: var(--padding-inline);
-  font-family: inherit;
+  border: 0;
   border-radius: var(--border-radius);
   display: flex;
-  align-items: center;
+  font-family: inherit;
+  font-size: var(--font-size);
+  font-weight: var(--font-weight);
   line-height: var(--line-height);
+  padding-block: var(--padding-block-sm);
+  padding-inline: var(--padding-inline);
 
   &:focus-visible {
     box-shadow: 0 0 0 4px var(--sage-color-primary-200);
@@ -141,8 +143,8 @@ $sage-chip-sentiment-interactive: (
   }
 
   sage-icon {
-    margin-inline-start: var(--margin-inline);
     margin-inline-end: calc(var(--margin-inline-xs) * -1);
+    margin-inline-start: var(--margin-inline);
   }
 }
 
@@ -199,9 +201,9 @@ $sage-chip-sentiment-interactive: (
   }
 
   .sage-chip__close {
-    width: var(--close-size-lg);
     height: var(--close-size-lg);
     margin-inline-end: calc(var(--margin-inline-xl) * -1);
+    width: var(--close-size-lg);
   }
 
   &:host(.sage-chip--tag) {

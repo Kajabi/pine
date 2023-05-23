@@ -36,7 +36,7 @@ export class SageChip {
    */
   @Event() sageTagCloseClick: EventEmitter;
 
-  private handleCloseClick() {
+  private handleCloseClick = () => {
     this.sageTagCloseClick.emit();
   }
 
@@ -79,7 +79,7 @@ export class SageChip {
       <Host class={this.classNames()}>
         {this.setChipContent()}
         {this.variant === 'tag' && (
-          <button class="sage-chip__close" type="button" onClick={() => this.handleCloseClick()}>
+          <button class="sage-chip__close" type="button" onClick={this.handleCloseClick}>
             <sage-icon name="remove" size="12px"></sage-icon>
           </button>
         )}
