@@ -16,6 +16,7 @@ Default.args = {
   sentiment: "neutral",
   dot: false,
   label: "label",
+  large: false,
   variant: "text",
 }
 Default.parameters = { ...defaultParameters };
@@ -25,6 +26,7 @@ Sentiment.args = {
   sentiment: "success",
   dot: false,
   label: "label",
+  large: false,
   variant: "text",
 }
 Sentiment.parameters = { ...defaultParameters };
@@ -34,6 +36,7 @@ Dots.args = {
   sentiment: "neutral",
   dot: true,
   label: "label",
+  large: false,
   variant: "text",
 }
 Dots.parameters = { ...defaultParameters };
@@ -43,6 +46,7 @@ Dropdown.args = {
   sentiment: "neutral",
   dot: false,
   label: "label",
+  large: false,
   variant: "dropdown",
 }
 Dropdown.parameters = { ...defaultParameters };
@@ -52,6 +56,7 @@ Tag.args = {
   sentiment: "neutral",
   dot: false,
   label: "label",
+  large: false,
   variant: "tag",
 }
 Tag.parameters = { ...defaultParameters };
