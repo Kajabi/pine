@@ -79,7 +79,7 @@ $sage-chip-sentiment-interactive: (
   warning: var(--background-warning-interactive),
 );
 
-@each $sentiment, $value in $sage-chip-colors {
+@each $sentiment, $value in $sage-chip-sentiment {
   :host(.sage-chip--#{$sentiment}) {
     background: $value;
 
