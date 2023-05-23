@@ -1,5 +1,8 @@
 import * as dotenv from 'dotenv';
 
+import { build as optimizeSvgs} from '../optimizeSvg'
+import { collectionCopy } from '../collection-copy';
+
 if (process.env.NODE_ENV !== 'prod') {
   dotenv.config({ path: `${process.cwd()}/libs/icons/.env` })
 }
@@ -22,7 +25,8 @@ const log = console.log;
 
 const baseDir = process.cwd();
 const scriptsDir = path.join(baseDir, 'scripts');
-const srcSvgBasePath = path.join(process.cwd(), 'src', 'svg');
+const srcDir = path.join(baseDir, 'src');
+const srcSvgBasePath = path.join(srcDir, 'svg');
 
 const date = new Date();
 const strDate = [date.getFullYear().toString(), (date.getMonth() + 1).toString().padStart(2,'0'), date.getDate().toString()].join('-');
@@ -36,10 +40,8 @@ const run = async (rootDir: string) => {
 
     const data = await processData(rootDir, config);
 
-    log(`${makeResultsTable(data.downloaded)}\n`);
-
-    console.log('Icon Count: ', data.icons.length, 'Result Count: ', data.downloaded.length);
-    createJsonIconList(data.icons, config.outputPath);
+    log((detail('Optimizing images!!!!')));
+    await optimizeSvgs(rootDir);
 
     const git = gitClient();
     await git.add(srcSvgBasePath);
@@ -47,10 +49,25 @@ const run = async (rootDir: string) => {
     const statusResults: StatusResult = await git.status([srcSvgBasePath]);
     const filesChanged = statusResults.files;
 
-    if (filesChanged.length <= 0)
+    if (filesChanged.length <= 0) {
+      log(detail('No changes were found. Exiting the process!!!!'))
+
+      removeTmpDirectory(config);
+
       return;
+    }
+
+    log('Copying collections...');
+    await collectionCopy(rootDir);
+
+    log(`${makeResultsTable(data.downloaded)}\n`);
+
+    console.log('Icon Count: ', data.icons.length, 'Result Count: ', data.downloaded.length);
+    createJsonIconList(data.icons, srcDir);
 
     await createChangelogHTML(statusResults);
+
+    removeTmpDirectory(config)
 
     // restore staged files in case of failure
     const { exec } = require('node:child_process')
@@ -201,7 +218,42 @@ const createChangelogHTML = async (statusResults: StatusResult) => {
     .replace(/{{renamed}}/g, statusResults.renamed.length.toString())
     .replace(/{{content}}/g, [created, modified, deleted, renamed].join('\n'));
 
-  fs.writeFileSync(path.join(baseDir, 'changelogs', `${strDate}-changelog.html`), html);
+  const changelogFilename = `${strDate}-changelog.html`
+  const changelogPath = path.join(baseDir, 'changelogs');
+  const fullChangelogFilename = path.join(changelogPath, changelogFilename)
+
+  // Write file to changelogs directory
+  fs.writeFileSync(fullChangelogFilename, html);
+
+  const arrChangelogs = fs.readdirSync(changelogPath);
+
+  const changelogRecords = []
+  let numberOfChangelogs = 0;
+
+  arrChangelogs.reverse().forEach((filename, idx) => {
+    if ( path.extname(filename) === '.html') {
+      if (idx < 10 ) {
+        changelogRecords.push(`<a href="changelogs/${filename}">${path.basename(filename)}</a>`)
+      }
+      numberOfChangelogs++
+    }
+  })
+  log('Number of Changelog files found: ', detail(numberOfChangelogs));
+
+  const indexHtml = fs.readFileSync(path.join(baseDir, 'src','index-template.html'), 'utf8')
+    .replace(/{{changelogs}}/g, changelogRecords.join(' <br/>'));
+
+  // Copy index.html file to www worker folder
+  fs.writeFileSync(path.join(baseDir, 'src', 'index.html'), indexHtml);
+
+  if ( fs.ensureDir(path.join(baseDir, 'www')) ) {
+    const wwwChangelogPath = path.join(baseDir, 'www', 'changelogs');
+    const wwwChangelogFile = path.join(wwwChangelogPath, changelogFilename);
+
+    // Create Changelogs folder in `www` worker folder
+    fs.mkdirSync(wwwChangelogPath, { recursive: true })
+    fs.copyFileSync(fullChangelogFilename, wwwChangelogFile)
+  }
 
   return statusResults;
 }
@@ -257,7 +309,7 @@ const createJsonIconList = (icons: Array<FigmaIcon>, outputDir: string) => {
       )};
 
     const srcJsonStr = JSON.stringify(outputObj, null, 2) + '\n';
-    fs.writeFileSync(path.join(outputDir, '..', 'icon-data.json'), srcJsonStr);
+    fs.writeFileSync(path.join(outputDir, 'icon-data.json'), srcJsonStr);
 
   }
   catch (e) {
@@ -311,9 +363,14 @@ const downloadImage = (icon: FigmaIcon, outputDir: string) => {
       res.data.pipe(writer)
     })
     .catch((err) => {
+      if (err.message === 'Socket connection timeout') {
+        log(detail('Create new Figma access Token'),)
+      }
+
       log('Icon name: ', detail(icon.name))
       log('Error details ', '\nMessage: ', error(err.message), '\nUrl: ', detail(err.config.url))
       log(chalk.red.bold('Something went wrong fetching the image from S3, please try again'),)
+      log(chalk.red.bold(err),)
     });
 
   return new Promise<IconFileDetail>((resolve, reject) => {
@@ -674,6 +731,17 @@ const makeRow = (a, b) => {
   return `  ${a}\t    ${b}\t`
 }
 
+/**
+ * Removes the tmp directory created during
+ * the download process from the FigmaAPI
+ *
+ * @param config - FigmaIconConfig object
+ */
+const removeTmpDirectory = (config: FigmaIconConfig) => {
+  log('Removing tmp directory')
+  const tmpDir = path.join(config.downloadPath, '..');
+  fs.rmSync(tmpDir, { force: true, recursive: true });
+}
 /**
  * Reads and Sets the Figma access token
  *
