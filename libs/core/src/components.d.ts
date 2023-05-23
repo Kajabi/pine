@@ -93,7 +93,7 @@ export namespace Components {
     }
     interface SageChip {
         /**
-          * Determines the color scheme of the chip.
+          * Sets the color scheme of the chip.
          */
         "color": 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
         /**
@@ -109,7 +109,7 @@ export namespace Components {
          */
         "large": boolean;
         /**
-          * Determines the style variant of the chip. It accepts values from a predefined set of options.
+          * Sets the style variant of the chip. It accepts values from a predefined set of options.
          */
         "variant": 'text' | 'tag' | 'dropdown';
     }
@@ -635,7 +635,7 @@ declare namespace LocalJSX {
     }
     interface SageChip {
         /**
-          * Determines the color scheme of the chip.
+          * Sets the color scheme of the chip.
          */
         "color"?: 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
         /**
@@ -655,7 +655,7 @@ declare namespace LocalJSX {
          */
         "onSageTagCloseClick"?: (event: SageChipCustomEvent<any>) => void;
         /**
-          * Determines the style variant of the chip. It accepts values from a predefined set of options.
+          * Sets the style variant of the chip. It accepts values from a predefined set of options.
          */
         "variant"?: 'text' | 'tag' | 'dropdown';
     }

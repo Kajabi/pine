@@ -8,7 +8,7 @@ import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 
 export class SageChip {
   /**
-   * Determines the color scheme of the chip.
+   * Sets the color scheme of the chip.
    */
   @Prop() color: 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning' = 'neutral';
 
@@ -28,7 +28,7 @@ export class SageChip {
   @Prop() large: boolean;
 
   /**
-   * Determines the style variant of the chip. It accepts values from a predefined set of options.
+   * Sets the style variant of the chip. It accepts values from a predefined set of options.
    */
   @Prop() variant: 'text' | 'tag' | 'dropdown' = 'text';
 
