@@ -93,15 +93,11 @@ export namespace Components {
     }
     interface SageChip {
         /**
-          * Sets the color scheme of the chip.
-         */
-        "color": 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
-        /**
           * Determines whether a dot should be displayed on the chip.
          */
         "dot": boolean;
         /**
-          * Sets the text or label content of the chip.
+          * Sets the text label content of the chip.
          */
         "label": string;
         /**
@@ -109,7 +105,11 @@ export namespace Components {
          */
         "large": boolean;
         /**
-          * Sets the style variant of the chip. It accepts values from a predefined set of options.
+          * Sets the color scheme of the chip.
+         */
+        "sentiment": 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
+        /**
+          * Sets the style variant of the chip.
          */
         "variant": 'text' | 'tag' | 'dropdown';
     }
@@ -635,15 +635,11 @@ declare namespace LocalJSX {
     }
     interface SageChip {
         /**
-          * Sets the color scheme of the chip.
-         */
-        "color"?: 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
-        /**
           * Determines whether a dot should be displayed on the chip.
          */
         "dot"?: boolean;
         /**
-          * Sets the text or label content of the chip.
+          * Sets the text label content of the chip.
          */
         "label"?: string;
         /**
@@ -655,7 +651,11 @@ declare namespace LocalJSX {
          */
         "onSageTagCloseClick"?: (event: SageChipCustomEvent<any>) => void;
         /**
-          * Sets the style variant of the chip. It accepts values from a predefined set of options.
+          * Sets the color scheme of the chip.
+         */
+        "sentiment"?: 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
+        /**
+          * Sets the style variant of the chip.
          */
         "variant"?: 'text' | 'tag' | 'dropdown';
     }

@@ -10,7 +10,7 @@ export class SageChip {
   /**
    * Sets the color scheme of the chip.
    */
-  @Prop() color: 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning' = 'neutral';
+  @Prop() sentiment: 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning' = 'neutral';
 
   /**
    * Determines whether a dot should be displayed on the chip.
@@ -18,7 +18,7 @@ export class SageChip {
   @Prop() dot: boolean;
 
   /**
-   *  Sets the text or label content of the chip.
+   *  Sets the text label content of the chip.
    */
   @Prop() label: string;
 
@@ -28,7 +28,7 @@ export class SageChip {
   @Prop() large: boolean;
 
   /**
-   * Sets the style variant of the chip. It accepts values from a predefined set of options.
+   * Sets the style variant of the chip.
    */
   @Prop() variant: 'text' | 'tag' | 'dropdown' = 'text';
 
@@ -50,8 +50,8 @@ export class SageChip {
     if (this.variant) {
       classNames.push('sage-chip--' + this.variant);
     }
-    if (this.color) {
-      classNames.push('sage-chip--' + this.color);
+    if (this.sentiment) {
+      classNames.push('sage-chip--' + this.sentiment);
     }
 
     return classNames.join('  ');

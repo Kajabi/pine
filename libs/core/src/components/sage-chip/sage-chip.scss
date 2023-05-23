@@ -24,19 +24,19 @@
   --font-size-lg: var(--sage-font-size-body);
   --font-weight: var(--sage-font-weight-medium);
   --line-height: var(--sage-line-height-sm);
-  --padding-block-sm: calc(var(--sage-spacing-xxs) / 2); // 4px
+  --padding-block-sm: calc(var(--sage-spacing-xxs) / 2);
   --padding-block: var(--sage-spacing-xxs);
   --padding-block-lg: 6px;
-  --padding-inline-sm: calc(var(--sage-spacing-xxs) / 2); // 4px
+  --padding-inline-sm: calc(var(--sage-spacing-xxs) / 2);
   --padding-inline: 10px;
-  --padding-inline-lg: calc(var(--sage-spacing-md) / 2); // 12px
+  --padding-inline-lg: calc(var(--sage-spacing-md) / 2);
   --padding-inline-xl: 14px;
-  --margin-block-xs: calc(var(--sage-spacing-xxs) / 2); // 2px
-  --margin-inline-sm: calc(var(--sage-spacing-xs) / 2); // 4px
-  --margin-inline-xs: calc(var(--sage-spacing-xxs) / 2); // 2px
+  --margin-block-xs: calc(var(--sage-spacing-xxs) / 2);
+  --margin-inline-sm: calc(var(--sage-spacing-xs) / 2);
+  --margin-inline-xs: calc(var(--sage-spacing-xxs) / 2);
   --margin-inline: 6px;
   --margin-inline-lg: var(--sage-spacing-xs);
-  --margin-inline-xl: calc(var(--sage-spacing-md) / 2); // 12px
+  --margin-inline-xl: calc(var(--sage-spacing-md) / 2);
 
   --dot-size: 4px;
   --close-size: 10px;
@@ -52,7 +52,7 @@
   padding-inline: var(--padding-inline);
 }
 
-$sage-chip-colors: (
+$sage-chip-sentiment: (
   accent: var(--background-accent),
   danger: var(--background-danger),
   info: var(--background-info),
@@ -61,7 +61,7 @@ $sage-chip-colors: (
   warning: var(--background-warning),
 );
 
-$sage-chip-dot-colors: (
+$sage-chip-sentiment-dots: (
   accent: var(--background-accent-dot),
   danger: var(--background-danger-dot),
   info: var(--background-info-dot),
@@ -70,7 +70,7 @@ $sage-chip-dot-colors: (
   warning: var(--background-warning-dot),
 );
 
-$sage-chip-colors-interactive: (
+$sage-chip-sentiment-interactive: (
   accent: var(--background-accent-interactive),
   danger: var(--background-danger-interactive),
   info: var(--background-info-interactive),
@@ -79,24 +79,24 @@ $sage-chip-colors-interactive: (
   warning: var(--background-warning-interactive),
 );
 
-@each $color, $value in $sage-chip-colors {
-  :host(.sage-chip--#{$color}) {
+@each $sentiment, $value in $sage-chip-colors {
+  :host(.sage-chip--#{$sentiment}) {
     background: $value;
 
     // dot colors
     .sage-chip__dot {
-      /* stylelint-disable -- TODO: ask about unknown function */
-      background: map-get($sage-chip-dot-colors, $color);
+      /* stylelint-disable -- TODO: ask about unknown function error */
+      background: map-get($sage-chip-sentiment-dots, $sentiment);
     }
 
     // tag close hover colors
     .sage-chip__close:hover {
-      background: map-get($sage-chip-colors-interactive, $color);
+      background: map-get($sage-chip-sentiment-interactive, $sentiment);
     }
   }
   // dropdown hover colors
-  :host(.sage-chip--#{$color}.sage-chip--dropdown:hover) {
-    background: map-get($sage-chip-colors-interactive, $color);
+  :host(.sage-chip--#{$sentiment}.sage-chip--dropdown:hover) {
+    background: map-get($sage-chip-sentiment-interactive, $sentiment);
   }
 }
 

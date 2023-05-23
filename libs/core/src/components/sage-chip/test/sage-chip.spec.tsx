@@ -31,14 +31,14 @@ describe('sage-chip', () => {
     `);
   });
 
-  it('renders with color when color prop is set', async () => {
+  it('renders with color when sentiment prop is set', async () => {
     const page = await newSpecPage({
       components: [SageChip],
-      html: `<sage-chip color="accent" />`,
+      html: `<sage-chip sentiment="accent" />`,
     });
 
     expect(page.root).toEqualHtml(`
-    <sage-chip class="sage-chip sage-chip--accent sage-chip--text" color="accent">
+    <sage-chip class="sage-chip sage-chip--accent sage-chip--text" sentiment="accent">
       <mock:shadow-root>
         <span class="sage-chip__label"></span>
       </mock:shadow-root>
