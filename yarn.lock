@@ -14461,6 +14461,11 @@ run-async@^2.2.0, run-async@^2.4.0:
   resolved "https://registry.npmjs.org/run-async/-/run-async-2.4.1.tgz"
   integrity sha512-tvVnVv01b8c1RrA6Ep7JkStj85Guv/YrMcwqYQnwjsAS2cTmmPGBBjAjpCW7RrSodNSoE2/qg9O4bceNvUuDgQ==
 
+run-func@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/run-func/-/run-func-3.0.0.tgz#16b5802afdb8e92d3e0857d16e728295876005cb"
+  integrity sha512-RZwVzBrD7biV5CiAgwEUdaRGt0hLjBrhn4PqemBuNogH9Sc/8Bv8p+6F6AweU5bxZXsb3Mxltgu+/f+TGi0udA==
+
 run-parallel@^1.1.9:
   version "1.2.0"
   resolved "https://registry.npmjs.org/run-parallel/-/run-parallel-1.2.0.tgz"

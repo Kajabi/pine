@@ -38,8 +38,7 @@ export interface FigmaIconConfig {
   ignoreFrames: string[]
 
   /**
-   * Path to save the svgs
-   * @defaultValue `src/svgs`
+   * Path to save the downloaded SVGs
    */
   outputPath: string,
 

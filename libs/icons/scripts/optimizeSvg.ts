@@ -18,25 +18,33 @@ const libraryName = 'sage-icons';
  *
  * @param rootDir - The source directory
  */
-const build = async(rootDir: string) => {
+export const build = async(rootDir: string) => {
   try {
 
+    /*
+    Read from Temp Directory, which is location of Downloaded icons from Figma
+    Optimize images move into `src/svg`
+    */
+
     const packageJsonPath  = join(rootDir, 'package.json');
-    const srcDir = join(rootDir, 'src');
+    const srcDir = join(rootDir, 'tmp');
     const srcSvgDir = join(srcDir, 'svg');
+    const outputDir = join(rootDir, 'src');
+    const outputSvgDir = join(outputDir, 'svg');
     const iconDir = join(rootDir, 'icons');
     const distDir = join(rootDir, 'dist');
     const distSageIconsDir = join(distDir, libraryName);
     const distSvgDir = join(distDir, 'svg');
 
-    await Promise.all([fs.emptyDir(iconDir), fs.emptyDir(distDir)]);
-    await fs.emptyDir(distSvgDir), await fs.emptyDir(distSageIconsDir);
+    await cleanDirectories(iconDir, distDir, distSvgDir, distSageIconsDir, outputSvgDir);
 
     const packageData = await fs.readJson(packageJsonPath);
     const version = packageData.version as string;
 
-    const srcSvgData = await getSvgs(srcSvgDir, distSvgDir, distSageIconsDir);
+    log(info('Getting SVGs'));
+    const srcSvgData = await getSvgs(srcSvgDir, distSvgDir, distSageIconsDir, outputSvgDir);
 
+    log(info('calling optimizeSvgs'));
     await optimizeSvgs(srcSvgData);
 
     await Promise.all([
@@ -57,7 +65,14 @@ const build = async(rootDir: string) => {
 
 }
 
-const getSvgs = async (srcSvgDir: string, distSvgDir: string, distSageIconsDir: string): Promise<SvgData[]> => {
+const cleanDirectories = async (iconDir, distDir, distSvgDir, distSageIconsDir, outputSvgDir) => {
+  await Promise.all([fs.emptyDir(iconDir), fs.emptyDir(distDir)]);
+    await fs.emptyDir(distSvgDir), await fs.emptyDir(distSageIconsDir);
+    await fs.emptyDir(outputSvgDir);
+
+}
+
+const getSvgs = async (srcSvgDir: string, distSvgDir: string, distSageIconsDir: string, outputSvgDir: string): Promise<SvgData[]> => {
   const optimizedSvgDir = join(distSageIconsDir, 'svg');
   await fs.emptyDir(optimizedSvgDir);
 
@@ -73,14 +88,17 @@ const getSvgs = async (srcSvgDir: string, distSvgDir: string, distSageIconsDir: 
         throw new Error(`svg filename "${fileName}" must be all lowercase`);
       }
 
-      // srcFilePath: /src/svg/airplane-outline.svg
+      // srcFilePath: /tmp/svg/airplane-outline.svg
       const srcFilePath = join(srcSvgDir, fileName);
 
-      // distSvgFilePath: /dist/svg
+      // distSvgFilePath: /dist/svg/airplane-outline.svg
       const distSvgFilePath = join(distSvgDir, fileName);
 
       // optimizedFilePath: /dist/sage-icons/svg/airplane-outline.svg
       const optimizedFilePath = join(optimizedSvgDir, fileName);
+
+      // ouputSvgFilePath: /src/svg/airplane-outline.svg
+      const outputSvgFilePath = join(outputSvgDir, fileName);
 
       const dotSplit = fileName.split('.');
       if (dotSplit.length > 2) {
@@ -108,17 +126,18 @@ const getSvgs = async (srcSvgDir: string, distSvgDir: string, distSageIconsDir: 
       );
 
       return {
-        fileName,
-        title,
-        srcFilePath,
         distSvgFilePath,
-        srcSvgContent: await fs.readFile(srcFilePath, 'utf8'),
+        exportName,
+        fileName,
+        fileNameCjs,
+        fileNameMjs,
+        iconName,
         optimizedFilePath,
         optimizedSvgContent: null,
-        iconName,
-        fileNameMjs,
-        fileNameCjs,
-        exportName,
+        outputSvgFilePath,
+        srcFilePath,
+        srcSvgContent: await fs.readFile(srcFilePath, 'utf8'),
+        title,
       };
     }),
   );
@@ -146,6 +165,12 @@ const optimizeSvgs = async (srcSvgData: Array<SvgData>) => {
       'removeDimensions',
       'removeUselessDefs',
       {
+        name: 'removeAttrs',
+        params: {
+          attrs: "(fill|stroke|clip-rule)"
+        }
+      },
+      {
         name: 'addClassesToSVGElement',
         params: {
           className: 'sageicon'
@@ -161,6 +186,12 @@ const optimizeSvgs = async (srcSvgData: Array<SvgData>) => {
       'removeScriptElement',
       'removeDimensions',
       'removeUselessDefs',
+      {
+        name: 'removeAttrs',
+        params: {
+          attrs: "(fill|stroke|clip-rule)"
+        }
+      },
       {
         name: 'addClassesToSVGElement',
         params: {
@@ -203,6 +234,7 @@ const optimizeSvg = async (optimizePass: Record<string, unknown>, webComponentPa
 
   await fs.writeFile(svgData.optimizedFilePath, svgData.optimizedSvgContent);
   await fs.writeFile(svgData.distSvgFilePath, sourceSvg.data);
+  await fs.writeFile(svgData.outputSvgFilePath, sourceSvg.data);
 }
 
 const copyToTesting = async (rootDir: string, distDir: string, srcSvgData: Array<SvgData>) => {
@@ -408,5 +440,3 @@ const getDataUrl = (svgData: SvgData) => {
 
   return `"data:image/svg+xml;utf8,${svg}"`;
 }
-
-build(join(__dirname, '..'));
