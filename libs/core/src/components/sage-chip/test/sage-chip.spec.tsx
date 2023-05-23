@@ -149,5 +149,4 @@ describe('sage-chip', () => {
 
     expect(eventSpy).toHaveBeenCalled();
   });
-
 });

@@ -5,7 +5,6 @@ import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
   styleUrl: 'sage-chip.scss',
   shadow: true,
 })
-
 export class SageChip {
   /**
    * Sets the color scheme of the chip.
@@ -33,8 +32,8 @@ export class SageChip {
   @Prop() variant: 'text' | 'tag' | 'dropdown' = 'text';
 
   /**
-  * Event when close button is clicked on tag variant.
-  */
+   * Event when close button is clicked on tag variant.
+   */
   @Event() sageTagCloseClick: EventEmitter;
 
   private handleCloseClick() {
@@ -57,7 +56,7 @@ export class SageChip {
     return classNames.join('  ');
   }
 
-  render() {
+  private setChipContent() {
     const isDropdown = this.variant === 'dropdown';
     const chipContent = isDropdown ? (
       <button class="sage-chip__button" type="button">
@@ -72,9 +71,13 @@ export class SageChip {
       </span>
     );
 
+    return chipContent;
+  }
+
+  render() {
     return (
       <Host class={this.classNames()}>
-        {chipContent}
+        {this.setChipContent()}
         {this.variant === 'tag' && (
           <button class="sage-chip__close" type="button" onClick={() => this.handleCloseClick()}>
             <sage-icon name="remove" size="12px"></sage-icon>
