@@ -135,7 +135,7 @@ describe('sage-chip', () => {
     const page = await newSpecPage({
       components: [SageChip],
       html: `
-        <sage-chip variant="tag" label="Tag Chip"></sage-chip>
+        <sage-chip variant="tag" label="Tag Chip" />
       `,
     });
 
