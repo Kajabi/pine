@@ -40,7 +40,6 @@ const run = async (rootDir: string) => {
 
     const data = await processData(rootDir, config);
 
-    log((detail('Optimizing images!!!!')));
     await optimizeSvgs(rootDir);
 
     const git = gitClient();
