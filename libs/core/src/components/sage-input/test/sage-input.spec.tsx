@@ -180,4 +180,29 @@ describe('sage-input', () => {
     expect(sageInput?.value).toEqual('');
     expect(eventSpy).toHaveBeenCalled();
   });
+
+  it('is invalid when type email is not a valid email address onInput', async () => {
+    const page = await newSpecPage({
+      components: [SageInput],
+      html: `<sage-input type="email" value="yada-yada" required="true" />`,
+    });
+
+    const sageInput = page.root;
+    const input = sageInput?.shadowRoot?.querySelector<HTMLInputElement>('input');
+    const eventSpy = jest.fn();
+
+    document.addEventListener('sageInput', eventSpy);
+
+    expect(sageInput?.value).toEqual('yada-yada');
+
+    input.value = 'notavalidemailaddress.com';
+
+    // TODO Q: is mockReturnValue actually working or merely mirrroring my call?
+    input.checkValidity = jest.fn().mockReturnValue(false);
+    input.dispatchEvent(new Event('input'));
+    await page.waitForChanges();
+
+    expect(sageInput?.value).toEqual('notavalidemailaddress.com');
+    expect(eventSpy).toHaveBeenCalled();
+  });
 });
