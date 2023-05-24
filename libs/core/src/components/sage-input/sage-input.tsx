@@ -1,4 +1,5 @@
 import { Component, Event, EventEmitter, h, Host, Prop } from '@stencil/core';
+import { isRequired } from '../../utils/utils';
 
 /**
  * @slot - Content is placed between the opening closing tags
@@ -27,7 +28,7 @@ export class SageInput {
   /**
    * Indicates whether or not the input field is invalid or throws an error
    */
-  @Prop() invalid?: boolean;
+  @Prop({mutable: true}) invalid?: boolean;
 
   /**
    * A unique identifier for the input field
@@ -79,9 +80,13 @@ export class SageInput {
 
   private onInputEvent = (ev: Event) => {
     const input = ev.target as HTMLInputElement | null;
+
+    isRequired(input, this);
+
     if (input) {
       this.value = input.value || '';
     }
+
     this.sageInput.emit(ev as InputEvent);
   };
 
