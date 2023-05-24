@@ -267,7 +267,7 @@ describe('sage-textarea', () => {
     expect(textarea?.innerHTML.toString()).toBe('');
   });
 
-  it('onChange logic with valid `innerHTML` runs', async () => {
+  it('is valid when the value is present onChange' , async () => {
     const page = await newSpecPage({
       components: [SageTextarea],
       html: `<sage-textarea value="initial" required="true"></sage-textarea>`,
@@ -290,7 +290,7 @@ describe('sage-textarea', () => {
     expect(eventSpy).toHaveBeenCalled();
   });
 
-  it('onChange logic with invalid `innerHTML` runs', async () => {
+  it('is invalid when the value is empty onChange', async () => {
     const page = await newSpecPage({
       components: [SageTextarea],
       html: `<sage-textarea value="initial" required="true"></sage-textarea>`,

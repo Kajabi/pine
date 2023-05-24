@@ -7,7 +7,8 @@ export const hasShadowDom = (el: HTMLElement) => {
 }
 
 export const isRequired = (target, component) => {
-  if ( !target || !component ) return;
+  if ( !target ) return;
+
   if (component.required === true) {
     (target.checkValidity() === false) ? component.invalid = true : component.invalid = false;
   }

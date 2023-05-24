@@ -80,7 +80,8 @@ export class SageTextarea {
   @Event() sageTextareaChange: EventEmitter<TextareaChangeEventDetail>;
 
   private onTextareaChange = (ev: Event) => {
-    const textarea = ev.target as HTMLTextAreaElement;
+    const textarea = ev.target as HTMLTextAreaElement | null;
+
     isRequired(textarea, this);
 
     if (textarea) {
