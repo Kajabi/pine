@@ -35,7 +35,7 @@
     "build.dev": "run-s build.ts build.icons build.component.dev collection.copy",
     "build.component": "stencil build --docs",
     "build.component.dev": "stencil build --dev --docs --watch --serve",
-    "build.icons": "run-func scripts/optimizeSvg.js build $(pwd)",
+    "build.icons": "run-func scripts/optimize-svgs.js run $(pwd)",
     "build.ts": "tsc -p scripts/tsconfig.json",
     "collection.copy": "run-func scripts/collection-copy.js collectionCopy $(pwd)",
     "figma.export": "node scripts/figma_icons/figma-icon-export.js",
