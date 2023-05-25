@@ -11,24 +11,30 @@ export class PdsAvatar {
 
   @Prop() image?: string;
 
-  @Prop() size: string;
+  @Prop() size?:
+  | 'xl'
+  | 'lg'
+  | 'md'
+  | 'sm'
+  | 'xs' = 'sm';
 
   @Prop() variant?: 'customer' | 'admin' = 'customer'
+
+  private classNames = (props: object) => {
+    return Object.keys(props).join(' ');
+  }
 
   render() {
     return (
       <Host
-        class={{
+        class={this.classNames({
           'pds-avatar': true,
-        }}
+          ...(this.size && { [`pds-avatar--${this.size}`] : []}),
+          ...(this.variant === 'admin' && { [`pds-avatar--${this.variant}`] : []}),
+        })}
       >
-        <pds-icon
-          name="user-filled"
-          size={`${this.size || 'normal'}`}
-        >
-        </pds-icon>
+        <pds-icon name="user-filled" size="normal"></pds-icon>
       </Host>
     );
   }
-
 }

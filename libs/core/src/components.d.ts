@@ -10,7 +10,11 @@ export namespace Components {
     interface PdsAvatar {
         "badge"?: boolean;
         "image"?: string;
-        "size": string;
+        "size"?: | 'xl'
+  | 'lg'
+  | 'md'
+  | 'sm'
+  | 'xs';
         "variant"?: 'customer' | 'admin';
     }
     interface PdsButton {
@@ -597,7 +601,11 @@ declare namespace LocalJSX {
     interface PdsAvatar {
         "badge"?: boolean;
         "image"?: string;
-        "size"?: string;
+        "size"?: | 'xl'
+  | 'lg'
+  | 'md'
+  | 'sm'
+  | 'xs';
         "variant"?: 'customer' | 'admin';
     }
     interface PdsButton {

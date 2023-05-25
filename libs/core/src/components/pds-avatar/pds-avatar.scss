@@ -1,4 +1,10 @@
 :host {
+  /**
+    * @prop --size: Custom size of avatar
+  */
+
+  --size: var(--pine-spacing-sm);
+
   align-items: center;
   background-color: var(--pine-color-primary-200);
   block-size: var(--size);
@@ -10,8 +16,24 @@
   justify-content: center;
 }
 
+$pds-avatar-sizes: (
+  xs: var(--pine-spacing-md),
+  sm: 32px,
+  md: 40px,
+  lg: 56px,
+  xl: var(--pine-spacing-2xl)
+);
+
+@each $size, $value in $pds-avatar-sizes {
+  :host(.pds-avatar--#{$size}) {
+    height: $value;
+    width: $value;
+  }
+}
+
 pds-icon {
+  // Percentage is average size of icon in relation to total avatar size of
+  // all preset sizes found in Figma
   height: 33.53%;
-  width: 33.53%; // Average size of icon in relation to total avatar size of all available non-custom sizes
-  //width: 34.36%; Percent of smallest icon at 24px
+  width: 33.53%;
 }

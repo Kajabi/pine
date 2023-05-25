@@ -7,12 +7,19 @@
 
 ## Properties
 
-| Property  | Attribute | Description | Type                    | Default      |
-| --------- | --------- | ----------- | ----------------------- | ------------ |
-| `badge`   | `badge`   |             | `boolean`               | `false`      |
-| `image`   | `image`   |             | `string`                | `undefined`  |
-| `size`    | `size`    |             | `string`                | `undefined`  |
-| `variant` | `variant` |             | `"admin" \| "customer"` | `'customer'` |
+| Property  | Attribute | Description | Type                                   | Default      |
+| --------- | --------- | ----------- | -------------------------------------- | ------------ |
+| `badge`   | `badge`   |             | `boolean`                              | `false`      |
+| `image`   | `image`   |             | `string`                               | `undefined`  |
+| `size`    | `size`    |             | `"lg" \| "md" \| "sm" \| "xl" \| "xs"` | `'sm'`       |
+| `variant` | `variant` |             | `"admin" \| "customer"`                | `'customer'` |
+
+
+## CSS Custom Properties
+
+| Name     | Description           |
+| -------- | --------------------- |
+| `--size` | Custom size of avatar |
 
 
 ## Dependencies
