@@ -138,7 +138,7 @@ $sage-chip-sentiment-interactive: (
   padding-inline: var(--padding-inline);
 
   &:focus-visible {
-    box-shadow: 0 0 0 4px var(--sage-color-primary-200);
+    box-shadow: var(--box-shadow-focus);
     outline: none;
   }
 
@@ -174,7 +174,7 @@ $sage-chip-sentiment-interactive: (
   }
 
   &:focus-visible {
-    box-shadow: 0 0 0 4px var(--sage-color-primary-200);
+    box-shadow: var(--box-shadow-focus);
     outline: none;
   }
 }
