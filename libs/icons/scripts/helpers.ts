@@ -35,15 +35,15 @@ export interface SvgData {
   optimizedFilePath: string;
 
   /**
+   * The path to the save the optimized SVG within the Repo
+   */
+  optimizedLocalSvgFilePath: string;
+
+  /**
    * Optimized svg content data generated from
    * SVGO
    */
   optimizedSvgContent: string;
-
-  /**
-   * The path to the save the optimized SVG
-   */
-  outputSvgFilePath: string;
 
   /**
    * /tmp/svg/airplane-outline.svg
@@ -60,7 +60,6 @@ export interface JsonData {
   icons: { name: string; tags?: string[] }[];
   version?: string;
 }
-
 
 export const reservedKeywords = new Set([
   'do',

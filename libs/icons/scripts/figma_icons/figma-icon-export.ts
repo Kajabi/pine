@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 
-import { build as optimizeSvgs} from '../optimizeSvg'
+import { run as optimizeSvgs} from '../optimize-svgs'
 import { collectionCopy } from '../collection-copy';
 
 if (process.env.NODE_ENV !== 'prod') {
@@ -40,7 +40,7 @@ const run = async (rootDir: string) => {
 
     const data = await processData(rootDir, config);
 
-    await optimizeSvgs(rootDir);
+    await optimizeSvgs(rootDir, true);
 
     const git = gitClient();
     await git.add(srcSvgBasePath);
