@@ -31,6 +31,10 @@ $pds-avatar-sizes: (
   }
 }
 
+:host(.pds-avatar--admin) {
+  border-radius: 12px;
+}
+
 pds-icon {
   // Percentage is average size of icon in relation to total avatar size of
   // all preset sizes found in Figma

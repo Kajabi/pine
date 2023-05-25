@@ -18,7 +18,7 @@ export class PdsAvatar {
   | 'sm'
   | 'xs' = 'sm';
 
-  @Prop() variant?: 'customer' | 'admin' = 'customer'
+  @Prop({ reflect: true }) variant?: 'customer' | 'admin' = 'customer'
 
   private classNames = (props: object) => {
     return Object.keys(props).join(' ');
