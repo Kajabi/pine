@@ -40,7 +40,7 @@ export interface FigmaIconConfig {
   /**
    * Path to save the downloaded SVGs
    */
-  outputPath: string,
+  downloadPath: string,
 
   /**
    * Page that contains the icons

@@ -443,10 +443,10 @@ const fetchAndDownloadIcons = async (page, fileId: string, config: FigmaIconConf
 
     const icons: Array<FigmaIcon> = await fetchImageUrls(fileId, iconLibrary)
 
-    await createOutputDirectory(config.outputPath);
-    fs.emptyDirSync(config.outputPath);
+    await createOutputDirectory(config.downloadPath);
+    fs.emptyDirSync(config.downloadPath);
 
-    const allIcons = icons.map((icon) => downloadImage(icon, config.outputPath));
+    const allIcons = icons.map((icon) => downloadImage(icon, config.downloadPath));
 
     const results = await Promise.all(allIcons).then((res) => { return res; });
 
@@ -602,7 +602,7 @@ const loadFigmaIconConfig = async (rootDir: string) => {
  */
 const processData = async (rootDir: string, config: FigmaIconConfig) => {
   try {
-    config.outputPath = path.join(rootDir, config.outputPath);
+    config.downloadPath = path.join(rootDir, config.downloadPath);
 
     let figmaFileId = config.figmaFileId;
     let figmaData = await fetchFigmaData(figmaFileId);
@@ -624,7 +624,7 @@ const processData = async (rootDir: string, config: FigmaIconConfig) => {
 
     const page = findPage(figmaData.document, config.pageName);
 
-    const response = await fs.emptyDir(config.outputPath)
+    const response = await fs.emptyDir(config.downloadPath)
     .then(() => {
       return fetchAndDownloadIcons(page, figmaFileId, config, figmaData.components);
     })
