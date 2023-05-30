@@ -1,6 +1,8 @@
-import { Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
-import { isRequired } from '../../utils/utils';
-import { TextareaChangeEventDetail } from './textarea-interface';
+
+import { Component, Host, h, Prop, Event, EventEmitter, Method } from '@stencil/core';
+
+// import { isRequired } from '../../utils/utils';
+import { TextareaChangeEventDetail, TextareaInputEventDetail } from './textarea-interface';
 
 @Component({
   tag: 'sage-textarea',
@@ -8,7 +10,9 @@ import { TextareaChangeEventDetail } from './textarea-interface';
   shadow: true,
 })
 export class SageTextarea {
-  @Element() el: HTMLDivElement;
+  private textareaEl: HTMLTextAreaElement;
+
+  // @Element() el: HTMLDivElement;
 
   /**
    * A unique identifier for the textarea
@@ -72,24 +76,75 @@ export class SageTextarea {
   /**
    * The value of the textarea
    */
-  @Prop({mutable: true}) value?: string;
+  @Prop({mutable: true}) value = "";
 
   /**
    * Event emitted whenever the value of the textarea changes
    */
   @Event() sageTextareaChange: EventEmitter<TextareaChangeEventDetail>;
 
-  private onTextareaChange = (ev: Event) => {
-    const textarea = ev.target as HTMLTextAreaElement | null;
+  /**
+   * Event emitted whenever an alteration to the input's value is committed by the user
+   */
+  @Event() sageTextareaInput: EventEmitter<TextareaInputEventDetail>;
 
-    isRequired(textarea, this);
+  private emitChange = (ev: Event) => {
+    // const textarea = ev.target as HTMLTextAreaElement | null;
+    // const value = textarea.value;
 
-    if (textarea) {
-      this.value = textarea.innerHTML;
-    }
+    // isRequired(textarea, this);
 
-    this.sageTextareaChange.emit({value: this.value, event: ev});
+    // if (textarea) {
+    //   // this.value = value;
+    //   this.value = textarea.value || "";
+    // }
+
+    const { value } = this;
+
+    const newValue = value == null ? value : value.toString();
+
+    this.sageTextareaChange.emit({value: newValue, event: ev});
   };
+
+  private emitInput = (ev: Event) => {
+    // declare var
+    const target = ev.target as HTMLTextAreaElement | null;
+
+    // set the value
+    this.value = target.value || "";
+
+    // emit the event
+    this.sageTextareaInput.emit({event: ev, value: this.value});
+  }
+
+  private onChange = (ev: Event) => {
+    this.emitChange(ev);
+  }
+
+  private onInput = (ev: Event) => {
+    const input = ev.target as HTMLTextAreaElement | null;
+    if (input) {
+      this.value = input.value || '';
+    }
+    this.emitInput(ev);
+  }
+
+  // private emitInputChange(event?: Event) {
+  //   const { value } = this;
+  //   this.sageTextareaInput.emit({ value: value, event });
+  // }
+
+
+
+  /**
+   * Sets focus on a specific `sagd-textarea`. Use this method instead of the global `input.focus()`.
+   */
+  @Method()
+  async setFocus() {
+    if (this.textareaEl) {
+      this.textareaEl.focus();
+    }
+  }
 
   private textareaClassNames() {
     const classNames = ['sage-textarea__field'];
@@ -99,6 +154,10 @@ export class SageTextarea {
     }
 
     return classNames.join('  ');
+  }
+
+  private getValue(): string {
+    return this.value || '';
   }
 
   /**
@@ -121,6 +180,9 @@ export class SageTextarea {
   };
 
   render() {
+    const value = this.getValue();
+    console.log('value: ', value);
+
     return (
       <Host
         aria-disabled={this.disabled ? 'true' : null}
@@ -131,7 +193,9 @@ export class SageTextarea {
               {this.label}
             </label>
           }
+
           <textarea
+            ref={(el) => (this.textareaEl = el!) }
             aria-describedby={this.assignDescription()}
             aria-invalid={this.invalid ? "true" : undefined}
             class={this.textareaClassNames()}
@@ -142,8 +206,10 @@ export class SageTextarea {
             readOnly={this.readonly}
             required={this.required}
             rows={this.rows}
-            onChange={this.onTextareaChange}
-          >{this.value}</textarea>
+            onChange={this.onChange}
+            onInput={this.onInput}
+          >{value}</textarea>
+
           {this.hintMessage &&
             <p
               class="sage-textarea__hint-message"
@@ -152,6 +218,7 @@ export class SageTextarea {
               {this.hintMessage}
             </p>
           }
+
           {this.invalid &&
             <p
               aria-live="assertive"

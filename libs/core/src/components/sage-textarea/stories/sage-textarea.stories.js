@@ -9,6 +9,7 @@ const BaseTemplate = (args) => html`<sage-textarea
   label="${args.label}"
   name="${args.name}"
   onChange=${args.onChange}"
+  onInput="${args.onInput}"
   placeholder="${args.placeholder}"
   readonly="${args.readonly}"
   required="${args.required}"
@@ -28,7 +29,7 @@ const textareaEventExample = () => {
     const textarea = e.target.shadowRoot.querySelector(".sage-textarea__field");
 
     console.log('e: ', textarea);
-    console.log(`The value has been update to #${textarea.value}`);
+    console.log(`The value has been updated to #${textarea.value}`);
   });
 };
 
@@ -56,6 +57,7 @@ Required.args = {
   label: 'Name',
   name: 'Required',
   required: true,
+  value: 'Frank Dux'
 };
 Required.parameters = { ...defaultParameters };
 

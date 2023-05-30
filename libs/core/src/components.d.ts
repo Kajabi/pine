@@ -5,7 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { TextareaChangeEventDetail } from "./components/sage-textarea/textarea-interface";
+import { TextareaChangeEventDetail, TextareaInputEventDetail } from "./components/sage-textarea/textarea-interface";
 export namespace Components {
     interface MyComponent {
         /**
@@ -338,9 +338,13 @@ export namespace Components {
          */
         "rows"?: number;
         /**
+          * Sets focus on a specific `sagd-textarea`. Use this method instead of the global `input.focus()`.
+         */
+        "setFocus": () => Promise<void>;
+        /**
           * The value of the textarea
          */
-        "value"?: string;
+        "value": string;
     }
     interface SageTooltip {
         /**
@@ -841,6 +845,10 @@ declare namespace LocalJSX {
           * Event emitted whenever the value of the textarea changes
          */
         "onSageTextareaChange"?: (event: SageTextareaCustomEvent<TextareaChangeEventDetail>) => void;
+        /**
+          * Event emitted whenever an alteration to the input's value is committed by the user
+         */
+        "onSageTextareaInput"?: (event: SageTextareaCustomEvent<TextareaInputEventDetail>) => void;
         /**
           * Specifies a short hint that describes the expected value of the textarea
          */

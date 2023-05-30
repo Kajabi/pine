@@ -7,3 +7,8 @@ export interface TextareaEvent <T = TextareaChangeEventDetail> extends CustomEve
   detail: T;
   target: HTMLSageTextareaElement;
 }
+
+export interface TextareaInputEventDetail {
+  event?: Event;
+  value: string | null;
+}

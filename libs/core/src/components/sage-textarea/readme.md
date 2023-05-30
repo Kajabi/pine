@@ -20,14 +20,28 @@
 | `readonly`     | `readonly`      | Indicates whether or not the textarea is readonly                                                   | `boolean` | `false`            |
 | `required`     | `required`      | Indicates whether or not the textarea is required                                                   | `boolean` | `false`            |
 | `rows`         | `rows`          | Sets number of rows of text visible without needing to scroll in the textarea                       | `number`  | `undefined`        |
-| `value`        | `value`         | The value of the textarea                                                                           | `string`  | `undefined`        |
+| `value`        | `value`         | The value of the textarea                                                                           | `string`  | `""`               |
 
 
 ## Events
 
-| Event                | Description                                              | Type                                     |
-| -------------------- | -------------------------------------------------------- | ---------------------------------------- |
-| `sageTextareaChange` | Event emitted whenever the value of the textarea changes | `CustomEvent<TextareaChangeEventDetail>` |
+| Event                | Description                                                                        | Type                                     |
+| -------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------- |
+| `sageTextareaChange` | Event emitted whenever the value of the textarea changes                           | `CustomEvent<TextareaChangeEventDetail>` |
+| `sageTextareaInput`  | Event emitted whenever an alteration to the input's value is committed by the user | `CustomEvent<TextareaInputEventDetail>`  |
+
+
+## Methods
+
+### `setFocus() => Promise<void>`
+
+Sets focus on a specific `sagd-textarea`. Use this method instead of the global `input.focus()`.
+
+#### Returns
+
+Type: `Promise<void>`
+
+
 
 
 ----------------------------------------------
