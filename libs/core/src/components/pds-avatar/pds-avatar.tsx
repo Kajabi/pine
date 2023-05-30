@@ -34,6 +34,9 @@ export class PdsAvatar {
         })}
       >
         <pds-icon name="user-filled" size="normal"></pds-icon>
+        {this.badge &&
+          <pds-icon class="pds-avatar__badge" name="check-circle-filled" size="normal"></pds-icon>
+        }
       </Host>
     );
   }

@@ -14,6 +14,7 @@
   display: inline-flex;
   inline-size: var(--size);
   justify-content: center;
+  position: relative;
 }
 
 $pds-avatar-sizes: (
@@ -38,6 +39,15 @@ $pds-avatar-sizes: (
 pds-icon {
   // Percentage is average size of icon in relation to total avatar size of
   // all preset sizes found in Figma
+  // Used to allow icon to scale to container size
   height: 33.53%;
   width: 33.53%;
+}
+
+.pds-avatar__badge {
+  background-color: var(--pine-color-base-white);
+  border-radius: 100px;
+  bottom: 0;
+  position: absolute;
+  right: 0;
 }
