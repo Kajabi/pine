@@ -33,6 +33,20 @@ and not creating confusion, we adhere to two principles.
 
 <ArgsTable of="sage-icon" />
 
+### color
+The `color` property allows the icon to render in the specified color. This can be either string or hex format.
+
+```
+<sage-icon name="youtube" color="blue"></sage-icon>
+<sage-icon name="youtube" color="#ff0000"></sage-icon>
+```
+
+The above examples will render the following output:
+<Canvas withSource="none">
+  <sage-icon name="youtube" color="blue"></sage-icon>
+  <sage-icon name="youtube" color="#ff0000"></sage-icon>
+</Canvas>
+
 ### name
 The `name` property is the name of the svg filename.
 
@@ -46,8 +60,8 @@ The `size` property includes several pre-defined values for ease of use:
 <sage-icon name="upload" size="large"></sage-icon>
 ```
 
- will render the following output:
- <Canvas withSource="none">
+The above examples will render the following output:
+<Canvas withSource="none">
   <sage-icon name="upload" size="small"></sage-icon>
   <sage-icon name="upload" size="normal"></sage-icon>
   <sage-icon name="upload" size="medium"></sage-icon>
