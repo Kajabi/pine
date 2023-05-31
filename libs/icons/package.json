@@ -45,6 +45,7 @@
     "test": "stencil test --spec --e2e",
     "test.spec": "stencil test --spec",
     "test.spec.watch": "stencil test --spec --watch",
+    "test.watch": "stencil test --spec --e2e --watch --coverage",
     "update": "run-s build.ts figma.export"
   },
   "files": [
