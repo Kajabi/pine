@@ -1,4 +1,5 @@
 import { Component, Event, EventEmitter, h, Host, Prop } from '@stencil/core';
+import { assignDescription, messageId } from '../../utils/utils';
 
 /**
  * @slot - Content is placed between the opening closing tags
@@ -32,7 +33,7 @@ export class PdsInput {
   /**
    * A unique identifier for the input field
    */
-  @Prop() inputId: string;
+  @Prop() inputId!: string;
 
   /**
    * Text to be displayed as the input label
@@ -93,6 +94,8 @@ export class PdsInput {
         <div class="pds-input">
           <label htmlFor={this.inputId}>{this.label}</label>
           <input class="pds-input__field"
+            aria-describedby={assignDescription(this.inputId, this.invalid, this.hint)}
+            aria-invalid={this.invalid ? "true" : undefined}
             disabled={this.disabled}
             id={this.inputId}
             name={this.name}
@@ -104,11 +107,21 @@ export class PdsInput {
             onInput={this.onInputEvent}
           />
           {this.hint
-            ? <p class="pds-input__hint">{this.hint}</p>
+            ? <p
+                class="sage-input__hint"
+                id={messageId(this.inputId, 'helper')}
+              >
+                {this.hint}
+              </p>
             : ''
           }
           {this.errorText
-            ? <p class="pds-input__error-text">{this.errorText}</p>
+            ? <p
+                class="pds-input__error-text"
+                id={messageId(this.inputId, 'error')}
+              >
+                {this.errorText}
+              </p>
             : ''
           }
         </div>
