@@ -1,7 +1,7 @@
 
 import { Component, Host, h, Prop, Event, EventEmitter, Method } from '@stencil/core';
 
-// import { isRequired } from '../../utils/utils';
+import { isRequired } from '../../utils/utils';
 import { TextareaChangeEventDetail, TextareaInputEventDetail } from './textarea-interface';
 
 @Component({
@@ -99,10 +99,27 @@ export class SageTextarea {
     //   this.value = textarea.value || "";
     // }
 
+    // declare the var
     const { value } = this;
+    const textarea = ev.target as HTMLTextAreaElement | null;
 
+    console.log('textareatsx: ', textarea);
+    console.log('textareatsx.value: ', textarea.value);
+    console.log('textareatsx.innerHTML: ', textarea.innerHTML);
+    // console.log('textareatsx.checkValidity: ', textarea.checkValidity);
+    // console.log('textareatsx.validity.valid: ', textarea.validity.valid);
+
+    // validate the input
+    isRequired(textarea, this);
+
+    // console.log('myValue: ', value);
+    // console.log('hey: ', this);
+    // console.log('ev: ', ev.target);
+
+    // set the value
     const newValue = value == null ? value : value.toString();
 
+    // emit the event
     this.sageTextareaChange.emit({value: newValue, event: ev});
   };
 
@@ -118,10 +135,13 @@ export class SageTextarea {
   }
 
   private onChange = (ev: Event) => {
+    // console.log('changeEv: ', ev);
+    // console.log('changeEvTarg: ', ev.target.toString());
     this.emitChange(ev);
   }
 
   private onInput = (ev: Event) => {
+    console.log('onInput');
     const input = ev.target as HTMLTextAreaElement | null;
     if (input) {
       this.value = input.value || '';
@@ -181,7 +201,7 @@ export class SageTextarea {
 
   render() {
     const value = this.getValue();
-    console.log('value: ', value);
+    console.log('valuetsx: ', value);
 
     return (
       <Host

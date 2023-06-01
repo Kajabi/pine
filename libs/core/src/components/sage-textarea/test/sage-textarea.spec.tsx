@@ -273,10 +273,11 @@ describe('sage-textarea', () => {
     // expect(textarea?.value.toString()).toBe('new value');
 
     // textarea.value = '';
-    // textarea?.dispatchEvent(new Event('textareaInput'));
+    // await textarea?.setAttribute('value', '');
+    // textarea?.dispatchEvent(new Event('sageTextareaChange'));
     // await page.waitForChanges();
 
-    // expect(textarea?.value.toString()).toBe('');
+    // expect(textarea?.getAttribute('value')).toBe('');
   });
 
   it('is valid when the value is present onChange' , async () => {
@@ -285,18 +286,35 @@ describe('sage-textarea', () => {
       html: `<sage-textarea value="initial" required="true"></sage-textarea>`,
     });
 
+    // set up vars
+    const component = page.body?.querySelector<HTMLTextAreaElement>('sage-textarea');
+    const button = page.body?.querySelector<HTMLButtonElement>('button');
     const eventSpy = jest.fn();
-    document.addEventListener('sageTextareaChange', eventSpy);
+    // console.log('component: ', component);
 
-    const textarea = page.body?.querySelector<HTMLTextAreaElement>('sage-textarea');
-    expect(textarea?.getAttribute('value')).toEqual('initial');
+    // set the value
+    component.value = 'initialA';
+    // await component?.setAttribute('value', 'initialA');
+
+    const textarea = component?.shadowRoot?.querySelector('textarea');
+    console.log('textrea: ', textarea?.innerHTML);
+
+    // textarea.prototype.checkValidity = eventSpy;
+    // if (textarea) {
+    //   jest.spyOn(textarea, 'checkValidity');
+    // }
+
+    // set the event, dispatch, then wait
+    page.doc?.addEventListener('sageTextareaChange', eventSpy);
+    textarea?.dispatchEvent(new Event('change'));
     await page.waitForChanges();
 
-    textarea.value = 'initialA';
-    textarea.dispatchEvent(new Event('sageTextareaChange'));
-    await page.waitForChanges();
+    page.root?.querySelector('button')?.click();
 
-    expect(textarea?.getAttribute('value')).toEqual('initialA');
+    // expectations
+    // expect(component?.getAttribute('value')).toBe('initialA');
+    expect(textarea?.innerHTML).toBe('initialA');
+    // expect(component?.value).toEqual('initialA');
     expect(eventSpy).toHaveBeenCalled();
   });
 

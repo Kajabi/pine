@@ -7,6 +7,8 @@ export const hasShadowDom = (el: HTMLElement) => {
 }
 
 export const isRequired = (target, component) => {
+  console.log('utilsTarget: ', target);
+  // console.log('utilsComponent: ', component);
   if ( !target ) return;
 
   if (component.required === true) {
