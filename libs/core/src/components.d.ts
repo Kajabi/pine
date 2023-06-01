@@ -689,7 +689,7 @@ declare namespace LocalJSX {
         /**
           * A unique identifier for the input field
          */
-        "inputId"?: string;
+        "inputId": string;
         /**
           * Indicates whether or not the input field is invalid or throws an error
          */
