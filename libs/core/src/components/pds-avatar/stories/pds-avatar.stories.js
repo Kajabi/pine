@@ -1,7 +1,9 @@
 import { html } from 'lit-html';
+import imgFile from '../assets/demi_wilkinson.png';
 
 const BaseTemplate = (args) => html`<pds-avatar
 	badge="${args.badge}"
+	image="${args.image}"
 	size="${args.size}"
 	variant="${args.variant}"
 >
@@ -10,6 +12,8 @@ const BaseTemplate = (args) => html`<pds-avatar
 const AdminVariantTemplate = (args) => html`<pds-avatar size="${args.size}" variant="${args.variant}"></pds-avatar>`;
 
 const BadgeTemplate = (args) => html`<pds-avatar badge="${args.badge}" size="${args.size}"></pds-avatar>`;
+
+const ImageTemplate = (args) => html`<pds-avatar image="${args.image}" size="${args.size}"></pds-avatar>`;
 
 const defaultParameters = { docs: { disable: true } };
 
@@ -29,4 +33,10 @@ export const Badge = BadgeTemplate.bind();
 Badge.args = {
 	badge: true,
 	size: 'md'
+}
+
+export const Image = ImageTemplate.bind();
+Image.args = {
+	image: imgFile,
+	size: 'xl'
 }

@@ -4,17 +4,6 @@
   */
 
   --size: var(--pine-spacing-sm);
-
-  align-items: center;
-  background-color: var(--pine-color-primary-200);
-  block-size: var(--size);
-  border: var(--pine-border-default);
-  border-color: transparent;
-  border-radius: 100px;
-  display: inline-flex;
-  inline-size: var(--size);
-  justify-content: center;
-  position: relative;
 }
 
 $pds-avatar-sizes: (
@@ -26,14 +15,33 @@ $pds-avatar-sizes: (
 );
 
 @each $size, $value in $pds-avatar-sizes {
-  :host(.pds-avatar--#{$size}) {
+  :host(.pds-avatar--#{$size}) div {
     height: $value;
     width: $value;
   }
 }
 
-:host(.pds-avatar--admin) {
+:host(.pds-avatar--admin) div {
   border-radius: 12px;
+}
+
+div {
+  --radius-round: 100px;
+
+  align-items: center;
+  background-color: var(--pine-color-primary-200);
+  block-size: var(--size);
+  border: var(--pine-border-default);
+  border-color: transparent;
+  border-radius: var(--radius-round);
+  display: inline-flex;
+  inline-size: var(--size);
+  justify-content: center;
+  position: relative;
+
+  &:has(img) {
+    background-color: transparent
+  }
 }
 
 pds-icon {
@@ -45,9 +53,14 @@ pds-icon {
 }
 
 .pds-avatar__badge {
-  background-color: var(--pine-color-base-white);
-  border-radius: 100px;
-  bottom: 0;
+  background-color: var(--pds-color-base-white);
+  border-radius: var(--radius-round);
+--pine  bottom: 0;
   position: absolute;
   right: 0;
+}
+
+img {
+  border-radius: var(--radius-round);
+  width: 100%;
 }

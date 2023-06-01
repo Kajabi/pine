@@ -33,10 +33,12 @@ export class PdsAvatar {
           ...(this.variant === 'admin' && { [`pds-avatar--${this.variant}`] : []}),
         })}
       >
-        <pds-icon name="user-filled" size="normal"></pds-icon>
-        {this.badge &&
-          <pds-icon class="pds-avatar__badge" name="check-circle-filled" size="normal"></pds-icon>
-        }
+        <div>
+          {this.image ? <img src={this.image} /> : <pds-icon name="user-filled" size="normal"></pds-icon>}
+          {this.badge &&
+            <pds-icon class="pds-avatar__badge" name="check-circle-filled" size="normal"></pds-icon>
+          }
+        </div>
       </Host>
     );
   }
