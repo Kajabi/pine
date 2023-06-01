@@ -162,6 +162,10 @@ export namespace Components {
          */
         "hint"?: string;
         /**
+          * A unique identifier for the input field
+         */
+        "inputId": string;
+        /**
           * Indicates whether or not the input field is invalid or throws an error
          */
         "invalid"?: boolean;
@@ -690,6 +694,10 @@ declare namespace LocalJSX {
           * Displays a hint or description of the input field
          */
         "hint"?: string;
+        /**
+          * A unique identifier for the input field
+         */
+        "inputId": string;
         /**
           * Indicates whether or not the input field is invalid or throws an error
          */

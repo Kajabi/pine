@@ -1,5 +1,5 @@
 import { Component, Event, EventEmitter, h, Host, Prop } from '@stencil/core';
-import { assignDescription, messageId } from '../../utils/form';
+import { assignDescription, messageId } from '../../utils/utils';
 
 /**
  * @slot - Content is placed between the opening closing tags
@@ -34,6 +34,11 @@ export class PdsInput {
    * Indicates whether or not the input field is invalid or throws an error
    */
   @Prop() invalid?: boolean;
+
+  /**
+   * A unique identifier for the input field
+   */
+  @Prop() inputId!: string;
 
   /**
    * Text to be displayed as the input label
@@ -91,9 +96,9 @@ export class PdsInput {
         aria-disabled={this.disabled ? 'true' : null}
       >
         <div class="pds-input">
-          <label htmlFor={this.componentId}>{this.label}</label>
+          <label htmlFor={this.inputId}>{this.label}</label>
           <input class="pds-input__field"
-            aria-describedby={assignDescription(this.componentId, this.invalid, this.hint)}
+            aria-describedby={assignDescription(this.inputId, this.invalid, this.hint)}
             aria-invalid={this.invalid ? "true" : undefined}
             disabled={this.disabled}
             id={this.componentId}
@@ -105,22 +110,23 @@ export class PdsInput {
             value={this.value}
             onInput={this.onInputEvent}
           />
-          {this.hint &&
-            <p
-              class="pds-input__hint"
-              id={messageId(this.componentId, 'helper')}
-            >
-              {this.hint}
-            </p>
+          {this.hint
+            ? <p
+                class="pds-input__hint"
+                id={messageId(this.inputId, 'helper')}
+              >
+                {this.hint}
+              </p>
+            : ''
           }
-          {this.errorText &&
-            <p
-              class="pds-input__error-text"
-              id={messageId(this.componentId, 'error')}
-              aria-live="assertive"
-            >
-              {this.errorText}
-            </p>
+          {this.errorText
+            ? <p
+                class="pds-input__error-text"
+                id={messageId(this.inputId, 'error')}
+              >
+                {this.errorText}
+              </p>
+            : ''
           }
         </div>
       </Host>

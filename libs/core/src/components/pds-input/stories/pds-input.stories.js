@@ -5,7 +5,7 @@ const BaseTemplate = (args) => html`<pds-input
   error-text="${args.errorText}"
   hint="${args.hint}"
   invalid="${args.invalid}"
-  component-id="${args.componentId}"
+  input-id="${args.inputId}"
   label="${args.label}"
   name="${args.name}"
   placeholder="${args.placeholder}"
@@ -23,7 +23,7 @@ const defaultParameters = {
 
 export const Text = BaseTemplate.bind({});
 Text.args = {
-  componentId: 'sage-input-text-example',
+  inputId: 'pds-input-text-example',
   label: 'Name',
   type: 'text',
   value: 'Frank Dux'
@@ -32,7 +32,7 @@ Text.parameters = { ...defaultParameters };
 
 export const Email = BaseTemplate.bind({});
 Email.args = {
-  componentId: 'sage-input-email-example',
+  inputId: 'pds-input-email-example',
   label: 'Email',
   type: 'email',
   value: 'user123@test.com'
@@ -41,7 +41,7 @@ Email.parameters = { ...defaultParameters };
 
 export const Required = BaseTemplate.bind({});
 Required.args = {
-  componentId: 'sage-input-required-example',
+  inputId: 'pds-input-required-example',
   label: 'Email',
   type: 'email',
   required: true,
@@ -51,7 +51,7 @@ Required.parameters = { ...defaultParameters };
 
 export const Placeholder = BaseTemplate.bind({});
 Placeholder.args = {
-  componentId: 'sage-input-placeholder-example',
+  inputId: 'pds-input-placeholder-example',
   label: 'Email',
   placeholder: '123@email.com',
   type: 'email',
@@ -61,7 +61,7 @@ Placeholder.parameters = { ...defaultParameters };
 
 export const Disabled = BaseTemplate.bind({});
 Disabled.args = {
-  componentId: 'sage-input-disabled-example',
+  inputId: 'pds-input-disabled-example',
   label: 'Email',
   type: 'email',
   disabled: true,
@@ -71,7 +71,7 @@ Disabled.parameters = { ...defaultParameters };
 
 export const Readonly = BaseTemplate.bind({});
 Readonly.args = {
-  componentId: 'sage-input-readonly-example',
+  inputId: 'pds-input-readonly-example',
   label: 'Email',
   readonly: true,
   type: 'email',
@@ -81,7 +81,7 @@ Readonly.parameters = { ...defaultParameters };
 
 export const Hint = BaseTemplate.bind({});
 Hint.args = {
-  componentId: 'sage-input-hint-example',
+  inputId: 'pds-input-hint-example',
   label: 'Email',
   hint: 'Please use the correct format',
   type: 'email',
@@ -91,7 +91,7 @@ Hint.parameters = { ...defaultParameters };
 
 export const Error = BaseTemplate.bind({});
 Error.args = {
-  componentId: 'sage-input-error-example',
+  inputId: 'pds-input-error-example',
   label: 'Email',
   errorText: "Please provide a valid Email address",
   type: 'email',
