@@ -8,13 +8,29 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
     interface PdsAvatar {
+        /**
+          * Determines whether the badge is visible or not
+          * @defaultValue false
+         */
         "badge"?: boolean;
+        /**
+          * The src for a custom user image.
+          * @defaultValue null
+         */
         "image"?: string;
+        /**
+          * Preset sizes for the avatar. If a custom size is desired, use the `--size` custom property instead.
+          * @defaultValue md
+         */
         "size"?: | 'xl'
   | 'lg'
   | 'md'
   | 'sm'
   | 'xs';
+        /**
+          * Determines the variant of avatar. Changes appearance accordingly.
+          * @defaultValue customer
+         */
         "variant"?: 'customer' | 'admin';
     }
     interface PdsButton {
@@ -599,13 +615,29 @@ declare global {
 }
 declare namespace LocalJSX {
     interface PdsAvatar {
+        /**
+          * Determines whether the badge is visible or not
+          * @defaultValue false
+         */
         "badge"?: boolean;
+        /**
+          * The src for a custom user image.
+          * @defaultValue null
+         */
         "image"?: string;
+        /**
+          * Preset sizes for the avatar. If a custom size is desired, use the `--size` custom property instead.
+          * @defaultValue md
+         */
         "size"?: | 'xl'
   | 'lg'
   | 'md'
   | 'sm'
   | 'xs';
+        /**
+          * Determines the variant of avatar. Changes appearance accordingly.
+          * @defaultValue customer
+         */
         "variant"?: 'customer' | 'admin';
     }
     interface PdsButton {

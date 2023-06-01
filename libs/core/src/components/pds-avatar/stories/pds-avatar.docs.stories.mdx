@@ -6,7 +6,17 @@ import * as stories from './pds-avatar.stories.js';
 
 <Meta title="components/Avatar" component="pds-avatar" argTypes={extractArgTypes('pds-avatar')} />
 
+# Avatar
+
+Avatar is used for showing a thumbnail representation of an admin, customer, or business.
+
+## Properties
+
+<ArgsTable of="pds-avatar" />
+
 ### Default
+
+Default avatar with a `size`.
 
 <Story story={stories.Default} />
 
@@ -14,14 +24,30 @@ import * as stories from './pds-avatar.stories.js';
   <pds-avatar></pds-avatar>
 </Canvas>
 
+### Admin Variant
+
+An admin variant of the avatar with less-rounded borders.
+
 <Canvas>
   <Story story={stories.AdminVariant} />
 </Canvas>
+
+### Badge
+
+An avatar with a badge.
 
 <Canvas>
   <Story story={stories.Badge} />
 </Canvas>
 
+### Image
+
+An avatar using a user profile image. When not set, will default to the user icon.
+
 <Canvas>
   <Story story={stories.Image} />
 </Canvas>
+
+### Custom Sizes
+
+An avatar with a custom size set via CSS Custom Properties. Setting this will _not_ override a set size prop value.
