@@ -114,6 +114,25 @@ describe('pds-input', () => {
     `);
   });
 
+  it('renders in invalid state when invalid prop is set', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsInput],
+      html: `<pds-input input-id="pds-input-invalid" invalid="true" label="Name" value="Frank Dux"></pds-input>`
+    });
+    expect(root).toEqualHtml(`
+    <pds-input input-id="pds-input-invalid" invalid="true" label="Name" value="Frank Dux">
+      <mock:shadow-root>
+        <div class="pds-input">
+          <label htmlFor="pds-input-invalid">
+            Name
+          </label>
+          <input aria-invalid="true" id="pds-input-invalid" class="pds-input__field" type="text" value="Frank Dux" />
+        </div>
+      </mock:shadow-root>
+    </pds-input>
+    `);
+  });
+
   it('renders a hint', async () => {
     const { root } = await newSpecPage({
       components: [PdsInput],
