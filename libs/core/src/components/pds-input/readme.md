@@ -20,7 +20,7 @@
 | `readonly`                 | `readonly`     | Indicates whether or not the input field is readonly                                                         | `boolean` | `undefined` |
 | `required`                 | `required`     | Indicates whether or not the input field is required                                                         | `boolean` | `undefined` |
 | `type`                     | `type`         | Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'` | `string`  | `'text'`    |
-| `value`                    | `value`        | The value of the input "text"                                                                                | `string`  | `undefined` |
+| `value`                    | `value`        | The value of the input                                                                                       | `string`  | `undefined` |
 
 
 ## Events
