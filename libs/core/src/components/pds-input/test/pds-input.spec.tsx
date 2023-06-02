@@ -5,10 +5,10 @@ describe('pds-input', () => {
   it('renders a value when prop is set', async () => {
     const { root } = await newSpecPage({
       components: [PdsInput],
-      html: `<pds-input input-id="field-1" value="Frank Dux"></pds-input>`
+      html: `<pds-input component-id="field-1" value="Frank Dux"></pds-input>`
     });
     expect(root).toEqualHtml(`
-    <pds-input input-id="field-1" value="Frank Dux">
+    <pds-input component-id="field-1" value="Frank Dux">
       <mock:shadow-root>
         <div class="pds-input">
           <label htmlFor="field-1">
@@ -23,10 +23,10 @@ describe('pds-input', () => {
   it('renders a label', async () => {
     const { root } = await newSpecPage({
       components: [PdsInput],
-      html: `<pds-input input-id="field-1" label="Name" value="Frank Dux"></pds-input>`
+      html: `<pds-input component-id="field-1" label="Name" value="Frank Dux"></pds-input>`
     });
     expect(root).toEqualHtml(`
-    <pds-input input-id="field-1" label="Name" value="Frank Dux">
+    <pds-input component-id="field-1" label="Name" value="Frank Dux">
       <mock:shadow-root>
         <div class="pds-input">
           <label htmlFor="field-1">
@@ -42,11 +42,11 @@ describe('pds-input', () => {
   it('renders placeholder text', async () => {
     const { root } = await newSpecPage({
       components: [PdsInput],
-      html: `<pds-input placeholder="placeholder text" input-id="field-1" value="Frank Dux"></pds-input>`
+      html: `<pds-input placeholder="placeholder text" component-id="field-1" value="Frank Dux"></pds-input>`
     });
 
     expect(root).toEqualHtml(`
-    <pds-input input-id="field-1" placeholder="placeholder text" value="Frank Dux">
+    <pds-input component-id="field-1" placeholder="placeholder text" value="Frank Dux">
       <mock:shadow-root>
         <div class="pds-input">
           <label htmlFor="field-1">
@@ -61,11 +61,11 @@ describe('pds-input', () => {
   it('renders readonly input', async () => {
     const { root } = await newSpecPage({
       components: [PdsInput],
-      html: `<pds-input required="true" input-id="field-1" value="Frank Dux"></pds-input>`
+      html: `<pds-input required="true" component-id="field-1" value="Frank Dux"></pds-input>`
     });
 
     expect(root).toEqualHtml(`
-    <pds-input input-id="field-1" required="true" value="Frank Dux">
+    <pds-input component-id="field-1" required="true" value="Frank Dux">
       <mock:shadow-root>
         <div class="pds-input">
           <label htmlFor="field-1">
@@ -80,10 +80,10 @@ describe('pds-input', () => {
   it('renders disabled input', async () => {
     const { root } = await newSpecPage({
       components: [PdsInput],
-      html: `<pds-input disabled="true" input-id="field-1" value="Frank Dux"></pds-input>`
+      html: `<pds-input disabled="true" component-id="field-1" value="Frank Dux"></pds-input>`
     });
     expect(root).toEqualHtml(`
-    <pds-input aria-disabled="true" input-id="field-1" disabled="true" value="Frank Dux">
+    <pds-input aria-disabled="true" component-id="field-1" disabled="true" value="Frank Dux">
       <mock:shadow-root>
         <div class="pds-input">
           <label htmlFor="field-1">
@@ -98,11 +98,11 @@ describe('pds-input', () => {
   it('renders readonly input', async () => {
     const { root } = await newSpecPage({
       components: [PdsInput],
-      html: `<pds-input readonly="true" input-id="field-1" value="Frank Dux"></pds-input>`
+      html: `<pds-input readonly="true" component-id="field-1" value="Frank Dux"></pds-input>`
     });
 
     expect(root).toEqualHtml(`
-    <pds-input input-id="field-1" readonly="true" value="Frank Dux">
+    <pds-input component-id="field-1" readonly="true" value="Frank Dux">
       <mock:shadow-root>
         <div class="pds-input">
           <label htmlFor="field-1">
@@ -117,10 +117,10 @@ describe('pds-input', () => {
   it('renders in invalid state when invalid prop is set', async () => {
     const { root } = await newSpecPage({
       components: [PdsInput],
-      html: `<pds-input input-id="pds-input-invalid" invalid="true" label="Name" value="Frank Dux"></pds-input>`
+      html: `<pds-input component-id="pds-input-invalid" invalid="true" label="Name" value="Frank Dux"></pds-input>`
     });
     expect(root).toEqualHtml(`
-    <pds-input input-id="pds-input-invalid" invalid="true" label="Name" value="Frank Dux">
+    <pds-input component-id="pds-input-invalid" invalid="true" label="Name" value="Frank Dux">
       <mock:shadow-root>
         <div class="pds-input">
           <label htmlFor="pds-input-invalid">
@@ -136,7 +136,7 @@ describe('pds-input', () => {
   it('renders a hint', async () => {
     const { root } = await newSpecPage({
       components: [PdsInput],
-      html: `<pds-input hint="Use the correct syntax" input-id="field-1" value="Frank Dux"></pds-input>`
+      html: `<pds-input hint="Use the correct syntax" component-id="field-1" value="Frank Dux"></pds-input>`
     });
 
     const hint = root.shadowRoot.querySelector('.pds-input__hint');
@@ -146,7 +146,7 @@ describe('pds-input', () => {
   it('renders a error', async () => {
     const { root } = await newSpecPage({
       components: [PdsInput],
-      html: `<pds-input error-text="Please provide a helpful error mespds" input-id="field-1" value="Frank Dux"></pds-input>`
+      html: `<pds-input error-text="Please provide a helpful error mespds" component-id="field-1" value="Frank Dux"></pds-input>`
     });
 
     const errorText = root.shadowRoot.querySelector('.pds-input__error-text');
