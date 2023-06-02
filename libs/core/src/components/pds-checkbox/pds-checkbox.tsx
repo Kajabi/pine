@@ -15,7 +15,7 @@ export class PdsCheckbox {
   /**
    * String used for checkbox `id` attribute and label `for` attribute.
    */
-  @Prop() componentId: string;
+  @Prop() componentId!: string;
 
   /**
    * It determines whether or not the checkbox is disabled.
