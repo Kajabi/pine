@@ -1,5 +1,5 @@
 import { Component, h, Prop, Host, Event, EventEmitter } from '@stencil/core';
-import { assignDescription, messageId } from '../../utils/form';
+import { assignDescription, messageId } from '../../utils/utils';
 
 @Component({
   tag: 'pds-checkbox',
@@ -15,7 +15,7 @@ export class PdsCheckbox {
   /**
    * String used for checkbox `id` attribute and label `for` attribute.
    */
-  @Prop() componentId!: string;
+  @Prop() componentId: string;
 
   /**
    * It determines whether or not the checkbox is disabled.
@@ -85,6 +85,8 @@ export class PdsCheckbox {
   }
 
   render() {
+    console.log('id: ', this.componentId, ' invalid: ', this.invalid, ' message: ', this.helperMessage);
+    console.log('the result: ', assignDescription(this.componentId, this.invalid, this.helperMessage));
     return (
       <Host class={this.classNames()}>
         <input

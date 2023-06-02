@@ -1,5 +1,5 @@
 import { Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
-import { assignDescription, isRequired, messageId } from '../../utils/form';
+import { assignDescription, isRequired, messageId } from '../../utils/utils';
 import { TextareaChangeEventDetail } from './textarea-interface';
 
 @Component({

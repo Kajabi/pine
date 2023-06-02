@@ -119,14 +119,14 @@ export class PdsInput {
               </p>
             : ''
           }
-          {this.errorText
-            ? <p
-                class="pds-input__error-text"
-                id={messageId(this.inputId, 'error')}
-              >
-                {this.errorText}
-              </p>
-            : ''
+          {this.errorText &&
+            <p
+              class="pds-input__error-text"
+              id={messageId(this.inputId, 'error')}
+              aria-live="assertive"
+            >
+              {this.errorText}
+            </p>
           }
         </div>
       </Host>
