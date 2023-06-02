@@ -29,7 +29,7 @@ export class PdsAvatar {
   | 'lg'
   | 'md'
   | 'sm'
-  | 'xs' = 'md';
+  | 'xs';
 
   /**
    * Determines the variant of avatar. Changes appearance accordingly.

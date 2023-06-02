@@ -1,6 +1,6 @@
 :host {
   /**
-    * @prop --size: Custom size of avatar. Setting this will *not* override a set `size` prop value.
+    * @prop --size: Custom size of avatar
   */
 
   --size: var(--pine-spacing-sm);
@@ -47,15 +47,15 @@ div {
 pds-icon {
   // Percentage is average size of icon in relation to total avatar size of
   // all preset sizes found in Figma
-  // Used to allow icons to scale to container size
+  // Used to allow icon to scale to container size
   height: 33.53%;
   width: 33.53%;
 }
 
 .pds-avatar__badge {
-  background-color: var(--pds-color-base-white);
+  background-color: var(--pine-color-base-white);
   border-radius: var(--radius-round);
---pine  bottom: 0;
+  bottom: 0;
   position: absolute;
   right: 0;
 }

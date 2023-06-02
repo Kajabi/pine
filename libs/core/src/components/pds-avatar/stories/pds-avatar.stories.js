@@ -13,6 +13,8 @@ const AdminVariantTemplate = (args) => html`<pds-avatar size="${args.size}" vari
 
 const BadgeTemplate = (args) => html`<pds-avatar badge="${args.badge}" size="${args.size}"></pds-avatar>`;
 
+const CustomSizeTemplate = (args) => html`<pds-avatar style="--size: 128px;"></pds-avatar>`;
+
 const ImageTemplate = (args) => html`<pds-avatar image="${args.image}" size="${args.size}"></pds-avatar>`;
 
 const defaultParameters = { docs: { disable: true } };
@@ -34,6 +36,8 @@ Badge.args = {
 	badge: true,
 	size: 'md'
 }
+
+export const CustomSize = CustomSizeTemplate.bind();
 
 export const Image = ImageTemplate.bind();
 Image.args = {
