@@ -106,23 +106,22 @@ export class PdsInput {
             value={this.value}
             onInput={this.onInputEvent}
           />
-          {this.hint
-            ? <p
-                class="sage-input__hint"
-                id={messageId(this.inputId, 'helper')}
-              >
-                {this.hint}
-              </p>
-            : ''
+          {this.hint &&
+            <p
+              class="pds-input__hint"
+              id={messageId(this.inputId, 'helper')}
+            >
+              {this.hint}
+            </p>
           }
-          {this.errorText
-            ? <p
-                class="pds-input__error-text"
-                id={messageId(this.inputId, 'error')}
-              >
-                {this.errorText}
-              </p>
-            : ''
+          {this.errorText &&
+            <p
+              class="pds-input__error-text"
+              id={messageId(this.inputId, 'error')}
+              aria-live="assertive"
+            >
+              {this.errorText}
+            </p>
           }
         </div>
       </Host>
