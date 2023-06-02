@@ -129,7 +129,7 @@ describe('pds-switch', () => {
     expect(page.root).toEqualHtml(`
       <pds-switch component-id="pds-switch-msg" class="pds-switch pds-switch--message" label="Switch helper message" helper-message="Direct trade next level slow-carb, hashtag distillery">
         <mock:shadow-root>
-          <input id="pds-switch-msg" name="pds-switch-msg" class="pds-switch__input" type="checkbox">
+          <input aria-describedby="pds-switch-msg__helper-message" id="pds-switch-msg" name="pds-switch-msg" class="pds-switch__input" type="checkbox">
           <label htmlFor="pds-switch-msg" class="pds-switch__label">Switch helper message</label>
           <div id="pds-switch-msg__helper-message"  class="pds-switch__message">Direct trade next level slow-carb, hashtag distillery</div>
         </mock:shadow-root>
