@@ -85,8 +85,6 @@ export class PdsCheckbox {
   }
 
   render() {
-    console.log('id: ', this.componentId, ' invalid: ', this.invalid, ' message: ', this.helperMessage);
-    console.log('the result: ', assignDescription(this.componentId, this.invalid, this.helperMessage));
     return (
       <Host class={this.classNames()}>
         <input
