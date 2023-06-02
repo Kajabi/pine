@@ -33,7 +33,7 @@ export class PdsInput {
   /**
    * A unique identifier for the input field
    */
-  @Prop() inputId!: string;
+  @Prop() componentId!: string;
 
   /**
    * Text to be displayed as the input label
@@ -92,12 +92,12 @@ export class PdsInput {
         aria-disabled={this.disabled ? 'true' : null}
       >
         <div class="pds-input">
-          <label htmlFor={this.inputId}>{this.label}</label>
+          <label htmlFor={this.componentId}>{this.label}</label>
           <input class="pds-input__field"
-            aria-describedby={assignDescription(this.inputId, this.invalid, this.hint)}
+            aria-describedby={assignDescription(this.componentId, this.invalid, this.hint)}
             aria-invalid={this.invalid ? "true" : undefined}
             disabled={this.disabled}
-            id={this.inputId}
+            id={this.componentId}
             name={this.name}
             placeholder={this.placeholder}
             readOnly={this.readonly}
@@ -109,7 +109,7 @@ export class PdsInput {
           {this.hint &&
             <p
               class="pds-input__hint"
-              id={messageId(this.inputId, 'helper')}
+              id={messageId(this.componentId, 'helper')}
             >
               {this.hint}
             </p>
@@ -117,7 +117,7 @@ export class PdsInput {
           {this.errorText &&
             <p
               class="pds-input__error-text"
-              id={messageId(this.inputId, 'error')}
+              id={messageId(this.componentId, 'error')}
               aria-live="assertive"
             >
               {this.errorText}

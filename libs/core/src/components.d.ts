@@ -146,6 +146,10 @@ export namespace Components {
     }
     interface PdsInput {
         /**
+          * A unique identifier for the input field
+         */
+        "componentId": string;
+        /**
           * Indicates whether or not the input field is disabled
          */
         "disabled"?: boolean;
@@ -157,10 +161,6 @@ export namespace Components {
           * Displays a hint or description of the input field
          */
         "hint"?: string;
-        /**
-          * A unique identifier for the input field
-         */
-        "inputId": string;
         /**
           * Indicates whether or not the input field is invalid or throws an error
          */
@@ -675,6 +675,10 @@ declare namespace LocalJSX {
     }
     interface PdsInput {
         /**
+          * A unique identifier for the input field
+         */
+        "componentId": string;
+        /**
           * Indicates whether or not the input field is disabled
          */
         "disabled"?: boolean;
@@ -686,10 +690,6 @@ declare namespace LocalJSX {
           * Displays a hint or description of the input field
          */
         "hint"?: string;
-        /**
-          * A unique identifier for the input field
-         */
-        "inputId": string;
         /**
           * Indicates whether or not the input field is invalid or throws an error
          */
