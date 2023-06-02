@@ -3,15 +3,15 @@ import { html } from 'lit-html';
 const BaseTemplate = (args) =>
   html` <pds-checkbox
     component-id=${args.componentId}
-    label=${args.label}
     checked=${args.checked}
     disabled=${args.disabled}
     helper-message=${args.helperMessage}
-    name=${args.name}
     indeterminate=${args.indeterminate}
+    invalid=${args.invalid}
+    label=${args.label}
+    name=${args.name}
     required=${args.required}
     value=${args.value}
-    invalid=${args.invalid}
   />`;
 
 const defaultParameters = { docs: { disable: true } };
