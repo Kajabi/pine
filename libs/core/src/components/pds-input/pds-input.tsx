@@ -11,6 +11,11 @@ import { assignDescription, messageId } from '../../utils/utils';
 })
 export class PdsInput {
   /**
+   * A unique identifier for the input field
+   */
+  @Prop() componentId!: string;
+
+  /**
    * Indicates whether or not the input field is disabled
    */
   @Prop() disabled?: boolean;
@@ -29,11 +34,6 @@ export class PdsInput {
    * Indicates whether or not the input field is invalid or throws an error
    */
   @Prop() invalid?: boolean;
-
-  /**
-   * A unique identifier for the input field
-   */
-  @Prop() componentId!: string;
 
   /**
    * Text to be displayed as the input label
@@ -69,7 +69,6 @@ export class PdsInput {
 
   /**
    * The value of the input
-   * "text"
    */
   @Prop({mutable: true}) value?: string;
 

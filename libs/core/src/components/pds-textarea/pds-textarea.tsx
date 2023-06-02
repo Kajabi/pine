@@ -13,7 +13,7 @@ export class PdsTextarea {
   /**
    * A unique identifier for the textarea
    */
-  @Prop() componentId?: string;
+  @Prop() componentId!: string;
 
   /**
    * Indicates whether or not the textarea is disabled
