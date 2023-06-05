@@ -218,6 +218,7 @@ export namespace Components {
     interface PdsRadio {
         /**
           * Determines whether or not the radio is checked.
+          * @defaultValue false
          */
         "checked": boolean;
         /**
@@ -226,6 +227,7 @@ export namespace Components {
         "componentId": string;
         /**
           * Determines whether or not the radio is disabled.
+          * @defaultValue false
          */
         "disabled": boolean;
         /**
@@ -234,6 +236,7 @@ export namespace Components {
         "helperMessage": string;
         /**
           * It determines whether or not the radio is invalid.
+          * @defaultValue false
          */
         "invalid": boolean;
         /**
@@ -246,6 +249,7 @@ export namespace Components {
         "name": string;
         /**
           * It determines whether or not the radio is required.
+          * @defaultValue false
          */
         "required": boolean;
         /**
@@ -796,6 +800,7 @@ declare namespace LocalJSX {
     interface PdsRadio {
         /**
           * Determines whether or not the radio is checked.
+          * @defaultValue false
          */
         "checked"?: boolean;
         /**
@@ -804,6 +809,7 @@ declare namespace LocalJSX {
         "componentId"?: string;
         /**
           * Determines whether or not the radio is disabled.
+          * @defaultValue false
          */
         "disabled"?: boolean;
         /**
@@ -812,6 +818,7 @@ declare namespace LocalJSX {
         "helperMessage"?: string;
         /**
           * It determines whether or not the radio is invalid.
+          * @defaultValue false
          */
         "invalid"?: boolean;
         /**
@@ -824,6 +831,7 @@ declare namespace LocalJSX {
         "name"?: string;
         /**
           * It determines whether or not the radio is required.
+          * @defaultValue false
          */
         "required"?: boolean;
         /**

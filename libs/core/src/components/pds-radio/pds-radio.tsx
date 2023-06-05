@@ -8,18 +8,21 @@ import { Component, Host, h, Prop } from '@stencil/core';
 export class PdsRadio {
   /**
    * Determines whether or not the radio is checked.
+   * @defaultValue false
    */
-  @Prop() checked: boolean;
+  @Prop() checked = false;
 
   /**
    * Determines whether or not the radio is disabled.
+   * @defaultValue false
    */
-  @Prop() disabled: boolean;
+  @Prop() disabled = false;
 
   /**
    * It determines whether or not the radio is invalid.
+   * @defaultValue false
    */
-  @Prop() invalid: boolean;
+  @Prop() invalid = false;
 
   /**
    * String used for radio `id` attribute and label `for` attribute.
@@ -43,8 +46,9 @@ export class PdsRadio {
 
   /**
    * It determines whether or not the radio is required.
+   * @defaultValue false
    */
-  @Prop() required: boolean;
+  @Prop() required = false;
 
   /**
    * The value of the radio that is submitted with a form.
