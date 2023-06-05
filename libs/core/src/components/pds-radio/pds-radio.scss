@@ -1,3 +1,117 @@
 :host {
-  display: block;
+  --background-color: var(--pine-color-base-white);
+  --background-color-hover: var(--pine-color-neutral-grey-100);
+  --background-color-disabled: var(--pine-color-neutral-grey-200);
+  --border: var(--pine-border-interactive);
+  --border-color-hover: var(--pine-border-interactive-hover-color);
+  --border-color-disabled: var(--pine-color-neutral-grey-300);
+  --border-radius: 50%;
+  --color: var(--pine-color-neutral-charcoal-200);
+  --color-checked: var(--pine-color-neutral-charcoal-500);
+  --color-disabled: var(--pine-color-neutral-grey-500);
+  --color-focus: var(--pine-color-primary-200);
+  --color-invalid: var(--pine-color-red-300);
+  --color-invalid-focus: var(--pine-color-red-200);
+  --font-size: var(--pine-font-size-body-sm);
+  --input-size: 16px;
+  --check-size: 6px;
+
+  align-items: center;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+:host(.is-invalid) {
+  input {
+    border-color: var(--color-invalid);
+
+    &:checked {
+      background: var(--color-invalid);
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 4px var(--color-invalid-focus);
+      outline: none;
+    }
+  }
+
+  label,
+  .pds-radio__message {
+    color: var(--color-invalid);
+  }
+}
+
+input {
+  appearance: none;
+  border: var(--border);
+  border-radius: var(--border-radius);
+  height: var(--input-size);
+  margin: 0;
+  position: relative;
+  width: var(--input-size);
+
+  &:hover {
+    background: var(--background-color-hover);
+    border-color: var(--border-color-hover);
+  }
+
+  &:checked {
+    background: var(--color-checked);
+    border-color: var(--color-checked);
+
+    &::after {
+      background: var(--background-color);
+      border-radius: 50%;
+      content: "";
+      display: block;
+      height: var(--check-size);
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: var(--check-size);
+    }
+  }
+
+  &:disabled {
+    background: var(--background-color-disabled);
+    border-color: var(--border-color-disabled);
+    cursor: not-allowed;
+
+    &:checked {
+      background: var(--color-disabled);
+      border-color: var(--border-color-disabled);
+
+      &::after {
+        border-color: var(--border-color-disabled);
+      }
+    }
+
+    + label {
+      color: var(--border-color-hover);
+      cursor: not-allowed;
+    }
+
+    ~ .pds-radio__message {
+      color: var(--color-disabled);
+    }
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 4px var(--color-focus);
+    outline: none;
+  }
+
+}
+
+label {
+  margin-inline-start: 10px;
+}
+
+.pds-radio__message {
+  color: var(--color);
+  font-size: var(--font-size);
+  margin-block-start: var(--check-size);
+  margin-inline-start: 26px;
+  width: 100%;
 }
