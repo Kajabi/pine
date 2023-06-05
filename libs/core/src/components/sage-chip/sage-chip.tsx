@@ -8,11 +8,13 @@ import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 export class SageChip {
   /**
    * Sets the color scheme of the chip.
+   * @defaultValue 'neutral'
    */
   @Prop() sentiment: 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning' = 'neutral';
 
   /**
    * Determines whether a dot should be displayed on the chip.
+   * @defaultValue false
    */
   @Prop() dot = false;
 
@@ -23,11 +25,13 @@ export class SageChip {
 
   /**
    * Determines whether the chip should be rendered in a larger size.
+   * @defaultValue false
    */
   @Prop() large = false;
 
   /**
    * Sets the style variant of the chip.
+   * @defaultValue 'text'
    */
   @Prop() variant: 'text' | 'tag' | 'dropdown' = 'text';
 

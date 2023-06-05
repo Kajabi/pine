@@ -94,6 +94,7 @@ export namespace Components {
     interface SageChip {
         /**
           * Determines whether a dot should be displayed on the chip.
+          * @defaultValue false
          */
         "dot": boolean;
         /**
@@ -102,14 +103,17 @@ export namespace Components {
         "label": string;
         /**
           * Determines whether the chip should be rendered in a larger size.
+          * @defaultValue false
          */
         "large": boolean;
         /**
           * Sets the color scheme of the chip.
+          * @defaultValue 'neutral'
          */
         "sentiment": 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
         /**
           * Sets the style variant of the chip.
+          * @defaultValue 'text'
          */
         "variant": 'text' | 'tag' | 'dropdown';
     }
@@ -636,6 +640,7 @@ declare namespace LocalJSX {
     interface SageChip {
         /**
           * Determines whether a dot should be displayed on the chip.
+          * @defaultValue false
          */
         "dot"?: boolean;
         /**
@@ -644,6 +649,7 @@ declare namespace LocalJSX {
         "label"?: string;
         /**
           * Determines whether the chip should be rendered in a larger size.
+          * @defaultValue false
          */
         "large"?: boolean;
         /**
@@ -652,10 +658,12 @@ declare namespace LocalJSX {
         "onSageTagCloseClick"?: (event: SageChipCustomEvent<any>) => void;
         /**
           * Sets the color scheme of the chip.
+          * @defaultValue 'neutral'
          */
         "sentiment"?: 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
         /**
           * Sets the style variant of the chip.
+          * @defaultValue 'text'
          */
         "variant"?: 'text' | 'tag' | 'dropdown';
     }
