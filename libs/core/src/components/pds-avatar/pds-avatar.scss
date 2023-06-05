@@ -39,8 +39,15 @@ div {
   justify-content: center;
   position: relative;
 
-  &:has(img) {
-    background-color: transparent
+  // Remove when FF has support for :has
+  :host(.pds-avatar[image]) & {
+    background-color: transparent;
+  }
+
+  @supports selector(:has) {
+    &:has(img) {
+      background-color: transparent
+    }
   }
 }
 
@@ -54,6 +61,7 @@ pds-icon {
 
 .pds-avatar__badge {
   background-color: var(--pine-color-base-white);
+  border-color: var(--pine-color-base-white);
   border-radius: var(--radius-round);
   bottom: 0;
   position: absolute;
