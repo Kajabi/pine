@@ -1,5 +1,5 @@
 import { Component, h, Prop, Host, Event, EventEmitter } from '@stencil/core';
-import { assignDescription, messageId } from '../../utils/utils';
+import { assignDescription, messageId } from '../../utils/form';
 
 @Component({
   tag: 'pds-checkbox',

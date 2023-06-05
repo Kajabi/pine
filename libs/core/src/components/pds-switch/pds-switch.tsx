@@ -1,5 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
-import { assignDescription, messageId } from '../../utils/utils';
+import { assignDescription, messageId } from '../../utils/form';
 
 @Component({
   tag: 'pds-switch',

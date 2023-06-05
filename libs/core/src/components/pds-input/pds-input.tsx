@@ -1,5 +1,5 @@
 import { Component, Event, EventEmitter, h, Host, Prop } from '@stencil/core';
-import { assignDescription, messageId } from '../../utils/utils';
+import { assignDescription, messageId } from '../../utils/form';
 
 /**
  * @slot - Content is placed between the opening closing tags

@@ -20,9 +20,3 @@ describe('format', () => {
     expect(format('Joseph', 'Quincy', 'Publique')).toEqual('Joseph Quincy Publique');
   });
 });
-
-describe('isRequired', () => {
-  it('returns empty string when no target or component defined', () => {
-    expect(isRequired(undefined, undefined)).toEqual(undefined);
-  });
-});
