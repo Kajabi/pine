@@ -9,9 +9,9 @@
 
 | Property    | Attribute   | Description                                                      | Type                                                                    | Default     |
 | ----------- | ----------- | ---------------------------------------------------------------- | ----------------------------------------------------------------------- | ----------- |
-| `dot`       | `dot`       | Determines whether a dot should be displayed on the chip.        | `boolean`                                                               | `undefined` |
+| `dot`       | `dot`       | Determines whether a dot should be displayed on the chip.        | `boolean`                                                               | `false`     |
 | `label`     | `label`     | Sets the text label content of the chip.                         | `string`                                                                | `undefined` |
-| `large`     | `large`     | Determines whether the chip should be rendered in a larger size. | `boolean`                                                               | `undefined` |
+| `large`     | `large`     | Determines whether the chip should be rendered in a larger size. | `boolean`                                                               | `false`     |
 | `sentiment` | `sentiment` | Sets the color scheme of the chip.                               | `"accent" \| "danger" \| "info" \| "neutral" \| "success" \| "warning"` | `'neutral'` |
 | `variant`   | `variant`   | Sets the style variant of the chip.                              | `"dropdown" \| "tag" \| "text"`                                         | `'text'`    |
 

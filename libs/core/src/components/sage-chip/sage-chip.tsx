@@ -14,7 +14,7 @@ export class SageChip {
   /**
    * Determines whether a dot should be displayed on the chip.
    */
-  @Prop() dot: boolean;
+  @Prop() dot = false;
 
   /**
    *  Sets the text label content of the chip.
@@ -24,7 +24,7 @@ export class SageChip {
   /**
    * Determines whether the chip should be rendered in a larger size.
    */
-  @Prop() large: boolean;
+  @Prop() large = false;
 
   /**
    * Sets the style variant of the chip.
