@@ -7,10 +7,12 @@ describe('pds-radio', () => {
       components: [PdsRadio],
       html: `<pds-radio></pds-radio>`,
     });
+
     expect(page.root).toEqualHtml(`
       <pds-radio>
         <mock:shadow-root>
-          <slot></slot>
+          <input type="radio">
+          <label></label>
         </mock:shadow-root>
       </pds-radio>
     `);
