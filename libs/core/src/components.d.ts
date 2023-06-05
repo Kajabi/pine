@@ -216,6 +216,42 @@ export namespace Components {
         "variant": 'inline' | 'plain';
     }
     interface PdsRadio {
+        /**
+          * Determines whether or not the radio is checked.
+         */
+        "checked": boolean;
+        /**
+          * String used for radio `id` attribute and label `for` attribute.
+         */
+        "componentId": string;
+        /**
+          * Determines whether or not the radio is disabled.
+         */
+        "disabled": boolean;
+        /**
+          * String used for helper message below radio.
+         */
+        "helperMessage": string;
+        /**
+          * It determines whether or not the radio is invalid.
+         */
+        "invalid": boolean;
+        /**
+          * String used for label text next to radio.
+         */
+        "label": string;
+        /**
+          * String used for radio `name` attribute.
+         */
+        "name": string;
+        /**
+          * It determines whether or not the radio is required.
+         */
+        "required": boolean;
+        /**
+          * The value of the radio that is submitted with a form.
+         */
+        "value": string;
     }
     interface PdsSwitch {
         /**
@@ -758,6 +794,42 @@ declare namespace LocalJSX {
         "variant"?: 'inline' | 'plain';
     }
     interface PdsRadio {
+        /**
+          * Determines whether or not the radio is checked.
+         */
+        "checked"?: boolean;
+        /**
+          * String used for radio `id` attribute and label `for` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * Determines whether or not the radio is disabled.
+         */
+        "disabled"?: boolean;
+        /**
+          * String used for helper message below radio.
+         */
+        "helperMessage"?: string;
+        /**
+          * It determines whether or not the radio is invalid.
+         */
+        "invalid"?: boolean;
+        /**
+          * String used for label text next to radio.
+         */
+        "label"?: string;
+        /**
+          * String used for radio `name` attribute.
+         */
+        "name"?: string;
+        /**
+          * It determines whether or not the radio is required.
+         */
+        "required"?: boolean;
+        /**
+          * The value of the radio that is submitted with a form.
+         */
+        "value"?: string;
     }
     interface PdsSwitch {
         /**
