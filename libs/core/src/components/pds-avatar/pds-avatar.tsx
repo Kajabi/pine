@@ -37,24 +37,33 @@ export class PdsAvatar {
    */
   @Prop({ reflect: true }) variant?: 'customer' | 'admin' = 'customer'
 
-  private classNames = (props: object) => {
-    return Object.keys(props).join(' ');
-  }
+  private renderIconOrImage = () => (
+    this.image
+      ? <img alt='Profile' src={this.image} />
+      : <pds-icon name="user-filled" size="normal"></pds-icon>
+  );
+
+  private renderBadge = () => (
+    this.badge
+      && <pds-icon class="pds-avatar__badge" name="check-circle-filled" size="normal"></pds-icon>
+  )
+
+  private classNames = () => (
+    {
+      'pds-avatar': true,
+      [`pds-avatar--${this.size}`]: this.size != undefined,
+      [`pds-avatar--${this.variant}`]: this.variant === 'admin'
+    }
+  )
 
   render() {
     return (
       <Host
-        class={this.classNames({
-          'pds-avatar': true,
-          ...(this.size && { [`pds-avatar--${this.size}`] : []}),
-          ...(this.variant === 'admin' && { [`pds-avatar--${this.variant}`] : []}),
-        })}
+        class={{...this.classNames()}}
       >
         <div>
-          {this.image ? <img alt='Profile' src={this.image} /> : <pds-icon name="user-filled" size="normal"></pds-icon>}
-          {this.badge &&
-            <pds-icon class="pds-avatar__badge" name="check-circle-filled" size="normal"></pds-icon>
-          }
+          {this.renderIconOrImage}
+          {this.renderBadge}
         </div>
       </Host>
     );
