@@ -235,7 +235,7 @@ export namespace Components {
          */
         "helperMessage": string;
         /**
-          * It determines whether or not the radio is invalid.
+          * Determines whether or not the radio is invalid.
           * @defaultValue false
          */
         "invalid": boolean;
@@ -248,7 +248,7 @@ export namespace Components {
          */
         "name": string;
         /**
-          * It determines whether or not the radio is required.
+          * Determines whether or not the radio is required.
           * @defaultValue false
          */
         "required": boolean;
@@ -817,7 +817,7 @@ declare namespace LocalJSX {
          */
         "helperMessage"?: string;
         /**
-          * It determines whether or not the radio is invalid.
+          * Determines whether or not the radio is invalid.
           * @defaultValue false
          */
         "invalid"?: boolean;
@@ -830,7 +830,7 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * It determines whether or not the radio is required.
+          * Determines whether or not the radio is required.
           * @defaultValue false
          */
         "required"?: boolean;

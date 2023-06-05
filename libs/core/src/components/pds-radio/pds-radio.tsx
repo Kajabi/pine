@@ -19,7 +19,7 @@ export class PdsRadio {
   @Prop() disabled = false;
 
   /**
-   * It determines whether or not the radio is invalid.
+   * Determines whether or not the radio is invalid.
    * @defaultValue false
    */
   @Prop() invalid = false;
@@ -45,7 +45,7 @@ export class PdsRadio {
   @Prop() name: string;
 
   /**
-   * It determines whether or not the radio is required.
+   * Determines whether or not the radio is required.
    * @defaultValue false
    */
   @Prop() required = false;
