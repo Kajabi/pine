@@ -16,6 +16,7 @@ export const PdsIcon = /*@__PURE__*/createReactComponent<JSX.PdsIcon, HTMLPdsIco
 export const PdsImage = /*@__PURE__*/createReactComponent<JSX.PdsImage, HTMLPdsImageElement>('pds-image');
 export const PdsInput = /*@__PURE__*/createReactComponent<JSX.PdsInput, HTMLPdsInputElement>('pds-input');
 export const PdsLink = /*@__PURE__*/createReactComponent<JSX.PdsLink, HTMLPdsLinkElement>('pds-link');
+export const PdsSelect = /*@__PURE__*/createReactComponent<JSX.PdsSelect, HTMLPdsSelectElement>('pds-select');
 export const PdsSwitch = /*@__PURE__*/createReactComponent<JSX.PdsSwitch, HTMLPdsSwitchElement>('pds-switch');
 export const PdsTab = /*@__PURE__*/createReactComponent<JSX.PdsTab, HTMLPdsTabElement>('pds-tab');
 export const PdsTabpanel = /*@__PURE__*/createReactComponent<JSX.PdsTabpanel, HTMLPdsTabpanelElement>('pds-tabpanel');

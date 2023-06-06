@@ -215,6 +215,48 @@ export namespace Components {
          */
         "variant": 'inline' | 'plain';
     }
+    interface PdsSelect {
+        /**
+          * A unique identifier for the field
+         */
+        "componentId": string;
+        /**
+          * Indicates whether or not the field is disabled
+         */
+        "disabled"?: boolean;
+        /**
+          * Displays an error message for the field
+         */
+        "errorMessage"?: string;
+        /**
+          * Displays a hint or description of the field
+         */
+        "helperMessage"?: string;
+        /**
+          * Indicates whether or not the field is invalid or throws an error
+         */
+        "invalid"?: boolean;
+        /**
+          * Text to be displayed as the label
+         */
+        "label"?: string;
+        /**
+          * Enables multiselect
+         */
+        "multiple": boolean;
+        /**
+          * Specifies the name. Submitted with the form name/value pair
+         */
+        "name"?: string;
+        /**
+          * Indicates whether or not the field is required
+         */
+        "required"?: boolean;
+        /**
+          * The value of the selected option. If multiple is true, this is an array.
+         */
+        "value"?: string | string[];
+    }
     interface PdsSwitch {
         /**
           * Determines the input 'checked' state
@@ -416,6 +458,10 @@ export interface PdsInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsInputElement;
 }
+export interface PdsSelectCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsSelectElement;
+}
 export interface PdsSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsSwitchElement;
@@ -475,6 +521,12 @@ declare global {
         prototype: HTMLPdsLinkElement;
         new (): HTMLPdsLinkElement;
     };
+    interface HTMLPdsSelectElement extends Components.PdsSelect, HTMLStencilElement {
+    }
+    var HTMLPdsSelectElement: {
+        prototype: HTMLPdsSelectElement;
+        new (): HTMLPdsSelectElement;
+    };
     interface HTMLPdsSwitchElement extends Components.PdsSwitch, HTMLStencilElement {
     }
     var HTMLPdsSwitchElement: {
@@ -519,6 +571,7 @@ declare global {
         "pds-image": HTMLPdsImageElement;
         "pds-input": HTMLPdsInputElement;
         "pds-link": HTMLPdsLinkElement;
+        "pds-select": HTMLPdsSelectElement;
         "pds-switch": HTMLPdsSwitchElement;
         "pds-tab": HTMLPdsTabElement;
         "pds-tabpanel": HTMLPdsTabpanelElement;
@@ -748,6 +801,52 @@ declare namespace LocalJSX {
          */
         "variant"?: 'inline' | 'plain';
     }
+    interface PdsSelect {
+        /**
+          * A unique identifier for the field
+         */
+        "componentId"?: string;
+        /**
+          * Indicates whether or not the field is disabled
+         */
+        "disabled"?: boolean;
+        /**
+          * Displays an error message for the field
+         */
+        "errorMessage"?: string;
+        /**
+          * Displays a hint or description of the field
+         */
+        "helperMessage"?: string;
+        /**
+          * Indicates whether or not the field is invalid or throws an error
+         */
+        "invalid"?: boolean;
+        /**
+          * Text to be displayed as the label
+         */
+        "label"?: string;
+        /**
+          * Enables multiselect
+         */
+        "multiple"?: boolean;
+        /**
+          * Specifies the name. Submitted with the form name/value pair
+         */
+        "name"?: string;
+        /**
+          * Emitted when a keyboard input occurred
+         */
+        "onPdsSelectChange"?: (event: PdsSelectCustomEvent<InputEvent>) => void;
+        /**
+          * Indicates whether or not the field is required
+         */
+        "required"?: boolean;
+        /**
+          * The value of the selected option. If multiple is true, this is an array.
+         */
+        "value"?: string | string[];
+    }
     interface PdsSwitch {
         /**
           * Determines the input 'checked' state
@@ -953,6 +1052,7 @@ declare namespace LocalJSX {
         "pds-image": PdsImage;
         "pds-input": PdsInput;
         "pds-link": PdsLink;
+        "pds-select": PdsSelect;
         "pds-switch": PdsSwitch;
         "pds-tab": PdsTab;
         "pds-tabpanel": PdsTabpanel;
@@ -972,6 +1072,7 @@ declare module "@stencil/core" {
             "pds-image": LocalJSX.PdsImage & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
             "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
+            "pds-select": LocalJSX.PdsSelect & JSXBase.HTMLAttributes<HTMLPdsSelectElement>;
             "pds-switch": LocalJSX.PdsSwitch & JSXBase.HTMLAttributes<HTMLPdsSwitchElement>;
             "pds-tab": LocalJSX.PdsTab & JSXBase.HTMLAttributes<HTMLPdsTabElement>;
             "pds-tabpanel": LocalJSX.PdsTabpanel & JSXBase.HTMLAttributes<HTMLPdsTabpanelElement>;
