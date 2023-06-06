@@ -92,8 +92,8 @@ input {
       cursor: not-allowed;
     }
 
-    ~ .sage-checkbox__message {
-      color: var(--color-disable);
+    ~ .sage-radio__message {
+      color: var(--color-disabled);
     }
   }
 
