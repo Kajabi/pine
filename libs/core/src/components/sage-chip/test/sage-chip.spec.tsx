@@ -89,7 +89,7 @@ describe('sage-chip', () => {
       <mock:shadow-root>
         <span class="sage-chip__label"></span>
         <button class="sage-chip__close" type="button" aria-label="Remove" >
-          <sage-icon name="remove" size="12px"></sage-icon>
+          <pds-icon name="remove" size="12px"></pds-icon>
         </button>
       </mock:shadow-root>
     </sage-chip>
@@ -106,7 +106,7 @@ describe('sage-chip', () => {
     <sage-chip class="sage-chip sage-chip--neutral sage-chip--dropdown" variant="dropdown">
       <mock:shadow-root>
         <button class="sage-chip__button" type="button">
-          <sage-icon name="down-small" size="12px" aria-hidden="true"></sage-icon>
+          <pds-icon name="down-small" size="12px" aria-hidden="true"></pds-icon>
         </button>
       </mock:shadow-root>
     </sage-chip>
@@ -124,7 +124,7 @@ describe('sage-chip', () => {
       <mock:shadow-root>
         <button class="sage-chip__button" type="button">
           <i class="sage-chip__dot" aria-hidden="true"></i>
-          <sage-icon name="down-small" size="12px" aria-hidden="true"></sage-icon>
+          <pds-icon name="down-small" size="12px" aria-hidden="true"></pds-icon>
         </button>
       </mock:shadow-root>
     </sage-chip>

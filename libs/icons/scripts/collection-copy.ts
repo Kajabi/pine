@@ -3,7 +3,7 @@ import { join } from 'path';
 
 export const collectionCopy = async (rootDir: string) => {
   const optimizedSrc = join(rootDir, 'src', 'svg');
-  const collectionDest = join(rootDir, 'dist', 'collection', 'components', 'sage-icon', 'svg');
+  const collectionDest = join(rootDir, 'dist', 'collection', 'components', 'pds-icon', 'svg');
 
   await fs.copy(optimizedSrc, collectionDest);
 
@@ -23,7 +23,7 @@ export const collectionCopy = async (rootDir: string) => {
 
   const cePackaageJson = {
     name: '@pine-ds/components',
-    description: 'Sage Icons custom element',
+    description: 'Pine Icons custom element',
     main: './index.cjs.js',
     module: '.index.js',
     types: './index.d.ts',

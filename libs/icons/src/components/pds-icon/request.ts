@@ -1,6 +1,6 @@
 import { validateContent } from './validate';
 
-export const sageIconContent = new Map<string, string>();
+export const pdsIconContent = new Map<string, string>();
 const requests = new Map<string, Promise<any>>();
 
 export const getSvgContent = (url: string, sanitize = false) => {
@@ -15,15 +15,15 @@ export const getSvgContent = (url: string, sanitize = false) => {
             if (svgContent && sanitize !== false) {
               svgContent = validateContent(svgContent);
             }
-            sageIconContent.set(url, svgContent || '');
+            pdsIconContent.set(url, svgContent || '');
           });
         }
-        sageIconContent.set(url, '');
+        pdsIconContent.set(url, '');
       });
 
       requests.set(url, req);
     } else {
-      sageIconContent.set(url, '');
+      pdsIconContent.set(url, '');
       return Promise.resolve();
     }
   }

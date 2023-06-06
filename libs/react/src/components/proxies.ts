@@ -9,11 +9,11 @@ import { applyPolyfills, defineCustomElements } from '@pine-ds/core/loader';
 
 applyPolyfills().then(() => defineCustomElements());
 export const MyComponent = /*@__PURE__*/createReactComponent<JSX.MyComponent, HTMLMyComponentElement>('my-component');
+export const PdsIcon = /*@__PURE__*/createReactComponent<JSX.PdsIcon, HTMLPdsIconElement>('pds-icon');
 export const SageButton = /*@__PURE__*/createReactComponent<JSX.SageButton, HTMLSageButtonElement>('sage-button');
 export const SageCheckbox = /*@__PURE__*/createReactComponent<JSX.SageCheckbox, HTMLSageCheckboxElement>('sage-checkbox');
 export const SageChip = /*@__PURE__*/createReactComponent<JSX.SageChip, HTMLSageChipElement>('sage-chip');
 export const SageDivider = /*@__PURE__*/createReactComponent<JSX.SageDivider, HTMLSageDividerElement>('sage-divider');
-export const SageIcon = /*@__PURE__*/createReactComponent<JSX.SageIcon, HTMLSageIconElement>('sage-icon');
 export const SageImage = /*@__PURE__*/createReactComponent<JSX.SageImage, HTMLSageImageElement>('sage-image');
 export const SageInput = /*@__PURE__*/createReactComponent<JSX.SageInput, HTMLSageInputElement>('sage-input');
 export const SageLink = /*@__PURE__*/createReactComponent<JSX.SageLink, HTMLSageLinkElement>('sage-link');

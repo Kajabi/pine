@@ -2,12 +2,12 @@
   "name": "@pine-ds/icons",
   "version": "0.0.1",
   "license": "MIT",
-  "description": "Sage Icon Library",
+  "description": "Pine Icon Library",
   "author": " Kajabi Design System Services",
   "keywords": [
     "icon",
     "icon library",
-    "sage",
+    "pine",
     "svg",
     "web component"
   ],
@@ -18,7 +18,7 @@
   "types": "dist/types/index.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
-  "unpkg": "dist/sage-icons/icons.esm.js",
+  "unpkg": "dist/pds-icons/icons.esm.js",
   "publishConfig": {
     "access": "public",
     "directory": "dist"

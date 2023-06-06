@@ -1,14 +1,14 @@
 import { Build, Component, Element, Host, Prop, State, Watch, h } from '@stencil/core';
-import { getSvgContent, sageIconContent } from './request';
+import { getSvgContent, pdsIconContent } from './request';
 import { getName, getUrl, inheritAttributes } from './utils';
 
 @Component({
-  tag: 'sage-icon',
+  tag: 'pds-icon',
   assetsDirs: ['svg'],
-  styleUrl: 'sage-icon.scss',
+  styleUrl: 'pds-icon.scss',
   shadow: true,
 })
-export class SageIcon {
+export class PdsIcon {
   private io?: IntersectionObserver;
   private inheritedAttributes: { [k: string]: any } = {};
 
@@ -82,10 +82,10 @@ export class SageIcon {
     if (Build.isBrowser && this.isVisible) {
       const url = getUrl(this);
       if (url) {
-        if (sageIconContent.has(url)) {
-          this.svgContent = sageIconContent.get(url);
+        if (pdsIconContent.has(url)) {
+          this.svgContent = pdsIconContent.get(url);
         } else {
-          getSvgContent(url).then(() => (this.svgContent = sageIconContent.get(url)));
+          getSvgContent(url).then(() => (this.svgContent = pdsIconContent.get(url)));
         }
       }
     }
@@ -161,8 +161,8 @@ export class SageIcon {
 const createColorClasses = (color: string | undefined) => {
   return color
    ? {
-       'sage-color': true,
-       [`sage-color-${color}`]: true,
+       'pds-color': true,
+       [`pds-color-${color}`]: true,
      }
    : null;
  };

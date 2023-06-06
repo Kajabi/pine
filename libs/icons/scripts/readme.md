@@ -54,5 +54,5 @@ Once the latest svgs have been updated, which would either be added, deleted, or
   yarn run nx icons:build
 ```
 
-The `build` command will download the latest icons from the Figma document (see [Figma Icon Configuration](#figma-doc-configuration)), optimize all of the icons, and generate the files to be distributed. Once complete and successful, all of the optimized svgs will be located in `dist/sage-icons/svg`, along with the `sage-icon` web component in the `dist` directory.
+The `build` command will download the latest icons from the Figma document (see [Figma Icon Configuration](#figma-doc-configuration)), optimize all of the icons, and generate the files to be distributed. Once complete and successful, all of the optimized svgs will be located in `dist/pds-icons/svg`, along with the `pds-icon` web component in the `dist` directory.
 

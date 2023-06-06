@@ -66,7 +66,7 @@ export class SageChip {
       <button class="sage-chip__button" type="button">
         {this.dot && <i class="sage-chip__dot" aria-hidden="true"></i>}
         {this.label}
-        <sage-icon name="down-small" size="12px" aria-hidden="true"></sage-icon>
+        <pds-icon name="down-small" size="12px" aria-hidden="true"></pds-icon>
       </button>
     ) : (
       <span class="sage-chip__label">
@@ -84,7 +84,7 @@ export class SageChip {
         {this.setChipContent()}
         {this.variant === 'tag' && (
           <button class="sage-chip__close" type="button" onClick={this.handleCloseClick} aria-label="Remove">
-            <sage-icon name="remove" size="12px"></sage-icon>
+            <pds-icon name="remove" size="12px"></pds-icon>
           </button>
         )}
       </Host>

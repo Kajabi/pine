@@ -1,5 +1,5 @@
 import { getAssetPath } from '@stencil/core';
-import { SageIcon } from './sage-icon';
+import { PdsIcon } from './pds-icon';
 
 let CACHED_MAP: Map<string, string>;
 
@@ -14,8 +14,8 @@ export const getIconMap = (): Map<string, string> => {
   }  else {
     if (!CACHED_MAP) {
       const win = window as any;
-      win.SageIcons = win.SageIcons || {};
-      CACHED_MAP = win.SageIcons.map = win.SageIcons.map || new Map();
+      win.PdsIcons = win.PdsIcons || {};
+      CACHED_MAP = win.PdsIcons.map = win.PdsIcons.map || new Map();
     }
 
     return CACHED_MAP;
@@ -58,7 +58,7 @@ export const getSrc = (src: string | undefined) => {
   return null;
 }
 
-export const getUrl = (icon: SageIcon) => {
+export const getUrl = (icon: PdsIcon) => {
   const url = getName(icon.name);
   if (url) {
     return getNamedUrl(url);

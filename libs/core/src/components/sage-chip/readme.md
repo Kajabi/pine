@@ -27,12 +27,12 @@
 
 ### Depends on
 
-- sage-icon
+- pds-icon
 
 ### Graph
 ```mermaid
 graph TD;
-  sage-chip --> sage-icon
+  sage-chip --> pds-icon
   style sage-chip fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

@@ -11,7 +11,7 @@ import startCase from 'lodash/startCase';
 const log = console.log;
 const error = chalk.red.bold;
 
-const libraryName = 'sage-icons';
+const libraryName = 'pds-icons';
 
 /**
  * Builds the icons for distribution
@@ -23,7 +23,7 @@ export const run = async(rootDir: string, optimizeFiles = false) => {
   try {
     const packageJsonPath  = join(rootDir, 'package.json');
     const distDir = join(rootDir, 'dist');
-    const distSageIconsDir = join(distDir, libraryName);
+    const distPineIconsDir = join(distDir, libraryName);
     const distSvgDir = join(distDir, 'svg');
     const iconDir = join(rootDir, 'icons');
 
@@ -42,13 +42,13 @@ export const run = async(rootDir: string, optimizeFiles = false) => {
 
     log('Source SVG Directory: ', srcSvgDir);
 
-    await cleanDirectories(iconDir, distDir, distSvgDir, distSageIconsDir);
+    await cleanDirectories(iconDir, distDir, distSvgDir, distPineIconsDir);
 
     const packageData = await fs.readJson(packageJsonPath);
     const version = packageData.version as string;
 
     log('Getting SVGs...');
-    const srcSvgData = await getSvgs(srcSvgDir, distSvgDir, distSageIconsDir, optimizedOutputSvgDir, optimizeFiles);
+    const srcSvgData = await getSvgs(srcSvgDir, distSvgDir, distPineIconsDir, optimizedOutputSvgDir, optimizeFiles);
 
     if (optimizeFiles) {
       log('Optimized OuputSvgDir: ', optimizedOutputSvgDir)
@@ -76,13 +76,13 @@ export const run = async(rootDir: string, optimizeFiles = false) => {
 
 }
 
-const cleanDirectories = async (iconDir, distDir, distSvgDir, distSageIconsDir) => {
+const cleanDirectories = async (iconDir, distDir, distSvgDir, distPineIconsDir) => {
   await Promise.all([fs.emptyDir(iconDir), fs.emptyDir(distDir)]);
-    await fs.emptyDir(distSvgDir), await fs.emptyDir(distSageIconsDir);
+    await fs.emptyDir(distSvgDir), await fs.emptyDir(distPineIconsDir);
 }
 
-const getSvgs = async (srcDir: string, distSvgDir: string, distSageIconsDir: string, outputSvgDir: string, isOptimizing: boolean): Promise<SvgData[]> => {
-  const optimizedSvgDir = join(distSageIconsDir, 'svg');
+const getSvgs = async (srcDir: string, distSvgDir: string, distPineIconsDir: string, outputSvgDir: string, isOptimizing: boolean): Promise<SvgData[]> => {
+  const optimizedSvgDir = join(distPineIconsDir, 'svg');
   await fs.emptyDir(optimizedSvgDir);
 
   const svgFiles = (await fs.readdir(srcDir)).filter((filename) => {
@@ -103,7 +103,7 @@ const getSvgs = async (srcDir: string, distSvgDir: string, distSageIconsDir: str
       // distSvgFilePath: /dist/svg/airplane-outline.svg
       const distSvgFilePath = join(distSvgDir, fileName);
 
-      // optimizedFilePath: /dist/sage-icons/svg/airplane-outline.svg
+      // optimizedFilePath: /dist/pds-icons/svg/airplane-outline.svg
       const optimizedFilePath = join(optimizedSvgDir, fileName);
 
       // optimizedLocalSvgFilePath: /src/svg/airplane-outline.svg
@@ -182,7 +182,7 @@ const optimizeSvgs = async (srcSvgData: Array<SvgData>) => {
       {
         name: 'addClassesToSVGElement',
         params: {
-          className: 'sageicon'
+          className: 'pdsicon'
         }
       },
     ],
@@ -204,7 +204,7 @@ const optimizeSvgs = async (srcSvgData: Array<SvgData>) => {
       {
         name: 'addClassesToSVGElement',
         params: {
-          className: 'sageicon'
+          className: 'pdsicon'
         }
       },
     ]
@@ -362,7 +362,7 @@ const createIconPackage = async (version: string, iconDir: string, srcSvgData: A
 const createEsmIcons = async (version: string, iconDir: string, srcSvgData: Array<SvgData>) => {
   const iconEsmFilePath = join(iconDir, 'index.mjs');
 
-  const o = [`/* Sage-icons v${version}, ES Modules */`, ``];
+  const o = [`/* pds-icons v${version}, ES Modules */`, ``];
 
   srcSvgData.forEach((svgData) => {
     o.push(`export const ${svgData.exportName} = ${getDataUrl(svgData)}`);
@@ -374,7 +374,7 @@ const createEsmIcons = async (version: string, iconDir: string, srcSvgData: Arra
 const createCjsIcons = async (version: string, iconDir: string, srcSvgData: Array<SvgData>) => {
   const iconCjsFilePath = join(iconDir, 'index.js');
 
-  const o = [`/* Sage-icons v${version}, CommonJs */`, ``];
+  const o = [`/* pds-icons v${version}, CommonJs */`, ``];
 
   srcSvgData.forEach((svgData) => {
     o.push(`exports.${svgData.exportName} = ${getDataUrl(svgData)}`);
@@ -386,7 +386,7 @@ const createCjsIcons = async (version: string, iconDir: string, srcSvgData: Arra
 const createDtsIcons = async (version: string, iconDir: string, srcSvgData: Array<SvgData>) => {
   const iconDtsFilePath = join(iconDir, 'index.d.ts');
 
-  const o = [`/* Sage-icons v${version}, Types */`, ``];
+  const o = [`/* pds-icons v${version}, Types */`, ``];
 
   srcSvgData.forEach((svgData) => {
     o.push(`export declare var ${svgData.exportName}: string`);
@@ -405,15 +405,15 @@ const createSvgSymbols = async (version: string, distDir: string, srcSvgData: Ar
   const symbolsSvgFilePath = join(distDir, `${libraryName}.symbols.svg`);
 
   const lines = [
-    `<svg data-sageicons="${version}" style="display:none">`,
+    `<svg data-pdsicons="${version}" style="display:none">`,
     `<style>`,
-    `.sageicon {`,
+    `.pdsicon {`,
     `  fill: currentColor;`,
     `}`,
-    `.sageicon-fill-none {`,
+    `.pdsicon-fill-none {`,
     `  fill: none;`,
     `}`,
-    `.sageicon-stroke-width {`,
+    `.pdsicon-stroke-width {`,
     `  stroke-width: 32px;`,
     `}`,
     `</style>`,

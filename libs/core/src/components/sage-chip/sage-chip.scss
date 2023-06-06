@@ -142,7 +142,7 @@ $sage-chip-sentiment-interactive: (
     outline: none;
   }
 
-  sage-icon {
+  pds-icon {
     margin-inline-end: calc(var(--margin-inline-xs) * -1);
     margin-inline-start: var(--margin-inline);
   }
@@ -166,7 +166,7 @@ $sage-chip-sentiment-interactive: (
   position: relative;
   width: var(--close-size);
 
-  sage-icon {
+  pds-icon {
     left: 50%;
     position: absolute;
     top: 50%;
