@@ -19,6 +19,13 @@ export class SageIcon {
   @State() private svgContent?: string;
 
   /**
+   *
+   * The color of the icon
+   *
+   */
+  @Prop() color?: string;
+
+  /**
    * The name of the icon to use from
    * the built-in set.
    */
@@ -95,20 +102,25 @@ export class SageIcon {
 
     const style = {
       height: this.iconSize(),
-      width: this.iconSize()
+      width: this.iconSize(),
+      color: this.color,
     }
 
     return (
+
       <Host
         aria-label={ariaLabel !== undefined && !this.hasAriaHidden() ? ariaLabel : null }
         role="img"
         style={style}
+        class={{
+          ...createColorClasses(this.color),
+        }}
         {...inheritedAttributes}
       >
         {Build.isBrowser && this.svgContent ? (
-          <div innerHTML={this.svgContent}></div>
+          <div class="icon-inner" innerHTML={this.svgContent}></div>
         ) : (
-          <div></div>
+          <div class="icon-inner"></div>
         )}
       </Host>
     )
@@ -117,6 +129,7 @@ export class SageIcon {
   /*****
    * Private Methods
    ****/
+
   private waitUntilVisible(el: HTMLElement, rootMargin: string, cb: () => void) {
     if (Build.isBrowser && typeof window !== 'undefined' && (window as any).IntersectionObserver) {
       const io = (this.io = new (window as any).IntersectionObserver(
@@ -144,3 +157,12 @@ export class SageIcon {
     return el.hasAttribute('aria-hidden') && el.getAttribute('aria-hidden') === 'true';
   }
 }
+
+const createColorClasses = (color: string | undefined) => {
+  return color
+   ? {
+       'sage-color': true,
+       [`sage-color-${color}`]: true,
+     }
+   : null;
+ };
