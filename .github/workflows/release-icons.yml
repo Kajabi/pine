@@ -28,7 +28,7 @@ jobs:
         uses: ./.github/workflows/actions/publish-npm
         with:
           project: 'icons'
-          scope: '@sage/icons'
+          scope: '@pine-ds/icons'
           tag: ${{ inputs.tag }}
           token: ${{ secrets.NPM_TOKEN }}
           version: ${{ inputs.version }}

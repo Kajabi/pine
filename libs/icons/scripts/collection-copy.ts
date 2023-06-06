@@ -22,7 +22,7 @@ export const collectionCopy = async (rootDir: string) => {
   await fs.writeFile(ceCjsPath, emptyCjs);
 
   const cePackaageJson = {
-    name: '@sage/components',
+    name: '@pine-ds/components',
     description: 'Sage Icons custom element',
     main: './index.cjs.js',
     module: '.index.js',

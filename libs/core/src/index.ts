@@ -1,1 +1,1 @@
-import '@sage/icons';
+import '@pine-ds/icons';

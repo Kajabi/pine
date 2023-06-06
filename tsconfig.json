@@ -22,13 +22,13 @@
     "strict": true,
     "strictPropertyInitialization": false,
     "paths": {
-      "@sage/core": [
+      "@pine-ds/core": [
         "./libs/core"
       ],
-      "@sage/react": [
+      "@pine-ds/react": [
         "./react"
       ],
-      "@sage/icons": [
+      "@pine-ds/icons": [
         "./libs/icons"
       ]
     },

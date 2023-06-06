@@ -1,4 +1,4 @@
-import type { Components as SageIconsComponents, JSX as SageIconsJSX } from '@sage/icons';
+import type { Components as SageIconsComponents, JSX as SageIconsJSX } from '@pine-ds/icons';
 
 export * from './components';
 export * from './index';
