@@ -1,4 +1,4 @@
-name: 'Sage Archive Upload'
+name: 'Archive Upload'
 description: 'Zips and uploads an archive to be reused. Leverages Github upload-artifact'
 
 inputs:

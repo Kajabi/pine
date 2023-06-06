@@ -1,4 +1,4 @@
-name: 'Sage Framework Build'
+name: 'Pine Framework Build'
 
 on:
   push:

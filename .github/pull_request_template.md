@@ -8,7 +8,7 @@ Fixes #(issue)
 
 ## Type of change
 
-Please delete options that are not relevant. 
+Please delete options that are not relevant.
 If your type of change is not present, add that option.
 
 - [ ] Bug fix (non-breaking change which fixes an issue)
@@ -30,7 +30,7 @@ Please also list any relevant details for your test configuration.
 
 **Test Configuration**:
 
-- Sage versions:
+- Pine versions:
 - OS:
 - Browsers:
 - Screen readers:

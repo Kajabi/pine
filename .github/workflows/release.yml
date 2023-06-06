@@ -1,4 +1,4 @@
-name: "Sage Release"
+name: "Pine Release"
 
 on:
   workflow_dispatch:
@@ -21,7 +21,7 @@ on:
           - dev
 
 jobs:
-  build-sage:
+  build-pine:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

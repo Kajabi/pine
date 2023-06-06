@@ -1,4 +1,4 @@
-name: "Sage Nightly Automations"
+name: "Pine Nightly Automations"
 
 on:
   # schedule:
