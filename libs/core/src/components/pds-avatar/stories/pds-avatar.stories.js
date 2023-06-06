@@ -13,7 +13,7 @@ const AdminTemplate = (args) => html`<pds-avatar size="${args.size}" variant="${
 
 const BadgeTemplate = (args) => html`<pds-avatar badge="${args.badge}" size="${args.size}"></pds-avatar>`;
 
-const CustomSizeTemplate = (args) => html`<pds-avatar></pds-avatar>`;
+const CustomSizeTemplate = (args) => html`<pds-avatar style="--size: 128px;"></pds-avatar>`;
 
 const ImageTemplate = (args) => html`<pds-avatar image="${args.image}" size="${args.size}"></pds-avatar>`;
 
@@ -26,7 +26,7 @@ Default.args = {
 Default.parameters = { ...defaultParameters };
 
 export const Admin = AdminTemplate.bind();
-AdminTemplate.args = {
+Admin.args = {
 	size: 'lg',
 	variant: 'admin',
 }

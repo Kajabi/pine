@@ -20,7 +20,6 @@ export namespace Components {
         "image"?: string;
         /**
           * Preset sizes for the avatar. If a custom size is desired, use the `--size` custom property instead.
-          * @defaultValue md
          */
         "size"?: | 'xl'
   | 'lg'
@@ -627,7 +626,6 @@ declare namespace LocalJSX {
         "image"?: string;
         /**
           * Preset sizes for the avatar. If a custom size is desired, use the `--size` custom property instead.
-          * @defaultValue md
          */
         "size"?: | 'xl'
   | 'lg'

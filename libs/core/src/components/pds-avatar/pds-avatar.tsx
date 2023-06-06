@@ -22,7 +22,6 @@ export class PdsAvatar {
   /**
    * Preset sizes for the avatar. If a custom size is desired,
    * use the `--size` custom property instead.
-   * @defaultValue md
    */
   @Prop() size?:
   | 'xl'
@@ -37,24 +36,24 @@ export class PdsAvatar {
    */
   @Prop({ reflect: true }) variant?: 'customer' | 'admin' = 'customer'
 
+  private renderBadge = () => (
+    this.badge
+      && <pds-icon class="pds-avatar__badge" name="check-circle-filled" size="normal"></pds-icon>
+  );
+
   private renderIconOrImage = () => (
     this.image
       ? <img alt='Profile' src={this.image} />
       : <pds-icon name="user-filled" size="normal"></pds-icon>
   );
 
-  private renderBadge = () => (
-    this.badge
-      && <pds-icon class="pds-avatar__badge" name="check-circle-filled" size="normal"></pds-icon>
-  )
-
   private classNames = () => (
     {
       'pds-avatar': true,
-      [`pds-avatar--${this.size}`]: this.size != undefined,
+      [`pds-avatar--${this.size}`]: this.size !== undefined,
       [`pds-avatar--${this.variant}`]: this.variant === 'admin'
     }
-  )
+  );
 
   render() {
     return (
@@ -62,8 +61,8 @@ export class PdsAvatar {
         class={{...this.classNames()}}
       >
         <div>
-          {this.renderIconOrImage}
-          {this.renderBadge}
+          {this.renderIconOrImage()}
+          {this.renderBadge()}
         </div>
       </Host>
     );
