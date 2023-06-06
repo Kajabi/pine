@@ -1,7 +1,7 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: sage-react
+  name: sage-new-react
   description: The React library for the Sage design system
   tags:
     - javascript
