@@ -1,7 +1,7 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: pine-react
+  name: sage-react
   description: The React library for the Pine design system
   tags:
     - javascript

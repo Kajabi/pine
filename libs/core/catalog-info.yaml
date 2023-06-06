@@ -1,7 +1,7 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: pine-core
+  name: sage-core
   description: The core library for the Pine design system
   tags:
     - javascript
