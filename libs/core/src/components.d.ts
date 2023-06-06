@@ -203,6 +203,48 @@ export namespace Components {
          */
         "variant": 'inline' | 'plain';
     }
+    interface SageSelect {
+        /**
+          * A unique identifier for the field
+         */
+        "componentId": string;
+        /**
+          * Indicates whether or not the field is disabled
+         */
+        "disabled"?: boolean;
+        /**
+          * Displays an error message for the field
+         */
+        "errorMessage"?: string;
+        /**
+          * Displays a hint or description of the field
+         */
+        "helperMessage"?: string;
+        /**
+          * Indicates whether or not the field is invalid or throws an error
+         */
+        "invalid"?: boolean;
+        /**
+          * Text to be displayed as the label
+         */
+        "label"?: string;
+        /**
+          * Enables multiselect
+         */
+        "multiple": boolean;
+        /**
+          * Specifies the name. Submitted with the form name/value pair
+         */
+        "name"?: string;
+        /**
+          * Indicates whether or not the field is required
+         */
+        "required"?: boolean;
+        /**
+          * The value of the selected option. If multiple is true, this is an array.
+         */
+        "value"?: string | string[];
+    }
     interface SageSwitch {
         /**
           * Determines the input 'checked' state
@@ -400,6 +442,10 @@ export interface SageInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSageInputElement;
 }
+export interface SageSelectCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSageSelectElement;
+}
 export interface SageSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLSageSwitchElement;
@@ -459,6 +505,12 @@ declare global {
         prototype: HTMLSageLinkElement;
         new (): HTMLSageLinkElement;
     };
+    interface HTMLSageSelectElement extends Components.SageSelect, HTMLStencilElement {
+    }
+    var HTMLSageSelectElement: {
+        prototype: HTMLSageSelectElement;
+        new (): HTMLSageSelectElement;
+    };
     interface HTMLSageSwitchElement extends Components.SageSwitch, HTMLStencilElement {
     }
     var HTMLSageSwitchElement: {
@@ -503,6 +555,7 @@ declare global {
         "sage-image": HTMLSageImageElement;
         "sage-input": HTMLSageInputElement;
         "sage-link": HTMLSageLinkElement;
+        "sage-select": HTMLSageSelectElement;
         "sage-switch": HTMLSageSwitchElement;
         "sage-tab": HTMLSageTabElement;
         "sage-tabpanel": HTMLSageTabpanelElement;
@@ -716,6 +769,52 @@ declare namespace LocalJSX {
          */
         "variant"?: 'inline' | 'plain';
     }
+    interface SageSelect {
+        /**
+          * A unique identifier for the field
+         */
+        "componentId"?: string;
+        /**
+          * Indicates whether or not the field is disabled
+         */
+        "disabled"?: boolean;
+        /**
+          * Displays an error message for the field
+         */
+        "errorMessage"?: string;
+        /**
+          * Displays a hint or description of the field
+         */
+        "helperMessage"?: string;
+        /**
+          * Indicates whether or not the field is invalid or throws an error
+         */
+        "invalid"?: boolean;
+        /**
+          * Text to be displayed as the label
+         */
+        "label"?: string;
+        /**
+          * Enables multiselect
+         */
+        "multiple"?: boolean;
+        /**
+          * Specifies the name. Submitted with the form name/value pair
+         */
+        "name"?: string;
+        /**
+          * Emitted when a keyboard input occurred
+         */
+        "onSageSelectChange"?: (event: SageSelectCustomEvent<InputEvent>) => void;
+        /**
+          * Indicates whether or not the field is required
+         */
+        "required"?: boolean;
+        /**
+          * The value of the selected option. If multiple is true, this is an array.
+         */
+        "value"?: string | string[];
+    }
     interface SageSwitch {
         /**
           * Determines the input 'checked' state
@@ -921,6 +1020,7 @@ declare namespace LocalJSX {
         "sage-image": SageImage;
         "sage-input": SageInput;
         "sage-link": SageLink;
+        "sage-select": SageSelect;
         "sage-switch": SageSwitch;
         "sage-tab": SageTab;
         "sage-tabpanel": SageTabpanel;
@@ -940,6 +1040,7 @@ declare module "@stencil/core" {
             "sage-image": LocalJSX.SageImage & JSXBase.HTMLAttributes<HTMLSageImageElement>;
             "sage-input": LocalJSX.SageInput & JSXBase.HTMLAttributes<HTMLSageInputElement>;
             "sage-link": LocalJSX.SageLink & JSXBase.HTMLAttributes<HTMLSageLinkElement>;
+            "sage-select": LocalJSX.SageSelect & JSXBase.HTMLAttributes<HTMLSageSelectElement>;
             "sage-switch": LocalJSX.SageSwitch & JSXBase.HTMLAttributes<HTMLSageSwitchElement>;
             "sage-tab": LocalJSX.SageTab & JSXBase.HTMLAttributes<HTMLSageTabElement>;
             "sage-tabpanel": LocalJSX.SageTabpanel & JSXBase.HTMLAttributes<HTMLSageTabpanelElement>;

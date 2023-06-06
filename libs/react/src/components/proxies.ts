@@ -16,6 +16,7 @@ export const SageIcon = /*@__PURE__*/createReactComponent<JSX.SageIcon, HTMLSage
 export const SageImage = /*@__PURE__*/createReactComponent<JSX.SageImage, HTMLSageImageElement>('sage-image');
 export const SageInput = /*@__PURE__*/createReactComponent<JSX.SageInput, HTMLSageInputElement>('sage-input');
 export const SageLink = /*@__PURE__*/createReactComponent<JSX.SageLink, HTMLSageLinkElement>('sage-link');
+export const SageSelect = /*@__PURE__*/createReactComponent<JSX.SageSelect, HTMLSageSelectElement>('sage-select');
 export const SageSwitch = /*@__PURE__*/createReactComponent<JSX.SageSwitch, HTMLSageSwitchElement>('sage-switch');
 export const SageTab = /*@__PURE__*/createReactComponent<JSX.SageTab, HTMLSageTabElement>('sage-tab');
 export const SageTabpanel = /*@__PURE__*/createReactComponent<JSX.SageTabpanel, HTMLSageTabpanelElement>('sage-tabpanel');
