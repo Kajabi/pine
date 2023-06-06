@@ -1,8 +1,8 @@
 import { addons } from '@storybook/addons';
 import { themes } from '@storybook/theming';
-import SageTheme from './SageTheme';
+import PineTheme from './PineTheme';
 
 addons.setConfig({
   panelPosition: 'right',
-  theme: SageTheme
+  theme: PineTheme
 });

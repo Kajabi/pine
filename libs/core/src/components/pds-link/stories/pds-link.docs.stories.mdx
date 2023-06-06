@@ -1,0 +1,60 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+import * as stories from './pds-link.stories.js';
+
+<Meta title="components/Link" component="pds-link" argTypes={extractArgTypes('pds-link')} args={{ href: '#some-anchor' }} />
+
+# Link
+
+<p>
+  Link is mainly used as navigational element and usually appear within or directly following a paragraph or sentence. The "plain link" is used for interactive user generated text
+  like product, post, and offer titles.
+</p>
+
+## Properties
+
+<ArgsTable of="pds-link" />
+
+## Variants
+
+### External
+
+<Story story={stories.External} />
+
+<Canvas>
+  <pds-link href="#some-anchor" external="true"></pds-link>
+</Canvas>
+
+### Inline
+
+<Story story={stories.Inline} />
+
+<Canvas>
+  <pds-link href="https://www.google.com"></pds-link>
+</Canvas>
+
+### Plain
+
+<Story story={stories.Plain} />
+
+<Canvas>
+  <pds-link href="#some-anchor" variant="plain"></pds-link>
+</Canvas>
+
+### With Custom Text (uses slot)
+
+<Story story={stories.WithCustomText} />
+
+<Canvas>
+  <pds-link href="#some-anchor">Overrides default use of href</pds-link>
+</Canvas>
+
+### Without custom text in slot
+
+<Story story={stories.WithoutCustomTextInSlot} />
+
+<Canvas>
+  <pds-link href="#some-anchor"></pds-link>
+</Canvas>

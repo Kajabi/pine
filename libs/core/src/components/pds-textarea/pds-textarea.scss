@@ -1,0 +1,96 @@
+:host {
+  --background-color: #fff;
+  --background-color-disabled: var(--pine-color-neutral-grey-200);
+
+  --color: var(--pine-color-neutral-charcoal-400);
+  --color-error: var(--pine-color-red-300);
+  --color-placeholder: var(--pine-color-neutral-charcoal-200);
+  --color-disabled: var(--pine-color-neutral-charcoal-200);
+
+  --border-color-default: var(--pine-color-neutral-grey-400);
+  --border-color-hover: var(--pine-color-neutral-grey-500);
+  --border-color-focus-visible: var(--pine-color-neutral-grey-300);
+  --border-color-error: var(--pine-color-red-300);
+
+  --focus-visible-outline-color: var(--pine-color-primary-200);
+  --focus-visible-outline-color-error: var(--pine-color-red-200);
+
+  --label-font-size: var(--pine-font-size-body);
+  --label-font-weight: var(--pine-font-weight-medium);
+  --label-line-height: var(--pine-line-height-md);
+  --label-margin-block-end: var(--pine-spacing-xs);
+
+  --field-font-size: var(--pine-font-size-body);
+  --field-font-weight: var(--pine-font-weight-regular);
+  --field-line-height: var(--pine-line-height-md);
+  --field-padding-block: var(--pine-spacing-xs);
+  --field-padding-inline: var(--pine-spacing-sm);
+
+  --hint-font-size: var(--pine-font-size-body-xs);
+  --hint-font-weight: var(--pine-font-weight-regular);
+  --hint-line-height: var(--pine-line-height-sm);
+  --hint-margin-block-start: var(--pine-spacing-xs);
+
+  display: inline;
+}
+
+.pds-textarea {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  display: block;
+  font-size: var(--label-font-size);
+  font-weight: var(--label-font-weight);
+  line-height: var(--label-line-height);
+  margin-block-end: var(--label-margin-block-end);
+}
+
+.pds-textarea__field {
+  background-color: var(--background-color);
+  border: var(--pine-border-interactive);
+  border-radius: var(--pine-border-radius-md);
+  font-family: inherit;
+  font-size: var(--field-font-size);
+  font-weight: var(--field-font-weight);
+  line-height: var(--field-line-height);
+  padding: var(--field-padding-block) var(--field-padding-inline);
+
+  &:hover:not(:disabled, .is-invalid) {
+    border-color: var(--border-color-hover);
+  }
+
+  &:disabled {
+    background-color: var(--background-color-disabled);
+    color: var(--color-disabled);
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    border-color: var(--border-color-focus-visible);
+    outline: 4px solid var(--focus-visible-outline-color);
+  }
+
+  &::placeholder {
+    color: var(--color-placeholder);
+  }
+
+  &.is-invalid {
+    border-color: var(--color-error);
+    outline-color: var(--focus-visible-outline-color-error);
+  }
+}
+
+.pds-textarea__error-message,
+.pds-textarea__hint-message {
+  font-size: var(--hint-font-size);
+  font-weight: var(--hint-font-weight);
+  line-height: var(--hint-line-height);
+  margin-block-end: 0;
+  margin-block-start: var(--hint-margin-block-start);
+}
+
+.pds-textarea__error-message {
+  color: var(--color-error);
+}

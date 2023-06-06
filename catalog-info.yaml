@@ -1,9 +1,8 @@
-# TODO: Change these to `pine` instead of `sage` once the repo has been changed
 apiVersion: backstage.io/v1alpha1
 kind: System
 metadata:
-  name: sage
-  description: The Sage Design System
+  name: pine
+  description: The Pine Design System
   tags:
     - design
     - ux
@@ -13,8 +12,8 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: sage
-  description: The Sage Design System Library
+  name: pine
+  description: The Pine Design System Library
   tags:
     - design
     - ux
@@ -22,18 +21,18 @@ metadata:
     - typescript
     - web-components
   annotations:
-    backstage.io/source-location: url:https://github.com/Kajabi/sage/tree/next
-    github.com/project-slug: Kajabi/sage
+    backstage.io/source-location: url:https://github.com/Kajabi/pine/tree/next
+    github.com/project-slug: Kajabi/pine
 spec:
   type: library
   lifecycle: production
   owner: design-system-services
-  system: sage
+  system: pine
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Location
 metadata:
-  name: sage.mono-repo
+  name: pine.mono-repo
 spec:
   targets:
     - ./libs/core/catalog-info.yaml

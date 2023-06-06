@@ -30,7 +30,7 @@ export interface SvgData {
   iconName: string;
 
   /**
-   * /dist/sage-icons/svg/airplane-outline.svg
+   * /dist/pds-icons/svg/airplane-outline.svg
    */
   optimizedFilePath: string;
 

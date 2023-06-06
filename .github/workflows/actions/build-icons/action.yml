@@ -1,5 +1,5 @@
-name: 'Build Sage Icons'
-description: 'Build Sage Icon library'
+name: 'Build Pine Icons'
+description: 'Build Pine Icon library'
 
 inputs:
   node-version:
@@ -21,9 +21,9 @@ runs:
 
     - name: Cache Node modules
       uses: actions/cache@v3
-      id: sage-icons-node-modules
+      id: icons-node-modules
       env:
-        cache-name: sage-icons-node-modules
+        cache-name: icons-node-modules
       with:
         path: ./libs/icons/node_modules
         key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}-v1
@@ -40,16 +40,16 @@ runs:
       run: yarn nx run icons:build
       shell: bash
 
-    - name: Upload Sage Icons Build Archive
+    - name: Upload Icons Build Archive
       uses: ./.github/workflows/actions/upload-archive
       with:
-        name: sage-icons-build
-        output: SageIconsBuild.zip
+        name: icons-build
+        output: IconsBuild.zip
         paths: libs/icons/dist libs/icons/components lib/icons/icons lib/icons/www
 
-    - name: Upload Sage Icons Source
+    - name: Upload Icons Source
       uses: ./.github/workflows/actions/upload-archive
       with:
-        name: sage-icons-src
-        output: SageIconsSrc.zip
+        name: icons-src
+        output: IconsSrc.zip
         paths: libs/icons/src

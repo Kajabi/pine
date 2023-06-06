@@ -1,0 +1,165 @@
+:host {
+  --background-color: var(--pine-color-neutral-charcoal-400);
+  --box-shadow: 0 8px 14px rgba(0,0,0,0.16), 0 0 4px rgba(0,0,0,0.08);
+  --color: #fff;
+  --width: 320px;
+  --arrow-size: 6px;
+  --arrow-offset: 14px;
+
+  --overlay-border-radius: 10px;
+  --overlay-font-size: 14px;
+  --overlay-line-height: 20px;
+  --overlay-padding: 8px 12px;
+
+  --arrow-pointing-down: var(--arrow-size) var(--arrow-size) 0;
+  --arrow-pointing-to-the-right: var(--arrow-size) 0 var(--arrow-size) var(--arrow-size);
+  --arrow-pointing-to-the-left: var(--arrow-size) var(--arrow-size) var(--arrow-size) 0;
+  --arrow-pointing-up: 0 var(--arrow-size) var(--arrow-size);
+
+  display: inline-block;
+  position: relative;
+
+  ::slotted([slot="content"]) {
+    white-space: normal;
+    width: var(--width);
+  }
+}
+
+.pds-tooltip__content {
+  background-color: var(--background-color);
+  border-radius: var(--overlay-border-radius);
+  box-shadow: var(--box-shadow);
+  color: var(--color);
+  font-size: var(--overlay-font-size);
+  line-height: var(--overlay-line-height);
+  // TODO: need to use block / none but the tooltip content width and height are needed for calculations
+  opacity: 0;
+  padding: var(--overlay-padding);
+  position: absolute;
+  visibility: hidden;
+  width: max-content;
+
+  .pds-tooltip--is-open & {
+    // TODO: need to use block / none but the tooltip content width and height are needed for calculations
+    opacity: 1;
+    visibility: visible;
+    z-index: 1;
+  }
+
+  :host(.pds-tooltip--has-html-content) & {
+    width: auto;
+  }
+
+  &::after {
+    border-color: transparent;
+    border-right-color: transparent;
+    border-style: solid;
+    border-width: var(--arrow-pointing-to-the-left);
+    content: '';
+    height: 0;
+    position: absolute;
+    width: 0;
+
+    .pds-tooltip--right & {
+      border-inline-end-color: var(--background-color);
+      border-width: var(--arrow-pointing-to-the-left);
+      left: calc(var(--arrow-size) * -1);
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .pds-tooltip--right-end & {
+      border-inline-end-color: var(--background-color);
+      border-width: var(--arrow-pointing-to-the-left);
+      bottom: var(--arrow-offset);
+      left: calc(var(--arrow-size) * -1);
+      top: initial;
+    }
+
+    .pds-tooltip--right-start & {
+      border-inline-end-color: var(--background-color);
+      border-width: var(--arrow-pointing-to-the-left);
+      left: calc(var(--arrow-size) * -1);
+      top: var(--arrow-offset);
+    }
+
+    .pds-tooltip--top & {
+      border-block-start-color: var(--background-color);
+      border-width: var(--arrow-pointing-down);
+      bottom: calc(var(--arrow-size) * -1);
+      left: 50%;
+      top: initial;
+      transform: translateX(-50%);
+    }
+
+    .pds-tooltip--top-start & {
+      border-block-start-color: var(--background-color);
+      border-width: var(--arrow-pointing-down);
+      bottom: calc(var(--arrow-size) * -1);
+      left: var(--arrow-offset);
+      top: initial;
+    }
+
+    .pds-tooltip--top-end & {
+      border-block-start-color: var(--background-color);
+      border-width: var(--arrow-pointing-down);
+      bottom: calc(var(--arrow-size) * -1);
+      left: initial;
+      right: var(--arrow-offset);
+      top: initial;
+    }
+
+    .pds-tooltip--left & {
+      border-inline-start-color: var(--background-color);
+      border-width: var(--arrow-pointing-to-the-right);
+      left: initial;
+      right: calc(var(--arrow-size) * -1);
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .pds-tooltip--left-end & {
+      border-inline-start-color: var(--background-color);
+      border-width: var(--arrow-pointing-to-the-right);
+      bottom: var(--arrow-offset);
+      left: initial;
+      right: calc(var(--arrow-size) * -1);
+      top: initial;
+    }
+
+    .pds-tooltip--left-start & {
+      border-inline-start-color: var(--background-color);
+      border-width: var(--arrow-pointing-to-the-right);
+      left: initial;
+      right: calc(var(--arrow-size) * -1);
+      top: var(--arrow-offset);
+    }
+
+    .pds-tooltip--bottom & {
+      border-block-end-color: var(--background-color);
+      border-width: var(--arrow-pointing-up);
+      left: 50%;
+      top: calc(var(--arrow-size) * -1);
+      transform: translateX(-50%);
+    }
+
+    .pds-tooltip--bottom-end & {
+      border-block-end-color: var(--background-color);
+      border-width: var(--arrow-pointing-up);
+      left: initial;
+      right: var(--arrow-offset);
+      top: calc(var(--arrow-size) * -1);
+    }
+
+    .pds-tooltip--bottom-start & {
+      border-block-end-color: var(--background-color);
+      border-width: var(--arrow-pointing-up);
+      left: var(--arrow-offset);
+      top: calc(var(--arrow-size) * -1);
+    }
+
+    .pds-tooltip--no-arrow & {
+      border-width: 0;
+    }
+  }
+}

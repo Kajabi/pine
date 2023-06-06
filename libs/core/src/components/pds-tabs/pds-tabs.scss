@@ -1,0 +1,32 @@
+:host {
+  /**
+   * @prop --panel-margin-top: Optional margin-top for panels
+   */
+  --panel-margin-top: 0;
+
+  /**
+   * @prop --panel-padding: Optional padding for panels
+   */
+  --panel-padding: 0;
+
+  display: block;
+}
+
+// delete later
+*:focus {
+  outline: 2px solid #046c98;
+}
+
+.pds-tabs__tablist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+:host(.pds-tabs--availability) .pds-tabs__tablist {
+  gap: 8px;
+}
+
+:host(.pds-tabs--filter) .pds-tabs__tablist {
+  gap: 16px;
+}

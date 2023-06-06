@@ -1,26 +1,26 @@
 {
-  "name": "@sage/react",
+  "name": "@pine-ds/react",
   "version": "0.0.1",
   "license": "MIT",
-  "description": "Sage Web Components React Wrapper",
+  "description": "Pine Web Components React Wrapper",
   "author": "Kajabi Design System Services",
   "keywords": [
-    "sage",
+    "pine",
     "react",
     "components",
     "framework"
   ],
-  "homepage": "https://github.com/kajabi/sage/tree/main#readme",
+  "homepage": "https://github.com/kajabi/pine/tree/main#readme",
   "sideEffects": false,
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kajabi/sage/tree/main/libs/react"
+    "url": "git+https://github.com/kajabi/pine/tree/main/libs/react"
   },
   "bugs": {
-    "url": "https://github.com/kajabi/sage/issues"
+    "url": "https://github.com/kajabi/pine/issues"
   },
   "directories": {
     "lib": "lib",
@@ -37,8 +37,8 @@
     "rollup": "rollup -c"
   },
   "dependencies": {
-    "@sage/core": "*",
-    "@sage/icons": "*"
+    "@pine-ds/core": "*",
+    "@pine-ds/icons": "*"
   },
   "devDependencies": {
     "@types/jest": "^29.1.2",

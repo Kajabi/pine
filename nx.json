@@ -2,7 +2,7 @@
   "affected": {
     "defaultBase": "origin/main"
   },
-  "npmScope": "sage",
+  "npmScope": "pine-ds",
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/nx-cloud",
