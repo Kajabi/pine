@@ -3,12 +3,12 @@ import { html, render } from 'lit-html';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
-import * as stories from './sage-checkbox.stories.js';
+import * as stories from './pds-checkbox.stories.js';
 
 <Meta
   title="components/Checkbox"
-  component="sage-checkbox"
-  argTypes={extractArgTypes('sage-checkbox')}
+  component="pds-checkbox"
+  argTypes={extractArgTypes('pds-checkbox')}
   args={{
     checked: false,
     disabled: false,
@@ -23,14 +23,14 @@ Checkboxes provide users with selectable options like toggling a single setting 
 
 ## Properties
 
-<ArgsTable of="sage-checkbox" />
+<ArgsTable of="pds-checkbox" />
 
 ### Default
 
 <Story story={stories.Default} />
 
 <Canvas>
-  <sage-checkbox component-id="default" label="Label" />
+  <pds-checkbox component-id="default" label="Label" />
 </Canvas>
 
 ### Checked
@@ -40,7 +40,7 @@ Checkboxes appear as checked when activated.
 <Story story={stories.Checked} />
 
 <Canvas>
-  <sage-checkbox component-id="checked" label="Label" checked />
+  <pds-checkbox component-id="checked" label="Label" checked />
 </Canvas>
 
 ### Indeterminate
@@ -52,7 +52,7 @@ Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs]
 <Story story={stories.Indeterminate} />
 
 <Canvas>
-  <sage-checkbox component-id="indeterminate" label="Label" indeterminate checked />
+  <pds-checkbox component-id="indeterminate" label="Label" indeterminate checked />
 </Canvas>
 
 ### Disabled
@@ -62,7 +62,7 @@ Disabled visually indicates and functionally prevents interaction with the check
 <Story story={stories.Disabled} />
 
 <Canvas>
-  <sage-checkbox component-id="disabled" label="Label" disabled />
+  <pds-checkbox component-id="disabled" label="Label" disabled />
 </Canvas>
 
 ### Message
@@ -72,7 +72,7 @@ Message is a string of text that displays below the label text.
 <Story story={stories.withMessage} />
 
 <Canvas>
-  <sage-checkbox component-id="message1" label="Label" helper-message="This is short message text." />
+  <pds-checkbox component-id="message1" label="Label" helper-message="This is short message text." />
 </Canvas>
 
 ### Invalid
@@ -82,7 +82,7 @@ Invalid displays the checkbox in invalid state such as when required but is not 
 <Story story={stories.Invalid} />
 
 <Canvas>
-  <sage-checkbox component-id="invalid" label="Label" invalid />
+  <pds-checkbox component-id="invalid" label="Label" invalid />
 </Canvas>
 
 ## Additional Resources

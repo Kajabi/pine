@@ -35,7 +35,7 @@ export namespace Components {
          */
         "variant": 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
     }
-    interface SageCheckbox {
+    interface PdsCheckbox {
         /**
           * It determines whether or not the checkbox is checked.
          */
@@ -404,9 +404,9 @@ export namespace Components {
         "showTooltip": () => Promise<void>;
     }
 }
-export interface SageCheckboxCustomEvent<T> extends CustomEvent<T> {
+export interface PdsCheckboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
-    target: HTMLSageCheckboxElement;
+    target: HTMLPdsCheckboxElement;
 }
 export interface SageChipCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -439,11 +439,11 @@ declare global {
         prototype: HTMLPdsButtonElement;
         new (): HTMLPdsButtonElement;
     };
-    interface HTMLSageCheckboxElement extends Components.SageCheckbox, HTMLStencilElement {
+    interface HTMLPdsCheckboxElement extends Components.PdsCheckbox, HTMLStencilElement {
     }
-    var HTMLSageCheckboxElement: {
-        prototype: HTMLSageCheckboxElement;
-        new (): HTMLSageCheckboxElement;
+    var HTMLPdsCheckboxElement: {
+        prototype: HTMLPdsCheckboxElement;
+        new (): HTMLPdsCheckboxElement;
     };
     interface HTMLSageChipElement extends Components.SageChip, HTMLStencilElement {
     }
@@ -513,7 +513,7 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "pds-button": HTMLPdsButtonElement;
-        "sage-checkbox": HTMLSageCheckboxElement;
+        "pds-checkbox": HTMLPdsCheckboxElement;
         "sage-chip": HTMLSageChipElement;
         "sage-divider": HTMLSageDividerElement;
         "sage-image": HTMLSageImageElement;
@@ -556,7 +556,7 @@ declare namespace LocalJSX {
          */
         "variant"?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
     }
-    interface SageCheckbox {
+    interface PdsCheckbox {
         /**
           * It determines whether or not the checkbox is checked.
          */
@@ -592,7 +592,7 @@ declare namespace LocalJSX {
         /**
           * Emits a boolean indicating whether the checkbox is currently checked or unchecked.
          */
-        "onSageCheckboxChange"?: (event: SageCheckboxCustomEvent<boolean>) => void;
+        "onPdsCheckboxChange"?: (event: PdsCheckboxCustomEvent<boolean>) => void;
         /**
           * It determines whether or not the checkbox is required.
          */
@@ -947,7 +947,7 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "pds-button": PdsButton;
-        "sage-checkbox": SageCheckbox;
+        "pds-checkbox": PdsCheckbox;
         "sage-chip": SageChip;
         "sage-divider": SageDivider;
         "sage-image": SageImage;
@@ -966,7 +966,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "pds-button": LocalJSX.PdsButton & JSXBase.HTMLAttributes<HTMLPdsButtonElement>;
-            "sage-checkbox": LocalJSX.SageCheckbox & JSXBase.HTMLAttributes<HTMLSageCheckboxElement>;
+            "pds-checkbox": LocalJSX.PdsCheckbox & JSXBase.HTMLAttributes<HTMLPdsCheckboxElement>;
             "sage-chip": LocalJSX.SageChip & JSXBase.HTMLAttributes<HTMLSageChipElement>;
             "sage-divider": LocalJSX.SageDivider & JSXBase.HTMLAttributes<HTMLSageDividerElement>;
             "sage-image": LocalJSX.SageImage & JSXBase.HTMLAttributes<HTMLSageImageElement>;

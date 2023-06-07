@@ -1,11 +1,11 @@
 import { Component, h, Prop, Host, Event, EventEmitter } from '@stencil/core';
 
 @Component({
-  tag: 'sage-checkbox',
-  styleUrl: 'sage-checkbox.scss',
+  tag: 'pds-checkbox',
+  styleUrl: 'pds-checkbox.scss',
   shadow: true,
 })
-export class SageCheckbox {
+export class PdsCheckbox {
   /**
    * It determines whether or not the checkbox is checked.
    */
@@ -60,7 +60,7 @@ export class SageCheckbox {
   /**
    * Emits a boolean indicating whether the checkbox is currently checked or unchecked.
    */
-  @Event() sageCheckboxChange: EventEmitter<boolean>;
+  @Event() pdsCheckboxChange: EventEmitter<boolean>;
 
   private handleCheckboxChange(event: Event) {
     if (this.disabled) {
@@ -70,7 +70,7 @@ export class SageCheckbox {
     const target = event.target as HTMLInputElement;
     const isChecked = target.checked;
 
-    this.sageCheckboxChange.emit(isChecked);
+    this.pdsCheckboxChange.emit(isChecked);
   }
 
   private classNames() {
@@ -97,7 +97,7 @@ export class SageCheckbox {
           onChange={event => this.handleCheckboxChange(event)}
         />
         <label htmlFor={this.componentId}>{this.label}</label>
-        {this.helperMessage && <div class={'sage-checkbox__message'}>{this.helperMessage}</div>}
+        {this.helperMessage && <div class={'pds-checkbox__message'}>{this.helperMessage}</div>}
       </Host>
     );
   }

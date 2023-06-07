@@ -1,18 +1,18 @@
 :host {
-  --checkbox-background-color-disabled: var(--sage-color-neutral-grey-200);
-  --checkbox-background-color-hover: var(--sage-color-neutral-grey-100);
-  --checkbox-border: var(--sage-border-interactive);
-  --checkbox-border-color-disabled: var(--sage-color-neutral-charcoal-100);
-  --checkbox-border-color-hover: var(--sage-border-interactive-hover-color);
-  --checkbox-border-radius: var(--sage-border-radius-xs);
-  --checkbox-color-checked: var(--sage-color-neutral-charcoal-500);
-  --checkbox-color-disabled: var(--sage-color-neutral-grey-300);
-  --checkbox-color-focus: var(--sage-color-primary-200);
-  --checkbox-color-invalid-focus: var(--sage-color-red-200);
-  --checkbox-color-invalid: var(--sage-color-red-300);
-  --checkbox-icon-border-color: var(--sage-color-base-white);
-  --checkbox-message-color-disabled: var(--sage-color-neutral-grey-500);
-  --checkbox-message-color: var(--sage-color-neutral-charcoal-200);
+  --checkbox-background-color-disabled: var(--pine-color-neutral-grey-200);
+  --checkbox-background-color-hover: var(--pine-color-neutral-grey-100);
+  --checkbox-border: var(--pine-border-interactive);
+  --checkbox-border-color-disabled: var(--pine-color-neutral-charcoal-100);
+  --checkbox-border-color-hover: var(--pine-border-interactive-hover-color);
+  --checkbox-border-radius: var(--pine-border-radius-xs);
+  --checkbox-color-checked: var(--pine-color-neutral-charcoal-500);
+  --checkbox-color-disabled: var(--pine-color-neutral-grey-300);
+  --checkbox-color-focus: var(--pine-color-primary-200);
+  --checkbox-color-invalid-focus: var(--pine-color-red-200);
+  --checkbox-color-invalid: var(--pine-color-red-300);
+  --checkbox-icon-border-color: var(--pine-color-base-white);
+  --checkbox-message-color-disabled: var(--pine-color-neutral-grey-500);
+  --checkbox-message-color: var(--pine-color-neutral-charcoal-200);
   --checkbox-input-size: 16px;
 
   align-items: center;
@@ -35,7 +35,7 @@
   }
 
   label,
-  .sage-checkbox__message {
+  .pds-checkbox__message {
     color: var(--checkbox-color-invalid);
   }
 }
@@ -101,7 +101,7 @@ input {
       cursor: not-allowed;
     }
 
-    ~ .sage-checkbox__message {
+    ~ .pds-checkbox__message {
       color: var(--checkbox-message-color-disabled);
     }
   }
@@ -116,7 +116,7 @@ label {
   margin-inline-start: 10px;
 }
 
-.sage-checkbox__message {
+.pds-checkbox__message {
   color: var(--checkbox-message-color);
   font-size: 14px;
   margin-block-start: 6px;

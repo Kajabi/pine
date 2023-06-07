@@ -1,7 +1,7 @@
 import { html } from 'lit-html';
 
 const BaseTemplate = (args) =>
-  html` <sage-checkbox
+  html` <pds-checkbox
     component-id=${args.componentId}
     label=${args.label}
     checked=${args.checked}

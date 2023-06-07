@@ -1,4 +1,4 @@
-# sage-checkbox
+# pds-checkbox
 
 
 
@@ -23,9 +23,9 @@
 
 ## Events
 
-| Event                | Description                                                                        | Type                   |
-| -------------------- | ---------------------------------------------------------------------------------- | ---------------------- |
-| `sageCheckboxChange` | Emits a boolean indicating whether the checkbox is currently checked or unchecked. | `CustomEvent<boolean>` |
+| Event               | Description                                                                        | Type                   |
+| ------------------- | ---------------------------------------------------------------------------------- | ---------------------- |
+| `pdsCheckboxChange` | Emits a boolean indicating whether the checkbox is currently checked or unchecked. | `CustomEvent<boolean>` |
 
 
 ----------------------------------------------
