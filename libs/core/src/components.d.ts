@@ -7,20 +7,6 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { TextareaChangeEventDetail } from "./components/sage-textarea/textarea-interface";
 export namespace Components {
-    interface MyComponent {
-        /**
-          * The first name
-         */
-        "first": string;
-        /**
-          * The last name
-         */
-        "last": string;
-        /**
-          * The middle name
-         */
-        "middle": string;
-    }
     interface SageButton {
         /**
           * Toggles disabled state of button
@@ -447,12 +433,6 @@ export interface SageTooltipCustomEvent<T> extends CustomEvent<T> {
     target: HTMLSageTooltipElement;
 }
 declare global {
-    interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
-    }
-    var HTMLMyComponentElement: {
-        prototype: HTMLMyComponentElement;
-        new (): HTMLMyComponentElement;
-    };
     interface HTMLSageButtonElement extends Components.SageButton, HTMLStencilElement {
     }
     var HTMLSageButtonElement: {
@@ -532,7 +512,6 @@ declare global {
         new (): HTMLSageTooltipElement;
     };
     interface HTMLElementTagNameMap {
-        "my-component": HTMLMyComponentElement;
         "sage-button": HTMLSageButtonElement;
         "sage-checkbox": HTMLSageCheckboxElement;
         "sage-chip": HTMLSageChipElement;
@@ -549,20 +528,6 @@ declare global {
     }
 }
 declare namespace LocalJSX {
-    interface MyComponent {
-        /**
-          * The first name
-         */
-        "first"?: string;
-        /**
-          * The last name
-         */
-        "last"?: string;
-        /**
-          * The middle name
-         */
-        "middle"?: string;
-    }
     interface SageButton {
         /**
           * Toggles disabled state of button
@@ -981,7 +946,6 @@ declare namespace LocalJSX {
     | 'left-end';
     }
     interface IntrinsicElements {
-        "my-component": MyComponent;
         "sage-button": SageButton;
         "sage-checkbox": SageCheckbox;
         "sage-chip": SageChip;
@@ -1001,7 +965,6 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
             "sage-button": LocalJSX.SageButton & JSXBase.HTMLAttributes<HTMLSageButtonElement>;
             "sage-checkbox": LocalJSX.SageCheckbox & JSXBase.HTMLAttributes<HTMLSageCheckboxElement>;
             "sage-chip": LocalJSX.SageChip & JSXBase.HTMLAttributes<HTMLSageChipElement>;

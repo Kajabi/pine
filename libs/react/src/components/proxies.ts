@@ -8,7 +8,6 @@ import type { JSX } from '@pine-ds/core';
 import { applyPolyfills, defineCustomElements } from '@pine-ds/core/loader';
 
 applyPolyfills().then(() => defineCustomElements());
-export const MyComponent = /*@__PURE__*/createReactComponent<JSX.MyComponent, HTMLMyComponentElement>('my-component');
 export const PdsIcon = /*@__PURE__*/createReactComponent<JSX.PdsIcon, HTMLPdsIconElement>('pds-icon');
 export const SageButton = /*@__PURE__*/createReactComponent<JSX.SageButton, HTMLSageButtonElement>('sage-button');
 export const SageCheckbox = /*@__PURE__*/createReactComponent<JSX.SageCheckbox, HTMLSageCheckboxElement>('sage-checkbox');
