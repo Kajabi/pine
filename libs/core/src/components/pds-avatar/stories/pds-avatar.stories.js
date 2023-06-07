@@ -1,5 +1,5 @@
 import { html } from 'lit-html';
-import imgFile from '../assets/demi_wilkinson.png';
+import imgFile from '../assets/demi_wilkinson.jpg';
 
 const BaseTemplate = (args) => html`<pds-avatar
 	badge="${args.badge}"

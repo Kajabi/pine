@@ -3,7 +3,9 @@
     * @prop --size: Custom size of avatar
   */
 
-  --size: var(--pine-spacing-sm);
+  --size: var(--pine-spacing-2xl);
+
+  display: inline-block;
 }
 
 $pds-avatar-sizes: (
@@ -26,13 +28,15 @@ $pds-avatar-sizes: (
 }
 
 div {
-  --radius-round: 100px;
+  // These custom props are not reachable
+  --background-color: var(--pine-color-primary-100);
+  --border: var(--pine-border-default);
+  --badge-background-color: var(--pine-color-base-white);
+  --radius-round: 50%;
 
   align-items: center;
-  background-color: var(--pine-color-primary-200);
+  background-color: var(--background-color);
   block-size: var(--size);
-  border: var(--pine-border-default);
-  border-color: transparent;
   border-radius: var(--radius-round);
   display: inline-flex;
   inline-size: var(--size);
@@ -60,8 +64,8 @@ pds-icon {
 }
 
 .pds-avatar__badge {
-  background-color: var(--pine-color-base-white);
-  border-color: var(--pine-color-base-white);
+  background-color: var(--icon-background-color);
+  border-color: var(--badge-background-color);
   border-radius: var(--radius-round);
   bottom: 0;
   position: absolute;

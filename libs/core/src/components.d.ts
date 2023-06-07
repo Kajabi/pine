@@ -17,7 +17,7 @@ export namespace Components {
           * The src for a custom user image.
           * @defaultValue null
          */
-        "image"?: string;
+        "image"?: string | null;
         /**
           * Preset sizes for the avatar. If a custom size is desired, use the `--size` custom property instead.
          */
@@ -623,7 +623,7 @@ declare namespace LocalJSX {
           * The src for a custom user image.
           * @defaultValue null
          */
-        "image"?: string;
+        "image"?: string | null;
         /**
           * Preset sizes for the avatar. If a custom size is desired, use the `--size` custom property instead.
          */

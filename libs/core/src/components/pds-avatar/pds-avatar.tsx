@@ -17,7 +17,7 @@ export class PdsAvatar {
    * The src for a custom user image.
    * @defaultValue null
    */
-  @Prop() image?: string;
+  @Prop() image?: string | null;
 
   /**
    * Preset sizes for the avatar. If a custom size is desired,
