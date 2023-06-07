@@ -1,4 +1,4 @@
-# sage-input
+# pds-input
 
 
 
@@ -25,9 +25,9 @@
 
 ## Events
 
-| Event       | Description                            | Type                      |
-| ----------- | -------------------------------------- | ------------------------- |
-| `sageInput` | Emitted when a keyboard input occurred | `CustomEvent<InputEvent>` |
+| Event      | Description                            | Type                      |
+| ---------- | -------------------------------------- | ------------------------- |
+| `pdsInput` | Emitted when a keyboard input occurred | `CustomEvent<InputEvent>` |
 
 
 ## Slots

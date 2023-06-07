@@ -2,12 +2,12 @@ import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
-import * as stories from './sage-input.stories.js';
+import * as stories from './pds-input.stories.js';
 
 <Meta
   title="components/Input"
-  component="sage-input"
-  argTypes={extractArgTypes('sage-input')}
+  component="pds-input"
+  argTypes={extractArgTypes('pds-input')}
   args={{
     disabled: false,
     errorText: null,
@@ -44,7 +44,7 @@ import * as stories from './sage-input.stories.js';
 - Do not use a `placeholder` to communicate the field label, use a `label` property
 
 ## Properties
-<ArgsTable of="sage-input" />
+<ArgsTable of="pds-input" />
 
 ## Variants
 
@@ -54,7 +54,7 @@ import * as stories from './sage-input.stories.js';
 <Story story={stories.Text} />
 
 <Canvas>
-  <sage-input label="Name" type="text" value="Frank Dux"></sage-input>
+  <pds-input label="Name" type="text" value="Frank Dux"></pds-input>
 </Canvas>
 
 ### Email
@@ -63,7 +63,7 @@ import * as stories from './sage-input.stories.js';
 <Story story={stories.Email} />
 
 <Canvas>
-  <sage-input label="Name" type="email" value="Frank Dux"></sage-input>
+  <pds-input label="Name" type="email" value="Frank Dux"></pds-input>
 </Canvas>
 
 ### Required
@@ -72,7 +72,7 @@ import * as stories from './sage-input.stories.js';
 <Story story={stories.Required} />
 
 <Canvas>
-  <sage-input label="Name" type="email" required="true" value="Frank Dux"></sage-input>
+  <pds-input label="Name" type="email" required="true" value="Frank Dux"></pds-input>
 </Canvas>
 
 ### Placeholder
@@ -81,7 +81,7 @@ import * as stories from './sage-input.stories.js';
 <Story story={stories.Placeholder} />
 
 <Canvas>
-  <sage-input label="Name" type="email" placeholder="123@email.com" value="Frank Dux"></sage-input>
+  <pds-input label="Name" type="email" placeholder="123@email.com" value="Frank Dux"></pds-input>
 </Canvas>
 
 ### Disabled
@@ -90,7 +90,7 @@ import * as stories from './sage-input.stories.js';
 <Story story={stories.Disabled} />
 
 <Canvas>
-  <sage-input label="Name" type="email" disabled="true" value="Frank Dux"></sage-input>
+  <pds-input label="Name" type="email" disabled="true" value="Frank Dux"></pds-input>
 </Canvas>
 
 ### Readonly
@@ -99,7 +99,7 @@ import * as stories from './sage-input.stories.js';
 <Story story={stories.Readonly} />
 
 <Canvas>
-  <sage-input label="Name" type="email" readonly="true" value="Frank Dux"></sage-input>
+  <pds-input label="Name" type="email" readonly="true" value="Frank Dux"></pds-input>
 </Canvas>
 
 ### Hint
@@ -108,7 +108,7 @@ import * as stories from './sage-input.stories.js';
 <Story story={stories.Hint} />
 
 <Canvas>
-  <sage-input label="Name" type="email" hint="Please use the correct format" value="Frank Dux"></sage-input>
+  <pds-input label="Name" type="email" hint="Please use the correct format" value="Frank Dux"></pds-input>
 </Canvas>
 
 ### Error
@@ -117,7 +117,7 @@ import * as stories from './sage-input.stories.js';
 <Story story={stories.Error} />
 
 <Canvas>
-  <sage-input label="Name" type="email" error-text="Please provide a valid Email address" value="Frank Dux"></sage-input>
+  <pds-input label="Name" type="email" error-text="Please provide a valid Email address" value="Frank Dux"></pds-input>
 </Canvas>
 
 ## Additional Links

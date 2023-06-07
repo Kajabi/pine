@@ -1,6 +1,6 @@
 import { html } from 'lit-html';
 
-const BaseTemplate = (args) => html`<sage-input
+const BaseTemplate = (args) => html`<pds-input
   disabled="${args.disabled}"
   error-text="${args.errorText}"
   hint="${args.hint}"
@@ -12,7 +12,7 @@ const BaseTemplate = (args) => html`<sage-input
   required="${args.required}"
   type="${args.type}"
   value="${args.value}">
-</sage-input>`;
+</pds-input>`;
 
 const defaultParameters = {
   docs: {

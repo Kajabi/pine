@@ -4,11 +4,11 @@ import { Component, Event, EventEmitter, h, Host, Prop } from '@stencil/core';
  * @slot - Content is placed between the opening closing tags
  */
 @Component({
-  tag: 'sage-input',
-  styleUrl: 'sage-input.scss',
+  tag: 'pds-input',
+  styleUrl: 'pds-input.scss',
   shadow: true,
 })
-export class SageInput {
+export class PdsInput {
   /**
    * Indicates whether or not the input field is disabled
    */
@@ -75,14 +75,14 @@ export class SageInput {
   /**
    * Emitted when a keyboard input occurred
    */
-  @Event() sageInput: EventEmitter<InputEvent>;
+  @Event() pdsInput: EventEmitter<InputEvent>;
 
   private onInputEvent = (ev: Event) => {
     const input = ev.target as HTMLInputElement | null;
     if (input) {
       this.value = input.value || '';
     }
-    this.sageInput.emit(ev as InputEvent);
+    this.pdsInput.emit(ev as InputEvent);
   };
 
   render() {
@@ -90,9 +90,9 @@ export class SageInput {
       <Host
         aria-disabled={this.disabled ? 'true' : null}
       >
-        <div class="sage-input">
+        <div class="pds-input">
           <label htmlFor={this.inputId}>{this.label}</label>
-          <input class="sage-input__field"
+          <input class="pds-input__field"
             disabled={this.disabled}
             id={this.inputId}
             name={this.name}
@@ -104,11 +104,11 @@ export class SageInput {
             onInput={this.onInputEvent}
           />
           {this.hint
-            ? <p class="sage-input__hint">{this.hint}</p>
+            ? <p class="pds-input__hint">{this.hint}</p>
             : ''
           }
           {this.errorText
-            ? <p class="sage-input__error-text">{this.errorText}</p>
+            ? <p class="pds-input__error-text">{this.errorText}</p>
             : ''
           }
         </div>

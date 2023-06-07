@@ -1,14 +1,14 @@
 
 import { newE2EPage } from "@stencil/core/testing";
 
-describe('sage-input', () => {
+describe('pds-input', () => {
   it('renders toggle of disabled state', async () => {
     const page = await newE2EPage();
-    await page.setContent('<sage-input></sage-input>');
-    const component = await page.find('sage-input');
+    await page.setContent('<pds-input></pds-input>');
+    const component = await page.find('pds-input');
     expect(component).toHaveClass('hydrated');
 
-    const element = await page.find('sage-input >>> input');
+    const element = await page.find('pds-input >>> input');
     let value = await element.getProperty('disabled');
     expect(value).toBe(false);
 
@@ -21,19 +21,19 @@ describe('sage-input', () => {
   it('toggles an error state', async () => {
     const page = await newE2EPage();
 
-    await page.setContent('<sage-input error-text="This is error text"></sage-input>');
-    const component = await page.find('sage-input');
+    await page.setContent('<pds-input error-text="This is error text"></pds-input>');
+    const component = await page.find('pds-input');
     expect(component).toHaveClass('hydrated');
 
-    const element = await page.find('sage-input >>> .sage-input__error-text');
+    const element = await page.find('pds-input >>> .pds-input__error-text');
     expect(element.textContent).toEqual(`This is error text`);
   });
 
-  it('renders a value sageInput', async () => {
+  it('renders a value pdsInput', async () => {
     const page = await newE2EPage();
 
-    await page.setContent('<sage-input></sage-input>');
-    const input = await page.find('sage-input >>> input');
+    await page.setContent('<pds-input></pds-input>');
+    const input = await page.find('pds-input >>> input');
 
     let value = await input.getProperty('value');
     expect(value).toBe('');
@@ -41,7 +41,7 @@ describe('sage-input', () => {
     await input.focus();
     await page.waitForChanges();
 
-    const inputSpy = await page.spyOnEvent('sageInput');
+    const inputSpy = await page.spyOnEvent('pdsInput');
     await page.keyboard.type('Hello');
     await page.waitForChanges();
     value = await input.getProperty('value');

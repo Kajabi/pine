@@ -144,7 +144,7 @@ export namespace Components {
          */
         "width"?: number;
     }
-    interface SageInput {
+    interface PdsInput {
         /**
           * Indicates whether or not the input field is disabled
          */
@@ -412,9 +412,9 @@ export interface PdsChipCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsChipElement;
 }
-export interface SageInputCustomEvent<T> extends CustomEvent<T> {
+export interface PdsInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
-    target: HTMLSageInputElement;
+    target: HTMLPdsInputElement;
 }
 export interface SageSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -463,11 +463,11 @@ declare global {
         prototype: HTMLPdsImageElement;
         new (): HTMLPdsImageElement;
     };
-    interface HTMLSageInputElement extends Components.SageInput, HTMLStencilElement {
+    interface HTMLPdsInputElement extends Components.PdsInput, HTMLStencilElement {
     }
-    var HTMLSageInputElement: {
-        prototype: HTMLSageInputElement;
-        new (): HTMLSageInputElement;
+    var HTMLPdsInputElement: {
+        prototype: HTMLPdsInputElement;
+        new (): HTMLPdsInputElement;
     };
     interface HTMLSageLinkElement extends Components.SageLink, HTMLStencilElement {
     }
@@ -517,7 +517,7 @@ declare global {
         "pds-chip": HTMLPdsChipElement;
         "pds-divider": HTMLPdsDividerElement;
         "pds-image": HTMLPdsImageElement;
-        "sage-input": HTMLSageInputElement;
+        "pds-input": HTMLPdsInputElement;
         "sage-link": HTMLSageLinkElement;
         "sage-switch": HTMLSageSwitchElement;
         "sage-tab": HTMLSageTabElement;
@@ -673,7 +673,7 @@ declare namespace LocalJSX {
          */
         "width"?: number;
     }
-    interface SageInput {
+    interface PdsInput {
         /**
           * Indicates whether or not the input field is disabled
          */
@@ -705,7 +705,7 @@ declare namespace LocalJSX {
         /**
           * Emitted when a keyboard input occurred
          */
-        "onSageInput"?: (event: SageInputCustomEvent<InputEvent>) => void;
+        "onPdsInput"?: (event: PdsInputCustomEvent<InputEvent>) => void;
         /**
           * Specifies a short hint that describes the expected value of the input field
          */
@@ -951,7 +951,7 @@ declare namespace LocalJSX {
         "pds-chip": PdsChip;
         "pds-divider": PdsDivider;
         "pds-image": PdsImage;
-        "sage-input": SageInput;
+        "pds-input": PdsInput;
         "sage-link": SageLink;
         "sage-switch": SageSwitch;
         "sage-tab": SageTab;
@@ -970,7 +970,7 @@ declare module "@stencil/core" {
             "pds-chip": LocalJSX.PdsChip & JSXBase.HTMLAttributes<HTMLPdsChipElement>;
             "pds-divider": LocalJSX.PdsDivider & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
             "pds-image": LocalJSX.PdsImage & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
-            "sage-input": LocalJSX.SageInput & JSXBase.HTMLAttributes<HTMLSageInputElement>;
+            "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
             "sage-link": LocalJSX.SageLink & JSXBase.HTMLAttributes<HTMLSageLinkElement>;
             "sage-switch": LocalJSX.SageSwitch & JSXBase.HTMLAttributes<HTMLSageSwitchElement>;
             "sage-tab": LocalJSX.SageTab & JSXBase.HTMLAttributes<HTMLSageTabElement>;

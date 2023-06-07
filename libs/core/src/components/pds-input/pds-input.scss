@@ -59,7 +59,7 @@
   display: inline;
 }
 
-.sage-input {
+.pds-input {
   display: flex;
   flex-direction: column;
 }
@@ -111,14 +111,14 @@ input {
     color: var(--color-placeholder);
   }
 
-  &:has(~.sage-input__error-text) {
+  &:has(~.pds-input__error-text) {
     border-color: var(--color-error);
   }
   /* stylelint-enable */
 }
 
-.sage-input__error-text,
-.sage-input__hint {
+.pds-input__error-text,
+.pds-input__hint {
   font-size: var(--hint-font-size);
   font-weight: var(--hint-font-weight);
   line-height: var(--hint-line-height);
@@ -126,6 +126,6 @@ input {
   margin-top: var(--hint-margin-top);
 }
 
-.sage-input__error-text {
+.pds-input__error-text {
   color: var(--color-error);
 }
