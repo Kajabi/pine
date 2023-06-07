@@ -1,4 +1,4 @@
-# sage-chip
+# pds-chip
 
 
 
@@ -18,9 +18,9 @@
 
 ## Events
 
-| Event               | Description                                        | Type               |
-| ------------------- | -------------------------------------------------- | ------------------ |
-| `sageTagCloseClick` | Event when close button is clicked on tag variant. | `CustomEvent<any>` |
+| Event              | Description                                        | Type               |
+| ------------------ | -------------------------------------------------- | ------------------ |
+| `pdsTagCloseClick` | Event when close button is clicked on tag variant. | `CustomEvent<any>` |
 
 
 ## Dependencies
@@ -32,8 +32,8 @@
 ### Graph
 ```mermaid
 graph TD;
-  sage-chip --> pds-icon
-  style sage-chip fill:#f9f,stroke:#333,stroke-width:4px
+  pds-chip --> pds-icon
+  style pds-chip fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

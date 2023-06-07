@@ -1,42 +1,42 @@
 :host {
-  --background-danger: var(--sage-color-red-100);
-  --background-danger-dot: var(--sage-color-red-300);
-  --background-danger-interactive: var(--sage-color-red-200);
-  --background-neutral: var(--sage-color-neutral-grey-300);
-  --background-neutral-dot: var(--sage-color-neutral-charcoal-100);
-  --background-neutral-interactive: var(--sage-color-neutral-grey-400);
-  --background-info: var(--sage-color-primary-100);
-  --background-info-dot: var(--sage-color-primary-300);
-  --background-info-interactive: var(--sage-color-primary-200);
-  --background-accent: var(--sage-color-purple-100);
-  --background-accent-dot: var(--sage-color-purple-300);
-  --background-accent-interactive: var(--sage-color-purple-200);
-  --background-success: var(--sage-color-sage-100);
-  --background-success-dot: var(--sage-color-sage-300);
-  --background-success-interactive: var(--sage-color-sage-200);
-  --background-warning: var(--sage-color-yellow-100);
-  --background-warning-dot: var(--sage-color-yellow-300);
-  --background-warning-interactive: var(--sage-color-yellow-200);
-  --box-shadow-focus: 0 0 0 4px var(--sage-color-primary-200);
+  --background-danger: var(--pine-color-red-100);
+  --background-danger-dot: var(--pine-color-red-300);
+  --background-danger-interactive: var(--pine-color-red-200);
+  --background-neutral: var(--pine-color-neutral-grey-300);
+  --background-neutral-dot: var(--pine-color-neutral-charcoal-100);
+  --background-neutral-interactive: var(--pine-color-neutral-grey-400);
+  --background-info: var(--pine-color-primary-100);
+  --background-info-dot: var(--pine-color-primary-300);
+  --background-info-interactive: var(--pine-color-primary-200);
+  --background-accent: var(--pine-color-purple-100);
+  --background-accent-dot: var(--pine-color-purple-300);
+  --background-accent-interactive: var(--pine-color-purple-200);
+  --background-success: var(--pine-color-green-100);
+  --background-success-dot: var(--pine-color-green-300);
+  --background-success-interactive: var(--pine-color-green-200);
+  --background-warning: var(--pine-color-yellow-100);
+  --background-warning-dot: var(--pine-color-yellow-300);
+  --background-warning-interactive: var(--pine-color-yellow-200);
+  --box-shadow-focus: 0 0 0 4px var(--pine-color-primary-200);
 
-  --border-radius: var(--sage-border-radius-lg);
-  --font-size: var(--sage-font-size-body-sm);
-  --font-size-lg: var(--sage-font-size-body);
-  --font-weight: var(--sage-font-weight-medium);
-  --line-height: var(--sage-line-height-sm);
-  --padding-block-sm: calc(var(--sage-spacing-xxs) / 2);
-  --padding-block: var(--sage-spacing-xxs);
+  --border-radius: var(--pine-border-radius-lg);
+  --font-size: var(--pine-font-size-body-sm);
+  --font-size-lg: var(--pine-font-size-body);
+  --font-weight: var(--pine-font-weight-medium);
+  --line-height: var(--pine-line-height-sm);
+  --padding-block-sm: calc(var(--pine-spacing-xxs) / 2);
+  --padding-block: var(--pine-spacing-xxs);
   --padding-block-lg: 6px;
-  --padding-inline-sm: calc(var(--sage-spacing-xxs) / 2);
+  --padding-inline-sm: calc(var(--pine-spacing-xxs) / 2);
   --padding-inline: 10px;
-  --padding-inline-lg: calc(var(--sage-spacing-md) / 2);
+  --padding-inline-lg: calc(var(--pine-spacing-md) / 2);
   --padding-inline-xl: 14px;
-  --margin-block-xs: calc(var(--sage-spacing-xxs) / 2);
-  --margin-inline-sm: calc(var(--sage-spacing-xs) / 2);
-  --margin-inline-xs: calc(var(--sage-spacing-xxs) / 2);
+  --margin-block-xs: calc(var(--pine-spacing-xxs) / 2);
+  --margin-inline-sm: calc(var(--pine-spacing-xs) / 2);
+  --margin-inline-xs: calc(var(--pine-spacing-xxs) / 2);
   --margin-inline: 4px;
-  --margin-inline-lg: var(--sage-spacing-xs);
-  --margin-inline-xl: calc(var(--sage-spacing-md) / 2);
+  --margin-inline-lg: var(--pine-spacing-xs);
+  --margin-inline-xl: calc(var(--pine-spacing-md) / 2);
 
   --dot-size: 4px;
   --close-size: 10px;
@@ -52,7 +52,7 @@
   padding-inline: var(--padding-inline);
 }
 
-$sage-chip-sentiment: (
+$pds-chip-sentiment: (
   accent: var(--background-accent),
   danger: var(--background-danger),
   info: var(--background-info),
@@ -61,7 +61,7 @@ $sage-chip-sentiment: (
   warning: var(--background-warning),
 );
 
-$sage-chip-sentiment-dots: (
+$pds-chip-sentiment-dots: (
   accent: var(--background-accent-dot),
   danger: var(--background-danger-dot),
   info: var(--background-info-dot),
@@ -70,7 +70,7 @@ $sage-chip-sentiment-dots: (
   warning: var(--background-warning-dot),
 );
 
-$sage-chip-sentiment-interactive: (
+$pds-chip-sentiment-interactive: (
   accent: var(--background-accent-interactive),
   danger: var(--background-danger-interactive),
   info: var(--background-info-interactive),
@@ -79,30 +79,30 @@ $sage-chip-sentiment-interactive: (
   warning: var(--background-warning-interactive),
 );
 
-@each $sentiment, $value in $sage-chip-sentiment {
-  :host(.sage-chip--#{$sentiment}) {
+@each $sentiment, $value in $pds-chip-sentiment {
+  :host(.pds-chip--#{$sentiment}) {
     background: $value;
 
     // dot colors
-    .sage-chip__dot {
+    .pds-chip__dot {
       /* stylelint-disable-next-line */
-      background: map-get($sage-chip-sentiment-dots, $sentiment);
+      background: map-get($pds-chip-sentiment-dots, $sentiment);
     }
 
     // tag close hover colors
-    .sage-chip__close:hover {
+    .pds-chip__close:hover {
       /* stylelint-disable-next-line */
-      background: map-get($sage-chip-sentiment-interactive, $sentiment);
+      background: map-get($pds-chip-sentiment-interactive, $sentiment);
     }
   }
   // dropdown hover colors
-  :host(.sage-chip--#{$sentiment}.sage-chip--dropdown:hover) {
+  :host(.pds-chip--#{$sentiment}.pds-chip--dropdown:hover) {
     /* stylelint-disable-next-line */
-    background: map-get($sage-chip-sentiment-interactive, $sentiment);
+    background: map-get($pds-chip-sentiment-interactive, $sentiment);
   }
 }
 
-.sage-chip__dot {
+.pds-chip__dot {
   border: 1px solid transparent;
   border-radius: 50%;
   display: inline-block;
@@ -114,16 +114,16 @@ $sage-chip-sentiment-interactive: (
 
 // dropdown
 
-:host(.sage-chip--dropdown) {
+:host(.pds-chip--dropdown) {
   padding: 0;
 
-  .sage-chip__dot {
+  .pds-chip__dot {
     margin-block-end: 1px;
     margin-block-start: var(--margin-block-xs);
   }
 }
 
-.sage-chip__button {
+.pds-chip__button {
   align-items: center;
   appearance: none;
   background: transparent;
@@ -150,11 +150,11 @@ $sage-chip-sentiment-interactive: (
 
 // tag
 
-:host(.sage-chip--tag) {
+:host(.pds-chip--tag) {
   padding-block: var(--padding-block-sm);
 }
 
-.sage-chip__close {
+.pds-chip__close {
   appearance: none;
   background: transparent;
   border: 0;
@@ -181,32 +181,32 @@ $sage-chip-sentiment-interactive: (
 
 // large
 
-:host(.sage-chip--large) {
+:host(.pds-chip--large) {
   font-size: var(--font-size-lg);
   padding-block: var(--padding-block-lg);
   padding-inline: var(--padding-inline-xl);
 
-  &:host(.sage-chip--dropdown) {
+  &:host(.pds-chip--dropdown) {
     padding-block: var(--padding-block);
     padding-inline: var(--padding-inline-sm);
 
-    .sage-chip__dot {
+    .pds-chip__dot {
       margin-block-end: 0;
     }
   }
 
-  .sage-chip__button {
+  .pds-chip__button {
     font-size: var(--font-size-lg);
     padding-inline: var(--padding-inline-lg)
   }
 
-  .sage-chip__close {
+  .pds-chip__close {
     height: var(--close-size-lg);
     margin-inline-end: calc(var(--margin-inline-xl) * -1);
     width: var(--close-size-lg);
   }
 
-  &:host(.sage-chip--tag) {
+  &:host(.pds-chip--tag) {
     padding-block: var(--padding-block);
   }
 }

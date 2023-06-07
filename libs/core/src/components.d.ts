@@ -77,7 +77,7 @@ export namespace Components {
          */
         "value": string;
     }
-    interface SageChip {
+    interface PdsChip {
         /**
           * Determines whether a dot should be displayed on the chip.
           * @defaultValue false
@@ -408,9 +408,9 @@ export interface PdsCheckboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsCheckboxElement;
 }
-export interface SageChipCustomEvent<T> extends CustomEvent<T> {
+export interface PdsChipCustomEvent<T> extends CustomEvent<T> {
     detail: T;
-    target: HTMLSageChipElement;
+    target: HTMLPdsChipElement;
 }
 export interface SageInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -445,11 +445,11 @@ declare global {
         prototype: HTMLPdsCheckboxElement;
         new (): HTMLPdsCheckboxElement;
     };
-    interface HTMLSageChipElement extends Components.SageChip, HTMLStencilElement {
+    interface HTMLPdsChipElement extends Components.PdsChip, HTMLStencilElement {
     }
-    var HTMLSageChipElement: {
-        prototype: HTMLSageChipElement;
-        new (): HTMLSageChipElement;
+    var HTMLPdsChipElement: {
+        prototype: HTMLPdsChipElement;
+        new (): HTMLPdsChipElement;
     };
     interface HTMLSageDividerElement extends Components.SageDivider, HTMLStencilElement {
     }
@@ -514,7 +514,7 @@ declare global {
     interface HTMLElementTagNameMap {
         "pds-button": HTMLPdsButtonElement;
         "pds-checkbox": HTMLPdsCheckboxElement;
-        "sage-chip": HTMLSageChipElement;
+        "pds-chip": HTMLPdsChipElement;
         "sage-divider": HTMLSageDividerElement;
         "sage-image": HTMLSageImageElement;
         "sage-input": HTMLSageInputElement;
@@ -602,7 +602,7 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
-    interface SageChip {
+    interface PdsChip {
         /**
           * Determines whether a dot should be displayed on the chip.
           * @defaultValue false
@@ -620,7 +620,7 @@ declare namespace LocalJSX {
         /**
           * Event when close button is clicked on tag variant.
          */
-        "onSageTagCloseClick"?: (event: SageChipCustomEvent<any>) => void;
+        "onPdsTagCloseClick"?: (event: PdsChipCustomEvent<any>) => void;
         /**
           * Sets the color scheme of the chip.
           * @defaultValue 'neutral'
@@ -948,7 +948,7 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "pds-button": PdsButton;
         "pds-checkbox": PdsCheckbox;
-        "sage-chip": SageChip;
+        "pds-chip": PdsChip;
         "sage-divider": SageDivider;
         "sage-image": SageImage;
         "sage-input": SageInput;
@@ -967,7 +967,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "pds-button": LocalJSX.PdsButton & JSXBase.HTMLAttributes<HTMLPdsButtonElement>;
             "pds-checkbox": LocalJSX.PdsCheckbox & JSXBase.HTMLAttributes<HTMLPdsCheckboxElement>;
-            "sage-chip": LocalJSX.SageChip & JSXBase.HTMLAttributes<HTMLSageChipElement>;
+            "pds-chip": LocalJSX.PdsChip & JSXBase.HTMLAttributes<HTMLPdsChipElement>;
             "sage-divider": LocalJSX.SageDivider & JSXBase.HTMLAttributes<HTMLSageDividerElement>;
             "sage-image": LocalJSX.SageImage & JSXBase.HTMLAttributes<HTMLSageImageElement>;
             "sage-input": LocalJSX.SageInput & JSXBase.HTMLAttributes<HTMLSageInputElement>;

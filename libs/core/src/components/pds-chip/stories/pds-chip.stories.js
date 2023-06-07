@@ -1,7 +1,7 @@
 import { html } from 'lit-html';
 
 const BaseTemplate = (args) => html`
-<sage-chip
+<pds-chip
   dot="${args.dot}"
   label="${args.label}"
   large="${args.large}"

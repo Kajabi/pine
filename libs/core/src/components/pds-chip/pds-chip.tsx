@@ -1,11 +1,11 @@
 import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 
 @Component({
-  tag: 'sage-chip',
-  styleUrl: 'sage-chip.scss',
+  tag: 'pds-chip',
+  styleUrl: 'pds-chip.scss',
   shadow: true,
 })
-export class SageChip {
+export class PdsChip {
   /**
    * Sets the color scheme of the chip.
    * @defaultValue 'neutral'
@@ -38,23 +38,23 @@ export class SageChip {
   /**
    * Event when close button is clicked on tag variant.
    */
-  @Event() sageTagCloseClick: EventEmitter;
+  @Event() pdsTagCloseClick: EventEmitter;
 
   private handleCloseClick = () => {
-    this.sageTagCloseClick.emit();
+    this.pdsTagCloseClick.emit();
   }
 
   private classNames() {
-    const classNames = ['sage-chip'];
+    const classNames = ['pds-chip'];
 
     if (this.large) {
-      classNames.push('sage-chip--large');
+      classNames.push('pds-chip--large');
     }
     if (this.variant) {
-      classNames.push('sage-chip--' + this.variant);
+      classNames.push('pds-chip--' + this.variant);
     }
     if (this.sentiment) {
-      classNames.push('sage-chip--' + this.sentiment);
+      classNames.push('pds-chip--' + this.sentiment);
     }
 
     return classNames.join('  ');
@@ -63,14 +63,14 @@ export class SageChip {
   private setChipContent() {
     const isDropdown = this.variant === 'dropdown';
     const chipContent = isDropdown ? (
-      <button class="sage-chip__button" type="button">
-        {this.dot && <i class="sage-chip__dot" aria-hidden="true"></i>}
+      <button class="pds-chip__button" type="button">
+        {this.dot && <i class="pds-chip__dot" aria-hidden="true"></i>}
         {this.label}
         <pds-icon name="down-small" size="12px" aria-hidden="true"></pds-icon>
       </button>
     ) : (
-      <span class="sage-chip__label">
-        {this.dot && <i class="sage-chip__dot" aria-hidden="true"></i>}
+      <span class="pds-chip__label">
+        {this.dot && <i class="pds-chip__dot" aria-hidden="true"></i>}
         {this.label}
       </span>
     );
@@ -83,7 +83,7 @@ export class SageChip {
       <Host class={this.classNames()}>
         {this.setChipContent()}
         {this.variant === 'tag' && (
-          <button class="sage-chip__close" type="button" onClick={this.handleCloseClick} aria-label="Remove">
+          <button class="pds-chip__close" type="button" onClick={this.handleCloseClick} aria-label="Remove">
             <pds-icon name="remove" size="12px"></pds-icon>
           </button>
         )}
