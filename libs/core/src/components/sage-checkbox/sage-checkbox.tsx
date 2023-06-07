@@ -62,12 +62,12 @@ export class SageCheckbox {
    */
   @Event() sageCheckboxChange: EventEmitter<boolean>;
 
-  private handleCheckboxChange(event: Event) {
+  private handleCheckboxChange = (e: Event) => {
     if (this.disabled) {
       return;
     }
 
-    const target = event.target as HTMLInputElement;
+    const target = e.target as HTMLInputElement;
     const isChecked = target.checked;
 
     this.sageCheckboxChange.emit(isChecked);
@@ -94,7 +94,7 @@ export class SageCheckbox {
           checked={this.checked}
           required={this.required}
           disabled={this.disabled}
-          onChange={event => this.handleCheckboxChange(event)}
+          onChange={this.handleCheckboxChange}
         />
         <label htmlFor={this.componentId}>{this.label}</label>
         {this.helperMessage && <div class={'sage-checkbox__message'}>{this.helperMessage}</div>}
