@@ -4,13 +4,13 @@
   --border: var(--sage-border-interactive);
   --border-color-disabled: var(--sage-color-neutral-charcoal-100);
   --border-color-hover: var(--sage-border-interactive-hover-color);
+  --border-color-icon: var(--sage-color-base-white);
   --border-radius: var(--sage-border-radius-xs);
   --color-checked: var(--sage-color-neutral-charcoal-500);
   --color-disabled: var(--sage-color-neutral-grey-300);
   --color-focus: var(--sage-color-primary-200);
   --color-invalid-focus: var(--sage-color-red-200);
   --color-invalid: var(--sage-color-red-300);
-  --icon-border-color: var(--sage-color-base-white);
   --message-color-disabled: var(--sage-color-neutral-grey-500);
   --message-color: var(--sage-color-neutral-charcoal-200);
   --input-size: 16px;
@@ -68,7 +68,7 @@ input {
     border-color: var(--color-checked);
 
     &::after {
-      border: 1px solid var(--icon-border-color);
+      border: 1px solid var(--border-color-icon);
       border-left: 0;
       border-top: 0;
       content: "";
