@@ -1,11 +1,11 @@
 import { Component, Prop, Host, h } from '@stencil/core';
 
 @Component({
-  tag: 'sage-divider',
-  styleUrl: 'sage-divider.scss',
+  tag: 'pds-divider',
+  styleUrl: 'pds-divider.scss',
   shadow: true,
 })
-export class SageDivider {
+export class PdsDivider {
   /**
    * Adds offset margin/padding to expand the width (horizontal) or the height (vertical) of divider.
    */
@@ -18,14 +18,14 @@ export class SageDivider {
   @Prop() vertical = false;
 
   private classNames() {
-    const classNames = ['sage-divider'];
+    const classNames = ['pds-divider'];
 
     if (this.vertical) {
-      classNames.push('sage-divider--vertical');
+      classNames.push('pds-divider--vertical');
     }
 
     if (this.offset) {
-      const offsetClassName = 'sage-divider--offset-' + this.offset;
+      const offsetClassName = 'pds-divider--offset-' + this.offset;
       classNames.push(offsetClassName);
     }
 

@@ -103,7 +103,7 @@ export namespace Components {
          */
         "variant": 'text' | 'tag' | 'dropdown';
     }
-    interface SageDivider {
+    interface PdsDivider {
         /**
           * Adds offset margin/padding to expand the width (horizontal) or the height (vertical) of divider.
          */
@@ -451,11 +451,11 @@ declare global {
         prototype: HTMLPdsChipElement;
         new (): HTMLPdsChipElement;
     };
-    interface HTMLSageDividerElement extends Components.SageDivider, HTMLStencilElement {
+    interface HTMLPdsDividerElement extends Components.PdsDivider, HTMLStencilElement {
     }
-    var HTMLSageDividerElement: {
-        prototype: HTMLSageDividerElement;
-        new (): HTMLSageDividerElement;
+    var HTMLPdsDividerElement: {
+        prototype: HTMLPdsDividerElement;
+        new (): HTMLPdsDividerElement;
     };
     interface HTMLSageImageElement extends Components.SageImage, HTMLStencilElement {
     }
@@ -515,7 +515,7 @@ declare global {
         "pds-button": HTMLPdsButtonElement;
         "pds-checkbox": HTMLPdsCheckboxElement;
         "pds-chip": HTMLPdsChipElement;
-        "sage-divider": HTMLSageDividerElement;
+        "pds-divider": HTMLPdsDividerElement;
         "sage-image": HTMLSageImageElement;
         "sage-input": HTMLSageInputElement;
         "sage-link": HTMLSageLinkElement;
@@ -632,7 +632,7 @@ declare namespace LocalJSX {
          */
         "variant"?: 'text' | 'tag' | 'dropdown';
     }
-    interface SageDivider {
+    interface PdsDivider {
         /**
           * Adds offset margin/padding to expand the width (horizontal) or the height (vertical) of divider.
          */
@@ -949,7 +949,7 @@ declare namespace LocalJSX {
         "pds-button": PdsButton;
         "pds-checkbox": PdsCheckbox;
         "pds-chip": PdsChip;
-        "sage-divider": SageDivider;
+        "pds-divider": PdsDivider;
         "sage-image": SageImage;
         "sage-input": SageInput;
         "sage-link": SageLink;
@@ -968,7 +968,7 @@ declare module "@stencil/core" {
             "pds-button": LocalJSX.PdsButton & JSXBase.HTMLAttributes<HTMLPdsButtonElement>;
             "pds-checkbox": LocalJSX.PdsCheckbox & JSXBase.HTMLAttributes<HTMLPdsCheckboxElement>;
             "pds-chip": LocalJSX.PdsChip & JSXBase.HTMLAttributes<HTMLPdsChipElement>;
-            "sage-divider": LocalJSX.SageDivider & JSXBase.HTMLAttributes<HTMLSageDividerElement>;
+            "pds-divider": LocalJSX.PdsDivider & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
             "sage-image": LocalJSX.SageImage & JSXBase.HTMLAttributes<HTMLSageImageElement>;
             "sage-input": LocalJSX.SageInput & JSXBase.HTMLAttributes<HTMLSageInputElement>;
             "sage-link": LocalJSX.SageLink & JSXBase.HTMLAttributes<HTMLSageLinkElement>;

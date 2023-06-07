@@ -1,44 +1,44 @@
 import { newSpecPage } from '@stencil/core/testing';
-import { SageDivider } from '../sage-divider';
+import { PdsDivider } from '../pds-divider';
 
-describe('sage-divider', () => {
+describe('pds-divider', () => {
   it('renders', async () => {
     const page = await newSpecPage({
-      components: [SageDivider],
-      html: `<sage-divider />`,
+      components: [PdsDivider],
+      html: `<pds-divider />`,
     });
     expect(page.root).toEqualHtml(`
-      <sage-divider>
+      <pds-divider>
         <mock:shadow-root>
-          <hr class="sage-divider">
+          <hr class="pds-divider">
         </mock:shadow-root>
-      </sage-divider>
+      </pds-divider>
     `);
   });
   it('renders vertically when vertical prop is set', async () => {
     const page = await newSpecPage({
-      components: [SageDivider],
-      html: `<sage-divider vertical="true" />`,
+      components: [PdsDivider],
+      html: `<pds-divider vertical="true" />`,
     });
     expect(page.root).toEqualHtml(`
-      <sage-divider vertical="true">
+      <pds-divider vertical="true">
         <mock:shadow-root>
-          <hr class="sage-divider sage-divider--vertical">
+          <hr class="pds-divider pds-divider--vertical">
         </mock:shadow-root>
-      </sage-divider>
+      </pds-divider>
     `)
   })
   it('renders with offset applied when prop is set', async () => {
     const page = await newSpecPage({
-      components: [SageDivider],
-      html: `<sage-divider offset="lg" />`,
+      components: [PdsDivider],
+      html: `<pds-divider offset="lg" />`,
     });
     expect(page.root).toEqualHtml(`
-      <sage-divider offset="lg">
+      <pds-divider offset="lg">
         <mock:shadow-root>
-          <hr class="sage-divider sage-divider--offset-lg">
+          <hr class="pds-divider pds-divider--offset-lg">
         </mock:shadow-root>
-      </sage-divider>
+      </pds-divider>
     `)
   })
 });

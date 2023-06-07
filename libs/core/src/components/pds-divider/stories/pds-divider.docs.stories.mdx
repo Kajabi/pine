@@ -3,9 +3,9 @@ import { html, render } from 'lit-html';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
-import * as stories from './sage-divider.stories.js';
+import * as stories from './pds-divider.stories.js';
 
-<Meta title="components/Divider" component="sage-divider" argTypes={extractArgTypes('sage-divider')} />
+<Meta title="components/Divider" component="pds-divider" argTypes={extractArgTypes('pds-divider')} />
 
 # Divider
 
@@ -13,7 +13,7 @@ Use the divider to separate sections of content. You can also use them to overri
 
 ## Properties
 
-<ArgsTable of="sage-divider" />
+<ArgsTable of="pds-divider" />
 
 ### Default
 
@@ -22,7 +22,7 @@ The default divider displays a horizontal line.
 <Story story={stories.Default} />
 
 <Canvas>
-  <sage-divider />
+  <pds-divider />
 </Canvas>
 
 ### Vertical
@@ -35,7 +35,7 @@ To display the divider vertically, the `vertical` prop can be set to `true`.
 
 <Canvas>
   <div style={{ height: '150px' }}>
-    <sage-divider vertical="true" />
+    <pds-divider vertical="true" />
   </div>
 </Canvas>
 
@@ -46,13 +46,13 @@ Both horizontal and vertical dividers can be offset to create a full width/heigh
 Offset sizes follow the global spacing sizes: `xxs`:4px, `xs`:8px, `sm`:12px,`md`:24px, `lg`:32px, `xl`:48px, `xxl`:64px.
 
 <Canvas>
-  <sage-divider offset="lg" />
+  <pds-divider offset="lg" />
 </Canvas>
 
 Below you will see a vertical divider using a large offset.
 
 <Canvas>
   <div style={{ height: '150px' }}>
-    <sage-divider offset="lg" vertical="true" />
+    <pds-divider offset="lg" vertical="true" />
   </div>
 </Canvas>

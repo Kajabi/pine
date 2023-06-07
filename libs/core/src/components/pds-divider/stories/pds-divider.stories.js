@@ -1,6 +1,6 @@
 import { html } from 'lit-html';
 
-const BaseTemplate = (args) => html` <sage-divider vertical=${args.vertical} offset=${args.offset} />`;
+const BaseTemplate = (args) => html` <pds-divider vertical=${args.vertical} offset=${args.offset} />`;
 
 const defaultParameters = { docs: { disable: true } };
 

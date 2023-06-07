@@ -1,14 +1,14 @@
 :host {
-  --background-color: var(--sage-color-neutral-grey-400);
-  --offset-xxs: var(--sage-spacing-xxs);
-  --offset-xs: var(--sage-spacing-xs);
-  --offset-sm: var(--sage-spacing-sm);
-  --offset-md: var(--sage-spacing-md);
-  --offset-lg: var(--sage-spacing-lg);
-  --offset-xxl: var(--sage-spacing-2xl);
+  --background-color: var(--pine-color-neutral-grey-400);
+  --offset-xxs: var(--pine-spacing-xxs);
+  --offset-xs: var(--pine-spacing-xs);
+  --offset-sm: var(--pine-spacing-sm);
+  --offset-md: var(--pine-spacing-md);
+  --offset-lg: var(--pine-spacing-lg);
+  --offset-xxl: var(--pine-spacing-2xl);
 }
 
-$sage-divider-offsets: (
+$pds-divider-offsets: (
   xxs: var(-offset-xxs),
   xs: var(--offset-xs),
   sm: var(--offset-sm),
@@ -18,7 +18,7 @@ $sage-divider-offsets: (
   xxl: var(--offset-xxl),
 );
 
-.sage-divider {
+.pds-divider {
   background: var(--background-color);
   border: 0;
   display: flex;
@@ -27,17 +27,17 @@ $sage-divider-offsets: (
   width: 100%;
 }
 
-.sage-divider--vertical {
+.pds-divider--vertical {
   height: 100%;
   width: 1px;
 }
 
-@each $offset, $value in $sage-divider-offsets {
-  .sage-divider--offset-#{$offset} {
+@each $offset, $value in $pds-divider-offsets {
+  .pds-divider--offset-#{$offset} {
     margin: 0 calc($value * -1);
     padding: 0 $value;
 
-    &.sage-divider--vertical {
+    &.pds-divider--vertical {
       margin: calc($value * -1) 0;
       padding: $value 0;
     }
@@ -45,7 +45,7 @@ $sage-divider-offsets: (
 }
 
 @media (max-width: 767px) {
-  .sage-divider--vertical {
+  .pds-divider--vertical {
     display: none;
   }
 }
