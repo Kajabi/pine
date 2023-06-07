@@ -19,7 +19,7 @@ const build = (data: object) => {
 	try {
 		Object.keys(data).map((cssPropertyName) => {
 			const cssVariables = tokensToCss(data[cssPropertyName], cssPropertyName, `--${cssPropertyName}`, ).replaceAll('', '');
-			const cssClass = `:root {\n${cssVariables.replaceAll("--", "  --sage-")}}\n`
+			const cssClass = `:root {\n${cssVariables.replaceAll("--", "  --pine-")}}\n`
 			saveTokens(cssPropertyName, cssClass)
 		})
 
@@ -110,7 +110,7 @@ const formatIndexFile = (categoryName: string) => {
 
 /**
  * Receives values of CSS property names and joins them.
- * 
+ *
  * @param data Array data to be joined
  * @returns CSS property values joined by a space
  */
