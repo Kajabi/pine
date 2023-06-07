@@ -1,6 +1,6 @@
 import { html } from 'lit-html';
 
-const BaseTemplate = (args) => html` <sage-image
+const BaseTemplate = (args) => html` <pds-image
   alt="${args.alt}"
   height="${args.height}"
   loading="${args.loading}"
@@ -10,7 +10,7 @@ const BaseTemplate = (args) => html` <sage-image
   width="${args.width}"
 />`;
 
-const SizesAndSrcsetTemplate = (args) => html`<sage-image alt="${args.alt}" sizes="${args.sizes}" src="${args.src}" srcset="${args.srcset}" />`;
+const SizesAndSrcsetTemplate = (args) => html`<pds-image alt="${args.alt}" sizes="${args.sizes}" src="${args.src}" srcset="${args.srcset}" />`;
 
 const defaultParameters = { docs: { disable: true } };
 

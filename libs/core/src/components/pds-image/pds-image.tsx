@@ -1,11 +1,11 @@
 import { Component, Host, h, Prop } from '@stencil/core';
 
 @Component({
-  tag: 'sage-image',
-  styleUrl: 'sage-image.scss',
+  tag: 'pds-image',
+  styleUrl: 'pds-image.scss',
   shadow: true,
 })
-export class SageImage {
+export class PdsImage {
   /**
    * The image's alt tag. If none is provided,
    * it will default to an empty string.
@@ -52,10 +52,10 @@ export class SageImage {
     return (
       <Host
         class={{
-          'sage-image': true,
+          'pds-image': true,
         }}
       >
-        <img 
+        <img
           alt={this.alt}
           height={this.height}
           loading={this.loading}
