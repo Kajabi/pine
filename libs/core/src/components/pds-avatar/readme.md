@@ -9,6 +9,7 @@
 
 | Property  | Attribute | Description                                                                                         | Type                                   | Default      |
 | --------- | --------- | --------------------------------------------------------------------------------------------------- | -------------------------------------- | ------------ |
+| `alt`     | `alt`     | The alt for a custom user image.                                                                    | `string`                               | `undefined`  |
 | `badge`   | `badge`   | Determines whether the badge is visible or not                                                      | `boolean`                              | `false`      |
 | `image`   | `image`   | The src for a custom user image.                                                                    | `string`                               | `undefined`  |
 | `size`    | `size`    | Preset sizes for the avatar. If a custom size is desired, use the `--size` custom property instead. | `"lg" \| "md" \| "sm" \| "xl" \| "xs"` | `undefined`  |

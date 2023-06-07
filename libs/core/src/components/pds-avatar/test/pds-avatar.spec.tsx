@@ -76,7 +76,23 @@ describe('pds-avatar', () => {
       <pds-avatar class="pds-avatar" image="https://placehold.co/64x64" variant="customer">
         <mock:shadow-root>
           <div>
-            <img alt="Profile" src="https://placehold.co/64x64"/>
+            <img src="https://placehold.co/64x64"/>
+          </div>
+        </mock:shadow-root>
+      </pds-avatar>
+    `);
+  });
+
+  it('renders image alt when prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsAvatar],
+      html: `<pds-avatar alt="Customer Profile" image="https://placehold.co/64x64"></pds-avatar>`
+    });
+    expect(page.root).toEqualHtml(`
+      <pds-avatar class="pds-avatar" alt="Customer Profile" image="https://placehold.co/64x64" variant="customer">
+        <mock:shadow-root>
+          <div>
+            <img alt="Customer Profile" src="https://placehold.co/64x64"/>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -86,13 +102,13 @@ describe('pds-avatar', () => {
   it('renders both an image and badge when props are set', async () => {
     const page = await newSpecPage({
       components: [PdsAvatar],
-      html: `<pds-avatar badge="true" image="https://placehold.co/64x64"></pds-avatar>`
+      html: `<pds-avatar badge="true" alt="Customer Profile" image="https://placehold.co/64x64"></pds-avatar>`
     });
     expect(page.root).toEqualHtml(`
-      <pds-avatar class="pds-avatar" badge="true" image="https://placehold.co/64x64" variant="customer">
+      <pds-avatar class="pds-avatar" badge="true" alt="Customer Profile" image="https://placehold.co/64x64" variant="customer">
         <mock:shadow-root>
           <div>
-            <img alt="Profile" src="https://placehold.co/64x64"/>
+            <img alt="Customer Profile" src="https://placehold.co/64x64"/>
             <pds-icon class="pds-avatar__badge" name="check-circle-filled" size="normal"></pds-icon>
           </div>
         </mock:shadow-root>

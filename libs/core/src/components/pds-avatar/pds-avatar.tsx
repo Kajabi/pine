@@ -8,6 +8,12 @@ import { Component, Host, h, Prop } from '@stencil/core';
 export class PdsAvatar {
 
   /**
+   * The alt for a custom user image.
+   * @defaultValue null
+   */
+  @Prop() alt?: string | null;
+
+  /**
    * Determines whether the badge is visible or not
    * @defaultValue false
    */
@@ -43,7 +49,7 @@ export class PdsAvatar {
 
   private renderIconOrImage = () => (
     this.image
-      ? <img alt='Profile' src={this.image} />
+      ? <img alt={this.alt} src={this.image} />
       : <pds-icon name="user-filled" size="normal"></pds-icon>
   );
 

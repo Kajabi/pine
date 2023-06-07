@@ -9,6 +9,11 @@ import { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-in
 export namespace Components {
     interface PdsAvatar {
         /**
+          * The alt for a custom user image.
+          * @defaultValue null
+         */
+        "alt"?: string | null;
+        /**
           * Determines whether the badge is visible or not
           * @defaultValue false
          */
@@ -614,6 +619,11 @@ declare global {
 }
 declare namespace LocalJSX {
     interface PdsAvatar {
+        /**
+          * The alt for a custom user image.
+          * @defaultValue null
+         */
+        "alt"?: string | null;
         /**
           * Determines whether the badge is visible or not
           * @defaultValue false

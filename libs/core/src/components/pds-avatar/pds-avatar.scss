@@ -64,7 +64,8 @@ pds-icon {
 }
 
 .pds-avatar__badge {
-  background-color: var(--icon-background-color);
+  background-color: var(--badge-background-color);
+  border: var(--pine-border-default);
   border-color: var(--badge-background-color);
   border-radius: var(--radius-round);
   bottom: 0;
