@@ -15,7 +15,7 @@ const HTMLContentTemplate = (args) => html`
       <p><strong>This is a tooltip</strong></p>
       <p>Tooltips are used to describe or identify an element. In most scenarios, tooltips help the user understand the meaning, function or alt-text of an element.</p>
     </div>
-    <sage-button variant="secondary">Hover</sage-button>
+    <pds-button variant="secondary">Hover</pds-button>
   </sage-tooltip>`;
 
 const PositionTemplate = (args) => html`
@@ -23,46 +23,46 @@ const PositionTemplate = (args) => html`
     <div class="position-demo-grid">
       <div class="position-demo-grid-item">
         <sage-tooltip content="content 2" has-arrow=${args.hasArrow} placement="top-start" opened=${args.opened}>
-          <sage-button variant="accent">t</sage-button>
+          <pds-button variant="accent">t</pds-button>
         </sage-tooltip>
         <sage-tooltip content="content 2" has-arrow=${args.hasArrow} placement="top" opened=${args.opened}>
-          <sage-button variant="accent">t</sage-button>
+          <pds-button variant="accent">t</pds-button>
         </sage-tooltip>
         <sage-tooltip content="content 3" has-arrow=${args.hasArrow} placement="top-end" opened=${args.opened}>
-          <sage-button variant="accent">te</sage-button>
+          <pds-button variant="accent">te</pds-button>
         </sage-tooltip>
         </div>
         <div class="position-demo-grid-item">
           <sage-tooltip content="content 1" has-arrow=${args.hasArrow} placement="left-start" opened=${args.opened}>
-            <sage-button variant="accent">ls</sage-button>
+            <pds-button variant="accent">ls</pds-button>
           </sage-tooltip>
           <sage-tooltip content="content 2" has-arrow=${args.hasArrow} placement="left" opened=${args.opened}>
-            <sage-button variant="accent">l</sage-button>
+            <pds-button variant="accent">l</pds-button>
           </sage-tooltip>
           <sage-tooltip content="content 3" has-arrow=${args.hasArrow} placement="left-end" opened=${args.opened}>
-            <sage-button variant="accent">le</sage-button>
+            <pds-button variant="accent">le</pds-button>
           </sage-tooltip>
         </div>
         <div class="position-demo-grid-item">
           <sage-tooltip content="content 1" has-arrow=${args.hasArrow} placement="bottom-start" opened=${args.opened}>
-            <sage-button variant="accent">bs</sage-button>
+            <pds-button variant="accent">bs</pds-button>
           </sage-tooltip>
           <sage-tooltip content="content 2" has-arrow=${args.hasArrow} placement="bottom" opened=${args.opened}>
-            <sage-button variant="accent">b</sage-button>
+            <pds-button variant="accent">b</pds-button>
           </sage-tooltip>
           <sage-tooltip content="content 3" has-arrow=${args.hasArrow} placement="bottom-end" opened=${args.opened}>
-            <sage-button variant="accent">be</sage-button>
+            <pds-button variant="accent">be</pds-button>
           </sage-tooltip>
         </div>
         <div class="position-demo-grid-item">
           <sage-tooltip content="content 1" has-arrow=${args.hasArrow} placement="right-start" opened=${args.opened}>
-            <sage-button variant="accent">rs</sage-button>
+            <pds-button variant="accent">rs</pds-button>
           </sage-tooltip>
           <sage-tooltip content="content 2" has-arrow=${args.hasArrow} placement="right" opened=${args.opened}>
-            <sage-button variant="accent">r</sage-button>
+            <pds-button variant="accent">r</pds-button>
           </sage-tooltip>
           <sage-tooltip content="content 3" has-arrow=${args.hasArrow} placement="right-end" opened=${args.opened}>
-            <sage-button variant="accent">re</sage-button>
+            <pds-button variant="accent">re</pds-button>
           </sage-tooltip>
       </div>
     </div>

@@ -2,12 +2,12 @@ import { Component, Element, Host, h, Prop } from '@stencil/core';
 import { hasShadowDom } from '../../utils/utils';
 
 @Component({
-  tag: 'sage-button',
-  styleUrl: 'sage-button.scss',
+  tag: 'pds-button',
+  styleUrl: 'pds-button.scss',
   shadow: true,
 })
-export class SageButton {
-  @Element() el: HTMLSageButtonElement;
+export class PdsButton {
+  @Element() el: HTMLPdsButtonElement;
 
   /**
    * Sets button variant styles as outlined in Figma documentation
@@ -36,7 +36,7 @@ export class SageButton {
   @Prop() value?: string;
 
   /**
-   * Provides button with a type 
+   * Provides button with a type
    * @defaultValue button
    */
   @Prop() type?: 'button' | 'reset' | 'submit' = 'button';
@@ -59,11 +59,11 @@ export class SageButton {
       }
     }
   }
-  
+
   private buttonClassNames = () => {
-    let className = `sage-button`;
+    let className = `pds-button`;
     if (this.variant && this.variant != 'primary') {
-      const variantClassName = `sage-button--${this.variant}`;
+      const variantClassName = `pds-button--${this.variant}`;
       className += ' ' + variantClassName;
     }
     return className;

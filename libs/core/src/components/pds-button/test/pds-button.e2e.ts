@@ -1,10 +1,10 @@
 import { newE2EPage } from '@stencil/core/testing';
 
-describe('sage-button', () => {
+describe('pds-button', () => {
   it('renders', async () => {
     const page = await newE2EPage();
-    await page.setContent('<sage-button></sage-button>');
-    const element = await page.find('sage-button');
+    await page.setContent('<pds-button></pds-button>');
+    const element = await page.find('pds-button');
     expect(element).toHaveClass('hydrated');
   });
 
@@ -12,14 +12,14 @@ describe('sage-button', () => {
     const page = await newE2EPage({
       html: `
         <form>
-          <sage-button type="submit"></sage-button>
+          <pds-button type="submit"></pds-button>
         </form>
       `
     });
-    
+
     const elementForm = await page.find('form');
     const elementFormEvent = await elementForm.spyOnEvent('submit');
-    await page.evaluate(() => document.querySelector('sage-button').click());
+    await page.evaluate(() => document.querySelector('pds-button').click());
     await page.waitForChanges();
 
     // Confirm onClick has been called
@@ -32,15 +32,15 @@ describe('sage-button', () => {
       html: `
         <form>
           <input></input>
-          <sage-button type="reset"></sage-button>
+          <pds-button type="reset"></pds-button>
         </form>
       `
     });
-    
+
     const elementForm = await page.find('form');
     const elementFormEvent = await elementForm.spyOnEvent('reset');
     page.evaluate(() => document.querySelector('input').value = 'test');
-    await page.evaluate(() => document.querySelector('sage-button').click());    
+    await page.evaluate(() => document.querySelector('pds-button').click());
     await page.waitForChanges();
 
     // Confirm form received reset event
@@ -53,21 +53,21 @@ describe('sage-button', () => {
 
   it('renders when slot is used', async () => {
     const page = await newE2EPage();
-    await page.setContent('<sage-button>Test Content</sage-button>');
-    const component = await page.find('sage-button');
+    await page.setContent('<pds-button>Test Content</pds-button>');
+    const component = await page.find('pds-button');
     expect(component).toHaveClass('hydrated');
 
-    const element = await page.find('sage-button');
+    const element = await page.find('pds-button');
     expect(element.textContent).toMatch('Test Content');
   });
 
   it('renders toggle of disabled state', async () => {
     const page = await newE2EPage();
-    await page.setContent('<sage-button></sage-button>');
-    const component = await page.find('sage-button');
+    await page.setContent('<pds-button></pds-button>');
+    const component = await page.find('pds-button');
     expect(component).toHaveClass('hydrated');
 
-    const element = await page.find('sage-button >>> button');
+    const element = await page.find('pds-button >>> button');
     let value = await element.getProperty('disabled');
     expect(value).toBe(false);
 
@@ -79,11 +79,11 @@ describe('sage-button', () => {
 
   it('renders toggle of icon', async () => {
     const page = await newE2EPage();
-    await page.setContent('<sage-button></sage-button>');
-    const component = await page.find('sage-button');
+    await page.setContent('<pds-button></pds-button>');
+    const component = await page.find('pds-button');
     expect(component).toHaveClass('hydrated');
 
-    const element = await page.find('sage-button >>> button');
+    const element = await page.find('pds-button >>> button');
     let icon = await element.find('svg');
     expect(icon).toBeNull();
 

@@ -2,13 +2,13 @@ import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
-import * as stories from './sage-button.stories.js';
+import * as stories from './pds-button.stories.js';
 
-<Meta title="components/Button" component="sage-button" argTypes={extractArgTypes('sage-button')} />
+<Meta title="components/Button" component="pds-button" argTypes={extractArgTypes('pds-button')} />
 
 # Button
 
-A button component to generate all versions of `sage-button` as outlined in [Figma](https://www.figma.com/file/sMbtLUHSt2vfKgKjyQ3052/%F0%9F%A7%A9-Sage-components?node-id=3%3A15&t=dIcvX1VtOu0FL0VE-0).
+A button component to generate all versions of `pds-button` as outlined in [Figma](https://www.figma.com/file/sMbtLUHSt2vfKgKjyQ3052/%F0%9F%A7%A9-Sage-components?node-id=3%3A15&t=dIcvX1VtOu0FL0VE-0).
 
 ## Usage Guidelines
 
@@ -25,7 +25,7 @@ A button component to generate all versions of `sage-button` as outlined in [Fig
 
 ## Accessibility
 
-When following our usage guidelines, sage-button should be accessible right out of the box but there are still a few general accessibility best practices to make sure you follow:
+When following our usage guidelines, pds-button should be accessible right out of the box but there are still a few general accessibility best practices to make sure you follow:
 
 - Buttons should always contain helpful text about what they do even if this text is expected to be visually hidden. (e.g. "submit form" or "delete account")
 - Buttons should not disable tabbing or keyboard navigation.
@@ -33,7 +33,7 @@ When following our usage guidelines, sage-button should be accessible right out 
 
 ## Properties
 
-<ArgsTable of="sage-button" />
+<ArgsTable of="pds-button" />
 
 ## Variant
 
@@ -44,9 +44,9 @@ Default button styles, used with affirmative actions such as submitting, continu
 <Story story={stories.Primary} />
 
 <Canvas>
-  <sage-button>Default</sage-button>
-  <sage-button disabled="true">Disabled</sage-button>
-  <sage-button icon="trashIcon">Icon</sage-button>
+  <pds-button>Default</pds-button>
+  <pds-button disabled="true">Disabled</pds-button>
+  <pds-button icon="trashIcon">Icon</pds-button>
 </Canvas>
 
 ### Secondary
@@ -56,9 +56,9 @@ Secondary button styles, used with neutral actions such as going back, saving as
 <Story story={stories.Secondary} />
 
 <Canvas>
-  <sage-button variant="secondary">Secondary</sage-button>
-  <sage-button variant="secondary" disabled="true">Disabled</sage-button>
-  <sage-button variant="secondary" icon="trashIcon">Icon</sage-button>
+  <pds-button variant="secondary">Secondary</pds-button>
+  <pds-button variant="secondary" disabled="true">Disabled</pds-button>
+  <pds-button variant="secondary" icon="trashIcon">Icon</pds-button>
 </Canvas>
 
 ### Accent
@@ -68,9 +68,9 @@ Accent button styles, used for tertiary actions or when more contrast is needed
 <Story story={stories.Accent} />
 
 <Canvas>
-  <sage-button variant="accent">Default</sage-button>
-  <sage-button variant="accent" disabled="true">Disabled</sage-button>
-  <sage-button variant="accent" icon="trashIcon">Icon</sage-button>
+  <pds-button variant="accent">Default</pds-button>
+  <pds-button variant="accent" disabled="true">Disabled</pds-button>
+  <pds-button variant="accent" icon="trashIcon">Icon</pds-button>
 </Canvas>
 
 ### Disclosure
@@ -80,9 +80,9 @@ Disclosure button styles, used to provide multiple options or more information w
 <Story story={stories.Disclosure} />
 
 <Canvas>
-  <sage-button variant="disclosure">Default</sage-button>
-  <sage-button variant="disclosure" disabled="true">Disabled</sage-button>
-  <sage-button variant="disclosure" icon="trashIcon">Icon</sage-button>
+  <pds-button variant="disclosure">Default</pds-button>
+  <pds-button variant="disclosure" disabled="true">Disabled</pds-button>
+  <pds-button variant="disclosure" icon="trashIcon">Icon</pds-button>
 </Canvas>
 
 ### Destructive
@@ -92,14 +92,14 @@ Destructive button styles, used with actions that delete information such as del
 <Story story={stories.Destructive} />
 
 <Canvas>
-  <sage-button variant="destructive">Default</sage-button>
-  <sage-button variant="destructive" disabled="true">Disabled</sage-button>
-  <sage-button variant="destructive" icon="trashIcon">Icon</sage-button>
+  <pds-button variant="destructive">Default</pds-button>
+  <pds-button variant="destructive" disabled="true">Disabled</pds-button>
+  <pds-button variant="destructive" icon="trashIcon">Icon</pds-button>
 </Canvas>
 
 ## Type
 
-The type prop allows a `sage-button` to set [button type attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type).
+The type prop allows a `pds-button` to set [button type attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type).
 
 ### Default (Button)
 

@@ -6,7 +6,7 @@ sage-tab {
 ///
 /// Resets base button styles
 ///
-@mixin sage-button-style-reset {
+@mixin pds-button-style-reset {
   appearance: none;
   background-color: transparent;
   border: 0;
@@ -24,7 +24,7 @@ sage-tab {
 }
 
 .sage-tab {
-  @include sage-button-style-reset();
+  @include pds-button-style-reset();
 
   align-items: center;
   color: #60666c;

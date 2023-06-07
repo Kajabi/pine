@@ -7,7 +7,7 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { TextareaChangeEventDetail } from "./components/sage-textarea/textarea-interface";
 export namespace Components {
-    interface SageButton {
+    interface PdsButton {
         /**
           * Toggles disabled state of button
           * @defaultValue false
@@ -433,11 +433,11 @@ export interface SageTooltipCustomEvent<T> extends CustomEvent<T> {
     target: HTMLSageTooltipElement;
 }
 declare global {
-    interface HTMLSageButtonElement extends Components.SageButton, HTMLStencilElement {
+    interface HTMLPdsButtonElement extends Components.PdsButton, HTMLStencilElement {
     }
-    var HTMLSageButtonElement: {
-        prototype: HTMLSageButtonElement;
-        new (): HTMLSageButtonElement;
+    var HTMLPdsButtonElement: {
+        prototype: HTMLPdsButtonElement;
+        new (): HTMLPdsButtonElement;
     };
     interface HTMLSageCheckboxElement extends Components.SageCheckbox, HTMLStencilElement {
     }
@@ -512,7 +512,7 @@ declare global {
         new (): HTMLSageTooltipElement;
     };
     interface HTMLElementTagNameMap {
-        "sage-button": HTMLSageButtonElement;
+        "pds-button": HTMLPdsButtonElement;
         "sage-checkbox": HTMLSageCheckboxElement;
         "sage-chip": HTMLSageChipElement;
         "sage-divider": HTMLSageDividerElement;
@@ -528,7 +528,7 @@ declare global {
     }
 }
 declare namespace LocalJSX {
-    interface SageButton {
+    interface PdsButton {
         /**
           * Toggles disabled state of button
           * @defaultValue false
@@ -946,7 +946,7 @@ declare namespace LocalJSX {
     | 'left-end';
     }
     interface IntrinsicElements {
-        "sage-button": SageButton;
+        "pds-button": PdsButton;
         "sage-checkbox": SageCheckbox;
         "sage-chip": SageChip;
         "sage-divider": SageDivider;
@@ -965,7 +965,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "sage-button": LocalJSX.SageButton & JSXBase.HTMLAttributes<HTMLSageButtonElement>;
+            "pds-button": LocalJSX.PdsButton & JSXBase.HTMLAttributes<HTMLPdsButtonElement>;
             "sage-checkbox": LocalJSX.SageCheckbox & JSXBase.HTMLAttributes<HTMLSageCheckboxElement>;
             "sage-chip": LocalJSX.SageChip & JSXBase.HTMLAttributes<HTMLSageChipElement>;
             "sage-divider": LocalJSX.SageDivider & JSXBase.HTMLAttributes<HTMLSageDividerElement>;

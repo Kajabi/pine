@@ -3,7 +3,7 @@
   vertical-align: middle;
 }
 
-.sage-button {
+.pds-button {
   // Background Color
   --background-color: #202327;
   --background-color-hover: #040506;
@@ -56,7 +56,7 @@
   }
 }
 
-.sage-button--accent {
+.pds-button--accent {
   --background-color: #0072ef;
   --background-color-hover: #054fb8;
   --background-color-disabled: #e6f4fe;
@@ -64,7 +64,7 @@
   --color-disabled: #8ecafb;
 }
 
-.sage-button--destructive {
+.pds-button--destructive {
   --background-color: #cf3c32;
   --background-color-hover: #99221e;
   --background-color-disabled: #e48079;
@@ -72,7 +72,7 @@
   --outline-color: #fdb0aa;
 }
 
-.sage-button--secondary {
+.pds-button--secondary {
   --background-color: transparent;
   --background-color-hover: transparent;
   --background-color-disabled: transparent;

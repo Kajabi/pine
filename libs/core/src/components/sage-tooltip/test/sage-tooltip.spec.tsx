@@ -7,7 +7,7 @@ describe('sage-tooltip', () => {
       components: [SageTooltip],
       html: `
        <sage-tooltip placement="right">
-        <sage-button variant="secondary">Secondary</sage-button>
+        <pds-button variant="secondary">Secondary</pds-button>
        </sage-tooltip>`
     });
     expect(root).toEqualHtml(`
@@ -22,7 +22,7 @@ describe('sage-tooltip', () => {
           </div>
         </div>
         </mock:shadow-root>
-        <sage-button variant="secondary">Secondary</sage-button>
+        <pds-button variant="secondary">Secondary</pds-button>
       </sage-link>
     `);
   });
@@ -32,7 +32,7 @@ describe('sage-tooltip', () => {
       components: [SageTooltip],
       html: `
       <sage-tooltip content="Tooltip content">
-        <sage-button variant="secondary">Secondary</sage-button>
+        <pds-button variant="secondary">Secondary</pds-button>
       </sage-tooltip>`
     });
     await page.root?.showTooltip();
@@ -48,7 +48,7 @@ describe('sage-tooltip', () => {
       components: [SageTooltip],
       html: `
       <sage-tooltip content="Tooltip content">
-        <sage-button variant="secondary">Secondary</sage-button>
+        <pds-button variant="secondary">Secondary</pds-button>
       </sage-tooltip>`
     });
     await page.root?.showTooltip();
@@ -66,7 +66,7 @@ describe('sage-tooltip', () => {
       components: [SageTooltip],
       html: `
       <sage-tooltip placement="right" content="Tooltip content">
-        <sage-button variant="secondary">Secondary</sage-button>
+        <pds-button variant="secondary">Secondary</pds-button>
       </sage-tooltip>`
     });
 
@@ -80,7 +80,7 @@ describe('sage-tooltip', () => {
       components: [SageTooltip],
       html: `
       <sage-tooltip has-arrow="false" content="Tooltip content">
-        <sage-button variant="secondary">Secondary</sage-button>
+        <pds-button variant="secondary">Secondary</pds-button>
       </sage-tooltip>`
     });
 
@@ -94,7 +94,7 @@ describe('sage-tooltip', () => {
       components: [SageTooltip],
       html: `
       <sage-tooltip content="Tooltip content" opened="true">
-        <sage-button variant="secondary">Secondary</sage-button>
+        <pds-button variant="secondary">Secondary</pds-button>
       </sage-tooltip>`
     });
 
@@ -110,7 +110,7 @@ describe('sage-tooltip', () => {
       components: [SageTooltip],
       html: `
       <sage-tooltip content="Tooltip content">
-        <sage-button variant="secondary">Secondary</sage-button>
+        <pds-button variant="secondary">Secondary</pds-button>
       </sage-tooltip>`
     });
 
@@ -126,7 +126,7 @@ describe('sage-tooltip', () => {
       components: [SageTooltip],
       html: `
       <sage-tooltip content="Tooltip content">
-        <sage-button variant="secondary">Secondary</sage-button>
+        <pds-button variant="secondary">Secondary</pds-button>
       </sage-tooltip>`
     });
 
@@ -146,7 +146,7 @@ describe('sage-tooltip', () => {
       components: [SageTooltip],
       html: `
       <sage-tooltip content="Tooltip content">
-        <sage-button variant="secondary">Secondary</sage-button>
+        <pds-button variant="secondary">Secondary</pds-button>
       </sage-tooltip>`
     });
 
@@ -161,7 +161,7 @@ describe('sage-tooltip', () => {
       components: [SageTooltip],
       html: `
       <sage-tooltip content="Tooltip content">
-        <sage-button variant="secondary">Secondary</sage-button>
+        <pds-button variant="secondary">Secondary</pds-button>
       </sage-tooltip>`
     });
 
