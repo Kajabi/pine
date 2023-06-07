@@ -20,6 +20,13 @@
 | `value`         | `value`          | The value of the radio that is submitted with a form.           | `string`  | `undefined` |
 
 
+## Events
+
+| Event            | Description                                                                        | Type                   |
+| ---------------- | ---------------------------------------------------------------------------------- | ---------------------- |
+| `pdsRadioChange` | Emits a boolean indicating whether the checkbox is currently checked or unchecked. | `CustomEvent<boolean>` |
+
+
 ----------------------------------------------
 
 

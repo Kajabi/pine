@@ -458,6 +458,10 @@ export interface PdsInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsInputElement;
 }
+export interface PdsRadioCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsRadioElement;
+}
 export interface PdsSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsSwitchElement;
@@ -829,6 +833,10 @@ declare namespace LocalJSX {
           * String used for radio `name` attribute.
          */
         "name"?: string;
+        /**
+          * Emits a boolean indicating whether the checkbox is currently checked or unchecked.
+         */
+        "onPdsRadioChange"?: (event: PdsRadioCustomEvent<boolean>) => void;
         /**
           * Determines whether or not the radio is required.
           * @defaultValue false

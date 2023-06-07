@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop } from '@stencil/core';
+import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 
 @Component({
   tag: 'pds-radio',
@@ -55,6 +55,22 @@ export class PdsRadio {
    */
   @Prop() value: string;
 
+  /**
+   * Emits a boolean indicating whether the checkbox is currently checked or unchecked.
+   */
+  @Event() pdsRadioChange: EventEmitter<boolean>;
+
+  private handleRadioChange = (e: Event) => {
+    if (this.disabled) {
+      return;
+    }
+
+    const target = e.target as HTMLInputElement;
+    const isChecked = target.checked;
+
+    this.pdsRadioChange.emit(isChecked);
+  }
+
   private classNames() {
     const classNames = [];
 
@@ -79,10 +95,10 @@ export class PdsRadio {
           checked={this.checked}
           required={this.required}
           disabled={this.disabled}
-          // onChange={(event) => this.handleRadioChange(event)}
+          onChange={this.handleRadioChange}
         />
         <label htmlFor={this.componentId}>{this.label}</label>
-        {this.helperMessage && <div class={'sage-radio__message'}>{this.helperMessage}</div>}
+        {this.helperMessage && <div class={'pds-radio__message'}>{this.helperMessage}</div>}
       </Host>
     );
   }
