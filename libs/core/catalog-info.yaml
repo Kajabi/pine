@@ -1,0 +1,14 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: sage-new-core
+  description: The core library for the Sage design system
+  tags:
+    - javascript
+    - typescript
+spec:
+  type: library
+  lifecycle: production
+  owner: design-system-services
+  system: sage
+  subcomponentOf: sage
