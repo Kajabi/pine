@@ -5,6 +5,7 @@ metadata:
   description: The React library for the Sage design system
   tags:
     - javascript
+    - typescript
     - react
 spec:
   type: library

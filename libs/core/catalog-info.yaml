@@ -5,6 +5,7 @@ metadata:
   description: The core library for the Sage design system
   tags:
     - javascript
+    - typescript
 spec:
   type: library
   lifecycle: production

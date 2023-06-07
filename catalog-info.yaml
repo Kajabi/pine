@@ -19,6 +19,8 @@ metadata:
     - design
     - ux
     - javascript
+    - typescript
+    - web-components
   annotations:
     backstage.io/source-location: url:https://github.com/Kajabi/sage/tree/next
     github.com/project-slug: Kajabi/sage
