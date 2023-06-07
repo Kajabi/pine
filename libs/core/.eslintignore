@@ -1,4 +1,3 @@
-src/components.d.ts
 **/*.spec.ts
 **/*.spec.tsx
 **/*.e2e.ts

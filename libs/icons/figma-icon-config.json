@@ -1,4 +1,4 @@
 {
   "pageName": "Icons",
-  "outputPath": "src/svg"
+  "downloadPath": "tmp/svg"
 }

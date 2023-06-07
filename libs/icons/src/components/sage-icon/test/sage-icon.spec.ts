@@ -10,7 +10,7 @@ describe('sage-icon', () => {
     expect(root).toEqualHtml(`
       <sage-icon role="img" size="regular" style="height: 16px; width: 16px;">
         <mock:shadow-root>
-          <div></div>
+          <div class="icon-inner"></div>
         </mock:shadow-root>
       </sage-icon>
     `);
@@ -24,7 +24,7 @@ describe('sage-icon', () => {
     expect(root).toEqualHtml(`
       <sage-icon role="img" size="small" style="height: 12px; width: 12px;">
         <mock:shadow-root>
-          <div></div>
+          <div class="icon-inner"></div>
         </mock:shadow-root>
       </sage-icon>
     `);
@@ -38,7 +38,7 @@ describe('sage-icon', () => {
     expect(root).toEqualHtml(`
       <sage-icon role="img" size="32px" style="height: 32px; width: 32px;">
         <mock:shadow-root>
-          <div></div>
+          <div class="icon-inner"></div>
         </mock:shadow-root>
       </sage-icon>
     `);
@@ -52,9 +52,24 @@ describe('sage-icon', () => {
     expect(root).toEqualHtml(`
       <sage-icon aria-label="archive" name="archive" role="img" size="regular" style="height: 16px; width: 16px;">
         <mock:shadow-root>
-          <div></div>
+          <div class="icon-inner"></div>
         </mock:shadow-root>
       </sage-icon>
     `);
   });
+
+  it('add correct styles when color specified', async () => {
+    const { root } = await newSpecPage({
+      components: [SageIcon],
+      html: '<sage-icon name="archive" color="red"></sage-icon>',
+    });
+    expect(root).toEqualHtml(`
+      <sage-icon aria-label="archive" class="sage-color sage-color-red" color="red" name="archive" role="img" size="regular" style="height: 16px; width: 16px; color: red">
+        <mock:shadow-root>
+          <div class="icon-inner"></div>
+        </mock:shadow-root>
+      </sage-icon>
+    `);
+  });
+
 });
