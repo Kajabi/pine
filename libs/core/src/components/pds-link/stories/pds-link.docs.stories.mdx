@@ -2,9 +2,9 @@ import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
-import * as stories from './sage-link.stories.js';
+import * as stories from './pds-link.stories.js';
 
-<Meta title="components/Link" component="sage-link" argTypes={extractArgTypes('sage-link')} args={{ href: '#some-anchor' }} />
+<Meta title="components/Link" component="pds-link" argTypes={extractArgTypes('pds-link')} args={{ href: '#some-anchor' }} />
 
 # Link
 
@@ -15,7 +15,7 @@ import * as stories from './sage-link.stories.js';
 
 ## Properties
 
-<ArgsTable of="sage-link" />
+<ArgsTable of="pds-link" />
 
 ## Variants
 
@@ -24,7 +24,7 @@ import * as stories from './sage-link.stories.js';
 <Story story={stories.External} />
 
 <Canvas>
-  <sage-link href="#some-anchor" external="true"></sage-link>
+  <pds-link href="#some-anchor" external="true"></pds-link>
 </Canvas>
 
 ### Inline
@@ -32,7 +32,7 @@ import * as stories from './sage-link.stories.js';
 <Story story={stories.Inline} />
 
 <Canvas>
-  <sage-link href="https://www.google.com"></sage-link>
+  <pds-link href="https://www.google.com"></pds-link>
 </Canvas>
 
 ### Plain
@@ -40,7 +40,7 @@ import * as stories from './sage-link.stories.js';
 <Story story={stories.Plain} />
 
 <Canvas>
-  <sage-link href="#some-anchor" variant="plain"></sage-link>
+  <pds-link href="#some-anchor" variant="plain"></pds-link>
 </Canvas>
 
 ### With Custom Text (uses slot)
@@ -48,7 +48,7 @@ import * as stories from './sage-link.stories.js';
 <Story story={stories.WithCustomText} />
 
 <Canvas>
-  <sage-link href="#some-anchor">Overrides default use of href</sage-link>
+  <pds-link href="#some-anchor">Overrides default use of href</pds-link>
 </Canvas>
 
 ### Without custom text in slot
@@ -56,5 +56,5 @@ import * as stories from './sage-link.stories.js';
 <Story story={stories.WithoutCustomTextInSlot} />
 
 <Canvas>
-  <sage-link href="#some-anchor"></sage-link>
+  <pds-link href="#some-anchor"></pds-link>
 </Canvas>

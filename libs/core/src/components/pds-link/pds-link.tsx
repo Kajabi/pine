@@ -4,11 +4,11 @@ import { Component, h, Prop } from '@stencil/core';
  * @slot - Content is placed between the opening closing tags
  */
 @Component({
-  tag: 'sage-link',
-  styleUrl: 'sage-link.scss',
+  tag: 'pds-link',
+  styleUrl: 'pds-link.scss',
   shadow: true,
 })
-export class SageLink {
+export class PdsLink {
   /**
    * When enabled, opens link in a new tab.
    * @defaultValue false
@@ -49,7 +49,7 @@ export class SageLink {
     );
 
     return (
-      <a href={this.href} class={`sage-link sage-link--${this.variant} sage-link--${this.fontSize} `} target={this.external ? '_blank' : undefined}>
+      <a href={this.href} class={`pds-link pds-link--${this.variant} pds-link--${this.fontSize} `} target={this.external ? '_blank' : undefined}>
         <slot>{this.href}</slot>
         {this.external == true && externalIcon}
       </a>

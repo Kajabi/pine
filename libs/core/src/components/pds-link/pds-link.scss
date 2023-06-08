@@ -12,7 +12,7 @@
   outline-offset: 4px;
 }
 
-.sage-link {
+.pds-link {
   align-items: center;
   color: #202327;
   display: inline-flex;
@@ -22,7 +22,7 @@
 // We have a small consensus stating that
 // fonts will be REMs, box-model will be
 // discussed later px or (r)em's
-.sage-link--sm {
+.pds-link--sm {
   font-size: 12px;
 
   svg {
@@ -31,7 +31,7 @@
   }
 }
 
-.sage-link--md {
+.pds-link--md {
   font-size: 14px;
 
   svg {
@@ -40,7 +40,7 @@
   }
 }
 
-.sage-link--lg {
+.pds-link--lg {
   font-size: 16px;
 
   svg {
@@ -49,7 +49,7 @@
   }
 }
 
-.sage-link--plain {
+.pds-link--plain {
   font-weight: 500;
   text-decoration: none;
 
@@ -59,7 +59,7 @@
 }
 
 // Default = inline link
-.sage-link--default {
+.pds-link--default {
   text-decoration: underline;
 
   &:hover {

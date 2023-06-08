@@ -1,7 +1,7 @@
 import { html } from 'lit-html';
 
-const BaseTemplate = (args) => html`<sage-link external=${args.external} font-size=${args.fontSize} href=${args.href} variant=${args.variant}></sage-link>`;
-const BaseTemplateWithSlot = (args) => html` <sage-link external=${args.external} font-size=${args.fontSize} href=${args.href} variant=${args.variant}>${args.slot}</sage-link>`;
+const BaseTemplate = (args) => html`<pds-link external=${args.external} font-size=${args.fontSize} href=${args.href} variant=${args.variant}></pds-link>`;
+const BaseTemplateWithSlot = (args) => html` <pds-link external=${args.external} font-size=${args.fontSize} href=${args.href} variant=${args.variant}>${args.slot}</pds-link>`;
 const defaultParameters = { docs: { disable: true } };
 
 export const External = BaseTemplate.bind();

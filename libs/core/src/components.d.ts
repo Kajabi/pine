@@ -195,7 +195,7 @@ export namespace Components {
          */
         "value"?: string;
     }
-    interface SageLink {
+    interface PdsLink {
         /**
           * When enabled, opens link in a new tab.
           * @defaultValue false
@@ -469,11 +469,11 @@ declare global {
         prototype: HTMLPdsInputElement;
         new (): HTMLPdsInputElement;
     };
-    interface HTMLSageLinkElement extends Components.SageLink, HTMLStencilElement {
+    interface HTMLPdsLinkElement extends Components.PdsLink, HTMLStencilElement {
     }
-    var HTMLSageLinkElement: {
-        prototype: HTMLSageLinkElement;
-        new (): HTMLSageLinkElement;
+    var HTMLPdsLinkElement: {
+        prototype: HTMLPdsLinkElement;
+        new (): HTMLPdsLinkElement;
     };
     interface HTMLSageSwitchElement extends Components.SageSwitch, HTMLStencilElement {
     }
@@ -518,7 +518,7 @@ declare global {
         "pds-divider": HTMLPdsDividerElement;
         "pds-image": HTMLPdsImageElement;
         "pds-input": HTMLPdsInputElement;
-        "sage-link": HTMLSageLinkElement;
+        "pds-link": HTMLPdsLinkElement;
         "sage-switch": HTMLSageSwitchElement;
         "sage-tab": HTMLSageTabElement;
         "sage-tabpanel": HTMLSageTabpanelElement;
@@ -728,7 +728,7 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
-    interface SageLink {
+    interface PdsLink {
         /**
           * When enabled, opens link in a new tab.
           * @defaultValue false
@@ -952,7 +952,7 @@ declare namespace LocalJSX {
         "pds-divider": PdsDivider;
         "pds-image": PdsImage;
         "pds-input": PdsInput;
-        "sage-link": SageLink;
+        "pds-link": PdsLink;
         "sage-switch": SageSwitch;
         "sage-tab": SageTab;
         "sage-tabpanel": SageTabpanel;
@@ -971,7 +971,7 @@ declare module "@stencil/core" {
             "pds-divider": LocalJSX.PdsDivider & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
             "pds-image": LocalJSX.PdsImage & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
             "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
-            "sage-link": LocalJSX.SageLink & JSXBase.HTMLAttributes<HTMLSageLinkElement>;
+            "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
             "sage-switch": LocalJSX.SageSwitch & JSXBase.HTMLAttributes<HTMLSageSwitchElement>;
             "sage-tab": LocalJSX.SageTab & JSXBase.HTMLAttributes<HTMLSageTabElement>;
             "sage-tabpanel": LocalJSX.SageTabpanel & JSXBase.HTMLAttributes<HTMLSageTabpanelElement>;

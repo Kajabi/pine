@@ -1,45 +1,45 @@
 import { newSpecPage } from '@stencil/core/testing';
-import { SageLink } from '../sage-link';
+import { PdsLink } from '../pds-link';
 
-describe('sage-link', () => {
+describe('pds-link', () => {
   it('renders', async () => {
     const { root } = await newSpecPage({
-      components: [SageLink],
-      html: '<sage-link></sage-link>',
+      components: [PdsLink],
+      html: '<pds-link></pds-link>',
     });
     expect(root).toEqualHtml(`
-      <sage-link>
+      <pds-link>
         <mock:shadow-root>
-          <a class="sage-link sage-link--inline sage-link--lg">
+          <a class="pds-link pds-link--inline pds-link--lg">
             <slot></slot>
           </a>
         </mock:shadow-root>
-      </sage-link>
+      </pds-link>
     `);
   });
 
   it('renders with values', async () => {
     const { root } = await newSpecPage({
-      components: [SageLink],
-      html: `<sage-link href="#"></sage-link>`,
+      components: [PdsLink],
+      html: `<pds-link href="#"></pds-link>`,
     });
     expect(root).toEqualHtml(`
-      <sage-link href="#">
+      <pds-link href="#">
         <mock:shadow-root>
-          <a class="sage-link sage-link--inline sage-link--lg" href="#">
+          <a class="pds-link pds-link--inline pds-link--lg" href="#">
             <slot>
               #
             </slot>
           </a>
         </mock:shadow-root>
-      </sage-link>
+      </pds-link>
     `);
   });
 
   it('renders the svg when external is true', async () => {
     const { root } = await newSpecPage({
-      components: [SageLink],
-      html: `<sage-link href="#" external="true"></sage-link>`,
+      components: [PdsLink],
+      html: `<pds-link href="#" external="true"></pds-link>`,
     });
 
     const svg = root.shadowRoot.querySelector('svg');
@@ -55,21 +55,21 @@ describe('sage-link', () => {
 
   it('renders class name when size is assigned', async () => {
     const { root } = await newSpecPage({
-      components: [SageLink],
-      html: `<sage-link href="#" font-size="md" external="true" />`,
+      components: [PdsLink],
+      html: `<pds-link href="#" font-size="md" external="true" />`,
     });
 
-    const linkTag = root.shadowRoot.querySelector('a.sage-link--md');
+    const linkTag = root.shadowRoot.querySelector('a.pds-link--md');
     expect(linkTag).not.toBeNull();
   });
 
   it('renders "variant" class name when variant property is assigned', async () => {
     const { root } = await newSpecPage({
-      components: [SageLink],
-      html: `<sage-link href="#" variant="plain" />`,
+      components: [PdsLink],
+      html: `<pds-link href="#" variant="plain" />`,
     });
 
-    const linkTag = root.shadowRoot.querySelector('a.sage-link--plain');
+    const linkTag = root.shadowRoot.querySelector('a.pds-link--plain');
     expect(linkTag).not.toBeNull();
   });
 });
