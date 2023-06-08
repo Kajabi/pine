@@ -16,7 +16,7 @@ describe('pds-radio', () => {
     const component = await page.find('pds-radio');
     expect(component).toHaveClass('hydrated');
 
-    const radio = await page.find('pds-radio >>> input');
+    const radio = await page.find('pds-radio input');
     await radio.click();
     expect(await radio.getProperty('checked')).toBeTruthy();
   });
@@ -27,7 +27,7 @@ describe('pds-radio', () => {
     const component = await page.find('pds-radio');
     expect(component).toHaveClass('hydrated');
 
-    let radio = await page.find('pds-radio >>> input');
+    let radio = await page.find('pds-radio input');
     component.setProperty('disabled', false);
     await page.waitForChanges();
     expect(await radio.getProperty('disabled')).toBe(false);
@@ -41,7 +41,7 @@ describe('pds-radio', () => {
     const page = await newE2EPage();
     await page.setContent('<pds-radio component-id="default" label="Label text" />');
 
-    const radio = await page.find('pds-radio >>> input');
+    const radio = await page.find('pds-radio input');
     const eventSpy = await page.spyOnEvent('pdsRadioChange');
     await radio.press('Space');
 
@@ -52,7 +52,7 @@ describe('pds-radio', () => {
     const page = await newE2EPage();
     await page.setContent('<pds-radio component-id="default" label="Label text" disabled />');
 
-    const radio = await page.find('pds-radio >>> input');
+    const radio = await page.find('pds-radio input');
     const eventSpy = await page.spyOnEvent('pdsRadioChange');
 
     await radio.press('Space');

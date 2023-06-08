@@ -4,7 +4,7 @@ import { assignDescription, messageId } from '../../utils/form';
 @Component({
   tag: 'pds-radio',
   styleUrl: 'pds-radio.scss',
-  shadow: true,
+  scoped: true,
 })
 export class PdsRadio {
   /**

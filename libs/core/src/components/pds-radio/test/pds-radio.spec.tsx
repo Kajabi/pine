@@ -10,10 +10,8 @@ describe('pds-radio', () => {
 
     expect(page.root).toEqualHtml(`
       <pds-radio>
-        <mock:shadow-root>
-          <input type="radio">
-          <label></label>
-        </mock:shadow-root>
+        <input type="radio">
+        <label></label>
       </pds-radio>
     `);
   });
@@ -26,10 +24,8 @@ describe('pds-radio', () => {
 
     expect(page.root).toEqualHtml(`
       <pds-radio component-id="default" label="Label text">
-        <mock:shadow-root>
-          <input type="radio" id="default">
-          <label htmlfor="default">Label text</label>
-        </mock:shadow-root>
+        <input type="radio" id="default">
+        <label htmlfor="default">Label text</label>
       </pds-radio>
     `);
   });
@@ -40,7 +36,7 @@ describe('pds-radio', () => {
       html: `<pds-radio component-id="default" label="Label text" checked />`,
     });
 
-    const input = root?.shadowRoot?.querySelector('input');
+    const input = root?.querySelector('input');
     expect(input?.checked).toBe(true);
   });
 
@@ -50,7 +46,7 @@ describe('pds-radio', () => {
       html: `<pds-radio component-id="default" label="Label text" disabled />`,
     });
 
-    const input = root?.shadowRoot?.querySelector('input');
+    const input = root?.querySelector('input');
     expect(input?.disabled).toBe(true);
   });
 
@@ -62,10 +58,8 @@ describe('pds-radio', () => {
 
     expect(page.root).toEqualHtml(`
       <pds-radio class="is-invalid" component-id="default" label="Label text" invalid>
-        <mock:shadow-root>
-          <input aria-invalid="true" id="default" type="radio">
-          <label htmlfor="default">Label text</label>
-        </mock:shadow-root>
+        <input aria-invalid="true" id="default" type="radio">
+        <label htmlfor="default">Label text</label>
       </pds-radio>
     `);
   });
@@ -78,10 +72,8 @@ describe('pds-radio', () => {
 
     expect(page.root).toEqualHtml(`
       <pds-radio component-id="default" label="This is label text">
-        <mock:shadow-root>
-          <input type="radio" id="default">
-          <label htmlfor="default">This is label text</label>
-        </mock:shadow-root>
+        <input type="radio" id="default">
+        <label htmlfor="default">This is label text</label>
       </pds-radio>
     `);
   });
@@ -94,11 +86,9 @@ describe('pds-radio', () => {
 
     expect(page.root).toEqualHtml(`
       <pds-radio component-id="default" label="Label text" helper-message="This is short message text.">
-        <mock:shadow-root>
-          <input aria-describedby="default__helper-message" id="default" type="radio">
-          <label htmlfor="default">Label text</label>
-          <div class="pds-radio__message" id="default__helper-message">This is short message text.</div>
-        </mock:shadow-root>
+        <input aria-describedby="default__helper-message" id="default" type="radio">
+        <label htmlfor="default">Label text</label>
+        <div class="pds-radio__message" id="default__helper-message">This is short message text.</div>
       </pds-radio>
     `);
   });
@@ -109,7 +99,7 @@ describe('pds-radio', () => {
       html: `<pds-radio component-id="default" label="Label text" required />`,
     });
 
-    const input = root?.shadowRoot?.querySelector('input');
+    const input = root?.querySelector('input');
     expect(input?.required).toBe(true);
   });
 
@@ -119,7 +109,7 @@ describe('pds-radio', () => {
       html: `<pds-radio component-id="default" label="Label text" value="This is the input value" />`,
     });
 
-    const input = root?.shadowRoot?.querySelector('input');
+    const input = root?.querySelector('input');
     expect(input?.value).toEqual('This is the input value');
   });
 
@@ -129,11 +119,11 @@ describe('pds-radio', () => {
       html: '<pds-radio component-id="default" label="Label text" />',
     });
 
-    const checkbox = page.root?.shadowRoot?.querySelector('input[type="radio"]');
+    const radio = page.root?.querySelector('input[type="radio"]');
     const eventSpy = jest.fn();
 
     page.root?.addEventListener('pdsRadioChange', eventSpy);
-    checkbox?.dispatchEvent(new Event('change'));
+    radio?.dispatchEvent(new Event('change'));
     await page.waitForChanges();
 
     expect(eventSpy).toHaveBeenCalled();
@@ -145,11 +135,11 @@ describe('pds-radio', () => {
       html: '<pds-radio component-id="default" label="Label text" disabled />',
     });
 
-    const checkbox = page.root?.shadowRoot?.querySelector('input[type="radio"]');
+    const radio = page.root?.querySelector('input[type="radio"]');
     const eventSpy = jest.fn();
 
     page.root?.addEventListener('pdsRadioChange', eventSpy);
-    checkbox?.dispatchEvent(new Event('change'));
+    radio?.dispatchEvent(new Event('change'));
     await page.waitForChanges();
 
     expect(eventSpy).not.toHaveBeenCalled();
