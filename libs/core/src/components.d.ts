@@ -215,7 +215,7 @@ export namespace Components {
          */
         "variant": 'inline' | 'plain';
     }
-    interface SageSwitch {
+    interface PdsSwitch {
         /**
           * Determines the input 'checked' state
          */
@@ -416,9 +416,9 @@ export interface PdsInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsInputElement;
 }
-export interface SageSwitchCustomEvent<T> extends CustomEvent<T> {
+export interface PdsSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
-    target: HTMLSageSwitchElement;
+    target: HTMLPdsSwitchElement;
 }
 export interface SageTabCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -475,11 +475,11 @@ declare global {
         prototype: HTMLPdsLinkElement;
         new (): HTMLPdsLinkElement;
     };
-    interface HTMLSageSwitchElement extends Components.SageSwitch, HTMLStencilElement {
+    interface HTMLPdsSwitchElement extends Components.PdsSwitch, HTMLStencilElement {
     }
-    var HTMLSageSwitchElement: {
-        prototype: HTMLSageSwitchElement;
-        new (): HTMLSageSwitchElement;
+    var HTMLPdsSwitchElement: {
+        prototype: HTMLPdsSwitchElement;
+        new (): HTMLPdsSwitchElement;
     };
     interface HTMLSageTabElement extends Components.SageTab, HTMLStencilElement {
     }
@@ -519,7 +519,7 @@ declare global {
         "pds-image": HTMLPdsImageElement;
         "pds-input": HTMLPdsInputElement;
         "pds-link": HTMLPdsLinkElement;
-        "sage-switch": HTMLSageSwitchElement;
+        "pds-switch": HTMLPdsSwitchElement;
         "sage-tab": HTMLSageTabElement;
         "sage-tabpanel": HTMLSageTabpanelElement;
         "sage-tabs": HTMLSageTabsElement;
@@ -748,7 +748,7 @@ declare namespace LocalJSX {
          */
         "variant"?: 'inline' | 'plain';
     }
-    interface SageSwitch {
+    interface PdsSwitch {
         /**
           * Determines the input 'checked' state
          */
@@ -784,7 +784,7 @@ declare namespace LocalJSX {
         /**
           * Emits an event on input change
          */
-        "onSageSwitchChange"?: (event: SageSwitchCustomEvent<InputEvent>) => void;
+        "onPdsSwitchChange"?: (event: PdsSwitchCustomEvent<InputEvent>) => void;
         /**
           * Determines the 'required' state of the input
          */
@@ -953,7 +953,7 @@ declare namespace LocalJSX {
         "pds-image": PdsImage;
         "pds-input": PdsInput;
         "pds-link": PdsLink;
-        "sage-switch": SageSwitch;
+        "pds-switch": PdsSwitch;
         "sage-tab": SageTab;
         "sage-tabpanel": SageTabpanel;
         "sage-tabs": SageTabs;
@@ -972,7 +972,7 @@ declare module "@stencil/core" {
             "pds-image": LocalJSX.PdsImage & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
             "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
-            "sage-switch": LocalJSX.SageSwitch & JSXBase.HTMLAttributes<HTMLSageSwitchElement>;
+            "pds-switch": LocalJSX.PdsSwitch & JSXBase.HTMLAttributes<HTMLPdsSwitchElement>;
             "sage-tab": LocalJSX.SageTab & JSXBase.HTMLAttributes<HTMLSageTabElement>;
             "sage-tabpanel": LocalJSX.SageTabpanel & JSXBase.HTMLAttributes<HTMLSageTabpanelElement>;
             "sage-tabs": LocalJSX.SageTabs & JSXBase.HTMLAttributes<HTMLSageTabsElement>;

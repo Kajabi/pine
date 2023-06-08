@@ -1,7 +1,7 @@
 import { html } from 'lit-html';
 
 const BaseTemplate = (args) => html`
-  <sage-switch
+  <pds-switch
     checked=${args.checked}
     component-id=${args.componentId}
     disabled=${args.disabled}
@@ -20,7 +20,7 @@ const defaultParameters = { docs: { disable: true } };
 
 const switchEventExample = () => {
   document.addEventListener('sageSwitchChange', function(e) {
-    const input = e.target.shadowRoot.querySelector(".sage-switch__input");
+    const input = e.target.shadowRoot.querySelector(".pds-switch__input");
     const inputState = input.checked ? '✅ checked' : '😭 not checked';
 
     console.info('sageSwitchChange event', e);
@@ -33,10 +33,10 @@ export const Default = BaseTemplate.bind({});
 Default.args = {
   checked: false,
   disabled: false,
-  componentId: 'sage-switch-checkbox-example',
+  componentId: 'pds-switch-checkbox-example',
   invalid: false,
   label: 'checkbox switch',
-  name: 'sage-switch-checkbox',
+  name: 'pds-switch-checkbox',
   onChange: switchEventExample(),
   required: false,
   type: 'checkbox',
@@ -48,10 +48,10 @@ export const Radio = BaseTemplate.bind({});
 Radio.args = {
   checked: false,
   disabled: false,
-  componentId: 'sage-switch-radio-example',
+  componentId: 'pds-switch-radio-example',
   invalid: false,
   label: 'radio switch',
-  name: 'sage-switch-radio',
+  name: 'pds-switch-radio',
   required: false,
   type: 'radio',
 };
@@ -62,10 +62,10 @@ export const Disabled = BaseTemplate.bind({});
 Disabled.args = {
   checked: false,
   disabled: true,
-  componentId: 'sage-switch-disabled-example',
+  componentId: 'pds-switch-disabled-example',
   invalid: false,
   label: 'Can\'t touch this',
-  name: 'sage-switch-disabled',
+  name: 'pds-switch-disabled',
   required: false,
   type: 'checkbox',
 };
@@ -76,11 +76,11 @@ export const HelperMessage = BaseTemplate.bind({});
 HelperMessage.args = {
   checked: true,
   disabled: false,
-  componentId: 'sage-switch-helper-example',
+  componentId: 'pds-switch-helper-example',
   helperMessage: 'Save my login details for next time.',
   invalid: false,
   label: 'Remember me!',
-  name: 'sage-switch-message',
+  name: 'pds-switch-message',
   required: false,
   type: 'checkbox',
 };
@@ -91,11 +91,11 @@ export const Invalid = BaseTemplate.bind({});
 Invalid.args = {
   checked: false,
   disabled: false,
-  componentId: 'sage-switch-invalid-example',
+  componentId: 'pds-switch-invalid-example',
   errorMessage: 'Terms and conditions must be accepted to continue',
   invalid: true,
   label: 'I agree to the terms and conditions',
-  name: 'sage-switch-invalid',
+  name: 'pds-switch-invalid',
   required: true,
   type: 'checkbox',
 };

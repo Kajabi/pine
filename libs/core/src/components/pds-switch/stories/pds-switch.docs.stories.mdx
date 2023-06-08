@@ -2,12 +2,12 @@ import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
-import * as stories from './sage-switch.stories.js';
+import * as stories from './pds-switch.stories.js';
 
 <Meta
   title="components/Switch"
-  component="sage-switch"
-  argTypes={extractArgTypes('sage-switch')}
+  component="pds-switch"
+  argTypes={extractArgTypes('pds-switch')}
   args={{
     disabled: false,
     required: false,
@@ -39,7 +39,7 @@ When only one Switch is needed for users to turn on/off a value, use a `checkbox
 
 ## Properties
 
-<ArgsTable of="sage-switch" />
+<ArgsTable of="pds-switch" />
 
 ## Variants
 
@@ -50,10 +50,10 @@ The default switch style uses a checkbox input.
 <Story story={stories.Default} />
 
 <Canvas>
-  <sage-switch
-    component-id="sage-switch-default-example"
+  <pds-switch
+    component-id="pds-switch-default-example"
     label="Default Switch"
-    name="sage-switch-default"
+    name="pds-switch-default"
     type="checkbox"
   />
 </Canvas>
@@ -66,12 +66,12 @@ Renders a switch using a radio button input. Just like a [standard radio button]
 <Story story={stories.Radio} />
 
 <Canvas>
-  <sage-switch
-    component-id="sage-switch-radio-example"
+  <pds-switch
+    component-id="pds-switch-radio-example"
     label="Radio Switch"
-    name="sage-switch-radio"
+    name="pds-switch-radio"
     type="radio"
-    value="sage-switch-radio"
+    value="pds-switch-radio"
   />
 </Canvas>
 
@@ -82,11 +82,11 @@ Prevents user interaction on the input.
 <Story story={stories.Disabled} />
 
 <Canvas>
-  <sage-switch
-    component-id="sage-switch-disabled-example"
+  <pds-switch
+    component-id="pds-switch-disabled-example"
     disabled="true"
     label="Can't touch this"
-    name="sage-switch-disabled"
+    name="pds-switch-disabled"
     type="checkbox"
   />
 </Canvas>
@@ -98,11 +98,11 @@ Displays additional descriptive text underneath the main label.
 <Story story={stories.HelperMessage} />
 
 <Canvas>
-  <sage-switch
-    component-id="sage-switch-helper-example"
+  <pds-switch
+    component-id="pds-switch-helper-example"
     helper-message="Save my login details for next time."
     label="Remember me"
-    name="sage-switch-helper"
+    name="pds-switch-helper"
     type="checkbox"
   />
 </Canvas>
@@ -114,12 +114,12 @@ An optional error message can be displayed for additional instructions, displaye
 <Story story={stories.Invalid} />
 
 <Canvas>
-  <sage-switch
-    component-id="sage-switch-invalid-example"
+  <pds-switch
+    component-id="pds-switch-invalid-example"
     error-message="Terms and conditions must be accepted to continue"
     invalid="true"
     label="I agree to the terms and conditions"
-    name="sage-switch-invalid"
+    name="pds-switch-invalid"
     required="true"
     type="checkbox"
   />

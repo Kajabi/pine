@@ -1,14 +1,14 @@
 import { newE2EPage } from '@stencil/core/testing';
 
-describe('sage-switch', () => {
+describe('pds-switch', () => {
   it('renders a checked input when toggled', async () => {
     const page = await newE2EPage();
-    await page.setContent('<sage-switch></sage-switch>');
+    await page.setContent('<pds-switch></pds-switch>');
 
-    const component = await page.find('sage-switch');
+    const component = await page.find('pds-switch');
     expect(component).toHaveClass('hydrated');
 
-    const el = await page.find('sage-switch >>> input');
+    const el = await page.find('pds-switch >>> input');
     let value = await el.getProperty('checked');
     expect(value).toBe(false);
 
@@ -21,12 +21,12 @@ describe('sage-switch', () => {
 
   it('renders a disabled input when toggled', async () => {
     const page = await newE2EPage();
-    await page.setContent('<sage-switch></sage-switch>');
+    await page.setContent('<pds-switch></pds-switch>');
 
-    const component = await page.find('sage-switch');
+    const component = await page.find('pds-switch');
     expect(component).toHaveClass('hydrated');
 
-    const el = await page.find('sage-switch >>> input');
+    const el = await page.find('pds-switch >>> input');
     let value = await el.getProperty('disabled');
     expect(value).toBe(false);
 
@@ -39,12 +39,12 @@ describe('sage-switch', () => {
 
   it('renders an invalid input when toggled', async () => {
     const page = await newE2EPage();
-    await page.setContent('<sage-switch></sage-switch>');
+    await page.setContent('<pds-switch></pds-switch>');
 
-    const component = await page.find('sage-switch');
+    const component = await page.find('pds-switch');
     expect(component).toHaveClass('hydrated');
 
-    const el = await page.find('sage-switch >>> input');
+    const el = await page.find('pds-switch >>> input');
     let value = el.getAttribute('aria-invalid');
     expect(value).toBe(null);
 
@@ -57,13 +57,13 @@ describe('sage-switch', () => {
 
   it('renders an invalid input with error message when toggled', async () => {
     const page = await newE2EPage();
-    await page.setContent('<sage-switch invalid="true" error-message="Please correct this item"></sage-switch>');
+    await page.setContent('<pds-switch invalid="true" error-message="Please correct this item"></pds-switch>');
 
-    const component = await page.find('sage-switch');
+    const component = await page.find('pds-switch');
     expect(component).toHaveClass('hydrated');
 
-    const el = await page.find('sage-switch >>> input');
-    const errText = await page.find('sage-switch >>> .sage-switch__message--error');
+    const el = await page.find('pds-switch >>> input');
+    const errText = await page.find('pds-switch >>> .pds-switch__message--error');
     const ariaDesc = el.getAttribute('aria-describedby');
     const ariaInvalid = el.getAttribute('aria-invalid');
 
@@ -74,14 +74,14 @@ describe('sage-switch', () => {
 
   it('renders a helper and error message and assigns the aria-description to the input', async () => {
     const page = await newE2EPage();
-    await page.setContent('<sage-switch component-id="switch-with-description" invalid="true" helper-message="This is a helper message" error-message="This is an error message"></sage-switch>');
+    await page.setContent('<pds-switch component-id="switch-with-description" invalid="true" helper-message="This is a helper message" error-message="This is an error message"></pds-switch>');
 
-    const component = await page.find('sage-switch');
-    const el = await page.find('sage-switch >>> input');
+    const component = await page.find('pds-switch');
+    const el = await page.find('pds-switch >>> input');
     expect(component).toHaveClass('hydrated');
 
-    const helperMessage = await page.find('sage-switch >>> #switch-with-description__helper-message');
-    const errorMessage = await page.find('sage-switch >>> #switch-with-description__error-message');
+    const helperMessage = await page.find('pds-switch >>> #switch-with-description__helper-message');
+    const errorMessage = await page.find('pds-switch >>> #switch-with-description__error-message');
 
     const ariaDesc = el.getAttribute('aria-describedby');
     const ariaInvalid = el.getAttribute('aria-invalid');

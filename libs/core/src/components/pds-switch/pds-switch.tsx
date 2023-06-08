@@ -1,12 +1,12 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
 
 @Component({
-  tag: 'sage-switch',
-  styleUrl: 'sage-switch.scss',
+  tag: 'pds-switch',
+  styleUrl: 'pds-switch.scss',
   shadow: true,
 })
-export class SageSwitch {
-  @Element() el: HTMLSageSwitchElement;
+export class PdsSwitch {
+  @Element() el: HTMLPdsSwitchElement;
 
   /**
    * Identifies this input with a unique string, and associates the input with its label
@@ -67,24 +67,24 @@ export class SageSwitch {
   /**
    * Emits an event on input change
   */
-  @Event() sageSwitchChange: EventEmitter<InputEvent>;
+  @Event() pdsSwitchChange: EventEmitter<InputEvent>;
 
   private onSwitchUpdate = (e: Event) => {
     if (this.disabled) return;
-    this.sageSwitchChange.emit(e as InputEvent);
+    this.pdsSwitchChange.emit(e as InputEvent);
   };
 
   /**
    * Generate switch classes
    */
   private switchClassNames = () => {
-    let switchClasses = `sage-switch`;
+    let switchClasses = `pds-switch`;
 
     if (this.invalid === true) {
-      switchClasses += " sage-switch--error";
+      switchClasses += " pds-switch--error";
     }
     if (this.helperMessage !== undefined) {
-      switchClasses += " sage-switch--message";
+      switchClasses += " pds-switch--message";
     }
     return switchClasses;
   };
@@ -115,7 +115,7 @@ export class SageSwitch {
           aria-describedby={this.assignDescription()}
           aria-invalid={this.invalid ? "true" : undefined}
           checked={this.checked}
-          class="sage-switch__input"
+          class="pds-switch__input"
           disabled={this.disabled}
           id={this.componentId}
           name={this.name ? this.name : this.componentId}
@@ -124,12 +124,12 @@ export class SageSwitch {
           type={this.type}
           value={this.value}
         />
-        <label class="sage-switch__label" htmlFor={this.componentId}>
+        <label class="pds-switch__label" htmlFor={this.componentId}>
           {this.label}
         </label>
         {this.helperMessage &&
           <div
-            class={`sage-switch__message`}
+            class={`pds-switch__message`}
             id={this.messageId(this.componentId, 'helper')}
           >
             {this.helperMessage}
@@ -137,7 +137,7 @@ export class SageSwitch {
         }
         {this.errorMessage &&
           <div
-            class={`sage-switch__message sage-switch__message--error`}
+            class={`pds-switch__message pds-switch__message--error`}
             id={this.messageId(this.componentId, 'error')}
             aria-live="assertive"
           >

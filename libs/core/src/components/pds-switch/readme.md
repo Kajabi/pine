@@ -1,4 +1,4 @@
-# sage-switch
+# pds-switch
 
 
 
@@ -24,9 +24,9 @@
 
 ## Events
 
-| Event              | Description                    | Type                      |
-| ------------------ | ------------------------------ | ------------------------- |
-| `sageSwitchChange` | Emits an event on input change | `CustomEvent<InputEvent>` |
+| Event             | Description                    | Type                      |
+| ----------------- | ------------------------------ | ------------------------- |
+| `pdsSwitchChange` | Emits an event on input change | `CustomEvent<InputEvent>` |
 
 
 ----------------------------------------------
