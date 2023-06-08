@@ -74,6 +74,18 @@ Invalid displays the radio in invalid state such as when required but is not che
   <pds-radio component-id="invalid" label="Label" invalid />
 </Canvas>
 
+### Group
+
+A radio group is defined by giving each of radio input in the group the same `name`.
+
+Once a radio group is created, only one radio at a time can be selected.
+
+<Canvas>
+  <sage-radio component-id="default1" label="Label" name="radio" checked />
+  <sage-radio component-id="default2" label="Label" name="radio" />
+  <sage-radio component-id="default3" label="Label" name="radio" />
+</Canvas>
+
 ## Additional Resources
 
 [MDN Web Docs: Radio](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio)
