@@ -27,6 +27,8 @@ $pds-avatar-sizes: (
   border-radius: 12px;
 }
 
+
+
 div {
   // These custom props are not reachable
   --background-color: var(--pine-color-primary-100);
@@ -44,8 +46,8 @@ div {
   position: relative;
 
   // Remove when FF has support for :has
-  :host(.pds-avatar[image]) & {
-    background-color: transparent;
+  :host(.pds-avatar--has-image) div {
+    background: transparent
   }
 
   @supports selector(:has) {

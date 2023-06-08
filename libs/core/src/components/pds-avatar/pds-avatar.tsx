@@ -56,7 +56,8 @@ export class PdsAvatar {
   private classNames = () => (
     {
       'pds-avatar': true,
-      [`pds-avatar--${this.size}`]: this.size !== undefined,
+      [`pds-avatar--has-image`]: this.image !== undefined || null, // Remove when FF supports :has selector
+      [`pds-avatar--${this.size}`]: this.size !== undefined || null,
       [`pds-avatar--${this.variant}`]: this.variant === 'admin'
     }
   );

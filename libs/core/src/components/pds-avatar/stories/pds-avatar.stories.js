@@ -10,14 +10,6 @@ const BaseTemplate = (args) => html`<pds-avatar
 >
 </pds-avatar>`;
 
-const AdminTemplate = (args) => html`<pds-avatar size="${args.size}" variant="${args.variant}"></pds-avatar>`;
-
-const BadgeTemplate = (args) => html`<pds-avatar badge="${args.badge}" size="${args.size}"></pds-avatar>`;
-
-const CustomSizeTemplate = (args) => html`<pds-avatar style="--size: 128px;"></pds-avatar>`;
-
-const ImageTemplate = (args) => html`<pds-avatar alt="${args.alt}" image="${args.image}" size="${args.size}"></pds-avatar>`;
-
 const defaultParameters = { docs: { disable: true } };
 
 export const Default = BaseTemplate.bind();
@@ -26,23 +18,27 @@ Default.args = {
 }
 Default.parameters = { ...defaultParameters };
 
-export const Admin = AdminTemplate.bind();
+export const Admin = BaseTemplate.bind();
 Admin.args = {
 	size: 'lg',
 	variant: 'admin',
 }
+Admin.parameters = { ...defaultParameters };
 
-export const Badge = BadgeTemplate.bind();
+export const Badge = BaseTemplate.bind();
 Badge.args = {
 	badge: true,
 	size: 'md'
 }
+Badge.parameters = { ...defaultParameters };
 
-export const CustomSize = CustomSizeTemplate.bind();
+export const CustomSize = BaseTemplate.bind();
+CustomSize.parameters = { ...defaultParameters };
 
-export const Image = ImageTemplate.bind();
+export const Image = BaseTemplate.bind();
 Image.args = {
 	alt: 'Customer Profile',
 	image: imgFile,
 	size: 'xl'
 }
+Image.parameters = { ...defaultParameters };

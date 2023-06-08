@@ -3,13 +3,18 @@ import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 import * as stories from './pds-avatar.stories.js';
+import imgFile from '../assets/demi_wilkinson.jpg';
 
 <Meta
   title="components/Avatar"
   component="pds-avatar"
   argTypes={extractArgTypes('pds-avatar')}
   args={{
+    alt: null,
     badge: false,
+    image: null,
+    size: null,
+    variant: 'customer',
   }}
 />
 
@@ -35,30 +40,38 @@ Default avatar.
 
 An admin variant of the avatar with less-rounded borders.
 
+<Story story={stories.Admin} />
+
 <Canvas>
-  <Story story={stories.Admin} />
+  <pds-avatar variant="admin"></pds-avatar>
 </Canvas>
 
 ### Badge
 
 An avatar with a badge.
 
+<Story story={stories.Badge} />
+
 <Canvas>
-  <Story story={stories.Badge} />
+  <pds-avatar badge="true"></pds-avatar>
 </Canvas>
 
 ### Custom Sizes
 
+<Story story={stories.CustomSize} />
+
 An avatar with a custom size set via CSS Custom Properties. Setting this will _not_ override a set size prop value.
 
 <Canvas>
-  <Story story={stories.CustomSize} />
+  <pds-avatar style={{ ['--size']: '128px' }}></pds-avatar>
 </Canvas>
 
 ### Image
 
+<Story story={stories.Image} />
+
 An avatar using a user profile image. When not set, will default to the user icon.
 
 <Canvas>
-  <Story story={stories.Image} />
+  <pds-avatar alt="Customer Profile" image={imgFile}></pds-avatar>
 </Canvas>
