@@ -3,11 +3,11 @@ import { isRequired } from '../../utils/utils';
 import { TextareaChangeEventDetail } from './textarea-interface';
 
 @Component({
-  tag: 'sage-textarea',
-  styleUrl: 'sage-textarea.scss',
+  tag: 'pds-textarea',
+  styleUrl: 'pds-textarea.scss',
   shadow: true,
 })
-export class SageTextarea {
+export class PdsTextarea {
   @Element() el: HTMLDivElement;
 
   /**
@@ -77,7 +77,7 @@ export class SageTextarea {
   /**
    * Event emitted whenever the value of the textarea changes
    */
-  @Event() sageTextareaChange: EventEmitter<TextareaChangeEventDetail>;
+  @Event() pdsTextareaChange: EventEmitter<TextareaChangeEventDetail>;
 
   private onTextareaChange = (ev: Event) => {
     const textarea = ev.target as HTMLTextAreaElement;
@@ -87,11 +87,11 @@ export class SageTextarea {
       this.value = textarea.innerHTML;
     }
 
-    this.sageTextareaChange.emit({value: this.value, event: ev});
+    this.pdsTextareaChange.emit({value: this.value, event: ev});
   };
 
   private textareaClassNames() {
-    const classNames = ['sage-textarea__field'];
+    const classNames = ['pds-textarea__field'];
 
     if (this.invalid && this.invalid === true) {
       classNames.push('is-invalid');
@@ -124,7 +124,7 @@ export class SageTextarea {
       <Host
         aria-disabled={this.disabled ? 'true' : null}
       >
-        <div class="sage-textarea">
+        <div class="pds-textarea">
           {this.label &&
             <label htmlFor={this.componentId}>
               {this.label}
@@ -145,7 +145,7 @@ export class SageTextarea {
           >{this.value}</textarea>
           {this.hintMessage &&
             <p
-              class="sage-textarea__hint-message"
+              class="pds-textarea__hint-message"
               id={this.messageId(this.componentId, 'helper')}
             >
               {this.hintMessage}
@@ -154,7 +154,7 @@ export class SageTextarea {
           {this.invalid &&
             <p
               aria-live="assertive"
-              class="sage-textarea__error-message"
+              class="pds-textarea__error-message"
               id={this.messageId(this.componentId, 'error')}
             >
               {this.errorMessage}

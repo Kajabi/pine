@@ -5,5 +5,5 @@ export interface TextareaChangeEventDetail {
 
 export interface TextareaEvent <T = TextareaChangeEventDetail> extends CustomEvent {
   detail: T;
-  target: HTMLSageTextareaElement;
+  target: HTMLPdsTextareaElement;
 }

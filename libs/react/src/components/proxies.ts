@@ -20,5 +20,5 @@ export const PdsSwitch = /*@__PURE__*/createReactComponent<JSX.PdsSwitch, HTMLPd
 export const PdsTab = /*@__PURE__*/createReactComponent<JSX.PdsTab, HTMLPdsTabElement>('pds-tab');
 export const PdsTabpanel = /*@__PURE__*/createReactComponent<JSX.PdsTabpanel, HTMLPdsTabpanelElement>('pds-tabpanel');
 export const PdsTabs = /*@__PURE__*/createReactComponent<JSX.PdsTabs, HTMLPdsTabsElement>('pds-tabs');
-export const SageTextarea = /*@__PURE__*/createReactComponent<JSX.SageTextarea, HTMLSageTextareaElement>('sage-textarea');
+export const PdsTextarea = /*@__PURE__*/createReactComponent<JSX.PdsTextarea, HTMLPdsTextareaElement>('pds-textarea');
 export const SageTooltip = /*@__PURE__*/createReactComponent<JSX.SageTooltip, HTMLSageTooltipElement>('sage-tooltip');

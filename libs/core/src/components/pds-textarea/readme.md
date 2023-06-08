@@ -1,4 +1,4 @@
-# sage-textarea
+# pds-textarea
 
 
 
@@ -25,9 +25,9 @@
 
 ## Events
 
-| Event                | Description                                              | Type                                     |
-| -------------------- | -------------------------------------------------------- | ---------------------------------------- |
-| `sageTextareaChange` | Event emitted whenever the value of the textarea changes | `CustomEvent<TextareaChangeEventDetail>` |
+| Event               | Description                                              | Type                                     |
+| ------------------- | -------------------------------------------------------- | ---------------------------------------- |
+| `pdsTextareaChange` | Event emitted whenever the value of the textarea changes | `CustomEvent<TextareaChangeEventDetail>` |
 
 
 ----------------------------------------------

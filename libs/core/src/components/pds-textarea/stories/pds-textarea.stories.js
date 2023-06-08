@@ -1,6 +1,6 @@
 import { html } from 'lit-html';
 
-const BaseTemplate = (args) => html`<sage-textarea
+const BaseTemplate = (args) => html`<pds-textarea
   component-id="${args.componentId}"
   disabled="${args.disabled}"
   error-message="${args.errorMessage}"
@@ -15,7 +15,7 @@ const BaseTemplate = (args) => html`<sage-textarea
   rows="${args.rows}"
   value="${args.value}"
   >
-</sage-textarea>`;
+</pds-textarea>`;
 
 const defaultParameters = {
   docs: {
@@ -24,8 +24,8 @@ const defaultParameters = {
 };
 
 const textareaEventExample = () => {
-  document.addEventListener('sageTextareaChange', function(e) {
-    const textarea = e.target.shadowRoot.querySelector(".sage-textarea__field");
+  document.addEventListener('pdsTextareaChange', function(e) {
+    const textarea = e.target.shadowRoot.querySelector(".pds-textarea__field");
 
     console.log('e: ', textarea);
     console.log(`The value has been update to #${textarea.value}`);
@@ -34,7 +34,7 @@ const textareaEventExample = () => {
 
 export const Default = BaseTemplate.bind({});
 Default.args = {
-  componentId: 'sage-textarea-default-example',
+  componentId: 'pds-textarea-default-example',
   label: 'Name',
   onChange: textareaEventExample(),
   name: 'Default',
@@ -43,7 +43,7 @@ Default.parameters = { ...defaultParameters };
 
 export const Rows = BaseTemplate.bind({});
 Rows.args = {
-  componentId: 'sage-textarea-rows-example',
+  componentId: 'pds-textarea-rows-example',
   label: 'Name',
   name: 'Rows',
   rows: 4,
@@ -52,7 +52,7 @@ Rows.parameters = { ...defaultParameters };
 
 export const Required = BaseTemplate.bind({});
 Required.args = {
-  componentId: 'sage-textarea-required-example',
+  componentId: 'pds-textarea-required-example',
   label: 'Name',
   name: 'Required',
   required: true,
@@ -61,7 +61,7 @@ Required.parameters = { ...defaultParameters };
 
 export const Placeholder = BaseTemplate.bind({});
 Placeholder.args = {
-  componentId: 'sage-textarea-placeholder-example',
+  componentId: 'pds-textarea-placeholder-example',
   label: 'Name',
   name: 'Placeholder',
   placeholder: 'Placeholder...'
@@ -70,7 +70,7 @@ Placeholder.parameters = { ...defaultParameters };
 
 export const Disabled = BaseTemplate.bind({});
 Disabled.args = {
-  componentId: 'sage-textarea-disabled-example',
+  componentId: 'pds-textarea-disabled-example',
   disabled: true,
   label: 'Name',
   name: 'Disabled',
@@ -79,7 +79,7 @@ Disabled.parameters = { ...defaultParameters };
 
 export const Readonly = BaseTemplate.bind({});
 Readonly.args = {
-  componentId: 'sage-textarea-readonly-example',
+  componentId: 'pds-textarea-readonly-example',
   label: 'Name',
   name: 'Readonly',
   readonly: true,
@@ -89,7 +89,7 @@ Readonly.parameters = { ...defaultParameters };
 
 export const Hint = BaseTemplate.bind({});
 Hint.args = {
-  componentId: 'sage-textarea-hint-example',
+  componentId: 'pds-textarea-hint-example',
   hintMessage: 'Hint',
   label: 'Name',
   name: 'Hint',
@@ -98,7 +98,7 @@ Hint.parameters = { ...defaultParameters };
 
 export const Invalid = BaseTemplate.bind({});
 Invalid.args = {
-  componentId: 'sage-textarea-error-example',
+  componentId: 'pds-textarea-error-example',
   errorMessage: 'Error',
   invalid: true,
   label: 'Name',

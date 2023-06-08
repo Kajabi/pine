@@ -1,19 +1,19 @@
 import { newE2EPage } from '@stencil/core/testing';
 
-describe('sage-textarea', () => {
+describe('pds-textarea', () => {
   it('renders', async () => {
     const page = await newE2EPage();
-    await page.setContent('<sage-textarea name="foo"></sage-textarea>');
+    await page.setContent('<pds-textarea name="foo"></pds-textarea>');
     await page.waitForChanges();
-    const element = await page.find('sage-textarea');
+    const element = await page.find('pds-textarea');
 
     expect(element).toHaveClass('hydrated');
   });
 
   it('renders a value and updates', async () => {
     const page = await newE2EPage();
-    await page.setContent('<sage-textarea name="foo" required="true"></sage-textarea> <button>test</button>');
-    const textarea = await page.find('sage-textarea >>> textarea');
+    await page.setContent('<pds-textarea name="foo" required="true"></pds-textarea> <button>test</button>');
+    const textarea = await page.find('pds-textarea >>> textarea');
     const button = await page.find('button');
 
     let value = await textarea.getProperty('value');
@@ -22,7 +22,7 @@ describe('sage-textarea', () => {
     await textarea.focus();
     await page.waitForChanges();
 
-    const event = await page.spyOnEvent('sageTextareaChange');
+    const event = await page.spyOnEvent('pdsTextareaChange');
     await page.keyboard.type('Hello');
     await page.waitForChanges();
     await button.focus();

@@ -5,7 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { TextareaChangeEventDetail } from "./components/sage-textarea/textarea-interface";
+import { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
     interface PdsButton {
         /**
@@ -300,7 +300,7 @@ export namespace Components {
          */
         "variant": 'primary' | 'availability' | 'filter';
     }
-    interface SageTextarea {
+    interface PdsTextarea {
         /**
           * A unique identifier for the textarea
          */
@@ -424,9 +424,9 @@ export interface PdsTabCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsTabElement;
 }
-export interface SageTextareaCustomEvent<T> extends CustomEvent<T> {
+export interface PdsTextareaCustomEvent<T> extends CustomEvent<T> {
     detail: T;
-    target: HTMLSageTextareaElement;
+    target: HTMLPdsTextareaElement;
 }
 export interface SageTooltipCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -499,11 +499,11 @@ declare global {
         prototype: HTMLPdsTabsElement;
         new (): HTMLPdsTabsElement;
     };
-    interface HTMLSageTextareaElement extends Components.SageTextarea, HTMLStencilElement {
+    interface HTMLPdsTextareaElement extends Components.PdsTextarea, HTMLStencilElement {
     }
-    var HTMLSageTextareaElement: {
-        prototype: HTMLSageTextareaElement;
-        new (): HTMLSageTextareaElement;
+    var HTMLPdsTextareaElement: {
+        prototype: HTMLPdsTextareaElement;
+        new (): HTMLPdsTextareaElement;
     };
     interface HTMLSageTooltipElement extends Components.SageTooltip, HTMLStencilElement {
     }
@@ -523,7 +523,7 @@ declare global {
         "pds-tab": HTMLPdsTabElement;
         "pds-tabpanel": HTMLPdsTabpanelElement;
         "pds-tabs": HTMLPdsTabsElement;
-        "sage-textarea": HTMLSageTextareaElement;
+        "pds-textarea": HTMLPdsTextareaElement;
         "sage-tooltip": HTMLSageTooltipElement;
     }
 }
@@ -838,7 +838,7 @@ declare namespace LocalJSX {
          */
         "variant": 'primary' | 'availability' | 'filter';
     }
-    interface SageTextarea {
+    interface PdsTextarea {
         /**
           * A unique identifier for the textarea
          */
@@ -872,7 +872,7 @@ declare namespace LocalJSX {
         /**
           * Event emitted whenever the value of the textarea changes
          */
-        "onSageTextareaChange"?: (event: SageTextareaCustomEvent<TextareaChangeEventDetail>) => void;
+        "onPdsTextareaChange"?: (event: PdsTextareaCustomEvent<TextareaChangeEventDetail>) => void;
         /**
           * Specifies a short hint that describes the expected value of the textarea
          */
@@ -957,7 +957,7 @@ declare namespace LocalJSX {
         "pds-tab": PdsTab;
         "pds-tabpanel": PdsTabpanel;
         "pds-tabs": PdsTabs;
-        "sage-textarea": SageTextarea;
+        "pds-textarea": PdsTextarea;
         "sage-tooltip": SageTooltip;
     }
 }
@@ -976,7 +976,7 @@ declare module "@stencil/core" {
             "pds-tab": LocalJSX.PdsTab & JSXBase.HTMLAttributes<HTMLPdsTabElement>;
             "pds-tabpanel": LocalJSX.PdsTabpanel & JSXBase.HTMLAttributes<HTMLPdsTabpanelElement>;
             "pds-tabs": LocalJSX.PdsTabs & JSXBase.HTMLAttributes<HTMLPdsTabsElement>;
-            "sage-textarea": LocalJSX.SageTextarea & JSXBase.HTMLAttributes<HTMLSageTextareaElement>;
+            "pds-textarea": LocalJSX.PdsTextarea & JSXBase.HTMLAttributes<HTMLPdsTextareaElement>;
             "sage-tooltip": LocalJSX.SageTooltip & JSXBase.HTMLAttributes<HTMLSageTooltipElement>;
         }
     }
