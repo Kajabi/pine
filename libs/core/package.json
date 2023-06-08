@@ -25,10 +25,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kajabi/sage.git"
+    "url": "https://github.com/kajabi/pine.git"
   },
   "bugs": {
-    "url": "https://github.com/kajab/sage/issues"
+    "url": "https://github.com/kajab/pine/issues"
   },
   "files": [
     "dist/",

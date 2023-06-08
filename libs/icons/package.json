@@ -25,10 +25,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kajabi/sage/libs/icons"
+    "url": "https://github.com/kajabi/pine/libs/icons"
   },
   "bugs": {
-    "url": "https://github.com/kajab/sage/issues"
+    "url": "https://github.com/kajab/pine/issues"
   },
   "scripts": {
     "build": "run-s build.ts build.icons build.component collection.copy",
