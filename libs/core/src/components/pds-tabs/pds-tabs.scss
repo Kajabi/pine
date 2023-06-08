@@ -17,16 +17,16 @@
   outline: 2px solid #046c98;
 }
 
-.sage-tabs__tablist {
+.pds-tabs__tablist {
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
 }
 
-:host(.sage-tabs--availability) .sage-tabs__tablist {
+:host(.pds-tabs--availability) .pds-tabs__tablist {
   gap: 8px;
 }
 
-:host(.sage-tabs--filter) .sage-tabs__tablist {
+:host(.pds-tabs--filter) .pds-tabs__tablist {
   gap: 16px;
 }

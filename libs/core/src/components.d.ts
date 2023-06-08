@@ -262,26 +262,26 @@ export namespace Components {
          */
         "value": string;
     }
-    interface SageTab {
+    interface PdsTab {
         "index": number;
         /**
-          * Sets the related tab name, this name must match a `sage-tabpanel`'s tab name property
+          * Sets the related tab name, this name must match a `pds-tabpanel`'s tab name property
          */
         "name": string;
         "parentComponentId": string;
         "selected": boolean;
         "variant": string;
     }
-    interface SageTabpanel {
+    interface PdsTabpanel {
         /**
-          * Sets the related tab name, this name must match a `sage-tab`'s tab name property
+          * Sets the related tab name, this name must match a `pds-tab`'s tab name property
          */
         "name": string;
         "parentComponentId": string;
         "selected": boolean;
         "variant": string;
     }
-    interface SageTabs {
+    interface PdsTabs {
         "activeTabIndex": number;
         /**
           * Sets the starting active tab name and maintains the name as the component re-renders
@@ -420,9 +420,9 @@ export interface PdsSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsSwitchElement;
 }
-export interface SageTabCustomEvent<T> extends CustomEvent<T> {
+export interface PdsTabCustomEvent<T> extends CustomEvent<T> {
     detail: T;
-    target: HTMLSageTabElement;
+    target: HTMLPdsTabElement;
 }
 export interface SageTextareaCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -481,23 +481,23 @@ declare global {
         prototype: HTMLPdsSwitchElement;
         new (): HTMLPdsSwitchElement;
     };
-    interface HTMLSageTabElement extends Components.SageTab, HTMLStencilElement {
+    interface HTMLPdsTabElement extends Components.PdsTab, HTMLStencilElement {
     }
-    var HTMLSageTabElement: {
-        prototype: HTMLSageTabElement;
-        new (): HTMLSageTabElement;
+    var HTMLPdsTabElement: {
+        prototype: HTMLPdsTabElement;
+        new (): HTMLPdsTabElement;
     };
-    interface HTMLSageTabpanelElement extends Components.SageTabpanel, HTMLStencilElement {
+    interface HTMLPdsTabpanelElement extends Components.PdsTabpanel, HTMLStencilElement {
     }
-    var HTMLSageTabpanelElement: {
-        prototype: HTMLSageTabpanelElement;
-        new (): HTMLSageTabpanelElement;
+    var HTMLPdsTabpanelElement: {
+        prototype: HTMLPdsTabpanelElement;
+        new (): HTMLPdsTabpanelElement;
     };
-    interface HTMLSageTabsElement extends Components.SageTabs, HTMLStencilElement {
+    interface HTMLPdsTabsElement extends Components.PdsTabs, HTMLStencilElement {
     }
-    var HTMLSageTabsElement: {
-        prototype: HTMLSageTabsElement;
-        new (): HTMLSageTabsElement;
+    var HTMLPdsTabsElement: {
+        prototype: HTMLPdsTabsElement;
+        new (): HTMLPdsTabsElement;
     };
     interface HTMLSageTextareaElement extends Components.SageTextarea, HTMLStencilElement {
     }
@@ -520,9 +520,9 @@ declare global {
         "pds-input": HTMLPdsInputElement;
         "pds-link": HTMLPdsLinkElement;
         "pds-switch": HTMLPdsSwitchElement;
-        "sage-tab": HTMLSageTabElement;
-        "sage-tabpanel": HTMLSageTabpanelElement;
-        "sage-tabs": HTMLSageTabsElement;
+        "pds-tab": HTMLPdsTabElement;
+        "pds-tabpanel": HTMLPdsTabpanelElement;
+        "pds-tabs": HTMLPdsTabsElement;
         "sage-textarea": HTMLSageTextareaElement;
         "sage-tooltip": HTMLSageTooltipElement;
     }
@@ -799,27 +799,27 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
-    interface SageTab {
+    interface PdsTab {
         "index"?: number;
         /**
-          * Sets the related tab name, this name must match a `sage-tabpanel`'s tab name property
+          * Sets the related tab name, this name must match a `pds-tabpanel`'s tab name property
          */
         "name": string;
-        "onTabClick"?: (event: SageTabCustomEvent<object>) => void;
+        "onTabClick"?: (event: PdsTabCustomEvent<object>) => void;
         "parentComponentId"?: string;
         "selected"?: boolean;
         "variant"?: string;
     }
-    interface SageTabpanel {
+    interface PdsTabpanel {
         /**
-          * Sets the related tab name, this name must match a `sage-tab`'s tab name property
+          * Sets the related tab name, this name must match a `pds-tab`'s tab name property
          */
         "name": string;
         "parentComponentId"?: string;
         "selected"?: boolean;
         "variant"?: string;
     }
-    interface SageTabs {
+    interface PdsTabs {
         "activeTabIndex"?: number;
         /**
           * Sets the starting active tab name and maintains the name as the component re-renders
@@ -954,9 +954,9 @@ declare namespace LocalJSX {
         "pds-input": PdsInput;
         "pds-link": PdsLink;
         "pds-switch": PdsSwitch;
-        "sage-tab": SageTab;
-        "sage-tabpanel": SageTabpanel;
-        "sage-tabs": SageTabs;
+        "pds-tab": PdsTab;
+        "pds-tabpanel": PdsTabpanel;
+        "pds-tabs": PdsTabs;
         "sage-textarea": SageTextarea;
         "sage-tooltip": SageTooltip;
     }
@@ -973,9 +973,9 @@ declare module "@stencil/core" {
             "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
             "pds-switch": LocalJSX.PdsSwitch & JSXBase.HTMLAttributes<HTMLPdsSwitchElement>;
-            "sage-tab": LocalJSX.SageTab & JSXBase.HTMLAttributes<HTMLSageTabElement>;
-            "sage-tabpanel": LocalJSX.SageTabpanel & JSXBase.HTMLAttributes<HTMLSageTabpanelElement>;
-            "sage-tabs": LocalJSX.SageTabs & JSXBase.HTMLAttributes<HTMLSageTabsElement>;
+            "pds-tab": LocalJSX.PdsTab & JSXBase.HTMLAttributes<HTMLPdsTabElement>;
+            "pds-tabpanel": LocalJSX.PdsTabpanel & JSXBase.HTMLAttributes<HTMLPdsTabpanelElement>;
+            "pds-tabs": LocalJSX.PdsTabs & JSXBase.HTMLAttributes<HTMLPdsTabsElement>;
             "sage-textarea": LocalJSX.SageTextarea & JSXBase.HTMLAttributes<HTMLSageTextareaElement>;
             "sage-tooltip": LocalJSX.SageTooltip & JSXBase.HTMLAttributes<HTMLSageTooltipElement>;
         }

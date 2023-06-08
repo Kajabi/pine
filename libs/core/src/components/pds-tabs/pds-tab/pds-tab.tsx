@@ -1,15 +1,15 @@
 import { Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 
 @Component({
-  tag: 'sage-tab',
-  styleUrl: 'sage-tab.scss',
+  tag: 'pds-tab',
+  styleUrl: 'pds-tab.scss',
   shadow: false,
 })
-export class SageTab {
+export class PdsTab {
   @Element() el: HTMLElement;
 
   /**
-   * Sets the related tab name, this name must match a `sage-tabpanel`'s tab name property
+   * Sets the related tab name, this name must match a `pds-tabpanel`'s tab name property
    */
   @Prop() name!: string;
 
@@ -38,7 +38,7 @@ export class SageTab {
   @Prop({mutable: true}) selected = false;
 
   /**
-   * Emits an event upon tab click for `sage-tab` and `sage-tabpanel` to listen for
+   * Emits an event upon tab click for `pds-tab` and `pds-tabpanel` to listen for
    */
   /** @internal */
   @Event() tabClick: EventEmitter<object>;
@@ -48,11 +48,11 @@ export class SageTab {
 
   render() {
     const availabilityTabEdgeInlineStart = (
-      <span class="sage-tab-edge" role="presentation"></span>
+      <span class="pds-tab-edge" role="presentation"></span>
     )
 
     const availabilityTabEdgeInlineEnd = (
-      <span class="sage-tab-edge sage-tab-edge--end" role="presentation"></span>
+      <span class="pds-tab-edge pds-tab-edge--end" role="presentation"></span>
     )
 
     return (
@@ -63,12 +63,12 @@ export class SageTab {
           aria-controls={this.parentComponentId + "__" + this.name + "-panel"}
           tabindex={this.selected ? "0" : "-1"}
           aria-selected={this.selected ? "true" : "false"}
-          class={this.selected ? "sage-tab is-active" : "sage-tab"}
+          class={this.selected ? "pds-tab is-active" : "pds-tab"}
           onClick={this.onTabClick.bind(this, this.index, this.parentComponentId)}
         >
           {this.variant === "availability" && availabilityTabEdgeInlineStart}
           {this.variant === "availability" && availabilityTabEdgeInlineEnd}
-          <div class="sage-tab__content"><slot/></div>
+          <div class="pds-tab__content"><slot/></div>
         </button>
       </Host>
     );

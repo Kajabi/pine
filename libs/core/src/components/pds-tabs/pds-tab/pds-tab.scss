@@ -1,4 +1,4 @@
-sage-tab {
+pds-tab {
   display: inline-block;
   position: relative;
 }
@@ -23,7 +23,7 @@ sage-tab {
   outline: 4px solid #8ecafb;
 }
 
-.sage-tab {
+.pds-tab {
   @include pds-button-style-reset();
 
   align-items: center;
@@ -37,7 +37,7 @@ sage-tab {
   &[aria-selected='true'] {
     color: #202327;
 
-    .sage-tab__content::after {
+    .pds-tab__content::after {
       opacity: 1;
     }
   }
@@ -50,7 +50,7 @@ sage-tab {
     color: #43474b;
   }
 
-  .sage-tab__content {
+  .pds-tab__content {
     font-family: inherit;
     font-size: 16px;
     font-weight: 500;
@@ -70,15 +70,15 @@ sage-tab {
     }
   }
 
-  .sage-tab-edge {
+  .pds-tab-edge {
     display: none;
   }
 }
 
-.sage-tabs--availability {
+.pds-tabs--availability {
   --tab-background-color: transparent;
 
-  .sage-tab {
+  .pds-tab {
     background-color: var(--tab-background-color);
     border-radius: 8px 8px 0 0;
     padding: 8px 16px 13px;
@@ -87,11 +87,11 @@ sage-tab {
     &[aria-selected='true'] {
       --tab-background-color: #fff;
 
-      .sage-tab__content::after {
+      .pds-tab__content::after {
         opacity: 1;
       }
 
-      .sage-tab-edge {
+      .pds-tab-edge {
         z-index: 1;
       }
     }
@@ -105,13 +105,13 @@ sage-tab {
     }
   }
 
-  .sage-tab__content {
+  .pds-tab__content {
     font-size: 12px;
     line-height: 16px;
     padding-bottom: 7px;
   }
 
-  .sage-tab-edge {
+  .pds-tab-edge {
     bottom: 0;
     display: block;
     height: 8px;
@@ -133,7 +133,7 @@ sage-tab {
     }
   }
 
-  .sage-tab-edge--end {
+  .pds-tab-edge--end {
     inset-inline-end: unset;
     inset-inline-start: 100%;
 
@@ -145,10 +145,10 @@ sage-tab {
   }
 }
 
-.sage-tabs--filter {
+.pds-tabs--filter {
   --tab-background-color: #eceeef;
 
-  .sage-tab {
+  .pds-tab {
     background-color: var(--tab-background-color);
     border-radius: 50px;
     color: #202327;
@@ -165,7 +165,7 @@ sage-tab {
     }
   }
 
-  .sage-tab__content {
+  .pds-tab__content {
     font-size: 14px;
     line-height: 20px;
     padding-bottom: 0;

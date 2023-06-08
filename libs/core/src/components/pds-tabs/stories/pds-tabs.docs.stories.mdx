@@ -3,35 +3,35 @@ import { html, render } from 'lit-html';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
-import * as stories from './sage-tabs.stories.js';
+import * as stories from './pds-tabs.stories.js';
 
 <Meta
   title="components/Tabs"
-  component="sage-tabs"
-  argTypes={extractArgTypes('sage-tabs')}
+  component="pds-tabs"
+  argTypes={extractArgTypes('pds-tabs')}
   subcomponents={{
-    SageTab: 'sage-tab',
-    SageTabPanel: 'sage-tabpanel',
+    PdsTab: 'pds-tab',
+    PdsTabPanel: 'pds-tabpanel',
   }}
 />
 
 # Tabs
 
-A tabs component to generate all versions of `sage-tab` as outlined in [Figma](https://www.figma.com/file/sMbtLUHSt2vfKgKjyQ3052/%F0%9F%A7%A9-Sage-components?node-id=488%3A43471&t=5FtThY98rugq7hGi-1).
+A tabs component to generate all versions of `pds-tab` as outlined in [Figma](https://www.figma.com/file/sMbtLUHSt2vfKgKjyQ3052/%F0%9F%A7%A9-Sage-components?node-id=488%3A43471&t=5FtThY98rugq7hGi-1).
 
 ## Sub Components
 
 ### Tab
 
-A subcomponent which handles tab logic. This subcomponent is expected to be used exclusively within `sage-tab`.
+A subcomponent which handles tab logic. This subcomponent is expected to be used exclusively within `pds-tab`.
 
-Requires a unique `name` property to be passed, e.g. `<sage-tab name="foo">Tab Content</sage-tab>`
+Requires a unique `name` property to be passed, e.g. `<pds-tab name="foo">Tab Content</pds-tab>`
 
 ### Tabpanel
 
-A subcomponent which handles tabpanel logic. This subcomponent is expected to be used exclusively within `sage-tab`.
+A subcomponent which handles tabpanel logic. This subcomponent is expected to be used exclusively within `pds-tab`.
 
-Requires a matching `name` property to be passed, e.g. `<sage-tabpanel name="foo">Tabpanel Content</sage-tabpanel>`
+Requires a matching `name` property to be passed, e.g. `<pds-tabpanel name="foo">Tabpanel Content</pds-tabpanel>`
 
 ## Accessibility
 
@@ -45,7 +45,7 @@ In order for all accessibility to properly compile, you must provide a few requi
 
 ## Properties
 
-<ArgsTable of="sage-tabs" />
+<ArgsTable of="pds-tabs" />
 
 ## Variant
 

@@ -5,11 +5,11 @@ import { Component, Element, Host, h, Prop, Listen } from '@stencil/core';
  * @slot tabpanels - Content is placed directly after the `div[role="tablist"]` element as siblings
  */
 @Component({
-  tag: 'sage-tabs',
-  styleUrl: 'sage-tabs.scss',
+  tag: 'pds-tabs',
+  styleUrl: 'pds-tabs.scss',
   shadow: true,
 })
-export class SageTabs {
+export class PdsTabs {
   private tabs;
   private tabPanels;
 
@@ -82,15 +82,15 @@ export class SageTabs {
         break;
     }
 
-    // Move focus to the button element within `sage-tab`
+    // Move focus to the button element within `pds-tab`
     this.tabs[moveFocusTo].children[0].focus();
     this.activeTabName = this.tabs[moveFocusTo].name;
     this.activeTabIndex = moveFocusTo;
   }
 
   private findAllChildren() {
-    this.tabs = this.el.querySelectorAll('sage-tab');
-    this.tabPanels = this.el.querySelectorAll('sage-tabpanel');
+    this.tabs = this.el.querySelectorAll('pds-tab');
+    this.tabPanels = this.el.querySelectorAll('pds-tabpanel');
   }
 
   private propGeneration(child, index = 0) {
@@ -112,9 +112,9 @@ export class SageTabs {
   }
 
   private classNames() {
-    let className = `sage-tabs`;
+    let className = `pds-tabs`;
     if (this.variant && this.variant != 'primary') {
-      const variantClassName = `sage-tabs--${this.variant}`;
+      const variantClassName = `pds-tabs--${this.variant}`;
       className += ' ' + variantClassName;
     }
 
@@ -132,7 +132,7 @@ export class SageTabs {
   render() {
     return (
       <Host active-tab-name={this.activeTabName} class={this.classNames()} id={this.componentId}>
-        <div class="sage-tabs__tablist" role="tablist" aria-label={this.tablistLabel}>
+        <div class="pds-tabs__tablist" role="tablist" aria-label={this.tablistLabel}>
           <slot name="tabs" />
         </div>
         <slot name="tabpanels" />

@@ -1,11 +1,11 @@
 import { newE2EPage } from '@stencil/core/testing';
 
-describe('sage-tabpanel', () => {
+describe('pds-tabpanel', () => {
   it('renders', async () => {
     const page = await newE2EPage();
-    await page.setContent('<sage-tabpanel></sage-tabpanel>');
+    await page.setContent('<pds-tabpanel></pds-tabpanel>');
 
-    const element = await page.find('sage-tabpanel');
+    const element = await page.find('pds-tabpanel');
     expect(element).toHaveClass('hydrated');
   });
 });
