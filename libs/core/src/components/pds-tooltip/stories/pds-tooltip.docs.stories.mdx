@@ -3,12 +3,12 @@ import { html, render } from 'lit-html';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
-import * as stories from './sage-tooltip.stories';
+import * as stories from './pds-tooltip.stories';
 
 <Meta
   title="components/Tooltip"
-  component="sage-tooltip"
-  argTypes={extractArgTypes('sage-tooltip')}
+  component="pds-tooltip"
+  argTypes={extractArgTypes('pds-tooltip')}
 />
 
 # Tooltip
@@ -26,7 +26,7 @@ That information should remain visible.
 
 ## Properties
 
-<ArgsTable of="sage-tooltip" />
+<ArgsTable of="pds-tooltip" />
 
 ## Variants
 ### Trigger
@@ -35,12 +35,12 @@ Whether your trigger is text or an HTML element, it will be placed in the defaul
 <Story story={stories.Default} />
 
 <Canvas>
-  <sage-tooltip content="this is tooltip content" has-arrow="true" placement="bottom-start">
+  <pds-tooltip content="this is tooltip content" has-arrow="true" placement="bottom-start">
     text
-  </sage-tooltip>
-  <sage-tooltip content="this is tooltip content" has-arrow="true" placement="right-start">
+  </pds-tooltip>
+  <pds-tooltip content="this is tooltip content" has-arrow="true" placement="right-start">
     <pds-button variant="secondary">Button</pds-button>
-  </sage-tooltip>
+  </pds-tooltip>
 </Canvas>
 
 ### Content
@@ -49,7 +49,7 @@ Text-based content is generated using the `content` prop. Use this option only w
 tooltip content is expected to be a string.
 
 <Canvas>
-  <sage-tooltip content="this is tooltip content" has-arrow="true" placement="right">text</sage-tooltip>
+  <pds-tooltip content="this is tooltip content" has-arrow="true" placement="right">text</pds-tooltip>
 </Canvas>
 
 #### HTML Element Content
@@ -59,13 +59,13 @@ enable the `htmlContent` property and provide your element in the `content` slot
 <Story story={stories.HTMLContent} />
 
 <Canvas>
-  <sage-tooltip has-arrow="true" placement="right">
+  <pds-tooltip has-arrow="true" placement="right">
     text
     <div slot="content">
       <p>this is s a sentence in a tooltip.</p>
       <p>this is s a sentence in a tooltip.</p>
     </div>
-  </sage-tooltip>
+  </pds-tooltip>
 </Canvas>
 
 ### Positioning
@@ -79,7 +79,7 @@ By default the arrow is visible but it can be hidden by disabling it when `has-a
 <Story story={stories.NoArrow} />
 
 <Canvas>
-  <sage-tooltip content="this is tooltip content" has-arrow="false" placement="right">text</sage-tooltip>
+  <pds-tooltip content="this is tooltip content" has-arrow="false" placement="right">text</pds-tooltip>
 </Canvas>
 
 ## Additional Resources

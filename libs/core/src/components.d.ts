@@ -354,7 +354,7 @@ export namespace Components {
          */
         "value"?: string;
     }
-    interface SageTooltip {
+    interface PdsTooltip {
         /**
           * Id used to reference the component
          */
@@ -428,9 +428,9 @@ export interface PdsTextareaCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsTextareaElement;
 }
-export interface SageTooltipCustomEvent<T> extends CustomEvent<T> {
+export interface PdsTooltipCustomEvent<T> extends CustomEvent<T> {
     detail: T;
-    target: HTMLSageTooltipElement;
+    target: HTMLPdsTooltipElement;
 }
 declare global {
     interface HTMLPdsButtonElement extends Components.PdsButton, HTMLStencilElement {
@@ -505,11 +505,11 @@ declare global {
         prototype: HTMLPdsTextareaElement;
         new (): HTMLPdsTextareaElement;
     };
-    interface HTMLSageTooltipElement extends Components.SageTooltip, HTMLStencilElement {
+    interface HTMLPdsTooltipElement extends Components.PdsTooltip, HTMLStencilElement {
     }
-    var HTMLSageTooltipElement: {
-        prototype: HTMLSageTooltipElement;
-        new (): HTMLSageTooltipElement;
+    var HTMLPdsTooltipElement: {
+        prototype: HTMLPdsTooltipElement;
+        new (): HTMLPdsTooltipElement;
     };
     interface HTMLElementTagNameMap {
         "pds-button": HTMLPdsButtonElement;
@@ -524,7 +524,7 @@ declare global {
         "pds-tabpanel": HTMLPdsTabpanelElement;
         "pds-tabs": HTMLPdsTabsElement;
         "pds-textarea": HTMLPdsTextareaElement;
-        "sage-tooltip": HTMLSageTooltipElement;
+        "pds-tooltip": HTMLPdsTooltipElement;
     }
 }
 declare namespace LocalJSX {
@@ -896,7 +896,7 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
-    interface SageTooltip {
+    interface PdsTooltip {
         /**
           * Id used to reference the component
          */
@@ -918,11 +918,11 @@ declare namespace LocalJSX {
         /**
           * Emitted after a tooltip is closed
          */
-        "onSageTooltipHide"?: (event: SageTooltipCustomEvent<any>) => void;
+        "onPdsTooltipHide"?: (event: PdsTooltipCustomEvent<any>) => void;
         /**
           * Emitted after a tooltip is shown
          */
-        "onSageTooltipShow"?: (event: SageTooltipCustomEvent<any>) => void;
+        "onPdsTooltipShow"?: (event: PdsTooltipCustomEvent<any>) => void;
         /**
           * Determines whether or not the tooltip is visible
           * @defaultValue false
@@ -958,7 +958,7 @@ declare namespace LocalJSX {
         "pds-tabpanel": PdsTabpanel;
         "pds-tabs": PdsTabs;
         "pds-textarea": PdsTextarea;
-        "sage-tooltip": SageTooltip;
+        "pds-tooltip": PdsTooltip;
     }
 }
 export { LocalJSX as JSX };
@@ -977,7 +977,7 @@ declare module "@stencil/core" {
             "pds-tabpanel": LocalJSX.PdsTabpanel & JSXBase.HTMLAttributes<HTMLPdsTabpanelElement>;
             "pds-tabs": LocalJSX.PdsTabs & JSXBase.HTMLAttributes<HTMLPdsTabsElement>;
             "pds-textarea": LocalJSX.PdsTextarea & JSXBase.HTMLAttributes<HTMLPdsTextareaElement>;
-            "sage-tooltip": LocalJSX.SageTooltip & JSXBase.HTMLAttributes<HTMLSageTooltipElement>;
+            "pds-tooltip": LocalJSX.PdsTooltip & JSXBase.HTMLAttributes<HTMLPdsTooltipElement>;
         }
     }
 }

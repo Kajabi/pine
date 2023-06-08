@@ -1,5 +1,5 @@
 :host {
-  --background-color: var(--sage-color-neutral-charcoal-400);
+  --background-color: var(--pine-color-neutral-charcoal-400);
   --box-shadow: 0 8px 14px rgba(0,0,0,0.16), 0 0 4px rgba(0,0,0,0.08);
   --color: #fff;
   --width: 320px;
@@ -25,7 +25,7 @@
   }
 }
 
-.sage-tooltip__content {
+.pds-tooltip__content {
   background-color: var(--background-color);
   border-radius: var(--overlay-border-radius);
   box-shadow: var(--box-shadow);
@@ -39,14 +39,14 @@
   visibility: hidden;
   width: max-content;
 
-  .sage-tooltip--is-open & {
+  .pds-tooltip--is-open & {
     // TODO: need to use block / none but the tooltip content width and height are needed for calculations
     opacity: 1;
     visibility: visible;
     z-index: 1;
   }
 
-  :host(.sage-tooltip--has-html-content) & {
+  :host(.pds-tooltip--has-html-content) & {
     width: auto;
   }
 
@@ -60,7 +60,7 @@
     position: absolute;
     width: 0;
 
-    .sage-tooltip--right & {
+    .pds-tooltip--right & {
       border-inline-end-color: var(--background-color);
       border-width: var(--arrow-pointing-to-the-left);
       left: calc(var(--arrow-size) * -1);
@@ -68,7 +68,7 @@
       transform: translateY(-50%);
     }
 
-    .sage-tooltip--right-end & {
+    .pds-tooltip--right-end & {
       border-inline-end-color: var(--background-color);
       border-width: var(--arrow-pointing-to-the-left);
       bottom: var(--arrow-offset);
@@ -76,14 +76,14 @@
       top: initial;
     }
 
-    .sage-tooltip--right-start & {
+    .pds-tooltip--right-start & {
       border-inline-end-color: var(--background-color);
       border-width: var(--arrow-pointing-to-the-left);
       left: calc(var(--arrow-size) * -1);
       top: var(--arrow-offset);
     }
 
-    .sage-tooltip--top & {
+    .pds-tooltip--top & {
       border-block-start-color: var(--background-color);
       border-width: var(--arrow-pointing-down);
       bottom: calc(var(--arrow-size) * -1);
@@ -92,7 +92,7 @@
       transform: translateX(-50%);
     }
 
-    .sage-tooltip--top-start & {
+    .pds-tooltip--top-start & {
       border-block-start-color: var(--background-color);
       border-width: var(--arrow-pointing-down);
       bottom: calc(var(--arrow-size) * -1);
@@ -100,7 +100,7 @@
       top: initial;
     }
 
-    .sage-tooltip--top-end & {
+    .pds-tooltip--top-end & {
       border-block-start-color: var(--background-color);
       border-width: var(--arrow-pointing-down);
       bottom: calc(var(--arrow-size) * -1);
@@ -109,7 +109,7 @@
       top: initial;
     }
 
-    .sage-tooltip--left & {
+    .pds-tooltip--left & {
       border-inline-start-color: var(--background-color);
       border-width: var(--arrow-pointing-to-the-right);
       left: initial;
@@ -118,7 +118,7 @@
       transform: translateY(-50%);
     }
 
-    .sage-tooltip--left-end & {
+    .pds-tooltip--left-end & {
       border-inline-start-color: var(--background-color);
       border-width: var(--arrow-pointing-to-the-right);
       bottom: var(--arrow-offset);
@@ -127,7 +127,7 @@
       top: initial;
     }
 
-    .sage-tooltip--left-start & {
+    .pds-tooltip--left-start & {
       border-inline-start-color: var(--background-color);
       border-width: var(--arrow-pointing-to-the-right);
       left: initial;
@@ -135,7 +135,7 @@
       top: var(--arrow-offset);
     }
 
-    .sage-tooltip--bottom & {
+    .pds-tooltip--bottom & {
       border-block-end-color: var(--background-color);
       border-width: var(--arrow-pointing-up);
       left: 50%;
@@ -143,7 +143,7 @@
       transform: translateX(-50%);
     }
 
-    .sage-tooltip--bottom-end & {
+    .pds-tooltip--bottom-end & {
       border-block-end-color: var(--background-color);
       border-width: var(--arrow-pointing-up);
       left: initial;
@@ -151,14 +151,14 @@
       top: calc(var(--arrow-size) * -1);
     }
 
-    .sage-tooltip--bottom-start & {
+    .pds-tooltip--bottom-start & {
       border-block-end-color: var(--background-color);
       border-width: var(--arrow-pointing-up);
       left: var(--arrow-offset);
       top: calc(var(--arrow-size) * -1);
     }
 
-    .sage-tooltip--no-arrow & {
+    .pds-tooltip--no-arrow & {
       border-width: 0;
     }
   }

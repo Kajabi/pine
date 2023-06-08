@@ -1,4 +1,4 @@
-# my-component
+# pds-tooltip
 
 
 
@@ -19,10 +19,10 @@
 
 ## Events
 
-| Event             | Description                       | Type               |
-| ----------------- | --------------------------------- | ------------------ |
-| `sageTooltipHide` | Emitted after a tooltip is closed | `CustomEvent<any>` |
-| `sageTooltipShow` | Emitted after a tooltip is shown  | `CustomEvent<any>` |
+| Event            | Description                       | Type               |
+| ---------------- | --------------------------------- | ------------------ |
+| `pdsTooltipHide` | Emitted after a tooltip is closed | `CustomEvent<any>` |
+| `pdsTooltipShow` | Emitted after a tooltip is shown  | `CustomEvent<any>` |
 
 
 ## Methods

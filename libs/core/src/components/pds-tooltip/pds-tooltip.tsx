@@ -9,11 +9,11 @@ import {
  */
 
 @Component({
-  tag: 'sage-tooltip',
-  styleUrl: 'sage-tooltip.scss',
+  tag: 'pds-tooltip',
+  styleUrl: 'pds-tooltip.scss',
   shadow: true,
 })
-export class SageTooltip {
+export class PdsTooltip {
   private contentEl: HTMLElement | null;
 
   /**
@@ -86,12 +86,12 @@ export class SageTooltip {
   /**
    * Emitted after a tooltip is closed
    */
-  @Event() sageTooltipHide: EventEmitter;
+  @Event() pdsTooltipHide: EventEmitter;
 
   /**
    * Emitted after a tooltip is shown
    */
-  @Event() sageTooltipShow: EventEmitter;
+  @Event() pdsTooltipShow: EventEmitter;
 
   componentWillLoad() {
     if (this.opened) {
@@ -130,12 +130,12 @@ export class SageTooltip {
 
   private handleHide = () => {
     this.hideTooltip();
-    this.sageTooltipHide.emit();
+    this.pdsTooltipHide.emit();
   };
 
   private handleShow = () => {
     this.showTooltip();
-    this.sageTooltipShow.emit();
+    this.pdsTooltipShow.emit();
   };
 
   render() {
@@ -148,21 +148,21 @@ export class SageTooltip {
       >
         <div
           class={`
-            sage-tooltip
-            sage-tooltip--${this.placement}
-            ${this.htmlContent ? 'sage-tooltip--has-html-content' : ''}
-            ${this.opened ? 'sage-tooltip--is-open' : ''}
-            ${this.hasArrow ? '' : 'sage-tooltip--no-arrow'}
+            pds-tooltip
+            pds-tooltip--${this.placement}
+            ${this.htmlContent ? 'pds-tooltip--has-html-content' : ''}
+            ${this.opened ? 'pds-tooltip--is-open' : ''}
+            ${this.hasArrow ? '' : 'pds-tooltip--no-arrow'}
           `}
         >
           <span
             aria-describedby={this.componentId}
-            class="sage-tooltip__trigger"
+            class="pds-tooltip__trigger"
           >
             <slot />
           </span>
 
-          <div class="sage-tooltip__content"
+          <div class="pds-tooltip__content"
             aria-hidden={this.opened ? 'false' : 'true'}
             aria-live={this.opened ? 'polite' : 'off'}
             id={this.componentId}
