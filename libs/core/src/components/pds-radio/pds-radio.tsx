@@ -1,4 +1,5 @@
 import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
+import { assignDescription, messageId } from '../../utils/form';
 
 @Component({
   tag: 'pds-radio',
@@ -88,6 +89,8 @@ export class PdsRadio {
     return (
       <Host class={this.classNames()}>
         <input
+          aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
+          aria-invalid={this.invalid ? "true" : undefined}
           type="radio"
           id={this.componentId}
           name={this.name}
@@ -98,7 +101,13 @@ export class PdsRadio {
           onChange={this.handleRadioChange}
         />
         <label htmlFor={this.componentId}>{this.label}</label>
-        {this.helperMessage && <div class={'pds-radio__message'}>{this.helperMessage}</div>}
+        {this.helperMessage &&
+          <div
+            class={'pds-radio__message'}
+            id={messageId(this.componentId, 'helper')}
+          >
+            {this.helperMessage}
+          </div>}
       </Host>
     );
   }
