@@ -4,7 +4,14 @@ import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 import * as stories from './pds-avatar.stories.js';
 
-<Meta title="components/Avatar" component="pds-avatar" argTypes={extractArgTypes('pds-avatar')} />
+<Meta
+  title="components/Avatar"
+  component="pds-avatar"
+  argTypes={extractArgTypes('pds-avatar')}
+  args={{
+    badge: false,
+  }}
+/>
 
 # Avatar
 
