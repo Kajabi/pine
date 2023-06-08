@@ -837,7 +837,7 @@ declare namespace LocalJSX {
         /**
           * Emitted when a keyboard input occurred
          */
-        "onPdsSelectChange"?: (event: PdsSelectCustomEvent<InputEvent>) => void;
+        "onPdsSelectChange"?: (event: PdsSelectCustomEvent<string>) => void;
         /**
           * Indicates whether or not the field is required
          */
