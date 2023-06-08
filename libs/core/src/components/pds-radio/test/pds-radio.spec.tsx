@@ -63,7 +63,7 @@ describe('pds-radio', () => {
     expect(page.root).toEqualHtml(`
       <pds-radio class="is-invalid" component-id="default" label="Label text" invalid>
         <mock:shadow-root>
-          <input type="radio" id="default">
+          <input aria-invalid="true" id="default" type="radio">
           <label htmlfor="default">Label text</label>
         </mock:shadow-root>
       </pds-radio>
@@ -95,9 +95,9 @@ describe('pds-radio', () => {
     expect(page.root).toEqualHtml(`
       <pds-radio component-id="default" label="Label text" helper-message="This is short message text.">
         <mock:shadow-root>
-          <input type="radio" id="default">
+          <input aria-describedby="default__helper-message" id="default" type="radio">
           <label htmlfor="default">Label text</label>
-          <div class="pds-radio__message">This is short message text.</div>
+          <div class="pds-radio__message" id="default__helper-message">This is short message text.</div>
         </mock:shadow-root>
       </pds-radio>
     `);
