@@ -23,9 +23,9 @@
 
 ## Events
 
-| Event              | Description                            | Type                      |
-| ------------------ | -------------------------------------- | ------------------------- |
-| `sageSelectChange` | Emitted when a keyboard input occurred | `CustomEvent<InputEvent>` |
+| Event              | Description                            | Type                  |
+| ------------------ | -------------------------------------- | --------------------- |
+| `sageSelectChange` | Emitted when a keyboard input occurred | `CustomEvent<string>` |
 
 
 ----------------------------------------------

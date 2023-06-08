@@ -805,7 +805,7 @@ declare namespace LocalJSX {
         /**
           * Emitted when a keyboard input occurred
          */
-        "onSageSelectChange"?: (event: SageSelectCustomEvent<InputEvent>) => void;
+        "onSageSelectChange"?: (event: SageSelectCustomEvent<string>) => void;
         /**
           * Indicates whether or not the field is required
          */

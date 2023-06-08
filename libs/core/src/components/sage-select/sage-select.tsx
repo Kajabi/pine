@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, Host, h, Prop, State } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, h, Listen, Prop, State } from '@stencil/core';
 
 @Component({
   tag: 'sage-select',
@@ -70,11 +70,19 @@ export class SageSelect {
   /**
    * Emitted when a keyboard input occurred
    */
-  @Event() sageSelectChange: EventEmitter<InputEvent>;
+  @Event() sageSelectChange: EventEmitter<string>;
+
+  // @Listen('selectedOptionValue')
+  // selectedOptionValueFunc() {
+  //   console.log('event emitted')
+  // }
 
   handleSelect(event) {
+    console.log('in');
     console.log(event.target.value);
+
     this.selectValue = event.target.value;
+    this.sageSelectChange.emit(this.selectValue)
   }
 
   handleSecondSelect(event) {
@@ -82,20 +90,20 @@ export class SageSelect {
     this.selectValueAfter = event.target.value;
   }
 
-  handleChange(event) {
-    this.value = event.target.value;
+  // handleChange(event) {
+  //   this.value = event.target.value;
 
-    if (event.target.validity.typeMismatch) {
-      console.log('this element is not valid')
-    }
-  }
+  //   if (event.target.validity.typeMismatch) {
+  //     console.log('this element is not valid')
+  //   }
+  // }
 
   render() {
     return (
       <Host>
         <label htmlFor={this.componentId}>{this.label}</label>
 
-        <select name={this.name} id={this.componentId}  onInput={(event) => this.handleSelect(event)}>
+        <select name={this.name} id={this.componentId} onInput={(event) => this.handleSelect(event)}>
           <option value="option 1" selected={this.selectValue === 'option 1'}>options 1</option>
           <option value="option 2" selected={this.selectValue === 'option 2'}>options 2</option>
           <option value="option 3" selected={this.selectValue === 'option 3'}>options 3</option>
@@ -105,6 +113,11 @@ export class SageSelect {
           {this.avOptions.map(recipient => (
             <option value={recipient.id} selected={this.selectedReceiverIds.indexOf(recipient.id) !== -1}>{recipient.name}</option>
           ))}
+        </select> */}
+
+        {/* <select class="inf__filter-input" onChange={(event) => this.handleInputChange(event)}>
+          <slot />
+          {this.options.map(item => <option>{item.label || item.value}</option>)}
         </select> */}
 
         {this.helperMessage &&
