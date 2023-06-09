@@ -12,27 +12,27 @@ describe('pds-avatar', () => {
   it('renders admin variant with correct class', async () => {
     const page = await newE2EPage();
 
-    await page.setContent('<sage-avatar variant="admin"></sage-avatar>');
-    const component = await page.find('sage-avatar');
-    expect(component).toHaveClass('sage-avatar--admin');
+    await page.setContent('<pds-avatar variant="admin"></pds-avatar>');
+    const component = await page.find('pds-avatar');
+    expect(component).toHaveClass('pds-avatar--admin');
   });
 
-  it('renders avatar with size prop and correct class', async () => {
+  it('renders avatar with size prop and correct corresponding style', async () => {
     const page = await newE2EPage();
 
-    await page.setContent('<sage-avatar size="xl"></sage-avatar>');
-    const component = await page.find('sage-avatar');
-    expect(component).toHaveClass('sage-avatar--xl');
+    await page.setContent('<pds-avatar size="xl"></pds-avatar>');
+    const div = (await page.find('pds-avatar')).shadowRoot.querySelector('div');
+    expect(div).toEqualAttribute('style', 'height: 64px; width: 64px;');
   });
 
   it('should render image when prop is set and not render default icon', async () => {
     const page = await newE2EPage();
 
-    await page.setContent('<sage-avatar image="https://placehold.co/64x64"></sage-avatar>');
-    const image = await page.find('sage-avatar >>> img');
+    await page.setContent('<pds-avatar image="https://placehold.co/64x64"></pds-avatar>');
+    const image = await page.find('pds-avatar >>> img');
     expect(image).toBeTruthy();
 
-    const defaultIcon = await page.find('sage-avatar >>> .sage-avatar[name="user-fulfilled"]');
+    const defaultIcon = await page.find('pds-avatar >>> .pds-avatar[name="user-fulfilled"]');
     expect(defaultIcon).toBeNull();
   })
 });

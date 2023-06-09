@@ -33,6 +33,9 @@ Badge.args = {
 Badge.parameters = { ...defaultParameters };
 
 export const CustomSize = BaseTemplate.bind();
+CustomSize.args = {
+	size: '128px'
+}
 CustomSize.parameters = { ...defaultParameters };
 
 export const Image = BaseTemplate.bind();

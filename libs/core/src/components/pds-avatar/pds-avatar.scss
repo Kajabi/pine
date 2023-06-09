@@ -1,52 +1,27 @@
 :host {
-  /**
-    * @prop --size: Custom size of avatar
-  */
-
-  --size: var(--pine-spacing-2xl);
-
   display: inline-block;
 }
-
-$pds-avatar-sizes: (
-  xs: var(--pine-spacing-md),
-  sm: 32px,
-  md: 40px,
-  lg: 56px,
-  xl: var(--pine-spacing-2xl)
-);
-
-@each $size, $value in $pds-avatar-sizes {
-  :host(.pds-avatar--#{$size}) div {
-    height: $value;
-    width: $value;
-  }
-}
-
-:host(.pds-avatar--admin) div {
-  border-radius: 12px;
-}
-
-
 
 div {
   // These custom props are not reachable
   --background-color: var(--pine-color-primary-100);
-  --border: var(--pine-border-default);
   --badge-background-color: var(--pine-color-base-white);
+  --border: var(--pine-border-default);
   --radius-round: 50%;
 
   align-items: center;
   background-color: var(--background-color);
-  block-size: var(--size);
   border-radius: var(--radius-round);
   display: inline-flex;
-  inline-size: var(--size);
   justify-content: center;
   position: relative;
 
+  :host(.pds-avatar--admin) & {
+    border-radius: 12px;
+  }
+
   // Remove when FF has support for :has
-  :host(.pds-avatar--has-image) div {
+  :host(.pds-avatar--has-image) & {
     background: transparent
   }
 
@@ -55,14 +30,6 @@ div {
       background-color: transparent
     }
   }
-}
-
-pds-icon {
-  // Percentage is average size of icon in relation to total avatar size of
-  // all preset sizes found in Figma
-  // Used to allow icon to scale to container size
-  height: 33.53%;
-  width: 33.53%;
 }
 
 .pds-avatar__badge {

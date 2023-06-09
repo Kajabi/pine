@@ -14,7 +14,7 @@ export namespace Components {
          */
         "alt"?: string | null;
         /**
-          * Determines whether the badge is visible or not
+          * Determines whether the badge is visible or not.
           * @defaultValue false
          */
         "badge"?: boolean;
@@ -24,13 +24,14 @@ export namespace Components {
          */
         "image"?: string | null;
         /**
-          * Preset sizes for the avatar. If a custom size is desired, use the `--size` custom property instead.
+          * Size of the avatar. Value can be preset or custom.
          */
-        "size"?: | 'xl'
-  | 'lg'
-  | 'md'
-  | 'sm'
-  | 'xs';
+        "size"?: | 'xl' // 64px
+  | 'lg' // 56px
+  | 'md' // 40px
+  | 'sm' // 32px
+  | 'xs' // 24px
+  | string;
         /**
           * Determines the variant of avatar. Changes appearance accordingly.
           * @defaultValue customer
@@ -625,7 +626,7 @@ declare namespace LocalJSX {
          */
         "alt"?: string | null;
         /**
-          * Determines whether the badge is visible or not
+          * Determines whether the badge is visible or not.
           * @defaultValue false
          */
         "badge"?: boolean;
@@ -635,13 +636,14 @@ declare namespace LocalJSX {
          */
         "image"?: string | null;
         /**
-          * Preset sizes for the avatar. If a custom size is desired, use the `--size` custom property instead.
+          * Size of the avatar. Value can be preset or custom.
          */
-        "size"?: | 'xl'
-  | 'lg'
-  | 'md'
-  | 'sm'
-  | 'xs';
+        "size"?: | 'xl' // 64px
+  | 'lg' // 56px
+  | 'md' // 40px
+  | 'sm' // 32px
+  | 'xs' // 24px
+  | string;
         /**
           * Determines the variant of avatar. Changes appearance accordingly.
           * @defaultValue customer
