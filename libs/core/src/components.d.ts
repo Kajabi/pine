@@ -19,6 +19,11 @@ export namespace Components {
          */
         "badge"?: boolean;
         /**
+          * Determines whether the avatar functions as a dropdown trigger.
+          * @defaultValue false
+         */
+        "dropdown"?: boolean;
+        /**
           * The src for a custom user image.
           * @defaultValue null
          */
@@ -630,6 +635,11 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "badge"?: boolean;
+        /**
+          * Determines whether the avatar functions as a dropdown trigger.
+          * @defaultValue false
+         */
+        "dropdown"?: boolean;
         /**
           * The src for a custom user image.
           * @defaultValue null

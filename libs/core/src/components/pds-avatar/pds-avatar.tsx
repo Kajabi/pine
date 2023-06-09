@@ -20,6 +20,12 @@ export class PdsAvatar {
   @Prop() badge? = false;
 
   /**
+   * Determines whether the avatar functions as a dropdown trigger.
+   * @defaultValue false
+   */
+  @Prop() dropdown? = false;
+
+  /**
    * The src for a custom user image.
    * @defaultValue null
    */
@@ -58,6 +64,28 @@ export class PdsAvatar {
     }
   }
 
+  private renderAvatar = () => {
+    const style = {
+      height: this.avatarSize(),
+      width: this.avatarSize(),
+    };
+    return (
+      this.dropdown
+        ?
+        <button class="sage-avatar__button" type="button">
+          <div style={style}>
+            {this.renderIconOrImage()}
+            {this.renderBadge()}
+          </div>
+        </button>
+        :
+        <div style={style}>
+          {this.renderIconOrImage()}
+          {this.renderBadge()}
+        </div>
+    )
+  };
+
   private renderBadge = () => (
     this.badge
     // Percentage is average size of icon in relation to total avatar size
@@ -84,19 +112,12 @@ export class PdsAvatar {
   );
 
   render() {
-    const style = {
-      height: this.avatarSize(),
-      width: this.avatarSize(),
-    };
 
     return (
       <Host
         class={{...this.classNames()}}
       >
-        <div style={style}>
-          {this.renderIconOrImage()}
-          {this.renderBadge()}
-        </div>
+        {this.renderAvatar()}
       </Host>
     );
   }

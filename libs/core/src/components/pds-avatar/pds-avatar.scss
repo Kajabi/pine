@@ -32,6 +32,26 @@ div {
   }
 }
 
+.pds-avatar__button {
+  --radius-round: 50%;
+  --box-shadow-focus: 0 0 0 2px var(--pine-color-primary-200);
+
+  align-items: center;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  padding: 0;
+
+  &:focus-visible {
+    // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
+    box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
+    outline: none;
+  }
+}
+
 .pds-avatar__badge {
   background-color: var(--badge-background-color);
   border: var(--pine-border-default);

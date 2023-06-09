@@ -12,6 +12,7 @@ import imgFile from '../assets/demi_wilkinson.jpg';
   args={{
     alt: null,
     badge: false,
+    dropdown: false,
     image: null,
     size: null,
     variant: 'customer',
@@ -64,6 +65,16 @@ An avatar with a custom size set on the prop.
 
 <Canvas>
   <pds-avatar size="128px"></pds-avatar>
+</Canvas>
+
+### Dropdown
+
+<Story story={stories.DropdownTrigger} />
+
+Allows the avatar to be used as a dropdown trigger.
+
+<Canvas>
+  <pds-avatar dropdown="true"></pds-avatar>
 </Canvas>
 
 ### Image
