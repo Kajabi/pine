@@ -13,6 +13,7 @@ export class PdsCard {
 
   /**
    * Determines whether the card should have a border.
+   * @defaultValue true
    */
   @Prop() border = true;
 
