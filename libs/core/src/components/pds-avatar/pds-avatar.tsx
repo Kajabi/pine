@@ -29,7 +29,7 @@ export class PdsAvatar {
    * The src for a custom user image.
    * @defaultValue null
    */
-  @Prop() image?: string | null;
+  @Prop() image?: string | null = null;
 
   /**
    * Size of the avatar. Value can be preset or custom.
@@ -106,7 +106,7 @@ export class PdsAvatar {
   private classNames = () => (
     {
       'pds-avatar': true,
-      [`pds-avatar--has-image`]: this.image !== undefined || null, // Remove when FF supports :has selector
+      [`pds-avatar--has-image`]: this.image !== '' && this.image !== null, // Remove when FF supports :has selector
       [`pds-avatar--${this.variant}`]: this.variant === 'admin'
     }
   );
