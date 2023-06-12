@@ -3,7 +3,7 @@ import { newE2EPage } from '@stencil/core/testing';
 describe('pds-checkbox', () => {
   it('toggles checked and unchecked', async () => {
     const page = await newE2EPage();
-    await page.setContent('<pds-checkbox checkbox-id="default" label="Label text" />');
+    await page.setContent('<pds-checkbox component-id="default" label="Label text" />');
 
     const component = await page.find('pds-checkbox');
     expect(component).toHaveClass('hydrated');
@@ -18,7 +18,7 @@ describe('pds-checkbox', () => {
 
   it('toggles input disabled state', async () => {
     const page = await newE2EPage();
-    await page.setContent('<pds-checkbox checkbox-id="default" label="Label text" />');
+    await page.setContent('<pds-checkbox component-id="default" label="Label text" />');
     const component = await page.find('pds-checkbox');
     expect(component).toHaveClass('hydrated');
 
@@ -34,7 +34,7 @@ describe('pds-checkbox', () => {
 
   it('emits "pdsCheckboxChange" event when checkbox is changed', async () => {
     const page = await newE2EPage();
-    await page.setContent('<pds-checkbox checkbox-id="default" label="Label text" />');
+    await page.setContent('<pds-checkbox component-id="default" label="Label text" />');
 
     const checkbox = await page.find('pds-checkbox >>> input');
     const eventSpy = await page.spyOnEvent('pdsCheckboxChange');
@@ -45,7 +45,7 @@ describe('pds-checkbox', () => {
 
   it('does not emit "pdsCheckboxChange" event when checkbox is changed and disabled', async () => {
     const page = await newE2EPage();
-    await page.setContent('<pds-checkbox checkbox-id="default" label="Label text" disabled />');
+    await page.setContent('<pds-checkbox component-id="default" label="Label text" disabled />');
 
     const checkbox = await page.find('pds-checkbox >>> input');
     const eventSpy = await page.spyOnEvent('pdsCheckboxChange');

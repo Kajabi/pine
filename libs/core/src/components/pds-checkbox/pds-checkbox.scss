@@ -1,19 +1,19 @@
 :host {
-  --checkbox-background-color-disabled: var(--pine-color-neutral-grey-200);
-  --checkbox-background-color-hover: var(--pine-color-neutral-grey-100);
-  --checkbox-border: var(--pine-border-interactive);
-  --checkbox-border-color-disabled: var(--pine-color-neutral-charcoal-100);
-  --checkbox-border-color-hover: var(--pine-border-interactive-hover-color);
-  --checkbox-border-radius: var(--pine-border-radius-xs);
-  --checkbox-color-checked: var(--pine-color-neutral-charcoal-500);
-  --checkbox-color-disabled: var(--pine-color-neutral-grey-300);
-  --checkbox-color-focus: var(--pine-color-primary-200);
-  --checkbox-color-invalid-focus: var(--pine-color-red-200);
-  --checkbox-color-invalid: var(--pine-color-red-300);
-  --checkbox-icon-border-color: var(--pine-color-base-white);
-  --checkbox-message-color-disabled: var(--pine-color-neutral-grey-500);
-  --checkbox-message-color: var(--pine-color-neutral-charcoal-200);
-  --checkbox-input-size: 16px;
+  --background-color-disabled: var(--pine-color-neutral-grey-200);
+  --background-color-hover: var(--pine-color-neutral-grey-100);
+  --border: var(--pine-border-interactive);
+  --border-color-disabled: var(--pine-color-neutral-charcoal-100);
+  --border-color-hover: var(--pine-border-interactive-hover-color);
+  --border-radius: var(--pine-border-radius-xs);
+  --color-checked: var(--pine-color-neutral-charcoal-500);
+  --color-disabled: var(--pine-color-neutral-grey-300);
+  --color-focus: var(--pine-color-primary-200);
+  --color-invalid-focus: var(--pine-color-red-200);
+  --color-invalid: var(--pine-color-red-300);
+  --icon-border-color: var(--pine-color-base-white);
+  --message-color-disabled: var(--pine-color-neutral-grey-500);
+  --message-color: var(--pine-color-neutral-charcoal-200);
+  --input-size: 16px;
 
   align-items: center;
   display: flex;
@@ -22,21 +22,21 @@
 
 :host(.is-invalid) {
   input {
-    border-color: var(--checkbox-color-invalid);
+    border-color: var(--color-invalid);
 
     &:checked {
-      background: var(--checkbox-color-invalid);
+      background: var(--color-invalid);
     }
 
     &:focus-visible {
-      box-shadow: 0 0 0 4px var(--checkbox-color-invalid-focus);
+      box-shadow: 0 0 0 4px var(--color-invalid-focus);
       outline: none;
     }
   }
 
   label,
   .pds-checkbox__message {
-    color: var(--checkbox-color-invalid);
+    color: var(--color-invalid);
   }
 }
 
@@ -51,24 +51,24 @@
 
 input {
   appearance: none;
-  border: var(--checkbox-border);
-  border-radius: var(--checkbox-border-radius);
-  height: var(--checkbox-input-size);
+  border: var(--border);
+  border-radius: var(--border-radius);
+  height: var(--input-size);
   margin: 0;
   position: relative;
-  width: var(--checkbox-input-size);
+  width: var(--input-size);
 
   &:hover {
-    background: var(--checkbox-background-color-hover);
-    border-color: var(--checkbox-border-color-hover);
+    background: var(--background-color-hover);
+    border-color: var(--border-color-hover);
   }
 
   &:checked {
-    background: var(--checkbox-color-checked);
-    border-color: var(--checkbox-color-checked);
+    background: var(--color-checked);
+    border-color: var(--color-checked);
 
     &::after {
-      border: 1px solid var(--checkbox-icon-border-color);
+      border: 1px solid var(--border-color-icon);
       border-left: 0;
       border-top: 0;
       content: "";
@@ -83,31 +83,31 @@ input {
   }
 
   &:disabled {
-    background: var(--checkbox-background-color-disabled);
-    border-color: var(--checkbox-color-disabled);
+    background: var(--background-color-disabled);
+    border-color: var(--color-disabled);
     cursor: not-allowed;
 
     &:checked {
-      background: var(--checkbox-color-disabled);
-      border-color: var(--checkbox-color-disabled);
+      background: var(--color-disabled);
+      border-color: var(--color-disabled);
 
       &::after {
-        border-color: var(--checkbox-border-color-disabled);
+        border-color: var(--border-color-disabled);
       }
     }
 
     + label {
-      color: var(--checkbox-border-color-hover);
+      color: var(--border-color-hover);
       cursor: not-allowed;
     }
 
     ~ .pds-checkbox__message {
-      color: var(--checkbox-message-color-disabled);
+      color: var(--message-color-disabled);
     }
   }
 
   &:focus-visible {
-    box-shadow: 0 0 0 4px var(--checkbox-color-focus);
+    box-shadow: 0 0 0 4px var(--color-focus);
     outline: none;
   }
 }
@@ -117,7 +117,7 @@ label {
 }
 
 .pds-checkbox__message {
-  color: var(--checkbox-message-color);
+  color: var(--message-color);
   font-size: 14px;
   margin-block-start: 6px;
   margin-inline-start: 26px;
