@@ -1,0 +1,43 @@
+:host {
+  --background: var(--pine-color-base-white);
+  --border: var(--pine-border-interactive);
+  --border-radius: var(--pine-border-radius-lg);
+  --padding: var(--pine-spacing-md);
+  --padding-compact: var(--pine-spacing-sm);
+  --box-shadow-sm: var(--pine-box-shadow-sm);
+  --box-shadow-md: var(--pine-box-shadow-md);
+  --box-shadow-lg: var(--pine-box-shadow-lg);
+
+  background: var(--background-custom, var(--background));
+  border-radius: var(--border-radius);
+  display: block;
+  position: relative;
+}
+
+:host(.has-border) {
+  border: var(--border);
+}
+
+:host(.pds-card--padding-none) {
+  padding: 0;
+}
+
+:host(.pds-card--padding-sm) {
+  padding: var(--padding-compact);
+}
+
+:host(.pds-card--padding-md) {
+  padding: var(--padding);
+}
+
+:host(.pds-card--shadow-sm) {
+  box-shadow: var(--box-shadow-sm);
+}
+
+:host(.pds-card--shadow-md) {
+  box-shadow: var(--box-shadow-md);
+}
+
+:host(.pds-card--shadow-lg) {
+  box-shadow: var(--box-shadow-lg);
+}
