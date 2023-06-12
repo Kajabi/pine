@@ -1,0 +1,96 @@
+import { ArgsTable, Canvas, IconGallery, IconItem, Meta, Story } from '@storybook/addon-docs';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+import pdsIconsJson from '../../../../../icons/dist/pds-icons.json';
+
+import * as stories from './pds-icon.stories.js';
+
+export const argTypes = () => {
+  const extractedArgs = extractArgTypes('pds-icon');
+  extractedArgs.name.control.type = 'select';
+  extractedArgs.name.options = Object.values(pdsIconsJson["icons"]).map((icon) => (icon.name));
+  return extractedArgs;
+}
+
+<Meta title="components/Icon" component="pds-icon" argTypes={argTypes()}/>
+
+# Icon
+Displays Icons used with the Pine Design System
+
+## Guidelines
+
+Icons are an effective way to enforce the purpose of an experience. Icons are broken out into two main
+categories: Actions and Features. In order to ensure that the icons are adding to the clarity of an experience
+and not creating confusion, we adhere to two principles.
+
+<Story story={stories.Default} />
+
+<Canvas>
+  <pds-icon name="upload"></pds-icon>
+</Canvas>
+
+## Properties
+
+<ArgsTable of="pds-icon" />
+
+### color
+The `color` property allows the icon to render in the specified color. This can be either string or hex format.
+
+```
+<pds-icon name="youtube" color="blue"></pds-icon>
+<pds-icon name="youtube" color="#ff0000"></pds-icon>
+```
+
+The above examples will render the following output:
+<Canvas withSource="none">
+  <pds-icon name="youtube" color="blue"></pds-icon>
+  <pds-icon name="youtube" color="#ff0000"></pds-icon>
+</Canvas>
+
+### name
+The `name` property is the name of the svg filename.
+
+### size
+The `size` property includes several pre-defined values for ease of use:
+
+```
+<pds-icon name="upload" size="small"></pds-icon>
+<pds-icon name="upload"></pds-icon>
+<pds-icon name="upload" size="medium"></pds-icon>
+<pds-icon name="upload" size="large"></pds-icon>
+```
+
+The above examples will render the following output:
+<Canvas withSource="none">
+  <pds-icon name="upload" size="small"></pds-icon>
+  <pds-icon name="upload" size="normal"></pds-icon>
+  <pds-icon name="upload" size="medium"></pds-icon>
+  <pds-icon name="upload" size="large"></pds-icon>
+</Canvas>
+
+It also accepts any custom size attribute. For example:
+```
+<pds-icon name="upload" size="60px"></pds-icon>
+<pds-icon name="upload" size="2rem"></pds-icon>
+```
+
+will render the following output:
+<Canvas withSource="none">
+  <pds-icon name="upload" size="60px"></pds-icon>
+  <pds-icon name="upload" size="2rem"></pds-icon>
+</Canvas>
+
+export const IconItems = (args) => (
+  Object.values(pdsIconsJson["icons"]).map((icon, index) => (
+    <IconItem key={`item-${index}`} name={icon.name}>
+      <pds-icon name={icon.name}></pds-icon>
+    </IconItem>
+  ))
+)
+
+# Icons
+<Canvas withSource="none">
+  <IconGallery>
+    <IconItems />
+  </IconGallery>
+</Canvas>

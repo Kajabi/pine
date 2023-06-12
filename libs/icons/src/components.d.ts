@@ -6,7 +6,7 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
-    interface SageIcon {
+    interface PdsIcon {
         /**
           * The color of the icon
          */
@@ -27,18 +27,18 @@ export namespace Components {
     }
 }
 declare global {
-    interface HTMLSageIconElement extends Components.SageIcon, HTMLStencilElement {
+    interface HTMLPdsIconElement extends Components.PdsIcon, HTMLStencilElement {
     }
-    var HTMLSageIconElement: {
-        prototype: HTMLSageIconElement;
-        new (): HTMLSageIconElement;
+    var HTMLPdsIconElement: {
+        prototype: HTMLPdsIconElement;
+        new (): HTMLPdsIconElement;
     };
     interface HTMLElementTagNameMap {
-        "sage-icon": HTMLSageIconElement;
+        "pds-icon": HTMLPdsIconElement;
     }
 }
 declare namespace LocalJSX {
-    interface SageIcon {
+    interface PdsIcon {
         /**
           * The color of the icon
          */
@@ -58,14 +58,14 @@ declare namespace LocalJSX {
     | string;
     }
     interface IntrinsicElements {
-        "sage-icon": SageIcon;
+        "pds-icon": PdsIcon;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "sage-icon": LocalJSX.SageIcon & JSXBase.HTMLAttributes<HTMLSageIconElement>;
+            "pds-icon": LocalJSX.PdsIcon & JSXBase.HTMLAttributes<HTMLPdsIconElement>;
         }
     }
 }

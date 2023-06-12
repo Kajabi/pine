@@ -5,23 +5,9 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { TextareaChangeEventDetail } from "./components/sage-textarea/textarea-interface";
+import { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
-    interface MyComponent {
-        /**
-          * The first name
-         */
-        "first": string;
-        /**
-          * The last name
-         */
-        "last": string;
-        /**
-          * The middle name
-         */
-        "middle": string;
-    }
-    interface SageButton {
+    interface PdsButton {
         /**
           * Toggles disabled state of button
           * @defaultValue false
@@ -49,7 +35,7 @@ export namespace Components {
          */
         "variant": 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
     }
-    interface SageCheckbox {
+    interface PdsCheckbox {
         /**
           * It determines whether or not the checkbox is checked.
          */
@@ -91,7 +77,7 @@ export namespace Components {
          */
         "value": string;
     }
-    interface SageChip {
+    interface PdsChip {
         /**
           * Determines whether a dot should be displayed on the chip.
           * @defaultValue false
@@ -117,7 +103,7 @@ export namespace Components {
          */
         "variant": 'text' | 'tag' | 'dropdown';
     }
-    interface SageDivider {
+    interface PdsDivider {
         /**
           * Adds offset margin/padding to expand the width (horizontal) or the height (vertical) of divider.
          */
@@ -128,7 +114,7 @@ export namespace Components {
          */
         "vertical": boolean;
     }
-    interface SageImage {
+    interface PdsImage {
         /**
           * The image's alt tag. If none is provided, it will default to an empty string.
          */
@@ -158,7 +144,7 @@ export namespace Components {
          */
         "width"?: number;
     }
-    interface SageInput {
+    interface PdsInput {
         /**
           * Indicates whether or not the input field is disabled
          */
@@ -209,7 +195,7 @@ export namespace Components {
          */
         "value"?: string;
     }
-    interface SageLink {
+    interface PdsLink {
         /**
           * When enabled, opens link in a new tab.
           * @defaultValue false
@@ -229,7 +215,7 @@ export namespace Components {
          */
         "variant": 'inline' | 'plain';
     }
-    interface SageSwitch {
+    interface PdsSwitch {
         /**
           * Determines the input 'checked' state
          */
@@ -276,26 +262,26 @@ export namespace Components {
          */
         "value": string;
     }
-    interface SageTab {
+    interface PdsTab {
         "index": number;
         /**
-          * Sets the related tab name, this name must match a `sage-tabpanel`'s tab name property
+          * Sets the related tab name, this name must match a `pds-tabpanel`'s tab name property
          */
         "name": string;
         "parentComponentId": string;
         "selected": boolean;
         "variant": string;
     }
-    interface SageTabpanel {
+    interface PdsTabpanel {
         /**
-          * Sets the related tab name, this name must match a `sage-tab`'s tab name property
+          * Sets the related tab name, this name must match a `pds-tab`'s tab name property
          */
         "name": string;
         "parentComponentId": string;
         "selected": boolean;
         "variant": string;
     }
-    interface SageTabs {
+    interface PdsTabs {
         "activeTabIndex": number;
         /**
           * Sets the starting active tab name and maintains the name as the component re-renders
@@ -314,7 +300,7 @@ export namespace Components {
          */
         "variant": 'primary' | 'availability' | 'filter';
     }
-    interface SageTextarea {
+    interface PdsTextarea {
         /**
           * A unique identifier for the textarea
          */
@@ -368,7 +354,7 @@ export namespace Components {
          */
         "value"?: string;
     }
-    interface SageTooltip {
+    interface PdsTooltip {
         /**
           * Id used to reference the component
          */
@@ -418,152 +404,131 @@ export namespace Components {
         "showTooltip": () => Promise<void>;
     }
 }
-export interface SageCheckboxCustomEvent<T> extends CustomEvent<T> {
+export interface PdsCheckboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
-    target: HTMLSageCheckboxElement;
+    target: HTMLPdsCheckboxElement;
 }
-export interface SageChipCustomEvent<T> extends CustomEvent<T> {
+export interface PdsChipCustomEvent<T> extends CustomEvent<T> {
     detail: T;
-    target: HTMLSageChipElement;
+    target: HTMLPdsChipElement;
 }
-export interface SageInputCustomEvent<T> extends CustomEvent<T> {
+export interface PdsInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
-    target: HTMLSageInputElement;
+    target: HTMLPdsInputElement;
 }
-export interface SageSwitchCustomEvent<T> extends CustomEvent<T> {
+export interface PdsSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
-    target: HTMLSageSwitchElement;
+    target: HTMLPdsSwitchElement;
 }
-export interface SageTabCustomEvent<T> extends CustomEvent<T> {
+export interface PdsTabCustomEvent<T> extends CustomEvent<T> {
     detail: T;
-    target: HTMLSageTabElement;
+    target: HTMLPdsTabElement;
 }
-export interface SageTextareaCustomEvent<T> extends CustomEvent<T> {
+export interface PdsTextareaCustomEvent<T> extends CustomEvent<T> {
     detail: T;
-    target: HTMLSageTextareaElement;
+    target: HTMLPdsTextareaElement;
 }
-export interface SageTooltipCustomEvent<T> extends CustomEvent<T> {
+export interface PdsTooltipCustomEvent<T> extends CustomEvent<T> {
     detail: T;
-    target: HTMLSageTooltipElement;
+    target: HTMLPdsTooltipElement;
 }
 declare global {
-    interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
+    interface HTMLPdsButtonElement extends Components.PdsButton, HTMLStencilElement {
     }
-    var HTMLMyComponentElement: {
-        prototype: HTMLMyComponentElement;
-        new (): HTMLMyComponentElement;
+    var HTMLPdsButtonElement: {
+        prototype: HTMLPdsButtonElement;
+        new (): HTMLPdsButtonElement;
     };
-    interface HTMLSageButtonElement extends Components.SageButton, HTMLStencilElement {
+    interface HTMLPdsCheckboxElement extends Components.PdsCheckbox, HTMLStencilElement {
     }
-    var HTMLSageButtonElement: {
-        prototype: HTMLSageButtonElement;
-        new (): HTMLSageButtonElement;
+    var HTMLPdsCheckboxElement: {
+        prototype: HTMLPdsCheckboxElement;
+        new (): HTMLPdsCheckboxElement;
     };
-    interface HTMLSageCheckboxElement extends Components.SageCheckbox, HTMLStencilElement {
+    interface HTMLPdsChipElement extends Components.PdsChip, HTMLStencilElement {
     }
-    var HTMLSageCheckboxElement: {
-        prototype: HTMLSageCheckboxElement;
-        new (): HTMLSageCheckboxElement;
+    var HTMLPdsChipElement: {
+        prototype: HTMLPdsChipElement;
+        new (): HTMLPdsChipElement;
     };
-    interface HTMLSageChipElement extends Components.SageChip, HTMLStencilElement {
+    interface HTMLPdsDividerElement extends Components.PdsDivider, HTMLStencilElement {
     }
-    var HTMLSageChipElement: {
-        prototype: HTMLSageChipElement;
-        new (): HTMLSageChipElement;
+    var HTMLPdsDividerElement: {
+        prototype: HTMLPdsDividerElement;
+        new (): HTMLPdsDividerElement;
     };
-    interface HTMLSageDividerElement extends Components.SageDivider, HTMLStencilElement {
+    interface HTMLPdsImageElement extends Components.PdsImage, HTMLStencilElement {
     }
-    var HTMLSageDividerElement: {
-        prototype: HTMLSageDividerElement;
-        new (): HTMLSageDividerElement;
+    var HTMLPdsImageElement: {
+        prototype: HTMLPdsImageElement;
+        new (): HTMLPdsImageElement;
     };
-    interface HTMLSageImageElement extends Components.SageImage, HTMLStencilElement {
+    interface HTMLPdsInputElement extends Components.PdsInput, HTMLStencilElement {
     }
-    var HTMLSageImageElement: {
-        prototype: HTMLSageImageElement;
-        new (): HTMLSageImageElement;
+    var HTMLPdsInputElement: {
+        prototype: HTMLPdsInputElement;
+        new (): HTMLPdsInputElement;
     };
-    interface HTMLSageInputElement extends Components.SageInput, HTMLStencilElement {
+    interface HTMLPdsLinkElement extends Components.PdsLink, HTMLStencilElement {
     }
-    var HTMLSageInputElement: {
-        prototype: HTMLSageInputElement;
-        new (): HTMLSageInputElement;
+    var HTMLPdsLinkElement: {
+        prototype: HTMLPdsLinkElement;
+        new (): HTMLPdsLinkElement;
     };
-    interface HTMLSageLinkElement extends Components.SageLink, HTMLStencilElement {
+    interface HTMLPdsSwitchElement extends Components.PdsSwitch, HTMLStencilElement {
     }
-    var HTMLSageLinkElement: {
-        prototype: HTMLSageLinkElement;
-        new (): HTMLSageLinkElement;
+    var HTMLPdsSwitchElement: {
+        prototype: HTMLPdsSwitchElement;
+        new (): HTMLPdsSwitchElement;
     };
-    interface HTMLSageSwitchElement extends Components.SageSwitch, HTMLStencilElement {
+    interface HTMLPdsTabElement extends Components.PdsTab, HTMLStencilElement {
     }
-    var HTMLSageSwitchElement: {
-        prototype: HTMLSageSwitchElement;
-        new (): HTMLSageSwitchElement;
+    var HTMLPdsTabElement: {
+        prototype: HTMLPdsTabElement;
+        new (): HTMLPdsTabElement;
     };
-    interface HTMLSageTabElement extends Components.SageTab, HTMLStencilElement {
+    interface HTMLPdsTabpanelElement extends Components.PdsTabpanel, HTMLStencilElement {
     }
-    var HTMLSageTabElement: {
-        prototype: HTMLSageTabElement;
-        new (): HTMLSageTabElement;
+    var HTMLPdsTabpanelElement: {
+        prototype: HTMLPdsTabpanelElement;
+        new (): HTMLPdsTabpanelElement;
     };
-    interface HTMLSageTabpanelElement extends Components.SageTabpanel, HTMLStencilElement {
+    interface HTMLPdsTabsElement extends Components.PdsTabs, HTMLStencilElement {
     }
-    var HTMLSageTabpanelElement: {
-        prototype: HTMLSageTabpanelElement;
-        new (): HTMLSageTabpanelElement;
+    var HTMLPdsTabsElement: {
+        prototype: HTMLPdsTabsElement;
+        new (): HTMLPdsTabsElement;
     };
-    interface HTMLSageTabsElement extends Components.SageTabs, HTMLStencilElement {
+    interface HTMLPdsTextareaElement extends Components.PdsTextarea, HTMLStencilElement {
     }
-    var HTMLSageTabsElement: {
-        prototype: HTMLSageTabsElement;
-        new (): HTMLSageTabsElement;
+    var HTMLPdsTextareaElement: {
+        prototype: HTMLPdsTextareaElement;
+        new (): HTMLPdsTextareaElement;
     };
-    interface HTMLSageTextareaElement extends Components.SageTextarea, HTMLStencilElement {
+    interface HTMLPdsTooltipElement extends Components.PdsTooltip, HTMLStencilElement {
     }
-    var HTMLSageTextareaElement: {
-        prototype: HTMLSageTextareaElement;
-        new (): HTMLSageTextareaElement;
-    };
-    interface HTMLSageTooltipElement extends Components.SageTooltip, HTMLStencilElement {
-    }
-    var HTMLSageTooltipElement: {
-        prototype: HTMLSageTooltipElement;
-        new (): HTMLSageTooltipElement;
+    var HTMLPdsTooltipElement: {
+        prototype: HTMLPdsTooltipElement;
+        new (): HTMLPdsTooltipElement;
     };
     interface HTMLElementTagNameMap {
-        "my-component": HTMLMyComponentElement;
-        "sage-button": HTMLSageButtonElement;
-        "sage-checkbox": HTMLSageCheckboxElement;
-        "sage-chip": HTMLSageChipElement;
-        "sage-divider": HTMLSageDividerElement;
-        "sage-image": HTMLSageImageElement;
-        "sage-input": HTMLSageInputElement;
-        "sage-link": HTMLSageLinkElement;
-        "sage-switch": HTMLSageSwitchElement;
-        "sage-tab": HTMLSageTabElement;
-        "sage-tabpanel": HTMLSageTabpanelElement;
-        "sage-tabs": HTMLSageTabsElement;
-        "sage-textarea": HTMLSageTextareaElement;
-        "sage-tooltip": HTMLSageTooltipElement;
+        "pds-button": HTMLPdsButtonElement;
+        "pds-checkbox": HTMLPdsCheckboxElement;
+        "pds-chip": HTMLPdsChipElement;
+        "pds-divider": HTMLPdsDividerElement;
+        "pds-image": HTMLPdsImageElement;
+        "pds-input": HTMLPdsInputElement;
+        "pds-link": HTMLPdsLinkElement;
+        "pds-switch": HTMLPdsSwitchElement;
+        "pds-tab": HTMLPdsTabElement;
+        "pds-tabpanel": HTMLPdsTabpanelElement;
+        "pds-tabs": HTMLPdsTabsElement;
+        "pds-textarea": HTMLPdsTextareaElement;
+        "pds-tooltip": HTMLPdsTooltipElement;
     }
 }
 declare namespace LocalJSX {
-    interface MyComponent {
-        /**
-          * The first name
-         */
-        "first"?: string;
-        /**
-          * The last name
-         */
-        "last"?: string;
-        /**
-          * The middle name
-         */
-        "middle"?: string;
-    }
-    interface SageButton {
+    interface PdsButton {
         /**
           * Toggles disabled state of button
           * @defaultValue false
@@ -591,7 +556,7 @@ declare namespace LocalJSX {
          */
         "variant"?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
     }
-    interface SageCheckbox {
+    interface PdsCheckbox {
         /**
           * It determines whether or not the checkbox is checked.
          */
@@ -627,7 +592,7 @@ declare namespace LocalJSX {
         /**
           * Emits a boolean indicating whether the checkbox is currently checked or unchecked.
          */
-        "onSageCheckboxChange"?: (event: SageCheckboxCustomEvent<boolean>) => void;
+        "onPdsCheckboxChange"?: (event: PdsCheckboxCustomEvent<boolean>) => void;
         /**
           * It determines whether or not the checkbox is required.
          */
@@ -637,7 +602,7 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
-    interface SageChip {
+    interface PdsChip {
         /**
           * Determines whether a dot should be displayed on the chip.
           * @defaultValue false
@@ -655,7 +620,7 @@ declare namespace LocalJSX {
         /**
           * Event when close button is clicked on tag variant.
          */
-        "onSageTagCloseClick"?: (event: SageChipCustomEvent<any>) => void;
+        "onPdsTagCloseClick"?: (event: PdsChipCustomEvent<any>) => void;
         /**
           * Sets the color scheme of the chip.
           * @defaultValue 'neutral'
@@ -667,7 +632,7 @@ declare namespace LocalJSX {
          */
         "variant"?: 'text' | 'tag' | 'dropdown';
     }
-    interface SageDivider {
+    interface PdsDivider {
         /**
           * Adds offset margin/padding to expand the width (horizontal) or the height (vertical) of divider.
          */
@@ -678,7 +643,7 @@ declare namespace LocalJSX {
          */
         "vertical"?: boolean;
     }
-    interface SageImage {
+    interface PdsImage {
         /**
           * The image's alt tag. If none is provided, it will default to an empty string.
          */
@@ -708,7 +673,7 @@ declare namespace LocalJSX {
          */
         "width"?: number;
     }
-    interface SageInput {
+    interface PdsInput {
         /**
           * Indicates whether or not the input field is disabled
          */
@@ -740,7 +705,7 @@ declare namespace LocalJSX {
         /**
           * Emitted when a keyboard input occurred
          */
-        "onSageInput"?: (event: SageInputCustomEvent<InputEvent>) => void;
+        "onPdsInput"?: (event: PdsInputCustomEvent<InputEvent>) => void;
         /**
           * Specifies a short hint that describes the expected value of the input field
          */
@@ -763,7 +728,7 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
-    interface SageLink {
+    interface PdsLink {
         /**
           * When enabled, opens link in a new tab.
           * @defaultValue false
@@ -783,7 +748,7 @@ declare namespace LocalJSX {
          */
         "variant"?: 'inline' | 'plain';
     }
-    interface SageSwitch {
+    interface PdsSwitch {
         /**
           * Determines the input 'checked' state
          */
@@ -819,7 +784,7 @@ declare namespace LocalJSX {
         /**
           * Emits an event on input change
          */
-        "onSageSwitchChange"?: (event: SageSwitchCustomEvent<InputEvent>) => void;
+        "onPdsSwitchChange"?: (event: PdsSwitchCustomEvent<InputEvent>) => void;
         /**
           * Determines the 'required' state of the input
          */
@@ -834,27 +799,27 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
-    interface SageTab {
+    interface PdsTab {
         "index"?: number;
         /**
-          * Sets the related tab name, this name must match a `sage-tabpanel`'s tab name property
+          * Sets the related tab name, this name must match a `pds-tabpanel`'s tab name property
          */
         "name": string;
-        "onTabClick"?: (event: SageTabCustomEvent<object>) => void;
+        "onTabClick"?: (event: PdsTabCustomEvent<object>) => void;
         "parentComponentId"?: string;
         "selected"?: boolean;
         "variant"?: string;
     }
-    interface SageTabpanel {
+    interface PdsTabpanel {
         /**
-          * Sets the related tab name, this name must match a `sage-tab`'s tab name property
+          * Sets the related tab name, this name must match a `pds-tab`'s tab name property
          */
         "name": string;
         "parentComponentId"?: string;
         "selected"?: boolean;
         "variant"?: string;
     }
-    interface SageTabs {
+    interface PdsTabs {
         "activeTabIndex"?: number;
         /**
           * Sets the starting active tab name and maintains the name as the component re-renders
@@ -873,7 +838,7 @@ declare namespace LocalJSX {
          */
         "variant": 'primary' | 'availability' | 'filter';
     }
-    interface SageTextarea {
+    interface PdsTextarea {
         /**
           * A unique identifier for the textarea
          */
@@ -907,7 +872,7 @@ declare namespace LocalJSX {
         /**
           * Event emitted whenever the value of the textarea changes
          */
-        "onSageTextareaChange"?: (event: SageTextareaCustomEvent<TextareaChangeEventDetail>) => void;
+        "onPdsTextareaChange"?: (event: PdsTextareaCustomEvent<TextareaChangeEventDetail>) => void;
         /**
           * Specifies a short hint that describes the expected value of the textarea
          */
@@ -931,7 +896,7 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
-    interface SageTooltip {
+    interface PdsTooltip {
         /**
           * Id used to reference the component
          */
@@ -953,11 +918,11 @@ declare namespace LocalJSX {
         /**
           * Emitted after a tooltip is closed
          */
-        "onSageTooltipHide"?: (event: SageTooltipCustomEvent<any>) => void;
+        "onPdsTooltipHide"?: (event: PdsTooltipCustomEvent<any>) => void;
         /**
           * Emitted after a tooltip is shown
          */
-        "onSageTooltipShow"?: (event: SageTooltipCustomEvent<any>) => void;
+        "onPdsTooltipShow"?: (event: PdsTooltipCustomEvent<any>) => void;
         /**
           * Determines whether or not the tooltip is visible
           * @defaultValue false
@@ -981,40 +946,38 @@ declare namespace LocalJSX {
     | 'left-end';
     }
     interface IntrinsicElements {
-        "my-component": MyComponent;
-        "sage-button": SageButton;
-        "sage-checkbox": SageCheckbox;
-        "sage-chip": SageChip;
-        "sage-divider": SageDivider;
-        "sage-image": SageImage;
-        "sage-input": SageInput;
-        "sage-link": SageLink;
-        "sage-switch": SageSwitch;
-        "sage-tab": SageTab;
-        "sage-tabpanel": SageTabpanel;
-        "sage-tabs": SageTabs;
-        "sage-textarea": SageTextarea;
-        "sage-tooltip": SageTooltip;
+        "pds-button": PdsButton;
+        "pds-checkbox": PdsCheckbox;
+        "pds-chip": PdsChip;
+        "pds-divider": PdsDivider;
+        "pds-image": PdsImage;
+        "pds-input": PdsInput;
+        "pds-link": PdsLink;
+        "pds-switch": PdsSwitch;
+        "pds-tab": PdsTab;
+        "pds-tabpanel": PdsTabpanel;
+        "pds-tabs": PdsTabs;
+        "pds-textarea": PdsTextarea;
+        "pds-tooltip": PdsTooltip;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
-            "sage-button": LocalJSX.SageButton & JSXBase.HTMLAttributes<HTMLSageButtonElement>;
-            "sage-checkbox": LocalJSX.SageCheckbox & JSXBase.HTMLAttributes<HTMLSageCheckboxElement>;
-            "sage-chip": LocalJSX.SageChip & JSXBase.HTMLAttributes<HTMLSageChipElement>;
-            "sage-divider": LocalJSX.SageDivider & JSXBase.HTMLAttributes<HTMLSageDividerElement>;
-            "sage-image": LocalJSX.SageImage & JSXBase.HTMLAttributes<HTMLSageImageElement>;
-            "sage-input": LocalJSX.SageInput & JSXBase.HTMLAttributes<HTMLSageInputElement>;
-            "sage-link": LocalJSX.SageLink & JSXBase.HTMLAttributes<HTMLSageLinkElement>;
-            "sage-switch": LocalJSX.SageSwitch & JSXBase.HTMLAttributes<HTMLSageSwitchElement>;
-            "sage-tab": LocalJSX.SageTab & JSXBase.HTMLAttributes<HTMLSageTabElement>;
-            "sage-tabpanel": LocalJSX.SageTabpanel & JSXBase.HTMLAttributes<HTMLSageTabpanelElement>;
-            "sage-tabs": LocalJSX.SageTabs & JSXBase.HTMLAttributes<HTMLSageTabsElement>;
-            "sage-textarea": LocalJSX.SageTextarea & JSXBase.HTMLAttributes<HTMLSageTextareaElement>;
-            "sage-tooltip": LocalJSX.SageTooltip & JSXBase.HTMLAttributes<HTMLSageTooltipElement>;
+            "pds-button": LocalJSX.PdsButton & JSXBase.HTMLAttributes<HTMLPdsButtonElement>;
+            "pds-checkbox": LocalJSX.PdsCheckbox & JSXBase.HTMLAttributes<HTMLPdsCheckboxElement>;
+            "pds-chip": LocalJSX.PdsChip & JSXBase.HTMLAttributes<HTMLPdsChipElement>;
+            "pds-divider": LocalJSX.PdsDivider & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
+            "pds-image": LocalJSX.PdsImage & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
+            "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
+            "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
+            "pds-switch": LocalJSX.PdsSwitch & JSXBase.HTMLAttributes<HTMLPdsSwitchElement>;
+            "pds-tab": LocalJSX.PdsTab & JSXBase.HTMLAttributes<HTMLPdsTabElement>;
+            "pds-tabpanel": LocalJSX.PdsTabpanel & JSXBase.HTMLAttributes<HTMLPdsTabpanelElement>;
+            "pds-tabs": LocalJSX.PdsTabs & JSXBase.HTMLAttributes<HTMLPdsTabsElement>;
+            "pds-textarea": LocalJSX.PdsTextarea & JSXBase.HTMLAttributes<HTMLPdsTextareaElement>;
+            "pds-tooltip": LocalJSX.PdsTooltip & JSXBase.HTMLAttributes<HTMLPdsTooltipElement>;
         }
     }
 }

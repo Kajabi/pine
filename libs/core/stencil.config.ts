@@ -6,7 +6,7 @@ import { reactOutputTarget } from '@stencil/react-output-target';
 import { sass } from '@stencil/sass';
 
 export const config: Config = {
-  namespace: 'sage-core',
+  namespace: 'pine-core',
   globalStyle: 'src/global/styles/app.scss',
   outputTargets: [
     {
@@ -32,7 +32,7 @@ export const config: Config = {
       serviceWorker: null, // disable service workers
     },
     reactOutputTarget({
-      componentCorePackage: '@sage/core',
+      componentCorePackage: '@pine-ds/core',
       includeDefineCustomElements: true,
       includePolyfills: true,
       proxiesFile: '../../libs/react/src/components/proxies.ts',

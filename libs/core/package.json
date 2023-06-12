@@ -1,11 +1,11 @@
 {
-  "name": "@sage/core",
+  "name": "@pine-ds/core",
   "version": "0.0.1",
   "license": "MIT",
-  "description": "Base components for Sage Design System",
+  "description": "Base components for Pine Design System",
   "author": "Kajabi Design System Services",
   "keywords": [
-    "sage",
+    "pine",
     "stencil",
     "framework",
     "web components",
@@ -25,10 +25,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kajabi/sage.git"
+    "url": "https://github.com/kajabi/pine.git"
   },
   "bugs": {
-    "url": "https://github.com/kajab/sage/issues"
+    "url": "https://github.com/kajab/pine/issues"
   },
   "files": [
     "dist/",
@@ -52,7 +52,7 @@
     "test.watch": "stencil test --spec --e2e --watchAll --coverage"
   },
   "dependencies": {
-    "@sage/icons": "*",
+    "@pine-ds/icons": "*",
     "@stencil/core": "^2.18.0"
   },
   "devDependencies": {

@@ -1,0 +1,116 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+import * as stories from './pds-textarea.stories.js';
+
+<Meta
+  title="components/Textarea"
+  component="pds-textarea"
+  argTypes={extractArgTypes('pds-textarea')}
+  args={{
+    componentId: null,
+    disabled: false,
+    errorMessage: null,
+    hintMessage: null,
+    invalid: false,
+    label: null,
+    name: null,
+    placeholder: null,
+    readonly: false,
+    required: false,
+    value: null,
+  }}
+/>
+
+# Textarea
+A textarea field coupled with a label, hint message, and error message which allows for user input and feedback
+
+## Guidelines
+### Usage
+
+#### When to use
+- You want a response longer than one line
+
+#### When not to use
+- To gather basic information, use an [Input](/docs/components-input--text)
+- You want a response that is one line of text, use an [Input](/docs/components-input--text)
+
+### Accessibility
+- The textarea component comes with a built-in label through the `label` property, it is strongly encouraged that you include it
+- Please provide clear and descriptive error, hint, and placeholder messages
+
+## Properties
+<ArgsTable of="pds-textarea" />
+
+## Variants
+
+### Default
+Basic textarea example
+<Story story={stories.Default} />
+
+<Canvas>
+  <pds-textarea name="Default" label="Name" component-id="textarea-default"></pds-textarea>
+</Canvas>
+
+### Disabled
+Disabled states can be set by the `disabled` property
+<Story story={stories.Disabled} />
+
+<Canvas>
+  <pds-textarea name="Disabled" label="Name" disabled="true" component-id="textarea-disabled"></pds-textarea>
+</Canvas>
+
+### Error Message
+Error messages are passed using the `error-message` property, textareas will only calculate their validity when on their `required` property is set to true
+
+You can also manually pass in an invalid state by setting the `invalid` property to true but this property will be update whenever the `onChange` event is triggered
+<Story story={stories.Invalid} />
+
+<Canvas>
+  <pds-textarea name="Invalid" label="Name" error-message="Error" invalid="true" required="true" component-id="textarea-invalid" ></pds-textarea>
+</Canvas>
+
+### Hint Message
+Hints are used to provide context about what is expected from the users
+
+Do not use hint messages to provide examples to users, please use the `placeholder` property instead
+<Story story={stories.Hint} />
+
+<Canvas>
+  <pds-textarea name="Hint" label="Name" hint-message="Hint" component-id="textarea-hint-message"></pds-textarea>
+</Canvas>
+
+### Placeholder
+Placeholders should be examples of content that can be filled into the textarea
+
+Do not use placeholders to provide hints to users, please use the `hint-message` property instead
+<Story story={stories.Placeholder} />
+
+<Canvas>
+  <pds-textarea name="Placeholder" label="Name" placeholder="Placeholder..." component-id="textarea-placeholder"></pds-textarea>
+</Canvas>
+
+### Readonly
+Readonly states can be used to display static content while preventing the user from editing
+<Story story={stories.Readonly} />
+
+<Canvas>
+  <pds-textarea name="Readonly" label="Name" readonly="true" value="Readonly Value" component-id="textarea-readonly"></pds-textarea>
+</Canvas>
+
+### Required
+It's recommended you also pass `error-message` on any required fields
+<Story story={stories.Required} />
+
+<Canvas>
+  <pds-textarea name="Required" label="Name" required="true" component-id="textarea-required"></pds-textarea>
+</Canvas>
+
+### Rows
+The rows property is used to pass a number of expected rows visible within the textarea
+<Story story={stories.Rows} />
+
+<Canvas>
+  <pds-textarea name="Rows" label="Name" rows="4" component-id="textarea-rows"></pds-textarea>
+</Canvas>

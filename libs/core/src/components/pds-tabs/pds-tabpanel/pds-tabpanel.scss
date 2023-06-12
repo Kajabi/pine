@@ -1,0 +1,13 @@
+:host {
+  display: block;
+}
+
+.pds-tabpanel {
+  display: none;
+  margin-top: var(--panel-margin-top);
+  padding: var(--panel-padding);
+
+  &.is-active {
+    display: block;
+  }
+}

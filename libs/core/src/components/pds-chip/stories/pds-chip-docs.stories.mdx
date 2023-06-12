@@ -1,0 +1,101 @@
+import { Meta, Story, Canvas, Source, ArgsTable } from '@storybook/addon-docs';
+import { html, render } from 'lit-html';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+import * as stories from './pds-chip.stories.js';
+
+<Meta title="components/Chip" component="pds-chip" argTypes={extractArgTypes('pds-chip')} />
+
+# Chip
+
+Chips are used to inform users of the status of an object or to relate properties to a parent. Commonly used in tabular data to indicate status.
+
+## Properties
+
+<ArgsTable of="pds-chip" />
+
+### Default
+
+<Story story={stories.Default} />
+
+<Canvas>
+  <pds-chip label="Label" />
+</Canvas>
+
+### Sentiment
+
+The `sentiment` property represents the named color scheme of the chip component.
+
+<Story story={stories.Sentiment} />
+
+<Canvas>
+  <pds-chip label="Accent" sentiment="accent" />
+  <pds-chip label="Danger" sentiment="danger" />
+  <pds-chip label="Info" sentiment="info" />
+  <pds-chip label="Neutral" sentiment="neutral" />
+  <pds-chip label="Success" sentiment="success" />
+  <pds-chip label="Warning" sentiment="warning" />
+</Canvas>
+
+### Dot
+
+A small circular indicator displayed within a chip. Dot colors are determined by the `sentiment` prop.
+
+<Story story={stories.Dots} />
+
+<Canvas>
+  <pds-chip label="Accent" sentiment="accent" dot />
+  <pds-chip label="Danger" sentiment="danger" dot />
+  <pds-chip label="Info" sentiment="info" dot />
+  <pds-chip label="Neutral" sentiment="neutral" dot/>
+  <pds-chip label="Success" sentiment="success" dot />
+  <pds-chip label="Warning" sentiment="warning" dot />
+</Canvas>
+
+### Dropdown
+
+If the `variant` property is set to `"dropdown"`, the chip will be rendered in a dropdown style, altering its appearance and behavior accordingly.
+
+Should be used in conjunction with the `pds-dropdown` component. <!-- TODO: Add link to dropdown component when available. -->
+
+<Story story={stories.Dropdown} />
+
+<Canvas>
+  <pds-chip label="Accent" sentiment="accent" variant="dropdown" />
+  <pds-chip label="Danger" sentiment="danger" variant="dropdown" />
+  <pds-chip label="Info" sentiment="info" variant="dropdown" />
+  <pds-chip label="Neutral" sentiment="neutral" variant="dropdown" />
+  <pds-chip label="Success" sentiment="success" variant="dropdown" />
+  <pds-chip label="Warning" sentiment="warning" variant="dropdown" />
+</Canvas>
+
+### Tag
+
+If the `variant` property is set to `"tag"`, the chip will be rendered in a tag style, altering its appearance and behavior accordingly.
+
+Tag is often used to represent a selected item or a removable element and includes a close button that can be clicked to perform an associated action.
+
+<Story story={stories.Tag} />
+
+<Canvas>
+  <pds-chip label="Accent" sentiment="accent" variant="tag" />
+  <pds-chip label="Danger" sentiment="danger" variant="tag" />
+  <pds-chip label="Info" sentiment="info" variant="tag" />
+  <pds-chip label="Neutral" sentiment="neutral" variant="tag" />
+  <pds-chip label="Success" sentiment="success" variant="tag" />
+  <pds-chip label="Warning" sentiment="warning" variant="tag" />
+</Canvas>
+
+### Large
+
+Large chips will be displayed with a larger visual footprint compared to the default size.
+
+<Story story={stories.Large} />
+
+<Canvas>
+  <pds-chip label="Accent" sentiment="accent" variant="text" large />
+  <pds-chip label="Danger" sentiment="danger" dot large />
+  <pds-chip label="Info" sentiment="info" variant="dropdown" large />
+  <pds-chip label="Success" sentiment="success" variant="tag" large />
+</Canvas>

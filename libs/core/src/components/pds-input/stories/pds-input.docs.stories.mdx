@@ -1,0 +1,124 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+import * as stories from './pds-input.stories.js';
+
+<Meta
+  title="components/Input"
+  component="pds-input"
+  argTypes={extractArgTypes('pds-input')}
+  args={{
+    disabled: false,
+    errorText: null,
+    hint: null,
+    name: null,
+    placeholder: null,
+    readonly: false,
+    required: false,
+    type: 'text'
+}}
+/>
+
+# Input
+
+<p>
+  An input field coupled with a label and error text which allows for user input and feedback.
+</p>
+
+## Guidelines
+### Usage
+
+#### When to use
+- To gather basic usage information
+- You want a response that is one line of text
+
+#### When not to use
+- You want a response longer than one line, use a [Textarea](/docs/components-textarea--default)
+- You want a response from a predefined list, use a select (TODO: create select and link here)
+
+
+### Accessibility
+- The input component comes with a built-in label through the `label` property, it is strongly encouraged that you include it
+- Please provide clear and descriptive error, hint, and placeholder messages
+- Do not use a `placeholder` to communicate the field label, use a `label` property
+
+## Properties
+<ArgsTable of="pds-input" />
+
+## Variants
+
+### Text
+<p>The type of input used varies based on the type of information you look to capture. The `text` default type allows for any type of single line data.</p>
+
+<Story story={stories.Text} />
+
+<Canvas>
+  <pds-input label="Name" type="text" value="Frank Dux"></pds-input>
+</Canvas>
+
+### Email
+<p>This is used when the input type is `email`.</p>
+
+<Story story={stories.Email} />
+
+<Canvas>
+  <pds-input label="Name" type="email" value="Frank Dux"></pds-input>
+</Canvas>
+
+### Required
+<p>Indicates that the user must specify a value for the input before the owning form can be submitted.</p>
+
+<Story story={stories.Required} />
+
+<Canvas>
+  <pds-input label="Name" type="email" required="true" value="Frank Dux"></pds-input>
+</Canvas>
+
+### Placeholder
+<p>Provides a short, non-essential hint about the expected input.</p>
+
+<Story story={stories.Placeholder} />
+
+<Canvas>
+  <pds-input label="Name" type="email" placeholder="123@email.com" value="Frank Dux"></pds-input>
+</Canvas>
+
+### Disabled
+<p>Removes all interactive behavior from the text field and provides a visual treatment.</p>
+
+<Story story={stories.Disabled} />
+
+<Canvas>
+  <pds-input label="Name" type="email" disabled="true" value="Frank Dux"></pds-input>
+</Canvas>
+
+### Readonly
+<p>Removes the ability to interact with the text field. If a value is present, that is still passed to the form.</p>
+
+<Story story={stories.Readonly} />
+
+<Canvas>
+  <pds-input label="Name" type="email" readonly="true" value="Frank Dux"></pds-input>
+</Canvas>
+
+### Hint
+<p>A `hint` is used to provide additional information about how to complete the text field.</p>
+
+<Story story={stories.Hint} />
+
+<Canvas>
+  <pds-input label="Name" type="email" hint="Please use the correct format" value="Frank Dux"></pds-input>
+</Canvas>
+
+### Error
+<p>When `errorText` is present, the input displays the error message and provides a visual treatment.</p>
+
+<Story story={stories.Error} />
+
+<Canvas>
+  <pds-input label="Name" type="email" error-text="Please provide a valid Email address" value="Frank Dux"></pds-input>
+</Canvas>
+
+## Additional Links
+
