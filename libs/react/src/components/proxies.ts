@@ -10,6 +10,7 @@ import { applyPolyfills, defineCustomElements } from '@pine-ds/core/loader';
 applyPolyfills().then(() => defineCustomElements());
 export const PdsAvatar = /*@__PURE__*/createReactComponent<JSX.PdsAvatar, HTMLPdsAvatarElement>('pds-avatar');
 export const PdsButton = /*@__PURE__*/createReactComponent<JSX.PdsButton, HTMLPdsButtonElement>('pds-button');
+export const PdsCard = /*@__PURE__*/createReactComponent<JSX.PdsCard, HTMLPdsCardElement>('pds-card');
 export const PdsCheckbox = /*@__PURE__*/createReactComponent<JSX.PdsCheckbox, HTMLPdsCheckboxElement>('pds-checkbox');
 export const PdsChip = /*@__PURE__*/createReactComponent<JSX.PdsChip, HTMLPdsChipElement>('pds-chip');
 export const PdsCopytext = /*@__PURE__*/createReactComponent<JSX.PdsCopytext, HTMLPdsCopytextElement>('pds-copytext');

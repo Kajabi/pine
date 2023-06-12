@@ -81,6 +81,24 @@ export namespace Components {
          */
         "variant": 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled';
     }
+    interface PdsCard {
+        /**
+          * Sets a background color on the card.
+         */
+        "bgColor": string;
+        /**
+          * Determines whether the card should have a border.
+         */
+        "border": boolean;
+        /**
+          * Sets the padding size for the card.
+         */
+        "padding": 'sm' | 'md' | 'none';
+        /**
+          * Sets the shadow size for the card.
+         */
+        "shadow": 'sm' | 'md' | 'lg';
+    }
     interface PdsCheckbox {
         /**
           * It determines whether or not the checkbox is checked.
@@ -659,6 +677,12 @@ declare global {
         prototype: HTMLPdsButtonElement;
         new (): HTMLPdsButtonElement;
     };
+    interface HTMLPdsCardElement extends Components.PdsCard, HTMLStencilElement {
+    }
+    var HTMLPdsCardElement: {
+        prototype: HTMLPdsCardElement;
+        new (): HTMLPdsCardElement;
+    };
     interface HTMLPdsCheckboxElement extends Components.PdsCheckbox, HTMLStencilElement {
     }
     var HTMLPdsCheckboxElement: {
@@ -764,6 +788,7 @@ declare global {
     interface HTMLElementTagNameMap {
         "pds-avatar": HTMLPdsAvatarElement;
         "pds-button": HTMLPdsButtonElement;
+        "pds-card": HTMLPdsCardElement;
         "pds-checkbox": HTMLPdsCheckboxElement;
         "pds-chip": HTMLPdsChipElement;
         "pds-copytext": HTMLPdsCopytextElement;
@@ -856,6 +881,24 @@ declare namespace LocalJSX {
           * Sets button variant styles as outlined in Figma documentation
          */
         "variant"?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled';
+    }
+    interface PdsCard {
+        /**
+          * Sets a background color on the card.
+         */
+        "bgColor"?: string;
+        /**
+          * Determines whether the card should have a border.
+         */
+        "border"?: boolean;
+        /**
+          * Sets the padding size for the card.
+         */
+        "padding"?: 'sm' | 'md' | 'none';
+        /**
+          * Sets the shadow size for the card.
+         */
+        "shadow"?: 'sm' | 'md' | 'lg';
     }
     interface PdsCheckbox {
         /**
@@ -1417,6 +1460,7 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "pds-avatar": PdsAvatar;
         "pds-button": PdsButton;
+        "pds-card": PdsCard;
         "pds-checkbox": PdsCheckbox;
         "pds-chip": PdsChip;
         "pds-copytext": PdsCopytext;
@@ -1442,6 +1486,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "pds-avatar": LocalJSX.PdsAvatar & JSXBase.HTMLAttributes<HTMLPdsAvatarElement>;
             "pds-button": LocalJSX.PdsButton & JSXBase.HTMLAttributes<HTMLPdsButtonElement>;
+            "pds-card": LocalJSX.PdsCard & JSXBase.HTMLAttributes<HTMLPdsCardElement>;
             "pds-checkbox": LocalJSX.PdsCheckbox & JSXBase.HTMLAttributes<HTMLPdsCheckboxElement>;
             "pds-chip": LocalJSX.PdsChip & JSXBase.HTMLAttributes<HTMLPdsChipElement>;
             "pds-copytext": LocalJSX.PdsCopytext & JSXBase.HTMLAttributes<HTMLPdsCopytextElement>;
