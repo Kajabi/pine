@@ -8,14 +8,13 @@
     "node": ">= 16"
   },
   "scripts": {
-    "bootstrap": "lerna bootstrap",
     "build.all": "nx run-many --target=build",
     "commit": "npx cz",
     "coverage": "open libs/core/coverage/lcov-report/index.html",
     "stencil.generate": "yarn nx run core:generate",
     "lint.all": "nx run-many --target=lint",
     "prepare": "husky install",
-    "setup": "yarn install && yarn bootstrap",
+    "setup": "yarn install",
     "start": "nx run core:start",
     "test.all": "nx run-many --target=test"
   },
@@ -25,7 +24,7 @@
     "@nrwl/nx-cloud": "15.1.0",
     "commitizen": "^4.2.5",
     "husky": "^8.0.1",
-    "lerna": "^6.5.1",
+    "lerna": "^7.0.1",
     "lint-staged": "^13.0.3",
     "nx": "15.7.2",
     "semver": "^7.3.8",
@@ -37,4 +36,3 @@
     }
   }
 }
-

@@ -45,7 +45,7 @@ jobs:
 
       - name: Install Dependencies
         if: steps.icons-node-modules.outputs.cache-hit != 'true'
-        run: lerna bootstrap -- --frozen-lockfile --immutable
+        run: yarn install --frozen-lockfile --immutable
         shell: bash
 
       - name: Get current date

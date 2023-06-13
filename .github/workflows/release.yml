@@ -46,7 +46,7 @@ jobs:
 
       - name: Install Dependencies
         if: steps.cache-node-modules.ouputs.cache-hit != true || steps.changed-files.outputs.any_changed == 'true'
-        run: lerna bootstrap --ignore-scripts
+        run: yarn install  --ignore-scripts
         shell: bash
 
       - name: Set NPM Token

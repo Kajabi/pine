@@ -28,7 +28,7 @@ runs:
         registry-url: 'https://registry.npmjs.org'
 
     - name: Install Dependencies
-      run: lerna bootstrap --include-dependencies --scope ${{ inputs.scope }} --ignore-scripts -- --legacy-peer-deps
+      run: yarn install  --include-dependencies --scope ${{ inputs.scope }} --ignore-scripts -- --legacy-peer-deps
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
