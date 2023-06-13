@@ -33,7 +33,7 @@ runs:
 
     - name: Install Dependencies
       if: steps.cache-node-modules.ouputs.cache-hit != true || steps.changed-files.outputs.any_changed == 'true'
-      run: lerna bootstrap -- --frozen-lockfile --immutable
+      run: yarn install --frozen-lockfile --immutable
       shell: bash
 
     - name: Build Icons
