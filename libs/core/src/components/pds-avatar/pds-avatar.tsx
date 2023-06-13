@@ -72,7 +72,7 @@ export class PdsAvatar {
     return (
       this.dropdown
         ?
-        <button class="sage-avatar__button" type="button">
+        <button class="pds-avatar__button" type="button">
           <div style={style}>
             {this.renderIconOrImage()}
             {this.renderBadge()}
