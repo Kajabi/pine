@@ -30,6 +30,7 @@ export namespace Components {
         "image"?: string | null;
         /**
           * Size of the avatar. Value can be preset or custom.
+          * @defaultValue lg
          */
         "size"?: | 'xl' // 64px
   | 'lg' // 56px
@@ -647,6 +648,7 @@ declare namespace LocalJSX {
         "image"?: string | null;
         /**
           * Size of the avatar. Value can be preset or custom.
+          * @defaultValue lg
          */
         "size"?: | 'xl' // 64px
   | 'lg' // 56px

@@ -9,7 +9,7 @@
 
 | Property   | Attribute  | Description                                                       | Type                    | Default      |
 | ---------- | ---------- | ----------------------------------------------------------------- | ----------------------- | ------------ |
-| `alt`      | `alt`      | The alt for a custom user image.                                  | `string`                | `undefined`  |
+| `alt`      | `alt`      | The alt for a custom user image.                                  | `string`                | `null`       |
 | `badge`    | `badge`    | Determines whether the badge is visible or not.                   | `boolean`               | `false`      |
 | `dropdown` | `dropdown` | Determines whether the avatar functions as a dropdown trigger.    | `boolean`               | `false`      |
 | `image`    | `image`    | The src for a custom user image.                                  | `string`                | `null`       |

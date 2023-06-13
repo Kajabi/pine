@@ -11,7 +11,7 @@ export class PdsAvatar {
    * The alt for a custom user image.
    * @defaultValue null
    */
-  @Prop() alt?: string | null;
+  @Prop() alt?: string | null = null;
 
   /**
    * Determines whether the badge is visible or not.
@@ -33,6 +33,7 @@ export class PdsAvatar {
 
   /**
    * Size of the avatar. Value can be preset or custom.
+   * @defaultValue lg
    */
   @Prop({ reflect: true }) size?:
   | 'xl' // 64px

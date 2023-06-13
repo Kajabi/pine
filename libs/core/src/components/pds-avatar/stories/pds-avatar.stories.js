@@ -41,7 +41,8 @@ CustomSize.parameters = { ...defaultParameters };
 
 export const DropdownTrigger = BaseTemplate.bind();
 DropdownTrigger.args = {
-	dropdown: true
+	dropdown: true,
+	size: 'lg'
 }
 DropdownTrigger.parameters = { ...defaultParameters };
 
