@@ -40,7 +40,7 @@ div {
   appearance: none;
   background: transparent;
   border: 0;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   cursor: pointer;
   display: flex;
   padding: 0;
