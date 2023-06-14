@@ -1,4 +1,4 @@
-import { isRequired } from './form';
+import { isRequired } from '../form';
 
 describe('isRequired', () => {
   it('returns empty string when no target or component defined', () => {
