@@ -146,6 +146,10 @@ export namespace Components {
     }
     interface PdsInput {
         /**
+          * A unique identifier for the input field
+         */
+        "componentId": string;
+        /**
           * Indicates whether or not the input field is disabled
          */
         "disabled"?: boolean;
@@ -157,10 +161,6 @@ export namespace Components {
           * Displays a hint or description of the input field
          */
         "hint"?: string;
-        /**
-          * A unique identifier for the input field
-         */
-        "inputId": string;
         /**
           * Indicates whether or not the input field is invalid or throws an error
          */
@@ -191,7 +191,7 @@ export namespace Components {
          */
         "type": string;
         /**
-          * The value of the input "text"
+          * The value of the input
          */
         "value"?: string;
     }
@@ -304,7 +304,7 @@ export namespace Components {
         /**
           * A unique identifier for the textarea
          */
-        "componentId"?: string;
+        "componentId": string;
         /**
           * Indicates whether or not the textarea is disabled
           * @defaultValue false
@@ -564,7 +564,7 @@ declare namespace LocalJSX {
         /**
           * String used for checkbox `id` attribute and label `for` attribute.
          */
-        "componentId"?: string;
+        "componentId": string;
         /**
           * It determines whether or not the checkbox is disabled.
          */
@@ -675,6 +675,10 @@ declare namespace LocalJSX {
     }
     interface PdsInput {
         /**
+          * A unique identifier for the input field
+         */
+        "componentId": string;
+        /**
           * Indicates whether or not the input field is disabled
          */
         "disabled"?: boolean;
@@ -686,10 +690,6 @@ declare namespace LocalJSX {
           * Displays a hint or description of the input field
          */
         "hint"?: string;
-        /**
-          * A unique identifier for the input field
-         */
-        "inputId"?: string;
         /**
           * Indicates whether or not the input field is invalid or throws an error
          */
@@ -724,7 +724,7 @@ declare namespace LocalJSX {
          */
         "type"?: string;
         /**
-          * The value of the input "text"
+          * The value of the input
          */
         "value"?: string;
     }
@@ -842,7 +842,7 @@ declare namespace LocalJSX {
         /**
           * A unique identifier for the textarea
          */
-        "componentId"?: string;
+        "componentId": string;
         /**
           * Indicates whether or not the textarea is disabled
           * @defaultValue false

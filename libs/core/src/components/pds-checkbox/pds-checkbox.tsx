@@ -1,4 +1,5 @@
 import { Component, h, Prop, Host, Event, EventEmitter } from '@stencil/core';
+import { assignDescription, messageId } from '../../utils/form';
 
 @Component({
   tag: 'pds-checkbox',
@@ -12,24 +13,14 @@ export class PdsCheckbox {
   @Prop() checked: boolean;
 
   /**
+   * String used for checkbox `id` attribute and label `for` attribute.
+   */
+  @Prop() componentId!: string;
+
+  /**
    * It determines whether or not the checkbox is disabled.
    */
   @Prop() disabled: boolean;
-
-  /**
-   * It determines whether or not the checkbox is invalid.
-   */
-  @Prop() invalid: boolean;
-
-  /**
-   * String used for checkbox `id` attribute and label `for` attribute.
-   */
-  @Prop() componentId: string;
-
-  /**
-   * String used for label text next to checkbox.
-   */
-  @Prop() label: string;
 
   /**
    * String used for helper message below checkbox.
@@ -37,15 +28,25 @@ export class PdsCheckbox {
   @Prop() helperMessage: string;
 
   /**
-   * String used for checkbox `name` attribute.
-   */
-  @Prop() name: string;
-
-  /**
    * If `true`, the checkbox will visually appear as indeterminate.
    * Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
    */
   @Prop() indeterminate: boolean;
+
+  /**
+   * It determines whether or not the checkbox is invalid.
+   */
+  @Prop() invalid: boolean;
+
+  /**
+   * String used for label text next to checkbox.
+   */
+  @Prop() label: string;
+
+  /**
+   * String used for checkbox `name` attribute.
+   */
+  @Prop() name: string;
 
   /**
    * It determines whether or not the checkbox is required.
@@ -87,6 +88,8 @@ export class PdsCheckbox {
     return (
       <Host class={this.classNames()}>
         <input
+          aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
+          aria-invalid={this.invalid ? "true" : undefined}
           type="checkbox"
           id={this.componentId}
           name={this.name}
@@ -97,7 +100,15 @@ export class PdsCheckbox {
           onChange={this.handleCheckboxChange}
         />
         <label htmlFor={this.componentId}>{this.label}</label>
-        {this.helperMessage && <div class={'pds-checkbox__message'}>{this.helperMessage}</div>}
+        {this.helperMessage &&
+          <div
+            class={'pds-checkbox__message'}
+            id={messageId(this.componentId, 'helper')}
+          >
+            {this.helperMessage}
+          </div>
+        }
+        {/* TODO: add error message under helper message in a followup */}
       </Host>
     );
   }

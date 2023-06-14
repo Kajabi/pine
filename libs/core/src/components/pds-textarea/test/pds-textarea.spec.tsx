@@ -39,15 +39,15 @@ describe('pds-textarea', () => {
   it('renders error text', async () => {
     const {root} = await newSpecPage({
       components: [PdsTextarea],
-      html: `<pds-textarea component-id="testId" invalid="true" error-message="error"></pds-textarea>`,
+      html: `<pds-textarea component-id="pds-textarea-error" invalid="true" error-message="error"></pds-textarea>`,
     });
 
     expect(root).toEqualHtml(`
-      <pds-textarea component-id="testId" invalid="true" error-message="error">
+      <pds-textarea component-id="pds-textarea-error" invalid="true" error-message="error">
         <mock:shadow-root>
           <div class="pds-textarea">
-            <textarea aria-invalid="true" class="pds-textarea__field is-invalid" id="testId" name="testId"></textarea>
-            <p aria-live="assertive" class="pds-textarea__error-message" id="testId__error-message">error</p>
+            <textarea aria-invalid="true" class="pds-textarea__field is-invalid" id="pds-textarea-error" name="pds-textarea-error"></textarea>
+            <p aria-live="assertive" class="pds-textarea__error-message" id="pds-textarea-error__error-message">error</p>
           </div>
         </mock:shadow-root>
       </pds-textarea>
@@ -74,15 +74,15 @@ describe('pds-textarea', () => {
   it('renders hint text', async () => {
     const {root} = await newSpecPage({
       components: [PdsTextarea],
-      html: `<pds-textarea component-id="testId" hint-message="hint"></pds-textarea>`,
+      html: `<pds-textarea component-id="pds-textarea-hint" hint-message="hint"></pds-textarea>`,
     });
 
     expect(root).toEqualHtml(`
-      <pds-textarea component-id="testId" hint-message="hint">
+      <pds-textarea component-id="pds-textarea-hint" hint-message="hint">
         <mock:shadow-root>
           <div class="pds-textarea">
-            <textarea class="pds-textarea__field" id="testId" name="testId"></textarea>
-            <p class="pds-textarea__hint-message" id="testId__helper-message">hint</p>
+            <textarea aria-describedby="pds-textarea-hint__helper-message" class="pds-textarea__field" id="pds-textarea-hint" name="pds-textarea-hint"></textarea>
+            <p class="pds-textarea__hint-message" id="pds-textarea-hint__helper-message">hint</p>
           </div>
         </mock:shadow-root>
       </pds-textarea>
@@ -178,15 +178,15 @@ describe('pds-textarea', () => {
   it('renders textarea id and for attribute on label when property is passed', async () => {
     const {root} = await newSpecPage({
       components: [PdsTextarea],
-      html: `<pds-textarea component-id="testId" label="label"></pds-textarea>`,
+      html: `<pds-textarea component-id="pds-textarea-id" label="label"></pds-textarea>`,
     });
 
     expect(root).toEqualHtml(`
-      <pds-textarea component-id="testId" label="label">
+      <pds-textarea component-id="pds-textarea-id" label="label">
         <mock:shadow-root>
           <div class="pds-textarea">
-            <label htmlFor="testId">label</label>
-            <textarea class="pds-textarea__field" id="testId" name="testId"></textarea>
+            <label htmlFor="pds-textarea-id">label</label>
+            <textarea class="pds-textarea__field" id="pds-textarea-id" name="pds-textarea-id"></textarea>
           </div>
         </mock:shadow-root>
       </pds-textarea>

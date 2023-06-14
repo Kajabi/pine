@@ -1,4 +1,4 @@
-import { positionTooltip } from './overlay';
+import { positionTooltip } from '../overlay';
 
 let mockButton = document.createElement('button');
 

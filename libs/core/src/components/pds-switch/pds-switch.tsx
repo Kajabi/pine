@@ -1,4 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
+import { assignDescription, messageId } from '../../utils/form';
 
 @Component({
   tag: 'pds-switch',
@@ -89,30 +90,11 @@ export class PdsSwitch {
     return switchClasses;
   };
 
-  /**
-   * Create id for messaging
-   */
-  private messageId = (id: string, messageType: string) => {
-    return `${id}__${messageType}-message`;
-  };
-
-  /**
-   * Assign aria-description id to relate messages with input
-   */
-  private assignDescription = () => {
-    let relatedId = this.messageId(this.componentId, 'helper')
-
-    if (!this.invalid || !this.helperMessage) return;
-    if (this.invalid) relatedId = this.messageId(this.componentId, 'error');
-
-    return relatedId;
-  };
-
   render() {
     return (
       <Host class={this.switchClassNames()} aria-disabled={this.disabled ? 'true' : null}>
         <input
-          aria-describedby={this.assignDescription()}
+          aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
           aria-invalid={this.invalid ? "true" : undefined}
           checked={this.checked}
           class="pds-switch__input"
@@ -130,7 +112,7 @@ export class PdsSwitch {
         {this.helperMessage &&
           <div
             class={`pds-switch__message`}
-            id={this.messageId(this.componentId, 'helper')}
+            id={messageId(this.componentId, 'helper')}
           >
             {this.helperMessage}
           </div>
@@ -138,7 +120,7 @@ export class PdsSwitch {
         {this.errorMessage &&
           <div
             class={`pds-switch__message pds-switch__message--error`}
-            id={this.messageId(this.componentId, 'error')}
+            id={messageId(this.componentId, 'error')}
             aria-live="assertive"
           >
             {this.errorMessage}

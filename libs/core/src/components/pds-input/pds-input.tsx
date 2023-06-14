@@ -1,4 +1,5 @@
 import { Component, Event, EventEmitter, h, Host, Prop } from '@stencil/core';
+import { assignDescription, messageId } from '../../utils/form';
 
 /**
  * @slot - Content is placed between the opening closing tags
@@ -9,6 +10,11 @@ import { Component, Event, EventEmitter, h, Host, Prop } from '@stencil/core';
   shadow: true,
 })
 export class PdsInput {
+  /**
+   * A unique identifier for the input field
+   */
+  @Prop() componentId!: string;
+
   /**
    * Indicates whether or not the input field is disabled
    */
@@ -28,11 +34,6 @@ export class PdsInput {
    * Indicates whether or not the input field is invalid or throws an error
    */
   @Prop() invalid?: boolean;
-
-  /**
-   * A unique identifier for the input field
-   */
-  @Prop() inputId: string;
 
   /**
    * Text to be displayed as the input label
@@ -68,7 +69,6 @@ export class PdsInput {
 
   /**
    * The value of the input
-   * "text"
    */
   @Prop({mutable: true}) value?: string;
 
@@ -91,10 +91,12 @@ export class PdsInput {
         aria-disabled={this.disabled ? 'true' : null}
       >
         <div class="pds-input">
-          <label htmlFor={this.inputId}>{this.label}</label>
+          <label htmlFor={this.componentId}>{this.label}</label>
           <input class="pds-input__field"
+            aria-describedby={assignDescription(this.componentId, this.invalid, this.hint)}
+            aria-invalid={this.invalid ? "true" : undefined}
             disabled={this.disabled}
-            id={this.inputId}
+            id={this.componentId}
             name={this.name}
             placeholder={this.placeholder}
             readOnly={this.readonly}
@@ -103,13 +105,22 @@ export class PdsInput {
             value={this.value}
             onInput={this.onInputEvent}
           />
-          {this.hint
-            ? <p class="pds-input__hint">{this.hint}</p>
-            : ''
+          {this.hint &&
+            <p
+              class="pds-input__hint"
+              id={messageId(this.componentId, 'helper')}
+            >
+              {this.hint}
+            </p>
           }
-          {this.errorText
-            ? <p class="pds-input__error-text">{this.errorText}</p>
-            : ''
+          {this.errorText &&
+            <p
+              class="pds-input__error-text"
+              id={messageId(this.componentId, 'error')}
+              aria-live="assertive"
+            >
+              {this.errorText}
+            </p>
           }
         </div>
       </Host>

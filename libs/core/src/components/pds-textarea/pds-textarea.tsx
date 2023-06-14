@@ -1,5 +1,5 @@
 import { Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
-import { isRequired } from '../../utils/utils';
+import { assignDescription, isRequired, messageId } from '../../utils/form';
 import { TextareaChangeEventDetail } from './textarea-interface';
 
 @Component({
@@ -13,7 +13,7 @@ export class PdsTextarea {
   /**
    * A unique identifier for the textarea
    */
-  @Prop() componentId?: string;
+  @Prop() componentId!: string;
 
   /**
    * Indicates whether or not the textarea is disabled
@@ -100,25 +100,6 @@ export class PdsTextarea {
     return classNames.join('  ');
   }
 
-  /**
-   * Create id for messaging
-   */
-  private messageId = (id: string, messageType: string) => {
-    return `${id}__${messageType}-message`;
-  };
-
-  /**
-   * Assign aria-description id to relate messages with input
-   */
-  private assignDescription = () => {
-    let relatedId = this.messageId(this.componentId, 'helper')
-
-    if (!this.invalid || !this.hintMessage) return;
-    if (this.invalid) relatedId = this.messageId(this.componentId, 'error');
-
-    return relatedId;
-  };
-
   render() {
     return (
       <Host
@@ -131,7 +112,7 @@ export class PdsTextarea {
             </label>
           }
           <textarea
-            aria-describedby={this.assignDescription()}
+            aria-describedby={assignDescription(this.componentId, this.invalid, this.hintMessage)}
             aria-invalid={this.invalid ? "true" : undefined}
             class={this.textareaClassNames()}
             disabled={this.disabled}
@@ -146,7 +127,7 @@ export class PdsTextarea {
           {this.hintMessage &&
             <p
               class="pds-textarea__hint-message"
-              id={this.messageId(this.componentId, 'helper')}
+              id={messageId(this.componentId, 'helper')}
             >
               {this.hintMessage}
             </p>
@@ -155,7 +136,7 @@ export class PdsTextarea {
             <p
               aria-live="assertive"
               class="pds-textarea__error-message"
-              id={this.messageId(this.componentId, 'error')}
+              id={messageId(this.componentId, 'error')}
             >
               {this.errorMessage}
             </p>
