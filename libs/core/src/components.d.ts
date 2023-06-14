@@ -215,6 +215,48 @@ export namespace Components {
          */
         "variant": 'inline' | 'plain';
     }
+    interface PdsRadio {
+        /**
+          * Determines whether or not the radio is checked.
+          * @defaultValue false
+         */
+        "checked": boolean;
+        /**
+          * String used for radio `id` attribute and label `for` attribute.
+         */
+        "componentId": string;
+        /**
+          * Determines whether or not the radio is disabled.
+          * @defaultValue false
+         */
+        "disabled": boolean;
+        /**
+          * String used for helper message below radio.
+         */
+        "helperMessage": string;
+        /**
+          * Determines whether or not the radio is invalid.
+          * @defaultValue false
+         */
+        "invalid": boolean;
+        /**
+          * String used for label text next to radio.
+         */
+        "label": string;
+        /**
+          * String used for radio `name` attribute.
+         */
+        "name": string;
+        /**
+          * Determines whether or not the radio is required.
+          * @defaultValue false
+         */
+        "required": boolean;
+        /**
+          * The value of the radio that is submitted with a form.
+         */
+        "value": string;
+    }
     interface PdsSwitch {
         /**
           * Determines the input 'checked' state
@@ -416,6 +458,10 @@ export interface PdsInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsInputElement;
 }
+export interface PdsRadioCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsRadioElement;
+}
 export interface PdsSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsSwitchElement;
@@ -475,6 +521,12 @@ declare global {
         prototype: HTMLPdsLinkElement;
         new (): HTMLPdsLinkElement;
     };
+    interface HTMLPdsRadioElement extends Components.PdsRadio, HTMLStencilElement {
+    }
+    var HTMLPdsRadioElement: {
+        prototype: HTMLPdsRadioElement;
+        new (): HTMLPdsRadioElement;
+    };
     interface HTMLPdsSwitchElement extends Components.PdsSwitch, HTMLStencilElement {
     }
     var HTMLPdsSwitchElement: {
@@ -519,6 +571,7 @@ declare global {
         "pds-image": HTMLPdsImageElement;
         "pds-input": HTMLPdsInputElement;
         "pds-link": HTMLPdsLinkElement;
+        "pds-radio": HTMLPdsRadioElement;
         "pds-switch": HTMLPdsSwitchElement;
         "pds-tab": HTMLPdsTabElement;
         "pds-tabpanel": HTMLPdsTabpanelElement;
@@ -748,6 +801,52 @@ declare namespace LocalJSX {
          */
         "variant"?: 'inline' | 'plain';
     }
+    interface PdsRadio {
+        /**
+          * Determines whether or not the radio is checked.
+          * @defaultValue false
+         */
+        "checked"?: boolean;
+        /**
+          * String used for radio `id` attribute and label `for` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * Determines whether or not the radio is disabled.
+          * @defaultValue false
+         */
+        "disabled"?: boolean;
+        /**
+          * String used for helper message below radio.
+         */
+        "helperMessage"?: string;
+        /**
+          * Determines whether or not the radio is invalid.
+          * @defaultValue false
+         */
+        "invalid"?: boolean;
+        /**
+          * String used for label text next to radio.
+         */
+        "label"?: string;
+        /**
+          * String used for radio `name` attribute.
+         */
+        "name"?: string;
+        /**
+          * Emits a boolean indicating whether the checkbox is currently checked or unchecked.
+         */
+        "onPdsRadioChange"?: (event: PdsRadioCustomEvent<boolean>) => void;
+        /**
+          * Determines whether or not the radio is required.
+          * @defaultValue false
+         */
+        "required"?: boolean;
+        /**
+          * The value of the radio that is submitted with a form.
+         */
+        "value"?: string;
+    }
     interface PdsSwitch {
         /**
           * Determines the input 'checked' state
@@ -953,6 +1052,7 @@ declare namespace LocalJSX {
         "pds-image": PdsImage;
         "pds-input": PdsInput;
         "pds-link": PdsLink;
+        "pds-radio": PdsRadio;
         "pds-switch": PdsSwitch;
         "pds-tab": PdsTab;
         "pds-tabpanel": PdsTabpanel;
@@ -972,6 +1072,7 @@ declare module "@stencil/core" {
             "pds-image": LocalJSX.PdsImage & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
             "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
+            "pds-radio": LocalJSX.PdsRadio & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
             "pds-switch": LocalJSX.PdsSwitch & JSXBase.HTMLAttributes<HTMLPdsSwitchElement>;
             "pds-tab": LocalJSX.PdsTab & JSXBase.HTMLAttributes<HTMLPdsTabElement>;
             "pds-tabpanel": LocalJSX.PdsTabpanel & JSXBase.HTMLAttributes<HTMLPdsTabpanelElement>;

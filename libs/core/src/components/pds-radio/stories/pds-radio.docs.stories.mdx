@@ -1,0 +1,91 @@
+import { Meta, Story, Canvas, Source, ArgsTable } from '@storybook/addon-docs';
+import { html, render } from 'lit-html';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+import * as stories from './pds-radio.stories.js';
+
+<Meta
+  title="components/Radio"
+  component="pds-radio"
+  argTypes={extractArgTypes('pds-radio')}
+  args={{
+    checked: false,
+    disabled: false,
+    invalid: false,
+    required: false,
+  }}
+/>
+
+# Radio
+
+Radio components provide users a way to select only one option from a list of two or more options.
+
+## Properties
+
+<ArgsTable of="pds-radio" />
+
+### Default
+
+<Story story={stories.Default} />
+
+<Canvas>
+  <pds-radio component-id="default" label="Label" />
+</Canvas>
+
+### Checked
+
+Radios appear as checked when activated.
+
+<Story story={stories.Checked} />
+
+<Canvas>
+  <pds-radio component-id="checked" label="Label" checked />
+</Canvas>
+
+### Disabled
+
+Disabled visually indicates and functionally prevents interaction with the radio.
+
+<Story story={stories.Disabled} />
+
+<Canvas>
+  <pds-radio component-id="disabled" label="Label" disabled />
+</Canvas>
+
+
+### Message
+
+Message is a string of text that displays below the label text.
+
+<Story story={stories.withMessage} />
+
+<Canvas>
+  <pds-radio component-id="message1" label="Label" helper-message="This is short message text." />
+</Canvas>
+
+### Invalid
+
+Invalid displays the radio in invalid state such as when required but is not checked.
+
+<Story story={stories.Invalid} />
+
+<Canvas>
+  <pds-radio component-id="invalid" label="Label" invalid />
+</Canvas>
+
+### Group
+
+A radio group is defined by assigning each radio in the group the same `name`.
+
+Once a radio group is created, only one radio at a time can be selected.
+
+<Canvas>
+  <pds-radio component-id="default1" label="Label" name="radio" checked />
+  <pds-radio component-id="default2" label="Label" name="radio" />
+  <pds-radio component-id="default3" label="Label" name="radio" />
+</Canvas>
+
+## Additional Resources
+
+[MDN Web Docs: Radio](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio)
