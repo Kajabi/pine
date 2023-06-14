@@ -89,12 +89,12 @@ Hint.args = {
 };
 Hint.parameters = { ...defaultParameters };
 
-export const Error = BaseTemplate.bind({});
-Error.args = {
-  componentId: 'pds-input-error-example',
+export const Invalid = BaseTemplate.bind({});
+Invalid.args = {
+  componentId: 'pds-input-invalid-example',
   label: 'Email',
   errorText: "Please provide a valid Email address",
   type: 'email',
   value: 'user123@test.com'
 };
-Error.parameters = { ...defaultParameters };
+Invalid.parameters = { ...defaultParameters };
