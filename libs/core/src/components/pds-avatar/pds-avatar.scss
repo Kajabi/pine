@@ -1,0 +1,68 @@
+:host {
+  display: inline-block;
+}
+
+div {
+  // These custom props are not reachable
+  --background-color: var(--pine-color-primary-100);
+  --badge-background-color: var(--pine-color-base-white);
+  --border: var(--pine-border-default);
+  --radius-round: 50%;
+
+  align-items: center;
+  background-color: var(--background-color);
+  border-radius: var(--radius-round);
+  display: inline-flex;
+  justify-content: center;
+  position: relative;
+
+  :host(.pds-avatar--admin) & {
+    border-radius: 12px;
+  }
+
+  // Remove when FF has support for :has
+  :host(.pds-avatar--has-image) & {
+    background: transparent
+  }
+
+  @supports selector(:has) {
+    &:has(img) {
+      background-color: transparent
+    }
+  }
+}
+
+.pds-avatar__button {
+  --radius-round: 50%;
+  --box-shadow-focus: 0 0 0 4px var(--pine-color-primary-200);
+
+  align-items: center;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-round);
+  cursor: pointer;
+  display: flex;
+  padding: 0;
+
+  &:focus-visible {
+    // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
+    box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
+    outline: none;
+  }
+}
+
+.pds-avatar__badge {
+  background-color: var(--badge-background-color);
+  border: var(--border);
+  border-color: var(--badge-background-color);
+  border-radius: var(--radius-round);
+  bottom: 0;
+  position: absolute;
+  right: 0;
+}
+
+img {
+  border-radius: var(--radius-round);
+  width: 100%;
+}
