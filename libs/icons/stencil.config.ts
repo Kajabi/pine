@@ -5,6 +5,10 @@ import { sass } from '@stencil/sass';
 
 export const config: Config = {
   namespace: 'pds-icons',
+  devServer: {
+    openBrowser: false,
+    port: 7200
+  },
   plugins: [sass()],
   outputTargets: [
     {

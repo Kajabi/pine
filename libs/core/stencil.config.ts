@@ -8,6 +8,10 @@ import { sass } from '@stencil/sass';
 export const config: Config = {
   namespace: 'pine-core',
   globalStyle: 'src/global/styles/app.scss',
+  devServer: {
+    openBrowser: false,
+    port: 7100
+  },
   outputTargets: [
     {
       type: 'dist',
