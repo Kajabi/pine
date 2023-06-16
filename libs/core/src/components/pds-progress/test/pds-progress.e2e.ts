@@ -33,12 +33,11 @@ describe('pds-progress', () => {
     expect(element.textContent).toBe('custom label test');
   });
 
-  it ('renders with visible percent text', async () => {
+  it('renders with visible percent text', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-progress show-percent="true" percent="23"></pds-progress>');
 
     const element = await page.find('pds-progress >>> .pds-progress__percentage');
     expect(element.textContent).toBe('23%');
   });
-
 });

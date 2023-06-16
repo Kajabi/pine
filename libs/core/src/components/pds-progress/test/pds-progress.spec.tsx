@@ -109,5 +109,4 @@ describe('pds-progress', () => {
       </pds-progress>
     `);
   });
-
 });
