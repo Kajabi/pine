@@ -253,11 +253,33 @@ export namespace Components {
         "variant": 'inline' | 'plain';
     }
     interface PdsProgress {
+        /**
+          * Determines whether or not progress is animated.
+          * @defaultValue false
+         */
         "animated": boolean;
+        /**
+          * String used for progress `id` attribute and label `for` attribute.
+         */
         "componentId": string;
+        /**
+          * Sets the progress fill color. Accepts a color token or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
+          * @defaultValue 'var(--pds-color-primary)'
+         */
         "fillColor": string;
+        /**
+          * String used for label text. Label is visually hidden but required for better accessibility.
+         */
         "label": string;
-        "percentage": number;
+        /**
+          * Sets the progress fill pecentage and visually displayed when `show-percentage=true`.
+          * @defaultValue 0
+         */
+        "percent": number;
+        /**
+          * Determines whether or not the percent value should be displayed as text.
+          * @defaultValue false
+         */
         "showPercent": boolean;
     }
     interface PdsRadio {
@@ -898,11 +920,33 @@ declare namespace LocalJSX {
         "variant"?: 'inline' | 'plain';
     }
     interface PdsProgress {
+        /**
+          * Determines whether or not progress is animated.
+          * @defaultValue false
+         */
         "animated"?: boolean;
+        /**
+          * String used for progress `id` attribute and label `for` attribute.
+         */
         "componentId": string;
+        /**
+          * Sets the progress fill color. Accepts a color token or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
+          * @defaultValue 'var(--pds-color-primary)'
+         */
         "fillColor"?: string;
+        /**
+          * String used for label text. Label is visually hidden but required for better accessibility.
+         */
         "label": string;
-        "percentage"?: number;
+        /**
+          * Sets the progress fill pecentage and visually displayed when `show-percentage=true`.
+          * @defaultValue 0
+         */
+        "percent"?: number;
+        /**
+          * Determines whether or not the percent value should be displayed as text.
+          * @defaultValue false
+         */
         "showPercent"?: boolean;
     }
     interface PdsRadio {

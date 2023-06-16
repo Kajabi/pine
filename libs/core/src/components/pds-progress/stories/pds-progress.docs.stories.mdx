@@ -22,5 +22,45 @@ Displays progress with a value.
 <Story story={stories.Default} />
 
 <Canvas>
-  <pds-progress component-id="default" label="Label" percentage="50" animated></pds-progress>
+  <pds-progress component-id="default" label="Default"></pds-progress>
+</Canvas>
+
+### Percent
+
+<Story story={stories.Percent} />
+
+The percent of how much the `pds-progress` is filled. Should be a number ranging from 0 to 100.
+
+<Canvas>
+  <pds-progress component-id="percent" label="percent" percent="25"></pds-progress>
+</Canvas>
+
+### Show Percent
+
+<Story story={stories.showPercent} />
+
+Displays the `percent` value as text beside the progress.
+
+<Canvas>
+  <pds-progress component-id="show-percent" label="Show percent" percent="50" show-percent></pds-progress>
+</Canvas>
+
+### Animated
+
+<Story story={stories.Animated} />
+
+When `animated`, progress will animate from 0 to the `percent` value.
+
+<Canvas>
+  <pds-progress component-id="animated" label="Animated " percent="75" animated></pds-progress>
+</Canvas>
+
+### Fill Color
+
+<Story story={stories.fillColor} />
+
+Allows for `pds-progress` to be filled with a custom color. Accepts any valid color token or CSS color value.
+
+<Canvas>
+  <pds-progress component-id="fillcolor" label="Fill color" percent="95" fill-color="#86D5BC"></pds-progress>
 </Canvas>
