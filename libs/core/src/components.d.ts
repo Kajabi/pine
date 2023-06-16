@@ -253,6 +253,12 @@ export namespace Components {
         "variant": 'inline' | 'plain';
     }
     interface PdsProgress {
+        "animated": boolean;
+        "componentId": string;
+        "fillColor": string;
+        "label": string;
+        "percentage": number;
+        "showPercent": boolean;
     }
     interface PdsRadio {
         /**
@@ -892,6 +898,12 @@ declare namespace LocalJSX {
         "variant"?: 'inline' | 'plain';
     }
     interface PdsProgress {
+        "animated"?: boolean;
+        "componentId": string;
+        "fillColor"?: string;
+        "label": string;
+        "percentage"?: number;
+        "showPercent"?: boolean;
     }
     interface PdsRadio {
         /**

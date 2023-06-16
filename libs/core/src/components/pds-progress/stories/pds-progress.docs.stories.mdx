@@ -1,0 +1,26 @@
+import { Meta, Story, Canvas, Source, ArgsTable } from '@storybook/addon-docs';
+import { html, render } from 'lit-html';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+import * as stories from './pds-progress.stories.js';
+
+<Meta
+  title="components/Progress"
+  component="pds-progress"
+  argTypes={extractArgTypes('pds-progress')}
+/>
+
+# Progress
+
+Displays progress with a value.
+
+<ArgsTable of="pds-progress" />
+
+### Default
+
+<Story story={stories.Default} />
+
+<Canvas>
+  <pds-progress component-id="default" label="Label" percentage="50" animated></pds-progress>
+</Canvas>
