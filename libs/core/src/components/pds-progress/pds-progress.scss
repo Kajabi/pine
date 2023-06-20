@@ -1,5 +1,7 @@
 :host {
   --progress-fill-color: var(--pine-color-primary-300);
+  --height-progress-bar: 8px;
+
   align-items: center;
   display: flex;
 }
@@ -22,7 +24,7 @@
   border-radius: var(--border-radius);
   display: flex;
   flex-direction: row;
-  height: 8px;
+  height: var(--height-progress-bar);
   position: relative;
   width: 100%;
 }
@@ -37,7 +39,7 @@ progress,
 progress::-webkit-progress-bar {
   background-color: transparent;
   border: 0;
-  height: 8px;
+  height: var(--height-progress-bar);
   width: 100%;
 }
 
