@@ -19,6 +19,7 @@
 .pds-progress {
   --background-progress-bar: var(--pine-color-neutral-grey-300);
   --border-radius: var(--pine-border-radius-xs);
+
   align-items: center;
   background-color: var(--background-progress-bar);
   border-radius: var(--border-radius);
@@ -46,6 +47,7 @@ progress::-webkit-progress-bar {
 progress::-webkit-progress-value {
   --background-color: var(--pine-color-primary-300);
   --border-radius: var(--pine-border-radius-xs);
+
   background-color: var(--progress-fill-color, var(--background-color));
   border-radius: var(--border-radius);
 }
@@ -53,6 +55,7 @@ progress::-webkit-progress-value {
 progress::-moz-progress-bar {
   --background-color: var(--pine-color-primary-300);
   --border-radius: var(--pine-border-radius-xs);
+
   background-color: var(--progress-fill-color, var(--background-color));
   border-radius: var(--border-radius);
 }
@@ -73,6 +76,7 @@ progress::-moz-progress-bar {
   --line-height: var(--pine-line-height-sm);
   --font-weight: var(--pine-font-weight-medium);
   --margin-inline-start: var(--pine-spacing-md);
+
   font-size: var(--font-size);
   font-weight: var(--font-weight);
   line-height: var(--line-height);
