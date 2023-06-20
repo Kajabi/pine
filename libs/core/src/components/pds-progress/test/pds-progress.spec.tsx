@@ -10,7 +10,7 @@ describe('pds-progress', () => {
     expect(page.root).toEqualHtml(`
       <pds-progress>
         <mock:shadow-root>
-          <div class="pds-progress-bar">
+          <div class="pds-progress">
             <label class="pds-progress__label"></label>
             <progress max="100" value="0"></progress>
           </div>
@@ -28,7 +28,7 @@ describe('pds-progress', () => {
     expect(page.root).toEqualHtml(`
       <pds-progress component-id="default" label="Label text">
         <mock:shadow-root>
-          <div class="pds-progress-bar">
+          <div class="pds-progress">
             <label class="pds-progress__label" htmlfor="default">Label text</label>
             <progress id="default" max="100" value="0"></progress>
           </div>
@@ -46,7 +46,7 @@ describe('pds-progress', () => {
     expect(page.root).toEqualHtml(`
       <pds-progress component-id="default" label="Label text" animated="true" class="is-animated">
         <mock:shadow-root>
-          <div class="pds-progress-bar">
+          <div class="pds-progress">
             <label class="pds-progress__label" htmlfor="default">Label text</label>
             <progress id="default" max="100" value="0"></progress>
           </div>
@@ -64,7 +64,7 @@ describe('pds-progress', () => {
     expect(page.root).toEqualHtml(`
       <pds-progress component-id="default" label="Label text" percent="38">
         <mock:shadow-root>
-          <div class="pds-progress-bar">
+          <div class="pds-progress">
             <label class="pds-progress__label" htmlfor="default">Label text</label>
             <progress id="default" max="100" value="38"></progress>
           </div>
@@ -82,7 +82,7 @@ describe('pds-progress', () => {
     expect(page.root).toEqualHtml(`
       <pds-progress component-id="default" label="Label text" show-percent="true">
         <mock:shadow-root>
-          <div class="pds-progress-bar">
+          <div class="pds-progress">
             <label class="pds-progress__label" htmlfor="default">Label text</label>
             <progress id="default" max="100" value="0"></progress>
           </div>
@@ -101,7 +101,7 @@ describe('pds-progress', () => {
     expect(page.root).toEqualHtml(`
       <pds-progress component-id="default" label="Label text" fill-color="#333333">
         <mock:shadow-root>
-          <div class="pds-progress-bar">
+          <div class="pds-progress">
             <label class="pds-progress__label" htmlfor="default">Label text</label>
             <progress id="default" max="100" value="0" style="--progress-fill-color: #333333;"></progress>
           </div>

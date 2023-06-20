@@ -43,7 +43,7 @@ export class PdsProgress {
   render() {
     return (
       <Host class={this.animated ? { 'is-animated': this.animated } : ''}>
-        <div class="pds-progress-bar">
+        <div class="pds-progress">
           <label class="pds-progress__label" htmlFor={this.componentId}>
             {this.label}
           </label>
