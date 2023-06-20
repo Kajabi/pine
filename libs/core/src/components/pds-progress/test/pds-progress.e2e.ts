@@ -17,12 +17,17 @@ describe('pds-progress', () => {
     expect(element.getAttribute('value')).toBe('25');
   });
 
-  it('renders with animated progress', async () => {
+  it('updates the percent value properly', async () => {
     const page = await newE2EPage();
-    await page.setContent('<pds-progress animated="true"></pds-progress>');
+    await page.setContent(`<pds-progress percent="50"></pds-progress>`);
 
     const element = await page.find('pds-progress');
-    expect(element).toHaveClass('is-animated');
+    expect(await element.getProperty('percent')).toBe(50);
+
+    element.setProperty('percent', 75);
+    await page.waitForChanges();
+
+    expect(await element.getProperty('percent')).toBe(75);
   });
 
   it('renders with a custom label', async () => {
