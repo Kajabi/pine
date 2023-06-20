@@ -65,6 +65,16 @@ Allows for `pds-progress` to be filled with a custom color. Accepts any valid co
   <pds-progress component-id="fillcolor" label="Fill color" percent="95" fill-color="#86D5BC"></pds-progress>
 </Canvas>
 
+### Tooltip
+
+A tooltip can be added by combining the `progress` component with a [tooltip](/docs/components-tooltip--default).
+
+<Canvas>
+  <pds-tooltip content="50%" has-arrow="false" placement="top" style={{ width: '100%' }}>
+    <pds-progress component-id="tooltip-demo" label="Progress w/ tooltip" percent="50"></pds-progress>
+  </pds-tooltip>
+</Canvas>
+
 ## Additional Resources
 
 [MDN Web Docs: Progress](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress)
