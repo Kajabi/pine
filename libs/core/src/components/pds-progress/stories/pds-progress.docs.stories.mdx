@@ -1,0 +1,80 @@
+import { Meta, Story, Canvas, Source, ArgsTable } from '@storybook/addon-docs';
+import { html, render } from 'lit-html';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+import * as stories from './pds-progress.stories.js';
+
+<Meta
+  title="components/Progress"
+  component="pds-progress"
+  argTypes={extractArgTypes('pds-progress')}
+/>
+
+# Progress
+
+Displays progress with a value.
+
+<ArgsTable of="pds-progress" />
+
+### Default
+
+<Story story={stories.Default} />
+
+<Canvas>
+  <pds-progress component-id="default" label="Default"></pds-progress>
+</Canvas>
+
+### Percent
+
+<Story story={stories.Percent} />
+
+The percent of how much the `pds-progress` is filled. Should be a number ranging from 0 to 100.
+
+<Canvas>
+  <pds-progress component-id="percent" label="percent" percent="25"></pds-progress>
+</Canvas>
+
+### Show Percent
+
+<Story story={stories.showPercent} />
+
+Displays the `percent` value as text beside the progress.
+
+<Canvas>
+  <pds-progress component-id="show-percent" label="Show percent" percent="50" show-percent></pds-progress>
+</Canvas>
+
+### Animated
+
+<Story story={stories.Animated} />
+
+When `animated`, progress will animate from 0 to the `percent` value.
+
+<Canvas>
+  <pds-progress component-id="animated" label="Animated " percent="75" animated></pds-progress>
+</Canvas>
+
+### Fill Color
+
+<Story story={stories.fillColor} />
+
+Allows for `pds-progress` to be filled with a custom color. Accepts any valid color token or CSS color value.
+
+<Canvas>
+  <pds-progress component-id="fillcolor" label="Fill color" percent="95" fill-color="#86D5BC"></pds-progress>
+</Canvas>
+
+### Tooltip
+
+A tooltip can be added by combining the `progress` component with a [tooltip](/docs/components-tooltip--default).
+
+<Canvas>
+  <pds-tooltip content="50%" has-arrow="false" placement="top" style={{ width: '100%' }}>
+    <pds-progress component-id="tooltip-demo" label="Progress w/ tooltip" percent="50"></pds-progress>
+  </pds-tooltip>
+</Canvas>
+
+## Additional Resources
+
+[MDN Web Docs: Progress](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress)

@@ -252,6 +252,36 @@ export namespace Components {
          */
         "variant": 'inline' | 'plain';
     }
+    interface PdsProgress {
+        /**
+          * Determines whether or not progress is animated.
+          * @defaultValue false
+         */
+        "animated": boolean;
+        /**
+          * String used for progress `id` attribute and label `for` attribute.
+         */
+        "componentId": string;
+        /**
+          * Sets the progress fill color. Accepts a color token or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
+          * @defaultValue 'var(--pds-color-primary)'
+         */
+        "fillColor": string;
+        /**
+          * String used for label text. Label is visually hidden but required for better accessibility.
+         */
+        "label": string;
+        /**
+          * Sets the progress fill pecentage and visually displayed when `show-percentage=true`.
+          * @defaultValue 0
+         */
+        "percent": number;
+        /**
+          * Determines whether or not the percent value should be displayed as text.
+          * @defaultValue false
+         */
+        "showPercent": boolean;
+    }
     interface PdsRadio {
         /**
           * Determines whether or not the radio is checked.
@@ -564,6 +594,12 @@ declare global {
         prototype: HTMLPdsLinkElement;
         new (): HTMLPdsLinkElement;
     };
+    interface HTMLPdsProgressElement extends Components.PdsProgress, HTMLStencilElement {
+    }
+    var HTMLPdsProgressElement: {
+        prototype: HTMLPdsProgressElement;
+        new (): HTMLPdsProgressElement;
+    };
     interface HTMLPdsRadioElement extends Components.PdsRadio, HTMLStencilElement {
     }
     var HTMLPdsRadioElement: {
@@ -615,6 +651,7 @@ declare global {
         "pds-image": HTMLPdsImageElement;
         "pds-input": HTMLPdsInputElement;
         "pds-link": HTMLPdsLinkElement;
+        "pds-progress": HTMLPdsProgressElement;
         "pds-radio": HTMLPdsRadioElement;
         "pds-switch": HTMLPdsSwitchElement;
         "pds-tab": HTMLPdsTabElement;
@@ -882,6 +919,36 @@ declare namespace LocalJSX {
          */
         "variant"?: 'inline' | 'plain';
     }
+    interface PdsProgress {
+        /**
+          * Determines whether or not progress is animated.
+          * @defaultValue false
+         */
+        "animated"?: boolean;
+        /**
+          * String used for progress `id` attribute and label `for` attribute.
+         */
+        "componentId": string;
+        /**
+          * Sets the progress fill color. Accepts a color token or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
+          * @defaultValue 'var(--pds-color-primary)'
+         */
+        "fillColor"?: string;
+        /**
+          * String used for label text. Label is visually hidden but required for better accessibility.
+         */
+        "label": string;
+        /**
+          * Sets the progress fill pecentage and visually displayed when `show-percentage=true`.
+          * @defaultValue 0
+         */
+        "percent"?: number;
+        /**
+          * Determines whether or not the percent value should be displayed as text.
+          * @defaultValue false
+         */
+        "showPercent"?: boolean;
+    }
     interface PdsRadio {
         /**
           * Determines whether or not the radio is checked.
@@ -1134,6 +1201,7 @@ declare namespace LocalJSX {
         "pds-image": PdsImage;
         "pds-input": PdsInput;
         "pds-link": PdsLink;
+        "pds-progress": PdsProgress;
         "pds-radio": PdsRadio;
         "pds-switch": PdsSwitch;
         "pds-tab": PdsTab;
@@ -1155,6 +1223,7 @@ declare module "@stencil/core" {
             "pds-image": LocalJSX.PdsImage & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
             "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
+            "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-radio": LocalJSX.PdsRadio & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
             "pds-switch": LocalJSX.PdsSwitch & JSXBase.HTMLAttributes<HTMLPdsSwitchElement>;
             "pds-tab": LocalJSX.PdsTab & JSXBase.HTMLAttributes<HTMLPdsTabElement>;
