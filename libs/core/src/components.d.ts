@@ -140,6 +140,11 @@ export namespace Components {
          */
         "variant": 'text' | 'tag' | 'dropdown';
     }
+    interface PdsCopytext {
+        "border": boolean;
+        "fullWidth": boolean;
+        "value": string;
+    }
     interface PdsDivider {
         /**
           * Adds offset margin/padding to expand the width (horizontal) or the height (vertical) of divider.
@@ -570,6 +575,12 @@ declare global {
         prototype: HTMLPdsChipElement;
         new (): HTMLPdsChipElement;
     };
+    interface HTMLPdsCopytextElement extends Components.PdsCopytext, HTMLStencilElement {
+    }
+    var HTMLPdsCopytextElement: {
+        prototype: HTMLPdsCopytextElement;
+        new (): HTMLPdsCopytextElement;
+    };
     interface HTMLPdsDividerElement extends Components.PdsDivider, HTMLStencilElement {
     }
     var HTMLPdsDividerElement: {
@@ -647,6 +658,7 @@ declare global {
         "pds-button": HTMLPdsButtonElement;
         "pds-checkbox": HTMLPdsCheckboxElement;
         "pds-chip": HTMLPdsChipElement;
+        "pds-copytext": HTMLPdsCopytextElement;
         "pds-divider": HTMLPdsDividerElement;
         "pds-image": HTMLPdsImageElement;
         "pds-input": HTMLPdsInputElement;
@@ -802,6 +814,11 @@ declare namespace LocalJSX {
           * @defaultValue 'text'
          */
         "variant"?: 'text' | 'tag' | 'dropdown';
+    }
+    interface PdsCopytext {
+        "border"?: boolean;
+        "fullWidth"?: boolean;
+        "value"?: string;
     }
     interface PdsDivider {
         /**
@@ -1197,6 +1214,7 @@ declare namespace LocalJSX {
         "pds-button": PdsButton;
         "pds-checkbox": PdsCheckbox;
         "pds-chip": PdsChip;
+        "pds-copytext": PdsCopytext;
         "pds-divider": PdsDivider;
         "pds-image": PdsImage;
         "pds-input": PdsInput;
@@ -1219,6 +1237,7 @@ declare module "@stencil/core" {
             "pds-button": LocalJSX.PdsButton & JSXBase.HTMLAttributes<HTMLPdsButtonElement>;
             "pds-checkbox": LocalJSX.PdsCheckbox & JSXBase.HTMLAttributes<HTMLPdsCheckboxElement>;
             "pds-chip": LocalJSX.PdsChip & JSXBase.HTMLAttributes<HTMLPdsChipElement>;
+            "pds-copytext": LocalJSX.PdsCopytext & JSXBase.HTMLAttributes<HTMLPdsCopytextElement>;
             "pds-divider": LocalJSX.PdsDivider & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
             "pds-image": LocalJSX.PdsImage & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
             "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
