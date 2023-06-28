@@ -1,0 +1,67 @@
+:host(.pds-copytext) {
+  button {
+    align-items: center;
+    background: #FFF;
+    border: 0;
+    border-radius: 8px;
+    display: flex;
+    font-size: 16px;
+    font-weight: var(--pine-font-weight-medium);
+    padding: 8px;
+
+    &:hover {
+      background-color: #f6f8f8;
+      color: #202327;
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 4px var(--pine-color-primary-200);
+      outline: none;
+    }
+
+    span {
+      margin-right: 8px;
+    }
+  }
+
+  // bordered
+  &:host(.pds-copytext--bordered) {
+    border: 0;
+    padding: 0;
+
+    button {
+      padding: 0;
+
+      &:hover {
+        background: none;
+      }
+    }
+
+    span {
+      border: 1px solid #d3d5d9;
+      border-radius: 8px;
+      padding: 8px 16px;
+    }
+
+    :hover {
+      span {
+        border-color: #b5bac0
+      }
+    }
+  }
+
+  // full width
+  &:host(.pds-copytext--full-width) {
+    width: 100%;
+
+    button {
+      justify-content: space-between;
+      width: 100%;
+
+      span {
+        text-align: left;
+        width: 100%;
+      }
+    }
+  }
+}
