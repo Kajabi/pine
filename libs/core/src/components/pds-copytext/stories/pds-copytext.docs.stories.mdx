@@ -1,0 +1,40 @@
+import { Meta, Story, Canvas, Source, ArgsTable } from '@storybook/addon-docs';
+import { html, render } from 'lit-html';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+import * as stories from './pds-copytext.stories.js';
+
+<Meta title="components/CopyText" component="pds-copytext" argTypes={extractArgTypes('pds-copytext')} />
+
+# Copy Text
+
+A small component to use in places where "copy" text is provided to be copied elsewhere.
+
+## Properties
+
+<ArgsTable of="pds-copytext" />
+
+### Default
+
+<Story story={stories.Default} />
+
+<Canvas>
+  <pds-copytext value="Copy this"></pds-copytext>
+</Canvas>
+
+### Borderless
+
+<Story story={stories.Borderless} />
+
+<Canvas>
+  <pds-copytext value="Copy that" border="false"></pds-copytext>
+</Canvas>
+
+### Full width
+
+<Story story={stories.FullWidth} />
+
+<Canvas>
+  <pds-copytext value="Copy all of this" full-width="true"></pds-copytext>
+</Canvas>
