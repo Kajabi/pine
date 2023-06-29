@@ -10,9 +10,9 @@ describe('pds-copytext', () => {
     expect(page.root).toEqualHtml(`
       <pds-copytext class="pds-copytext pds-copytext--bordered">
         <mock:shadow-root>
-          <button>
+          <button type="button">
             <span></span>
-            <pds-icon name="copy"></pds-icon>
+            <pds-icon name="copy" size="18px"></pds-icon>
           </button>
         </mock:shadow-root>
       </pds-copytext>
