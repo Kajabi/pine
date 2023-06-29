@@ -8,9 +8,10 @@
   --box-shadow-focus: 0 0 0 4px var(--pine-color-primary-200);
   --color-hover: var(--pine-color-neutral-charcoal-400);
   --font-size: var(--pine-font-size-body); // 16px
-  --font-weight: var(--pine-font-weight-medium); // 500
+  --font-weight: var(--pine-font-weight-semibold); // 600
   --spacing-sm: var(--pine-spacing-sm); // 16px
   --spacing-xs: var(--pine-spacing-xs); // 8px
+  --spacing-xxs: var(--pine-spacing-xxs); // 4px
 
   button {
     align-items: center;
@@ -20,7 +21,8 @@
     display: flex;
     font-size: var(--font-size);
     font-weight: var(--font-weight);
-    padding: var(--spacing-xs);
+    max-width: 100%;
+    padding: var(--spacing-xxs) var(--spacing-xs);
 
     &:hover {
       background-color: var(--background-hover);
@@ -34,6 +36,11 @@
 
     span {
       margin-right: var(--spacing-sm);
+      white-space: nowrap;
+    }
+
+    :nth-child(2) {
+      flex-shrink: 0;
     }
   }
 
@@ -78,6 +85,16 @@
         text-align: left;
         width: 100%;
       }
+    }
+  }
+
+  // truncated
+
+  &:host(.pds-copytext--truncated) {
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
     }
   }
 }
