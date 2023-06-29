@@ -836,7 +836,7 @@ declare namespace LocalJSX {
         /**
           * The string that is displayed and that is also copied to the clipboard upon interaction.
          */
-        "value"?: string;
+        "value": string;
     }
     interface PdsDivider {
         /**

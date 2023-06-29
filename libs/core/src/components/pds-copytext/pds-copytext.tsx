@@ -17,7 +17,7 @@ export class PdsCopytext {
   /**
    * The string that is displayed and that is also copied to the clipboard upon interaction.
    */
-  @Prop() value: string;
+  @Prop() value!: string;
 
   async copyToClipboard(value: string) {
     try {
