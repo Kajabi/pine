@@ -7,13 +7,17 @@ import { Component, Host, h, Prop } from '@stencil/core';
 })
 export class PdsCopytext {
   /**
-   * Determines whether copytext should have a border.
+   * Determines whether `copytext` should have a border.
    */
   @Prop() border = true;
   /**
-   * Determines whether copytext should expand to the full width of its container.
+   * Determines whether `copytext` should expand to the full width of its container.
    */
   @Prop() fullWidth = false;
+  /**
+   * Determines whether the `value` should truncate and display with an ellipsis.
+   */
+  @Prop() truncate = false;
   /**
    * The string that is displayed and that is also copied to the clipboard upon interaction.
    */
@@ -39,15 +43,19 @@ export class PdsCopytext {
       classNames.push('pds-copytext--full-width');
     }
 
+    if (this.truncate) {
+      classNames.push('pds-copytext--truncated');
+    }
+
     return classNames.join('  ');
   }
 
   render() {
     return (
       <Host class={this.classNames()}>
-        <button onClick={() => this.copyToClipboard(this.value)}>
+        <button type="button" onClick={() => this.copyToClipboard(this.value)}>
           <span>{this.value}</span>
-          <pds-icon name="copy"></pds-icon>
+          <pds-icon name="copy" size="18px"></pds-icon>
         </button>
       </Host>
     );
