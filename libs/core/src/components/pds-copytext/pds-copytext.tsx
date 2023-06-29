@@ -6,8 +6,17 @@ import { Component, Host, h, Prop } from '@stencil/core';
   shadow: true,
 })
 export class PdsCopytext {
+  /**
+   * Determines whether copytext should have a border.
+   */
   @Prop() border = true;
+  /**
+   * Determines whether copytext should expand to the full width of its container.
+   */
   @Prop() fullWidth = false;
+  /**
+   * The string that is displayed and that is also copied to the clipboard upon interaction.
+   */
   @Prop() value: string;
 
   async copyToClipboard(value: string) {

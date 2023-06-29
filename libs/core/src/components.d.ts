@@ -141,8 +141,17 @@ export namespace Components {
         "variant": 'text' | 'tag' | 'dropdown';
     }
     interface PdsCopytext {
+        /**
+          * Determines whether copytext should have a border.
+         */
         "border": boolean;
+        /**
+          * Determines whether copytext should expand to the full width of its container.
+         */
         "fullWidth": boolean;
+        /**
+          * The string that is displayed and that is also copied to the clipboard upon interaction.
+         */
         "value": string;
     }
     interface PdsDivider {
@@ -816,8 +825,17 @@ declare namespace LocalJSX {
         "variant"?: 'text' | 'tag' | 'dropdown';
     }
     interface PdsCopytext {
+        /**
+          * Determines whether copytext should have a border.
+         */
         "border"?: boolean;
+        /**
+          * Determines whether copytext should expand to the full width of its container.
+         */
         "fullWidth"?: boolean;
+        /**
+          * The string that is displayed and that is also copied to the clipboard upon interaction.
+         */
         "value"?: string;
     }
     interface PdsDivider {
