@@ -35,7 +35,7 @@
     }
 
     span {
-      margin-right: var(--spacing-sm);
+      margin-inline-end: var(--spacing-xs);
       white-space: nowrap;
     }
 
@@ -61,6 +61,7 @@
     span {
       border: var(--border);
       border-radius: var(--border-radius);
+      margin-inline-end: var(--spacing-sm);
       padding-block: var(--spacing-xs);
       padding-inline: var(--spacing-sm);
     }
