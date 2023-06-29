@@ -20,7 +20,7 @@ A small component to use in places where "copy" text is provided to be copied el
 <Story story={stories.Default} />
 
 <Canvas>
-  <pds-copytext value="Copy this"></pds-copytext>
+  <pds-copytext value="Copy this text"></pds-copytext>
 </Canvas>
 
 ### Borderless
@@ -28,7 +28,7 @@ A small component to use in places where "copy" text is provided to be copied el
 <Story story={stories.Borderless} />
 
 <Canvas>
-  <pds-copytext value="Copy that" border="false"></pds-copytext>
+  <pds-copytext value="Copy that text" border="false"></pds-copytext>
 </Canvas>
 
 ### Full width
@@ -36,5 +36,15 @@ A small component to use in places where "copy" text is provided to be copied el
 <Story story={stories.FullWidth} />
 
 <Canvas>
-  <pds-copytext value="Copy all of this" full-width="true"></pds-copytext>
+  <pds-copytext value="Copy all of this text" full-width="true"></pds-copytext>
+</Canvas>
+
+### Truncate
+
+<Story story={stories.Truncate} />
+
+<Canvas>
+  <div  style={{ width: '350px' }}>
+    <pds-copytext value="Copy all of this really long text that should be truncated in the UI, but will still be copied to the clipboard." truncate="true"></pds-copytext>
+  </div>
 </Canvas>
