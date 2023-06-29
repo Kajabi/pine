@@ -55,7 +55,7 @@ export class PdsCopytext {
       <Host class={this.classNames()}>
         <button type="button" onClick={() => this.copyToClipboard(this.value)}>
           <span>{this.value}</span>
-          <pds-icon name="copy" size="18px"></pds-icon>
+          <pds-icon name="copy" size="16px"></pds-icon>
         </button>
       </Host>
     );

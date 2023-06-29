@@ -12,7 +12,7 @@ describe('pds-copytext', () => {
         <mock:shadow-root>
           <button type="button">
             <span></span>
-            <pds-icon name="copy" size="18px"></pds-icon>
+            <pds-icon name="copy" size="16px"></pds-icon>
           </button>
         </mock:shadow-root>
       </pds-copytext>
