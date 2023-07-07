@@ -1,0 +1,20 @@
+import { Meta, Story, Canvas, Source, ArgsTable } from '@storybook/addon-docs';
+import { html, render } from 'lit-html';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+import * as stories from './pds-label.stories.js';
+
+<Meta title="components/Label" component="pds-label" argTypes={extractArgTypes('pds-label')} />
+
+# Label
+
+## Properties
+
+<ArgsTable of="pds-label" />
+
+### Default
+
+<Story story={stories.Default} />
+
+<Canvas></Canvas>
