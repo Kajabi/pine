@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@pine-ds/core": "*",
-    "@pine-ds/icons": "*"
+    "pineicons": "*"
   },
   "devDependencies": {
     "@types/jest": "^29.1.2",

@@ -2,7 +2,8 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
 
-import { SageButton } from '@sage/react';
+import { PdsButton, PdsCheckbox, PdsIcon, PdsInput, PdsRadio } from '@pine-ds/react';
+import { add } from 'pineicons/icons';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -32,7 +33,8 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-      <SageButton variant="accent" onClick={handleClick}>Test Sage Button</SageButton>
+      <PdsCheckbox componentId='foo' label="Test" onClick={handleClick}/>
+      <PdsIcon icon={add} size="large" />
     </div>
   )
 }

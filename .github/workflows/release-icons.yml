@@ -28,7 +28,7 @@ jobs:
         uses: ./.github/workflows/actions/publish-npm
         with:
           project: 'icons'
-          scope: '@pine-ds/icons'
+          scope: 'pineicons'
           tag: ${{ inputs.tag }}
           token: ${{ secrets.NPM_TOKEN }}
           version: ${{ inputs.version }}

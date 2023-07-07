@@ -1,4 +1,4 @@
-import type { Components as PdsIconsComponents, JSX as PdsIconsJSX } from '@pine-ds/icons';
+import type { Components as PdsIconsComponents, JSX as PdsIconsJSX } from 'pineicons';
 
 export * from './components';
 export * from './index';

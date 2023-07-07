@@ -52,7 +52,7 @@
     "test.watch": "stencil test --spec --e2e --watchAll --coverage"
   },
   "dependencies": {
-    "@pine-ds/icons": "*",
+    "pineicons": "*",
     "@stencil/core": "^4.0.2"
   },
   "devDependencies": {

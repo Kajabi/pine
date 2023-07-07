@@ -37,7 +37,7 @@ runs:
       shell: bash
 
     - name: Build Icons
-      run: yarn nx run icons:build
+      run: yarn nx run pineicons:build
       shell: bash
 
     - name: Upload Icons Build Archive

@@ -28,7 +28,7 @@
       "@pine-ds/react": [
         "./react"
       ],
-      "@pine-ds/icons": [
+      "pineicons": [
         "./libs/icons"
       ]
     },
