@@ -57,6 +57,11 @@ export const run = async(rootDir: string, optimizeFiles = false) => {
       log('Optimizing SVGs...');
       await optimizeSvgs(srcSvgData);
     }
+    else {
+      log(`Copying previous optimized files to ${join(distPineIconsDir, 'svg')}.`)
+      fs.copy(optimizedOutputSvgDir, join(distPineIconsDir, 'svg'));
+      fs.copy(optimizedOutputSvgDir, distSvgDir);
+    }
 
     await Promise.all([
       createDataJson(version, optimizedOutputDir, distDir, srcSvgData),

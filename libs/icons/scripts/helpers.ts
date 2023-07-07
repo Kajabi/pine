@@ -110,4 +110,5 @@ export const reservedKeywords = new Set([
   'implements',
   'instanceof',
   'constructor',
+  'package'
 ])
