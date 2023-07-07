@@ -12,6 +12,10 @@ export namespace Components {
          */
         "color"?: string;
         /**
+          * This a combination of both `name` and `src`. If a `src` url is detected it will set the `src` property. Otherwise it assumes it's a built-in named SVG and set the `name` property.
+         */
+        "icon"?: any;
+        /**
           * The name of the icon to use from the built-in set.
          */
         "name"?: string;
@@ -43,6 +47,10 @@ declare namespace LocalJSX {
           * The color of the icon
          */
         "color"?: string;
+        /**
+          * This a combination of both `name` and `src`. If a `src` url is detected it will set the `src` property. Otherwise it assumes it's a built-in named SVG and set the `name` property.
+         */
+        "icon"?: any;
         /**
           * The name of the icon to use from the built-in set.
          */

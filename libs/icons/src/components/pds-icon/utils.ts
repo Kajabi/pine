@@ -22,7 +22,14 @@ export const getIconMap = (): Map<string, string> => {
   }
 }
 
-export const getName = (iconName: string | undefined) => {
+export const getName = (
+  iconName: string | undefined,
+  icon: string | undefined,
+) => {
+  if(!iconName && icon && !isSrc(icon)) {
+    iconName = icon;
+  }
+
   if (isStr(iconName)) {
     iconName = toLower(iconName);
   }
@@ -58,13 +65,21 @@ export const getSrc = (src: string | undefined) => {
   return null;
 }
 
-export const getUrl = (icon: PdsIcon) => {
-  const url = getName(icon.name);
+export const getUrl = (i: PdsIcon) => {
+  let url = getName(i.name, i.icon);
   if (url) {
     return getNamedUrl(url);
   }
-};
 
+  if (i.icon) {
+    url = getSrc(i.icon);
+    if (url) {
+      return url;
+    }
+  }
+
+  return null;
+};
 
 export const isSrc = (str: string) => str.length > 0 && /(\/|\.)/.test(str);
 export const isStr = (val: any): val is string => typeof val === 'string';
