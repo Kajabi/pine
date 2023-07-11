@@ -16,6 +16,13 @@
 | `value` _(required)_ | `value`        | String that is displayed and that is also copied to the clipboard upon interaction. | `string`  | `undefined` |
 
 
+## Events
+
+| Event              | Description                            | Type               |
+| ------------------ | -------------------------------------- | ------------------ |
+| `pdsCopyTextClick` | Event when copyText button is clicked. | `CustomEvent<any>` |
+
+
 ## Dependencies
 
 ### Depends on

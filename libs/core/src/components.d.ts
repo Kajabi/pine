@@ -543,6 +543,10 @@ export interface PdsChipCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsChipElement;
 }
+export interface PdsCopytextCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsCopytextElement;
+}
 export interface PdsInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsInputElement;
@@ -845,6 +849,10 @@ declare namespace LocalJSX {
           * Determines whether `copytext` should expand to the full width of its container.
          */
         "fullWidth"?: boolean;
+        /**
+          * Event when copyText button is clicked.
+         */
+        "onPdsCopyTextClick"?: (event: PdsCopytextCustomEvent<any>) => void;
         /**
           * Determines whether the `value` should truncate and display with an ellipsis.
          */

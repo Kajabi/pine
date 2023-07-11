@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop } from '@stencil/core';
+import { Component,Event, EventEmitter, Host, h, Prop } from '@stencil/core';
 
 @Component({
   tag: 'pds-copytext',
@@ -27,12 +27,34 @@ export class PdsCopytext {
    */
   @Prop() value!: string;
 
+  /**
+   * Event when copyText button is clicked.
+   */
+  @Event() pdsCopyTextClick: EventEmitter;
+
   async copyToClipboard(value: string) {
-    try {
-      await navigator.clipboard.writeText(value);
-      console.log('✅ Copied to clipboard:', value);
-    } catch (err) {
-      console.error('🛑 Failed to copy:', err);
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(value)
+        .then(() => {
+          this.pdsCopyTextClick.emit("Copied to clipboard");
+          console.log(this.pdsCopyTextClick.emit("Copied to clipboard"));
+        })
+        .catch(err => {
+          this.pdsCopyTextClick.emit('Error writing text to clipboard: ' + err);
+          console.log(this.pdsCopyTextClick.emit('Error writing text to clipboard: ' + err));
+        });
+    } else {
+      // fallback for Safari
+      const el = document.createElement('textarea');
+      el.value = value;
+      el.setAttribute('readonly', '');
+      el.setAttribute('class', 'visually-hidden');
+      document.body.appendChild(el);
+      el.select();
+
+      document.execCommand("copy");
+      document.body.removeChild(el);
+      this.pdsCopyTextClick.emit("Copied to clipboard");
     }
   }
 
