@@ -13,12 +13,12 @@
   --spacing-xs: var(--pine-spacing-xs); // 8px
   --spacing-xxs: var(--pine-spacing-xxs); // 4px
 
-  button {
+  pds-button {
     align-items: center;
     background: var(--background);
     border: 0;
     border-radius: var(--border-radius);
-    display: flex;
+    display: inline-flex;
     font-size: var(--font-size);
     font-weight: var(--font-weight);
     max-width: 100%;
@@ -50,7 +50,7 @@
     border: 0;
     padding: 0;
 
-    button {
+    pds-button {
       padding: 0;
 
       &:hover {
@@ -76,9 +76,11 @@
   // full width
 
   &:host(.pds-copytext--full-width) {
+    display: flex;
     width: 100%;
 
-    button {
+    pds-button {
+      display: flex;
       justify-content: space-between;
       width: 100%;
 
@@ -92,10 +94,16 @@
   // truncated
 
   &:host(.pds-copytext--truncated) {
-    span {
-      overflow: hidden;
-      text-overflow: ellipsis;
+    pds-button {
+      display: flex;
       width: 100%;
+
+      span {
+        overflow: hidden;
+        text-align: left;
+        text-overflow: ellipsis;
+        width: 100%;
+      }
     }
   }
 }
