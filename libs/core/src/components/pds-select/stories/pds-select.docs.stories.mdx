@@ -1,0 +1,34 @@
+import { Meta, Story, Canvas, Source, ArgsTable } from '@storybook/addon-docs';
+import { html, render } from 'lit-html';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+import * as stories from './pds-select.stories.js';
+
+<Meta
+  title="components/Select"
+  component="pds-select"
+  argTypes={extractArgTypes('pds-select')}
+  args={{
+    checked: false,
+    disabled: false,
+    invalid: false,
+    required: false,
+  }}
+/>
+
+# Select
+
+This is select description text
+
+## Properties
+
+<ArgsTable of="pds-select" />
+
+### Default
+
+<Story story={stories.Default} />
+
+<Canvas>
+  <pds-select component-id="default" label="Label" />
+</Canvas>

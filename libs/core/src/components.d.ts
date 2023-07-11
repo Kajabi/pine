@@ -388,6 +388,10 @@ export namespace Components {
          */
         "value": string;
     }
+    interface PdsSelect {
+        "options": Array<string>;
+        "selectedOption": string;
+    }
     interface PdsSortable {
         /**
           * Determines whether `sortable` should have a border.
@@ -822,6 +826,12 @@ declare global {
         prototype: HTMLPdsRadioElement;
         new (): HTMLPdsRadioElement;
     };
+    interface HTMLPdsSelectElement extends Components.PdsSelect, HTMLStencilElement {
+    }
+    var HTMLPdsSelectElement: {
+        prototype: HTMLPdsSelectElement;
+        new (): HTMLPdsSelectElement;
+    };
     interface HTMLPdsSortableElementEventMap {
         "pdsSortableItemMoved": any;
     }
@@ -996,6 +1006,7 @@ declare global {
         "pds-link": HTMLPdsLinkElement;
         "pds-progress": HTMLPdsProgressElement;
         "pds-radio": HTMLPdsRadioElement;
+        "pds-select": HTMLPdsSelectElement;
         "pds-sortable": HTMLPdsSortableElement;
         "pds-sortable-item": HTMLPdsSortableItemElement;
         "pds-switch": HTMLPdsSwitchElement;
@@ -1411,6 +1422,10 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
+    interface PdsSelect {
+        "options"?: Array<string>;
+        "selectedOption"?: string;
+    }
     interface PdsSortable {
         /**
           * Determines whether `sortable` should have a border.
@@ -1707,6 +1722,7 @@ declare namespace LocalJSX {
         "pds-link": PdsLink;
         "pds-progress": PdsProgress;
         "pds-radio": PdsRadio;
+        "pds-select": PdsSelect;
         "pds-sortable": PdsSortable;
         "pds-sortable-item": PdsSortableItem;
         "pds-switch": PdsSwitch;
@@ -1738,6 +1754,7 @@ declare module "@stencil/core" {
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
             "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-radio": LocalJSX.PdsRadio & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
+            "pds-select": LocalJSX.PdsSelect & JSXBase.HTMLAttributes<HTMLPdsSelectElement>;
             "pds-sortable": LocalJSX.PdsSortable & JSXBase.HTMLAttributes<HTMLPdsSortableElement>;
             "pds-sortable-item": LocalJSX.PdsSortableItem & JSXBase.HTMLAttributes<HTMLPdsSortableItemElement>;
             "pds-switch": LocalJSX.PdsSwitch & JSXBase.HTMLAttributes<HTMLPdsSwitchElement>;
