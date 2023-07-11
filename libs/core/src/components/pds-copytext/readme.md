@@ -20,11 +20,13 @@
 
 ### Depends on
 
+- [pds-button](../pds-button)
 - pds-icon
 
 ### Graph
 ```mermaid
 graph TD;
+  pds-copytext --> pds-button
   pds-copytext --> pds-icon
   style pds-copytext fill:#f9f,stroke:#333,stroke-width:4px
 ```

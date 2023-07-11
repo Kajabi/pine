@@ -70,7 +70,7 @@ export namespace Components {
         /**
           * Sets button variant styles as outlined in Figma documentation
          */
-        "variant": 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
+        "variant": 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled';
     }
     interface PdsCheckbox {
         /**
@@ -754,7 +754,7 @@ declare namespace LocalJSX {
         /**
           * Sets button variant styles as outlined in Figma documentation
          */
-        "variant"?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
+        "variant"?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled';
     }
     interface PdsCheckbox {
         /**
