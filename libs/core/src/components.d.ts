@@ -257,6 +257,9 @@ export namespace Components {
          */
         "value"?: string;
     }
+    interface PdsLabel {
+        "for"?: string | null;
+    }
     interface PdsLink {
         /**
           * When enabled, opens link in a new tab.
@@ -623,6 +626,12 @@ declare global {
         prototype: HTMLPdsInputElement;
         new (): HTMLPdsInputElement;
     };
+    interface HTMLPdsLabelElement extends Components.PdsLabel, HTMLStencilElement {
+    }
+    var HTMLPdsLabelElement: {
+        prototype: HTMLPdsLabelElement;
+        new (): HTMLPdsLabelElement;
+    };
     interface HTMLPdsLinkElement extends Components.PdsLink, HTMLStencilElement {
     }
     var HTMLPdsLinkElement: {
@@ -686,6 +695,7 @@ declare global {
         "pds-divider": HTMLPdsDividerElement;
         "pds-image": HTMLPdsImageElement;
         "pds-input": HTMLPdsInputElement;
+        "pds-label": HTMLPdsLabelElement;
         "pds-link": HTMLPdsLinkElement;
         "pds-progress": HTMLPdsProgressElement;
         "pds-radio": HTMLPdsRadioElement;
@@ -963,6 +973,9 @@ declare namespace LocalJSX {
           * The value of the input
          */
         "value"?: string;
+    }
+    interface PdsLabel {
+        "for"?: string | null;
     }
     interface PdsLink {
         /**
@@ -1266,6 +1279,7 @@ declare namespace LocalJSX {
         "pds-divider": PdsDivider;
         "pds-image": PdsImage;
         "pds-input": PdsInput;
+        "pds-label": PdsLabel;
         "pds-link": PdsLink;
         "pds-progress": PdsProgress;
         "pds-radio": PdsRadio;
@@ -1289,6 +1303,7 @@ declare module "@stencil/core" {
             "pds-divider": LocalJSX.PdsDivider & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
             "pds-image": LocalJSX.PdsImage & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
             "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
+            "pds-label": LocalJSX.PdsLabel & JSXBase.HTMLAttributes<HTMLPdsLabelElement>;
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
             "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-radio": LocalJSX.PdsRadio & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;

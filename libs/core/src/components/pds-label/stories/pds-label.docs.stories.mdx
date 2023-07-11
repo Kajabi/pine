@@ -5,7 +5,14 @@ import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 import * as stories from './pds-label.stories.js';
 
-<Meta title="components/Label" component="pds-label" argTypes={extractArgTypes('pds-label')} />
+<Meta
+  title="components/Label"
+  component="pds-label"
+  argTypes={extractArgTypes('pds-label')}
+  args={{
+    for: null,
+  }}
+/>
 
 # Label
 
@@ -17,4 +24,6 @@ import * as stories from './pds-label.stories.js';
 
 <Story story={stories.Default} />
 
-<Canvas></Canvas>
+<Canvas>
+  <pds-label>label</pds-label>
+</Canvas>

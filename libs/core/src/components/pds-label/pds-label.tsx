@@ -1,4 +1,4 @@
-import { Component, Host, h } from '@stencil/core';
+import { Component, Host, h, Prop } from '@stencil/core';
 
 @Component({
   tag: 'pds-label',
@@ -7,12 +7,15 @@ import { Component, Host, h } from '@stencil/core';
 })
 export class PdsLabel {
 
+  @Prop() for?: string | null = null;
+
   render() {
     return (
-      <Host>
-        <slot></slot>
+      <Host class="pds-label">
+        <label htmlFor={this.for}>
+          <slot></slot>
+        </label>
       </Host>
     );
   }
-
 }

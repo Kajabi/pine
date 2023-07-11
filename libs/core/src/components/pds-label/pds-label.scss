@@ -1,3 +1,13 @@
 :host {
-  display: block;
+  display: inline-block;
+}
+
+label {
+  --color: var(--pine-color-neutral-charcoal-400);
+  --font-family: var(--pine-font-family-circular);
+  --font-weight: var(--pine-font-weight-medium);
+
+  color: var(--color);
+  font-family: var(--font-family);
+  font-weight: var(--font-weight);
 }
