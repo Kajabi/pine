@@ -11,6 +11,10 @@ export class PdsCopytext {
    */
   @Prop() border = true;
   /**
+   * String used for the component `id` attribute.
+   */
+  @Prop() componentId: string;
+  /**
    * Determines whether `copytext` should expand to the full width of its container.
    */
   @Prop() fullWidth = false;
@@ -19,7 +23,7 @@ export class PdsCopytext {
    */
   @Prop() truncate = false;
   /**
-   * The string that is displayed and that is also copied to the clipboard upon interaction.
+   * String that is displayed and that is also copied to the clipboard upon interaction.
    */
   @Prop() value!: string;
 
@@ -52,7 +56,7 @@ export class PdsCopytext {
 
   render() {
     return (
-      <Host class={this.classNames()}>
+      <Host class={this.classNames()} id={this.componentId}>
         <button type="button" onClick={() => this.copyToClipboard(this.value)}>
           <span>{this.value}</span>
           <pds-icon name="copy" size="16px"></pds-icon>

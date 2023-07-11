@@ -146,6 +146,10 @@ export namespace Components {
          */
         "border": boolean;
         /**
+          * String used for the component `id` attribute.
+         */
+        "componentId": string;
+        /**
           * Determines whether `copytext` should expand to the full width of its container.
          */
         "fullWidth": boolean;
@@ -154,7 +158,7 @@ export namespace Components {
          */
         "truncate": boolean;
         /**
-          * The string that is displayed and that is also copied to the clipboard upon interaction.
+          * String that is displayed and that is also copied to the clipboard upon interaction.
          */
         "value": string;
     }
@@ -834,6 +838,10 @@ declare namespace LocalJSX {
          */
         "border"?: boolean;
         /**
+          * String used for the component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
           * Determines whether `copytext` should expand to the full width of its container.
          */
         "fullWidth"?: boolean;
@@ -842,7 +850,7 @@ declare namespace LocalJSX {
          */
         "truncate"?: boolean;
         /**
-          * The string that is displayed and that is also copied to the clipboard upon interaction.
+          * String that is displayed and that is also copied to the clipboard upon interaction.
          */
         "value": string;
     }

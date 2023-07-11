@@ -1,6 +1,6 @@
 import { html } from 'lit-html';
 
-const BaseTemplate = (args) => html` <pds-copytext border="${args.border}" full-width="${args.fullWidth}" truncate="${args.truncate}" value="${args.value}"></pds-copytext>`;
+const BaseTemplate = (args) => html` <pds-copytext border="${args.border}" full-width="${args.fullWidth}" component-id=${args.componentId} truncate="${args.truncate}" value="${args.value}"></pds-copytext>`;
 
 const defaultParameters = { docs: { disable: true } };
 
