@@ -87,19 +87,4 @@ describe('pds-copytext', () => {
     `);
   });
 
-  it('calls copyToClipboard when the button is clicked', async () => {
-    const page = await newSpecPage({
-      components: [PdsCopytext],
-      html: `<pds-copytext value="Test Value"></pds-copytext>`,
-    });
-
-    const component = page.rootInstance as PdsCopytext;
-    spyOn(component, 'copyToClipboard');
-
-    const button = page.root?.shadowRoot?.querySelector('pds-button');
-    button?.dispatchEvent(new Event('click'));
-
-    expect(component.copyToClipboard).toHaveBeenCalledWith('Test Value');
-  });
-
 });

@@ -32,19 +32,19 @@ export class PdsCopytext {
    */
   @Event() pdsCopyTextClick: EventEmitter;
 
-  async copyToClipboard(value: string) {
+  private copyToClipboard = (value: string) => {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(value)
         .then(() => {
-          this.pdsCopyTextClick.emit("Copied to clipboard");
+          this.pdsCopyTextClick.emit('Copied to clipboard');
           console.log(this.pdsCopyTextClick.emit("Copied to clipboard"));
         })
-        .catch(err => {
+        .catch((err) => {
           this.pdsCopyTextClick.emit('Error writing text to clipboard: ' + err);
           console.log(this.pdsCopyTextClick.emit('Error writing text to clipboard: ' + err));
         });
     } else {
-      // fallback for Safari
+      // fallback for safari
       const el = document.createElement('textarea');
       el.value = value;
       el.setAttribute('readonly', '');
@@ -52,10 +52,14 @@ export class PdsCopytext {
       document.body.appendChild(el);
       el.select();
 
-      document.execCommand("copy");
+      document.execCommand('copy');
       document.body.removeChild(el);
-      this.pdsCopyTextClick.emit("Copied to clipboard");
+      this.pdsCopyTextClick.emit('Copied to clipboard');
     }
+  }
+
+  private handleClick = () => {
+    this.copyToClipboard(this.value);
   }
 
   private classNames() {
@@ -79,7 +83,7 @@ export class PdsCopytext {
   render() {
     return (
       <Host class={this.classNames()} id={this.componentId}>
-        <pds-button type="button" variant="unstyled" onClick={() => this.copyToClipboard(this.value)}>
+        <pds-button type="button" variant="unstyled" onClick={this.handleClick}>
           <span>{this.value}</span>
           <pds-icon name="copy" size="16px"></pds-icon>
         </pds-button>
