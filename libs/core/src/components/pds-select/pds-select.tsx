@@ -1,60 +1,81 @@
-import { Component, h, Prop, Listen } from '@stencil/core';
+import { Component, Element, Host, h, Prop, Event, EventEmitter, ComponentInterface } from '@stencil/core';
 
 @Component({
   tag: 'pds-select',
   styleUrl: 'pds-select.scss',
   shadow: true,
 })
-export class PdsSelect {
-  @Prop() options: Array<string>;
-  @Prop({ mutable: true }) selectedOption: string;
+export class PdsSelect implements ComponentInterface {
+  @Element() el!: HTMLPdsSelectElement;
 
-  private expanded = false;
+  @Prop() componentId!: string;
+  @Prop() disabled = false;
+  @Prop() errorMessage?: string;
+  @Prop() hintMessage?: string;
+  @Prop({ mutable: true }) invalid = false;
+  @Prop() label?: string;
+  @Prop() name: string = this.componentId;
+  @Prop() placeholder?: string;
+  @Prop() readonly = false;
+  @Prop() required = false;
+  @Prop({ mutable: true }) value?: string;
 
-  @Listen('keydown', {})
-  handleKeyDown(event: KeyboardEvent) {
-    if (event.key === 'ArrowDown') {
-      this.expanded = true;
-      event.preventDefault();
+  @Event() pdsSelectChange!: EventEmitter<string>;
+
+  private onSelectChange = (ev: Event) => {
+    const select = ev.target as HTMLSelectElement;
+    if (select) {
+      this.value = select.value;
     }
-  }
+    this.pdsSelectChange.emit(this.value);
+  };
 
-  handleOptionClick(option: string) {
-    this.selectedOption = option;
-    this.expanded = false;
+  private selectClassNames() {
+    const classNames = ['combo-input'];
+    if (this.invalid && this.invalid === true) {
+      classNames.push('is-invalid');
+    }
+    return classNames.join(' ');
   }
 
   render() {
     return (
-      <div
-        role="combobox"
-        aria-expanded={this.expanded}
-        aria-haspopup="listbox"
-        aria-owns="options-list"
-        aria-controls="options-list"
-      >
-        <input
-          type="text"
-          value={this.selectedOption}
-          aria-autocomplete="list"
-          aria-controls="options-list"
-          onFocus={() => (this.expanded = true)}
-          onBlur={() => (this.expanded = false)}
-        />
-        {this.expanded && (
-          <ul id="options-list" role="listbox">
-            {this.options.map((option) => (
-              <li
-                role="option"
-                aria-selected={option === this.selectedOption}
-                onClick={() => this.handleOptionClick(option)}
-              >
-                {option}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+      <Host>
+        <div class="pds-select combo js-select">
+          {this.label && (
+            <label
+              htmlFor={this.componentId}
+              id={`${this.componentId}-label`}
+              class="pds-select__label combo-label"
+            >
+              {this.label}
+            </label>
+          )}
+
+          <div
+            aria-controls={`${this.componentId}-listbox`}
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            aria-labelledby={`${this.componentId}-label`}
+            class={this.selectClassNames()}
+            id={this.componentId}
+            role="combobox"
+            tabindex="0"
+            onChange={this.onSelectChange}
+            // disabled={this.disabled}
+          ></div>
+
+          <div
+            aria-labelledby={`${this.componentId}-label`}
+            class="pds-select__menu combo-menu"
+            id={`${this.componentId}-listbox`}
+            role="listbox"
+            tabindex="-1"
+          >
+            <slot></slot>
+          </div>
+        </div>
+      </Host>
     );
   }
 }

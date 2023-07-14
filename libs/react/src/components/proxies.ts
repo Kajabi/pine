@@ -18,6 +18,7 @@ import { defineCustomElement as definePdsLink } from '@pine-ds/core/components/p
 import { defineCustomElement as definePdsProgress } from '@pine-ds/core/components/pds-progress.js';
 import { defineCustomElement as definePdsRadio } from '@pine-ds/core/components/pds-radio.js';
 import { defineCustomElement as definePdsSelect } from '@pine-ds/core/components/pds-select.js';
+import { defineCustomElement as definePdsSelectOption } from '@pine-ds/core/components/pds-select-option.js';
 import { defineCustomElement as definePdsSortable } from '@pine-ds/core/components/pds-sortable.js';
 import { defineCustomElement as definePdsSortableItem } from '@pine-ds/core/components/pds-sortable-item.js';
 import { defineCustomElement as definePdsSwitch } from '@pine-ds/core/components/pds-switch.js';
@@ -46,6 +47,7 @@ export const PdsLink = /*@__PURE__*/createReactComponent<JSX.PdsLink, HTMLPdsLin
 export const PdsProgress = /*@__PURE__*/createReactComponent<JSX.PdsProgress, HTMLPdsProgressElement>('pds-progress', undefined, undefined, definePdsProgress);
 export const PdsRadio = /*@__PURE__*/createReactComponent<JSX.PdsRadio, HTMLPdsRadioElement>('pds-radio', undefined, undefined, definePdsRadio);
 export const PdsSelect = /*@__PURE__*/createReactComponent<JSX.PdsSelect, HTMLPdsSelectElement>('pds-select', undefined, undefined, definePdsSelect);
+export const PdsSelectOption = /*@__PURE__*/createReactComponent<JSX.PdsSelectOption, HTMLPdsSelectOptionElement>('pds-select-option', undefined, undefined, definePdsSelectOption);
 export const PdsSortable = /*@__PURE__*/createReactComponent<JSX.PdsSortable, HTMLPdsSortableElement>('pds-sortable', undefined, undefined, definePdsSortable);
 export const PdsSortableItem = /*@__PURE__*/createReactComponent<JSX.PdsSortableItem, HTMLPdsSortableItemElement>('pds-sortable-item', undefined, undefined, definePdsSortableItem);
 export const PdsSwitch = /*@__PURE__*/createReactComponent<JSX.PdsSwitch, HTMLPdsSwitchElement>('pds-switch', undefined, undefined, definePdsSwitch);
