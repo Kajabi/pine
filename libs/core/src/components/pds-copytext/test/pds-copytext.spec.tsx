@@ -87,4 +87,63 @@ describe('pds-copytext', () => {
     `);
   });
 
+  it('copies value text to clipboard when button is clicked', async () => {
+    const page = await newSpecPage({
+      components: [PdsCopytext],
+      html: `<pds-copytext value="custom value text"></pds-copytext>`,
+    });
+
+    // Create a mock for navigator.clipboard
+    const clipboardMock = {
+      writeText: jest.fn(),
+    };
+
+    // Spy on the writeText method of the clipboard mock
+    const writeTextSpy = jest.spyOn(clipboardMock, 'writeText');
+    writeTextSpy.mockResolvedValue(undefined); // Mock a resolved promise
+
+    // Mock the navigator.clipboard object
+    Object.defineProperty(window, 'navigator', {
+      value: {
+        clipboard: clipboardMock,
+      },
+      configurable: true,
+    });
+
+    const button = page.root?.shadowRoot?.querySelector('pds-button') as HTMLButtonElement;
+    button.click();
+
+    expect(writeTextSpy).toHaveBeenCalledWith('custom value text');
+  });
+
+  it('emits error event when clipboard writeText fails', async () => {
+    const page = await newSpecPage({
+      components: [PdsCopytext],
+      html: `<pds-copytext value="custom value text"></pds-copytext>`,
+    });
+
+    // Create a mock for the event emitter
+    const emitMock = jest.fn();
+
+    // Mock the navigator.clipboard object
+    Object.defineProperty(window, 'navigator', {
+      value: {
+        clipboard: {
+          writeText: jest.fn().mockRejectedValue(new Error('Clipboard write error')),
+        },
+      },
+      configurable: true,
+    });
+
+    // Replace the event emitter with the mock
+    page.rootInstance.pdsCopyTextClick.emit = emitMock;
+
+    const button = page.root?.shadowRoot?.querySelector('pds-button') as HTMLButtonElement;
+    button.click();
+
+    await page.waitForChanges();
+
+    expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith('custom value text');
+    expect(emitMock).toHaveBeenCalledWith('Error writing text to clipboard: Error: Clipboard write error');
+  });
 });

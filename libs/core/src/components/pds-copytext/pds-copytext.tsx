@@ -32,31 +32,31 @@ export class PdsCopytext {
    */
   @Event() pdsCopyTextClick: EventEmitter;
 
-  private copyToClipboard = (value: string) => {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(value)
-        .then(() => {
-          this.pdsCopyTextClick.emit('Copied to clipboard');
-          console.log(this.pdsCopyTextClick.emit("Copied to clipboard"));
-        })
-        .catch((err) => {
-          this.pdsCopyTextClick.emit('Error writing text to clipboard: ' + err);
-          console.log(this.pdsCopyTextClick.emit('Error writing text to clipboard: ' + err));
-        });
-    } else {
-      // fallback for safari
-      const el = document.createElement('textarea');
-      el.value = value;
-      el.setAttribute('readonly', '');
-      el.setAttribute('class', 'visually-hidden');
-      document.body.appendChild(el);
-      el.select();
-
-      document.execCommand('copy');
-      document.body.removeChild(el);
-      this.pdsCopyTextClick.emit('Copied to clipboard');
+  private copyToClipboard = async (value: string) => {
+    try {
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(value);
+        this.pdsCopyTextClick.emit('Copied to clipboard');
+        // console.log(this.pdsCopyTextClick.emit('Copied to clipboard'));
+      } else {
+        //falback for safari
+        const el = document.createElement('textarea');
+        el.value = value;
+        el.setAttribute('readonly', '');
+        el.style.position = 'absolute';
+        el.style.left = '-9999px';
+        document.body.appendChild(el);
+        el.focus();
+        el.setSelectionRange(0, el.value.length);
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        this.pdsCopyTextClick.emit('Copied to clipboard');
+      }
+    } catch (err) {
+      this.pdsCopyTextClick.emit(`Error writing text to clipboard: ${err}`);
+      // console.log(this.pdsCopyTextClick.emit( this.pdsCopyTextClick.emit(`Error writing text to clipboard: ${err}`)));
     }
-  }
+  };
 
   private handleClick = () => {
     this.copyToClipboard(this.value);
