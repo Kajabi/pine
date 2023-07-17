@@ -78,3 +78,7 @@ export class PdfSelectOption {
     );
   }
 }
+
+
+// TODO if it have a value`,` make it an li, otherwise make div and fill the slot
+// do in a method rather to not have extra code
