@@ -16,9 +16,9 @@
 
 ## Events
 
-| Event                     | Description                                                    | Type               |
-| ------------------------- | -------------------------------------------------------------- | ------------------ |
-| `pdsSelectOptionSelected` | Triggered when an option is clicked when allowSelect is false. | `CustomEvent<any>` |
+| Event                     | Description                         | Type               |
+| ------------------------- | ----------------------------------- | ------------------ |
+| `pdsSelectOptionSelected` | Triggered when an option is clicked | `CustomEvent<any>` |
 
 
 ----------------------------------------------

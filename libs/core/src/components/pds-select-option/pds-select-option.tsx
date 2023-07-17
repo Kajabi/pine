@@ -6,7 +6,7 @@ import { Component, Element, Event, EventEmitter, h, Prop } from '@stencil/core'
   shadow: true,
 })
 export class PdfSelectOption {
-  @Element() element: HTMLPdsSelectOptionElement;
+  @Element() element!: HTMLPdsSelectOptionElement;
 
   /**
    * Sets the state of the option to
@@ -24,14 +24,33 @@ export class PdfSelectOption {
   @Prop() value: string | number;
 
   /**
-   * Triggered when an option is clicked when allowSelect is false.
+   * Triggered when an option is clicked
    */
+  // @Event({ bubbles: true, composed: true }) pdsSelectOptionSelected: EventEmitter<{ value: string; event: Event }>;
   @Event({ bubbles: true, composed: true }) pdsSelectOptionSelected: EventEmitter;
 
   private onOptionSelected = (ev: Event) => {
-    console.log('ev: ', ev);
-    this.selected = !this.selected
-    this.pdsSelectOptionSelected.emit({value: this.value, event: ev})
+    console.log(this);
+    this.selected = true;
+    this.pdsSelectOptionSelected.emit({value: this.value as string, event: ev});
+  }
+
+  componentDidLoad() {
+    this.updateSelectedAttribute();
+  }
+
+  componentDidUpdate() {
+    this.updateSelectedAttribute();
+  }
+
+  // Is this solution better or the `aria-selected` in the render?
+  // Currenlty they are doing the same thing.
+  private updateSelectedAttribute() {
+    const optionElement = this.element.shadowRoot.querySelector('li');
+
+    if (optionElement) {
+      optionElement.setAttribute('aria-selected', this.selected ? 'true' : 'false');
+    }
   }
 
   private selectOptionClassNames() {
@@ -47,7 +66,7 @@ export class PdfSelectOption {
   render() {
     return (
       <li
-        aria-selected={this.selected}
+        // aria-selected={this.selected}
         class={this.selectOptionClassNames()}
         role="option"
         onMouseDown={this.onOptionSelected}

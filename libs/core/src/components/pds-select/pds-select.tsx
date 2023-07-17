@@ -1,11 +1,11 @@
-import { Component, Element, Host, h, Prop, Event, EventEmitter, ComponentInterface } from '@stencil/core';
+import { Component, Element, Host, h, Prop, Event, EventEmitter, Listen } from '@stencil/core';
 
 @Component({
   tag: 'pds-select',
   styleUrl: 'pds-select.scss',
   shadow: true,
 })
-export class PdsSelect implements ComponentInterface {
+export class PdsSelect {
   @Element() el!: HTMLPdsSelectElement;
 
   @Prop() componentId!: string;
@@ -22,13 +22,21 @@ export class PdsSelect implements ComponentInterface {
 
   @Event() pdsSelectChange!: EventEmitter<string>;
 
-  private onSelectChange = (ev: Event) => {
-    const select = ev.target as HTMLSelectElement;
-    if (select) {
-      this.value = select.value;
-    }
-    this.pdsSelectChange.emit(this.value);
-  };
+  // private onSelectChange = (ev: Event) => {
+  //   console.log('ran');
+  //   const select = ev.target as HTMLSelectElement;
+  //   if (select) {
+  //     this.value = select.value;
+  //   }
+  //   this.pdsSelectChange.emit(this.value);
+
+  //   console.log('this.value: ', this.value);
+  // };
+
+  @Listen('pdsSelectOptionSelected')
+  pdsSelectedOption(event: CustomEvent<any>) {
+    this.value = event.detail.value;
+  }
 
   private selectClassNames() {
     const classNames = ['combo-input'];
@@ -36,6 +44,28 @@ export class PdsSelect implements ComponentInterface {
       classNames.push('is-invalid');
     }
     return classNames.join(' ');
+  }
+
+  private updateSelectedOptionText() {
+    const selectedOption = this.el.querySelector('pds-select-option[selected]');
+    if (selectedOption) {
+      this.value = selectedOption.getAttribute('value');
+      const comboInput = this.el.querySelector('.combo-input');
+      if (comboInput) {
+        comboInput.textContent = this.value;
+      }
+    }
+  }
+
+  private handleOptionSelected = (event: CustomEvent<{ value: string; event: Event }>) => {
+    const { value } = event.detail;
+    this.value = value;
+    this.pdsSelectChange.emit(this.value);
+    // this.updateSelectedOptionText();
+  };
+
+  componentDidRender() {
+    this.updateSelectedOptionText();
   }
 
   render() {
@@ -57,13 +87,18 @@ export class PdsSelect implements ComponentInterface {
             aria-expanded="false"
             aria-haspopup="listbox"
             aria-labelledby={`${this.componentId}-label`}
+            aria-activedescendant={`${this.componentId}-option-${this.value}`}
             class={this.selectClassNames()}
             id={this.componentId}
             role="combobox"
             tabindex="0"
-            onChange={this.onSelectChange}
+            // onChange={this.onSelectChange}
             // disabled={this.disabled}
-          ></div>
+          >
+            {this.value}
+          </div>
+
+
 
           <div
             aria-labelledby={`${this.componentId}-label`}

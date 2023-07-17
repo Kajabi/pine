@@ -1498,7 +1498,7 @@ declare namespace LocalJSX {
     }
     interface PdsSelectOption {
         /**
-          * Triggered when an option is clicked when allowSelect is false.
+          * Triggered when an option is clicked
          */
         "onPdsSelectOptionSelected"?: (event: PdsSelectOptionCustomEvent<any>) => void;
         /**
