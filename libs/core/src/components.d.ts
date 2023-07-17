@@ -399,6 +399,7 @@ export namespace Components {
         "placeholder"?: string;
         "readonly": boolean;
         "required": boolean;
+        "selectedOptionValue"?: string;
         "value"?: string;
     }
     interface PdsSelectOption {
@@ -1494,6 +1495,7 @@ declare namespace LocalJSX {
         "placeholder"?: string;
         "readonly"?: boolean;
         "required"?: boolean;
+        "selectedOptionValue"?: string;
         "value"?: string;
     }
     interface PdsSelectOption {

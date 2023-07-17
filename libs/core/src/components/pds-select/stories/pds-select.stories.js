@@ -37,7 +37,7 @@ export const Default = BaseTemplate.bind({});
 Default.args = {
   componentId: 'pds-select-default-example',
   label: 'Name',
-  onChange: selectEventExample(),
+  // onChange: selectEventExample(),
   name: 'Default',
 };
 Default.parameters = { ...defaultParameters };

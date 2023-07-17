@@ -1,4 +1,4 @@
-import { Component, Element, Host, h, Prop, Event, EventEmitter, Listen } from '@stencil/core';
+import { Component, Element, Host, h, Prop, Event, EventEmitter, Listen, Watch } from '@stencil/core';
 
 @Component({
   tag: 'pds-select',
@@ -7,6 +7,7 @@ import { Component, Element, Host, h, Prop, Event, EventEmitter, Listen } from '
 })
 export class PdsSelect {
   @Element() el!: HTMLPdsSelectElement;
+  @Prop() selectedOptionValue?: string;
 
   @Prop() componentId!: string;
   @Prop() disabled = false;
@@ -20,52 +21,48 @@ export class PdsSelect {
   @Prop() required = false;
   @Prop({ mutable: true }) value?: string;
 
+
   @Event() pdsSelectChange!: EventEmitter<string>;
-
-  // private onSelectChange = (ev: Event) => {
-  //   console.log('ran');
-  //   const select = ev.target as HTMLSelectElement;
-  //   if (select) {
-  //     this.value = select.value;
-  //   }
-  //   this.pdsSelectChange.emit(this.value);
-
-  //   console.log('this.value: ', this.value);
-  // };
 
   @Listen('pdsSelectOptionSelected')
   pdsSelectedOption(event: CustomEvent<any>) {
-    this.value = event.detail.value;
+    const { value } = event.detail;
+
+    if (this.selectedOptionValue !== value) {
+      // Deselect the previous selected option, if any
+      const prevSelectedOption = this.el.querySelector('pds-select-option[selected]') as HTMLPdsSelectOptionElement;
+
+      if (prevSelectedOption) {
+        prevSelectedOption.selected = false;
+      }
+
+      // Select the newly clicked option
+      this.selectedOptionValue = value;
+      const selectedOption = this.el.querySelector(`pds-select-option[value="${value}"]`) as HTMLPdsSelectOptionElement;
+
+      if (selectedOption) {
+        selectedOption.selected = true;
+      }
+      console.log(value);
+      this.pdsSelectChange.emit(this.selectedOptionValue);
+    }
   }
 
   private selectClassNames() {
     const classNames = ['combo-input'];
+
     if (this.invalid && this.invalid === true) {
       classNames.push('is-invalid');
     }
     return classNames.join(' ');
   }
 
-  private updateSelectedOptionText() {
-    const selectedOption = this.el.querySelector('pds-select-option[selected]');
-    if (selectedOption) {
-      this.value = selectedOption.getAttribute('value');
-      const comboInput = this.el.querySelector('.combo-input');
-      if (comboInput) {
-        comboInput.textContent = this.value;
-      }
-    }
-  }
-
-  private handleOptionSelected = (event: CustomEvent<{ value: string; event: Event }>) => {
-    const { value } = event.detail;
-    this.value = value;
-    this.pdsSelectChange.emit(this.value);
-    // this.updateSelectedOptionText();
-  };
-
   componentDidRender() {
-    this.updateSelectedOptionText();
+    const comboInput = this.el.querySelector('.combo-input');
+
+    if (comboInput) {
+      comboInput.textContent = this.selectedOptionValue || '';
+    }
   }
 
   render() {
@@ -92,13 +89,9 @@ export class PdsSelect {
             id={this.componentId}
             role="combobox"
             tabindex="0"
-            // onChange={this.onSelectChange}
-            // disabled={this.disabled}
           >
-            {this.value}
+            {this.selectedOptionValue}
           </div>
-
-
 
           <div
             aria-labelledby={`${this.componentId}-label`}
