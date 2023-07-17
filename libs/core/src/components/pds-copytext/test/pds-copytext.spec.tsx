@@ -122,28 +122,28 @@ describe('pds-copytext', () => {
       html: `<pds-copytext value="custom value text"></pds-copytext>`,
     });
 
-    // Create a mock for the event emitter
-    const emitMock = jest.fn();
+    // Mock the navigator.clipboard object to simulate writeText failure
+    const clipboardMock = {
+      writeText: jest.fn().mockRejectedValue(new Error('Clipboard write error')),
+    };
 
-    // Mock the navigator.clipboard object
+    // Set the mock clipboard object on the window.navigator
     Object.defineProperty(window, 'navigator', {
       value: {
-        clipboard: {
-          writeText: jest.fn().mockRejectedValue(new Error('Clipboard write error')),
-        },
+        clipboard: clipboardMock,
       },
       configurable: true,
     });
 
-    // Replace the event emitter with the mock
-    page.rootInstance.pdsCopyTextClick.emit = emitMock;
+    // Attach a spy to the component's event emitter
+    const emitSpy = jest.spyOn(page.rootInstance.pdsCopyTextClick, 'emit');
 
     const button = page.root?.shadowRoot?.querySelector('pds-button') as HTMLButtonElement;
     button.click();
 
     await page.waitForChanges();
 
-    expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith('custom value text');
-    expect(emitMock).toHaveBeenCalledWith('Error writing text to clipboard: Error: Clipboard write error');
+    expect(clipboardMock.writeText).toHaveBeenCalledWith('custom value text');
+    expect(emitSpy).toHaveBeenCalledWith('Error writing text to clipboard: Error: Clipboard write error');
   });
 });
