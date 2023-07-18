@@ -414,7 +414,7 @@ export namespace Components {
         /**
           * The value of that is saved for form data
          */
-        "value": string | number;
+        "value": string;
     }
     interface PdsSortable {
         /**
@@ -1514,7 +1514,7 @@ declare namespace LocalJSX {
         /**
           * The value of that is saved for form data
          */
-        "value"?: string | number;
+        "value"?: string;
     }
     interface PdsSortable {
         /**

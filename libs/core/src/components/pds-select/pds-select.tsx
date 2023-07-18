@@ -65,6 +65,30 @@ export class PdsSelect {
     }
   }
 
+  componentDidLoad() {
+    // Find the first 'pds-select-option' with 'selected=true'
+    const firstSelectedOption = this.el.querySelector('pds-select-option[selected]') as HTMLPdsSelectOptionElement;
+
+    if (firstSelectedOption) {
+      // Set the selected option value to the first selected option's value
+      this.selectedOptionValue = firstSelectedOption.value;
+    } else {
+      // If no option is selected, get the first 'pds-select-option' and set the value accordingly
+      const firstOption = this.el.querySelector('pds-select-option') as HTMLPdsSelectOptionElement;
+      if (firstOption) {
+        this.selectedOptionValue = firstOption.value;
+      } else {
+        this.selectedOptionValue = ''; // No options available, set an empty string or placeholder if available
+      }
+    }
+
+    // Update the text content of the combobox
+    const comboInput = this.el.querySelector('.combo-input');
+    if (comboInput) {
+      comboInput.textContent = this.selectedOptionValue || '';
+    }
+  }
+
   render() {
     return (
       <Host>

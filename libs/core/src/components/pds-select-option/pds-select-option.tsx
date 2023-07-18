@@ -21,7 +21,7 @@ export class PdfSelectOption {
   /**
    * The value of that is saved for form data
    */
-  @Prop() value: string | number;
+  @Prop() value: string;
 
   /**
    * Triggered when an option is clicked
