@@ -7,7 +7,7 @@ import { Component, Element, Host, h, Prop, Event, EventEmitter, Listen, Watch }
 })
 export class PdsSelect {
   @Element() el!: HTMLPdsSelectElement;
-  @Prop() selectedOptionValue?: string;
+  private comboInputRef?: HTMLDivElement;
 
   @Prop() componentId!: string;
   @Prop() disabled = false;
@@ -20,7 +20,9 @@ export class PdsSelect {
   @Prop() readonly = false;
   @Prop() required = false;
   @Prop({ mutable: true }) value?: string;
+  @Prop() selectedOptionValue?: string;
 
+  private isComboboxOpen = false;
 
   @Event() pdsSelectChange!: EventEmitter<string>;
 
@@ -43,7 +45,7 @@ export class PdsSelect {
       if (selectedOption) {
         selectedOption.selected = true;
       }
-      console.log(value);
+
       this.pdsSelectChange.emit(this.selectedOptionValue);
     }
   }
@@ -54,15 +56,8 @@ export class PdsSelect {
     if (this.invalid && this.invalid === true) {
       classNames.push('is-invalid');
     }
+
     return classNames.join(' ');
-  }
-
-  componentDidRender() {
-    const comboInput = this.el.querySelector('.combo-input');
-
-    if (comboInput) {
-      comboInput.textContent = this.selectedOptionValue || '';
-    }
   }
 
   componentDidLoad() {
@@ -75,6 +70,7 @@ export class PdsSelect {
     } else {
       // If no option is selected, get the first 'pds-select-option' and set the value accordingly
       const firstOption = this.el.querySelector('pds-select-option') as HTMLPdsSelectOptionElement;
+
       if (firstOption) {
         this.selectedOptionValue = firstOption.value;
       } else {
@@ -82,10 +78,39 @@ export class PdsSelect {
       }
     }
 
-    // Update the text content of the combobox
+    // Use shadowRoot to find the .combo-input element
+    this.comboInputRef = this.el.shadowRoot?.querySelector('.combo-input') as HTMLDivElement;
+
+    if (this.comboInputRef) {
+      this.comboInputRef.addEventListener('click', this.handleComboboxClick);
+    }
+  }
+
+  private handleComboboxToggle = () => {
+    this.isComboboxOpen = !this.isComboboxOpen;
+    this.comboInputRef.setAttribute('aria-expanded', this.isComboboxOpen.toString());
+  };
+
+  @Listen('keydown', { target: 'document' })
+  handleComboInputKeyDown(event: KeyboardEvent) {
+    if (event.key === "Enter" || event.key === " ") {
+      this.handleComboboxToggle();
+    }
+  }
+
+  @Listen('click', { target: 'document' })
+  handleComboboxClick(event: MouseEvent) {
+    if (event.target === this.comboInputRef) {
+      this.handleComboboxToggle();
+    }
+  }
+
+  // eslint-disable-next-line @stencil/no-unused-watch
+  @Watch('selectedOptionValue')
+  updateComboboxContent(newValue: string) {
     const comboInput = this.el.querySelector('.combo-input');
     if (comboInput) {
-      comboInput.textContent = this.selectedOptionValue || '';
+      comboInput.textContent = newValue || '';
     }
   }
 
@@ -105,7 +130,7 @@ export class PdsSelect {
 
           <div
             aria-controls={`${this.componentId}-listbox`}
-            aria-expanded="false"
+            aria-expanded={this.isComboboxOpen.toString()}
             aria-haspopup="listbox"
             aria-labelledby={`${this.componentId}-label`}
             aria-activedescendant={`${this.componentId}-option-${this.value}`}
