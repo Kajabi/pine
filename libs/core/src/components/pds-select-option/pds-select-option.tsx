@@ -8,6 +8,12 @@ import { Component, Element, Event, EventEmitter, h, Prop } from '@stencil/core'
 export class PdfSelectOption {
   @Element() element!: HTMLPdsSelectOptionElement;
 
+
+  /**
+   * The id for the option
+   */
+  @Prop() componentId: string;
+
   /**
    * Sets the state of the option to
    */
@@ -69,12 +75,13 @@ export class PdfSelectOption {
       <li
         // aria-selected={this.selected}
         class={this.selectOptionClassNames()}
+        id={this.componentId}
         role="option"
         onMouseDown={this.onOptionSelected}
         // onFocus={}
         // onBlur={}
       >
-        {this.value ? this.value : <slot />}
+       {this.text || this.value}
       </li>
     );
   }

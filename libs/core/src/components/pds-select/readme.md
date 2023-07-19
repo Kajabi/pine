@@ -19,6 +19,7 @@
 | `placeholder`              | `placeholder`           |             | `string`  | `undefined`        |
 | `readonly`                 | `readonly`              |             | `boolean` | `false`            |
 | `required`                 | `required`              |             | `boolean` | `false`            |
+| `selectedOptionText`       | `selected-option-text`  |             | `string`  | `undefined`        |
 | `selectedOptionValue`      | `selected-option-value` |             | `string`  | `undefined`        |
 | `value`                    | `value`                 |             | `string`  | `undefined`        |
 

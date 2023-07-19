@@ -399,10 +399,15 @@ export namespace Components {
         "placeholder"?: string;
         "readonly": boolean;
         "required": boolean;
+        "selectedOptionText"?: string;
         "selectedOptionValue"?: string;
         "value"?: string;
     }
     interface PdsSelectOption {
+        /**
+          * The id for the option
+         */
+        "componentId": string;
         /**
           * Sets the state of the option to
          */
@@ -1495,10 +1500,15 @@ declare namespace LocalJSX {
         "placeholder"?: string;
         "readonly"?: boolean;
         "required"?: boolean;
+        "selectedOptionText"?: string;
         "selectedOptionValue"?: string;
         "value"?: string;
     }
     interface PdsSelectOption {
+        /**
+          * The id for the option
+         */
+        "componentId"?: string;
         /**
           * Triggered when an option is clicked
          */

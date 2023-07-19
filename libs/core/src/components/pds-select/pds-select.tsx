@@ -20,15 +20,17 @@ export class PdsSelect {
   @Prop() readonly = false;
   @Prop() required = false;
   @Prop({ mutable: true }) value?: string;
+  @Prop({ mutable: true }) selectedOptionText?: string;
   @Prop() selectedOptionValue?: string;
 
   private isComboboxOpen = false;
+  private selectedOptionId?: string;
 
   @Event() pdsSelectChange!: EventEmitter<string>;
 
   @Listen('pdsSelectOptionSelected')
   pdsSelectedOption(event: CustomEvent<any>) {
-    const { value } = event.detail;
+    const { value, text } = event.detail;
 
     if (this.selectedOptionValue !== value) {
       // Deselect the previous selected option, if any
@@ -40,10 +42,14 @@ export class PdsSelect {
 
       // Select the newly clicked option
       this.selectedOptionValue = value;
+      this.selectedOptionText = text;
+
       const selectedOption = this.el.querySelector(`pds-select-option[value="${value}"]`) as HTMLPdsSelectOptionElement;
 
       if (selectedOption) {
         selectedOption.selected = true;
+        // Update the selectedOptionId with the componentId of the selected option
+        this.selectedOptionId = selectedOption.componentId;
       }
 
       this.pdsSelectChange.emit(this.selectedOptionValue);
@@ -133,7 +139,7 @@ export class PdsSelect {
             aria-expanded={this.isComboboxOpen.toString()}
             aria-haspopup="listbox"
             aria-labelledby={`${this.componentId}-label`}
-            aria-activedescendant={`${this.componentId}-option-${this.value}`}
+            aria-activedescendant={this.selectedOptionId ? `${this.componentId}-option-${this.selectedOptionId}` : undefined}
             class={this.selectClassNames()}
             id={this.componentId}
             role="combobox"

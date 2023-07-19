@@ -7,11 +7,12 @@
 
 ## Properties
 
-| Property   | Attribute  | Description                              | Type      | Default     |
-| ---------- | ---------- | ---------------------------------------- | --------- | ----------- |
-| `selected` | `selected` | Sets the state of the option to          | `boolean` | `undefined` |
-| `text`     | `text`     | The text to be displayed in the option   | `string`  | `undefined` |
-| `value`    | `value`    | The value of that is saved for form data | `string`  | `undefined` |
+| Property      | Attribute      | Description                              | Type      | Default     |
+| ------------- | -------------- | ---------------------------------------- | --------- | ----------- |
+| `componentId` | `component-id` | The id for the option                    | `string`  | `undefined` |
+| `selected`    | `selected`     | Sets the state of the option to          | `boolean` | `undefined` |
+| `text`        | `text`         | The text to be displayed in the option   | `string`  | `undefined` |
+| `value`       | `value`        | The value of that is saved for form data | `string`  | `undefined` |
 
 
 ## Events
