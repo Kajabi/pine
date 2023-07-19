@@ -143,6 +143,7 @@ export namespace Components {
     interface PdsCopytext {
         /**
           * Determines whether `copytext` should have a border.
+          * @defaultValue true
          */
         "border": boolean;
         /**
@@ -151,10 +152,12 @@ export namespace Components {
         "componentId": string;
         /**
           * Determines whether `copytext` should expand to the full width of its container.
+          * @defaultValue false
          */
         "fullWidth": boolean;
         /**
           * Determines whether the `value` should truncate and display with an ellipsis.
+          * @defaultValue false
          */
         "truncate": boolean;
         /**
@@ -839,6 +842,7 @@ declare namespace LocalJSX {
     interface PdsCopytext {
         /**
           * Determines whether `copytext` should have a border.
+          * @defaultValue true
          */
         "border"?: boolean;
         /**
@@ -847,6 +851,7 @@ declare namespace LocalJSX {
         "componentId"?: string;
         /**
           * Determines whether `copytext` should expand to the full width of its container.
+          * @defaultValue false
          */
         "fullWidth"?: boolean;
         /**
@@ -855,6 +860,7 @@ declare namespace LocalJSX {
         "onPdsCopyTextClick"?: (event: PdsCopytextCustomEvent<any>) => void;
         /**
           * Determines whether the `value` should truncate and display with an ellipsis.
+          * @defaultValue false
          */
         "truncate"?: boolean;
         /**
