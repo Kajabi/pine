@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
 
-import { PdsButton, PdsCheckbox, PdsIcon, PdsInput, PdsRadio } from '@pine-ds/react';
+import { PdsCheckbox, PdsIcon } from '@pine-ds/react';
 import { add } from 'pineicons/icons';
 import { PdsCheckboxCustomEvent } from '@pine-ds/core/loader';
 
 function App() {
   const [count, setCount] = useState(0)
 
-  const handleClick = (evt: PdsCheckboxCustomEvent<Event>) => {
+  const handleClick = (evt: PdsCheckboxCustomEvent<boolean>) => {
     console.log('Event: ', evt);
     if ( evt.target?.checked) {
       console.log('Do Something')
@@ -41,7 +41,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-      <PdsCheckbox componentId='foo' label="Test" onChange={handleClick}/>
+      <PdsCheckbox componentId='foo' label="Test" onPdsCheckboxChange={handleClick}/>
       <PdsIcon icon={add} size="large" />
     </div>
   )

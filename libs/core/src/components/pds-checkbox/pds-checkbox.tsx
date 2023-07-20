@@ -72,6 +72,8 @@ export class PdsCheckbox {
     const target = e.target as HTMLInputElement;
     const isChecked = target.checked;
 
+    this.checked = isChecked;
+
     this.pdsCheckboxChange.emit(isChecked);
   }
 
