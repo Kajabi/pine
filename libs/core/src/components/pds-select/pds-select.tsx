@@ -97,14 +97,14 @@ export class PdsSelect {
     this.comboInputRef.setAttribute('aria-expanded', this.isComboboxOpen.toString());
   };
 
-  @Listen('keydown', { target: 'document' })
+  @Listen('keydown', {})
   handleComboInputKeyDown(event: KeyboardEvent) {
     if (event.key === "Enter" || event.key === " ") {
       this.handleComboboxToggle();
     }
   }
 
-  @Listen('click', { target: 'document' })
+  @Listen('click', {})
   handleComboboxClick(event: MouseEvent) {
     if (event.target === this.comboInputRef) {
       this.handleComboboxToggle();
