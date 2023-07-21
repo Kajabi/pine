@@ -32,6 +32,11 @@ export class PdsSelect {
   pdsSelectedOption(event: CustomEvent<any>) {
     const { value, text } = event.detail;
 
+    // Set the value to equal the text if the value is empty
+    if(this.selectedOptionValue === undefined) {
+      this.selectedOptionValue = this.selectedOptionText;
+    }
+
     if (this.selectedOptionValue !== value) {
       // Deselect the previous selected option, if any
       const prevSelectedOption = this.el.querySelector('pds-select-option[selected]') as HTMLPdsSelectOptionElement;
@@ -78,7 +83,11 @@ export class PdsSelect {
       const firstOption = this.el.querySelector('pds-select-option') as HTMLPdsSelectOptionElement;
 
       if (firstOption) {
-        this.selectedOptionValue = firstOption.value;
+        if(firstOption.innerHTML) {
+          this.selectedOptionText = firstOption.innerHTML
+        } else {
+          this.selectedOptionValue = firstOption.value;
+        }
       } else {
         this.selectedOptionValue = ''; // No options available, set an empty string or placeholder if available
       }
@@ -104,7 +113,9 @@ export class PdsSelect {
     }
   }
 
-  @Listen('click', {})
+  @Listen('click', {
+    target: 'body'
+  })
   handleComboboxClick(event: MouseEvent) {
     if (event.target === this.comboInputRef) {
       this.handleComboboxToggle();
@@ -145,7 +156,7 @@ export class PdsSelect {
             role="combobox"
             tabindex="0"
           >
-            {this.selectedOptionValue}
+            {this.selectedOptionText || this.selectedOptionValue}
           </div>
 
           <div

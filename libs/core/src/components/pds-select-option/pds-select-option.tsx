@@ -38,7 +38,7 @@ export class PdfSelectOption {
   private onOptionSelected = (ev: Event) => {
     console.log(this);
     this.selected = true;
-    this.pdsSelectOptionSelected.emit({value: this.value as string, event: ev});
+    this.pdsSelectOptionSelected.emit({text: this.element.innerHTML, value: this.value as string, event: ev});
   }
 
   componentDidLoad() {
@@ -81,7 +81,7 @@ export class PdfSelectOption {
         // onFocus={}
         // onBlur={}
       >
-       {this.text || this.value}
+       {this.element.innerHTML || this.value}
       </li>
     );
   }
