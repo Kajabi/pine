@@ -91,7 +91,7 @@ export class PdsInput {
         aria-disabled={this.disabled ? 'true' : null}
       >
         <div class="pds-input">
-          <label htmlFor={this.componentId}>{this.label}</label>
+          {/* <label htmlFor={this.componentId}>{this.label}</label> */}
           <input class="pds-input__field"
             aria-describedby={assignDescription(this.componentId, this.invalid, this.hint)}
             aria-invalid={this.invalid ? "true" : undefined}

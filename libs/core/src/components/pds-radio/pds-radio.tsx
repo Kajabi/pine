@@ -1,5 +1,6 @@
 import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
+import { PdsLabel } from '../_internal/pds-label/pds-label';
 
 @Component({
   tag: 'pds-radio',
@@ -100,7 +101,8 @@ export class PdsRadio {
           disabled={this.disabled}
           onChange={this.handleRadioChange}
         />
-        <label htmlFor={this.componentId}>{this.label}</label>
+        {/* <label htmlFor={this.componentId}>{this.label}</label> */}
+        <PdsLabel htmlFor={this.componentId} text={this.label} />
         {this.helperMessage &&
           <div
             class={'pds-radio__message'}
