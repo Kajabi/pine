@@ -30,7 +30,7 @@ export class PdsSelect {
 
   @Listen('pdsSelectOptionSelected')
   pdsSelectedOption(event: CustomEvent<any>) {
-    const { value, text } = event.detail;
+    const { id, text, value } = event.detail;
 
     // Set the value to equal the text if the value is empty
     if(this.selectedOptionValue === undefined) {
@@ -49,7 +49,7 @@ export class PdsSelect {
       this.selectedOptionValue = value;
       this.selectedOptionText = text;
 
-      const selectedOption = this.el.querySelector(`pds-select-option[value="${value}"]`) as HTMLPdsSelectOptionElement;
+      const selectedOption = this.el.querySelector(`pds-select-option[component-id="${id}"]`) as HTMLPdsSelectOptionElement;
 
       if (selectedOption) {
         selectedOption.selected = true;

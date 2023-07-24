@@ -37,7 +37,11 @@ export class PdfSelectOption {
   private onOptionSelected = (ev: Event) => {
     console.log(this);
     this.selected = true;
-    this.pdsSelectOptionSelected.emit({text: this.element.innerHTML, value: this.value as string, event: ev});
+    this.pdsSelectOptionSelected.emit({
+      id: this.element.componentId,
+      text: this.element.innerHTML,
+      value: this.value as string,
+      event: ev});
   }
 
   private selectOptionClassNames() {
