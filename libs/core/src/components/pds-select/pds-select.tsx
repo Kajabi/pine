@@ -97,7 +97,7 @@ export class PdsSelect {
     this.comboInputRef = this.el.shadowRoot?.querySelector('.combo-input') as HTMLDivElement;
 
     if (this.comboInputRef) {
-      this.comboInputRef.addEventListener('click', this.handleComboboxClick);
+      this.comboInputRef.addEventListener('click', this.handleComboboxToggle);
     }
   }
 
@@ -109,15 +109,6 @@ export class PdsSelect {
   @Listen('keydown', {})
   handleComboInputKeyDown(event: KeyboardEvent) {
     if (event.key === "Enter" || event.key === " ") {
-      this.handleComboboxToggle();
-    }
-  }
-
-  @Listen('click', {
-    target: 'body'
-  })
-  handleComboboxClick(event: MouseEvent) {
-    if (event.target === this.comboInputRef) {
       this.handleComboboxToggle();
     }
   }

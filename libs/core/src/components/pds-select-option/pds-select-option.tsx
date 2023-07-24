@@ -34,7 +34,6 @@ export class PdfSelectOption {
    */
   // @Event({ bubbles: true, composed: true }) pdsSelectOptionSelected: EventEmitter<{ value: string; event: Event }>;
   @Event({ bubbles: true, composed: true }) pdsSelectOptionSelected: EventEmitter;
-
   private onOptionSelected = (ev: Event) => {
     console.log(this);
     this.selected = true;
@@ -77,7 +76,7 @@ export class PdfSelectOption {
         class={this.selectOptionClassNames()}
         id={this.componentId}
         role="option"
-        onMouseDown={this.onOptionSelected}
+        onClick={this.onOptionSelected}
         // onFocus={}
         // onBlur={}
       >
