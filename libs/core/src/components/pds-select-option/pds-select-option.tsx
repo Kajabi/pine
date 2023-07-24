@@ -40,24 +40,6 @@ export class PdfSelectOption {
     this.pdsSelectOptionSelected.emit({text: this.element.innerHTML, value: this.value as string, event: ev});
   }
 
-  componentDidLoad() {
-    this.updateSelectedAttribute();
-  }
-
-  componentDidUpdate() {
-    this.updateSelectedAttribute();
-  }
-
-  // Is this solution better or the `aria-selected` in the render?
-  // Currenlty they are doing the same thing.
-  private updateSelectedAttribute() {
-    const optionElement = this.element.shadowRoot.querySelector('li');
-
-    if (optionElement) {
-      optionElement.setAttribute('aria-selected', this.selected ? 'true' : 'false');
-    }
-  }
-
   private selectOptionClassNames() {
     const classNames = ['pds-select-option'];
 
@@ -68,11 +50,12 @@ export class PdfSelectOption {
     return classNames.join('  ');
   }
 
-
   render() {
+    const WrapperTag = this.value !== undefined ? 'li' : 'div';
+
     return (
-      <li
-        // aria-selected={this.selected}
+      <WrapperTag
+        aria-selected={this.selected}
         class={this.selectOptionClassNames()}
         id={this.componentId}
         role="option"
@@ -81,11 +64,7 @@ export class PdfSelectOption {
         // onBlur={}
       >
        {this.element.innerHTML || this.value}
-      </li>
+      </WrapperTag>
     );
   }
 }
-
-
-// TODO if it have a value`,` make it an li, otherwise make div and fill the slot
-// do in a method rather to not have extra code
