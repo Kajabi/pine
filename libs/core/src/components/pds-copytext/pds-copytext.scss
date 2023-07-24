@@ -9,6 +9,7 @@
   --color-hover: var(--pine-color-neutral-charcoal-400);
   --font-size: var(--pine-font-size-body); // 16px
   --font-weight: var(--pine-font-weight-semibold); // 600
+  --line-height: var(--pine-line-height-md); // 24px
   --spacing-sm: var(--pine-spacing-sm); // 16px
   --spacing-xs: var(--pine-spacing-xs); // 8px
   --spacing-xxs: var(--pine-spacing-xxs); // 4px
@@ -35,6 +36,7 @@
     }
 
     span {
+      line-height: var(--line-height);
       margin-inline-end: var(--spacing-xs);
       white-space: nowrap;
     }
