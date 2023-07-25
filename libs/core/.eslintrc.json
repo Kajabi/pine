@@ -1,14 +1,11 @@
 {
-  "extends": ["plugin:@stencil/recommended", "plugin:@typescript-eslint/recommended", "prettier"],
+  "extends": ["plugin:@stencil-community/recommended", "plugin:@typescript-eslint/recommended", "prettier"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": ["./tsconfig.json"]
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
-    "@stencil/decorators-context": "off", // This is set to off until support for ESLINT 8, othwerise remove rule
-    "@stencil/strict-boolean-conditions": "off", // This is set to off until support for ESLINT 8, othwerise remove rule
-    // "@stencil/decorators-style": "off",
-    "@stencil/own-methods-must-be-private": "off"
+    "@typescript-eslint/no-explicit-any": "warn"
   }
 }
