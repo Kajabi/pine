@@ -1,1 +1,45 @@
-// Todo
+.pds-select__label {
+  color: #040506;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.pds-select {
+  display: block;
+  margin-bottom: 10px;
+  max-width: 340px;
+  position: relative;
+}
+
+.pds-select__input {
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #000;;
+  border-radius: 10px;
+  display: flex;
+  font-size: 1em;
+  justify-content: space-between;
+  padding: 8px 16px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.pds-select__menu {
+  border: 1px solid #000;
+  border-radius: 10px;
+  display: none;
+  margin-top: 8px;
+  padding: 8px;
+
+  .is-open & {
+    display: block;
+  }
+}
+
+.is-open {
+  pds-icon {
+    transform: rotate(180deg);
+  }
+}

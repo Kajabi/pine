@@ -7,6 +7,7 @@ import { Component, Element, Host, h, Prop, Event, EventEmitter, Listen, Watch }
 })
 export class PdsSelect {
   @Element() el!: HTMLPdsSelectElement;
+  private comboWrapperRef?: HTMLDivElement;
   private comboInputRef?: HTMLDivElement;
 
   @Prop() componentId!: string;
@@ -59,10 +60,25 @@ export class PdsSelect {
 
       this.pdsSelectChange.emit(this.selectedOptionValue);
     }
+
+    this.handleComboboxToggle();
   }
 
-  private selectClassNames() {
-    const classNames = ['combo-input'];
+  // private selectClassNames() {
+  //   const classNames = ['pds-select'];
+
+  //   console.log('this.isComboboxOpen: ', this.isComboboxOpen);
+
+  //   if (this.isComboboxOpen && this.isComboboxOpen === true) {
+  //     console.log('in');
+  //     classNames.push('is-open');
+  //   }
+
+  //   return classNames.join(' ');
+  // }
+
+  private selectInputClassNames() {
+    const classNames = ['pds-select__input combo-input'];
 
     if (this.invalid && this.invalid === true) {
       classNames.push('is-invalid');
@@ -102,8 +118,15 @@ export class PdsSelect {
   }
 
   private handleComboboxToggle = () => {
+    this.comboWrapperRef =  this.el.shadowRoot?.querySelector('.pds-select') as HTMLDivElement;
+
     this.isComboboxOpen = !this.isComboboxOpen;
     this.comboInputRef.setAttribute('aria-expanded', this.isComboboxOpen.toString());
+    if (this.isComboboxOpen) {
+      this.comboWrapperRef.classList.add('is-open')
+    } else {
+      this.comboWrapperRef.classList.remove('is-open')
+    }
   };
 
   @Listen('keydown', {})
@@ -125,29 +148,34 @@ export class PdsSelect {
   render() {
     return (
       <Host>
-        <div class="pds-select combo js-select">
-          {this.label && (
-            <label
-              htmlFor={this.componentId}
-              id={`${this.componentId}-label`}
-              class="pds-select__label combo-label"
-            >
-              {this.label}
-            </label>
-          )}
-
+        {this.label && (
+          <label
+            htmlFor={this.componentId}
+            id={`${this.componentId}-label`}
+            class="pds-select__label combo-label"
+          >
+            {this.label}
+          </label>
+        )}
+        <div
+          class={`
+            pds-select
+            ${this.isComboboxOpen ? 'is-open' : ''}
+          `}
+        >
           <div
             aria-controls={`${this.componentId}-listbox`}
             aria-expanded={this.isComboboxOpen.toString()}
             aria-haspopup="listbox"
             aria-labelledby={`${this.componentId}-label`}
             aria-activedescendant={this.selectedOptionId ? `${this.componentId}-option-${this.selectedOptionId}` : undefined}
-            class={this.selectClassNames()}
+            class={this.selectInputClassNames()}
             id={this.componentId}
             role="combobox"
             tabindex="0"
           >
             {this.selectedOptionText || this.selectedOptionValue}
+            <pds-icon name="caret-down" size="small"></pds-icon>
           </div>
 
           <div

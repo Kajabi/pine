@@ -31,6 +31,19 @@
 | `pdsSelectChange` |             | `CustomEvent<string>` |
 
 
+## Dependencies
+
+### Depends on
+
+- pds-icon
+
+### Graph
+```mermaid
+graph TD;
+  pds-select --> pds-icon
+  style pds-select fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 
