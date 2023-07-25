@@ -101,7 +101,6 @@ export class PdsRadio {
           disabled={this.disabled}
           onChange={this.handleRadioChange}
         />
-        {/* <label htmlFor={this.componentId}>{this.label}</label> */}
         <PdsLabel htmlFor={this.componentId} text={this.label} />
         {this.helperMessage &&
           <div
