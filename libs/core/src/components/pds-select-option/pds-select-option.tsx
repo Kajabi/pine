@@ -55,10 +55,8 @@ export class PdfSelectOption {
   }
 
   render() {
-    const WrapperTag = this.value !== undefined ? 'li' : 'div';
-
     return (
-      <WrapperTag
+      <div
         aria-selected={this.selected}
         class={this.selectOptionClassNames()}
         id={this.componentId}
@@ -67,8 +65,11 @@ export class PdfSelectOption {
         // onFocus={}
         // onBlur={}
       >
-       {this.element.innerHTML || this.value}
-      </WrapperTag>
+        {this.element.innerHTML || this.value}
+        {this.selected && (
+          <pds-icon name="check"></pds-icon>
+        )}
+      </div>
     );
   }
 }

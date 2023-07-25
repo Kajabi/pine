@@ -22,6 +22,19 @@
 | `pdsSelectOptionSelected` | Triggered when an option is clicked | `CustomEvent<any>` |
 
 
+## Dependencies
+
+### Depends on
+
+- pds-icon
+
+### Graph
+```mermaid
+graph TD;
+  pds-select-option --> pds-icon
+  style pds-select-option fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 

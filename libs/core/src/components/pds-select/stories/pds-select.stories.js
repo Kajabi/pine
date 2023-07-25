@@ -1,7 +1,7 @@
 import { html } from 'lit-html';
 
 // const BaseTemplate = (args) => html`
-//   <pds-select component-id="combobox">
+//   <pds-select component-id="combobox" label="Label">
 //     <pds-select-option component-id="opt0" value="">Select an Option</pds-select-option>
 //     <pds-select-option component-id="opt1" value="Option A value"></pds-select-option>
 //     <pds-select-option component-id="opt2" value="Option B value"></pds-select-option>
@@ -12,14 +12,16 @@ import { html } from 'lit-html';
 
 // TODO: This example is to handle cases when the value is different from the pds-select-option text content
 // const BaseTemplate = (args) => html`
-//   <pds-select component-id="combobox">
+//   <pds-select component-id="combobox" label="Label">
 //     <pds-select-option component-id="opt0" value="val0">Select an Option</pds-select-option>
 //     <pds-select-option component-id="opt1" value="val1">Option A value</pds-select-option>
 //     <pds-select-option component-id="opt2" value="val2">Option B value</pds-select-option>
 //     <pds-select-option component-id="opt3" value="val3">Option C value</pds-select-option>
-//     <pds-select-option component-id="opt4" value="val4">Option D value</pds-select-option>
 //     <pds-select-option component-id="opt4" value="val4">
-//       <div><p>Option D</p> <p>value</p></div>
+//       <div>
+//         <p>Option D</p>
+//         <p>value</p>
+//       </div>
 //     </pds-select-option>
 //   </pds-select>
 // `;
@@ -28,7 +30,7 @@ import { html } from 'lit-html';
 
 // NOTE FOR DOCS - id on select and option are both needed for accessibility regarding aria-activedescendant
 const BaseTemplate = (args) => html`
-  <pds-select component-id="combobox">
+  <pds-select component-id="combobox" label="Label">
     <pds-select-option component-id="opt0">Select an option</pds-select-option>
     <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
     <pds-select-option component-id="opt2">Option B Slot</pds-select-option>

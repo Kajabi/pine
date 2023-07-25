@@ -1,12 +1,16 @@
 // Todo
 .pds-select-option {
+  align-items: center;
   background-color: #fff;
   border-radius: 10px;
+  display: flex;
   font-size: 16px;
+  justify-content: space-between;
   line-height: 24px;
   padding: 6px 14px;
 
-  &:hover {
+  &:hover,
+  &.is-selected {
     background-color: #F9FAFA;
   }
 }

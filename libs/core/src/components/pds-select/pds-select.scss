@@ -14,7 +14,7 @@
 .pds-select__input {
   align-items: center;
   background-color: #fff;
-  border: 1px solid #000;;
+  border: 1px solid #d3d5d9;
   border-radius: 10px;
   display: flex;
   font-size: 1em;
@@ -27,8 +27,8 @@
 }
 
 .pds-select__menu {
-  border: 1px solid #000;
   border-radius: 10px;
+  box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.16), 0 0 4px 0 rgba(0, 0, 0, 0.08);
   display: none;
   margin-top: 8px;
   padding: 8px;
