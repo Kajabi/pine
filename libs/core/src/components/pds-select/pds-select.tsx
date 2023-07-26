@@ -9,6 +9,14 @@ export class PdsSelect {
   @Element() el!: HTMLPdsSelectElement;
   private comboWrapperRef?: HTMLDivElement;
   private comboInputRef?: HTMLDivElement;
+  private isComboboxOpen = false;
+  private selectedOptionId?: string;
+
+  /**
+   * Track the index of the focused option
+   */
+  private focusIndex = -1;
+
 
   @Prop() componentId!: string;
   @Prop() disabled = false;
@@ -24,8 +32,7 @@ export class PdsSelect {
   @Prop({ mutable: true }) selectedOptionText?: string;
   @Prop() selectedOptionValue?: string;
 
-  private isComboboxOpen = false;
-  private selectedOptionId?: string;
+
 
   @Event() pdsSelectChange!: EventEmitter<string>;
 
@@ -122,19 +129,102 @@ export class PdsSelect {
 
     this.isComboboxOpen = !this.isComboboxOpen;
     this.comboInputRef.setAttribute('aria-expanded', this.isComboboxOpen.toString());
+
     if (this.isComboboxOpen) {
       this.comboWrapperRef.classList.add('is-open')
     } else {
       this.comboWrapperRef.classList.remove('is-open')
     }
+
+    if (this.isComboboxOpen) {
+      // Move focus to the input when the combobox is opened
+      this.comboInputRef?.focus();
+      // Set the focus index to the first option
+      this.focusIndex = 0;
+    } else {
+      // Reset focus index when the combobox is closed
+      this.focusIndex = -1;
+    }
   };
 
   @Listen('keydown', {})
   handleComboInputKeyDown(event: KeyboardEvent) {
-    if (event.key === "Enter" || event.key === " ") {
-      this.handleComboboxToggle();
+    const options = this.el.querySelectorAll('pds-select-option');
+    console.log('options: ', options);
+
+    if (this.isComboboxOpen && options.length > 0) {
+      switch (event.key) {
+        case 'ArrowDown':
+          event.preventDefault();
+          this.focusNextOption();
+          break;
+        case 'ArrowUp':
+          event.preventDefault();
+          this.focusPreviousOption();
+          break;
+        case 'Home':
+          event.preventDefault();
+          this.focusFirstOption();
+          break;
+        case 'End':
+          event.preventDefault();
+          this.focusLastOption();
+          break;
+        case 'Enter':
+        case ' ':
+          event.preventDefault();
+          this.selectFocusedOption();
+          break;
+      }
     }
   }
+
+  // Focus Management
+  private focusNextOption() {
+    const options = this.el.querySelectorAll('pds-select-option');
+    if (options.length > 0) {
+      this.focusIndex = (this.focusIndex + 1) % options.length;
+      this.focusOptionAtIndex(this.focusIndex);
+    }
+  }
+
+  private focusPreviousOption() {
+    const options = this.el.querySelectorAll('pds-select-option');
+    if (options.length > 0) {
+      this.focusIndex = (this.focusIndex - 1 + options.length) % options.length;
+      this.focusOptionAtIndex(this.focusIndex);
+    }
+  }
+
+  private focusFirstOption() {
+    this.focusIndex = 0;
+    this.focusOptionAtIndex(this.focusIndex);
+  }
+
+  private focusLastOption() {
+    const options = this.el.querySelectorAll('pds-select-option');
+    if (options.length > 0) {
+      this.focusIndex = options.length - 1;
+      this.focusOptionAtIndex(this.focusIndex);
+    }
+  }
+
+  private focusOptionAtIndex(index: number) {
+    const options = this.el.querySelectorAll('pds-select-option');
+    options.forEach((option, i) => {
+      option.tabIndex = i === index ? 0 : -1;
+    });
+    options[index].focus();
+  }
+
+  private selectFocusedOption() {
+    const options = this.el.querySelectorAll('pds-select-option');
+    if (options.length > 0 && this.focusIndex >= 0 && this.focusIndex < options.length) {
+      const focusedOption = options[this.focusIndex].shadowRoot?.querySelector('.pds-select-option') as HTMLElement;
+      focusedOption.click();
+    }
+  }
+  // End Focus Management
 
   // eslint-disable-next-line @stencil/no-unused-watch
   @Watch('selectedOptionValue')
