@@ -10,7 +10,7 @@ export class PdsCopytext {
    * Determines whether `copytext` should have a border.
    * @defaultValue true
    */
-  @Prop() border = true;
+  @Prop({ reflect: true }) border = true;
 
   /**
    * String used for the component `id` attribute.
