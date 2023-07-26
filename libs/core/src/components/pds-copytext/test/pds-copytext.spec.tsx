@@ -8,7 +8,7 @@ describe('pds-copytext', () => {
       html: `<pds-copytext></pds-copytext>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-copytext class="pds-copytext pds-copytext--bordered">
+      <pds-copytext border class="pds-copytext pds-copytext--bordered">
         <mock:shadow-root>
           <pds-button type="button" variant="unstyled">
             <span></span>
@@ -42,7 +42,7 @@ describe('pds-copytext', () => {
       html: `<pds-copytext full-width="true"></pds-copytext>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-copytext class="pds-copytext pds-copytext--bordered pds-copytext--full-width" full-width="true">
+      <pds-copytext border class="pds-copytext pds-copytext--bordered pds-copytext--full-width" full-width="true">
         <mock:shadow-root>
           <pds-button type="button" variant="unstyled">
             <span></span>
@@ -59,7 +59,7 @@ describe('pds-copytext', () => {
       html: `<pds-copytext truncate="true"></pds-copytext>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-copytext class="pds-copytext pds-copytext--bordered pds-copytext--truncated" truncate="true">
+      <pds-copytext border class="pds-copytext pds-copytext--bordered pds-copytext--truncated" truncate="true">
         <mock:shadow-root>
           <pds-button type="button" variant="unstyled">
             <span></span>
@@ -76,7 +76,7 @@ describe('pds-copytext', () => {
       html: `<pds-copytext value="custom value text"></pds-copytext>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-copytext class="pds-copytext pds-copytext--bordered" value="custom value text">
+      <pds-copytext border class="pds-copytext pds-copytext--bordered" value="custom value text">
         <mock:shadow-root>
           <pds-button type="button" variant="unstyled">
             <span>custom value text</span>
