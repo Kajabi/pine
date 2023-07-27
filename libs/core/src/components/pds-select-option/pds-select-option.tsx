@@ -57,7 +57,7 @@ export class PdsSelectOption {
   render() {
     return (
       <div
-        aria-selected={this.selected}
+        aria-selected={this.selected ? "true" : "false"}
         class={this.selectOptionClassNames()}
         id={this.componentId}
         role="option"

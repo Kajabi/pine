@@ -81,7 +81,7 @@ export class PdsSelect {
   // eslint-disable-next-line @stencil/no-unused-watch
   @Watch('selectedOptionValue')
   updateComboboxContent(newValue: string) {
-    const comboInput = this.el.querySelector('.combo-input');
+    const comboInput = this.el.querySelector('.pds-select__input');
     if (comboInput) {
       comboInput.textContent = newValue || '';
     }
@@ -114,8 +114,8 @@ export class PdsSelect {
       }
     }
 
-    // Use shadowRoot to find the .combo-input element
-    this.comboInputRef = this.el.shadowRoot?.querySelector('.combo-input') as HTMLDivElement;
+    // Use shadowRoot to find the .pds-select__input element
+    this.comboInputRef = this.el.shadowRoot?.querySelector('.pds-select__input') as HTMLDivElement;
 
     if (this.comboInputRef) {
       this.comboInputRef.addEventListener('click', this.handleComboboxToggle);
@@ -238,7 +238,7 @@ export class PdsSelect {
   };
 
   private selectInputClassNames() {
-    const classNames = ['pds-select__input combo-input'];
+    const classNames = ['pds-select__input'];
 
     if (this.invalid && this.invalid === true) {
       classNames.push('is-invalid');
@@ -326,7 +326,7 @@ export class PdsSelect {
           <label
             htmlFor={this.componentId}
             id={`${this.componentId}-label`}
-            class="pds-select__label combo-label"
+            class="pds-select__label"
           >
             {this.label}
           </label>
@@ -354,7 +354,7 @@ export class PdsSelect {
 
           <div
             aria-labelledby={`${this.componentId}-label`}
-            class="pds-select__menu combo-menu"
+            class="pds-select__menu"
             id={`${this.componentId}-listbox`}
             role="listbox"
             tabindex="-1"

@@ -35,4 +35,16 @@ describe('pds-select-option', () => {
     const optionElement = page.root?.shadowRoot?.querySelector('.pds-select-option');
     expect(optionElement?.textContent).toEqual(optionText);
   });
+
+  it('displays is-selected class when option is selected', async () => {
+    const optionText = 'Option text';
+    const page = await newSpecPage({
+      components: [PdsSelectOption],
+      html: `<pds-select-option component-id="opt1" selected>${optionText}</pds-select-option>`,
+    });
+
+    const element = page.root?.shadowRoot?.querySelector('.pds-select-option');
+    expect(element).toHaveClass('is-selected');
+    expect(element?.getAttribute('aria-selected')).toMatch('true');
+  });
 });

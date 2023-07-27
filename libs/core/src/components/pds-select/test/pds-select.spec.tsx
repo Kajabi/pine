@@ -36,8 +36,8 @@ describe('pds-select', () => {
       <pds-select component-id="combobox" label="Label">
         <mock:shadow-root>
           <div class="pds-select">
-            <div class="pds-select__input combo-input" tabindex="0">Select an option<pds-icon name="caret-down" size="small"></pds-icon></div>
-            <div class="pds-select__menu combo-menu" tabindex="-1">
+            <div class="pds-select__input" tabindex="0">Select an option<pds-icon name="caret-down" size="small"></pds-icon></div>
+            <div class="pds-select__menu" tabindex="-1">
               <pds-select-option class="pds-select-option" tabindex="-1" component-id="opt0">Select an option</pds-select-option>
               <pds-select-option class="pds-select-option" tabindex="-1" component-id="opt1">Option A Slot</pds-select-option>
             </div>
