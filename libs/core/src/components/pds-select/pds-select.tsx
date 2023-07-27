@@ -7,6 +7,7 @@ import { Component, Element, Host, h, Prop, Event, EventEmitter, Listen, Watch }
 })
 export class PdsSelect {
   @Element() el!: HTMLPdsSelectElement;
+
   private comboWrapperRef?: HTMLDivElement;
   private comboInputRef?: HTMLDivElement;
   private isComboboxOpen = false;
@@ -32,15 +33,36 @@ export class PdsSelect {
    */
   private wasComboboxFocusedIndex: number;
 
-
+  /**
+   * A unique identifier for the combobox
+   */
   @Prop() componentId!: string;
+
+  /**
+   * Indicates that the combobox is disabled
+   * @defaultValue false
+   */
   @Prop() disabled = false;
+
+  /**
+   * Specifies the error text and provides an error-themed treatment to the field
+   */
   @Prop() errorMessage?: string;
+
+  /**
+   * Displays a hint or description of the combobox
+   */
   @Prop() hintMessage?: string;
+
+  /**
+   * Indicates  whether or not the input field is invalid or throws an error
+   */
   @Prop({ mutable: true }) invalid = false;
+
+  /**
+   * Text to be displayed as the combobox label
+   */
   @Prop() label?: string;
-  @Prop() name: string = this.componentId;
-  @Prop() placeholder?: string;
   @Prop() readonly = false;
   @Prop() required = false;
   @Prop({ mutable: true }) value?: string;
@@ -48,8 +70,47 @@ export class PdsSelect {
   @Prop() selectedOptionValue?: string;
 
 
+  // eslint-disable-next-line @stencil/no-unused-watch
+  @Watch('selectedOptionValue')
+  updateComboboxContent(newValue: string) {
+    const comboInput = this.el.querySelector('.combo-input');
+    if (comboInput) {
+      comboInput.textContent = newValue || '';
+    }
+  }
 
   @Event() pdsSelectChange!: EventEmitter<string>;
+
+  componentDidLoad() {
+    // Find the first 'pds-select-option' with 'selected=true'
+    const firstSelectedOption = this.el.querySelector('pds-select-option[selected]') as HTMLPdsSelectOptionElement;
+
+    if (firstSelectedOption) {
+      // Set the selected option value to the first selected option's value
+      this.selectedOptionValue = firstSelectedOption.value;
+    } else {
+      // If no option is selected, get the first 'pds-select-option' and set the value accordingly
+      const firstOption = this.el.querySelector('pds-select-option') as HTMLPdsSelectOptionElement;
+
+      if (firstOption) {
+        if(firstOption.innerHTML) {
+          this.selectedOptionText = firstOption.innerHTML
+        } else {
+          this.selectedOptionValue = firstOption.value;
+        }
+      } else {
+        this.selectedOptionValue = ''; // No options available, set an empty string or placeholder if available
+      }
+    }
+
+    // Use shadowRoot to find the .combo-input element
+    this.comboInputRef = this.el.shadowRoot?.querySelector('.combo-input') as HTMLDivElement;
+
+    if (this.comboInputRef) {
+      this.comboInputRef.addEventListener('click', this.handleComboboxToggle);
+      this.comboInputRef.addEventListener('blur', this.handleComboInputBlur);
+    }
+  }
 
   @Listen('pdsSelectOptionSelected')
   pdsSelectedOption(event: CustomEvent<any>) {
@@ -86,55 +147,51 @@ export class PdsSelect {
     this.handleComboboxToggle();
   }
 
-  private selectInputClassNames() {
-    const classNames = ['pds-select__input combo-input'];
+  @Listen('keydown', {})
+  handleComboInputKeyDown(event: KeyboardEvent) {
+    const options = this.el.querySelectorAll('pds-select-option');
+    console.log('options: ', options);
+    console.log('this.selectedOptionId: ', this.selectedOptionId);
 
-    if (this.invalid && this.invalid === true) {
-      classNames.push('is-invalid');
+    if (!this.isComboboxOpen) {
+      this.handleComboboxToggle();
+      return false;
     }
 
-    // Add 'is--current' class to the combo box if the combobox was focused before blur
-    if (this.wasComboboxFocused) {
-      classNames.push('is--current');
-    }
-
-    return classNames.join(' ');
-  }
-
-  private handleComboInputBlur() {
-    // Set the flag to remember the focus state when the combobox loses focus
-    console.log('handleComboInputBlur-  document.activeElement: ', document.activeElement, ' this.comboInputRef: ', this.comboInputRef);
-    this.wasComboboxFocused = document.activeElement === this.comboInputRef;
-  }
-
-  componentDidLoad() {
-    // Find the first 'pds-select-option' with 'selected=true'
-    const firstSelectedOption = this.el.querySelector('pds-select-option[selected]') as HTMLPdsSelectOptionElement;
-
-    if (firstSelectedOption) {
-      // Set the selected option value to the first selected option's value
-      this.selectedOptionValue = firstSelectedOption.value;
-    } else {
-      // If no option is selected, get the first 'pds-select-option' and set the value accordingly
-      const firstOption = this.el.querySelector('pds-select-option') as HTMLPdsSelectOptionElement;
-
-      if (firstOption) {
-        if(firstOption.innerHTML) {
-          this.selectedOptionText = firstOption.innerHTML
-        } else {
-          this.selectedOptionValue = firstOption.value;
-        }
-      } else {
-        this.selectedOptionValue = ''; // No options available, set an empty string or placeholder if available
+    if (this.isComboboxOpen && options.length > 0) {
+      switch (event.key) {
+        case 'ArrowDown':
+          event.preventDefault();
+          if (!this.isComboboxOpen) {
+            this.handleComboboxToggle();
+            this.focusOptionAtIndex(this.focusIndex);
+          }
+          this.focusNextOption();
+          break;
+        case 'ArrowUp':
+          event.preventDefault();
+          this.focusPreviousOption();
+          break;
+        case 'Escape':
+          if(this.isComboboxOpen) {
+            this.handleComboboxToggle();
+          }
+        case 'Home':
+          event.preventDefault();
+          this.focusFirstOption();
+          break;
+        case 'End':
+          event.preventDefault();
+          this.focusLastOption();
+          break;
+        case 'Enter':
+        case ' ':
+          event.preventDefault();
+          if (this.isComboboxOpen) {
+            this.selectFocusedOption();
+          }
+          break;
       }
-    }
-
-    // Use shadowRoot to find the .combo-input element
-    this.comboInputRef = this.el.shadowRoot?.querySelector('.combo-input') as HTMLDivElement;
-
-    if (this.comboInputRef) {
-      this.comboInputRef.addEventListener('click', this.handleComboboxToggle);
-      this.comboInputRef.addEventListener('blur', this.handleComboInputBlur);
     }
   }
 
@@ -171,52 +228,25 @@ export class PdsSelect {
     }
   };
 
-  @Listen('keydown', {})
-  handleComboInputKeyDown(event: KeyboardEvent) {
-    const options = this.el.querySelectorAll('pds-select-option');
-    console.log('options: ', options);
-    console.log('this.selectedOptionId: ', this.selectedOptionId);
+  private selectInputClassNames() {
+    const classNames = ['pds-select__input combo-input'];
 
-    if (!this.isComboboxOpen) {
-      this.handleComboboxToggle();
-      return false;
+    if (this.invalid && this.invalid === true) {
+      classNames.push('is-invalid');
     }
 
-    if (this.isComboboxOpen && options.length > 0) {
-      switch (event.key) {
-        case 'ArrowDown':
-          event.preventDefault();
-          if (!this.isComboboxOpen) {
-            this.handleComboboxToggle();
-            this.focusOptionAtIndex(this.focusIndex);
-          }
-          this.focusNextOption();
-          break;
-        case 'ArrowUp':
-          event.preventDefault();
-          this.focusPreviousOption();
-          break;
-        case 'Esc':
-          if(this.isComboboxOpen) {
-            !this.isComboboxOpen;
-          }
-        case 'Home':
-          event.preventDefault();
-          this.focusFirstOption();
-          break;
-        case 'End':
-          event.preventDefault();
-          this.focusLastOption();
-          break;
-        case 'Enter':
-        case ' ':
-          event.preventDefault();
-          if (this.isComboboxOpen) {
-            this.selectFocusedOption();
-          }
-          break;
-      }
+    // Add 'is--current' class to the combo box if the combobox was focused before blur
+    if (this.wasComboboxFocused) {
+      classNames.push('is--current');
     }
+
+    return classNames.join(' ');
+  }
+
+  private handleComboInputBlur() {
+    // Set the flag to remember the focus state when the combobox loses focus
+    console.log('handleComboInputBlur-  document.activeElement: ', document.activeElement, ' this.comboInputRef: ', this.comboInputRef);
+    this.wasComboboxFocused = document.activeElement === this.comboInputRef;
   }
 
   // Focus Management
@@ -277,15 +307,6 @@ export class PdsSelect {
     }
   }
   // End Focus Management
-
-  // eslint-disable-next-line @stencil/no-unused-watch
-  @Watch('selectedOptionValue')
-  updateComboboxContent(newValue: string) {
-    const comboInput = this.el.querySelector('.combo-input');
-    if (comboInput) {
-      comboInput.textContent = newValue || '';
-    }
-  }
 
   render() {
     return (

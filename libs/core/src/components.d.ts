@@ -389,14 +389,31 @@ export namespace Components {
         "value": string;
     }
     interface PdsSelect {
+        /**
+          * A unique identifier for the combobox
+         */
         "componentId": string;
+        /**
+          * Indicates that the combobox is disabled
+          * @defaultValue false
+         */
         "disabled": boolean;
+        /**
+          * Specifies the error text and provides an error-themed treatment to the field
+         */
         "errorMessage"?: string;
+        /**
+          * Displays a hint or description of the combobox
+         */
         "hintMessage"?: string;
+        /**
+          * Indicates  whether or not the input field is invalid or throws an error
+         */
         "invalid": boolean;
+        /**
+          * Text to be displayed as the combobox label
+         */
         "label"?: string;
-        "name": string;
-        "placeholder"?: string;
         "readonly": boolean;
         "required": boolean;
         "selectedOptionText"?: string;
@@ -1489,15 +1506,32 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     interface PdsSelect {
+        /**
+          * A unique identifier for the combobox
+         */
         "componentId": string;
+        /**
+          * Indicates that the combobox is disabled
+          * @defaultValue false
+         */
         "disabled"?: boolean;
+        /**
+          * Specifies the error text and provides an error-themed treatment to the field
+         */
         "errorMessage"?: string;
+        /**
+          * Displays a hint or description of the combobox
+         */
         "hintMessage"?: string;
+        /**
+          * Indicates  whether or not the input field is invalid or throws an error
+         */
         "invalid"?: boolean;
+        /**
+          * Text to be displayed as the combobox label
+         */
         "label"?: string;
-        "name"?: string;
         "onPdsSelectChange"?: (event: PdsSelectCustomEvent<string>) => void;
-        "placeholder"?: string;
         "readonly"?: boolean;
         "required"?: boolean;
         "selectedOptionText"?: string;
