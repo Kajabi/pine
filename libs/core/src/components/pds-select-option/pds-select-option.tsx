@@ -5,7 +5,7 @@ import { Component, Element, Event, EventEmitter, h, Prop } from '@stencil/core'
   styleUrl: 'pds-select-option.scss',
   shadow: true,
 })
-export class PdfSelectOption {
+export class PdsSelectOption {
   @Element() element!: HTMLPdsSelectOptionElement;
 
 

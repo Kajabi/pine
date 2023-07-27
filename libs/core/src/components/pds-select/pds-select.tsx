@@ -17,6 +17,21 @@ export class PdsSelect {
    */
   private focusIndex = -1;
 
+  /**
+   * Flag to remember if the combobox was focused before blur
+   */
+  private wasComboboxFocused = false;
+
+  /**
+   * Flag to remember if the combobox was focused before blur
+   */
+  private wasComboboxFocusedId: string;
+
+  /**
+   * Flag to remember focused combobox index
+   */
+  private wasComboboxFocusedIndex: number;
+
 
   @Prop() componentId!: string;
   @Prop() disabled = false;
@@ -71,19 +86,6 @@ export class PdsSelect {
     this.handleComboboxToggle();
   }
 
-  // private selectClassNames() {
-  //   const classNames = ['pds-select'];
-
-  //   console.log('this.isComboboxOpen: ', this.isComboboxOpen);
-
-  //   if (this.isComboboxOpen && this.isComboboxOpen === true) {
-  //     console.log('in');
-  //     classNames.push('is-open');
-  //   }
-
-  //   return classNames.join(' ');
-  // }
-
   private selectInputClassNames() {
     const classNames = ['pds-select__input combo-input'];
 
@@ -91,7 +93,18 @@ export class PdsSelect {
       classNames.push('is-invalid');
     }
 
+    // Add 'is--current' class to the combo box if the combobox was focused before blur
+    if (this.wasComboboxFocused) {
+      classNames.push('is--current');
+    }
+
     return classNames.join(' ');
+  }
+
+  private handleComboInputBlur() {
+    // Set the flag to remember the focus state when the combobox loses focus
+    console.log('handleComboInputBlur-  document.activeElement: ', document.activeElement, ' this.comboInputRef: ', this.comboInputRef);
+    this.wasComboboxFocused = document.activeElement === this.comboInputRef;
   }
 
   componentDidLoad() {
@@ -121,6 +134,7 @@ export class PdsSelect {
 
     if (this.comboInputRef) {
       this.comboInputRef.addEventListener('click', this.handleComboboxToggle);
+      this.comboInputRef.addEventListener('blur', this.handleComboInputBlur);
     }
   }
 
@@ -132,18 +146,28 @@ export class PdsSelect {
 
     if (this.isComboboxOpen) {
       this.comboWrapperRef.classList.add('is-open')
-    } else {
-      this.comboWrapperRef.classList.remove('is-open')
-    }
-
-    if (this.isComboboxOpen) {
       // Move focus to the input when the combobox is opened
       this.comboInputRef?.focus();
+
       // Set the focus index to the first option
-      this.focusIndex = 0;
+      if (!this.focusIndex && !this.wasComboboxFocused)  {
+        this.focusIndex = 0;
+      }
+      this.wasComboboxFocused = true;
+
+      if (this.wasComboboxFocused) {
+        // If the combobox was previously focused, reapply focus to the previously focused option
+        this.focusOptionAtIndex(this.wasComboboxFocusedIndex);
+      }
     } else {
+      this.comboWrapperRef.classList.remove('is-open')
       // Reset focus index when the combobox is closed
       this.focusIndex = -1;
+
+      if (this.wasComboboxFocused) {
+        // If the combobox was focused before the click, set the focus index to 0
+        this.focusIndex = 0;
+      }
     }
   };
 
@@ -151,17 +175,31 @@ export class PdsSelect {
   handleComboInputKeyDown(event: KeyboardEvent) {
     const options = this.el.querySelectorAll('pds-select-option');
     console.log('options: ', options);
+    console.log('this.selectedOptionId: ', this.selectedOptionId);
+
+    if (!this.isComboboxOpen) {
+      this.handleComboboxToggle();
+      return false;
+    }
 
     if (this.isComboboxOpen && options.length > 0) {
       switch (event.key) {
         case 'ArrowDown':
           event.preventDefault();
+          if (!this.isComboboxOpen) {
+            this.handleComboboxToggle();
+            this.focusOptionAtIndex(this.focusIndex);
+          }
           this.focusNextOption();
           break;
         case 'ArrowUp':
           event.preventDefault();
           this.focusPreviousOption();
           break;
+        case 'Esc':
+          if(this.isComboboxOpen) {
+            !this.isComboboxOpen;
+          }
         case 'Home':
           event.preventDefault();
           this.focusFirstOption();
@@ -173,7 +211,9 @@ export class PdsSelect {
         case 'Enter':
         case ' ':
           event.preventDefault();
-          this.selectFocusedOption();
+          if (this.isComboboxOpen) {
+            this.selectFocusedOption();
+          }
           break;
       }
     }
@@ -181,17 +221,18 @@ export class PdsSelect {
 
   // Focus Management
   private focusNextOption() {
+    console.log('hey this: ', this);
     const options = this.el.querySelectorAll('pds-select-option');
-    if (options.length > 0) {
-      this.focusIndex = (this.focusIndex + 1) % options.length;
+    if (options.length > 0 && this.focusIndex < options.length - 1) {
+      this.focusIndex++;
       this.focusOptionAtIndex(this.focusIndex);
     }
   }
 
   private focusPreviousOption() {
     const options = this.el.querySelectorAll('pds-select-option');
-    if (options.length > 0) {
-      this.focusIndex = (this.focusIndex - 1 + options.length) % options.length;
+    if (options.length > 0 && this.focusIndex > 0) {
+      this.focusIndex--;
       this.focusOptionAtIndex(this.focusIndex);
     }
   }
@@ -210,10 +251,21 @@ export class PdsSelect {
   }
 
   private focusOptionAtIndex(index: number) {
+    console.log('focusOptionAtIndex: ', index );
     const options = this.el.querySelectorAll('pds-select-option');
     options.forEach((option, i) => {
-      option.tabIndex = i === index ? 0 : -1;
+      const shadowOption = option.shadowRoot?.querySelector('.pds-select-option') as HTMLElement;
+
+      shadowOption.tabIndex = i === index ? 0 : -1;
+      shadowOption.classList.toggle('is--current', i === index);
     });
+
+    if (options[index].componentId ){
+      this.wasComboboxFocusedId = options[index].componentId;
+      this.wasComboboxFocusedIndex = index;
+      console.log('this.wasComboboxFocusedId: ', this.wasComboboxFocusedId);
+    }
+
     options[index].focus();
   }
 
