@@ -17,16 +17,15 @@
 | `label`                    | `label`                 | Text to be displayed as the combobox label                                   | `string`  | `undefined` |
 | `readonly`                 | `readonly`              |                                                                              | `boolean` | `false`     |
 | `required`                 | `required`              |                                                                              | `boolean` | `false`     |
-| `selectedOptionText`       | `selected-option-text`  |                                                                              | `string`  | `undefined` |
-| `selectedOptionValue`      | `selected-option-value` |                                                                              | `string`  | `undefined` |
-| `value`                    | `value`                 |                                                                              | `string`  | `undefined` |
+| `selectedOptionText`       | `selected-option-text`  | The display text for the selected option                                     | `string`  | `undefined` |
+| `selectedOptionValue`      | `selected-option-value` | The value for the selected option                                            | `string`  | `undefined` |
 
 
 ## Events
 
-| Event             | Description | Type                  |
-| ----------------- | ----------- | --------------------- |
-| `pdsSelectChange` |             | `CustomEvent<string>` |
+| Event             | Description                                                | Type                  |
+| ----------------- | ---------------------------------------------------------- | --------------------- |
+| `pdsSelectChange` | Emitted when the select value changes from selected option | `CustomEvent<string>` |
 
 
 ## Dependencies

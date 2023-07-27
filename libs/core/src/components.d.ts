@@ -416,9 +416,14 @@ export namespace Components {
         "label"?: string;
         "readonly": boolean;
         "required": boolean;
+        /**
+          * The display text for the selected option
+         */
         "selectedOptionText"?: string;
+        /**
+          * The value for the selected option
+         */
         "selectedOptionValue"?: string;
-        "value"?: string;
     }
     interface PdsSelectOption {
         /**
@@ -1531,12 +1536,20 @@ declare namespace LocalJSX {
           * Text to be displayed as the combobox label
          */
         "label"?: string;
+        /**
+          * Emitted when the select value changes from selected option
+         */
         "onPdsSelectChange"?: (event: PdsSelectCustomEvent<string>) => void;
         "readonly"?: boolean;
         "required"?: boolean;
+        /**
+          * The display text for the selected option
+         */
         "selectedOptionText"?: string;
+        /**
+          * The value for the selected option
+         */
         "selectedOptionValue"?: string;
-        "value"?: string;
     }
     interface PdsSelectOption {
         /**

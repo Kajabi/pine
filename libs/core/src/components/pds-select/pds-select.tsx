@@ -65,9 +65,17 @@ export class PdsSelect {
   @Prop() label?: string;
   @Prop() readonly = false;
   @Prop() required = false;
-  @Prop({ mutable: true }) value?: string;
+  // @Prop({ mutable: true }) value?: string;
+
+  /**
+   * The display text for the selected option
+   */
   @Prop({ mutable: true }) selectedOptionText?: string;
-  @Prop() selectedOptionValue?: string;
+
+  /**
+   * The value for the selected option
+   */
+  @Prop({ mutable: true }) selectedOptionValue?: string;
 
 
   // eslint-disable-next-line @stencil/no-unused-watch
@@ -79,6 +87,9 @@ export class PdsSelect {
     }
   }
 
+  /**
+   * Emitted when the select value changes from selected option
+   */
   @Event() pdsSelectChange!: EventEmitter<string>;
 
   componentDidLoad() {
@@ -150,8 +161,6 @@ export class PdsSelect {
   @Listen('keydown', {})
   handleComboInputKeyDown(event: KeyboardEvent) {
     const options = this.el.querySelectorAll('pds-select-option');
-    console.log('options: ', options);
-    console.log('this.selectedOptionId: ', this.selectedOptionId);
 
     if (!this.isComboboxOpen) {
       this.handleComboboxToggle();
@@ -245,13 +254,11 @@ export class PdsSelect {
 
   private handleComboInputBlur() {
     // Set the flag to remember the focus state when the combobox loses focus
-    console.log('handleComboInputBlur-  document.activeElement: ', document.activeElement, ' this.comboInputRef: ', this.comboInputRef);
     this.wasComboboxFocused = document.activeElement === this.comboInputRef;
   }
 
   // Focus Management
   private focusNextOption() {
-    console.log('hey this: ', this);
     const options = this.el.querySelectorAll('pds-select-option');
     if (options.length > 0 && this.focusIndex < options.length - 1) {
       this.focusIndex++;
@@ -290,13 +297,17 @@ export class PdsSelect {
       shadowOption.classList.toggle('is--current', i === index);
     });
 
-    if (options[index].componentId ){
-      this.wasComboboxFocusedId = options[index].componentId;
-      this.wasComboboxFocusedIndex = index;
-      console.log('this.wasComboboxFocusedId: ', this.wasComboboxFocusedId);
+    if (this.wasComboboxFocused && index != undefined) {
+      if (options[index].componentId && options[index].componentId != undefined){
+        this.wasComboboxFocusedId = options[index].componentId;
+        this.wasComboboxFocusedIndex = index;
+        console.log('this.wasComboboxFocusedId: ', this.wasComboboxFocusedId);
+      }
     }
 
-    options[index].focus();
+    if (index != undefined) {
+      options[index].focus();
+    }
   }
 
   private selectFocusedOption() {
