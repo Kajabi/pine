@@ -1,5 +1,6 @@
 import { Component, h, Prop, Host, Event, EventEmitter } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
+import { PdsLabel } from '../_internal/pds-label/pds-label';
 
 @Component({
   tag: 'pds-checkbox',
@@ -99,7 +100,7 @@ export class PdsCheckbox {
           disabled={this.disabled}
           onChange={this.handleCheckboxChange}
         />
-        <label htmlFor={this.componentId}>{this.label}</label>
+        <PdsLabel htmlFor={this.componentId} text={this.label} />
         {this.helperMessage &&
           <div
             class={'pds-checkbox__message'}
