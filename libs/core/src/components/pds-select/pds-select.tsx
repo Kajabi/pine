@@ -93,12 +93,27 @@ export class PdsSelect {
   @Event() pdsSelectChange!: EventEmitter<string>;
 
   componentDidLoad() {
+    // const selected = this.el.querySelectorAll('pds-select-option').forEach((s) => {
+    //   console.log('option: ', s);
+    //   if (s.selected === true) {
+    //     return s;
+    //   }
+    // });
+    // console.log('selected qs:', selected)
+
     // Find the first 'pds-select-option' with 'selected=true'
-    const firstSelectedOption = this.el.querySelector('pds-select-option[selected]') as HTMLPdsSelectOptionElement;
+    // const firstSelectedOption = this.el.querySelector('pds-select-option[selected]') as HTMLElement | null;
+    // Find the first 'pds-select-option' with 'selected=true'
+
+    const options = Array.from(this.el.querySelectorAll('pds-select-option'));
+    const firstSelectedOption = options.find((option) => option.hasAttribute('selected'));
 
     if (firstSelectedOption) {
-      // Set the selected option value to the first selected option's value
-      this.selectedOptionValue = firstSelectedOption.value;
+      // Check if the 'selected' attribute exists and is not null
+      if (firstSelectedOption.getAttribute('selected') !== null) {
+        // Set the selected option value to the first selected option's value
+        this.selectedOptionValue = firstSelectedOption.getAttribute('value');
+      }
     } else {
       // If no option is selected, get the first 'pds-select-option' and set the value accordingly
       const firstOption = this.el.querySelector('pds-select-option') as HTMLPdsSelectOptionElement;
