@@ -35,16 +35,33 @@ describe('pds-select', () => {
     expect(page.root).toEqualHtml(`
       <pds-select component-id="combobox" label="Label">
         <mock:shadow-root>
+          <label htmlfor="combobox" id="combobox-label" class="pds-select__label">Label</label>
           <div class="pds-select">
-            <div class="pds-select__input" tabindex="0">Select an option<pds-icon name="caret-down" size="small"></pds-icon></div>
-            <div class="pds-select__menu" tabindex="-1">
-              <pds-select-option class="pds-select-option" tabindex="-1" component-id="opt0">Select an option</pds-select-option>
-              <pds-select-option class="pds-select-option" tabindex="-1" component-id="opt1">Option A Slot</pds-select-option>
+            <div aria-controls="combobox-listbox" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="combobox-label" class="pds-select__input" id="combobox" role="combobox" tabindex="0">
+              Select an option
+              <pds-icon name="caret-down" size="small"></pds-icon>
+            </div>
+            <div aria-labelledby="combobox-label" class="pds-select__menu" id="combobox-listbox" role="listbox" tabindex="-1">
+              <slot></slot>
             </div>
           </div>
         </mock:shadow-root>
-        <pds-select-option component-id="opt0">Select an option</pds-select-option>
-        <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
+        <pds-select-option component-id="opt0">
+          <mock:shadow-root>
+            <div aria-selected="false" class="pds-select-option" id="opt0" role="option" tabindex="-1">
+              Select an option
+            </div>
+          </mock:shadow-root>
+          Select an option
+        </pds-select-option>
+        <pds-select-option component-id="opt1">
+          <mock:shadow-root>
+            <div aria-selected="false" class="pds-select-option" id="opt1" role="option" tabindex="-1">
+              Option A Slot
+            </div>
+          </mock:shadow-root>
+          Option A Slot
+        </pds-select-option>
       </pds-select>
     `);
   });

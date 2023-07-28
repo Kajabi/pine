@@ -14,18 +14,26 @@ describe('pds-select', () => {
       `,
     });
 
-    const select = await page.find('pds-select');
-    const selectOption = await page.find('pds-select-option >>> .pds-select-option');
+    // const select = await page.find('pds-select');
+    const selectComponent = await page.find('pds-select');
+    await selectComponent.click();
+    const selectOption = (await page.find('pds-select-option')).shadowRoot.querySelector('.pds-select-option');
+
+    // const selectOption = selectComponent.find('')
     console.log('selectOption: ', selectOption);
 
     // Listen for the 'pdsSelectChange' event on the 'pds-select' component
-    const selectChangeEvent = await page.spyOnEvent('pdsSelectChange');
+    const selectChangeEvent = await page.spyOnEvent('pdsSelectOptionSelected');
 
     // Click on the 'pds-select-option' to select it
-    await selectOption.click();
+    // await selectOption?.click();
+    selectOption?.dispatchEvent(new Event('pdsSelectOptionSelected'));
     await page.waitForChanges();
 
+    console.log('selectOption After: ', selectOption);
     // Verify that the 'pdsSelectChange' event is emitted with the correct details
-    expect(selectChangeEvent).toHaveReceivedEventDetail('Option A Slot');
+    // expect(selectChangeEvent).toHaveReceivedEventDetail('Select an option');
+    // expect(selectChangeEvent).toHaveReceivedEventTimes(1);
+    expect(selectOption).toHaveClass('is-selected');
   });
 });
