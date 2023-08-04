@@ -10,7 +10,6 @@ export class PdsSelect {
 
   private comboWrapperRef?: HTMLDivElement;
   private comboInputRef?: HTMLDivElement;
-  private isComboboxOpen = false;
 
   /**
    * Track the index of the focused option
@@ -57,6 +56,12 @@ export class PdsSelect {
    * Indicates  whether or not the input field is invalid or throws an error
    */
   @Prop({ mutable: true }) invalid = false;
+
+  /**
+   * Is enabled when the combobox is open
+   * @defaultValue false
+   */
+  @Prop() isComboboxOpen = false;
 
   /**
    * Text to be displayed as the combobox label
