@@ -11,7 +11,6 @@ export class PdsSelect {
   private comboWrapperRef?: HTMLDivElement;
   private comboInputRef?: HTMLDivElement;
   private isComboboxOpen = false;
-  private selectedOptionId?: string;
 
   /**
    * Track the index of the focused option
@@ -68,14 +67,19 @@ export class PdsSelect {
   // @Prop({ mutable: true }) value?: string;
 
   /**
+   * The display id for the selected option
+   */
+  @Prop() selectedOptionId?: string;
+
+  /**
    * The display text for the selected option
    */
-  @Prop({ mutable: true }) selectedOptionText?: string;
+  @Prop() selectedOptionText?: string;
 
   /**
    * The value for the selected option
    */
-  @Prop({ mutable: true }) selectedOptionValue?: string;
+  @Prop() selectedOptionValue?: string;
 
 
   // eslint-disable-next-line @stencil/no-unused-watch
@@ -129,11 +133,7 @@ export class PdsSelect {
       if (firstOption) {
         if(firstOption.innerHTML) {
           this.selectedOptionText = firstOption.innerHTML
-        } else {
-          this.selectedOptionValue = firstOption.value;
         }
-      } else {
-        this.selectedOptionValue = ''; // No options available, set an empty string or placeholder if available
       }
     }
 
@@ -149,6 +149,8 @@ export class PdsSelect {
   @Listen('pdsSelectOptionSelected')
   pdsSelectedOption(event: CustomEvent<any>) {
     const { id, text, value } = event.detail;
+
+    console.log('id: ', id, ' text: ', text, ' value: ', value);
 
     // Set the value to equal the text if the value is empty
     if(this.selectedOptionValue === undefined) {
@@ -188,7 +190,8 @@ export class PdsSelect {
 
     if (!this.isComboboxOpen) {
       this.handleComboboxToggle();
-      return false;
+      // return false;
+      event.preventDefault();
     }
 
     if (this.isComboboxOpen && options.length > 0) {
@@ -209,6 +212,7 @@ export class PdsSelect {
           if(this.isComboboxOpen) {
             this.handleComboboxToggle();
           }
+          break;
         case 'Home':
           event.preventDefault();
           this.focusFirstOption();
@@ -314,25 +318,29 @@ export class PdsSelect {
   private focusOptionAtIndex(index: number) {
     if (index === undefined) return false;
 
-    console.log('focusOptionAtIndex: ', index );
+    console.log('1 focusOptionAtIndex: ', index );
     const options = this.el.querySelectorAll('pds-select-option');
     options.forEach((option, i) => {
       const shadowOption = option.shadowRoot?.querySelector('.pds-select-option') as HTMLElement;
 
       shadowOption.tabIndex = i === index ? 0 : -1;
       shadowOption.classList.toggle('is--current', i === index);
+
     });
 
-    if (this.wasComboboxFocused && index != undefined) {
+    if (this.wasComboboxFocused && index !== undefined) {
       if (options[index].componentId && options[index].componentId != undefined){
         this.wasComboboxFocusedId = options[index].componentId;
+        this.selectedOptionId = options[index].componentId;
         this.wasComboboxFocusedIndex = index;
-        console.log('this.wasComboboxFocusedId: ', this.wasComboboxFocusedId);
+        console.log('2 this.wasComboboxFocusedId: ', this.wasComboboxFocusedId);
       }
     }
 
-    if (index != undefined) {
+    if (index !== undefined) {
       options[index].focus();
+      // this.selectedOptionId = options[index].componentId;
+      console.log('3 this: ', this, ' selectedOptionId: ', this.selectedOptionId);
     }
   }
 
@@ -346,6 +354,9 @@ export class PdsSelect {
   // End Focus Management
 
   render() {
+
+    console.log('return this.selectedOptionId: ', this.selectedOptionId);
+    console.log('comboboxisopen: ', this.isComboboxOpen);
     return (
       <Host>
         {this.label && (
@@ -368,7 +379,7 @@ export class PdsSelect {
             aria-expanded={this.isComboboxOpen.toString()}
             aria-haspopup="listbox"
             aria-labelledby={`${this.componentId}-label`}
-            aria-activedescendant={this.selectedOptionId ? `${this.componentId}-option-${this.selectedOptionId}` : undefined}
+            aria-activedescendant={this.selectedOptionId && this.isComboboxOpen ? `${this.componentId}-option-${this.selectedOptionId}` : undefined}
             class={this.selectInputClassNames()}
             id={this.componentId}
             role="combobox"
