@@ -411,11 +411,20 @@ export namespace Components {
          */
         "invalid": boolean;
         /**
+          * Is enabled when the combobox is open
+          * @defaultValue false
+         */
+        "isComboboxOpen": boolean;
+        /**
           * Text to be displayed as the combobox label
          */
         "label"?: string;
         "readonly": boolean;
         "required": boolean;
+        /**
+          * The display id for the selected option
+         */
+        "selectedOptionId"?: string;
         /**
           * The display text for the selected option
          */
@@ -1533,6 +1542,11 @@ declare namespace LocalJSX {
          */
         "invalid"?: boolean;
         /**
+          * Is enabled when the combobox is open
+          * @defaultValue false
+         */
+        "isComboboxOpen"?: boolean;
+        /**
           * Text to be displayed as the combobox label
          */
         "label"?: string;
@@ -1542,6 +1556,10 @@ declare namespace LocalJSX {
         "onPdsSelectChange"?: (event: PdsSelectCustomEvent<string>) => void;
         "readonly"?: boolean;
         "required"?: boolean;
+        /**
+          * The display id for the selected option
+         */
+        "selectedOptionId"?: string;
         /**
           * The display text for the selected option
          */
