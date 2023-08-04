@@ -21,7 +21,7 @@ describe('pds-select', () => {
   //   await expect(page.root).rejects.toThrow();
   // });
 
-  it('renders correctly with default selected option', async () => {
+  it('renders correctly with no selected option', async () => {
     const page = await newSpecPage({
       components: [PdsSelect, PdsSelectOption],
       html: `
@@ -66,6 +66,52 @@ describe('pds-select', () => {
     `);
   });
 
+  it('renders correctly with selected option', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect, PdsSelectOption],
+      html: `
+        <pds-select component-id="combobox" label="Label">
+          <pds-select-option component-id="opt0">Select an option</pds-select-option>
+          <pds-select-option component-id="opt1" selected="true">Option A Slot</pds-select-option>
+        </pds-select>
+      `,
+    });
+
+    expect(page.root).toEqualHtml(`
+      <pds-select component-id="combobox" label="Label">
+        <mock:shadow-root>
+          <label htmlfor="combobox" id="combobox-label" class="pds-select__label">Label</label>
+          <div class="pds-select">
+            <div aria-controls="combobox-listbox" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="combobox-label" class="pds-select__input" id="combobox" role="combobox" tabindex="0">
+              Option A Slot
+              <pds-icon name="caret-down" size="small"></pds-icon>
+            </div>
+            <div aria-labelledby="combobox-label" class="pds-select__menu" id="combobox-listbox" role="listbox" tabindex="-1">
+              <slot></slot>
+            </div>
+          </div>
+        </mock:shadow-root>
+        <pds-select-option component-id="opt0">
+          <mock:shadow-root>
+            <div aria-selected="false" class="pds-select-option" id="opt0" role="option" tabindex="-1">
+              Select an option
+            </div>
+          </mock:shadow-root>
+          Select an option
+        </pds-select-option>
+        <pds-select-option component-id="opt1" selected="">
+          <mock:shadow-root>
+            <div aria-selected="true" class="is-selected pds-select-option" id="opt1" role="option" tabindex="0">
+              Option A Slot
+              <pds-icon name="check"></pds-icon>
+            </div>
+          </mock:shadow-root>
+          Option A Slot
+        </pds-select-option>
+      </pds-select>
+    `);
+  });
+
   it('renders correctly when invalid text', async () => {
     const page = await newSpecPage({
       components: [PdsSelect, PdsSelectOption],
@@ -80,5 +126,98 @@ describe('pds-select', () => {
     const element = page.root?.shadowRoot;
 
     expect(element?.querySelector('.pds-select__input')).not.toBeNull();
+  });
+
+
+  // it('emits the correct event details when an option is selected', async () => {
+  //   const page = await newSpecPage({
+  //     components: [PdsSelect, PdsSelectOption],
+  //     html: `
+  //       <pds-select component-id="combobox" label="Label">
+  //         <pds-select-option component-id="opt0" value="1">Select an option</pds-select-option>
+  //         <pds-select-option component-id="opt1" value="2">Option A Slot</pds-select-option>
+  //       </pds-select>
+  //     `,
+  //   });
+
+  //   const select = page.root?.querySelector('pds-select');
+  //   const option = page.root?.querySelector('pds-select-option');
+
+  //   const pdsSelectChange = jest.fn();
+
+  //   select?.addEventListener('pdsSelectChange', pdsSelectChange);
+
+  //   // option?.click(); // Simulate selecting an option
+  //   option?.dispatchEvent(new Event('pdsSelectOptionSelected'));
+
+  //   await page.waitForChanges();
+
+  //   // expect(pdsSelectChange).toHaveBeenCalled();
+  //   // expect(pdsSelectChange.mock.calls[0][0].detail).toEqual('1'); // Verify the emitted value matches the selected option value
+
+  //   expect(pdsSelectChange).toHaveBeenCalled();
+  // });
+
+  // it('emits the correct event details when an option is selected', async () => {
+  //   const page = await newSpecPage({
+  //     components: [PdsSelect, PdsSelectOption],
+  //     html: `
+  //       <pds-select component-id="combobox" label="Label">
+  //         <pds-select-option component-id="opt0" value="1">Select an option</pds-select-option>
+  //         <pds-select-option component-id="opt1" value="2">Option A Slot</pds-select-option>
+  //       </pds-select>
+  //     `,
+  //   });
+
+  //   const select = page.root?.querySelector('pds-select');
+  //   const option = page.root?.querySelector('pds-select-option[value="1"]'); // Select the first option
+
+  //   const pdsSelectChange = jest.fn();
+
+  //   select?.addEventListener('pdsSelectChange', pdsSelectChange);
+
+  //   console.log('option: ', option);
+  //   // Simulate user interaction by clicking on the option
+  //   option?.click();
+
+  //   await page.waitForChanges();
+
+  //   expect(pdsSelectChange).toHaveBeenCalled();
+  //   expect(pdsSelectChange.mock.calls[0][0].detail).toEqual('1'); // Verify the emitted value matches the selected option value
+  // });
+
+
+  it('focuses the first option when opened and arrow down key is pressed', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `
+        <pds-select component-id="combobox" label="Label">
+          <pds-select-option component-id="opt0">Select an option</pds-select-option>
+          <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
+          <pds-select-option component-id="opt2">Option B Slot</pds-select-option>
+          <pds-select-option component-id="opt3">Option C Slot</pds-select-option>
+          <pds-select-option component-id="opt4">Option D Slot</pds-select-option>
+        </pds-select>
+      `,
+    });
+
+
+    const select = page.root?.querySelector('pds-select');
+    const input = page.root?.shadowRoot?.querySelector<HTMLInputElement>('.pds-select__input');
+
+    // Open the combobox by clicking on it
+    input?.click();
+    await page.waitForChanges();
+
+    // Simulate arrow down key press
+    const arrowDownEvent = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+    input?.dispatchEvent(arrowDownEvent);
+    await page.waitForChanges();
+
+    // Check if the first option is focused
+    const focusedOption = page.root?.shadowRoot?.querySelector('.pds-select-option.is--current');
+    const firstOption = page.root?.shadowRoot?.querySelector('.pds-select-option');
+
+    expect(focusedOption).toBe(firstOption);
   });
 });

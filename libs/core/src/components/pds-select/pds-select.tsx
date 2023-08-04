@@ -108,11 +108,19 @@ export class PdsSelect {
     const options = Array.from(this.el.querySelectorAll('pds-select-option'));
     const firstSelectedOption = options.find((option) => option.hasAttribute('selected'));
 
+    console.log('here');
+
     if (firstSelectedOption) {
       // Check if the 'selected' attribute exists and is not null
+
       if (firstSelectedOption.getAttribute('selected') !== null) {
         // Set the selected option value to the first selected option's value
         this.selectedOptionValue = firstSelectedOption.getAttribute('value');
+
+        // Use innerHTML if the value is null
+        if (this.selectedOptionValue === null) {
+          this.selectedOptionText = firstSelectedOption.innerHTML;
+        }
       }
     } else {
       // If no option is selected, get the first 'pds-select-option' and set the value accordingly
@@ -168,6 +176,7 @@ export class PdsSelect {
       }
 
       this.pdsSelectChange.emit(this.selectedOptionValue);
+      console.log('after pdsSelectChange emit', this.pdsSelectChange);
     }
 
     this.handleComboboxToggle();
@@ -303,6 +312,8 @@ export class PdsSelect {
   }
 
   private focusOptionAtIndex(index: number) {
+    if (index === undefined) return false;
+
     console.log('focusOptionAtIndex: ', index );
     const options = this.el.querySelectorAll('pds-select-option');
     options.forEach((option, i) => {
