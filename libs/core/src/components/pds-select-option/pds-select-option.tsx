@@ -33,15 +33,19 @@ export class PdsSelectOption {
    * Triggered when an option is clicked
    */
   // @Event({ bubbles: true, composed: true }) pdsSelectOptionSelected: EventEmitter<{ value: string; event: Event }>;
-  @Event({ bubbles: true, composed: true }) pdsSelectOptionSelected: EventEmitter;
+  @Event({
+    bubbles: true,
+    composed: true,
+  }) pdsSelectOptionSelected: EventEmitter;
   private onOptionSelected = (ev: Event) => {
-    console.log('this: ', this);
     this.selected = true;
     this.pdsSelectOptionSelected.emit({
       id: this.element.componentId,
       text: this.element.innerHTML,
       value: this.value as string,
       event: ev});
+    console.log('pdsSelectOptionSelected: ', this.pdsSelectOptionSelected);
+    console.log('this: ', this);
   }
 
   private selectOptionClassNames() {

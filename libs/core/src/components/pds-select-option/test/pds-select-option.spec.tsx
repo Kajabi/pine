@@ -47,4 +47,20 @@ describe('pds-select-option', () => {
     expect(element).toHaveClass('is-selected');
     expect(element?.getAttribute('aria-selected')).toMatch('true');
   });
+
+  // it('emits event when selected', async () => {
+  //   const optionText = 'Option text';
+  //   const page = await newSpecPage({
+  //     components: [PdsSelectOption],
+  //     html: `<pds-select-option component-id="opt1">${optionText}</pds-select-option>`,
+  //   });
+
+  //   page.body.dispatchEvent(new CustomEvent('onOptionSelected', {'detail': ['opt1', 'Option text', undefined]}));
+  //   await page.waitForChanges();
+
+  //   console.log('viewing: ', page.root?.shadowRoot?.innerHTML);
+
+  //   const option = page.root?.shadowRoot?.querySelector('.pds-select-option.is-selected');
+  //   expect(option).toBeTruthy();
+  });
 });

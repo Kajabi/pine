@@ -194,15 +194,11 @@ describe('pds-select', () => {
         <pds-select component-id="combobox" label="Label">
           <pds-select-option component-id="opt0">Select an option</pds-select-option>
           <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
-          <pds-select-option component-id="opt2">Option B Slot</pds-select-option>
-          <pds-select-option component-id="opt3">Option C Slot</pds-select-option>
-          <pds-select-option component-id="opt4">Option D Slot</pds-select-option>
         </pds-select>
       `,
     });
 
-
-    const select = page.root?.querySelector('pds-select');
+    const select = page.root?.shadowRoot?.querySelector('.pds-select');
     const input = page.root?.shadowRoot?.querySelector<HTMLInputElement>('.pds-select__input');
 
     // Open the combobox by clicking on it
@@ -219,5 +215,43 @@ describe('pds-select', () => {
     const firstOption = page.root?.shadowRoot?.querySelector('.pds-select-option');
 
     expect(focusedOption).toBe(firstOption);
+  });
+
+  it('should move focus down when arrow down is pressed twice', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `
+        <pds-select component-id="combobox" label="Label">
+          <pds-select-option component-id="opt0">Select an option</pds-select-option>
+          <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
+        </pds-select>
+      `,
+    });
+
+    const input = page.root?.shadowRoot?.querySelector<HTMLInputElement>('.pds-select__input');
+
+    // Open the combobox by clicking on it
+    input?.click();
+    await page.waitForChanges();
+
+    // Simulate arrow down key press twice
+    page.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    await page.waitForChanges();
+
+    page.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    await page.waitForChanges();
+
+    // Check if the focus moved to the second option
+    // const focusedOption = page.body.querySelector('pds-select-option.is--current');
+    let focusedOption = page.root?.shadowRoot?.querySelector('.pds-select-option.is--current');
+    let secondOption = page.root?.shadowRoot?.querySelector('pds-select-option:nth-child(2)');
+    expect(focusedOption).toEqual(secondOption);
+
+    page.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    await page.waitForChanges();
+
+    focusedOption = page.root?.shadowRoot?.querySelector('.pds-select-option.is--current');
+    secondOption = page.root?.shadowRoot?.querySelector('pds-select-option:nth-child(2)');
+    expect(focusedOption).toEqual(secondOption);
   });
 });
