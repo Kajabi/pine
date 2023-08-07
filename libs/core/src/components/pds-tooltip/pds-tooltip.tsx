@@ -19,7 +19,7 @@ export class PdsTooltip {
   /**
    * Reference to the Host element
    */
-  @Element() el: HTMLDivElement;
+  @Element() el: HTMLPdsTooltipElement;
 
   /**
    * Determines when the tooltip is open
@@ -73,7 +73,6 @@ export class PdsTooltip {
    */
   @Prop({mutable: true, reflect: true}) opened = false;
 
-  // eslint-disable-next-line @stencil/no-unused-watch
   @Watch('opened')
   handleOpenToggle() {
     if (this.opened) {

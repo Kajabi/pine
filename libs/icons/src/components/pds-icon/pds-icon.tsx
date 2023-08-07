@@ -12,7 +12,7 @@ export class PdsIcon {
   private io?: IntersectionObserver;
   private inheritedAttributes: { [k: string]: any } = {};
 
-  @Element() el!: HTMLElement;
+  @Element() el!: HTMLPdsIconElement;
 
   @State() private ariaLabel?: string;
   @State() private isVisible = false;

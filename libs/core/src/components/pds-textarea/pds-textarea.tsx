@@ -9,7 +9,7 @@ import { PdsLabel } from '../_internal/pds-label/pds-label';
   shadow: true,
 })
 export class PdsTextarea {
-  @Element() el: HTMLDivElement;
+  @Element() el: HTMLPdsTextareaElement;
 
   /**
    * A unique identifier for the textarea
@@ -36,7 +36,7 @@ export class PdsTextarea {
    * Indicates whether or not the textarea is invalid or throws an error
    * @defaultValue false
    */
-  @Prop({mutable: true}) invalid = false;
+  @Prop({mutable: true}) invalid = false;       // eslint-disable-line @stencil-community/strict-mutable
 
   /**
    * Text to be displayed as the textarea label

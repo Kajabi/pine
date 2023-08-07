@@ -6,7 +6,7 @@ import { Component, Element, Host, h, Prop } from '@stencil/core';
   shadow: false,
 })
 export class PdsTabpanel {
-  @Element() el: HTMLElement;
+  @Element() el: HTMLPdsTabpanelElement;
 
   /**
    * Sets the related tab name, this name must match a `pds-tab`'s tab name property
@@ -17,7 +17,7 @@ export class PdsTabpanel {
    * Keeps track of the parentComponentId unique id, this property is passed by parent component
    */
   /** @internal */
-  @Prop({mutable: true}) parentComponentId: string;
+  @Prop() parentComponentId: string;
 
   /**
    * Keeps track of if the expected tab variant, this property is passed by parent component
@@ -29,7 +29,7 @@ export class PdsTabpanel {
    * Keeps track of the tabpanel selected state, this property is passed by parent component
    */
   /** @internal */
-  @Prop({mutable: true}) selected = false;
+  @Prop({mutable: true}) selected = false;          // eslint-disable-line @stencil-community/strict-mutable
 
   render() {
     return (
