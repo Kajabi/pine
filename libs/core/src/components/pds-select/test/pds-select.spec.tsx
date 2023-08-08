@@ -219,18 +219,71 @@ describe('pds-select', () => {
     page.root.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
     await page.waitForChanges();
 
-    console.log('page.root.shadowRoot: ', page.body.querySelector('pds-select-option')?.shadowRoot?.querySelector('.pds-select-option'));
-
     // Verify current and tabindex
     expect(firstOption?.classList.contains('is--current')).toBe(true);
     expect(firstOption?.getAttribute('tabindex')).toEqual('0');
 
-    page.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
+    page.root.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
     await page.waitForChanges();
 
     firstOption = page.body.querySelector('pds-select-option')?.shadowRoot?.querySelector('.pds-select-option');
     expect(firstOption?.getAttribute('tabindex')).toEqual('0');
     expect(firstOption?.classList.contains('is--current')).toBe(true);
+  });
+
+  // TODO: test returning opposite results
+  it('should not move focus down when arrow down is pressed on the last list item', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect, PdsSelectOption],
+      html: `
+        <pds-select component-id="combobox" label="Label">
+          <pds-select-option component-id="opt0">Select an option</pds-select-option>
+          <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
+        </pds-select>
+      `,
+    });
+
+    const input = page.root?.shadowRoot?.querySelector<HTMLInputElement>('.pds-select__input');
+
+    // Open the combobox by clicking on it
+    input?.click();
+    await page.waitForChanges();
+
+    let testingFirst = page.body.querySelector('pds-select-option')?.shadowRoot?.querySelector('.pds-select-option');
+    let testingLast = page.body.querySelector('pds-select-option:last-child')?.shadowRoot?.querySelector('.pds-select-option');
+
+    console.log('test first option: ', testingFirst?.outerHTML);
+    console.log('last .inner: ', testingLast?.outerHTML);
+
+    let lastOption = page.body.querySelector('pds-select-option:last-child')?.shadowRoot?.querySelector('.pds-select-option');
+
+    // Simulate arrow down (Option 1 has focus)
+    page.root.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    await page.waitForChanges();
+
+    testingFirst = page.body.querySelector('pds-select-option')?.shadowRoot?.querySelector('.pds-select-option');
+    testingLast = page.body.querySelector('pds-select-option:last-child')?.shadowRoot?.querySelector('.pds-select-option');
+
+    console.log('test first option: ', testingFirst?.outerHTML);
+    console.log('last .inner: ', testingLast?.outerHTML);
+
+    expect(lastOption?.classList.contains('is--current')).toBe(false);
+    expect(lastOption?.getAttribute('tabindex')).toEqual('-1');
+
+    // Simulate arrow down (Option 2 has focus)
+    page.root.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    await page.waitForChanges();
+
+    expect(lastOption?.classList.contains('is--current')).toBe(true);
+    expect(lastOption?.getAttribute('tabindex')).toEqual('0');
+
+    // Simulate arrow down
+    page.root.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    await page.waitForChanges();
+
+    lastOption = page.body.querySelector('pds-select-option')?.shadowRoot?.querySelector('.pds-select-option');
+    expect(lastOption?.getAttribute('tabindex')).toEqual('0');
+    expect(lastOption?.classList.contains('is--current')).toBe(true);
   });
 
   it('should close the combobox', async () => {
@@ -252,13 +305,14 @@ describe('pds-select', () => {
     expect(select?.classList.contains('is-open')).toBe(true);
 
     // Close the combobox by clicking on it
-    input?.click();
-    await page.waitForChanges();
-
-    // Simulate arrow down key press
-    // const arrowDownEvent = new KeyboardEvent('keydown', { key: 'Escape' });
-    // input?.dispatchEvent(arrowDownEvent);
+    // input?.click();
     // await page.waitForChanges();
+
+    // TODO: use escape press vs click
+    // Simulate escape key press
+    const event = new KeyboardEvent('keydown', { key: 'Escape' });
+    page.root.dispatchEvent(event);
+    await page.waitForChanges();
 
     expect(select?.classList.contains('is-open')).toBe(false);
   });
