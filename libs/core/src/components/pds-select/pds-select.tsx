@@ -183,16 +183,19 @@ export class PdsSelect {
   handleComboInputKeyDown(event: KeyboardEvent) {
     const options = this.el.querySelectorAll('pds-select-option');
 
-    if (!this.isComboboxOpen) {
-      this.handleComboboxToggle();
-      // return false;
-      event.preventDefault();
-    }
+    console.log('handleComboInputKeyDown: ', event.key);
 
-    if (this.isComboboxOpen && options.length > 0) {
+    // if (!this.isComboboxOpen) {
+    //   this.handleComboboxToggle();
+    //   // return false;
+    //   event.preventDefault();
+    // }
+
+    if (options.length > 0) {
       switch (event.key) {
         case 'ArrowDown':
           event.preventDefault();
+
           if (!this.isComboboxOpen) {
             this.handleComboboxToggle();
             this.focusOptionAtIndex(this.focusIndex);
@@ -201,6 +204,12 @@ export class PdsSelect {
           break;
         case 'ArrowUp':
           event.preventDefault();
+
+          if (!this.isComboboxOpen) {
+            this.handleComboboxToggle();
+            return
+          }
+
           this.focusPreviousOption();
           break;
         case 'Escape':
@@ -217,8 +226,22 @@ export class PdsSelect {
           this.focusLastOption();
           break;
         case 'Enter':
+          event.preventDefault();
+
+          if (this.isComboboxOpen) {
+            this.selectFocusedOption();
+          }
+          break;
         case ' ':
           event.preventDefault();
+
+          // Open combobox is closed
+          if (!this.isComboboxOpen) {
+            this.handleComboboxToggle();
+            return
+          }
+
+          // Select focused option if combobox is open
           if (this.isComboboxOpen) {
             this.selectFocusedOption();
           }
