@@ -403,6 +403,10 @@ export namespace Components {
          */
         "errorMessage"?: string;
         /**
+          * Track the index of the focused option
+         */
+        "focusIndex": number;
+        /**
           * Displays a hint or description of the combobox
          */
         "hintMessage"?: string;
@@ -433,6 +437,14 @@ export namespace Components {
           * The value for the selected option
          */
         "selectedOptionValue"?: string;
+        /**
+          * Flag to remember if the combobox was focused before blur
+         */
+        "wasComboboxFocused": boolean;
+        /**
+          * Flag to remember if the combobox was focused before blur
+         */
+        "wasComboboxFocusedId": string;
     }
     interface PdsSelectOption {
         /**
@@ -1534,6 +1546,10 @@ declare namespace LocalJSX {
          */
         "errorMessage"?: string;
         /**
+          * Track the index of the focused option
+         */
+        "focusIndex"?: number;
+        /**
           * Displays a hint or description of the combobox
          */
         "hintMessage"?: string;
@@ -1568,6 +1584,14 @@ declare namespace LocalJSX {
           * The value for the selected option
          */
         "selectedOptionValue"?: string;
+        /**
+          * Flag to remember if the combobox was focused before blur
+         */
+        "wasComboboxFocused"?: boolean;
+        /**
+          * Flag to remember if the combobox was focused before blur
+         */
+        "wasComboboxFocusedId"?: string;
     }
     interface PdsSelectOption {
         /**

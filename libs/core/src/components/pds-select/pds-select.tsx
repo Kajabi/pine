@@ -14,17 +14,17 @@ export class PdsSelect {
   /**
    * Track the index of the focused option
    */
-  private focusIndex = -1;
+  @Prop() focusIndex = -1;
 
   /**
    * Flag to remember if the combobox was focused before blur
    */
-  private wasComboboxFocused = false;
+  @Prop() wasComboboxFocused = false;
 
   /**
    * Flag to remember if the combobox was focused before blur
    */
-  private wasComboboxFocusedId: string;
+  @Prop() wasComboboxFocusedId: string;
 
   /**
    * Flag to remember focused combobox index
@@ -67,9 +67,10 @@ export class PdsSelect {
    * Text to be displayed as the combobox label
    */
   @Prop() label?: string;
+
   @Prop() readonly = false;
+
   @Prop() required = false;
-  // @Prop({ mutable: true }) value?: string;
 
   /**
    * The display id for the selected option
@@ -86,38 +87,19 @@ export class PdsSelect {
    */
   @Prop() selectedOptionValue?: string;
 
-
-  // eslint-disable-next-line @stencil/no-unused-watch
-  @Watch('selectedOptionValue')
-  updateComboboxContent(newValue: string) {
-    const comboInput = this.el.querySelector('.pds-select__input');
-    if (comboInput) {
-      comboInput.textContent = newValue || '';
-    }
-  }
-
   /**
    * Emitted when the select value changes from selected option
    */
   @Event() pdsSelectChange!: EventEmitter<string>;
 
   componentDidLoad() {
-    // const selected = this.el.querySelectorAll('pds-select-option').forEach((s) => {
-    //   console.log('option: ', s);
-    //   if (s.selected === true) {
-    //     return s;
-    //   }
-    // });
-    // console.log('selected qs:', selected)
-
-    // Find the first 'pds-select-option' with 'selected=true'
-    // const firstSelectedOption = this.el.querySelector('pds-select-option[selected]') as HTMLElement | null;
-    // Find the first 'pds-select-option' with 'selected=true'
-
     const options = Array.from(this.el.querySelectorAll('pds-select-option'));
     const firstSelectedOption = options.find((option) => option.hasAttribute('selected'));
 
-    console.log('here');
+    const select = this.el.shadowRoot.querySelector('.pds-select');
+
+    // console.log('here el: ', this.el);
+    // console.log('here select: ', select);
 
     if (firstSelectedOption) {
       // Check if the 'selected' attribute exists and is not null
@@ -137,6 +119,7 @@ export class PdsSelect {
 
       if (firstOption) {
         if(firstOption.innerHTML) {
+          // console.log('PROBLEM AREA');
           this.selectedOptionText = firstOption.innerHTML
         }
       }
@@ -149,6 +132,13 @@ export class PdsSelect {
       this.comboInputRef.addEventListener('click', this.handleComboboxToggle);
       this.comboInputRef.addEventListener('blur', this.handleComboInputBlur);
     }
+
+    // console.log('after here select: ', select);
+  }
+
+  @Listen('pdsSelectChange')
+  pdsSelectChangeListener(event: CustomEvent<any>) {
+    console.log('pdsSelectChange event.detail: ', event.detail);
   }
 
   @Listen('pdsSelectOptionSelected')
@@ -183,7 +173,7 @@ export class PdsSelect {
       }
 
       this.pdsSelectChange.emit(this.selectedOptionValue);
-      console.log('after pdsSelectChange emit', this.pdsSelectChange);
+      // console.log('after pdsSelectChange emit this', this);
     }
 
     this.handleComboboxToggle();
@@ -250,6 +240,7 @@ export class PdsSelect {
 
       // Set the focus index to the first option
       if (!this.focusIndex && !this.wasComboboxFocused)  {
+        console.log('IN HERE');
         this.focusIndex = 0;
       }
       this.wasComboboxFocused = true;
@@ -323,7 +314,6 @@ export class PdsSelect {
   private focusOptionAtIndex(index: number) {
     if (index === undefined) return false;
 
-    console.log('1 focusOptionAtIndex: ', index );
     const options = this.el.querySelectorAll('pds-select-option');
     options.forEach((option, i) => {
       const shadowOption = option.shadowRoot?.querySelector('.pds-select-option') as HTMLElement;
@@ -338,14 +328,11 @@ export class PdsSelect {
         this.wasComboboxFocusedId = options[index].componentId;
         this.selectedOptionId = options[index].componentId;
         this.wasComboboxFocusedIndex = index;
-        console.log('2 this.wasComboboxFocusedId: ', this.wasComboboxFocusedId);
       }
     }
 
     if (index !== undefined) {
       options[index].focus();
-      // this.selectedOptionId = options[index].componentId;
-      console.log('3 this: ', this, ' selectedOptionId: ', this.selectedOptionId);
     }
   }
 
@@ -360,8 +347,9 @@ export class PdsSelect {
 
   render() {
 
-    console.log('return this.selectedOptionId: ', this.selectedOptionId);
-    console.log('comboboxisopen: ', this.isComboboxOpen);
+    // console.log('return this.selectedOptionId: ', this.selectedOptionId);
+    // console.log('comboboxisopen: ', this.isComboboxOpen);
+    // console.log('this.focusIndex: ', this.focusIndex);
     return (
       <Host>
         {this.label && (

@@ -44,7 +44,6 @@ export class PdsSelectOption {
       text: this.element.innerHTML,
       value: this.value as string,
       event: ev});
-    console.log('pdsSelectOptionSelected: ', this.pdsSelectOptionSelected);
     console.log('this: ', this);
   }
 

@@ -128,65 +128,6 @@ describe('pds-select', () => {
     expect(element?.querySelector('.pds-select__input')).not.toBeNull();
   });
 
-
-  // it('emits the correct event details when an option is selected', async () => {
-  //   const page = await newSpecPage({
-  //     components: [PdsSelect, PdsSelectOption],
-  //     html: `
-  //       <pds-select component-id="combobox" label="Label">
-  //         <pds-select-option component-id="opt0" value="1">Select an option</pds-select-option>
-  //         <pds-select-option component-id="opt1" value="2">Option A Slot</pds-select-option>
-  //       </pds-select>
-  //     `,
-  //   });
-
-  //   const select = page.root?.querySelector('pds-select');
-  //   const option = page.root?.querySelector('pds-select-option');
-
-  //   const pdsSelectChange = jest.fn();
-
-  //   select?.addEventListener('pdsSelectChange', pdsSelectChange);
-
-  //   // option?.click(); // Simulate selecting an option
-  //   option?.dispatchEvent(new Event('pdsSelectOptionSelected'));
-
-  //   await page.waitForChanges();
-
-  //   // expect(pdsSelectChange).toHaveBeenCalled();
-  //   // expect(pdsSelectChange.mock.calls[0][0].detail).toEqual('1'); // Verify the emitted value matches the selected option value
-
-  //   expect(pdsSelectChange).toHaveBeenCalled();
-  // });
-
-  // it('emits the correct event details when an option is selected', async () => {
-  //   const page = await newSpecPage({
-  //     components: [PdsSelect, PdsSelectOption],
-  //     html: `
-  //       <pds-select component-id="combobox" label="Label">
-  //         <pds-select-option component-id="opt0" value="1">Select an option</pds-select-option>
-  //         <pds-select-option component-id="opt1" value="2">Option A Slot</pds-select-option>
-  //       </pds-select>
-  //     `,
-  //   });
-
-  //   const select = page.root?.querySelector('pds-select');
-  //   const option = page.root?.querySelector('pds-select-option[value="1"]'); // Select the first option
-
-  //   const pdsSelectChange = jest.fn();
-
-  //   select?.addEventListener('pdsSelectChange', pdsSelectChange);
-
-  //   console.log('option: ', option);
-  //   // Simulate user interaction by clicking on the option
-  //   option?.click();
-
-  //   await page.waitForChanges();
-
-  //   expect(pdsSelectChange).toHaveBeenCalled();
-  //   expect(pdsSelectChange.mock.calls[0][0].detail).toEqual('1'); // Verify the emitted value matches the selected option value
-  // });
-
-
   it('focuses the first option when opened and arrow down key is pressed', async () => {
     const page = await newSpecPage({
       components: [PdsSelect],
@@ -219,7 +160,7 @@ describe('pds-select', () => {
 
   it('should move focus down when arrow down is pressed twice', async () => {
     const page = await newSpecPage({
-      components: [PdsSelect],
+      components: [PdsSelect, PdsSelectOption],
       html: `
         <pds-select component-id="combobox" label="Label">
           <pds-select-option component-id="opt0">Select an option</pds-select-option>
@@ -230,7 +171,7 @@ describe('pds-select', () => {
 
     const input = page.root?.shadowRoot?.querySelector<HTMLInputElement>('.pds-select__input');
 
-    // Open the combobox by clicking on it
+    // Open the combobox by clicking on itstensadfasdfasdfasdfasfdasdfasdfasdfasdf
     input?.click();
     await page.waitForChanges();
 
@@ -253,5 +194,72 @@ describe('pds-select', () => {
     focusedOption = page.root?.shadowRoot?.querySelector('.pds-select-option.is--current');
     secondOption = page.root?.shadowRoot?.querySelector('pds-select-option:nth-child(2)');
     expect(focusedOption).toEqual(secondOption);
+  });
+
+  it('should not move focus up when arrow up is pressed on the first list item', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect, PdsSelectOption],
+      html: `
+        <pds-select component-id="combobox" label="Label">
+          <pds-select-option component-id="opt0">Select an option</pds-select-option>
+          <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
+        </pds-select>
+      `,
+    });
+
+    const input = page.root?.shadowRoot?.querySelector<HTMLInputElement>('.pds-select__input');
+
+    // Open the combobox by clicking on it
+    input?.click();
+    await page.waitForChanges();
+
+    let firstOption = page.body.querySelector('pds-select-option')?.shadowRoot?.querySelector('.pds-select-option');
+
+    // Simulate arrow down
+    page.root.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    await page.waitForChanges();
+
+    console.log('page.root.shadowRoot: ', page.body.querySelector('pds-select-option')?.shadowRoot?.querySelector('.pds-select-option'));
+
+    // Verify current and tabindex
+    expect(firstOption?.classList.contains('is--current')).toBe(true);
+    expect(firstOption?.getAttribute('tabindex')).toEqual('0');
+
+    page.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
+    await page.waitForChanges();
+
+    firstOption = page.body.querySelector('pds-select-option')?.shadowRoot?.querySelector('.pds-select-option');
+    expect(firstOption?.getAttribute('tabindex')).toEqual('0');
+    expect(firstOption?.classList.contains('is--current')).toBe(true);
+  });
+
+  it('should close the combobox', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `
+        <pds-select></pds-select>
+      `,
+    });
+
+    const select = page.root?.shadowRoot?.querySelector('.pds-select');
+    const input = page.root?.shadowRoot?.querySelector<HTMLInputElement>('.pds-select__input');
+
+    // Open the combobox by clicking on it
+    input?.click();
+    await page.waitForChanges();
+
+    // Verify
+    expect(select?.classList.contains('is-open')).toBe(true);
+
+    // Close the combobox by clicking on it
+    input?.click();
+    await page.waitForChanges();
+
+    // Simulate arrow down key press
+    // const arrowDownEvent = new KeyboardEvent('keydown', { key: 'Escape' });
+    // input?.dispatchEvent(arrowDownEvent);
+    // await page.waitForChanges();
+
+    expect(select?.classList.contains('is-open')).toBe(false);
   });
 });

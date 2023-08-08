@@ -134,7 +134,7 @@ describe('pds-select', () => {
 
     const select = await page.find('pds-select >>> .pds-select');
     const input = await page.find('pds-select >>> .pds-select__input');
-    console.log('select: ', select);
+    // console.log('select: ', select);
 
     // Open the combobox by clicking on it
     await input.click();
