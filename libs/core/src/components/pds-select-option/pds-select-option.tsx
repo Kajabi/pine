@@ -32,7 +32,6 @@ export class PdsSelectOption {
   /**
    * Triggered when an option is clicked
    */
-  // @Event({ bubbles: true, composed: true }) pdsSelectOptionSelected: EventEmitter<{ value: string; event: Event }>;
   @Event({
     bubbles: true,
     composed: true,
@@ -44,7 +43,6 @@ export class PdsSelectOption {
       text: this.element.innerHTML,
       value: this.value as string,
       event: ev});
-    console.log('this: ', this);
   }
 
   private selectOptionClassNames() {
@@ -66,8 +64,6 @@ export class PdsSelectOption {
         role="option"
         onClick={this.onOptionSelected}
         tabindex={this.selected ? 0 : -1}
-        // onFocus={}
-        // onBlur={}
       >
         {this.element.innerHTML || this.value}
         {this.selected && (

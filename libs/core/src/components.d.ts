@@ -412,6 +412,7 @@ export namespace Components {
         "hintMessage"?: string;
         /**
           * Indicates  whether or not the input field is invalid or throws an error
+          * @defaultValue false
          */
         "invalid": boolean;
         /**
@@ -423,8 +424,6 @@ export namespace Components {
           * Text to be displayed as the combobox label
          */
         "label"?: string;
-        "readonly": boolean;
-        "required": boolean;
         /**
           * The display id for the selected option
          */
@@ -439,12 +438,17 @@ export namespace Components {
         "selectedOptionValue"?: string;
         /**
           * Flag to remember if the combobox was focused before blur
+          * @defaultValue false
          */
         "wasComboboxFocused": boolean;
         /**
           * Flag to remember if the combobox was focused before blur
          */
         "wasComboboxFocusedId": string;
+        /**
+          * Flag to remember focused combobox index
+         */
+        "wasComboboxFocusedIndex": number;
     }
     interface PdsSelectOption {
         /**
@@ -1555,6 +1559,7 @@ declare namespace LocalJSX {
         "hintMessage"?: string;
         /**
           * Indicates  whether or not the input field is invalid or throws an error
+          * @defaultValue false
          */
         "invalid"?: boolean;
         /**
@@ -1570,8 +1575,6 @@ declare namespace LocalJSX {
           * Emitted when the select value changes from selected option
          */
         "onPdsSelectChange"?: (event: PdsSelectCustomEvent<string>) => void;
-        "readonly"?: boolean;
-        "required"?: boolean;
         /**
           * The display id for the selected option
          */
@@ -1586,12 +1589,17 @@ declare namespace LocalJSX {
         "selectedOptionValue"?: string;
         /**
           * Flag to remember if the combobox was focused before blur
+          * @defaultValue false
          */
         "wasComboboxFocused"?: boolean;
         /**
           * Flag to remember if the combobox was focused before blur
          */
         "wasComboboxFocusedId"?: string;
+        /**
+          * Flag to remember focused combobox index
+         */
+        "wasComboboxFocusedIndex"?: number;
     }
     interface PdsSelectOption {
         /**

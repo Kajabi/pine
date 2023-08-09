@@ -3,24 +3,6 @@ import { PdsSelect } from '../pds-select';
 import { PdsSelectOption } from '../../pds-select-option/pds-select-option';
 
 describe('pds-select', () => {
-  // it('throws an error if componentId prop is not provided', async () => {
-  //   expect(() => {
-  //     newSpecPage({
-  //       components: [PdsSelect],
-  //       html: `<pds-select label="Label"></pds-select>`,
-  //     });
-  //   }).toThrowError('propMissing: componentId');
-  // });
-
-  // it('throws an error if label prop is not provided', async () => {
-  //   const page = await newSpecPage({
-  //     components: [PdsSelect, PdsSelectOption],
-  //     html: `<pds-select component-id="myId"></pds-select>`,
-  //   });
-
-  //   await expect(page.root).rejects.toThrow();
-  // });
-
   it('renders correctly with no selected option', async () => {
     const page = await newSpecPage({
       components: [PdsSelect, PdsSelectOption],
@@ -252,8 +234,8 @@ describe('pds-select', () => {
     let testingFirst = page.body.querySelector('pds-select-option')?.shadowRoot?.querySelector('.pds-select-option');
     let testingLast = page.body.querySelector('pds-select-option:last-child')?.shadowRoot?.querySelector('.pds-select-option');
 
-    console.log('test first option: ', testingFirst?.outerHTML);
-    console.log('last .inner: ', testingLast?.outerHTML);
+    // console.log('test first option: ', testingFirst?.outerHTML);
+    // console.log('last .inner: ', testingLast?.outerHTML);
 
     let lastOption = page.body.querySelector('pds-select-option:last-child')?.shadowRoot?.querySelector('.pds-select-option');
 
@@ -264,8 +246,8 @@ describe('pds-select', () => {
     testingFirst = page.body.querySelector('pds-select-option')?.shadowRoot?.querySelector('.pds-select-option');
     testingLast = page.body.querySelector('pds-select-option:last-child')?.shadowRoot?.querySelector('.pds-select-option');
 
-    console.log('test first option: ', testingFirst?.outerHTML);
-    console.log('last .inner: ', testingLast?.outerHTML);
+    // console.log('test first option: ', testingFirst?.outerHTML);
+    // console.log('last .inner: ', testingLast?.outerHTML);
 
     expect(lastOption?.classList.contains('is--current')).toBe(false);
     expect(lastOption?.getAttribute('tabindex')).toEqual('-1');

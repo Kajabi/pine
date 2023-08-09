@@ -8,7 +8,14 @@ import { Component, Element, Host, h, Prop, Event, EventEmitter, Listen } from '
 export class PdsSelect {
   @Element() el!: HTMLPdsSelectElement;
 
+  /**
+   * Reference to the combobox wrapper
+   */
   private comboWrapperRef?: HTMLDivElement;
+
+  /**
+   * Reference to the combobox input element
+   */
   private comboInputRef?: HTMLDivElement;
 
   /**
@@ -18,6 +25,7 @@ export class PdsSelect {
 
   /**
    * Flag to remember if the combobox was focused before blur
+   * @defaultValue false
    */
   @Prop() wasComboboxFocused = false;
 
@@ -29,7 +37,7 @@ export class PdsSelect {
   /**
    * Flag to remember focused combobox index
    */
-  private wasComboboxFocusedIndex: number;
+  @Prop() wasComboboxFocusedIndex: number;
 
   /**
    * A unique identifier for the combobox
@@ -54,6 +62,7 @@ export class PdsSelect {
 
   /**
    * Indicates  whether or not the input field is invalid or throws an error
+   * @defaultValue false
    */
   @Prop({ mutable: true }) invalid = false;
 
@@ -67,10 +76,6 @@ export class PdsSelect {
    * Text to be displayed as the combobox label
    */
   @Prop() label?: string;
-
-  @Prop() readonly = false;
-
-  @Prop() required = false;
 
   /**
    * The display id for the selected option
@@ -114,7 +119,7 @@ export class PdsSelect {
 
       if (firstOption) {
         if(firstOption.innerHTML) {
-          this.selectedOptionText = firstOption.innerHTML
+          this.selectedOptionText = firstOption.innerHTML;
         }
       }
     }
@@ -153,6 +158,7 @@ export class PdsSelect {
 
       if (selectedOption) {
         selectedOption.selected = true;
+
         // Update the selectedOptionId with the componentId of the selected option
         this.selectedOptionId = selectedOption.componentId;
       }
@@ -176,6 +182,7 @@ export class PdsSelect {
             this.handleComboboxToggle();
             this.focusOptionAtIndex(this.focusIndex);
           }
+
           this.focusNextOption();
           break;
         case 'ArrowUp':
@@ -211,7 +218,7 @@ export class PdsSelect {
         case ' ':
           event.preventDefault();
 
-          // Open combobox is closed
+          // Open combobox if closed
           if (!this.isComboboxOpen) {
             this.handleComboboxToggle();
             return
@@ -233,7 +240,8 @@ export class PdsSelect {
     this.comboInputRef.setAttribute('aria-expanded', this.isComboboxOpen.toString());
 
     if (this.isComboboxOpen) {
-      this.comboWrapperRef.classList.add('is-open')
+      this.comboWrapperRef.classList.add('is-open');
+
       // Move focus to the input when the combobox is opened
       this.comboInputRef?.focus();
 
@@ -249,7 +257,8 @@ export class PdsSelect {
         this.focusOptionAtIndex(this.wasComboboxFocusedIndex);
       }
     } else {
-      this.comboWrapperRef.classList.remove('is-open')
+      this.comboWrapperRef.classList.remove('is-open');
+
       // Reset focus index when the combobox is closed
       this.focusIndex = -1;
 
