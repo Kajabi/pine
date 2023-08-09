@@ -1,4 +1,4 @@
-import { Component, Element, Host, h, Prop, Event, EventEmitter, Listen, Watch } from '@stencil/core';
+import { Component, Element, Host, h, Prop, Event, EventEmitter, Listen } from '@stencil/core';
 
 @Component({
   tag: 'pds-select',
@@ -96,11 +96,6 @@ export class PdsSelect {
     const options = Array.from(this.el.querySelectorAll('pds-select-option'));
     const firstSelectedOption = options.find((option) => option.hasAttribute('selected'));
 
-    const select = this.el.shadowRoot.querySelector('.pds-select');
-
-    // console.log('here el: ', this.el);
-    // console.log('here select: ', select);
-
     if (firstSelectedOption) {
       // Check if the 'selected' attribute exists and is not null
 
@@ -119,7 +114,6 @@ export class PdsSelect {
 
       if (firstOption) {
         if(firstOption.innerHTML) {
-          // console.log('PROBLEM AREA');
           this.selectedOptionText = firstOption.innerHTML
         }
       }
@@ -132,20 +126,11 @@ export class PdsSelect {
       this.comboInputRef.addEventListener('click', this.handleComboboxToggle);
       this.comboInputRef.addEventListener('blur', this.handleComboInputBlur);
     }
-
-    // console.log('after here select: ', select);
-  }
-
-  @Listen('pdsSelectChange')
-  pdsSelectChangeListener(event: CustomEvent<any>) {
-    console.log('pdsSelectChange event.detail: ', event.detail);
   }
 
   @Listen('pdsSelectOptionSelected')
   pdsSelectedOption(event: CustomEvent<any>) {
     const { id, text, value } = event.detail;
-
-    console.log('id: ', id, ' text: ', text, ' value: ', value);
 
     // Set the value to equal the text if the value is empty
     if(this.selectedOptionValue === undefined) {
@@ -173,7 +158,6 @@ export class PdsSelect {
       }
 
       this.pdsSelectChange.emit(this.selectedOptionValue);
-      // console.log('after pdsSelectChange emit this', this);
     }
 
     this.handleComboboxToggle();
@@ -182,14 +166,6 @@ export class PdsSelect {
   @Listen('keydown', {})
   handleComboInputKeyDown(event: KeyboardEvent) {
     const options = this.el.querySelectorAll('pds-select-option');
-
-    console.log('handleComboInputKeyDown: ', event.key);
-
-    // if (!this.isComboboxOpen) {
-    //   this.handleComboboxToggle();
-    //   // return false;
-    //   event.preventDefault();
-    // }
 
     if (options.length > 0) {
       switch (event.key) {
@@ -369,10 +345,6 @@ export class PdsSelect {
   // End Focus Management
 
   render() {
-
-    // console.log('return this.selectedOptionId: ', this.selectedOptionId);
-    // console.log('comboboxisopen: ', this.isComboboxOpen);
-    // console.log('this.focusIndex: ', this.focusIndex);
     return (
       <Host>
         {this.label && (
