@@ -1,6 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsSelect } from '../pds-select';
-import { PdsSelectOption } from '../../pds-select-option/pds-select-option';
+import { PdsSelectOption } from '../pds-select-option/pds-select-option';
 
 describe('pds-select', () => {
   it('renders correctly with no selected option', async () => {
