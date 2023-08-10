@@ -1,4 +1,7 @@
 import { Component, Element, Host, h, Prop, Event, EventEmitter, Listen } from '@stencil/core';
+import {
+  positionTooltip
+} from '../../utils/overlay';
 
 @Component({
   tag: 'pds-select',
@@ -17,6 +20,11 @@ export class PdsSelect {
    * Reference to the combobox input element
    */
   private comboInputRef?: HTMLDivElement;
+
+  /**
+   * Reference to the combobox overlay
+   */
+  private overlayEl: HTMLElement | null;
 
   /**
    * Track the index of the focused option
@@ -78,6 +86,24 @@ export class PdsSelect {
   @Prop() label?: string;
 
   /**
+   * Determines the preferred position of the tooltip
+   * @defaultValue "right"
+   */
+  @Prop({ reflect: true }) placement:
+    'top'
+    | 'top-start'
+    | 'top-end'
+    | 'right'
+    | 'right-start'
+    | 'right-end'
+    | 'bottom'
+    | 'bottom-start'
+    | 'bottom-end'
+    | 'left'
+    | 'left-start'
+    | 'left-end' = 'bottom-start';
+
+  /**
    * The display id for the selected option
    */
   @Prop() selectedOptionId?: string;
@@ -131,6 +157,10 @@ export class PdsSelect {
       this.comboInputRef.addEventListener('click', this.handleComboboxToggle);
       this.comboInputRef.addEventListener('blur', this.handleComboInputBlur);
     }
+  }
+
+  componentDidRender() {
+    positionTooltip({elem: this.comboInputRef, elemPlacement: this.placement, overlay: this.overlayEl, offset:  4});
   }
 
   @Listen('pdsSelectOptionSelected')
@@ -379,6 +409,7 @@ export class PdsSelect {
             aria-activedescendant={this.selectedOptionId && this.isComboboxOpen ? `${this.componentId}-option-${this.selectedOptionId}` : undefined}
             class={this.selectInputClassNames()}
             id={this.componentId}
+            ref={(el) => (this.comboInputRef = el)}
             role="combobox"
             tabindex="0"
           >
@@ -390,6 +421,7 @@ export class PdsSelect {
             aria-labelledby={`${this.componentId}-label`}
             class="pds-select__menu"
             id={`${this.componentId}-listbox`}
+            ref={(el) => (this.overlayEl = el)}
             role="listbox"
             tabindex="-1"
           >

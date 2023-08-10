@@ -425,6 +425,22 @@ export namespace Components {
          */
         "label"?: string;
         /**
+          * Determines the preferred position of the tooltip
+          * @defaultValue "right"
+         */
+        "placement": 'top'
+    | 'top-start'
+    | 'top-end'
+    | 'right'
+    | 'right-start'
+    | 'right-end'
+    | 'bottom'
+    | 'bottom-start'
+    | 'bottom-end'
+    | 'left'
+    | 'left-start'
+    | 'left-end';
+        /**
           * The display id for the selected option
          */
         "selectedOptionId"?: string;
@@ -1575,6 +1591,22 @@ declare namespace LocalJSX {
           * Emitted when the select value changes from selected option
          */
         "onPdsSelectChange"?: (event: PdsSelectCustomEvent<string>) => void;
+        /**
+          * Determines the preferred position of the tooltip
+          * @defaultValue "right"
+         */
+        "placement"?: 'top'
+    | 'top-start'
+    | 'top-end'
+    | 'right'
+    | 'right-start'
+    | 'right-end'
+    | 'bottom'
+    | 'bottom-start'
+    | 'bottom-end'
+    | 'left'
+    | 'left-start'
+    | 'left-end';
         /**
           * The display id for the selected option
          */
