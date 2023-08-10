@@ -29,12 +29,21 @@
 .pds-select__menu {
   border-radius: 10px;
   box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.16), 0 0 4px 0 rgba(0, 0, 0, 0.08);
-  display: none;
   margin-top: 8px;
+  max-height: 400px;
+  max-width: 340px;
+  min-width: 200px;
+  opacity: 0;
+  overflow: auto;
   padding: 8px;
+  position: absolute;
+  visibility: hidden;
+  width: 100%;
 
   .is-open & {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    z-index: 1;
   }
 }
 
