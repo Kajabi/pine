@@ -8,7 +8,6 @@ import { Component, Element, Event, EventEmitter, h, Prop } from '@stencil/core'
 export class PdsSelectOption {
   @Element() element!: HTMLPdsSelectOptionElement;
 
-
   /**
    * The id for the option
    */
