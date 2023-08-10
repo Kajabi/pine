@@ -1,44 +1,89 @@
+:host {
+  --icon-margin-inline-start: var(--pine-spacing-xs);
+  --icon-rotate-angle: 180deg;
+
+  --input-background-color: var(--pine-color-base-white);
+  --input-border-color: var(--pine-color-neutral-grey-400);
+  --input-border-color-hover: var(--pine-color-neutral-grey-500);
+  --input-border-radius: var(--pine-border-radius-md);
+  --input-font-size: var(--pine-font-size-body);
+  --input-focus-box-shadow: 0 0 0 4px var(--pine-color-primary-200);
+  --input-padding: var(--pine-spacing-xs) var(--pine-spacing-sm);
+
+  --label-color: var(--pine-color-neutral-charcoal-500);
+  --label-font-size: var(--pine-font-size-body);
+  --label-line-height: var(--pine-line-height-md);
+
+  --menu-background-color: var(--pine-color-base-white);
+  --menu-border-radius: var(--pine-border-radius-md);
+  --menu-box-shadow: var(--pine-box-shadow-md);
+  --menu-margin-block-start: var(--pine-spacing-xs);
+  --menu-max-height: 400px;
+  --menu-max-width: 340px;
+  --menu-min-width: 200px;
+  --menu-padding: var(--pine-spacing-xs);
+  --menu-z-index: 1;
+
+  --select-max-width: 340px;
+
+  --transition-timing: 0.15s ease-out;
+
+  pds-icon {
+    margin-inline-start: var(--icon-margin-inline-start);
+  }
+}
+
 .pds-select__label {
-  color: #040506;
-  font-size: 16px;
-  line-height: 24px;
+  color: var(--label-color);
+  font-size: var(--label-font-size);
+  line-height: var(--label-line-height);
 }
 
 .pds-select {
   display: block;
-  margin-bottom: 10px;
-  max-width: 340px;
+  max-width: var(--select-max-width);
   position: relative;
+  width: 100%;
 }
 
 .pds-select__input {
   align-items: center;
-  background-color: #fff;
-  border: 1px solid #d3d5d9;
-  border-radius: 10px;
+  background-color: var(--input-background-color);
+  border: 1px solid var(--input-border-color);
+  border-radius: var(--input-border-radius);
   display: flex;
-  font-size: 1em;
+  font-size: var(--input-font-size);
   justify-content: space-between;
-  padding: 8px 16px;
+  padding: var(--input-padding);
+  transition: var(--transition-timing);
+  transition-property: border-color;
 
   &:hover {
+    border-color: var(--input-border-color-hover);
     cursor: pointer;
+  }
+
+  &:focus-visible {
+    box-shadow: var(--input-focus-box-shadow);
+    outline: none;
   }
 }
 
 .pds-select__menu {
-  border-radius: 10px;
-  box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.16), 0 0 4px 0 rgba(0, 0, 0, 0.08);
-  margin-top: 8px;
-  max-height: 400px;
-  max-width: 340px;
-  min-width: 200px;
+  background-color: var(--menu-background-color);
+  border-radius: var(--menu-background-color);
+  box-shadow: var(--menu-box-shadow);
+  margin-block-start: var(--menu-margin-block-start);
+  max-height: var(--menu-max-height);
+  max-width: var(--menu-max-width);
+  min-width: var(--menu-min-width);
   opacity: 0;
   overflow: auto;
-  padding: 8px;
+  padding: var(--menu-padding);
   position: absolute;
   visibility: hidden;
   width: 100%;
+  z-index: var(--menu-z-index);
 
   .is-open & {
     opacity: 1;
@@ -49,6 +94,6 @@
 
 .is-open {
   pds-icon {
-    transform: rotate(180deg);
+    transform: rotate(var(--icon-rotate-angle));
   }
 }
