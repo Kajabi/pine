@@ -29,6 +29,49 @@ This is select description text
 
 <Story story={stories.Default} />
 
+### Option 1 using only values
 <Canvas>
-  <pds-select component-id="default" label="Label" />
+<pds-select component-id="combobox" label="Label">
+  <pds-select-option component-id="opt0" value="">Select an Option</pds-select-option>
+  <pds-select-option component-id="opt1" value="Option A value"></pds-select-option>
+  <pds-select-option component-id="opt2" value="Option B value"></pds-select-option>
+  <pds-select-option component-id="opt3" value="Option C value"></pds-select-option>
+  <pds-select-option component-id="opt4" value="Option D value"></pds-select-option>
+</pds-select>
+<pds-select component-id="combobox1" label="Label">
+  <pds-select-option component-id="opt0" value="val0">Select an Option</pds-select-option>
+  <pds-select-option component-id="opt1" value="val1">Option A value</pds-select-option>
+  <pds-select-option component-id="opt2" value="val2">Option B value</pds-select-option>
+  <pds-select-option component-id="opt3" value="val3">Option C value</pds-select-option>
+  <pds-select-option component-id="opt4" value="val4">
+    <div>
+      <p>Option D</p>
+      <p>value</p>
+    </div>
+  </pds-select-option>
+</pds-select>
+<pds-select component-id="combobox2" label="Label">
+    <pds-select-option component-id="opt0">Select an option</pds-select-option>
+    <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
+    <pds-select-option component-id="opt2">Option B Slot</pds-select-option>
+    <pds-select-option component-id="opt3">Option C Slot</pds-select-option>
+    <pds-select-option component-id="opt4">Option D Slot</pds-select-option>
+  </pds-select>
 </Canvas>
+
+### Option 2
+<Canvas>
+  <pds-select component-id="combobox1" label="Label">
+    <pds-select-option component-id="opt0" value="val0">Select an Option</pds-select-option>
+    <pds-select-option component-id="opt1" value="val1">Option A value</pds-select-option>
+    <pds-select-option component-id="opt2" value="val2">Option B value</pds-select-option>
+    <pds-select-option component-id="opt3" value="val3">Option C value</pds-select-option>
+    <pds-select-option component-id="opt4" value="val4">
+      <div>
+        <p>Option D</p>
+        <p>value</p>
+      </div>
+    </pds-select-option>
+  </pds-select>
+</Canvas>
+
