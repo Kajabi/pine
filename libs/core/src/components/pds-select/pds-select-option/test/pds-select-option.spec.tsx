@@ -2,7 +2,7 @@ import { newSpecPage } from '@stencil/core/testing';
 import { PdsSelectOption } from '../pds-select-option';
 
 describe('pds-select-option', () => {
-  it('displays correctly when value is present without textcontent  ', async () => {
+  it('displays correctly when value is present without text content  ', async () => {
     const optionValue = 'option-value';
     const page = await newSpecPage({
       components: [PdsSelectOption],
@@ -13,7 +13,7 @@ describe('pds-select-option', () => {
     expect(optionElement?.textContent).toEqual(optionValue);
   });
 
-  it('displays correctly when textcontent is present without value', async () => {
+  it('displays correctly when text content is present without value', async () => {
     const optionText = 'Option text';
     const page = await newSpecPage({
       components: [PdsSelectOption],
@@ -24,7 +24,7 @@ describe('pds-select-option', () => {
     expect(optionElement?.textContent).toEqual(optionText);
   });
 
-  it('displays correctly when both the textcontent and value are present', async () => {
+  it('displays correctly when both the text content and value are present', async () => {
     const optionText = 'Option text';
     const optionValue = 'option-value';
     const page = await newSpecPage({
