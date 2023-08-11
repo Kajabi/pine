@@ -165,7 +165,6 @@ describe('pds-select', () => {
     await page.waitForChanges();
 
     // Check if the focus moved to the second option
-    // const focusedOption = page.body.querySelector('pds-select-option.is--current');
     let focusedOption = page.root?.shadowRoot?.querySelector('.pds-select-option.is--current');
     let secondOption = page.root?.shadowRoot?.querySelector('pds-select-option:nth-child(2)');
     expect(focusedOption).toEqual(secondOption);
@@ -286,11 +285,6 @@ describe('pds-select', () => {
     // Verify
     expect(select?.classList.contains('is-open')).toBe(true);
 
-    // Close the combobox by clicking on it
-    // input?.click();
-    // await page.waitForChanges();
-
-    // TODO: use escape press vs click
     // Simulate escape key press
     const event = new KeyboardEvent('keydown', { key: 'Escape' });
     page.root.dispatchEvent(event);
