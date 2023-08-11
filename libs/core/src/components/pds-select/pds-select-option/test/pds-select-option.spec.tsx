@@ -37,10 +37,9 @@ describe('pds-select-option', () => {
   });
 
   it('displays is-selected class when option is selected', async () => {
-    const optionText = 'Option text';
     const page = await newSpecPage({
       components: [PdsSelectOption],
-      html: `<pds-select-option component-id="opt1" selected>${optionText}</pds-select-option>`,
+      html: `<pds-select-option component-id="opt1" selected>Option text</pds-select-option>`,
     });
 
     const element = page.root?.shadowRoot?.querySelector('.pds-select-option');
@@ -49,10 +48,9 @@ describe('pds-select-option', () => {
   });
 
   it('emits the pdsSelectOptionSelected event when option is clicked', async () => {
-    const optionText = 'Option text';
     const page = await newSpecPage({
       components: [PdsSelectOption],
-      html: `<pds-select-option component-id="opt1" selected>${optionText}</pds-select-option>`,
+      html: `<pds-select-option component-id="opt1" selected>Option text</pds-select-option>`,
     });
 
     const component = page.body.querySelector('pds-select-option');
