@@ -24,9 +24,7 @@ describe('pds-select', () => {
     await page.waitForChanges();
 
     // Check if the focus moved to the second option
-    const focusedOption = await page.find('pds-select-option >>> .pds-select-option.is--current');
     const secondOption = await page.find('pds-select-option >>> .pds-select-option:nth-child(1)');
-    // expect(focusedOption).toBe(secondOption);
     expect(secondOption.getAttribute('tabindex')).toBe('0');
     expect(secondOption.classList.contains('is--current')).toBeTruthy();
 
