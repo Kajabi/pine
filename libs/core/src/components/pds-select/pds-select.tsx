@@ -210,7 +210,6 @@ export class PdsSelect {
 
           if (!this.isComboboxOpen) {
             this.handleComboboxToggle();
-            this.focusOptionAtIndex(this.focusIndex);
           }
 
           this.focusNextOption();
@@ -398,7 +397,7 @@ export class PdsSelect {
         <div
           class={`
             pds-select
-            ${this.isComboboxOpen ? 'is-open' : ''}
+
           `}
         >
           <div
