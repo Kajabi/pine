@@ -7,7 +7,7 @@ describe('pds-select', () => {
     const page = await newSpecPage({
       components: [PdsSelect, PdsSelectOption],
       html: `
-        <pds-select component-id="combobox" label="Label">
+        <pds-select component-id="combobox" label="Label" placement="bottom-start">
           <pds-select-option component-id="opt0">Select an option</pds-select-option>
           <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
         </pds-select>
@@ -15,7 +15,7 @@ describe('pds-select', () => {
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-select component-id="combobox" label="Label">
+      <pds-select component-id="combobox" label="Label" placement="bottom-start">
         <mock:shadow-root>
           <label htmlfor="combobox" id="combobox-label" class="pds-select__label">Label</label>
           <div class="pds-select">
@@ -23,7 +23,7 @@ describe('pds-select', () => {
               Select an option
               <pds-icon name="caret-down" size="small"></pds-icon>
             </div>
-            <div aria-labelledby="combobox-label" class="pds-select__menu" id="combobox-listbox" role="listbox" tabindex="-1">
+            <div aria-labelledby="combobox-label" class="pds-select__menu" id="combobox-listbox" role="listbox" tabindex="-1" style="top: calc(0px + 4px); left: 0; transform: translateX(0);">
               <slot></slot>
             </div>
           </div>
@@ -52,7 +52,7 @@ describe('pds-select', () => {
     const page = await newSpecPage({
       components: [PdsSelect, PdsSelectOption],
       html: `
-        <pds-select component-id="combobox" label="Label">
+        <pds-select component-id="combobox" label="Label" placement="bottom-start">
           <pds-select-option component-id="opt0">Select an option</pds-select-option>
           <pds-select-option component-id="opt1" selected="true">Option A Slot</pds-select-option>
         </pds-select>
@@ -60,7 +60,7 @@ describe('pds-select', () => {
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-select component-id="combobox" label="Label">
+      <pds-select component-id="combobox" label="Label" placement="bottom-start">
         <mock:shadow-root>
           <label htmlfor="combobox" id="combobox-label" class="pds-select__label">Label</label>
           <div class="pds-select">
@@ -68,7 +68,7 @@ describe('pds-select', () => {
               Option A Slot
               <pds-icon name="caret-down" size="small"></pds-icon>
             </div>
-            <div aria-labelledby="combobox-label" class="pds-select__menu" id="combobox-listbox" role="listbox" tabindex="-1">
+            <div aria-labelledby="combobox-label" class="pds-select__menu" id="combobox-listbox" role="listbox" tabindex="-1" style="top: calc(0px + 4px); left: 0; transform: translateX(0);">
               <slot></slot>
             </div>
           </div>
@@ -234,8 +234,8 @@ describe('pds-select', () => {
     let testingFirst = page.body.querySelector('pds-select-option')?.shadowRoot?.querySelector('.pds-select-option');
     let testingLast = page.body.querySelector('pds-select-option:last-child')?.shadowRoot?.querySelector('.pds-select-option');
 
-    // console.log('test first option: ', testingFirst?.outerHTML);
-    // console.log('last .inner: ', testingLast?.outerHTML);
+    console.log('test first option: ', testingFirst?.outerHTML);
+    console.log('last .inner: ', testingLast?.outerHTML);
 
     let lastOption = page.body.querySelector('pds-select-option:last-child')?.shadowRoot?.querySelector('.pds-select-option');
 
@@ -246,8 +246,8 @@ describe('pds-select', () => {
     testingFirst = page.body.querySelector('pds-select-option')?.shadowRoot?.querySelector('.pds-select-option');
     testingLast = page.body.querySelector('pds-select-option:last-child')?.shadowRoot?.querySelector('.pds-select-option');
 
-    // console.log('test first option: ', testingFirst?.outerHTML);
-    // console.log('last .inner: ', testingLast?.outerHTML);
+    console.log('test first option after: ', testingFirst?.outerHTML);
+    console.log('last .inner after: ', testingLast?.outerHTML);
 
     expect(lastOption?.classList.contains('is--current')).toBe(false);
     expect(lastOption?.getAttribute('tabindex')).toEqual('-1');
