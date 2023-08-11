@@ -47,4 +47,22 @@ describe('pds-select-option', () => {
     expect(element).toHaveClass('is-selected');
     expect(element?.getAttribute('aria-selected')).toMatch('true');
   });
+
+  it('emits the pdsSelectOptionSelected event when option is clicked', async () => {
+    const optionText = 'Option text';
+    const page = await newSpecPage({
+      components: [PdsSelectOption],
+      html: `<pds-select-option component-id="opt1" selected>${optionText}</pds-select-option>`,
+    });
+
+    const component = page.body.querySelector('pds-select-option');
+    const eventSpy = jest.fn();
+    const option = component?.shadowRoot?.querySelector('.pds-select-option') as HTMLElement;
+
+    page.root?.addEventListener('pdsSelectOptionSelected', eventSpy);
+    option?.dispatchEvent(new Event('click'));
+    await page.waitForChanges();
+
+    expect(eventSpy).toHaveBeenCalled();
+  });
 });
