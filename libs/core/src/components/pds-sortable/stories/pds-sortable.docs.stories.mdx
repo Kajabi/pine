@@ -1,0 +1,31 @@
+import { Meta, Story, Canvas, Source, ArgsTable } from '@storybook/addon-docs';
+import { html, render } from 'lit-html';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+import * as stories from './pds-sortable.stories.js';
+
+<Meta
+  title="components/Sortable"
+  component="pds-sortable"
+  argTypes={extractArgTypes('pds-sortable')}
+  args={{}}
+/>
+
+# Sortable
+
+## Properties
+
+<ArgsTable of="pds-sortable" />
+
+### Default
+
+<Story story={stories.Default} />
+
+<Canvas>
+  <pds-sortable component-id="default">
+    <pds-sortable-item>Item 1</pds-sortable-item>
+    <pds-sortable-item>Item 2</pds-sortable-item>
+    <pds-sortable-item>Item 3</pds-sortable-item>
+  </pds-sortable>
+</Canvas>

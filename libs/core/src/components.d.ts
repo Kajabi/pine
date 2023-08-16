@@ -350,6 +350,14 @@ export namespace Components {
          */
         "value": string;
     }
+    interface PdsSortable {
+        /**
+          * A unique identifier for the sortable container
+         */
+        "componentId": string;
+    }
+    interface PdsSortableItem {
+    }
     interface PdsSwitch {
         /**
           * Determines the input 'checked' state
@@ -642,6 +650,18 @@ declare global {
         prototype: HTMLPdsRadioElement;
         new (): HTMLPdsRadioElement;
     };
+    interface HTMLPdsSortableElement extends Components.PdsSortable, HTMLStencilElement {
+    }
+    var HTMLPdsSortableElement: {
+        prototype: HTMLPdsSortableElement;
+        new (): HTMLPdsSortableElement;
+    };
+    interface HTMLPdsSortableItemElement extends Components.PdsSortableItem, HTMLStencilElement {
+    }
+    var HTMLPdsSortableItemElement: {
+        prototype: HTMLPdsSortableItemElement;
+        new (): HTMLPdsSortableItemElement;
+    };
     interface HTMLPdsSwitchElement extends Components.PdsSwitch, HTMLStencilElement {
     }
     var HTMLPdsSwitchElement: {
@@ -690,6 +710,8 @@ declare global {
         "pds-link": HTMLPdsLinkElement;
         "pds-progress": HTMLPdsProgressElement;
         "pds-radio": HTMLPdsRadioElement;
+        "pds-sortable": HTMLPdsSortableElement;
+        "pds-sortable-item": HTMLPdsSortableItemElement;
         "pds-switch": HTMLPdsSwitchElement;
         "pds-tab": HTMLPdsTabElement;
         "pds-tabpanel": HTMLPdsTabpanelElement;
@@ -1061,6 +1083,14 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
+    interface PdsSortable {
+        /**
+          * A unique identifier for the sortable container
+         */
+        "componentId": string;
+    }
+    interface PdsSortableItem {
+    }
     interface PdsSwitch {
         /**
           * Determines the input 'checked' state
@@ -1270,6 +1300,8 @@ declare namespace LocalJSX {
         "pds-link": PdsLink;
         "pds-progress": PdsProgress;
         "pds-radio": PdsRadio;
+        "pds-sortable": PdsSortable;
+        "pds-sortable-item": PdsSortableItem;
         "pds-switch": PdsSwitch;
         "pds-tab": PdsTab;
         "pds-tabpanel": PdsTabpanel;
@@ -1293,6 +1325,8 @@ declare module "@stencil/core" {
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
             "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-radio": LocalJSX.PdsRadio & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
+            "pds-sortable": LocalJSX.PdsSortable & JSXBase.HTMLAttributes<HTMLPdsSortableElement>;
+            "pds-sortable-item": LocalJSX.PdsSortableItem & JSXBase.HTMLAttributes<HTMLPdsSortableItemElement>;
             "pds-switch": LocalJSX.PdsSwitch & JSXBase.HTMLAttributes<HTMLPdsSwitchElement>;
             "pds-tab": LocalJSX.PdsTab & JSXBase.HTMLAttributes<HTMLPdsTabElement>;
             "pds-tabpanel": LocalJSX.PdsTabpanel & JSXBase.HTMLAttributes<HTMLPdsTabpanelElement>;
