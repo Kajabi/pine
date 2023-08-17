@@ -21,15 +21,9 @@ export class PdsSortableItem {
    */
   @Prop() handle = false;
 
-  private classNames() {
-    const classNames = ['pds-sortable-item'];
-
-    return classNames.join('  ');
-  }
-
   render() {
     return (
-      <Host class={this.classNames()}>
+      <Host class="pds-sortable-item">
         {this.handle && (
           <div class="pds-sortable-item__handle">
             <pds-icon name="handle"></pds-icon>
