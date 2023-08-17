@@ -1,39 +1,69 @@
 :host(.pds-sortable-item) {
+  --background-color-interactive: var(--pine-color-neutral-grey-200);
+  --background-color: var(--pine-color-base-white);
+  --border-radius: var(--pine-border-radius-md);
+  --border: var(--pine-border-default);
+  --box-shadow: var(--pine-box-shadow-lg);
+  --color-interactive-handle: var(--pine-color-primary-300);
+  --margin-inline-end: var(--pine-spacing-md); //24px
+  --padding-block-xs: var(--pine-spacing-xs); //8px
+  --padding-inline: var(--pine-spacing-md); //24px
+
   align-items: center;
   cursor: grab;
   display: flex;
   flex-wrap: wrap;
-  padding: 10px;
-
-  &:hover {
-    background-color: #f6f8f8;
-  }
-
+  padding-block: var(--padding-block-xs);
+  padding-inline: var(--padding-inline);
 
   .pds-sortable-item__actions {
     margin-left: auto
   }
 
   .pds-sortable-item__handle {
-    margin-block-start: 3px;
-    margin-inline-end: 10px;
+    line-height: 1;
+    margin-inline-end: var(--margin-inline-end);
+  }
+
+  // styles when sortable is bordered
+  .pds-sortable--bordered & {
+    &:first-child {
+      border-top-left-radius: var(--border-radius);
+      border-top-right-radius: var(--border-radius);
+    }
+
+    &:last-child {
+      border-bottom-left-radius: var(--border-radius);
+      border-bottom-right-radius: var(--border-radius);
+    }
+  }
+
+  // styles when sortable is divided
+  .pds-sortable--divided & {
+    border-bottom: var(--border);
+
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+}
+
+:host(.pds-sortable-item):hover {
+  background-color: var(--background-color-interactive);
+
+  pds-icon {
+    color: var(--color-interactive-handle)
   }
 }
 
 :host(.pds-sortable-item--drag) {
-  background-color: var(--pine-color-base-white);
-  box-shadow: var(--pine-box-shadow-lg);
+  background-color: var(--background-color);
+  border-radius: 0;
+  box-shadow: var(--box-shadow);
   opacity: 1;
 }
 
 :host(.pds-sortable-item--ghost) {
-  background-color: var(--pine-color-neutral-grey-200);
+  background-color: var(--background-color-interactive);
+  border-radius: 0;
 }
-
-
-
-
-
-
-
-

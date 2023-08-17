@@ -7,16 +7,21 @@ import Sortable from 'sortablejs';
   scoped: true,
 })
 export class PdsSortable {
+    /**
+   * Determines whether `sortable` should have a border.
+   * @defaultValue false
+   */
+    @Prop({ reflect: true }) border = false;
+
   /**
    * A unique identifier for the sortable container
    */
   @Prop() componentId!: string;
 
   /**
-   * Determines whether `sortable` should have a border.
-   * @defaultValue false
+   * Deternines whether `sortable` items should be divided with border
    */
-  @Prop({ reflect: true }) border = false;
+  @Prop({ reflect: true }) dividers = false;
 
   private container: HTMLElement;
 
@@ -25,6 +30,10 @@ export class PdsSortable {
 
     if (this.border) {
       classNames.push('pds-sortable--bordered');
+    }
+
+    if (this.dividers) {
+      classNames.push('pds-sortable--divided');
     }
 
     return classNames.join('  ');

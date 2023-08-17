@@ -1,12 +1,12 @@
 import { Component, Host, h, Prop } from '@stencil/core';
 
 /**
- * @slot sortable-actions - Content is placed within the `pds-sortable-item__actions` element as children
+ * @slot sortable-actions - Content is placed within the `pds-sortable-item__actions` element as children. This slot is only rendered if `actions` is set to `true`.
  */
 @Component({
   tag: 'pds-sortable-item',
   styleUrl: 'pds-sortable-item.scss',
-  shadow: true,
+  scoped: true,
 })
 export class PdsSortableItem {
     /**
@@ -32,7 +32,7 @@ export class PdsSortableItem {
       <Host class={this.classNames()}>
         {this.handle && (
           <div class="pds-sortable-item__handle">
-            <pds-icon name="handle-2-vertical"></pds-icon>
+            <pds-icon name="handle"></pds-icon>
           </div>
         )}
         <slot></slot>

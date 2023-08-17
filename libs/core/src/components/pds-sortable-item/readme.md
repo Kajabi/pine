@@ -15,9 +15,9 @@
 
 ## Slots
 
-| Slot                 | Description                                                                   |
-| -------------------- | ----------------------------------------------------------------------------- |
-| `"sortable-actions"` | Content is placed within the `pds-sortable-item__actions` element as children |
+| Slot                 | Description                                                                                                                              |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `"sortable-actions"` | Content is placed within the `pds-sortable-item__actions` element as children. This slot is only rendered if `actions` is set to `true`. |
 
 
 ## Dependencies

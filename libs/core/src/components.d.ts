@@ -360,6 +360,10 @@ export namespace Components {
           * A unique identifier for the sortable container
          */
         "componentId": string;
+        /**
+          * Deternines whether `sortable` items should be divided with border
+         */
+        "dividers": boolean;
     }
     interface PdsSortableItem {
         /**
@@ -1108,6 +1112,10 @@ declare namespace LocalJSX {
           * A unique identifier for the sortable container
          */
         "componentId": string;
+        /**
+          * Deternines whether `sortable` items should be divided with border
+         */
+        "dividers"?: boolean;
     }
     interface PdsSortableItem {
         /**

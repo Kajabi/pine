@@ -1,10 +1,12 @@
 :host(.pds-sortable) {
+  --border-radius: var(--pine-border-radius-md);
+  --border: var(--pine-border-default);
+
   display: flex;
   flex-direction: column;
-  gap: 10px;
 
   &.pds-sortable--bordered {
-    border: 1px solid #CCC;
-    border-radius: 10px;
+    border: var(--border);
+    border-radius: var(--border-radius)
   }
 }
