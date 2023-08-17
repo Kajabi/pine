@@ -1,6 +1,6 @@
 import { html } from 'lit-html';
 
-const BaseTemplate = (args) => html` <pds-sortable border="${args.border}" component-id="${args.componentId}item-divided="${args.dividers}"></pds-sortable>`;
+const BaseTemplate = (args) => html` <pds-sortable border="${args.border}" component-id="${args.componentId} dividers="${args.dividers}"></pds-sortable>`;
 
 const defaultParameters = { docs: { disable: true } };
 
