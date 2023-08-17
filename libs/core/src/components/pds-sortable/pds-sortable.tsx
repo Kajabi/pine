@@ -52,7 +52,8 @@ export class PdsSortable {
       <Host
         class={this.classNames()}
         id={this.componentId}
-        ref={(el) => (this.container = el as HTMLElement)}>
+        ref={(el) => (this.container = el as HTMLElement)}
+      >
         <slot></slot>
       </Host>
     );
