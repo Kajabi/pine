@@ -1,3 +1,10 @@
-:host {
-  display: block;
+:host(.pds-sortable) {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  &.pds-sortable--bordered {
+    border: 1px solid #CCC;
+    border-radius: 10px;
+  }
 }

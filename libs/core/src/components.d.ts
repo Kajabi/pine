@@ -352,11 +352,26 @@ export namespace Components {
     }
     interface PdsSortable {
         /**
+          * Determines whether `sortable` should have a border.
+          * @defaultValue false
+         */
+        "border": boolean;
+        /**
           * A unique identifier for the sortable container
          */
         "componentId": string;
     }
     interface PdsSortableItem {
+        /**
+          * Determines whether `sortable-actions` slot should be enabled.
+          * @defaultValue false
+         */
+        "actions": boolean;
+        /**
+          * Determines whether `sortable-item` should have a handle.
+          * @defaultValue false
+         */
+        "handle": boolean;
     }
     interface PdsSwitch {
         /**
@@ -1085,11 +1100,26 @@ declare namespace LocalJSX {
     }
     interface PdsSortable {
         /**
+          * Determines whether `sortable` should have a border.
+          * @defaultValue false
+         */
+        "border"?: boolean;
+        /**
           * A unique identifier for the sortable container
          */
         "componentId": string;
     }
     interface PdsSortableItem {
+        /**
+          * Determines whether `sortable-actions` slot should be enabled.
+          * @defaultValue false
+         */
+        "actions"?: boolean;
+        /**
+          * Determines whether `sortable-item` should have a handle.
+          * @defaultValue false
+         */
+        "handle"?: boolean;
     }
     interface PdsSwitch {
         /**

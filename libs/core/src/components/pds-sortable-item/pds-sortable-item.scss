@@ -1,0 +1,39 @@
+:host(.pds-sortable-item) {
+  align-items: center;
+  cursor: grab;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+
+  &:hover {
+    background-color: #f6f8f8;
+  }
+
+
+  .pds-sortable-item__actions {
+    margin-left: auto
+  }
+
+  .pds-sortable-item__handle {
+    margin-block-start: 3px;
+    margin-inline-end: 10px;
+  }
+}
+
+:host(.pds-sortable-item--drag) {
+  background-color: var(--pine-color-base-white);
+  box-shadow: var(--pine-box-shadow-lg);
+  opacity: 1;
+}
+
+:host(.pds-sortable-item--ghost) {
+  background-color: var(--pine-color-neutral-grey-200);
+}
+
+
+
+
+
+
+
+

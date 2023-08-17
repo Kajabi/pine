@@ -12,17 +12,38 @@ export class PdsSortable {
    */
   @Prop() componentId!: string;
 
+  /**
+   * Determines whether `sortable` should have a border.
+   * @defaultValue false
+   */
+  @Prop({ reflect: true }) border = false;
+
   private container: HTMLElement;
+
+  private classNames() {
+    const classNames = ['pds-sortable'];
+
+    if (this.border) {
+      classNames.push('pds-sortable--bordered');
+    }
+
+    return classNames.join('  ');
+  }
 
   componentDidLoad() {
     Sortable.create(this.container, {
       animation: 150,
+      ghostClass: 'pds-sortable-item--ghost',
+      dragClass: "pds-sortable-item--drag"
     });
   }
 
   render() {
     return (
-      <Host id={this.componentId} ref={(el) => (this.container = el as HTMLElement)}>
+      <Host
+        class={this.classNames()}
+        id={this.componentId}
+        ref={(el) => (this.container = el as HTMLElement)}>
         <slot></slot>
       </Host>
     );
