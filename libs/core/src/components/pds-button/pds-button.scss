@@ -85,3 +85,15 @@
   --color: #202327;
   --color-disabled: #8d939a;
 }
+
+.pds-button--unstyled {
+  --background-color: transparent;
+  --background-color-hover: transparent;
+  --background-color-disabled: transparent;
+  --color: inherit;
+  border: 0;
+  margin: 0;
+  min-height: auto;
+  padding: 0;
+  width: inherit;
+}

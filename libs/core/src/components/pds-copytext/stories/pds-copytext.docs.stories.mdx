@@ -1,0 +1,56 @@
+import { Meta, Story, Canvas, Source, ArgsTable } from '@storybook/addon-docs';
+import { html, render } from 'lit-html';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+import * as stories from './pds-copytext.stories.js';
+
+<Meta title="components/CopyText" component="pds-copytext" argTypes={extractArgTypes('pds-copytext')} />
+
+# Copy Text
+
+A component to use in places where "copy" text is provided to be copied elsewhere.
+
+## Properties
+
+<ArgsTable of="pds-copytext" />
+
+### Default
+
+<Story story={stories.Default} />
+
+<Canvas>
+  <pds-copytext value="Copy this text"></pds-copytext>
+</Canvas>
+
+### Borderless
+
+When `border` is set to `false`, the component will not have a border.
+
+<Story story={stories.Borderless} />
+
+<Canvas>
+  <pds-copytext value="Copy that text" border="false"></pds-copytext>
+</Canvas>
+
+### Full width
+
+When `full-width` is set to `true`, the component will take up the full width of its container.
+
+<Story story={stories.FullWidth} />
+
+<Canvas>
+  <pds-copytext value="Copy all of this text" full-width="true"></pds-copytext>
+</Canvas>
+
+### Truncate
+
+When `truncate` is set to `true`, the value text will be truncated and an ellipsis added.
+
+<Story story={stories.Truncate} />
+
+<Canvas>
+  <div style={{ width: '350px' }}>
+    <pds-copytext value="Copy all of this really long text that should be truncated in the UI, but will still be copied to the clipboard." truncate="true"></pds-copytext>
+  </div>
+</Canvas>

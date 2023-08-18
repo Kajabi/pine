@@ -1,6 +1,7 @@
 import { Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 import { assignDescription, isRequired, messageId } from '../../utils/form';
 import { TextareaChangeEventDetail } from './textarea-interface';
+import { PdsLabel } from '../_internal/pds-label/pds-label';
 
 @Component({
   tag: 'pds-textarea',
@@ -107,9 +108,7 @@ export class PdsTextarea {
       >
         <div class="pds-textarea">
           {this.label &&
-            <label htmlFor={this.componentId}>
-              {this.label}
-            </label>
+            <PdsLabel htmlFor={this.componentId} text={this.label} />
           }
           <textarea
             aria-describedby={assignDescription(this.componentId, this.invalid, this.hintMessage)}

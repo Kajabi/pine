@@ -1,5 +1,6 @@
 import { Component, Event, EventEmitter, h, Host, Prop } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
+import { PdsLabel } from '../_internal/pds-label/pds-label';
 
 /**
  * @slot - Content is placed between the opening closing tags
@@ -91,7 +92,7 @@ export class PdsInput {
         aria-disabled={this.disabled ? 'true' : null}
       >
         <div class="pds-input">
-          <label htmlFor={this.componentId}>{this.label}</label>
+          <PdsLabel htmlFor={this.componentId} text={this.label} />
           <input class="pds-input__field"
             aria-describedby={assignDescription(this.componentId, this.invalid, this.hint)}
             aria-invalid={this.invalid ? "true" : undefined}

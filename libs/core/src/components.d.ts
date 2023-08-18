@@ -70,7 +70,7 @@ export namespace Components {
         /**
           * Sets button variant styles as outlined in Figma documentation
          */
-        "variant": 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
+        "variant": 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled';
     }
     interface PdsCheckbox {
         /**
@@ -139,6 +139,31 @@ export namespace Components {
           * @defaultValue 'text'
          */
         "variant": 'text' | 'tag' | 'dropdown';
+    }
+    interface PdsCopytext {
+        /**
+          * Determines whether `copytext` should have a border.
+          * @defaultValue true
+         */
+        "border": boolean;
+        /**
+          * String used for the component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * Determines whether `copytext` should expand to the full width of its container.
+          * @defaultValue false
+         */
+        "fullWidth": boolean;
+        /**
+          * Determines whether the `value` should truncate and display with an ellipsis.
+          * @defaultValue false
+         */
+        "truncate": boolean;
+        /**
+          * String that is displayed and that is also copied to the clipboard upon interaction.
+         */
+        "value": string;
     }
     interface PdsDivider {
         /**
@@ -251,6 +276,36 @@ export namespace Components {
           * Modifies the look of the link
          */
         "variant": 'inline' | 'plain';
+    }
+    interface PdsProgress {
+        /**
+          * Determines whether or not progress is animated.
+          * @defaultValue false
+         */
+        "animated": boolean;
+        /**
+          * String used for progress `id` attribute and label `for` attribute.
+         */
+        "componentId": string;
+        /**
+          * Sets the progress fill color. Accepts a color token or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
+          * @defaultValue 'var(--pds-color-primary)'
+         */
+        "fillColor": string;
+        /**
+          * String used for label text. Label is visually hidden but required for better accessibility.
+         */
+        "label": string;
+        /**
+          * Sets the progress fill pecentage and visually displayed when `show-percentage=true`.
+          * @defaultValue 0
+         */
+        "percent": number;
+        /**
+          * Determines whether or not the percent value should be displayed as text.
+          * @defaultValue false
+         */
+        "showPercent": boolean;
     }
     interface PdsRadio {
         /**
@@ -491,6 +546,10 @@ export interface PdsChipCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsChipElement;
 }
+export interface PdsCopytextCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsCopytextElement;
+}
 export interface PdsInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsInputElement;
@@ -540,6 +599,12 @@ declare global {
         prototype: HTMLPdsChipElement;
         new (): HTMLPdsChipElement;
     };
+    interface HTMLPdsCopytextElement extends Components.PdsCopytext, HTMLStencilElement {
+    }
+    var HTMLPdsCopytextElement: {
+        prototype: HTMLPdsCopytextElement;
+        new (): HTMLPdsCopytextElement;
+    };
     interface HTMLPdsDividerElement extends Components.PdsDivider, HTMLStencilElement {
     }
     var HTMLPdsDividerElement: {
@@ -563,6 +628,12 @@ declare global {
     var HTMLPdsLinkElement: {
         prototype: HTMLPdsLinkElement;
         new (): HTMLPdsLinkElement;
+    };
+    interface HTMLPdsProgressElement extends Components.PdsProgress, HTMLStencilElement {
+    }
+    var HTMLPdsProgressElement: {
+        prototype: HTMLPdsProgressElement;
+        new (): HTMLPdsProgressElement;
     };
     interface HTMLPdsRadioElement extends Components.PdsRadio, HTMLStencilElement {
     }
@@ -611,10 +682,12 @@ declare global {
         "pds-button": HTMLPdsButtonElement;
         "pds-checkbox": HTMLPdsCheckboxElement;
         "pds-chip": HTMLPdsChipElement;
+        "pds-copytext": HTMLPdsCopytextElement;
         "pds-divider": HTMLPdsDividerElement;
         "pds-image": HTMLPdsImageElement;
         "pds-input": HTMLPdsInputElement;
         "pds-link": HTMLPdsLinkElement;
+        "pds-progress": HTMLPdsProgressElement;
         "pds-radio": HTMLPdsRadioElement;
         "pds-switch": HTMLPdsSwitchElement;
         "pds-tab": HTMLPdsTabElement;
@@ -688,7 +761,7 @@ declare namespace LocalJSX {
         /**
           * Sets button variant styles as outlined in Figma documentation
          */
-        "variant"?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive';
+        "variant"?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled';
     }
     interface PdsCheckbox {
         /**
@@ -765,6 +838,35 @@ declare namespace LocalJSX {
           * @defaultValue 'text'
          */
         "variant"?: 'text' | 'tag' | 'dropdown';
+    }
+    interface PdsCopytext {
+        /**
+          * Determines whether `copytext` should have a border.
+          * @defaultValue true
+         */
+        "border"?: boolean;
+        /**
+          * String used for the component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * Determines whether `copytext` should expand to the full width of its container.
+          * @defaultValue false
+         */
+        "fullWidth"?: boolean;
+        /**
+          * Event when copyText button is clicked.
+         */
+        "onPdsCopyTextClick"?: (event: PdsCopytextCustomEvent<any>) => void;
+        /**
+          * Determines whether the `value` should truncate and display with an ellipsis.
+          * @defaultValue false
+         */
+        "truncate"?: boolean;
+        /**
+          * String that is displayed and that is also copied to the clipboard upon interaction.
+         */
+        "value": string;
     }
     interface PdsDivider {
         /**
@@ -881,6 +983,36 @@ declare namespace LocalJSX {
           * Modifies the look of the link
          */
         "variant"?: 'inline' | 'plain';
+    }
+    interface PdsProgress {
+        /**
+          * Determines whether or not progress is animated.
+          * @defaultValue false
+         */
+        "animated"?: boolean;
+        /**
+          * String used for progress `id` attribute and label `for` attribute.
+         */
+        "componentId": string;
+        /**
+          * Sets the progress fill color. Accepts a color token or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
+          * @defaultValue 'var(--pds-color-primary)'
+         */
+        "fillColor"?: string;
+        /**
+          * String used for label text. Label is visually hidden but required for better accessibility.
+         */
+        "label": string;
+        /**
+          * Sets the progress fill pecentage and visually displayed when `show-percentage=true`.
+          * @defaultValue 0
+         */
+        "percent"?: number;
+        /**
+          * Determines whether or not the percent value should be displayed as text.
+          * @defaultValue false
+         */
+        "showPercent"?: boolean;
     }
     interface PdsRadio {
         /**
@@ -1130,10 +1262,12 @@ declare namespace LocalJSX {
         "pds-button": PdsButton;
         "pds-checkbox": PdsCheckbox;
         "pds-chip": PdsChip;
+        "pds-copytext": PdsCopytext;
         "pds-divider": PdsDivider;
         "pds-image": PdsImage;
         "pds-input": PdsInput;
         "pds-link": PdsLink;
+        "pds-progress": PdsProgress;
         "pds-radio": PdsRadio;
         "pds-switch": PdsSwitch;
         "pds-tab": PdsTab;
@@ -1151,10 +1285,12 @@ declare module "@stencil/core" {
             "pds-button": LocalJSX.PdsButton & JSXBase.HTMLAttributes<HTMLPdsButtonElement>;
             "pds-checkbox": LocalJSX.PdsCheckbox & JSXBase.HTMLAttributes<HTMLPdsCheckboxElement>;
             "pds-chip": LocalJSX.PdsChip & JSXBase.HTMLAttributes<HTMLPdsChipElement>;
+            "pds-copytext": LocalJSX.PdsCopytext & JSXBase.HTMLAttributes<HTMLPdsCopytextElement>;
             "pds-divider": LocalJSX.PdsDivider & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
             "pds-image": LocalJSX.PdsImage & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
             "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
+            "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-radio": LocalJSX.PdsRadio & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
             "pds-switch": LocalJSX.PdsSwitch & JSXBase.HTMLAttributes<HTMLPdsSwitchElement>;
             "pds-tab": LocalJSX.PdsTab & JSXBase.HTMLAttributes<HTMLPdsTabElement>;
