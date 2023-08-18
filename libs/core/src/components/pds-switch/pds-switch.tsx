@@ -1,5 +1,6 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
+import { PdsLabel } from '../_internal/pds-label/pds-label';
 
 @Component({
   tag: 'pds-switch',
@@ -106,9 +107,7 @@ export class PdsSwitch {
           type={this.type}
           value={this.value}
         />
-        <label class="pds-switch__label" htmlFor={this.componentId}>
-          {this.label}
-        </label>
+        <PdsLabel classNames="pds-switch__label" htmlFor={this.componentId} text={this.label} />
         {this.helperMessage &&
           <div
             class={`pds-switch__message`}
