@@ -1,0 +1,16 @@
+// TODO: move these styles into base/reset files
+:host {
+  display: inline-block;
+}
+
+label, pds-label {
+  --color: var(--pine-color-neutral-charcoal-400);
+  --font-family: var(--pine-font-family-circular);
+  --font-weight: var(--pine-font-weight-medium);
+  --letter-spacing: var(--pine-letter-spacing-xs);
+
+  color: var(--color);
+  font-family: var(--font-family);
+  font-weight: var(--font-weight);
+  letter-spacing: var(--letter-spacing);
+}

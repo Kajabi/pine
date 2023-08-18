@@ -34,6 +34,22 @@ describe('pds-button', () => {
     `);
   });
 
+  it('renders unstyled button', async () => {
+    const {root} = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button variant="unstyled"></pds-button>`,
+    });
+    expect(root).toEqualHtml(`
+      <pds-button variant="unstyled">
+        <mock:shadow-root>
+          <button class="pds-button pds-button--unstyled" type="button">
+            <slot></slot>
+          </button>
+        </mock:shadow-root>
+      </pds-button>
+    `);
+  });
+
   it('renders disabled button', async () => {
     const {root} = await newSpecPage({
       components: [PdsButton],
@@ -55,7 +71,7 @@ describe('pds-button', () => {
       components: [PdsButton],
       html: `<pds-button icon="trashIcon"></pds-button>`,
     });
-    const svg = root.shadowRoot.querySelector('svg');
+    const svg = root?.shadowRoot?.querySelector('svg');
     expect(svg).not.toBeNull();
   });
 
@@ -71,7 +87,7 @@ describe('pds-button', () => {
     const form = root.doc.querySelector<HTMLFormElement>("form");
     const eventSpy = jest.fn();
     form?.addEventListener("reset", eventSpy());
-    const button = document.querySelector<HTMLPdsButtonElement>('pds-button');
+    const button = document.querySelector<HTMLButtonElement>('pds-button');
     button?.click();
     await root.waitForChanges();
     expect(eventSpy).toHaveBeenCalled();

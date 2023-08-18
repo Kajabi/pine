@@ -12,7 +12,7 @@ export class PdsButton {
   /**
    * Sets button variant styles as outlined in Figma documentation
     */
-  @Prop() variant: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' = 'primary';
+  @Prop() variant: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled'  = 'primary';
 
   /**
    * Displays icon before text when icon string matches an icon name
