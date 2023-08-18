@@ -9,7 +9,7 @@ describe('pds-sortable', () => {
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-sortable class="pds-sortable">Content</pds-sortable>
+      <pds-sortable class="pds-sortable pds-sortable--handle-type-row">Content</pds-sortable>
     `);
   });
 
@@ -20,7 +20,7 @@ describe('pds-sortable', () => {
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-sortable class="pds-sortable pds-sortable--bordered" border="">
+      <pds-sortable class="pds-sortable pds-sortable--bordered pds-sortable--handle-type-row" border="">
         Content
       </pds-sortable>
     `);
@@ -33,10 +33,20 @@ describe('pds-sortable', () => {
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-sortable class="pds-sortable pds-sortable--divided" dividers="">
+      <pds-sortable class="pds-sortable pds-sortable--divided pds-sortable--handle-type-row" dividers="">
         Content
       </pds-sortable>
     `);
   });
 
+  it('renders with handle type set to "handle"', async () => {
+    const page = await newSpecPage({
+      components: [PdsSortable],
+      html: `<pds-sortable handle-type="handle">Content</pds-sortable>`,
+    });
+
+    expect(page.root).toEqualHtml(`
+      <pds-sortable class="pds-sortable pds-sortable--handle-type-handle" handle-type="handle">Content</pds-sortable>
+    `);
+  });
 });

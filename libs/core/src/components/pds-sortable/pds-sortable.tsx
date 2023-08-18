@@ -14,14 +14,19 @@ export class PdsSortable {
     @Prop({ reflect: true }) border = false;
 
   /**
-   * A unique identifier for the sortable container
+   * A unique identifier for the sortable container.
    */
   @Prop() componentId!: string;
 
   /**
-   * Deternines whether `sortable` items should be divided with border
+   * Deternines whether `sortable` items should be divided with border.
    */
   @Prop({ reflect: true }) dividers = false;
+
+    /**
+   * Determines the grab location to use for sortable items.
+   */
+    @Prop() handleType: 'handle' | 'row' = 'row';
 
   private container: HTMLElement;
 
@@ -36,16 +41,30 @@ export class PdsSortable {
       classNames.push('pds-sortable--divided');
     }
 
+    if (this.handleType) {
+      classNames.push(`pds-sortable--handle-type-${this.handleType}`);
+    }
+
     return classNames.join('  ');
   }
 
   componentDidLoad() {
-    Sortable.create(this.container, {
+    let sortableOptions: any = {
       animation: 150,
       ghostClass: 'pds-sortable-item--ghost',
-      dragClass: "pds-sortable-item--drag"
-    });
+      dragClass: 'pds-sortable-item--drag',
+    };
+
+    if (this.handleType === 'handle') {
+      sortableOptions = {
+        ...sortableOptions,
+        handle: '.pds-sortable-item__handle',
+      };
+    }
+
+    Sortable.create(this.container, sortableOptions);
   }
+
 
   render() {
     return (

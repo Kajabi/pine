@@ -71,6 +71,17 @@ Sortable description will go here.
   </pds-sortable>
 </Canvas>
 
+#### Handle Only
+By default the full `row` is active for dragging/sorting. However, `handle-type` can be set to `handle` in order to allow only the handle to be used.
+
+<Canvas>
+  <pds-sortable component-id="handle-only" handle-type="handle">
+    <pds-sortable-item handle>Item 1</pds-sortable-item>
+    <pds-sortable-item handle>Item 2</pds-sortable-item>
+    <pds-sortable-item handle>Item 3</pds-sortable-item>
+  </pds-sortable>
+</Canvas>
+
 ### Actions
 
 <Story story={stories.Actions} />

@@ -1,6 +1,6 @@
 import { html } from 'lit-html';
 
-const BaseTemplate = (args) => html` <pds-sortable border="${args.border}" component-id="${args.componentId} dividers="${args.dividers}"></pds-sortable>`;
+const BaseTemplate = (args) => html` <pds-sortable border="${args.border}" component-id="${args.componentId} dividers="${args.dividers}" handle-type="${args.handleType}"></pds-sortable>`;
 
 const defaultParameters = { docs: { disable: true } };
 
@@ -9,6 +9,7 @@ Default.args = {
   componentId: 'default',
   border: false,
   dividers: false,
+  handleType: 'row',
 };
 Default.parameters = { ...defaultParameters };
 
@@ -18,6 +19,7 @@ Bordered.args = {
   componentId: 'bordered',
   border: true,
   dividers: false,
+  handleType: 'row',
 };
 Bordered.parameters = { ...defaultParameters };
 
@@ -26,6 +28,7 @@ Dividers.args = {
   componentId: 'dividers',
   border: true,
   dividers: true,
+  handleType: 'row',
 };
 Dividers.parameters = { ...defaultParameters };
 
@@ -35,6 +38,7 @@ Handle.args = {
   componentId: 'handle',
   border: false,
   dividers: false,
+  handleType: 'handle',
 };
 Handle.parameters = { ...defaultParameters };
 
@@ -44,6 +48,7 @@ Actions.args = {
   componentId: 'actions',
   border: false,
   dividers: false,
+  handleType: 'row',
 };
 Actions.parameters = { ...defaultParameters };
 
@@ -52,6 +57,7 @@ FullDemo.args = {
   componentId: 'demo',
   border: false,
   dividers: false,
+  handleType: 'row',
 };
 FullDemo.parameters = { ...defaultParameters };
 

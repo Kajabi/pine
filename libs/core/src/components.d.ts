@@ -357,13 +357,17 @@ export namespace Components {
          */
         "border": boolean;
         /**
-          * A unique identifier for the sortable container
+          * A unique identifier for the sortable container.
          */
         "componentId": string;
         /**
-          * Deternines whether `sortable` items should be divided with border
+          * Deternines whether `sortable` items should be divided with border.
          */
         "dividers": boolean;
+        /**
+          * Determines the grab location to use for sortable items.
+         */
+        "handleType": 'handle' | 'row';
     }
     interface PdsSortableItem {
         /**
@@ -1109,13 +1113,17 @@ declare namespace LocalJSX {
          */
         "border"?: boolean;
         /**
-          * A unique identifier for the sortable container
+          * A unique identifier for the sortable container.
          */
         "componentId": string;
         /**
-          * Deternines whether `sortable` items should be divided with border
+          * Deternines whether `sortable` items should be divided with border.
          */
         "dividers"?: boolean;
+        /**
+          * Determines the grab location to use for sortable items.
+         */
+        "handleType"?: 'handle' | 'row';
     }
     interface PdsSortableItem {
         /**
