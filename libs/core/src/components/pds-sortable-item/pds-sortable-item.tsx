@@ -9,11 +9,16 @@ import { Component, Host, h, Prop } from '@stencil/core';
   scoped: true,
 })
 export class PdsSortableItem {
-    /**
+  /**
    * Determines whether `sortable-actions` slot should be enabled.
    * @defaultValue false
    */
-    @Prop() actions = false;
+  @Prop() actions = false;
+
+  /**
+   * A unique identifier for the sortable item.
+   */
+  @Prop() componentId: string;
 
   /**
    * Determines whether `sortable-item` should have a handle.
@@ -23,7 +28,7 @@ export class PdsSortableItem {
 
   render() {
     return (
-      <Host class="pds-sortable-item">
+      <Host class="pds-sortable-item" id={this.componentId}>
         {this.handle && (
           <div class="pds-sortable-item__handle">
             <pds-icon name="handle"></pds-icon>

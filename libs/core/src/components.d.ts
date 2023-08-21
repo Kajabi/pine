@@ -376,6 +376,10 @@ export namespace Components {
          */
         "actions": boolean;
         /**
+          * A unique identifier for the sortable item.
+         */
+        "componentId": string;
+        /**
           * Determines whether `sortable-item` should have a handle.
           * @defaultValue false
          */
@@ -1139,6 +1143,10 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "actions"?: boolean;
+        /**
+          * A unique identifier for the sortable item.
+         */
+        "componentId"?: string;
         /**
           * Determines whether `sortable-item` should have a handle.
           * @defaultValue false
