@@ -590,6 +590,10 @@ export interface PdsRadioCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsRadioElement;
 }
+export interface PdsSortableCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsSortableElement;
+}
 export interface PdsSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsSwitchElement;
@@ -1124,6 +1128,10 @@ declare namespace LocalJSX {
           * Determines the grab location to use for sortable items.
          */
         "handleType"?: 'handle' | 'row';
+        /**
+          * Event when a sortable item is moved.
+         */
+        "onPdsSortableItemMoved"?: (event: PdsSortableCustomEvent<any>) => void;
     }
     interface PdsSortableItem {
         /**

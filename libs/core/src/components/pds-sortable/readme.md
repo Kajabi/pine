@@ -15,6 +15,13 @@
 | `handleType`               | `handle-type`  | Determines the grab location to use for sortable items.            | `"handle" \| "row"` | `'row'`     |
 
 
+## Events
+
+| Event                  | Description                          | Type               |
+| ---------------------- | ------------------------------------ | ------------------ |
+| `pdsSortableItemMoved` | Event when a sortable item is moved. | `CustomEvent<any>` |
+
+
 ----------------------------------------------
 
 

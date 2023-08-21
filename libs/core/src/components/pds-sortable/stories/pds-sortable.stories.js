@@ -1,8 +1,15 @@
 import { html } from 'lit-html';
 
-const BaseTemplate = (args) => html` <pds-sortable border="${args.border}" component-id="${args.componentId} dividers="${args.dividers}" handle-type="${args.handleType}"></pds-sortable>`;
+const BaseTemplate = (args) =>
+  html` <pds-sortable border="${args.border}" component-id="${args.componentId} dividers="${args.dividers}" handle-type="${args.handleType}"></pds-sortable>`;
 
 const defaultParameters = { docs: { disable: true } };
+
+const sortableEventExample = () => {
+  document.addEventListener('pdsSortableItemMoved', function (e) {
+    console.info('Item Moved:', e.detail);
+  });
+};
 
 export const Default = BaseTemplate.bind();
 Default.args = {
@@ -10,9 +17,9 @@ Default.args = {
   border: false,
   dividers: false,
   handleType: 'row',
+  onChange: sortableEventExample(),
 };
 Default.parameters = { ...defaultParameters };
-
 
 export const Bordered = BaseTemplate.bind();
 Bordered.args = {
@@ -32,7 +39,6 @@ Dividers.args = {
 };
 Dividers.parameters = { ...defaultParameters };
 
-
 export const Handle = BaseTemplate.bind();
 Handle.args = {
   componentId: 'handle',
@@ -41,7 +47,6 @@ Handle.args = {
   handleType: 'handle',
 };
 Handle.parameters = { ...defaultParameters };
-
 
 export const Actions = BaseTemplate.bind();
 Actions.args = {
@@ -60,5 +65,3 @@ FullDemo.args = {
   handleType: 'row',
 };
 FullDemo.parameters = { ...defaultParameters };
-
-
