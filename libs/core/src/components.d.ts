@@ -365,7 +365,7 @@ export namespace Components {
          */
         "dividers": boolean;
         /**
-          * Determines the grab location to use for sortable items.
+          * Assigns the handle type to use for sortable items.
          */
         "handleType": 'handle' | 'row';
     }
@@ -1129,11 +1129,11 @@ declare namespace LocalJSX {
          */
         "dividers"?: boolean;
         /**
-          * Determines the grab location to use for sortable items.
+          * Assigns the handle type to use for sortable items.
          */
         "handleType"?: 'handle' | 'row';
         /**
-          * Event when a sortable item is moved.
+          * Event emitted when a sortable item is moved.
          */
         "onPdsSortableItemMoved"?: (event: PdsSortableCustomEvent<any>) => void;
     }

@@ -24,12 +24,12 @@ export class PdsSortable {
   @Prop({ reflect: true }) dividers = false;
 
   /**
-   * Determines the grab location to use for sortable items.
+   * Assigns the handle type to use for sortable items.
    */
   @Prop() handleType: 'handle' | 'row' = 'row';
 
   /**
-   * Event when a sortable item is moved.
+   * Event emitted when a sortable item is moved.
    */
   @Event() pdsSortableItemMoved: EventEmitter;
 
