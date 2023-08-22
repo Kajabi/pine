@@ -6,7 +6,7 @@ import { Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil
   shadow: false,
 })
 export class PdsTab {
-  @Element() el: HTMLElement;
+  @Element() el: HTMLPdsTabElement;
 
   /**
    * Sets the related tab name, this name must match a `pds-tabpanel`'s tab name property
@@ -17,7 +17,7 @@ export class PdsTab {
    * Keeps track of the parentComponentId unique id, this property is passed by parent component
    */
   /** @internal */
-  @Prop({mutable: true}) parentComponentId: string;
+  @Prop() parentComponentId: string;
 
   /**
    * Keeps track of if the expected tab variant, this property is passed by parent component
@@ -35,7 +35,7 @@ export class PdsTab {
    * Keeps track of the tabpanel selected state, this property is passed by parent component
    */
   /** @internal */
-  @Prop({mutable: true}) selected = false;
+  @Prop() selected = false;
 
   /**
    * Emits an event upon tab click for `pds-tab` and `pds-tabpanel` to listen for

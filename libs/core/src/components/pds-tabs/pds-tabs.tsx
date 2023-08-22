@@ -13,7 +13,7 @@ export class PdsTabs {
   private tabs;
   private tabPanels;
 
-  @Element() el: HTMLDivElement;
+  @Element() el: HTMLPdsTabsElement;
 
   /**
    * Sets the aria-label attached to the tablist element
