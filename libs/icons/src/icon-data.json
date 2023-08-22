@@ -67,6 +67,20 @@
       ]
     },
     {
+      "name": "ai-sparkle",
+      "category": "actions",
+      "tags": [
+        "brightness",
+        "edit",
+        "effect",
+        "filter",
+        "light",
+        "photo",
+        "spark",
+        "sparkle"
+      ]
+    },
+    {
       "name": "ai-writer",
       "category": "features",
       "tags": [
@@ -178,6 +192,24 @@
         "navigation",
         "report",
         "statistics"
+      ]
+    },
+    {
+      "name": "app-store",
+      "category": "features",
+      "tags": [
+        "apple",
+        "appstore",
+        "computer",
+        "design",
+        "development",
+        "device",
+        "iPad",
+        "iPhone",
+        "logo",
+        "mac",
+        "pay",
+        "payment"
       ]
     },
     {
@@ -2037,6 +2069,27 @@
       ]
     },
     {
+      "name": "ios-battery",
+      "category": "device-specific",
+      "tags": [
+        "For iOS use only"
+      ]
+    },
+    {
+      "name": "ios-data",
+      "category": "device-specific",
+      "tags": [
+        "For iOS use only"
+      ]
+    },
+    {
+      "name": "ios-wifi",
+      "category": "device-specific",
+      "tags": [
+        "For iOS use only"
+      ]
+    },
+    {
       "name": "italic",
       "category": "text-editor",
       "tags": [
@@ -2614,30 +2667,6 @@
       ]
     },
     {
-      "name": "package",
-      "category": "features",
-      "tags": [
-        "backup",
-        "clone",
-        "copies",
-        "copy",
-        "document",
-        "duplicate",
-        "file",
-        "files",
-        "group",
-        "layer",
-        "layers",
-        "note",
-        "paper",
-        "paste",
-        "report",
-        "separate",
-        "split",
-        "ungroup"
-      ]
-    },
-    {
       "name": "partners-filled",
       "category": "navigation",
       "tags": [
@@ -2817,6 +2846,23 @@
         "media",
         "multimedia",
         "play"
+      ]
+    },
+    {
+      "name": "play-store",
+      "category": "features",
+      "tags": [
+        "android",
+        "app",
+        "application",
+        "appstore",
+        "development",
+        "google",
+        "market",
+        "media",
+        "music",
+        "play",
+        "video"
       ]
     },
     {
@@ -3289,6 +3335,30 @@
       "category": "features",
       "tags": [
         "sage-icon-sequences"
+      ]
+    },
+    {
+      "name": "series",
+      "category": "features",
+      "tags": [
+        "backup",
+        "clone",
+        "copies",
+        "copy",
+        "document",
+        "duplicate",
+        "file",
+        "files",
+        "group",
+        "layer",
+        "layers",
+        "note",
+        "paper",
+        "paste",
+        "report",
+        "separate",
+        "split",
+        "ungroup"
       ]
     },
     {
