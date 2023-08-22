@@ -1,34 +1,42 @@
 import { html } from 'lit-html';
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
-const BaseTemplate = (args) => html` <pds-card border=${args.border} padding=${args.padding} bg-color=${args.bgColor} shadow=${args.shadow}></pds-card>`;
+export default {
+  args: { padding: 'md' },
+  argTypes: extractArgTypes('pds-card'),
+  component: 'pds-card',
+  title: 'components/Card',
+};
 
-const defaultParameters = { docs: { disable: true } };
+const BaseTemplate = (args) => html`
+  <pds-card
+    border=${args.border}
+    bg-color=${args.bgColor}
+    padding=${args.padding}
+    shadow=${args.shadow}
+  >
+  </pds-card>`;
 
 export const Default = BaseTemplate.bind();
 Default.args = {};
-Default.parameters = { ...defaultParameters };
-
-export const Border = BaseTemplate.bind();
-Border.args = {
-  border: false,
-};
-Border.parameters = { ...defaultParameters };
 
 export const Padding = BaseTemplate.bind();
 Padding.args = {
   padding: 'sm',
 };
-Padding.parameters = { ...defaultParameters };
 
-export const background = BaseTemplate.bind();
-background.args = {
+export const Border = BaseTemplate.bind();
+Border.args = {
+  border: false,
+};
+
+export const Background = BaseTemplate.bind();
+Background.args = {
   bgColor: 'var(--pine-color-primary-100)',
   border: false,
 };
-background.parameters = { ...defaultParameters };
 
-export const shadow = BaseTemplate.bind();
-shadow.args = {
+export const Shadow = BaseTemplate.bind();
+Shadow.args = {
   shadow: 'md',
 };
-shadow.parameters = { ...defaultParameters };

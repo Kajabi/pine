@@ -88,6 +88,7 @@ export namespace Components {
         "bgColor": string;
         /**
           * Determines whether the card should have a border.
+          * @defaultValue true
          */
         "border": boolean;
         /**
@@ -889,6 +890,7 @@ declare namespace LocalJSX {
         "bgColor"?: string;
         /**
           * Determines whether the card should have a border.
+          * @defaultValue true
          */
         "border"?: boolean;
         /**

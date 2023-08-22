@@ -1,20 +1,7 @@
-import { Meta, Story, Canvas, Source, ArgsTable } from '@storybook/addon-docs';
-import { html, render } from 'lit-html';
-
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
-
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs';
 import * as stories from './pds-card.stories.js';
 
-<Meta
-  title="components/Card"
-  component="pds-card"
-  argTypes={extractArgTypes('pds-card')}
-  args={{
-    padding: 'md',
-    border: true,
-    shadow: 'none',
-  }}
-/>
+<Meta of={stories} />
 
 # Card
 
@@ -22,13 +9,11 @@ A block container that provides styling for elevation, border, and background.
 
 ## Properties
 
-<ArgsTable of="pds-card" />
+<ArgTypes of={stories} />
 
 ### Default
 
-<Story story={stories.Default} />
-
-<Canvas>
+<Canvas mdxSource={`<pds-card>Card content</pds-card>`}>
   <pds-card>Card content</pds-card>
 </Canvas>
 
@@ -36,9 +21,7 @@ A block container that provides styling for elevation, border, and background.
 
 Padding is the space between a card's content and its border.
 
-<Story story={stories.Padding} />
-
-<Canvas>
+<Canvas mdxSource={`<pds-card padding="sm">Card content</pds-card>`}>
   <pds-card padding="sm">Card content</pds-card>
 </Canvas>
 
@@ -48,15 +31,11 @@ A border is an outline that displays around a card and is visible by default.
 
 Set `border="false"` to remove the border.
 
-<Story story={stories.Border} />
-
-<Canvas>
+<Canvas mdxSource={`<pds-card border="false">Card content</pds-card>`}>
   <pds-card border="false">Card content</pds-card>
 </Canvas>
 
 ### Background Color
-
-<Story story={stories.background} />
 
 To change a card's appearance, apply a background color using the `bg-color` prop.
 
@@ -73,16 +52,14 @@ When using a background color, it is recommended to also use `border="false"` in
 - Custom properties: `var(--pine-color-primary-100)`
 - Keyword: `currentcolor`
 
-<Canvas>
-  <pds-card border="false" bg-color="var(--pine-color-primary-100)">Card content</pds-card>
+<Canvas mdxSource={`<pds-card border="false" bg-color="var(--pine-color-primary-100)">Card content</pds-card>`}>
+<pds-card border="false" bg-color="var(--pine-color-primary-100)">Card content</pds-card>
 </Canvas>
 
 ### Shadow
 
 Adds a shadow effect to the card, which can be used to create the appearance of elevation.
 
-<Story story={stories.shadow} />
-
-<Canvas>
-  <pds-card shadow="md">Card content</pds-card>
+<Canvas mdxSource={`<pds-card shadow="lg">Card content</pds-card>`}>
+  <pds-card shadow="lg">Card content</pds-card>
 </Canvas>
