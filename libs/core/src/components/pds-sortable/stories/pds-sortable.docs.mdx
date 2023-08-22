@@ -1,19 +1,9 @@
-import { Meta, Story, Canvas, Source, ArgsTable } from '@storybook/addon-docs';
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
 import { html, render } from 'lit-html';
-
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 import * as stories from './pds-sortable.stories.js';
 
-<Meta
-  title="components/Sortable"
-  component="pds-sortable"
-  argTypes={extractArgTypes('pds-sortable')}
-  args={{}}
-  subcomponents={{
-    PdsSortableItem: 'pds-sortable-item',
-  }}
-/>
+<Meta of={stories} />
 
 # Sortable
 
@@ -21,13 +11,17 @@ Sortable is for creating sortable containers of items that can be sorted via dra
 
 ## Properties
 
-<ArgsTable of="pds-sortable" />
+<ArgTypes of={stories} />
 
 ### Default
 
-<Story story={stories.Default} />
-
-<Canvas>
+<Canvas mdxSource={`
+  <pds-sortable component-id="default">
+    <pds-sortable-item>Item 1</pds-sortable-item>
+    <pds-sortable-item>Item 2</pds-sortable-item>
+    <pds-sortable-item>Item 3</pds-sortable-item>
+  </pds-sortable>
+`}>
   <pds-sortable component-id="default">
     <pds-sortable-item>Item 1</pds-sortable-item>
     <pds-sortable-item>Item 2</pds-sortable-item>
@@ -39,9 +33,13 @@ Sortable is for creating sortable containers of items that can be sorted via dra
 
 When `border` is set to `true`, the component will render a border around all items.
 
-<Story story={stories.Bordered} />
-
-<Canvas>
+<Canvas mdxSource={`
+  <pds-sortable border component-id="bordered">
+    <pds-sortable-item>Item 1</pds-sortable-item>
+    <pds-sortable-item>Item 2</pds-sortable-item>
+    <pds-sortable-item>Item 3</pds-sortable-item>
+  </pds-sortable>
+`}>
   <pds-sortable border component-id="bordered">
     <pds-sortable-item>Item 1</pds-sortable-item>
     <pds-sortable-item>Item 2</pds-sortable-item>
@@ -53,9 +51,13 @@ When `border` is set to `true`, the component will render a border around all it
 
 When `dividers` is set to `true`, a border will display between items.
 
-<Story story={stories.Dividers} />
-
-<Canvas>
+<Canvas mdxSource={`
+  <pds-sortable dividers>
+    <pds-sortable-item>Item 1</pds-sortable-item>
+    <pds-sortable-item>Item 2</pds-sortable-item>
+    <pds-sortable-item>Item 3</pds-sortable-item>
+  </pds-sortable>
+`}>
   <pds-sortable dividers>
     <pds-sortable-item>Item 1</pds-sortable-item>
     <pds-sortable-item>Item 2</pds-sortable-item>
@@ -65,11 +67,15 @@ When `dividers` is set to `true`, a border will display between items.
 
 ### Handle
 
-When `handle` is set to `true` on a `pds-sortable-item`, an handle icon will be displayed within an item.
+When `handle` is set to `true` on a `pds-sortable-item` a handle icon will be displayed within an item.
 
-<Story story={stories.Handle} />
-
-<Canvas>
+<Canvas mdxSource={`
+  <pds-sortable component-id="handle">
+    <pds-sortable-item handle>Item 1</pds-sortable-item>
+    <pds-sortable-item handle>Item 2</pds-sortable-item>
+    <pds-sortable-item handle>Item 3</pds-sortable-item>
+  </pds-sortable>
+`}>
   <pds-sortable component-id="handle">
     <pds-sortable-item handle>Item 1</pds-sortable-item>
     <pds-sortable-item handle>Item 2</pds-sortable-item>
@@ -80,7 +86,13 @@ When `handle` is set to `true` on a `pds-sortable-item`, an handle icon will be 
 #### Handle Only
 By default the full `row` is active for dragging/sorting. However, `handle-type` can be set to `handle` in order to allow only the handle to be used.
 
-<Canvas>
+<Canvas mdxSource={`
+  <pds-sortable component-id="handle-only" handle-type="handle">
+    <pds-sortable-item handle>Item 1</pds-sortable-item>
+    <pds-sortable-item handle>Item 2</pds-sortable-item>
+    <pds-sortable-item handle>Item 3</pds-sortable-item>
+  </pds-sortable>
+`}>
   <pds-sortable component-id="handle-only" handle-type="handle">
     <pds-sortable-item handle>Item 1</pds-sortable-item>
     <pds-sortable-item handle>Item 2</pds-sortable-item>
@@ -94,24 +106,43 @@ The `actions` property in the `pds-sortable-item` component determines whether t
 
 The `sortable-actions` slot is provided to place content within the `pds-sortable-item__actions` element as children, but this slot is only rendered if the `actions` property is set to `true`.
 
-<Story story={stories.Actions} />
-
-<Canvas>
+<Canvas mdxSource={`
   <pds-sortable component-id="actions">
     <pds-sortable-item actions>
-      Item 1
+      <div>Item 1</div>
       <div slot="sortable-actions">
         <pds-link href="#" variant="plain">action</pds-link>
       </div>
     </pds-sortable-item>
     <pds-sortable-item actions >
-      Item 2
+      <div>Item 2</div>
       <div slot="sortable-actions">
         <pds-link href="#" variant="plain">action</pds-link>
       </div>
     </pds-sortable-item>
     <pds-sortable-item actions>
-      Item 3
+      <div>Item 3</div>
+      <div slot="sortable-actions">
+        <pds-link href="#" variant="plain">action</pds-link>
+      </div>
+    </pds-sortable-item>
+  </pds-sortable>
+`}>
+  <pds-sortable component-id="actions">
+    <pds-sortable-item actions>
+      <div>Item 1</div>
+      <div slot="sortable-actions">
+        <pds-link href="#" variant="plain">action</pds-link>
+      </div>
+    </pds-sortable-item>
+    <pds-sortable-item actions >
+      <div>Item 2</div>
+      <div slot="sortable-actions">
+        <pds-link href="#" variant="plain">action</pds-link>
+      </div>
+    </pds-sortable-item>
+    <pds-sortable-item actions>
+      <div>Item 3</div>
       <div slot="sortable-actions">
         <pds-link href="#" variant="plain">action</pds-link>
       </div>
@@ -123,9 +154,7 @@ The `sortable-actions` slot is provided to place content within the `pds-sortabl
 
 The following is a demo of how all the properties and slots can be used together to create a sortable list.
 
-<Story story={stories.FullDemo} />
-
-<Canvas>
+<Canvas mdxSource={`
   <pds-sortable border dividers component-id="demo">
     <pds-sortable-item actions handle>
       <div>
@@ -149,6 +178,36 @@ The following is a demo of how all the properties and slots can be used together
       <div>
         <div><strong>Item 3</strong></div>
         <div>Item 3 description copy text</div>
+      </div>
+      <div slot="sortable-actions">
+        <pds-link href="#" variant="plain">action</pds-link>
+      </div>
+    </pds-sortable-item>
+  </pds-sortable>
+`}>
+  <pds-sortable border dividers component-id="demo">
+    <pds-sortable-item actions handle>
+      <div>
+        <div><strong>Item 1</strong></div>
+        <div>Item 1 description text</div>
+      </div>
+      <div slot="sortable-actions">
+        <pds-link href="#" variant="plain">action</pds-link>
+      </div>
+    </pds-sortable-item>
+    <pds-sortable-item actions handle>
+      <div>
+        <div><strong>Item 2</strong></div>
+        <div>Item 2 description text</div>
+      </div>
+      <div slot="sortable-actions">
+        <pds-link href="#" variant="plain">action</pds-link>
+      </div>
+    </pds-sortable-item>
+    <pds-sortable-item actions handle>
+      <div>
+        <div><strong>Item 3</strong></div>
+        <div>Item 3 description text</div>
       </div>
       <div slot="sortable-actions">
         <pds-link href="#" variant="plain">action</pds-link>

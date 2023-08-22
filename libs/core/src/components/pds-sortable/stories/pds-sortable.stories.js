@@ -1,9 +1,20 @@
 import { html } from 'lit-html';
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
-const BaseTemplate = (args) =>
-  html` <pds-sortable border="${args.border}" component-id="${args.componentId} dividers="${args.dividers}" handle-type="${args.handleType}"></pds-sortable>`;
+export default {
+  argTypes: extractArgTypes('pds-sortable'),
+  component: 'pds-sortable',
+  title: 'components/Sortable'
+}
 
-const defaultParameters = { docs: { disable: true } };
+const BaseTemplate = (args) => html`
+<pds-sortable
+  border="${args.border}"
+  component-id="${args.componentId}
+  dividers="${args.dividers}"
+  handle-type="${args.handleType}"
+>
+</pds-sortable>`;
 
 const sortableEventExample = () => {
   document.addEventListener('pdsSortableItemMoved', function (e) {
@@ -19,7 +30,6 @@ Default.args = {
   handleType: 'row',
   onChange: sortableEventExample(),
 };
-Default.parameters = { ...defaultParameters };
 
 export const Bordered = BaseTemplate.bind();
 Bordered.args = {
@@ -28,7 +38,6 @@ Bordered.args = {
   dividers: false,
   handleType: 'row',
 };
-Bordered.parameters = { ...defaultParameters };
 
 export const Dividers = BaseTemplate.bind();
 Dividers.args = {
@@ -37,7 +46,6 @@ Dividers.args = {
   dividers: true,
   handleType: 'row',
 };
-Dividers.parameters = { ...defaultParameters };
 
 export const Handle = BaseTemplate.bind();
 Handle.args = {
@@ -46,7 +54,6 @@ Handle.args = {
   dividers: false,
   handleType: 'handle',
 };
-Handle.parameters = { ...defaultParameters };
 
 export const Actions = BaseTemplate.bind();
 Actions.args = {
@@ -55,7 +62,6 @@ Actions.args = {
   dividers: false,
   handleType: 'row',
 };
-Actions.parameters = { ...defaultParameters };
 
 export const FullDemo = BaseTemplate.bind();
 FullDemo.args = {
@@ -64,4 +70,3 @@ FullDemo.args = {
   dividers: false,
   handleType: 'row',
 };
-FullDemo.parameters = { ...defaultParameters };
