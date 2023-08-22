@@ -1,4 +1,11 @@
-import { html } from 'lit-html';
+import { html } from 'lit';
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+export default {
+  argTypes: extractArgTypes('pds-image'),
+  component: 'pds-tooltip',
+  title: 'components/Tooltip'
+}
 
 const defaultParameters = {
   docs: {

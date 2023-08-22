@@ -1,4 +1,22 @@
-import { html } from 'lit-html';
+import { html } from 'lit';
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+export default {
+  argTypes: extractArgTypes('pds-input'),
+  args: {
+    disabled: false,
+    errorText: null,
+    hint: null,
+    invalid: false,
+    name: null,
+    placeholder: null,
+    readonly: false,
+    required: false,
+    type: 'text'
+  },
+  component: 'pds-input',
+  title: 'components/Input'
+}
 
 const BaseTemplate = (args) => html`<pds-input
   disabled="${args.disabled}"
@@ -15,12 +33,6 @@ const BaseTemplate = (args) => html`<pds-input
   value="${args.value}">
 </pds-input>`;
 
-const defaultParameters = {
-  docs: {
-    disable: true
-  }
-};
-
 export const Text = BaseTemplate.bind({});
 Text.args = {
   componentId: 'pds-input-text-example',
@@ -28,7 +40,6 @@ Text.args = {
   type: 'text',
   value: 'Frank Dux'
 };
-Text.parameters = { ...defaultParameters };
 
 export const Email = BaseTemplate.bind({});
 Email.args = {
@@ -37,7 +48,6 @@ Email.args = {
   type: 'email',
   value: 'user123@test.com'
 };
-Email.parameters = { ...defaultParameters };
 
 export const Required = BaseTemplate.bind({});
 Required.args = {
@@ -47,7 +57,6 @@ Required.args = {
   required: true,
   value: 'user123@test.com',
 };
-Required.parameters = { ...defaultParameters };
 
 export const Placeholder = BaseTemplate.bind({});
 Placeholder.args = {
@@ -57,7 +66,6 @@ Placeholder.args = {
   type: 'email',
   value: 'user123@test.com'
 };
-Placeholder.parameters = { ...defaultParameters };
 
 export const Disabled = BaseTemplate.bind({});
 Disabled.args = {
@@ -67,7 +75,6 @@ Disabled.args = {
   disabled: true,
   value: 'user123@test.com',
 };
-Disabled.parameters = { ...defaultParameters };
 
 export const Readonly = BaseTemplate.bind({});
 Readonly.args = {
@@ -77,7 +84,6 @@ Readonly.args = {
   type: 'email',
   value: 'user123@test.com'
 };
-Readonly.parameters = { ...defaultParameters };
 
 export const Hint = BaseTemplate.bind({});
 Hint.args = {
@@ -87,7 +93,6 @@ Hint.args = {
   type: 'email',
   value: 'user123@test.com'
 };
-Hint.parameters = { ...defaultParameters };
 
 export const Invalid = BaseTemplate.bind({});
 Invalid.args = {
@@ -97,4 +102,3 @@ Invalid.args = {
   type: 'email',
   value: 'user123@test.com'
 };
-Invalid.parameters = { ...defaultParameters };

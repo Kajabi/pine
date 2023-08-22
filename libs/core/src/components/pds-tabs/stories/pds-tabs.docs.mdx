@@ -1,19 +1,11 @@
-import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
-import { html, render } from 'lit-html';
+import { Meta, Story, Canvas, ArgTypes } from '@storybook/blocks';
+import { html, render } from 'lit';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 import * as stories from './pds-tabs.stories.js';
 
-<Meta
-  title="components/Tabs"
-  component="pds-tabs"
-  argTypes={extractArgTypes('pds-tabs')}
-  subcomponents={{
-    PdsTab: 'pds-tab',
-    PdsTabPanel: 'pds-tabpanel',
-  }}
-/>
+<Meta of={stories} />
 
 # Tabs
 
@@ -45,7 +37,7 @@ In order for all accessibility to properly compile, you must provide a few requi
 
 ## Properties
 
-<ArgsTable of="pds-tabs" />
+<ArgTypes of={stories} />
 
 ## Variant
 
@@ -54,7 +46,7 @@ In order for all accessibility to properly compile, you must provide a few requi
 Default tabs styles
 
 <Canvas>
-  <Story story={stories.Primary} />
+  <Story of={stories.Primary} />
 </Canvas>
 
 ### Availability
@@ -62,7 +54,7 @@ Default tabs styles
 Tabs with a more literal tab feeling, used for things like dates or times
 
 <Canvas>
-  <Story story={stories.Availability} />
+  <Story of={stories.Availability} />
 </Canvas>
 
 ### Filter
@@ -72,7 +64,7 @@ Pill shaped tabs for filtering data or content
 Note: Tabs are likely not a good component to add filtered data to on tab click as each tab has a unique tabpanel associated with it and all content within that panel will change upon tab click
 
 <Canvas>
-  <Story story={stories.Filter} />
+  <Story of={stories.Filter} />
 </Canvas>
 
 ## Additional Resources

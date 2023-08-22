@@ -1,4 +1,11 @@
-import { html } from 'lit-html';
+import { html } from 'lit';
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+export default {
+  argTypes: extractArgTypes('pds-chip'),
+  component: 'pds-chip',
+  title: 'components/Chip'
+}
 
 const BaseTemplate = (args) => html`
 <pds-chip
@@ -9,8 +16,6 @@ const BaseTemplate = (args) => html`
   variant="${args.variant}"
 />`;
 
-const defaultParameters = { docs: { disable: true } };
-
 export const Default = BaseTemplate.bind();
 Default.args = {
   dot: false,
@@ -19,7 +24,6 @@ Default.args = {
   sentiment: "neutral",
   variant: "text",
 }
-Default.parameters = { ...defaultParameters };
 
 export const Sentiment = BaseTemplate.bind();
 Sentiment.args = {
@@ -29,7 +33,6 @@ Sentiment.args = {
   sentiment: "success",
   variant: "text",
 }
-Sentiment.parameters = { ...defaultParameters };
 
 export const Dots = BaseTemplate.bind();
 Dots.args = {
@@ -39,7 +42,6 @@ Dots.args = {
   sentiment: "neutral",
   variant: "text",
 }
-Dots.parameters = { ...defaultParameters };
 
 export const Dropdown = BaseTemplate.bind();
 Dropdown.args = {
@@ -49,7 +51,6 @@ Dropdown.args = {
   sentiment: "neutral",
   variant: "dropdown",
 }
-Dropdown.parameters = { ...defaultParameters };
 
 export const Tag = BaseTemplate.bind();
 Tag.args = {
@@ -59,7 +60,6 @@ Tag.args = {
   sentiment: "neutral",
   variant: "tag",
 }
-Tag.parameters = { ...defaultParameters };
 
 export const Large = BaseTemplate.bind();
 Large.args = {
@@ -69,4 +69,3 @@ Large.args = {
   sentiment: "neutral",
   variant: "tag",
 }
-Large.parameters = { ...defaultParameters };

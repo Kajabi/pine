@@ -1,4 +1,24 @@
-import { html } from 'lit-html';
+import { html } from 'lit';
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+export default {
+  args: {
+    componentId: null,
+    disabled: false,
+    errorMessage: null,
+    hintMessage: null,
+    invalid: false,
+    label: null,
+    name: null,
+    placeholder: null,
+    readonly: false,
+    required: false,
+    value: null,
+  },
+  argTypes: extractArgTypes('pds-textarea'),
+  component: 'pds-textarea',
+  title: 'components/Textarea'
+}
 
 const BaseTemplate = (args) => html`<pds-textarea
   component-id="${args.componentId}"
@@ -17,12 +37,6 @@ const BaseTemplate = (args) => html`<pds-textarea
   >
 </pds-textarea>`;
 
-const defaultParameters = {
-  docs: {
-    disable: true,
-  },
-};
-
 const textareaEventExample = () => {
   document.addEventListener('pdsTextareaChange', function(e) {
     const textarea = e.target.shadowRoot.querySelector(".pds-textarea__field");
@@ -39,7 +53,6 @@ Default.args = {
   onChange: textareaEventExample(),
   name: 'Default',
 };
-Default.parameters = { ...defaultParameters };
 
 export const Rows = BaseTemplate.bind({});
 Rows.args = {
@@ -48,7 +61,6 @@ Rows.args = {
   name: 'Rows',
   rows: 4,
 };
-Rows.parameters = { ...defaultParameters };
 
 export const Required = BaseTemplate.bind({});
 Required.args = {
@@ -57,7 +69,6 @@ Required.args = {
   name: 'Required',
   required: true,
 };
-Required.parameters = { ...defaultParameters };
 
 export const Placeholder = BaseTemplate.bind({});
 Placeholder.args = {
@@ -66,7 +77,6 @@ Placeholder.args = {
   name: 'Placeholder',
   placeholder: 'Placeholder...'
 };
-Placeholder.parameters = { ...defaultParameters };
 
 export const Disabled = BaseTemplate.bind({});
 Disabled.args = {
@@ -75,7 +85,6 @@ Disabled.args = {
   label: 'Name',
   name: 'Disabled',
 };
-Disabled.parameters = { ...defaultParameters };
 
 export const Readonly = BaseTemplate.bind({});
 Readonly.args = {
@@ -85,7 +94,6 @@ Readonly.args = {
   readonly: true,
   value: 'Readonly Value'
 };
-Readonly.parameters = { ...defaultParameters };
 
 export const Hint = BaseTemplate.bind({});
 Hint.args = {
@@ -94,7 +102,6 @@ Hint.args = {
   label: 'Name',
   name: 'Hint',
 };
-Hint.parameters = { ...defaultParameters };
 
 export const Invalid = BaseTemplate.bind({});
 Invalid.args = {
@@ -105,4 +112,3 @@ Invalid.args = {
   name: 'Error',
   required: true,
 };
-Invalid.parameters = { ...defaultParameters };

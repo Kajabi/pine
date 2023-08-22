@@ -1,4 +1,18 @@
-import { html } from 'lit-html';
+import { html } from 'lit';
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+export default {
+  argTypes: extractArgTypes('pds-checkbox'),
+  args: {
+    checked: false,
+    disabled: false,
+    indeterminate: false,
+    invalid: false,
+    required: false,
+  },
+  component: 'pds-checkbox',
+  title: 'components/Checkbox',
+}
 
 const BaseTemplate = (args) =>
   html` <pds-checkbox
@@ -14,14 +28,11 @@ const BaseTemplate = (args) =>
     value=${args.value}
   />`;
 
-const defaultParameters = { docs: { disable: true } };
-
 export const Default = BaseTemplate.bind();
 Default.args = {
   componentId: 'default',
   label: 'Label text',
 };
-Default.parameters = { ...defaultParameters };
 
 export const Checked = BaseTemplate.bind();
 Checked.args = {
@@ -29,7 +40,6 @@ Checked.args = {
   label: 'Label text',
   checked: true,
 };
-Checked.parameters = { ...defaultParameters };
 
 export const Disabled = BaseTemplate.bind();
 Disabled.args = {
@@ -37,7 +47,6 @@ Disabled.args = {
   label: 'Label text',
   disabled: true,
 };
-Disabled.parameters = { ...defaultParameters };
 
 export const Indeterminate = BaseTemplate.bind();
 Indeterminate.args = {
@@ -46,7 +55,6 @@ Indeterminate.args = {
   indeterminate: true,
   checked: true,
 };
-Indeterminate.parameters = { ...defaultParameters };
 
 export const withMessage = BaseTemplate.bind();
 withMessage.args = {
@@ -54,7 +62,6 @@ withMessage.args = {
   label: 'Label text',
   helperMessage: "This is short message text",
 };
-withMessage.parameters = { ...defaultParameters };
 
 export const Invalid = BaseTemplate.bind();
 Invalid.args = {
@@ -62,4 +69,3 @@ Invalid.args = {
   label: 'Label text',
   invalid: true,
 };
-Invalid.parameters = { ...defaultParameters };

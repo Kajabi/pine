@@ -1,18 +1,8 @@
-import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
-
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
 
 import * as stories from './pds-switch.stories.js';
 
-<Meta
-  title="components/Switch"
-  component="pds-switch"
-  argTypes={extractArgTypes('pds-switch')}
-  args={{
-    disabled: false,
-    required: false,
-  }}
-/>
+<Meta of={stories} />
 
 # Switch
 
@@ -39,7 +29,7 @@ When only one Switch is needed for users to turn on/off a value, use a `checkbox
 
 ## Properties
 
-<ArgsTable of="pds-switch" />
+<ArgTypes of={stories} />
 
 ## Variants
 
@@ -47,15 +37,22 @@ When only one Switch is needed for users to turn on/off a value, use a `checkbox
 
 The default switch style uses a checkbox input.
 
-<Story story={stories.Default} />
-
-<Canvas>
-  <pds-switch
-    component-id="pds-switch-default-example"
-    label="Default Switch"
-    name="pds-switch-default"
-    type="checkbox"
-  />
+<Canvas mdxSource={`
+<pds-switch
+  component-id="pds-switch-default-example"
+  label="Default Switch"
+  name="pds-switch-default"
+  type="checkbox"
+/>
+`}>
+  <div>
+    <pds-switch
+      component-id="pds-switch-default-example"
+      label="Default Switch"
+      name="pds-switch-default"
+      type="checkbox"
+    />
+  </div>
 </Canvas>
 
 
@@ -63,64 +60,98 @@ The default switch style uses a checkbox input.
 
 Renders a switch using a radio button input. Just like a [standard radio button](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio), toggling a single value on/off requires (at minimum) a pair of inputs to represent each state.
 
-<Story story={stories.Radio} />
-
-<Canvas>
-  <pds-switch
-    component-id="pds-switch-radio-example"
-    label="Radio Switch"
-    name="pds-switch-radio"
-    type="radio"
-    value="pds-switch-radio"
-  />
+<Canvas mdxSource={`
+<pds-switch
+  component-id="pds-switch-radio-example"
+  label="Radio Switch"
+  name="pds-switch-radio"
+  type="radio"
+  value="pds-switch-radio"
+/>
+`}>
+  <>
+    <pds-switch
+      component-id="pds-switch-radio-example"
+      label="Radio Switch"
+      name="pds-switch-radio"
+      type="radio"
+      value="pds-switch-radio"
+    />
+  </>
 </Canvas>
 
 ### Disabled
 
 Prevents user interaction on the input.
 
-<Story story={stories.Disabled} />
-
-<Canvas>
-  <pds-switch
-    component-id="pds-switch-disabled-example"
-    disabled="true"
-    label="Can't touch this"
-    name="pds-switch-disabled"
-    type="checkbox"
-  />
+<Canvas mdxSource={`
+<pds-switch
+  component-id="pds-switch-disabled-example"
+  disabled="true"
+  label="Can't touch this"
+  name="pds-switch-disabled"
+  type="checkbox"
+/>
+`}>
+  <>
+    <pds-switch
+      component-id="pds-switch-disabled-example"
+      disabled="true"
+      label="Can't touch this"
+      name="pds-switch-disabled"
+      type="checkbox"
+    />
+  </>
 </Canvas>
 
 ### Helper message
 
 Displays additional descriptive text underneath the main label.
 
-<Story story={stories.HelperMessage} />
-
-<Canvas>
-  <pds-switch
-    component-id="pds-switch-helper-example"
-    helper-message="Save my login details for next time."
-    label="Remember me"
-    name="pds-switch-helper"
-    type="checkbox"
-  />
+<Canvas mdxSource={`
+<pds-switch
+  component-id="pds-switch-helper-example"
+  helper-message="Save my login details for next time."
+  label="Remember me"
+  name="pds-switch-helper"
+  type="checkbox"
+/>
+`}>
+  <>
+    <pds-switch
+      component-id="pds-switch-helper-example"
+      helper-message="Save my login details for next time."
+      label="Remember me"
+      name="pds-switch-helper"
+      type="checkbox"
+    />
+  </>
 </Canvas>
 
 ### Invalid state
 
 An optional error message can be displayed for additional instructions, displayed independently from the helper message.
 
-<Story story={stories.Invalid} />
-
-<Canvas>
-  <pds-switch
-    component-id="pds-switch-invalid-example"
-    error-message="Terms and conditions must be accepted to continue"
-    invalid="true"
-    label="I agree to the terms and conditions"
-    name="pds-switch-invalid"
-    required="true"
-    type="checkbox"
-  />
+<Canvas mdxSource={`
+<pds-switch
+  component-id="pds-switch-invalid-example"
+  error-message="Terms and conditions must be accepted to continue"
+  invalid="true"
+  label="I agree to the terms and conditions"
+  name="pds-switch-invalid"
+  required="true"
+  type="checkbox"
+/>
+`}>
+  <>
+    <pds-switch
+      component-id="pds-switch-invalid-example"
+      error-message="Terms and conditions must be accepted to continue"
+      invalid="true"
+      label="I agree to the terms and conditions"
+      name="pds-switch-invalid"
+      required="true"
+      type="checkbox"
+    />
+  </>
 </Canvas>

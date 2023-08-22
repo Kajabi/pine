@@ -1,27 +1,8 @@
-import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
-
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
 
 import * as stories from './pds-textarea.stories.js';
 
-<Meta
-  title="components/Textarea"
-  component="pds-textarea"
-  argTypes={extractArgTypes('pds-textarea')}
-  args={{
-    componentId: null,
-    disabled: false,
-    errorMessage: null,
-    hintMessage: null,
-    invalid: false,
-    label: null,
-    name: null,
-    placeholder: null,
-    readonly: false,
-    required: false,
-    value: null,
-  }}
-/>
+<Meta of={stories} />
 
 # Textarea
 A textarea field coupled with a label, hint message, and error message which allows for user input and feedback
@@ -41,23 +22,25 @@ A textarea field coupled with a label, hint message, and error message which all
 - Please provide clear and descriptive error, hint, and placeholder messages
 
 ## Properties
-<ArgsTable of="pds-textarea" />
+<ArgTypes of={stories} />
 
 ## Variants
 
 ### Default
 Basic textarea example
-<Story story={stories.Default} />
 
-<Canvas>
+<Canvas mdxSource={`
+<pds-textarea name="Default" label="Name" component-id="textarea-default"></pds-textarea>
+`}>
   <pds-textarea name="Default" label="Name" component-id="textarea-default"></pds-textarea>
 </Canvas>
 
 ### Disabled
 Disabled states can be set by the `disabled` property
-<Story story={stories.Disabled} />
 
-<Canvas>
+<Canvas mdxSource={`
+<pds-textarea name="Disabled" label="Name" disabled="true" component-id="textarea-disabled"></pds-textarea>
+`}>
   <pds-textarea name="Disabled" label="Name" disabled="true" component-id="textarea-disabled"></pds-textarea>
 </Canvas>
 
@@ -65,9 +48,10 @@ Disabled states can be set by the `disabled` property
 Error messages are passed using the `error-message` property, textareas will only calculate their validity when on their `required` property is set to true
 
 You can also manually pass in an invalid state by setting the `invalid` property to true but this property will be update whenever the `onChange` event is triggered
-<Story story={stories.Invalid} />
 
-<Canvas>
+<Canvas mdxSource={`
+<pds-textarea name="Invalid" label="Name" error-message="Error" invalid="true" required="true" component-id="textarea-invalid" ></pds-textarea>
+`}>
   <pds-textarea name="Invalid" label="Name" error-message="Error" invalid="true" required="true" component-id="textarea-invalid" ></pds-textarea>
 </Canvas>
 
@@ -75,9 +59,10 @@ You can also manually pass in an invalid state by setting the `invalid` property
 Hints are used to provide context about what is expected from the users
 
 Do not use hint messages to provide examples to users, please use the `placeholder` property instead
-<Story story={stories.Hint} />
 
-<Canvas>
+<Canvas mdxSource={`
+<pds-textarea name="Hint" label="Name" hint-message="Hint" component-id="textarea-hint-message"></pds-textarea>
+`}>
   <pds-textarea name="Hint" label="Name" hint-message="Hint" component-id="textarea-hint-message"></pds-textarea>
 </Canvas>
 
@@ -85,32 +70,36 @@ Do not use hint messages to provide examples to users, please use the `placehold
 Placeholders should be examples of content that can be filled into the textarea
 
 Do not use placeholders to provide hints to users, please use the `hint-message` property instead
-<Story story={stories.Placeholder} />
 
-<Canvas>
+<Canvas mdxSource={`
+<pds-textarea name="Placeholder" label="Name" placeholder="Placeholder..." component-id="textarea-placeholder"></pds-textarea>
+`}>
   <pds-textarea name="Placeholder" label="Name" placeholder="Placeholder..." component-id="textarea-placeholder"></pds-textarea>
 </Canvas>
 
 ### Readonly
 Readonly states can be used to display static content while preventing the user from editing
-<Story story={stories.Readonly} />
 
-<Canvas>
+<Canvas mdxSource={`
+<pds-textarea name="Readonly" label="Name" readonly="true" value="Readonly Value" component-id="textarea-readonly"></pds-textarea>
+`}>
   <pds-textarea name="Readonly" label="Name" readonly="true" value="Readonly Value" component-id="textarea-readonly"></pds-textarea>
 </Canvas>
 
 ### Required
 It's recommended you also pass `error-message` on any required fields
-<Story story={stories.Required} />
 
-<Canvas>
+<Canvas mdxSource={`
+<pds-textarea name="Required" label="Name" required="true" component-id="textarea-required"></pds-textarea>
+`}>
   <pds-textarea name="Required" label="Name" required="true" component-id="textarea-required"></pds-textarea>
 </Canvas>
 
 ### Rows
 The rows property is used to pass a number of expected rows visible within the textarea
-<Story story={stories.Rows} />
 
-<Canvas>
+<Canvas mdxSource={`
+<pds-textarea name="Rows" label="Name" rows="4" component-id="textarea-rows"></pds-textarea>
+`}>
   <pds-textarea name="Rows" label="Name" rows="4" component-id="textarea-rows"></pds-textarea>
 </Canvas>

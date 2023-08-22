@@ -1,4 +1,11 @@
-import { html, render } from 'lit-html';
+import { html, render } from 'lit';
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+export default {
+  argTypes: extractArgTypes('pds-tabs'),
+  component: 'pds-tabs',
+  title: 'components/Tabs',
+}
 
 const BaseTemplate = (args) => html`
 <pds-tabs active-tab-name=${args.activeTabName} variant=${args.variant} component-id=${args.componentId} tablist-label=${args.tablistLabel}>

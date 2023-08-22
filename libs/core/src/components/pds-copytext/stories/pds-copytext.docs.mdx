@@ -1,11 +1,9 @@
-import { Meta, Story, Canvas, Source, ArgsTable } from '@storybook/addon-docs';
-import { html, render } from 'lit-html';
-
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import { html, render } from 'lit';
 
 import * as stories from './pds-copytext.stories.js';
 
-<Meta title="components/CopyText" component="pds-copytext" argTypes={extractArgTypes('pds-copytext')} />
+<Meta  of={stories} />
 
 # Copy Text
 
@@ -13,13 +11,13 @@ A component to use in places where "copy" text is provided to be copied elsewher
 
 ## Properties
 
-<ArgsTable of="pds-copytext" />
+<ArgTypes of={stories} />
 
 ### Default
 
-<Story story={stories.Default} />
-
-<Canvas>
+<Canvas mdxSource={`
+<pds-copytext value="Copy this text"></pds-copytext>
+`}>
   <pds-copytext value="Copy this text"></pds-copytext>
 </Canvas>
 
@@ -27,9 +25,9 @@ A component to use in places where "copy" text is provided to be copied elsewher
 
 When `border` is set to `false`, the component will not have a border.
 
-<Story story={stories.Borderless} />
-
-<Canvas>
+<Canvas mdxSource={`
+<pds-copytext value="Copy that text" border="false"></pds-copytext>
+`}>
   <pds-copytext value="Copy that text" border="false"></pds-copytext>
 </Canvas>
 
@@ -37,9 +35,9 @@ When `border` is set to `false`, the component will not have a border.
 
 When `full-width` is set to `true`, the component will take up the full width of its container.
 
-<Story story={stories.FullWidth} />
-
-<Canvas>
+<Canvas mdxSource={`
+<pds-copytext value="Copy all of this text" full-width="true"></pds-copytext>
+`}>
   <pds-copytext value="Copy all of this text" full-width="true"></pds-copytext>
 </Canvas>
 
@@ -47,9 +45,9 @@ When `full-width` is set to `true`, the component will take up the full width of
 
 When `truncate` is set to `true`, the value text will be truncated and an ellipsis added.
 
-<Story story={stories.Truncate} />
-
-<Canvas>
+<Canvas mdxSource={`
+<pds-copytext value="Copy all of this really long text that should be truncated in the UI, but will still be copied to the clipboard." truncate="true"></pds-copytext>
+`}>
   <div style={{ width: '350px' }}>
     <pds-copytext value="Copy all of this really long text that should be truncated in the UI, but will still be copied to the clipboard." truncate="true"></pds-copytext>
   </div>
