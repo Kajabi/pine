@@ -14,8 +14,10 @@ docsJson.components = combinedDocsJson
 
 if (docsJson) { setStencilDocJson(docsJson) }
 
-export const parameters = {
-  actions: { argTypesRegex: "^on[A-Z].*" },
+const preview = {
+  parameters: {
+    actions: { argTypesRegex: "^on[A-Z].*" },
+  },
   controls: {
     matchers: {
       color: /(background|color)$/i,
@@ -27,3 +29,5 @@ export const parameters = {
     extractComponentDescription,
   }
 }
+
+export default preview;
