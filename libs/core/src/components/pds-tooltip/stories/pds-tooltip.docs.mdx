@@ -1,15 +1,9 @@
-import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
-import { html, render } from 'lit-html';
-
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import { html, render } from 'lit';
 
 import * as stories from './pds-tooltip.stories';
 
-<Meta
-  title="components/Tooltip"
-  component="pds-tooltip"
-  argTypes={extractArgTypes('pds-tooltip')}
-/>
+<Meta of={stories} />
 
 # Tooltip
 Tooltips display helpful popup text when users hover over or keyboard focus on an element.
@@ -26,15 +20,20 @@ That information should remain visible.
 
 ## Properties
 
-<ArgsTable of="pds-tooltip" />
+<ArgTypes of={stories} />
 
 ## Variants
 ### Trigger
 Whether your trigger is text or an HTML element, it will be placed in the default slot between the opening and closing tags.
 
-<Story story={stories.Default} />
-
-<Canvas>
+<Canvas mdxSource={`
+<pds-tooltip content="this is tooltip content" has-arrow="true" placement="bottom-start">
+  text
+</pds-tooltip>
+<pds-tooltip content="this is tooltip content" has-arrow="true" placement="right-start">
+  <pds-button variant="secondary">Button</pds-button>
+</pds-tooltip>
+`}>
   <pds-tooltip content="this is tooltip content" has-arrow="true" placement="bottom-start">
     text
   </pds-tooltip>
@@ -48,7 +47,9 @@ Whether your trigger is text or an HTML element, it will be placed in the defaul
 Text-based content is generated using the `content` prop. Use this option only when the
 tooltip content is expected to be a string.
 
-<Canvas>
+<Canvas mdxSource={`
+<pds-tooltip content="this is tooltip content" has-arrow="true" placement="right">text</pds-tooltip>
+`}>
   <pds-tooltip content="this is tooltip content" has-arrow="true" placement="right">text</pds-tooltip>
 </Canvas>
 
@@ -56,9 +57,15 @@ tooltip content is expected to be a string.
 Tooltip content may contain HTML elements. In these cases,
 enable the `htmlContent` property and provide your element in the `content` slot.
 
-<Story story={stories.HTMLContent} />
-
-<Canvas>
+<Canvas mdxSource={`
+<pds-tooltip has-arrow="true" placement="right">
+  text
+  <div slot="content">
+    <p>this is s a sentence in a tooltip.</p>
+    <p>this is s a sentence in a tooltip.</p>
+  </div>
+</pds-tooltip>
+`}>
   <pds-tooltip has-arrow="true" placement="right">
     text
     <div slot="content">
@@ -71,14 +78,13 @@ enable the `htmlContent` property and provide your element in the `content` slot
 ### Positioning
 Using the placement prop you can adjust where your tooltip will be displayed.
 
-<Story story={stories.Positioning} />
 
 ### Arrow
 By default the arrow is visible but it can be hidden by disabling it when `has-arrow` is `false`.
 
-<Story story={stories.NoArrow} />
-
-<Canvas>
+<Canvas mdxSource={`
+<pds-tooltip content="this is tooltip content" has-arrow="false" placement="right">text</pds-tooltip>
+`}>
   <pds-tooltip content="this is tooltip content" has-arrow="false" placement="right">text</pds-tooltip>
 </Canvas>
 

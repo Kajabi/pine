@@ -1,4 +1,11 @@
-import { html } from 'lit-html';
+import { html } from 'lit';
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+export default {
+  argTypes: extractArgTypes('pds-progress'),
+  component: 'pds-progress',
+  title: 'components/Progress'
+}
 
 const BaseTemplate = (args) =>
   html`<pds-progress
@@ -10,7 +17,6 @@ const BaseTemplate = (args) =>
     show-percent=${args.showPercent}
   ></pds-progress>`;
 
-const defaultParameters = { docs: { disable: true } };
 
 export const Default = BaseTemplate.bind();
 Default.args = {
@@ -20,7 +26,6 @@ Default.args = {
   percent: 0,
   showPercent: false,
 };
-Default.parameters = { ...defaultParameters };
 
 export const Percent = BaseTemplate.bind();
 Percent.args = {
@@ -30,7 +35,6 @@ Percent.args = {
   percent: 50,
   showPercent: false,
 };
-Percent.parameters = { ...defaultParameters };
 
 export const showPercent = BaseTemplate.bind();
 showPercent.args = {
@@ -40,7 +44,6 @@ showPercent.args = {
   percent: 50,
   showPercent: true,
 };
-showPercent.parameters = { ...defaultParameters };
 
 export const Animated = BaseTemplate.bind();
 Animated.args = {
@@ -50,7 +53,6 @@ Animated.args = {
   percent: 75,
   showPercent: false,
 };
-Animated.parameters = { ...defaultParameters };
 
 export const fillColor = BaseTemplate.bind();
 fillColor.args = {
@@ -61,4 +63,3 @@ fillColor.args = {
   showPercent: false,
   fillColor: '#86D5BC',
 };
-fillColor.parameters = { ...defaultParameters };

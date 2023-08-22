@@ -1,10 +1,8 @@
-import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
-
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
 
 import * as stories from './pds-image.stories.js';
 
-<Meta title="components/Image" component="pds-image" argTypes={extractArgTypes('pds-image')} />
+<Meta of={stories} />
 
 # Image
 
@@ -22,15 +20,15 @@ For more responsive images, be sure to take advantage of the `srcset` and `sizes
 
 ## Properties
 
-<ArgsTable of="pds-image" />
+<ArgTypes of={stories} />
 
 ### Default
 
 A default image with a `src` and `alt`.
 
-<Story story={stories.Default} />
-
-<Canvas>
+<Canvas mdxSource={`
+<pds-image src="//source.unsplash.com/random" alt="Random Unsplash"></pds-image>
+`}>
   <pds-image src="//source.unsplash.com/random" alt="Random Unsplash"></pds-image>
 </Canvas>
 
@@ -38,9 +36,14 @@ A default image with a `src` and `alt`.
 
 An image with `srcset` and `sizes` props set. Refresh the browser at `400px` and below and the browser will select the smaller image to render.
 
-<Story story={stories.SizesAndSrcset} />
-
-<Canvas>
+<Canvas mdxSource={`
+<pds-image
+  alt="Random Unsplash"
+  sizes="(max-width: 450px) 150px, 600px"
+  src="//source.unsplash.com/600x200"
+  srcset="//source.unsplash.com/150x150 400w, //source.unsplash.com/600x200"
+></pds-image>
+`}>
   <pds-image
     alt="Random Unsplash"
     sizes="(max-width: 450px) 150px, 600px"

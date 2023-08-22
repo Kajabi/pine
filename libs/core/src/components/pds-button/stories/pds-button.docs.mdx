@@ -1,10 +1,8 @@
-import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
-
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
 
 import * as stories from './pds-button.stories.js';
 
-<Meta title="components/Button" component="pds-button" argTypes={extractArgTypes('pds-button')} />
+<Meta of={stories} />
 
 # Button
 
@@ -33,7 +31,7 @@ When following our usage guidelines, pds-button should be accessible right out o
 
 ## Properties
 
-<ArgsTable of="pds-button" />
+<ArgTypes of={stories} />
 
 ## Variant
 
@@ -41,9 +39,11 @@ When following our usage guidelines, pds-button should be accessible right out o
 
 Default button styles, used with affirmative actions such as submitting, continuing, and saving
 
-<Story story={stories.Primary} />
-
-<Canvas>
+<Canvas mdxSource={`
+<pds-button>Default</pds-button>
+<pds-button disabled="true">Disabled</pds-button>
+<pds-button icon="trashIcon">Icon</pds-button>
+`}>
   <pds-button>Default</pds-button>
   <pds-button disabled="true">Disabled</pds-button>
   <pds-button icon="trashIcon">Icon</pds-button>
@@ -53,9 +53,11 @@ Default button styles, used with affirmative actions such as submitting, continu
 
 Secondary button styles, used with neutral actions such as going back, saving as draft, and cancelling
 
-<Story story={stories.Secondary} />
-
-<Canvas>
+<Canvas mdxSource={`
+<pds-button variant="secondary">Secondary</pds-button>
+<pds-button variant="secondary" disabled="true">Disabled</pds-button>
+<pds-button variant="secondary" icon="trashIcon">Icon</pds-button>
+`}>
   <pds-button variant="secondary">Secondary</pds-button>
   <pds-button variant="secondary" disabled="true">Disabled</pds-button>
   <pds-button variant="secondary" icon="trashIcon">Icon</pds-button>
@@ -65,9 +67,11 @@ Secondary button styles, used with neutral actions such as going back, saving as
 
 Accent button styles, used for tertiary actions or when more contrast is needed
 
-<Story story={stories.Accent} />
-
-<Canvas>
+<Canvas mdxSource={`
+<pds-button variant="accent">Default</pds-button>
+<pds-button variant="accent" disabled="true">Disabled</pds-button>
+<pds-button variant="accent" icon="trashIcon">Icon</pds-button>
+`}>
   <pds-button variant="accent">Default</pds-button>
   <pds-button variant="accent" disabled="true">Disabled</pds-button>
   <pds-button variant="accent" icon="trashIcon">Icon</pds-button>
@@ -77,9 +81,11 @@ Accent button styles, used for tertiary actions or when more contrast is needed
 
 Disclosure button styles, used to provide multiple options or more information within a button
 
-<Story story={stories.Disclosure} />
-
-<Canvas>
+<Canvas mdxSource={`
+<pds-button variant="disclosure">Default</pds-button>
+<pds-button variant="disclosure" disabled="true">Disabled</pds-button>
+<pds-button variant="disclosure" icon="trashIcon">Icon</pds-button>
+`}>
   <pds-button variant="disclosure">Default</pds-button>
   <pds-button variant="disclosure" disabled="true">Disabled</pds-button>
   <pds-button variant="disclosure" icon="trashIcon">Icon</pds-button>
@@ -89,9 +95,11 @@ Disclosure button styles, used to provide multiple options or more information w
 
 Destructive button styles, used with actions that delete information such as deleting an item or removing a contact
 
-<Story story={stories.Destructive} />
-
-<Canvas>
+<Canvas mdxSource={`
+<pds-button variant="destructive">Default</pds-button>
+<pds-button variant="destructive" disabled="true">Disabled</pds-button>
+<pds-button variant="destructive" icon="trashIcon">Icon</pds-button>
+`}>
   <pds-button variant="destructive">Default</pds-button>
   <pds-button variant="destructive" disabled="true">Disabled</pds-button>
   <pds-button variant="destructive" icon="trashIcon">Icon</pds-button>

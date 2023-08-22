@@ -1,21 +1,9 @@
-import { Meta, Story, Canvas, Source, ArgsTable } from '@storybook/addon-docs';
-import { html, render } from 'lit-html';
-
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import { html, render } from 'lit';
 
 import * as stories from './pds-checkbox.stories.js';
 
-<Meta
-  title="components/Checkbox"
-  component="pds-checkbox"
-  argTypes={extractArgTypes('pds-checkbox')}
-  args={{
-    checked: false,
-    disabled: false,
-    indeterminate: false,
-    invalid: false,
-    required: false,
-}} />
+<Meta of={stories} />
 
 # Checkbox
 
@@ -23,23 +11,23 @@ Checkboxes provide users with selectable options like toggling a single setting 
 
 ## Properties
 
-<ArgsTable of="pds-checkbox" />
+<ArgTypes of={stories} />
 
 ### Default
 
-<Story story={stories.Default} />
-
-<Canvas>
-  <pds-checkbox component-id="default" label="Label" />
+<Canvas mdxSource={`
+<pds-checkbox component-id="default" label="Label" />
+`}>
+<pds-checkbox component-id="default" label="Label" />
 </Canvas>
 
 ### Checked
 
 Checkboxes appear as checked when activated.
 
-<Story story={stories.Checked} />
-
-<Canvas>
+<Canvas mdxSource={`
+<pds-checkbox component-id="checked" label="Label" checked />
+`}>
   <pds-checkbox component-id="checked" label="Label" checked />
 </Canvas>
 
@@ -49,9 +37,9 @@ Component `indeterminate` prop is for visual styling only.
 
 Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes)
 
-<Story story={stories.Indeterminate} />
-
-<Canvas>
+<Canvas mdxSource={`
+<pds-checkbox component-id="indeterminate" label="Label" indeterminate checked />
+`}>
   <pds-checkbox component-id="indeterminate" label="Label" indeterminate checked />
 </Canvas>
 
@@ -59,9 +47,9 @@ Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs]
 
 Disabled visually indicates and functionally prevents interaction with the checkbox.
 
-<Story story={stories.Disabled} />
-
-<Canvas>
+<Canvas mdxSource={`
+<pds-checkbox component-id="disabled" label="Label" disabled />
+`}>
   <pds-checkbox component-id="disabled" label="Label" disabled />
 </Canvas>
 
@@ -69,9 +57,9 @@ Disabled visually indicates and functionally prevents interaction with the check
 
 Message is a string of text that displays below the label text.
 
-<Story story={stories.withMessage} />
-
-<Canvas>
+<Canvas mdxSource={`
+<pds-checkbox component-id="message1" label="Label" helper-message="This is short message text." />
+`}>
   <pds-checkbox component-id="message1" label="Label" helper-message="This is short message text." />
 </Canvas>
 
@@ -79,9 +67,9 @@ Message is a string of text that displays below the label text.
 
 Invalid displays the checkbox in invalid state such as when required but is not checked.
 
-<Story story={stories.Invalid} />
-
-<Canvas>
+<Canvas mdxSource={`
+<pds-checkbox component-id="invalid" label="Label" invalid />
+`}>
   <pds-checkbox component-id="invalid" label="Label" invalid />
 </Canvas>
 

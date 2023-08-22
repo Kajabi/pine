@@ -1,7 +1,13 @@
-import { html } from 'lit-html';
+import { html } from 'lit';
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+export default {
+  argTypes: extractArgTypes('pds-button'),
+  component: 'pds-button',
+  title: 'components/Button'
+}
 
 const BaseTemplate = (args) => html`<pds-button  disabled=${args.disabled} icon=${args.icon} name=${args.name} type=${args.type} value=${args.value} variant=${args.variant}>${args.slot}</pds-button> `;
-const defaultParameters = { docs: { disable: true } };
 
 export const Accent = BaseTemplate.bind();
 Accent.args = {
@@ -10,7 +16,6 @@ Accent.args = {
   type: 'button',
   variant: 'accent',
 };
-Accent.parameters = { ...defaultParameters };
 
 export const Destructive = BaseTemplate.bind({});
 Destructive.args = {
@@ -19,7 +24,6 @@ Destructive.args = {
   type: 'button',
   variant: 'destructive',
 }
-Destructive.parameters = { ...defaultParameters };
 
 export const Disclosure = BaseTemplate.bind({});
 Disclosure.args = {
@@ -28,7 +32,6 @@ Disclosure.args = {
   type: 'button',
   variant: 'disclosure',
 }
-Disclosure.parameters = { ...defaultParameters };
 
 export const Primary = BaseTemplate.bind({});
 Primary.args = {
@@ -36,7 +39,6 @@ Primary.args = {
   slot: 'Default',
   type: 'button',
 }
-Primary.parameters = { ...defaultParameters };
 
 export const Secondary = BaseTemplate.bind({});
 Secondary.args = {
@@ -45,4 +47,3 @@ Secondary.args = {
   variant: 'secondary',
   type: 'button',
 }
-Secondary.parameters = { ...defaultParameters };

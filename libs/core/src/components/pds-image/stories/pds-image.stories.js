@@ -1,4 +1,11 @@
-import { html } from 'lit-html';
+import { html } from 'lit';
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+export default {
+  argTypes: extractArgTypes('pds-image'),
+  component: 'pds-image',
+  title: 'components/Image'
+}
 
 const BaseTemplate = (args) => html` <pds-image
   alt="${args.alt}"
@@ -12,14 +19,11 @@ const BaseTemplate = (args) => html` <pds-image
 
 const SizesAndSrcsetTemplate = (args) => html`<pds-image alt="${args.alt}" sizes="${args.sizes}" src="${args.src}" srcset="${args.srcset}" />`;
 
-const defaultParameters = { docs: { disable: true } };
-
 export const Default = BaseTemplate.bind();
 Default.args = {
   alt: 'Random Unsplash',
   src: '//source.unsplash.com/320x180'
 }
-Default.parameters = { ...defaultParameters };
 
 export const SizesAndSrcset = SizesAndSrcsetTemplate.bind();
 SizesAndSrcset.args = {
@@ -28,4 +32,3 @@ SizesAndSrcset.args = {
   src: '//source.unsplash.com/600x200',
   srcset: '//source.unsplash.com/150x150 400w, //source.unsplash.com/600x200',
 }
-SizesAndSrcset.parameters = { ...defaultParameters };

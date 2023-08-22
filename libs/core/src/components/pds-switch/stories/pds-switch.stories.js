@@ -1,4 +1,15 @@
-import { html } from 'lit-html';
+import { html } from 'lit';
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+export default {
+  args: {
+    disabled: false,
+    required: false,
+  },
+  argTypes: extractArgTypes('pds-switch'),
+  component: 'pds-switch',
+  title: 'components/Switch'
+}
 
 const BaseTemplate = (args) => html`
   <pds-switch
@@ -15,8 +26,6 @@ const BaseTemplate = (args) => html`
     type=${args.type}
   />
 `;
-
-const defaultParameters = { docs: { disable: true } };
 
 const switchEventExample = () => {
   document.addEventListener('sageSwitchChange', function(e) {
@@ -41,7 +50,6 @@ Default.args = {
   required: false,
   type: 'checkbox',
 };
-Default.parameters = { ...defaultParameters };
 
 export const Radio = BaseTemplate.bind({});
 
@@ -55,7 +63,6 @@ Radio.args = {
   required: false,
   type: 'radio',
 };
-Radio.parameters = { ...defaultParameters };
 
 export const Disabled = BaseTemplate.bind({});
 
@@ -69,7 +76,6 @@ Disabled.args = {
   required: false,
   type: 'checkbox',
 };
-Disabled.parameters = { ...defaultParameters };
 
 export const HelperMessage = BaseTemplate.bind({});
 
@@ -84,7 +90,6 @@ HelperMessage.args = {
   required: false,
   type: 'checkbox',
 };
-HelperMessage.parameters = { ...defaultParameters };
 
 export const Invalid = BaseTemplate.bind({});
 
@@ -99,4 +104,3 @@ Invalid.args = {
   required: true,
   type: 'checkbox',
 };
-Invalid.parameters = { ...defaultParameters };

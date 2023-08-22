@@ -1,5 +1,21 @@
-import { html } from 'lit-html';
+import { html } from 'lit';
 import imgFile from '../assets/demi_wilkinson.jpg';
+
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+export default {
+  args: {
+    alt: null,
+    badge: false,
+    dropdown: false,
+    image: null,
+    size: null,
+    variant: 'customer',
+  },
+  argTypes: extractArgTypes('pds-avatar'),
+  component: 'pds-avatar',
+  title: 'components/Avatar',
+}
 
 const BaseTemplate = (args) => html`<pds-avatar
 	alt="${args.alt}"
@@ -11,40 +27,33 @@ const BaseTemplate = (args) => html`<pds-avatar
 >
 </pds-avatar>`;
 
-const defaultParameters = { docs: { disable: true } };
-
 export const Default = BaseTemplate.bind();
 Default.args = {
 	size: 'sm'
 }
-Default.parameters = { ...defaultParameters };
 
 export const Admin = BaseTemplate.bind();
 Admin.args = {
 	size: 'lg',
 	variant: 'admin',
 }
-Admin.parameters = { ...defaultParameters };
 
 export const Badge = BaseTemplate.bind();
 Badge.args = {
 	badge: true,
 	size: 'md'
 }
-Badge.parameters = { ...defaultParameters };
 
 export const CustomSize = BaseTemplate.bind();
 CustomSize.args = {
 	size: '128px'
 }
-CustomSize.parameters = { ...defaultParameters };
 
 export const DropdownTrigger = BaseTemplate.bind();
 DropdownTrigger.args = {
 	dropdown: true,
 	size: 'lg'
 }
-DropdownTrigger.parameters = { ...defaultParameters };
 
 export const Image = BaseTemplate.bind();
 Image.args = {
@@ -52,4 +61,3 @@ Image.args = {
 	image: imgFile,
 	size: 'xl'
 }
-Image.parameters = { ...defaultParameters };

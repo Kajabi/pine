@@ -1,4 +1,17 @@
-import { html } from 'lit-html';
+import { html } from 'lit';
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
+export default {
+  args: {
+    checked: false,
+    disabled: false,
+    invalid: false,
+    required: false,
+  },
+  argTypes: extractArgTypes('pds-radio'),
+  component: 'pds-radio',
+  title: 'components/Radio'
+}
 
 const BaseTemplate = (args) =>
   html` <pds-radio
@@ -14,14 +27,11 @@ const BaseTemplate = (args) =>
     invalid=${args.invalid}
   />`;
 
-const defaultParameters = { docs: { disable: true } };
-
 export const Default = BaseTemplate.bind();
 Default.args = {
   componentId: 'default',
   label: 'Label text',
 };
-Default.parameters = { ...defaultParameters };
 
 export const Checked = BaseTemplate.bind();
 Checked.args = {
@@ -29,7 +39,6 @@ Checked.args = {
   label: 'Label text',
   checked: true,
 };
-Checked.parameters = { ...defaultParameters };
 
 export const Disabled = BaseTemplate.bind();
 Disabled.args = {
@@ -37,7 +46,6 @@ Disabled.args = {
   label: 'Label text',
   disabled: true,
 };
-Disabled.parameters = { ...defaultParameters };
 
 export const withMessage = BaseTemplate.bind();
 withMessage.args = {
@@ -45,7 +53,6 @@ withMessage.args = {
   label: 'Label text',
   helperMessage: 'This is short message text',
 };
-withMessage.parameters = { ...defaultParameters };
 
 export const Invalid = BaseTemplate.bind();
 Invalid.args = {
@@ -53,4 +60,3 @@ Invalid.args = {
   label: 'Label text',
   invalid: true,
 };
-Invalid.parameters = { ...defaultParameters };
