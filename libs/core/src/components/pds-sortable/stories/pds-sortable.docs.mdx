@@ -110,27 +110,27 @@ By default the full `row` is active for dragging/sorting. However, `handle-type`
 
 ### Actions
 
-The `actions` property in the `pds-sortable-item` component determines whether the `sortable-actions` slot should be enabled.
+The `actions` property in the `pds-sortable-item` component determines whether the `sortable-item-actions` slot should be enabled.
 
-The `sortable-actions` slot is provided to place content within the `pds-sortable-item__actions` element as children, but this slot is only rendered if the `actions` property is set to `true`.
+The `sortable-item-actions` slot is provided to place content within the `pds-sortable-item__actions` element as children, but this slot is only rendered if the `actions` property is set to `true`.
 
 <Canvas mdxSource={`
 <pds-sortable component-id="actions">
   <pds-sortable-item actions>
     <div>Item 1</div>
-    <div slot="sortable-actions">
+    <div slot="sortable-item-actions">
       <pds-link href="#" variant="plain">action</pds-link>
     </div>
   </pds-sortable-item>
   <pds-sortable-item actions >
     <div>Item 2</div>
-    <div slot="sortable-actions">
+    <div slot="sortable-item-actions">
       <pds-link href="#" variant="plain">action</pds-link>
     </div>
   </pds-sortable-item>
   <pds-sortable-item actions>
     <div>Item 3</div>
-    <div slot="sortable-actions">
+    <div slot="sortable-item-actions">
       <pds-link href="#" variant="plain">action</pds-link>
     </div>
   </pds-sortable-item>
@@ -139,19 +139,19 @@ The `sortable-actions` slot is provided to place content within the `pds-sortabl
   <pds-sortable component-id="actions">
     <pds-sortable-item actions>
       <div>Item 1</div>
-      <div slot="sortable-actions">
+      <div slot="sortable-item-actions">
         <pds-link href="#" variant="plain">action</pds-link>
       </div>
     </pds-sortable-item>
     <pds-sortable-item actions >
       <div>Item 2</div>
-      <div slot="sortable-actions">
+      <div slot="sortable-item-actions">
         <pds-link href="#" variant="plain">action</pds-link>
       </div>
     </pds-sortable-item>
     <pds-sortable-item actions>
       <div>Item 3</div>
-      <div slot="sortable-actions">
+      <div slot="sortable-item-actions">
         <pds-link href="#" variant="plain">action</pds-link>
       </div>
     </pds-sortable-item>
@@ -169,7 +169,7 @@ The following is a demo of how all the properties and slots can be used together
       <div><strong>Item 1</strong></div>
       <div>Item 1 description copy text</div>
     </div>
-    <div slot="sortable-actions">
+    <div slot="sortable-item-actions">
       <pds-link href="#" variant="plain">action</pds-link>
     </div>
   </pds-sortable-item>
@@ -178,7 +178,7 @@ The following is a demo of how all the properties and slots can be used together
       <div><strong>Item 2</strong></div>
       <div>Item 2 description copy text</div>
     </div>
-    <div slot="sortable-actions">
+    <div slot="sortable-item-actions">
       <pds-link href="#" variant="plain">action</pds-link>
     </div>
   </pds-sortable-item>
@@ -187,7 +187,7 @@ The following is a demo of how all the properties and slots can be used together
       <div><strong>Item 3</strong></div>
       <div>Item 3 description copy text</div>
     </div>
-    <div slot="sortable-actions">
+    <div slot="sortable-item-actions">
       <pds-link href="#" variant="plain">action</pds-link>
     </div>
   </pds-sortable-item>
@@ -199,7 +199,7 @@ The following is a demo of how all the properties and slots can be used together
         <div><strong>Item 1</strong></div>
         <div>Item 1 description text</div>
       </div>
-      <div slot="sortable-actions">
+      <div slot="sortable-item-actions">
         <pds-link href="#" variant="plain">action</pds-link>
       </div>
     </pds-sortable-item>
@@ -208,7 +208,7 @@ The following is a demo of how all the properties and slots can be used together
         <div><strong>Item 2</strong></div>
         <div>Item 2 description text</div>
       </div>
-      <div slot="sortable-actions">
+      <div slot="sortable-item-actions">
         <pds-link href="#" variant="plain">action</pds-link>
       </div>
     </pds-sortable-item>
@@ -217,7 +217,7 @@ The following is a demo of how all the properties and slots can be used together
         <div><strong>Item 3</strong></div>
         <div>Item 3 description text</div>
       </div>
-      <div slot="sortable-actions">
+      <div slot="sortable-item-actions">
         <pds-link href="#" variant="plain">action</pds-link>
       </div>
     </pds-sortable-item>

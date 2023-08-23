@@ -371,7 +371,7 @@ export namespace Components {
     }
     interface PdsSortableItem {
         /**
-          * Determines whether `sortable-actions` slot should be enabled.
+          * Determines whether `sortable-item-actions` slot should be enabled.
           * @defaultValue false
          */
         "actions": boolean;
@@ -1139,7 +1139,7 @@ declare namespace LocalJSX {
     }
     interface PdsSortableItem {
         /**
-          * Determines whether `sortable-actions` slot should be enabled.
+          * Determines whether `sortable-item-actions` slot should be enabled.
           * @defaultValue false
          */
         "actions"?: boolean;

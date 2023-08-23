@@ -7,18 +7,18 @@
 
 ## Properties
 
-| Property      | Attribute      | Description                                                   | Type      | Default     |
-| ------------- | -------------- | ------------------------------------------------------------- | --------- | ----------- |
-| `actions`     | `actions`      | Determines whether `sortable-actions` slot should be enabled. | `boolean` | `false`     |
-| `componentId` | `component-id` | A unique identifier for the sortable item.                    | `string`  | `undefined` |
-| `handle`      | `handle`       | Determines whether `sortable-item` should have a handle.      | `boolean` | `false`     |
+| Property      | Attribute      | Description                                                        | Type      | Default     |
+| ------------- | -------------- | ------------------------------------------------------------------ | --------- | ----------- |
+| `actions`     | `actions`      | Determines whether `sortable-item-actions` slot should be enabled. | `boolean` | `false`     |
+| `componentId` | `component-id` | A unique identifier for the sortable item.                         | `string`  | `undefined` |
+| `handle`      | `handle`       | Determines whether `sortable-item` should have a handle.           | `boolean` | `false`     |
 
 
 ## Slots
 
-| Slot                 | Description                                                                                                                              |
-| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `"sortable-actions"` | Content is placed within the `pds-sortable-item__actions` element as children. This slot is only rendered if `actions` is set to `true`. |
+| Slot                      | Description                                                                                                                              |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `"sortable-item-actions"` | Content is placed within the `pds-sortable-item__actions` element as children. This slot is only rendered if `actions` is set to `true`. |
 
 
 ## Dependencies

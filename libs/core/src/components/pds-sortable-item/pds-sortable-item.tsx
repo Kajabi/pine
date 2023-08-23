@@ -1,7 +1,7 @@
 import { Component, Host, h, Prop } from '@stencil/core';
 
 /**
- * @slot sortable-actions - Content is placed within the `pds-sortable-item__actions` element as children. This slot is only rendered if `actions` is set to `true`.
+ * @slot sortable-item-actions - Content is placed within the `pds-sortable-item__actions` element as children. This slot is only rendered if `actions` is set to `true`.
  */
 @Component({
   tag: 'pds-sortable-item',
@@ -10,7 +10,7 @@ import { Component, Host, h, Prop } from '@stencil/core';
 })
 export class PdsSortableItem {
   /**
-   * Determines whether `sortable-actions` slot should be enabled.
+   * Determines whether `sortable-item-actions` slot should be enabled.
    * @defaultValue false
    */
   @Prop() actions = false;
@@ -37,7 +37,7 @@ export class PdsSortableItem {
         <slot></slot>
         {this.actions && (
           <div class="pds-sortable-item__actions">
-            <slot name="sortable-actions" />
+            <slot name="sortable-item-actions" />
           </div>
         )}
       </Host>

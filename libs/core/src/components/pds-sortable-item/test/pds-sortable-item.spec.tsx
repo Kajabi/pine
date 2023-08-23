@@ -48,7 +48,7 @@ describe('pds-sortable-item', () => {
       components: [PdsSortableItem],
       html: `
         <pds-sortable-item actions="true">
-          <div slot="sortable-actions">Actions content</div>
+          <div slot="sortable-item-actions">Actions content</div>
         </pds-sortable-item>
       `,
     });
@@ -56,7 +56,7 @@ describe('pds-sortable-item', () => {
     expect(page.root).toEqualHtml(`
       <pds-sortable-item class="pds-sortable-item" actions="true">
         <div class="pds-sortable-item__actions">
-          <div slot="sortable-actions">Actions content</div>
+          <div slot="sortable-item-actions">Actions content</div>
         </div>
       </pds-sortable-item>
     `);
