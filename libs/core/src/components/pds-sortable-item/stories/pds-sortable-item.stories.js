@@ -10,9 +10,10 @@ export default {
 const BaseTemplate = (args) => html`
 <pds-sortable-item
   action="${args.actions}"
-  component-id="${args.componentId}
+  component-id="${args.componentId}"
   handle="${args.handle}"
 >
+  Item
 </pds-sortable-item>`;
 
 export const Default = BaseTemplate.bind();
