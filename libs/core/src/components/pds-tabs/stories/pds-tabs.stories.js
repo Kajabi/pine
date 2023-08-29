@@ -8,7 +8,7 @@ export default {
   decorators: [withActions],
   parameters: {
     actions: {
-      handles: ['tabClick', 'keydown']
+      handles: ['pdsTabClick', 'keydown']
     },
   },
   title: 'components/Tabs',

@@ -41,7 +41,7 @@ export class PdsTabs {
   /** @internal */
   @Prop({mutable: true}) activeTabIndex: number;
 
-  @Listen('tabClick', {
+  @Listen('pdsTabClick', {
     target: 'body',
   })
   tabClickHandler(event: CustomEvent<any>) {

@@ -52,7 +52,7 @@ describe('pds-tabs', () => {
       html: `<pds-tab active-name="two" parent-component-id="foo" name="two">Content</pds-tab>`,
     });
     const eventSpy = jest.fn();
-    document.addEventListener('tabClick', eventSpy);
+    document.addEventListener('pdsTabClick', eventSpy);
     const component = page.doc.getElementById("foo__two");
     component?.click();
     expect(eventSpy).toHaveBeenCalled();

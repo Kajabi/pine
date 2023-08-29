@@ -55,7 +55,7 @@ it('renders variant prop', async () => {
     `);
   });
 
-  it('pds-tabs catches `tabClick` event', async () => {
+  it('pds-tabs catches `pdsTabClick` event', async () => {
     const page = await newSpecPage({
       components: [PdsTabs, PdsTab, PdsTabpanel],
       html: `
@@ -67,7 +67,7 @@ it('renders variant prop', async () => {
         </pds-tabs>`,
     });
 
-    page.body.dispatchEvent(new CustomEvent('tabClick', {'detail': [0, 'test']}));
+    page.body.dispatchEvent(new CustomEvent('pdsTabClick', {'detail': [0, 'test']}));
     await page.waitForChanges();
     const tabs = page.body.querySelector('pds-tabs[active-tab-name="one"]');
     expect(tabs).toBeTruthy();
@@ -85,7 +85,7 @@ it('renders variant prop', async () => {
     });
 
     // Move focus to tab by clicking on second activeTabIndex (1)
-    page.body.dispatchEvent(new CustomEvent('tabClick', {'detail': [1, 'test']}));
+    page.body.dispatchEvent(new CustomEvent('pdsTabClick', {'detail': [1, 'test']}));
     await page.waitForChanges();
     expect(page.body.querySelector('pds-tab[name="one"] > button')).not.toHaveClass('is-active');
     expect(page.body.querySelector('pds-tab[name="two"] > button')).toHaveClass('is-active');
@@ -115,7 +115,7 @@ it('renders variant prop', async () => {
     });
 
     // Move focus to tab by clicking on first activeTabIndex (0)
-    page.body.dispatchEvent(new CustomEvent('tabClick', {'detail': [0, 'test']}));
+    page.body.dispatchEvent(new CustomEvent('pdsTabClick', {'detail': [0, 'test']}));
     await page.waitForChanges();
     expect(page.body.querySelector('pds-tab[name="one"] > button')).toHaveClass('is-active');
     expect(page.body.querySelector('pds-tab[name="two"] > button')).not.toHaveClass('is-active');
@@ -145,7 +145,7 @@ it('renders variant prop', async () => {
     });
 
     // Move focus to tab by clicking on second activeTabIndex (1)
-    page.body.dispatchEvent(new CustomEvent('tabClick', {'detail': [1, 'test']}));
+    page.body.dispatchEvent(new CustomEvent('pdsTabClick', {'detail': [1, 'test']}));
     await page.waitForChanges();
     expect(page.body.querySelector('pds-tab[name="one"] > button')).not.toHaveClass('is-active');
     expect(page.body.querySelector('pds-tab[name="two"] > button')).toHaveClass('is-active');
@@ -175,7 +175,7 @@ it('renders variant prop', async () => {
     });
 
     // Move focus to tab by clicking on last activeTabIndex (2)
-    page.body.dispatchEvent(new CustomEvent('tabClick', {'detail': [2, 'test']}));
+    page.body.dispatchEvent(new CustomEvent('pdsTabClick', {'detail': [2, 'test']}));
     await page.waitForChanges();
     expect(page.body.querySelector('pds-tab[name="one"] > button')).not.toHaveClass('is-active');
     expect(page.body.querySelector('pds-tab[name="two"] > button')).not.toHaveClass('is-active');
@@ -205,7 +205,7 @@ it('renders variant prop', async () => {
     });
 
     // Move focus to tab by clicking on last activeTabIndex (2)
-    page.body.dispatchEvent(new CustomEvent('tabClick', {'detail': [1, 'test']}));
+    page.body.dispatchEvent(new CustomEvent('pdsTabClick', {'detail': [1, 'test']}));
     await page.waitForChanges();
     expect(page.body.querySelector('pds-tab[name="one"] > button')).not.toHaveClass('is-active');
     expect(page.body.querySelector('pds-tab[name="two"] > button')).toHaveClass('is-active');
@@ -235,7 +235,7 @@ it('renders variant prop', async () => {
     });
 
     // Move focus to tab by clicking on last activeTabIndex (2)
-    page.body.dispatchEvent(new CustomEvent('tabClick', {'detail': [1, 'test']}));
+    page.body.dispatchEvent(new CustomEvent('pdsTabClick', {'detail': [1, 'test']}));
     await page.waitForChanges();
     expect(page.body.querySelector('pds-tab[name="one"] > button')).not.toHaveClass('is-active');
     expect(page.body.querySelector('pds-tab[name="two"] > button')).toHaveClass('is-active');

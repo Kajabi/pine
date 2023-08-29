@@ -41,9 +41,9 @@ export class PdsTab {
    * Emits an event upon tab click for `pds-tab` and `pds-tabpanel` to listen for
    */
   /** @internal */
-  @Event() tabClick: EventEmitter<object>;
+  @Event() pdsTabClick: EventEmitter<object>;
   private onTabClick(index, parentComponentId) {
-    this.tabClick.emit([index, parentComponentId]);
+    this.pdsTabClick.emit([index, parentComponentId]);
   }
 
   render() {
