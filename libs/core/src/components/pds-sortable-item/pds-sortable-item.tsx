@@ -13,7 +13,7 @@ export class PdsSortableItem {
    * Determines whether `sortable-item-actions` slot should be enabled.
    * @defaultValue false
    */
-  @Prop() actions = false;
+  @Prop() enableActions = false;
 
   /**
    * A unique identifier for the sortable item.
@@ -35,7 +35,7 @@ export class PdsSortableItem {
           </div>
         )}
         <slot></slot>
-        {this.actions && (
+        {this.enableActions && (
           <div class="pds-sortable-item__actions">
             <slot name="sortable-item-actions" />
           </div>

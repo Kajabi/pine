@@ -7,11 +7,11 @@
 
 ## Properties
 
-| Property      | Attribute      | Description                                                        | Type      | Default     |
-| ------------- | -------------- | ------------------------------------------------------------------ | --------- | ----------- |
-| `actions`     | `actions`      | Determines whether `sortable-item-actions` slot should be enabled. | `boolean` | `false`     |
-| `componentId` | `component-id` | A unique identifier for the sortable item.                         | `string`  | `undefined` |
-| `handle`      | `handle`       | Determines whether `sortable-item` should have a handle.           | `boolean` | `false`     |
+| Property        | Attribute        | Description                                                        | Type      | Default     |
+| --------------- | ---------------- | ------------------------------------------------------------------ | --------- | ----------- |
+| `componentId`   | `component-id`   | A unique identifier for the sortable item.                         | `string`  | `undefined` |
+| `enableActions` | `enable-actions` | Determines whether `sortable-item-actions` slot should be enabled. | `boolean` | `false`     |
+| `handle`        | `handle`         | Determines whether `sortable-item` should have a handle.           | `boolean` | `false`     |
 
 
 ## Slots

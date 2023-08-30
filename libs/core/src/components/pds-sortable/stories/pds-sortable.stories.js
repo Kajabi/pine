@@ -30,19 +30,19 @@ const HandleTemplate = (args) => html`
 
 const ActionsTemplate = (args) => html`
 <pds-sortable border="${args.border}" component-id="${args.componentId}" dividers="${args.dividers}" handle-type="${args.handleType}">
-  <pds-sortable-item actions>
+  <pds-sortable-item enable-actions>
     <div>Item 1</div>
     <div slot="sortable-item-actions">
       <pds-link href="#" variant="plain">action</pds-link>
     </div>
   </pds-sortable-item>
-  <pds-sortable-item actions>
+  <pds-sortable-item enable-actions>
     <div>Item 2</div>
     <div slot="sortable-item-actions">
       <pds-link href="#" variant="plain">action</pds-link>
     </div>
   </pds-sortable-item>
-  <pds-sortable-item actions>
+  <pds-sortable-item enable-actions>
     <div>Item 3</div>
     <div slot="sortable-item-actions">
       <pds-link href="#" variant="plain">action</pds-link>
@@ -52,7 +52,7 @@ const ActionsTemplate = (args) => html`
 
 const FullDemoTemplate = (args) => html`
 <pds-sortable border="${args.border}" component-id="${args.componentId}" dividers="${args.dividers}" handle-type="${args.handleType}">
-  <pds-sortable-item actions handle>
+  <pds-sortable-item enable-actions handle>
     <div>
       <div><strong>Item 1</strong></div>
       <div>Item 1 description copy text</div>
@@ -61,7 +61,7 @@ const FullDemoTemplate = (args) => html`
       <pds-link href="#" variant="plain">action</pds-link>
     </div>
   </pds-sortable-item>
-  <pds-sortable-item actions handle>
+  <pds-sortable-item enable-actions handle>
     <div>
       <div><strong>Item 2</strong></div>
       <div>Item 2 description copy text</div>
@@ -70,7 +70,7 @@ const FullDemoTemplate = (args) => html`
       <pds-link href="#" variant="plain">action</pds-link>
     </div>
   </pds-sortable-item>
-  <pds-sortable-item actions handle>
+  <pds-sortable-item enable-actions handle>
     <div>
       <div><strong>Item 3</strong></div>
       <div>Item 3 description copy text</div>
