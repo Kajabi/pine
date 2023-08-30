@@ -81,19 +81,12 @@ const FullDemoTemplate = (args) => html`
   </pds-sortable-item>
 </pds-sortable>`;
 
-const sortableEventExample = () => {
-  document.addEventListener('pdsSortableItemMoved', function (e) {
-    console.info('Item Moved:', e.detail);
-  });
-};
-
 export const Default = BaseTemplate.bind();
 Default.args = {
   componentId: 'default',
   border: false,
   dividers: false,
   handleType: 'row',
-  onChange: sortableEventExample(),
 };
 
 export const Bordered = BaseTemplate.bind();
