@@ -8,15 +8,16 @@
   --margin-inline-end: var(--pine-spacing-md);
   --padding-block-xs: var(--pine-spacing-xs);
   --padding-inline: var(--pine-spacing-md);
+  --padding-inline-start: var(--pine-spacing-md);
 
   align-items: center;
   display: flex;
-  flex-wrap: wrap;
   padding-block: var(--padding-block-xs);
   padding-inline: var(--padding-inline);
 
   .pds-sortable-item__actions {
     margin-inline-start: auto;
+    padding-inline-start: var(--padding-inline-start);
   }
 
   .pds-sortable-item__handle {
