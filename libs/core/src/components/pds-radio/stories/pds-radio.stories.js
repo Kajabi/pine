@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+import { withActions } from '@storybook/addon-actions/decorator';
 
 export default {
   args: {
@@ -10,7 +11,13 @@ export default {
   },
   argTypes: extractArgTypes('pds-radio'),
   component: 'pds-radio',
-  title: 'components/Radio'
+  decorators: [withActions],
+  parameters: {
+    actions: {
+      handles: ['onchange', 'pdsRadioChange'],
+    },
+  },
+  title: 'components/Radio',
 }
 
 const BaseTemplate = (args) =>

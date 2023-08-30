@@ -1118,7 +1118,7 @@ declare namespace LocalJSX {
           * Sets the related tab name, this name must match a `pds-tabpanel`'s tab name property
          */
         "name": string;
-        "onTabClick"?: (event: PdsTabCustomEvent<object>) => void;
+        "onPdsTabClick"?: (event: PdsTabCustomEvent<object>) => void;
         "parentComponentId"?: string;
         "selected"?: boolean;
         "variant"?: string;

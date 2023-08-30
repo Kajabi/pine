@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+import { withActions } from '@storybook/addon-actions/decorator';
 
 export default {
   args: {
@@ -8,7 +9,13 @@ export default {
   },
   argTypes: extractArgTypes('pds-switch'),
   component: 'pds-switch',
-  title: 'components/Switch'
+  decorators: [withActions],
+  parameters: {
+    actions: {
+      handles: ['onchange', 'pdsSwitchChange'],
+    },
+  },
+  title: 'components/Switch',
 }
 
 const BaseTemplate = (args) => html`
@@ -27,16 +34,6 @@ const BaseTemplate = (args) => html`
   />
 `;
 
-const switchEventExample = () => {
-  document.addEventListener('sageSwitchChange', function(e) {
-    const input = e.target.shadowRoot.querySelector(".pds-switch__input");
-    const inputState = input.checked ? '✅ checked' : '😭 not checked';
-
-    console.info('sageSwitchChange event', e);
-    console.info(`#${input.id} switch is: ${inputState}`);
-  });
-};
-
 export const Default = BaseTemplate.bind({});
 
 Default.args = {
@@ -46,7 +43,6 @@ Default.args = {
   invalid: false,
   label: 'checkbox switch',
   name: 'pds-switch-checkbox',
-  onChange: switchEventExample(),
   required: false,
   type: 'checkbox',
 };

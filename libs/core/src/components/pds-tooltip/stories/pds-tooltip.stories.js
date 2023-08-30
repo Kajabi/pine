@@ -1,9 +1,16 @@
 import { html } from 'lit';
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+import { withActions } from '@storybook/addon-actions/decorator';
 
 export default {
   argTypes: extractArgTypes('pds-image'),
   component: 'pds-tooltip',
+  decorators: [withActions],
+  parameters: {
+    actions: {
+      handles: ['mouseEnter', 'pdsTooltipShow', 'mouseLeave', 'pdsTooltipHide'],
+    },
+  },
   title: 'components/Tooltip'
 }
 

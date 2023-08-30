@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+import { withActions } from '@storybook/addon-actions/decorator';
 
 export default {
   args: {
@@ -17,7 +18,13 @@ export default {
   },
   argTypes: extractArgTypes('pds-textarea'),
   component: 'pds-textarea',
-  title: 'components/Textarea'
+  decorators: [withActions],
+  parameters: {
+    actions: {
+      handles: ['onchange', 'pdsTextareaChange'],
+    },
+  },
+  title: 'components/Textarea',
 }
 
 const BaseTemplate = (args) => html`<pds-textarea
@@ -37,20 +44,10 @@ const BaseTemplate = (args) => html`<pds-textarea
   >
 </pds-textarea>`;
 
-const textareaEventExample = () => {
-  document.addEventListener('pdsTextareaChange', function(e) {
-    const textarea = e.target.shadowRoot.querySelector(".pds-textarea__field");
-
-    console.log('e: ', textarea);
-    console.log(`The value has been update to #${textarea.value}`);
-  });
-};
-
 export const Default = BaseTemplate.bind({});
 Default.args = {
   componentId: 'pds-textarea-default-example',
   label: 'Name',
-  onChange: textareaEventExample(),
   name: 'Default',
 };
 

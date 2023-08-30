@@ -76,7 +76,7 @@ describe('pds-tabs', () => {
       </pds-tabs>
     `);
     const inactiveTabButton = await page.find(`pds-tab[name="one"] > button`);
-    const event = await page.spyOnEvent('tabClick');
+    const event = await page.spyOnEvent('pdsTabClick');
     inactiveTabButton.click();
     await page.waitForChanges();
     expect(event).toHaveReceivedEvent();

@@ -1,25 +1,33 @@
 import { html } from 'lit';
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+import { withActions } from '@storybook/addon-actions/decorator';
 
 export default {
   argTypes: extractArgTypes('pds-copytext'),
   component: 'pds-copytext',
-  title: 'components/Copytext'
+  decorators: [withActions],
+  parameters: {
+    actions: {
+      handles: ['onclick', 'pdsCopyTextClick'],
+    },
+  },
+  title: 'components/Copy Text',
 }
 
-const BaseTemplate = (args) => html` <pds-copytext border="${args.border}" full-width="${args.fullWidth}" component-id=${args.componentId} onClick=${args.onClick} truncate="${args.truncate}" value="${args.value}"></pds-copytext>`;
-
-const copyTextEventExample = () => {
-  document.addEventListener('pdsCopyTextClick', function(e) {
-    console.info(e.detail);
-  });
-};
+const BaseTemplate = (args) => html`
+  <pds-copytext
+    border="${args.border}"
+    full-width="${args.fullWidth}"
+    component-id=${args.componentId}
+    onClick=${args.onClick}
+    truncate="${args.truncate}"
+    value="${args.value}">
+  </pds-copytext>`;
 
 export const Default = BaseTemplate.bind();
 Default.args = {
   border: true,
   fullWidth: false,
-  onClick: copyTextEventExample(),
   truncate: false,
   value: 'Default copy text',
 };
