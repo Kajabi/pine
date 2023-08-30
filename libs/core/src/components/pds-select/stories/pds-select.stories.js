@@ -5,8 +5,12 @@ import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 export default {
   args: {
     checked: false,
+    componentId: null,
     disabled: false,
+    errorMessage: null,
+    hintMessage: null,
     invalid: false,
+    label: null,
     required: false,
   },
   argTypes: extractArgTypes('pds-select'),
@@ -18,7 +22,12 @@ export default {
 };
 
 const BaseTemplate = (args) => html`
-  <pds-select component-id="combobox" label="Label">
+  <pds-select
+    component-id=${args.componentId}
+    error-message=${args.errorMessage}
+    hint-message=${args.hintMessage}
+    label=${args.label}
+  >
     <pds-select-option component-id="opt0" value="">Select an Option</pds-select-option>
     <pds-select-option component-id="opt1" value="Option A value">testing</pds-select-option>
     <pds-select-option component-id="opt2" value="Option B value"></pds-select-option>
@@ -39,6 +48,7 @@ const selectEventExample = () => {
 export const Default = BaseTemplate.bind({});
 Default.args = {
   componentId: 'pds-select-default-example',
-  label: 'Name',
+  hintMessage: 'This is a hint message',
+  errorMessage: 'This is an error message',
   name: 'Default',
 };

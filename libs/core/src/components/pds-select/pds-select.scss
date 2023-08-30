@@ -24,6 +24,12 @@
   --menu-padding: var(--pine-spacing-xs);
   --menu-z-index: 1;
 
+  --message-font-size: var(--pine-font-size-body-xs);
+  --message-font-weight: var(--pine-font-weight-regular);
+  --message-line-height: var(--pine-line-height-sm);
+  --message-margin-top: var(--pine-spacing-xs);
+  --message-color-error: var(--pine-color-red-300);
+
   --select-max-width: 340px;
 
   --transition-timing: 0.15s ease-out;
@@ -96,4 +102,17 @@
   pds-icon {
     transform: rotate(var(--icon-rotate-angle));
   }
+}
+
+.pds-select__error-message,
+.pds-select__hint-message {
+  font-size: var(--message-font-size);
+  font-weight: var(--message-font-weight);
+  line-height: var(--message-line-height);
+  margin-bottom: 0;
+  margin-top: var(--message-margin-top);
+}
+
+.pds-select__error-message {
+  color: var(--message-color-error);
 }

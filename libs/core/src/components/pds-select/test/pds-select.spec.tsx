@@ -110,6 +110,38 @@ describe('pds-select', () => {
     expect(element?.querySelector('.pds-select__input')).not.toBeNull();
   });
 
+  it('renders a hintMessage', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect, PdsSelectOption],
+      html: `
+        <pds-select component-id="combobox" label="Label" hint-message="Use the correct syntax">
+          <pds-select-option component-id="opt0">Select an option</pds-select-option>
+          <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
+        </pds-select>
+      `,
+    });
+
+    const element = page.root?.shadowRoot;
+
+    expect(element?.querySelector('.pds-select__hint-message')).not.toBeNull();
+  });
+
+  it('renders a errorMessage', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect, PdsSelectOption],
+      html: `
+        <pds-select component-id="combobox" label="Label" error-message="Use the correct syntax">
+          <pds-select-option component-id="opt0">Select an option</pds-select-option>
+          <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
+        </pds-select>
+      `,
+    });
+
+    const element = page.root?.shadowRoot;
+
+    expect(element?.querySelector('.pds-select__error-message')).not.toBeNull();
+  });
+
   it('focuses the first option when opened and arrow down key is pressed', async () => {
     const page = await newSpecPage({
       components: [PdsSelect],

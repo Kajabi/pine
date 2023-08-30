@@ -2,6 +2,7 @@ import { Component, Element, Host, h, Prop, Event, EventEmitter, Listen } from '
 import {
   positionTooltip
 } from '../../utils/overlay';
+import { assignDescription, messageId } from '../../utils/form';
 
 @Component({
   tag: 'pds-select',
@@ -72,7 +73,7 @@ export class PdsSelect {
    * Indicates  whether or not the input field is invalid or throws an error
    * @defaultValue false
    */
-  @Prop({ mutable: true }) invalid = false;
+  @Prop() invalid = false;
 
   /**
    * Is enabled when the combobox is open
@@ -402,6 +403,7 @@ export class PdsSelect {
         >
           <div
             aria-controls={`${this.componentId}-listbox`}
+            aria-describedby={assignDescription(this.componentId, this.invalid, this.hintMessage)}
             aria-expanded={this.isComboboxOpen.toString()}
             aria-haspopup="listbox"
             aria-labelledby={`${this.componentId}-label`}
@@ -426,6 +428,25 @@ export class PdsSelect {
           >
             <slot></slot>
           </div>
+
+          {this.hintMessage &&
+            <p
+              class="pds-select__hint-message"
+              id={messageId(this.componentId, 'helper')}
+            >
+              {this.hintMessage}
+            </p>
+          }
+
+          {this.errorMessage &&
+            <p
+              class="pds-select__error-message"
+              id={messageId(this.componentId, 'error')}
+              aria-live="assertive"
+            >
+              {this.errorMessage}
+            </p>
+          }
         </div>
       </Host>
     );
