@@ -365,7 +365,7 @@ export namespace Components {
          */
         "dividers": boolean;
         /**
-          * Assigns the handle type to use for sortable items.
+          * Determines the grabbable area for the `pds-sortable-item`.
          */
         "handleType": 'handle' | 'row';
     }
@@ -1129,7 +1129,7 @@ declare namespace LocalJSX {
          */
         "dividers"?: boolean;
         /**
-          * Assigns the handle type to use for sortable items.
+          * Determines the grabbable area for the `pds-sortable-item`.
          */
         "handleType"?: 'handle' | 'row';
         /**

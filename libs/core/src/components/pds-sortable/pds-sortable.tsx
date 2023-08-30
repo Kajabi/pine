@@ -24,7 +24,7 @@ export class PdsSortable {
   @Prop({ reflect: true }) dividers = false;
 
   /**
-   * Assigns the handle type to use for sortable items.
+   * Determines the grabbable area for the `pds-sortable-item`.
    */
   @Prop() handleType: 'handle' | 'row' = 'row';
 
