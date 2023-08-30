@@ -1,24 +1,9 @@
-import { Meta, Story, Canvas, Source, ArgsTable } from '@storybook/addon-docs';
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs';
 import { html, render } from 'lit-html';
-
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 import * as stories from './pds-select.stories.js';
 
-<Meta
-  title="components/Select"
-  component="pds-select"
-  argTypes={extractArgTypes('pds-select')}
-  args={{
-    checked: false,
-    disabled: false,
-    invalid: false,
-    required: false,
-  }}
-  subcomponents={{
-    PdsSelectOption: 'pds-select-option',
-  }}
-/>
+<Meta of={stories} />
 
 # Select
 
@@ -33,8 +18,10 @@ A subcomponent of the select component. This component is used to define the opt
 Requires a unique `component-id` property to be passed.
 
 e.g. `<pds-select-option component-id="myId" value='My value'></pds-select-option>`
-<Canvas>
+<Canvas mdxSource={`
 <pds-select-option component-id="myId" value='My value'></pds-select-option>
+`}>
+  <pds-select-option component-id="myId" value='My value'></pds-select-option>
 </Canvas>
 
 #### Value vs Text Content
@@ -42,8 +29,10 @@ Requires either a `value` property or text content to be passed. If both are pas
 
 e.g. `<pds-select-option component-id='myId' value='my value'>My text content</pds-select-option>`
 
-<Canvas>
+<Canvas mdxSource={`
 <pds-select-option component-id='myId' value='my value'>My text content</pds-select-option>
+`}>
+  <pds-select-option component-id='myId' value='my value'>My text content</pds-select-option>
 </Canvas>
 
 will render `my value` as the option value.
@@ -58,14 +47,25 @@ This select is keyboard accessible following the Comboxbox and Listbox best prac
 
 ## Properties
 
-<ArgsTable of="pds-select" />
+<ArgTypes of="pds-select" />
 
 ### Default
 
-<Story story={stories.Default} />
+{/* <Story story={stories.Default} /> */}
+<Canvas of={stories.Default} source={{
+  code: `
+    <pds-select component-id="combobox" label="Label">
+      <pds-select-option component-id="opt0" value="">Select an Option</pds-select-option>
+      <pds-select-option component-id="opt1" value="Option A value"></pds-select-option>
+      <pds-select-option component-id="opt2" value="Option B value"></pds-select-option>
+      <pds-select-option component-id="opt3" value="Option C value"></pds-select-option>
+      <pds-select-option component-id="opt4" value="Option D value"></pds-select-option>
+    </pds-select>
+  `
+}} />
 
 ### Select
-<Canvas>
+<Canvas mdxSource={`
 <div style={{display: 'flex', 'flexDirection': 'column', gap: '16px'}}>
   {/* Using only values */}
   <pds-select component-id="combobox" label="Label">
@@ -92,6 +92,33 @@ This select is keyboard accessible following the Comboxbox and Listbox best prac
     <pds-select-option component-id="opt4" value="val4">Option D value</pds-select-option>
   </pds-select>
 </div>
+`}>
+  <div style={{display: 'flex', 'flexDirection': 'column', gap: '16px'}}>
+    {/* Using only values */}
+    <pds-select component-id="combobox" label="Label">
+      <pds-select-option component-id="opt0" value="">Select an Option</pds-select-option>
+      <pds-select-option component-id="opt1" value="Option A value"></pds-select-option>
+      <pds-select-option component-id="opt2" value="Option B value"></pds-select-option>
+      <pds-select-option component-id="opt3" value="Option C value"></pds-select-option>
+      <pds-select-option component-id="opt4" value="Option D value"></pds-select-option>
+    </pds-select>
+    {/* Using text content with no value */}
+    <pds-select component-id="combobox2" label="Label">
+      <pds-select-option component-id="opt0">Select an option</pds-select-option>
+      <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
+      <pds-select-option component-id="opt2">Option B Slot</pds-select-option>
+      <pds-select-option component-id="opt3">Option C Slot</pds-select-option>
+      <pds-select-option component-id="opt4">Option D Slot</pds-select-option>
+    </pds-select>
+    {/* Using value both values and text content  */}
+    <pds-select component-id="combobox1" label="Label">
+      <pds-select-option component-id="opt0" value="val0">Select an Option</pds-select-option>
+      <pds-select-option component-id="opt1" value="val1">Option A value</pds-select-option>
+      <pds-select-option component-id="opt2" value="val2">Option B value</pds-select-option>
+      <pds-select-option component-id="opt3" value="val3">Option C value</pds-select-option>
+      <pds-select-option component-id="opt4" value="val4">Option D value</pds-select-option>
+    </pds-select>
+  </div>
 </Canvas>
 
 ## Additional Resources
