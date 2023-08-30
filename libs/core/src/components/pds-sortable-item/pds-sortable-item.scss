@@ -5,9 +5,9 @@
   --border: var(--pine-border-default);
   --box-shadow: var(--pine-box-shadow-lg);
   --color-interactive-handle: var(--pine-color-primary-300);
-  --margin-inline-end: var(--pine-spacing-md); //24px
-  --padding-block-xs: var(--pine-spacing-xs); //8px
-  --padding-inline: var(--pine-spacing-md); //24px
+  --margin-inline-end: var(--pine-spacing-md);
+  --padding-block-xs: var(--pine-spacing-xs);
+  --padding-inline: var(--pine-spacing-md);
 
   align-items: center;
   display: flex;
@@ -16,7 +16,7 @@
   padding-inline: var(--padding-inline);
 
   .pds-sortable-item__actions {
-    margin-left: auto
+    margin-inline-start: auto;
   }
 
   .pds-sortable-item__handle {
@@ -27,22 +27,22 @@
   // styles when sortable is bordered
   .pds-sortable--bordered & {
     &:first-child {
-      border-top-left-radius: var(--border-radius);
-      border-top-right-radius: var(--border-radius);
+      border-start-end-radius: var(--border-radius);
+      border-start-start-radius: var(--border-radius);
     }
 
     &:last-child {
-      border-bottom-left-radius: var(--border-radius);
-      border-bottom-right-radius: var(--border-radius);
+      border-end-end-radius: var(--border-radius);
+      border-end-start-radius: var(--border-radius);
     }
   }
 
   // styles when sortable is divided
   .pds-sortable--divided & {
-    border-bottom: var(--border);
+    border-block-end: var(--border);
 
     &:last-child {
-      border-bottom: 0;
+      border-block-end: 0;
     }
   }
 
