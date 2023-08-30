@@ -30,11 +30,12 @@
     "dist/"
   ],
   "scripts": {
-    "build": "npm run clean && npm run compile",
+    "build": "yarn run clean && yarn run compile",
     "clean": "rm -rf dist",
-    "compile": "npm run tsc",
-    "tsc": "tsc -p .",
-    "rollup": "rollup -c"
+    "compile": "yarn run tsc",
+    "rollup": "rollup -c",
+    "start": "yarn run build",
+    "tsc": "tsc -p ."
   },
   "dependencies": {
     "@pine-ds/core": "*",
