@@ -91,9 +91,9 @@ describe('pds-button', () => {
     await page.waitForChanges();
     icon = await element.find('pds-icon');
 
-    expect(icon).toBeTruthy();
-
     const iconName = await icon.getProperty('name');
+
+    expect(icon).toBeTruthy();
     expect(iconName).toBe('trash');
   });
 
@@ -103,9 +103,9 @@ describe('pds-button', () => {
 
     const element = await page.find('pds-button >>> button');
     const icon = await element.find('pds-icon');
-    expect(icon).toBeTruthy(); // Ensure an icon is present
-    const iconName = await icon.getProperty('name'); // Get the value of the "name" attribute
-    console.log(iconName);
-    expect(iconName).toBe('caret-down'); // Check if the "name" attribute is "caret-down"
+    const iconName = await icon.getProperty('name');
+
+    expect(icon).toBeTruthy();
+    expect(iconName).toBe('caret-down');
   });
 });
