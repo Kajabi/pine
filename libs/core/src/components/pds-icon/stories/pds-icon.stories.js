@@ -1,17 +1,9 @@
 import { html } from 'lit';
 
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
-import pdsIconsJson from '../../../../../icons/dist/pds-icons.json';
-
-const customTypes = () => {
-  const extractedArgs = extractArgTypes('pds-icon');
-  extractedArgs.name.control.type = 'select';
-  extractedArgs.name.options = Object.values(pdsIconsJson["icons"]).map((icon) => (icon.name));
-  return extractedArgs;
-}
+import { customArgsWithIconControl } from "../../../stories/_helpers";
 
 export default {
-  argTypes: customTypes(),
+  argTypes: customArgsWithIconControl({component: 'pds-icon', property: 'name'}),
   component: 'pds-icon',
   title: 'components/Icon'
 }
