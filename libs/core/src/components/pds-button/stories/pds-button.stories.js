@@ -40,8 +40,12 @@ Disclosure.args = {
   disabled: false,
   slot: 'Disclosure',
   type: 'button',
-  variant: 'disclosure',
-  icon: 'caret-down',
+  variant: 'disclosure'
+}
+
+// We do not want to show Icon control, but icon is hard coded
+Disclosure.parameters = {
+  controls: { exclude: 'icon' }
 }
 
 export const Primary = BaseTemplate.bind({});
