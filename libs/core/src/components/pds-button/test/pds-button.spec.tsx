@@ -71,8 +71,8 @@ describe('pds-button', () => {
       components: [PdsButton],
       html: `<pds-button icon="trashIcon"></pds-button>`,
     });
-    const svg = root?.shadowRoot?.querySelector('svg');
-    expect(svg).not.toBeNull();
+    const icon = root?.shadowRoot?.querySelector('pds-icon');
+    expect(icon).not.toBeNull();
   });
 
   it('runs `handleClick` method when clicked on from inside a form', async () => {
