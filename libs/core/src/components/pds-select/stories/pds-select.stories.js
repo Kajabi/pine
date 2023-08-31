@@ -45,10 +45,22 @@ const selectEventExample = () => {
   });
 };
 
-export const Default = BaseTemplate.bind({});
+export const Default = BaseTemplate.bind();
 Default.args = {
   componentId: 'pds-select-default-example',
+  label: 'Label',
+};
+
+export const HintMessage = BaseTemplate.bind();
+HintMessage.args = {
+  componentId: 'pds-select-hint-message-example',
   hintMessage: 'This is a hint message',
+  label: 'Label',
+};
+
+export const ErrorMessage = BaseTemplate.bind();
+ErrorMessage.args = {
+  componentId: 'pds-select-error-message-example',
   errorMessage: 'This is an error message',
-  name: 'Default',
+  label: 'Label',
 };
