@@ -29,7 +29,7 @@ const BaseTemplate = (args) => html`
 export const Accent = BaseTemplate.bind();
 Accent.args = {
   disabled: false,
-  slot: 'Default',
+  slot: 'Accent',
   type: 'button',
   variant: 'accent',
 };
@@ -37,7 +37,7 @@ Accent.args = {
 export const Destructive = BaseTemplate.bind({});
 Destructive.args = {
   disabled: false,
-  slot: 'Default',
+  slot: 'Destructive',
   type: 'button',
   variant: 'destructive',
 }
@@ -45,7 +45,7 @@ Destructive.args = {
 export const Disclosure = BaseTemplate.bind({});
 Disclosure.args = {
   disabled: false,
-  slot: 'Default',
+  slot: 'Disclosure',
   type: 'button',
   variant: 'disclosure',
   icon: 'caret-down',
@@ -54,14 +54,14 @@ Disclosure.args = {
 export const Primary = BaseTemplate.bind({});
 Primary.args = {
   disabled: false,
-  slot: 'Default',
+  slot: 'Primary',
   type: 'button',
 }
 
 export const Secondary = BaseTemplate.bind({});
 Secondary.args = {
   disabled: false,
-  slot: 'Default',
+  slot: 'Secondary',
   variant: 'secondary',
   type: 'button',
 }
