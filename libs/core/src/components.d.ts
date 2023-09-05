@@ -354,6 +354,10 @@ export namespace Components {
           * Shows the popover by enabling the opened property
          */
         "showPopover": () => Promise<void>;
+        /**
+          * Toggles the popover visibility on click
+         */
+        "togglePopover": () => Promise<void>;
     }
     interface PdsProgress {
         /**

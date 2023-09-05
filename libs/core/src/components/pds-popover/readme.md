@@ -47,6 +47,16 @@ Type: `Promise<void>`
 
 
 
+### `togglePopover() => Promise<void>`
+
+Toggles the popover visibility on click
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
 
 ## Slots
 
