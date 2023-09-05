@@ -229,7 +229,7 @@ export namespace Components {
     }
     interface PdsInput {
         /**
-          * A unique identifier for the input field
+          * String used for the component `id` attribute.
          */
         "componentId": string;
         /**
@@ -380,7 +380,7 @@ export namespace Components {
          */
         "checked": boolean;
         /**
-          * Identifies this input with a unique string, and associates the input with its label
+          * String used for the component `id` attribute and associates the input with its label
          */
         "componentId": string;
         /**
@@ -447,7 +447,7 @@ export namespace Components {
          */
         "activeTabName": string;
         /**
-          * Sets unique id on tabs component
+          * String used for the component `id` attribute.
          */
         "componentId": string;
         /**
@@ -461,7 +461,7 @@ export namespace Components {
     }
     interface PdsTextarea {
         /**
-          * A unique identifier for the textarea
+          * String used for the component `id` attribute.
          */
         "componentId": string;
         /**
@@ -515,7 +515,7 @@ export namespace Components {
     }
     interface PdsTooltip {
         /**
-          * Id used to reference the component
+          * String used for the component `id` attribute.
          */
         "componentId": string;
         /**
@@ -956,7 +956,7 @@ declare namespace LocalJSX {
     }
     interface PdsInput {
         /**
-          * A unique identifier for the input field
+          * String used for the component `id` attribute.
          */
         "componentId": string;
         /**
@@ -1115,7 +1115,7 @@ declare namespace LocalJSX {
          */
         "checked"?: boolean;
         /**
-          * Identifies this input with a unique string, and associates the input with its label
+          * String used for the component `id` attribute and associates the input with its label
          */
         "componentId": string;
         /**
@@ -1187,7 +1187,7 @@ declare namespace LocalJSX {
          */
         "activeTabName": string;
         /**
-          * Sets unique id on tabs component
+          * String used for the component `id` attribute.
          */
         "componentId": string;
         /**
@@ -1201,7 +1201,7 @@ declare namespace LocalJSX {
     }
     interface PdsTextarea {
         /**
-          * A unique identifier for the textarea
+          * String used for the component `id` attribute.
          */
         "componentId": string;
         /**
@@ -1259,7 +1259,7 @@ declare namespace LocalJSX {
     }
     interface PdsTooltip {
         /**
-          * Id used to reference the component
+          * String used for the component `id` attribute.
          */
         "componentId"?: string;
         /**

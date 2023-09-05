@@ -10,7 +10,7 @@
 | Property                   | Attribute        | Description                                                                                      | Type                    | Default      |
 | -------------------------- | ---------------- | ------------------------------------------------------------------------------------------------ | ----------------------- | ------------ |
 | `checked`                  | `checked`        | Determines the input 'checked' state                                                             | `boolean`               | `false`      |
-| `componentId` _(required)_ | `component-id`   | Identifies this input with a unique string, and associates the input with its label              | `string`                | `undefined`  |
+| `componentId` _(required)_ | `component-id`   | String used for the component `id` attribute and associates the input with its label             | `string`                | `undefined`  |
 | `disabled`                 | `disabled`       | Determines the input 'disabled' state, preventing user interaction                               | `boolean`               | `false`      |
 | `errorMessage`             | `error-message`  | Displays message text describing an invalid state                                                | `string`                | `undefined`  |
 | `helperMessage`            | `helper-message` | Displays help text for additional description of an input                                        | `string`                | `undefined`  |

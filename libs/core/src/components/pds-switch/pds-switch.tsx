@@ -11,7 +11,7 @@ export class PdsSwitch {
   @Element() el: HTMLPdsSwitchElement;
 
   /**
-   * Identifies this input with a unique string, and associates the input with its label
+   * String used for the component `id` attribute and associates the input with its label
    */
   @Prop() componentId!: string;
 
