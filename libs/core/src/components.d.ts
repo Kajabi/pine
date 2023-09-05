@@ -180,6 +180,10 @@ export namespace Components {
     }
     interface PdsDivider {
         /**
+          * String used for the component `id` attribute.
+         */
+        "componentId": string;
+        /**
           * Adds offset margin/padding to expand the width (horizontal) or the height (vertical) of divider.
          */
         "offset": 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
@@ -894,6 +898,10 @@ declare namespace LocalJSX {
         "value": string;
     }
     interface PdsDivider {
+        /**
+          * String used for the component `id` attribute.
+         */
+        "componentId"?: string;
         /**
           * Adds offset margin/padding to expand the width (horizontal) or the height (vertical) of divider.
          */
