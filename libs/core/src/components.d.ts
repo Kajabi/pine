@@ -452,7 +452,7 @@ export namespace Components {
         /**
           * Displays a hint or description of the textarea
          */
-        "hintMessage"?: string;
+        "helperMessage"?: string;
         /**
           * Indicates whether or not the textarea is invalid or throws an error
           * @defaultValue false
@@ -1168,7 +1168,7 @@ declare namespace LocalJSX {
         /**
           * Displays a hint or description of the textarea
          */
-        "hintMessage"?: string;
+        "helperMessage"?: string;
         /**
           * Indicates whether or not the textarea is invalid or throws an error
           * @defaultValue false

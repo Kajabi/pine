@@ -5,7 +5,7 @@ import * as stories from './pds-textarea.stories.js';
 <Meta of={stories} />
 
 # Textarea
-A textarea field coupled with a label, hint message, and error message which allows for user input and feedback
+A textarea field coupled with a label, helper message, and error message which allows for user input and feedback
 
 ## Guidelines
 ### Usage
@@ -19,7 +19,7 @@ A textarea field coupled with a label, hint message, and error message which all
 
 ### Accessibility
 - The textarea component comes with a built-in label through the `label` property, it is strongly encouraged that you include it
-- Please provide clear and descriptive error, hint, and placeholder messages
+- Please provide clear and descriptive error, helper, and placeholder messages
 
 ## Properties
 <ArgTypes of={stories} />
@@ -55,21 +55,21 @@ You can also manually pass in an invalid state by setting the `invalid` property
   <pds-textarea name="Invalid" label="Name" error-message="Error" invalid="true" required="true" component-id="textarea-invalid" ></pds-textarea>
 </Canvas>
 
-### Hint Message
-Hints are used to provide context about what is expected from the users
+### Helper Message
+Helper messages are used to provide context about what is expected from the users
 
-Do not use hint messages to provide examples to users, please use the `placeholder` property instead
+Do not use helper messages to provide examples to users, please use the `placeholder` property instead
 
 <Canvas mdxSource={`
-<pds-textarea name="Hint" label="Name" hint-message="Hint" component-id="textarea-hint-message"></pds-textarea>
+<pds-textarea name="Message" label="Name" helper-message="Helper message text" component-id="pds-textarea-helper-example"></pds-textarea>
 `}>
-  <pds-textarea name="Hint" label="Name" hint-message="Hint" component-id="textarea-hint-message"></pds-textarea>
+  <pds-textarea name="Message" label="Name" helper-message="Helper message text" component-id="pds-textarea-helper-example"></pds-textarea>
 </Canvas>
 
 ### Placeholder
 Placeholders should be examples of content that can be filled into the textarea
 
-Do not use placeholders to provide hints to users, please use the `hint-message` property instead
+Do not use placeholders to provide hints to users, please use the `helper-message` property instead
 
 <Canvas mdxSource={`
 <pds-textarea name="Placeholder" label="Name" placeholder="Placeholder..." component-id="textarea-placeholder"></pds-textarea>

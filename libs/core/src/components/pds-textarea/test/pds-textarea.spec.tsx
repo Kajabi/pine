@@ -71,18 +71,18 @@ describe('pds-textarea', () => {
     `);
   });
 
-  it('renders hint text', async () => {
+  it('renders helper text', async () => {
     const {root} = await newSpecPage({
       components: [PdsTextarea],
-      html: `<pds-textarea component-id="pds-textarea-hint" hint-message="hint"></pds-textarea>`,
+      html: `<pds-textarea component-id="pds-textarea-helper" helper-message="helper"></pds-textarea>`,
     });
 
     expect(root).toEqualHtml(`
-      <pds-textarea component-id="pds-textarea-hint" hint-message="hint">
+      <pds-textarea component-id="pds-textarea-helper" helper-message="helper">
         <mock:shadow-root>
           <div class="pds-textarea">
-            <textarea aria-describedby="pds-textarea-hint__helper-message" class="pds-textarea__field" id="pds-textarea-hint" name="pds-textarea-hint"></textarea>
-            <p class="pds-textarea__hint-message" id="pds-textarea-hint__helper-message">hint</p>
+            <textarea aria-describedby="pds-textarea-helper__helper-message" class="pds-textarea__field" id="pds-textarea-helper" name="pds-textarea-helper"></textarea>
+            <p class="pds-textarea__helper-message" id="pds-textarea-helper__helper-message">helper</p>
           </div>
         </mock:shadow-root>
       </pds-textarea>
@@ -218,19 +218,19 @@ describe('pds-textarea', () => {
           component-id="textarea-with-description"
           invalid="true"
           label="Textarea with description"
-          hint-message="This is a helper message"
+          helper-message="This is a helper message"
           error-message="This is an error message">
         </pds-textarea>
       `
     });
 
     expect(root).toEqualHtml(`
-      <pds-textarea component-id="textarea-with-description" label="Textarea with description" hint-message="This is a helper message" error-message="This is an error message" invalid="true">
+      <pds-textarea component-id="textarea-with-description" label="Textarea with description" helper-message="This is a helper message" error-message="This is an error message" invalid="true">
         <mock:shadow-root>
           <div class="pds-textarea">
             <label htmlFor="textarea-with-description">Textarea with description</label>
             <textarea aria-describedby="textarea-with-description__error-message" aria-invalid="true"  class="is-invalid pds-textarea__field" id="textarea-with-description" name="textarea-with-description"></textarea>
-            <p id="textarea-with-description__helper-message"  class="pds-textarea__hint-message">
+            <p id="textarea-with-description__helper-message"  class="pds-textarea__helper-message">
               This is a helper message
             </p>
             <p aria-live="assertive" id="textarea-with-description__error-message" class="pds-textarea__error-message">
