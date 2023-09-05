@@ -24,7 +24,7 @@ import * as stories from './pds-input.stories.js';
 
 ### Accessibility
 - The input component comes with a built-in label through the `label` property, it is strongly encouraged that you include it
-- Please provide clear and descriptive error, hint, and placeholder messages
+- Please provide clear and descriptive error, helper message, and placeholder messages
 - Do not use a `placeholder` to communicate the field label, use a `label` property
 
 ## Properties
@@ -86,13 +86,13 @@ import * as stories from './pds-input.stories.js';
   <pds-input component-id="pds-input-readonly-example" label="Name" type="email" readonly="true" value="Frank Dux"></pds-input>
 </Canvas>
 
-### Hint
-<p>A `hint` is used to provide additional information about how to complete the text field.</p>
+### Helper Message
+<p>A `helper-message` is used to provide additional information about how to complete the text field.</p>
 
 <Canvas mdxSource={`
-<pds-input component-id="pds-input-hint-example" label="Name" type="email" hint="Please use the correct format" value="Frank Dux"></pds-input>
+<pds-input component-id="pds-input-help-example" label="Name" type="email" helper-message="Please use the correct format" value="Frank Dux"></pds-input>
 `}>
-  <pds-input component-id="pds-input-hint-example" label="Name" type="email" hint="Please use the correct format" value="Frank Dux"></pds-input>
+  <pds-input component-id="pds-input-help-example" label="Name" type="email" helper-message="Please use the correct format" value="Frank Dux"></pds-input>
 </Canvas>
 
 ### Invalid

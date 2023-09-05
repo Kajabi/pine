@@ -221,9 +221,9 @@ export namespace Components {
          */
         "errorText"?: string;
         /**
-          * Displays a hint or description of the input field
+          * Displays a message or hint below the input field
          */
-        "hint"?: string;
+        "helperMessage"?: string;
         /**
           * Indicates whether or not the input field is invalid or throws an error
          */
@@ -924,9 +924,9 @@ declare namespace LocalJSX {
          */
         "errorText"?: string;
         /**
-          * Displays a hint or description of the input field
+          * Displays a message or hint below the input field
          */
-        "hint"?: string;
+        "helperMessage"?: string;
         /**
           * Indicates whether or not the input field is invalid or throws an error
          */

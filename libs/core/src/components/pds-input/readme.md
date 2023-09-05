@@ -7,20 +7,20 @@
 
 ## Properties
 
-| Property                   | Attribute      | Description                                                                                                  | Type      | Default     |
-| -------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------ | --------- | ----------- |
-| `componentId` _(required)_ | `component-id` | A unique identifier for the input field                                                                      | `string`  | `undefined` |
-| `disabled`                 | `disabled`     | Indicates whether or not the input field is disabled                                                         | `boolean` | `undefined` |
-| `errorText`                | `error-text`   | Specifies the error text and provides an error-themed treatment to the field                                 | `string`  | `undefined` |
-| `hint`                     | `hint`         | Displays a hint or description of the input field                                                            | `string`  | `undefined` |
-| `invalid`                  | `invalid`      | Indicates whether or not the input field is invalid or throws an error                                       | `boolean` | `undefined` |
-| `label`                    | `label`        | Text to be displayed as the input label                                                                      | `string`  | `undefined` |
-| `name`                     | `name`         | Specifies the name. Submitted with the form name/value pair                                                  | `string`  | `undefined` |
-| `placeholder`              | `placeholder`  | Specifies a short hint that describes the expected value of the input field                                  | `string`  | `undefined` |
-| `readonly`                 | `readonly`     | Indicates whether or not the input field is readonly                                                         | `boolean` | `undefined` |
-| `required`                 | `required`     | Indicates whether or not the input field is required                                                         | `boolean` | `undefined` |
-| `type`                     | `type`         | Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'` | `string`  | `'text'`    |
-| `value`                    | `value`        | The value of the input                                                                                       | `string`  | `undefined` |
+| Property                   | Attribute        | Description                                                                                                  | Type      | Default     |
+| -------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------ | --------- | ----------- |
+| `componentId` _(required)_ | `component-id`   | A unique identifier for the input field                                                                      | `string`  | `undefined` |
+| `disabled`                 | `disabled`       | Indicates whether or not the input field is disabled                                                         | `boolean` | `undefined` |
+| `errorText`                | `error-text`     | Specifies the error text and provides an error-themed treatment to the field                                 | `string`  | `undefined` |
+| `helperMessage`            | `helper-message` | Displays a message or hint below the input field                                                             | `string`  | `undefined` |
+| `invalid`                  | `invalid`        | Indicates whether or not the input field is invalid or throws an error                                       | `boolean` | `undefined` |
+| `label`                    | `label`          | Text to be displayed as the input label                                                                      | `string`  | `undefined` |
+| `name`                     | `name`           | Specifies the name. Submitted with the form name/value pair                                                  | `string`  | `undefined` |
+| `placeholder`              | `placeholder`    | Specifies a short hint that describes the expected value of the input field                                  | `string`  | `undefined` |
+| `readonly`                 | `readonly`       | Indicates whether or not the input field is readonly                                                         | `boolean` | `undefined` |
+| `required`                 | `required`       | Indicates whether or not the input field is required                                                         | `boolean` | `undefined` |
+| `type`                     | `type`           | Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'` | `string`  | `'text'`    |
+| `value`                    | `value`          | The value of the input                                                                                       | `string`  | `undefined` |
 
 
 ## Events
@@ -53,10 +53,10 @@
 | `--field-line-height`    | Line height of the field text                 |
 | `--field-padding-block`  | Block padding for the field text              |
 | `--field-padding-inline` | Inline padding for the field text             |
-| `--hint-font-size`       | Font size of the hint text                    |
-| `--hint-font-weight`     | Font weight of the hint text                  |
-| `--hint-line-height`     | Line height of the hint text                  |
-| `--hint-margin-top`      | Top margin of the hint                        |
+| `--helper-font-size`     | Font size of the helper text                  |
+| `--helper-font-weight`   | Font weight of the helper text                |
+| `--helper-line-height`   | Line height of the helper text                |
+| `--helper-margin-top`    | Top margin of the helper                      |
 | `--label-font-size`      | Font size of the label text                   |
 | `--label-font-weight`    | Font weight of the label text                 |
 | `--label-line-height`    | Line height of the label text                 |

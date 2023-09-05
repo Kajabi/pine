@@ -133,14 +133,14 @@ describe('pds-input', () => {
     `);
   });
 
-  it('renders a hint', async () => {
+  it('renders a helper message', async () => {
     const { root } = await newSpecPage({
       components: [PdsInput],
-      html: `<pds-input hint="Use the correct syntax" component-id="field-1" value="Frank Dux"></pds-input>`
+      html: `<pds-input helper-message="Use the correct syntax" component-id="field-1" value="Frank Dux"></pds-input>`
     });
 
-    const hint = root.shadowRoot.querySelector('.pds-input__hint');
-    expect(hint).not.toBeNull();
+    const helperMessage = root.shadowRoot.querySelector('.pds-input__helper-message');
+    expect(helperMessage).not.toBeNull();
   });
 
   it('renders a error', async () => {

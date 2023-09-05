@@ -22,10 +22,10 @@
     * @prop --field-padding-block: Block padding for the field text
     * @prop --field-padding-inline: Inline padding for the field text
     *
-    * @prop --hint-font-size: Font size of the hint text
-    * @prop --hint-font-weight: Font weight of the hint text
-    * @prop --hint-line-height: Line height of the hint text
-    * @prop --hint-margin-top: Top margin of the hint
+    * @prop --helper-font-size: Font size of the helper text
+    * @prop --helper-font-weight: Font weight of the helper text
+    * @prop --helper-line-height: Line height of the helper text
+    * @prop --helper-margin-top: Top margin of the helper
     */
   --background: #fff;
   --background-disabled: #f9fafa;
@@ -50,10 +50,10 @@
   --field-padding-block: 8px;
   --field-padding-inline: 16px;
 
-  --hint-font-size: 12px;
-  --hint-font-weight: 400;
-  --hint-line-height: 20px;
-  --hint-margin-top: 8px;
+  --helper-font-size: 12px;
+  --helper-font-weight: 400;
+  --helper-line-height: 20px;
+  --helper-margin-top: 8px;
 
 
   display: inline;
@@ -118,12 +118,12 @@ input {
 }
 
 .pds-input__error-text,
-.pds-input__hint {
-  font-size: var(--hint-font-size);
-  font-weight: var(--hint-font-weight);
-  line-height: var(--hint-line-height);
+.pds-input__helper-message {
+  font-size: var(--helper-font-size);
+  font-weight: var(--helper-font-weight);
+  line-height: var(--helper-line-height);
   margin-bottom: 0;
-  margin-top: var(--hint-margin-top);
+  margin-top: var(--helper-margin-top);
 }
 
 .pds-input__error-text {
