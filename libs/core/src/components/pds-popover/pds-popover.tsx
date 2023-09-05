@@ -83,6 +83,10 @@ export class PdsPopover {
    */
   @Event() pdsPopoverShow: EventEmitter;
 
+  componentDidLoad() {
+    document.addEventListener('click', this.handleGlobalClick);
+  }
+
   componentDidUpdate() {
     if (this.opened) {
       this.showPopover();
@@ -129,10 +133,19 @@ export class PdsPopover {
   };
 
   private handleShow = () => {
-    console.log('before handleShow');
-    console.log('this.opened', this.opened);
     this.showPopover();
     this.pdsPopoverShow.emit();
+  };
+
+  /**
+   * Closes the popover if the click is not inside the popover
+   */
+  private handleGlobalClick = (event: MouseEvent) => {
+    if(this.opened) {
+      if (!this.el.contains(event.target as Node)) {
+        this.handleHide();
+      }
+    }
   };
 
   render() {
@@ -151,9 +164,6 @@ export class PdsPopover {
             aria-describedby={this.componentId}
             class="pds-popover__trigger"
             onClick={() => this.togglePopover()}
-            // onFocus={() => this.handleShow()}
-            // onBlur={() => this.handleHide()}
-            tabindex="0"
           >
             <slot />
           </span>
