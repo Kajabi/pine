@@ -8,3 +8,27 @@ import * as stories from './pds-popover.stories.js';
 # Popover
 
 Popver description
+
+## Properties
+
+<ArgTypes of={stories} />
+
+## Variants
+
+<Canvas mdxSource={`
+<pds-popover has-arrow="true" placement="bottom-right" html-content="true">
+  <div slot="content">
+    <p><strong>This is a popover</strong></p>
+    <p><strong>This is a popover</strong></p>
+  </div>
+  <pds-button variant="secondary">Click</pds-button>
+</pds-popover>
+`}>
+  <pds-popover has-arrow="true" placement="bottom-start" html-content="true">
+    <div slot="content">
+      <p><strong>This is a popover</strong></p>
+      <p><strong>This is a popover</strong></p>
+    </div>
+    <pds-button variant="secondary">Click</pds-button>
+  </pds-popover>
+</Canvas>
