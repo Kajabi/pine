@@ -22,7 +22,7 @@ export class PdsAvatar {
   /**
    * String used for the component `id` attribute.
    */
-    @Prop() componentId: string;
+  @Prop() componentId: string;
 
   /**
    * Determines whether the avatar functions as a dropdown trigger.
