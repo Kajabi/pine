@@ -13,6 +13,11 @@ export class PdsImage {
   @Prop() alt? = '';
 
   /**
+   * String used for the component `id` attribute.
+   */
+  @Prop() componentId: string;
+
+  /**
    * The height of the image in pixels. Setting this will
    * devote space in the layout to prevent layout
    * shifts when the image is loaded.
@@ -54,6 +59,7 @@ export class PdsImage {
         class={{
           'pds-image': true,
         }}
+        id={this.componentId}
       >
         <img
           alt={this.alt}

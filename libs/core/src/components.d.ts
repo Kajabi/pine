@@ -199,6 +199,10 @@ export namespace Components {
          */
         "alt"?: string;
         /**
+          * String used for the component `id` attribute.
+         */
+        "componentId": string;
+        /**
           * The height of the image in pixels. Setting this will devote space in the layout to prevent layout shifts when the image is loaded.
          */
         "height"?: number;
@@ -917,6 +921,10 @@ declare namespace LocalJSX {
           * The image's alt tag. If none is provided, it will default to an empty string.
          */
         "alt"?: string;
+        /**
+          * String used for the component `id` attribute.
+         */
+        "componentId"?: string;
         /**
           * The height of the image in pixels. Setting this will devote space in the layout to prevent layout shifts when the image is loaded.
          */
