@@ -34,7 +34,7 @@
   min-height: 40px;
   padding: 0.5rem 1rem;
 
-  svg {
+  pds-icon {
     fill: currentColor;
     margin-inline-end: 0.5rem;
   }
@@ -72,7 +72,8 @@
   --outline-color: #fdb0aa;
 }
 
-.pds-button--secondary {
+.pds-button--secondary,
+.pds-button--disclosure {
   --background-color: transparent;
   --background-color-hover: transparent;
   --background-color-disabled: transparent;
@@ -84,6 +85,13 @@
 
   --color: #202327;
   --color-disabled: #8d939a;
+}
+
+.pds-button--disclosure {
+  pds-icon {
+    margin-inline-end: 0;
+    margin-inline-start: 0.5rem;
+  }
 }
 
 .pds-button--unstyled {
