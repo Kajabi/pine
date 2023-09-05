@@ -10,6 +10,7 @@ export default {
 
 const BaseTemplate = (args) => html`
   <pds-button
+    component-id=${args.componentId}
     disabled=${args.disabled}
     icon=${args.icon}
     name=${args.name}
