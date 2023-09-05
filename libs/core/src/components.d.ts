@@ -20,6 +20,10 @@ export namespace Components {
          */
         "badge"?: boolean;
         /**
+          * String used for the component `id` attribute.
+         */
+        "componentId": string;
+        /**
           * Determines whether the avatar functions as a dropdown trigger.
           * @defaultValue false
          */
@@ -710,6 +714,10 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "badge"?: boolean;
+        /**
+          * String used for the component `id` attribute.
+         */
+        "componentId"?: string;
         /**
           * Determines whether the avatar functions as a dropdown trigger.
           * @defaultValue false
