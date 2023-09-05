@@ -125,6 +125,10 @@ export namespace Components {
     }
     interface PdsChip {
         /**
+          * String used for the component `id` attribute.
+         */
+        "componentId": string;
+        /**
           * Determines whether a dot should be displayed on the chip.
           * @defaultValue false
          */
@@ -827,6 +831,10 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     interface PdsChip {
+        /**
+          * String used for the component `id` attribute.
+         */
+        "componentId"?: string;
         /**
           * Determines whether a dot should be displayed on the chip.
           * @defaultValue false

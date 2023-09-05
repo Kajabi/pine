@@ -16,6 +16,7 @@ export default {
 
 const BaseTemplate = (args) => html`
 <pds-chip
+  component-id="${args.componentId}"
   dot="${args.dot}"
   label="${args.label}"
   large="${args.large}"
