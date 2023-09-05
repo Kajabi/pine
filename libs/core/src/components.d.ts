@@ -280,6 +280,10 @@ export namespace Components {
     }
     interface PdsLink {
         /**
+          * String used for the component `id` attribute.
+         */
+        "componentId": string;
+        /**
           * When enabled, opens link in a new tab.
           * @defaultValue false
          */
@@ -1006,6 +1010,10 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     interface PdsLink {
+        /**
+          * String used for the component `id` attribute.
+         */
+        "componentId"?: string;
         /**
           * When enabled, opens link in a new tab.
           * @defaultValue false

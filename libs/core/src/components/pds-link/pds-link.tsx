@@ -10,6 +10,11 @@ import { Component, h, Prop } from '@stencil/core';
 })
 export class PdsLink {
   /**
+   * String used for the component `id` attribute.
+   */
+  @Prop() componentId: string;
+
+  /**
    * When enabled, opens link in a new tab.
    * @defaultValue false
    */
@@ -49,7 +54,7 @@ export class PdsLink {
     );
 
     return (
-      <a href={this.href} class={`pds-link pds-link--${this.variant} pds-link--${this.fontSize} `} target={this.external ? '_blank' : undefined}>
+      <a id={this.componentId} href={this.href} class={`pds-link pds-link--${this.variant} pds-link--${this.fontSize} `} target={this.external ? '_blank' : undefined}>
         <slot>{this.href}</slot>
         {this.external == true && externalIcon}
       </a>
