@@ -111,13 +111,13 @@ input {
     color: var(--color-placeholder);
   }
 
-  &:has(~.pds-input__error-text) {
+  &:has(~.pds-input__error-message) {
     border-color: var(--color-error);
   }
   /* stylelint-enable */
 }
 
-.pds-input__error-text,
+.pds-input__error-message,
 .pds-input__helper-message {
   font-size: var(--helper-font-size);
   font-weight: var(--helper-font-weight);
@@ -126,6 +126,6 @@ input {
   margin-top: var(--helper-margin-top);
 }
 
-.pds-input__error-text {
+.pds-input__error-message {
   color: var(--color-error);
 }

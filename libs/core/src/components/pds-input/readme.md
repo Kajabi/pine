@@ -11,7 +11,7 @@
 | -------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------ | --------- | ----------- |
 | `componentId` _(required)_ | `component-id`   | A unique identifier for the input field                                                                      | `string`  | `undefined` |
 | `disabled`                 | `disabled`       | Indicates whether or not the input field is disabled                                                         | `boolean` | `undefined` |
-| `errorText`                | `error-text`     | Specifies the error text and provides an error-themed treatment to the field                                 | `string`  | `undefined` |
+| `errorMessage`             | `error-message`  | Specifies the error message and provides an error-themed treatment to the field                              | `string`  | `undefined` |
 | `helperMessage`            | `helper-message` | Displays a message or hint below the input field                                                             | `string`  | `undefined` |
 | `invalid`                  | `invalid`        | Indicates whether or not the input field is invalid or throws an error                                       | `boolean` | `undefined` |
 | `label`                    | `label`          | Text to be displayed as the input label                                                                      | `string`  | `undefined` |
@@ -35,32 +35,6 @@
 | Slot | Description                                        |
 | ---- | -------------------------------------------------- |
 |      | Content is placed between the opening closing tags |
-
-
-## CSS Custom Properties
-
-| Name                     | Description                                   |
-| ------------------------ | --------------------------------------------- |
-| `--background`           | Background of the input                       |
-| `--background-disabled`  | Background of a disabled input                |
-| `--border-color-default` | Border color of the input text                |
-| `--color`                | Color of the input text                       |
-| `--color-error`          | Color of the input text when error is present |
-| `--color-hover`          | Border color of the input text when hovered   |
-| `--color-placeholder`    | Color of the placeholder text                 |
-| `--field-font-size`      | Font size of the field text                   |
-| `--field-font-weight`    | Font weight of the field text                 |
-| `--field-line-height`    | Line height of the field text                 |
-| `--field-padding-block`  | Block padding for the field text              |
-| `--field-padding-inline` | Inline padding for the field text             |
-| `--helper-font-size`     | Font size of the helper text                  |
-| `--helper-font-weight`   | Font weight of the helper text                |
-| `--helper-line-height`   | Line height of the helper text                |
-| `--helper-margin-top`    | Top margin of the helper                      |
-| `--label-font-size`      | Font size of the label text                   |
-| `--label-font-weight`    | Font weight of the label text                 |
-| `--label-line-height`    | Line height of the label text                 |
-| `--label-margin-bottom`  | Bottom margin of the label                    |
 
 
 ----------------------------------------------

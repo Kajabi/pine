@@ -217,9 +217,9 @@ export namespace Components {
          */
         "disabled"?: boolean;
         /**
-          * Specifies the error text and provides an error-themed treatment to the field
+          * Specifies the error message and provides an error-themed treatment to the field
          */
-        "errorText"?: string;
+        "errorMessage"?: string;
         /**
           * Displays a message or hint below the input field
          */
@@ -920,9 +920,9 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Specifies the error text and provides an error-themed treatment to the field
+          * Specifies the error message and provides an error-themed treatment to the field
          */
-        "errorText"?: string;
+        "errorMessage"?: string;
         /**
           * Displays a message or hint below the input field
          */

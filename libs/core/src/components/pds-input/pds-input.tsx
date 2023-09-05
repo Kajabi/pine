@@ -22,9 +22,9 @@ export class PdsInput {
   @Prop() disabled?: boolean;
 
   /**
-   * Specifies the error text and provides an error-themed treatment to the field
+   * Specifies the error message and provides an error-themed treatment to the field
    */
-  @Prop() errorText?: string;
+  @Prop() errorMessage?: string;
 
   /**
    * Displays a message or hint below the input field
@@ -114,13 +114,13 @@ export class PdsInput {
               {this.helperMessage}
             </p>
           }
-          {this.errorText &&
+          {this.errorMessage &&
             <p
-              class="pds-input__error-text"
+              class="pds-input__error-message"
               id={messageId(this.componentId, 'error')}
               aria-live="assertive"
             >
-              {this.errorText}
+              {this.errorMessage}
             </p>
           }
         </div>
