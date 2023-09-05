@@ -1,4 +1,4 @@
-import { Component, Element, Event, Host, Prop, State, h, EventEmitter, Method, Watch } from '@stencil/core';
+import { Component, Element, Event, Host, Prop, State, h, EventEmitter, Method } from '@stencil/core';
 import {
   positionTooltip
 } from '../../utils/overlay';
@@ -73,15 +73,6 @@ export class PdsPopover {
    */
   @Prop({mutable: true, reflect: true}) opened = false;
 
-  @Watch('opened')
-  handleOpenToggle() {
-    if (this.opened) {
-      this.handleShow();
-    } else {
-      this.handleHide();
-    }
-  }
-
   /**
    * Emitted after a popover is closed
    */
@@ -92,15 +83,6 @@ export class PdsPopover {
    */
   @Event() pdsPopoverShow: EventEmitter;
 
-  componentWillLoad() {
-    if (this.opened) {
-      this.showPopover();
-    }
-
-    this.el.addEventListener('blur', this.handleHide, true);
-    this.el.addEventListener('focus', this.handleShow, true);
-  }
-
   componentDidUpdate() {
     if (this.opened) {
       this.showPopover();
@@ -109,6 +91,20 @@ export class PdsPopover {
 
   componentDidRender() {
     positionTooltip({elem: this.el, elemPlacement: this.placement, overlay: this.contentEl});
+  }
+
+  /**
+   * Toggles the popover visibility on click
+   */
+  @Method()
+  async togglePopover() {
+    this.opened = !this.opened;
+
+    if (this.opened) {
+      this.handleShow();
+    } else {
+      this.handleHide();
+    }
   }
 
   /**
@@ -133,18 +129,15 @@ export class PdsPopover {
   };
 
   private handleShow = () => {
+    console.log('before handleShow');
+    console.log('this.opened', this.opened);
     this.showPopover();
     this.pdsPopoverShow.emit();
   };
 
   render() {
     return (
-      <Host
-        onMouseEnter={this.handleShow}
-        onMouseLeave={this.handleHide}
-        onFocusin={this.handleShow}
-        onFocusout={this.handleHide}
-      >
+      <Host>
         <div
           class={`
             pds-popover
@@ -157,6 +150,10 @@ export class PdsPopover {
           <span
             aria-describedby={this.componentId}
             class="pds-popover__trigger"
+            onClick={() => this.togglePopover()}
+            // onFocus={() => this.handleShow()}
+            // onBlur={() => this.handleHide()}
+            tabindex="0"
           >
             <slot />
           </span>
