@@ -24,7 +24,6 @@ export const Default = BaseTemplate.bind();
 Default.args = {
   alt: 'Random Unsplash',
   src: '//source.unsplash.com/320x180',
-  componentId: "default"
 }
 
 export const SizesAndSrcset = SizesAndSrcsetTemplate.bind();
