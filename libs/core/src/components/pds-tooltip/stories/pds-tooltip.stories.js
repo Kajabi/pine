@@ -3,7 +3,7 @@ import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 import { withActions } from '@storybook/addon-actions/decorator';
 
 export default {
-  argTypes: extractArgTypes('pds-image'),
+  argTypes: extractArgTypes('pds-tooltip'),
   component: 'pds-tooltip',
   decorators: [withActions],
   parameters: {
