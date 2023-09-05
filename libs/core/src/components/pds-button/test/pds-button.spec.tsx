@@ -66,6 +66,23 @@ describe('pds-button', () => {
     `);
   });
 
+  it('renders with id when prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button component-id="test"></pds-button>`,
+    });
+
+    expect(page.root).toEqualHtml(`
+      <pds-button component-id="test" id="test" variant="primary">
+        <mock:shadow-root>
+          <button class="pds-button" type="button">
+            <slot></slot>
+          </button>
+        </mock:shadow-root>
+      </pds-button>
+    `);
+  });
+
   it('renders icon button', async () => {
     const { root } = await newSpecPage({
       components: [PdsButton],
