@@ -16,9 +16,9 @@ export default {
 
 const BaseTemplate = (args) => html`
 <pds-list-options>
-  <pds-list-option-item>Item 1</pds-list-option-item>
-  <pds-list-option-item>Item 2</pds-list-option-item>
-  <pds-list-option-item>Item 3</pds-list-option-item>
+  <pds-list-option>Item 1</pds-list-option>
+  <pds-list-option>Item 2</pds-list-option>
+  <pds-list-option>Item 3</pds-list-option>
 </pds-list-options>`;
 
 export const Default = BaseTemplate.bind({});

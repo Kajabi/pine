@@ -50,11 +50,6 @@ export class PdsPopover {
   @Prop() htmlContent = false;
 
   /**
-   * A list of options for the popover
-   */
-  @Prop() options: string[] = [];
-
-  /**
    * Determines the preferred position of the popover
    * @defaultValue "right"
    */
@@ -183,15 +178,6 @@ export class PdsPopover {
             <slot
               name="content"
             ></slot>
-            {this.content && !this.options.length ? (
-              this.content
-            ) : (
-              <ul>
-                {this.options.map((option) => (
-                  <li>{option}</li>
-                ))}
-              </ul>
-            )}
             {this.content}
           </div>
         </div>
