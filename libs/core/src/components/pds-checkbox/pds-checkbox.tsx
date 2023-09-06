@@ -14,7 +14,7 @@ export class PdsCheckbox {
   @Prop() checked: boolean;
 
   /**
-   * String used for checkbox `id` attribute and label `for` attribute.
+   * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
    */
   @Prop() componentId!: string;
 

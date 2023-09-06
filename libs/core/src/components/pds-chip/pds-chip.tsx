@@ -7,7 +7,7 @@ import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 })
 export class PdsChip {
   /**
-   * String used for the component `id` attribute.
+   * A unique identifier used for the underlying component `id` attribute.
    */
   @Prop() componentId: string;
 

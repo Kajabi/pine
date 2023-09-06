@@ -10,7 +10,7 @@ import { Component, h, Prop } from '@stencil/core';
 })
 export class PdsLink {
   /**
-   * String used for the component `id` attribute.
+   * A unique identifier used for the underlying component `id` attribute.
    */
   @Prop() componentId: string;
 

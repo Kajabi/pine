@@ -13,7 +13,7 @@ export class PdsProgress {
   @Prop() animated = false;
 
   /**
-  * String used for progress `id` attribute and label `for` attribute.
+  * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
   */
   @Prop() componentId!: string;
 

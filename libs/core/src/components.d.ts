@@ -20,7 +20,7 @@ export namespace Components {
          */
         "badge"?: boolean;
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
         /**
@@ -51,7 +51,7 @@ export namespace Components {
     }
     interface PdsButton {
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
         /**
@@ -87,7 +87,7 @@ export namespace Components {
          */
         "checked": boolean;
         /**
-          * String used for checkbox `id` attribute and label `for` attribute.
+          * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
          */
         "componentId": string;
         /**
@@ -125,7 +125,7 @@ export namespace Components {
     }
     interface PdsChip {
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
         /**
@@ -160,7 +160,7 @@ export namespace Components {
          */
         "border": boolean;
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
         /**
@@ -180,7 +180,7 @@ export namespace Components {
     }
     interface PdsDivider {
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
         /**
@@ -199,7 +199,7 @@ export namespace Components {
          */
         "alt"?: string;
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
         /**
@@ -229,7 +229,7 @@ export namespace Components {
     }
     interface PdsInput {
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
         /**
@@ -280,7 +280,7 @@ export namespace Components {
     }
     interface PdsLink {
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
         /**
@@ -309,7 +309,7 @@ export namespace Components {
          */
         "animated": boolean;
         /**
-          * String used for progress `id` attribute and label `for` attribute.
+          * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
          */
         "componentId": string;
         /**
@@ -339,7 +339,7 @@ export namespace Components {
          */
         "checked": boolean;
         /**
-          * String used for radio `id` attribute and label `for` attribute.
+          * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
          */
         "componentId": string;
         /**
@@ -380,7 +380,7 @@ export namespace Components {
          */
         "checked": boolean;
         /**
-          * String used for the component `id` attribute and associates the input with its label
+          * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
          */
         "componentId": string;
         /**
@@ -447,7 +447,7 @@ export namespace Components {
          */
         "activeTabName": string;
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
         /**
@@ -461,7 +461,7 @@ export namespace Components {
     }
     interface PdsTextarea {
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
         /**
@@ -515,7 +515,7 @@ export namespace Components {
     }
     interface PdsTooltip {
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
         /**
@@ -735,7 +735,7 @@ declare namespace LocalJSX {
          */
         "badge"?: boolean;
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
         /**
@@ -766,7 +766,7 @@ declare namespace LocalJSX {
     }
     interface PdsButton {
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
         /**
@@ -802,7 +802,7 @@ declare namespace LocalJSX {
          */
         "checked"?: boolean;
         /**
-          * String used for checkbox `id` attribute and label `for` attribute.
+          * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
          */
         "componentId": string;
         /**
@@ -844,7 +844,7 @@ declare namespace LocalJSX {
     }
     interface PdsChip {
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
         /**
@@ -883,7 +883,7 @@ declare namespace LocalJSX {
          */
         "border"?: boolean;
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
         /**
@@ -907,7 +907,7 @@ declare namespace LocalJSX {
     }
     interface PdsDivider {
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
         /**
@@ -926,7 +926,7 @@ declare namespace LocalJSX {
          */
         "alt"?: string;
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
         /**
@@ -956,7 +956,7 @@ declare namespace LocalJSX {
     }
     interface PdsInput {
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
         /**
@@ -1011,7 +1011,7 @@ declare namespace LocalJSX {
     }
     interface PdsLink {
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
         /**
@@ -1040,7 +1040,7 @@ declare namespace LocalJSX {
          */
         "animated"?: boolean;
         /**
-          * String used for progress `id` attribute and label `for` attribute.
+          * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
          */
         "componentId": string;
         /**
@@ -1070,7 +1070,7 @@ declare namespace LocalJSX {
          */
         "checked"?: boolean;
         /**
-          * String used for radio `id` attribute and label `for` attribute.
+          * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
          */
         "componentId"?: string;
         /**
@@ -1115,7 +1115,7 @@ declare namespace LocalJSX {
          */
         "checked"?: boolean;
         /**
-          * String used for the component `id` attribute and associates the input with its label
+          * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
          */
         "componentId": string;
         /**
@@ -1187,7 +1187,7 @@ declare namespace LocalJSX {
          */
         "activeTabName": string;
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
         /**
@@ -1201,7 +1201,7 @@ declare namespace LocalJSX {
     }
     interface PdsTextarea {
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
         /**
@@ -1259,7 +1259,7 @@ declare namespace LocalJSX {
     }
     interface PdsTooltip {
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
         /**
