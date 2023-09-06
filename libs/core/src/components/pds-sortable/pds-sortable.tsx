@@ -14,7 +14,7 @@ export class PdsSortable {
   @Prop({ reflect: true }) border = false;
 
   /**
-   * A unique identifier for the sortable container.
+   * A unique identifier used for the sortable container `id` attribute.
    */
   @Prop() componentId!: string;
 

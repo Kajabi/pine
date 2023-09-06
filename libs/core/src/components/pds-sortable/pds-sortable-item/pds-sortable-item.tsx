@@ -16,7 +16,7 @@ export class PdsSortableItem {
   @Prop() enableActions = false;
 
   /**
-   * A unique identifier for the sortable item.
+   * A unique identifier used for the sortable item `id` attribute.
    */
   @Prop() componentId: string;
 

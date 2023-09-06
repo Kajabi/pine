@@ -357,7 +357,7 @@ export namespace Components {
          */
         "border": boolean;
         /**
-          * A unique identifier for the sortable container.
+          * A unique identifier used for the sortable container `id` attribute.
          */
         "componentId": string;
         /**
@@ -371,7 +371,7 @@ export namespace Components {
     }
     interface PdsSortableItem {
         /**
-          * A unique identifier for the sortable item.
+          * A unique identifier used for the sortable item `id` attribute.
          */
         "componentId": string;
         /**
@@ -1121,7 +1121,7 @@ declare namespace LocalJSX {
          */
         "border"?: boolean;
         /**
-          * A unique identifier for the sortable container.
+          * A unique identifier used for the sortable container `id` attribute.
          */
         "componentId": string;
         /**
@@ -1139,7 +1139,7 @@ declare namespace LocalJSX {
     }
     interface PdsSortableItem {
         /**
-          * A unique identifier for the sortable item.
+          * A unique identifier used for the sortable item `id` attribute.
          */
         "componentId"?: string;
         /**
