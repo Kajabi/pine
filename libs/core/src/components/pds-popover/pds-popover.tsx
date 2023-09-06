@@ -40,6 +40,11 @@ export class PdsPopover {
   @Prop() hasArrow? = false;
 
   /**
+   * A list of options for the popover
+   */
+  @Prop() options: string[] = [];
+
+  /**
    * Determines the preferred position of the popover
    * @defaultValue "right"
    */

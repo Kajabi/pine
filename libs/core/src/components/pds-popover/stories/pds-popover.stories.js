@@ -42,6 +42,19 @@ const AvatarDropdownTemplate = (args) => html`
     <pds-avatar dropdown="true"></pds-avatar>
   </pds-popover>`;
 
+const ListTemplate = (args) => html`
+  <pds-popover options={['sOption 1', 'Option 2', 'Option 3']}>
+    <pds-button variant="secondary">Click</pds-button>
+    <div slot="content">
+      <pds-list-options>
+        <pds-list-option-item>Item 1</pds-list-option-item>
+        <pds-list-option-item>Item 2</pds-list-option-item>
+        <pds-list-option-item>Item 3</pds-list-option-item>
+      </pds-list-options>
+    </div>
+  </pds-popover>
+`;
+
 export const Default = BaseTemplate.bind({});
 Default.args = {
   componentId: "default",
@@ -56,3 +69,10 @@ AvatarPopover.args = {
   htmlContent: true,
   placement: "bottom-start",
 };
+
+export const Options = ListTemplate.bind({});
+Options.args = {
+  htmlContent: true,
+  placement: "bottom-start",
+};
+
