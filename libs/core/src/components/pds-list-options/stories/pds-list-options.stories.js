@@ -11,7 +11,7 @@ export default {
       handles: [],
     },
   },
-  title: 'components/ListOptions'
+  title: 'components/List Options'
 }
 
 const BaseTemplate = (args) => html`
