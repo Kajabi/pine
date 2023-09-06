@@ -347,10 +347,6 @@ export namespace Components {
          */
         "opened": boolean;
         /**
-          * A list of options for the popover
-         */
-        "options": string[];
-        /**
           * Determines the preferred position of the popover
           * @defaultValue "right"
          */
@@ -1236,10 +1232,6 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "opened"?: boolean;
-        /**
-          * A list of options for the popover
-         */
-        "options"?: string[];
         /**
           * Determines the preferred position of the popover
           * @defaultValue "right"
