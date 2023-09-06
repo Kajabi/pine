@@ -28,11 +28,6 @@ export class PdsPopover {
   @State() isOpen = false;
 
   /**
-   * Content for the popover. If HTML is required, use the content slot
-   */
-  @Prop() content: string;
-
-  /**
    * Id used to reference the component
    */
   @Prop() componentId: string;
@@ -42,12 +37,6 @@ export class PdsPopover {
    * @defaultValue true
    */
   @Prop() hasArrow? = true;
-
-  /**
-   * Enable this option when using the content slot
-   * @defaultValue false
-   */
-  @Prop() htmlContent = false;
 
   /**
    * Determines the preferred position of the popover
@@ -155,7 +144,6 @@ export class PdsPopover {
           class={`
             pds-popover
             pds-popover--${this.placement}
-            ${this.htmlContent ? 'pds-popover--has-html-content' : ''}
             ${this.opened ? 'pds-popover--is-open' : ''}
             ${this.hasArrow ? '' : 'pds-popover--no-arrow'}
           `}
@@ -178,7 +166,6 @@ export class PdsPopover {
             <slot
               name="content"
             ></slot>
-            {this.content}
           </div>
         </div>
       </Host>
