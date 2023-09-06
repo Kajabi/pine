@@ -26,10 +26,10 @@
   --field-padding-block: var(--pine-spacing-xs);
   --field-padding-inline: var(--pine-spacing-sm);
 
-  --helper-font-size: var(--pine-font-size-body-xs);
-  --helper-font-weight: var(--pine-font-weight-regular);
-  --helper-line-height: var(--pine-line-height-sm);
-  --helper-margin-block-start: var(--pine-spacing-xs);
+  --helper-message-font-size: var(--pine-font-size-body-xs);
+  --helper-message-font-weight: var(--pine-font-weight-regular);
+  --helper-message-line-height: var(--pine-line-height-sm);
+  --helper-message-margin-block-start: var(--pine-spacing-xs);
 
   display: inline;
 }
@@ -84,11 +84,11 @@ label {
 
 .pds-textarea__error-message,
 .pds-textarea__helper-message {
-  font-size: var(--helper-font-size);
-  font-weight: var(--helper-font-weight);
-  line-height: var(--helper-line-height);
+  font-size: var(--helper-message-font-size);
+  font-weight: var(--helper-message-font-weight);
+  line-height: var(--helper-message-line-height);
   margin-block-end: 0;
-  margin-block-start: var(--helper-margin-block-start);
+  margin-block-start: var(--helper-message-margin-block-start);
 }
 
 .pds-textarea__error-message {

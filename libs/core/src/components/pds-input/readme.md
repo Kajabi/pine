@@ -37,6 +37,32 @@
 |      | Content is placed between the opening closing tags |
 
 
+## CSS Custom Properties
+
+| Name                           | Description                                   |
+| ------------------------------ | --------------------------------------------- |
+| `--background`                 | Background of the input                       |
+| `--background-disabled`        | Background of a disabled input                |
+| `--border-color-default`       | Border color of the input text                |
+| `--color`                      | Color of the input text                       |
+| `--color-error`                | Color of the input text when error is present |
+| `--color-hover`                | Border color of the input text when hovered   |
+| `--color-placeholder`          | Color of the placeholder text                 |
+| `--field-font-size`            | Font size of the field text                   |
+| `--field-font-weight`          | Font weight of the field text                 |
+| `--field-line-height`          | Line height of the field text                 |
+| `--field-padding-block`        | Block padding for the field text              |
+| `--field-padding-inline`       | Inline padding for the field text             |
+| `--helper-message-font-size`   | Font size of the helper text                  |
+| `--helper-message-font-weight` | Font weight of the helper text                |
+| `--helper-message-line-height` | Line height of the helper text                |
+| `--helper-message-margin-top`  | Top margin of the helper                      |
+| `--label-font-size`            | Font size of the label text                   |
+| `--label-font-weight`          | Font weight of the label text                 |
+| `--label-line-height`          | Line height of the label text                 |
+| `--label-margin-bottom`        | Bottom margin of the label                    |
+
+
 ----------------------------------------------
 
 

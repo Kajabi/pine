@@ -22,10 +22,10 @@
     * @prop --field-padding-block: Block padding for the field text
     * @prop --field-padding-inline: Inline padding for the field text
     *
-    * @prop --helper-font-size: Font size of the helper text
-    * @prop --helper-font-weight: Font weight of the helper text
-    * @prop --helper-line-height: Line height of the helper text
-    * @prop --helper-margin-top: Top margin of the helper
+    * @prop --helper-message-font-size: Font size of the helper text
+    * @prop --helper-message-font-weight: Font weight of the helper text
+    * @prop --helper-message-line-height: Line height of the helper text
+    * @prop --helper-message-margin-top: Top margin of the helper
     */
   --background: #fff;
   --background-disabled: #f9fafa;
@@ -50,10 +50,10 @@
   --field-padding-block: 8px;
   --field-padding-inline: 16px;
 
-  --helper-font-size: 12px;
-  --helper-font-weight: 400;
-  --helper-line-height: 20px;
-  --helper-margin-top: 8px;
+  --helper-message-font-size: 12px;
+  --helper-message-font-weight: 400;
+  --helper-message-line-height: 20px;
+  --helper-message-margin-top: 8px;
 
 
   display: inline;
@@ -119,11 +119,11 @@ input {
 
 .pds-input__error-message,
 .pds-input__helper-message {
-  font-size: var(--helper-font-size);
-  font-weight: var(--helper-font-weight);
-  line-height: var(--helper-line-height);
+  font-size: var(--helper-message-font-size);
+  font-weight: var(--helper-message-font-weight);
+  line-height: var(--helper-message-line-height);
   margin-bottom: 0;
-  margin-top: var(--helper-margin-top);
+  margin-top: var(--helper-message-margin-top);
 }
 
 .pds-input__error-message {
