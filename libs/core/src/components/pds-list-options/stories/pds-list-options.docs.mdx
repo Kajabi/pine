@@ -1,0 +1,23 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import { html, render } from 'lit-html';
+
+import * as stories from './pds-list-options.stories.js';
+// import * as SortableItemStories from '../pds-sortable-item/stories/pds-sortable-item.stories.js';
+
+<Meta of={stories} />
+
+# List options
+
+List options description
+
+## Properties
+
+<ArgTypes of={stories} />
+
+### Default
+
+<Canvas of={stories.Default} source={{
+  code: `
+    <pds-list-options></pds-list-options>
+  `
+}} />

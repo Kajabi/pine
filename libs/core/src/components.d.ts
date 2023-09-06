@@ -278,6 +278,18 @@ export namespace Components {
          */
         "variant": 'inline' | 'plain';
     }
+    interface PdsListOption {
+        /**
+          * A unique identifier for component.
+         */
+        "componentId": string;
+    }
+    interface PdsListOptions {
+        /**
+          * A unique identifier for the sortable container.
+         */
+        "componentId": string;
+    }
     interface PdsPopover {
         /**
           * Id used to reference the component
@@ -306,6 +318,10 @@ export namespace Components {
           * @defaultValue false
          */
         "opened": boolean;
+        /**
+          * A list of options for the popover
+         */
+        "options": string[];
         /**
           * Determines the preferred position of the popover
           * @defaultValue "right"
@@ -687,6 +703,18 @@ declare global {
         prototype: HTMLPdsLinkElement;
         new (): HTMLPdsLinkElement;
     };
+    interface HTMLPdsListOptionElement extends Components.PdsListOption, HTMLStencilElement {
+    }
+    var HTMLPdsListOptionElement: {
+        prototype: HTMLPdsListOptionElement;
+        new (): HTMLPdsListOptionElement;
+    };
+    interface HTMLPdsListOptionsElement extends Components.PdsListOptions, HTMLStencilElement {
+    }
+    var HTMLPdsListOptionsElement: {
+        prototype: HTMLPdsListOptionsElement;
+        new (): HTMLPdsListOptionsElement;
+    };
     interface HTMLPdsPopoverElement extends Components.PdsPopover, HTMLStencilElement {
     }
     var HTMLPdsPopoverElement: {
@@ -751,6 +779,8 @@ declare global {
         "pds-image": HTMLPdsImageElement;
         "pds-input": HTMLPdsInputElement;
         "pds-link": HTMLPdsLinkElement;
+        "pds-list-option": HTMLPdsListOptionElement;
+        "pds-list-options": HTMLPdsListOptionsElement;
         "pds-popover": HTMLPdsPopoverElement;
         "pds-progress": HTMLPdsProgressElement;
         "pds-radio": HTMLPdsRadioElement;
@@ -1049,6 +1079,18 @@ declare namespace LocalJSX {
          */
         "variant"?: 'inline' | 'plain';
     }
+    interface PdsListOption {
+        /**
+          * A unique identifier for component.
+         */
+        "componentId"?: string;
+    }
+    interface PdsListOptions {
+        /**
+          * A unique identifier for the sortable container.
+         */
+        "componentId": string;
+    }
     interface PdsPopover {
         /**
           * Id used to reference the component
@@ -1081,6 +1123,10 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "opened"?: boolean;
+        /**
+          * A list of options for the popover
+         */
+        "options"?: string[];
         /**
           * Determines the preferred position of the popover
           * @defaultValue "right"
@@ -1381,6 +1427,8 @@ declare namespace LocalJSX {
         "pds-image": PdsImage;
         "pds-input": PdsInput;
         "pds-link": PdsLink;
+        "pds-list-option": PdsListOption;
+        "pds-list-options": PdsListOptions;
         "pds-popover": PdsPopover;
         "pds-progress": PdsProgress;
         "pds-radio": PdsRadio;
@@ -1405,6 +1453,8 @@ declare module "@stencil/core" {
             "pds-image": LocalJSX.PdsImage & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
             "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
+            "pds-list-option": LocalJSX.PdsListOption & JSXBase.HTMLAttributes<HTMLPdsListOptionElement>;
+            "pds-list-options": LocalJSX.PdsListOptions & JSXBase.HTMLAttributes<HTMLPdsListOptionsElement>;
             "pds-popover": LocalJSX.PdsPopover & JSXBase.HTMLAttributes<HTMLPdsPopoverElement>;
             "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-radio": LocalJSX.PdsRadio & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
