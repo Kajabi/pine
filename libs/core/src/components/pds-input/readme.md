@@ -25,9 +25,16 @@
 
 ## Events
 
-| Event      | Description                             | Type                      |
-| ---------- | --------------------------------------- | ------------------------- |
-| `pdsInput` | Emitted when a keyboard input occurred. | `CustomEvent<InputEvent>` |
+| Event      | Description                            | Type                      |
+| ---------- | -------------------------------------- | ------------------------- |
+| `pdsInput` | Emitted when a keyboard input occurred | `CustomEvent<InputEvent>` |
+
+
+## Slots
+
+| Slot | Description                                        |
+| ---- | -------------------------------------------------- |
+|      | Content is placed between the opening closing tags |
 
 
 ----------------------------------------------
