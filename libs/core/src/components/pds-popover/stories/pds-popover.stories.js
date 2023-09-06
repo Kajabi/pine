@@ -43,15 +43,15 @@ const AvatarDropdownTemplate = (args) => html`
   </pds-popover>`;
 
 const ListTemplate = (args) => html`
-  <pds-popover options={['sOption 1', 'Option 2', 'Option 3']}>
+  <pds-popover has-arrow=${args.hasArrow} placement=${args.placement}>
     <pds-button variant="secondary">Click</pds-button>
     <div slot="content">
       <pds-list-options>
-        <pds-list-option-item>Item 1</pds-list-option-item>
-        <pds-list-option-item>Item 2</pds-list-option-item>
-        <pds-list-option-item>Item 3</pds-list-option-item>
+        <pds-list-option>Item 1</pds-list-option>
+        <pds-list-option>Item 2</pds-list-option>
+        <pds-list-option>Item 3</pds-list-option>
       </pds-list-options>
-    </div>
+
   </pds-popover>
 `;
 
@@ -72,7 +72,7 @@ AvatarPopover.args = {
 
 export const Options = ListTemplate.bind({});
 Options.args = {
-  htmlContent: true,
+  hasArrow: false,
   placement: "bottom-start",
 };
 

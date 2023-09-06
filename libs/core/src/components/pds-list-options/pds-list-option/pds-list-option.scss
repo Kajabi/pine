@@ -1,1 +1,32 @@
 // TODO
+:host {
+  --background-color-hover: var(--pine-color-neutral-grey-100);
+  --border-color-current: var(--pine-color-primary-200);
+  --border-radius: var(--pine-border-radius-md);
+  --border-width: 4px;
+  --font-size: var(--pine-font-size-body);
+  --font-weight: var(--pine-font-weight-regular);
+  --line-height: var(--pine-line-height-md);
+  --padding-block: 6px;
+  --padding-inline: 14px;
+}
+
+.pds-list-option {
+  align-items: center;
+  border: var(--border-width) solid transparent;
+  border-radius: var(--border-radius);
+  display: flex;
+  font-size: var(--font-size);
+  justify-content: space-between;
+  line-height: var(--line-height);
+  padding: var(--padding-block) var(--padding-inline);
+
+  &:hover,
+  &.is-selected {
+    background-color: var(--background-color-hover);
+  }
+
+  &.is--current {
+    border-color: var(--border-color-current);
+  }
+}
