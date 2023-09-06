@@ -44,7 +44,7 @@ const AvatarDropdownTemplate = (args) => html`
 
 const ListTemplate = (args) => html`
   <pds-popover has-arrow=${args.hasArrow} placement=${args.placement}>
-    <pds-button variant="secondary">Click</pds-button>
+    <pds-button variant="secondary">Menu</pds-button>
     <div slot="content">
       <pds-list-options>
         <pds-list-option>Item 1</pds-list-option>
@@ -70,8 +70,8 @@ AvatarPopover.args = {
   placement: "bottom-start",
 };
 
-export const Options = ListTemplate.bind({});
-Options.args = {
+export const WithList = ListTemplate.bind({});
+WithList.args = {
   hasArrow: false,
   placement: "bottom-start",
 };
