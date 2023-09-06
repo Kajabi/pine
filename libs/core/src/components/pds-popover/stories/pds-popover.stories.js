@@ -8,7 +8,7 @@ export default {
   decorators: [withActions],
   parameters: {
     actions: {
-      handles: ['mouseEnter', 'pdsPopoverShow', 'mouseLeave', 'pdsPopoverHide'],
+      handles: ['pdsPopoverShow', 'pdsPopoverHide'],
     },
   },
   title: 'components/Popover'
@@ -22,12 +22,12 @@ const BaseTemplate = (args) => html`
         <pds-button>Get Started</pds-button>
       </div>
     </div>
-    <pds-button variant="secondary">Click</pds-button>
+    <pds-button variant="secondary">Help</pds-button>
   </pds-popover>`;
 
 const ListTemplate = (args) => html`
   <pds-popover has-arrow=${args.hasArrow} placement=${args.placement}>
-    <pds-button variant="secondary">Click</pds-button>
+    <pds-button variant="secondary">Menu</pds-button>
     <div slot="content">
       <pds-list-options>
         <pds-list-option>Item 1</pds-list-option>
@@ -45,8 +45,8 @@ Default.args = {
   placement: "bottom-start",
 };
 
-export const Options = ListTemplate.bind({});
-Options.args = {
+export const WithList = ListTemplate.bind({});
+WithList.args = {
   hasArrow: false,
   placement: "bottom-start",
 };
