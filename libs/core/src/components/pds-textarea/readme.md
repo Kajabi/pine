@@ -9,7 +9,7 @@
 
 | Property                   | Attribute        | Description                                                                                         | Type      | Default            |
 | -------------------------- | ---------------- | --------------------------------------------------------------------------------------------------- | --------- | ------------------ |
-| `componentId` _(required)_ | `component-id`   | A unique identifier for the textarea                                                                | `string`  | `undefined`        |
+| `componentId` _(required)_ | `component-id`   | A unique identifier used for the underlying component `id` attribute.                               | `string`  | `undefined`        |
 | `disabled`                 | `disabled`       | Indicates whether or not the textarea is disabled                                                   | `boolean` | `false`            |
 | `errorMessage`             | `error-message`  | Specifies the error text and provides an error-themed treatment to the field                        | `string`  | `undefined`        |
 | `helperMessage`            | `helper-message` | Displays a hint or description of the textarea                                                      | `string`  | `undefined`        |

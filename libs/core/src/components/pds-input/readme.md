@@ -9,7 +9,7 @@
 
 | Property                   | Attribute        | Description                                                                                                  | Type      | Default     |
 | -------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------ | --------- | ----------- |
-| `componentId` _(required)_ | `component-id`   | A unique identifier for the input field                                                                      | `string`  | `undefined` |
+| `componentId` _(required)_ | `component-id`   | A unique identifier used for the underlying component `id` attribute.                                        | `string`  | `undefined` |
 | `disabled`                 | `disabled`       | Indicates whether or not the input field is disabled                                                         | `boolean` | `undefined` |
 | `errorMessage`             | `error-message`  | Specifies the error message and provides an error-themed treatment to the field                              | `string`  | `undefined` |
 | `helperMessage`            | `helper-message` | Displays a message or hint below the input field                                                             | `string`  | `undefined` |
