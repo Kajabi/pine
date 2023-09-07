@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
 import Sortable from 'sortablejs';
 
 @Component({
@@ -7,6 +7,13 @@ import Sortable from 'sortablejs';
   scoped: true,
 })
 export class PdsSortable {
+  @Element() el: HTMLPdsSortableElement;
+
+  /**
+   * Event emitted when a sortable item is moved.
+   */
+  @Event() pdsSortableItemMoved: EventEmitter;
+
   /**
    * Determines whether `sortable` should have a border.
    * @defaultValue false
@@ -28,13 +35,6 @@ export class PdsSortable {
    */
   @Prop() handleType: 'handle' | 'row' = 'row';
 
-  /**
-   * Event emitted when a sortable item is moved.
-   */
-  @Event() pdsSortableItemMoved: EventEmitter;
-
-  private container: HTMLElement;
-
   private classNames() {
     const classNames = ['pds-sortable'];
 
@@ -54,6 +54,7 @@ export class PdsSortable {
   }
 
   componentDidLoad() {
+
     let sortableOptions: any = {
       animation: 150,
       ghostClass: 'pds-sortable-item--ghost',
@@ -70,12 +71,12 @@ export class PdsSortable {
       };
     }
 
-    Sortable.create(this.container, sortableOptions);
+    Sortable.create(this.el, sortableOptions);
   }
 
   render() {
     return (
-      <Host class={this.classNames()} id={this.componentId} ref={(el) => (this.container = el as HTMLElement)}>
+      <Host class={this.classNames()} id={this.componentId}>
         <slot></slot>
       </Host>
     );
