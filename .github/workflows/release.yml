@@ -37,7 +37,7 @@ jobs:
         id: core-node-modules
         with:
           path: "**/node_modules"
-          key: ${{ runner.os}}-build-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os}}-build-${{ hashFiles('**/package-lock.json') }}
 
       - name: Configure user
         run: |
@@ -46,7 +46,7 @@ jobs:
 
       - name: Install Dependencies
         if: steps.cache-node-modules.ouputs.cache-hit != true || steps.changed-files.outputs.any_changed == 'true'
-        run: yarn install  --ignore-scripts
+        run: npm ci --ignore-scripts
         shell: bash
 
       - name: Set NPM Token

@@ -26,18 +26,18 @@ runs:
         cache-name: icons-node-modules
       with:
         path: ./libs/icons/node_modules
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}-v1
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}-v1
 
     - name: Set SHA
       uses: nrwl/nx-set-shas@v3
 
     - name: Install Dependencies
       if: steps.cache-node-modules.ouputs.cache-hit != true || steps.changed-files.outputs.any_changed == 'true'
-      run: yarn install --frozen-lockfile --immutable
+      run: npm ci
       shell: bash
 
     - name: Build Icons
-      run: yarn nx run icons:build
+      run: npx nx run icons:build
       shell: bash
 
     - name: Upload Icons Build Archive

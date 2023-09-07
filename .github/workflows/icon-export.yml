@@ -38,14 +38,14 @@ jobs:
           cache-name: icons-node-modules
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}-v1
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}-v1
 
       - name: Set SHA
         uses: nrwl/nx-set-shas@v3
 
       - name: Install Dependencies
         if: steps.icons-node-modules.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile --immutable
+        run: npm ci
         shell: bash
 
       - name: Get current date
@@ -53,7 +53,7 @@ jobs:
         run: echo "current_date=$(date --rfc-3339=date)" >> $GITHUB_ENV
 
       - name: Running Icon Export
-        run: yarn nx run icons:update
+        run: npx nx run icons:update
         env:
           FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }}
           FIGMA_FILE_ID: ${{ secrets.FIGMA_FILE_ID }}

@@ -20,9 +20,9 @@ runs:
         node-version: ${{ inputs.node-version }}
 
     - name: Install Dependencies
-      run: yarn install --frozen-lockfile --immutable
+      run: npm ci
       shell: bash
 
     - name: Lint
-      run : yarn nx affected --target=test --parallel=3 --ci --coverage
+      run : npx nx affected --target=test --parallel=3 --ci --coverage
       shell: bash

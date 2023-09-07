@@ -28,7 +28,7 @@ runs:
         registry-url: 'https://registry.npmjs.org'
 
     - name: Install Dependencies
-      run: yarn install  --include-dependencies --scope ${{ inputs.scope }} --ignore-scripts -- --legacy-peer-deps
+      run: npm ci --workspace ${{ inputs.scope }} --ignore-scripts
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
@@ -38,7 +38,7 @@ runs:
       working-directory: ${{ inputs.working-directory }}
 
     - name: Run Build
-      run: yarn nx run ${{ inputs.project }}:build
+      run: npx nx run ${{ inputs.project }}:build
       shell: bash
 
     - name: Prepare NPM Token

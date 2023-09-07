@@ -1,7 +1,7 @@
 # Build and Development scripts
 
 # Updating Icons
-The `src/svg` directory is where the icons are downloaded. These are pulled initially from the Figma document, considered the single source of truth. These images are not optimized, as they are just exported from the editor. To get the latest svgs, you will need to run `yarn run nx icons:update`. Prior to running you will need to configure `figma-icon-config.json`.
+The `src/svg` directory is where the icons are downloaded. These are pulled initially from the Figma document, considered the single source of truth. These images are not optimized, as they are just exported from the editor. To get the latest svgs, you will need to run `npx nx icons:update`. Prior to running you will need to configure `figma-icon-config.json`.
 
 # Figma Icon Configuration
 The `figma-icon-config.json` should be located in the root directory. You can follow the instructions below to create one if there isn't one currently. The presence of this file is required to pull icons from Figma.
@@ -45,13 +45,13 @@ figma-icon-config.json
 
 Example on how to use environment variables
 ```sh
-FIGMA_ACCESS_TOKEN=[mySampleAccessToken] yarn nx run icons:update
+FIGMA_ACCESS_TOKEN=[mySampleAccessToken] npx nx run icons:update
 ```
 
 # Building locally
 Once the latest svgs have been updated, which would either be added, deleted, or modified in the `src/svg` directory, you can run:
 ```sh
-  yarn run nx icons:build
+  npx nx icons:build
 ```
 
 The `build` command will download the latest icons from the Figma document (see [Figma Icon Configuration](#figma-doc-configuration)), optimize all of the icons, and generate the files to be distributed. Once complete and successful, all of the optimized svgs will be located in `dist/pds-icons/svg`, along with the `pds-icon` web component in the `dist` directory.

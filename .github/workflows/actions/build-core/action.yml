@@ -26,18 +26,18 @@ runs:
         cache-name: core-node-modules
       with:
         path: ./libs/core/node_modules
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}-v1
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}-v1
 
     - name: Set SHA
       uses: nrwl/nx-set-shas@v3
 
     - name: Install Dependencies
-      run: yarn install
+      run: npm ci
       working-directory: './libs/core'
       shell: bash
 
     - name: Build Core
-      run: yarn nx run core:build  --ci
+      run: npx nx run core:build  --ci
       shell: bash
 
     - name: Upload artifacts
