@@ -35,11 +35,11 @@
     "loader/"
   ],
   "scripts": {
-    "build": "yarn build.stencil",
+    "build": "npm run build.stencil",
     "build.stencil": "stencil build --docs",
     "build.storybook": "storybook build",
     "build.ts": "tsc -p scripts/tsconfig.json",
-    "build.tokens": "yarn run build.ts && node scripts/build-tokens.js",
+    "build.tokens": "npm run build.ts && node scripts/build-tokens.js",
     "generate": "stencil generate",
     "lint": "run-p lint.*",
     "lint.eslint": "eslint src",
