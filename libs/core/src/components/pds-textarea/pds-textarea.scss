@@ -26,10 +26,10 @@
   --field-padding-block: var(--pine-spacing-xs);
   --field-padding-inline: var(--pine-spacing-sm);
 
-  --hint-font-size: var(--pine-font-size-body-xs);
-  --hint-font-weight: var(--pine-font-weight-regular);
-  --hint-line-height: var(--pine-line-height-sm);
-  --hint-margin-block-start: var(--pine-spacing-xs);
+  --helper-message-font-size: var(--pine-font-size-body-xs);
+  --helper-message-font-weight: var(--pine-font-weight-regular);
+  --helper-message-line-height: var(--pine-line-height-sm);
+  --helper-message-margin-block-start: var(--pine-spacing-xs);
 
   display: inline;
 }
@@ -83,12 +83,12 @@ label {
 }
 
 .pds-textarea__error-message,
-.pds-textarea__hint-message {
-  font-size: var(--hint-font-size);
-  font-weight: var(--hint-font-weight);
-  line-height: var(--hint-line-height);
+.pds-textarea__helper-message {
+  font-size: var(--helper-message-font-size);
+  font-weight: var(--helper-message-font-weight);
+  line-height: var(--helper-message-line-height);
   margin-block-end: 0;
-  margin-block-start: var(--hint-margin-block-start);
+  margin-block-start: var(--helper-message-margin-block-start);
 }
 
 .pds-textarea__error-message {

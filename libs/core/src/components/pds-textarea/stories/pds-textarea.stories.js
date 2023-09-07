@@ -7,7 +7,7 @@ export default {
     componentId: null,
     disabled: false,
     errorMessage: null,
-    hintMessage: null,
+    helperMessage: null,
     invalid: false,
     label: null,
     name: null,
@@ -31,7 +31,7 @@ const BaseTemplate = (args) => html`<pds-textarea
   component-id="${args.componentId}"
   disabled="${args.disabled}"
   error-message="${args.errorMessage}"
-  hint-message="${args.hintMessage}"
+  helper-message="${args.helperMessage}"
   invalid="${args.invalid}"
   label="${args.label}"
   name="${args.name}"
@@ -92,12 +92,12 @@ Readonly.args = {
   value: 'Readonly Value'
 };
 
-export const Hint = BaseTemplate.bind({});
-Hint.args = {
-  componentId: 'pds-textarea-hint-example',
-  hintMessage: 'Hint',
+export const Message = BaseTemplate.bind({});
+Message.args = {
+  componentId: 'pds-textarea-helper-example',
+  helperMessage: 'Helper message text',
   label: 'Name',
-  name: 'Hint',
+  name: 'Message',
 };
 
 export const Invalid = BaseTemplate.bind({});

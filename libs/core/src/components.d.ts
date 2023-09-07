@@ -217,13 +217,13 @@ export namespace Components {
          */
         "disabled"?: boolean;
         /**
-          * Specifies the error text and provides an error-themed treatment to the field
+          * Specifies the error message and provides an error-themed treatment to the field
          */
-        "errorText"?: string;
+        "errorMessage"?: string;
         /**
-          * Displays a hint or description of the input field
+          * Displays a message or hint below the input field
          */
-        "hint"?: string;
+        "helperMessage"?: string;
         /**
           * Indicates whether or not the input field is invalid or throws an error
          */
@@ -452,7 +452,7 @@ export namespace Components {
         /**
           * Displays a hint or description of the textarea
          */
-        "hintMessage"?: string;
+        "helperMessage"?: string;
         /**
           * Indicates whether or not the textarea is invalid or throws an error
           * @defaultValue false
@@ -920,13 +920,13 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Specifies the error text and provides an error-themed treatment to the field
+          * Specifies the error message and provides an error-themed treatment to the field
          */
-        "errorText"?: string;
+        "errorMessage"?: string;
         /**
-          * Displays a hint or description of the input field
+          * Displays a message or hint below the input field
          */
-        "hint"?: string;
+        "helperMessage"?: string;
         /**
           * Indicates whether or not the input field is invalid or throws an error
          */
@@ -1168,7 +1168,7 @@ declare namespace LocalJSX {
         /**
           * Displays a hint or description of the textarea
          */
-        "hintMessage"?: string;
+        "helperMessage"?: string;
         /**
           * Indicates whether or not the textarea is invalid or throws an error
           * @defaultValue false

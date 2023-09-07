@@ -6,8 +6,8 @@ export default {
   argTypes: extractArgTypes('pds-input'),
   args: {
     disabled: false,
-    errorText: null,
-    hint: null,
+    errorMessage: null,
+    helperMessage: null,
     invalid: false,
     name: null,
     placeholder: null,
@@ -27,8 +27,8 @@ export default {
 
 const BaseTemplate = (args) => html`<pds-input
   disabled="${args.disabled}"
-  error-text="${args.errorText}"
-  hint="${args.hint}"
+  error-message="${args.errorMessage}"
+  helper-message="${args.helperMessage}"
   invalid="${args.invalid}"
   component-id="${args.componentId}"
   label="${args.label}"
@@ -92,11 +92,11 @@ Readonly.args = {
   value: 'user123@test.com'
 };
 
-export const Hint = BaseTemplate.bind({});
-Hint.args = {
-  componentId: 'pds-input-hint-example',
+export const withMessage = BaseTemplate.bind({});
+withMessage.args = {
+  componentId: 'pds-input-helper-example',
   label: 'Email',
-  hint: 'Please use the correct format',
+  helperMessage: 'Please use the correct format',
   type: 'email',
   value: 'user123@test.com'
 };
@@ -105,7 +105,7 @@ export const Invalid = BaseTemplate.bind({});
 Invalid.args = {
   componentId: 'pds-input-invalid-example',
   label: 'Email',
-  errorText: "Please provide a valid Email address",
+  errorMessage: "Please provide a valid email address",
   type: 'email',
   value: 'user123@test.com'
 };

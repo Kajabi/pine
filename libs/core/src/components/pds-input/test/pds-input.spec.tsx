@@ -133,24 +133,24 @@ describe('pds-input', () => {
     `);
   });
 
-  it('renders a hint', async () => {
+  it('renders a helper message', async () => {
     const { root } = await newSpecPage({
       components: [PdsInput],
-      html: `<pds-input hint="Use the correct syntax" component-id="field-1" value="Frank Dux"></pds-input>`
+      html: `<pds-input helper-message="Use the correct syntax" component-id="field-1" value="Frank Dux"></pds-input>`
     });
 
-    const hint = root.shadowRoot.querySelector('.pds-input__hint');
-    expect(hint).not.toBeNull();
+    const helperMessage = root.shadowRoot.querySelector('.pds-input__helper-message');
+    expect(helperMessage).not.toBeNull();
   });
 
-  it('renders a error', async () => {
+  it('renders a error message', async () => {
     const { root } = await newSpecPage({
       components: [PdsInput],
-      html: `<pds-input error-text="Please provide a helpful error mespds" component-id="field-1" value="Frank Dux"></pds-input>`
+      html: `<pds-input error-message="Please provide a helpful error message" component-id="field-1" value="Frank Dux"></pds-input>`
     });
 
-    const errorText = root.shadowRoot.querySelector('.pds-input__error-text');
-    expect(errorText).not.toBeNull();
+    const errorMessage = root.shadowRoot.querySelector('.pds-input__error-message');
+    expect(errorMessage).not.toBeNull();
   });
 
   it('updates value prop on value change', async () => {

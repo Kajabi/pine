@@ -22,14 +22,14 @@ export class PdsInput {
   @Prop() disabled?: boolean;
 
   /**
-   * Specifies the error text and provides an error-themed treatment to the field
+   * Specifies the error message and provides an error-themed treatment to the field
    */
-  @Prop() errorText?: string;
+  @Prop() errorMessage?: string;
 
   /**
-   * Displays a hint or description of the input field
+   * Displays a message or hint below the input field
    */
-  @Prop() hint?: string;
+  @Prop() helperMessage?: string;
 
   /**
    * Indicates whether or not the input field is invalid or throws an error
@@ -94,7 +94,7 @@ export class PdsInput {
         <div class="pds-input">
           <PdsLabel htmlFor={this.componentId} text={this.label} />
           <input class="pds-input__field"
-            aria-describedby={assignDescription(this.componentId, this.invalid, this.hint)}
+            aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
             aria-invalid={this.invalid ? "true" : undefined}
             disabled={this.disabled}
             id={this.componentId}
@@ -106,21 +106,21 @@ export class PdsInput {
             value={this.value}
             onInput={this.onInputEvent}
           />
-          {this.hint &&
+          {this.helperMessage &&
             <p
-              class="pds-input__hint"
+              class="pds-input__helper-message"
               id={messageId(this.componentId, 'helper')}
             >
-              {this.hint}
+              {this.helperMessage}
             </p>
           }
-          {this.errorText &&
+          {this.errorMessage &&
             <p
-              class="pds-input__error-text"
+              class="pds-input__error-message"
               id={messageId(this.componentId, 'error')}
               aria-live="assertive"
             >
-              {this.errorText}
+              {this.errorMessage}
             </p>
           }
         </div>

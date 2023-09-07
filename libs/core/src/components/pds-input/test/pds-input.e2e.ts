@@ -21,12 +21,12 @@ describe('pds-input', () => {
   it('toggles an error state', async () => {
     const page = await newE2EPage();
 
-    await page.setContent('<pds-input error-text="This is error text"></pds-input>');
+    await page.setContent('<pds-input error-message="This is error message"></pds-input>');
     const component = await page.find('pds-input');
     expect(component).toHaveClass('hydrated');
 
-    const element = await page.find('pds-input >>> .pds-input__error-text');
-    expect(element.textContent).toEqual(`This is error text`);
+    const element = await page.find('pds-input >>> .pds-input__error-message');
+    expect(element.textContent).toEqual(`This is error message`);
   });
 
   it('renders a value pdsInput', async () => {

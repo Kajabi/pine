@@ -30,7 +30,7 @@ export class PdsTextarea {
   /**
    * Displays a hint or description of the textarea
    */
-  @Prop() hintMessage?: string;
+  @Prop() helperMessage?: string;
 
   /**
    * Indicates whether or not the textarea is invalid or throws an error
@@ -111,7 +111,7 @@ export class PdsTextarea {
             <PdsLabel htmlFor={this.componentId} text={this.label} />
           }
           <textarea
-            aria-describedby={assignDescription(this.componentId, this.invalid, this.hintMessage)}
+            aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
             aria-invalid={this.invalid ? "true" : undefined}
             class={this.textareaClassNames()}
             disabled={this.disabled}
@@ -123,12 +123,12 @@ export class PdsTextarea {
             rows={this.rows}
             onChange={this.onTextareaChange}
           >{this.value}</textarea>
-          {this.hintMessage &&
+          {this.helperMessage &&
             <p
-              class="pds-textarea__hint-message"
+              class="pds-textarea__helper-message"
               id={messageId(this.componentId, 'helper')}
             >
-              {this.hintMessage}
+              {this.helperMessage}
             </p>
           }
           {this.invalid &&
