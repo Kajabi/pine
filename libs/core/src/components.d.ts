@@ -374,6 +374,41 @@ export namespace Components {
          */
         "value": string;
     }
+    interface PdsSortable {
+        /**
+          * Determines whether `sortable` should have a border.
+          * @defaultValue false
+         */
+        "border": boolean;
+        /**
+          * A unique identifier used for the sortable container `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * Deternines whether `sortable` items should be divided with border.
+         */
+        "dividers": boolean;
+        /**
+          * Determines the grabbable area for the `pds-sortable-item`.
+         */
+        "handleType": 'handle' | 'row';
+    }
+    interface PdsSortableItem {
+        /**
+          * A unique identifier used for the sortable item `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * Determines whether `sortable-item-actions` slot should be enabled.
+          * @defaultValue false
+         */
+        "enableActions": boolean;
+        /**
+          * Determines whether `sortable-item` should have a handle.
+          * @defaultValue false
+         */
+        "handle": boolean;
+    }
     interface PdsSwitch {
         /**
           * Determines the input 'checked' state
@@ -583,6 +618,10 @@ export interface PdsRadioCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsRadioElement;
 }
+export interface PdsSortableCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsSortableElement;
+}
 export interface PdsSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsSwitchElement;
@@ -666,6 +705,18 @@ declare global {
         prototype: HTMLPdsRadioElement;
         new (): HTMLPdsRadioElement;
     };
+    interface HTMLPdsSortableElement extends Components.PdsSortable, HTMLStencilElement {
+    }
+    var HTMLPdsSortableElement: {
+        prototype: HTMLPdsSortableElement;
+        new (): HTMLPdsSortableElement;
+    };
+    interface HTMLPdsSortableItemElement extends Components.PdsSortableItem, HTMLStencilElement {
+    }
+    var HTMLPdsSortableItemElement: {
+        prototype: HTMLPdsSortableItemElement;
+        new (): HTMLPdsSortableItemElement;
+    };
     interface HTMLPdsSwitchElement extends Components.PdsSwitch, HTMLStencilElement {
     }
     var HTMLPdsSwitchElement: {
@@ -714,6 +765,8 @@ declare global {
         "pds-link": HTMLPdsLinkElement;
         "pds-progress": HTMLPdsProgressElement;
         "pds-radio": HTMLPdsRadioElement;
+        "pds-sortable": HTMLPdsSortableElement;
+        "pds-sortable-item": HTMLPdsSortableItemElement;
         "pds-switch": HTMLPdsSwitchElement;
         "pds-tab": HTMLPdsTabElement;
         "pds-tabpanel": HTMLPdsTabpanelElement;
@@ -1109,6 +1162,45 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
+    interface PdsSortable {
+        /**
+          * Determines whether `sortable` should have a border.
+          * @defaultValue false
+         */
+        "border"?: boolean;
+        /**
+          * A unique identifier used for the sortable container `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * Deternines whether `sortable` items should be divided with border.
+         */
+        "dividers"?: boolean;
+        /**
+          * Determines the grabbable area for the `pds-sortable-item`.
+         */
+        "handleType"?: 'handle' | 'row';
+        /**
+          * Event emitted when a sortable item is moved.
+         */
+        "onPdsSortableItemMoved"?: (event: PdsSortableCustomEvent<any>) => void;
+    }
+    interface PdsSortableItem {
+        /**
+          * A unique identifier used for the sortable item `id` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * Determines whether `sortable-item-actions` slot should be enabled.
+          * @defaultValue false
+         */
+        "enableActions"?: boolean;
+        /**
+          * Determines whether `sortable-item` should have a handle.
+          * @defaultValue false
+         */
+        "handle"?: boolean;
+    }
     interface PdsSwitch {
         /**
           * Determines the input 'checked' state
@@ -1318,6 +1410,8 @@ declare namespace LocalJSX {
         "pds-link": PdsLink;
         "pds-progress": PdsProgress;
         "pds-radio": PdsRadio;
+        "pds-sortable": PdsSortable;
+        "pds-sortable-item": PdsSortableItem;
         "pds-switch": PdsSwitch;
         "pds-tab": PdsTab;
         "pds-tabpanel": PdsTabpanel;
@@ -1341,6 +1435,8 @@ declare module "@stencil/core" {
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
             "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-radio": LocalJSX.PdsRadio & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
+            "pds-sortable": LocalJSX.PdsSortable & JSXBase.HTMLAttributes<HTMLPdsSortableElement>;
+            "pds-sortable-item": LocalJSX.PdsSortableItem & JSXBase.HTMLAttributes<HTMLPdsSortableItemElement>;
             "pds-switch": LocalJSX.PdsSwitch & JSXBase.HTMLAttributes<HTMLPdsSwitchElement>;
             "pds-tab": LocalJSX.PdsTab & JSXBase.HTMLAttributes<HTMLPdsTabElement>;
             "pds-tabpanel": LocalJSX.PdsTabpanel & JSXBase.HTMLAttributes<HTMLPdsTabpanelElement>;
