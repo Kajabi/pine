@@ -16,8 +16,8 @@ export class PdsListOption {
 
   render() {
     return (
-      <Host class="pds-list-option" id={this.componentId}>
-        <div class="pds-list-option">
+      <Host>
+        <div class="pds-list-option" id={this.componentId}>
           <slot></slot>
         </div>
       </Host>
