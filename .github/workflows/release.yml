@@ -32,12 +32,21 @@ jobs:
         with:
           node-version: 18.x
 
+      - name: Get NPM cache directory
+        id: npm-cache-dir
+        shell: bash
+        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+
       - name: Cache node_modules
         uses: actions/cache@v3
-        id: core-node-modules
+        id: cache-node-modules
+        env:
+          cache-name: cache-node-modules
         with:
-          path: "**/node_modules"
-          key: ${{ runner.os}}-build-${{ hashFiles('**/package-lock.json') }}
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-
 
       - name: Configure user
         run: |

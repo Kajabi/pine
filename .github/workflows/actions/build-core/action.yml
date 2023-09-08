@@ -19,25 +19,36 @@ runs:
       with:
         node-version: ${{ inputs.node-version }}
 
-    - name: Cache Node modules
+    - name: Verify NPM Cache
+      shell: bash
+      run: npm cache verify
+
+    - name: Get NPM cache directory
+      id: npm-cache-dir
+      shell: bash
+      run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+
+    - name: Cache node_modules
       uses: actions/cache@v3
-      id: core-node-modules
+      id: cache-node-modules
       env:
-        cache-name: core-node-modules
+        cache-name: cache-node-modules
       with:
-        path: ./libs/core/node_modules
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}-v1
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-
 
     - name: Set SHA
       uses: nrwl/nx-set-shas@v3
 
     - name: Install Dependencies
+      if: steps.cache-node-modules.outputs.cache-hit != true
       run: npm ci
-      working-directory: './libs/core'
       shell: bash
 
     - name: Build Core
-      run: npx nx run core:build  --ci
+      run: npx nx run core:build
       shell: bash
 
     - name: Upload artifacts
