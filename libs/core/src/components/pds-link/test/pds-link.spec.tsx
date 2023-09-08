@@ -18,6 +18,23 @@ describe('pds-link', () => {
     `);
   });
 
+  it('renders with id when prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsLink],
+      html: `<pds-link component-id="test"></pds-link>`,
+    });
+
+    expect(page.root).toEqualHtml(`
+      <pds-link component-id="test">
+        <mock:shadow-root>
+          <a class="pds-link pds-link--inline pds-link--lg" id="test">
+            <slot></slot>
+          </a>
+        </mock:shadow-root>
+      </pds-link>
+    `);
+  });
+
   it('renders with values', async () => {
     const { root } = await newSpecPage({
       components: [PdsLink],

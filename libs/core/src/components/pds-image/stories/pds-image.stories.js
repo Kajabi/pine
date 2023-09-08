@@ -10,6 +10,7 @@ export default {
 const BaseTemplate = (args) => html` <pds-image
   alt="${args.alt}"
   height="${args.height}"
+  component-id="${args.componentId}"
   loading="${args.loading}"
   sizes="${args.sizes}"
   src="${args.src}"
@@ -22,7 +23,7 @@ const SizesAndSrcsetTemplate = (args) => html`<pds-image alt="${args.alt}" sizes
 export const Default = BaseTemplate.bind();
 Default.args = {
   alt: 'Random Unsplash',
-  src: '//source.unsplash.com/320x180'
+  src: '//source.unsplash.com/320x180',
 }
 
 export const SizesAndSrcset = SizesAndSrcsetTemplate.bind();

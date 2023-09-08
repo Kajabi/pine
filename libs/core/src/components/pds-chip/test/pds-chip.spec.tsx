@@ -16,6 +16,21 @@ describe('pds-chip', () => {
     `);
   });
 
+  it('renders with id when prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip component-id="test" />`,
+    });
+
+    expect(page.root).toEqualHtml(`
+      <pds-chip class="pds-chip pds-chip--neutral pds-chip--text" component-id="test" id="test">
+        <mock:shadow-root>
+          <span class="pds-chip__label"></span>
+        </mock:shadow-root>
+      </pds-chip>
+    `);
+  });
+
   it('renders label text when label prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsChip],

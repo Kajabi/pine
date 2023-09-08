@@ -12,7 +12,7 @@ import { PdsLabel } from '../_internal/pds-label/pds-label';
 })
 export class PdsInput {
   /**
-   * A unique identifier for the input field
+   * A unique identifier used for the underlying component `id` attribute.
    */
   @Prop() componentId!: string;
 

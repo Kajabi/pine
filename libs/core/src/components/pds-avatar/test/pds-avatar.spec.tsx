@@ -18,6 +18,23 @@ describe('pds-avatar', () => {
     `);
   });
 
+  it('renders with id when prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsAvatar],
+      html: `<pds-avatar component-id="test"></pds-avatar>`,
+    });
+
+    expect(page.root).toEqualHtml(`
+      <pds-avatar component-id="test" id="test" class="pds-avatar" size="lg" variant="customer">
+        <mock:shadow-root>
+          <div style="height: 56px; width: 56px;">
+            <pds-icon name="user-filled" size="33.53%"></pds-icon>
+          </div>
+        </mock:shadow-root>
+      </pds-avatar>
+    `);
+  });
+
   it('renders the admin variant of avatar when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsAvatar],

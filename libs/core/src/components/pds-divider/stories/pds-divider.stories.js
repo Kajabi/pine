@@ -7,7 +7,12 @@ export default {
   title: 'components/Divider'
 }
 
-const BaseTemplate = (args) => html` <pds-divider vertical=${args.vertical} offset=${args.offset} />`;
+const BaseTemplate = (args) => html`
+  <pds-divider
+    component-id=${args.componentId}
+    offset=${args.offset}
+    vertical=${args.vertical}
+  />`;
 
 export const Default = BaseTemplate.bind();
 Default.args = {

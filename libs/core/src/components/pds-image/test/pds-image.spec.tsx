@@ -15,6 +15,22 @@ describe('pds-image', () => {
       </pds-image>
     `);
   });
+
+  it('renders with id when prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsImage],
+      html: `<pds-image class="pds-image" component-id="test" src="//source.unsplash.com/100x100"></pds-image>`,
+    });
+
+    expect(page.root).toEqualHtml(`
+      <pds-image class="pds-image" component-id="test" id="test" src="//source.unsplash.com/100x100">
+        <mock:shadow-root>
+          <img alt="" loading="eager" src="//source.unsplash.com/100x100" />
+        </mock:shadow-root>
+      </pds-image>
+    `);
+  });
+
   it('renders with lazy loading when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsImage],

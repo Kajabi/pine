@@ -12,7 +12,7 @@ export class PdsTextarea {
   @Element() el: HTMLPdsTextareaElement;
 
   /**
-   * A unique identifier for the textarea
+   * A unique identifier used for the underlying component `id` attribute.
    */
   @Prop() componentId!: string;
 

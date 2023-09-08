@@ -20,6 +20,10 @@ export namespace Components {
          */
         "badge"?: boolean;
         /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
           * Determines whether the avatar functions as a dropdown trigger.
           * @defaultValue false
          */
@@ -46,6 +50,10 @@ export namespace Components {
         "variant"?: 'customer' | 'admin';
     }
     interface PdsButton {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
         /**
           * Toggles disabled state of button
           * @defaultValue false
@@ -79,7 +87,7 @@ export namespace Components {
          */
         "checked": boolean;
         /**
-          * String used for checkbox `id` attribute and label `for` attribute.
+          * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
          */
         "componentId": string;
         /**
@@ -117,6 +125,10 @@ export namespace Components {
     }
     interface PdsChip {
         /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
           * Determines whether a dot should be displayed on the chip.
           * @defaultValue false
          */
@@ -148,7 +160,7 @@ export namespace Components {
          */
         "border": boolean;
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
         /**
@@ -168,6 +180,10 @@ export namespace Components {
     }
     interface PdsDivider {
         /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
           * Adds offset margin/padding to expand the width (horizontal) or the height (vertical) of divider.
          */
         "offset": 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
@@ -182,6 +198,10 @@ export namespace Components {
           * The image's alt tag. If none is provided, it will default to an empty string.
          */
         "alt"?: string;
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
         /**
           * The height of the image in pixels. Setting this will devote space in the layout to prevent layout shifts when the image is loaded.
          */
@@ -209,7 +229,7 @@ export namespace Components {
     }
     interface PdsInput {
         /**
-          * A unique identifier for the input field
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
         /**
@@ -260,6 +280,10 @@ export namespace Components {
     }
     interface PdsLink {
         /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
           * When enabled, opens link in a new tab.
           * @defaultValue false
          */
@@ -285,7 +309,7 @@ export namespace Components {
          */
         "animated": boolean;
         /**
-          * String used for progress `id` attribute and label `for` attribute.
+          * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
          */
         "componentId": string;
         /**
@@ -315,7 +339,7 @@ export namespace Components {
          */
         "checked": boolean;
         /**
-          * String used for radio `id` attribute and label `for` attribute.
+          * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
          */
         "componentId": string;
         /**
@@ -356,7 +380,7 @@ export namespace Components {
          */
         "checked": boolean;
         /**
-          * Identifies this input with a unique string, and associates the input with its label
+          * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
          */
         "componentId": string;
         /**
@@ -423,7 +447,7 @@ export namespace Components {
          */
         "activeTabName": string;
         /**
-          * Sets unique id on tabs component
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
         /**
@@ -437,7 +461,7 @@ export namespace Components {
     }
     interface PdsTextarea {
         /**
-          * A unique identifier for the textarea
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
         /**
@@ -491,7 +515,7 @@ export namespace Components {
     }
     interface PdsTooltip {
         /**
-          * Id used to reference the component
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
         /**
@@ -711,6 +735,10 @@ declare namespace LocalJSX {
          */
         "badge"?: boolean;
         /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
           * Determines whether the avatar functions as a dropdown trigger.
           * @defaultValue false
          */
@@ -737,6 +765,10 @@ declare namespace LocalJSX {
         "variant"?: 'customer' | 'admin';
     }
     interface PdsButton {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
         /**
           * Toggles disabled state of button
           * @defaultValue false
@@ -770,7 +802,7 @@ declare namespace LocalJSX {
          */
         "checked"?: boolean;
         /**
-          * String used for checkbox `id` attribute and label `for` attribute.
+          * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
          */
         "componentId": string;
         /**
@@ -812,6 +844,10 @@ declare namespace LocalJSX {
     }
     interface PdsChip {
         /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
           * Determines whether a dot should be displayed on the chip.
           * @defaultValue false
          */
@@ -847,7 +883,7 @@ declare namespace LocalJSX {
          */
         "border"?: boolean;
         /**
-          * String used for the component `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
         /**
@@ -871,6 +907,10 @@ declare namespace LocalJSX {
     }
     interface PdsDivider {
         /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
           * Adds offset margin/padding to expand the width (horizontal) or the height (vertical) of divider.
          */
         "offset"?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
@@ -885,6 +925,10 @@ declare namespace LocalJSX {
           * The image's alt tag. If none is provided, it will default to an empty string.
          */
         "alt"?: string;
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
         /**
           * The height of the image in pixels. Setting this will devote space in the layout to prevent layout shifts when the image is loaded.
          */
@@ -912,7 +956,7 @@ declare namespace LocalJSX {
     }
     interface PdsInput {
         /**
-          * A unique identifier for the input field
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
         /**
@@ -967,6 +1011,10 @@ declare namespace LocalJSX {
     }
     interface PdsLink {
         /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
           * When enabled, opens link in a new tab.
           * @defaultValue false
          */
@@ -992,7 +1040,7 @@ declare namespace LocalJSX {
          */
         "animated"?: boolean;
         /**
-          * String used for progress `id` attribute and label `for` attribute.
+          * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
          */
         "componentId": string;
         /**
@@ -1022,7 +1070,7 @@ declare namespace LocalJSX {
          */
         "checked"?: boolean;
         /**
-          * String used for radio `id` attribute and label `for` attribute.
+          * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
          */
         "componentId"?: string;
         /**
@@ -1067,7 +1115,7 @@ declare namespace LocalJSX {
          */
         "checked"?: boolean;
         /**
-          * Identifies this input with a unique string, and associates the input with its label
+          * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
          */
         "componentId": string;
         /**
@@ -1139,7 +1187,7 @@ declare namespace LocalJSX {
          */
         "activeTabName": string;
         /**
-          * Sets unique id on tabs component
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
         /**
@@ -1153,7 +1201,7 @@ declare namespace LocalJSX {
     }
     interface PdsTextarea {
         /**
-          * A unique identifier for the textarea
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
         /**
@@ -1211,7 +1259,7 @@ declare namespace LocalJSX {
     }
     interface PdsTooltip {
         /**
-          * Id used to reference the component
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
         /**

@@ -10,20 +10,20 @@ export class PdsButton {
   @Element() el: HTMLPdsButtonElement;
 
   /**
-   * Sets button variant styles as outlined in Figma documentation
+   * A unique identifier used for the underlying component `id` attribute.
    */
-  @Prop() variant: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled' = 'primary';
-
-  /**
-   * Displays icon before text when icon string matches an icon name
-   */
-  @Prop() icon?: string = null;
+  @Prop() componentId: string;
 
   /**
    * Toggles disabled state of button
    * @defaultValue false
    */
   @Prop() disabled? = false;
+
+  /**
+   * Displays icon before text when icon string matches an icon name
+   */
+  @Prop() icon?: string = null;
 
   /**
    * Provides button with a submittable name
@@ -40,6 +40,11 @@ export class PdsButton {
    * @defaultValue button
    */
   @Prop() type?: 'button' | 'reset' | 'submit' = 'button';
+
+  /**
+   * Sets button variant styles as outlined in Figma documentation
+   */
+  @Prop() variant: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled' = 'primary';
 
   private handleClick = (ev: Event) => {
     if (this.type != 'button') {
@@ -71,7 +76,12 @@ export class PdsButton {
 
   render() {
     return (
-      <Host variant={this.variant} aria-disabled={this.disabled ? 'true' : null} onClick={this.handleClick}>
+      <Host
+        aria-disabled={this.disabled ? 'true' : null}
+        id={this.componentId}
+        onClick={this.handleClick}
+        variant={this.variant}
+      >
         <button
           class={this.buttonClassNames()}
           disabled={this.disabled}

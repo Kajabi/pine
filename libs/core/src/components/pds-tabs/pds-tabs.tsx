@@ -21,7 +21,7 @@ export class PdsTabs {
   @Prop() tablistLabel!: string;
 
   /**
-   * Sets unique id on tabs component
+   * A unique identifier used for the underlying component `id` attribute.
    */
   @Prop() componentId!: string;
 

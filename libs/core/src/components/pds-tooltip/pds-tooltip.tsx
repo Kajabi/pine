@@ -33,7 +33,7 @@ export class PdsTooltip {
   @Prop() content: string;
 
   /**
-   * Id used to reference the component
+   * A unique identifier used for the underlying component `id` attribute.
    */
   @Prop() componentId: string;
 

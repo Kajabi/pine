@@ -15,6 +15,22 @@ describe('pds-divider', () => {
       </pds-divider>
     `);
   });
+
+  it('renders with id when prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsDivider],
+      html: `<pds-divider component-id="test" />`,
+    });
+
+    expect(page.root).toEqualHtml(`
+      <pds-divider component-id="test" id="test">
+        <mock:shadow-root>
+          <hr class="pds-divider">
+        </mock:shadow-root>
+      </pds-divider>
+    `);
+  });
+
   it('renders vertically when vertical prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsDivider],

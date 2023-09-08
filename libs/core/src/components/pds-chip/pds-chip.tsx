@@ -7,6 +7,11 @@ import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 })
 export class PdsChip {
   /**
+   * A unique identifier used for the underlying component `id` attribute.
+   */
+  @Prop() componentId: string;
+
+  /**
    * Sets the color scheme of the chip.
    * @defaultValue 'neutral'
    */
@@ -80,7 +85,7 @@ export class PdsChip {
 
   render() {
     return (
-      <Host class={this.classNames()}>
+      <Host class={this.classNames()} id={this.componentId}>
         {this.setChipContent()}
         {this.variant === 'tag' && (
           <button class="pds-chip__close" type="button" onClick={this.handleCloseClick} aria-label="Remove">

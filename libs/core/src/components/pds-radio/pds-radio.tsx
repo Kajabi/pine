@@ -27,7 +27,7 @@ export class PdsRadio {
   @Prop() invalid = false;
 
   /**
-   * String used for radio `id` attribute and label `for` attribute.
+   * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
    */
   @Prop() componentId: string;
 

@@ -20,6 +20,11 @@ export class PdsAvatar {
   @Prop() badge? = false;
 
   /**
+   * A unique identifier used for the underlying component `id` attribute.
+   */
+  @Prop() componentId: string;
+
+  /**
    * Determines whether the avatar functions as a dropdown trigger.
    * @defaultValue false
    */
@@ -116,6 +121,7 @@ export class PdsAvatar {
 
     return (
       <Host
+        id={this.componentId}
         class={{...this.classNames()}}
       >
         {this.renderAvatar()}

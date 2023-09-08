@@ -7,6 +7,11 @@ import { Component, Prop, Host, h } from '@stencil/core';
 })
 export class PdsDivider {
   /**
+   * A unique identifier used for the underlying component `id` attribute.
+   */
+  @Prop() componentId: string;
+
+  /**
    * Adds offset margin/padding to expand the width (horizontal) or the height (vertical) of divider.
    */
   @Prop() offset: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
@@ -34,7 +39,7 @@ export class PdsDivider {
 
   render() {
     return (
-      <Host>
+      <Host id={this.componentId}>
         <hr class={this.classNames()} />
       </Host>
     );
