@@ -23,7 +23,7 @@ runs:
       shell: bash
       run: npm cache verify
 
-    - name: Get NPM  cache directory
+    - name: Get NPM cache directory
       id: npm-cache-dir
       shell: bash
       run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
