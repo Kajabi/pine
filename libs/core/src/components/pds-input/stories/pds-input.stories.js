@@ -69,9 +69,8 @@ export const Placeholder = BaseTemplate.bind({});
 Placeholder.args = {
   componentId: 'pds-input-placeholder-example',
   label: 'Email',
-  placeholder: '123@email.com',
+  placeholder: 'Enter a email address...',
   type: 'email',
-  value: 'user123@test.com'
 };
 
 export const Disabled = BaseTemplate.bind({});
@@ -107,5 +106,5 @@ Invalid.args = {
   label: 'Email',
   errorMessage: "Please provide a valid email address",
   type: 'email',
-  value: 'user123@test.com'
+  value: 'Frank Dux'
 };
