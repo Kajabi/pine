@@ -1,20 +1,34 @@
 :host {
+
+  --border-radius: var(--pine-border-radius-sm);
+  --color: var(--pine-color-neutral-charcoal-400);
+  --font-size: var(--pine-font-size-body);
+  --font-size-sm: var(--pine-font-size-body-sm);
+  --font-size-xs: var(--pine-font-size-body-xs);
+  --font-weight: var(--pine-font-weight-medium);
+  --margin-inline-start: var(--pine-spacing-xxs);
+  --outline: 4px solid var(--pine-color-primary-200);
+  --outline-offset: var(--pine-spacing-xxs);
+  --svg-lg: 15px;
+  --svg-md: 13px;
+  --svg-sm: 11px;
+
   display: inline;
 
   svg {
-    margin-left: 4px;
+    margin-inline-start: var(--margin-inline-start);
   }
 }
 
 :host(:focus) {
-  border-radius: 6px;
-  outline: 4px solid #8ecafb;
-  outline-offset: 4px;
+  border-radius: var(--border-radius);
+  outline: var(--outline);
+  outline-offset: var(--outline-offset);
 }
 
 .pds-link {
   align-items: center;
-  color: #202327;
+  color: var(--color);
   display: inline-flex;
   font-weight: inherit;
 }
@@ -23,34 +37,34 @@
 // fonts will be REMs, box-model will be
 // discussed later px or (r)em's
 .pds-link--sm {
-  font-size: 12px;
+  font-size: var(--font-size-xs);
 
   svg {
-    height: 11px;
-    width: 11px;
+    height: var(--svg-sm);
+    width: var(--svg-sm);
   }
 }
 
 .pds-link--md {
-  font-size: 14px;
+  font-size: var(--font-size-sm);
 
   svg {
-    height: 13px;
-    width: 13px;
+    height: var(--svg-md);
+    width: var(--svg-md);
   }
 }
 
 .pds-link--lg {
-  font-size: 16px;
+  font-size: var(--font-size);
 
   svg {
-    height: 15px;
-    width: 15px;
+    height: var(--svg-lg);
+    width: var(--svg-lg);
   }
 }
 
 .pds-link--plain {
-  font-weight: 500;
+  font-weight: var(--font-weight);
   text-decoration: none;
 
   &:hover {
