@@ -323,6 +323,14 @@ export namespace Components {
           * A unique identifier for the sortable container.
          */
         "componentId": string;
+        /**
+          * Track the currently focused option index
+         */
+        "focusedOptionIndex": number;
+        /**
+          * Store the ID of the last selected option
+         */
+        "selectedOptionId"?: string;
     }
     interface PdsPopover {
         /**
@@ -712,6 +720,10 @@ export interface PdsCopytextCustomEvent<T> extends CustomEvent<T> {
 export interface PdsInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsInputElement;
+}
+export interface PdsListOptionCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsListOptionElement;
 }
 export interface PdsPopoverCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1406,12 +1418,24 @@ declare namespace LocalJSX {
           * A unique identifier for component.
          */
         "componentId"?: string;
+        /**
+          * Emitted after a list option is selected
+         */
+        "onPdsListOptionSelected"?: (event: PdsListOptionCustomEvent<any>) => void;
     }
     interface PdsListOptions {
         /**
           * A unique identifier for the sortable container.
          */
         "componentId": string;
+        /**
+          * Track the currently focused option index
+         */
+        "focusedOptionIndex"?: number;
+        /**
+          * Store the ID of the last selected option
+         */
+        "selectedOptionId"?: string;
     }
     interface PdsPopover {
         /**
