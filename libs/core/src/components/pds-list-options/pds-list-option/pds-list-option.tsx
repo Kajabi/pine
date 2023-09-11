@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
 
 /**
  * @slot (default) - The sortable item's content
@@ -14,10 +14,27 @@ export class PdsListOption {
    */
   @Prop() componentId: string;
 
+  @Element() element: HTMLPdsListOptionElement;
+
+  /**
+   * Emitted after a list option is selected
+   */
+  @Event() pdsListOptionSelected: EventEmitter;
+
+  private handleClick() {
+    // Dispatch the custom event with the componentId as its payload
+    this.pdsListOptionSelected.emit(this.componentId);
+  }
+
   render() {
     return (
-      <Host>
-        <div class="pds-list-option" id={this.componentId}>
+      <Host
+        role="menuitem"
+        tabIndex={0}
+        id={this.componentId}
+        onClick={() => this.handleClick()}
+      >
+        <div class="pds-list-option">
           <slot></slot>
         </div>
       </Host>

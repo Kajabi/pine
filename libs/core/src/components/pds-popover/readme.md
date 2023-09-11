@@ -7,14 +7,12 @@
 
 ## Properties
 
-| Property      | Attribute      | Description                                                        | Type                                                                                                                                                                 | Default     |
-| ------------- | -------------- | ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `componentId` | `component-id` | Id used to reference the component                                 | `string`                                                                                                                                                             | `undefined` |
-| `content`     | `content`      | Content for the popover. If HTML is required, use the content slot | `string`                                                                                                                                                             | `undefined` |
-| `hasArrow`    | `has-arrow`    | Determines whether or not the popover has an arrow                 | `boolean`                                                                                                                                                            | `true`      |
-| `htmlContent` | `html-content` | Enable this option when using the content slot                     | `boolean`                                                                                                                                                            | `false`     |
-| `opened`      | `opened`       | Determines whether or not the popover is visible                   | `boolean`                                                                                                                                                            | `false`     |
-| `placement`   | `placement`    | Determines the preferred position of the popover                   | `"bottom" \| "bottom-end" \| "bottom-start" \| "left" \| "left-end" \| "left-start" \| "right" \| "right-end" \| "right-start" \| "top" \| "top-end" \| "top-start"` | `'right'`   |
+| Property      | Attribute      | Description                                        | Type                                                                                                                                                                 | Default     |
+| ------------- | -------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `componentId` | `component-id` | Id used to reference the component                 | `string`                                                                                                                                                             | `undefined` |
+| `hasArrow`    | `has-arrow`    | Determines whether or not the popover has an arrow | `boolean`                                                                                                                                                            | `true`      |
+| `opened`      | `opened`       | Determines whether or not the popover is visible   | `boolean`                                                                                                                                                            | `false`     |
+| `placement`   | `placement`    | Determines the preferred position of the popover   | `"bottom" \| "bottom-end" \| "bottom-start" \| "left" \| "left-end" \| "left-start" \| "right" \| "right-end" \| "right-start" \| "top" \| "top-end" \| "top-start"` | `'right'`   |
 
 
 ## Events
