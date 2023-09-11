@@ -12,6 +12,13 @@
 | `componentId` | `component-id` | A unique identifier for component. | `string` | `undefined` |
 
 
+## Events
+
+| Event                   | Description                             | Type               |
+| ----------------------- | --------------------------------------- | ------------------ |
+| `pdsListOptionSelected` | Emitted after a list option is selected | `CustomEvent<any>` |
+
+
 ## Slots
 
 | Slot          | Description                 |

@@ -317,16 +317,20 @@ export namespace Components {
           * A unique identifier for the sortable container.
          */
         "componentId": string;
+        /**
+          * Track the currently focused option index
+         */
+        "focusedOptionIndex": number;
+        /**
+          * Store the ID of the last selected option
+         */
+        "selectedOptionId"?: string;
     }
     interface PdsPopover {
         /**
           * Id used to reference the component
          */
         "componentId": string;
-        /**
-          * Content for the popover. If HTML is required, use the content slot
-         */
-        "content": string;
         /**
           * Determines whether or not the popover has an arrow
           * @defaultValue true
@@ -336,11 +340,6 @@ export namespace Components {
           * Hides the popover by disabling the opened property
          */
         "hidePopover": () => Promise<void>;
-        /**
-          * Enable this option when using the content slot
-          * @defaultValue false
-         */
-        "htmlContent": boolean;
         /**
           * Determines whether or not the popover is visible
           * @defaultValue false
@@ -686,6 +685,10 @@ export interface PdsCopytextCustomEvent<T> extends CustomEvent<T> {
 export interface PdsInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsInputElement;
+}
+export interface PdsListOptionCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsListOptionElement;
 }
 export interface PdsPopoverCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1193,12 +1196,24 @@ declare namespace LocalJSX {
           * A unique identifier for component.
          */
         "componentId"?: string;
+        /**
+          * Emitted after a list option is selected
+         */
+        "onPdsListOptionSelected"?: (event: PdsListOptionCustomEvent<any>) => void;
     }
     interface PdsListOptions {
         /**
           * A unique identifier for the sortable container.
          */
         "componentId": string;
+        /**
+          * Track the currently focused option index
+         */
+        "focusedOptionIndex"?: number;
+        /**
+          * Store the ID of the last selected option
+         */
+        "selectedOptionId"?: string;
     }
     interface PdsPopover {
         /**
@@ -1206,19 +1221,10 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
-          * Content for the popover. If HTML is required, use the content slot
-         */
-        "content"?: string;
-        /**
           * Determines whether or not the popover has an arrow
           * @defaultValue true
          */
         "hasArrow"?: boolean;
-        /**
-          * Enable this option when using the content slot
-          * @defaultValue false
-         */
-        "htmlContent"?: boolean;
         /**
           * Emitted after a popover is closed
          */
