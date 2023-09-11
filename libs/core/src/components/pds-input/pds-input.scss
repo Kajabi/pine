@@ -15,7 +15,7 @@
   --label-font-size: var(--pine-font-size-body);
   --label-font-weight: var(--pine-font-weight-medium);
   --label-line-height: var(--pine-line-height-md);
-  --label-margin-bottom: 8px;
+  --label-margin-block-end: var(--pine-spacing-xs);
 
   --field-font-size: var(--pine-font-size-body);
   --field-font-weight: var(--pine-font-weight-regular);
@@ -40,7 +40,7 @@ label {
   font-size: var(--label-font-size);
   font-weight: var(--label-font-weight);
   line-height: var(--label-line-height);
-  margin-block-end: var(--label-margin-bottom);
+  margin-block-end: var(--label-margin-block-end);
 }
 
 input {
