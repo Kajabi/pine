@@ -8,15 +8,15 @@
     "node": ">= 16"
   },
   "scripts": {
-    "build.all": "nx run-many --target=build",
+    "build.all": "npx nx run-many --target=build",
     "commit": "npx cz",
     "coverage": "open libs/core/coverage/lcov-report/index.html",
-    "stencil.generate": "nx run core:generate",
-    "lint.all": "nx run-many --target=lint",
+    "stencil.generate": "npx nx run core:generate",
+    "lint.all": "npx nx run-many --target=lint",
     "prepare": "husky install",
     "setup": "npm install",
-    "start": "nx run core:start",
-    "test.all": "nx run-many --target=test"
+    "start": "npx nx run core:start",
+    "test.all": "npx nx run-many --target=test"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",
@@ -25,10 +25,10 @@
     "husky": "^8.0.1",
     "lerna": "^7.0.1",
     "lint-staged": "^13.0.3",
-    "nx": "16.6.0",
+    "nx": "^16.8.1",
+    "nx-cloud": "latest",
     "semver": "^7.3.8",
-    "validate-branch-name": "^1.3.0",
-    "nx-cloud": "latest"
+    "validate-branch-name": "^1.3.0"
   },
   "config": {
     "commitizen": {
