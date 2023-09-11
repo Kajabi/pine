@@ -69,3 +69,10 @@ AvatarPopover.args = {
   htmlContent: true,
   placement: "bottom-start",
 };
+
+export const AvatarPopover = AvatarDropdownTemplate.bind({});
+AvatarPopover.args = {
+  hasArrow: false,
+  htmlContent: true,
+  placement: "bottom-start",
+};

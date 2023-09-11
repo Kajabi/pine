@@ -58,6 +58,24 @@ There can only be one trigger for the Popover.
   </div>
 </Canvas>
 
+<Canvas mdxSource={`
+<pds-popover has-arrow="true" placement="bottom-start" html-content="true">
+  <div slot="content">
+    <p><strong>This is a popover</strong></p>
+    <p><strong>This is a popover</strong></p>
+  </div>
+  <pds-avatar dropdown="true"></pds-avatar>
+</pds-popover>
+`}>
+  <pds-popover has-arrow="true" placement="bottom-start" html-content="true">
+    <div slot="content">
+      <p><strong>This is a popover</strong></p>
+      <p><strong>This is a popover</strong></p>
+    </div>
+    <pds-avatar dropdown="true"></pds-avatar>
+  </pds-popover>
+</Canvas>
+
 ### Content
 The popover content is placed in a container with the slot, `content`. This is where you can place any HTML content you want to display in the popover.
 
