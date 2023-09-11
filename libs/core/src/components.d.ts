@@ -233,39 +233,39 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Indicates whether or not the input field is disabled
+          * Determines whether or not the input field is disabled.
          */
         "disabled"?: boolean;
         /**
-          * Specifies the error message and provides an error-themed treatment to the field
+          * Specifies the error message and provides an error-themed treatment to the field.
          */
         "errorMessage"?: string;
         /**
-          * Displays a message or hint below the input field
+          * Displays a message or hint below the input field.
          */
         "helperMessage"?: string;
         /**
-          * Indicates whether or not the input field is invalid or throws an error
+          * Determines whether or not the input field is invalid or throws an error.
          */
         "invalid"?: boolean;
         /**
-          * Text to be displayed as the input label
+          * Text to be displayed as the input label.
          */
         "label"?: string;
         /**
-          * Specifies the name. Submitted with the form name/value pair
+          * Specifies the name. Submitted with the form name/value pair.
          */
         "name"?: string;
         /**
-          * Specifies a short hint that describes the expected value of the input field
+          * Specifies a short hint that describes the expected value of the input field.
          */
         "placeholder"?: string;
         /**
-          * Indicates whether or not the input field is readonly
+          * Determines whether or not the input field is readonly.
          */
         "readonly"?: boolean;
         /**
-          * Indicates whether or not the input field is required
+          * Determines whether or not the input field is required.
          */
         "required"?: boolean;
         /**
@@ -274,7 +274,7 @@ export namespace Components {
          */
         "type": string;
         /**
-          * The value of the input
+          * The value of the input.
          */
         "value"?: string;
     }
@@ -1013,43 +1013,43 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
-          * Indicates whether or not the input field is disabled
+          * Determines whether or not the input field is disabled.
          */
         "disabled"?: boolean;
         /**
-          * Specifies the error message and provides an error-themed treatment to the field
+          * Specifies the error message and provides an error-themed treatment to the field.
          */
         "errorMessage"?: string;
         /**
-          * Displays a message or hint below the input field
+          * Displays a message or hint below the input field.
          */
         "helperMessage"?: string;
         /**
-          * Indicates whether or not the input field is invalid or throws an error
+          * Determines whether or not the input field is invalid or throws an error.
          */
         "invalid"?: boolean;
         /**
-          * Text to be displayed as the input label
+          * Text to be displayed as the input label.
          */
         "label"?: string;
         /**
-          * Specifies the name. Submitted with the form name/value pair
+          * Specifies the name. Submitted with the form name/value pair.
          */
         "name"?: string;
         /**
-          * Emitted when a keyboard input occurred
+          * Emitted when a keyboard input occurred.
          */
         "onPdsInput"?: (event: PdsInputCustomEvent<InputEvent>) => void;
         /**
-          * Specifies a short hint that describes the expected value of the input field
+          * Specifies a short hint that describes the expected value of the input field.
          */
         "placeholder"?: string;
         /**
-          * Indicates whether or not the input field is readonly
+          * Determines whether or not the input field is readonly.
          */
         "readonly"?: boolean;
         /**
-          * Indicates whether or not the input field is required
+          * Determines whether or not the input field is required.
          */
         "required"?: boolean;
         /**
@@ -1058,7 +1058,7 @@ declare namespace LocalJSX {
          */
         "type"?: string;
         /**
-          * The value of the input
+          * The value of the input.
          */
         "value"?: string;
     }

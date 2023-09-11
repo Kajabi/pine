@@ -10,57 +10,24 @@
 | Property                   | Attribute        | Description                                                                                                  | Type      | Default     |
 | -------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------ | --------- | ----------- |
 | `componentId` _(required)_ | `component-id`   | A unique identifier used for the underlying component `id` attribute.                                        | `string`  | `undefined` |
-| `disabled`                 | `disabled`       | Indicates whether or not the input field is disabled                                                         | `boolean` | `undefined` |
-| `errorMessage`             | `error-message`  | Specifies the error message and provides an error-themed treatment to the field                              | `string`  | `undefined` |
-| `helperMessage`            | `helper-message` | Displays a message or hint below the input field                                                             | `string`  | `undefined` |
-| `invalid`                  | `invalid`        | Indicates whether or not the input field is invalid or throws an error                                       | `boolean` | `undefined` |
-| `label`                    | `label`          | Text to be displayed as the input label                                                                      | `string`  | `undefined` |
-| `name`                     | `name`           | Specifies the name. Submitted with the form name/value pair                                                  | `string`  | `undefined` |
-| `placeholder`              | `placeholder`    | Specifies a short hint that describes the expected value of the input field                                  | `string`  | `undefined` |
-| `readonly`                 | `readonly`       | Indicates whether or not the input field is readonly                                                         | `boolean` | `undefined` |
-| `required`                 | `required`       | Indicates whether or not the input field is required                                                         | `boolean` | `undefined` |
+| `disabled`                 | `disabled`       | Determines whether or not the input field is disabled.                                                       | `boolean` | `undefined` |
+| `errorMessage`             | `error-message`  | Specifies the error message and provides an error-themed treatment to the field.                             | `string`  | `undefined` |
+| `helperMessage`            | `helper-message` | Displays a message or hint below the input field.                                                            | `string`  | `undefined` |
+| `invalid`                  | `invalid`        | Determines whether or not the input field is invalid or throws an error.                                     | `boolean` | `undefined` |
+| `label`                    | `label`          | Text to be displayed as the input label.                                                                     | `string`  | `undefined` |
+| `name`                     | `name`           | Specifies the name. Submitted with the form name/value pair.                                                 | `string`  | `undefined` |
+| `placeholder`              | `placeholder`    | Specifies a short hint that describes the expected value of the input field.                                 | `string`  | `undefined` |
+| `readonly`                 | `readonly`       | Determines whether or not the input field is readonly.                                                       | `boolean` | `undefined` |
+| `required`                 | `required`       | Determines whether or not the input field is required.                                                       | `boolean` | `undefined` |
 | `type`                     | `type`           | Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'` | `string`  | `'text'`    |
-| `value`                    | `value`          | The value of the input                                                                                       | `string`  | `undefined` |
+| `value`                    | `value`          | The value of the input.                                                                                      | `string`  | `undefined` |
 
 
 ## Events
 
-| Event      | Description                            | Type                      |
-| ---------- | -------------------------------------- | ------------------------- |
-| `pdsInput` | Emitted when a keyboard input occurred | `CustomEvent<InputEvent>` |
-
-
-## Slots
-
-| Slot | Description                                        |
-| ---- | -------------------------------------------------- |
-|      | Content is placed between the opening closing tags |
-
-
-## CSS Custom Properties
-
-| Name                           | Description                                   |
-| ------------------------------ | --------------------------------------------- |
-| `--background`                 | Background of the input                       |
-| `--background-disabled`        | Background of a disabled input                |
-| `--border-color-default`       | Border color of the input text                |
-| `--color`                      | Color of the input text                       |
-| `--color-error`                | Color of the input text when error is present |
-| `--color-hover`                | Border color of the input text when hovered   |
-| `--color-placeholder`          | Color of the placeholder text                 |
-| `--field-font-size`            | Font size of the field text                   |
-| `--field-font-weight`          | Font weight of the field text                 |
-| `--field-line-height`          | Line height of the field text                 |
-| `--field-padding-block`        | Block padding for the field text              |
-| `--field-padding-inline`       | Inline padding for the field text             |
-| `--helper-message-font-size`   | Font size of the helper text                  |
-| `--helper-message-font-weight` | Font weight of the helper text                |
-| `--helper-message-line-height` | Line height of the helper text                |
-| `--helper-message-margin-top`  | Top margin of the helper                      |
-| `--label-font-size`            | Font size of the label text                   |
-| `--label-font-weight`          | Font weight of the label text                 |
-| `--label-line-height`          | Line height of the label text                 |
-| `--label-margin-bottom`        | Bottom margin of the label                    |
+| Event      | Description                             | Type                      |
+| ---------- | --------------------------------------- | ------------------------- |
+| `pdsInput` | Emitted when a keyboard input occurred. | `CustomEvent<InputEvent>` |
 
 
 ----------------------------------------------
