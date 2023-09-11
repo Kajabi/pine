@@ -69,9 +69,3 @@ AvatarPopover.args = {
   htmlContent: true,
   placement: "bottom-start",
 };
-
-export const WithList = ListTemplate.bind({});
-WithList.args = {
-  hasArrow: false,
-  placement: "bottom-start",
-};

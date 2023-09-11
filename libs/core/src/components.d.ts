@@ -312,26 +312,6 @@ export namespace Components {
          */
         "variant": 'inline' | 'plain';
     }
-    interface PdsListOption {
-        /**
-          * A unique identifier for component.
-         */
-        "componentId": string;
-    }
-    interface PdsListOptions {
-        /**
-          * A unique identifier for the sortable container.
-         */
-        "componentId": string;
-        /**
-          * Track the currently focused option index
-         */
-        "focusedOptionIndex": number;
-        /**
-          * Store the ID of the last selected option
-         */
-        "selectedOptionId"?: string;
-    }
     interface PdsPopover {
         /**
           * A unique identifier used for the underlying component id attribute.
@@ -721,10 +701,6 @@ export interface PdsInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsInputElement;
 }
-export interface PdsListOptionCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLPdsListOptionElement;
-}
 export interface PdsPopoverCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsPopoverElement;
@@ -1073,8 +1049,6 @@ declare global {
         "pds-image": HTMLPdsImageElement;
         "pds-input": HTMLPdsInputElement;
         "pds-link": HTMLPdsLinkElement;
-        "pds-list-option": HTMLPdsListOptionElement;
-        "pds-list-options": HTMLPdsListOptionsElement;
         "pds-popover": HTMLPdsPopoverElement;
         "pds-progress": HTMLPdsProgressElement;
         "pds-radio": HTMLPdsRadioElement;
@@ -1412,30 +1386,6 @@ declare namespace LocalJSX {
           * Modifies the look of the link
          */
         "variant"?: 'inline' | 'plain';
-    }
-    interface PdsListOption {
-        /**
-          * A unique identifier for component.
-         */
-        "componentId"?: string;
-        /**
-          * Emitted after a list option is selected
-         */
-        "onPdsListOptionSelected"?: (event: PdsListOptionCustomEvent<any>) => void;
-    }
-    interface PdsListOptions {
-        /**
-          * A unique identifier for the sortable container.
-         */
-        "componentId": string;
-        /**
-          * Track the currently focused option index
-         */
-        "focusedOptionIndex"?: number;
-        /**
-          * Store the ID of the last selected option
-         */
-        "selectedOptionId"?: string;
     }
     interface PdsPopover {
         /**
@@ -1840,8 +1790,6 @@ declare namespace LocalJSX {
         "pds-image": PdsImage;
         "pds-input": PdsInput;
         "pds-link": PdsLink;
-        "pds-list-option": PdsListOption;
-        "pds-list-options": PdsListOptions;
         "pds-popover": PdsPopover;
         "pds-progress": PdsProgress;
         "pds-radio": PdsRadio;
@@ -1874,8 +1822,6 @@ declare module "@stencil/core" {
             "pds-image": LocalJSX.PdsImage & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
             "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
-            "pds-list-option": LocalJSX.PdsListOption & JSXBase.HTMLAttributes<HTMLPdsListOptionElement>;
-            "pds-list-options": LocalJSX.PdsListOptions & JSXBase.HTMLAttributes<HTMLPdsListOptionsElement>;
             "pds-popover": LocalJSX.PdsPopover & JSXBase.HTMLAttributes<HTMLPdsPopoverElement>;
             "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-radio": LocalJSX.PdsRadio & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
