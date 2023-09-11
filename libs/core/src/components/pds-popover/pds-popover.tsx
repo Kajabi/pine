@@ -36,7 +36,7 @@ export class PdsPopover {
    * Determines whether or not the popover has an arrow
    * @defaultValue true
    */
-  @Prop() hasArrow? = true;
+  @Prop() hasArrow? = false;
 
   /**
    * Determines the preferred position of the popover

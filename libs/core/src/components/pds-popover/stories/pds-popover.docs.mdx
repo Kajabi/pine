@@ -7,16 +7,7 @@ import * as stories from './pds-popover.stories.js';
 
 # Popover
 
-Popovers are containers that float on top of existing content used to display transient additional content, actions, or menus.
-
-## Guidelines
-### Usage
-#### When to use
-- pending
-
-#### When not to use
-- pending
-
+Popovers are containers that float on top of existing content used to display additional content.
 
 ## Properties
 
@@ -28,28 +19,28 @@ Popovers are containers that float on top of existing content used to display tr
 Whether your trigger is a `pds-button` or a different component or HTML element, it will be placed in the default slot between the opening and closing tags.
 There can only be one trigger for the Popover.
 
+#### Button trigger
+
 <Canvas mdxSource={`
-<pds-popover has-arrow="true" placement="bottom-right" html-content="true">
+<pds-popover placement="bottom-right" html-content="true">
   <div slot="content">
-    <p><strong>This is a popover</strong></p>
     <p><strong>This is a popover</strong></p>
   </div>
   <pds-button variant="secondary">Click</pds-button>
 </pds-popover>
 `}>
-  <pds-popover has-arrow="true" placement="bottom-start" html-content="true">
+  <pds-popover placement="bottom-start" html-content="true">
     <div slot="content">
-      <p><strong>This is a popover</strong></p>
       <p><strong>This is a popover</strong></p>
     </div>
     <pds-button variant="secondary">Click</pds-button>
   </pds-popover>
 </Canvas>
 
+#### Avatar trigger
 <Canvas mdxSource={`
-<pds-popover has-arrow="true" placement="bottom-start" html-content="true">
+<pds-popover placement="bottom-start" html-content="true">
   <div slot="content">
-    <p><strong>This is a popover</strong></p>
     <p><strong>This is a popover</strong></p>
   </div>
   <pds-avatar dropdown="true"></pds-avatar>
@@ -58,7 +49,6 @@ There can only be one trigger for the Popover.
   <pds-popover has-arrow="true" placement="bottom-start" html-content="true">
     <div slot="content">
       <p><strong>This is a popover</strong></p>
-      <p><strong>This is a popover</strong></p>
     </div>
     <pds-avatar dropdown="true"></pds-avatar>
   </pds-popover>
@@ -66,3 +56,52 @@ There can only be one trigger for the Popover.
 
 ### Content
 The popover content is placed in a container with the slot, `content`. This is where you can place any HTML content you want to display in the popover.
+
+<Canvas mdxSource={`
+<pds-popover placement="bottom-start">
+  <div slot="content">
+    <p>Pastrami chuck leberkas, swine biltong tail fatback jowl landjaeger ground round strip steak t-bone cow beef. Filet mignon bresaola pastrami, beef salami hamburger short ribs. Strip steak picanha pork loin tri-tip, prosciutto frankfurter turducken cupim sausage corned beef spare ribs sirloin fatback t-bone bacon. Boudin pork chop capicola short ribs flank rump. Fatback andouille chuck, pork venison t-bone bacon cupim turducken brisket sausage pork loin. Shank buffalo sirloin swine shoulder sausage prosciutto fatback.</p>
+    <div>
+      <pds-button variant="secondary">Cancel</pds-button>
+      <pds-button>Get Started</pds-button>
+    </div>
+  </div>
+  <pds-button variant="secondary">Popover trigger</pds-button>
+</pds-popover>
+`}>
+  <pds-popover placement="bottom-start">
+    <div slot="content">
+      <p>Pastrami chuck leberkas, swine biltong tail fatback jowl landjaeger ground round strip steak t-bone cow beef. Filet mignon bresaola pastrami, beef salami hamburger short ribs. Strip steak picanha pork loin tri-tip, prosciutto frankfurter turducken cupim sausage corned beef spare ribs sirloin fatback t-bone bacon. Boudin pork chop capicola short ribs flank rump. Fatback andouille chuck, pork venison t-bone bacon cupim turducken brisket sausage pork loin. Shank buffalo sirloin swine shoulder sausage prosciutto fatback.</p>
+      <div>
+        <pds-button variant="secondary">Cancel</pds-button>
+        <pds-button>Get Started</pds-button>
+      </div>
+    </div>
+    <pds-button variant="secondary">Popover trigger</pds-button>
+  </pds-popover>
+</Canvas>
+
+### Positioning
+Using the placement prop you can adjust where your tooltip will be displayed.
+
+
+### Arrow
+By default the arrow is hidden on popovers. It can be shown by enabling it when `has-arrow` is `true`.
+
+<Canvas mdxSource={`
+<pds-popover has-arrow="true" placement="bottom-start">
+  <div slot="content">
+    <p><strong>This is a popover</strong></p>
+    <p><strong>This is a popover</strong></p>
+  </div>
+  <pds-avatar dropdown="true"></pds-avatar>
+</pds-popover>
+`}>
+  <pds-popover has-arrow="true" placement="bottom-start">
+    <div slot="content">
+      <p><strong>This is a popover</strong></p>
+      <p><strong>This is a popover</strong></p>
+    </div>
+    <pds-button variant="secondary">Click</pds-button>
+  </pds-popover>
+</Canvas>

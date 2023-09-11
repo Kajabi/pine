@@ -2,13 +2,13 @@
   --background-color: #fff;
   --box-shadow: 0 8px 14px rgba(0,0,0,0.16), 0 0 4px rgba(0,0,0,0.08);
   --color: var(--pine-color-neutral-charcoal-400);
-  --width: 320px;
   --arrow-size: 6px;
   --arrow-offset: 14px;
 
   --overlay-border-radius: 10px;
   --overlay-font-size: 14px;
   --overlay-line-height: 20px;
+  --overlay-min-width: 240px;
   --overlay-padding: 8px 12px;
 
   --arrow-pointing-down: var(--arrow-size) var(--arrow-size) 0;
@@ -18,11 +18,6 @@
 
   display: inline-block;
   position: relative;
-
-  ::slotted([slot="content"]) {
-    white-space: normal;
-    width: var(--width);
-  }
 }
 
 .pds-popover__content {
@@ -32,12 +27,12 @@
   color: var(--color);
   font-size: var(--overlay-font-size);
   line-height: var(--overlay-line-height);
+  min-width: var(--overlay-min-width);
   // TODO: need to use block / none but the popover content width and height are needed for calculations
   opacity: 0;
   padding: var(--overlay-padding);
   position: absolute;
   visibility: hidden;
-  width: max-content;
 
   .pds-popover--is-open & {
     // TODO: need to use block / none but the popover content width and height are needed for calculations
