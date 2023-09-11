@@ -7,13 +7,25 @@ import * as stories from './pds-popover.stories.js';
 
 # Popover
 
-Popver description
+Popovers are containers that float on top of existing content used to display transient additional content, actions, or menus.
+
+## Guidelines
+### Usage
+#### When to use
+- pending
+
+#### When not to use
+- pending
+
 
 ## Properties
 
 <ArgTypes of={stories} />
 
 ## Variants
+
+### Trigger
+Whether your trigger is text or an HTML element, it will be placed in the default slot between the opening and closing tags.
 
 <Canvas mdxSource={`
 <pds-popover has-arrow="true" placement="bottom-right" html-content="true">
@@ -32,3 +44,6 @@ Popver description
     <pds-button variant="secondary">Click</pds-button>
   </pds-popover>
 </Canvas>
+
+### Content
+The popover content is placed in a container with the slot, `content`.
