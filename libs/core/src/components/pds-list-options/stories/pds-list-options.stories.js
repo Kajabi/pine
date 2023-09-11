@@ -8,7 +8,7 @@ export default {
   decorators: [withActions],
   parameters: {
     actions: {
-      handles: [],
+      handles: ['pdsListOptionSelected'],
     },
   },
   title: 'components/List Options'
