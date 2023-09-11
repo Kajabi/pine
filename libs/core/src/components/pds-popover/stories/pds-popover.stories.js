@@ -28,28 +28,9 @@ const BaseTemplate = (args) => html`
     <pds-button variant="secondary">Help</pds-button>
   </pds-popover>`;
 
-const ListTemplate = (args) => html`
-  <pds-popover has-arrow=${args.hasArrow} placement=${args.placement}>
-    <pds-button variant="secondary">Menu</pds-button>
-    <div slot="content">
-      <pds-list-options>
-        <pds-list-option>Item 1</pds-list-option>
-        <pds-list-option>Item 2</pds-list-option>
-        <pds-list-option>Item 3</pds-list-option>
-      </pds-list-options>
-
-  </pds-popover>
-`;
-
 export const Default = BaseTemplate.bind({});
 Default.args = {
   hasArrow: false,
   htmlContent: true,
-  placement: "bottom-start",
-};
-
-export const WithList = ListTemplate.bind({});
-WithList.args = {
-  hasArrow: false,
   placement: "bottom-start",
 };
