@@ -161,7 +161,7 @@ export class PdsPopover {
             aria-live={this.opened ? 'polite' : 'off'}
             id={this.componentId}
             ref={(el) => (this.contentEl = el)}
-            role="tooltip"
+            role="dialog"
           >
             <slot
               name="content"
