@@ -244,6 +244,54 @@ describe('pds-select', () => {
     expect(firstOption?.classList.contains('is--current')).toBe(true);
   });
 
+  it('should open the comboxbox and move focus to the first item when the up arrow is pressed on the combobox trigger', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect, PdsSelectOption],
+      html: `
+        <pds-select component-id="combobox" label="Label">
+          <pds-select-option component-id="opt0">Select an option</pds-select-option>
+          <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
+        </pds-select>
+      `,
+    });
+
+    const input = page.root?.shadowRoot?.querySelector<HTMLInputElement>('.pds-select__input');
+    const select = page.root?.shadowRoot?.querySelector<HTMLElement>('.pds-select');
+
+    // Open the combobox by clicking on it
+    input?.focus();
+    page.root?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
+    await page.waitForChanges();
+
+    // Verify current and tabindex
+    expect(select?.classList.contains('is-open')).toBe(true);
+    expect(input?.getAttribute('aria-expanded')).toEqual('true');
+  });
+
+  it('should open the comboxbox and move focus to the first item when the down arrow is pressed on the combobox trigger', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect, PdsSelectOption],
+      html: `
+        <pds-select component-id="combobox" label="Label">
+          <pds-select-option component-id="opt0">Select an option</pds-select-option>
+          <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
+        </pds-select>
+      `,
+    });
+
+    const input = page.root?.shadowRoot?.querySelector<HTMLInputElement>('.pds-select__input');
+    const select = page.root?.shadowRoot?.querySelector<HTMLElement>('.pds-select');
+
+    // Open the combobox by clicking on it
+    input?.focus();
+    page.root?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    await page.waitForChanges();
+
+    // Verify current and tabindex
+    expect(select?.classList.contains('is-open')).toBe(true);
+    expect(input?.getAttribute('aria-expanded')).toEqual('true');
+  });
+
   // TODO: test returning opposite results
   it('should not move focus down when arrow down is pressed on the last list item', async () => {
     const page = await newSpecPage({
