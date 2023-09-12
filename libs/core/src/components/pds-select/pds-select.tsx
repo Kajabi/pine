@@ -33,18 +33,18 @@ export class PdsSelect {
   @Prop() focusIndex = -1;
 
   /**
-   * Flag to remember if the combobox was focused before blur
+   * Determines whether or not the combobox was focused before blur
    * @defaultValue false
    */
   @Prop() wasComboboxFocused = false;
 
   /**
-   * Flag to remember if the combobox was focused before blur
+   * The id of the previously focused combobox option
    */
   @Prop() wasComboboxFocusedId: string;
 
   /**
-   * Flag to remember focused combobox index
+   * The index of the previously focused combobox option
    */
   @Prop() wasComboboxFocusedIndex: number;
 
@@ -65,9 +65,9 @@ export class PdsSelect {
   @Prop() errorMessage?: string;
 
   /**
-   * Displays a hint or description of the combobox
+   * Displays a helper or description of the combobox
    */
-  @Prop() hintMessage?: string;
+  @Prop() helperMessage?: string;
 
   /**
    * Indicates  whether or not the input field is invalid or throws an error
@@ -403,7 +403,7 @@ export class PdsSelect {
         >
           <div
             aria-controls={`${this.componentId}-listbox`}
-            aria-describedby={assignDescription(this.componentId, this.invalid, this.hintMessage)}
+            aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
             aria-expanded={this.isComboboxOpen.toString()}
             aria-haspopup="listbox"
             aria-labelledby={`${this.componentId}-label`}
@@ -429,12 +429,12 @@ export class PdsSelect {
             <slot></slot>
           </div>
 
-          {this.hintMessage &&
+          {this.helperMessage &&
             <p
-              class="pds-select__hint-message"
+              class="pds-select__helper-message"
               id={messageId(this.componentId, 'helper')}
             >
-              {this.hintMessage}
+              {this.helperMessage}
             </p>
           }
 

@@ -110,11 +110,11 @@ describe('pds-select', () => {
     expect(element?.querySelector('.pds-select__input')).not.toBeNull();
   });
 
-  it('renders a hintMessage', async () => {
+  it('renders a helperMessage', async () => {
     const page = await newSpecPage({
       components: [PdsSelect, PdsSelectOption],
       html: `
-        <pds-select component-id="combobox" label="Label" hint-message="Use the correct syntax">
+        <pds-select component-id="combobox" label="Label" helper-message="Use the correct syntax">
           <pds-select-option component-id="opt0">Select an option</pds-select-option>
           <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
         </pds-select>
@@ -123,7 +123,7 @@ describe('pds-select', () => {
 
     const element = page.root?.shadowRoot;
 
-    expect(element?.querySelector('.pds-select__hint-message')).not.toBeNull();
+    expect(element?.querySelector('.pds-select__helper-message')).not.toBeNull();
   });
 
   it('renders a errorMessage', async () => {
@@ -265,9 +265,6 @@ describe('pds-select', () => {
     let testingFirst = page.body.querySelector('pds-select-option')?.shadowRoot?.querySelector('.pds-select-option');
     let testingLast = page.body.querySelector('pds-select-option:last-child')?.shadowRoot?.querySelector('.pds-select-option');
 
-    console.log('test first option: ', testingFirst?.outerHTML);
-    console.log('last .inner: ', testingLast?.outerHTML);
-
     let lastOption = page.body.querySelector('pds-select-option:last-child')?.shadowRoot?.querySelector('.pds-select-option');
 
     // Simulate arrow down (Option 1 has focus)
@@ -276,9 +273,6 @@ describe('pds-select', () => {
 
     testingFirst = page.body.querySelector('pds-select-option')?.shadowRoot?.querySelector('.pds-select-option');
     testingLast = page.body.querySelector('pds-select-option:last-child')?.shadowRoot?.querySelector('.pds-select-option');
-
-    console.log('test first option after: ', testingFirst?.outerHTML);
-    console.log('last .inner after: ', testingLast?.outerHTML);
 
     expect(lastOption?.classList.contains('is--current')).toBe(false);
     expect(lastOption?.getAttribute('tabindex')).toEqual('-1');

@@ -407,9 +407,9 @@ export namespace Components {
          */
         "focusIndex": number;
         /**
-          * Displays a hint or description of the combobox
+          * Displays a helper or description of the combobox
          */
-        "hintMessage"?: string;
+        "helperMessage"?: string;
         /**
           * Indicates  whether or not the input field is invalid or throws an error
           * @defaultValue false
@@ -453,16 +453,16 @@ export namespace Components {
          */
         "selectedOptionValue"?: string;
         /**
-          * Flag to remember if the combobox was focused before blur
+          * Determines whether or not the combobox was focused before blur
           * @defaultValue false
          */
         "wasComboboxFocused": boolean;
         /**
-          * Flag to remember if the combobox was focused before blur
+          * The id of the previously focused combobox option
          */
         "wasComboboxFocusedId": string;
         /**
-          * Flag to remember focused combobox index
+          * The index of the previously focused combobox option
          */
         "wasComboboxFocusedIndex": number;
     }
@@ -1570,9 +1570,9 @@ declare namespace LocalJSX {
          */
         "focusIndex"?: number;
         /**
-          * Displays a hint or description of the combobox
+          * Displays a helper or description of the combobox
          */
-        "hintMessage"?: string;
+        "helperMessage"?: string;
         /**
           * Indicates  whether or not the input field is invalid or throws an error
           * @defaultValue false
@@ -1620,16 +1620,16 @@ declare namespace LocalJSX {
          */
         "selectedOptionValue"?: string;
         /**
-          * Flag to remember if the combobox was focused before blur
+          * Determines whether or not the combobox was focused before blur
           * @defaultValue false
          */
         "wasComboboxFocused"?: boolean;
         /**
-          * Flag to remember if the combobox was focused before blur
+          * The id of the previously focused combobox option
          */
         "wasComboboxFocusedId"?: string;
         /**
-          * Flag to remember focused combobox index
+          * The index of the previously focused combobox option
          */
         "wasComboboxFocusedIndex"?: number;
     }

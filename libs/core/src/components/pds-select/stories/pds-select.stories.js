@@ -8,7 +8,7 @@ export default {
     componentId: null,
     disabled: false,
     errorMessage: null,
-    hintMessage: null,
+    helperMessage: null,
     invalid: false,
     label: null,
     required: false,
@@ -25,7 +25,7 @@ const BaseTemplate = (args) => html`
   <pds-select
     component-id=${args.componentId}
     error-message=${args.errorMessage}
-    hint-message=${args.hintMessage}
+    helper-message=${args.helperMessage}
     label=${args.label}
   >
     <pds-select-option component-id="opt0" value="">Select an Option</pds-select-option>
@@ -36,25 +36,16 @@ const BaseTemplate = (args) => html`
   </pds-select>
 `;
 
-const selectEventExample = () => {
-  document.addEventListener('pdsSelectChange', function(e) {
-    const select = e.target.shadowRoot.querySelector(".pds-select__field");
-
-    console.log('e: ', select);
-    console.log(`The value has been update to #${select.value}`);
-  });
-};
-
 export const Default = BaseTemplate.bind();
 Default.args = {
   componentId: 'pds-select-default-example',
   label: 'Label',
 };
 
-export const HintMessage = BaseTemplate.bind();
-HintMessage.args = {
-  componentId: 'pds-select-hint-message-example',
-  hintMessage: 'This is a hint message',
+export const helperMessage = BaseTemplate.bind();
+helperMessage.args = {
+  componentId: 'pds-select-helper-message-example',
+  helperMessage: 'This is a helper message',
   label: 'Label',
 };
 
