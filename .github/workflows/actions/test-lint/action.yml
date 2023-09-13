@@ -19,10 +19,22 @@ runs:
       with:
         node-version: ${{ inputs.node-version }}
 
+    - name: Cache node_modules
+      uses: actions/cache@v3
+      id: cache-node-modules
+      env:
+        cache-name: cache-node-modules
+      with:
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-
+
     - name: Install Dependencies
-      run: yarn install --frozen-lockfile --immutable
+      if: steps.cache-node-modules.ouputs.cache-hit != true
+      run: npm ci
       shell: bash
 
     - name: Lint
-      run : yarn nx affected --target=lint --parallel=3
+      run : npx nx affected --target=lint --parallel=3
       shell: bash
