@@ -29,7 +29,7 @@ const srcDir = path.join(baseDir, 'src');
 const srcSvgBasePath = path.join(srcDir, 'svg');
 
 const date = new Date();
-const strDate = [date.getFullYear().toString(), (date.getMonth() + 1).toString().padStart(2,'0'), date.getDate().toString()].join('-');
+const strDate = [date.getFullYear().toString(), (date.getMonth() + 1).toString().padStart(2,'0'), date.getDate().toString().padStart(2, '0')].join('-');
 
 let figmaClient;
 

@@ -68,13 +68,13 @@ jobs:
       - name: Determine Major or Minor version bump
         id: version-bump
         run: |
-          echo "VERSION_BUMP_TYPE=$(node ./.scripts/determine-bump-type.js)" >> $GITHUB_OUTPUT
+          echo "VERSION_BUMP_TYPE=$(node ./.scripts/update-icon-version.js)" >> $GITHUB_OUTPUT
         shell: bash
 
   release:
     needs: update-icons
     uses: ./.github/workflows/release-icons.yml
-    if: needs.update-icons.outputs.bumpType != 'undefined'
+    if: needs.update-icons.outputs.bumpType != ''
     with:
       tag: 'nightly'
       version: ${{ needs.update-icons.outputs.bumpType }}
