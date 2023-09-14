@@ -233,7 +233,7 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Determines whether or not the input field is disabled.
+          * If true, the input field is disabled.
          */
         "disabled"?: boolean;
         /**
@@ -245,7 +245,7 @@ export namespace Components {
          */
         "helperMessage"?: string;
         /**
-          * Determines whether or not the input field is invalid or throws an error.
+          * If true, the input field is invalid.
          */
         "invalid"?: boolean;
         /**
@@ -261,11 +261,11 @@ export namespace Components {
          */
         "placeholder"?: string;
         /**
-          * Determines whether or not the input field is readonly.
+          * If true, the input field is readonly.
          */
         "readonly"?: boolean;
         /**
-          * Determines whether or not the input field is required.
+          * If true, the input field is required.
          */
         "required"?: boolean;
         /**
@@ -1013,7 +1013,7 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
-          * Determines whether or not the input field is disabled.
+          * If true, the input field is disabled.
          */
         "disabled"?: boolean;
         /**
@@ -1025,7 +1025,7 @@ declare namespace LocalJSX {
          */
         "helperMessage"?: string;
         /**
-          * Determines whether or not the input field is invalid or throws an error.
+          * If true, the input field is invalid.
          */
         "invalid"?: boolean;
         /**
@@ -1045,11 +1045,11 @@ declare namespace LocalJSX {
          */
         "placeholder"?: string;
         /**
-          * Determines whether or not the input field is readonly.
+          * If true, the input field is readonly.
          */
         "readonly"?: boolean;
         /**
-          * Determines whether or not the input field is required.
+          * If true, the input field is required.
          */
         "required"?: boolean;
         /**

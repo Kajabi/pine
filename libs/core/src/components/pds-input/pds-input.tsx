@@ -14,7 +14,7 @@ export class PdsInput {
   @Prop() componentId!: string;
 
   /**
-   * Determines whether or not the input field is disabled.
+   * If true, the input field is disabled.
    */
   @Prop() disabled?: boolean;
 
@@ -29,7 +29,7 @@ export class PdsInput {
   @Prop() helperMessage?: string;
 
   /**
-   * Determines whether or not the input field is invalid or throws an error.
+   * If true, the input field is invalid.
    */
   @Prop() invalid?: boolean;
 
@@ -49,12 +49,12 @@ export class PdsInput {
   @Prop() placeholder?: string;
 
   /**
-   * Determines whether or not the input field is readonly.
+   * If true, the input field is readonly.
    */
   @Prop() readonly?: boolean;
 
   /**
-   * Determines whether or not the input field is required.
+   * If true, the input field is required.
    */
   @Prop() required?: boolean;
 
