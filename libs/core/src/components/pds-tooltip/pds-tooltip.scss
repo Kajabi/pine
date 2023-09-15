@@ -1,15 +1,15 @@
 :host {
   --background-color: var(--pine-color-neutral-charcoal-400);
-  --box-shadow: 0 8px 14px rgba(0,0,0,0.16), 0 0 4px rgba(0,0,0,0.08);
-  --color: #fff;
+  --box-shadow: var(--pine-box-shadow-md);
+  --color: var(--pine-color-base-white);
   --width: 320px;
   --arrow-size: 6px;
   --arrow-offset: 14px;
 
-  --overlay-border-radius: 10px;
-  --overlay-font-size: 14px;
-  --overlay-line-height: 20px;
-  --overlay-padding: 8px 12px;
+  --overlay-border-radius: var(--pine-border-radius-md);
+  --overlay-font-size: var(--pine-font-size-body-sm);
+  --overlay-line-height: var(--pine-line-height-sm);
+  --overlay-padding: var(--pine-spacing-xs) calc(var(--pine-spacing-md) / 2);
 
   --arrow-pointing-down: var(--arrow-size) var(--arrow-size) 0;
   --arrow-pointing-to-the-right: var(--arrow-size) 0 var(--arrow-size) var(--arrow-size);

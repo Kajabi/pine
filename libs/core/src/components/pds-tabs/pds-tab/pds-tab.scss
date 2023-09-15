@@ -1,4 +1,24 @@
 pds-tab {
+  --background-color-tab: var(--pine-color-neutral-grey-300);
+  --background-color-tab-active: var(--pine-color-neutral-charcoal-400);
+  --background-color-tab-hover: var(--pine-color-neutral-grey-400);
+  --border-radius: var(--pine-border-radius-xs);
+
+  --color: var(--pine-color-neutral-charcoal-200);
+  --color-active: var(--pine-color-neutral-charcoal-400);
+  --color-focus: var(--pine-color-neutral-charcoal-300);
+  --color-white: var(--pine-color-base-white);
+
+  --font-size-body: var(--pine-font-size-body);
+  --font-size-sm: var(--pine-font-size-body-sm);
+  --font-size-xs: var(--pine-font-size-body-xs);
+  --font-weight: var(--pine-font-weight-medium);
+  --line-height-md: var(--pine-line-height-md);
+  --line-height-sm: var(--pine-line-height-sm);
+  --line-height-xs: var(--pine-line-height-xs);
+
+  --outline: 4px solid var(--pine-color-primary-200);
+
   display: inline-block;
   position: relative;
 }
@@ -19,15 +39,15 @@ pds-tab {
 
 // delete later
 *:focus-visible {
-  border-radius: 4px;
-  outline: 4px solid #8ecafb;
+  border-radius: var(--border-radius);
+  outline: var(--outline);
 }
 
 .pds-tab {
   @include pds-button-style-reset();
 
   align-items: center;
-  color: #60666c;
+  color: var(--color);
   display: inline-flex;
   position: relative;
   text-decoration: none;
@@ -35,7 +55,7 @@ pds-tab {
 
   &.is-active,
   &[aria-selected='true'] {
-    color: #202327;
+    color: var(--color-active);
 
     .pds-tab__content::after {
       opacity: 1;
@@ -43,19 +63,19 @@ pds-tab {
   }
 
   &:hover {
-    color: #202327;
+    color: var(--color-active);
   }
 
   &:focus-visible {
-    color: #43474b;
+    color: var(--color-focus);
   }
 
   .pds-tab__content {
     font-family: inherit;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 24px;
-    padding-bottom: 11px;
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight);
+    line-height: var(--line-height-md);
+    padding-block-end: 11px;
     position: relative;
 
     &::after {
@@ -85,7 +105,7 @@ pds-tab {
 
     &.is-active,
     &[aria-selected='true'] {
-      --tab-background-color: #fff;
+      --tab-background-color: var(--color-white);
 
       .pds-tab__content::after {
         opacity: 1;
@@ -97,17 +117,17 @@ pds-tab {
     }
 
     &:hover:not(.is-active, [aria-selected='true']) {
-      --tab-background-color: #eceeef;
+      --tab-background-color: var(--background-color-tab);
     }
 
     &:focus-visible {
-      color: #202327;
+      color: var(--color);
     }
   }
 
   .pds-tab__content {
-    font-size: 12px;
-    line-height: 16px;
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-xs);
     padding-bottom: 7px;
   }
 
@@ -146,29 +166,29 @@ pds-tab {
 }
 
 .pds-tabs--filter {
-  --tab-background-color: #eceeef;
+  --tab-background-color: var(--background-color-tab);
 
   .pds-tab {
     background-color: var(--tab-background-color);
     border-radius: 50px;
-    color: #202327;
+    color: var(--color-active);
     padding: 6px 15px;
 
     &.is-active,
     &[aria-selected='true'] {
-      --tab-background-color: #202327;
-      color: #fff;
+      --tab-background-color: var(--background-color-tab-active);
+      color: var(--color-white)
     }
 
     &:hover:not(.is-active, [aria-selected='true']) {
-      --tab-background-color: #d3d5d9;
+      --tab-background-color: var(--background-color-tab-hover);
     }
   }
 
   .pds-tab__content {
-    font-size: 14px;
-    line-height: 20px;
-    padding-bottom: 0;
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-sm);
+    padding-block-end: 0;
 
     &::after {
       content: unset;

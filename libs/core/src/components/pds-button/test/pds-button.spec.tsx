@@ -10,7 +10,7 @@ describe('pds-button', () => {
     expect(root).toEqualHtml(`
       <pds-button variant="primary">
         <mock:shadow-root>
-          <button class="pds-button" type="button">
+          <button class="pds-button pds-button--primary" type="button">
             <slot></slot>
           </button>
         </mock:shadow-root>
@@ -58,7 +58,7 @@ describe('pds-button', () => {
     expect(root).toEqualHtml(`
       <pds-button disabled="true" aria-disabled="true" variant="primary">
         <mock:shadow-root>
-          <button class="pds-button" type="button" disabled>
+          <button class="pds-button pds-button--primary" type="button" disabled>
             <slot></slot>
           </button>
         </mock:shadow-root>
@@ -75,7 +75,7 @@ describe('pds-button', () => {
     expect(page.root).toEqualHtml(`
       <pds-button component-id="test" id="test" variant="primary">
         <mock:shadow-root>
-          <button class="pds-button" type="button">
+          <button class="pds-button pds-button--primary" type="button">
             <slot></slot>
           </button>
         </mock:shadow-root>

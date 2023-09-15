@@ -9,24 +9,29 @@
    */
   --panel-padding: 0;
 
+  --gap-md: var(--pine-spacing-md);
+  --gap-xs: var(--pine-spacing-xs);
+  --gap-sm: 16px var(--pine-spacing-sm);
+  --outline: 2px solid var(--pine-color-primary-200);
+
   display: block;
 }
 
 // delete later
 *:focus {
-  outline: 2px solid #046c98;
+  outline: var(--outline);
 }
 
 .pds-tabs__tablist {
   display: flex;
   flex-wrap: wrap;
-  gap: 24px;
+  gap: var(--gap-md);
 }
 
 :host(.pds-tabs--availability) .pds-tabs__tablist {
-  gap: 8px;
+  gap: var(--gap-xs);
 }
 
 :host(.pds-tabs--filter) .pds-tabs__tablist {
-  gap: 16px;
+  gap: var(--gap-sm);
 }

@@ -65,14 +65,15 @@ export class PdsButton {
     }
   }
 
-  private buttonClassNames = () => {
-    let className = `pds-button`;
-    if (this.variant && this.variant != 'primary') {
-      const variantClassName = `pds-button--${this.variant}`;
-      className += ' ' + variantClassName;
+  private classNames() {
+    const classNames = ['pds-button'];
+
+    if (this.variant) {
+      classNames.push('pds-button--' + this.variant);
     }
-    return className;
-  };
+
+    return classNames.join('  ');
+  }
 
   render() {
     return (
@@ -83,7 +84,7 @@ export class PdsButton {
         variant={this.variant}
       >
         <button
-          class={this.buttonClassNames()}
+          class={this.classNames()}
           disabled={this.disabled}
           name={this.name}
           type={this.type}

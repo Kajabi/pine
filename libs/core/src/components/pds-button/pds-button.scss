@@ -1,27 +1,47 @@
 :host {
-  display: inline-flex;
-  vertical-align: middle;
-}
-
-.pds-button {
-  // Background Color
-  --background-color: #202327;
-  --background-color-hover: #040506;
-  --background-color-disabled: #4f5358;
-
-  // Border Color
   --border-color: transparent;
   --border-color-hover: transparent;
   --border-color-focus: transparent;
   --border-color-disabled: transparent;
 
-  // Color
-  --color: #fff;
-  --color-disabled: #fff;
+  // primary
+  --background-color-primary: var(--pine-color-neutral-charcoal-400);
+  --background-color-hover-primary: var(--pine-color-neutral-charcoal-500);
+  --background-color-disabled-primary: var(--pine-color-neutral-grey-300);
+  --color-primary: var(--pine-color-base-white);
+  --color-disabled-primary: var(--pine-color-neutral-charcoal-100);
+  --outline-color-primary: var(--pine-color-primary-200);
 
-  // Outline Color
-  --outline-color: #8ecafb;
+  // secondary
+  --border-color-secondary: var(--pine-color-neutral-grey-400);
+  --border-color-hover-secondary: var(--pine-color-neutral-grey-500);
+  --border-color-focus-secondary: var(--pine-color-neutral-grey-300);
+  --border-color-disabled-secondary: var(--pine-color-neutral-grey-300);
+  --color-secondary: var(--pine-color-neutral-charcoal-400);
+  --color-disabled-secondary: var(--pine-color-neutral-charcoal-100);
+  --outline-color-secondary: var(--pine-color-primary-200);
 
+  // accent
+  --background-color-accent: var(--pine-color-primary-300);
+  --background-color-hover-accent: var(--pine-color-primary-400);
+  --background-color-disabled-accent: var(--pine-color-primary-100);
+  --color-accent: var(--pine-color-base-white);
+  --color-disabled-accent: var(--pine-color-primary-200);
+  --outline-color-accent: var(--pine-color-primary-200);
+
+  // destructive
+  --background-color-destructive: var(--pine-color-red-300);
+  --background-color-hover-destructive: var(--pine-color-red-400);
+  --background-color-disabled-destructive: var(--pine-color-red-100);
+  --color-destructive: var(--pine-color-base-white);
+  --color-disabled-destructive: var(--pine-color-red-200);
+  --outline-color-destructive: var(--pine-color-red-200);
+
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.pds-button {
   align-items: center;
   background-color: var(--background-color);
   border: 1px solid var(--border-color);
@@ -56,20 +76,31 @@
   }
 }
 
-.pds-button--accent {
-  --background-color: #0072ef;
-  --background-color-hover: #054fb8;
-  --background-color-disabled: #e6f4fe;
+.pds-button--primary {
+  --background-color: var(--background-color-primary);
+  --background-color-hover: var(--background-color-hover-primary);
+  --background-color-disabled: var(--background-color-disabled-primary);
+  --color: var(--color-primary);
+  --color-disabled: var(--color-disabled-primary);
+  --outline-color: var(--outline-color-primary);
+}
 
-  --color-disabled: #8ecafb;
+.pds-button--accent {
+  --background-color: var(--background-color-accent);
+  --background-color-hover: var(--background-color-hover-accent);
+  --background-color-disabled: var(--background-color-disabled-accent);
+  --color: var(--color-accent);
+  --color-disabled: var(--color-disabled-accent);
+  --outline-color: var(--outline-color-accent);
 }
 
 .pds-button--destructive {
-  --background-color: #cf3c32;
-  --background-color-hover: #99221e;
-  --background-color-disabled: #e48079;
-
-  --outline-color: #fdb0aa;
+  --background-color: var(--background-color-destructive);
+  --background-color-hover: var(--background-color-hover-destructive);
+  --background-color-disabled: var(--background-color-disabled-destructive);
+  --color: var(--color-destructive);
+  --color-disabled: var(--color-disabled-destructive);
+  --outline-color: var(--outline-color-destructive);
 }
 
 .pds-button--secondary,
@@ -77,14 +108,13 @@
   --background-color: transparent;
   --background-color-hover: transparent;
   --background-color-disabled: transparent;
-
-  --border-color: #ddd;
-  --border-color-hover: #b5bac0;
-  --border-color-focus: #eceeef;
-  --border-color-disabled: #eceeef;
-
-  --color: #202327;
-  --color-disabled: #8d939a;
+  --border-color-disabled: var(--border-color-disabled-secondary);
+  --border-color-focus: var(--border-color-focus-secondary);
+  --border-color-hover: var(--border-color-hover-secondary);
+  --border-color: var(--border-color-secondary);
+  --color: var(--color-secondary);
+  --color-disabled: var(--color-disabled-secondary);
+  --outline-color: var(--outline-color-secondary);
 }
 
 .pds-button--disclosure {
