@@ -19,6 +19,10 @@ import * as stories from './pds-link.stories.js';
 
 ### External
 
+An `external` link is designed to redirect users to an external website or resource.
+
+Notably, it's styled visually with an icon to indicate its external nature and opens a new browser tab on interaction.
+
 <Canvas mdxSource={`
 <pds-link href="#some-anchor" external="true"></pds-link>
 `}>
@@ -26,6 +30,8 @@ import * as stories from './pds-link.stories.js';
 </Canvas>
 
 ### Inline
+
+The `inline` variant displays a standard inline hyperlink. Visually, it maintains the typical underlined appearance of a hyperlink.
 
 <Canvas mdxSource={`
 <pds-link href="https://www.google.com"></pds-link>
@@ -35,6 +41,8 @@ import * as stories from './pds-link.stories.js';
 
 ### Plain
 
+The `plain` variant displays a standard plain hyperlink. Visually, it does not include an underline.
+
 <Canvas mdxSource={`
 <pds-link href="#some-anchor" variant="plain"></pds-link>
 `}>
@@ -43,6 +51,8 @@ import * as stories from './pds-link.stories.js';
 
 ### With Custom Text (uses slot)
 
+Providing custom text within the open and closing tags allows the default link text to be replaced with custom content.
+
 <Canvas mdxSource={`
 <pds-link href="#some-anchor">Overrides default use of href</pds-link>
 `}>
@@ -50,6 +60,8 @@ import * as stories from './pds-link.stories.js';
 </Canvas>
 
 ### Without custom text in slot
+
+When no custom text is provided, the link will use the `href` as the link text.
 
 <Canvas mdxSource={`
 <pds-link href="#some-anchor"></pds-link>
