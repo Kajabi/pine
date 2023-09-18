@@ -13,22 +13,37 @@ const BaseTemplateWithSlot = (args) => html` <pds-link external=${args.external}
 
 export const External = BaseTemplate.bind();
 External.args = {
-  external: true
+  external: true,
+  fontSize: 'lg',
+  variant: 'inline'
 };
 
 export const Inline = BaseTemplate.bind();
 Inline.args = {
-  href: 'https://www.google.com'
+  external: false,
+  fontSize: 'lg',
+  href: 'https://www.google.com',
+  variant: 'inline'
 };
 
 export const Plain = BaseTemplate.bind();
 Plain.args = {
+  external: false,
+  fontSize: 'lg',
   variant: 'plain'
 };
 
 export const WithCustomText = BaseTemplateWithSlot.bind();
 WithCustomText.args = {
-  slot: 'Overrides default use of href'
+  external: false,
+  fontSize: 'lg',
+  slot: 'Overrides default use of href',
+  variant: 'inline'
 };
 
 export const WithoutCustomTextInSlot = BaseTemplateWithSlot.bind();
+WithoutCustomTextInSlot.args = {
+  external: false,
+  fontSize: 'lg',
+  variant: 'inline'
+};
