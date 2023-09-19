@@ -38,6 +38,7 @@
     "build.icons": "run-func scripts/optimize-svgs.js run $(pwd)",
     "build.ts": "tsc -p scripts/tsconfig.json",
     "collection.copy": "run-func scripts/collection-copy.js collectionCopy $(pwd)",
+    "deploy": "run-s build",
     "figma.export": "node scripts/figma_icons/figma-icon-export.js",
     "lint": "run-p lint.*",
     "lint.eslint": "eslint src/**/*.{ts,tsx}",
