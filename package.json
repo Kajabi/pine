@@ -13,7 +13,7 @@
     "coverage": "open libs/core/coverage/lcov-report/index.html",
     "stencil.generate": "npx nx run core:generate",
     "lint.all": "npx nx run-many --target=lint",
-    "prepare": "husky install",
+    "prepare": "node ./.scripts/prepare.js",
     "setup": "npm install",
     "start": "npx nx run core:start",
     "test.all": "npx nx run-many --target=test"
