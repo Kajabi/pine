@@ -43,7 +43,7 @@ runs:
       uses: nrwl/nx-set-shas@v3
 
     - name: Install Dependencies
-      if: steps.cache-node-modules.ouputs.cache-hit != true || steps.changed-files.outputs.any_changed == 'true'
+      if: steps.cache-node-modules.ouputs.cache-hit != true
       run: npm ci
       shell: bash
 

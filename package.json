@@ -11,11 +11,12 @@
     "build.all": "npx nx run-many --target=build",
     "commit": "npx cz",
     "coverage": "open libs/core/coverage/lcov-report/index.html",
-    "stencil.generate": "npx nx run core:generate",
+    "deploy": "npx nx run-many -t deploy -p icons core",
     "lint.all": "npx nx run-many --target=lint",
-    "prepare": "husky install",
+    "prepare": "node ./.scripts/prepare.js",
     "setup": "npm install",
     "start": "npx nx run core:start",
+    "stencil.generate": "npx nx run core:generate",
     "test.all": "npx nx run-many --target=test"
   },
   "devDependencies": {

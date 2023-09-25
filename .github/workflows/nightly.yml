@@ -1,8 +1,8 @@
 name: "Pine Nightly Automations"
 
 on:
-  # schedule:
-  #   - cron: '00 06 * * 1-5'
+  schedule:
+    - cron: '00 11 * * 1-5' # 11 am UTC Mon-Fri
   workflow_dispatch:
 
 jobs:
