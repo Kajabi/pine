@@ -441,6 +441,10 @@ export namespace Components {
     | 'left-start'
     | 'left-end';
         /**
+          * Pending
+         */
+        "selectFocusedOption": () => Promise<void>;
+        /**
           * The display id for the selected option
          */
         "selectedOptionId"?: string;

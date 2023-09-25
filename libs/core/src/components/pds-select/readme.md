@@ -33,6 +33,19 @@
 | `pdsSelectChange` | Emitted when the select value changes from selected option | `CustomEvent<string>` |
 
 
+## Methods
+
+### `selectFocusedOption() => Promise<void>`
+
+Pending
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+
 ## Dependencies
 
 ### Depends on

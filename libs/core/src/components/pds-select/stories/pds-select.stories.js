@@ -15,9 +15,6 @@ export default {
   },
   argTypes: extractArgTypes('pds-select'),
   component: "pds-select",
-  subcomponents: {
-    PdsSelectOption: 'pds-select-option',
-  },
   title: "components/Select",
 };
 

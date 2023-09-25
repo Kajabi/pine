@@ -1,4 +1,4 @@
-import { Component, Element, Host, h, Prop, Event, EventEmitter, Listen } from '@stencil/core';
+import { Component, Element, Host, h, Method, Prop, Event, EventEmitter, Listen } from '@stencil/core';
 import {
   positionTooltip
 } from '../../utils/overlay';
@@ -79,7 +79,7 @@ export class PdsSelect {
    * Is enabled when the combobox is open
    * @defaultValue false
    */
-  @Prop() isComboboxOpen = false;
+  @Prop({ mutable: true }) isComboboxOpen = false;
 
   /**
    * Text to be displayed as the combobox label
@@ -156,7 +156,7 @@ export class PdsSelect {
 
     if (this.comboInputRef) {
       this.comboInputRef.addEventListener('click', this.handleComboboxToggle);
-      this.comboInputRef.addEventListener('blur', this.handleComboInputBlur);
+      // this.comboInputRef.addEventListener('blur', this.handleComboInputBlur);
     }
   }
 
@@ -202,69 +202,69 @@ export class PdsSelect {
 
   @Listen('keydown', {})
   handleComboInputKeyDown(event: KeyboardEvent) {
-    const options = this.el.querySelectorAll('pds-select-option');
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
 
-    if (options.length > 0) {
-      switch (event.key) {
-        case 'ArrowDown':
-          event.preventDefault();
+        if (!this.isComboboxOpen) {
+          this.handleComboboxToggle();
+        }
 
-          if (!this.isComboboxOpen) {
-            this.handleComboboxToggle();
-          }
+        this.focusNextOption();
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
 
-          this.focusNextOption();
-          break;
-        case 'ArrowUp':
-          event.preventDefault();
+        if (!this.isComboboxOpen) {
+          this.handleComboboxToggle();
+          return
+        }
 
-          if (!this.isComboboxOpen) {
-            this.handleComboboxToggle();
-            return
-          }
+        this.focusPreviousOption();
+        break;
+      case 'Escape':
+        console.log('Escape outer');
+        if(this.isComboboxOpen) {
+          console.log('Escape inner');
+          this.handleComboboxToggle();
+        }
+        break;
+      case 'Home':
+        event.preventDefault();
+        this.focusFirstOption();
+        break;
+      case 'End':
+        event.preventDefault();
+        this.focusLastOption();
+        break;
+      case 'Enter':
+        event.preventDefault();
 
-          this.focusPreviousOption();
-          break;
-        case 'Escape':
-          if(this.isComboboxOpen) {
-            this.handleComboboxToggle();
-          }
-          break;
-        case 'Home':
-          event.preventDefault();
-          this.focusFirstOption();
-          break;
-        case 'End':
-          event.preventDefault();
-          this.focusLastOption();
-          break;
-        case 'Enter':
-          event.preventDefault();
+        if (this.isComboboxOpen) {
+          this.selectFocusedOption();
+        }
+        break;
+      case ' ':
+        event.preventDefault();
 
-          if (this.isComboboxOpen) {
-            this.selectFocusedOption();
-          }
-          break;
-        case ' ':
-          event.preventDefault();
+        // Open combobox if closed
+        if (!this.isComboboxOpen) {
+          this.handleComboboxToggle();
+          return
+        }
 
-          // Open combobox if closed
-          if (!this.isComboboxOpen) {
-            this.handleComboboxToggle();
-            return
-          }
-
-          // Select focused option if combobox is open
-          if (this.isComboboxOpen) {
-            this.selectFocusedOption();
-          }
-          break;
-      }
+        // Select focused option if combobox is open
+        if (this.isComboboxOpen) {
+          this.selectFocusedOption();
+        }
+        break;
     }
   }
 
   private handleComboboxToggle = () => {
     this.comboWrapperRef =  this.el.shadowRoot?.querySelector('.pds-select') as HTMLDivElement;
+
+    // console.log('this.comboInputRef: ', this.comboInputRef);
 
     this.isComboboxOpen = !this.isComboboxOpen;
     this.comboInputRef.setAttribute('aria-expanded', this.isComboboxOpen.toString());
@@ -274,6 +274,7 @@ export class PdsSelect {
 
       // Move focus to the input when the combobox is opened
       this.comboInputRef?.focus();
+      console.log('if this.isComboboxOpen');
 
       // Set the focus index to the first option
       if (!this.focusIndex && !this.wasComboboxFocused)  {
@@ -314,10 +315,15 @@ export class PdsSelect {
     return classNames.join(' ');
   }
 
-  private handleComboInputBlur() {
-    // Set the flag to remember the focus state when the combobox loses focus
-    this.wasComboboxFocused = document.activeElement === this.comboInputRef;
-  }
+  // private handleComboInputBlur() {
+  //   // Set the flag to remember the focus state when the combobox loses focus
+  //   console.log('this: ', this);
+  //   console.log('this.wasComboboxFocused Before', this.wasComboboxFocused);
+  //   console.log('document.activeElement', document.activeElement);
+  //   console.log('this.comboInputRef', this.comboInputRef);
+  //   this.wasComboboxFocused = document.activeElement === this.comboInputRef;
+  //   console.log('this.wasComboboxFocused After', this.wasComboboxFocused);
+  // }
 
   // Focus Management
   private focusNextOption() {
@@ -374,13 +380,26 @@ export class PdsSelect {
     }
   }
 
-  private selectFocusedOption() {
+  // private selectFocusedOption() {
+  //   const options = this.el.querySelectorAll('pds-select-option');
+  //   if (options.length > 0 && this.focusIndex >= 0 && this.focusIndex < options.length) {
+  //     const focusedOption = options[this.focusIndex].shadowRoot?.querySelector('.pds-select-option') as HTMLElement;
+  //     focusedOption.click();
+  //   }
+  // }
+
+  /**
+   * Pending
+   */
+  @Method()
+  async  selectFocusedOption() {
     const options = this.el.querySelectorAll('pds-select-option');
     if (options.length > 0 && this.focusIndex >= 0 && this.focusIndex < options.length) {
       const focusedOption = options[this.focusIndex].shadowRoot?.querySelector('.pds-select-option') as HTMLElement;
       focusedOption.click();
     }
   }
+
   // End Focus Management
 
   render() {
