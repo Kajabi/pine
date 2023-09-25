@@ -15,7 +15,7 @@
 
   display: inline;
 
-  svg {
+  pds-icon {
     margin-inline-start: var(--margin-inline-start);
   }
 }
@@ -39,7 +39,7 @@
 .pds-link--sm {
   font-size: var(--font-size-xs);
 
-  svg {
+  pds-icon {
     height: var(--svg-sm);
     width: var(--svg-sm);
   }
@@ -48,7 +48,7 @@
 .pds-link--md {
   font-size: var(--font-size-sm);
 
-  svg {
+  pds-icon {
     height: var(--svg-md);
     width: var(--svg-md);
   }
@@ -57,7 +57,7 @@
 .pds-link--lg {
   font-size: var(--font-size);
 
-  svg {
+  pds-icon {
     height: var(--svg-lg);
     width: var(--svg-lg);
   }

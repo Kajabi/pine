@@ -23,6 +23,19 @@ Link is mainly used as navigational element and usually appear within or directl
 |      | Content is placed between the opening closing tags |
 
 
+## Dependencies
+
+### Depends on
+
+- pds-icon
+
+### Graph
+```mermaid
+graph TD;
+  pds-link --> pds-icon
+  style pds-link fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 
