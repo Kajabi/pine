@@ -1125,7 +1125,7 @@ declare namespace LocalJSX {
         /**
           * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
          */
-        "componentId"?: string;
+        "componentId": string;
         /**
           * Determines whether or not the radio is disabled.
           * @defaultValue false
