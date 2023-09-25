@@ -41,6 +41,20 @@ export class PdsLink {
    */
   @Prop() href!: string;
 
+  private classNames() {
+    const classNames = ['pds-link'];
+
+    if (this.fontSize) {
+      classNames.push('pds-link--' + this.fontSize);
+    }
+
+    if (this.variant) {
+      classNames.push('pds-link--' + this.variant);
+    }
+
+    return classNames.join(' ');
+  }
+
   render() {
     const externalIcon = (
       <svg role="presentation" width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -55,9 +69,9 @@ export class PdsLink {
 
     return (
       <a
-        id={this.componentId}
+        class={this.classNames()}
         href={this.href}
-        class={`pds-link ${this.variant ? `pds-link--${this.variant}` : ''} ${this.fontSize ? `pds-link--${this.fontSize}` : ''}`}
+        id={this.componentId}
         target={this.external ? '_blank' : undefined}
       >
         <slot>{this.href}</slot>
