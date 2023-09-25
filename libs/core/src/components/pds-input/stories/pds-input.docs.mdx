@@ -45,9 +45,9 @@ import * as stories from './pds-input.stories.js';
 <p>This is used when the input type is `email`.</p>
 
 <Canvas mdxSource={`
-<pds-input component-id="pds-input-email-example" label="Name" type="email" value="Frank Dux"></pds-input>
+<pds-input component-id="pds-input-email-example" label="Email Address" type="email" value="frank@example.com"></pds-input>
 `}>
-  <pds-input component-id="pds-input-email-example" label="Name" type="email" value="Frank Dux"></pds-input>
+  <pds-input component-id="pds-input-email-example" label="Email Address" type="email" value="frank@example.com"></pds-input>
 </Canvas>
 
 ### Required
@@ -63,9 +63,9 @@ import * as stories from './pds-input.stories.js';
 <p>Provides a short, non-essential hint about the expected input.</p>
 
 <Canvas mdxSource={`
-<pds-input component-id="pds-input-placeholder-example" label="Name" type="email" placeholder="123@email.com" value="Frank Dux"></pds-input>
+<pds-input component-id="pds-input-placeholder-example" label="Email" type="email" placeholder="Enter a email address..." value=""></pds-input>
 `}>
-  <pds-input component-id="pds-input-placeholder-example" label="Name" type="email" placeholder="123@email.com" value="Frank Dux"></pds-input>
+  <pds-input component-id="pds-input-placeholder-example" label="Email" type="email" placeholder="Enter a email address..." value=""></pds-input>
 </Canvas>
 
 ### Disabled
@@ -104,5 +104,6 @@ import * as stories from './pds-input.stories.js';
   <pds-input component-id="pds-input-error-example" label="Name" type="email" error-message="Please provide a valid email address" value="Frank Dux"></pds-input>
 </Canvas>
 
-## Additional Links
+## Additional Resources
 
+[MDN Web Docs: Input](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)

@@ -1,60 +1,32 @@
 :host {
-  /**
+  --background: var(--pine-color-base-white);
+  --background-disabled: var(--pine-color-neutral-grey-100);
 
-    * @prop --background: Background of the input
-    * @prop --background-disabled: Background of a disabled input
-    *
-    * @prop --color: Color of the input text
-    * @prop --color-error: Color of the input text when error is present
-    * @prop --color-placeholder: Color of the placeholder text
-    *
-    * @prop --border-color-default: Border color of the input text
-    * @prop --color-hover: Border color of the input text when hovered
-    *
-    * @prop --label-font-size: Font size of the label text
-    * @prop --label-font-weight: Font weight of the label text
-    * @prop --label-line-height: Line height of the label text
-    * @prop --label-margin-bottom: Bottom margin of the label
-    *
-    * @prop --field-font-size: Font size of the field text
-    * @prop --field-font-weight: Font weight of the field text
-    * @prop --field-line-height: Line height of the field text
-    * @prop --field-padding-block: Block padding for the field text
-    * @prop --field-padding-inline: Inline padding for the field text
-    *
-    * @prop --helper-message-font-size: Font size of the helper text
-    * @prop --helper-message-font-weight: Font weight of the helper text
-    * @prop --helper-message-line-height: Line height of the helper text
-    * @prop --helper-message-margin-top: Top margin of the helper
-    */
-  --background: #fff;
-  --background-disabled: #f9fafa;
+  --color: var(--pine-color-neutral-charcoal-500);
+  --color-error: var(--pine-color-red-300);
+  --color-placeholder: var(--pine-color-neutral-charcoal-200);
+  --color-disabled: var(--pine-color-neutral-grey-500);
 
-  --color: #040506;
-  --color-error: #cf3c32;
-  --color-placeholder: #60666c;
+  --border-color-default: var(--pine-color-neutral-grey-400);
+  --border-color-hover: var(--pine-color-neutral-grey-500);
 
-  --border-color-default: #d3d5d9;
-  --border-color-hover: #b5bac0;
+  --focus-box-shadow: 0 0 0 4px var(--pine-color-primary-200);
 
-  --focus-box-shadow: 0 0 0 4px #8ecafb;
+  --label-font-size: var(--pine-font-size-body);
+  --label-font-weight: var(--pine-font-weight-medium);
+  --label-line-height: var(--pine-line-height-md);
+  --label-margin-block-end: var(--pine-spacing-xs);
 
-  --label-font-size: 16px;
-  --label-font-weight: 500;
-  --label-line-height: 24px;
-  --label-margin-bottom: 8px;
+  --field-font-size: var(--pine-font-size-body);
+  --field-font-weight: var(--pine-font-weight-regular);
+  --field-line-height: var(--pine-line-height-md);
+  --field-padding-block: var(--pine-spacing-xs);
+  --field-padding-inline: var(--pine-spacing-sm);
 
-  --field-font-size: 16px;
-  --field-font-weight: 400;
-  --field-line-height: 24px;
-  --field-padding-block: 8px;
-  --field-padding-inline: 16px;
-
-  --helper-message-font-size: 12px;
-  --helper-message-font-weight: 400;
-  --helper-message-line-height: 20px;
-  --helper-message-margin-top: 8px;
-
+  --helper-message-font-size: var(--pine-font-size-body);
+  --helper-message-font-weight: var(--pine-font-weight-regular);
+  --helper-message-line-height: var(--pine-line-height-sm);
+  --helper-message-margin-top: var(--pine-spacing-xs);
 
   display: inline;
 }
@@ -68,7 +40,7 @@ label {
   font-size: var(--label-font-size);
   font-weight: var(--label-font-weight);
   line-height: var(--label-line-height);
-  margin-bottom: var(--label-margin-bottom);
+  margin-block-end: var(--label-margin-block-end);
 }
 
 input {
@@ -81,9 +53,9 @@ input {
 
   &:disabled {
     background-color: var(--background-disabled);
+    color: var(--color-disabled);
     cursor: not-allowed;
   }
-
 
   &:hover {
     border-color: var(--border-color-hover);
@@ -122,8 +94,8 @@ input {
   font-size: var(--helper-message-font-size);
   font-weight: var(--helper-message-font-weight);
   line-height: var(--helper-message-line-height);
-  margin-bottom: 0;
-  margin-top: var(--helper-message-margin-top);
+  margin-block-end: 0;
+  margin-block-start: var(--helper-message-margin-top);
 }
 
 .pds-input__error-message {

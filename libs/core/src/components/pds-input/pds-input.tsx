@@ -2,9 +2,6 @@ import { Component, Event, EventEmitter, h, Host, Prop } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
 import { PdsLabel } from '../_internal/pds-label/pds-label';
 
-/**
- * @slot - Content is placed between the opening closing tags
- */
 @Component({
   tag: 'pds-input',
   styleUrl: 'pds-input.scss',
@@ -17,47 +14,47 @@ export class PdsInput {
   @Prop() componentId!: string;
 
   /**
-   * Indicates whether or not the input field is disabled
+   * Indicates whether or not the input field is disabled.
    */
   @Prop() disabled?: boolean;
 
   /**
-   * Specifies the error message and provides an error-themed treatment to the field
+   * Specifies the error message and provides an error-themed treatment to the field.
    */
   @Prop() errorMessage?: string;
 
   /**
-   * Displays a message or hint below the input field
+   * Displays a message or hint below the input field.
    */
   @Prop() helperMessage?: string;
 
   /**
-   * Indicates whether or not the input field is invalid or throws an error
+   * Indicates whether or not the input field is invalid or throws an error.
    */
   @Prop() invalid?: boolean;
 
   /**
-   * Text to be displayed as the input label
+   * Text to be displayed as the input label.
    */
   @Prop() label?: string;
 
   /**
-   * Specifies the name. Submitted with the form name/value pair
+   * Specifies the name. Submitted with the form name/value pair.
    */
   @Prop() name?: string;
 
   /**
-   * Specifies a short hint that describes the expected value of the input field
+   * Specifies a short hint that describes the expected value of the input field.
    */
   @Prop() placeholder?: string;
 
   /**
-   * Indicates whether or not the input field is readonly
+   * Indicates whether or not the input field is readonly.
    */
   @Prop() readonly?: boolean;
 
   /**
-   * Indicates whether or not the input field is required
+   * Indicates whether or not the input field is required.
    */
   @Prop() required?: boolean;
 
@@ -69,12 +66,12 @@ export class PdsInput {
   @Prop() type = 'text';
 
   /**
-   * The value of the input
+   * The value of the input.
    */
   @Prop({mutable: true}) value?: string;
 
   /**
-   * Emitted when a keyboard input occurred
+   * Emitted when a keyboard input occurred.
    */
   @Event() pdsInput: EventEmitter<InputEvent>;
 
