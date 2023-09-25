@@ -8,7 +8,6 @@
   --font-weight: var(--pine-font-weight-medium);
   --margin-inline-start: var(--pine-spacing-xxs);
   --outline: 4px solid var(--pine-color-primary-200);
-  --outline-offset: var(--pine-spacing-xxs);
   --svg-lg: 15px;
   --svg-md: 13px;
   --svg-sm: 11px;
@@ -20,17 +19,16 @@
   }
 }
 
-:host(:focus) {
-  border-radius: var(--border-radius);
-  outline: var(--outline);
-  outline-offset: var(--outline-offset);
-}
-
 .pds-link {
   align-items: center;
   color: var(--color);
   display: inline-flex;
   font-weight: inherit;
+
+  &:focus {
+    border-radius: var(--border-radius);
+    outline: var(--outline);
+  }
 }
 
 // We have a small consensus stating that
