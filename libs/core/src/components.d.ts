@@ -308,7 +308,7 @@ export namespace Components {
     }
     interface PdsPopover {
         /**
-          * Id used to reference the component
+          * A unique identifier used for the underlying component id attribute.
          */
         "componentId": string;
         /**
@@ -1155,7 +1155,7 @@ declare namespace LocalJSX {
     }
     interface PdsPopover {
         /**
-          * Id used to reference the component
+          * A unique identifier used for the underlying component id attribute.
          */
         "componentId"?: string;
         /**

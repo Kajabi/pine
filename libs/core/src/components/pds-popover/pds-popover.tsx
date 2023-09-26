@@ -28,7 +28,7 @@ export class PdsPopover {
   @State() isOpen = false;
 
   /**
-   * Id used to reference the component
+   * A unique identifier used for the underlying component id attribute.
    */
   @Prop() componentId: string;
 
