@@ -1,5 +1,5 @@
 {
-  "name": "@pine-ds/react",
+  "name": "@ju-skinner/react",
   "version": "0.0.1",
   "license": "MIT",
   "description": "Pine Web Components React Wrapper",
@@ -37,8 +37,8 @@
     "rollup": "rollup -c"
   },
   "dependencies": {
-    "@pine-ds/core": "*",
-    "@pine-ds/icons": "*"
+    "@ju-skinner/core": "*",
+    "@ju-skinner/icons": "*"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.3",

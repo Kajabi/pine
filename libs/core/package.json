@@ -1,5 +1,5 @@
 {
-  "name": "@pine-ds/core",
+  "name": "@ju-skinner/core",
   "version": "0.0.1",
   "license": "MIT",
   "description": "Base components for Pine Design System",
@@ -55,7 +55,7 @@
     "test.watch": "stencil test --spec --e2e --watchAll --coverage"
   },
   "dependencies": {
-    "@pine-ds/icons": "*",
+    "@ju-skinner/icons": "*",
     "@stencil/core": "^4.0.2",
     "sortablejs": "^1.15.0"
   },
