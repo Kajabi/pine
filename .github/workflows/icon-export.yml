@@ -51,7 +51,6 @@ jobs:
         uses: nrwl/nx-set-shas@v3
 
       - name: Install Dependencies
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci
         shell: bash
 
