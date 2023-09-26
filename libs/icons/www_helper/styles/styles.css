@@ -1,0 +1,57 @@
+/* stylelint-disable-next-line selector-max-id */
+#icon-gallery {
+  border: hsla(203, 50%, 30%, 0.15);
+  border-radius: 4px;
+  box-shadow: rgba(0,0,0,0.10) 0 1px 3px 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  font-family: "Nunito Sans", -apple-system, ".SFNSText-Regular", "San Francisco", "system-ui", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  height: 3744px;
+  position: relative;
+  visibility: visible;
+  width: 958px;
+
+}
+
+.icon-gallery-container {
+  font-family: "Nunito Sans",-apple-system,".SFNSText-Regular","San Francisco",BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  -webkit-overflow-scrolling: touch;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.icon-item {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 1 calc(20% - 10px);
+  flex-direction: row;
+  margin: 0 10px 30px 0;
+  min-width: 120px;
+}
+
+.icon {
+  align-items: center;
+  background: #FFF;
+  border: 1px solid hsla(203, 50%, 30%, 0.15);
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.10) 0 1px 3px 0;
+  display: flex;
+  flex: none;
+  height: 40px;
+  justify-content: center;
+  overflow: hidden;
+  width: 40px;
+}
+
+.icon-title {
+  color: #2E3438;
+  font-family: "Nunito Sans",-apple-system,".SFNSText-Regular","San Francisco",BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 14px;
+  line-height: 1.2;
+  margin-left: 10px;
+}

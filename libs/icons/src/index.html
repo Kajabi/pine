@@ -7,6 +7,7 @@
 
     <script type="module" src="/build/pds-icons.esm.js"></script>
     <script nomodule src="/build/pds-icons.js"></script>
+    <link rel="stylesheet" href="./styles/styles.css" />
   </head>
   <body>
     <h1>Pine Icons</h1>
@@ -16,26 +17,14 @@
     <!-- do not remove this is replaced during update process -->
     <a href="changelogs/2023-08-22-changelog.html">2023-08-22-changelog.html</a> <br/><a href="changelogs/2023-05-23-changelog.html">2023-05-23-changelog.html</a>
 
-    <h2>Examples</h2>
-    <h3>Default</h3>
-    <pds-icon name="access-key" color="pink"></pds-icon>
-    <pds-icon name="location"></pds-icon>
+    <div id="app">
+      <h1>Icon Gallery</h1>
+      <div class="icon-gallery-container">
+        <div id="icon-gallery">
+        </div>
+      </div>
+    </div>
+    <script src="./scripts/index.mjs" type="module"></script>
 
-    <h3>Default Sizes</h3>
-    <pds-icon name="upload" size="small"></pds-icon>
-    <pds-icon name="upload" size="normal"></pds-icon>
-    <pds-icon name="upload" size="medium"></pds-icon>
-    <pds-icon name="upload" size="large"></pds-icon>
-
-    <h3>Custom size</h3>
-    <pds-icon name="youtube" size="140px"></pds-icon>
-
-    <h3>Color</h3>
-    <pds-icon name="youtube" size="140px" color="red"></pds-icon>
-
-    <h3>Accessibility / Aria<h2>
-    <pds-icon name="screen-share-off"></pds-icon>
-    <pds-icon name="screen-share-on" aria-label="Screen Share"></pds-icon>
-    <pds-icon name="screen-share-on" aria-hidden="true"></pds-icon>
   </body>
 </html>

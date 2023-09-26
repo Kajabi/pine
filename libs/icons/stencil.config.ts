@@ -33,7 +33,10 @@ export const config: Config = {
       empty: false,
       serviceWorker: null, // disable service workers
       copy: [
-        { src: '../changelogs', dest: 'changelogs'}
+        { src: '../changelogs', dest: 'changelogs'},
+        { src: '../www_helper/scripts', dest: 'scripts'},
+        { src: '../www_helper/styles', dest: 'styles'},
+        { src: 'icon-data.json', dest: 'scripts/icon-data.json'},
       ]
     },
   ]
