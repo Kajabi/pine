@@ -28,8 +28,26 @@ jobs:
         uses: ./.github/workflows/actions/publish-npm
         with:
           project: 'icons'
-          scope: '@pine-ds/icons'
+          scope: '@ju-skinner/icons'
           tag: ${{ inputs.tag }}
           token: ${{ secrets.NPM_TOKEN }}
           version: ${{ inputs.version }}
           working-directory: 'libs/icons'
+
+  finalize-release:
+    needs: [release-icons]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure user
+        run: |
+          git config user.name "Kajabi Automation Bot"
+          git config user.email "dev+github-bot@kajabi.com"
+
+      - name: Create GitHub Release
+        run: npm version prerelease --preid=--preid=alpha --no-commit-hooks -w @ju-skinner/icons -m "Version bump %s"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash

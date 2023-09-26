@@ -36,7 +36,7 @@ export const config: Config = {
       serviceWorker: null, // disable service workers
     },
     reactOutputTarget({
-      componentCorePackage: '@pine-ds/core',
+      componentCorePackage: '@ju-skinner/core',
       includeDefineCustomElements: true,
       includePolyfills: true,
       proxiesFile: '../../libs/react/src/components/proxies.ts',

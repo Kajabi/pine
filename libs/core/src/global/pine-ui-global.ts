@@ -1,1 +1,1 @@
-import '@pine-ds/icons';
+import '@ju-skinner/icons';

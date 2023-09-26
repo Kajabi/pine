@@ -22,13 +22,13 @@
     "strict": true,
     "strictPropertyInitialization": false,
     "paths": {
-      "@pine-ds/core": [
+      "@ju-skinner/core": [
         "./libs/core"
       ],
-      "@pine-ds/react": [
+      "@ju-skinner/react": [
         "./react"
       ],
-      "@pine-ds/icons": [
+      "@ju-skinner/icons": [
         "./libs/icons"
       ]
     },

@@ -22,7 +22,7 @@ export const collectionCopy = async (rootDir: string) => {
   await fs.writeFile(ceCjsPath, emptyCjs);
 
   const cePackaageJson = {
-    name: '@pine-ds/components',
+    name: '@ju-skinner/components',
     description: 'Pine Icons custom element',
     main: './index.cjs.js',
     module: '.index.js',

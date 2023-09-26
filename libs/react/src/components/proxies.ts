@@ -3,9 +3,9 @@
 /* auto-generated react proxies */
 import { createReactComponent } from './react-component-lib';
 
-import type { JSX } from '@pine-ds/core';
+import type { JSX } from '@ju-skinner/core';
 
-import { applyPolyfills, defineCustomElements } from '@pine-ds/core/loader';
+import { applyPolyfills, defineCustomElements } from '@ju-skinner/core/loader';
 
 applyPolyfills().then(() => defineCustomElements());
 export const PdsAvatar = /*@__PURE__*/createReactComponent<JSX.PdsAvatar, HTMLPdsAvatarElement>('pds-avatar');
