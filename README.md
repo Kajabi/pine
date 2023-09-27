@@ -41,7 +41,7 @@ Loader                         | 🟡     | ❌    | ❌
 Popover                        | ❌     | ❌    | ❌
 Progress                       | ✅     | ✅    | ❌
 Radio                          | ✅     | ✅    | ❌
-Sortable                       | 🟡     | ❌    | ❌
+Sortable                       | ✅     | ✅    | ❌
 Switch                         | ✅     | ✅    | ❌
 Table                          | 🟡     | ❌    | ❌
 Tabs                           | ✅     | ✅    | ❌
@@ -67,7 +67,6 @@ Modal                         | ❌     | ❌    | ❌
 Page Heading                  | ❌     | ❌    | ❌
 Pagination                    | ❌     | ❌    | ❌
 Search                        | ❌     | ❌    | ❌
-Sortable                      | ❌     | ❌    | ❌
 Toast                         | ❌     | ❌    | ❌
 Toolbar                       | ❌     | ❌    | ❌
 
