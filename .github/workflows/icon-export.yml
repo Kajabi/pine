@@ -2,6 +2,12 @@ name: 'Run Icon Update'
 
 on:
   workflow_call:
+    inputs:
+      tag:
+        description: 'The tag to publish to NPM'
+        type: string
+        default: latest
+
     secrets:
       FIGMA_ACCESS_TOKEN:
         description: "The personal access token created in Figma"
@@ -75,7 +81,7 @@ jobs:
     uses: ./.github/workflows/release-icons.yml
     if: needs.update-icons.outputs.bumpType != 'none'
     with:
-      tag: 'nightly'
+      tag: ${{ inputs.tag }}
       version: ${{ needs.update-icons.outputs.bumpType }}
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
