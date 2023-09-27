@@ -119,6 +119,23 @@ describe('pds-checkbox', () => {
     `);
   });
 
+  it('renders error message when error-message prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsCheckbox],
+      html: `<pds-checkbox component-id="default" label="Label text" invalid="true" error-message="This is a short error message." />`,
+    });
+
+    expect(page.root).toEqualHtml(`
+      <pds-checkbox class="is-invalid" component-id="default" error-message="This is a short error message." invalid="true" label="Label text">
+        <mock:shadow-root>
+          <input aria-invalid="true" id="default" type="checkbox">
+          <label htmlfor="default">Label text</label>
+          <div aria-live="assertive" class="pds-checkbox__message pds-checkbox__message--error" id="default__error-message">This is a short error message.</div>
+        </mock:shadow-root>
+      </pds-checkbox>
+    `);
+  });
+
   it('renders required input when required prop is set', async () => {
     const { root } = await newSpecPage({
       components: [PdsCheckbox],
