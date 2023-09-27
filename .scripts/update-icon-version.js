@@ -48,13 +48,11 @@ const run = async () => {
       changelogsPath, // Changelogs
       path.join(srcIconsBasePath, 'index.html'), // updated homepage with new changelog file
       path.join(srcIconsBasePath, 'icon-data.json'), // icon data
-      path.join(baseIconsPath, 'package.json'), // Icon version bump
-      'package-lock.json'
     ])
 
     const msg = `created: ${created.length}, modified: ${modified.length}, renamed: ${renamed.length}, deleted: ${deleted.length}`
     await git.commit(`ci(icons): v${iconPkgVersion}, ${msg}`)
-    await git.tag([`v${iconPkgVersion}`, '-a', '-m', msg]);
+    await git.tag([`@pine-ds/icons@${iconPkgVersion}`, '-a', '-m', msg]);
 
     process.env.BUMP_TYPE = bumpType;
 
