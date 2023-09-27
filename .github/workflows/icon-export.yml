@@ -73,7 +73,7 @@ jobs:
   release:
     needs: update-icons
     uses: ./.github/workflows/release-icons.yml
-    if: needs.update-icons.outputs.bumpType != ''
+    if: needs.update-icons.outputs.bumpType != 'none'
     with:
       tag: 'nightly'
       version: ${{ needs.update-icons.outputs.bumpType }}

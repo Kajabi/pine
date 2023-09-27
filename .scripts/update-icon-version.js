@@ -19,7 +19,7 @@ const gitClient = (options={baseDir: srcSvgBasePath, binary: 'git'} ) => {
 
 const run = async () => {
   let git = gitClient();
-  let bumpType = null;
+  let bumpType = 'none';
 
   await git.add(srcSvgBasePath);
   const statusResults = await git.status([srcSvgBasePath]);
