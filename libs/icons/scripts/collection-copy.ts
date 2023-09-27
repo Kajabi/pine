@@ -3,16 +3,17 @@ import { join } from 'path';
 
 export const collectionCopy = async (rootDir: string) => {
   const optimizedSrc = join(rootDir, 'src', 'svg');
+  const distSvgDest = join(rootDir, 'dist', 'svg');
   const collectionDest = join(rootDir, 'dist', 'collection', 'components', 'pds-icon', 'svg');
 
   await fs.copy(optimizedSrc, collectionDest);
+  await fs.copy(optimizedSrc, distSvgDest);
 
   // we don't want to copy the src/svgs to the collection (distribution)
   await fs.remove(join(rootDir, 'dist', 'collection', 'svg'));
 
   // don't want to copy the test svgs to the collection either
   await fs.remove(join(rootDir, 'dist', 'collection', 'components', 'test'));
-  await fs.remove(join(rootDir, 'dist', 'svg'));
 
   const cePackageDir = join(rootDir, 'components');
   const cePackageJsonPath = join(cePackageDir, 'package.json');
