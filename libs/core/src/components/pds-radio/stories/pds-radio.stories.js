@@ -26,6 +26,7 @@ const BaseTemplate = (args) =>
     label=${args.label}
     checked=${args.checked}
     disabled=${args.disabled}
+    error-message=${args.errorMessage}
     helper-message=${args.helperMessage}
     name=${args.name}
     indeterminate=${args.indeterminate}
@@ -64,6 +65,7 @@ withMessage.args = {
 export const Invalid = BaseTemplate.bind();
 Invalid.args = {
   componentId: 'invalid',
+  errorMessage: 'This is a short error message',
   label: 'Label text',
   invalid: true,
 };
