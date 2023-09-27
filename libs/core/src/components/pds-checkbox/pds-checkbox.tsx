@@ -24,7 +24,7 @@ export class PdsCheckbox {
   @Prop() disabled: boolean;
 
   /**
-   * Displays message text describing an invalid state
+   * Displays message text describing an invalid state.
    */
   @Prop() errorMessage: string;
 

@@ -95,7 +95,7 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Displays message text describing an invalid state
+          * Displays message text describing an invalid state.
          */
         "errorMessage": string;
         /**
@@ -352,7 +352,7 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Displays message text describing an invalid state
+          * Displays message text describing an invalid state.
          */
         "errorMessage": string;
         /**
@@ -871,7 +871,7 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Displays message text describing an invalid state
+          * Displays message text describing an invalid state.
          */
         "errorMessage"?: string;
         /**
@@ -1144,7 +1144,7 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Displays message text describing an invalid state
+          * Displays message text describing an invalid state.
          */
         "errorMessage"?: string;
         /**

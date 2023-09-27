@@ -21,7 +21,7 @@ export class PdsRadio {
   @Prop() disabled = false;
 
   /**
-   * Displays message text describing an invalid state
+   * Displays message text describing an invalid state.
    */
   @Prop() errorMessage: string;
 
