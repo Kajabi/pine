@@ -1,8 +1,10 @@
 import { html } from 'lit-html';
 
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+import { withActions } from '@storybook/addon-actions/decorator';
 
 export default {
+  argTypes: extractArgTypes('pds-select'),
   args: {
     checked: false,
     componentId: null,
@@ -13,8 +15,13 @@ export default {
     label: null,
     required: false,
   },
-  argTypes: extractArgTypes('pds-select'),
   component: "pds-select",
+  decorators: [withActions],
+  parameters: {
+    actions: {
+      handles: ['pdsSelectChange', 'pdsSelectOptionSelected', 'keydown'],
+    },
+  },
   title: "components/Select",
 };
 
@@ -27,9 +34,6 @@ const BaseTemplate = (args) => html`
   >
     <pds-select-option component-id="opt0" value="">Select an Option</pds-select-option>
     <pds-select-option component-id="opt1" value="Option A value">testing</pds-select-option>
-    <pds-select-option component-id="opt2" value="Option B value"></pds-select-option>
-    <pds-select-option component-id="opt3" value="Option C value"></pds-select-option>
-    <pds-select-option component-id="opt4" value="Option D value"></pds-select-option>
   </pds-select>
 `;
 

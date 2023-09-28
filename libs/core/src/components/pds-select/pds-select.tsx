@@ -207,6 +207,7 @@ export class PdsSelect {
         event.preventDefault();
 
         if (!this.isComboboxOpen) {
+          console.log('!!NOT OPEN');
           this.handleComboboxToggle();
         }
 
@@ -235,6 +236,7 @@ export class PdsSelect {
         break;
       case 'End':
         event.preventDefault();
+        console.log('###setting current');
         this.focusLastOption();
         break;
       case 'Enter':
