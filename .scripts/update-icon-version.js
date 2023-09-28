@@ -19,11 +19,11 @@ const gitClient = (options={baseDir: srcSvgBasePath, binary: 'git'} ) => {
 
 /**
  *
- * @param {*} bumpType - The type of version that will be performed
+ * @param {*} nextVersionType - The type of version that will be performed
  * @param {*} preid  - The prereleaese identifier if type is `pre*`
  */
-const run = async (bumpType = 'none', preid='') => {
-  const output = [bumpType];
+const run = async (nextVersionType = 'none', preid='') => {
+  const output = [nextVersionType];
 
   if (preid != '' )
     output.push(preid)
@@ -35,19 +35,19 @@ const run = async (bumpType = 'none', preid='') => {
 
   const { created, deleted, modified, renamed } = statusResults;
 
-  if ( bumpType == 'none' ) {
+  if ( nextVersionType == 'none' ) {
     if ( deleted.length > 0 || renamed.length > 0) {
-      bumpType = 'major';
+      nextVersionType = 'major';
     } else if (modified.length > 0 || created.length > 0 ) {
-      bumpType = 'minor';
+      nextVersionType = 'minor';
     }
   }
 
   try {
-    git = gitClient(options={baseDir: process.cwd()})
+    git = git.cwd(process.cwd())
 
     await git.stash(['save', '--include-untracked']);
-    const iconPkgVersion = await getNextVersion(bumpType, preid);
+    const iconPkgVersion = await getNextVersion(nextVersionType, preid);
     await git.stash(['pop']);
 
     if (iconPkgVersion == null)
@@ -65,8 +65,6 @@ const run = async (bumpType = 'none', preid='') => {
     await git.commit(`ci(icons): v${iconPkgVersion}, ${msg}`)
     await git.tag([`@pine-ds/icons@${iconPkgVersion}`, '-a', '-m', msg]);
 
-    process.env.BUMP_TYPE = bumpType;
-
     process.stdout.write(output.join(','));
   }
   catch (e) {
@@ -79,13 +77,13 @@ const run = async (bumpType = 'none', preid='') => {
  *
  * Will get the next version based on the type of
  * version.
- * @param bumpType - The type of version to run e.g major, minor
+ * @param nextVersionType - The type of version to run e.g major, minor
  * @returns string - the next version that the package will be
  */
-const getNextVersion = async (bumpType, preid) => {
-  let command = `npm version ${bumpType} --workspace libs/icons --no-git-tag-version`
+const getNextVersion = async (nextVersionType, preid) => {
+  let command = `npm version ${nextVersionType} --workspace libs/icons --no-git-tag-version`
 
-  if (bumpType.startsWith('pre')) {
+  if (nextVersionType.startsWith('pre')) {
     command =  command.concat(` --preid ${preid}`);
   }
 
