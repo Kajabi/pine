@@ -17,26 +17,37 @@ const gitClient = (options={baseDir: srcSvgBasePath, binary: 'git'} ) => {
   return simpleGit(options);
 }
 
-const run = async () => {
+/**
+ *
+ * @param {*} bumpType - The type of version that will be performed
+ * @param {*} preid  - The prereleaese identifier if type is `pre*`
+ */
+const run = async (bumpType = 'none', preid='') => {
+  const output = [bumpType];
+
+  if (preid != '' )
+    output.push(preid)
+
   let git = gitClient();
-  let bumpType = 'none';
 
   await git.add(srcSvgBasePath);
   const statusResults = await git.status([srcSvgBasePath]);
 
   const { created, deleted, modified, renamed } = statusResults;
 
-  if ( deleted.length > 0 || renamed.length > 0) {
-    bumpType = 'major';
-  } else if (modified.length > 0 || created.length > 0 ) {
-    bumpType = 'minor';
+  if ( bumpType == 'none' ) {
+    if ( deleted.length > 0 || renamed.length > 0) {
+      bumpType = 'major';
+    } else if (modified.length > 0 || created.length > 0 ) {
+      bumpType = 'minor';
+    }
   }
 
   try {
     git = gitClient(options={baseDir: process.cwd()})
 
     await git.stash(['save', '--include-untracked']);
-    const iconPkgVersion = await getNextVersion(bumpType);
+    const iconPkgVersion = await getNextVersion(bumpType, preid);
     await git.stash(['pop']);
 
     if (iconPkgVersion == null)
@@ -56,7 +67,7 @@ const run = async () => {
 
     process.env.BUMP_TYPE = bumpType;
 
-    console.log(bumpType);
+    process.stdout.write(output.join(','));
   }
   catch (e) {
     console.error(`Error occurred: ${e}`);
@@ -71,8 +82,13 @@ const run = async () => {
  * @param bumpType - The type of version to run e.g major, minor
  * @returns string - the next version that the package will be
  */
-const getNextVersion = async (bumpType) => {
-  const command = `npm version ${bumpType} --workspace libs/icons --no-git-tag-version`
+const getNextVersion = async (bumpType, preid) => {
+  let command = `npm version ${bumpType} --workspace libs/icons --no-git-tag-version`
+
+  if (bumpType.startsWith('pre')) {
+    command =  command.concat(` --preid ${preid}`);
+  }
+
   try {
     const _npmVersionProcess = execSync(command)
     const libsPackageJSON = path.join(process.cwd(), 'libs', 'icons', 'package.json')
@@ -106,6 +122,15 @@ const updateChangelogFile = async (iconPkgVersion) => {
   fs.writeFileSync(fullChangelogFilename, html);
 }
 
-run();
+let [,,versionType, preVersionId] = process.argv;
+
+if ((versionType !== undefined && versionType.startsWith('pre')) && (preVersionId === undefined || preVersionId === '' )) {
+  throw Error('When using a pre version type, you must include a preVersionId e.g alpha, beta, rc, etc')
+}
+else if (versionType.startsWith('pre') == false) {
+  preVersionId = undefined
+}
+
+run(versionType, preVersionId);
 
 
