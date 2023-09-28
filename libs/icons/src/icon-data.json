@@ -127,6 +127,14 @@
       ]
     },
     {
+      "name": "align-center",
+      "category": "text-editor",
+      "tags": [
+        "align",
+        "center"
+      ]
+    },
+    {
       "name": "align-justify",
       "category": "text-editor",
       "tags": [
@@ -148,14 +156,6 @@
       "tags": [
         "align",
         "right"
-      ]
-    },
-    {
-      "name": "aling-center",
-      "category": "text-editor",
-      "tags": [
-        "aling",
-        "center"
       ]
     },
     {
