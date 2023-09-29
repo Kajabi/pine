@@ -1,0 +1,27 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import { html, render } from 'lit-html';
+
+import * as stories from './pds-table.stories.js';
+//import * as SortableItemStories from '../pds-sortable-item/stories/pds-sortable-item.stories.js';
+
+<Meta of={stories} />
+
+# Table
+
+The table description will go here
+
+## Properties
+
+<ArgTypes of={stories} />
+
+## Default
+
+<Canvas mdxSource={`
+<pds-table component-id="default">
+  TEST
+</pds-table>
+`}>
+  <pds-table component-id="default">
+    TEST
+  </pds-table>
+</Canvas>

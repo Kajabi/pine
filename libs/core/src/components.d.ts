@@ -474,6 +474,12 @@ export namespace Components {
         "selected": boolean;
         "variant": string;
     }
+    interface PdsTable {
+        /**
+          * A unique identifier used for the table `id` attribute.
+         */
+        "componentId": string;
+    }
     interface PdsTabpanel {
         /**
           * Sets the related tab name, this name must match a `pds-tab`'s tab name property
@@ -825,6 +831,12 @@ declare global {
         prototype: HTMLPdsTabElement;
         new (): HTMLPdsTabElement;
     };
+    interface HTMLPdsTableElement extends Components.PdsTable, HTMLStencilElement {
+    }
+    var HTMLPdsTableElement: {
+        prototype: HTMLPdsTableElement;
+        new (): HTMLPdsTableElement;
+    };
     interface HTMLPdsTabpanelElement extends Components.PdsTabpanel, HTMLStencilElement {
     }
     var HTMLPdsTabpanelElement: {
@@ -888,6 +900,7 @@ declare global {
         "pds-sortable-item": HTMLPdsSortableItemElement;
         "pds-switch": HTMLPdsSwitchElement;
         "pds-tab": HTMLPdsTabElement;
+        "pds-table": HTMLPdsTableElement;
         "pds-tabpanel": HTMLPdsTabpanelElement;
         "pds-tabs": HTMLPdsTabsElement;
         "pds-textarea": HTMLPdsTextareaElement;
@@ -1390,6 +1403,12 @@ declare namespace LocalJSX {
         "selected"?: boolean;
         "variant"?: string;
     }
+    interface PdsTable {
+        /**
+          * A unique identifier used for the table `id` attribute.
+         */
+        "componentId": string;
+    }
     interface PdsTabpanel {
         /**
           * Sets the related tab name, this name must match a `pds-tab`'s tab name property
@@ -1541,6 +1560,7 @@ declare namespace LocalJSX {
         "pds-sortable-item": PdsSortableItem;
         "pds-switch": PdsSwitch;
         "pds-tab": PdsTab;
+        "pds-table": PdsTable;
         "pds-tabpanel": PdsTabpanel;
         "pds-tabs": PdsTabs;
         "pds-textarea": PdsTextarea;
@@ -1566,6 +1586,7 @@ declare module "@stencil/core" {
             "pds-sortable-item": LocalJSX.PdsSortableItem & JSXBase.HTMLAttributes<HTMLPdsSortableItemElement>;
             "pds-switch": LocalJSX.PdsSwitch & JSXBase.HTMLAttributes<HTMLPdsSwitchElement>;
             "pds-tab": LocalJSX.PdsTab & JSXBase.HTMLAttributes<HTMLPdsTabElement>;
+            "pds-table": LocalJSX.PdsTable & JSXBase.HTMLAttributes<HTMLPdsTableElement>;
             "pds-tabpanel": LocalJSX.PdsTabpanel & JSXBase.HTMLAttributes<HTMLPdsTabpanelElement>;
             "pds-tabs": LocalJSX.PdsTabs & JSXBase.HTMLAttributes<HTMLPdsTabsElement>;
             "pds-textarea": LocalJSX.PdsTextarea & JSXBase.HTMLAttributes<HTMLPdsTextareaElement>;
