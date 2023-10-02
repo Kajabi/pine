@@ -47,9 +47,6 @@ jobs:
 
       - name: Commmit version bump
         run: |
-          git config user.name "Kajabi Automation Bot"
-          git config user.email "dev+github-bot@kajabi.com"
           git add libs/icons/package.json package-lock.json
           git commit -m "chore(icons): update package lock files for version bump"
-          git push
         shell: bash
