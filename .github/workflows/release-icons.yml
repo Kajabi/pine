@@ -3,6 +3,11 @@ name: 'Release Icons'
 on:
   workflow_call:
     inputs:
+      preid:
+        description: 'The prerelease id used when doing a prerelease. e.g prerelease, premajor, preminor, etc'
+        type: string
+        default: ''
+
       tag:
         description: 'The tag to publish on NPM.'
         required: true
@@ -20,6 +25,8 @@ on:
 jobs:
   release-icons:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -31,8 +38,8 @@ jobs:
       - name: Publish Icons
         uses: ./.github/workflows/actions/publish-npm
         with:
+          preid: ${{ inputs.preid }}
           project: 'icons'
-          scope: '@pine-ds/icons'
           tag: ${{ inputs.tag }}
           token: ${{ secrets.NPM_TOKEN }}
           version: ${{ inputs.version }}
