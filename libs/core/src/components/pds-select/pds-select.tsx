@@ -30,23 +30,7 @@ export class PdsSelect {
   /**
    * Track the index of the focused option
    */
-  @Prop() focusIndex = -1;
-
-  /**
-   * Determines whether or not the combobox was focused before blur
-   * @defaultValue false
-   */
-  @Prop() wasComboboxFocused = false;
-
-  /**
-   * The id of the previously focused combobox option
-   */
-  @Prop() wasComboboxFocusedId: string;
-
-  /**
-   * The index of the previously focused combobox option
-   */
-  @Prop() wasComboboxFocusedIndex: number;
+  @Prop({mutable: true}) focusIndex = -1;
 
   /**
    * A unique identifier for the combobox
@@ -107,17 +91,17 @@ export class PdsSelect {
   /**
    * The display id for the selected option
    */
-  @Prop() selectedOptionId?: string;
+  @Prop({mutable: true}) selectedOptionId?: string;
 
   /**
    * The display text for the selected option
    */
-  @Prop() selectedOptionText?: string;
+  @Prop({mutable: true}) selectedOptionText?: string;
 
   /**
    * The value for the selected option
    */
-  @Prop() selectedOptionValue?: string;
+  @Prop({mutable: true}) selectedOptionValue?: string;
 
   /**
    * Emitted when the select value changes from selected option
@@ -279,26 +263,16 @@ export class PdsSelect {
       console.log('if this.isComboboxOpen');
 
       // Set the focus index to the first option
-      if (!this.focusIndex && !this.wasComboboxFocused)  {
+      if (!this.focusIndex)  {
         console.log('IN HERE');
         this.focusIndex = 0;
       }
-      // this.wasComboboxFocused = true;
-
-      // if (this.wasComboboxFocused) {
-        // If the combobox was previously focused, reapply focus to the previously focused option
-      this.focusOptionAtIndex(this.wasComboboxFocusedIndex);
     } else {
       // close combobox
       this.comboWrapperRef.classList.remove('is-open');
 
       // Reset focus index when the combobox is closed
       this.focusIndex = -1;
-
-      if (this.wasComboboxFocused) {
-        // If the combobox was focused before the click, set the focus index to 0
-        this.focusIndex = 0;
-      }
     }
   };
 
@@ -361,18 +335,6 @@ export class PdsSelect {
       // }
 
     });
-
-    // if (this.wasComboboxFocused && index !== undefined) {
-    //   if (options[index].componentId && options[index].componentId != undefined){
-    //     this.wasComboboxFocusedId = options[index].componentId;
-    //     this.selectedOptionId = options[index].componentId;
-    //     this.wasComboboxFocusedIndex = index;
-    //   }
-    // }
-
-    // if (index !== undefined) {
-    //   options[index].focus();
-    // }
   }
 
   // private selectFocusedOption() {

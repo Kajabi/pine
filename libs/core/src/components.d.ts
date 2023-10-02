@@ -456,19 +456,6 @@ export namespace Components {
           * The value for the selected option
          */
         "selectedOptionValue"?: string;
-        /**
-          * Determines whether or not the combobox was focused before blur
-          * @defaultValue false
-         */
-        "wasComboboxFocused": boolean;
-        /**
-          * The id of the previously focused combobox option
-         */
-        "wasComboboxFocusedId": string;
-        /**
-          * The index of the previously focused combobox option
-         */
-        "wasComboboxFocusedIndex": number;
     }
     interface PdsSelectOption {
         /**
@@ -1623,19 +1610,6 @@ declare namespace LocalJSX {
           * The value for the selected option
          */
         "selectedOptionValue"?: string;
-        /**
-          * Determines whether or not the combobox was focused before blur
-          * @defaultValue false
-         */
-        "wasComboboxFocused"?: boolean;
-        /**
-          * The id of the previously focused combobox option
-         */
-        "wasComboboxFocusedId"?: string;
-        /**
-          * The index of the previously focused combobox option
-         */
-        "wasComboboxFocusedIndex"?: number;
     }
     interface PdsSelectOption {
         /**
