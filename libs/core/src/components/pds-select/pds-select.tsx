@@ -266,11 +266,11 @@ export class PdsSelect {
   private handleComboboxToggle = () => {
     this.comboWrapperRef =  this.el.shadowRoot?.querySelector('.pds-select') as HTMLDivElement;
 
-    // console.log('this.comboInputRef: ', this.comboInputRef);
-
+    // update props
     this.isComboboxOpen = !this.isComboboxOpen;
     this.comboInputRef.setAttribute('aria-expanded', this.isComboboxOpen.toString());
 
+    // open combobox
     if (this.isComboboxOpen) {
       this.comboWrapperRef.classList.add('is-open');
 
@@ -283,13 +283,13 @@ export class PdsSelect {
         console.log('IN HERE');
         this.focusIndex = 0;
       }
-      this.wasComboboxFocused = true;
+      // this.wasComboboxFocused = true;
 
-      if (this.wasComboboxFocused) {
+      // if (this.wasComboboxFocused) {
         // If the combobox was previously focused, reapply focus to the previously focused option
-        this.focusOptionAtIndex(this.wasComboboxFocusedIndex);
-      }
+      this.focusOptionAtIndex(this.wasComboboxFocusedIndex);
     } else {
+      // close combobox
       this.comboWrapperRef.classList.remove('is-open');
 
       // Reset focus index when the combobox is closed
@@ -309,23 +309,8 @@ export class PdsSelect {
       classNames.push('is-invalid');
     }
 
-    // Add 'is--current' class to the combo box if the combobox was focused before blur
-    if (this.wasComboboxFocused) {
-      classNames.push('is--current');
-    }
-
     return classNames.join(' ');
   }
-
-  // private handleComboInputBlur() {
-  //   // Set the flag to remember the focus state when the combobox loses focus
-  //   console.log('this: ', this);
-  //   console.log('this.wasComboboxFocused Before', this.wasComboboxFocused);
-  //   console.log('document.activeElement', document.activeElement);
-  //   console.log('this.comboInputRef', this.comboInputRef);
-  //   this.wasComboboxFocused = document.activeElement === this.comboInputRef;
-  //   console.log('this.wasComboboxFocused After', this.wasComboboxFocused);
-  // }
 
   // Focus Management
   private focusNextOption() {
@@ -357,6 +342,7 @@ export class PdsSelect {
     }
   }
 
+  // add previous index as well
   private focusOptionAtIndex(index: number) {
     if (index === undefined) return false;
 
@@ -365,21 +351,28 @@ export class PdsSelect {
       const shadowOption = option.shadowRoot?.querySelector('.pds-select-option') as HTMLElement;
 
       shadowOption.tabIndex = i === index ? 0 : -1;
+      // if(shadowOption.innerText === "Option B") {
+      //   console.log('shadowOption classlist: ', shadowOption.classList.toString());
+      // }
       shadowOption.classList.toggle('is--current', i === index);
+
+      // if(shadowOption.innerText === "Option B") {
+      //   console.log('shadowOption classlist after: ', shadowOption.classList.toString());
+      // }
 
     });
 
-    if (this.wasComboboxFocused && index !== undefined) {
-      if (options[index].componentId && options[index].componentId != undefined){
-        this.wasComboboxFocusedId = options[index].componentId;
-        this.selectedOptionId = options[index].componentId;
-        this.wasComboboxFocusedIndex = index;
-      }
-    }
+    // if (this.wasComboboxFocused && index !== undefined) {
+    //   if (options[index].componentId && options[index].componentId != undefined){
+    //     this.wasComboboxFocusedId = options[index].componentId;
+    //     this.selectedOptionId = options[index].componentId;
+    //     this.wasComboboxFocusedIndex = index;
+    //   }
+    // }
 
-    if (index !== undefined) {
-      options[index].focus();
-    }
+    // if (index !== undefined) {
+    //   options[index].focus();
+    // }
   }
 
   // private selectFocusedOption() {
