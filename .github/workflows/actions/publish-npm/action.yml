@@ -6,6 +6,10 @@ inputs:
     default: './'
     description: 'A folder containing a package.json file.'
 
+  preid:
+    default: ''
+    description: 'The prerelease id used when doing a prerelease.'
+
   project:
     description: 'The name of the project based on Nx naming.'
 
@@ -35,7 +39,7 @@ runs:
       shell: bash
 
     - name: Update Version
-      run: npx lerna version ${{ inputs.version }} --yes --exact --no-changelog --no-push --no-git-tag-version
+      run: npx lerna version ${{ inputs.version }} --yes --exact --no-changelog --no-push --no-git-tag-version --preid=${{ inputs.preid }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
@@ -50,6 +54,6 @@ runs:
         NPM_TOKEN: ${{ inputs.token }}
 
     - name: Publish to NPM
-      run: npm publish ${{ inputs.folder }} --tag ${{ inputs.tag }} --provenance
+      run: npm publish ${{ inputs.folder }} --tag ${{ inputs.tag }} --provenance --access public
       shell: bash
       working-directory: ${{ inputs.working-directory }}

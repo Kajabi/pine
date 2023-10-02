@@ -22,12 +22,7 @@ const gitClient = (options={baseDir: srcSvgBasePath, binary: 'git'} ) => {
  * @param {*} nextVersionType - The type of version that will be performed
  * @param {*} preid  - The prereleaese identifier if type is `pre*`
  */
-const run = async (nextVersionType = 'none', preid='') => {
-  const output = [nextVersionType];
-
-  if (preid != '' )
-    output.push(preid)
-
+const run = async (nextVersionType = null, preid='') => {
   let git = gitClient();
 
   await git.add(srcSvgBasePath);
@@ -35,7 +30,7 @@ const run = async (nextVersionType = 'none', preid='') => {
 
   const { created, deleted, modified, renamed } = statusResults;
 
-  if ( nextVersionType == 'none' ) {
+  if ( nextVersionType === null ) {
     if ( deleted.length > 0 || renamed.length > 0) {
       nextVersionType = 'major';
     } else if (modified.length > 0 || created.length > 0 ) {
@@ -44,6 +39,11 @@ const run = async (nextVersionType = 'none', preid='') => {
   }
 
   try {
+    if (nextVersionType === null) {
+      console.error('Version has not been set please check raw logs to resolve issue');
+      process.exit();
+    }
+
     git = git.cwd(process.cwd())
 
     await git.stash(['save', '--include-untracked']);
@@ -65,11 +65,15 @@ const run = async (nextVersionType = 'none', preid='') => {
     await git.commit(`ci(icons): v${iconPkgVersion}, ${msg}`)
     await git.tag([`@pine-ds/icons@${iconPkgVersion}`, '-a', '-m', msg]);
 
-    process.stdout.write(output.join(','));
+    const output = [nextVersionType];
+    if (preid != '' )
+      output.push(preid)
+
+    console.log(output.join(','));
   }
   catch (e) {
     console.error(`Error occurred: ${e}`);
-    await git.stash(['drop']); // Delete the stash created in the Run process;
+    // await git.stash(['drop']); // Delete the stash created in the Run process;
   }
 }
 
@@ -96,7 +100,6 @@ const getNextVersion = async (nextVersionType, preid) => {
 
   }
   catch (err) {
-    await git.stash(['drop']); // Delete the stash created in the Run process;
     throw Error(`An Error occurred during Versioning: ${err.stderr.toString()}`);
   }
 }
@@ -122,13 +125,13 @@ const updateChangelogFile = async (iconPkgVersion) => {
 
 let [,,versionType, preVersionId] = process.argv;
 
-if ((versionType !== undefined && versionType.startsWith('pre')) && (preVersionId === undefined || preVersionId === '' )) {
+if ((versionType?.startsWith('pre')) && (preVersionId === '' )) {
   throw Error('When using a pre version type, you must include a preVersionId e.g alpha, beta, rc, etc')
 }
-else if (versionType.startsWith('pre') == false) {
-  preVersionId = undefined
+
+if (versionType !== '') {
+  run(versionType, preVersionId);
 }
-
-run(versionType, preVersionId);
-
-
+else {
+  run();
+}

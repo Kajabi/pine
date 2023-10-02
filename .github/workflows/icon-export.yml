@@ -3,10 +3,19 @@ name: 'Run Icon Update'
 on:
   workflow_call:
     inputs:
+      preid:
+        description: 'The prerelease id used when doing a prerelease.'
+        type: string
+        default: ''
+
       tag:
         description: 'The tag to publish to NPM'
         type: string
         default: latest
+
+      version:
+        description: The type of version to release.
+        type: string
 
     secrets:
       FIGMA_ACCESS_TOKEN:
@@ -21,7 +30,10 @@ jobs:
   update-icons:
     runs-on: ubuntu-latest
     outputs:
-      bumpType: ${{ steps.version-bump.outputs.VERSION_BUMP_TYPE}}
+      versionInfo: ${{ steps.version-type-info.outputs.VERSION_INFO }}
+      nextVersionType: ${{ steps.split-version-info.outputs._0 }}
+      preid: ${{ steps.split-version-info.outputs._1 }}
+
     steps:
       - uses: actions/checkout@v3
         with:
@@ -30,7 +42,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 20.x
 
       - name: Configure user
         run: |
@@ -66,19 +78,28 @@ jobs:
           FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }}
           FIGMA_FILE_ID: ${{ secrets.FIGMA_FILE_ID }}
 
-      - name: Determine Major or Minor version bump
-        id: version-bump
+      - name: Determine next version type
+        id: version-type-info
         run: |
-          echo "VERSION_BUMP_TYPE=$(node ./.scripts/update-icon-version.js)" >> $GITHUB_OUTPUT
+          echo "VERSION_INFO=$(node ./.scripts/update-icon-version.js '${{ inputs.version }}' '${{ inputs.preid }}')" >> $GITHUB_OUTPUT
         shell: bash
+
+      - name: Split version info
+        uses: xom9ikk/split@v1.1
+        id: split-version-info
+        with:
+          string: ${{ steps.version-type-info.outputs.VERSION_INFO }}
+          separator: ','
+          limit: 2
 
   release:
     needs: update-icons
     uses: ./.github/workflows/release-icons.yml
-    if: needs.update-icons.outputs.bumpType != 'none'
+    if: ${{ needs.update-icons.outputs.nextVersionType != '' }}
     with:
+      preid: ${{ needs.update-icons.outputs.preid }}
       tag: ${{ inputs.tag }}
-      version: ${{ needs.update-icons.outputs.bumpType }}
+      version: ${{ needs.update-icons.outputs.nextVersionType }}
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
