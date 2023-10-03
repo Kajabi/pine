@@ -187,16 +187,19 @@ export class PdsSelect {
   @Listen('keydown', {})
   handleComboInputKeyDown(event: KeyboardEvent) {
     switch (event.key) {
+      // When the down arrow is pressed, open the combobox and focus the first option. The DOM focus remains on the this.isComboboxOpen
+      // TODO: needs to be updated for down arrow. Should read... When the down arrow is pressed, open the combobox if it not already displayed without moving focus or chaning selection
       case 'ArrowDown':
         event.preventDefault();
 
         if (!this.isComboboxOpen) {
-          console.log('!!NOT OPEN');
           this.handleComboboxToggle();
         }
 
         this.focusNextOption();
         break;
+      
+      // When the up arrow is pressed, open the combobox and focus the first option. The DOM focus remains on the this.isComboboxOpen
       case 'ArrowUp':
         event.preventDefault();
 
@@ -208,21 +211,25 @@ export class PdsSelect {
         this.focusPreviousOption();
         break;
       case 'Escape':
-        console.log('Escape outer');
         if(this.isComboboxOpen) {
-          console.log('Escape inner');
           this.handleComboboxToggle();
         }
         break;
+
+      // When the home key is pressed, open the combobox and moves visual focus to first selection
       case 'Home':
         event.preventDefault();
         this.focusFirstOption();
         break;
+
+      // When the end key is pressed, open the combobox and moves visual focus to last selection
       case 'End':
         event.preventDefault();
-        console.log('###setting current');
         this.focusLastOption();
         break;
+
+      // When the Enter key is pressed, open the combobox without moving focus or changing selection
+      // When the Enter key is pressed, close the combobox, select the focused option, and move focus to the input
       case 'Enter':
         event.preventDefault();
 
@@ -230,6 +237,8 @@ export class PdsSelect {
           this.selectFocusedOption();
         }
         break;
+      // When the SPACE key is pressed, open the combobox without moving focus or changing selection
+      // When the SPACE key is pressed, close the combobox, select the focused option, and move focus to the input
       case ' ':
         event.preventDefault();
 
