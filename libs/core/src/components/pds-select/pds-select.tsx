@@ -290,51 +290,62 @@ export class PdsSelect {
   private focusNextOption() {
     const options = this.el.querySelectorAll('pds-select-option');
     if (options.length > 0 && this.focusIndex < options.length - 1) {
+      const previousIndex = this.focusIndex;
       this.focusIndex++;
-      this.focusOptionAtIndex(this.focusIndex);
+      this.focusOptionAtIndex(previousIndex, this.focusIndex);
     }
   }
 
   private focusPreviousOption() {
     const options = this.el.querySelectorAll('pds-select-option');
     if (options.length > 0 && this.focusIndex > 0) {
+      const previousIndex = this.focusIndex;
       this.focusIndex--;
-      this.focusOptionAtIndex(this.focusIndex);
+      this.focusOptionAtIndex(previousIndex, this.focusIndex);
     }
   }
 
   private focusFirstOption() {
+    const previousIndex = this.focusIndex;
     this.focusIndex = 0;
-    this.focusOptionAtIndex(this.focusIndex);
+    this.focusOptionAtIndex(previousIndex, this.focusIndex);
   }
 
   private focusLastOption() {
     const options = this.el.querySelectorAll('pds-select-option');
     if (options.length > 0) {
+      const previousIndex = this.focusIndex;
       this.focusIndex = options.length - 1;
-      this.focusOptionAtIndex(this.focusIndex);
+      this.focusOptionAtIndex(previousIndex, this.focusIndex);
     }
   }
 
   // add previous index as well
-  private focusOptionAtIndex(index: number) {
+  private focusOptionAtIndex(previousIndex: number, index: number) {
+    console.log('focusOptionAtIndex: ', index);
     if (index === undefined) return false;
 
     const options = this.el.querySelectorAll('pds-select-option');
-    options.forEach((option, i) => {
-      const shadowOption = option.shadowRoot?.querySelector('.pds-select-option') as HTMLElement;
 
-      shadowOption.tabIndex = i === index ? 0 : -1;
-      // if(shadowOption.innerText === "Option B") {
-      //   console.log('shadowOption classlist: ', shadowOption.classList.toString());
-      // }
-      shadowOption.classList.toggle('is--current', i === index);
+    // Update previousIndex
+    if (previousIndex !== undefined && previousIndex < options.length) {
+      // set to first option if combobox was initial opening
+      if (previousIndex === -1){
+        previousIndex = 0;
+      }
 
-      // if(shadowOption.innerText === "Option B") {
-      //   console.log('shadowOption classlist after: ', shadowOption.classList.toString());
-      // }
+      const prevOption = options[previousIndex].shadowRoot?.querySelector('.pds-select-option') as HTMLElement;
+      prevOption.tabIndex = -1;
+      prevOption.classList.remove('is--current');
+    }
 
-    });
+    // Update index
+    if (index !== undefined && index < options.length) {
+      const currentOption = options[index].shadowRoot?.querySelector('.pds-select-option') as HTMLElement;
+      currentOption.tabIndex = 0;
+      currentOption.classList.add('is--current');
+      options[index].focus();
+    }
   }
 
   // private selectFocusedOption() {
@@ -349,7 +360,7 @@ export class PdsSelect {
    * Pending
    */
   @Method()
-  async  selectFocusedOption() {
+  async selectFocusedOption() {
     const options = this.el.querySelectorAll('pds-select-option');
     if (options.length > 0 && this.focusIndex >= 0 && this.focusIndex < options.length) {
       const focusedOption = options[this.focusIndex].shadowRoot?.querySelector('.pds-select-option') as HTMLElement;
