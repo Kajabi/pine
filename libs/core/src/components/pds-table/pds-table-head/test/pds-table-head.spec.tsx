@@ -1,18 +1,18 @@
 import { newSpecPage } from '@stencil/core/testing';
-import { PdsTable } from '../pds-table';
+import { PdsTableHead } from '../pds-table-head';
 
-describe('pds-table', () => {
+describe('pds-table-head', () => {
   it('renders', async () => {
     const page = await newSpecPage({
-      components: [PdsTable],
-      html: `<pds-table></pds-table>`,
+      components: [PdsTableHead],
+      html: `<pds-table-head></pds-table-head>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-table class="pds-table" role="grid">
+      <pds-table-head role="row">
         <mock:shadow-root>
           <slot></slot>
         </mock:shadow-root>
-      </pds-table>
+      </pds-table-head>
     `);
   });
 });

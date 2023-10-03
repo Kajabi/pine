@@ -19,7 +19,7 @@ export class PdsTable {
 
   render() {
     return (
-      <Host class={this.classNames()} id={this.componentId}>
+      <Host class={this.classNames()} id={this.componentId} role="grid">
         <slot></slot>
       </Host>
     );

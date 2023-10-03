@@ -480,6 +480,16 @@ export namespace Components {
          */
         "componentId": string;
     }
+    interface PdsTableBody {
+    }
+    interface PdsTableCell {
+    }
+    interface PdsTableHead {
+    }
+    interface PdsTableHeadCell {
+    }
+    interface PdsTableRow {
+    }
     interface PdsTabpanel {
         /**
           * Sets the related tab name, this name must match a `pds-tab`'s tab name property
@@ -837,6 +847,36 @@ declare global {
         prototype: HTMLPdsTableElement;
         new (): HTMLPdsTableElement;
     };
+    interface HTMLPdsTableBodyElement extends Components.PdsTableBody, HTMLStencilElement {
+    }
+    var HTMLPdsTableBodyElement: {
+        prototype: HTMLPdsTableBodyElement;
+        new (): HTMLPdsTableBodyElement;
+    };
+    interface HTMLPdsTableCellElement extends Components.PdsTableCell, HTMLStencilElement {
+    }
+    var HTMLPdsTableCellElement: {
+        prototype: HTMLPdsTableCellElement;
+        new (): HTMLPdsTableCellElement;
+    };
+    interface HTMLPdsTableHeadElement extends Components.PdsTableHead, HTMLStencilElement {
+    }
+    var HTMLPdsTableHeadElement: {
+        prototype: HTMLPdsTableHeadElement;
+        new (): HTMLPdsTableHeadElement;
+    };
+    interface HTMLPdsTableHeadCellElement extends Components.PdsTableHeadCell, HTMLStencilElement {
+    }
+    var HTMLPdsTableHeadCellElement: {
+        prototype: HTMLPdsTableHeadCellElement;
+        new (): HTMLPdsTableHeadCellElement;
+    };
+    interface HTMLPdsTableRowElement extends Components.PdsTableRow, HTMLStencilElement {
+    }
+    var HTMLPdsTableRowElement: {
+        prototype: HTMLPdsTableRowElement;
+        new (): HTMLPdsTableRowElement;
+    };
     interface HTMLPdsTabpanelElement extends Components.PdsTabpanel, HTMLStencilElement {
     }
     var HTMLPdsTabpanelElement: {
@@ -901,6 +941,11 @@ declare global {
         "pds-switch": HTMLPdsSwitchElement;
         "pds-tab": HTMLPdsTabElement;
         "pds-table": HTMLPdsTableElement;
+        "pds-table-body": HTMLPdsTableBodyElement;
+        "pds-table-cell": HTMLPdsTableCellElement;
+        "pds-table-head": HTMLPdsTableHeadElement;
+        "pds-table-head-cell": HTMLPdsTableHeadCellElement;
+        "pds-table-row": HTMLPdsTableRowElement;
         "pds-tabpanel": HTMLPdsTabpanelElement;
         "pds-tabs": HTMLPdsTabsElement;
         "pds-textarea": HTMLPdsTextareaElement;
@@ -1409,6 +1454,16 @@ declare namespace LocalJSX {
          */
         "componentId": string;
     }
+    interface PdsTableBody {
+    }
+    interface PdsTableCell {
+    }
+    interface PdsTableHead {
+    }
+    interface PdsTableHeadCell {
+    }
+    interface PdsTableRow {
+    }
     interface PdsTabpanel {
         /**
           * Sets the related tab name, this name must match a `pds-tab`'s tab name property
@@ -1561,6 +1616,11 @@ declare namespace LocalJSX {
         "pds-switch": PdsSwitch;
         "pds-tab": PdsTab;
         "pds-table": PdsTable;
+        "pds-table-body": PdsTableBody;
+        "pds-table-cell": PdsTableCell;
+        "pds-table-head": PdsTableHead;
+        "pds-table-head-cell": PdsTableHeadCell;
+        "pds-table-row": PdsTableRow;
         "pds-tabpanel": PdsTabpanel;
         "pds-tabs": PdsTabs;
         "pds-textarea": PdsTextarea;
@@ -1587,6 +1647,11 @@ declare module "@stencil/core" {
             "pds-switch": LocalJSX.PdsSwitch & JSXBase.HTMLAttributes<HTMLPdsSwitchElement>;
             "pds-tab": LocalJSX.PdsTab & JSXBase.HTMLAttributes<HTMLPdsTabElement>;
             "pds-table": LocalJSX.PdsTable & JSXBase.HTMLAttributes<HTMLPdsTableElement>;
+            "pds-table-body": LocalJSX.PdsTableBody & JSXBase.HTMLAttributes<HTMLPdsTableBodyElement>;
+            "pds-table-cell": LocalJSX.PdsTableCell & JSXBase.HTMLAttributes<HTMLPdsTableCellElement>;
+            "pds-table-head": LocalJSX.PdsTableHead & JSXBase.HTMLAttributes<HTMLPdsTableHeadElement>;
+            "pds-table-head-cell": LocalJSX.PdsTableHeadCell & JSXBase.HTMLAttributes<HTMLPdsTableHeadCellElement>;
+            "pds-table-row": LocalJSX.PdsTableRow & JSXBase.HTMLAttributes<HTMLPdsTableRowElement>;
             "pds-tabpanel": LocalJSX.PdsTabpanel & JSXBase.HTMLAttributes<HTMLPdsTabpanelElement>;
             "pds-tabs": LocalJSX.PdsTabs & JSXBase.HTMLAttributes<HTMLPdsTabsElement>;
             "pds-textarea": LocalJSX.PdsTextarea & JSXBase.HTMLAttributes<HTMLPdsTextareaElement>;

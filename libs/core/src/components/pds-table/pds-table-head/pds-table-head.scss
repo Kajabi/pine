@@ -1,0 +1,6 @@
+:host {
+  --border: var(--pine-border-default);
+
+  border-block-end: var(--border);
+  display: flex;
+}
