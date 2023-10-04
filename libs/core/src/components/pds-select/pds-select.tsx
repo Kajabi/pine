@@ -187,16 +187,19 @@ export class PdsSelect {
   @Listen('keydown', {})
   handleComboInputKeyDown(event: KeyboardEvent) {
     switch (event.key || event.code) {
-      // When the down arrow is pressed, open the combobox and focus the first option. The DOM focus remains on the this.isComboboxOpen
-      // TODO: needs to be updated for down arrow. Should read... When the down arrow is pressed, open the combobox if it not already displayed without moving focus or chaning selection
+      // When the down arrow is pressed, open the combobox if it not already displayed without moving focus or chaning selection
       case 'ArrowDown':
         event.preventDefault();
 
         if (!this.isComboboxOpen) {
           this.handleComboboxToggle();
+          return
         }
 
-        this.focusNextOption();
+        if (this.isComboboxOpen) {
+          this.focusNextOption();
+          return
+        }
         break;
       
       // When the up arrow is pressed, open the combobox and focus the first option. The DOM focus remains on the this.isComboboxOpen
@@ -210,7 +213,8 @@ export class PdsSelect {
 
         this.focusPreviousOption();
         break;
-        
+      
+      // When the ESC key is pressed on a opened combobox, close it and return focus to the input
       case 'Escape':
         if(this.isComboboxOpen) {
           this.handleComboboxToggle();
@@ -220,18 +224,22 @@ export class PdsSelect {
       // When the home key is pressed, open the combobox and moves visual focus to first selection
       case 'Home':
         event.preventDefault();
+
         if(!this.isComboboxOpen) {
           this.handleComboboxToggle();
         }
+
         this.focusFirstOption();
         break;
 
       // When the end key is pressed, open the combobox and moves visual focus to last selection
       case 'End':
         event.preventDefault();
+        
         if(!this.isComboboxOpen) {
           this.handleComboboxToggle()
         }
+
         this.focusLastOption();
         break;
 
@@ -242,10 +250,12 @@ export class PdsSelect {
 
         if (!this.isComboboxOpen) {
           this.handleComboboxToggle();
+          return
         }
 
         if (this.isComboboxOpen) {
           this.selectFocusedOption();
+          return
         }
         break;
 
@@ -263,6 +273,7 @@ export class PdsSelect {
         // Select focused option if combobox is open
         if (this.isComboboxOpen) {
           this.selectFocusedOption();
+          return
         }
         break;
     }

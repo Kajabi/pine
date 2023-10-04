@@ -16,12 +16,12 @@ export default {
     required: false,
   },
   component: "pds-select",
-  decorators: [withActions],
-  parameters: {
-    actions: {
-      handles: ['pdsSelectChange', 'pdsSelectOptionSelected', 'keydown'],
-    },
-  },
+  // decorators: [withActions],
+  // parameters: {
+  //   actions: {
+  //     handles: ['pdsSelectChange', 'pdsSelectOptionSelected', 'keydown'],
+  //   },
+  // },
   title: "components/Select",
 };
 

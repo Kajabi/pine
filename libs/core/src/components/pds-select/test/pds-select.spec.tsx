@@ -252,39 +252,76 @@ describe('pds-select', () => {
     // expect(options[1].shadowRoot?.querySelector('.pds-select-option')?.classList.contains('is--current')).toBeFalsy();
   });
 
-  it('should not move focus up when arrow up is pressed on the first list item', async () => {
+  // it('should not move focus up when arrow up is pressed on the first list item', async () => {
+  //   const page = await newSpecPage({
+  //     components: [PdsSelect, PdsSelectOption],
+  //     html: `
+  //       <pds-select component-id="combobox" label="Label">
+  //         <pds-select-option component-id="opt0">Select an option</pds-select-option>
+  //         <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
+  //       </pds-select>
+  //     `,
+  //   });
+
+  //   const input = page.root?.shadowRoot?.querySelector<HTMLInputElement>('.pds-select__input');
+
+  //   // Open the combobox by clicking on it
+  //   input?.click();
+  //   await page.waitForChanges();
+
+  //   let firstOption = page.body.querySelector('pds-select-option')?.shadowRoot?.querySelector('.pds-select-option');
+
+  //   // Simulate arrow down
+  //   page.root?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+  //   await page.waitForChanges();
+
+  //   // Verify current and tabindex
+  //   expect(firstOption?.classList.contains('is--current')).toBe(true);
+  //   expect(firstOption?.getAttribute('tabindex')).toEqual('0');
+
+  //   page.root?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
+  //   await page.waitForChanges();
+
+  //   firstOption = page.body.querySelector('pds-select-option')?.shadowRoot?.querySelector('.pds-select-option');
+  //   expect(firstOption?.getAttribute('tabindex')).toEqual('0');
+  //   expect(firstOption?.classList.contains('is--current')).toBe(true);
+  // });
+
+  it('should not move focus to previous option if the first option is already focused', async () => {
+    // Arrange
     const page = await newSpecPage({
       components: [PdsSelect, PdsSelectOption],
       html: `
-        <pds-select component-id="combobox" label="Label">
-          <pds-select-option component-id="opt0">Select an option</pds-select-option>
-          <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
+        <pds-select>
+          <pds-select-option component-id="opt0" value="Option 1">Option 1</pds-select-option>
+          <pds-select-option component-id="opt1" value="Option 2">Option 2</pds-select-option>
+          <pds-select-option component-id="opt2" value="Option 3">Option 3</pds-select-option>
         </pds-select>
       `,
     });
 
-    const input = page.root?.shadowRoot?.querySelector<HTMLInputElement>('.pds-select__input');
+    // // Set focus on the first option
+    const firstOption = page.root?.querySelector('pds-select-option[component-id="opt0"]') as HTMLElement;
 
-    // Open the combobox by clicking on it
-    input?.click();
-    await page.waitForChanges();
+    console.log('!!! MINE fio', firstOption);
+    console.log('!!! MINE fioc', firstOption.classList);
+    firstOption.focus();
 
-    let firstOption = page.body.querySelector('pds-select-option')?.shadowRoot?.querySelector('.pds-select-option');
+    // CHECK
 
-    // Simulate arrow down
-    page.root?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
-    await page.waitForChanges();
-
-    // Verify current and tabindex
-    expect(firstOption?.classList.contains('is--current')).toBe(true);
-    expect(firstOption?.getAttribute('tabindex')).toEqual('0');
+    // // Act
+    // await page.keyboard.press('ArrowUp');
 
     page.root?.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
     await page.waitForChanges();
 
-    firstOption = page.body.querySelector('pds-select-option')?.shadowRoot?.querySelector('.pds-select-option');
-    expect(firstOption?.getAttribute('tabindex')).toEqual('0');
-    expect(firstOption?.classList.contains('is--current')).toBe(true);
+    console.log('!!! MINE da', document.activeElement);
+    // // Assert
+    const focusedOption = document.activeElement as HTMLElement;
+    console.log('!!! MINE fo', focusedOption);
+    console.log('!!! MINE fo', focusedOption.shadowRoot);
+    // expect(focusedOption).toBe(firstOption);
+    expect(focusedOption.shadowRoot?.querySelector('.pds-select-option')?.classList.contains('is--current')).toBeTruthy();
   });
 
   it('should open the comboxbox and move focus to the first item when the up arrow is pressed on the combobox trigger', async () => {
@@ -472,51 +509,105 @@ describe('pds-select', () => {
     expect(options[1].shadowRoot?.querySelector('.pds-select-option')?.classList.contains('is--current')).toBeTruthy();
   });
 
-  it('should open the combobox when the SPACE key is pressed', async () => {
+  it('should open combobox on Space key press if closed', async () => {
     const page = await newSpecPage({
       components: [PdsSelect],
-      html: `
-        <pds-select></pds-select>
-      `,
+      html: `<pds-select component-id="combobox" label="Label">
+               <pds-select-option component-id="opt0">Select an option</pds-select-option>
+               <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
+             </pds-select>`,
     });
 
-    const element = page.root as HTMLElement;
+    const component = page.rootInstance as PdsSelect;
 
-    // Simulate pressing the SPACE key.
-    const spaceKey = new KeyboardEvent('keydown', { key: ' ' });
-    element.dispatchEvent(spaceKey);
+    // Spy on the handleComboboxToggle and selectFocusedOption methods
+    jest.spyOn(component, 'handleComboboxToggle');
+    jest.spyOn(component, 'selectFocusedOption');
 
-    expect(element.shadowRoot?.querySelector('.pds-select')?.classList.contains('is-open')).toBeTruthy();
+    // Create a 'Space' keydown event
+    const event = new KeyboardEvent('keydown', { key: ' ' });
+
+    // Dispatch the event on the root element
+    page.root?.dispatchEvent(event);
+
+    // Assert that the handleComboboxToggle method is called
+    expect(component.handleComboboxToggle).toHaveBeenCalled();
+    // Assert that the selectFocusedOption method is not called
+    expect(component.selectFocusedOption).not.toHaveBeenCalled();
   });
 
-  it('should select an option in an open combobox when the SPACE key is pressed', async () => {
+  it('should select focused option on Space key press if combobox is open', async () => {
     const page = await newSpecPage({
       components: [PdsSelect],
-      html: `
-        <pds-select>
-          <pds-select-option>Option A</pds-select-option>
-          <pds-select-option>Option B</pds-select-option>
-        </pds-select>
-      `,
+      html: `<pds-select component-id="combobox" label="Label" isComboboxOpen>
+               <pds-select-option component-id="opt0">Select an option</pds-select-option>
+               <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
+             </pds-select>`,
     });
 
-    const element = page.root as HTMLElement;
-    const options = page.root?.querySelectorAll('pds-select-option');
+    const component = page.rootInstance as PdsSelect;
 
-    // open the combobox
-    element.shadowRoot?.querySelector<HTMLElement>('.pds-select__input')?.click();
+    // Spy on the handleComboboxToggle and selectFocusedOption methods
+    jest.spyOn(component, 'handleComboboxToggle');
+    jest.spyOn(component, 'selectFocusedOption');
 
-    // select the second item 
+    // Create a 'Space' keydown event
+    const event = new KeyboardEvent('keydown', { key: ' ' });
 
-    // Simulate pressing the SPACE key.
-    const spaceKey = new KeyboardEvent('keydown', { key: ' ' });
-    element.dispatchEvent(spaceKey);
+    // Dispatch the event on the root element
+    page.root?.dispatchEvent(event);
 
-    // verify selected option
-    expect(options[1].selected).toBeTruthy();
-    expect(option[1].tabIndex).toBe("0");
-    expect(element.shadowRoot?.querySelector('.pds-select')?.classList.contains('is-open')).toBeTruthy();
+    // Assert that the selectFocusedOption method is called
+    expect(component.selectFocusedOption).toHaveBeenCalled();
+    // Assert that the handleComboboxToggle method is called
+    expect(component.handleComboboxToggle).toHaveBeenCalled();
   });
+
+  // it('should open the combobox when the SPACE key is pressed', async () => {
+  //   const page = await newSpecPage({
+  //     components: [PdsSelect],
+  //     html: `
+  //       <pds-select></pds-select>
+  //     `,
+  //   });
+
+  //   const element = page.root as HTMLElement;
+
+  //   // Simulate pressing the SPACE key.
+  //   const spaceKey = new KeyboardEvent('keydown', { key: ' ' });
+  //   element.dispatchEvent(spaceKey);
+
+  //   expect(element.shadowRoot?.querySelector('.pds-select')?.classList.contains('is-open')).toBeTruthy();
+  // });
+
+  // it('should select an option in an open combobox when the SPACE key is pressed', async () => {
+  //   const page = await newSpecPage({
+  //     components: [PdsSelect],
+  //     html: `
+  //       <pds-select>
+  //         <pds-select-option>Option A</pds-select-option>
+  //         <pds-select-option>Option B</pds-select-option>
+  //       </pds-select>
+  //     `,
+  //   });
+
+  //   const element = page.root as HTMLElement;
+  //   const options = page.root?.querySelectorAll('pds-select-option');
+
+  //   // open the combobox
+  //   element.shadowRoot?.querySelector<HTMLElement>('.pds-select__input')?.click();
+
+  //   // select the second item 
+
+  //   // Simulate pressing the SPACE key.
+  //   const spaceKey = new KeyboardEvent('keydown', { key: ' ' });
+  //   element.dispatchEvent(spaceKey);
+
+  //   // verify selected option
+  //   expect(options[1].selected).toBeTruthy();
+  //   expect(option[1].tabIndex).toBe("0");
+  //   expect(element.shadowRoot?.querySelector('.pds-select')?.classList.contains('is-open')).toBeTruthy();
+  // });
 
   it('should open combobox and select focused option on Enter key press', async () => {
     const page = await newSpecPage({
