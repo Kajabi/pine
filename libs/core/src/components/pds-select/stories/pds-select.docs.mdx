@@ -2,6 +2,7 @@ import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
 import { html, render } from 'lit-html';
 
 import * as stories from './pds-select.stories.js';
+import * as selectOptionStories from '../pds-select-option/stories/pds-select-option.stories.js';
 
 <Meta of={stories} />
 
@@ -35,6 +36,10 @@ e.g. `<pds-select-option component-id='myId' value='my value'>My text content</p
   <pds-select-option component-id='myId' value='my value'>My text content</pds-select-option>
 </Canvas>
 
+
+## Sub Component Properties
+
+<ArgTypes of={selectOptionStories} />
 
 ## Guidelines
 ### Accessibility
