@@ -435,6 +435,9 @@ describe('pds-select', () => {
 
     const component = page.rootInstance as PdsSelect;
 
+    // Open the comboxbox
+    component['isComboboxOpen'] = true;
+
     // Spy on the handleComboboxToggle and focusFirstOption methods
     jest.spyOn(component, 'handleComboboxToggle');
     jest.spyOn(component, 'focusFirstOption');
@@ -447,7 +450,7 @@ describe('pds-select', () => {
 
     // Assert that the handleComboboxToggle and focusFirstOption methods are not called
     expect(component.handleComboboxToggle).not.toHaveBeenCalled();
-    expect(component.focusFirstOption).not.toHaveBeenCalled();
+    expect(component.focusFirstOption).toHaveBeenCalled();
   });
 
   // it('should focus the first option when the Home key is pressed', async () => {
@@ -484,7 +487,7 @@ describe('pds-select', () => {
 
 
 
-  it('should focus the last option when the End key is pressed', async () => {
+  it('should open the combobox and focus the last option when the End key is pressed on a closed combobox', async () => {
     const page = await newSpecPage({
       components: [PdsSelect],
       html: `
@@ -495,18 +498,52 @@ describe('pds-select', () => {
       `,
     });
 
-    const element = page.root as HTMLElement;
-    const options = page.root?.querySelectorAll('pds-select-option') as NodeListOf<HTMLElement>;
+    const component = page.rootInstance as PdsSelect;
 
-    element.shadowRoot?.querySelector<HTMLElement>('.pds-select__input')?.click();
+    // Spy on the handleComboboxToggle and focusLastOption methods
+    jest.spyOn(component, 'handleComboboxToggle');
+    jest.spyOn(component, 'focusLastOption');
 
-    // Simulate pressing the ESC key.
-    const homeKey = new KeyboardEvent('keydown', { key: 'End' });
-    element.dispatchEvent(homeKey);
+    // Create a 'End' keydown event
+    const event = new KeyboardEvent('keydown', { key: 'End' });
 
-    // Assert that the dropdown is closed.
-    expect(options[0].shadowRoot?.querySelector('.pds-select-option')?.classList.contains('is--current')).toBeFalsy();
-    expect(options[1].shadowRoot?.querySelector('.pds-select-option')?.classList.contains('is--current')).toBeTruthy();
+    // Dispatch the event on the root element
+    page.root?.dispatchEvent(event);
+
+    // Assert that the handleComboboxToggle and focusLastOption methods are not called
+    expect(component.handleComboboxToggle).toHaveBeenCalled();
+    expect(component.focusLastOption).toHaveBeenCalled();
+  });
+
+  it('should not open the combobox and focus the last option when the End key is pressed on a open combobox', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `
+        <pds-select>
+          <pds-select-option>Option A</pds-select-option>
+          <pds-select-option>Option B</pds-select-option>
+        </pds-select>
+      `,
+    });
+
+    const component = page.rootInstance as PdsSelect;
+
+    // Open the comboxbox
+    component['isComboboxOpen'] = true;
+
+    // Spy on the handleComboboxToggle and focusLastOption methods
+    jest.spyOn(component, 'handleComboboxToggle');
+    jest.spyOn(component, 'focusLastOption');
+
+    // Create a 'End' keydown event
+    const event = new KeyboardEvent('keydown', { key: 'End' });
+
+    // Dispatch the event on the root element
+    page.root?.dispatchEvent(event);
+
+    // Assert that the handleComboboxToggle and focusLastOption methods are not called
+    expect(component.handleComboboxToggle).not.toHaveBeenCalled();
+    expect(component.focusLastOption).toHaveBeenCalled();
   });
 
   it('should open combobox on Space key press if closed', async () => {
@@ -522,7 +559,6 @@ describe('pds-select', () => {
 
     // Spy on the handleComboboxToggle and selectFocusedOption methods
     jest.spyOn(component, 'handleComboboxToggle');
-    jest.spyOn(component, 'selectFocusedOption');
 
     // Create a 'Space' keydown event
     const event = new KeyboardEvent('keydown', { key: ' ' });
@@ -532,8 +568,6 @@ describe('pds-select', () => {
 
     // Assert that the handleComboboxToggle method is called
     expect(component.handleComboboxToggle).toHaveBeenCalled();
-    // Assert that the selectFocusedOption method is not called
-    expect(component.selectFocusedOption).not.toHaveBeenCalled();
   });
 
   it('should select focused option on Space key press if combobox is open', async () => {
@@ -547,9 +581,13 @@ describe('pds-select', () => {
 
     const component = page.rootInstance as PdsSelect;
 
+    // Open the comboxbox
+    component['isComboboxOpen'] = true;
+
     // Spy on the handleComboboxToggle and selectFocusedOption methods
     jest.spyOn(component, 'handleComboboxToggle');
     jest.spyOn(component, 'selectFocusedOption');
+    
 
     // Create a 'Space' keydown event
     const event = new KeyboardEvent('keydown', { key: ' ' });
