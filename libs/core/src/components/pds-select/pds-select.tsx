@@ -108,7 +108,7 @@ export class PdsSelect {
    */
   @Event() pdsSelectChange!: EventEmitter<string>;
 
-  componentDidLoad() {
+  componentWillLoad() {
     const options = Array.from(this.el.querySelectorAll('pds-select-option'));
     const firstSelectedOption = options.find((option) => option.hasAttribute('selected'));
 
@@ -186,7 +186,7 @@ export class PdsSelect {
 
   @Listen('keydown', {})
   handleComboInputKeyDown(event: KeyboardEvent) {
-    switch (event.key) {
+    switch (event.key || event.code) {
       // When the down arrow is pressed, open the combobox and focus the first option. The DOM focus remains on the this.isComboboxOpen
       // TODO: needs to be updated for down arrow. Should read... When the down arrow is pressed, open the combobox if it not already displayed without moving focus or chaning selection
       case 'ArrowDown':
@@ -210,6 +210,7 @@ export class PdsSelect {
 
         this.focusPreviousOption();
         break;
+        
       case 'Escape':
         if(this.isComboboxOpen) {
           this.handleComboboxToggle();
@@ -219,12 +220,18 @@ export class PdsSelect {
       // When the home key is pressed, open the combobox and moves visual focus to first selection
       case 'Home':
         event.preventDefault();
+        if(!this.isComboboxOpen) {
+          this.handleComboboxToggle();
+        }
         this.focusFirstOption();
         break;
 
       // When the end key is pressed, open the combobox and moves visual focus to last selection
       case 'End':
         event.preventDefault();
+        if(!this.isComboboxOpen) {
+          this.handleComboboxToggle()
+        }
         this.focusLastOption();
         break;
 
@@ -233,10 +240,15 @@ export class PdsSelect {
       case 'Enter':
         event.preventDefault();
 
+        if (!this.isComboboxOpen) {
+          this.handleComboboxToggle();
+        }
+
         if (this.isComboboxOpen) {
           this.selectFocusedOption();
         }
         break;
+
       // When the SPACE key is pressed, open the combobox without moving focus or changing selection
       // When the SPACE key is pressed, close the combobox, select the focused option, and move focus to the input
       case ' ':
@@ -272,16 +284,16 @@ export class PdsSelect {
       console.log('if this.isComboboxOpen');
 
       // Set the focus index to the first option
-      if (!this.focusIndex)  {
-        console.log('IN HERE');
-        this.focusIndex = 0;
-      }
+      // if (!this.focusIndex)  {
+      //   console.log('IN HERE');
+      //   this.focusIndex = 0;
+      // }
     } else {
       // close combobox
       this.comboWrapperRef.classList.remove('is-open');
 
       // Reset focus index when the combobox is closed
-      this.focusIndex = -1;
+      // this.focusIndex = -1;
     }
   };
 
