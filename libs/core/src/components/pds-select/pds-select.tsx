@@ -108,7 +108,8 @@ export class PdsSelect {
    */
   @Event() pdsSelectChange!: EventEmitter<string>;
 
-  componentWillLoad() {
+  // TODO: needs to be componentWillLoad, but click doesnt work
+  componentDidLoad() {
     const options = Array.from(this.el.querySelectorAll('pds-select-option'));
     const firstSelectedOption = options.find((option) => option.hasAttribute('selected'));
 
