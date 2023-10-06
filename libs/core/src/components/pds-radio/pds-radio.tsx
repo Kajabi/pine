@@ -29,7 +29,7 @@ export class PdsRadio {
   /**
    * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
    */
-  @Prop() componentId: string;
+  @Prop() componentId!: string;
 
   /**
    * String used for label text next to radio.
