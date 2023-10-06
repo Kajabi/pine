@@ -1,0 +1,40 @@
+@mixin generate-columns($prefix, $columns) {
+  @for $i from 1 through $columns {
+    /* stylelint-disable-next-line function-no-unknown */
+    $class-name: if($prefix, 'pds-grid-col-#{$prefix}-#{$i}', 'pds-grid-col-#{$i}');
+    .#{$class-name} {
+      grid-column: auto / span $i;
+    }
+  }
+}
+
+:host {
+  display: block;
+}
+
+.pds-grid {
+  display: grid;
+  gap: var(--pine-spacing-sm);
+  grid-template-columns: repeat(12, 1fr);
+}
+
+// Base Classes
+@include generate-columns(false, 12);
+
+/* Responsive Classes */
+@media (min-width: 576px) {
+  @include generate-columns('sm', 12);
+}
+
+@media (min-width: 768px) {
+  @include generate-columns('md', 12);
+}
+
+@media (min-width: 992px) {
+  @include generate-columns('lg', 12);
+}
+
+@media (min-width: 1200px) {
+  @include generate-columns('xl', 12);
+}
+

@@ -193,6 +193,34 @@ export namespace Components {
          */
         "vertical": boolean;
     }
+    interface PdsGrid {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+    }
+    interface PdsGridCol {
+        /**
+          * Non-responsive size
+         */
+        "size"?: string;
+        /**
+          * Size for large screens
+         */
+        "sizeLg"?: string;
+        /**
+          * Size for medium screens
+         */
+        "sizeMd"?: string;
+        /**
+          * Size for small screens
+         */
+        "sizeSm"?: string;
+        /**
+          * Size for Extra-large screens
+         */
+        "sizeXl"?: string;
+    }
     interface PdsImage {
         /**
           * The image's alt tag. If none is provided, it will default to an empty string.
@@ -675,6 +703,18 @@ declare global {
         prototype: HTMLPdsDividerElement;
         new (): HTMLPdsDividerElement;
     };
+    interface HTMLPdsGridElement extends Components.PdsGrid, HTMLStencilElement {
+    }
+    var HTMLPdsGridElement: {
+        prototype: HTMLPdsGridElement;
+        new (): HTMLPdsGridElement;
+    };
+    interface HTMLPdsGridColElement extends Components.PdsGridCol, HTMLStencilElement {
+    }
+    var HTMLPdsGridColElement: {
+        prototype: HTMLPdsGridColElement;
+        new (): HTMLPdsGridColElement;
+    };
     interface HTMLPdsImageElement extends Components.PdsImage, HTMLStencilElement {
     }
     var HTMLPdsImageElement: {
@@ -760,6 +800,8 @@ declare global {
         "pds-chip": HTMLPdsChipElement;
         "pds-copytext": HTMLPdsCopytextElement;
         "pds-divider": HTMLPdsDividerElement;
+        "pds-grid": HTMLPdsGridElement;
+        "pds-grid-col": HTMLPdsGridColElement;
         "pds-image": HTMLPdsImageElement;
         "pds-input": HTMLPdsInputElement;
         "pds-link": HTMLPdsLinkElement;
@@ -972,6 +1014,34 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "vertical"?: boolean;
+    }
+    interface PdsGrid {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+    }
+    interface PdsGridCol {
+        /**
+          * Non-responsive size
+         */
+        "size"?: string;
+        /**
+          * Size for large screens
+         */
+        "sizeLg"?: string;
+        /**
+          * Size for medium screens
+         */
+        "sizeMd"?: string;
+        /**
+          * Size for small screens
+         */
+        "sizeSm"?: string;
+        /**
+          * Size for Extra-large screens
+         */
+        "sizeXl"?: string;
     }
     interface PdsImage {
         /**
@@ -1405,6 +1475,8 @@ declare namespace LocalJSX {
         "pds-chip": PdsChip;
         "pds-copytext": PdsCopytext;
         "pds-divider": PdsDivider;
+        "pds-grid": PdsGrid;
+        "pds-grid-col": PdsGridCol;
         "pds-image": PdsImage;
         "pds-input": PdsInput;
         "pds-link": PdsLink;
@@ -1430,6 +1502,8 @@ declare module "@stencil/core" {
             "pds-chip": LocalJSX.PdsChip & JSXBase.HTMLAttributes<HTMLPdsChipElement>;
             "pds-copytext": LocalJSX.PdsCopytext & JSXBase.HTMLAttributes<HTMLPdsCopytextElement>;
             "pds-divider": LocalJSX.PdsDivider & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
+            "pds-grid": LocalJSX.PdsGrid & JSXBase.HTMLAttributes<HTMLPdsGridElement>;
+            "pds-grid-col": LocalJSX.PdsGridCol & JSXBase.HTMLAttributes<HTMLPdsGridColElement>;
             "pds-image": LocalJSX.PdsImage & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
             "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
