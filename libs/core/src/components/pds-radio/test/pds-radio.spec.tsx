@@ -93,6 +93,21 @@ describe('pds-radio', () => {
     `);
   });
 
+  it('renders error message when error-message prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: `<pds-radio component-id="default" label="Label text" invalid="true" error-message="This is a short error message." />`,
+    });
+
+    expect(page.root).toEqualHtml(`
+      <pds-radio class="is-invalid" component-id="default" error-message="This is a short error message." invalid="true" label="Label text">
+        <input aria-invalid="true" id="default" type="radio">
+        <label htmlfor="default">Label text</label>
+        <div aria-live="assertive" class="pds-radio__message pds-radio__message--error" id="default__error-message">This is a short error message.</div>
+      </pds-radio>
+    `);
+  });
+
   it('renders required input when required prop is set', async () => {
     const { root } = await newSpecPage({
       components: [PdsRadio],

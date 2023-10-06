@@ -55,10 +55,12 @@ Message is a string of text that displays below the label text.
 
 Invalid displays the radio in invalid state such as when required but is not checked.
 
+An optional error message can be displayed for additional instructions, displayed independently from the helper message.
+
 <Canvas mdxSource={`
-  <pds-radio component-id="invalid" label="Label" invalid />
+  <pds-radio component-id="invalid" label="Label" invalid error-message="This is a short error message" />
 `}>
-  <pds-radio component-id="invalid" label="Label" invalid />
+  <pds-radio component-id="invalid" label="Label" invalid error-message="This is a short error message" />
 </Canvas>
 
 ### Group
