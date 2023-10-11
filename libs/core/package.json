@@ -36,8 +36,7 @@
   ],
   "scripts": {
     "build": "npm run build.stencil",
-    "build.all": "run-s build.icons build.stencil build.tokens build.storybook",
-    "build.icons": "npx nx run icons:build",
+    "build.all": "run-s build.stencil build.tokens build.storybook",
     "build.stencil": "stencil build --docs",
     "build.storybook": "storybook build",
     "build.ts": "tsc -p scripts/tsconfig.json",
