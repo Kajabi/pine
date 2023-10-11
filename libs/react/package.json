@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@pine-ds/core": "*",
-    "@pine-ds/icons": "*"
+    "@pine-ds/icons": "2.0.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.3",
