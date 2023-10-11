@@ -1,6 +1,6 @@
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
-import pdsIconsJson from '../../../../icons/dist/pds-icons.json';
+import pdsIconsJson from '@pine-ds/icons/dist/pds-icons.json';
 
 interface IconControlArgs {
   component: string,
