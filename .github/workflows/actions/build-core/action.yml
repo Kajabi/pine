@@ -42,15 +42,6 @@ runs:
     - name: Set SHA
       uses: nrwl/nx-set-shas@v3
 
-    - name: Restore Icons Node modules cache
-      uses: actions/cache/restore@v3
-      id: restore-icons-lib-node-modules
-      env:
-        cache-name: icons-node-modules
-      with:
-        path: ./libs/icons/node_modules
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}-v1
-
     - name: Install Dependencies
       if: steps.cache-node-modules.outputs.cache-hit != true
       run: npm ci
