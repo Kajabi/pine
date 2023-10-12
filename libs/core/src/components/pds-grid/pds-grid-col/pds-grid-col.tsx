@@ -6,6 +6,16 @@ import { Component, h, Host,  Prop } from '@stencil/core';
 })
 export class PdsGridCol {
   /**
+   * Represents the starting grid column
+   */
+  @Prop() colStart?: string;
+
+  /**
+   * Represents the ending grid column
+   */
+  @Prop() colEnd?: string;
+  
+  /**
    * Non-responsive size
    */
   @Prop() size?: string;
@@ -36,6 +46,8 @@ export class PdsGridCol {
       ${this.sizeMd ? `pds-grid-col-md-${this.sizeMd}` : ''}
       ${this.sizeLg ? `pds-grid-col-lg-${this.sizeLg}` : ''}
       ${this.sizeXl ? `pds-grid-col-xl-${this.sizeXl}` : ''}
+      ${this.colStart ? `pds-grid-start-${this.colStart}` :  ''}
+      ${this.colEnd ? `pds-grid-start-${this.colEnd}` :  ''}
     `;
 
     return (

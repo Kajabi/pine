@@ -7,13 +7,15 @@
 
 ## Properties
 
-| Property | Attribute | Description                  | Type     | Default     |
-| -------- | --------- | ---------------------------- | -------- | ----------- |
-| `size`   | `size`    | Non-responsive size          | `string` | `undefined` |
-| `sizeLg` | `size-lg` | Size for large screens       | `string` | `undefined` |
-| `sizeMd` | `size-md` | Size for medium screens      | `string` | `undefined` |
-| `sizeSm` | `size-sm` | Size for small screens       | `string` | `undefined` |
-| `sizeXl` | `size-xl` | Size for Extra-large screens | `string` | `undefined` |
+| Property   | Attribute   | Description                         | Type     | Default     |
+| ---------- | ----------- | ----------------------------------- | -------- | ----------- |
+| `colEnd`   | `col-end`   | Represents the ending grid column   | `string` | `undefined` |
+| `colStart` | `col-start` | Represents the starting grid column | `string` | `undefined` |
+| `size`     | `size`      | Non-responsive size                 | `string` | `undefined` |
+| `sizeLg`   | `size-lg`   | Size for large screens              | `string` | `undefined` |
+| `sizeMd`   | `size-md`   | Size for medium screens             | `string` | `undefined` |
+| `sizeSm`   | `size-sm`   | Size for small screens              | `string` | `undefined` |
+| `sizeXl`   | `size-xl`   | Size for Extra-large screens        | `string` | `undefined` |
 
 
 ----------------------------------------------

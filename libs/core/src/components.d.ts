@@ -201,6 +201,14 @@ export namespace Components {
     }
     interface PdsGridCol {
         /**
+          * Represents the ending grid column
+         */
+        "colEnd"?: string;
+        /**
+          * Represents the starting grid column
+         */
+        "colStart"?: string;
+        /**
           * Non-responsive size
          */
         "size"?: string;
@@ -1022,6 +1030,14 @@ declare namespace LocalJSX {
         "componentId"?: string;
     }
     interface PdsGridCol {
+        /**
+          * Represents the ending grid column
+         */
+        "colEnd"?: string;
+        /**
+          * Represents the starting grid column
+         */
+        "colStart"?: string;
         /**
           * Non-responsive size
          */
