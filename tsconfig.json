@@ -28,9 +28,6 @@
       "@pine-ds/react": [
         "./react"
       ],
-      "@pine-ds/icons": [
-        "./libs/icons"
-      ]
     },
     "target": "es2017",
   }

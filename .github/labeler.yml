@@ -4,5 +4,3 @@
 "package: react":
   - libs/react/**/*
 
-"package: icons":
-  - libs/icons/**/*

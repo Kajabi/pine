@@ -36,5 +36,4 @@ metadata:
 spec:
   targets:
     - ./libs/core/catalog-info.yaml
-    - ./libs/icons/catalog-info.yaml
     - ./libs/react/catalog-info.yaml
