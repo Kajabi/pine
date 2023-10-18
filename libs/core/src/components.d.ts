@@ -479,16 +479,25 @@ export namespace Components {
           * A unique identifier used for the table `id` attribute.
          */
         "componentId": string;
+        /**
+          * Determines if table displays checkboxes for selectable rows.
+         */
+        "selectable": boolean;
     }
     interface PdsTableBody {
     }
     interface PdsTableCell {
     }
+    interface PdsTableCheckboxCell {
+    }
     interface PdsTableHead {
+        "selectable": boolean;
     }
     interface PdsTableHeadCell {
     }
     interface PdsTableRow {
+        "selectable": boolean;
+        "value": string;
     }
     interface PdsTabpanel {
         /**
@@ -859,6 +868,12 @@ declare global {
         prototype: HTMLPdsTableCellElement;
         new (): HTMLPdsTableCellElement;
     };
+    interface HTMLPdsTableCheckboxCellElement extends Components.PdsTableCheckboxCell, HTMLStencilElement {
+    }
+    var HTMLPdsTableCheckboxCellElement: {
+        prototype: HTMLPdsTableCheckboxCellElement;
+        new (): HTMLPdsTableCheckboxCellElement;
+    };
     interface HTMLPdsTableHeadElement extends Components.PdsTableHead, HTMLStencilElement {
     }
     var HTMLPdsTableHeadElement: {
@@ -943,6 +958,7 @@ declare global {
         "pds-table": HTMLPdsTableElement;
         "pds-table-body": HTMLPdsTableBodyElement;
         "pds-table-cell": HTMLPdsTableCellElement;
+        "pds-table-checkbox-cell": HTMLPdsTableCheckboxCellElement;
         "pds-table-head": HTMLPdsTableHeadElement;
         "pds-table-head-cell": HTMLPdsTableHeadCellElement;
         "pds-table-row": HTMLPdsTableRowElement;
@@ -1453,16 +1469,25 @@ declare namespace LocalJSX {
           * A unique identifier used for the table `id` attribute.
          */
         "componentId": string;
+        /**
+          * Determines if table displays checkboxes for selectable rows.
+         */
+        "selectable"?: boolean;
     }
     interface PdsTableBody {
     }
     interface PdsTableCell {
     }
+    interface PdsTableCheckboxCell {
+    }
     interface PdsTableHead {
+        "selectable"?: boolean;
     }
     interface PdsTableHeadCell {
     }
     interface PdsTableRow {
+        "selectable"?: boolean;
+        "value"?: string;
     }
     interface PdsTabpanel {
         /**
@@ -1618,6 +1643,7 @@ declare namespace LocalJSX {
         "pds-table": PdsTable;
         "pds-table-body": PdsTableBody;
         "pds-table-cell": PdsTableCell;
+        "pds-table-checkbox-cell": PdsTableCheckboxCell;
         "pds-table-head": PdsTableHead;
         "pds-table-head-cell": PdsTableHeadCell;
         "pds-table-row": PdsTableRow;
@@ -1649,6 +1675,7 @@ declare module "@stencil/core" {
             "pds-table": LocalJSX.PdsTable & JSXBase.HTMLAttributes<HTMLPdsTableElement>;
             "pds-table-body": LocalJSX.PdsTableBody & JSXBase.HTMLAttributes<HTMLPdsTableBodyElement>;
             "pds-table-cell": LocalJSX.PdsTableCell & JSXBase.HTMLAttributes<HTMLPdsTableCellElement>;
+            "pds-table-checkbox-cell": LocalJSX.PdsTableCheckboxCell & JSXBase.HTMLAttributes<HTMLPdsTableCheckboxCellElement>;
             "pds-table-head": LocalJSX.PdsTableHead & JSXBase.HTMLAttributes<HTMLPdsTableHeadElement>;
             "pds-table-head-cell": LocalJSX.PdsTableHeadCell & JSXBase.HTMLAttributes<HTMLPdsTableHeadCellElement>;
             "pds-table-row": LocalJSX.PdsTableRow & JSXBase.HTMLAttributes<HTMLPdsTableRowElement>;

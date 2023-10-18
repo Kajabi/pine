@@ -29,6 +29,19 @@
 | `pdsCheckboxChange` | Emits a boolean indicating whether the checkbox is currently checked or unchecked. | `CustomEvent<boolean>` |
 
 
+## Dependencies
+
+### Used by
+
+ - [pds-table-row](../pds-table/pds-table-row)
+
+### Graph
+```mermaid
+graph TD;
+  pds-table-row --> pds-checkbox
+  style pds-checkbox fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 

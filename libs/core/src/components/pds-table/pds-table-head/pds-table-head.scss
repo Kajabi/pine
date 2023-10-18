@@ -4,3 +4,11 @@
   border-block-end: var(--border);
   display: flex;
 }
+
+:host > pds-table-checkbox-cell::before {
+    content: "";
+    height: 16px;
+    margin-inline-end: 8px;
+    width: 16px;
+}
+
