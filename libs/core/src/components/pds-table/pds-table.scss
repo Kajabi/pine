@@ -1,4 +1,6 @@
 :host {
-  display: flex;
-  flex-direction: column;
+  border-collapse: separate;
+  box-sizing: border-box;
+  display: table;
+  width: 100%;
 }
