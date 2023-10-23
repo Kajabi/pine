@@ -209,25 +209,29 @@ export namespace Components {
          */
         "colStart"?: string;
         /**
-          * Non-responsive size
+          * Size of the column for all screen sizes
          */
         "size"?: string;
         /**
-          * Size for large screens
+          * At screen sizes less than the `LG` breakpoint, this will take the number of columns specified.
          */
         "sizeLg"?: string;
         /**
-          * Size for medium screens
+          * At screen sizes less than the `MD` breakpoint, this will take the number of columns specified.
          */
         "sizeMd"?: string;
         /**
-          * Size for small screens
+          * At screen sizes less than the `SM` breakpoint, this will take the number of columns specified.
          */
         "sizeSm"?: string;
         /**
           * Size for Extra-large screens
          */
         "sizeXl"?: string;
+        /**
+          * At screen sizes less than the `XS` breakpoint, this will take the number of columns specified.
+         */
+        "sizeXs"?: string;
     }
     interface PdsImage {
         /**
@@ -1039,25 +1043,29 @@ declare namespace LocalJSX {
          */
         "colStart"?: string;
         /**
-          * Non-responsive size
+          * Size of the column for all screen sizes
          */
         "size"?: string;
         /**
-          * Size for large screens
+          * At screen sizes less than the `LG` breakpoint, this will take the number of columns specified.
          */
         "sizeLg"?: string;
         /**
-          * Size for medium screens
+          * At screen sizes less than the `MD` breakpoint, this will take the number of columns specified.
          */
         "sizeMd"?: string;
         /**
-          * Size for small screens
+          * At screen sizes less than the `SM` breakpoint, this will take the number of columns specified.
          */
         "sizeSm"?: string;
         /**
           * Size for Extra-large screens
          */
         "sizeXl"?: string;
+        /**
+          * At screen sizes less than the `XS` breakpoint, this will take the number of columns specified.
+         */
+        "sizeXs"?: string;
     }
     interface PdsImage {
         /**

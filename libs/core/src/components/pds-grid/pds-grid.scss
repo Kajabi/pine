@@ -45,6 +45,10 @@ class name if a prefix exists, otherwise omit from the class name
 @include generate-columns(false, 12);
 
 /* Responsive Classes */
+@media (max-width: 575px) {
+  @include generate-columns('xs', 12);
+}
+
 @media (min-width: 576px) {
   @include generate-columns('sm', 12);
 }

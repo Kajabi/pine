@@ -14,24 +14,29 @@ export class PdsGridCol {
    * Represents the ending grid column
    */
   @Prop() colEnd?: string;
-  
-  /**
-   * Non-responsive size
-   */
-  @Prop() size?: string;
 
   /**
-   * Size for small screens
+   * Size of the column for all screen sizes
+   */
+  @Prop() size?: string;
+  
+  /**
+   * At screen sizes less than the `XS` breakpoint, this will take the number of columns specified.
+   */
+  @Prop() sizeXs?: string;
+
+  /**
+   * At screen sizes less than the `SM` breakpoint, this will take the number of columns specified.
    */
   @Prop() sizeSm?: string;
 
   /**
-   * Size for medium screens
+   * At screen sizes less than the `MD` breakpoint, this will take the number of columns specified.
    */
   @Prop() sizeMd?: string;
 
   /**
-   * Size for large screens
+   * At screen sizes less than the `LG` breakpoint, this will take the number of columns specified.
    */
   @Prop() sizeLg?: string;
 
@@ -42,6 +47,7 @@ export class PdsGridCol {
 
   render() {
     const responsiveClasses = `
+      ${this.sizeXs ? `pds-grid-col-xs-${this.sizeXs}` : ''}
       ${this.sizeSm ? `pds-grid-col-sm-${this.sizeSm}` : ''}
       ${this.sizeMd ? `pds-grid-col-md-${this.sizeMd}` : ''}
       ${this.sizeLg ? `pds-grid-col-lg-${this.sizeLg}` : ''}
