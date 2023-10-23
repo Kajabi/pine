@@ -1,4 +1,7 @@
 :host {
+  --padding: calc(var(--pine-spacing-md) / 2);
+
   display: table-cell;
+  padding: var(--padding);
   vertical-align: inherit;
 }

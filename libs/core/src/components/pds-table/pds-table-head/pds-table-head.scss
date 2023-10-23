@@ -1,8 +1,12 @@
-:host{
+:host {
+  --border: var(--pine-border-default);
+
   border-color: inherit;
   box-sizing: border-box;
   display: table-header-group;
   vertical-align: middle;
 }
 
-
+:host pds-table-checkbox-cell {
+  border-block-end: var(--border)
+}

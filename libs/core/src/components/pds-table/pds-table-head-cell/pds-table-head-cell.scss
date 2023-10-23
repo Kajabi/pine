@@ -1,6 +1,19 @@
 :host {
+  --border: var(--pine-border-default);
+  --color: var(--pine-color-neutral-charcoal-200);
+  --font-size: var(--pine-font-size-body-sm);
+  --font-weight: var(--pine-font-weight-medium);
+  --line-height: var(--pine-line-height-sm);
+  --padding: calc(var(--pine-spacing-md) / 2);
+
+  border-block-end: var(--border);
+  color: var(--color);
   display: table-cell;
-  font-weight: bold;
-  text-align: -internal-center;
+  font-size: var(--font-size);
+  font-style: normal;
+  font-weight: var(--font-weight);
+  line-height: var(--line-height);
+  padding: var(--padding);
+  text-align: start;
   vertical-align: inherit;
 }
