@@ -95,6 +95,10 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
+          * Displays message text describing an invalid state.
+         */
+        "errorMessage": string;
+        /**
           * String used for helper message below checkbox.
          */
         "helperMessage": string;
@@ -347,6 +351,10 @@ export namespace Components {
           * @defaultValue false
          */
         "disabled": boolean;
+        /**
+          * Displays message text describing an invalid state.
+         */
+        "errorMessage": string;
         /**
           * String used for helper message below radio.
          */
@@ -863,6 +871,10 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
+          * Displays message text describing an invalid state.
+         */
+        "errorMessage"?: string;
+        /**
           * String used for helper message below checkbox.
          */
         "helperMessage"?: string;
@@ -1125,12 +1137,16 @@ declare namespace LocalJSX {
         /**
           * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
          */
-        "componentId"?: string;
+        "componentId": string;
         /**
           * Determines whether or not the radio is disabled.
           * @defaultValue false
          */
         "disabled"?: boolean;
+        /**
+          * Displays message text describing an invalid state.
+         */
+        "errorMessage"?: string;
         /**
           * String used for helper message below radio.
          */

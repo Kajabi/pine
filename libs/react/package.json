@@ -17,7 +17,7 @@
   "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kajabi/pine/tree/main/libs/react"
+    "url": "git+https://github.com/Kajabi/pine.git"
   },
   "bugs": {
     "url": "https://github.com/kajabi/pine/issues"
@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@pine-ds/core": "*",
-    "@pine-ds/icons": "*"
+    "@pine-ds/icons": "2.0.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.3",

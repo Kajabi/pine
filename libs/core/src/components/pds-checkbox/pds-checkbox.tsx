@@ -24,6 +24,11 @@ export class PdsCheckbox {
   @Prop() disabled: boolean;
 
   /**
+   * Displays message text describing an invalid state.
+   */
+  @Prop() errorMessage: string;
+
+  /**
    * String used for helper message below checkbox.
    */
   @Prop() helperMessage: string;
@@ -109,7 +114,15 @@ export class PdsCheckbox {
             {this.helperMessage}
           </div>
         }
-        {/* TODO: add error message under helper message in a followup */}
+        {this.errorMessage &&
+          <div
+            class={`pds-checkbox__message pds-checkbox__message--error`}
+            id={messageId(this.componentId, 'error')}
+            aria-live="assertive"
+          >
+            {this.errorMessage}
+          </div>
+        }
       </Host>
     );
   }

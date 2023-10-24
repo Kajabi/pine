@@ -21,6 +21,11 @@ export class PdsRadio {
   @Prop() disabled = false;
 
   /**
+   * Displays message text describing an invalid state.
+   */
+  @Prop() errorMessage: string;
+
+  /**
    * Determines whether or not the radio is invalid.
    * @defaultValue false
    */
@@ -29,7 +34,7 @@ export class PdsRadio {
   /**
    * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
    */
-  @Prop() componentId: string;
+  @Prop() componentId!: string;
 
   /**
    * String used for label text next to radio.
@@ -108,7 +113,17 @@ export class PdsRadio {
             id={messageId(this.componentId, 'helper')}
           >
             {this.helperMessage}
-          </div>}
+          </div>
+        }
+        {this.errorMessage &&
+          <div
+            class={`pds-radio__message pds-radio__message--error`}
+            id={messageId(this.componentId, 'error')}
+            aria-live="assertive"
+          >
+            {this.errorMessage}
+          </div>
+        }
       </Host>
     );
   }

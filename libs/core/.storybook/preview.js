@@ -1,8 +1,7 @@
 import { extractArgTypes, extractComponentDescription, setStencilDocJson } from '@pxtrn/storybook-addon-docs-stencil';
 
 import docsJson from '../dist/docs.json';
-import iconDocsJson from '../../icons/dist/docs.json';
-
+import iconDocsJson from '@pine-ds/icons/dist/docs.json';
 /*
 *
 * Merge the Icon docs.json with core docs.json file
