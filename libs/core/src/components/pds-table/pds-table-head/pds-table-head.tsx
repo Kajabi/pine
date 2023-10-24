@@ -6,9 +6,10 @@ import { Component, Host, h, Prop } from '@stencil/core';
   shadow: true,
 })
 export class PdsTableHead {
-
-    // Prop to receive the selectable value from the pdsTable component
-    @Prop() selectable: boolean;
+  /**
+   *  Prop to receive the selectable value from the `pdsTable` parent component.
+   */
+  @Prop() selectable: boolean;
 
     // Prop to receive the selectable value from the pdsTable component
     @Prop() selectable: boolean;
@@ -23,5 +24,4 @@ export class PdsTableHead {
       </Host>
     );
   }
-
 }

@@ -7,9 +7,9 @@
 
 ## Properties
 
-| Property     | Attribute    | Description | Type      | Default     |
-| ------------ | ------------ | ----------- | --------- | ----------- |
-| `selectable` | `selectable` |             | `boolean` | `undefined` |
+| Property     | Attribute    | Description                                                                | Type      | Default     |
+| ------------ | ------------ | -------------------------------------------------------------------------- | --------- | ----------- |
+| `selectable` | `selectable` | Prop to receive the selectable value from the `pdsTable` parent component. | `boolean` | `undefined` |
 
 
 ## Dependencies

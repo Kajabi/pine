@@ -1,5 +1,12 @@
 :host {
+  --background-interactive: var(--pine-color-neutral-grey-200);
+
   border-color: inherit;
   display: table-row;
   vertical-align: inherit;
+}
+
+:host(:hover),
+:host(.is-selected) {
+  background: var(--background-interactive);
 }

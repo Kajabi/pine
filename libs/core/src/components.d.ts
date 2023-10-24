@@ -491,12 +491,21 @@ export namespace Components {
     interface PdsTableCheckboxCell {
     }
     interface PdsTableHead {
+        /**
+          * Prop to receive the selectable value from the `pdsTable` parent component.
+         */
         "selectable": boolean;
     }
     interface PdsTableHeadCell {
     }
     interface PdsTableRow {
+        /**
+          * Prop to receive the selectable value from the `pdsTable` parent component.
+         */
         "selectable": boolean;
+        /**
+          * A property to hold the value associated with the row and the `pdsCheckbox`.
+         */
         "value": string;
     }
     interface PdsTabpanel {
@@ -662,6 +671,10 @@ export interface PdsSwitchCustomEvent<T> extends CustomEvent<T> {
 export interface PdsTabCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsTabElement;
+}
+export interface PdsTableRowCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsTableRowElement;
 }
 export interface PdsTextareaCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1481,12 +1494,25 @@ declare namespace LocalJSX {
     interface PdsTableCheckboxCell {
     }
     interface PdsTableHead {
+        /**
+          * Prop to receive the selectable value from the `pdsTable` parent component.
+         */
         "selectable"?: boolean;
     }
     interface PdsTableHeadCell {
     }
     interface PdsTableRow {
+        /**
+          * Event that is emitted when the checkbox is clicked, carrying the selected value.
+         */
+        "onPdsTableRowSelected"?: (event: PdsTableRowCustomEvent<string>) => void;
+        /**
+          * Prop to receive the selectable value from the `pdsTable` parent component.
+         */
         "selectable"?: boolean;
+        /**
+          * A property to hold the value associated with the row and the `pdsCheckbox`.
+         */
         "value"?: string;
     }
     interface PdsTabpanel {

@@ -7,10 +7,17 @@
 
 ## Properties
 
-| Property     | Attribute    | Description | Type      | Default     |
-| ------------ | ------------ | ----------- | --------- | ----------- |
-| `selectable` | `selectable` |             | `boolean` | `undefined` |
-| `value`      | `value`      |             | `string`  | `undefined` |
+| Property     | Attribute    | Description                                                                 | Type      | Default     |
+| ------------ | ------------ | --------------------------------------------------------------------------- | --------- | ----------- |
+| `selectable` | `selectable` | Prop to receive the selectable value from the `pdsTable` parent component.  | `boolean` | `undefined` |
+| `value`      | `value`      | A property to hold the value associated with the row and the `pdsCheckbox`. | `string`  | `undefined` |
+
+
+## Events
+
+| Event                 | Description                                                                      | Type                  |
+| --------------------- | -------------------------------------------------------------------------------- | --------------------- |
+| `pdsTableRowSelected` | Event that is emitted when the checkbox is clicked, carrying the selected value. | `CustomEvent<string>` |
 
 
 ## Dependencies

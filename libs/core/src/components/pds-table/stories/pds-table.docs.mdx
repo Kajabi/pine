@@ -2,7 +2,7 @@ import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
 import { html, render } from 'lit-html';
 
 import * as stories from './pds-table.stories.js';
-//import * as SortableItemStories from '../pds-sortable-item/stories/pds-sortable-item.stories.js';
+import * as TableRowStories from '../pds-table-row/stories/pds-table-row.stories.js';
 
 <Meta of={stories} />
 
@@ -13,6 +13,10 @@ The table description will go here
 ## Properties
 
 <ArgTypes of={stories} />
+
+## Table Row
+
+<ArgTypes of={TableRowStories} />
 
 ## Default
 
@@ -78,17 +82,17 @@ The table description will go here
       <pds-table-head-cell>Column Title</pds-table-head-cell>
     </pds-table-head>
     <pds-table-body>
-      <pds-table-row value="row1">
+      <pds-table-row value="row1" selectable>
         <pds-table-cell>Row Item Alpha</pds-table-cell>
         <pds-table-cell>Row Item Beta</pds-table-cell>
         <pds-table-cell>Row Item Charlie</pds-table-cell>
       </pds-table-row>
-      <pds-table-row value="row2">
+      <pds-table-row value="row2" selectable>
         <pds-table-cell>Row Item Alpha</pds-table-cell>
         <pds-table-cell>Row Item Beta</pds-table-cell>
         <pds-table-cell>Row Item Charlie</pds-table-cell>
       </pds-table-row>
-      <pds-table-row value="row3">
+      <pds-table-row value="row3" selectable>
         <pds-table-cell>Row Item Alpha</pds-table-cell>
         <pds-table-cell>Row Item Beta</pds-table-cell>
         <pds-table-cell>Row Item Charlie</pds-table-cell>
@@ -103,17 +107,17 @@ The table description will go here
       <pds-table-head-cell>Column Title</pds-table-head-cell>
     </pds-table-head>
     <pds-table-body>
-      <pds-table-row value="row1">
+      <pds-table-row value="row1" selectable>
         <pds-table-cell>Row Item Alpha</pds-table-cell>
         <pds-table-cell>Row Item Beta</pds-table-cell>
         <pds-table-cell>Row Item Charlie</pds-table-cell>
       </pds-table-row>
-      <pds-table-row value="row2">
+      <pds-table-row value="row2" selectable>
         <pds-table-cell>Row Item Alpha</pds-table-cell>
         <pds-table-cell>Row Item Beta</pds-table-cell>
         <pds-table-cell>Row Item Charlie</pds-table-cell>
       </pds-table-row>
-      <pds-table-row value="row3">
+      <pds-table-row value="row3" selectable>
         <pds-table-cell>Row Item Alpha</pds-table-cell>
         <pds-table-cell>Row Item Beta</pds-table-cell>
         <pds-table-cell>Row Item Charlie</pds-table-cell>
