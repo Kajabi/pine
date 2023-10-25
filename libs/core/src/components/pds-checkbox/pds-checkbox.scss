@@ -1,4 +1,5 @@
 :host {
+  --background-color: var(--pine-color-base-white);
   --background-color-disabled: var(--pine-color-neutral-grey-200);
   --background-color-hover: var(--pine-color-neutral-grey-100);
   --border: var(--pine-border-interactive);
@@ -51,6 +52,7 @@
 
 input {
   appearance: none;
+  background-color: var(--background-color);
   border: var(--border);
   border-radius: var(--border-radius);
   height: var(--input-size);
