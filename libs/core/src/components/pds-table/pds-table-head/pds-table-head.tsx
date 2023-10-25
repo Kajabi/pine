@@ -11,9 +11,6 @@ export class PdsTableHead {
    */
   @Prop() selectable: boolean;
 
-    // Prop to receive the selectable value from the pdsTable component
-    @Prop() selectable: boolean;
-
   render() {
     return (
       <Host role="row">
