@@ -1,3 +1,7 @@
+:root {
+  --pine-columns: 12;
+  --pine-gap: 24px;
+}
 /* Generate the class names the starting grid column
 */
 @mixin generate-column-start($columns) {
@@ -37,9 +41,23 @@ class name if a prefix exists, otherwise omit from the class name
 
 .pds-grid {
   display: grid;
-  gap: var(--pine-spacing-sm);
-  grid-template-columns: repeat(12, 1fr);
+  // todo why is pine gap not working here if no shadow DOM
+  // it is defined above in the host
+  gap: var(--pine-gap);
+  grid-template-columns: repeat(var(--pine-columns, 12), 1fr);
+  
+  > * {
+    grid-column: auto / span 12;
+  }
 }
+
+// TODO Q - SHOULD THERE BE A GRID EXPECTATION THAT IT STACKS ON XS < 576px?
+// IF NOT, THIS IS NO LONGER NEEDED
+// @media (max-width: 575px) {
+//   .pds-grid-col {
+//     grid-column: auto / span 12;
+//   }
+// }
 
 // Base Classes
 @include generate-columns(false, 12);
@@ -68,16 +86,16 @@ class name if a prefix exists, otherwise omit from the class name
 // OFFSETS <--> Start / End <--> grid-column-start / grid-columnp-end
 // the idea is to use grid-column-start based on the the user selection
 // Start Example
-.pds-grid-start-1 {
-  grid-column-start: 1;
-}
+// .pds-grid-start-1 {
+//   grid-column-start: 1;
+// }
 
 @include generate-column-start(12);
 
 // End Example
-.pds-grid-end-8 {
-  grid-column-end: 8;
-}
+// .pds-grid-end-8 {
+//   grid-column-end: 8;
+// }
 
 @include generate-column-end(12);
 
@@ -85,5 +103,58 @@ class name if a prefix exists, otherwise omit from the class name
 .pds-grid > div {
   // item should size 1 column
   // Do we want this to be 1 column or width: 100%? How to differentiate
+  // SOLUTION: an item with no class will be 1 column
 }
 
+
+// Do we add just the class for more utility or add the functionality 
+// within the component to then use the css from the class
+// Grid Column Alignment helpers
+.pds-justify-content-start {
+  justify-self: start;
+}
+
+.pds-justify-content-center {
+  justify-self: center;
+}
+
+.pds-justify-content-end {
+  justify-self: end;
+}
+
+.pds-justify-content-space-between {
+  justify-self: space-between;
+}
+
+.pds-justify-content-space-around {
+  justify-self: space-around;
+}
+
+.pds-justify-content-space-evenly {
+  justify-self: space-evenly;
+}
+
+.pds-align-items-start {
+  align-self: start;
+}
+
+.pds-align-items-center {
+  align-self: center;
+}
+
+.pds-align-items-end {
+  align-self: end;
+}
+
+.pds-align-items-stretch {
+  align-self: stretch;
+}
+
+.pds-align-items-baseline {
+  align-self: baseline;
+}
+
+// DEMO STYLES
+.pds-grid-demo .pds-grid-col {
+  border: var(--pine-border-default);
+}

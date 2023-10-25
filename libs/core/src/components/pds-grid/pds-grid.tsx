@@ -10,6 +10,11 @@ export class PdsGrid {
    */
   @Prop() componentId: string;
 
+  /**
+   * If `true`, the grid items will not wrap to the next line if horizontal space is not available.
+   */
+  @Prop() noWrap? = false;
+
   render() {
     return (
       <Host class="pds-grid">

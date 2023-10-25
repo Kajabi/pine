@@ -198,34 +198,38 @@ export namespace Components {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
+        /**
+          * If `true`, the grid items will not wrap to the next line if horizontal space is not available.
+         */
+        "noWrap"?: boolean;
     }
     interface PdsGridCol {
         /**
-          * Represents the ending grid column
+          * Represents the ending grid column. They are only used if the `colStart` is also set.
          */
         "colEnd"?: string;
         /**
-          * Represents the starting grid column
+          * Represents the starting grid column. This is used in place of offsets. Does not need `colEnd` to be set.
          */
         "colStart"?: string;
         /**
-          * Size of the column for all screen sizes
+          * Size of the column for all screen sizes that are not explicitly set.
          */
         "size"?: string;
         /**
-          * At screen sizes less than the `LG` breakpoint, this will take the number of columns specified.
+          * At screen sizes greater than the `LG` breakpoint, this will take the number of columns specified.
          */
         "sizeLg"?: string;
         /**
-          * At screen sizes less than the `MD` breakpoint, this will take the number of columns specified.
+          * At screen sizes greater than the `MD` breakpoint, this will take the number of columns specified.
          */
         "sizeMd"?: string;
         /**
-          * At screen sizes less than the `SM` breakpoint, this will take the number of columns specified.
+          * At screen sizes greater than the `SM` breakpoint, this will take the number of columns specified.
          */
         "sizeSm"?: string;
         /**
-          * Size for Extra-large screens
+          * At screen sizes greater than the `XL` breakpoint, this will take the number of columns specified.
          */
         "sizeXl"?: string;
         /**
@@ -1032,34 +1036,38 @@ declare namespace LocalJSX {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
+        /**
+          * If `true`, the grid items will not wrap to the next line if horizontal space is not available.
+         */
+        "noWrap"?: boolean;
     }
     interface PdsGridCol {
         /**
-          * Represents the ending grid column
+          * Represents the ending grid column. They are only used if the `colStart` is also set.
          */
         "colEnd"?: string;
         /**
-          * Represents the starting grid column
+          * Represents the starting grid column. This is used in place of offsets. Does not need `colEnd` to be set.
          */
         "colStart"?: string;
         /**
-          * Size of the column for all screen sizes
+          * Size of the column for all screen sizes that are not explicitly set.
          */
         "size"?: string;
         /**
-          * At screen sizes less than the `LG` breakpoint, this will take the number of columns specified.
+          * At screen sizes greater than the `LG` breakpoint, this will take the number of columns specified.
          */
         "sizeLg"?: string;
         /**
-          * At screen sizes less than the `MD` breakpoint, this will take the number of columns specified.
+          * At screen sizes greater than the `MD` breakpoint, this will take the number of columns specified.
          */
         "sizeMd"?: string;
         /**
-          * At screen sizes less than the `SM` breakpoint, this will take the number of columns specified.
+          * At screen sizes greater than the `SM` breakpoint, this will take the number of columns specified.
          */
         "sizeSm"?: string;
         /**
-          * Size for Extra-large screens
+          * At screen sizes greater than the `XL` breakpoint, this will take the number of columns specified.
          */
         "sizeXl"?: string;
         /**

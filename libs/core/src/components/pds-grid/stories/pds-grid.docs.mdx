@@ -1,0 +1,184 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import { html, render } from 'lit';
+
+import * as stories from './pds-grid.stories.js';
+import * as gridColStories from '../pds-grid-col/stories/pds-grid-col.stories.js';
+// need to create and import stories from grid col
+
+
+<Meta of={stories} />
+
+# Grid
+
+## Sub Components
+
+### Grid Item
+
+## Grid Item Properties
+<ArgTypes of={gridColStories} />
+
+## Guildlines
+
+## Properties
+<ArgTypes of={stories} />
+
+### Default
+
+<Canvas mdxSource={`
+<div class="pds-grid-demo">
+  <pds-grid>
+    <pds-grid-col size="4">Content 1</pds-grid-col>
+    <pds-grid-col size="4">Content 2</pds-grid-col>
+    <pds-grid-col size="4">Content 3</pds-grid-col>
+  </pds-grid>
+</div>
+`}>
+  <div class="pds-grid-demo">
+    <pds-grid>
+      <pds-grid-col size="4">Content 1</pds-grid-col>
+      <pds-grid-col size="4">Content 2</pds-grid-col>
+      <pds-grid-col size="4">Content 3</pds-grid-col>
+    </pds-grid>
+  </div>
+</Canvas>
+
+### Responsive
+<Canvas mdxSource={`
+<div class="pds-grid-demo">
+  <pds-grid>
+    <pds-grid-col size-xs="12" size-sm="12" size-md="6" size-lg="4" size-xl="3">Content 1</pds-grid-col>
+    <pds-grid-col size-xs="12" size-sm="12" size-md="6" size-lg="4" size-xl="3">Content 2</pds-grid-col>
+    <pds-grid-col size-xs="12" size-sm="12" size-md="6" size-lg="4" size-xl="3">Content 3</pds-grid-col>
+  </pds-grid>
+</div>
+`}>
+  <div class="pds-grid-demo">
+    <pds-grid>
+      <pds-grid-col size-xs="12" size-sm="12" size-md="6" size-lg="4" size-xl="3">Content 1</pds-grid-col>
+      <pds-grid-col size-xs="12" size-sm="12" size-md="6" size-lg="4" size-xl="3">Content 2</pds-grid-col>
+      <pds-grid-col size-xs="12" size-sm="12" size-md="6" size-lg="4" size-xl="3">Content 3</pds-grid-col>
+    </pds-grid>
+  </div>
+</Canvas>
+
+
+### Alignment
+<Canvas mdxSource={`
+<div class="pds-grid-demo">
+  <pds-grid>
+    <pds-grid-col col-start="2">Content 1</pds-grid-col>
+    <pds-grid-col size="6" class="pds-align-items-center pds-justify-content-center"><p>Content 2</p><p>Content 2</p></pds-grid-col>
+    <pds-grid-col size="4" class="pds-align-items-end">Content 3</pds-grid-col>
+  </pds-grid>
+</div>
+`}>
+  <div class="pds-grid-demo">
+    <pds-grid>
+      <pds-grid-col col-start="2">Content 1</pds-grid-col>
+      <pds-grid-col size="6" class="pds-align-items-center pds-justify-content-center"><p>Content 2</p><p>Content 2</p></pds-grid-col>
+      <pds-grid-col size="4" class="pds-align-items-end">Content 3</pds-grid-col>
+    </pds-grid>
+  </div>
+</Canvas>
+
+### Wrapping
+<Canvas mdxSource={`
+<div class="pds-grid-demo">
+  <pds-grid>
+    <pds-grid-col size="4">Content 1</pds-grid-col>
+    <pds-grid-col size="8">Content 2</pds-grid-col>
+    <pds-grid-col size="4">Content 3</pds-grid-col>
+  </pds-grid>
+</div>
+`}>
+  <div class="pds-grid-demo">
+    <pds-grid>
+      <pds-grid-col size="4">Content 1</pds-grid-col>
+      <pds-grid-col size="8">Content 2</pds-grid-col>
+      <pds-grid-col size="4">Content 3</pds-grid-col>
+    </pds-grid>
+  </div>
+</Canvas>
+
+### Nesting
+<Canvas mdxSource={`
+<div class="pds-grid-demo">
+  <pds-grid>
+    <pds-grid-col size="12" size-md="8">
+      <div>
+        <pds-grid>
+          <pds-grid-col size="12" size-xl="6">Column 1 Item 1</pds-grid-col>
+          <pds-grid-col size="12" size-xl="6">Column 1 Item 2</pds-grid-col>
+        </pds-grid>
+      </div>
+    </pds-grid-col>
+    <pds-grid-col size="12" size-md="4">
+      <div style="display: flex; align-items: center; justify-content: center; min-height:">
+        Column 2
+      </div>
+    </pds-grid-col>
+  </pds-grid>
+</div>
+`}>
+  <div class="pds-grid-demo">
+    <pds-grid>
+      <pds-grid-col size="4">
+        <div>
+          <pds-grid>
+            <pds-grid-col size-xl="6">Column 1 Item 1</pds-grid-col>
+            <pds-grid-col size-xl="6">Column 1 Item 2</pds-grid-col>
+          </pds-grid>
+        </div>
+      </pds-grid-col>
+      <pds-grid-col size="4">
+       <div >
+        Column 2
+        </div>
+      </pds-grid-col>
+      <pds-grid-col size="4">Content 3</pds-grid-col>
+    </pds-grid>
+  </div>
+</Canvas>
+
+## Additional Resources
+
+Responsive
+Currently have to put size="12" on the column to trigger the responsive, but not sure if I like that
+
+
+Start / End
+Simiar to offset, use start to denote the beginning of a column. It is meant to be paired with end to denote the end of a column. A start with no end will be size to one column
+
+End
+Think of end when spanning to the end of the grid. It is meant to be paired with start to denote the end of a column. An end with no start will be size to one column
+Setting an end only causes the grid item to be one column length, that may not be correct
+
+Grid CSS Variables
+grid columns - Allows for the familiar Bootstrap feel. The bad is that it's style based so it makes maintaining responsive changes more difficult
+grid-gap - A way to set the gap between grid items for all breakpoints via a style attribute
+
+Alignment
+When alignment is set on the grid the border gets applied to the content. This is not desireable.
+This leads me to believe the Box or Flex should be the immediate child and THAT should contain the alignment
+
+Wrapping
+If there isn't enough availabe space for the grid item, it will wrap to the next line. This is the default behavior of the grid. To prevent wrapping, use nowrap.
+Any gaps used will only apply horizontal and vertical spacing between grid items. 
+Note - When there are no sizes on the grid items, , each grid item will automatically be sized to one column with a static width.
+
+Nesting
+Nesting allows to place a grid inside of a grid. This is useful for creating more complex layouts.
+
+
+{/* <div style="
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+">
+    Column 2
+  </div> */}
+in order to achieve a centered child, we need
+div with display: flex, justify-content: center, align-items: center, and height: 100% / min-height: 100% for it to actually work
+then the child can be centered. We may need a BOX component to handle that part
+

@@ -6,17 +6,17 @@ import { Component, h, Host,  Prop } from '@stencil/core';
 })
 export class PdsGridCol {
   /**
-   * Represents the starting grid column
+   * Represents the starting grid column. This is used in place of offsets. Does not need `colEnd` to be set.
    */
   @Prop() colStart?: string;
 
   /**
-   * Represents the ending grid column
+   * Represents the ending grid column. They are only used if the `colStart` is also set.
    */
   @Prop() colEnd?: string;
 
   /**
-   * Size of the column for all screen sizes
+   * Size of the column for all screen sizes that are not explicitly set.
    */
   @Prop() size?: string;
   
@@ -26,22 +26,22 @@ export class PdsGridCol {
   @Prop() sizeXs?: string;
 
   /**
-   * At screen sizes less than the `SM` breakpoint, this will take the number of columns specified.
+   * At screen sizes greater than the `SM` breakpoint, this will take the number of columns specified.
    */
   @Prop() sizeSm?: string;
 
   /**
-   * At screen sizes less than the `MD` breakpoint, this will take the number of columns specified.
+   * At screen sizes greater than the `MD` breakpoint, this will take the number of columns specified.
    */
   @Prop() sizeMd?: string;
 
   /**
-   * At screen sizes less than the `LG` breakpoint, this will take the number of columns specified.
+   * At screen sizes greater than the `LG` breakpoint, this will take the number of columns specified.
    */
   @Prop() sizeLg?: string;
 
   /**
-   * Size for Extra-large screens
+   * At screen sizes greater than the `XL` breakpoint, this will take the number of columns specified.
    */
   @Prop() sizeXl?: string;
 
@@ -53,7 +53,7 @@ export class PdsGridCol {
       ${this.sizeLg ? `pds-grid-col-lg-${this.sizeLg}` : ''}
       ${this.sizeXl ? `pds-grid-col-xl-${this.sizeXl}` : ''}
       ${this.colStart ? `pds-grid-start-${this.colStart}` :  ''}
-      ${this.colEnd ? `pds-grid-start-${this.colEnd}` :  ''}
+      ${this.colEnd ? `pds-grid-end-${this.colEnd}` :  ''}
     `;
 
     return (
