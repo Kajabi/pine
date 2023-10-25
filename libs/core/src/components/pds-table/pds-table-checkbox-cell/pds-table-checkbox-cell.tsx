@@ -9,10 +9,9 @@ export class PdsTableCheckboxCell {
 
   render() {
     return (
-      <Host>
+      <Host role="gridcell">
         <slot></slot>
       </Host>
     );
   }
-
 }

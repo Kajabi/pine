@@ -28,17 +28,17 @@ The table description will go here
     <pds-table-head-cell>Column Title</pds-table-head-cell>
   </pds-table-head>
   <pds-table-body>
-    <pds-table-row value="row1">
+    <pds-table-row value="default1">
       <pds-table-cell>Row Item Alpha</pds-table-cell>
       <pds-table-cell>Row Item Alpha</pds-table-cell>
       <pds-table-cell>Row Item Alpha</pds-table-cell>
     </pds-table-row>
-    <pds-table-row value="row2">
+    <pds-table-row value="default4">
       <pds-table-cell>Row Item Bravo</pds-table-cell>
       <pds-table-cell>Row Item Bravo</pds-table-cell>
       <pds-table-cell>Row Item Bravo</pds-table-cell>
     </pds-table-row>
-    <pds-table-row value="row3">
+    <pds-table-row value="default3">
       <pds-table-cell>Row Item Charlie</pds-table-cell>
       <pds-table-cell>Row Item Charlie</pds-table-cell>
       <pds-table-cell>Row Item Charlie</pds-table-cell>
@@ -53,17 +53,71 @@ The table description will go here
       <pds-table-head-cell>Column Title</pds-table-head-cell>
     </pds-table-head>
     <pds-table-body>
-      <pds-table-row value="row1">
+      <pds-table-row value="default1">
         <pds-table-cell>Row Item Alpha</pds-table-cell>
         <pds-table-cell>Row Item Beta</pds-table-cell>
         <pds-table-cell>Row Item Charlie</pds-table-cell>
       </pds-table-row>
-      <pds-table-row value="row2">
+      <pds-table-row value="default2">
         <pds-table-cell>Row Item Alpha</pds-table-cell>
         <pds-table-cell>Row Item Beta</pds-table-cell>
         <pds-table-cell>Row Item Charlie</pds-table-cell>
       </pds-table-row>
-      <pds-table-row value="row3">
+      <pds-table-row value="default3">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</Canvas>
+
+## Compact
+
+<Canvas mdxSource={`
+  <pds-table component-id="compact" compact>
+    <pds-table-head>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row value="compact1">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="compact2">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="compact3">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+`}>
+  <pds-table component-id="compact" compact>
+    <pds-table-head>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row value="compact1">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="compact2">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="compact3">
         <pds-table-cell>Row Item Alpha</pds-table-cell>
         <pds-table-cell>Row Item Beta</pds-table-cell>
         <pds-table-cell>Row Item Charlie</pds-table-cell>
@@ -82,17 +136,17 @@ The table description will go here
       <pds-table-head-cell>Column Title</pds-table-head-cell>
     </pds-table-head>
     <pds-table-body>
-      <pds-table-row value="row1" selectable>
+      <pds-table-row value="selectable1">
         <pds-table-cell>Row Item Alpha</pds-table-cell>
         <pds-table-cell>Row Item Beta</pds-table-cell>
         <pds-table-cell>Row Item Charlie</pds-table-cell>
       </pds-table-row>
-      <pds-table-row value="row2" selectable>
+      <pds-table-row value="selectable2">
         <pds-table-cell>Row Item Alpha</pds-table-cell>
         <pds-table-cell>Row Item Beta</pds-table-cell>
         <pds-table-cell>Row Item Charlie</pds-table-cell>
       </pds-table-row>
-      <pds-table-row value="row3" selectable>
+      <pds-table-row value="selectable3">
         <pds-table-cell>Row Item Alpha</pds-table-cell>
         <pds-table-cell>Row Item Beta</pds-table-cell>
         <pds-table-cell>Row Item Charlie</pds-table-cell>
@@ -107,17 +161,17 @@ The table description will go here
       <pds-table-head-cell>Column Title</pds-table-head-cell>
     </pds-table-head>
     <pds-table-body>
-      <pds-table-row value="row1" selectable>
+      <pds-table-row value="selectable1">
         <pds-table-cell>Row Item Alpha</pds-table-cell>
         <pds-table-cell>Row Item Beta</pds-table-cell>
         <pds-table-cell>Row Item Charlie</pds-table-cell>
       </pds-table-row>
-      <pds-table-row value="row2" selectable>
+      <pds-table-row value="selectable2">
         <pds-table-cell>Row Item Alpha</pds-table-cell>
         <pds-table-cell>Row Item Beta</pds-table-cell>
         <pds-table-cell>Row Item Charlie</pds-table-cell>
       </pds-table-row>
-      <pds-table-row value="row3" selectable>
+      <pds-table-row value="selectable3">
         <pds-table-cell>Row Item Alpha</pds-table-cell>
         <pds-table-cell>Row Item Beta</pds-table-cell>
         <pds-table-cell>Row Item Charlie</pds-table-cell>

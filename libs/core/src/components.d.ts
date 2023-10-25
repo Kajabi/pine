@@ -476,6 +476,10 @@ export namespace Components {
     }
     interface PdsTable {
         /**
+          * Determines if table displays compact which reduces the spacing of table cells.
+         */
+        "compact": boolean;
+        /**
           * A unique identifier used for the table `id` attribute.
          */
         "componentId": string;
@@ -487,6 +491,10 @@ export namespace Components {
     interface PdsTableBody {
     }
     interface PdsTableCell {
+        /**
+          * Prop to receive the compact value from the `pdsTable` parent component.
+         */
+        "compact": boolean;
     }
     interface PdsTableCheckboxCell {
     }
@@ -497,6 +505,10 @@ export namespace Components {
         "selectable": boolean;
     }
     interface PdsTableHeadCell {
+        /**
+          * Prop to receive the compact value from the `pdsTable` parent component.
+         */
+        "compact": boolean;
     }
     interface PdsTableRow {
         /**
@@ -1479,6 +1491,10 @@ declare namespace LocalJSX {
     }
     interface PdsTable {
         /**
+          * Determines if table displays compact which reduces the spacing of table cells.
+         */
+        "compact"?: boolean;
+        /**
           * A unique identifier used for the table `id` attribute.
          */
         "componentId": string;
@@ -1490,6 +1506,10 @@ declare namespace LocalJSX {
     interface PdsTableBody {
     }
     interface PdsTableCell {
+        /**
+          * Prop to receive the compact value from the `pdsTable` parent component.
+         */
+        "compact"?: boolean;
     }
     interface PdsTableCheckboxCell {
     }
@@ -1500,6 +1520,10 @@ declare namespace LocalJSX {
         "selectable"?: boolean;
     }
     interface PdsTableHeadCell {
+        /**
+          * Prop to receive the compact value from the `pdsTable` parent component.
+         */
+        "compact"?: boolean;
     }
     interface PdsTableRow {
         /**

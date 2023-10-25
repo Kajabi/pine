@@ -3,6 +3,7 @@
   --font-size: var(--pine-font-size-body-sm);
   --line-height: var(--pine-line-height-sm);
   --padding: calc(var(--pine-spacing-md) / 2);
+  --padding-compact: var(--pine-spacing-xxs)
 
   color: var(--color);
   display: table-cell;
@@ -10,4 +11,8 @@
   line-height: var(--line-height);
   padding: var(--padding);
   vertical-align: inherit;
+}
+
+:host(.is-compact) {
+  padding-block: var(--padding-compact);
 }

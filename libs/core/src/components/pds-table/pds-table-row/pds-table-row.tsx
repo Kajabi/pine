@@ -10,14 +10,17 @@ export class PdsTableRow {
    * A property to hold the value associated with the row and the `pdsCheckbox`.
    */
   @Prop() value: string;
+
   /**
    *  Prop to receive the selectable value from the `pdsTable` parent component.
    */
   @Prop() selectable: boolean;
+
   /**
    * Event that is emitted when the checkbox is clicked, carrying the selected value.
    */
   @Event() pdsTableRowSelected: EventEmitter<string>;
+
   /**
    * A local state to track whether the row is currently selected.
    */
@@ -54,8 +57,8 @@ export class PdsTableRow {
             {/* TODO: ADD LABEL BACK TO CHECKBOX  */}
             <pds-checkbox
               componentId={this.value}
-              value={this.value}
               onClick={this.handleCheckboxClick}
+              value={this.value}
             />
           </pds-table-checkbox-cell>
         )}

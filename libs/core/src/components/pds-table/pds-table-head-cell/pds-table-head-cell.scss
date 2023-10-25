@@ -5,6 +5,7 @@
   --font-weight: var(--pine-font-weight-medium);
   --line-height: var(--pine-line-height-sm);
   --padding: calc(var(--pine-spacing-md) / 2);
+  --padding-compact: var(--pine-spacing-xxs);
 
   border-block-end: var(--border);
   color: var(--color);
@@ -16,4 +17,8 @@
   padding: var(--padding);
   text-align: start;
   vertical-align: inherit;
+}
+
+:host(.is-compact) {
+  padding-block: var(--padding-compact)
 }

@@ -8,7 +8,7 @@ describe('pds-table-checkbox-cell', () => {
       html: `<pds-table-checkbox-cell></pds-table-checkbox-cell>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-table-checkbox-cell>
+      <pds-table-checkbox-cell role="gridcell">
         <mock:shadow-root>
           <slot></slot>
         </mock:shadow-root>
