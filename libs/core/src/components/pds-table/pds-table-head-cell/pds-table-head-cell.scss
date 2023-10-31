@@ -22,3 +22,10 @@
 :host(.is-compact) {
   padding-block: var(--padding-compact)
 }
+
+:host(.is-fixed) {
+  background: #fff;
+  left: 0;
+  position: sticky;
+  z-index: 1;
+}

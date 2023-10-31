@@ -484,6 +484,10 @@ export namespace Components {
          */
         "componentId": string;
         /**
+          * Enables fixed first column which will make the first column sticky on horizontal scroll. Will also include checkbox if table is selectable.
+         */
+        "fixedColumn": boolean;
+        /**
           * Determines if table displays checkboxes for selectable rows.
          */
         "selectable": boolean;
@@ -491,10 +495,6 @@ export namespace Components {
     interface PdsTableBody {
     }
     interface PdsTableCell {
-        /**
-          * Prop to receive the compact value from the `pdsTable` parent component.
-         */
-        "compact": boolean;
     }
     interface PdsTableCheckboxCell {
     }
@@ -505,10 +505,6 @@ export namespace Components {
         "selectable": boolean;
     }
     interface PdsTableHeadCell {
-        /**
-          * Prop to receive the compact value from the `pdsTable` parent component.
-         */
-        "compact": boolean;
     }
     interface PdsTableRow {
         /**
@@ -1499,6 +1495,10 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
+          * Enables fixed first column which will make the first column sticky on horizontal scroll. Will also include checkbox if table is selectable.
+         */
+        "fixedColumn"?: boolean;
+        /**
           * Determines if table displays checkboxes for selectable rows.
          */
         "selectable"?: boolean;
@@ -1506,10 +1506,6 @@ declare namespace LocalJSX {
     interface PdsTableBody {
     }
     interface PdsTableCell {
-        /**
-          * Prop to receive the compact value from the `pdsTable` parent component.
-         */
-        "compact"?: boolean;
     }
     interface PdsTableCheckboxCell {
     }
@@ -1520,10 +1516,6 @@ declare namespace LocalJSX {
         "selectable"?: boolean;
     }
     interface PdsTableHeadCell {
-        /**
-          * Prop to receive the compact value from the `pdsTable` parent component.
-         */
-        "compact"?: boolean;
     }
     interface PdsTableRow {
         /**

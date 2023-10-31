@@ -4,3 +4,14 @@
   display: table;
   width: 100%;
 }
+
+:host(.is-responsive) {
+  background: #FFF;
+  overflow: scroll;
+  position: relative;
+  width: 400px;
+}
+
+.fixed-container {
+  white-space: nowrap;
+}
