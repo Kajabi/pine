@@ -1,4 +1,4 @@
-import { Component, Host, h } from '@stencil/core';
+import { Component, Element, Host, h } from '@stencil/core';
 
 @Component({
   tag: 'pds-table-cell',
@@ -6,10 +6,23 @@ import { Component, Host, h } from '@stencil/core';
   shadow: true,
 })
 export class PdsTableCell {
+  @Element() hostElement: HTMLPdsTableCellElement;
+  tableRef: HTMLPdsTableElement
 
+  componentWillRender() {
+    this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+  }
+
+  private classNames() {
+    const classnames = []
+    if (this.tableRef.compact)
+      classnames.push('is-compact')
+
+    return classnames.join(' ');
+  }
   render() {
     return (
-      <Host role="gridcell">
+      <Host role="gridcell" class={ this.classNames() }>
         <slot></slot>
       </Host>
     );

@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop } from '@stencil/core';
+import { Component, Element, Host, h } from '@stencil/core';
 
 @Component({
   tag: 'pds-table-head',
@@ -6,16 +6,22 @@ import { Component, Host, h, Prop } from '@stencil/core';
   shadow: true,
 })
 export class PdsTableHead {
-  /**
-   *  Prop to receive the selectable value from the `pdsTable` parent component.
-   */
-  @Prop() selectable: boolean;
+  @Element() hostElement: HTMLPdsTableHeadElement;
+  tableRef: HTMLPdsTableElement
 
+  componentWillRender() {
+    this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+
+    if ( this.tableRef.fixedColumn) {
+      const tableCell = this.hostElement.querySelector('pds-table-head-cell:first-child');
+      tableCell?.classList.add("is-fixed");
+    }
+  }
   render() {
     return (
       <Host role="row">
-        {this.selectable && (
-          <pds-table-checkbox-cell></pds-table-checkbox-cell>
+        {this.tableRef.selectable && (
+          <pds-table-checkbox-cell part="cell"></pds-table-checkbox-cell>
         )}
         <slot></slot>
       </Host>

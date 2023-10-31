@@ -5,11 +5,11 @@
 <!-- Auto Generated Below -->
 
 
-## Properties
+## Shadow Parts
 
-| Property     | Attribute    | Description                                                                | Type      | Default     |
-| ------------ | ------------ | -------------------------------------------------------------------------- | --------- | ----------- |
-| `selectable` | `selectable` | Prop to receive the selectable value from the `pdsTable` parent component. | `boolean` | `undefined` |
+| Part     | Description |
+| -------- | ----------- |
+| `"cell"` |             |
 
 
 ## Dependencies

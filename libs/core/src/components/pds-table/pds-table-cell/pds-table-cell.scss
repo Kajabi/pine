@@ -1,5 +1,6 @@
 :host {
   --color: var(--pine-color-neutral-charcoal-200);
+  --fixed-column-index: 0;
   --font-size: var(--pine-font-size-body-sm);
   --line-height: var(--pine-line-height-sm);
   --padding: calc(var(--pine-spacing-md) / 2);
@@ -11,6 +12,7 @@
   line-height: var(--line-height);
   padding: var(--padding);
   vertical-align: inherit;
+
 }
 
 :host(.is-compact) {

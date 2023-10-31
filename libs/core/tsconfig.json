@@ -2,6 +2,7 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "allowUnreachableCode": false,
+    "baseUrl": ".",
     "declaration": false,
     "experimentalDecorators": true,
     "lib": ["dom", "es2015", "es2017"],
@@ -11,6 +12,11 @@
     "module": "esnext",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "paths": {
+      "@utils/*": [
+          "src/utils/*",
+        ],
+    },
     "resolveJsonModule": true,
     "target": "es2017",
   },

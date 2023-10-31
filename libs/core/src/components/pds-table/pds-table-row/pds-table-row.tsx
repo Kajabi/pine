@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop, Event, EventEmitter, State } from '@stencil/core';
+import { Component, Element, Host, h, Prop, Event, EventEmitter, State } from '@stencil/core';
 
 @Component({
   tag: 'pds-table-row',
@@ -6,15 +6,13 @@ import { Component, Host, h, Prop, Event, EventEmitter, State } from '@stencil/c
   shadow: true,
 })
 export class PdsTableRow {
+  @Element() hostElement: HTMLPdsTableRowElement;
+  tableRef : HTMLPdsTableElement
+
   /**
    * A property to hold the value associated with the row and the `pdsCheckbox`.
    */
   @Prop() value: string;
-
-  /**
-   *  Prop to receive the selectable value from the `pdsTable` parent component.
-   */
-  @Prop() selectable: boolean;
 
   /**
    * Event that is emitted when the checkbox is clicked, carrying the selected value.
@@ -45,6 +43,15 @@ export class PdsTableRow {
     return classNames.join('  ');
   }
 
+  componentWillRender() {
+    this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement
+
+    if ( this.tableRef.fixedColumn ) {
+      const tableCell = this.hostElement.querySelector('pds-table-cell');
+      tableCell?.classList.add("is-fixed");
+    }
+  }
+
   render() {
     return (
       <Host
@@ -52,8 +59,8 @@ export class PdsTableRow {
         role="row"
         value={this.value}
       >
-        {this.selectable && (
-          <pds-table-checkbox-cell>
+        {this.tableRef.selectable && (
+          <pds-table-checkbox-cell part="cell" >
             {/* TODO: ADD LABEL BACK TO CHECKBOX  */}
             <pds-checkbox
               componentId={this.value}
