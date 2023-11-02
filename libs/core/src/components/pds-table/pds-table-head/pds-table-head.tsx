@@ -21,7 +21,10 @@ export class PdsTableHead {
     return (
       <Host role="row">
         {this.tableRef.selectable && (
-          <pds-table-checkbox-cell part="cell"></pds-table-checkbox-cell>
+          <pds-table-checkbox-cell
+            part={this.tableRef.fixedColumn ? 'cell' : ''}
+          >
+          </pds-table-checkbox-cell>
         )}
         <slot></slot>
       </Host>

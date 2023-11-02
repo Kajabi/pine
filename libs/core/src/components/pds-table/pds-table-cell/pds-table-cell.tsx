@@ -7,22 +7,29 @@ import { Component, Element, Host, h } from '@stencil/core';
 })
 export class PdsTableCell {
   @Element() hostElement: HTMLPdsTableCellElement;
-  tableRef: HTMLPdsTableElement
+  tableRef: HTMLPdsTableElement;
 
   componentWillRender() {
     this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
   }
 
   private classNames() {
-    const classnames = []
-    if (this.tableRef.compact)
-      classnames.push('is-compact')
+    const classnames = [];
+
+    if (this.tableRef.compact) {
+      classnames.push('is-compact');
+    }
 
     return classnames.join(' ');
   }
+
   render() {
     return (
-      <Host role="gridcell" class={ this.classNames() }>
+      <Host
+        class={this.classNames()}
+        role="gridcell"
+        style={this.tableRef.fixedColumn && this.tableRef.selectable ? { '--fixed-cell-position': '40px' } : {}}
+      >
         <slot></slot>
       </Host>
     );

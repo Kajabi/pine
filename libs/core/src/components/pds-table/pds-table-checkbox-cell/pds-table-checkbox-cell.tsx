@@ -1,4 +1,4 @@
-import { Component, Element, Host, h } from '@stencil/core';
+import { Component, Host, h } from '@stencil/core';
 
 @Component({
   tag: 'pds-table-checkbox-cell',
@@ -6,7 +6,6 @@ import { Component, Element, Host, h } from '@stencil/core';
   shadow: true,
 })
 export class PdsTableCheckboxCell {
-  @Element() hostElement: HTMLPdsTableCheckboxCellElement;
 
   render() {
     return (

@@ -19,13 +19,6 @@
 | `pdsTableRowSelected` | Event that is emitted when the checkbox is clicked, carrying the selected value. | `CustomEvent<string>` |
 
 
-## Shadow Parts
-
-| Part     | Description |
-| -------- | ----------- |
-| `"cell"` |             |
-
-
 ## Dependencies
 
 ### Depends on

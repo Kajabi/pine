@@ -21,7 +21,12 @@ export class PdsTable {
   @Prop() componentId!: string;
 
   /**
-   * Enables fixed first column which will make the first column sticky on horizontal scroll. Will also include checkbox if table is selectable.
+   * Enables the table to be responsive by horizontally scrolling on smaller screens.
+   */
+  @Prop() responsive: boolean;
+
+  /**
+   * Determines if table displays fixed column which fixes the first column of the table.
    */
   @Prop() fixedColumn: boolean;
 
@@ -37,6 +42,10 @@ export class PdsTable {
       classNames.push('is-compact');
     }
 
+    if (this.responsive) {
+      classNames.push('is-responsive');
+    }
+
     return classNames.join('  ');
   }
 
@@ -48,13 +57,7 @@ export class PdsTable {
         role="grid"
         selectable={this.selectable}
       >
-        {this.fixedColumn ? (
-          <div class="fixed-container">
-            <slot></slot>
-          </div>
-        ) : (
-          <slot></slot>
-        )}
+        <slot></slot>
       </Host>
     );
   }

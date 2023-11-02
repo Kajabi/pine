@@ -484,9 +484,13 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Enables fixed first column which will make the first column sticky on horizontal scroll. Will also include checkbox if table is selectable.
+          * Determines if table displays fixed column which fixes the first column of the table.
          */
         "fixedColumn": boolean;
+        /**
+          * Enables the table to be responsive by horizontally scrolling on smaller screens.
+         */
+        "responsive": boolean;
         /**
           * Determines if table displays checkboxes for selectable rows.
          */
@@ -1487,9 +1491,13 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
-          * Enables fixed first column which will make the first column sticky on horizontal scroll. Will also include checkbox if table is selectable.
+          * Determines if table displays fixed column which fixes the first column of the table.
          */
         "fixedColumn"?: boolean;
+        /**
+          * Enables the table to be responsive by horizontally scrolling on smaller screens.
+         */
+        "responsive"?: boolean;
         /**
           * Determines if table displays checkboxes for selectable rows.
          */

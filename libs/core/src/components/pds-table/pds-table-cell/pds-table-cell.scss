@@ -1,10 +1,12 @@
 :host {
+  --background-fixed: var(--pine-color-base-white);
   --color: var(--pine-color-neutral-charcoal-200);
   --fixed-column-index: 0;
   --font-size: var(--pine-font-size-body-sm);
   --line-height: var(--pine-line-height-sm);
   --padding: calc(var(--pine-spacing-md) / 2);
   --padding-compact: var(--pine-spacing-xxs);
+  --fixed-cell-position: 0;
 
   color: var(--color);
   display: table-cell;
@@ -12,7 +14,6 @@
   line-height: var(--line-height);
   padding: var(--padding);
   vertical-align: inherit;
-
 }
 
 :host(.is-compact) {
@@ -20,8 +21,8 @@
 }
 
 :host(.is-fixed) {
-  background: #fff;
-  left: 0;
+  background: var(--background-fixed);
+  left: var(--fixed-cell-position);
   position: sticky;
   z-index: 1;
 }

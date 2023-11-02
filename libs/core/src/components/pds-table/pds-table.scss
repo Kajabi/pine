@@ -1,4 +1,7 @@
 :host {
+  --background: var(--pine-color-base-white);
+
+  background: var(--background);
   border-collapse: separate;
   box-sizing: border-box;
   display: table;
@@ -6,12 +9,9 @@
 }
 
 :host(.is-responsive) {
-  background: #FFF;
-  overflow: scroll;
-  position: relative;
-  width: 400px;
-}
-
-.fixed-container {
+  display: block;
+  margin: 0 auto;
+  max-width: fit-content;
+  overflow-x: auto;
   white-space: nowrap;
 }

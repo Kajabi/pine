@@ -18,11 +18,172 @@ The table description will go here
 
 <ArgTypes of={TableRowStories} />
 
+## Default
 
-## Fixed Column
+<Canvas mdxSource={`
+  <pds-table component-id="default">
+    <pds-table-head>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row value="default1">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="default4">
+        <pds-table-cell>Row Item Bravo</pds-table-cell>
+        <pds-table-cell>Row Item Bravo</pds-table-cell>
+        <pds-table-cell>Row Item Bravo</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="default3">
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+`}>
+  <pds-table component-id="default">
+    <pds-table-head>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row value="default1">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="default2">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="default3">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</Canvas>
 
-<Canvas>
-  <pds-table component-id="fixed" fixed-column compact>
+## Compact
+
+<Canvas mdxSource={`
+  <pds-table component-id="compact" compact>
+    <pds-table-head>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row value="compact1">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="compact2">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="compact3">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+`}>
+  <pds-table component-id="compact" compact>
+    <pds-table-head>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row value="compact1">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="compact2">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="compact3">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</Canvas>
+
+## Selectable
+
+<Canvas mdxSource={`
+  <pds-table component-id="selectable" selectable>
+    <pds-table-head>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row value="selectable1">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="selectable2">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="selectable3">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+`}>
+  <pds-table component-id="selectable" selectable>
+    <pds-table-head>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row value="selectable1">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="selectable2">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="selectable3">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</Canvas>
+
+## Responsive
+
+<Canvas mdxSource={`
+<pds-table component-id="responsive" responsive>
     <pds-table-head>
       <pds-table-head-cell>Column Title</pds-table-head-cell>
       <pds-table-head-cell>Column Title</pds-table-head-cell>
@@ -38,7 +199,7 @@ The table description will go here
       <pds-table-head-cell>Column Title</pds-table-head-cell>
     </pds-table-head>
     <pds-table-body>
-      <pds-table-row value="default1">
+      <pds-table-row value="responsive1">
         <pds-table-cell>Row Item Alpha</pds-table-cell>
         <pds-table-cell>Row Item Beta</pds-table-cell>
         <pds-table-cell>Row Item Charlie</pds-table-cell>
@@ -52,7 +213,7 @@ The table description will go here
         <pds-table-cell>Row Item Lima</pds-table-cell>
         <pds-table-cell>Row Item Mike</pds-table-cell>
       </pds-table-row>
-      <pds-table-row value="default2">
+      <pds-table-row value="responsive2">
         <pds-table-cell>Row Item Alpha</pds-table-cell>
         <pds-table-cell>Row Item Beta</pds-table-cell>
         <pds-table-cell>Row Item Charlie</pds-table-cell>
@@ -66,7 +227,195 @@ The table description will go here
         <pds-table-cell>Row Item Lima</pds-table-cell>
         <pds-table-cell>Row Item Mike</pds-table-cell>
       </pds-table-row>
-      <pds-table-row value="default3">
+      <pds-table-row value="responsive3">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+        <pds-table-cell>Row Item Delta</pds-table-cell>
+        <pds-table-cell>Row Item Echo</pds-table-cell>
+        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
+        <pds-table-cell>Row Item Golf</pds-table-cell>
+        <pds-table-cell>Row Item Hotel</pds-table-cell>
+        <pds-table-cell>Row Item Juliett</pds-table-cell>
+        <pds-table-cell>Row Item Kilo</pds-table-cell>
+        <pds-table-cell>Row Item Lima</pds-table-cell>
+        <pds-table-cell>Row Item Mike</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+`}>
+  <pds-table component-id="responsive" responsive>
+    <pds-table-head>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row value="responsive1">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+        <pds-table-cell>Row Item Delta</pds-table-cell>
+        <pds-table-cell>Row Item Echo</pds-table-cell>
+        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
+        <pds-table-cell>Row Item Golf</pds-table-cell>
+        <pds-table-cell>Row Item Hotel</pds-table-cell>
+        <pds-table-cell>Row Item Juliett</pds-table-cell>
+        <pds-table-cell>Row Item Kilo</pds-table-cell>
+        <pds-table-cell>Row Item Lima</pds-table-cell>
+        <pds-table-cell>Row Item Mike</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="responsive2">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+        <pds-table-cell>Row Item Delta</pds-table-cell>
+        <pds-table-cell>Row Item Echo</pds-table-cell>
+        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
+        <pds-table-cell>Row Item Golf</pds-table-cell>
+        <pds-table-cell>Row Item Hotel</pds-table-cell>
+        <pds-table-cell>Row Item Juliett</pds-table-cell>
+        <pds-table-cell>Row Item Kilo</pds-table-cell>
+        <pds-table-cell>Row Item Lima</pds-table-cell>
+        <pds-table-cell>Row Item Mike</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="responsive3">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+        <pds-table-cell>Row Item Delta</pds-table-cell>
+        <pds-table-cell>Row Item Echo</pds-table-cell>
+        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
+        <pds-table-cell>Row Item Golf</pds-table-cell>
+        <pds-table-cell>Row Item Hotel</pds-table-cell>
+        <pds-table-cell>Row Item Juliett</pds-table-cell>
+        <pds-table-cell>Row Item Kilo</pds-table-cell>
+        <pds-table-cell>Row Item Lima</pds-table-cell>
+        <pds-table-cell>Row Item Mike</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</Canvas>
+
+
+## Fixed Column
+
+<Canvas mdxSource={`
+<pds-table component-id="fixed" responsive fixed-column>
+    <pds-table-head>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row value="fixed1">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+        <pds-table-cell>Row Item Delta</pds-table-cell>
+        <pds-table-cell>Row Item Echo</pds-table-cell>
+        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
+        <pds-table-cell>Row Item Golf</pds-table-cell>
+        <pds-table-cell>Row Item Hotel</pds-table-cell>
+        <pds-table-cell>Row Item Juliett</pds-table-cell>
+        <pds-table-cell>Row Item Kilo</pds-table-cell>
+        <pds-table-cell>Row Item Lima</pds-table-cell>
+        <pds-table-cell>Row Item Mike</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="fixed2">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+        <pds-table-cell>Row Item Delta</pds-table-cell>
+        <pds-table-cell>Row Item Echo</pds-table-cell>
+        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
+        <pds-table-cell>Row Item Golf</pds-table-cell>
+        <pds-table-cell>Row Item Hotel</pds-table-cell>
+        <pds-table-cell>Row Item Juliett</pds-table-cell>
+        <pds-table-cell>Row Item Kilo</pds-table-cell>
+        <pds-table-cell>Row Item Lima</pds-table-cell>
+        <pds-table-cell>Row Item Mike</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="fixed3">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+        <pds-table-cell>Row Item Delta</pds-table-cell>
+        <pds-table-cell>Row Item Echo</pds-table-cell>
+        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
+        <pds-table-cell>Row Item Golf</pds-table-cell>
+        <pds-table-cell>Row Item Hotel</pds-table-cell>
+        <pds-table-cell>Row Item Juliett</pds-table-cell>
+        <pds-table-cell>Row Item Kilo</pds-table-cell>
+        <pds-table-cell>Row Item Lima</pds-table-cell>
+        <pds-table-cell>Row Item Mike</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+`}>
+  <pds-table component-id="fixed" responsive fixed-column>
+    <pds-table-head>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row value="fixed1">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+        <pds-table-cell>Row Item Delta</pds-table-cell>
+        <pds-table-cell>Row Item Echo</pds-table-cell>
+        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
+        <pds-table-cell>Row Item Golf</pds-table-cell>
+        <pds-table-cell>Row Item Hotel</pds-table-cell>
+        <pds-table-cell>Row Item Juliett</pds-table-cell>
+        <pds-table-cell>Row Item Kilo</pds-table-cell>
+        <pds-table-cell>Row Item Lima</pds-table-cell>
+        <pds-table-cell>Row Item Mike</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="fixed2">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+        <pds-table-cell>Row Item Delta</pds-table-cell>
+        <pds-table-cell>Row Item Echo</pds-table-cell>
+        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
+        <pds-table-cell>Row Item Golf</pds-table-cell>
+        <pds-table-cell>Row Item Hotel</pds-table-cell>
+        <pds-table-cell>Row Item Juliett</pds-table-cell>
+        <pds-table-cell>Row Item Kilo</pds-table-cell>
+        <pds-table-cell>Row Item Lima</pds-table-cell>
+        <pds-table-cell>Row Item Mike</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="fixed3">
         <pds-table-cell>Row Item Alpha</pds-table-cell>
         <pds-table-cell>Row Item Beta</pds-table-cell>
         <pds-table-cell>Row Item Charlie</pds-table-cell>

@@ -1,5 +1,4 @@
 :host {
-  --fixed-column-index: 0
   --padding-inline: calc(var(--pine-spacing-md) / 2);
   --padding-block-start: calc(var(--pine-spacing-xxs) / 2);
   --width: var(--pine-spacing-sm);
@@ -9,9 +8,9 @@
   padding-inline: var(--padding-inline);
   vertical-align: middle;
   width: var(--width);
-
 }
 
 :host(.is-compact) {
-  padding-inline-end:0;
+  padding-inline-end: 0;
 }
+

@@ -1,12 +1,13 @@
 :host {
+  --background-fixed: var(--pine-color-base-white);
   --border: var(--pine-border-default);
   --color: var(--pine-color-neutral-charcoal-200);
-  --fixed-column-index: 0;
+  --fixed-cell-position: 0;
   --font-size: var(--pine-font-size-body-sm);
   --font-weight: var(--pine-font-weight-medium);
   --line-height: var(--pine-line-height-sm);
-  --padding: calc(var(--pine-spacing-md) / 2);
   --padding-compact: var(--pine-spacing-xxs);
+  --padding: calc(var(--pine-spacing-md) / 2);
 
   border-block-end: var(--border);
   color: var(--color);
@@ -25,8 +26,8 @@
 }
 
 :host(.is-fixed) {
-  background: #fff;
-  left: 0;
+  background: var(--background-fixed);
+  left: var(--fixed-cell-position);
   position: sticky;
   z-index: 1;
 }

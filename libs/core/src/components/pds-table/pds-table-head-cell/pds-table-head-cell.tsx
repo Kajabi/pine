@@ -7,8 +7,7 @@ import { Component, Element, Host, h } from '@stencil/core';
 })
 export class PdsTableHeadCell {
   @Element() hostElement: HTMLPdsTableHeadCellElement;
-  tableRef: HTMLPdsTableElement
-
+  tableRef: HTMLPdsTableElement;
 
   componentWillRender() {
     this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
@@ -16,7 +15,9 @@ export class PdsTableHeadCell {
 
   render() {
     return (
-      <Host role="columnheader">
+      <Host
+        role="columnheader"
+        style={this.tableRef.fixedColumn && this.tableRef.selectable ? { '--fixed-cell-position': '40px' } : {}}>
         <slot></slot>
       </Host>
     );

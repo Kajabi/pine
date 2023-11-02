@@ -1,4 +1,5 @@
 :host {
+  --background-fixed: var(--pine-color-base-white);
   --background-interactive: var(--pine-color-neutral-grey-200);
 
   border-color: inherit;
@@ -8,7 +9,7 @@
   // used for pds-checkbox-cell
   // because it is in the ShadowDom
   &::part(cell) {
-    background: #fff;
+    background-color: var(--background-fixed);
     left: 0;
     position: sticky;
     z-index: 1;
