@@ -13,9 +13,20 @@ export class PdsTableHeadCell {
     this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
   }
 
+  private classNames() {
+    const classnames = [];
+
+    if (this.tableRef && this.tableRef.compact) {
+      classnames.push('is-compact');
+    }
+
+    return classnames.join(' ');
+  }
+
   render() {
     return (
       <Host
+        class={this.classNames()}
         role="columnheader"
         style={this.tableRef && this.tableRef.fixedColumn && this.tableRef.selectable ? { '--fixed-cell-position': '40px' } : {}}>
         <slot></slot>
