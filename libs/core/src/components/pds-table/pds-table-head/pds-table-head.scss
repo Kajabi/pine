@@ -9,7 +9,7 @@
 
   // used for pds-checkbox-cell
   // because it is in the ShadowDom
-  &::part(cell) {
+  &::part(checkbox-cell) {
     background-color: var(--background-fixed);
     left: 0;
     position: sticky;

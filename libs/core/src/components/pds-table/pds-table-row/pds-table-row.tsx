@@ -61,7 +61,7 @@ export class PdsTableRow {
         value={this.value}
       >
         {this.tableRef && this.tableRef.selectable && (
-          <pds-table-checkbox-cell part={this.tableRef.fixedColumn ? 'cell' : ''} >
+          <pds-table-checkbox-cell part={this.tableRef.fixedColumn ? 'checkbox-cell' : ''} >
             {/* TODO: ADD LABEL BACK TO CHECKBOX  */}
             <pds-checkbox
               componentId={this.value}

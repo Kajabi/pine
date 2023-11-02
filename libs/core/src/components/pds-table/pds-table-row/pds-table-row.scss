@@ -8,7 +8,7 @@
 
   // used for pds-checkbox-cell
   // because it is in the ShadowDom
-  &::part(cell) {
+  &::part(checkbox-cell) {
     background-color: var(--background-fixed);
     left: 0;
     position: sticky;
@@ -17,6 +17,8 @@
 }
 
 :host(:hover),
+:host(:hover)::part(checkbox-cell),
+:host(:hover) ::slotted(pds-table-cell),
 :host(.is-selected) {
   background: var(--background-interactive);
 }
