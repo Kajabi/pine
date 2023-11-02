@@ -12,7 +12,7 @@ export class PdsTableHead {
   componentWillRender() {
     this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
 
-    if ( this.tableRef.fixedColumn) {
+    if (this.tableRef && this.tableRef.fixedColumn) {
       const tableCell = this.hostElement.querySelector('pds-table-head-cell:first-child');
       tableCell?.classList.add("is-fixed");
     }
@@ -20,10 +20,8 @@ export class PdsTableHead {
   render() {
     return (
       <Host role="row">
-        {this.tableRef.selectable && (
-          <pds-table-checkbox-cell
-            part={this.tableRef.fixedColumn ? 'cell' : ''}
-          >
+        {this.tableRef && this.tableRef.selectable && (
+          <pds-table-checkbox-cell part={this.tableRef.fixedColumn ? 'cell' : ''}>
           </pds-table-checkbox-cell>
         )}
         <slot></slot>

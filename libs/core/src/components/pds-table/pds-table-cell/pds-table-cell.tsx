@@ -16,7 +16,7 @@ export class PdsTableCell {
   private classNames() {
     const classnames = [];
 
-    if (this.tableRef.compact) {
+    if (this.tableRef && this.tableRef.compact) {
       classnames.push('is-compact');
     }
 
@@ -28,7 +28,7 @@ export class PdsTableCell {
       <Host
         class={this.classNames()}
         role="gridcell"
-        style={this.tableRef.fixedColumn && this.tableRef.selectable ? { '--fixed-cell-position': '40px' } : {}}
+        style={this.tableRef && this.tableRef.fixedColumn && this.tableRef.selectable ? { '--fixed-cell-position': '40px' } : {}}
       >
         <slot></slot>
       </Host>

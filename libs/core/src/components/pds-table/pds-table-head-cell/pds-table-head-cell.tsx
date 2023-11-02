@@ -17,7 +17,7 @@ export class PdsTableHeadCell {
     return (
       <Host
         role="columnheader"
-        style={this.tableRef.fixedColumn && this.tableRef.selectable ? { '--fixed-cell-position': '40px' } : {}}>
+        style={this.tableRef && this.tableRef.fixedColumn && this.tableRef.selectable ? { '--fixed-cell-position': '40px' } : {}}>
         <slot></slot>
       </Host>
     );

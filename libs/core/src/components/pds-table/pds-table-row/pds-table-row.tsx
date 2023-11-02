@@ -44,13 +44,14 @@ export class PdsTableRow {
   }
 
   componentWillRender() {
-    this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement
+    this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
 
-    if ( this.tableRef.fixedColumn ) {
+    if (this.tableRef && this.tableRef.fixedColumn) {
       const tableCell = this.hostElement.querySelector('pds-table-cell');
       tableCell?.classList.add("is-fixed");
     }
   }
+
 
   render() {
     return (
@@ -59,7 +60,7 @@ export class PdsTableRow {
         role="row"
         value={this.value}
       >
-        {this.tableRef.selectable && (
+        {this.tableRef && this.tableRef.selectable && (
           <pds-table-checkbox-cell part={this.tableRef.fixedColumn ? 'cell' : ''} >
             {/* TODO: ADD LABEL BACK TO CHECKBOX  */}
             <pds-checkbox
