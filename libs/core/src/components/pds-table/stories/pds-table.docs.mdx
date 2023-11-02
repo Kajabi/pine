@@ -432,3 +432,129 @@ The table description will go here
     </pds-table-body>
   </pds-table>
 </Canvas>
+
+### Fixed w/ Checkbox
+
+<Canvas mdxSource={`
+<pds-table component-id="fixedcb" responsive fixed-column selectable>
+    <pds-table-head>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row value="fixedcb1">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+        <pds-table-cell>Row Item Delta</pds-table-cell>
+        <pds-table-cell>Row Item Echo</pds-table-cell>
+        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
+        <pds-table-cell>Row Item Golf</pds-table-cell>
+        <pds-table-cell>Row Item Hotel</pds-table-cell>
+        <pds-table-cell>Row Item Juliett</pds-table-cell>
+        <pds-table-cell>Row Item Kilo</pds-table-cell>
+        <pds-table-cell>Row Item Lima</pds-table-cell>
+        <pds-table-cell>Row Item Mike</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="fixedcb2">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+        <pds-table-cell>Row Item Delta</pds-table-cell>
+        <pds-table-cell>Row Item Echo</pds-table-cell>
+        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
+        <pds-table-cell>Row Item Golf</pds-table-cell>
+        <pds-table-cell>Row Item Hotel</pds-table-cell>
+        <pds-table-cell>Row Item Juliett</pds-table-cell>
+        <pds-table-cell>Row Item Kilo</pds-table-cell>
+        <pds-table-cell>Row Item Lima</pds-table-cell>
+        <pds-table-cell>Row Item Mike</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="fixedcb3">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+        <pds-table-cell>Row Item Delta</pds-table-cell>
+        <pds-table-cell>Row Item Echo</pds-table-cell>
+        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
+        <pds-table-cell>Row Item Golf</pds-table-cell>
+        <pds-table-cell>Row Item Hotel</pds-table-cell>
+        <pds-table-cell>Row Item Juliett</pds-table-cell>
+        <pds-table-cell>Row Item Kilo</pds-table-cell>
+        <pds-table-cell>Row Item Lima</pds-table-cell>
+        <pds-table-cell>Row Item Mike</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+`}>
+  <pds-table component-id="fixedcb" responsive fixed-column selectable>
+    <pds-table-head>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row value="fixedcb1">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+        <pds-table-cell>Row Item Delta</pds-table-cell>
+        <pds-table-cell>Row Item Echo</pds-table-cell>
+        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
+        <pds-table-cell>Row Item Golf</pds-table-cell>
+        <pds-table-cell>Row Item Hotel</pds-table-cell>
+        <pds-table-cell>Row Item Juliett</pds-table-cell>
+        <pds-table-cell>Row Item Kilo</pds-table-cell>
+        <pds-table-cell>Row Item Lima</pds-table-cell>
+        <pds-table-cell>Row Item Mike</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="fixedcb2">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+        <pds-table-cell>Row Item Delta</pds-table-cell>
+        <pds-table-cell>Row Item Echo</pds-table-cell>
+        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
+        <pds-table-cell>Row Item Golf</pds-table-cell>
+        <pds-table-cell>Row Item Hotel</pds-table-cell>
+        <pds-table-cell>Row Item Juliett</pds-table-cell>
+        <pds-table-cell>Row Item Kilo</pds-table-cell>
+        <pds-table-cell>Row Item Lima</pds-table-cell>
+        <pds-table-cell>Row Item Mike</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="fixedcb3">
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+        <pds-table-cell>Row Item Delta</pds-table-cell>
+        <pds-table-cell>Row Item Echo</pds-table-cell>
+        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
+        <pds-table-cell>Row Item Golf</pds-table-cell>
+        <pds-table-cell>Row Item Hotel</pds-table-cell>
+        <pds-table-cell>Row Item Juliett</pds-table-cell>
+        <pds-table-cell>Row Item Kilo</pds-table-cell>
+        <pds-table-cell>Row Item Lima</pds-table-cell>
+        <pds-table-cell>Row Item Mike</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</Canvas>
