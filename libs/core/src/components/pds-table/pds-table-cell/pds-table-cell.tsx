@@ -1,4 +1,4 @@
-import { Component, Element, Host, h } from '@stencil/core';
+import { Component, Element, Host, Prop, h } from '@stencil/core';
 
 @Component({
   tag: 'pds-table-cell',
@@ -13,11 +13,20 @@ export class PdsTableCell {
     this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
   }
 
+  /**
+   * Truncates content to a max width of 100px and adds an ellipsis.
+   */
+  @Prop() truncate: boolean;
+
   private classNames() {
     const classnames = [];
 
     if (this.tableRef && this.tableRef.compact) {
       classnames.push('is-compact');
+    }
+
+    if (this.truncate) {
+      classnames.push('is-truncated');
     }
 
     return classnames.join(' ');

@@ -7,6 +7,7 @@
   --padding: calc(var(--pine-spacing-md) / 2);
   --padding-compact: var(--pine-spacing-xxs);
   --fixed-cell-position: 0;
+  --max-width-truncated: 100px;
 
   color: var(--color);
   display: table-cell;
@@ -25,4 +26,11 @@
   left: var(--fixed-cell-position);
   position: sticky;
   z-index: 1;
+}
+
+:host(.is-truncated) {
+  max-width: var(--max-width-truncated);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

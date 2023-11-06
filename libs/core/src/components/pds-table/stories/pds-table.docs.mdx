@@ -3,6 +3,7 @@ import { html, render } from 'lit-html';
 
 import * as stories from './pds-table.stories.js';
 import * as TableRowStories from '../pds-table-row/stories/pds-table-row.stories.js';
+import * as TableCellStories from '../pds-table-cell/stories/pds-table-cell.stories.js';
 
 <Meta of={stories} />
 
@@ -17,6 +18,10 @@ The table description will go here
 ## Table Row
 
 <ArgTypes of={TableRowStories} />
+
+## Table Cell
+
+<ArgTypes of={TableCellStories} />
 
 ## Default
 
@@ -33,7 +38,7 @@ The table description will go here
         <pds-table-cell>Row Item Alpha</pds-table-cell>
         <pds-table-cell>Row Item Alpha</pds-table-cell>
       </pds-table-row>
-      <pds-table-row value="default4">
+      <pds-table-row value="default2">
         <pds-table-cell>Row Item Bravo</pds-table-cell>
         <pds-table-cell>Row Item Bravo</pds-table-cell>
         <pds-table-cell>Row Item Bravo</pds-table-cell>
@@ -54,7 +59,7 @@ The table description will go here
     </pds-table-head>
     <pds-table-body>
       <pds-table-row value="default1">
-        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell >Row Item Alpha</pds-table-cell>
         <pds-table-cell>Row Item Beta</pds-table-cell>
         <pds-table-cell>Row Item Charlie</pds-table-cell>
       </pds-table-row>
@@ -554,6 +559,60 @@ The table description will go here
         <pds-table-cell>Row Item Kilo</pds-table-cell>
         <pds-table-cell>Row Item Lima</pds-table-cell>
         <pds-table-cell>Row Item Mike</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</Canvas>
+
+## Cell Truncation
+
+<Canvas mdxSource={`
+  <pds-table component-id="truncate">
+    <pds-table-head>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row value="truncate1">
+        <pds-table-cell truncated>Row Item Alpha</pds-table-cell>
+        <pds-table-cell truncated>Row Item Alpha</pds-table-cell>
+        <pds-table-cell truncated>Row Item Alpha</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="truncate2">
+        <pds-table-cell truncated>Row Item Bravo</pds-table-cell>
+        <pds-table-cell truncated>Row Item Bravo</pds-table-cell>
+        <pds-table-cell truncated>Row Item Bravo</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="truncate3">
+        <pds-table-cell truncated>Row Item Charlie</pds-table-cell>
+        <pds-table-cell truncated>Row Item Charlie</pds-table-cell>
+        <pds-table-cell truncated>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+`}>
+  <pds-table component-id="truncate">
+    <pds-table-head>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row value="truncate1">
+        <pds-table-cell truncate>Row Item Alpha Row Item Alpha Row Item Alpha Row Item Alpha Row Item Alpha</pds-table-cell>
+        <pds-table-cell truncate>Row Item Beta Row Item Beta Row Item Beta Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="truncate2">
+        <pds-table-cell truncate>Row Item Alpha Row Item Alpha Row Item Alpha Row Item Alpha Row Item Alpha</pds-table-cell>
+        <pds-table-cell truncate>Row Item Beta Row Item Beta Row Item Beta Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row value="truncate3">
+        <pds-table-cell truncate>Row Item Alpha Row Item Alpha Row Item Alpha Row Item Alpha Row Item Alpha</pds-table-cell>
+        <pds-table-cell truncate>Row Item Beta Row Item Beta Row Item Beta Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
       </pds-table-row>
     </pds-table-body>
   </pds-table>

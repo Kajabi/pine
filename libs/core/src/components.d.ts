@@ -499,6 +499,10 @@ export namespace Components {
     interface PdsTableBody {
     }
     interface PdsTableCell {
+        /**
+          * Truncates content to a max width of 100px and adds an ellipsis.
+         */
+        "truncate": boolean;
     }
     interface PdsTableCheckboxCell {
     }
@@ -1506,6 +1510,10 @@ declare namespace LocalJSX {
     interface PdsTableBody {
     }
     interface PdsTableCell {
+        /**
+          * Truncates content to a max width of 100px and adds an ellipsis.
+         */
+        "truncate"?: boolean;
     }
     interface PdsTableCheckboxCell {
     }
