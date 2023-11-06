@@ -30,17 +30,6 @@ const ResponsiveTemplate = (args) => html`
 
 export const Responsive = ResponsiveTemplate.bind();
 
-const CSSVariablesTemplate = (args) => html`
-<div class="pds-grid-demo">
-  <pds-grid style="--pine-columns: 3;">
-    <pds-grid-col>Content 1</pds-grid-col>
-    <pds-grid-col><p>Content 2</p><p>Content 2</p></pds-grid-col>
-    <pds-grid-col>Content 3</pds-grid-col>
-  </pds-grid>
-</div>`;
-
-export const CSSVariables = CSSVariablesTemplate.bind();
-
 // TEST EXAMPLE
 // Auto
 // Wrap
@@ -52,7 +41,7 @@ export const CSSVariables = CSSVariablesTemplate.bind();
 const AlignmentTemplate = (args) => html`
 <div class="pds-grid-demo">
   <pds-grid>
-    <pds-grid-col col-start="2">Content 1</pds-grid-col>
+    <pds-grid-col size="1">Content 1</pds-grid-col>
     <pds-grid-col size="6" class="pds-align-items-center pds-justify-content-center"><p>Content 2</p><p>Content 2</p></pds-grid-col>
     <pds-grid-col size="4" class="pds-align-items-end">Content 3</pds-grid-col>
   </pds-grid>
@@ -84,7 +73,7 @@ export const Nesting = NestingTemplate.bind();
 const KitchenSinkTemplate = (args) => html`
 <div class="pds-grid-demo">
   <pds-grid>
-    <pds-grid-col>Content 1</pds-grid-col>
+    <pds-grid-col size="1">Content 1</pds-grid-col>
     <pds-grid-col col-start="3" size="4"><p>Content 2</p><p>Content 2</p></pds-grid-col>
     <pds-grid-col col-end="12">Content 3</pds-grid-col>
   </pds-grid>

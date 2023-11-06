@@ -5,6 +5,8 @@ import { Component, h, Host,  Prop } from '@stencil/core';
   styleUrl: 'pds-grid-col.scss',
 })
 export class PdsGridCol {
+  
+  @Prop() bordered?: boolean;
   /**
    * Represents the starting grid column. This is used in place of offsets. Does not need `colEnd` to be set.
    */

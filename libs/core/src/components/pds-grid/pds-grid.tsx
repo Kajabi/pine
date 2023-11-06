@@ -16,8 +16,12 @@ export class PdsGrid {
   @Prop() noWrap? = false;
 
   render() {
+    const gridClasses = `
+      ${this.noWrap ? 'pds-grid--no-wrap' : ''}
+    `;
+
     return (
-      <Host class="pds-grid">
+      <Host class={`pds-grid ${gridClasses}`}>
       </Host>
       );
   }

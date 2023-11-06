@@ -198,10 +198,6 @@ export namespace Components {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
-        /**
-          * If `true`, the grid items will not wrap to the next line if horizontal space is not available.
-         */
-        "noWrap"?: boolean;
     }
     interface PdsGridCol {
         /**
@@ -1036,10 +1032,6 @@ declare namespace LocalJSX {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
-        /**
-          * If `true`, the grid items will not wrap to the next line if horizontal space is not available.
-         */
-        "noWrap"?: boolean;
     }
     interface PdsGridCol {
         /**

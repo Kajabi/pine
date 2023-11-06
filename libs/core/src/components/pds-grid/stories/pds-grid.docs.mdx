@@ -9,10 +9,12 @@ import * as gridColStories from '../pds-grid-col/stories/pds-grid-col.stories.js
 <Meta of={stories} />
 
 # Grid
+The Grid component is a mobile-first layout component that allows for the creation of complex layouts. It is based on the CSS Grid specification and is intended to be used in conjunction with the Grid Item component.
 
 ## Sub Components
 
 ### Grid Item
+The `pds-grid-col` component is the column component that is used to create the grid layout. It is intended to be used as a child of the `pds-grid` component.
 
 ## Grid Item Properties
 <ArgTypes of={gridColStories} />
@@ -42,7 +44,29 @@ import * as gridColStories from '../pds-grid-col/stories/pds-grid-col.stories.js
   </div>
 </Canvas>
 
+`pds-grid-col` is intended to have either a `size` or one of the responsive size props set. If neither are set, the grid item will occupy the entire row.
+<Canvas mdxSource={`
+<div class="pds-grid-demo">
+  <pds-grid>
+    <pds-grid-col size="6">Content 1</pds-grid-col>
+    <pds-grid-col>Content 2</pds-grid-col>
+    <pds-grid-col>Content 3</pds-grid-col>
+  </pds-grid>
+</div>
+`}>
+  <div class="pds-grid-demo">
+    <pds-grid>
+      <pds-grid-col size="6">Content 1</pds-grid-col>
+      <pds-grid-col>Content 2</pds-grid-col>
+      <pds-grid-col>Content 3</pds-grid-col>
+    </pds-grid>
+  </div>
+</Canvas>
+
+
+
 ### Responsive
+Use responsive size props to set the size of the grid item at different breakpoints. If a responsive size prop is not set, the grid item will default to the `size` prop. If neither are set, the grid item will occupy the entire row.
 <Canvas mdxSource={`
 <div class="pds-grid-demo">
   <pds-grid>
@@ -61,12 +85,12 @@ import * as gridColStories from '../pds-grid-col/stories/pds-grid-col.stories.js
   </div>
 </Canvas>
 
-
-### Alignment
+{/* This section will possible go into BOX component */}
+{/* ### Alignment
 <Canvas mdxSource={`
 <div class="pds-grid-demo">
   <pds-grid>
-    <pds-grid-col col-start="2">Content 1</pds-grid-col>
+    <pds-grid-col col-start="2" size="1">Content 1</pds-grid-col>
     <pds-grid-col size="6" class="pds-align-items-center pds-justify-content-center"><p>Content 2</p><p>Content 2</p></pds-grid-col>
     <pds-grid-col size="4" class="pds-align-items-end">Content 3</pds-grid-col>
   </pds-grid>
@@ -74,14 +98,23 @@ import * as gridColStories from '../pds-grid-col/stories/pds-grid-col.stories.js
 `}>
   <div class="pds-grid-demo">
     <pds-grid>
-      <pds-grid-col col-start="2">Content 1</pds-grid-col>
-      <pds-grid-col size="6" class="pds-align-items-center pds-justify-content-center"><p>Content 2</p><p>Content 2</p></pds-grid-col>
-      <pds-grid-col size="4" class="pds-align-items-end">Content 3</pds-grid-col>
+      <pds-grid-col col-start="2" size="1">Content 1</pds-grid-col>
+      <pds-grid-col size="6" class="pds-align-items-center pds-justify-content-center">
+        <div style={{border: '1px solid black'}}>
+          <p>Content 2</p><p>Content 2</p>
+        </div>
+      </pds-grid-col>
+      <pds-grid-col size="4" class="pds-align-items-end">
+        <div style={{border: '1px solid black'}}>
+          Content 3
+        </div>
+      </pds-grid-col>
     </pds-grid>
   </div>
-</Canvas>
+</Canvas> */}
 
 ### Wrapping
+Grid items will automatically wrap to the next line if there is not enough space horizontally for the grid item. Any `gap`s used will apply vertical spacing between the rows. 
 <Canvas mdxSource={`
 <div class="pds-grid-demo">
   <pds-grid>
@@ -98,7 +131,24 @@ import * as gridColStories from '../pds-grid-col/stories/pds-grid-col.stories.js
       <pds-grid-col size="4">Content 3</pds-grid-col>
     </pds-grid>
   </div>
+
+  <pds-grid border="true">
+    <pds-grid-col size="4">
+      Content 1
+    </pds-grid-col>
+    </pds-grid-col>
+    
+    <pds-grid>
+      <pds-grid-col size="8">
+        Content 2
+      </pds-grid-col>
+    </pds-grid>
+
+    <pds-grid-col size="8">Content 2</pds-grid-col>
+    <pds-grid-col size="4">Content 3</pds-grid-col>
+  </pds-grid>
 </Canvas>
+
 
 ### Nesting
 <Canvas mdxSource={`
@@ -122,7 +172,7 @@ import * as gridColStories from '../pds-grid-col/stories/pds-grid-col.stories.js
 `}>
   <div class="pds-grid-demo">
     <pds-grid>
-      <pds-grid-col size="4">
+      <pds-grid-col size="8">
         <div>
           <pds-grid>
             <pds-grid-col size-xl="6">Column 1 Item 1</pds-grid-col>
@@ -131,19 +181,15 @@ import * as gridColStories from '../pds-grid-col/stories/pds-grid-col.stories.js
         </div>
       </pds-grid-col>
       <pds-grid-col size="4">
-       <div >
-        Column 2
-        </div>
+        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100%'}}>
+          Column 2
+        </div> 
       </pds-grid-col>
-      <pds-grid-col size="4">Content 3</pds-grid-col>
     </pds-grid>
   </div>
 </Canvas>
 
 ## Additional Resources
-
-Responsive
-Currently have to put size="12" on the column to trigger the responsive, but not sure if I like that
 
 
 Start / End
@@ -153,22 +199,8 @@ End
 Think of end when spanning to the end of the grid. It is meant to be paired with start to denote the end of a column. An end with no start will be size to one column
 Setting an end only causes the grid item to be one column length, that may not be correct
 
-Grid CSS Variables
-grid columns - Allows for the familiar Bootstrap feel. The bad is that it's style based so it makes maintaining responsive changes more difficult
-grid-gap - A way to set the gap between grid items for all breakpoints via a style attribute
-
-Alignment
-When alignment is set on the grid the border gets applied to the content. This is not desireable.
-This leads me to believe the Box or Flex should be the immediate child and THAT should contain the alignment
-
-Wrapping
-If there isn't enough availabe space for the grid item, it will wrap to the next line. This is the default behavior of the grid. To prevent wrapping, use nowrap.
-Any gaps used will only apply horizontal and vertical spacing between grid items. 
-Note - When there are no sizes on the grid items, , each grid item will automatically be sized to one column with a static width.
-
 Nesting
 Nesting allows to place a grid inside of a grid. This is useful for creating more complex layouts.
-
 
 {/* <div style="
     display: flex;
