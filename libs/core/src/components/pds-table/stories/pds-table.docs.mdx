@@ -79,6 +79,8 @@ The table description will go here
 
 ## Compact
 
+A compact table is a table with a reduced row spacing. This is useful for tables with a large number of rows.
+
 <Canvas mdxSource={`
   <pds-table component-id="compact" compact>
     <pds-table-head>
@@ -133,6 +135,10 @@ The table description will go here
 
 ## Selectable
 
+When the `selectable` prop is set to `true`, the table will render a checkbox in the first column of each row.
+
+The value of the row can be set using the `value` attribute on the `pds-table-row` element which is then also used as the checkbox value.
+
 <Canvas mdxSource={`
   <pds-table component-id="selectable" selectable>
     <pds-table-head>
@@ -186,6 +192,8 @@ The table description will go here
 </Canvas>
 
 ## Responsive
+
+When the `responsive` prop is set to `true`, the table will render a horizontal scrollbar when the table width exceeds the width of the container.
 
 <Canvas mdxSource={`
 <pds-table component-id="responsive" responsive>
@@ -314,6 +322,10 @@ The table description will go here
 
 ## Fixed Column
 
+When the `fixed-column` prop is set to `true`, the first column of the table will be fixed in place while the rest of the table scrolls horizontally.
+
+**Note:** Fixed column must be used in conjunction with the `responsive` prop to enable horizontal scrolling.
+
 <Canvas mdxSource={`
 <pds-table component-id="fixed" responsive fixed-column>
     <pds-table-head>
@@ -440,6 +452,8 @@ The table description will go here
 
 ### Fixed w/ Checkbox
 
+The `fixed-column` prop can be used in conjunction with the `selectable` prop to render an addition checkbox and they will both remain fixed in place while the rest of the table scrolls horizontally.
+
 <Canvas mdxSource={`
 <pds-table component-id="fixedcb" responsive fixed-column selectable>
     <pds-table-head>
@@ -565,6 +579,8 @@ The table description will go here
 </Canvas>
 
 ## Cell Truncation
+
+When the `truncate` prop is set to `true` on a `pds-table-cell` element, the cell will truncate the text and add an ellipsis when the text exceeds the max-width (100px) of the cell.
 
 <Canvas mdxSource={`
   <pds-table component-id="truncate">
