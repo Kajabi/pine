@@ -3,7 +3,6 @@
 }
 
 .pds-box {
-
   flex-basis: 0;
   flex-grow: 1;
 }
@@ -33,6 +32,7 @@
 // Base Classes
 @include generate-columns(false, 12);
 
+// Responsive Classes
 @media (max-width: 575px) {
   @include generate-columns('xs', 12);
 }
@@ -52,3 +52,6 @@
 @media (min-width: 1200px) {
   @include generate-columns('xl', 12);
 }
+
+// Offset
+

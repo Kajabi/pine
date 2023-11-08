@@ -53,6 +53,26 @@ export namespace Components {
     }
     interface PdsBox {
         /**
+          * Defines the vertical alignment of the box items.
+         */
+        "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * If `true`, the box will have a bottom.
+         */
+        "bordered"?: boolean;
+        /**
+          * Defines the display style of the box.
+         */
+        "display"?: `flex` | `inline-flex`;
+        /**
+          * Defines the horizontal alignment of the box items.
+         */
+        "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
+        /**
+          * The minimum height of the row. Used in conjunction with alignment props
+         */
+        "minHeight"?: string;
+        /**
           * Size of the column for all screen sizes that are not explicitly set.
          */
         "size"?: string;
@@ -416,9 +436,25 @@ export namespace Components {
     }
     interface PdsRow {
         /**
+          * Defines the vertical alignment of the row items.
+         */
+        "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * If `true`, the row will have a bottom.
+         */
+        "bordered"?: boolean;
+        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
+        /**
+          * Defines the horizontal alignment of the row items.
+         */
+        "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
+        /**
+          * The minimum height of the row. Used in conjunction with alignment props
+         */
+        "minHeight"?: string;
         /**
           * If `true`, the row items will not wrap to the next line if horizontal space is not available.
          */
@@ -1106,6 +1142,26 @@ declare namespace LocalJSX {
     }
     interface PdsBox {
         /**
+          * Defines the vertical alignment of the box items.
+         */
+        "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * If `true`, the box will have a bottom.
+         */
+        "bordered"?: boolean;
+        /**
+          * Defines the display style of the box.
+         */
+        "display"?: `flex` | `inline-flex`;
+        /**
+          * Defines the horizontal alignment of the box items.
+         */
+        "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
+        /**
+          * The minimum height of the row. Used in conjunction with alignment props
+         */
+        "minHeight"?: string;
+        /**
           * Size of the column for all screen sizes that are not explicitly set.
          */
         "size"?: string;
@@ -1489,9 +1545,25 @@ declare namespace LocalJSX {
     }
     interface PdsRow {
         /**
+          * Defines the vertical alignment of the row items.
+         */
+        "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * If `true`, the row will have a bottom.
+         */
+        "bordered"?: boolean;
+        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
+        /**
+          * Defines the horizontal alignment of the row items.
+         */
+        "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
+        /**
+          * The minimum height of the row. Used in conjunction with alignment props
+         */
+        "minHeight"?: string;
         /**
           * If `true`, the row items will not wrap to the next line if horizontal space is not available.
          */

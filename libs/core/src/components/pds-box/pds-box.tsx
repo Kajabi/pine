@@ -6,6 +6,31 @@ import { Component, h, Host, Prop } from '@stencil/core';
 })
 export class PdsBox {
   /**
+   * Defines the vertical alignment of the box items.
+  */
+  @Prop() alignItems?: `start` | `center` | `end` | `baseline` | `stretch`;
+
+  /**
+   * If `true`, the box will have a bottom.
+   */
+  @Prop() bordered? = false;
+  
+  /**
+   * Defines the display style of the box.
+  */
+  @Prop() display?: `flex` | `inline-flex`;
+
+  /**
+   * Defines the horizontal alignment of the box items.
+  */
+  @Prop() justifyContent?: `start` | `center` | `end` | `space-between` | `space-around`;
+
+  /**
+   * The minimum height of the row. Used in conjunction with alignment props
+   */
+  @Prop() minHeight?: string;
+  
+  /**
    * Size of the column for all screen sizes that are not explicitly set.
    */
   @Prop() size?: string;
@@ -37,6 +62,9 @@ export class PdsBox {
 
   render() {
     const boxClasses = `
+      ${this.alignItems ? `pds-align-items-${this.alignItems}` : ''}
+      ${this.display ? `pds-display-${this.display}` : ''}
+      ${this.justifyContent ? `pds-justify-content-${this.justifyContent}` : ''}
       ${this.size ? `pds-box pds-box-${this.size}` : ''}
       ${this.sizeSm ? `pds-box-sm-${this.sizeSm}` : ''}
       ${this.sizeMd ? `pds-box-md-${this.sizeMd}` : ''}
@@ -44,8 +72,13 @@ export class PdsBox {
       ${this.sizeXl ? `pds-box-xl-${this.sizeXl}` : ''}
       ${!this.size && !this.sizeSm && !this.sizeMd && !this.sizeLg && !this.sizeXl ? 'pds-box' : ''}
     `;
+
+    const boxInlineStyles = {
+      ...(this.minHeight && { 'min-height': this.minHeight }),
+    };
+
     return (
-      <Host class={boxClasses}>
+      <Host class={boxClasses} style={boxInlineStyles}>
       </Host>
     );
   }
