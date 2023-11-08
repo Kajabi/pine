@@ -51,6 +51,32 @@ export namespace Components {
          */
         "variant"?: 'customer' | 'admin';
     }
+    interface PdsBox {
+        /**
+          * Size of the column for all screen sizes that are not explicitly set.
+         */
+        "size"?: string;
+        /**
+          * At screen sizes greater than the `LG` breakpoint, this will take the number of columns specified.
+         */
+        "sizeLg"?: string;
+        /**
+          * At screen sizes greater than the `MD` breakpoint, this will take the number of columns specified.
+         */
+        "sizeMd"?: string;
+        /**
+          * At screen sizes greater than the `SM` breakpoint, this will take the number of columns specified.
+         */
+        "sizeSm"?: string;
+        /**
+          * At screen sizes greater than the `XL` breakpoint, this will take the number of columns specified.
+         */
+        "sizeXl"?: string;
+        /**
+          * At screen sizes less than the `XS` breakpoint, this will take the number of columns specified.
+         */
+        "sizeXs"?: string;
+    }
     interface PdsButton {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -388,6 +414,16 @@ export namespace Components {
          */
         "value": string;
     }
+    interface PdsRow {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * If `true`, the row items will not wrap to the next line if horizontal space is not available.
+         */
+        "noWrap"?: boolean;
+    }
     interface PdsSortable {
         /**
           * Determines whether `sortable` should have a border.
@@ -707,6 +743,12 @@ declare global {
         prototype: HTMLPdsAvatarElement;
         new (): HTMLPdsAvatarElement;
     };
+    interface HTMLPdsBoxElement extends Components.PdsBox, HTMLStencilElement {
+    }
+    var HTMLPdsBoxElement: {
+        prototype: HTMLPdsBoxElement;
+        new (): HTMLPdsBoxElement;
+    };
     interface HTMLPdsButtonElement extends Components.PdsButton, HTMLStencilElement {
     }
     var HTMLPdsButtonElement: {
@@ -821,6 +863,12 @@ declare global {
     var HTMLPdsRadioElement: {
         prototype: HTMLPdsRadioElement;
         new (): HTMLPdsRadioElement;
+    };
+    interface HTMLPdsRowElement extends Components.PdsRow, HTMLStencilElement {
+    }
+    var HTMLPdsRowElement: {
+        prototype: HTMLPdsRowElement;
+        new (): HTMLPdsRowElement;
     };
     interface HTMLPdsSortableElementEventMap {
         "pdsSortableItemMoved": any;
@@ -986,6 +1034,7 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "pds-avatar": HTMLPdsAvatarElement;
+        "pds-box": HTMLPdsBoxElement;
         "pds-button": HTMLPdsButtonElement;
         "pds-checkbox": HTMLPdsCheckboxElement;
         "pds-chip": HTMLPdsChipElement;
@@ -996,6 +1045,7 @@ declare global {
         "pds-link": HTMLPdsLinkElement;
         "pds-progress": HTMLPdsProgressElement;
         "pds-radio": HTMLPdsRadioElement;
+        "pds-row": HTMLPdsRowElement;
         "pds-sortable": HTMLPdsSortableElement;
         "pds-sortable-item": HTMLPdsSortableItemElement;
         "pds-switch": HTMLPdsSwitchElement;
@@ -1053,6 +1103,32 @@ declare namespace LocalJSX {
           * @defaultValue customer
          */
         "variant"?: 'customer' | 'admin';
+    }
+    interface PdsBox {
+        /**
+          * Size of the column for all screen sizes that are not explicitly set.
+         */
+        "size"?: string;
+        /**
+          * At screen sizes greater than the `LG` breakpoint, this will take the number of columns specified.
+         */
+        "sizeLg"?: string;
+        /**
+          * At screen sizes greater than the `MD` breakpoint, this will take the number of columns specified.
+         */
+        "sizeMd"?: string;
+        /**
+          * At screen sizes greater than the `SM` breakpoint, this will take the number of columns specified.
+         */
+        "sizeSm"?: string;
+        /**
+          * At screen sizes greater than the `XL` breakpoint, this will take the number of columns specified.
+         */
+        "sizeXl"?: string;
+        /**
+          * At screen sizes less than the `XS` breakpoint, this will take the number of columns specified.
+         */
+        "sizeXs"?: string;
     }
     interface PdsButton {
         /**
@@ -1411,6 +1487,16 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
+    interface PdsRow {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * If `true`, the row items will not wrap to the next line if horizontal space is not available.
+         */
+        "noWrap"?: boolean;
+    }
     interface PdsSortable {
         /**
           * Determines whether `sortable` should have a border.
@@ -1697,6 +1783,7 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "pds-avatar": PdsAvatar;
+        "pds-box": PdsBox;
         "pds-button": PdsButton;
         "pds-checkbox": PdsCheckbox;
         "pds-chip": PdsChip;
@@ -1707,6 +1794,7 @@ declare namespace LocalJSX {
         "pds-link": PdsLink;
         "pds-progress": PdsProgress;
         "pds-radio": PdsRadio;
+        "pds-row": PdsRow;
         "pds-sortable": PdsSortable;
         "pds-sortable-item": PdsSortableItem;
         "pds-switch": PdsSwitch;
@@ -1728,6 +1816,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "pds-avatar": LocalJSX.PdsAvatar & JSXBase.HTMLAttributes<HTMLPdsAvatarElement>;
+            "pds-box": LocalJSX.PdsBox & JSXBase.HTMLAttributes<HTMLPdsBoxElement>;
             "pds-button": LocalJSX.PdsButton & JSXBase.HTMLAttributes<HTMLPdsButtonElement>;
             "pds-checkbox": LocalJSX.PdsCheckbox & JSXBase.HTMLAttributes<HTMLPdsCheckboxElement>;
             "pds-chip": LocalJSX.PdsChip & JSXBase.HTMLAttributes<HTMLPdsChipElement>;
@@ -1738,6 +1827,7 @@ declare module "@stencil/core" {
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
             "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-radio": LocalJSX.PdsRadio & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
+            "pds-row": LocalJSX.PdsRow & JSXBase.HTMLAttributes<HTMLPdsRowElement>;
             "pds-sortable": LocalJSX.PdsSortable & JSXBase.HTMLAttributes<HTMLPdsSortableElement>;
             "pds-sortable-item": LocalJSX.PdsSortableItem & JSXBase.HTMLAttributes<HTMLPdsSortableItemElement>;
             "pds-switch": LocalJSX.PdsSwitch & JSXBase.HTMLAttributes<HTMLPdsSwitchElement>;
