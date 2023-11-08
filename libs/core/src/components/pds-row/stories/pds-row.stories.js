@@ -29,7 +29,7 @@ const SizeTemplate = (args) => html`
 <pds-row
   component-id="${args.componentId}" 
 >
-  <pds-box size="2">Item 1</pds-box>
+  <pds-box offset="1" size="1">Item 1</pds-box>
   <pds-box size="8">Item 2</pds-box>
   <pds-box size="2">Item 3</pds-box>
 </pds-row>
@@ -69,8 +69,15 @@ const NestedTemplate = (args) => html`
       <pds-box size-xl="6">Column 1 Item 2</pds-box>
     </pds-row>
   </pds-box>
-  <pds-box size-md="4">
-    <pds-box>
+  <pds-box
+    display="flex"
+    size-md="4"
+  >
+    <pds-box
+      display="flex"
+      align-items="center"
+      justify-content="center"
+    >
       Column 2
     </pds-box>
   </pds-box>
@@ -81,3 +88,29 @@ export const Nested = NestedTemplate.bind();
 Nested.args = {
   componentId: 'opt0',
 };
+
+const OffsetTemplate = (args) => html`
+<pds-row
+  component-id="${args.componentId}" 
+>
+  <pds-box size="4">Item 1</pds-box>
+  <pds-box offset="4" size="4">Item 2</pds-box>
+</pds-row>
+<pds-row
+  component-id="${args.componentId}" 
+>
+  <pds-box size-md="4">Item 1</pds-box>
+  <pds-box offset-md="4" size-md="4">Item 2</pds-box>
+</pds-row>
+<pds-row
+  component-id="${args.componentId}" 
+>
+  <pds-box offset="3" offset-xs="2" size="6" size-xs="8">Item 1</pds-box>
+</pds-row>
+`;
+
+export const Offset = OffsetTemplate.bind();
+Offset.args = {
+  componentId: 'opt0',
+};
+

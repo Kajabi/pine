@@ -29,10 +29,45 @@
   }
 }
 
-// Base Classes
+@mixin generate-column-offsets($prefix, $columns) {
+  @for $i from 1 through $columns {
+    /* stylelint-disable-next-line function-no-unknown */
+    $class-name: if($prefix, 'pds-box-offset-#{$prefix}-#{$i}', 'pds-box-offset-#{$i}');
+    .#{$class-name} {
+      margin-inline-start: calc($i / $columns * 100%); 
+    }
+  }
+}
+
+// Base offset classes
+@include generate-column-offsets(false, 12);
+
+// Responsive offset classes
+@media (max-width: 575px) {
+  @include generate-column-offsets('xs', 12);
+}
+
+@media (min-width: 576px) {
+  @include generate-column-offsets('sm', 12);
+}
+
+@media (min-width: 768px) {
+  @include generate-column-offsets('md', 12);
+}
+
+@media (min-width: 992px) {
+  @include generate-column-offsets('lg', 12);
+}
+
+@media (min-width: 1200px) {
+  @include generate-column-offsets('xl', 12);
+}
+
+
+// Base column width classes
 @include generate-columns(false, 12);
 
-// Responsive Classes
+// Responsive column width classes
 @media (max-width: 575px) {
   @include generate-columns('xs', 12);
 }

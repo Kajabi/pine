@@ -73,6 +73,30 @@ export namespace Components {
          */
         "minHeight"?: string;
         /**
+          * Move columns to the end direction of the row for all screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offset"?: string;
+        /**
+          * Move columns to the end direction of the row for `LG` screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offsetLg"?: string;
+        /**
+          * Move columns to the end direction of the row for `MD` screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offsetMd"?: string;
+        /**
+          * Move columns to the end direction of the row for `SM` screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offsetSm"?: string;
+        /**
+          * Move columns to the end direction of the row for `XL` screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offsetXl"?: string;
+        /**
+          * Move columns to the end direction of the row for `XS` screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offsetXs"?: string;
+        /**
           * Size of the column for all screen sizes that are not explicitly set.
          */
         "size"?: string;
@@ -1161,6 +1185,30 @@ declare namespace LocalJSX {
           * The minimum height of the row. Used in conjunction with alignment props
          */
         "minHeight"?: string;
+        /**
+          * Move columns to the end direction of the row for all screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offset"?: string;
+        /**
+          * Move columns to the end direction of the row for `LG` screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offsetLg"?: string;
+        /**
+          * Move columns to the end direction of the row for `MD` screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offsetMd"?: string;
+        /**
+          * Move columns to the end direction of the row for `SM` screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offsetSm"?: string;
+        /**
+          * Move columns to the end direction of the row for `XL` screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offsetXl"?: string;
+        /**
+          * Move columns to the end direction of the row for `XS` screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offsetXs"?: string;
         /**
           * Size of the column for all screen sizes that are not explicitly set.
          */

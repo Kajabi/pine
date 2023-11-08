@@ -31,6 +31,36 @@ export class PdsBox {
   @Prop() minHeight?: string;
   
   /**
+   * Move columns to the end direction of the row for all screen sizes. Increases the starting margin of a column by specified number of columns.
+   */
+  @Prop() offset?: string;
+
+  /**
+   * Move columns to the end direction of the row for `XS` screen sizes. Increases the starting margin of a column by specified number of columns.
+  */
+  @Prop() offsetXs?: string;
+
+  /**
+   * Move columns to the end direction of the row for `SM` screen sizes. Increases the starting margin of a column by specified number of columns.
+  */
+  @Prop() offsetSm?: string;
+
+  /**
+   * Move columns to the end direction of the row for `MD` screen sizes. Increases the starting margin of a column by specified number of columns.
+  */
+  @Prop() offsetMd?: string;
+
+  /**
+   * Move columns to the end direction of the row for `LG` screen sizes. Increases the starting margin of a column by specified number of columns.
+  */
+  @Prop() offsetLg?: string;
+
+  /**
+   * Move columns to the end direction of the row for `XL` screen sizes. Increases the starting margin of a column by specified number of columns.
+  */
+  @Prop() offsetXl?: string;
+
+  /**
    * Size of the column for all screen sizes that are not explicitly set.
    */
   @Prop() size?: string;
@@ -65,7 +95,14 @@ export class PdsBox {
       ${this.alignItems ? `pds-align-items-${this.alignItems}` : ''}
       ${this.display ? `pds-display-${this.display}` : ''}
       ${this.justifyContent ? `pds-justify-content-${this.justifyContent}` : ''}
+      ${this.offset ? `pds-box-offset-${this.offset}` : ''}
+      ${this.offsetXs ? `pds-box-offset-xs-${this.offsetXs}` : ''}
+      ${this.offsetSm ? `pds-box-offset-sm-${this.offsetSm}` : ''}
+      ${this.offsetMd ? `pds-box-offset-md-${this.offsetMd}` : ''}
+      ${this.offsetLg ? `pds-box-offset-lg-${this.offsetLg}` : ''}
+      ${this.offsetXl ? `pds-box-offset-xl-${this.offsetXl}` : ''}
       ${this.size ? `pds-box pds-box-${this.size}` : ''}
+      ${this.sizeXs ? `pds-box-xs-${this.sizeXs}` : ''}
       ${this.sizeSm ? `pds-box-sm-${this.sizeSm}` : ''}
       ${this.sizeMd ? `pds-box-md-${this.sizeMd}` : ''}
       ${this.sizeLg ? `pds-box-lg-${this.sizeLg}` : ''}
