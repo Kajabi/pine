@@ -49,6 +49,7 @@ export class PdsRow {
 
     return (
       <Host class={`pds-row ${rowClasses}`} style={rowInlineStyles}>
+        {/* ie gap: 6px - we need to have a parent element with margin-left: -12px and child element with margin-left: 12px. */}
       </Host>
       );
   }

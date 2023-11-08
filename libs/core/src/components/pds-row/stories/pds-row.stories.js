@@ -16,7 +16,6 @@ const BaseTemplate = (args) => html`
     <p>Content 1</p>
     <p>Content 2</p>
   </pds-box>
-  <pds-box>Item 3</pds-box>
 </pds-row>
 `;
 
@@ -29,9 +28,15 @@ const SizeTemplate = (args) => html`
 <pds-row
   component-id="${args.componentId}" 
 >
-  <pds-box offset="1" size="1">Item 1</pds-box>
+  <pds-box size="2">Item 1</pds-box>
   <pds-box size="8">Item 2</pds-box>
   <pds-box size="2">Item 3</pds-box>
+</pds-row>
+<pds-row
+  component-id="${args.componentId}" 
+>
+  <pds-box size="8">Item 1</pds-box>
+  <pds-box>Item 2</pds-box>
 </pds-row>
 `;
 

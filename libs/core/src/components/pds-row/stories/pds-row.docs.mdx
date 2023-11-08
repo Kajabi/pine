@@ -4,6 +4,7 @@ import * as stories from './pds-row.stories.js';
 <Meta of={stories} />
 
 # Row
+Base on 12 column flexbox-based grid system
 
 ## Properties
 
@@ -12,6 +13,7 @@ import * as stories from './pds-row.stories.js';
 ## Variants
 
 ### Default
+By default boxes with rows will be equal width if no size is specified.
 
 <Canvas mdxSource={`
 <pds-row>
@@ -52,6 +54,10 @@ import * as stories from './pds-row.stories.js';
   </pds-row>
 </Canvas>
 
+### Wrapping
+If the size values equal more than 12, the boxes will wrap to the next line.
+need demo
+
 ### Responsive
 <Canvas mdxSource={`
 <pds-row>
@@ -77,7 +83,7 @@ import * as stories from './pds-row.stories.js';
   </pds-row>
 </Canvas>
 
-### Responsive
+### Nested
 
 <Canvas mdxSource={`
 <pds-row>
@@ -87,11 +93,19 @@ import * as stories from './pds-row.stories.js';
       <pds-box size-xl="6">Column 1 Item 2</pds-box>
     </pds-row>
   </pds-box>
-  <pds-box size-md="4">
-    <pds-box>
+  <pds-box
+    display="flex"
+    size-md="4"
+  >
+    <pds-box
+      display="flex"
+      align-items="center"
+      justify-content="center"
+    >
       Column 2
     </pds-box>
   </pds-box>
+</pds-row>
 `}>
   <pds-row>
     <pds-box size-md="8">
@@ -100,10 +114,52 @@ import * as stories from './pds-row.stories.js';
         <pds-box size-xl="6">Column 1 Item 2</pds-box>
       </pds-row>
     </pds-box>
-    <pds-box size-md="4">
-      <pds-box>
+    <pds-box
+      display="flex"
+      size-md="4"
+    >
+      <pds-box
+        display="flex"
+        align-items="center"
+        justify-content="center"
+      >
         Column 2
       </pds-box>
     </pds-box>
   </pds-row>
+</Canvas>
+
+### Offsets
+<Canvas mdxSource={`
+<pds-row>
+  <pds-box size="4">Item 1</pds-box>
+  <pds-box offset="4" size="4">Item 2</pds-box>
+</pds-row>
+<pds-row>
+  <pds-box size-md="4">Item 1</pds-box>
+  <pds-box offset-md="4" size-md="4">Item 2</pds-box>
+</pds-row>
+<pds-row>
+  <pds-box offset="3" offset-xs="2" size="6" size-xs="8">Item 1</pds-box>
+</pds-row>
+`}>
+<>
+  <pds-row
+    component-id="${args.componentId}" 
+  >
+    <pds-box size="4">Item 1</pds-box>
+    <pds-box offset="4" size="4">Item 2</pds-box>
+  </pds-row>
+  <pds-row
+    component-id="${args.componentId}" 
+  >
+    <pds-box size-md="4">Item 1</pds-box>
+    <pds-box offset-md="4" size-md="4">Item 2</pds-box>
+  </pds-row>
+  <pds-row
+    component-id="${args.componentId}" 
+  >
+    <pds-box offset="3" offset-xs="2" size="6" size-xs="8">Item 1</pds-box>
+  </pds-row>
+</>
 </Canvas>
