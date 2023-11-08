@@ -6,9 +6,29 @@ import { Component, Prop, h, Host} from '@stencil/core';
 })
 export class PdsRow {
   /**
+   * Defines the vertical alignment of the row items.
+  */
+  @Prop() alignItems?: `start` | `center` | `end` | `baseline` | `stretch`;
+
+  /**
+   * If `true`, the row will have a bottom.
+   */
+  @Prop() bordered? = false;
+
+  /**
    * A unique identifier used for the underlying component `id` attribute.
    */
   @Prop() componentId: string;
+
+  /**
+   * Defines the horizontal alignment of the row items.
+  */
+  @Prop() justifyContent?: `start` | `center` | `end` | `space-between` | `space-around`;
+
+  /**
+   * The minimum height of the row. Used in conjunction with alignment props
+   */
+  @Prop() minHeight?: string;
 
   /**
    * If `true`, the row items will not wrap to the next line if horizontal space is not available.
@@ -17,11 +37,18 @@ export class PdsRow {
 
   render() {
     const rowClasses = `
+      ${this.alignItems ? `pds-align-items-${this.alignItems}` : ''}
+      ${this.bordered ? 'pds-row--bordered' : ''}
+      ${this.justifyContent ? `pds-justify-content-${this.justifyContent}` : ''}
       ${this.noWrap ? 'pds-row--no-wrap' : ''}
     `;
 
+    const rowInlineStyles = {
+      ...(this.minHeight && { 'min-height': this.minHeight }),
+    };
+
     return (
-      <Host class={`pds-row ${rowClasses}`}>
+      <Host class={`pds-row ${rowClasses}`} style={rowInlineStyles}>
       </Host>
       );
   }

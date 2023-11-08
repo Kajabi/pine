@@ -10,3 +10,62 @@
 .pds-row--no-wrap {
   flex-wrap: nowrap;
 }
+
+.pds-row--bordered {
+  border: var(--pine-border-default);
+}
+
+// Display helpers
+.pds-display-flex {
+  display: flex;
+}
+
+.pds-display-inline-flex {
+  display: inline-flex;
+}
+
+// Justify Content helpers
+.pds-justify-content-start {
+  justify-content: start;
+}
+
+.pds-justify-content-center {
+  justify-content: center;
+}
+
+.pds-justify-content-end {
+  justify-content: end;
+}
+
+.pds-justify-content-space-between {
+  justify-content: space-between;
+}
+
+.pds-justify-content-space-around {
+  justify-content: space-around;
+}
+
+.pds-justify-content-space-evenly {
+  justify-content: space-evenly;
+}
+
+// Align Items helpers
+.pds-align-items-start {
+  align-items: start;
+}
+
+.pds-align-items-center {
+  align-items: center;
+}
+
+.pds-align-items-end {
+  align-items: end;
+}
+
+.pds-align-items-stretch {
+  align-items: stretch;
+}
+
+.pds-align-items-baseline {
+  align-items: baseline;
+}
