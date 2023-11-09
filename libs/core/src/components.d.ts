@@ -509,6 +509,10 @@ export namespace Components {
     interface PdsTableHead {
     }
     interface PdsTableHeadCell {
+        /**
+          * Determines whether the table column is sortable when set to `true`.
+         */
+        "sortable": boolean;
     }
     interface PdsTableRow {
         /**
@@ -679,6 +683,10 @@ export interface PdsSwitchCustomEvent<T> extends CustomEvent<T> {
 export interface PdsTabCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsTabElement;
+}
+export interface PdsTableHeadCellCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsTableHeadCellElement;
 }
 export interface PdsTableRowCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1520,6 +1528,14 @@ declare namespace LocalJSX {
     interface PdsTableHead {
     }
     interface PdsTableHeadCell {
+        /**
+          * Event emitted to signal that a table column header has been sorted, providing information about the sorted column's name and sorting direction.
+         */
+        "onPdsTableHeadCellSorted"?: (event: PdsTableHeadCellCustomEvent<{ column: string; direction: string }>) => void;
+        /**
+          * Determines whether the table column is sortable when set to `true`.
+         */
+        "sortable"?: boolean;
     }
     interface PdsTableRow {
         /**

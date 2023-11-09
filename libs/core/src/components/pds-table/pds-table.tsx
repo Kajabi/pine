@@ -1,5 +1,4 @@
-import { Component, Element, Host, h, Prop } from '@stencil/core';
-
+import { Component, Element, Host, h, Prop, State, Listen } from '@stencil/core';
 
 @Component({
   tag: 'pds-table',
@@ -35,6 +34,13 @@ export class PdsTable {
    */
   @Prop() selectable: boolean;
 
+  @State() sortingColumn: string | null = null;
+  @State() sortingDirection: 'asc' | 'desc' = 'asc';
+
+  componentWillLoad() {
+    this.sortingColumn = null;
+  }
+
   private classNames() {
     const classNames = ['pds-table'];
 
@@ -47,6 +53,74 @@ export class PdsTable {
     }
 
     return classNames.join('  ');
+  }
+
+  private sortTable(column: string, direction: 'asc' | 'desc') {
+    // Create an array to hold the table data
+    const tableData = [];
+
+    // Get the rows in the table
+    const tableRows = this.el.querySelectorAll('pds-table-row');
+
+    // Find the column index based on the column name
+    const columnHeaderCells: HTMLElement[] = Array.from(
+      this.el.querySelectorAll('pds-table-head-cell[sortable]')
+    );
+
+    const columnHeaderCell = columnHeaderCells.find(
+      (cell) => cell.innerText.trim() === column
+    );
+
+    if (!columnHeaderCell) {
+      console.warn(`Column "${column}" not found.`);
+      return;
+    }
+
+    const columnIndex = columnHeaderCells.indexOf(columnHeaderCell);
+
+    // Loop through the rows
+    tableRows.forEach((row) => {
+      const rowData = [];
+
+      // Get the cells in each row
+      const cells = row.querySelectorAll('pds-table-cell');
+
+      // Loop through the cells
+      cells.forEach((cell) => {
+        rowData.push(cell.innerHTML.trim());
+      });
+
+      tableData.push(rowData);
+    });
+
+    // Sort the table data
+    tableData.sort((a, b) => {
+      const valueA = a[columnIndex];
+      const valueB = b[columnIndex];
+
+      if (direction === 'asc') {
+        return valueA.localeCompare(valueB);
+      } else if (direction === 'desc') {
+        return valueB.localeCompare(valueA);
+      }
+      return 0;
+    });
+
+    // Update the table with the sorted data
+    tableData.forEach((rowData, index) => {
+      const cells = tableRows[index].querySelectorAll('pds-table-cell');
+      cells.forEach((cell, cellIndex) => {
+        cell.textContent = rowData[cellIndex];
+      });
+    });
+  }
+
+  @Listen('pdsTableHeadCellSorted')
+  handleTableHeadCellSorted(event: CustomEvent<{ column: string; direction: 'asc' | 'desc' }>) {
+    const { direction } = event.detail;
+    this.sortTable(event.detail.column, direction);
+    this.sortingColumn = event.detail.column;
+    this.sortingDirection = direction;
   }
 
   render() {

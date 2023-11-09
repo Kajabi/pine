@@ -31,3 +31,18 @@
   position: sticky;
   z-index: 1;
 }
+
+:host(.is-sortable) {
+  cursor: pointer;
+
+  pds-icon {
+    margin-inline-start: var(--pine-spacing-xxs);
+    padding-block-start: 2px;
+    position: absolute;
+  }
+}
+
+:host(.is-sortable:hover),
+:host(.is-active) {
+  color: var(--pine-color-neutral-charcoal-500);
+}
