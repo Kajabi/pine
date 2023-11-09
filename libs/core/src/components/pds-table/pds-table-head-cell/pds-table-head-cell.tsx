@@ -30,18 +30,21 @@ export class PdsTableHeadCell {
       const column = this.hostElement.innerText.trim();
       this.sortingDirection = this.sortingDirection === 'asc' ? 'desc' : 'asc';
 
-      // removes and then sets the active class on the table head cell
       this.tableRef.querySelectorAll('pds-table-head-cell').forEach((headCell) => {
         headCell.classList.remove('is-active');
-        this.hostElement.classList.toggle('is-active');
       });
 
+      this.hostElement.classList.toggle('is-active');
       this.pdsTableHeadCellSorted.emit({ column, direction: this.sortingDirection });
     }
   }
 
   private classNames() {
     const classNames = [];
+
+    if (this.tableRef && this.tableRef.compact) {
+      classNames.push('is-compact');
+    }
 
     if (this.sortable) {
       classNames.push('is-sortable');

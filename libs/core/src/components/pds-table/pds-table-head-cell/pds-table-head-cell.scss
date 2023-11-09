@@ -1,11 +1,14 @@
 :host {
   --background-fixed: var(--pine-color-base-white);
   --border: var(--pine-border-default);
+  --color-sorting: var(--pine-color-neutral-charcoal-500);
   --color: var(--pine-color-neutral-charcoal-200);
   --fixed-cell-position: 0;
   --font-size: var(--pine-font-size-body-sm);
   --font-weight: var(--pine-font-weight-medium);
   --line-height: var(--pine-line-height-sm);
+  --margin-arrow: var(--pine-spacing-xxs);
+  --padding-arrow: calc(var(--pine-spacing-xxs) / 2);
   --padding-compact: var(--pine-spacing-xxs);
   --padding: calc(var(--pine-spacing-md) / 2);
 
@@ -36,13 +39,13 @@
   cursor: pointer;
 
   pds-icon {
-    margin-inline-start: var(--pine-spacing-xxs);
-    padding-block-start: 2px;
+    margin-inline-start: var(--margin-arrow);
+    padding-block-start: var(--padding-arrow);
     position: absolute;
   }
 }
 
 :host(.is-sortable:hover),
 :host(.is-active) {
-  color: var(--pine-color-neutral-charcoal-500);
+  color: var(--color-sorting);
 }
