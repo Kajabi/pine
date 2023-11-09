@@ -49,6 +49,11 @@ export class PdsCheckbox {
    */
   @Prop() label: string;
 
+    /**
+   * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
+   */
+    @Prop() labelHidden: boolean;
+
   /**
    * String used for checkbox `name` attribute.
    */
@@ -105,7 +110,7 @@ export class PdsCheckbox {
           disabled={this.disabled}
           onChange={this.handleCheckboxChange}
         />
-        <PdsLabel htmlFor={this.componentId} text={this.label} />
+        <PdsLabel htmlFor={this.componentId} text={this.label} classNames={this.labelHidden ? 'visually-hidden' : ''} />
         {this.helperMessage &&
           <div
             class={'pds-checkbox__message'}

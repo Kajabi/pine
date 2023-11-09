@@ -118,6 +118,19 @@ label {
   margin-inline-start: 10px;
 }
 
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: polygon(0 0, 0 0, 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
 .pds-checkbox__message {
   color: var(--message-color);
   font-size: 14px;

@@ -115,6 +115,10 @@ export namespace Components {
          */
         "label": string;
         /**
+          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "labelHidden": boolean;
+        /**
           * String used for checkbox `name` attribute.
          */
         "name": string;
@@ -1104,6 +1108,10 @@ declare namespace LocalJSX {
           * String used for label text next to checkbox.
          */
         "label"?: string;
+        /**
+          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "labelHidden"?: boolean;
         /**
           * String used for checkbox `name` attribute.
          */
