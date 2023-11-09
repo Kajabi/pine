@@ -6,7 +6,7 @@ export default {
   argTypes: extractArgTypes('pds-table-cell'),
   component: 'pds-table-cell',
   decorators: [withActions],
-  title: 'components/Table/Table Cell',
+  title: 'components/Table/Cells',
 };
 
 const BaseTemplate = (args) => html`

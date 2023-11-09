@@ -4,6 +4,7 @@ import { html, render } from 'lit-html';
 import * as stories from './pds-table.stories.js';
 import * as TableRowStories from '../pds-table-row/stories/pds-table-row.stories.js';
 import * as TableCellStories from '../pds-table-cell/stories/pds-table-cell.stories.js';
+import * as TableHeadCellStories from '../pds-table-head-cell/stories/pds-table-head-cell.stories.js';
 
 <Meta of={stories} />
 
@@ -15,11 +16,15 @@ The table description will go here
 
 <ArgTypes of={stories} />
 
-## Table Row
+### Head Cell
+
+<ArgTypes of={TableHeadCellStories} />
+
+### Row
 
 <ArgTypes of={TableRowStories} />
 
-## Table Cell
+### Cell
 
 <ArgTypes of={TableCellStories} />
 
@@ -642,83 +647,58 @@ When the `truncate` prop is set to `true` on a `pds-table-cell` element, the cel
   <pds-table-head>
     <pds-table-head-cell sortable>Name</pds-table-head-cell>
     <pds-table-head-cell sortable>Email</pds-table-head-cell>
-    <pds-table-head-cell sortable>Email Marketing</pds-table-head-cell>
+    <pds-table-head-cell sortable>Account</pds-table-head-cell>
   </pds-table-head>
   <pds-table-body>
     <pds-table-row>
       <pds-table-cell>John Doe</pds-table-cell>
       <pds-table-cell>john.doe@example.com</pds-table-cell>
-      <pds-table-cell>Subscribed</pds-table-cell>
+      <pds-table-cell>47321</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
       <pds-table-cell>Jane Smith</pds-table-cell>
       <pds-table-cell>jane.smith@example.com</pds-table-cell>
-      <pds-table-cell>Not Subscribed</pds-table-cell>
+      <pds-table-cell>89654</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
       <pds-table-cell>Michael Johnson</pds-table-cell>
       <pds-table-cell>michael.johnson@example.com</pds-table-cell>
-      <pds-table-cell>Subscribed</pds-table-cell>
+      <pds-table-cell>21578</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
       <pds-table-cell>Susan Brown</pds-table-cell>
       <pds-table-cell>susan.brown@example.com</pds-table-cell>
-      <pds-table-cell>Not Subscribed</pds-table-cell>
+      <pds-table-cell>63920</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
       <pds-table-cell>William Davis</pds-table-cell>
       <pds-table-cell>william.davis@example.com</pds-table-cell>
-      <pds-table-cell>Subscribed</pds-table-cell>
+      <pds-table-cell>17436</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
       <pds-table-cell>Mary Wilson</pds-table-cell>
       <pds-table-cell>mary.wilson@example.com</pds-table-cell>
-      <pds-table-cell>Not Subscribed</pds-table-cell>
+      <pds-table-cell>58203</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
       <pds-table-cell>James Lee</pds-table-cell>
       <pds-table-cell>james.lee@example.com</pds-table-cell>
-      <pds-table-cell>Subscribed</pds-table-cell>
+      <pds-table-cell>92617</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
       <pds-table-cell>Linda Hall</pds-table-cell>
       <pds-table-cell>linda.hall@example.com</pds-table-cell>
-      <pds-table-cell>Not Subscribed</pds-table-cell>
+      <pds-table-cell>30456</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
       <pds-table-cell>Robert Turner</pds-table-cell>
       <pds-table-cell>robert.turner@example.com</pds-table-cell>
-      <pds-table-cell>Subscribed</pds-table-cell>
+      <pds-table-cell>71842</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
       <pds-table-cell>Elizabeth Miller</pds-table-cell>
       <pds-table-cell>elizabeth.miller@example.com</pds-table-cell>
-      <pds-table-cell>Not Subscribed</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>David White</pds-table-cell>
-      <pds-table-cell>david.white@example.com</pds-table-cell>
-      <pds-table-cell>Subscribed</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Barbara Harris</pds-table-cell>
-      <pds-table-cell>barbara.harris@example.com</pds-table-cell>
-      <pds-table-cell>Not Subscribed</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Joseph Clark</pds-table-cell>
-      <pds-table-cell>joseph.clark@example.com</pds-table-cell>
-      <pds-table-cell>Subscribed</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Margaret Lewis</pds-table-cell>
-      <pds-table-cell>margaret.lewis@example.com</pds-table-cell>
-      <pds-table-cell>Not Subscribed</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Charles Martinez</pds-table-cell>
-      <pds-table-cell>charles.martinez@example.com</pds-table-cell>
-      <pds-table-cell>Subscribed</pds-table-cell>
+      <pds-table-cell>45908</pds-table-cell>
     </pds-table-row>
   </pds-table-body>
 </pds-table>
@@ -727,83 +707,58 @@ When the `truncate` prop is set to `true` on a `pds-table-cell` element, the cel
   <pds-table-head>
     <pds-table-head-cell sortable>Name</pds-table-head-cell>
     <pds-table-head-cell sortable>Email</pds-table-head-cell>
-    <pds-table-head-cell sortable>Email Marketing</pds-table-head-cell>
+    <pds-table-head-cell sortable>Account</pds-table-head-cell>
   </pds-table-head>
   <pds-table-body>
     <pds-table-row>
       <pds-table-cell>John Doe</pds-table-cell>
       <pds-table-cell>john.doe@example.com</pds-table-cell>
-      <pds-table-cell>Subscribed</pds-table-cell>
+      <pds-table-cell>47321</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
       <pds-table-cell>Jane Smith</pds-table-cell>
       <pds-table-cell>jane.smith@example.com</pds-table-cell>
-      <pds-table-cell>Not Subscribed</pds-table-cell>
+      <pds-table-cell>89654</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
       <pds-table-cell>Michael Johnson</pds-table-cell>
       <pds-table-cell>michael.johnson@example.com</pds-table-cell>
-      <pds-table-cell>Subscribed</pds-table-cell>
+      <pds-table-cell>21578</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
       <pds-table-cell>Susan Brown</pds-table-cell>
       <pds-table-cell>susan.brown@example.com</pds-table-cell>
-      <pds-table-cell>Not Subscribed</pds-table-cell>
+      <pds-table-cell>63920</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
       <pds-table-cell>William Davis</pds-table-cell>
       <pds-table-cell>william.davis@example.com</pds-table-cell>
-      <pds-table-cell>Subscribed</pds-table-cell>
+      <pds-table-cell>17436</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
       <pds-table-cell>Mary Wilson</pds-table-cell>
       <pds-table-cell>mary.wilson@example.com</pds-table-cell>
-      <pds-table-cell>Not Subscribed</pds-table-cell>
+      <pds-table-cell>58203</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
       <pds-table-cell>James Lee</pds-table-cell>
       <pds-table-cell>james.lee@example.com</pds-table-cell>
-      <pds-table-cell>Subscribed</pds-table-cell>
+      <pds-table-cell>92617</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
       <pds-table-cell>Linda Hall</pds-table-cell>
       <pds-table-cell>linda.hall@example.com</pds-table-cell>
-      <pds-table-cell>Not Subscribed</pds-table-cell>
+      <pds-table-cell>30456</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
       <pds-table-cell>Robert Turner</pds-table-cell>
       <pds-table-cell>robert.turner@example.com</pds-table-cell>
-      <pds-table-cell>Subscribed</pds-table-cell>
+      <pds-table-cell>71842</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
       <pds-table-cell>Elizabeth Miller</pds-table-cell>
       <pds-table-cell>elizabeth.miller@example.com</pds-table-cell>
-      <pds-table-cell>Not Subscribed</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>David White</pds-table-cell>
-      <pds-table-cell>david.white@example.com</pds-table-cell>
-      <pds-table-cell>Subscribed</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Barbara Harris</pds-table-cell>
-      <pds-table-cell>barbara.harris@example.com</pds-table-cell>
-      <pds-table-cell>Not Subscribed</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Joseph Clark</pds-table-cell>
-      <pds-table-cell>joseph.clark@example.com</pds-table-cell>
-      <pds-table-cell>Subscribed</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Margaret Lewis</pds-table-cell>
-      <pds-table-cell>margaret.lewis@example.com</pds-table-cell>
-      <pds-table-cell>Not Subscribed</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Charles Martinez</pds-table-cell>
-      <pds-table-cell>charles.martinez@example.com</pds-table-cell>
-      <pds-table-cell>Subscribed</pds-table-cell>
+      <pds-table-cell>45908</pds-table-cell>
     </pds-table-row>
   </pds-table-body>
 </pds-table>

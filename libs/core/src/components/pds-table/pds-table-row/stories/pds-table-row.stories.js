@@ -11,7 +11,7 @@ export default {
       handles: ['onclick', 'pdsTableRowSelected'],
     },
   },
-  title: 'components/Table/Table Row',
+  title: 'components/Table/Rows',
 };
 
 const BaseTemplate = (args) => html`
