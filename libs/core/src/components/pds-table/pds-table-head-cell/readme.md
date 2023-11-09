@@ -14,9 +14,9 @@
 
 ## Events
 
-| Event                    | Description                                                                                                                                     | Type                                                  |
-| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| `pdsTableHeadCellSorted` | Event emitted to signal that a table column header has been sorted, providing information about the sorted column's name and sorting direction. | `CustomEvent<{ column: string; direction: string; }>` |
+| Event          | Description                                                                                                                                     | Type                                                  |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `pdsTableSort` | Event emitted to signal that a table column header has been sorted, providing information about the sorted column's name and sorting direction. | `CustomEvent<{ column: string; direction: string; }>` |
 
 
 ## Dependencies

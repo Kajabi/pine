@@ -1539,7 +1539,7 @@ declare namespace LocalJSX {
         /**
           * Event emitted to signal that a table column header has been sorted, providing information about the sorted column's name and sorting direction.
          */
-        "onPdsTableHeadCellSorted"?: (event: PdsTableHeadCellCustomEvent<{ column: string; direction: string }>) => void;
+        "onPdsTableSort"?: (event: PdsTableHeadCellCustomEvent<{ column: string; direction: string }>) => void;
         /**
           * Determines whether the table column is sortable when set to `true`.
          */

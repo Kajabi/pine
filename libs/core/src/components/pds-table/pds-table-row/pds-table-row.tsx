@@ -7,7 +7,7 @@ import { Component, Element, Host, h, Prop, Event, EventEmitter, State } from '@
 })
 export class PdsTableRow {
   @Element() hostElement: HTMLPdsTableRowElement;
-  tableRef : HTMLPdsTableElement
+  tableRef: HTMLPdsTableElement
 
   /**
    * A property to hold the value associated with the row and the `pdsCheckbox`.
@@ -52,7 +52,6 @@ export class PdsTableRow {
     }
   }
 
-
   render() {
     return (
       <Host
@@ -62,11 +61,12 @@ export class PdsTableRow {
       >
         {this.tableRef && this.tableRef.selectable && (
           <pds-table-checkbox-cell part={this.tableRef.fixedColumn ? 'checkbox-cell' : ''} >
-            {/* TODO: ADD LABEL BACK TO CHECKBOX  */}
             <pds-checkbox
               componentId={this.value}
               onClick={this.handleCheckboxClick}
               value={this.value}
+              label={this.value}
+              labelHidden={true}
             />
           </pds-table-checkbox-cell>
         )}

@@ -10,7 +10,7 @@ import * as TableHeadCellStories from '../pds-table-head-cell/stories/pds-table-
 
 # Table
 
-The table description will go here
+The table compononent should be used to display tabular data.
 
 ## Properties
 
@@ -585,7 +585,7 @@ The `fixed-column` prop can be used in conjunction with the `selectable` prop to
 
 ## Cell Truncation
 
-When the `truncate` prop is set to `true` on a `pds-table-cell` element, the cell will truncate the text and add an ellipsis when the text exceeds the max-width (100px) of the cell.
+When the `truncate` prop is set to `true` on a `pds-table-cell` element, the cell will visually truncate the text and add an ellipsis when the text exceeds the max-width (100px) of the cell.
 
 <Canvas mdxSource={`
   <pds-table component-id="truncate">
@@ -641,6 +641,9 @@ When the `truncate` prop is set to `true` on a `pds-table-cell` element, the cel
 
 ## Sorting
 
+Basic sorting can be enabled by adding the `sortable` attribute to a `pds-table-head-cell` element. The table will automatically sort in ascending or descending order when the cell is clicked.
+
+In cases where the default sorting functionality is not suitable, you can prevent it and use your own custom sorting mechanism by listening to the `pdsTableSort` event.
 
 <Canvas mdxSource={`
 <pds-table component-id="sortable">

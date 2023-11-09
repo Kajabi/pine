@@ -17,7 +17,7 @@ export class PdsTableHeadCell {
   /**
    * Event emitted to signal that a table column header has been sorted, providing information about the sorted column's name and sorting direction.
    */
-  @Event() pdsTableHeadCellSorted: EventEmitter<{ column: string; direction: string }>;
+  @Event() pdsTableSort: EventEmitter<{ column: string; direction: string }>;
 
   @State() private sortingDirection: 'asc' | 'desc' = 'asc';
 
@@ -35,7 +35,8 @@ export class PdsTableHeadCell {
       });
 
       this.hostElement.classList.toggle('is-active');
-      this.pdsTableHeadCellSorted.emit({ column, direction: this.sortingDirection });
+      this.pdsTableSort.emit({ column, direction: this.sortingDirection });
+      console.log('Event emitted: pdsTableSort', { column, direction: this.sortingDirection });
     }
   }
 
