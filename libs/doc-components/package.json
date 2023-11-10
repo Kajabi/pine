@@ -1,7 +1,12 @@
 {
   "name": "@pine-ds/doc-components",
   "version": "0.0.1",
-  "description": "Stencil Component Starter",
+  "license": "MIT",
+  "description": "Documentation Web Components used for Pine Documentation Site",
+  "keywords": [
+    "stencil",
+    "web components"
+  ],
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
   "es2015": "dist/esm/index.js",
@@ -10,17 +15,24 @@
   "collection": "dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
   "unpkg": "dist/doc-components/doc-components.esm.js",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/",
+    "directory": "dist"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ionic-team/stencil-component-starter.git"
+    "url": "git+https://github.com/Kajabi/pine.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kajab/pine/issues"
   },
   "files": [
     "dist/",
     "loader/"
   ],
   "scripts": {
-    "build": "stencil build --docs",
-    "start": "stencil build --dev --watch --serve",
+    "build.stencil": "stencil build --docs",
+    "start.stencil": "stencil build --docs --dev --watch --serve",
     "test": "stencil test --spec --e2e",
     "test.watch": "stencil test --spec --e2e --watchAll",
     "generate": "stencil generate"
@@ -35,6 +47,5 @@
     "jest": "^29.7.0",
     "jest-cli": "^29.7.0",
     "puppeteer": "21.1.1"
-  },
-  "license": "MIT"
+  }
 }
