@@ -27,6 +27,8 @@ By default boxes with rows will be equal width if no size is specified.
 `}>
   <pds-row
     component-id="${args.componentId}" 
+    gap="12px"
+    min-height="100px"
   >
     <pds-box>Item 1</pds-box>
     <pds-box>
@@ -163,3 +165,7 @@ need demo
   </pds-row>
 </>
 </Canvas>
+
+### Gaps / Gutters
+
+They required an additional Box layer for the border to appear correctly

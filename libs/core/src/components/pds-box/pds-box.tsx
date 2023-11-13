@@ -11,9 +11,20 @@ export class PdsBox {
   @Prop() alignItems?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
-   * If `true`, the box will have a bottom.
+   * If `true`, the box will have a border.
    */
   @Prop() bordered? = false;
+
+  /**
+   * Defines how rounded the box corners are.
+   */
+  @Prop() borderRadius?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
+
+  // FINISH LOGICAL PROPS during cleanup
+  // @Prop() borderRadiusStartStart?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
+  // @Prop() borderRadiusStartEnd?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
+  // @Prop() borderRadiusEndStart?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
+  // @Prop() borderRadiusEndEnd?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
   
   /**
    * Defines the display style of the box.
@@ -60,6 +71,8 @@ export class PdsBox {
   */
   @Prop() offsetXl?: string;
 
+  @Prop() shadow?: `none` | `xs`| `sm` | `md` | `lg`;
+
   /**
    * Size of the column for all screen sizes that are not explicitly set.
    */
@@ -93,6 +106,8 @@ export class PdsBox {
   render() {
     const boxClasses = `
       ${this.alignItems ? `pds-align-items-${this.alignItems}` : ''}
+      ${this.bordered ? 'pds-box--bordered' : ''}
+      ${this.borderRadius ? `pds-border-radius-${this.borderRadius}` : ''}
       ${this.display ? `pds-display-${this.display}` : ''}
       ${this.justifyContent ? `pds-justify-content-${this.justifyContent}` : ''}
       ${this.offset ? `pds-box-offset-${this.offset}` : ''}
@@ -101,6 +116,7 @@ export class PdsBox {
       ${this.offsetMd ? `pds-box-offset-md-${this.offsetMd}` : ''}
       ${this.offsetLg ? `pds-box-offset-lg-${this.offsetLg}` : ''}
       ${this.offsetXl ? `pds-box-offset-xl-${this.offsetXl}` : ''}
+      ${this.shadow ? `pds-shadow-${this.shadow}` : ''}
       ${this.size ? `pds-box pds-box-${this.size}` : ''}
       ${this.sizeXs ? `pds-box-xs-${this.sizeXs}` : ''}
       ${this.sizeSm ? `pds-box-sm-${this.sizeSm}` : ''}

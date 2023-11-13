@@ -21,6 +21,11 @@ export class PdsRow {
   @Prop() componentId: string;
 
   /**
+   * Defines the spacing between the row items.
+  */
+  @Prop() gap?: string;
+
+  /**
    * Defines the horizontal alignment of the row items.
   */
   @Prop() justifyContent?: `start` | `center` | `end` | `space-between` | `space-around`;
@@ -44,12 +49,17 @@ export class PdsRow {
     `;
 
     const rowInlineStyles = {
-      ...(this.minHeight && { 'min-height': this.minHeight }),
+      ...(this.minHeight && {
+        'min-height': this.minHeight,
+      }),
+      ...(this.gap && {
+        '--pine-gap-x': this.gap,
+        '--pine-gap-y': this.gap,
+      }),
     };
 
     return (
       <Host class={`pds-row ${rowClasses}`} style={rowInlineStyles}>
-        {/* ie gap: 6px - we need to have a parent element with margin-left: -12px and child element with margin-left: 12px. */}
       </Host>
       );
   }

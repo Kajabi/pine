@@ -57,7 +57,11 @@ export namespace Components {
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * If `true`, the box will have a bottom.
+          * Defines how rounded the box corners are.
+         */
+        "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
+        /**
+          * If `true`, the box will have a border.
          */
         "bordered"?: boolean;
         /**
@@ -96,6 +100,7 @@ export namespace Components {
           * Move columns to the end direction of the row for `XS` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
         "offsetXs"?: string;
+        "shadow"?: `none` | `xs`| `sm` | `md` | `lg`;
         /**
           * Size of the column for all screen sizes that are not explicitly set.
          */
@@ -471,6 +476,10 @@ export namespace Components {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
+        /**
+          * Defines the spacing between the row items.
+         */
+        "gap"?: string;
         /**
           * Defines the horizontal alignment of the row items.
          */
@@ -1170,7 +1179,11 @@ declare namespace LocalJSX {
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * If `true`, the box will have a bottom.
+          * Defines how rounded the box corners are.
+         */
+        "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
+        /**
+          * If `true`, the box will have a border.
          */
         "bordered"?: boolean;
         /**
@@ -1209,6 +1222,7 @@ declare namespace LocalJSX {
           * Move columns to the end direction of the row for `XS` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
         "offsetXs"?: string;
+        "shadow"?: `none` | `xs`| `sm` | `md` | `lg`;
         /**
           * Size of the column for all screen sizes that are not explicitly set.
          */
@@ -1604,6 +1618,10 @@ declare namespace LocalJSX {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
+        /**
+          * Defines the spacing between the row items.
+         */
+        "gap"?: string;
         /**
           * Defines the horizontal alignment of the row items.
          */

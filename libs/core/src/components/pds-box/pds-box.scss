@@ -8,14 +8,15 @@
 }
 
 [class*='pds-box'] {
-  border: 1px solid #ddd;
   box-sizing: border-box;
   max-width: 100%;
   min-height: 100%;
-  padding-left: 15px;
-  padding-right: 15px;
   position: relative;
   width: 100%;
+}
+
+.pds-box--bordered {
+  border: var(--pine-border-default);
 }
 
 @mixin generate-columns($prefix, $columns) {

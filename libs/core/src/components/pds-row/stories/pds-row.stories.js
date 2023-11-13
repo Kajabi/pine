@@ -10,9 +10,10 @@ export default {
 const BaseTemplate = (args) => html`
 <pds-row
   component-id="${args.componentId}" 
+  gap="8px"
 >
-  <pds-box>Item 1</pds-box>
-  <pds-box>
+  <pds-box bordered>Item 1</pds-box>
+  <pds-box bordered>
     <p>Content 1</p>
     <p>Content 2</p>
   </pds-box>
@@ -118,4 +119,38 @@ export const Offset = OffsetTemplate.bind();
 Offset.args = {
   componentId: 'opt0',
 };
+
+
+const GapTemplate = (args) => html`
+<pds-row
+  component-id="${args.componentId}" 
+  gap="24px"
+  min-height="100px"
+>
+  <pds-box size-sm="6">
+    <pds-box 
+      bordered 
+      border-radius="md"
+      display="flex"
+    >
+      Content 1
+    </pds-box>
+  </pds-box>
+  <pds-box>
+    <pds-box
+      shadow="sm"
+      border-radius="md"
+      display="flex"
+    >
+      Content 2
+    </pds-box>
+  </pds-box>
+</pds-row>
+`;
+
+export const Gap = GapTemplate.bind();
+Gap.args = {
+  componentId: 'opt0',
+};
+
 

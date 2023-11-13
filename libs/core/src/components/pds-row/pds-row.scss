@@ -1,10 +1,24 @@
 :host {
+  --pine-gap-y: 10px;
+  
   display: block;
+  margin-left: calc(var(--pine-gap-x) * -0.5);
+  margin-right: calc(var(--pine-gap-x) * -0.5);
+  margin-top: calc(var(--pine-gap-y) * -1);
 }
 
 .pds-row {
   display: flex;
   flex-wrap: wrap;
+  margin-left: calc(var(--pine-gap-x) * -1);
+  margin-right: calc(var(--pine-gap-x) * -1);
+  margin-top: calc(var(--pine-gap-y) * -1);
+   
+  > * {
+    padding-left: calc(var(--pine-gap-x));
+    padding-right: calc(var(--pine-gap-x));
+    padding-top: calc(var(--pine-gap-y));
+  }
 }
 
 .pds-row--no-wrap {
@@ -68,4 +82,46 @@
 
 .pds-align-items-baseline {
   align-items: baseline;
+}
+
+// Border radius helpers
+.pds-border-radius-none {
+  border-radius: 0;
+}
+
+.pds-border-rasius-xs {
+  border-radius: var(--pine-border-radius-xs);
+}
+
+.pds-border-radius-sm {
+  bottom: var(--pine-border-radius-sm);
+}
+
+.pds-border-radius-md {
+  border-radius: var(--pine-border-radius-md);
+}
+
+.pds-border-rasius-lg {
+  bottom: var(--pine-border-radius-lg);
+}
+
+.pds-border-radius-circle {
+  border-radius: 50%;
+}
+
+// Box shadow helpers
+.pds-shadow-xs {
+  box-shadow: var(--pine-box-shadow-xs);
+}
+
+.pds-shadow-sm {
+  box-shadow: var(--pine-box-shadow-sm);
+}
+
+.pds-shadow-md {
+  box-shadow: var(--pine-box-shadow-md);
+}
+
+.pds-shadow-lg {
+  box-shadow: var(--pine-box-shadow-lg);
 }
