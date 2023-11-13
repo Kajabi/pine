@@ -71,6 +71,20 @@ export class PdsBox {
   */
   @Prop() offsetXl?: string;
 
+  /**
+   * Defines the spacing between the box items.
+  */
+  @Prop() padding?: `none` | `xs`| `sm` | `md` | `lg`;
+
+  // FINISH ON CLEANUP
+  // @Prop() paddingTop?: `none` | `xs`| `sm` | `md` | `lg`;
+  // @Prop() paddingRight?: `none` | `xs`| `sm` | `md` | `lg`;
+  // @Prop() paddingBottom?: `none` | `xs`| `sm` | `md` | `lg`;
+  // @Prop() paddingLeft?: `none` | `xs`| `sm` | `md` | `lg`;
+
+  /**
+   * Defines the box shadow.
+  */
   @Prop() shadow?: `none` | `xs`| `sm` | `md` | `lg`;
 
   /**
@@ -116,6 +130,7 @@ export class PdsBox {
       ${this.offsetMd ? `pds-box-offset-md-${this.offsetMd}` : ''}
       ${this.offsetLg ? `pds-box-offset-lg-${this.offsetLg}` : ''}
       ${this.offsetXl ? `pds-box-offset-xl-${this.offsetXl}` : ''}
+      ${this.padding ? `pds-padding-${this.padding}` : ''}
       ${this.shadow ? `pds-shadow-${this.shadow}` : ''}
       ${this.size ? `pds-box pds-box-${this.size}` : ''}
       ${this.sizeXs ? `pds-box-xs-${this.sizeXs}` : ''}

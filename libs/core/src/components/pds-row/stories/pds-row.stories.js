@@ -125,22 +125,24 @@ const GapTemplate = (args) => html`
 <pds-row
   component-id="${args.componentId}" 
   gap="24px"
-  min-height="100px"
+  min-height="200px"
 >
   <pds-box size-sm="6">
     <pds-box 
       bordered 
       border-radius="md"
       display="flex"
+      padding="md"
     >
       Content 1
     </pds-box>
   </pds-box>
   <pds-box>
     <pds-box
-      shadow="sm"
       border-radius="md"
       display="flex"
+      padding="sm"
+      shadow="sm"
     >
       Content 2
     </pds-box>

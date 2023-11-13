@@ -100,6 +100,13 @@ export namespace Components {
           * Move columns to the end direction of the row for `XS` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
         "offsetXs"?: string;
+        /**
+          * Defines the spacing between the box items.
+         */
+        "padding"?: `none` | `xs`| `sm` | `md` | `lg`;
+        /**
+          * Defines the box shadow.
+         */
         "shadow"?: `none` | `xs`| `sm` | `md` | `lg`;
         /**
           * Size of the column for all screen sizes that are not explicitly set.
@@ -1222,6 +1229,13 @@ declare namespace LocalJSX {
           * Move columns to the end direction of the row for `XS` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
         "offsetXs"?: string;
+        /**
+          * Defines the spacing between the box items.
+         */
+        "padding"?: `none` | `xs`| `sm` | `md` | `lg`;
+        /**
+          * Defines the box shadow.
+         */
         "shadow"?: `none` | `xs`| `sm` | `md` | `lg`;
         /**
           * Size of the column for all screen sizes that are not explicitly set.

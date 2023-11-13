@@ -125,3 +125,36 @@
 .pds-shadow-lg {
   box-shadow: var(--pine-box-shadow-lg);
 }
+
+// Padding helpers
+.pds-padding-none {
+  padding: 0;
+}
+
+.pds-padding-xxs {
+  padding: var(--pine-spacing-xxs);
+}
+
+.pds-padding-xs {
+  padding: var(--pine-spacing-xxs);
+}
+
+.pds-padding-sm {
+  padding: var(--pine-spacing-sm);
+}
+
+.pds-padding-md {
+  padding: var(--pine-spacing-md);
+}
+
+.pds-padding-lg {
+  padding: var(--pine-spacing-lg);
+}
+
+.pds-padding-xl {
+  padding: var(--pine-spacing-xl);
+}
+
+.pds-padding-xxl {
+  padding: var(--pine-spacing-2xl);
+}
