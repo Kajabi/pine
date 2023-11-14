@@ -39,7 +39,7 @@ describe('pds-table-cell', () => {
       html: `<pds-table compact><pds-table-cell></pds-table-cell></pds-table>`,
     });
 
-    const tableCell = page.body.querySelector('pds-table-cell') as any;
+    const tableCell = page.body.querySelector('pds-table-cell') as HTMLElement;
     expect(tableCell.classList.contains('is-compact')).toBeTruthy();
   });
 
@@ -49,7 +49,7 @@ describe('pds-table-cell', () => {
       html: `<pds-table fixed-column selectable><pds-table-cell></pds-table-cell></pds-table>`,
     });
 
-    const tableCell = page.body.querySelector('pds-table-cell') as any;
+    const tableCell = page.body.querySelector('pds-table-cell') as HTMLElement;
     expect(tableCell.style.getPropertyValue('--fixed-cell-position')).toBe('40px');
   });
 });
