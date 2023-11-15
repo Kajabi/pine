@@ -35,6 +35,14 @@ import DocSource from "../components/DocSource.astro";
       </defs>
     </svg>
     <h1>Welcome to <span class='text-gradient'>Astro</span></h1>
+    <h2>DocCanvas</h2>
+    <doc-canvas 
+      web-component="<pds-avatar></pds-avatar>"
+      react="hey react"
+    >
+      testing text
+      <pds-avatar badge="true"></pds-avatar>
+    </doc-canvas>
     <h2>Doc Components from `libs/doc-components`</h2>
     <doc-source first="Stencil" last="'Don't call me a framework' JS"></doc-source>
 
@@ -48,6 +56,7 @@ import DocSource from "../components/DocSource.astro";
         <pds-icon name="upload" size="large"></pds-icon>
       `}>
     </DocSource>
+
     <p class='instructions'>
       To get started, open the directory <code>src/pages</code> in your project.<br
       />

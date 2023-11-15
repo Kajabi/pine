@@ -1,0 +1,12 @@
+---
+import DocCanvasJSX from './DocCanvasJSX.jsx';
+
+interface Props {
+  react?: string;
+  webComponent?: string;
+}
+
+const { react, webComponent } = Astro.props;
+
+<DocCanvas react={react} webComponent={webComponent} />
+---

@@ -6,6 +6,20 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
+    interface DocCanvas {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * React code snippet for the component
+         */
+        "react"?: string;
+        /**
+          * Web Component code snippet for the component
+         */
+        "webComponent"?: string;
+    }
     interface DocSource {
         /**
           * The first name
@@ -22,6 +36,12 @@ export namespace Components {
     }
 }
 declare global {
+    interface HTMLDocCanvasElement extends Components.DocCanvas, HTMLStencilElement {
+    }
+    var HTMLDocCanvasElement: {
+        prototype: HTMLDocCanvasElement;
+        new (): HTMLDocCanvasElement;
+    };
     interface HTMLDocSourceElement extends Components.DocSource, HTMLStencilElement {
     }
     var HTMLDocSourceElement: {
@@ -29,10 +49,25 @@ declare global {
         new (): HTMLDocSourceElement;
     };
     interface HTMLElementTagNameMap {
+        "doc-canvas": HTMLDocCanvasElement;
         "doc-source": HTMLDocSourceElement;
     }
 }
 declare namespace LocalJSX {
+    interface DocCanvas {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * React code snippet for the component
+         */
+        "react"?: string;
+        /**
+          * Web Component code snippet for the component
+         */
+        "webComponent"?: string;
+    }
     interface DocSource {
         /**
           * The first name
@@ -48,6 +83,7 @@ declare namespace LocalJSX {
         "middle"?: string;
     }
     interface IntrinsicElements {
+        "doc-canvas": DocCanvas;
         "doc-source": DocSource;
     }
 }
@@ -55,6 +91,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "doc-canvas": LocalJSX.DocCanvas & JSXBase.HTMLAttributes<HTMLDocCanvasElement>;
             "doc-source": LocalJSX.DocSource & JSXBase.HTMLAttributes<HTMLDocSourceElement>;
         }
     }
