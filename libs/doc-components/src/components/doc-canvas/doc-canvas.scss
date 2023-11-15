@@ -4,8 +4,8 @@
 
 .doc-canvas {
   background-color: #F9FAFA;
-  border: 1px solid #ECEEEF;
   border-radius: 16px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12), 0 0 2px 0 rgba(0, 0, 0, 0.08);
   color: black;
   display: flex;
   flex-direction: column;
@@ -20,6 +20,7 @@
 
 
 .doc-canvas-preview {
+  background-color: white;
   border-start-start-radius: 8px;
   border-start-end-radius: 8px;
   padding: 16px;

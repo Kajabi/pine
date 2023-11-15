@@ -1,10 +1,16 @@
 import { Component, Host, h, Prop, State } from '@stencil/core';
 
+export interface MdxSource {
+  react?: string;
+  webComponent?: string;
+}
+
 @Component({
   tag: 'doc-canvas',
   styleUrl: 'doc-canvas.scss',
 })
 export class DocCanvas {
+  private source: MdxSource = {};
   /**
    * A unique identifier used for the underlying component `id` attribute.
    */
@@ -19,6 +25,8 @@ export class DocCanvas {
    * Web Component code snippet for the component 
    */
   @Prop() webComponent?: string;
+
+  @Prop() mdxSource?: string;
 
   /**
    * Determines which tab is active
@@ -44,7 +52,7 @@ export class DocCanvas {
   }
 
   handleCopyCodeClick(): void {
-    const codeToCopy = this.activeTab === 'react' ? this.react : this.webComponent;
+    const codeToCopy = this.activeTab === 'react' ? this.source?.react : this.source?.webComponent;
 
     if (codeToCopy) {
       // Create a temporary textarea element to copy the code
@@ -61,7 +69,14 @@ export class DocCanvas {
     }
   }
 
+  componentWillRender() {
+    this.source = JSON.parse(this.mdxSource);
+  }
+
   render() {
+    console.log('React Code:', this.source?.react);
+    console.log('Web Component Code:', this.source?.webComponent);
+
     return (
       <Host
         id={this.componentId}
@@ -71,26 +86,26 @@ export class DocCanvas {
           <slot></slot>
         </div>
         <div class="doc-canvas-actions">
-          {this.react && 
+          {this.source?.react && 
             <button
               class={`
                 doc-canvas-action
                 ${this.activeTab === 'react' ? 'doc-canvas-action--active' : ''}
               `}
-              disabled={!this.react}
+              disabled={!this.source?.react}
               onClick={() => this.handleTabClick('react')}
             >
               React
             </button>
           }
           
-          {this.webComponent && 
+          {this.source?.webComponent && 
             <button
               class={`
               doc-canvas-action
                 ${this.activeTab === 'webComponent' ? 'doc-canvas-action--active' : ''}
               `}
-              disabled={!this.webComponent}
+              disabled={!this.source?.webComponent}
               onClick={() => this.handleTabClick('webComponent')}
             >
               Web Component
@@ -113,8 +128,8 @@ export class DocCanvas {
           >
             Copy Code
           </button>
-          {this.activeTab === 'react' && this.react && <code>{this.react}</code>}
-          {this.activeTab === 'webComponent' && this.webComponent && <code>{this.webComponent}</code>}
+          {this.activeTab === 'react' && this.source?.react && <code>{this.source?.react}</code>}
+          {this.activeTab === 'webComponent' && this.source?.webComponent && <code>{this.source?.webComponent}</code>}
         </div>
       </Host>
     );

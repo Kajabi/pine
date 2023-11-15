@@ -11,6 +11,7 @@ export namespace Components {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
+        "mdxSource"?: string;
         /**
           * React code snippet for the component
          */
@@ -59,6 +60,7 @@ declare namespace LocalJSX {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
+        "mdxSource"?: string;
         /**
           * React code snippet for the component
          */

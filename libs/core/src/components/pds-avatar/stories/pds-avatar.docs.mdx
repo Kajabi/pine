@@ -16,13 +16,15 @@ Avatar is used for showing a thumbnail representation of an admin, customer, or 
 ### Default
 
 ## HEY I'm DOC COMPONENTS in libs/doc-components
-<doc-canvas web-component="webcomponent stuff" react="react stuff">
-  <doc-source first="Stencil" last="'Don't call me a framework' JS"></doc-source>
-</doc-canvas>
-
 <doc-canvas 
-  web-component='<pds-avatar badge="true"></pds-avatar>'
-  react='<PdsAvatar badge="true">'
+  mdx-source={
+    JSON.stringify(
+      {
+        react: `<PdsAvatar badge="true">`, 
+        webComponent: `<pds-avatar badge="true"></pds-avatar>`
+      }
+    )
+    }
 >
   <pds-avatar badge="true"></pds-avatar>
 </doc-canvas>

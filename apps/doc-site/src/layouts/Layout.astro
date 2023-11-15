@@ -14,13 +14,14 @@ const { title } = Astro.props;
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<!-- Core -->
-		<script type="module" src="/pine-core/pine-core.esm.js"></script>
-		<script nomodule src="/pine-core/index.esm.js"></script>
 
-		<!-- Doc Components -->
-		<link rel="stylesheet" href="/pine-core/pine-core.css" />
+		<!-- core -->
+		<script type="module" src="http://localhost:7101/build/pine-core.esm.js"></script>
+    <script nomodule src="http://localhost:7101/build/index.esm.js"></script>
 
+    <link rel="stylesheet" href="http://localhost:7101/build/pine-core.css" />
+
+		<!-- doc-components -->
     <script type="module" src="http://localhost:7200/build/doc-components.esm.js"></script>
     <script nomodule src="http://localhost:7200/build/index.esm.js"></script>
 
