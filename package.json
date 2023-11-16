@@ -35,5 +35,8 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "@astrojs/prism": "^3.0.0"
   }
 }

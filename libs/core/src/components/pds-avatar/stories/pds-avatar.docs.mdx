@@ -1,6 +1,7 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
 
 import * as stories from './pds-avatar.stories.js';
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 <Meta of={stories}
 />
@@ -28,6 +29,8 @@ Avatar is used for showing a thumbnail representation of an admin, customer, or 
 >
   <pds-avatar badge="true"></pds-avatar>
 </doc-canvas>
+
+<doc-args-table of={JSON.stringify(extractArgTypes('pds-avatar'))}></doc-args-table>
 
 <Canvas of={stories.Default} source={{
   code: `
