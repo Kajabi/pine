@@ -1,4 +1,6 @@
 ---
+import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
 import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
 import DocSource from "../components/DocSource.astro";
@@ -35,14 +37,7 @@ import DocSource from "../components/DocSource.astro";
       </defs>
     </svg>
     <h1>Welcome to <span class='text-gradient'>Astro</span></h1>
-    <h2>DocCanvas</h2>
-    <doc-canvas 
-      web-component='<pds-avatar badge="true"></pds-avatar>'
-      react='<PdsAvatar badge="true">'
-    >
-      testing text
-      <pds-avatar badge="true"></pds-avatar>
-    </doc-canvas>
+    <h2>Test Avatar</h2>
     <doc-canvas 
       mdx-source={
         JSON.stringify(
@@ -55,6 +50,9 @@ import DocSource from "../components/DocSource.astro";
     >
       <pds-avatar badge="true"></pds-avatar>
     </doc-canvas>
+    
+    <h2>Test Avatar Props Table</h2>
+    <!-- <doc-args-table of={JSON.stringify(extractArgTypes('pds-avatar'))}></doc-args-table> -->
     <h2>Doc Components from `libs/doc-components`</h2>
     <doc-source first="Stencil" last="'Don't call me a framework' JS"></doc-source>
 
