@@ -74,6 +74,7 @@ export class DocCanvas {
   }
 
   render() {
+    console.log('source:', this.source);
     console.log('React Code:', this.source?.react);
     console.log('Web Component Code:', this.source?.webComponent);
 

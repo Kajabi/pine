@@ -43,6 +43,18 @@ import DocSource from "../components/DocSource.astro";
       testing text
       <pds-avatar badge="true"></pds-avatar>
     </doc-canvas>
+    <doc-canvas 
+      mdx-source={
+        JSON.stringify(
+          {
+            react: `<PdsAvatar badge="true">`, 
+            webComponent: `<pds-avatar badge="true"></pds-avatar>`
+          }
+        )
+        }
+    >
+      <pds-avatar badge="true"></pds-avatar>
+    </doc-canvas>
     <h2>Doc Components from `libs/doc-components`</h2>
     <doc-source first="Stencil" last="'Don't call me a framework' JS"></doc-source>
 
