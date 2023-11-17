@@ -28,6 +28,9 @@
       "@pine-ds/react": [
         "./react"
       ],
+      "@pine-ds/doc-components": [
+        "./libs/doc-components"
+      ]
     },
     "target": "es2017",
   }

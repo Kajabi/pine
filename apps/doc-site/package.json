@@ -11,8 +11,14 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.3.1",
+    "@astrojs/mdx": "^1.1.5",
+    "@astrojs/react": "^3.0.5",
     "@pine-ds/doc-components": "^0.0.1",
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^18.0.6",
     "astro": "^3.4.3",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "typescript": "^5.2.2"
   }
 }
