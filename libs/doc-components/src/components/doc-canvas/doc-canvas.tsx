@@ -129,8 +129,8 @@ export class DocCanvas {
           >
             Copy Code
           </button>
-          {this.activeTab === 'react' && this.source?.react && <code>{this.source?.react}</code>}
-          {this.activeTab === 'webComponent' && this.source?.webComponent && <code>{this.source?.webComponent}</code>}
+          {this.activeTab === 'react' && this.source?.react && <pre><code>{this.source?.react}</code></pre>}
+          {this.activeTab === 'webComponent' && this.source?.webComponent && <pre><code>{this.source?.webComponent}</code></pre>}
         </div>
       </Host>
     );
