@@ -55,6 +55,22 @@ describe('pds-table-head-cell', () => {
     expect(tableHeadCell.style.getPropertyValue('--fixed-cell-position')).toBe('40px');
   });
 
+  it('emits the pdsTableSort event when clicked', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableHeadCell, PdsTable],
+      html: `
+        <pds-table sortable>
+          <pds-table-head-cell sortable>Column Title</pds-table-head-cell>
+        </pds-table>`,
+    });
 
+    const tableHeadCell = page.body.querySelector('pds-table-head-cell') as HTMLElement;
+    const eventSpy = jest.fn();
 
+    page.root?.addEventListener('pdsTableSort', eventSpy);
+    tableHeadCell.click();
+    await page.waitForChanges();
+
+    expect(eventSpy).toHaveBeenCalled();
+  });
 });
