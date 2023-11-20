@@ -16,6 +16,11 @@ export class PdsBox {
   @Prop() bordered? = false;
 
   /**
+   *  Defines the border color of the box.
+   */
+  @Prop() borderColor?: string;
+
+  /**
    * Defines how rounded the box corners are.
    */
   @Prop() borderRadius?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
@@ -40,6 +45,11 @@ export class PdsBox {
    * The minimum height of the row. Used in conjunction with alignment props
    */
   @Prop() minHeight?: string;
+
+  /**
+   * The minimum width of the row. Used in conjunction with alignment props
+   */
+  @Prop() minWidth?: string;
   
   /**
    * Move columns to the end direction of the row for all screen sizes. Increases the starting margin of a column by specified number of columns.
@@ -142,7 +152,9 @@ export class PdsBox {
     `;
 
     const boxInlineStyles = {
+      ...(this.borderColor && { 'border-color': this.borderColor }),
       ...(this.minHeight && { 'min-height': this.minHeight }),
+      ...(this.minWidth && { 'min-width': this.minWidth }),
     };
 
     return (

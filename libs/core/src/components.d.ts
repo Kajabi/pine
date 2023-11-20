@@ -57,6 +57,10 @@ export namespace Components {
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
+          * Defines the border color of the box.
+         */
+        "borderColor"?: string;
+        /**
           * Defines how rounded the box corners are.
          */
         "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
@@ -76,6 +80,10 @@ export namespace Components {
           * The minimum height of the row. Used in conjunction with alignment props
          */
         "minHeight"?: string;
+        /**
+          * The minimum width of the row. Used in conjunction with alignment props
+         */
+        "minWidth"?: string;
         /**
           * Move columns to the end direction of the row for all screen sizes. Increases the starting margin of a column by specified number of columns.
          */
@@ -1186,6 +1194,10 @@ declare namespace LocalJSX {
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
+          * Defines the border color of the box.
+         */
+        "borderColor"?: string;
+        /**
           * Defines how rounded the box corners are.
          */
         "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
@@ -1205,6 +1217,10 @@ declare namespace LocalJSX {
           * The minimum height of the row. Used in conjunction with alignment props
          */
         "minHeight"?: string;
+        /**
+          * The minimum width of the row. Used in conjunction with alignment props
+         */
+        "minWidth"?: string;
         /**
           * Move columns to the end direction of the row for all screen sizes. Increases the starting margin of a column by specified number of columns.
          */

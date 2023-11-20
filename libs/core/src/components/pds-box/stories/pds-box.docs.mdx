@@ -1,0 +1,407 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import * as stories from './pds-box.stories.js';
+
+<Meta of={stories} />
+
+# Box
+Box is our primitive layout component. It is intended to be used as a building block for more complex layouts. It allows for custom sizing, colors, padding, and alignment while still adhering to Pine tokens and brand guidelines.
+
+## Properties
+
+Props Table goes here
+
+## Variants
+
+### Border
+By default Box has no border. Use `border` to add a border to the box. Use `borderColor` to change the color of the border. Use `borderRadius` to change the rounding of the box's corners.
+
+<Canvas mdxSource={`
+<pds-box
+  bordered="true"
+>
+  Border
+</pds-box>
+`}>
+  <pds-box
+    bordered="true"
+  >
+    Border
+  </pds-box>
+</Canvas>
+
+### Border Color
+Please refer to the color brand guidelines for the appropriate color to use. Use `borderColor` to change the color of the border.
+
+<Canvas mdxSource={`
+<pds-box
+  bordered="true"
+  border-color="blue"
+>
+  Border
+</pds-box>
+`}>
+  <pds-box
+    bordered="true"
+  >
+    Border
+  </pds-box>
+  <pds-box
+    bordered="true"
+    border-color="#0072EF"
+  >
+    Border
+  </pds-box>
+  <pds-box
+    bordered="true"
+    border-color="#CF3C32"
+  >
+    Border
+  </pds-box>
+  <pds-box
+    bordered="true"
+    border-color="#FFC505"
+  >
+    Border
+  </pds-box>
+</Canvas>
+
+### Border Radius
+<Canvas mdxSource={`
+<pds-box
+  bordered="true"
+  border-radius="xs"
+>
+  Shadow xs
+</pds-box>
+<pds-box
+  bordered="true"
+  border-radius="sm"
+>
+  Shadow sm
+</pds-box>
+<pds-box
+  bordered="true"
+  border-radius="md"
+>
+  Shadow md
+</pds-box>
+<pds-box
+  bordered="true"
+  border-radius="lg"
+>
+  Shadow lg
+</pds-box>
+`}>
+  <pds-box
+    bordered="true"
+    border-radius="xs"
+  >
+    Shadow xs
+  </pds-box>
+  <pds-box
+    bordered="true"
+    border-radius="sm"
+  >
+    Shadow sm
+  </pds-box>
+  <pds-box
+    bordered="true"
+    border-radius="md"
+  >
+    Shadow md
+  </pds-box>
+  <pds-box
+    bordered="true"
+    border-radius="lg"
+  >
+    Shadow lg
+  </pds-box>
+</Canvas>
+
+### Shadow
+By default Box has no shadow. Use `shadow` to add a shadow to the box. 
+
+<Canvas mdxSource={`
+<pds-box
+  shadow="xs"
+>
+  Shadow xs
+</pds-box>
+<pds-box
+  shadow="sm"
+>
+  Shadow sm
+</pds-box>
+<pds-box
+  shadow="md"
+>
+  Shadow md
+</pds-box>
+<pds-box
+  shadow="lg"
+>
+  Shadow lg
+</pds-box>
+`}>
+  <pds-box
+    shadow="xs"
+  >
+    Shadow xs
+  </pds-box>
+  <pds-box
+    shadow="sm"
+  >
+    Shadow sm
+  </pds-box>
+  <pds-box
+    shadow="md"
+  >
+    Shadow md
+  </pds-box>
+  <pds-box
+    shadow="lg"
+  >
+    Shadow lg
+  </pds-box>
+</Canvas>
+
+### Padding
+By default Box has no padding. Use `padding` to add padding to the box. Use `paddingX` to add horizontal padding to the box. Use `paddingY` to add vertical padding to the box. Use `paddingTop` to add padding to the top of the box. Use `paddingBottom` to add padding to the bottom of the box. Use `paddingLeft` to add padding to the left of the box. Use `paddingRight` to add padding to the right of the box.
+
+<Canvas mdxSource={`
+<pds-box
+    bordered="true"
+    padding="xxs"
+  >
+    Padding xxs
+  </pds-box>
+  <pds-box
+    bordered="true"
+    padding="xxs"
+  >
+    Padding xs
+  </pds-box>
+  <pds-box
+    bordered="true"
+    padding="xs"
+  >
+    Padding xxs
+  </pds-box>
+  <pds-box
+    bordered="true"
+    padding="sm"
+  >
+    Padding sm
+  </pds-box>
+  <pds-box
+    bordered="true"
+    padding="md"
+  >
+    Padding md
+  </pds-box>
+  <pds-box
+    bordered="true"
+    padding="lg"
+  >
+    Padding lg
+  </pds-box>
+  <pds-box
+    bordered="true"
+    padding="xl"
+  >
+    Padding xl
+  </pds-box>
+  <pds-box
+    bordered="true"
+    padding="xxl"
+  >
+    Padding xxl
+  </pds-box>
+`}>
+  <pds-box
+    bordered="true"
+    padding="xxs"
+  >
+    Padding xxs
+  </pds-box>
+  <pds-box
+    bordered="true"
+    padding="xxs"
+  >
+    Padding xs
+  </pds-box>
+  <pds-box
+    bordered="true"
+    padding="xs"
+  >
+    Padding xxs
+  </pds-box>
+  <pds-box
+    bordered="true"
+    padding="sm"
+  >
+    Padding sm
+  </pds-box>
+  <pds-box
+    bordered="true"
+    padding="md"
+  >
+    Padding md
+  </pds-box>
+  <pds-box
+    bordered="true"
+    padding="lg"
+  >
+    Padding lg
+  </pds-box>
+  <pds-box
+    bordered="true"
+    padding="xl"
+  >
+    Padding xl
+  </pds-box>
+  <pds-box
+    bordered="true"
+    padding="xxl"
+  >
+    Padding xxl
+  </pds-box>
+</Canvas>
+
+### Display
+By default Box is `display: block`. Use `display` to change the display property `flex` if the box is intended to fill the entire row. Use `inline-flex` if the box is intended to sit next to the previous or next box.
+
+### Alignment
+Adding either `flex` **`display`** property to the box will initiate alignment values. Use `align-items` to change the vertical alignment of the box. Use `justify-content` to change the horizontal alignment of the box.
+
+<Canvas mdxSource={`
+<pds-row min-height="100px">
+  <pds-box
+    align-items="start"
+    bordered="true"
+    display="flex"
+    justify-content="center"
+    min-height="200px"
+    padding="sm"
+  >
+    Content 1
+  </pds-box>
+  <pds-box
+    align-items="center"
+    bordered="true"
+    display="flex"
+    justify-content="center"
+    padding="sm"
+  >
+    Content2
+  </pds-box>
+  <pds-box
+    align-items="end"
+    bordered="true"
+    display="flex"
+    justify-content="end"
+    padding="sm"
+  >
+    Content 3
+  </pds-box>
+</pds-row>
+`}>
+  <pds-row min-height="100px">
+    <pds-box
+      align-items="start"
+      bordered="true"
+      display="flex"
+      justify-content="center"
+      min-height="200px"
+      padding="sm"
+    >
+      Content 1
+    </pds-box>
+    <pds-box
+      align-items="center"
+      bordered="true"
+      display="flex"
+      justify-content="center"
+      padding="sm"
+    >
+      Content2
+    </pds-box>
+    <pds-box
+      align-items="end"
+      bordered="true"
+      display="flex"
+      justify-content="end"
+      padding="sm"
+    >
+      Content 3
+    </pds-box>
+  </pds-row>
+</Canvas>
+
+Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to ensure the box is vertically centered. Horizontal centering does take affect with no `min-height` present.
+<Canvas mdxSource={`
+<pds-row>
+  <pds-box
+    align-items="start"
+    bordered="true"
+    display="flex"
+    justify-content="center"
+    padding="sm"
+  >
+    Content 1
+  </pds-box>
+  <pds-box
+    align-items="center"
+    bordered="true"
+    display="flex"
+    justify-content="center"
+    padding="sm"
+  >
+    Content2
+  </pds-box>
+  <pds-box
+    align-items="end"
+    bordered="true"
+    display="flex"
+    justify-content="end"
+    padding="sm"
+  >
+    Content 3
+  </pds-box>
+</pds-row>
+`}>
+  <pds-row>
+    <pds-box
+      align-items="start"
+      bordered="true"
+      display="flex"
+      justify-content="center"
+      padding="sm"
+    >
+      Content 1
+    </pds-box>
+    <pds-box
+      align-items="center"
+      bordered="true"
+      display="flex"
+      justify-content="center"
+      padding="sm"
+    >
+      Content2
+    </pds-box>
+    <pds-box
+      align-items="end"
+      bordered="true"
+      display="flex"
+      justify-content="end"
+      padding="sm"
+    >
+      Content 3
+    </pds-box>
+  </pds-row>
+</Canvas>
+
+### Layout Properties - size / offset
+Only intended to be used when Row parent is present
+
+

@@ -130,6 +130,7 @@ const GapTemplate = (args) => html`
   <pds-box size-sm="6">
     <pds-box 
       bordered 
+      border-color="blue"
       border-radius="md"
       display="flex"
       padding="md"
