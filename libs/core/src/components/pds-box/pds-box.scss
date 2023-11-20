@@ -9,6 +9,7 @@
 
 [class*='pds-box'] {
   box-sizing: border-box;
+  display: block;
   max-width: 100%;
   min-height: 100%;
   position: relative;
@@ -17,6 +18,136 @@
 
 .pds-box--bordered {
   border: var(--pine-border-default);
+}
+
+// Border radius helpers
+.pds-border-radius-none {
+  border-radius: 0;
+}
+
+.pds-border-rasius-xs {
+  border-radius: var(--pine-border-radius-xs);
+}
+
+.pds-border-radius-sm {
+  border-radius: var(--pine-border-radius-sm);
+}
+
+.pds-border-radius-md {
+  border-radius: var(--pine-border-radius-md);
+}
+
+.pds-border-radius-lg {
+  border-radius: var(--pine-border-radius-lg);
+}
+
+.pds-border-radius-circle {
+  border-radius: 50%;
+}
+
+// Box shadow helpers
+.pds-shadow-xs {
+  box-shadow: var(--pine-box-shadow-xs);
+}
+
+.pds-shadow-sm {
+  box-shadow: var(--pine-box-shadow-sm);
+}
+
+.pds-shadow-md {
+  box-shadow: var(--pine-box-shadow-md);
+}
+
+.pds-shadow-lg {
+  box-shadow: var(--pine-box-shadow-lg);
+}
+
+// Spacing helpers
+.pds-padding-none {
+  padding: 0;
+}
+
+.pds-padding-xxs {
+  padding: var(--pine-spacing-xxs);
+}
+
+.pds-padding-xs {
+  padding: var(--pine-spacing-xxs);
+}
+
+.pds-padding-sm {
+  padding: var(--pine-spacing-sm);
+}
+
+.pds-padding-md {
+  padding: var(--pine-spacing-md);
+}
+
+.pds-padding-lg {
+  padding: var(--pine-spacing-lg);
+}
+
+.pds-padding-xl {
+  padding: var(--pine-spacing-xl);
+}
+
+.pds-padding-xxl {
+  padding: var(--pine-spacing-2xl);
+}
+
+// Display helpers
+.pds-display-flex {
+  display: flex;
+}
+
+.pds-display-inline-flex {
+  display: inline-flex;
+}
+
+// Justify Content helpers
+.pds-justify-content-start {
+  justify-content: start;
+}
+
+.pds-justify-content-center {
+  justify-content: center;
+}
+
+.pds-justify-content-end {
+  justify-content: end;
+}
+
+.pds-justify-content-space-between {
+  justify-content: space-between;
+}
+
+.pds-justify-content-space-around {
+  justify-content: space-around;
+}
+
+.pds-justify-content-space-evenly {
+  justify-content: space-evenly;
+}
+
+// Align Items helpers
+.pds-align-items-start {
+  align-items: start;
+}
+
+.pds-align-items-center {
+  align-items: center;
+}
+
+.pds-align-items-end {
+  align-items: end;
+}
+
+.pds-align-items-stretch {
+  align-items: stretch;
+}
+
+.pds-align-items-baseline {
+  align-items: baseline;
 }
 
 @mixin generate-columns($prefix, $columns) {
