@@ -19,6 +19,8 @@
 :host(:hover),
 :host(:hover)::part(checkbox-cell),
 :host(:hover) ::slotted(pds-table-cell),
-:host(.is-selected) {
+:host(.is-selected),
+:host(.is-selected)::part(checkbox-cell),
+:host(.is-selected) ::slotted(pds-table-cell) {
   background: var(--background-interactive);
 }
