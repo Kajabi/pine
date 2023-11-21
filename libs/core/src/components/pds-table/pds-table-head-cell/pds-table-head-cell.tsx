@@ -20,10 +20,29 @@ export class PdsTableHeadCell {
   @Event() pdsTableSort: EventEmitter<{ column: string; direction: string }>;
 
   @State() private sortingDirection: 'asc' | 'desc' = 'asc';
+  @State() private tableScrolling: boolean = false;
 
   componentWillRender() {
     this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
   }
+
+  componentDidLoad() {
+    if (this.tableRef && this.tableRef.responsive && this.tableRef.fixedColumn) {
+      this.tableRef.addEventListener('scroll', this.handleScroll);
+    }
+  }
+
+  disconnectedCallback() {
+    this.tableRef.removeEventListener('scroll', this.handleScroll);
+  }
+
+  private handleScroll = () => {
+    if (this.tableRef.scrollLeft > 0) {
+      this.tableScrolling = true;
+    } else {
+      this.tableScrolling = false;
+    }
+  };
 
   private handleSortClick = () => {
     if (this.sortable) {
@@ -55,6 +74,10 @@ export class PdsTableHeadCell {
       classNames.push('sort-' + this.sortingDirection);
     }
 
+    if (this.tableRef && this.tableRef.fixedColumn && this.tableScrolling) {
+      classNames.push('has-scrolled');
+    }
+
     return classNames.join('  ');
   }
 
@@ -68,7 +91,7 @@ export class PdsTableHeadCell {
           this.tableRef &&
           this.tableRef.fixedColumn &&
           this.tableRef.selectable
-            ? { '--fixed-cell-position': '40px' } // can this be calculated?
+            ? { '--fixed-cell-position': '40px' }
             : {}
         }
       >

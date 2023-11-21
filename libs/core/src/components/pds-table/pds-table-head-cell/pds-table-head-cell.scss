@@ -1,6 +1,7 @@
 :host {
   --background-fixed: var(--pine-color-base-white);
   --border: var(--pine-border-default);
+  --box-shadow: 3px 3px 6px -2px rgba(0, 0, 0, 0.1);
   --color-sorting: var(--pine-color-neutral-charcoal-500);
   --color: var(--pine-color-neutral-charcoal-200);
   --fixed-cell-position: 0;
@@ -33,6 +34,11 @@
   left: var(--fixed-cell-position);
   position: sticky;
   z-index: 1;
+}
+
+// box shadow when table has scrolled and cell is fixed
+:host(.has-scrolled.is-fixed) {
+  box-shadow: var(--box-shadow);
 }
 
 :host(.is-sortable) {

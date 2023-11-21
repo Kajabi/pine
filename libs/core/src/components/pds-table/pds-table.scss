@@ -9,6 +9,14 @@
 }
 
 :host(.is-responsive) {
+  background-attachment: local, local, scroll, scroll;
+  background-image: linear-gradient(to right, var(--background), var(--background)),
+                    linear-gradient(to right, var(--background), var(--background)),
+                    linear-gradient(to right, rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0)),
+                    linear-gradient(to left, rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0));
+  background-position: left center, right center, left center, right center;
+  background-repeat: no-repeat;
+  background-size: 4px 100%, 4px 100%, 4px 100%, 4px 100%;
   display: block;
   margin: 0 auto;
   max-width: fit-content;
