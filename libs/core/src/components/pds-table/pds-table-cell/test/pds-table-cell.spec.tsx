@@ -52,4 +52,28 @@ describe('pds-table-cell', () => {
     const tableCell = page.body.querySelector('pds-table-cell') as HTMLElement;
     expect(tableCell.style.getPropertyValue('--fixed-cell-position')).toBe('40px');
   });
+
+  it('toggles is-scrolled class when table is scrolled', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableCell, PdsTable],
+      html: `<pds-table responsive fixed-column><pds-table-cell></pds-table-cell></pds-table>`,
+    });
+
+    const tableCell = page.body.querySelector('pds-table-cell') as HTMLElement;
+    const table = page.body.querySelector('pds-table') as HTMLElement;
+
+    table.scrollLeft = 10;
+    table.dispatchEvent(new Event('scroll'));
+
+    await page.waitForChanges();
+
+    expect(tableCell).toHaveClass('has-scrolled');
+
+    table.scrollLeft = 0;
+    table.dispatchEvent(new Event('scroll'));
+
+    await page.waitForChanges();
+
+    expect(tableCell).not.toHaveClass('has-scrolled');
+  });
 });
