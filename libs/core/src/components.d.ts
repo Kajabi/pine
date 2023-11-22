@@ -69,6 +69,10 @@ export namespace Components {
          */
         "bordered"?: boolean;
         /**
+          * Defines the orientation of the box items.
+         */
+        "direction"?: `row` | `column`;
+        /**
           * Defines the display style of the box.
          */
         "display"?: `flex` | `inline-flex`;
@@ -1205,6 +1209,10 @@ declare namespace LocalJSX {
           * If `true`, the box will have a border.
          */
         "bordered"?: boolean;
+        /**
+          * Defines the orientation of the box items.
+         */
+        "direction"?: `row` | `column`;
         /**
           * Defines the display style of the box.
          */

@@ -32,6 +32,11 @@ export class PdsBox {
   // @Prop() borderRadiusEndEnd?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
   
   /**
+   * Defines the orientation of the box items.
+   */
+  @Prop() direction?: `row` | `column`;
+
+  /**
    * Defines the display style of the box.
   */
   @Prop() display?: `flex` | `inline-flex`;
@@ -132,7 +137,8 @@ export class PdsBox {
       ${this.alignItems ? `pds-align-items-${this.alignItems}` : ''}
       ${this.bordered ? 'pds-box--bordered' : ''}
       ${this.borderRadius ? `pds-border-radius-${this.borderRadius}` : ''}
-      ${this.display ? `pds-display-${this.display}` : ''}
+      ${this.direction ? `pds-box-direction-${this.direction}` : ''}
+      ${this.display ? `pds-box-display-${this.display}` : ''}
       ${this.justifyContent ? `pds-justify-content-${this.justifyContent}` : ''}
       ${this.offset ? `pds-box-offset-${this.offset}` : ''}
       ${this.offsetXs ? `pds-box-offset-xs-${this.offsetXs}` : ''}

@@ -105,12 +105,21 @@
 }
 
 // Display helpers
-.pds-display-flex {
+.pds-box-display-flex {
   display: flex;
 }
 
-.pds-display-inline-flex {
+.pds-box-display-inline-flex {
   display: inline-flex;
+}
+
+// Flex Direction helpers
+.pds-box-direction-row {
+  flex-direction: row;
+}
+
+.pds-box-direction-column {
+  flex-direction: column;
 }
 
 // Justify Content helpers

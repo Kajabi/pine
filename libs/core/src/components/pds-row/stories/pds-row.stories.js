@@ -13,7 +13,7 @@ const BaseTemplate = (args) => html`
   gap="8px"
 >
   <pds-box bordered>Item 1</pds-box>
-  <pds-box bordered>
+  <pds-box bordered direction="column">
     <p>Content 1</p>
     <p>Content 2</p>
   </pds-box>
@@ -51,7 +51,7 @@ const ResponsiveTemplate = (args) => html`
   component-id="${args.componentId}" 
 >
   <pds-box size-md="6" size-lg="4" size-xl="3">Item 1</pds-box>
-  <pds-box size-md="6" size-lg="4" size-xl="3">
+  <pds-box direction="column" size-md="6" size-lg="4" size-xl="3">
     <p>Content 1</p>
     <p>Content 2</p>
   </pds-box>

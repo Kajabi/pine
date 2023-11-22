@@ -13,6 +13,7 @@
   margin-left: calc(var(--pine-gap-x) * -1);
   margin-right: calc(var(--pine-gap-x) * -1);
   margin-top: calc(var(--pine-gap-y) * -1);
+  width: 100%;
    
   > * {
     padding-left: calc(var(--pine-gap-x));
@@ -84,8 +85,8 @@
   align-items: baseline;
 }
 
-.demo-row {
-  .pds-box {
+.sbdocs {
+  .pds-row .pds-box {
     border: var(--pine-border-default);;
   }
 }

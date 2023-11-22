@@ -18,7 +18,7 @@ By default boxes with rows will be equal width if no size is specified.
 <Canvas mdxSource={`
 <pds-row>
   <pds-box>Item 1</pds-box>
-  <pds-box>
+  <pds-box direction="column">
     <p>Content 1</p>
     <p>Content 2</p>
   </pds-box>
@@ -32,7 +32,7 @@ By default boxes with rows will be equal width if no size is specified.
     min-height="100px"
   >
     <pds-box>Item 1</pds-box>
-    <pds-box>
+    <pds-box direction="column">
       <p>Content 1</p>
       <p>Content 2</p>
     </pds-box>
@@ -65,7 +65,7 @@ need demo
 <Canvas mdxSource={`
 <pds-row>
   <pds-box size-md="6" size-lg="4" size-xl="3">Item 1</pds-box>
-  <pds-box size-md="6" size-lg="4" size-xl="3">
+  <pds-box direction="column" size-md="6" size-lg="4" size-xl="3">
     <p>Content 1</p>
     <p>Content 2</p>
   </pds-box>
@@ -77,7 +77,7 @@ need demo
     component-id="${args.componentId}" 
   >
     <pds-box size-md="6" size-lg="4" size-xl="3">Item 1</pds-box>
-    <pds-box size-md="6" size-lg="4" size-xl="3">
+    <pds-box direction="column" size-md="6" size-lg="4" size-xl="3">
       <p>Content 1</p>
       <p>Content 2</p>
     </pds-box>

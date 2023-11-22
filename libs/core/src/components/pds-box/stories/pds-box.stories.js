@@ -13,6 +13,7 @@ const BaseTemplate = (args) => html`
 	bordered="${args.bordered}"
   border-color="${args.borderColor}"
 	border-radius="${args.borderRadius}"
+  direction="${args.direction}"
 	display="${args.display}"
 	justify-content="${args.justifyContent}"
   min-height="${args.minHeight}"
