@@ -10,16 +10,10 @@
 [class*='pds-box'] {
   box-sizing: border-box;
   display: inline-flex;
-  // max-width: 100%;
-  // min-height: 100%;
-  // position: relative;
-  // width: 100%;
 
   // The immediate child of the row will fit the width of the row
   .pds-row > & {
     display: flex;
-    max-width: 100%;
-    min-height: 100%;
     position: relative;
     width: 100%;
   }
