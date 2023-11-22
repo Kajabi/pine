@@ -54,32 +54,32 @@ export class PdsBox {
   /**
    * Move columns to the end direction of the row for all screen sizes. Increases the starting margin of a column by specified number of columns.
    */
-  @Prop() offset?: string;
+  @Prop() offset?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;;
 
   /**
    * Move columns to the end direction of the row for `XS` screen sizes. Increases the starting margin of a column by specified number of columns.
   */
-  @Prop() offsetXs?: string;
+  @Prop() offsetXs?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;;
 
   /**
    * Move columns to the end direction of the row for `SM` screen sizes. Increases the starting margin of a column by specified number of columns.
   */
-  @Prop() offsetSm?: string;
+  @Prop() offsetSm?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;;
 
   /**
    * Move columns to the end direction of the row for `MD` screen sizes. Increases the starting margin of a column by specified number of columns.
   */
-  @Prop() offsetMd?: string;
+  @Prop() offsetMd?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;;
 
   /**
    * Move columns to the end direction of the row for `LG` screen sizes. Increases the starting margin of a column by specified number of columns.
   */
-  @Prop() offsetLg?: string;
+  @Prop() offsetLg?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;;
 
   /**
    * Move columns to the end direction of the row for `XL` screen sizes. Increases the starting margin of a column by specified number of columns.
   */
-  @Prop() offsetXl?: string;
+  @Prop() offsetXl?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;;
 
   /**
    * Defines the spacing between the box items.
@@ -100,32 +100,32 @@ export class PdsBox {
   /**
    * Size of the column for all screen sizes that are not explicitly set.
    */
-  @Prop() size?: string;
+  @Prop() size?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
 
   /**
    * At screen sizes less than the `XS` breakpoint, this will take the number of columns specified.
    */
-  @Prop() sizeXs?: string;
+  @Prop() sizeXs?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
 
   /**
    * At screen sizes greater than the `SM` breakpoint, this will take the number of columns specified.
    */
-  @Prop() sizeSm?: string;
+  @Prop() sizeSm?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
 
   /**
    * At screen sizes greater than the `MD` breakpoint, this will take the number of columns specified.
    */
-  @Prop() sizeMd?: string;
+  @Prop() sizeMd?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
 
   /**
    * At screen sizes greater than the `LG` breakpoint, this will take the number of columns specified.
    */
-  @Prop() sizeLg?: string;
+  @Prop() sizeLg?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
 
   /**
    * At screen sizes greater than the `XL` breakpoint, this will take the number of columns specified.
    */
-  @Prop() sizeXl?: string;
+  @Prop() sizeXl?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
 
   render() {
     const boxClasses = `

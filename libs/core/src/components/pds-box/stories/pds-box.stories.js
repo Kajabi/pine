@@ -7,26 +7,26 @@ export default {
   title: 'components/Box',
 };
 
-const DefaultTemplate = (args) => html`
-<pds-row
-  align-items="center"
-  justify-content="space-between"
-  bordered="true"
-  component-id="${args.componentId}" 
+const BaseTemplate = (args) => html`
+<pds-box
+	align-items="${args.alignItems}"
+	bordered="${args.bordered}"
+  border-color="${args.borderColor}"
+	border-radius="${args.borderRadius}"
+	display="${args.display}"
+	justify-content="${args.justifyContent}"
+  min-height="${args.minHeight}"
+  min-width="${args.minWidth}"
+  padding="${args.padding}"
+  shadow="${args.shadow}"
+	variant="${args.variant}"
 >
-  <pds-box size="2">Item 1</pds-box>
-  <pds-box
-    display="flex"
-    align-items="center"
-    justify-content="center"
-    min-height="100px"
-    size="8"
-  >Item 2</pds-box>
-  <pds-box size="2">Item 3</pds-box>
-</pds-row>
-`;
+  Box content
+</pds-box>`;
 
-export const Default = DefaultTemplate.bind();
+export const Default = BaseTemplate.bind();
 Default.args = {
   componentId: 'opt0',
+  bordered: true,
+  minHeight: '100px',
 };

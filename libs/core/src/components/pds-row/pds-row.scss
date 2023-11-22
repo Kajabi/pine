@@ -83,3 +83,9 @@
 .pds-align-items-baseline {
   align-items: baseline;
 }
+
+.demo-row {
+  .pds-box {
+    border: var(--pine-border-default);;
+  }
+}

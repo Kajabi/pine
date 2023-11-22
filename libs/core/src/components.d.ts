@@ -87,27 +87,27 @@ export namespace Components {
         /**
           * Move columns to the end direction of the row for all screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offset"?: string;
+        "offset"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * Move columns to the end direction of the row for `LG` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetLg"?: string;
+        "offsetLg"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * Move columns to the end direction of the row for `MD` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetMd"?: string;
+        "offsetMd"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * Move columns to the end direction of the row for `SM` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetSm"?: string;
+        "offsetSm"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * Move columns to the end direction of the row for `XL` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetXl"?: string;
+        "offsetXl"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * Move columns to the end direction of the row for `XS` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetXs"?: string;
+        "offsetXs"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * Defines the spacing between the box items.
          */
@@ -119,27 +119,27 @@ export namespace Components {
         /**
           * Size of the column for all screen sizes that are not explicitly set.
          */
-        "size"?: string;
+        "size"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * At screen sizes greater than the `LG` breakpoint, this will take the number of columns specified.
          */
-        "sizeLg"?: string;
+        "sizeLg"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * At screen sizes greater than the `MD` breakpoint, this will take the number of columns specified.
          */
-        "sizeMd"?: string;
+        "sizeMd"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * At screen sizes greater than the `SM` breakpoint, this will take the number of columns specified.
          */
-        "sizeSm"?: string;
+        "sizeSm"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * At screen sizes greater than the `XL` breakpoint, this will take the number of columns specified.
          */
-        "sizeXl"?: string;
+        "sizeXl"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * At screen sizes less than the `XS` breakpoint, this will take the number of columns specified.
          */
-        "sizeXs"?: string;
+        "sizeXs"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
     }
     interface PdsButton {
         /**
@@ -1224,27 +1224,27 @@ declare namespace LocalJSX {
         /**
           * Move columns to the end direction of the row for all screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offset"?: string;
+        "offset"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * Move columns to the end direction of the row for `LG` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetLg"?: string;
+        "offsetLg"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * Move columns to the end direction of the row for `MD` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetMd"?: string;
+        "offsetMd"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * Move columns to the end direction of the row for `SM` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetSm"?: string;
+        "offsetSm"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * Move columns to the end direction of the row for `XL` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetXl"?: string;
+        "offsetXl"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * Move columns to the end direction of the row for `XS` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetXs"?: string;
+        "offsetXs"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * Defines the spacing between the box items.
          */
@@ -1256,27 +1256,27 @@ declare namespace LocalJSX {
         /**
           * Size of the column for all screen sizes that are not explicitly set.
          */
-        "size"?: string;
+        "size"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * At screen sizes greater than the `LG` breakpoint, this will take the number of columns specified.
          */
-        "sizeLg"?: string;
+        "sizeLg"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * At screen sizes greater than the `MD` breakpoint, this will take the number of columns specified.
          */
-        "sizeMd"?: string;
+        "sizeMd"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * At screen sizes greater than the `SM` breakpoint, this will take the number of columns specified.
          */
-        "sizeSm"?: string;
+        "sizeSm"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * At screen sizes greater than the `XL` breakpoint, this will take the number of columns specified.
          */
-        "sizeXl"?: string;
+        "sizeXl"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * At screen sizes less than the `XS` breakpoint, this will take the number of columns specified.
          */
-        "sizeXs"?: string;
+        "sizeXs"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
     }
     interface PdsButton {
         /**
