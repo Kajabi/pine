@@ -1,10 +1,243 @@
 
-import { Meta, Story } from '@storybook/blocks';
+import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
 
 <Meta title="Foundations/Layout"/>
 
 # Layout
+The Layout system consists on using the `Row` and the `Box` component in tandem
 
 ## Row
+The `pds-row` component is designed to create horizontal rows that contain a set of columns.
 
 ## Box
+The `pds-box` component serves as a versatile building block for creating individual elements within your layout. You can use the `pds-box` component to create columns, rows, and other layout elements with use of the `size` and `offset` properties or their variants.
+
+### Creating a 12-Column Grid System
+By combining the `pds-box` and `pds-row` components, you can easily create a 12-column grid system. Here's an example of how to structure your layout:
+<Canvas mdxSource={`
+<pds-row>
+  <pds-box size="6">
+    Content for column 1
+  </pds-box>
+  <pds-box size="6">
+    Content for column 2
+  </pds-box>
+</pds-row>
+`}>
+<pds-row>
+  <pds-box size="6">
+    Content for column 1
+  </pds-box>
+  <pds-box size="6">
+    Content for column 2
+  </pds-box>
+</pds-row>
+</Canvas>
+
+This creates a two-column layout, and you can customize the sizes and arrangement of the columns to achieve the desired layout for your application.
+
+## Responsive Design
+The layout components are designed to be responsive, allowing you to create layouts that adapt to different screen sizes. Take advantage of properties like `offset-xs`, `offset-sm`, etc., to customize the layout for specific breakpoints.
+<Canvas mdxSource={`
+<pds-row>
+  <pds-box size="6" offset-xs="12">
+    Content for small screens
+  </pds-box>
+  <pds-box size="6" offset-xs="0">
+    Content for larger screens
+  </pds-box>
+</pds-row>
+`}>
+<pds-row>
+  <pds-box size="6" offset-xs="12">
+    Content for small screens
+  </pds-box>
+  <pds-box size="6" offset-xs="0">
+    Content for larger screens
+  </pds-box>
+</pds-row>
+</Canvas>
+
+### Alignment
+Adding either `flex` **`display`** property to the box will initiate alignment values. Use `align-items` to change the vertical alignment of the box. Use `justify-content` to change the horizontal alignment of the box.
+
+<Canvas mdxSource={`
+<pds-row min-height="100px">
+  <pds-box
+    align-items="start"
+    bordered="true"
+    display="flex"
+    justify-content="center"
+    min-height="200px"
+    padding="sm"
+  >
+    Content 1
+  </pds-box>
+  <pds-box
+    align-items="center"
+    bordered="true"
+    display="flex"
+    justify-content="center"
+    padding="sm"
+  >
+    Content2
+  </pds-box>
+  <pds-box
+    align-items="end"
+    bordered="true"
+    display="flex"
+    justify-content="end"
+    padding="sm"
+  >
+    Content 3
+  </pds-box>
+</pds-row>
+`}>
+  <pds-row min-height="100px">
+    <pds-box
+      align-items="start"
+      bordered="true"
+      display="flex"
+      justify-content="center"
+      min-height="200px"
+      padding="sm"
+    >
+      Content 1
+    </pds-box>
+    <pds-box
+      align-items="center"
+      bordered="true"
+      display="flex"
+      justify-content="center"
+      padding="sm"
+    >
+      Content2
+    </pds-box>
+    <pds-box
+      align-items="end"
+      bordered="true"
+      display="flex"
+      justify-content="end"
+      padding="sm"
+    >
+      Content 3
+    </pds-box>
+  </pds-row>
+</Canvas>
+
+Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to ensure the box is vertically centered. Horizontal centering does take affect with no `min-height` present.
+<Canvas mdxSource={`
+<pds-row>
+  <pds-box
+    align-items="start"
+    bordered="true"
+    display="flex"
+    justify-content="center"
+    padding="sm"
+  >
+    Content 1
+  </pds-box>
+  <pds-box
+    align-items="center"
+    bordered="true"
+    display="flex"
+    justify-content="center"
+    padding="sm"
+  >
+    Content2
+  </pds-box>
+  <pds-box
+    align-items="end"
+    bordered="true"
+    display="flex"
+    justify-content="end"
+    padding="sm"
+  >
+    Content 3
+  </pds-box>
+</pds-row>
+`}>
+  <pds-row>
+    <pds-box
+      align-items="start"
+      bordered="true"
+      display="flex"
+      justify-content="center"
+      padding="sm"
+    >
+      Content 1
+    </pds-box>
+    <pds-box
+      align-items="center"
+      bordered="true"
+      display="flex"
+      justify-content="center"
+      padding="sm"
+    >
+      Content2
+    </pds-box>
+    <pds-box
+      align-items="end"
+      bordered="true"
+      display="flex"
+      justify-content="end"
+      padding="sm"
+    >
+      Content 3
+    </pds-box>
+  </pds-row>
+</Canvas>
+
+Either add description text or delete this section
+### Example
+<Canvas mdxSource={`
+<pds-row>
+  <pds-box size="6" offset="3" align-items="center" justify-content="center">
+    Centered content
+  </pds-box>
+</pds-row>
+`}>
+<pds-row>
+  <pds-box size="6" offset="3" align-items="center" justify-content="center">
+    Centered content
+  </pds-box>
+</pds-row>
+</Canvas>
+
+<Canvas mdxSource={`
+<pds-row min-height="100px" align-items="center" justify-content="center">
+  <pds-box size="6" offset="3">
+    Centered content
+  </pds-box>
+</pds-row>
+`}>
+<pds-row bordered="true" min-height="100px" align-items="center" justify-content="center">
+  <pds-box size="6">
+    Centered content
+  </pds-box>
+</pds-row>
+</Canvas>
+
+## Troubleshooting
+
+If you encounter issues with your layout, here are some common problems and their solutions:
+
+### 1. Columns Not Aligning Correctly
+  - **Issue:** Columns are not aligning as expected.
+  - **Solution:** Double-check the `align-items` and `justify-content` properties on the parent `pds-row` component. Ensure that the sum of the column sizes within the row is equal to or less than 12 for a 12-column grid. Colums sums greater than 12 will wrap the row to the next line.
+
+### 2. Unexpected Spacing
+  - **Issue:** Unexpected spacing between columns.
+  - **Solution:** Check the `padding` property on the `pds-box` components. Adjust the padding values to achieve the desired spacing between columns.
+
+### 3. **Misalignment on Small Screens**
+  - **Issue:** Misalignment of columns on small screens.
+  - **Solution:** Use responsive properties like `offset-xs` to adjust column positions on smaller screens. Also, consider testing with a simplified layout or applying different alignment properties for smaller screens.
+
+### 4. **Layout Not Responsive**
+  - **Issue:** The layout does not respond as expected on different devices.
+  - **Solution:** Review the usage of responsive properties across your layout. Ensure that breakpoints are applied consistently, and test on various devices to identify and address responsiveness issues.
+
+### 5. **Performance Degradation due to Unnecessary Nesting**
+  - **Issue:** Noticeable performance degradation, especially on complex layouts.
+  - **Solution:** Review the nested `pds-box`s structure and minimize unnecessary nesting by flattening your layout structure where possible. Excessive nesting can cause performance issues, especially on complex layouts.
