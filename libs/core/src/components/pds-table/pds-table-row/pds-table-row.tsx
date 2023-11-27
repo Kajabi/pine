@@ -1,4 +1,4 @@
-import { Component, Element, Host, h, Prop, Event, EventEmitter, State } from '@stencil/core';
+import { Component, Element, Host, h, Event, EventEmitter, State } from '@stencil/core';
 
 @Component({
   tag: 'pds-table-row',
@@ -7,12 +7,7 @@ import { Component, Element, Host, h, Prop, Event, EventEmitter, State } from '@
 })
 export class PdsTableRow {
   @Element() hostElement: HTMLPdsTableRowElement;
-  tableRef: HTMLPdsTableElement
-
-  /**
-   * A property to hold the value associated with the row and the `pdsCheckbox`.
-   */
-  @Prop() value: string;
+  tableRef: HTMLPdsTableElement;
 
   /**
    * Event that is emitted when the checkbox is clicked, carrying the selected value.
@@ -26,7 +21,6 @@ export class PdsTableRow {
 
   private handleCheckboxClick = () => {
     this.isSelected = !this.isSelected; // Toggle the selected state
-    this.pdsTableRowSelected.emit({ value: this.value, isSelected: this.isSelected }); // Emit the custom event with the value
     const selectedIndex = Array.from(this.hostElement.parentNode.children).indexOf(this.hostElement);
     console.log('Event emitted: pdsTableRowSelected', { rowIndex: selectedIndex, isSelected: this.isSelected });
   }
@@ -50,26 +44,32 @@ export class PdsTableRow {
     }
   }
 
+  private generateUniqueId = () => {
+    const randomString = Math.random().toString(36).substring(2, 8);
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const uniqueId = `${randomString}-${timestamp}`;
+
+    return uniqueId;
+  }
+
   render() {
     return (
       <Host
         class={this.classNames()}
         role="row"
-        value={this.value}
       >
-        <slot name='checkbox'>
-        {this.tableRef && this.tableRef.selectable && (
-          <pds-table-checkbox-cell part={this.tableRef.fixedColumn ? 'checkbox-cell' : ''} >
-            <pds-checkbox
-              componentId={this.value}
-              onClick={this.handleCheckboxClick}
-              label={this.value}
-              labelHidden={true}
-              checked={this.isSelected}
-              value={this.value}
-            />
-          </pds-table-checkbox-cell>
-        )}
+        <slot name="checkbox">
+          {this.tableRef && this.tableRef.selectable && (
+            <pds-table-checkbox-cell part={this.tableRef.fixedColumn ? 'checkbox-cell' : ''} >
+              <pds-checkbox
+                componentId={this.generateUniqueId()}
+                onClick={this.handleCheckboxClick}
+                label={"Select Row"}
+                labelHidden={true}
+                checked={this.isSelected}
+              />
+            </pds-table-checkbox-cell>
+          )}
         </slot>
         <slot></slot>
       </Host>

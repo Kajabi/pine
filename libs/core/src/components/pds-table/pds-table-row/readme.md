@@ -5,13 +5,6 @@
 <!-- Auto Generated Below -->
 
 
-## Properties
-
-| Property | Attribute | Description                                                                 | Type     | Default     |
-| -------- | --------- | --------------------------------------------------------------------------- | -------- | ----------- |
-| `value`  | `value`   | A property to hold the value associated with the row and the `pdsCheckbox`. | `string` | `undefined` |
-
-
 ## Events
 
 | Event                 | Description                                                                      | Type                                                   |

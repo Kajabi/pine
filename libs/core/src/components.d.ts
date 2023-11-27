@@ -519,10 +519,6 @@ export namespace Components {
         "sortable": boolean;
     }
     interface PdsTableRow {
-        /**
-          * A property to hold the value associated with the row and the `pdsCheckbox`.
-         */
-        "value": string;
     }
     interface PdsTabpanel {
         /**
@@ -1550,10 +1546,6 @@ declare namespace LocalJSX {
           * Event that is emitted when the checkbox is clicked, carrying the selected value.
          */
         "onPdsTableRowSelected"?: (event: PdsTableRowCustomEvent<{ value: string; isSelected: boolean; }>) => void;
-        /**
-          * A property to hold the value associated with the row and the `pdsCheckbox`.
-         */
-        "value"?: string;
     }
     interface PdsTabpanel {
         /**
