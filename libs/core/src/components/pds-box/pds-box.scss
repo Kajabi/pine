@@ -179,11 +179,15 @@
 }
 
 @mixin generate-column-offsets($prefix, $columns) {
-  @for $i from 1 through $columns {
+  @for $i from 0 through $columns {
     /* stylelint-disable-next-line function-no-unknown */
     $class-name: if($prefix, 'pds-box-offset-#{$prefix}-#{$i}', 'pds-box-offset-#{$i}');
     .#{$class-name} {
-      margin-inline-start: calc($i / $columns * 100%); 
+      @if $i == 0 {
+        margin-inline-start: 0;
+      } @else {
+        margin-inline-start: calc($i / $columns * 100%);
+      }
     }
   }
 }
@@ -236,6 +240,3 @@
 @media (min-width: 1200px) {
   @include generate-columns('xl', 12);
 }
-
-// Offset
-
