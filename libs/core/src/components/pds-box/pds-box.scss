@@ -13,7 +13,7 @@
 
   // The immediate child of the row will fit the width of the row
   .pds-row > & {
-    display: flex;
+    // display: flex;
     position: relative;
     width: 100%;
   }
@@ -163,12 +163,17 @@
 }
 
 @mixin generate-columns($prefix, $columns) {
-  @for $i from 1 through $columns {
+  @for $i from 0 through $columns {
     /* stylelint-disable-next-line function-no-unknown */
     $class-name: if($prefix, 'pds-box-#{$prefix}-#{$i}', 'pds-box-#{$i}');
     .#{$class-name} {
-      flex: calc($i / $columns * 100%);
-      max-width: calc($i / $columns * 100%); 
+      @if $i == 0 {
+        display: none;
+      } @else {
+        display: inline-flex;
+        flex: calc($i / $columns * 100%);
+        max-width: calc($i / $columns * 100%);
+      }
     }
   }
 }

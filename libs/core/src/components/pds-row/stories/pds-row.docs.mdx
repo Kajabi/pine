@@ -76,7 +76,7 @@ need demo
   <pds-row
     component-id="${args.componentId}" 
   >
-    <pds-box size-md="6" size-lg="4" size-xl="3">Item 1</pds-box>
+    <pds-box size-xs="0" size-sm="0" size-lg="4" size-xl="3">Item 1</pds-box>
     <pds-box direction="column" size-md="6" size-lg="4" size-xl="3">
       <p>Content 1</p>
       <p>Content 2</p>
@@ -87,7 +87,6 @@ need demo
 </Canvas>
 
 ### Nested
-
 <Canvas mdxSource={`
 <pds-row>
   <pds-box size-md="8">
@@ -169,4 +168,32 @@ need demo
 
 ### Gaps / Gutters
 
-They required an additional Box layer for the border to appear correctly
+When a gap or gutter is needed between the columns, an additional child `pds-box` must be used to ensure correct spacing between the columns and rows
+<Canvas mdxSource={`
+<pds-row>
+  <pds-box size="2">Item 1</pds-box>
+  <pds-box size="8">Item 2</pds-box>
+  <pds-box size="2">Item 3</pds-box>
+</pds-row>
+`}>
+  <pds-row gap="16px">
+    <pds-box size="4">
+      <pds-box shadow="sm">
+        Item 1
+      </pds-box>
+    </pds-box>
+    <pds-box size="8">
+      <pds-box shadow="sm">
+        Item 2
+      </pds-box>
+    </pds-box>
+    <pds-box size="8">
+      <pds-box shadow="sm">
+        Item 2
+      </pds-box>
+    </pds-box>
+  </pds-row>
+</Canvas>
+
+### Layout Properties
+`pds-row` creates the horizontal rows that are used to contain a set of columns and can be view on the [Layouts](/docs/foundations-layout--docs) page.

@@ -37,26 +37,42 @@ By combining the `pds-box` and `pds-row` components, you can easily create a 12-
 This creates a two-column layout, and you can customize the sizes and arrangement of the columns to achieve the desired layout for your application.
 
 ## Responsive Design
-The layout components are designed to be responsive, allowing you to create layouts that adapt to different screen sizes. Take advantage of properties like `offset-xs`, `offset-sm`, etc., to customize the layout for specific breakpoints.
+Using the size modifiers such as `-xs`, `-md`, etc, enable responsive behavior for you `pds-box`. The layout components are designed to be responsive, allowing you to create layouts that adapt to different screen sizes. Take advantage of properties like `size-xs`, `offset-sm`, etc., to customize the layout for specific breakpoints. Be sure to optimize your layout for mobile devices, as well as larger screens.
 <Canvas mdxSource={`
 <pds-row>
-  <pds-box size="6" offset-xs="12">
-    Content for small screens
+  <pds-box size-md="6" size-lg="4" size-xl="3">Item 1</pds-box>
+  <pds-box direction="column" size-md="6" size-lg="4" size-xl="3">
+    <p>Content 1</p>
+    <p>Content 2</p>
   </pds-box>
-  <pds-box size="6" offset-xs="0">
-    Content for larger screens
-  </pds-box>
+  <pds-box size-md="6" size-lg="4" size-xl="3">Item 3</pds-box>
+  <pds-box size-md="6" size-lg="4" size-xl="3">Item 4</pds-box>
 </pds-row>
 `}>
-<pds-row>
-  <pds-box size="6" offset-xs="12">
-    Content for small screens
-  </pds-box>
-  <pds-box size="6" offset-xs="0">
-    Content for larger screens
-  </pds-box>
-</pds-row>
+  <pds-row
+    component-id="${args.componentId}" 
+  >
+    <pds-box size-md="6" size-lg="4" size-xl="3">Item 1</pds-box>
+    <pds-box size-md="6" size-lg="4" size-xl="3">Item 2</pds-box>
+    <pds-box size-md="6" size-lg="4" size-xl="3">Item 3</pds-box>
+  </pds-row>
 </Canvas>
+
+
+### Visible / Hidden Columns
+`size` and `offset` can be used to hide or show columns at different breakpoints. Values from 1 - 12 show the column, 0 hides the column.
+<Canvas mdxSource={`
+<pds-row>
+  <pds-box size-xs="0" size-sm="0" size-lg="6">Larger screen content</pds-box>
+  <pds-box size-md="6" size-lg="0">Small screen content</pds-box>
+</pds-row>
+`}>
+  <pds-row>
+    <pds-box size-xs="0" size-sm="0" size-lg="12">Larger screen content</pds-box>
+    <pds-box size-md="12" size-lg="0">Small screen content</pds-box>
+  </pds-row>
+</Canvas>
+
 
 ### Alignment
 Adding either `flex` **`display`** property to the box will initiate alignment values. Use `align-items` to change the vertical alignment of the box. Use `justify-content` to change the horizontal alignment of the box.
@@ -241,3 +257,7 @@ If you encounter issues with your layout, here are some common problems and thei
 ### 5. **Performance Degradation due to Unnecessary Nesting**
   - **Issue:** Noticeable performance degradation, especially on complex layouts.
   - **Solution:** Review the nested `pds-box`s structure and minimize unnecessary nesting by flattening your layout structure where possible. Excessive nesting can cause performance issues, especially on complex layouts.
+
+## Related Components
+- [Box](/docs/components-box--docs)
+- [Row](/docs/components-row--docs)

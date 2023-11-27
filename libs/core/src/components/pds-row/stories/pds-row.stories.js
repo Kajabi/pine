@@ -9,8 +9,12 @@ export default {
 
 const BaseTemplate = (args) => html`
 <pds-row
+  align-items="${args.alignItems}"  
+  bordered="${args.bordered}"
   component-id="${args.componentId}" 
-  gap="8px"
+  gap="${args.gap}"
+  justify-content="${args.justifyContent}"
+  min-height="${args.minHeight}"
 >
   <pds-box bordered>Item 1</pds-box>
   <pds-box bordered direction="column">
@@ -22,7 +26,9 @@ const BaseTemplate = (args) => html`
 
 export const Default = BaseTemplate.bind();
 Default.args = {
+  bordered: "true",
   componentId: 'opt0',
+  gap: '8px',
 };
 
 const SizeTemplate = (args) => html`
@@ -123,37 +129,31 @@ Offset.args = {
 
 const GapTemplate = (args) => html`
 <pds-row
+  align-items="${args.alignItems}"  
+  bordered="${args.bordered}"
   component-id="${args.componentId}" 
-  gap="24px"
-  min-height="200px"
+  gap="${args.gap}"
+  justify-content="${args.justifyContent}"
+  min-height="${args.minHeight}"
 >
-  <pds-box size-sm="6">
-    <pds-box 
-      bordered 
-      border-color="blue"
-      border-radius="md"
-      display="flex"
-      padding="md"
-    >
-      Content 1
+  <pds-box size="4">
+    <pds-box shadow="sm">
+      Item 1
     </pds-box>
-  </pds-box>
-  <pds-box>
-    <pds-box
-      border-radius="md"
-      display="flex"
-      padding="sm"
-      shadow="sm"
-    >
-      Content 2
+    </pds-box>
+    <pds-box size="8">
+    <pds-box shadow="sm">
+      Item 2
     </pds-box>
   </pds-box>
 </pds-row>
 `;
 
+
 export const Gap = GapTemplate.bind();
 Gap.args = {
   componentId: 'opt0',
+  gap: '24px'
 };
 
 
