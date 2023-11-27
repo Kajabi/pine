@@ -17,7 +17,7 @@ export class PdsTableRow {
   /**
    * Event that is emitted when the checkbox is clicked, carrying the selected value.
    */
-  @Event() pdsTableRowSelected: EventEmitter<string>;
+  @Event() pdsTableRowSelected: EventEmitter<{ value: string; isSelected: boolean; }>;
 
   /**
    * A local state to track whether the row is currently selected.
@@ -26,11 +26,9 @@ export class PdsTableRow {
 
   private handleCheckboxClick = () => {
     this.isSelected = !this.isSelected; // Toggle the selected state
-    this.pdsTableRowSelected.emit(this.value); // Emit the custom event with the value
-
-    console.log('Event emitted: pdsTableRowSelected');
-    console.log('Value:', this.value);
-    console.log('IsSelected:', this.isSelected);
+    this.pdsTableRowSelected.emit({ value: this.value, isSelected: this.isSelected }); // Emit the custom event with the value
+    const selectedIndex = Array.from(this.hostElement.parentNode.children).indexOf(this.hostElement);
+    console.log('Event emitted: pdsTableRowSelected', { rowIndex: selectedIndex, isSelected: this.isSelected });
   }
 
   private classNames() {
@@ -59,17 +57,20 @@ export class PdsTableRow {
         role="row"
         value={this.value}
       >
+        <slot name='checkbox'>
         {this.tableRef && this.tableRef.selectable && (
           <pds-table-checkbox-cell part={this.tableRef.fixedColumn ? 'checkbox-cell' : ''} >
             <pds-checkbox
               componentId={this.value}
               onClick={this.handleCheckboxClick}
-              value={this.value}
               label={this.value}
               labelHidden={true}
+              checked={this.isSelected}
+              value={this.value}
             />
           </pds-table-checkbox-cell>
         )}
+        </slot>
         <slot></slot>
       </Host>
     );

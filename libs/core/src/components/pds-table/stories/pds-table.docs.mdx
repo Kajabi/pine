@@ -646,7 +646,7 @@ Basic sorting can be enabled by adding the `sortable` attribute to a `pds-table-
 In cases where the default sorting functionality is not suitable, you can prevent it and use your own custom sorting mechanism by listening to the `pdsTableSort` event.
 
 <Canvas mdxSource={`
-<pds-table component-id="sortable">
+<pds-table component-id="sortable" selectable>
   <pds-table-head>
     <pds-table-head-cell sortable>Name</pds-table-head-cell>
     <pds-table-head-cell sortable>Email</pds-table-head-cell>
@@ -706,59 +706,59 @@ In cases where the default sorting functionality is not suitable, you can preven
   </pds-table-body>
 </pds-table>
 `}>
-<pds-table component-id="sortable">
+<pds-table component-id="sortable" selectable>
   <pds-table-head>
     <pds-table-head-cell sortable>Name</pds-table-head-cell>
     <pds-table-head-cell sortable>Email</pds-table-head-cell>
     <pds-table-head-cell sortable>Account</pds-table-head-cell>
   </pds-table-head>
   <pds-table-body>
-    <pds-table-row>
+    <pds-table-row  value="test1">
       <pds-table-cell>John Doe</pds-table-cell>
       <pds-table-cell>john.doe@example.com</pds-table-cell>
       <pds-table-cell>47321</pds-table-cell>
     </pds-table-row>
-    <pds-table-row>
+    <pds-table-row value="test2">
       <pds-table-cell>Jane Smith</pds-table-cell>
       <pds-table-cell>jane.smith@example.com</pds-table-cell>
       <pds-table-cell>89654</pds-table-cell>
     </pds-table-row>
-    <pds-table-row>
+    <pds-table-row value="test3">
       <pds-table-cell>Michael Johnson</pds-table-cell>
       <pds-table-cell>michael.johnson@example.com</pds-table-cell>
       <pds-table-cell>21578</pds-table-cell>
     </pds-table-row>
-    <pds-table-row>
+    <pds-table-row value="test4">
       <pds-table-cell>Susan Brown</pds-table-cell>
       <pds-table-cell>susan.brown@example.com</pds-table-cell>
       <pds-table-cell>63920</pds-table-cell>
     </pds-table-row>
-    <pds-table-row>
+    <pds-table-row value="test5">
       <pds-table-cell>William Davis</pds-table-cell>
       <pds-table-cell>william.davis@example.com</pds-table-cell>
       <pds-table-cell>17436</pds-table-cell>
     </pds-table-row>
-    <pds-table-row>
+    <pds-table-row value="test6">
       <pds-table-cell>Mary Wilson</pds-table-cell>
       <pds-table-cell>mary.wilson@example.com</pds-table-cell>
       <pds-table-cell>58203</pds-table-cell>
     </pds-table-row>
-    <pds-table-row>
+    <pds-table-row value="test7">
       <pds-table-cell>James Lee</pds-table-cell>
       <pds-table-cell>james.lee@example.com</pds-table-cell>
       <pds-table-cell>92617</pds-table-cell>
     </pds-table-row>
-    <pds-table-row>
+    <pds-table-row value="test8">
       <pds-table-cell>Linda Hall</pds-table-cell>
       <pds-table-cell>linda.hall@example.com</pds-table-cell>
       <pds-table-cell>30456</pds-table-cell>
     </pds-table-row>
-    <pds-table-row>
+    <pds-table-row value="test9">
       <pds-table-cell>Robert Turner</pds-table-cell>
       <pds-table-cell>robert.turner@example.com</pds-table-cell>
       <pds-table-cell>71842</pds-table-cell>
     </pds-table-row>
-    <pds-table-row>
+    <pds-table-row value="test10">
       <pds-table-cell>Elizabeth Miller</pds-table-cell>
       <pds-table-cell>elizabeth.miller@example.com</pds-table-cell>
       <pds-table-cell>45908</pds-table-cell>

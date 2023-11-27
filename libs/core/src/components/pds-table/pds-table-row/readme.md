@@ -14,9 +14,9 @@
 
 ## Events
 
-| Event                 | Description                                                                      | Type                  |
-| --------------------- | -------------------------------------------------------------------------------- | --------------------- |
-| `pdsTableRowSelected` | Event that is emitted when the checkbox is clicked, carrying the selected value. | `CustomEvent<string>` |
+| Event                 | Description                                                                      | Type                                                   |
+| --------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `pdsTableRowSelected` | Event that is emitted when the checkbox is clicked, carrying the selected value. | `CustomEvent<{ value: string; isSelected: boolean; }>` |
 
 
 ## Dependencies
