@@ -1545,7 +1545,7 @@ declare namespace LocalJSX {
         /**
           * Event that is emitted when the checkbox is clicked, carrying the selected value.
          */
-        "onPdsTableRowSelected"?: (event: PdsTableRowCustomEvent<{ value: string; isSelected: boolean; }>) => void;
+        "onPdsTableRowSelected"?: (event: PdsTableRowCustomEvent<{ rowIndex: number; isSelected: boolean; }>) => void;
     }
     interface PdsTabpanel {
         /**

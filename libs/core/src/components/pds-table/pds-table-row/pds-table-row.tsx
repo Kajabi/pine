@@ -12,7 +12,7 @@ export class PdsTableRow {
   /**
    * Event that is emitted when the checkbox is clicked, carrying the selected value.
    */
-  @Event() pdsTableRowSelected: EventEmitter<{ value: string; isSelected: boolean; }>;
+  @Event() pdsTableRowSelected: EventEmitter<{ rowIndex: number; isSelected: boolean; }>;
 
   /**
    * A local state to track whether the row is currently selected.
@@ -22,6 +22,7 @@ export class PdsTableRow {
   private handleCheckboxClick = () => {
     this.isSelected = !this.isSelected; // Toggle the selected state
     const selectedIndex = Array.from(this.hostElement.parentNode.children).indexOf(this.hostElement);
+    this.pdsTableRowSelected.emit({ rowIndex: selectedIndex, isSelected: this.isSelected });
     console.log('Event emitted: pdsTableRowSelected', { rowIndex: selectedIndex, isSelected: this.isSelected });
   }
 
