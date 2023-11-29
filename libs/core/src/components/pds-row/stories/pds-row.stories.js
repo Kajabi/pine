@@ -60,6 +60,7 @@ const GapTemplate = (args) => html`
 
 export const Gap = GapTemplate.bind();
 Gap.args = {
+  bordered: "false",
   componentId: 'opt0',
   gap: '24px'
 };
