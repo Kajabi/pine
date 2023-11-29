@@ -14,27 +14,48 @@ The `pds-box` component serves as a versatile building block for creating indivi
 
 ### Creating a 12-Column Grid System
 By combining the `pds-box` and `pds-row` components, you can easily create a 12-column grid system. Here's an example of how to structure your layout:
+
 <Canvas mdxSource={`
 <pds-row>
-  <pds-box size="6">
+  <pds-box>
     Content for column 1
   </pds-box>
-  <pds-box size="6">
+  <pds-box>
     Content for column 2
   </pds-box>
 </pds-row>
 `}>
 <pds-row>
-  <pds-box size="6">
+  <pds-box>
     Content for column 1
   </pds-box>
-  <pds-box size="6">
+  <pds-box>
     Content for column 2
   </pds-box>
 </pds-row>
 </Canvas>
 
-This creates a two-column layout, and you can customize the sizes and arrangement of the columns to achieve the desired layout for your application.
+By default, adding `pds-row`s with no `size` property will create equal width columns. 
+This creates a two-column layout, and you can customize the `size` and arrangement of the columns to achieve the desired layout for your application. The `size` property affects the width of the column across all viewports.
+<Canvas mdxSource={`
+<pds-row>
+  <pds-box size="4">
+    Content for column 1
+  </pds-box>
+  <pds-box size="8">
+    Content for column 2
+  </pds-box>
+</pds-row>
+`}>
+<pds-row>
+  <pds-box size="4">
+    Content for column 1
+  </pds-box>
+  <pds-box size="8">
+    Content for column 2
+  </pds-box>
+</pds-row>
+</Canvas>
 
 ## Responsive Design
 Using the size modifiers such as `-xs`, `-md`, etc, enable responsive behavior for you `pds-box`. The layout components are designed to be responsive, allowing you to create layouts that adapt to different screen sizes. Take advantage of properties like `size-xs`, `offset-sm`, etc., to customize the layout for specific breakpoints. Be sure to optimize your layout for mobile devices, as well as larger screens.
@@ -73,6 +94,41 @@ Using the size modifiers such as `-xs`, `-md`, etc, enable responsive behavior f
   </pds-row>
 </Canvas>
 
+### Offsetting Columns
+Use the `offset` property to offset columns to the right. The `offset` property accepts values from 1 - 11. For example, `offset="1"` will offset the column by one column width. Adding size modifiers such as `offset-md="1"` will offset the column by one column width on medium screens and larger.
+<Canvas mdxSource={`
+<pds-row>
+  <pds-box size="4">Item 1</pds-box>
+  <pds-box offset="4" size="4">Item 2</pds-box>
+</pds-row>
+<pds-row>
+  <pds-box size-md="4">Item 1</pds-box>
+  <pds-box offset-md="4" size-md="4">Item 2</pds-box>
+</pds-row>
+<pds-row>
+  <pds-box offset="3" offset-xs="2" size="6" size-xs="8">Item 1</pds-box>
+</pds-row>
+`}>
+<>
+  <pds-row
+    component-id="${args.componentId}" 
+  >
+    <pds-box size="4">Item 1</pds-box>
+    <pds-box offset="4" size="4">Item 2</pds-box>
+  </pds-row>
+  <pds-row
+    component-id="${args.componentId}" 
+  >
+    <pds-box size-md="4">Item 1</pds-box>
+    <pds-box offset-md="4" size-md="4">Item 2</pds-box>
+  </pds-row>
+  <pds-row
+    component-id="${args.componentId}" 
+  >
+    <pds-box offset="3" offset-xs="2" size="6" size-xs="8">Item 1</pds-box>
+  </pds-row>
+</>
+</Canvas>
 
 ### Alignment
 Adding either `flex` **`display`** property to the box will initiate alignment values. Use `align-items` to change the vertical alignment of the box. Use `justify-content` to change the horizontal alignment of the box.
@@ -204,34 +260,50 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
   </pds-row>
 </Canvas>
 
-Either add description text or delete this section
-### Example
+## Nested Layouts
+You can nest `pds-row` and `pds-box` components to create more complex layouts. 
 <Canvas mdxSource={`
 <pds-row>
-  <pds-box size="6" offset="3" align-items="center" justify-content="center">
-    Centered content
+  <pds-box size-md="8">
+    <pds-row>
+      <pds-box size-xl="6">Column 1 Item 1</pds-box>
+      <pds-box size-xl="6">Column 1 Item 2</pds-box>
+    </pds-row>
+  </pds-box>
+  <pds-box
+    display="flex"
+    size-md="4"
+  >
+    <pds-box
+      display="flex"
+      align-items="center"
+      justify-content="center"
+    >
+      Column 2
+    </pds-box>
   </pds-box>
 </pds-row>
 `}>
-<pds-row>
-  <pds-box size="6" offset="3" align-items="center" justify-content="center">
-    Centered content
-  </pds-box>
-</pds-row>
-</Canvas>
-
-<Canvas mdxSource={`
-<pds-row min-height="100px" align-items="center" justify-content="center">
-  <pds-box size="6" offset="3">
-    Centered content
-  </pds-box>
-</pds-row>
-`}>
-<pds-row bordered="true" min-height="100px" align-items="center" justify-content="center">
-  <pds-box size="6">
-    Centered content
-  </pds-box>
-</pds-row>
+  <pds-row>
+    <pds-box size-md="8">
+      <pds-row>
+        <pds-box size-xl="6">Column 1 Item 1</pds-box>
+        <pds-box size-xl="6">Column 1 Item 2</pds-box>
+      </pds-row>
+    </pds-box>
+    <pds-box
+      display="flex"
+      size-md="4"
+    >
+      <pds-box
+        display="flex"
+        align-items="center"
+        justify-content="center"
+      >
+        Column 2
+      </pds-box>
+    </pds-box>
+  </pds-row>
 </Canvas>
 
 ## Troubleshooting
