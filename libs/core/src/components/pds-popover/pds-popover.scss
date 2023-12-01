@@ -47,7 +47,7 @@
 
   &::after {
     border-color: transparent;
-    border-right-color: transparent;
+    border-inline-end-color: transparent;
     border-style: solid;
     border-width: var(--arrow-pointing-to-the-left);
     content: '';
@@ -58,58 +58,58 @@
     .pds-popover--right & {
       border-inline-end-color: var(--background-color);
       border-width: var(--arrow-pointing-to-the-left);
-      left: calc(var(--arrow-size) * -1);
-      top: 50%;
+      inset-block-start: 50%;
+      inset-inline-start: calc(var(--arrow-size) * -1);
       transform: translateY(-50%);
     }
 
     .pds-popover--right-end & {
       border-inline-end-color: var(--background-color);
       border-width: var(--arrow-pointing-to-the-left);
-      bottom: var(--arrow-offset);
-      left: calc(var(--arrow-size) * -1);
-      top: initial;
+      inset-block-end: var(--arrow-offset);
+      inset-block-start: initial;
+      inset-inline-start: calc(var(--arrow-size) * -1);
     }
 
     .pds-popover--right-start & {
       border-inline-end-color: var(--background-color);
       border-width: var(--arrow-pointing-to-the-left);
-      left: calc(var(--arrow-size) * -1);
-      top: var(--arrow-offset);
+      inset-block-start: var(--arrow-offset);
+      inset-inline-start: calc(var(--arrow-size) * -1);
     }
 
     .pds-popover--top & {
       border-block-start-color: var(--background-color);
       border-width: var(--arrow-pointing-down);
-      bottom: calc(var(--arrow-size) * -1);
-      left: 50%;
-      top: initial;
+      inset-block-end: calc(var(--arrow-size) * -1);
+      inset-block-start: initial;
+      inset-inline-start: 50%;
       transform: translateX(-50%);
     }
 
     .pds-popover--top-start & {
       border-block-start-color: var(--background-color);
       border-width: var(--arrow-pointing-down);
-      bottom: calc(var(--arrow-size) * -1);
-      left: var(--arrow-offset);
-      top: initial;
+      inset-block-end: calc(var(--arrow-size) * -1);
+      inset-block-start: initial;
+      inset-inline-start: var(--arrow-offset);
     }
 
     .pds-popover--top-end & {
       border-block-start-color: var(--background-color);
       border-width: var(--arrow-pointing-down);
-      bottom: calc(var(--arrow-size) * -1);
-      left: initial;
-      right: var(--arrow-offset);
-      top: initial;
+      inset-block-end: calc(var(--arrow-size) * -1);
+      inset-block-start: initial;
+      inset-inline-end: var(--arrow-offset);
+      inset-inline-start: initial;
     }
 
     .pds-popover--left & {
       border-inline-start-color: var(--background-color);
       border-width: var(--arrow-pointing-to-the-right);
-      left: initial;
-      right: calc(var(--arrow-size) * -1);
-      top: 50%;
+      inset-block-start: 50%;
+      inset-inline-end: calc(var(--arrow-size) * -1);
+      inset-inline-start: initial;
       transform: translateY(-50%);
     }
 
@@ -117,40 +117,40 @@
       border-inline-start-color: var(--background-color);
       border-width: var(--arrow-pointing-to-the-right);
       bottom: var(--arrow-offset);
-      left: initial;
-      right: calc(var(--arrow-size) * -1);
-      top: initial;
+      inset-block-start: initial;
+      inset-inline-end: calc(var(--arrow-size) * -1);
+      inset-inline-start: initial;
     }
 
     .pds-popover--left-start & {
       border-inline-start-color: var(--background-color);
       border-width: var(--arrow-pointing-to-the-right);
-      left: initial;
-      right: calc(var(--arrow-size) * -1);
-      top: var(--arrow-offset);
+      inset-block-start: var(--arrow-offset);
+      inset-inline-end: calc(var(--arrow-size) * -1);
+      inset-inline-start: initial;
     }
 
     .pds-popover--bottom & {
       border-block-end-color: var(--background-color);
       border-width: var(--arrow-pointing-up);
-      left: 50%;
-      top: calc(var(--arrow-size) * -1);
+      inset-block-start: calc(var(--arrow-size) * -1);
+      inset-inline-start: 50%;
       transform: translateX(-50%);
     }
 
     .pds-popover--bottom-end & {
       border-block-end-color: var(--background-color);
       border-width: var(--arrow-pointing-up);
-      left: initial;
-      right: var(--arrow-offset);
-      top: calc(var(--arrow-size) * -1);
+      inset-block-start: calc(var(--arrow-size) * -1);
+      inset-inline-end: var(--arrow-offset);
+      inset-inline-start: initial;
     }
 
     .pds-popover--bottom-start & {
       border-block-end-color: var(--background-color);
       border-width: var(--arrow-pointing-up);
-      left: var(--arrow-offset);
-      top: calc(var(--arrow-size) * -1);
+      inset-block-start: calc(var(--arrow-size) * -1);
+      inset-inline-start: var(--arrow-offset);
     }
 
     .pds-popover--no-arrow & {
