@@ -2,13 +2,13 @@ import { html } from 'lit-html';
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 export default {
-  argTypes: extractArgTypes('pds-row'),
-  component: 'pds-grid-row',
-  title: 'components/Row',
+  argTypes: extractArgTypes('pds-layout-row'),
+  component: 'pds-layout-row',
+  title: 'components/Layout/Row',
 };
 
 const BaseTemplate = (args) => html`
-<pds-row
+<pds-layout-row
   align-items="${args.alignItems}"  
   bordered="${args.bordered}"
   component-id="${args.componentId}" 
@@ -21,7 +21,7 @@ const BaseTemplate = (args) => html`
     <p>Content 1</p>
     <p>Content 2</p>
   </pds-layout-box>
-</pds-row>
+</pds-layout-row>
 `;
 
 export const Default = BaseTemplate.bind();
@@ -32,7 +32,7 @@ Default.args = {
 };
 
 const GapTemplate = (args) => html`
-<pds-row
+<pds-layout-row
   align-items="${args.alignItems}"  
   bordered="${args.bordered}"
   component-id="${args.componentId}" 
@@ -54,7 +54,7 @@ const GapTemplate = (args) => html`
       Item 2
     </pds-layout-box>
   </pds-layout-box>
-</pds-row>
+</pds-layout-row>
 `;
 
 

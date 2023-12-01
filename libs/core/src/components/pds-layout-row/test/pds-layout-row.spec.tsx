@@ -1,19 +1,19 @@
 import { newSpecPage } from '@stencil/core/testing';
-import { PdsRow } from '../pds-row';
+import { PdsLayoutRow } from '../pds-layout-row';
 
-describe('pds-row', () => {
+describe('pds-layout-row', () => {
   it('renders', async () => {
     const page = await newSpecPage({
-      components: [PdsRow],
-      html: `<pds-row></pds-row>`,
+      components: [PdsLayoutRow],
+      html: `<pds-layout-row></pds-layout-row>`,
     });
     expect(page.root).toBeTruthy();
   });
 
   it('renders a min-height when prop is set', async () => {
     const page = await newSpecPage({
-      components: [PdsRow],
-      html: `<pds-row min-height="150px"></pds-row>`,
+      components: [PdsLayoutRow],
+      html: `<pds-layout-row min-height="150px"></pds-layout-row>`,
     });
     
     const element = page.root;
@@ -23,8 +23,8 @@ describe('pds-row', () => {
 
   it('renders a gap when prop is set', async () => {
     const page = await newSpecPage({
-      components: [PdsRow],
-      html: `<pds-row gap="16px"></pds-row>`,
+      components: [PdsLayoutRow],
+      html: `<pds-layout-row gap="16px"></pds-layout-row>`,
     });
     
     const element = page.root;
@@ -34,8 +34,8 @@ describe('pds-row', () => {
 
   it('renders the align-items when prop is set', async () => {
     const page = await newSpecPage({
-      components: [PdsRow],
-      html: `<pds-row align-items="center"></pds-row>`,
+      components: [PdsLayoutRow],
+      html: `<pds-layout-row align-items="center"></pds-layout-row>`,
     });
     
     const element = page.root;
@@ -45,8 +45,8 @@ describe('pds-row', () => {
 
   it('renders the justify-content when prop is set', async () => {
     const page = await newSpecPage({
-      components: [PdsRow],
-      html: `<pds-row justify-content="center"></pds-row>`,
+      components: [PdsLayoutRow],
+      html: `<pds-layout-row justify-content="center"></pds-layout-row>`,
     });
     
     const element = page.root;
@@ -56,23 +56,23 @@ describe('pds-row', () => {
   
   it('renders a border if true', async () => {
     const page = await newSpecPage({
-      components: [PdsRow],
-      html: `<pds-row bordered></pds-row>`,
+      components: [PdsLayoutRow],
+      html: `<pds-layout-row bordered></pds-layout-row>`,
     });
     
     const element = page.root;
 
-    expect(element).toHaveClass('pds-row--bordered');
+    expect(element).toHaveClass('pds-layout-row--bordered');
   });
 
   it('does not wrap when no-wrap if true', async () => {
     const page = await newSpecPage({
-      components: [PdsRow],
-      html: `<pds-row no-wrap></pds-row>`,
+      components: [PdsLayoutRow],
+      html: `<pds-layout-row no-wrap></pds-layout-row>`,
     });
     
     const element = page.root;
 
-    expect(element).toHaveClass('pds-row--no-wrap');
+    expect(element).toHaveClass('pds-layout-row--no-wrap');
   });
 });

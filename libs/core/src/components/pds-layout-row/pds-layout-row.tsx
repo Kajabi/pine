@@ -1,10 +1,10 @@
 import { Component, Prop, h, Host} from '@stencil/core';
 
 @Component({
-  tag: 'pds-row',
-  styleUrl: 'pds-row.scss',
+  tag: 'pds-layout-row',
+  styleUrl: 'pds-layout-row.scss',
 })
-export class PdsRow {
+export class PdsLayoutRow {
   /**
    * Defines the vertical alignment of the row items.
   */
@@ -43,9 +43,9 @@ export class PdsRow {
   render() {
     const rowClasses = `
       ${this.alignItems ? `pds-align-items-${this.alignItems}` : ''}
-      ${this.bordered ? 'pds-row--bordered' : ''}
+      ${this.bordered ? 'pds-layout-row--bordered' : ''}
       ${this.justifyContent ? `pds-justify-content-${this.justifyContent}` : ''}
-      ${this.noWrap ? 'pds-row--no-wrap' : ''}
+      ${this.noWrap ? 'pds-layout-row--no-wrap' : ''}
     `;
 
     const rowInlineStyles = {
@@ -59,7 +59,7 @@ export class PdsRow {
     };
 
     return (
-      <Host class={`pds-row ${rowClasses}`} style={rowInlineStyles}>
+      <Host class={`pds-layout-row ${rowClasses}`} style={rowInlineStyles}>
       </Host>
       );
   }

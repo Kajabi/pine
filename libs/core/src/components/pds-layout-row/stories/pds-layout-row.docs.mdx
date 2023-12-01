@@ -1,5 +1,5 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
-import * as stories from './pds-row.stories.js';
+import * as stories from './pds-layout-row.stories.js';
 
 <Meta of={stories} />
 
@@ -16,16 +16,16 @@ Base on 12 column flexbox-based grid system
 By default boxes with rows will be equal width if no size is specified.
 
 <Canvas mdxSource={`
-<pds-row>
+<pds-layout-row>
   <pds-layout-box>Item 1</pds-layout-box>
   <pds-layout-box direction="column">
     <p>Content 1</p>
     <p>Content 2</p>
   </pds-layout-box>
   <pds-layout-box>Item 3</pds-layout-box>
-</pds-row>
+</pds-layout-row>
 `}>
-  <pds-row
+  <pds-layout-row
     class="demo-row"
     component-id="${args.componentId}" 
     gap="12px"
@@ -37,7 +37,7 @@ By default boxes with rows will be equal width if no size is specified.
       <p>Content 2</p>
     </pds-layout-box>
     <pds-layout-box>Item 3</pds-layout-box>
-  </pds-row>
+  </pds-layout-row>
 </Canvas>
 
 ### Wrapping
@@ -47,13 +47,13 @@ need demo
 ### Gaps / Gutters
 When a gap or gutter is needed between the columns, an additional child `pds-layout-box` must be used to ensure correct spacing between the columns and rows
 <Canvas mdxSource={`
-<pds-row>
+<pds-layout-row>
   <pds-layout-box size="2">Item 1</pds-layout-box>
   <pds-layout-box size="8">Item 2</pds-layout-box>
   <pds-layout-box size="2">Item 3</pds-layout-box>
-</pds-row>
+</pds-layout-row>
 `}>
-  <pds-row gap="16px">
+  <pds-layout-row gap="16px">
     <pds-layout-box size="4">
       <pds-layout-box shadow="sm">
         Item 1
@@ -69,8 +69,8 @@ When a gap or gutter is needed between the columns, an additional child `pds-lay
         Item 2
       </pds-layout-box>
     </pds-layout-box>
-  </pds-row>
+  </pds-layout-row>
 </Canvas>
 
 ### Layout Properties
-`pds-row` creates the horizontal rows that are used to contain a set of columns and can be view on the [Layouts](/docs/foundations-layout--docs) page.
+`pds-layout-row` creates the horizontal rows that are used to contain a set of columns and can be view on the [Layouts](/docs/foundations-layout--docs) page.

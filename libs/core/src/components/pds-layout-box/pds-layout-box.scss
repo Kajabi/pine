@@ -2,29 +2,29 @@
   display: block;
 }
 
-.pds-box {
+.pds-layout-box {
   flex-basis: 0;
   flex-grow: 1;
 }
 
-[class*='pds-box'] {
+[class*='pds-layout-box'] {
   box-sizing: border-box;
   display: inline-flex;
 
   // The immediate child of the row will fit the width of the row
-  .pds-row > & {
+  .pds-layout-row > & {
     position: relative;
     width: 100%;
   }
 }
 
-.pds-box--auto {
+.pds-layout-box--auto {
   flex: 0 0 auto;
   min-width: auto;
   width: auto;
 }
 
-.pds-box--bordered {
+.pds-layout-box--bordered {
   border: var(--pine-border-default);
 }
 
@@ -71,35 +71,35 @@
 }
 
 // Gap helpers
-.pds-box-gap-none {
+.pds-layout-box-gap-none {
   gap: 0;
 }
 
-.pds-box-gap-xxs {
+.pds-layout-box-gap-xxs {
   gap: var(--pine-spacing-xxs);
 }
 
-.pds-box-gap-xs {
+.pds-layout-box-gap-xs {
   gap: var(--pine-spacing-xxs);
 }
 
-.pds-box-gap-sm {
+.pds-layout-box-gap-sm {
   gap: var(--pine-spacing-sm);
 }
 
-.pds-box-gap-md {
+.pds-layout-box-gap-md {
   gap: var(--pine-spacing-md);
 }
 
-.pds-box-gap-lg {
+.pds-layout-box-gap-lg {
   gap: var(--pine-spacing-lg);
 }
 
-.pds-box-gap-xl {
+.pds-layout-box-gap-xl {
   gap: var(--pine-spacing-xl);
 }
 
-.pds-box-gap-xxl {
+.pds-layout-box-gap-xxl {
   gap: var(--pine-spacing-2xl);
 }
 
@@ -137,20 +137,20 @@
 }
 
 // Display helpers
-.pds-box-display-flex {
+.pds-layout-box-display-flex {
   display: flex;
 }
 
-.pds-box-display-inline-flex {
+.pds-layout-box-display-inline-flex {
   display: inline-flex;
 }
 
 // Flex Direction helpers
-.pds-box-direction-row {
+.pds-layout-box-direction-row {
   flex-direction: row;
 }
 
-.pds-box-direction-column {
+.pds-layout-box-direction-column {
   flex-direction: column;
 }
 
@@ -203,7 +203,7 @@
 @mixin generate-columns($prefix, $columns) {
   @for $i from 0 through $columns {
     /* stylelint-disable-next-line function-no-unknown */
-    $class-name: if($prefix, 'pds-box-#{$prefix}-#{$i}', 'pds-box-#{$i}');
+    $class-name: if($prefix, 'pds-layout-box-#{$prefix}-#{$i}', 'pds-layout-box-#{$i}');
     .#{$class-name} {
       @if $i == 0 {
         display: none;
@@ -219,7 +219,7 @@
 @mixin generate-column-offsets($prefix, $columns) {
   @for $i from 0 through $columns {
     /* stylelint-disable-next-line function-no-unknown */
-    $class-name: if($prefix, 'pds-box-offset-#{$prefix}-#{$i}', 'pds-box-offset-#{$i}');
+    $class-name: if($prefix, 'pds-layout-box-offset-#{$prefix}-#{$i}', 'pds-layout-box-offset-#{$i}');
     .#{$class-name} {
       @if $i == 0 {
         margin-inline-start: 0;

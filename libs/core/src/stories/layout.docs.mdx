@@ -7,60 +7,60 @@ import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
 The Layout system consists on using the `Row` and the `Box` component in tandem
 
 ## Row
-The `pds-row` component is designed to create horizontal rows that contain a set of columns.
+The `pds-layout-row` component is designed to create horizontal rows that contain a set of columns.
 
 ## Box
 The `pds-layout-box` component serves as a versatile building block for creating individual elements within your layout. You can use the `pds-layout-box` component to create columns, rows, and other layout elements with use of the `size` and `offset` properties or their variants.
 
 ### Creating a 12-Column Grid System
-By combining the `pds-layout-box` and `pds-row` components, you can easily create a 12-column grid system. Here's an example of how to structure your layout:
+By combining the `pds-layout-box` and `pds-layout-row` components, you can easily create a 12-column grid system. Here's an example of how to structure your layout:
 
 <Canvas mdxSource={`
-<pds-row>
+<pds-layout-row>
   <pds-layout-box>
     Content for column 1
   </pds-layout-box>
   <pds-layout-box>
     Content for column 2
   </pds-layout-box>
-</pds-row>
+</pds-layout-row>
 `}>
-<pds-row>
+<pds-layout-row>
   <pds-layout-box>
     Content for column 1
   </pds-layout-box>
   <pds-layout-box>
     Content for column 2
   </pds-layout-box>
-</pds-row>
+</pds-layout-row>
 </Canvas>
 
-By default, adding `pds-row`s with no `size` property will create equal width columns. 
+By default, adding `pds-layout-row`s with no `size` property will create equal width columns. 
 This creates a two-column layout, and you can customize the `size` and arrangement of the columns to achieve the desired layout for your application. The `size` property affects the width of the column across all viewports.
 <Canvas mdxSource={`
-<pds-row>
+<pds-layout-row>
   <pds-layout-box size="4">
     Content for column 1
   </pds-layout-box>
   <pds-layout-box size="8">
     Content for column 2
   </pds-layout-box>
-</pds-row>
+</pds-layout-row>
 `}>
-<pds-row>
+<pds-layout-row>
   <pds-layout-box size="4">
     Content for column 1
   </pds-layout-box>
   <pds-layout-box size="8">
     Content for column 2
   </pds-layout-box>
-</pds-row>
+</pds-layout-row>
 </Canvas>
 
 ## Responsive Design
 Using the size modifiers such as `-xs`, `-md`, etc, enable responsive behavior for you `pds-layout-box`. The layout components are designed to be responsive, allowing you to create layouts that adapt to different screen sizes. Take advantage of properties like `size-xs`, `offset-sm`, etc., to customize the layout for specific breakpoints. Be sure to optimize your layout for mobile devices, as well as larger screens.
 <Canvas mdxSource={`
-<pds-row>
+<pds-layout-row>
   <pds-layout-box size-md="6" size-lg="4" size-xl="3">Item 1</pds-layout-box>
   <pds-layout-box direction="column" size-md="6" size-lg="4" size-xl="3">
     <p>Content 1</p>
@@ -68,65 +68,65 @@ Using the size modifiers such as `-xs`, `-md`, etc, enable responsive behavior f
   </pds-layout-box>
   <pds-layout-box size-md="6" size-lg="4" size-xl="3">Item 3</pds-layout-box>
   <pds-layout-box size-md="6" size-lg="4" size-xl="3">Item 4</pds-layout-box>
-</pds-row>
+</pds-layout-row>
 `}>
-  <pds-row
+  <pds-layout-row
     component-id="${args.componentId}" 
   >
     <pds-layout-box size-md="6" size-lg="4" size-xl="3">Item 1</pds-layout-box>
     <pds-layout-box size-md="6" size-lg="4" size-xl="3">Item 2</pds-layout-box>
     <pds-layout-box size-md="6" size-lg="4" size-xl="3">Item 3</pds-layout-box>
-  </pds-row>
+  </pds-layout-row>
 </Canvas>
 
 
 ### Visible / Hidden Columns
 `size` and `offset` can be used to hide or show columns at different breakpoints. Values from 1 - 12 show the column, 0 hides the column.
 <Canvas mdxSource={`
-<pds-row>
+<pds-layout-row>
   <pds-layout-box size-xs="0" size-sm="0" size-lg="6">Larger screen content</pds-layout-box>
   <pds-layout-box size-md="6" size-lg="0">Small screen content</pds-layout-box>
-</pds-row>
+</pds-layout-row>
 `}>
-  <pds-row>
+  <pds-layout-row>
     <pds-layout-box size-xs="0" size-sm="0" size-lg="12">Larger screen content</pds-layout-box>
     <pds-layout-box size-md="12" size-lg="0">Small screen content</pds-layout-box>
-  </pds-row>
+  </pds-layout-row>
 </Canvas>
 
 ### Offsetting Columns
 Use the `offset` property to offset columns to the right. The `offset` property accepts values from 1 - 11. For example, `offset="1"` will offset the column by one column width. Adding size modifiers such as `offset-md="1"` will offset the column by one column width on medium screens and larger.
 <Canvas mdxSource={`
-<pds-row>
+<pds-layout-row>
   <pds-layout-box size="4">Item 1</pds-layout-box>
   <pds-layout-box offset="4" size="4">Item 2</pds-layout-box>
-</pds-row>
-<pds-row>
+</pds-layout-row>
+<pds-layout-row>
   <pds-layout-box size-md="4">Item 1</pds-layout-box>
   <pds-layout-box offset-md="4" size-md="4">Item 2</pds-layout-box>
-</pds-row>
-<pds-row>
+</pds-layout-row>
+<pds-layout-row>
   <pds-layout-box offset="3" offset-xs="2" size="6" size-xs="8">Item 1</pds-layout-box>
-</pds-row>
+</pds-layout-row>
 `}>
 <>
-  <pds-row
+  <pds-layout-row
     component-id="${args.componentId}" 
   >
     <pds-layout-box size="4">Item 1</pds-layout-box>
     <pds-layout-box offset="4" size="4">Item 2</pds-layout-box>
-  </pds-row>
-  <pds-row
+  </pds-layout-row>
+  <pds-layout-row
     component-id="${args.componentId}" 
   >
     <pds-layout-box size-md="4">Item 1</pds-layout-box>
     <pds-layout-box offset-md="4" size-md="4">Item 2</pds-layout-box>
-  </pds-row>
-  <pds-row
+  </pds-layout-row>
+  <pds-layout-row
     component-id="${args.componentId}" 
   >
     <pds-layout-box offset="3" offset-xs="2" size="6" size-xs="8">Item 1</pds-layout-box>
-  </pds-row>
+  </pds-layout-row>
 </>
 </Canvas>
 
@@ -134,7 +134,7 @@ Use the `offset` property to offset columns to the right. The `offset` property 
 Adding either `flex` **`display`** property to the box will initiate alignment values. Use `align-items` to change the vertical alignment of the box. Use `justify-content` to change the horizontal alignment of the box.
 
 <Canvas mdxSource={`
-<pds-row min-height="100px">
+<pds-layout-row min-height="100px">
   <pds-layout-box
     align-items="start"
     bordered="true"
@@ -163,9 +163,9 @@ Adding either `flex` **`display`** property to the box will initiate alignment v
   >
     Content 3
   </pds-layout-box>
-</pds-row>
+</pds-layout-row>
 `}>
-  <pds-row min-height="100px">
+  <pds-layout-row min-height="100px">
     <pds-layout-box
       align-items="start"
       bordered="true"
@@ -194,12 +194,12 @@ Adding either `flex` **`display`** property to the box will initiate alignment v
     >
       Content 3
     </pds-layout-box>
-  </pds-row>
+  </pds-layout-row>
 </Canvas>
 
 Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to ensure the box is vertically centered. Horizontal centering does take affect with no `min-height` present.
 <Canvas mdxSource={`
-<pds-row>
+<pds-layout-row>
   <pds-layout-box
     align-items="start"
     bordered="true"
@@ -227,9 +227,9 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
   >
     Content 3
   </pds-layout-box>
-</pds-row>
+</pds-layout-row>
 `}>
-  <pds-row>
+  <pds-layout-row>
     <pds-layout-box
       align-items="start"
       bordered="true"
@@ -257,18 +257,18 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
     >
       Content 3
     </pds-layout-box>
-  </pds-row>
+  </pds-layout-row>
 </Canvas>
 
 ## Nested Layouts
-You can nest `pds-row` and `pds-layout-box` components to create more complex layouts. 
+You can nest `pds-layout-row` and `pds-layout-box` components to create more complex layouts. 
 <Canvas mdxSource={`
-<pds-row>
+<pds-layout-row>
   <pds-layout-box size-md="8">
-    <pds-row>
+    <pds-layout-row>
       <pds-layout-box size-xl="6">Column 1 Item 1</pds-layout-box>
       <pds-layout-box size-xl="6">Column 1 Item 2</pds-layout-box>
-    </pds-row>
+    </pds-layout-row>
   </pds-layout-box>
   <pds-layout-box
     display="flex"
@@ -282,14 +282,14 @@ You can nest `pds-row` and `pds-layout-box` components to create more complex la
       Column 2
     </pds-layout-box>
   </pds-layout-box>
-</pds-row>
+</pds-layout-row>
 `}>
-  <pds-row>
+  <pds-layout-row>
     <pds-layout-box size-md="8">
-      <pds-row>
+      <pds-layout-row>
         <pds-layout-box size-xl="6">Column 1 Item 1</pds-layout-box>
         <pds-layout-box size-xl="6">Column 1 Item 2</pds-layout-box>
-      </pds-row>
+      </pds-layout-row>
     </pds-layout-box>
     <pds-layout-box
       display="flex"
@@ -303,7 +303,7 @@ You can nest `pds-row` and `pds-layout-box` components to create more complex la
         Column 2
       </pds-layout-box>
     </pds-layout-box>
-  </pds-row>
+  </pds-layout-row>
 </Canvas>
 
 ## Examples
@@ -314,7 +314,7 @@ You can nest `pds-row` and `pds-layout-box` components to create more complex la
   display="flex"
   padding="md"
 >
-  <pds-row col-gap="16px">
+  <pds-layout-row col-gap="16px">
     <pds-layout-box align-items="center" justify-content="center">
       <img src="../src/stories/assets/offers.png" />
     </pds-layout-box>
@@ -328,10 +328,10 @@ You can nest `pds-row` and `pds-layout-box` components to create more complex la
         </pds-layout-box>
       </pds-layout-box>
     </pds-layout-box>
-  </pds-row>
+  </pds-layout-row>
 </pds-layout-box>
 
-<pds-row col-gap="24px">
+<pds-layout-row col-gap="24px">
   <pds-layout-box size-md="4">
     <pds-layout-box
       bordered="true" 
@@ -389,7 +389,7 @@ You can nest `pds-row` and `pds-layout-box` components to create more complex la
       </pds-layout-box>
     </pds-layout-box>
   </pds-layout-box>
-</pds-row>
+</pds-layout-row>
 
 ## Troubleshooting
 
@@ -397,7 +397,7 @@ If you encounter issues with your layout, here are some common problems and thei
 
 ### 1. Columns Not Aligning Correctly
   - **Issue:** Columns are not aligning as expected.
-  - **Solution:** Double-check the `align-items` and `justify-content` properties on the parent `pds-row` component. Ensure that the sum of the column sizes within the row is equal to or less than 12 for a 12-column grid. Colums sums greater than 12 will wrap the row to the next line.
+  - **Solution:** Double-check the `align-items` and `justify-content` properties on the parent `pds-layout-row` component. Ensure that the sum of the column sizes within the row is equal to or less than 12 for a 12-column grid. Colums sums greater than 12 will wrap the row to the next line.
 
 ### 2. Unexpected Spacing
   - **Issue:** Unexpected spacing between columns.
