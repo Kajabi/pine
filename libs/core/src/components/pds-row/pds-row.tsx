@@ -16,14 +16,14 @@ export class PdsRow {
   @Prop() bordered? = false;
 
   /**
+   * Defines the spacing between the row items.
+  */
+  @Prop() colGap?: string;
+
+  /**
    * A unique identifier used for the underlying component `id` attribute.
    */
   @Prop() componentId: string;
-
-  /**
-   * Defines the spacing between the row items.
-  */
-  @Prop() gap?: string;
 
   /**
    * Defines the horizontal alignment of the row items.
@@ -49,12 +49,12 @@ export class PdsRow {
     `;
 
     const rowInlineStyles = {
+      ...(this.colGap && {
+        '--pine-gap-x': this.colGap,
+        '--pine-gap-y': this.colGap,
+      }),
       ...(this.minHeight && {
         'min-height': this.minHeight,
-      }),
-      ...(this.gap && {
-        '--pine-gap-x': this.gap,
-        '--pine-gap-y': this.gap,
       }),
     };
 

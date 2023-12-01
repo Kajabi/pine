@@ -56,6 +56,11 @@ export namespace Components {
           * Defines the vertical alignment of the box items.
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        "auto"?: boolean;
+        /**
+          * Defines the background-color of the box.
+         */
+        "backgroundColor"?: string;
         /**
           * Defines the border color of the box.
          */
@@ -76,6 +81,10 @@ export namespace Components {
           * Defines the display style of the box.
          */
         "display"?: `flex` | `inline-flex`;
+        /**
+          * Defines the spacing between the box items.
+         */
+        "gap"?: `none` | `xs`| `sm` | `md` | `lg`;
         /**
           * Defines the horizontal alignment of the box items.
          */
@@ -492,13 +501,13 @@ export namespace Components {
          */
         "bordered"?: boolean;
         /**
+          * Defines the spacing between the row items.
+         */
+        "colGap"?: string;
+        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
-        /**
-          * Defines the spacing between the row items.
-         */
-        "gap"?: string;
         /**
           * Defines the horizontal alignment of the row items.
          */
@@ -1197,6 +1206,11 @@ declare namespace LocalJSX {
           * Defines the vertical alignment of the box items.
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        "auto"?: boolean;
+        /**
+          * Defines the background-color of the box.
+         */
+        "backgroundColor"?: string;
         /**
           * Defines the border color of the box.
          */
@@ -1217,6 +1231,10 @@ declare namespace LocalJSX {
           * Defines the display style of the box.
          */
         "display"?: `flex` | `inline-flex`;
+        /**
+          * Defines the spacing between the box items.
+         */
+        "gap"?: `none` | `xs`| `sm` | `md` | `lg`;
         /**
           * Defines the horizontal alignment of the box items.
          */
@@ -1653,13 +1671,13 @@ declare namespace LocalJSX {
          */
         "bordered"?: boolean;
         /**
+          * Defines the spacing between the row items.
+         */
+        "colGap"?: string;
+        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
-        /**
-          * Defines the spacing between the row items.
-         */
-        "gap"?: string;
         /**
           * Defines the horizontal alignment of the row items.
          */

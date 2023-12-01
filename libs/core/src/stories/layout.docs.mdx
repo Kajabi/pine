@@ -306,6 +306,91 @@ You can nest `pds-row` and `pds-box` components to create more complex layouts.
   </pds-row>
 </Canvas>
 
+## Examples
+
+<pds-box 
+  background-color="#DDF8F0"
+  border-radius="lg"
+  display="flex"
+  padding="md"
+>
+  <pds-row col-gap="16px">
+    <pds-box align-items="center" justify-content="center">
+      <img src="../src/stories/assets/offers.png" />
+    </pds-box>
+    <pds-box size-md="9">
+      <pds-box direction="column">
+        <h3>Accept Kajabi Payments on all your Offers!</h3>
+        <p>Convert credit card payments and enable Apple Pay, Google Pay, and Buy Now, Pay Later options with one-click.</p>
+        <pds-box gap="sm">
+          <pds-button>Primary</pds-button>
+          <pds-button variant="secondary">Secondary</pds-button>
+        </pds-box>
+      </pds-box>
+    </pds-box>
+  </pds-row>
+</pds-box>
+
+<pds-row col-gap="24px">
+  <pds-box size-md="4">
+    <pds-box
+      bordered="true" 
+      border-radius="lg"
+      direction="column"
+      padding="sm"
+    >
+      <h3>Transactions</h3>
+      <pds-box gap="sm" justify-content="space-between">
+        <pds-box direction="column">
+          <span>0</span>
+          <span>Successful transactions</span>
+        </pds-box>
+        <pds-box auto="true" align-items="center">
+          <pds-icon name="caret-right"></pds-icon>
+        </pds-box>
+      </pds-box>
+    </pds-box>
+  </pds-box>
+  <pds-box size-md="4">
+    <pds-box
+      bordered="true" 
+      border-radius="lg"
+      direction="column"
+      padding="sm"
+    >
+      <h3>Transactions</h3>
+      <pds-box gap="sm" justify-content="space-between">
+        <pds-box direction="column">
+          <span>0</span>
+          <span>Successful transactions</span>
+        </pds-box>
+        <pds-box auto="true" align-items="center">
+          <pds-icon name="caret-right"></pds-icon>
+        </pds-box>
+      </pds-box>
+    </pds-box>
+  </pds-box>
+  <pds-box size-md="4">
+    <pds-box
+      bordered="true" 
+      border-radius="lg"
+      direction="column"
+      padding="sm"
+    >
+      <h3>Transactions</h3>
+      <pds-box gap="sm" justify-content="space-between">
+        <pds-box direction="column">
+          <span>0</span>
+          <span>Successful transactions</span>
+        </pds-box>
+        <pds-box auto="true" align-items="center">
+          <pds-icon name="caret-right"></pds-icon>
+        </pds-box>
+      </pds-box>
+    </pds-box>
+  </pds-box>
+</pds-row>
+
 ## Troubleshooting
 
 If you encounter issues with your layout, here are some common problems and their solutions:

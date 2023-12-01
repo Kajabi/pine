@@ -12,7 +12,7 @@ const BaseTemplate = (args) => html`
   align-items="${args.alignItems}"  
   bordered="${args.bordered}"
   component-id="${args.componentId}" 
-  gap="${args.gap}"
+  col-gap="${args.colGap}"
   justify-content="${args.justifyContent}"
   min-height="${args.minHeight}"
 >
@@ -28,7 +28,7 @@ export const Default = BaseTemplate.bind();
 Default.args = {
   bordered: "true",
   componentId: 'opt0',
-  gap: '8px',
+  colGap: '8px',
 };
 
 const GapTemplate = (args) => html`
@@ -36,7 +36,7 @@ const GapTemplate = (args) => html`
   align-items="${args.alignItems}"  
   bordered="${args.bordered}"
   component-id="${args.componentId}" 
-  gap="${args.gap}"
+  col-gap="${args.colGap}"
   justify-content="${args.justifyContent}"
   min-height="${args.minHeight}"
 >
@@ -62,7 +62,7 @@ export const Gap = GapTemplate.bind();
 Gap.args = {
   bordered: "false",
   componentId: 'opt0',
-  gap: '24px'
+  colGap: '24px'
 };
 
 

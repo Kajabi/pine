@@ -11,6 +11,16 @@ export class PdsBox {
   @Prop() alignItems?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
+   * 
+   */
+  @Prop() auto?: boolean;
+
+  /**
+   *  Defines the background-color of the box.
+   */
+  @Prop() backgroundColor?: string;
+
+  /**
    * If `true`, the box will have a border.
    */
   @Prop() bordered? = false;
@@ -40,6 +50,11 @@ export class PdsBox {
    * Defines the display style of the box.
   */
   @Prop() display?: `flex` | `inline-flex`;
+
+  /**
+   * Defines the spacing between the box items.
+  */
+  @Prop() gap?: `none` | `xs`| `sm` | `md` | `lg`;
 
   /**
    * Defines the horizontal alignment of the box items.
@@ -135,10 +150,12 @@ export class PdsBox {
   render() {
     const boxClasses = `
       ${this.alignItems ? `pds-align-items-${this.alignItems}` : ''}
+      ${this.auto ? 'pds-box--auto' : ''}
       ${this.bordered ? 'pds-box--bordered' : ''}
       ${this.borderRadius ? `pds-border-radius-${this.borderRadius}` : ''}
       ${this.direction ? `pds-box-direction-${this.direction}` : ''}
       ${this.display ? `pds-box-display-${this.display}` : ''}
+      ${this.gap ? `pds-box-gap-${this.gap}` : ''}
       ${this.justifyContent ? `pds-justify-content-${this.justifyContent}` : ''}
       ${this.offset ? `pds-box-offset-${this.offset}` : ''}
       ${this.offsetXs ? `pds-box-offset-xs-${this.offsetXs}` : ''}
@@ -158,6 +175,7 @@ export class PdsBox {
     `;
 
     const boxInlineStyles = {
+      ...(this.backgroundColor && { 'background-color': this.backgroundColor }),
       ...(this.borderColor && { 'border-color': this.borderColor }),
       ...(this.minHeight && { 'min-height': this.minHeight }),
       ...(this.minWidth && { 'min-width': this.minWidth }),

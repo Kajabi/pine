@@ -18,6 +18,12 @@
   }
 }
 
+.pds-box--auto {
+  flex: 0 0 auto;
+  min-width: auto;
+  width: auto;
+}
+
 .pds-box--bordered {
   border: var(--pine-border-default);
 }
@@ -62,6 +68,39 @@
 
 .pds-shadow-lg {
   box-shadow: var(--pine-box-shadow-lg);
+}
+
+// Gap helpers
+.pds-box-gap-none {
+  gap: 0;
+}
+
+.pds-box-gap-xxs {
+  gap: var(--pine-spacing-xxs);
+}
+
+.pds-box-gap-xs {
+  gap: var(--pine-spacing-xxs);
+}
+
+.pds-box-gap-sm {
+  gap: var(--pine-spacing-sm);
+}
+
+.pds-box-gap-md {
+  gap: var(--pine-spacing-md);
+}
+
+.pds-box-gap-lg {
+  gap: var(--pine-spacing-lg);
+}
+
+.pds-box-gap-xl {
+  gap: var(--pine-spacing-xl);
+}
+
+.pds-box-gap-xxl {
+  gap: var(--pine-spacing-2xl);
 }
 
 // Spacing helpers
