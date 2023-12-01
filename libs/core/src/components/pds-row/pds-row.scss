@@ -2,23 +2,23 @@
   --pine-gap-y: 10px;
   
   display: block;
-  margin-left: calc(var(--pine-gap-x) * -0.5);
-  margin-right: calc(var(--pine-gap-x) * -0.5);
-  margin-top: calc(var(--pine-gap-y) * -1);
+  margin-block-start: calc(var(--pine-gap-y) * -1);
+  margin-inline-end: calc(var(--pine-gap-x) * -0.5);
+  margin-inline-start: calc(var(--pine-gap-x) * -0.5);
 }
 
 .pds-row {
   display: flex;
   flex-wrap: wrap;
-  margin-left: calc(var(--pine-gap-x) * -1);
-  margin-right: calc(var(--pine-gap-x) * -1);
-  margin-top: calc(var(--pine-gap-y) * -1);
+  margin-block-start: calc(var(--pine-gap-y) * -1);
+  margin-inline-end: calc(var(--pine-gap-x) * -1);
+  margin-inline-start: calc(var(--pine-gap-x) * -1);
   width: 100%;
    
   > * {
-    padding-left: calc(var(--pine-gap-x));
-    padding-right: calc(var(--pine-gap-x));
-    padding-top: calc(var(--pine-gap-y));
+    padding-block-start: calc(var(--pine-gap-y));
+    padding-inline-end: calc(var(--pine-gap-x));
+    padding-inline-start: calc(var(--pine-gap-x));
   }
 }
 
