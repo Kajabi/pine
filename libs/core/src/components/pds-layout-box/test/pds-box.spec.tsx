@@ -1,19 +1,19 @@
 import { newSpecPage } from '@stencil/core/testing';
-import { PdsBox } from '../pds-box';
+import { PdsLayoutBox } from '../pds-layout-box';
 
-describe('pds-box', () => {
+describe('pds-layout-box', () => {
   it('renders', async () => {
     const page = await newSpecPage({
-      components: [PdsBox],
-      html: `<pds-box></pds-box>`,
+      components: [PdsLayoutBox],
+      html: `<pds-layout-box></pds-layout-box>`,
     });
     expect(page.root).toBeTruthy();
   });
 
   it('renders a border-color when prop is set', async () => {
     const page = await newSpecPage({
-      components: [PdsBox],
-      html: `<pds-box border-color="#dedede"></pds-box>`,
+      components: [PdsLayoutBox],
+      html: `<pds-layout-box border-color="#dedede"></pds-layout-box>`,
     });
     
     const element = page.root;
@@ -23,8 +23,8 @@ describe('pds-box', () => {
   
   it('renders a min-height when prop is set', async () => {
     const page = await newSpecPage({
-      components: [PdsBox],
-      html: `<pds-box min-height="175px"></pds-box>`,
+      components: [PdsLayoutBox],
+      html: `<pds-layout-box min-height="175px"></pds-layout-box>`,
     });
     
     const element = page.root;
@@ -34,8 +34,8 @@ describe('pds-box', () => {
 
   it('renders a min-width when prop is set', async () => {
     const page = await newSpecPage({
-      components: [PdsBox],
-      html: `<pds-box min-width="300px"></pds-box>`,
+      components: [PdsLayoutBox],
+      html: `<pds-layout-box min-width="300px"></pds-layout-box>`,
     });
     
     const element = page.root;
@@ -45,8 +45,8 @@ describe('pds-box', () => {
 
   it('renders align-items class when prop is set', async () => {
     const page = await newSpecPage({
-      components: [PdsBox],
-      html: `<pds-box align-items="center"></pds-box>`,
+      components: [PdsLayoutBox],
+      html: `<pds-layout-box align-items="center"></pds-layout-box>`,
     });
     
     const element = page.root;

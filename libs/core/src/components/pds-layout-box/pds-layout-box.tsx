@@ -1,10 +1,10 @@
 import { Component, h, Host, Prop } from '@stencil/core';
 
 @Component({
-  tag: 'pds-box',
-  styleUrl: 'pds-box.scss',
+  tag: 'pds-layout-box',
+  styleUrl: 'pds-layout-box.scss',
 })
-export class PdsBox {
+export class PdsLayoutBox {
   /**
    * Defines the vertical alignment of the box items.
   */

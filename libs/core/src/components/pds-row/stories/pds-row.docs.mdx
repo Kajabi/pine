@@ -17,12 +17,12 @@ By default boxes with rows will be equal width if no size is specified.
 
 <Canvas mdxSource={`
 <pds-row>
-  <pds-box>Item 1</pds-box>
-  <pds-box direction="column">
+  <pds-layout-box>Item 1</pds-layout-box>
+  <pds-layout-box direction="column">
     <p>Content 1</p>
     <p>Content 2</p>
-  </pds-box>
-  <pds-box>Item 3</pds-box>
+  </pds-layout-box>
+  <pds-layout-box>Item 3</pds-layout-box>
 </pds-row>
 `}>
   <pds-row
@@ -31,12 +31,12 @@ By default boxes with rows will be equal width if no size is specified.
     gap="12px"
     min-height="100px"
   >
-    <pds-box>Item 1</pds-box>
-    <pds-box direction="column">
+    <pds-layout-box>Item 1</pds-layout-box>
+    <pds-layout-box direction="column">
       <p>Content 1</p>
       <p>Content 2</p>
-    </pds-box>
-    <pds-box>Item 3</pds-box>
+    </pds-layout-box>
+    <pds-layout-box>Item 3</pds-layout-box>
   </pds-row>
 </Canvas>
 
@@ -45,30 +45,30 @@ If the size values equal more than 12, the boxes will wrap to the next line.
 need demo
 
 ### Gaps / Gutters
-When a gap or gutter is needed between the columns, an additional child `pds-box` must be used to ensure correct spacing between the columns and rows
+When a gap or gutter is needed between the columns, an additional child `pds-layout-box` must be used to ensure correct spacing between the columns and rows
 <Canvas mdxSource={`
 <pds-row>
-  <pds-box size="2">Item 1</pds-box>
-  <pds-box size="8">Item 2</pds-box>
-  <pds-box size="2">Item 3</pds-box>
+  <pds-layout-box size="2">Item 1</pds-layout-box>
+  <pds-layout-box size="8">Item 2</pds-layout-box>
+  <pds-layout-box size="2">Item 3</pds-layout-box>
 </pds-row>
 `}>
   <pds-row gap="16px">
-    <pds-box size="4">
-      <pds-box shadow="sm">
+    <pds-layout-box size="4">
+      <pds-layout-box shadow="sm">
         Item 1
-      </pds-box>
-    </pds-box>
-    <pds-box size="8">
-      <pds-box shadow="sm">
+      </pds-layout-box>
+    </pds-layout-box>
+    <pds-layout-box size="8">
+      <pds-layout-box shadow="sm">
         Item 2
-      </pds-box>
-    </pds-box>
-    <pds-box size="8">
-      <pds-box shadow="sm">
+      </pds-layout-box>
+    </pds-layout-box>
+    <pds-layout-box size="8">
+      <pds-layout-box shadow="sm">
         Item 2
-      </pds-box>
-    </pds-box>
+      </pds-layout-box>
+    </pds-layout-box>
   </pds-row>
 </Canvas>
 

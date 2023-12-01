@@ -10,28 +10,28 @@ The Layout system consists on using the `Row` and the `Box` component in tandem
 The `pds-row` component is designed to create horizontal rows that contain a set of columns.
 
 ## Box
-The `pds-box` component serves as a versatile building block for creating individual elements within your layout. You can use the `pds-box` component to create columns, rows, and other layout elements with use of the `size` and `offset` properties or their variants.
+The `pds-layout-box` component serves as a versatile building block for creating individual elements within your layout. You can use the `pds-layout-box` component to create columns, rows, and other layout elements with use of the `size` and `offset` properties or their variants.
 
 ### Creating a 12-Column Grid System
-By combining the `pds-box` and `pds-row` components, you can easily create a 12-column grid system. Here's an example of how to structure your layout:
+By combining the `pds-layout-box` and `pds-row` components, you can easily create a 12-column grid system. Here's an example of how to structure your layout:
 
 <Canvas mdxSource={`
 <pds-row>
-  <pds-box>
+  <pds-layout-box>
     Content for column 1
-  </pds-box>
-  <pds-box>
+  </pds-layout-box>
+  <pds-layout-box>
     Content for column 2
-  </pds-box>
+  </pds-layout-box>
 </pds-row>
 `}>
 <pds-row>
-  <pds-box>
+  <pds-layout-box>
     Content for column 1
-  </pds-box>
-  <pds-box>
+  </pds-layout-box>
+  <pds-layout-box>
     Content for column 2
-  </pds-box>
+  </pds-layout-box>
 </pds-row>
 </Canvas>
 
@@ -39,43 +39,43 @@ By default, adding `pds-row`s with no `size` property will create equal width co
 This creates a two-column layout, and you can customize the `size` and arrangement of the columns to achieve the desired layout for your application. The `size` property affects the width of the column across all viewports.
 <Canvas mdxSource={`
 <pds-row>
-  <pds-box size="4">
+  <pds-layout-box size="4">
     Content for column 1
-  </pds-box>
-  <pds-box size="8">
+  </pds-layout-box>
+  <pds-layout-box size="8">
     Content for column 2
-  </pds-box>
+  </pds-layout-box>
 </pds-row>
 `}>
 <pds-row>
-  <pds-box size="4">
+  <pds-layout-box size="4">
     Content for column 1
-  </pds-box>
-  <pds-box size="8">
+  </pds-layout-box>
+  <pds-layout-box size="8">
     Content for column 2
-  </pds-box>
+  </pds-layout-box>
 </pds-row>
 </Canvas>
 
 ## Responsive Design
-Using the size modifiers such as `-xs`, `-md`, etc, enable responsive behavior for you `pds-box`. The layout components are designed to be responsive, allowing you to create layouts that adapt to different screen sizes. Take advantage of properties like `size-xs`, `offset-sm`, etc., to customize the layout for specific breakpoints. Be sure to optimize your layout for mobile devices, as well as larger screens.
+Using the size modifiers such as `-xs`, `-md`, etc, enable responsive behavior for you `pds-layout-box`. The layout components are designed to be responsive, allowing you to create layouts that adapt to different screen sizes. Take advantage of properties like `size-xs`, `offset-sm`, etc., to customize the layout for specific breakpoints. Be sure to optimize your layout for mobile devices, as well as larger screens.
 <Canvas mdxSource={`
 <pds-row>
-  <pds-box size-md="6" size-lg="4" size-xl="3">Item 1</pds-box>
-  <pds-box direction="column" size-md="6" size-lg="4" size-xl="3">
+  <pds-layout-box size-md="6" size-lg="4" size-xl="3">Item 1</pds-layout-box>
+  <pds-layout-box direction="column" size-md="6" size-lg="4" size-xl="3">
     <p>Content 1</p>
     <p>Content 2</p>
-  </pds-box>
-  <pds-box size-md="6" size-lg="4" size-xl="3">Item 3</pds-box>
-  <pds-box size-md="6" size-lg="4" size-xl="3">Item 4</pds-box>
+  </pds-layout-box>
+  <pds-layout-box size-md="6" size-lg="4" size-xl="3">Item 3</pds-layout-box>
+  <pds-layout-box size-md="6" size-lg="4" size-xl="3">Item 4</pds-layout-box>
 </pds-row>
 `}>
   <pds-row
     component-id="${args.componentId}" 
   >
-    <pds-box size-md="6" size-lg="4" size-xl="3">Item 1</pds-box>
-    <pds-box size-md="6" size-lg="4" size-xl="3">Item 2</pds-box>
-    <pds-box size-md="6" size-lg="4" size-xl="3">Item 3</pds-box>
+    <pds-layout-box size-md="6" size-lg="4" size-xl="3">Item 1</pds-layout-box>
+    <pds-layout-box size-md="6" size-lg="4" size-xl="3">Item 2</pds-layout-box>
+    <pds-layout-box size-md="6" size-lg="4" size-xl="3">Item 3</pds-layout-box>
   </pds-row>
 </Canvas>
 
@@ -84,13 +84,13 @@ Using the size modifiers such as `-xs`, `-md`, etc, enable responsive behavior f
 `size` and `offset` can be used to hide or show columns at different breakpoints. Values from 1 - 12 show the column, 0 hides the column.
 <Canvas mdxSource={`
 <pds-row>
-  <pds-box size-xs="0" size-sm="0" size-lg="6">Larger screen content</pds-box>
-  <pds-box size-md="6" size-lg="0">Small screen content</pds-box>
+  <pds-layout-box size-xs="0" size-sm="0" size-lg="6">Larger screen content</pds-layout-box>
+  <pds-layout-box size-md="6" size-lg="0">Small screen content</pds-layout-box>
 </pds-row>
 `}>
   <pds-row>
-    <pds-box size-xs="0" size-sm="0" size-lg="12">Larger screen content</pds-box>
-    <pds-box size-md="12" size-lg="0">Small screen content</pds-box>
+    <pds-layout-box size-xs="0" size-sm="0" size-lg="12">Larger screen content</pds-layout-box>
+    <pds-layout-box size-md="12" size-lg="0">Small screen content</pds-layout-box>
   </pds-row>
 </Canvas>
 
@@ -98,34 +98,34 @@ Using the size modifiers such as `-xs`, `-md`, etc, enable responsive behavior f
 Use the `offset` property to offset columns to the right. The `offset` property accepts values from 1 - 11. For example, `offset="1"` will offset the column by one column width. Adding size modifiers such as `offset-md="1"` will offset the column by one column width on medium screens and larger.
 <Canvas mdxSource={`
 <pds-row>
-  <pds-box size="4">Item 1</pds-box>
-  <pds-box offset="4" size="4">Item 2</pds-box>
+  <pds-layout-box size="4">Item 1</pds-layout-box>
+  <pds-layout-box offset="4" size="4">Item 2</pds-layout-box>
 </pds-row>
 <pds-row>
-  <pds-box size-md="4">Item 1</pds-box>
-  <pds-box offset-md="4" size-md="4">Item 2</pds-box>
+  <pds-layout-box size-md="4">Item 1</pds-layout-box>
+  <pds-layout-box offset-md="4" size-md="4">Item 2</pds-layout-box>
 </pds-row>
 <pds-row>
-  <pds-box offset="3" offset-xs="2" size="6" size-xs="8">Item 1</pds-box>
+  <pds-layout-box offset="3" offset-xs="2" size="6" size-xs="8">Item 1</pds-layout-box>
 </pds-row>
 `}>
 <>
   <pds-row
     component-id="${args.componentId}" 
   >
-    <pds-box size="4">Item 1</pds-box>
-    <pds-box offset="4" size="4">Item 2</pds-box>
+    <pds-layout-box size="4">Item 1</pds-layout-box>
+    <pds-layout-box offset="4" size="4">Item 2</pds-layout-box>
   </pds-row>
   <pds-row
     component-id="${args.componentId}" 
   >
-    <pds-box size-md="4">Item 1</pds-box>
-    <pds-box offset-md="4" size-md="4">Item 2</pds-box>
+    <pds-layout-box size-md="4">Item 1</pds-layout-box>
+    <pds-layout-box offset-md="4" size-md="4">Item 2</pds-layout-box>
   </pds-row>
   <pds-row
     component-id="${args.componentId}" 
   >
-    <pds-box offset="3" offset-xs="2" size="6" size-xs="8">Item 1</pds-box>
+    <pds-layout-box offset="3" offset-xs="2" size="6" size-xs="8">Item 1</pds-layout-box>
   </pds-row>
 </>
 </Canvas>
@@ -135,7 +135,7 @@ Adding either `flex` **`display`** property to the box will initiate alignment v
 
 <Canvas mdxSource={`
 <pds-row min-height="100px">
-  <pds-box
+  <pds-layout-box
     align-items="start"
     bordered="true"
     display="flex"
@@ -144,8 +144,8 @@ Adding either `flex` **`display`** property to the box will initiate alignment v
     padding="sm"
   >
     Content 1
-  </pds-box>
-  <pds-box
+  </pds-layout-box>
+  <pds-layout-box
     align-items="center"
     bordered="true"
     display="flex"
@@ -153,8 +153,8 @@ Adding either `flex` **`display`** property to the box will initiate alignment v
     padding="sm"
   >
     Content2
-  </pds-box>
-  <pds-box
+  </pds-layout-box>
+  <pds-layout-box
     align-items="end"
     bordered="true"
     display="flex"
@@ -162,11 +162,11 @@ Adding either `flex` **`display`** property to the box will initiate alignment v
     padding="sm"
   >
     Content 3
-  </pds-box>
+  </pds-layout-box>
 </pds-row>
 `}>
   <pds-row min-height="100px">
-    <pds-box
+    <pds-layout-box
       align-items="start"
       bordered="true"
       display="flex"
@@ -175,8 +175,8 @@ Adding either `flex` **`display`** property to the box will initiate alignment v
       padding="sm"
     >
       Content 1
-    </pds-box>
-    <pds-box
+    </pds-layout-box>
+    <pds-layout-box
       align-items="center"
       bordered="true"
       display="flex"
@@ -184,8 +184,8 @@ Adding either `flex` **`display`** property to the box will initiate alignment v
       padding="sm"
     >
       Content2
-    </pds-box>
-    <pds-box
+    </pds-layout-box>
+    <pds-layout-box
       align-items="end"
       bordered="true"
       display="flex"
@@ -193,14 +193,14 @@ Adding either `flex` **`display`** property to the box will initiate alignment v
       padding="sm"
     >
       Content 3
-    </pds-box>
+    </pds-layout-box>
   </pds-row>
 </Canvas>
 
 Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to ensure the box is vertically centered. Horizontal centering does take affect with no `min-height` present.
 <Canvas mdxSource={`
 <pds-row>
-  <pds-box
+  <pds-layout-box
     align-items="start"
     bordered="true"
     display="flex"
@@ -208,8 +208,8 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
     padding="sm"
   >
     Content 1
-  </pds-box>
-  <pds-box
+  </pds-layout-box>
+  <pds-layout-box
     align-items="center"
     bordered="true"
     display="flex"
@@ -217,8 +217,8 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
     padding="sm"
   >
     Content2
-  </pds-box>
-  <pds-box
+  </pds-layout-box>
+  <pds-layout-box
     align-items="end"
     bordered="true"
     display="flex"
@@ -226,11 +226,11 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
     padding="sm"
   >
     Content 3
-  </pds-box>
+  </pds-layout-box>
 </pds-row>
 `}>
   <pds-row>
-    <pds-box
+    <pds-layout-box
       align-items="start"
       bordered="true"
       display="flex"
@@ -238,8 +238,8 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
       padding="sm"
     >
       Content 1
-    </pds-box>
-    <pds-box
+    </pds-layout-box>
+    <pds-layout-box
       align-items="center"
       bordered="true"
       display="flex"
@@ -247,8 +247,8 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
       padding="sm"
     >
       Content2
-    </pds-box>
-    <pds-box
+    </pds-layout-box>
+    <pds-layout-box
       align-items="end"
       bordered="true"
       display="flex"
@@ -256,139 +256,139 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
       padding="sm"
     >
       Content 3
-    </pds-box>
+    </pds-layout-box>
   </pds-row>
 </Canvas>
 
 ## Nested Layouts
-You can nest `pds-row` and `pds-box` components to create more complex layouts. 
+You can nest `pds-row` and `pds-layout-box` components to create more complex layouts. 
 <Canvas mdxSource={`
 <pds-row>
-  <pds-box size-md="8">
+  <pds-layout-box size-md="8">
     <pds-row>
-      <pds-box size-xl="6">Column 1 Item 1</pds-box>
-      <pds-box size-xl="6">Column 1 Item 2</pds-box>
+      <pds-layout-box size-xl="6">Column 1 Item 1</pds-layout-box>
+      <pds-layout-box size-xl="6">Column 1 Item 2</pds-layout-box>
     </pds-row>
-  </pds-box>
-  <pds-box
+  </pds-layout-box>
+  <pds-layout-box
     display="flex"
     size-md="4"
   >
-    <pds-box
+    <pds-layout-box
       display="flex"
       align-items="center"
       justify-content="center"
     >
       Column 2
-    </pds-box>
-  </pds-box>
+    </pds-layout-box>
+  </pds-layout-box>
 </pds-row>
 `}>
   <pds-row>
-    <pds-box size-md="8">
+    <pds-layout-box size-md="8">
       <pds-row>
-        <pds-box size-xl="6">Column 1 Item 1</pds-box>
-        <pds-box size-xl="6">Column 1 Item 2</pds-box>
+        <pds-layout-box size-xl="6">Column 1 Item 1</pds-layout-box>
+        <pds-layout-box size-xl="6">Column 1 Item 2</pds-layout-box>
       </pds-row>
-    </pds-box>
-    <pds-box
+    </pds-layout-box>
+    <pds-layout-box
       display="flex"
       size-md="4"
     >
-      <pds-box
+      <pds-layout-box
         display="flex"
         align-items="center"
         justify-content="center"
       >
         Column 2
-      </pds-box>
-    </pds-box>
+      </pds-layout-box>
+    </pds-layout-box>
   </pds-row>
 </Canvas>
 
 ## Examples
 
-<pds-box 
+<pds-layout-box 
   background-color="#DDF8F0"
   border-radius="lg"
   display="flex"
   padding="md"
 >
   <pds-row col-gap="16px">
-    <pds-box align-items="center" justify-content="center">
+    <pds-layout-box align-items="center" justify-content="center">
       <img src="../src/stories/assets/offers.png" />
-    </pds-box>
-    <pds-box size-md="9">
-      <pds-box direction="column">
+    </pds-layout-box>
+    <pds-layout-box size-md="9">
+      <pds-layout-box direction="column">
         <h3>Accept Kajabi Payments on all your Offers!</h3>
         <p>Convert credit card payments and enable Apple Pay, Google Pay, and Buy Now, Pay Later options with one-click.</p>
-        <pds-box gap="sm">
+        <pds-layout-box gap="sm">
           <pds-button>Primary</pds-button>
           <pds-button variant="secondary">Secondary</pds-button>
-        </pds-box>
-      </pds-box>
-    </pds-box>
+        </pds-layout-box>
+      </pds-layout-box>
+    </pds-layout-box>
   </pds-row>
-</pds-box>
+</pds-layout-box>
 
 <pds-row col-gap="24px">
-  <pds-box size-md="4">
-    <pds-box
+  <pds-layout-box size-md="4">
+    <pds-layout-box
       bordered="true" 
       border-radius="lg"
       direction="column"
       padding="sm"
     >
       <h3>Transactions</h3>
-      <pds-box gap="sm" justify-content="space-between">
-        <pds-box direction="column">
+      <pds-layout-box gap="sm" justify-content="space-between">
+        <pds-layout-box direction="column">
           <span>0</span>
           <span>Successful transactions</span>
-        </pds-box>
-        <pds-box auto="true" align-items="center">
+        </pds-layout-box>
+        <pds-layout-box auto="true" align-items="center">
           <pds-icon name="caret-right"></pds-icon>
-        </pds-box>
-      </pds-box>
-    </pds-box>
-  </pds-box>
-  <pds-box size-md="4">
-    <pds-box
+        </pds-layout-box>
+      </pds-layout-box>
+    </pds-layout-box>
+  </pds-layout-box>
+  <pds-layout-box size-md="4">
+    <pds-layout-box
       bordered="true" 
       border-radius="lg"
       direction="column"
       padding="sm"
     >
       <h3>Transactions</h3>
-      <pds-box gap="sm" justify-content="space-between">
-        <pds-box direction="column">
+      <pds-layout-box gap="sm" justify-content="space-between">
+        <pds-layout-box direction="column">
           <span>0</span>
           <span>Successful transactions</span>
-        </pds-box>
-        <pds-box auto="true" align-items="center">
+        </pds-layout-box>
+        <pds-layout-box auto="true" align-items="center">
           <pds-icon name="caret-right"></pds-icon>
-        </pds-box>
-      </pds-box>
-    </pds-box>
-  </pds-box>
-  <pds-box size-md="4">
-    <pds-box
+        </pds-layout-box>
+      </pds-layout-box>
+    </pds-layout-box>
+  </pds-layout-box>
+  <pds-layout-box size-md="4">
+    <pds-layout-box
       bordered="true" 
       border-radius="lg"
       direction="column"
       padding="sm"
     >
       <h3>Transactions</h3>
-      <pds-box gap="sm" justify-content="space-between">
-        <pds-box direction="column">
+      <pds-layout-box gap="sm" justify-content="space-between">
+        <pds-layout-box direction="column">
           <span>0</span>
           <span>Successful transactions</span>
-        </pds-box>
-        <pds-box auto="true" align-items="center">
+        </pds-layout-box>
+        <pds-layout-box auto="true" align-items="center">
           <pds-icon name="caret-right"></pds-icon>
-        </pds-box>
-      </pds-box>
-    </pds-box>
-  </pds-box>
+        </pds-layout-box>
+      </pds-layout-box>
+    </pds-layout-box>
+  </pds-layout-box>
 </pds-row>
 
 ## Troubleshooting
@@ -401,7 +401,7 @@ If you encounter issues with your layout, here are some common problems and thei
 
 ### 2. Unexpected Spacing
   - **Issue:** Unexpected spacing between columns.
-  - **Solution:** Check the `padding` property on the `pds-box` components. Adjust the padding values to achieve the desired spacing between columns.
+  - **Solution:** Check the `padding` property on the `pds-layout-box` components. Adjust the padding values to achieve the desired spacing between columns.
 
 ### 3. **Misalignment on Small Screens**
   - **Issue:** Misalignment of columns on small screens.
@@ -413,7 +413,7 @@ If you encounter issues with your layout, here are some common problems and thei
 
 ### 5. **Performance Degradation due to Unnecessary Nesting**
   - **Issue:** Noticeable performance degradation, especially on complex layouts.
-  - **Solution:** Review the nested `pds-box`s structure and minimize unnecessary nesting by flattening your layout structure where possible. Excessive nesting can cause performance issues, especially on complex layouts.
+  - **Solution:** Review the nested `pds-layout-box`s structure and minimize unnecessary nesting by flattening your layout structure where possible. Excessive nesting can cause performance issues, especially on complex layouts.
 
 ## Related Components
 - [Box](/docs/components-box--docs)
