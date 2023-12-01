@@ -25,44 +25,10 @@
 
 ## Events
 
-| Event      | Description                            | Type                      |
-| ---------- | -------------------------------------- | ------------------------- |
-| `pdsInput` | Emitted when a keyboard input occurred | `CustomEvent<InputEvent>` |
-
-
-## Slots
-
-| Slot | Description                                        |
-| ---- | -------------------------------------------------- |
-|      | Content is placed between the opening closing tags |
-
-
-## CSS Custom Properties
-
-| Name                     | Description                                   |
-| ------------------------ | --------------------------------------------- |
-| `--background`           | Background of the input                       |
-| `--background-disabled`  | Background of a disabled input                |
-| `--border-color-default` | Border color of the input text                |
-| `--color`                | Color of the input text                       |
-| `--color-error`          | Color of the input text when error is present |
-| `--color-hover`          | Border color of the input text when hovered   |
-| `--color-placeholder`    | Color of the placeholder text                 |
-| `--field-font-size`      | Font size of the field text                   |
-| `--field-font-weight`    | Font weight of the field text                 |
-| `--field-line-height`    | Line height of the field text                 |
-| `--field-padding-block`  | Block padding for the field text              |
-| `--field-padding-inline` | Inline padding for the field text             |
-| `--hint-font-size`       | Font size of the hint text                    |
-| `--hint-font-weight`     | Font weight of the hint text                  |
-| `--hint-line-height`     | Line height of the hint text                  |
-| `--hint-margin-top`      | Top margin of the hint                        |
-| `--label-font-size`      | Font size of the label text                   |
-| `--label-font-weight`    | Font weight of the label text                 |
-| `--label-line-height`    | Line height of the label text                 |
-| `--label-margin-bottom`  | Bottom margin of the label                    |
+| Event      | Description                             | Type                      |
+| ---------- | --------------------------------------- | ------------------------- |
+| `pdsInput` | Emitted when a keyboard input occurred. | `CustomEvent<InputEvent>` |
 
 
 ----------------------------------------------
-
 
