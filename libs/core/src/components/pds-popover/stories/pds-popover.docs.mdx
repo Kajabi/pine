@@ -29,12 +29,14 @@ There can only be one trigger for the Popover.
   <pds-button variant="secondary">Click</pds-button>
 </pds-popover>
 `}>
-  <pds-popover placement="bottom-start" html-content="true">
-    <div slot="content">
-      <p><strong>This is a popover</strong></p>
-    </div>
-    <pds-button variant="secondary">Click</pds-button>
-  </pds-popover>
+  <div style={{ height: '100px' }}>
+    <pds-popover placement="bottom-start" html-content="true">
+      <div slot="content">
+        <p><strong>This is a popover</strong></p>
+      </div>
+      <pds-button variant="secondary">Click</pds-button>
+    </pds-popover>
+  </div>
 </Canvas>
 
 #### Avatar trigger
@@ -46,12 +48,14 @@ There can only be one trigger for the Popover.
   <pds-avatar dropdown="true"></pds-avatar>
 </pds-popover>
 `}>
-  <pds-popover has-arrow="true" placement="bottom-start" html-content="true">
-    <div slot="content">
-      <p><strong>This is a popover</strong></p>
-    </div>
-    <pds-avatar dropdown="true"></pds-avatar>
-  </pds-popover>
+  <div style={{ height: '125px' }}>
+    <pds-popover has-arrow="true" placement="bottom-start" html-content="true">
+      <div slot="content">
+        <p><strong>This is a popover</strong></p>
+      </div>
+      <pds-avatar dropdown="true"></pds-avatar>
+    </pds-popover>
+  </div>
 </Canvas>
 
 ### Content
@@ -69,16 +73,18 @@ The popover content is placed in a container with the slot, `content`. This is w
   <pds-button variant="secondary">Popover trigger</pds-button>
 </pds-popover>
 `}>
-  <pds-popover placement="bottom-start">
-    <div slot="content">
-      <p>Pastrami chuck leberkas, swine biltong tail fatback jowl landjaeger ground round strip steak t-bone cow beef. Filet mignon bresaola pastrami, beef salami hamburger short ribs. Strip steak picanha pork loin tri-tip, prosciutto frankfurter turducken cupim sausage corned beef spare ribs sirloin fatback t-bone bacon. Boudin pork chop capicola short ribs flank rump. Fatback andouille chuck, pork venison t-bone bacon cupim turducken brisket sausage pork loin. Shank buffalo sirloin swine shoulder sausage prosciutto fatback.</p>
-      <div>
-        <pds-button variant="secondary">Cancel</pds-button>
-        <pds-button>Get Started</pds-button>
+  <div style={{ height: '400px' }}>
+    <pds-popover placement="bottom-start">
+      <div slot="content">
+        <p>Pastrami chuck leberkas, swine biltong tail fatback jowl landjaeger ground round strip steak t-bone cow beef. Filet mignon bresaola pastrami, beef salami hamburger short ribs. Strip steak picanha pork loin tri-tip, prosciutto frankfurter turducken cupim sausage corned beef spare ribs sirloin fatback t-bone bacon. Boudin pork chop capicola short ribs flank rump. Fatback andouille chuck, pork venison t-bone bacon cupim turducken brisket sausage pork loin. Shank buffalo sirloin swine shoulder sausage prosciutto fatback.</p>
+        <div>
+          <pds-button variant="secondary">Cancel</pds-button>
+          <pds-button>Get Started</pds-button>
+        </div>
       </div>
-    </div>
-    <pds-button variant="secondary">Popover trigger</pds-button>
-  </pds-popover>
+      <pds-button variant="secondary">Popover trigger</pds-button>
+    </pds-popover>
+  </div>
 </Canvas>
 
 ### Positioning
@@ -97,11 +103,13 @@ By default the arrow is hidden on popovers. It can be shown by enabling it when 
   <pds-avatar dropdown="true"></pds-avatar>
 </pds-popover>
 `}>
-  <pds-popover has-arrow="true" placement="bottom-start">
-    <div slot="content">
-      <p><strong>This is a popover</strong></p>
-      <p><strong>This is a popover</strong></p>
-    </div>
-    <pds-button variant="secondary">Click</pds-button>
-  </pds-popover>
+  <div style={{ height: '150px' }}>
+    <pds-popover has-arrow="true" placement="bottom-start">
+      <div slot="content">
+        <p><strong>This is a popover</strong></p>
+        <p><strong>This is a popover</strong></p>
+      </div>
+      <pds-button variant="secondary">Click</pds-button>
+    </pds-popover>
+  </div>
 </Canvas>

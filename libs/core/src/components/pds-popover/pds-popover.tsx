@@ -147,6 +147,7 @@ export class PdsPopover {
             ${this.opened ? 'pds-popover--is-open' : ''}
             ${this.hasArrow ? '' : 'pds-popover--no-arrow'}
           `}
+          id={this.componentId}
         >
           <span
             aria-describedby={this.componentId}
@@ -159,7 +160,7 @@ export class PdsPopover {
           <div class="pds-popover__content"
             aria-hidden={this.opened ? 'false' : 'true'}
             aria-live={this.opened ? 'polite' : 'off'}
-            id={this.componentId}
+            id={`${this.componentId}-content`}
             ref={(el) => (this.contentEl = el)}
             role="dialog"
           >
