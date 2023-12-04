@@ -24,7 +24,7 @@ describe('pds-layout-row', () => {
   it('renders a gap when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsLayoutRow],
-      html: `<pds-layout-row gap="16px"></pds-layout-row>`,
+      html: `<pds-layout-row col-gap="16px"></pds-layout-row>`,
     });
     
     const element = page.root;
