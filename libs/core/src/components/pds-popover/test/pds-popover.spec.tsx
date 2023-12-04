@@ -16,6 +16,20 @@ describe('pds-popover', () => {
     expect(element?.querySelector('.pds-popover--no-arrow')).not.toBeNull();
   });
 
+  it('should show arrow when has-arrow is true', async () => {
+    const page = await newSpecPage({
+      components: [PdsPopover],
+      html: `
+      <pds-popover has-arrow="true">
+        <pds-button variant="secondary">Secondary</pds-button>
+       </pds-popover>`
+    });
+
+    const element = page.root?.shadowRoot;
+
+    expect(element?.querySelector('.pds-popover--no-arrow')).toBeNull();
+  });
+
   it('should be able to call method to show popover', async () => {
     const page = await newSpecPage({
       components: [PdsPopover],
