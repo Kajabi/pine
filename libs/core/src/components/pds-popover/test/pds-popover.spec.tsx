@@ -49,6 +49,7 @@ describe('pds-popover', () => {
     const popoverElement = page.root?.shadowRoot?.querySelector('.pds-popover');
     expect(popoverElement).toHaveClass('pds-popover--is-open');
   });
+  
   it('should toggle the popover', async () => {
     const page = await newSpecPage({
       components: [PdsPopover],
