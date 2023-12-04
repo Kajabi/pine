@@ -5,7 +5,9 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { OverlayPlacementType } from "./utils/types";
 import { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
+export { OverlayPlacementType } from "./utils/types";
 export { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
     interface PdsAvatar {
@@ -329,18 +331,7 @@ export namespace Components {
           * Determines the preferred position of the popover
           * @defaultValue "right"
          */
-        "placement": 'top'
-    | 'top-start'
-    | 'top-end'
-    | 'right'
-    | 'right-start'
-    | 'right-end'
-    | 'bottom'
-    | 'bottom-start'
-    | 'bottom-end'
-    | 'left'
-    | 'left-start'
-    | 'left-end';
+        "placement": OverlayPlacementType;
         /**
           * Shows the popover by enabling the opened property
          */
@@ -1180,18 +1171,7 @@ declare namespace LocalJSX {
           * Determines the preferred position of the popover
           * @defaultValue "right"
          */
-        "placement"?: 'top'
-    | 'top-start'
-    | 'top-end'
-    | 'right'
-    | 'right-start'
-    | 'right-end'
-    | 'bottom'
-    | 'bottom-start'
-    | 'bottom-end'
-    | 'left'
-    | 'left-start'
-    | 'left-end';
+        "placement"?: OverlayPlacementType;
     }
     interface PdsProgress {
         /**

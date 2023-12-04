@@ -2,6 +2,7 @@ import { Component, Element, Event, Host, Prop, State, h, EventEmitter, Method }
 import {
   positionTooltip
 } from '../../utils/overlay';
+import { OverlayPlacementType } from '../../utils/types';
 
 /**
  * @slot (default) - The popover's target element
@@ -42,19 +43,8 @@ export class PdsPopover {
    * Determines the preferred position of the popover
    * @defaultValue "right"
    */
-  @Prop({ reflect: true }) placement:
-    'top'
-    | 'top-start'
-    | 'top-end'
-    | 'right'
-    | 'right-start'
-    | 'right-end'
-    | 'bottom'
-    | 'bottom-start'
-    | 'bottom-end'
-    | 'left'
-    | 'left-start'
-    | 'left-end' = 'right';
+
+  @Prop({ reflect: true }) placement: OverlayPlacementType= 'right';
 
   /**
    * Determines whether or not the popover is visible
@@ -143,7 +133,7 @@ export class PdsPopover {
       ${this.opened ? 'pds-popover--is-open' : ''}
       ${this.hasArrow ? '' : 'pds-popover--no-arrow'}
     `;
-    
+
     return (
       <Host>
         <div
