@@ -44,7 +44,7 @@ export class PdsPopover {
    * @defaultValue "right"
    */
 
-  @Prop({ reflect: true }) placement: OverlayPlacementType= 'right';
+  @Prop({ reflect: true }) placement: OverlayPlacementType = 'right';
 
   /**
    * Determines whether or not the popover is visible
