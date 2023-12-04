@@ -138,6 +138,12 @@ export class PdsPopover {
   };
 
   render() {
+    const popverClasses = `
+      pds-popover--${this.placement}
+      ${this.opened ? 'pds-popover--is-open' : ''}
+      ${this.hasArrow ? '' : 'pds-popover--no-arrow'}
+    `;
+    
     return (
       <Host>
         <div
