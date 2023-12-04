@@ -143,7 +143,7 @@ export class PdsPopover {
       ${this.opened ? 'pds-popover--is-open' : ''}
       ${this.hasArrow ? '' : 'pds-popover--no-arrow'}
     `;
-    
+
     return (
       <Host>
         <div
