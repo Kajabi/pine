@@ -1,4 +1,10 @@
 :host {
+  display: inline-block;
+  position: relative;
+}
+
+div {
+  // These custom props are not reachable
   --background-color: var(--pine-color-base-white);
   --box-shadow: var(--pine-box-shadow-md);
   --color: var(--pine-color-neutral-charcoal-400);
@@ -15,9 +21,6 @@
   --arrow-pointing-to-the-right: var(--arrow-size) 0 var(--arrow-size) var(--arrow-size);
   --arrow-pointing-to-the-left: var(--arrow-size) var(--arrow-size) var(--arrow-size) 0;
   --arrow-pointing-up: 0 var(--arrow-size) var(--arrow-size);
-
-  display: inline-block;
-  position: relative;
 }
 
 .pds-popover__content {
