@@ -1,7 +1,6 @@
 import { Config } from '@stencil/core';
 import { reactOutputTarget } from '@stencil/react-output-target';
 
-// @ts-ignore
 // Plugins
 import { sass } from '@stencil/sass';
 
@@ -26,6 +25,10 @@ export const config: Config = {
     {
       type: 'docs-json',
       file: './dist/docs.json', // Used to extract documentation data for Storybook
+    },
+    {
+      type: 'docs-json',
+      file: '../doc-components/src/assets/docs.json', // Used for docsArgTable Component
     },
     {
       type: 'docs-readme',

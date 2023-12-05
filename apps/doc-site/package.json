@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
+    "prebuild": "cp ../../libs/core/src/components/**/docs/*.mdx ./src/mdx",
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro"
