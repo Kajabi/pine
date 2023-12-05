@@ -1,5 +1,6 @@
 import React from 'react';
 import { components } from '../../assets/docs.json'
+import './docArgsTable.css';
 
 export interface DocArgsTableProps {
   componentName: string
@@ -14,7 +15,7 @@ const DocArgsTable: React.FC<DocArgsTableProps> = ({
 
   return (
     <>
-      <table>
+      <table className="args-table">
         <thead>
           <tr>
             <td>Name</td>
@@ -29,7 +30,7 @@ const DocArgsTable: React.FC<DocArgsTableProps> = ({
                 <td>{prop.name}</td>
                 <td>
                   <div>{prop.docs}</div>
-                  <div><em>{prop.type}</em></div>
+                  <div className="args-type"><em>{prop.type}</em></div>
                 </td>
                 <td>{prop.default}</td>
               </tr>

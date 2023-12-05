@@ -659,19 +659,52 @@ declare global {
         prototype: HTMLPdsButtonElement;
         new (): HTMLPdsButtonElement;
     };
+    interface HTMLPdsCheckboxElementEventMap {
+        "pdsCheckboxChange": boolean;
+    }
     interface HTMLPdsCheckboxElement extends Components.PdsCheckbox, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsCheckboxElementEventMap>(type: K, listener: (this: HTMLPdsCheckboxElement, ev: PdsCheckboxCustomEvent<HTMLPdsCheckboxElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsCheckboxElementEventMap>(type: K, listener: (this: HTMLPdsCheckboxElement, ev: PdsCheckboxCustomEvent<HTMLPdsCheckboxElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsCheckboxElement: {
         prototype: HTMLPdsCheckboxElement;
         new (): HTMLPdsCheckboxElement;
     };
+    interface HTMLPdsChipElementEventMap {
+        "pdsTagCloseClick": any;
+    }
     interface HTMLPdsChipElement extends Components.PdsChip, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsChipElementEventMap>(type: K, listener: (this: HTMLPdsChipElement, ev: PdsChipCustomEvent<HTMLPdsChipElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsChipElementEventMap>(type: K, listener: (this: HTMLPdsChipElement, ev: PdsChipCustomEvent<HTMLPdsChipElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsChipElement: {
         prototype: HTMLPdsChipElement;
         new (): HTMLPdsChipElement;
     };
+    interface HTMLPdsCopytextElementEventMap {
+        "pdsCopyTextClick": any;
+    }
     interface HTMLPdsCopytextElement extends Components.PdsCopytext, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsCopytextElementEventMap>(type: K, listener: (this: HTMLPdsCopytextElement, ev: PdsCopytextCustomEvent<HTMLPdsCopytextElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsCopytextElementEventMap>(type: K, listener: (this: HTMLPdsCopytextElement, ev: PdsCopytextCustomEvent<HTMLPdsCopytextElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsCopytextElement: {
         prototype: HTMLPdsCopytextElement;
@@ -689,7 +722,18 @@ declare global {
         prototype: HTMLPdsImageElement;
         new (): HTMLPdsImageElement;
     };
+    interface HTMLPdsInputElementEventMap {
+        "pdsInput": InputEvent;
+    }
     interface HTMLPdsInputElement extends Components.PdsInput, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsInputElementEventMap>(type: K, listener: (this: HTMLPdsInputElement, ev: PdsInputCustomEvent<HTMLPdsInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsInputElementEventMap>(type: K, listener: (this: HTMLPdsInputElement, ev: PdsInputCustomEvent<HTMLPdsInputElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsInputElement: {
         prototype: HTMLPdsInputElement;
@@ -707,13 +751,35 @@ declare global {
         prototype: HTMLPdsProgressElement;
         new (): HTMLPdsProgressElement;
     };
+    interface HTMLPdsRadioElementEventMap {
+        "pdsRadioChange": boolean;
+    }
     interface HTMLPdsRadioElement extends Components.PdsRadio, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsRadioElementEventMap>(type: K, listener: (this: HTMLPdsRadioElement, ev: PdsRadioCustomEvent<HTMLPdsRadioElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsRadioElementEventMap>(type: K, listener: (this: HTMLPdsRadioElement, ev: PdsRadioCustomEvent<HTMLPdsRadioElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsRadioElement: {
         prototype: HTMLPdsRadioElement;
         new (): HTMLPdsRadioElement;
     };
+    interface HTMLPdsSortableElementEventMap {
+        "pdsSortableItemMoved": any;
+    }
     interface HTMLPdsSortableElement extends Components.PdsSortable, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsSortableElementEventMap>(type: K, listener: (this: HTMLPdsSortableElement, ev: PdsSortableCustomEvent<HTMLPdsSortableElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsSortableElementEventMap>(type: K, listener: (this: HTMLPdsSortableElement, ev: PdsSortableCustomEvent<HTMLPdsSortableElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsSortableElement: {
         prototype: HTMLPdsSortableElement;
@@ -725,13 +791,35 @@ declare global {
         prototype: HTMLPdsSortableItemElement;
         new (): HTMLPdsSortableItemElement;
     };
+    interface HTMLPdsSwitchElementEventMap {
+        "pdsSwitchChange": InputEvent;
+    }
     interface HTMLPdsSwitchElement extends Components.PdsSwitch, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsSwitchElementEventMap>(type: K, listener: (this: HTMLPdsSwitchElement, ev: PdsSwitchCustomEvent<HTMLPdsSwitchElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsSwitchElementEventMap>(type: K, listener: (this: HTMLPdsSwitchElement, ev: PdsSwitchCustomEvent<HTMLPdsSwitchElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsSwitchElement: {
         prototype: HTMLPdsSwitchElement;
         new (): HTMLPdsSwitchElement;
     };
+    interface HTMLPdsTabElementEventMap {
+        "pdsTabClick": object;
+    }
     interface HTMLPdsTabElement extends Components.PdsTab, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsTabElementEventMap>(type: K, listener: (this: HTMLPdsTabElement, ev: PdsTabCustomEvent<HTMLPdsTabElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsTabElementEventMap>(type: K, listener: (this: HTMLPdsTabElement, ev: PdsTabCustomEvent<HTMLPdsTabElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsTabElement: {
         prototype: HTMLPdsTabElement;
@@ -749,13 +837,36 @@ declare global {
         prototype: HTMLPdsTabsElement;
         new (): HTMLPdsTabsElement;
     };
+    interface HTMLPdsTextareaElementEventMap {
+        "pdsTextareaChange": TextareaChangeEventDetail;
+    }
     interface HTMLPdsTextareaElement extends Components.PdsTextarea, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsTextareaElementEventMap>(type: K, listener: (this: HTMLPdsTextareaElement, ev: PdsTextareaCustomEvent<HTMLPdsTextareaElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsTextareaElementEventMap>(type: K, listener: (this: HTMLPdsTextareaElement, ev: PdsTextareaCustomEvent<HTMLPdsTextareaElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsTextareaElement: {
         prototype: HTMLPdsTextareaElement;
         new (): HTMLPdsTextareaElement;
     };
+    interface HTMLPdsTooltipElementEventMap {
+        "pdsTooltipHide": any;
+        "pdsTooltipShow": any;
+    }
     interface HTMLPdsTooltipElement extends Components.PdsTooltip, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsTooltipElementEventMap>(type: K, listener: (this: HTMLPdsTooltipElement, ev: PdsTooltipCustomEvent<HTMLPdsTooltipElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsTooltipElementEventMap>(type: K, listener: (this: HTMLPdsTooltipElement, ev: PdsTooltipCustomEvent<HTMLPdsTooltipElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsTooltipElement: {
         prototype: HTMLPdsTooltipElement;
