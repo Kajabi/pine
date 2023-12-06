@@ -1,60 +1,15 @@
-import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
-import { html, render } from 'lit';
+import { Meta, Canvas, Controls } from '@storybook/blocks';
 
 import * as stories from './pds-divider.stories.js';
 
+import Docs from '../docs/pds-divider.mdx';
+
 <Meta of={stories} />
 
-# Divider
+<Docs />
 
-Use the divider to separate sections of content. You can also use them to override auto-layout padding.
+# Playground
 
-## Properties
+<Canvas of={stories.Default} />
 
-<ArgTypes of={stories} />
-
-### Default
-
-The default divider displays a horizontal line.
-
-<Canvas mdxSource={`
-<pds-divider />
-`}>
-  <pds-divider />
-</Canvas>
-
-### Vertical
-
-To display the divider vertically, the `vertical` prop can be set to `true`.
-
-**Note**: Vertical dividers are not displayed on small screen sizes less than 767px.
-
-<Canvas mdxSource={`
-<pds-divider vertical="true" />
-`}>
-  <div style={{ height: '150px' }}>
-    <pds-divider vertical="true" />
-  </div>
-</Canvas>
-
-### Offsets
-
-Both horizontal and vertical dividers can be offset to create a full width/height bleed appearance.
-
-Offset sizes follow the global spacing sizes: `xxs`:4px, `xs`:8px, `sm`:12px,`md`:24px, `lg`:32px, `xl`:48px, `xxl`:64px.
-
-<Canvas mdxSource={`
-<pds-divider offset="lg" />
-`}>
-  <pds-divider offset="lg" />
-</Canvas>
-
-Below you will see a vertical divider using a large offset.
-
-<Canvas mdxSource={`
-<pds-divider offset="lg" vertical="true" />
-`}>
-  <div style={{ height: '150px' }}>
-    <pds-divider offset="lg" vertical="true" />
-  </div>
-</Canvas>
+<Controls of={stories.Default} />
