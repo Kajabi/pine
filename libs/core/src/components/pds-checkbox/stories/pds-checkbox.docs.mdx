@@ -1,83 +1,15 @@
-import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
-import { html, render } from 'lit';
+import { Meta, Canvas, Controls } from '@storybook/blocks';
 
 import * as stories from './pds-checkbox.stories.js';
 
+import Docs from '../docs/pds-checkbox.mdx';
+
 <Meta of={stories} />
 
-# Checkbox
+<Docs />
 
-Checkboxes provide users with selectable options like toggling a single setting or selecting multiple options from a list.
+## Playground
 
-## Properties
+<Canvas of={stories.Default} />
 
-<ArgTypes of={stories} />
-
-### Default
-
-<Canvas mdxSource={`
-<pds-checkbox component-id="default" label="Label" />
-`}>
-<pds-checkbox component-id="default" label="Label" />
-</Canvas>
-
-### Checked
-
-Checkboxes appear as checked when activated.
-
-<Canvas mdxSource={`
-<pds-checkbox component-id="checked" label="Label" checked />
-`}>
-  <pds-checkbox component-id="checked" label="Label" checked />
-</Canvas>
-
-### Indeterminate
-
-Component `indeterminate` prop is for visual styling only.
-
-Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes)
-
-<Canvas mdxSource={`
-<pds-checkbox component-id="indeterminate" label="Label" indeterminate checked />
-`}>
-  <pds-checkbox component-id="indeterminate" label="Label" indeterminate checked />
-</Canvas>
-
-### Disabled
-
-Disabled visually indicates and functionally prevents interaction with the checkbox.
-
-<Canvas mdxSource={`
-<pds-checkbox component-id="disabled" label="Label" disabled />
-`}>
-  <pds-checkbox component-id="disabled" label="Label" disabled />
-</Canvas>
-
-### Message
-
-Message is a string of text that displays below the label text.
-
-<Canvas mdxSource={`
-<pds-checkbox component-id="message1" label="Label" helper-message="This is short message text." />
-`}>
-  <pds-checkbox component-id="message1" label="Label" helper-message="This is short message text." />
-</Canvas>
-
-### Invalid
-
-Invalid displays the checkbox in invalid state such as when required but is not checked.
-
-An optional error message can be displayed for additional instructions, displayed independently from the helper message.
-
-<Canvas mdxSource={`
-<pds-checkbox component-id="invalid" label="Label" invalid error-message="This is a short error message"/>
-`}>
-  <pds-checkbox component-id="invalid" label="Label" invalid error-message="This is a short error message" />
-</Canvas>
-
-## Additional Resources
-
-[MDN Web Docs: Checkboxes](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox)
-
-[MDN Web Docs: Indeterminate State](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes)
-
+<Controls of={stories.Default} />
