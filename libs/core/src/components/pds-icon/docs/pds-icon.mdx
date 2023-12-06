@@ -1,0 +1,108 @@
+import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
+import {components as pdsDocsJson} from '@pine-ds/icons/dist/docs.json';
+
+# Icon
+Displays Icons used with the Pine Design System
+
+## Guidelines
+
+Icons are an effective way to enforce the purpose of an experience. Icons are broken out into two main
+categories: Actions and Features. In order to ensure that the icons are adding to the clarity of an experience
+and not creating confusion, we adhere to two principles.
+
+<DocCanvas client:only mdxSource={{
+  react: `<PdsIcon name="upload"></PdsIcon>`,
+  webComponent: `<pds-icon name="upload"></pds-icon>`
+}}>
+  <>
+    <pds-icon name="upload"></pds-icon>
+  </>
+</DocCanvas>
+
+## Properties
+
+<DocArgsTable componentName='pds-icon' docSource={pdsDocsJson} />
+
+### color
+The `color` property allows the icon to render in the specified color. This can be either string or hex format.
+
+```html
+<pds-icon name="youtube" color="blue"></pds-icon>
+<pds-icon name="youtube" color="#ff0000"></pds-icon>
+```
+
+The above examples will render the following output:
+<DocCanvas client:only mdxSource={{
+  react: `
+<PdsIcon name="youtube" color="blue"></PdsIcon>
+<PdsIcon name="youtube" color="#ff0000"></PdsIcon>
+`,
+  webComponent: `
+<pds-icon name="youtube" color="blue"></pds-icon>
+<pds-icon name="youtube" color="#ff0000"></pds-icon>
+`
+}}>
+  <>
+   <pds-icon name="youtube" color="blue"></pds-icon>
+  <pds-icon name="youtube" color="#ff0000"></pds-icon>
+  </>
+</DocCanvas>
+
+### name
+The `name` property is the name of the svg filename.
+
+### size
+The `size` property includes several pre-defined values for ease of use:
+
+```html
+<pds-icon name="upload" size="small"></pds-icon>
+<pds-icon name="upload"></pds-icon>
+<pds-icon name="upload" size="medium"></pds-icon>
+<pds-icon name="upload" size="large"></pds-icon>
+```
+
+The above examples will render the following output:
+<DocCanvas client:only mdxSource={{
+  react: `
+<PdsIcon name="upload" size="small"></PdsIcon>
+<PdsIcon name="upload" size="normal"></PdsIcon>
+<PdsIcon name="upload" size="medium"></PdsIcon>
+<PdsIcon name="upload" size="large"></PdsIcon>
+`,
+  webComponent: `
+<pds-icon name="upload" size="small"></pds-icon>
+<pds-icon name="upload" size="normal"></pds-icon>
+<pds-icon name="upload" size="medium"></pds-icon>
+<pds-icon name="upload" size="large"></pds-icon>`
+}}>
+  <>
+    <pds-icon name="upload" size="small"></pds-icon>
+    <pds-icon name="upload" size="normal"></pds-icon>
+    <pds-icon name="upload" size="medium"></pds-icon>
+    <pds-icon name="upload" size="large"></pds-icon>
+  </>
+</DocCanvas>
+
+It also accepts any custom size attribute. For example:
+```html
+<pds-icon name="upload" size="60px"></pds-icon>
+<pds-icon name="upload" size="2rem"></pds-icon>
+```
+
+will render the following output:
+<DocCanvas client:only mdxSource={{
+  react: `
+<PdsIcon name="upload" size="60px"></PdsIcon>
+<PdsIcon name="upload" size="2rem"></PdsIcon>
+`,
+  webComponent: `
+<pds-icon name="upload" size="60px"></pds-icon>
+<pds-icon name="upload" size="2rem"></pds-icon>
+`
+}}>
+  <>
+    <pds-icon name="upload" size="60px"></pds-icon>
+    <pds-icon name="upload" size="2rem"></pds-icon>
+  </>
+</DocCanvas>
+
