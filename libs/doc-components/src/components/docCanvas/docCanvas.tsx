@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { prism } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
 
 import './docCanvas.css';
 
@@ -19,7 +22,7 @@ const docCanvas: React.FC<DocCanvasProps> = ({
   // isMenuVisible = false,
   mdxSource
 }) => {
-  const [activeTab, setActiveTab] = useState('react');
+  const [activeTab, setActiveTab] = useState('webComponent');
   const [isMenuVisible, setMenuVisible] = useState(false);
 
   const handleCopyCodeClick = () => {
@@ -57,11 +60,9 @@ const docCanvas: React.FC<DocCanvasProps> = ({
 
   const renderSource = () => {
     return (
-      <pre>
-        <code>
-          {mdxSource?.[activeTab]}
-        </code>
-      </pre>
+      <SyntaxHighlighter language="jsx" style={prism}>
+        {mdxSource?.[activeTab]}
+      </SyntaxHighlighter>
     )
   }
 
@@ -72,18 +73,6 @@ const docCanvas: React.FC<DocCanvasProps> = ({
         {children}
         </div>
         <div className="doc-canvas-actions">
-          {mdxSource?.react &&
-            <button
-              className={`
-                doc-canvas-action
-                ${activeTab === 'react' ? 'doc-canvas-action--active' : ''}
-              `}
-              disabled={!mdxSource?.react}
-              onClick={() => handleTabClick('react')}
-            >
-              React
-            </button>
-          }
 
           {mdxSource?.webComponent &&
             <button
@@ -97,6 +86,19 @@ const docCanvas: React.FC<DocCanvasProps> = ({
               Web Component
             </button>
           }
+
+          {mdxSource?.react &&
+            <button
+              className={`
+                doc-canvas-action
+                ${activeTab === 'react' ? 'doc-canvas-action--active' : ''}
+              `}
+              disabled={!mdxSource?.react}
+              onClick={() => handleTabClick('react')}
+            >
+              React
+            </button>
+          }
           <button
             className={`
               doc-canvas-action
@@ -107,16 +109,19 @@ const docCanvas: React.FC<DocCanvasProps> = ({
             Toggle menu
           </button>
         </div>
-        <div className="doc-canvas-code">
+        <div className="doc-canvas-code-wrapper">
+          <div className="doc-canvas-code">
+
+            { renderSource() }
+
+          </div>
+
           <button
             className="doc-canvas-action doc-canvas-action--copy-code"
             onClick={() => handleCopyCodeClick()}
           >
             Copy Code
           </button>
-
-          { renderSource() }
-
         </div>
       </div>
   )
