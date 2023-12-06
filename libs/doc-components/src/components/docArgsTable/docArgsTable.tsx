@@ -4,14 +4,21 @@ import './docArgsTable.css';
 
 export interface DocArgsTableProps {
   componentName: string
+  docSource: object
 }
 
 const DocArgsTable: React.FC<DocArgsTableProps> = ({
-  componentName
+  componentName,
+  docSource
 }) => {
   let props: object = {};
 
-  props = components.find((component) => component.tag === componentName)?.props || {};
+  if (docSource) {
+    props = docSource.find((component: { tag: string; }) => component.tag === componentName)?.props || {};
+  }
+  else {
+    props = components.find((component) => component.tag === componentName)?.props || {};
+  }
 
   return (
     <>
