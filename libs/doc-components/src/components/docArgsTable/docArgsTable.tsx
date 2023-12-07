@@ -31,9 +31,9 @@ const DocArgsTable: React.FC<DocArgsTableProps> = ({
           </tr>
         </thead>
         <tbody>
-          {props && Object.values(props).map((prop: any) => {
+          {props && Object.values(props).map((prop: any, i: number) => {
             return (
-              <tr>
+              <tr key={`rowIndex-${i}`}>
                 <td>{prop.name}</td>
                 <td>
                   <div>{prop.docs}</div>
