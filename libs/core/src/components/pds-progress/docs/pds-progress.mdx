@@ -31,7 +31,7 @@ The percent of how much the `pds-progress` is filled. Should be a number ranging
 Displays the `percent` value as text beside the progress.
 
 <DocCanvas client:only mdxSource={{
-  react: `<PdsProgress componentId="show-percent" label="Show percent" percent="50" show-percent={true}></PdsProgress>`,
+  react: `<PdsProgress componentId="show-percent" label="Show percent" percent="50" showPercent={true}></PdsProgress>`,
   webComponent: `<pds-progress component-id="show-percent" label="Show percent" percent="50" show-percent></pds-progress>`
 }}>
   <pds-progress component-id="show-percent" label="Show percent" percent="50" show-percent></pds-progress>
@@ -53,7 +53,7 @@ When `animated`, progress will animate from 0 to the `percent` value.
 Allows for `pds-progress` to be filled with a custom color. Accepts any valid color token or CSS color value.
 
 <DocCanvas client:only mdxSource={{
-  react: `<PdsProgress componentId="fillcolor" label="Fill color" percent="95" fill-color="#86D5BC"></PdsProgress>`,
+  react: `<PdsProgress componentId="fillcolor" label="Fill color" percent="95" fillColor="#86D5BC"></PdsProgress>`,
   webComponent: `<pds-progress component-id="fillcolor" label="Fill color" percent="95" fill-color="#86D5BC"></pds-progress>
 `}}>
   <pds-progress component-id="fillcolor" label="Fill color" percent="95" fill-color="#86D5BC"></pds-progress>
@@ -64,8 +64,8 @@ Allows for `pds-progress` to be filled with a custom color. Accepts any valid co
 A tooltip can be added by combining the `progress` component with a [tooltip](/docs/components-tooltip--default).
 
 <DocCanvas client:only mdxSource={{
-  react: `<PdsTooltip content="50%" has-arrow="false" placement="top" style={{ width: '100%' }}>
-    <PdsProgress component-id="tooltip-demo" label="Progress w/ tooltip" percent="50"></PdsProgress>
+  react: `<PdsTooltip content="50%" hasArrow="false" placement="top" style={{ width: '100%' }}>
+    <PdsProgress componentId="tooltip-demo" label="Progress w/ tooltip" percent="50"></PdsProgress>
   </PdsTooltip>`,
   webComponent: `<pds-tooltip content="50%" has-arrow="false" placement="top" style={{ width: '100%' }}>
     <pds-progress component-id="tooltip-demo" label="Progress w/ tooltip" percent="50"></pds-progress>
