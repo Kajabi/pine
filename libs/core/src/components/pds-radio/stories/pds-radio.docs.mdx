@@ -1,5 +1,4 @@
-import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
-import { html, render } from 'lit';
+import { Canvas, Controls, Meta } from '@storybook/blocks';
 
 import * as stories from './pds-radio.stories.js';
 
@@ -8,3 +7,9 @@ import Docs from '../docs/pds-radio.mdx';
 <Meta of={stories} />
 
 <Docs />
+
+# Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />
