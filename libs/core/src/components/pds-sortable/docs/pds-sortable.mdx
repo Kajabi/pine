@@ -8,7 +8,6 @@ Sortable is for creating containers of items that can be sorted via drag and dro
 
 <DocArgsTable componentName='pds-sortable' />
 
-
 ## Sortable Items
 
 The `pds-sortable-item` sub-component are the items that can be sorted within a sortable container `pds-sortable`.
@@ -42,7 +41,7 @@ The `pds-sortable-item` sub-component are the items that can be sorted within a 
 When `border` is set to `true`, the component will render a border around all items.
 
 <DocCanvas client:only mdxSource={{
-  react:`<PdsSortable border component-id="bordered">
+  react:`<PdsSortable border componentId="bordered">
   <PdsSortableItem>Item 1</PdsSortableItem>
   <PdsSortableItem>Item 2</PdsSortableItem>
   <PdsSortableItem>Item 3</PdsSortableItem>
@@ -140,20 +139,20 @@ The `enable-actions` property in the `pds-sortable-item` component determines wh
 The `sortable-item-actions` slot is provided to place content within the `pds-sortable-item__actions` element as children, but this slot is only rendered if the `enable-actions` property is set to `true`.
 
 <DocCanvas client:only mdxSource={{
-  react: `<PdsSortable component-id="actions">
-  <PdsSortableItem enable-actions>
+  react: `<PdsSortable componentId="actions">
+  <PdsSortableItem enableActions={true}>
     <div>Item 1</div>
     <div slot="sortable-item-actions">
       <PdsLink href="#" variant="plain">action</PdsLink>
     </div>
   </PdsSortableItem>
-  <PdsSortableItem enable-actions={true} >
+  <PdsSortableItem enableActions={true} >
     <div>Item 2</div>
     <div slot="sortable-item-actions">
       <PdsLink href="#" variant="plain">action</PdsLink>
     </div>
   </PdsSortableItem>
-  <PdsSortableItem enable-actions={true}>
+  <PdsSortableItem enableActions={true}>
     <div>Item 3</div>
     <div slot="sortable-item-actions">
       <PdsLink href="#" variant="plain">action</PdsLink>
