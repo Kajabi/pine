@@ -1,5 +1,4 @@
-import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
-import { html, render } from 'lit-html';
+import { Canvas, Controls, Meta } from '@storybook/blocks';
 
 import * as stories from './pds-sortable.stories.js';
 
@@ -8,3 +7,9 @@ import Docs from '../docs/pds-sortable.mdx';
 <Meta of={stories} />
 
 <Docs />
+
+# Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />
