@@ -1,6 +1,17 @@
 "package: core":
-  - libs/core/**/*
+- changed-files:
+  - any-glob-to-any-file: 'libs/core/**/*'
 
 "package: react":
-  - libs/react/**/*
+- changed-files:
+  - any-glob-to-any-file: 'libs/react/**/*'
 
+documentation:
+- changed-files:
+  - any-glob-to-any-file: '**/*.[md|mdx]'
+
+enhancement:
+- head-branch: ['feature']
+
+bug:
+- head-branch: ['fix']
