@@ -1,0 +1,156 @@
+import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
+
+# Tabs
+
+A tabs component to generate all versions of `pds-tab` as outlined in [Figma](https://www.figma.com/file/sMbtLUHSt2vfKgKjyQ3052/%F0%9F%A7%A9-Sage-components?node-id=488%3A43471&t=5FtThY98rugq7hGi-1).
+
+## Sub Components
+
+### Tab
+
+A subcomponent which handles tab logic. This subcomponent is expected to be used exclusively within `pds-tab`.
+
+Requires a unique `name` property to be passed, e.g. `<pds-tab name="foo">Tab Content</pds-tab>`
+
+### Tabpanel
+
+A subcomponent which handles tabpanel logic. This subcomponent is expected to be used exclusively within `pds-tab`.
+
+Requires a matching `name` property to be passed, e.g. `<pds-tabpanel name="foo">Tabpanel Content</pds-tabpanel>`
+
+## Accessibility
+
+This component has been built to align with the [W3C Aria best practices for tabs](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/). You get all tabbing, keyboard navigation, focus states, and aria information applied automatically.
+
+In order for all accessibility to properly compile, you must provide a few required properties to the component.
+
+**1. A descriptive `tablist-label`:** Provides context to screen readers about what kind of tablist information is being presented
+
+**2. A unique `component-id`:** Provides a unique `id` to the tabs component, be sure it doesn't match any other `id`'s on the page
+
+## Properties
+
+<DocArgsTable componentName='pds-tabs' />
+
+## Variant
+
+### Default (Primary)
+
+Default tabs styles
+
+<DocCanvas client:only mdxSource={{
+  react: `
+<PdsTabs activeTabName="Dollop" variant="primary" componentId="primary" tablistLabel="Foo">
+  <PdsTab name="Sturdy">Sturdy</PdsTab>
+  <PdsTab name="Dollop">Dollop</PdsTab>
+  <PdsTab name="Waffle">Waffle</PdsTab>
+  <PdsTabpanel name="Sturdy">Content Sturdy</PdsTabpanel>
+  <PdsTabpanel name="Dollop">Content Dollop</PdsTabpanel>
+  <PdsTabpanel name="Waffle">Content Waffle</PdsTabpanel>
+</PdsTabs>
+`,
+  webComponent: `
+<pds-tabs active-tab-name="Dollop" variant="primary" component-id="primary" tablist-label="Foo">
+  <pds-tab name="Sturdy">Sturdy</pds-tab>
+  <pds-tab name="Dollop">Dollop</pds-tab>
+  <pds-tab name="Waffle">Waffle</pds-tab>
+  <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
+  <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
+  <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+</pds-tabs>
+`
+}}>
+  <pds-tabs active-tab-name="Dollop" variant="primary" component-id="primary" tablist-label="Foo">
+    <pds-tab name="Sturdy">Sturdy</pds-tab>
+    <pds-tab name="Dollop">Dollop</pds-tab>
+    <pds-tab name="Waffle">Waffle</pds-tab>
+    <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
+    <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
+    <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+  </pds-tabs>
+</DocCanvas>
+
+### Availability
+
+Tabs with a more literal tab feeling, used for things like dates or times
+
+<DocCanvas client:only mdxSource={{
+  react: `
+<div style="background-color: #ddd; padding: 20px;">
+  <PdsTabs activeTabName="tuesday" variant="availability" componentId="availability" tablistLabel="Foo">
+    <PdsTab name="monday">Monday</PdsTab>
+    <PdsTab name="tuesday">Tuesday</PdsTab>
+    <PdsTab name="wednesday">Wednesday</PdsTab>
+    <PdsTabpanel name="tuesday">Content Tuesday</PdsTabpanel>
+    <PdsTabpanel name="wednesday">Content Wednesday</PdsTabpanel>
+    <PdsTabpanel name="monday">Content Monday</PdsTabpanel>
+  </PdsTabs>
+</div>
+`,
+  webComponent:`
+<div style="background-color: #ddd; padding: 20px;">
+  <pds-tabs active-tab-name="tuesday" variant="availability" component-id="availability" tablist-label="Foo">
+    <pds-tab name="monday">Monday</pds-tab>
+    <pds-tab name="tuesday">Tuesday</pds-tab>
+    <pds-tab name="wednesday">Wednesday</pds-tab>
+    <pds-tabpanel name="tuesday">Content Tuesday</pds-tabpanel>
+    <pds-tabpanel name="wednesday">Content Wednesday</pds-tabpanel>
+    <pds-tabpanel name="monday">Content Monday</pds-tabpanel>
+  </pds-tabs>
+</div>
+`
+}}>
+
+  <div style={{backgroundColor: '#ddd', padding: '20px'}}>
+    <pds-tabs active-tab-name="tuesday" variant="availability" component-id="availability" tablist-label="Foo">
+      <pds-tab name="monday">Monday</pds-tab>
+      <pds-tab name="tuesday">Tuesday</pds-tab>
+      <pds-tab name="wednesday">Wednesday</pds-tab>
+      <pds-tabpanel name="tuesday">Content Tuesday</pds-tabpanel>
+      <pds-tabpanel name="wednesday">Content Wednesday</pds-tabpanel>
+      <pds-tabpanel name="monday">Content Monday</pds-tabpanel>
+    </pds-tabs>
+  </div>
+</DocCanvas>
+
+### Filter
+
+Pill shaped tabs for filtering data or content
+
+Note: Tabs are likely not a good component to add filtered data to on tab click as each tab has a unique tabpanel associated with it and all content within that panel will change upon tab click
+
+<DocCanvas client:only mdxSource={{
+  react: `
+<PdsTabs activeTabName="Sturdy" variant="filter" componentId="filter" tablistLabel="Foo">
+  <PdsTab name="Sturdy">Sturdy</PdsTab>
+  <PdsTab name="Dollop">Dollop</PdsTab>
+  <PdsTab name="Waffle">Waffle</PdsTab>
+  <PdsTabpanel name="Sturdy">Content Sturdy</PdsTabpanel>
+  <PdsTabpanel name="Dollop">Content Dollop</PdsTabpanel>
+  <PdsTabpanel name="Waffle">Content Waffle</PdsTabpanel>
+</PdsTabs>
+`,
+  webComponent: `
+<pds-tabs active-tab-name="Sturdy" variant="filter" component-id="filter" tablist-label="Foo">
+  <pds-tab name="Sturdy">Sturdy</pds-tab>
+  <pds-tab name="Dollop">Dollop</pds-tab>
+  <pds-tab name="Waffle">Waffle</pds-tab>
+  <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
+  <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
+  <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+</pds-tabs>
+`
+}}>
+  <pds-tabs active-tab-name="Sturdy" variant="filter" component-id="filter" tablist-label="Foo">
+    <pds-tab name="Sturdy">Sturdy</pds-tab>
+    <pds-tab name="Dollop">Dollop</pds-tab>
+    <pds-tab name="Waffle">Waffle</pds-tab>
+    <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
+    <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
+    <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+  </pds-tabs>
+</DocCanvas>
+
+## Additional Resources
+
+[W3C Aria best practices for tabs](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/)
