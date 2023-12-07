@@ -22,7 +22,7 @@ Radio components provide users a way to select only one option from a list of tw
 Radios appear as checked when activated.
 
 <DocCanvas client:only mdxSource={{
-  react: `<PdsRadio componentId="checked" label="Label" checked />`,
+  react: `<PdsRadio componentId="checked" label="Label" checked={true} />`,
   webComponent: `<pds-radio component-id="checked" label="Label" checked />`
 }}>
   <pds-radio component-id="checked" label="Label" checked />
@@ -33,7 +33,7 @@ Radios appear as checked when activated.
 Disabled visually indicates and functionally prevents interaction with the radio.
 
 <DocCanvas client:only mdxSource={{
-  react: `<PdsRadio component-id="disabled" label="Label" disabled />`,
+  react: `<PdsRadio componentId="disabled" label="Label" disabled={true} />`,
   webComponent: `<pds-radio component-id="disabled" label="Label" disabled />`
 }}>
   <pds-radio component-id="disabled" label="Label" disabled />
@@ -44,7 +44,7 @@ Disabled visually indicates and functionally prevents interaction with the radio
 Message is a string of text that displays below the label text.
 
 <DocCanvas client:only mdxSource={{
-  react: `<PdsRadio componentId="message1" label="Label" helper-message="This is short message text." />`,
+  react: `<PdsRadio componentId="message1" label="Label" helperMessage="This is short message text." />`,
   webComponent: `<pds-radio component-id="message1" label="Label" helper-message="This is short message text." />`
 }}>
   <pds-radio component-id="message1" label="Label" helper-message="This is short message text." />
@@ -57,7 +57,7 @@ Invalid displays the radio in invalid state such as when required but is not che
 An optional error message can be displayed for additional instructions, displayed independently from the helper message.
 
 <DocCanvas client:only mdxSource={{
-  react: `<PdsRadio componentId="invalid" label="Label" invalid error-message="This is a short error message" />`,
+  react: `<PdsRadio componentId="invalid" label="Label" invalid errorMessage="This is a short error message" />`,
   webComponent: `<pds-radio component-id="invalid" label="Label" invalid error-message="This is a short error message" />`
 }}>
   <pds-radio component-id="invalid" label="Label" invalid error-message="This is a short error message" />
@@ -71,7 +71,7 @@ Once a radio group is created, only one radio at a time can be selected.
 
 <DocCanvas client:only mdxSource={{
   react: `<div>
-  <PdsRadio componentId="default1" label="Label" name="radio" checked />
+  <PdsRadio componentId="default1" label="Label" name="radio" checked={true} />
   <PdsRadio componentId="default2" label="Label" name="radio" />
   <PdsRadio componentId="default3" label="Label" name="radio" />
 </div>
