@@ -4,7 +4,7 @@ import './docArgsTable.css';
 
 export interface DocArgsTableProps {
   componentName: string
-  docSource: object
+  docSource: Array<any>
 }
 
 const DocArgsTable: React.FC<DocArgsTableProps> = ({
