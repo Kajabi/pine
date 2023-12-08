@@ -317,7 +317,15 @@ export namespace Components {
         /**
           * Defines the display style of the box.
          */
-        "display"?: `flex` | `inline-flex`;
+        "display"?: `flex` | `inline-flex` | `block` | `inline-block`;
+        /**
+          * If `true`, sets the box `max-width` to `100%`.
+         */
+        "fit"?: boolean;
+        /**
+          * Defines how a box will grow or shrink to fit the space available in its container.
+         */
+        "flex"?: `none` | `grow` | `shrink`;
         /**
           * Defines the spacing between the box items.
          */
@@ -1483,7 +1491,15 @@ declare namespace LocalJSX {
         /**
           * Defines the display style of the box.
          */
-        "display"?: `flex` | `inline-flex`;
+        "display"?: `flex` | `inline-flex` | `block` | `inline-block`;
+        /**
+          * If `true`, sets the box `max-width` to `100%`.
+         */
+        "fit"?: boolean;
+        /**
+          * Defines how a box will grow or shrink to fit the space available in its container.
+         */
+        "flex"?: `none` | `grow` | `shrink`;
         /**
           * Defines the spacing between the box items.
          */

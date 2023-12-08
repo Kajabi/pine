@@ -49,12 +49,22 @@ export class PdsLayoutBox {
   /**
    * Defines the display style of the box.
   */
-  @Prop() display?: `flex` | `inline-flex`;
+  @Prop() display?: `flex` | `inline-flex` | `block` | `inline-block`;
+
+  /**
+   * If `true`, sets the box `max-width` to `100%`.
+   */
+  @Prop() fit?: boolean;
 
   /**
    * Defines the spacing between the box items.
   */
   @Prop() gap?: `none` | `xs`| `sm` | `md` | `lg`;
+
+  /**
+   * Defines how a box will grow or shrink to fit the space available in its container.
+   */
+  @Prop() flex?: `none` | `grow` | `shrink`;
 
   /**
    * Defines the horizontal alignment of the box items.
@@ -154,8 +164,10 @@ export class PdsLayoutBox {
       ${this.bordered ? 'pds-layout-box--bordered' : ''}
       ${this.borderRadius ? `pds-border-radius-${this.borderRadius}` : ''}
       ${this.direction ? `pds-layout-box-direction-${this.direction}` : ''}
-      ${this.display ? `pds-layout-box-display-${this.display}` : ''}
+      ${this.display ? `pds-layout-box--display-${this.display}` : ''}
+      ${this.fit ? 'pds-layout-box--fit' : ''}
       ${this.gap ? `pds-layout-box-gap-${this.gap}` : ''}
+      ${this.flex ? `pds-layout-box--flex-${this.flex}` : ''}
       ${this.justifyContent ? `pds-justify-content-${this.justifyContent}` : ''}
       ${this.offset ? `pds-layout-box-offset-${this.offset}` : ''}
       ${this.offsetXs ? `pds-layout-box-offset-xs-${this.offsetXs}` : ''}
