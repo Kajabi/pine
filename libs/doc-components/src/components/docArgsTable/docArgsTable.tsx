@@ -1,23 +1,69 @@
-import React from 'react';
+import Markdown from 'markdown-to-jsx';
 import { components } from '../../assets/docs.json'
-import './docArgsTable.css';
 
 export interface DocArgsTableProps {
   componentName: string
   docSource: Array<any>
 }
 
+// type DocComponent = typeof components;
+const typedComponents: Record<string, any> = components;
+
+const sectionNameMapping = {
+  props: "properties",
+  events: "events",
+  methods: "methods",
+  slots: "slots",
+  styles: "css custom properties",
+  parts: "css shadow parts"
+} as const;
+
 const DocArgsTable: React.FC<DocArgsTableProps> = ({
   componentName,
   docSource
 }) => {
-  let props: object = {};
+  let component: any;
 
-  if (docSource) {
-    props = docSource.find((component: { tag: string; }) => component.tag === componentName)?.props || {};
+  component = docSource
+    ? docSource.find((component: { tag: string; }) => component.tag === componentName)
+    : components.find((component: { tag: string; }) => component.tag === componentName)!
+
+  if ( component ) {
+    Object.keys(sectionNameMapping).forEach((sectionName: string) => {
+      typedComponents[sectionName] = component[sectionName];
+    });
   }
-  else {
-    props = components.find((component) => component.tag === componentName)?.props || {};
+
+  const generateTableSection = (section: string) => {
+    const sectionTitle: string = Object.keys(sectionNameMapping).find((k) => k == section) || '';
+    return (
+      <>
+        <tr key={sectionTitle}>
+          <td colSpan={3}>{sectionTitle.toUpperCase()}</td>
+        </tr>
+        { generateSubSection(typedComponents[section]) }
+      </>
+    );
+  };
+
+  const generateSubSection = (sectionProps: any) => {
+
+    const tableRows = sectionProps.map((prop: any, i: number) => (
+      <tr key={`rowIndex-${i}`}>
+        <td>{prop.attr || prop.event || prop.name}</td>
+        <td>
+          <Markdown>{prop.docs}</Markdown>
+          <div className="args-type"><em>{prop.type || prop.detail}</em></div>
+        </td>
+        <td>{prop.default}</td>
+      </tr>
+    ))
+
+    return (
+      <>
+        { tableRows }
+      </>
+    )
   }
 
   return (
@@ -31,18 +77,12 @@ const DocArgsTable: React.FC<DocArgsTableProps> = ({
           </tr>
         </thead>
         <tbody>
-          {props && Object.values(props).map((prop: any, i: number) => {
-            return (
-              <tr key={`rowIndex-${i}`}>
-                <td>{prop.name}</td>
-                <td>
-                  <div>{prop.docs}</div>
-                  <div className="args-type"><em>{prop.type}</em></div>
-                </td>
-                <td>{prop.default}</td>
-              </tr>
-            )
-          })}
+          { Object.keys(typedComponents).map((section) => {
+            if (typedComponents[section].length > 0 ) {
+              return generateTableSection(section)
+            }
+          })
+          }
         </tbody>
       </table>
     </>

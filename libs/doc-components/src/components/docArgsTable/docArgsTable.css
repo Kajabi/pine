@@ -4,6 +4,11 @@
   width: 100%;
 }
 
+.args-table td:first-child {
+  font-weight: bold;
+  white-space: nowrap;
+}
+
 .args-table tbody td {
   border: 1px solid #eaecef;
   padding: 6px 13px;
