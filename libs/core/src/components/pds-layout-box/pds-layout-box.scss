@@ -24,8 +24,42 @@
   width: auto;
 }
 
+.pds-layout-box--fit {
+  max-width: 100%
+}
+
 .pds-layout-box--bordered {
   border: var(--pine-border-default);
+}
+
+// Display helpers
+.pds-layout-box--display-flex {
+  display: flex;
+}
+
+.pds-layout-box--display-inline-flex {
+  display: inline-flex;
+}
+
+.pds-layout-box--display-block {
+  display: block;
+}
+
+.pds-layout-box--display-inline-block {
+  display: inline-block;
+}
+
+// Flex helpers
+.pds-layout-box--flex-none {
+  flex: 0 0 auto;
+}
+
+.pds-layout-box--flex-grow {
+  flex: 1 1 auto
+}
+
+.pds-layout-box--flex-shrink {
+  flex: 0 0 auto;
 }
 
 // Border radius helpers
@@ -33,7 +67,7 @@
   border-radius: 0;
 }
 
-.pds-border-rasius-xs {
+.pds-border-radius-xs {
   border-radius: var(--pine-border-radius-xs);
 }
 
@@ -199,6 +233,46 @@
 .pds-align-items-baseline {
   align-items: baseline;
 }
+
+// Spacing mixin
+$pine-spacing-tokens: (
+  xxs: 4px,
+  xs: 8px,
+  sm: 16px,
+  md: 24px,
+  lg: 36px,
+  xl: 48px,
+  2xl: 64px,
+);
+
+@mixin generate-spacing-classes($directions, $tokens) {
+  @each $direction in $directions {
+    @each $key, $value in $tokens {
+      /* stylelint-disable-next-line function-no-unknown */
+      $class-name: if($direction, 'pds-spacing-#{$direction}-#{$key}', 'pds-spacing-#{$key}');
+      .#{$class-name} {
+        @if $direction == 'top' {
+          margin-block-start: $value;
+        } @else if $direction == 'bottom' {
+          margin-block-end: $value;
+        } @else if $direction == 'left' {
+          margin-inline-start: $value;
+        } @else if $direction == 'right' {
+          margin-inline-end: $value;
+        } @else {
+          margin: $value;
+        }
+      }
+    }
+  }
+}
+
+@include generate-spacing-classes(false, $pine-spacing-tokens);
+@include generate-spacing-classes('top', $pine-spacing-tokens);
+@include generate-spacing-classes('right', $pine-spacing-tokens);
+@include generate-spacing-classes('left', $pine-spacing-tokens);
+@include generate-spacing-classes('bottom', $pine-spacing-tokens);
+
 
 @mixin generate-columns($prefix, $columns) {
   @for $i from 0 through $columns {
