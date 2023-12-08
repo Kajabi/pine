@@ -418,3 +418,64 @@ If you encounter issues with your layout, here are some common problems and thei
 ## Related Components
 - [Box](/docs/components-box--docs)
 - [Row](/docs/components-row--docs)
+
+## Pages example
+### Form Edit view
+<pds-layout-box fit>
+  <pds-layout-row col-gap="16px">
+    {/* left side */}
+    <pds-layout-box direction="column" size-md="8">
+      <pds-layout-box class="pds-spacing-bottom-md" bordered direction="column" padding="md" border-radius="lg">
+        <h3>Episode Details</h3>
+        <pds-input class="pds-spacing-bottom-md" component-id="episode-details" label="Episode title" type="text" value="Ep 1"></pds-input>
+        {/* TODO - add select */}
+        <pds-button class="pds-spacing-bottom-md" variant="secondary" icon="calendar-schedule">Create Season (optional)</pds-button>
+        <label>Media</label>
+        <p>File upload component</p>
+        <label>Show notes</label>
+        <p>Text editor component</p>
+        <pds-checkbox component-id="episode-explicit" label="Episode contains explicit content" />
+      </pds-layout-box>
+
+      <pds-layout-box bordered direction="column" padding="md" border-radius="lg">
+        <h3>Transcription</h3>
+        <p>Add an episode transcript your members can access from the episode page.
+The maximum file size for a transcript is 2 MB. Supported file format: txt</p>
+        <pds-button variant="secondary" icon="upload">Upload</pds-button>
+      </pds-layout-box>
+    </pds-layout-box>
+    
+    {/* right side */}
+    <pds-layout-box direction="column" size-md="4">
+      {/* box1 */}
+      <pds-layout-box class="pds-spacing-bottom-md" bordered direction="column" flex="none" padding="md" border-radius="lg">
+        <h3>Publish Settings</h3>
+        {/* TODO: revisit This
+        - Currently this box has flex props which cause the chip to stretch full width
+        - arfh */}
+        <pds-chip label="Neutral" sentiment="neutral" />
+        <pds-box>
+          <pds-chip label="Neutral" sentiment="neutral" />
+        </pds-box>
+        <p>Publish date</p>
+        <p>Not Set</p>
+        <pds-button variant="secondary" icon="calendar-schedule">Schedule episode</pds-button>
+      </pds-layout-box>
+      {/* box 2 */}
+      <pds-layout-box class="pds-spacing-bottom-md" bordered display="block" flex="none" padding="md" border-radius="lg">
+        <h3>Publish Settings</h3>
+        <pds-chip label="Neutral" sentiment="neutral" />
+        <pds-box>
+          <pds-chip label="Neutral" sentiment="neutral" />
+        </pds-box>
+        <p>Publish date</p>
+        <p>Not Set</p>
+        <pds-button variant="secondary" icon="calendar-schedule">Schedule episode</pds-button>
+      </pds-layout-box>
+      <pds-layout-box bordered direction="column" flex="none" padding="md" border-radius="lg">
+        <h3>Episode Thumbnail</h3>
+        <p>File upload component</p>
+      </pds-layout-box>
+    </pds-layout-box>
+  </pds-layout-row>
+</pds-layout-box>
