@@ -20,7 +20,7 @@
   "collection:main": "dist/collection/index.js",
   "unpkg": "dist/core/core.esm.js",
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/",
+    "access": "public",
     "directory": "dist"
   },
   "repository": {
