@@ -44,7 +44,7 @@ runs:
 
     - name: Install Dependencies
       if: steps.cache-node-modules.outputs.cache-hit != true
-      run: npm ci
+      run: npm ci --legacy-peer-deps
       shell: bash
 
     - name: Build Core
