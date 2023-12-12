@@ -35,7 +35,7 @@ runs:
         registry-url: 'https://registry.npmjs.org'
 
     - name: Install Dependencies
-      run: npm ci --ignore-scripts --legacy-peer-deps
+      run: npm ci --legacy-peer-deps --ignore-scripts
       shell: bash
 
     - name: Update Version

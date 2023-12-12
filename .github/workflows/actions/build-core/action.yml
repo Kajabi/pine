@@ -1,5 +1,5 @@
-name: 'Build Pine Core'
-description: 'Builds Pine Core library'
+name: 'Build Core'
+description: 'Builds the Core Design System library'
 
 inputs:
   node-version:
@@ -31,11 +31,9 @@ runs:
     - name: Cache node_modules
       uses: actions/cache@v3
       id: cache-node-modules
-      env:
-        cache-name: cache-node-modules
       with:
         path: ${{ steps.npm-cache-dir.outputs.dir }}
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ runner.os }}-build-${{ github.sha }}-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-
 
