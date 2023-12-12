@@ -1,7 +1,6 @@
 import { Config } from '@stencil/core';
 import { reactOutputTarget } from '@stencil/react-output-target';
 
-// @ts-ignore
 // Plugins
 import { sass } from '@stencil/sass';
 
@@ -19,8 +18,6 @@ export const config: Config = {
     },
     {
       type: 'dist-custom-elements',
-      autoDefineCustomElements: true,
-      generateTypeDeclarations: true,
       includeGlobalScripts: false
     },
     {
@@ -37,9 +34,7 @@ export const config: Config = {
     },
     reactOutputTarget({
       componentCorePackage: '@pine-ds/core',
-      includeDefineCustomElements: true,
-      includePolyfills: true,
-      proxiesFile: '../../libs/react/src/components/proxies.ts',
+      proxiesFile: '../react/src/components/proxies.ts',
     }),
   ],
   buildEs5: 'prod',
