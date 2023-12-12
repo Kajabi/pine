@@ -56,11 +56,10 @@ export class PdsTable {
   }
 
   private sortTable(column: string, direction: 'asc' | 'desc') {
-    // Create an array to hold the table data
-    const tableData = [];
+    const tableBody = this.el.querySelector('pds-table-body');
 
-    // Get the rows in the table
-    const tableRows = this.el.querySelectorAll('pds-table-row');
+    // Get the rows in the table body
+    const tableRows = Array.from(tableBody.querySelectorAll('pds-table-row'));
 
     // Find the column index based on the column name
     const columnHeaderCells: HTMLElement[] = Array.from(
@@ -78,40 +77,22 @@ export class PdsTable {
 
     const columnIndex = columnHeaderCells.indexOf(columnHeaderCell);
 
-    // Loop through the rows
-    tableRows.forEach((row) => {
-      const rowData = [];
-
-      // Get the cells in each row
-      const cells = row.querySelectorAll('pds-table-cell');
-
-      // Loop through the cells
-      cells.forEach((cell) => {
-        rowData.push(cell.innerHTML.trim());
-      });
-
-      tableData.push(rowData);
-    });
-
-    // Sort the table data
-    tableData.sort((a, b) => {
-      const valueA = a[columnIndex];
-      const valueB = b[columnIndex];
+    // Sort the rows based on the content of the specified column
+    tableRows.sort((a, b) => {
+      const valueA = a.querySelector(`pds-table-cell:nth-child(${columnIndex + 1})`).textContent.trim();
+      const valueB = b.querySelector(`pds-table-cell:nth-child(${columnIndex + 1})`).textContent.trim();
 
       if (direction === 'asc') {
         return valueA.localeCompare(valueB);
-      } else if (direction === 'desc') {
+      } else {
         return valueB.localeCompare(valueA);
       }
-      return 0;
     });
 
-    // Update the table with the sorted data
-    tableData.forEach((rowData, index) => {
-      const cells = tableRows[index].querySelectorAll('pds-table-cell');
-      cells.forEach((cell, cellIndex) => {
-        cell.textContent = rowData[cellIndex];
-      });
+    // Clear and append the sorted rows back to the table body
+    tableBody.innerHTML = '';
+    tableRows.forEach((row) => {
+      tableBody.appendChild(row);
     });
   }
 
