@@ -315,7 +315,7 @@ export namespace Components {
         "componentId": string;
         /**
           * Determines whether or not the popover has an arrow
-          * @defaultValue true
+          * @defaultValue false
          */
         "hasArrow"?: boolean;
         /**
@@ -1151,7 +1151,7 @@ declare namespace LocalJSX {
         "componentId"?: string;
         /**
           * Determines whether or not the popover has an arrow
-          * @defaultValue true
+          * @defaultValue false
          */
         "hasArrow"?: boolean;
         /**

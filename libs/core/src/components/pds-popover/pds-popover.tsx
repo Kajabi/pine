@@ -35,7 +35,7 @@ export class PdsPopover {
 
   /**
    * Determines whether or not the popover has an arrow
-   * @defaultValue true
+   * @defaultValue false
    */
   @Prop() hasArrow? = false;
 
@@ -127,17 +127,18 @@ export class PdsPopover {
     }
   };
 
-  render() {
-    const popverClasses = `
+  private popoverClasses() {
+    return `
       pds-popover--${this.placement}
       ${this.opened ? 'pds-popover--is-open' : ''}
       ${this.hasArrow ? '' : 'pds-popover--no-arrow'}
-    `;
+  `};
 
+  render() {
     return (
       <Host>
         <div
-          class={`pds-popover ${popverClasses}}`}
+          class={`pds-popover ${this.popoverClasses()}}`}
           id={this.componentId}
         >
           <span
