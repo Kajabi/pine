@@ -18,6 +18,12 @@ export const config: Config = {
     },
     {
       type: 'dist-custom-elements',
+      dir: 'components',
+      copy: [{
+        src: '../scripts/custom-elements',
+        dest: 'components',
+        warn: true
+      }],
       includeGlobalScripts: false
     },
     {
@@ -34,10 +40,15 @@ export const config: Config = {
     },
     reactOutputTarget({
       componentCorePackage: '@pine-ds/core',
+      includeImportCustomElements: true,
+      includePolyfills: false,
+      includeDefineCustomElements: false,
       proxiesFile: '../react/src/components/proxies.ts',
+      excludeComponents: [
+        'pds-icon'
+      ]
     }),
   ],
   buildEs5: 'prod',
-  plugins: [sass()],
-  taskQueue: 'async',
+  plugins: [sass()]
 };
