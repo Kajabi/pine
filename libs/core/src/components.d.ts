@@ -909,13 +909,35 @@ declare global {
         prototype: HTMLPdsTableHeadElement;
         new (): HTMLPdsTableHeadElement;
     };
+    interface HTMLPdsTableHeadCellElementEventMap {
+        "pdsTableSort": { column: string; direction: string };
+    }
     interface HTMLPdsTableHeadCellElement extends Components.PdsTableHeadCell, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsTableHeadCellElementEventMap>(type: K, listener: (this: HTMLPdsTableHeadCellElement, ev: PdsTableHeadCellCustomEvent<HTMLPdsTableHeadCellElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsTableHeadCellElementEventMap>(type: K, listener: (this: HTMLPdsTableHeadCellElement, ev: PdsTableHeadCellCustomEvent<HTMLPdsTableHeadCellElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsTableHeadCellElement: {
         prototype: HTMLPdsTableHeadCellElement;
         new (): HTMLPdsTableHeadCellElement;
     };
+    interface HTMLPdsTableRowElementEventMap {
+        "pdsTableRowSelected": { rowIndex: number; isSelected: boolean; };
+    }
     interface HTMLPdsTableRowElement extends Components.PdsTableRow, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsTableRowElementEventMap>(type: K, listener: (this: HTMLPdsTableRowElement, ev: PdsTableRowCustomEvent<HTMLPdsTableRowElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsTableRowElementEventMap>(type: K, listener: (this: HTMLPdsTableRowElement, ev: PdsTableRowCustomEvent<HTMLPdsTableRowElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsTableRowElement: {
         prototype: HTMLPdsTableRowElement;
