@@ -142,8 +142,9 @@ export class PdsPopover {
       pds-popover--${this.placement}
       ${this.opened ? 'pds-popover--is-open' : ''}
       ${this.hasArrow ? '' : 'pds-popover--no-arrow'}
-    `;
+  `};
 
+  render() {
     return (
       <Host>
         <div
