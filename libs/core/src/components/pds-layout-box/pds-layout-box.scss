@@ -25,7 +25,9 @@
 }
 
 .pds-layout-box--fit {
-  max-width: 100%
+  max-width: 100%;
+  min-width: 100%;
+  width: 100%;
 }
 
 .pds-layout-box--bordered {
@@ -351,4 +353,8 @@ $pine-spacing-tokens: (
 
 @media (min-width: 1200px) {
   @include generate-columns('xl', 12);
+}
+
+img {
+  width: 100%;
 }
