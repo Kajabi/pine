@@ -4,8 +4,18 @@ import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
 <Meta title="Foundations/Layout"/>
 
 # Layout
-The Layout system consists on using the `Row` and the `Box` component in tandem
+The Layout system is driven by `pds-layout-box`s and `pds-layout-row`s. 
 
+## `pds-layout-box`
+
+The `pds-layout-box` serves 2 main purposes:
+1. A fully customizable container for your content that allows customization of border, padding, background color, etc.
+2. A a grid column
+
+#### In order to use the `pds-box` as a grid column, it **MUST** be a direct child of a `pds-row` have a `size` property set.
+
+## `pds-layout-row`
+The `pds-layout-row` component is designed to create horizontal rows that contain a set of columns that are capable of altering sizes at different breakpoints. `pds-box` that don't exist in `pds-row` will not container responsive functionality.
 
 ## Examples
 ### Form Edit view
@@ -306,14 +316,6 @@ The maximum file size for a transcript is 2 MB. Supported file format: txt</p>
 </pds-layout-box>
 </Canvas>
 
-## Row
-The `pds-layout-row` component is designed to create horizontal rows that contain a set of columns that are capable of altering sizes at different breakpoints.
-
-## Box
-The `pds-layout` serves 2 main purposes:
-1. A fully customizable container for your content that allows customization of border, padding, background color, etc.
-2. A building block for creating responsive columns, with use of `size` and `offset` properties, when couple with a `pds-layout-row`
-
 ### Creating a 12-Column Grid System
 By combining the `pds-layout-box` and `pds-layout-row` components, you can easily create a 12-column grid system. Here's an example of how to structure your layout:
 
@@ -415,7 +417,7 @@ Using the size modifiers such as `-xs`, `-md`, etc, enable responsive behavior f
 ### Offsetting Columns
 Use the `offset` property to offset columns to the right. The `offset` property accepts values from 1 - 11. For example, `offset="1"` will offset the column by one column width. Adding size modifiers such as `offset-md="1"` will offset the column by one column width on medium screens and larger.
 <Canvas mdxSource={`
-<pds-layout-box fit>
+<pds-layout-box direction="column"  fit>
   <pds-layout-row>
     <pds-layout-box size="4">Item 1</pds-layout-box>
     <pds-layout-box offset="4" size="4">Item 2</pds-layout-box>
@@ -429,7 +431,7 @@ Use the `offset` property to offset columns to the right. The `offset` property 
   </pds-layout-row>
 </pds-layout-box>
 `}>
-<pds-layout-box fit>
+<pds-layout-box direction="column" fit>
   <pds-layout-row
     component-id="${args.componentId}" 
   >
