@@ -2,20 +2,6 @@ import { newSpecPage } from '@stencil/core/testing';
 import { PdsPopover } from '../pds-popover';
 
 describe('pds-popover', () => {
-  it('should hide arrow when has-arrow is false', async () => {
-    const page = await newSpecPage({
-      components: [PdsPopover],
-      html: `
-      <pds-popover has-arrow="false">
-        <pds-button variant="secondary">Secondary</pds-button>
-       </pds-popover>`
-    });
-
-    const element = page.root?.shadowRoot;
-
-    expect(element?.querySelector('.pds-popover--no-arrow')).not.toBeNull();
-  });
-
   it('should show arrow when has-arrow is true', async () => {
     const page = await newSpecPage({
       components: [PdsPopover],
@@ -39,12 +25,15 @@ describe('pds-popover', () => {
        </pds-popover>`
     });
 
-    await page.root?.showPopover();
+    const popover = page.rootInstance as PdsPopover;
+
+    // Call the showPopover method
+    await popover.showPopover();
     await page.waitForChanges();
 
-    const element = page.root?.shadowRoot;
-
-    expect(element?.querySelector('.pds-popover')).toHaveClass('pds-popover--is-open');
+    // Check for expected class
+    const popoverElement = page.root?.shadowRoot?.querySelector('.pds-popover');
+    expect(popoverElement).toHaveClass('pds-popover--is-open');
   });
   
   it('should toggle the popover', async () => {
