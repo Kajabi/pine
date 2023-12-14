@@ -4,7 +4,7 @@ import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
 <Meta title="Foundations/Layout"/>
 
 # Layout
-The Layout system is driven by `pds-layout-box`s and `pds-layout-row`s. 
+The Layout system is driven by `pds-layout-box` and `pds-layout-row`. 
 
 ## `pds-layout-box`
 
@@ -12,10 +12,12 @@ The `pds-layout-box` serves 2 main purposes:
 1. A fully customizable container for your content that allows customization of border, padding, background color, etc.
 2. A a grid column
 
-#### In order to use the `pds-box` as a grid column, it **MUST** be a direct child of a `pds-row` have a `size` property set.
+In order to use the `pds-layout-box` as a grid column, it **MUST**:
+- be a direct child of a `pds-layout-row`
+- have a `size` property set.
 
 ## `pds-layout-row`
-The `pds-layout-row` component is designed to create horizontal rows that contain a set of columns that are capable of altering sizes at different breakpoints. `pds-box` that don't exist in `pds-row` will not container responsive functionality.
+The `pds-layout-row` component is designed to create horizontal rows that contain a set of columns that are capable of altering sizes at different breakpoints. `pds-layout-box`s that don't exist in `pds-layout-row`s will not contain responsive functionality.
 
 ## Examples
 ### Form Edit view
