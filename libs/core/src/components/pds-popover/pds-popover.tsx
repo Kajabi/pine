@@ -128,11 +128,14 @@ export class PdsPopover {
   };
 
   private popoverClasses() {
-    return `
-      pds-popover--${this.placement}
-      ${this.opened ? 'pds-popover--is-open' : ''}
-      ${this.hasArrow ? '' : 'pds-popover--no-arrow'}
-  `};
+    const classNames = [];
+
+    if(this.placement){ classNames.push(`pds-popover--${this.placement}`); }
+    if(this.opened){ classNames.push('pds-popover--is-open'); }
+    if(!this.hasArrow){ classNames.push('pds-popover--no-arrow'); }
+
+    return classNames.join('  ');
+  };
 
   render() {
     return (
