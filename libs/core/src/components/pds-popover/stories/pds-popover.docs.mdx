@@ -1,4 +1,4 @@
-import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import { Meta, Canvas, ArgTypes, Controls } from '@storybook/blocks';
 
 import * as stories from './pds-popover.stories.js';
 
@@ -73,7 +73,7 @@ The popover content is placed in a container with the slot, `content`. This is w
   <pds-button variant="secondary">Popover trigger</pds-button>
 </pds-popover>
 `}>
-  <div style={{ height: '400px' }}>
+  <div style={{ height: '150px' }}>
     <pds-popover placement="bottom-start">
       <div slot="content">
         <p>Pastrami chuck leberkas, swine biltong tail fatback jowl landjaeger.</p>
@@ -88,158 +88,43 @@ The popover content is placed in a container with the slot, `content`. This is w
 </Canvas>
 
 ### Placement
-The placement property enables precise control over the positioning of your Popover. By utilizing this property, you can dictate the specific location of the popover relative to the trigger element. This customization ensures optimal visibility and alignment per your page's layout and design requirements.
+The placement property enables precise control over the positioning of your Popover. By utilizing this 
+property, you can dictate the specific location of the popover relative to the trigger element. This 
+customization ensures optimal visibility and alignment per your page's layout and design requirements.
+To see more example, navigate to the [playground](#playground).
 
+Example `top-start` placement:
 <Canvas mdxSource={`
-<div style={{ display: 'flex', 'flex-wrap': 'wrap', gap: '16px' }}>
+<pds-popover has-arrow="true" placement="top-start">
+  <div slot="content">
+    <p><strong>Popover Content</strong></p>
+  </div>
+  <pds-button variant="secondary">top-start</pds-button>
+</pds-popover>
+`}>
   <pds-popover has-arrow="true" placement="top-start">
     <div slot="content">
       <p><strong>Popover Content</strong></p>
     </div>
     <pds-button variant="secondary">top-start</pds-button>
   </pds-popover>
-  <pds-popover has-arrow="true" placement="top">
-    <div slot="content">
-      <p><strong>Popover Content</strong></p>
-    </div>
-    <pds-button variant="secondary">top</pds-button>
-  </pds-popover>
-  <pds-popover has-arrow="true" placement="top-end">
-    <div slot="content">
-      <p><strong>Popover Content</strong></p>
-    </div>
-    <pds-button variant="secondary">top-end</pds-button>
-  </pds-popover>
-  <pds-popover has-arrow="true" placement="bottom-start">
-    <div slot="content">
-      <p><strong>Popover Content</strong></p>
-    </div>
-    <pds-button variant="secondary">bottom-start</pds-button>
-  </pds-popover>
-  <pds-popover has-arrow="true" placement="bottom">
-    <div slot="content">
-      <p><strong>Popover Content</strong></p>
-    </div>
-    <pds-button variant="secondary">bottom</pds-button>
-  </pds-popover>
-  <pds-popover has-arrow="true" placement="bottom-end">
-    <div slot="content">
-      <p><strong>Popover Content</strong></p>
-    </div>
-    <pds-button variant="secondary">bottom-end</pds-button>
-  </pds-popover>
-  <pds-popover has-arrow="true" placement="left-start">
-    <div slot="content">
-      <p><strong>Popover Content</strong></p>
-    </div>
-    <pds-button variant="secondary">left-start</pds-button>
-  </pds-popover>
-  <pds-popover has-arrow="true" placement="left">
-    <div slot="content">
-      <p><strong>Popover Content</strong></p>
-    </div>
-    <pds-button variant="secondary">left</pds-button>
-  </pds-popover>
-  <pds-popover has-arrow="true" placement="left-end">
-    <div slot="content">
-      <p><strong>Popover Content</strong></p>
-    </div>
-    <pds-button variant="secondary">left-end</pds-button>
-  </pds-popover>
+</Canvas>
+
+Example `right-start` placement:
+<Canvas mdxSource={`
+<pds-popover has-arrow="true" placement="right-start">
+  <div slot="content">
+    <p><strong>Popover Content</strong></p>
+  </div>
+  <pds-button variant="secondary">right-start</pds-button>
+</pds-popover>
+`}>
   <pds-popover has-arrow="true" placement="right-start">
     <div slot="content">
       <p><strong>Popover Content</strong></p>
     </div>
     <pds-button variant="secondary">right-start</pds-button>
   </pds-popover>
-  <pds-popover has-arrow="true" placement="right">
-    <div slot="content">
-      <p><strong>Popover Content</strong></p>
-    </div>
-    <pds-button variant="secondary">right</pds-button>
-  </pds-popover>
-  <pds-popover has-arrow="true" placement="right-end">
-    <div slot="content">
-      <p><strong>Popover Content</strong></p>
-    </div>
-    <pds-button variant="secondary">right-end</pds-button>
-  </pds-popover>
-</div>
-`}>
-  <div style={{ display: 'flex', 'flex-wrap': 'wrap', gap: '16px' }}>
-    <pds-popover has-arrow="true" placement="top-start">
-      <div slot="content">
-        <p><strong>Popover Content</strong></p>
-      </div>
-      <pds-button variant="secondary">top-start</pds-button>
-    </pds-popover>
-    <pds-popover has-arrow="true" placement="top">
-      <div slot="content">
-        <p><strong>Popover Content</strong></p>
-      </div>
-      <pds-button variant="secondary">top</pds-button>
-    </pds-popover>
-    <pds-popover has-arrow="true" placement="top-end">
-      <div slot="content">
-        <p><strong>Popover Content</strong></p>
-      </div>
-      <pds-button variant="secondary">top-end</pds-button>
-    </pds-popover>
-    <pds-popover has-arrow="true" placement="bottom-start">
-      <div slot="content">
-        <p><strong>Popover Content</strong></p>
-      </div>
-      <pds-button variant="secondary">bottom-start</pds-button>
-    </pds-popover>
-    <pds-popover has-arrow="true" placement="bottom">
-      <div slot="content">
-        <p><strong>Popover Content</strong></p>
-      </div>
-      <pds-button variant="secondary">bottom</pds-button>
-    </pds-popover>
-    <pds-popover has-arrow="true" placement="bottom-end">
-      <div slot="content">
-        <p><strong>Popover Content</strong></p>
-      </div>
-      <pds-button variant="secondary">bottom-end</pds-button>
-    </pds-popover>
-    <pds-popover has-arrow="true" placement="left-start">
-      <div slot="content">
-        <p><strong>Popover Content</strong></p>
-      </div>
-      <pds-button variant="secondary">left-start</pds-button>
-    </pds-popover>
-    <pds-popover has-arrow="true" placement="left">
-      <div slot="content">
-        <p><strong>Popover Content</strong></p>
-      </div>
-      <pds-button variant="secondary">left</pds-button>
-    </pds-popover>
-    <pds-popover has-arrow="true" placement="left-end">
-      <div slot="content">
-        <p><strong>Popover Content</strong></p>
-      </div>
-      <pds-button variant="secondary">left-end</pds-button>
-    </pds-popover>
-    <pds-popover has-arrow="true" placement="right-start">
-      <div slot="content">
-        <p><strong>Popover Content</strong></p>
-      </div>
-      <pds-button variant="secondary">right-start</pds-button>
-    </pds-popover>
-    <pds-popover has-arrow="true" placement="right">
-      <div slot="content">
-        <p><strong>Popover Content</strong></p>
-      </div>
-      <pds-button variant="secondary">right</pds-button>
-    </pds-popover>
-    <pds-popover has-arrow="true" placement="right-end">
-      <div slot="content">
-        <p><strong>Popover Content</strong></p>
-      </div>
-      <pds-button variant="secondary">right-end</pds-button>
-    </pds-popover>
-  </div>
 </Canvas>
 
 
@@ -266,3 +151,9 @@ By default the arrow is hidden. It can be shown by setting `has-arrow` to `true`
     </pds-popover>
   </div>
 </Canvas>
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />
