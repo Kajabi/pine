@@ -4,5 +4,8 @@
     "module": "commonjs",
     "resolveJsonModule": true,
     "target": "es2017",
-  }
+  },
+  "exclude": [
+    "custom-elements"
+  ]
 }

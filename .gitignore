@@ -8,7 +8,7 @@ docs.json
 loader/
 www/
 
-storybook-static/
+storybook-static
 
 # IDEs and editors
 .idea/

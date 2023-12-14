@@ -1,6 +1,7 @@
 dist/
 www/
 loader/
+components/
 
 scripts/**/*.js
 
@@ -27,3 +28,4 @@ $RECYCLE.BIN/
 Thumbs.db
 UserInterfaceState.xcuserstate
 .env
+

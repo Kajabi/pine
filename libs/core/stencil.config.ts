@@ -1,7 +1,6 @@
 import { Config } from '@stencil/core';
 import { reactOutputTarget } from '@stencil/react-output-target';
 
-// @ts-ignore
 // Plugins
 import { sass } from '@stencil/sass';
 
@@ -19,8 +18,12 @@ export const config: Config = {
     },
     {
       type: 'dist-custom-elements',
-      autoDefineCustomElements: true,
-      generateTypeDeclarations: true,
+      dir: 'components',
+      copy: [{
+        src: '../scripts/custom-elements',
+        dest: 'components',
+        warn: true
+      }],
       includeGlobalScripts: false
     },
     {
@@ -37,12 +40,15 @@ export const config: Config = {
     },
     reactOutputTarget({
       componentCorePackage: '@pine-ds/core',
-      includeDefineCustomElements: true,
-      includePolyfills: true,
-      proxiesFile: '../../libs/react/src/components/proxies.ts',
+      includeImportCustomElements: true,
+      includePolyfills: false,
+      includeDefineCustomElements: false,
+      proxiesFile: '../react/src/components/proxies.ts',
+      excludeComponents: [
+        'pds-icon'
+      ]
     }),
   ],
   buildEs5: 'prod',
-  plugins: [sass()],
-  taskQueue: 'async',
+  plugins: [sass()]
 };
