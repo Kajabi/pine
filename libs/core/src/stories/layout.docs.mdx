@@ -22,7 +22,7 @@ The `pds-layout-row` component is designed to create horizontal rows that contai
 ## Examples
 ### Form Edit view
 <Canvas mdxSource={`
-<pds-layout-box fit>
+<pds-layout-box display="block">
   <pds-layout-row col-gap="16px">
     {/* left side */}
     <pds-layout-box direction="column" size-md="8">
@@ -81,7 +81,7 @@ The maximum file size for a transcript is 2 MB. Supported file format: txt</p>
   </pds-layout-row>
 </pds-layout-box>
 `}>
-<pds-layout-box fit>
+<pds-layout-box display="block">
   <pds-layout-row col-gap="16px">
     {/* left side */}
     <pds-layout-box direction="column" size-md="8">
@@ -193,7 +193,7 @@ The maximum file size for a transcript is 2 MB. Supported file format: txt</p>
 ### Example 2
 
 <Canvas mdxSource={`
-<pds-layout-box fit>
+<pds-layout-box display="block">
   <pds-layout-row col-gap="24px">
     <pds-layout-box size-md="4">
       <pds-layout-box
@@ -255,7 +255,7 @@ The maximum file size for a transcript is 2 MB. Supported file format: txt</p>
   </pds-layout-row>
 </pds-layout-box>
 `}>
-<pds-layout-box fit>
+<pds-layout-box display="block">
   <pds-layout-row col-gap="24px">
     <pds-layout-box size-md="4">
       <pds-layout-box
@@ -322,7 +322,7 @@ The maximum file size for a transcript is 2 MB. Supported file format: txt</p>
 By combining the `pds-layout-box` and `pds-layout-row` components, you can easily create a 12-column grid system. Here's an example of how to structure your layout:
 
 <Canvas mdxSource={`
-<pds-layout-box fit>
+<pds-layout-box display="block">
   <pds-layout-row>
     <pds-layout-box>
       Content for column 1
@@ -333,7 +333,7 @@ By combining the `pds-layout-box` and `pds-layout-row` components, you can easil
   </pds-layout-row>
 </pds-layout-box>
 `}>
-<pds-layout-box fit>
+<pds-layout-box display="block">
   <pds-layout-row>
     <pds-layout-box>
       Content for column 1
@@ -348,7 +348,7 @@ By combining the `pds-layout-box` and `pds-layout-row` components, you can easil
 By default, adding `pds-layout-row`s with no `size` property will create equal width columns. 
 This creates a two-column layout, and you can customize the `size` and arrangement of the columns to achieve the desired layout for your application. The `size` property affects the width of the column across all viewports.
 <Canvas mdxSource={`
-<pds-layout-box fit>
+<pds-layout-box display="block">
   <pds-layout-row>
     <pds-layout-box size="4">
       Content for column 1
@@ -359,7 +359,7 @@ This creates a two-column layout, and you can customize the `size` and arrangeme
   </pds-layout-row>
 </pds-layout-box>
 `}>
-<pds-layout-box fit>
+<pds-layout-box display="block">
   <pds-layout-row>
     <pds-layout-box size="4">
       Content for column 1
@@ -374,7 +374,7 @@ This creates a two-column layout, and you can customize the `size` and arrangeme
 ## Responsive Design
 Using the size modifiers such as `-xs`, `-md`, etc, enable responsive behavior for you `pds-layout-box`. The layout components are designed to be responsive, allowing you to create layouts that adapt to different screen sizes. Take advantage of properties like `size-xs`, `offset-sm`, etc., to customize the layout for specific breakpoints. Be sure to optimize your layout for mobile devices, as well as larger screens.
 <Canvas mdxSource={`
-<pds-layout-box fit>
+<pds-layout-box display="block">
   <pds-layout-row>
     <pds-layout-box size-md="6" size-lg="4" size-xl="3">Item 1</pds-layout-box>
     <pds-layout-box direction="column" size-md="6" size-lg="4" size-xl="3">
@@ -386,7 +386,7 @@ Using the size modifiers such as `-xs`, `-md`, etc, enable responsive behavior f
   </pds-layout-row>
 </pds-layout-box>
 `}>
-  <pds-layout-box fit>
+  <pds-layout-box display="block">
     <pds-layout-row
       component-id="${args.componentId}" 
     >
@@ -401,14 +401,14 @@ Using the size modifiers such as `-xs`, `-md`, etc, enable responsive behavior f
 ### Visible / Hidden Columns
 `size` and `offset` can be used to hide or show columns at different breakpoints. Values from 1 - 12 show the column, 0 hides the column.
 <Canvas mdxSource={`
-<pds-layout-box fit>
+<pds-layout-box display="block">
   <pds-layout-row>
     <pds-layout-box size-xs="0" size-sm="0" size-lg="6">Larger screen content</pds-layout-box>
     <pds-layout-box size-md="6" size-lg="0">Small screen content</pds-layout-box>
   </pds-layout-row>
 </pds-layout-box>
 `}>
-  <pds-layout-box fit>
+  <pds-layout-box display="block">
     <pds-layout-row>
       <pds-layout-box size-xs="0" size-sm="0" size-lg="12">Larger screen content</pds-layout-box>
       <pds-layout-box size-md="12" size-lg="0">Small screen content</pds-layout-box>
@@ -458,7 +458,7 @@ Use the `offset` property to offset columns to the right. The `offset` property 
 Adding either `flex` **`display`** property to the box will initiate alignment values. Use `align-items` to change the vertical alignment of the box. Use `justify-content` to change the horizontal alignment of the box.
 
 <Canvas mdxSource={`
-<pds-layout-box fit>
+<pds-layout-box display="block">
   <pds-layout-row min-height="100px">
     <pds-layout-box
       align-items="start"
@@ -491,7 +491,7 @@ Adding either `flex` **`display`** property to the box will initiate alignment v
   </pds-layout-row>
 </pds-layout-box>
 `}>
-  <pds-layout-box fit>
+  <pds-layout-box display="block">
     <pds-layout-row min-height="100px">
       <pds-layout-box
         align-items="start"
@@ -527,7 +527,7 @@ Adding either `flex` **`display`** property to the box will initiate alignment v
 
 Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to ensure the box is vertically centered. Horizontal centering does take affect with no `min-height` present.
 <Canvas mdxSource={`
-<pds-layout-box fit>
+<pds-layout-box display="block">
   <pds-layout-row>
     <pds-layout-box
       align-items="start"
@@ -559,7 +559,7 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
   </pds-layout-row>
 </pds-layout-box>
 `}>
-  <pds-layout-box fit>
+  <pds-layout-box display="block">
     <pds-layout-row>
       <pds-layout-box
         align-items="start"
@@ -595,9 +595,9 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
 ## Nested Layouts
 You can nest `pds-layout-row` and `pds-layout-box` components to create more complex layouts. 
 <Canvas mdxSource={`
-<pds-layout-box fit>
+<pds-layout-box display="block">
   <pds-layout-row>
-    <pds-layout-box size-md="8">
+    <pds-layout-box display="block" size-md="8">
       <pds-layout-row>
         <pds-layout-box size-xl="6">Column 1 Item 1</pds-layout-box>
         <pds-layout-box size-xl="6">Column 1 Item 2</pds-layout-box>
@@ -618,9 +618,9 @@ You can nest `pds-layout-row` and `pds-layout-box` components to create more com
   </pds-layout-row>
 </pds-layout-box>
 `}>
-  <pds-layout-box fit>
+  <pds-layout-box display="block">
     <pds-layout-row>
-      <pds-layout-box size-md="8">
+      <pds-layout-box display="block" size-md="8">
         <pds-layout-row>
           <pds-layout-box size-xl="6">Column 1 Item 1</pds-layout-box>
           <pds-layout-box size-xl="6">Column 1 Item 2</pds-layout-box>

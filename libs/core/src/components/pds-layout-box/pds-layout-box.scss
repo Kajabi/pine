@@ -2,9 +2,8 @@
   display: block;
 }
 
-.pds-layout-box {
-  flex-basis: 0;
-  flex-grow: 1;
+img {
+  width: 100%;
 }
 
 [class*='pds-layout-box'] {
@@ -16,6 +15,130 @@
     position: relative;
     width: 100%;
   }
+}
+
+// Spacing mixin
+$pine-spacing-tokens: (
+  xxs: 4px,
+  xs: 8px,
+  sm: 16px,
+  md: 24px,
+  lg: 36px,
+  xl: 48px,
+  2xl: 64px,
+);
+
+@mixin generate-spacing-classes($directions, $tokens) {
+  @each $direction in $directions {
+    @each $key, $value in $tokens {
+      /* stylelint-disable-next-line function-no-unknown */
+      $class-name: if($direction, 'pds-spacing-#{$direction}-#{$key}', 'pds-spacing-#{$key}');
+      .#{$class-name} {
+        @if $direction == 'top' {
+          margin-block-start: $value;
+        } @else if $direction == 'bottom' {
+          margin-block-end: $value;
+        } @else if $direction == 'left' {
+          margin-inline-start: $value;
+        } @else if $direction == 'right' {
+          margin-inline-end: $value;
+        } @else {
+          margin: $value;
+        }
+      }
+    }
+  }
+}
+
+@include generate-spacing-classes(false, $pine-spacing-tokens);
+@include generate-spacing-classes('top', $pine-spacing-tokens);
+@include generate-spacing-classes('right', $pine-spacing-tokens);
+@include generate-spacing-classes('left', $pine-spacing-tokens);
+@include generate-spacing-classes('bottom', $pine-spacing-tokens);
+
+
+@mixin generate-columns($prefix, $columns) {
+  @for $i from 0 through $columns {
+    /* stylelint-disable-next-line function-no-unknown */
+    $class-name: if($prefix, 'pds-layout-box-#{$prefix}-#{$i}', 'pds-layout-box-#{$i}');
+    .#{$class-name} {
+      @if $i == 0 {
+        display: none;
+      } @else {
+        display: inline-flex;
+        flex: calc($i / $columns * 100%);
+        max-width: calc($i / $columns * 100%);
+      }
+    }
+  }
+}
+
+@mixin generate-column-offsets($prefix, $columns) {
+  @for $i from 0 through $columns {
+    /* stylelint-disable-next-line function-no-unknown */
+    $class-name: if($prefix, 'pds-layout-box-offset-#{$prefix}-#{$i}', 'pds-layout-box-offset-#{$i}');
+    .#{$class-name} {
+      @if $i == 0 {
+        margin-inline-start: 0;
+      } @else {
+        margin-inline-start: calc($i / $columns * 100%);
+      }
+    }
+  }
+}
+
+// Base offset classes
+@include generate-column-offsets(false, 12);
+
+// Responsive offset classes
+@media (max-width: 575px) {
+  @include generate-column-offsets('xs', 12);
+}
+
+@media (min-width: 576px) {
+  @include generate-column-offsets('sm', 12);
+}
+
+@media (min-width: 768px) {
+  @include generate-column-offsets('md', 12);
+}
+
+@media (min-width: 992px) {
+  @include generate-column-offsets('lg', 12);
+}
+
+@media (min-width: 1200px) {
+  @include generate-column-offsets('xl', 12);
+}
+
+
+// Base column width classes
+@include generate-columns(false, 12);
+
+// Responsive column width classes
+@media (max-width: 575px) {
+  @include generate-columns('xs', 12);
+}
+
+@media (min-width: 576px) {
+  @include generate-columns('sm', 12);
+}
+
+@media (min-width: 768px) {
+  @include generate-columns('md', 12);
+}
+
+@media (min-width: 992px) {
+  @include generate-columns('lg', 12);
+}
+
+@media (min-width: 1200px) {
+  @include generate-columns('xl', 12);
+}
+
+.pds-layout-box {
+  flex-basis: 0;
+  flex-grow: 1;
 }
 
 .pds-layout-box--auto {
@@ -234,127 +357,4 @@
 
 .pds-align-items-baseline {
   align-items: baseline;
-}
-
-// Spacing mixin
-$pine-spacing-tokens: (
-  xxs: 4px,
-  xs: 8px,
-  sm: 16px,
-  md: 24px,
-  lg: 36px,
-  xl: 48px,
-  2xl: 64px,
-);
-
-@mixin generate-spacing-classes($directions, $tokens) {
-  @each $direction in $directions {
-    @each $key, $value in $tokens {
-      /* stylelint-disable-next-line function-no-unknown */
-      $class-name: if($direction, 'pds-spacing-#{$direction}-#{$key}', 'pds-spacing-#{$key}');
-      .#{$class-name} {
-        @if $direction == 'top' {
-          margin-block-start: $value;
-        } @else if $direction == 'bottom' {
-          margin-block-end: $value;
-        } @else if $direction == 'left' {
-          margin-inline-start: $value;
-        } @else if $direction == 'right' {
-          margin-inline-end: $value;
-        } @else {
-          margin: $value;
-        }
-      }
-    }
-  }
-}
-
-@include generate-spacing-classes(false, $pine-spacing-tokens);
-@include generate-spacing-classes('top', $pine-spacing-tokens);
-@include generate-spacing-classes('right', $pine-spacing-tokens);
-@include generate-spacing-classes('left', $pine-spacing-tokens);
-@include generate-spacing-classes('bottom', $pine-spacing-tokens);
-
-
-@mixin generate-columns($prefix, $columns) {
-  @for $i from 0 through $columns {
-    /* stylelint-disable-next-line function-no-unknown */
-    $class-name: if($prefix, 'pds-layout-box-#{$prefix}-#{$i}', 'pds-layout-box-#{$i}');
-    .#{$class-name} {
-      @if $i == 0 {
-        display: none;
-      } @else {
-        display: inline-flex;
-        flex: calc($i / $columns * 100%);
-        max-width: calc($i / $columns * 100%);
-      }
-    }
-  }
-}
-
-@mixin generate-column-offsets($prefix, $columns) {
-  @for $i from 0 through $columns {
-    /* stylelint-disable-next-line function-no-unknown */
-    $class-name: if($prefix, 'pds-layout-box-offset-#{$prefix}-#{$i}', 'pds-layout-box-offset-#{$i}');
-    .#{$class-name} {
-      @if $i == 0 {
-        margin-inline-start: 0;
-      } @else {
-        margin-inline-start: calc($i / $columns * 100%);
-      }
-    }
-  }
-}
-
-// Base offset classes
-@include generate-column-offsets(false, 12);
-
-// Responsive offset classes
-@media (max-width: 575px) {
-  @include generate-column-offsets('xs', 12);
-}
-
-@media (min-width: 576px) {
-  @include generate-column-offsets('sm', 12);
-}
-
-@media (min-width: 768px) {
-  @include generate-column-offsets('md', 12);
-}
-
-@media (min-width: 992px) {
-  @include generate-column-offsets('lg', 12);
-}
-
-@media (min-width: 1200px) {
-  @include generate-column-offsets('xl', 12);
-}
-
-
-// Base column width classes
-@include generate-columns(false, 12);
-
-// Responsive column width classes
-@media (max-width: 575px) {
-  @include generate-columns('xs', 12);
-}
-
-@media (min-width: 576px) {
-  @include generate-columns('sm', 12);
-}
-
-@media (min-width: 768px) {
-  @include generate-columns('md', 12);
-}
-
-@media (min-width: 992px) {
-  @include generate-columns('lg', 12);
-}
-
-@media (min-width: 1200px) {
-  @include generate-columns('xl', 12);
-}
-
-img {
-  width: 100%;
 }
