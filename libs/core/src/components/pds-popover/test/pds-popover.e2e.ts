@@ -14,9 +14,11 @@ describe('pds-popover E2E', () => {
 
     const popoverContent = await page.find('pds-popover >>> .pds-popover__content');
     expect(await popoverContent.isVisible()).toBeTruthy();
+    expect(await popover.getProperty('opened')).toEqual(true);
 
     // close popover
     await triggerButton.click();
+    expect(await popover.getProperty('opened')).toEqual(false);
     expect(await popoverContent.isVisible()).toBeFalsy();
   });
 
