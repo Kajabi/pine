@@ -19,6 +19,11 @@ runs:
       with:
         node-version: ${{ inputs.node-version }}
 
+    - name: Get npm cache directory
+      id: npm-cache-dir
+      shell: bash
+      run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+
     - name: Cache node_modules
       uses: actions/cache@v3
       id: cache-node-modules

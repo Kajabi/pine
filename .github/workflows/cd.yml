@@ -1,0 +1,13 @@
+name: Continuous Deployment
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/release.yml
+    with:
+      preid: ''
+      ref: 'main'
+      tag: 'latest'
+      version: ''

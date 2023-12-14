@@ -19,4 +19,4 @@ runs:
 
     - name:  Extract the Archive
       run: unzip -q -o ${{ inputs.path }}/${{ inputs.filename }}
-      shel: bash
+      shell: bash
