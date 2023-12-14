@@ -94,10 +94,10 @@ jobs:
           shell: bash
 
         # Lerna does not automatically bump versions
-        - name: Bump Package Lock
-          run: |
-            lerna exec "npm install --package-lock-only"
-            git add .
-            git commit -m "chore(): update package lock files"
-            git push
-          shell: bash
+        # - name: Bump Package Lock
+        #   run: |
+        #     lerna exec "npm install --package-lock-only"
+        #     git add .
+        #     git commit -m "chore(): update package lock files"
+        #     git push
+        #   shell: bash
