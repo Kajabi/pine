@@ -1,6 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
-import { PdsTableHeadCell } from '../pds-table-head-cell';
 import { PdsTable } from '../../pds-table';
+import { PdsTableHeadCell } from '../pds-table-head-cell';
 
 describe('pds-table-head-cell', () => {
   it('renders', async () => {
@@ -54,5 +54,45 @@ describe('pds-table-head-cell', () => {
     const tableHeadCell = page.body.querySelector('pds-table-head-cell') as HTMLElement;
     expect(tableHeadCell.style.getPropertyValue('--fixed-cell-position')).toBe('40px');
   });
+
+  it('toggles is-scrolled class when table has fixed column and is scrolled', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableHeadCell, PdsTable],
+      html: `<pds-table responsive fixed-column><pds-table-head-cell></pds-table-head-cell></pds-table>`,
+    });
+
+    const tableHeadCell = page.body.querySelector('pds-table-head-cell') as HTMLElement;
+    const table = page.body.querySelector('pds-table') as HTMLElement;
+
+    table.scrollLeft = 10;
+    table.dispatchEvent(new Event('scroll'));
+
+    await page.waitForChanges();
+
+    expect(tableHeadCell).toHaveClass('has-scrolled');
+
+    table.scrollLeft = 0;
+    table.dispatchEvent(new Event('scroll'));
+
+    await page.waitForChanges();
+
+    expect(tableHeadCell).not.toHaveClass('has-scrolled');
+  });
+
+  it('handles sort click', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableHeadCell, PdsTable],
+      html: `<pds-table><pds-table-head-cell sortable></pds-table-head-cell></pds-table>`,
+    });
+
+    const tableHeadCell = page.body.querySelector('pds-table-head-cell') as HTMLElement;
+
+    tableHeadCell.click();
+
+    expect(tableHeadCell.classList.contains('is-active')).toBe(true);
+
+  });
+
+
 
 });
