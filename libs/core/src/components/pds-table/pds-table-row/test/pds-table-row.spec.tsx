@@ -27,7 +27,7 @@ describe('pds-table-row', () => {
           <pds-table-row></pds-table-row>
         </pds-table-body>
       </pds-table>
-      `
+      `,
     });
 
     const row = page.root?.querySelector('pds-table-row');
@@ -38,5 +38,4 @@ describe('pds-table-row', () => {
 
     expect(row?.classList.contains('is-selected')).toBe(true);
   });
-
 });

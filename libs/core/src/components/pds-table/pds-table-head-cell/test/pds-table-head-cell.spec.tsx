@@ -90,9 +90,5 @@ describe('pds-table-head-cell', () => {
     tableHeadCell.click();
 
     expect(tableHeadCell.classList.contains('is-active')).toBe(true);
-
   });
-
-
-
 });

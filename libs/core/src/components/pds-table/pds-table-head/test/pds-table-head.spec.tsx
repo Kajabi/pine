@@ -75,5 +75,4 @@ describe('pds-table-head', () => {
       expect(checkboxCell.getAttribute('part')).toBe('');
     }
   });
-
 });
