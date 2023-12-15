@@ -25,8 +25,8 @@
       "@pine-ds/core": [
         "./libs/core"
       ],
-      "@pine-ds/react": [
-        "./react"
+      "@pine-ds/core-react": [
+        "./libs/core-react"
       ],
     },
     "target": "es2017",

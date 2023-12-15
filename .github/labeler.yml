@@ -2,9 +2,9 @@
 - changed-files:
   - any-glob-to-any-file: 'libs/core/**/*'
 
-"package: react":
+"package: core-react":
 - changed-files:
-  - any-glob-to-any-file: 'libs/react/**/*'
+  - any-glob-to-any-file: 'libs/core-react/**/*'
 
 documentation:
 - changed-files:

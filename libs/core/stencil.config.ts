@@ -43,7 +43,7 @@ export const config: Config = {
       includeImportCustomElements: true,
       includePolyfills: false,
       includeDefineCustomElements: false,
-      proxiesFile: '../react/src/components/proxies.ts',
+      proxiesFile: '../core-react/src/components/proxies.ts',
       excludeComponents: [
         'pds-icon'
       ]
