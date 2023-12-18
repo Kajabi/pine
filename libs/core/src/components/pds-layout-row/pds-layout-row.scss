@@ -2,6 +2,7 @@
   --pine-gap-y: 10px;
   
   display: block;
+  margin-block-end: calc(var(--pine-gap-y) * -1);
   margin-block-start: calc(var(--pine-gap-y) * -1);
   margin-inline-end: calc(var(--pine-gap-x) * -0.5);
   margin-inline-start: calc(var(--pine-gap-x) * -0.5);
@@ -10,11 +11,13 @@
 .pds-layout-row {
   display: flex;
   flex-wrap: wrap;
+  margin-block-end: calc(var(--pine-gap-y) * -1);
   margin-block-start: calc(var(--pine-gap-y) * -1);
   margin-inline-end: calc(var(--pine-gap-x) * -1);
   margin-inline-start: calc(var(--pine-gap-x) * -1);
    
   > * {
+    padding-block-end: calc(var(--pine-gap-y));
     padding-block-start: calc(var(--pine-gap-y));
     padding-inline-end: calc(var(--pine-gap-x));
     padding-inline-start: calc(var(--pine-gap-x));
