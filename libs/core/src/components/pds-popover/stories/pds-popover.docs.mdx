@@ -29,15 +29,29 @@ There can only be one trigger for the Popover.
   <pds-button variant="secondary">Click</pds-button>
 </pds-popover>
 `}>
-  <div style={{ height: '100px' }}>
-    <pds-popover placement="bottom-start" html-content="true">
-      <div slot="content">
-        <p><strong>This is a popover</strong></p>
-      </div>
-      <pds-button variant="secondary">Click</pds-button>
-    </pds-popover>
-  </div>
+  <pds-popover placement="bottom-start" hoisted="true" html-content="true">
+    <div slot="content">
+      <p><strong>This is a popover</strong></p>
+    </div>
+    <pds-button variant="secondary">Click</pds-button>
+  </pds-popover>
 </Canvas>
+
+## Absolute
+<pds-popover placement="bottom-start" html-content="true">
+  <div slot="content">
+    <p><strong>This is a popover</strong></p>
+  </div>
+  <pds-button variant="secondary">Click</pds-button>
+</pds-popover>
+
+## Fixed
+<pds-popover placement="bottom-start" hoisted="true" html-content="true">
+  <div slot="content">
+    <p><strong>This is a popover</strong></p>
+  </div>
+  <pds-button variant="secondary">Click</pds-button>
+</pds-popover>
 
 #### Avatar trigger
 <Canvas mdxSource={`

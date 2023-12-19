@@ -50,6 +50,8 @@ export class PdsPopover {
    */
   @Prop() hasArrow? = false;
 
+  @Prop() hoisted? = false;
+
   /**
    * Determines the preferred position of the popover
    * @defaultValue "right"
@@ -75,6 +77,14 @@ export class PdsPopover {
 
   componentDidLoad() {
     document.addEventListener('click', this.handleGlobalClick);
+
+    // ['focus'].forEach((event) => {
+    //   this.triggerEl?.addEventListener(event, this.handleShow);
+    // });
+
+    // ['blur'].forEach((event) => {
+    //   this.triggerEl?.addEventListener(event, this.handleHide);
+    // });
   }
 
   componentDidUpdate() {
@@ -92,6 +102,7 @@ export class PdsPopover {
     if (this.triggerEl && this.contentEl) {
       const { x, y, placement, middlewareData } = await computePosition(this.triggerEl, this.contentEl, {
         placement: this.placement,
+        strategy: this.hoisted ? 'fixed' : 'absolute',
         middleware: [
           offset(12),
           flip(),
@@ -182,6 +193,7 @@ export class PdsPopover {
     if(this.placement){ classNames.push(`pds-popover--${this.placement}`); }
     if(this.opened){ classNames.push('pds-popover--is-open'); }
     if(!this.hasArrow){ classNames.push('pds-popover--no-arrow'); }
+    if(this.hoisted){ classNames.push('pds-popover--hoisted'); }
 
     return classNames.join('  ');
   };
@@ -197,7 +209,7 @@ export class PdsPopover {
     return (
       <Host>
         <div
-          class={`pds-popover ${this.popoverClasses()}}`}
+          class={`pds-popover ${this.popoverClasses()}`}
           id={this.componentId}
         >
           <span

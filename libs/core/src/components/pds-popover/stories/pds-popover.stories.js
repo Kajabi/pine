@@ -59,6 +59,7 @@ export const Default = BaseTemplate.bind({});
 Default.args = {
   componentId: "default",
   hasArrow: false,
+  hoisted: false,
   htmlContent: true,
   placement: "bottom-start",
 };

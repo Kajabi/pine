@@ -1397,6 +1397,7 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "hasArrow"?: boolean;
+        "hoisted"?: boolean;
         /**
           * Emitted after a popover is closed
          */
