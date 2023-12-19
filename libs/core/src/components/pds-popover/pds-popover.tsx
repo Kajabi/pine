@@ -10,7 +10,8 @@ import {
   flip,
   shift,
   offset,
-  arrow
+  arrow,
+  autoUpdate
 } from '@floating-ui/dom';
 
 /**
@@ -27,6 +28,7 @@ export class PdsPopover {
   private arrow: HTMLElement | null;
   private contentEl: HTMLElement | null;
   private triggerEl: HTMLElement | null;
+  private cleanupAutoUpdate: (() => void) | null = null;
 
   /**
    * Reference to the Host element
@@ -78,13 +80,12 @@ export class PdsPopover {
   componentDidLoad() {
     document.addEventListener('click', this.handleGlobalClick);
 
-    // ['focus'].forEach((event) => {
-    //   this.triggerEl?.addEventListener(event, this.handleShow);
-    // });
-
-    // ['blur'].forEach((event) => {
-    //   this.triggerEl?.addEventListener(event, this.handleHide);
-    // });
+    // Start auto updates
+    this.cleanupAutoUpdate = autoUpdate(
+      this.triggerEl,
+      this.contentEl,
+      this.computePopoverPosition.bind(this),
+    );
   }
 
   componentDidUpdate() {
@@ -94,8 +95,15 @@ export class PdsPopover {
   }
 
   componentDidRender() {
-    // positionTooltip({elem: this.el, elemPlacement: this.placement, overlay: this.contentEl});
     this.computePopoverPosition();
+  }
+
+  disconnectedCallback() {
+    // Stop auto updates when the component is disconnected
+    this.cleanupAutoUpdate?.();
+  
+    // Remove the global click event listener
+    document.removeEventListener('click', this.handleGlobalClick);
   }
 
   private async computePopoverPosition() {
