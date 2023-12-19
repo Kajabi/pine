@@ -1,8 +1,17 @@
+
 import { Component, Element, Event, Host, Prop, State, h, EventEmitter, Method } from '@stencil/core';
-import {
-  positionTooltip
-} from '../../utils/overlay';
+// import {
+//   positionTooltip
+// } from '../../utils/overlay';
 import { OverlayPlacementType } from '../../utils/types';
+
+import {
+  computePosition,
+  flip,
+  shift,
+  offset,
+  arrow
+} from '@floating-ui/dom';
 
 /**
  * @slot (default) - The popover's target element
@@ -15,7 +24,9 @@ import { OverlayPlacementType } from '../../utils/types';
   shadow: true,
 })
 export class PdsPopover {
+  private arrow: HTMLElement | null;
   private contentEl: HTMLElement | null;
+  private triggerEl: HTMLElement | null;
 
   /**
    * Reference to the Host element
@@ -73,7 +84,45 @@ export class PdsPopover {
   }
 
   componentDidRender() {
-    positionTooltip({elem: this.el, elemPlacement: this.placement, overlay: this.contentEl});
+    // positionTooltip({elem: this.el, elemPlacement: this.placement, overlay: this.contentEl});
+    this.computePopoverPosition();
+  }
+
+  private async computePopoverPosition() {
+    if (this.triggerEl && this.contentEl) {
+      const { x, y, placement, middlewareData } = await computePosition(this.triggerEl, this.contentEl, {
+        placement: this.placement,
+        middleware: [
+          offset(12),
+          flip(),
+          shift({padding: 14}),
+          arrow({element: this.arrow}),
+        ]
+      })
+      
+      Object.assign(this.contentEl.style, {
+        left: `${x}px`,
+        top: `${y}px`,
+      });
+
+      // Accessing the data
+      const {x: arrowX, y: arrowY} = middlewareData.arrow;
+
+      const staticSide = {
+        top: 'bottom',
+        right: 'left',
+        bottom: 'top',
+        left: 'right',
+      }[placement.split('-')[0]];
+
+      Object.assign(this.arrow.style, {
+        left: arrowX != null ? `${arrowX}px` : '',
+        top: arrowY != null ? `${arrowY}px` : '',
+        right: '',
+        bottom: '',
+        [staticSide]: '-4px',
+      });
+    }
   }
 
   /**
@@ -169,6 +218,7 @@ export class PdsPopover {
             <slot
               name="content"
             ></slot>
+            <div class="pds-popover__arrow" ref={(el) => (this.arrow = el)}></div>
           </div>
         </div>
       </Host>
