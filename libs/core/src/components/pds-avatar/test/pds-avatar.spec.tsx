@@ -90,7 +90,7 @@ describe('pds-avatar', () => {
       html: `<pds-avatar image="https://placehold.co/64x64" size="lg"></pds-avatar>`
     });
     expect(page.root).toEqualHtml(`
-      <pds-avatar class="pds-avatar pds-avatar--has-image" image="https://placehold.co/64x64" size="lg" variant="customer">
+      <pds-avatar class="pds-avatar" image="https://placehold.co/64x64" size="lg" variant="customer">
         <mock:shadow-root>
           <div style="height: 56px; width: 56px;">
             <img src="https://placehold.co/64x64"/>
@@ -106,7 +106,7 @@ describe('pds-avatar', () => {
       html: `<pds-avatar alt="Customer Profile" image="https://placehold.co/64x64" size="lg"></pds-avatar>`
     });
     expect(page.root).toEqualHtml(`
-      <pds-avatar class="pds-avatar pds-avatar--has-image" alt="Customer Profile" image="https://placehold.co/64x64" size="lg" variant="customer">
+      <pds-avatar class="pds-avatar" alt="Customer Profile" image="https://placehold.co/64x64" size="lg" variant="customer">
         <mock:shadow-root>
           <div style="height: 56px; width: 56px;">
             <img alt="Customer Profile" src="https://placehold.co/64x64"/>
@@ -122,7 +122,7 @@ describe('pds-avatar', () => {
       html: `<pds-avatar badge="true" alt="Customer Profile" image="https://placehold.co/64x64" size="lg"></pds-avatar>`
     });
     expect(page.root).toEqualHtml(`
-      <pds-avatar class="pds-avatar pds-avatar--has-image" badge="true" alt="Customer Profile" image="https://placehold.co/64x64" size="lg" variant="customer">
+      <pds-avatar class="pds-avatar" badge="true" alt="Customer Profile" image="https://placehold.co/64x64" size="lg" variant="customer">
         <mock:shadow-root>
           <div style="height: 56px; width: 56px">
             <img alt="Customer Profile" src="https://placehold.co/64x64"/>
