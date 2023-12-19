@@ -1,0 +1,14 @@
+{
+  "source": ["tokens/**/*.json"],
+  "platforms": {
+    "css": {
+      "transformGroup": "css",
+      "buildPath": "src/global/styles/tokens/tier1/",
+      "files": [{
+        "destination": "_variables.scss",
+        "format": "css/variables"
+      }],
+      "prefix": "pine"
+    }
+  }
+}

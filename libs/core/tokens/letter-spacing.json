@@ -1,0 +1,7 @@
+{
+  "letter-spacing": {
+    "xs": { "value": "-0.15px" },
+    "sm": { "value": "-0.5px" },
+    "md": { "value": "-0.6px" }
+  }
+}

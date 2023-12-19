@@ -1,0 +1,8 @@
+{
+  "border-radius": {
+    "4": { "value": "4px" },
+    "6": { "value": "6px" },
+    "10": { "value": "10px" },
+    "16": { "value": "16px" }
+  }
+}
