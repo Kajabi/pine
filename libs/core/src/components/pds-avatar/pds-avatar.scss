@@ -20,8 +20,15 @@ div {
     border-radius: 12px;
   }
 
-  &:has(img) {
-    background-color: transparent;
+  // Remove when FF has support for :has
+  :host(.pds-avatar--has-image) & {
+    background: transparent
+  }
+
+  @supports selector(:has) {
+    &:has(img) {
+      background-color: transparent
+    }
   }
 }
 
