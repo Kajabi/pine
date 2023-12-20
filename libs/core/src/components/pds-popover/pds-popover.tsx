@@ -25,9 +25,9 @@ import {
   shadow: true,
 })
 export class PdsPopover {
-  private arrow: HTMLElement | null;
-  private contentEl: HTMLElement | null;
-  private triggerEl: HTMLElement | null;
+  @Prop() arrow: HTMLElement | null;
+  @Prop() contentEl: HTMLElement | null;
+  @Prop() triggerEl: HTMLElement | null;
   private cleanupAutoUpdate: (() => void) | null = null;
 
   /**
@@ -53,6 +53,10 @@ export class PdsPopover {
   @Prop() hasArrow? = false;
 
   @Prop() hoisted? = false;
+
+  @Prop() offset? = 12;
+
+  @Prop() padding? = 14;
 
   /**
    * Determines the preferred position of the popover
@@ -112,9 +116,9 @@ export class PdsPopover {
         placement: this.placement,
         strategy: this.hoisted ? 'fixed' : 'absolute',
         middleware: [
-          offset(12),
+          offset(this.offset),
           flip(),
-          shift({padding: 14}),
+          shift({padding: this.padding}),
           arrow({element: this.arrow}),
         ]
       })

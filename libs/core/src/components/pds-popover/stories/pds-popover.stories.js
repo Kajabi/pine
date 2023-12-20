@@ -19,7 +19,7 @@ export default {
 }
 
 const BaseTemplate = (args) => html`
-  <pds-popover component-id="${args.componentId}" has-arrow=${args.hasArrow} opened=${args.opened} placement=${args.placement}>
+  <pds-popover component-id="${args.componentId}" has-arrow=${args.hasArrow} hoisted=${args.hoisted} opened=${args.opened} placement=${args.placement}>
     <div slot="content">
       <p>Pastrami chuck leberkas, swine biltong tail fatback</p>
       <div>

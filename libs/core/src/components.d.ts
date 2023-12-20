@@ -313,10 +313,12 @@ export namespace Components {
         "variant": 'inline' | 'plain';
     }
     interface PdsPopover {
+        "arrow": HTMLElement | null;
         /**
           * A unique identifier used for the underlying component id attribute.
          */
         "componentId": string;
+        "contentEl": HTMLElement | null;
         /**
           * Determines whether or not the popover has an arrow
           * @defaultValue false
@@ -331,6 +333,7 @@ export namespace Components {
           * @defaultValue false
          */
         "opened": boolean;
+        "padding"?: number;
         /**
           * Determines the preferred position of the popover
           * @defaultValue "right"
@@ -653,32 +656,24 @@ export namespace Components {
           * Hides the tooltip by disabling the opened property
          */
         "hideTooltip": () => Promise<void>;
+        "hoisted"?: boolean;
         /**
           * Enable this option when using the content slot
           * @defaultValue false
          */
         "htmlContent": boolean;
+        "offset"?: number;
         /**
           * Determines whether or not the tooltip is visible
           * @defaultValue false
          */
         "opened": boolean;
+        "padding"?: number;
         /**
           * Determines the preferred position of the tooltip
           * @defaultValue "right"
          */
-        "placement": 'top'
-    | 'top-start'
-    | 'top-end'
-    | 'right'
-    | 'right-start'
-    | 'right-end'
-    | 'bottom'
-    | 'bottom-start'
-    | 'bottom-end'
-    | 'left'
-    | 'left-start'
-    | 'left-end';
+        "placement": OverlayPlacementType;
         /**
           * Shows the tooltip by enabling the opened property
          */
@@ -1388,16 +1383,19 @@ declare namespace LocalJSX {
         "variant"?: 'inline' | 'plain';
     }
     interface PdsPopover {
+        "arrow"?: HTMLElement | null;
         /**
           * A unique identifier used for the underlying component id attribute.
          */
         "componentId"?: string;
+        "contentEl"?: HTMLElement | null;
         /**
           * Determines whether or not the popover has an arrow
           * @defaultValue false
          */
         "hasArrow"?: boolean;
         "hoisted"?: boolean;
+        "offset"?: number;
         /**
           * Emitted after a popover is closed
          */
@@ -1411,11 +1409,13 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "opened"?: boolean;
+        "padding"?: number;
         /**
           * Determines the preferred position of the popover
           * @defaultValue "right"
          */
         "placement"?: OverlayPlacementType;
+        "triggerEl"?: HTMLElement | null;
     }
     interface PdsProgress {
         /**
@@ -1746,11 +1746,13 @@ declare namespace LocalJSX {
           * @defaultValue true
          */
         "hasArrow"?: boolean;
+        "hoisted"?: boolean;
         /**
           * Enable this option when using the content slot
           * @defaultValue false
          */
         "htmlContent"?: boolean;
+        "offset"?: number;
         /**
           * Emitted after a tooltip is closed
          */
@@ -1764,22 +1766,12 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "opened"?: boolean;
+        "padding"?: number;
         /**
           * Determines the preferred position of the tooltip
           * @defaultValue "right"
          */
-        "placement"?: 'top'
-    | 'top-start'
-    | 'top-end'
-    | 'right'
-    | 'right-start'
-    | 'right-end'
-    | 'bottom'
-    | 'bottom-start'
-    | 'bottom-end'
-    | 'left'
-    | 'left-start'
-    | 'left-end';
+        "placement"?: OverlayPlacementType;
     }
     interface IntrinsicElements {
         "pds-avatar": PdsAvatar;

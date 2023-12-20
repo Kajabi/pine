@@ -22,7 +22,7 @@ There can only be one trigger for the Popover.
 #### Button trigger
 
 <Canvas mdxSource={`
-<pds-popover placement="bottom-right" html-content="true">
+<pds-popover placement="bottom-right" hoisted="true" html-content="true">
   <div slot="content">
     <p><strong>This is a popover</strong></p>
   </div>
@@ -46,12 +46,14 @@ There can only be one trigger for the Popover.
 </pds-popover>
 
 ## Fixed
+<div>
 <pds-popover placement="bottom-start" hoisted="true" html-content="true">
   <div slot="content">
     <p><strong>This is a popover</strong></p>
   </div>
   <pds-button variant="secondary">Click</pds-button>
 </pds-popover>
+</div>
 
 #### Avatar trigger
 <Canvas mdxSource={`
@@ -62,14 +64,12 @@ There can only be one trigger for the Popover.
   <pds-avatar dropdown="true"></pds-avatar>
 </pds-popover>
 `}>
-  <div style={{ height: '125px' }}>
-    <pds-popover has-arrow="true" placement="bottom-start" html-content="true">
-      <div slot="content">
-        <p><strong>This is a popover</strong></p>
-      </div>
-      <pds-avatar dropdown="true"></pds-avatar>
-    </pds-popover>
-  </div>
+  <pds-popover has-arrow="true" placement="bottom-start" html-content="true">
+    <div slot="content">
+      <p><strong>This is a popover</strong></p>
+    </div>
+    <pds-avatar dropdown="true"></pds-avatar>
+  </pds-popover>
 </Canvas>
 
 #### Avatar trigger
@@ -106,18 +106,16 @@ The popover content is placed in a container with the slot, `content`. This is w
   <pds-button variant="secondary">Popover trigger</pds-button>
 </pds-popover>
 `}>
-  <div style={{ height: '150px' }}>
-    <pds-popover placement="bottom-start">
-      <div slot="content">
-        <p>Pastrami chuck leberkas, swine biltong tail fatback jowl landjaeger.</p>
-        <div>
-          <pds-button variant="secondary">Cancel</pds-button>
-          <pds-button>Get Started</pds-button>
-        </div>
+  <pds-popover placement="bottom-start">
+    <div slot="content">
+      <p>Pastrami chuck leberkas, swine biltong tail fatback jowl landjaeger.</p>
+      <div>
+        <pds-button variant="secondary">Cancel</pds-button>
+        <pds-button>Get Started</pds-button>
       </div>
-      <pds-button variant="secondary">Popover trigger</pds-button>
-    </pds-popover>
-  </div>
+    </div>
+    <pds-button variant="secondary">Popover trigger</pds-button>
+  </pds-popover>
 </Canvas>
 
 ### Placement
@@ -174,15 +172,13 @@ By default the arrow is hidden. It can be shown by setting `has-arrow` to `true`
   <pds-avatar dropdown="true"></pds-avatar>
 </pds-popover>
 `}>
-  <div style={{ height: '150px' }}>
-    <pds-popover has-arrow="true" placement="bottom-start">
-      <div slot="content">
-        <p><strong>This is a popover</strong></p>
-        <p><strong>This is a popover</strong></p>
-      </div>
-      <pds-button variant="secondary">Click</pds-button>
-    </pds-popover>
-  </div>
+  <pds-popover has-arrow="true" placement="bottom-start">
+    <div slot="content">
+      <p><strong>This is a popover</strong></p>
+      <p><strong>This is a popover</strong></p>
+    </div>
+    <pds-button variant="secondary">Click</pds-button>
+  </pds-popover>
 </Canvas>
 
 ## Playground
