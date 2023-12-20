@@ -3,3 +3,11 @@
 <script nomodule src="/pine-core/index.esm.js"></script>
 
 <link rel="stylesheet" href="/pine-core/pine-core.css" />
+
+<style>
+  .docs-story div[scale] {
+    /* This is needed to prevent the storybook canvases from cropping
+    components meant to overflow */
+    transform: none !important;
+  }
+</style>
