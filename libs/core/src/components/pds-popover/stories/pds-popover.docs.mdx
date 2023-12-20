@@ -7,7 +7,9 @@ import * as stories from './pds-popover.stories.js';
 
 # Popover
 
-Popover is a discrete UI element that displays over the main content to present extra information or user options. It's designed for minimal disruption, appearing only when necessary and allowing for a clutter-free, user-centric experience.
+Popover is a discrete UI element that displays over the main content to present extra information or user options.
+It's designed for minimal disruption, appearing only when necessary and allowing for a clutter-free, user-centric
+experience. This is a general component that is used in many places throughout the Pine Design System, such as `Tooltip` and `Select`.
 
 ## Properties
 
@@ -36,24 +38,6 @@ There can only be one trigger for the Popover.
     <pds-button variant="secondary">Click</pds-button>
   </pds-popover>
 </Canvas>
-
-## Absolute
-<pds-popover placement="bottom-start" html-content="true">
-  <div slot="content">
-    <p><strong>This is a popover</strong></p>
-  </div>
-  <pds-button variant="secondary">Click</pds-button>
-</pds-popover>
-
-## Fixed
-<div>
-<pds-popover placement="bottom-start" hoisted="true" html-content="true">
-  <div slot="content">
-    <p><strong>This is a popover</strong></p>
-  </div>
-  <pds-button variant="secondary">Click</pds-button>
-</pds-popover>
-</div>
 
 #### Avatar trigger
 <Canvas mdxSource={`
@@ -95,7 +79,7 @@ There can only be one trigger for the Popover.
 The popover content is placed in a container with the slot, `content`. This is where you can place any HTML content you want to display in the popover.
 
 <Canvas mdxSource={`
-<pds-popover placement="bottom-start">
+<pds-popover hoisted="true" placement="bottom-start">
   <div slot="content">
     <p>Pastrami chuck leberkas, swine biltong tail fatback jowl landjaeger</p>
     <div>
@@ -106,13 +90,82 @@ The popover content is placed in a container with the slot, `content`. This is w
   <pds-button variant="secondary">Popover trigger</pds-button>
 </pds-popover>
 `}>
-  <pds-popover placement="bottom-start">
+  <pds-popover hoisted="true" placement="bottom-start">
     <div slot="content">
       <p>Pastrami chuck leberkas, swine biltong tail fatback jowl landjaeger.</p>
       <div>
         <pds-button variant="secondary">Cancel</pds-button>
         <pds-button>Get Started</pds-button>
       </div>
+    </div>
+    <pds-button variant="secondary">Popover trigger</pds-button>
+  </pds-popover>
+</Canvas>
+
+## Hoisted
+By default, the `pds-popover` position will be `absolute`. This means that the popover will be positioned relative
+to the nearest positioned parent container. This works in most cases; however if the parent container has the
+`overflow` property set to `hidden`, the popover content will be cut off. To avoid this, set the `hoisted` property
+to `true`. **Be aware that using `fixed` position causes a performance hit due to position recalculations.**
+<Canvas mdxSource={`
+<div>
+  <pds-popover has-arrow="true" placement="bottom-start" html-content="true">
+    <div slot="content">
+      <p><strong>This is a popover</strong></p>
+    </div>
+    <pds-button variant="secondary">Not hoisted</pds-button>
+  </pds-popover>
+  <pds-popover has-arrow="true" hoisted="true" placement="bottom-start" html-content="true">
+    <div slot="content">
+      <p><strong>This is a popover</strong></p>
+    </div>
+    <pds-button variant="secondary">Hoisted</pds-button>
+  </pds-popover>
+</div>
+`}>
+  <div>
+    <pds-popover has-arrow="true" placement="bottom-start" html-content="true">
+      <div slot="content">
+        <p><strong>This is a popover</strong></p>
+      </div>
+      <pds-button variant="secondary">Not hoisted</pds-button>
+    </pds-popover>
+    <pds-popover has-arrow="true" hoisted="true" placement="bottom-start" html-content="true">
+      <div slot="content">
+        <p><strong>This is a popover</strong></p>
+      </div>
+      <pds-button variant="secondary">Hoisted</pds-button>
+    </pds-popover>
+  </div>
+</Canvas>
+
+### Popover within popover
+If the parent popover is fixed, the subsequent children must also be fixed. Be aware that this is a performance hit.
+**Currenlty there is an issue such that the child popover does not leave the screen when the parent popover scrolls from view**
+
+<Canvas mdxSource={`
+<pds-popover hoisted="true" placement="bottom-start">
+  <div slot="content">
+    <p>This is primary popover content</p>
+    <pds-popover hoisted="true" placement="right-start">
+      <div slot="content">
+        <p>Secondary Popover</p>
+      </div>
+      <pds-button variant="secondary">My popover within another popover</pds-button>
+    </pds-popover>
+  </div>
+  <pds-button variant="secondary">Popover trigger</pds-button>
+</pds-popover>
+`}>
+  <pds-popover hoisted="true" placement="bottom-start">
+    <div slot="content">
+      <p>This is primary popover content</p>
+      <pds-popover hoisted="true" placement="right-start">
+        <div slot="content">
+          <p>Secondary Popover</p>
+        </div>
+        <pds-button variant="secondary">My popover within another popover</pds-button>
+      </pds-popover>
     </div>
     <pds-button variant="secondary">Popover trigger</pds-button>
   </pds-popover>
