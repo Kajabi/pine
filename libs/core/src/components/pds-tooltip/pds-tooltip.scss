@@ -23,6 +23,11 @@
     white-space: normal;
     width: var(--width);
   }
+
+  ::part(content) {
+    background-color: var(--background-color);
+    color: var(--color);
+  }
 }
 
 .pds-tooltip__content {

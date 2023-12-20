@@ -1,14 +1,22 @@
 :host {
+  --background-color: var(--pine-color-base-white);
+  --color: var(--pine-color-neutral-charcoal-400);
+  
   display: inline-block;
   position: relative;
+
+  &::part(content) {
+    background-color: var(--background-color);
+    color: var(--color);
+  }
 }
 
 div {
   // These custom props are not reachable
   --background-color: var(--pine-color-base-white);
+  --color: var(--color);
   --box-shadow: var(--pine-box-shadow-md);
-  --color: var(--pine-color-neutral-charcoal-400);
-  --arrow-size: 6px;
+  --arrow-size: 8px;
   --arrow-offset: 14px;
 
   --overlay-border-radius: var(--pine-border-radius-md);
@@ -24,7 +32,6 @@ div {
 }
 
 .pds-popover__content {
-  background-color: var(--background-color);
   border-radius: var(--overlay-border-radius);
   box-shadow: var(--box-shadow);
   color: var(--color);
@@ -55,9 +62,9 @@ div {
 
 .pds-popover__arrow {
   background: #fff;
-  height: 8px;
+  height: var(--arrow-size);
   position: absolute;
   transform: rotate(45deg);
-  width: 8px;
-  z-index: 1;
+  width: var(--arrow-size);
+  z-index: -1;
 }

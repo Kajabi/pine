@@ -52,6 +52,17 @@ export class PdsPopover {
    */
   @Prop() hasArrow? = false;
 
+  /**
+   * Determines how the popover is positioned relative to the trigger element.
+   * By default, the popover will use `absolute` positioning, which allows the
+   * popover to scroll with the page. Setting this to `fixed` handles most used.
+   * However, if the trigger element is within a container that has `overflow: hidden`
+   * set, the popover will not be able to escape the container and get clipped. In
+   * this case, you can set the `hoisted` property to `true` to use `fixed` positioning
+   * instead. **Be aware that this is less performant, as it requires recalculating
+   * the popover position on scroll. Only use this option if you need it.**
+   * @defaultValue false
+   */
   @Prop() hoisted? = false;
 
   @Prop() offset? = 12;
@@ -62,7 +73,6 @@ export class PdsPopover {
    * Determines the preferred position of the popover
    * @defaultValue "right"
    */
-
   @Prop({ reflect: true }) placement: OverlayPlacementType = 'right';
 
   /**
@@ -236,8 +246,9 @@ export class PdsPopover {
             aria-hidden={this.opened ? 'false' : 'true'}
             aria-live={this.opened ? 'polite' : 'off'}
             id={`${this.componentId}-content`}
+            part="content"
             ref={(el) => (this.contentEl = el)}
-            role="dialog"
+            // role="dialog"
           >
             <slot
               name="content"

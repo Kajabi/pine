@@ -147,14 +147,12 @@ export class PdsTooltip {
         onFocusout={this.handleHide}
       >
         <div
-          ref={(el) => (this.referenceElement = el)}
           class={`
             pds-tooltip
-            pds-tooltip--${this.placement}
             ${this.htmlContent ? 'pds-tooltip--has-html-content' : ''}
-            ${this.opened ? 'pds-tooltip--is-open' : ''}
-            ${this.hasArrow ? '' : 'pds-tooltip--no-arrow'}
           `}
+          exportparts="content"
+          ref={(el) => (this.referenceElement = el)}
         >
           <pds-popover
             ref={(el) => (this.popover = el)}
@@ -163,7 +161,9 @@ export class PdsTooltip {
             opened={this.opened}
             padding={this.padding}
             placement={this.placement}
-            hoisted={this.hoisted}
+            // tooltips only show on hover so hoisted={true} is less of a performance
+            // issue than click-based triggers
+            hoisted={true} 
           >
             <span
               aria-describedby={this.componentId}

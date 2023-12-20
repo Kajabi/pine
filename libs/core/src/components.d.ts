@@ -1394,6 +1394,10 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "hasArrow"?: boolean;
+        /**
+          * Determines how the popover is positioned relative to the trigger element. By default, the popover will use `absolute` positioning, which allows the popover to scroll with the page. Setting this to `fixed` handles most used. However, if the trigger element is within a container that has `overflow: hidden` set, the popover will not be able to escape the container and get clipped. In this case, you can set the `hoisted` property to `true` to use `fixed` positioning instead. **Be aware that this is less performant, as it requires recalculating the popover position on scroll. Only use this option if you need it.**
+          * @defaultValue false
+         */
         "hoisted"?: boolean;
         "offset"?: number;
         /**
