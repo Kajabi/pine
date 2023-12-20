@@ -37,6 +37,7 @@
     }
   },
   "dependencies": {
-    "@floating-ui/dom": "^1.5.3"
+    "@floating-ui/dom": "^1.5.3",
+    "@floating-ui/core": "^1.5.2"
   }
 }

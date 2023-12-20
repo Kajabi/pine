@@ -1,7 +1,10 @@
 import { Component, Element, Event, Host, Prop, State, h, EventEmitter, Method, Watch } from '@stencil/core';
-import {
-  positionTooltip
-} from '../../utils/overlay';
+// import {
+//   positionTooltip
+// } from '../../utils/overlay';
+
+import { ReferenceElement } from "@floating-ui/core";
+import { OverlayPlacementType } from '../../utils/types';
 
 /**
  * @slot (default) - The tooltip's target element
@@ -14,7 +17,8 @@ import {
   shadow: true,
 })
 export class PdsTooltip {
-  private contentEl: HTMLElement | null;
+  private popover: HTMLPdsPopoverElement | null;
+  private referenceElement: ReferenceElement | null = null;
 
   /**
    * Reference to the Host element
@@ -42,6 +46,8 @@ export class PdsTooltip {
    * @defaultValue true
    */
   @Prop() hasArrow? = true;
+  
+  @Prop() hoisted? = false;
 
   /**
    * Enable this option when using the content slot
@@ -49,23 +55,15 @@ export class PdsTooltip {
    */
   @Prop() htmlContent = false;
 
+  @Prop() offset? = 12;
+
+  @Prop() padding? = 14;
+
   /**
    * Determines the preferred position of the tooltip
    * @defaultValue "right"
    */
-  @Prop({ reflect: true }) placement:
-    'top'
-    | 'top-start'
-    | 'top-end'
-    | 'right'
-    | 'right-start'
-    | 'right-end'
-    | 'bottom'
-    | 'bottom-start'
-    | 'bottom-end'
-    | 'left'
-    | 'left-start'
-    | 'left-end' = 'right';
+  @Prop({ reflect: true }) placement: OverlayPlacementType = 'right';
 
   /**
    * Determines whether or not the tooltip is visible
@@ -104,11 +102,10 @@ export class PdsTooltip {
   componentDidUpdate() {
     if (this.opened) {
       this.showTooltip();
-    }
+    } 
   }
 
   componentDidRender() {
-    positionTooltip({elem: this.el, elemPlacement: this.placement, overlay: this.contentEl});
   }
 
   /**
@@ -117,6 +114,9 @@ export class PdsTooltip {
   @Method()
   async showTooltip() {
     this.opened = true;
+    console.log('showing tooltip');
+    this.popover.triggerEl = this.referenceElement;
+    this.popover.showPopover(); 
   }
 
   /**
@@ -125,6 +125,7 @@ export class PdsTooltip {
   @Method()
   async hideTooltip() {
     this.opened = false;
+    this.popover.hidePopover();
   }
 
   private handleHide = () => {
@@ -134,7 +135,7 @@ export class PdsTooltip {
 
   private handleShow = () => {
     this.showTooltip();
-    this.pdsTooltipShow.emit();
+    this.pdsTooltipShow.emit(); 
   };
 
   render() {
@@ -146,6 +147,7 @@ export class PdsTooltip {
         onFocusout={this.handleHide}
       >
         <div
+          ref={(el) => (this.referenceElement = el)}
           class={`
             pds-tooltip
             pds-tooltip--${this.placement}
@@ -154,25 +156,28 @@ export class PdsTooltip {
             ${this.hasArrow ? '' : 'pds-tooltip--no-arrow'}
           `}
         >
-          <span
-            aria-describedby={this.componentId}
-            class="pds-tooltip__trigger"
+          <pds-popover
+            ref={(el) => (this.popover = el)}
+            hasArrow={this.hasArrow}
+            offset={this.offset}
+            opened={this.opened}
+            padding={this.padding}
+            placement={this.placement}
+            hoisted={this.hoisted}
           >
-            <slot />
-          </span>
-
-          <div class="pds-tooltip__content"
-            aria-hidden={this.opened ? 'false' : 'true'}
-            aria-live={this.opened ? 'polite' : 'off'}
-            id={this.componentId}
-            ref={(el) => (this.contentEl = el)}
-            role="tooltip"
-          >
-            <slot
-              name="content"
-            ></slot>
-            {this.content}
-          </div>
+            <span
+              aria-describedby={this.componentId}
+              class="pds-tooltip__trigger"
+            >
+              <slot />
+            </span>
+            <div slot="content">
+              <slot
+                name="content"
+              ></slot>
+              {this.content}
+            </div>
+          </pds-popover>
         </div>
       </Host>
     );
