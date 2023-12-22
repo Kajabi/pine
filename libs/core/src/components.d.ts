@@ -313,11 +313,17 @@ export namespace Components {
         "variant": 'inline' | 'plain';
     }
     interface PdsPopover {
+        /**
+          * Represents the overlay arrow in the popover
+         */
         "arrow": HTMLElement | null;
         /**
           * A unique identifier used for the underlying component id attribute.
          */
         "componentId": string;
+        /**
+          * Represents the popover slot content element
+         */
         "contentEl": HTMLElement | null;
         /**
           * Determines whether or not the popover has an arrow
@@ -333,6 +339,9 @@ export namespace Components {
           * @defaultValue false
          */
         "opened": boolean;
+        /**
+          * Sets the padding(in pixels) of the popover content element
+         */
         "padding"?: number;
         /**
           * Determines the preferred position of the popover
@@ -1383,11 +1392,17 @@ declare namespace LocalJSX {
         "variant"?: 'inline' | 'plain';
     }
     interface PdsPopover {
+        /**
+          * Represents the overlay arrow in the popover
+         */
         "arrow"?: HTMLElement | null;
         /**
           * A unique identifier used for the underlying component id attribute.
          */
         "componentId"?: string;
+        /**
+          * Represents the popover slot content element
+         */
         "contentEl"?: HTMLElement | null;
         /**
           * Determines whether or not the popover has an arrow
@@ -1395,10 +1410,13 @@ declare namespace LocalJSX {
          */
         "hasArrow"?: boolean;
         /**
-          * Determines how the popover is positioned relative to the trigger element. By default, the popover will use `absolute` positioning, which allows the popover to scroll with the page. Setting this to `fixed` handles most used. However, if the trigger element is within a container that has `overflow: hidden` set, the popover will not be able to escape the container and get clipped. In this case, you can set the `hoisted` property to `true` to use `fixed` positioning instead. **Be aware that this is less performant, as it requires recalculating the popover position on scroll. Only use this option if you need it.**
+          * Determines how the popover is positioned relative to the trigger element. By default, the popover will use `absolute` positioning, which allows the popover to scroll with the page. Setting this to `fixed` handles most used. However, if the trigger element is within a container that has `overflow: hidden` set, the popover will not be able to escape the container and get clipped. In this case, you can set the `hoisted` property to `true` to use `fixed` positioning instead. Be aware that this is less performant, as it requires recalculating the popover position on scroll. Only use this option if you need it.
           * @defaultValue false
          */
         "hoisted"?: boolean;
+        /**
+          * Sets the offset distance(in pixels) between the popover and the trigger element
+         */
         "offset"?: number;
         /**
           * Emitted after a popover is closed
@@ -1413,12 +1431,18 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "opened"?: boolean;
+        /**
+          * Sets the padding(in pixels) of the popover content element
+         */
         "padding"?: number;
         /**
           * Determines the preferred position of the popover
           * @defaultValue "right"
          */
         "placement"?: OverlayPlacementType;
+        /**
+          * Represents the popover trigger element
+         */
         "triggerEl"?: HTMLElement | null;
     }
     interface PdsProgress {
