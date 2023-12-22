@@ -1,8 +1,5 @@
 
 import { Component, Element, Event, Host, Prop, State, h, EventEmitter, Method } from '@stencil/core';
-// import {
-//   positionTooltip
-// } from '../../utils/overlay';
 import { OverlayPlacementType } from '../../utils/types';
 
 import {
@@ -159,7 +156,6 @@ export class PdsPopover {
         top: `${y}px`,
       });
 
-      // Accessing the data
       const {x: arrowX, y: arrowY} = middlewareData.arrow;
 
       const staticSide = {
@@ -169,13 +165,15 @@ export class PdsPopover {
         left: 'right',
       }[placement.split('-')[0]];
 
-      Object.assign(this.arrow.style, {
-        left: arrowX != null ? `${arrowX}px` : '',
-        top: arrowY != null ? `${arrowY}px` : '',
-        right: '',
-        bottom: '',
-        [staticSide]: '-4px',
-      });
+      if (this.hasArrow) {
+        Object.assign(this.arrow.style, {
+          left: arrowX != null ? `${arrowX}px` : '',
+          top: arrowY != null ? `${arrowY}px` : '',
+          right: '',
+          bottom: '',
+          [staticSide]: '-4px',
+        });
+      }
     }
   }
 
@@ -269,7 +267,6 @@ export class PdsPopover {
             id={`${this.componentId}-content`}
             part="content"
             ref={(el) => (this.contentEl = el)}
-            // role="dialog"
           >
             <slot
               name="content"
