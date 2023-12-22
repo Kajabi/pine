@@ -17,6 +17,9 @@ import {
 /**
  * @slot (default) - The popover's target element
  * @slot content - HTML content for the popover
+ * 
+ * @part arrow - The popover arrow
+ * @part content - The popover content
  */
 
 @Component({
@@ -25,16 +28,13 @@ import {
   shadow: true,
 })
 export class PdsPopover {
-  @Prop() arrow: HTMLElement | null;
-  @Prop() contentEl: HTMLElement | null;
-  @Prop() triggerEl: HTMLElement | null;
   private cleanupAutoUpdate: (() => void) | null = null;
 
   /**
    * Reference to the Host element
    */
   @Element() el: HTMLPdsPopoverElement;
-
+  
   /**
    * Determines when the popover is open
    * @defaultValue false
@@ -42,9 +42,24 @@ export class PdsPopover {
   @State() isOpen = false;
 
   /**
+   * Represents the overlay arrow in the popover
+   */
+  @Prop({ mutable: true }) arrow: HTMLElement | null;
+
+  /**
    * A unique identifier used for the underlying component id attribute.
    */
   @Prop() componentId: string;
+
+  /**
+   * Represents the popover slot content element
+   */
+  @Prop({ mutable: true }) contentEl: HTMLElement | null;
+
+  /**
+   * Represents the popover trigger element
+   */
+  @Prop({ mutable: true }) triggerEl: HTMLElement | null;
 
   /**
    * Determines whether or not the popover has an arrow
@@ -65,8 +80,20 @@ export class PdsPopover {
    */
   @Prop() hoisted? = false;
 
+  /**
+   * Sets the offset distance(in pixels) between the popover and the trigger element
+   */
   @Prop() offset? = 12;
 
+  /**
+   * Determines whether or not the popover is visible
+   * @defaultValue false
+   */
+  @Prop({mutable: true, reflect: true}) opened = false;
+  
+  /**
+   * Sets the padding(in pixels) of the popover content element
+   */
   @Prop() padding? = 14;
 
   /**
@@ -74,12 +101,6 @@ export class PdsPopover {
    * @defaultValue "right"
    */
   @Prop({ reflect: true }) placement: OverlayPlacementType = 'right';
-
-  /**
-   * Determines whether or not the popover is visible
-   * @defaultValue false
-   */
-  @Prop({mutable: true, reflect: true}) opened = false;
 
   /**
    * Emitted after a popover is closed
@@ -129,7 +150,7 @@ export class PdsPopover {
           offset(this.offset),
           flip(),
           shift({padding: this.padding}),
-          arrow({element: this.arrow}),
+          arrow({element: this.hasArrow ? this.arrow : null}),
         ]
       })
       
@@ -229,7 +250,7 @@ export class PdsPopover {
 
   render() {
     return (
-      <Host>
+      <Host exportparts="arrow, content">
         <div
           class={`pds-popover ${this.popoverClasses()}`}
           id={this.componentId}
@@ -253,7 +274,12 @@ export class PdsPopover {
             <slot
               name="content"
             ></slot>
-            <div class="pds-popover__arrow" ref={(el) => (this.arrow = el)}></div>
+            {this.hasArrow &&
+              <div class="pds-popover__arrow" 
+                part="arrow" 
+                ref={(el) => (this.arrow = el)}
+              ></div>
+            }
           </div>
         </div>
       </Host>
