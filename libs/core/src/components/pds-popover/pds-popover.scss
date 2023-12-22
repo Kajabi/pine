@@ -47,7 +47,7 @@ div {
 
   .pds-popover--is-open & {
     display: block;
-    z-index: 10000;
+    z-index: 1000;
   }
 
   :host(.pds-popover--has-html-content) & {

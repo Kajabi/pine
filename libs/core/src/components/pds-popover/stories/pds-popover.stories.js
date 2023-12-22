@@ -6,6 +6,7 @@ export default {
   argTypes: extractArgTypes('pds-popover'),
   args: {
     hasArrow: false,
+    hoisted: false,
     opened: false
   },
   component: 'pds-popover',
@@ -58,17 +59,13 @@ const ListTemplate = (args) => html`
 export const Default = BaseTemplate.bind({});
 Default.args = {
   componentId: "default",
-  hasArrow: false,
-  hoisted: false,
-  htmlContent: true,
   placement: "bottom-start",
 };
 
 export const AvatarPopover = AvatarDropdownTemplate.bind({});
 AvatarPopover.args = {
-  hasArrow: false,
-  htmlContent: true,
-  placement: "bottom-start",
+  hasArrow: true,
+  placement: "right-start",
 };
 
 export const AvatarPopover = AvatarDropdownTemplate.bind({});

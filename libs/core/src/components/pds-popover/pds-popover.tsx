@@ -74,8 +74,8 @@ export class PdsPopover {
    * However, if the trigger element is within a container that has `overflow: hidden`
    * set, the popover will not be able to escape the container and get clipped. In
    * this case, you can set the `hoisted` property to `true` to use `fixed` positioning
-   * instead. **Be aware that this is less performant, as it requires recalculating
-   * the popover position on scroll. Only use this option if you need it.**
+   * instead. Be aware that this is less performant, as it requires recalculating
+   * the popover position on scroll. Only use this option if you need it.
    * @defaultValue false
    */
   @Prop() hoisted? = false;
