@@ -40,7 +40,7 @@ export class PdsTableHeadCell {
     }
   };
 
-  private handleSortClick = () => {
+  private toggleSort = () => {
     if (this.sortable) {
       const column = this.hostElement.innerText.trim();
       this.sortingDirection = this.sortingDirection === 'asc' ? 'desc' : 'asc';
@@ -82,7 +82,7 @@ export class PdsTableHeadCell {
       <Host
         class={this.classNames()}
         role="columnheader"
-        onClick={this.handleSortClick}
+        onClick={this.toggleSort}
         style={
           this.tableRef &&
           this.tableRef.fixedColumn &&
