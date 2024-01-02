@@ -23,25 +23,25 @@ const BaseTemplate = (args) => html`
   selectable="${args.selectable}"
 >
   <pds-table-head>
-    <pds-table-head-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Column Title</pds-table-head-cell>
-    <pds-table-head-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Column Title</pds-table-head-cell>
-    <pds-table-head-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Column Title</pds-table-head-cell>
+    <pds-table-head-cell>Column Title</pds-table-head-cell>
+    <pds-table-head-cell>Column Title</pds-table-head-cell>
+    <pds-table-head-cell>Column Title</pds-table-head-cell>
   </pds-table-head>
   <pds-table-body>
     <pds-table-row value="row1">
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Alpha</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Alpha</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Alpha</pds-table-cell>
+      <pds-table-cell>Row Item Alpha</pds-table-cell>
+      <pds-table-cell>Row Item Alpha</pds-table-cell>
+      <pds-table-cell>Row Item Alpha</pds-table-cell>
     </pds-table-row>
     <pds-table-row value="row2">
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Bravo</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Bravo</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Bravo</pds-table-cell>
+      <pds-table-cell>Row Item Bravo</pds-table-cell>
+      <pds-table-cell>Row Item Bravo</pds-table-cell>
+      <pds-table-cell>Row Item Bravo</pds-table-cell>
     </pds-table-row>
     <pds-table-row value="row3">
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Charlie</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Charlie</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Charlie</pds-table-cell>
+      <pds-table-cell>Row Item Charlie</pds-table-cell>
+      <pds-table-cell>Row Item Charlie</pds-table-cell>
+      <pds-table-cell>Row Item Charlie</pds-table-cell>
     </pds-table-row>
   </pds-table-body>
 </pds-table>`;
@@ -55,61 +55,61 @@ const ResponsiveTemplate = (args) => html`
   selectable="${args.selectable}"
 >
   <pds-table-head>
-    <pds-table-head-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Column Title</pds-table-head-cell>
-    <pds-table-head-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Column Title</pds-table-head-cell>
-    <pds-table-head-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Column Title</pds-table-head-cell>
-    <pds-table-head-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Column Title</pds-table-head-cell>
-    <pds-table-head-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Column Title</pds-table-head-cell>
-    <pds-table-head-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Column Title</pds-table-head-cell>
-    <pds-table-head-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Column Title</pds-table-head-cell>
-    <pds-table-head-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Column Title</pds-table-head-cell>
-    <pds-table-head-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Column Title</pds-table-head-cell>
-    <pds-table-head-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Column Title</pds-table-head-cell>
-    <pds-table-head-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Column Title</pds-table-head-cell>
-    <pds-table-head-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Column Title</pds-table-head-cell>
+    <pds-table-head-cell>Column Title</pds-table-head-cell>
+    <pds-table-head-cell>Column Title</pds-table-head-cell>
+    <pds-table-head-cell>Column Title</pds-table-head-cell>
+    <pds-table-head-cell>Column Title</pds-table-head-cell>
+    <pds-table-head-cell>Column Title</pds-table-head-cell>
+    <pds-table-head-cell>Column Title</pds-table-head-cell>
+    <pds-table-head-cell>Column Title</pds-table-head-cell>
+    <pds-table-head-cell>Column Title</pds-table-head-cell>
+    <pds-table-head-cell>Column Title</pds-table-head-cell>
+    <pds-table-head-cell>Column Title</pds-table-head-cell>
+    <pds-table-head-cell>Column Title</pds-table-head-cell>
+    <pds-table-head-cell>Column Title</pds-table-head-cell>
   </pds-table-head>
   <pds-table-body>
     <pds-table-row value="responsive1">
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Alpha</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Beta</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Charlie</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Delta</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Echo</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Foxtrot</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Golf</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Hotel</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Juliett</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Kilo</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Lima</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Mike</pds-table-cell>
+      <pds-table-cell>Row Item Alpha</pds-table-cell>
+      <pds-table-cell>Row Item Beta</pds-table-cell>
+      <pds-table-cell>Row Item Charlie</pds-table-cell>
+      <pds-table-cell>Row Item Delta</pds-table-cell>
+      <pds-table-cell>Row Item Echo</pds-table-cell>
+      <pds-table-cell>Row Item Foxtrot</pds-table-cell>
+      <pds-table-cell>Row Item Golf</pds-table-cell>
+      <pds-table-cell>Row Item Hotel</pds-table-cell>
+      <pds-table-cell>Row Item Juliett</pds-table-cell>
+      <pds-table-cell>Row Item Kilo</pds-table-cell>
+      <pds-table-cell>Row Item Lima</pds-table-cell>
+      <pds-table-cell>Row Item Mike</pds-table-cell>
     </pds-table-row>
     <pds-table-row value="responsive2">
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Alpha</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Beta</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Charlie</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Delta</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Echo</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Foxtrot</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Golf</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Hotel</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Juliett</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Kilo</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Lima</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Mike</pds-table-cell>
+      <pds-table-cell>Row Item Alpha</pds-table-cell>
+      <pds-table-cell>Row Item Beta</pds-table-cell>
+      <pds-table-cell>Row Item Charlie</pds-table-cell>
+      <pds-table-cell>Row Item Delta</pds-table-cell>
+      <pds-table-cell>Row Item Echo</pds-table-cell>
+      <pds-table-cell>Row Item Foxtrot</pds-table-cell>
+      <pds-table-cell>Row Item Golf</pds-table-cell>
+      <pds-table-cell>Row Item Hotel</pds-table-cell>
+      <pds-table-cell>Row Item Juliett</pds-table-cell>
+      <pds-table-cell>Row Item Kilo</pds-table-cell>
+      <pds-table-cell>Row Item Lima</pds-table-cell>
+      <pds-table-cell>Row Item Mike</pds-table-cell>
     </pds-table-row>
     <pds-table-row value="responsive3">
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Alpha</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Beta</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Charlie</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Delta</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Echo</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Foxtrot</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Golf</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Hotel</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Juliett</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Kilo</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Lima</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Row Item Mike</pds-table-cell>
+      <pds-table-cell>Row Item Alpha</pds-table-cell>
+      <pds-table-cell>Row Item Beta</pds-table-cell>
+      <pds-table-cell>Row Item Charlie</pds-table-cell>
+      <pds-table-cell>Row Item Delta</pds-table-cell>
+      <pds-table-cell>Row Item Echo</pds-table-cell>
+      <pds-table-cell>Row Item Foxtrot</pds-table-cell>
+      <pds-table-cell>Row Item Golf</pds-table-cell>
+      <pds-table-cell>Row Item Hotel</pds-table-cell>
+      <pds-table-cell>Row Item Juliett</pds-table-cell>
+      <pds-table-cell>Row Item Kilo</pds-table-cell>
+      <pds-table-cell>Row Item Lima</pds-table-cell>
+      <pds-table-cell>Row Item Mike</pds-table-cell>
     </pds-table-row>
   </pds-table-body>
 </pds-table>`;
@@ -123,50 +123,50 @@ const SortableTemplate = (args) => html`
   selectable="${args.selectable}"
 >
   <pds-table-head>
-    <pds-table-head-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}" sortable=${args.sortable}>Name</pds-table-head-cell>
-    <pds-table-head-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}" sortable=${args.sortable}>Email</pds-table-head-cell>
-    <pds-table-head-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}" sortable=${args.sortable}>Email Marketing</pds-table-head-cell>
+    <pds-table-head-cell sortable=${args.sortable}>Name</pds-table-head-cell>
+    <pds-table-head-cell sortable=${args.sortable}>Email</pds-table-head-cell>
+    <pds-table-head-cell sortable=${args.sortable}>Email Marketing</pds-table-head-cell>
   </pds-table-head>
   <pds-table-body>
     <pds-table-row>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">John Doe</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">john.doe@example.com</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Subscribed</pds-table-cell>
+      <pds-table-cell>John Doe</pds-table-cell>
+      <pds-table-cell>john.doe@example.com</pds-table-cell>
+      <pds-table-cell>Subscribed</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Jane Smith</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">jane.smith@example.com</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Not Subscribed</pds-table-cell>
+      <pds-table-cell>Jane Smith</pds-table-cell>
+      <pds-table-cell>jane.smith@example.com</pds-table-cell>
+      <pds-table-cell>Not Subscribed</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Michael Johnson</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">michael.johnson@example.com</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Subscribed</pds-table-cell>
+      <pds-table-cell>Michael Johnson</pds-table-cell>
+      <pds-table-cell>michael.johnson@example.com</pds-table-cell>
+      <pds-table-cell>Subscribed</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Susan Brown</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">susan.brown@example.com</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Not Subscribed</pds-table-cell>
+      <pds-table-cell>Susan Brown</pds-table-cell>
+      <pds-table-cell>susan.brown@example.com</pds-table-cell>
+      <pds-table-cell>Not Subscribed</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">William Davis</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">william.davis@example.com</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Subscribed</pds-table-cell>
+      <pds-table-cell>William Davis</pds-table-cell>
+      <pds-table-cell>william.davis@example.com</pds-table-cell>
+      <pds-table-cell>Subscribed</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Mary Wilson</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">mary.wilson@example.com</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Not Subscribed</pds-table-cell>
+      <pds-table-cell>Mary Wilson</pds-table-cell>
+      <pds-table-cell>mary.wilson@example.com</pds-table-cell>
+      <pds-table-cell>Not Subscribed</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">James Lee</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">james.lee@example.com</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Subscribed</pds-table-cell>
+      <pds-table-cell>James Lee</pds-table-cell>
+      <pds-table-cell>james.lee@example.com</pds-table-cell>
+      <pds-table-cell>Subscribed</pds-table-cell>
     </pds-table-row>
     <pds-table-row>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Linda Hall</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">linda.hall@example.com</pds-table-cell>
-      <pds-table-cell class="${args.compact ? 'hydrated is-compact' : 'hydrated'}">Not Subscribed</pds-table-cell>
+      <pds-table-cell>Linda Hall</pds-table-cell>
+      <pds-table-cell>linda.hall@example.com</pds-table-cell>
+      <pds-table-cell>Not Subscribed</pds-table-cell>
     </pds-table-row>
   </pds-table-body>
 </pds-table>`;
