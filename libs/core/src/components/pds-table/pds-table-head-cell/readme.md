@@ -21,6 +21,10 @@
 
 ## Dependencies
 
+### Used by
+
+ - [pds-table-head](../pds-table-head)
+
 ### Depends on
 
 - pds-icon
@@ -29,6 +33,7 @@
 ```mermaid
 graph TD;
   pds-table-head-cell --> pds-icon
+  pds-table-head --> pds-table-head-cell
   style pds-table-head-cell fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

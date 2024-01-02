@@ -32,10 +32,6 @@ export class PdsTableHeadCell {
     }
   }
 
-  disconnectedCallback() {
-    this.tableRef.removeEventListener('scroll', this.handleScroll);
-  }
-
   private handleScroll = () => {
     if (this.tableRef.scrollLeft > 0) {
       this.tableScrolling = true;

@@ -23,7 +23,6 @@ import { defineCustomElement as definePdsTab } from '@pine-ds/core/components/pd
 import { defineCustomElement as definePdsTable } from '@pine-ds/core/components/pds-table.js';
 import { defineCustomElement as definePdsTableBody } from '@pine-ds/core/components/pds-table-body.js';
 import { defineCustomElement as definePdsTableCell } from '@pine-ds/core/components/pds-table-cell.js';
-import { defineCustomElement as definePdsTableCheckboxCell } from '@pine-ds/core/components/pds-table-checkbox-cell.js';
 import { defineCustomElement as definePdsTableHead } from '@pine-ds/core/components/pds-table-head.js';
 import { defineCustomElement as definePdsTableHeadCell } from '@pine-ds/core/components/pds-table-head-cell.js';
 import { defineCustomElement as definePdsTableRow } from '@pine-ds/core/components/pds-table-row.js';
@@ -50,7 +49,6 @@ export const PdsTab = /*@__PURE__*/createReactComponent<JSX.PdsTab, HTMLPdsTabEl
 export const PdsTable = /*@__PURE__*/createReactComponent<JSX.PdsTable, HTMLPdsTableElement>('pds-table', undefined, undefined, definePdsTable);
 export const PdsTableBody = /*@__PURE__*/createReactComponent<JSX.PdsTableBody, HTMLPdsTableBodyElement>('pds-table-body', undefined, undefined, definePdsTableBody);
 export const PdsTableCell = /*@__PURE__*/createReactComponent<JSX.PdsTableCell, HTMLPdsTableCellElement>('pds-table-cell', undefined, undefined, definePdsTableCell);
-export const PdsTableCheckboxCell = /*@__PURE__*/createReactComponent<JSX.PdsTableCheckboxCell, HTMLPdsTableCheckboxCellElement>('pds-table-checkbox-cell', undefined, undefined, definePdsTableCheckboxCell);
 export const PdsTableHead = /*@__PURE__*/createReactComponent<JSX.PdsTableHead, HTMLPdsTableHeadElement>('pds-table-head', undefined, undefined, definePdsTableHead);
 export const PdsTableHeadCell = /*@__PURE__*/createReactComponent<JSX.PdsTableHeadCell, HTMLPdsTableHeadCellElement>('pds-table-head-cell', undefined, undefined, definePdsTableHeadCell);
 export const PdsTableRow = /*@__PURE__*/createReactComponent<JSX.PdsTableRow, HTMLPdsTableRowElement>('pds-table-row', undefined, undefined, definePdsTableRow);

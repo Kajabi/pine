@@ -14,9 +14,9 @@ export default {
   title: 'components/Table/Rows',
 };
 
-const BaseTemplate = (args) => html`
+const BaseTemplate = () => html`
 <pds-table>
-  <pds-table-row value=${args.value}>
+  <pds-table-row>
     <pds-table-cell>Row Item Alpha</pds-table-cell>
     <pds-table-cell>Row Item Beta</pds-table-cell>
     <pds-table-cell>Row Item Charlie</pds-table-cell>
@@ -24,6 +24,3 @@ const BaseTemplate = (args) => html`
 </pds-table>`;
 
 export const Default = BaseTemplate.bind();
-Default.args = {
-  value: 'default',
-};

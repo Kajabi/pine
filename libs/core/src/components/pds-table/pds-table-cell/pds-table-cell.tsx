@@ -19,10 +19,6 @@ export class PdsTableCell {
     }
   }
 
-  disconnectedCallback() {
-    this.tableRef.removeEventListener('scroll', this.handleScroll);
-  }
-
   /**
    * Truncates content to a max width of 100px and adds an ellipsis.
    */

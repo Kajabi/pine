@@ -40,3 +40,8 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+:host(.has-checkbox) {
+  vertical-align: middle;
+  width: 16px;
+}
