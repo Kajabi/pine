@@ -1,6 +1,6 @@
 {
   "name": "@pine-ds/react",
-  "version": "0.0.2-alpha.0",
+  "version": "0.0.2-alpha.1",
   "license": "MIT",
   "description": "Pine Web Components React Wrapper",
   "author": "Kajabi Design System Services",
@@ -36,7 +36,7 @@
     "tsc": "tsc -p ."
   },
   "dependencies": {
-    "@pine-ds/core": "^0.0.2-alpha.0",
+    "@pine-ds/core": "^0.0.2-alpha.1",
     "@pine-ds/icons": "3.3.0-rc.0"
   },
   "devDependencies": {
