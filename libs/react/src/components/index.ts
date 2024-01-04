@@ -1,1 +1,3 @@
-export * from "./proxies";
+export * from './proxies';
+
+export { PdsIcon } from './PdsIcon';

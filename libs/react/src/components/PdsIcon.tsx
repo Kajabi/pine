@@ -23,7 +23,7 @@ class PdsIconContainer extends React.PureComponent<InternalProps> {
     super(props);
     if (this.props.name) {
       console.warn(
-        'In Pine React, you import icons from "@pine-ds/icons" and set the icon you imported to the "icon" property. Setting the "name" property has no effect.'
+        'In Pine React, you import icons from "@pine-ds/icons/icons" and set the icon you imported to the "icon" property. Setting the "name" property has no effect.'
       );
     }
   }
