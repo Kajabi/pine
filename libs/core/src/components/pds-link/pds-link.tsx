@@ -1,5 +1,7 @@
 import { Component, h, Prop } from '@stencil/core';
 
+import { launch } from '@pine-ds/icons/icons';
+
 /**
  * @slot - Content is placed between the opening closing tags
  */
@@ -66,7 +68,7 @@ export class PdsLink {
       >
         <slot>{this.href}</slot>
         {this.external &&
-          <pds-icon name="launch" size={this.fontSize}></pds-icon>
+          <pds-icon icon={launch} size={this.fontSize}></pds-icon>
         }
       </a>
     );
