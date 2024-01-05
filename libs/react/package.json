@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@pine-ds/core": "^0.0.2-alpha.1",
-    "@pine-ds/icons": "3.3.0"
+    "@pine-ds/icons": "3.3.1-rc.0"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.1.5",
