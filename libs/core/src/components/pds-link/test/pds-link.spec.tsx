@@ -59,8 +59,8 @@ describe('pds-link', () => {
       html: `<pds-link href="#" external="true"></pds-link>`,
     });
 
-    const externalIcon = root?.shadowRoot?.querySelector('pds-icon[name="launch"]');
-    expect(externalIcon).not.toBeNull();
+    const externalIcon = root?.shadowRoot?.querySelectorAll('pds-icon');
+    expect(externalIcon?.length).toBe(1)
   });
 
   it('renders class name when size is assigned', async () => {
