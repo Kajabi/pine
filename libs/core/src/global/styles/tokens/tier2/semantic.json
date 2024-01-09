@@ -1,0 +1,15 @@
+{
+  "border": {
+    "default": { "value": "1px solid {color.grey.300}" },
+    "interactive": {
+      "default": { "value": "1px solid {color.grey.400}" },
+      "hover": { "value": "1px solid {color.grey.500}" },
+      "error": { "value": "1px solid {color.red.300}" }
+    },
+    "focus": {
+      "default": { "value": "2px solid {color.blue.200}" },
+      "error": { "value": "2px solid {color.red.200}" }
+    },
+    "selected": { "value": "2px solid {color.charcoal.400}" }
+  }
+}
