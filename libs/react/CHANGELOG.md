@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.2-rc.0](https://github.com/Kajabi/pine/compare/@pine-ds/react@0.0.2-alpha.1...@pine-ds/react@0.0.2-rc.0) (2024-01-10)
+
+
+### Bug Fixes
+
+* **react:** add missing exports ([90828e0](https://github.com/Kajabi/pine/commit/90828e0e3a4f54e642ab8dddfdeaea587e9b22cb))
+
+
+
+
+
 ## [0.0.2-alpha.1](https://github.com/Kajabi/pine/compare/@pine-ds/react@0.0.2-alpha.0...@pine-ds/react@0.0.2-alpha.1) (2024-01-03)
 
 **Note:** Version bump only for package @pine-ds/react

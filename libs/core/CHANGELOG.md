@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.2-rc.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@0.0.2-alpha.1...@pine-ds/core@0.0.2-rc.0) (2024-01-10)
+
+
+### Bug Fixes
+
+* **pds-link:** icons should be imported and set via icon property ([c57a515](https://github.com/Kajabi/pine/commit/c57a515713a132785bac543b14ffb56fb01c4416))
+
+
+
+
+
 ## [0.0.2-alpha.1](https://github.com/Kajabi/pine/compare/@pine-ds/core@0.0.2-alpha.0...@pine-ds/core@0.0.2-alpha.1) (2024-01-03)
 
 **Note:** Version bump only for package @pine-ds/core
