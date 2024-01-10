@@ -1,0 +1,21 @@
+.args-table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+}
+
+.args-table td:first-child {
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.args-table tbody td {
+  border: 1px solid #eaecef;
+  padding: 6px 13px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.args-type {
+  font-size: 14px;
+}

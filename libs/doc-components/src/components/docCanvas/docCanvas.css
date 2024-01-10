@@ -1,0 +1,84 @@
+.doc-canvas {
+  background-color: #F9FAFA;
+  border-radius: 16px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12), 0 0 2px 0 rgba(0, 0, 0, 0.08);
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.doc-canvas-preview,
+.doc-canvas-actions,
+.doc-canvas-code {
+  border: 1px solid #ECEEEF;
+}
+
+
+.doc-canvas-preview {
+  background-color: white;
+  border-start-end-radius: 8px;
+  border-start-start-radius: 8px;
+  padding: 16px;
+}
+
+.doc-canvas-actions {
+  background-color: #F6F8F8;
+  display: flex;
+  gap: 10px;
+  padding: 10px 6px;
+
+
+  button:last-child {
+    margin-left: auto;
+  }
+}
+
+.doc-canvas-action {
+  background-color: #8ECAFB;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.doc-canvas-action--active {
+  background-color: #07265F;
+  color: white;
+}
+
+.doc-canvas-action--copy-code {
+  position: absolute;
+  right: 10px;
+  top: 6px;
+}
+
+.doc-canvas-code-wrapper {
+  display: none;
+  position: relative;
+
+  .doc-canvas--menu-visible & {
+    display: flex;
+  }
+}
+
+.doc-canvas-code {
+  background-color: rgb(245, 242, 240);
+  border-end-end-radius: 8px;
+  border-end-start-radius: 8px;
+  /* display: none; */
+  overflow: auto;
+  position: relative;
+  width: 100%;
+
+  code {
+    border-radius: 4px;
+    direction: ltr;
+    font-family: Consolas, Monaco, 'Andale Mono', monospace;
+    font-size: 14px;
+    padding: 4px;
+  }
+
+  pre {
+    margin: 0;
+  }
+}
