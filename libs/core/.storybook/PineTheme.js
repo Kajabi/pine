@@ -29,6 +29,6 @@ export default create({
 
   brandTitle: 'Pine Design System',
   brandUrl: 'https://sage.kajabi.com/pages/index',
-  brandImage: '/images/sage-logo.png',
+  brandImage: '/images/pine-logo.png',
   brandTarget: '_self',
 });
