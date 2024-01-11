@@ -21,7 +21,7 @@ metadata:
     - typescript
     - web-components
   annotations:
-    backstage.io/source-location: url:https://github.com/Kajabi/pine/tree/next
+    backstage.io/source-location: url:https://github.com/Kajabi/pine/tree/main
     github.com/project-slug: Kajabi/pine
 spec:
   type: library
