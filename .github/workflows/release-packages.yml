@@ -59,7 +59,7 @@ jobs:
           output: libs/core/CoreBuild.zip
           paths: libs/core/dist libs/core/components libs/core/css libs/core/hydrate libs/core/loader libs/core/src/components.d.ts
 
-  release-react:
+  release-core-react:
     needs: [release-core]
     runs-on: ubuntu-latest
     steps:
@@ -85,15 +85,15 @@ jobs:
         uses: ./.github/workflows/actions/publish-npm
         with:
           preid: ${{ inputs.preid }}
-          project: 'react'
+          project: 'core-react'
           tag: ${{ inputs.tag }}
           token: ${{ secrets.NPM_TOKEN }}
           version: ${{ inputs.version }}
-          working-directory: 'libs/react'
+          working-directory: 'libs/core-react'
 
-      - name: Cache Built react
+      - name: Cache Built core-react
         uses: ./.github/workflows/actions/upload-archive
         with:
-          name: pine-react
-          output: libs/react/ReactBuild.zip
-          paths: libs/react/dist libs/react/css
+          name: pine-core-react
+          output: libs/core-react/ReactBuild.zip
+          paths: libs/core-react/dist libs/core-react/css
