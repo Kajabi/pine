@@ -1,0 +1,22 @@
+:host {
+  --background-fixed: var(--pine-color-base-white);
+  --border: var(--pine-border-default);
+
+  border-color: inherit;
+  box-sizing: border-box;
+  display: table-header-group;
+  vertical-align: middle;
+
+  // used for pds-checkbox-cell
+  // because it is in the ShadowDom
+  &::part(checkbox-cell) {
+    background-color: var(--background-fixed);
+    left: 0;
+    position: sticky;
+    z-index: 1;
+  }
+}
+
+:host pds-table-checkbox-cell {
+  border-block-end: var(--border);
+}

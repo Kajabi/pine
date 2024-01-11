@@ -1,4 +1,5 @@
 :host {
+  --background-color: var(--pine-color-base-white);
   --background-color-disabled: var(--pine-color-neutral-grey-200);
   --background-color-hover: var(--pine-color-neutral-grey-100);
   --border: var(--pine-border-interactive);
@@ -51,6 +52,7 @@
 
 input {
   appearance: none;
+  background-color: var(--background-color);
   border: var(--border);
   border-radius: var(--border-radius);
   height: var(--input-size);
@@ -114,6 +116,19 @@ input {
 
 label {
   margin-inline-start: 10px;
+}
+
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: polygon(0 0, 0 0, 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }
 
 .pds-checkbox__message {
