@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Markdown from 'markdown-to-jsx';
 
+import './docArgsTable.css';
+
+
 export interface DocArgsTableProps {
   componentName: string
   docSource: Array<any>
@@ -14,6 +17,12 @@ const sectionNameMapping = {
   styles: "css custom properties",
   parts: "css shadow parts"
 } as const;
+
+const HEADER_COLUMNS: Array<string> = [
+  'Name',
+  'Description',
+  'Default'
+];
 
 const DocArgsTable: React.FC<DocArgsTableProps> = ({
   componentName,
@@ -32,59 +41,82 @@ const DocArgsTable: React.FC<DocArgsTableProps> = ({
     });
   }
 
-  const generateTableSection = (section: string) => {
-    const sectionTitle: string = Object.keys(sectionNameMapping).find((k) => k == section) || '';
-    return (
-      <>
-        <tr key={sectionTitle}>
-          <td colSpan={3}>{sectionTitle.toUpperCase()}</td>
-        </tr>
-        { generateSubSection(typedComponents[section]) }
-      </>
-    );
-  };
 
-  const generateSubSection = (sectionProps: any) => {
-
-    const tableRows = sectionProps.map((prop: any, i: number) => (
-      <tr key={`rowIndex-${i}`}>
-        <td>{prop.attr || prop.event || prop.name}</td>
-        <td>
-          <Markdown>{prop.docs}</Markdown>
-          <div className="args-type"><em>{prop.type || prop.detail}</em></div>
-        </td>
-        <td>{prop.default}</td>
-      </tr>
+  const renderHeaders = () => {
+   return HEADER_COLUMNS.map( (name: string) => (
+      <div className='args-table-header'>{name}</div>
     ))
+  }
 
+  const renderSections = () => {
+    return (
+      Object.keys(typedComponents).map((section) => {
+        if ( typedComponents[section].length > 0 ) {
+          return generateSection(section);
+        }
+      })
+    )
+  }
+
+  const generateSection = (section: string) => {
+    const sectionTitle: string = Object.keys(sectionNameMapping).find( (k) => k == section) || '';
     return (
       <>
-        { tableRows }
+        <section className="args-section">
+          <div className="args-table-cell">{sectionTitle.toUpperCase()}</div>
+        </section>
+        { generateSectionRows(typedComponents[section] )}
       </>
     )
   }
 
+  const generateSectionRows = (sectionProps: any) => {
+    const rows = sectionProps.map((prop: any, idx: number) => (
+      <div className='arg-table-row' key={`rowIndex-${idx}`}>
+        <div className='arg-table-cell'>
+          <strong>{prop.attr || prop.event || prop.name }</strong>
+        </div>
+        <div className='arg-table-cell'>
+          <Markdown>{prop.docs}</Markdown>
+          <div className="args-type"><code>{prop.type || prop.detail}</code></div>
+        </div>
+        <div className='arg-table-cell'>
+          <Markdown>{renderDefaultOrEmpty(prop.default)}</Markdown>
+        </div>
+      </div>
+    ));
+
+    return (
+      <>
+        { rows }
+      </>
+    )
+  }
+
+  const renderDefaultOrEmpty = (value: string | undefined) => {
+    if (value === undefined)
+      return '';
+
+    return `\`\`\`${value}\`\`\``
+  }
+
+  const inlineStyles = () => (
+    {
+      "gridTemplateColumns":  `repeat(${HEADER_COLUMNS.length}, 1fr)`,
+      'marginBottom': '40px'
+    }
+  );
+
   return (
     <>
-      <table className="args-table">
-        <thead>
-          <tr>
-            <td>Name</td>
-            <td>Description</td>
-            <td>Default</td>
-          </tr>
-        </thead>
-        <tbody>
-          { Object.keys(typedComponents).map((section) => {
-            if (typedComponents[section].length > 0 ) {
-              return generateTableSection(section)
-            }
-          })
-          }
-        </tbody>
-      </table>
+    <div className="args-table" style={inlineStyles()}>
+      { renderHeaders() }
+      { renderSections() }
+    </div>
     </>
   )
 };
+
+import './docArgsTable.css';
 
 export default DocArgsTable
