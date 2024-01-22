@@ -15,7 +15,7 @@
     "lint.all": "npx nx run-many --target=lint",
     "prepare": "node ./.scripts/prepare.js",
     "setup": "npm install",
-    "start": "npx nx run core:start",
+    "start": "npx nx run-many -t start",
     "stencil.generate": "npx nx run core:generate",
     "test.all": "npx nx run-many --target=test"
   },
