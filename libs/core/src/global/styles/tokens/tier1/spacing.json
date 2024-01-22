@@ -1,5 +1,6 @@
 {
   "spacing": {
+    "0": { "value": "0px" },
     "4": { "value": "4px" },
     "8": { "value": "8px" },
     "16": { "value": "16px" },
