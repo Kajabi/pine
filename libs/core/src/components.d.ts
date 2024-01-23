@@ -5,10 +5,10 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { BoxColumnType, BoxTShirtSizeType } from "./utils/types";
+import { BoxColumnType, BoxTShirtSizeType, OverlayPlacementType } from "./utils/types";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 import { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
-export { BoxColumnType, BoxTShirtSizeType } from "./utils/types";
+export { BoxColumnType, BoxTShirtSizeType, OverlayPlacementType } from "./utils/types";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 export { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
@@ -437,6 +437,39 @@ export namespace Components {
          */
         "variant": 'inline' | 'plain';
     }
+    interface PdsPopover {
+        /**
+          * A unique identifier used for the underlying component id attribute.
+         */
+        "componentId": string;
+        /**
+          * Determines whether or not the popover has an arrow
+          * @defaultValue false
+         */
+        "hasArrow"?: boolean;
+        /**
+          * Hides the popover by disabling the opened property
+         */
+        "hidePopover": () => Promise<void>;
+        /**
+          * Determines whether or not the popover is visible
+          * @defaultValue false
+         */
+        "opened": boolean;
+        /**
+          * Determines the preferred position of the popover
+          * @defaultValue "right"
+         */
+        "placement": OverlayPlacementType;
+        /**
+          * Shows the popover by enabling the opened property
+         */
+        "showPdsPopover": () => Promise<void>;
+        /**
+          * Toggles the popover visibility on click
+         */
+        "togglePdsPopover": () => Promise<void>;
+    }
     interface PdsProgress {
         /**
           * Determines whether or not progress is animated.
@@ -825,6 +858,10 @@ export interface PdsInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsInputElement;
 }
+export interface PdsPopoverCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsPopoverElement;
+}
 export interface PdsRadioCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsRadioElement;
@@ -961,6 +998,24 @@ declare global {
     var HTMLPdsLinkElement: {
         prototype: HTMLPdsLinkElement;
         new (): HTMLPdsLinkElement;
+    };
+    interface HTMLPdsPopoverElementEventMap {
+        "pdsPopoverHide": any;
+        "pdsPopoverShow": any;
+    }
+    interface HTMLPdsPopoverElement extends Components.PdsPopover, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsPopoverElementEventMap>(type: K, listener: (this: HTMLPdsPopoverElement, ev: PdsPopoverCustomEvent<HTMLPdsPopoverElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsPopoverElementEventMap>(type: K, listener: (this: HTMLPdsPopoverElement, ev: PdsPopoverCustomEvent<HTMLPdsPopoverElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLPdsPopoverElement: {
+        prototype: HTMLPdsPopoverElement;
+        new (): HTMLPdsPopoverElement;
     };
     interface HTMLPdsProgressElement extends Components.PdsProgress, HTMLStencilElement {
     }
@@ -1164,6 +1219,7 @@ declare global {
         "pds-image": HTMLPdsImageElement;
         "pds-input": HTMLPdsInputElement;
         "pds-link": HTMLPdsLinkElement;
+        "pds-popover": HTMLPdsPopoverElement;
         "pds-progress": HTMLPdsProgressElement;
         "pds-radio": HTMLPdsRadioElement;
         "pds-row": HTMLPdsRowElement;
@@ -1625,6 +1681,35 @@ declare namespace LocalJSX {
          */
         "variant"?: 'inline' | 'plain';
     }
+    interface PdsPopover {
+        /**
+          * A unique identifier used for the underlying component id attribute.
+         */
+        "componentId"?: string;
+        /**
+          * Determines whether or not the popover has an arrow
+          * @defaultValue false
+         */
+        "hasArrow"?: boolean;
+        /**
+          * Emitted after a popover is closed
+         */
+        "onPdsPopoverHide"?: (event: PdsPopoverCustomEvent<any>) => void;
+        /**
+          * Emitted after a popover is shown
+         */
+        "onPdsPopoverShow"?: (event: PdsPopoverCustomEvent<any>) => void;
+        /**
+          * Determines whether or not the popover is visible
+          * @defaultValue false
+         */
+        "opened"?: boolean;
+        /**
+          * Determines the preferred position of the popover
+          * @defaultValue "right"
+         */
+        "placement"?: OverlayPlacementType;
+    }
     interface PdsProgress {
         /**
           * Determines whether or not progress is animated.
@@ -2032,6 +2117,7 @@ declare namespace LocalJSX {
         "pds-image": PdsImage;
         "pds-input": PdsInput;
         "pds-link": PdsLink;
+        "pds-popover": PdsPopover;
         "pds-progress": PdsProgress;
         "pds-radio": PdsRadio;
         "pds-row": PdsRow;
@@ -2065,6 +2151,7 @@ declare module "@stencil/core" {
             "pds-image": LocalJSX.PdsImage & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
             "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
+            "pds-popover": LocalJSX.PdsPopover & JSXBase.HTMLAttributes<HTMLPdsPopoverElement>;
             "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-radio": LocalJSX.PdsRadio & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
             "pds-row": LocalJSX.PdsRow & JSXBase.HTMLAttributes<HTMLPdsRowElement>;
