@@ -8,8 +8,65 @@
     },
     "focus": {
       "default": { "value": "{border-width.thick} solid {color.blue.200}" },
+      "destructive": { "value": "{border-width.thick} solid {color.red.200}" },
       "error": { "value": "{border-width.thick} solid {color.red.200}" }
     },
     "selected": { "value": "{border-width.thick} solid {color.charcoal.400}" }
+  },
+  "color": {
+    "background": {
+      "action": {
+        "primary": {
+          "default": { "value": "{color.charcoal.400}" },
+          "disabled": { "value": "{color.grey.300}" },
+          "hover": { "value": "{color.charcoal.500}" }
+        },
+        "secondary": { "value": "{color.white}" },
+        "accent": { 
+          "default": { "value": "{color.blue.300}" },
+          "disabled": { "value": "{color.blue.100}" },
+          "hover": { "value": "{color.blue.400}" }
+        },
+        "destructive": {
+          "default": { "value": "{color.red.300}" },
+          "disabled": { "value": "{color.red.100}" },
+          "hover": { "value": "{color.red.400}" }
+        }
+      },
+      "container": { "value": "{color.white}" },
+      "form": { "value": "{color.white}" },
+      "sentiment": {
+        "neutral": { "value": "{color.charcoal.400}" },
+        "positive": { "value": "{color.green.300}" },
+        "negative": { "value": "{color.red.300}" },
+        "attentive": { "value": "{color.yellow.300}" },
+        "informative": { "value": "{color.blue.300}" }
+      }
+    },
+    "text": {
+      "action": {
+        "primary": {
+          "default": { "value": "{color.white}" },
+          "disabled": { "value": "{color.charcoal.100}" }
+        },
+        "accent": {
+          "default": { "value": "{color.white}" },
+          "disabled": { "value": "{color.blue.200}" }
+        },
+        "destructive": {
+          "default": { "value": "{color.white}" },
+          "disabled": { "value": "{color.red.200}" }
+        }
+      },
+      "body": { "value": "{color.charcoal.400}" },
+      "form": {
+        "default": { "value": "{color.charcoal.400}" },
+        "disabled": { "value": "{color.charcoal.200}" },
+        "error": { "value": "{color.red.300}" },
+        "placeholder": { "value": "{color.charcoal.200}" }
+      },
+      "heading": { "value": "{color.charcoal.500}" },
+      "icon": { "value": "{color.charcoal.400}" }
+    }
   }
 }

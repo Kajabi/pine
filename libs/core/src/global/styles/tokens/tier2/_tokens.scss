@@ -1,6 +1,6 @@
 /**
  * Do not edit directly
- * Generated on Fri, 19 Jan 2024 20:56:18 GMT
+ * Generated on Tue, 23 Jan 2024 22:57:30 GMT
  */
 
 :root {
@@ -8,6 +8,7 @@
   --pine-border-radius-6: 6px;
   --pine-border-radius-10: 10px;
   --pine-border-radius-16: 16px;
+  --pine-border-radius-round: 50%;
   --pine-border-width-none: 0;
   --pine-border-width-thin: 1px;
   --pine-border-width-thick: 2px;
@@ -57,6 +58,36 @@
   --pine-color-purple-300: #8e5ad8;
   --pine-color-purple-400: #50348a;
   --pine-color-purple-500: #381c5e;
+  --pine-color-background-action-primary-default: #202327;
+  --pine-color-background-action-primary-disabled: #eceeef;
+  --pine-color-background-action-primary-hover: #040506;
+  --pine-color-background-action-secondary: #ffffff;
+  --pine-color-background-action-accent-default: #0072ef;
+  --pine-color-background-action-accent-disabled: #e6f4fe;
+  --pine-color-background-action-accent-hover: #054fb8;
+  --pine-color-background-action-destructive-default: #cf3c32;
+  --pine-color-background-action-destructive-disabled: #fff0f0;
+  --pine-color-background-action-destructive-hover: #99221e;
+  --pine-color-background-container: #ffffff;
+  --pine-color-background-form: #ffffff;
+  --pine-color-background-sentiment-neutral: #202327;
+  --pine-color-background-sentiment-positive: #23856d;
+  --pine-color-background-sentiment-negative: #cf3c32;
+  --pine-color-background-sentiment-attentive: #ffc505;
+  --pine-color-background-sentiment-informative: #0072ef;
+  --pine-color-text-action-primary-default: #ffffff;
+  --pine-color-text-action-primary-disabled: #8d939a;
+  --pine-color-text-action-accent-default: #ffffff;
+  --pine-color-text-action-accent-disabled: #8ecafb;
+  --pine-color-text-action-destructive-default: #ffffff;
+  --pine-color-text-action-destructive-disabled: #fdb0aa;
+  --pine-color-text-body: #202327;
+  --pine-color-text-form-default: #202327;
+  --pine-color-text-form-disabled: #60666c;
+  --pine-color-text-form-error: #cf3c32;
+  --pine-color-text-form-placeholder: #60666c;
+  --pine-color-text-heading: #040506;
+  --pine-color-text-icon: #202327;
   --pine-font-family: Circular;
   --pine-font-size-h1: 40px;
   --pine-font-size-h2: 32px;
@@ -82,18 +113,20 @@
   --pine-line-height-40: 40px;
   --pine-line-height-48: 48px;
   --pine-line-height-60: 60px;
-  --pine-spacing-4: 4px;
-  --pine-spacing-8: 8px;
-  --pine-spacing-16: 16px;
-  --pine-spacing-24: 24px;
-  --pine-spacing-36: 36px;
-  --pine-spacing-48: 48px;
-  --pine-spacing-64: 64px;
+  --pine-spacing-0: 0px;
+  --pine-spacing-100: 8px;
+  --pine-spacing-200: 16px;
+  --pine-spacing-300: 24px;
+  --pine-spacing-450: 36px;
+  --pine-spacing-600: 48px;
+  --pine-spacing-800: 64px;
+  --pine-spacing-050: 4px;
   --pine-border-default: 1px solid #eceeef;
   --pine-border-interactive-default: 1px solid #d3d5d9;
   --pine-border-interactive-hover: 1px solid #b5bac0;
   --pine-border-interactive-error: 1px solid #cf3c32;
   --pine-border-focus-default: 2px solid #8ecafb;
+  --pine-border-focus-destructive: 2px solid #fdb0aa;
   --pine-border-focus-error: 2px solid #fdb0aa;
   --pine-border-selected: 2px solid #202327;
 }
