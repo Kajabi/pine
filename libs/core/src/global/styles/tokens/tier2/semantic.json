@@ -13,6 +13,10 @@
     },
     "selected": { "value": "{border-width.thick} solid {color.charcoal.400}" }
   },
+  "border-radius": {
+    "default": { "value": "{border-radius.10}" },
+    "circle": { "value": "{border-radius.round}" }
+  },
   "color": {
     "background": {
       "action": {
@@ -66,7 +70,11 @@
         "placeholder": { "value": "{color.charcoal.200}" }
       },
       "heading": { "value": "{color.charcoal.500}" },
-      "icon": { "value": "{color.charcoal.400}" }
+      "icon": { "value": "{color.charcoal.400}" },
+      "link": {
+        "default": { "value": "{color.blue.300}" },
+        "hover": { "value": "{color.blue.400}" }
+      }
     }
   }
 }
