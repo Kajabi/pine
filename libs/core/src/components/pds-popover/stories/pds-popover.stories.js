@@ -49,8 +49,8 @@ Default.args = {
   placement: "bottom-start",
 };
 
-export const AvatarPopover = AvatarDropdownTemplate.bind({});
-AvatarPopover.args = {
+export const AvatarTrigger = AvatarDropdownTemplate.bind({});
+AvatarTrigger.args = {
   hasArrow: true,
   placement: "right-start",
 };

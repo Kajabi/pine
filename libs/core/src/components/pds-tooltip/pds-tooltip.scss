@@ -21,12 +21,14 @@
 
   ::slotted([slot="content"]) {
     white-space: normal;
-    width: var(--width);
   }
 
   ::part(content) {
     background-color: var(--tooltip-background-color);
+    box-sizing: border-box;
     color: var(--tooltip-color);
+    max-width: max-content;
+    min-width: min-content;
   }
 
   ::part(arrow) {
