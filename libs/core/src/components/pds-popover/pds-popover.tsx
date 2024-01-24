@@ -68,7 +68,7 @@ export class PdsPopover {
 
   componentDidUpdate() {
     if (this.opened) {
-      this.showPopover();
+      this.showPdsPopover();
     }
   }
 
@@ -102,17 +102,17 @@ export class PdsPopover {
    * Hides the popover by disabling the opened property
    */
   @Method()
-  async hidePopover() {
+  async hidePdsPopover() {
     this.opened = false;
   }
 
   private handleHide = () => {
-    this.hidePopover();
+    this.hidePdsPopover();
     this.pdsPopoverHide.emit();
   };
 
   private handleShow = () => {
-    this.showPopover();
+    this.showPdsPopover();
     this.pdsPopoverShow.emit();
   };
 
@@ -147,7 +147,7 @@ export class PdsPopover {
           <span
             aria-describedby={this.componentId}
             class="pds-popover__trigger"
-            onClick={() => this.togglePopover()}
+            onClick={() => this.togglePdsPopover()}
           >
             <slot />
           </span>

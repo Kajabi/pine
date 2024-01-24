@@ -25,7 +25,7 @@
 
 ## Methods
 
-### `hidePopover() => Promise<void>`
+### `hidePdsPopover() => Promise<void>`
 
 Hides the popover by disabling the opened property
 
