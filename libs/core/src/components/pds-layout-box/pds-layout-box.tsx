@@ -34,12 +34,6 @@ export class PdsLayoutBox {
    * Defines how rounded the box corners are.
    */
   @Prop() borderRadius?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
-
-  // FINISH LOGICAL PROPS during cleanup
-  // @Prop() borderRadiusStartStart?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
-  // @Prop() borderRadiusStartEnd?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
-  // @Prop() borderRadiusEndStart?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
-  // @Prop() borderRadiusEndEnd?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
   
   /**
    * Defines the orientation of the box items.
@@ -115,12 +109,6 @@ export class PdsLayoutBox {
    * Defines the spacing between the box items.
   */
   @Prop() padding?: `none` | `xs`| `sm` | `md` | `lg`;
-
-  // FINISH ON CLEANUP
-  // @Prop() paddingTop?: `none` | `xs`| `sm` | `md` | `lg`;
-  // @Prop() paddingRight?: `none` | `xs`| `sm` | `md` | `lg`;
-  // @Prop() paddingBottom?: `none` | `xs`| `sm` | `md` | `lg`;
-  // @Prop() paddingLeft?: `none` | `xs`| `sm` | `md` | `lg`;
 
   /**
    * Defines the box shadow.
