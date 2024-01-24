@@ -47,16 +47,16 @@ describe('pds-popover', () => {
     // Initially, the opened property should be false
     expect(popover.opened).toBe(false);
 
-    // Call the togglePopover method
-    await popover.togglePopover();
+    // Call the togglePdsPopover method
+    await popover.togglePdsPopover();
 
-    // After calling togglePopover, the opened property should be true
+    // After calling togglePdsPopover, the opened property should be true
     expect(popover.opened).toBe(true);
 
-    // Call the togglePopover method again
-    await popover.togglePopover();
+    // Call the togglePdsPopover method again
+    await popover.togglePdsPopover();
 
-    // After calling togglePopover again, the opened property should be false
+    // After calling togglePdsPopover again, the opened property should be false
     expect(popover.opened).toBe(false);
   });
 

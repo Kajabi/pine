@@ -325,7 +325,7 @@ export namespace Components {
         /**
           * Hides the popover by disabling the opened property
          */
-        "hidePopover": () => Promise<void>;
+        "hidePdsPopover": () => Promise<void>;
         /**
           * Determines whether or not the popover is visible
           * @defaultValue false
