@@ -43,6 +43,7 @@ describe('pds-popover E2E', () => {
 
     // open popover
     await triggerButton?.click();
+    
     // close popover
     await triggerButton?.click();
     expect(eventSpy).toHaveReceivedEvent();

@@ -214,6 +214,7 @@ export class PdsPopover {
 
   private handleShow = () => {
     this.showPdsPopover();
+    this.computePopoverPosition();
     this.pdsPopoverShow.emit();
   };
 
@@ -240,13 +241,6 @@ export class PdsPopover {
   };
 
   render() {
-    const popverClasses = `
-      pds-popover--${this.placement}
-      ${this.opened ? 'pds-popover--is-open' : ''}
-      ${this.hasArrow ? '' : 'pds-popover--no-arrow'}
-  `};
-
-  render() {
     return (
       <Host exportparts="arrow, content">
         <div
@@ -257,6 +251,7 @@ export class PdsPopover {
             aria-describedby={this.componentId}
             class="pds-popover__trigger"
             onClick={() => this.togglePdsPopover()}
+            ref={(el) => (this.triggerEl = el)}
           >
             <slot />
           </span>

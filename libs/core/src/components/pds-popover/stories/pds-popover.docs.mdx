@@ -56,25 +56,6 @@ There can only be one trigger for the Popover.
   </pds-popover>
 </Canvas>
 
-#### Avatar trigger
-<Canvas mdxSource={`
-<pds-popover placement="bottom-start" html-content="true">
-  <div slot="content">
-    <p><strong>This is a popover</strong></p>
-  </div>
-  <pds-avatar dropdown="true"></pds-avatar>
-</pds-popover>
-`}>
-  <div style={{ height: '125px' }}>
-    <pds-popover has-arrow="true" placement="bottom-start" html-content="true">
-      <div slot="content">
-        <p><strong>This is a popover</strong></p>
-      </div>
-      <pds-avatar dropdown="true"></pds-avatar>
-    </pds-popover>
-  </div>
-</Canvas>
-
 ### Content
 The popover content is placed in a container with the slot, `content`. This is where you can place any HTML content you want to display in the popover.
 
@@ -172,8 +153,8 @@ If the parent popover is fixed, the subsequent children must also be fixed. Be a
 </Canvas>
 
 ### Placement
-The placement property enables precise control over the positioning of your Popover. By utilizing this
-property, you can dictate the specific location of the popover relative to the trigger element. This
+The placement property enables precise control over the positioning of your Popover. By utilizing this 
+property, you can dictate the specific location of the popover relative to the trigger element. This 
 customization ensures optimal visibility and alignment per your page's layout and design requirements.
 To see more example, navigate to the [playground](#playground).
 

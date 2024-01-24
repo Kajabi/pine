@@ -1,5 +1,5 @@
 import { newSpecPage } from '@stencil/core/testing';
-import { PdsPopover } from '../../pds-popover2/pds-popover';
+import { PdsPopover } from '../pds-popover';
 
 describe('pds-popover', () => {
   it('should show arrow when has-arrow is true', async () => {
@@ -16,134 +16,72 @@ describe('pds-popover', () => {
     expect(element?.querySelector('.pds-popover--no-arrow')).toBeNull();
   });
 
-  it('should show arrow when has-arrow is true', async () => {
-    const page = await newSpecPage({
+  it('should toggle popover visibility', async () => {
+    const page = await newSpecPage({ 
       components: [PdsPopover],
       html: `
-      <pds-popover has-arrow="true">
-        <pds-button variant="secondary">Secondary</pds-button>
-       </pds-popover>`
+      <pds-popover placement="bottom-start" hoisted="true" html-content="true">
+        <div slot="content">
+          <p><strong>This is a popover</strong></p>
+        </div>
+        <pds-button variant="secondary">Click</pds-button>
+      </pds-popover>`
     });
+    const element = page.root;
 
-    const element = page.root?.shadowRoot;
+    expect(element?.opened).toBe(false);
 
-    expect(element?.querySelector('.pds-popover--no-arrow')).toBeNull();
+    await element?.togglePdsPopover();
+    await element?.togglePdsPopover();
+
+    expect(element?.opened).toBe(false);
+
+    await element?.togglePdsPopover();
+
+    expect(element?.opened).toBe(true);
   });
 
-  it('should be able to call method to show popover', async () => {
-    const page = await newSpecPage({
+  it('should show popover', async () => {
+    const page = await newSpecPage({ 
       components: [PdsPopover],
       html: `
-      <pds-popover placement="right">
-        <pds-button variant="secondary">Secondary</pds-button>
-       </pds-popover>`
+      <pds-popover placement="bottom-start" hoisted="true" html-content="true">
+        <div slot="content">
+          <p><strong>This is a popover</strong></p>
+        </div>
+        <pds-button variant="secondary">Click</pds-button>
+      </pds-popover>`
     });
 
-  //   const popover = page.rootInstance as PdsPopover;
+    const element = page.root;
 
-  //   // Call the showPopover method
-  //   await popover.showPopover();
-  //   await page.waitForChanges();
+    expect(element?.opened).toBe(false);
 
-  //   // Check for expected class
-  //   const popoverElement = page.root?.shadowRoot?.querySelector('.pds-popover');
-  //   expect(popoverElement).toHaveClass('pds-popover--is-open');
-  // });
-  
-  // it('should toggle the popover', async () => {
-  //   const page = await newSpecPage({
-  //     components: [PdsPopover],
-  //     html: `<pds-popover></pds-popover>`
-  //   });
+    await element?.showPdsPopover();
 
-  it('should toggle the popover', async () => {
-    const page = await newSpecPage({
-      components: [PdsPopover],
-      html: `<pds-popover></pds-popover>`
-    });
-
-    const popover = page.rootInstance as PdsPopover;
-
-  //   // Initially, the opened property should be false
-  //   expect(popover.opened).toBe(false);
-
-    // Call the togglePdsPopover method
-    await popover.togglePdsPopover();
-
-    // After calling togglePdsPopover, the opened property should be true
-    expect(popover.opened).toBe(true);
-
-    // Call the togglePdsPopover method again
-    await popover.togglePdsPopover();
-
-    // After calling togglePdsPopover again, the opened property should be false
-    expect(popover.opened).toBe(false);
+    expect(element?.opened).toBe(true);
   });
 
-  // it('should close the popover on global click when opened', async () => {
-  //   const page = await newSpecPage({
-  //     components: [PdsPopover],
-  //     html: `<pds-popover></pds-popover>`
-  //   });
+  it('should hide popover', async () => {
+    const page = await newSpecPage({ 
+      components: [PdsPopover],
+      html: `
+      <pds-popover placement="bottom-start" hoisted="true" html-content="true">
+        <div slot="content">
+          <p><strong>This is a popover</strong></p>
+        </div>
+        <pds-button variant="secondary">Click</pds-button>
+      </pds-popover>`
+    });
 
-  //   const popover = page.rootInstance as PdsPopover;
+    const element = page.root;
 
-  //   popover.opened = true;
+    element.opened = true;
 
-  //   const mockClickEvent = new MouseEvent('click', {
-  //     bubbles: true,
-  //   });
+    expect(element?.opened).toBe(true);
 
-  //   document.dispatchEvent(mockClickEvent);
+    await element?.hidePdsPopover();
 
-  //   expect(popover.opened).toBe(false);
-  // });
-
-  // it('should not close the popover on global click when not opened', async () => {
-  //   // Create a new instance of the component
-  //   const page = await newSpecPage({
-  //     components: [PdsPopover],
-  //     html: `<pds-popover></pds-popover>`
-  //   });
-
-  //   const popover = page.rootInstance as PdsPopover;
-
-  //   expect(popover.opened).toBe(false);
-
-  //   const mockClickEvent = new MouseEvent('click', {
-  //     bubbles: true,
-  //   });
-
-  //   document.dispatchEvent(mockClickEvent);
-
-  //   expect(popover.opened).toBe(false);
-  // });
-
-  // it('should toggle the popover on trigger click', async () => {
-  //   const page = await newSpecPage({
-  //     components: [PdsPopover],
-  //     html: `<pds-popover></pds-popover>`
-  //   });
-
-  //   const popover = page.rootInstance as PdsPopover;
-
-  //   expect(popover.opened).toBe(false);
-
-  //   const triggerElement = page.root?.shadowRoot?.querySelector('.pds-popover__trigger');
-
-  //   const mockClickEvent = new MouseEvent('click', {
-  //     bubbles: true,
-  //   });
-
-  //   triggerElement?.dispatchEvent(mockClickEvent);
-
-  //   // After clicking the trigger element, the opened property should be true
-  //   expect(popover.opened).toBe(true);
-
-  //   // Click the trigger element again
-  //   triggerElement?.dispatchEvent(mockClickEvent);
-
-  //   // After clicking again, the opened property should be false
-  //   expect(popover.opened).toBe(false);
-  // });
+    expect(element?.opened).toBe(false);
+  });
 });

@@ -130,7 +130,7 @@ export class PdsTooltip {
     this.opened = true;
     console.log('showing tooltip');
     this.popover.triggerEl = this.referenceElement;
-    this.popover.showPopover(); 
+    this.popover.showPdsPopover(); 
   }
 
   /**
@@ -139,7 +139,7 @@ export class PdsTooltip {
   @Method()
   async hideTooltip() {
     this.opened = false;
-    this.popover.hidePopover();
+    this.popover.hidePdsPopover();
   }
 
   private handleHide = () => {
