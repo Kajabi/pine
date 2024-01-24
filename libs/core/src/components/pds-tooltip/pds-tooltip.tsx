@@ -129,6 +129,7 @@ export class PdsTooltip {
   async showTooltip() {
     this.opened = true;
     console.log('showing tooltip');
+    console.log('mymypopover', this.popover);
     this.popover.triggerEl = this.referenceElement;
     this.popover.showPdsPopover(); 
   }

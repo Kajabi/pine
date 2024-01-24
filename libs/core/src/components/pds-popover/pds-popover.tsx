@@ -25,6 +25,19 @@ import {
   shadow: true,
 })
 export class PdsPopover {
+  /**
+   * Represents the overlay arrow in the popover
+   */
+  private arrowEl: HTMLElement | null;
+  /**
+   * Represents the popover slot content element
+   */
+  private contentEl: HTMLElement | null;
+
+  /**
+   * Represents the popover trigger element
+   */
+  private triggerEl: HTMLElement | null
   private cleanupAutoUpdate: (() => void) | null = null;
 
   /**
@@ -39,24 +52,9 @@ export class PdsPopover {
   @State() isOpen = false;
 
   /**
-   * Represents the overlay arrow in the popover
-   */
-  @Prop({ mutable: true }) arrow: HTMLElement | null;
-
-  /**
    * A unique identifier used for the underlying component id attribute.
    */
   @Prop() componentId: string;
-
-  /**
-   * Represents the popover slot content element
-   */
-  @Prop({ mutable: true }) contentEl: HTMLElement | null;
-
-  /**
-   * Represents the popover trigger element
-   */
-  @Prop({ mutable: true }) triggerEl: HTMLElement | null;
 
   /**
    * Determines whether or not the popover has an arrow
