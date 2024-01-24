@@ -293,6 +293,9 @@ export namespace Components {
           * Defines the vertical alignment of the box items.
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * If `true`, the box will be sized to fit its contents.
+         */
         "auto"?: boolean;
         /**
           * Defines the background-color of the box.
@@ -1467,6 +1470,9 @@ declare namespace LocalJSX {
           * Defines the vertical alignment of the box items.
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * If `true`, the box will be sized to fit its contents.
+         */
         "auto"?: boolean;
         /**
           * Defines the background-color of the box.

@@ -10,6 +10,7 @@ export default {
 const BaseTemplate = (args) => html`
 <pds-layout-box
 	align-items="${args.alignItems}"
+  background-color="${args.backgroundColor}"
 	bordered="${args.bordered}"
   border-color="${args.borderColor}"
 	border-radius="${args.borderRadius}"
@@ -20,7 +21,6 @@ const BaseTemplate = (args) => html`
   min-width="${args.minWidth}"
   padding="${args.padding}"
   shadow="${args.shadow}"
-	variant="${args.variant}"
 >
   Box content
 </pds-layout-box>`;

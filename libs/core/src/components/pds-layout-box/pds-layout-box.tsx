@@ -11,7 +11,7 @@ export class PdsLayoutBox {
   @Prop() alignItems?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
-   * 
+   * If `true`, the box will be sized to fit its contents.
    */
   @Prop() auto?: boolean;
 

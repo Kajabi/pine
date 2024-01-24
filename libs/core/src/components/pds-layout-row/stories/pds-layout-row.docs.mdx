@@ -47,25 +47,35 @@ need demo
 ### Gaps / Gutters
 When a gap or gutter is needed between the columns, an additional child `pds-layout-box` must be used to ensure correct spacing between the columns and rows
 <Canvas mdxSource={`
-<pds-layout-row>
-  <pds-layout-box size="2">Item 1</pds-layout-box>
-  <pds-layout-box size="8">Item 2</pds-layout-box>
-  <pds-layout-box size="2">Item 3</pds-layout-box>
+<pds-layout-row col-gap="16px">
+  <pds-layout-box size="4">
+    <pds-layout-box 
+      border-radius="sm"
+      padding="sm"
+      shadow="sm"
+    >
+      Item 1
+    </pds-layout-box>
+  </pds-layout-box>
+  <pds-layout-box size="8">
+    <pds-layout-box padding="sm" shadow="sm">
+      Item 2
+    </pds-layout-box>
+  </pds-layout-box>
 </pds-layout-row>
 `}>
-  <pds-layout-row gap="16px">
+  <pds-layout-row col-gap="16px">
     <pds-layout-box size="4">
-      <pds-layout-box shadow="sm">
+      <pds-layout-box 
+        border-radius="sm"
+        padding="sm"
+        shadow="sm"
+      >
         Item 1
       </pds-layout-box>
     </pds-layout-box>
     <pds-layout-box size="8">
-      <pds-layout-box shadow="sm">
-        Item 2
-      </pds-layout-box>
-    </pds-layout-box>
-    <pds-layout-box size="8">
-      <pds-layout-box shadow="sm">
+      <pds-layout-box padding="sm" shadow="sm">
         Item 2
       </pds-layout-box>
     </pds-layout-box>
