@@ -6,10 +6,10 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
-import { LayoutColumnType } from "./utils/types";
+import { BoxColumnType, BoxTShirtSizeType } from "./utils/types";
 import { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
-export { LayoutColumnType } from "./utils/types";
+export { BoxColumnType, BoxTShirtSizeType } from "./utils/types";
 export { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
     interface PdsAvatar {
@@ -340,7 +340,7 @@ export namespace Components {
           * Defines the spacing between the box items.
           * @defaultValue none
          */
-        "gap"?: `none` | `xs`| `sm` | `md` | `lg`;
+        "gap"?: BoxTShirtSizeType;
         /**
           * Defines the horizontal alignment of the box items.
           * @defaultValue start
@@ -357,61 +357,61 @@ export namespace Components {
         /**
           * Move columns to the end direction of the row for all screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offset"?: LayoutColumnType;
+        "offset"?: BoxColumnType;
         /**
           * Move columns to the end direction of the row for `LG` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetLg"?: LayoutColumnType;
+        "offsetLg"?: BoxColumnType;
         /**
           * Move columns to the end direction of the row for `MD` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetMd"?: LayoutColumnType;
+        "offsetMd"?: BoxColumnType;
         /**
           * Move columns to the end direction of the row for `SM` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetSm"?: LayoutColumnType;
+        "offsetSm"?: BoxColumnType;
         /**
           * Move columns to the end direction of the row for `XL` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetXl"?: LayoutColumnType;
+        "offsetXl"?: BoxColumnType;
         /**
           * Move columns to the end direction of the row for `XS` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetXs"?: LayoutColumnType;
+        "offsetXs"?: BoxColumnType;
         /**
           * Defines the spacing between the box items.
           * @defaultValue none
          */
-        "padding"?: `none` | `xs`| `sm` | `md` | `lg`;
+        "padding"?: BoxTShirtSizeType;
         /**
           * Defines the box shadow.
           * @defaultValue none
          */
-        "shadow"?: `none` | `xs`| `sm` | `md` | `lg`;
+        "shadow"?: BoxTShirtSizeType;
         /**
           * Size of the column for all screen sizes that are not explicitly set.
          */
-        "size"?: LayoutColumnType;
+        "size"?: BoxColumnType;
         /**
           * At screen sizes greater than the `LG` breakpoint, this will take the number of columns specified.
          */
-        "sizeLg"?: LayoutColumnType;
+        "sizeLg"?: BoxColumnType;
         /**
           * At screen sizes greater than the `MD` breakpoint, this will take the number of columns specified.
          */
-        "sizeMd"?: LayoutColumnType;
+        "sizeMd"?: BoxColumnType;
         /**
           * At screen sizes greater than the `SM` breakpoint, this will take the number of columns specified.
          */
-        "sizeSm"?: LayoutColumnType;
+        "sizeSm"?: BoxColumnType;
         /**
           * At screen sizes greater than the `XL` breakpoint, this will take the number of columns specified.
          */
-        "sizeXl"?: LayoutColumnType;
+        "sizeXl"?: BoxColumnType;
         /**
           * At screen sizes less than the `XS` breakpoint, this will take the number of columns specified.
          */
-        "sizeXs"?: LayoutColumnType;
+        "sizeXs"?: BoxColumnType;
     }
     interface PdsLayoutRow {
         /**
@@ -1528,7 +1528,7 @@ declare namespace LocalJSX {
           * Defines the spacing between the box items.
           * @defaultValue none
          */
-        "gap"?: `none` | `xs`| `sm` | `md` | `lg`;
+        "gap"?: BoxTShirtSizeType;
         /**
           * Defines the horizontal alignment of the box items.
           * @defaultValue start
@@ -1545,61 +1545,61 @@ declare namespace LocalJSX {
         /**
           * Move columns to the end direction of the row for all screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offset"?: LayoutColumnType;
+        "offset"?: BoxColumnType;
         /**
           * Move columns to the end direction of the row for `LG` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetLg"?: LayoutColumnType;
+        "offsetLg"?: BoxColumnType;
         /**
           * Move columns to the end direction of the row for `MD` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetMd"?: LayoutColumnType;
+        "offsetMd"?: BoxColumnType;
         /**
           * Move columns to the end direction of the row for `SM` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetSm"?: LayoutColumnType;
+        "offsetSm"?: BoxColumnType;
         /**
           * Move columns to the end direction of the row for `XL` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetXl"?: LayoutColumnType;
+        "offsetXl"?: BoxColumnType;
         /**
           * Move columns to the end direction of the row for `XS` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetXs"?: LayoutColumnType;
+        "offsetXs"?: BoxColumnType;
         /**
           * Defines the spacing between the box items.
           * @defaultValue none
          */
-        "padding"?: `none` | `xs`| `sm` | `md` | `lg`;
+        "padding"?: BoxTShirtSizeType;
         /**
           * Defines the box shadow.
           * @defaultValue none
          */
-        "shadow"?: `none` | `xs`| `sm` | `md` | `lg`;
+        "shadow"?: BoxTShirtSizeType;
         /**
           * Size of the column for all screen sizes that are not explicitly set.
          */
-        "size"?: LayoutColumnType;
+        "size"?: BoxColumnType;
         /**
           * At screen sizes greater than the `LG` breakpoint, this will take the number of columns specified.
          */
-        "sizeLg"?: LayoutColumnType;
+        "sizeLg"?: BoxColumnType;
         /**
           * At screen sizes greater than the `MD` breakpoint, this will take the number of columns specified.
          */
-        "sizeMd"?: LayoutColumnType;
+        "sizeMd"?: BoxColumnType;
         /**
           * At screen sizes greater than the `SM` breakpoint, this will take the number of columns specified.
          */
-        "sizeSm"?: LayoutColumnType;
+        "sizeSm"?: BoxColumnType;
         /**
           * At screen sizes greater than the `XL` breakpoint, this will take the number of columns specified.
          */
-        "sizeXl"?: LayoutColumnType;
+        "sizeXl"?: BoxColumnType;
         /**
           * At screen sizes less than the `XS` breakpoint, this will take the number of columns specified.
          */
-        "sizeXs"?: LayoutColumnType;
+        "sizeXs"?: BoxColumnType;
     }
     interface PdsLayoutRow {
         /**

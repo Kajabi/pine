@@ -12,7 +12,7 @@ export type TooltipPlacementType =
   | 'bottom'
   | 'bottom-end';
 
-export type LayoutColumnType =
+export type BoxColumnType =
   '0' 
   | '1' 
   | '2' 
@@ -26,3 +26,10 @@ export type LayoutColumnType =
   | '10'
   | '11'
   | '12';
+
+  export type BoxTShirtSizeType =
+  'none'
+  | 'xs'
+  | 'sm'
+  | 'md'
+  | 'lg'

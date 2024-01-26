@@ -1,6 +1,6 @@
 import { Component, h, Host, Prop } from '@stencil/core';
 
-import { LayoutColumnType } from '../../utils/types';
+import { BoxColumnType, BoxTShirtSizeType } from '../../utils/types';
 
 @Component({
   tag: 'pds-layout-box',
@@ -60,7 +60,7 @@ export class PdsLayoutBox {
    * Defines the spacing between the box items.
    * @defaultValue none
   */
-  @Prop() gap?: `none` | `xs`| `sm` | `md` | `lg`;
+  @Prop() gap?: BoxTShirtSizeType;
 
   /**
    * Defines how a box will grow or shrink to fit the space available in its container.
@@ -87,74 +87,74 @@ export class PdsLayoutBox {
   /**
    * Move columns to the end direction of the row for all screen sizes. Increases the starting margin of a column by specified number of columns.
    */
-  @Prop() offset?: LayoutColumnType;
+  @Prop() offset?: BoxColumnType;
 
   /**
    * Move columns to the end direction of the row for `XS` screen sizes. Increases the starting margin of a column by specified number of columns.
   */
-  @Prop() offsetXs?: LayoutColumnType;
+  @Prop() offsetXs?: BoxColumnType;
 
   /**
    * Move columns to the end direction of the row for `SM` screen sizes. Increases the starting margin of a column by specified number of columns.
   */
-  @Prop() offsetSm?: LayoutColumnType;
+  @Prop() offsetSm?: BoxColumnType;
 
   /**
    * Move columns to the end direction of the row for `MD` screen sizes. Increases the starting margin of a column by specified number of columns.
   */
-  @Prop() offsetMd?: LayoutColumnType;
+  @Prop() offsetMd?: BoxColumnType;
 
   /**
    * Move columns to the end direction of the row for `LG` screen sizes. Increases the starting margin of a column by specified number of columns.
   */
-  @Prop() offsetLg?: LayoutColumnType;
+  @Prop() offsetLg?: BoxColumnType;
 
   /**
    * Move columns to the end direction of the row for `XL` screen sizes. Increases the starting margin of a column by specified number of columns.
   */
-  @Prop() offsetXl?: LayoutColumnType;
+  @Prop() offsetXl?: BoxColumnType;
 
   /**
    * Defines the spacing between the box items.
    * @defaultValue none
   */
-  @Prop() padding?: `none` | `xs`| `sm` | `md` | `lg`;
+  @Prop() padding?: BoxTShirtSizeType;
 
   /**
    * Defines the box shadow.
    * @defaultValue none
   */
-  @Prop() shadow?: `none` | `xs`| `sm` | `md` | `lg`;
+  @Prop() shadow?: BoxTShirtSizeType;
 
   /**
    * Size of the column for all screen sizes that are not explicitly set.
    */
-  @Prop() size?: LayoutColumnType;
+  @Prop() size?: BoxColumnType;
 
   /**
    * At screen sizes less than the `XS` breakpoint, this will take the number of columns specified.
    */
-  @Prop() sizeXs?: LayoutColumnType;
+  @Prop() sizeXs?: BoxColumnType;
 
   /**
    * At screen sizes greater than the `SM` breakpoint, this will take the number of columns specified.
    */
-  @Prop() sizeSm?: LayoutColumnType;
+  @Prop() sizeSm?: BoxColumnType;
 
   /**
    * At screen sizes greater than the `MD` breakpoint, this will take the number of columns specified.
    */
-  @Prop() sizeMd?: LayoutColumnType;
+  @Prop() sizeMd?: BoxColumnType;
 
   /**
    * At screen sizes greater than the `LG` breakpoint, this will take the number of columns specified.
    */
-  @Prop() sizeLg?: LayoutColumnType;
+  @Prop() sizeLg?: BoxColumnType;
 
   /**
    * At screen sizes greater than the `XL` breakpoint, this will take the number of columns specified.
    */
-  @Prop() sizeXl?: LayoutColumnType;
+  @Prop() sizeXl?: BoxColumnType;
 
   render() {
     const boxClasses = `
