@@ -1,0 +1,121 @@
+import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+# Textarea
+
+A textarea field coupled with a label, helper message, and error message which allows for user input and feedback
+
+## Guidelines
+### Usage
+
+#### When to use
+- You want a response longer than one line
+
+#### When not to use
+- To gather basic information, use an [Input](/docs/components-input--text)
+- You want a response that is one line of text, use an [Input](/docs/components-input--text)
+
+### Accessibility
+- The textarea component comes with a built-in label through the `label` property, it is strongly encouraged that you include it
+- Please provide clear and descriptive error, helper-message, and placeholder messages
+
+## Properties
+<DocArgsTable componentName="pds-textarea" docSource={components} />
+
+## Default
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsTextarea name="Default" label="Name" componentId="textarea-default"></PdsTextarea>',
+    webComponent: '<pds-textarea name="Default" label="Name" component-id="textarea-default"></pds-textarea>'
+}}>
+  <pds-textarea name="Default" label="Name" component-id="textarea-default"></pds-textarea>
+</DocCanvas>
+
+### Disabled
+Disabled states can be set by the `disabled` property
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsTextarea name="Disabled" label="Name" disabled="true" componentId="textarea-disabled"></PdsTextarea>',
+    webComponent: '<pds-textarea name="Disabled" label="Name" disabled="true" component-id="textarea-disabled"></pds-textarea>'
+}}>
+  <pds-textarea name="Disabled" label="Name" disabled="true" component-id="textarea-disabled"></pds-textarea>
+</DocCanvas>
+
+### Error Message
+
+Error messages are passed using the `error-message` property, textareas will only calculate their validity when on their `required` property is set to true
+
+You can also manually pass in an invalid state by setting the `invalid` property to true but this property will be update whenever the `onChange` event is triggered.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsTextarea name="Invalid" label="Name" errorMessage="Error" invalid="true" required="true" componentId="textarea-invalid"></PdsTextarea>',
+    webComponent: '<pds-textarea name="Invalid" label="Name" error-message="Error" invalid="true" required="true" component-id="textarea-invalid"></pds-textarea>'
+}}>
+  <pds-textarea name="Invalid" label="Name" error-message="Error" invalid="true" required="true" component-id="textarea-invalid"></pds-textarea>
+</DocCanvas>
+
+### Helper Message
+
+Helper messages are used to provide context about what is expected from the users
+
+Do not use helper messages to provide examples to users, please use the `placeholder` property instead
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsTextarea name="Message" label="Name" helperMessage="Helper message text" componentId="pds-textarea-helper-example"></PdsTextarea>',
+    webComponent: '<pds-textarea name="Message" label="Name" helper-message="Helper message text" component-id="pds-textarea-helper-example"></pds-textarea>'
+}}>
+  <pds-textarea name="Message" label="Name" helper-message="Helper message text" component-id="pds-textarea-helper-example"></pds-textarea>
+</DocCanvas>
+
+### Placeholder
+
+Placeholders should be examples of content that can be filled into the textarea
+
+Do not use placeholders to provide hints to users, please use the `helper-message` property instead
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsTextarea name="Placeholder" label="Name" placeholder="Placeholder..." componentId="textarea-placeholder"></PdsTextarea>',
+    webComponent: '<pds-textarea name="Placeholder" label="Name" placeholder="Placeholder..." component-id="textarea-placeholder"></pds-textarea>'
+}}>
+  <pds-textarea name="Placeholder" label="Name" placeholder="Placeholder..." component-id="textarea-placeholder"></pds-textarea>
+</DocCanvas>
+
+### Readonly
+
+Readonly states can be used to display static content while preventing the user from editing
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsTextarea name="Readonly" label="Name" readonly="true" value="Readonly Value" componentId="textarea-readonly"></PdsTextarea>',
+    webComponent: '<pds-textarea name="Readonly" label="Name" readonly="true" value="Readonly Value" component-id="textarea-readonly"></pds-textarea>'
+}}>
+  <pds-textarea name="Readonly" label="Name" readonly="true" value="Readonly Value" component-id="textarea-readonly"></pds-textarea>
+</DocCanvas>
+
+### Required
+It's recommended you also pass `error-message` on any required fields
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsTextarea name="Required" label="Name" required="true" componentId="textarea-required"></PdsTextarea>',
+    webComponent: '<pds-textarea name="Required" label="Name" required="true" component-id="textarea-required"></pds-textarea>'
+}}>
+  <pds-textarea name="Required" label="Name" required="true" component-id="textarea-required"></pds-textarea>
+</DocCanvas>
+
+### Rows
+
+The rows property is used to pass a number of expected rows visible within the textarea
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsTextarea name="Rows" label="Name" rows="4" componentId="textarea-rows"></PdsTextarea>',
+    webComponent: '<pds-textarea name="Rows" label="Name" rows="4" component-id="textarea-rows"></pds-textarea>'
+}}>
+  <pds-textarea name="Rows" label="Name" rows="4" component-id="textarea-rows"></pds-textarea>
+</DocCanvas>

@@ -1,0 +1,58 @@
+import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+# Copy Text
+
+A component to use in places where "copy" text is provided to be copied elsewhere.
+
+## Properties
+
+<DocArgsTable componentName="pds-copytext" docSource={components} />
+
+### Default
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsCopytext value="Copy this text"></PdsCopytext>',
+    webComponent: '<pds-copytext value="Copy this text"></pds-copytext>'
+}}>
+  <pds-copytext value="Copy this text"></pds-copytext>
+</DocCanvas>
+
+### Borderless
+
+When `border` is set to `false`, the component will not have a border.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsCopytext value="Copy that text" border="false"></PdsCopytext>',
+    webComponent: '<pds-copytext value="Copy that text" border="false"></pds-copytext>'
+}}>
+  <pds-copytext value="Copy that text" border="false"></pds-copytext>
+</DocCanvas>
+
+### Full width
+
+When `full-width` is set to `true`, the component will take up the full width of its container.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsCopytext value="Copy all of this text" fullWidth></PdsCopytext>',
+    webComponent: '<pds-copytext value="Copy all of this text" full-width></pds-copytext>'
+}}>
+  <pds-copytext value="Copy all of this text" full-width></pds-copytext>
+</DocCanvas>
+
+### Truncate
+
+When `truncate` is set to `true`, the value text will be truncated and an ellipsis added.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsCopytext value="Copy all of this really long text that should be truncated in the UI, but will still be copied to the clipboard." truncate="true"></PdsCopytext>',
+    webComponent: '<pds-copytext value="Copy all of this really long text that should be truncated in the UI, but will still be copied to the clipboard." truncate="true"></pds-copytext>'
+}}>
+  <div style={{ width: '350px' }}>
+    <pds-copytext value="Copy all of this really long text that should be truncated in the UI, but will still be copied to the clipboard." truncate="true"></pds-copytext>
+  </div>
+</DocCanvas>

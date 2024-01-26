@@ -1,0 +1,134 @@
+:root {
+  --doc-canvas-background: #f9fafa;
+  --doc-canvas-border: 1px solid #eceeef;
+  --doc-canvas-grey: #ececec;
+  --doc-canvas-green: #628b83;
+  --doc-canvas-radius-sm: 4px;
+  --doc-canvas-radius: 8px;
+  --doc-canvas-spacing: 10px;
+  --doc-canvas-spacing-sm: 8px;
+  --doc-canvas-color-light: #fff;
+  --doc-canvas-color: #333;
+}
+
+.doc-canvas {
+  background-color: var(--doc-canvas-background);
+  border-radius: var(--doc-canvas-radius);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12), 0 0 2px 0 rgba(0, 0, 0, 0.08);
+  color: var(--doc-canvas-color);
+  display: flex;
+  flex-direction: column;
+  padding: var(--doc-canvas-spacing);
+}
+
+.doc-canvas-preview,
+.doc-canvas-actions,
+.doc-canvas-code {
+  border: var(--doc-canvas-border);
+}
+
+.doc-canvas-preview {
+  background-color: var(--doc-canvas-color-light);
+  border-start-end-radius: var(--doc-canvas-radius);
+  border-start-start-radius: var(--doc-canvas-radius);
+  padding: var(--doc-canvas-spacing);
+}
+
+.doc-canvas-actions {
+  color: var(--doc-canvas-color);
+  display: flex;
+  gap: var(--doc-canvas-spacing);
+  padding: var(--doc-canvas-spacing);
+}
+
+.doc-canvas-action {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-family: "Nunito Sans",-apple-system,".SFNSText-Regular","San Francisco",BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 11px;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 300;
+  min-width: 80px;
+  outline: inherit;
+  padding: var(--doc-canvas-spacing-sm);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.doc-canvas-action:first-child {
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 8px 15px;
+}
+
+.doc-canvas-action:hover {
+  background: rgba(204, 204, 204, 0.28);
+  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.3);
+  color: #000;
+}
+
+.doc-canvas-action--active {
+  background-color: var(--doc-canvas-green);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+  color: var(--doc-canvas-color-light);
+  font-weight: 700;
+  opacity: 1;
+}
+
+.doc-canvas-action--active:hover {
+  background-color: var(--doc-canvas-green);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+  color: var(--doc-canvas-color-light);
+  opacity: 1;
+}
+
+.doc-canvas-action--copy-code {
+  border-radius: var(--doc-canvas-radius-sm);
+  bottom: 0;
+  position: absolute;
+  right: 0;
+}
+
+.doc-canvas-action--toggle-menu {
+  border-radius: var(--doc-canvas-radius-sm);
+  margin-left: auto;
+}
+
+.doc-cavas-actions-toggle {
+  background-color: #eee;
+  border-radius: var(--doc-canvas-radius-sm);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.doc-canvas-code-wrapper {
+  display: none;
+  position: relative;
+
+  .doc-canvas--menu-visible & {
+    display: flex;
+  }
+}
+
+.doc-canvas-code {
+  background-color: rgb(245, 242, 240);
+  border-end-end-radius: var(--doc-canvas-radius);
+  border-end-start-radius: var(--doc-canvas-radius);
+  overflow: auto;
+  position: relative;
+  width: 100%;
+
+  code {
+    border-radius: var(--doc-canvas-radius-sm);
+    direction: ltr;
+    font-family: "Nunito Sans",-apple-system,".SFNSText-Regular","San Francisco",BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    padding: 4px;
+  }
+
+  pre {
+    margin: 0;
+  }
+}

@@ -1,0 +1,80 @@
+import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+# Divider
+
+Use the divider to separate sections of content. You can also use them to override auto-layout padding.
+
+## Properties
+
+<DocArgsTable componentName="pds-divider" docSource={components} />
+
+### Default
+
+The default divider displays a horizontal line.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsDivider />',
+    webComponent: '<pds-divider />'
+}}>
+  <pds-divider />
+</DocCanvas>
+
+### Vertical
+
+To display the divider vertically, the `vertical` prop can be set to `true`.
+
+**Note**: Vertical dividers are not displayed on small screen sizes less than 767px.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+<div style={{ height: '150px' }}>
+  <PdsDivider vertical="true" />
+</div>
+    `,
+    webComponent: `
+<div style={{ height: '150px' }}>
+  <pds-divider vertical="true" />
+</div>
+    `
+}}>
+  <div style={{ height: '150px' }}>
+    <pds-divider vertical="true" />
+  </div>
+</DocCanvas>
+
+### Offsets
+
+Both horizontal and vertical dividers can be offset to create a full width/height bleed appearance.
+
+Offset sizes follow the global spacing sizes: `xxs`:4px, `xs`:8px, `sm`:12px,`md`:24px, `lg`:32px, `xl`:48px, `xxl`:64px.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsDivider offset="lg" />',
+    webComponent: '<pds-divider offset="lg" />'
+}}>
+  <pds-divider offset="lg" />
+</DocCanvas>
+
+Below you will see a vertical divider using a large offset.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+<div style={{ height: '150px' }}>
+  <PdsDivider offset="lg" vertical="true" />
+</div>
+    `,
+    webComponent: `
+<div style={{ height: '150px' }}>
+  <pds-divider offset="lg" vertical="true" />
+</div>
+    `
+}}>
+  <div style={{ height: '150px' }}>
+    <pds-divider offset="lg" vertical="true" />
+  </div>
+</DocCanvas>

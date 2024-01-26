@@ -1,70 +1,15 @@
-import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import { Meta, Canvas, Controls } from '@storybook/blocks';
 
 import * as stories from './pds-link.stories.js';
 
+import Docs from '../docs/pds-link.mdx';
+
 <Meta of={stories} />
 
-# Link
+<Docs />
 
-<p>
-  Link is mainly used as navigational element and usually appear within or directly following a paragraph or sentence. The "plain link" is used for interactive user generated text
-  like product, post, and offer titles.
-</p>
+# Playground
 
-## Properties
+<Canvas of={stories.External} />
 
-<ArgTypes of={stories} />
-
-## Variants
-
-### External
-
-An `external` link is designed to redirect users to an external website or resource.
-
-Notably, it's styled visually with an icon to indicate its external nature and opens a new browser tab on interaction.
-
-<Canvas mdxSource={`
-<pds-link href="#some-anchor" external="true"></pds-link>
-`}>
-  <pds-link href="#some-anchor" external="true"></pds-link>
-</Canvas>
-
-### Inline
-
-The `inline` variant displays a standard inline hyperlink. Visually, it maintains the typical underlined appearance of a hyperlink.
-
-<Canvas mdxSource={`
-<pds-link href="https://www.google.com"></pds-link>
-`}>
-  <pds-link href="https://www.google.com"></pds-link>
-</Canvas>
-
-### Plain
-
-The `plain` variant displays a standard plain hyperlink. Visually, it does not include an underline.
-
-<Canvas mdxSource={`
-<pds-link href="#some-anchor" variant="plain"></pds-link>
-`}>
-  <pds-link href="#some-anchor" variant="plain"></pds-link>
-</Canvas>
-
-### With Custom Text (uses slot)
-
-Providing text within the open and closing tags allows the default link text to be replaced with custom text.
-
-<Canvas mdxSource={`
-<pds-link href="#some-anchor">Overrides default use of href</pds-link>
-`}>
-  <pds-link href="#some-anchor">Overrides default use of href</pds-link>
-</Canvas>
-
-### Without custom text in slot
-
-When no custom text is provided, the link will use the `href` as the link text.
-
-<Canvas mdxSource={`
-<pds-link href="#some-anchor"></pds-link>
-`}>
-  <pds-link href="#some-anchor"></pds-link>
-</Canvas>
+<Controls of={stories.External} />

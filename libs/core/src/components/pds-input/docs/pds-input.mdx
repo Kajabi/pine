@@ -1,0 +1,122 @@
+import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+# Input
+
+<p>
+  An input field coupled with a label and error text which allows for user input and feedback.
+</p>
+
+## Guidelines
+### Usage
+
+#### When to use
+- To gather basic usage information
+- You want a response that is one line of text
+
+#### When not to use
+- You want a response longer than one line, use a [Textarea](/docs/components-textarea--default)
+- You want a response from a predefined list, use a select (TODO: create select and link here)
+
+
+### Accessibility
+- The input component comes with a built-in label through the `label` property, it is strongly encouraged that you include it
+- Please provide clear and descriptive error, helper-message, and placeholder messages
+- Do not use a `placeholder` to communicate the field label, use a `label` property
+
+## Properties
+<DocArgsTable componentName="pds-input" docSource={components} />
+
+## Variants
+
+### Text
+<p>The type of input used varies based on the type of information you look to capture. The `text` default type allows for any type of single line data.</p>
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsInput componentId="pds-input-text-example" label="Name" type="text" value="Frank Dux"></PdsInput>',
+    webComponent: '<pds-input component-id="pds-input-text-example" label="Name" type="text" value="Frank Dux"></pds-input>'
+}}>
+  <pds-input component-id="pds-input-text-example" label="Name" type="text" value="Frank Dux"></pds-input>
+</DocCanvas>
+
+### Email
+<p>This is used when the input type is `email`.</p>
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsInput componentId="pds-input-email-example" label="Email Address" type="email" value="frank@example.com"></PdsInput>',
+    webComponent: '<pds-input component-id="pds-input-email-example" label="Email Address" type="email" value="frank@example.com"></pds-input>'
+}}>
+  <pds-input component-id="pds-input-email-example" label="Email Address" type="email" value="frank@example.com"></pds-input>
+</DocCanvas>
+
+### Required
+<p>Indicates that the user must specify a value for the input before the owning form can be submitted.</p>
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsInput componentId="pds-input-required-example" label="Name" type="email" required="true" value="Frank Dux"></PdsInput>',
+    webComponent: '<pds-input component-id="pds-input-required-example" label="Name" type="email" required="true" value="Frank Dux"></pds-input>'
+}}>
+  <pds-input component-id="pds-input-required-example" label="Name" type="email" required="true" value="Frank Dux"></pds-input>
+</DocCanvas>
+
+### Placeholder
+<p>Provides a short, non-essential hint about the expected input.</p>
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsInput componentId="pds-input-placeholder-example" label="Email" type="email" placeholder="Enter a email address..." value=""></PdsInput>',
+    webComponent: '<pds-input component-id="pds-input-placeholder-example" label="Email" type="email" placeholder="Enter a email address..." value=""></pds-input>'
+}}>
+  <pds-input component-id="pds-input-placeholder-example" label="Email" type="email" placeholder="Enter a email address..." value=""></pds-input>
+</DocCanvas>
+
+### Disabled
+<p>Removes all interactive behavior from the text field and provides a visual treatment.</p>
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsInput componentId="pds-input-disabled-example" label="Name" type="email" disabled="true" value="Frank Dux"></PdsInput>',
+    webComponent: '<pds-input component-id="pds-input-disabled-example" label="Name" type="email" disabled="true" value="Frank Dux"></pds-input>'
+}}>
+  <pds-input component-id="pds-input-disabled-example" label="Name" type="email" disabled="true" value="Frank Dux"></pds-input>
+</DocCanvas>
+
+### Readonly
+<p>Removes the ability to interact with the text field. If a value is present, that is still passed to the form.</p>
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsInput componentId="pds-input-readonly-example" label="Name" type="email" readonly="true" value="Frank Dux"></PdsInput>',
+    webComponent: '<pds-input component-id="pds-input-readonly-example" label="Name" type="email" readonly="true" value="Frank Dux"></pds-input>'
+}}>
+  <pds-input component-id="pds-input-readonly-example" label="Name" type="email" readonly="true" value="Frank Dux"></pds-input>
+</DocCanvas>
+
+### Helper Message
+<p>A `helper-message` is used to provide additional information about how to complete the text field.</p>
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsInput componentId="pds-input-help-example" label="Name" type="email" helperMessage="Please use the correct format" value="Frank Dux"></PdsInput>',
+    webComponent: '<pds-input component-id="pds-input-help-example" label="Name" type="email" helper-message="Please use the correct format" value="Frank Dux"></pds-input>'
+}}>
+  <pds-input component-id="pds-input-help-example" label="Name" type="email" helper-message="Please use the correct format" value="Frank Dux"></pds-input>
+</DocCanvas>
+
+### Invalid
+<p>When `error-message` is present, the input displays the error message and provides a visual treatment.</p>
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsInput componentId="pds-input-error-example" label="Name" type="email" errorMessage="Please provide a valid email address" value="Frank Dux"></PdsInput>',
+    webComponent: '<pds-input component-id="pds-input-error-example" label="Name" type="email" error-message="Please provide a valid email address" value="Frank Dux"></pds-input>'
+}}>
+  <pds-input component-id="pds-input-error-example" label="Name" type="email" error-message="Please provide a valid email address" value="Frank Dux"></pds-input>
+</DocCanvas>
+
+## Additional Resources
+
+[MDN Web Docs: Input](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)

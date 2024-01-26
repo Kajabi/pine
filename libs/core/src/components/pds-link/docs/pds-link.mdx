@@ -1,0 +1,77 @@
+import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+# Link
+
+<p>
+  Link is mainly used as navigational element and usually appear within or directly following a paragraph or sentence. The "plain link" is used for interactive user generated text
+  like product, post, and offer titles.
+</p>
+
+## Properties
+
+<DocArgsTable componentName="pds-link" docSource={components} />
+
+## Variants
+
+### External
+
+An `external` link is designed to redirect users to an external website or resource.
+
+Notably, it's styled visually with an icon to indicate its external nature and opens a new browser tab on interaction.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsLink href="#some-anchor" external="true"></PdsLink>',
+    webComponent: '<pds-link href="#some-anchor" external="true"></pds-link>'
+}}>
+  <pds-link href="#some-anchor" external="true"></pds-link>
+</DocCanvas>
+
+### Inline
+
+The `inline` variant displays a standard inline hyperlink. Visually, it maintains the typical underlined appearance of a hyperlink.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsLink href="https://www.google.com"></PdsLink>',
+    webComponent: '<pds-link href="https://www.google.com"></pds-link>'
+}}>
+  <pds-link href="https://www.google.com"></pds-link>
+</DocCanvas>
+
+### Plain
+
+The `plain` variant displays a standard plain hyperlink. Visually, it does not include an underline.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsLink href="#some-anchor" variant="plain"></PdsLink>',
+    webComponent: '<pds-link href="#some-anchor" variant="plain"></pds-link>'
+}}>
+  <pds-link href="#some-anchor" variant="plain"></pds-link>
+</DocCanvas>
+
+### With Custom Text (uses slot)
+
+Providing text within the open and closing tags allows the default link text to be replaced with custom text.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsLink href="#some-anchor">Overrides default use of href</PdsLink>',
+    webComponent: '<pds-link href="#some-anchor">Overrides default use of href</pds-link>'
+}}>
+  <pds-link href="#some-anchor">Overrides default use of href</pds-link>
+</DocCanvas>
+
+### Without custom text in slot
+
+When no custom text is provided, the link will use the `href` as the link text.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsLink href="#some-anchor"></PdsLink>',
+    webComponent: '<pds-link href="#some-anchor"></pds-link>'
+}}>
+  <pds-link href="#some-anchor"></pds-link>
+</DocCanvas>

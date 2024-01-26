@@ -1,63 +1,15 @@
-import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+
+import Docs from '../docs/pds-avatar.mdx'
 
 import * as stories from './pds-avatar.stories.js';
 
-<Meta of={stories}
-/>
+<Meta of={stories} />
 
-# Avatar
+<Docs />
 
-Avatar is used for showing a thumbnail representation of an admin, customer, or business.
+# Playground
 
-## Properties
+<Canvas of={stories.Default} />
 
-<ArgTypes of={stories} />
-
-### Default
-
-<Canvas of={stories.Default} source={{
-  code: `
-    <pds-avatar></pds-avatar>
-  `
-}} />
-
-### Admin
-
-An admin variant of the avatar with less-rounded borders.
-
-<Canvas of={stories.Admin} source={{
-  code: `<pds-avatar variant="admin"></pds-avatar>`
-}} />
-
-### Badge
-
-An avatar with a badge.
-
-<Canvas of={stories.Badge} source={{
-  code: `<pds-avatar badge="true"></pds-avatar>`
-}} />
-
-
-### Custom Sizes
-
-An avatar with a custom size set on the prop.
-
-<Canvas of={stories.CustomSize} source={{
-  code: `<pds-avatar size="128px"></pds-avatar>`
-}} />
-
-### Dropdown
-
-Allows the avatar to be used as a dropdown trigger.
-
-<Canvas of={stories.DropdownTrigger} source={{
-  code: `<pds-avatar dropdown="true"></pds-avatar>`
-}} />
-
-### Image
-
-An avatar using a user profile image. When not set, will default to the user icon.
-
-<Canvas of={stories.Image} source={{
-  code: `<pds-avatar alt="Customer Profile" image="../assets/demi_wilkinson.jpg"></pds-avatar>`
-}} />
+<Controls of={stories.Default} />

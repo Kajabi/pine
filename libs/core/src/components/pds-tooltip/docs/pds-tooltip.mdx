@@ -1,0 +1,117 @@
+import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+# Tooltip
+
+Tooltips display helpful popup text when users hover over or keyboard focus on an element.
+
+## Guidelines
+### Usage
+#### When to use
+- To describe icon-only buttons
+- When adding more context or explanation to an element is helpful, but not essential
+
+#### When not to use
+- Do not use a tooltip when information is essential to task completion.
+That information should remain visible.
+
+## Properties
+
+<DocArgsTable componentName="pds-tooltip" docSource={components} />
+
+## Variants
+### Trigger
+Whether your trigger is text or an HTML element, it will be placed in the default slot between the opening and closing tags.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsTooltip content="this is tooltip content" has-arrow="true" placement="bottom-start">
+        text
+      </PdsTooltip>
+      <PdsTooltip content="this is tooltip content" has-arrow="true" placement="right-start">
+        <PdsButton variant="secondary">Button</pds-button>
+      </PdsTooltip>
+    `,
+    webComponent: `
+      <pds-tooltip content="this is tooltip content" has-arrow="true" placement="bottom-start">
+        text
+      </pds-tooltip>
+      <pds-tooltip content="this is tooltip content" has-arrow="true" placement="right-start">
+        <pds-button variant="secondary">Button</pds-button>
+      </pds-tooltip>
+    `
+}}>
+  <pds-tooltip content="this is tooltip content" has-arrow="true" placement="bottom-start">
+    text
+  </pds-tooltip>
+  <pds-tooltip content="this is tooltip content" has-arrow="true" placement="right-start">
+    <pds-button variant="secondary">Button</pds-button>
+  </pds-tooltip>
+</DocCanvas>
+
+### Content
+#### Text Content
+Text-based content is generated using the `content` prop. Use this option only when the
+tooltip content is expected to be a string.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsTooltip content="this is tooltip content" hasArrow="true" placement="right">text</PdsTooltip>',
+    webComponent: '<pds-tooltip content="this is tooltip content" has-arrow="true" placement="right">text</pds-tooltip>'
+  }}>
+  <pds-tooltip content="this is tooltip content" has-arrow="true" placement="right">text</pds-tooltip>
+</DocCanvas>
+
+#### HTML Element Content
+Tooltip content may contain HTML elements. In these cases,
+enable the `htmlContent` property and provide your element in the `content` slot.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsTooltip hasArrow="true" placement="right">
+        text
+        <div slot="content">
+          <p>this is a sentence in a tooltip.</p>
+          <p>this is a sentence in a tooltip.</p>
+        </div>
+      </PdsTooltip>
+    `,
+    webComponent: `
+      <pds-tooltip has-arrow="true" placement="right">
+        text
+        <div slot="content">
+          <p>this is a sentence in a tooltip.</p>
+          <p>this is a sentence in a tooltip.</p>
+        </div>
+      </pds-tooltip>
+    `
+}}>
+  <pds-tooltip has-arrow="true" placement="right">
+    text
+    <div slot="content">
+      <p>this is a sentence in a tooltip.</p>
+      <p>this is a sentence in a tooltip.</p>
+    </div>
+  </pds-tooltip>
+</DocCanvas>
+
+### Positioning
+Using the placement prop you can adjust where your tooltip will be displayed.
+
+
+### Arrow
+By default the arrow is visible but it can be hidden by disabling it when `has-arrow` is `false`.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsTooltip content="this is tooltip content" has-arrow="false" placement="right">text</PdsTooltip>',
+    webComponent: '<pds-tooltip content="this is tooltip content" has-arrow="false" placement="right">text</pds-tooltip>'
+}}>
+  <pds-tooltip content="this is tooltip content" has-arrow="false" placement="right">text</pds-tooltip>
+</DocCanvas>
+
+## Additional Resources
+
+[W3 Aria Tooltip Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/)

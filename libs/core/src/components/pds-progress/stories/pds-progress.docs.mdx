@@ -1,75 +1,15 @@
-import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
-import { html, render } from 'lit';
+import { Canvas, Controls, Meta } from '@storybook/blocks';
 
 import * as stories from './pds-progress.stories.js';
 
+import Docs from '../docs/pds-progress.mdx';
+
 <Meta of={stories} />
 
-# Progress
+<Docs />
 
-Displays progress with a value.
+# Playground
 
-<ArgTypes of={stories} />
+<Canvas of={stories.Default} />
 
-### Default
-
-<Canvas mdxSource={`
-<pds-progress component-id="default" label="Default"></pds-progress>
-`}>
-  <pds-progress component-id="default" label="Default"></pds-progress>
-</Canvas>
-
-### Percent
-
-The percent of how much the `pds-progress` is filled. Should be a number ranging from 0 to 100.
-
-<Canvas mdxSource={`
-<pds-progress component-id="percent" label="percent" percent="25"></pds-progress>
-`}>
-  <pds-progress component-id="percent" label="percent" percent="25"></pds-progress>
-</Canvas>
-
-### Show Percent
-
-Displays the `percent` value as text beside the progress.
-
-<Canvas mdxSource={`
-<pds-progress component-id="show-percent" label="Show percent" percent="50" show-percent></pds-progress>
-`}>
-  <pds-progress component-id="show-percent" label="Show percent" percent="50" show-percent></pds-progress>
-</Canvas>
-
-### Animated
-
-When `animated`, progress will animate from 0 to the `percent` value.
-
-<Canvas mdxSource={`
-<pds-progress component-id="animated" label="Animated " percent="75" animated></pds-progress>
-`}>
-  <pds-progress component-id="animated" label="Animated " percent="75" animated></pds-progress>
-</Canvas>
-
-### Fill Color
-
-Allows for `pds-progress` to be filled with a custom color. Accepts any valid color token or CSS color value.
-
-<Canvas mdxSource={`
-<pds-progress component-id="fillcolor" label="Fill color" percent="95" fill-color="#86D5BC"></pds-progress>
-`}>
-  <pds-progress component-id="fillcolor" label="Fill color" percent="95" fill-color="#86D5BC"></pds-progress>
-</Canvas>
-
-### Tooltip
-
-A tooltip can be added by combining the `progress` component with a [tooltip](/docs/components-tooltip--default).
-
-<Canvas mdxSource={`
-`}>
-  <pds-tooltip content="50%" has-arrow="false" placement="top" style={{ width: '100%' }}>
-    <pds-progress component-id="tooltip-demo" label="Progress w/ tooltip" percent="50"></pds-progress>
-  </pds-tooltip>
-</Canvas>
-
-## Additional Resources
-
-[MDN Web Docs: Progress](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress)
+<Controls of={stories.Default} />
