@@ -43,7 +43,7 @@ Progress                       | ✅     | ✅    | ❌
 Radio                          | ✅     | ✅    | ❌
 Sortable                       | ✅     | ✅    | ❌
 Switch                         | ✅     | ✅    | ❌
-Table                          | 🟡     | ❌    | ❌
+Table                          | ✅     | ✅    | ❌
 Tabs                           | ✅     | ✅    | ❌
 Tooltip                        | ✅     | ✅    | ❌
 
