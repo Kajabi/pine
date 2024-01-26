@@ -184,10 +184,10 @@ export class PdsLayoutBox {
     `;
 
     const boxInlineStyles = {
-      ...(this.backgroundColor && { 'background-color': this.backgroundColor }),
-      ...(this.borderColor && { 'border-color': this.borderColor }),
-      ...(this.minHeight && { 'min-height': this.minHeight }),
-      ...(this.minWidth && { 'min-width': this.minWidth }),
+      ...(this.backgroundColor && { '--box-background-color': this.backgroundColor }),
+      ...(this.borderColor && { '--box-border-color': this.borderColor }),
+      ...(this.minHeight && { '--box-min-height': this.minHeight }),
+      ...(this.minWidth && { '--box-min-width': this.minWidth }),
     };
 
     return (

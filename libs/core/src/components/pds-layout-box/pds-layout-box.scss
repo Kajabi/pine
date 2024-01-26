@@ -1,4 +1,9 @@
 :host {
+  --box-background-color: inherit;
+  --box-border-color: inherit;
+  --box-min-height: none;
+  --box-min-width: none;
+
   display: block;
 }
 
@@ -7,8 +12,11 @@ img {
 }
 
 [class*='pds-layout-box'] {
+  background-color: var(--box-background-color);
   box-sizing: border-box;
   display: inline-flex;
+  min-height: var(--box-min-height);;
+  min-width: var(--box-min-width);
 
   // The immediate child of the row will fit the width of the row
   .pds-layout-row > & {
@@ -154,7 +162,9 @@ $pine-spacing-tokens: (
 }
 
 .pds-layout-box--bordered {
-  border: var(--pine-border-default);
+  border-color: var(--box-border-color, var(--pine-border-default-color));
+  border-style: var(--pine-border-default-style);
+  border-width: var(--pine-border-default-width);
 }
 
 // Display helpers
