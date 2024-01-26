@@ -14,7 +14,7 @@
     "selected": { "value": "{border-width.thick} solid {color.charcoal.400}" }
   },
   "border-radius": {
-    "default": { "value": "{border-radius.10}" },
+    "default": { "value": "{border-radius.100}" },
     "circle": { "value": "{border-radius.round}" }
   },
   "color": {
