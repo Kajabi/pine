@@ -519,7 +519,7 @@ Adding either `flex` **`display`** property to the box will initiate alignment v
   </pds-layout-box>
 </Canvas>
 
-Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to ensure the box is vertically centered. Horizontal centering does take affect with no `min-height` present.
+Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to ensure the box is vertically centered. Horizontal centering does take effect with no `min-height` present.
 <Canvas mdxSource={`
 <pds-layout-box display="block">
   <pds-layout-row>
@@ -681,7 +681,7 @@ If you encounter issues with your layout, here are some common problems and thei
 
 ### 1. Columns Not Aligning Correctly
   - **Issue:** Columns are not aligning as expected.
-  - **Solution:** Double-check the `align-items` and `justify-content` properties on the parent `pds-layout-row` component. Ensure that the sum of the column sizes within the row is equal to or less than 12 for a 12-column grid. Colums sums greater than 12 will wrap the row to the next line.
+  - **Solution:** Double-check the `align-items` and `justify-content` properties on the parent `pds-layout-row` component. Ensure that the sum of the column sizes within the row is less than or equal to 12 for a 12-column grid. Colums sums greater than 12 will wrap the row to the next line.
 
 ### 2. Unexpected Spacing
   - **Issue:** Unexpected spacing between columns.
