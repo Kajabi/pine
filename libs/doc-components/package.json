@@ -2,11 +2,11 @@
   "name": "@pine-ds/doc-components",
   "description": "Pine documentation components",
   "author": "Kajabi Design System Services",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "publishConfig": {
     "access": "public",
     "directory": "dist"
