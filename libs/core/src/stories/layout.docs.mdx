@@ -324,10 +324,10 @@ By combining the `pds-layout-box` and `pds-layout-row` components, you can easil
 <Canvas mdxSource={`
 <pds-layout-box display="block">
   <pds-layout-row>
-    <pds-layout-box>
+    <pds-layout-box bordered>
       Content for column 1
     </pds-layout-box>
-    <pds-layout-box>
+    <pds-layout-box bordered>
       Content for column 2
     </pds-layout-box>
   </pds-layout-row>
@@ -335,10 +335,10 @@ By combining the `pds-layout-box` and `pds-layout-row` components, you can easil
 `}>
 <pds-layout-box display="block">
   <pds-layout-row>
-    <pds-layout-box>
+    <pds-layout-box bordered>
       Content for column 1
     </pds-layout-box>
-    <pds-layout-box>
+    <pds-layout-box bordered>
       Content for column 2
     </pds-layout-box>
   </pds-layout-row>
@@ -350,10 +350,10 @@ This creates a two-column layout, and you can customize the `size` and arrangeme
 <Canvas mdxSource={`
 <pds-layout-box display="block">
   <pds-layout-row>
-    <pds-layout-box size="4">
+    <pds-layout-box bordered size="4">
       Content for column 1
     </pds-layout-box>
-    <pds-layout-box size="8">
+    <pds-layout-box bordered size="8">
       Content for column 2
     </pds-layout-box>
   </pds-layout-row>
@@ -361,10 +361,10 @@ This creates a two-column layout, and you can customize the `size` and arrangeme
 `}>
 <pds-layout-box display="block">
   <pds-layout-row>
-    <pds-layout-box size="4">
+    <pds-layout-box bordered size="4">
       Content for column 1
     </pds-layout-box>
-    <pds-layout-box size="8">
+    <pds-layout-box bordered size="8">
       Content for column 2
     </pds-layout-box>
   </pds-layout-row>
@@ -376,23 +376,17 @@ Using the size modifiers such as `-xs`, `-md`, etc, enable responsive behavior f
 <Canvas mdxSource={`
 <pds-layout-box display="block">
   <pds-layout-row>
-    <pds-layout-box size-md="6" size-lg="4" size-xl="3">Item 1</pds-layout-box>
-    <pds-layout-box direction="column" size-md="6" size-lg="4" size-xl="3">
-      <p>Content 1</p>
-      <p>Content 2</p>
-    </pds-layout-box>
-    <pds-layout-box size-md="6" size-lg="4" size-xl="3">Item 3</pds-layout-box>
-    <pds-layout-box size-md="6" size-lg="4" size-xl="3">Item 4</pds-layout-box>
+    <pds-layout-box bordered size-md="6" size-lg="4" size-xl="3">Item 1</pds-layout-box>
+    <pds-layout-box bordered size-md="6" size-lg="4" size-xl="3">Item 2</pds-layout-box>
+    <pds-layout-box bordered size-md="6" size-lg="4" size-xl="3">Item 3</pds-layout-box>
   </pds-layout-row>
 </pds-layout-box>
 `}>
   <pds-layout-box display="block">
-    <pds-layout-row
-      component-id="${args.componentId}" 
-    >
-      <pds-layout-box size-md="6" size-lg="4" size-xl="3">Item 1</pds-layout-box>
-      <pds-layout-box size-md="6" size-lg="4" size-xl="3">Item 2</pds-layout-box>
-      <pds-layout-box size-md="6" size-lg="4" size-xl="3">Item 3</pds-layout-box>
+    <pds-layout-row>
+      <pds-layout-box bordered size-md="6" size-lg="4" size-xl="3">Item 1</pds-layout-box>
+      <pds-layout-box bordered size-md="6" size-lg="4" size-xl="3">Item 2</pds-layout-box>
+      <pds-layout-box bordered size-md="6" size-lg="4" size-xl="3">Item 3</pds-layout-box>
     </pds-layout-row>
   </pds-layout-box>
 </Canvas>
@@ -403,15 +397,15 @@ Using the size modifiers such as `-xs`, `-md`, etc, enable responsive behavior f
 <Canvas mdxSource={`
 <pds-layout-box display="block">
   <pds-layout-row>
-    <pds-layout-box size-xs="0" size-sm="0" size-lg="6">Larger screen content</pds-layout-box>
-    <pds-layout-box size-md="6" size-lg="0">Small screen content</pds-layout-box>
+    <pds-layout-box bordered size-xs="0" size-sm="0" size-lg="6">Larger screen content</pds-layout-box>
+    <pds-layout-box bordered size-md="6" size-lg="0">Small screen content</pds-layout-box>
   </pds-layout-row>
 </pds-layout-box>
 `}>
   <pds-layout-box display="block">
     <pds-layout-row>
-      <pds-layout-box size-xs="0" size-sm="0" size-lg="12">Larger screen content</pds-layout-box>
-      <pds-layout-box size-md="12" size-lg="0">Small screen content</pds-layout-box>
+      <pds-layout-box bordered size-xs="0" size-sm="0" size-lg="12">Larger screen content</pds-layout-box>
+      <pds-layout-box bordered size-md="12" size-lg="0">Small screen content</pds-layout-box>
     </pds-layout-row>
   </pds-layout-box>
 </Canvas>
@@ -421,15 +415,15 @@ Use the `offset` property to offset columns to the right. The `offset` property 
 <Canvas mdxSource={`
 <pds-layout-box direction="column"  fit>
   <pds-layout-row>
-    <pds-layout-box size="4">Item 1</pds-layout-box>
-    <pds-layout-box offset="4" size="4">Item 2</pds-layout-box>
+    <pds-layout-box bordered size="4">Item 1</pds-layout-box>
+    <pds-layout-box bordered offset="4" size="4">Item 2</pds-layout-box>
   </pds-layout-row>
   <pds-layout-row>
-    <pds-layout-box size-md="4">Item 1</pds-layout-box>
-    <pds-layout-box offset-md="4" size-md="4">Item 2</pds-layout-box>
+    <pds-layout-box bordered size-md="4">Item 1</pds-layout-box>
+    <pds-layout-box bordered offset-md="4" size-md="4">Item 2</pds-layout-box>
   </pds-layout-row>
   <pds-layout-row>
-    <pds-layout-box offset="3" offset-xs="2" size="6" size-xs="8">Item 1</pds-layout-box>
+    <pds-layout-box bordered offset="3" offset-xs="2" size="6" size-xs="8">Item 1</pds-layout-box>
   </pds-layout-row>
 </pds-layout-box>
 `}>
@@ -437,19 +431,19 @@ Use the `offset` property to offset columns to the right. The `offset` property 
   <pds-layout-row
     component-id="${args.componentId}" 
   >
-    <pds-layout-box size="4">Item 1</pds-layout-box>
-    <pds-layout-box offset="4" size="4">Item 2</pds-layout-box>
+    <pds-layout-box bordered size="4">Item 1</pds-layout-box>
+    <pds-layout-box bordered offset="4" size="4">Item 2</pds-layout-box>
   </pds-layout-row>
   <pds-layout-row
     component-id="${args.componentId}" 
   >
-    <pds-layout-box size-md="4">Item 1</pds-layout-box>
-    <pds-layout-box offset-md="4" size-md="4">Item 2</pds-layout-box>
+    <pds-layout-box bordered size-md="4">Item 1</pds-layout-box>
+    <pds-layout-box bordered offset-md="4" size-md="4">Item 2</pds-layout-box>
   </pds-layout-row>
   <pds-layout-row
     component-id="${args.componentId}" 
   >
-    <pds-layout-box offset="3" offset-xs="2" size="6" size-xs="8">Item 1</pds-layout-box>
+    <pds-layout-box bordered offset="3" offset-xs="2" size="6" size-xs="8">Item 1</pds-layout-box>
   </pds-layout-row>
 </pds-layout-box>
 </Canvas>
@@ -620,13 +614,14 @@ You can nest `pds-layout-row` and `pds-layout-box` components to create more com
 `}>
   <pds-layout-box display="block">
     <pds-layout-row>
-      <pds-layout-box display="block" size-md="8">
+      <pds-layout-box bordered display="block" size-md="8">
         <pds-layout-row>
           <pds-layout-box size-xl="6">Column 1 Item 1</pds-layout-box>
           <pds-layout-box size-xl="6">Column 1 Item 2</pds-layout-box>
         </pds-layout-row>
       </pds-layout-box>
       <pds-layout-box
+        bordered
         display="flex"
         size-md="4"
       >
