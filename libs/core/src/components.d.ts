@@ -6,8 +6,10 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
+import { LayoutColumnType } from "./utils/types";
 import { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
+export { LayoutColumnType } from "./utils/types";
 export { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
     interface PdsAvatar {
@@ -355,27 +357,27 @@ export namespace Components {
         /**
           * Move columns to the end direction of the row for all screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offset"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "offset"?: LayoutColumnType;
         /**
           * Move columns to the end direction of the row for `LG` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetLg"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "offsetLg"?: LayoutColumnType;
         /**
           * Move columns to the end direction of the row for `MD` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetMd"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "offsetMd"?: LayoutColumnType;
         /**
           * Move columns to the end direction of the row for `SM` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetSm"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "offsetSm"?: LayoutColumnType;
         /**
           * Move columns to the end direction of the row for `XL` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetXl"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "offsetXl"?: LayoutColumnType;
         /**
           * Move columns to the end direction of the row for `XS` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetXs"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "offsetXs"?: LayoutColumnType;
         /**
           * Defines the spacing between the box items.
           * @defaultValue none
@@ -389,27 +391,27 @@ export namespace Components {
         /**
           * Size of the column for all screen sizes that are not explicitly set.
          */
-        "size"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "size"?: LayoutColumnType;
         /**
           * At screen sizes greater than the `LG` breakpoint, this will take the number of columns specified.
          */
-        "sizeLg"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "sizeLg"?: LayoutColumnType;
         /**
           * At screen sizes greater than the `MD` breakpoint, this will take the number of columns specified.
          */
-        "sizeMd"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "sizeMd"?: LayoutColumnType;
         /**
           * At screen sizes greater than the `SM` breakpoint, this will take the number of columns specified.
          */
-        "sizeSm"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "sizeSm"?: LayoutColumnType;
         /**
           * At screen sizes greater than the `XL` breakpoint, this will take the number of columns specified.
          */
-        "sizeXl"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "sizeXl"?: LayoutColumnType;
         /**
           * At screen sizes less than the `XS` breakpoint, this will take the number of columns specified.
          */
-        "sizeXs"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "sizeXs"?: LayoutColumnType;
     }
     interface PdsLayoutRow {
         /**
@@ -1543,27 +1545,27 @@ declare namespace LocalJSX {
         /**
           * Move columns to the end direction of the row for all screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offset"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "offset"?: LayoutColumnType;
         /**
           * Move columns to the end direction of the row for `LG` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetLg"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "offsetLg"?: LayoutColumnType;
         /**
           * Move columns to the end direction of the row for `MD` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetMd"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "offsetMd"?: LayoutColumnType;
         /**
           * Move columns to the end direction of the row for `SM` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetSm"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "offsetSm"?: LayoutColumnType;
         /**
           * Move columns to the end direction of the row for `XL` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetXl"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "offsetXl"?: LayoutColumnType;
         /**
           * Move columns to the end direction of the row for `XS` screen sizes. Increases the starting margin of a column by specified number of columns.
          */
-        "offsetXs"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "offsetXs"?: LayoutColumnType;
         /**
           * Defines the spacing between the box items.
           * @defaultValue none
@@ -1577,27 +1579,27 @@ declare namespace LocalJSX {
         /**
           * Size of the column for all screen sizes that are not explicitly set.
          */
-        "size"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "size"?: LayoutColumnType;
         /**
           * At screen sizes greater than the `LG` breakpoint, this will take the number of columns specified.
          */
-        "sizeLg"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "sizeLg"?: LayoutColumnType;
         /**
           * At screen sizes greater than the `MD` breakpoint, this will take the number of columns specified.
          */
-        "sizeMd"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "sizeMd"?: LayoutColumnType;
         /**
           * At screen sizes greater than the `SM` breakpoint, this will take the number of columns specified.
          */
-        "sizeSm"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "sizeSm"?: LayoutColumnType;
         /**
           * At screen sizes greater than the `XL` breakpoint, this will take the number of columns specified.
          */
-        "sizeXl"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "sizeXl"?: LayoutColumnType;
         /**
           * At screen sizes less than the `XS` breakpoint, this will take the number of columns specified.
          */
-        "sizeXs"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+        "sizeXs"?: LayoutColumnType;
     }
     interface PdsLayoutRow {
         /**

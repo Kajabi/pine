@@ -1,5 +1,7 @@
 import { Component, h, Host, Prop } from '@stencil/core';
 
+import { LayoutColumnType } from '../../utils/types';
+
 @Component({
   tag: 'pds-layout-box',
   styleUrl: 'pds-layout-box.scss',
@@ -85,32 +87,32 @@ export class PdsLayoutBox {
   /**
    * Move columns to the end direction of the row for all screen sizes. Increases the starting margin of a column by specified number of columns.
    */
-  @Prop() offset?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;;
+  @Prop() offset?: LayoutColumnType;
 
   /**
    * Move columns to the end direction of the row for `XS` screen sizes. Increases the starting margin of a column by specified number of columns.
   */
-  @Prop() offsetXs?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;;
+  @Prop() offsetXs?: LayoutColumnType;
 
   /**
    * Move columns to the end direction of the row for `SM` screen sizes. Increases the starting margin of a column by specified number of columns.
   */
-  @Prop() offsetSm?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;;
+  @Prop() offsetSm?: LayoutColumnType;
 
   /**
    * Move columns to the end direction of the row for `MD` screen sizes. Increases the starting margin of a column by specified number of columns.
   */
-  @Prop() offsetMd?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;;
+  @Prop() offsetMd?: LayoutColumnType;
 
   /**
    * Move columns to the end direction of the row for `LG` screen sizes. Increases the starting margin of a column by specified number of columns.
   */
-  @Prop() offsetLg?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;;
+  @Prop() offsetLg?: LayoutColumnType;
 
   /**
    * Move columns to the end direction of the row for `XL` screen sizes. Increases the starting margin of a column by specified number of columns.
   */
-  @Prop() offsetXl?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;;
+  @Prop() offsetXl?: LayoutColumnType;
 
   /**
    * Defines the spacing between the box items.
@@ -127,32 +129,32 @@ export class PdsLayoutBox {
   /**
    * Size of the column for all screen sizes that are not explicitly set.
    */
-  @Prop() size?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+  @Prop() size?: LayoutColumnType;
 
   /**
    * At screen sizes less than the `XS` breakpoint, this will take the number of columns specified.
    */
-  @Prop() sizeXs?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+  @Prop() sizeXs?: LayoutColumnType;
 
   /**
    * At screen sizes greater than the `SM` breakpoint, this will take the number of columns specified.
    */
-  @Prop() sizeSm?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+  @Prop() sizeSm?: LayoutColumnType;
 
   /**
    * At screen sizes greater than the `MD` breakpoint, this will take the number of columns specified.
    */
-  @Prop() sizeMd?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+  @Prop() sizeMd?: LayoutColumnType;
 
   /**
    * At screen sizes greater than the `LG` breakpoint, this will take the number of columns specified.
    */
-  @Prop() sizeLg?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+  @Prop() sizeLg?: LayoutColumnType;
 
   /**
    * At screen sizes greater than the `XL` breakpoint, this will take the number of columns specified.
    */
-  @Prop() sizeXl?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
+  @Prop() sizeXl?: LayoutColumnType;
 
   render() {
     const boxClasses = `
