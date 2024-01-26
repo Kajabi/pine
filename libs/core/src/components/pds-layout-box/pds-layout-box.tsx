@@ -7,6 +7,7 @@ import { Component, h, Host, Prop } from '@stencil/core';
 export class PdsLayoutBox {
   /**
    * Defines the vertical alignment of the box items.
+   * @defaultValue start
   */
   @Prop() alignItems?: `start` | `center` | `end` | `baseline` | `stretch`;
 
@@ -32,16 +33,19 @@ export class PdsLayoutBox {
 
   /**
    * Defines how rounded the box corners are.
+   * @defaultValue none
    */
   @Prop() borderRadius?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
   
   /**
    * Defines the orientation of the box items.
+   * @defaultValue row
    */
   @Prop() direction?: `row` | `column`;
 
   /**
    * Defines the display style of the box.
+   * @defaultValue flex
   */
   @Prop() display?: `flex` | `inline-flex` | `block` | `inline-block`;
 
@@ -52,16 +56,19 @@ export class PdsLayoutBox {
 
   /**
    * Defines the spacing between the box items.
+   * @defaultValue none
   */
   @Prop() gap?: `none` | `xs`| `sm` | `md` | `lg`;
 
   /**
    * Defines how a box will grow or shrink to fit the space available in its container.
+   * @defaultValue none
    */
   @Prop() flex?: `none` | `grow` | `shrink`;
 
   /**
    * Defines the horizontal alignment of the box items.
+   * @defaultValue start
   */
   @Prop() justifyContent?: `start` | `center` | `end` | `space-between` | `space-around`;
 
@@ -107,11 +114,13 @@ export class PdsLayoutBox {
 
   /**
    * Defines the spacing between the box items.
+   * @defaultValue none
   */
   @Prop() padding?: `none` | `xs`| `sm` | `md` | `lg`;
 
   /**
    * Defines the box shadow.
+   * @defaultValue none
   */
   @Prop() shadow?: `none` | `xs`| `sm` | `md` | `lg`;
 

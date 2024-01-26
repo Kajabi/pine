@@ -7,6 +7,7 @@ import { Component, Prop, h, Host} from '@stencil/core';
 export class PdsLayoutRow {
   /**
    * Defines the vertical alignment of the row items.
+   * @defaultValue start
   */
   @Prop() alignItems?: `start` | `center` | `end` | `baseline` | `stretch`;
 
@@ -27,6 +28,7 @@ export class PdsLayoutRow {
 
   /**
    * Defines the horizontal alignment of the row items.
+   * @defaultValue start
   */
   @Prop() justifyContent?: `start` | `center` | `end` | `space-between` | `space-around`;
 

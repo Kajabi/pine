@@ -291,6 +291,7 @@ export namespace Components {
     interface PdsLayoutBox {
         /**
           * Defines the vertical alignment of the box items.
+          * @defaultValue start
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
@@ -307,6 +308,7 @@ export namespace Components {
         "borderColor"?: string;
         /**
           * Defines how rounded the box corners are.
+          * @defaultValue none
          */
         "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
         /**
@@ -315,10 +317,12 @@ export namespace Components {
         "bordered"?: boolean;
         /**
           * Defines the orientation of the box items.
+          * @defaultValue row
          */
         "direction"?: `row` | `column`;
         /**
           * Defines the display style of the box.
+          * @defaultValue flex
          */
         "display"?: `flex` | `inline-flex` | `block` | `inline-block`;
         /**
@@ -327,14 +331,17 @@ export namespace Components {
         "fit"?: boolean;
         /**
           * Defines how a box will grow or shrink to fit the space available in its container.
+          * @defaultValue none
          */
         "flex"?: `none` | `grow` | `shrink`;
         /**
           * Defines the spacing between the box items.
+          * @defaultValue none
          */
         "gap"?: `none` | `xs`| `sm` | `md` | `lg`;
         /**
           * Defines the horizontal alignment of the box items.
+          * @defaultValue start
          */
         "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
         /**
@@ -371,10 +378,12 @@ export namespace Components {
         "offsetXs"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * Defines the spacing between the box items.
+          * @defaultValue none
          */
         "padding"?: `none` | `xs`| `sm` | `md` | `lg`;
         /**
           * Defines the box shadow.
+          * @defaultValue none
          */
         "shadow"?: `none` | `xs`| `sm` | `md` | `lg`;
         /**
@@ -405,6 +414,7 @@ export namespace Components {
     interface PdsLayoutRow {
         /**
           * Defines the vertical alignment of the row items.
+          * @defaultValue start
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
@@ -421,6 +431,7 @@ export namespace Components {
         "componentId": string;
         /**
           * Defines the horizontal alignment of the row items.
+          * @defaultValue start
          */
         "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
         /**
@@ -1468,6 +1479,7 @@ declare namespace LocalJSX {
     interface PdsLayoutBox {
         /**
           * Defines the vertical alignment of the box items.
+          * @defaultValue start
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
@@ -1484,6 +1496,7 @@ declare namespace LocalJSX {
         "borderColor"?: string;
         /**
           * Defines how rounded the box corners are.
+          * @defaultValue none
          */
         "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
         /**
@@ -1492,10 +1505,12 @@ declare namespace LocalJSX {
         "bordered"?: boolean;
         /**
           * Defines the orientation of the box items.
+          * @defaultValue row
          */
         "direction"?: `row` | `column`;
         /**
           * Defines the display style of the box.
+          * @defaultValue flex
          */
         "display"?: `flex` | `inline-flex` | `block` | `inline-block`;
         /**
@@ -1504,14 +1519,17 @@ declare namespace LocalJSX {
         "fit"?: boolean;
         /**
           * Defines how a box will grow or shrink to fit the space available in its container.
+          * @defaultValue none
          */
         "flex"?: `none` | `grow` | `shrink`;
         /**
           * Defines the spacing between the box items.
+          * @defaultValue none
          */
         "gap"?: `none` | `xs`| `sm` | `md` | `lg`;
         /**
           * Defines the horizontal alignment of the box items.
+          * @defaultValue start
          */
         "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
         /**
@@ -1548,10 +1566,12 @@ declare namespace LocalJSX {
         "offsetXs"?: `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` | `11` | `12`;
         /**
           * Defines the spacing between the box items.
+          * @defaultValue none
          */
         "padding"?: `none` | `xs`| `sm` | `md` | `lg`;
         /**
           * Defines the box shadow.
+          * @defaultValue none
          */
         "shadow"?: `none` | `xs`| `sm` | `md` | `lg`;
         /**
@@ -1582,6 +1602,7 @@ declare namespace LocalJSX {
     interface PdsLayoutRow {
         /**
           * Defines the vertical alignment of the row items.
+          * @defaultValue start
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
@@ -1598,6 +1619,7 @@ declare namespace LocalJSX {
         "componentId"?: string;
         /**
           * Defines the horizontal alignment of the row items.
+          * @defaultValue start
          */
         "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
         /**
