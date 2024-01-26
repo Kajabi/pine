@@ -8,6 +8,9 @@ import { prism } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 import './docCanvas.css';
 
+
+const camelToFlat = (c: string) => (c = c.replace(/[A-Z]/g, " $&"), c[0].toUpperCase() + c.slice(1))
+
 interface SourceType {
   [key: string]: any
 }
@@ -69,6 +72,25 @@ const docCanvas: React.FC<DocCanvasProps> = ({
     )
   }
 
+  const createViewCodeButtons = () => {
+    const buttons = Object.keys(mdxSource).map((key) => (
+      <button
+        className={`
+        doc-canvas-action
+          ${isMenuVisible && activeTab === key ? 'doc-canvas-action--active' : ''}
+        `}
+        disabled={!mdxSource[key]}
+        onClick={() => handleTabClick(key)}
+      >
+        {camelToFlat(key)}
+      </button>
+      )
+    )
+
+    return (
+      <> {buttons} </>
+    )
+  }
   return (
     <div className={`doc-canvas ${isMenuVisible ? 'doc-canvas--menu-visible' : ''}`}
       >
@@ -76,54 +98,33 @@ const docCanvas: React.FC<DocCanvasProps> = ({
         {children}
         </div>
         <div className="doc-canvas-actions">
+          <div className="doc-cavas-actions-toggle">
+            { createViewCodeButtons() }
+          </div>
 
-          {mdxSource?.webComponent &&
-            <button
-              className={`
-              doc-canvas-action
-                ${activeTab === 'webComponent' ? 'doc-canvas-action--active' : ''}
-              `}
-              disabled={!mdxSource?.webComponent}
-              onClick={() => handleTabClick('webComponent')}
-            >
-              Web Component
-            </button>
-          }
-
-          {mdxSource?.react &&
+          {isMenuVisible &&
             <button
               className={`
                 doc-canvas-action
-                ${activeTab === 'react' ? 'doc-canvas-action--active' : ''}
+                doc-canvas-action--toggle-menu
+                ${isMenuVisible ? 'doc-canvas-action--active' : ''}
               `}
-              disabled={!mdxSource?.react}
-              onClick={() => handleTabClick('react')}
+              onClick={() => handleToggleMenuClick()}
             >
-              React
+              {isMenuVisible ? 'Hide code' : 'Show code'}
             </button>
           }
-          <button
-            className={`
-              doc-canvas-action
-              ${isMenuVisible ? 'doc-canvas-action--active' : ''}
-            `}
-            onClick={() => handleToggleMenuClick()}
-          >
-            Toggle menu
-          </button>
         </div>
         <div className="doc-canvas-code-wrapper">
           <div className="doc-canvas-code">
-
             { renderSource() }
-
           </div>
 
           <button
             className="doc-canvas-action doc-canvas-action--copy-code"
             onClick={() => handleCopyCodeClick()}
           >
-            Copy Code
+            Copy
           </button>
         </div>
       </div>
