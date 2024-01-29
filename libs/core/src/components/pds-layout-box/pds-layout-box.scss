@@ -150,7 +150,7 @@ $pine-spacing-tokens: (
 }
 
 .pds-layout-box--auto {
-  flex: 0 0 auto;
+  flex: 0 0 fit-content;
   min-width: auto;
   width: auto;
 }
