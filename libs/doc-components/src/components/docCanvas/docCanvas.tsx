@@ -51,7 +51,6 @@ const docCanvas: React.FC<DocCanvasProps> = ({
 
 
   const handleTabClick = (tab: string) => {
-    console.log('Tab Clicked: ', tab);
     if (isMenuVisible == false) {
       setMenuVisible(true);
     }
