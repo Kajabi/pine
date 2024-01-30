@@ -28,9 +28,12 @@
 }
 
 .doc-canvas-preview {
+  align-items: center;
   background-color: var(--doc-canvas-color-light);
   border-start-end-radius: var(--doc-canvas-radius);
   border-start-start-radius: var(--doc-canvas-radius);
+  display: inline-flex;
+  gap: 20px;
   padding: var(--doc-canvas-spacing);
 }
 

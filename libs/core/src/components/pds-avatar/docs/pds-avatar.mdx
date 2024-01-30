@@ -1,6 +1,8 @@
 import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
 
+import sampleImg from '../assets/demi_wilkinson.jpg';
+
 # Avatar
 
 Avatar is used for showing a thumbnail representation of an admin, customer, or business.
@@ -77,5 +79,5 @@ An avatar using a user profile image. When not set, will default to the user ico
     react: '<PdsAvatar alt="Customer Profile" image="../assets/demi_wilkinson.jpg"></PdsAvatar>',
     webComponent: '<pds-avatar alt="Customer Profile" image="../assets/demi_wilkinson.jpg"></pds-avatar>'
 }}>
-  <pds-avatar alt="Customer Profile" image="../assets/demi_wilkinson.jpg"></pds-avatar>
+  <pds-avatar alt="Customer Profile" image={sampleImg}></pds-avatar>
 </DocCanvas>

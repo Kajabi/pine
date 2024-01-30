@@ -18,6 +18,18 @@ const sectionNameMapping = {
   parts: "css shadow parts"
 } as const;
 
+function isSectionKey(key: string): key is keyof typeof sectionNameMapping {
+  return key in sectionNameMapping;
+}
+
+function lookupValueByKey(key: string): string {
+  if (isSectionKey(key)) {
+    return sectionNameMapping[key];
+  } else {
+    throw new Error(`Invalid key: ${key}`);
+  }
+}
+
 const HEADER_COLUMNS: Array<string> = [
   'Name',
   'Description',
@@ -58,17 +70,15 @@ const DocArgsTable: React.FC<DocArgsTableProps> = ({
     )
   }
 
-  const generateSection = (section: string) => {
-    const sectionTitle: string = Object.keys(sectionNameMapping).find( (k) => k == section) || '';
-    return (
-      <>
-        <section className="args-section">
-          <div className="args-table-cell">{sectionTitle.toUpperCase()}</div>
-        </section>
-        { generateSectionRows(typedComponents[section] )}
-      </>
-    )
-  }
+  const generateSection = (section: string) => (
+    <>
+      <section className="args-section">
+        <div className="args-table-cell">{lookupValueByKey(section).toUpperCase()}</div>
+      </section>
+      { generateSectionRows(typedComponents[section] )}
+    </>
+  )
+
 
   const generateSectionRows = (sectionProps: any) => {
     const rows = sectionProps.map((prop: any, idx: number) => (
