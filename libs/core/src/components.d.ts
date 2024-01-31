@@ -426,7 +426,7 @@ export namespace Components {
         /**
           * Defines the spacing between the row items.
          */
-        "colGap"?: string;
+        "colGap"?: BoxTShirtSizeType | null;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -1614,7 +1614,7 @@ declare namespace LocalJSX {
         /**
           * Defines the spacing between the row items.
          */
-        "colGap"?: string;
+        "colGap"?: BoxTShirtSizeType | null;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */

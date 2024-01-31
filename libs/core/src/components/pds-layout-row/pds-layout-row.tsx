@@ -1,5 +1,7 @@
 import { Component, Prop, h, Host} from '@stencil/core';
 
+import { BoxTShirtSizeType } from '../../utils/types';
+
 @Component({
   tag: 'pds-layout-row',
   styleUrl: 'pds-layout-row.scss',
@@ -19,7 +21,7 @@ export class PdsLayoutRow {
   /**
    * Defines the spacing between the row items.
   */
-  @Prop() colGap?: string;
+  @Prop() colGap?: BoxTShirtSizeType | null;
 
   /**
    * A unique identifier used for the underlying component `id` attribute.
@@ -42,6 +44,14 @@ export class PdsLayoutRow {
    */
   @Prop() noWrap? = false;
 
+  private colGapMap: { [key in BoxTShirtSizeType]: string } = {
+    none: '0',
+    xs: '.5rem',
+    sm: '1rem',
+    md: '1.5rem',
+    lg: '2.25rem',
+  };
+
   render() {
     const rowClasses = `
       ${this.alignItems ? `pds-align-items-${this.alignItems}` : ''}
@@ -52,8 +62,8 @@ export class PdsLayoutRow {
 
     const rowInlineStyles = {
       ...(this.colGap && {
-        '--pine-gap-x': this.colGap,
-        '--pine-gap-y': this.colGap,
+        '--pine-gap-x': this.colGap ? this.colGapMap[this.colGap] : '',
+        '--pine-gap-y': this.colGap ? this.colGapMap[this.colGap] : '',
       }),
       ...(this.minHeight && {
         'min-height': this.minHeight,

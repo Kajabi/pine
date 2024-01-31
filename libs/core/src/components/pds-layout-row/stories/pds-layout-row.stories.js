@@ -62,7 +62,7 @@ export const Gap = GapTemplate.bind();
 Gap.args = {
   bordered: "false",
   componentId: 'opt0',
-  colGap: '24px'
+  colGap: 'sm',
 };
 
 
