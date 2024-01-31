@@ -12,7 +12,7 @@ export class PdsLayoutRow {
   @Prop() alignItems?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
-   * If `true`, the row will have a bottom.
+   * If `true`, the row will have a border.
    */
   @Prop() bordered? = false;
 

@@ -420,7 +420,7 @@ export namespace Components {
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * If `true`, the row will have a bottom.
+          * If `true`, the row will have a border.
          */
         "bordered"?: boolean;
         /**
@@ -1608,7 +1608,7 @@ declare namespace LocalJSX {
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * If `true`, the row will have a bottom.
+          * If `true`, the row will have a border.
          */
         "bordered"?: boolean;
         /**
