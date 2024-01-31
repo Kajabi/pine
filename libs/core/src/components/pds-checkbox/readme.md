@@ -25,9 +25,9 @@
 
 ## Events
 
-| Event               | Description                                                                        | Type                   |
-| ------------------- | ---------------------------------------------------------------------------------- | ---------------------- |
-| `pdsCheckboxChange` | Emits a boolean indicating whether the checkbox is currently checked or unchecked. | `CustomEvent<boolean>` |
+| Event               | Description                                                                        | Type                                          |
+| ------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------- |
+| `pdsCheckboxChange` | Emits a boolean indicating whether the checkbox is currently checked or unchecked. | `CustomEvent<CheckboxChangeEventDetail<any>>` |
 
 
 ## Dependencies

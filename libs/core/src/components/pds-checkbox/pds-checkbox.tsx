@@ -1,6 +1,7 @@
 import { Component, h, Prop, Host, Event, EventEmitter } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
 import { PdsLabel } from '../_internal/pds-label/pds-label';
+import { CheckboxChangeEventDetail } from './checkbox-interface';
 
 @Component({
   tag: 'pds-checkbox',
@@ -70,9 +71,9 @@ export class PdsCheckbox {
   @Prop() value: string;
 
   /**
-   * Emits a boolean indicating whether the checkbox is currently checked or unchecked.
+   * Event emitted that contains the `value` and `checked`.
    */
-  @Event() pdsCheckboxChange: EventEmitter<boolean>;
+  @Event() pdsCheckboxChange: EventEmitter<CheckboxChangeEventDetail>;
 
   private handleCheckboxChange = (e: Event) => {
     if (this.disabled) {
@@ -80,9 +81,12 @@ export class PdsCheckbox {
     }
 
     const target = e.target as HTMLInputElement;
-    const isChecked = target.checked;
+    this.checked = target.checked;
 
-    this.pdsCheckboxChange.emit(isChecked);
+    this.pdsCheckboxChange.emit({
+      checked: target.checked,
+      value: this.value
+    });
   }
 
   private classNames() {

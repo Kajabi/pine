@@ -5,7 +5,9 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 import { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
+export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 export { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
     interface PdsAvatar {
@@ -712,7 +714,7 @@ declare global {
         new (): HTMLPdsButtonElement;
     };
     interface HTMLPdsCheckboxElementEventMap {
-        "pdsCheckboxChange": boolean;
+        "pdsCheckboxChange": CheckboxChangeEventDetail;
     }
     interface HTMLPdsCheckboxElement extends Components.PdsCheckbox, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsCheckboxElementEventMap>(type: K, listener: (this: HTMLPdsCheckboxElement, ev: PdsCheckboxCustomEvent<HTMLPdsCheckboxElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1126,9 +1128,9 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Emits a boolean indicating whether the checkbox is currently checked or unchecked.
+          * Event emitted that contains the `value` and `checked`.
          */
-        "onPdsCheckboxChange"?: (event: PdsCheckboxCustomEvent<boolean>) => void;
+        "onPdsCheckboxChange"?: (event: PdsCheckboxCustomEvent<CheckboxChangeEventDetail>) => void;
         /**
           * It determines whether or not the checkbox is required.
          */
