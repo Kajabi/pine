@@ -1,0 +1,49 @@
+
+import { Meta, Story } from '@storybook/blocks';
+
+<Meta title="Guides/Events"/>
+
+# Event Handling
+Pine tries to adere to the browser standards whenever possible. However, with Web Components there are events that are a result of a direct user
+interaction, like `click`, `focus` that bubble just fine from inside a Web Component's shadow DOM into the light DOM. But then we have others,
+like `change` event, that don't. The differencce between those events is that the former are defined as
+[composed events](https://developer.mozilla.org/en-US/docs/Web/API/Event/composed), while the latter are not.
+
+
+We also try to dispatch non-composed events by manually creating them on Web Component's host elements, but they do not behave 1:1 like their native
+equivalents. This results in unexpected behavior. Similar to React "swallowing" `change` events that are created in such a way and event handlers set with
+the `onChange` prop not being invoked.
+
+Due to that, our components dispatch custom events that are named like the native events they are meant to replace, but prefixed with "pds". So form components
+like `pds-checkbox`, for example, dispatch an `pdsCheckboxChange` event. Which custom events are available can be found in the "Events" section of each component's
+properties table.
+
+## Examples
+
+These examples show you how to use the custom "pds"-prefixed events with Vanilla JS and React.
+
+### Vanilla JS
+
+```html
+<pds-checbox component-id="example" />
+
+<script>
+const handleChange = () => {
+  console.log('changed!')
+}
+
+document.getElementById("example").addEventListener('pdsCheckboxChange', handleLdchange)
+</script>
+```
+
+## React
+
+```javascript
+const MyApp = () => {
+  const handleChange = React.useCallback(() => {
+    console.log('changed!')
+  }, [])
+
+  return <PdsCheckbox onPdsCheckboxChange={handleChange} />
+}
+```
