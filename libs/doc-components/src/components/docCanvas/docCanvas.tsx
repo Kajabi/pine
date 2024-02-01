@@ -59,7 +59,6 @@ const docCanvas: React.FC<DocCanvasProps> = ({
   }
 
   const handleToggleMenuClick = () => {
-    console.log('handleToggleMenuClick');
     setMenuVisible(!isMenuVisible);
   }
 
