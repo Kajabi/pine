@@ -51,7 +51,6 @@ export class PdsTableHeadCell {
 
       this.hostElement.classList.toggle('is-active');
       this.pdsTableSort.emit({ column, direction: this.sortingDirection });
-      console.log('Event emitted: pdsTableSort', { column, direction: this.sortingDirection });
     }
   }
 

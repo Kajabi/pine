@@ -23,7 +23,6 @@ export class PdsTableRow {
     this.isSelected = !this.isSelected; // Toggle the selected state
     const selectedIndex = Array.from(this.hostElement.parentNode.children).indexOf(this.hostElement);
     this.pdsTableRowSelected.emit({ rowIndex: selectedIndex, isSelected: this.isSelected });
-    console.log('Event emitted: pdsTableRowSelected', { rowIndex: selectedIndex, isSelected: this.isSelected });
   }
 
   private classNames() {
