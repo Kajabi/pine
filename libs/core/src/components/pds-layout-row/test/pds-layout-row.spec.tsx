@@ -24,12 +24,12 @@ describe('pds-layout-row', () => {
   it('renders a gap when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsLayoutRow],
-      html: `<pds-layout-row col-gap="16px"></pds-layout-row>`,
+      html: `<pds-layout-row col-gap="sm"></pds-layout-row>`,
     });
     
     const element = page.root;
 
-    expect(element).toEqualAttribute('style', '--pine-gap-x: 16px; --pine-gap-y: 16px;');
+    expect(element).toEqualAttribute('style', '--pine-gap-x: 1rem; --pine-gap-y: 1rem;');
   });
 
   it('renders the align-items when prop is set', async () => {
