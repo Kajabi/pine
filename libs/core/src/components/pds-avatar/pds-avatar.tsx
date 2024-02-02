@@ -73,7 +73,7 @@ export class PdsAvatar {
   private renderAvatar = () => {
     const style = {
       height: this.avatarSize(),
-      width: this.avatarSize(),
+      width: this.avatarSize()
     };
     return (
       this.dropdown

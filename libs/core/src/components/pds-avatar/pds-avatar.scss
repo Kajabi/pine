@@ -11,13 +11,14 @@ div {
 
   align-items: center;
   background-color: var(--background-color);
-  border-radius: var(--radius-round);
+  border-radius: var(--admin-radius-round, var(--radius-round));
   display: inline-flex;
   justify-content: center;
   position: relative;
 
   :host(.pds-avatar--admin) & {
-    border-radius: 12px;
+    --admin-radius-round: 12px;
+    border-radius: var(--admin-radius-round);
   }
 
   // Remove when FF has support for :has
@@ -33,7 +34,6 @@ div {
 }
 
 .pds-avatar__button {
-  --radius-round: 50%;
   --box-shadow-focus: 0 0 0 4px var(--pine-color-primary-200);
 
   align-items: center;
@@ -63,6 +63,8 @@ div {
 }
 
 img {
-  border-radius: var(--radius-round);
+  border-radius: var(--admin-radius-round, var(--radius-round));
+  height: 100%;
+  object-fit: cover;
   width: 100%;
 }
