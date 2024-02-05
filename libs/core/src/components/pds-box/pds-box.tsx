@@ -26,7 +26,7 @@ export class PdsBox {
   /**
    * If `true`, the box will have a border.
    */
-  @Prop() bordered? = false;
+  @Prop() border? = false;
 
   /**
    *  Defines the border color of the box.
@@ -160,7 +160,7 @@ export class PdsBox {
     const boxClasses = `
       ${this.alignItems ? `pds-align-items-${this.alignItems}` : ''}
       ${this.auto ? 'pds-box--auto' : ''}
-      ${this.bordered ? 'pds-box--bordered' : ''}
+      ${this.border ? 'pds-box--border' : ''}
       ${this.borderRadius ? `pds-border-radius-${this.borderRadius}` : ''}
       ${this.direction ? `pds-box-direction-${this.direction}` : ''}
       ${this.display ? `pds-box--display-${this.display}` : ''}

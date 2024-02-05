@@ -57,12 +57,12 @@ describe('pds-row', () => {
   it('renders a border if true', async () => {
     const page = await newSpecPage({
       components: [PdsRow],
-      html: `<pds-row bordered></pds-row>`,
+      html: `<pds-row border></pds-row>`,
     });
     
     const element = page.root;
 
-    expect(element).toHaveClass('pds-row--bordered');
+    expect(element).toHaveClass('pds-row--border');
   });
 
   it('does not wrap when no-wrap if true', async () => {

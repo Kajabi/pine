@@ -16,7 +16,7 @@ export class PdsRow {
   /**
    * If `true`, the row will have a border.
    */
-  @Prop() bordered? = false;
+  @Prop() border? = false;
 
   /**
    * Defines the spacing between the row items.
@@ -55,7 +55,7 @@ export class PdsRow {
   render() {
     const rowClasses = `
       ${this.alignItems ? `pds-align-items-${this.alignItems}` : ''}
-      ${this.bordered ? 'pds-row--bordered' : ''}
+      ${this.border ? 'pds-row--border' : ''}
       ${this.justifyContent ? `pds-justify-content-${this.justifyContent}` : ''}
       ${this.noWrap ? 'pds-row--no-wrap' : ''}
     `;

@@ -111,7 +111,7 @@ $pine-spacing-tokens: (
   width: 100%;
 }
 
-.pds-box--bordered {
+.pds-box--border {
   border-color: var(--box-border-color, var(--pine-border-default-color));
   border-style: var(--pine-border-default-style);
   border-width: var(--pine-border-default-width);

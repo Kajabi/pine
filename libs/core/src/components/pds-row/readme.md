@@ -10,7 +10,7 @@
 | Property         | Attribute         | Description                                                                                   | Type                                                                | Default     |
 | ---------------- | ----------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- | ----------- |
 | `alignItems`     | `align-items`     | Defines the vertical alignment of the row items.                                              | `"baseline" \| "center" \| "end" \| "start" \| "stretch"`           | `undefined` |
-| `bordered`       | `bordered`        | If `true`, the row will have a border.                                                        | `boolean`                                                           | `false`     |
+| `border`         | `border`          | If `true`, the row will have a border.                                                        | `boolean`                                                           | `false`     |
 | `colGap`         | `col-gap`         | Defines the spacing between the row items.                                                    | `"lg" \| "md" \| "none" \| "sm" \| "xs"`                            | `undefined` |
 | `componentId`    | `component-id`    | A unique identifier used for the underlying component `id` attribute.                         | `string`                                                            | `undefined` |
 | `justifyContent` | `justify-content` | Defines the horizontal alignment of the row items.                                            | `"center" \| "end" \| "space-around" \| "space-between" \| "start"` | `undefined` |

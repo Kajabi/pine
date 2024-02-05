@@ -68,6 +68,10 @@ export namespace Components {
          */
         "backgroundColor"?: string;
         /**
+          * If `true`, the box will have a border.
+         */
+        "border"?: boolean;
+        /**
           * Defines the border color of the box.
          */
         "borderColor"?: string;
@@ -76,10 +80,6 @@ export namespace Components {
           * @defaultValue none
          */
         "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
-        /**
-          * If `true`, the box will have a border.
-         */
-        "bordered"?: boolean;
         /**
           * Defines the orientation of the box items.
           * @defaultValue row
@@ -522,7 +522,7 @@ export namespace Components {
         /**
           * If `true`, the row will have a border.
          */
-        "bordered"?: boolean;
+        "border"?: boolean;
         /**
           * Defines the spacing between the row items.
          */
@@ -1240,6 +1240,10 @@ declare namespace LocalJSX {
          */
         "backgroundColor"?: string;
         /**
+          * If `true`, the box will have a border.
+         */
+        "border"?: boolean;
+        /**
           * Defines the border color of the box.
          */
         "borderColor"?: string;
@@ -1248,10 +1252,6 @@ declare namespace LocalJSX {
           * @defaultValue none
          */
         "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
-        /**
-          * If `true`, the box will have a border.
-         */
-        "bordered"?: boolean;
         /**
           * Defines the orientation of the box items.
           * @defaultValue row
@@ -1714,7 +1714,7 @@ declare namespace LocalJSX {
         /**
           * If `true`, the row will have a border.
          */
-        "bordered"?: boolean;
+        "border"?: boolean;
         /**
           * Defines the spacing between the row items.
          */

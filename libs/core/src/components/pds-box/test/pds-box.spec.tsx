@@ -76,15 +76,15 @@ describe('pds-box', () => {
     expect(element).toEqualAttribute('style', '--box-background-color: #dedede;');
   });
 
-  it('renders bordered class when prop is set', async () => {
+  it('renders border class when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsBox],
-      html: `<pds-box bordered="true"></pds-box>`,
+      html: `<pds-box border="true"></pds-box>`,
     });
     
     const element = page.root;
 
-    expect(element).toHaveClass('pds-box--bordered');
+    expect(element).toHaveClass('pds-box--border');
   });
   
   it('renders border-color class when prop is set', async () => {
