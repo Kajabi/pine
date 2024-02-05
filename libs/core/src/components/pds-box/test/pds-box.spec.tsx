@@ -1,19 +1,19 @@
 import { newSpecPage } from '@stencil/core/testing';
-import { PdsLayoutBox } from '../pds-layout-box';
+import { PdsBox } from '../pds-box';
 
-describe('pds-layout-box', () => {
+describe('pds-box', () => {
   it('renders', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box></pds-box>`,
     });
     expect(page.root).toBeTruthy();
   });
 
   it('renders a border-color when prop is set', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box border-color="#dedede"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box border-color="#dedede"></pds-box>`,
     });
     
     const element = page.root;
@@ -23,8 +23,8 @@ describe('pds-layout-box', () => {
   
   it('renders a min-height when prop is set', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box min-height="175px"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box min-height="175px"></pds-box>`,
     });
     
     const element = page.root;
@@ -34,8 +34,8 @@ describe('pds-layout-box', () => {
 
   it('renders a min-width when prop is set', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box min-width="300px"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box min-width="300px"></pds-box>`,
     });
     
     const element = page.root;
@@ -45,8 +45,8 @@ describe('pds-layout-box', () => {
 
   it('renders align-items class when prop is set', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box align-items="center"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box align-items="center"></pds-box>`,
     });
     
     const element = page.root;
@@ -56,19 +56,19 @@ describe('pds-layout-box', () => {
 
   it('renders auto class when prop is set', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box auto="true"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box auto="true"></pds-box>`,
     });
     
     const element = page.root;
 
-    expect(element).toHaveClass('pds-layout-box--auto');
+    expect(element).toHaveClass('pds-box--auto');
   });
 
   it('renders background-color class when prop is set', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box background-color="#dedede"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box background-color="#dedede"></pds-box>`,
     });
     
     const element = page.root;
@@ -78,19 +78,19 @@ describe('pds-layout-box', () => {
 
   it('renders bordered class when prop is set', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box bordered="true"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box bordered="true"></pds-box>`,
     });
     
     const element = page.root;
 
-    expect(element).toHaveClass('pds-layout-box--bordered');
+    expect(element).toHaveClass('pds-box--bordered');
   });
   
   it('renders border-color class when prop is set', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box border-color="#dedede"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box border-color="#dedede"></pds-box>`,
     });
     
     const element = page.root;
@@ -100,8 +100,8 @@ describe('pds-layout-box', () => {
 
   it('renders border-radius class when prop is set to none', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box border-radius="none"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box border-radius="none"></pds-box>`,
     });
     
     const element = page.root;
@@ -111,63 +111,63 @@ describe('pds-layout-box', () => {
 
   it('renders direction class when prop is set to column', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box direction="column"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box direction="column"></pds-box>`,
     });
     
     const element = page.root;
 
-    expect(element).toHaveClass('pds-layout-box-direction-column');
+    expect(element).toHaveClass('pds-box-direction-column');
   });
 
   it('renders display class when prop is set to inline-block', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box display="inline-block"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box display="inline-block"></pds-box>`,
     });
     
     const element = page.root;
 
-    expect(element).toHaveClass('pds-layout-box--display-inline-block');
+    expect(element).toHaveClass('pds-box--display-inline-block');
   });
 
   it('renders fit class when prop is set', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box fit="true"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box fit="true"></pds-box>`,
     });
     
     const element = page.root;
 
-    expect(element).toHaveClass('pds-layout-box--fit');
+    expect(element).toHaveClass('pds-box--fit');
   });
 
   it('renders gap class when prop is set to xs', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box gap="xs"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box gap="xs"></pds-box>`,
     });
     
     const element = page.root;
 
-    expect(element).toHaveClass('pds-layout-box-gap-xs');
+    expect(element).toHaveClass('pds-box-gap-xs');
   });
 
   it('renders flex class when prop is set to grow', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box flex="grow"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box flex="grow"></pds-box>`,
     });
 
     const element = page.root;
 
-    expect(element).toHaveClass('pds-layout-box--flex-grow');
+    expect(element).toHaveClass('pds-box--flex-grow');
   });
 
   it('renders justify-content class when prop is set to center', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box justify-content="center"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box justify-content="center"></pds-box>`,
     });
 
     const element = page.root;
@@ -177,74 +177,74 @@ describe('pds-layout-box', () => {
 
   it('renders offset class when prop is set to 2', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box offset="2"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box offset="2"></pds-box>`,
     });
 
     const element = page.root;
 
-    expect(element).toHaveClass('pds-layout-box-offset-2');
+    expect(element).toHaveClass('pds-box-offset-2');
   });
 
   it('renders offset-xs class when prop is set to 2', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box offset-xs="2"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box offset-xs="2"></pds-box>`,
     });
 
     const element = page.root;
 
-    expect(element).toHaveClass('pds-layout-box-offset-xs-2');
+    expect(element).toHaveClass('pds-box-offset-xs-2');
   });
 
   it('renders offset-sm class when prop is set to 2', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box offset-sm="2"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box offset-sm="2"></pds-box>`,
     });
 
     const element = page.root;
 
-    expect(element).toHaveClass('pds-layout-box-offset-sm-2');
+    expect(element).toHaveClass('pds-box-offset-sm-2');
   });
 
   it('renders offset-md class when prop is set to 2', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box offset-md="2"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box offset-md="2"></pds-box>`,
     });
 
     const element = page.root;
 
-    expect(element).toHaveClass('pds-layout-box-offset-md-2');
+    expect(element).toHaveClass('pds-box-offset-md-2');
   });
 
   it('renders offset-lg class when prop is set to 2', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box offset-lg="2"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box offset-lg="2"></pds-box>`,
     });
 
     const element = page.root;
 
-    expect(element).toHaveClass('pds-layout-box-offset-lg-2');
+    expect(element).toHaveClass('pds-box-offset-lg-2');
   });
 
   it('renders offset-xl class when prop is set to 2', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box offset-xl="2"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box offset-xl="2"></pds-box>`,
     });
 
     const element = page.root;
 
-    expect(element).toHaveClass('pds-layout-box-offset-xl-2');
+    expect(element).toHaveClass('pds-box-offset-xl-2');
   });
 
   it('renders padding class when prop is set to sm', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box padding="sm"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box padding="sm"></pds-box>`,
     });
 
     const element = page.root;
@@ -254,8 +254,8 @@ describe('pds-layout-box', () => {
 
   it('renders shadow class when prop is set to xs', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box shadow="xs"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box shadow="xs"></pds-box>`,
     });
 
     const element = page.root;
@@ -265,89 +265,89 @@ describe('pds-layout-box', () => {
 
   it('renders size class when prop is set to 6', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box size="6"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box size="6"></pds-box>`,
     });
 
     const element = page.root;
 
-    expect(element).toHaveClasses(['pds-layout-box', 'pds-layout-box-6']);
+    expect(element).toHaveClasses(['pds-box', 'pds-box-6']);
   });
 
   it('renders size-xs class when prop is set to 6', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box size-xs="6"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box size-xs="6"></pds-box>`,
     });
 
     const element = page.root;
 
-    expect(element).toHaveClass('pds-layout-box-xs-6');
+    expect(element).toHaveClass('pds-box-xs-6');
   });
 
   it('renders size-sm class when prop is set to 6', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box size-sm="6"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box size-sm="6"></pds-box>`,
     });
 
     const element = page.root;
 
-    expect(element).toHaveClass('pds-layout-box-sm-6');
+    expect(element).toHaveClass('pds-box-sm-6');
   });
 
   it('renders size-md class when prop is set to 6', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box size-md="6"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box size-md="6"></pds-box>`,
     });
 
     const element = page.root;
 
-    expect(element).toHaveClass('pds-layout-box-md-6');
+    expect(element).toHaveClass('pds-box-md-6');
   });
 
   it('renders size-lg class when prop is set to 6', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box size-lg="6"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box size-lg="6"></pds-box>`,
     });
 
     const element = page.root;
 
-    expect(element).toHaveClass('pds-layout-box-lg-6');
+    expect(element).toHaveClass('pds-box-lg-6');
   });
 
   it('renders size-lg class when prop is set to 6', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box size-lg="6"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box size-lg="6"></pds-box>`,
     });
 
     const element = page.root;
 
-    expect(element).toHaveClass('pds-layout-box-lg-6');
+    expect(element).toHaveClass('pds-box-lg-6');
   });
 
   it('renders size-xl class when prop is set to 6', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box size-xl="6"></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box size-xl="6"></pds-box>`,
     });
 
     const element = page.root;
 
-    expect(element).toHaveClass('pds-layout-box-xl-6');
+    expect(element).toHaveClass('pds-box-xl-6');
   });
 
   it('renders layout-box class when no size prop is set', async () => {
     const page = await newSpecPage({
-      components: [PdsLayoutBox],
-      html: `<pds-layout-box></pds-layout-box>`,
+      components: [PdsBox],
+      html: `<pds-box></pds-box>`,
     });
 
     const element = page.root;
 
-    expect(element).toHaveClass('pds-layout-box');
+    expect(element).toHaveClass('pds-box');
   });
 });

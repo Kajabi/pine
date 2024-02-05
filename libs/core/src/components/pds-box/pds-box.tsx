@@ -3,10 +3,10 @@ import { Component, h, Host, Prop } from '@stencil/core';
 import { BoxColumnType, BoxTShirtSizeType } from '../../utils/types';
 
 @Component({
-  tag: 'pds-layout-box',
-  styleUrl: 'pds-layout-box.scss',
+  tag: 'pds-box',
+  styleUrl: 'pds-box.scss',
 })
-export class PdsLayoutBox {
+export class PdsBox {
   /**
    * Defines the vertical alignment of the box items.
    * @defaultValue start
@@ -159,30 +159,30 @@ export class PdsLayoutBox {
   render() {
     const boxClasses = `
       ${this.alignItems ? `pds-align-items-${this.alignItems}` : ''}
-      ${this.auto ? 'pds-layout-box--auto' : ''}
-      ${this.bordered ? 'pds-layout-box--bordered' : ''}
+      ${this.auto ? 'pds-box--auto' : ''}
+      ${this.bordered ? 'pds-box--bordered' : ''}
       ${this.borderRadius ? `pds-border-radius-${this.borderRadius}` : ''}
-      ${this.direction ? `pds-layout-box-direction-${this.direction}` : ''}
-      ${this.display ? `pds-layout-box--display-${this.display}` : ''}
-      ${this.fit ? 'pds-layout-box--fit' : ''}
-      ${this.gap ? `pds-layout-box-gap-${this.gap}` : ''}
-      ${this.flex ? `pds-layout-box--flex-${this.flex}` : ''}
+      ${this.direction ? `pds-box-direction-${this.direction}` : ''}
+      ${this.display ? `pds-box--display-${this.display}` : ''}
+      ${this.fit ? 'pds-box--fit' : ''}
+      ${this.gap ? `pds-box-gap-${this.gap}` : ''}
+      ${this.flex ? `pds-box--flex-${this.flex}` : ''}
       ${this.justifyContent ? `pds-justify-content-${this.justifyContent}` : ''}
-      ${this.offset ? `pds-layout-box-offset-${this.offset}` : ''}
-      ${this.offsetXs ? `pds-layout-box-offset-xs-${this.offsetXs}` : ''}
-      ${this.offsetSm ? `pds-layout-box-offset-sm-${this.offsetSm}` : ''}
-      ${this.offsetMd ? `pds-layout-box-offset-md-${this.offsetMd}` : ''}
-      ${this.offsetLg ? `pds-layout-box-offset-lg-${this.offsetLg}` : ''}
-      ${this.offsetXl ? `pds-layout-box-offset-xl-${this.offsetXl}` : ''}
+      ${this.offset ? `pds-box-offset-${this.offset}` : ''}
+      ${this.offsetXs ? `pds-box-offset-xs-${this.offsetXs}` : ''}
+      ${this.offsetSm ? `pds-box-offset-sm-${this.offsetSm}` : ''}
+      ${this.offsetMd ? `pds-box-offset-md-${this.offsetMd}` : ''}
+      ${this.offsetLg ? `pds-box-offset-lg-${this.offsetLg}` : ''}
+      ${this.offsetXl ? `pds-box-offset-xl-${this.offsetXl}` : ''}
       ${this.padding ? `pds-padding-${this.padding}` : ''}
       ${this.shadow ? `pds-shadow-${this.shadow}` : ''}
-      ${this.size ? `pds-layout-box pds-layout-box-${this.size}` : ''}
-      ${this.sizeXs ? `pds-layout-box-xs-${this.sizeXs}` : ''}
-      ${this.sizeSm ? `pds-layout-box-sm-${this.sizeSm}` : ''}
-      ${this.sizeMd ? `pds-layout-box-md-${this.sizeMd}` : ''}
-      ${this.sizeLg ? `pds-layout-box-lg-${this.sizeLg}` : ''}
-      ${this.sizeXl ? `pds-layout-box-xl-${this.sizeXl}` : ''}
-      ${!this.size && !this.sizeSm && !this.sizeMd && !this.sizeLg && !this.sizeXl ? 'pds-layout-box' : ''}
+      ${this.size ? `pds-box pds-box-${this.size}` : ''}
+      ${this.sizeXs ? `pds-box-xs-${this.sizeXs}` : ''}
+      ${this.sizeSm ? `pds-box-sm-${this.sizeSm}` : ''}
+      ${this.sizeMd ? `pds-box-md-${this.sizeMd}` : ''}
+      ${this.sizeLg ? `pds-box-lg-${this.sizeLg}` : ''}
+      ${this.sizeXl ? `pds-box-xl-${this.sizeXl}` : ''}
+      ${!this.size && !this.sizeSm && !this.sizeMd && !this.sizeLg && !this.sizeXl ? 'pds-box' : ''}
     `;
 
     const boxInlineStyles = {

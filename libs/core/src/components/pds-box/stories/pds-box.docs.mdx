@@ -1,5 +1,5 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
-import * as stories from './pds-layout-box.stories.js';
+import * as stories from './pds-box.stories.js';
 
 <Meta of={stories} />
 
@@ -16,274 +16,274 @@ Box is our primitive layout component. It is intended to be used as a building b
 By default Box has no border. Use `bordered` to add a border to the box. Use `borderColor` to change the color of the border. Use `borderRadius` to change the rounding of the box's corners.
 
 <Canvas mdxSource={`
-<pds-layout-box
+<pds-box
   bordered="true"
 >
   Border
-</pds-layout-box>
+</pds-box>
 `}>
-  <pds-layout-box
+  <pds-box
     bordered="true"
   >
     Border
-  </pds-layout-box>
+  </pds-box>
 </Canvas>
 
 ### Border Color
 Please refer to the color brand guidelines for the appropriate color to use. Use `borderColor` to change the color of the border.
 
 <Canvas mdxSource={`
-<pds-layout-box
+<pds-box
   bordered="true"
 >
   Border Color
-</pds-layout-box>
-<pds-layout-box
+</pds-box>
+<pds-box
   bordered="true"
   border-color="#0072EF"
 >
   Border Color
-</pds-layout-box>
-<pds-layout-box
+</pds-box>
+<pds-box
   bordered="true"
   border-color="#CF3C32"
 >
   Border Color
-</pds-layout-box>
-<pds-layout-box
+</pds-box>
+<pds-box
   bordered="true"
   border-color="#FFC505"
 >
   Border Color
-</pds-layout-box>
+</pds-box>
 `}>
-  <pds-layout-box
+  <pds-box
     bordered="true"
   >
     Border Color
-  </pds-layout-box>
-  <pds-layout-box
+  </pds-box>
+  <pds-box
     bordered="true"
     border-color="#0072EF"
   >
     Border Color
-  </pds-layout-box>
-  <pds-layout-box
+  </pds-box>
+  <pds-box
     bordered="true"
     border-color="#CF3C32"
   >
     Border Color
-  </pds-layout-box>
-  <pds-layout-box
+  </pds-box>
+  <pds-box
     bordered="true"
     border-color="#FFC505"
   >
     Border Color
-  </pds-layout-box>
+  </pds-box>
 </Canvas>
 
 ### Border Radius
 By default Box has no border radius. Use `borderRadius` to change the rounding of the box's corners.
 <Canvas mdxSource={`
-<pds-layout-box
+<pds-box
   bordered="true"
   border-radius="xs"
 >
   xs border radius
-</pds-layout-box>
-<pds-layout-box
+</pds-box>
+<pds-box
   bordered="true"
   border-radius="sm"
 >
   sm border radius
-</pds-layout-box>
-<pds-layout-box
+</pds-box>
+<pds-box
   bordered="true"
   border-radius="md"
 >
   md border radius
-</pds-layout-box>
-<pds-layout-box
+</pds-box>
+<pds-box
   bordered="true"
   border-radius="lg"
 >
   lg border radius
-</pds-layout-box>
+</pds-box>
 `}>
-  <pds-layout-box
+  <pds-box
     bordered="true"
     border-radius="xs"
   >
     xs border radius
-  </pds-layout-box>
-  <pds-layout-box
+  </pds-box>
+  <pds-box
     bordered="true"
     border-radius="sm"
   >
     sm border radius
-  </pds-layout-box>
-  <pds-layout-box
+  </pds-box>
+  <pds-box
     bordered="true"
     border-radius="md"
   >
     md border radius
-  </pds-layout-box>
-  <pds-layout-box
+  </pds-box>
+  <pds-box
     bordered="true"
     border-radius="lg"
   >
     lg border radius
-  </pds-layout-box>
+  </pds-box>
 </Canvas>
 
 ### Shadow
 By default Box has no shadow. Use `shadow` to add a shadow to the box. 
 
 <Canvas mdxSource={`
-<pds-layout-box
+<pds-box
   shadow="xs"
 >
   Shadow xs
-</pds-layout-box>
-<pds-layout-box
+</pds-box>
+<pds-box
   shadow="sm"
 >
   Shadow sm
-</pds-layout-box>
-<pds-layout-box
+</pds-box>
+<pds-box
   shadow="md"
 >
   Shadow md
-</pds-layout-box>
-<pds-layout-box
+</pds-box>
+<pds-box
   shadow="lg"
 >
   Shadow lg
-</pds-layout-box>
+</pds-box>
 `}>
-  <pds-layout-box
+  <pds-box
     shadow="xs"
   >
     Shadow xs
-  </pds-layout-box>
-  <pds-layout-box
+  </pds-box>
+  <pds-box
     shadow="sm"
   >
     Shadow sm
-  </pds-layout-box>
-  <pds-layout-box
+  </pds-box>
+  <pds-box
     shadow="md"
   >
     Shadow md
-  </pds-layout-box>
-  <pds-layout-box
+  </pds-box>
+  <pds-box
     shadow="lg"
   >
     Shadow lg
-  </pds-layout-box>
+  </pds-box>
 </Canvas>
 
 ### Padding
 By default Box has no padding. Use `padding` to add padding to the box.
 
 <Canvas mdxSource={`
-<pds-layout-box
+<pds-box
   bordered="true"
   padding="xxs"
 >
   Padding xxs
-</pds-layout-box>
-<pds-layout-box
+</pds-box>
+<pds-box
   bordered="true"
   padding="xxs"
 >
   Padding xs
-</pds-layout-box>
-<pds-layout-box
+</pds-box>
+<pds-box
   bordered="true"
   padding="xs"
 >
   Padding xxs
-</pds-layout-box>
-<pds-layout-box
+</pds-box>
+<pds-box
   bordered="true"
   padding="sm"
 >
   Padding sm
-</pds-layout-box>
-<pds-layout-box
+</pds-box>
+<pds-box
   bordered="true"
   padding="md"
 >
   Padding md
-</pds-layout-box>
-<pds-layout-box
+</pds-box>
+<pds-box
   bordered="true"
   padding="lg"
 >
   Padding lg
-</pds-layout-box>
-<pds-layout-box
+</pds-box>
+<pds-box
   bordered="true"
   padding="xl"
 >
   Padding xl
-</pds-layout-box>
-<pds-layout-box
+</pds-box>
+<pds-box
   bordered="true"
   padding="xxl"
 >
   Padding xxl
-</pds-layout-box>
+</pds-box>
 `}>
-  <pds-layout-box
+  <pds-box
     bordered="true"
     padding="xxs"
   >
     Padding xxs
-  </pds-layout-box>
-  <pds-layout-box
+  </pds-box>
+  <pds-box
     bordered="true"
     padding="xxs"
   >
     Padding xs
-  </pds-layout-box>
-  <pds-layout-box
+  </pds-box>
+  <pds-box
     bordered="true"
     padding="xs"
   >
     Padding xxs
-  </pds-layout-box>
-  <pds-layout-box
+  </pds-box>
+  <pds-box
     bordered="true"
     padding="sm"
   >
     Padding sm
-  </pds-layout-box>
-  <pds-layout-box
+  </pds-box>
+  <pds-box
     bordered="true"
     padding="md"
   >
     Padding md
-  </pds-layout-box>
-  <pds-layout-box
+  </pds-box>
+  <pds-box
     bordered="true"
     padding="lg"
   >
     Padding lg
-  </pds-layout-box>
-  <pds-layout-box
+  </pds-box>
+  <pds-box
     bordered="true"
     padding="xl"
   >
     Padding xl
-  </pds-layout-box>
-  <pds-layout-box
+  </pds-box>
+  <pds-box
     bordered="true"
     padding="xxl"
   >
     Padding xxl
-  </pds-layout-box>
+  </pds-box>
 </Canvas>
 
 ### Display
@@ -292,37 +292,37 @@ By default Box is `display: inline-flex`. Use `display` to change the display pr
 ### Direction
 By default Box is `flex-direction: row`. Use `direction` to change the direction property `column` if the box's contents are intended to stack vertically'.
 <Canvas mdxSource={`
-<pds-layout-box
+<pds-box
   bordered="true"
 >
   <span>Item 1</span>
   <span>Item 2</span>
-</pds-layout-box>
-<pds-layout-box
+</pds-box>
+<pds-box
   bordered="true"
   direction="column"
 >
   <span>Item 1</span>
   <span>Item 2</span>
-</pds-layout-box>
+</pds-box>
 `}>
-  <pds-layout-box
+  <pds-box
     bordered="true"
   >
     <span>Item 1</span>
     <span>Item 2</span>
-  </pds-layout-box>
-  <pds-layout-box
+  </pds-box>
+  <pds-box
     bordered="true"
     direction="column"
   >
     <span>Item 1</span>
     <span>Item 2</span>
-  </pds-layout-box>
+  </pds-box>
 </Canvas>
 
 
 ### Layout Properties
-`pds-layout-box` not only allows for custom element properties, but it also allows for a flexible layout system. The layout system is based on the [CSS Flexbox specification](https://drafts.csswg.org/css-flexbox/) and can be view on the [Layouts](/docs/foundations-layout--docs) page
+`pds-box` not only allows for custom element properties, but it also allows for a flexible layout system. The layout system is based on the [CSS Flexbox specification](https://drafts.csswg.org/css-flexbox/) and can be view on the [Layouts](/docs/foundations-layout--docs) page
 
 

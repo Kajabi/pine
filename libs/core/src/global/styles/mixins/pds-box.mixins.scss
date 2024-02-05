@@ -23,7 +23,7 @@
 @mixin generate-columns($prefix, $columns) {
   @for $i from 0 through $columns {
     /* stylelint-disable-next-line function-no-unknown */
-    $class-name: if($prefix, 'pds-layout-box-#{$prefix}-#{$i}', 'pds-layout-box-#{$i}');
+    $class-name: if($prefix, 'pds-box-#{$prefix}-#{$i}', 'pds-box-#{$i}');
     .#{$class-name} {
       @if $i == 0 {
         display: none;
@@ -39,7 +39,7 @@
 @mixin generate-column-offsets($prefix, $columns) {
   @for $i from 0 through $columns {
     /* stylelint-disable-next-line function-no-unknown */
-    $class-name: if($prefix, 'pds-layout-box-offset-#{$prefix}-#{$i}', 'pds-layout-box-offset-#{$i}');
+    $class-name: if($prefix, 'pds-box-offset-#{$prefix}-#{$i}', 'pds-box-offset-#{$i}');
     .#{$class-name} {
       @if $i == 0 {
         margin-inline-start: 0;

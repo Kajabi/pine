@@ -17,12 +17,12 @@ By default boxes with rows will be equal width if no size is specified.
 
 <Canvas mdxSource={`
 <pds-layout-row>
-  <pds-layout-box>Item 1</pds-layout-box>
-  <pds-layout-box direction="column">
+  <pds-box>Item 1</pds-box>
+  <pds-box direction="column">
     <p>Content 1</p>
     <p>Content 2</p>
-  </pds-layout-box>
-  <pds-layout-box>Item 3</pds-layout-box>
+  </pds-box>
+  <pds-box>Item 3</pds-box>
 </pds-layout-row>
 `}>
   <pds-layout-row
@@ -31,12 +31,12 @@ By default boxes with rows will be equal width if no size is specified.
     gap="12px"
     min-height="100px"
   >
-    <pds-layout-box>Item 1</pds-layout-box>
-    <pds-layout-box direction="column">
+    <pds-box>Item 1</pds-box>
+    <pds-box direction="column">
       <p>Content 1</p>
       <p>Content 2</p>
-    </pds-layout-box>
-    <pds-layout-box>Item 3</pds-layout-box>
+    </pds-box>
+    <pds-box>Item 3</pds-box>
   </pds-layout-row>
 </Canvas>
 
@@ -45,13 +45,13 @@ If the size values equal more than 12, the boxes will wrap to the next line.
 
 <Canvas mdxSource={`
 <pds-layout-row>
-  <pds-layout-box bordered size-xs="4">size-xs 4</pds-layout-box>
-  <pds-layout-box bordered size-xs="10">size-xs 10</pds-layout-box>
+  <pds-box bordered size-xs="4">size-xs 4</pds-box>
+  <pds-box bordered size-xs="10">size-xs 10</pds-box>
 </pds-layout-row>
 `}>
   <pds-layout-row>
-    <pds-layout-box bordered size-sm="4">size-xs 4</pds-layout-box>
-    <pds-layout-box bordered size-sm="10">size-xs 10</pds-layout-box>
+    <pds-box bordered size-sm="4">size-xs 4</pds-box>
+    <pds-box bordered size-sm="10">size-xs 10</pds-box>
   </pds-layout-row>
 </Canvas>
 

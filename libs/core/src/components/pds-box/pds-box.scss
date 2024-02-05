@@ -13,7 +13,7 @@ img {
   width: 100%;
 }
 
-[class*='pds-layout-box'] {
+[class*='pds-box'] {
   background-color: var(--box-background-color);
   box-sizing: border-box;
   display: inline-flex;
@@ -94,56 +94,56 @@ $pine-spacing-tokens: (
   @include generate-columns('xl', 12);
 }
 
-.pds-layout-box {
+.pds-box {
   flex-basis: 0;
   flex-grow: 1;
 }
 
-.pds-layout-box--auto {
+.pds-box--auto {
   flex: 0 0 var(--box-min-width, fit-content);
   min-width: auto;
   width: auto;
 }
 
-.pds-layout-box--fit {
+.pds-box--fit {
   max-width: 100%;
   min-width: 100%;
   width: 100%;
 }
 
-.pds-layout-box--bordered {
+.pds-box--bordered {
   border-color: var(--box-border-color, var(--pine-border-default-color));
   border-style: var(--pine-border-default-style);
   border-width: var(--pine-border-default-width);
 }
 
 // Display helpers
-.pds-layout-box--display-flex {
+.pds-box--display-flex {
   display: flex;
 }
 
-.pds-layout-box--display-inline-flex {
+.pds-box--display-inline-flex {
   display: inline-flex;
 }
 
-.pds-layout-box--display-block {
+.pds-box--display-block {
   display: block;
 }
 
-.pds-layout-box--display-inline-block {
+.pds-box--display-inline-block {
   display: inline-block;
 }
 
 // Flex helpers
-.pds-layout-box--flex-none {
+.pds-box--flex-none {
   flex: 0 0 auto;
 }
 
-.pds-layout-box--flex-grow {
+.pds-box--flex-grow {
   flex: 1 1 auto
 }
 
-.pds-layout-box--flex-shrink {
+.pds-box--flex-shrink {
   flex: 0 0 auto;
 }
 
@@ -190,35 +190,35 @@ $pine-spacing-tokens: (
 }
 
 // Gap helpers
-.pds-layout-box-gap-none {
+.pds-box-gap-none {
   gap: 0;
 }
 
-.pds-layout-box-gap-xxs {
+.pds-box-gap-xxs {
   gap: var(--pine-spacing-xxs);
 }
 
-.pds-layout-box-gap-xs {
+.pds-box-gap-xs {
   gap: var(--pine-spacing-xxs);
 }
 
-.pds-layout-box-gap-sm {
+.pds-box-gap-sm {
   gap: var(--pine-spacing-sm);
 }
 
-.pds-layout-box-gap-md {
+.pds-box-gap-md {
   gap: var(--pine-spacing-md);
 }
 
-.pds-layout-box-gap-lg {
+.pds-box-gap-lg {
   gap: var(--pine-spacing-lg);
 }
 
-.pds-layout-box-gap-xl {
+.pds-box-gap-xl {
   gap: var(--pine-spacing-xl);
 }
 
-.pds-layout-box-gap-xxl {
+.pds-box-gap-xxl {
   gap: var(--pine-spacing-2xl);
 }
 
@@ -256,20 +256,20 @@ $pine-spacing-tokens: (
 }
 
 // Display helpers
-.pds-layout-box-display-flex {
+.pds-box-display-flex {
   display: flex;
 }
 
-.pds-layout-box-display-inline-flex {
+.pds-box-display-inline-flex {
   display: inline-flex;
 }
 
 // Flex Direction helpers
-.pds-layout-box-direction-row {
+.pds-box-direction-row {
   flex-direction: row;
 }
 
-.pds-layout-box-direction-column {
+.pds-box-direction-column {
   flex-direction: column;
 }
 

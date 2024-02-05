@@ -5,11 +5,11 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 import { BoxColumnType, BoxTShirtSizeType } from "./utils/types";
+import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 import { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
-export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 export { BoxColumnType, BoxTShirtSizeType } from "./utils/types";
+export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 export { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
     interface PdsAvatar {
@@ -52,6 +52,129 @@ export namespace Components {
           * @defaultValue customer
          */
         "variant"?: 'customer' | 'admin';
+    }
+    interface PdsBox {
+        /**
+          * Defines the vertical alignment of the box items.
+          * @defaultValue start
+         */
+        "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * If `true`, the box will be sized to fit its contents.
+         */
+        "auto"?: boolean;
+        /**
+          * Defines the background-color of the box.
+         */
+        "backgroundColor"?: string;
+        /**
+          * Defines the border color of the box.
+         */
+        "borderColor"?: string;
+        /**
+          * Defines how rounded the box corners are.
+          * @defaultValue none
+         */
+        "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
+        /**
+          * If `true`, the box will have a border.
+         */
+        "bordered"?: boolean;
+        /**
+          * Defines the orientation of the box items.
+          * @defaultValue row
+         */
+        "direction"?: `row` | `column`;
+        /**
+          * Defines the display style of the box.
+          * @defaultValue flex
+         */
+        "display"?: `flex` | `inline-flex` | `block` | `inline-block`;
+        /**
+          * If `true`, sets the box `max-width` to `100%`.
+         */
+        "fit"?: boolean;
+        /**
+          * Defines how a box will grow or shrink to fit the space available in its container.
+          * @defaultValue none
+         */
+        "flex"?: `none` | `grow` | `shrink`;
+        /**
+          * Defines the spacing between the box items.
+          * @defaultValue none
+         */
+        "gap"?: BoxTShirtSizeType;
+        /**
+          * Defines the horizontal alignment of the box items.
+          * @defaultValue start
+         */
+        "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
+        /**
+          * The minimum height of the row. Used in conjunction with alignment props
+         */
+        "minHeight"?: string;
+        /**
+          * The minimum width of the row. Used in conjunction with alignment props
+         */
+        "minWidth"?: string;
+        /**
+          * Move columns to the end direction of the row for all screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offset"?: BoxColumnType;
+        /**
+          * Move columns to the end direction of the row for `LG` screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offsetLg"?: BoxColumnType;
+        /**
+          * Move columns to the end direction of the row for `MD` screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offsetMd"?: BoxColumnType;
+        /**
+          * Move columns to the end direction of the row for `SM` screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offsetSm"?: BoxColumnType;
+        /**
+          * Move columns to the end direction of the row for `XL` screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offsetXl"?: BoxColumnType;
+        /**
+          * Move columns to the end direction of the row for `XS` screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offsetXs"?: BoxColumnType;
+        /**
+          * Defines the spacing between the box items.
+          * @defaultValue none
+         */
+        "padding"?: BoxTShirtSizeType;
+        /**
+          * Defines the box shadow.
+          * @defaultValue none
+         */
+        "shadow"?: BoxTShirtSizeType;
+        /**
+          * Size of the column for all screen sizes that are not explicitly set.
+         */
+        "size"?: BoxColumnType;
+        /**
+          * At screen sizes greater than the `LG` breakpoint, this will take the number of columns specified.
+         */
+        "sizeLg"?: BoxColumnType;
+        /**
+          * At screen sizes greater than the `MD` breakpoint, this will take the number of columns specified.
+         */
+        "sizeMd"?: BoxColumnType;
+        /**
+          * At screen sizes greater than the `SM` breakpoint, this will take the number of columns specified.
+         */
+        "sizeSm"?: BoxColumnType;
+        /**
+          * At screen sizes greater than the `XL` breakpoint, this will take the number of columns specified.
+         */
+        "sizeXl"?: BoxColumnType;
+        /**
+          * At screen sizes less than the `XS` breakpoint, this will take the number of columns specified.
+         */
+        "sizeXs"?: BoxColumnType;
     }
     interface PdsButton {
         /**
@@ -289,129 +412,6 @@ export namespace Components {
           * The value of the input.
          */
         "value"?: string;
-    }
-    interface PdsLayoutBox {
-        /**
-          * Defines the vertical alignment of the box items.
-          * @defaultValue start
-         */
-        "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
-        /**
-          * If `true`, the box will be sized to fit its contents.
-         */
-        "auto"?: boolean;
-        /**
-          * Defines the background-color of the box.
-         */
-        "backgroundColor"?: string;
-        /**
-          * Defines the border color of the box.
-         */
-        "borderColor"?: string;
-        /**
-          * Defines how rounded the box corners are.
-          * @defaultValue none
-         */
-        "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
-        /**
-          * If `true`, the box will have a border.
-         */
-        "bordered"?: boolean;
-        /**
-          * Defines the orientation of the box items.
-          * @defaultValue row
-         */
-        "direction"?: `row` | `column`;
-        /**
-          * Defines the display style of the box.
-          * @defaultValue flex
-         */
-        "display"?: `flex` | `inline-flex` | `block` | `inline-block`;
-        /**
-          * If `true`, sets the box `max-width` to `100%`.
-         */
-        "fit"?: boolean;
-        /**
-          * Defines how a box will grow or shrink to fit the space available in its container.
-          * @defaultValue none
-         */
-        "flex"?: `none` | `grow` | `shrink`;
-        /**
-          * Defines the spacing between the box items.
-          * @defaultValue none
-         */
-        "gap"?: BoxTShirtSizeType;
-        /**
-          * Defines the horizontal alignment of the box items.
-          * @defaultValue start
-         */
-        "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
-        /**
-          * The minimum height of the row. Used in conjunction with alignment props
-         */
-        "minHeight"?: string;
-        /**
-          * The minimum width of the row. Used in conjunction with alignment props
-         */
-        "minWidth"?: string;
-        /**
-          * Move columns to the end direction of the row for all screen sizes. Increases the starting margin of a column by specified number of columns.
-         */
-        "offset"?: BoxColumnType;
-        /**
-          * Move columns to the end direction of the row for `LG` screen sizes. Increases the starting margin of a column by specified number of columns.
-         */
-        "offsetLg"?: BoxColumnType;
-        /**
-          * Move columns to the end direction of the row for `MD` screen sizes. Increases the starting margin of a column by specified number of columns.
-         */
-        "offsetMd"?: BoxColumnType;
-        /**
-          * Move columns to the end direction of the row for `SM` screen sizes. Increases the starting margin of a column by specified number of columns.
-         */
-        "offsetSm"?: BoxColumnType;
-        /**
-          * Move columns to the end direction of the row for `XL` screen sizes. Increases the starting margin of a column by specified number of columns.
-         */
-        "offsetXl"?: BoxColumnType;
-        /**
-          * Move columns to the end direction of the row for `XS` screen sizes. Increases the starting margin of a column by specified number of columns.
-         */
-        "offsetXs"?: BoxColumnType;
-        /**
-          * Defines the spacing between the box items.
-          * @defaultValue none
-         */
-        "padding"?: BoxTShirtSizeType;
-        /**
-          * Defines the box shadow.
-          * @defaultValue none
-         */
-        "shadow"?: BoxTShirtSizeType;
-        /**
-          * Size of the column for all screen sizes that are not explicitly set.
-         */
-        "size"?: BoxColumnType;
-        /**
-          * At screen sizes greater than the `LG` breakpoint, this will take the number of columns specified.
-         */
-        "sizeLg"?: BoxColumnType;
-        /**
-          * At screen sizes greater than the `MD` breakpoint, this will take the number of columns specified.
-         */
-        "sizeMd"?: BoxColumnType;
-        /**
-          * At screen sizes greater than the `SM` breakpoint, this will take the number of columns specified.
-         */
-        "sizeSm"?: BoxColumnType;
-        /**
-          * At screen sizes greater than the `XL` breakpoint, this will take the number of columns specified.
-         */
-        "sizeXl"?: BoxColumnType;
-        /**
-          * At screen sizes less than the `XS` breakpoint, this will take the number of columns specified.
-         */
-        "sizeXs"?: BoxColumnType;
     }
     interface PdsLayoutRow {
         /**
@@ -864,6 +864,12 @@ declare global {
         prototype: HTMLPdsAvatarElement;
         new (): HTMLPdsAvatarElement;
     };
+    interface HTMLPdsBoxElement extends Components.PdsBox, HTMLStencilElement {
+    }
+    var HTMLPdsBoxElement: {
+        prototype: HTMLPdsBoxElement;
+        new (): HTMLPdsBoxElement;
+    };
     interface HTMLPdsButtonElement extends Components.PdsButton, HTMLStencilElement {
     }
     var HTMLPdsButtonElement: {
@@ -949,12 +955,6 @@ declare global {
     var HTMLPdsInputElement: {
         prototype: HTMLPdsInputElement;
         new (): HTMLPdsInputElement;
-    };
-    interface HTMLPdsLayoutBoxElement extends Components.PdsLayoutBox, HTMLStencilElement {
-    }
-    var HTMLPdsLayoutBoxElement: {
-        prototype: HTMLPdsLayoutBoxElement;
-        new (): HTMLPdsLayoutBoxElement;
     };
     interface HTMLPdsLayoutRowElement extends Components.PdsLayoutRow, HTMLStencilElement {
     }
@@ -1155,6 +1155,7 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "pds-avatar": HTMLPdsAvatarElement;
+        "pds-box": HTMLPdsBoxElement;
         "pds-button": HTMLPdsButtonElement;
         "pds-checkbox": HTMLPdsCheckboxElement;
         "pds-chip": HTMLPdsChipElement;
@@ -1162,7 +1163,6 @@ declare global {
         "pds-divider": HTMLPdsDividerElement;
         "pds-image": HTMLPdsImageElement;
         "pds-input": HTMLPdsInputElement;
-        "pds-layout-box": HTMLPdsLayoutBoxElement;
         "pds-layout-row": HTMLPdsLayoutRowElement;
         "pds-link": HTMLPdsLinkElement;
         "pds-progress": HTMLPdsProgressElement;
@@ -1224,6 +1224,129 @@ declare namespace LocalJSX {
           * @defaultValue customer
          */
         "variant"?: 'customer' | 'admin';
+    }
+    interface PdsBox {
+        /**
+          * Defines the vertical alignment of the box items.
+          * @defaultValue start
+         */
+        "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * If `true`, the box will be sized to fit its contents.
+         */
+        "auto"?: boolean;
+        /**
+          * Defines the background-color of the box.
+         */
+        "backgroundColor"?: string;
+        /**
+          * Defines the border color of the box.
+         */
+        "borderColor"?: string;
+        /**
+          * Defines how rounded the box corners are.
+          * @defaultValue none
+         */
+        "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
+        /**
+          * If `true`, the box will have a border.
+         */
+        "bordered"?: boolean;
+        /**
+          * Defines the orientation of the box items.
+          * @defaultValue row
+         */
+        "direction"?: `row` | `column`;
+        /**
+          * Defines the display style of the box.
+          * @defaultValue flex
+         */
+        "display"?: `flex` | `inline-flex` | `block` | `inline-block`;
+        /**
+          * If `true`, sets the box `max-width` to `100%`.
+         */
+        "fit"?: boolean;
+        /**
+          * Defines how a box will grow or shrink to fit the space available in its container.
+          * @defaultValue none
+         */
+        "flex"?: `none` | `grow` | `shrink`;
+        /**
+          * Defines the spacing between the box items.
+          * @defaultValue none
+         */
+        "gap"?: BoxTShirtSizeType;
+        /**
+          * Defines the horizontal alignment of the box items.
+          * @defaultValue start
+         */
+        "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
+        /**
+          * The minimum height of the row. Used in conjunction with alignment props
+         */
+        "minHeight"?: string;
+        /**
+          * The minimum width of the row. Used in conjunction with alignment props
+         */
+        "minWidth"?: string;
+        /**
+          * Move columns to the end direction of the row for all screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offset"?: BoxColumnType;
+        /**
+          * Move columns to the end direction of the row for `LG` screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offsetLg"?: BoxColumnType;
+        /**
+          * Move columns to the end direction of the row for `MD` screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offsetMd"?: BoxColumnType;
+        /**
+          * Move columns to the end direction of the row for `SM` screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offsetSm"?: BoxColumnType;
+        /**
+          * Move columns to the end direction of the row for `XL` screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offsetXl"?: BoxColumnType;
+        /**
+          * Move columns to the end direction of the row for `XS` screen sizes. Increases the starting margin of a column by specified number of columns.
+         */
+        "offsetXs"?: BoxColumnType;
+        /**
+          * Defines the spacing between the box items.
+          * @defaultValue none
+         */
+        "padding"?: BoxTShirtSizeType;
+        /**
+          * Defines the box shadow.
+          * @defaultValue none
+         */
+        "shadow"?: BoxTShirtSizeType;
+        /**
+          * Size of the column for all screen sizes that are not explicitly set.
+         */
+        "size"?: BoxColumnType;
+        /**
+          * At screen sizes greater than the `LG` breakpoint, this will take the number of columns specified.
+         */
+        "sizeLg"?: BoxColumnType;
+        /**
+          * At screen sizes greater than the `MD` breakpoint, this will take the number of columns specified.
+         */
+        "sizeMd"?: BoxColumnType;
+        /**
+          * At screen sizes greater than the `SM` breakpoint, this will take the number of columns specified.
+         */
+        "sizeSm"?: BoxColumnType;
+        /**
+          * At screen sizes greater than the `XL` breakpoint, this will take the number of columns specified.
+         */
+        "sizeXl"?: BoxColumnType;
+        /**
+          * At screen sizes less than the `XS` breakpoint, this will take the number of columns specified.
+         */
+        "sizeXs"?: BoxColumnType;
     }
     interface PdsButton {
         /**
@@ -1477,129 +1600,6 @@ declare namespace LocalJSX {
           * The value of the input.
          */
         "value"?: string;
-    }
-    interface PdsLayoutBox {
-        /**
-          * Defines the vertical alignment of the box items.
-          * @defaultValue start
-         */
-        "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
-        /**
-          * If `true`, the box will be sized to fit its contents.
-         */
-        "auto"?: boolean;
-        /**
-          * Defines the background-color of the box.
-         */
-        "backgroundColor"?: string;
-        /**
-          * Defines the border color of the box.
-         */
-        "borderColor"?: string;
-        /**
-          * Defines how rounded the box corners are.
-          * @defaultValue none
-         */
-        "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
-        /**
-          * If `true`, the box will have a border.
-         */
-        "bordered"?: boolean;
-        /**
-          * Defines the orientation of the box items.
-          * @defaultValue row
-         */
-        "direction"?: `row` | `column`;
-        /**
-          * Defines the display style of the box.
-          * @defaultValue flex
-         */
-        "display"?: `flex` | `inline-flex` | `block` | `inline-block`;
-        /**
-          * If `true`, sets the box `max-width` to `100%`.
-         */
-        "fit"?: boolean;
-        /**
-          * Defines how a box will grow or shrink to fit the space available in its container.
-          * @defaultValue none
-         */
-        "flex"?: `none` | `grow` | `shrink`;
-        /**
-          * Defines the spacing between the box items.
-          * @defaultValue none
-         */
-        "gap"?: BoxTShirtSizeType;
-        /**
-          * Defines the horizontal alignment of the box items.
-          * @defaultValue start
-         */
-        "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
-        /**
-          * The minimum height of the row. Used in conjunction with alignment props
-         */
-        "minHeight"?: string;
-        /**
-          * The minimum width of the row. Used in conjunction with alignment props
-         */
-        "minWidth"?: string;
-        /**
-          * Move columns to the end direction of the row for all screen sizes. Increases the starting margin of a column by specified number of columns.
-         */
-        "offset"?: BoxColumnType;
-        /**
-          * Move columns to the end direction of the row for `LG` screen sizes. Increases the starting margin of a column by specified number of columns.
-         */
-        "offsetLg"?: BoxColumnType;
-        /**
-          * Move columns to the end direction of the row for `MD` screen sizes. Increases the starting margin of a column by specified number of columns.
-         */
-        "offsetMd"?: BoxColumnType;
-        /**
-          * Move columns to the end direction of the row for `SM` screen sizes. Increases the starting margin of a column by specified number of columns.
-         */
-        "offsetSm"?: BoxColumnType;
-        /**
-          * Move columns to the end direction of the row for `XL` screen sizes. Increases the starting margin of a column by specified number of columns.
-         */
-        "offsetXl"?: BoxColumnType;
-        /**
-          * Move columns to the end direction of the row for `XS` screen sizes. Increases the starting margin of a column by specified number of columns.
-         */
-        "offsetXs"?: BoxColumnType;
-        /**
-          * Defines the spacing between the box items.
-          * @defaultValue none
-         */
-        "padding"?: BoxTShirtSizeType;
-        /**
-          * Defines the box shadow.
-          * @defaultValue none
-         */
-        "shadow"?: BoxTShirtSizeType;
-        /**
-          * Size of the column for all screen sizes that are not explicitly set.
-         */
-        "size"?: BoxColumnType;
-        /**
-          * At screen sizes greater than the `LG` breakpoint, this will take the number of columns specified.
-         */
-        "sizeLg"?: BoxColumnType;
-        /**
-          * At screen sizes greater than the `MD` breakpoint, this will take the number of columns specified.
-         */
-        "sizeMd"?: BoxColumnType;
-        /**
-          * At screen sizes greater than the `SM` breakpoint, this will take the number of columns specified.
-         */
-        "sizeSm"?: BoxColumnType;
-        /**
-          * At screen sizes greater than the `XL` breakpoint, this will take the number of columns specified.
-         */
-        "sizeXl"?: BoxColumnType;
-        /**
-          * At screen sizes less than the `XS` breakpoint, this will take the number of columns specified.
-         */
-        "sizeXs"?: BoxColumnType;
     }
     interface PdsLayoutRow {
         /**
@@ -2023,6 +2023,7 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "pds-avatar": PdsAvatar;
+        "pds-box": PdsBox;
         "pds-button": PdsButton;
         "pds-checkbox": PdsCheckbox;
         "pds-chip": PdsChip;
@@ -2030,7 +2031,6 @@ declare namespace LocalJSX {
         "pds-divider": PdsDivider;
         "pds-image": PdsImage;
         "pds-input": PdsInput;
-        "pds-layout-box": PdsLayoutBox;
         "pds-layout-row": PdsLayoutRow;
         "pds-link": PdsLink;
         "pds-progress": PdsProgress;
@@ -2056,6 +2056,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "pds-avatar": LocalJSX.PdsAvatar & JSXBase.HTMLAttributes<HTMLPdsAvatarElement>;
+            "pds-box": LocalJSX.PdsBox & JSXBase.HTMLAttributes<HTMLPdsBoxElement>;
             "pds-button": LocalJSX.PdsButton & JSXBase.HTMLAttributes<HTMLPdsButtonElement>;
             "pds-checkbox": LocalJSX.PdsCheckbox & JSXBase.HTMLAttributes<HTMLPdsCheckboxElement>;
             "pds-chip": LocalJSX.PdsChip & JSXBase.HTMLAttributes<HTMLPdsChipElement>;
@@ -2063,7 +2064,6 @@ declare module "@stencil/core" {
             "pds-divider": LocalJSX.PdsDivider & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
             "pds-image": LocalJSX.PdsImage & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
             "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
-            "pds-layout-box": LocalJSX.PdsLayoutBox & JSXBase.HTMLAttributes<HTMLPdsLayoutBoxElement>;
             "pds-layout-row": LocalJSX.PdsLayoutRow & JSXBase.HTMLAttributes<HTMLPdsLayoutRowElement>;
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
             "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
