@@ -1,0 +1,51 @@
+@mixin generate-spacing-classes($directions, $tokens) {
+  @each $direction in $directions {
+    @each $key, $value in $tokens {
+      /* stylelint-disable-next-line function-no-unknown */
+      $class-name: if($direction, 'pds-spacing-#{$direction}-#{$key}', 'pds-spacing-#{$key}');
+      .#{$class-name} {
+        @if $direction == 'top' {
+          margin-block-start: $value;
+        } @else if $direction == 'bottom' {
+          margin-block-end: $value;
+        } @else if $direction == 'left' {
+          margin-inline-start: $value;
+        } @else if $direction == 'right' {
+          margin-inline-end: $value;
+        } @else {
+          margin: $value;
+        }
+      }
+    }
+  }
+}
+
+@mixin generate-columns($prefix, $columns) {
+  @for $i from 0 through $columns {
+    /* stylelint-disable-next-line function-no-unknown */
+    $class-name: if($prefix, 'pds-layout-box-#{$prefix}-#{$i}', 'pds-layout-box-#{$i}');
+    .#{$class-name} {
+      @if $i == 0 {
+        display: none;
+      } @else {
+        display: inline-flex;
+        flex: calc($i / $columns * 100%);
+        max-width: calc($i / $columns * 100%);
+      }
+    }
+  }
+}
+
+@mixin generate-column-offsets($prefix, $columns) {
+  @for $i from 0 through $columns {
+    /* stylelint-disable-next-line function-no-unknown */
+    $class-name: if($prefix, 'pds-layout-box-offset-#{$prefix}-#{$i}', 'pds-layout-box-offset-#{$i}');
+    .#{$class-name} {
+      @if $i == 0 {
+        margin-inline-start: 0;
+      } @else {
+        margin-inline-start: calc($i / $columns * 100%);
+      }
+    }
+  }
+}

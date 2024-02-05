@@ -1,3 +1,5 @@
+@import '../../global/styles/mixins/pds-box.mixins';
+
 :host {
   --box-background-color: inherit;
   --box-border-color: inherit;
@@ -36,64 +38,12 @@ $pine-spacing-tokens: (
   2xl: 64px,
 );
 
-@mixin generate-spacing-classes($directions, $tokens) {
-  @each $direction in $directions {
-    @each $key, $value in $tokens {
-      /* stylelint-disable-next-line function-no-unknown */
-      $class-name: if($direction, 'pds-spacing-#{$direction}-#{$key}', 'pds-spacing-#{$key}');
-      .#{$class-name} {
-        @if $direction == 'top' {
-          margin-block-start: $value;
-        } @else if $direction == 'bottom' {
-          margin-block-end: $value;
-        } @else if $direction == 'left' {
-          margin-inline-start: $value;
-        } @else if $direction == 'right' {
-          margin-inline-end: $value;
-        } @else {
-          margin: $value;
-        }
-      }
-    }
-  }
-}
-
+// Generate spacing classes
 @include generate-spacing-classes(false, $pine-spacing-tokens);
 @include generate-spacing-classes('top', $pine-spacing-tokens);
 @include generate-spacing-classes('right', $pine-spacing-tokens);
 @include generate-spacing-classes('left', $pine-spacing-tokens);
 @include generate-spacing-classes('bottom', $pine-spacing-tokens);
-
-
-@mixin generate-columns($prefix, $columns) {
-  @for $i from 0 through $columns {
-    /* stylelint-disable-next-line function-no-unknown */
-    $class-name: if($prefix, 'pds-layout-box-#{$prefix}-#{$i}', 'pds-layout-box-#{$i}');
-    .#{$class-name} {
-      @if $i == 0 {
-        display: none;
-      } @else {
-        display: inline-flex;
-        flex: calc($i / $columns * 100%);
-        max-width: calc($i / $columns * 100%);
-      }
-    }
-  }
-}
-
-@mixin generate-column-offsets($prefix, $columns) {
-  @for $i from 0 through $columns {
-    /* stylelint-disable-next-line function-no-unknown */
-    $class-name: if($prefix, 'pds-layout-box-offset-#{$prefix}-#{$i}', 'pds-layout-box-offset-#{$i}');
-    .#{$class-name} {
-      @if $i == 0 {
-        margin-inline-start: 0;
-      } @else {
-        margin-inline-start: calc($i / $columns * 100%);
-      }
-    }
-  }
-}
 
 // Base offset classes
 @include generate-column-offsets(false, 12);
