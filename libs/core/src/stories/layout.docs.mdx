@@ -23,7 +23,7 @@ The `pds-row` component is designed to create horizontal rows that contain a set
 ### Form Edit view
 <Canvas mdxSource={`
 <pds-box display="block">
-  <pds-row col-gap="1rem">
+  <pds-row col-gap="sm">
     {/* left side */}
     <pds-box direction="column" size-md="8">
       <pds-box class="pds-spacing-bottom-md" border direction="column" padding="md" border-radius="lg">
@@ -82,7 +82,7 @@ The maximum file size for a transcript is 2 MB. Supported file format: txt</p>
 </pds-box>
 `}>
 <pds-box display="block">
-  <pds-row col-gap="1rem">
+  <pds-row col-gap="sm">
     {/* left side */}
     <pds-box direction="column" size-md="8">
       <pds-box class="pds-spacing-bottom-md" border direction="column" padding="md" border-radius="lg">
@@ -149,7 +149,7 @@ The maximum file size for a transcript is 2 MB. Supported file format: txt</p>
   display="flex"
   padding="md"
 >
-  <pds-row col-gap="1rem">
+  <pds-row col-gap="sm">
     <pds-box align-items="center" justify-content="center">
       <img src="../src/stories/assets/offers.png" />
     </pds-box>
@@ -172,7 +172,7 @@ The maximum file size for a transcript is 2 MB. Supported file format: txt</p>
   display="flex"
   padding="md"
 >
-  <pds-row col-gap="1rem">
+  <pds-row col-gap="sm">
     <pds-box align-items="center" justify-content="center" size-sm="3">
       <img src="../src/stories/assets/offers.png" />
     </pds-box>
@@ -194,7 +194,7 @@ The maximum file size for a transcript is 2 MB. Supported file format: txt</p>
 
 <Canvas mdxSource={`
 <pds-box display="block">
-  <pds-row col-gap="24px">
+  <pds-row col-gap="md">
     <pds-box size-md="4">
       <pds-box
         border="true" 
@@ -256,7 +256,7 @@ The maximum file size for a transcript is 2 MB. Supported file format: txt</p>
 </pds-box>
 `}>
 <pds-box display="block">
-  <pds-row col-gap="24px">
+  <pds-row col-gap="md">
     <pds-box size-md="4">
       <pds-box
         border="true" 
@@ -640,7 +640,7 @@ You can nest `pds-row` and `pds-box` components to create more complex layouts.
 ### Gaps / Gutters
 When a gap or gutter is needed between the columns, an additional child `pds-box` must be used to ensure correct spacing between the columns and rows
 <Canvas mdxSource={`
-<pds-row col-gap="16px">
+<pds-row col-gap="sm">
   <pds-box size-sm="4">
     <pds-box 
       border-radius="sm"
@@ -657,7 +657,7 @@ When a gap or gutter is needed between the columns, an additional child `pds-box
   </pds-box>
 </pds-row>
 `}>
-  <pds-row col-gap="16px">
+  <pds-row col-gap="sm">
     <pds-box size-sm="4">
       <pds-box 
         border-radius="sm"

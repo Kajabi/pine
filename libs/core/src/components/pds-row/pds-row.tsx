@@ -46,10 +46,13 @@ export class PdsRow {
 
   private colGapMap: { [key in BoxTShirtSizeType]: string } = {
     none: '0',
+    xxs: '.25rem',
     xs: '.5rem',
     sm: '1rem',
     md: '1.5rem',
     lg: '2.25rem',
+    xl: '3rem',
+    xxl: '4rem',
   };
 
   render() {

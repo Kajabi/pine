@@ -29,7 +29,10 @@ export type BoxColumnType =
 
   export type BoxTShirtSizeType =
   'none'
+  | 'xxs'
   | 'xs'
   | 'sm'
   | 'md'
   | 'lg'
+  | 'xl'
+  | 'xxl'

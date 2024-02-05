@@ -1,10 +1,18 @@
 @import './pds-box.mixins';
 
-:host {
+pds-box {
   --box-background-color: inherit;
   --box-border-color: inherit;
   --box-min-height: none;
   --box-min-width: none;
+
+  --box-gap-xxs: var(--pine-spacing-050);
+  --box-gap-xs: var(--pine-spacing-100);
+  --box-gap-sm: var(--pine-spacing-200);
+  --box-gap-md: var(--pine-spacing-300);
+  --box-gap-lg: var(--pine-spacing-450);
+  --box-gap-xl: var(--pine-spacing-600);
+  --box-gap-xxl: var(--pine-spacing-800);
 
   display: block;
 }
@@ -195,31 +203,31 @@ $pine-spacing-tokens: (
 }
 
 .pds-box-gap-xxs {
-  gap: var(--pine-spacing-xxs);
+  gap: var(--box-gap-xxs);
 }
 
 .pds-box-gap-xs {
-  gap: var(--pine-spacing-xxs);
+  gap: var(--box-gap-xs);
 }
 
 .pds-box-gap-sm {
-  gap: var(--pine-spacing-sm);
+  gap: var(--box-gap-sm);
 }
 
 .pds-box-gap-md {
-  gap: var(--pine-spacing-md);
+  gap: var(--box-gap-md);
 }
 
 .pds-box-gap-lg {
-  gap: var(--pine-spacing-lg);
+  gap: var(--box-gap-lg);
 }
 
 .pds-box-gap-xl {
-  gap: var(--pine-spacing-xl);
+  gap: var(--box-gap-xl);
 }
 
 .pds-box-gap-xxl {
-  gap: var(--pine-spacing-2xl);
+  gap: var(--box-gap-2xl);
 }
 
 // Spacing helpers
@@ -228,31 +236,31 @@ $pine-spacing-tokens: (
 }
 
 .pds-padding-xxs {
-  padding: var(--pine-spacing-xxs);
+  padding: var(--box-gap-xxs);
 }
 
 .pds-padding-xs {
-  padding: var(--pine-spacing-xxs);
+  padding: var(--box-gap-xxs);
 }
 
 .pds-padding-sm {
-  padding: var(--pine-spacing-sm);
+  padding: var(--box-gap-sm);
 }
 
 .pds-padding-md {
-  padding: var(--pine-spacing-md);
+  padding: var(--box-gap-md);
 }
 
 .pds-padding-lg {
-  padding: var(--pine-spacing-lg);
+  padding: var(--box-gap-lg);
 }
 
 .pds-padding-xl {
-  padding: var(--pine-spacing-xl);
+  padding: var(--box-gap-xl);
 }
 
 .pds-padding-xxl {
-  padding: var(--pine-spacing-2xl);
+  padding: var(--box-gap-2xl);
 }
 
 // Display helpers
