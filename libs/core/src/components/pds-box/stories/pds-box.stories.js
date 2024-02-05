@@ -11,7 +11,7 @@ const BaseTemplate = (args) => html`
 <pds-box
 	align-items="${args.alignItems}"
   background-color="${args.backgroundColor}"
-	bordered="${args.bordered}"
+	border="${args.border}"
   border-color="${args.borderColor}"
 	border-radius="${args.borderRadius}"
   direction="${args.direction}"
@@ -28,6 +28,6 @@ const BaseTemplate = (args) => html`
 export const Default = BaseTemplate.bind();
 Default.args = {
   componentId: 'opt0',
-  bordered: true,
+  border: true,
   minHeight: '100px',
 };
