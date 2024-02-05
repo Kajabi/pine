@@ -6,7 +6,12 @@
 - changed-files:
   - any-glob-to-any-file: 'libs/react/**/*'
 
+"package: doc-componenets":
+- changed-files:
+  - any-glob-to-any-file: 'libs/doc-components/**/*'
+
 documentation:
+- head-branch: ['docs']
 - changed-files:
   - any-glob-to-any-file: '**/*.[md|mdx]'
 
