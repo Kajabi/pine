@@ -4,7 +4,7 @@ import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
 <Meta title="Foundations/Layout"/>
 
 # Layout
-The Layout system is driven by `pds-box` and `pds-layout-row`. 
+The Layout system is driven by `pds-box` and `pds-row`. 
 
 ## `pds-box`
 
@@ -13,17 +13,17 @@ The `pds-box` serves 2 main purposes:
 2. A a grid column
 
 In order to use the `pds-box` as a grid column, it **MUST**:
-- be a direct child of a `pds-layout-row`
+- be a direct child of a `pds-row`
 - have a `size` property set.
 
-## `pds-layout-row`
-The `pds-layout-row` component is designed to create horizontal rows that contain a set of columns that are capable of altering sizes at different breakpoints. `pds-box`s that don't exist in `pds-layout-row`s will not contain responsive functionality.
+## `pds-row`
+The `pds-row` component is designed to create horizontal rows that contain a set of columns that are capable of altering sizes at different breakpoints. `pds-box`s that don't exist in `pds-row`s will not contain responsive functionality.
 
 ## Examples
 ### Form Edit view
 <Canvas mdxSource={`
 <pds-box display="block">
-  <pds-layout-row col-gap="1rem">
+  <pds-row col-gap="1rem">
     {/* left side */}
     <pds-box direction="column" size-md="8">
       <pds-box class="pds-spacing-bottom-md" bordered direction="column" padding="md" border-radius="lg">
@@ -78,11 +78,11 @@ The maximum file size for a transcript is 2 MB. Supported file format: txt</p>
         <p>File upload component</p>
       </pds-box>
     </pds-box>
-  </pds-layout-row>
+  </pds-row>
 </pds-box>
 `}>
 <pds-box display="block">
-  <pds-layout-row col-gap="1rem">
+  <pds-row col-gap="1rem">
     {/* left side */}
     <pds-box direction="column" size-md="8">
       <pds-box class="pds-spacing-bottom-md" bordered direction="column" padding="md" border-radius="lg">
@@ -137,7 +137,7 @@ The maximum file size for a transcript is 2 MB. Supported file format: txt</p>
         <p>File upload component</p>
       </pds-box>
     </pds-box>
-  </pds-layout-row>
+  </pds-row>
 </pds-box>
 </Canvas>
 
@@ -149,7 +149,7 @@ The maximum file size for a transcript is 2 MB. Supported file format: txt</p>
   display="flex"
   padding="md"
 >
-  <pds-layout-row col-gap="1rem">
+  <pds-row col-gap="1rem">
     <pds-box align-items="center" justify-content="center">
       <img src="../src/stories/assets/offers.png" />
     </pds-box>
@@ -163,7 +163,7 @@ The maximum file size for a transcript is 2 MB. Supported file format: txt</p>
         </pds-box>
       </pds-box>
     </pds-box>
-  </pds-layout-row>
+  </pds-row>
 </pds-box>
 `}>
 <pds-box 
@@ -172,7 +172,7 @@ The maximum file size for a transcript is 2 MB. Supported file format: txt</p>
   display="flex"
   padding="md"
 >
-  <pds-layout-row col-gap="1rem">
+  <pds-row col-gap="1rem">
     <pds-box align-items="center" justify-content="center" size-sm="3">
       <img src="../src/stories/assets/offers.png" />
     </pds-box>
@@ -186,7 +186,7 @@ The maximum file size for a transcript is 2 MB. Supported file format: txt</p>
         </pds-box>
       </pds-box>
     </pds-box>
-  </pds-layout-row>
+  </pds-row>
 </pds-box>
 </Canvas>
 
@@ -194,7 +194,7 @@ The maximum file size for a transcript is 2 MB. Supported file format: txt</p>
 
 <Canvas mdxSource={`
 <pds-box display="block">
-  <pds-layout-row col-gap="24px">
+  <pds-row col-gap="24px">
     <pds-box size-md="4">
       <pds-box
         bordered="true" 
@@ -252,11 +252,11 @@ The maximum file size for a transcript is 2 MB. Supported file format: txt</p>
         </pds-box>
       </pds-box>
     </pds-box>
-  </pds-layout-row>
+  </pds-row>
 </pds-box>
 `}>
 <pds-box display="block">
-  <pds-layout-row col-gap="24px">
+  <pds-row col-gap="24px">
     <pds-box size-md="4">
       <pds-box
         bordered="true" 
@@ -314,60 +314,60 @@ The maximum file size for a transcript is 2 MB. Supported file format: txt</p>
         </pds-box>
       </pds-box>
     </pds-box>
-  </pds-layout-row>
+  </pds-row>
 </pds-box>
 </Canvas>
 
 ### Creating a 12-Column Grid System
-By combining the `pds-box` and `pds-layout-row` components, you can easily create a 12-column grid system. Here's an example of how to structure your layout:
+By combining the `pds-box` and `pds-row` components, you can easily create a 12-column grid system. Here's an example of how to structure your layout:
 
 <Canvas mdxSource={`
 <pds-box display="block">
-  <pds-layout-row>
+  <pds-row>
     <pds-box bordered>
       Content for column 1
     </pds-box>
     <pds-box bordered>
       Content for column 2
     </pds-box>
-  </pds-layout-row>
+  </pds-row>
 </pds-box>
 `}>
 <pds-box display="block">
-  <pds-layout-row>
+  <pds-row>
     <pds-box bordered>
       Content for column 1
     </pds-box>
     <pds-box bordered>
       Content for column 2
     </pds-box>
-  </pds-layout-row>
+  </pds-row>
 </pds-box>
 </Canvas>
 
-By default, adding `pds-layout-row`s with no `size` property will create equal width columns. 
+By default, adding `pds-row`s with no `size` property will create equal width columns. 
 This creates a two-column layout, and you can customize the `size` and arrangement of the columns to achieve the desired layout for your application. The `size` property affects the width of the column across all viewports.
 <Canvas mdxSource={`
 <pds-box display="block">
-  <pds-layout-row>
+  <pds-row>
     <pds-box bordered size="4">
       Content for column 1
     </pds-box>
     <pds-box bordered size="8">
       Content for column 2
     </pds-box>
-  </pds-layout-row>
+  </pds-row>
 </pds-box>
 `}>
 <pds-box display="block">
-  <pds-layout-row>
+  <pds-row>
     <pds-box bordered size="4">
       Content for column 1
     </pds-box>
     <pds-box bordered size="8">
       Content for column 2
     </pds-box>
-  </pds-layout-row>
+  </pds-row>
 </pds-box>
 </Canvas>
 
@@ -375,19 +375,19 @@ This creates a two-column layout, and you can customize the `size` and arrangeme
 Using the size modifiers such as `-xs`, `-md`, etc, enable responsive behavior for you `pds-box`. The layout components are designed to be responsive, allowing you to create layouts that adapt to different screen sizes. Take advantage of properties like `size-xs`, `offset-sm`, etc., to customize the layout for specific breakpoints. Be sure to optimize your layout for mobile devices, as well as larger screens.
 <Canvas mdxSource={`
 <pds-box display="block">
-  <pds-layout-row>
+  <pds-row>
     <pds-box bordered size-md="6" size-lg="4" size-xl="3">Item 1</pds-box>
     <pds-box bordered size-md="6" size-lg="4" size-xl="3">Item 2</pds-box>
     <pds-box bordered size-md="6" size-lg="4" size-xl="3">Item 3</pds-box>
-  </pds-layout-row>
+  </pds-row>
 </pds-box>
 `}>
   <pds-box display="block">
-    <pds-layout-row>
+    <pds-row>
       <pds-box bordered size-md="6" size-lg="4" size-xl="3">Item 1</pds-box>
       <pds-box bordered size-md="6" size-lg="4" size-xl="3">Item 2</pds-box>
       <pds-box bordered size-md="6" size-lg="4" size-xl="3">Item 3</pds-box>
-    </pds-layout-row>
+    </pds-row>
   </pds-box>
 </Canvas>
 
@@ -396,17 +396,17 @@ Using the size modifiers such as `-xs`, `-md`, etc, enable responsive behavior f
 `size` and `offset` can be used to hide or show columns at different breakpoints. Values from 1 - 12 show the column, 0 hides the column.
 <Canvas mdxSource={`
 <pds-box display="block">
-  <pds-layout-row>
+  <pds-row>
     <pds-box bordered size-xs="0" size-sm="0" size-lg="6">Larger screen content</pds-box>
     <pds-box bordered size-md="6" size-lg="0">Small screen content</pds-box>
-  </pds-layout-row>
+  </pds-row>
 </pds-box>
 `}>
   <pds-box display="block">
-    <pds-layout-row>
+    <pds-row>
       <pds-box bordered size-xs="0" size-sm="0" size-lg="12">Larger screen content</pds-box>
       <pds-box bordered size-md="12" size-lg="0">Small screen content</pds-box>
-    </pds-layout-row>
+    </pds-row>
   </pds-box>
 </Canvas>
 
@@ -414,37 +414,37 @@ Using the size modifiers such as `-xs`, `-md`, etc, enable responsive behavior f
 Use the `offset` property to offset columns to the right. The `offset` property accepts values from 1 - 11. For example, `offset="1"` will offset the column by one column width. Adding size modifiers such as `offset-md="1"` will offset the column by one column width on medium screens and larger.
 <Canvas mdxSource={`
 <pds-box direction="column"  fit>
-  <pds-layout-row>
+  <pds-row>
     <pds-box bordered size="4">Item 1</pds-box>
     <pds-box bordered offset="4" size="4">Item 2</pds-box>
-  </pds-layout-row>
-  <pds-layout-row>
+  </pds-row>
+  <pds-row>
     <pds-box bordered size-md="4">Item 1</pds-box>
     <pds-box bordered offset-md="4" size-md="4">Item 2</pds-box>
-  </pds-layout-row>
-  <pds-layout-row>
+  </pds-row>
+  <pds-row>
     <pds-box bordered offset="3" offset-xs="2" size="6" size-xs="8">Item 1</pds-box>
-  </pds-layout-row>
+  </pds-row>
 </pds-box>
 `}>
 <pds-box direction="column" fit>
-  <pds-layout-row
+  <pds-row
     component-id="${args.componentId}" 
   >
     <pds-box bordered size="4">Item 1</pds-box>
     <pds-box bordered offset="4" size="4">Item 2</pds-box>
-  </pds-layout-row>
-  <pds-layout-row
+  </pds-row>
+  <pds-row
     component-id="${args.componentId}" 
   >
     <pds-box bordered size-md="4">Item 1</pds-box>
     <pds-box bordered offset-md="4" size-md="4">Item 2</pds-box>
-  </pds-layout-row>
-  <pds-layout-row
+  </pds-row>
+  <pds-row
     component-id="${args.componentId}" 
   >
     <pds-box bordered offset="3" offset-xs="2" size="6" size-xs="8">Item 1</pds-box>
-  </pds-layout-row>
+  </pds-row>
 </pds-box>
 </Canvas>
 
@@ -453,7 +453,7 @@ Adding either `flex` **`display`** property to the box will initiate alignment v
 
 <Canvas mdxSource={`
 <pds-box display="block">
-  <pds-layout-row min-height="100px">
+  <pds-row min-height="100px">
     <pds-box
       align-items="start"
       bordered="true"
@@ -482,11 +482,11 @@ Adding either `flex` **`display`** property to the box will initiate alignment v
     >
       Content 3
     </pds-box>
-  </pds-layout-row>
+  </pds-row>
 </pds-box>
 `}>
   <pds-box display="block">
-    <pds-layout-row min-height="100px">
+    <pds-row min-height="100px">
       <pds-box
         align-items="start"
         bordered="true"
@@ -515,14 +515,14 @@ Adding either `flex` **`display`** property to the box will initiate alignment v
       >
         Content 3
       </pds-box>
-    </pds-layout-row>
+    </pds-row>
   </pds-box>
 </Canvas>
 
 Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to ensure the box is vertically centered. Horizontal centering does take effect with no `min-height` present.
 <Canvas mdxSource={`
 <pds-box display="block">
-  <pds-layout-row>
+  <pds-row>
     <pds-box
       align-items="start"
       bordered="true"
@@ -550,11 +550,11 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
     >
       Content 3
     </pds-box>
-  </pds-layout-row>
+  </pds-row>
 </pds-box>
 `}>
   <pds-box display="block">
-    <pds-layout-row>
+    <pds-row>
       <pds-box
         align-items="start"
         bordered="true"
@@ -582,20 +582,20 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
       >
         Content 3
       </pds-box>
-    </pds-layout-row>
+    </pds-row>
   </pds-box>
 </Canvas>
 
 ## Nested Layouts
-You can nest `pds-layout-row` and `pds-box` components to create more complex layouts. 
+You can nest `pds-row` and `pds-box` components to create more complex layouts. 
 <Canvas mdxSource={`
 <pds-box display="block">
-  <pds-layout-row>
+  <pds-row>
     <pds-box display="block" size-md="8">
-      <pds-layout-row>
+      <pds-row>
         <pds-box size-xl="6">Column 1 Item 1</pds-box>
         <pds-box size-xl="6">Column 1 Item 2</pds-box>
-      </pds-layout-row>
+      </pds-row>
     </pds-box>
     <pds-box
       display="flex"
@@ -609,16 +609,16 @@ You can nest `pds-layout-row` and `pds-box` components to create more complex la
         Column 2
       </pds-box>
     </pds-box>
-  </pds-layout-row>
+  </pds-row>
 </pds-box>
 `}>
   <pds-box display="block">
-    <pds-layout-row>
+    <pds-row>
       <pds-box bordered display="block" size-md="8">
-        <pds-layout-row>
+        <pds-row>
           <pds-box size-xl="6">Column 1 Item 1</pds-box>
           <pds-box size-xl="6">Column 1 Item 2</pds-box>
-        </pds-layout-row>
+        </pds-row>
       </pds-box>
       <pds-box
         bordered
@@ -633,14 +633,14 @@ You can nest `pds-layout-row` and `pds-box` components to create more complex la
           Column 2
         </pds-box>
       </pds-box>
-    </pds-layout-row>
+    </pds-row>
   </pds-box>
 </Canvas>
 
 ### Gaps / Gutters
 When a gap or gutter is needed between the columns, an additional child `pds-box` must be used to ensure correct spacing between the columns and rows
 <Canvas mdxSource={`
-<pds-layout-row col-gap="16px">
+<pds-row col-gap="16px">
   <pds-box size-sm="4">
     <pds-box 
       border-radius="sm"
@@ -655,9 +655,9 @@ When a gap or gutter is needed between the columns, an additional child `pds-box
       Item 2
     </pds-box>
   </pds-box>
-</pds-layout-row>
+</pds-row>
 `}>
-  <pds-layout-row col-gap="16px">
+  <pds-row col-gap="16px">
     <pds-box size-sm="4">
       <pds-box 
         border-radius="sm"
@@ -672,7 +672,7 @@ When a gap or gutter is needed between the columns, an additional child `pds-box
         Item 2
       </pds-box>
     </pds-box>
-  </pds-layout-row>
+  </pds-row>
 </Canvas>
 
 ## Troubleshooting
@@ -681,7 +681,7 @@ If you encounter issues with your layout, here are some common problems and thei
 
 ### 1. Columns Not Aligning Correctly
   - **Issue:** Columns are not aligning as expected.
-  - **Solution:** Double-check the `align-items` and `justify-content` properties on the parent `pds-layout-row` component. Ensure that the sum of the column sizes within the row is less than or equal to 12 for a 12-column grid. Colums sums greater than 12 will wrap the row to the next line.
+  - **Solution:** Double-check the `align-items` and `justify-content` properties on the parent `pds-row` component. Ensure that the sum of the column sizes within the row is less than or equal to 12 for a 12-column grid. Colums sums greater than 12 will wrap the row to the next line.
 
 ### 2. Unexpected Spacing
   - **Issue:** Unexpected spacing between columns.

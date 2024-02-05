@@ -413,38 +413,6 @@ export namespace Components {
          */
         "value"?: string;
     }
-    interface PdsLayoutRow {
-        /**
-          * Defines the vertical alignment of the row items.
-          * @defaultValue start
-         */
-        "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
-        /**
-          * If `true`, the row will have a border.
-         */
-        "bordered"?: boolean;
-        /**
-          * Defines the spacing between the row items.
-         */
-        "colGap"?: BoxTShirtSizeType | null;
-        /**
-          * A unique identifier used for the underlying component `id` attribute.
-         */
-        "componentId": string;
-        /**
-          * Defines the horizontal alignment of the row items.
-          * @defaultValue start
-         */
-        "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
-        /**
-          * The minimum height of the row. Used in conjunction with alignment props
-         */
-        "minHeight"?: string;
-        /**
-          * If `true`, the row items will not wrap to the next line if horizontal space is not available.
-         */
-        "noWrap"?: boolean;
-    }
     interface PdsLink {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -544,6 +512,38 @@ export namespace Components {
           * The value of the radio that is submitted with a form.
          */
         "value": string;
+    }
+    interface PdsRow {
+        /**
+          * Defines the vertical alignment of the row items.
+          * @defaultValue start
+         */
+        "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * If `true`, the row will have a border.
+         */
+        "bordered"?: boolean;
+        /**
+          * Defines the spacing between the row items.
+         */
+        "colGap"?: BoxTShirtSizeType | null;
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * Defines the horizontal alignment of the row items.
+          * @defaultValue start
+         */
+        "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
+        /**
+          * The minimum height of the row. Used in conjunction with alignment props
+         */
+        "minHeight"?: string;
+        /**
+          * If `true`, the row items will not wrap to the next line if horizontal space is not available.
+         */
+        "noWrap"?: boolean;
     }
     interface PdsSortable {
         /**
@@ -956,12 +956,6 @@ declare global {
         prototype: HTMLPdsInputElement;
         new (): HTMLPdsInputElement;
     };
-    interface HTMLPdsLayoutRowElement extends Components.PdsLayoutRow, HTMLStencilElement {
-    }
-    var HTMLPdsLayoutRowElement: {
-        prototype: HTMLPdsLayoutRowElement;
-        new (): HTMLPdsLayoutRowElement;
-    };
     interface HTMLPdsLinkElement extends Components.PdsLink, HTMLStencilElement {
     }
     var HTMLPdsLinkElement: {
@@ -990,6 +984,12 @@ declare global {
     var HTMLPdsRadioElement: {
         prototype: HTMLPdsRadioElement;
         new (): HTMLPdsRadioElement;
+    };
+    interface HTMLPdsRowElement extends Components.PdsRow, HTMLStencilElement {
+    }
+    var HTMLPdsRowElement: {
+        prototype: HTMLPdsRowElement;
+        new (): HTMLPdsRowElement;
     };
     interface HTMLPdsSortableElementEventMap {
         "pdsSortableItemMoved": any;
@@ -1163,10 +1163,10 @@ declare global {
         "pds-divider": HTMLPdsDividerElement;
         "pds-image": HTMLPdsImageElement;
         "pds-input": HTMLPdsInputElement;
-        "pds-layout-row": HTMLPdsLayoutRowElement;
         "pds-link": HTMLPdsLinkElement;
         "pds-progress": HTMLPdsProgressElement;
         "pds-radio": HTMLPdsRadioElement;
+        "pds-row": HTMLPdsRowElement;
         "pds-sortable": HTMLPdsSortableElement;
         "pds-sortable-item": HTMLPdsSortableItemElement;
         "pds-switch": HTMLPdsSwitchElement;
@@ -1601,38 +1601,6 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
-    interface PdsLayoutRow {
-        /**
-          * Defines the vertical alignment of the row items.
-          * @defaultValue start
-         */
-        "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
-        /**
-          * If `true`, the row will have a border.
-         */
-        "bordered"?: boolean;
-        /**
-          * Defines the spacing between the row items.
-         */
-        "colGap"?: BoxTShirtSizeType | null;
-        /**
-          * A unique identifier used for the underlying component `id` attribute.
-         */
-        "componentId"?: string;
-        /**
-          * Defines the horizontal alignment of the row items.
-          * @defaultValue start
-         */
-        "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
-        /**
-          * The minimum height of the row. Used in conjunction with alignment props
-         */
-        "minHeight"?: string;
-        /**
-          * If `true`, the row items will not wrap to the next line if horizontal space is not available.
-         */
-        "noWrap"?: boolean;
-    }
     interface PdsLink {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -1736,6 +1704,38 @@ declare namespace LocalJSX {
           * The value of the radio that is submitted with a form.
          */
         "value"?: string;
+    }
+    interface PdsRow {
+        /**
+          * Defines the vertical alignment of the row items.
+          * @defaultValue start
+         */
+        "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * If `true`, the row will have a border.
+         */
+        "bordered"?: boolean;
+        /**
+          * Defines the spacing between the row items.
+         */
+        "colGap"?: BoxTShirtSizeType | null;
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * Defines the horizontal alignment of the row items.
+          * @defaultValue start
+         */
+        "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
+        /**
+          * The minimum height of the row. Used in conjunction with alignment props
+         */
+        "minHeight"?: string;
+        /**
+          * If `true`, the row items will not wrap to the next line if horizontal space is not available.
+         */
+        "noWrap"?: boolean;
     }
     interface PdsSortable {
         /**
@@ -2031,10 +2031,10 @@ declare namespace LocalJSX {
         "pds-divider": PdsDivider;
         "pds-image": PdsImage;
         "pds-input": PdsInput;
-        "pds-layout-row": PdsLayoutRow;
         "pds-link": PdsLink;
         "pds-progress": PdsProgress;
         "pds-radio": PdsRadio;
+        "pds-row": PdsRow;
         "pds-sortable": PdsSortable;
         "pds-sortable-item": PdsSortableItem;
         "pds-switch": PdsSwitch;
@@ -2064,10 +2064,10 @@ declare module "@stencil/core" {
             "pds-divider": LocalJSX.PdsDivider & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
             "pds-image": LocalJSX.PdsImage & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
             "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
-            "pds-layout-row": LocalJSX.PdsLayoutRow & JSXBase.HTMLAttributes<HTMLPdsLayoutRowElement>;
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
             "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-radio": LocalJSX.PdsRadio & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
+            "pds-row": LocalJSX.PdsRow & JSXBase.HTMLAttributes<HTMLPdsRowElement>;
             "pds-sortable": LocalJSX.PdsSortable & JSXBase.HTMLAttributes<HTMLPdsSortableElement>;
             "pds-sortable-item": LocalJSX.PdsSortableItem & JSXBase.HTMLAttributes<HTMLPdsSortableItemElement>;
             "pds-switch": LocalJSX.PdsSwitch & JSXBase.HTMLAttributes<HTMLPdsSwitchElement>;

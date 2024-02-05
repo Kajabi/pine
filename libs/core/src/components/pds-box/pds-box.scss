@@ -21,7 +21,7 @@ img {
   min-width: var(--box-min-width);
 
   // The immediate child of the row will fit the width of the row
-  .pds-layout-row > & {
+  .pds-row > & {
     position: relative;
     width: 100%;
   }

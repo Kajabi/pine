@@ -8,7 +8,7 @@
   margin-inline-start: calc(var(--pine-gap-x) * -0.5);
 }
 
-.pds-layout-row {
+.pds-row {
   display: flex;
   flex-wrap: wrap;
   margin-block-end: calc(var(--pine-gap-y) * -1);
@@ -24,11 +24,11 @@
   }
 }
 
-.pds-layout-row--no-wrap {
+.pds-row--no-wrap {
   flex-wrap: nowrap;
 }
 
-.pds-layout-row--bordered {
+.pds-row--bordered {
   border: var(--pine-border-default);
 }
 

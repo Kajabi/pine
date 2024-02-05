@@ -14,10 +14,10 @@ import { defineCustomElement as definePdsCopytext } from '@pine-ds/core/componen
 import { defineCustomElement as definePdsDivider } from '@pine-ds/core/components/pds-divider.js';
 import { defineCustomElement as definePdsImage } from '@pine-ds/core/components/pds-image.js';
 import { defineCustomElement as definePdsInput } from '@pine-ds/core/components/pds-input.js';
-import { defineCustomElement as definePdsLayoutRow } from '@pine-ds/core/components/pds-layout-row.js';
 import { defineCustomElement as definePdsLink } from '@pine-ds/core/components/pds-link.js';
 import { defineCustomElement as definePdsProgress } from '@pine-ds/core/components/pds-progress.js';
 import { defineCustomElement as definePdsRadio } from '@pine-ds/core/components/pds-radio.js';
+import { defineCustomElement as definePdsRow } from '@pine-ds/core/components/pds-row.js';
 import { defineCustomElement as definePdsSortable } from '@pine-ds/core/components/pds-sortable.js';
 import { defineCustomElement as definePdsSortableItem } from '@pine-ds/core/components/pds-sortable-item.js';
 import { defineCustomElement as definePdsSwitch } from '@pine-ds/core/components/pds-switch.js';
@@ -42,10 +42,10 @@ export const PdsCopytext = /*@__PURE__*/createReactComponent<JSX.PdsCopytext, HT
 export const PdsDivider = /*@__PURE__*/createReactComponent<JSX.PdsDivider, HTMLPdsDividerElement>('pds-divider', undefined, undefined, definePdsDivider);
 export const PdsImage = /*@__PURE__*/createReactComponent<JSX.PdsImage, HTMLPdsImageElement>('pds-image', undefined, undefined, definePdsImage);
 export const PdsInput = /*@__PURE__*/createReactComponent<JSX.PdsInput, HTMLPdsInputElement>('pds-input', undefined, undefined, definePdsInput);
-export const PdsLayoutRow = /*@__PURE__*/createReactComponent<JSX.PdsLayoutRow, HTMLPdsLayoutRowElement>('pds-layout-row', undefined, undefined, definePdsLayoutRow);
 export const PdsLink = /*@__PURE__*/createReactComponent<JSX.PdsLink, HTMLPdsLinkElement>('pds-link', undefined, undefined, definePdsLink);
 export const PdsProgress = /*@__PURE__*/createReactComponent<JSX.PdsProgress, HTMLPdsProgressElement>('pds-progress', undefined, undefined, definePdsProgress);
 export const PdsRadio = /*@__PURE__*/createReactComponent<JSX.PdsRadio, HTMLPdsRadioElement>('pds-radio', undefined, undefined, definePdsRadio);
+export const PdsRow = /*@__PURE__*/createReactComponent<JSX.PdsRow, HTMLPdsRowElement>('pds-row', undefined, undefined, definePdsRow);
 export const PdsSortable = /*@__PURE__*/createReactComponent<JSX.PdsSortable, HTMLPdsSortableElement>('pds-sortable', undefined, undefined, definePdsSortable);
 export const PdsSortableItem = /*@__PURE__*/createReactComponent<JSX.PdsSortableItem, HTMLPdsSortableItemElement>('pds-sortable-item', undefined, undefined, definePdsSortableItem);
 export const PdsSwitch = /*@__PURE__*/createReactComponent<JSX.PdsSwitch, HTMLPdsSwitchElement>('pds-switch', undefined, undefined, definePdsSwitch);

@@ -3,10 +3,10 @@ import { Component, Prop, h, Host} from '@stencil/core';
 import { BoxTShirtSizeType } from '../../utils/types';
 
 @Component({
-  tag: 'pds-layout-row',
-  styleUrl: 'pds-layout-row.scss',
+  tag: 'pds-row',
+  styleUrl: 'pds-row.scss',
 })
-export class PdsLayoutRow {
+export class PdsRow {
   /**
    * Defines the vertical alignment of the row items.
    * @defaultValue start
@@ -55,9 +55,9 @@ export class PdsLayoutRow {
   render() {
     const rowClasses = `
       ${this.alignItems ? `pds-align-items-${this.alignItems}` : ''}
-      ${this.bordered ? 'pds-layout-row--bordered' : ''}
+      ${this.bordered ? 'pds-row--bordered' : ''}
       ${this.justifyContent ? `pds-justify-content-${this.justifyContent}` : ''}
-      ${this.noWrap ? 'pds-layout-row--no-wrap' : ''}
+      ${this.noWrap ? 'pds-row--no-wrap' : ''}
     `;
 
     const rowInlineStyles = {
@@ -71,7 +71,7 @@ export class PdsLayoutRow {
     };
 
     return (
-      <Host class={`pds-layout-row ${rowClasses}`} style={rowInlineStyles}>
+      <Host class={`pds-row ${rowClasses}`} style={rowInlineStyles}>
       </Host>
       );
   }

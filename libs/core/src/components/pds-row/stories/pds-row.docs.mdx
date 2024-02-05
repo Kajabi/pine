@@ -1,5 +1,5 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
-import * as stories from './pds-layout-row.stories.js';
+import * as stories from './pds-row.stories.js';
 
 <Meta of={stories} />
 
@@ -16,16 +16,16 @@ import * as stories from './pds-layout-row.stories.js';
 By default boxes with rows will be equal width if no size is specified.
 
 <Canvas mdxSource={`
-<pds-layout-row>
+<pds-row>
   <pds-box>Item 1</pds-box>
   <pds-box direction="column">
     <p>Content 1</p>
     <p>Content 2</p>
   </pds-box>
   <pds-box>Item 3</pds-box>
-</pds-layout-row>
+</pds-row>
 `}>
-  <pds-layout-row
+  <pds-row
     class="demo-row"
     component-id="${args.componentId}" 
     gap="12px"
@@ -37,23 +37,23 @@ By default boxes with rows will be equal width if no size is specified.
       <p>Content 2</p>
     </pds-box>
     <pds-box>Item 3</pds-box>
-  </pds-layout-row>
+  </pds-row>
 </Canvas>
 
 ### Wrapping
 If the size values equal more than 12, the boxes will wrap to the next line.
 
 <Canvas mdxSource={`
-<pds-layout-row>
+<pds-row>
   <pds-box bordered size-xs="4">size-xs 4</pds-box>
   <pds-box bordered size-xs="10">size-xs 10</pds-box>
-</pds-layout-row>
+</pds-row>
 `}>
-  <pds-layout-row>
+  <pds-row>
     <pds-box bordered size-sm="4">size-xs 4</pds-box>
     <pds-box bordered size-sm="10">size-xs 10</pds-box>
-  </pds-layout-row>
+  </pds-row>
 </Canvas>
 
 ### Layout Properties
-`pds-layout-row` creates the horizontal rows that are used to contain a set of columns and can be view on the [Layouts](/docs/foundations-layout--docs) page.
+`pds-row` creates the horizontal rows that are used to contain a set of columns and can be view on the [Layouts](/docs/foundations-layout--docs) page.

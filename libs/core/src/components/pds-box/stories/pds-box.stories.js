@@ -2,13 +2,13 @@ import { html } from 'lit-html';
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 export default {
-  argTypes: extractArgTypes('pds-layout-box'),
-  component: 'pds-layout-box',
+  argTypes: extractArgTypes('pds-box'),
+  component: 'pds-box',
   title: 'components/Layout/Box',
 };
 
 const BaseTemplate = (args) => html`
-<pds-layout-box
+<pds-box
 	align-items="${args.alignItems}"
   background-color="${args.backgroundColor}"
 	bordered="${args.bordered}"
@@ -23,7 +23,7 @@ const BaseTemplate = (args) => html`
   shadow="${args.shadow}"
 >
   Box content
-</pds-layout-box>`;
+</pds-box>`;
 
 export const Default = BaseTemplate.bind();
 Default.args = {
