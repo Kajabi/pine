@@ -10,6 +10,7 @@
 
 .pds-row {
   display: flex;
+  flex-grow: 1;
   flex-wrap: wrap;
   margin-block-end: calc(var(--pine-gap-y) * -1);
   margin-block-start: calc(var(--pine-gap-y) * -1);
