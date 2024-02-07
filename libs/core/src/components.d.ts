@@ -314,9 +314,17 @@ export namespace Components {
     }
     interface PdsPopover {
         /**
+          * Represents the overlay arrow in the popover
+         */
+        "arrow": HTMLElement | null;
+        /**
           * A unique identifier used for the underlying component id attribute.
          */
         "componentId": string;
+        /**
+          * Represents the popover slot content element
+         */
+        "contentEl": HTMLElement | null;
         /**
           * Determines whether or not the popover has an arrow
           * @defaultValue false
@@ -357,6 +365,10 @@ export namespace Components {
           * Toggles the popover visibility on click
          */
         "togglePdsPopover": () => Promise<void>;
+        /**
+          * Represents the popover trigger element
+         */
+        "triggerEl": HTMLElement | null;
     }
     interface PdsProgress {
         /**
@@ -1404,9 +1416,17 @@ declare namespace LocalJSX {
     }
     interface PdsPopover {
         /**
+          * Represents the overlay arrow in the popover
+         */
+        "arrow"?: HTMLElement | null;
+        /**
           * A unique identifier used for the underlying component id attribute.
          */
         "componentId"?: string;
+        /**
+          * Represents the popover slot content element
+         */
+        "contentEl"?: HTMLElement | null;
         /**
           * Determines whether or not the popover has an arrow
           * @defaultValue false
@@ -1443,6 +1463,10 @@ declare namespace LocalJSX {
           * @defaultValue "right"
          */
         "placement"?: OverlayPlacementType;
+        /**
+          * Represents the popover trigger element
+         */
+        "triggerEl"?: HTMLElement | null;
     }
     interface PdsProgress {
         /**

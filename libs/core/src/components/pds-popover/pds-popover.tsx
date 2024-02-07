@@ -28,16 +28,21 @@ export class PdsPopover {
   /**
    * Represents the overlay arrow in the popover
    */
-  private arrowEl: HTMLElement | null;
+  @Prop({ mutable: true }) arrow: HTMLElement | null;
+
   /**
    * Represents the popover slot content element
    */
-  private contentEl: HTMLElement | null;
+
+  @Prop({ mutable: true }) contentEl: HTMLElement | null;
 
   /**
    * Represents the popover trigger element
    */
-  private triggerEl: HTMLElement | null
+
+  @Prop({ mutable: true }) triggerEl: HTMLElement | null;
+
+
   private cleanupAutoUpdate: (() => void) | null = null;
 
   /**
