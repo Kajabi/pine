@@ -32,6 +32,10 @@ img {
   .pds-row > & {
     position: relative;
     width: 100%;
+
+    &.pds-box--auto {
+      width: auto;
+    }
   }
 }
 
