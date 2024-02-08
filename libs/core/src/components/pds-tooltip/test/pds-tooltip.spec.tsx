@@ -14,13 +14,17 @@ describe('pds-tooltip', () => {
     expect(root).toEqualHtml(`
       <pds-tooltip placement="right">
         <mock:shadow-root>
-        <div class="pds-tooltip pds-tooltip--right">
-          <span class="pds-tooltip__trigger">
-            <slot></slot>
-          </span>
-          <div class="pds-tooltip__content" aria-hidden="true" aria-live="off" role="tooltip" style="top: 50%; left: calc(0px + 8px); transform: translateY(-50%);">
-            <slot name="content"></slot>
-          </div>
+        <div class="pds-tooltip" exportparts="content">
+          <pds-popover hasarrow="" hoisted="" offset="12" padding="14" placement="right">
+            <span class="pds-tooltip__trigger">
+              <slot></slot>
+            </span>
+              <div aria-hidden="true" aria-live="off" class="pds-tooltip__content" role="tooltip" style="top: 50%; left: calc(0px + 8px); transform: translateY(-50%);">
+                <div slot="content">
+                  <slot name="content"></slot>
+                </div>
+              </div>
+          </pds-popover>
         </div>
         </mock:shadow-root>
         <pds-button variant="secondary">Secondary</pds-button>
