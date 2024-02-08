@@ -18,6 +18,15 @@
 | `variant`     | `variant`      | Sets button variant styles as outlined in Figma documentation         | `"accent" \| "destructive" \| "disclosure" \| "primary" \| "secondary" \| "unstyled"` | `'primary'` |
 
 
+## Shadow Parts
+
+| Part       | Description |
+| ---------- | ----------- |
+| `"button"` |             |
+| `"caret"`  |             |
+| `"icon"`   |             |
+
+
 ## Dependencies
 
 ### Used by

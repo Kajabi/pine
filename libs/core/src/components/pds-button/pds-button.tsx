@@ -87,12 +87,13 @@ export class PdsButton {
           class={this.classNames()}
           disabled={this.disabled}
           name={this.name}
+          part="button"
           type={this.type}
           value={this.value}
         >
-          {this.icon && this.variant !== 'disclosure' && <pds-icon name={this.icon}></pds-icon>}
+          {this.icon && this.variant !== 'disclosure' && <pds-icon name={this.icon} part="icon"></pds-icon>}
           <slot />
-          {this.variant === 'disclosure' && <pds-icon name="caret-down"></pds-icon>}
+          {this.variant === 'disclosure' && <pds-icon name="caret-down" part="caret"></pds-icon>}
         </button>
       </Host>
     );
