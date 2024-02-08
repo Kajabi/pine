@@ -41,7 +41,8 @@ const GapTemplate = (args) => html`
   min-height="${args.minHeight}"
 >
   <pds-box size="4">
-    <pds-box 
+    <pds-box
+      border="true"
       border-radius="sm"
       padding="sm"
       shadow="sm"
@@ -50,7 +51,12 @@ const GapTemplate = (args) => html`
     </pds-box>
   </pds-box>
   <pds-box size="8">
-    <pds-box padding="sm" shadow="sm">
+    <pds-box
+      border="true"
+      border-radius="sm"
+      padding="sm"
+      shadow="sm"
+    >
       Item 2
     </pds-box>
   </pds-box>

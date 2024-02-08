@@ -1,59 +1,15 @@
-import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+
 import * as stories from './pds-row.stories.js';
+
+import Docs from '../docs/pds-row.mdx';
 
 <Meta of={stories} />
 
-# Row
-`pds-row` is a flexbox-based grid system that allows you to create complex layouts with rows and columns. It is based on the 12 column grid system and is used to create horizontal rows that contain a set of columns.
+<Docs />
 
-## Properties
+# Playground
 
-<ArgTypes of={stories} />
+<Canvas of={stories.Default} />
 
-## Variants
-
-### Default
-By default boxes with rows will be equal width if no size is specified.
-
-<Canvas mdxSource={`
-<pds-row>
-  <pds-box>Item 1</pds-box>
-  <pds-box direction="column">
-    <p>Content 1</p>
-    <p>Content 2</p>
-  </pds-box>
-  <pds-box>Item 3</pds-box>
-</pds-row>
-`}>
-  <pds-row
-    class="demo-row"
-    component-id="${args.componentId}" 
-    gap="12px"
-    min-height="100px"
-  >
-    <pds-box>Item 1</pds-box>
-    <pds-box direction="column">
-      <p>Content 1</p>
-      <p>Content 2</p>
-    </pds-box>
-    <pds-box>Item 3</pds-box>
-  </pds-row>
-</Canvas>
-
-### Wrapping
-If the size values equal more than 12, the boxes will wrap to the next line.
-
-<Canvas mdxSource={`
-<pds-row>
-  <pds-box border size-xs="4">size-xs 4</pds-box>
-  <pds-box border size-xs="10">size-xs 10</pds-box>
-</pds-row>
-`}>
-  <pds-row>
-    <pds-box border size-sm="4">size-xs 4</pds-box>
-    <pds-box border size-sm="10">size-xs 10</pds-box>
-  </pds-row>
-</Canvas>
-
-### Layout Properties
-`pds-row` creates the horizontal rows that are used to contain a set of columns and can be view on the [Layouts](/docs/foundations-layout--docs) page.
+<Controls of={stories.Default} />

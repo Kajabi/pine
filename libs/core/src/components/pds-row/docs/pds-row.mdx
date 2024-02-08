@@ -1,0 +1,75 @@
+import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+
+# Row
+`pds-row` is a flexbox-based grid system that allows you to create complex layouts with rows and columns. It is based on the 12 column grid system and is used to create horizontal rows that contain a set of columns.
+
+## Properties
+
+<DocArgsTable componentName="pds-row" docSource={components} />
+
+## Variants
+
+### Default
+By default boxes with rows will be equal width if no size is specified.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsRow>
+        <PdsBox>Item 1</PdsBox>
+        <PdsBox direction="column">
+          <p>Content 1</p>
+          <p>Content 2</p>
+        </PdsBox>
+        <PdsBox>Item 3</PdsBox>
+      </PdsRow>
+    `,
+    webComponent: `
+      <pds-row>
+        <pds-box>Item 1</pds-box>
+        <pds-box direction="column">
+          <p>Content 1</p>
+          <p>Content 2</p>
+        </pds-box>
+        <pds-box>Item 3</pds-box>
+      </pds-row>
+    `
+}}>
+  <pds-row>
+    <pds-box>Item 1</pds-box>
+    <pds-box direction="column">
+      <p>Content 1</p>
+      <p>Content 2</p>
+    </pds-box>
+    <pds-box>Item 3</pds-box>
+  </pds-row>
+</DocCanvas>
+
+### Wrapping
+If the size values equal more than 12, the boxes will wrap to the next line.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsRow>
+        <PdsBox border size-xs="4">size-xs 4</PdsBox>
+        <PdsBox border size-xs="10">size-xs 10</PdsBox>
+      </PdsRow>
+    `,
+    webComponent: `
+      <pds-row>
+        <pds-box border size-xs="4">size-xs 4</pds-box>
+        <pds-box border size-xs="10">size-xs 10</pds-box>
+      </pds-row>
+    `
+}}>
+  <pds-row>
+    <pds-box border size-xs="4">size-xs 4</pds-box>
+    <pds-box border size-xs="10">size-xs 10</pds-box>
+  </pds-row>
+</DocCanvas>
+
+### Layout Properties
+`pds-row` creates the horizontal rows that are used to contain a set of columns and can be view on the [Layouts](/docs/foundations-layout--docs) page.
