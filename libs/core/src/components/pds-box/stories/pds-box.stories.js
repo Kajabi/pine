@@ -3,6 +3,9 @@ import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 export default {
   argTypes: extractArgTypes('pds-box'),
+  args: {
+    border: false,
+  },
   component: 'pds-box',
   title: 'components/Layout/Box',
 };
