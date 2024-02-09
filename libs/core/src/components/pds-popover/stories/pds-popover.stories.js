@@ -6,6 +6,7 @@ export default {
   argTypes: extractArgTypes('pds-popover'),
   args: {
     hasArrow: false,
+    hoisted: false,
     opened: false
   },
   component: 'pds-popover',
@@ -19,7 +20,7 @@ export default {
 }
 
 const BaseTemplate = (args) => html`
-  <pds-popover component-id="${args.componentId}" has-arrow=${args.hasArrow} opened=${args.opened} placement=${args.placement}>
+  <pds-popover component-id="${args.componentId}" has-arrow=${args.hasArrow} hoisted=${args.hoisted} opened=${args.opened} placement=${args.placement}>
     <div slot="content">
       <p>Pastrami chuck leberkas, swine biltong tail fatback</p>
       <div>
@@ -31,7 +32,7 @@ const BaseTemplate = (args) => html`
   </pds-popover>`;
 
 const AvatarDropdownTemplate = (args) => html`
-  <pds-popover component-id="${args.componentId}" has-arrow=${args.hasArrow} opened=${args.opened} placement=${args.placement}>
+  <pds-popover component-id="${args.componentId}" has-arrow=${args.hasArrow} hoisted=${args.hoisted} opened=${args.opened} placement=${args.placement}>
     <div slot="content">
       <p>Pastrami chuck leberkas, swine biltong tail fatback jowl.</p>
       <div>
@@ -45,14 +46,11 @@ const AvatarDropdownTemplate = (args) => html`
 export const Default = BaseTemplate.bind({});
 Default.args = {
   componentId: "default",
-  hasArrow: false,
-  htmlContent: true,
   placement: "bottom-start",
 };
 
-export const AvatarPopover = AvatarDropdownTemplate.bind({});
-AvatarPopover.args = {
-  hasArrow: false,
-  htmlContent: true,
-  placement: "bottom-start",
+export const AvatarTrigger = AvatarDropdownTemplate.bind({});
+AvatarTrigger.args = {
+  hasArrow: true,
+  placement: "right-start",
 };

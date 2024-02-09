@@ -1,7 +1,7 @@
 import { Component, Element, Event, Host, Prop, State, h, EventEmitter, Method, Watch } from '@stencil/core';
-import {
-  positionTooltip
-} from '../../utils/overlay';
+
+
+import { OverlayPlacementType } from '../../utils/types';
 
 /**
  * @slot (default) - The tooltip's target element
@@ -14,7 +14,8 @@ import {
   shadow: true,
 })
 export class PdsTooltip {
-  private contentEl: HTMLElement | null;
+  private popover: HTMLPdsPopoverElement | null;
+
 
   /**
    * Reference to the Host element
@@ -42,6 +43,19 @@ export class PdsTooltip {
    * @defaultValue true
    */
   @Prop() hasArrow? = true;
+  
+  /**
+   * Determines how the popover is positioned relative to the trigger element.
+   * By default, the popover will use `absolute` positioning, which allows the
+   * popover to scroll with the page. Setting this to `fixed` handles most used.
+   * However, if the trigger element is within a container that has `overflow: hidden`
+   * set, the popover will not be able to escape the container and get clipped. In
+   * this case, you can set the `hoisted` property to `true` to use `fixed` positioning
+   * instead. Be aware that this is less performant, as it requires recalculating
+   * the popover position on scroll. Only use this option if you need it.
+   * @defaultValue false
+   */
+  @Prop() hoisted? = false;
 
   /**
    * Enable this option when using the content slot
@@ -50,22 +64,20 @@ export class PdsTooltip {
   @Prop() htmlContent = false;
 
   /**
+   * Sets the offset distance(in pixels) between the popover and the trigger element
+   */
+  @Prop() offset? = 12;
+
+  /**
+   * Sets the padding(in pixels) of the popover content element
+   */
+  @Prop() padding? = 14;
+
+  /**
    * Determines the preferred position of the tooltip
    * @defaultValue "right"
    */
-  @Prop({ reflect: true }) placement:
-    'top'
-    | 'top-start'
-    | 'top-end'
-    | 'right'
-    | 'right-start'
-    | 'right-end'
-    | 'bottom'
-    | 'bottom-start'
-    | 'bottom-end'
-    | 'left'
-    | 'left-start'
-    | 'left-end' = 'right';
+  @Prop({ reflect: true }) placement: OverlayPlacementType = 'right';
 
   /**
    * Determines whether or not the tooltip is visible
@@ -104,11 +116,10 @@ export class PdsTooltip {
   componentDidUpdate() {
     if (this.opened) {
       this.showTooltip();
-    }
+    } 
   }
 
   componentDidRender() {
-    positionTooltip({elem: this.el, elemPlacement: this.placement, overlay: this.contentEl});
   }
 
   /**
@@ -117,6 +128,8 @@ export class PdsTooltip {
   @Method()
   async showTooltip() {
     this.opened = true;
+    console.log('showing tooltip');
+    console.log('mymypopover', this.popover);
   }
 
   /**
@@ -125,6 +138,7 @@ export class PdsTooltip {
   @Method()
   async hideTooltip() {
     this.opened = false;
+    this.popover.hidePdsPopover();
   }
 
   private handleHide = () => {
@@ -134,7 +148,7 @@ export class PdsTooltip {
 
   private handleShow = () => {
     this.showTooltip();
-    this.pdsTooltipShow.emit();
+    this.pdsTooltipShow.emit(); 
   };
 
   render() {
@@ -148,31 +162,34 @@ export class PdsTooltip {
         <div
           class={`
             pds-tooltip
-            pds-tooltip--${this.placement}
             ${this.htmlContent ? 'pds-tooltip--has-html-content' : ''}
-            ${this.opened ? 'pds-tooltip--is-open' : ''}
-            ${this.hasArrow ? '' : 'pds-tooltip--no-arrow'}
           `}
+          exportparts="content"
         >
-          <span
-            aria-describedby={this.componentId}
-            class="pds-tooltip__trigger"
+          <pds-popover
+            ref={(el) => (this.popover = el)}
+            hasArrow={this.hasArrow}
+            offset={this.offset}
+            opened={this.opened}
+            padding={this.padding}
+            placement={this.placement}
+            // tooltips only show on hover so hoisted={true} is less of a performance
+            // issue than click-based triggers
+            hoisted={true} 
           >
-            <slot />
-          </span>
-
-          <div class="pds-tooltip__content"
-            aria-hidden={this.opened ? 'false' : 'true'}
-            aria-live={this.opened ? 'polite' : 'off'}
-            id={this.componentId}
-            ref={(el) => (this.contentEl = el)}
-            role="tooltip"
-          >
-            <slot
-              name="content"
-            ></slot>
-            {this.content}
-          </div>
+            <span
+              aria-describedby={this.componentId}
+              class="pds-tooltip__trigger"
+            >
+              <slot />
+            </span>
+            <div slot="content">
+              <slot
+                name="content"
+              ></slot>
+              {this.content}
+            </div>
+          </pds-popover>
         </div>
       </Host>
     );

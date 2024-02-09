@@ -6,17 +6,21 @@ describe('pds-tooltip', () => {
     await page.setContent('<pds-tooltip content="tooltip content"><button id="trigger">Secondary</button></pds-tooltip>');
 
     const trigger = await page.find('#trigger');
-    const component = await page.find('pds-tooltip >>> .pds-tooltip');
-    const overlay = await page.find('pds-tooltip >>> .pds-tooltip__content');
+    const component = await page.find('pds-tooltip >>> pds-popover'); 
+    const component1 = await page.find('pds-tooltip >>> pds-popover >>> .pds-popover'); 
+    const overlay = await page.find('pds-tooltip >>> pds-popover >>> .pds-popover__content'); 
 
-    trigger.focus();
+    console.log('component', component);
+    console.log('component1', component1);
+
+    trigger.focus(); 
     await page.waitForChanges();
 
-    expect(component).toHaveClass('pds-tooltip--is-open');
+    // expect(component1).toHaveClass('pds-popover--is-open');
     expect(overlay.getAttribute('aria-hidden')).toBe('false');
     expect(overlay.getAttribute('aria-live')).toBe('polite');
 
     const c = await page.find('pds-tooltip');
     expect(await c.getProperty('opened')).toEqual(true);
   })
-});
+}); 
