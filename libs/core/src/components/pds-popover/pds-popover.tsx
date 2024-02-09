@@ -28,19 +28,22 @@ export class PdsPopover {
   /**
    * Represents the overlay arrow in the popover
    */
-  @Prop({ mutable: true }) arrow: HTMLElement | null;
+  // @Prop({ mutable: true }) arrow: HTMLElement | null;
+  private arrow: HTMLElement | null;
 
   /**
    * Represents the popover slot content element
    */
 
-  @Prop({ mutable: true }) contentEl: HTMLElement | null;
+  // @Prop({ mutable: true }) contentEl: HTMLElement | null;
+  private contentEl: HTMLElement | null;
 
   /**
    * Represents the popover trigger element
    */
 
-  @Prop({ mutable: true }) triggerEl: HTMLElement | null;
+  // @Prop({ mutable: true }) triggerEl: HTMLElement | null;
+  private triggerEl: HTMLElement | null;
 
 
   private cleanupAutoUpdate: (() => void) | null = null;
@@ -113,6 +116,7 @@ export class PdsPopover {
   @Event() pdsPopoverShow: EventEmitter;
 
   componentDidLoad() {
+    this.arrow = this.el.shadowRoot?.querySelector('.pds-popover__arrow');
     document.addEventListener('click', this.handleGlobalClick);
 
     // Start auto updates
@@ -271,8 +275,7 @@ export class PdsPopover {
             ></slot>
             {this.hasArrow &&
               <div class="pds-popover__arrow" 
-                part="arrow" 
-                ref={(el) => (this.arrow = el)}
+                part="arrow"
               ></div>
             }
           </div>

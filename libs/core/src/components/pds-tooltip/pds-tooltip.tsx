@@ -1,6 +1,6 @@
 import { Component, Element, Event, Host, Prop, State, h, EventEmitter, Method, Watch } from '@stencil/core';
 
-import { ReferenceElement } from "@floating-ui/core";
+
 import { OverlayPlacementType } from '../../utils/types';
 
 /**
@@ -15,7 +15,7 @@ import { OverlayPlacementType } from '../../utils/types';
 })
 export class PdsTooltip {
   private popover: HTMLPdsPopoverElement | null;
-  private referenceElement: ReferenceElement | null = null;
+
 
   /**
    * Reference to the Host element
@@ -130,8 +130,6 @@ export class PdsTooltip {
     this.opened = true;
     console.log('showing tooltip');
     console.log('mymypopover', this.popover);
-    this.popover.triggerEl = this.referenceElement;
-    this.popover.showPdsPopover(); 
   }
 
   /**
@@ -167,7 +165,6 @@ export class PdsTooltip {
             ${this.htmlContent ? 'pds-tooltip--has-html-content' : ''}
           `}
           exportparts="content"
-          ref={(el) => (this.referenceElement = el)}
         >
           <pds-popover
             ref={(el) => (this.popover = el)}
