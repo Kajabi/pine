@@ -1,6 +1,12 @@
 import { Component, Element, Host, h, Prop } from '@stencil/core';
 import { hasShadowDom } from '../../utils/utils';
 
+/**
+ * @part button - The main button element that represents the button component.
+ * @part caret - The caret icon element that appears when the button variant is 'disclosure'.
+ * @part icon - The icon element that appears before the text in the button, if provided.
+*/
+
 @Component({
   tag: 'pds-button',
   styleUrl: 'pds-button.scss',
