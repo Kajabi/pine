@@ -57,16 +57,16 @@ export class PdsRow {
 
   render() {
     const rowClasses = `
-      ${this.alignItems ? `pds-align-items-${this.alignItems}` : ''}
-      ${this.border ? 'pds-row--border' : ''}
-      ${this.justifyContent ? `pds-justify-content-${this.justifyContent}` : ''}
-      ${this.noWrap ? 'pds-row--no-wrap' : ''}
-    `;
+    ${this.alignItems !== undefined && this.alignItems.trim() !== '' ? `pds-align-items-${this.alignItems}` : ''}
+    ${this.border ? 'pds-row--border' : ''}
+    ${this.justifyContent !== undefined && this.justifyContent.trim() !== '' ? `pds-justify-content-${this.justifyContent}` : ''}
+    ${this.noWrap ? 'pds-row--no-wrap' : ''}
+  `;
 
-    const rowInlineStyles = {
-      ...(this.colGap && {
-        '--pine-gap-x': this.colGap ? this.colGapMap[this.colGap] : '',
-        '--pine-gap-y': this.colGap ? this.colGapMap[this.colGap] : '',
+  const rowInlineStyles = {
+    ...(this.colGap && {
+      '--pine-gap-x':this.colGap !== undefined &&  this.colGap.trim() !== '' ? this.colGapMap[this.colGap] : '',
+      '--pine-gap-y':this.colGap !== undefined &&  this.colGap.trim() !== '' ? this.colGapMap[this.colGap] : '',
       }),
       ...(this.minHeight && {
         'min-height': this.minHeight,

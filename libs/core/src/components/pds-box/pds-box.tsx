@@ -158,31 +158,35 @@ export class PdsBox {
 
   render() {
     const boxClasses = `
-      ${this.alignItems ? `pds-align-items-${this.alignItems}` : ''}
-      ${this.auto ? 'pds-box--auto' : ''}
-      ${this.border ? 'pds-box--border' : ''}
-      ${this.borderRadius ? `pds-border-radius-${this.borderRadius}` : ''}
-      ${this.direction ? `pds-box-direction-${this.direction}` : ''}
-      ${this.display ? `pds-box--display-${this.display}` : ''}
-      ${this.fit ? 'pds-box--fit' : ''}
-      ${this.gap ? `pds-box-gap-${this.gap}` : ''}
-      ${this.flex ? `pds-box--flex-${this.flex}` : ''}
-      ${this.justifyContent ? `pds-justify-content-${this.justifyContent}` : ''}
-      ${this.offset ? `pds-box-offset-${this.offset}` : ''}
-      ${this.offsetXs ? `pds-box-offset-xs-${this.offsetXs}` : ''}
-      ${this.offsetSm ? `pds-box-offset-sm-${this.offsetSm}` : ''}
-      ${this.offsetMd ? `pds-box-offset-md-${this.offsetMd}` : ''}
-      ${this.offsetLg ? `pds-box-offset-lg-${this.offsetLg}` : ''}
-      ${this.offsetXl ? `pds-box-offset-xl-${this.offsetXl}` : ''}
-      ${this.padding ? `pds-padding-${this.padding}` : ''}
-      ${this.shadow ? `pds-shadow-${this.shadow}` : ''}
-      ${this.size ? `pds-box pds-box-${this.size}` : ''}
-      ${this.sizeXs ? `pds-box-xs-${this.sizeXs}` : ''}
-      ${this.sizeSm ? `pds-box-sm-${this.sizeSm}` : ''}
-      ${this.sizeMd ? `pds-box-md-${this.sizeMd}` : ''}
-      ${this.sizeLg ? `pds-box-lg-${this.sizeLg}` : ''}
-      ${this.sizeXl ? `pds-box-xl-${this.sizeXl}` : ''}
-      ${!this.size && !this.sizeSm && !this.sizeMd && !this.sizeLg && !this.sizeXl ? 'pds-box' : ''}
+    ${this.alignItems !== undefined && this.alignItems.trim() !== '' ? `pds-align-items-${this.alignItems}` : ''}
+    ${this.auto ? 'pds-box--auto' : ''}
+    ${this.border ? 'pds-box--border' : ''}
+    ${this.borderRadius !== undefined && this.borderRadius.trim() !== '' ? `pds-border-radius-${this.borderRadius}` : ''}
+    ${this.direction !== undefined && this.direction.trim() !== '' ? `pds-box-direction-${this.direction}` : ''}
+    ${this.display !== undefined && this.display.trim() !== '' ? `pds-box--display-${this.display}` : ''}
+    ${this.fit ? 'pds-box--fit' : ''}
+    ${this.gap !== undefined && this.gap.trim() !== '' ? `pds-box-gap-${this.gap}` : ''}
+    ${this.flex !== undefined && this.flex.trim() !== '' ? `pds-box--flex-${this.flex}` : ''}
+    ${this.justifyContent !== undefined && this.justifyContent.trim() !== '' ? `pds-justify-content-${this.justifyContent}` : ''}
+    ${this.offset !== undefined && this.offset.trim() !== '' ? `pds-box-offset-${this.offset}` : ''}
+    ${this.offsetXs !== undefined && this.offsetXs.trim() !== '' ? `pds-box-offset-xs-${this.offsetXs}` : ''}
+    ${this.offsetSm !== undefined && this.offsetSm.trim() !== '' ? `pds-box-offset-sm-${this.offsetSm}` : ''}
+    ${this.offsetMd !== undefined && this.offsetMd.trim() !== '' ? `pds-box-offset-md-${this.offsetMd}` : ''}
+    ${this.offsetLg !== undefined && this.offsetLg.trim() !== '' ? `pds-box-offset-lg-${this.offsetLg}` : ''}
+    ${this.offsetXl !== undefined && this.offsetXl.trim() !== '' ? `pds-box-offset-xl-${this.offsetXl}` : ''}
+    ${this.padding !== undefined && this.padding.trim() !== '' ? `pds-padding-${this.padding}` : ''}
+    ${this.shadow !== undefined && this.shadow.trim() !== '' ? `pds-shadow-${this.shadow}` : ''}
+    ${this.size !== undefined && this.size.trim() !== '' ? `pds-box pds-box-${this.size}` : ''}
+    ${this.sizeXs !== undefined && this.sizeXs.trim() !== '' ? `pds-box-xs-${this.sizeXs}` : ''}
+    ${this.sizeSm !== undefined && this.sizeSm.trim() !== '' ? `pds-box-sm-${this.sizeSm}` : ''}
+    ${this.sizeMd !== undefined && this.sizeMd.trim() !== '' ? `pds-box-md-${this.sizeMd}` : ''}
+    ${this.sizeLg !== undefined && this.sizeLg.trim() !== '' ? `pds-box-lg-${this.sizeLg}` : ''}
+    ${this.sizeXl !== undefined && this.sizeXl.trim() !== '' ? `pds-box-xl-${this.sizeXl}` : ''}
+    ${this.size == undefined &&
+      this.sizeSm == undefined &&
+      this.sizeMd == undefined &&
+      this.sizeLg == undefined &&
+      this.sizeXl == undefined ? 'pds-box' : ''}
     `;
 
     const boxInlineStyles = {
