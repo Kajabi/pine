@@ -18,6 +18,15 @@
 | `variant`     | `variant`      | Sets button variant styles as outlined in Figma documentation         | `"accent" \| "destructive" \| "disclosure" \| "primary" \| "secondary" \| "unstyled"` | `'primary'` |
 
 
+## Shadow Parts
+
+| Part       | Description                                                                  |
+| ---------- | ---------------------------------------------------------------------------- |
+| `"button"` | The main button element that represents the button component.                |
+| `"caret"`  | The caret icon element that appears when the button variant is 'disclosure'. |
+| `"icon"`   | The icon element that appears before the text in the button, if provided.    |
+
+
 ## Dependencies
 
 ### Used by
