@@ -11,5 +11,14 @@ export default {
 }
 
 const BaseTemplate = (args) => html`
-	<pds-accordion></pds-accordion>
+	<pds-accordion>
+    <span slot="summary">Button Trigger</span>
+    <ul>
+      <li>Item 1</li>
+      <li>Item 2</li>
+      <li>Item 3</li>
+    </ul>
+  </pds-accordion>
 `;
+
+export const Default = BaseTemplate.bind();
