@@ -15,6 +15,7 @@ const BaseTemplate = (args) => html`
   col-gap="${args.colGap}"
   justify-content="${args.justifyContent}"
   min-height="${args.minHeight}"
+  no-wrap="${args.noWrap}"
 >
   <pds-box border>Item 1</pds-box>
   <pds-box border direction="column">
