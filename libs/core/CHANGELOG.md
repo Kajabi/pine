@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.3-rc.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@0.0.2-rc.0...@pine-ds/core@0.0.3-rc.0) (2024-02-13)
+
+
+### Bug Fixes
+
+* **avatar:** style issues for admin variant ([#138](https://github.com/Kajabi/pine/issues/138)) ([0e7af3a](https://github.com/Kajabi/pine/commit/0e7af3a94e827e6dc1b425244d21a5f5a176de89))
+* **checkbox:** event details ([#137](https://github.com/Kajabi/pine/issues/137)) ([c2ee64c](https://github.com/Kajabi/pine/commit/c2ee64cd8d691e8fa6caa9356a3f1c3a238ec682))
+* updates path to tokens file in stylelint ignore to fix linting errors ([47dd18a](https://github.com/Kajabi/pine/commit/47dd18a7e07246eeb95d4a6855622122f5376f2e))
+
+
+### Features
+
+* **box:** add box and row component ([#119](https://github.com/Kajabi/pine/issues/119)) ([7822884](https://github.com/Kajabi/pine/commit/78228847b2cfbde30ec7b109f831bd2facfda8bd))
+* **button:** add css shadow parts ([2a5c861](https://github.com/Kajabi/pine/commit/2a5c86152f22a82db187f8a6eb721e0f50728972))
+* **table:** Table Component ([#112](https://github.com/Kajabi/pine/issues/112)) ([2315be1](https://github.com/Kajabi/pine/commit/2315be11bdad4257d49f12b31776d9ed0eae3c24))
+
+
+
+
+
 ## [0.0.2-rc.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@0.0.2-alpha.1...@pine-ds/core@0.0.2-rc.0) (2024-01-10)
 
 

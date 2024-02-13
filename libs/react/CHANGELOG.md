@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.3-rc.0](https://github.com/Kajabi/pine/compare/@pine-ds/react@0.0.2-rc.0...@pine-ds/react@0.0.3-rc.0) (2024-02-13)
+
+
+### Bug Fixes
+
+* **checkbox:** event details ([#137](https://github.com/Kajabi/pine/issues/137)) ([c2ee64c](https://github.com/Kajabi/pine/commit/c2ee64cd8d691e8fa6caa9356a3f1c3a238ec682))
+
+
+### Features
+
+* **box:** add box and row component ([#119](https://github.com/Kajabi/pine/issues/119)) ([7822884](https://github.com/Kajabi/pine/commit/78228847b2cfbde30ec7b109f831bd2facfda8bd))
+* **table:** Table Component ([#112](https://github.com/Kajabi/pine/issues/112)) ([2315be1](https://github.com/Kajabi/pine/commit/2315be11bdad4257d49f12b31776d9ed0eae3c24))
+
+
+
+
+
 ## [0.0.2-rc.0](https://github.com/Kajabi/pine/compare/@pine-ds/react@0.0.2-alpha.1...@pine-ds/react@0.0.2-rc.0) (2024-01-10)
 
 
