@@ -388,6 +388,93 @@ export namespace Components {
          */
         "value": string;
     }
+    interface PdsSelect {
+        /**
+          * A unique identifier for the combobox
+         */
+        "componentId": string;
+        /**
+          * Indicates that the combobox is disabled
+          * @defaultValue false
+         */
+        "disabled": boolean;
+        /**
+          * Specifies the error text and provides an error-themed treatment to the field
+         */
+        "errorMessage"?: string;
+        /**
+          * Track the index of the focused option
+         */
+        "focusIndex": number;
+        /**
+          * Displays a helper or description of the combobox
+         */
+        "helperMessage"?: string;
+        /**
+          * Indicates  whether or not the input field is invalid or throws an error
+          * @defaultValue false
+         */
+        "invalid": boolean;
+        /**
+          * Is enabled when the combobox is open
+          * @defaultValue false
+         */
+        "isComboboxOpen": boolean;
+        /**
+          * Text to be displayed as the combobox label
+         */
+        "label"?: string;
+        /**
+          * Determines the preferred position of the tooltip
+          * @defaultValue "right"
+         */
+        "placement": 'top'
+    | 'top-start'
+    | 'top-end'
+    | 'right'
+    | 'right-start'
+    | 'right-end'
+    | 'bottom'
+    | 'bottom-start'
+    | 'bottom-end'
+    | 'left'
+    | 'left-start'
+    | 'left-end';
+        /**
+          * Pending
+         */
+        "selectFocusedOption": () => Promise<void>;
+        /**
+          * The display id for the selected option
+         */
+        "selectedOptionId"?: string;
+        /**
+          * The display text for the selected option
+         */
+        "selectedOptionText"?: string;
+        /**
+          * The value for the selected option
+         */
+        "selectedOptionValue"?: string;
+    }
+    interface PdsSelectOption {
+        /**
+          * The id for the option
+         */
+        "componentId": string;
+        /**
+          * Sets the state of the option to
+         */
+        "selected": boolean;
+        /**
+          * The text to be displayed in the option
+         */
+        "text": string;
+        /**
+          * The value of that is saved for form data
+         */
+        "value": string;
+    }
     interface PdsSortable {
         /**
           * Determines whether `sortable` should have a border.
@@ -672,6 +759,14 @@ export interface PdsRadioCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsRadioElement;
 }
+export interface PdsSelectCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsSelectElement;
+}
+export interface PdsSelectOptionCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsSelectOptionElement;
+}
 export interface PdsSortableCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsSortableElement;
@@ -821,6 +916,40 @@ declare global {
     var HTMLPdsRadioElement: {
         prototype: HTMLPdsRadioElement;
         new (): HTMLPdsRadioElement;
+    };
+    interface HTMLPdsSelectElementEventMap {
+        "pdsSelectChange": string;
+    }
+    interface HTMLPdsSelectElement extends Components.PdsSelect, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsSelectElementEventMap>(type: K, listener: (this: HTMLPdsSelectElement, ev: PdsSelectCustomEvent<HTMLPdsSelectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsSelectElementEventMap>(type: K, listener: (this: HTMLPdsSelectElement, ev: PdsSelectCustomEvent<HTMLPdsSelectElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLPdsSelectElement: {
+        prototype: HTMLPdsSelectElement;
+        new (): HTMLPdsSelectElement;
+    };
+    interface HTMLPdsSelectOptionElementEventMap {
+        "pdsSelectOptionSelected": any;
+    }
+    interface HTMLPdsSelectOptionElement extends Components.PdsSelectOption, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsSelectOptionElementEventMap>(type: K, listener: (this: HTMLPdsSelectOptionElement, ev: PdsSelectOptionCustomEvent<HTMLPdsSelectOptionElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsSelectOptionElementEventMap>(type: K, listener: (this: HTMLPdsSelectOptionElement, ev: PdsSelectOptionCustomEvent<HTMLPdsSelectOptionElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLPdsSelectOptionElement: {
+        prototype: HTMLPdsSelectOptionElement;
+        new (): HTMLPdsSelectOptionElement;
     };
     interface HTMLPdsSortableElementEventMap {
         "pdsSortableItemMoved": any;
@@ -996,6 +1125,8 @@ declare global {
         "pds-link": HTMLPdsLinkElement;
         "pds-progress": HTMLPdsProgressElement;
         "pds-radio": HTMLPdsRadioElement;
+        "pds-select": HTMLPdsSelectElement;
+        "pds-select-option": HTMLPdsSelectOptionElement;
         "pds-sortable": HTMLPdsSortableElement;
         "pds-sortable-item": HTMLPdsSortableItemElement;
         "pds-switch": HTMLPdsSwitchElement;
@@ -1411,6 +1542,97 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
+    interface PdsSelect {
+        /**
+          * A unique identifier for the combobox
+         */
+        "componentId": string;
+        /**
+          * Indicates that the combobox is disabled
+          * @defaultValue false
+         */
+        "disabled"?: boolean;
+        /**
+          * Specifies the error text and provides an error-themed treatment to the field
+         */
+        "errorMessage"?: string;
+        /**
+          * Track the index of the focused option
+         */
+        "focusIndex"?: number;
+        /**
+          * Displays a helper or description of the combobox
+         */
+        "helperMessage"?: string;
+        /**
+          * Indicates  whether or not the input field is invalid or throws an error
+          * @defaultValue false
+         */
+        "invalid"?: boolean;
+        /**
+          * Is enabled when the combobox is open
+          * @defaultValue false
+         */
+        "isComboboxOpen"?: boolean;
+        /**
+          * Text to be displayed as the combobox label
+         */
+        "label"?: string;
+        /**
+          * Emitted when the select value changes from selected option
+         */
+        "onPdsSelectChange"?: (event: PdsSelectCustomEvent<string>) => void;
+        /**
+          * Determines the preferred position of the tooltip
+          * @defaultValue "right"
+         */
+        "placement"?: 'top'
+    | 'top-start'
+    | 'top-end'
+    | 'right'
+    | 'right-start'
+    | 'right-end'
+    | 'bottom'
+    | 'bottom-start'
+    | 'bottom-end'
+    | 'left'
+    | 'left-start'
+    | 'left-end';
+        /**
+          * The display id for the selected option
+         */
+        "selectedOptionId"?: string;
+        /**
+          * The display text for the selected option
+         */
+        "selectedOptionText"?: string;
+        /**
+          * The value for the selected option
+         */
+        "selectedOptionValue"?: string;
+    }
+    interface PdsSelectOption {
+        /**
+          * The id for the option
+         */
+        "componentId"?: string;
+        /**
+          * Triggered when an option is clicked
+         */
+        "onPdsSelectOptionSelected"?: (event: PdsSelectOptionCustomEvent<any>) => void;
+        /**
+          * Sets the state of the option to
+         */
+        "selected"?: boolean;
+        /**
+          * The text to be displayed in the option
+         */
+        "text"?: string;
+        /**
+          * The value of that is saved for form data
+         */
+        "value"?: string;
+    }
     interface PdsSortable {
         /**
           * Determines whether `sortable` should have a border.
@@ -1707,6 +1929,8 @@ declare namespace LocalJSX {
         "pds-link": PdsLink;
         "pds-progress": PdsProgress;
         "pds-radio": PdsRadio;
+        "pds-select": PdsSelect;
+        "pds-select-option": PdsSelectOption;
         "pds-sortable": PdsSortable;
         "pds-sortable-item": PdsSortableItem;
         "pds-switch": PdsSwitch;
@@ -1738,6 +1962,8 @@ declare module "@stencil/core" {
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
             "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-radio": LocalJSX.PdsRadio & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
+            "pds-select": LocalJSX.PdsSelect & JSXBase.HTMLAttributes<HTMLPdsSelectElement>;
+            "pds-select-option": LocalJSX.PdsSelectOption & JSXBase.HTMLAttributes<HTMLPdsSelectOptionElement>;
             "pds-sortable": LocalJSX.PdsSortable & JSXBase.HTMLAttributes<HTMLPdsSortableElement>;
             "pds-sortable-item": LocalJSX.PdsSortableItem & JSXBase.HTMLAttributes<HTMLPdsSortableItemElement>;
             "pds-switch": LocalJSX.PdsSwitch & JSXBase.HTMLAttributes<HTMLPdsSwitchElement>;

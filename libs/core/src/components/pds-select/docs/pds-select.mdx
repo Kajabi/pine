@@ -1,0 +1,194 @@
+import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+# Select
+
+Select allows users to make a single or multiple selections from a list of options.
+
+## Sub Components
+
+### Select Option
+
+A subcomponent of the select component. This component is used to define the options of the select component.
+
+Requires a unique `component-id` property to be passed.
+
+e.g. `<pds-select-option component-id="myId" value='My value'></pds-select-option>`
+
+<DocCanvas client:only mdxSource={{
+    react: '<PdsSelectOption componentId="myId" value="My value"></PdsSelectOption>',
+    webComponent: '<pds-select-option component-id="myId" value="My value"></pds-select-option>'
+}}>
+  <pds-select-option component-id="myId" value='My value'></pds-select-option>
+</DocCanvas>
+
+#### Value vs Text Content
+
+Requires either a `value` property or text content to be passed. If both are passed, the text content will be used.
+
+e.g. `<pds-select-option component-id='myId' value='my value'>My text content</pds-select-option>`
+
+<DocCanvas client:only mdxSource={{
+  react: '<PdsSelectOption componentId="myId" value="my value">My text content</PdsSelectOption>',
+  webComponent: '<pds-select-option component-id="myId" value="my value">My text content</pds-select-option>'
+}}>
+  <pds-select-option component-id='myId' value='my value'>My text content</pds-select-option>
+</DocCanvas>
+
+
+## Sub Component Properties
+
+<DocArgsTable componentName="pds-select-option" docSource={components} />
+
+## Guidelines
+### Accessibility
+Our select component doesn't use the native HTML `<select>`, instead ARIA is used to achieve semantic HTML behavior.
+This select is keyboard accessible following the Comboxbox and Listbox best practices from the W3C. This allows the select component to also be screen reader accessible.
+
+- Specify a unique `component-id` for  the `pds-select`. This will properly set the relationship between the menu button and listbox.
+- Specify a unique `component-id` for each `pds-select-option` to achieve form selection through ARIA roles.
+
+## Properties
+
+<DocArgsTable componentName="pds-select" docSource={components} />
+
+### Default
+
+<DocCanvas client:only mdxSource={{
+  react: `<PdsSelect componentId="combobox" label="Label">
+  <PdsSelectOption componentId="opt0" value="">Select an Option</PdsSelectOption>
+  <PdsSelectOption componentId="opt1" value="Option A value"></PdsSelectOption>
+  <PdsSelectOption componentId="opt2" value="Option B value"></PdsSelectOption>
+  <PdsSelectOption componentId="opt3" value="Option C value"></PdsSelectOption>
+  <PdsSelectOption componentId="opt4" value="Option D value"></PdsSelectOption>
+</PdsSelect>`,
+  webComponent: `<pds-select component-id="combobox" label="Label">
+  <pds-select-option component-id="opt0" value="">Select an Option</pds-select-option>
+  <pds-select-option component-id="opt1" value="Option A value"></pds-select-option>
+  <pds-select-option component-id="opt2" value="Option B value"></pds-select-option>
+  <pds-select-option component-id="opt3" value="Option C value"></pds-select-option>
+  <pds-select-option component-id="opt4" value="Option D value"></pds-select-option>
+</pds-select>
+  `
+}}>
+  <pds-select component-id="combobox" label="Label">
+    <pds-select-option component-id="opt0" value="">Select an Option</pds-select-option>
+    <pds-select-option component-id="opt1" value="Option A value"></pds-select-option>
+    <pds-select-option component-id="opt2" value="Option B value"></pds-select-option>
+    <pds-select-option component-id="opt3" value="Option C value"></pds-select-option>
+    <pds-select-option component-id="opt4" value="Option D value"></pds-select-option>
+  </pds-select>
+</DocCanvas>
+
+### Select only using values
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsSelect componentId="combobox" label="Label">
+    <PdsSelectOption componentId="opt0" value="">Select an Option</PdsSelectOption>
+    <PdsSelectOption componentId="opt1" value="Option A value"></PdsSelectOption>
+    <PdsSelectOption componentId="opt2" value="Option B value"></PdsSelectOption>
+    <PdsSelectOption componentId="opt3" value="Option C value"></PdsSelectOption>
+    <PdsSelectOption componentId="opt4" value="Option D value"></PdsSelectOption>
+  </PdsSelect>`,
+    webComponent: `<pds-select component-id="combobox" label="Label">
+    <pds-select-option component-id="opt0" value="">Select an Option</pds-select-option>
+    <pds-select-option component-id="opt1" value="Option A value"></pds-select-option>
+    <pds-select-option component-id="opt2" value="Option B value"></pds-select-option>
+    <pds-select-option component-id="opt3" value="Option C value"></pds-select-option>
+    <pds-select-option component-id="opt4" value="Option D value"></pds-select-option>
+  </pds-select>
+  `}}>
+  <div style={{display: 'flex', 'flexDirection': 'column', gap: '16px'}}>
+    {/* Using only values */}
+    <pds-select component-id="combobox" label="Label">
+      <pds-select-option component-id="opt0" value="">Select an Option</pds-select-option>
+      <pds-select-option component-id="opt1" value="Option A value"></pds-select-option>
+      <pds-select-option component-id="opt2" value="Option B value"></pds-select-option>
+      <pds-select-option component-id="opt3" value="Option C value"></pds-select-option>
+      <pds-select-option component-id="opt4" value="Option D value"></pds-select-option>
+    </pds-select>
+    {/* Using text content with no value */}
+    <pds-select component-id="combobox2" label="Label">
+      <pds-select-option component-id="opt0">Select an option</pds-select-option>
+      <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
+      <pds-select-option component-id="opt2">Option B Slot</pds-select-option>
+      <pds-select-option component-id="opt3">Option C Slot</pds-select-option>
+      <pds-select-option component-id="opt4">Option D Slot</pds-select-option>
+    </pds-select>
+    {/* Using value both values and text content  */}
+    <pds-select component-id="combobox1" label="Label">
+      <pds-select-option component-id="opt0" value="val0">Select an Option</pds-select-option>
+      <pds-select-option component-id="opt1" value="val1">Option A value</pds-select-option>
+      <pds-select-option component-id="opt2" value="val2">Option B value</pds-select-option>
+      <pds-select-option component-id="opt3" value="val3">Option C value</pds-select-option>
+      <pds-select-option component-id="opt4" value="val4">Option D value</pds-select-option>
+    </pds-select>
+  </div>
+</DocCanvas>
+
+### Select using text content with no value
+<DocCanvas client:only
+  mdxSource={{
+    react: `{/* Using text content with no value */}
+  <PdsSelect componentId="combobox2" label="Label">
+    <PdsSelectOption componentId="opt0">Select an option</PdsSelectOption>
+    <PdsSelectOption componentId="opt1">Option A Slot</PdsSelectOption>
+    <PdsSelectOption componentId="opt2">Option B Slot</PdsSelectOption>
+    <PdsSelectOption componentId="opt3">Option C Slot</PdsSelectOption>
+    <PdsSelectOption componentId="opt4">Option D Slot</PdsSelectOption>
+  </PdsSelect>`,
+    webComponent: `{/* Using text content with no value */}
+  <pds-select component-id="combobox2" label="Label">
+    <pds-select-option component-id="opt0">Select an option</pds-select-option>
+    <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
+    <pds-select-option component-id="opt2">Option B Slot</pds-select-option>
+    <pds-select-option component-id="opt3">Option C Slot</pds-select-option>
+    <pds-select-option component-id="opt4">Option D Slot</pds-select-option>
+  </pds-select>
+  `}}>
+  <div style={{display: 'flex', 'flexDirection': 'column', gap: '16px'}}>
+    {/* Using text content with no value */}
+    <pds-select component-id="combobox2" label="Label">
+      <pds-select-option component-id="opt0">Select an option</pds-select-option>
+      <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
+      <pds-select-option component-id="opt2">Option B Slot</pds-select-option>
+      <pds-select-option component-id="opt3">Option C Slot</pds-select-option>
+      <pds-select-option component-id="opt4">Option D Slot</pds-select-option>
+    </pds-select>
+  </div>
+</DocCanvas>
+
+### Select using both values and text content
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsSelect componentId="combobox1" label="Label">
+    <PdsSelectOption componentId="opt0" value="val0">Select an Option</PdsSelectOption>
+    <PdsSelectOption componentId="opt1" value="val1">Option A value</PdsSelectOption>
+    <PdsSelectOption componentId="opt2" value="val2">Option B value</PdsSelectOption>
+    <PdsSelectOption componentId="opt3" value="val3">Option C value</PdsSelectOption>
+    <PdsSelectOption componentId="opt4" value="val4">Option D value</PdsSelectOption>
+  </PdsSelect>`,
+    webComponent: `{/* Using value both values and text content  */}
+  <pds-select component-id="combobox1" label="Label">
+    <pds-select-option component-id="opt0" value="val0">Select an Option</pds-select-option>
+    <pds-select-option component-id="opt1" value="val1">Option A value</pds-select-option>
+    <pds-select-option component-id="opt2" value="val2">Option B value</pds-select-option>
+    <pds-select-option component-id="opt3" value="val3">Option C value</pds-select-option>
+    <pds-select-option component-id="opt4" value="val4">Option D value</pds-select-option>
+  </pds-select>
+  `}}>
+  <div style={{display: 'flex', 'flexDirection': 'column', gap: '16px'}}>
+    <pds-select component-id="combobox1" label="Label">
+      <pds-select-option component-id="opt0" value="val0">Select an Option</pds-select-option>
+      <pds-select-option component-id="opt1" value="val1">Option A value</pds-select-option>
+      <pds-select-option component-id="opt2" value="val2">Option B value</pds-select-option>
+      <pds-select-option component-id="opt3" value="val3">Option C value</pds-select-option>
+      <pds-select-option component-id="opt4" value="val4">Option D value</pds-select-option>
+    </pds-select>
+  </div>
+</DocCanvas>
+
+## Additional Resources
+
+- [W3C Combobox best practices](https://www.w3.org/TR/wai-aria-practices-1.1/#combobox)
+- [W3C Listbox best practices](https://www.w3.org/TR/wai-aria-practices-1.1/#Listbox)

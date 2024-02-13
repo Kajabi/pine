@@ -1,0 +1,16 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import { html, render } from 'lit-html';
+
+import * as stories from './pds-select.stories.js';
+
+import Docs from '../docs/pds-select.mdx';
+
+<Meta of={stories} />
+
+<Docs />
+
+# Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />
