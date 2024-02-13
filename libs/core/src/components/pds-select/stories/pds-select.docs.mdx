@@ -1,131 +1,16 @@
-import { Meta, Canvas, ArgTypes } from '@storybook/blocks';
+import { Meta, Canvas, Controls } from '@storybook/blocks';
 import { html, render } from 'lit-html';
 
 import * as stories from './pds-select.stories.js';
-import * as selectOptionStories from '../pds-select-option/stories/pds-select-option.stories.js';
+
+import Docs from '../docs/pds-select.mdx';
 
 <Meta of={stories} />
 
-# Select
+<Docs />
 
-Select allows users to make a single or multiple selections from a list of options.
+# Playground
 
-## Sub Components
+<Canvas of={stories.Default} />
 
-### Select Option
-
-A subcomponent of the select component. This component is used to define the options of the select component.
-
-Requires a unique `component-id` property to be passed.
-
-e.g. `<pds-select-option component-id="myId" value='My value'></pds-select-option>`
-<Canvas mdxSource={`
-<pds-select-option component-id="myId" value='My value'></pds-select-option>
-`}>
-  <pds-select-option component-id="myId" value='My value'></pds-select-option>
-</Canvas>
-
-#### Value vs Text Content
-Requires either a `value` property or text content to be passed. If both are passed, the text content will be used.
-
-e.g. `<pds-select-option component-id='myId' value='my value'>My text content</pds-select-option>`
-
-<Canvas mdxSource={`
-<pds-select-option component-id='myId' value='my value'>My text content</pds-select-option>
-`}>
-  <pds-select-option component-id='myId' value='my value'>My text content</pds-select-option>
-</Canvas>
-
-
-## Sub Component Properties
-
-<ArgTypes of={selectOptionStories} />
-
-## Guidelines
-### Accessibility
-Our select component doesn't use the native HTML `<select>`, instead ARIA is used to achieve semantic HTML behavior.
-This select is keyboard accessible following the Comboxbox and Listbox best practices from the W3C. This allows the select component to also be screen reader accessible.
-
-- Specify a unique `component-id` for  the `pds-select`. This will properly set the relationship between the menu button and listbox.
-- Specify a unique `component-id` for each `pds-select-option` to achieve form selection through ARIA roles.
-
-## Properties
-
-<ArgTypes of={stories} />
-
-### Default
-
-{/* <Story story={stories.Default} /> */}
-<Canvas of={stories.Default} source={{
-  code: `
-    <pds-select component-id="combobox" label="Label">
-      <pds-select-option component-id="opt0" value="">Select an Option</pds-select-option>
-      <pds-select-option component-id="opt1" value="Option A value"></pds-select-option>
-      <pds-select-option component-id="opt2" value="Option B value"></pds-select-option>
-      <pds-select-option component-id="opt3" value="Option C value"></pds-select-option>
-      <pds-select-option component-id="opt4" value="Option D value"></pds-select-option>
-    </pds-select>
-  `
-}} />
-
-### Select
-<Canvas mdxSource={`
-<div style={{display: 'flex', 'flexDirection': 'column', gap: '16px'}}>
-  {/* Using only values */}
-  <pds-select component-id="combobox" label="Label">
-    <pds-select-option component-id="opt0" value="">Select an Option</pds-select-option>
-    <pds-select-option component-id="opt1" value="Option A value"></pds-select-option>
-    <pds-select-option component-id="opt2" value="Option B value"></pds-select-option>
-    <pds-select-option component-id="opt3" value="Option C value"></pds-select-option>
-    <pds-select-option component-id="opt4" value="Option D value"></pds-select-option>
-  </pds-select>
-  {/* Using text content with no value */}
-  <pds-select component-id="combobox2" label="Label">
-    <pds-select-option component-id="opt0">Select an option</pds-select-option>
-    <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
-    <pds-select-option component-id="opt2">Option B Slot</pds-select-option>
-    <pds-select-option component-id="opt3">Option C Slot</pds-select-option>
-    <pds-select-option component-id="opt4">Option D Slot</pds-select-option>
-  </pds-select>
-  {/* Using value both values and text content  */}
-  <pds-select component-id="combobox1" label="Label">
-    <pds-select-option component-id="opt0" value="val0">Select an Option</pds-select-option>
-    <pds-select-option component-id="opt1" value="val1">Option A value</pds-select-option>
-    <pds-select-option component-id="opt2" value="val2">Option B value</pds-select-option>
-    <pds-select-option component-id="opt3" value="val3">Option C value</pds-select-option>
-    <pds-select-option component-id="opt4" value="val4">Option D value</pds-select-option>
-  </pds-select>
-</div>
-`}>
-  <div style={{display: 'flex', 'flexDirection': 'column', gap: '16px'}}>
-    {/* Using only values */}
-    <pds-select component-id="combobox" label="Label">
-      <pds-select-option component-id="opt0" value="">Select an Option</pds-select-option>
-      <pds-select-option component-id="opt1" value="Option A value"></pds-select-option>
-      <pds-select-option component-id="opt2" value="Option B value"></pds-select-option>
-      <pds-select-option component-id="opt3" value="Option C value"></pds-select-option>
-      <pds-select-option component-id="opt4" value="Option D value"></pds-select-option>
-    </pds-select>
-    {/* Using text content with no value */}
-    <pds-select component-id="combobox2" label="Label">
-      <pds-select-option component-id="opt0">Select an option</pds-select-option>
-      <pds-select-option component-id="opt1">Option A Slot</pds-select-option>
-      <pds-select-option component-id="opt2">Option B Slot</pds-select-option>
-      <pds-select-option component-id="opt3">Option C Slot</pds-select-option>
-      <pds-select-option component-id="opt4">Option D Slot</pds-select-option>
-    </pds-select>
-    {/* Using value both values and text content  */}
-    <pds-select component-id="combobox1" label="Label">
-      <pds-select-option component-id="opt0" value="val0">Select an Option</pds-select-option>
-      <pds-select-option component-id="opt1" value="val1">Option A value</pds-select-option>
-      <pds-select-option component-id="opt2" value="val2">Option B value</pds-select-option>
-      <pds-select-option component-id="opt3" value="val3">Option C value</pds-select-option>
-      <pds-select-option component-id="opt4" value="val4">Option D value</pds-select-option>
-    </pds-select>
-  </div>
-</Canvas>
-
-## Additional Resources
-
-- [W3C Combobox best practices](https://www.w3.org/TR/wai-aria-practices-1.1/#combobox)
-- [W3C Listbox best practices](https://www.w3.org/TR/wai-aria-practices-1.1/#Listbox)
+<Controls of={stories.Default} />
