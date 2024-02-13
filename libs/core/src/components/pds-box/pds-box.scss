@@ -1,0 +1,332 @@
+@import './pds-box.mixins';
+
+pds-box {
+  --box-background-color: inherit;
+  --box-border-color: inherit;
+  --box-min-height: none;
+  --box-min-width: none;
+
+  --box-gap-xxs: var(--pine-spacing-050);
+  --box-gap-xs: var(--pine-spacing-100);
+  --box-gap-sm: var(--pine-spacing-200);
+  --box-gap-md: var(--pine-spacing-300);
+  --box-gap-lg: var(--pine-spacing-450);
+  --box-gap-xl: var(--pine-spacing-600);
+  --box-gap-xxl: var(--pine-spacing-800);
+
+  display: block;
+}
+
+img {
+  width: 100%;
+}
+
+[class*='pds-box'] {
+  background-color: var(--box-background-color);
+  box-sizing: border-box;
+  display: inline-flex;
+  min-height: var(--box-min-height);;
+  min-width: var(--box-min-width);
+
+  // The immediate child of the row will fit the width of the row
+  .pds-row > & {
+    position: relative;
+    width: 100%;
+
+    &.pds-box--auto {
+      width: auto;
+    }
+  }
+}
+
+// Spacing mixin
+$pine-spacing-tokens: (
+  xxs: 4px,
+  xs: 8px,
+  sm: 16px,
+  md: 24px,
+  lg: 36px,
+  xl: 48px,
+  2xl: 64px,
+);
+
+// Generate spacing classes
+@include generate-spacing-classes(false, $pine-spacing-tokens);
+@include generate-spacing-classes('top', $pine-spacing-tokens);
+@include generate-spacing-classes('right', $pine-spacing-tokens);
+@include generate-spacing-classes('left', $pine-spacing-tokens);
+@include generate-spacing-classes('bottom', $pine-spacing-tokens);
+
+// Base offset classes
+@include generate-column-offsets(false, 12);
+
+// Responsive offset classes
+@media (max-width: 575px) {
+  @include generate-column-offsets('xs', 12);
+}
+
+@media (min-width: 576px) {
+  @include generate-column-offsets('sm', 12);
+}
+
+@media (min-width: 768px) {
+  @include generate-column-offsets('md', 12);
+}
+
+@media (min-width: 992px) {
+  @include generate-column-offsets('lg', 12);
+}
+
+@media (min-width: 1200px) {
+  @include generate-column-offsets('xl', 12);
+}
+
+
+// Base column width classes
+@include generate-columns(false, 12);
+
+// Responsive column width classes
+@media (max-width: 575px) {
+  @include generate-columns('xs', 12);
+}
+
+@media (min-width: 576px) {
+  @include generate-columns('sm', 12);
+}
+
+@media (min-width: 768px) {
+  @include generate-columns('md', 12);
+}
+
+@media (min-width: 992px) {
+  @include generate-columns('lg', 12);
+}
+
+@media (min-width: 1200px) {
+  @include generate-columns('xl', 12);
+}
+
+.pds-box {
+  flex-basis: 0;
+  flex-grow: 1;
+}
+
+.pds-box--auto {
+  flex: 0 0 var(--box-min-width, fit-content);
+  min-width: auto;
+  width: auto;
+}
+
+.pds-box--fit {
+  max-width: 100%;
+  min-width: 100%;
+  width: 100%;
+}
+
+.pds-box--border {
+  border-color: var(--box-border-color, var(--pine-border-default-color));
+  border-style: var(--pine-border-default-style);
+  border-width: var(--pine-border-default-width);
+}
+
+// Display helpers
+.pds-box--display-flex {
+  display: flex;
+}
+
+.pds-box--display-inline-flex {
+  display: inline-flex;
+}
+
+.pds-box--display-block {
+  display: block;
+}
+
+.pds-box--display-inline-block {
+  display: inline-block;
+}
+
+// Flex helpers
+.pds-box--flex-none {
+  flex: 0 0 auto;
+}
+
+.pds-box--flex-grow {
+  flex: 1 1 auto
+}
+
+.pds-box--flex-shrink {
+  flex: 0 0 auto;
+}
+
+// Border radius helpers
+.pds-border-radius-none {
+  border-radius: 0;
+}
+
+.pds-border-radius-xs {
+  border-radius: var(--pine-border-radius-xs);
+}
+
+.pds-border-radius-sm {
+  border-radius: var(--pine-border-radius-sm);
+}
+
+.pds-border-radius-md {
+  border-radius: var(--pine-border-radius-md);
+}
+
+.pds-border-radius-lg {
+  border-radius: var(--pine-border-radius-lg);
+}
+
+.pds-border-radius-circle {
+  border-radius: 50%;
+}
+
+// Box shadow helpers
+.pds-shadow-xs {
+  box-shadow: var(--pine-box-shadow-xs);
+}
+
+.pds-shadow-sm {
+  box-shadow: var(--pine-box-shadow-sm);
+}
+
+.pds-shadow-md {
+  box-shadow: var(--pine-box-shadow-md);
+}
+
+.pds-shadow-lg {
+  box-shadow: var(--pine-box-shadow-lg);
+}
+
+// Gap helpers
+.pds-box-gap-none {
+  gap: 0;
+}
+
+.pds-box-gap-xxs {
+  gap: var(--box-gap-xxs);
+}
+
+.pds-box-gap-xs {
+  gap: var(--box-gap-xs);
+}
+
+.pds-box-gap-sm {
+  gap: var(--box-gap-sm);
+}
+
+.pds-box-gap-md {
+  gap: var(--box-gap-md);
+}
+
+.pds-box-gap-lg {
+  gap: var(--box-gap-lg);
+}
+
+.pds-box-gap-xl {
+  gap: var(--box-gap-xl);
+}
+
+.pds-box-gap-xxl {
+  gap: var(--box-gap-2xl);
+}
+
+// Spacing helpers
+.pds-padding-none {
+  padding: 0;
+}
+
+.pds-padding-xxs {
+  padding: var(--box-gap-xxs);
+}
+
+.pds-padding-xs {
+  padding: var(--box-gap-xxs);
+}
+
+.pds-padding-sm {
+  padding: var(--box-gap-sm);
+}
+
+.pds-padding-md {
+  padding: var(--box-gap-md);
+}
+
+.pds-padding-lg {
+  padding: var(--box-gap-lg);
+}
+
+.pds-padding-xl {
+  padding: var(--box-gap-xl);
+}
+
+.pds-padding-xxl {
+  padding: var(--box-gap-2xl);
+}
+
+// Display helpers
+.pds-box-display-flex {
+  display: flex;
+}
+
+.pds-box-display-inline-flex {
+  display: inline-flex;
+}
+
+// Flex Direction helpers
+.pds-box-direction-row {
+  flex-direction: row;
+}
+
+.pds-box-direction-column {
+  flex-direction: column;
+}
+
+// Justify Content helpers
+.pds-justify-content-start {
+  justify-content: start;
+}
+
+.pds-justify-content-center {
+  justify-content: center;
+}
+
+.pds-justify-content-end {
+  justify-content: end;
+}
+
+.pds-justify-content-space-between {
+  justify-content: space-between;
+}
+
+.pds-justify-content-space-around {
+  justify-content: space-around;
+}
+
+.pds-justify-content-space-evenly {
+  justify-content: space-evenly;
+}
+
+// Align Items helpers
+.pds-align-items-start {
+  align-items: start;
+}
+
+.pds-align-items-center {
+  align-items: center;
+}
+
+.pds-align-items-end {
+  align-items: end;
+}
+
+.pds-align-items-stretch {
+  align-items: stretch;
+}
+
+.pds-align-items-baseline {
+  align-items: baseline;
+}
