@@ -17,10 +17,6 @@ pds-box {
   display: block;
 }
 
-img {
-  width: 100%;
-}
-
 [class*='pds-box'] {
   background-color: var(--box-background-color);
   box-sizing: border-box;
