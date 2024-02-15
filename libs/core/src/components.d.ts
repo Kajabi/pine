@@ -13,6 +13,10 @@ export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-in
 export { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
     interface PdsAccordion {
+        /**
+          * Can be used to manually set the open state of the accordion.
+         */
+        "isOpen": boolean;
     }
     interface PdsAvatar {
         /**
@@ -1194,6 +1198,10 @@ declare global {
 }
 declare namespace LocalJSX {
     interface PdsAccordion {
+        /**
+          * Can be used to manually set the open state of the accordion.
+         */
+        "isOpen"?: boolean;
     }
     interface PdsAvatar {
         /**
