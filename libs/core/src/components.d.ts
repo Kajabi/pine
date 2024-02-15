@@ -14,6 +14,10 @@ export { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-in
 export namespace Components {
     interface PdsAccordion {
         /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
           * Can be used to manually set the open state of the accordion.
          */
         "isOpen": boolean;
@@ -1198,6 +1202,10 @@ declare global {
 }
 declare namespace LocalJSX {
     interface PdsAccordion {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
         /**
           * Can be used to manually set the open state of the accordion.
          */

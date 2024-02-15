@@ -11,6 +11,11 @@ import { Component, h, Host, Prop, Watch } from '@stencil/core';
 })
 export class PdsAccordion {
   private detailsEl: HTMLDetailsElement;
+
+  /**
+   * A unique identifier used for the underlying component `id` attribute.
+   */
+  @Prop() componentId: string;
   
   /**
    * Can be used to manually set the open state of the accordion.
@@ -43,7 +48,7 @@ export class PdsAccordion {
 
   render() {
     return (
-    <Host>
+    <Host class="pds-accordion" id={this.componentId}>
       <details {...this.getOpenAttribute()} ref={(el) => this.detailsEl = el as HTMLDetailsElement}>
         <summary><slot name="summary" /></summary>
         <slot />
