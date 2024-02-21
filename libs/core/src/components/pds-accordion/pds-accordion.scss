@@ -1,3 +1,50 @@
 :host {
-  display: block;
+  display: inline-block;
+}
+
+:host(:hover) summary {
+  background: var(--color-background-hover);
+  cursor: pointer;
+  color: var(--color-font-hover);
+}
+
+details {
+  --color-background-hover: var(--pine-color-neutral-grey-300);
+  --color-font: var(--pine-color-neutral-charcoal-200);
+  --color-font-hover: var(--pine-color-neutral-charcoal-300);
+  --color-font-active: var(--pine-color-neutral-charcoal-400);
+  --font-weight: var(--pine-font-weight-medium);
+  --spacing-icon: 8px;
+}
+
+summary {
+  color: var(--color-font);
+  font-weight: var(--font-weight);
+  padding-block: 4px;
+  padding-inline-end: 4px;
+  padding-inline-start: 8px;
+  
+  // Removes marker on Firefox/Chrome
+  display: inline-block;
+  align-items: center;
+
+  // Removes marker on Safari
+  &::-webkit-details-marker {
+    display: none;
+  }
+}
+
+details[open] summary {
+  color: var(--color-font-active);
+}
+
+::slotted([slot="summary"]) {
+  display: flex;
+  align-items: center;
+}
+
+::slotted(ul) {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }

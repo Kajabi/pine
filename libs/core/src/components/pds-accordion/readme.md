@@ -11,6 +11,9 @@
 | ------------- | -------------- | --------------------------------------------------------------------- | --------- | ----------- |
 | `componentId` | `component-id` | A unique identifier used for the underlying component `id` attribute. | `string`  | `undefined` |
 | `isOpen`      | `open`         | Can be used to manually set the open state of the accordion.          | `boolean` | `false`     |
+| `label`       | `label`        | Label for the accordion trigger button.                               | `string`  | `undefined` |
+| `leftIcon`    | `left-icon`    | The left icon for the trigger button.                                 | `string`  | `undefined` |
+| `rightIcon`   | `right-icon`   | The right icon for the trigger button.                                | `string`  | `undefined` |
 
 
 ## Slots
@@ -20,6 +23,19 @@
 | `"(default)"` | Accordion body content.           |
 | `"summary"`   | Accordion trigger button content. |
 
+
+## Dependencies
+
+### Depends on
+
+- pds-icon
+
+### Graph
+```mermaid
+graph TD;
+  pds-accordion --> pds-icon
+  style pds-accordion fill:#f9f,stroke:#333,stroke-width:4px
+```
 
 ----------------------------------------------
 

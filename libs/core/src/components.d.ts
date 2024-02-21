@@ -21,6 +21,18 @@ export namespace Components {
           * Can be used to manually set the open state of the accordion.
          */
         "isOpen": boolean;
+        /**
+          * Label for the accordion trigger button.
+         */
+        "label": string;
+        /**
+          * The left icon for the trigger button.
+         */
+        "leftIcon": string;
+        /**
+          * The right icon for the trigger button.
+         */
+        "rightIcon": string;
     }
     interface PdsAvatar {
         /**
@@ -1210,6 +1222,18 @@ declare namespace LocalJSX {
           * Can be used to manually set the open state of the accordion.
          */
         "isOpen"?: boolean;
+        /**
+          * Label for the accordion trigger button.
+         */
+        "label"?: string;
+        /**
+          * The left icon for the trigger button.
+         */
+        "leftIcon"?: string;
+        /**
+          * The right icon for the trigger button.
+         */
+        "rightIcon"?: string;
     }
     interface PdsAvatar {
         /**

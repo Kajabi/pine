@@ -16,6 +16,16 @@ export class PdsAccordion {
    * A unique identifier used for the underlying component `id` attribute.
    */
   @Prop() componentId: string;
+
+  /**
+   * Label for the accordion trigger button.
+   */
+  @Prop() label: string;
+
+  /**
+   * The left icon for the trigger button.
+   */
+  @Prop() leftIcon: string;
   
   /**
    * Can be used to manually set the open state of the accordion.
@@ -25,6 +35,12 @@ export class PdsAccordion {
     mutable: true,
     reflect: true 
   }) isOpen: boolean = false;
+
+  /**
+   * The right icon for the trigger button.
+   */
+  @Prop() rightIcon: string;
+
 
   @Watch('isOpen')
   handleOpenState(newValue: boolean) {
@@ -46,14 +62,34 @@ export class PdsAccordion {
     this.isOpen = this.detailsEl.open;
   }
 
+  private renderLeftIcon = () => {
+    if (this.leftIcon) {
+      return <pds-icon name={this.leftIcon}></pds-icon>;
+    } else {
+      return null;
+    }
+  }
+    
+  private renderRightIcon = () => {
+    if (this.rightIcon) {
+      return <pds-icon name={this.rightIcon}></pds-icon>;
+    } else {
+      return null;
+    }
+  }
+
   render() {
     return (
-    <Host class="pds-accordion" id={this.componentId}>
-      <details {...this.getOpenAttribute()} ref={(el) => this.detailsEl = el as HTMLDetailsElement}>
-        <summary><slot name="summary" /></summary>
-        <slot />
-      </details>
-    </Host>
+      <Host class="pds-accordion" id={this.componentId}>
+        <details {...this.getOpenAttribute()} ref={(el) => this.detailsEl = el as HTMLDetailsElement}>
+          <summary>
+            {this.renderLeftIcon()}
+            {this.label}
+            {this.renderRightIcon()}
+          </summary>
+          <slot />
+        </details>
+      </Host>
     );
   }
 }

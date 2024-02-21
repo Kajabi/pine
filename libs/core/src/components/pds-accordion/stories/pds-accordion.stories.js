@@ -5,6 +5,8 @@ import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 export default {
   args: {
     isOpen: false,
+    label: 'Products',
+    rightIcon: 'down-small',
   },
   argTypes: extractArgTypes('pds-accordion'),
   component: 'pds-accordion',
@@ -12,8 +14,11 @@ export default {
 }
 
 const BaseTemplate = (args) => html`
-	<pds-accordion open="${args.isOpen}">
-    <span slot="summary">Button Trigger</span>
+	<pds-accordion 
+    label="${args.label}"
+    open="${args.isOpen}"
+    right-icon="${args.rightIcon}"
+  >
     <ul>
       <li>Item 1</li>
       <li>Item 2</li>
@@ -25,4 +30,6 @@ const BaseTemplate = (args) => html`
 export const Default = BaseTemplate.bind();
 Default.args = {
   isOpen: false,
+  label: 'Products',
+  rightIcon: 'down-small',
 };
