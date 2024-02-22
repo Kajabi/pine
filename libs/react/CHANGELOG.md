@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.4-rc.0](https://github.com/Kajabi/pine/compare/@pine-ds/react@0.0.3-rc.0...@pine-ds/react@0.0.4-rc.0) (2024-02-22)
+
+
+### Bug Fixes
+
+* update package json with type ([0ec0c81](https://github.com/Kajabi/pine/commit/0ec0c81ab86f89433cfa4adf6ba1b79572dc39f9))
+
+
+
+
+
 ## [0.0.3-rc.0](https://github.com/Kajabi/pine/compare/@pine-ds/react@0.0.2-rc.0...@pine-ds/react@0.0.3-rc.0) (2024-02-13)
 
 
