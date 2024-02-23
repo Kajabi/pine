@@ -3,9 +3,63 @@ import { components } from '../../../../dist/docs.json';
 
 # Accordion
 
+An Accordion, composed of a single trigger button and a panel of custom content, is used to show and hide information. Use the provided slots to add custom content to both the trigger and the panel.
+
+## Guidelines
+
+### Accessibility
+
+**Caution**: The label slot is built with the `<summary>` HTML component. Because the `<summary>`'s default accessibility role is `button`, it will strip all child elements of their own roles. Exercise caution to not use the label as a substitute for a heading.
 
 ## Properties
 
 <DocArgsTable componentName="pds-accordion" docSource={components} />
 
 ## Default
+
+With neither slot set, the accordion will render with a default trigger label and no panel content.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsAccordion></PdsAccordion>',
+    webComponent: '<pds-accordion></pds-accordion>'
+}}>
+  <pds-accordion></pds-accordion>
+</DocCanvas>
+
+## Content Slots Set
+
+When the slots are set, the accordion will render with the provided trigger label and panel content. HTML markup or Pine components can be used placed in the panel content.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsAccordion>
+        <span slot="label">Custom Accordion Label</span>
+        <div>
+          <h3>Custom Panel Content</h3>
+          <p style="margin: 0;">Custom panel content</p>
+          <PdsButton variant="primary">Custom Button</PdsButton>
+        </div>
+      </PdsAccordion>
+    `,
+    webComponent: `
+      <pds-accordion>
+        <span slot="label">Custom Accordion Label</span>
+        <div>
+          <h3>Custom Panel Content</h3>
+          <p style="margin: 0;">Custom panel content</p>
+          <pds-button variant="primary">Custom Button</pds-button>
+        </div>
+      </pds-accordion>
+    `
+}}>
+  <pds-accordion>
+    <span slot="label">Custom Accordion Label</span>
+    <div>
+      <h3>Custom Panel Content</h3>
+      <p style={{ margin: '0'}}>Custom panel content</p>
+      <pds-button variant="primary">Custom Button</pds-button>
+    </div>
+  </pds-accordion>
+</DocCanvas>
