@@ -57,6 +57,10 @@
     max-width: 100%;
     padding: 3px 5px;
     word-break: break-word;
+
+    &:empty {
+      display: none;
+    }
   }
 }
 
