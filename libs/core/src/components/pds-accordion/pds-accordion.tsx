@@ -2,7 +2,7 @@ import { Component, h, Host, Prop, Watch } from '@stencil/core';
 
 /**
  * @slot (default) - Accordion body content.
- * @slot summary - Accordion trigger button content.
+ * @slot label - Accordion trigger button content.
  */
 @Component({
   tag: 'pds-accordion',
@@ -14,11 +14,13 @@ export class PdsAccordion {
 
   /**
    * A unique identifier used for the underlying component `id` attribute.
+   * @defaultValue null
    */
   @Prop() componentId: string;
 
   /**
    * Can be used to manually set the open state of the accordion.
+   * @defaultValue false
    */
   @Prop({ 
     attribute: 'open',

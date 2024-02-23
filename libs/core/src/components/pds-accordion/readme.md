@@ -18,7 +18,7 @@
 | Slot          | Description                       |
 | ------------- | --------------------------------- |
 | `"(default)"` | Accordion body content.           |
-| `"summary"`   | Accordion trigger button content. |
+| `"label"`     | Accordion trigger button content. |
 
 
 ----------------------------------------------

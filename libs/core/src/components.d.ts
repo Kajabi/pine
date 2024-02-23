@@ -15,10 +15,12 @@ export namespace Components {
     interface PdsAccordion {
         /**
           * A unique identifier used for the underlying component `id` attribute.
+          * @defaultValue null
          */
         "componentId": string;
         /**
           * Can be used to manually set the open state of the accordion.
+          * @defaultValue false
          */
         "isOpen": boolean;
     }
@@ -1204,10 +1206,12 @@ declare namespace LocalJSX {
     interface PdsAccordion {
         /**
           * A unique identifier used for the underlying component `id` attribute.
+          * @defaultValue null
          */
         "componentId"?: string;
         /**
           * Can be used to manually set the open state of the accordion.
+          * @defaultValue false
          */
         "isOpen"?: boolean;
     }

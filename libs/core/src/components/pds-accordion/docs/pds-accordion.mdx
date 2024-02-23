@@ -9,7 +9,7 @@ An Accordion, composed of a single trigger button and a panel of custom content,
 
 ### Accessibility
 
-**Caution**: The label slot is built with the `<summary>` HTML component. Because the `<summary>`'s default accessibility role is `button`, it will strip all child elements of their own roles. Exercise caution to not use the label as a substitute for a heading.
+**Caution**: The label slot is built with the `<summary>` HTML component. Because the `<summary>`'s default accessibility role is `button`, it will strip all child elements of their own roles. This will prevent elements such as headings to be read as such for users of assitive technology. Exercise caution to not use the label as a substitute for a heading.
 
 ## Properties
 
@@ -29,7 +29,7 @@ With neither slot set, the accordion will render with a default trigger label an
 
 ## Content Slots Set
 
-When the slots are set, the accordion will render with the provided trigger label and panel content. HTML markup or Pine components can be used placed in the panel content.
+When the slots are set, the accordion will render with the provided trigger label and panel content. HTML markup or Pine components can be used inside the panel slot.
 
 <DocCanvas client:only
   mdxSource={{
@@ -63,3 +63,9 @@ When the slots are set, the accordion will render with the provided trigger labe
     </div>
   </pds-accordion>
 </DocCanvas>
+
+## References
+
+[MDN: Details](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details)
+
+[MDN: Summary](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/summary)
