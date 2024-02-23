@@ -38,7 +38,8 @@
   },
   "dependencies": {
     "@pine-ds/core": "^0.0.4-rc.0",
-    "@pine-ds/icons": "3.4.0"
+    "@pine-ds/icons": "3.4.0",
+    "tslib": "*"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.1.5",
