@@ -17,6 +17,7 @@ details {
   --spacing-padding-inline-end: var(--pine-spacing-xxs);
 }
 
+/* stylelint-disable-next-line */
 details[open] {
   background-color: var(--color-content-background);
 
@@ -33,10 +34,19 @@ summary {
   padding-inline-end: var(--spacing-padding-inline-end);
   padding-inline-start: var(--spacing-padding-inline-start);
 
+  // Removes marker on Firefox/Chrome
+  /* stylelint-disable-next-line */
+  display: block;
+
+  // Removes marker on Safari
+  &::-webkit-details-marker {
+    display: none;
+  }
+
   &:hover {
     background: var(--color-background-hover);
-    cursor: pointer;
     color: var(--color-font-hover);
+    cursor: pointer;
   }
 
   &:focus-visible {
@@ -44,12 +54,5 @@ summary {
     box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
     outline: none;
   }
-  
-  // Removes marker on Firefox/Chrome
-  display: block;
 
-  // Removes marker on Safari
-  &::-webkit-details-marker {
-    display: none;
-  }
 }
