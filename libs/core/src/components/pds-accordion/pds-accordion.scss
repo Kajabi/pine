@@ -3,7 +3,7 @@
 }
 
 details {
-  --border-radius-summary: var(--pine-spacing-xs);
+  --border-radius: var(--pine-spacing-xs);
   --box-shadow-focus: 0 0 0 4px var(--pine-color-primary-200);
   --color-content-background: var(--pine-base-color-white);
   --color-background-hover: var(--pine-color-neutral-grey-300);
@@ -11,10 +11,14 @@ details {
   --color-font-active: var(--pine-color-neutral-charcoal-400);
   --color-font-hover: var(--pine-color-neutral-charcoal-300);
   --font-weight: var(--pine-font-weight-medium);
-  --spacing-padding-block: var(--pine-spacing-xxs);
+  --spacing-details-padding-inline: 12px;
   --spacing-slotted-indented: 32px;
-  --spacing-padding-inline-start: var(--pine-spacing-xs);
-  --spacing-padding-inline-end: var(--pine-spacing-xxs);
+  --spacing-summary-padding-block: var(--pine-spacing-xxs);
+  --spacing-summary-padding-inline-start: var(--pine-spacing-xs);
+  --spacing-summary-padding-inline-end: var(--pine-spacing-xxs);
+
+  border-radius: var(--border-radius);
+  padding-inline: var(--spacing-details-padding-inline)
 }
 
 /* stylelint-disable-next-line */
@@ -27,16 +31,17 @@ details[open] {
 }
 
 summary {
-  border-radius: var(--border-radius-summary);
+  border-radius: var(--border-radius);
   color: var(--color-font);
   font-weight: var(--font-weight);
-  padding-block: var(--spacing-padding-block);
-  padding-inline-end: var(--spacing-padding-inline-end);
-  padding-inline-start: var(--spacing-padding-inline-start);
+  padding-block: var(--spacing-summary-padding-block);
+  padding-inline-end: var(--spacing-summary-padding-inline-end);
+  padding-inline-start: var(--spacing-summary-padding-inline-start);
 
   // Removes marker on Firefox/Chrome
   /* stylelint-disable-next-line */
-  display: block;
+  display: flex;
+  align-items: center;
 
   // Removes marker on Safari
   &::-webkit-details-marker {
@@ -55,4 +60,7 @@ summary {
     outline: none;
   }
 
+  pds-icon {
+    margin-left: auto;
+  }
 }

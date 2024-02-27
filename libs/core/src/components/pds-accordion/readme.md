@@ -21,6 +21,19 @@
 | `"label"`     | Accordion trigger button content. |
 
 
+## Dependencies
+
+### Depends on
+
+- pds-icon
+
+### Graph
+```mermaid
+graph TD;
+  pds-accordion --> pds-icon
+  style pds-accordion fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 

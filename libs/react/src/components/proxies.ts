@@ -5,6 +5,7 @@ import { createReactComponent } from './react-component-lib';
 
 import type { JSX } from '@pine-ds/core/components';
 
+import { defineCustomElement as definePdsAccordion } from '@pine-ds/core/components/pds-accordion.js';
 import { defineCustomElement as definePdsAvatar } from '@pine-ds/core/components/pds-avatar.js';
 import { defineCustomElement as definePdsBox } from '@pine-ds/core/components/pds-box.js';
 import { defineCustomElement as definePdsButton } from '@pine-ds/core/components/pds-button.js';
@@ -33,6 +34,7 @@ import { defineCustomElement as definePdsTabs } from '@pine-ds/core/components/p
 import { defineCustomElement as definePdsTextarea } from '@pine-ds/core/components/pds-textarea.js';
 import { defineCustomElement as definePdsTooltip } from '@pine-ds/core/components/pds-tooltip.js';
 
+export const PdsAccordion = /*@__PURE__*/createReactComponent<JSX.PdsAccordion, HTMLPdsAccordionElement>('pds-accordion', undefined, undefined, definePdsAccordion);
 export const PdsAvatar = /*@__PURE__*/createReactComponent<JSX.PdsAvatar, HTMLPdsAvatarElement>('pds-avatar', undefined, undefined, definePdsAvatar);
 export const PdsBox = /*@__PURE__*/createReactComponent<JSX.PdsBox, HTMLPdsBoxElement>('pds-box', undefined, undefined, definePdsBox);
 export const PdsButton = /*@__PURE__*/createReactComponent<JSX.PdsButton, HTMLPdsButtonElement>('pds-button', undefined, undefined, definePdsButton);

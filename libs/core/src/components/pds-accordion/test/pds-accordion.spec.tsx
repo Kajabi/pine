@@ -11,8 +11,13 @@ describe('pds-accordion', () => {
       <pds-accordion class="pds-accordion">
         <mock:shadow-root>
             <details>
-              <summary><slot name="label">Details</slot></summary>
-              <slot></slot>
+              <summary>
+                <slot name="label">Details</slot>
+                <pds-icon name="down-small"></pds-icon>
+              </summary>
+              <div class="pds-accordion__body">
+                <slot />
+              </div>
             </details>
         </mock:shadow-root>
       </pds-accordion>
@@ -28,8 +33,13 @@ describe('pds-accordion', () => {
       <pds-accordion class="pds-accordion" open>
         <mock:shadow-root>
             <details open>
-              <summary><slot name="label">Details</slot></summary>
-              <slot></slot>
+              <summary>
+                <slot name="label">Details</slot>
+                <pds-icon name="up-small"></pds-icon>
+              </summary>
+              <div class="pds-accordion__body">
+                <slot />
+              </div>
             </details>
         </mock:shadow-root>
       </pds-accordion>
@@ -46,8 +56,13 @@ describe('pds-accordion', () => {
       <pds-accordion component-id="test" id="test" class="pds-accordion">
         <mock:shadow-root>
           <details>
-            <summary><slot name="label">Details</slot></summary>
-            <slot></slot>
+            <summary>
+              <slot name="label">Details</slot>
+              <pds-icon name="down-small"></pds-icon>
+            </summary>
+            <div class="pds-accordion__body">
+              <slot />
+            </div>
           </details>
         </mock:shadow-root>
       </pds-accordion>
@@ -64,8 +79,13 @@ describe('pds-accordion', () => {
       <pds-accordion class="pds-accordion">
         <mock:shadow-root>
           <details>
-            <summary><slot name="label">Details</slot></summary>
-            <slot></slot>
+            <summary>
+              <slot name="label">Details</slot>
+              <pds-icon name="down-small"></pds-icon>
+            </summary>
+            <div class="pds-accordion__body">
+              <slot />
+            </div>
           </details>
         </mock:shadow-root>
         <span slot="label">Summary</span>
@@ -83,8 +103,13 @@ describe('pds-accordion', () => {
       <pds-accordion class="pds-accordion">
         <mock:shadow-root>
           <details>
-            <summary><slot name="label">Details</slot></summary>
-            <slot></slot>
+            <summary>
+              <slot name="label">Details</slot>
+              <pds-icon name="down-small"></pds-icon>
+            </summary>
+            <div class="pds-accordion__body">
+              <slot />
+            </div>
           </details>
         </mock:shadow-root>
         <div>Hello World</div>
@@ -102,8 +127,13 @@ describe('pds-accordion', () => {
       <pds-accordion class="pds-accordion" open>
         <mock:shadow-root>
           <details open>
-            <summary><slot name="label">Details</slot></summary>
-            <slot></slot>
+            <summary>
+              <slot name="label">Details</slot>
+              <pds-icon name="up-small"></pds-icon>
+            </summary>
+            <div class="pds-accordion__body">
+              <slot />
+            </div>
           </details>
         </mock:shadow-root>
         <span slot="label">Summary</span>
