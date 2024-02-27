@@ -12,7 +12,6 @@ details {
   --color-font-hover: var(--pine-color-neutral-charcoal-300);
   --font-weight: var(--pine-font-weight-medium);
   --spacing-details-padding-inline: 12px;
-  --spacing-slotted-indented: 32px;
   --spacing-summary-padding-block: var(--pine-spacing-xxs);
   --spacing-summary-padding-inline-start: var(--pine-spacing-xs);
   --spacing-summary-padding-inline-end: var(--pine-spacing-xxs);
@@ -40,8 +39,8 @@ summary {
 
   // Removes marker on Firefox/Chrome
   /* stylelint-disable-next-line */
-  display: flex;
   align-items: center;
+  display: flex;
 
   // Removes marker on Safari
   &::-webkit-details-marker {
@@ -61,6 +60,6 @@ summary {
   }
 
   pds-icon {
-    margin-left: auto;
+    margin-inline-start: auto;
   }
 }
