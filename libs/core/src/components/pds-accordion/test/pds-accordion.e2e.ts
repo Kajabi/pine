@@ -54,4 +54,22 @@ describe('pds-accordion', () => {
     expect(el.getProperty('isOpen')).toBeTruthy();
     expect(el).toHaveAttribute('open');
   });
+  
+  it('emits PdsAccordionToggle event when accordion is toggled', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-accordion></pds-accordion>');
+
+    const el = await page.find('pds-accordion');
+    const toggleEvent = await el.spyOnEvent('pdsAccordionToggle');
+
+    await el.click();
+    await page.waitForChanges();
+
+    expect(toggleEvent).toHaveReceivedEventDetail({ open: true });
+
+    await el.click();
+    await page.waitForChanges();
+
+    expect(toggleEvent).toHaveReceivedEventDetail({ open: false });
+  });
 });

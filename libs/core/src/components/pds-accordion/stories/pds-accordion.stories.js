@@ -1,6 +1,6 @@
 import { html } from 'lit';
-
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+import { withActions } from '@storybook/addon-actions/decorator';
 
 export default {
   args: {
@@ -9,6 +9,12 @@ export default {
   },
   argTypes: extractArgTypes('pds-accordion'),
   component: 'pds-accordion',
+  decorators: [withActions],
+  parameters: {
+    actions: {
+      handles: ['pdsAccordionToggle'],
+    }
+  },
   title: 'components/Accordion',
 }
 
@@ -32,4 +38,4 @@ const BaseTemplate = (args) => html`
   </pds-accordion>
 `;
 
-export const Default = BaseTemplate.bind();
+export const Default = BaseTemplate.bind({});

@@ -13,6 +13,13 @@
 | `isOpen`      | `open`         | Can be used to manually set the open state of the accordion.          | `boolean` | `false`     |
 
 
+## Events
+
+| Event                | Description                            | Type                              |
+| -------------------- | -------------------------------------- | --------------------------------- |
+| `pdsAccordionToggle` | Emitted when the accordion is toggled. | `CustomEvent<{ open: boolean; }>` |
+
+
 ## Slots
 
 | Slot          | Description                       |
