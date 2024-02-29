@@ -1,0 +1,52 @@
+{
+	"blocks": [
+		{
+			"type": "header",
+			"text": {
+				"type": "plain_text",
+				"text": ":pine:  Pine Release v  :pine:"
+			}
+		},
+		{
+			"type": "context",
+			"elements": [
+				{
+					"text": "*[DATE]*  |  Design System Services",
+					"type": "mrkdwn"
+				}
+			]
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Release Information*"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "* Detail 1",
+				"verbatim": false
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "* Detail 2"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "* Detail 3"
+			}
+		}
+	]
+}

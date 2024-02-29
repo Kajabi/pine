@@ -1,0 +1,8 @@
+name: "Notify Slack Channel"
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  prepare-message:
