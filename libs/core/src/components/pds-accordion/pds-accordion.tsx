@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, h, Host, Prop, Watch } from '@stencil/core';
+import { Component, h, Host, Prop, Watch } from '@stencil/core';
 
 /**
  * @slot (default) - Accordion body content.
@@ -33,13 +33,8 @@ export class PdsAccordion {
     this.isOpen = newValue;
   }
 
-  /**
-   * Emitted when the accordion is toggled.
-   */
-  @Event() pdsAccordionToggle: EventEmitter<{open: boolean}>;
   private handleToggle = () => {
     this.isOpen = this.detailsEl.open;
-    this.pdsAccordionToggle.emit({ open: this.isOpen });
   }
 
   private getOpenAttribute = () => {

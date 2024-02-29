@@ -821,10 +821,6 @@ export namespace Components {
         "showTooltip": () => Promise<void>;
     }
 }
-export interface PdsAccordionCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLPdsAccordionElement;
-}
 export interface PdsCheckboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsCheckboxElement;
@@ -874,18 +870,7 @@ export interface PdsTooltipCustomEvent<T> extends CustomEvent<T> {
     target: HTMLPdsTooltipElement;
 }
 declare global {
-    interface HTMLPdsAccordionElementEventMap {
-        "pdsAccordionToggle": {open: boolean};
-    }
     interface HTMLPdsAccordionElement extends Components.PdsAccordion, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLPdsAccordionElementEventMap>(type: K, listener: (this: HTMLPdsAccordionElement, ev: PdsAccordionCustomEvent<HTMLPdsAccordionElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLPdsAccordionElementEventMap>(type: K, listener: (this: HTMLPdsAccordionElement, ev: PdsAccordionCustomEvent<HTMLPdsAccordionElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsAccordionElement: {
         prototype: HTMLPdsAccordionElement;
@@ -1229,10 +1214,6 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "isOpen"?: boolean;
-        /**
-          * Emitted when the accordion is toggled.
-         */
-        "onPdsAccordionToggle"?: (event: PdsAccordionCustomEvent<{open: boolean}>) => void;
     }
     interface PdsAvatar {
         /**
