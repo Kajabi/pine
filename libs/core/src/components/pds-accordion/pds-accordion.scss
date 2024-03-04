@@ -1,0 +1,65 @@
+:host {
+  display: block;
+}
+
+details {
+  --border-radius: var(--pine-spacing-xs);
+  --box-shadow-focus: 0 0 0 4px var(--pine-color-primary-200);
+  --color-content-background: var(--pine-base-color-white);
+  --color-background-hover: var(--pine-color-neutral-grey-300);
+  --color-font: var(--pine-color-neutral-charcoal-200);
+  --color-font-active: var(--pine-color-neutral-charcoal-400);
+  --color-font-hover: var(--pine-color-neutral-charcoal-300);
+  --font-weight: var(--pine-font-weight-medium);
+  --spacing-details-padding-inline: 12px;
+  --spacing-summary-padding-block: var(--pine-spacing-xxs);
+  --spacing-summary-padding-inline-start: var(--pine-spacing-xs);
+  --spacing-summary-padding-inline-end: var(--pine-spacing-xxs);
+
+  border-radius: var(--border-radius);
+  padding-inline: var(--spacing-details-padding-inline)
+}
+
+/* stylelint-disable-next-line */
+details[open] {
+  background-color: var(--color-content-background);
+
+  summary {
+    color: var(--color-font-active);
+  }
+}
+
+summary {
+  border-radius: var(--border-radius);
+  color: var(--color-font);
+  font-weight: var(--font-weight);
+  padding-block: var(--spacing-summary-padding-block);
+  padding-inline-end: var(--spacing-summary-padding-inline-end);
+  padding-inline-start: var(--spacing-summary-padding-inline-start);
+
+  // Removes marker on Firefox/Chrome
+  /* stylelint-disable-next-line */
+  align-items: center;
+  display: flex;
+
+  // Removes marker on Safari
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &:hover {
+    background: var(--color-background-hover);
+    color: var(--color-font-hover);
+    cursor: pointer;
+  }
+
+  &:focus-visible {
+    // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
+    box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
+    outline: none;
+  }
+
+  pds-icon {
+    margin-inline-start: auto;
+  }
+}

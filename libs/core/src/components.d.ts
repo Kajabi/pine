@@ -12,6 +12,18 @@ export { BoxColumnType, BoxTShirtSizeType } from "./utils/types";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 export { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
+    interface PdsAccordion {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+          * @defaultValue null
+         */
+        "componentId": string;
+        /**
+          * Can be used to manually set the open state of the accordion.
+          * @defaultValue false
+         */
+        "isOpen": boolean;
+    }
     interface PdsAvatar {
         /**
           * The alt for a custom user image.
@@ -858,6 +870,12 @@ export interface PdsTooltipCustomEvent<T> extends CustomEvent<T> {
     target: HTMLPdsTooltipElement;
 }
 declare global {
+    interface HTMLPdsAccordionElement extends Components.PdsAccordion, HTMLStencilElement {
+    }
+    var HTMLPdsAccordionElement: {
+        prototype: HTMLPdsAccordionElement;
+        new (): HTMLPdsAccordionElement;
+    };
     interface HTMLPdsAvatarElement extends Components.PdsAvatar, HTMLStencilElement {
     }
     var HTMLPdsAvatarElement: {
@@ -1154,6 +1172,7 @@ declare global {
         new (): HTMLPdsTooltipElement;
     };
     interface HTMLElementTagNameMap {
+        "pds-accordion": HTMLPdsAccordionElement;
         "pds-avatar": HTMLPdsAvatarElement;
         "pds-box": HTMLPdsBoxElement;
         "pds-button": HTMLPdsButtonElement;
@@ -1184,6 +1203,18 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    interface PdsAccordion {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+          * @defaultValue null
+         */
+        "componentId"?: string;
+        /**
+          * Can be used to manually set the open state of the accordion.
+          * @defaultValue false
+         */
+        "isOpen"?: boolean;
+    }
     interface PdsAvatar {
         /**
           * The alt for a custom user image.
@@ -2022,6 +2053,7 @@ declare namespace LocalJSX {
     | 'left-end';
     }
     interface IntrinsicElements {
+        "pds-accordion": PdsAccordion;
         "pds-avatar": PdsAvatar;
         "pds-box": PdsBox;
         "pds-button": PdsButton;
@@ -2055,6 +2087,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "pds-accordion": LocalJSX.PdsAccordion & JSXBase.HTMLAttributes<HTMLPdsAccordionElement>;
             "pds-avatar": LocalJSX.PdsAvatar & JSXBase.HTMLAttributes<HTMLPdsAvatarElement>;
             "pds-box": LocalJSX.PdsBox & JSXBase.HTMLAttributes<HTMLPdsBoxElement>;
             "pds-button": LocalJSX.PdsButton & JSXBase.HTMLAttributes<HTMLPdsButtonElement>;
