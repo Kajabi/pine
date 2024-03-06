@@ -1,5 +1,8 @@
 import { Component, Host, h, Prop } from '@stencil/core';
 
+/**
+ * @part image - The main image element that represents the avatar component.
+*/
 @Component({
   tag: 'pds-avatar',
   styleUrl: 'pds-avatar.scss',
@@ -79,13 +82,13 @@ export class PdsAvatar {
       this.dropdown
         ?
         <button class="pds-avatar__button" type="button">
-          <div style={style}>
+          <div style={style} part="image">
             {this.renderIconOrImage()}
             {this.renderBadge()}
           </div>
         </button>
         :
-        <div style={style}>
+        <div style={style} part="image">
           {this.renderIconOrImage()}
           {this.renderBadge()}
         </div>
