@@ -20,9 +20,10 @@
 
 ## Shadow Parts
 
-| Part      | Description                                                  |
-| --------- | ------------------------------------------------------------ |
-| `"image"` | The main image element that represents the avatar component. |
+| Part              | Description                                                  |
+| ----------------- | ------------------------------------------------------------ |
+| `"asset-wrapper"` |                                                              |
+| `"image"`         | The main image element that represents the avatar component. |
 
 
 ## Dependencies
