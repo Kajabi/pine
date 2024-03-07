@@ -8,9 +8,9 @@ details {
   --color-content-background: var(--pine-base-color-white);
   --color-background-hover: var(--pine-color-neutral-grey-300);
   --color-font: var(--pine-color-neutral-charcoal-200);
-  --color-font-active: var(--pine-color-neutral-charcoal-400);
+  --color-font-active: var(--pine-color-neutral-charcoal-500);
   --color-font-hover: var(--pine-color-neutral-charcoal-300);
-  --font-weight: var(--pine-font-weight-medium);
+  --font-weight: var(--pine-font-weight-semibold);
   --spacing-details-padding-inline: 12px;
   --spacing-summary-padding-block: var(--pine-spacing-xxs);
   --spacing-summary-padding-inline-start: var(--pine-spacing-xs);
@@ -26,6 +26,7 @@ details[open] {
 
   summary {
     color: var(--color-font-active);
+    font-weight: var(--font-weight);
   }
 }
 
