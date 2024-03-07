@@ -18,9 +18,16 @@ Link is mainly used as navigational element and usually appear within or directl
 
 ## Slots
 
-| Slot | Description                                        |
-| ---- | -------------------------------------------------- |
-|      | Content is placed between the opening closing tags |
+| Slot | Description                                         |
+| ---- | --------------------------------------------------- |
+|      | Content is placed between the opening closing tags. |
+
+
+## Shadow Parts
+
+| Part     | Description                                               |
+| -------- | --------------------------------------------------------- |
+| `"link"` | The main link element that represents the link component. |
 
 
 ## Dependencies

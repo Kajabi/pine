@@ -10,7 +10,7 @@ describe('pds-link', () => {
     expect(root).toEqualHtml(`
       <pds-link>
         <mock:shadow-root>
-          <a class="pds-link pds-link--inline pds-link--lg">
+          <a class="pds-link pds-link--inline pds-link--lg" part="link">
             <slot></slot>
           </a>
         </mock:shadow-root>
@@ -27,7 +27,7 @@ describe('pds-link', () => {
     expect(page.root).toEqualHtml(`
       <pds-link component-id="test">
         <mock:shadow-root>
-          <a class="pds-link pds-link--inline pds-link--lg" id="test">
+          <a class="pds-link pds-link--inline pds-link--lg" id="test" part="link">
             <slot></slot>
           </a>
         </mock:shadow-root>
@@ -43,7 +43,7 @@ describe('pds-link', () => {
     expect(root).toEqualHtml(`
       <pds-link href="#">
         <mock:shadow-root>
-          <a class="pds-link pds-link--inline pds-link--lg" href="#">
+          <a class="pds-link pds-link--inline pds-link--lg" href="#" part="link">
             <slot>
               #
             </slot>
