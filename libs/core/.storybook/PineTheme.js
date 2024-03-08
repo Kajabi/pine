@@ -28,7 +28,7 @@ export default create({
   inputBorderRadius: 6,
 
   brandTitle: 'Pine Design System',
-  brandUrl: 'https://sage.kajabi.com/pages/index',
+  brandUrl: 'https://pine-design-system.netlify.app/',
   brandImage: '/images/pine-logo.png',
   brandTarget: '_self',
 });
