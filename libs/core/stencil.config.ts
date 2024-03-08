@@ -36,6 +36,9 @@ export const config: Config = {
       footer: '',
     },
     {
+      type: 'dist-hydrate-script'
+    },
+    {
       type: 'www',
       serviceWorker: null, // disable service workers
     },
