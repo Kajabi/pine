@@ -10,7 +10,7 @@
     "components",
     "framework"
   ],
-  "homepage": "https://github.com/kajabi/pine/tree/main#readme",
+  "homepage": "https://github.com/Kajabi/pine/tree/main#readme",
   "sideEffects": false,
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -21,7 +21,7 @@
     "url": "git+https://github.com/Kajabi/pine.git"
   },
   "bugs": {
-    "url": "https://github.com/kajabi/pine/issues"
+    "url": "https://github.com/Kajabi/pine/issues"
   },
   "directories": {
     "lib": "lib",
