@@ -3,7 +3,8 @@ import { Component, h, Prop } from '@stencil/core';
 import { launch } from '@pine-ds/icons/icons';
 
 /**
- * @slot - Content is placed between the opening closing tags
+ * @part link - The main link element that represents the link component.
+ * @slot - Content is placed between the opening closing tags.
  */
 @Component({
   tag: 'pds-link',
@@ -65,6 +66,7 @@ export class PdsLink {
         href={this.href}
         id={this.componentId}
         target={this.external ? '_blank' : undefined}
+        part="link"
       >
         <slot>{this.href}</slot>
         {this.external &&
