@@ -24,7 +24,8 @@ export const config: Config = {
         dest: 'components',
         warn: true
       }],
-      includeGlobalScripts: false
+      customElementsExportBehavior: 'single-export-module',
+      includeGlobalScripts: false,
     },
     {
       type: 'docs-json',
