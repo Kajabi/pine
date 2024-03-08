@@ -11,6 +11,7 @@ export const config: Config = {
     openBrowser: false,
     port: 7100
   },
+  sourceMap: false,
   outputTargets: [
     {
       type: 'dist',
