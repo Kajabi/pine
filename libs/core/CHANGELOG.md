@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.1](https://github.com/Kajabi/pine/compare/@pine-ds/core@0.1.0...@pine-ds/core@0.1.1) (2024-03-08)
+
+
+### Bug Fixes
+
+* esm module loading issue ([daa9941](https://github.com/Kajabi/pine/commit/daa994133cd8a8119a4864740e46bf3f90e53ff3))
+
+
+### Features
+
+* **link:** adds shadow part for link component ([6760b0d](https://github.com/Kajabi/pine/commit/6760b0dd3bb0c86d96b5ee6098b24cedb3345fc6))
+
+
+
+
+
 # [0.1.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@0.0.4...@pine-ds/core@0.1.0) (2024-03-08)
 
 
