@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.1.0](https://github.com/Kajabi/pine/compare/@pine-ds/react@0.0.4...@pine-ds/react@0.1.0) (2024-03-08)
+
+
+### Bug Fixes
+
+* **accordion:** fixes typos in docs and addresses icon state and styling issues per feedback ([ffb0e68](https://github.com/Kajabi/pine/commit/ffb0e68e692af862413ceebf8febea8da05bf2a2))
+
+
+
+
+
 ## [0.0.4](https://github.com/Kajabi/pine/compare/@pine-ds/react@0.0.4-rc.0...@pine-ds/react@0.0.4) (2024-02-23)
 
 **Note:** Version bump only for package @pine-ds/react

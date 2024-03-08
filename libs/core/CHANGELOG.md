@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.1.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@0.0.4...@pine-ds/core@0.1.0) (2024-03-08)
+
+
+### Bug Fixes
+
+* **accordion:** fixes typos in docs and addresses icon state and styling issues per feedback ([ffb0e68](https://github.com/Kajabi/pine/commit/ffb0e68e692af862413ceebf8febea8da05bf2a2))
+
+
+### Features
+
+* **accordion:** adds component id and class ([0120721](https://github.com/Kajabi/pine/commit/01207219795c1aa139d94ab2115222fb15c6548f))
+* **accordion:** adds label, left icon, and right icon props ([c3650e9](https://github.com/Kajabi/pine/commit/c3650e913561fb75ecc877ec32f7901f72e74bae))
+* **accordion:** adds prop to handle open attribute ([81d8dd8](https://github.com/Kajabi/pine/commit/81d8dd8b8fdd2b7c00cc960b63487fd583195566))
+* **accordion:** adds slots ([93180ec](https://github.com/Kajabi/pine/commit/93180ec715a8c3c0becdbcbf7708ab089247f43b))
+* **accordion:** initial commit ([6ed612a](https://github.com/Kajabi/pine/commit/6ed612a76453bfc250fbfa6df1795db3355b9892))
+
+
+
+
+
 ## [0.0.4](https://github.com/Kajabi/pine/compare/@pine-ds/core@0.0.4-rc.0...@pine-ds/core@0.0.4) (2024-02-23)
 
 **Note:** Version bump only for package @pine-ds/core
