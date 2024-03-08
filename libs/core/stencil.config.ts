@@ -50,5 +50,6 @@ export const config: Config = {
     }),
   ],
   buildEs5: 'prod',
-  plugins: [sass()]
+  plugins: [sass()],
+  taskQueue: 'async'
 };
