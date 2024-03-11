@@ -18,6 +18,14 @@
 | `variant`     | `variant`      | Determines the variant of avatar. Changes appearance accordingly.     | `"admin" \| "customer"` | `'customer'` |
 
 
+## Shadow Parts
+
+| Part              | Description                                                  |
+| ----------------- | ------------------------------------------------------------ |
+| `"asset-wrapper"` |                                                              |
+| `"image"`         | The main image element that represents the avatar component. |
+
+
 ## Dependencies
 
 ### Depends on
