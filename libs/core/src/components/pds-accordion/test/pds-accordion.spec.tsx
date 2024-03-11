@@ -13,7 +13,7 @@ describe('pds-accordion', () => {
             <details>
               <summary>
                 <slot name="label">Details</slot>
-                <pds-icon name="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' class='pdsicon'><path fill-rule='evenodd' d='M3.594 5.594a.889.889 0 0 1 1.257 0L7.778 8.52l2.927-2.927a.889.889 0 0 1 1.257 1.257l-3.556 3.555a.889.889 0 0 1-1.257 0L3.594 6.851a.889.889 0 0 1 0-1.257Z'/></svg>"></pds-icon>
+                <pds-icon icon="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' class='pdsicon'><path fill-rule='evenodd' d='M3.594 5.594a.889.889 0 0 1 1.257 0L7.778 8.52l2.927-2.927a.889.889 0 0 1 1.257 1.257l-3.556 3.555a.889.889 0 0 1-1.257 0L3.594 6.851a.889.889 0 0 1 0-1.257Z'/></svg>"></pds-icon>
               </summary>
               <div class="pds-accordion__body">
                 <slot />
@@ -35,7 +35,7 @@ describe('pds-accordion', () => {
             <details open>
               <summary>
                 <slot name="label">Details</slot>
-                <pds-icon name="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' class='pdsicon'><path fill-rule='evenodd' d='M7.15 5.594a.889.889 0 0 1 1.256 0l3.556 3.555a.889.889 0 0 1-1.257 1.257L7.778 7.48 4.85 10.406A.889.889 0 1 1 3.594 9.15l3.555-3.555Z'/></svg>"></pds-icon>
+                <pds-icon icon="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' class='pdsicon'><path fill-rule='evenodd' d='M7.15 5.594a.889.889 0 0 1 1.256 0l3.556 3.555a.889.889 0 0 1-1.257 1.257L7.778 7.48 4.85 10.406A.889.889 0 1 1 3.594 9.15l3.555-3.555Z'/></svg>"></pds-icon>
               </summary>
               <div class="pds-accordion__body">
                 <slot />
@@ -58,7 +58,7 @@ describe('pds-accordion', () => {
           <details>
             <summary>
               <slot name="label">Details</slot>
-              <pds-icon name="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' class='pdsicon'><path fill-rule='evenodd' d='M3.594 5.594a.889.889 0 0 1 1.257 0L7.778 8.52l2.927-2.927a.889.889 0 0 1 1.257 1.257l-3.556 3.555a.889.889 0 0 1-1.257 0L3.594 6.851a.889.889 0 0 1 0-1.257Z'/></svg>"></pds-icon>
+              <pds-icon icon="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' class='pdsicon'><path fill-rule='evenodd' d='M3.594 5.594a.889.889 0 0 1 1.257 0L7.778 8.52l2.927-2.927a.889.889 0 0 1 1.257 1.257l-3.556 3.555a.889.889 0 0 1-1.257 0L3.594 6.851a.889.889 0 0 1 0-1.257Z'/></svg>"></pds-icon>
             </summary>
             <div class="pds-accordion__body">
               <slot />
@@ -81,7 +81,7 @@ describe('pds-accordion', () => {
           <details>
             <summary>
               <slot name="label">Details</slot>
-              <pds-icon name="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' class='pdsicon'><path fill-rule='evenodd' d='M3.594 5.594a.889.889 0 0 1 1.257 0L7.778 8.52l2.927-2.927a.889.889 0 0 1 1.257 1.257l-3.556 3.555a.889.889 0 0 1-1.257 0L3.594 6.851a.889.889 0 0 1 0-1.257Z'/></svg>"></pds-icon>
+              <pds-icon icon="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' class='pdsicon'><path fill-rule='evenodd' d='M3.594 5.594a.889.889 0 0 1 1.257 0L7.778 8.52l2.927-2.927a.889.889 0 0 1 1.257 1.257l-3.556 3.555a.889.889 0 0 1-1.257 0L3.594 6.851a.889.889 0 0 1 0-1.257Z'/></svg>"></pds-icon>
             </summary>
             <div class="pds-accordion__body">
               <slot />
@@ -105,7 +105,7 @@ describe('pds-accordion', () => {
           <details>
             <summary>
               <slot name="label">Details</slot>
-              <pds-icon name="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' class='pdsicon'><path fill-rule='evenodd' d='M3.594 5.594a.889.889 0 0 1 1.257 0L7.778 8.52l2.927-2.927a.889.889 0 0 1 1.257 1.257l-3.556 3.555a.889.889 0 0 1-1.257 0L3.594 6.851a.889.889 0 0 1 0-1.257Z'/></svg>"></pds-icon>
+              <pds-icon icon="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' class='pdsicon'><path fill-rule='evenodd' d='M3.594 5.594a.889.889 0 0 1 1.257 0L7.778 8.52l2.927-2.927a.889.889 0 0 1 1.257 1.257l-3.556 3.555a.889.889 0 0 1-1.257 0L3.594 6.851a.889.889 0 0 1 0-1.257Z'/></svg>"></pds-icon>
             </summary>
             <div class="pds-accordion__body">
               <slot />
@@ -129,7 +129,7 @@ describe('pds-accordion', () => {
           <details open>
             <summary>
               <slot name="label">Details</slot>
-              <pds-icon name="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' class='pdsicon'><path fill-rule='evenodd' d='M7.15 5.594a.889.889 0 0 1 1.256 0l3.556 3.555a.889.889 0 0 1-1.257 1.257L7.778 7.48 4.85 10.406A.889.889 0 1 1 3.594 9.15l3.555-3.555Z'/></svg>"></pds-icon>
+              <pds-icon icon="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' class='pdsicon'><path fill-rule='evenodd' d='M7.15 5.594a.889.889 0 0 1 1.256 0l3.556 3.555a.889.889 0 0 1-1.257 1.257L7.778 7.48 4.85 10.406A.889.889 0 1 1 3.594 9.15l3.555-3.555Z'/></svg>"></pds-icon>
             </summary>
             <div class="pds-accordion__body">
               <slot />

@@ -55,7 +55,7 @@ export class PdsAccordion {
         <details {...this.getOpenAttribute()} ref={(el) => this.detailsEl = el as HTMLDetailsElement}>
           <summary>
             <slot name="label">Details</slot>
-            <pds-icon name={this.isOpen ? upSmall : downSmall } />
+            <pds-icon icon={this.isOpen ? upSmall : downSmall } />
           </summary>
           <div class="pds-accordion__body">
             <slot />
