@@ -11,7 +11,6 @@ export const config: Config = {
     openBrowser: false,
     port: 7100
   },
-  sourceMap: false,
   outputTargets: [
     {
       type: 'dist',
@@ -37,7 +36,7 @@ export const config: Config = {
       footer: '',
     },
     {
-      type: 'dist-hydrate-script'
+      type: 'dist-hydrate-script',
     },
     {
       type: 'www',

@@ -1,6 +1,6 @@
 {
   "name": "@pine-ds/core",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "license": "MIT",
   "description": "Base components for Pine Design System",
   "author": "Kajabi Design System Services",
@@ -56,7 +56,7 @@
     "test.watch": "stencil test --spec --e2e --watchAll --coverage"
   },
   "dependencies": {
-    "@pine-ds/icons": "^3.4.0",
+    "@pine-ds/icons": "^3.6.0",
     "@stencil/core": "^4.8.1",
     "sortablejs": "^1.15.0",
     "tslib": "^2.6.2"
