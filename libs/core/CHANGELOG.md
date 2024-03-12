@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.5](https://github.com/Kajabi/pine/compare/@pine-ds/core@0.1.3...@pine-ds/core@0.1.5) (2024-03-12)
+
+
+### Features
+
+* **pds-avatar:** adds image part for avatar component ([b72029a](https://github.com/Kajabi/pine/commit/b72029a29484153aca0b0db1dd3913f7962cc8cb))
+
+
+
+
+
 ## [0.1.3](https://github.com/Kajabi/pine/compare/@pine-ds/core@0.1.0...@pine-ds/core@0.1.3) (2024-03-08)
 
 
