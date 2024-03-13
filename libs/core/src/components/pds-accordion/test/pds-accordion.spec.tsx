@@ -1,5 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsAccordion } from '../pds-accordion';
+import { downSmall, upSmall } from '@pine-ds/icons/icons';
 
 describe('pds-accordion', () => {
   it('renders the accordion', async () => {
@@ -13,7 +14,7 @@ describe('pds-accordion', () => {
             <details>
               <summary>
                 <slot name="label">Details</slot>
-                <pds-icon name="down-small"></pds-icon>
+                <pds-icon icon="${downSmall}"></pds-icon>
               </summary>
               <div class="pds-accordion__body">
                 <slot />
@@ -35,7 +36,7 @@ describe('pds-accordion', () => {
             <details open>
               <summary>
                 <slot name="label">Details</slot>
-                <pds-icon name="up-small"></pds-icon>
+                <pds-icon icon="${upSmall}"></pds-icon>
               </summary>
               <div class="pds-accordion__body">
                 <slot />
@@ -58,7 +59,7 @@ describe('pds-accordion', () => {
           <details>
             <summary>
               <slot name="label">Details</slot>
-              <pds-icon name="down-small"></pds-icon>
+              <pds-icon icon="${downSmall}"></pds-icon>
             </summary>
             <div class="pds-accordion__body">
               <slot />
@@ -81,7 +82,7 @@ describe('pds-accordion', () => {
           <details>
             <summary>
               <slot name="label">Details</slot>
-              <pds-icon name="down-small"></pds-icon>
+              <pds-icon icon="${downSmall}"></pds-icon>
             </summary>
             <div class="pds-accordion__body">
               <slot />
@@ -105,7 +106,7 @@ describe('pds-accordion', () => {
           <details>
             <summary>
               <slot name="label">Details</slot>
-              <pds-icon name="down-small"></pds-icon>
+              <pds-icon icon="${downSmall}"></pds-icon>
             </summary>
             <div class="pds-accordion__body">
               <slot />
@@ -129,7 +130,7 @@ describe('pds-accordion', () => {
           <details open>
             <summary>
               <slot name="label">Details</slot>
-              <pds-icon name="up-small"></pds-icon>
+              <pds-icon icon="${upSmall}"></pds-icon>
             </summary>
             <div class="pds-accordion__body">
               <slot />

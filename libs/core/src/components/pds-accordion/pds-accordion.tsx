@@ -1,4 +1,5 @@
 import { Component, h, Host, Prop, Watch } from '@stencil/core';
+import { downSmall, upSmall } from '@pine-ds/icons/icons';
 
 /**
  * @slot (default) - Accordion body content.
@@ -54,7 +55,7 @@ export class PdsAccordion {
         <details {...this.getOpenAttribute()} ref={(el) => this.detailsEl = el as HTMLDetailsElement}>
           <summary>
             <slot name="label">Details</slot>
-            <pds-icon name={this.isOpen ? 'up-small' : 'down-small'} />
+            <pds-icon icon={this.isOpen ? upSmall : downSmall } />
           </summary>
           <div class="pds-accordion__body">
             <slot />
