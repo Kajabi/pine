@@ -11,7 +11,7 @@ describe('pds-avatar', () => {
       <pds-avatar class="pds-avatar" size="lg" variant="customer">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px;">
-            <pds-icon name="user-filled" size="33.53%"></pds-icon>
+            <pds-icon color="var(--pine-color-primary-400)" icon="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 17' class='pdsicon'><path fill-rule='evenodd' d='M11.667 3.697C11.667 5.687 10.067 8 8 8 5.933 8 4.333 5.687 4.333 3.697a3.667 3.667 0 1 1 7.334 0Zm-8.77 7.2c1-1 2.356-1.562 3.77-1.564h2.666a5.34 5.34 0 0 1 5.334 5.334.667.667 0 0 1-.464.635A22.19 22.19 0 0 1 8 16a22.19 22.19 0 0 1-6.203-.698.667.667 0 0 1-.464-.635 5.34 5.34 0 0 1 1.564-3.77Z'/></svg>" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -28,7 +28,7 @@ describe('pds-avatar', () => {
       <pds-avatar component-id="test" id="test" class="pds-avatar" size="lg" variant="customer">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px;">
-            <pds-icon name="user-filled" size="33.53%"></pds-icon>
+            <pds-icon color="var(--pine-color-primary-400)" icon="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 17' class='pdsicon'><path fill-rule='evenodd' d='M11.667 3.697C11.667 5.687 10.067 8 8 8 5.933 8 4.333 5.687 4.333 3.697a3.667 3.667 0 1 1 7.334 0Zm-8.77 7.2c1-1 2.356-1.562 3.77-1.564h2.666a5.34 5.34 0 0 1 5.334 5.334.667.667 0 0 1-.464.635A22.19 22.19 0 0 1 8 16a22.19 22.19 0 0 1-6.203-.698.667.667 0 0 1-.464-.635 5.34 5.34 0 0 1 1.564-3.77Z'/></svg>" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -44,7 +44,7 @@ describe('pds-avatar', () => {
       <pds-avatar class="pds-avatar pds-avatar--admin" size="lg" variant="admin">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px">
-            <pds-icon name="user-filled" size="33.53%"></pds-icon>
+            <pds-icon color="var(--pine-color-primary-400)" icon="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 17' class='pdsicon'><path fill-rule='evenodd' d='M11.667 3.697C11.667 5.687 10.067 8 8 8 5.933 8 4.333 5.687 4.333 3.697a3.667 3.667 0 1 1 7.334 0Zm-8.77 7.2c1-1 2.356-1.562 3.77-1.564h2.666a5.34 5.34 0 0 1 5.334 5.334.667.667 0 0 1-.464.635A22.19 22.19 0 0 1 8 16a22.19 22.19 0 0 1-6.203-.698.667.667 0 0 1-.464-.635 5.34 5.34 0 0 1 1.564-3.77Z'/></svg>" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -60,8 +60,8 @@ describe('pds-avatar', () => {
       <pds-avatar class="pds-avatar" badge="true" size="lg" variant="customer">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px;">
-            <pds-icon name="user-filled" size="33.53%"></pds-icon>
-            <pds-icon class="pds-avatar__badge" name="check-circle-filled" size="33.53%"></pds-icon>
+            <pds-icon color="var(--pine-color-primary-400)"icon="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 17' class='pdsicon'><path fill-rule='evenodd' d='M11.667 3.697C11.667 5.687 10.067 8 8 8 5.933 8 4.333 5.687 4.333 3.697a3.667 3.667 0 1 1 7.334 0Zm-8.77 7.2c1-1 2.356-1.562 3.77-1.564h2.666a5.34 5.34 0 0 1 5.334 5.334.667.667 0 0 1-.464.635A22.19 22.19 0 0 1 8 16a22.19 22.19 0 0 1-6.203-.698.667.667 0 0 1-.464-.635 5.34 5.34 0 0 1 1.564-3.77Z'/></svg>" size="33.53%"></pds-icon>
+            <pds-icon class="pds-avatar__badge" icon="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' class='pdsicon'><path d='M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8Zm4.473 5.807L7.14 11.14c-.26.26-.68.26-.94 0L3.533 8.473a.664.664 0 1 1 .94-.94l2.194 2.194 4.86-4.86c.26-.26.68-.26.94 0 .266.253.266.68.006.94Z'/></svg>" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -77,7 +77,7 @@ describe('pds-avatar', () => {
       <pds-avatar class="pds-avatar" size="128px" variant="customer">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 128px; width: 128px">
-            <pds-icon name="user-filled" size="33.53%"></pds-icon>
+            <pds-icon color="var(--pine-color-primary-400)" icon="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 17' class='pdsicon'><path fill-rule='evenodd' d='M11.667 3.697C11.667 5.687 10.067 8 8 8 5.933 8 4.333 5.687 4.333 3.697a3.667 3.667 0 1 1 7.334 0Zm-8.77 7.2c1-1 2.356-1.562 3.77-1.564h2.666a5.34 5.34 0 0 1 5.334 5.334.667.667 0 0 1-.464.635A22.19 22.19 0 0 1 8 16a22.19 22.19 0 0 1-6.203-.698.667.667 0 0 1-.464-.635 5.34 5.34 0 0 1 1.564-3.77Z'/></svg>" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -126,7 +126,7 @@ describe('pds-avatar', () => {
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px">
             <img alt="Customer Profile" src="https://placehold.co/64x64"/>
-            <pds-icon class="pds-avatar__badge" name="check-circle-filled" size="33.53%"></pds-icon>
+            <pds-icon class="pds-avatar__badge" icon="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' class='pdsicon'><path d='M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8Zm4.473 5.807L7.14 11.14c-.26.26-.68.26-.94 0L3.533 8.473a.664.664 0 1 1 .94-.94l2.194 2.194 4.86-4.86c.26-.26.68-.26.94 0 .266.253.266.68.006.94Z'/></svg>" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -142,7 +142,7 @@ describe('pds-avatar', () => {
       <pds-avatar class="pds-avatar" size="xl" variant="customer">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 64px; width: 64px;">
-            <pds-icon name="user-filled" size="33.53%"></pds-icon>
+            <pds-icon color="var(--pine-color-primary-400)" icon="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 17' class='pdsicon'><path fill-rule='evenodd' d='M11.667 3.697C11.667 5.687 10.067 8 8 8 5.933 8 4.333 5.687 4.333 3.697a3.667 3.667 0 1 1 7.334 0Zm-8.77 7.2c1-1 2.356-1.562 3.77-1.564h2.666a5.34 5.34 0 0 1 5.334 5.334.667.667 0 0 1-.464.635A22.19 22.19 0 0 1 8 16a22.19 22.19 0 0 1-6.203-.698.667.667 0 0 1-.464-.635 5.34 5.34 0 0 1 1.564-3.77Z'/></svg>" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -159,14 +159,14 @@ describe('pds-avatar', () => {
         <mock:shadow-root>
           <button class="pds-avatar__button" type="button">
             <div part="asset-wrapper" style="height: 56px; width: 56px;">
-              <pds-icon name="user-filled" size="33.53%"></pds-icon>
+              <pds-icon color="var(--pine-color-primary-400)" icon="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 17' class='pdsicon'><path fill-rule='evenodd' d='M11.667 3.697C11.667 5.687 10.067 8 8 8 5.933 8 4.333 5.687 4.333 3.697a3.667 3.667 0 1 1 7.334 0Zm-8.77 7.2c1-1 2.356-1.562 3.77-1.564h2.666a5.34 5.34 0 0 1 5.334 5.334.667.667 0 0 1-.464.635A22.19 22.19 0 0 1 8 16a22.19 22.19 0 0 1-6.203-.698.667.667 0 0 1-.464-.635 5.34 5.34 0 0 1 1.564-3.77Z'/></svg>" size="33.53%"></pds-icon>
             </div>
           </button>
         </mock:shadow-root>
       </pds-avatar>
     `);
   });
-  
+
   it('renders avatar without button when dropdown prop is false', async () => {
     const page = await newSpecPage({
       components: [PdsAvatar],
@@ -176,11 +176,11 @@ describe('pds-avatar', () => {
       <pds-avatar class="pds-avatar" dropdown="false" size="lg" variant="customer">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px;">
-            <pds-icon name="user-filled" size="33.53%"></pds-icon>
+            <pds-icon color="var(--pine-color-primary-400)" icon="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 17' class='pdsicon'><path fill-rule='evenodd' d='M11.667 3.697C11.667 5.687 10.067 8 8 8 5.933 8 4.333 5.687 4.333 3.697a3.667 3.667 0 1 1 7.334 0Zm-8.77 7.2c1-1 2.356-1.562 3.77-1.564h2.666a5.34 5.34 0 0 1 5.334 5.334.667.667 0 0 1-.464.635A22.19 22.19 0 0 1 8 16a22.19 22.19 0 0 1-6.203-.698.667.667 0 0 1-.464-.635 5.34 5.34 0 0 1 1.564-3.77Z'/></svg>" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
     `);
   });
-  
+
 });

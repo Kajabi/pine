@@ -1,4 +1,5 @@
 import { Component, Host, h, Prop } from '@stencil/core';
+import { checkCircleFilled, userFilled } from '@pine-ds/icons/icons';
 
 /**
  * @part image - The main image element that represents the avatar component.
@@ -78,7 +79,7 @@ export class PdsAvatar {
       height: this.avatarSize(),
       width: this.avatarSize()
     };
-    
+
     return (
       <div style={style} part="asset-wrapper">
         {this.renderIconOrImage()}
@@ -104,7 +105,7 @@ export class PdsAvatar {
     // Percentage is average size of icon in relation to total avatar size
     // of all preset sizes found in Figma.
     // Used to allow icons to scale to container size
-      && <pds-icon class="pds-avatar__badge" name="check-circle-filled" size="33.53%"></pds-icon>
+      && <pds-icon class="pds-avatar__badge" icon={checkCircleFilled} size="33.53%"></pds-icon>
   );
 
   private renderIconOrImage = () => (
@@ -113,7 +114,7 @@ export class PdsAvatar {
       // Percentage is average size of icon in relation to total avatar size
       // of all preset sizes found in Figma.
       // Used to allow icons to scale to container size
-      : <pds-icon name="user-filled" size="33.53%"></pds-icon>
+      : <pds-icon color="var(--pine-color-primary-400)" icon={userFilled} size="33.53%"></pds-icon>
   );
 
   private classNames = () => (
