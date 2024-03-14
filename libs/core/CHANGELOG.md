@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@0.1.5...@pine-ds/core@0.2.0) (2024-03-14)
+
+
+### Bug Fixes
+
+* **accordion:** updates arrow icons ([fb3cfe9](https://github.com/Kajabi/pine/commit/fb3cfe9adb1708b90453fd9c09e461a4079ec53d))
+* **accordion:** uses correct icon prop for icon ([c0cf2d9](https://github.com/Kajabi/pine/commit/c0cf2d94e7dbdd8a40888d384674c4ceb0217ead))
+* **accordion:** uses icon import in tests ([f71bc35](https://github.com/Kajabi/pine/commit/f71bc35853df2aec4cc289f747273648e5659faf))
+* **avatar:** correct icon color ([69a4016](https://github.com/Kajabi/pine/commit/69a40160728d1da52dd38134aa98fce02dc83622))
+* **avatar:** fix test ([ebd3f79](https://github.com/Kajabi/pine/commit/ebd3f79f7f61d1de9bb179a6efca57dd43146598))
+* **avatar:** update icon import and correct color ([22b3b9e](https://github.com/Kajabi/pine/commit/22b3b9e06b6b944f0dbc1338e89132a773043d4c))
+
+
+
+
+
 ## [0.1.5](https://github.com/Kajabi/pine/compare/@pine-ds/core@0.1.3...@pine-ds/core@0.1.5) (2024-03-12)
 
 
