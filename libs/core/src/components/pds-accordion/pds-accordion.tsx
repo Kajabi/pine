@@ -1,5 +1,5 @@
 import { Component, h, Host, Prop, Watch } from '@stencil/core';
-import { downSmall, upSmall } from '@pine-ds/icons/icons';
+import { downSmall } from '@pine-ds/icons/icons';
 
 /**
  * @slot (default) - Accordion body content.
@@ -23,10 +23,10 @@ export class PdsAccordion {
    * Can be used to manually set the open state of the accordion.
    * @defaultValue false
    */
-  @Prop({ 
+  @Prop({
     attribute: 'open',
     mutable: true,
-    reflect: true 
+    reflect: true
   }) isOpen: boolean = false;
 
   @Watch('isOpen')
@@ -55,7 +55,7 @@ export class PdsAccordion {
         <details {...this.getOpenAttribute()} ref={(el) => this.detailsEl = el as HTMLDetailsElement}>
           <summary>
             <slot name="label">Details</slot>
-            <pds-icon icon={this.isOpen ? upSmall : downSmall } />
+            <pds-icon icon={ downSmall } />
           </summary>
           <div class="pds-accordion__body">
             <slot />
