@@ -111,7 +111,7 @@ describe('pds-copytext', () => {
     });
 
     const button = page.root?.shadowRoot?.querySelector('pds-button') as HTMLButtonElement;
-    button.click();
+    await button.click();
 
     expect(writeTextSpy).toHaveBeenCalledWith('custom value text');
   });
@@ -139,7 +139,7 @@ describe('pds-copytext', () => {
     const emitSpy = jest.spyOn(page.rootInstance.pdsCopyTextClick, 'emit');
 
     const button = page.root?.shadowRoot?.querySelector('pds-button') as HTMLButtonElement;
-    button.click();
+    await button.click();
 
     await page.waitForChanges();
 
