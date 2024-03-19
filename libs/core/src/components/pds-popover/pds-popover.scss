@@ -1,0 +1,167 @@
+:host {
+  display: inline-block;
+  position: relative;
+}
+
+div {
+  // These custom props are not reachable
+  --background-color: var(--pine-color-base-white);
+  --box-shadow: var(--pine-box-shadow-md);
+  --color: var(--pine-color-neutral-charcoal-400);
+  --arrow-size: 6px;
+  --arrow-offset: 14px;
+
+  --overlay-border-radius: var(--pine-border-radius-md);
+  --overlay-font-size: var(--pine-font-size-body-sm);
+  --overlay-line-height: var(--pine-line-height-sm);
+  --overlay-min-width: 240px;
+  --overlay-padding: var(--pine-spacing-xs) 12px;
+
+  --arrow-pointing-down: var(--arrow-size) var(--arrow-size) 0;
+  --arrow-pointing-to-the-right: var(--arrow-size) 0 var(--arrow-size) var(--arrow-size);
+  --arrow-pointing-to-the-left: var(--arrow-size) var(--arrow-size) var(--arrow-size) 0;
+  --arrow-pointing-up: 0 var(--arrow-size) var(--arrow-size);
+}
+
+.pds-popover__content {
+  background-color: var(--background-color);
+  border-radius: var(--overlay-border-radius);
+  box-shadow: var(--box-shadow);
+  color: var(--color);
+  font-size: var(--overlay-font-size);
+  line-height: var(--overlay-line-height);
+  min-width: var(--overlay-min-width);
+  // TODO: need to use block / none but the popover content width and height are needed for calculations
+  opacity: 0;
+  padding: var(--overlay-padding);
+  position: absolute;
+  visibility: hidden;
+
+  .pds-popover--is-open & {
+    // TODO: need to use block / none but the popover content width and height are needed for calculations
+    opacity: 1;
+    visibility: visible;
+    z-index: 1;
+  }
+
+  :host(.pds-popover--has-html-content) & {
+    width: auto;
+  }
+
+  &::after {
+    border-color: transparent;
+    border-inline-end-color: transparent;
+    border-style: solid;
+    border-width: var(--arrow-pointing-to-the-left);
+    content: '';
+    height: 0;
+    position: absolute;
+    width: 0;
+
+    .pds-popover--right & {
+      border-inline-end-color: var(--background-color);
+      border-width: var(--arrow-pointing-to-the-left);
+      inset-block-start: 50%;
+      inset-inline-start: calc(var(--arrow-size) * -1);
+      transform: translateY(-50%);
+    }
+
+    .pds-popover--right-end & {
+      border-inline-end-color: var(--background-color);
+      border-width: var(--arrow-pointing-to-the-left);
+      inset-block-end: var(--arrow-offset);
+      inset-block-start: initial;
+      inset-inline-start: calc(var(--arrow-size) * -1);
+    }
+
+    .pds-popover--right-start & {
+      border-inline-end-color: var(--background-color);
+      border-width: var(--arrow-pointing-to-the-left);
+      inset-block-start: var(--arrow-offset);
+      inset-inline-start: calc(var(--arrow-size) * -1);
+    }
+
+    .pds-popover--top & {
+      border-block-start-color: var(--background-color);
+      border-width: var(--arrow-pointing-down);
+      inset-block-end: calc(var(--arrow-size) * -1);
+      inset-block-start: initial;
+      inset-inline-start: 50%;
+      transform: translateX(-50%);
+    }
+
+    .pds-popover--top-start & {
+      border-block-start-color: var(--background-color);
+      border-width: var(--arrow-pointing-down);
+      inset-block-end: calc(var(--arrow-size) * -1);
+      inset-block-start: initial;
+      inset-inline-start: var(--arrow-offset);
+    }
+
+    .pds-popover--top-end & {
+      border-block-start-color: var(--background-color);
+      border-width: var(--arrow-pointing-down);
+      inset-block-end: calc(var(--arrow-size) * -1);
+      inset-block-start: initial;
+      inset-inline-end: var(--arrow-offset);
+      inset-inline-start: initial;
+    }
+
+    .pds-popover--left & {
+      border-inline-start-color: var(--background-color);
+      border-width: var(--arrow-pointing-to-the-right);
+      inset-block-start: 50%;
+      inset-inline-end: calc(var(--arrow-size) * -1);
+      inset-inline-start: initial;
+      transform: translateY(-50%);
+    }
+
+    .pds-popover--left-end & {
+      border-inline-start-color: var(--background-color);
+      border-width: var(--arrow-pointing-to-the-right);
+      bottom: var(--arrow-offset);
+      inset-block-start: initial;
+      inset-inline-end: calc(var(--arrow-size) * -1);
+      inset-inline-start: initial;
+    }
+
+    .pds-popover--left-start & {
+      border-inline-start-color: var(--background-color);
+      border-width: var(--arrow-pointing-to-the-right);
+      inset-block-start: var(--arrow-offset);
+      inset-inline-end: calc(var(--arrow-size) * -1);
+      inset-inline-start: initial;
+    }
+
+    .pds-popover--bottom & {
+      border-block-end-color: var(--background-color);
+      border-width: var(--arrow-pointing-up);
+      inset-block-start: calc(var(--arrow-size) * -1);
+      inset-inline-start: 50%;
+      transform: translateX(-50%);
+    }
+
+    .pds-popover--bottom-end & {
+      border-block-end-color: var(--background-color);
+      border-width: var(--arrow-pointing-up);
+      inset-block-start: calc(var(--arrow-size) * -1);
+      inset-inline-end: var(--arrow-offset);
+      inset-inline-start: initial;
+    }
+
+    .pds-popover--bottom-start & {
+      border-block-end-color: var(--background-color);
+      border-width: var(--arrow-pointing-up);
+      inset-block-start: calc(var(--arrow-size) * -1);
+      inset-inline-start: var(--arrow-offset);
+    }
+
+    .pds-popover--no-arrow & {
+      border-width: 0;
+    }
+  }
+}
+
+.pds-popover__trigger {
+  display: inline-block;
+}
