@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.3](https://github.com/Kajabi/pine/compare/@pine-ds/core@0.2.2...@pine-ds/core@0.2.3) (2024-03-19)
+
+
+### Bug Fixes
+
+* **accordion:** transition timing ([06a5174](https://github.com/Kajabi/pine/commit/06a5174587fe4086f4020296137d834ee6257856))
+
+
+
+
+
 ## [0.2.2](https://github.com/Kajabi/pine/compare/@pine-ds/core@0.2.0...@pine-ds/core@0.2.2) (2024-03-19)
 
 
