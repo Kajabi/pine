@@ -43,7 +43,7 @@ details[open] {
 
   /* stylelint-disable-next-line selector-no-qualifying-type */
   .pds-accordion__body {
-    transition: max-height 5s ease-in-out;
+    transition: max-height 1s ease-in-out;
 
     /* stylelint-disable-next-line selector-no-qualifying-type */
     &.open {
