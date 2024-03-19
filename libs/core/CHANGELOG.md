@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1](https://github.com/Kajabi/pine/compare/@pine-ds/core@0.2.0...@pine-ds/core@0.2.1) (2024-03-19)
+
+
+### Features
+
+* **accordion:** add animation to accordion ([#154](https://github.com/Kajabi/pine/issues/154)) ([677a5f0](https://github.com/Kajabi/pine/commit/677a5f044fb166c10a954c7a245bb5a905c089ec))
+
+
+
+
+
 # [0.2.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@0.1.5...@pine-ds/core@0.2.0) (2024-03-14)
 
 
