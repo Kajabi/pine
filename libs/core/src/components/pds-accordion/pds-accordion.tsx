@@ -1,5 +1,5 @@
 import { Component, h, Host, Prop, Watch } from '@stencil/core';
-import { downSmall, upSmall } from '@pine-ds/icons/icons';
+import { downSmall } from '@pine-ds/icons/icons';
 
 /**
  * @slot (default) - Accordion body content.
@@ -12,6 +12,7 @@ import { downSmall, upSmall } from '@pine-ds/icons/icons';
 })
 export class PdsAccordion {
   private detailsEl: HTMLDetailsElement;
+  private containerEl: HTMLDivElement;
 
   /**
    * A unique identifier used for the underlying component `id` attribute.
@@ -23,15 +24,21 @@ export class PdsAccordion {
    * Can be used to manually set the open state of the accordion.
    * @defaultValue false
    */
-  @Prop({ 
+  @Prop({
     attribute: 'open',
     mutable: true,
-    reflect: true 
+    reflect: true
   }) isOpen: boolean = false;
 
   @Watch('isOpen')
   handleOpenState(newValue: boolean) {
     this.isOpen = newValue;
+
+    if ( newValue === true ) {
+      this.containerEl.classList.add('open');
+    } else {
+      this.containerEl.classList.remove('open');
+    }
   }
 
   private handleToggle = () => {
@@ -55,9 +62,9 @@ export class PdsAccordion {
         <details {...this.getOpenAttribute()} ref={(el) => this.detailsEl = el as HTMLDetailsElement}>
           <summary>
             <slot name="label">Details</slot>
-            <pds-icon icon={this.isOpen ? upSmall : downSmall } />
+            <pds-icon icon={ downSmall } />
           </summary>
-          <div class="pds-accordion__body">
+          <div class={`pds-accordion__body ${this.isOpen ? 'open' : ''}`} ref={(el) => this.containerEl = el as HTMLDivElement}>
             <slot />
           </div>
         </details>
