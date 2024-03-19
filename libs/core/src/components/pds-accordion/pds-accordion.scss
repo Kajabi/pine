@@ -35,14 +35,21 @@ details[open] {
     color: var(--color-font-active);
     font-weight: var(--font-weight);
 
-    ~ * {
-      animation: fadeIn 150ms ease-in;
-    }
-
     pds-icon {
       transform: scaleY(-1);
       transition: transform var(--animation-transform-timing);
     }
+  }
+
+  /* stylelint-disable-next-line selector-no-qualifying-type */
+  .pds-accordion__body {
+    transition: max-height 1s ease-in-out;
+
+    /* stylelint-disable-next-line selector-no-qualifying-type */
+    &.open {
+      max-height: 5000px;
+    }
+
   }
 }
 
@@ -81,14 +88,8 @@ summary {
   }
 }
 
-@keyframes fadeIn {
- 0% {
-   opacity: 0;
-   transform: translateY(-10px);
- }
-
- 100% {
-   opacity: 1;
-   transform: translateY(0);
- }
+.pds-accordion__body {
+  max-height: 0;
+  overflow: hidden;
 }
+

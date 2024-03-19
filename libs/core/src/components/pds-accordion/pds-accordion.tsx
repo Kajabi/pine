@@ -12,6 +12,7 @@ import { downSmall } from '@pine-ds/icons/icons';
 })
 export class PdsAccordion {
   private detailsEl: HTMLDetailsElement;
+  private containerEl: HTMLDivElement;
 
   /**
    * A unique identifier used for the underlying component `id` attribute.
@@ -32,6 +33,12 @@ export class PdsAccordion {
   @Watch('isOpen')
   handleOpenState(newValue: boolean) {
     this.isOpen = newValue;
+
+    if ( newValue === true ) {
+      this.containerEl.classList.add('open');
+    } else {
+      this.containerEl.classList.remove('open');
+    }
   }
 
   private handleToggle = () => {
@@ -57,7 +64,7 @@ export class PdsAccordion {
             <slot name="label">Details</slot>
             <pds-icon icon={ downSmall } />
           </summary>
-          <div class="pds-accordion__body">
+          <div class={`pds-accordion__body ${this.isOpen ? 'open' : ''}`} ref={(el) => this.containerEl = el as HTMLDivElement}>
             <slot />
           </div>
         </details>

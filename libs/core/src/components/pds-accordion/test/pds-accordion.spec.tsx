@@ -38,7 +38,7 @@ describe('pds-accordion', () => {
                 <slot name="label">Details</slot>
                 <pds-icon icon="${downSmall}"></pds-icon>
               </summary>
-              <div class="pds-accordion__body">
+              <div class="open pds-accordion__body">
                 <slot />
               </div>
             </details>
@@ -132,7 +132,7 @@ describe('pds-accordion', () => {
               <slot name="label">Details</slot>
               <pds-icon icon="${downSmall}"></pds-icon>
             </summary>
-            <div class="pds-accordion__body">
+            <div class="open pds-accordion__body">
               <slot />
             </div>
           </details>
