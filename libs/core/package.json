@@ -56,7 +56,7 @@
     "test.watch": "stencil test --spec --e2e --watchAll --coverage"
   },
   "dependencies": {
-    "@pine-ds/icons": "^3.6.0",
+    "@pine-ds/icons": "^3.8.0",
     "@stencil/core": "^4.8.1",
     "sortablejs": "^1.15.0",
     "tslib": "^2.6.2"
