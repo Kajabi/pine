@@ -47,7 +47,7 @@ details[open] {
 
     /* stylelint-disable-next-line selector-no-qualifying-type */
     &.open {
-      max-height: 5000px;
+      max-height: max-content;
     }
 
   }
