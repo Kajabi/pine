@@ -5,7 +5,7 @@
   --border: var(--pine-border-interactive);
   --border-hover: var(--pine-border-interactive-hover-color);
   --border-radius: var(--pine-border-radius-md);
-  --box-shadow-focus: 0 0 0 4px var(--pine-color-primary-200);
+  --box-shadow-focus: 0 0 0 2px var(--pine-color-primary-200);
   --color-hover: var(--pine-color-neutral-charcoal-400);
   --font-size: var(--pine-font-size-body);
   --font-weight: var(--pine-font-weight-semibold);
@@ -25,14 +25,10 @@
     max-width: 100%;
     padding: var(--spacing-xxs) var(--spacing-xs);
 
-    &:hover {
+    &::part(button):hover {
       background-color: var(--background-hover);
+      border-radius: none;
       color: var(--color-hover);
-    }
-
-    &:focus-visible {
-      box-shadow: var(--box-shadow-focus);
-      outline: none;
     }
 
     span {

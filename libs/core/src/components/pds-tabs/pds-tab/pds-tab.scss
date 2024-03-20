@@ -2,7 +2,8 @@ pds-tab {
   --background-color-tab: var(--pine-color-neutral-grey-300);
   --background-color-tab-active: var(--pine-color-neutral-charcoal-400);
   --background-color-tab-hover: var(--pine-color-neutral-grey-400);
-  --border-radius: var(--pine-border-radius-xs);
+  --border-radius: var(--pine-border-radius-md);
+  --box-shadow-focus: 0 0 0 2px var(--pine-color-primary-200);
 
   --color: var(--pine-color-neutral-charcoal-200);
   --color-active: var(--pine-color-neutral-charcoal-400);
@@ -37,12 +38,6 @@ pds-tab {
   padding: 0;
 }
 
-// delete later
-*:focus-visible {
-  border-radius: var(--border-radius);
-  outline: var(--outline);
-}
-
 .pds-tab {
   @include pds-button-style-reset();
 
@@ -67,7 +62,9 @@ pds-tab {
   }
 
   &:focus-visible {
-    color: var(--color-focus);
+    // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
+    box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
+    outline: none;
   }
 
   .pds-tab__content {

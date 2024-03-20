@@ -4,6 +4,8 @@
   --background-color-checked-hover: var(--pine-color-neutral-charcoal-400);
   --background-color-disabled: var(--pine-color-neutral-grey-300);
   --background-color-hover: var(--pine-color-neutral-grey-500);
+  --box-shadow-focus: 0 0 0 2px var(--outline-color-focus);
+  --box-shadow-focus-error: 0 0 0 2px var(--outline-color-focus-error);
 
   --input-border-radius: var(--pine-border-radius-lg);
   --input-height: 20px;
@@ -47,7 +49,7 @@
   }
 
   input:focus-visible:not(:disabled):not(:checked) {
-    box-shadow: 0 0 0 4px var(--outline-color-focus-error);
+    box-shadow: var(--box-shadow-focus-error);
   }
 }
 
@@ -136,7 +138,7 @@ input:hover:not(:disabled) {
 
  // Focus state
 input:focus-visible:not(:disabled) {
-  box-shadow: 0 0 0 4px var(--outline-color-focus);
+  box-shadow: var(--box-shadow-focus);
   outline: none;
 }
 

@@ -17,11 +17,6 @@
   display: block;
 }
 
-// delete later
-*:focus {
-  outline: var(--outline);
-}
-
 .pds-tabs__tablist {
   display: flex;
   flex-wrap: wrap;
