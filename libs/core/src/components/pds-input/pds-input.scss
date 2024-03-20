@@ -10,7 +10,8 @@
   --border-color-default: var(--pine-color-neutral-grey-400);
   --border-color-hover: var(--pine-color-neutral-grey-500);
 
-  --focus-box-shadow: 0 0 0 4px var(--pine-color-primary-200);
+  --focus-box-shadow: 0 0 0 2px var(--pine-color-primary-200);
+  --focus-box-shadow-error: 0 0 0 2px var(--pine-color-red-200);
 
   --label-font-size: var(--pine-font-size-body);
   --label-font-weight: var(--pine-font-weight-medium);
@@ -61,7 +62,7 @@ input {
     border-color: var(--border-color-hover);
   }
 
-  &:focus {
+  &:focus-visible {
     box-shadow: var(--focus-box-shadow);
     outline: none;
   }
@@ -85,6 +86,11 @@ input {
 
   &:has(~.pds-input__error-message) {
     border-color: var(--color-error);
+
+    &:focus-visible {
+      box-shadow: var(--focus-box-shadow-error);
+      outline: none;
+    }
   }
   /* stylelint-enable */
 }

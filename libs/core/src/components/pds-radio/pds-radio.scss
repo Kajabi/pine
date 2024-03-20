@@ -6,6 +6,8 @@
   --border-color-hover: var(--pine-border-interactive-hover-color);
   --border-color-disabled: var(--pine-color-neutral-grey-300);
   --border-radius: 50%;
+  --box-shadow-focus: 0 0 0 2px var(--color-focus);
+  --box-shadow-focus-error: 0 0 0 2px var(--color-invalid-focus);
   --color: var(--pine-color-neutral-charcoal-200);
   --color-checked: var(--pine-color-neutral-charcoal-500);
   --color-disabled: var(--pine-color-neutral-grey-500);
@@ -30,7 +32,7 @@
     }
 
     &:focus-visible {
-      box-shadow: 0 0 0 4px var(--color-invalid-focus);
+      box-shadow: var(--box-shadow-focus-error);
       outline: none;
     }
   }
@@ -98,7 +100,7 @@ input {
   }
 
   &:focus-visible {
-    box-shadow: 0 0 0 4px var(--color-focus);
+    box-shadow: var(--box-shadow-focus);
     outline: none;
   }
 

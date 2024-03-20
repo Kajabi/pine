@@ -12,6 +12,9 @@
   --border-color-focus-visible: var(--pine-color-neutral-grey-300);
   --border-color-error: var(--pine-color-red-300);
 
+  --box-shadow-focus: 0 0 0 2px var(--focus-visible-outline-color);
+  --box-shadow-focus-error: 0 0 0 2px var(--focus-visible-outline-color-error);
+
   --focus-visible-outline-color: var(--pine-color-primary-200);
   --focus-visible-outline-color-error: var(--pine-color-red-200);
 
@@ -68,8 +71,9 @@ label {
   }
 
   &:focus-visible {
-    border-color: var(--border-color-focus-visible);
-    outline: 4px solid var(--focus-visible-outline-color);
+    // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
+    box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
+    outline: none;
   }
 
   &::placeholder {
@@ -78,7 +82,10 @@ label {
 
   &.is-invalid {
     border-color: var(--color-error);
-    outline-color: var(--focus-visible-outline-color-error);
+
+    &:focus-visible {
+      box-shadow: var(--box-shadow-focus-error);
+    }
   }
 }
 

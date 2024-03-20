@@ -64,9 +64,12 @@
     border-color: var(--border-color-hover);
   }
 
-  &:focus {
+  &:focus-visible {
+    --box-shadow-focus: 0 0 0 2px var(--pine-color-primary-200);
     border-color: var(--border-color-focus);
-    outline: 4px solid var(--outline-color);
+    // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
+    box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
+    outline: none;
   }
 
   &:disabled {
