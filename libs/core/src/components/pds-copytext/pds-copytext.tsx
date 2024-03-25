@@ -43,8 +43,10 @@ export class PdsCopytext {
 
   private copyToClipboard = async (value: string) => {
     try {
-      await navigator.clipboard.writeText(value);
-      this.pdsCopyTextClick.emit('Copied to clipboard');
+      if (typeof navigator.clipboard !== 'undefined') {
+        await navigator.clipboard.writeText(value);
+        this.pdsCopyTextClick.emit('Copied to clipboard');
+      }
     } catch (err) {
       console.error(err);
       this.pdsCopyTextClick.emit(`Error writing text to clipboard: ${err}`);
