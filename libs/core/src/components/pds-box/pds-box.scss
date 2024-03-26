@@ -43,7 +43,7 @@ $pine-spacing-tokens: (
   md: 24px,
   lg: 36px,
   xl: 48px,
-  2xl: 64px,
+  xxl: 64px,
 );
 
 // Generate spacing classes
@@ -227,7 +227,7 @@ $pine-spacing-tokens: (
 }
 
 .pds-box-gap-xxl {
-  gap: var(--box-gap-2xl);
+  gap: var(--box-gap-xxl);
 }
 
 // Spacing helpers
@@ -260,7 +260,7 @@ $pine-spacing-tokens: (
 }
 
 .pds-padding-xxl {
-  padding: var(--box-gap-2xl);
+  padding: var(--box-gap-xxl);
 }
 
 // Display helpers
