@@ -4,8 +4,9 @@
     <source media="(prefers-color-scheme: light)" srcset="./docs/assets/pine-logo.png">
     <img alt="Pine: Web Component Design System" src="./docs/assets/pine-logo.png">
   </picture>
-  <br>
-  <a href="https://main--pine-design-system.netlify.app/?path=/docs/welcome--docs">Documentation Site</a>
+</p>
+<p align="center">
+  <a href="https://pine-design-system.netlify.app/">Documentation Site</a>
 
 Pine is a UI toolkit for building beautiful, accessible web applications.
 </p>
