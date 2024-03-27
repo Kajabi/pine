@@ -1,6 +1,15 @@
-# Pine
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./docs/assets/pine-logo-dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="./docs/assets/pine-logo.png">
+    <img alt="Pine: Web Component Design System" src="./docs/assets/pine-logo.png">
+  </picture>
+</p>
+<p align="center">
+  <a href="https://pine-design-system.netlify.app/">Documentation Site</a>
 
-Pine is Kajabi's UI toolkit for building beautiful, accessible web applications.
+Pine is a UI toolkit for building beautiful, accessible web applications.
+</p>
 
 Pine is implemented as a collection of
 [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components).
@@ -9,8 +18,7 @@ Pine is implemented as a collection of
 
 ## Roadmap
 
-**Alpha** components are in-development and may have many frequent breaking
-changes.
+**Alpha** components are in development and may have frequent breaking changes.
 
 **Beta** components are mostly polished and ready for use, but may still have breaking changes.
 
@@ -24,22 +32,24 @@ changes.
 
 Component                     | Alpha | Beta | Stable
 ----------------------------- | :---: | :--: | :----:
+Accordion                      | ✅     | ✅    | ❌
 Avatar                         | ✅     | ✅    | ❌
+Box                            | ✅     | ✅    | ❌
 Button                         | ✅     | ✅    | ❌
 Checkbox                       | ✅     | ✅    | ❌
 Chip                           | ✅     | ✅    | ❌
 Copy Text                      | ✅     | ✅    | ❌
 Divider                        | ✅     | ✅    | ❌
 Form Input                     | ✅     | ✅    | ❌
-Form Select                    | ✅     | ✅    | ❌
+Form Select                    | 🟡     | ❌    | ❌
 Form Textarea                  | ✅     | ✅    | ❌
 Icon                           | ✅     | ✅    | ❌
 Image                          | ✅     | ✅    | ❌
-Label                          | ✅     | ✅    | ❌
 Link                           | ✅     | ✅    | ❌
 Loader                         | 🟡     | ❌    | ❌
 Popover                        | ❌     | ❌    | ❌
 Progress                       | ✅     | ✅    | ❌
+Row                            | ✅     | ✅    | ❌
 Radio                          | ✅     | ✅    | ❌
 Sortable                       | ✅     | ✅    | ❌
 Switch                         | ✅     | ✅    | ❌
@@ -53,9 +63,6 @@ These features are planned for a future release.
 
 Component                     | Alpha | Beta | Stable
 ----------------------------- | :---: | :--: | :----:
-Grid                          | ❌     | ❌    | ❌
-Container                     | ❌     | ❌    | ❌
-Flex                          | ❌     | ❌    | ❌
 Alert                         | ❌     | ❌    | ❌
 Banner                        | ❌     | ❌    | ❌
 Breadcrumbs                   | ❌     | ❌    | ❌
