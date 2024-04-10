@@ -1,23 +1,58 @@
 import { registerTransforms } from '@tokens-studio/sd-transforms';
+import fs from 'fs-extra';
 import StyleDictionary from 'style-dictionary';
 
 registerTransforms(StyleDictionary);
 
-const sd = new StyleDictionary({
-  source: ["src/global/styles/tokens/core/tokens.json"],
-  platforms: {
-    css: {
-      transformGroup: "tokens-studio",
-      transforms: ["name/kebab", "color/hex"],
-      buildPath: "src/global/styles/tokens/semantic/",
-      files: [{
-        "destination": "_tokens.scss",
-        "format": "css/variables"
-      }],
-      prefix: "pine"
-    }
-  }
-});
+const basePath = `src/global/styles/tokens`;
 
-await sd.cleanAllPlatforms();
-await sd.buildAllPlatforms();
+const getConfig = (sets: string[]) => {
+	return {
+		source: sets.map(tokenSet => `${basePath}/${tokenSet}/${tokenSet}.json`),
+		platforms: {
+			css: {
+				transformGroup: 'tokens-studio',
+				transforms: ['name/kebab', 'color/hex'],
+				buildPath: `${basePath}/`,
+				// Create multiple outputs for each tokenset
+				files: sets.map(tokenSet => ({
+					// Make sure only the tokens originating from this set are output
+					filter: token => token.filePath === `${basePath}/${tokenSet}/${tokenSet}.json`,
+					destination: `${tokenSet}/_${tokenSet}.scss`,
+					format: 'css/variables'
+				})),
+        prefix: 'pine'
+			}
+		},
+	};
+};
+
+const sortTokens = async (sets: string[]) => {
+	const tokens = JSON.parse(fs.readFileSync(`${basePath}/tokens.json`, 'utf8'));
+
+  // Split tokensets from original JSON file into their own files
+	sets.forEach(tokenSet => {
+		fs.ensureDirSync(`${basePath}/${tokenSet}/`);
+		if (tokens.hasOwnProperty(tokenSet)) {
+			const tokensSubset = JSON.stringify(
+				structuredClone(tokens[tokenSet]),
+				null,
+				2
+			);
+			fs.writeFileSync(
+				`${basePath}/${tokenSet}/${tokenSet}.json`,
+				tokensSubset
+			);
+		}
+	});
+
+	const cfg = getConfig(sets);
+	const sd = new StyleDictionary(cfg);
+
+	await sd.cleanAllPlatforms();
+	await sd.buildAllPlatforms();
+};
+
+const tokenSets = ['core', 'semantic'];
+
+sortTokens(tokenSets);
