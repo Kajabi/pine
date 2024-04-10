@@ -1,0 +1,32 @@
+import { Meta, Story } from '@storybook/blocks';
+
+<Meta title="Resources/Icon Management"/>
+
+# Icon Management
+This document describes the icon library, how it's automatically updated, and best practices for developers and designers.
+
+## Icon Updates
+The icon library is automatically updated via a nightly build process that runs twice a week, on Tuesdays and Thursdays. This ensures the library stays current with the latest icons.
+
+Previously, this process could lead to unintended package version updates within your project. To prevent this, the package version has been set to use `*`. This tells the package manager to use the latest tagged version of the icon library.
+
+## Benefits:
+
+* Developers can still update to the absolute latest version by running `npm update @pine-ds/icons` if needed. This will update the `package-lock.json` file with the most recent version.
+
+## Developers
+
+* Using Existing Icons: No action is required to use existing icons in your project.
+* Requesting New Icons:
+  * If a required icon is missing, but exists in the [Figma Icon document](https://www.figma.com/file/gr2OhPSlvtsYIZQCL5G2ey/%E2%84%B9%EF%B8%8F-Sage-icons?type=design&node-id=2-2&mode=design&t=g5byhDbSokb3hccP-0), the automated process will eventually add it to the library.
+  * Once the new version containing the desired icon has been published, run `npm update @pine-ds/icons` in your project to ensure you're using the latest version.
+
+## Designers
+
+* Adding New Icons:
+
+  * Always add new icons to the [Figma Icon document](https://www.figma.com/file/gr2OhPSlvtsYIZQCL5G2ey/%E2%84%B9%EF%B8%8F-Sage-icons?type=design&node-id=2-2&mode=design&t=g5byhDbSokb3hccP-0) before notifying developers.
+  * This allows the automated build process to run and update the library before developers require the new icon.
+
+
+By following these practices, developers and designers can work together to ensure a smooth and efficient workflow for utilizing the icon library.
