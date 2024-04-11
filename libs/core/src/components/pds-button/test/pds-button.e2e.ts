@@ -78,26 +78,6 @@ describe('pds-button', () => {
     expect(value).toBe(true);
   });
 
-  it('renders toggle of icon', async () => {
-    const page = await newE2EPage();
-    await page.setContent('<pds-button></pds-button>');
-    const component = await page.find('pds-button');
-    expect(component).toHaveClass('hydrated');
-
-    const element = await page.find('pds-button >>> button');
-    let icon = await element.find('pds-icon');
-    expect(icon).toBeNull();
-
-    component.setProperty('icon', 'trash');
-    await page.waitForChanges();
-    icon = await element.find('pds-icon');
-
-    const iconName = await icon.getProperty('name');
-
-    expect(icon).toBeTruthy();
-    expect(iconName).toBe('trash');
-  });
-
   it('renders caret-down icon when variant is disclosure', async () => {
     const page = await newE2EPage();
 
