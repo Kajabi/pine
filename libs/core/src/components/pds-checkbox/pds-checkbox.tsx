@@ -12,7 +12,7 @@ export class PdsCheckbox {
   /**
    * It determines whether or not the checkbox is checked.
    */
-  @Prop() checked: boolean;
+  @Prop({ mutable: true }) checked: boolean;
 
   /**
    * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
