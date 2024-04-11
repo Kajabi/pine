@@ -1,3 +1,4 @@
+import { downSmall, remove } from '@pine-ds/icons/icons';
 import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 
 @Component({
@@ -71,7 +72,7 @@ export class PdsChip {
       <button class="pds-chip__button" type="button">
         {this.dot && <i class="pds-chip__dot" aria-hidden="true"></i>}
         {this.label}
-        <pds-icon name="down-small" size="12px" aria-hidden="true"></pds-icon>
+        <pds-icon icon={downSmall} size="12px" aria-hidden="true"></pds-icon>
       </button>
     ) : (
       <span class="pds-chip__label">
@@ -89,7 +90,7 @@ export class PdsChip {
         {this.setChipContent()}
         {this.variant === 'tag' && (
           <button class="pds-chip__close" type="button" onClick={this.handleCloseClick} aria-label="Remove">
-            <pds-icon name="remove" size="12px"></pds-icon>
+            <pds-icon icon={remove} size="12px"></pds-icon>
           </button>
         )}
       </Host>

@@ -1,6 +1,8 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsChip } from '../pds-chip';
 
+import { downSmall, remove as removeIcon } from '@pine-ds/icons/icons';
+
 describe('pds-chip', () => {
   it('renders', async () => {
     const page = await newSpecPage({
@@ -104,7 +106,7 @@ describe('pds-chip', () => {
       <mock:shadow-root>
         <span class="pds-chip__label"></span>
         <button class="pds-chip__close" type="button" aria-label="Remove" >
-          <pds-icon name="remove" size="12px"></pds-icon>
+          <pds-icon icon="${removeIcon}" size="12px"></pds-icon>
         </button>
       </mock:shadow-root>
     </pds-chip>
@@ -121,7 +123,7 @@ describe('pds-chip', () => {
     <pds-chip class="pds-chip pds-chip--neutral pds-chip--dropdown" variant="dropdown">
       <mock:shadow-root>
         <button class="pds-chip__button" type="button">
-          <pds-icon name="down-small" size="12px" aria-hidden="true"></pds-icon>
+          <pds-icon icon="${downSmall}" size="12px" aria-hidden="true"></pds-icon>
         </button>
       </mock:shadow-root>
     </pds-chip>
@@ -139,7 +141,7 @@ describe('pds-chip', () => {
       <mock:shadow-root>
         <button class="pds-chip__button" type="button">
           <i class="pds-chip__dot" aria-hidden="true"></i>
-          <pds-icon name="down-small" size="12px" aria-hidden="true"></pds-icon>
+          <pds-icon icon="${downSmall}" size="12px" aria-hidden="true"></pds-icon>
         </button>
       </mock:shadow-root>
     </pds-chip>
