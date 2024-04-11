@@ -37,8 +37,8 @@
     "tsc": "tsc -p ."
   },
   "dependencies": {
-    "@pine-ds/core": "^0.2.3",
-    "@pine-ds/icons": "3.8.0",
+    "@pine-ds/core": "*",
+    "@pine-ds/icons": "*",
     "tslib": "*"
   },
   "devDependencies": {
