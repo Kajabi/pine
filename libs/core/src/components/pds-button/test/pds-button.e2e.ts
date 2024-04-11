@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { caretDown } from '@pine-ds/icons/icons';
 
 describe('pds-button', () => {
   it('renders', async () => {
@@ -99,13 +100,14 @@ describe('pds-button', () => {
 
   it('renders caret-down icon when variant is disclosure', async () => {
     const page = await newE2EPage();
+
     await page.setContent('<pds-button variant="disclosure"></pds-button>');
 
     const element = await page.find('pds-button >>> button');
     const icon = await element.find('pds-icon');
-    const iconName = await icon.getProperty('name');
+    const iconName = await icon.getProperty('icon');
 
     expect(icon).toBeTruthy();
-    expect(iconName).toBe('caret-down');
+    expect(iconName).toBe(caretDown);
   });
 });

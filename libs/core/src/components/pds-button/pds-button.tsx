@@ -1,6 +1,8 @@
 import { Component, Element, Host, h, Prop } from '@stencil/core';
 import { hasShadowDom } from '../../utils/utils';
 
+import { caretDown } from '@pine-ds/icons/icons';
+
 /**
  * @part button - The main button element that represents the button component.
  * @part caret - The caret icon element that appears when the button variant is 'disclosure'.
@@ -99,7 +101,7 @@ export class PdsButton {
         >
           {this.icon && this.variant !== 'disclosure' && <pds-icon name={this.icon} part="icon"></pds-icon>}
           <slot />
-          {this.variant === 'disclosure' && <pds-icon name="caret-down" part="caret"></pds-icon>}
+          {this.variant === 'disclosure' && <pds-icon icon={caretDown} part="caret"></pds-icon>}
         </button>
       </Host>
     );
