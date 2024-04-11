@@ -8,3 +8,6 @@
 @use 'border';
 @use 'font-family';
 @use 'box-shadow';
+// Remove above when all tokens below are integrated
+@use 'core/core';
+@use 'semantic/semantic';
