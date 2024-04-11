@@ -1,5 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsCopytext } from '../pds-copytext';
+import { copy as copyIcon } from '@pine-ds/icons/icons';
 
 describe('pds-copytext', () => {
   it('renders', async () => {
@@ -12,7 +13,7 @@ describe('pds-copytext', () => {
         <mock:shadow-root>
           <pds-button type="button" variant="unstyled">
             <span></span>
-            <pds-icon name="copy" size="16px"></pds-icon>
+            <pds-icon icon="${copyIcon}" size="16px"></pds-icon>
           </pds-button>
         </mock:shadow-root>
       </pds-copytext>
@@ -29,7 +30,7 @@ describe('pds-copytext', () => {
         <mock:shadow-root>
           <pds-button type="button" variant="unstyled">
             <span></span>
-            <pds-icon name="copy" size="16px"></pds-icon>
+            <pds-icon icon="${copyIcon}" size="16px"></pds-icon>
           </pds-button>
         </mock:shadow-root>
       </pds-copytext>
@@ -46,7 +47,7 @@ describe('pds-copytext', () => {
         <mock:shadow-root>
           <pds-button type="button" variant="unstyled">
             <span></span>
-            <pds-icon name="copy" size="16px"></pds-icon>
+            <pds-icon icon="${copyIcon}" size="16px"></pds-icon>
           </pds-button>
         </mock:shadow-root>
       </pds-copytext>
@@ -63,7 +64,7 @@ describe('pds-copytext', () => {
         <mock:shadow-root>
           <pds-button type="button" variant="unstyled">
             <span></span>
-            <pds-icon name="copy" size="16px"></pds-icon>
+            <pds-icon icon="${copyIcon}" size="16px"></pds-icon>
           </pds-button>
         </mock:shadow-root>
       </pds-copytext>
@@ -80,7 +81,7 @@ describe('pds-copytext', () => {
         <mock:shadow-root>
           <pds-button type="button" variant="unstyled">
             <span>custom value text</span>
-            <pds-icon name="copy" size="16px"></pds-icon>
+            <pds-icon icon="${copyIcon}" size="16px"></pds-icon>
           </pds-button>
         </mock:shadow-root>
       </pds-copytext>

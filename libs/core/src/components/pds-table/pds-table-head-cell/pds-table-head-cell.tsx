@@ -1,5 +1,7 @@
 import { Component, Element, Host, Prop, h, Event, EventEmitter, State } from '@stencil/core';
 
+import { downSmall, upSmall } from '@pine-ds/icons/icons';
+
 @Component({
   tag: 'pds-table-head-cell',
   styleUrl: 'pds-table-head-cell.scss',
@@ -92,7 +94,7 @@ export class PdsTableHeadCell {
       >
         <slot></slot>
         {this.sortable && (
-          <pds-icon name={this.sortingDirection === 'asc' ? 'up-small' : 'down-small'} />
+          <pds-icon icon={this.sortingDirection === 'asc' ? upSmall : downSmall} />
         )}
       </Host>
     );
