@@ -1,5 +1,7 @@
 import { Component, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
 
+import { copy as copyIcon } from '@pine-ds/icons/icons';
+
 @Component({
   tag: 'pds-copytext',
   styleUrl: 'pds-copytext.scss',
@@ -90,7 +92,7 @@ export class PdsCopytext {
       <Host class={this.classNames()} id={this.componentId}>
         <pds-button type="button" variant="unstyled" onClick={this.handleClick}>
           <span>{this.value}</span>
-          <pds-icon name="copy" size="16px"></pds-icon>
+          <pds-icon icon={copyIcon} size="16px"></pds-icon>
         </pds-button>
       </Host>
     );
