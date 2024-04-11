@@ -30,9 +30,11 @@ describe('pds-avatar', () => {
     await page.setContent('<pds-avatar image="https://placehold.co/64x64"></pds-avatar>');
 
     const image = await page.find('pds-avatar >>> img');
-    expect(image).toBeTruthy();
 
-    const defaultIcon = await page.find('pds-avatar >>> .pds-avatar[name="user-fulfilled"]');
-    expect(defaultIcon).toBeNull();
+    await page.waitForChanges();
+    expect(image).not.toBeNull();
+
+    const avatar = await page.find('pds-avatar');
+    expect(avatar.shadowRoot.querySelector('pds-icon')).toBeNull();
   })
 });
