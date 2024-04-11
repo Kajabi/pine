@@ -2,6 +2,8 @@ import { newSpecPage } from '@stencil/core/testing';
 import { PdsTable } from '../../pds-table';
 import { PdsTableHeadCell } from '../pds-table-head-cell';
 
+import { upSmall } from '@pine-ds/icons/icons';
+
 describe('pds-table-head-cell', () => {
   it('renders', async () => {
     const page = await newSpecPage({
@@ -26,7 +28,7 @@ describe('pds-table-head-cell', () => {
       <pds-table-head-cell class="is-sortable sort-asc" role="columnheader" sortable="true">
         <mock:shadow-root>
           <slot></slot>
-          <pds-icon name="up-small"></pds-icon>
+          <pds-icon icon="${upSmall}"></pds-icon>
         </mock:shadow-root>
       </pds-table-head-cell>
     `);
