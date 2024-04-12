@@ -5,6 +5,7 @@ loader/
 /components/
 
 scripts/**/*.js
+scripts/**/*.mjs
 
 *~
 *.sw[mnpcod]
@@ -30,3 +31,5 @@ Thumbs.db
 UserInterfaceState.xcuserstate
 .env
 
+/src/global/styles/tokens/core/*.json
+/src/global/styles/tokens/semantic/*.json
