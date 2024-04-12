@@ -31,3 +31,5 @@ Thumbs.db
 UserInterfaceState.xcuserstate
 .env
 
+/src/global/styles/tokens/core/*.json
+/src/global/styles/tokens/semantic/*.json
