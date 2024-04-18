@@ -42,7 +42,7 @@
     "build.stencil": "stencil build --docs",
     "build.storybook": "storybook build",
     "build.ts": "tsc -p scripts/tsconfig.json",
-    "build.tokens": "npm run build.ts && node scripts/sd-transforms.mjs",
+    "build.tokens": "node scripts/sd-transforms.mjs",
     "deploy": "npm run build.all",
     "generate": "stencil generate",
     "lint": "run-p lint.*",
