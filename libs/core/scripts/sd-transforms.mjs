@@ -6,7 +6,7 @@ registerTransforms(StyleDictionary);
 
 const basePath = `src/global/styles/tokens`;
 
-const getConfig = (sets: string[]) => {
+const getConfig = (sets) => {
 	return {
 		source: sets.map(tokenSet => `${basePath}/${tokenSet}/${tokenSet}.json`),
 		platforms: {
@@ -27,7 +27,7 @@ const getConfig = (sets: string[]) => {
 	};
 };
 
-const sortTokens = async (sets: string[]) => {
+const sortTokens = async (sets) => {
 	const tokens = JSON.parse(fs.readFileSync(`${basePath}/tokens.json`, 'utf8'));
 
   // Split tokensets from original JSON file into their own files

@@ -5,7 +5,6 @@ loader/
 /components/
 
 scripts/**/*.js
-scripts/**/*.mjs
 
 *~
 *.sw[mnpcod]
