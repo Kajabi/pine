@@ -6,7 +6,7 @@ interface TokenEntry {
 }
 
 interface Token {
-  [key: string]: TokenEntry;
+  [key: string]: TokenEntry | Token;
 }
 
 interface DocTokenTableProps {
@@ -28,19 +28,27 @@ const findValueByKey = (obj: any, keyPath: string): string | undefined => {
     value = value[key];
   }
 
+  console.log('keypath: ', keyPath);
+
   return 'value' in value ? value.value : undefined;
 };
 
-const DocTokenTable: React.FC<DocTokenTableProps> = ({ category }) => {
+const DocTokenTable: React.FC<DocTokenTableProps> = ({ type, category }) => {
   console.log('all core tokens: ', allTokenJson);
+  
+  let pineTokens: Token = {};
 
-  const semanticTokens: Token = allTokenJson.semantic[category];
+  if (type == 'core') {
+    pineTokens = allTokenJson.core[category];
+  } else if (type == 'semantic') {
+    pineTokens = allTokenJson.semantic[category];
+  }
   
   const renderTableRows = (tokens: Token, parentKey?: string) => {
-    return Object.keys(tokens).map((key) => {
-      const token = tokens[key];
+    return Object.entries(tokens).map(([key, token]) => {
       const fullKey = parentKey ? `${parentKey}-${key}` : key;
       const prefixedKey = `--pine-${category}-${fullKey}`;
+      let style: React.CSSProperties = {};
   
       if ('value' in token) {
         let matchingValue;
@@ -54,9 +62,59 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category }) => {
             : token.value;
         }
   
+        switch (category) {
+          case 'color':
+            if (matchingValue.startsWith('#')) {
+              style.backgroundColor = matchingValue;
+              style.width = "30px";
+              style.height = "30px";
+            } else {
+              style.color = matchingValue;
+            }
+            break;
+          case 'border':
+            style.border = matchingValue;
+            style.width = "30px";
+            style.height = "30px";
+            break;
+          case 'border-radius':
+            style.borderRadius = matchingValue;
+            style.width = "100px";
+            style.height = "50px";
+            style.border = "1px solid black";
+            break;
+          case 'box-shadow':
+            style.boxShadow = matchingValue;
+            break;
+          case 'letter-spacing':
+            style.letterSpacing = matchingValue;
+            break;
+          case 'line-height':
+            style.lineHeight = matchingValue;
+            break;
+          case 'font-weight':
+            style.fontWeight = matchingValue;
+            break;
+          case 'font-family':
+            style.fontFamily = matchingValue;
+            break;
+          case 'font-size':
+            style.fontSize = matchingValue;
+            break;
+          default:
+            // Handle other token types or use a default style
+            break;
+        }
+        console.log('matchingvalue: ', matchingValue);
+
+        // MOVE THIS TO THE FIRST TABLE CELL
+
+
         return (
           <tr key={fullKey}>
-            <td style={{ backgroundColor: `var(${prefixedKey})` }}></td>
+            <td>
+              <div style={style}>Aa</div>
+            </td>
             <td>{prefixedKey}</td>
             <td>{matchingValue}</td>
           </tr>
@@ -78,7 +136,7 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category }) => {
         </tr>
       </thead>
       <tbody>
-        {renderTableRows(semanticTokens)}
+        {renderTableRows(pineTokens)}
       </tbody>
     </table>
   );
