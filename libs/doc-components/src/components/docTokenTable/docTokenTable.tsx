@@ -101,20 +101,41 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ type, category }) => {
           case 'font-size':
             style.fontSize = matchingValue;
             break;
+          case 'spacing':
+            // Render spacing cell
+            return (
+              <tr key={fullKey}>
+                <td>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: `var(${prefixedKey})`}}>
+                    <div style={{ border: '1px solid black', width: '30px', height: '30px' }}></div>
+                    <div style={{ border: '1px solid black', width: '30px', height: '30px' }}></div>
+                  </div>
+                </td>
+                <td>{prefixedKey}</td>
+                <td>{matchingValue}</td>
+              </tr>
+            );
           default:
-            // Handle other token types or use a default style
-            break;
+            // For other categories, render an empty div with the computed style
+            return (
+              <tr key={fullKey}>
+                <td>
+                  <div style={style}></div>
+                </td>
+                <td>{prefixedKey}</td>
+                <td>{matchingValue}</td>
+              </tr>
+            );
         }
         console.log('matchingvalue: ', matchingValue);
 
-        // MOVE THIS TO THE FIRST TABLE CELL
-
+        // Render "Aa" preview only for text-based styles
+      const isTextBasedStyle = ['letter-spacing', 'line-height', 'font-weight', 'font-family', 'font-size'].includes(category);
+      const preview = isTextBasedStyle ? <div style={style}>Aa</div> : <div style={style}></div>;
 
         return (
           <tr key={fullKey}>
-            <td>
-              <div style={style}>Aa</div>
-            </td>
+            <td>{preview}</td>
             <td>{prefixedKey}</td>
             <td>{matchingValue}</td>
           </tr>
