@@ -9,7 +9,7 @@ export const config: Config = {
   globalStyle: 'src/global/styles/app.scss',
   devServer: {
     openBrowser: false,
-    port: 7100
+    port: 7300,
   },
   outputTargets: [
     {
