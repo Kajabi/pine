@@ -1,10 +1,10 @@
 :host {
-  --background-color: var(--pine-color-background-form-default);
-  --background-color-disabled: var(--pine-color-grey-200);
-  --background-color-hover: var(--pine-color-grey-100);
+  --background: var(--pine-color-background-form-default);
+  --background-disabled: var(--pine-color-grey-200);
+  --background-hover: var(--pine-color-grey-100);
   --border: var(--pine-border-interactive);
-  --border-color-disabled: var(--pine-color-charcoal-100);
-  --border-color-hover: var(--pine-border-interactive-hover);
+  --border-disabled: var(--pine-color-charcoal-100);
+  --border-hover: var(--pine-border-interactive-hover);
   --border-color-icon: var(--pine-color-white);
   --border-radius: var(--pine-border-radius-050);
   --box-shadow-focus: 0 0 0 2px var(--pine-color-primary-200);
@@ -14,8 +14,8 @@
   --color-focus: var(--pine-color-primary-200);
   --color-invalid-focus: var(--pine-color-red-200);
   --color-invalid: var(--pine-color-red-300);
-  --message-color-disabled: var(--pine-color-grey-500);
   --message-color: var(--pine-color-charcoal-200);
+  --text-color-disabled: var(--pine-color-grey-500);
   --input-size: 16px;
 
   align-items: center;
@@ -55,7 +55,7 @@
 
 input {
   appearance: none;
-  background-color: var(--background-color);
+  background-color: var(--background);
   border: var(--border);
   border-radius: var(--border-radius);
   height: var(--input-size);
@@ -64,8 +64,8 @@ input {
   width: var(--input-size);
 
   &:hover {
-    background: var(--background-color-hover);
-    border-color: var(--border-color-hover);
+    background: var(--background-hover);
+    border: var(--border-hover);
   }
 
   &:checked {
@@ -88,7 +88,7 @@ input {
   }
 
   &:disabled {
-    background: var(--background-color-disabled);
+    background: var(--background-disabled);
     border-color: var(--color-disabled);
     cursor: not-allowed;
 
@@ -97,17 +97,17 @@ input {
       border-color: var(--color-disabled);
 
       &::after {
-        border-color: var(--border-color-disabled);
+        border-color: var(--border-disabled);
       }
     }
 
     + label {
-      color: var(--border-color-hover);
+      color: var(--text-color-disabled);
       cursor: not-allowed;
     }
 
     ~ .pds-checkbox__message {
-      color: var(--message-color-disabled);
+      color: var(--text-color-disabled);
     }
   }
 
