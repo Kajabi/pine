@@ -4,18 +4,18 @@
 
 details {
   --animation-transform-timing: 200ms;
-  --border-radius: var(--pine-spacing-xs);
-  --box-shadow-focus: inset 0 0 0 2px var(--pine-color-primary-200);
-  --color-content-background: var(--pine-base-color-white);
-  --color-background-hover: var(--pine-color-neutral-grey-300);
-  --color-font: var(--pine-color-neutral-charcoal-200);
-  --color-font-active: var(--pine-color-neutral-charcoal-500);
-  --color-font-hover: var(--pine-color-neutral-charcoal-300);
-  --font-weight: var(--pine-font-weight-semibold);
-  --spacing-details-padding-inline: 12px;
-  --spacing-summary-padding-block: var(--pine-spacing-xxs);
-  --spacing-summary-padding-inline-start: var(--pine-spacing-xs);
-  --spacing-summary-padding-inline-end: var(--pine-spacing-xxs);
+  --border-radius: var(--pine-border-radius-default);
+  --box-shadow-focus: inset 0 0 0 2px var(--pine-color-blue-200);
+  --color-content-background: var(--pine-color-background-container-default);
+  --color-background-hover: var(--pine-color-grey-300);
+  --color-font: var(--pine-color-charcoal-200);
+  --color-font-active: var(--pine-color-charcoal-500);
+  --color-font-hover: var(--pine-color-charcoal-300);
+  --font: var(--pine-body-semi);
+  --spacing-details-padding-inline: var(--pine-spacing-150);
+  --spacing-summary-padding-block: var(--pine-spacing-050);
+  --spacing-summary-padding-inline-start: var(--pine-spacing-100);
+  --spacing-summary-padding-inline-end: var(--pine-spacing-050);
 
   border-radius: var(--border-radius);
   padding-inline: var(--spacing-details-padding-inline);
@@ -43,7 +43,7 @@ details[open] {
 
   summary {
     color: var(--color-font-active);
-    font-weight: var(--font-weight);
+    font: var(--font);
 
     pds-icon {
       transform: scaleY(-1);
@@ -66,7 +66,7 @@ details[open] {
 summary {
   border-radius: var(--border-radius);
   color: var(--color-font);
-  font-weight: var(--font-weight);
+  font: var(--font);
   padding-block: var(--spacing-summary-padding-block);
   padding-inline-end: var(--spacing-summary-padding-inline-end);
   padding-inline-start: var(--spacing-summary-padding-inline-start);
