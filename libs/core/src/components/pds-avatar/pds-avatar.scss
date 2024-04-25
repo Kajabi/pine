@@ -4,21 +4,22 @@
 
 div {
   // These custom props are not reachable
-  --background-color: var(--pine-color-primary-100);
-  --badge-background-color: var(--pine-color-base-white);
-  --border: var(--pine-border-default);
-  --radius-round: 50%;
+  --color-background-container: var(--pine-color-blue-100);
+  --color-background-badge: var(--pine-color-background-container-default);
+  --border-color-badge: var(--pine-color-white);
+  --border-default: var(--pine-border-default);
+  --border-radius-round: var(--pine-border-radius-circle);
 
   align-items: center;
-  background-color: var(--background-color);
-  border-radius: var(--admin-radius-round, var(--radius-round));
+  background-color: var(--color-background-container);
+  border-radius: var(--border-radius-admin-round, var(--border-radius-round));
   display: inline-flex;
   justify-content: center;
   position: relative;
 
   :host(.pds-avatar--admin) & {
-    --admin-radius-round: 12px;
-    border-radius: var(--admin-radius-round);
+    --border-radius-admin-round: var(--pine-spacing-150);
+    border-radius: var(--border-radius-admin-round);
   }
 
   // Remove when FF has support for :has
@@ -35,13 +36,13 @@ div {
 
 .pds-avatar__button {
   --box-shadow-focus: 0 0 0 2px var(--pine-color-primary-200);
-  --radius-round: 50%;
+  --border-radius-round: 50%;
 
   align-items: center;
   appearance: none;
   background: transparent;
   border: 0;
-  border-radius: var(--radius-round);
+  border-radius: var(--border-radius-round);
   cursor: pointer;
   display: flex;
   padding: 0;
@@ -54,17 +55,17 @@ div {
 }
 
 .pds-avatar__badge {
-  background-color: var(--badge-background-color);
-  border: var(--border);
-  border-color: var(--badge-background-color);
-  border-radius: var(--radius-round);
+  background-color: var(--color-background-badge);
+  border: var(--border-default);
+  border-color: var(--border-color-badge);
+  border-radius: var(--border-radius-round);
   bottom: 0;
   position: absolute;
   right: 0;
 }
 
 img {
-  border-radius: var(--admin-radius-round, var(--radius-round));
+  border-radius: var(--border-radius-admin-round, var(--border-radius-round));
   height: 100%;
   object-fit: cover;
   width: 100%;
