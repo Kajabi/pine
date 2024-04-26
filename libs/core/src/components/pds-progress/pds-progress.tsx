@@ -19,7 +19,7 @@ export class PdsProgress {
 
   /**
   * Sets the progress fill color. Accepts a color token or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
-  * @defaultValue 'var(--pds-color-primary)'
+  * @defaultValue 'var(--pine-color-blue-300)'
   */
   @Prop() fillColor: string;
 
@@ -50,7 +50,7 @@ export class PdsProgress {
           <progress
             id={this.componentId}
             max="100"
-            style={this.fillColor ? { '--progress-fill-color': this.fillColor } : {}}
+            style={this.fillColor ? { '--color-progress-fill': this.fillColor } : {}}
             value={this.percent}
           >
           </progress>

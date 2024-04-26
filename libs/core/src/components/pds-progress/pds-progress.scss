@@ -1,6 +1,6 @@
 :host {
-  --progress-fill-color: var(--pine-color-primary-300);
-  --height-progress-bar: 8px;
+  --color-progress-fill: var(--pine-color-blue-300);
+  --sizing-progress-bar-height: 8px;
 
   align-items: center;
   display: flex;
@@ -17,15 +17,15 @@
 }
 
 .pds-progress {
-  --background-progress-bar: var(--pine-color-neutral-grey-300);
-  --border-radius: var(--pine-border-radius-xs);
+  --border-radius: var(--pine-border-radius-050);
+  --color-progress-bar-background: var(--pine-color-grey-300);
 
   align-items: center;
-  background-color: var(--background-progress-bar);
+  background-color: var(--color-progress-bar-background);
   border-radius: var(--border-radius);
   display: flex;
   flex-direction: row;
-  height: var(--height-progress-bar);
+  height: var(--sizing-progress-bar-height);
   position: relative;
   width: 100%;
 }
@@ -40,23 +40,23 @@ progress,
 progress::-webkit-progress-bar {
   background-color: transparent;
   border: 0;
-  height: var(--height-progress-bar);
+  height: var(--sizing-progress-bar-height);
   width: 100%;
 }
 
 progress::-webkit-progress-value {
-  --background-color: var(--pine-color-primary-300);
-  --border-radius: var(--pine-border-radius-xs);
+  --border-radius: var(--pine-border-radius-050);
+  --color-background: var(--pine-color-blue-300);
 
-  background-color: var(--progress-fill-color, var(--background-color));
+  background-color: var(--color-progress-fill, var(--color-background));
   border-radius: var(--border-radius);
 }
 
 progress::-moz-progress-bar {
-  --background-color: var(--pine-color-primary-300);
-  --border-radius: var(--pine-border-radius-xs);
+  --color-background: var(--pine-color-blue-300);
+  --border-radius: var(--pine-border-radius-050);
 
-  background-color: var(--progress-fill-color, var(--background-color));
+  background-color: var(--color-progress-fill, var(--color-background));
   border-radius: var(--border-radius);
 }
 
@@ -72,13 +72,13 @@ progress::-moz-progress-bar {
 }
 
 .pds-progress__percentage {
-  --font-size: var(--pine-font-size-body-sm);
-  --line-height: var(--pine-line-height-sm);
+  --font-size: var(--pine-font-size-087);
   --font-weight: var(--pine-font-weight-medium);
-  --margin-inline-start: var(--pine-spacing-md);
+  --line-height: var(--pine-line-height-150);
+  --spacing-inline-start-margin: var(--pine-spacing-300);
 
   font-size: var(--font-size);
   font-weight: var(--font-weight);
   line-height: var(--line-height);
-  margin-inline-start: calc(var(--margin-inline-start) / 2);
+  margin-inline-start: calc(var(--spacing-inline-start-margin) / 2);
 }
