@@ -1,24 +1,25 @@
 pds-tab {
-  --background-color-tab: var(--pine-color-neutral-grey-300);
-  --background-color-tab-active: var(--pine-color-neutral-charcoal-400);
-  --background-color-tab-hover: var(--pine-color-neutral-grey-400);
-  --border-radius: var(--pine-border-radius-md);
-  --box-shadow-focus: 0 0 0 2px var(--pine-color-primary-200);
-
-  --color: var(--pine-color-neutral-charcoal-200);
-  --color-active: var(--pine-color-neutral-charcoal-400);
-  --color-focus: var(--pine-color-neutral-charcoal-300);
-  --color-white: var(--pine-color-base-white);
-
-  --font-size-body: var(--pine-font-size-body);
-  --font-size-sm: var(--pine-font-size-body-sm);
-  --font-size-xs: var(--pine-font-size-body-xs);
-  --font-weight: var(--pine-font-weight-medium);
-  --line-height-md: var(--pine-line-height-md);
-  --line-height-sm: var(--pine-line-height-sm);
-  --line-height-xs: var(--pine-line-height-xs);
-
-  --outline: 4px solid var(--pine-color-primary-200);
+  --border-radius-default: var(--pine-border-radius-125);
+  --border-radius-availability: var(--pine-border-radius-100);
+  --border-radius-none: var(--pine-border-radius-0);
+  --box-shadow-focus: 0 0 0 2px var(--pine-color-blue-200);
+  --color-background-availability: var(--pine-color-white);
+  --color-background-default: var(--pine-color-grey-300);
+  --color-background-active: var(--pine-color-charcoal-400);
+  --color-background-hover: var(--pine-color-grey-400);
+  --color-text-default: var(--pine-color-charcoal-200);
+  --color-text-active: var(--pine-color-charcoal-400);
+  --color-text-focus: var(--pine-color-charcoal-300);
+  --color-text-active-inverse: var(--pine-color-white);
+  --font-size-availability-content: var(--pine-font-size-075);
+  --font-size-default: var(--pine-font-size-100);
+  --font-size-filter-content: var(--pine-font-size-087);
+  --font-weight-default: var(--pine-font-weight-medium);
+  --line-height-default: var(--pine-line-height-150);
+  --line-height-filter-content: var(--pine-line-height-125);
+  --line-height-availability-content: var(--pine-line-height-100);
+  --spacing-padding-none: var(--pine-spacing-0);
+  --outline: 4px solid var(--pine-color-blue-200);
 
   display: inline-block;
   position: relative;
@@ -30,19 +31,19 @@ pds-tab {
 @mixin pds-button-style-reset {
   appearance: none;
   background-color: transparent;
-  border: 0;
+  border: var(--border-radius-none);
   box-shadow: none;
   color: inherit;
   cursor: pointer;
   font-family: inherit;
-  padding: 0;
+  padding: var(--spacing-padding-none);
 }
 
 .pds-tab {
   @include pds-button-style-reset();
 
   align-items: center;
-  color: var(--color);
+  color: var(--color-text-default);
   display: inline-flex;
   position: relative;
   text-decoration: none;
@@ -50,7 +51,7 @@ pds-tab {
 
   &.is-active,
   &[aria-selected='true'] {
-    color: var(--color-active);
+    color: var(--color-text-active);
 
     .pds-tab__content::after {
       opacity: 1;
@@ -58,7 +59,7 @@ pds-tab {
   }
 
   &:hover {
-    color: var(--color-active);
+    color: var(--color-text-active);
   }
 
   &:focus-visible {
@@ -69,9 +70,9 @@ pds-tab {
 
   .pds-tab__content {
     font-family: inherit;
-    font-size: var(--font-size-body);
-    font-weight: var(--font-weight);
-    line-height: var(--line-height-md);
+    font-size: var(--font-size-default);
+    font-weight: var(--font-weight-default);
+    line-height: var(--line-height-default);
     padding-block-end: 11px;
     position: relative;
 
@@ -93,16 +94,16 @@ pds-tab {
 }
 
 .pds-tabs--availability {
-  --tab-background-color: transparent;
+  --color-background-tab: transparent;
 
   .pds-tab {
-    background-color: var(--tab-background-color);
-    border-radius: 8px 8px 0 0;
+    background-color: var(--color-background-tab);
+    border-radius: var(--border-radius-availability) var(--border-radius-availability) var(--border-radius-none) var(--border-radius-none);
     padding: 8px 16px 13px;
 
     &.is-active,
     &[aria-selected='true'] {
-      --tab-background-color: var(--color-white);
+      --color-background-tab: var(--color-background-availability);
 
       .pds-tab__content::after {
         opacity: 1;
@@ -114,17 +115,17 @@ pds-tab {
     }
 
     &:hover:not(.is-active, [aria-selected='true']) {
-      --tab-background-color: var(--background-color-tab);
+      --color-background-tab: var(--color-background-default);
     }
 
     &:focus-visible {
-      color: var(--color);
+      color: var(--color-text-default);
     }
   }
 
   .pds-tab__content {
-    font-size: var(--font-size-xs);
-    line-height: var(--line-height-xs);
+    font-size: var(--font-size-availability-content);
+    line-height: var(--line-height-availability-content);
     padding-bottom: 7px;
   }
 
@@ -140,7 +141,7 @@ pds-tab {
     &::before {
       border-radius: 50%;
       bottom: 0;
-      box-shadow: 4px 4px 0 0 var(--tab-background-color);
+      box-shadow: 4px 4px 0 0 var(--color-background-tab);
       content: '';
       display: block;
       height: 200%;
@@ -155,7 +156,7 @@ pds-tab {
     inset-inline-start: 100%;
 
     &::before {
-      box-shadow: -4px 4px 0 0 var(--tab-background-color);
+      box-shadow: -4px 4px 0 0 var(--color-background-tab);
       inset-inline-end: unset;
       inset-inline-start: 0;
     }
@@ -163,28 +164,28 @@ pds-tab {
 }
 
 .pds-tabs--filter {
-  --tab-background-color: var(--background-color-tab);
+  --color-background-tab: var(--color-background-active);
 
   .pds-tab {
-    background-color: var(--tab-background-color);
+    background-color: var(--color-background-tab);
     border-radius: 50px;
-    color: var(--color-active);
+    color: var(--color-text-active);
     padding: 6px 15px;
 
     &.is-active,
     &[aria-selected='true'] {
-      --tab-background-color: var(--background-color-tab-active);
-      color: var(--color-white)
+      --color-background-tab: var(--color-background-active);
+      color: var(--color-text-active-inverse)
     }
 
     &:hover:not(.is-active, [aria-selected='true']) {
-      --tab-background-color: var(--background-color-tab-hover);
+      --color-background-tab: var(--color-background-hover);
     }
   }
 
   .pds-tab__content {
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-sm);
+    font-size: var(--font-size-filter-content);
+    line-height: var(--line-height-filter-content);
     padding-block-end: 0;
 
     &::after {
