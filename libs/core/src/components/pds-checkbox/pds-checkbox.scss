@@ -1,7 +1,5 @@
 :host {
-  --border: var(--pine-border-width-thin) solid var(--pine-color-grey-400);
-  --border-color-disabled: var(--pine-color-charcoal-100);
-  --border-color-icon: var(--pine-color-white);
+  --border-default: var(--pine-border-width-thin) solid var(--pine-color-grey-400);
   --border-color-interactive-hover: var(--pine-border-width-thin) solid var(--pine-color-grey-500);
   --border-radius: var(--pine-border-radius-050);
   --box-shadow-focus: 0 0 0 2px var(--pine-color-primary-200);
@@ -9,11 +7,12 @@
   --color-background: var(--pine-color-white);
   --color-background-disabled: var(--pine-color-grey-200);
   --color-background-hover: var(--pine-color-grey-100);
+  --color-border-disabled: var(--pine-color-charcoal-100);
+  --color-border-icon: var(--pine-color-white);
   --color-checked: var(--pine-color-charcoal-500);
   --color-disabled: var(--pine-color-grey-300);
   --color-focus: var(--pine-color-primary-200);
   --color-invalid: var(--pine-color-red-300);
-  --color-invalid-focus: var(--pine-color-red-200);
   --color-message-text: var(--pine-color-charcoal-200);
   --color-text-disabled: var(--pine-color-grey-500);
   --input-size: 16px;
@@ -56,7 +55,7 @@
 input {
   appearance: none;
   background-color: var(--color-background);
-  border: var(--border);
+  border: var(--border-default);
   border-radius: var(--border-radius);
   height: var(--input-size);
   margin: 0;
@@ -73,7 +72,7 @@ input {
     border-color: var(--color-checked);
 
     &::after {
-      border: 1px solid var(--border-color-icon);
+      border: 1px solid var(--color-border-icon);
       border-left: 0;
       border-top: 0;
       content: "";
@@ -97,7 +96,7 @@ input {
       border-color: var(--color-disabled);
 
       &::after {
-        border-color: var(--border-color-disabled);
+        border-color: var(--color-border-disabled);
       }
     }
 
