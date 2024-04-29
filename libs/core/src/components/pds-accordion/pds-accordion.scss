@@ -26,6 +26,16 @@ details {
   }
 }
 
+@keyframes slide-down {
+  from {
+    transform: translateY(-100%)
+  }
+
+  to {
+    transform: translateY(0%);
+  }
+}
+
 /* stylelint-disable-next-line */
 details[open] {
   background-color: var(--color-content-background);
@@ -89,6 +99,7 @@ summary {
 }
 
 .pds-accordion__body {
+  animation: slide-down var(--animation-transform-timing);
   max-height: 0;
   overflow: hidden;
 }
