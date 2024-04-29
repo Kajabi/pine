@@ -14,7 +14,7 @@ interface DocTokenTableProps {
   category: string;
 }
 
-const findValueByKey = (obj: any, keyPath: string): string | undefined => {
+const findValueByKey = (obj: Record<string, any>, keyPath: string): string | undefined => {
   if (obj === null || typeof obj !== 'object') {
     return undefined;
   }
@@ -23,7 +23,7 @@ const findValueByKey = (obj: any, keyPath: string): string | undefined => {
   let value = obj;
 
   for (const key of keys) {
-    if (typeof value !== 'object' || !value.hasOwnProperty(key)) {
+    if (typeof value !== 'object' || !Object.prototype.hasOwnProperty.call(value, key)) {
       return undefined;
     }
     value = value[key];
@@ -45,7 +45,7 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ type, category }) => {
     return Object.entries(tokens).map(([key, token]): JSX.Element => {
       const fullKey = parentKey ? `${parentKey}-${key}` : key;
       const prefixedKey = `--pine-${category}-${fullKey}`;
-      let style: React.CSSProperties = {};
+      const style: React.CSSProperties = {};
   
       if ('value' in token) {
         let matchingValue: string | undefined;
