@@ -1,39 +1,53 @@
 :host(.pds-copytext) {
 
-  --background: var(--pine-color-base-white);
-  --background-hover: var(--pine-color-neutral-grey-200);
-  --border: var(--pine-border-interactive);
-  --border-hover: var(--pine-border-interactive-hover-color);
-  --border-radius: var(--pine-border-radius-md);
-  --box-shadow-focus: 0 0 0 2px var(--pine-color-primary-200);
-  --color-hover: var(--pine-color-neutral-charcoal-400);
-  --font-size: var(--pine-font-size-body);
-  --font-weight: var(--pine-font-weight-semibold);
-  --line-height: var(--pine-line-height-md);
-  --spacing-sm: var(--pine-spacing-sm);
-  --spacing-xs: var(--pine-spacing-xs);
-  --spacing-xxs: var(--pine-spacing-xxs);
+  --border-interactive-default: var(--pine-border-width-thin) solid var(--pine-color-grey-300);
+  --border-interactive-hover: var(--pine-border-width-thin) solid var(--pine-color-grey-400);
+
+  --border-radius-default: var(--pine-border-radius-125);
+  --border-radius-hover: var(--pine-border-radius-0);
+
+  --border-width-default: var(--pine-border-width-none);
+
+  --box-shadow-focus: 0 0 0 2px var(--pine-color-blue-200);
+
+  --color-background-default: var(--pine-color-white);
+  // Update custom prop usage in Button before changing
+  --copytext-color-background-hover: var(--pine-color-grey-200);
+  --color-border-interactive-hover: var(--pine-color-grey-400);
+  --color-text-hover: var(--pine-color-charcoal-400);
+
+  --font-size-default: var(--pine-font-size-100);
+  --font-weight-default: var(--pine-font-weight-semi-bold);
+
+  --spacing-bordered-margin-inline-end: var(--pine-spacing-200);
+  --spacing-bordered-padding-block: var(--pine-spacing-100);
+  --spacing-bordered-padding-inline: var(--pine-spacing-200);
+  --spacing-margin-inline-end: var(--pine-spacing-100);
+  --spacing-padding-block: var(--pine-spacing-050);
+  --spacing-padding-inline: var(--pine-spacing-100);
+  --spacing-padding-none: var(--pine-spacing-0);
+
+  --typography-default: var(--pine-font-weight-medium) var(--pine-font-size-100)/var(--pine-line-height-150) var(--pine-font-family-circular);
 
   pds-button {
     align-items: center;
-    background: var(--background);
-    border: 0;
-    border-radius: var(--border-radius);
+    background: var(--color-background-default);
+    border: var(--border-width-default);
+    border-radius: var(--border-radius-default);
     display: inline-flex;
-    font-size: var(--font-size);
-    font-weight: var(--font-weight);
+    font: var(--typography-default);
     max-width: 100%;
-    padding: var(--spacing-xxs) var(--spacing-xs);
+    padding: var(--spacing-padding-block) var(--spacing-padding-inline);
 
     &::part(button):hover {
-      background-color: var(--background-hover);
-      border-radius: none;
-      color: var(--color-hover);
+      // Update custom prop usage in Button before changing
+      background-color: var(--copytext-color-background-hover);
+      border-radius: var(--border-radius-hover);
+      color: var(--color-text-hover);
     }
 
     span {
-      line-height: var(--line-height);
-      margin-inline-end: var(--spacing-xs);
+      margin-inline-end: var(--spacing-margin-inline-end);
       white-space: nowrap;
     }
 
@@ -45,11 +59,11 @@
   // bordered
 
   &:host(.pds-copytext--bordered) {
-    border: 0;
-    padding: 0;
+    border: var(--border-width-default);
+    padding: var(--spacing-padding-none);
 
     pds-button {
-      padding: 0;
+      padding: var(--spacing-padding-none);
 
       &:hover {
         background: none;
@@ -57,16 +71,16 @@
     }
 
     span {
-      border: var(--border);
-      border-radius: var(--border-radius);
-      margin-inline-end: var(--spacing-sm);
-      padding-block: var(--spacing-xs);
-      padding-inline: var(--spacing-sm);
+      border: var(--border-interactive-default);
+      border-radius: var(--border-radius-default);
+      margin-inline-end: var(--spacing-bordered-margin-inline-end);
+      padding-block: var(--spacing-bordered-padding-block);
+      padding-inline: var(--spacing-bordered-padding-inline);
     }
 
     :hover {
       span {
-        border-color: var(--border-hover)
+        border: var(--border-interactive-hover);
       }
     }
   }
