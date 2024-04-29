@@ -34,9 +34,9 @@
   --spacing-xl: var(--pine-spacing-150);
   --spacing-xxl: calc(var(--pine-spacing-350) / 2);
 
-  --dot-size: var(--spacing-xs);
-  --close-size: var(--spacing-lg);
-  --close-size-lg: calc(var(--spacing-xl) * 2);
+  --close-size: 10px;
+  --close-size-lg: 24px;
+  --dot-size: 4px;
 
   align-items: center;
   border-radius: var(--border-radius);
@@ -114,7 +114,7 @@ $pds-chip-sentiment-interactive: (
   padding: 0;
 
   .pds-chip__dot {
-    margin-block-end: 1px;
+    margin-block-end: calc(var(--spacing-xxs) / 4);
     margin-block-start: var(--spacing-xxs);
   }
 }
