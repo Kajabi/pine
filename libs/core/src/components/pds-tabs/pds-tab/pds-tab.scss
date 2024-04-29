@@ -1,25 +1,32 @@
 pds-tab {
-  --border-radius-default: var(--pine-border-radius-125);
   --border-radius-availability: var(--pine-border-radius-100);
+  --border-radius-default: var(--pine-border-radius-125);
   --border-radius-none: var(--pine-border-radius-0);
+
   --box-shadow-focus: 0 0 0 2px var(--pine-color-blue-200);
+
+  --color-background-active: var(--pine-color-charcoal-400);
   --color-background-availability: var(--pine-color-white);
   --color-background-default: var(--pine-color-grey-300);
-  --color-background-active: var(--pine-color-charcoal-400);
   --color-background-hover: var(--pine-color-grey-400);
-  --color-text-default: var(--pine-color-charcoal-200);
   --color-text-active: var(--pine-color-charcoal-400);
-  --color-text-focus: var(--pine-color-charcoal-300);
   --color-text-active-inverse: var(--pine-color-white);
+  --color-text-default: var(--pine-color-charcoal-200);
+  --color-text-focus: var(--pine-color-charcoal-300);
+
   --font-size-availability-content: var(--pine-font-size-075);
   --font-size-default: var(--pine-font-size-100);
   --font-size-filter-content: var(--pine-font-size-087);
+
   --font-weight-default: var(--pine-font-weight-medium);
+
+  --line-height-availability-content: var(--pine-line-height-100);
   --line-height-default: var(--pine-line-height-150);
   --line-height-filter-content: var(--pine-line-height-125);
-  --line-height-availability-content: var(--pine-line-height-100);
-  --spacing-padding-none: var(--pine-spacing-0);
+
   --outline: 4px solid var(--pine-color-blue-200);
+
+  --spacing-padding-none: var(--pine-spacing-0);
 
   display: inline-block;
   position: relative;

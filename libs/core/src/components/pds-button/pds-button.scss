@@ -1,10 +1,45 @@
 :host {
-  --color-border-default: transparent;
-  --color-border-hover: transparent;
-  --color-border-focus: transparent;
-  --color-border-disabled: transparent;
   --border-width-default: var(--pine-border-width-thin);
   --border-width-unstyled: var(--pine-border-radius-0);
+
+  --color-border-default: transparent;
+  --color-border-disabled: transparent;
+  --color-border-focus: transparent;
+  --color-border-hover: transparent;
+
+  // primary
+  --color-background-primary-default: var(--pine-color-background-action-primary-default);
+  --color-background-primary-disabled: var(--pine-color-background-action-primary-disabled);
+  --color-background-primary-hover: var(--pine-color-background-action-primary-hover);
+  --color-text-primary-default: var(--pine-color-text-action-primary-default);
+  --color-text-primary-disabled: var(--pine-color-text-action-primary-disabled);
+  --color-outline-primary: var(--pine-color-blue-200);
+
+  // secondary
+  --color-border-secondary-default: var(--pine-color-grey-400);
+  --color-border-secondary-disabled: var(--pine-color-grey-300);
+  --color-border-secondary-focus: var(--pine-color-grey-300);
+  --color-border-secondary-hover: var(--pine-color-grey-500);
+  --color-text-secondary-default: var(--pine-color-text-body-default);
+  --color-text-secondary-disabled: var(--pine-color-text-action-primary-disabled);
+  --color-outline-secondary: var(--pine-color-blue-200);
+
+  // accent
+  --color-background-accent-default: var(--pine-color-background-action-accent-default);
+  --color-background-accent-disabled: var(--pine-color-background-action-accent-disabled);
+  --color-background-accent-hover: var(--pine-color-background-action-accent-hover);
+  --color-text-accent-default: var(--pine-color-text-action-accent-default);
+  --color-text-accent-disabled: var(--pine-color-text-action-accent-disabled);
+  --color-outline-accent: var(--pine-color-blue-200);
+
+  // destructive
+  --color-background-destructive-default: var(--pine-color-background-action-destructive-default);
+  --color-background-destructive-disabled: var(--pine-color-background-action-destructive-disabled);
+  --color-background-destructive-hover: var(--pine-color-background-action-destructive-hover);
+  --color-text-destructive-default: var(--pine-color-text-action-destructive-default);
+  --color-text-destructive-disabled: var(--pine-color-text-action-destructive-disabled);
+  --color-outline-destructive: var(--pine-color-red-200);
+
   --spacing-disclosure-icon-margin-inline-end: var(--pine-spacing-0);
   --spacing-disclosure-margin-inline-start: var(--pine-spacing-100);
   --spacing-icon-margin-inline-end: var(--pine-spacing-100);
@@ -12,40 +47,8 @@
   --spacing-padding-inline: var(--pine-spacing-200);
   --spacing-unstyled-padding: var(--pine-spacing-0);
   --spacing-unstyled-margin: var(--pine-spacing-0);
+
   --typography-default: var(--pine-body-med);
-
-  // primary
-  --color-background-primary-default: var(--pine-color-background-action-primary-default);
-  --color-background-primary-hover: var(--pine-color-background-action-primary-hover);
-  --color-background-primary-disabled: var(--pine-color-background-action-primary-disabled);
-  --color-text-primary-default: var(--pine-color-text-action-primary-default);
-  --color-text-primary-disabled: var(--pine-color-text-action-primary-disabled);
-  --color-outline-primary: var(--pine-color-blue-200);
-
-  // secondary
-  --color-border-secondary-default: var(--pine-color-grey-400);
-  --color-border-secondary-hover: var(--pine-color-grey-500);
-  --color-border-secondary-focus: var(--pine-color-grey-300);
-  --color-border-secondary-disabled: var(--pine-color-grey-300);
-  --color-text-secondary-default: var(--pine-color-text-body-default);
-  --color-text-secondary-disabled: var(--pine-color-text-action-primary-disabled);
-  --color-outline-secondary: var(--pine-color-blue-200);
-
-  // accent
-  --color-background-accent-default: var(--pine-color-background-action-accent-default);
-  --color-background-accent-hover: var(--pine-color-background-action-accent-hover);
-  --color-background-accent-disabled: var(--pine-color-background-action-accent-disabled);
-  --color-text-accent-default: var(--pine-color-text-action-accent-default);
-  --color-text-accent-disabled: var(--pine-color-text-action-accent-disabled);
-  --color-outline-accent: var(--pine-color-blue-200);
-
-  // destructive
-  --color-background-destructive-default: var(--pine-color-background-action-destructive-default);
-  --color-background-destructive-hover: var(--pine-color-background-action-destructive-hover);
-  --color-background-destructive-disabled: var(--pine-color-background-action-destructive-disabled);
-  --color-text-destructive-default: var(--pine-color-text-action-destructive-default);
-  --color-text-destructive-disabled: var(--pine-color-text-action-destructive-disabled);
-  --color-outline-destructive: var(--pine-color-red-200);
 
   display: inline-flex;
   vertical-align: middle;

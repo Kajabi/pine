@@ -5,10 +5,14 @@
 div {
   // These custom props are not reachable
   --color-background-container: var(--pine-color-blue-100);
-  --color-background-badge: var(--pine-color-background-container-default);
-  --border-color-badge: var(--pine-color-white);
-  --border-default: var(--pine-border-default);
-  --border-radius-round: var(--pine-border-radius-circle);
+  --color-background-badge: var(--pine-color-white);
+  --color-border-badge: var(--pine-color-white);
+
+  --border-default: var(--pine-border-width-thin) solid var(--pine-color-grey-300);
+  --border-radius-round: var(--pine-border-radius-round);
+  --border-radius-none: var(--pine-border-radius-0);
+
+  --spacing-none: var(--pine-spacing-0);
 
   align-items: center;
   background-color: var(--color-background-container);
@@ -36,16 +40,16 @@ div {
 
 .pds-avatar__button {
   --box-shadow-focus: 0 0 0 2px var(--pine-color-primary-200);
-  --border-radius-round: 50%;
+  --border-radius-round: var(--pine-border-radius-round);
 
   align-items: center;
   appearance: none;
   background: transparent;
-  border: 0;
+  border: var(--border-radius-none);
   border-radius: var(--border-radius-round);
   cursor: pointer;
   display: flex;
-  padding: 0;
+  padding: var(--spacing-none);
 
   &:focus-visible {
     // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
@@ -57,11 +61,11 @@ div {
 .pds-avatar__badge {
   background-color: var(--color-background-badge);
   border: var(--border-default);
-  border-color: var(--border-color-badge);
+  border-color: var(--color-border-badge);
   border-radius: var(--border-radius-round);
-  bottom: 0;
+  bottom: var(--spacing-none);
   position: absolute;
-  right: 0;
+  right: var(--spacing-none);
 }
 
 img {

@@ -4,20 +4,25 @@
 
 details {
   --animation-transform-timing: 200ms;
-  --border-radius: var(--pine-border-radius-default);
+
+  --border-radius-default: var(--pine-border-radius-100);
+
   --box-shadow-focus: inset 0 0 0 2px var(--pine-color-blue-200);
-  --color-content-background: var(--pine-color-background-container-default);
+
+  --color-content-background-default: var(--pine-color-white);
   --color-background-hover: var(--pine-color-grey-300);
-  --color-font: var(--pine-color-charcoal-200);
-  --color-font-active: var(--pine-color-charcoal-500);
-  --color-font-hover: var(--pine-color-charcoal-300);
-  --font: var(--pine-body-semi);
+  --color-text-default: var(--pine-color-charcoal-200);
+  --color-text-active: var(--pine-color-charcoal-500);
+  --color-text-hover: var(--pine-color-charcoal-300);
+  
   --spacing-details-padding-inline: var(--pine-spacing-150);
   --spacing-summary-padding-block: var(--pine-spacing-050);
   --spacing-summary-padding-inline-start: var(--pine-spacing-100);
   --spacing-summary-padding-inline-end: var(--pine-spacing-050);
+  
+  --typography-default: var(--pine-font-weight-semi-bold) var(--pine-font-size-100)/var(--pine-line-height-150) var(--pine-font-family-circular);
 
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-default);
   padding-inline: var(--spacing-details-padding-inline);
 
   pds-icon {
@@ -42,8 +47,8 @@ details[open] {
   transition: transform var(--animation-transform-timing);
 
   summary {
-    color: var(--color-font-active);
-    font: var(--font);
+    color: var(--color-text-active);
+    font: var(--typography-default);
 
     pds-icon {
       transform: scaleY(-1);
@@ -64,9 +69,9 @@ details[open] {
 }
 
 summary {
-  border-radius: var(--border-radius);
-  color: var(--color-font);
-  font: var(--font);
+  border-radius: var(--border-radius-default);
+  color: var(--color-text-default);
+  font: var(--typography-default);
   padding-block: var(--spacing-summary-padding-block);
   padding-inline-end: var(--spacing-summary-padding-inline-end);
   padding-inline-start: var(--spacing-summary-padding-inline-start);
@@ -83,7 +88,7 @@ summary {
 
   &:hover {
     background: var(--color-background-hover);
-    color: var(--color-font-hover);
+    color: var(--color-text-hover);
     cursor: pointer;
   }
 
