@@ -61,6 +61,7 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ type, category }) => {
         }
         
         if (matchingValue) {
+          console.log('category', category );
           switch (category) {
             case 'color':
               if (matchingValue.startsWith('#')) {
@@ -77,10 +78,16 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ type, category }) => {
               style.height = "30px";
               break;
             case 'border-radius':
+              style.border = "1px solid black";
               style.borderRadius = matchingValue;
               style.width = "100px";
               style.height = "50px";
+              break;
+            case 'border-width':
               style.border = "1px solid black";
+              style.borderWidth = matchingValue;
+              style.width = "30px";
+              style.height = "30px";
               break;
             case 'box-shadow':
               style.boxShadow = matchingValue;
