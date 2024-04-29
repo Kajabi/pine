@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.4](https://github.com/Kajabi/pine/compare/@pine-ds/core@0.2.3...@pine-ds/core@0.2.4) (2024-04-29)
+
+
+### Bug Fixes
+
+* **accordion:** animations for safari ([d355c37](https://github.com/Kajabi/pine/commit/d355c377257969a22d3c776b7630bc6b70a3afd4))
+* address style linting issues ([f3bb4c7](https://github.com/Kajabi/pine/commit/f3bb4c7ece060fef14007d01bb846248b4321def))
+* changes script file to mjs to address style-dictionary build issue ([f1f1c2a](https://github.com/Kajabi/pine/commit/f1f1c2adc1b8c3d621ec5c38d383aede274b040a))
+* **checkbox:** the property checkbox should be mutable ([#167](https://github.com/Kajabi/pine/issues/167)) ([4189588](https://github.com/Kajabi/pine/commit/418958882244661b10034c9ca9b5e6c02426340e))
+* removes unnecessary comments and adds color transform for tokens ([67873b0](https://github.com/Kajabi/pine/commit/67873b05350de86b176cedadbfe05cdb14164aed))
+* updates all focus rings to 2px box shadows ([aceeec8](https://github.com/Kajabi/pine/commit/aceeec81f89306c8e725b7b84de68e2b36560f84))
+
+
+
+
+
 ## [0.2.3](https://github.com/Kajabi/pine/compare/@pine-ds/core@0.2.2...@pine-ds/core@0.2.3) (2024-03-19)
 
 

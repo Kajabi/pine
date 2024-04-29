@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.4](https://github.com/Kajabi/pine/compare/@pine-ds/doc-components@0.2.3...@pine-ds/doc-components@0.2.4) (2024-04-29)
+
+**Note:** Version bump only for package @pine-ds/doc-components
+
+
+
+
+
 ## [0.2.3](https://github.com/Kajabi/pine/compare/@pine-ds/doc-components@0.2.2...@pine-ds/doc-components@0.2.3) (2024-03-19)
 
 **Note:** Version bump only for package @pine-ds/doc-components
