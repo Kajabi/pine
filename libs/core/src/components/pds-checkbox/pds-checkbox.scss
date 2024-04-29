@@ -1,21 +1,21 @@
 :host {
-  --background: var(--pine-color-background-form-default);
-  --background-disabled: var(--pine-color-grey-200);
-  --background-hover: var(--pine-color-grey-100);
-  --border: var(--pine-border-interactive);
-  --border-disabled: var(--pine-color-charcoal-100);
-  --border-hover: var(--pine-border-interactive-hover);
+  --border: var(--pine-border-width-thin) solid var(--pine-color-grey-400);
+  --border-color-disabled: var(--pine-color-charcoal-100);
   --border-color-icon: var(--pine-color-white);
+  --border-color-interactive-hover: var(--pine-border-width-thin) solid var(--pine-color-grey-500);
   --border-radius: var(--pine-border-radius-050);
   --box-shadow-focus: 0 0 0 2px var(--pine-color-primary-200);
   --box-shadow-focus-invalid: 0 0 0 2px var(--pine-color-red-200);
+  --color-background: var(--pine-color-white);
+  --color-background-disabled: var(--pine-color-grey-200);
+  --color-background-hover: var(--pine-color-grey-100);
   --color-checked: var(--pine-color-charcoal-500);
   --color-disabled: var(--pine-color-grey-300);
   --color-focus: var(--pine-color-primary-200);
-  --color-invalid-focus: var(--pine-color-red-200);
   --color-invalid: var(--pine-color-red-300);
-  --message-color: var(--pine-color-charcoal-200);
-  --text-color-disabled: var(--pine-color-grey-500);
+  --color-invalid-focus: var(--pine-color-red-200);
+  --color-message-text: var(--pine-color-charcoal-200);
+  --color-text-disabled: var(--pine-color-grey-500);
   --input-size: 16px;
 
   align-items: center;
@@ -55,7 +55,7 @@
 
 input {
   appearance: none;
-  background-color: var(--background);
+  background-color: var(--color-background);
   border: var(--border);
   border-radius: var(--border-radius);
   height: var(--input-size);
@@ -64,8 +64,8 @@ input {
   width: var(--input-size);
 
   &:hover {
-    background: var(--background-hover);
-    border: var(--border-hover);
+    background: var(--color-background-hover);
+    border: var(--border-color-interactive-hover);
   }
 
   &:checked {
@@ -88,7 +88,7 @@ input {
   }
 
   &:disabled {
-    background: var(--background-disabled);
+    background: var(--color-background-disabled);
     border-color: var(--color-disabled);
     cursor: not-allowed;
 
@@ -97,17 +97,17 @@ input {
       border-color: var(--color-disabled);
 
       &::after {
-        border-color: var(--border-disabled);
+        border-color: var(--border-color-disabled);
       }
     }
 
     + label {
-      color: var(--text-color-disabled);
+      color: var(--color-text-disabled);
       cursor: not-allowed;
     }
 
     ~ .pds-checkbox__message {
-      color: var(--text-color-disabled);
+      color: var(--color-text-disabled);
     }
   }
 
@@ -136,7 +136,7 @@ label {
 }
 
 .pds-checkbox__message {
-  color: var(--message-color);
+  color: var(--color-message-text);
   font-size: 14px;
   margin-block-start: 6px;
   margin-inline-start: 26px;
