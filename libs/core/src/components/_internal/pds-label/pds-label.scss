@@ -4,13 +4,13 @@
 }
 
 label, pds-label {
-  --color: var(--pine-color-neutral-charcoal-400);
-  --font-family: var(--pine-font-family-circular);
-  --font-weight: var(--pine-font-weight-medium);
-  --letter-spacing: var(--pine-letter-spacing-xs);
+  --color-text-default: var(--pine-color-neutral-charcoal-400);
+  --font-family-default: var(--pine-font-family-circular);
+  --font-weight-default: var(--pine-font-weight-medium);
+  --letter-spacing-default: var(--pine-letter-spacing-xs);
 
-  color: var(--color);
-  font-family: var(--font-family);
-  font-weight: var(--font-weight);
-  letter-spacing: var(--letter-spacing);
+  color: var(--color-text-default);
+  font-family: var(--font-family-default);
+  font-weight: var(--font-weight-default);
+  letter-spacing: var(--letter-spacing-default);
 }
