@@ -1,5 +1,5 @@
 :host {
-  --border-interactive: var(--pine-border-interactive-default);
+  --border-interactive-default: var(--pine-border-width-thin) solid var( --pine-color-grey-400);
   --border-radius: 50%;
   --box-shadow-focus: 0 0 0 2px var(--color-focus);
   --box-shadow-focus-error: 0 0 0 2px var(--color-invalid-focus);
@@ -49,7 +49,7 @@
 
 input {
   appearance: none;
-  border: var(--border-interactive);
+  border: var(--border-interactive-default);
   border-radius: var(--border-radius);
   height: var(--sizing-input-size);
   margin: 0;
