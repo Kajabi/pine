@@ -38,7 +38,7 @@ export class PdsBox {
    * @defaultValue none
    */
   @Prop() borderRadius?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
-  
+
   /**
    * Defines the orientation of the box items.
    * @defaultValue row
@@ -83,7 +83,7 @@ export class PdsBox {
    * The minimum width of the row. Used in conjunction with alignment props
    */
   @Prop() minWidth?: string;
-  
+
   /**
    * Move columns to the end direction of the row for all screen sizes. Increases the starting margin of a column by specified number of columns.
    */
@@ -190,10 +190,10 @@ export class PdsBox {
     `;
 
     const boxInlineStyles = {
-      ...(this.backgroundColor && { '--box-background-color': this.backgroundColor }),
-      ...(this.borderColor && { '--box-border-color': this.borderColor }),
-      ...(this.minHeight && { '--box-min-height': this.minHeight }),
-      ...(this.minWidth && { '--box-min-width': this.minWidth }),
+      ...(this.backgroundColor && { '--color-background-default': this.backgroundColor }),
+      ...(this.borderColor && { '--color-border-default': this.borderColor }),
+      ...(this.minHeight && { '--sizing-box-min-height': this.minHeight }),
+      ...(this.minWidth && { '--sizing-box-min-width': this.minWidth }),
     };
 
     return (

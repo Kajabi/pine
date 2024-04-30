@@ -15,21 +15,21 @@ describe('pds-box', () => {
       components: [PdsBox],
       html: `<pds-box border-color="#dedede"></pds-box>`,
     });
-    
+
     const element = page.root;
 
     expect(element).toEqualAttribute('style', '--box-border-color: #dedede;');
   });
-  
+
   it('renders a min-height when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsBox],
       html: `<pds-box min-height="175px"></pds-box>`,
     });
-    
+
     const element = page.root;
 
-    expect(element).toEqualAttribute('style', '--box-min-height: 175px;');
+    expect(element).toEqualAttribute('style', '--sizing-box-min-height: 175px;');
   });
 
   it('renders a min-width when prop is set', async () => {
@@ -37,10 +37,10 @@ describe('pds-box', () => {
       components: [PdsBox],
       html: `<pds-box min-width="300px"></pds-box>`,
     });
-    
+
     const element = page.root;
 
-    expect(element).toEqualAttribute('style', '--box-min-width: 300px;');
+    expect(element).toEqualAttribute('style', '--sizing-box-min-height: 300px;');
   });
 
   it('renders align-items class when prop is set', async () => {
@@ -48,7 +48,7 @@ describe('pds-box', () => {
       components: [PdsBox],
       html: `<pds-box align-items="center"></pds-box>`,
     });
-    
+
     const element = page.root;
 
     expect(element).toHaveClass('pds-align-items-center');
@@ -59,7 +59,7 @@ describe('pds-box', () => {
       components: [PdsBox],
       html: `<pds-box auto="true"></pds-box>`,
     });
-    
+
     const element = page.root;
 
     expect(element).toHaveClass('pds-box--auto');
@@ -70,10 +70,10 @@ describe('pds-box', () => {
       components: [PdsBox],
       html: `<pds-box background-color="#dedede"></pds-box>`,
     });
-    
+
     const element = page.root;
 
-    expect(element).toEqualAttribute('style', '--box-background-color: #dedede;');
+    expect(element).toEqualAttribute('style', '--color-background-default: #dedede;');
   });
 
   it('renders border class when prop is set', async () => {
@@ -81,18 +81,18 @@ describe('pds-box', () => {
       components: [PdsBox],
       html: `<pds-box border="true"></pds-box>`,
     });
-    
+
     const element = page.root;
 
     expect(element).toHaveClass('pds-box--border');
   });
-  
+
   it('renders border-color class when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsBox],
       html: `<pds-box border-color="#dedede"></pds-box>`,
     });
-    
+
     const element = page.root;
 
     expect(element).toEqualAttribute('style', '--box-border-color: #dedede;');
@@ -103,7 +103,7 @@ describe('pds-box', () => {
       components: [PdsBox],
       html: `<pds-box border-radius="none"></pds-box>`,
     });
-    
+
     const element = page.root;
 
     expect(element).toHaveClass('pds-border-radius-none');
@@ -114,7 +114,7 @@ describe('pds-box', () => {
       components: [PdsBox],
       html: `<pds-box direction="column"></pds-box>`,
     });
-    
+
     const element = page.root;
 
     expect(element).toHaveClass('pds-box-direction-column');
@@ -125,7 +125,7 @@ describe('pds-box', () => {
       components: [PdsBox],
       html: `<pds-box display="inline-block"></pds-box>`,
     });
-    
+
     const element = page.root;
 
     expect(element).toHaveClass('pds-box--display-inline-block');
@@ -136,7 +136,7 @@ describe('pds-box', () => {
       components: [PdsBox],
       html: `<pds-box fit="true"></pds-box>`,
     });
-    
+
     const element = page.root;
 
     expect(element).toHaveClass('pds-box--fit');
@@ -147,7 +147,7 @@ describe('pds-box', () => {
       components: [PdsBox],
       html: `<pds-box gap="xs"></pds-box>`,
     });
-    
+
     const element = page.root;
 
     expect(element).toHaveClass('pds-box-gap-xs');
