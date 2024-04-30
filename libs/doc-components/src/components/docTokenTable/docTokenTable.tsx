@@ -3,6 +3,7 @@ import allTokenJson from '../../../../core/src/global/styles/tokens/tokens.json'
 
 interface TokenEntry {
   value: string;
+  type: string;
 }
 
 interface Token {
@@ -47,12 +48,28 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ type, category }) => {
       const prefixedKey = `--pine-${category}-${fullKey}`;
       const style: React.CSSProperties = {};
   
+      // console.log('token', token);
+      // console.log('token.value', token.value);
+
       if ('value' in token) {
         let matchingValue: string | undefined;
 
         if (typeof token.value === 'object') {
           if ('value' in token.value) {
             matchingValue = token.value.value as string;
+          } else {
+            // console.log('if token value doesnt have value prop: ', token.value);
+            // console.log(typeof token.value);
+            for (key in token.value) {
+              // console.log('key', key);
+              matchingValue = findValueByKey(allTokenJson.core, key);
+              // console.log('matchingValue', matchingValue);
+              
+              if (token.value.hasOwnProperty(key)) {
+                // matchingValue += token.value[key];
+                console.log(token.value[key]);
+              }
+            }
           }
         } else {
           matchingValue = token.value.startsWith('{') && token.value.endsWith('}')
@@ -61,7 +78,7 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ type, category }) => {
         }
         
         if (matchingValue) {
-          console.log('category', category );
+          // console.log('category', category );
           switch (category) {
             case 'color':
               if (matchingValue.startsWith('#')) {
