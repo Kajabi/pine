@@ -34,9 +34,9 @@
   --spacing-xl: var(--pine-spacing-150);
   --spacing-xxl: calc(var(--pine-spacing-350) / 2);
 
-  --close-size: 10px;
-  --close-size-lg: 24px;
-  --dot-size: 4px;
+  --sizing-close: 10px;
+  --sizing-close-lg: 24px;
+  --sizing-dot: 4px;
 
   align-items: center;
   border-radius: var(--border-radius);
@@ -102,10 +102,10 @@ $pds-chip-sentiment-interactive: (
   border: 1px solid transparent;
   border-radius: 50%;
   display: inline-block;
-  height: var(--dot-size);
+  height: var(--sizing-dot);
   margin-block-end: var(--spacing-xxs);
   margin-inline-end: var(--spacing-xs);
-  width: var(--dot-size);
+  width: var(--sizing-dot);
 }
 
 // dropdown
@@ -155,12 +155,12 @@ $pds-chip-sentiment-interactive: (
   background: transparent;
   border: 0;
   border-radius: 50%;
-  height: var(--close-size);
+  height: var(--sizing-close);
   margin-inline-end: calc(var(--spacing-md) * -1);
   margin-inline-start: var(--spacing-xs);
-  padding: var(--close-size);
+  padding: var(--sizing-close);
   position: relative;
-  width: var(--close-size);
+  width: var(--sizing-close);
 
   pds-icon {
     left: 50%;
@@ -197,9 +197,9 @@ $pds-chip-sentiment-interactive: (
   }
 
   .pds-chip__close {
-    height: var(--close-size-lg);
+    height: var(--sizing-close-lg);
     margin-inline-end: calc(var(--spacing-xl) * -1);
-    width: var(--close-size-lg);
+    width: var(--sizing-close-lg);
   }
 
   &:host(.pds-chip--tag) {
