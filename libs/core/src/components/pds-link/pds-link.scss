@@ -1,28 +1,31 @@
 :host {
 
-  --border-radius: var(--pine-border-radius-sm);
-  --box-shadow-focus: inset 0 0 0 2px var(--pine-color-primary-200);
-  --color: var(--pine-color-neutral-charcoal-400);
-  --font-size: var(--pine-font-size-body);
-  --font-size-sm: var(--pine-font-size-body-sm);
-  --font-size-xs: var(--pine-font-size-body-xs);
+  --border-outline: 4px solid var(--pine-color-blue-200);
+  --border-radius: var(--pine-border-radius-075);
+  --box-shadow-focus: inset 0 0 0 2px var(--pine-color-blue-200);
+
+  --color-text-default: var(--pine-color-charcoal-400);
+
+  --font-size: var(--pine-font-size-100);
+  --font-size-sm: var(--pine-font-size-087);
+  --font-size-xs: var(--pine-font-size-075);
   --font-weight: var(--pine-font-weight-medium);
-  --margin-inline-start: var(--pine-spacing-xxs);
-  --outline: 4px solid var(--pine-color-primary-200);
-  --svg-lg: 15px;
-  --svg-md: 13px;
-  --svg-sm: 11px;
+
+  --spacing-inline-start-margin: var(--pine-spacing-050);
+  --sizing-svg-lg: 15px;
+  --sizing-svg-md: 13px;
+  --sizing-svg-sm: 11px;
 
   display: inline;
 
   pds-icon {
-    margin-inline-start: var(--margin-inline-start);
+    margin-inline-start: var(--spacing-inline-start-margin);
   }
 }
 
 .pds-link {
   align-items: center;
-  color: var(--color);
+  color: var(--color-text);
   display: inline-flex;
   font-weight: inherit;
 
@@ -40,8 +43,8 @@
   font-size: var(--font-size-xs);
 
   pds-icon {
-    height: var(--svg-sm);
-    width: var(--svg-sm);
+    height: var(--sizing-svg-sm);
+    width: var(--sizing-svg-sm);
   }
 }
 
@@ -49,8 +52,8 @@
   font-size: var(--font-size-sm);
 
   pds-icon {
-    height: var(--svg-md);
-    width: var(--svg-md);
+    height: var(--sizing-svg-md);
+    width: var(--sizing-svg-md);
   }
 }
 
@@ -58,8 +61,8 @@
   font-size: var(--font-size);
 
   pds-icon {
-    height: var(--svg-lg);
-    width: var(--svg-lg);
+    height: var(--sizing-svg-lg);
+    width: var(--sizing-svg-lg);
   }
 }
 

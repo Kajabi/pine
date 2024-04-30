@@ -103,7 +103,7 @@ describe('pds-progress', () => {
         <mock:shadow-root>
           <div class="pds-progress">
             <label class="pds-progress__label" htmlfor="default">Label text</label>
-            <progress id="default" max="100" value="0" style="--progress-fill-color: #333333;"></progress>
+            <progress id="default" max="100" value="0" style="--color-progress-fill: #333333;"></progress>
           </div>
         </mock:shadow-root>
       </pds-progress>
