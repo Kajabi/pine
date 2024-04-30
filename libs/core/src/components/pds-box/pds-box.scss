@@ -1,10 +1,10 @@
 @import './pds-box.mixins';
 
 pds-box {
-  --color-background-default: inherit;
-  --color-border-default: inherit;
-  --sizing-box-min-height: none;
-  --sizing-box-min-width: none;
+  --color-background-box: inherit;
+  --color-border-box: inherit;
+  --sizing-min-height-box: none;
+  --sizing-min-width-box: none;
 
   --spacing-gap-xxs: var(--pine-spacing-050);
   --spacing-gap-xs: var(--pine-spacing-100);
@@ -18,11 +18,11 @@ pds-box {
 }
 
 [class*='pds-box'] {
-  background-color: var(--color-background-default);
+  background-color: var(--color-background-box);
   box-sizing: border-box;
   display: inline-flex;
-  min-height: var(--sizing-box-min-height);;
-  min-width: var(--sizing-box-min-width);
+  min-height: var(--sizing-min-height-box);
+  min-width: var(--sizing-min-width-box);
 
   // The immediate child of the row will fit the width of the row
   .pds-row > & {
@@ -108,7 +108,7 @@ $pine-spacing-tokens: (
 }
 
 .pds-box--auto {
-  flex: 0 0 var(--sizing-box-min-width, fit-content);
+  flex: 0 0 var(--sizing-min-width-box, fit-content);
   min-width: auto;
   width: auto;
 }
@@ -120,7 +120,7 @@ $pine-spacing-tokens: (
 }
 
 .pds-box--border {
-  border-color: var(--color-border-default, var(--pine-color-grey-300));
+  border-color: var(--color-border-box, var(--pine-color-grey-300));
   border-style: var(--pine-border-default-style);
   border-width: var(--pine-border-default-width);
 }

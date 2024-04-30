@@ -190,10 +190,10 @@ export class PdsBox {
     `;
 
     const boxInlineStyles = {
-      ...(this.backgroundColor && { '--color-background-default': this.backgroundColor }),
-      ...(this.borderColor && { '--color-border-default': this.borderColor }),
-      ...(this.minHeight && { '--sizing-box-min-height': this.minHeight }),
-      ...(this.minWidth && { '--sizing-box-min-width': this.minWidth }),
+      ...(this.backgroundColor && { '--color-background-box': this.backgroundColor }),
+      ...(this.borderColor && { '--color-border-box': this.borderColor }),
+      ...(this.minHeight && { '--sizing-min-height-box': this.minHeight }),
+      ...(this.minWidth && { '--sizing-min-height-box': this.minWidth }),
     };
 
     return (

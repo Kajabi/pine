@@ -18,7 +18,7 @@ describe('pds-box', () => {
 
     const element = page.root;
 
-    expect(element).toEqualAttribute('style', '--box-border-color: #dedede;');
+    expect(element).toEqualAttribute('style', '--color-border-box: #dedede;');
   });
 
   it('renders a min-height when prop is set', async () => {
@@ -29,7 +29,7 @@ describe('pds-box', () => {
 
     const element = page.root;
 
-    expect(element).toEqualAttribute('style', '--sizing-box-min-height: 175px;');
+    expect(element).toEqualAttribute('style', '--sizing-min-height-box: 175px;');
   });
 
   it('renders a min-width when prop is set', async () => {
@@ -40,7 +40,7 @@ describe('pds-box', () => {
 
     const element = page.root;
 
-    expect(element).toEqualAttribute('style', '--sizing-box-min-height: 300px;');
+    expect(element).toEqualAttribute('style', '--sizing-min-height-box: 300px;');
   });
 
   it('renders align-items class when prop is set', async () => {
@@ -73,7 +73,7 @@ describe('pds-box', () => {
 
     const element = page.root;
 
-    expect(element).toEqualAttribute('style', '--color-background-default: #dedede;');
+    expect(element).toEqualAttribute('style', '--color-background-box: #dedede;');
   });
 
   it('renders border class when prop is set', async () => {
@@ -95,7 +95,7 @@ describe('pds-box', () => {
 
     const element = page.root;
 
-    expect(element).toEqualAttribute('style', '--box-border-color: #dedede;');
+    expect(element).toEqualAttribute('style', '--color-border-box: #dedede;');
   });
 
   it('renders border-radius class when prop is set to none', async () => {
