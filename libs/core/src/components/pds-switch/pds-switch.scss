@@ -1,38 +1,38 @@
 :host {
-  --background-color: var(--pine-color-neutral-grey-400);
-  --background-color-checked: var(--pine-color-neutral-charcoal-400);
-  --background-color-checked-hover: var(--pine-color-neutral-charcoal-400);
-  --background-color-disabled: var(--pine-color-neutral-grey-300);
-  --background-color-hover: var(--pine-color-neutral-grey-500);
-  --box-shadow-focus: 0 0 0 2px var(--outline-color-focus);
-  --box-shadow-focus-error: 0 0 0 2px var(--outline-color-focus-error);
+  --border-radius-input: var(--pine-border-radius-200);
+  --box-shadow-focus: 0 0 0 2px var(--color-outline-focus);
+  --box-shadow-focus-error: 0 0 0 2px var(--color-outline-focus-error);
+  --box-shadow-input-toggle: 0 2px 4px 0 rgba(0, 0, 0, 0.12), 0 0 2px 0 rgba(0, 0, 0, 0.08);
 
-  --input-border-radius: var(--pine-border-radius-lg);
-  --input-height: 20px;
-  --input-width: 36px;
-  --input-toggle-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12), 0 0 2px 0 rgba(0, 0, 0, 0.08);
-  --input-toggle-color: var(--pine-color-base-white);
-  --input-toggle-offset: 2px;
-  --input-toggle-size: calc(var(--input-height) - (var(--input-toggle-offset) * 2));
+  --color-background-checked: var(--pine-color-charcoal-400);
+  --color-background-checked-hover: var(--pine-color-charcoal-400);
+  --color-background-disabled: var(--pine-color-grey-300);
+  --color-background-hover: var(--pine-color-grey-500);
+  --color-background-input-default: var(--pine-color-grey-400);
+  --color-input-toggle: var(--pine-color-white);
+  --color-message-text: var(--pine-color-charcoal-200);
+  --color-outline-focus: var(--pine-color-blue-200);
+  --color-outline-focus-error: var(--pine-color-red-200);
+  --color-text-default: var(--pine-color-charcoal-400);
+  --color-text-disabled: var(--pine-color-grey-500);
+  --color-text-error: var(--pine-color-red-300);
 
-  --label-gap-size: 12px;
-  --label-line-height: var(--pine-line-height-md);
+  --dimension-input-height: 20px;
+  --dimension-input-width: 36px;
 
-  --message-spacing-block: var(--pine-spacing-xxs);
-  --message-spacing-inline: calc(var(--input-width) + var(--label-gap-size));
-  --message-text-color: var(--pine-color-neutral-charcoal-200);
+  --line-height-label: var(--pine-line-height-150);
 
-  --outline-color-focus: var(--pine-color-primary-200);
-  --outline-color-focus-error: var(--pine-color-red-200);
+  --sizing-input-toggle-size: calc(var(--dimension-input-height) - (var(--spacing-input-toggle-offset) * 2));
+  --sizing-label-gap-size: 12px;
+  --spacing-input-toggle-offset: 2px;
+  --spacing-message-block: var(--pine-spacing-050);
+  --spacing-message-inline: calc(var(--dimension-input-width) + var(--sizing-label-gap-size));
 
-  --text-color-default: var(--pine-color-neutral-charcoal-400);
-  --text-color-disabled: var(--pine-color-neutral-grey-500);
-  --text-color-error: var(--pine-color-red-300);
   --transition-timing: 0.15s ease-out;
 
 
   align-items: flex-start;
-  color: var(--text-color-default);
+  color: var(--color-text-default);
   display: inline-flex;
   flex-flow: row wrap;
   margin-block-end: var(--pine-spacing-md);
@@ -40,12 +40,12 @@
 }
 
 :host(.pds-switch--error) {
-  color: var(--text-color-error);
+  color: var(--color-text-error);
 
   input,
   input:checked,
   input:hover:not(:disabled):not(:checked) {
-    background-color: var(--text-color-error);
+    background-color: var(--color-text-error);
   }
 
   input:focus-visible:not(:disabled):not(:checked) {
@@ -56,34 +56,34 @@
 // switch container
 input {
   appearance: none;
-  background: var(--background-color);
+  background: var(--color-background-input-default);
   border: 0;
-  border-radius: var(--input-border-radius);
+  border-radius: var(--border-radius-input);
   cursor: pointer;
   display: inline-block;
-  height: var(--input-height);
+  height: var(--dimension-input-height);
   margin: 0;
   padding: 0;
   position: relative;
   transform: translateY(2px);
   transition: var(--transition-timing);
   transition-property: background, border, color;
-  width: var(--input-width);
+  width: var(--dimension-input-width);
 
   // switch toggle
   &::after {
-    background: var(--input-toggle-color);
+    background: var(--color-input-toggle);
     border-radius: 50%;
-    box-shadow: var(--input-toggle-box-shadow);
+    box-shadow: var(--box-shadow-input-toggle);
     content: "";
     display: block;
-    height: var(--input-toggle-size);
+    height: var(--sizing-input-toggle-size);
     inset-block-start: 50%;
     inset-inline-start: 50%;
     position: absolute;
     transform: translate3d(-100%, -50%, 0);
     transition: transform var(--transition-timing);
-    width: var(--input-toggle-size);
+    width: var(--sizing-input-toggle-size);
   }
 }
 
@@ -91,8 +91,8 @@ label {
   cursor: pointer;
   display: inline-flex;
   flex-grow: 1;
-  line-height: var(--label-line-height);
-  margin-inline-start: var(--label-gap-size);
+  line-height: var(--line-height-label);
+  margin-inline-start: var(--sizing-label-gap-size);
 
   .pds-switch--error & {
     color: inherit;
@@ -101,14 +101,14 @@ label {
 
 // Help and error messages
 .pds-switch__message {
-  color: var(--message-text-color);
+  color: var(--color-message-text);
   flex: 1 0 100%;
   font-size: var(--pine-font-size-body-sm);
   line-height: var(--pine-line-height-sm);
-  margin-inline-start: var(--message-spacing-inline);
+  margin-inline-start: var(--spacing-message-inline);
 
   + .pds-switch__message {
-    margin-block-start: var(--message-spacing-block);
+    margin-block-start: var(--spacing-message-block);
   }
 }
 
@@ -118,11 +118,11 @@ label {
 
 // Disabled state
 input:disabled {
-  background-color: var(--background-color-disabled);
+  background-color: var(--color-background-disabled);
   cursor: not-allowed;
 
   ~ label {
-    color: var(--text-color-disabled);
+    color: var(--color-text-disabled);
     cursor: initial;
   }
 
@@ -133,7 +133,7 @@ input:disabled {
 
 // Hover state
 input:hover:not(:disabled) {
-  background-color: var(--background-color-hover);
+  background-color: var(--color-background-hover);
 }
 
  // Focus state
@@ -151,10 +151,10 @@ input:checked::after {
 // switch container
 input:checked:not(:disabled) {
   background-color: currentColor;
-  color: var(--background-color-checked);
+  color: var(--color-background-checked);
 
   &:hover {
     border-color: currentColor;
-    color: var(--background-color-checked-hover);
+    color: var(--color-background-checked-hover);
   }
 }
