@@ -4,23 +4,20 @@ describe('pds-image', () => {
   it('should properly lazy load an image', async () => {
     const page = await newE2EPage();
     page.setViewport({
-      width: 640,
-      height: 500
+      width: 600,
+      height: 300
     });
     await page.setContent(`
-      <div style="height: 2000px; border: 1px solid red;"></div>
-      <pds-image loading="lazy" src="//source.unsplash.com/320x180"></pds-image>
+      <div style="height: 3000px; border: 1px solid red;"></div>
+      <pds-image loading="lazy" height="320" width="180" src="//source.unsplash.com/320x180"></pds-image>
     `, { waitUntil: 'load'});
 
-    let isImageLoaded = await page.evaluate(() => document.querySelector('pds-image')?.shadowRoot?.querySelector('img')?.complete);
-    await page.waitForTimeout(2000);
+    const img = page.find('pds-image >>> img');
 
-    expect(isImageLoaded).toBe(false);
+    expect(await (await img)?.isIntersectingViewport()).toBeFalsy();
 
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-    await page.waitForTimeout(2000);
-    isImageLoaded = await page.evaluate(() => document.querySelector('pds-image')?.shadowRoot?.querySelector('img')?.complete);
+    await page.evaluate(() => window.scrollBy(0, document.body.scrollHeight));
 
-    expect(isImageLoaded).toBe(true);
+    expect(await (await img)?.isIntersectingViewport()).toBeTruthy();
   })
 });

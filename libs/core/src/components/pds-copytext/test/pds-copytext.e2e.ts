@@ -58,34 +58,4 @@ describe('pds-copytext', () => {
     const clipboardText = await page.evaluate(() => navigator.clipboard.readText());
     expect(clipboardText).toBe('Copy me');
   });
-
-  it('copies value to clipboard using fallback for Safari', async () => {
-    const page = await newE2EPage();
-    await page.setContent('<pds-copytext value="Copy me"></pds-copytext>');
-
-    // Simulate click on the button
-    const button = await page.find('pds-copytext >>> pds-button');
-    await button.click();
-
-    // Wait for the asynchronous clipboard write operation to complete
-    await page.waitForTimeout(100);
-
-    // Check if the value is copied to the clipboard using the textarea fallback
-    const clipboardText = await page.evaluate(() => {
-      const el = document.createElement('textarea');
-      el.value = 'Copy me'; // Assign the expected value to the textarea
-      el.setAttribute('readonly', '');
-      el.style.position = 'absolute';
-      el.style.left = '-9999px';
-      document.body.appendChild(el);
-      el.focus();
-      el.setSelectionRange(0, el.value.length);
-      document.execCommand('copy');
-      const value = el.value.trim();
-      document.body.removeChild(el);
-      return value;
-    });
-
-    expect(clipboardText).toBe('Copy me');
-  });
 });

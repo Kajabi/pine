@@ -43,21 +43,8 @@ export class PdsCopytext {
 
   private copyToClipboard = async (value: string) => {
     try {
-      if (navigator.clipboard) {
+      if (typeof navigator.clipboard !== 'undefined') {
         await navigator.clipboard.writeText(value);
-        this.pdsCopyTextClick.emit('Copied to clipboard');
-      } else {
-        // falback for safari
-        const el = document.createElement('textarea');
-        el.value = value;
-        el.setAttribute('readonly', '');
-        el.style.position = 'absolute';
-        el.style.left = '-9999px';
-        document.body.appendChild(el);
-        el.focus();
-        el.setSelectionRange(0, el.value.length);
-        document.execCommand('copy');
-        document.body.removeChild(el);
         this.pdsCopyTextClick.emit('Copied to clipboard');
       }
     } catch (err) {
