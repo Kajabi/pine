@@ -45,8 +45,7 @@
   --spacing-icon-margin-inline-end: var(--pine-spacing-100);
   --spacing-padding-block: var(--pine-spacing-100);
   --spacing-padding-inline: var(--pine-spacing-200);
-  --spacing-unstyled-padding: var(--pine-spacing-0);
-  --spacing-unstyled-margin: var(--pine-spacing-0);
+  --spacing-unstyled: var(--pine-spacing-0);
 
   --typography-default: var(--pine-body-med);
 
@@ -144,8 +143,8 @@
   --color-background-disabled: transparent;
   --color-text-default: inherit;
   border: var(--border-width-unstyled);
-  margin: var(--spacing-unstyled-margin);
+  margin: var(--spacing-unstyled);
   min-height: auto;
-  padding: var(--spacing-unstyled-padding);
+  padding: var(--spacing-unstyled);
   width: inherit;
 }
