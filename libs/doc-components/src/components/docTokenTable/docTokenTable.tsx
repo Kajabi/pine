@@ -41,6 +41,13 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ type, category }) => {
   } else if (type == 'semantic') {
     pineTokens = allTokenJson.semantic[category as keyof typeof allTokenJson.semantic] as Token || {};
   }
+
+  const buildValue = (item): string => {
+    const boxShadowValue = Object.values(item) as unknown as string[];
+    const filteredBoxShadowValue = boxShadowValue.filter(prop => prop !== 'dropShadow');
+    
+    return filteredBoxShadowValue.join(' ');
+  };
   
   const renderTableRows = (tokens: Token, parentKey?: string): JSX.Element[] => {
     return Object.entries(tokens).map(([key, token]): JSX.Element => {
@@ -48,26 +55,25 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ type, category }) => {
       const prefixedKey = `--pine-${category}-${fullKey}`;
       const style: React.CSSProperties = {};
   
-      // console.log('token', token);
-      // console.log('token.value', token.value);
-
       if ('value' in token) {
         let matchingValue: string | undefined;
+
+        // [{'box-shadow': ['x', 'y', 'blur', 'spread', 'color']}]
+        //check for the token.type
 
         if (typeof token.value === 'object') {
           if ('value' in token.value) {
             matchingValue = token.value.value as string;
           } else {
-            // console.log('if token value doesnt have value prop: ', token.value);
-            // console.log(typeof token.value);
-            for (key in token.value) {
-              // console.log('key', key);
-              matchingValue = findValueByKey(allTokenJson.core, key);
-              // console.log('matchingValue', matchingValue);
-              
-              if (token.value.hasOwnProperty(key)) {
-                // matchingValue += token.value[key];
-                console.log(token.value[key]);
+            if (token.type = 'box-shadow') {
+              if (Array.isArray(token.value)) {
+                const boxShadows  = [] 
+                for (const item of token.value){
+                  boxShadows.push(buildValue(item));
+                }
+                matchingValue = boxShadows.join(', ');
+              } else {
+                matchingValue = buildValue(token.value);
               }
             }
           }
@@ -107,6 +113,8 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ type, category }) => {
               style.height = "30px";
               break;
             case 'box-shadow':
+              style.width = "60px";
+              style.height = "30px";
               style.boxShadow = matchingValue;
               break;
             case 'letter-spacing':
