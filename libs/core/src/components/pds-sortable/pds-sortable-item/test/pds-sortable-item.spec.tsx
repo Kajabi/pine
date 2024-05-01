@@ -1,6 +1,8 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsSortableItem } from '../pds-sortable-item';
 
+import { handle } from '@pine-ds/icons/icons';
+
 describe('pds-sortable-item', () => {
   it('renders', async () => {
     const page = await newSpecPage({
@@ -37,7 +39,7 @@ describe('pds-sortable-item', () => {
     expect(page.root).toEqualHtml(`
       <pds-sortable-item class="pds-sortable-item" handle="true">
         <div class="pds-sortable-item__handle">
-          <pds-icon name="handle"></pds-icon>
+          <pds-icon icon="${handle}"></pds-icon>
         </div>
       </pds-sortable-item>
     `);

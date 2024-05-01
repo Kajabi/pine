@@ -1,5 +1,6 @@
 import { Component, Host, h, Prop } from '@stencil/core';
 
+import { handle } from '@pine-ds/icons/icons';
 /**
  * @slot sortable-item-actions - Content is placed within the `pds-sortable-item__actions` element as children. This slot is only rendered if `actions` is set to `true`.
  */
@@ -31,7 +32,7 @@ export class PdsSortableItem {
       <Host class="pds-sortable-item" id={this.componentId}>
         {this.handle && (
           <div class="pds-sortable-item__handle">
-            <pds-icon name="handle"></pds-icon>
+            <pds-icon icon={handle}></pds-icon>
           </div>
         )}
         <slot></slot>

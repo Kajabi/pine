@@ -1,28 +1,28 @@
 :host(.pds-sortable-item) {
-  --background-color-interactive: var(--pine-color-neutral-grey-200);
-  --background-color: var(--pine-color-base-white);
-  --border-radius: var(--pine-border-radius-md);
-  --border: var(--pine-border-default);
+  --border-radius: var(--pine-border-radius-125);
+  --border-default: var(--pine-border-default);
   --box-shadow: var(--pine-box-shadow-lg);
-  --color-interactive-handle: var(--pine-color-primary-300);
-  --margin-inline-end: var(--pine-spacing-md);
-  --padding-block-xs: var(--pine-spacing-xs);
-  --padding-inline: var(--pine-spacing-md);
-  --padding-inline-start: var(--pine-spacing-md);
+  --color-background-default: var(--pine-color-white);
+  --color-background-interactive: var(--pine-color-grey-200);
+  --color-interactive-handle: var(--pine-color-blue-300);
+  --spacing-margin-inline-end: var(--pine-spacing-300);
+  --spacing-padding-block-xs: var(--pine-spacing-100);
+  --spacing-padding-inline: var(--pine-spacing-300);
+  --spacing-padding-inline-start: var(--pine-spacing-300);
 
   align-items: center;
   display: flex;
-  padding-block: var(--padding-block-xs);
-  padding-inline: var(--padding-inline);
+  padding-block: var(--spacing-padding-block-xs);
+  padding-inline: var(--spacing-padding-inline);
 
   .pds-sortable-item__actions {
     margin-inline-start: auto;
-    padding-inline-start: var(--padding-inline-start);
+    padding-inline-start: var(--spacing-padding-inline-start);
   }
 
   .pds-sortable-item__handle {
     line-height: 1;
-    margin-inline-end: var(--margin-inline-end);
+    margin-inline-end: var(--spacing-margin-inline-end);
   }
 
   // styles when sortable is bordered
@@ -40,7 +40,7 @@
 
   // styles when sortable is divided
   .pds-sortable--divided & {
-    border-block-end: var(--border);
+    border-block-end: var(--border-default);
 
     &:last-child {
       border-block-end: 0;
@@ -60,7 +60,7 @@
 }
 
 :host(.pds-sortable-item):hover {
-  background-color: var(--background-color-interactive);
+  background-color: var(--color-background-interactive);
 
   pds-icon {
     color: var(--color-interactive-handle)
@@ -68,13 +68,13 @@
 }
 
 :host(.pds-sortable-item--drag) {
-  background-color: var(--background-color);
+  background-color: var(--color-background-default);
   border-radius: 0;
   box-shadow: var(--box-shadow);
   opacity: 1;
 }
 
 :host(.pds-sortable-item--ghost) {
-  background-color: var(--background-color-interactive);
+  background-color: var(--color-background-interactive);
   border-radius: 0;
 }
