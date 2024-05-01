@@ -1,6 +1,6 @@
 :host {
-  --background-fixed: var(--pine-color-base-white);
-  --background-interactive: var(--pine-color-neutral-grey-200);
+  --color-background-fixed: var(--pine-color-white);
+  --color-background-interactive: var(--pine-color-grey-200);
 
   border-color: inherit;
   display: table-row;
@@ -9,7 +9,7 @@
   // used for pds-checkbox-cell
   // because it is in the ShadowDom
   &::part(checkbox-cell) {
-    background-color: var(--background-fixed);
+    background-color: var(--color-background-fixed);
     left: 0;
     position: sticky;
     z-index: 1;
@@ -22,5 +22,5 @@
 :host(.is-selected),
 :host(.is-selected)::part(checkbox-cell),
 :host(.is-selected) ::slotted(pds-table-cell) {
-  background: var(--background-interactive);
+  background: var(--color-background-interactive);
 }

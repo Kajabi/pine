@@ -1,7 +1,7 @@
 :host {
-  --background: var(--pine-color-base-white);
+  --color-background-default: var(--pine-color-white);
 
-  background: var(--background);
+  background: var(--color-background-default);
   border-collapse: separate;
   box-sizing: border-box;
   display: table;
@@ -10,8 +10,8 @@
 
 :host(.is-responsive) {
   background-attachment: local, local, scroll, scroll;
-  background-image: linear-gradient(to right, var(--background), var(--background)),
-                    linear-gradient(to right, var(--background), var(--background)),
+  background-image: linear-gradient(to right, var(--color-background-default), var(--color-background-default)),
+                    linear-gradient(to right, var(--color-background-default), var(--color-background-default)),
                     linear-gradient(to right, rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0)),
                     linear-gradient(to left, rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0));
   background-position: left center, right center, left center, right center;
