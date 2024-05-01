@@ -48,7 +48,6 @@ export class PdsCopytext {
         this.pdsCopyTextClick.emit('Copied to clipboard');
       }
     } catch (err) {
-      console.error(err);
       this.pdsCopyTextClick.emit(`Error writing text to clipboard: ${err}`);
     }
   };
