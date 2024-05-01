@@ -1,41 +1,46 @@
 :host {
-  --background-fixed: var(--pine-color-base-white);
-  --box-shadow: 3px 3px 6px -2px rgba(0, 0, 0, 0.2);
-  --color: var(--pine-color-neutral-charcoal-200);
-  --fixed-column-index: 0;
-  --font-size: var(--pine-font-size-body-sm);
-  --line-height: var(--pine-line-height-sm);
-  --padding: calc(var(--pine-spacing-md) / 2);
-  --padding-compact: var(--pine-spacing-xxs);
-  --fixed-cell-position: 0;
-  --max-width-truncated: 100px;
+  --box-shadow-fixed: 3px 3px 6px -2px rgba(0, 0, 0, 0.2);
 
-  color: var(--color);
+  --color-background-fixed: var(--pine-color-white);
+  --color-cell-default: var(--pine-color-charcoal-200);
+
+  --dimension-fixed-cell-position: 0;
+  --dimension-max-width-truncated: 100px;
+
+  --font-size-cell-default: var(--pine-font-size-087);
+
+  --number-fixed-column-index: 0;
+
+  --spacing-line-height-cell-default: var(--pine-line-height-125);
+  --spacing-padding-cell-default: calc(var(--pine-spacing-300) / 2);
+  --spacing-padding-compact: var(--pine-spacing-050);
+
+  color: var(--color-cell-default);
   display: table-cell;
-  font-size: var(--font-size);
-  line-height: var(--line-height);
-  padding: var(--padding);
+  font-size: var(--font-size-cell-default);
+  line-height: var(--spacing-line-height-cell-default);
+  padding: var(--spacing-padding-cell-default);
   vertical-align: inherit;
 }
 
 :host(.is-compact) {
-  padding-block: var(--padding-compact);
+  padding-block: var(--spacing-padding-compact);
 }
 
 :host(.is-fixed) {
-  background: var(--background-fixed);
-  left: var(--fixed-cell-position);
+  background: var(--color-background-fixed);
+  left: var(--dimension-fixed-cell-position);
   position: sticky;
   z-index: 1;
 }
 
 // box shadow when table has scrolled and cell is fixed
 :host(.has-scrolled.is-fixed) {
-  box-shadow: var(--box-shadow);
+  box-shadow: var(--box-shadow-fixed);
 }
 
 :host(.is-truncated) {
-  max-width: var(--max-width-truncated);
+  max-width: var(--dimension-max-width-truncated);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
