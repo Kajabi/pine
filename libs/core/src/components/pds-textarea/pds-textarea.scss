@@ -1,38 +1,35 @@
 :host {
-  --background-color: var(--pine-color-base-white);
-  --background-color-disabled: var(--pine-color-neutral-grey-200);
+  --box-shadow-focus: 0 0 0 2px var(--color-focus-visible-outline);
+  --box-shadow-focus-error: 0 0 0 2px var(--color-focus-visible-outline-error);
 
-  --color: var(--pine-color-neutral-charcoal-400);
-  --color-error: var(--pine-color-red-300);
-  --color-placeholder: var(--pine-color-neutral-charcoal-200);
-  --color-disabled: var(--pine-color-neutral-charcoal-200);
+  --color: var(--pine-color-charcoal-400);
+  --color-background: var(--pine-color-white);
+  --color-background-disabled: var(--pine-color-grey-200);
+  --color-border-default: var(--pine-color-grey-400);
+  --color-border-error: var(--pine-color-red-300);
+  --color-border-focus-visible: var(--pine-color-grey-300);
+  --color-border-hover: var(--pine-color-grey-500);
+  --color-disabled-default: var(--pine-color-charcoal-200);
+  --color-error-default: var(--pine-color-red-300);
+  --color-focus-visible-outline: var(--pine-color-primary-200);
+  --color-focus-visible-outline-error: var(--pine-color-red-200);
+  --color-placeholder-default: var(--pine-color-charcoal-200);
 
-  --border-color-default: var(--pine-color-neutral-grey-400);
-  --border-color-hover: var(--pine-color-neutral-grey-500);
-  --border-color-focus-visible: var(--pine-color-neutral-grey-300);
-  --border-color-error: var(--pine-color-red-300);
+  --font-size-field: var(--pine-font-size-100);
+  --font-size-helper-message: var(--pine-font-size-075);
+  --font-size-label: var(--pine-font-size-100);
+  --font-weight-field: var(--pine-font-weight-normal);
+  --font-weight-helper-message: var(--pine-font-weight-normal);
+  --font-weight-label: var(--pine-font-weight-medium);
 
-  --box-shadow-focus: 0 0 0 2px var(--focus-visible-outline-color);
-  --box-shadow-focus-error: 0 0 0 2px var(--focus-visible-outline-color-error);
+  --line-height-field: var(--pine-line-height-150);
+  --line-height-helper-message: var(--pine-line-height-125);
+  --line-height-label: var(--pine-line-height-150);
 
-  --focus-visible-outline-color: var(--pine-color-primary-200);
-  --focus-visible-outline-color-error: var(--pine-color-red-200);
-
-  --label-font-size: var(--pine-font-size-body);
-  --label-font-weight: var(--pine-font-weight-medium);
-  --label-line-height: var(--pine-line-height-md);
-  --label-margin-block-end: var(--pine-spacing-xs);
-
-  --field-font-size: var(--pine-font-size-body);
-  --field-font-weight: var(--pine-font-weight-regular);
-  --field-line-height: var(--pine-line-height-md);
-  --field-padding-block: var(--pine-spacing-xs);
-  --field-padding-inline: var(--pine-spacing-sm);
-
-  --helper-message-font-size: var(--pine-font-size-body-xs);
-  --helper-message-font-weight: var(--pine-font-weight-regular);
-  --helper-message-line-height: var(--pine-line-height-sm);
-  --helper-message-margin-block-start: var(--pine-spacing-xs);
+  --spacing-margin-block-end-label: var(--pine-spacing-100);
+  --spacing-margin-block-start-helper-message: var(--pine-spacing-100);
+  --spacing-padding-block-field: var(--pine-spacing-100);
+  --spacing-padding-inline-field: var(--pine-spacing-200);
 
   display: inline;
 }
@@ -44,29 +41,29 @@
 
 label {
   display: block;
-  font-size: var(--label-font-size);
-  font-weight: var(--label-font-weight);
-  line-height: var(--label-line-height);
-  margin-block-end: var(--label-margin-block-end);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-label);
+  line-height: var(--line-height-label);
+  margin-block-end: var(--spacing-margin-block-end-label);
 }
 
 .pds-textarea__field {
-  background-color: var(--background-color);
+  background-color: var(--color-background);
   border: var(--pine-border-interactive);
   border-radius: var(--pine-border-radius-md);
   font-family: inherit;
-  font-size: var(--field-font-size);
-  font-weight: var(--field-font-weight);
-  line-height: var(--field-line-height);
-  padding: var(--field-padding-block) var(--field-padding-inline);
+  font-size: var(--font-size-field);
+  font-weight: var(--font-weight-field);
+  line-height: var(--line-height-field);
+  padding: var(--spacing-padding-block-field) var(--spacing-padding-inline-field);
 
   &:hover:not(:disabled, .is-invalid) {
-    border-color: var(--border-color-hover);
+    border-color: var(--color-border-hover);
   }
 
   &:disabled {
-    background-color: var(--background-color-disabled);
-    color: var(--color-disabled);
+    background-color: var(--color-background-disabled);
+    color: var(--color-disabled-default);
     cursor: not-allowed;
   }
 
@@ -77,11 +74,11 @@ label {
   }
 
   &::placeholder {
-    color: var(--color-placeholder);
+    color: var(--color-placeholder-default);
   }
 
   &.is-invalid {
-    border-color: var(--color-error);
+    border-color: var(--color-border-error);
 
     &:focus-visible {
       box-shadow: var(--box-shadow-focus-error);
@@ -91,13 +88,12 @@ label {
 
 .pds-textarea__error-message,
 .pds-textarea__helper-message {
-  font-size: var(--helper-message-font-size);
-  font-weight: var(--helper-message-font-weight);
-  line-height: var(--helper-message-line-height);
-  margin-block-end: 0;
-  margin-block-start: var(--helper-message-margin-block-start);
+  font-size: var(--font-size-helper-message);
+  font-weight: var(--font-weight-helper-message);
+  line-height: var(--line-height-helper-message);
+  margin-block-start: var(--spacing-margin-block-start-helper-message);
 }
 
 .pds-textarea__error-message {
-  color: var(--color-error);
+  color: var(--color-error-default);
 }
