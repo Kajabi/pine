@@ -1,28 +1,28 @@
 @import './pds-box.mixins';
 
 pds-box {
-  --box-background-color: inherit;
-  --box-border-color: inherit;
-  --box-min-height: none;
-  --box-min-width: none;
+  --color-background-box: inherit;
+  --color-border-box: inherit;
+  --sizing-min-height-box: none;
+  --sizing-min-width-box: none;
 
-  --box-gap-xxs: var(--pine-spacing-050);
-  --box-gap-xs: var(--pine-spacing-100);
-  --box-gap-sm: var(--pine-spacing-200);
-  --box-gap-md: var(--pine-spacing-300);
-  --box-gap-lg: var(--pine-spacing-450);
-  --box-gap-xl: var(--pine-spacing-600);
-  --box-gap-xxl: var(--pine-spacing-800);
+  --spacing-gap-xxs: var(--pine-spacing-050);
+  --spacing-gap-xs: var(--pine-spacing-100);
+  --spacing-gap-sm: var(--pine-spacing-200);
+  --spacing-gap-md: var(--pine-spacing-300);
+  --spacing-gap-lg: var(--pine-spacing-450);
+  --spacing-gap-xl: var(--pine-spacing-600);
+  --spacing-gap-xxl: var(--pine-spacing-800);
 
   display: block;
 }
 
 [class*='pds-box'] {
-  background-color: var(--box-background-color);
+  background-color: var(--color-background-box);
   box-sizing: border-box;
   display: inline-flex;
-  min-height: var(--box-min-height);;
-  min-width: var(--box-min-width);
+  min-height: var(--sizing-min-height-box);
+  min-width: var(--sizing-min-width-box);
 
   // The immediate child of the row will fit the width of the row
   .pds-row > & {
@@ -108,7 +108,7 @@ $pine-spacing-tokens: (
 }
 
 .pds-box--auto {
-  flex: 0 0 var(--box-min-width, fit-content);
+  flex: 0 0 var(--sizing-min-width-box, fit-content);
   min-width: auto;
   width: auto;
 }
@@ -120,7 +120,7 @@ $pine-spacing-tokens: (
 }
 
 .pds-box--border {
-  border-color: var(--box-border-color, var(--pine-border-default-color));
+  border-color: var(--color-border-box, var(--pine-color-grey-300));
   border-style: var(--pine-border-default-style);
   border-width: var(--pine-border-default-width);
 }
@@ -203,31 +203,31 @@ $pine-spacing-tokens: (
 }
 
 .pds-box-gap-xxs {
-  gap: var(--box-gap-xxs);
+  gap: var(--spacing-gap-xxs);
 }
 
 .pds-box-gap-xs {
-  gap: var(--box-gap-xs);
+  gap: var(--spacing-gap-xs);
 }
 
 .pds-box-gap-sm {
-  gap: var(--box-gap-sm);
+  gap: var(--spacing-gap-sm);
 }
 
 .pds-box-gap-md {
-  gap: var(--box-gap-md);
+  gap: var(--spacing-gap-md);
 }
 
 .pds-box-gap-lg {
-  gap: var(--box-gap-lg);
+  gap: var(--spacing-gap-lg);
 }
 
 .pds-box-gap-xl {
-  gap: var(--box-gap-xl);
+  gap: var(--spacing-gap-xl);
 }
 
 .pds-box-gap-xxl {
-  gap: var(--box-gap-xxl);
+  gap: var(--spacing-gap-xxl);
 }
 
 // Spacing helpers
@@ -236,31 +236,31 @@ $pine-spacing-tokens: (
 }
 
 .pds-padding-xxs {
-  padding: var(--box-gap-xxs);
+  padding: var(--spacing-gap-xxs);
 }
 
 .pds-padding-xs {
-  padding: var(--box-gap-xxs);
+  padding: var(--spacing-gap-xxs);
 }
 
 .pds-padding-sm {
-  padding: var(--box-gap-sm);
+  padding: var(--spacing-gap-sm);
 }
 
 .pds-padding-md {
-  padding: var(--box-gap-md);
+  padding: var(--spacing-gap-md);
 }
 
 .pds-padding-lg {
-  padding: var(--box-gap-lg);
+  padding: var(--spacing-gap-lg);
 }
 
 .pds-padding-xl {
-  padding: var(--box-gap-xl);
+  padding: var(--spacing-gap-xl);
 }
 
 .pds-padding-xxl {
-  padding: var(--box-gap-xxl);
+  padding: var(--spacing-gap-xxl);
 }
 
 // Display helpers
