@@ -1,18 +1,18 @@
 :host {
   /**
-   * @prop --panel-margin-top: Optional margin-top for panels
+   * @prop --spacing-panel-margin-top: Optional margin-top for panels
    */
-  --panel-margin-top: 0;
-
+  --spacing-panel-margin-top: 0;
   /**
-   * @prop --panel-padding: Optional padding for panels
+   * @prop --spacing-panel-padding: Optional padding for panels
    */
-  --panel-padding: 0;
+  --spacing-panel-padding: 0;
 
-  --gap-md: var(--pine-spacing-md);
-  --gap-xs: var(--pine-spacing-xs);
-  --gap-sm: 16px var(--pine-spacing-sm);
-  --outline: 2px solid var(--pine-color-primary-200);
+  --outline: 2px solid var(--pine-color-blue-200);
+  
+  --spacing-gap-availability: var(--pine-spacing-100);
+  --spacing-gap-default: var(--pine-spacing-300);
+  --spacing-gap-filter: 16px var(--pine-spacing-200);
 
   display: block;
 }
@@ -20,13 +20,13 @@
 .pds-tabs__tablist {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--gap-md);
+  gap: var(--spacing-gap-default);
 }
 
 :host(.pds-tabs--availability) .pds-tabs__tablist {
-  gap: var(--gap-xs);
+  gap: var(--spacing-gap-availability);
 }
 
 :host(.pds-tabs--filter) .pds-tabs__tablist {
-  gap: var(--gap-sm);
+  gap: var(--spacing-gap-filter);
 }

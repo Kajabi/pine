@@ -4,21 +4,26 @@
 
 div {
   // These custom props are not reachable
-  --background-color: var(--pine-color-primary-100);
-  --badge-background-color: var(--pine-color-base-white);
-  --border: var(--pine-border-default);
-  --radius-round: 50%;
+  --color-background-container: var(--pine-color-blue-100);
+  --color-background-badge: var(--pine-color-white);
+  --color-border-badge: var(--pine-color-white);
+
+  --border-default: var(--pine-border-width-thin) solid var(--pine-color-grey-300);
+  --border-radius-round: var(--pine-border-radius-round);
+  --border-radius-none: var(--pine-border-radius-0);
+
+  --spacing-none: var(--pine-spacing-0);
 
   align-items: center;
-  background-color: var(--background-color);
-  border-radius: var(--admin-radius-round, var(--radius-round));
+  background-color: var(--color-background-container);
+  border-radius: var(--border-radius-admin-round, var(--border-radius-round));
   display: inline-flex;
   justify-content: center;
   position: relative;
 
   :host(.pds-avatar--admin) & {
-    --admin-radius-round: 12px;
-    border-radius: var(--admin-radius-round);
+    --border-radius-admin-round: var(--pine-spacing-150);
+    border-radius: var(--border-radius-admin-round);
   }
 
   // Remove when FF has support for :has
@@ -35,16 +40,16 @@ div {
 
 .pds-avatar__button {
   --box-shadow-focus: 0 0 0 2px var(--pine-color-primary-200);
-  --radius-round: 50%;
+  --border-radius-round: var(--pine-border-radius-round);
 
   align-items: center;
   appearance: none;
   background: transparent;
-  border: 0;
-  border-radius: var(--radius-round);
+  border: var(--border-radius-none);
+  border-radius: var(--border-radius-round);
   cursor: pointer;
   display: flex;
-  padding: 0;
+  padding: var(--spacing-none);
 
   &:focus-visible {
     // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
@@ -54,17 +59,17 @@ div {
 }
 
 .pds-avatar__badge {
-  background-color: var(--badge-background-color);
-  border: var(--border);
-  border-color: var(--badge-background-color);
-  border-radius: var(--radius-round);
-  bottom: 0;
+  background-color: var(--color-background-badge);
+  border: var(--border-default);
+  border-color: var(--color-border-badge);
+  border-radius: var(--border-radius-round);
+  bottom: var(--spacing-none);
   position: absolute;
-  right: 0;
+  right: var(--spacing-none);
 }
 
 img {
-  border-radius: var(--admin-radius-round, var(--radius-round));
+  border-radius: var(--border-radius-admin-round, var(--border-radius-round));
   height: 100%;
   object-fit: cover;
   width: 100%;

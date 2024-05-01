@@ -1,41 +1,53 @@
 :host {
-  --border-color: transparent;
-  --border-color-hover: transparent;
-  --border-color-focus: transparent;
-  --border-color-disabled: transparent;
+  --border-width-default: var(--pine-border-width-thin);
+  --border-width-unstyled: var(--pine-border-radius-0);
+
+  --color-border-default: transparent;
+  --color-border-disabled: transparent;
+  --color-border-focus: transparent;
+  --color-border-hover: transparent;
 
   // primary
-  --background-color-primary: var(--pine-color-neutral-charcoal-400);
-  --background-color-hover-primary: var(--pine-color-neutral-charcoal-500);
-  --background-color-disabled-primary: var(--pine-color-neutral-grey-300);
-  --color-primary: var(--pine-color-base-white);
-  --color-disabled-primary: var(--pine-color-neutral-charcoal-100);
-  --outline-color-primary: var(--pine-color-primary-200);
+  --color-background-primary-default: var(--pine-color-background-action-primary-default);
+  --color-background-primary-disabled: var(--pine-color-background-action-primary-disabled);
+  --color-background-primary-hover: var(--pine-color-background-action-primary-hover);
+  --color-text-primary-default: var(--pine-color-text-action-primary-default);
+  --color-text-primary-disabled: var(--pine-color-text-action-primary-disabled);
+  --color-outline-primary: var(--pine-color-blue-200);
 
   // secondary
-  --border-color-secondary: var(--pine-color-neutral-grey-400);
-  --border-color-hover-secondary: var(--pine-color-neutral-grey-500);
-  --border-color-focus-secondary: var(--pine-color-neutral-grey-300);
-  --border-color-disabled-secondary: var(--pine-color-neutral-grey-300);
-  --color-secondary: var(--pine-color-neutral-charcoal-400);
-  --color-disabled-secondary: var(--pine-color-neutral-charcoal-100);
-  --outline-color-secondary: var(--pine-color-primary-200);
+  --color-border-secondary-default: var(--pine-color-grey-400);
+  --color-border-secondary-disabled: var(--pine-color-grey-300);
+  --color-border-secondary-focus: var(--pine-color-grey-300);
+  --color-border-secondary-hover: var(--pine-color-grey-500);
+  --color-text-secondary-default: var(--pine-color-text-body-default);
+  --color-text-secondary-disabled: var(--pine-color-text-action-primary-disabled);
+  --color-outline-secondary: var(--pine-color-blue-200);
 
   // accent
-  --background-color-accent: var(--pine-color-primary-300);
-  --background-color-hover-accent: var(--pine-color-primary-400);
-  --background-color-disabled-accent: var(--pine-color-primary-100);
-  --color-accent: var(--pine-color-base-white);
-  --color-disabled-accent: var(--pine-color-primary-200);
-  --outline-color-accent: var(--pine-color-primary-200);
+  --color-background-accent-default: var(--pine-color-background-action-accent-default);
+  --color-background-accent-disabled: var(--pine-color-background-action-accent-disabled);
+  --color-background-accent-hover: var(--pine-color-background-action-accent-hover);
+  --color-text-accent-default: var(--pine-color-text-action-accent-default);
+  --color-text-accent-disabled: var(--pine-color-text-action-accent-disabled);
+  --color-outline-accent: var(--pine-color-blue-200);
 
   // destructive
-  --background-color-destructive: var(--pine-color-red-300);
-  --background-color-hover-destructive: var(--pine-color-red-400);
-  --background-color-disabled-destructive: var(--pine-color-red-100);
-  --color-destructive: var(--pine-color-base-white);
-  --color-disabled-destructive: var(--pine-color-red-200);
-  --outline-color-destructive: var(--pine-color-red-200);
+  --color-background-destructive-default: var(--pine-color-background-action-destructive-default);
+  --color-background-destructive-disabled: var(--pine-color-background-action-destructive-disabled);
+  --color-background-destructive-hover: var(--pine-color-background-action-destructive-hover);
+  --color-text-destructive-default: var(--pine-color-text-action-destructive-default);
+  --color-text-destructive-disabled: var(--pine-color-text-action-destructive-disabled);
+  --color-outline-destructive: var(--pine-color-red-200);
+
+  --spacing-disclosure-icon-margin-inline-end: var(--pine-spacing-0);
+  --spacing-disclosure-margin-inline-start: var(--pine-spacing-100);
+  --spacing-icon-margin-inline-end: var(--pine-spacing-100);
+  --spacing-padding-block: var(--pine-spacing-100);
+  --spacing-padding-inline: var(--pine-spacing-200);
+  --spacing-unstyled: var(--pine-spacing-0);
+
+  --typography-default: var(--pine-body-med);
 
   display: inline-flex;
   vertical-align: middle;
@@ -43,98 +55,96 @@
 
 .pds-button {
   align-items: center;
-  background-color: var(--background-color);
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  color: var(--color);
+  background-color: var(--color-background-default);
+  border: var(--border-width-default) solid var(--color-border-default);
+  border-radius: var(--pine-border-radius-125);
+  color: var(--color-text-default);
   display: flex;
-  font-family: inherit;
-  font-size: 1rem;
-  font-weight: 500;
+  font: var(--typography-default);
   min-height: 40px;
-  padding: 0.5rem 1rem;
+  padding: var(--spacing-padding-block) var(--spacing-padding-inline);
 
   pds-icon {
     fill: currentColor;
-    margin-inline-end: 0.5rem;
+    margin-inline-end: var(--spacing-icon-margin-inline-end);
   }
 
   &:hover {
-    background-color: var(--background-color-hover);
-    border-color: var(--border-color-hover);
+    background-color: var(--color-background-hover);
+    border-color: var(--color-border-hover);
   }
 
   &:focus-visible {
     --box-shadow-focus: 0 0 0 2px var(--pine-color-primary-200);
-    border-color: var(--border-color-focus);
+    border-color: var(--color-border-focus);
     // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
     box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
     outline: none;
   }
 
   &:disabled {
-    background-color: var(--background-color-disabled);
-    border-color: var(--border-color-disabled);
-    color: var(--color-disabled);
+    background-color: var(--color-background-disabled);
+    border-color: var(--color-border-disabled);
+    color: var(--color-text-disabled);
   }
 }
 
 .pds-button--primary {
-  --background-color: var(--background-color-primary);
-  --background-color-hover: var(--background-color-hover-primary);
-  --background-color-disabled: var(--background-color-disabled-primary);
-  --color: var(--color-primary);
-  --color-disabled: var(--color-disabled-primary);
-  --outline-color: var(--outline-color-primary);
+  --color-background-default: var(--color-background-primary-default);
+  --color-background-hover: var(--color-background-primary-hover);
+  --color-background-disabled: var(--color-background-primary-disabled);
+  --color-text-default: var(--color-text-primary-default);
+  --color-text-disabled: var(--color-text-primary-disabled);
+  --color-outline: var(--color-outline-primary);
 }
 
 .pds-button--accent {
-  --background-color: var(--background-color-accent);
-  --background-color-hover: var(--background-color-hover-accent);
-  --background-color-disabled: var(--background-color-disabled-accent);
-  --color: var(--color-accent);
-  --color-disabled: var(--color-disabled-accent);
-  --outline-color: var(--outline-color-accent);
+  --color-background-default: var(--color-background-accent-default);
+  --color-background-hover: var(--color-background-accent-hover);
+  --color-background-disabled: var(--color-background-accent-disabled);
+  --color-text-default: var(--color-text-accent-default);
+  --color-text-disabled: var(--color-text-accent-disabled);
+  --color-outline: var(--color-outline-accent);
 }
 
 .pds-button--destructive {
-  --background-color: var(--background-color-destructive);
-  --background-color-hover: var(--background-color-hover-destructive);
-  --background-color-disabled: var(--background-color-disabled-destructive);
-  --color: var(--color-destructive);
-  --color-disabled: var(--color-disabled-destructive);
-  --outline-color: var(--outline-color-destructive);
+  --color-background-default: var(--color-background-destructive-default);
+  --color-background-hover: var(--color-background-destructive-hover);
+  --color-background-disabled: var(--color-background-destructive-disabled);
+  --color-text-default: var(--color-text-destructive-default);
+  --color-text-disabled: var(--color-text-destructive-disabled);
+  --color-outline: var(--color-outline-destructive);
 }
 
 .pds-button--secondary,
 .pds-button--disclosure {
-  --background-color: transparent;
-  --background-color-hover: transparent;
-  --background-color-disabled: transparent;
-  --border-color-disabled: var(--border-color-disabled-secondary);
-  --border-color-focus: var(--border-color-focus-secondary);
-  --border-color-hover: var(--border-color-hover-secondary);
-  --border-color: var(--border-color-secondary);
-  --color: var(--color-secondary);
-  --color-disabled: var(--color-disabled-secondary);
-  --outline-color: var(--outline-color-secondary);
+  --color-background-default: transparent;
+  --color-background-hover: transparent;
+  --color-background-disabled: transparent;
+  --color-border-disabled: var(--color-border-secondary-disabled);
+  --color-border-focus: var(--color-border-secondary-focus);
+  --color-border-hover: var(--color-border-secondary-hover);
+  --color-border-default: var(--color-border-secondary-default);
+  --color-text-default: var(--color-text-secondary-default);
+  --color-text-disabled: var(--color-text-secondary-disabled);
+  --color-outline: var(--color-outline-secondary);
 }
 
 .pds-button--disclosure {
   pds-icon {
-    margin-inline-end: 0;
-    margin-inline-start: 0.5rem;
+    margin-inline-end: var(--spacing-disclosure-icon-margin-inline-end);
+    margin-inline-start: var(--spacing-disclosure-margin-inline-start);
   }
 }
 
 .pds-button--unstyled {
-  --background-color: transparent;
-  --background-color-hover: transparent;
-  --background-color-disabled: transparent;
-  --color: inherit;
-  border: 0;
-  margin: 0;
+  --color-background-default: transparent;
+  --color-background-hover: transparent;
+  --color-background-disabled: transparent;
+  --color-text-default: inherit;
+  border: var(--border-width-unstyled);
+  margin: var(--spacing-unstyled);
   min-height: auto;
-  padding: 0;
+  padding: var(--spacing-unstyled);
   width: inherit;
 }
