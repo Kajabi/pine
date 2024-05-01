@@ -1,4 +1,6 @@
 pds-tab {
+  --border-none: var(--pine-border-width-none);
+
   --border-radius-availability: var(--pine-border-radius-100);
   --border-radius-default: var(--pine-border-radius-125);
   --border-radius-none: var(--pine-border-radius-0);
@@ -38,7 +40,7 @@ pds-tab {
 @mixin pds-button-style-reset {
   appearance: none;
   background-color: transparent;
-  border: var(--border-radius-none);
+  border: var(--border-none);
   box-shadow: none;
   color: inherit;
   cursor: pointer;
