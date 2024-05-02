@@ -11,7 +11,6 @@ interface Token {
 }
 
 interface DocTokenTableProps {
-  type: string;
   category: string;
 }
 
@@ -33,20 +32,23 @@ const findValueByKey = (obj: Record<string, any>, keyPath: string): string | und
   return 'value' in value ? value.value : undefined;
 };
 
-const DocTokenTable: React.FC<DocTokenTableProps> = ({ type, category }) => {
-  let pineTokens: Token | TokenEntry = {};
-  
-  if (type == 'core') {
-    pineTokens = allTokenJson.core[category as keyof typeof allTokenJson.core] as Token;
-  } else if (type == 'semantic') {
-    pineTokens = allTokenJson.semantic[category as keyof typeof allTokenJson.semantic] as Token || {};
-  }
+const DocTokenTable: React.FC<DocTokenTableProps> = ({ category }) => {
+  // let pineTokens: Token | TokenEntry = {};
+  const pineTokens = allTokenJson.core[category as keyof typeof allTokenJson.core] as Token;
 
   const buildValue = (item): string => {
     const boxShadowValue = Object.values(item) as unknown as string[];
     const filteredBoxShadowValue = boxShadowValue.filter(prop => prop !== 'dropShadow');
     
     return filteredBoxShadowValue.join(' ');
+  };
+
+  const categoryStyleMapping: Record<string, Partial<React.CSSProperties>> = {
+    color: { width: "90px", height: "30px" },
+    border: { width: "30px", height: "30px" },
+    "border-radius": { border: "1px solid #d3d5d9", width: "100px", height: "50px" },
+    "border-width": { border: "1px solid #d3d5d9", width: "30px", height: "30px" },
+    "box-shadow": { width: "60px", height: "30px" },
   };
   
   const renderTableRows = (tokens: Token, parentKey?: string): JSX.Element[] => {
@@ -58,17 +60,14 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ type, category }) => {
       if ('value' in token) {
         let matchingValue: string | undefined;
 
-        // [{'box-shadow': ['x', 'y', 'blur', 'spread', 'color']}]
-        //check for the token.type
-
         if (typeof token.value === 'object') {
           if ('value' in token.value) {
             matchingValue = token.value.value as string;
           } else {
             if (token.type = 'box-shadow') {
               if (Array.isArray(token.value)) {
-                const boxShadows  = [] 
-                for (const item of token.value){
+                const boxShadows = [] ;
+                for (const item of token.value as string[]){
                   boxShadows.push(buildValue(item));
                 }
                 matchingValue = boxShadows.join(', ');
@@ -84,37 +83,23 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ type, category }) => {
         }
         
         if (matchingValue) {
-          // console.log('category', category );
+          const categoryStyles = categoryStyleMapping[category];
+          Object.assign(style, categoryStyles);
+
           switch (category) {
             case 'color':
-              if (matchingValue.startsWith('#')) {
-                style.backgroundColor = matchingValue;
-                style.width = "30px";
-                style.height = "30px";
-              } else {
-                style.color = matchingValue;
-              }
+              style.backgroundColor = matchingValue;
               break;
             case 'border':
               style.border = matchingValue;
-              style.width = "30px";
-              style.height = "30px";
               break;
             case 'border-radius':
-              style.border = "1px solid black";
               style.borderRadius = matchingValue;
-              style.width = "100px";
-              style.height = "50px";
               break;
             case 'border-width':
-              style.border = "1px solid black";
               style.borderWidth = matchingValue;
-              style.width = "30px";
-              style.height = "30px";
               break;
             case 'box-shadow':
-              style.width = "60px";
-              style.height = "30px";
               style.boxShadow = matchingValue;
               break;
             case 'letter-spacing':
