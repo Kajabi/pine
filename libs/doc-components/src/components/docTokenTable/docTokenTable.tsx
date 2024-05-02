@@ -37,7 +37,7 @@ const findValueByKey = (obj: Record<string, any>, keyPath: string): string | und
 const DocTokenTable: React.FC<DocTokenTableProps> = ({ category }) => {
   const pineTokens = allTokenJson.core[category as keyof typeof allTokenJson.core] as Token;
 
-  const buildValue = (item): string => {
+  const buildValue = (item: string | { [s: string]: unknown; } | ArrayLike<unknown>): string => {
     const boxShadowValue = Object.values(item) as unknown as string[];
     const filteredBoxShadowValue = boxShadowValue.filter(prop => prop !== 'dropShadow');
     
@@ -45,11 +45,11 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category }) => {
   };
 
   const categoryStyleMapping: Record<string, Partial<React.CSSProperties>> = {
-    color: { width: "90px", height: "30px" },
-    border: { width: "30px", height: "30px" },
-    "border-radius": { border: "1px solid #d3d5d9", width: "100px", height: "50px" },
-    "border-width": { border: "1px solid #d3d5d9", width: "30px", height: "30px" },
-    "box-shadow": { width: "60px", height: "30px" },
+    color: { width: "100%", height: "40px", borderRadius: "4px"},
+    border: { width: "100%", height: "40px", borderRadius: "4px" },
+    "border-radius": { border: "1px solid #d3d5d9", width: "100%", height: "40px" },
+    "border-width": { border: "1px solid #d3d5d9", width: "100%", height: "40px" },
+    "box-shadow": { width: "100%", height: "40px" },
   };
   
   const renderTableRows = (tokens: Token, parentKey?: string): JSX.Element[] => {
@@ -124,8 +124,8 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category }) => {
                 <tr key={fullKey}>
                   <td>
                     <div style={{ display: 'flex', alignItems: 'center', gap: `var(${prefixedKey})`}}>
-                      <div style={{ border: '1px solid black', width: '30px', height: '30px' }}></div>
-                      <div style={{ border: '1px solid black', width: '30px', height: '30px' }}></div>
+                      <div style={{ border: '1px solid black', width: '60px', height: '30px', borderRadius: '4px' }}></div>
+                      <div style={{ border: '1px solid black', width: '60px', height: '30px', borderRadius: '4px' }}></div>
                     </div>
                   </td>
                   <td>{prefixedKey}</td>
