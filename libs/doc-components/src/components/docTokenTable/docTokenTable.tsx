@@ -1,6 +1,8 @@
 import React from 'react';
 import allTokenJson from '../../../../core/src/global/styles/tokens/tokens.json';
 
+import './docTokenTable.css';
+
 interface TokenEntry {
   value: string;
   type: string;
@@ -33,7 +35,6 @@ const findValueByKey = (obj: Record<string, any>, keyPath: string): string | und
 };
 
 const DocTokenTable: React.FC<DocTokenTableProps> = ({ category }) => {
-  // let pineTokens: Token | TokenEntry = {};
   const pineTokens = allTokenJson.core[category as keyof typeof allTokenJson.core] as Token;
 
   const buildValue = (item): string => {
@@ -163,7 +164,7 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category }) => {
   };
   
   return (
-    <table>
+    <table className="doc-token-table">
       <thead>
         <tr>
           <th>Preview</th>
