@@ -461,7 +461,7 @@ export namespace Components {
         "componentId": string;
         /**
           * Sets the progress fill color. Accepts a color token or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
-          * @defaultValue 'var(--pds-color-primary)'
+          * @defaultValue 'var(--pine-color-blue-300)'
          */
         "fillColor": string;
         /**
@@ -1668,7 +1668,7 @@ declare namespace LocalJSX {
         "componentId": string;
         /**
           * Sets the progress fill color. Accepts a color token or a [valid color value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
-          * @defaultValue 'var(--pds-color-primary)'
+          * @defaultValue 'var(--pine-color-blue-300)'
          */
         "fillColor"?: string;
         /**
