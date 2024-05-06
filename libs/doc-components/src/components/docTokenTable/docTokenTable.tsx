@@ -66,28 +66,10 @@ const applyStyle = (category: string, value: string): React.CSSProperties => {
   return style;
 }
 
-const findValueByKey = (obj: Record<string, any>, keyPath: string): string | undefined => {
-  if (obj === null || typeof obj !== 'object') {
-    return undefined;
-  }
-
-  const keys = keyPath.split('.');
-  let value = obj;
-
-  for (const key of keys) {
-    if (typeof value !== 'object' || !Object.prototype.hasOwnProperty.call(value, key)) {
-      return undefined;
-    }
-    value = value[key];
-  }
-
-  return 'value' in value ? value.value : undefined;
-};
-
 const DocTokenTable: React.FC<DocTokenTableProps> = ({ category }) => {
   const pineTokens = allTokenJson.core[category as keyof typeof allTokenJson.core] as Token;
 
-  const buildValue = (item: string | { [s: string]: unknown; } | ArrayLike<unknown>): string => {
+  const buildValue = (item: string | Record<string, unknown> | ArrayLike<unknown>): string => {
     const boxShadowValue = Object.values(item) as unknown as string[];
     const filteredBoxShadowValue = boxShadowValue.filter(prop => prop !== 'dropShadow');
     
@@ -102,13 +84,14 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category }) => {
             
       if ('value' in token) {
         let cssPropertyValue: string | undefined;
+        cssPropertyValue = token.value as string;  
                 
         if (typeof token.value === 'object') {
           if ('value' in token.value) {
             cssPropertyValue = token.value.value as string;
           }
           else { // For BoxShadow's
-            if (token.type = 'box-shadow') {
+            if (token.type === 'boxShadow') {
               if (Array.isArray(token.value)) {
                 const boxShadows = [] ;
                 for (const item of token.value as string[]){
@@ -120,11 +103,6 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category }) => {
               }
             }
           }
-        }
-        else {
-          cssPropertyValue = token.value.startsWith('{') && token.value.endsWith('}')
-          ? findValueByKey(allTokenJson.core, token.value.slice(1, -1))
-          : token.value;  
         }
 
         let style: React.CSSProperties = {};  
