@@ -16,6 +16,56 @@ interface DocTokenTableProps {
   category: string;
 }
 
+const categoryStyleMapping: Record<string, Partial<React.CSSProperties>> = {
+  color: { width: "100%", height: "40px", borderRadius: "4px"},
+  border: { width: "100%", height: "40px", borderRadius: "4px" },
+  "border-radius": { border: "1px solid #d3d5d9", width: "100%", height: "40px" },
+  "border-width": { border: "1px solid #d3d5d9", width: "100%", height: "40px" },
+  "box-shadow": { width: "100%", height: "40px" },
+};
+
+const applyStyle = (category: string, value: string): React.CSSProperties => {
+  const style: React.CSSProperties = {};
+  const categoryStyles = categoryStyleMapping[category];
+
+  Object.assign(style, categoryStyles);
+
+  switch (category) {
+    case 'color':
+      style.backgroundColor = value;
+      break;
+    case 'border':
+      style.border = value;
+      break;
+    case 'border-radius':
+      style.borderRadius = value;
+      break;
+    case 'border-width':
+      style.borderWidth = value;
+      break;
+    case 'box-shadow':
+      style.boxShadow = value;
+      break;
+    case 'letter-spacing':
+      style.letterSpacing = value;
+      break;
+    case 'line-height':
+      style.lineHeight = value;
+      break;
+    case 'font-weight':
+      style.fontWeight = value;
+      break;
+    case 'font-family':
+      style.fontFamily = value;
+      break;
+    case 'font-size':
+      style.fontSize = value;
+      break;
+  }
+
+  return style;
+}
+
 const findValueByKey = (obj: Record<string, any>, keyPath: string): string | undefined => {
   if (obj === null || typeof obj !== 'object') {
     return undefined;
@@ -44,121 +94,73 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category }) => {
     return filteredBoxShadowValue.join(' ');
   };
 
-  const categoryStyleMapping: Record<string, Partial<React.CSSProperties>> = {
-    color: { width: "100%", height: "40px", borderRadius: "4px"},
-    border: { width: "100%", height: "40px", borderRadius: "4px" },
-    "border-radius": { border: "1px solid #d3d5d9", width: "100%", height: "40px" },
-    "border-width": { border: "1px solid #d3d5d9", width: "100%", height: "40px" },
-    "box-shadow": { width: "100%", height: "40px" },
-  };
-  
   const renderTableRows = (tokens: Token, parentKey?: string): JSX.Element[] => {
     return Object.entries(tokens).map(([key, token]): JSX.Element => {
-      const fullKey = parentKey ? `${parentKey}-${key}` : key;
-      const prefixedKey = `--pine-${category}-${fullKey}`;
-      const style: React.CSSProperties = {};
-  
+      
+      const tokenKeyName = parentKey ? `${parentKey}-${key}` : key;
+      const cssVariableName =  `--pine-${category}-${tokenKeyName}`;
+            
       if ('value' in token) {
-        let matchingValue: string | undefined;
-
+        let cssPropertyValue: string | undefined;
+                
         if (typeof token.value === 'object') {
           if ('value' in token.value) {
-            matchingValue = token.value.value as string;
-          } else {
+            cssPropertyValue = token.value.value as string;
+          }
+          else { // For BoxShadow's
             if (token.type = 'box-shadow') {
               if (Array.isArray(token.value)) {
                 const boxShadows = [] ;
                 for (const item of token.value as string[]){
                   boxShadows.push(buildValue(item));
                 }
-                matchingValue = boxShadows.join(', ');
+                cssPropertyValue = boxShadows.join(', ');
               } else {
-                matchingValue = buildValue(token.value);
+                cssPropertyValue = buildValue(token.value);
               }
             }
           }
-        } else {
-          matchingValue = token.value.startsWith('{') && token.value.endsWith('}')
-            ? findValueByKey(allTokenJson.core, token.value.slice(1, -1))
-            : token.value;
         }
-        
-        if (matchingValue) {
-          const categoryStyles = categoryStyleMapping[category];
-          Object.assign(style, categoryStyles);
-
-          switch (category) {
-            case 'color':
-              style.backgroundColor = matchingValue;
-              break;
-            case 'border':
-              style.border = matchingValue;
-              break;
-            case 'border-radius':
-              style.borderRadius = matchingValue;
-              break;
-            case 'border-width':
-              style.borderWidth = matchingValue;
-              break;
-            case 'box-shadow':
-              style.boxShadow = matchingValue;
-              break;
-            case 'letter-spacing':
-              style.letterSpacing = matchingValue;
-              break;
-            case 'line-height':
-              style.lineHeight = matchingValue;
-              break;
-            case 'font-weight':
-              style.fontWeight = matchingValue;
-              break;
-            case 'font-family':
-              style.fontFamily = matchingValue;
-              break;
-            case 'font-size':
-              style.fontSize = matchingValue;
-              break;
-            case 'spacing':
-              // Render spacing row
-              return (
-                <tr key={fullKey}>
-                  <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: `var(${prefixedKey})`}}>
-                      <div style={{ border: '1px solid black', width: '60px', height: '30px', borderRadius: '4px' }}></div>
-                      <div style={{ border: '1px solid black', width: '60px', height: '30px', borderRadius: '4px' }}></div>
-                    </div>
-                  </td>
-                  <td>{prefixedKey}</td>
-                  <td>{matchingValue}</td>
-                </tr>
-              );
-            default:
-              // For other categories, render an empty div with the computed style
-              return (
-                <tr key={fullKey}>
-                  <td>
-                    <div style={style}></div>
-                  </td>
-                  <td>{prefixedKey}</td>
-                  <td>{matchingValue}</td>
-                </tr>
-              );
-          }
+        else {
+          cssPropertyValue = token.value.startsWith('{') && token.value.endsWith('}')
+          ? findValueByKey(allTokenJson.core, token.value.slice(1, -1))
+          : token.value;  
         }
 
+        let style: React.CSSProperties = {};  
         // Render "Aa" preview only for text-based styles
-        const isTextBasedStyle = ['letter-spacing', 'line-height', 'font-weight', 'font-family', 'font-size'].includes(category);
-        const preview = isTextBasedStyle ? <div style={style}>Aa</div> : <div style={style}></div>;
+        let previewDiv = <div style={style}>Aa</div>;
+
+        if (cssPropertyValue) {
+          style = applyStyle(category, cssPropertyValue);
+
+          const isTextBasedStyle = ['letter-spacing', 'line-height', 'font-weight', 'font-family', 'font-size'].includes(category);
+          previewDiv = isTextBasedStyle ? <div style={style}>Aa</div> : <div style={style}></div>;
+
+           switch (category) {
+            case 'spacing':
+              previewDiv = 
+                <div style={{ display: 'flex', alignItems: 'center', gap: `var(${cssVariableName})`}}>
+                  <div key={`${Math.floor(Math.random() * (100000 - 1 + 1)) + 1}`} style={{ border: '1px solid #B5BAC0', width: '60px', height: '30px', borderRadius: '4px' }}></div>
+                  <div style={{ border: '1px solid #B5BAC0', width: '60px', height: '30px', borderRadius: '4px' }}></div>
+                </div>
+              ;
+              break;
+           }
+        }
 
         return (
-          <tr key={fullKey}>
-            <td>{preview}</td>
-            <td>{prefixedKey}</td>
-            <td>{matchingValue}</td>
+          <tr key={`${cssVariableName}-${new Date().getUTCMilliseconds()}`}>
+            <td>{previewDiv}</td>
+            <td>{cssVariableName}</td>
+            <td>{cssPropertyValue}</td>
           </tr>
         );
-      } else {
-        return <>{renderTableRows(token as Token, fullKey)}</>;
+      }
+      else {
+        return <>
+          { renderTableRows(token as Token, tokenKeyName) }
+        </>;
       }
     });
   };
