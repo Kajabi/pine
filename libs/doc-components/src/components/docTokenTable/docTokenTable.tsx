@@ -72,20 +72,20 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category }) => {
   const buildValue = (item: string | Record<string, unknown> | ArrayLike<unknown>): string => {
     const boxShadowValue = Object.values(item) as unknown as string[];
     const filteredBoxShadowValue = boxShadowValue.filter(prop => prop !== 'dropShadow');
-    
+
     return filteredBoxShadowValue.join(' ');
   };
 
   const renderTableRows = (tokens: Token, parentKey?: string): JSX.Element[] => {
     return Object.entries(tokens).map(([key, token]): JSX.Element => {
-      
+
       const tokenKeyName = parentKey ? `${parentKey}-${key}` : key;
       const cssVariableName =  `--pine-${category}-${tokenKeyName}`;
-            
+
       if ('value' in token) {
         let cssPropertyValue: string | undefined;
-        cssPropertyValue = token.value as string;  
-                
+        cssPropertyValue = token.value as string;
+
         if (typeof token.value === 'object') {
           if ('value' in token.value) {
             cssPropertyValue = token.value.value as string;
@@ -105,7 +105,7 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category }) => {
           }
         }
 
-        let style: React.CSSProperties = {};  
+        let style: React.CSSProperties = {};
         // Render "Aa" preview only for text-based styles
         let previewDiv = <div style={style}>Aa</div>;
 
@@ -117,10 +117,10 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category }) => {
 
            switch (category) {
             case 'spacing':
-              previewDiv = 
+              previewDiv =
                 <div style={{ display: 'flex', alignItems: 'center', gap: `var(${cssVariableName})`}}>
-                  <div key={`${Math.floor(Math.random() * (100000 - 1 + 1)) + 1}`} style={{ border: '1px solid #B5BAC0', width: '60px', height: '30px', borderRadius: '4px' }}></div>
-                  <div style={{ border: '1px solid #B5BAC0', width: '60px', height: '30px', borderRadius: '4px' }}></div>
+                  <div key={`${Math.floor(Math.random() * (100000 - 1 + 1)) + 1}`} style={{ border: '1px solid #eceeef', width: '60px', height: '30px', borderRadius: '4px' }}></div>
+                  <div style={{ border: '1px solid #eceeef', width: '60px', height: '30px', borderRadius: '4px' }}></div>
                 </div>
               ;
               break;
@@ -142,7 +142,7 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category }) => {
       }
     });
   };
-  
+
   return (
     <table className="doc-token-table">
       <thead>
