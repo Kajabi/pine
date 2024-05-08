@@ -90,46 +90,44 @@ When `dividers` is set to `true`, a border will display between items.
 When `handle` is set to `true` on a `pds-sortable-item` a handle icon will be displayed within an item.
 
 <DocCanvas client:only mdxSource={{
-  react: `<PdsSortable componentId="handle">
-  <PdsSortableItem handle={true}>Item 1</PdsSortableItem>
-  <PdsSortableItem handle={true}>Item 2</PdsSortableItem>
-  <PdsSortableItem handle={true}>Item 3</PdsSortableItem>
+  react: `<PdsSortable componentId="handle" handleType="handle">
+  <PdsSortableItem>Item 1</PdsSortableItem>
+  <PdsSortableItem>Item 2</PdsSortableItem>
+  <PdsSortableItem>Item 3</PdsSortableItem>
 </PdsSortable>
   `,
-  webComponent: `<pds-sortable component-id="handle">
-  <pds-sortable-item handle>Item 1</pds-sortable-item>
-  <pds-sortable-item handle>Item 2</pds-sortable-item>
-  <pds-sortable-item handle>Item 3</pds-sortable-item>
+  webComponent: `<pds-sortable component-id="handle" handle-type="handle">
+  <pds-sortable-item>Item 1</pds-sortable-item>
+  <pds-sortable-item>Item 2</pds-sortable-item>
+  <pds-sortable-item>Item 3</pds-sortable-item>
 </pds-sortable>
 `}}>
-  <pds-sortable component-id="handle">
-    <pds-sortable-item handle>Item 1</pds-sortable-item>
-    <pds-sortable-item handle>Item 2</pds-sortable-item>
-    <pds-sortable-item handle>Item 3</pds-sortable-item>
+  <pds-sortable component-id="handle" handle-type="handle">
+    <pds-sortable-item>Item 1</pds-sortable-item>
+    <pds-sortable-item>Item 2</pds-sortable-item>
+    <pds-sortable-item>Item 3</pds-sortable-item>
   </pds-sortable>
 </DocCanvas>
 
 #### Handle vs. Row `handle-type`
 By default the full `row` is active for dragging/sorting. However, `handle-type` can be set to `handle` in order to allow only the handle to be used.
 
-This should be used in combination with `handle` set to `true` on the `pds-sortable-item`.
-
 <DocCanvas client:only mdxSource={{
   react: `<PdsSortable componentId="handle-only" handleType="handle">
-  <PdsSortableItem handle={true}>Item 1</PdsSortableItem>
-  <PdsSortableItem handle={true}>Item 2</PdsSortableItem>
-  <PdsSortableItem handle={true}>Item 3</PdsSortableItem>
+  <PdsSortableItem>Item 1</PdsSortableItem>
+  <PdsSortableItem>Item 2</PdsSortableItem>
+  <PdsSortableItem>Item 3</PdsSortableItem>
 </PdsSortable>`,
   webComponent: `<pds-sortable component-id="handle-only" handle-type="handle">
-  <pds-sortable-item handle>Item 1</pds-sortable-item>
-  <pds-sortable-item handle>Item 2</pds-sortable-item>
-  <pds-sortable-item handle>Item 3</pds-sortable-item>
+  <pds-sortable-item>Item 1</pds-sortable-item>
+  <pds-sortable-item>Item 2</pds-sortable-item>
+  <pds-sortable-item>Item 3</pds-sortable-item>
 </pds-sortable>
 `}}>
   <pds-sortable component-id="handle-only" handle-type="handle">
-    <pds-sortable-item handle>Item 1</pds-sortable-item>
-    <pds-sortable-item handle>Item 2</pds-sortable-item>
-    <pds-sortable-item handle>Item 3</pds-sortable-item>
+    <pds-sortable-item>Item 1</pds-sortable-item>
+    <pds-sortable-item>Item 2</pds-sortable-item>
+    <pds-sortable-item>Item 3</pds-sortable-item>
   </pds-sortable>
 </DocCanvas>
 
@@ -209,8 +207,8 @@ The `sortable-item-actions` slot is provided to place content within the `pds-so
 The following is a demo of how all the properties and slots can be used together to create a sortable list.
 
 <DocCanvas client:only mdxSource={{
-  react: `<PdsSortable border={true} dividers={true} componentId="demo">
-  <PdsSortableItem enable-actions handle>
+  react: `<PdsSortable border={true} dividers={true} componentId="demo" handleType="handle">
+  <PdsSortableItem enable-actions>
     <div>
       <div><strong>Item 1</strong></div>
       <div>Item 1 description copy text</div>
@@ -219,7 +217,7 @@ The following is a demo of how all the properties and slots can be used together
       <PdsLink href="#" variant="plain">action</PdsLink>
     </div>
   </PdsSortableItem>
-  <PdsSortableItem enable-actions handle>
+  <PdsSortableItem enable-actions>
     <div>
       <div><strong>Item 2</strong></div>
       <div>Item 2 description copy text</div>
@@ -228,7 +226,7 @@ The following is a demo of how all the properties and slots can be used together
       <PdsLink href="#" variant="plain">action</PdsLink>
     </div>
   </PdsSortableItem>
-  <PdsSortableItem enable-actions handle>
+  <PdsSortableItem enable-actions>
     <div>
       <div><strong>Item 3</strong></div>
       <div>Item 3 description copy text</div>
@@ -239,8 +237,8 @@ The following is a demo of how all the properties and slots can be used together
   </PdsSortableItem>
 </PdsSortable>
   `,
-  webComponent: `<pds-sortable border dividers component-id="demo">
-  <pds-sortable-item enable-actions handle>
+  webComponent: `<pds-sortable border dividers component-id="demo" handle-type="handle">
+  <pds-sortable-item enable-actions>
     <div>
       <div><strong>Item 1</strong></div>
       <div>Item 1 description copy text</div>
@@ -249,7 +247,7 @@ The following is a demo of how all the properties and slots can be used together
       <pds-link href="#" variant="plain">action</pds-link>
     </div>
   </pds-sortable-item>
-  <pds-sortable-item enable-actions handle>
+  <pds-sortable-item enable-actions>
     <div>
       <div><strong>Item 2</strong></div>
       <div>Item 2 description copy text</div>
@@ -258,7 +256,7 @@ The following is a demo of how all the properties and slots can be used together
       <pds-link href="#" variant="plain">action</pds-link>
     </div>
   </pds-sortable-item>
-  <pds-sortable-item enable-actions handle>
+  <pds-sortable-item enable-actions>
     <div>
       <div><strong>Item 3</strong></div>
       <div>Item 3 description copy text</div>
@@ -269,8 +267,8 @@ The following is a demo of how all the properties and slots can be used together
   </pds-sortable-item>
 </pds-sortable>
 `}}>
-  <pds-sortable border dividers component-id="demo">
-    <pds-sortable-item enable-actions handle>
+  <pds-sortable border dividers component-id="demo" handle-type="handle">
+    <pds-sortable-item enable-actions>
       <div>
         <div><strong>Item 1</strong></div>
         <div>Item 1 description text</div>
@@ -279,7 +277,7 @@ The following is a demo of how all the properties and slots can be used together
         <pds-link href="#" variant="plain">action</pds-link>
       </div>
     </pds-sortable-item>
-    <pds-sortable-item enable-actions handle>
+    <pds-sortable-item enable-actions>
       <div>
         <div><strong>Item 2</strong></div>
         <div>Item 2 description text</div>
@@ -288,7 +286,7 @@ The following is a demo of how all the properties and slots can be used together
         <pds-link href="#" variant="plain">action</pds-link>
       </div>
     </pds-sortable-item>
-    <pds-sortable-item enable-actions handle>
+    <pds-sortable-item enable-actions>
       <div>
         <div><strong>Item 3</strong></div>
         <div>Item 3 description text</div>

@@ -1,4 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
+import { SortableType } from './sortable-interface';
 import Sortable from 'sortablejs';
 
 @Component({
@@ -46,7 +47,7 @@ export class PdsSortable {
       classNames.push('pds-sortable--divided');
     }
 
-    if (this.handleType) {
+    if (this.handleType !== undefined) {
       classNames.push(`pds-sortable--handle-type-${this.handleType}`);
     }
 
@@ -55,7 +56,7 @@ export class PdsSortable {
 
   componentDidLoad() {
 
-    let sortableOptions: any = {
+    let sortableOptions: SortableType = {
       animation: 150,
       ghostClass: 'pds-sortable-item--ghost',
       dragClass: 'pds-sortable-item--drag',

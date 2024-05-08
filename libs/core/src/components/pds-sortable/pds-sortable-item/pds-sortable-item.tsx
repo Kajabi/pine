@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop } from '@stencil/core';
+import { Component, Element, Host, h, Prop } from '@stencil/core';
 
 import { handle } from '@pine-ds/icons/icons';
 /**
@@ -10,6 +10,8 @@ import { handle } from '@pine-ds/icons/icons';
   scoped: true,
 })
 export class PdsSortableItem {
+  @Element() el: HTMLPdsSortableItemElement;
+  sortableRef: HTMLPdsSortableElement;
   /**
    * Determines whether `sortable-item-actions` slot should be enabled.
    * @defaultValue false
@@ -25,7 +27,17 @@ export class PdsSortableItem {
    * Determines whether `sortable-item` should have a handle.
    * @defaultValue false
    */
-  @Prop() handle = false;
+  @Prop({ mutable: true }) handle = false;
+
+  componentWillRender() {
+    // When the parent sortable has a type of 'handle', the sortable items
+    // will automatically set handle to 'true'.
+    this.sortableRef = this.el.closest('pds-sortable') as HTMLPdsSortableElement;
+
+    if (this.sortableRef && this.sortableRef.handleType === 'handle') {
+      this.handle = true;
+    }
+  }
 
   render() {
     return (
