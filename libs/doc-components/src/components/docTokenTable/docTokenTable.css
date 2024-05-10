@@ -1,0 +1,26 @@
+.doc-token-table {
+  table-layout: fixed;
+  width: 100%;
+	
+	thead {
+		tr {
+			border-top: 0 !important
+		}
+
+		th {
+			border: 0 !important;
+			text-align: left;
+		}
+	}
+
+	tbody {
+		tr {
+			background-color: #ffffff !important;
+		}
+
+		td {
+			border-left: 0 !important;
+			border-right: 0 !important;
+		}
+	}
+}

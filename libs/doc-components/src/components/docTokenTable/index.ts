@@ -1,0 +1,1 @@
+export { default as DocTokenTable } from './docTokenTable';
