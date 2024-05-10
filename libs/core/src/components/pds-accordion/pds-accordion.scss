@@ -14,12 +14,12 @@ details {
   --color-text-default: var(--pine-color-charcoal-200);
   --color-text-active: var(--pine-color-charcoal-500);
   --color-text-hover: var(--pine-color-charcoal-300);
-  
+
   --spacing-details-padding-inline: var(--pine-spacing-150);
   --spacing-summary-padding-block: var(--pine-spacing-050);
   --spacing-summary-padding-inline-start: var(--pine-spacing-100);
   --spacing-summary-padding-inline-end: var(--pine-spacing-050);
-  
+
   --typography-default: var(--pine-font-weight-semi-bold) var(--pine-font-size-100)/var(--pine-line-height-150) var(--pine-font-family-circular);
 
   border-radius: var(--border-radius-default);
@@ -33,10 +33,16 @@ details {
 
 @keyframes slide-down {
   from {
+    opacity: 0;
     transform: translateY(-100%)
   }
 
+  65% {
+    opacity: 0;
+  }
+
   to {
+    opacity: 1;
     transform: translateY(0%);
   }
 }
