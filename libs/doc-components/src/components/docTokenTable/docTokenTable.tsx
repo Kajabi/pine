@@ -30,38 +30,20 @@ const applyStyle = (category: string, value: string): React.CSSProperties => {
 
   Object.assign(style, categoryStyles);
 
-  switch (category) {
-    case 'color':
-      style.backgroundColor = value;
-      break;
-    case 'border':
-      style.border = value;
-      break;
-    case 'border-radius':
-      style.borderRadius = value;
-      break;
-    case 'border-width':
-      style.borderWidth = value;
-      break;
-    case 'box-shadow':
-      style.boxShadow = value;
-      break;
-    case 'letter-spacing':
-      style.letterSpacing = value;
-      break;
-    case 'line-height':
-      style.lineHeight = value;
-      break;
-    case 'font-weight':
-      style.fontWeight = value;
-      break;
-    case 'font-family':
-      style.fontFamily = value;
-      break;
-    case 'font-size':
-      style.fontSize = value;
-      break;
-  }
+  const styleMap: { [key: string ]: (value: string) => void } = {
+    'border': (val) => style.border = val,
+    'color': (val) => style.backgroundColor = val,
+    'border-radius': (val) => style.borderRadius = val,
+    'border-width': (val) => style.borderWidth = val,
+    'box-shadow': (val) => style.boxShadow = val,
+    'font-family': (val) => style.fontFamily = val,
+    'font-size': (val) => style.fontSize = val,
+    'font-weight': (val) => style.fontWeight = val,
+    'letter-spacing': (val) => style.letterSpacing =  val,
+    'line-height': (val) => style.lineHeight = val,
+  };
+
+  styleMap[category]?.(value);
 
   return style;
 }
@@ -77,7 +59,17 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category }) => {
   };
 
   const renderTableRows = (tokens: Token, parentKey?: string): JSX.Element[] => {
-    return Object.entries(tokens).map(([key, token]): JSX.Element => {
+    const entries = Object.entries(tokens);
+
+    // sets and sorts data based on numerical value
+    // and ignores box-shadow and color
+    let data = ['box-shadow', 'color'].includes(category)
+      ? entries
+      : entries.sort(([ , tokenA], [ , tokenB]) =>
+          parseInt(tokenA.value as string) - parseInt(tokenB.value as string)
+        )
+
+    return data.map(([key, token]): JSX.Element => {
 
       const tokenKeyName = parentKey ? `${parentKey}-${key}` : key;
       const cssVariableName =  `--pine-${category}-${tokenKeyName}`;
@@ -90,17 +82,11 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category }) => {
           if ('value' in token.value) {
             cssPropertyValue = token.value.value as string;
           }
-          else { // For BoxShadow's
-            if (token.type === 'boxShadow') {
-              if (Array.isArray(token.value)) {
-                const boxShadows = [] ;
-                for (const item of token.value as string[]){
-                  boxShadows.push(buildValue(item));
-                }
-                cssPropertyValue = boxShadows.join(', ');
-              } else {
-                cssPropertyValue = buildValue(token.value);
-              }
+          else if (token.type === 'boxShadow') {
+            if (Array.isArray(token.value)) {
+              cssPropertyValue = (token.value as string[]).map(buildValue).join(', ');
+            } else {
+              cssPropertyValue = buildValue(token.value);
             }
           }
         }
