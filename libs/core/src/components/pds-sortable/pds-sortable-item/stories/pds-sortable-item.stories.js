@@ -11,7 +11,7 @@ const BaseTemplate = (args) => html`
 <pds-sortable-item
   action="${args.enableActions}"
   component-id="${args.componentId}"
-  handle="${args.handle}"
+  show-handle="${args.showHandle}"
 >
   Item
 </pds-sortable-item>`;
@@ -20,5 +20,5 @@ export const Default = BaseTemplate.bind();
 Default.args = {
   componentId: 'default',
   enableActions: false,
-  handle: false,
+  showHandle: false,
 };

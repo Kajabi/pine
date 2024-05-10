@@ -590,7 +590,7 @@ export namespace Components {
           * Determines whether `sortable-item` should have a handle.
           * @defaultValue false
          */
-        "handle": boolean;
+        "showHandle": boolean;
     }
     interface PdsSwitch {
         /**
@@ -1805,7 +1805,7 @@ declare namespace LocalJSX {
           * Determines whether `sortable-item` should have a handle.
           * @defaultValue false
          */
-        "handle"?: boolean;
+        "showHandle"?: boolean;
     }
     interface PdsSwitch {
         /**

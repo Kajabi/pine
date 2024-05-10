@@ -11,7 +11,7 @@
 | --------------- | ---------------- | ------------------------------------------------------------------ | --------- | ----------- |
 | `componentId`   | `component-id`   | A unique identifier used for the sortable item `id` attribute.     | `string`  | `undefined` |
 | `enableActions` | `enable-actions` | Determines whether `sortable-item-actions` slot should be enabled. | `boolean` | `false`     |
-| `handle`        | `handle`         | Determines whether `sortable-item` should have a handle.           | `boolean` | `false`     |
+| `showHandle`    | `show-handle`    | Determines whether `sortable-item` should have a handle.           | `boolean` | `false`     |
 
 
 ## Slots
