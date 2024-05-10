@@ -1,6 +1,6 @@
 import { Component, Element, Host, h, Prop } from '@stencil/core';
 
-import { handle } from '@pine-ds/icons/icons';
+import { handle as handleIcon } from '@pine-ds/icons/icons';
 /**
  * @slot sortable-item-actions - Content is placed within the `pds-sortable-item__actions` element as children. This slot is only rendered if `actions` is set to `true`.
  */
@@ -27,24 +27,24 @@ export class PdsSortableItem {
    * Determines whether `sortable-item` should have a handle.
    * @defaultValue false
    */
-  @Prop({ mutable: true }) handle = false;
+  @Prop({ mutable: true }) showHandle = false;
 
   componentWillRender() {
     // When the parent sortable has a type of 'handle', the sortable items
-    // will automatically set handle to 'true'.
+    // will automatically set showHandle to 'true'.
     this.sortableRef = this.el.closest('pds-sortable') as HTMLPdsSortableElement;
 
     if (this.sortableRef && this.sortableRef.handleType === 'handle') {
-      this.handle = true;
+      this.showHandle = true;
     }
   }
 
   render() {
     return (
       <Host class="pds-sortable-item" id={this.componentId}>
-        {this.handle && (
+        {this.showHandle && (
           <div class="pds-sortable-item__handle">
-            <pds-icon icon={handle}></pds-icon>
+            <pds-icon icon={handleIcon}></pds-icon>
           </div>
         )}
         <slot></slot>

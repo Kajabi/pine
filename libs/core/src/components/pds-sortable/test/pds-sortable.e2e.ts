@@ -9,7 +9,7 @@ describe('pds-sortable', () => {
     expect(element).toHaveClass('hydrated');
   });
 
-  it('sets sortable item handle prop to true when handleType is set to "handle"', async () => {
+  it('sets sortable item show-handle prop to true when handleType is set to "handle"', async () => {
     const page = await newE2EPage();
 
     await page.setContent(`
@@ -20,7 +20,7 @@ describe('pds-sortable', () => {
       </pds-sortable>`);
 
     const item = await page.find('.pds-sortable-item');
-    expect(await item.getProperty('handle')).toBe(true);
+    expect(await item.getProperty('showHandle')).toBe(true);
   })
 
   it('reorders items when an item is dragged and dropped', async () => {

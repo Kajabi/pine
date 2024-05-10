@@ -1,7 +1,7 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsSortableItem } from '../pds-sortable-item';
 
-import { handle } from '@pine-ds/icons/icons';
+import { handle as handleIcon } from '@pine-ds/icons/icons';
 
 describe('pds-sortable-item', () => {
   it('renders', async () => {
@@ -27,19 +27,19 @@ describe('pds-sortable-item', () => {
     `);
   });
 
-  it('renders with handle when prop is set', async () => {
+  it('renders with handle icon when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsSortableItem],
       html: `
-        <pds-sortable-item handle="true">
+        <pds-sortable-item show-handle="true">
         </pds-sortable-item>
       `,
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-sortable-item class="pds-sortable-item" handle="true">
+      <pds-sortable-item class="pds-sortable-item" show-handle="true">
         <div class="pds-sortable-item__handle">
-          <pds-icon icon="${handle}"></pds-icon>
+          <pds-icon icon="${handleIcon}"></pds-icon>
         </div>
       </pds-sortable-item>
     `);
