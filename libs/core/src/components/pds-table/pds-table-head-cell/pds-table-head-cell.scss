@@ -1,10 +1,11 @@
 :host {
   --border-head-cell-default: var(--pine-border-width-thin) solid var(--pine-color-grey-300);
+
   --box-shadow-default: 3px 3px 6px -2px rgba(0, 0, 0, 0.1);
 
   --color-background-fixed: var(--pine-color-white);
   --color-sorting: var(--pine-color-charcoal-500);
-  --color-default: var(--pine-color-charcoal-200);
+  --color-text-default: var(--pine-color-charcoal-200);
 
   --dimension-fixed-cell-position: 0;
 
@@ -20,7 +21,7 @@
   --spacing-padding-block-compact: var(--pine-spacing-050);
 
   border-block-end: var(--border-head-cell-default);
-  color: var(--color-default);
+  color: var(--color-text-default);
   display: table-cell;
   font-size: var(--font-size-head-cell);
   font-style: normal;
