@@ -1,9 +1,0 @@
-{
-  "border-radius": {
-    "040": { "value": "4px" },
-    "060": { "value": "6px" },
-    "100": { "value": "10px" },
-    "160": { "value": "16px" },
-    "round": { "value": "50%" }
-  }
-}
