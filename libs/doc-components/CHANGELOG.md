@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.0.0 (2024-05-16)
+
+
+### chore
+
+* Release 1.0.0 ([d44fb64](https://github.com/Kajabi/pine/commit/d44fb64132ee76f77f51add0c6289b6ac6ef90a5))
+
+
+### Features 🚀
+
+* **token:** Add token table ([#175](https://github.com/Kajabi/pine/issues/175)) ([52b3dd5](https://github.com/Kajabi/pine/commit/52b3dd59e9086f5f22f4de66e848a21bef59d456))
+* Update documentation format ([#123](https://github.com/Kajabi/pine/issues/123)) ([5dc1789](https://github.com/Kajabi/pine/commit/5dc17892e78b6fae345e1735918b75e0427f3234))
+
+
+### Bug Fixes 🐛
+
+* Adds CSS to remove empty code elements in the props table ([da731e3](https://github.com/Kajabi/pine/commit/da731e3484395f16419bdc864f1d2dd9900a8fae))
+
+
+### Documentation 📄
+
+* Multiple fixes ([#136](https://github.com/Kajabi/pine/issues/136)) ([f4dc903](https://github.com/Kajabi/pine/commit/f4dc903bcf24c21b1c5f9786b0a08cb5d3c51e9b))
+
 ## [0.2.4](https://github.com/Kajabi/pine/compare/@pine-ds/doc-components@0.2.3...@pine-ds/doc-components@0.2.4) (2024-04-29)
 
 **Note:** Version bump only for package @pine-ds/doc-components
