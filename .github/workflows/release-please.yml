@@ -1,0 +1,118 @@
+name: "Release Please"
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  id-token: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      paths_released: ${{ steps.manifest-release.outputs.paths_released }}
+      releases_created: ${{ steps.manifest-release.outputs.releases_created }}
+
+      core--tag_name: ${{ steps.manifest-release.outputs['libs/core--tag_name'] }}
+      core--version: ${{ steps.manifest-release.outputs['libs/core--version'] }}
+      core--major: ${{ steps.manifest-release.outputs['libs/core--major'] }}
+      core--minor: ${{ steps.manifest-release.outputs['libs/core--minor'] }}
+      core--patch: ${{ steps.manifest-release.outputs['libs/core--patch'] }}
+
+      react--tag_name: ${{ steps.manifest-release.outputs['libs/react--tag_name'] }}
+      react--version: ${{ steps.manifest-release.outputs['libs/react--version'] }}
+      react--major: ${{ steps.manifest-release.outputs['libs/react--major'] }}
+      react--minor: ${{ steps.manifest-release.outputs['libs/react--minor'] }}
+      react--patch: ${{ steps.manifest-release.outputs['libs/react--patch'] }}
+
+      doc-components--tag_name: ${{ steps.manifest-release.outputs['libs/doc-components--tag_name'] }}
+      doc-components--version: ${{ steps.manifest-release.outputs['libs/doc-components--version'] }}
+      doc-components--major: ${{ steps.manifest-release.outputs['libs/doc-components--major'] }}
+      doc-components--minor: ${{ steps.manifest-release.outputs['libs/doc-components--minor'] }}
+      doc-components--patch: ${{ steps.manifest-release.outputs['libs/doc-components--patch'] }}
+
+    permissions:
+      contents: write
+      id-token: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ''
+
+      - uses: google-github-actions/release-please-action@v4
+        id: manifest-release
+        with:
+          manifest-file: .release-please-manifest.json
+
+      - name: Show output from Release-Please
+        run: |
+          echo "RELEASES_created: ${{ steps.manifest-release.outputs.releases_created }}"
+
+  release-packages:
+    runs-on: ubuntu-latest
+    needs: release-please
+    if: ${{ needs.release-please.outputs.releases_created == 'true' }}
+    strategy:
+      matrix:
+        path: ${{ fromJSON(needs.release-please.outputs.paths_released) }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure user
+        run: |
+          git config user.name "DSS Automation Bot"
+          git config user.email "dev+github-bot@kajabi.com"
+
+      - name: Build Packages
+        run: npm install --legacy-peer-deps
+
+      - uses: bhowell2/github-substring-action@1.0.2
+        id: project-name
+        with:
+          value: ${{ matrix.path}}
+          index_of_str: "libs/"
+
+      - name: Outputs
+        if: contains(fromJSON(needs.release-please.outputs.paths_released), matrix.path)
+        run: |
+          echo "Path Outputs for: ${{ matrix.path}} "
+          echo "tag_name: ${{ needs.release-please.outputs[format('{0}--tag_name', steps.project-name.outputs.substring)] }}"
+          echo "version: ${{ needs.release-please.outputs[format('{0}--version', steps.project-name.outputs.substring)] }}"
+          echo "major: ${{ needs.release-please.outputs[format('{0}--major', steps.project-name.outputs.substring)] }}"
+          echo "minor: ${{ needs.release-please.outputs[format('{0}--minor', steps.project-name.outputs.substring)] }}"
+          echo "patch: ${{ needs.release-please.outputs[format('{0}--patch', steps.project-name.outputs.substring)] }}"
+
+      - uses: ./.github/workflows/actions/publish-npm
+        with:
+          tag: 'latest'
+          token: ${{ secrets.NPM_TOKEN }}
+          working-directory: ${{ matrix.path }}
+          project: "${{ steps.project-name.outputs.substring }}"
+
+      - name: Current Date
+        run: |
+          echo "CURRENT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+      - name: Core Slack Notification
+        if: matrix.path == 'libs/core' && success()
+        uses: slackapi/slack-github-action@v1.26.0
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          DATE: ${{ env.CURRENT_DATE }}
+          RELEASE_URL: "${{ format(vars.release_url, github.repository) }}/${{ needs.release-please.outputs['core--tag_name'] }}"
+          VERSION: ${{ needs.release-please.outputs['core--version'] }}
+        with:
+          channel-id: ${{ vars.SLACK_CHANNEL_NAME }}
+          payload-file-path: "./.github/workflows/slack_payloads/release-info.json"
