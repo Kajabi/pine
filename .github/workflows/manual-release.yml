@@ -1,4 +1,4 @@
-name: 'Production Release'
+name: 'Manual Production Release'
 
 on:
   workflow_call:
@@ -93,11 +93,3 @@ jobs:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           shell: bash
 
-        # Lerna does not automatically bump versions
-        # - name: Bump Package Lock
-        #   run: |
-        #     lerna exec "npm install --package-lock-only"
-        #     git add .
-        #     git commit -m "chore(): update package lock files"
-        #     git push
-        #   shell: bash
