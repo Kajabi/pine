@@ -2,5 +2,8 @@
   "@pine-ds/core": "0.2.4",
   "@pine-ds/react": "0.2.4",
   "@pine-ds/doc-components": "0.2.4",
-  ".": "0.0.0"
+  ".": "0.0.0",
+  "libs/core": "1.0.0",
+  "libs/doc-components": "1.0.0",
+  "libs/react": "1.0.0"
 }
