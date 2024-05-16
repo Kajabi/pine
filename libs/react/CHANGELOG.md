@@ -3,6 +3,37 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.0](https://github.com/Kajabi/pine/compare/react-v0.2.4...react-v1.0.0) (2024-05-16)
+
+
+### chore
+
+* Release 1.0.0 ([4a7cbb3](https://github.com/Kajabi/pine/commit/4a7cbb39337710eb9943e040d52146e3a8233c89))
+
+
+### Features 🚀
+
+* Adding catalog-info documents for Radiator integration ([83c9d46](https://github.com/Kajabi/pine/commit/83c9d4634c9e011e96c459f6fbdd21189dc79c9d))
+* **box:** Add box and row component ([#119](https://github.com/Kajabi/pine/issues/119)) ([7822884](https://github.com/Kajabi/pine/commit/78228847b2cfbde30ec7b109f831bd2facfda8bd))
+* **chip:** Initial generation and base color styles ([7fd0bc1](https://github.com/Kajabi/pine/commit/7fd0bc12608bee8fbd8fa66ca9a7dd51e618a778))
+* **copytext:** Initial generation markup and test ([0ae791f](https://github.com/Kajabi/pine/commit/0ae791fe3d026818e42fecac7a3713ebc997c5a0))
+* **label:** Adds for prop and associated styling for component ([fe82e21](https://github.com/Kajabi/pine/commit/fe82e2104e9dce6cc6824780c318294e8f324a60))
+* **progress:** Initial generation and test files ([794499f](https://github.com/Kajabi/pine/commit/794499f4be1cecf62b34f52e72749c53c8daa1e9))
+* **react:** Add PdsIcon helper ([#126](https://github.com/Kajabi/pine/issues/126)) ([066cacc](https://github.com/Kajabi/pine/commit/066cacc7b6b87661414df0b7a2ec2f8e8bbd7798))
+* **table:** Table Component ([#112](https://github.com/Kajabi/pine/issues/112)) ([2315be1](https://github.com/Kajabi/pine/commit/2315be11bdad4257d49f12b31776d9ed0eae3c24))
+* Update documentation format ([#123](https://github.com/Kajabi/pine/issues/123)) ([5dc1789](https://github.com/Kajabi/pine/commit/5dc17892e78b6fae345e1735918b75e0427f3234))
+
+
+### Bug Fixes 🐛
+
+* **accordion:** Fixes typos in docs and addresses icon state and styling issues per feedback ([ffb0e68](https://github.com/Kajabi/pine/commit/ffb0e68e692af862413ceebf8febea8da05bf2a2))
+* Adding new prefix to prevent conflicts with current sage ([59cc1cd](https://github.com/Kajabi/pine/commit/59cc1cd0afcf89c783f1062ff35a0f9b7765c4a0))
+* **checkbox:** Event details ([#137](https://github.com/Kajabi/pine/issues/137)) ([c2ee64c](https://github.com/Kajabi/pine/commit/c2ee64cd8d691e8fa6caa9356a3f1c3a238ec682))
+* **react:** Add missing exports ([90828e0](https://github.com/Kajabi/pine/commit/90828e0e3a4f54e642ab8dddfdeaea587e9b22cb))
+* Tag updates ([a62af96](https://github.com/Kajabi/pine/commit/a62af966492e6f7d5a968fcfd4c905443289e746))
+* Updating pine references ([9b2bdd9](https://github.com/Kajabi/pine/commit/9b2bdd97e8ebb25417414577093fe00a01afbab3))
+* Updating to sage ([d97bfed](https://github.com/Kajabi/pine/commit/d97bfedf40ad0984f8104177fe7ed7eced4f2e8f))
+
 ## [0.2.4](https://github.com/Kajabi/pine/compare/@pine-ds/react@0.2.3...@pine-ds/react@0.2.4) (2024-04-29)
 
 **Note:** Version bump only for package @pine-ds/react
