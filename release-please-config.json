@@ -1,0 +1,28 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "bump-minor-pre-major": false,
+  "bump-patch-for-minor-pre-major": false,
+  "include-v-in-tag": true,
+  "packages": {
+    "libs/core": {
+
+    },
+    "libs/doc-components": {
+
+    },
+    "libs/react": {
+
+    }
+  },
+  "plugins": [
+    "sentence-case"
+  ],
+  "changelog-sections": [
+    { "type": "feat", "section": "Features 🚀", "hidden": false},
+    { "type": "feature", "section": "Features 🚀", "hidden": false },
+    { "type": "fix", "section": "Bug Fixes 🐛", "hidden": false},
+    { "type": "perf", "section": "Performance Improvements 🛠️", "hidden": false },
+    { "type": "revert", "section": "Reverts" },
+    { "type": "docs", "section": "Documentation 📄", "hidden": false},
+  ]
+}
