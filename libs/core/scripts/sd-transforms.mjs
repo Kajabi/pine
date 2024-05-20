@@ -21,6 +21,9 @@ const getConfig = (sets) => {
 					destination: `${tokenSet}/_${tokenSet}.scss`,
 					format: 'css/variables'
 				})),
+				options: {
+					showFileHeader: false
+				},
         prefix: 'pine'
 			}
 		},

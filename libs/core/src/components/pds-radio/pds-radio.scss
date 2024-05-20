@@ -1,6 +1,7 @@
 :host {
   --border-interactive-default: var(--pine-border-width-thin) solid var( --pine-color-grey-400);
   --border-radius: 50%;
+
   --box-shadow-focus: 0 0 0 2px var(--color-focus);
   --box-shadow-focus-error: 0 0 0 2px var(--color-invalid-focus);
 

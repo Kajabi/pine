@@ -1,10 +1,14 @@
 :host(.pds-sortable-item) {
   --border-radius: var(--pine-border-radius-125);
-  --border-default: var(--pine-border-default);
+
+  --border-default: var(--pine-border-width-thin) solid var(--pine-color-grey-300);
+
   --box-shadow: var(--pine-box-shadow-lg);
+
   --color-background-default: var(--pine-color-white);
   --color-background-interactive: var(--pine-color-grey-200);
   --color-interactive-handle: var(--pine-color-blue-300);
+
   --spacing-margin-inline-end: var(--pine-spacing-300);
   --spacing-padding-block-xs: var(--pine-spacing-100);
   --spacing-padding-inline: var(--pine-spacing-300);

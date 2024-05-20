@@ -1,17 +1,24 @@
 :host {
   --border-radius-overlay: var(--pine-border-radius-125);
+
   --border-width-arrow-down: var(--sizing-arrow-default) var(--sizing-arrow-default) 0;
   --border-width-arrow-left: var(--sizing-arrow-default) var(--sizing-arrow-default) var(--sizing-arrow-default) 0;
   --border-width-arrow-right: var(--sizing-arrow-default) 0 var(--sizing-arrow-default) var(--sizing-arrow-default);
   --border-width-arrow-up: 0 var(--sizing-arrow-default) var(--sizing-arrow-default);
+
   --box-shadow-default: var(--pine-box-shadow-md);
+
   --color-background-default: var(--pine-color-charcoal-400);
   --color-text-default: var(--pine-color-white);
+
   --font-size-overlay: var(--pine-font-size-087);
+
   --line-height-overlay: var(--pine-line-height-125);
+
   --sizing-arrow-default: 6px;
   --sizing-arrow-offset: 14px;
   --sizing-width-default: 320px;
+
   --spacing-padding-overlay: var(--pine-spacing-100) calc(var(--pine-spacing-300) / 2);
 
   display: inline-block;

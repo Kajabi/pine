@@ -1,5 +1,6 @@
 :host {
   --border-radius-input: var(--pine-border-radius-200);
+
   --box-shadow-focus: 0 0 0 2px var(--color-outline-focus);
   --box-shadow-focus-error: 0 0 0 2px var(--color-outline-focus-error);
   --box-shadow-input-toggle: 0 2px 4px 0 rgba(0, 0, 0, 0.12), 0 0 2px 0 rgba(0, 0, 0, 0.08);
@@ -23,12 +24,13 @@
   --line-height-label: var(--pine-line-height-150);
 
   --sizing-input-toggle-size: calc(var(--dimension-input-height) - (var(--spacing-input-toggle-offset) * 2));
-  --sizing-label-gap-size: 12px;
-  --spacing-input-toggle-offset: 2px;
-  --spacing-message-block: var(--pine-spacing-050);
-  --spacing-message-inline: calc(var(--dimension-input-width) + var(--sizing-label-gap-size));
 
-  --transition-timing: 0.15s ease-out;
+  --spacing-label-gap-size: var(--pine-spacing-150);
+  --spacing-input-toggle-offset: calc(var(--pine-spacing-050) / 2);
+  --spacing-message-block: var(--pine-spacing-050);
+  --spacing-message-inline: calc(var(--dimension-input-width) + var(--spacing-label-gap-size));
+
+  --number-transition-timing: 0.15s ease-out;
 
 
   align-items: flex-start;
@@ -66,7 +68,7 @@ input {
   padding: 0;
   position: relative;
   transform: translateY(2px);
-  transition: var(--transition-timing);
+  transition: var(--number-transition-timing);
   transition-property: background, border, color;
   width: var(--dimension-input-width);
 
@@ -82,7 +84,7 @@ input {
     inset-inline-start: 50%;
     position: absolute;
     transform: translate3d(-100%, -50%, 0);
-    transition: transform var(--transition-timing);
+    transition: transform var(--number-transition-timing);
     width: var(--sizing-input-toggle-size);
   }
 }
@@ -92,7 +94,7 @@ label {
   display: inline-flex;
   flex-grow: 1;
   line-height: var(--line-height-label);
-  margin-inline-start: var(--sizing-label-gap-size);
+  margin-inline-start: var(--spacing-label-gap-size);
 
   .pds-switch--error & {
     color: inherit;

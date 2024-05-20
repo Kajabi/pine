@@ -54,6 +54,7 @@ Primary.args = {
   disabled: false,
   slot: 'Primary',
   type: 'button',
+  variant: 'primary'
 }
 
 export const Secondary = BaseTemplate.bind({});

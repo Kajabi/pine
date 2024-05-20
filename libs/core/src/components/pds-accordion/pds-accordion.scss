@@ -3,8 +3,6 @@
 }
 
 details {
-  --animation-transform-timing: 200ms;
-
   --border-radius-default: var(--pine-border-radius-100);
 
   --box-shadow-focus: inset 0 0 0 2px var(--pine-color-blue-200);
@@ -14,6 +12,8 @@ details {
   --color-text-default: var(--pine-color-charcoal-200);
   --color-text-active: var(--pine-color-charcoal-500);
   --color-text-hover: var(--pine-color-charcoal-300);
+
+  --number-animation-transform-timing: 200ms;
 
   --spacing-details-padding-inline: var(--pine-spacing-150);
   --spacing-summary-padding-block: var(--pine-spacing-050);
@@ -27,7 +27,7 @@ details {
 
   pds-icon {
     transform: scaleY(1);
-    transition: transform var(--animation-transform-timing);
+    transition: transform var(--number-animation-transform-timing);
   }
 }
 
@@ -50,7 +50,7 @@ details {
 /* stylelint-disable-next-line */
 details[open] {
   background-color: var(--color-content-background);
-  transition: transform var(--animation-transform-timing);
+  transition: transform var(--number-animation-transform-timing);
 
   summary {
     color: var(--color-text-active);
@@ -58,7 +58,7 @@ details[open] {
 
     pds-icon {
       transform: scaleY(-1);
-      transition: transform var(--animation-transform-timing);
+      transition: transform var(--number-animation-transform-timing);
     }
   }
 
@@ -110,7 +110,7 @@ summary {
 }
 
 .pds-accordion__body {
-  animation: slide-down var(--animation-transform-timing);
+  animation: slide-down var(--number-animation-transform-timing);
   max-height: 0;
   overflow: hidden;
 }
