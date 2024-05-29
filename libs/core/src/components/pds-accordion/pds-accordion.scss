@@ -31,22 +31,6 @@ details {
   }
 }
 
-@keyframes slide-down {
-  from {
-    opacity: 0;
-    transform: translateY(-100%)
-  }
-
-  65% {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0%);
-  }
-}
-
 /* stylelint-disable-next-line */
 details[open] {
   background-color: var(--color-content-background);
@@ -64,13 +48,12 @@ details[open] {
 
   /* stylelint-disable-next-line selector-no-qualifying-type */
   .pds-accordion__body {
-    transition: max-height 1s ease-in-out;
+    display: none;
 
     /* stylelint-disable-next-line selector-no-qualifying-type */
     &.open {
-      max-height: 1000px;
+      display: block;
     }
-
   }
 }
 
@@ -108,10 +91,3 @@ summary {
     margin-inline-start: auto;
   }
 }
-
-.pds-accordion__body {
-  animation: slide-down var(--number-animation-transform-timing);
-  max-height: 0;
-  overflow: hidden;
-}
-
