@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.1](https://github.com/Kajabi/pine/compare/core-v1.0.0...core-v1.0.1) (2024-05-30)
+
+
+### Bug Fixes 🐛
+
+* **accordion:** Remove accordion slidedown animation ([#200](https://github.com/Kajabi/pine/issues/200)) ([e35f908](https://github.com/Kajabi/pine/commit/e35f908463834480b673479bb1f12abdd45bd204))
+
 ## [1.0.0](https://github.com/Kajabi/pine/compare/core-v0.2.4...core-v1.0.0) (2024-05-16)
 
 

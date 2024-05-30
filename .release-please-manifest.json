@@ -1,5 +1,5 @@
 {
-  "libs/core": "1.0.0",
+  "libs/core": "1.0.1",
   "libs/react": "1.0.0",
   "libs/doc-components": "1.0.0",
   ".": "0.0.0"
