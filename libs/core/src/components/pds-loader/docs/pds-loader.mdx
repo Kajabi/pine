@@ -1,0 +1,32 @@
+import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+# Loader
+
+<p>
+  TBD
+</p>
+
+## Properties
+
+<DocArgsTable componentName="pds-loader" docSource={components} />
+
+### Default
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsLoader variant="spinner"></PdsLoader>',
+    webComponent: '<pds-loader variant="spinner"></pds-loader>'
+}}>
+  <pds-loader variant="spinner"></pds-loader>
+</DocCanvas>
+
+## Typing
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsLoader variant="typing"></PdsLoader>',
+    webComponent: '<pds-loader variant="typing"></pds-loader>'
+}}>
+  <pds-loader variant="typing"></pds-loader>
+</DocCanvas>

@@ -1,0 +1,91 @@
+:host {
+  display: block;
+}
+
+// Default Loader
+.pds-loader {
+  --color-background-spinner: var(--pine-color-blue-300);
+  --number-spinner-timing: 2s;
+  --number-spinner-path-timing: 1.5s;
+
+  --sizing-spinner: 128px;
+
+  inline-size: var(--sizing-spinner);
+  block-size: var(--sizing-spinner);
+  animation: rotate var(--number-spinner-timing) linear infinite;
+  color: var(--color-background-spinner);
+}
+
+.pds-loader__spinner-path {
+  stroke-width: 8px;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// Typing Loader
+.pds-loader--typing {
+  --border-radius-typing: var(--pine-border-radius-200);
+  --border-radius-typing-dot: var(--pine-border-radius-round);
+
+  --box-shadow-typing: var(--pine-box-shadow-sm);
+
+  --color-background-typing-default: var(--pine-color-grey-200);
+  --color-background-typing-dot-default: var(--pine-color-grey-500);
+
+  --number-typing-timing: 1s;
+
+  --opacity-typing-dot-default: 0.4;
+  --opacity-typing-dot-active: 1;
+
+  --sizing-typing-dot: calc(var(--pine-spacing-150) / 2);
+
+  --spacing-typing-gap: var(--pine-spacing-050);
+  --spacing-typing-margin-block: var(--pine-spacing-0);
+  --spacing-typing-margin-inline: auto;
+  --spacing-typing-padding-block: 15px;
+  --spacing-typing-padding-inline: var(--pine-spacing-250);
+
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-typing-gap);
+  position: relative;
+  margin-block: var(--spacing-typing-margin-block);
+  margin-inline: var(--spacing-typing-margin-inline);
+  padding-block: var(--spacing-typing-padding-block);
+  padding-inline: var(--spacing-typing-padding-inline);
+  background-color: var(--color-background-typing-default);
+  border-radius: var(--border-radius-typing);
+  box-shadow: var(--box-shadow-typing);
+
+  span {
+    block-size: var(--sizing-typing-dot);
+    inline-size: var(--sizing-typing-dot);
+    background-color: var(--color-background-typing-dot-default);
+    border-radius: var(--border-radius-typing-dot);
+    opacity: var(--opacity-typing-dot-default);
+
+    @for $i from 1 through 3 {
+      &:nth-of-type(#{$i}) {
+        animation: var(--number-typing-timing) typing infinite ($i * 0.3333s);
+      }
+    }
+  }
+}
+
+@keyframes typing {
+  0%,
+  25% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: var(--opacity-typing-dot-active);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
