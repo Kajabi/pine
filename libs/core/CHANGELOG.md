@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.2](https://github.com/Kajabi/pine/compare/@pine-ds/core@0.2.4...@pine-ds/core@1.0.2) (2024-06-04)
+
+
+### Bug Fixes
+
+* **accordion:** adds line to resolve Clipboard API promise ([e4ff379](https://github.com/Kajabi/pine/commit/e4ff379fcacf4345cf988f1c96ccf60f859fe620))
+* **accordion:** adjust animation for open accordion refresh ([#187](https://github.com/Kajabi/pine/issues/187)) ([c2e41e7](https://github.com/Kajabi/pine/commit/c2e41e7126ce8f7c45514120009298cd4972a9d3))
+* **accordion:** remove accordion slidedown animation ([#200](https://github.com/Kajabi/pine/issues/200)) ([e35f908](https://github.com/Kajabi/pine/commit/e35f908463834480b673479bb1f12abdd45bd204))
+* adjust naming for clarity ([b52775e](https://github.com/Kajabi/pine/commit/b52775ea070f1f182a0901cd162d3ca0db235b50))
+* **progress:** progress bar not showing in storybook ([#185](https://github.com/Kajabi/pine/issues/185)) ([e78fa66](https://github.com/Kajabi/pine/commit/e78fa6631a8cc05929d04dad2263e525994686d0))
+* **sortable:** allows sortable items to set handle prop to true when parent type is 'handle' ([436d35f](https://github.com/Kajabi/pine/commit/436d35ffcdf99080a95b628f6fb4270a4bc16d12))
+
+
+### Features
+
+* **token:** add token table ([#175](https://github.com/Kajabi/pine/issues/175)) ([52b3dd5](https://github.com/Kajabi/pine/commit/52b3dd59e9086f5f22f4de66e848a21bef59d456))
+
+
+
+
+
 ## [1.0.1](https://github.com/Kajabi/pine/compare/core-v1.0.0...core-v1.0.1) (2024-05-30)
 
 

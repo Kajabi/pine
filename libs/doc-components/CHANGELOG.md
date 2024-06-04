@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.1](https://github.com/Kajabi/pine/compare/@pine-ds/doc-components@0.2.4...@pine-ds/doc-components@1.0.1) (2024-06-04)
+
+
+### Features
+
+* **token:** add token table ([#175](https://github.com/Kajabi/pine/issues/175)) ([52b3dd5](https://github.com/Kajabi/pine/commit/52b3dd59e9086f5f22f4de66e848a21bef59d456))
+
+
+
+
+
 ## [1.0.0](https://github.com/Kajabi/pine/compare/doc-components-v0.2.4...doc-components-v1.0.0) (2024-05-16)
 
 
