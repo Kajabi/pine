@@ -1,4 +1,4 @@
-import { Component, Prop, h, Host} from '@stencil/core';
+import { Component, Prop, h, Host } from '@stencil/core';
 
 import { BoxTShirtSizeType } from '../../utils/types';
 
@@ -10,7 +10,7 @@ export class PdsRow {
   /**
    * Defines the vertical alignment of the row items.
    * @defaultValue start
-  */
+   */
   @Prop() alignItems?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
@@ -20,7 +20,7 @@ export class PdsRow {
 
   /**
    * Defines the spacing between the row items.
-  */
+   */
   @Prop() colGap?: BoxTShirtSizeType | null;
 
   /**
@@ -31,7 +31,7 @@ export class PdsRow {
   /**
    * Defines the horizontal alignment of the row items.
    * @defaultValue start
-  */
+   */
   @Prop() justifyContent?: `start` | `center` | `end` | `space-between` | `space-around`;
 
   /**
@@ -63,19 +63,16 @@ export class PdsRow {
     ${this.noWrap ? 'pds-row--no-wrap' : ''}
   `;
 
-  const rowInlineStyles = {
-    ...(this.colGap && {
-      '--pine-gap-x':this.colGap !== undefined &&  this.colGap.trim() !== '' ? this.colGapMap[this.colGap] : '',
-      '--pine-gap-y':this.colGap !== undefined &&  this.colGap.trim() !== '' ? this.colGapMap[this.colGap] : '',
+    const rowInlineStyles = {
+      ...(this.colGap && {
+        '--row-gap-x': this.colGap !== undefined && this.colGap.trim() !== '' ? this.colGapMap[this.colGap] : '',
+        '--row-gap-y': this.colGap !== undefined && this.colGap.trim() !== '' ? this.colGapMap[this.colGap] : '',
       }),
       ...(this.minHeight && {
         'min-height': this.minHeight,
       }),
     };
 
-    return (
-      <Host class={`pds-row ${rowClasses}`} style={rowInlineStyles}>
-      </Host>
-      );
+    return <Host class={`pds-row ${rowClasses}`} style={rowInlineStyles}></Host>;
   }
 }
