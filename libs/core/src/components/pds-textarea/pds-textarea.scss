@@ -1,4 +1,6 @@
 :host {
+  --border-interactive-default: var(--pine-border-width-thin) solid var(--pine-color-grey-400);
+
   --box-shadow-focus: 0 0 0 2px var(--color-focus-visible-outline);
   --box-shadow-focus-error: 0 0 0 2px var(--color-focus-visible-outline-error);
 
@@ -49,7 +51,7 @@ label {
 
 .pds-textarea__field {
   background-color: var(--color-background);
-  border: var(--pine-border-interactive);
+  border: var(--pine-border-interactive-default);
   border-radius: var(--pine-border-radius-md);
   font-family: inherit;
   font-size: var(--font-size-field);

@@ -1,6 +1,7 @@
 @import './pds-box.mixins';
 
 pds-box {
+  --border-width-default: var(--pine-border-width-thin);
   --color-background-box: inherit;
   --color-border-box: inherit;
   --sizing-min-height-box: none;
@@ -121,8 +122,8 @@ $pine-spacing-tokens: (
 
 .pds-box--border {
   border-color: var(--color-border-box, var(--pine-color-grey-300));
-  border-style: var(--pine-border-default-style);
-  border-width: var(--pine-border-default-width);
+  border-style: solid;
+  border-width: var(--border-width-default);
 }
 
 // Display helpers
