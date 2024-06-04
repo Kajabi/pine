@@ -15,7 +15,7 @@ describe('pds-row', () => {
       components: [PdsRow],
       html: `<pds-row min-height="150px"></pds-row>`,
     });
-    
+
     const element = page.root;
 
     expect(element).toEqualAttribute('style', 'min-height: 150px;');
@@ -26,10 +26,10 @@ describe('pds-row', () => {
       components: [PdsRow],
       html: `<pds-row col-gap="sm"></pds-row>`,
     });
-    
+
     const element = page.root;
 
-    expect(element).toEqualAttribute('style', '--pine-gap-x: 1rem; --pine-gap-y: 1rem;');
+    expect(element).toEqualAttribute('style', '--row-gap-x: 1rem; --row-gap-y: 1rem;');
   });
 
   it('renders the align-items when prop is set', async () => {
@@ -37,7 +37,7 @@ describe('pds-row', () => {
       components: [PdsRow],
       html: `<pds-row align-items="center"></pds-row>`,
     });
-    
+
     const element = page.root;
 
     expect(element).toHaveClass('pds-align-items-center');
@@ -48,18 +48,18 @@ describe('pds-row', () => {
       components: [PdsRow],
       html: `<pds-row justify-content="center"></pds-row>`,
     });
-    
+
     const element = page.root;
 
     expect(element).toHaveClass('pds-justify-content-center');
   });
-  
+
   it('renders a border if true', async () => {
     const page = await newSpecPage({
       components: [PdsRow],
       html: `<pds-row border></pds-row>`,
     });
-    
+
     const element = page.root;
 
     expect(element).toHaveClass('pds-row--border');
@@ -70,7 +70,7 @@ describe('pds-row', () => {
       components: [PdsRow],
       html: `<pds-row no-wrap></pds-row>`,
     });
-    
+
     const element = page.root;
 
     expect(element).toHaveClass('pds-row--no-wrap');
