@@ -3,9 +3,9 @@ import { components } from '../../../../dist/docs.json';
 
 # Loader
 
-<p>
+<h2>
   TBD
-</p>
+</h2>
 
 ## Properties
 
@@ -19,6 +19,18 @@ import { components } from '../../../../dist/docs.json';
     webComponent: '<pds-loader variant="spinner"></pds-loader>'
 }}>
   <pds-loader variant="spinner"></pds-loader>
+</DocCanvas>
+
+### Default with Visible Label
+
+The label is visually hidden by default, but still read by screenreaders. Set `showLabel` to `true` to make the label visible.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsLoader showLabel="true" size="128px" variant="spinner"></PdsLoader>',
+    webComponent: '<pds-loader show-label="true" size="128px" variant="spinner"></pds-loader>'
+}}>
+  <pds-loader show-label="true" size="128px" variant="spinner"></pds-loader>
 </DocCanvas>
 
 ## Typing

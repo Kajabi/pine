@@ -8,8 +8,6 @@
   --number-spinner-timing: 2s;
   --number-spinner-path-timing: 1.5s;
 
-  --sizing-spinner: 128px;
-
   animation: rotate var(--number-spinner-timing) linear infinite;
   block-size: var(--sizing-spinner);
   color: var(--color-background-spinner);
@@ -53,7 +51,7 @@
   background-color: var(--color-background-typing-default);
   border-radius: var(--border-radius-typing);
   box-shadow: var(--box-shadow-typing);
-  display: flex;
+  display: inline-flex;
   gap: var(--spacing-typing-gap);
   margin-block: var(--spacing-typing-margin-block);
   margin-inline: var(--spacing-typing-margin-inline);
@@ -81,4 +79,14 @@
     opacity: var(--opacity-typing-dot-active);
     transform: scale(1.2);
   }
+}
+
+.pds-loader__label--hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }

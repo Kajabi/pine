@@ -451,6 +451,14 @@ export namespace Components {
     }
     interface PdsLoader {
         /**
+          * Determines whether the loader should display a label.
+         */
+        "showLabel"?: boolean;
+        /**
+          * Sets the size of the spinner loader. Value can be preset or custom.
+         */
+        "size"?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
           * Determines the type of loader.
          */
         "variant": 'spinner' | 'typing';
@@ -1670,6 +1678,14 @@ declare namespace LocalJSX {
         "variant"?: 'inline' | 'plain';
     }
     interface PdsLoader {
+        /**
+          * Determines whether the loader should display a label.
+         */
+        "showLabel"?: boolean;
+        /**
+          * Sets the size of the spinner loader. Value can be preset or custom.
+         */
+        "size"?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
         /**
           * Determines the type of loader.
          */
