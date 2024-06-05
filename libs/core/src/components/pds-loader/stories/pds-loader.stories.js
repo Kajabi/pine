@@ -7,11 +7,18 @@ export default {
   title: 'components/Loader'
 }
 
-const BaseTemplate = (args) => html`<pds-loader variant="${args.variant}></pds-loader>`;
+const BaseTemplate = (args) => html`
+  <pds-loader
+    show-label="${args.showLabel}"
+    size="${args.size}"
+    variant="${args.variant}"
+  >
+  </pds-loader>`;
 
 export const Default = BaseTemplate.bind();
 Default.args = {
-  variant: 'spinner'
+  variant: 'spinner',
+  size: '100px'
 };
 
 export const Typing = BaseTemplate.bind();

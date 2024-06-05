@@ -7,9 +7,11 @@
 
 ## Properties
 
-| Property  | Attribute | Description                    | Type                    | Default     |
-| --------- | --------- | ------------------------------ | ----------------------- | ----------- |
-| `variant` | `variant` | Determines the type of loader. | `"spinner" \| "typing"` | `'spinner'` |
+| Property    | Attribute    | Description                                                         | Type                    | Default     |
+| ----------- | ------------ | ------------------------------------------------------------------- | ----------------------- | ----------- |
+| `showLabel` | `show-label` | Determines whether the loader should display a label.               | `boolean`               | `false`     |
+| `size`      | `size`       | Sets the size of the spinner loader. Value can be preset or custom. | `string`                | `'md'`      |
+| `variant`   | `variant`    | Determines the type of loader.                                      | `"spinner" \| "typing"` | `'spinner'` |
 
 
 ----------------------------------------------
