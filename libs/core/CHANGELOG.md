@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.2](https://github.com/Kajabi/pine/compare/core-v1.0.1...core-v1.0.2) (2024-06-06)
+
+
+### Documentation 📄
+
+* **accordion:** Update icon name ([#199](https://github.com/Kajabi/pine/issues/199)) ([a89aaad](https://github.com/Kajabi/pine/commit/a89aaadeb405e59b6030e51a24b97d6e6ecbb186))
+
 ## [1.0.2](https://github.com/Kajabi/pine/compare/@pine-ds/core@0.2.4...@pine-ds/core@1.0.2) (2024-06-04)
 
 
