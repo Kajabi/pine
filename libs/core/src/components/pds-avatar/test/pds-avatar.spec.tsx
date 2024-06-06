@@ -1,7 +1,7 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsAvatar } from '../pds-avatar';
 
-import { userFilled } from '@pine-ds/icons/icons';
+import { checkCircleFilled, userFilled } from '@pine-ds/icons/icons';
 
 describe('pds-avatar', () => {
   it('renders a default avatar', async () => {
@@ -63,7 +63,7 @@ describe('pds-avatar', () => {
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px;">
             <pds-icon color="var(--pine-color-primary-400)"icon="${userFilled}" size="33.53%"></pds-icon>
-            <pds-icon class="pds-avatar__badge" icon="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' class='pdsicon'><path d='M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8Zm4.473 5.807L7.14 11.14c-.26.26-.68.26-.94 0L3.533 8.473a.664.664 0 1 1 .94-.94l2.194 2.194 4.86-4.86c.26-.26.68-.26.94 0 .266.253.266.68.006.94Z'/></svg>" size="33.53%"></pds-icon>
+            <pds-icon class="pds-avatar__badge" icon="${checkCircleFilled}" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -128,7 +128,7 @@ describe('pds-avatar', () => {
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px">
             <img alt="Customer Profile" src="https://placehold.co/64x64"/>
-            <pds-icon class="pds-avatar__badge" icon="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' class='pdsicon'><path d='M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8Zm4.473 5.807L7.14 11.14c-.26.26-.68.26-.94 0L3.533 8.473a.664.664 0 1 1 .94-.94l2.194 2.194 4.86-4.86c.26-.26.68-.26.94 0 .266.253.266.68.006.94Z'/></svg>" size="33.53%"></pds-icon>
+            <pds-icon class="pds-avatar__badge" icon="${checkCircleFilled}" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
