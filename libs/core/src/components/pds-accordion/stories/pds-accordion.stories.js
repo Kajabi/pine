@@ -15,7 +15,7 @@ const BaseTemplate = (args) => html`
 	<pds-accordion component-id="${args.componentId}" open="${args.isOpen}">
     <pds-row align-items="center" slot="label">
       <pds-box align-items="center">
-        <pds-icon name="products-outline"></pds-icon>
+        <pds-icon name="product"></pds-icon>
         <span style="display: inline-block; margin-left: 8px;">Products</span>
       </pds-box>
     </pds-row>
