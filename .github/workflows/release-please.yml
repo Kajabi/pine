@@ -47,7 +47,7 @@ jobs:
           fetch-depth: 0
           ref: ''
 
-      - uses: google-github-actions/release-please-action@v4
+      - uses: googleapis/release-please-action@v4
         id: manifest-release
         with:
           manifest-file: .release-please-manifest.json
