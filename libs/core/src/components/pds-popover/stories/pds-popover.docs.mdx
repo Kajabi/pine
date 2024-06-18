@@ -1,0 +1,159 @@
+import { Meta, Canvas, ArgTypes, Controls } from '@storybook/blocks';
+
+import * as stories from './pds-popover.stories.js';
+
+<Meta of={stories}
+/>
+
+# Popover
+
+Popover is a discrete UI element that displays over the main content to present extra information or user options. It's designed for minimal disruption, appearing only when necessary and allowing for a clutter-free, user-centric experience.
+
+## Properties
+
+<ArgTypes of={stories} />
+
+## Variants
+
+### Trigger
+The trigger can be a button, `pds-button`, another Pine component, or an HTML element. There is just one trigger for each Popover, making its use straightforward.
+There can only be one trigger for the Popover.
+
+#### Button trigger
+
+<Canvas mdxSource={`
+<pds-popover placement="bottom-right" html-content="true">
+  <div slot="content">
+    <p><strong>This is a popover</strong></p>
+  </div>
+  <pds-button variant="secondary">Click</pds-button>
+</pds-popover>
+`}>
+  <div style={{ height: '100px' }}>
+    <pds-popover placement="bottom-start" html-content="true">
+      <div slot="content">
+        <p><strong>This is a popover</strong></p>
+      </div>
+      <pds-button variant="secondary">Click</pds-button>
+    </pds-popover>
+  </div>
+</Canvas>
+
+#### Avatar trigger
+<Canvas mdxSource={`
+<pds-popover placement="bottom-start" html-content="true">
+  <div slot="content">
+    <p><strong>This is a popover</strong></p>
+  </div>
+  <pds-avatar dropdown="true"></pds-avatar>
+</pds-popover>
+`}>
+  <div style={{ height: '125px' }}>
+    <pds-popover has-arrow="true" placement="bottom-start" html-content="true">
+      <div slot="content">
+        <p><strong>This is a popover</strong></p>
+      </div>
+      <pds-avatar dropdown="true"></pds-avatar>
+    </pds-popover>
+  </div>
+</Canvas>
+
+### Content
+The popover content is placed in a container with the slot, `content`. This is where you can place any HTML content you want to display in the popover.
+
+<Canvas mdxSource={`
+<pds-popover placement="bottom-start">
+  <div slot="content">
+    <p>Pastrami chuck leberkas, swine biltong tail fatback jowl landjaeger</p>
+    <div>
+      <pds-button variant="secondary">Cancel</pds-button>
+      <pds-button>Get Started</pds-button>
+    </div>
+  </div>
+  <pds-button variant="secondary">Popover trigger</pds-button>
+</pds-popover>
+`}>
+  <div style={{ height: '150px' }}>
+    <pds-popover placement="bottom-start">
+      <div slot="content">
+        <p>Pastrami chuck leberkas, swine biltong tail fatback jowl landjaeger.</p>
+        <div>
+          <pds-button variant="secondary">Cancel</pds-button>
+          <pds-button>Get Started</pds-button>
+        </div>
+      </div>
+      <pds-button variant="secondary">Popover trigger</pds-button>
+    </pds-popover>
+  </div>
+</Canvas>
+
+### Placement
+The placement property enables precise control over the positioning of your Popover. By utilizing this
+property, you can dictate the specific location of the popover relative to the trigger element. This
+customization ensures optimal visibility and alignment per your page's layout and design requirements.
+To see more example, navigate to the [playground](#playground).
+
+Example `top-start` placement:
+<Canvas mdxSource={`
+<pds-popover has-arrow="true" placement="top-start">
+  <div slot="content">
+    <p><strong>Popover Content</strong></p>
+  </div>
+  <pds-button variant="secondary">top-start</pds-button>
+</pds-popover>
+`}>
+  <pds-popover has-arrow="true" placement="top-start">
+    <div slot="content">
+      <p><strong>Popover Content</strong></p>
+    </div>
+    <pds-button variant="secondary">top-start</pds-button>
+  </pds-popover>
+</Canvas>
+
+Example `right-start` placement:
+<Canvas mdxSource={`
+<pds-popover has-arrow="true" placement="right-start">
+  <div slot="content">
+    <p><strong>Popover Content</strong></p>
+  </div>
+  <pds-button variant="secondary">right-start</pds-button>
+</pds-popover>
+`}>
+  <pds-popover has-arrow="true" placement="right-start">
+    <div slot="content">
+      <p><strong>Popover Content</strong></p>
+    </div>
+    <pds-button variant="secondary">right-start</pds-button>
+  </pds-popover>
+</Canvas>
+
+
+
+### Arrow
+By default the arrow is hidden. It can be shown by setting `has-arrow` to `true`.
+
+<Canvas mdxSource={`
+<pds-popover has-arrow="true" placement="bottom-start">
+  <div slot="content">
+    <p><strong>This is a popover</strong></p>
+    <p><strong>This is a popover</strong></p>
+  </div>
+  <pds-avatar dropdown="true"></pds-avatar>
+</pds-popover>
+`}>
+  <div style={{ height: '150px' }}>
+    <pds-popover has-arrow="true" placement="bottom-start">
+      <div slot="content">
+        <p><strong>This is a popover</strong></p>
+        <p><strong>This is a popover</strong></p>
+      </div>
+      <pds-button variant="secondary">Click</pds-button>
+    </pds-popover>
+  </div>
+</Canvas>
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />
