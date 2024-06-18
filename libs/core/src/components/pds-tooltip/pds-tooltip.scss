@@ -24,6 +24,10 @@
   display: inline-block;
   position: relative;
 
+  ::slotted(*) {
+    display: flex;
+  }
+
   ::slotted([slot="content"]) {
     white-space: normal;
     width: var(--sizing-width-default);
