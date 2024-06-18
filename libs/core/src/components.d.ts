@@ -451,6 +451,10 @@ export namespace Components {
     }
     interface PdsLoader {
         /**
+          * If false, the loader will be hidden.
+         */
+        "isLoading": boolean;
+        /**
           * Determines whether the loader should display a label.
          */
         "showLabel"?: boolean;
@@ -1678,6 +1682,10 @@ declare namespace LocalJSX {
         "variant"?: 'inline' | 'plain';
     }
     interface PdsLoader {
+        /**
+          * If false, the loader will be hidden.
+         */
+        "isLoading"?: boolean;
         /**
           * Determines whether the loader should display a label.
          */

@@ -1,11 +1,20 @@
 import { Component, Host, h, Prop } from '@stencil/core';
 
+/**
+ * @slot - Default slot for Loader label text.
+ */
+
 @Component({
   tag: 'pds-loader',
   styleUrl: 'pds-loader.scss',
   shadow: true,
 })
 export class PdsLoader {
+  /**
+   * If false, the loader will be hidden.
+   */
+  @Prop() isLoading: boolean = true;
+
   /**
    * Determines whether the loader should display a label.
    */
@@ -21,8 +30,14 @@ export class PdsLoader {
    */
   @Prop() variant: 'spinner' | 'typing' = 'spinner';
 
+  private ariaAttrs = {
+    'aria-hidden': !this.isLoading,
+    'aria-busy': this.isLoading,
+    'aria-live': 'polite',
+  };
+
   private loaderSize() {
-    const sizes: { [key: string]: any } = {
+    const sizes: { [key: string]: string } = {
       xs: '24px',
       sm: '32px',
       md: '48px',
@@ -46,50 +61,44 @@ export class PdsLoader {
     }
   };
 
-  private renderLoader = () => {
-    if (this.variant === 'spinner') {
-      return (
-        <svg class="pds-loader" style={this.style()} viewBox="0 0 200 200" fill="none">
-          <defs>
-            <linearGradient id="spinner-secondHalf">
-              <stop offset="0%" stop-opacity="0" stop-color="currentColor" />
-              <stop offset="100%" stop-opacity="0.5" stop-color="currentColor" />
-            </linearGradient>
-            <linearGradient id="spinner-firstHalf">
-              <stop offset="0%" stop-opacity="1" stop-color="currentColor" />
-              <stop offset="100%" stop-opacity="0.5" stop-color="currentColor" />
-            </linearGradient>
-          </defs>
-
-          <g class="pds-loader__spinner-path">
-            <path stroke="url(#spinner-secondHalf)" d="M 4 100 A 96 96 0 0 1 196 100" />
-            <path stroke="url(#spinner-firstHalf)" d="M 196 100 A 96 96 0 0 1 4 100" />
-
-            <path stroke="currentColor" stroke-linecap="round" d="M 4 100 A 96 96 0 0 1 4 98" />
-          </g>
-        </svg>
-      );
-    }
-    if (this.variant === 'typing') {
-      return (
-        <div class="pds-loader--typing">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      );
-    }
-  };
-
-  private renderLabel = () => {
-    return <div class={`pds-loader__label ${this.showLabel ? '' : 'pds-loader__label--hidden'}`}>Loading...</div>;
-  };
-
   render() {
     return (
-      <Host>
-        {this.renderLoader()}
-        {this.renderLabel()}
+      <Host class="pds-loader" {...this.ariaAttrs} data-loading={this.isLoading}>
+        {this.variant === 'spinner' && (
+          <div class="pds-loader--spinner">
+            <svg style={this.style()} viewBox="0 0 200 200" fill="none">
+              <defs>
+                <linearGradient id="spinner-secondHalf">
+                  <stop offset="0%" stop-opacity="0" stop-color="currentColor" />
+                  <stop offset="100%" stop-opacity="0.5" stop-color="currentColor" />
+                </linearGradient>
+                <linearGradient id="spinner-firstHalf">
+                  <stop offset="0%" stop-opacity="1" stop-color="currentColor" />
+                  <stop offset="100%" stop-opacity="0.5" stop-color="currentColor" />
+                </linearGradient>
+              </defs>
+
+              <g class="pds-loader--spinner__spinner-path">
+                <path stroke="url(#spinner-secondHalf)" d="M 4 100 A 96 96 0 0 1 196 100" />
+                <path stroke="url(#spinner-firstHalf)" d="M 196 100 A 96 96 0 0 1 4 100" />
+
+                <path stroke="currentColor" stroke-linecap="round" d="M 4 100 A 96 96 0 0 1 4 98" />
+              </g>
+            </svg>
+          </div>
+        )}
+
+        {this.variant === 'typing' && (
+          <div class="pds-loader--typing">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        )}
+
+        <div class={`pds-loader__label ${this.showLabel ? '' : 'pds-loader--hidden'}`}>
+          <slot>Loading...</slot>
+        </div>
       </Host>
     );
   }
