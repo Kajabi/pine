@@ -224,7 +224,7 @@ export namespace Components {
         /**
           * It determines whether or not the checkbox is checked.
          */
-        "checked": boolean;
+        "checked"?: boolean;
         /**
           * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
          */
@@ -680,6 +680,14 @@ export namespace Components {
         "truncate": boolean;
     }
     interface PdsTableHead {
+        /**
+          * Indicates that the selection state is indeterminate.
+         */
+        "indeterminate"?: boolean;
+        /**
+          * A local state to track whether the row is currently selected.
+         */
+        "isSelected": boolean;
     }
     interface PdsTableHeadCell {
         /**
@@ -688,6 +696,14 @@ export namespace Components {
         "sortable": boolean;
     }
     interface PdsTableRow {
+        /**
+          * Indicates that the selection state is indeterminate.
+         */
+        "indeterminate"?: boolean;
+        /**
+          * A local state to track whether the row is currently selected.
+         */
+        "isSelected"?: boolean;
     }
     interface PdsTabpanel {
         /**
@@ -853,6 +869,14 @@ export interface PdsTabCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsTabElement;
 }
+export interface PdsTableCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsTableElement;
+}
+export interface PdsTableHeadCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsTableHeadElement;
+}
 export interface PdsTableHeadCellCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsTableHeadCellElement;
@@ -896,6 +920,7 @@ declare global {
     };
     interface HTMLPdsCheckboxElementEventMap {
         "pdsCheckboxChange": CheckboxChangeEventDetail;
+        "pdsCheckboxInput": CheckboxChangeEventDetail;
     }
     interface HTMLPdsCheckboxElement extends Components.PdsCheckbox, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsCheckboxElementEventMap>(type: K, listener: (this: HTMLPdsCheckboxElement, ev: PdsCheckboxCustomEvent<HTMLPdsCheckboxElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1066,7 +1091,19 @@ declare global {
         prototype: HTMLPdsTabElement;
         new (): HTMLPdsTabElement;
     };
+    interface HTMLPdsTableElementEventMap {
+        "pdsTableSelect": { rowIndex: number; isSelected: boolean };
+        "pdsTableSelectAll": { isSelected: boolean };
+    }
     interface HTMLPdsTableElement extends Components.PdsTable, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsTableElementEventMap>(type: K, listener: (this: HTMLPdsTableElement, ev: PdsTableCustomEvent<HTMLPdsTableElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsTableElementEventMap>(type: K, listener: (this: HTMLPdsTableElement, ev: PdsTableCustomEvent<HTMLPdsTableElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsTableElement: {
         prototype: HTMLPdsTableElement;
@@ -1084,7 +1121,24 @@ declare global {
         prototype: HTMLPdsTableCellElement;
         new (): HTMLPdsTableCellElement;
     };
+    interface HTMLPdsTableHeadElementEventMap {
+        "pdsTableSelectAll": {
+    isSelected: boolean
+  };
+        "pdsTableSelect": {
+    rowIndex: number
+    isSelected: boolean
+  };
+    }
     interface HTMLPdsTableHeadElement extends Components.PdsTableHead, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsTableHeadElementEventMap>(type: K, listener: (this: HTMLPdsTableHeadElement, ev: PdsTableHeadCustomEvent<HTMLPdsTableHeadElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsTableHeadElementEventMap>(type: K, listener: (this: HTMLPdsTableHeadElement, ev: PdsTableHeadCustomEvent<HTMLPdsTableHeadElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsTableHeadElement: {
         prototype: HTMLPdsTableHeadElement;
@@ -1108,7 +1162,8 @@ declare global {
         new (): HTMLPdsTableHeadCellElement;
     };
     interface HTMLPdsTableRowElementEventMap {
-        "pdsTableRowSelected": { rowIndex: number; isSelected: boolean; };
+        "pdsTableSelect": { rowIndex: number; isSelected: boolean; };
+        "pdsTableSelectAll": { isSelected: boolean };
     }
     interface HTMLPdsTableRowElement extends Components.PdsTableRow, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsTableRowElementEventMap>(type: K, listener: (this: HTMLPdsTableRowElement, ev: PdsTableRowCustomEvent<HTMLPdsTableRowElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1456,6 +1511,7 @@ declare namespace LocalJSX {
           * Event emitted that contains the `value` and `checked`.
          */
         "onPdsCheckboxChange"?: (event: PdsCheckboxCustomEvent<CheckboxChangeEventDetail>) => void;
+        "onPdsCheckboxInput"?: (event: PdsCheckboxCustomEvent<CheckboxChangeEventDetail>) => void;
         /**
           * It determines whether or not the checkbox is required.
          */
@@ -1882,6 +1938,8 @@ declare namespace LocalJSX {
           * Determines if table displays fixed column which fixes the first column of the table.
          */
         "fixedColumn"?: boolean;
+        "onPdsTableSelect"?: (event: PdsTableCustomEvent<{ rowIndex: number; isSelected: boolean }>) => void;
+        "onPdsTableSelectAll"?: (event: PdsTableCustomEvent<{ isSelected: boolean }>) => void;
         /**
           * Enables the table to be responsive by horizontally scrolling on smaller screens.
          */
@@ -1900,6 +1958,27 @@ declare namespace LocalJSX {
         "truncate"?: boolean;
     }
     interface PdsTableHead {
+        /**
+          * Indicates that the selection state is indeterminate.
+         */
+        "indeterminate"?: boolean;
+        /**
+          * A local state to track whether the row is currently selected.
+         */
+        "isSelected"?: boolean;
+        /**
+          * Emitted with row index and selected state.
+         */
+        "onPdsTableSelect"?: (event: PdsTableHeadCustomEvent<{
+    rowIndex: number
+    isSelected: boolean
+  }>) => void;
+        /**
+          * Emitted with selected state.
+         */
+        "onPdsTableSelectAll"?: (event: PdsTableHeadCustomEvent<{
+    isSelected: boolean
+  }>) => void;
     }
     interface PdsTableHeadCell {
         /**
@@ -1913,9 +1992,21 @@ declare namespace LocalJSX {
     }
     interface PdsTableRow {
         /**
+          * Indicates that the selection state is indeterminate.
+         */
+        "indeterminate"?: boolean;
+        /**
+          * A local state to track whether the row is currently selected.
+         */
+        "isSelected"?: boolean;
+        /**
           * Event that is emitted when the checkbox is clicked, carrying the selected value.
          */
-        "onPdsTableRowSelected"?: (event: PdsTableRowCustomEvent<{ rowIndex: number; isSelected: boolean; }>) => void;
+        "onPdsTableSelect"?: (event: PdsTableRowCustomEvent<{ rowIndex: number; isSelected: boolean; }>) => void;
+        /**
+          * Emitted with selected state.
+         */
+        "onPdsTableSelectAll"?: (event: PdsTableRowCustomEvent<{ isSelected: boolean }>) => void;
     }
     interface PdsTabpanel {
         /**
