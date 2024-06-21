@@ -114,7 +114,7 @@ export class PdsAvatar {
       // Percentage is average size of icon in relation to total avatar size
       // of all preset sizes found in Figma.
       // Used to allow icons to scale to container size
-      : <pds-icon color="var(--pine-color-primary-400)" icon={userFilled} size="33.53%"></pds-icon>
+      : <pds-icon color="var(--pine-color-blue-400)" icon={userFilled} size="33.53%"></pds-icon>
   );
 
   private classNames = () => (
