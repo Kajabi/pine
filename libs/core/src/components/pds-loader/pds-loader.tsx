@@ -72,7 +72,7 @@ export class PdsLoader {
                 </linearGradient>
               </defs>
 
-              <g class="pds-loader--spinner__spinner-path">
+              <g class="pds-loader__spinner-path">
                 <path stroke="url(#spinner-secondHalf)" d="M 4 100 A 96 96 0 0 1 196 100" />
                 <path stroke="url(#spinner-firstHalf)" d="M 196 100 A 96 96 0 0 1 4 100" />
 
