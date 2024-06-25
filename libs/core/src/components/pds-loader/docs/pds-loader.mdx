@@ -3,15 +3,21 @@ import { components } from '../../../../dist/docs.json';
 
 # Loader
 
-<h2>
-  TBD
-</h2>
+A Loader is used to denote content on the page that is currently processing or loading.
+
+## Guidelines
+
+### Accessibility
+
+Dynamic content on a page that does not require a page load is considered a live region. A loader can be used to convey to the user that the live region will be updated. The appropriate aria role, `aria-live`, is already set on the loader component when `is-loading` is set to `true`. When `is-loading` is set to `false`, `aria-hidden` is added to the component to hide it from the accessibility tree. For more information about live regions, please refer to [MDN's article.](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions)
 
 ## Properties
 
 <DocArgsTable componentName="pds-loader" docSource={components} />
 
 ### Default
+
+By default, the prop `is-loading` is true, which displays the loader. Setting it to false will hide the loader as needed.
 
 <DocCanvas client:only
   mdxSource={{
@@ -21,19 +27,46 @@ import { components } from '../../../../dist/docs.json';
   <pds-loader is-loading="true" variant="spinner"></pds-loader>
 </DocCanvas>
 
-### Default with Visible Label
+### Visible Label
 
-The label is visually hidden by default, but still read by screenreaders. Set `showLabel` to `true` to make the label visible.
+The loader label is visually hidden by default, but still read by screenreaders. Set `showLabel` to `true` to make the label visible.
 
 <DocCanvas client:only
   mdxSource={{
-    react: '<PdsLoader isLoading="true" showLabel="true" size="128px" variant="spinner"></PdsLoader>',
-    webComponent: '<pds-loader is-loading="true" show-label="true" size="128px" variant="spinner"></pds-loader>'
+    react: '<PdsLoader isLoading="true" showLabel="true" variant="spinner"></PdsLoader>',
+    webComponent: '<pds-loader is-loading="true" show-label="true" variant="spinner"></pds-loader>'
 }}>
-  <pds-loader is-loading="true" show-label="false" size="128px" variant="spinner"></pds-loader>
+  <pds-loader is-loading="true" show-label="true" variant="spinner"></pds-loader>
 </DocCanvas>
 
+### Loader Size
+
+The default loader's size can be changed to a either a preset value or a custom pixel value. This will not affect the `typing` variant.
+
+#### Preset
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsLoader isLoading="true" size="xs" variant="spinner"></PdsLoader>',
+    webComponent: '<pds-loader is-loading="true" size="xs" variant="spinner"></pds-loader>'
+}}>
+  <pds-loader is-loading="true" size="xs" variant="spinner"></pds-loader>
+</DocCanvas>
+
+#### Custom
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsLoader isLoading="true" size="128px" variant="spinner"></PdsLoader>',
+    webComponent: '<pds-loader is-loading="true" size="128px" variant="spinner"></pds-loader>'
+}}>
+  <pds-loader is-loading="true" size="128px" variant="spinner"></pds-loader>
+</DocCanvas>
+
+
 ## Typing
+
+Setting the `variant` prop to `typing` will display a typing loader. This loader is not affected by any changes to the `size` prop.
 
 <DocCanvas client:only
   mdxSource={{
@@ -42,3 +75,7 @@ The label is visually hidden by default, but still read by screenreaders. Set `s
 }}>
   <pds-loader is-loading="true" variant="typing"></pds-loader>
 </DocCanvas>
+
+## References
+
+[MDN: Live Regions](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions)
