@@ -1,21 +1,21 @@
 :host {
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: var(--pine-spacing-100);
 }
 
 :host(.pds-loader--hidden),
 .pds-loader--hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
+  border-width: 0 ;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }
 
 // Default Loader
@@ -30,7 +30,7 @@
   inline-size: var(--sizing-spinner);
 }
 
-.pds-loader--spinner__spinner-path {
+.pds-loader__spinner-path {
   stroke-width: 8px;
 }
 
