@@ -1,7 +1,7 @@
 import { Component, Host, h, Prop } from '@stencil/core';
 
 /**
- * @slot - Default slot for Loader label text.
+ * @slot label - Default slot for Loader label text.
  */
 
 @Component({
@@ -30,12 +30,6 @@ export class PdsLoader {
    */
   @Prop() variant: 'spinner' | 'typing' = 'spinner';
 
-  private ariaAttrs = {
-    'aria-hidden': !this.isLoading,
-    'aria-busy': this.isLoading,
-    'aria-live': 'polite',
-  };
-
   private loaderSize() {
     const sizes: { [key: string]: string } = {
       xs: '24px',
@@ -63,7 +57,7 @@ export class PdsLoader {
 
   render() {
     return (
-      <Host class="pds-loader" {...this.ariaAttrs} data-loading={this.isLoading}>
+      <Host class={`pds-loader ${this.isLoading ? '' : 'pds-loader--hidden'}`} aria-hidden={!this.isLoading} aria-busy={this.isLoading} aria-live="polite">
         {this.variant === 'spinner' && (
           <div class="pds-loader--spinner">
             <svg style={this.style()} viewBox="0 0 200 200" fill="none">
@@ -97,7 +91,7 @@ export class PdsLoader {
         )}
 
         <div class={`pds-loader__label ${this.showLabel ? '' : 'pds-loader--hidden'}`}>
-          <slot>Loading...</slot>
+          <slot name="label">Loading...</slot>
         </div>
       </Host>
     );

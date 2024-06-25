@@ -17,9 +17,9 @@
 
 ## Slots
 
-| Slot | Description                         |
-| ---- | ----------------------------------- |
-|      | Default slot for Loader label text. |
+| Slot      | Description                         |
+| --------- | ----------------------------------- |
+| `"label"` | Default slot for Loader label text. |
 
 
 ----------------------------------------------
