@@ -12,7 +12,7 @@ import { PdsLabel } from '../_internal/pds-label/pds-label';
   shadow: true,
 })
 export class PdsInput {
-  @Element() el!: HTMLElement;
+  @Element() el!: HTMLPdsInputElement;
 
   /**
    * A unique identifier used for the underlying component `id` attribute.
