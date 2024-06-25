@@ -7,7 +7,7 @@ export default {
   title: 'components/Loader',
   args: {
     isLoading: true,
-  }
+  },
 }
 
 const BaseTemplate = (args) => html`
@@ -17,7 +17,7 @@ const BaseTemplate = (args) => html`
     size="${args.size}"
     variant="${args.variant}"
   >
-    ${args.slot}
+    <span slot="label">${args.label}</span>
   </pds-loader>
 `;
 
@@ -25,7 +25,7 @@ export const Default = BaseTemplate.bind();
 Default.args = {
   size: '100px',
   showLabel: true,
-  slot: 'Now loading...',
+  label: "Now loading...",
   variant: 'spinner'
 };
 
