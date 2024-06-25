@@ -1,4 +1,6 @@
 :host {
+  --border-default: var(--border-width-default) solid var(--color-border-default);
+  --border-radius-default: var(--pine-border-radius-125);
   --border-width-default: var(--pine-border-width-thin);
   --border-width-unstyled: var(--pine-border-radius-0);
 
@@ -56,8 +58,8 @@
 .pds-button {
   align-items: center;
   background-color: var(--color-background-default);
-  border: var(--border-width-default) solid var(--color-border-default);
-  border-radius: var(--pine-border-radius-125);
+  border: var(--border-default);
+  border-radius: var(--border-radius-default);
   color: var(--color-text-default);
   display: flex;
   font: var(--typography-default);

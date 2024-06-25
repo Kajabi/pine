@@ -1,13 +1,19 @@
-import { Component, Event, EventEmitter, h, Host, Prop } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Listen, h, Host, Prop } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
 import { PdsLabel } from '../_internal/pds-label/pds-label';
 
+/**
+ * @slot prefix - Element before the form control
+ * @slot suffix - Element after the form control
+ */
 @Component({
   tag: 'pds-input',
   styleUrl: 'pds-input.scss',
   shadow: true,
 })
 export class PdsInput {
+  @Element() el!: HTMLElement;
+
   /**
    * A unique identifier used for the underlying component `id` attribute.
    */
@@ -48,6 +54,9 @@ export class PdsInput {
    */
   @Prop() placeholder?: string;
 
+  @Prop() prefixType?: 'static' | 'text' | 'interactive';
+  @Prop() suffixType?: 'static' | 'text' | 'interactive';
+
   /**
    * Indicates whether or not the input field is readonly.
    */
@@ -83,6 +92,50 @@ export class PdsInput {
     this.pdsInput.emit(ev as InputEvent);
   };
 
+  private formControlClassNames() {
+    const classNames = ["pds-input__form-control"];
+
+    return classNames.join('  ');
+  }
+
+  @Listen('resize', { target: 'window' })
+  handleResize() {
+    this.updateInputPadding();
+  }
+
+  componentDidLoad() {
+    this.updateInputPadding();
+
+    const prefixSlot = this.el.shadowRoot.querySelector('slot[name="prefix"]');
+    const suffixSlot = this.el.shadowRoot.querySelector('slot[name="suffix"]');
+
+    const observer = new MutationObserver(() => this.updateInputPadding());
+
+    if (prefixSlot) {
+      observer.observe(prefixSlot, { childList: true, subtree: true });
+    }
+
+    if (suffixSlot) {
+      observer.observe(suffixSlot, { childList: true, subtree: true });
+    }
+  }
+
+  private updateInputPadding() {
+    const prefixSlot = this.el.shadowRoot.querySelector('.pds-input__prefix-wrapper');
+    const suffixSlot = this.el.shadowRoot.querySelector('.pds-input__suffix-wrapper');
+
+    const prefixWidth = prefixSlot ? (prefixSlot as HTMLElement).offsetWidth + 12 : 8;
+    const suffixWidth = suffixSlot ? (suffixSlot as HTMLElement).offsetWidth  + 12 : 8;
+
+    if (prefixWidth != 0) {
+      this.el.style.setProperty('--input-prefix-padding', `${prefixWidth}px`);
+    }
+
+    if (suffixWidth != 0) {
+      this.el.style.setProperty('--input-suffix-padding', `${suffixWidth}px`);
+    }
+  }
+
   render() {
     return (
       <Host
@@ -90,19 +143,28 @@ export class PdsInput {
       >
         <div class="pds-input">
           <PdsLabel htmlFor={this.componentId} text={this.label} />
-          <input class="pds-input__field"
-            aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
-            aria-invalid={this.invalid ? "true" : undefined}
-            disabled={this.disabled}
-            id={this.componentId}
-            name={this.name}
-            placeholder={this.placeholder}
-            readOnly={this.readonly}
-            required={this.required}
-            type={this.type}
-            value={this.value}
-            onInput={this.onInputEvent}
-          />
+          <div class={this.formControlClassNames()}>
+            <div class="pds-input__prefix-wrapper" part={`prefix-${this.prefixType}`}>
+              <slot name="prefix"></slot>
+            </div>
+
+            <input class="pds-input__field"
+              aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
+              aria-invalid={this.invalid ? "true" : undefined}
+              disabled={this.disabled}
+              id={this.componentId}
+              name={this.name}
+              placeholder={this.placeholder}
+              readOnly={this.readonly}
+              required={this.required}
+              type={this.type}
+              value={this.value}
+              onInput={this.onInputEvent}
+            />
+            <div class="pds-input__suffix-wrapper" part={`suffix-${this.suffixType}`}>
+              <slot name="suffix"></slot>
+            </div>
+          </div>
           {this.helperMessage &&
             <p
               class="pds-input__helper-message"

@@ -407,6 +407,7 @@ export namespace Components {
           * Specifies a short hint that describes the expected value of the input field.
          */
         "placeholder"?: string;
+        "prefixType"?: 'static' | 'text' | 'interactive';
         /**
           * Indicates whether or not the input field is readonly.
          */
@@ -415,6 +416,7 @@ export namespace Components {
           * Indicates whether or not the input field is required.
          */
         "required"?: boolean;
+        "suffixType"?: 'static' | 'text' | 'interactive';
         /**
           * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`
           * @defaultValue "text"
@@ -1614,6 +1616,7 @@ declare namespace LocalJSX {
           * Specifies a short hint that describes the expected value of the input field.
          */
         "placeholder"?: string;
+        "prefixType"?: 'static' | 'text' | 'interactive';
         /**
           * Indicates whether or not the input field is readonly.
          */
@@ -1622,6 +1625,7 @@ declare namespace LocalJSX {
           * Indicates whether or not the input field is required.
          */
         "required"?: boolean;
+        "suffixType"?: 'static' | 'text' | 'interactive';
         /**
           * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`
           * @defaultValue "text"
