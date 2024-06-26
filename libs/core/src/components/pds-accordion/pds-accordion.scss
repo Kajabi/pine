@@ -31,10 +31,18 @@ details {
   }
 }
 
+details::details-content {
+  display: block;
+  block-size: 0;
+  transition-property: block-size, content-visibility;
+  transition-duration: .5s;
+  transition-behavior: allow-discrete;
+  overflow: hidden;
+}
+
 /* stylelint-disable-next-line */
 details[open] {
   background-color: var(--color-content-background);
-  transition: transform var(--number-animation-transform-timing);
 
   summary {
     color: var(--color-text-active);
@@ -43,16 +51,6 @@ details[open] {
     pds-icon {
       transform: scaleY(-1);
       transition: transform var(--number-animation-transform-timing);
-    }
-  }
-
-  /* stylelint-disable-next-line selector-no-qualifying-type */
-  .pds-accordion__body {
-    display: none;
-
-    /* stylelint-disable-next-line selector-no-qualifying-type */
-    &.open {
-      display: block;
     }
   }
 }
