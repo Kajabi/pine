@@ -35,6 +35,7 @@ describe('pds-table-row', () => {
       <pds-table selectable="true">
         <pds-table-body>
           <pds-table-row></pds-table-row>
+          <pds-table-row></pds-table-row>
         </pds-table-body>
       </pds-table>
     `);
@@ -42,11 +43,11 @@ describe('pds-table-row', () => {
     const row = await page.find('pds-table-row');
     const checkbox = await page.find('pds-table-row >>> pds-checkbox');
 
-    const pdsTableRowSelectedSpy = await row.spyOnEvent('pdsTableRowSelected');
+    const pdsTableSelectSpy = await row.spyOnEvent('pdsTableRowSelected');
 
     await checkbox.click();
     await page.waitForChanges();
 
-    expect(pdsTableRowSelectedSpy).toHaveReceivedEventDetail({ rowIndex: 0, isSelected: true });
+    expect(pdsTableSelectSpy).toHaveReceivedEventDetail({ rowIndex: 0, isSelected: true });
   });
 });

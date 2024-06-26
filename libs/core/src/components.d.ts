@@ -1122,13 +1122,7 @@ declare global {
         new (): HTMLPdsTableCellElement;
     };
     interface HTMLPdsTableHeadElementEventMap {
-        "pdsTableSelectAll": {
-    isSelected: boolean
-  };
-        "pdsTableSelect": {
-    rowIndex: number
-    isSelected: boolean
-  };
+        "pdsTableSelectAll": { isSelected: boolean };
     }
     interface HTMLPdsTableHeadElement extends Components.PdsTableHead, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsTableHeadElementEventMap>(type: K, listener: (this: HTMLPdsTableHeadElement, ev: PdsTableHeadCustomEvent<HTMLPdsTableHeadElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1162,8 +1156,7 @@ declare global {
         new (): HTMLPdsTableHeadCellElement;
     };
     interface HTMLPdsTableRowElementEventMap {
-        "pdsTableSelect": { rowIndex: number; isSelected: boolean; };
-        "pdsTableSelectAll": { isSelected: boolean };
+        "pdsTableRowSelected": { rowIndex: number; isSelected: boolean; };
     }
     interface HTMLPdsTableRowElement extends Components.PdsTableRow, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsTableRowElementEventMap>(type: K, listener: (this: HTMLPdsTableRowElement, ev: PdsTableRowCustomEvent<HTMLPdsTableRowElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1967,18 +1960,9 @@ declare namespace LocalJSX {
          */
         "isSelected"?: boolean;
         /**
-          * Emitted with row index and selected state.
-         */
-        "onPdsTableSelect"?: (event: PdsTableHeadCustomEvent<{
-    rowIndex: number
-    isSelected: boolean
-  }>) => void;
-        /**
           * Emitted with selected state.
          */
-        "onPdsTableSelectAll"?: (event: PdsTableHeadCustomEvent<{
-    isSelected: boolean
-  }>) => void;
+        "onPdsTableSelectAll"?: (event: PdsTableHeadCustomEvent<{ isSelected: boolean }>) => void;
     }
     interface PdsTableHeadCell {
         /**
@@ -2002,11 +1986,7 @@ declare namespace LocalJSX {
         /**
           * Event that is emitted when the checkbox is clicked, carrying the selected value.
          */
-        "onPdsTableSelect"?: (event: PdsTableRowCustomEvent<{ rowIndex: number; isSelected: boolean; }>) => void;
-        /**
-          * Emitted with selected state.
-         */
-        "onPdsTableSelectAll"?: (event: PdsTableRowCustomEvent<{ isSelected: boolean }>) => void;
+        "onPdsTableRowSelected"?: (event: PdsTableRowCustomEvent<{ rowIndex: number; isSelected: boolean; }>) => void;
     }
     interface PdsTabpanel {
         /**
