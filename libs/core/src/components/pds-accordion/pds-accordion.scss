@@ -31,15 +31,6 @@ details {
   }
 }
 
-details::details-content {
-  display: block;
-  block-size: 0;
-  transition-property: block-size, content-visibility;
-  transition-duration: .5s;
-  transition-behavior: allow-discrete;
-  overflow: hidden;
-}
-
 /* stylelint-disable-next-line */
 details[open] {
   background-color: var(--color-content-background);
