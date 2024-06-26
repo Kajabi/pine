@@ -987,11 +987,16 @@
       "type": "typography"
     }
   },
-  "$themes": [],
   "$metadata": {
-    "tokenSetOrder": [
-      "core",
-      "semantic"
-    ]
+    "tokenSetOrder": {
+      "0": {
+        "value": "core",
+        "type": "other"
+      },
+      "1": {
+        "value": "semantic",
+        "type": "other"
+      }
+    }
   }
 }
