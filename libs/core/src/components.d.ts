@@ -1931,7 +1931,13 @@ declare namespace LocalJSX {
           * Determines if table displays fixed column which fixes the first column of the table.
          */
         "fixedColumn"?: boolean;
+        /**
+          * Event that is emitted when the checkbox is clicked, carrying the rowIndex and selected value.
+         */
         "onPdsTableSelect"?: (event: PdsTableCustomEvent<{ rowIndex: number; isSelected: boolean }>) => void;
+        /**
+          * Event that is emitted when the select all checkbox is clicked, carrying the selected value.
+         */
         "onPdsTableSelectAll"?: (event: PdsTableCustomEvent<{ isSelected: boolean }>) => void;
         /**
           * Enables the table to be responsive by horizontally scrolling on smaller screens.
@@ -1960,7 +1966,7 @@ declare namespace LocalJSX {
          */
         "isSelected"?: boolean;
         /**
-          * Emitted with selected state.
+          * Event that is emitted when the select all checkbox is clicked, carrying the selected value.
          */
         "onPdsTableSelectAll"?: (event: PdsTableHeadCustomEvent<{ isSelected: boolean }>) => void;
     }
