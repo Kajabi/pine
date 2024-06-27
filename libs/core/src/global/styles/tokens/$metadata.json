@@ -1,6 +1,10 @@
 {
   "tokenSetOrder": [
-    "core/core",
+    "core/border",
+    "core/box-shadow",
+    "core/color",
+    "core/typography",
+    "core/spacing",
     "semantic/semantic"
   ]
 }
