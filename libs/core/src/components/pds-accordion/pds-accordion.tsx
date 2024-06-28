@@ -23,7 +23,12 @@ export class PdsAccordion {
    * Can be used to manually set the open state of the accordion.
    * @defaultValue false
    */
-  @Prop({ attribute: 'open', mutable: true, reflect: true }) isOpen: boolean = false;
+  @Prop({
+    attribute: 'open',
+    mutable: true,
+    reflect: true,
+  })
+  isOpen: boolean = false;
 
   @Watch('isOpen')
   handleOpenState(newValue: boolean) {
