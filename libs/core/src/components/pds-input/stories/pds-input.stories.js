@@ -34,18 +34,28 @@ const BaseTemplate = (args) => html`<pds-input
   label="${args.label}"
   name="${args.name}"
   placeholder="${args.placeholder}"
+  prefixType="${args.prefixType}"
+  suffixType="${args.suffixType}"
   readonly="${args.readonly}"
   required="${args.required}"
   type="${args.type}"
   value="${args.value}">
+  ${args.action ? args.action : ''}
+  ${args.prefix ? args.prefix : ''}
+  ${args.suffix ? args.suffix : ''}
+  ${args.tooltip ? args.tooltip : ''}
 </pds-input>`;
 
 export const Text = BaseTemplate.bind({});
 Text.args = {
+  action: html`<pds-icon slot="action" icon="ai-writer-filled"></pds-icon>`,
   componentId: 'pds-input-text-example',
   label: 'Name',
   type: 'text',
-  value: 'Frank Dux'
+  value: 'Frank Dux',
+  prefix: html`<pds-icon slot="prefix" icon="user"></pds-icon>`,
+  suffix: html`<span slot="suffix">.com</span>`,
+  tooltip: html`<pds-icon slot="tooltip" icon="info-circle"></pds-icon>`,
 };
 
 export const Email = BaseTemplate.bind({});

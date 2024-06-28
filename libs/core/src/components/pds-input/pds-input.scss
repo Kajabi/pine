@@ -68,7 +68,29 @@ label {
   font-size: var(--input-font-size-label);
   font-weight: var(--input-font-weight-label);
   line-height: var(--input-line-height-label);
+}
+
+.pds-input__required-indicator {
+  color: var(--pine-color-red-300);
+  font-weight: var(--pine-font-weight-medium);
+}
+
+.pds-input__label-wrapper {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
   margin-block-end: var(--input-spacing-label-margin-block-end);
+}
+
+.pds-input__label-meta {
+  align-items: center;
+  display: flex;
+  gap: 4px;
+}
+
+slot[name=action] {
+  margin-inline-start: auto;
 }
 
 .pds-input__prefix-wrapper {

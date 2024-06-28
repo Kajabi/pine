@@ -3,8 +3,10 @@ import { assignDescription, messageId } from '../../utils/form';
 import { PdsLabel } from '../_internal/pds-label/pds-label';
 
 /**
+ * @slot action - Element to be displayed as an action
  * @slot prefix - Element before the form control
  * @slot suffix - Element after the form control
+ * @slot tooltip - Element to be displayed as a tooltip
  */
 @Component({
   tag: 'pds-input',
@@ -54,7 +56,14 @@ export class PdsInput {
    */
   @Prop() placeholder?: string;
 
+  /**
+   * Specifies the type of prefix element.
+   */
   @Prop() prefixType?: 'static' | 'text' | 'interactive';
+
+  /**
+   * Specifies the type of suffix element.
+   */
   @Prop() suffixType?: 'static' | 'text' | 'interactive';
 
   /**
@@ -142,7 +151,14 @@ export class PdsInput {
         aria-disabled={this.disabled ? 'true' : null}
       >
         <div class="pds-input">
-          <PdsLabel htmlFor={this.componentId} text={this.label} />
+          <div class="pds-input__label-wrapper">
+            <div class="pds-input__label-meta">
+              <PdsLabel htmlFor={this.componentId} text={this.label} />
+              {this.required && <span aria-hidden="true" class="pds-input__required-indicator">*</span>}
+              <slot name="tooltip"></slot>
+            </div>
+            <slot name="action"></slot>
+          </div>
           <div class={this.formControlClassNames()}>
             <div class="pds-input__prefix-wrapper" part={`prefix-${this.prefixType}`}>
               <slot name="prefix"></slot>

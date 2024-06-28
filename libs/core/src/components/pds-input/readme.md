@@ -17,10 +17,10 @@
 | `label`                    | `label`          | Text to be displayed as the input label.                                                                     | `string`                              | `undefined` |
 | `name`                     | `name`           | Specifies the name. Submitted with the form name/value pair.                                                 | `string`                              | `undefined` |
 | `placeholder`              | `placeholder`    | Specifies a short hint that describes the expected value of the input field.                                 | `string`                              | `undefined` |
-| `prefixType`               | `prefix-type`    |                                                                                                              | `"interactive" \| "static" \| "text"` | `undefined` |
+| `prefixType`               | `prefix-type`    | Specifies the type of prefix element.                                                                        | `"interactive" \| "static" \| "text"` | `undefined` |
 | `readonly`                 | `readonly`       | Indicates whether or not the input field is readonly.                                                        | `boolean`                             | `undefined` |
 | `required`                 | `required`       | Indicates whether or not the input field is required.                                                        | `boolean`                             | `undefined` |
-| `suffixType`               | `suffix-type`    |                                                                                                              | `"interactive" \| "static" \| "text"` | `undefined` |
+| `suffixType`               | `suffix-type`    | Specifies the type of suffix element.                                                                        | `"interactive" \| "static" \| "text"` | `undefined` |
 | `type`                     | `type`           | Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'` | `string`                              | `'text'`    |
 | `value`                    | `value`          | The value of the input.                                                                                      | `string`                              | `undefined` |
 
@@ -34,10 +34,12 @@
 
 ## Slots
 
-| Slot       | Description                     |
-| ---------- | ------------------------------- |
-| `"prefix"` | Element before the form control |
-| `"suffix"` | Element after the form control  |
+| Slot        | Description                          |
+| ----------- | ------------------------------------ |
+| `"action"`  | Element to be displayed as an action |
+| `"prefix"`  | Element before the form control      |
+| `"suffix"`  | Element after the form control       |
+| `"tooltip"` | Element to be displayed as a tooltip |
 
 
 ----------------------------------------------
