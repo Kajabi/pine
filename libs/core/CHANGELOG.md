@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@1.0.2...@pine-ds/core@1.1.0) (2024-06-28)
+
+
+### Bug Fixes
+
+* **tooltip:** resolve trigger alignment when present in a group ([#208](https://github.com/Kajabi/pine/issues/208)) ([c5bec03](https://github.com/Kajabi/pine/commit/c5bec031f5eda1de0d55561b51aa3cbc05e43379))
+* update old token values in components ([#210](https://github.com/Kajabi/pine/issues/210)) ([ddc2e50](https://github.com/Kajabi/pine/commit/ddc2e50ac69a173324a5f5c772216d1c7c82ccae))
+
+
+
+
+
 # [1.1.0-rc.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@1.0.2...@pine-ds/core@1.1.0-rc.0) (2024-06-28)
 
 
