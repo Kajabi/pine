@@ -111,6 +111,7 @@ export class PdsTable {
         id={this.componentId}
         role="grid"
         selectable={this.selectable}
+        tabindex="0"
       >
         <slot></slot>
       </Host>
