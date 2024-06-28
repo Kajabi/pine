@@ -27,8 +27,7 @@ export class PdsAccordion {
     attribute: 'open',
     mutable: true,
     reflect: true,
-  })
-  isOpen: boolean = false;
+  }) isOpen: boolean = false;
 
   @Watch('isOpen')
   handleOpenState(newValue: boolean) {
