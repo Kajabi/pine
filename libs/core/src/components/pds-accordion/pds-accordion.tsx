@@ -12,7 +12,6 @@ import { downSmall } from '@pine-ds/icons/icons';
 })
 export class PdsAccordion {
   private detailsEl: HTMLDetailsElement;
-  private containerEl: HTMLDivElement;
 
   /**
    * A unique identifier used for the underlying component `id` attribute.
@@ -27,30 +26,24 @@ export class PdsAccordion {
   @Prop({
     attribute: 'open',
     mutable: true,
-    reflect: true
+    reflect: true,
   }) isOpen: boolean = false;
 
   @Watch('isOpen')
   handleOpenState(newValue: boolean) {
     this.isOpen = newValue;
-
-    if ( newValue === true ) {
-      this.containerEl.classList.add('open');
-    } else {
-      this.containerEl.classList.remove('open');
-    }
   }
 
   private handleToggle = () => {
     this.isOpen = this.detailsEl.open;
-  }
+  };
 
   private getOpenAttribute = () => {
     if (this.isOpen !== false) {
       return { open: true };
     }
     return '';
-  }
+  };
 
   componentDidLoad() {
     this.detailsEl.addEventListener('toggle', this.handleToggle);
@@ -59,12 +52,12 @@ export class PdsAccordion {
   render() {
     return (
       <Host class="pds-accordion" id={this.componentId}>
-        <details {...this.getOpenAttribute()} ref={(el) => this.detailsEl = el as HTMLDetailsElement}>
+        <details {...this.getOpenAttribute()} ref={(el) => (this.detailsEl = el as HTMLDetailsElement)}>
           <summary>
             <slot name="label">Details</slot>
-            <pds-icon icon={ downSmall } />
+            <pds-icon icon={downSmall} />
           </summary>
-          <div class={`pds-accordion__body ${this.isOpen ? 'open' : ''}`} ref={(el) => this.containerEl = el as HTMLDivElement}>
+          <div class="pds-accordion__body">
             <slot />
           </div>
         </details>
