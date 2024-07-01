@@ -449,6 +449,24 @@ export namespace Components {
          */
         "variant": 'inline' | 'plain';
     }
+    interface PdsLoader {
+        /**
+          * If false, the loader will be hidden.
+         */
+        "isLoading": boolean;
+        /**
+          * Determines whether the loader should display a label.
+         */
+        "showLabel"?: boolean;
+        /**
+          * Sets the size of the spinner loader. Value can be preset or custom.
+         */
+        "size"?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * Determines the type of loader.
+         */
+        "variant": 'spinner' | 'typing';
+    }
     interface PdsProgress {
         /**
           * Determines whether or not progress is animated.
@@ -980,6 +998,12 @@ declare global {
         prototype: HTMLPdsLinkElement;
         new (): HTMLPdsLinkElement;
     };
+    interface HTMLPdsLoaderElement extends Components.PdsLoader, HTMLStencilElement {
+    }
+    var HTMLPdsLoaderElement: {
+        prototype: HTMLPdsLoaderElement;
+        new (): HTMLPdsLoaderElement;
+    };
     interface HTMLPdsProgressElement extends Components.PdsProgress, HTMLStencilElement {
     }
     var HTMLPdsProgressElement: {
@@ -1183,6 +1207,7 @@ declare global {
         "pds-image": HTMLPdsImageElement;
         "pds-input": HTMLPdsInputElement;
         "pds-link": HTMLPdsLinkElement;
+        "pds-loader": HTMLPdsLoaderElement;
         "pds-progress": HTMLPdsProgressElement;
         "pds-radio": HTMLPdsRadioElement;
         "pds-row": HTMLPdsRowElement;
@@ -1656,6 +1681,24 @@ declare namespace LocalJSX {
          */
         "variant"?: 'inline' | 'plain';
     }
+    interface PdsLoader {
+        /**
+          * If false, the loader will be hidden.
+         */
+        "isLoading"?: boolean;
+        /**
+          * Determines whether the loader should display a label.
+         */
+        "showLabel"?: boolean;
+        /**
+          * Sets the size of the spinner loader. Value can be preset or custom.
+         */
+        "size"?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        /**
+          * Determines the type of loader.
+         */
+        "variant"?: 'spinner' | 'typing';
+    }
     interface PdsProgress {
         /**
           * Determines whether or not progress is animated.
@@ -2064,6 +2107,7 @@ declare namespace LocalJSX {
         "pds-image": PdsImage;
         "pds-input": PdsInput;
         "pds-link": PdsLink;
+        "pds-loader": PdsLoader;
         "pds-progress": PdsProgress;
         "pds-radio": PdsRadio;
         "pds-row": PdsRow;
@@ -2098,6 +2142,7 @@ declare module "@stencil/core" {
             "pds-image": LocalJSX.PdsImage & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
             "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
+            "pds-loader": LocalJSX.PdsLoader & JSXBase.HTMLAttributes<HTMLPdsLoaderElement>;
             "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-radio": LocalJSX.PdsRadio & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
             "pds-row": LocalJSX.PdsRow & JSXBase.HTMLAttributes<HTMLPdsRowElement>;
