@@ -13,7 +13,7 @@ describe('pds-table', () => {
       html: `<pds-table></pds-table>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-table class="pds-table" role="grid">
+      <pds-table class="pds-table" role="grid" tabindex="0">
         <mock:shadow-root>
           <slot></slot>
         </mock:shadow-root>
@@ -28,7 +28,7 @@ describe('pds-table', () => {
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-table class="pds-table is-compact" compact="true" role="grid">
+      <pds-table class="pds-table is-compact" compact="true" role="grid" tabindex="0">
         <mock:shadow-root>
           <slot></slot>
         </mock:shadow-root>
@@ -43,7 +43,7 @@ describe('pds-table', () => {
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-table class="pds-table is-responsive" responsive="true" role="grid">
+      <pds-table class="pds-table is-responsive" responsive="true" role="grid" tabindex="0">
         <mock:shadow-root>
           <slot></slot>
         </mock:shadow-root>
@@ -55,7 +55,7 @@ describe('pds-table', () => {
     const page = await newSpecPage({
       components: [PdsTable, PdsTableHead, PdsTableHeadCell, PdsTableBody, PdsTableRow, PdsTableCell],
       html: `
-        <pds-table component-id="test-table" responsive>
+        <pds-table component-id="test-table" responsive tabindex="0">
           <pds-table-head>
             <pds-table-head-cell sortable>Column 1</pds-table-head-cell>
             <pds-table-head-cell sortable>Column 2</pds-table-head-cell>

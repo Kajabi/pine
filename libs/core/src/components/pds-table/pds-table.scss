@@ -8,6 +8,13 @@
   width: 100%;
 }
 
+:host(:focus-visible) {
+  --box-shadow-focus: 0 0 0 2px var(--pine-color-blue-200);
+  // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
+  box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
+  outline: none;
+}
+
 :host(.is-responsive) {
   background-attachment: local, local, scroll, scroll;
   background-image: linear-gradient(to right, var(--color-background-default), var(--color-background-default)),
