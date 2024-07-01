@@ -408,6 +408,10 @@ export namespace Components {
          */
         "placeholder"?: string;
         /**
+          * Specifies the type of prefix element.
+         */
+        "prefixType"?: 'static' | 'text' | 'interactive';
+        /**
           * Indicates whether or not the input field is readonly.
          */
         "readonly"?: boolean;
@@ -415,6 +419,10 @@ export namespace Components {
           * Indicates whether or not the input field is required.
          */
         "required"?: boolean;
+        /**
+          * Specifies the type of suffix element.
+         */
+        "suffixType"?: 'static' | 'text' | 'interactive';
         /**
           * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`
           * @defaultValue "text"
@@ -1615,6 +1623,10 @@ declare namespace LocalJSX {
          */
         "placeholder"?: string;
         /**
+          * Specifies the type of prefix element.
+         */
+        "prefixType"?: 'static' | 'text' | 'interactive';
+        /**
           * Indicates whether or not the input field is readonly.
          */
         "readonly"?: boolean;
@@ -1622,6 +1634,10 @@ declare namespace LocalJSX {
           * Indicates whether or not the input field is required.
          */
         "required"?: boolean;
+        /**
+          * Specifies the type of suffix element.
+         */
+        "suffixType"?: 'static' | 'text' | 'interactive';
         /**
           * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`
           * @defaultValue "text"

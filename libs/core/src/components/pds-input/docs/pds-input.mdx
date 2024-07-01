@@ -29,6 +29,95 @@ import { components } from '../../../../dist/docs.json';
 
 ## Variants
 
+### Icon before
+<pds-input component-id="pds-input-text-example" label="Text field" type="text" value="Frank Dux">
+  <pds-icon slot="prefix" icon="user"></pds-icon>
+</pds-input>
+
+### Icon after
+<pds-input component-id="pds-input-text-example" label="Text field" type="text" value="Frank Dux">
+  <pds-icon slot="suffix" icon="check"></pds-icon>
+</pds-input>
+
+### Icon before and after
+<pds-input component-id="pds-input-text-example" label="Text field" type="text" value="Frank Dux">
+  <pds-icon slot="prefix" icon="user"></pds-icon>
+  <pds-icon slot="suffix" icon="check"></pds-icon>
+</pds-input>
+
+### Text before
+<pds-input
+  component-id="pds-input-text-example"
+  label="Text field"
+  prefix-type="text"
+  type="text"
+  value="Frank Dux"
+>
+  <div slot="prefix">http://</div>
+</pds-input>
+
+### Text after
+<pds-input
+  component-id="pds-input-text-example"
+  label="Text field"
+  suffix-type="text"
+  type="text"
+  value="Frank Dux"
+>
+  <div slot="suffix">.com</div>
+</pds-input>
+
+### Text before and after
+<pds-input
+  component-id="pds-input-text-example"
+  label="Text field"
+  prefix-type="text"
+  suffix-type="text"
+  type="text"
+  value="Frank Dux"
+>
+  <div slot="prefix">http://</div>
+  <div slot="suffix">.com</div>
+</pds-input>
+
+### Interactive type before
+<pds-input
+  component-id="pds-input-text-example"
+  label="Text field"
+  prefix-type="interactive"
+  type="text"
+  value="Frank Dux"
+>
+  <pds-button slot="prefix" variant="disclosure">US</pds-button>
+
+</pds-input>
+
+### Interactive type after
+<pds-input
+  component-id="pds-input-text-example"
+  label="Text field"
+  suffix-type="interactive"
+  type="text"
+  value="Frank Dux"
+>
+  <pds-button slot="suffix" variant="disclosure">US</pds-button>
+
+</pds-input>
+
+### Interactive type before and after
+<pds-input
+  component-id="pds-input-text-example"
+  label="Text field"
+  prefix-type="interactive"
+  suffix-type="interactive"
+  type="text"
+  value="Frank Dux"
+>
+  <pds-button slot="prefix" variant="disclosure">US</pds-button>
+  <pds-button slot="suffix" variant="disclosure">US</pds-button>
+
+</pds-input>
+
 ### Text
 <p>The type of input used varies based on the type of information you look to capture. The `text` default type allows for any type of single line data.</p>
 
@@ -120,3 +209,4 @@ import { components } from '../../../../dist/docs.json';
 ## Additional Resources
 
 [MDN Web Docs: Input](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
+
