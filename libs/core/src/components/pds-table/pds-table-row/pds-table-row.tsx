@@ -1,4 +1,6 @@
-import { Component, Element, Host, h, Event, EventEmitter, State } from '@stencil/core';
+import { Component, Element, Host, h, Event, EventEmitter, Prop } from '@stencil/core';
+
+import { closest } from '../../../utils/closest';
 
 @Component({
   tag: 'pds-table-row',
@@ -7,22 +9,38 @@ import { Component, Element, Host, h, Event, EventEmitter, State } from '@stenci
 })
 export class PdsTableRow {
   @Element() hostElement: HTMLPdsTableRowElement;
-  tableRef: HTMLPdsTableElement;
+  private tableRef: HTMLPdsTableElement;
+
+  /**
+   * Indicates that the selection state is indeterminate.
+   * */
+  @Prop({ mutable: true }) indeterminate?: boolean
+
+  /**
+   * A local state to track whether the row is currently selected.
+   */
+  @Prop({ mutable: true }) isSelected?: boolean;
 
   /**
    * Event that is emitted when the checkbox is clicked, carrying the selected value.
    */
   @Event() pdsTableRowSelected: EventEmitter<{ rowIndex: number; isSelected: boolean; }>;
 
-  /**
-   * A local state to track whether the row is currently selected.
-   */
-  @State() isSelected: boolean = false;
-
-  private handleCheckboxClick = () => {
+  private handleClick = () => {
     this.isSelected = !this.isSelected; // Toggle the selected state
-    const selectedIndex = Array.from(this.hostElement.parentNode.children).indexOf(this.hostElement);
-    this.pdsTableRowSelected.emit({ rowIndex: selectedIndex, isSelected: this.isSelected });
+    this.handleSelect(this.isSelected);
+  }
+
+  private handleSelect = (isSelected: boolean) => {
+    this.indeterminate = false;
+
+    if (!closest('pds-table-head', this.hostElement)) {
+      const rowIndex = Array.from(this.hostElement.parentNode.children).indexOf(this.hostElement)
+      this.pdsTableRowSelected.emit({
+        rowIndex,
+        isSelected,
+      })
+    }
   }
 
   private classNames() {
@@ -44,6 +62,12 @@ export class PdsTableRow {
     }
   }
 
+  componentWillLoad() {
+    if (this.isSelected) {
+      this.handleSelect(this.isSelected);
+    }
+  }
+
   private generateUniqueId = () => {
     const randomString = Math.random().toString(36).substring(2, 8);
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
@@ -62,7 +86,8 @@ export class PdsTableRow {
           <pds-table-cell part={this.tableRef.fixedColumn ? 'checkbox-cell' : ''} class={this.tableRef.selectable ? 'has-checkbox' : ''} >
             <pds-checkbox
               componentId={this.generateUniqueId()}
-              onClick={this.handleCheckboxClick}
+              onClick={this.handleClick}
+              indeterminate={this.indeterminate}
               label={"Select Row"}
               labelHidden={true}
               checked={this.isSelected}

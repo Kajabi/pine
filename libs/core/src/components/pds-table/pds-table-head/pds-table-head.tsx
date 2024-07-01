@@ -1,4 +1,5 @@
-import { Component, Element, Host, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
+import { closest } from '@utils/closest';
 
 @Component({
   tag: 'pds-table-head',
@@ -7,7 +8,47 @@ import { Component, Element, Host, h } from '@stencil/core';
 })
 export class PdsTableHead {
   @Element() hostElement: HTMLPdsTableHeadElement;
-  tableRef: HTMLPdsTableElement
+  private tableRef: HTMLPdsTableElement
+
+   /** Indicates that the selection state is indeterminate. */
+   @Prop({ mutable: true }) indeterminate?: boolean
+
+   /**
+   * A local state to track whether the row is currently selected.
+   */
+   @Prop({mutable: true}) isSelected: boolean;
+
+  /**
+   * Event that is emitted when the select all checkbox is clicked, carrying the selected value.
+   */
+  @Event() pdsTableSelectAll: EventEmitter<{ isSelected: boolean }>;
+
+  private generateUniqueId = () => {
+    const randomString = Math.random().toString(36).substring(2, 8);
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const uniqueId = `${randomString}-${timestamp}`;
+
+    return uniqueId;
+  }
+
+  private handleInput = (ev: Event) => {
+    this.isSelected = !(ev.target as HTMLInputElement).checked
+    this.handleSelect(this.isSelected)
+  };
+
+  private handleSelect = (isSelected: boolean) => {
+    this.indeterminate = false
+
+    if ( closest('pds-table-head', this.hostElement) ) {
+      this.pdsTableSelectAll.emit({ isSelected });
+    }
+  }
+
+  componentWillLoad() {
+    if (this.isSelected) {
+      this.handleSelect(this.isSelected)
+    }
+  }
 
   componentWillRender() {
     this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
@@ -17,11 +58,21 @@ export class PdsTableHead {
       tableCell?.classList.add("is-fixed");
     }
   }
+
   render() {
     return (
       <Host role="row">
         {this.tableRef && this.tableRef.selectable && (
-          <pds-table-head-cell part={this.tableRef.fixedColumn ? 'checkbox-cell' : ''}></pds-table-head-cell>
+          <pds-table-head-cell part={this.tableRef.selectable ? 'checkbox-cell' : ''}>
+            <pds-checkbox
+              componentId={this.generateUniqueId()}
+              indeterminate={this.indeterminate}
+              onInput={this.handleInput}
+              label={"Select All Rows"}
+              labelHidden={true}
+              checked={this.isSelected}
+            />
+          </pds-table-head-cell>
         )}
         <slot></slot>
       </Host>

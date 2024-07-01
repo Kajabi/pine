@@ -48,10 +48,23 @@
 }
 
 :host(.is-indeterminate) {
-  input:checked {
+  input {
+    background: var(--color-checked);
+    border-color: var(--color-checked);
+
     &::after {
+      border: 1px solid var(--color-border-icon);
       border-bottom: 0;
+      border-left: 0;
+      border-top: 0;
+      content: "";
+      display: block;
+      height: 7px;
+      left: 50%;
+      position: absolute;
+      top: 50%;
       transform: rotate(87deg) translate3d(-114%, 25%, 0);
+      width: 4px;
     }
   }
 }

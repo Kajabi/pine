@@ -9,7 +9,7 @@ import { downSmall, upSmall } from '@pine-ds/icons/icons';
 })
 export class PdsTableHeadCell {
   @Element() hostElement: HTMLPdsTableHeadCellElement;
-  tableRef: HTMLPdsTableElement;
+  private tableRef: HTMLPdsTableElement;
 
   /**
    * Determines whether the table column is sortable when set to `true`.
@@ -23,6 +23,11 @@ export class PdsTableHeadCell {
 
   @State() private sortingDirection: 'asc' | 'desc' = 'asc';
   @State() private tableScrolling: boolean = false;
+
+  /**
+   * A local state to track whether the row is currently selected.
+   */
+  @State() isSelected: boolean = false;
 
   componentWillRender() {
     this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;

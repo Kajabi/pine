@@ -1,4 +1,4 @@
-import { Component, Element, Host, h, Prop, State, Listen } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, h, Prop, State, Listen } from '@stencil/core';
 
 @Component({
   tag: 'pds-table',
@@ -7,7 +7,6 @@ import { Component, Element, Host, h, Prop, State, Listen } from '@stencil/core'
 })
 export class PdsTable {
   @Element() el: HTMLPdsTableElement;
-  tableRef: HTMLElement;
 
   /**
    * Determines if table displays compact which reduces the spacing of table cells.
@@ -36,6 +35,17 @@ export class PdsTable {
 
   @State() sortingColumn: string | null = null;
   @State() sortingDirection: 'asc' | 'desc' = 'asc';
+
+
+  /**
+   * Event that is emitted when the checkbox is clicked, carrying the rowIndex and selected value.
+   */
+  @Event() pdsTableSelect: EventEmitter<{ rowIndex: number; isSelected: boolean }>;
+
+  /**
+   * Event that is emitted when the select all checkbox is clicked, carrying the selected value.
+   */
+  @Event() pdsTableSelectAll: EventEmitter<{ isSelected: boolean }>;
 
   componentWillLoad() {
     this.sortingColumn = null;
@@ -102,6 +112,33 @@ export class PdsTable {
     this.sortTable(event.detail.column, direction);
     this.sortingColumn = event.detail.column;
     this.sortingDirection = direction;
+  }
+
+  @Listen('pdsTableSelectAll')
+  handleTableSelectAll(event: CustomEvent<{ isSelected: boolean }>) {
+    if (event.defaultPrevented) return;
+
+    const pdsTableBody = this.el.querySelector('pds-table-body');
+    const tableRows = Array.from(pdsTableBody.querySelectorAll('pds-table-row'));
+
+    tableRows.forEach((row) => {
+      row.isSelected = event.detail.isSelected;
+    });
+  }
+
+  @Listen('pdsTableRowSelected')
+  async handleTableSelect(event: CustomEvent<{ rowIndex: number; isSelected: boolean }>) {
+    if (event.defaultPrevented) return;
+
+    const allTableRows = this.el.querySelectorAll('pds-table-row');
+    const allSelectedRows = Array.from(allTableRows).every((row) => row.isSelected);
+    const noneSelectedRows = Array.from(allTableRows).every((row) => !row.isSelected);
+    const pdsTableHead = this.el.querySelector('pds-table-head');
+    if (!pdsTableHead) return;
+
+    const headerCheckbox = pdsTableHead.shadowRoot.querySelector('pds-checkbox');
+    headerCheckbox.checked = allSelectedRows;
+    headerCheckbox.indeterminate = !allSelectedRows && !noneSelectedRows;
   }
 
   render() {

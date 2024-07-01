@@ -5,6 +5,14 @@
 <!-- Auto Generated Below -->
 
 
+## Properties
+
+| Property        | Attribute       | Description                                                   | Type      | Default     |
+| --------------- | --------------- | ------------------------------------------------------------- | --------- | ----------- |
+| `indeterminate` | `indeterminate` | Indicates that the selection state is indeterminate.          | `boolean` | `undefined` |
+| `isSelected`    | `is-selected`   | A local state to track whether the row is currently selected. | `boolean` | `undefined` |
+
+
 ## Events
 
 | Event                 | Description                                                                      | Type                                                      |

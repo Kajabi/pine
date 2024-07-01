@@ -7,7 +7,7 @@ import { Component, Element, Host, Prop, State, h } from '@stencil/core';
 })
 export class PdsTableCell {
   @Element() hostElement: HTMLPdsTableCellElement;
-  tableRef: HTMLPdsTableElement;
+  private tableRef: HTMLPdsTableElement;
 
   componentWillRender() {
     this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;

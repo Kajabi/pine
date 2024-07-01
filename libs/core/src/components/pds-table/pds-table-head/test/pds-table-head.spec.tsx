@@ -75,4 +75,57 @@ describe('pds-table-head', () => {
       expect(checkboxCell.getAttribute('part')).toBe('');
     }
   });
+
+  it('renders a pds-checkbox when selectable is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableHead, PdsTable],
+      html: `
+        <pds-table selectable="true" fixed-column="true">
+          <pds-table-head>
+            <pds-table-head-cell>Column Title</pds-table-head-cell>
+            <pds-table-head-cell>Column Title</pds-table-head-cell>
+            <pds-table-head-cell>Column Title</pds-table-head-cell>
+          </pds-table-head>
+        </pds-table>`,
+    });
+
+    const head = page.root?.querySelector('pds-table-head');
+    const checkbox = head?.shadowRoot?.querySelector('pds-checkbox');
+
+    expect(checkbox).not.toBeNull();
+    expect(checkbox?.getAttribute('label')).toBe('Select All Rows');
+  });
+
+  it('sets isSelected to true when checkbox is clicked', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableHead, PdsTable],
+      html: `
+        <pds-table selectable="true">
+          <pds-table-head>
+            <pds-table-head-cell>Column Title</pds-table-head-cell>
+            <pds-table-head-cell>Column Title</pds-table-head-cell>
+            <pds-table-head-cell>Column Title</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>Row 1, Column 1</pds-table-cell>
+              <pds-table-cell>Row 1, Column 2</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>`,
+    });
+
+    const head = page.root?.querySelector('pds-table-head');
+    const checkbox = head?.shadowRoot?.querySelector('pds-checkbox');
+    const inputEvent = new Event('input', {
+      bubbles: true,
+      cancelable: true,
+    });
+
+    checkbox?.dispatchEvent(inputEvent);
+    await page.waitForChanges();
+
+    // Check if isSelected is toggled
+    expect((head as unknown as PdsTableHead).isSelected).toBe(true);
+  })
 });

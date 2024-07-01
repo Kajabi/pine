@@ -79,7 +79,7 @@ describe('pds-checkbox', () => {
     expect(page.root).toEqualHtml(`
       <pds-checkbox class="is-indeterminate" component-id="default" label="Label text" indeterminate>
         <mock:shadow-root>
-          <input type="checkbox" id="default">
+          <input indeterminate="" type="checkbox" id="default">
           <label htmlfor="default">Label text</label>
         </mock:shadow-root>
       </pds-checkbox>
