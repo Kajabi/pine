@@ -6,17 +6,17 @@ registerTransforms(StyleDictionary);
 
 const basePath = `src/global/styles/tokens`;
 
+// Dynamically get token set names from folder names
 const getTokenSetNamesFromFolders = (path) => {
 	let tokenSets = [];
 	fs.readdirSync(path, { withFileTypes: true })
 		.filter(dirent => dirent.isDirectory())
 		.map(dirent => tokenSets.push(dirent.name));
 
-	console.log('tokenSets: ', tokenSets);
-
 	return tokenSets;
 }
 
+// Set up Style Dictionary config
 const getConfig = (sets) => {
 	return {
 		source: sets.map(tokenSet => `${basePath}/${tokenSet}/${tokenSet}.json`),
@@ -25,7 +25,7 @@ const getConfig = (sets) => {
 				transformGroup: 'tokens-studio',
 				transforms: ['name/kebab', 'color/hex'],
 				buildPath: `${basePath}/`,
-				// Create multiple outputs for each tokenset
+				// Create multiple outputs for each token set
 				files: sets.map(tokenSet => ({
 					// Make sure only the tokens originating from this set are output
 					filter: token => token.filePath === `${basePath}/${tokenSet}/${tokenSet}.json`,
