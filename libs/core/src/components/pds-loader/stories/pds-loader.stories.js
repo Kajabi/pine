@@ -7,6 +7,7 @@ export default {
   title: 'components/Loader',
   args: {
     isLoading: true,
+    showLabel: false,
   },
 }
 
