@@ -6,6 +6,17 @@ registerTransforms(StyleDictionary);
 
 const basePath = `src/global/styles/tokens`;
 
+// Dynamically get token set names from folder names
+const getTokenSetNamesFromFolders = (path) => {
+	let tokenSets = [];
+	fs.readdirSync(path, { withFileTypes: true })
+		.filter(dirent => dirent.isDirectory())
+		.map(dirent => tokenSets.push(dirent.name));
+
+	return tokenSets;
+}
+
+// Set up Style Dictionary config
 const getConfig = (sets) => {
 	return {
 		source: sets.map(tokenSet => `${basePath}/${tokenSet}/${tokenSet}.json`),
@@ -14,7 +25,7 @@ const getConfig = (sets) => {
 				transformGroup: 'tokens-studio',
 				transforms: ['name/kebab', 'color/hex'],
 				buildPath: `${basePath}/`,
-				// Create multiple outputs for each tokenset
+				// Create multiple outputs for each token set
 				files: sets.map(tokenSet => ({
 					// Make sure only the tokens originating from this set are output
 					filter: token => token.filePath === `${basePath}/${tokenSet}/${tokenSet}.json`,
@@ -30,32 +41,9 @@ const getConfig = (sets) => {
 	};
 };
 
-const sortTokens = async (sets) => {
-	const tokens = JSON.parse(fs.readFileSync(`${basePath}/tokens.json`, 'utf8'));
+const tokenSets = getTokenSetNamesFromFolders(basePath);
+const cfg = getConfig(tokenSets);
+const sd = new StyleDictionary(cfg);
 
-  // Split tokensets from original JSON file into their own files
-	sets.forEach(tokenSet => {
-		fs.ensureDirSync(`${basePath}/${tokenSet}/`);
-		if (tokens.hasOwnProperty(tokenSet)) {
-			const tokensSubset = JSON.stringify(
-				structuredClone(tokens[tokenSet]),
-				null,
-				2
-			);
-			fs.writeFileSync(
-				`${basePath}/${tokenSet}/${tokenSet}.json`,
-				tokensSubset
-			);
-		}
-	});
-
-	const cfg = getConfig(sets);
-	const sd = new StyleDictionary(cfg);
-
-	await sd.cleanAllPlatforms();
-	await sd.buildAllPlatforms();
-};
-
-const tokenSets = ['core', 'semantic'];
-
-sortTokens(tokenSets);
+await sd.cleanAllPlatforms();
+await sd.buildAllPlatforms();

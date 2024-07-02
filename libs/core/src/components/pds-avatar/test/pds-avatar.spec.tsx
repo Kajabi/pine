@@ -159,7 +159,7 @@ describe('pds-avatar', () => {
     expect(page.root).toEqualHtml(`
       <pds-avatar class="pds-avatar" dropdown="true" size="lg" variant="customer">
         <mock:shadow-root>
-          <button class="pds-avatar__button" type="button">
+          <button aria-label="Avatar dropdown trigger" class="pds-avatar__button" type="button">
             <div part="asset-wrapper" style="height: 56px; width: 56px;">
               <pds-icon color="var(--pine-color-blue-400)" icon="${userFilled}" size="33.53%"></pds-icon>
             </div>
