@@ -23,7 +23,13 @@ export class PdsLoader {
   /**
    * Sets the size of the spinner loader. Value can be preset or custom.
    */
-  @Prop({ reflect: true }) size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string = 'md';
+  @Prop({ reflect: true }) size?:
+  | 'xs' // 24px
+  | 'sm' // 32px
+  | 'md' // 48px
+  | 'lg' // 64px
+  | 'xl' // 80px
+  | string = 'md';
 
   /**
    * Determines the type of loader.

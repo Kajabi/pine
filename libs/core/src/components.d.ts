@@ -461,7 +461,12 @@ export namespace Components {
         /**
           * Sets the size of the spinner loader. Value can be preset or custom.
          */
-        "size"?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        "size"?: | 'xs' // 24px
+  | 'sm' // 32px
+  | 'md' // 48px
+  | 'lg' // 64px
+  | 'xl' // 80px
+  | string;
         /**
           * Determines the type of loader.
          */
@@ -1693,7 +1698,12 @@ declare namespace LocalJSX {
         /**
           * Sets the size of the spinner loader. Value can be preset or custom.
          */
-        "size"?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string;
+        "size"?: | 'xs' // 24px
+  | 'sm' // 32px
+  | 'md' // 48px
+  | 'lg' // 64px
+  | 'xl' // 80px
+  | string;
         /**
           * Determines the type of loader.
          */
