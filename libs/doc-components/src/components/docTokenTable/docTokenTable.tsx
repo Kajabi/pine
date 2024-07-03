@@ -1,5 +1,5 @@
 import React from 'react';
-import allTokenJson from '../../../../core/src/global/styles/tokens/tokens.json';
+import allTokenJson from '../../../../core/src/global/styles/tokens/core/core.json';
 
 import './docTokenTable.css';
 
@@ -49,7 +49,7 @@ const applyStyle = (category: string, value: string): React.CSSProperties => {
 }
 
 const DocTokenTable: React.FC<DocTokenTableProps> = ({ category }) => {
-  const pineTokens = allTokenJson.core[category as keyof typeof allTokenJson.core] as Token;
+  const pineTokens = allTokenJson[category as keyof typeof allTokenJson] as Token;
 
   const buildValue = (item: string | Record<string, unknown> | ArrayLike<unknown>): string => {
     const boxShadowValue = Object.values(item) as unknown as string[];
