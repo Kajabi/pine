@@ -4,14 +4,14 @@
       "value": {
         "width": "{border-width.thin}",
         "style": "solid",
-        "color": "{color.grey.300}"
+        "color": "{color.gray.300}"
       },
       "type": "border"
     },
     "interactive": {
       "default": {
         "value": {
-          "color": "{color.grey.400}",
+          "color": "{color.gray.400}",
           "width": "{border-width.thin}",
           "style": "solid"
         },
@@ -20,7 +20,7 @@
       "hover": {
         "value": {
           "width": "{border-width.thin}",
-          "color": "{color.grey.500}",
+          "color": "{color.gray.500}",
           "style": "solid"
         },
         "type": "border"
@@ -80,7 +80,7 @@
             "type": "color"
           },
           "disabled": {
-            "value": "{color.grey.300}",
+            "value": "{color.gray.300}",
             "type": "color"
           },
           "hover": {
