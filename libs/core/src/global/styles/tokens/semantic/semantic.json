@@ -76,7 +76,7 @@
       "action": {
         "primary": {
           "default": {
-            "value": "{color.charcoal.400}",
+            "value": "{color.gray.900}",
             "type": "color"
           },
           "disabled": {
@@ -84,7 +84,7 @@
             "type": "color"
           },
           "hover": {
-            "value": "{color.charcoal.500}",
+            "value": "{color.gray.950}",
             "type": "color"
           }
         },
@@ -137,7 +137,7 @@
       },
       "sentiment": {
         "neutral": {
-          "value": "{color.charcoal.400}",
+          "value": "{color.gray.900}",
           "type": "color"
         },
         "positive": {
@@ -166,7 +166,7 @@
             "type": "color"
           },
           "disabled": {
-            "value": "{color.charcoal.100}",
+            "value": "{color.gray.600}",
             "type": "color"
           }
         },
@@ -193,17 +193,17 @@
       },
       "body": {
         "default": {
-          "value": "{color.charcoal.400}",
+          "value": "{color.gray.900}",
           "type": "color"
         }
       },
       "form": {
         "default": {
-          "value": "{color.charcoal.400}",
+          "value": "{color.gray.900}",
           "type": "color"
         },
         "disabled": {
-          "value": "{color.charcoal.200}",
+          "value": "{color.gray.700}",
           "type": "color"
         },
         "error": {
@@ -211,19 +211,19 @@
           "type": "color"
         },
         "placeholder": {
-          "value": "{color.charcoal.200}",
+          "value": "{color.gray.700}",
           "type": "color"
         }
       },
       "heading": {
         "default": {
-          "value": "{color.charcoal.500}",
+          "value": "{color.gray.950}",
           "type": "color"
         }
       },
       "icon": {
         "default": {
-          "value": "{color.charcoal.400}",
+          "value": "{color.gray.900}",
           "type": "color"
         }
       },
