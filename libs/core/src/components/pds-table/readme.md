@@ -16,6 +16,14 @@
 | `selectable`               | `selectable`   | Determines if table displays checkboxes for selectable rows.                         | `boolean` | `undefined` |
 
 
+## Events
+
+| Event               | Description                                                                                   | Type                                                      |
+| ------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| `pdsTableSelect`    | Event that is emitted when the checkbox is clicked, carrying the rowIndex and selected value. | `CustomEvent<{ rowIndex: number; isSelected: boolean; }>` |
+| `pdsTableSelectAll` | Event that is emitted when the select all checkbox is clicked, carrying the selected value.   | `CustomEvent<{ isSelected: boolean; }>`                   |
+
+
 ----------------------------------------------
 
 

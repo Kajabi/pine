@@ -1,4 +1,4 @@
-import { Component, h, Prop, Host, Event, EventEmitter } from '@stencil/core';
+import { Component, h, Prop, Host, Event, EventEmitter, Watch } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
 import { PdsLabel } from '../_internal/pds-label/pds-label';
 import { CheckboxChangeEventDetail } from './checkbox-interface';
@@ -12,7 +12,7 @@ export class PdsCheckbox {
   /**
    * It determines whether or not the checkbox is checked.
    */
-  @Prop({ mutable: true }) checked: boolean;
+  @Prop({ mutable: true }) checked?: boolean = false;
 
   /**
    * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
@@ -38,7 +38,7 @@ export class PdsCheckbox {
    * If `true`, the checkbox will visually appear as indeterminate.
    * Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
    */
-  @Prop() indeterminate: boolean;
+  @Prop({ mutable: true }) indeterminate: boolean;
 
   /**
    * It determines whether or not the checkbox is invalid.
@@ -75,6 +75,13 @@ export class PdsCheckbox {
    */
   @Event() pdsCheckboxChange: EventEmitter<CheckboxChangeEventDetail>;
 
+  @Event() pdsCheckboxInput: EventEmitter<CheckboxChangeEventDetail>;
+
+  @Watch('checked')
+  updateIndeterminate() {
+    this.indeterminate = undefined
+  }
+
   private handleCheckboxChange = (e: Event) => {
     if (this.disabled) {
       return;
@@ -85,6 +92,13 @@ export class PdsCheckbox {
 
     this.pdsCheckboxChange.emit({
       checked: target.checked,
+      value: this.value
+    });
+  }
+
+  private handleInput = () => {
+    this.pdsCheckboxInput.emit({
+      checked: this.checked,
       value: this.value
     });
   }
@@ -103,16 +117,18 @@ export class PdsCheckbox {
     return (
       <Host class={this.classNames()}>
         <input
+          type="checkbox"
           aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
           aria-invalid={this.invalid ? "true" : undefined}
-          type="checkbox"
           id={this.componentId}
+          indeterminate={this.indeterminate}
           name={this.name}
           value={this.value}
           checked={this.checked}
           required={this.required}
           disabled={this.disabled}
           onChange={this.handleCheckboxChange}
+          onInput={this.handleInput}
         />
         <PdsLabel htmlFor={this.componentId} text={this.label} classNames={this.labelHidden ? 'visually-hidden' : ''} />
         {this.helperMessage &&

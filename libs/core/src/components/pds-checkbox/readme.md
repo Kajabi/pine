@@ -9,7 +9,7 @@
 
 | Property                   | Attribute        | Description                                                                                                                                                                                                                                               | Type      | Default     |
 | -------------------------- | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ----------- |
-| `checked`                  | `checked`        | It determines whether or not the checkbox is checked.                                                                                                                                                                                                     | `boolean` | `undefined` |
+| `checked`                  | `checked`        | It determines whether or not the checkbox is checked.                                                                                                                                                                                                     | `boolean` | `false`     |
 | `componentId` _(required)_ | `component-id`   | A unique identifier used for the underlying component `id` attribute and the label `for` attribute.                                                                                                                                                       | `string`  | `undefined` |
 | `disabled`                 | `disabled`       | It determines whether or not the checkbox is disabled.                                                                                                                                                                                                    | `boolean` | `undefined` |
 | `errorMessage`             | `error-message`  | Displays message text describing an invalid state.                                                                                                                                                                                                        | `string`  | `undefined` |
@@ -28,17 +28,20 @@
 | Event               | Description                                            | Type                                          |
 | ------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | `pdsCheckboxChange` | Event emitted that contains the `value` and `checked`. | `CustomEvent<CheckboxChangeEventDetail<any>>` |
+| `pdsCheckboxInput`  |                                                        | `CustomEvent<CheckboxChangeEventDetail<any>>` |
 
 
 ## Dependencies
 
 ### Used by
 
+ - [pds-table-head](../pds-table/pds-table-head)
  - [pds-table-row](../pds-table/pds-table-row)
 
 ### Graph
 ```mermaid
 graph TD;
+  pds-table-head --> pds-checkbox
   pds-table-row --> pds-checkbox
   style pds-checkbox fill:#f9f,stroke:#333,stroke-width:4px
 ```
