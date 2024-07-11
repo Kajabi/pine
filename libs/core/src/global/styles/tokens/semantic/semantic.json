@@ -4,14 +4,14 @@
       "value": {
         "width": "{border-width.thin}",
         "style": "solid",
-        "color": "{color.gray.300}"
+        "color": "{color.grey.300}"
       },
       "type": "border"
     },
     "interactive": {
       "default": {
         "value": {
-          "color": "{color.gray.400}",
+          "color": "{color.grey.400}",
           "width": "{border-width.thin}",
           "style": "solid"
         },
@@ -20,7 +20,7 @@
       "hover": {
         "value": {
           "width": "{border-width.thin}",
-          "color": "{color.gray.500}",
+          "color": "{color.grey.500}",
           "style": "solid"
         },
         "type": "border"
@@ -76,15 +76,15 @@
       "action": {
         "primary": {
           "default": {
-            "value": "{color.gray.900}",
+            "value": "{color.grey.900}",
             "type": "color"
           },
           "disabled": {
-            "value": "{color.gray.300}",
+            "value": "{color.grey.300}",
             "type": "color"
           },
           "hover": {
-            "value": "{color.gray.950}",
+            "value": "{color.grey.950}",
             "type": "color"
           }
         },
@@ -137,7 +137,7 @@
       },
       "sentiment": {
         "neutral": {
-          "value": "{color.gray.900}",
+          "value": "{color.grey.900}",
           "type": "color"
         },
         "positive": {
@@ -166,7 +166,7 @@
             "type": "color"
           },
           "disabled": {
-            "value": "{color.gray.600}",
+            "value": "{color.grey.600}",
             "type": "color"
           }
         },
@@ -193,17 +193,17 @@
       },
       "body": {
         "default": {
-          "value": "{color.gray.900}",
+          "value": "{color.grey.900}",
           "type": "color"
         }
       },
       "form": {
         "default": {
-          "value": "{color.gray.900}",
+          "value": "{color.grey.900}",
           "type": "color"
         },
         "disabled": {
-          "value": "{color.gray.700}",
+          "value": "{color.grey.700}",
           "type": "color"
         },
         "error": {
@@ -211,19 +211,19 @@
           "type": "color"
         },
         "placeholder": {
-          "value": "{color.gray.700}",
+          "value": "{color.grey.700}",
           "type": "color"
         }
       },
       "heading": {
         "default": {
-          "value": "{color.gray.950}",
+          "value": "{color.grey.950}",
           "type": "color"
         }
       },
       "icon": {
         "default": {
-          "value": "{color.gray.900}",
+          "value": "{color.grey.900}",
           "type": "color"
         }
       },
