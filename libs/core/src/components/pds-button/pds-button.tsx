@@ -11,7 +11,7 @@ import { caretDown } from '@pine-ds/icons/icons';
 
 @Component({
   tag: 'pds-button',
-  styleUrl: 'pds-button.scss',
+  styleUrls: ['../../global/styles/base.scss', 'pds-button.scss'],
   shadow: true,
 })
 export class PdsButton {

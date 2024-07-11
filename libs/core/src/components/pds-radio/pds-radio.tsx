@@ -4,7 +4,7 @@ import { PdsLabel } from '../_internal/pds-label/pds-label';
 
 @Component({
   tag: 'pds-radio',
-  styleUrl: 'pds-radio.scss',
+  styleUrls: ['../../global/styles/base.scss', 'pds-radio.scss'],
   scoped: true,
 })
 export class PdsRadio {

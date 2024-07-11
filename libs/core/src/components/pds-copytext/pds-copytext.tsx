@@ -4,7 +4,7 @@ import { copy as copyIcon } from '@pine-ds/icons/icons';
 
 @Component({
   tag: 'pds-copytext',
-  styleUrl: 'pds-copytext.scss',
+  styleUrls: ['../../global/styles/base.scss', 'pds-copytext.scss'],
   shadow: true,
 })
 export class PdsCopytext {
