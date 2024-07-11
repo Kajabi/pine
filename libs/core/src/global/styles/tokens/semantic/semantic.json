@@ -76,7 +76,7 @@
       "action": {
         "primary": {
           "default": {
-            "value": "{color.charcoal.400}",
+            "value": "{color.grey.900}",
             "type": "color"
           },
           "disabled": {
@@ -84,7 +84,7 @@
             "type": "color"
           },
           "hover": {
-            "value": "{color.charcoal.500}",
+            "value": "{color.grey.950}",
             "type": "color"
           }
         },
@@ -137,7 +137,7 @@
       },
       "sentiment": {
         "neutral": {
-          "value": "{color.charcoal.400}",
+          "value": "{color.grey.900}",
           "type": "color"
         },
         "positive": {
@@ -166,7 +166,7 @@
             "type": "color"
           },
           "disabled": {
-            "value": "{color.charcoal.100}",
+            "value": "{color.grey.600}",
             "type": "color"
           }
         },
@@ -193,17 +193,17 @@
       },
       "body": {
         "default": {
-          "value": "{color.charcoal.400}",
+          "value": "{color.grey.900}",
           "type": "color"
         }
       },
       "form": {
         "default": {
-          "value": "{color.charcoal.400}",
+          "value": "{color.grey.900}",
           "type": "color"
         },
         "disabled": {
-          "value": "{color.charcoal.200}",
+          "value": "{color.grey.700}",
           "type": "color"
         },
         "error": {
@@ -211,19 +211,19 @@
           "type": "color"
         },
         "placeholder": {
-          "value": "{color.charcoal.200}",
+          "value": "{color.grey.700}",
           "type": "color"
         }
       },
       "heading": {
         "default": {
-          "value": "{color.charcoal.500}",
+          "value": "{color.grey.950}",
           "type": "color"
         }
       },
       "icon": {
         "default": {
-          "value": "{color.charcoal.400}",
+          "value": "{color.grey.900}",
           "type": "color"
         }
       },
@@ -245,7 +245,7 @@
       "fontSize": "{font-size.250}",
       "lineHeight": "{line-height.275}",
       "letterSpacing": "{letter-spacing.md}",
-      "fontFamily": "{font-family.circular}"
+      "fontFamily": "{font-family.greet}"
     },
     "type": "typography"
   },
@@ -255,7 +255,7 @@
       "fontSize": "{font-size.200}",
       "lineHeight": "{line-height.125}",
       "letterSpacing": "{letter-spacing.sm}",
-      "fontFamily": "{font-family.circular}"
+      "fontFamily": "{font-family.greet}"
     },
     "type": "typography"
   },
@@ -265,7 +265,7 @@
       "fontWeight": "{font-weight.bold}",
       "lineHeight": "{line-height.100}",
       "letterSpacing": "{letter-spacing.xs}",
-      "fontFamily": "{font-family.circular}"
+      "fontFamily": "{font-family.greet}"
     },
     "type": "typography"
   },
@@ -275,7 +275,7 @@
       "fontSize": "{font-size.150}",
       "lineHeight": "{line-height.125}",
       "letterSpacing": "{letter-spacing.xs}",
-      "fontFamily": "{font-family.circular}"
+      "fontFamily": "{font-family.greet}"
     },
     "type": "typography"
   },
@@ -284,7 +284,7 @@
       "fontWeight": "{font-weight.semi-bold}",
       "fontSize": "{font-size.112}",
       "lineHeight": "{line-height.225}",
-      "fontFamily": "{font-family.circular}"
+      "fontFamily": "{font-family.greet}"
     },
     "type": "typography"
   },
@@ -293,7 +293,7 @@
       "fontWeight": "{font-weight.semi-bold}",
       "fontSize": "{font-size.100}",
       "lineHeight": "{line-height.175}",
-      "fontFamily": "{font-family.circular}"
+      "fontFamily": "{font-family.greet}"
     },
     "type": "typography"
   },
@@ -302,7 +302,7 @@
       "fontWeight": "{font-weight.normal}",
       "fontSize": "{font-size.100}",
       "lineHeight": "{line-height.150}",
-      "fontFamily": "{font-family.circular}"
+      "fontFamily": "{font-family.greet}"
     },
     "type": "typography"
   },
@@ -311,7 +311,7 @@
       "fontSize": "{font-size.100}",
       "lineHeight": "{line-height.150}",
       "fontWeight": "{font-weight.medium}",
-      "fontFamily": "{font-family.circular}"
+      "fontFamily": "{font-family.greet}"
     },
     "type": "typography"
   },
@@ -320,7 +320,7 @@
       "fontSize": "{font-size.100}",
       "lineHeight": "{line-height.150}",
       "fontWeight": "{font-weight.semi-bold}",
-      "fontFamily": "{font-family.circular}"
+      "fontFamily": "{font-family.greet}"
     },
     "type": "typography"
   },
@@ -329,7 +329,7 @@
       "fontSize": "{font-size.100}",
       "lineHeight": "{line-height.150}",
       "fontWeight": "{font-weight.bold}",
-      "fontFamily": "{font-family.circular}"
+      "fontFamily": "{font-family.greet}"
     },
     "type": "typography"
   },
@@ -338,7 +338,7 @@
       "fontWeight": "{font-weight.normal}",
       "fontSize": "{font-size.087}",
       "lineHeight": "{line-height.150}",
-      "fontFamily": "{font-family.circular}"
+      "fontFamily": "{font-family.greet}"
     },
     "type": "typography"
   },
@@ -347,7 +347,7 @@
       "fontWeight": "{font-weight.medium}",
       "fontSize": "{font-size.087}",
       "lineHeight": "{line-height.150}",
-      "fontFamily": "{font-family.circular}"
+      "fontFamily": "{font-family.greet}"
     },
     "type": "typography"
   },
@@ -356,7 +356,7 @@
       "fontWeight": "{font-weight.semi-bold}",
       "fontSize": "{font-size.087}",
       "lineHeight": "{line-height.150}",
-      "fontFamily": "{font-family.circular}"
+      "fontFamily": "{font-family.greet}"
     },
     "type": "typography"
   },
@@ -365,7 +365,7 @@
       "fontWeight": "{font-weight.bold}",
       "fontSize": "{font-size.087}",
       "lineHeight": "{line-height.150}",
-      "fontFamily": "{font-family.circular}"
+      "fontFamily": "{font-family.greet}"
     },
     "type": "typography"
   },
@@ -374,7 +374,7 @@
       "fontWeight": "{font-weight.normal}",
       "fontSize": "{font-size.075}",
       "lineHeight": "{line-height.100}",
-      "fontFamily": "{font-family.circular}"
+      "fontFamily": "{font-family.greet}"
     },
     "type": "typography"
   },
@@ -383,7 +383,7 @@
       "fontWeight": "{font-weight.medium}",
       "fontSize": "{font-size.075}",
       "lineHeight": "{line-height.100}",
-      "fontFamily": "{font-family.circular}"
+      "fontFamily": "{font-family.greet}"
     },
     "type": "typography"
   },
@@ -392,7 +392,7 @@
       "fontWeight": "{font-weight.semi-bold}",
       "fontSize": "{font-size.075}",
       "lineHeight": "{line-height.100}",
-      "fontFamily": "{font-family.circular}"
+      "fontFamily": "{font-family.greet}"
     },
     "type": "typography"
   },
@@ -401,7 +401,7 @@
       "fontWeight": "{font-weight.bold}",
       "fontSize": "{font-size.075}",
       "lineHeight": "{line-height.100}",
-      "fontFamily": "{font-family.circular}"
+      "fontFamily": "{font-family.greet}"
     },
     "type": "typography"
   }
