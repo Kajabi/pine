@@ -106,6 +106,10 @@
   --pine-color-purple-900: #372d82;
   --pine-color-purple-950: #221b4b;
   --pine-font-family-greet: "Greet";
+  --pine-font-size-50: 8px;
+  --pine-font-size-62: 10px;
+  --pine-font-size-75: 12px;
+  --pine-font-size-87: 14px;
   --pine-font-size-100: 16px;
   --pine-font-size-112: 18px;
   --pine-font-size-125: 20px;
@@ -119,10 +123,6 @@
   --pine-font-size-225: 36px;
   --pine-font-size-237: 38px;
   --pine-font-size-250: 40px;
-  --pine-font-size-050: 8px;
-  --pine-font-size-062: 10px;
-  --pine-font-size-075: 12px;
-  --pine-font-size-087: 14px;
   --pine-font-weight-thin: 100;
   --pine-font-weight-extra-light: 200;
   --pine-font-weight-light: 300;
@@ -132,9 +132,9 @@
   --pine-font-weight-bold: 700;
   --pine-font-weight-extra-bold: 800;
   --pine-font-weight-heavy: 900;
-  --pine-letter-spacing-xs: -0.15px;
-  --pine-letter-spacing-sm: -0.5px;
-  --pine-letter-spacing-md: -0.6px;
+  --pine-line-height-25: 0.625;
+  --pine-line-height-50: 0.78125;
+  --pine-line-height-75: 0.9375;
   --pine-line-height-100: 1;
   --pine-line-height-125: 1.25;
   --pine-line-height-150: 1.5;
@@ -144,9 +144,6 @@
   --pine-line-height-250: 2.5;
   --pine-line-height-275: 2.75;
   --pine-line-height-300: 3;
-  --pine-line-height-025: 0.625;
-  --pine-line-height-050: 0.78125;
-  --pine-line-height-075: 0.9375;
   --pine-spacing-0: 0;
   --pine-spacing-100: 8px;
   --pine-spacing-150: 12px;
@@ -164,4 +161,13 @@
   --pine-spacing-750: 60px;
   --pine-spacing-800: 64px;
   --pine-spacing-050: 4px;
+  --pine-letter-spacing-78: 0.11px;
+  --pine-letter-spacing-85: 0.12px;
+  --pine-letter-spacing-100: 0.14px;
+  --pine-letter-spacing-114: 0.16px;
+  --pine-letter-spacing-128: 0.18px;
+  --pine-letter-spacing-142: 0.20px;
+  --pine-letter-spacing-157: 0.22px;
+  --pine-letter-spacing-171: 0.24px;
+  --pine-letter-spacing-185: 0.26px;
 }
