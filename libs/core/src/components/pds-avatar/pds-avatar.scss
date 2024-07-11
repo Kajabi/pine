@@ -39,7 +39,7 @@ div {
 }
 
 .pds-avatar__button {
-  --box-shadow-focus: 0 0 0 2px var(--pine-color-blue-200);
+  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
   --border-radius-round: var(--pine-border-radius-round);
 
   align-items: center;

@@ -1,6 +1,6 @@
 import { Component, h, Host, Prop } from '@stencil/core';
 
-import { BoxColumnType, BoxTShirtSizeType } from '../../utils/types';
+import { BoxColumnType, BoxTShirtSizeType, BoxShadowSizeType } from '../../utils/types';
 
 @Component({
   tag: 'pds-box',
@@ -124,7 +124,7 @@ export class PdsBox {
    * Defines the box shadow.
    * @defaultValue none
   */
-  @Prop() shadow?: BoxTShirtSizeType;
+  @Prop() shadow?: BoxShadowSizeType;
 
   /**
    * Size of the column for all screen sizes that are not explicitly set.

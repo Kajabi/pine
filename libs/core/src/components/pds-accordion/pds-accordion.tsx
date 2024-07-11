@@ -2,12 +2,14 @@ import { Component, h, Host, Prop, Watch } from '@stencil/core';
 import { downSmall } from '@pine-ds/icons/icons';
 
 /**
+ * @part accordion-body - Accordion body styles.
+ * @part accordion-button - Accordion button/trigger styles.
  * @slot (default) - Accordion body content.
  * @slot label - Accordion trigger button content.
  */
 @Component({
   tag: 'pds-accordion',
-  styleUrl: 'pds-accordion.scss',
+  styleUrls: ['../../global/styles/base.scss','pds-accordion.scss'],
   shadow: true,
 })
 export class PdsAccordion {
@@ -53,11 +55,11 @@ export class PdsAccordion {
     return (
       <Host class="pds-accordion" id={this.componentId}>
         <details {...this.getOpenAttribute()} ref={(el) => (this.detailsEl = el as HTMLDetailsElement)}>
-          <summary>
+          <summary part="accordion-button">
             <slot name="label">Details</slot>
             <pds-icon icon={downSmall} />
           </summary>
-          <div class="pds-accordion__body">
+          <div part="accordion-body" class="pds-accordion__body">
             <slot />
           </div>
         </details>
