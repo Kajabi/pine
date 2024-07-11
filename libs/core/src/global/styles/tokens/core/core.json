@@ -4,6 +4,14 @@
       "value": "0",
       "type": "borderRadius"
     },
+    "50": {
+      "value": "4px",
+      "type": "borderRadius"
+    },
+    "75": {
+      "value": "6px",
+      "type": "borderRadius"
+    },
     "100": {
       "value": "8px",
       "type": "borderRadius"
@@ -38,14 +46,6 @@
     },
     "300": {
       "value": "24px",
-      "type": "borderRadius"
-    },
-    "050": {
-      "value": "4px",
-      "type": "borderRadius"
-    },
-    "075": {
-      "value": "6px",
       "type": "borderRadius"
     },
     "round": {
@@ -510,71 +510,71 @@
     }
   },
   "font-size": {
-    "50": {
+    "57": {
       "value": "8px",
       "type": "fontSizes"
     },
-    "62": {
+    "71": {
       "value": "10px",
       "type": "fontSizes"
     },
-    "75": {
+    "85": {
       "value": "12px",
       "type": "fontSizes"
     },
-    "87": {
+    "100": {
       "value": "14px",
       "type": "fontSizes"
     },
-    "100": {
+    "116": {
       "value": "16px",
       "type": "fontSizes"
     },
-    "112": {
+    "128": {
       "value": "18px",
       "type": "fontSizes"
     },
-    "125": {
+    "142": {
       "value": "20px",
       "type": "fontSizes"
     },
-    "137": {
+    "157": {
       "value": "22px",
       "type": "fontSizes"
     },
-    "150": {
+    "171": {
       "value": "24px",
       "type": "fontSizes"
     },
-    "162": {
+    "185": {
       "value": "26px",
       "type": "fontSizes"
     },
-    "175": {
+    "200": {
       "value": "28px",
       "type": "fontSizes"
     },
-    "187": {
+    "214": {
       "value": "30px",
       "type": "fontSizes"
     },
-    "200": {
+    "228": {
       "value": "32px",
       "type": "fontSizes"
     },
-    "212": {
+    "242": {
       "value": "34px",
       "type": "fontSizes"
     },
-    "225": {
+    "257": {
       "value": "36px",
       "type": "fontSizes"
     },
-    "237": {
+    "271": {
       "value": "38px",
       "type": "fontSizes"
     },
-    "250": {
+    "285": {
       "value": "40px",
       "type": "fontSizes"
     }
@@ -672,6 +672,10 @@
       "value": "0",
       "type": "spacing"
     },
+    "50": {
+      "value": "4px",
+      "type": "spacing"
+    },
     "100": {
       "value": "8px",
       "type": "spacing"
@@ -731,13 +735,13 @@
     "800": {
       "value": "64px",
       "type": "spacing"
-    },
-    "050": {
-      "value": "4px",
-      "type": "spacing"
     }
   },
   "letter-spacing": {
+    "0": {
+      "value": "0px",
+      "type": "letterSpacing"
+    },
     "78": {
       "value": "0.11px",
       "type": "letterSpacing"
