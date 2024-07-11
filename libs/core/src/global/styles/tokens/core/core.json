@@ -510,6 +510,22 @@
     }
   },
   "font-size": {
+    "50": {
+      "value": "8px",
+      "type": "fontSizes"
+    },
+    "62": {
+      "value": "10px",
+      "type": "fontSizes"
+    },
+    "75": {
+      "value": "12px",
+      "type": "fontSizes"
+    },
+    "87": {
+      "value": "14px",
+      "type": "fontSizes"
+    },
     "100": {
       "value": "16px",
       "type": "fontSizes"
@@ -561,22 +577,6 @@
     "250": {
       "value": "40px",
       "type": "fontSizes"
-    },
-    "050": {
-      "value": "8px",
-      "type": "fontSizes"
-    },
-    "062": {
-      "value": "10px",
-      "type": "fontSizes"
-    },
-    "075": {
-      "value": "12px",
-      "type": "fontSizes"
-    },
-    "087": {
-      "value": "14px",
-      "type": "fontSizes"
     }
   },
   "font-weight": {
@@ -617,21 +617,19 @@
       "type": "fontWeights"
     }
   },
-  "letter-spacing": {
-    "xs": {
-      "value": "-0.15px",
-      "type": "letterSpacing"
-    },
-    "sm": {
-      "value": "-0.5px",
-      "type": "letterSpacing"
-    },
-    "md": {
-      "value": "-0.6px",
-      "type": "letterSpacing"
-    }
-  },
   "line-height": {
+    "25": {
+      "value": "0.625",
+      "type": "lineHeights"
+    },
+    "50": {
+      "value": "0.78125",
+      "type": "lineHeights"
+    },
+    "75": {
+      "value": "0.9375",
+      "type": "lineHeights"
+    },
     "100": {
       "value": "1",
       "type": "lineHeights"
@@ -666,18 +664,6 @@
     },
     "300": {
       "value": "3",
-      "type": "lineHeights"
-    },
-    "025": {
-      "value": "0.625",
-      "type": "lineHeights"
-    },
-    "050": {
-      "value": "0.78125",
-      "type": "lineHeights"
-    },
-    "075": {
-      "value": "0.9375",
       "type": "lineHeights"
     }
   },
@@ -749,6 +735,44 @@
     "050": {
       "value": "4px",
       "type": "spacing"
+    }
+  },
+  "letter-spacing": {
+    "78": {
+      "value": "0.11px",
+      "type": "letterSpacing"
+    },
+    "85": {
+      "value": "0.12px",
+      "type": "letterSpacing"
+    },
+    "100": {
+      "value": "0.14px",
+      "type": "letterSpacing"
+    },
+    "114": {
+      "value": "0.16px",
+      "type": "letterSpacing"
+    },
+    "128": {
+      "value": "0.18px",
+      "type": "letterSpacing"
+    },
+    "142": {
+      "value": "0.20px",
+      "type": "letterSpacing"
+    },
+    "157": {
+      "value": "0.22px",
+      "type": "letterSpacing"
+    },
+    "171": {
+      "value": "0.24px",
+      "type": "letterSpacing"
+    },
+    "185": {
+      "value": "0.26px",
+      "type": "letterSpacing"
     }
   }
 }
