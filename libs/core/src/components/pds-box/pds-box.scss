@@ -182,20 +182,32 @@ $pine-spacing-tokens: (
 }
 
 // Box shadow helpers
-.pds-shadow-xs {
-  box-shadow: var(--pine-box-shadow-xs);
+.pds-shadow-050 {
+  box-shadow: var(--pine-box-shadow-050);
 }
 
-.pds-shadow-sm {
-  box-shadow: var(--pine-box-shadow-sm);
+.pds-shadow-100 {
+  box-shadow: var(--pine-box-shadow-100);
 }
 
-.pds-shadow-md {
-  box-shadow: var(--pine-box-shadow-md);
+.pds-shadow-150 {
+  box-shadow: var(--pine-box-shadow-150);
 }
 
-.pds-shadow-lg {
-  box-shadow: var(--pine-box-shadow-lg);
+.pds-shadow-200 {
+  box-shadow: var(--pine-box-shadow-200);
+}
+
+.pds-shadow-300 {
+  box-shadow: var(--pine-box-shadow-300);
+}
+
+.pds-shadow-400 {
+  box-shadow: var(--pine-box-shadow-400);
+}
+
+.pds-shadow-500 {
+  box-shadow: var(--pine-box-shadow-500);
 }
 
 // Gap helpers
