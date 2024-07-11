@@ -4,14 +4,14 @@
       "value": {
         "width": "{border-width.thin}",
         "style": "solid",
-        "color": "{color.gray.30}"
+        "color": "{color.gray.300}"
       },
       "type": "border"
     },
     "interactive": {
       "default": {
         "value": {
-          "color": "{color.gray.40}",
+          "color": "{color.gray.400}",
           "width": "{border-width.thin}",
           "style": "solid"
         },
@@ -20,14 +20,14 @@
       "hover": {
         "value": {
           "width": "{border-width.thin}",
-          "color": "{color.gray.50}",
+          "color": "{color.gray.500}",
           "style": "solid"
         },
         "type": "border"
       },
       "error": {
         "value": {
-          "color": "{color.red.30}",
+          "color": "{color.red.300}",
           "width": "{border-width.thin}",
           "style": "solid"
         },
@@ -37,7 +37,7 @@
     "focus": {
       "default": {
         "value": {
-          "color": "{color.blue.20}",
+          "color": "{color.blue.200}",
           "width": "{border-width.thick}",
           "style": "solid"
         },
@@ -45,7 +45,7 @@
       },
       "destructive": {
         "value": {
-          "color": "{color.red.20}",
+          "color": "{color.red.200}",
           "width": "{border-width.thick}",
           "style": "solid"
         },
@@ -53,7 +53,7 @@
       },
       "error": {
         "value": {
-          "color": "{color.red.20}",
+          "color": "{color.red.200}",
           "width": "{border-width.thick}",
           "style": "solid"
         },
@@ -76,15 +76,15 @@
       "action": {
         "primary": {
           "default": {
-            "value": "{color.gray.90}",
+            "value": "{color.gray.900}",
             "type": "color"
           },
           "disabled": {
-            "value": "{color.gray.30}",
+            "value": "{color.gray.300}",
             "type": "color"
           },
           "hover": {
-            "value": "{color.gray.95}",
+            "value": "{color.gray.950}",
             "type": "color"
           }
         },
@@ -96,29 +96,29 @@
         },
         "accent": {
           "default": {
-            "value": "{color.blue.30}",
+            "value": "{color.blue.300}",
             "type": "color"
           },
           "disabled": {
-            "value": "{color.blue.10}",
+            "value": "{color.blue.100}",
             "type": "color"
           },
           "hover": {
-            "value": "{color.blue.40}",
+            "value": "{color.blue.400}",
             "type": "color"
           }
         },
         "destructive": {
           "default": {
-            "value": "{color.red.30}",
+            "value": "{color.red.300}",
             "type": "color"
           },
           "disabled": {
-            "value": "{color.red.10}",
+            "value": "{color.red.100}",
             "type": "color"
           },
           "hover": {
-            "value": "{color.red.40}",
+            "value": "{color.red.400}",
             "type": "color"
           }
         }
@@ -137,23 +137,23 @@
       },
       "sentiment": {
         "neutral": {
-          "value": "{color.gray.90}",
+          "value": "{color.gray.900}",
           "type": "color"
         },
         "positive": {
-          "value": "{color.green.30}",
+          "value": "{color.green.300}",
           "type": "color"
         },
         "negative": {
-          "value": "{color.red.30}",
+          "value": "{color.red.300}",
           "type": "color"
         },
         "attentive": {
-          "value": "{color.yellow.30}",
+          "value": "{color.yellow.300}",
           "type": "color"
         },
         "informative": {
-          "value": "{color.blue.30}",
+          "value": "{color.blue.300}",
           "type": "color"
         }
       }
@@ -166,7 +166,7 @@
             "type": "color"
           },
           "disabled": {
-            "value": "{color.gray.60}",
+            "value": "{color.gray.600}",
             "type": "color"
           }
         },
@@ -176,7 +176,7 @@
             "type": "color"
           },
           "disabled": {
-            "value": "{color.blue.20}",
+            "value": "{color.blue.200}",
             "type": "color"
           }
         },
@@ -186,54 +186,54 @@
             "type": "color"
           },
           "disabled": {
-            "value": "{color.red.20}",
+            "value": "{color.red.200}",
             "type": "color"
           }
         }
       },
       "body": {
         "default": {
-          "value": "{color.gray.90}",
+          "value": "{color.gray.900}",
           "type": "color"
         }
       },
       "form": {
         "default": {
-          "value": "{color.gray.90}",
+          "value": "{color.gray.900}",
           "type": "color"
         },
         "disabled": {
-          "value": "{color.gray.70}",
+          "value": "{color.gray.700}",
           "type": "color"
         },
         "error": {
-          "value": "{color.red.30}",
+          "value": "{color.red.300}",
           "type": "color"
         },
         "placeholder": {
-          "value": "{color.gray.70}",
+          "value": "{color.gray.700}",
           "type": "color"
         }
       },
       "heading": {
         "default": {
-          "value": "{color.gray.95}",
+          "value": "{color.gray.950}",
           "type": "color"
         }
       },
       "icon": {
         "default": {
-          "value": "{color.gray.90}",
+          "value": "{color.gray.900}",
           "type": "color"
         }
       },
       "link": {
         "default": {
-          "value": "{color.blue.30}",
+          "value": "{color.blue.300}",
           "type": "color"
         },
         "hover": {
-          "value": "{color.blue.40}",
+          "value": "{color.blue.400}",
           "type": "color"
         }
       }
