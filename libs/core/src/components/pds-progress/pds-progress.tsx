@@ -2,7 +2,7 @@ import { Component, Host, h, Prop } from '@stencil/core';
 
 @Component({
   tag: 'pds-progress',
-  styleUrl: 'pds-progress.scss',
+  styleUrls: ['../../global/styles/base.scss', 'pds-progress.scss'],
   shadow: true,
 })
 export class PdsProgress {

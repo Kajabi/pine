@@ -4,7 +4,7 @@ import { PdsLabel } from '../_internal/pds-label/pds-label';
 
 @Component({
   tag: 'pds-switch',
-  styleUrl: 'pds-switch.scss',
+  styleUrls: ['../../global/styles/base.scss', 'pds-switch.scss'],
   shadow: true,
 })
 export class PdsSwitch {
