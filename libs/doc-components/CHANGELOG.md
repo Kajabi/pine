@@ -19,6 +19,13 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
+## [1.1.1](https://github.com/Kajabi/pine/compare/doc-components-v1.1.0...doc-components-v1.1.1) (2024-07-15)
+
+
+### Bug Fixes 🐛
+
+* Corrects tokens path in token table ([3026fe9](https://github.com/Kajabi/pine/commit/3026fe97922a0ddf3e4a2d8f30765ee3ac3b2911))
+
 ## [1.0.1](https://github.com/Kajabi/pine/compare/@pine-ds/doc-components@0.2.4...@pine-ds/doc-components@1.0.1) (2024-06-04)
 
 
