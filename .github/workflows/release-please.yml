@@ -76,7 +76,7 @@ jobs:
           git config user.email "dev+github-bot@kajabi.com"
 
       - name: Build Packages
-        run: npm install --legacy-peer-deps
+        run: npm ci --legacy-peer-deps
 
       - uses: bhowell2/github-substring-action@1.0.2
         id: project-name

@@ -35,7 +35,6 @@ runs:
         registry-url: 'https://registry.npmjs.org'
 
     - name: Install Dependencies
-      if: inputs.version != ''
       run: npm ci --legacy-peer-deps --ignore-scripts
       shell: bash
 
