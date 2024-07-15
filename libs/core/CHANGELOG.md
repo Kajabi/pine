@@ -28,6 +28,19 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
+## [1.2.0](https://github.com/Kajabi/pine/compare/core-v1.1.0...core-v1.2.0) (2024-07-15)
+
+
+### Features 🚀
+
+* **table:** Adds select-all checkbox to the table header ([#216](https://github.com/Kajabi/pine/issues/216)) ([c26ed4f](https://github.com/Kajabi/pine/commit/c26ed4f5213cb387bfc99ac4019da598da44ab38))
+
+
+### Bug Fixes 🐛
+
+* **avatar:** Add aria label ([#218](https://github.com/Kajabi/pine/issues/218)) ([d5726ab](https://github.com/Kajabi/pine/commit/d5726ab92f737b66ede04a18e395a22be53608e9))
+* No self-closing web components ([#214](https://github.com/Kajabi/pine/issues/214)) ([522b055](https://github.com/Kajabi/pine/commit/522b055b6894751812ba4264a0d69b024abdc02b))
+
 ## [1.0.5](https://github.com/Kajabi/pine/compare/core-v1.0.2...core-v1.0.5) (2024-06-06)
 
 
