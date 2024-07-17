@@ -505,7 +505,7 @@
   },
   "font-family": {
     "greet": {
-      "value": "\"Greet\"",
+      "value": "\"GreetStandard\"",
       "type": "fontFamilies"
     }
   },
@@ -581,39 +581,39 @@
   },
   "font-weight": {
     "thin": {
-      "value": "100",
+      "value": "125",
       "type": "fontWeights"
     },
     "extra-light": {
-      "value": "200",
+      "value": "225",
       "type": "fontWeights"
     },
     "light": {
-      "value": "300",
+      "value": "325",
       "type": "fontWeights"
     },
     "normal": {
-      "value": "400",
+      "value": "425",
       "type": "fontWeights"
     },
     "medium": {
-      "value": "500",
+      "value": "525",
       "type": "fontWeights"
     },
     "semi-bold": {
-      "value": "600",
+      "value": "625",
       "type": "fontWeights"
     },
     "bold": {
-      "value": "700",
+      "value": "725",
       "type": "fontWeights"
     },
     "extra-bold": {
-      "value": "800",
+      "value": "825",
       "type": "fontWeights"
     },
     "heavy": {
-      "value": "900",
+      "value": "925",
       "type": "fontWeights"
     }
   },
@@ -636,6 +636,10 @@
     },
     "125": {
       "value": "1.25",
+      "type": "lineHeights"
+    },
+    "142": {
+      "value": "1.425",
       "type": "lineHeights"
     },
     "150": {
