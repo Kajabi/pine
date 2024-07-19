@@ -1,4 +1,4 @@
-import { Component, Host, h } from '@stencil/core';
+import { Component, h, Prop } from '@stencil/core';
 
 @Component({
   tag: 'pds-text',
@@ -7,11 +7,18 @@ import { Component, Host, h } from '@stencil/core';
 })
 export class PdsText {
 
+  /**
+   * Determines what semantic text tag to render.
+   */
+  @Prop() tag!: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p';
+
   render() {
+    const Tag = this.tag;
+
     return (
-      <Host>
-        <slot></slot>
-      </Host>
+      <Tag>
+        <slot />
+      </Tag>
     );
   }
 

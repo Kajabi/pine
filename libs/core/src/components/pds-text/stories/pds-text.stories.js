@@ -8,9 +8,14 @@ export default {
   title: 'components/Text',
 }
 
-const BaseTemplate = () => html`<pds-text
-
+const BaseTemplate = (args) => html`<pds-text
+  tag="${args.tag}"
 >
+  ${args.slot}
 </pds-text>`;
 
 export const Default = BaseTemplate.bind();
+Default.args = {
+  slot: 'Hello World',
+  tag: 'h1',
+};
