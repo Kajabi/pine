@@ -1,3 +1,53 @@
 :host {
   display: block;
 }
+
+// TODO: Replace with semantic type tokens
+h1 {
+  font-size: var(--pine-font-size-200);
+  font-weight: var(--pine-font-weight-semi-bold);
+  letter-spacing: var(--pine-letter-spacing-185);
+  line-height: var(--pine-line-height-125);
+}
+
+h2 {
+  font-size: var(--pine-font-size-185);
+  font-weight: var(--pine-font-weight-semi-bold);
+  letter-spacing: var(--pine-letter-spacing-171);
+  line-height: var(--pine-line-height-125);
+}
+
+h3 {
+  font-size: var(--pine-font-size-157);
+  font-weight: var(--pine-font-weight-semi-bold);
+  letter-spacing: var(--pine-letter-spacing-157);
+  line-height: var(--pine-line-height-125);
+}
+
+h4 {
+  font-size: var(--pine-font-size-142);
+  font-weight: var(--pine-font-weight-semi-bold);
+  letter-spacing: var(--pine-letter-spacing-142);
+  line-height: var(--pine-line-height-125);
+}
+
+h5 {
+  font-size: var(--pine-font-size-128);
+  font-weight: var(--pine-font-weight-medium);
+  letter-spacing: var(--pine-letter-spacing-128);
+  line-height: var(--pine-line-height-125);
+}
+
+h6 {
+  font-size: var(--pine-font-size-116);
+  font-weight: var(--pine-font-weight-medium);
+  letter-spacing: var(--pine-letter-spacing-114);
+  line-height: var(--pine-line-height-125);
+}
+
+p {
+  font-size: var(--pine-font-size-100);
+  font-weight: var(--pine-font-weight-normal);
+  letter-spacing: var(--pine-letter-spacing-100);
+  line-height: var(--pine-line-height-142);
+}
