@@ -1,5 +1,4 @@
 import React from 'react';
-import allTokenJson from '../../../../core/src/global/styles/tokens/core/core.json';
 
 import './docTokenTable.css';
 
@@ -14,6 +13,7 @@ interface Token {
 
 interface DocTokenTableProps {
   category: string;
+  jsonData: Record<string, Token>;
 }
 
 const categoryStyleMapping: Record<string, Partial<React.CSSProperties>> = {
@@ -48,8 +48,8 @@ const applyStyle = (category: string, value: string): React.CSSProperties => {
   return style;
 }
 
-const DocTokenTable: React.FC<DocTokenTableProps> = ({ category }) => {
-  const pineTokens = allTokenJson[category as keyof typeof allTokenJson] as Token;
+const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, jsonData }) => {
+  const pineTokens = jsonData[category as keyof typeof jsonData] as Token;
 
   const buildValue = (item: string | Record<string, unknown> | ArrayLike<unknown>): string => {
     const boxShadowValue = Object.values(item) as unknown as string[];

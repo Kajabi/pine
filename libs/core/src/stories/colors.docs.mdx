@@ -2,7 +2,9 @@
 import { Meta, Story } from '@storybook/blocks';
 import {DocTokenTable} from '@pine-ds/doc-components';
 
+import allTokenJson from '../global/styles/tokens/core/core.json';
+
 <Meta title="Foundations/Design Tokens/Color"/>
 
 # Colors
-<DocTokenTable category="color" />
+<DocTokenTable category="color" jsonData={allTokenJson} />

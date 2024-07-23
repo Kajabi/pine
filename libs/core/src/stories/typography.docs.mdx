@@ -1,24 +1,26 @@
 import { Meta, Story } from '@storybook/blocks';
 import {DocTokenTable} from '@pine-ds/doc-components';
 
+import allTokenJson from '../global/styles/tokens/core/core.json';
+
 <Meta title="Foundations/Design Tokens/Typography"/>
 
 # Font Family
 
-<DocTokenTable category="font-family" />
+<DocTokenTable category="font-family" jsonData={allTokenJson} />
 
 # Font Size
 
-<DocTokenTable category="font-size" />
+<DocTokenTable category="font-size" jsonData={allTokenJson} />
 
 # Font Weight
 
-<DocTokenTable category="font-weight" />
+<DocTokenTable category="font-weight" jsonData={allTokenJson} />
 
 # Letter Spacing
 
-<DocTokenTable category="letter-spacing" />
+<DocTokenTable category="letter-spacing" jsonData={allTokenJson} />
 
 
 # Line Height
-<DocTokenTable category="line-height" />
+<DocTokenTable category="line-height" jsonData={allTokenJson} />
