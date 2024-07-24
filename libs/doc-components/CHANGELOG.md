@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/doc-components@1.1.0...@pine-ds/doc-components@2.0.0-mercury.0) (2024-07-24)
+
+
+### Bug Fixes
+
+* corrects tokens path in token table ([3026fe9](https://github.com/Kajabi/pine/commit/3026fe97922a0ddf3e4a2d8f30765ee3ac3b2911))
+
+
+
+
+
 # [1.1.0](https://github.com/Kajabi/pine/compare/@pine-ds/doc-components@1.0.1...@pine-ds/doc-components@1.1.0) (2024-06-28)
 
 **Note:** Version bump only for package @pine-ds/doc-components

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@1.1.0...@pine-ds/core@2.0.0-mercury.0) (2024-07-24)
+
+
+### Bug Fixes
+
+* **avatar:** add aria label ([#218](https://github.com/Kajabi/pine/issues/218)) ([d5726ab](https://github.com/Kajabi/pine/commit/d5726ab92f737b66ede04a18e395a22be53608e9))
+
+
+
+
+
 # [1.1.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@1.0.2...@pine-ds/core@1.1.0) (2024-06-28)
 
 
