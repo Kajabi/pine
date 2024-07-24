@@ -12,6 +12,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 # [1.3.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@1.1.0...@pine-ds/core@1.3.0) (2024-08-01)
+# [2.0.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@1.1.0...@pine-ds/core@2.0.0-mercury.0) (2024-07-24)
 
 
 ### Bug Fixes
