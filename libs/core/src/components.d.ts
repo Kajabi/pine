@@ -758,6 +758,10 @@ export namespace Components {
     }
     interface PdsText {
         /**
+          * Sets the font size.
+         */
+        "size": 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p';
+        /**
           * Determines what semantic text tag to render.
          */
         "tag": 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p';
@@ -2089,6 +2093,10 @@ declare namespace LocalJSX {
         "variant": 'primary' | 'availability' | 'filter';
     }
     interface PdsText {
+        /**
+          * Sets the font size.
+         */
+        "size": 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p';
         /**
           * Determines what semantic text tag to render.
          */

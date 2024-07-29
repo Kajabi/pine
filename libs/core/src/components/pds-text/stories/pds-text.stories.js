@@ -17,5 +17,5 @@ const BaseTemplate = (args) => html`<pds-text
 export const Default = BaseTemplate.bind();
 Default.args = {
   slot: 'Hello World',
-  tag: 'h1',
+  tag: 'h1'
 };

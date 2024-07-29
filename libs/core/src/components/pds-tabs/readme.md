@@ -23,14 +23,6 @@
 | `"tabs"`      | Content is placed within the `div[role="tablist"]` element as children         |
 
 
-## CSS Custom Properties
-
-| Name                         | Description                    |
-| ---------------------------- | ------------------------------ |
-| `--spacing-panel-margin-top` | Optional margin-top for panels |
-| `--spacing-panel-padding`    | Optional padding for panels    |
-
-
 ----------------------------------------------
 
 
