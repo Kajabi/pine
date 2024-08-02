@@ -1,0 +1,197 @@
+name: "Pine Continuous Deployment"
+
+on:
+  ## We will uncomment this when we settle on a deployment schedule
+  # schedule:
+  #  - cron: '00 04 * * 1' # 4 am UTC (9 am CST) Monday
+
+  workflow_dispatch:
+    inputs:
+      preid:
+        type: string
+        description: Which prerelease id should be used? This is only needed when a version is "prepatch", "preminor", "premajor", or "prerelease".
+        default: ''
+          # - ''
+          # - alpha
+          # - beta
+          # - rc
+          # - next
+
+      ref:
+        type: string
+        description: The branch name, tag, or SHA to be checked out. This can also be left blank.
+        default: ''
+
+      tag:
+        type: choice
+        required: true
+        description: Which npm tag should this be published to?
+        options:
+          - latest
+          - next
+          - dev
+
+      version:
+        type: choice
+        description: Which version should be published?
+        options:
+          - ''
+          - patch
+          - minor
+          - major
+          - prepatch
+          - preminor
+          - premajor
+          - prerelease
+
+jobs:
+  build-core:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set SHA
+        uses: nrwl/nx-set-shas@v3
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup
+        uses: ./.github/workflows/actions/setup
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+
+      - name: Install Dependencies
+        run: npm ci --legacy-peer-deps
+        shell: bash
+
+      - name: Build Core
+        run: npx nx run @pine-ds/core:build
+        shell: bash
+
+      - name: Upload Core build
+        uses: ./.github/workflows/actions/upload-archive
+        with:
+          name: pine-core
+          output: libs/core/CoreBuild.zip
+          paths: libs/core/dist libs/core/components libs/core/css libs/core/hydrate libs/core/loader libs/core/src/components.d.ts
+
+  build-react:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set SHA
+        uses: nrwl/nx-set-shas@v3
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup
+        uses: ./.github/workflows/actions/setup
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+
+      - name: Install Dependencies
+        run: npm ci --legacy-peer-deps
+        shell: bash
+
+      - name: Build React
+        run: npx nx run @pine-ds/react:build
+        shell: bash
+
+      - name: Upload React build
+        uses: ./.github/workflows/actions/upload-archive
+        with:
+          name: pine-react
+          output: libs/react/ReactBuild.zip
+          paths: libs/react/dist libs/react/css
+
+  build-doc-components:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set SHA
+        uses: nrwl/nx-set-shas@v3
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup
+        uses: ./.github/workflows/actions/setup
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+
+      - name: Install Dependencies
+        run: npm ci --legacy-peer-deps
+        shell: bash
+
+      - name: Build Doc Components
+        run: npx nx run @pine-ds/doc-components:build
+        shell: bash
+
+      - name: Upload Doc Components build
+        uses: ./.github/workflows/actions/upload-archive
+        with:
+          name: pine-doc-components
+          output: libs/doc-components/DocComponentsBuild.zip
+          paths: libs/doc-components/dist libs/doc-components/css
+
+  release:
+    needs: [build-core, build-react, build-doc-components]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup
+        uses: ./.github/workflows/actions/setup
+
+      - name: Restore core built Cache
+        uses: ./.github/workflows/actions/download-archive
+        with:
+          name: pine-core
+          path: libs/core
+          filename: CoreBuild.zip
+
+      - name: Restore React built Cache
+        uses: ./.github/workflows/actions/download-archive
+        with:
+          name: pine-react
+          path: libs/react
+          filename: ReactBuild.zip
+
+      - name: Restore Doc Components built cache
+        uses: ./.github/workflows/actions/download-archive
+        with:
+          name: pine-doc-components
+          path: libs/doc-components
+          filename: DocComponentsBuild.zip
+
+      - name: Install Dependencies
+        run: npm ci --ignore-scripts
+        shell: bash
+
+      - name: Build All
+        run: npx nx run-many --target=build --all
+        shell: bash
+
+      - name: Prepare NPM Token
+        run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} >> .npmrc
+        shell: bash
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Release
+        run: npx nx release --yes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true

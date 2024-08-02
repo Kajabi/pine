@@ -15,31 +15,9 @@ jobs:
     release:
       permissions:
         id-token: write
-      uses: ./.github/workflows/release-packages.yml
+      uses: ./.github/workflows/schedule-release
       with:
         preid: 'mercury'
         tag: 'next'
         version: 'premajor'
       secrets: inherit
-
-    finalize-release:
-      needs: release
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v3
-          with:
-            fetch-depth: 0
-            ref: ${{ inputs.ref }}
-
-        - name: Configure user
-          run: |
-            git config user.name "DSS Automation Bot"
-            git config user.email "dev+github-bot@kajabi.com"
-
-        - name: Create GitHub Release
-          run: lerna version premajor --yes --force-publish='*' --conventional-commits --create-release github --preid=mercury
-          env:
-            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          shell: bash
-
