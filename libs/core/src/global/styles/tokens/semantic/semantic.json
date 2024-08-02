@@ -137,7 +137,7 @@
         "default": {
           "value": {
             "fontFamily": "{font-family.inter}",
-            "fontWeight": "{font-weight.normal} + 25",
+            "fontWeight": "{font-weight.normal}",
             "fontSize": "{font-size.100}",
             "lineHeight": "{line-height.100} * 1.425",
             "letterSpacing": "{letter-spacing.100}"
@@ -147,7 +147,7 @@
         "medium": {
           "value": {
             "fontFamily": "{font-family.inter}",
-            "fontWeight": "{font-weight.medium} + 25",
+            "fontWeight": "{font-weight.medium}",
             "fontSize": "{font-size.100}",
             "lineHeight": "{line-height.100} * 1.425",
             "letterSpacing": "{letter-spacing.100}"
@@ -157,7 +157,7 @@
         "semibold": {
           "value": {
             "fontFamily": "{font-family.inter}",
-            "fontWeight": "{font-weight.semi-bold} + 25",
+            "fontWeight": "{font-weight.semi-bold}",
             "fontSize": "{font-size.100}",
             "lineHeight": "{line-height.100} * 1.425",
             "letterSpacing": "{letter-spacing.100}"
@@ -167,7 +167,7 @@
         "bold": {
           "value": {
             "fontFamily": "{font-family.inter}",
-            "fontWeight": "{font-weight.bold} + 25",
+            "fontWeight": "{font-weight.bold}",
             "fontSize": "{font-size.100}",
             "lineHeight": "{line-height.100} * 1.425",
             "letterSpacing": "{letter-spacing.100}"
@@ -189,7 +189,7 @@
         "medium": {
           "value": {
             "fontFamily": "{font-family.inter}",
-            "fontWeight": "{font-weight.medium} + 25",
+            "fontWeight": "{font-weight.medium}",
             "fontSize": "{font-size.85}",
             "lineHeight": "{line-height.100} * 1.425",
             "letterSpacing": "{letter-spacing.85}"
@@ -199,7 +199,7 @@
         "bold": {
           "value": {
             "fontFamily": "{font-family.inter}",
-            "fontWeight": "{font-weight.bold} + 25",
+            "fontWeight": "{font-weight.bold}",
             "fontSize": "{font-size.85}",
             "lineHeight": "{line-height.100} * 1.425",
             "letterSpacing": "{letter-spacing.85}"
