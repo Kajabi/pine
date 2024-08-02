@@ -4,7 +4,7 @@ description: 'Builds the Core Design System library'
 inputs:
   node-version:
     description: 'The version of node to use'
-    default: 22
+    default: ''
 
 runs:
   using: 'composite'
@@ -46,13 +46,13 @@ runs:
       run: npm ci --legacy-peer-deps
       shell: bash
 
-    - name: Build Core
-      run: npx nx run @pine-ds/core:build
+    - name: Build React
+      run: npx nx run @pine-ds/react:build
       shell: bash
 
     - name: Upload artifacts
       uses: ./.github/workflows/actions/upload-archive
       with:
-        name: pine-core-build
-        output: libs/core/CoreBuild.zip
-        paths: libs/core/components libs/core/css libs/core/dist libs/core/hydrate libs/core/loader libs/core/src/components.d.ts
+        name: pine-react
+        output: libs/react/ReactBuild.zip
+        paths: libs/react/dist libs/react/css

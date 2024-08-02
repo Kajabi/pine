@@ -46,13 +46,13 @@ runs:
       run: npm ci --legacy-peer-deps
       shell: bash
 
-    - name: Build Core
-      run: npx nx run @pine-ds/core:build
+    - name: Build Doc Components
+      run: npx nx run @pine-ds/doc-components:build
       shell: bash
 
     - name: Upload artifacts
       uses: ./.github/workflows/actions/upload-archive
       with:
-        name: pine-core-build
-        output: libs/core/CoreBuild.zip
-        paths: libs/core/components libs/core/css libs/core/dist libs/core/hydrate libs/core/loader libs/core/src/components.d.ts
+        name: pine-doc-components
+        output: libs/doc-components/DocComponentsBuild.zip
+        paths: libs/doc-components/dist libs/doc-components/css
