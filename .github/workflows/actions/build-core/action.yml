@@ -46,7 +46,7 @@ runs:
       shell: bash
 
     - name: Build Core
-      run: npx nx run core:build
+      run: npx nx run @pine-ds/core:build
       shell: bash
 
     - name: Upload artifacts

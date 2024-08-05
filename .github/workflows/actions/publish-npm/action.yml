@@ -45,7 +45,7 @@ runs:
       working-directory: ${{ inputs.working-directory }}
 
     - name: Run Build
-      run: npx nx run ${{ inputs.project }}:build
+      run: npx nx run @pine-ds/${{ inputs.project }}:build
       shell: bash
 
     - name: Prepare NPM Token

@@ -16,7 +16,7 @@
     "prepare": "node ./.scripts/prepare.js",
     "setup": "npm install",
     "start": "npx nx run-many -t start",
-    "stencil.generate": "npx nx run core:generate",
+    "stencil.generate": "npx nx run @pine-ds/core:generate",
     "test.all": "npx nx run-many --target=test"
   },
   "devDependencies": {

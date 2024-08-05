@@ -1,6 +1,5 @@
 {
   "defaultBase": "origin/main",
-  "npmScope": "pine-ds",
   "tasksRunnerOptions": {
     "default": {
       "runner": "nx-cloud",
