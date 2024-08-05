@@ -1,7 +1,5 @@
 {
-  "affected": {
-    "defaultBase": "origin/main"
-  },
+  "defaultBase": "origin/main",
   "npmScope": "pine-ds",
   "tasksRunnerOptions": {
     "default": {

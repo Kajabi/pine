@@ -57,14 +57,14 @@
   },
   "dependencies": {
     "@pine-ds/icons": "*",
-    "@stencil/core": "^4.8.1",
+    "@stencil/core": "^4.20.0",
     "sortablejs": "^1.15.0",
     "tslib": "^2.6.2"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
     "@babel/preset-env": "^7.22.10",
-    "@pine-ds/doc-components": "^0.2.4",
+    "@pine-ds/doc-components": "*",
     "@pxtrn/storybook-addon-docs-stencil": "^6.4.1",
     "@stencil-community/eslint-plugin": "^0.5.0",
     "@stencil/react-output-target": "^0.5.3",

@@ -40,6 +40,8 @@ testem.log
 **/package.e2e.json
 .env
 
+.nx/
+
 # System Files
 .DS_Store
 Thumbs.db
