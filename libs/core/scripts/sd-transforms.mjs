@@ -20,6 +20,7 @@ const getTokenSetNamesFromFolders = (path) => {
 const getConfig = (sets) => {
 	return {
 		source: sets.map(tokenSet => `${basePath}/${tokenSet}/${tokenSet}.json`),
+		preprocessors: ['tokens-studio'],
 		platforms: {
 			css: {
 				transformGroup: 'tokens-studio',
