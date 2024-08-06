@@ -1,8 +1,8 @@
-import { registerTransforms } from '@tokens-studio/sd-transforms';
+import { register } from '@tokens-studio/sd-transforms';
 import fs from 'fs-extra';
 import StyleDictionary from 'style-dictionary';
 
-registerTransforms(StyleDictionary);
+register(StyleDictionary);
 
 const basePath = `src/global/styles/tokens`;
 
