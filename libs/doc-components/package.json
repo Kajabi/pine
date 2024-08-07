@@ -2,7 +2,7 @@
   "name": "@pine-ds/doc-components",
   "description": "Pine documentation components",
   "author": "Kajabi Design System Services",
-  "version": "4.0.0-mercury.0",
+  "version": "5.0.0-mercury.0",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
