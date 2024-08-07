@@ -1,0 +1,210 @@
+@font-face {
+  font-family: "GreetStandard";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: local("greetstandard-light"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-light.woff2?v=1") format("woff2"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-light.woff?v=1") format("woff");
+}
+@font-face {
+  font-family: "GreetStandard";
+  font-style: italic;
+  font-weight: 300;
+  font-display: swap;
+  src: local("greetstandard-lightitalic"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-lightitalic.woff2?v=1") format("woff2"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-lightitalic.woff?v=1") format("woff");
+}
+@font-face {
+  font-family: "GreetStandard";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local("greetstandard-regular"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-regular.woff2?v=1") format("woff2"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-regular.woff?v=1") format("woff");
+}
+@font-face {
+  font-family: "GreetStandard";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local("greetstandard-regularitalic"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-regularitalic.woff2?v=1") format("woff2"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-regularitalic.woff?v=1") format("woff");
+}
+@font-face {
+  font-family: "GreetStandard";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: local("greetstandard-medium"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-medium.woff2?v=1") format("woff2"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-medium.woff?v=1") format("woff");
+}
+@font-face {
+  font-family: "GreetStandard";
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: local("greetstandard-mediumitalic"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-mediumitalic.woff2?v=1") format("woff2"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-mediumitalic.woff?v=1") format("woff");
+}
+@font-face {
+  font-family: "GreetStandard";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local("greetstandard-semibold"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-semibold.woff2?v=1") format("woff2"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-semibold.woff?v=1") format("woff");
+}
+@font-face {
+  font-family: "GreetStandard";
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  src: local("greetstandard-semibolditalic"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-semibolditalic.woff2?v=1") format("woff2"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-semibolditalic.woff?v=1") format("woff");
+}
+@font-face {
+  font-family: "GreetStandard";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local("greetstandard-bold"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-bold.woff2?v=1") format("woff2"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-bold.woff?v=1") format("woff");
+}
+@font-face {
+  font-family: "GreetStandard";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: local("greetstandard-bolditalic"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-bolditalic.woff2?v=1") format("woff2"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-bolditalic.woff?v=1") format("woff");
+}
+@font-face {
+  font-family: "GreetStandard";
+  font-style: "normal";
+  font-weight: 900;
+  font-display: swap;
+  src: local("greetstandard-heavy"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-heavy.woff2?v=1") format("woff2"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-heavy.woff?v=1") format("woff");
+}
+@font-face {
+  font-family: "GreetStandard";
+  font-style: italic;
+  font-weight: 900;
+  font-display: swap;
+  src: local("greetstandard-heavyitalic"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-heavyitalic.woff2?v=1") format("woff2"), url("https://sage.kajabi-cdn.com/fonts/greet/greetstandard-heavyitalic.woff?v=1") format("woff");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100;
+  font-display: swap;
+  src: local("Inter-Thin"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-Thin.woff2?v=1") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 100;
+  font-display: swap;
+  src: local("Inter-ThinItalic"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-ThinItalic.woff2?v=1") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 200;
+  font-display: swap;
+  src: local("Inter-ExtraLight"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-ExtraLight.woff2?v=1") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 200;
+  font-display: swap;
+  src: local("Inter-ExtraLightItalic"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-ExtraLightItalic.woff2?v=1") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: local("Inter-Light"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-Light.woff2?v=1") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 300;
+  font-display: swap;
+  src: local("Inter-LightItalic"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-LightItalic.woff2?v=1") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local("Inter-Regular"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-Regular.woff2?v=1") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local("Inter-Italic"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-Italic.woff2?v=1") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: local("Inter-Medium"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-Medium.woff2?v=1") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: local("Inter-MediumItalic"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-MediumItalic.woff2?v=1") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local("Inter-Thin"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-SemiBold.woff2?v=1") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  src: local("Inter-Thin"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-SemiBoldItalic.woff2?v=1") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local("Inter-SemiBold"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-Bold.woff2?v=1") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: local("Inter-BoldItalic"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-BoldItalic.woff2?v=1") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: local("Inter-ExtraBold"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-ExtraBold.woff2?v=1") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 800;
+  font-display: swap;
+  src: local("Inter-ExtraBoldItalic"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-ExtraBoldItalic.woff2?v=1") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: local("Inter-Black"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-Black.woff2?v=1") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 900;
+  font-display: swap;
+  src: local("Inter-BlackItalic"), url("https://sage.kajabi-cdn.com/fonts/inter/Inter-BlackItalic.woff2?v=1") format("woff2");
+}
