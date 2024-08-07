@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/doc-components@5.0.0-mercury.0...@pine-ds/doc-components@6.0.0-mercury.0) (2024-08-07)
+
+**Note:** Version bump only for package @pine-ds/doc-components
+
+
+
+
+
 # [5.0.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/doc-components@4.0.0-mercury.0...@pine-ds/doc-components@5.0.0-mercury.0) (2024-08-07)
 
 **Note:** Version bump only for package @pine-ds/doc-components
