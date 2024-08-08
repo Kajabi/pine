@@ -19,7 +19,7 @@ jobs:
       with:
         preid: 'mercury'
         tag: 'next'
-        version: 'premajor'
+        version: 'preminor'
       secrets: inherit
 
     finalize-release:
