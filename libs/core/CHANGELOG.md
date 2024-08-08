@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@1.3.1...@pine-ds/core@2.1.0-mercury.0) (2024-08-08)
+
+**Note:** Version bump only for package @pine-ds/core
+
+
+
+
+
 # [6.0.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@5.0.0-mercury.0...@pine-ds/core@6.0.0-mercury.0) (2024-08-07)
 
 **Note:** Version bump only for package @pine-ds/core
