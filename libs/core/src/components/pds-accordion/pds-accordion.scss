@@ -7,23 +7,25 @@ details {
 
   --box-shadow-focus: inset 0 0 0 2px var(--pine-color-blue-200);
 
-  --color-content-background-default: var(--pine-color-white);
-  --color-background-hover: var(--pine-color-grey-300);
-  --color-text-default: var(--pine-color-charcoal-200);
-  --color-text-active: var(--pine-color-charcoal-500);
-  --color-text-hover: var(--pine-color-charcoal-300);
+  --color-background-default: var(--pine-color-white);
+  --color-background-hover: var(--pine-color-mercury-150);
+  --color-text-default: var(--pine-color-grey-700);
+  --color-text-active: var(--pine-color-grey-950);
+  --color-text-hover: var(--pine-color-grey-800);
+
+  --font-weight-active: var(--pine-font-weight-semi-bold);
 
   --number-animation-transform-timing: 200ms;
 
   --spacing-details-padding-inline: var(--pine-spacing-150);
-  --spacing-summary-padding-block: var(--pine-spacing-050);
+  --spacing-details-padding-block: var(--pine-spacing-100);
+  --spacing-summary-padding-block: var(--pine-spacing-50);
   --spacing-summary-padding-inline-start: var(--pine-spacing-100);
-  --spacing-summary-padding-inline-end: var(--pine-spacing-050);
+  --spacing-summary-padding-inline-end: var(--pine-spacing-50);
 
-  --typography-default: var(--pine-font-weight-semi-bold) var(--pine-font-size-100)/var(--pine-line-height-150) var(--pine-font-family-circular);
+  --typography-default: var(--pine-font-weight-medium) var(--pine-font-size-100)/var(--pine-line-height-150) var(--pine-font-family-inter);
 
   border-radius: var(--border-radius-default);
-  padding-inline: var(--spacing-details-padding-inline);
 
   pds-icon {
     transform: scaleY(1);
@@ -33,11 +35,11 @@ details {
 
 /* stylelint-disable-next-line */
 details[open] {
-  background-color: var(--color-content-background);
+  background-color: var(--color-background-default);
 
   summary {
     color: var(--color-text-active);
-    font: var(--typography-default);
+    font-weight: var(--font-weight-active);
 
     pds-icon {
       transform: scaleY(-1);
@@ -47,6 +49,7 @@ details[open] {
 }
 
 summary {
+  background-color: var(--color-background-default);
   border-radius: var(--border-radius-default);
   color: var(--color-text-default);
   font: var(--typography-default);
@@ -79,4 +82,9 @@ summary {
   pds-icon {
     margin-inline-start: auto;
   }
+}
+
+.pds-accordion__body {
+  padding-block: var(--spacing-details-padding-block);
+  padding-inline: var(--spacing-details-padding-inline);
 }
