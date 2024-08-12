@@ -26,8 +26,8 @@
   --sizing-input-toggle-size: calc(var(--dimension-input-height) - (var(--spacing-input-toggle-offset) * 2));
 
   --spacing-label-gap-size: var(--pine-spacing-150);
-  --spacing-input-toggle-offset: calc(var(--pine-spacing-050) / 2);
-  --spacing-message-block: var(--pine-spacing-050);
+  --spacing-input-toggle-offset: calc(var(--pine-spacing-50) / 2);
+  --spacing-message-block: var(--pine-spacing-50);
   --spacing-message-inline: calc(var(--dimension-input-width) + var(--spacing-label-gap-size));
 
   --number-transition-timing: 0.15s ease-out;
