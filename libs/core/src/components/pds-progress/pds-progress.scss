@@ -20,7 +20,7 @@
 }
 
 .pds-progress {
-  --border-radius: var(--pine-border-radius-50);
+  --border-radius: var(--pine-border-radius-050);
   --color-progress-bar-background: var(--pine-color-grey-300);
 
   align-items: center;
@@ -48,7 +48,7 @@ progress::-webkit-progress-bar {
 }
 
 progress::-webkit-progress-value {
-  --border-radius: var(--pine-border-radius-50);
+  --border-radius: var(--pine-border-radius-050);
   --color-background: var(--pine-color-blue-300);
 
   background-color: var(--color-progress-fill, var(--color-background));
@@ -57,7 +57,7 @@ progress::-webkit-progress-value {
 
 progress::-moz-progress-bar {
   --color-background: var(--pine-color-blue-300);
-  --border-radius: var(--pine-border-radius-50);
+  --border-radius: var(--pine-border-radius-050);
 
   background-color: var(--color-progress-fill, var(--color-background));
   border-radius: var(--border-radius);
@@ -75,7 +75,7 @@ progress::-moz-progress-bar {
 }
 
 .pds-progress__percentage {
-  --font-size: var(--pine-font-size-85);
+  --font-size: var(--pine-font-size-085);
   --font-weight: var(--pine-font-weight-medium);
   --line-height: var(--pine-line-height-150);
   --spacing-inline-start-margin: var(--pine-spacing-300);
