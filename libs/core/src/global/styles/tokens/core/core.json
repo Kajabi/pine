@@ -4,14 +4,6 @@
       "value": "0",
       "type": "borderRadius"
     },
-    "50": {
-      "value": "4px",
-      "type": "borderRadius"
-    },
-    "75": {
-      "value": "6px",
-      "type": "borderRadius"
-    },
     "100": {
       "value": "8px",
       "type": "borderRadius"
@@ -46,6 +38,14 @@
     },
     "300": {
       "value": "24px",
+      "type": "borderRadius"
+    },
+    "050": {
+      "value": "4px",
+      "type": "borderRadius"
+    },
+    "075": {
+      "value": "6px",
       "type": "borderRadius"
     },
     "round": {
@@ -153,10 +153,6 @@
       "type": "color"
     },
     "grey": {
-      "50": {
-        "value": "#FCFCFC",
-        "type": "color"
-      },
       "100": {
         "value": "#F8F8F8",
         "type": "color"
@@ -200,13 +196,13 @@
       "950": {
         "value": "#1A1A19",
         "type": "color"
+      },
+      "050": {
+        "value": "#FCFCFC",
+        "type": "color"
       }
     },
     "blue": {
-      "50": {
-        "value": "#FAFCFF",
-        "type": "color"
-      },
       "100": {
         "value": "#EFF6FF",
         "type": "color"
@@ -250,13 +246,13 @@
       "950": {
         "value": "#172554",
         "type": "color"
+      },
+      "050": {
+        "value": "#FAFCFF",
+        "type": "color"
       }
     },
     "green": {
-      "50": {
-        "value": "#FBFEFC",
-        "type": "color"
-      },
       "100": {
         "value": "#EDFCF2",
         "type": "color"
@@ -300,13 +296,13 @@
       "950": {
         "value": "#052E1C",
         "type": "color"
+      },
+      "050": {
+        "value": "#FBFEFC",
+        "type": "color"
       }
     },
     "red": {
-      "50": {
-        "value": "#FFFAFA",
-        "type": "color"
-      },
       "100": {
         "value": "#FEF2F2",
         "type": "color"
@@ -350,13 +346,13 @@
       "950": {
         "value": "#450A0A",
         "type": "color"
+      },
+      "050": {
+        "value": "#FFFAFA",
+        "type": "color"
       }
     },
     "yellow": {
-      "50": {
-        "value": "#FFFEFA",
-        "type": "color"
-      },
       "100": {
         "value": "#FFFBEB",
         "type": "color"
@@ -400,13 +396,13 @@
       "950": {
         "value": "#451902",
         "type": "color"
+      },
+      "050": {
+        "value": "#FFFEFA",
+        "type": "color"
       }
     },
     "mercury": {
-      "50": {
-        "value": "#FFFCFA",
-        "type": "color"
-      },
       "100": {
         "value": "#FFF3ED",
         "type": "color"
@@ -450,13 +446,13 @@
       "950": {
         "value": "#450506",
         "type": "color"
+      },
+      "050": {
+        "value": "#FFFCFA",
+        "type": "color"
       }
     },
     "purple": {
-      "50": {
-        "value": "#FAFBFF",
-        "type": "color"
-      },
       "100": {
         "value": "#EEF1FF",
         "type": "color"
@@ -500,6 +496,10 @@
       "950": {
         "value": "#221B4B",
         "type": "color"
+      },
+      "050": {
+        "value": "#FAFBFF",
+        "type": "color"
       }
     }
   },
@@ -514,18 +514,6 @@
     }
   },
   "font-size": {
-    "57": {
-      "value": "8px",
-      "type": "fontSizes"
-    },
-    "71": {
-      "value": "10px",
-      "type": "fontSizes"
-    },
-    "85": {
-      "value": "12px",
-      "type": "fontSizes"
-    },
     "100": {
       "value": "14px",
       "type": "fontSizes"
@@ -581,6 +569,18 @@
     "285": {
       "value": "40px",
       "type": "fontSizes"
+    },
+    "057": {
+      "value": "8px",
+      "type": "fontSizes"
+    },
+    "071": {
+      "value": "10px",
+      "type": "fontSizes"
+    },
+    "085": {
+      "value": "12px",
+      "type": "fontSizes"
     }
   },
   "font-weight": {
@@ -622,18 +622,6 @@
     }
   },
   "line-height": {
-    "25": {
-      "value": "0.625",
-      "type": "lineHeights"
-    },
-    "50": {
-      "value": "0.78125",
-      "type": "lineHeights"
-    },
-    "75": {
-      "value": "0.9375",
-      "type": "lineHeights"
-    },
     "100": {
       "value": "1",
       "type": "lineHeights"
@@ -669,15 +657,23 @@
     "300": {
       "value": "3",
       "type": "lineHeights"
+    },
+    "025": {
+      "value": "0.625",
+      "type": "lineHeights"
+    },
+    "050": {
+      "value": "0.78125",
+      "type": "lineHeights"
+    },
+    "075": {
+      "value": "0.9375",
+      "type": "lineHeights"
     }
   },
   "spacing": {
     "0": {
       "value": "0",
-      "type": "spacing"
-    },
-    "50": {
-      "value": "4px",
       "type": "spacing"
     },
     "100": {
@@ -739,19 +735,15 @@
     "800": {
       "value": "64px",
       "type": "spacing"
+    },
+    "050": {
+      "value": "4px",
+      "type": "spacing"
     }
   },
   "letter-spacing": {
     "0": {
       "value": "0px",
-      "type": "letterSpacing"
-    },
-    "78": {
-      "value": "0.11px",
-      "type": "letterSpacing"
-    },
-    "85": {
-      "value": "0.12px",
       "type": "letterSpacing"
     },
     "100": {
@@ -780,6 +772,14 @@
     },
     "185": {
       "value": "0.26px",
+      "type": "letterSpacing"
+    },
+    "078": {
+      "value": "0.11px",
+      "type": "letterSpacing"
+    },
+    "085": {
+      "value": "0.12px",
       "type": "letterSpacing"
     }
   }
