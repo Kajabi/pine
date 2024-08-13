@@ -8,11 +8,11 @@
   --color-border-hover: transparent;
 
   // primary
-  --color-background-primary-default: var(--pine-color-charcoal-400);
+  --color-background-primary-default: var(--pine-color-grey-900);
   --color-background-primary-disabled: var(--pine-color-grey-300);
-  --color-background-primary-hover: var(--pine-color-charcoal-500);
+  --color-background-primary-hover: var(--pine-color-grey-950);
   --color-text-primary-default: var(--pine-color-white);
-  --color-text-primary-disabled: var(--pine-color-charcoal-100);
+  --color-text-primary-disabled: var(--pine-color-grey-600);
   --color-outline-primary: var(--pine-color-blue-200);
 
   // secondary
@@ -20,8 +20,8 @@
   --color-border-secondary-disabled: var(--pine-color-grey-300);
   --color-border-secondary-focus: var(--pine-color-grey-300);
   --color-border-secondary-hover: var(--pine-color-grey-500);
-  --color-text-secondary-default: var(--pine-color-charcoal-400);
-  --color-text-secondary-disabled: var(--pine-color-charcoal-100);
+  --color-text-secondary-default: var(--pine-color-grey-900);
+  --color-text-secondary-disabled: var(--pine-color-grey-600);
   --color-outline-secondary: var(--pine-color-blue-200);
 
   // accent
