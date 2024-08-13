@@ -18,10 +18,10 @@ details {
   --number-animation-transform-timing: 200ms;
 
   --spacing-details-padding-inline: var(--pine-spacing-150);
-  --spacing-details-padding-block: var(--pine-spacing-100);
-  --spacing-summary-padding-block: var(--pine-spacing-50);
+  --spacing-details-padding-block-end: calc(var(--pine-spacing-200) + 2) //18 + 2 = 18px;
+  --spacing-summary-padding-block: calc(var(--pine-spacing-150) / 2) //12 / 2 = 6px;
   --spacing-summary-padding-inline-start: var(--pine-spacing-100);
-  --spacing-summary-padding-inline-end: var(--pine-spacing-50);
+  --spacing-summary-padding-inline-end: var(--pine-spacing-050);
 
   --typography-default: var(--pine-font-weight-medium) var(--pine-font-size-100)/var(--pine-line-height-150) var(--pine-font-family-inter);
 
@@ -85,6 +85,6 @@ summary {
 }
 
 .pds-accordion__body {
-  padding-block: var(--spacing-details-padding-block);
+  padding-block-end: var(--spacing-details-padding-block-end);
   padding-inline: var(--spacing-details-padding-inline);
 }
