@@ -5,10 +5,10 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { BoxColumnType, BoxTShirtSizeType } from "./utils/types";
+import { BoxColumnType, BoxShadowSizeType, BoxTShirtSizeType } from "./utils/types";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 import { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
-export { BoxColumnType, BoxTShirtSizeType } from "./utils/types";
+export { BoxColumnType, BoxShadowSizeType, BoxTShirtSizeType } from "./utils/types";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 export { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
@@ -162,7 +162,7 @@ export namespace Components {
           * Defines the box shadow.
           * @defaultValue none
          */
-        "shadow"?: BoxTShirtSizeType;
+        "shadow"?: BoxShadowSizeType;
         /**
           * Size of the column for all screen sizes that are not explicitly set.
          */
@@ -1431,7 +1431,7 @@ declare namespace LocalJSX {
           * Defines the box shadow.
           * @defaultValue none
          */
-        "shadow"?: BoxTShirtSizeType;
+        "shadow"?: BoxShadowSizeType;
         /**
           * Size of the column for all screen sizes that are not explicitly set.
          */
