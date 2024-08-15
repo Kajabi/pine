@@ -63,11 +63,9 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category }) => {
 
     // sets and sorts data based on numerical value
     // and ignores box-shadow and color
-    const data = ['box-shadow', 'color'].includes(category)
-      ? entries
-      : entries.sort(([ , tokenA], [ , tokenB]) =>
-          parseInt(tokenA.value as string) - parseInt(tokenB.value as string)
-        )
+    const data = entries.sort((tokenKeyA, tokenKeyB) =>
+        parseInt(tokenKeyA[0]) - parseInt(tokenKeyB[0])
+    );
 
     return data.map(([key, token]): JSX.Element => {
 
