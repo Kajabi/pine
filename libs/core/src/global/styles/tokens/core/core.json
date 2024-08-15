@@ -117,7 +117,7 @@
           "y": "12px",
           "blur": "16px",
           "spread": "-4px",
-          "color": "rgba(0,0,0,0.9)",
+          "color": "rgba(0,0,0,0.08)",
           "type": "dropShadow"
         },
         {
@@ -181,7 +181,7 @@
           "y": "1px",
           "blur": "2px",
           "spread": "0",
-          "color": "rgba(0,0,0,0.5)",
+          "color": "rgba(0,0,0,0.05)",
           "type": "dropShadow"
         }
       ],
