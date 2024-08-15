@@ -163,7 +163,7 @@ export class PdsBox {
     ${this.border ? 'pds-box--border' : ''}
     ${this.borderRadius !== undefined && this.borderRadius.trim() !== '' ? `pds-border-radius-${this.borderRadius}` : ''}
     ${this.direction !== undefined && this.direction.trim() !== '' ? `pds-box-direction-${this.direction}` : ''}
-    ${this.display !== undefined && this.display.trim() !== '' ? `pds---display-${this.display}` : ''}
+    ${this.display !== undefined && this.display.trim() !== '' ? `pds-box--display-${this.display}` : ''}
     ${this.fit ? 'pds-box--fit' : ''}
     ${this.gap !== undefined && this.gap.trim() !== '' ? `pds-box-gap-${this.gap}` : ''}
     ${this.flex !== undefined && this.flex.trim() !== '' ? `pds-box--flex-${this.flex}` : ''}
