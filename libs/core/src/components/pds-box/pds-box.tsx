@@ -1,6 +1,6 @@
 import { Component, h, Host, Prop } from '@stencil/core';
 
-import { BoxColumnType, BoxTShirtSizeType } from '../../utils/types';
+import { BoxColumnType, BoxTShirtSizeType, BoxShadowSizeType } from '../../utils/types';
 
 @Component({
   tag: 'pds-box',
@@ -124,7 +124,7 @@ export class PdsBox {
    * Defines the box shadow.
    * @defaultValue none
   */
-  @Prop() shadow?: BoxTShirtSizeType;
+  @Prop() shadow?: BoxShadowSizeType;
 
   /**
    * Size of the column for all screen sizes that are not explicitly set.
@@ -163,7 +163,7 @@ export class PdsBox {
     ${this.border ? 'pds-box--border' : ''}
     ${this.borderRadius !== undefined && this.borderRadius.trim() !== '' ? `pds-border-radius-${this.borderRadius}` : ''}
     ${this.direction !== undefined && this.direction.trim() !== '' ? `pds-box-direction-${this.direction}` : ''}
-    ${this.display !== undefined && this.display.trim() !== '' ? `pds-box--display-${this.display}` : ''}
+    ${this.display !== undefined && this.display.trim() !== '' ? `pds---display-${this.display}` : ''}
     ${this.fit ? 'pds-box--fit' : ''}
     ${this.gap !== undefined && this.gap.trim() !== '' ? `pds-box-gap-${this.gap}` : ''}
     ${this.flex !== undefined && this.flex.trim() !== '' ? `pds-box--flex-${this.flex}` : ''}
