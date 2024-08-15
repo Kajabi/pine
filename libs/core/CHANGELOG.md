@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.5.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@2.4.0-mercury.0...@pine-ds/core@2.5.0-mercury.0) (2024-08-15)
+
+
+### Bug Fixes
+
+* update box shadow tokens ([#241](https://github.com/Kajabi/pine/issues/241)) ([2c844e9](https://github.com/Kajabi/pine/commit/2c844e97de0b22ffd2962ec20e1f628f9890dc47))
+
+
+
+
+
 # [2.4.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@2.3.0-mercury.0...@pine-ds/core@2.4.0-mercury.0) (2024-08-13)
 
 **Note:** Version bump only for package @pine-ds/core
