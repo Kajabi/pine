@@ -2,6 +2,7 @@ import { Component, h, Host, Prop, Watch } from '@stencil/core';
 import { downSmall } from '@pine-ds/icons/icons';
 
 /**
+ * @part accordion-body - Accordion body styles.
  * @slot (default) - Accordion body content.
  * @slot label - Accordion trigger button content.
  */
@@ -57,7 +58,7 @@ export class PdsAccordion {
             <slot name="label">Details</slot>
             <pds-icon icon={downSmall} />
           </summary>
-          <div class="pds-accordion__body">
+          <div part="accordion-body" class="pds-accordion__body">
             <slot />
           </div>
         </details>

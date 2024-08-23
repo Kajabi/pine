@@ -8,7 +8,7 @@ details {
   --box-shadow-focus: inset 0 0 0 2px var(--pine-color-blue-200);
 
   --color-background-default: var(--pine-color-white);
-  --color-background-hover: var(--pine-color-mercury-150);
+  --color-background-hover: var(--pine-color-grey-150);
   --color-text-default: var(--pine-color-grey-700);
   --color-text-active: var(--pine-color-grey-950);
   --color-text-hover: var(--pine-color-grey-800);
@@ -18,8 +18,8 @@ details {
   --number-animation-transform-timing: 200ms;
 
   --spacing-details-padding-inline: var(--pine-spacing-150);
-  --spacing-details-padding-block-end: calc(var(--pine-spacing-200) + 2) //18 + 2 = 18px;
-  --spacing-summary-padding-block: calc(var(--pine-spacing-150) / 2) //12 / 2 = 6px;
+  --spacing-details-padding-block-end: calc(var(--pine-spacing-200) + 2); //18 + 2 = 18px
+  --spacing-summary-padding-block: calc(var(--pine-spacing-150) / 2); //12 / 2 = 6px
   --spacing-summary-padding-inline-start: var(--pine-spacing-100);
   --spacing-summary-padding-inline-end: var(--pine-spacing-050);
 
@@ -29,7 +29,6 @@ details {
 
   pds-icon {
     transform: scaleY(1);
-    transition: transform var(--number-animation-transform-timing);
   }
 }
 
@@ -43,7 +42,6 @@ details[open] {
 
     pds-icon {
       transform: scaleY(-1);
-      transition: transform var(--number-animation-transform-timing);
     }
   }
 }
