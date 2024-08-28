@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.2](https://github.com/Kajabi/pine/compare/doc-components-v1.1.1...doc-components-v1.1.2) (2024-08-28)
+
+
+### Bug Fixes 🐛
+
+* **docTokenTable:** The algorithm to sort the components was incorrect ([#242](https://github.com/Kajabi/pine/issues/242)) ([b6419ec](https://github.com/Kajabi/pine/commit/b6419ec7e414f009db74ecbfeb1f914bcc91aa61))
+
 ## [1.2.1](https://github.com/Kajabi/pine/compare/@pine-ds/doc-components@1.2.0...@pine-ds/doc-components@1.2.1) (2024-08-05)
 
 **Note:** Version bump only for package @pine-ds/doc-components

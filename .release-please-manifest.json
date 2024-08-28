@@ -1,6 +1,6 @@
 {
   "libs/core": "1.2.0",
   "libs/react": "1.1.0",
-  "libs/doc-components": "1.1.1",
+  "libs/doc-components": "1.1.2",
   ".": "0.0.0"
 }
