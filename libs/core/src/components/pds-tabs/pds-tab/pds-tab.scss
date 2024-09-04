@@ -5,7 +5,7 @@ pds-tab {
   --border-radius-default: var(--pine-border-radius-125);
   --border-radius-none: var(--pine-border-radius-0);
 
-  --box-shadow-focus: 0 0 0 2px var(--pine-color-blue-200);
+  --box-shadow-focus: 0 0 0 1px #fff, 0 0 0 3px var(--pine-color-purple-300);
 
   --color-background-active: var(--pine-color-grey-900);
   --color-background-availability: var(--pine-color-white);
