@@ -11,6 +11,7 @@ pds-tab {
   --color-background-availability: var(--pine-color-white);
   --color-background-default: var(--pine-color-grey-300);
   --color-background-hover: var(--pine-color-grey-400);
+  --color-indicator-active: var(--pine-color-mercury-500);
   --color-text-active: var(--pine-color-grey-900);
   --color-text-active-inverse: var(--pine-color-white);
   --color-text-default: var(--pine-color-grey-700);
@@ -86,7 +87,7 @@ pds-tab {
     position: relative;
 
     &::after {
-      background-color: currentColor;
+      background-color: var(--color-indicator-active);
       bottom: 0;
       content: '';
       height: 3px;
