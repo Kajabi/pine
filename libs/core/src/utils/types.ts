@@ -12,6 +12,21 @@ export type TooltipPlacementType =
   | 'bottom'
   | 'bottom-end';
 
+  export type BoxBorderRadiusType =
+  'none'
+  | '050'
+  | '075'
+  | '100'
+  | '125'
+  | '150'
+  | '175'
+  | '200'
+  | '225'
+  | '250'
+  | '275'
+  | '300'
+  | 'round';
+
 export type BoxColumnType =
   '0'
   | '1'

@@ -1,6 +1,6 @@
 import { Component, h, Host, Prop } from '@stencil/core';
 
-import { BoxColumnType, BoxTShirtSizeType, BoxShadowSizeType } from '../../utils/types';
+import { BoxColumnType, BoxBorderRadiusType, BoxTShirtSizeType, BoxShadowSizeType } from '../../utils/types';
 
 @Component({
   tag: 'pds-box',
@@ -37,7 +37,7 @@ export class PdsBox {
    * Defines how rounded the box corners are.
    * @defaultValue none
    */
-  @Prop() borderRadius?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
+  @Prop() borderRadius?: BoxBorderRadiusType;
 
   /**
    * Defines the orientation of the box items.

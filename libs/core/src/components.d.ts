@@ -5,10 +5,10 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { BoxColumnType, BoxShadowSizeType, BoxTShirtSizeType } from "./utils/types";
+import { BoxBorderRadiusType, BoxColumnType, BoxShadowSizeType, BoxTShirtSizeType } from "./utils/types";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 import { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
-export { BoxColumnType, BoxShadowSizeType, BoxTShirtSizeType } from "./utils/types";
+export { BoxBorderRadiusType, BoxColumnType, BoxShadowSizeType, BoxTShirtSizeType } from "./utils/types";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 export { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
@@ -91,7 +91,7 @@ export namespace Components {
           * Defines how rounded the box corners are.
           * @defaultValue none
          */
-        "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
+        "borderRadius"?: BoxBorderRadiusType;
         /**
           * Defines the orientation of the box items.
           * @defaultValue row
@@ -1360,7 +1360,7 @@ declare namespace LocalJSX {
           * Defines how rounded the box corners are.
           * @defaultValue none
          */
-        "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
+        "borderRadius"?: BoxBorderRadiusType;
         /**
           * Defines the orientation of the box items.
           * @defaultValue row

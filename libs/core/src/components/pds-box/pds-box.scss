@@ -161,20 +161,48 @@ $pine-spacing-tokens: (
   border-radius: 0;
 }
 
-.pds-border-radius-xs {
-  border-radius: var(--pine-border-radius-xs);
+.pds-border-radius-100 {
+  border-radius: var(--pine-border-radius-100);
 }
 
-.pds-border-radius-sm {
-  border-radius: var(--pine-border-radius-sm);
+.pds-border-radius-125 {
+  border-radius: var(--pine-border-radius-125);
 }
 
-.pds-border-radius-md {
-  border-radius: var(--pine-border-radius-md);
+.pds-border-radius-150 {
+  border-radius: var(--pine-border-radius-150);
 }
 
-.pds-border-radius-lg {
-  border-radius: var(--pine-border-radius-lg);
+.pds-border-radius-175 {
+  border-radius: var(--pine-border-radius-175);
+}
+
+.pds-border-radius-200 {
+  border-radius: var(--pine-border-radius-200);
+}
+
+.pds-border-radius-225 {
+  border-radius: var(--pine-border-radius-225);
+}
+
+.pds-border-radius-250 {
+  border-radius: var(--pine-border-radius-250);
+}
+
+.pds-border-radius-275 {
+  border-radius: var(--pine-border-radius-275);
+}
+
+.pds-border-radius-300 {
+  border-radius: var(--pine-border-radius-300);
+}
+
+.pds-border-radius-050 {
+  border-radius: var(--pine-border-radius-050);
+}
+
+.pds-border-radius-075 {
+  border-radius: var(--pine-border-radius-075);
 }
 
 .pds-border-radius-circle {
