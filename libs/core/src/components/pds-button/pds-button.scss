@@ -116,7 +116,7 @@
   --color-outline: var(--color-outline-destructive);
 
   &:focus-visible {
-    --box-shadow-focus: 0 0 0 1px #fff, 0 0 0 3px var(--color-background-destructive-default);
+    --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--color-background-destructive-default);
     box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
     outline: none;
   }
