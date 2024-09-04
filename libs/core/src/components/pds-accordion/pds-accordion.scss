@@ -5,7 +5,7 @@
 details {
   --border-radius-default: var(--pine-border-radius-100);
 
-  --box-shadow-focus: inset 0 0 0 2px var(--pine-color-blue-200);
+  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
 
   --color-background-default: var(--pine-color-white);
   --color-background-hover: var(--pine-color-grey-150);

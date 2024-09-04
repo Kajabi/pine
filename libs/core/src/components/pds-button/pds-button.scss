@@ -75,7 +75,7 @@
   }
 
   &:focus-visible {
-    --box-shadow-focus: 0 0 0 2px var(--pine-color-blue-200);
+    --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
     border-color: var(--color-border-focus);
     // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
     box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
@@ -114,6 +114,12 @@
   --color-text-default: var(--color-text-destructive-default);
   --color-text-disabled: var(--color-text-destructive-disabled);
   --color-outline: var(--color-outline-destructive);
+
+  &:focus-visible {
+    --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--color-background-destructive-default);
+    box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
+    outline: none;
+  }
 }
 
 .pds-button--secondary,

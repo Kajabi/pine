@@ -1,8 +1,8 @@
 :host {
   --border-radius-input: var(--pine-border-radius-200);
 
-  --box-shadow-focus: 0 0 0 2px var(--color-outline-focus);
-  --box-shadow-focus-error: 0 0 0 2px var(--color-outline-focus-error);
+  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--color-outline-focus);
+  --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--color-outline-focus-error);
   --box-shadow-input-toggle: 0 2px 4px 0 rgba(0, 0, 0, 0.12), 0 0 2px 0 rgba(0, 0, 0, 0.08);
 
   --color-background-checked: var(--pine-color-grey-900);
@@ -12,7 +12,7 @@
   --color-background-input-default: var(--pine-color-grey-400);
   --color-input-toggle: var(--pine-color-white);
   --color-message-text: var(--pine-color-grey-700);
-  --color-outline-focus: var(--pine-color-blue-200);
+  --color-outline-focus: var(--pine-color-purple-300);
   --color-outline-focus-error: var(--pine-color-red-200);
   --color-text-default: var(--pine-color-grey-900);
   --color-text-disabled: var(--pine-color-grey-500);

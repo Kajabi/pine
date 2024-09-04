@@ -1,8 +1,8 @@
 :host {
   --border-interactive-default: var(--pine-border-width-thin) solid var(--pine-color-grey-400);
 
-  --box-shadow-focus: 0 0 0 2px var(--color-focus-visible-outline);
-  --box-shadow-focus-error: 0 0 0 2px var(--color-focus-visible-outline-error);
+  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--color-focus-visible-outline);
+  --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--color-focus-visible-outline-error);
 
   --color: var(--pine-color-grey-900);
   --color-background: var(--pine-color-white);
@@ -13,7 +13,7 @@
   --color-border-hover: var(--pine-color-grey-500);
   --color-disabled-default: var(--pine-color-grey-700);
   --color-error-default: var(--pine-color-red-300);
-  --color-focus-visible-outline: var(--pine-color-blue-200);
+  --color-focus-visible-outline: var(--pine-color-purple-300);
   --color-focus-visible-outline-error: var(--pine-color-red-200);
   --color-placeholder-default: var(--pine-color-grey-700);
 
@@ -51,8 +51,8 @@ label {
 
 .pds-textarea__field {
   background-color: var(--color-background);
-  border: var(--pine-border-interactive-default);
-  border-radius: var(--pine-border-radius-md);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--pine-border-radius-100);
   font-family: inherit;
   font-size: var(--font-size-field);
   font-weight: var(--font-weight-field);
