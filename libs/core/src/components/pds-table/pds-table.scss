@@ -9,7 +9,7 @@
 }
 
 :host(:focus-visible) {
-  --box-shadow-focus: 0 0 0 2px var(--pine-color-blue-200);
+  --box-shadow-focus: 0 0 0 1px #fff, 0 0 0 3px var(--pine-color-purple-300);
   // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
   box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
   outline: none;

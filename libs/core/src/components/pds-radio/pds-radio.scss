@@ -2,8 +2,8 @@
   --border-interactive-default: var(--pine-border-width-thin) solid var( --pine-color-grey-400);
   --border-radius: 50%;
 
-  --box-shadow-focus: 0 0 0 2px var(--color-focus);
-  --box-shadow-focus-error: 0 0 0 2px var(--color-invalid-focus);
+  --box-shadow-focus: 0 0 0 1px #fff, 0 0 0 3px var(--color-focus);
+  --box-shadow-focus-error: 0 0 0 1px #fff, 0 0 0 3px var(--color-invalid-focus);
 
   --color: var(--pine-color-grey-700);
   --color-background: var(--pine-color-white);
@@ -13,7 +13,7 @@
   --color-border-disabled: var(--pine-color-grey-300);
   --color-checked: var(--pine-color-grey-950);
   --color-disabled: var(---pine-color-grey-500);
-  --color-focus: var(--pine-color-blue-200);
+  --color-focus: var(--pine-color-purple-300);
   --color-invalid: var(--pine-color-red-300);
   --color-invalid-focus: var(--pine-color-red-200);
 
