@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.10.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/doc-components@1.2.1...@pine-ds/doc-components@2.10.0-mercury.0) (2024-09-04)
+
+
+### Bug Fixes
+
+* **docTokenTable:** the algorithm to sort the components was incorrect ([#242](https://github.com/Kajabi/pine/issues/242)) ([b6419ec](https://github.com/Kajabi/pine/commit/b6419ec7e414f009db74ecbfeb1f914bcc91aa61))
+
+
+
+
+
 # [2.9.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/doc-components@1.2.1...@pine-ds/doc-components@2.9.0-mercury.0) (2024-08-28)
 
 
