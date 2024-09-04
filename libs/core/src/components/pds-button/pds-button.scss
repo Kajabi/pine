@@ -1,4 +1,6 @@
 :host {
+  --border-radius-default: var(--pine-border-radius-round);
+
   --border-width-default: var(--pine-border-width-thin);
   --border-width-unstyled: var(--pine-border-radius-0);
 
