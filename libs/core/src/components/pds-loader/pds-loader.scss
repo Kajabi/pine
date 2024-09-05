@@ -20,9 +20,8 @@
 
 // Default Loader
 .pds-loader--spinner svg {
-  --color-background-spinner: var(--pine-color-blue-300);
+  --color-background-spinner: var(--pine-color-mercury-400);
   --number-spinner-timing: 2s;
-  --number-spinner-path-timing: 1.5s;
 
   animation: rotate var(--number-spinner-timing) linear infinite;
   block-size: var(--sizing-spinner);
