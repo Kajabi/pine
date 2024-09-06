@@ -1,0 +1,124 @@
+// TODO: replace core tokens with semantic
+.pine-base {
+  /*
+    Josh's Custom CSS Reset
+    https://www.joshwcomeau.com/css/custom-css-reset/
+  */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  * {
+    margin: 0;
+    color: var(--pine-color-grey-900);
+  }
+
+  img, picture, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  input, button, textarea, select {
+    font: inherit;
+  }
+
+  p, h1, h2, h3, h4, h5, h6 {
+    overflow-wrap: break-word;
+  }
+
+  /*
+    Additional Reset Styles
+  */
+  a:not([href]):not([class]) {
+    &,
+    &:hover {
+      color: currentColor;
+      text-decoration: none;
+    }
+  }
+
+  ul[role='list'],
+  ol[role='list'] {
+    list-style: none;
+  }
+
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+
+  /*
+    Mercury Base Styles
+  */
+  // Typography
+  * {
+    font-family: "Inter", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Ubuntu", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "GreetStandard", "Inter", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Ubuntu", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    color: var(--pine-color-grey-950);
+  }
+
+  h1 {
+    font: var(--pine-typography-heading-h1);
+    letter-spacing: var(--pine-letter-spacing-185);
+  }
+
+  h2 {
+    font: var(--pine-typography-heading-h2);
+    letter-spacing: var(--pine-letter-spacing-171);
+  }
+
+  h3 {
+    font: var(--pine-typography-heading-h3);
+    letter-spacing: var(--pine-letter-spacing-157);
+  }
+
+  h4 {
+    font: var(--pine-typography-heading-h4);
+    letter-spacing: var(--pine-letter-spacing-142);
+  }
+
+  h5 {
+    font: var(--pine-typography-heading-h5);
+    letter-spacing: var(--pine-letter-spacing-128);
+  }
+
+  h6 {
+    font: var(--pine-typography-heading-h6);
+    letter-spacing: var(--pine-letter-spacing-114);
+  }
+
+  p {
+    font: var(--pine-typography-body-md-default);
+    letter-spacing: var(--pine-letter-spacing-100);
+  }
+
+  code, kbd, pre, samp {
+    font-family: monospace;
+  }
+
+  // Accessibility
+
+  [role="button"] {
+    cursor: pointer;
+  }
+
+  :focus {
+    outline: 0;
+  }
+
+  :focus-visible {
+    outline: var(--pine-border-width-thin) solid var(--pine-color-purple-500);
+  }
+
+  // Misc.
+
+  [hidden] {
+    display: none !important;
+  }
+}
+
