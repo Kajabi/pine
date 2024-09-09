@@ -7,10 +7,7 @@
     "declaration": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": [
-      "dom",
-      "es2017"
-    ],
+    "lib": ["dom", "es2017"],
     "module": "es2015",
     "moduleResolution": "node",
     "noImplicitAny": true,
@@ -22,16 +19,10 @@
     "strict": true,
     "strictPropertyInitialization": false,
     "paths": {
-      "@pine-ds/core": [
-        "./libs/core"
-      ],
-      "@pine-ds/react": [
-        "./libs/react"
-      ],
-      "@pine-ds/doc-components": [
-        "./libs/doc-components"
-      ]
+      "@pine-ds/core": ["./libs/core"],
+      "@pine-ds/doc-components": ["./libs/doc-components"],
+      "@pine-ds/react": ["./libs/react"]
     },
-    "target": "es2017",
+    "target": "es2017"
   }
 }
