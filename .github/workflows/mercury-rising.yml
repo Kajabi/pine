@@ -38,7 +38,7 @@ jobs:
             git config user.email "dev+github-bot@kajabi.com"
 
         - name: Create GitHub Release
-          run: lerna version premajor --yes --force-publish='*' --conventional-commits --create-release github --preid=mercury
+          run: lerna version preminor --yes --force-publish='*' --conventional-commits --create-release github --preid=mercury
           env:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           shell: bash
