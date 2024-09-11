@@ -1,0 +1,121 @@
+// TODO: replace core tokens with semantic
+
+/*
+  Josh's Custom CSS Reset
+  https://www.joshwcomeau.com/css/custom-css-reset/
+*/
+:where(*:not(slot), *:not(slot)::before, *:not(slot)::after) {
+  box-sizing: border-box;
+}
+
+:where(*:not(slot)) {
+  margin: 0;
+  color: var(--pine-color-grey-900);
+}
+
+:where(img, picture, video, canvas, svg) {
+  display: block;
+  max-width: 100%;
+}
+
+:where(input, button, textarea, select) {
+  font: inherit;
+}
+
+:where(p, h1, h2, h3, h4, h5, h6) {
+  overflow-wrap: break-word;
+}
+
+/*
+  Additional Reset Styles
+*/
+:where(a:not([href]):not([class])) {
+  color: currentColor;
+  text-decoration: none;
+}
+
+:where(a:not([href]):not([class]):hover) {
+  color: currentColor;
+  text-decoration: none;
+}
+
+:where(ul[role='list'], ol[role='list']) {
+  list-style: none;
+}
+
+:where(table) {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/*
+  Mercury Base Styles
+*/
+// Typography
+:where(*:not(slot)) {
+  font-family: "Inter", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Ubuntu", sans-serif,
+  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+:where(h1, h2, h3, h4, h5, h6) {
+  font-family: "GreetStandard", "Inter", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Ubuntu", sans-serif,
+  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  color: var(--pine-color-grey-950);
+}
+
+:where(h1) {
+  font: var(--pine-typography-heading-h1);
+  letter-spacing: var(--pine-letter-spacing-185);
+}
+
+:where(h2) {
+  font: var(--pine-typography-heading-h2);
+  letter-spacing: var(--pine-letter-spacing-171);
+}
+
+:where(h3) {
+  font: var(--pine-typography-heading-h3);
+  letter-spacing: var(--pine-letter-spacing-157);
+}
+
+:where(h4) {
+  font: var(--pine-typography-heading-h4);
+  letter-spacing: var(--pine-letter-spacing-142);
+}
+
+:where(h5) {
+  font: var(--pine-typography-heading-h5);
+  letter-spacing: var(--pine-letter-spacing-128);
+}
+
+:where(h6) {
+  font: var(--pine-typography-heading-h6);
+  letter-spacing: var(--pine-letter-spacing-114);
+}
+
+:where(p) {
+  font: var(--pine-typography-body-md-default);
+  letter-spacing: var(--pine-letter-spacing-100);
+}
+
+:where(code, kbd, pre, samp) {
+  font-family: monospace;
+}
+
+// Accessibility
+:where([role="button"]) {
+  cursor: pointer;
+}
+
+:where(:focus) {
+  outline: 0;
+}
+
+:where(:focus-visible) {
+  outline: var(--pine-border-width-thin) solid var(--pine-color-purple-500);
+}
+
+// Misc.
+:where([hidden]) {
+  display: none !important;
+}

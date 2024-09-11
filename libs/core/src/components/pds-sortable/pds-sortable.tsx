@@ -4,7 +4,7 @@ import Sortable from 'sortablejs';
 
 @Component({
   tag: 'pds-sortable',
-  styleUrl: 'pds-sortable.scss',
+  styleUrls: ['../../global/styles/base.scss', 'pds-sortable.scss'],
   scoped: true,
 })
 export class PdsSortable {
