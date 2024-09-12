@@ -24,7 +24,7 @@ const getConfig = (sets) => {
 		platforms: {
 			css: {
 				transformGroup: 'tokens-studio',
-				transforms: ['name/kebab', 'color/hex', 'ts/resolveMath'],
+				transforms: ['name/kebab', 'color/hex', 'ts/resolveMath', 'size/px'],
 				buildPath: `${basePath}/`,
 				// Create multiple outputs for each token set
 				files: sets.map(tokenSet => ({
