@@ -1,8 +1,8 @@
-import { registerTransforms } from '@tokens-studio/sd-transforms';
+import { register } from '@tokens-studio/sd-transforms';
 import fs from 'fs-extra';
 import StyleDictionary from 'style-dictionary';
 
-registerTransforms(StyleDictionary);
+register(StyleDictionary);
 
 const basePath = `src/global/styles/tokens`;
 
@@ -20,10 +20,11 @@ const getTokenSetNamesFromFolders = (path) => {
 const getConfig = (sets) => {
 	return {
 		source: sets.map(tokenSet => `${basePath}/${tokenSet}/${tokenSet}.json`),
+		preprocessors: ['tokens-studio'],
 		platforms: {
 			css: {
 				transformGroup: 'tokens-studio',
-				transforms: ['name/kebab', 'color/hex', 'ts/resolveMath'],
+				transforms: ['name/kebab', 'color/hex', 'ts/resolveMath', 'size/px'],
 				buildPath: `${basePath}/`,
 				// Create multiple outputs for each token set
 				files: sets.map(tokenSet => ({
