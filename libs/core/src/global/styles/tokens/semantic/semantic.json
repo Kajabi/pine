@@ -364,7 +364,7 @@
     "body": {
       "md": {
         "$type": "letterSpacing",
-        "$value": "{letter-spacing.-114}"
+        "$value": "{letter-spacing.114} * -1"
       },
       "sm": {
         "$type": "letterSpacing",

@@ -826,10 +826,6 @@
     "085": {
       "$type": "letterSpacing",
       "$value": "0.12px"
-    },
-    "-114": {
-      "$type": "letterSpacing",
-      "$value": "-0.16px"
     }
   }
 }
