@@ -75,6 +75,7 @@ summary {
     // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
     box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
     outline: none;
+    position: relative;
   }
 
   pds-icon {
