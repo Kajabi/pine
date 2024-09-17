@@ -4,7 +4,7 @@ import { BoxColumnType, BoxTShirtSizeType, BoxShadowSizeType } from '../../utils
 
 @Component({
   tag: 'pds-box',
-  styleUrls: ['../../global/styles/base.scss', 'pds-box.scss'],
+  styleUrl: 'pds-box.scss',
 })
 export class PdsBox {
   /**

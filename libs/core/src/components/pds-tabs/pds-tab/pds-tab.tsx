@@ -2,7 +2,7 @@ import { Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil
 
 @Component({
   tag: 'pds-tab',
-  styleUrls: ['../../../global/styles/base.scss', 'pds-tab.scss'],
+  styleUrl: 'pds-tab.scss',
   shadow: false,
 })
 export class PdsTab {

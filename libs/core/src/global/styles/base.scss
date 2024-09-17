@@ -112,7 +112,7 @@
 }
 
 :where(:focus-visible) {
-  outline: var(--pine-border-width-thin) solid var(--pine-color-purple-500);
+  outline: var(--pine-border-width-thick) solid var(--pine-color-purple-500);
 }
 
 // Misc.

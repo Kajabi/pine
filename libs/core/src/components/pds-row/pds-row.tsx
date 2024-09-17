@@ -4,7 +4,7 @@ import { BoxTShirtSizeType } from '../../utils/types';
 
 @Component({
   tag: 'pds-row',
-  styleUrls: ['../../global/styles/base.scss', 'pds-row.scss'],
+  styleUrl: 'pds-row.scss',
 })
 export class PdsRow {
   /**
