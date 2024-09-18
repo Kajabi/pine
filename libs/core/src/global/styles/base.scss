@@ -1,4 +1,5 @@
 // TODO: replace core tokens with semantic
+// Heading color + outline
 
 /*
   Josh's Custom CSS Reset
@@ -10,7 +11,7 @@
 
 :where(*:not(slot)) {
   margin: 0;
-  color: var(--pine-color-grey-900);
+  color: var(--pine-color-text-default);
 }
 
 :where(img, picture, video, canvas, svg) {
@@ -53,49 +54,48 @@
 */
 // Typography
 :where(*:not(slot)) {
-  font-family: "Inter", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Ubuntu", sans-serif,
+  font-family: var(--pine-font-family-body), -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Ubuntu", sans-serif,
   "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 :where(h1, h2, h3, h4, h5, h6) {
-  font-family: "GreetStandard", "Inter", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Ubuntu", sans-serif,
-  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: var(--pine-font-family-heading);
   color: var(--pine-color-grey-950);
 }
 
 :where(h1) {
   font: var(--pine-typography-heading-h1);
-  letter-spacing: var(--pine-letter-spacing-185);
+  letter-spacing: var(--pine-letter-spacing-heading-h1);
 }
 
 :where(h2) {
   font: var(--pine-typography-heading-h2);
-  letter-spacing: var(--pine-letter-spacing-171);
+  letter-spacing: var(--pine-letter-spacing-heading-h2);
 }
 
 :where(h3) {
   font: var(--pine-typography-heading-h3);
-  letter-spacing: var(--pine-letter-spacing-157);
+  letter-spacing: var(--pine-letter-spacing-heading-h3);
 }
 
 :where(h4) {
   font: var(--pine-typography-heading-h4);
-  letter-spacing: var(--pine-letter-spacing-142);
+  letter-spacing: var(--pine-letter-spacing-heading-h4);
 }
 
 :where(h5) {
   font: var(--pine-typography-heading-h5);
-  letter-spacing: var(--pine-letter-spacing-128);
+  letter-spacing: var(--pine-letter-spacing-heading-h5);
 }
 
 :where(h6) {
   font: var(--pine-typography-heading-h6);
-  letter-spacing: var(--pine-letter-spacing-114);
+  letter-spacing: var(--pine-letter-spacing-heading-h6);
 }
 
 :where(p) {
   font: var(--pine-typography-body-md-default);
-  letter-spacing: var(--pine-letter-spacing-100);
+  letter-spacing: var(--pine-letter-spacing-body-md);
 }
 
 :where(code, kbd, pre, samp) {
