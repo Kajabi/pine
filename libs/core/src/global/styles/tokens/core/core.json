@@ -556,6 +556,10 @@
     "inter": {
       "$type": "fontFamilies",
       "$value": "\"Inter\""
+    },
+    "sprig": {
+      "$type": "fontFamilies",
+      "$value": "\"Sprig\""
     }
   },
   "font-size": {
