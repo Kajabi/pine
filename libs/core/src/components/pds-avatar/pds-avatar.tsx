@@ -6,7 +6,7 @@ import { checkCircleFilled, userFilled } from '@pine-ds/icons/icons';
 */
 @Component({
   tag: 'pds-avatar',
-  styleUrl: 'pds-avatar.scss',
+  styleUrls: ['../../global/styles/base.scss', 'pds-avatar.scss'],
   shadow: true,
 })
 export class PdsAvatar {
