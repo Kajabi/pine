@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.22.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@2.21.0-mercury.0...@pine-ds/core@2.22.0-mercury.0) (2024-09-19)
+
+
+### Features
+
+* **accordion:** adds part to accordion component ([#264](https://github.com/Kajabi/pine/issues/264)) ([8abeffc](https://github.com/Kajabi/pine/commit/8abeffc97ac91a1c519f79d9132f15fcdbce8a7f))
+
+
+
+
+
 # [2.21.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@2.20.0-mercury.0...@pine-ds/core@2.21.0-mercury.0) (2024-09-19)
 
 **Note:** Version bump only for package @pine-ds/core
