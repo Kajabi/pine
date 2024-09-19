@@ -3,6 +3,7 @@ import { downSmall } from '@pine-ds/icons/icons';
 
 /**
  * @part accordion-body - Accordion body styles.
+ * @part accordion-button - Accordion button/trigger styles.
  * @slot (default) - Accordion body content.
  * @slot label - Accordion trigger button content.
  */
@@ -54,7 +55,7 @@ export class PdsAccordion {
     return (
       <Host class="pds-accordion" id={this.componentId}>
         <details {...this.getOpenAttribute()} ref={(el) => (this.detailsEl = el as HTMLDetailsElement)}>
-          <summary>
+          <summary part="accordion-button">
             <slot name="label">Details</slot>
             <pds-icon icon={downSmall} />
           </summary>
