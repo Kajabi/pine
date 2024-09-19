@@ -12,7 +12,7 @@ describe('pds-accordion', () => {
       <pds-accordion class="pds-accordion">
         <mock:shadow-root>
             <details>
-              <summary>
+              <summary part="accordion-button">
                 <slot name="label">Details</slot>
                 <pds-icon icon="${downSmall}"></pds-icon>
               </summary>
@@ -34,7 +34,7 @@ describe('pds-accordion', () => {
       <pds-accordion class="pds-accordion" open>
         <mock:shadow-root>
             <details open>
-              <summary>
+              <summary part="accordion-button">
                 <slot name="label">Details</slot>
                 <pds-icon icon="${downSmall}"></pds-icon>
               </summary>
@@ -57,7 +57,7 @@ describe('pds-accordion', () => {
       <pds-accordion component-id="test" id="test" class="pds-accordion">
         <mock:shadow-root>
           <details>
-            <summary>
+            <summary part="accordion-button">
               <slot name="label">Details</slot>
               <pds-icon icon="${downSmall}"></pds-icon>
             </summary>
@@ -80,7 +80,7 @@ describe('pds-accordion', () => {
       <pds-accordion class="pds-accordion">
         <mock:shadow-root>
           <details>
-            <summary>
+            <summary part="accordion-button">
               <slot name="label">Details</slot>
               <pds-icon icon="${downSmall}"></pds-icon>
             </summary>
@@ -104,7 +104,7 @@ describe('pds-accordion', () => {
       <pds-accordion class="pds-accordion">
         <mock:shadow-root>
           <details>
-            <summary>
+            <summary part="accordion-button">
               <slot name="label">Details</slot>
               <pds-icon icon="${downSmall}"></pds-icon>
             </summary>
@@ -128,7 +128,7 @@ describe('pds-accordion', () => {
       <pds-accordion class="pds-accordion" open>
         <mock:shadow-root>
           <details open>
-            <summary>
+            <summary part="accordion-button">
               <slot name="label">Details</slot>
               <pds-icon icon="${downSmall}"></pds-icon>
             </summary>
