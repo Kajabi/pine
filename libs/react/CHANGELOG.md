@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.24.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/react@2.23.0-mercury.0...@pine-ds/react@2.24.0-mercury.0) (2024-09-30)
+
+**Note:** Version bump only for package @pine-ds/react
+
+
+
+
+
 # [2.23.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/react@2.22.0-mercury.0...@pine-ds/react@2.23.0-mercury.0) (2024-09-30)
 
 **Note:** Version bump only for package @pine-ds/react
