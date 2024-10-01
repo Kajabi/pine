@@ -1,19 +1,14 @@
-// TODO: move these styles into base/reset files
 :host {
   display: inline-block;
 }
 
 label, pds-label {
-  --color-text-default: var(--pine-color-grey-900);
-
-  --font-family-default: var(--pine-font-family-circular);
-
-  --font-weight-default: var(--pine-font-weight-medium);
-
-  --letter-spacing-default: var(--pine-letter-spacing-xs);
+  --color-text-default: var(--pine-color-grey-950);
+  --color-text-disabled: var(--pine-color-grey-600);
 
   color: var(--color-text-default);
-  font-family: var(--font-family-default);
-  font-weight: var(--font-weight-default);
-  letter-spacing: var(--letter-spacing-default);
+
+  &[disabled], &:disabled {
+    color: var(--color-text-disabled)
+  }
 }
