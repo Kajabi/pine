@@ -1,8 +1,12 @@
 name: 'Mercury Rising Release'
 
 on:
-  push:
-    branches: [mercury-rising]
+  workflow_call:
+    inputs:
+      ref:
+        type: string
+        description: The branch name, tag, or SHA to be checked out. This can also be left blank.
+        default: ''
 
   workflow_dispatch:
     inputs:
@@ -19,7 +23,7 @@ jobs:
       with:
         preid: 'mercury'
         tag: 'next'
-        version: 'premajor'
+        version: 'preminor'
       secrets: inherit
 
     finalize-release:
@@ -38,7 +42,7 @@ jobs:
             git config user.email "dev+github-bot@kajabi.com"
 
         - name: Create GitHub Release
-          run: lerna version premajor --yes --force-publish='*' --conventional-commits --create-release github --preid=mercury
+          run: lerna version preminor --yes --force-publish='*' --conventional-commits --create-release github --preid=mercury
           env:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           shell: bash
