@@ -3,28 +3,33 @@
   --border-radius: var(--pine-border-radius-200);
 
   --color-background-accent: var(--pine-color-purple-100);
-  --color-background-accent-dot: var(--pine-color-purple-300);
-  --color-background-accent-interactive: var(--pine-color-purple-200);
+  --color-background-accent-dot: var(--pine-color-purple-600);
+  --color-background-accent-hover: var(--pine-color-purple-200);
   --color-background-danger: var(--pine-color-red-100);
-  --color-background-danger-dot: var(--pine-color-red-300);
-  --color-background-danger-interactive: var(--pine-color-red-200);
+  --color-background-danger-dot: var(--pine-color-red-600);
+  --color-background-danger-hover: var(--pine-color-red-200);
   --color-background-info: var(--pine-color-blue-100);
-  --color-background-info-dot: var(--pine-color-blue-300);
-  --color-background-info-interactive: var(--pine-color-blue-200);
-  --color-background-neutral: var(--pine-color-grey-300);
+  --color-background-info-dot: var(--pine-color-blue-600);
+  --color-background-info-hover: var(--pine-color-blue-200);
+  --color-background-neutral: var(--pine-color-grey-100);
   --color-background-neutral-dot: var(--pine-color-grey-600);
-  --color-background-neutral-interactive: var(--pine-color-grey-400);
+  --color-background-neutral-hover: var(--pine-color-grey-400);
   --color-background-success: var(--pine-color-green-100);
-  --color-background-success-dot: var(--pine-color-green-300);
-  --color-background-success-interactive: var(--pine-color-green-200);
+  --color-background-success-dot: var(--pine-color-green-600);
+  --color-background-success-hover: var(--pine-color-green-200);
   --color-background-warning: var(--pine-color-yellow-100);
-  --color-background-warning-dot: var(--pine-color-yellow-300);
-  --color-background-warning-interactive: var(--pine-color-yellow-200);
+  --color-background-warning-dot: var(--pine-color-yellow-600);
+  --color-background-warning-hover: var(--pine-color-yellow-200);
+  --color-text-accent: var(--pine-color-purple-950);
+  --color-text-danger: var(--pine-color-red-950);
+  --color-text-info: var(--pine-color-blue-950);
+  --color-text-neutral: var(--pine-color-grey-950);
+  --color-text-success: var(--pine-color-green-950);
+  --color-text-warning: var(--pine-color-yellow-950);
 
-  --font-size-sm: var(--pine-font-size-085);
-  --font-size-body: var(--pine-font-size-100);
+  --font-size-sm: var(--pine-font-size-body-md);
+  --font-size-lg: var(--pine-font-size-heading-h6);
   --font-weight: var(--pine-font-weight-medium);
-  --line-height: var(--pine-line-height-100);
 
   --spacing-xxs: calc(var(--pine-spacing-050) / 2);
   --spacing-xs: var(--pine-spacing-050);
@@ -41,9 +46,6 @@
   align-items: center;
   border-radius: var(--border-radius);
   display: inline-flex;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight);
-  line-height: var(--line-height);
   padding-block: var(--spacing-xs);
   padding-inline: var(--spacing-lg);
 }
@@ -57,6 +59,15 @@ $pds-chip-sentiment: (
   warning: var(--color-background-warning),
 );
 
+$pds-chip-sentiment-text: (
+  accent: var(--color-text-accent),
+  danger: var(--color-text-danger),
+  info: var(--color-text-info),
+  neutral: var(--color-text-neutral),
+  success: var(--color-text-success),
+  warning: var(--color-text-warning),
+);
+
 $pds-chip-sentiment-dots: (
   accent: var(--color-background-accent-dot),
   danger: var(--color-background-danger-dot),
@@ -66,13 +77,13 @@ $pds-chip-sentiment-dots: (
   warning: var(--color-background-warning-dot),
 );
 
-$pds-chip-sentiment-interactive: (
-  accent: var(--color-background-accent-interactive),
-  danger: var(--color-background-danger-interactive),
-  info: var(--color-background-info-interactive),
-  neutral: var(--color-background-neutral-interactive),
-  success: var(--color-background-success-interactive),
-  warning: var(--color-background-warning-interactive),
+$pds-chip-sentiment-hover: (
+  accent: var(--color-background-accent-hover),
+  danger: var(--color-background-danger-hover),
+  info: var(--color-background-info-hover),
+  neutral: var(--color-background-neutral-hover),
+  success: var(--color-background-success-hover),
+  warning: var(--color-background-warning-hover),
 );
 
 @each $sentiment, $value in $pds-chip-sentiment {
@@ -85,16 +96,20 @@ $pds-chip-sentiment-interactive: (
       background: map-get($pds-chip-sentiment-dots, $sentiment);
     }
 
+    .pds-chip__label {
+      color: map-get($pds-chip-sentiment-text, $sentiment);
+    }
+
     // tag close hover colors
     .pds-chip__close:hover {
       /* stylelint-disable-next-line */
-      background: map-get($pds-chip-sentiment-interactive, $sentiment);
+      background: map-get($pds-chip-sentiment-hover, $sentiment);
     }
   }
   // dropdown hover colors
   :host(.pds-chip--#{$sentiment}.pds-chip--dropdown:hover) {
     /* stylelint-disable-next-line */
-    background: map-get($pds-chip-sentiment-interactive, $sentiment);
+    background: map-get($pds-chip-sentiment-hover, $sentiment);
   }
 }
 
@@ -106,6 +121,11 @@ $pds-chip-sentiment-interactive: (
   margin-block-end: var(--spacing-xxs);
   margin-inline-end: var(--spacing-xs);
   width: var(--sizing-dot);
+}
+
+.pds-chip__label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight);
 }
 
 // dropdown
@@ -126,10 +146,7 @@ $pds-chip-sentiment-interactive: (
   border: 0;
   border-radius: var(--border-radius);
   display: flex;
-  font-family: inherit;
-  font-size: var(--font-size-sm);
   font-weight: var(--font-weight);
-  line-height: var(--line-height);
   padding-block: var(--spacing-xs);
   padding-inline: var(--spacing-lg);
 
@@ -178,7 +195,7 @@ $pds-chip-sentiment-interactive: (
 // large
 
 :host(.pds-chip--large) {
-  font-size: var(--font-size-body);
+  font-size: var(--font-size-lg);
   padding-block: var(--spacing-sm);
   padding-inline: var(--spacing-xxl);
 
@@ -192,7 +209,7 @@ $pds-chip-sentiment-interactive: (
   }
 
   .pds-chip__button {
-    font-size: var(--font-size-body);
+    font-size: var(--font-size-lg);
     padding-inline: var(--spacing-xl)
   }
 
