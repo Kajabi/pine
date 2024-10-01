@@ -53,8 +53,10 @@
 */
 // Typography
 :where(*:not(slot)) {
-  font-family: var(--pine-font-family-body), -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Ubuntu", sans-serif,
-  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font: var(--pine-typography-body-md-default);
+  letter-spacing: var(--pine-letter-spacing-body-md);
+  color: var(--pine-color-text-default);
+
 }
 
 :where(h1, h2, h3, h4, h5, h6) {
@@ -90,11 +92,6 @@
 :where(h6) {
   font: var(--pine-typography-heading-h6);
   letter-spacing: var(--pine-letter-spacing-heading-h6);
-}
-
-:where(p) {
-  font: var(--pine-typography-body-md-default);
-  letter-spacing: var(--pine-letter-spacing-body-md);
 }
 
 :where(code, kbd, pre, samp) {
