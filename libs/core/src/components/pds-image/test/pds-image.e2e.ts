@@ -9,7 +9,7 @@ describe('pds-image', () => {
     });
     await page.setContent(`
       <div style="height: 3000px; border: 1px solid red;"></div>
-      <pds-image loading="lazy" height="320" width="180" src="//source.unsplash.com/320x180"></pds-image>
+      <pds-image loading="lazy" height="300" width="200" src="https://placebear.com/200/300"></pds-image>
     `, { waitUntil: 'load'});
 
     const img = page.find('pds-image >>> img');
