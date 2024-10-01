@@ -11,36 +11,37 @@
 
   // primary
   --color-background-primary-default: var(--pine-color-grey-900);
-  --color-background-primary-disabled: var(--pine-color-grey-300);
+  --color-background-primary-disabled: var(--pine-color-grey-100);
   --color-background-primary-hover: var(--pine-color-grey-950);
   --color-text-primary-default: var(--pine-color-white);
-  --color-text-primary-disabled: var(--pine-color-grey-600);
-  --color-outline-primary: var(--pine-color-blue-200);
+  --color-text-primary-disabled: var(--pine-color-grey-400);
+  --color-outline-primary: var(--pine-color-purple-300);
 
   // secondary
+  --color-background-secondary-hover: var(--pine-color-grey-050);
   --color-border-secondary-default: var(--pine-color-grey-400);
   --color-border-secondary-disabled: var(--pine-color-grey-300);
   --color-border-secondary-focus: var(--pine-color-grey-300);
   --color-border-secondary-hover: var(--pine-color-grey-500);
-  --color-text-secondary-default: var(--pine-color-grey-900);
-  --color-text-secondary-disabled: var(--pine-color-grey-600);
-  --color-outline-secondary: var(--pine-color-blue-200);
+  --color-text-secondary-default: var(--pine-color-grey-800);
+  --color-text-secondary-disabled: var(--pine-color-grey-400);
+  --color-outline-secondary: var(--pine-color-purple-300);
 
   // accent
   --color-background-accent-default: var(--pine-color-purple-500);
-  --color-background-accent-disabled: var(--pine-color-purple-150);
+  --color-background-accent-disabled: var(--pine-color-purple-100);
   --color-background-accent-hover: var(--pine-color-purple-600);
   --color-text-accent-default: var(--pine-color-white);
   --color-text-accent-disabled: var(--pine-color-purple-300);
   --color-outline-accent: var(--pine-color-purple-300);
 
   // destructive
-  --color-background-destructive-default: var(--pine-color-red-300);
+  --color-background-destructive-default: var(--pine-color-red-500);
   --color-background-destructive-disabled: var(--pine-color-red-100);
-  --color-background-destructive-hover: var(--pine-color-red-400);
+  --color-background-destructive-hover: var(--pine-color-red-600);
   --color-text-destructive-default: var(--pine-color-white);
-  --color-text-destructive-disabled: var(--pine-color-red-200);
-  --color-outline-destructive: var(--pine-color-red-200);
+  --color-text-destructive-disabled: var(--pine-color-red-300);
+  --color-outline-destructive: var(--pine-color-red-300);
 
   --spacing-disclosure-icon-margin-inline-end: var(--pine-spacing-0);
   --spacing-disclosure-margin-inline-start: var(--pine-spacing-100);
@@ -49,7 +50,7 @@
   --spacing-padding-inline: var(--pine-spacing-200);
   --spacing-unstyled: var(--pine-spacing-0);
 
-  --typography-default: var(--pine-font-weight-medium) var(--pine-font-size-100)/var(--pine-line-height-150) var(--pine-font-family-greet);
+  --typography-default: var(--pine-font-weight-body-medium) var(--pine-font-size-100)/var(--pine-line-height-150) var(--pine-font-family-greet);
 
   display: inline-flex;
   vertical-align: middle;
@@ -59,7 +60,7 @@
   align-items: center;
   background-color: var(--color-background-default);
   border: var(--border-width-default) solid var(--color-border-default);
-  border-radius: var(--pine-border-radius-125);
+  border-radius: var(--pine-border-radius-circle);
   color: var(--color-text-default);
   display: flex;
   font: var(--typography-default);
@@ -137,6 +138,10 @@
   --color-text-default: var(--color-text-secondary-default);
   --color-text-disabled: var(--color-text-secondary-disabled);
   --color-outline: var(--color-outline-secondary);
+
+  &:hover {
+    background-color: var(--color-background-secondary-hover);
+  }
 }
 
 .pds-button--disclosure {
