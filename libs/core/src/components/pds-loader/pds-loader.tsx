@@ -69,12 +69,12 @@ export class PdsLoader {
             <svg style={this.style()} viewBox="0 0 200 200" fill="none">
               <defs>
                 <linearGradient id="spinner-secondHalf">
-                  <stop offset="0%" stop-opacity="0" stop-color="currentColor" />
-                  <stop offset="100%" stop-opacity="0.5" stop-color="currentColor" />
+                  <stop offset="0%" stop-opacity="0" stop-color="var(--pine-color-mercury-400)" />
+                  <stop offset="100%" stop-opacity="0.5" stop-color="var(--pine-color-mercury-400)" />
                 </linearGradient>
                 <linearGradient id="spinner-firstHalf">
-                  <stop offset="0%" stop-opacity="1" stop-color="currentColor" />
-                  <stop offset="100%" stop-opacity="0.5" stop-color="currentColor" />
+                  <stop offset="0%" stop-opacity="1" stop-color="var(--pine-color-mercury-400)" />
+                  <stop offset="100%" stop-opacity="0.5" stop-color="var(--pine-color-mercury-400)" />
                 </linearGradient>
               </defs>
 
@@ -82,7 +82,7 @@ export class PdsLoader {
                 <path stroke="url(#spinner-secondHalf)" d="M 4 100 A 96 96 0 0 1 196 100" />
                 <path stroke="url(#spinner-firstHalf)" d="M 196 100 A 96 96 0 0 1 4 100" />
 
-                <path stroke="currentColor" stroke-linecap="round" d="M 4 100 A 96 96 0 0 1 4 98" />
+                <path stroke="var(--pine-color-mercury-400)" stroke-linecap="round" d="M 4 100 A 96 96 0 0 1 4 98" />
               </g>
             </svg>
           </div>
