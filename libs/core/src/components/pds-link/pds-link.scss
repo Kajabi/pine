@@ -4,17 +4,18 @@
   --border-radius: var(--pine-border-radius-075);
   --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
 
-  --color-text-default: var(--pine-color-grey-900);
+  --color-text-default: var(--pine-color-text-default);
+  --color-text-hover: var(--pine-color-grey-900);
 
-  --font-size: var(--pine-font-size-100);
-  --font-size-sm: var(--pine-font-size-085);
-  --font-size-xs: var(--pine-font-size-085);
-  --font-weight: var(--pine-font-weight-medium);
+  --font-size-default: var(--pine-font-size-body-md);
+  --font-size-sm: var(--pine-font-size-body-sm);
+  --font-size-xs: var(--pine-font-size-body-xs);
+  --font-weight: var(--pine-font-weight-body-medium);
 
   --spacing-inline-start-margin: var(--pine-spacing-050);
-  --sizing-svg-lg: 15px;
-  --sizing-svg-md: 13px;
-  --sizing-svg-sm: 11px;
+  --sizing-svg-lg: var(--font-size-default);
+  --sizing-svg-md: var(--font-size-sm);
+  --sizing-svg-sm: var(--font-size-xs);
 
   display: inline;
 
@@ -27,7 +28,7 @@
   align-items: center;
   color: var(--color-text);
   display: inline-flex;
-  font-weight: inherit;
+  font-weight: var(--font-weight);
 
   &:focus-visible {
     // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
@@ -59,7 +60,7 @@
 }
 
 .pds-link--lg {
-  font-size: var(--font-size);
+  font-size: var(--font-size-default);
 
   pds-icon {
     height: var(--sizing-svg-lg);
@@ -68,11 +69,11 @@
 }
 
 .pds-link--plain {
-  font-weight: var(--font-weight);
   text-decoration: none;
 
   &:hover {
     text-decoration: underline;
+    color: var(--color-text-hover);
   }
 }
 
@@ -82,5 +83,6 @@
 
   &:hover {
     text-decoration: none;
+    color: var(--color-text-hover);
   }
 }
