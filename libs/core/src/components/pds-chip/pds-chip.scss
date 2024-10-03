@@ -96,7 +96,7 @@ $pds-chip-sentiment-hover: (
       background: map-get($pds-chip-sentiment-dots, $sentiment);
     }
 
-    .pds-chip__label {
+    .pds-chip__label, .pds-chip__button {
       color: map-get($pds-chip-sentiment-text, $sentiment);
     }
 
