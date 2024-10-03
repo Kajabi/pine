@@ -8,7 +8,7 @@ label, pds-label {
 
   color: var(--color-text-default);
 
-  &[disabled], &:disabled {
-    color: var(--color-text-disabled)
+  [disabled] &, *:disabled & {
+    color: var(--color-text-disabled);
   }
 }

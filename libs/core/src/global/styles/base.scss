@@ -92,6 +92,10 @@
   letter-spacing: var(--pine-letter-spacing-heading-h6);
 }
 
+:where(div, label, p, span) {
+  color: var(--pine-color-text-default);
+}
+
 :where(code, kbd, pre, samp) {
   font-family: monospace;
 }
