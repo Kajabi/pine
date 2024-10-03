@@ -1,37 +1,32 @@
 :host {
-  --border-interactive-default: var(--pine-border-width-thin) solid var(--pine-color-grey-400);
+  --border-interactive-default: var(--pine-border-interactive-default);
+  --border-interactive-hover: var(--pine-border-interactive-hover);
 
   --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--color-focus-visible-outline);
   --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--color-focus-visible-outline-error);
 
-  --color: var(--pine-color-grey-900);
-  --color-background: var(--pine-color-white);
-  --color-background-disabled: var(--pine-color-grey-200);
-  --color-border-default: var(--pine-color-grey-400);
-  --color-border-error: var(--pine-color-red-300);
-  --color-border-focus-visible: var(--pine-color-grey-300);
-  --color-border-hover: var(--pine-color-grey-500);
-  --color-disabled-default: var(--pine-color-grey-700);
-  --color-error-default: var(--pine-color-red-300);
+  --color-background-default: var(--pine-color-white);
+  --color-background-disabled: var(--pine-color-grey-100);
+  --color-background-hover: var(--pine-color-grey-050);
+  --color-background-error-default: var(--pine-color-red-050);
+  --color-border-error-default: var(--pine-color-red-600);
+  --color-border-focus-visible: var(--pine-color-grey-400);
+  --color-border-hover: var(--pine-color-grey-400);
   --color-focus-visible-outline: var(--pine-color-purple-300);
-  --color-focus-visible-outline-error: var(--pine-color-red-200);
-  --color-placeholder-default: var(--pine-color-grey-700);
+  --color-focus-visible-outline-error: var(--pine-color-red-300);
+  --color-text-disabled-default: var(--pine-color-grey-400);
+  --color-text-message-error-default: var(--pine-color-red-600);
+  --color-text-placeholder-default: var(--pine-color-grey-600);
+  --color-text-placeholder-disabled: var(--pine-color-grey-400);
 
-  --font-size-field: var(--pine-font-size-100);
-  --font-size-helper-message: var(--pine-font-size-100);
-  --font-size-label: var(--pine-font-size-100);
-  --font-weight-field: var(--pine-font-weight-normal);
-  --font-weight-helper-message: var(--pine-font-weight-normal);
-  --font-weight-label: var(--pine-font-weight-medium);
-
-  --line-height-field: var(--pine-line-height-150);
-  --line-height-helper-message: var(--pine-line-height-125);
-  --line-height-label: var(--pine-line-height-150);
+  --font-weight-label-default: var(--pine-font-weight-body-medium);
 
   --spacing-margin-block-end-label: var(--pine-spacing-100);
   --spacing-margin-block-start-helper-message: var(--pine-spacing-100);
   --spacing-padding-block-field: var(--pine-spacing-100);
   --spacing-padding-inline-field: var(--pine-spacing-200);
+
+  --typography-message-default: var(--pine-typography-body-sm-default);
 
   display: inline;
 }
@@ -43,29 +38,23 @@
 
 label {
   display: block;
-  font-size: var(--font-size-label);
-  font-weight: var(--font-weight-label);
-  line-height: var(--line-height-label);
+  font-weight: var(--font-weight-label-default);
   margin-block-end: var(--spacing-margin-block-end-label);
 }
 
 .pds-textarea__field {
-  background-color: var(--color-background);
-  border: 1px solid var(--color-border-default);
+  background-color: var(--color-background-default);
+  border: var(--border-interactive-default);
   border-radius: var(--pine-border-radius-100);
-  font-family: inherit;
-  font-size: var(--font-size-field);
-  font-weight: var(--font-weight-field);
-  line-height: var(--line-height-field);
   padding: var(--spacing-padding-block-field) var(--spacing-padding-inline-field);
 
   &:hover:not(:disabled, .is-invalid) {
-    border-color: var(--color-border-hover);
+    border: var(--border-interactive-hover);
   }
 
   &:disabled {
     background-color: var(--color-background-disabled);
-    color: var(--color-disabled-default);
+    color: var(--color-text-disabled-default);
     cursor: not-allowed;
   }
 
@@ -76,11 +65,11 @@ label {
   }
 
   &::placeholder {
-    color: var(--color-placeholder-default);
+    color: var(--color-text-placeholder-default);
   }
 
   &.is-invalid {
-    border-color: var(--color-border-error);
+    border-color: var(--color-border-error-default);
 
     &:focus-visible {
       box-shadow: var(--box-shadow-focus-error);
@@ -90,12 +79,10 @@ label {
 
 .pds-textarea__error-message,
 .pds-textarea__helper-message {
-  font-size: var(--font-size-helper-message);
-  font-weight: var(--font-weight-helper-message);
-  line-height: var(--line-height-helper-message);
+  font: var(--typography-message-default);
   margin-block-start: var(--spacing-margin-block-start-helper-message);
 }
 
 .pds-textarea__error-message {
-  color: var(--color-error-default);
+  color: var(--color-text-message-error-default);
 }
