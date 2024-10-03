@@ -60,6 +60,7 @@ input {
     color: var(--color-text-disabled);
     cursor: not-allowed;
 
+    /* stylelint-disable */
     &::-webkit-input-placeholder {
       color: var(--color-text-placeholder-disabled);
     }
@@ -75,6 +76,7 @@ input {
     &:-ms-input-placeholder {
       color: var(--color-text-placeholder-disabled);
     }
+    /* stylelint-enable */
   }
 
   &:hover {
@@ -82,8 +84,8 @@ input {
   }
 
   &:focus-visible {
-    box-shadow: var(--box-shadow-focus);
     border-color: var(--color-border-active);
+    box-shadow: var(--box-shadow-focus);
     outline: none;
   }
 

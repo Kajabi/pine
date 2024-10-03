@@ -72,8 +72,8 @@
   text-decoration: none;
 
   &:hover {
-    text-decoration: underline;
     color: var(--color-text-hover);
+    text-decoration: underline;
   }
 }
 
@@ -82,7 +82,7 @@
   text-decoration: underline;
 
   &:hover {
-    text-decoration: none;
     color: var(--color-text-hover);
+    text-decoration: none;
   }
 }

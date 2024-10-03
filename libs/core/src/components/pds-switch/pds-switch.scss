@@ -129,7 +129,7 @@ input:disabled {
     cursor: initial;
   }
 
-  &:hover:after {
+  &:hover::after {
     background-color: var(--color-input-toggle-disabled);
   }
 
