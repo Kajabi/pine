@@ -3,13 +3,13 @@
 }
 
 details {
-  --border-radius-default: var(--pine-border-radius-100);
+  --border-radius-default: var(--pine-border-radius-default);
 
   --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
 
   --color-background-default: var(--pine-color-white);
   --color-background-hover: var(--pine-color-grey-150);
-  --color-text-default: var(--pine-color-grey-700);
+  --color-text-default: var(--pine-color-text-interactive-default);
   --color-text-active: var(--pine-color-grey-950);
   --color-text-hover: var(--pine-color-grey-800);
 
@@ -23,7 +23,7 @@ details {
   --spacing-summary-padding-inline-start: var(--pine-spacing-100);
   --spacing-summary-padding-inline-end: var(--pine-spacing-050);
 
-  --typography-default: var(--pine-font-weight-medium) var(--pine-font-size-100)/var(--pine-line-height-150) var(--pine-font-family-inter);
+  --typography-default: var(--pine-typography-body-md-medium);
 
   border-radius: var(--border-radius-default);
 

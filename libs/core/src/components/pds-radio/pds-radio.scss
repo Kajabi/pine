@@ -1,23 +1,26 @@
 :host {
-  --border-interactive-default: var(--pine-border-width-thin) solid var( --pine-color-grey-400);
-  --border-radius: 50%;
+  --border-interactive-default: var(--pine-border-interactive-default);
+  --border-interactive-hover: var(--pine-border-interactive-hover);
+  --border-radius: var(--pine-border-radius-circle);
 
-  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--color-focus);
-  --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--color-invalid-focus);
+  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
+  --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-red-200);
 
-  --color: var(--pine-color-grey-700);
-  --color-background: var(--pine-color-white);
-  --color-background-hover: var(--pine-color-grey-100);
-  --color-background-disabled: var(--pine-color-grey-200);
-  --color-border-hover: var(--pine-color-grey-500);
+  --color-background-checked: var(--pine-color-purple-500);
+  --color-background-checked-hover: var(--pine-color-purple-600);
+  --color-background-default: var(--pine-color-white);
+  --color-background-disabled: var(--pine-color-grey-100);
+  --color-background-hover: var(--pine-color-grey-50);
+  --color-background-checked-invalid: var(--pine-color-red-500);
+  --color-background-checked-invalid-hover: var(--pine-color-red-600);
+  --color-border-checked-hover: var(--pine-color-purple-600);
   --color-border-disabled: var(--pine-color-grey-300);
-  --color-checked: var(--pine-color-grey-950);
-  --color-disabled: var(---pine-color-grey-500);
-  --color-focus: var(--pine-color-purple-300);
-  --color-invalid: var(--pine-color-red-300);
-  --color-invalid-focus: var(--pine-color-red-200);
-
-  --font-size: var(--pine-font-size-085);
+  --color-border-invalid: var(--pine-color-red-500);
+  --color-border-checked-invalid-hover: var(--pine-color-red-600);
+  --color-text-invalid: var(--pine-color-red-500);
+  --color-text-disabled: var(---pine-color-grey-600);
+  --color-text-message-default: var(--pine-color-grey-800);
+  --color-text-message-disabled: var(--pine-color-grey-500);
 
   --sizing-check-size: 6px;
   --sizing-input-size: 16px;
@@ -30,10 +33,15 @@
 
 :host(.is-invalid) {
   input {
-    border-color: var(--color-invalid);
+    border-color: var(--color-border-invalid);
 
     &:checked {
-      background: var(--color-invalid);
+      background: var(--color-background-checked-invalid);
+
+      &:hover {
+        background: var(--color-background-checked-invalid-hover);
+        border-color: var(--color-border-checked-invalid-hover);
+      }
     }
 
     &:focus-visible {
@@ -44,7 +52,7 @@
 
   label,
   .pds-radio__message--error {
-    color: var(--color-invalid);
+    color: var(--color-text-invalid);
   }
 }
 
@@ -59,15 +67,20 @@ input {
 
   &:hover {
     background: var(--color-background-hover);
-    border-color: var(--color-border-hover);
+    border: var(--border-interactive-hover);
   }
 
   &:checked {
-    background: var(--color-checked);
-    border-color: var(--color-checked);
+    background: var(--color-background-checked);
+    border-color: var(--color-background-checked);
+
+    &:hover {
+      background: var(--color-background-checked-hover);
+      border-color: var(--color-border-checked-hover);
+    }
 
     &::after {
-      background: var(--color-background);
+      background: var(--color-background-default);
       border-radius: 50%;
       content: "";
       display: block;
@@ -86,7 +99,6 @@ input {
     cursor: not-allowed;
 
     &:checked {
-      background: var(--color-disabled);
       border-color: var(--color-border-disabled);
 
       &::after {
@@ -100,7 +112,7 @@ input {
     }
 
     ~ .pds-radio__message {
-      color: var(--color-disabled);
+      color: var(--color-text-message-disabled);
     }
   }
 
@@ -116,8 +128,7 @@ label {
 }
 
 .pds-radio__message {
-  color: var(--color);
-  font-size: var(--font-size);
+  color: var(--pine-color-grey-800);
   margin-block-start: var(--sizing-margin-block-start);
   margin-inline-start: 26px;
   width: 100%;

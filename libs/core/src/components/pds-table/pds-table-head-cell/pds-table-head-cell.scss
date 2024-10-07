@@ -1,18 +1,15 @@
 :host {
-  --border-head-cell-default: var(--pine-border-width-thin) solid var(--pine-color-grey-300);
+  --border-head-cell-default: var(--pine-border-width-thin) solid var(--pine-color-grey-100);
 
   --box-shadow-default: 3px 3px 6px -2px rgba(0, 0, 0, 0.1);
 
   --color-background-fixed: var(--pine-color-white);
-  --color-sorting: var(--pine-color-grey-950);
-  --color-text-default: var(--pine-color-grey-700);
+  --color-text-default: var(--pine-color-grey-800);
+  --color-text-active: var(--pine-color-grey-950);
 
   --dimension-fixed-cell-position: 0;
 
-  --font-size-head-cell: var(--pine-font-size-085);
-  --font-weight-cell-default: var(--pine-font-weight-normal);
-
-  --line-height-cell-default: var(--pine-line-height-125);
+  --letter-spacing-default: var(--pine-letter-spacing-body-md);
 
   --padding-cell-default: calc(var(--pine-spacing-300) / 2);
 
@@ -20,13 +17,12 @@
   --spacing-padding-arrow: calc(var(--pine-spacing-050) / 2);
   --spacing-padding-block-compact: var(--pine-spacing-050);
 
+  --typography-default: var(--pine-typography-body-md-medium);
+
   border-block-end: var(--border-head-cell-default);
   color: var(--color-text-default);
   display: table-cell;
-  font-size: var(--font-size-head-cell);
-  font-style: normal;
-  font-weight: var(--font-weight-cell-default);
-  line-height: var(--line-height-cell-default);
+  font: var(--typography-default);
   padding: var(--padding-cell-default);
   text-align: start;
   vertical-align: inherit;
@@ -60,5 +56,5 @@
 
 :host(.is-sortable:hover),
 :host(.is-active) {
-  color: var(--color-sorting);
+  color: var(--color-text-active);
 }

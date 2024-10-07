@@ -2,12 +2,12 @@
   --box-shadow-fixed: 3px 3px 6px -2px rgba(0, 0, 0, 0.2);
 
   --color-background-fixed: var(--pine-color-white);
-  --color-cell-default: var(--pine-color-grey-700);
+  --color-text-cell-default: var(--pine-color-grey-700);
 
   --dimension-fixed-cell-position: 0;
   --dimension-max-width-truncated: 100px;
 
-  --font-size-cell-default: var(--pine-font-size-085);
+  --letter-spacing-default: var(--pine-letter-spacing-body-md);
 
   --number-fixed-column-index: 0;
 
@@ -15,10 +15,12 @@
   --spacing-padding-cell-default: calc(var(--pine-spacing-300) / 2);
   --spacing-padding-compact: var(--pine-spacing-050);
 
-  color: var(--color-cell-default);
+  --typography-default: var(--pine-typography-body-md-default);
+
+  color: var(--color-text-cell-default);
   display: table-cell;
-  font-size: var(--font-size-cell-default);
-  line-height: var(--spacing-line-height-cell-default);
+  font: var(--typography-default);
+  letter-spacing: var(--letter-spacing-default);
   padding: var(--spacing-padding-cell-default);
   vertical-align: inherit;
 }

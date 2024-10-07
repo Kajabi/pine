@@ -1,5 +1,5 @@
 :host {
-  --color-progress-fill: var(--pine-color-blue-300);
+  --color-progress-fill: var(--pine-color-mercury-500);
 
   --sizing-progress-bar-height: 8px;
   --sizing-progress-bar-width: 100%;
@@ -21,7 +21,7 @@
 
 .pds-progress {
   --border-radius: var(--pine-border-radius-050);
-  --color-progress-bar-background: var(--pine-color-grey-300);
+  --color-progress-bar-background: var(--pine-color-grey-200);
 
   align-items: center;
   background-color: var(--color-progress-bar-background);
@@ -49,15 +49,15 @@ progress::-webkit-progress-bar {
 
 progress::-webkit-progress-value {
   --border-radius: var(--pine-border-radius-050);
-  --color-background: var(--pine-color-blue-300);
+  --color-background: var(--pine-color-mercury-500);
 
   background-color: var(--color-progress-fill, var(--color-background));
   border-radius: var(--border-radius);
 }
 
 progress::-moz-progress-bar {
-  --color-background: var(--pine-color-blue-300);
   --border-radius: var(--pine-border-radius-050);
+  --color-background: var(--pine-color-mercury-500);
 
   background-color: var(--color-progress-fill, var(--color-background));
   border-radius: var(--border-radius);
@@ -75,13 +75,9 @@ progress::-moz-progress-bar {
 }
 
 .pds-progress__percentage {
-  --font-size: var(--pine-font-size-085);
   --font-weight: var(--pine-font-weight-medium);
-  --line-height: var(--pine-line-height-150);
   --spacing-inline-start-margin: var(--pine-spacing-300);
 
-  font-size: var(--font-size);
   font-weight: var(--font-weight);
-  line-height: var(--line-height);
   margin-inline-start: calc(var(--spacing-inline-start-margin) / 2);
 }
