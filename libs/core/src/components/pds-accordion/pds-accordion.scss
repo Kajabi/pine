@@ -5,48 +5,49 @@
 details {
   --border-radius-default: var(--pine-border-radius-100);
 
-  --box-shadow-focus: inset 0 0 0 2px var(--pine-color-blue-200);
+  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
 
-  --color-content-background-default: var(--pine-color-white);
-  --color-background-hover: var(--pine-color-grey-300);
-  --color-text-default: var(--pine-color-charcoal-200);
-  --color-text-active: var(--pine-color-charcoal-500);
-  --color-text-hover: var(--pine-color-charcoal-300);
+  --color-background-default: var(--pine-color-white);
+  --color-background-hover: var(--pine-color-grey-150);
+  --color-text-default: var(--pine-color-grey-700);
+  --color-text-active: var(--pine-color-grey-950);
+  --color-text-hover: var(--pine-color-grey-800);
+
+  --font-weight-active: var(--pine-font-weight-semi-bold);
 
   --number-animation-transform-timing: 200ms;
 
   --spacing-details-padding-inline: var(--pine-spacing-150);
-  --spacing-summary-padding-block: var(--pine-spacing-050);
+  --spacing-details-padding-block-end: calc(var(--pine-spacing-200) + 2); //18 + 2 = 18px
+  --spacing-summary-padding-block: calc(var(--pine-spacing-150) / 2); //12 / 2 = 6px
   --spacing-summary-padding-inline-start: var(--pine-spacing-100);
   --spacing-summary-padding-inline-end: var(--pine-spacing-050);
 
-  --typography-default: var(--pine-font-weight-semi-bold) var(--pine-font-size-100)/var(--pine-line-height-150) var(--pine-font-family-circular);
+  --typography-default: var(--pine-font-weight-medium) var(--pine-font-size-100)/var(--pine-line-height-150) var(--pine-font-family-inter);
 
   border-radius: var(--border-radius-default);
-  padding-inline: var(--spacing-details-padding-inline);
 
   pds-icon {
     transform: scaleY(1);
-    transition: transform var(--number-animation-transform-timing);
   }
 }
 
 /* stylelint-disable-next-line */
 details[open] {
-  background-color: var(--color-content-background);
+  background-color: var(--color-background-default);
 
   summary {
     color: var(--color-text-active);
-    font: var(--typography-default);
+    font-weight: var(--font-weight-active);
 
     pds-icon {
       transform: scaleY(-1);
-      transition: transform var(--number-animation-transform-timing);
     }
   }
 }
 
 summary {
+  background-color: var(--color-background-default);
   border-radius: var(--border-radius-default);
   color: var(--color-text-default);
   font: var(--typography-default);
@@ -74,9 +75,15 @@ summary {
     // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
     box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
     outline: none;
+    position: relative;
   }
 
   pds-icon {
     margin-inline-start: auto;
   }
+}
+
+.pds-accordion__body {
+  padding-block-end: var(--spacing-details-padding-block-end);
+  padding-inline: var(--spacing-details-padding-inline);
 }

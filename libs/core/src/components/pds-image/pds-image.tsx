@@ -2,7 +2,7 @@ import { Component, Host, h, Prop } from '@stencil/core';
 
 @Component({
   tag: 'pds-image',
-  styleUrl: 'pds-image.scss',
+  styleUrls: ['../../global/styles/base.scss', 'pds-image.scss'],
   shadow: true,
 })
 export class PdsImage {

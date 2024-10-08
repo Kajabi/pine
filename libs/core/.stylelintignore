@@ -1,1 +1,3 @@
+src/global/styles/_fonts.scss
 src/global/styles/tokens/semantic/*.scss
+src/global/styles/base.scss

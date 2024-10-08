@@ -4,7 +4,7 @@ import { closest } from '../../../utils/closest';
 
 @Component({
   tag: 'pds-table-row',
-  styleUrl: 'pds-table-row.scss',
+  styleUrls: ['../../../global/styles/base.scss', 'pds-table-row.scss'],
   shadow: true,
 })
 export class PdsTableRow {

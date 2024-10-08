@@ -21,6 +21,14 @@
 | `"label"`     | Accordion trigger button content. |
 
 
+## Shadow Parts
+
+| Part                 | Description                      |
+| -------------------- | -------------------------------- |
+| `"accordion-body"`   | Accordion body styles.           |
+| `"accordion-button"` | Accordion button/trigger styles. |
+
+
 ## Dependencies
 
 ### Depends on

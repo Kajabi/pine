@@ -3,7 +3,7 @@ import { closest } from '@utils/closest';
 
 @Component({
   tag: 'pds-table-head',
-  styleUrl: 'pds-table-head.scss',
+  styleUrls: ['../../../global/styles/base.scss', 'pds-table-head.scss'],
   shadow: true,
 })
 export class PdsTableHead {

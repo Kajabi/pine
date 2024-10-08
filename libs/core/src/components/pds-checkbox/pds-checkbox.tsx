@@ -5,7 +5,7 @@ import { CheckboxChangeEventDetail } from './checkbox-interface';
 
 @Component({
   tag: 'pds-checkbox',
-  styleUrl: 'pds-checkbox.scss',
+  styleUrls: ['../../global/styles/base.scss', 'pds-checkbox.scss'],
   shadow: true,
 })
 export class PdsCheckbox {

@@ -5,20 +5,21 @@ pds-tab {
   --border-radius-default: var(--pine-border-radius-125);
   --border-radius-none: var(--pine-border-radius-0);
 
-  --box-shadow-focus: 0 0 0 2px var(--pine-color-blue-200);
+  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
 
-  --color-background-active: var(--pine-color-charcoal-400);
+  --color-background-active: var(--pine-color-grey-900);
   --color-background-availability: var(--pine-color-white);
   --color-background-default: var(--pine-color-grey-300);
   --color-background-hover: var(--pine-color-grey-400);
-  --color-text-active: var(--pine-color-charcoal-400);
+  --color-indicator-active: var(--pine-color-mercury-500);
+  --color-text-active: var(--pine-color-grey-900);
   --color-text-active-inverse: var(--pine-color-white);
-  --color-text-default: var(--pine-color-charcoal-200);
-  --color-text-focus: var(--pine-color-charcoal-300);
+  --color-text-default: var(--pine-color-grey-700);
+  --color-text-focus: var(--pine-color-grey-800);
 
-  --font-size-availability-content: var(--pine-font-size-075);
+  --font-size-availability-content: var(--pine-font-size-085);
   --font-size-default: var(--pine-font-size-100);
-  --font-size-filter-content: var(--pine-font-size-087);
+  --font-size-filter-content: var(--pine-font-size-085);
 
   --font-weight-default: var(--pine-font-weight-medium);
 
@@ -86,7 +87,7 @@ pds-tab {
     position: relative;
 
     &::after {
-      background-color: currentColor;
+      background-color: var(--color-indicator-active);
       bottom: 0;
       content: '';
       height: 3px;

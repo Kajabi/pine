@@ -2,7 +2,7 @@ import { Component, Element, Host, Prop, State, h } from '@stencil/core';
 
 @Component({
   tag: 'pds-table-cell',
-  styleUrl: 'pds-table-cell.scss',
+  styleUrls: ['../../../global/styles/base.scss', 'pds-table-cell.scss'],
   shadow: true,
 })
 export class PdsTableCell {

@@ -5,7 +5,7 @@ import { PdsLabel } from '../_internal/pds-label/pds-label';
 
 @Component({
   tag: 'pds-textarea',
-  styleUrl: 'pds-textarea.scss',
+  styleUrls: ['../../global/styles/base.scss', 'pds-textarea.scss'],
   shadow: true,
 })
 export class PdsTextarea {
