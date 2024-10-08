@@ -13,7 +13,7 @@ describe('pds-avatar', () => {
       <pds-avatar class="pds-avatar" size="lg" variant="customer">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px;">
-            <pds-icon color="var(--pine-color-blue-400)" icon="${userFilled}" size="33.53%"></pds-icon>
+            <pds-icon color="var(--pine-color-mercury-500)" icon="${userFilled}" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -30,7 +30,7 @@ describe('pds-avatar', () => {
       <pds-avatar component-id="test" id="test" class="pds-avatar" size="lg" variant="customer">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px;">
-            <pds-icon color="var(--pine-color-blue-400)" icon="${userFilled}" size="33.53%"></pds-icon>
+            <pds-icon color="var(--pine-color-mercury-500)" icon="${userFilled}" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -46,7 +46,7 @@ describe('pds-avatar', () => {
       <pds-avatar class="pds-avatar pds-avatar--admin" size="lg" variant="admin">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px">
-            <pds-icon color="var(--pine-color-blue-400)" icon="${userFilled}" size="33.53%"></pds-icon>
+            <pds-icon color="var(--pine-color-mercury-500)" icon="${userFilled}" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -62,8 +62,8 @@ describe('pds-avatar', () => {
       <pds-avatar class="pds-avatar" badge="true" size="lg" variant="customer">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px;">
-            <pds-icon color="var(--pine-color-blue-400)"icon="${userFilled}" size="33.53%"></pds-icon>
-            <pds-icon class="pds-avatar__badge" icon="${checkCircleFilled}" size="33.53%"></pds-icon>
+            <pds-icon color="var(--pine-color-mercury-500)" icon="${userFilled}" size="33.53%"></pds-icon>
+            <pds-icon class="pds-avatar__badge" color="var(--pine-color-purple-600)" icon="${checkCircleFilled}" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -79,7 +79,7 @@ describe('pds-avatar', () => {
       <pds-avatar class="pds-avatar" size="128px" variant="customer">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 128px; width: 128px">
-            <pds-icon color="var(--pine-color-blue-400)" icon="${userFilled}" size="33.53%"></pds-icon>
+            <pds-icon color="var(--pine-color-mercury-500)" icon="${userFilled}" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -128,7 +128,7 @@ describe('pds-avatar', () => {
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px">
             <img alt="Customer Profile" src="https://placehold.co/64x64"/>
-            <pds-icon class="pds-avatar__badge" icon="${checkCircleFilled}" size="33.53%"></pds-icon>
+            <pds-icon class="pds-avatar__badge" color="var(--pine-color-purple-600)" icon="${checkCircleFilled}" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -144,7 +144,7 @@ describe('pds-avatar', () => {
       <pds-avatar class="pds-avatar" size="xl" variant="customer">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 64px; width: 64px;">
-            <pds-icon color="var(--pine-color-blue-400)" icon="${userFilled}" size="33.53%"></pds-icon>
+            <pds-icon color="var(--pine-color-mercury-500)" icon="${userFilled}" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
@@ -161,7 +161,7 @@ describe('pds-avatar', () => {
         <mock:shadow-root>
           <button aria-label="Avatar dropdown trigger" class="pds-avatar__button" type="button">
             <div part="asset-wrapper" style="height: 56px; width: 56px;">
-              <pds-icon color="var(--pine-color-blue-400)" icon="${userFilled}" size="33.53%"></pds-icon>
+              <pds-icon color="var(--pine-color-mercury-500)" icon="${userFilled}" size="33.53%"></pds-icon>
             </div>
           </button>
         </mock:shadow-root>
@@ -178,7 +178,7 @@ describe('pds-avatar', () => {
       <pds-avatar class="pds-avatar" dropdown="false" size="lg" variant="customer">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px;">
-            <pds-icon color="var(--pine-color-blue-400)" icon="${userFilled}" size="33.53%"></pds-icon>
+            <pds-icon color="var(--pine-color-mercury-500)" icon="${userFilled}" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
