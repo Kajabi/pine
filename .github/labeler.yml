@@ -20,6 +20,3 @@ enhancement:
 
 bug:
 - head-branch: ['fix']
-
-mercury-rising:
-- base-branch: ['mercury-rising']

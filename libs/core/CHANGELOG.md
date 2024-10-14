@@ -3,6 +3,219 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.22.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@2.21.0-mercury.0...@pine-ds/core@2.22.0-mercury.0) (2024-09-19)
+
+
+### Features
+
+* **accordion:** adds part to accordion component ([#264](https://github.com/Kajabi/pine/issues/264)) ([8abeffc](https://github.com/Kajabi/pine/commit/8abeffc97ac91a1c519f79d9132f15fcdbce8a7f))
+
+
+
+
+
+# [2.21.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@2.20.0-mercury.0...@pine-ds/core@2.21.0-mercury.0) (2024-09-19)
+
+**Note:** Version bump only for package @pine-ds/core
+
+
+
+
+
+# [2.20.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@2.19.0-mercury.0...@pine-ds/core@2.20.0-mercury.0) (2024-09-19)
+
+**Note:** Version bump only for package @pine-ds/core
+
+
+
+
+
+# [2.19.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@2.18.0-mercury.0...@pine-ds/core@2.19.0-mercury.0) (2024-09-17)
+
+**Note:** Version bump only for package @pine-ds/core
+
+
+
+
+
+# [2.18.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@2.17.0-mercury.0...@pine-ds/core@2.18.0-mercury.0) (2024-09-16)
+
+**Note:** Version bump only for package @pine-ds/core
+
+
+
+
+
+# [2.17.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@2.16.0-mercury.0...@pine-ds/core@2.17.0-mercury.0) (2024-09-16)
+
+**Note:** Version bump only for package @pine-ds/core
+
+
+
+
+
+# [2.16.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@2.15.0-mercury.0...@pine-ds/core@2.16.0-mercury.0) (2024-09-13)
+
+**Note:** Version bump only for package @pine-ds/core
+
+
+
+
+
+# [2.15.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@1.3.1...@pine-ds/core@2.15.0-mercury.0) (2024-09-10)
+
+
+### Bug Fixes
+
+* update box shadow tokens ([#241](https://github.com/Kajabi/pine/issues/241)) ([48ce8ef](https://github.com/Kajabi/pine/commit/48ce8ef106555b3b0d0b55bafdca815c0e2cc362))
+
+
+
+
+
+# [2.12.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@2.11.0-mercury.0...@pine-ds/core@2.12.0-mercury.0) (2024-09-04)
+
+**Note:** Version bump only for package @pine-ds/core
+
+
+
+
+
+# [2.11.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@2.10.0-mercury.0...@pine-ds/core@2.11.0-mercury.0) (2024-09-04)
+
+**Note:** Version bump only for package @pine-ds/core
+
+
+
+
+
+# [2.10.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@1.3.1...@pine-ds/core@2.10.0-mercury.0) (2024-09-04)
+
+
+### Bug Fixes
+
+* update box shadow tokens ([#241](https://github.com/Kajabi/pine/issues/241)) ([514454e](https://github.com/Kajabi/pine/commit/514454e9750c2ff2fa7f954e72e5e70baf92e19a))
+
+
+
+
+
+# [2.9.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@1.3.1...@pine-ds/core@2.9.0-mercury.0) (2024-08-28)
+
+
+### Bug Fixes
+
+* update box shadow tokens ([#241](https://github.com/Kajabi/pine/issues/241)) ([87f41bd](https://github.com/Kajabi/pine/commit/87f41bd50d8fe9cd0e51a4aee11a59b466ba6114))
+
+
+
+
+
+# [2.8.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@1.3.1...@pine-ds/core@2.8.0-mercury.0) (2024-08-28)
+
+
+### Bug Fixes
+
+* update box shadow tokens ([#241](https://github.com/Kajabi/pine/issues/241)) ([535e9c7](https://github.com/Kajabi/pine/commit/535e9c7cdc928f123edd0fa112f8ade6ce42722c))
+
+
+
+
+
+# [2.7.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@2.6.0-mercury.0...@pine-ds/core@2.7.0-mercury.0) (2024-08-26)
+
+**Note:** Version bump only for package @pine-ds/core
+
+
+
+
+
+# [2.6.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@1.3.1...@pine-ds/core@2.6.0-mercury.0) (2024-08-20)
+
+
+### Bug Fixes
+
+* update box shadow tokens ([#241](https://github.com/Kajabi/pine/issues/241)) ([ff57580](https://github.com/Kajabi/pine/commit/ff575806c89b21e113ac5e51b24848dc06d19adf))
+
+
+
+
+
+# [2.5.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@2.4.0-mercury.0...@pine-ds/core@2.5.0-mercury.0) (2024-08-15)
+
+
+### Bug Fixes
+
+* update box shadow tokens ([#241](https://github.com/Kajabi/pine/issues/241)) ([2c844e9](https://github.com/Kajabi/pine/commit/2c844e97de0b22ffd2962ec20e1f628f9890dc47))
+
+
+
+
+
+# [2.4.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@2.3.0-mercury.0...@pine-ds/core@2.4.0-mercury.0) (2024-08-13)
+
+**Note:** Version bump only for package @pine-ds/core
+
+
+
+
+
+# [2.3.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@2.2.0-mercury.0...@pine-ds/core@2.3.0-mercury.0) (2024-08-12)
+
+**Note:** Version bump only for package @pine-ds/core
+
+
+
+
+
+# [2.2.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@2.1.0-mercury.0...@pine-ds/core@2.2.0-mercury.0) (2024-08-09)
+
+**Note:** Version bump only for package @pine-ds/core
+
+
+
+
+
+# [2.1.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@1.3.1...@pine-ds/core@2.1.0-mercury.0) (2024-08-08)
+
+**Note:** Version bump only for package @pine-ds/core
+
+
+
+
+
+# [6.0.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@5.0.0-mercury.0...@pine-ds/core@6.0.0-mercury.0) (2024-08-07)
+
+**Note:** Version bump only for package @pine-ds/core
+
+
+
+
+
+# [5.0.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@4.0.0-mercury.0...@pine-ds/core@5.0.0-mercury.0) (2024-08-07)
+
+**Note:** Version bump only for package @pine-ds/core
+
+
+
+
+
+# [4.0.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@3.0.0-mercury.0...@pine-ds/core@4.0.0-mercury.0) (2024-08-06)
+
+**Note:** Version bump only for package @pine-ds/core
+
+
+
+
+
+# [3.0.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@1.3.1...@pine-ds/core@3.0.0-mercury.0) (2024-08-05)
+
+**Note:** Version bump only for package @pine-ds/core
+
+
+
+
+
 ## [1.3.1](https://github.com/Kajabi/pine/compare/@pine-ds/core@1.3.0...@pine-ds/core@1.3.1) (2024-08-05)
 
 **Note:** Version bump only for package @pine-ds/core
@@ -12,6 +225,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 # [1.3.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@1.1.0...@pine-ds/core@1.3.0) (2024-08-01)
+# [2.0.0-mercury.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@1.1.0...@pine-ds/core@2.0.0-mercury.0) (2024-07-24)
 
 
 ### Bug Fixes
