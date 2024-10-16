@@ -1,10 +1,10 @@
 import { Meta } from '@storybook/blocks';
 import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 
-<Meta title="Foundations/Layout"/>
+<Meta title="components/Layout"/>
 
 # Layout
-The Layout system is driven by `pds-box` and `pds-row`. 
+The Layout system is driven by `pds-box` and `pds-row`.
 
 ## `pds-box`
 
@@ -46,7 +46,7 @@ The `pds-row` component is designed to create horizontal rows that contain a set
               <PdsButton variant="secondary" icon="upload">Upload</PdsButton>
             </PdsBox>
           </PdsBox>
-          
+
           {/* right side */}
           <PdsBox direction="column" sizeMd="4">
             {/* box 1 */}
@@ -102,7 +102,7 @@ The `pds-row` component is designed to create horizontal rows that contain a set
               <pds-button variant="secondary" icon="upload">Upload</pds-button>
             </pds-box>
           </pds-box>
-          
+
           {/* right side */}
           <pds-box direction="column" size-md="4">
             {/* box 1 */}
@@ -158,7 +158,7 @@ The `pds-row` component is designed to create horizontal rows that contain a set
           <pds-button variant="secondary" icon="upload">Upload</pds-button>
         </pds-box>
       </pds-box>
-      
+
       {/* right side */}
       <pds-box direction="column" size-md="4">
         {/* box 1 */}
@@ -197,7 +197,7 @@ The `pds-row` component is designed to create horizontal rows that contain a set
 <DocCanvas client:only
   mdxSource={{
     react: `
-      <PdsBox 
+      <PdsBox
         backgroundColor="#DDF8F0"
         borderRadius="lg"
         display="flex"
@@ -221,7 +221,7 @@ The `pds-row` component is designed to create horizontal rows that contain a set
       </PdsBox>
     `,
     webComponent: `
-      <pds-box 
+      <pds-box
         background-color="#DDF8F0"
         border-radius="lg"
         display="flex"
@@ -245,7 +245,7 @@ The `pds-row` component is designed to create horizontal rows that contain a set
       </pds-box>
     `
 }}>
-  <pds-box 
+  <pds-box
     background-color="#DDF8F0"
     border-radius="lg"
     display="flex"
@@ -278,7 +278,7 @@ The `pds-row` component is designed to create horizontal rows that contain a set
         <PdsRow colGap="md">
           <PdsBox sizeMd="4">
             <PdsBox
-              border="true" 
+              border="true"
               borderRadius="lg"
               direction="column"
               padding="sm"
@@ -297,7 +297,7 @@ The `pds-row` component is designed to create horizontal rows that contain a set
           </PdsBox>
           <PdsBox sizeMd="4">
             <PdsBox
-              border="true" 
+              border="true"
               borderRadius="lg"
               direction="column"
               padding="sm"
@@ -316,7 +316,7 @@ The `pds-row` component is designed to create horizontal rows that contain a set
           </PdsBox>
           <PdsBox sizeMd="4">
             <PdsBox
-              border="true" 
+              border="true"
               borderRadius="lg"
               direction="column"
               padding="sm"
@@ -341,7 +341,7 @@ The `pds-row` component is designed to create horizontal rows that contain a set
         <pds-row col-gap="md">
           <pds-box size-md="4">
             <pds-box
-              border="true" 
+              border="true"
               border-radius="lg"
               direction="column"
               padding="sm"
@@ -360,7 +360,7 @@ The `pds-row` component is designed to create horizontal rows that contain a set
           </pds-box>
           <pds-box size-md="4">
             <pds-box
-              border="true" 
+              border="true"
               border-radius="lg"
               direction="column"
               padding="sm"
@@ -379,7 +379,7 @@ The `pds-row` component is designed to create horizontal rows that contain a set
           </pds-box>
           <pds-box size-md="4">
             <pds-box
-              border="true" 
+              border="true"
               border-radius="lg"
               direction="column"
               padding="sm"
@@ -404,7 +404,7 @@ The `pds-row` component is designed to create horizontal rows that contain a set
     <pds-row col-gap="md">
       <pds-box size-md="4">
         <pds-box
-          border="true" 
+          border="true"
           border-radius="lg"
           direction="column"
           padding="sm"
@@ -423,7 +423,7 @@ The `pds-row` component is designed to create horizontal rows that contain a set
       </pds-box>
       <pds-box size-md="4">
         <pds-box
-          border="true" 
+          border="true"
           border-radius="lg"
           direction="column"
           padding="sm"
@@ -442,7 +442,7 @@ The `pds-row` component is designed to create horizontal rows that contain a set
       </pds-box>
       <pds-box size-md="4">
         <pds-box
-          border="true" 
+          border="true"
           border-radius="lg"
           direction="column"
           padding="sm"
@@ -505,7 +505,7 @@ By combining the `pds-box` and `pds-row` components, you can easily create a 12-
   </pds-box>
 </DocCanvas>
 
-By default, adding `pds-row`s with no `size` property will create equal width columns. 
+By default, adding `pds-row`s with no `size` property will create equal width columns.
 This creates a two-column layout, and you can customize the `size` and arrangement of the columns to achieve the desired layout for your application. The `size` property affects the width of the column across all viewports.
 
 <DocCanvas client:only
@@ -875,7 +875,7 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
 </DocCanvas>
 
 ## Nested Layouts
-You can nest `pds-row` and `pds-box` components to create more complex layouts. 
+You can nest `pds-row` and `pds-box` components to create more complex layouts.
 
 <DocCanvas client:only
   mdxSource={{
@@ -963,7 +963,7 @@ When a gap or gutter is needed between the columns, an additional child `pds-box
     react: `
       <PdsRow colGap="sm">
         <PdsBox sizeSm="4">
-          <PdsBox 
+          <PdsBox
             borderRadius="sm"
             padding="sm"
             shadow="sm"
@@ -981,7 +981,7 @@ When a gap or gutter is needed between the columns, an additional child `pds-box
     webComponent: `
       <pds-row col-gap="sm">
         <pds-box size-sm="4">
-          <pds-box 
+          <pds-box
             border-radius="sm"
             padding="sm"
             shadow="sm"
@@ -999,7 +999,7 @@ When a gap or gutter is needed between the columns, an additional child `pds-box
 }}>
   <pds-row col-gap="sm">
     <pds-box size-sm="4">
-      <pds-box 
+      <pds-box
         border-radius="sm"
         padding="sm"
         shadow="sm"

@@ -16,6 +16,13 @@ if (docsJson) { setStencilDocJson(docsJson) }
 const preview = {
   parameters: {
     actions: { argTypesRegex: "^on[A-Z].*" },
+    options: {
+      storySort: {
+        method: 'alphabetical',
+        order: ['Foundations', 'Guides', 'Components', 'Resources'],
+        locales: 'en-US',
+      },
+    }
   },
   controls: {
     matchers: {
