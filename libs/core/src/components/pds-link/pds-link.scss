@@ -1,10 +1,11 @@
 :host {
 
   --border-outline: 4px solid var(--pine-color-blue-200);
-  --border-radius: var(--pine-border-radius-075);
+  --border-radius: var(--pine-border-radius-050);
   --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
 
-  --color-text-default: var(--pine-color-grey-900);
+  --color-text: var(--pine-color-grey-950);
+  --color-text-hover: var(--pine-color-grey-900);
 
   --font-size: var(--pine-font-size-100);
   --font-size-sm: var(--pine-font-size-085);
@@ -29,10 +30,16 @@
   display: inline-flex;
   font-weight: inherit;
 
+  &:hover {
+    color: var(--color-text-hover);
+  }
+
   &:focus-visible {
+    border-radius: var(--border-radius);
     // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
     box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
     outline: none;
+    padding: var(--pine-spacing-050);
     position: relative;
   }
 }
