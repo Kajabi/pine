@@ -1,1 +1,23 @@
-[]
+[
+  {
+    "id": "1fdc6830119996c467639e1bfdc85bdaada88fdd",
+    "name": "kp",
+    "$figmaStyleReferences": {},
+    "selectedTokenSets": {
+      "core/core": "enabled",
+      "theme/dark": "enabled"
+    },
+    "group": "brand"
+  },
+  {
+    "id": "7b2e5ec872643433c5dffdeb93bd4dc28e168dd3",
+    "name": "community",
+    "$figmaStyleReferences": {},
+    "selectedTokenSets": {
+      "core/core": "enabled",
+      "theme/light": "disabled",
+      "theme/dark": "disabled"
+    },
+    "group": "brand"
+  }
+]

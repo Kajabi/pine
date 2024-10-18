@@ -1,6 +1,8 @@
 {
   "tokenSetOrder": [
     "core/core",
-    "semantic/semantic"
+    "semantic/semantic",
+    "theme/light",
+    "theme/dark"
   ]
 }
