@@ -3,8 +3,7 @@
   --border-interactive-default: var(--pine-border-width-thin) solid var(--pine-color-grey-300);
   --border-interactive-hover: var(--pine-border-width-thin) solid var(--pine-color-grey-400);
 
-  --border-radius-default: var(--pine-border-radius-125);
-  --border-radius-hover: var(--pine-border-radius-0);
+  --border-radius-default: var(--pine-border-radius-circle);
 
   --border-width-default: var(--pine-border-width-none);
 
@@ -17,7 +16,7 @@
   --copytext-color-background-hover: var(--pine-color-grey-200);
 
   --font-size-default: var(--pine-font-size-100);
-  --font-weight-default: var(--pine-font-weight-semi-bold);
+  --font-weight-default: var(--pine-font-weight-body-medium);
 
   --spacing-bordered-margin-inline-end: var(--pine-spacing-200);
   --spacing-bordered-padding-block: var(--pine-spacing-100);
@@ -27,7 +26,7 @@
   --spacing-padding-inline: var(--pine-spacing-100);
   --spacing-padding-none: var(--pine-spacing-0);
 
-  --typography-default: var(--pine-font-weight-medium) var(--pine-font-size-100)/var(--pine-line-height-150) var(--pine-font-family-circular);
+  --typography-default: var(--pine-font-weight-body-medium) var(--pine-font-size-body-md)/var(--pine-line-height-body) var(--pine-font-family-heading);
 
   pds-button {
     align-items: center;
@@ -39,14 +38,18 @@
     max-width: 100%;
     padding: var(--spacing-padding-block) var(--spacing-padding-inline);
 
+    &::part(button) {
+      padding-inline-end: calc(var(--spacing-padding-inline) / 2);
+    }
+
     &::part(button):hover {
       // Update custom prop usage in Button before changing
       background-color: var(--copytext-color-background-hover);
-      border-radius: var(--border-radius-hover);
       color: var(--color-text-hover);
     }
 
     span {
+      font-weight: var(--font-weight-default);
       margin-inline-end: var(--spacing-margin-inline-end);
       white-space: nowrap;
     }

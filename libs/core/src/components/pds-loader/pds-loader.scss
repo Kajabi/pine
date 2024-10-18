@@ -43,12 +43,12 @@
 // Typing Loader
 .pds-loader--typing {
   --border-radius-typing: var(--pine-border-radius-200);
-  --border-radius-typing-dot: var(--pine-border-radius-round);
+  --border-radius-typing-dot: var(--pine-border-radius-circle);
 
   --box-shadow-typing: var(--pine-box-shadow-100);
 
-  --color-background-typing-default: var(--pine-color-grey-200);
-  --color-background-typing-dot-default: var(--pine-color-grey-500);
+  --color-background-typing-default: var(--pine-color-grey-100);
+  --color-background-typing-dot-default: var(--pine-color-grey-400);
 
   --number-typing-timing: 1s;
 

@@ -8,12 +8,8 @@
 
   --box-shadow-default: var(--pine-box-shadow-200);
 
-  --color-background-default: var(--pine-color-grey-900);
+  --color-background-default: var(--pine-color-grey-950);
   --color-text-default: var(--pine-color-white);
-
-  --font-size-overlay: var(--pine-font-size-085);
-
-  --line-height-overlay: var(--pine-line-height-125);
 
   --sizing-arrow-default: 6px;
   --sizing-arrow-offset: 14px;
@@ -40,8 +36,6 @@
   border-radius: var(--border-radius-overlay);
   box-shadow: var(--box-shadow-default);
   color: var(--color-text-default);
-  font-size: var(--font-size-overlay);
-  line-height: var(--line-height-overlay);
   // TODO: need to use block / none but the tooltip content width and height are needed for calculations
   opacity: 0;
   padding: var(--spacing-padding-overlay);

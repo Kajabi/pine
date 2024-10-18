@@ -22,14 +22,16 @@ const SizesAndSrcsetTemplate = (args) => html`<pds-image alt="${args.alt}" sizes
 
 export const Default = BaseTemplate.bind();
 Default.args = {
-  alt: 'Random Unsplash',
-  src: '//source.unsplash.com/320x180',
+  alt: 'Random Bear',
+  src: 'https://placebear.com/320/180',
+  height: '180',
+  width: '320'
 }
 
 export const SizesAndSrcset = SizesAndSrcsetTemplate.bind();
 SizesAndSrcset.args = {
-  alt: 'Random Unsplash',
+  alt: 'Random Bear',
   sizes: '(max-width: 450px) 150px, 600px',
-  src: '//source.unsplash.com/600x200',
-  srcset: '//source.unsplash.com/150x150 400w, //source.unsplash.com/600x200',
+  src: 'https://placebear.com/600/200',
+  srcset: 'https://placebear.com/150/150 400w, https://placebear.com/600/200',
 }

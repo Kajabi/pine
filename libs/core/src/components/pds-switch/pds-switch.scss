@@ -5,23 +5,25 @@
   --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--color-outline-focus-error);
   --box-shadow-input-toggle: 0 2px 4px 0 rgba(0, 0, 0, 0.12), 0 0 2px 0 rgba(0, 0, 0, 0.08);
 
-  --color-background-checked: var(--pine-color-grey-900);
-  --color-background-checked-hover: var(--pine-color-grey-900);
-  --color-background-disabled: var(--pine-color-grey-300);
-  --color-background-hover: var(--pine-color-grey-500);
-  --color-background-input-default: var(--pine-color-grey-400);
-  --color-input-toggle: var(--pine-color-white);
+  --color-background-checked: var(--pine-color-purple-500);
+  --color-background-checked-hover: var(--pine-color-purple-600);
+  --color-background-error: var(--pine-color-red-500);
+  --color-background-input-disabled: var(--pine-color-grey-200);
+  --color-background-input-default: var(--pine-color-grey-300);
+  --color-background-input-hover: var(--pine-color-grey-400);
+  --color-input-toggle-default: var(--pine-color-white);
+  --color-input-toggle-disabled: var(--pine-color-grey-100);
   --color-message-text: var(--pine-color-grey-700);
   --color-outline-focus: var(--pine-color-purple-300);
   --color-outline-focus-error: var(--pine-color-red-200);
   --color-text-default: var(--pine-color-grey-900);
   --color-text-disabled: var(--pine-color-grey-500);
-  --color-text-error: var(--pine-color-red-300);
+  --color-text-error: var(--pine-color-red-500);
+
+  --font-weight-label-default: var(--pine-font-weight-body-medium);
 
   --dimension-input-height: 20px;
   --dimension-input-width: 36px;
-
-  --line-height-label: var(--pine-line-height-150);
 
   --sizing-input-toggle-size: calc(var(--dimension-input-height) - (var(--spacing-input-toggle-offset) * 2));
 
@@ -47,7 +49,7 @@
   input,
   input:checked,
   input:hover:not(:disabled):not(:checked) {
-    background-color: var(--color-text-error);
+    background-color: var(--color-background-error);
   }
 
   input:focus-visible:not(:disabled):not(:checked) {
@@ -67,14 +69,13 @@ input {
   margin: 0;
   padding: 0;
   position: relative;
-  transform: translateY(2px);
   transition: var(--number-transition-timing);
   transition-property: background, border, color;
   width: var(--dimension-input-width);
 
   // switch toggle
   &::after {
-    background: var(--color-input-toggle);
+    background: var(--color-input-toggle-default);
     border-radius: 50%;
     box-shadow: var(--box-shadow-input-toggle);
     content: "";
@@ -93,7 +94,7 @@ label {
   cursor: pointer;
   display: inline-flex;
   flex-grow: 1;
-  line-height: var(--line-height-label);
+  font-weight: var(--font-weight-label-default);
   margin-inline-start: var(--spacing-label-gap-size);
 
   .pds-switch--error & {
@@ -120,12 +121,16 @@ label {
 
 // Disabled state
 input:disabled {
-  background-color: var(--color-background-disabled);
+  background-color: var(--color-background-input-disabled);
   cursor: not-allowed;
 
   ~ label {
     color: var(--color-text-disabled);
     cursor: initial;
+  }
+
+  &:hover::after {
+    background-color: var(--color-input-toggle-disabled);
   }
 
   .pds-switch__message {
@@ -135,7 +140,7 @@ input:disabled {
 
 // Hover state
 input:hover:not(:disabled) {
-  background-color: var(--color-background-hover);
+  background-color: var(--color-background-input-hover);
 }
 
  // Focus state
