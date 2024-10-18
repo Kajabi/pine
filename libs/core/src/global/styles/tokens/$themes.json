@@ -4,8 +4,8 @@
     "name": "kp",
     "$figmaStyleReferences": {},
     "selectedTokenSets": {
-      "core/core": "enabled",
-      "theme/dark": "enabled"
+      "semantic/semantic": "enabled",
+      "theme/light": "enabled"
     },
     "group": "brand"
   },
@@ -14,9 +14,7 @@
     "name": "community",
     "$figmaStyleReferences": {},
     "selectedTokenSets": {
-      "core/core": "enabled",
-      "theme/light": "disabled",
-      "theme/dark": "disabled"
+      "core/core": "enabled"
     },
     "group": "brand"
   }
