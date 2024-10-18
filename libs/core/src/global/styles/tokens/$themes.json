@@ -5,7 +5,8 @@
     "$figmaStyleReferences": {},
     "selectedTokenSets": {
       "semantic/semantic": "enabled",
-      "theme/light": "enabled"
+      "theme/light": "enabled",
+      "core/core": "enabled"
     },
     "group": "brand"
   },
