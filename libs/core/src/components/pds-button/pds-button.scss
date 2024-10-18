@@ -13,7 +13,7 @@
   --color-background-primary-default: var(--pine-color-grey-900);
   --color-background-primary-disabled: var(--pine-color-grey-100);
   --color-background-primary-hover: var(--pine-color-grey-950);
-  --color-text-primary-default: var(--pine-color-white);
+  --color-text-primary-default: var(--pine-color-text-default);
   --color-text-primary-disabled: var(--pine-color-grey-400);
   --color-outline-primary: var(--pine-color-purple-300);
 
@@ -61,7 +61,7 @@
   background-color: var(--color-background-default);
   border: var(--border-width-default) solid var(--color-border-default);
   border-radius: var(--pine-border-radius-circle);
-  color: var(--color-text-default);
+  color: var(--pine-color-text-default);
   display: flex;
   font: var(--typography-default);
   min-height: 40px;
@@ -97,7 +97,7 @@
   --color-background-default: var(--color-background-primary-default);
   --color-background-hover: var(--color-background-primary-hover);
   --color-background-disabled: var(--color-background-primary-disabled);
-  --color-text-default: var(--color-text-primary-default);
+  // --color-text-default: var(--color-text-primary-default);
   --color-text-disabled: var(--color-text-primary-disabled);
   --color-outline: var(--color-outline-primary);
 }
@@ -106,7 +106,7 @@
   --color-background-default: var(--color-background-accent-default);
   --color-background-hover: var(--color-background-accent-hover);
   --color-background-disabled: var(--color-background-accent-disabled);
-  --color-text-default: var(--color-text-accent-default);
+  // --color-text-default: var(--color-text-accent-default);
   --color-text-disabled: var(--color-text-accent-disabled);
   --color-outline: var(--color-outline-accent);
 }
@@ -115,7 +115,7 @@
   --color-background-default: var(--color-background-destructive-default);
   --color-background-hover: var(--color-background-destructive-hover);
   --color-background-disabled: var(--color-background-destructive-disabled);
-  --color-text-default: var(--color-text-destructive-default);
+  // --color-text-default: var(--color-text-destructive-default);
   --color-text-disabled: var(--color-text-destructive-disabled);
   --color-outline: var(--color-outline-destructive);
 
@@ -135,7 +135,7 @@
   --color-border-focus: var(--color-border-secondary-focus);
   --color-border-hover: var(--color-border-secondary-hover);
   --color-border-default: var(--color-border-secondary-default);
-  --color-text-default: var(--color-text-secondary-default);
+  // --color-text-default: var(--color-text-secondary-default);
   --color-text-disabled: var(--color-text-secondary-disabled);
   --color-outline: var(--color-outline-secondary);
 
@@ -155,7 +155,7 @@
   --color-background-default: transparent;
   --color-background-hover: transparent;
   --color-background-disabled: transparent;
-  --color-text-default: inherit;
+  // --color-text-default: inherit;
   border: var(--border-width-unstyled);
   margin: var(--spacing-unstyled);
   min-height: auto;

@@ -1,0 +1,10 @@
+{
+  "color": {
+    "text": {
+      "default": {
+        "$type": "color",
+        "$value": "#dd3f06"
+      }
+    }
+  }
+}

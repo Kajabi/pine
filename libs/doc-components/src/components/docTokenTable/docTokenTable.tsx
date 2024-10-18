@@ -1,5 +1,5 @@
 import React from 'react';
-import allTokenJson from '../../../../core/src/global/styles/tokens/core/core.json';
+import allTokenJson from '../../../../core/src/global/styles/tokens/base/core.json';
 
 import './docTokenTable.css';
 

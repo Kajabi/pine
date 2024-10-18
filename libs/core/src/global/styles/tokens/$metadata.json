@@ -1,6 +1,10 @@
 {
   "tokenSetOrder": [
-    "core/core",
-    "semantic/semantic"
+    "base/core",
+    "base/semantic",
+    "brand/kp",
+    "brand/community",
+    "mode/light",
+    "mode/dark"
   ]
 }
