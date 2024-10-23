@@ -1,8 +1,8 @@
 {
   "color": {
-    "text": {
+    "background": {
       "default": {
-        "value": "#dd3f06",
+        "value": "{color.purple.400}",
         "type": "color"
       }
     }

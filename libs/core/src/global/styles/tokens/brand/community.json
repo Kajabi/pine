@@ -2,8 +2,8 @@
   "color": {
     "text": {
       "default": {
-        "$type": "color",
-        "$value": "#259dcb"
+        "value": "#259dcb",
+        "type": "color"
       }
     }
   }
