@@ -6,8 +6,7 @@
     "selectedTokenSets": {
       "brand/kp": "enabled",
       "base/core": "source",
-      "base/semantic": "source",
-      "base/component/button": "source"
+      "base/semantic": "source"
     },
     "group": "brand"
   },
@@ -18,8 +17,7 @@
     "selectedTokenSets": {
       "brand/community": "enabled",
       "base/core": "source",
-      "base/semantic": "source",
-      "base/component/button": "source"
+      "base/semantic": "source"
     },
     "group": "brand"
   },
