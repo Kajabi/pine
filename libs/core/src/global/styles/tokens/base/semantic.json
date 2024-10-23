@@ -66,6 +66,10 @@
       "default": {
         "value": "{color.white}",
         "type": "color"
+      },
+      "primary": {
+        "value": "{color.blue.400}",
+        "type": "color"
       }
     },
     "border": {

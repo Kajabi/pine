@@ -2,6 +2,7 @@
   "tokenSetOrder": [
     "base/core",
     "base/semantic",
+    "base/component/button",
     "brand/kp",
     "brand/community",
     "mode/light",
