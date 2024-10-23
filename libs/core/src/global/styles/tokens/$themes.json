@@ -7,7 +7,7 @@
       "brand/kp": "enabled",
       "base/core": "source",
       "base/semantic": "source",
-      "component/button": "disabled"
+      "base/component/button": "source"
     },
     "group": "brand"
   },
@@ -19,7 +19,7 @@
       "brand/community": "enabled",
       "base/core": "source",
       "base/semantic": "source",
-      "component/button": "disabled"
+      "base/component/button": "source"
     },
     "group": "brand"
   },
@@ -30,8 +30,7 @@
     "selectedTokenSets": {
       "mode/dark": "enabled",
       "base/core": "source",
-      "base/semantic": "source",
-      "component/button": "disabled"
+      "base/semantic": "source"
     },
     "group": "mode"
   },
@@ -42,8 +41,7 @@
     "selectedTokenSets": {
       "mode/light": "enabled",
       "base/core": "source",
-      "base/semantic": "source",
-      "component/button": "disabled"
+      "base/semantic": "source"
     },
     "group": "mode"
   }

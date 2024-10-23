@@ -64,5 +64,13 @@
         "type": "color"
       }
     }
+  },
+  "button": {
+    "color": {
+      "background": {
+        "value": "{color.blue.400}",
+        "type": "color"
+      }
+    }
   }
 }
