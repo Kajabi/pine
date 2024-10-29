@@ -2,7 +2,8 @@
   "tokenSetOrder": [
     "base/core",
     "base/semantic",
-    "core/core_old",
-    "semantic/semantic_old"
+    "kajabi_products/light",
+    "archive/semantic/semantic_old",
+    "archive/core/core_old"
   ]
 }

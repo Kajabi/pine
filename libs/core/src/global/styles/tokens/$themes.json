@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "id": "ed8276e2d75aa12d4ac0ab77327a46b34cfd03a5",
+    "name": "kajabi_products",
+    "$figmaStyleReferences": {},
+    "selectedTokenSets": {
+      "base/core": "source",
+      "base/semantic": "source",
+      "kajabi_products/light": "disabled",
+      "archive/semantic/semantic_old": "disabled",
+      "archive/core/core_old": "disabled"
+    },
+    "group": "brand"
+  },
+  {
+    "id": "88bc260bfde1cb8c2c12cde5caacd704efa5ffb2",
+    "name": "light",
+    "$figmaStyleReferences": {},
+    "selectedTokenSets": {
+      "base/core": "source",
+      "base/semantic": "source",
+      "kajabi_products/light": "enabled"
+    },
+    "group": "kajabi_products_theme"
+  }
+]
