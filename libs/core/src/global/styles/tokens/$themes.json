@@ -8,7 +8,8 @@
       "base/semantic": "source",
       "component/chip": "source",
       "component/button": "source",
-      "kp/light": "enabled"
+      "kp/light": "enabled",
+      "kp/dark": "disabled"
     },
     "group": "kp"
   },
@@ -19,10 +20,21 @@
     "selectedTokenSets": {
       "base/core": "source",
       "base/semantic": "source",
-      "kp/dark": "enabled",
       "component/button": "source",
-      "component/chip": "source"
+      "component/chip": "source",
+      "kp/dark": "enabled"
     },
     "group": "kp"
+  },
+  {
+    "id": "77476290a5834f8c25e580c0068a4c273261d344",
+    "name": "KP",
+    "$figmaStyleReferences": {},
+    "selectedTokenSets": {
+      "base/core": "source",
+      "base/semantic": "source",
+      "component/button": "source"
+    },
+    "group": "theme"
   }
 ]
