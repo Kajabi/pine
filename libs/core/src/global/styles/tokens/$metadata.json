@@ -2,9 +2,9 @@
   "tokenSetOrder": [
     "base/core",
     "base/semantic",
-    "component/chip",
-    "component/button",
-    "kp/light",
-    "kp/dark"
+    "components/chip",
+    "components/button",
+    "kajabi_products/light",
+    "kajabi_products/dark"
   ]
 }

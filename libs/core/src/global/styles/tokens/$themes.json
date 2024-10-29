@@ -1,17 +1,31 @@
 [
   {
+    "id": "77476290a5834f8c25e580c0068a4c273261d344",
+    "name": "kajabi_products",
+    "$figmaStyleReferences": {},
+    "selectedTokenSets": {
+      "base/core": "source",
+      "base/semantic": "source",
+      "kajabi_products/light": "disabled",
+      "kajabi_products/dark": "disabled",
+      "components/chip": "disabled",
+      "components/button": "source"
+    },
+    "group": "brand"
+  },
+  {
     "id": "5c2c15c488dc963910f1490d92d5c45423d17e95",
     "name": "light",
     "$figmaStyleReferences": {},
     "selectedTokenSets": {
       "base/core": "source",
       "base/semantic": "source",
-      "component/chip": "source",
-      "component/button": "source",
-      "kp/light": "enabled",
-      "kp/dark": "disabled"
+      "kajabi_products/light": "enabled",
+      "kajabi_products/dark": "disabled",
+      "components/chip": "source",
+      "components/button": "source"
     },
-    "group": "kp"
+    "group": "kajabi_products_theme"
   },
   {
     "id": "f69d0bddb30f046381118ee34754b553e7492fb9",
@@ -20,21 +34,11 @@
     "selectedTokenSets": {
       "base/core": "source",
       "base/semantic": "source",
-      "component/button": "source",
-      "component/chip": "source",
-      "kp/dark": "enabled"
+      "kajabi_products/light": "disabled",
+      "kajabi_products/dark": "enabled",
+      "components/chip": "source",
+      "components/button": "source"
     },
-    "group": "kp"
-  },
-  {
-    "id": "77476290a5834f8c25e580c0068a4c273261d344",
-    "name": "KP",
-    "$figmaStyleReferences": {},
-    "selectedTokenSets": {
-      "base/core": "source",
-      "base/semantic": "source",
-      "component/button": "source"
-    },
-    "group": "theme"
+    "group": "kajabi_products_theme"
   }
 ]
