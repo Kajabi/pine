@@ -4,7 +4,7 @@
       "value": {
         "width": "{border-width.thin}",
         "style": "solid",
-        "color": "{color.border.default}"
+        "color": "{color.border.@}"
       },
       "type": "border"
     },
@@ -70,10 +70,14 @@
       "primary": {
         "value": "{color.blue.400}",
         "type": "color"
+      },
+      "accent": {
+        "value": "{color.black}",
+        "type": "color"
       }
     },
     "border": {
-      "default": {
+      "@": {
         "value": "{color.grey.300}",
         "type": "color"
       }

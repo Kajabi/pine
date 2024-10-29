@@ -1,50 +1,28 @@
 [
   {
-    "id": "08da2f2c2d322bdb9a24092eb569cbf81979d871",
-    "name": "kp",
+    "id": "5c2c15c488dc963910f1490d92d5c45423d17e95",
+    "name": "light",
     "$figmaStyleReferences": {},
     "selectedTokenSets": {
-      "brand/kp": "enabled",
       "base/core": "source",
       "base/semantic": "source",
-      "base/component/button": "source"
+      "component/chip": "source",
+      "component/button": "source",
+      "kp/light": "enabled"
     },
-    "group": "brand"
-  },
-  {
-    "id": "4c39f963116134d263bdec93bbfeb35566b15a40",
-    "name": "community",
-    "$figmaStyleReferences": {},
-    "selectedTokenSets": {
-      "brand/community": "enabled",
-      "base/core": "source",
-      "base/semantic": "source",
-      "base/component/button": "disabled"
-    },
-    "group": "brand"
+    "group": "kp"
   },
   {
     "id": "f69d0bddb30f046381118ee34754b553e7492fb9",
     "name": "dark",
     "$figmaStyleReferences": {},
     "selectedTokenSets": {
-      "mode/dark": "enabled",
       "base/core": "source",
       "base/semantic": "source",
-      "base/component/button": "disabled"
+      "kp/dark": "enabled",
+      "component/button": "source",
+      "component/chip": "source"
     },
-    "group": "mode"
-  },
-  {
-    "id": "5c2c15c488dc963910f1490d92d5c45423d17e95",
-    "name": "light",
-    "$figmaStyleReferences": {},
-    "selectedTokenSets": {
-      "mode/light": "enabled",
-      "base/core": "source",
-      "base/semantic": "source",
-      "base/component/button": "disabled"
-    },
-    "group": "mode"
+    "group": "kp"
   }
 ]

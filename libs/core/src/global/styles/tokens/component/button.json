@@ -1,0 +1,20 @@
+{
+  "button": {
+    "color": {
+      "background": {
+        "value": "{color.background.primary}",
+        "type": "color"
+      }
+    }
+  },
+  "color": {
+    "button": {
+      "backgound": {
+        "accent": {
+          "value": "{color.background.accent}",
+          "type": "color"
+        }
+      }
+    }
+  }
+}

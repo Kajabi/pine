@@ -831,5 +831,11 @@
       "value": "0.12px",
       "type": "letterSpacing"
     }
+  },
+  "dimension": {
+    "md": {
+      "value": "10px",
+      "type": "dimension"
+    }
   }
 }

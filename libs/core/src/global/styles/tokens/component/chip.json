@@ -1,0 +1,12 @@
+{
+  "color": {
+    "chip": {
+      "background": {
+        "accent": {
+          "value": "{color.blue.800}",
+          "type": "color"
+        }
+      }
+    }
+  }
+}
