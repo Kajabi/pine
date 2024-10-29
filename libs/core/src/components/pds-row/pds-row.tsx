@@ -5,6 +5,7 @@ import { BoxTShirtSizeType } from '../../utils/types';
 @Component({
   tag: 'pds-row',
   styleUrl: 'pds-row.scss',
+  shadow: true
 })
 export class PdsRow {
   /**
@@ -73,6 +74,8 @@ export class PdsRow {
       }),
     };
 
-    return <Host class={`pds-row ${rowClasses}`} style={rowInlineStyles}></Host>;
+    return (<Host class={`pds-row ${rowClasses}`} style={rowInlineStyles}>
+      <slot></slot>
+    </Host>);
   }
 }

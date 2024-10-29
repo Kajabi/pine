@@ -8,9 +8,17 @@
   margin-block-start: calc(var(--row-gap-y) * -1);
   margin-inline-end: calc(var(--row-gap-x) * -0.5);
   margin-inline-start: calc(var(--row-gap-x) * -0.5);
+
+  ::slotted(*) {
+    border: 10px solid red;
+  }
+
+  ::slotted(*) > * {
+    border: 10px solid blue;
+  }
 }
 
-.pds-row {
+:host(.pds-row) {
   display: flex;
   flex-grow: 1;
   flex-wrap: wrap;
@@ -19,6 +27,7 @@
   margin-inline-end: calc(var(--row-gap-x) * -1);
   margin-inline-start: calc(var(--row-gap-x) * -1);
 
+  // TODO: not working
   > * {
     padding-block-end: calc(var(--row-gap-y));
     padding-block-start: calc(var(--row-gap-y));
@@ -27,56 +36,64 @@
   }
 }
 
-.pds-row--no-wrap {
+// :host(.pds-row > *) {
+//   padding-block-end: calc(var(--row-gap-y));
+//   padding-block-start: calc(var(--row-gap-y));
+//   padding-inline-end: calc(var(--row-gap-x));
+//   padding-inline-start: calc(var(--row-gap-x));
+//   border: 10px solid red;
+// }
+
+:host(.pds-row--no-wrap) {
   flex-wrap: nowrap;
 }
 
-.pds-row--border {
+:host(.pds-row--border) {
   border: var(--border-default);
 }
 
 // Justify Content helpers
-.pds-justify-content-start {
+:host(.pds-justify-content-start) {
   justify-content: start;
 }
 
-.pds-justify-content-center {
+:host(.pds-justify-content-center) {
   justify-content: center;
 }
 
-.pds-justify-content-end {
+:host(.pds-justify-content-end) {
   justify-content: end;
 }
 
-.pds-justify-content-space-between {
+:host(.pds-justify-content-space-between) {
   justify-content: space-between;
 }
 
-.pds-justify-content-space-around {
+:host(.pds-justify-content-space-around) {
   justify-content: space-around;
 }
 
-.pds-justify-content-space-evenly {
+:host(.pds-justify-content-space-evenly) {
   justify-content: space-evenly;
 }
 
 // Align Items helpers
-.pds-align-items-start {
+:host(.pds-align-items-start) {
   align-items: start;
 }
 
-.pds-align-items-center {
+:host(.pds-align-items-center) {
   align-items: center;
 }
 
-.pds-align-items-end {
+:host(.pds-align-items-end) {
   align-items: end;
 }
 
-.pds-align-items-stretch {
+:host(.pds-align-items-stretch) {
   align-items: stretch;
 }
 
-.pds-align-items-baseline {
+:host(.pds-align-items-baseline) {
   align-items: baseline;
 }
