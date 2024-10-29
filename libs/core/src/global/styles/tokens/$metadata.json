@@ -1,6 +1,7 @@
 {
   "tokenSetOrder": [
     "base/core",
+    "base/semantic_ash",
     "core/core_old",
     "semantic/semantic_old"
   ]
