@@ -13,7 +13,8 @@ const basePath = `src/global/styles/tokens`;
 
 async function run() {
   const $themes = JSON.parse(await promises.readFile(`${basePath}/$themes.json`, 'utf-8'));
-  const themes = permutateThemes($themes, { separator: '_' });
+  const themes = permutateThemes($themes, { separator: '-' });
+  console.log(themes);
 	const tokenSets = [
 		...new Set(
 			Object.values(themes)
