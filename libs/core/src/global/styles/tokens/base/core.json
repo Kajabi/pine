@@ -633,39 +633,39 @@
     }
   },
   "font-weight": {
-    "thin": {
+    "100": {
       "$type": "fontWeights",
       "$value": "100"
     },
-    "extra-light": {
+    "200": {
       "$type": "fontWeights",
       "$value": "200"
     },
-    "light": {
+    "300": {
       "$type": "fontWeights",
       "$value": "300"
     },
-    "normal": {
+    "400": {
       "$type": "fontWeights",
       "$value": "400"
     },
-    "medium": {
+    "500": {
       "$type": "fontWeights",
       "$value": "500"
     },
-    "semi-bold": {
+    "600": {
       "$type": "fontWeights",
       "$value": "600"
     },
-    "bold": {
+    "700": {
       "$type": "fontWeights",
       "$value": "700"
     },
-    "extra-bold": {
+    "800": {
       "$type": "fontWeights",
       "$value": "800"
     },
-    "heavy": {
+    "900": {
       "$type": "fontWeights",
       "$value": "900"
     }

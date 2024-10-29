@@ -75,7 +75,7 @@
         "$type": "typography",
         "$value": {
           "fontFamily": "{font-family.greet}",
-          "fontWeight": "{font-weight.semi-bold}",
+          "fontWeight": "{font-weight.600}",
           "fontSize": "{font-size.200}",
           "lineHeight": "{line-height.125}"
         }
@@ -84,7 +84,7 @@
         "$type": "typography",
         "$value": {
           "fontFamily": "{font-family.greet}",
-          "fontWeight": "{font-weight.semi-bold}",
+          "fontWeight": "{font-weight.600}",
           "fontSize": "{font-size.185}",
           "lineHeight": "{line-height.125}"
         }
@@ -93,7 +93,7 @@
         "$type": "typography",
         "$value": {
           "fontFamily": "{font-family.greet}",
-          "fontWeight": "{font-weight.semi-bold}",
+          "fontWeight": "{font-weight.600}",
           "fontSize": "{font-size.157}",
           "lineHeight": "{line-height.125}"
         }
@@ -102,7 +102,7 @@
         "$type": "typography",
         "$value": {
           "fontFamily": "{font-family.greet}",
-          "fontWeight": "{font-weight.semi-bold}",
+          "fontWeight": "{font-weight.600}",
           "fontSize": "{font-size.142}",
           "lineHeight": "{line-height.125}"
         }
@@ -111,7 +111,7 @@
         "$type": "typography",
         "$value": {
           "fontFamily": "{font-family.greet}",
-          "fontWeight": "{font-weight.medium}",
+          "fontWeight": "{font-weight.500}",
           "fontSize": "{font-size.128}",
           "lineHeight": "{line-height.125}"
         }
@@ -120,7 +120,7 @@
         "$type": "typography",
         "$value": {
           "fontFamily": "{font-family.greet}",
-          "fontWeight": "{font-weight.medium}",
+          "fontWeight": "{font-weight.500}",
           "fontSize": "{font-size.116}",
           "lineHeight": "{line-height.125}"
         }
@@ -132,7 +132,7 @@
           "$type": "typography",
           "$value": {
             "fontFamily": "{font-family.inter}",
-            "fontWeight": "{font-weight.normal}",
+            "fontWeight": "{font-weight.400}",
             "fontSize": "{font-size.100}",
             "lineHeight": "{line-height.100} * 1.425"
           }
@@ -141,7 +141,7 @@
           "$type": "typography",
           "$value": {
             "fontFamily": "{font-family.inter}",
-            "fontWeight": "{font-weight.medium}",
+            "fontWeight": "{font-weight.500}",
             "fontSize": "{font-size.100}",
             "lineHeight": "{line-height.100} * 1.425"
           }
@@ -150,7 +150,7 @@
           "$type": "typography",
           "$value": {
             "fontFamily": "{font-family.inter}",
-            "fontWeight": "{font-weight.semi-bold}",
+            "fontWeight": "{font-weight.600}",
             "fontSize": "{font-size.100}",
             "lineHeight": "{line-height.100} * 1.425"
           }
@@ -159,7 +159,7 @@
           "$type": "typography",
           "$value": {
             "fontFamily": "{font-family.inter}",
-            "fontWeight": "{font-weight.bold}",
+            "fontWeight": "{font-weight.700}",
             "fontSize": "{font-size.100}",
             "lineHeight": "{line-height.100} * 1.425"
           }
@@ -170,7 +170,7 @@
           "$type": "typography",
           "$value": {
             "fontFamily": "{font-family.inter}",
-            "fontWeight": "{font-weight.normal}",
+            "fontWeight": "{font-weight.400}",
             "fontSize": "{font-size.085}",
             "lineHeight": "{line-height.100} * 1.425"
           }
@@ -179,7 +179,7 @@
           "$type": "typography",
           "$value": {
             "fontFamily": "{font-family.inter}",
-            "fontWeight": "{font-weight.medium}",
+            "fontWeight": "{font-weight.500}",
             "fontSize": "{font-size.085}",
             "lineHeight": "{line-height.100} * 1.425"
           }
@@ -188,7 +188,7 @@
           "$type": "typography",
           "$value": {
             "fontFamily": "{font-family.inter}",
-            "fontWeight": "{font-weight.bold}",
+            "fontWeight": "{font-weight.700}",
             "fontSize": "{font-size.085}",
             "lineHeight": "{line-height.100} * 1.425"
           }
@@ -199,7 +199,7 @@
           "$type": "typography",
           "$value": {
             "fontFamily": "{font-family.inter}",
-            "fontWeight": "{font-weight.normal}",
+            "fontWeight": "{font-weight.400}",
             "fontSize": "{font-size.085}",
             "lineHeight": "{line-height.100} * 1.425"
           }
@@ -208,7 +208,7 @@
           "$type": "typography",
           "$value": {
             "fontFamily": "{font-family.inter}",
-            "fontWeight": "{font-weight.semi-bold}",
+            "fontWeight": "{font-weight.600}",
             "fontSize": "{font-size.085}",
             "lineHeight": "{line-height.100} * 1.425"
           }
@@ -230,45 +230,45 @@
     "heading": {
       "h1": {
         "$type": "fontWeights",
-        "$value": "{font-weight.semi-bold}"
+        "$value": "{font-weight.600}"
       },
       "h2": {
         "$type": "fontWeights",
-        "$value": "{font-weight.semi-bold}"
+        "$value": "{font-weight.600}"
       },
       "h3": {
         "$type": "fontWeights",
-        "$value": "{font-weight.semi-bold}"
+        "$value": "{font-weight.600}"
       },
       "h4": {
         "$type": "fontWeights",
-        "$value": "{font-weight.semi-bold}"
+        "$value": "{font-weight.600}"
       },
       "h5": {
         "$type": "fontWeights",
-        "$value": "{font-weight.medium}"
+        "$value": "{font-weight.500}"
       },
       "h6": {
         "$type": "fontWeights",
-        "$value": "{font-weight.medium}"
+        "$value": "{font-weight.500}"
       }
     },
     "body": {
       "regular": {
         "$type": "fontWeights",
-        "$value": "{font-weight.normal}"
+        "$value": "{font-weight.400}"
       },
       "medium": {
         "$type": "fontWeights",
-        "$value": "{font-weight.medium}"
+        "$value": "{font-weight.500}"
       },
       "semi-bold": {
         "$type": "fontWeights",
-        "$value": "{font-weight.semi-bold}"
+        "$value": "{font-weight.600}"
       },
       "bold": {
         "$type": "fontWeights",
-        "$value": "{font-weight.bold}"
+        "$value": "{font-weight.700}"
       }
     }
   },
