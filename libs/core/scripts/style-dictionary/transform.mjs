@@ -1,9 +1,9 @@
 import { register, permutateThemes } from '@tokens-studio/sd-transforms';
-import { generateBrandFiles } from './sd-file-generators.mjs';
+import {generateCoreFiles, generateComponentFiles, generateSemanticFiles } from './generators/index.mjs';
 import StyleDictionary from 'style-dictionary';
 import { getReferences, usesReferences } from "style-dictionary/utils";
 import { promises } from 'fs';
-import { coreFilter } from './sd-filters.mjs';
+import { coreFilter } from './filters/index.mjs';
 
 register(StyleDictionary, {
   /* options here if needed */
@@ -11,10 +11,14 @@ register(StyleDictionary, {
 
 const basePath = `src/global/styles/tokens`;
 
+const componentNames = [
+  "avatar",
+];
+
 async function run() {
   const $themes = JSON.parse(await promises.readFile(`${basePath}/$themes.json`, 'utf-8'));
   const themes = permutateThemes($themes, { separator: '-' });
-  console.log(themes);
+
 	const tokenSets = [
 		...new Set(
 			Object.values(themes)
@@ -26,27 +30,21 @@ async function run() {
 	});
 
   const configs = Object.entries(themes).map(([theme, tokensets]) => ({
+    log: {
+      verbosity: 'verbose',
+    },
     source: tokensets.map(tokenset => `${basePath}/${tokenset}.json`),
     preprocessors: ['tokens-studio'], // <-- since 0.16.0 this must be explicit
     platforms: {
       css: {
         transformGroup: 'tokens-studio',
-        transforms: ['name/kebab', 'color/hex', 'ts/resolveMath', 'size/px'],
+        transforms: ['attribute/themeable', 'name/kebab', 'color/hex', 'ts/resolveMath', 'size/px'],
 				buildPath: `${basePath}/`,
         files: [
-          {
-            destination: `base/_core.scss`,
-            format: 'css/variables',
-						filter: coreFilter
-          },
-					...generateBrandFiles(theme),
+          ...generateCoreFiles(),
+					...generateSemanticFiles(theme),
+          ...generateComponentFiles(componentNames),
         ],
-				// files: tokensets.map(tokenSet => ({
-				// 	// Make sure only the tokens originating from this set are output
-				// 	filter: token => token.filePath === `${basePath}/theme/${name}.json`,
-				// 	destination: `${basePath}/theme/_${name}.scss`,
-				// 	format: 'css/variables'
-				// })),
 				prefix: 'pine'
       },
     },
@@ -72,9 +70,12 @@ async function run() {
       type: "attribute",
       transform: (token) => {
         function isPartOfEnabledSet(token) {
+          const pathRegex = new RegExp(`^${basePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`, "g");
           const set = token.filePath
-            .replace(/^tokens\//g, "")
+            .replace(pathRegex, "")
+            .replace(/^\/+/g, "")
             .replace(/.json$/g, "");
+
           return themeableSets.includes(set);
         }
 
