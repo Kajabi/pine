@@ -1,0 +1,12 @@
+{
+  "avatar": {
+    "color": {
+      "background": {
+        "container": {
+          "value": "{color.mercury.050}",
+          "type": "color"
+        }
+      }
+    }
+  }
+}

@@ -6,7 +6,7 @@
     "selectedTokenSets": {
       "base/core": "source",
       "base/semantic": "source",
-      "kajabi_products/light": "disabled",
+      "components/avatar": "source",
       "archive/semantic/semantic_old": "disabled",
       "archive/core/core_old": "disabled"
     },
@@ -19,7 +19,10 @@
     "selectedTokenSets": {
       "base/core": "source",
       "base/semantic": "source",
-      "kajabi_products/light": "enabled"
+      "components/avatar": "source",
+      "kajabi_products/light": "enabled",
+      "archive/semantic/semantic_old": "disabled",
+      "archive/core/core_old": "disabled"
     },
     "group": "kajabi_products_theme"
   }
