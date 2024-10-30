@@ -620,7 +620,7 @@
         "value": {
           "fontFamily": "{font-family.greet}",
           "fontWeight": "{font-weight.semi-bold}",
-          "fontSize": "{font-size.200}",
+          "fontSize": "{font-size.heading.1}",
           "lineHeight": "{line-height.heading}",
           "letterSpacing": "{letter-spacing.185}"
         },
@@ -630,7 +630,7 @@
         "value": {
           "fontFamily": "{font-family.greet}",
           "fontWeight": "{font-weight.semi-bold}",
-          "fontSize": "{font-size.185}",
+          "fontSize": "{font-size.heading.2}",
           "lineHeight": "{line-height.heading}",
           "letterSpacing": "{letter-spacing.171}"
         },
@@ -640,9 +640,9 @@
         "value": {
           "fontFamily": "{font-family.greet}",
           "fontWeight": "{font-weight.semi-bold}",
-          "fontSize": "{font-size.157}",
           "lineHeight": "{line-height.heading}",
-          "letterSpacing": "{letter-spacing.157}"
+          "letterSpacing": "{letter-spacing.157}",
+          "fontSize": "{font-size.heading.3}"
         },
         "type": "typography"
       },
@@ -650,7 +650,7 @@
         "value": {
           "fontFamily": "{font-family.greet}",
           "fontWeight": "{font-weight.semi-bold}",
-          "fontSize": "{font-size.142}",
+          "fontSize": "{font-size.heading.4}",
           "lineHeight": "{line-height.heading}",
           "letterSpacing": "{letter-spacing.142}"
         },
@@ -660,7 +660,7 @@
         "value": {
           "fontFamily": "{font-family.greet}",
           "fontWeight": "{font-weight.medium}",
-          "fontSize": "{font-size.128}",
+          "fontSize": "{font-size.heading.5}",
           "lineHeight": "{line-height.heading}",
           "letterSpacing": "{letter-spacing.128}"
         },
@@ -670,7 +670,7 @@
         "value": {
           "fontFamily": "{font-family.greet}",
           "fontWeight": "{font-weight.medium}",
-          "fontSize": "{font-size.116}",
+          "fontSize": "{font-size.heading.6}",
           "lineHeight": "{line-height.heading}",
           "letterSpacing": "{letter-spacing.114}"
         },
