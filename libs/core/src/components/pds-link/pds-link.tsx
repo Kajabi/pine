@@ -59,19 +59,10 @@ export class PdsLink {
   }
 
   render() {
-
     return (
-      <a
-        class={this.classNames()}
-        href={this.href}
-        id={this.componentId}
-        target={this.external ? '_blank' : undefined}
-        part="link"
-      >
+      <a class={this.classNames()} href={this.href} id={this.componentId} target={this.external ? '_blank' : undefined} part="link">
         <slot>{this.href}</slot>
-        {this.external &&
-          <pds-icon icon={launch} size={this.fontSize}></pds-icon>
-        }
+        {this.external && <pds-icon icon={launch} size={this.fontSize}></pds-icon>}
       </a>
     );
   }

@@ -1,0 +1,15 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+
+import Docs from '../docs/pds-ben.mdx';
+
+import * as stories from './pds-ben.stories.js';
+
+<Meta of={stories} />
+
+<Docs />
+
+# Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

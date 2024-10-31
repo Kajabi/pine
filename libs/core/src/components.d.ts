@@ -65,6 +65,16 @@ export namespace Components {
          */
         "variant"?: 'customer' | 'admin';
     }
+    interface PdsBen {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * A little arbitrary stringy
+         */
+        "thingy": string;
+    }
     interface PdsBox {
         /**
           * Defines the vertical alignment of the box items.
@@ -929,6 +939,12 @@ declare global {
         prototype: HTMLPdsAvatarElement;
         new (): HTMLPdsAvatarElement;
     };
+    interface HTMLPdsBenElement extends Components.PdsBen, HTMLStencilElement {
+    }
+    var HTMLPdsBenElement: {
+        prototype: HTMLPdsBenElement;
+        new (): HTMLPdsBenElement;
+    };
     interface HTMLPdsBoxElement extends Components.PdsBox, HTMLStencilElement {
     }
     var HTMLPdsBoxElement: {
@@ -1251,6 +1267,7 @@ declare global {
     interface HTMLElementTagNameMap {
         "pds-accordion": HTMLPdsAccordionElement;
         "pds-avatar": HTMLPdsAvatarElement;
+        "pds-ben": HTMLPdsBenElement;
         "pds-box": HTMLPdsBoxElement;
         "pds-button": HTMLPdsButtonElement;
         "pds-checkbox": HTMLPdsCheckboxElement;
@@ -1333,6 +1350,16 @@ declare namespace LocalJSX {
           * @defaultValue customer
          */
         "variant"?: 'customer' | 'admin';
+    }
+    interface PdsBen {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * A little arbitrary stringy
+         */
+        "thingy"?: string;
     }
     interface PdsBox {
         /**
@@ -2185,6 +2212,7 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "pds-accordion": PdsAccordion;
         "pds-avatar": PdsAvatar;
+        "pds-ben": PdsBen;
         "pds-box": PdsBox;
         "pds-button": PdsButton;
         "pds-checkbox": PdsCheckbox;
@@ -2220,6 +2248,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "pds-accordion": LocalJSX.PdsAccordion & JSXBase.HTMLAttributes<HTMLPdsAccordionElement>;
             "pds-avatar": LocalJSX.PdsAvatar & JSXBase.HTMLAttributes<HTMLPdsAvatarElement>;
+            "pds-ben": LocalJSX.PdsBen & JSXBase.HTMLAttributes<HTMLPdsBenElement>;
             "pds-box": LocalJSX.PdsBox & JSXBase.HTMLAttributes<HTMLPdsBoxElement>;
             "pds-button": LocalJSX.PdsButton & JSXBase.HTMLAttributes<HTMLPdsButtonElement>;
             "pds-checkbox": LocalJSX.PdsCheckbox & JSXBase.HTMLAttributes<HTMLPdsCheckboxElement>;
