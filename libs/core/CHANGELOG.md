@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@2.0.0...@pine-ds/core@2.1.0) (2024-10-31)
+
+
+### Bug Fixes
+
+* update border-radius and shadow ([#282](https://github.com/Kajabi/pine/issues/282)) ([88c953d](https://github.com/Kajabi/pine/commit/88c953d1d22562adee4e19489608258501d814e3))
+
+
+
+
+
 # [2.0.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@1.3.1...@pine-ds/core@2.0.0) (2024-10-14)
 
 **Note:** Version bump only for package @pine-ds/core
