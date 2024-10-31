@@ -162,19 +162,19 @@ $pine-spacing-tokens: (
 }
 
 .pds-border-radius-xs {
-  border-radius: var(--pine-border-radius-xs);
+  border-radius: var(--pine-border-radius-050);
 }
 
 .pds-border-radius-sm {
-  border-radius: var(--pine-border-radius-sm);
+  border-radius: var(--pine-border-radius-075);
 }
 
 .pds-border-radius-md {
-  border-radius: var(--pine-border-radius-md);
+  border-radius: var(--pine-border-radius-100);
 }
 
 .pds-border-radius-lg {
-  border-radius: var(--pine-border-radius-lg);
+  border-radius: var(--pine-border-radius-200);
 }
 
 .pds-border-radius-circle {
@@ -208,6 +208,23 @@ $pine-spacing-tokens: (
 
 .pds-shadow-500 {
   box-shadow: var(--pine-box-shadow-500);
+}
+
+
+.pds-shadow-xs {
+  box-shadow: var(--pine-box-shadow-050);
+}
+
+.pds-shadow-sm {
+  box-shadow: var(--pine-box-shadow-100);
+}
+
+.pds-shadow-md {
+  box-shadow: var(--pine-box-shadow-150);
+}
+
+.pds-shadow-lg {
+  box-shadow: var(--pine-box-shadow-200);
 }
 
 // Gap helpers
