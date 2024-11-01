@@ -3,7 +3,7 @@
     "color": {
       "background": {
         "container": {
-          "value": "{color.mercury.050}",
+          "value": "{color.accent.@}",
           "type": "color"
         }
       }
