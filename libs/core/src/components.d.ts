@@ -581,6 +581,14 @@ export namespace Components {
         "noWrap"?: boolean;
     }
     interface PdsSelect {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * Text to be displayed as the select label.
+         */
+        "label"?: string;
     }
     interface PdsSortable {
         /**
@@ -1869,6 +1877,14 @@ declare namespace LocalJSX {
         "noWrap"?: boolean;
     }
     interface PdsSelect {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * Text to be displayed as the select label.
+         */
+        "label"?: string;
     }
     interface PdsSortable {
         /**
