@@ -590,9 +590,21 @@ export namespace Components {
          */
         "disabled"?: boolean;
         /**
+          * Displays a message or hint below the input field.
+         */
+        "hasError"?: boolean;
+        /**
+          * Displays a message or hint below the input field.
+         */
+        "helperMessage"?: string;
+        /**
           * Text to be displayed as the select label.
          */
         "label"?: string;
+        /**
+          * Specifies the name. Submitted with the form name/value pair.
+         */
+        "name"?: string;
         /**
           * Indicates whether or not the select field is required.
          */
@@ -1894,9 +1906,21 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
+          * Displays a message or hint below the input field.
+         */
+        "hasError"?: boolean;
+        /**
+          * Displays a message or hint below the input field.
+         */
+        "helperMessage"?: string;
+        /**
           * Text to be displayed as the select label.
          */
         "label"?: string;
+        /**
+          * Specifies the name. Submitted with the form name/value pair.
+         */
+        "name"?: string;
         /**
           * Indicates whether or not the select field is required.
          */

@@ -17,18 +17,18 @@
   --color-text-placeholder-disabled: var(--pine-color-grey-400);
 
   --font-size-helper-message: var(--pine-font-size-100);
-  --font-size-input-field: var(--pine-font-size-100);
+  --font-size-select-field: var(--pine-font-size-100);
   --font-size-label: var(--pine-font-size-100);
   --font-weight-helper-message: var(--pine-font-weight-normal);
-  --font-weight-input-field: var(--pine-font-weight-normal);
+  --font-weight-select-field: var(--pine-font-weight-normal);
   --font-weight-label: var(--pine-font-weight-medium);
 
   --line-height-label: var(--pine-line-height-150);
   --line-height-helper-message: var(--pine-line-height-125);
-  --line-height-input-field: var(--pine-line-height-150);
+  --line-height-select-field: var(--pine-line-height-150);
 
   --spacing-field-padding-block: var(--pine-spacing-100);
-  --spacing-input-field-padding-inline: var(--pine-spacing-200);
+  --spacing-select-field-padding-inline: var(--pine-spacing-200);
   --spacing-label-margin-block-end: var(--pine-spacing-100);
   --spacing-margin-top-helper-message: var(--pine-spacing-100);
 
@@ -50,8 +50,21 @@ label {
 select {
   border: 1px solid var(--color-border-default);
   border-radius: 10px;
-  font-size: var(--font-size-input-field);
-  font-weight: var(--font-weight-input-field);
-  line-height: var(--line-height-input-field);
-  padding: var(--spacing-field-padding-block) var(--spacing-input-field-padding-inline);
+  font-size: var(--font-size-select-field);
+  font-weight: var(--font-weight-select-field);
+  line-height: var(--line-height-select-field);
+  padding: var(--spacing-field-padding-block) var(--spacing-select-field-padding-inline);
+}
+
+select[has-error] {
+  background-color: var(--color-background-error);
+  border-color: var(--color-border-error);
+}
+
+.pds-select__helper-message {
+  font-size: var(--font-size-helper-message);
+  font-weight: var(--font-weight-helper-message);
+  line-height: var(--line-height-helper-message);
+  margin-block-end: 0;
+  margin-block-start: var(--spacing-margin-top-helper-message);
 }
