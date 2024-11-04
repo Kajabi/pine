@@ -1,4 +1,5 @@
 import { Component, Host, h, Prop } from '@stencil/core';
+import { messageId } from '../../utils/form';
 import { PdsLabel } from '../_internal/pds-label/pds-label';
 
 @Component({
@@ -18,9 +19,24 @@ export class PdsSelect {
   @Prop() disabled?: boolean;
 
   /**
+   * Displays a message or hint below the input field.
+   */
+  @Prop() hasError?: boolean;
+
+  /**
+   * Displays a message or hint below the input field.
+   */
+  @Prop() helperMessage?: string;
+
+  /**
    * Text to be displayed as the select label.
    */
   @Prop() label?: string;
+
+  /**
+   * Specifies the name. Submitted with the form name/value pair.
+   */
+  @Prop() name?: string;
 
   /**
    * Indicates whether or not the select field is required.
@@ -32,12 +48,17 @@ export class PdsSelect {
       <Host aria-disabled={this.disabled ? 'true' : null}>
         <div class="pds-select">
           <PdsLabel htmlFor={this.componentId} text={this.label} />
-          <select class="pds-select__field" disabled={this.disabled} id={this.componentId} name="pets" required={this.required}>
+          <select class="pds-select__field" disabled={this.disabled} has-error={this.hasError} id={this.componentId} name={this.name} required={this.required}>
             <option value="">Please choose an option</option>
             <option value="dog">Dog</option>
             <option value="cat">Cat</option>
             <option value="hamster">Hamster</option>
           </select>
+          {this.helperMessage && (
+            <p class="pds-select__helper-message" id={messageId(this.componentId, 'helper')}>
+              {this.helperMessage}
+            </p>
+          )}
         </div>
       </Host>
     );
