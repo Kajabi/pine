@@ -586,9 +586,17 @@ export namespace Components {
          */
         "componentId": string;
         /**
+          * Indicates whether or not the select field is disabled.
+         */
+        "disabled"?: boolean;
+        /**
           * Text to be displayed as the select label.
          */
         "label"?: string;
+        /**
+          * Indicates whether or not the select field is required.
+         */
+        "required"?: boolean;
     }
     interface PdsSortable {
         /**
@@ -1882,9 +1890,17 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
+          * Indicates whether or not the select field is disabled.
+         */
+        "disabled"?: boolean;
+        /**
           * Text to be displayed as the select label.
          */
         "label"?: string;
+        /**
+          * Indicates whether or not the select field is required.
+         */
+        "required"?: boolean;
     }
     interface PdsSortable {
         /**
