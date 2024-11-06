@@ -5,6 +5,12 @@
         "value": "#555555",
         "type": "color"
       }
+    },
+    "brand": {
+      "@": {
+        "value": "{color.mercury.500}",
+        "type": "color"
+      }
     }
   }
 }
