@@ -720,74 +720,74 @@
       "type": "lineHeights"
     }
   },
-  "spacing": {
+  "dimension": {
     "0": {
       "value": "0",
-      "type": "spacing"
+      "type": "dimension"
     },
     "100": {
       "value": "8px",
-      "type": "spacing"
+      "type": "dimension"
     },
     "150": {
       "value": "12px",
-      "type": "spacing"
+      "type": "dimension"
     },
     "200": {
       "value": "16px",
-      "type": "spacing"
+      "type": "dimension"
     },
     "250": {
       "value": "20px",
-      "type": "spacing"
+      "type": "dimension"
     },
     "300": {
       "value": "24px",
-      "type": "spacing"
+      "type": "dimension"
     },
     "350": {
       "value": "28px",
-      "type": "spacing"
+      "type": "dimension"
     },
     "400": {
       "value": "32px",
-      "type": "spacing"
+      "type": "dimension"
     },
     "450": {
       "value": "36px",
-      "type": "spacing"
+      "type": "dimension"
     },
     "500": {
       "value": "40px",
-      "type": "spacing"
+      "type": "dimension"
     },
     "550": {
       "value": "44px",
-      "type": "spacing"
+      "type": "dimension"
     },
     "600": {
       "value": "48px",
-      "type": "spacing"
+      "type": "dimension"
     },
     "650": {
       "value": "52px",
-      "type": "spacing"
+      "type": "dimension"
     },
     "700": {
       "value": "56px",
-      "type": "spacing"
+      "type": "dimension"
     },
     "750": {
       "value": "60px",
-      "type": "spacing"
+      "type": "dimension"
     },
     "800": {
       "value": "64px",
-      "type": "spacing"
+      "type": "dimension"
     },
     "050": {
       "value": "4px",
-      "type": "spacing"
+      "type": "dimension"
     }
   },
   "letter-spacing": {
