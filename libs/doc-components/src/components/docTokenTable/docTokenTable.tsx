@@ -1,11 +1,11 @@
 import React from 'react';
-import allTokenJson from '../../../../core/src/global/styles/tokens/core/core.json';
+import allTokenJson from '../../../../core/src/global/styles/tokens/base/core.json';
 
 import './docTokenTable.css';
 
 interface TokenEntry {
-  $value: string;
-  $type: string;
+  value: string;
+  type: string;
 }
 
 interface Token {
@@ -70,19 +70,19 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category }) => {
       const tokenKeyName = parentKey ? `${parentKey}-${key}` : key;
       const cssVariableName =  `--pine-${category}-${tokenKeyName}`;
 
-      if ('$value' in token) {
+      if ('value' in token) {
         let cssPropertyValue: string | undefined;
-        cssPropertyValue = token.$value as string;
+        cssPropertyValue = token.value as string;
 
-        if (typeof token.$value === 'object') {
-          if ('$value' in token.$value) {
-            cssPropertyValue = token.$value.$value as string;
+        if (typeof token.value === 'object') {
+          if ('value' in token.value) {
+            cssPropertyValue = token.value.value as string;
           }
-          else if (token.$type === 'boxShadow') {
-            if (Array.isArray(token.$value)) {
-              cssPropertyValue = (token.$value as string[]).map(buildValue).join(', ');
+          else if (token.type === 'boxShadow') {
+            if (Array.isArray(token.value)) {
+              cssPropertyValue = (token.value as string[]).map(buildValue).join(', ');
             } else {
-              cssPropertyValue = buildValue(token.$value);
+              cssPropertyValue = buildValue(token.value);
             }
           }
         }
