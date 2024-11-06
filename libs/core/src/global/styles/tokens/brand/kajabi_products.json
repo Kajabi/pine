@@ -1,0 +1,16 @@
+{
+  "color": {
+    "accent": {
+      "@": {
+        "$type": "color",
+        "$value": "#555555"
+      }
+    },
+    "brand": {
+      "@": {
+        "$type": "color",
+        "$value": "{color.mercury.500}"
+      }
+    }
+  }
+}

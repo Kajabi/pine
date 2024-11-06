@@ -1,0 +1,10 @@
+{
+  "color": {
+    "accent": {
+      "@": {
+        "$type": "color",
+        "$value": "#FF0000"
+      }
+    }
+  }
+}

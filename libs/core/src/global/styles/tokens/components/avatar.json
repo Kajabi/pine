@@ -1,0 +1,12 @@
+{
+  "avatar": {
+    "color": {
+      "background": {
+        "container": {
+          "$type": "color",
+          "$value": "{color.accent.@}"
+        }
+      }
+    }
+  }
+}
