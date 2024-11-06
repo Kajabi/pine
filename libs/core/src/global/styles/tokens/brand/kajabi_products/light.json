@@ -1,8 +1,10 @@
 {
   "color": {
     "accent": {
-      "value": "#FFFFCA",
-      "type": "color"
+      "@": {
+        "value": "#FFFFCA",
+        "type": "color"
+      }
     }
   }
 }
