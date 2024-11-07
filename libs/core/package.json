@@ -57,7 +57,7 @@
   },
   "dependencies": {
     "@pine-ds/icons": "*",
-    "@stencil/core": "^4.20.0",
+    "@stencil/core": "4.22.2",
     "sortablejs": "^1.15.0",
     "tslib": "^2.6.2"
   },
