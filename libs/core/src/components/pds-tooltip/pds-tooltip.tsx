@@ -1,4 +1,4 @@
-import { Component, Element, Event, Host, Prop, State, h, EventEmitter, Method, Watch } from '@stencil/core';
+import { Component, Element, Host, Prop, State, h, Method, Watch } from '@stencil/core';
 import {
   positionTooltip
 } from '../../utils/overlay';
