@@ -10,7 +10,7 @@ export const generateSemanticFiles = (theme) => {
   filesArr.push({
     format,
     filter: semanticFilter(true),
-    destination: `brand/${themeName}/output/${themeName.toLowerCase()}-${mode}.semantic.scss`,
+    destination: `brand/${themeName}/styles/${mode}.scss`,
   });
 
 
@@ -18,7 +18,7 @@ export const generateSemanticFiles = (theme) => {
   filesArr.push({
     format,
     filter: semanticFilter(false),
-    destination: `brand/${themeName}/output/${themeName}.scss`,
+    destination: `brand/${themeName}/styles/semantic.scss`,
   });
 
   return filesArr;
