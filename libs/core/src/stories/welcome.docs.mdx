@@ -2,6 +2,22 @@ import { Meta, Story } from '@storybook/blocks';
 
 <Meta title="Welcome"  />
 
+<form action='/'>
+<pds-input component-id="pds-input-required-example" label="Name" type="email" required="true" value="Frank Dux"></pds-input>
+<pds-checkbox component-id="default" label="Checkbox"></pds-checkbox>
+<pds-radio component-id="default" label="Radio"></pds-radio>
+<pds-textarea name="Default" label="Textarea" component-id="textarea-default"></pds-textarea>
+<div>
+	<pds-switch
+		component-id="pds-switch-default-example"
+		label="Switch"
+		name="pds-switch-default"
+		type="checkbox"
+	></pds-switch>
+</div>
+<button type="submit">submit</button>
+</form>
+
 # Building with Pine
 Our design system is the ultimate source of truth, offering a comprehensive and well-structured set of guidelines, components, and resources that empower designers and developers to create exceptional experiences for all Kajabi entrepreneurs. By adhering to our system, we can ensure a consistent, unified, and high-quality user experience across all touchpoints within the Kajabi platform.
 

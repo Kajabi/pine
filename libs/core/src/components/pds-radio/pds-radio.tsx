@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
+import { AttachInternals, Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
 import { PdsLabel } from '../_internal/pds-label/pds-label';
 import { danger } from '@pine-ds/icons/icons';
@@ -7,6 +7,7 @@ import { danger } from '@pine-ds/icons/icons';
   tag: 'pds-radio',
   styleUrls: ['../../global/styles/base.scss', 'pds-radio.scss'],
   scoped: true,
+  formAssociated: true
 })
 export class PdsRadio {
   /**
@@ -68,6 +69,8 @@ export class PdsRadio {
    */
   @Event() pdsRadioChange: EventEmitter<boolean>;
 
+  @AttachInternals() internals: ElementInternals;
+
   private handleRadioChange = (e: Event) => {
     if (this.disabled) {
       return;
@@ -77,6 +80,7 @@ export class PdsRadio {
     const isChecked = target.checked;
 
     this.pdsRadioChange.emit(isChecked);
+    this.internals.setFormValue(isChecked ? this.value : '');
   }
 
   private classNames() {
@@ -93,6 +97,7 @@ export class PdsRadio {
   }
 
   render() {
+    // console.log('radio internals', this.internals);
     return (
       <Host class={this.classNames()}>
         <input
