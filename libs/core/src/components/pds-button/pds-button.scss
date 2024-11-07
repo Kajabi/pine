@@ -4,24 +4,21 @@
   --color-border-focus: transparent;
   --color-border-hover: transparent;
 
-
-  // secondary
-  --color-border-secondary-focus: var(--pine-color-grey-300);
-
-  --typography-default: var(--pine-font-weight-body-medium) var(--pine-font-size-100)/var(--pine-line-height-150) var(--pine-font-family-greet);
-
   display: inline-flex;
   vertical-align: middle;
 }
 
 .pds-button {
   align-items: center;
-  background-color: var(--pine-color-background-default);
+  background-color: var(--color-background-default);
   border: var(--pine-border);
   border-radius: var(--pine-border-radius-round);
   color: var(--color-text-default); // Set in the variant classes below
   display: flex;
-  font: var(--typography-default);
+  font-family: var(--pine-font-family-greet);
+  font-size: var(--pine-font-size-body-md);
+  font-weight: var(--pine-font-weight-medium);
+  line-height: var(--pine-line-height-body);
   min-height: 40px;
   padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
 
@@ -64,8 +61,8 @@
   --color-background-default: var(--pine-color-accent);
   --color-background-hover: var(--pine-color-accent-hover);
   --color-background-disabled: var(--pine-color-accent-disabled);
-  --color-text-default: var(--pine-color-text-accent);
-  --color-text-disabled: var(--pine-color-text-accent-disabled);
+  --color-text-default: var(--pine-color-text-primary);
+  --color-text-disabled: var(--pine-color-text-primary-disabled);
   --color-outline: var(--pine-color-focus-ring);
 }
 
@@ -73,8 +70,8 @@
   --color-background-default: var(--pine-color-danger);
   --color-background-hover: var(--pine-color-danger-hover);
   --color-background-disabled: var(--pine-color-danger-disabled);
-  --color-text-default: var(--pine-color-text-danger-default);
-  --color-text-disabled: var(--pine-color-text-danger-disabled);
+  --color-text-default: var(--pine-color-text-primary);
+  --color-text-disabled: var(--pine-color-text-primary-disabled);
   --color-outline: var(--pine-color-focus-ring-danger);
 
   &:focus-visible {
@@ -90,7 +87,7 @@
   --color-background-hover: transparent;
   --color-background-disabled: transparent;
   --color-border-disabled: var(--pine-color-border-disabled);
-  --color-border-focus: var(--color-border-secondary-focus);
+  --color-border-focus: var(--pine-color-border);
   --color-border-hover: var(--pine-color-border-hover);
   --color-border-default: var(--pine-color-border);
   --color-text-default: var(--pine-color-text-secondary);
@@ -114,7 +111,7 @@
   --color-background-hover: transparent;
   --color-background-disabled: transparent;
   --color-text-default: inherit;
-  border: var(--pine-border-none);
+  border-width: var(--pine-dimension-none);
   margin: var(--pine-dimension-none);
   min-height: auto;
   padding: var(--pine-dimension-none);
