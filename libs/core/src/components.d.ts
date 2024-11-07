@@ -834,6 +834,11 @@ export namespace Components {
          */
         "htmlContent": boolean;
         /**
+          * Sets the maximum width of the tooltip content
+          * @defaultValue "352px"
+         */
+        "maxWidth": string;
+        /**
           * Determines whether or not the tooltip is visible
           * @defaultValue false
          */
@@ -911,10 +916,6 @@ export interface PdsTableRowCustomEvent<T> extends CustomEvent<T> {
 export interface PdsTextareaCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsTextareaElement;
-}
-export interface PdsTooltipCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLPdsTooltipElement;
 }
 declare global {
     interface HTMLPdsAccordionElement extends Components.PdsAccordion, HTMLStencilElement {
@@ -1230,19 +1231,7 @@ declare global {
         prototype: HTMLPdsTextareaElement;
         new (): HTMLPdsTextareaElement;
     };
-    interface HTMLPdsTooltipElementEventMap {
-        "pdsTooltipHide": any;
-        "pdsTooltipShow": any;
-    }
     interface HTMLPdsTooltipElement extends Components.PdsTooltip, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLPdsTooltipElementEventMap>(type: K, listener: (this: HTMLPdsTooltipElement, ev: PdsTooltipCustomEvent<HTMLPdsTooltipElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLPdsTooltipElementEventMap>(type: K, listener: (this: HTMLPdsTooltipElement, ev: PdsTooltipCustomEvent<HTMLPdsTooltipElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsTooltipElement: {
         prototype: HTMLPdsTooltipElement;
@@ -2153,13 +2142,10 @@ declare namespace LocalJSX {
          */
         "htmlContent"?: boolean;
         /**
-          * Emitted after a tooltip is closed
+          * Sets the maximum width of the tooltip content
+          * @defaultValue "352px"
          */
-        "onPdsTooltipHide"?: (event: PdsTooltipCustomEvent<any>) => void;
-        /**
-          * Emitted after a tooltip is shown
-         */
-        "onPdsTooltipShow"?: (event: PdsTooltipCustomEvent<any>) => void;
+        "maxWidth"?: string;
         /**
           * Determines whether or not the tooltip is visible
           * @defaultValue false
