@@ -15,7 +15,7 @@ if (docsJson) { setStencilDocJson(docsJson) }
 
 const preview = {
   parameters: {
-    actions: { argTypesRegex: "^on[A-Z].*" },
+    actions: { argTypesRegex: '^on.*' },
     options: {
       storySort: {
         method: 'alphabetical',
@@ -24,16 +24,20 @@ const preview = {
       },
     }
   },
+
   controls: {
     matchers: {
       color: /(background|color)$/i,
       date: /Date$/,
     },
   },
+
   docs: {
     extractArgTypes,
     extractComponentDescription,
-  }
+  },
+
+  tags: ['autodocs']
 }
 
 export default preview;
