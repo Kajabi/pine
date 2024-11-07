@@ -27,7 +27,7 @@
   ::slotted([slot="content"]) {
     display: block;
     white-space: normal;
-    width: var(--sizing-width-default);
+    max-width: var(--sizing-width-default);
   }
 }
 
@@ -42,6 +42,7 @@
   position: absolute;
   visibility: hidden;
   width: max-content;
+  max-width: var(--sizing-width-default);
 
   .pds-tooltip--is-open & {
     // TODO: need to use block / none but the tooltip content width and height are needed for calculations
