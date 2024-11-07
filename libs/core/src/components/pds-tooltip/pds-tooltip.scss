@@ -26,8 +26,8 @@
 
   ::slotted([slot="content"]) {
     display: block;
-    white-space: normal;
     max-width: var(--sizing-width-default);
+    white-space: normal;
   }
 }
 
@@ -37,12 +37,12 @@
   box-shadow: var(--box-shadow-default);
   color: var(--color-text-default);
   // TODO: need to use block / none but the tooltip content width and height are needed for calculations
+  max-width: var(--sizing-width-default);
   opacity: 0;
   padding: var(--spacing-padding-overlay);
   position: absolute;
   visibility: hidden;
   width: max-content;
-  max-width: var(--sizing-width-default);
 
   .pds-tooltip--is-open & {
     // TODO: need to use block / none but the tooltip content width and height are needed for calculations
