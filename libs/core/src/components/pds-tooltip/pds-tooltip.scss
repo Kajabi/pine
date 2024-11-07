@@ -26,8 +26,8 @@
 
   ::slotted([slot="content"]) {
     display: block;
+    max-width: var(--sizing-width-default);
     white-space: normal;
-    width: var(--sizing-width-default);
   }
 }
 
@@ -37,6 +37,7 @@
   box-shadow: var(--box-shadow-default);
   color: var(--color-text-default);
   // TODO: need to use block / none but the tooltip content width and height are needed for calculations
+  max-width: var(--sizing-width-default);
   opacity: 0;
   padding: var(--spacing-padding-overlay);
   position: absolute;

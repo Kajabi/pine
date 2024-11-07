@@ -17,7 +17,7 @@ describe('pds-tooltip', () => {
           <span class="pds-tooltip__trigger">
             <slot></slot>
           </span>
-          <div class="pds-tooltip__content" aria-hidden="true" aria-live="off" role="tooltip" style="top: 50%; left: calc(0px + 8px); transform: translateY(-50%);">
+          <div class="pds-tooltip__content" aria-hidden="true" aria-live="off" role="tooltip" style="max-width: 352px; top: 50%; left: calc(0px + 8px); transform: translateY(-50%);">
             <slot name="content"></slot>
           </div>
         </div>
@@ -175,4 +175,19 @@ describe('pds-tooltip', () => {
 
     expect(element?.shadowRoot?.querySelector('.pds-tooltip')).not.toHaveClass('pds-tooltip--is-open');
   })
+
+  it('should apply maxWidth to tooltip content', async () => {
+    const maxWidthValue = '400px';
+    const page = await newSpecPage({
+      components: [PdsTooltip],
+      html: `
+        <pds-tooltip max-width="${maxWidthValue}" content="Tooltip content">
+          <pds-button variant="secondary">Secondary</pds-button>
+        </pds-tooltip>`
+    });
+
+    const contentElement = page.root?.shadowRoot?.querySelector('.pds-tooltip__content') as HTMLElement;
+
+    expect(contentElement.style.maxWidth).toBe(maxWidthValue);
+  });
 });

@@ -1,4 +1,4 @@
-import { Component, Element, Event, Host, Prop, State, h, EventEmitter, Method, Watch } from '@stencil/core';
+import { Component, Element, Host, Prop, State, h, Method, Watch } from '@stencil/core';
 import {
   positionTooltip
 } from '../../utils/overlay';
@@ -68,6 +68,12 @@ export class PdsTooltip {
     | 'left-end' = 'right';
 
   /**
+   * Sets the maximum width of the tooltip content
+   * @defaultValue "352px"
+   */
+  @Prop() maxWidth: string = '352px';
+
+  /**
    * Determines whether or not the tooltip is visible
    * @defaultValue false
    */
@@ -81,16 +87,6 @@ export class PdsTooltip {
       this.handleHide();
     }
   }
-
-  /**
-   * Emitted after a tooltip is closed
-   */
-  @Event() pdsTooltipHide: EventEmitter;
-
-  /**
-   * Emitted after a tooltip is shown
-   */
-  @Event() pdsTooltipShow: EventEmitter;
 
   componentWillLoad() {
     if (this.opened) {
@@ -129,12 +125,10 @@ export class PdsTooltip {
 
   private handleHide = () => {
     this.hideTooltip();
-    this.pdsTooltipHide.emit();
   };
 
   private handleShow = () => {
     this.showTooltip();
-    this.pdsTooltipShow.emit();
   };
 
   render() {
@@ -167,6 +161,7 @@ export class PdsTooltip {
             id={this.componentId}
             ref={(el) => (this.contentEl = el)}
             role="tooltip"
+            style={{ maxWidth: this.maxWidth }}
           >
             <slot
               name="content"

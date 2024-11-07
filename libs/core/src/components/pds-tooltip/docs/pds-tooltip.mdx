@@ -112,6 +112,18 @@ By default the arrow is visible but it can be hidden by disabling it when `has-a
   <pds-tooltip content="this is tooltip content" has-arrow="false" placement="right">text</pds-tooltip>
 </DocCanvas>
 
+
+### Width/Sizing
+The `maxWidth` prop allows for adjust the maximum width for the tooltip content. The default max width is 352px, but it can be customized as needed by passing a new pixel value.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsTooltip content="This is long tooltip content to demonstrate how the max-width can be used to expand or narrow the width of the tooltip content to fit one\'s use case and content needs. This example uses 520px to create a bit more width for this amount of content." max-width="520px" placement="right">text</PdsTooltip>',
+    webComponent: '<pds-tooltip content="This is long tooltip content to demonstrate how the max-width can be used to expand or narrow the width of the tooltip content to fit one\'s use case and content needs. This example uses 520px to create a bit more width for this amount of content." max-width="520px" placement="right">text</pds-tooltip>'
+}}>
+  <pds-tooltip content="This is long tooltip content to demonstrate how the max-width can be used to expand or narrow the width of the tooltip content to fit one's use case and content needs. This example uses 520px to create a bit more width for this amount of content." max-width="520px" placement="right">text</pds-tooltip>
+</DocCanvas>
+
 ## Additional Resources
 
 [W3 Aria Tooltip Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/)
