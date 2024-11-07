@@ -1,54 +1,12 @@
 :host {
-  --border-radius-default: var(--pine-border-radius-round);
-
-  --border-width-default: var(--pine-border-width-thin);
-  --border-width-unstyled: var(--pine-border-radius-0);
-
   --color-border-default: transparent;
   --color-border-disabled: transparent;
   --color-border-focus: transparent;
   --color-border-hover: transparent;
 
-  // primary
-  --color-background-primary-default: var(--pine-color-grey-900);
-  --color-background-primary-disabled: var(--pine-color-grey-100);
-  --color-background-primary-hover: var(--pine-color-grey-950);
-  --color-text-primary-default: var(--pine-color-white);
-  --color-text-primary-disabled: var(--pine-color-grey-400);
-  --color-outline-primary: var(--pine-color-purple-300);
 
   // secondary
-  --color-background-secondary-hover: var(--pine-color-grey-050);
-  --color-border-secondary-default: var(--pine-color-grey-400);
-  --color-border-secondary-disabled: var(--pine-color-grey-300);
   --color-border-secondary-focus: var(--pine-color-grey-300);
-  --color-border-secondary-hover: var(--pine-color-grey-500);
-  --color-text-secondary-default: var(--pine-color-grey-800);
-  --color-text-secondary-disabled: var(--pine-color-grey-400);
-  --color-outline-secondary: var(--pine-color-purple-300);
-
-  // accent
-  --color-background-accent-default: var(--pine-color-purple-500);
-  --color-background-accent-disabled: var(--pine-color-purple-100);
-  --color-background-accent-hover: var(--pine-color-purple-600);
-  --color-text-accent-default: var(--pine-color-white);
-  --color-text-accent-disabled: var(--pine-color-purple-300);
-  --color-outline-accent: var(--pine-color-purple-300);
-
-  // destructive
-  --color-background-destructive-default: var(--pine-color-red-500);
-  --color-background-destructive-disabled: var(--pine-color-red-100);
-  --color-background-destructive-hover: var(--pine-color-red-600);
-  --color-text-destructive-default: var(--pine-color-white);
-  --color-text-destructive-disabled: var(--pine-color-red-300);
-  --color-outline-destructive: var(--pine-color-red-300);
-
-  --spacing-disclosure-icon-margin-inline-end: var(--pine-spacing-0);
-  --spacing-disclosure-margin-inline-start: var(--pine-spacing-100);
-  --spacing-icon-margin-inline-end: var(--pine-spacing-100);
-  --spacing-padding-block: var(--pine-spacing-100);
-  --spacing-padding-inline: var(--pine-spacing-200);
-  --spacing-unstyled: var(--pine-spacing-0);
 
   --typography-default: var(--pine-font-weight-body-medium) var(--pine-font-size-100)/var(--pine-line-height-150) var(--pine-font-family-greet);
 
@@ -58,19 +16,19 @@
 
 .pds-button {
   align-items: center;
-  background-color: var(--color-background-default);
-  border: var(--border-width-default) solid var(--color-border-default);
-  border-radius: var(--pine-border-radius-circle);
-  color: var(--color-text-default);
+  background-color: var(--pine-color-background-default);
+  border: var(--pine-border);
+  border-radius: var(--pine-border-radius-round);
+  color: var(--color-text-default); // Set in the variant classes below
   display: flex;
   font: var(--typography-default);
   min-height: 40px;
-  padding: var(--spacing-padding-block) var(--spacing-padding-inline);
+  padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
 
   pds-icon {
     color: currentColor;
     fill: currentColor;
-    margin-inline-end: var(--spacing-icon-margin-inline-end);
+    margin-inline-end: var(--pine-dimension-xs);
   }
 
   &:hover {
@@ -79,7 +37,7 @@
   }
 
   &:focus-visible {
-    --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
+    --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
     border-color: var(--color-border-focus);
     // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
     box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
@@ -94,33 +52,33 @@
 }
 
 .pds-button--primary {
-  --color-background-default: var(--color-background-primary-default);
-  --color-background-hover: var(--color-background-primary-hover);
-  --color-background-disabled: var(--color-background-primary-disabled);
-  --color-text-default: var(--color-text-primary-default);
-  --color-text-disabled: var(--color-text-primary-disabled);
-  --color-outline: var(--color-outline-primary);
+  --color-background-default: var(--pine-color-primary);
+  --color-background-hover: var(--pine-color-primary-hover);
+  --color-background-disabled: var(--pine-color-primary-disabled);
+  --color-text-default: var(--pine-color-text-primary);
+  --color-text-disabled: var(--pine-color-text-primary-disabled);
+  --color-outline: var(--pine-color-focus-ring);
 }
 
 .pds-button--accent {
-  --color-background-default: var(--color-background-accent-default);
-  --color-background-hover: var(--color-background-accent-hover);
-  --color-background-disabled: var(--color-background-accent-disabled);
-  --color-text-default: var(--color-text-accent-default);
-  --color-text-disabled: var(--color-text-accent-disabled);
-  --color-outline: var(--color-outline-accent);
+  --color-background-default: var(--pine-color-accent);
+  --color-background-hover: var(--pine-color-accent-hover);
+  --color-background-disabled: var(--pine-color-accent-disabled);
+  --color-text-default: var(--pine-color-text-accent);
+  --color-text-disabled: var(--pine-color-text-accent-disabled);
+  --color-outline: var(--pine-color-focus-ring);
 }
 
 .pds-button--destructive {
-  --color-background-default: var(--color-background-destructive-default);
-  --color-background-hover: var(--color-background-destructive-hover);
-  --color-background-disabled: var(--color-background-destructive-disabled);
-  --color-text-default: var(--color-text-destructive-default);
-  --color-text-disabled: var(--color-text-destructive-disabled);
-  --color-outline: var(--color-outline-destructive);
+  --color-background-default: var(--pine-color-danger);
+  --color-background-hover: var(--pine-color-danger-hover);
+  --color-background-disabled: var(--pine-color-danger-disabled);
+  --color-text-default: var(--pine-color-text-danger-default);
+  --color-text-disabled: var(--pine-color-text-danger-disabled);
+  --color-outline: var(--pine-color-focus-ring-danger);
 
   &:focus-visible {
-    --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--color-background-destructive-default);
+    --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-danger);
     box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
     outline: none;
   }
@@ -131,23 +89,23 @@
   --color-background-default: transparent;
   --color-background-hover: transparent;
   --color-background-disabled: transparent;
-  --color-border-disabled: var(--color-border-secondary-disabled);
+  --color-border-disabled: var(--pine-color-border-disabled);
   --color-border-focus: var(--color-border-secondary-focus);
-  --color-border-hover: var(--color-border-secondary-hover);
-  --color-border-default: var(--color-border-secondary-default);
-  --color-text-default: var(--color-text-secondary-default);
-  --color-text-disabled: var(--color-text-secondary-disabled);
-  --color-outline: var(--color-outline-secondary);
+  --color-border-hover: var(--pine-color-border-hover);
+  --color-border-default: var(--pine-color-border);
+  --color-text-default: var(--pine-color-text-secondary);
+  --color-text-disabled: var(--pine-color-text-secondary-disabled);
+  --color-outline: var(--pine-color-focus-ring);
 
   &:hover {
-    background-color: var(--color-background-secondary-hover);
+    background-color: var(--pine-color-secondary-hover);
   }
 }
 
 .pds-button--disclosure {
   pds-icon {
-    margin-inline-end: var(--spacing-disclosure-icon-margin-inline-end);
-    margin-inline-start: var(--spacing-disclosure-margin-inline-start);
+    margin-inline-end: var(--pine-dimension-none);
+    margin-inline-start: var(--pine-dimension-xs);
   }
 }
 
@@ -156,9 +114,9 @@
   --color-background-hover: transparent;
   --color-background-disabled: transparent;
   --color-text-default: inherit;
-  border: var(--border-width-unstyled);
-  margin: var(--spacing-unstyled);
+  border: var(--pine-border-none);
+  margin: var(--pine-dimension-none);
   min-height: auto;
-  padding: var(--spacing-unstyled);
+  padding: var(--pine-dimension-none);
   width: inherit;
 }
