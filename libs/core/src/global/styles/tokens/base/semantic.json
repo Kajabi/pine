@@ -72,6 +72,10 @@
         "disabled": {
           "value": "{color.grey.100}",
           "type": "color"
+        },
+        "hover": {
+          "value": "{color.grey.050}",
+          "type": "color"
         }
       }
     },
