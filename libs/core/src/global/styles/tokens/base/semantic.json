@@ -589,5 +589,15 @@
       "value": "{dimension.600}",
       "type": "dimension"
     }
+  },
+  "font-family": {
+    "heading": {
+      "value": "{font-family.greet}",
+      "type": "fontFamilies"
+    },
+    "body": {
+      "value": "{font-family.inter}",
+      "type": "fontFamilies"
+    }
   }
 }
