@@ -19,6 +19,11 @@ export class PdsSelect {
   @Prop() disabled?: boolean;
 
   /**
+   * Specifies the error message and provides an error-themed treatment to the field.
+   */
+  @Prop() errorMessage?: string;
+
+  /**
    * Displays a message or hint below the input field.
    */
   @Prop() hasError?: boolean;
@@ -36,7 +41,12 @@ export class PdsSelect {
   /**
    * Specifies the name. Submitted with the form name/value pair.
    */
-  @Prop() name?: string;
+  @Prop() name!: string;
+
+  /**
+   * An array of options to be rendered as select options.
+   */
+  @Prop() options!: { value: string; label: string }[];
 
   /**
    * Indicates whether or not the select field is required.
@@ -48,15 +58,21 @@ export class PdsSelect {
       <Host aria-disabled={this.disabled ? 'true' : null}>
         <div class="pds-select">
           <PdsLabel htmlFor={this.componentId} text={this.label} />
-          <select class="pds-select__field" disabled={this.disabled} has-error={this.hasError} id={this.componentId} name={this.name} required={this.required}>
-            <option value="">Please choose an option</option>
-            <option value="dog">Dog</option>
-            <option value="cat">Cat</option>
-            <option value="hamster">Hamster</option>
+          <select class={`pds-select__field ${this.hasError ? 'has-error' : ''}`} disabled={this.disabled} id={this.componentId} name={this.name} required={this.required}>
+            {this.options?.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </select>
           {this.helperMessage && (
             <p class="pds-select__helper-message" id={messageId(this.componentId, 'helper')}>
               {this.helperMessage}
+            </p>
+          )}
+          {this.errorMessage && (
+            <p class="pds-select__error-message" id={messageId(this.componentId, 'error')} aria-live="assertive">
+              {this.errorMessage}
             </p>
           )}
         </div>

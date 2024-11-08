@@ -56,15 +56,20 @@ select {
   padding: var(--spacing-field-padding-block) var(--spacing-select-field-padding-inline);
 }
 
-select[has-error] {
+.pds-select .has-error {
   background-color: var(--color-background-error);
   border-color: var(--color-border-error);
 }
 
+.pds-select__error-message,
 .pds-select__helper-message {
   font-size: var(--font-size-helper-message);
   font-weight: var(--font-weight-helper-message);
   line-height: var(--line-height-helper-message);
   margin-block-end: 0;
   margin-block-start: var(--spacing-margin-top-helper-message);
+}
+
+.pds-select__error-message {
+  color: var(--color-text-error);
 }
