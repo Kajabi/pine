@@ -590,6 +590,10 @@ export namespace Components {
          */
         "disabled"?: boolean;
         /**
+          * Specifies the error message and provides an error-themed treatment to the field.
+         */
+        "errorMessage"?: string;
+        /**
           * Displays a message or hint below the input field.
          */
         "hasError"?: boolean;
@@ -604,7 +608,11 @@ export namespace Components {
         /**
           * Specifies the name. Submitted with the form name/value pair.
          */
-        "name"?: string;
+        "name": string;
+        /**
+          * An array of options to be rendered as select options.
+         */
+        "options": { value: string; label: string }[];
         /**
           * Indicates whether or not the select field is required.
          */
@@ -1917,6 +1925,10 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
+          * Specifies the error message and provides an error-themed treatment to the field.
+         */
+        "errorMessage"?: string;
+        /**
           * Displays a message or hint below the input field.
          */
         "hasError"?: boolean;
@@ -1931,7 +1943,11 @@ declare namespace LocalJSX {
         /**
           * Specifies the name. Submitted with the form name/value pair.
          */
-        "name"?: string;
+        "name": string;
+        /**
+          * An array of options to be rendered as select options.
+         */
+        "options": { value: string; label: string }[];
         /**
           * Indicates whether or not the select field is required.
          */
