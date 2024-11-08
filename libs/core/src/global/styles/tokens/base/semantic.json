@@ -26,16 +26,8 @@
     }
   },
   "border-radius": {
-    "@": {
-      "value": "{border-radius.100}",
-      "type": "borderRadius"
-    },
     "circle": {
       "value": "50%",
-      "type": "borderRadius"
-    },
-    "none": {
-      "value": "{border-radius.0}",
       "type": "borderRadius"
     },
     "round": {
