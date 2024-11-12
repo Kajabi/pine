@@ -480,6 +480,32 @@
     "@": {
       "value": "{letter-spacing.114} * -1",
       "type": "letterSpacing"
+    },
+    "heading": {
+      "1": {
+        "value": "{letter-spacing.185}",
+        "type": "letterSpacing"
+      },
+      "2": {
+        "value": "{letter-spacing.171}",
+        "type": "letterSpacing"
+      },
+      "3": {
+        "value": "{letter-spacing.157}",
+        "type": "letterSpacing"
+      },
+      "4": {
+        "value": "{letter-spacing.142}",
+        "type": "letterSpacing"
+      },
+      "5": {
+        "value": "{letter-spacing.128}",
+        "type": "letterSpacing"
+      },
+      "6": {
+        "value": "{letter-spacing.114}",
+        "type": "letterSpacing"
+      }
     }
   },
   "line-height": {

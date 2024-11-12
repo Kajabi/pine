@@ -198,7 +198,6 @@
       "letter-spacing.185": "92cb2978a6881b6e80ca697baee10c34716737cf",
       "letter-spacing.078": "bd4396972f2380605b48b8dd71e20631b6e0ddfb",
       "letter-spacing.085": "ae9217d04c9ee70c240c5b9b27908a6c5219c028",
-      "border-radius.circle": "f323fb5f5d0dd1271806f5f161aca18b80a758e8",
       "border-width.@": "e4473d5fb4aca8a40aba0396552d48af7c7dc92b",
       "color.accent.disabled": "0198cdb93e0bbd39f23d2e6ee7a916f90e7d464c",
       "color.accent.hover": "8a042069c24b40ead3ea3c69dff2bdfb473c4fd6",
@@ -312,7 +311,8 @@
       "spacing.gap.lg": "85d25d9fe904cbb32addbc893aadff473f8604fa",
       "spacing.gap.xl": "a983e2f7c8fac4ff9d9967f84c4cde56d9e525c0",
       "spacing.gap.2xl": "4ba2361fd7a3ba3a804c044ade624e3ffe3f8e72",
-      "color.brand.@": "10e037cda087fd1327cadbba3a3be5b3028e6f59"
+      "color.brand.@": "10e037cda087fd1327cadbba3a3be5b3028e6f59",
+      "border-radius.circle": "f323fb5f5d0dd1271806f5f161aca18b80a758e8"
     },
     "group": "brand"
   },
@@ -488,7 +488,6 @@
       "dimension.650": "51474f6dc58a7f2bbfb89b7a750505cea47ce85c",
       "dimension.700": "3dca79f9d47ba60f6a7d946cdd17b1165dbf7c72",
       "dimension.750": "8ceaa2da1e14a90a5b0b2303bdbf4535c321f3c0",
-      "dimension.800": "3247b2fb7fdc5a86f2d2c44ce91a444dc46a37b1",
       "dimension.050": "95b27636433967aace8d1ab98742c690da0cae25",
       "letter-spacing.0": "8f40b42bf397a8205c91f5de3b411d27158efb8c",
       "letter-spacing.100": "60340b5289a472418c5984fe02ac11053e913aa1",
@@ -500,7 +499,6 @@
       "letter-spacing.185": "30be96710d3a427753a97a7d72c81a6b1e86c681",
       "letter-spacing.078": "eabe4a9f4ee309e0a3ef7448f73a2bb9a44ff3ec",
       "letter-spacing.085": "62a7f1bd1a9860ba6b980753b6f48052e1fbe2b0",
-      "border-radius.circle": "4409ea7ee61731735ae8f207b0c7533d35d5fe8a",
       "border-width.@": "cd1856b158bd180b1b910a5371e5b91f5fcba07a",
       "color.accent.@": "a095efa82d97d5690c0ae7a54821024a386e7dd0",
       "color.accent.disabled": "0b682344d11a8c709edcf8a6cd33aa2b99c67bf6",
@@ -605,7 +603,9 @@
       "dimension.lg": "b359a94ec9828161d5e9a94f46ea648dd41a6806",
       "dimension.xl": "77c1377ae4b10c4721824708fd6fc2a03236209a",
       "dimension.2xl": "00884db62b4415fdc6663e78caf54df7f0de07be",
-      "avatar.color.background.container": "2ea9178acf2683832cbc195db2416ab9db214eef"
+      "avatar.color.background.container": "2ea9178acf2683832cbc195db2416ab9db214eef",
+      "border-radius.circle": "4409ea7ee61731735ae8f207b0c7533d35d5fe8a",
+      "dimension.800": "3247b2fb7fdc5a86f2d2c44ce91a444dc46a37b1"
     },
     "group": "kajabi_products"
   },
@@ -862,7 +862,6 @@
       "dimension.650": "51474f6dc58a7f2bbfb89b7a750505cea47ce85c",
       "dimension.700": "3dca79f9d47ba60f6a7d946cdd17b1165dbf7c72",
       "dimension.750": "8ceaa2da1e14a90a5b0b2303bdbf4535c321f3c0",
-      "dimension.800": "3247b2fb7fdc5a86f2d2c44ce91a444dc46a37b1",
       "dimension.050": "95b27636433967aace8d1ab98742c690da0cae25",
       "letter-spacing.0": "8f40b42bf397a8205c91f5de3b411d27158efb8c",
       "letter-spacing.100": "60340b5289a472418c5984fe02ac11053e913aa1",
@@ -874,7 +873,6 @@
       "letter-spacing.185": "30be96710d3a427753a97a7d72c81a6b1e86c681",
       "letter-spacing.078": "eabe4a9f4ee309e0a3ef7448f73a2bb9a44ff3ec",
       "letter-spacing.085": "62a7f1bd1a9860ba6b980753b6f48052e1fbe2b0",
-      "border-radius.circle": "4409ea7ee61731735ae8f207b0c7533d35d5fe8a",
       "border-width.@": "cd1856b158bd180b1b910a5371e5b91f5fcba07a",
       "color.accent.@": "a095efa82d97d5690c0ae7a54821024a386e7dd0",
       "color.accent.disabled": "0b682344d11a8c709edcf8a6cd33aa2b99c67bf6",
@@ -979,7 +977,9 @@
       "dimension.lg": "b359a94ec9828161d5e9a94f46ea648dd41a6806",
       "dimension.xl": "77c1377ae4b10c4721824708fd6fc2a03236209a",
       "dimension.2xl": "00884db62b4415fdc6663e78caf54df7f0de07be",
-      "avatar.color.background.container": "2ea9178acf2683832cbc195db2416ab9db214eef"
+      "avatar.color.background.container": "2ea9178acf2683832cbc195db2416ab9db214eef",
+      "border-radius.circle": "4409ea7ee61731735ae8f207b0c7533d35d5fe8a",
+      "dimension.800": "3247b2fb7fdc5a86f2d2c44ce91a444dc46a37b1"
     },
     "group": "kajabi_products"
   }
