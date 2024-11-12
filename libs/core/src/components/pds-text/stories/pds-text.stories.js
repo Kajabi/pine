@@ -10,6 +10,7 @@ export default {
 
 const BaseTemplate = (args) => html`<pds-text
   tag="${args.tag}"
+  size="${args.size}"
 >
   ${args.slot}
 </pds-text>`;
@@ -17,5 +18,5 @@ const BaseTemplate = (args) => html`<pds-text
 export const Default = BaseTemplate.bind();
 Default.args = {
   slot: 'Hello World',
-  tag: 'h1'
+  tag: 'h1',
 };

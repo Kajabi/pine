@@ -755,6 +755,22 @@ export namespace Components {
          */
         "variant": 'primary' | 'availability' | 'filter';
     }
+    interface PdsText {
+        /**
+          * Sets the font size.
+         */
+        "size"?: | '2xl'
+  | 'xl'
+  | 'lg'
+  | 'md'
+  | 'sm'
+  | 'xs'
+  | '2xs';
+        /**
+          * Determines what semantic text tag to render.
+         */
+        "tag": 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p';
+    }
     interface PdsTextarea {
         /**
           * Specifies if and how the browser provides `autocomplete` assistance for the field.
@@ -1217,6 +1233,12 @@ declare global {
         prototype: HTMLPdsTabsElement;
         new (): HTMLPdsTabsElement;
     };
+    interface HTMLPdsTextElement extends Components.PdsText, HTMLStencilElement {
+    }
+    var HTMLPdsTextElement: {
+        prototype: HTMLPdsTextElement;
+        new (): HTMLPdsTextElement;
+    };
     interface HTMLPdsTextareaElementEventMap {
         "pdsTextareaChange": TextareaChangeEventDetail;
     }
@@ -1268,6 +1290,7 @@ declare global {
         "pds-table-row": HTMLPdsTableRowElement;
         "pds-tabpanel": HTMLPdsTabpanelElement;
         "pds-tabs": HTMLPdsTabsElement;
+        "pds-text": HTMLPdsTextElement;
         "pds-textarea": HTMLPdsTextareaElement;
         "pds-tooltip": HTMLPdsTooltipElement;
     }
@@ -2066,6 +2089,22 @@ declare namespace LocalJSX {
          */
         "variant": 'primary' | 'availability' | 'filter';
     }
+    interface PdsText {
+        /**
+          * Sets the font size.
+         */
+        "size"?: | '2xl'
+  | 'xl'
+  | 'lg'
+  | 'md'
+  | 'sm'
+  | 'xs'
+  | '2xs';
+        /**
+          * Determines what semantic text tag to render.
+         */
+        "tag": 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p';
+    }
     interface PdsTextarea {
         /**
           * Specifies if and how the browser provides `autocomplete` assistance for the field.
@@ -2202,6 +2241,7 @@ declare namespace LocalJSX {
         "pds-table-row": PdsTableRow;
         "pds-tabpanel": PdsTabpanel;
         "pds-tabs": PdsTabs;
+        "pds-text": PdsText;
         "pds-textarea": PdsTextarea;
         "pds-tooltip": PdsTooltip;
     }
@@ -2237,6 +2277,7 @@ declare module "@stencil/core" {
             "pds-table-row": LocalJSX.PdsTableRow & JSXBase.HTMLAttributes<HTMLPdsTableRowElement>;
             "pds-tabpanel": LocalJSX.PdsTabpanel & JSXBase.HTMLAttributes<HTMLPdsTabpanelElement>;
             "pds-tabs": LocalJSX.PdsTabs & JSXBase.HTMLAttributes<HTMLPdsTabsElement>;
+            "pds-text": LocalJSX.PdsText & JSXBase.HTMLAttributes<HTMLPdsTextElement>;
             "pds-textarea": LocalJSX.PdsTextarea & JSXBase.HTMLAttributes<HTMLPdsTextareaElement>;
             "pds-tooltip": LocalJSX.PdsTooltip & JSXBase.HTMLAttributes<HTMLPdsTooltipElement>;
         }

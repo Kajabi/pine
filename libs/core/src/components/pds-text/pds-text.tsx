@@ -10,7 +10,14 @@ export class PdsText {
   /**
    * Sets the font size.
    */
-  @Prop() size!: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p';
+  @Prop() size?:
+  | '2xl'
+  | 'xl'
+  | 'lg'
+  | 'md'
+  | 'sm'
+  | 'xs'
+  | '2xs';
 
   /**
    * Determines what semantic text tag to render.
@@ -21,9 +28,8 @@ export class PdsText {
     const Tag = this.tag;
 
     const typeClasses = `
-      ${this.size !== undefined ? `pds-text--size-${this.size}` : ''}
-      ${this.size ? 'pds-box--auto' : ''}
       pds-text
+      ${this.size !== undefined && this.size.trim() !== '' ? `pds-text--size-${this.size}` : ''}
     `;
 
     return (
@@ -32,5 +38,4 @@ export class PdsText {
       </Tag>
     );
   }
-
 }
