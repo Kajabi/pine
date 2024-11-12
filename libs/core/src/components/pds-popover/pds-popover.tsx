@@ -94,6 +94,14 @@ export class PdsPopover {
     positionTooltip({elem: this.el, elemPlacement: this.placement, overlay: this.contentEl});
   }
 
+  componentDidMount() {
+    document.addEventListener('click', this.handleOutsideClick);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleOutsideClick);
+  }
+
   private handlePopoverHide = () => {
     this.opened = false;
     this.pdsPopoverHide.emit();
@@ -104,16 +112,51 @@ export class PdsPopover {
     this.pdsPopoverShow.emit();
   };
 
+  private handleClick = () => {
+    if (!this.isOpen) {
+      this.isOpen = true;
+      this.pdsPopoverShow.emit();
+    }
+  };
+
+  private handleOutsideClick = (event: MouseEvent) => {
+    if (!this.el.contains(event.target as Node)) {
+      this.isOpen = false;
+      this.pdsPopoverHide.emit();
+    }
+  };
+
   render() {
     return (
-      <Host>
-        <slot name="trigger" />
+      <Host
+      >
         <div
-          class={`pds-popover ${this.isOpen ? 'pds-popover--open' : ''}`}
-          ref={(el) => (this.contentEl = el)}
-          style={{ position: 'absolute' }}
+          class={`
+            pds-popover
+            pds-popover--${this.placement}
+            ${this.opened ? 'pds-popover--is-open' : ''}
+            ${this.hasArrow ? '' : 'pds-popover--no-arrow'}
+          `}
         >
-          <slot name="content" />
+          <span
+            aria-describedby={this.componentId}
+            class="pds-popover__trigger"
+            onClick={this.handleClick}
+          >
+            <slot name="trigger"></slot>
+          </span>
+
+          <div class="pds-popover__content"
+            aria-hidden={this.opened ? 'false' : 'true'}
+            aria-live={this.opened ? 'polite' : 'off'}
+            id={this.componentId}
+            ref={(el) => (this.contentEl = el)}
+            role=""
+          >
+            <slot
+              name="content"
+            ></slot>
+          </div>
         </div>
       </Host>
     );
