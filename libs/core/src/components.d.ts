@@ -612,7 +612,7 @@ export namespace Components {
         /**
           * An array of options to be rendered as select options.
          */
-        "options": { value: string; label: string }[];
+        "options": string;
         /**
           * Indicates whether or not the select field is required.
          */
@@ -1936,7 +1936,7 @@ declare namespace LocalJSX {
         /**
           * An array of options to be rendered as select options.
          */
-        "options": { value: string; label: string }[];
+        "options"?: string;
         /**
           * Indicates whether or not the select field is required.
          */

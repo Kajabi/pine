@@ -24,12 +24,15 @@ describe('pds-select', () => {
       components: [PdsSelect],
       html: `<pds-select options='[{"value": "1", "label": "Option 1"}, {"value": "2", "label": "Option 2"}]'></pds-select>`,
     });
+
+    await page.waitForChanges();
+
     expect(page.root).toEqualHtml(`
       <pds-select options='[{"value": "1", "label": "Option 1"}, {"value": "2", "label": "Option 2"}]'>
         <mock:shadow-root>
           <div class="pds-select">
-            <pds-label></pds-label>
-            <select class="pds-select__field ">
+            <label></label>
+            <select class="pds-select__field">
               <option value="1">Option 1</option>
               <option value="2">Option 2</option>
             </select>
@@ -59,15 +62,15 @@ describe('pds-select', () => {
   it('renders with error message', async () => {
     const page = await newSpecPage({
       components: [PdsSelect],
-      html: `<pds-select error-message="Error occurred"></pds-select>`,
+      html: `<pds-select component-id="field-1" error-message="Error occurred"></pds-select>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-select error-message="Error occurred">
+      <pds-select component-id="field-1" error-message="Error occurred">
         <mock:shadow-root>
           <div class="pds-select">
-            <pds-label></pds-label>
-            <select class="pds-select__field has-error"></select>
-            <p class="pds-select__error-message" aria-live="assertive">Error occurred</p>
+            <label htmlFor="field-1"></label>
+            <select class="pds-select__field" id="field-1"></select>
+            <p class="pds-select__error-message" id="field-1__error-message" aria-live="assertive">Error occurred</p>
           </div>
         </mock:shadow-root>
       </pds-select>
@@ -77,15 +80,20 @@ describe('pds-select', () => {
   it('renders with helper message', async () => {
     const page = await newSpecPage({
       components: [PdsSelect],
-      html: `<pds-select helper-message="Helper text"></pds-select>`,
+      html: `<pds-select component-id="field-1" helper-message="Helper text"></pds-select>`,
     });
+
+    await page.waitForChanges(); // Ensures component fully renders
+
     expect(page.root).toEqualHtml(`
-      <pds-select helper-message="Helper text">
+      <pds-select component-id="field-1" helper-message="Helper text">
         <mock:shadow-root>
           <div class="pds-select">
-            <label></label>
-            <select class="pds-select__field"></select>
-            <p class="pds-select__helper-message">Helper text</p>
+            <label htmlFor="field-1"></label>
+            <select class="pds-select__field" id="field-1"></select>
+            <p class="pds-select__helper-message" id="field-1__helper-message">
+              Helper text
+            </p>
           </div>
         </mock:shadow-root>
       </pds-select>

@@ -46,12 +46,24 @@ export class PdsSelect {
   /**
    * An array of options to be rendered as select options.
    */
-  @Prop() options!: { value: string; label: string }[];
+  @Prop() options: string; // Expecting a JSON string of options
 
   /**
    * Indicates whether or not the select field is required.
    */
   @Prop() required?: boolean;
+
+  /**
+   * Utility to parse JSON options safely
+   */
+  get parsedOptions() {
+    try {
+      return JSON.parse(this.options) || [];
+    } catch (error) {
+      console.error('Invalid options format:', error);
+      return [];
+    }
+  }
 
   render() {
     return (
@@ -59,7 +71,7 @@ export class PdsSelect {
         <div class="pds-select">
           <PdsLabel htmlFor={this.componentId} text={this.label} />
           <select class={`pds-select__field ${this.hasError ? 'has-error' : ''}`} disabled={this.disabled} id={this.componentId} name={this.name} required={this.required}>
-            {this.options?.map((option) => (
+            {this.parsedOptions.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
