@@ -788,6 +788,10 @@
     "050": {
       "value": "4px",
       "type": "dimension"
+    },
+    "025": {
+      "value": "2px",
+      "type": "dimension"
     }
   },
   "letter-spacing": {
