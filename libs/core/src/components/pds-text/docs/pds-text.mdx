@@ -1,0 +1,20 @@
+import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+# Text
+
+TBD
+
+## Properties
+
+<DocArgsTable componentName="pds-text" docSource={components} />
+
+## Default
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsText tag="h1"></PdsText>',
+    webComponent: '<pds-text tag="h1"></pds-text>'
+}}>
+  <pds-text tag="h1" size="h2">Hello World!</pds-text>
+</DocCanvas>

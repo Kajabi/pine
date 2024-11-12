@@ -1,0 +1,90 @@
+:host {
+  display: block;
+}
+
+  // TODO: Consider making semantic tokens for each
+  // font property
+$type-sizes: (
+  h1: var(--pine-font-size-200),
+  h2: var(--pine-font-size-185),
+  h3: var(--pine-font-size-157),
+  h4: var(--pine-font-size-142),
+  h5: var(--pine-font-size-128),
+  h6: var(--pine-font-size-116),
+);
+
+@mixin generate-type-sizes($type-sizes) {
+  @each $key, $value in $type-sizes {
+    .pds-text--size-#{$key} {
+      font-size: $value;
+    }
+  }
+}
+
+@include generate-type-sizes($type-sizes);
+
+// TODO: Refactor with semantic type tokens
+
+// .pds-text--size-h1 {
+//   font-size: var(--pine-font-size-200);
+// }
+
+// .pds-text--size-h2 {
+//   font-size: var(--pine-font-size-185);
+// }
+
+// .pds-text--size-h3 {
+//   font-size: var(--pine-font-size-157);
+// }
+
+// .pds-text--size-h4 {
+//   font-size: var(--pine-font-size-142);
+// }
+
+// .pds-text--size-h5 {
+//   font-size: var(--pine-font-size-128);
+// }
+
+// .pds-text--size-h6 {
+//   font-size: var(--pine-font-size-116);
+// }
+
+// .pds-text--size-p {
+//   font-size: var(--pine-font-size-100);
+// }
+
+h1 {
+  letter-spacing: var(--pine-letter-spacing-185);
+  font: var(--pine-typography-heading-h1);
+}
+
+h2 {
+  letter-spacing: var(--pine-letter-spacing-171);
+  font: var(--pine-typography-heading-h2);
+}
+
+h3 {
+  letter-spacing: var(--pine-letter-spacing-157);
+  font: var(--pine-typography-heading-h3);
+}
+
+h4 {
+  letter-spacing: var(--pine-letter-spacing-142);
+  font: var(--pine-typography-heading-h4);
+}
+
+h5 {
+  letter-spacing: var(--pine-letter-spacing-128);
+  font: var(--pine-typography-heading-h5);
+}
+
+h6 {
+  letter-spacing: var(--pine-letter-spacing-114);
+  font: var(--pine-typography-heading-h6);
+}
+
+p {
+  letter-spacing: var(--pine-letter-spacing-100);
+  font: var(--pine-typography-body-md-default);
+}
+
