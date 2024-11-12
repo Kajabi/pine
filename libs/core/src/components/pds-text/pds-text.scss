@@ -72,3 +72,20 @@ $type-sizes: (
 }
 
 @include generate-type-sizes($type-sizes);
+
+$type-weights: (
+  regular: 400,
+  medium: 500,
+  semi-bold: 600,
+  bold: 700,
+);
+
+@mixin generate-type-weights($type-weights) {
+  @each $key, $value in $type-weights {
+    .pds-text--weight-#{$key} {
+      font-weight: $value;
+    }
+  }
+}
+
+@include generate-type-weights($type-weights);

@@ -770,6 +770,10 @@ export namespace Components {
           * Determines what semantic text tag to render.
          */
         "tag": 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p';
+        /**
+          * Sets the font weight.
+         */
+        "weight"?: 'regular' | 'medium' | 'semibold' | 'bold';
     }
     interface PdsTextarea {
         /**
@@ -2104,6 +2108,10 @@ declare namespace LocalJSX {
           * Determines what semantic text tag to render.
          */
         "tag": 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p';
+        /**
+          * Sets the font weight.
+         */
+        "weight"?: 'regular' | 'medium' | 'semibold' | 'bold';
     }
     interface PdsTextarea {
         /**

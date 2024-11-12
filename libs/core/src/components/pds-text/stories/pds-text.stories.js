@@ -11,6 +11,7 @@ export default {
 const BaseTemplate = (args) => html`<pds-text
   tag="${args.tag}"
   size="${args.size}"
+  weight="${args.weight}"
 >
   ${args.slot}
 </pds-text>`;

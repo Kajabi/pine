@@ -20,6 +20,11 @@ export class PdsText {
   | '2xs';
 
   /**
+   * Sets the font weight.
+   */
+  @Prop() weight?: 'regular' | 'medium' | 'semibold' | 'bold';
+
+  /**
    * Determines what semantic text tag to render.
    */
   @Prop() tag!: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p';
@@ -30,6 +35,7 @@ export class PdsText {
     const typeClasses = `
       pds-text
       ${this.size !== undefined && this.size.trim() !== '' ? `pds-text--size-${this.size}` : ''}
+      ${this.weight !== undefined && this.weight.trim() !== '' ? `pds-text--weight-${this.weight}` : ''}
     `;
 
     return (
