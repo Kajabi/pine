@@ -476,6 +476,8 @@ export namespace Components {
          */
         "variant": 'spinner' | 'typing';
     }
+    interface PdsPopover {
+    }
     interface PdsProgress {
         /**
           * Determines whether or not progress is animated.
@@ -1151,6 +1153,12 @@ declare global {
         prototype: HTMLPdsLoaderElement;
         new (): HTMLPdsLoaderElement;
     };
+    interface HTMLPdsPopoverElement extends Components.PdsPopover, HTMLStencilElement {
+    }
+    var HTMLPdsPopoverElement: {
+        prototype: HTMLPdsPopoverElement;
+        new (): HTMLPdsPopoverElement;
+    };
     interface HTMLPdsProgressElement extends Components.PdsProgress, HTMLStencilElement {
     }
     var HTMLPdsProgressElement: {
@@ -1389,6 +1397,7 @@ declare global {
         "pds-input": HTMLPdsInputElement;
         "pds-link": HTMLPdsLinkElement;
         "pds-loader": HTMLPdsLoaderElement;
+        "pds-popover": HTMLPdsPopoverElement;
         "pds-progress": HTMLPdsProgressElement;
         "pds-radio": HTMLPdsRadioElement;
         "pds-row": HTMLPdsRowElement;
@@ -1891,6 +1900,8 @@ declare namespace LocalJSX {
           * Determines the type of loader.
          */
         "variant"?: 'spinner' | 'typing';
+    }
+    interface PdsPopover {
     }
     interface PdsProgress {
         /**
@@ -2438,6 +2449,7 @@ declare namespace LocalJSX {
         "pds-input": PdsInput;
         "pds-link": PdsLink;
         "pds-loader": PdsLoader;
+        "pds-popover": PdsPopover;
         "pds-progress": PdsProgress;
         "pds-radio": PdsRadio;
         "pds-row": PdsRow;
@@ -2475,6 +2487,7 @@ declare module "@stencil/core" {
             "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
             "pds-loader": LocalJSX.PdsLoader & JSXBase.HTMLAttributes<HTMLPdsLoaderElement>;
+            "pds-popover": LocalJSX.PdsPopover & JSXBase.HTMLAttributes<HTMLPdsPopoverElement>;
             "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-radio": LocalJSX.PdsRadio & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
             "pds-row": LocalJSX.PdsRow & JSXBase.HTMLAttributes<HTMLPdsRowElement>;

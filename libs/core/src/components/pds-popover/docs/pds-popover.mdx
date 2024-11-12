@@ -1,0 +1,13 @@
+import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+# Popover
+<pds-popover>
+    <button popovertarget="mypopover" popovertargetaction="show">
+      Show popover
+    </button>
+    <button popovertarget="mypopover" popovertargetaction="hide">
+      Hide popover
+    </button>
+    <div id="mypopover" popover>Popover content</div>
+</pds-popover>
