@@ -51,7 +51,7 @@
   "color": {
     "accent": {
       "@": {
-        "value": "{color.purple.500}",
+        "value": "{color.purple.100}",
         "type": "color"
       },
       "disabled": {
@@ -109,7 +109,7 @@
     },
     "danger": {
       "@": {
-        "value": "{color.red.500}",
+        "value": "{color.red.100}",
         "type": "color"
       },
       "disabled": {
@@ -133,7 +133,7 @@
     },
     "info": {
       "@": {
-        "value": "{color.blue.500}",
+        "value": "{color.blue.100}",
         "type": "color"
       },
       "disabled": {
@@ -147,7 +147,7 @@
     },
     "neutral": {
       "@": {
-        "value": "{color.grey.500}",
+        "value": "{color.grey.100}",
         "type": "color"
       },
       "disabled": {
@@ -189,7 +189,7 @@
     },
     "success": {
       "@": {
-        "value": "{color.green.500}",
+        "value": "{color.green.100}",
         "type": "color"
       },
       "disabled": {
@@ -353,7 +353,7 @@
     },
     "warning": {
       "@": {
-        "value": "{color.yellow.500}",
+        "value": "{color.yellow.100}",
         "type": "color"
       },
       "disabled": {
