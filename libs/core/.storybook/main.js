@@ -5,12 +5,15 @@ const config = {
     "../src/**/*.docs.mdx",
     "../src/**/*.stories.@(js|jsx|ts|tsx)"
   ],
+
   addons: [
     getAbsolutePath("@storybook/addon-essentials"),
     getAbsolutePath("@storybook/addon-links"),
     getAbsolutePath("@storybook/addon-a11y"),
     getAbsolutePath("@storybook/addon-actions"),
     getAbsolutePath("@pxtrn/storybook-addon-docs-stencil"),
+    getAbsolutePath("@storybook/addon-mdx-gfm"),
+    "@chromatic-com/storybook"
   ],
 
   core: {},
@@ -20,7 +23,9 @@ const config = {
     options: {}
   },
 
-  staticDirs: ['../dist', '../assets']
+  staticDirs: ['../dist', '../assets'],
+
+  docs: {}
 }
 
 export default config;
