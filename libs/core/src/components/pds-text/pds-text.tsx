@@ -8,6 +8,11 @@ import { Component, h, Prop } from '@stencil/core';
 export class PdsText {
 
   /**
+   * Sets the text alignment.
+   */
+  @Prop() align?: 'start' | 'center' | 'end' | 'justify';
+
+  /**
    * Sets the font size.
    */
   @Prop() size?:
@@ -34,6 +39,7 @@ export class PdsText {
 
     const typeClasses = `
       pds-text
+      ${this.align !== undefined && this.align.trim() !== '' ? `pds-text--align-${this.align}` : ''}
       ${this.size !== undefined && this.size.trim() !== '' ? `pds-text--size-${this.size}` : ''}
       ${this.weight !== undefined && this.weight.trim() !== '' ? `pds-text--weight-${this.weight}` : ''}
     `;

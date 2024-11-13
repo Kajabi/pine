@@ -53,6 +53,7 @@ p {
   letter-spacing: -0.16px;
 }
 
+// Font Sizes
 $type-sizes: (
   2xl: 20px,
   xl: 18px,
@@ -73,6 +74,7 @@ $type-sizes: (
 
 @include generate-type-sizes($type-sizes);
 
+// Font Weights
 $type-weights: (
   regular: 400,
   medium: 500,
@@ -89,3 +91,21 @@ $type-weights: (
 }
 
 @include generate-type-weights($type-weights);
+
+// Text Alignment
+$type-alignments: (
+  start: start,
+  center: center,
+  end: end,
+  justify: justify,
+);
+
+@mixin generate-type-alignments($type-alignments) {
+  @each $key, $value in $type-alignments {
+    .pds-text--align-#{$key} {
+      text-align: $value;
+    }
+  }
+}
+
+@include generate-type-alignments($type-alignments);

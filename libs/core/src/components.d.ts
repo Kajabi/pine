@@ -757,6 +757,10 @@ export namespace Components {
     }
     interface PdsText {
         /**
+          * Sets the text alignment.
+         */
+        "align"?: 'start' | 'center' | 'end' | 'justify';
+        /**
           * Sets the font size.
          */
         "size"?: | '2xl'
@@ -2094,6 +2098,10 @@ declare namespace LocalJSX {
         "variant": 'primary' | 'availability' | 'filter';
     }
     interface PdsText {
+        /**
+          * Sets the text alignment.
+         */
+        "align"?: 'start' | 'center' | 'end' | 'justify';
         /**
           * Sets the font size.
          */
