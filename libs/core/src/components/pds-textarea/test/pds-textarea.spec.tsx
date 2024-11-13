@@ -252,22 +252,22 @@ describe('pds-textarea', () => {
     expect(pdsTextarea?.value).toBe('initial');
 
     const textarea = pdsTextarea?.shadowRoot?.querySelector<HTMLTextAreaElement>('textarea');
-    expect(textarea?.innerHTML.toString()).toBe('initial');
+    expect(textarea?.innerHTML).toBe('initial');
 
-    textarea.innerHTML = 'new value';
+    textarea.value = 'new value';
     textarea?.dispatchEvent(new Event('textareaInput'));
     await page.waitForChanges();
 
-    expect(textarea?.innerHTML.toString()).toBe('new value');
+    expect(textarea?.value).toBe('new value');
 
-    textarea.innerHTML = '';
+    textarea.value = '';
     textarea?.dispatchEvent(new Event('textareaInput'));
     await page.waitForChanges();
 
-    expect(textarea?.innerHTML.toString()).toBe('');
+    expect(textarea?.value).toBe('');
   });
 
-  it('onChange logic with valid `innerHTML` runs', async () => {
+  it('onChange logic with valid `value` runs', async () => {
     const page = await newSpecPage({
       components: [PdsTextarea],
       html: `<pds-textarea value="initial" required="true"></pds-textarea>`,
@@ -280,17 +280,17 @@ describe('pds-textarea', () => {
     expect(pdsTextarea?.value).toEqual('initial');
     expect(textarea?.innerHTML).toEqual('initial');
 
-    textarea.innerHTML += 'A';
+    textarea.value = 'A';
     textarea.checkValidity = jest.fn().mockReturnValue(true);
     textarea.dispatchEvent(new Event('change'));
     await page.waitForChanges();
 
-    expect(pdsTextarea?.value).toEqual('initialA');
-    expect(textarea?.innerHTML).toEqual('initialA');
+    expect(pdsTextarea?.value).toEqual('A');
+    expect(textarea?.innerHTML).toEqual('A');
     expect(eventSpy).toHaveBeenCalled();
   });
 
-  it('onChange logic with invalid `innerHTML` runs', async () => {
+  it('onChange logic with invalid `value` runs', async () => {
     const page = await newSpecPage({
       components: [PdsTextarea],
       html: `<pds-textarea value="initial" required="true"></pds-textarea>`,
@@ -305,13 +305,14 @@ describe('pds-textarea', () => {
     expect(pdsTextarea?.value).toEqual('initial');
     expect(textarea?.innerHTML).toEqual('initial');
 
-    textarea.innerHTML = '';
+    textarea.value = '';
     textarea.checkValidity = jest.fn().mockReturnValue(false);
     textarea.dispatchEvent(new Event('change'));
     await page.waitForChanges();
 
     expect(pdsTextarea?.value).toEqual('');
     expect(textarea?.innerHTML).toEqual('');
+    expect(textarea).toHaveClass('is-invalid');
     expect(eventSpy).toHaveBeenCalled();
   });
 });
