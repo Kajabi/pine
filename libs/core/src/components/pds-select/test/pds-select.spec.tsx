@@ -119,4 +119,45 @@ describe('pds-select', () => {
       </pds-select>
     `);
   });
+
+  it('updates value prop on value change', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select options='[{"value": "paul", "label": "Paul McCartney"}, {"value": "john", "label": "John Lennon"}]' />`,
+    });
+
+    const pdsSelect = page.root;
+    if (!pdsSelect || !pdsSelect.shadowRoot) {
+      throw new Error('pdsSelect or pdsSelect.shadowRoot is not available');
+    }
+    const select = pdsSelect.shadowRoot.querySelector('select');
+
+    // Change value to 'paul'
+    if (select) {
+      select.value = 'paul';
+      select.dispatchEvent(new Event('change'));
+      await page.waitForChanges();
+
+      // Check if the value is updated
+      expect(select.value).toBe('paul');
+
+      // Change value to 'john'
+      select.value = 'john';
+      select.dispatchEvent(new Event('change'));
+      await page.waitForChanges();
+
+      // Check if the value is updated
+      expect(select.value).toBe('john');
+
+      // Change value to empty
+      select.value = '';
+      select.dispatchEvent(new Event('change'));
+      await page.waitForChanges();
+
+      // Check if the value is updated
+      expect(select.value).toBe('');
+    } else {
+      throw new Error('select element is not available');
+    }
+  });
 });

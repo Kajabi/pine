@@ -617,6 +617,10 @@ export namespace Components {
           * Indicates whether or not the select field is required.
          */
         "required"?: boolean;
+        /**
+          * The value of the input.
+         */
+        "value"?: string;
     }
     interface PdsSortable {
         /**
@@ -923,6 +927,10 @@ export interface PdsRadioCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsRadioElement;
 }
+export interface PdsSelectCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsSelectElement;
+}
 export interface PdsSortableCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsSortableElement;
@@ -1102,7 +1110,18 @@ declare global {
         prototype: HTMLPdsRowElement;
         new (): HTMLPdsRowElement;
     };
+    interface HTMLPdsSelectElementEventMap {
+        "pdsSelect": InputEvent;
+    }
     interface HTMLPdsSelectElement extends Components.PdsSelect, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsSelectElementEventMap>(type: K, listener: (this: HTMLPdsSelectElement, ev: PdsSelectCustomEvent<HTMLPdsSelectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsSelectElementEventMap>(type: K, listener: (this: HTMLPdsSelectElement, ev: PdsSelectCustomEvent<HTMLPdsSelectElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsSelectElement: {
         prototype: HTMLPdsSelectElement;
@@ -1934,6 +1953,10 @@ declare namespace LocalJSX {
          */
         "name": string;
         /**
+          * Emitted when a keyboard input occurred.
+         */
+        "onPdsSelect"?: (event: PdsSelectCustomEvent<InputEvent>) => void;
+        /**
           * An array of options to be rendered as select options.
          */
         "options"?: string;
@@ -1941,6 +1964,10 @@ declare namespace LocalJSX {
           * Indicates whether or not the select field is required.
          */
         "required"?: boolean;
+        /**
+          * The value of the input.
+         */
+        "value"?: string;
     }
     interface PdsSortable {
         /**

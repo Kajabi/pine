@@ -18,6 +18,14 @@
 | `name` _(required)_        | `name`           | Specifies the name. Submitted with the form name/value pair.                     | `string`  | `undefined` |
 | `options`                  | `options`        | An array of options to be rendered as select options.                            | `string`  | `undefined` |
 | `required`                 | `required`       | Indicates whether or not the select field is required.                           | `boolean` | `undefined` |
+| `value`                    | `value`          | The value of the input.                                                          | `string`  | `undefined` |
+
+
+## Events
+
+| Event       | Description                             | Type                      |
+| ----------- | --------------------------------------- | ------------------------- |
+| `pdsSelect` | Emitted when a keyboard input occurred. | `CustomEvent<InputEvent>` |
 
 
 ----------------------------------------------
