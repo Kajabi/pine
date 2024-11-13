@@ -10,14 +10,14 @@
   pds-button {
     align-items: center;
     background: var(--pine-color-secondary);
-    border-width: var(--pine-dimension-none);
     border-radius: var(--pine-border-radius-round);
+    border-width: var(--pine-dimension-none);
     display: inline-flex;
     font-family: var(--pine-font-family-heading);
     font-size: var(--pine-font-size-body-md);
     font-weight: var(--pine-font-weight-body-medium);
-    line-height: var(--pine-line-height-body);
     letter-spacing: var(--pine-letter-spacing);
+    line-height: var(--pine-line-height-body);
     max-width: 100%;
     padding: var(--pine-dimension-2xs) var(--pine-dimension-xs);
 
