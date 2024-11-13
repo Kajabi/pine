@@ -1,4 +1,4 @@
-import { AttachInternals, Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
 import { PdsLabel } from '../_internal/pds-label/pds-label';
 
@@ -6,7 +6,6 @@ import { PdsLabel } from '../_internal/pds-label/pds-label';
   tag: 'pds-switch',
   styleUrls: ['../../global/styles/base.scss', 'pds-switch.scss'],
   shadow: true,
-  formAssociated: true
 })
 export class PdsSwitch {
   @Element() el: HTMLPdsSwitchElement;
@@ -72,12 +71,9 @@ export class PdsSwitch {
   */
   @Event() pdsSwitchChange: EventEmitter<InputEvent>;
 
-  @AttachInternals() internals: ElementInternals;
-
   private onSwitchUpdate = (e: Event) => {
     if (this.disabled) return;
     this.pdsSwitchChange.emit(e as InputEvent);
-    this.internals.setFormValue(this.checked ? this.value : '');
   };
 
   /**
@@ -96,7 +92,6 @@ export class PdsSwitch {
   };
 
   render() {
-    // console.log('switch internals', this.internals);
     return (
       <Host class={this.switchClassNames()} aria-disabled={this.disabled ? 'true' : null}>
         <input

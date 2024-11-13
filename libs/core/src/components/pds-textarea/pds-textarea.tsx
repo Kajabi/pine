@@ -1,4 +1,4 @@
-import { AttachInternals, Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
+import { Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 import { assignDescription, isRequired, messageId } from '../../utils/form';
 import { TextareaChangeEventDetail } from './textarea-interface';
 import { PdsLabel } from '../_internal/pds-label/pds-label';
@@ -7,7 +7,6 @@ import { PdsLabel } from '../_internal/pds-label/pds-label';
   tag: 'pds-textarea',
   styleUrls: ['../../global/styles/base.scss', 'pds-textarea.scss'],
   shadow: true,
-  formAssociated: true
 })
 export class PdsTextarea {
   @Element() el: HTMLPdsTextareaElement;
@@ -81,8 +80,6 @@ export class PdsTextarea {
    */
   @Event() pdsTextareaChange: EventEmitter<TextareaChangeEventDetail>;
 
-  @AttachInternals() internals: ElementInternals;
-
   private onTextareaChange = (ev: Event) => {
     const textarea = ev.target as HTMLTextAreaElement;
     isRequired(textarea, this);
@@ -105,7 +102,6 @@ export class PdsTextarea {
   }
 
   render() {
-    // console.log('textbox internals', this.internals);
     return (
       <Host
         aria-disabled={this.disabled ? 'true' : null}

@@ -1,4 +1,4 @@
-import { AttachInternals, Component, Event, EventEmitter, h, Host, Prop } from '@stencil/core';
+import { Component, Event, EventEmitter, h, Host, Prop } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
 import { PdsLabel } from '../_internal/pds-label/pds-label';
 
@@ -6,7 +6,6 @@ import { PdsLabel } from '../_internal/pds-label/pds-label';
   tag: 'pds-input',
   styleUrls: ['../../global/styles/base.scss', 'pds-input.scss'],
   shadow: true,
-  formAssociated: true
 })
 export class PdsInput {
   /**
@@ -76,19 +75,15 @@ export class PdsInput {
    */
   @Event() pdsInput: EventEmitter<InputEvent>;
 
-  @AttachInternals() internals: ElementInternals;
-
   private onInputEvent = (ev: Event) => {
     const input = ev.target as HTMLInputElement | null;
     if (input) {
       this.value = input.value || '';
     }
     this.pdsInput.emit(ev as InputEvent);
-    this.internals.setFormValue(this.value);
   };
 
   render() {
-    // console.log('input internals', this.internals);
     return (
       <Host
         aria-disabled={this.disabled ? 'true' : null}

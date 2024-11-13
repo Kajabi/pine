@@ -1,4 +1,4 @@
-import { AttachInternals, Component, h, Prop, Host, Event, EventEmitter, Watch } from '@stencil/core';
+import { Component, h, Prop, Host, Event, EventEmitter, Watch } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
 import { PdsLabel } from '../_internal/pds-label/pds-label';
 import { CheckboxChangeEventDetail } from './checkbox-interface';
@@ -7,7 +7,6 @@ import { CheckboxChangeEventDetail } from './checkbox-interface';
   tag: 'pds-checkbox',
   styleUrls: ['../../global/styles/base.scss', 'pds-checkbox.scss'],
   shadow: true,
-  formAssociated: true
 })
 export class PdsCheckbox {
   /**
@@ -78,8 +77,6 @@ export class PdsCheckbox {
 
   @Event() pdsCheckboxInput: EventEmitter<CheckboxChangeEventDetail>;
 
-  @AttachInternals() internals: ElementInternals;
-
   @Watch('checked')
   updateIndeterminate() {
     this.indeterminate = undefined
@@ -97,8 +94,6 @@ export class PdsCheckbox {
       checked: target.checked,
       value: this.value
     });
-
-    this.internals.setFormValue(this.checked ? this.value : '');
   }
 
   private handleInput = () => {
@@ -119,7 +114,6 @@ export class PdsCheckbox {
   }
 
   render() {
-    console.log('checkbox internals', this.internals);
     return (
       <Host class={this.classNames()}>
         <input
