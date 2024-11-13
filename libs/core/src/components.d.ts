@@ -761,6 +761,17 @@ export namespace Components {
          */
         "align"?: 'start' | 'center' | 'end' | 'justify';
         /**
+          * Sets the text color.
+         */
+        "color"?: | 'primary'
+  | 'secondary'
+  | 'neutral'
+  | 'accent'
+  | 'danger'
+  | 'info'
+  | 'success'
+  | 'warning';
+        /**
           * Sets the font size.
          */
         "size"?: | '2xl'
@@ -2102,6 +2113,17 @@ declare namespace LocalJSX {
           * Sets the text alignment.
          */
         "align"?: 'start' | 'center' | 'end' | 'justify';
+        /**
+          * Sets the text color.
+         */
+        "color"?: | 'primary'
+  | 'secondary'
+  | 'neutral'
+  | 'accent'
+  | 'danger'
+  | 'info'
+  | 'success'
+  | 'warning';
         /**
           * Sets the font size.
          */

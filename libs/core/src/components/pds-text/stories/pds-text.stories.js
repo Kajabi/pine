@@ -10,6 +10,7 @@ export default {
 
 const BaseTemplate = (args) => html`<pds-text
   align="${args.align}"
+  color="${args.color}"
   tag="${args.tag}"
   size="${args.size}"
   weight="${args.weight}"

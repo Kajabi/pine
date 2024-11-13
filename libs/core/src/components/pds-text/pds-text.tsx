@@ -13,6 +13,19 @@ export class PdsText {
   @Prop() align?: 'start' | 'center' | 'end' | 'justify';
 
   /**
+   * Sets the text color.
+   */
+  @Prop() color?:
+  | 'primary'
+  | 'secondary'
+  | 'neutral'
+  | 'accent'
+  | 'danger'
+  | 'info'
+  | 'success'
+  | 'warning';
+
+  /**
    * Sets the font size.
    */
   @Prop() size?:
@@ -40,6 +53,7 @@ export class PdsText {
     const typeClasses = `
       pds-text
       ${this.align !== undefined && this.align.trim() !== '' ? `pds-text--align-${this.align}` : ''}
+      ${this.color !== undefined && this.color.trim() !== '' ? `pds-text--color-${this.color}` : ''}
       ${this.size !== undefined && this.size.trim() !== '' ? `pds-text--size-${this.size}` : ''}
       ${this.weight !== undefined && this.weight.trim() !== '' ? `pds-text--weight-${this.weight}` : ''}
     `;
