@@ -45,7 +45,16 @@ export class PdsText {
   /**
    * Determines what semantic text tag to render.
    */
-  @Prop() tag!: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p';
+  @Prop() tag!:
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'h5'
+  | 'h6'
+  | 'p'
+  | 'code'
+  | 'pre';
 
   render() {
     const Tag = this.tag;
