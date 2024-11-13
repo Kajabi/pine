@@ -1807,7 +1807,13 @@ declare namespace LocalJSX {
           * @defaultValue true
          */
         "hasArrow"?: boolean;
+        /**
+          * Emitted after a popover is closed
+         */
         "onPdsPopoverHide"?: (event: PdsPopoverCustomEvent<any>) => void;
+        /**
+          * Emitted after a popover is shown
+         */
         "onPdsPopoverShow"?: (event: PdsPopoverCustomEvent<any>) => void;
         /**
           * Determines the preferred position of the popover

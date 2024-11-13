@@ -16,10 +16,10 @@
 
 ## Events
 
-| Event            | Description | Type               |
-| ---------------- | ----------- | ------------------ |
-| `pdsPopoverHide` |             | `CustomEvent<any>` |
-| `pdsPopoverShow` |             | `CustomEvent<any>` |
+| Event            | Description                       | Type               |
+| ---------------- | --------------------------------- | ------------------ |
+| `pdsPopoverHide` | Emitted after a popover is closed | `CustomEvent<any>` |
+| `pdsPopoverShow` | Emitted after a popover is shown  | `CustomEvent<any>` |
 
 
 ## Slots

@@ -2,3 +2,108 @@ import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
 
 # Popover
+
+Popovers display contextual information when users hover over or keyboard focus on an element. They typically contain more information than tooltips and can include interactive elements.
+
+## Guidelines
+### Usage
+- Use popovers for complex information that might overwhelm the main content.
+- Consider using a tooltip for simpler explanations or brief labels.
+
+#### When not to use
+- Don't use popovers for critical information that must be readily available.
+
+## Properties
+
+<DocArgsTable componentName="pds-popover" docSource={components} />
+
+## Variants
+### Default
+The trigger element is placed in the default slot and can be text, an icon, or another HTML element.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsPopover placement="bottom-start">
+        <div slot="trigger">
+          <PdsButton variant="accent">Popover</PdsButton>
+        </div>
+        <div slot="content">
+          <p><strong>This is a Popover</strong></p>
+        </div>
+      </PdsPopover>
+    `,
+    webComponent: `
+      <pds-popover placement="bottom-start">
+        <div slot="trigger">
+          <pds-button variant="accent">Popover</pds-button>
+        </div>
+        <div slot="content">
+          <p><strong>This is a Popover</strong></p>
+        </div>
+      </pds-popover>
+    `
+}}>
+  <pds-popover placement="bottom-start">
+    <div slot="trigger">
+        <pds-button variant="accent">Popover</pds-button>
+    </div>
+    <div slot="content">
+        <p><strong>This is a Popover</strong></p>
+    </div>
+  </pds-popover>
+</DocCanvas>
+
+### Content
+Popover content can be text or include HTML elements using a named content slot.
+
+### Positioning
+Using the placement prop, you can control where the popover appears relative to the trigger.
+
+### Arrow
+The popover includes an arrow by default, but you can hide it with the `has-arrow` prop.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsPopover content="This is popover content" has-arrow="false" placement="right">Hover me</PdsPopover>',
+    webComponent: '<pds-popover content="This is popover content" has-arrow="false" placement="right">Hover me</pds-popover>'
+}}>
+  <pds-popover content="This is popover content" has-arrow="false" placement="right">Hover me</pds-popover>
+</DocCanvas>
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsPopover placement="bottom-start" hasArrow="false">
+        <div slot="trigger">
+          <PdsButton variant="accent">Popover</PdsButton>
+        </div>
+        <div slot="content">
+          <p><strong>This is a Popover</strong></p>
+        </div>
+      </PdsPopover>
+    `,
+    webComponent: `
+      <pds-popover placement="bottom-start" has-arrow="false">
+        <div slot="trigger">
+          <pds-button variant="accent">Popover</pds-button>
+        </div>
+        <div slot="content">
+          <p><strong>This is a Popover</strong></p>
+        </div>
+      </pds-popover>
+    `
+}}>
+  <pds-popover placement="bottom-start" has-arrow="false">
+    <div slot="trigger">
+        <pds-button variant="accent">Popover</pds-button>
+    </div>
+    <div slot="content">
+        <p><strong>This is a Popover</strong></p>
+    </div>
+  </pds-popover>
+</DocCanvas>
+
+## Additional Resources
+
+- Consider linking to relevant accessibility resources or providing best practices for popover usage.

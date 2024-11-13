@@ -56,9 +56,14 @@ export class PdsPopover {
     | 'left-start'
     | 'left-end' = 'right';
 
-
+  /**
+   * Emitted after a popover is closed
+   */
   @Event() pdsPopoverHide: EventEmitter;
 
+  /**
+   * Emitted after a popover is shown
+   */
   @Event() pdsPopoverShow: EventEmitter;
 
   componentDidRender() {
