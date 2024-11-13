@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`pds-select renders 1`] = `
+<pds-select component-id="field-1">
+  <template shadowrootmode="open">
+    <div class="pds-select">
+      <label htmlfor="field-1"></label>
+      <select class="pds-select__field" id="field-1"></select>
+    </div>
+  </template>
+</pds-select>
+`;
+
+exports[`pds-select renders with disabled attribute 1`] = `
+<pds-select aria-disabled="true" component-id="field-1" disabled="">
+  <template shadowrootmode="open">
+    <div class="pds-select">
+      <label htmlfor="field-1"></label>
+      <select class="pds-select__field" disabled="" id="field-1"></select>
+    </div>
+  </template>
+</pds-select>
+`;
