@@ -550,11 +550,11 @@
   },
   "font-family": {
     "greet": {
-      "value": "\"GreetStandard\"",
+      "value": "\"GreetStandard\", \"Inter\", -apple-system, system-ui, \"BlinkMacSystemFont\", \"Segoe UI\", \"Roboto\", \"Ubuntu\", sans-serif",
       "type": "fontFamilies"
     },
     "inter": {
-      "value": "\"Inter\"",
+      "value": "\"Inter\", -apple-system, system-ui, \"BlinkMacSystemFont\", \"Segoe UI\", \"Roboto\", \"Ubuntu\", sans-serif",
       "type": "fontFamilies"
     },
     "sprig": {
