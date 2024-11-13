@@ -596,10 +596,6 @@ export namespace Components {
         /**
           * Displays a message or hint below the input field.
          */
-        "hasError"?: boolean;
-        /**
-          * Displays a message or hint below the input field.
-         */
         "helperMessage"?: string;
         /**
           * Text to be displayed as the select label.
@@ -1936,10 +1932,6 @@ declare namespace LocalJSX {
           * Specifies the error message and provides an error-themed treatment to the field.
          */
         "errorMessage"?: string;
-        /**
-          * Displays a message or hint below the input field.
-         */
-        "hasError"?: boolean;
         /**
           * Displays a message or hint below the input field.
          */
