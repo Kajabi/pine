@@ -99,27 +99,12 @@ export class PdsPopover {
   })
   handleOutsideClick(event: MouseEvent) {
     if (this.isOpen) {
-      console.log('click');
       if (!this.el.contains(event.target as Node)) {
         this.isOpen = false;
         this.pdsPopoverHide.emit();
       }
     }
   }
-
-  // private handleClick = () => {
-  //   if (!this.isOpen) {
-  //     this.isOpen = true;
-  //     this.pdsPopoverShow.emit();
-  //   }
-  // };
-
-  // private handleOutsideClick = (event: MouseEvent) => {
-  //   if (!this.el.contains(event.target as Node)) {
-  //     this.isOpen = false;
-  //     this.pdsPopoverHide.emit();
-  //   }
-  // };
 
   render() {
     return (
