@@ -4,7 +4,7 @@ import {
 } from '../../utils/overlay';
 
 /**
- * @slot (default) - The popover's target element
+ * @slot trigger - The popover's target element
  * @slot content - HTML content for the popover
  */
 

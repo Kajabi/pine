@@ -24,10 +24,10 @@
 
 ## Slots
 
-| Slot          | Description                  |
-| ------------- | ---------------------------- |
-| `"(default)"` | The popover's target element |
-| `"content"`   | HTML content for the popover |
+| Slot        | Description                  |
+| ----------- | ---------------------------- |
+| `"content"` | HTML content for the popover |
+| `"trigger"` | The popover's target element |
 
 
 ----------------------------------------------
