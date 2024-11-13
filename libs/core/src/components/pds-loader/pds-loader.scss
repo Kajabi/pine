@@ -2,7 +2,7 @@
   align-items: center;
   display: flex;
   flex-direction: column;
-  gap: var(--pine-spacing-100);
+  gap: var(--pine-dimension-xs);
 }
 
 :host(.pds-loader--hidden),
@@ -20,14 +20,12 @@
 
 // Default Loader
 .pds-loader--spinner svg {
-  --color-background-spinner: var(--pine-color-mercury-400);
+  --color-background-spinner: var(--pine-color-brand);
   --number-spinner-timing: 2s;
   --number-spinner-path-timing: 1.5s;
 
   animation: rotate var(--number-spinner-timing) linear infinite;
-  block-size: var(--sizing-spinner);
   color: var(--color-background-spinner);
-  inline-size: var(--sizing-spinner);
 }
 
 .pds-loader__spinner-path {
@@ -42,44 +40,28 @@
 
 // Typing Loader
 .pds-loader--typing {
-  --border-radius-typing: var(--pine-border-radius-200);
-  --border-radius-typing-dot: var(--pine-border-radius-circle);
-
-  --box-shadow-typing: var(--pine-box-shadow-100);
-
-  --color-background-typing-default: var(--pine-color-grey-100);
-  --color-background-typing-dot-default: var(--pine-color-grey-400);
-
   --number-typing-timing: 1s;
 
   --opacity-typing-dot-default: 0.4;
   --opacity-typing-dot-active: 1;
 
-  --sizing-typing-dot: calc(var(--pine-spacing-150) / 2);
-
-  --spacing-typing-gap: var(--pine-spacing-050);
-  --spacing-typing-margin-block: var(--pine-spacing-0);
-  --spacing-typing-margin-inline: auto;
-  --spacing-typing-padding-block: 15px;
-  --spacing-typing-padding-inline: var(--pine-spacing-250);
-
   align-items: center;
-  background-color: var(--color-background-typing-default);
-  border-radius: var(--border-radius-typing);
-  box-shadow: var(--box-shadow-typing);
+  background-color: var(--pine-color-background-container-disabled);
+  border-radius: var(--pine-dimension-sm);
+  box-shadow: var(--pine-box-shadow);
   display: inline-flex;
-  gap: var(--spacing-typing-gap);
-  margin-block: var(--spacing-typing-margin-block);
-  margin-inline: var(--spacing-typing-margin-inline);
-  padding-block: var(--spacing-typing-padding-block);
-  padding-inline: var(--spacing-typing-padding-inline);
+  gap: var(--pine-dimension-2xs);
+  margin-block: var(--pine-dimension-none);
+  margin-inline: auto;
+  padding-block: 15px;
+  padding-inline: 20px;
   position: relative;
 
   span {
-    background-color: var(--color-background-typing-dot-default);
-    block-size: var(--sizing-typing-dot);
-    border-radius: var(--border-radius-typing-dot);
-    inline-size: var(--sizing-typing-dot);
+    background-color: var(--pine-color-border);
+    block-size: 12px;
+    border-radius: var(--pine-border-radius-circle);
+    inline-size: 12px;
     opacity: var(--opacity-typing-dot-default);
 
     @for $i from 1 through 3 {
@@ -98,7 +80,7 @@
 }
 
 .pds-loader__label {
-  --typography-label-default: var(--pine-font-weight-semi-bold) var(--pine-font-size-100)/var(--pine-line-height-150) var(--pine-font-family-circular);
+  --typography-label-default: var(--pine-font-weight-medium) var(--pine-font-size-body-md)/var(--pine-line-height-body) var(--pine-font-family-body);
 
   font: var(--typography-label-default);
 }
