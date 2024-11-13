@@ -483,11 +483,6 @@ export namespace Components {
          */
         "hasArrow"?: boolean;
         /**
-          * Determines whether or not the popover is visible
-          * @defaultValue false
-         */
-        "opened": boolean;
-        /**
           * Determines the preferred position of the popover
           * @defaultValue "right"
          */
@@ -1814,11 +1809,6 @@ declare namespace LocalJSX {
         "hasArrow"?: boolean;
         "onPdsPopoverHide"?: (event: PdsPopoverCustomEvent<any>) => void;
         "onPdsPopoverShow"?: (event: PdsPopoverCustomEvent<any>) => void;
-        /**
-          * Determines whether or not the popover is visible
-          * @defaultValue false
-         */
-        "opened"?: boolean;
         /**
           * Determines the preferred position of the popover
           * @defaultValue "right"

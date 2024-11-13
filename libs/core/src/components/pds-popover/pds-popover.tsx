@@ -1,4 +1,4 @@
-import { Component, Element, Event, Host, Prop, State, h, EventEmitter, Watch } from '@stencil/core';
+import { Component, Element, Event, Host, Prop, State, h, EventEmitter, Listen } from '@stencil/core';
 import {
   positionTooltip
 } from '../../utils/overlay';
@@ -56,39 +56,10 @@ export class PdsPopover {
     | 'left-start'
     | 'left-end' = 'right';
 
-  /**
-   * Determines whether or not the popover is visible
-   * @defaultValue false
-   */
-  @Prop({mutable: true, reflect: true}) opened = false;
-
-  @Watch('opened')
-  handleOpenPopover() {
-    if (this.opened) {
-      this.handlePopoverShow();
-    } else {
-      this.handlePopoverHide();
-    }
-  }
 
   @Event() pdsPopoverHide: EventEmitter;
 
   @Event() pdsPopoverShow: EventEmitter;
-
-  componentWillLoad() {
-    if (this.opened) {
-      this.opened = true;
-    }
-
-    this.el.addEventListener('blur', this.handlePopoverHide, true);
-    this.el.addEventListener('focus', this.handlePopoverShow, true);
-  }
-
-  componentDidUpdate() {
-    if (this.opened) {
-      this.opened = true;
-    }
-  }
 
   componentDidRender() {
     positionTooltip({elem: this.el, elemPlacement: this.placement, overlay: this.contentEl});
@@ -102,29 +73,44 @@ export class PdsPopover {
     document.removeEventListener('click', this.handleOutsideClick);
   }
 
-  private handlePopoverHide = () => {
-    this.opened = false;
-    this.pdsPopoverHide.emit();
-  };
-
-  private handlePopoverShow = () => {
-    this.opened = true;
-    this.pdsPopoverShow.emit();
-  };
-
-  private handleClick = () => {
+  @Listen('click', {
+    capture: true
+  })
+  handleClick(event: MouseEvent) {
     if (!this.isOpen) {
       this.isOpen = true;
       this.pdsPopoverShow.emit();
+      event.stopPropagation();
     }
-  };
+  }
 
-  private handleOutsideClick = (event: MouseEvent) => {
-    if (!this.el.contains(event.target as Node)) {
-      this.isOpen = false;
-      this.pdsPopoverHide.emit();
+  @Listen('click', {
+    capture: true,
+    target: 'document'
+  })
+  handleOutsideClick(event: MouseEvent) {
+    if (this.isOpen) {
+      console.log('click');
+      if (!this.el.contains(event.target as Node)) {
+        this.isOpen = false;
+        this.pdsPopoverHide.emit();
+      }
     }
-  };
+  }
+
+  // private handleClick = () => {
+  //   if (!this.isOpen) {
+  //     this.isOpen = true;
+  //     this.pdsPopoverShow.emit();
+  //   }
+  // };
+
+  // private handleOutsideClick = (event: MouseEvent) => {
+  //   if (!this.el.contains(event.target as Node)) {
+  //     this.isOpen = false;
+  //     this.pdsPopoverHide.emit();
+  //   }
+  // };
 
   render() {
     return (
@@ -134,7 +120,7 @@ export class PdsPopover {
           class={`
             pds-popover
             pds-popover--${this.placement}
-            ${this.opened ? 'pds-popover--is-open' : ''}
+            ${this.isOpen ? 'pds-popover--is-open' : ''}
             ${this.hasArrow ? '' : 'pds-popover--no-arrow'}
           `}
         >
@@ -147,11 +133,10 @@ export class PdsPopover {
           </span>
 
           <div class="pds-popover__content"
-            aria-hidden={this.opened ? 'false' : 'true'}
-            aria-live={this.opened ? 'polite' : 'off'}
+            aria-hidden={this.isOpen ? 'false' : 'true'}
+            aria-live={this.isOpen ? 'polite' : 'off'}
             id={this.componentId}
             ref={(el) => (this.contentEl = el)}
-            role=""
           >
             <slot
               name="content"
