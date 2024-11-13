@@ -19,43 +19,43 @@ Popovers display contextual information when users hover over or keyboard focus 
 
 ## Variants
 ### Default
-The trigger element is placed in the default slot and can be text, an icon, or another HTML element.
+The popover's appearance and behavior are primarily controlled by two slots:
+1. **`trigger`:** This slot is used to define the element that triggers the popover. It can be any HTML element, such as a button or link.
+2. **`content`:** This slot is used to define the content of the popover. It can contain any HTML elements, including text, images, forms, or other components.
+
 
 <DocCanvas client:only
   mdxSource={{
     react: `
       <PdsPopover placement="bottom-start">
         <div slot="trigger">
-          <PdsButton variant="accent">Popover</PdsButton>
+          <PdsButton variant="secondary">Popover</PdsButton>
         </div>
         <div slot="content">
-          <p><strong>This is a Popover</strong></p>
+          <p>This is a Popover</p>
         </div>
       </PdsPopover>
     `,
     webComponent: `
       <pds-popover placement="bottom-start">
         <div slot="trigger">
-          <pds-button variant="accent">Popover</pds-button>
+          <pds-button variant="secondary">Popover</pds-button>
         </div>
         <div slot="content">
-          <p><strong>This is a Popover</strong></p>
+          <p>This is a Popover</p>
         </div>
       </pds-popover>
     `
 }}>
   <pds-popover placement="bottom-start">
     <div slot="trigger">
-        <pds-button variant="accent">Popover</pds-button>
+        <pds-button variant="secondary">Popover</pds-button>
     </div>
     <div slot="content">
-        <p><strong>This is a Popover</strong></p>
+        <p>This is a Popover</p>
     </div>
   </pds-popover>
 </DocCanvas>
-
-### Content
-Popover content can be text or include HTML elements using a named content slot.
 
 ### Positioning
 Using the placement prop, you can control where the popover appears relative to the trigger.
@@ -68,30 +68,30 @@ The popover includes an arrow by default, but you can hide it with the `has-arro
     react: `
       <PdsPopover placement="bottom-start" hasArrow="false">
         <div slot="trigger">
-          <PdsButton variant="accent">Popover</PdsButton>
+          <PdsButton variant="secondary">Popover</PdsButton>
         </div>
         <div slot="content">
-          <p><strong>This is a Popover</strong></p>
+          <p>This is a Popover</p>
         </div>
       </PdsPopover>
     `,
     webComponent: `
       <pds-popover placement="bottom-start" has-arrow="false">
         <div slot="trigger">
-          <pds-button variant="accent">Popover</pds-button>
+          <pds-button variant="secondary">Popover</pds-button>
         </div>
         <div slot="content">
-          <p><strong>This is a Popover</strong></p>
+          <p>This is a Popover</p>
         </div>
       </pds-popover>
     `
 }}>
   <pds-popover placement="bottom-start" has-arrow="false">
     <div slot="trigger">
-        <pds-button variant="accent">Popover</pds-button>
+        <pds-button variant="secondary">Popover</pds-button>
     </div>
     <div slot="content">
-        <p><strong>This is a Popover</strong></p>
+        <p>This is a Popover</p>
     </div>
   </pds-popover>
 </DocCanvas>

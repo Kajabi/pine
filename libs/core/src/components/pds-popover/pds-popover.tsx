@@ -86,6 +86,10 @@ export class PdsPopover {
       this.isOpen = true;
       this.pdsPopoverShow.emit();
       event.stopPropagation();
+    } else {
+      this.isOpen = false;
+      this.pdsPopoverHide.emit();
+      event.stopPropagation();
     }
   }
 

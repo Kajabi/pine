@@ -8,25 +8,27 @@ export default {
   decorators: [withActions],
   parameters: {
     actions: {
-      handles: ['mouseEnter', 'pdsPopoverShow', 'mouseLeave', 'pdsPopoverHide'],
+      handles: ['pdsPopoverShow', 'pdsPopoverHide'],
     },
   },
   title: 'components/Popover'
 }
 
 const BaseTemplate = (args) => html`
-  <pds-popover has-arrow=${args.hasArrow} placement=${args.placement} html-content=${args.htmlContent}>
-    <div slot="trigger">
-      <pds-button variant="accent">Click</pds-button>
-    </div>
-    <div slot="content">
-      <p><strong>This is a Popover</strong></p>
-    </div>
+  <pds-popover has-arrow=${args.hasArrow} placement=${args.placement}>
+		${args.slot}
   </pds-popover>`;
 
 export const Default = BaseTemplate.bind({});
 Default.args = {
-  content: "The popover content",
-  placement: "right",
-  slot: "target text"
+	hasArrow: true,
+	placement: "right-start",
+	slot: html`
+		<div slot="trigger">
+			<pds-button variant="secondary">Popover</pds-button>
+		</div>
+		<div slot="content">
+			<p>This is a Popover</p>
+		</div>
+	`
 };
