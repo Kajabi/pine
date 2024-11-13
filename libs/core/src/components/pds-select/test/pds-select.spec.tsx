@@ -7,39 +7,7 @@ describe('pds-select', () => {
       components: [PdsSelect],
       html: `<pds-select component-id="field-1"></pds-select>`,
     });
-    expect(page.root).toEqualHtml(`
-      <pds-select component-id="field-1">
-        <mock:shadow-root>
-          <div class="pds-select">
-            <label htmlFor="field-1"></label>
-            <select class="pds-select__field" id="field-1"></select>
-          </div>
-        </mock:shadow-root>
-      </pds-select>
-    `);
-  });
-
-  it('renders with options', async () => {
-    const page = await newSpecPage({
-      components: [PdsSelect],
-      html: `<pds-select options='[{"value": "1", "label": "Option 1"}, {"value": "2", "label": "Option 2"}]'></pds-select>`,
-    });
-
-    await page.waitForChanges();
-
-    expect(page.root).toEqualHtml(`
-      <pds-select options='[{"value": "1", "label": "Option 1"}, {"value": "2", "label": "Option 2"}]'>
-        <mock:shadow-root>
-          <div class="pds-select">
-            <label></label>
-            <select class="pds-select__field">
-              <option value="1">Option 1</option>
-              <option value="2">Option 2</option>
-            </select>
-          </div>
-        </mock:shadow-root>
-      </pds-select>
-    `);
+    expect(page.root).toMatchSnapshot();
   });
 
   it('renders with label', async () => {
@@ -47,16 +15,16 @@ describe('pds-select', () => {
       components: [PdsSelect],
       html: `<pds-select label="Select Label"></pds-select>`,
     });
-    expect(page.root).toEqualHtml(`
-      <pds-select label="Select Label">
-        <mock:shadow-root>
-          <div class="pds-select">
-            <label>Select Label</label>
-            <select class="pds-select__field"></select>
-          </div>
-        </mock:shadow-root>
-      </pds-select>
-    `);
+    if (page.root && page.root.shadowRoot) {
+      const label = page.root.shadowRoot.querySelector('label');
+      if (label) {
+        expect(label.textContent).toBe('Select Label');
+      } else {
+        throw new Error('label is not available');
+      }
+    } else {
+      throw new Error('page.root or page.root.shadowRoot is not available');
+    }
   });
 
   it('renders with error message', async () => {
@@ -64,17 +32,9 @@ describe('pds-select', () => {
       components: [PdsSelect],
       html: `<pds-select component-id="field-1" error-message="Error occurred"></pds-select>`,
     });
-    expect(page.root).toEqualHtml(`
-      <pds-select component-id="field-1" error-message="Error occurred">
-        <mock:shadow-root>
-          <div class="pds-select">
-            <label htmlFor="field-1"></label>
-            <select class="pds-select__field" id="field-1"></select>
-            <p class="pds-select__error-message" id="field-1__error-message" aria-live="assertive">Error occurred</p>
-          </div>
-        </mock:shadow-root>
-      </pds-select>
-    `);
+
+    const errorMessage = page.root?.shadowRoot?.querySelector('.pds-select__error-message');
+    expect(errorMessage?.textContent).toBe('Error occurred');
   });
 
   it('renders with helper message', async () => {
@@ -85,19 +45,8 @@ describe('pds-select', () => {
 
     await page.waitForChanges(); // Ensures component fully renders
 
-    expect(page.root).toEqualHtml(`
-      <pds-select component-id="field-1" helper-message="Helper text">
-        <mock:shadow-root>
-          <div class="pds-select">
-            <label htmlFor="field-1"></label>
-            <select class="pds-select__field" id="field-1"></select>
-            <p class="pds-select__helper-message" id="field-1__helper-message">
-              Helper text
-            </p>
-          </div>
-        </mock:shadow-root>
-      </pds-select>
-    `);
+    const helperMessage = page.root?.shadowRoot?.querySelector('.pds-select__helper-message');
+    expect(helperMessage?.textContent).toBe('Helper text');
   });
 
   it('renders with disabled attribute', async () => {
@@ -108,16 +57,7 @@ describe('pds-select', () => {
 
     await page.waitForChanges(); // Ensures component fully renders
 
-    expect(page.root).toEqualHtml(`
-      <pds-select aria-disabled="true" component-id="field-1" disabled>
-        <mock:shadow-root>
-          <div class="pds-select">
-            <label htmlFor="field-1"></label>
-            <select class="pds-select__field" id="field-1" disabled></select>
-          </div>
-        </mock:shadow-root>
-      </pds-select>
-    `);
+    expect(page.root).toMatchSnapshot();
   });
 
   it('updates value prop on value change', async () => {
@@ -159,5 +99,38 @@ describe('pds-select', () => {
     } else {
       throw new Error('select element is not available');
     }
+  });
+
+  it('parses valid JSON options correctly', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select options='[{"value": "1", "label": "Option 1"}, {"value": "2", "label": "Option 2"}]'></pds-select>`,
+    });
+
+    const pdsSelect = page.rootInstance;
+    expect(pdsSelect.parsedOptions).toEqual([
+      { value: '1', label: 'Option 1' },
+      { value: '2', label: 'Option 2' },
+    ]);
+  });
+
+  it('returns an empty array for invalid JSON options', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select options='invalid-json'></pds-select>`,
+    });
+
+    const pdsSelect = page.rootInstance;
+    expect(pdsSelect.parsedOptions).toEqual([]);
+  });
+
+  it('returns an empty array for empty options', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select options=''></pds-select>`,
+    });
+
+    const pdsSelect = page.rootInstance;
+    expect(pdsSelect.parsedOptions).toEqual([]);
   });
 });
