@@ -26,11 +26,6 @@ export class PdsSelect {
   /**
    * Displays a message or hint below the input field.
    */
-  @Prop() hasError?: boolean;
-
-  /**
-   * Displays a message or hint below the input field.
-   */
   @Prop() helperMessage?: string;
 
   /**
@@ -76,8 +71,10 @@ export class PdsSelect {
    */
   get parsedOptions() {
     try {
+      console.log('this.options:', this.options);
       return JSON.parse(this.options) || [];
     } catch (error) {
+      console.log('error:', error);
       console.error('Invalid options format:', error);
       return [];
     }
@@ -88,14 +85,7 @@ export class PdsSelect {
       <Host aria-disabled={this.disabled ? 'true' : null}>
         <div class="pds-select">
           <PdsLabel htmlFor={this.componentId} text={this.label} />
-          <select
-            class={`pds-select__field ${this.hasError ? 'has-error' : ''}`}
-            disabled={this.disabled}
-            id={this.componentId}
-            name={this.name}
-            onChange={this.onSelectEvent}
-            required={this.required}
-          >
+          <select class="pds-select__field" disabled={this.disabled} id={this.componentId} name={this.name} onChange={this.onSelectEvent} required={this.required}>
             {this.parsedOptions.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}

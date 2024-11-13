@@ -6,7 +6,6 @@ export default {
   args: {
     componentId: 'pds-select-example',
     disabled: true,
-    hasError: true,
     helperMessage: 'Please use the correct format',
     label: 'Benzo Alpha',
     name: 'beatles',
@@ -28,7 +27,6 @@ const BaseTemplate = (args) =>
     component-id="${args.componentId}"
     disabled="${args.disabled}"
     error-message="${args.errorMessage}"
-    has-error="${args.hasError}"
     helper-message="${args.helperMessage}"
     label="${args.label}"
     name="${args.name}"
@@ -42,7 +40,6 @@ Default.args = {
   componentId: 'pds-select-example',
   disabled: false,
   errorMessage: 'Naw, son',
-  hasError: false,
   helperMessage: 'Please use the correct format',
   label: 'Select your favorite Beatle',
   name: 'beatles',
