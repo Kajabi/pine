@@ -10,12 +10,12 @@ export default {
     helperMessage: 'Please use the correct format',
     label: 'Benzo Alpha',
     name: 'beatles',
-    options: [
+    options: JSON.stringify([
       { value: 'john', label: 'John Lennon1' },
       { value: 'paul', label: 'Paul McCartney1' },
       { value: 'george', label: 'George Harrison1' },
       { value: 'ringo', label: 'Ringo Starr1' },
-    ],
+    ]),
     required: true,
   },
   argTypes: extractArgTypes('pds-select'),
@@ -46,11 +46,11 @@ Default.args = {
   helperMessage: 'Please use the correct format',
   label: 'Select your favorite Beatle',
   name: 'beatles',
-  options: [
+  options: JSON.stringify([
     { value: 'paul', label: 'Paul McCartney' },
     { value: 'john', label: 'John Lennon' },
     { value: 'george', label: 'George Harrison' },
     { value: 'ringo', label: 'Ringo Starr' },
-  ],
+  ]),
   required: true,
 };
