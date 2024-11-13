@@ -75,8 +75,8 @@
   --pine-color-warning-disabled: #fffbeb;
   --pine-color-warning-hover: #db7204;
   --pine-color-brand: #ff3e14;
-  --pine-font-family-heading: "GreetStandard";
-  --pine-font-family-body: "Inter";
+  --pine-font-family-heading: "GreetStandard", "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif;
+  --pine-font-family-body: "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif;
   --pine-font-size: 14px;
   --pine-font-size-body-2xs: 8px;
   --pine-font-size-body-xs: 10px;
@@ -122,10 +122,10 @@
   --pine-border: 1px solid #d2d1d1;
   --pine-border-hover: 1px solid #9b9a98;
   --pine-border-none: 0px solid #d2d1d1;
-  --pine-typography-heading-1: 600 28px/1.25 "GreetStandard";
-  --pine-typography-heading-2: 600 26px/1.25 "GreetStandard";
-  --pine-typography-heading-3: 600 22px/1.25 "GreetStandard";
-  --pine-typography-heading-4: 600 20px/1.25 "GreetStandard";
-  --pine-typography-heading-5: 500 18px/1.25 "GreetStandard";
-  --pine-typography-heading-6: 500 16px/1.25 "GreetStandard";
+  --pine-typography-heading-1: 600 28px/1.25 "GreetStandard", "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif;
+  --pine-typography-heading-2: 600 26px/1.25 "GreetStandard", "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif;
+  --pine-typography-heading-3: 600 22px/1.25 "GreetStandard", "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif;
+  --pine-typography-heading-4: 600 20px/1.25 "GreetStandard", "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif;
+  --pine-typography-heading-5: 500 18px/1.25 "GreetStandard", "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif;
+  --pine-typography-heading-6: 500 16px/1.25 "GreetStandard", "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif;
 }
