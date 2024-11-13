@@ -99,4 +99,24 @@ describe('pds-select', () => {
       </pds-select>
     `);
   });
+
+  it('renders with disabled attribute', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select component-id="field-1" disabled></pds-select>`,
+    });
+
+    await page.waitForChanges(); // Ensures component fully renders
+
+    expect(page.root).toEqualHtml(`
+      <pds-select aria-disabled="true" component-id="field-1" disabled>
+        <mock:shadow-root>
+          <div class="pds-select">
+            <label htmlFor="field-1"></label>
+            <select class="pds-select__field" id="field-1" disabled></select>
+          </div>
+        </mock:shadow-root>
+      </pds-select>
+    `);
+  });
 });
