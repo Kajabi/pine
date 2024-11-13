@@ -1,32 +1,7 @@
 :host {
-  --border-interactive-default: var(--pine-border-interactive-default);
-  --border-interactive-hover: var(--pine-border-interactive-hover);
 
-  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--color-focus-visible-outline);
-  --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--color-focus-visible-outline-error);
-
-  --color-background-default: var(--pine-color-white);
-  --color-background-disabled: var(--pine-color-grey-100);
-  --color-background-hover: var(--pine-color-grey-050);
-  --color-background-error-default: var(--pine-color-red-050);
-  --color-border-error-default: var(--pine-color-red-600);
-  --color-border-focus-visible: var(--pine-color-grey-400);
-  --color-border-hover: var(--pine-color-grey-400);
-  --color-focus-visible-outline: var(--pine-color-purple-300);
-  --color-focus-visible-outline-error: var(--pine-color-red-300);
-  --color-text-disabled-default: var(--pine-color-grey-400);
-  --color-text-message-error-default: var(--pine-color-red-600);
-  --color-text-placeholder-default: var(--pine-color-grey-600);
-  --color-text-placeholder-disabled: var(--pine-color-grey-400);
-
-  --font-weight-label-default: var(--pine-font-weight-body-medium);
-
-  --spacing-margin-block-end-label: var(--pine-spacing-100);
-  --spacing-margin-block-start-helper-message: var(--pine-spacing-100);
-  --spacing-padding-block-field: var(--pine-spacing-100);
-  --spacing-padding-inline-field: var(--pine-spacing-200);
-
-  --typography-message-default: var(--pine-typography-body-sm-default);
+  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
+  --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring-danger);
 
   display: inline;
 }
@@ -38,23 +13,23 @@
 
 label {
   display: block;
-  font-weight: var(--font-weight-label-default);
-  margin-block-end: var(--spacing-margin-block-end-label);
+  font-weight: var(--pine-font-weight-medium);
+  margin-block-end: var(--pine-dimension-xs);
 }
 
 .pds-textarea__field {
-  background-color: var(--color-background-default);
-  border: var(--border-interactive-default);
-  border-radius: var(--pine-border-radius-100);
-  padding: var(--spacing-padding-block-field) var(--spacing-padding-inline-field);
+  background-color: var(--pine-color-background-container);
+  border: var(--pine-border);
+  border-radius: calc(var(--pine-dimension-xs) * 1.25);
+  padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
 
   &:hover:not(:disabled, .is-invalid) {
-    border: var(--border-interactive-hover);
+    border: var(--pine-border-hover);
   }
 
   &:disabled {
-    background-color: var(--color-background-disabled);
-    color: var(--color-text-disabled-default);
+    background-color: var(--pine-color-background-container-disabled);
+    color: var(--pine-color-text-disabled);
     cursor: not-allowed;
   }
 
@@ -65,11 +40,11 @@ label {
   }
 
   &::placeholder {
-    color: var(--color-text-placeholder-default);
+    color: var(--pine-color-text-placeholder);
   }
 
   &.is-invalid {
-    border-color: var(--color-border-error-default);
+    border-color: var(--pine-color-border-danger);
 
     &:focus-visible {
       box-shadow: var(--box-shadow-focus-error);
@@ -79,10 +54,14 @@ label {
 
 .pds-textarea__error-message,
 .pds-textarea__helper-message {
-  font: var(--typography-message-default);
-  margin-block-start: var(--spacing-margin-block-start-helper-message);
+  font-family: var(--pine-font-family-body);
+  font-size: var(--pine-font-size);
+  font-weight: var(--pine-font-weight-medium);
+  letter-spacing: var(--pine-letter-spacing);
+  line-height: var(--pine-line-height-body);
+  margin-block-start: var(--pine-dimension-xs);
 }
 
 .pds-textarea__error-message {
-  color: var(--color-text-message-error-default);
+  color: var(--pine-color-text-danger);
 }
