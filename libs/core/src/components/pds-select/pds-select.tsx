@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
 import { messageId } from '../../utils/form';
 import { PdsLabel } from '../_internal/pds-label/pds-label';
 
@@ -54,6 +54,24 @@ export class PdsSelect {
   @Prop() required?: boolean;
 
   /**
+   * The value of the input.
+   */
+  @Prop({ mutable: true }) value?: string;
+
+  /**
+   * Emitted when a keyboard input occurred.
+   */
+  @Event() pdsSelect: EventEmitter<InputEvent>;
+
+  private onSelectEvent = (ev: Event) => {
+    const select = ev.target as HTMLInputElement | null;
+    if (select) {
+      this.value = select.value || '';
+    }
+    this.pdsSelect.emit(ev as InputEvent);
+  };
+
+  /**
    * Utility to parse JSON options safely
    */
   get parsedOptions() {
@@ -70,7 +88,14 @@ export class PdsSelect {
       <Host aria-disabled={this.disabled ? 'true' : null}>
         <div class="pds-select">
           <PdsLabel htmlFor={this.componentId} text={this.label} />
-          <select class={`pds-select__field ${this.hasError ? 'has-error' : ''}`} disabled={this.disabled} id={this.componentId} name={this.name} required={this.required}>
+          <select
+            class={`pds-select__field ${this.hasError ? 'has-error' : ''}`}
+            disabled={this.disabled}
+            id={this.componentId}
+            name={this.name}
+            onChange={this.onSelectEvent}
+            required={this.required}
+          >
             {this.parsedOptions.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
