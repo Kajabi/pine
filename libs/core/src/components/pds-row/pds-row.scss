@@ -1,6 +1,5 @@
 :host {
-  --border-default: var(--pine-border-width-thin) solid var(--pine-color-grey-300);
-  --row-gap-y: calc(var(--pine-spacing-250) / 2);
+  --row-gap-y: 10px;
   --row-gap-x: 10px;
 
   display: block;
@@ -34,7 +33,7 @@
 }
 
 .pds-row--border {
-  border: var(--border-default);
+  border: var(--pine-border);
 }
 
 // Justify Content helpers
