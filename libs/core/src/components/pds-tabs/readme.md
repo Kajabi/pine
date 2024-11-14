@@ -25,10 +25,10 @@
 
 ## CSS Custom Properties
 
-| Name                         | Description                    |
-| ---------------------------- | ------------------------------ |
-| `--spacing-panel-margin-top` | Optional margin-top for panels |
-| `--spacing-panel-padding`    | Optional padding for panels    |
+| Name                                | Description                    |
+| ----------------------------------- | ------------------------------ |
+| `--tabs-dimension-panel-margin-top` | Optional margin-top for panels |
+| `--tabs-dimension-panel-padding`    | Optional padding for panels    |
 
 
 ----------------------------------------------
