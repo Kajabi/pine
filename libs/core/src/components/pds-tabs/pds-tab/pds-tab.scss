@@ -1,29 +1,8 @@
 pds-tab {
-  --border-none: var(--pine-border-width-none);
 
-  --border-radius-availability: var(--pine-border-radius-100);
-  --border-radius-default: var(--pine-border-radius-125);
-  --border-radius-none: var(--pine-border-radius-0);
+  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
 
-  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
-
-  --color-background-active: var(--pine-color-grey-900);
-  --color-background-availability: var(--pine-color-white);
-  --color-background-default: var(--pine-color-grey-300);
-  --color-background-hover: var(--pine-color-grey-100);
-  --color-indicator-active: var(--pine-color-mercury-500);
-  --color-text-active: var(--pine-color-grey-900);
-  --color-text-active-inverse: var(--pine-color-white);
-  --color-text-default: var(--pine-color-grey-700);
-  --color-text-focus: var(--pine-color-grey-800);
-
-  --letter-spacing-default: var(--pine-letter-spacing-body-md);
-
-  --outline: 4px solid var(--pine-color-blue-200);
-
-  --spacing-padding-none: var(--pine-spacing-0);
-
-  --typography-default: var(--pine-typography-body-md-medium);
+  --outline: 4px solid var(--pine-color-focus-ring);
 
   display: inline-block;
   position: relative;
@@ -35,19 +14,19 @@ pds-tab {
 @mixin pds-button-style-reset {
   appearance: none;
   background-color: transparent;
-  border: var(--border-none);
+  border: var(--pine-dimension-none);
   box-shadow: none;
   color: inherit;
   cursor: pointer;
   font-family: inherit;
-  padding: var(--spacing-padding-none);
+  padding: var(--pine-dimension-none);
 }
 
 .pds-tab {
   @include pds-button-style-reset();
 
   align-items: center;
-  color: var(--color-text-default);
+  color: var(--pine-color-text-secondary);
   display: inline-flex;
   position: relative;
   text-decoration: none;
@@ -55,7 +34,7 @@ pds-tab {
 
   &.is-active,
   &[aria-selected='true'] {
-    color: var(--color-text-active);
+    color: var(--pine-color-text);
 
     .pds-tab__content::after {
       opacity: 1;
@@ -63,7 +42,7 @@ pds-tab {
   }
 
   &:hover {
-    color: var(--color-text-active);
+    color: var(--pine-color-text);
   }
 
   &:focus-visible {
@@ -73,13 +52,16 @@ pds-tab {
   }
 
   .pds-tab__content {
-    font: var(--typography-default);
-    letter-spacing: var(--letter-spacing-default);
+    font-family: var(--pine-font-family-body);
+    font-size: var(--pine-font-size);
+    font-weight: var(--pine-font-weight-medium);
+    letter-spacing: var(--pine-letter-spacing);
+    line-height: var(--pine-line-height-body);
     padding-block-end: 11px;
     position: relative;
 
     &::after {
-      background-color: var(--color-indicator-active);
+      background-color: var(--pine-color-brand);
       bottom: 0;
       content: '';
       height: 3px;
@@ -100,12 +82,12 @@ pds-tab {
 
   .pds-tab {
     background-color: var(--color-background-tab);
-    border-radius: var(--border-radius-availability) var(--border-radius-availability) var(--border-radius-none) var(--border-radius-none);
+    border-radius: calc(var(--pine-dimension-xs) * 1.25) calc(var(--pine-dimension-xs) * 1.25) var(--pine-dimension-none) var(--pine-dimension-none);
     padding: 8px 16px 13px;
 
     &.is-active,
     &[aria-selected='true'] {
-      --color-background-tab: var(--color-background-availability);
+      --color-background-tab: var(--pine-color-secondary);
 
       .pds-tab__content::after {
         opacity: 1;
@@ -117,11 +99,11 @@ pds-tab {
     }
 
     &:hover:not(.is-active, [aria-selected='true']) {
-      --color-background-tab: var(--color-background-default);
+      --color-background-tab: var(--pine-color-secondary-hover);
     }
 
     &:focus-visible {
-      color: var(--color-text-default);
+      color: var(--pine-color-text-secondary);
     }
   }
 
@@ -164,27 +146,27 @@ pds-tab {
 }
 
 .pds-tabs--filter {
-  --color-background-tab: var(--color-background-active);
+  --color-background-tab: var(--pine-color-background-container);
 
   .pds-tab {
     background-color: var(--color-background-tab);
     border-radius: 50px;
-    color: var(--color-text-active);
+    color: var(--pine-color-text);
     padding: 6px 15px;
 
     &.is-active,
     &[aria-selected='true'] {
-      --color-background-tab: var(--color-background-active);
-      color: var(--color-text-active-inverse)
+      --color-background-tab: var(--pine-color-primary);
+      color: var(--pine-color-text-primary);
     }
 
     &:hover:not(.is-active, [aria-selected='true']) {
-      --color-background-tab: var(--color-background-hover);
+      --color-background-tab: var(--pine-color-background-container-hover);
     }
   }
 
   .pds-tab__content {
-    padding-block-end: 0;
+    padding-block-end: var(--pine-dimension-none);
 
     &::after {
       content: unset;
