@@ -1,9 +1,11 @@
 // ALL variables listed below are temporary and need to be vetted with final token values
 :host {
+  --color-background-disabled: var(--pine-color-grey-100);
   --color-background-error: var(--pine-color-red-050);
   --color-border-default: var(--pine-color-grey-300);
   --color-border-disabled: var(--pine-color-grey-200);
   --color-border-error: var(--pine-color-red-600);
+  --color-text-disabled: var(--pine-color-grey-600);
   --color-text-error: var(--pine-color-red-600);
 
   --font-size-helper-message: var(--pine-font-size-100);
@@ -38,12 +40,20 @@ label {
 }
 
 select {
+  appearance: none;
   border: 1px solid var(--color-border-default);
   border-radius: 10px;
   font-size: var(--font-size-select-field);
   font-weight: var(--font-weight-select-field);
   line-height: var(--line-height-select-field);
   padding: var(--spacing-field-padding-block) var(--spacing-select-field-padding-inline);
+
+  &:disabled {
+    background-color: var(--color-background-disabled);
+    border-color: var(--color-border-disabled);
+    color: var(--color-text-disabled);
+    cursor: not-allowed;
+  }
 }
 
 .pds-select .has-error {
@@ -53,7 +63,7 @@ select {
 
 .pds-select__error-message,
 .pds-select__helper-message {
-  font-size: var(--font-size-helper-message);
+  font-size: var(--pine-font-size-085);
   font-weight: var(--font-weight-helper-message);
   line-height: var(--line-height-helper-message);
   margin-block-end: 0;
@@ -61,5 +71,8 @@ select {
 }
 
 .pds-select__error-message {
+  align-items: center;
   color: var(--color-text-error);
+  display: flex;
+  gap: var(--pine-spacing-050);
 }

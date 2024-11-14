@@ -27,6 +27,19 @@
 | `pdsSelect` | Emitted when a keyboard input occurred. | `CustomEvent<InputEvent>` |
 
 
+## Dependencies
+
+### Depends on
+
+- pds-icon
+
+### Graph
+```mermaid
+graph TD;
+  pds-select --> pds-icon
+  style pds-select fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 
