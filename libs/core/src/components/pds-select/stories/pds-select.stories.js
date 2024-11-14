@@ -5,8 +5,6 @@ export default {
   argTypes: extractArgTypes('pds-select'),
   args: {
     componentId: 'pds-select-example',
-    disabled: true,
-    helperMessage: 'Please use the correct format',
     label: 'Benzo Alpha',
     name: 'beatles',
     options: JSON.stringify([
@@ -37,10 +35,55 @@ const BaseTemplate = (args) =>
 
 export const Default = BaseTemplate.bind({});
 Default.args = {
-  componentId: 'pds-select-example',
+  componentId: 'pds-select-default-example',
+  disabled: false,
+  label: 'Select your favorite Beatle',
+  name: 'beatles',
+  options: JSON.stringify([
+    { value: 'paul', label: 'Paul McCartney' },
+    { value: 'john', label: 'John Lennon' },
+    { value: 'george', label: 'George Harrison' },
+    { value: 'ringo', label: 'Ringo Starr' },
+  ]),
+  required: true,
+};
+
+export const Disabled = BaseTemplate.bind({});
+Disabled.args = {
+  componentId: 'pds-select-disabled-example',
+  disabled: true,
+  label: 'Select your favorite Beatle',
+  name: 'beatles',
+  options: JSON.stringify([
+    { value: 'paul', label: 'Paul McCartney' },
+    { value: 'john', label: 'John Lennon' },
+    { value: 'george', label: 'George Harrison' },
+    { value: 'ringo', label: 'Ringo Starr' },
+  ]),
+  required: true,
+};
+
+export const withMessage = BaseTemplate.bind({});
+withMessage.args = {
+  componentId: 'pds-select-message-example',
+  disabled: false,
+  helperMessage: 'Please use the correct format',
+  label: 'Select your favorite Beatle',
+  name: 'beatles',
+  options: JSON.stringify([
+    { value: 'paul', label: 'Paul McCartney' },
+    { value: 'john', label: 'John Lennon' },
+    { value: 'george', label: 'George Harrison' },
+    { value: 'ringo', label: 'Ringo Starr' },
+  ]),
+  required: true,
+};
+
+export const Invalid = BaseTemplate.bind({});
+Invalid.args = {
+  componentId: 'pds-select-invalid-example',
   disabled: false,
   errorMessage: 'Naw, son',
-  helperMessage: 'Please use the correct format',
   label: 'Select your favorite Beatle',
   name: 'beatles',
   options: JSON.stringify([
