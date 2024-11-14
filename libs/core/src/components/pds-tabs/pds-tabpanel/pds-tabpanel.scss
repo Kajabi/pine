@@ -4,8 +4,8 @@
 
 .pds-tabpanel {
   display: none;
-  margin-top: var(--spacing-panel-margin-top);
-  padding: var(--spacing-panel-padding);
+  margin-top: var(--tabs-dimension-panel-margin-top);
+  padding: var(--tabs-dimension-panel-padding);
 
   &.is-active {
     display: block;
