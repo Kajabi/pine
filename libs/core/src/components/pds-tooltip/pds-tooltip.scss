@@ -1,21 +1,13 @@
 :host {
-  --border-radius-overlay: var(--pine-border-radius-125);
 
-  --border-width-arrow-down: var(--sizing-arrow-default) var(--sizing-arrow-default) 0;
-  --border-width-arrow-left: var(--sizing-arrow-default) var(--sizing-arrow-default) var(--sizing-arrow-default) 0;
-  --border-width-arrow-right: var(--sizing-arrow-default) 0 var(--sizing-arrow-default) var(--sizing-arrow-default);
-  --border-width-arrow-up: 0 var(--sizing-arrow-default) var(--sizing-arrow-default);
+  --tooltip-border-width-arrow-down: var(--tooltip-sizing-arrow) var(--tooltip-sizing-arrow) 0;
+  --tooltip-border-width-arrow-left: var(--tooltip-sizing-arrow) var(--tooltip-sizing-arrow) var(--tooltip-sizing-arrow) 0;
+  --tooltip-border-width-arrow-right: var(--tooltip-sizing-arrow) 0 var(--tooltip-sizing-arrow) var(--tooltip-sizing-arrow);
+  --tooltip-border-width-arrow-up: 0 var(--tooltip-sizing-arrow) var(--tooltip-sizing-arrow);
 
-  --box-shadow-default: var(--pine-box-shadow-200);
-
-  --color-background-default: var(--pine-color-grey-950);
-  --color-text-default: var(--pine-color-white);
-
-  --sizing-arrow-default: 6px;
-  --sizing-arrow-offset: 14px;
-  --sizing-width-default: 320px;
-
-  --spacing-padding-overlay: var(--pine-spacing-100) calc(var(--pine-spacing-300) / 2);
+  --tooltip-sizing-arrow: 6px;
+  --tooltip-sizing-arrow-offset: 14px;
+  --tooltip-dimension-max-width: 320px;
 
   display: inline-block;
   position: relative;
@@ -26,20 +18,20 @@
 
   ::slotted([slot="content"]) {
     display: block;
-    max-width: var(--sizing-width-default);
+    max-width: var(--tooltip-dimension-max-width);
     white-space: normal;
   }
 }
 
 .pds-tooltip__content {
-  background-color: var(--color-background-default);
-  border-radius: var(--border-radius-overlay);
-  box-shadow: var(--box-shadow-default);
-  color: var(--color-text-default);
+  background-color: var(--pine-color-primary);
+  border-radius: calc(var(--pine-dimension-xs) * 1.25);
+  box-shadow: var(--pine-box-shadow);
+  color: var(--pine-color-text-primary);
   // TODO: need to use block / none but the tooltip content width and height are needed for calculations
-  max-width: var(--sizing-width-default);
+  max-width: var(--tooltip-dimension-max-width);
   opacity: 0;
-  padding: var(--spacing-padding-overlay);
+  padding: var(--pine-dimension-xs) calc(var(--pine-dimension-md) / 2);
   position: absolute;
   visibility: hidden;
   width: max-content;
@@ -59,108 +51,108 @@
     border-color: transparent;
     border-right-color: transparent;
     border-style: solid;
-    border-width: var(--border-width-arrow-left);
+    border-width: var(--tooltip-border-width-arrow-left);
     content: '';
     height: 0;
     position: absolute;
     width: 0;
 
     .pds-tooltip--right & {
-      border-inline-end-color: var(--color-background-default);
-      border-width: var(--border-width-arrow-left);
-      left: calc(var(--sizing-arrow-default) * -1);
+      border-inline-end-color: var(--pine-color-primary);
+      border-width: var(--tooltip-border-width-arrow-left);
+      left: calc(var(--tooltip-sizing-arrow) * -1);
       top: 50%;
       transform: translateY(-50%);
     }
 
     .pds-tooltip--right-end & {
-      border-inline-end-color: var(--color-background-default);
-      border-width: var(--border-width-arrow-left);
-      bottom: var(--sizing-arrow-offset);
-      left: calc(var(--sizing-arrow-default) * -1);
+      border-inline-end-color: var(--pine-color-primary);
+      border-width: var(--tooltip-border-width-arrow-left);
+      bottom: var(--tooltip-sizing-arrow-offset);
+      left: calc(var(--tooltip-sizing-arrow) * -1);
       top: initial;
     }
 
     .pds-tooltip--right-start & {
-      border-inline-end-color: var(--color-background-default);
-      border-width: var(--border-width-arrow-left);
-      left: calc(var(--sizing-arrow-default) * -1);
-      top: var(--sizing-arrow-offset);
+      border-inline-end-color: var(--pine-color-primary);
+      border-width: var(--tooltip-border-width-arrow-left);
+      left: calc(var(--tooltip-sizing-arrow) * -1);
+      top: var(--tooltip-sizing-arrow-offset);
     }
 
     .pds-tooltip--top & {
-      border-block-start-color: var(--color-background-default);
-      border-width: var(--border-width-arrow-down);
-      bottom: calc(var(--sizing-arrow-default) * -1);
+      border-block-start-color: var(--pine-color-primary);
+      border-width: var(--tooltip-border-width-arrow-down);
+      bottom: calc(var(--tooltip-sizing-arrow) * -1);
       left: 50%;
       top: initial;
       transform: translateX(-50%);
     }
 
     .pds-tooltip--top-start & {
-      border-block-start-color: var(--color-background-default);
-      border-width: var(--border-width-arrow-down);
-      bottom: calc(var(--sizing-arrow-default) * -1);
-      left: var(--sizing-arrow-offset);
+      border-block-start-color: var(--pine-color-primary);
+      border-width: var(--tooltip-border-width-arrow-down);
+      bottom: calc(var(--tooltip-sizing-arrow) * -1);
+      left: var(--tooltip-sizing-arrow-offset);
       top: initial;
     }
 
     .pds-tooltip--top-end & {
-      border-block-start-color: var(--color-background-default);
-      border-width: var(--border-width-arrow-down);
-      bottom: calc(var(--sizing-arrow-default) * -1);
+      border-block-start-color: var(--pine-color-primary);
+      border-width: var(--tooltip-border-width-arrow-down);
+      bottom: calc(var(--tooltip-sizing-arrow) * -1);
       left: initial;
-      right: var(--sizing-arrow-offset);
+      right: var(--tooltip-sizing-arrow-offset);
       top: initial;
     }
 
     .pds-tooltip--left & {
-      border-inline-start-color: var(--color-background-default);
-      border-width: var(--border-width-arrow-right);
+      border-inline-start-color: var(--pine-color-primary);
+      border-width: var(--tooltip-border-width-arrow-right);
       left: initial;
-      right: calc(var(--sizing-arrow-default) * -1);
+      right: calc(var(--tooltip-sizing-arrow) * -1);
       top: 50%;
       transform: translateY(-50%);
     }
 
     .pds-tooltip--left-end & {
-      border-inline-start-color: var(--color-background-default);
-      border-width: var(--border-width-arrow-right);
-      bottom: var(--sizing-arrow-offset);
+      border-inline-start-color: var(--pine-color-primary);
+      border-width: var(--tooltip-border-width-arrow-right);
+      bottom: var(--tooltip-sizing-arrow-offset);
       left: initial;
-      right: calc(var(--sizing-arrow-default) * -1);
+      right: calc(var(--tooltip-sizing-arrow) * -1);
       top: initial;
     }
 
     .pds-tooltip--left-start & {
-      border-inline-start-color: var(--color-background-default);
-      border-width: var(--border-width-arrow-right);
+      border-inline-start-color: var(--pine-color-primary);
+      border-width: var(--tooltip-border-width-arrow-right);
       left: initial;
-      right: calc(var(--sizing-arrow-default) * -1);
-      top: var(--sizing-arrow-offset);
+      right: calc(var(--tooltip-sizing-arrow) * -1);
+      top: var(--tooltip-sizing-arrow-offset);
     }
 
     .pds-tooltip--bottom & {
-      border-block-end-color: var(--color-background-default);
-      border-width: var(--border-width-arrow-up);
+      border-block-end-color: var(--pine-color-primary);
+      border-width: var(--tooltip-border-width-arrow-up);
       left: 50%;
-      top: calc(var(--sizing-arrow-default) * -1);
+      top: calc(var(--tooltip-sizing-arrow) * -1);
       transform: translateX(-50%);
     }
 
     .pds-tooltip--bottom-end & {
-      border-block-end-color: var(--color-background-default);
-      border-width: var(--border-width-arrow-up);
+      border-block-end-color: var(--pine-color-primary);
+      border-width: var(--tooltip-border-width-arrow-up);
       left: initial;
-      right: var(--sizing-arrow-offset);
-      top: calc(var(--sizing-arrow-default) * -1);
+      right: var(--tooltip-sizing-arrow-offset);
+      top: calc(var(--tooltip-sizing-arrow) * -1);
     }
 
     .pds-tooltip--bottom-start & {
-      border-block-end-color: var(--color-background-default);
-      border-width: var(--border-width-arrow-up);
-      left: var(--sizing-arrow-offset);
-      top: calc(var(--sizing-arrow-default) * -1);
+      border-block-end-color: var(--pine-color-primary);
+      border-width: var(--tooltip-border-width-arrow-up);
+      left: var(--tooltip-sizing-arrow-offset);
+      top: calc(var(--tooltip-sizing-arrow) * -1);
     }
 
     .pds-tooltip--no-arrow & {
