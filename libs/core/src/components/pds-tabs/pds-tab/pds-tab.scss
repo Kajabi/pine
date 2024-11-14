@@ -146,7 +146,7 @@ pds-tab {
 }
 
 .pds-tabs--filter {
-  --color-background-tab: var(--pine-color-secondary);
+  --color-background-tab: var(--pine-color-background-container);
 
   .pds-tab {
     background-color: var(--color-background-tab);
@@ -161,7 +161,7 @@ pds-tab {
     }
 
     &:hover:not(.is-active, [aria-selected='true']) {
-      --color-background-tab: var(--pine-color-secondary-hover);
+      --color-background-tab: var(--pine-color-background-container-hover);
     }
   }
 
