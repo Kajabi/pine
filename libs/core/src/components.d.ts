@@ -792,7 +792,9 @@ export namespace Components {
   | 'h6'
   | 'p'
   | 'code'
-  | 'pre';
+  | 'pre'
+  | 'strong'
+  | 'em';
         /**
           * Sets the font weight.
          */
@@ -2153,7 +2155,9 @@ declare namespace LocalJSX {
   | 'h6'
   | 'p'
   | 'code'
-  | 'pre';
+  | 'pre'
+  | 'strong'
+  | 'em';
         /**
           * Sets the font weight.
          */

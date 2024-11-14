@@ -46,7 +46,7 @@ h6 {
   letter-spacing: 0.16px;
 }
 
-p {
+code, em, p, pre, strong {
   font-family: "Inter";
   font-size: 14px;
   font-weight: 400;
@@ -55,11 +55,17 @@ p {
 
 code, pre {
   font-family: monospace;
+  letter-spacing: 0;
+}
+
+strong {
+  font-weight: bolder;
 }
 
 h1, h2, h3, h4, h5, h6, p, code, pre {
   color: var(--pine-color-text-default);
 }
+
 
 // Colors/Variants/Sentiment
 $type-colors: (
@@ -108,7 +114,7 @@ $type-sizes: (
 $type-weights: (
   regular: 400,
   medium: 500,
-  semi-bold: 600,
+  semibold: 600,
   bold: 700,
 );
 

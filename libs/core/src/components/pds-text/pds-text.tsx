@@ -54,7 +54,9 @@ export class PdsText {
   | 'h6'
   | 'p'
   | 'code'
-  | 'pre';
+  | 'pre'
+  | 'strong'
+  | 'em';
 
   render() {
     const Tag = this.tag;
