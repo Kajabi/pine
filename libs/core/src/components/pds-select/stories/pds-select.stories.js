@@ -60,6 +60,19 @@ Disabled.args = {
     { value: 'george', label: 'George Harrison' },
     { value: 'ringo', label: 'Ringo Starr' },
   ]),
+};
+
+export const Required = BaseTemplate.bind({});
+Required.args = {
+  componentId: 'pds-select-required-example',
+  label: 'Select your favorite Beatle',
+  name: 'beatles',
+  options: JSON.stringify([
+    { value: 'paul', label: 'Paul McCartney' },
+    { value: 'john', label: 'John Lennon' },
+    { value: 'george', label: 'George Harrison' },
+    { value: 'ringo', label: 'Ringo Starr' },
+  ]),
   required: true,
 };
 
@@ -76,7 +89,6 @@ withMessage.args = {
     { value: 'george', label: 'George Harrison' },
     { value: 'ringo', label: 'Ringo Starr' },
   ]),
-  required: true,
 };
 
 export const Invalid = BaseTemplate.bind({});
@@ -92,5 +104,4 @@ Invalid.args = {
     { value: 'george', label: 'George Harrison' },
     { value: 'ringo', label: 'Ringo Starr' },
   ]),
-  required: true,
 };

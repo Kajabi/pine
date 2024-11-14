@@ -16,22 +16,22 @@ export class PdsSelect {
   /**
    * Indicates whether or not the select field is disabled.
    */
-  @Prop() disabled?: boolean;
+  @Prop() disabled: boolean;
 
   /**
    * Specifies the error message and provides an error-themed treatment to the field.
    */
-  @Prop() errorMessage?: string;
+  @Prop() errorMessage: string;
 
   /**
    * Displays a message or hint below the input field.
    */
-  @Prop() helperMessage?: string;
+  @Prop() helperMessage: string;
 
   /**
    * Text to be displayed as the select label.
    */
-  @Prop() label?: string;
+  @Prop() label: string;
 
   /**
    * Specifies the name. Submitted with the form name/value pair.
@@ -46,7 +46,7 @@ export class PdsSelect {
   /**
    * Indicates whether or not the select field is required.
    */
-  @Prop() required?: boolean;
+  @Prop() required: boolean;
 
   /**
    * The value of the input.

@@ -588,19 +588,19 @@ export namespace Components {
         /**
           * Indicates whether or not the select field is disabled.
          */
-        "disabled"?: boolean;
+        "disabled": boolean;
         /**
           * Specifies the error message and provides an error-themed treatment to the field.
          */
-        "errorMessage"?: string;
+        "errorMessage": string;
         /**
           * Displays a message or hint below the input field.
          */
-        "helperMessage"?: string;
+        "helperMessage": string;
         /**
           * Text to be displayed as the select label.
          */
-        "label"?: string;
+        "label": string;
         /**
           * Specifies the name. Submitted with the form name/value pair.
          */
@@ -612,7 +612,7 @@ export namespace Components {
         /**
           * Indicates whether or not the select field is required.
          */
-        "required"?: boolean;
+        "required": boolean;
         /**
           * The value of the input.
          */
