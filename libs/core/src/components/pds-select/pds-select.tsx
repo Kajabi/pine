@@ -71,10 +71,8 @@ export class PdsSelect {
    */
   get parsedOptions() {
     try {
-      console.log('this.options:', this.options);
-      return JSON.parse(this.options) || [];
+      return JSON.parse(this.options);
     } catch (error) {
-      console.log('error:', error);
       console.error('Invalid options format:', error);
       return [];
     }
