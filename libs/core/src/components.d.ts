@@ -483,6 +483,10 @@ export namespace Components {
          */
         "hasArrow"?: boolean;
         /**
+          * Hides the popover by disabling the isOpen state
+         */
+        "hide": () => Promise<void>;
+        /**
           * Determines the preferred position of the popover
           * @defaultValue "right"
          */
@@ -498,6 +502,10 @@ export namespace Components {
     | 'left'
     | 'left-start'
     | 'left-end';
+        /**
+          * Shows the popover by enabling the isOpen state
+         */
+        "show": () => Promise<void>;
     }
     interface PdsProgress {
         /**

@@ -22,6 +22,29 @@
 | `pdsPopoverShow` | Emitted after a popover is shown  | `CustomEvent<any>` |
 
 
+## Methods
+
+### `hide() => Promise<void>`
+
+Hides the popover by disabling the isOpen state
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `show() => Promise<void>`
+
+Shows the popover by enabling the isOpen state
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+
 ## Slots
 
 | Slot        | Description                  |

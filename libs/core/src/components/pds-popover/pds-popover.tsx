@@ -1,4 +1,4 @@
-import { Component, Element, Event, Host, Prop, State, h, EventEmitter, Listen } from '@stencil/core';
+import { Component, Element, Event, Host, Method, Prop, State, h, EventEmitter, Listen } from '@stencil/core';
 import {
   positionTooltip
 } from '../../utils/overlay';
@@ -15,7 +15,7 @@ import {
 })
 export class PdsPopover {
   private contentEl: HTMLElement | null;
-
+  private triggeredEvent: Event;
   /**
    * Reference to the Host element
    */
@@ -82,28 +82,58 @@ export class PdsPopover {
     capture: true
   })
   handleClick(event: MouseEvent) {
-    if (!this.isOpen) {
-      this.isOpen = true;
-      this.pdsPopoverShow.emit();
+    console.log('handleClick');
+    const closestTarget = (event.target as HTMLElement).closest("div[slot='trigger']");
+
+    if (!closestTarget) {
       event.stopPropagation();
-    } else {
-      this.isOpen = false;
-      this.pdsPopoverHide.emit();
-      event.stopPropagation();
+      return;
     }
+
+    if (!this.isOpen) {
+      console.log('calling handleClick SHOW');
+      this.show();
+    } else {
+      console.log('calling handleClick HIDE');
+      this.hide();
+    }
+    event.stopPropagation();
   }
 
   @Listen('click', {
-    capture: true,
     target: 'document'
   })
   handleOutsideClick(event: MouseEvent) {
+    console.log('handleOutsideClick');
+    console.log('Event emitted', this.triggeredEvent);
+
+    // console.log('this.triggerEl', this.triggerEl);
     if (this.isOpen) {
-      if (!this.el.contains(event.target as Node)) {
-        this.isOpen = false;
-        this.pdsPopoverHide.emit();
+      // if (!this.el.contains(event.target as Node)) {
+      console.log('event.target', event.target);
+      // if (this.isOpen && !this.el.contains(event.target as Node) && !this.contentEl?.contains(event.target as Node)) {
+      if(this.contentEl && !this.contentEl.contains(event.target as Node)) {
+        this.hide();
       }
     }
+  }
+
+  /**
+   * Shows the popover by enabling the isOpen state
+   */
+  @Method()
+  async show() {
+    this.isOpen = true;
+    this.triggeredEvent = this.pdsPopoverShow.emit();
+  }
+
+  /**
+   * Hides the popover by disabling the isOpen state
+   */
+  @Method()
+  async hide() {
+    this.isOpen = false;
+    this.triggeredEvent = this.pdsPopoverHide.emit();
   }
 
   render() {
