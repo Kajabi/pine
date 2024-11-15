@@ -85,7 +85,7 @@ export class PdsTextarea {
     isRequired(textarea, this);
 
     if (textarea) {
-      this.value = textarea.innerHTML;
+      this.value = textarea.value;
     }
 
     this.pdsTextareaChange.emit({value: this.value, event: ev});
