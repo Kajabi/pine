@@ -15,7 +15,6 @@ import {
 })
 export class PdsPopover {
   private contentEl: HTMLElement | null;
-  private triggeredEvent: Event;
   /**
    * Reference to the Host element
    */
@@ -91,10 +90,8 @@ export class PdsPopover {
     }
 
     if (!this.isOpen) {
-      console.log('calling handleClick SHOW');
       this.show();
     } else {
-      console.log('calling handleClick HIDE');
       this.hide();
     }
     event.stopPropagation();
@@ -117,7 +114,7 @@ export class PdsPopover {
   @Method()
   async show() {
     this.isOpen = true;
-    this.triggeredEvent = this.pdsPopoverShow.emit();
+    this.pdsPopoverShow.emit();
   }
 
   /**
@@ -126,7 +123,7 @@ export class PdsPopover {
   @Method()
   async hide() {
     this.isOpen = false;
-    this.triggeredEvent = this.pdsPopoverHide.emit();
+    this.pdsPopoverHide.emit();
   }
 
   render() {
