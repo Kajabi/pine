@@ -18,7 +18,7 @@ export class PdsSwitch {
   /**
    * Determines the input 'checked' state
    */
-  @Prop() checked = false;
+  @Prop({ mutable: true }) checked = false;
 
   /**
    * Determines the input 'disabled' state, preventing user interaction
@@ -68,11 +68,20 @@ export class PdsSwitch {
 
   /**
    * Emits an event on input change
-  */
+   */
   @Event() pdsSwitchChange: EventEmitter<InputEvent>;
 
   private onSwitchUpdate = (e: Event) => {
     if (this.disabled) return;
+
+    const input = e.target as HTMLInputElement;
+
+    if (this.type === 'checkbox') {
+      this.checked = input.checked; // For checkbox, update checked state
+    } else if (this.type === 'radio') {
+      this.checked = true; // For radio, set checked to true on selection
+    }
+
     this.pdsSwitchChange.emit(e as InputEvent);
   };
 
