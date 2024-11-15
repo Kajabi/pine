@@ -229,4 +229,25 @@ describe('pds-switch', () => {
 
     expect(eventSpy).not.toHaveBeenCalled();
   });
+
+  it('sets checked to true for radio input on change', async () => {
+    const page = await newSpecPage({
+      components: [PdsSwitch],
+      html: `
+        <pds-switch
+          component-id="pds-switch-radio"
+          label="Switch radio"
+          type="radio"
+          value="on">
+        </pds-switch>
+      `
+    });
+
+    const component = page.root?.shadowRoot?.querySelector('input');
+
+    component?.dispatchEvent(new Event('change'));
+    await page.waitForChanges();
+
+    expect(component?.checked).toBe(true);
+  });
 });
