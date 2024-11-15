@@ -42,16 +42,21 @@ describe('pds-popover', () => {
       components: [PdsPopover],
       html: `
         <pds-popover placement="top">
-          <button>Popover</button>
+          <div slot="trigger">
+            <button>Popover</button>
+          </div>
+          <div slot="content">
+            <p>This is a Popover</p>
         </pds-popover>
       `,
     });
 
     const button = page.root?.querySelector('button');
-    await button?.click();
+    button?.click();
     await page.waitForChanges();
 
     const popover = page.root?.shadowRoot?.querySelector('.pds-popover');
+    console.log('popover', popover);
     expect(popover).toHaveClass('pds-popover--is-open');
   });
 
@@ -76,32 +81,4 @@ describe('pds-popover', () => {
     const popover = page.root?.shadowRoot?.querySelector('.pds-popover');
     expect(popover).not.toHaveClass('pds-popover--is-open');
   });
-
-  // it('should not close the popover on clicking inside', async () => {
-  //   const page = await newSpecPage({
-  //     components: [PdsPopover],
-  //     html: `
-  //       <pds-popover placement="top">
-  //         <div slot="trigger">
-  //           <pds-button variant="accent">Popover</pds-button>
-  //         </div>
-  //         <div slot="content">
-  //           <div class="popover-content">Content</div>
-  //         </div>
-  //       </pds-popover>
-  //     `,
-  //   });
-
-  //   const button = page.root?.querySelector('.pds-button') as HTMLElement;
-  //   await button?.click();
-  //   await page.waitForChanges();
-
-  //   const content = page.root?.shadowRoot?.querySelector('.popover-content') as HTMLElement;
-  //   await content?.click();
-  //   await page.waitForChanges();
-
-  //   const popover = page.root?.shadowRoot?.querySelector('.pds-popover');
-  //   console.log('popover', popover);
-  //   expect(popover).toHaveClass('pds-popover--is-open');
-  // });
 });
