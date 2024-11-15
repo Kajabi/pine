@@ -10,7 +10,7 @@ import {
 
 @Component({
   tag: 'pds-tooltip',
-  styleUrls: ['../../global/styles/base.scss', 'pds-tooltip.scss'],
+  styleUrls: ['pds-tooltip.scss'],
   shadow: true,
 })
 export class PdsTooltip {
