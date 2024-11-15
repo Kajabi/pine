@@ -6,7 +6,7 @@ import { danger } from '@pine-ds/icons/icons';
 
 @Component({
   tag: 'pds-textarea',
-  styleUrls: ['../../global/styles/base.scss', 'pds-textarea.scss'],
+  styleUrls: ['pds-textarea.scss'],
   shadow: true,
 })
 export class PdsTextarea {
