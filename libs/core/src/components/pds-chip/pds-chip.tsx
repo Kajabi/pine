@@ -3,7 +3,7 @@ import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 
 @Component({
   tag: 'pds-chip',
-  styleUrls: ['../../global/styles/base.scss', 'pds-chip.scss'],
+  styleUrls: ['pds-chip.scss'],
   shadow: true,
 })
 export class PdsChip {
