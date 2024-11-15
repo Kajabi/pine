@@ -104,14 +104,7 @@ export class PdsPopover {
     target: 'document'
   })
   handleOutsideClick(event: MouseEvent) {
-    console.log('handleOutsideClick');
-    console.log('Event emitted', this.triggeredEvent);
-
-    // console.log('this.triggerEl', this.triggerEl);
     if (this.isOpen) {
-      // if (!this.el.contains(event.target as Node)) {
-      console.log('event.target', event.target);
-      // if (this.isOpen && !this.el.contains(event.target as Node) && !this.contentEl?.contains(event.target as Node)) {
       if(this.contentEl && !this.contentEl.contains(event.target as Node)) {
         this.hide();
       }
