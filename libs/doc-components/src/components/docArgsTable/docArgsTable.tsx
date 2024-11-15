@@ -85,6 +85,7 @@ const DocArgsTable: React.FC<DocArgsTableProps> = ({
       <div className='arg-table-row' key={`rowIndex-${idx}`}>
         <div className='arg-table-cell'>
           <strong>{prop.attr || prop.event || prop.name }</strong>
+          <span style={{ color: 'red', cursor: 'help' }} title="Required">{prop.required == true ? '*' : ''}</span>
         </div>
         <div className='arg-table-cell'>
           <Markdown>{prop.docs}</Markdown>
