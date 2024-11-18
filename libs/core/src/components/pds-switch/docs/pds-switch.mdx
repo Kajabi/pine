@@ -3,21 +3,14 @@ import { components } from '../../../../dist/docs.json';
 
 # Switch
 
-Checkbox or radio component styled to appear as a toggle.
+Checkbox component styled to appear as a toggle.
 
 ## Guidelines
 
 ### Usage
 
-- Radio Switches require a shared `name` for grouping.
-- Specify a unique `component-id` and `value` for **each** Radio variant. This will ensure the label and radio group selection (respectively) are correctly identified.
 - Use caution when enabling both `checked` and `disabled` on a control. Clearly describe why this item cannot be unselected.
-- `sageSwitchChange` is a custom event emitted on input change. View the browser console on this page for an example.
-
-#### Checkbox or Radio?
-
-When only one Switch is needed for users to turn on/off a value, use a `checkbox`. [From MDN:](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio)
-  > Note: Checkboxes are similar to radio buttons, but with an important distinction: radio buttons are designed for selecting one value out of a set, whereas checkboxes let you turn individual values on and off. Where multiple controls exist, radio buttons allow one to be selected out of them all, whereas checkboxes allow multiple values to be selected.
+- `pdsSwitchChange` is a custom event emitted on input change. View the browser console on this page for an example.
 
 ### Accessibility
 
@@ -47,25 +40,6 @@ The default switch style uses a checkbox input.
       type="checkbox"
     ></pds-switch>
   </div>
-</DocCanvas>
-
-
-### Radio
-
-Renders a switch using a radio button input. Just like a [standard radio button](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio), toggling a single value on/off requires (at minimum) a pair of inputs to represent each state.
-
-<DocCanvas client:only
-  mdxSource={{
-    react: '<PdsSwitch componentId="pds-switch-radio-example" label="Radio Switch" name="pds-switch-radio" type="radio" value="pds-switch-radio" />',
-    webComponent: '<pds-switch component-id="pds-switch-radio-example" label="Radio Switch" name="pds-switch-radio" type="radio" value="pds-switch-radio"></pds-switch>'
-}}>
-  <pds-switch
-    component-id="pds-switch-radio-example"
-    label="Radio Switch"
-    name="pds-switch-radio"
-    type="radio"
-    value="pds-switch-radio"
-  ></pds-switch>
 </DocCanvas>
 
 ### Disabled
@@ -102,7 +76,7 @@ Displays additional descriptive text underneath the main label.
       label="Remember me"
       name="pds-switch-helper"
       type="checkbox"
-   ></pds-switch>
+    ></pds-switch>
   </>
 </DocCanvas>
 

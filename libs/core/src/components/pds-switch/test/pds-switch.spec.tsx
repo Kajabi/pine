@@ -23,53 +23,6 @@ describe('pds-switch', () => {
     `);
   });
 
-  it('renders a radio input with label and name defaulting to id', async () => {
-    const page = await newSpecPage({
-      components: [PdsSwitch],
-      html: `
-        <pds-switch
-          component-id="pds-switch-radio"
-          label="Switch radio"
-          type="radio"
-          value="on">
-        </pds-switch>
-      `
-    });
-
-    expect(page.root).toEqualHtml(`
-      <pds-switch component-id="pds-switch-radio" class="pds-switch" label="Switch radio" type="radio" value="on">
-        <mock:shadow-root>
-          <input id="pds-switch-radio" class="pds-switch__input" type="radio" name="pds-switch-radio" value="on">
-          <label htmlFor="pds-switch-radio" class="pds-switch__label">Switch radio</label>
-        </mock:shadow-root>
-      </pds-switch>
-    `);
-  });
-
-  it('renders a radio input with label and associated group name', async () => {
-    const page = await newSpecPage({
-      components: [PdsSwitch],
-      html: `
-        <pds-switch
-          component-id="pds-switch-radio-id"
-          label="Switch radio"
-          type="radio"
-          name="pds-radio-group-name"
-          value="on">
-        </pds-switch>
-      `
-    });
-
-    expect(page.root).toEqualHtml(`
-      <pds-switch component-id="pds-switch-radio-id" class="pds-switch" label="Switch radio" type="radio" name="pds-radio-group-name" value="on">
-        <mock:shadow-root>
-          <input id="pds-switch-radio-id" class="pds-switch__input" type="radio" name="pds-radio-group-name" value="on">
-          <label htmlFor="pds-switch-radio-id" class="pds-switch__label">Switch radio</label>
-        </mock:shadow-root>
-      </pds-switch>
-    `);
-  });
-
   it('renders a disabled input', async () => {
     const page = await newSpecPage({
       components: [PdsSwitch],
@@ -230,24 +183,4 @@ describe('pds-switch', () => {
     expect(eventSpy).not.toHaveBeenCalled();
   });
 
-  it('sets checked to true for radio input on change', async () => {
-    const page = await newSpecPage({
-      components: [PdsSwitch],
-      html: `
-        <pds-switch
-          component-id="pds-switch-radio"
-          label="Switch radio"
-          type="radio"
-          value="on">
-        </pds-switch>
-      `
-    });
-
-    const component = page.root?.shadowRoot?.querySelector('input');
-
-    component?.dispatchEvent(new Event('change'));
-    await page.waitForChanges();
-
-    expect(component?.checked).toBe(true);
-  });
 });

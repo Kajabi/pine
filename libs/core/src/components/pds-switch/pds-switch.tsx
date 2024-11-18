@@ -56,12 +56,6 @@ export class PdsSwitch {
   @Prop() required? = false;
 
   /**
-   * Specifies the underlying input element type
-   * @defaultValue 'checkbox'
-   */
-  @Prop() type: 'checkbox' | 'radio' = 'checkbox';
-
-  /**
    * Provides input with a string submitted in form data, and can be used to distinguish radio inputs
    */
   @Prop() value: string;
@@ -75,13 +69,7 @@ export class PdsSwitch {
     if (this.disabled) return;
 
     const input = e.target as HTMLInputElement;
-
-    if (this.type === 'checkbox') {
-      this.checked = input.checked; // For checkbox, update checked state
-    } else if (this.type === 'radio') {
-      this.checked = true; // For radio, set checked to true on selection
-    }
-
+    this.checked = input.checked;
     this.pdsSwitchChange.emit(e as InputEvent);
   };
 
@@ -113,7 +101,7 @@ export class PdsSwitch {
           name={this.name ? this.name : this.componentId}
           onChange={this.onSwitchUpdate}
           required={this.required}
-          type={this.type}
+          type="checkbox"
           value={this.value}
         />
         <PdsLabel classNames="pds-switch__label" htmlFor={this.componentId} text={this.label} />

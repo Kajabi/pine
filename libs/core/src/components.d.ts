@@ -653,11 +653,6 @@ export namespace Components {
          */
         "required"?: boolean;
         /**
-          * Specifies the underlying input element type
-          * @defaultValue 'checkbox'
-         */
-        "type": 'checkbox' | 'radio';
-        /**
           * Provides input with a string submitted in form data, and can be used to distinguish radio inputs
          */
         "value": string;
@@ -1939,11 +1934,6 @@ declare namespace LocalJSX {
           * Determines the 'required' state of the input
          */
         "required"?: boolean;
-        /**
-          * Specifies the underlying input element type
-          * @defaultValue 'checkbox'
-         */
-        "type"?: 'checkbox' | 'radio';
         /**
           * Provides input with a string submitted in form data, and can be used to distinguish radio inputs
          */
