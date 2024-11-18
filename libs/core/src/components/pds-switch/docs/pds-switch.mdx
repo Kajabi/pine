@@ -29,15 +29,14 @@ The default switch style uses a checkbox input.
 
 <DocCanvas client:only
   mdxSource={{
-    react: '<PdsSwitch componentId="pds-switch-default-example" label="Default Switch" name="pds-switch-default" type="checkbox" />',
-    webComponent: '<pds-switch component-id="pds-switch-default-example" label="Default Switch" name="pds-switch-default" type="checkbox"></pds-switch>'
+    react: '<PdsSwitch componentId="pds-switch-default-example" label="Default Switch" name="pds-switch-default" />',
+    webComponent: '<pds-switch component-id="pds-switch-default-example" label="Default Switch" name="pds-switch-default"></pds-switch>'
   }}>
   <div>
     <pds-switch
       component-id="pds-switch-default-example"
       label="Default Switch"
       name="pds-switch-default"
-      type="checkbox"
     ></pds-switch>
   </div>
 </DocCanvas>
@@ -48,15 +47,14 @@ Prevents user interaction on the input.
 
 <DocCanvas client:only
   mdxSource={{
-    react: `<PdsSwitch componentId="pds-switch-disabled-example" disabled="true" label="Can't touch this" name="pds-switch-disabled" type="checkbox"/>`,
-    webComponent: `<pds-switch component-id="pds-switch-disabled-example" disabled="true" label="Can't touch this" name="pds-switch-disabled" type="checkbox"></pds-switch>`
+    react: `<PdsSwitch componentId="pds-switch-disabled-example" disabled="true" label="Can't touch this" name="pds-switch-disabled"/>`,
+    webComponent: `<pds-switch component-id="pds-switch-disabled-example" disabled="true" label="Can't touch this" name="pds-switch-disabled"></pds-switch>`
 }}>
   <pds-switch
     component-id="pds-switch-disabled-example"
     disabled="true"
     label="Can't touch this"
     name="pds-switch-disabled"
-    type="checkbox"
   ></pds-switch>
 </DocCanvas>
 
@@ -66,8 +64,8 @@ Displays additional descriptive text underneath the main label.
 
 <DocCanvas client:only
   mdxSource={{
-    react: '<PdsSwitch componentId="pds-switch-helper-example" helperMessage="Save my login details for next time." label="Remember me" name="pds-switch-helper" type="checkbox" />',
-    webComponent: '<pds-switch component-id="pds-switch-helper-example" helper-message="Save my login details for next time." label="Remember me" name="pds-switch-helper" type="checkbox"></pds-switch>'
+    react: '<PdsSwitch componentId="pds-switch-helper-example" helperMessage="Save my login details for next time." label="Remember me" name="pds-switch-helper"/>',
+    webComponent: '<pds-switch component-id="pds-switch-helper-example" helper-message="Save my login details for next time." label="Remember me" name="pds-switch-helper"></pds-switch>'
   }}>
   <>
     <pds-switch
@@ -75,7 +73,6 @@ Displays additional descriptive text underneath the main label.
       helper-message="Save my login details for next time."
       label="Remember me"
       name="pds-switch-helper"
-      type="checkbox"
     ></pds-switch>
   </>
 </DocCanvas>
@@ -86,8 +83,8 @@ An optional error message can be displayed for additional instructions, displaye
 
 <DocCanvas client:only
   mdxSource={{
-    react: '<PdsSwitch componentId="pds-switch-invalid-example" errorMessage="Terms and conditions must be accepted to continue" invalid="true" label="I agree to the terms and conditions" name="pds-switch-invalid" required="true" type="checkbox"/>',
-    webComponent: '<pds-switch component-id="pds-switch-invalid-example" error-message="Terms and conditions must be accepted to continue" invalid="true" label="I agree to the terms and conditions" name="pds-switch-invalid" required="true" type="checkbox"></pds-switch>'
+    react: '<PdsSwitch componentId="pds-switch-invalid-example" errorMessage="Terms and conditions must be accepted to continue" invalid="true" label="I agree to the terms and conditions" name="pds-switch-invalid" required="true"/>',
+    webComponent: '<pds-switch component-id="pds-switch-invalid-example" error-message="Terms and conditions must be accepted to continue" invalid="true" label="I agree to the terms and conditions" name="pds-switch-invalid" required="true"></pds-switch>'
 }}>
   <pds-switch
     component-id="pds-switch-invalid-example"
@@ -96,6 +93,5 @@ An optional error message can be displayed for additional instructions, displaye
     label="I agree to the terms and conditions"
     name="pds-switch-invalid"
     required="true"
-    type="checkbox"
   ></pds-switch>
 </DocCanvas>
