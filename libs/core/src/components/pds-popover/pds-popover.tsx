@@ -81,7 +81,6 @@ export class PdsPopover {
     capture: true
   })
   handleClick(event: MouseEvent) {
-    console.log('handleClick');
     const closestTarget = (event.target as HTMLElement).closest("div[slot='trigger']");
 
     if (!closestTarget) {
