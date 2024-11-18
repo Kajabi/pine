@@ -61,8 +61,8 @@
   --color-background-default: var(--pine-color-accent);
   --color-background-hover: var(--pine-color-accent-hover);
   --color-background-disabled: var(--pine-color-accent-disabled);
-  --color-text-default: var(--pine-color-text-primary);
-  --color-text-disabled: var(--pine-color-text-primary-disabled);
+  --color-text-default: var(--pine-color-text-accent);
+  --color-text-disabled: var(--pine-color-text-accent-disabled);
   --color-outline: var(--pine-color-focus-ring);
 }
 
@@ -70,8 +70,8 @@
   --color-background-default: var(--pine-color-danger);
   --color-background-hover: var(--pine-color-danger-hover);
   --color-background-disabled: var(--pine-color-danger-disabled);
-  --color-text-default: var(--pine-color-text-primary);
-  --color-text-disabled: var(--pine-color-text-primary-disabled);
+  --color-text-default: var(--pine-color-text-danger);
+  --color-text-disabled: var(--pine-color-text-danger-disabled);
   --color-outline: var(--pine-color-focus-ring-danger);
 
   &:focus-visible {
