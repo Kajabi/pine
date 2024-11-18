@@ -31,7 +31,7 @@ describe('pds-select', () => {
   it('renders with options', async () => {
     const page = await newE2EPage();
 
-    await page.setContent('<pds-select options=\'[{"value": "1", "label": "Option 1"}, {"value": "2", "label": "Option 2"}]\'></pds-select>');
+    await page.setContent('<pds-select><option value="0">Option 1</option><option value="1">Option 2</option></pds-select>');
     const select = await page.find('pds-select >>> select');
 
     const options = await select.findAll('option');

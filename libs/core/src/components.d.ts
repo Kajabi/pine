@@ -606,10 +606,6 @@ export namespace Components {
          */
         "name": string;
         /**
-          * An array of options to be rendered as select options.
-         */
-        "options": string;
-        /**
           * Indicates whether or not the select field is required.
          */
         "required": boolean;
@@ -1948,10 +1944,6 @@ declare namespace LocalJSX {
           * Emitted when a keyboard input occurred.
          */
         "onPdsSelect"?: (event: PdsSelectCustomEvent<InputEvent>) => void;
-        /**
-          * An array of options to be rendered as select options.
-         */
-        "options"?: string;
         /**
           * Indicates whether or not the select field is required.
          */

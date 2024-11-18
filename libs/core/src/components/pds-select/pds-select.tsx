@@ -40,11 +40,6 @@ export class PdsSelect {
   @Prop() name!: string;
 
   /**
-   * An array of options to be rendered as select options.
-   */
-  @Prop() options: string; // Expecting a JSON string of options
-
-  /**
    * Indicates whether or not the select field is required.
    */
   @Prop() required: boolean;
@@ -59,37 +54,40 @@ export class PdsSelect {
    */
   @Event() pdsSelect: EventEmitter<InputEvent>;
 
+  private selectEl!: HTMLSelectElement;
+
   private onSelectEvent = (ev: Event) => {
-    const select = ev.target as HTMLInputElement | null;
-    if (select) {
-      this.value = select.value || '';
-    }
+    const select = ev.target as HTMLSelectElement;
+    this.value = select.value;
+    console.log('this.value', this.value);
     this.pdsSelect.emit(ev as InputEvent);
   };
 
-  /**
-   * Utility to parse JSON options safely
-   */
-  get parsedOptions() {
-    try {
-      return JSON.parse(this.options);
-    } catch (error) {
-      console.error('Invalid options format:', error);
-      return [];
-    }
-  }
+  private handleSlotChange = () => {
+    const slot = this.selectEl.querySelector('slot');
+    const slottedOptions = slot.assignedNodes({ flatten: true });
+    slottedOptions.forEach((node) => {
+      if (node.nodeType === Node.ELEMENT_NODE && node instanceof HTMLOptionElement) {
+        this.selectEl.appendChild(node.cloneNode(true));
+      }
+    });
+  };
 
   render() {
     return (
       <Host aria-disabled={this.disabled ? 'true' : null}>
         <div class="pds-select">
           <PdsLabel htmlFor={this.componentId} text={this.label} />
-          <select class="pds-select__field" disabled={this.disabled} id={this.componentId} name={this.name} onChange={this.onSelectEvent} required={this.required}>
-            {this.parsedOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
+          <select
+            class="pds-select__field"
+            disabled={this.disabled}
+            id={this.componentId}
+            name={this.name}
+            onChange={this.onSelectEvent}
+            required={this.required}
+            ref={(el) => (this.selectEl = el as HTMLSelectElement)}
+          >
+            <slot onSlotchange={this.handleSlotChange}></slot>
           </select>
           {this.helperMessage && (
             <p class="pds-select__helper-message" id={messageId(this.componentId, 'helper')}>

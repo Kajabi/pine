@@ -15,7 +15,6 @@
 | `helperMessage`            | `helper-message` | Displays a message or hint below the input field.                                | `string`  | `undefined` |
 | `label`                    | `label`          | Text to be displayed as the select label.                                        | `string`  | `undefined` |
 | `name` _(required)_        | `name`           | Specifies the name. Submitted with the form name/value pair.                     | `string`  | `undefined` |
-| `options`                  | `options`        | An array of options to be rendered as select options.                            | `string`  | `undefined` |
 | `required`                 | `required`       | Indicates whether or not the select field is required.                           | `boolean` | `undefined` |
 | `value`                    | `value`          | The value of the input.                                                          | `string`  | `undefined` |
 

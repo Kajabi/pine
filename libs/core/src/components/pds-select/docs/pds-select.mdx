@@ -4,3 +4,35 @@ import { components } from '../../../../dist/docs.json';
 # Select
 
 <p>The select field, coupled with a label, helper message, and error text, represents a control that provides a menu of options.</p>
+
+## Guidelines
+
+### Usage
+
+#### When to use
+
+- When you want to provide a list of options for the user to choose from
+
+### Accessibility
+
+- The input component comes with a built-in label through the `label` property, it is strongly encouraged that you include it
+- Please provide clear and descriptive error, and helper-message text
+- Selects should have a default option that is not selectable
+
+## Properties
+
+<DocArgsTable componentName="pds-select" docSource={components} />
+
+## Variants
+
+### Default
+
+<DocCanvas
+  client:only
+  mdxSource={{
+    react: '<PdsSelect componentId="pds-select-default-example" label="Name"></PdsSelect>',
+    webComponent: '<pds-select component-id="pds-select-default-example" label="Name"></pds-select>',
+  }}
+>
+  <pds-select component-id="pds-select-default-example" label="Name"></pds-select>
+</DocCanvas>

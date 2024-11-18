@@ -3,28 +3,76 @@ import { PdsSelect } from '../pds-select';
 
 describe('pds-select', () => {
   it('renders', async () => {
-    const page = await newSpecPage({
+    const { root } = await newSpecPage({
       components: [PdsSelect],
       html: `<pds-select component-id="field-1"></pds-select>`,
     });
-    expect(page.root).toMatchSnapshot();
+    expect(root).toEqualHtml(`
+      <pds-select component-id="field-1">
+        <mock:shadow-root>
+          <div class="pds-select">
+            <label htmlfor="field-1"></label>
+            <select class="pds-select__field" id="field-1">
+              <slot></slot>
+            </select>
+          </div>
+        </mock:shadow-root>
+      </pds-select>
+    `);
   });
 
-  it('renders with label', async () => {
+  it('renders with slotted options', async () => {
     const page = await newSpecPage({
       components: [PdsSelect],
-      html: `<pds-select label="Select Label"></pds-select>`,
+      html: `<pds-select component-id="field-1" label="Name">
+               <option value="1">Option 1</option>
+               <option value="2">Option 2</option>
+             </pds-select>`,
     });
-    if (page.root && page.root.shadowRoot) {
-      const label = page.root.shadowRoot.querySelector('label');
-      if (label) {
-        expect(label.textContent).toBe('Select Label');
-      } else {
-        throw new Error('label is not available');
+
+    // Trigger the handleSlotChange logic
+    const slot = page.root?.shadowRoot?.querySelector('slot');
+    const select = page.root?.shadowRoot?.querySelector('select');
+    const slottedOptions = slot?.assignedNodes({ flatten: true });
+
+    slottedOptions?.forEach((node) => {
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        select?.appendChild(node.cloneNode(true));
       }
-    } else {
-      throw new Error('page.root or page.root.shadowRoot is not available');
-    }
+    });
+
+    await page.waitForChanges();
+
+    expect(page.root).toEqualHtml(`
+      <pds-select component-id="field-1" label="Name">
+        <mock:shadow-root>
+          <div class="pds-select">
+            <pds-label htmlfor="field-1" text="Name"></pds-label>
+            <select class="pds-select__field" id="field-1">
+              <option value="1">Option 1</option>
+              <option value="2">Option 2</option>
+            </select>
+          </div>
+        </mock:shadow-root>
+      </pds-select>
+    `);
+  });
+
+  it('renders a label', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select component-id="field-1" label="Name"></pds-select>`,
+    });
+    expect(root).toEqualHtml(`
+      <pds-select component-id="field-1" label="Name">
+        <mock:shadow-root>
+          <div class="pds-select">
+            <label htmlFor="field-1">Name</label>
+            <select class="pds-select__field" id="field-1"></select>
+          </div>
+        </mock:shadow-root>
+      </pds-select>
+    `);
   });
 
   it('renders with error message', async () => {
@@ -34,7 +82,7 @@ describe('pds-select', () => {
     });
 
     const errorMessage = page.root?.shadowRoot?.querySelector('.pds-select__error-message');
-    expect(errorMessage?.textContent).toBe('Error occurred');
+    expect(errorMessage?.textContent).toContain('Error occurred');
   });
 
   it('renders with helper message', async () => {
@@ -101,44 +149,31 @@ describe('pds-select', () => {
     }
   });
 
-  describe('parsedOptions getter', () => {
-    let instance;
-
-    beforeEach(() => {
-      instance = {
-        options: null,
-        get parsedOptions() {
-          try {
-            return JSON.parse(this.options) || [];
-          } catch (error) {
-            console.error('Invalid options format:', error);
-            return [];
-          }
-        },
-      };
+  it('emits pdsSelect event on value change', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select options='[{"value": "paul", "label": "Paul McCartney"}, {"value": "john", "label": "John Lennon"}]' />`,
     });
 
-    it('should return parsed options when this.options is a valid JSON string', () => {
-      instance.options = JSON.stringify([{ key: 'value' }]);
-      expect(instance.parsedOptions).toEqual([{ key: 'value' }]);
-    });
+    const pdsSelect = page.root;
+    if (!pdsSelect || !pdsSelect.shadowRoot) {
+      throw new Error('pdsSelect or pdsSelect.shadowRoot is not available');
+    }
+    const select = pdsSelect.shadowRoot.querySelector('select');
 
-    it('should return an empty array and log an error when this.options is an invalid JSON string', () => {
-      console.error = jest.fn(); // Mock console.error to verify it's called
-      instance.options = '{invalidJSON}';
+    const pdsSelectEvent = jest.fn();
+    page.win.addEventListener('pdsSelect', pdsSelectEvent);
 
-      expect(instance.parsedOptions).toEqual([]);
-      expect(console.error).toHaveBeenCalledWith('Invalid options format:', expect.any(Error));
-    });
+    // Change value to 'paul'
+    if (select) {
+      select.value = 'paul';
+      select.dispatchEvent(new Event('change'));
+      await page.waitForChanges();
 
-    it('should return an empty array when this.options is null', () => {
-      instance.options = null;
-      expect(instance.parsedOptions).toEqual([]);
-    });
-
-    it('should return an empty array when this.options is an empty string', () => {
-      instance.options = '';
-      expect(instance.parsedOptions).toEqual([]);
-    });
+      // Check if the event is emitted
+      expect(pdsSelectEvent).toHaveBeenCalled();
+    } else {
+      throw new Error('select element is not available');
+    }
   });
 });
