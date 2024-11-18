@@ -47,19 +47,6 @@ Default.args = {
   type: 'checkbox',
 };
 
-export const Radio = BaseTemplate.bind({});
-
-Radio.args = {
-  checked: false,
-  disabled: false,
-  componentId: 'pds-switch-radio-example',
-  invalid: false,
-  label: 'radio switch',
-  name: 'pds-switch-radio',
-  required: false,
-  type: 'radio',
-};
-
 export const Disabled = BaseTemplate.bind({});
 
 Disabled.args = {
