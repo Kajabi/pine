@@ -353,7 +353,7 @@
     },
     "warning": {
       "@": {
-        "value": "{color.yellow.100}",
+        "value": "{color.yellow.500}",
         "type": "color"
       },
       "disabled": {

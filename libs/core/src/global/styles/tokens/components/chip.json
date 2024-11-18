@@ -1,0 +1,42 @@
+{
+  "chip": {
+    "color": {
+      "accent": {
+        "@": {
+          "value": "{color.purple.100}",
+          "type": "color"
+        }
+      },
+      "danger": {
+        "@": {
+          "value": "{color.red.100}",
+          "type": "color"
+        }
+      },
+      "info": {
+        "@": {
+          "value": "{color.blue.100}",
+          "type": "color"
+        }
+      },
+      "neutral": {
+        "@": {
+          "value": "{color.grey.100}",
+          "type": "color"
+        }
+      },
+      "success": {
+        "@": {
+          "value": "{color.green.100}",
+          "type": "color"
+        }
+      },
+      "warning": {
+        "@": {
+          "value": "{color.yellow.100}",
+          "type": "color"
+        }
+      }
+    }
+  }
+}
