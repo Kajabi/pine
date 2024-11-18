@@ -47,6 +47,7 @@ describe('pds-popover', () => {
           </div>
           <div slot="content">
             <p>This is a Popover</p>
+          </div>
         </pds-popover>
       `,
     });
@@ -56,7 +57,6 @@ describe('pds-popover', () => {
     await page.waitForChanges();
 
     const popover = page.root?.shadowRoot?.querySelector('.pds-popover');
-    console.log('popover', popover);
     expect(popover).toHaveClass('pds-popover--is-open');
   });
 
@@ -65,7 +65,12 @@ describe('pds-popover', () => {
       components: [PdsPopover],
       html: `
         <pds-popover placement="top">
-          <button>Popover</button>
+          <div slot="trigger">
+            <button>Popover</button>
+          </div>
+          <div slot="content">
+            <p>This is a Popover</p>
+          </div>
         </pds-popover>
       `,
     });
@@ -79,6 +84,34 @@ describe('pds-popover', () => {
     await page.waitForChanges();
 
     const popover = page.root?.shadowRoot?.querySelector('.pds-popover');
+    expect(popover).not.toHaveClass('pds-popover--is-open');
+  });
+
+  it('should hide the popover when trigger is clicked', async () => {
+    const page = await newSpecPage({
+      components: [PdsPopover],
+      html: `
+        <pds-popover>
+          <div slot="trigger">
+            <button>Show Popover</button>
+          </div>
+          <div slot="content">Popover Content</div>
+        </pds-popover>
+      `
+    });
+
+    // Open the popover
+    const button = page.root?.querySelector('button');
+    button?.click();
+    await page.waitForChanges();
+
+    const popover = page.root?.shadowRoot?.querySelector('.pds-popover');
+    expect(popover).toHaveClass('pds-popover--is-open');
+
+    // click trigger to close popover
+    await button?.click();
+    await page.waitForChanges();
+
     expect(popover).not.toHaveClass('pds-popover--is-open');
   });
 });
