@@ -5,24 +5,17 @@
 div {
   // These custom props are not reachable
   --color-background-container: var(--pine-color-mercury-050);
-  --color-background-badge: var(--pine-color-white);
-  --color-border-badge: var(--pine-color-white);
-
   --border-default: var(--pine-border-width-thin) solid var(--pine-color-grey-300);
-  --border-radius-round: var(--pine-border-radius-round);
-  --border-radius-none: var(--pine-border-radius-0);
-
-  --spacing-none: var(--pine-spacing-0);
 
   align-items: center;
   background-color: var(--color-background-container);
-  border-radius: var(--border-radius-admin-round, var(--border-radius-round));
+  border-radius: var(--border-radius-admin-round, var(--pine-border-radius-round));
   display: inline-flex;
   justify-content: center;
   position: relative;
 
   :host(.pds-avatar--admin) & {
-    --border-radius-admin-round: var(--pine-spacing-150);
+    --border-radius-admin-round: var(--pine-dimension-150);
     border-radius: var(--border-radius-admin-round);
   }
 
@@ -40,16 +33,15 @@ div {
 
 .pds-avatar__button {
   --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
-  --border-radius-round: var(--pine-border-radius-round);
 
   align-items: center;
   appearance: none;
   background: transparent;
-  border: var(--border-radius-none);
-  border-radius: var(--border-radius-round);
+  border: var(--pine-dimension-none);
+  border-radius: var(--pine-border-radius-round);
   cursor: pointer;
   display: flex;
-  padding: var(--spacing-none);
+  padding: var(--pine-dimension-none);
 
   &:focus-visible {
     // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
@@ -59,17 +51,17 @@ div {
 }
 
 .pds-avatar__badge {
-  background-color: var(--color-background-badge);
+  background-color: var(--pine-color-background-container);
   border: var(--border-default);
-  border-color: var(--color-border-badge);
-  border-radius: var(--border-radius-round);
-  bottom: var(--spacing-none);
+  border-color: var(--pine-color-secondary);
+  border-radius: var(--pine-border-radius-round);
+  bottom: var(--pine-dimension-none);
   position: absolute;
-  right: var(--spacing-none);
+  right: var(--pine-dimension-none);
 }
 
 img {
-  border-radius: var(--border-radius-admin-round, var(--border-radius-round));
+  border-radius: var(--border-radius-admin-round, var(--pine-border-radius-round));
   height: 100%;
   object-fit: cover;
   width: 100%;
