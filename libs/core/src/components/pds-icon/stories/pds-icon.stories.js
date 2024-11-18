@@ -12,5 +12,5 @@ const BaseTemplate = (args) => html`<pds-icon color=${args.color} name=${args.na
 
 export const Default = BaseTemplate.bind();
 Default.args = {
-  name: 'upload'
+  name: 'headset'
 };

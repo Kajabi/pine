@@ -1,5 +1,7 @@
 import { ArgTypes, Canvas, IconGallery, IconItem, Meta, Source } from '@storybook/blocks';
 
+import {DocCanvas} from '@pine-ds/doc-components'
+
 import pdsIconsJson from '@pine-ds/icons/dist/pds-icons.json';
 
 import * as stories from './pds-icon.stories.js';
@@ -12,14 +14,14 @@ import Docs from '../docs/pds-icon.mdx'
 
 # Icons
 
-<Canvas sourceState="none">
+<DocCanvas client:only mdxSource={{}}>
   <IconGallery>
     {
       Object.values(pdsIconsJson["icons"]).map((icon, index) => (
-        <IconItem key={`item-${index}`} name={icon.name}>
-          <pds-icon name={icon.name}></pds-icon>
+        <IconItem conItem key={`item-${index}`} name={icon.name}>
+          <pds-icon name={icon.name}>{icon.name}</pds-icon>
         </IconItem>
       ))
     }
   </IconGallery>
-</Canvas>
+</DocCanvas>

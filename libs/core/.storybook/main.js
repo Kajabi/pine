@@ -7,19 +7,19 @@ const config = {
   ],
 
   addons: [
-    getAbsolutePath("@storybook/addon-essentials"),
-    getAbsolutePath("@storybook/addon-links"),
-    getAbsolutePath("@storybook/addon-a11y"),
-    getAbsolutePath("@storybook/addon-actions"),
-    getAbsolutePath("@pxtrn/storybook-addon-docs-stencil"),
-    getAbsolutePath("@storybook/addon-mdx-gfm"),
+    "@storybook/addon-essentials",
+    "@storybook/addon-links",
+    "@storybook/addon-a11y",
+    "@storybook/addon-actions",
+    "@pxtrn/storybook-addon-docs-stencil",
+    "@storybook/addon-mdx-gfm",
     "@chromatic-com/storybook"
   ],
 
   core: {},
 
   framework: {
-    name: getAbsolutePath("@storybook/web-components-vite"),
+    name: "@storybook/web-components-vite",
     options: {}
   },
 
@@ -30,6 +30,3 @@ const config = {
 
 export default config;
 
-function getAbsolutePath(value) {
-  return dirname(require.resolve(join(value, "package.json")));
-}
