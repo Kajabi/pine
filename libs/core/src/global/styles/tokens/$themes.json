@@ -21,7 +21,6 @@
     "selectedTokenSets": {
       "base/core": "enabled",
       "base/semantic": "enabled",
-      "components/avatar": "enabled",
       "components/chip": "enabled",
       "brand/kajabi_products": "enabled"
     },
@@ -324,7 +323,6 @@
     "selectedTokenSets": {
       "base/core": "enabled",
       "base/semantic": "enabled",
-      "components/avatar": "enabled",
       "components/chip": "enabled",
       "brand/kajabi_products": "enabled",
       "brand/kajabi_products/light": "enabled"
@@ -699,7 +697,6 @@
     "selectedTokenSets": {
       "base/core": "enabled",
       "base/semantic": "enabled",
-      "components/avatar": "enabled",
       "components/chip": "enabled",
       "brand/kajabi_products": "enabled",
       "brand/kajabi_products/dark": "enabled"
