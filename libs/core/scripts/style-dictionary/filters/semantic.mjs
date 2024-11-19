@@ -1,6 +1,6 @@
  import fs from 'fs-extra';
 
- const basePath = `src/global/styles/tokens`;
+ import { basePath } from '../utils.mjs';
 
 // filters only tokens originating from semantic sets (not core, not components) and also check themeable or not
 export const semanticFilter =

@@ -10,11 +10,6 @@ register(StyleDictionary, {
 
 const basePath = `src/global/styles/tokens`;
 
-const componentNames = [
-  "avatar",
-  "chip",
-];
-
 async function run() {
   const $themes = JSON.parse(await promises.readFile(`${basePath}/$themes.json`, 'utf-8'));
   const themes = permutateThemes($themes, { separator: '-' });
@@ -44,7 +39,7 @@ async function run() {
         files: [
           ...generateCoreFiles(),
 					...generateSemanticFiles(theme),
-          ...generateComponentFiles(componentNames),
+          ...generateComponentFiles(),
         ],
 				prefix: 'pine'
       },
