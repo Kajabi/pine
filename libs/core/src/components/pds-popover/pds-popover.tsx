@@ -56,6 +56,12 @@ export class PdsPopover {
     | 'left-end' = 'right';
 
   /**
+   * Sets the maximum width of the popover content
+   * @defaultValue "352px"
+   */
+  @Prop() maxWidth: string = '352px';
+
+  /**
    * Emitted after a popover is closed
    */
   @Event() pdsPopoverHide: EventEmitter;
@@ -150,6 +156,7 @@ export class PdsPopover {
             aria-live={this.isOpen ? 'polite' : 'off'}
             id={this.componentId}
             ref={(el) => (this.contentEl = el)}
+            style={{ maxWidth: this.maxWidth }}
           >
             <slot
               name="content"

@@ -15,7 +15,7 @@ export default {
 }
 
 const BaseTemplate = (args) => html`
-  <pds-popover has-arrow=${args.hasArrow} placement=${args.placement}>
+  <pds-popover has-arrow=${args.hasArrow} max-width=${args.maxWidth} placement=${args.placement}>
 		${args.slot}
   </pds-popover>`;
 

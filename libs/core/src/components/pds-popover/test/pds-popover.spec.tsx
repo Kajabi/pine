@@ -22,7 +22,7 @@ describe('pds-popover', () => {
             <span class="pds-popover__trigger">
               <slot name="trigger"></slot>
             </span>
-            <div class="pds-popover__content" aria-hidden="true" aria-live="off" style="top: 50%; left: calc(0px + 8px); transform: translateY(-50%);">
+            <div class="pds-popover__content" aria-hidden="true" aria-live="off" style="max-width: 352px; top: 50%; left: calc(0px + 8px); transform: translateY(-50%);">
               <slot name="content"></slot>
             </div>
           </div>
@@ -35,6 +35,26 @@ describe('pds-popover', () => {
         </div>
       </pds-popover>
     `);
+  });
+
+  it('renders', async () => {
+    const maxWidthValue = '450px';
+    const page = await newSpecPage({
+      components: [PdsPopover],
+      html: `
+      <pds-popover max-width="450px">
+        <div slot="trigger">
+          <pds-button variant="accent">Popover</pds-button>
+        </div>
+        <div slot="content">
+          <p><strong>This is a Popover</strong></p>
+        </div>
+      </pds-popover>`,
+    });
+
+    const contentElement = page.root?.shadowRoot?.querySelector('.pds-popover__content') as HTMLElement;
+
+    expect(contentElement.style.maxWidth).toBe(maxWidthValue);
   });
 
   it('should open the popover on trigger click', async () => {

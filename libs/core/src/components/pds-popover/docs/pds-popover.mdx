@@ -96,6 +96,42 @@ The popover includes an arrow by default, but you can hide it with the `has-arro
   </pds-popover>
 </DocCanvas>
 
+### Width/Sizing
+The `maxWidth` prop allows for adjust the maximum width for the tooltip content. The default max width is 352px, but it can be customized as needed by passing a new pixel value.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsPopover placement="bottom-start" maxWidth="450px">
+        <div slot="trigger">
+          <PdsButton variant="secondary">Popover</PdsButton>
+        </div>
+        <div slot="content">
+          <p>This is a Popover</p>
+        </div>
+      </PdsPopover>
+    `,
+    webComponent: `
+      <pds-popover placement="bottom-start" max-width="450px">
+        <div slot="trigger">
+          <pds-button variant="secondary">Popover</pds-button>
+        </div>
+        <div slot="content">
+          <p>This is a Popover</p>
+        </div>
+      </pds-popover>
+    `
+}}>
+  <pds-popover placement="bottom-start" max-width="450px">
+    <div slot="trigger">
+        <pds-button variant="secondary">Popover</pds-button>
+    </div>
+    <div slot="content">
+        <p>This is a Popover</p>
+    </div>
+  </pds-popover>
+</DocCanvas>
+
 ## Additional Resources
 
 - [W3 Aria Menu Button Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/examples/menu-button-links/)
