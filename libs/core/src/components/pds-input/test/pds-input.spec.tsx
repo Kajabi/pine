@@ -133,6 +133,25 @@ describe('pds-input', () => {
     `);
   });
 
+  it('renders autocomplete attribute', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsInput],
+      html: `<pds-input component-id="field-1" value="Frank Dux" autocomplete="given-name"></pds-input>`
+    });
+
+    expect(root).toEqualHtml(`
+    <pds-input component-id="field-1" value="Frank Dux" autocomplete="given-name">
+      <mock:shadow-root>
+        <div class="pds-input">
+          <label htmlFor="field-1">
+          </label>
+          <input id="field-1" class="pds-input__field" type="text" value="Frank Dux" autocomplete="given-name" />
+        </div>
+      </mock:shadow-root>
+    </pds-input>
+    `);
+  });
+
   it('renders a helper message', async () => {
     const { root } = await newSpecPage({
       components: [PdsInput],

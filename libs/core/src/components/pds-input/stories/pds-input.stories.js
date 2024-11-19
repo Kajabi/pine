@@ -5,6 +5,7 @@ import { withActions } from '@storybook/addon-actions/decorator';
 export default {
   argTypes: extractArgTypes('pds-input'),
   args: {
+    autocomplete: null,
     disabled: false,
     errorMessage: null,
     helperMessage: null,
@@ -26,6 +27,7 @@ export default {
 }
 
 const BaseTemplate = (args) => html`<pds-input
+  autocomplete="${args.autocomplete}"
   disabled="${args.disabled}"
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"

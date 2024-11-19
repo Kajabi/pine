@@ -376,6 +376,10 @@ export namespace Components {
     }
     interface PdsInput {
         /**
+          * Specifies if and how the browser provides `autocomplete` assistance for the field.
+         */
+        "autocomplete": string;
+        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
@@ -1641,6 +1645,10 @@ declare namespace LocalJSX {
         "width"?: number;
     }
     interface PdsInput {
+        /**
+          * Specifies if and how the browser provides `autocomplete` assistance for the field.
+         */
+        "autocomplete"?: string;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
