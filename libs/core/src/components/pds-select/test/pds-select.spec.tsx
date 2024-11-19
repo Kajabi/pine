@@ -1,5 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsSelect } from '../pds-select';
+import { enlarge } from '@pine-ds/icons/icons';
 
 describe('pds-select', () => {
   it('renders', async () => {
@@ -10,12 +11,10 @@ describe('pds-select', () => {
     expect(root).toEqualHtml(`
       <pds-select component-id="field-1">
         <mock:shadow-root>
-          <div class="pds-select">
-            <label htmlfor="field-1"></label>
-            <select class="pds-select__field" id="field-1">
-              <slot></slot>
-            </select>
-          </div>
+          <label htmlFor="field-1"></label>
+          <select class="pds-select__field" id="field-1">
+            <slot></slot>
+          </select>
         </mock:shadow-root>
       </pds-select>
     `);
@@ -33,7 +32,7 @@ describe('pds-select', () => {
     // Trigger the handleSlotChange logic
     const slot = page.root?.shadowRoot?.querySelector('slot');
     const select = page.root?.shadowRoot?.querySelector('select');
-    const slottedOptions = slot?.assignedNodes({ flatten: true });
+    const slottedOptions = slot?.assignedNodes?.({ flatten: true });
 
     slottedOptions?.forEach((node) => {
       if (node.nodeType === Node.ELEMENT_NODE) {
@@ -47,11 +46,12 @@ describe('pds-select', () => {
       <pds-select component-id="field-1" label="Name">
         <mock:shadow-root>
           <div class="pds-select">
-            <pds-label htmlfor="field-1" text="Name"></pds-label>
+            <label htmlfor="field-1">Name</label>
             <select class="pds-select__field" id="field-1">
               <option value="1">Option 1</option>
               <option value="2">Option 2</option>
             </select>
+            <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-select>
@@ -69,6 +69,7 @@ describe('pds-select', () => {
           <div class="pds-select">
             <label htmlFor="field-1">Name</label>
             <select class="pds-select__field" id="field-1"></select>
+            <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-select>
@@ -105,7 +106,19 @@ describe('pds-select', () => {
 
     await page.waitForChanges(); // Ensures component fully renders
 
-    expect(page.root).toMatchSnapshot();
+    expect(page.root).toEqualHtml(`
+      <pds-select aria-disabled="true" component-id="field-1" disabled="">
+        <mock:shadow-root>
+          <div class="pds-select">
+            <label htmlfor="field-1"></label>
+            <select class="pds-select__field" disabled="" id="field-1">
+              <slot></slot>
+            </select>
+            <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
+          </div>
+        </mock:shadow-root>
+      </pds-select>
+    `);
   });
 
   it('updates value prop on value change', async () => {

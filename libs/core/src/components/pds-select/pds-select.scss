@@ -28,7 +28,7 @@
   --spacing-label-margin-block-end: var(--pine-spacing-100);
   --spacing-margin-top-helper-message: var(--pine-spacing-100);
 
-  display: inline;
+  // display: inline;
 }
 
 .pds-select {
@@ -41,6 +41,7 @@
   grid-template-columns: 1fr minmax(2rem, min-content);
   grid-template-rows: min-content min-content min-content;
   position: relative;
+  width: 100%;
 }
 
 label {
@@ -65,6 +66,7 @@ select {
 
   &:hover {
     border-color: var(--color-border-hover);
+    cursor: pointer;
   }
 
   &:focus-visible {

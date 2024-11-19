@@ -89,19 +89,21 @@ export class PdsSelect {
           >
             <slot onSlotchange={this.handleSlotChange}></slot>
           </select>
-          <div class="pds-select__message">
-            {this.helperMessage && (
-              <p class="pds-select__helper-message" id={messageId(this.componentId, 'helper')}>
-                {this.helperMessage}
-              </p>
-            )}
-            {this.errorMessage && (
-              <p class="pds-select__error-message" id={messageId(this.componentId, 'error')} aria-live="assertive">
-                <pds-icon icon={danger} size="small" />
-                {this.errorMessage}
-              </p>
-            )}
-          </div>
+          {(this.helperMessage || this.errorMessage) && (
+            <div class="pds-select__message">
+              {this.helperMessage && (
+                <p class="pds-select__helper-message" id={messageId(this.componentId, 'helper')}>
+                  {this.helperMessage}
+                </p>
+              )}
+              {this.errorMessage && (
+                <p class="pds-select__error-message" id={messageId(this.componentId, 'error')} aria-live="assertive">
+                  <pds-icon icon={danger} size="small" />
+                  {this.errorMessage}
+                </p>
+              )}
+            </div>
+          )}
           <pds-icon class="pds-select__select-icon" icon={enlarge} />
         </div>
       </Host>

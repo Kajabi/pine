@@ -15,7 +15,7 @@ import { components } from '../../../../dist/docs.json';
 
 ### Accessibility
 
-- The input component comes with a built-in label through the `label` property, it is strongly encouraged that you include it
+- The select component comes with a built-in label through the `label` property, it is strongly encouraged that you include it
 - Please provide clear and descriptive error, and helper-message text
 - Selects should have a default option that is not selectable
 
@@ -34,5 +34,31 @@ import { components } from '../../../../dist/docs.json';
     webComponent: '<pds-select component-id="pds-select-default-example" label="Name"></pds-select>',
   }}
 >
-  <pds-select component-id="pds-select-default-example" label="Name"></pds-select>
+  <div style={{ padding: '20px', width: '100%' }}>
+    <pds-select component-id="pds-select-default-example" label="Name">
+      <option value="paul">Paul McCartney</option>
+      <option value="john">John Lennon</option>
+      <option value="george">George Harrison</option>
+      <option value="ringo">Ringo Starr</option>
+    </pds-select>
+  </div>
+</DocCanvas>
+
+### Disabled
+
+<DocCanvas
+  client:only
+  mdxSource={{
+    react: '<PdsSelect componentId="pds-select-disabled-example" disabled="true" label="Name"></PdsSelect>',
+    webComponent: '<pds-select component-id="pds-select-disabled-example" disabled="true" label="Name"></pds-select>',
+  }}
+>
+  <div style={{ padding: '20px', width: '100%' }}>
+    <pds-select component-id="pds-select-disabled-example" disabled="true" label="Name">
+      <option value="paul">Paul McCartney</option>
+      <option value="john">John Lennon</option>
+      <option value="george">George Harrison</option>
+      <option value="ringo">Ringo Starr</option>
+    </pds-select>
+  </div>
 </DocCanvas>
