@@ -3,7 +3,6 @@ import {generateCoreFiles, generateComponentFiles, generateSemanticFiles } from 
 import StyleDictionary from 'style-dictionary';
 import { getReferences, usesReferences } from "style-dictionary/utils";
 import { promises } from 'fs';
-import { coreFilter } from './filters/index.mjs';
 
 register(StyleDictionary, {
   /* options here if needed */
@@ -13,6 +12,7 @@ const basePath = `src/global/styles/tokens`;
 
 const componentNames = [
   "avatar",
+  "chip",
 ];
 
 async function run() {
@@ -25,8 +25,9 @@ async function run() {
 				.reduce((acc, sets) => [...acc, ...sets], [])
 		),
 	];
+
 	const themeableSets = tokenSets.filter(set => {
-		return !Object.values(themes).every(sets => sets.includes(set));
+    return !Object.values(themes).every(sets => sets.includes(set));
 	});
 
   const configs = Object.entries(themes).map(([theme, tokensets]) => ({
