@@ -32,13 +32,21 @@
 }
 
 .pds-select {
-  display: flex;
+  display: grid;
   flex-direction: column;
+  grid-template-areas:
+    'label label'
+    'field field'
+    'message message';
+  grid-template-columns: 1fr minmax(2rem, min-content);
+  grid-template-rows: min-content min-content min-content;
+  position: relative;
 }
 
 label {
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-label);
+  grid-area: label;
   line-height: var(--line-height-label);
   margin-block-end: var(--spacing-label-margin-block-end);
 }
@@ -49,8 +57,11 @@ select {
   border-radius: 10px;
   font-size: var(--font-size-select-field);
   font-weight: var(--font-weight-select-field);
+  grid-area: field;
   line-height: var(--line-height-select-field);
   padding: var(--spacing-field-padding-block) var(--spacing-select-field-padding-inline);
+  padding-right: var(--pine-spacing-450);
+  position: relative;
 
   &:hover {
     border-color: var(--color-border-hover);
@@ -69,24 +80,7 @@ select {
     cursor: not-allowed;
   }
 
-  /* stylelint-disable */
-  &::-webkit-input-placeholder {
-    color: var(--color-text-placeholder);
-  }
-
-  &::-moz-placeholder {
-    color: var(--color-text-placeholder);
-  }
-
-  &::-moz-placeholder {
-    color: var(--color-text-placeholder);
-  }
-
-  &:-ms-input-placeholder {
-    color: var(--color-text-placeholder);
-  }
-
-  &:has(~ .pds-select__error-message) {
+  &:has(~ .pds-select__message .pds-select__error-message) {
     background-color: var(--color-background-error);
     border-color: var(--color-border-error);
 
@@ -95,7 +89,6 @@ select {
       outline: none;
     }
   }
-  /* stylelint-enable */
 }
 
 .pds-select__error-message,
@@ -112,4 +105,19 @@ select {
   color: var(--color-text-error);
   display: flex;
   gap: var(--pine-spacing-050);
+}
+
+.pds-select__message {
+  grid-area: message;
+}
+
+.pds-select__select-icon {
+  align-items: center;
+  display: flex;
+  grid-column: -1 / -2;
+  grid-row: 2 / 3;
+  height: 2.5rem;
+  pointer-events: none;
+  position: relative;
+  z-index: 1;
 }
