@@ -4,6 +4,7 @@
 
 // TODO: Update all values to match new semantic tokens, if applicable
 
+/* stylelint-disable */
 h1 {
   font-family: "GreetStandard";
   font-size: 28px;
@@ -52,6 +53,7 @@ code, em, p, pre, strong {
   font-weight: 400;
   letter-spacing: -0.16px;
 }
+/* stylelint-enable */
 
 code, pre {
   font-family: monospace;
@@ -64,6 +66,12 @@ strong {
 
 h1, h2, h3, h4, h5, h6, p, code, pre {
   color: var(--pine-color-text-default);
+}
+
+:host([truncate]) > * {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 
