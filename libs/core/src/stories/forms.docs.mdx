@@ -11,7 +11,7 @@ Pine Design System (PDS) form components such as `pds-input`, `pds-checkbox`, `p
 
 ## Examples for Demo Purposes
 
-***The examples provided on this page demonstrate how to integrate Pine components into a form. These are for demonstration purposes only and are not intended for production use.***
+> ***The examples provided on this page demonstrate how to integrate Pine components into a form. These are for demonstration purposes only and are not intended for production use.***
 
 Specifically:
 
@@ -41,7 +41,7 @@ The web component example utilizes vanilla JavaScript to access values directly 
           name: '',
           email: '',
           subscribe: false,
-          gender: '',
+          direction: '',
           notifications: false,
           message: '',
         });
@@ -49,12 +49,12 @@ The web component example utilizes vanilla JavaScript to access values directly 
         const handleSubmit = (e) => {
           e.preventDefault();
           // Validate required fields
-          const { name, email, subscribe, gender, notifications, message } = formData;
+          const { name, email, subscribe, direction, notifications, message } = formData;
           if (!name || !email) {
             alert('Please fill out all required fields');
             return;
           }
-          console.log('Form Data:', JSON.stringify({ name, email, subscribe, gender, notifications, message }));
+          console.log('Form Data:', JSON.stringify({ name, email, subscribe, direction, notifications, message }));
         };
 
         const handleChange = (e) => {
@@ -75,7 +75,6 @@ The web component example utilizes vanilla JavaScript to access values directly 
                   component-id="name"
                   label="Name"
                   type="text"
-                  id="name"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
@@ -88,7 +87,6 @@ The web component example utilizes vanilla JavaScript to access values directly 
                   component-id="email"
                   label="Email"
                   type="email"
-                  id="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
@@ -100,31 +98,28 @@ The web component example utilizes vanilla JavaScript to access values directly 
                 <pds-checkbox
                   component-id="subscribe"
                   label="Subscribe to newsletter"
-                  id="subscribe"
                   name="subscribe"
                   checked={formData.subscribe}
                   onChange={handleChange}
                 />
               </pds-box>
 
-              {/* Gender Radio Buttons */}
+              {/* Direction Radio Buttons */}
               <pds-box display="block" padding="sm" margin="sm">
                 <pds-radio
-                  component-id="gender-male"
-                  label="Male"
-                  id="gender-male"
-                  name="gender"
-                  value="male"
-                  checked={formData.gender === 'male'}
+                  component-id="direction-up"
+                  label="Up"
+                  name="direction"
+                  value="up"
+                  checked={formData.direction === 'up'}
                   onChange={handleChange}
                 />
                 <pds-radio
-                  component-id="gender-female"
-                  label="Female"
-                  id="gender-female"
-                  name="gender"
-                  value="female"
-                  checked={formData.gender === 'female'}
+                  component-id="direction-down"
+                  label="Down"
+                  name="direction"
+                  value="down"
+                  checked={formData.direction === 'down'}
                   onChange={handleChange}
                 />
               </pds-box>
@@ -134,7 +129,6 @@ The web component example utilizes vanilla JavaScript to access values directly 
                 <pds-switch
                   component-id="notifications"
                   label="Enable notifications"
-                  id="notifications"
                   name="notifications"
                   checked={formData.notifications}
                   onChange={handleChange}
@@ -146,7 +140,6 @@ The web component example utilizes vanilla JavaScript to access values directly 
                 <pds-textarea
                   component-id="message"
                   label="Message"
-                  id="message"
                   name="message"
                   value={formData.message}   // Bind the textarea value to the state
                   onChange={handleChange}    // Use the same handler to update the state
@@ -168,38 +161,40 @@ The web component example utilizes vanilla JavaScript to access values directly 
       <pds-box display="block" padding="lg" margin="md" border border-radius="lg">
         <form onSubmit={(e) => {
           e.preventDefault();
+          const form = e.target;
           console.log('Form Data:', {
-            name: document.getElementById('name').value,
-            email: document.getElementById('email').value,
-            subscribe: document.getElementById('subscribe').checked,
-            gender: document.querySelector('input[name="gender"]:checked')?.value,
-            notifications: document.getElementById('notifications').checked,
-            message: document.getElementById('message').value
+            name: form.querySelector('[component-id="name"]').value,
+            email: form.querySelector('[component-id="email"]').value,
+            subscribe: form.querySelector('[component-id="subscribe"]').checked,
+            direction: form.querySelector('input[name="direction"]:checked')?.value,
+            notifications: form.querySelector('[component-id="notifications"]').checked,
+            message: form.querySelector('[component-id="message"]').value
           });
         }}>
           <pds-box display="block" padding="sm">
-            <pds-input component-id="name" label="Name" type="text" id="name"></pds-input>
+            <pds-input component-id="name" label="Name" type="text"></pds-input>
           </pds-box>
 
           <pds-box display="block" padding="sm">
-            <pds-input component-id="email" label="Email" type="email" id="email"></pds-input>
+            <pds-input component-id="email" label="Email" type="email"></pds-input>
           </pds-box>
 
           <pds-box display="block" padding="sm">
-            <pds-checkbox component-id="subscribe" label="Subscribe to newsletter" id="subscribe"></pds-checkbox>
+            <pds-checkbox component-id="subscribe" label="Subscribe to newsletter"></pds-checkbox>
+          </pds-box>
+
+          <pds-box display="flex" padding="sm" gap="sm">
+            <p><strong>Favorite direction:</strong></p>
+            <pds-radio component-id="direction-up" label="Up" name="direction" value="up"></pds-radio>
+            <pds-radio component-id="direction-down" label="Down" name="direction" value="down"></pds-radio>
           </pds-box>
 
           <pds-box display="block" padding="sm">
-            <pds-radio component-id="gender-male" label="Male" id="gender-male" name="gender" value="male"></pds-radio>
-            <pds-radio component-id="gender-female" label="Female" id="gender-female" name="gender" value="female"></pds-radio>
+            <pds-switch component-id="notifications" label="Enable notifications"></pds-switch>
           </pds-box>
 
           <pds-box display="block" padding="sm">
-            <pds-switch component-id="notifications" label="Enable notifications" id="notifications"></pds-switch>
-          </pds-box>
-
-          <pds-box display="block" padding="sm">
-            <pds-textarea component-id="message" label="Message" id="message"></pds-textarea>
+            <pds-textarea component-id="message" label="Message"></pds-textarea>
           </pds-box>
 
           <pds-box display="block" padding="sm">
@@ -213,38 +208,40 @@ The web component example utilizes vanilla JavaScript to access values directly 
 <pds-box display="block" padding="lg" margin="md" border border-radius="lg">
   <form onSubmit={(e) => {
     e.preventDefault();
+    const form = e.target;
     console.log('Form Data:', {
-      name: document.getElementById('name').value,
-      email: document.getElementById('email').value,
-      subscribe: document.getElementById('subscribe').checked,
-      gender: document.querySelector('input[name="gender"]:checked')?.value,
-      notifications: document.getElementById('notifications').checked,
-      message: document.getElementById('message').value
+      name: form.querySelector('[component-id="name"]').value,
+      email: form.querySelector('[component-id="email"]').value,
+      subscribe: form.querySelector('[component-id="subscribe"]').checked,
+      direction: form.querySelector('input[name="direction"]:checked')?.value,
+      notifications: form.querySelector('[component-id="notifications"]').checked,
+      message: form.querySelector('[component-id="message"]').value
     });
   }}>
     <pds-box display="block" padding="sm">
-      <pds-input component-id="name" label="Name" type="text" id="name"></pds-input>
+      <pds-input component-id="name" label="Name" type="text"></pds-input>
     </pds-box>
 
     <pds-box display="block" padding="sm">
-      <pds-input component-id="email" label="Email" type="email" id="email"></pds-input>
+      <pds-input component-id="email" label="Email" type="email"></pds-input>
     </pds-box>
 
     <pds-box display="block" padding="sm">
-      <pds-checkbox component-id="subscribe" label="Subscribe to newsletter" id="subscribe"></pds-checkbox>
+      <pds-checkbox component-id="subscribe" label="Subscribe to newsletter"></pds-checkbox>
+    </pds-box>
+
+    <pds-box display="flex" padding="sm" gap="sm">
+      <p><strong>Favorite direction:</strong></p>
+      <pds-radio component-id="direction-up" label="Up" name="direction" value="up"></pds-radio>
+      <pds-radio component-id="direction-down" label="Down" name="direction" value="down"></pds-radio>
     </pds-box>
 
     <pds-box display="block" padding="sm">
-      <pds-radio component-id="gender-male" label="Male" id="gender-male" name="gender" value="male"></pds-radio>
-      <pds-radio component-id="gender-female" label="Female" id="gender-female" name="gender" value="female"></pds-radio>
+      <pds-switch component-id="notifications" label="Enable notifications"></pds-switch>
     </pds-box>
 
     <pds-box display="block" padding="sm">
-      <pds-switch component-id="notifications" label="Enable notifications" id="notifications"></pds-switch>
-    </pds-box>
-
-    <pds-box display="block" padding="sm">
-      <pds-textarea component-id="message" label="Message" id="message"></pds-textarea>
+      <pds-textarea component-id="message" label="Message"></pds-textarea>
     </pds-box>
 
     <pds-box display="block" padding="sm">
