@@ -110,3 +110,11 @@ Invalid.args = {
   type: 'email',
   value: 'Frank Dux'
 };
+
+export const Autocomplete = BaseTemplate.bind({});
+Autocomplete.args = {
+  componentId: 'pds-input-autocomplete',
+  label: 'First name',
+  type: 'text',
+  autocomplete: 'given-name',
+};

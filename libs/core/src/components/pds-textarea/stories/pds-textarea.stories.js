@@ -49,14 +49,14 @@ const BaseTemplate = (args) => html`<pds-textarea
 export const Default = BaseTemplate.bind({});
 Default.args = {
   componentId: 'pds-textarea-default-example',
-  label: 'Name',
+  label: 'Message',
   name: 'Default',
 };
 
 export const Rows = BaseTemplate.bind({});
 Rows.args = {
   componentId: 'pds-textarea-rows-example',
-  label: 'Name',
+  label: 'Message',
   name: 'Rows',
   rows: 4,
 };
@@ -64,7 +64,7 @@ Rows.args = {
 export const Required = BaseTemplate.bind({});
 Required.args = {
   componentId: 'pds-textarea-required-example',
-  label: 'Name',
+  label: 'Message',
   name: 'Required',
   required: true,
 };
@@ -72,23 +72,23 @@ Required.args = {
 export const Placeholder = BaseTemplate.bind({});
 Placeholder.args = {
   componentId: 'pds-textarea-placeholder-example',
-  label: 'Name',
+  label: 'Message',
   name: 'Placeholder',
-  placeholder: 'Placeholder...'
+  placeholder: 'Enter a message...'
 };
 
 export const Disabled = BaseTemplate.bind({});
 Disabled.args = {
   componentId: 'pds-textarea-disabled-example',
   disabled: true,
-  label: 'Name',
+  label: 'Message',
   name: 'Disabled',
 };
 
 export const Readonly = BaseTemplate.bind({});
 Readonly.args = {
   componentId: 'pds-textarea-readonly-example',
-  label: 'Name',
+  label: 'Message',
   name: 'Readonly',
   readonly: true,
   value: 'Readonly Value'
@@ -98,7 +98,7 @@ export const Message = BaseTemplate.bind({});
 Message.args = {
   componentId: 'pds-textarea-helper-example',
   helperMessage: 'Helper message text',
-  label: 'Name',
+  label: 'Message',
   name: 'Message',
 };
 
@@ -107,7 +107,16 @@ Invalid.args = {
   componentId: 'pds-textarea-error-example',
   errorMessage: 'Error',
   invalid: true,
-  label: 'Name',
+  label: 'Message',
   name: 'Error',
   required: true,
+};
+
+export const Autocomplete = BaseTemplate.bind({});
+Autocomplete.args = {
+  componentId: 'pds-textarea-autocomplete',
+  label: 'Message',
+  name: 'message',
+  autocomplete: 'on',
+  placeholder: 'Enter a message...',
 };
