@@ -29,6 +29,11 @@
   --spacing-margin-top-helper-message: var(--pine-spacing-100);
 
   // display: inline;
+
+  .hidden,
+  :host([hidden]) {
+      display: none;
+  }
 }
 
 .pds-select {

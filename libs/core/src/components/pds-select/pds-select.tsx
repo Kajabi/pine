@@ -9,6 +9,9 @@ import { danger, enlarge } from '@pine-ds/icons/icons';
   shadow: true,
 })
 export class PdsSelect {
+  private selectEl!: HTMLSelectElement;
+  private slotContainer!: HTMLDivElement;
+
   /**
    * A unique identifier used for the underlying component `id` attribute.
    */
@@ -54,7 +57,7 @@ export class PdsSelect {
    */
   @Event() pdsSelect: EventEmitter<InputEvent>;
 
-  private selectEl!: HTMLSelectElement;
+
 
   private onSelectEvent = (ev: Event) => {
     const select = ev.target as HTMLSelectElement;
@@ -64,13 +67,21 @@ export class PdsSelect {
   };
 
   private handleSlotChange = () => {
-    const slot = this.selectEl.querySelector('slot');
-    const slottedOptions = slot.assignedNodes({ flatten: true });
-    slottedOptions.forEach((node) => {
-      if (node.nodeType === Node.ELEMENT_NODE && node instanceof HTMLOptionElement) {
-        this.selectEl.appendChild(node.cloneNode(true));
-      }
-    });
+    const slot = this.slotContainer.querySelector('slot') as HTMLSlotElement;
+
+    if (slot) {
+      this.selectEl.innerHTML = '';
+      const assignedElements = slot.assignedElements({ flatten: true }) as HTMLOptionElement[];
+
+      assignedElements.map((item: any) => {
+        const option = item;
+
+        console.log('option', option);
+        if (option.tagName === 'OPTION') {
+          this.selectEl.appendChild(option.cloneNode(true));
+        }
+      })
+    }
   };
 
   render() {
@@ -87,8 +98,14 @@ export class PdsSelect {
             required={this.required}
             ref={(el) => (this.selectEl = el as HTMLSelectElement)}
           >
-            <slot onSlotchange={this.handleSlotChange}></slot>
           </select>
+          <div
+            aria-hidden="true"
+            class="hidden"
+            ref={(el) => (this.slotContainer = el)}
+          >
+            <slot onSlotchange={this.handleSlotChange}></slot>
+          </div>
           {(this.helperMessage || this.errorMessage) && (
             <div class="pds-select__message">
               {this.helperMessage && (
