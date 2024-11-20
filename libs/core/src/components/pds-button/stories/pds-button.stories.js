@@ -1,11 +1,18 @@
 import { html } from 'lit';
+import { withActions } from '@storybook/addon-actions/decorator';
 
 import { customArgsWithIconControl } from '../../../stories/_helpers';
 
 export default {
   argTypes: customArgsWithIconControl({ component: 'pds-button', property: 'icon' }),
   component: 'pds-button',
-  title: 'components/Button'
+  decorators: [withActions],
+  title: 'components/Button',
+  parameters: {
+    actions: {
+      handles: ['pdsClick'],
+    }
+  }
 }
 
 const BaseTemplate = (args) => html`

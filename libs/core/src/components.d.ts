@@ -477,6 +477,10 @@ export namespace Components {
         "variant": 'spinner' | 'typing';
     }
     interface PdsPopover {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
     }
     interface PdsProgress {
         /**
@@ -979,6 +983,10 @@ export namespace Components {
         "showTooltip": () => Promise<void>;
     }
 }
+export interface PdsButtonCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsButtonElement;
+}
 export interface PdsCheckboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsCheckboxElement;
@@ -994,6 +1002,10 @@ export interface PdsCopytextCustomEvent<T> extends CustomEvent<T> {
 export interface PdsInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsInputElement;
+}
+export interface PdsPopoverCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsPopoverElement;
 }
 export interface PdsRadioCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1054,7 +1066,18 @@ declare global {
         prototype: HTMLPdsBoxElement;
         new (): HTMLPdsBoxElement;
     };
+    interface HTMLPdsButtonElementEventMap {
+        "pdsClick": any;
+    }
     interface HTMLPdsButtonElement extends Components.PdsButton, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsButtonElementEventMap>(type: K, listener: (this: HTMLPdsButtonElement, ev: PdsButtonCustomEvent<HTMLPdsButtonElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsButtonElementEventMap>(type: K, listener: (this: HTMLPdsButtonElement, ev: PdsButtonCustomEvent<HTMLPdsButtonElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsButtonElement: {
         prototype: HTMLPdsButtonElement;
@@ -1153,7 +1176,19 @@ declare global {
         prototype: HTMLPdsLoaderElement;
         new (): HTMLPdsLoaderElement;
     };
+    interface HTMLPdsPopoverElementEventMap {
+        "show": any;
+        "hide": any;
+    }
     interface HTMLPdsPopoverElement extends Components.PdsPopover, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsPopoverElementEventMap>(type: K, listener: (this: HTMLPdsPopoverElement, ev: PdsPopoverCustomEvent<HTMLPdsPopoverElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsPopoverElementEventMap>(type: K, listener: (this: HTMLPdsPopoverElement, ev: PdsPopoverCustomEvent<HTMLPdsPopoverElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsPopoverElement: {
         prototype: HTMLPdsPopoverElement;
@@ -1614,6 +1649,7 @@ declare namespace LocalJSX {
           * Provides button with a submittable name
          */
         "name"?: string;
+        "onPdsClick"?: (event: PdsButtonCustomEvent<any>) => void;
         /**
           * Provides button with a type
           * @defaultValue button
@@ -1902,6 +1938,12 @@ declare namespace LocalJSX {
         "variant"?: 'spinner' | 'typing';
     }
     interface PdsPopover {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        "onHide"?: (event: PdsPopoverCustomEvent<any>) => void;
+        "onShow"?: (event: PdsPopoverCustomEvent<any>) => void;
     }
     interface PdsProgress {
         /**

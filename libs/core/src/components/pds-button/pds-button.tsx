@@ -1,4 +1,4 @@
-import { Component, Element, Host, h, Prop } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
 import { hasShadowDom } from '../../utils/utils';
 
 import { caretDown } from '@pine-ds/icons/icons';
@@ -54,7 +54,10 @@ export class PdsButton {
    */
   @Prop() variant: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled' = 'primary';
 
+  @Event() pdsClick: EventEmitter;
+
   private handleClick = (ev: Event) => {
+    console.log('button clicked');
     if (this.type != 'button') {
       // If button clicked IS NOT associated with a form
       if (hasShadowDom(this.el)) {
@@ -71,6 +74,7 @@ export class PdsButton {
         }
       }
     }
+    this.pdsClick.emit(ev);
   }
 
   private classNames() {
