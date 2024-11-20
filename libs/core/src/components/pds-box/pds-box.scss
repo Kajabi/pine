@@ -4,16 +4,6 @@ pds-box {
   --border-width-default: var(--pine-border-width-thin);
   --color-background-box: inherit;
   --color-border-box: inherit;
-  --sizing-min-height-box: none;
-  --sizing-min-width-box: none;
-
-  --spacing-gap-xxs: var(--pine-spacing-050);
-  --spacing-gap-xs: var(--pine-spacing-100);
-  --spacing-gap-sm: var(--pine-spacing-200);
-  --spacing-gap-md: var(--pine-spacing-300);
-  --spacing-gap-lg: var(--pine-spacing-450);
-  --spacing-gap-xl: var(--pine-spacing-600);
-  --spacing-gap-xxl: var(--pine-spacing-800);
 
   display: block;
 }
@@ -22,8 +12,8 @@ pds-box {
   background-color: var(--color-background-box);
   box-sizing: border-box;
   display: inline-flex;
-  min-height: var(--sizing-min-height-box);
-  min-width: var(--sizing-min-width-box);
+  min-height: var(--pine-dimension-none);
+  min-width: var(--pine-dimension-none);
 
   // The immediate child of the row will fit the width of the row
   .pds-row > & {
@@ -109,7 +99,7 @@ $pine-spacing-tokens: (
 }
 
 .pds-box--auto {
-  flex: 0 0 var(--sizing-min-width-box, fit-content);
+  flex: 0 0 var(--pine-dimension-none, fit-content);
   min-width: auto;
   width: auto;
 }
@@ -233,31 +223,31 @@ $pine-spacing-tokens: (
 }
 
 .pds-box-gap-xxs {
-  gap: var(--spacing-gap-xxs);
+  gap: var(--pine-dimension-2xs);
 }
 
 .pds-box-gap-xs {
-  gap: var(--spacing-gap-xs);
+  gap: var(--pine-dimension-xs);
 }
 
 .pds-box-gap-sm {
-  gap: var(--spacing-gap-sm);
+  gap: var(--pine-dimension-sm);
 }
 
 .pds-box-gap-md {
-  gap: var(--spacing-gap-md);
+  gap: var(--pine-dimension-md);
 }
 
 .pds-box-gap-lg {
-  gap: var(--spacing-gap-lg);
+  gap: var(--pine-dimension-lg);
 }
 
 .pds-box-gap-xl {
-  gap: var(--spacing-gap-xl);
+  gap: var(--pine-dimension-xl);
 }
 
 .pds-box-gap-xxl {
-  gap: var(--spacing-gap-xxl);
+  gap: var(--pine-dimension-xxl);
 }
 
 // Spacing helpers
@@ -266,31 +256,31 @@ $pine-spacing-tokens: (
 }
 
 .pds-padding-xxs {
-  padding: var(--spacing-gap-xxs);
+  padding: var(--pine-dimension-2xs);
 }
 
 .pds-padding-xs {
-  padding: var(--spacing-gap-xxs);
+  padding: var(--pine-dimension-2xs);
 }
 
 .pds-padding-sm {
-  padding: var(--spacing-gap-sm);
+  padding: var(--pine-dimension-sm);
 }
 
 .pds-padding-md {
-  padding: var(--spacing-gap-md);
+  padding: var(--pine-dimension-md);
 }
 
 .pds-padding-lg {
-  padding: var(--spacing-gap-lg);
+  padding: var(--pine-dimension-lg);
 }
 
 .pds-padding-xl {
-  padding: var(--spacing-gap-xl);
+  padding: var(--pine-dimension-xl);
 }
 
 .pds-padding-xxl {
-  padding: var(--spacing-gap-xxl);
+  padding: var(--pine-dimension-xxl);
 }
 
 // Display helpers
