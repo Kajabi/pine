@@ -9,7 +9,15 @@ import { danger, enlarge } from '@pine-ds/icons/icons';
   shadow: true,
 })
 export class PdsSelect {
+  /**
+   * A reference to the HTMLSelectElement used in the component.
+   */
   private selectEl!: HTMLSelectElement;
+
+  /**
+   * A reference to the HTMLDivElement that serves as the container for slot elements.
+   * This property is used to manipulate or access the slot container directly within the component.
+   */
   private slotContainer!: HTMLDivElement;
 
   /**
@@ -62,28 +70,39 @@ export class PdsSelect {
    */
   @Event() pdsSelect: EventEmitter<InputEvent>;
 
+  /**
+   * Handles the select event for the component.
+   *
+   * @param ev - The event object triggered by the select action.
+   * @remarks
+   * This method casts the event target to an HTMLSelectElement and updates the component's value
+   * with the selected option's value. It then emits a custom event (`pdsSelect`) with the original event.
+   */
   private onSelectEvent = (ev: Event) => {
     const select = ev.target as HTMLSelectElement;
     this.value = select.value;
-    console.log('this.value', this.value);
     this.pdsSelect.emit(ev as InputEvent);
   };
 
+  /**
+   * Handles the change event for the slot element.
+   * This method is triggered when the slot content changes.
+   * It updates the inner HTML of the select element by cloning and appending
+   * the assigned <option> elements from the slot.
+   */
   private handleSlotChange = () => {
     const slot = this.slotContainer.querySelector('slot') as HTMLSlotElement;
 
-    if (slot) {
-      this.selectEl.innerHTML = '';
-      const assignedElements = slot.assignedElements({ flatten: true }) as HTMLOptionElement[];
+    this.selectEl.innerHTML = '';
+    const assignedElements = slot.assignedElements({ flatten: true }) as HTMLOptionElement[];
 
-      assignedElements.map((item: any) => {
-        const option = item;
+    assignedElements.map((item: HTMLOptionElement) => {
+      const option = item;
 
-        if (option.tagName === 'OPTION') {
-          this.selectEl.appendChild(option.cloneNode(true));
-        }
-      });
-    }
+      if (option.tagName === 'OPTION') {
+        this.selectEl.appendChild(option.cloneNode(true));
+      }
+    });
   };
 
   render() {
