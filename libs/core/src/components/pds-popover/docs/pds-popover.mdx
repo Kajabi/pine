@@ -3,11 +3,12 @@ import { components } from '../../../../dist/docs.json';
 
 # Popover
 <pds-popover>
-    <button popovertarget="mypopover" popovertargetaction="show">
-      Show popover
-    </button>
+    <p>Popover content</p>
+    <p>Popover content</p>
     <button popovertarget="mypopover" popovertargetaction="hide">
       Hide popover
     </button>
-    <div id="mypopover" popover>Popover content</div>
+    <pds-button variant="secondary" popovertarget="mypopover" popovertargetaction="hide">
+      Hide popover
+    </pds-button>
 </pds-popover>
