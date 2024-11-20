@@ -614,7 +614,7 @@ export namespace Components {
          */
         "required": boolean;
         /**
-          * The value of the input.
+          * The value of the select field.
          */
         "value"?: string;
     }
@@ -1957,7 +1957,7 @@ declare namespace LocalJSX {
          */
         "required"?: boolean;
         /**
-          * The value of the input.
+          * The value of the select field.
          */
         "value"?: string;
     }

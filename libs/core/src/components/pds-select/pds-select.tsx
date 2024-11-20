@@ -53,7 +53,7 @@ export class PdsSelect {
   @Prop() required: boolean;
 
   /**
-   * The value of the input.
+   * The value of the select field.
    */
   @Prop({ mutable: true }) value?: string;
 
@@ -79,7 +79,6 @@ export class PdsSelect {
       assignedElements.map((item: any) => {
         const option = item;
 
-        console.log('option', option);
         if (option.tagName === 'OPTION') {
           this.selectEl.appendChild(option.cloneNode(true));
         }

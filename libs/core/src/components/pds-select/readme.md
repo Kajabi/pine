@@ -17,7 +17,7 @@
 | `label`                    | `label`          | Text to be displayed as the select label.                                          | `string`  | `undefined` |
 | `name` _(required)_        | `name`           | Specifies the name. Submitted with the form name/value pair.                       | `string`  | `undefined` |
 | `required`                 | `required`       | Indicates whether or not the select field is required.                             | `boolean` | `undefined` |
-| `value`                    | `value`          | The value of the input.                                                            | `string`  | `undefined` |
+| `value`                    | `value`          | The value of the select field.                                                     | `string`  | `undefined` |
 
 
 ## Events
