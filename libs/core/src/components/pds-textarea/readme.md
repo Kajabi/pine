@@ -9,6 +9,7 @@
 
 | Property                   | Attribute        | Description                                                                                         | Type      | Default            |
 | -------------------------- | ---------------- | --------------------------------------------------------------------------------------------------- | --------- | ------------------ |
+| `autocomplete`             | `autocomplete`   | Specifies if and how the browser provides `autocomplete` assistance for the field.                  | `string`  | `undefined`        |
 | `componentId` _(required)_ | `component-id`   | A unique identifier used for the underlying component `id` attribute.                               | `string`  | `undefined`        |
 | `disabled`                 | `disabled`       | Indicates whether or not the textarea is disabled                                                   | `boolean` | `false`            |
 | `errorMessage`             | `error-message`  | Specifies the error text and provides an error-themed treatment to the field                        | `string`  | `undefined`        |

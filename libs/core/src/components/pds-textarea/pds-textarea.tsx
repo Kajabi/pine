@@ -12,6 +12,11 @@ export class PdsTextarea {
   @Element() el: HTMLPdsTextareaElement;
 
   /**
+   * Specifies if and how the browser provides `autocomplete` assistance for the field.
+   */
+  @Prop() autocomplete: string;
+
+  /**
    * A unique identifier used for the underlying component `id` attribute.
    */
   @Prop() componentId!: string;
@@ -113,6 +118,7 @@ export class PdsTextarea {
           <textarea
             aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
             aria-invalid={this.invalid ? "true" : undefined}
+            autocomplete={this.autocomplete}
             class={this.textareaClassNames()}
             disabled={this.disabled}
             id={this.componentId}

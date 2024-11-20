@@ -757,6 +757,10 @@ export namespace Components {
     }
     interface PdsTextarea {
         /**
+          * Specifies if and how the browser provides `autocomplete` assistance for the field.
+         */
+        "autocomplete": string;
+        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
@@ -2063,6 +2067,10 @@ declare namespace LocalJSX {
         "variant": 'primary' | 'availability' | 'filter';
     }
     interface PdsTextarea {
+        /**
+          * Specifies if and how the browser provides `autocomplete` assistance for the field.
+         */
+        "autocomplete"?: string;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */

@@ -4,6 +4,7 @@ import { withActions } from '@storybook/addon-actions/decorator';
 
 export default {
   args: {
+    autocomplete: null,
     componentId: null,
     disabled: false,
     errorMessage: null,
@@ -28,6 +29,7 @@ export default {
 }
 
 const BaseTemplate = (args) => html`<pds-textarea
+  autocomplete="${args.autocomplete}"
   component-id="${args.componentId}"
   disabled="${args.disabled}"
   error-message="${args.errorMessage}"
