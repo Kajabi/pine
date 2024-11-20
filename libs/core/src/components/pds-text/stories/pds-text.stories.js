@@ -24,6 +24,34 @@ Default.args = {
   tag: 'h1',
 };
 
+export const Align = BaseTemplate.bind();
+Align.args = {
+  slot: '"Had to be me. Someone else might have gotten it wrong."',
+  align: 'center',
+  tag: 'em',
+};
+
+export const Color = BaseTemplate.bind();
+Color.args = {
+  slot: 'Hello World',
+  color: 'accent',
+  tag: 'p',
+};
+
+export const FontSize = BaseTemplate.bind();
+FontSize.args = {
+  slot: 'Hello World',
+  size: '2xl',
+  tag: 'p',
+};
+
+export const FontWeight = BaseTemplate.bind();
+FontWeight.args = {
+  slot: 'Hello World',
+  weight: 'bold',
+  tag: 'p',
+};
+
 const TruncateTemplate = (args) => html`<pds-text
   align="${args.align}"
   color="${args.color}"
@@ -37,6 +65,6 @@ const TruncateTemplate = (args) => html`<pds-text
 
 export const Truncate = TruncateTemplate.bind();
 Truncate.args = {
-  slot: 'loremId irure id magna ipsum voluptate irure esse eu nulla. Ullamco officia adipisicing qui nulla non sint. Mollit tempor veniam quis nisi aliqua duis elit eu laborum et incididunt ut sit irure. Nisi aute veniam sint do amet consectetur velit. Quis sunt enim mollit deserunt laboris dolor elit exercitation. Id labore deserunt sint consequat laboris nulla do ut magna. Aliquip labore esse sint consequat voluptate tempor consectetur sit sint culpa occaecat ut velit est.',
+  slot: 'Id irure id magna ipsum voluptate irure esse eu nulla. Ullamco officia adipisicing qui nulla non sint. Mollit tempor veniam quis nisi aliqua duis elit eu laborum et incididunt ut sit irure. Nisi aute veniam sint do amet consectetur velit. Quis sunt enim mollit deserunt laboris dolor elit exercitation. Id labore deserunt sint consequat laboris nulla do ut magna. Aliquip labore esse sint consequat voluptate tempor consectetur sit sint culpa occaecat ut velit est.',
   tag: 'p',
 };

@@ -3,7 +3,7 @@ import { components } from '../../../../dist/docs.json';
 
 # Text
 
-TBD
+The Text component allows for a choice of common semantic tags used for headings or body text. This tag can be nested so `em` and `strong` can be used as well.
 
 ## Properties
 
@@ -11,10 +11,97 @@ TBD
 
 ## Default
 
+A `tag` is required for this component. Each semantic tag comes with default styling.
+
 <DocCanvas client:only
   mdxSource={{
-    react: '<PdsText tag="h1"></PdsText>',
-    webComponent: '<pds-text tag="h1"></pds-text>'
+    react: '<PdsText tag="h1">Hello World!</PdsText>',
+    webComponent: '<pds-text tag="h1">Hello World!</pds-text>'
 }}>
   <pds-text tag="h1">Hello World!</pds-text>
+</DocCanvas>
+
+## Alignment
+
+Text can be aligned to the start, center, end, or justified.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsText align="center" tag="em">"Had to be me. Someone else might have gotten it wrong."</PdsText>',
+    webComponent: '<pds-text align="center" tag="em">"Had to be me. Someone else might have gotten it wrong."</pds-text>'
+}}>
+  <pds-text align="center" tag="em">"Had to be me. Someone else might have gotten it wrong."</pds-text>
+</DocCanvas>
+
+## Color
+
+Text color can align to our common variant/sentiment values.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsText color="primary" tag="p">Zebstrika</PdsText>
+      <PdsText color="secondary" tag="p">Pangoro</PdsText>
+      <PdsText color="neutral" tag="p">Urshifu</PdsText>
+      <PdsText color="accent" tag="p">Sableye</PdsText>
+      <PdsText color="danger" tag="p">Arcanine</PdsText>
+      <PdsText color="info" tag="p">Garchomp</PdsText>
+      <PdsText color="success" tag="p">Sceptile</PdsText>
+      <PdsText color="warning" tag="p">Pikachu</PdsText>
+    `,
+    webComponent: `
+      <pds-text color="primary" tag="p">Zebstrika</pds-text>
+      <pds-text color="secondary" tag="p">Pangoro</pds-text>
+      <pds-text color="neutral" tag="p">Urshifu</pds-text>
+      <pds-text color="accent" tag="p">Sableye</pds-text>
+      <pds-text color="danger" tag="p">Arcanine</pds-text>
+      <pds-text color="info" tag="p">Garchomp</pds-text>
+      <pds-text color="success" tag="p">Sceptile</pds-text>
+      <pds-text color="warning" tag="p">Pikachu</pds-text>
+    `
+}}>
+  <pds-text style={{backgroundColor: '#333', paddingInline: '8px'}} color="primary" tag="p">Zebstrika</pds-text>
+  <pds-text color="secondary" tag="p">Pangoro</pds-text>
+  <pds-text color="neutral" tag="p">Urshifu</pds-text>
+  <pds-text color="accent" tag="p">Sableye</pds-text>
+  <pds-text color="danger" tag="p">Arcanine</pds-text>
+  <pds-text color="info" tag="p">Garchomp</pds-text>
+  <pds-text color="success" tag="p">Sceptile</pds-text>
+  <pds-text color="warning" tag="p">Pikachu</pds-text>
+</DocCanvas>
+
+## Font Size
+
+Font size can be set to preset body text values.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsText size="2xl" tag="p">Hello World!</PdsText>',
+    webComponent: '<pds-text size="2xl"tag="p">Hello World!</pds-text>'
+}}>
+  <pds-text size="2xl" tag="p">Hello World!</pds-text>
+</DocCanvas>
+
+## Font Weight
+
+Font weight can be set to common font weight values.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsText weight="bold" tag="p">Hello World!</PdsText>',
+    webComponent: '<pds-text weight="bold" tag="p">Hello World!</pds-text>'
+}}>
+  <pds-text weight="bold" tag="p">Hello World!</pds-text>
+</DocCanvas>
+
+## Truncation
+
+To truncate text, add the `truncate` attribute to the component.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsText tag="p" truncate>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</PdsText>`,
+    webComponent: `<pds-text tag="p" truncate>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</pds-text>`
+}}>
+  <pds-text style={{maxWidth: '40ch'}} tag="p" truncate>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</pds-text>
 </DocCanvas>
