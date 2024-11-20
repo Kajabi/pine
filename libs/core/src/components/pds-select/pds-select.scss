@@ -12,7 +12,6 @@
   --color-text-disabled: var(--pine-color-grey-600);
   --color-text-error: var(--pine-color-red-600);
 
-  --font-size-helper-message: var(--pine-font-size-100);
   --font-size-select-field: var(--pine-font-size-100);
   --font-size-label: var(--pine-font-size-100);
   --font-weight-helper-message: var(--pine-font-weight-normal);
@@ -28,11 +27,9 @@
   --spacing-label-margin-block-end: var(--pine-spacing-100);
   --spacing-margin-top-helper-message: var(--pine-spacing-100);
 
-  // display: inline;
-
   .hidden,
   :host([hidden]) {
-      display: none;
+    display: none;
   }
 }
 
