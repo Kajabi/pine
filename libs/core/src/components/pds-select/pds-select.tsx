@@ -13,6 +13,11 @@ export class PdsSelect {
   private slotContainer!: HTMLDivElement;
 
   /**
+   * Specifies if and how the browser provides `autocomplete` assistance for the field.
+   */
+  @Prop() autocomplete: string;
+
+  /**
    * A unique identifier used for the underlying component `id` attribute.
    */
   @Prop() componentId!: string;
@@ -57,8 +62,6 @@ export class PdsSelect {
    */
   @Event() pdsSelect: EventEmitter<InputEvent>;
 
-
-
   private onSelectEvent = (ev: Event) => {
     const select = ev.target as HTMLSelectElement;
     this.value = select.value;
@@ -80,7 +83,7 @@ export class PdsSelect {
         if (option.tagName === 'OPTION') {
           this.selectEl.appendChild(option.cloneNode(true));
         }
-      })
+      });
     }
   };
 
@@ -90,6 +93,7 @@ export class PdsSelect {
         <div class="pds-select">
           <PdsLabel htmlFor={this.componentId} text={this.label} />
           <select
+            autocomplete={this.autocomplete}
             class="pds-select__field"
             disabled={this.disabled}
             id={this.componentId}
@@ -97,13 +101,8 @@ export class PdsSelect {
             onChange={this.onSelectEvent}
             required={this.required}
             ref={(el) => (this.selectEl = el as HTMLSelectElement)}
-          >
-          </select>
-          <div
-            aria-hidden="true"
-            class="hidden"
-            ref={(el) => (this.slotContainer = el)}
-          >
+          ></select>
+          <div aria-hidden="true" class="hidden" ref={(el) => (this.slotContainer = el)}>
             <slot onSlotchange={this.handleSlotChange}></slot>
           </div>
           {(this.helperMessage || this.errorMessage) && (

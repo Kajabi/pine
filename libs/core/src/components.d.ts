@@ -582,6 +582,10 @@ export namespace Components {
     }
     interface PdsSelect {
         /**
+          * Specifies if and how the browser provides `autocomplete` assistance for the field.
+         */
+        "autocomplete": string;
+        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
@@ -1916,6 +1920,10 @@ declare namespace LocalJSX {
         "noWrap"?: boolean;
     }
     interface PdsSelect {
+        /**
+          * Specifies if and how the browser provides `autocomplete` assistance for the field.
+         */
+        "autocomplete"?: string;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */

@@ -2,6 +2,12 @@ import { html } from 'lit';
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 export default {
+  args: {
+    autocomplete: null,
+    disabled: false,
+    errorMessage: null,
+    helperMessage: null,
+  },
   argTypes: extractArgTypes('pds-select'),
   component: 'pds-select',
   title: 'components/Select',
@@ -9,6 +15,7 @@ export default {
 
 const BaseTemplate = (args) =>
   html`<pds-select
+    autocomplete="${args.autocomplete}"
     component-id="${args.componentId}"
     disabled="${args.disabled}"
     error-message="${args.errorMessage}"
@@ -45,7 +52,7 @@ export const withMessage = BaseTemplate.bind({});
 withMessage.args = {
   componentId: 'pds-select-message-example',
   disabled: false,
-  helperMessage: 'Please use the correct format',
+  helperMessage: "Please don't pick Ringo",
   label: 'Select your favorite Beatle',
   name: 'beatles',
 };
@@ -54,7 +61,16 @@ export const Invalid = BaseTemplate.bind({});
 Invalid.args = {
   componentId: 'pds-select-invalid-example',
   disabled: false,
-  errorMessage: 'Naw, son',
+  errorMessage: 'Its not Ringo',
+  label: 'Select your favorite Beatle',
+  name: 'beatles',
+};
+
+export const Autocomplete = BaseTemplate.bind({});
+Autocomplete.args = {
+  componentId: 'pds-select-autocomplete-example',
+  disabled: false,
+  autocomplete: 'on',
   label: 'Select your favorite Beatle',
   name: 'beatles',
 };

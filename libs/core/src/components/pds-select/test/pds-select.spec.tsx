@@ -11,8 +11,8 @@ describe('pds-select', () => {
     });
     expect(root).toEqualHtml(`
       <pds-select component-id="field-1">
-      <mock:shadow-root>
-        <div class="pds-select">
+        <mock:shadow-root>
+          <div class="pds-select">
             <label htmlFor="field-1"></label>
             <select class="pds-select__field" id="field-1">
             </select>
@@ -203,5 +203,27 @@ describe('pds-select', () => {
     } else {
       throw new Error('select element is not available');
     }
+  });
+
+  it('renders autocomplete attribute when property is passed', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select autocomplete="off" component-id="field-1" label="Name"></pds-select>`,
+    });
+
+    expect(page.root).toEqualHtml(`
+      <pds-select autocomplete="off" component-id="field-1" label="Name">
+        <mock:shadow-root>
+          <div class="pds-select">
+            <label htmlFor="field-1">Name</label>
+            <select autocomplete="off" class="pds-select__field" id="field-1"></select>
+            <div aria-hidden="true" class="hidden">
+              <slot></slot>
+            </div>
+            <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
+          </div>
+        </mock:shadow-root>
+      </pds-select>
+    `);
   });
 });
