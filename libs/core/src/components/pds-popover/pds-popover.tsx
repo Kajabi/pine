@@ -10,7 +10,7 @@ import {
 
 @Component({
   tag: 'pds-popover',
-  styleUrls: ['../../global/styles/base.scss', 'pds-popover.scss'],
+  styleUrl: 'pds-popover.scss',
   shadow: true,
 })
 export class PdsPopover {
@@ -82,6 +82,33 @@ export class PdsPopover {
   componentWillUnmount() {
     document.removeEventListener('click', this.handleOutsideClick);
   }
+
+  @Listen('keydown', {
+    capture: true
+  })
+  handleKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Enter' || event.key === ' ' && !this.isOpen) {
+      if (this.isOpen) {
+        event.stopPropagation();
+        return;
+      }
+
+      const closestTarget = (event.target as HTMLElement).closest("div[slot='trigger']");
+      if (closestTarget) {
+        this.show();
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      return;
+    }
+
+    if (event.key === 'Escape' && this.isOpen) {
+      this.hide();
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }
+
 
   @Listen('click', {
     capture: true
