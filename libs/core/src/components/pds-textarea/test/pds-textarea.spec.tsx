@@ -210,6 +210,23 @@ describe('pds-textarea', () => {
     `);
   });
 
+  it('renders autocomplete attribute when property is passed', async () => {
+    const {root} = await newSpecPage({
+      components: [PdsTextarea],
+      html: `<pds-textarea autocomplete="off"></pds-textarea>`,
+    });
+
+    expect(root).toEqualHtml(`
+      <pds-textarea autocomplete="off">
+        <mock:shadow-root>
+          <div class="pds-textarea">
+            <textarea class="pds-textarea__field" autocomplete="off"></textarea>
+          </div>
+        </mock:shadow-root>
+      </pds-textarea>
+    `);
+  });
+
   it('renders a helper and error message and assigns aria-description to the input', async () => {
     const {root} = await newSpecPage({
       components: [PdsTextarea],

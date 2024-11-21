@@ -5,6 +5,7 @@ import { withActions } from '@storybook/addon-actions/decorator';
 export default {
   argTypes: extractArgTypes('pds-input'),
   args: {
+    autocomplete: null,
     disabled: false,
     errorMessage: null,
     helperMessage: null,
@@ -26,6 +27,7 @@ export default {
 }
 
 const BaseTemplate = (args) => html`<pds-input
+  autocomplete="${args.autocomplete}"
   disabled="${args.disabled}"
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
@@ -107,4 +109,12 @@ Invalid.args = {
   errorMessage: "Please provide a valid email address",
   type: 'email',
   value: 'Frank Dux'
+};
+
+export const Autocomplete = BaseTemplate.bind({});
+Autocomplete.args = {
+  componentId: 'pds-input-autocomplete',
+  label: 'First name',
+  type: 'text',
+  autocomplete: 'given-name',
 };

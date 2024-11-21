@@ -8,6 +8,12 @@ import { PdsLabel } from '../_internal/pds-label/pds-label';
   shadow: true,
 })
 export class PdsInput {
+
+  /**
+   * Specifies if and how the browser provides `autocomplete` assistance for the field.
+   */
+  @Prop() autocomplete: string;
+
   /**
    * A unique identifier used for the underlying component `id` attribute.
    */
@@ -93,6 +99,7 @@ export class PdsInput {
           <input class="pds-input__field"
             aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
             aria-invalid={this.invalid ? "true" : undefined}
+            autocomplete={this.autocomplete}
             disabled={this.disabled}
             id={this.componentId}
             name={this.name}
