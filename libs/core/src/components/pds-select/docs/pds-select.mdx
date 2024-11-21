@@ -39,8 +39,20 @@ import { components } from '../../../../dist/docs.json';
 <DocCanvas
   client:only
   mdxSource={{
-    react: '<PdsSelect componentId="pds-select-default-example" label="Name"></PdsSelect>',
-    webComponent: '<pds-select component-id="pds-select-default-example" label="Name"></pds-select>',
+    react: `
+      <PdsSelect componentId="pds-select-default-example" label="Name">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </PdsSelect>`,
+    webComponent: `
+      <pds-select component-id="pds-select-default-example" label="Name">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </pds-select>`,
   }}
 >
   <div style={{ padding: '20px', width: '100%' }}>
@@ -60,8 +72,20 @@ import { components } from '../../../../dist/docs.json';
 <DocCanvas
   client:only
   mdxSource={{
-    react: '<PdsSelect componentId="pds-select-disabled-example" disabled="true" label="Name"></PdsSelect>',
-    webComponent: '<pds-select component-id="pds-select-disabled-example" disabled="true" label="Name"></pds-select>',
+    react: `
+      <PdsSelect componentId="pds-select-disabled-example" disabled="true" label="Name">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </PdsSelect>`,
+    webComponent: `
+      <pds-select component-id="pds-select-disabled-example" disabled="true" label="Name">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </pds-select>`,
   }}
 >
   <div style={{ padding: '20px', width: '100%' }}>
@@ -81,9 +105,20 @@ import { components } from '../../../../dist/docs.json';
 <DocCanvas
   client:only
   mdxSource={{
-    react: '<PdsSelect componentId="pds-select-with-message-example" label="Name" helper-message="This is a helper message to convey extra context for the select"></PdsSelect>',
-    webComponent:
-      '<pds-select component-id="pds-select-with-message-example" label="Name" helper-message="This is a helper message to convey extra context for the select"></pds-select>',
+    react: `
+      <PdsSelect componentId="pds-select-with-message-example" label="Name" helper-message="This is a helper message to convey extra context for the select">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </PdsSelect>`,
+    webComponent: `
+      <pds-select component-id="pds-select-with-message-example" label="Name" helper-message="This is a helper message to convey extra context for the select">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </pds-select>`,
   }}
 >
   <div style={{ padding: '20px', width: '100%' }}>
@@ -103,9 +138,20 @@ import { components } from '../../../../dist/docs.json';
 <DocCanvas
   client:only
   mdxSource={{
-    react: '<PdsSelect componentId="pds-select-invalid-example" label="Name" error-message="This is an error message to convey extra context for the select"></PdsSelect>',
-    webComponent:
-      '<pds-select component-id="pds-select-invalid-example" label="Name" error-message="This is an error message to convey extra context for the select"></pds-select>',
+    react: `
+      <PdsSelect componentId="pds-select-invalid-example" label="Name" error-message="This is an error message to convey extra context for the select">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </PdsSelect>`,
+    webComponent: `
+      <pds-select component-id="pds-select-invalid-example" label="Name" error-message="This is an error message to convey extra context for the select">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </pds-select>`,
   }}
 >
   <div style={{ padding: '20px', width: '100%' }}>
@@ -125,8 +171,20 @@ import { components } from '../../../../dist/docs.json';
 <DocCanvas
   client:only
   mdxSource={{
-    react: '<PdsSelect autocomplete="on" componentId="pds-select-autocomplete-example" label="Name"></PdsSelect>',
-    webComponent: '<pds-select autocomplete="on" component-id="pds-select-autocomplete-example" label="Name"></pds-select>',
+    react: `
+      <PdsSelect autocomplete="on" componentId="pds-select-autocomplete-example" label="Name">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </PdsSelect>`,
+    webComponent: `
+      <pds-select autocomplete="on" component-id="pds-select-autocomplete-example" label="Name">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </pds-select>`,
   }}
 >
   <div style={{ padding: '20px', width: '100%' }}>
