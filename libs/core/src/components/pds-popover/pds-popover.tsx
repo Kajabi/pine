@@ -92,13 +92,15 @@ export class PdsPopover {
         event.stopPropagation();
         return;
       }
-
       const closestTarget = (event.target as HTMLElement).closest("div[slot='trigger']");
       if (closestTarget) {
-        this.show();
         event.preventDefault();
         event.stopPropagation();
       }
+
+      this.show();
+      event.preventDefault();
+      event.stopPropagation();
       return;
     }
 
@@ -174,6 +176,9 @@ export class PdsPopover {
             aria-describedby={this.componentId}
             class="pds-popover__trigger"
             onClick={this.handleClick}
+            // resolve test issue
+            // role="button"
+            // tabIndex={0}
           >
             <slot name="trigger"></slot>
           </span>
