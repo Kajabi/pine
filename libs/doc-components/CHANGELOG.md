@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.1](https://github.com/Kajabi/pine/compare/@pine-ds/doc-components@2.1.0...@pine-ds/doc-components@2.1.1) (2024-11-22)
+
+
+### Bug Fixes
+
+* **docArgsTable:** displays a red asterisk when a prop is required ([#311](https://github.com/Kajabi/pine/issues/311)) ([7200b47](https://github.com/Kajabi/pine/commit/7200b479ef4e27a9d7ecff98d3329fa67e463950))
+
+
+
+
+
 # [2.1.0](https://github.com/Kajabi/pine/compare/@pine-ds/doc-components@2.0.0...@pine-ds/doc-components@2.1.0) (2024-10-31)
 
 **Note:** Version bump only for package @pine-ds/doc-components

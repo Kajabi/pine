@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.1](https://github.com/Kajabi/pine/compare/@pine-ds/core@2.1.0...@pine-ds/core@2.1.1) (2024-11-22)
+
+
+### Bug Fixes
+
+* add autocomplete attribute to input and textarea ([#321](https://github.com/Kajabi/pine/issues/321)) ([0b9c108](https://github.com/Kajabi/pine/commit/0b9c108fb052c466473bfd997f7ca8300749fa7c))
+* adds tooltip max width prop and removes events ([#285](https://github.com/Kajabi/pine/issues/285)) ([9a32fbe](https://github.com/Kajabi/pine/commit/9a32fbe90a4f2446ae7246dfaee41424befc19a6))
+* **textarea:** update innerHTML to value ([#296](https://github.com/Kajabi/pine/issues/296)) ([15486d9](https://github.com/Kajabi/pine/commit/15486d98bb22e58578b5107684006e708c7ae111))
+* updates checked property on switch update ([#315](https://github.com/Kajabi/pine/issues/315)) ([381197f](https://github.com/Kajabi/pine/commit/381197f092da8b7c2ebd1417327119703d48abcb))
+
+
+
+
+
 # [2.1.0](https://github.com/Kajabi/pine/compare/@pine-ds/core@2.0.0...@pine-ds/core@2.1.0) (2024-10-31)
 
 
