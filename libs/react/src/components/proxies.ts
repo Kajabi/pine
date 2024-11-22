@@ -17,6 +17,7 @@ import { defineCustomElement as definePdsImage } from '@pine-ds/core/components/
 import { defineCustomElement as definePdsInput } from '@pine-ds/core/components/pds-input.js';
 import { defineCustomElement as definePdsLink } from '@pine-ds/core/components/pds-link.js';
 import { defineCustomElement as definePdsLoader } from '@pine-ds/core/components/pds-loader.js';
+import { defineCustomElement as definePdsPopover } from '@pine-ds/core/components/pds-popover.js';
 import { defineCustomElement as definePdsProgress } from '@pine-ds/core/components/pds-progress.js';
 import { defineCustomElement as definePdsRadio } from '@pine-ds/core/components/pds-radio.js';
 import { defineCustomElement as definePdsRow } from '@pine-ds/core/components/pds-row.js';
@@ -47,6 +48,7 @@ export const PdsImage = /*@__PURE__*/createReactComponent<JSX.PdsImage, HTMLPdsI
 export const PdsInput = /*@__PURE__*/createReactComponent<JSX.PdsInput, HTMLPdsInputElement>('pds-input', undefined, undefined, definePdsInput);
 export const PdsLink = /*@__PURE__*/createReactComponent<JSX.PdsLink, HTMLPdsLinkElement>('pds-link', undefined, undefined, definePdsLink);
 export const PdsLoader = /*@__PURE__*/createReactComponent<JSX.PdsLoader, HTMLPdsLoaderElement>('pds-loader', undefined, undefined, definePdsLoader);
+export const PdsPopover = /*@__PURE__*/createReactComponent<JSX.PdsPopover, HTMLPdsPopoverElement>('pds-popover', undefined, undefined, definePdsPopover);
 export const PdsProgress = /*@__PURE__*/createReactComponent<JSX.PdsProgress, HTMLPdsProgressElement>('pds-progress', undefined, undefined, definePdsProgress);
 export const PdsRadio = /*@__PURE__*/createReactComponent<JSX.PdsRadio, HTMLPdsRadioElement>('pds-radio', undefined, undefined, definePdsRadio);
 export const PdsRow = /*@__PURE__*/createReactComponent<JSX.PdsRow, HTMLPdsRowElement>('pds-row', undefined, undefined, definePdsRow);

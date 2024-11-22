@@ -24,14 +24,11 @@ describe('pds-popover', () => {
     );
 
     const button = await page.find('pds-popover >>> .pds-popover__trigger');
-    await button?.focus();
-    await page.waitForChanges();
+    await button?.press('Enter');
 
-    await page.keyboard.press('Enter');
     await page.waitForChanges();
-
-    const popover = await page.find('pds-popover >>> .pds-popover');
-    expect(popover).toHaveClass('pds-popover--is-open');
+    const popoverPanel = await page.find('pds-popover >>> .pds-popover');
+    expect(popoverPanel).toHaveClass('pds-popover--is-open');
   });
 
   it('should close the popover on Escape key press when open', async () => {

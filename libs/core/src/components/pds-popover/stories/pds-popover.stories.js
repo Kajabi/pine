@@ -25,7 +25,7 @@ Default.args = {
 	placement: "right-start",
 	slot: html`
 		<div slot="trigger">
-			<pds-button variant="secondary">Popover</pds-button>
+			Popover
 		</div>
 		<div slot="content">
 			<p>This is a Popover</p>

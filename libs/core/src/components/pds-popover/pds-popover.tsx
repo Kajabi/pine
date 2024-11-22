@@ -3,6 +3,8 @@ import {
   positionTooltip
 } from '../../utils/overlay';
 
+// import '../../components/pds-button/pds-button.scss';
+
 /**
  * @slot trigger - The popover's target element
  * @slot content - HTML content for the popover
@@ -172,16 +174,14 @@ export class PdsPopover {
             ${this.hasArrow ? '' : 'pds-popover--no-arrow'}
           `}
         >
-          <span
+          <button
             aria-describedby={this.componentId}
-            class="pds-popover__trigger"
+            class="pds-button pds-popover__trigger"
             onClick={this.handleClick}
-            // resolve test issue
-            // role="button"
-            // tabIndex={0}
           >
             <slot name="trigger"></slot>
-          </span>
+          </button>
+
 
           <div class="pds-popover__content"
             aria-hidden={this.isOpen ? 'false' : 'true'}
