@@ -12,6 +12,7 @@
   --color-text-disabled: var(--pine-color-grey-600);
   --color-text-error: var(--pine-color-red-600);
 
+  --font-size-helper-message: var(--pine-font-size-085);
   --font-size-select-field: var(--pine-font-size-100);
   --font-size-label: var(--pine-font-size-100);
   --font-weight-helper-message: var(--pine-font-weight-normal);
@@ -22,10 +23,11 @@
   --line-height-helper-message: var(--pine-line-height-125);
   --line-height-select-field: var(--pine-line-height-150);
 
+  --spacing-error-message: var(--pine-spacing-050);
   --spacing-field-padding-block: var(--pine-spacing-100);
-  --spacing-select-field-padding-inline: var(--pine-spacing-150);
   --spacing-label-margin-block-end: var(--pine-spacing-100);
   --spacing-margin-top-helper-message: var(--pine-spacing-100);
+  --spacing-select-field-padding-inline: var(--pine-spacing-150 --spacing-select-field-icon-allowance: var(--pine-spacing-450) ;);
 
   .hidden,
   :host([hidden]) {
@@ -63,7 +65,7 @@ select {
   grid-area: field;
   line-height: var(--line-height-select-field);
   padding: var(--spacing-field-padding-block) var(--spacing-select-field-padding-inline);
-  padding-right: var(--pine-spacing-450);
+  padding-right: var(--spacing-select-field-icon-allowance);
   position: relative;
 
   &:hover {
@@ -97,7 +99,7 @@ select {
 
 .pds-select__error-message,
 .pds-select__helper-message {
-  font-size: var(--pine-font-size-085);
+  font-size: var(--font-size-helper-message);
   font-weight: var(--font-weight-helper-message);
   line-height: var(--line-height-helper-message);
   margin-block-end: 0;
@@ -108,7 +110,7 @@ select {
   align-items: center;
   color: var(--color-text-error);
   display: flex;
-  gap: var(--pine-spacing-050);
+  gap: var(--spacing-error-message);
 }
 
 .pds-select__message {
