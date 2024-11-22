@@ -12,15 +12,13 @@ describe('pds-select', () => {
     expect(root).toEqualHtml(`
       <pds-select component-id="field-1">
         <mock:shadow-root>
-          <div class="pds-select">
-            <label htmlFor="field-1"></label>
-            <select class="pds-select__field" id="field-1">
-            </select>
-            <div aria-hidden="true" class="hidden">
-              <slot></slot>
-            </div>
-            <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
+          <label htmlFor="field-1"></label>
+          <select class="pds-select__field" id="field-1">
+          </select>
+          <div aria-hidden="true" class="hidden">
+            <slot></slot>
           </div>
+          <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
         </mock:shadow-root>
       </pds-select>
     `);
@@ -51,15 +49,13 @@ describe('pds-select', () => {
     expect(page.root).toEqualHtml(`
       <pds-select component-id="field-1" label="Name">
         <mock:shadow-root>
-          <div class="pds-select">
-            <label htmlfor="field-1">Name</label>
-            <select class="pds-select__field" id="field-1"></select>
-            </select>
-            <div aria-hidden="true" class="hidden">
-              <slot></slot>
-            </div>
-            <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
+          <label htmlfor="field-1">Name</label>
+          <select class="pds-select__field" id="field-1"></select>
+          </select>
+          <div aria-hidden="true" class="hidden">
+            <slot></slot>
           </div>
+          <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
         </mock:shadow-root>
         <option value="1">Option 1</option>
         <option value="2">Option 2</option>
@@ -75,14 +71,12 @@ describe('pds-select', () => {
     expect(root).toEqualHtml(`
       <pds-select component-id="field-1" label="Name">
         <mock:shadow-root>
-          <div class="pds-select">
-            <label htmlFor="field-1">Name</label>
-            <select class="pds-select__field" id="field-1"></select>
-            <div aria-hidden="true" class="hidden">
-              <slot></slot>
-            </div>
-            <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
+          <label htmlFor="field-1">Name</label>
+          <select class="pds-select__field" id="field-1"></select>
+          <div aria-hidden="true" class="hidden">
+            <slot></slot>
           </div>
+          <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
         </mock:shadow-root>
       </pds-select>
     `);
@@ -113,7 +107,7 @@ describe('pds-select', () => {
   it('renders with disabled attribute', async () => {
     const page = await newSpecPage({
       components: [PdsSelect],
-      html: `<pds-select component-id="field-1" disabled></pds-select>`,
+      html: `<pds-select aria-disabled="true" component-id="field-1" disabled></pds-select>`,
     });
 
     await page.waitForChanges(); // Ensures component fully renders
@@ -121,16 +115,14 @@ describe('pds-select', () => {
     expect(page.root).toEqualHtml(`
       <pds-select aria-disabled="true" component-id="field-1" disabled="">
         <mock:shadow-root>
-          <div class="pds-select">
-            <label htmlfor="field-1"></label>
-            <select class="pds-select__field" disabled="" id="field-1">
-              <slot></slot>
-            </select>
-            <div aria-hidden="true" class="hidden">
-              <slot></slot>
-            </div>
-            <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
+          <label htmlfor="field-1"></label>
+          <select class="pds-select__field" disabled="" id="field-1">
+            <slot></slot>
+          </select>
+          <div aria-hidden="true" class="hidden">
+            <slot></slot>
           </div>
+          <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
         </mock:shadow-root>
       </pds-select>
     `);
@@ -214,14 +206,12 @@ describe('pds-select', () => {
     expect(page.root).toEqualHtml(`
       <pds-select autocomplete="off" component-id="field-1" label="Name">
         <mock:shadow-root>
-          <div class="pds-select">
-            <label htmlFor="field-1">Name</label>
-            <select autocomplete="off" class="pds-select__field" id="field-1"></select>
-            <div aria-hidden="true" class="hidden">
-              <slot></slot>
-            </div>
-            <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
+          <label htmlFor="field-1">Name</label>
+          <select autocomplete="off" class="pds-select__field" id="field-1"></select>
+          <div aria-hidden="true" class="hidden">
+            <slot></slot>
           </div>
+          <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
         </mock:shadow-root>
       </pds-select>
     `);
