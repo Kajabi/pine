@@ -21,10 +21,20 @@ A `tag` is required for this component. Each semantic tag comes with default sty
 
 <DocCanvas client:only
   mdxSource={{
-    react: '<PdsText tag="h1">Hello World!</PdsText>',
-    webComponent: '<pds-text tag="h1">Hello World!</pds-text>'
+    react: `
+      <PdsText tag="h1" gutter="xs">Title</PdsText>
+      <PdsText tag="h2" gutter="lg">Subtitle</PdsText>
+      <PdsText tag="p">Excepteur nulla veniam ullamco tempor culpa magna occaecat culpa. Sunt cupidatat proident tempor labore cupidatat labore mollit ullamco esse culpa. Dolor aute consequat aliqua excepteur cillum. Tempor deserunt eiusmod nulla qui anim incididunt et nulla ex consequat sit Lorem.</PdsText>
+    `,
+    webComponent: `
+      <pds-text tag="h1" gutter="xs">Title</pds-text>
+      <pds-text tag="h2" gutter="lg">Subtitle</pds-text>
+      <pds-text tag="p">Excepteur nulla veniam ullamco tempor culpa magna occaecat culpa. Sunt cupidatat proident tempor labore cupidatat labore mollit ullamco esse culpa. Dolor aute consequat aliqua excepteur cillum. Tempor deserunt eiusmod nulla qui anim incididunt et nulla ex consequat sit Lorem.</pds-text>
+    `
 }}>
-  <pds-text tag="h1">Hello World!</pds-text>
+  <pds-text tag="h1" gutter="xs">Hello World!</pds-text>
+  <pds-text tag="h2" gutter="lg">Subtitle</pds-text>
+  <pds-text tag="p">Excepteur nulla veniam ullamco tempor culpa magna occaecat culpa. Sunt cupidatat proident tempor labore cupidatat labore mollit ullamco esse culpa. Dolor aute consequat aliqua excepteur cillum. Tempor deserunt eiusmod nulla qui anim incididunt et nulla ex consequat sit Lorem.</pds-text>
 </DocCanvas>
 
 ## Alignment
