@@ -1,0 +1,271 @@
+import { Meta } from '@storybook/blocks';
+import { DocCanvas } from '@pine-ds/doc-components';
+
+<Meta title="Guides/Forms" />
+
+# Using Pine Form Components
+
+## Overview
+
+Pine Design System (PDS) form components such as `pds-input`, `pds-checkbox`, `pds-button`, `pds-radio`, `pds-switch`, and `pds-textarea` are designed to work seamlessly within standard HTML `<form>` elements. These components ensure accessibility and consistency while providing enhanced styling and behavior.
+
+## Examples for Demo Purposes
+
+> ***The examples provided on this page demonstrate how to integrate Pine components into a form. These are for demonstration purposes only and are not intended for production use.***
+
+Specifically:
+
+- The examples log form data to the browser's console using `console.log()`.
+- Default values are displayed if the fields are not modified.
+- In production, replace the logging mechanism with proper form handling logic, such as API calls or state management integration.
+
+## Form Example Walkthrough
+
+### React Example
+
+The React implementation demonstrates a controlled form with state management using the `useState` hook. It highlights how to manage form data and handle validation for required fields like `name` and `email`.
+
+### Web Component Example
+
+The web component example utilizes vanilla JavaScript to access values directly from DOM elements. This implementation shows how Pine components can be integrated with native JavaScript without relying on a framework.
+
+> **Note:** Be mindful of best practices for validation and form submission when using these examples as a reference.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      import React, { useState } from 'react';
+
+      const FormComponent = () => {
+        const [formData, setFormData] = useState({
+          name: '',
+          email: '',
+          subscribe: false,
+          direction: '',
+          notifications: false,
+          message: '',
+        });
+
+        const handleSubmit = (e) => {
+          e.preventDefault();
+          // Validate required fields
+          const { name, email, subscribe, direction, notifications, message } = formData;
+          if (!name || !email) {
+            alert('Please fill out all required fields');
+            return;
+          }
+          console.log('Form Data:', JSON.stringify({ name, email, subscribe, direction, notifications, message }));
+        };
+
+        const handleChange = (e) => {
+          const { name, value, type, checked } = e.target;
+          setFormData((prevData) => ({
+            ...prevData,
+            [name]: type === 'checkbox' || type === 'radio' ? checked : value,
+          }));
+        };
+
+        return (
+          <pds-box display="block" padding="lg" margin="md" border border-radius="lg">
+            {/* Vertical Layout for form components */}
+            <form onSubmit={handleSubmit}>
+              {/* Name Input */}
+              <pds-box display="block" padding="sm" margin="sm">
+                <pds-input
+                  component-id="name"
+                  label="Name"
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                />
+              </pds-box>
+
+              {/* Email Input */}
+              <pds-box display="block" padding="sm" margin="sm">
+                <pds-input
+                  component-id="email"
+                  label="Email"
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+              </pds-box>
+
+              {/* Subscribe Checkbox */}
+              <pds-box display="block" padding="sm" margin="sm">
+                <pds-checkbox
+                  component-id="subscribe"
+                  label="Subscribe to newsletter"
+                  name="subscribe"
+                  checked={formData.subscribe}
+                  onChange={handleChange}
+                />
+              </pds-box>
+
+              {/* Direction Radio Buttons */}
+              <pds-box display="block" padding="sm" margin="sm">
+                <pds-radio
+                  component-id="direction-up"
+                  label="Up"
+                  name="direction"
+                  value="up"
+                  checked={formData.direction === 'up'}
+                  onChange={handleChange}
+                />
+                <pds-radio
+                  component-id="direction-down"
+                  label="Down"
+                  name="direction"
+                  value="down"
+                  checked={formData.direction === 'down'}
+                  onChange={handleChange}
+                />
+              </pds-box>
+
+              {/* Notifications Switch */}
+              <pds-box display="block" padding="sm" margin="sm">
+                <pds-switch
+                  component-id="notifications"
+                  label="Enable notifications"
+                  name="notifications"
+                  checked={formData.notifications}
+                  onChange={handleChange}
+                />
+              </pds-box>
+
+              {/* Message Textarea */}
+              <pds-box display="block" padding="sm" margin="sm">
+                <pds-textarea
+                  component-id="message"
+                  label="Message"
+                  name="message"
+                  value={formData.message}   // Bind the textarea value to the state
+                  onChange={handleChange}    // Use the same handler to update the state
+                />
+              </pds-box>
+
+              {/* Submit Button */}
+              <pds-box display="block" padding="sm" margin="sm">
+                <pds-button type="submit" variant="primary">Submit Form</pds-button>
+              </pds-box>
+            </form>
+          </pds-box>
+        );
+      };
+
+      export default FormComponent;
+    `,
+    webComponent: `
+      <pds-box display="block" padding="lg" margin="md" border border-radius="lg">
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          const form = e.target;
+          console.log('Form Data:', {
+            name: form.querySelector('[component-id="name"]').value,
+            email: form.querySelector('[component-id="email"]').value,
+            subscribe: form.querySelector('[component-id="subscribe"]').checked,
+            direction: form.querySelector('input[name="direction"]:checked')?.value,
+            notifications: form.querySelector('[component-id="notifications"]').checked,
+            message: form.querySelector('[component-id="message"]').value
+          });
+        }}>
+          <pds-box display="block" padding="sm">
+            <pds-input component-id="name" label="Name" type="text"></pds-input>
+          </pds-box>
+
+          <pds-box display="block" padding="sm">
+            <pds-input component-id="email" label="Email" type="email"></pds-input>
+          </pds-box>
+
+          <pds-box display="block" padding="sm">
+            <pds-checkbox component-id="subscribe" label="Subscribe to newsletter"></pds-checkbox>
+          </pds-box>
+
+          <pds-box display="flex" padding="sm" gap="sm">
+            <p><strong>Favorite direction:</strong></p>
+            <pds-radio component-id="direction-up" label="Up" name="direction" value="up"></pds-radio>
+            <pds-radio component-id="direction-down" label="Down" name="direction" value="down"></pds-radio>
+          </pds-box>
+
+          <pds-box display="block" padding="sm">
+            <pds-switch component-id="notifications" label="Enable notifications"></pds-switch>
+          </pds-box>
+
+          <pds-box display="block" padding="sm">
+            <pds-textarea component-id="message" label="Message"></pds-textarea>
+          </pds-box>
+
+          <pds-box display="block" padding="sm">
+            <pds-button type="submit" variant="primary">Submit Form</pds-button>
+          </pds-box>
+        </form>
+      </pds-box>
+    `
+}}>
+
+<pds-box display="block" padding="lg" margin="md" border border-radius="lg">
+  <form onSubmit={(e) => {
+    e.preventDefault();
+    const form = e.target;
+    console.log('Form Data:', {
+      name: form.querySelector('[component-id="name"]').value,
+      email: form.querySelector('[component-id="email"]').value,
+      subscribe: form.querySelector('[component-id="subscribe"]').checked,
+      direction: form.querySelector('input[name="direction"]:checked')?.value,
+      notifications: form.querySelector('[component-id="notifications"]').checked,
+      message: form.querySelector('[component-id="message"]').value
+    });
+  }}>
+    <pds-box display="block" padding="sm">
+      <pds-input component-id="name" label="Name" type="text"></pds-input>
+    </pds-box>
+
+    <pds-box display="block" padding="sm">
+      <pds-input component-id="email" label="Email" type="email"></pds-input>
+    </pds-box>
+
+    <pds-box display="block" padding="sm">
+      <pds-checkbox component-id="subscribe" label="Subscribe to newsletter"></pds-checkbox>
+    </pds-box>
+
+    <pds-box display="flex" padding="sm" gap="sm">
+      <p><strong>Favorite direction:</strong></p>
+      <pds-radio component-id="direction-up" label="Up" name="direction" value="up"></pds-radio>
+      <pds-radio component-id="direction-down" label="Down" name="direction" value="down"></pds-radio>
+    </pds-box>
+
+    <pds-box display="block" padding="sm">
+      <pds-switch component-id="notifications" label="Enable notifications"></pds-switch>
+    </pds-box>
+
+    <pds-box display="block" padding="sm">
+      <pds-textarea component-id="message" label="Message"></pds-textarea>
+    </pds-box>
+
+    <pds-box display="block" padding="sm">
+      <pds-button type="submit" variant="primary">Submit Form</pds-button>
+    </pds-box>
+  </form>
+</pds-box>
+
+</DocCanvas>
+
+## Guidelines and Recommendations
+
+### 1. Use Pine Components for Consistency
+
+- Incorporating `pds-*` components ensures your forms maintain visual and functional consistency across your application.
+- Each component has documentation that outlines its usage and properties. Refer to each component in the sidebar for more information.
+
+### 2. Validation
+
+- Implement robust validation to meet user expectations.
+- Use the `required` attribute for mandatory fields.
+
+### 3. Production-Ready Practices
+
+- Avoid logging sensitive user data to the console.
+- Replace placeholder code with API integrations or backend logic.
+- Ensure error handling is user-friendly and complies with accessibility standards.
