@@ -2,7 +2,7 @@ import { Component, Element, Event, EventEmitter, Host, h, Prop, State, Listen }
 
 @Component({
   tag: 'pds-table',
-  styleUrls: ['../../global/styles/base.scss', 'pds-table.scss'],
+  styleUrls: ['pds-table.scss'],
   shadow: true,
 })
 export class PdsTable {

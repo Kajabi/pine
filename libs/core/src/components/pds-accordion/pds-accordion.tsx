@@ -9,7 +9,7 @@ import { downSmall } from '@pine-ds/icons/icons';
  */
 @Component({
   tag: 'pds-accordion',
-  styleUrls: ['../../global/styles/base.scss','pds-accordion.scss'],
+  styleUrls: ['pds-accordion.scss'],
   shadow: true,
 })
 export class PdsAccordion {

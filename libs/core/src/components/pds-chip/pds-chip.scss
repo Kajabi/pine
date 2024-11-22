@@ -1,71 +1,54 @@
 :host {
   --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
-  --border-radius: var(--pine-border-radius-200);
 
-  --color-background-accent: var(--pine-color-purple-100);
   --color-background-accent-dot: var(--pine-color-purple-600);
   --color-background-accent-hover: var(--pine-color-purple-200);
-  --color-background-danger: var(--pine-color-red-100);
+
   --color-background-danger-dot: var(--pine-color-red-600);
   --color-background-danger-hover: var(--pine-color-red-200);
-  --color-background-info: var(--pine-color-blue-100);
+
   --color-background-info-dot: var(--pine-color-blue-600);
   --color-background-info-hover: var(--pine-color-blue-200);
-  --color-background-neutral: var(--pine-color-grey-100);
+
   --color-background-neutral-dot: var(--pine-color-grey-600);
   --color-background-neutral-hover: var(--pine-color-grey-400);
-  --color-background-success: var(--pine-color-green-100);
+
   --color-background-success-dot: var(--pine-color-green-600);
   --color-background-success-hover: var(--pine-color-green-200);
-  --color-background-warning: var(--pine-color-yellow-100);
+
   --color-background-warning-dot: var(--pine-color-yellow-600);
   --color-background-warning-hover: var(--pine-color-yellow-200);
-  --color-text-accent: var(--pine-color-purple-950);
-  --color-text-danger: var(--pine-color-red-950);
-  --color-text-info: var(--pine-color-blue-950);
-  --color-text-neutral: var(--pine-color-grey-950);
-  --color-text-success: var(--pine-color-green-950);
-  --color-text-warning: var(--pine-color-yellow-950);
 
-  --font-size-sm: var(--pine-font-size-body-md);
-  --font-size-lg: var(--pine-font-size-heading-h6);
-  --font-weight: var(--pine-font-weight-medium);
-
-  --spacing-xxs: calc(var(--pine-spacing-050) / 2);
-  --spacing-xs: var(--pine-spacing-050);
-  --spacing-sm: calc(var(--pine-spacing-150) / 2);
-  --spacing-md: var(--pine-spacing-100);
-  --spacing-lg: calc(var(--pine-spacing-250) / 2);
-  --spacing-xl: var(--pine-spacing-150);
-  --spacing-xxl: calc(var(--pine-spacing-350) / 2);
+  --spacing-sm: calc(var(--pine-dimension-150) / 2);
+  --spacing-lg: calc(var(--pine-dimension-250) / 2);
+  --spacing-xl: var(--pine-dimension-150);
+  --spacing-xxl: calc(var(--pine-dimension-350) / 2);
 
   --sizing-close: 10px;
-  --sizing-close-lg: 24px;
-  --sizing-dot: 4px;
 
   align-items: center;
-  border-radius: var(--border-radius);
+  border-radius: var(--pine-dimension-sm);
   display: inline-flex;
-  padding-block: var(--spacing-xs);
+  padding-block: var(--pine-dimension-2xs);
   padding-inline: var(--spacing-lg);
 }
 
 $pds-chip-sentiment: (
-  accent: var(--color-background-accent),
-  danger: var(--color-background-danger),
-  info: var(--color-background-info),
-  neutral: var(--color-background-neutral),
-  success: var(--color-background-success),
-  warning: var(--color-background-warning),
+  accent: var(--pine-color-accent),
+  danger: var(--pine-color-danger),
+  info: var(--pine-color-info),
+  neutral: var(--pine-color-neutral),
+  success: var(--pine-color-success),
+  warning: var(--pine-color-warning),
 );
 
 $pds-chip-sentiment-text: (
-  accent: var(--color-text-accent),
-  danger: var(--color-text-danger),
-  info: var(--color-text-info),
-  neutral: var(--color-text-neutral),
-  success: var(--color-text-success),
-  warning: var(--color-text-warning),
+  accent: var(--pine-color-text-accent),
+  danger: var(--pine-color-text-danger),
+  info: var(--pine-color-text-info),
+  neutral: var(--pine-color-text-neutral),
+  success: var(--pine-color-text-sucess),
+  warning: var(--pine-color-text-warning),
 );
 
 $pds-chip-sentiment-dots: (
@@ -78,7 +61,7 @@ $pds-chip-sentiment-dots: (
 );
 
 $pds-chip-sentiment-hover: (
-  accent: var(--color-background-accent-hover),
+  accent: var(--pine-color-accent-hover),
   danger: var(--color-background-danger-hover),
   info: var(--color-background-info-hover),
   neutral: var(--color-background-neutral-hover),
@@ -118,15 +101,15 @@ $pds-chip-sentiment-hover: (
   border: 1px solid transparent;
   border-radius: 50%;
   display: inline-block;
-  height: var(--sizing-dot);
-  margin-block-end: var(--spacing-xxs);
-  margin-inline-end: var(--spacing-xs);
-  width: var(--sizing-dot);
+  height: var(--pine-dimension-2xs);
+  margin-block-end: var(--pine-dimension-025);
+  margin-inline-end: var(--pine-dimension-2xs);
+  width: var(--pine-dimension-2xs);
 }
 
 .pds-chip__label {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight);
+  font-size: var(--pine-font-size-body-md);
+  font-weight: var(--pine-font-weight-medium);
 }
 
 // dropdown
@@ -135,8 +118,8 @@ $pds-chip-sentiment-hover: (
   padding: 0;
 
   .pds-chip__dot {
-    margin-block-end: calc(var(--spacing-xxs) / 4);
-    margin-block-start: var(--spacing-xxs);
+    margin-block-end: calc(var(--pine-dimension-025) / 4);
+    margin-block-start: var(--pine-dimension-025);
   }
 }
 
@@ -145,10 +128,10 @@ $pds-chip-sentiment-hover: (
   appearance: none;
   background: transparent;
   border: 0;
-  border-radius: var(--border-radius);
+  border-radius: var(--pine-dimension-sm);
   display: flex;
-  font-weight: var(--font-weight);
-  padding-block: var(--spacing-xs);
+  font-weight: var(--pine-font-weight-medium);
+  padding-block: var(--pine-dimension-2xs);
   padding-inline: var(--spacing-lg);
 
   &:focus-visible {
@@ -157,15 +140,15 @@ $pds-chip-sentiment-hover: (
   }
 
   pds-icon {
-    margin-inline-end: calc(var(--spacing-xxs) * -1);
-    margin-inline-start: var(--spacing-xs);
+    margin-inline-end: calc(var(--pine-dimension-025) * -1);
+    margin-inline-start: var(--pine-dimension-2xs);
   }
 }
 
 // tag
 
 :host(.pds-chip--tag) {
-  padding-block: var(--spacing-xxs);
+  padding-block: var(--pine-dimension-025);
 }
 
 .pds-chip__close {
@@ -174,8 +157,8 @@ $pds-chip-sentiment-hover: (
   border: 0;
   border-radius: 50%;
   height: var(--sizing-close);
-  margin-inline-end: calc(var(--spacing-md) * -1);
-  margin-inline-start: var(--spacing-xs);
+  margin-inline-end: calc(var(--pine-dimension-xs) * -1);
+  margin-inline-start: var(--pine-dimension-2xs);
   padding: var(--sizing-close);
   position: relative;
   width: var(--sizing-close);
@@ -196,13 +179,13 @@ $pds-chip-sentiment-hover: (
 // large
 
 :host(.pds-chip--large) {
-  font-size: var(--font-size-lg);
+  font-size: var(--pine-font-size-body-lg);
   padding-block: var(--spacing-sm);
   padding-inline: var(--spacing-xxl);
 
   &:host(.pds-chip--dropdown) {
-    padding-block: var(--spacing-xs);
-    padding-inline: var(--spacing-xxs);
+    padding-block: var(--pine-dimension-2xs);
+    padding-inline: var(--pine-dimension-025);
 
     .pds-chip__dot {
       margin-block-end: 0;
@@ -210,17 +193,17 @@ $pds-chip-sentiment-hover: (
   }
 
   .pds-chip__button {
-    font-size: var(--font-size-lg);
+    font-size: var(--pine-font-size-body-lg);
     padding-inline: var(--spacing-xl)
   }
 
   .pds-chip__close {
-    height: var(--sizing-close-lg);
+    height: var(--pine-dimension-md);
     margin-inline-end: calc(var(--spacing-xl) * -1);
-    width: var(--sizing-close-lg);
+    width: var(--pine-dimension-md);
   }
 
   &:host(.pds-chip--tag) {
-    padding-block: var(--spacing-xs);
+    padding-block: var(--pine-dimension-2xs);
   }
 }
