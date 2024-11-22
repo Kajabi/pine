@@ -73,6 +73,7 @@ const docCanvas: React.FC<DocCanvasProps> = ({
   const createViewCodeButtons = () => {
     const buttons = Object.keys(mdxSource).map((key) => (
       <button
+        key={key}
         className={`
         doc-canvas-action
           ${isMenuVisible && activeTab === key ? 'doc-canvas-action--active' : ''}
