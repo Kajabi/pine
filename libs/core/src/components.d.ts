@@ -772,6 +772,16 @@ export namespace Components {
   | 'success'
   | 'warning';
         /**
+          * Set the bottom margin for the text.
+         */
+        "gutter"?: | '2xl'
+  | 'xl'
+  | 'lg'
+  | 'md'
+  | 'sm'
+  | 'xs'
+  | '2xs';
+        /**
           * Sets the font size.
          */
         "size"?: | '2xl'
@@ -798,7 +808,12 @@ export namespace Components {
         /**
           * Sets the font weight.
          */
-        "weight"?: 'regular' | 'medium' | 'semibold' | 'bold';
+        "weight"?: | 'extra-light'
+  | 'light'
+  | 'regular'
+  | 'medium'
+  | 'semibold'
+  | 'bold';
     }
     interface PdsTextarea {
         /**
@@ -2135,6 +2150,16 @@ declare namespace LocalJSX {
   | 'success'
   | 'warning';
         /**
+          * Set the bottom margin for the text.
+         */
+        "gutter"?: | '2xl'
+  | 'xl'
+  | 'lg'
+  | 'md'
+  | 'sm'
+  | 'xs'
+  | '2xs';
+        /**
           * Sets the font size.
          */
         "size"?: | '2xl'
@@ -2147,7 +2172,7 @@ declare namespace LocalJSX {
         /**
           * Determines what semantic text tag to render.
          */
-        "tag": | 'h1'
+        "tag"?: | 'h1'
   | 'h2'
   | 'h3'
   | 'h4'
@@ -2161,7 +2186,12 @@ declare namespace LocalJSX {
         /**
           * Sets the font weight.
          */
-        "weight"?: 'regular' | 'medium' | 'semibold' | 'bold';
+        "weight"?: | 'extra-light'
+  | 'light'
+  | 'regular'
+  | 'medium'
+  | 'semibold'
+  | 'bold';
     }
     interface PdsTextarea {
         /**

@@ -52,6 +52,26 @@ FontWeight.args = {
   tag: 'p',
 };
 
+const GutterTemplate = (args) => html`<pds-text
+  align="${args.align}"
+  color="${args.color}"
+  gutter="${args.gutter}"
+  size="${args.size}"
+  tag="${args.tag}"
+  weight="${args.weight}"
+  truncate
+>
+  ${args.slot}
+</pds-text>
+<pds-text tag="p">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed</pds-text>`;
+
+export const Gutter = GutterTemplate.bind();
+Gutter.args = {
+  slot: 'Title',
+  gutter: 'lg',
+  tag: 'h2',
+};
+
 const TruncateTemplate = (args) => html`<pds-text
   align="${args.align}"
   color="${args.color}"

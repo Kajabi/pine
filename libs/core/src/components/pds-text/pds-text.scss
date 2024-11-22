@@ -129,6 +129,8 @@ $type-sizes: (
 
 // Font Weights
 $type-weights: (
+  extra-light: 200,
+  light: 300,
   regular: 400,
   medium: 500,
   semibold: 600,
@@ -144,6 +146,27 @@ $type-weights: (
 }
 
 @include generate-type-weights($type-weights);
+
+// Gutter Sizes
+$type-gutters: (
+  2xl: 48px,
+  xl: 40px,
+  lg: 32px,
+  md: 24px,
+  sm: 16px,
+  xs: 8px,
+  2xs: 4px,
+);
+
+@mixin generate-type-gutters($type-gutters) {
+  @each $key, $value in $type-gutters {
+    .pds-text--gutter-#{$key} {
+      margin-block-end: $value;
+    }
+  }
+}
+
+@include generate-type-gutters($type-gutters);
 
 // Text Alignment
 $type-alignments: (
