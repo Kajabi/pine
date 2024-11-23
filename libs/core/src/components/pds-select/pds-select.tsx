@@ -5,7 +5,7 @@ import { danger, enlarge } from '@pine-ds/icons/icons';
 
 @Component({
   tag: 'pds-select',
-  styleUrls: ['../../global/styles/base.scss', 'pds-select.scss'],
+  styleUrl: 'pds-select.scss',
   shadow: true,
 })
 export class PdsSelect {
@@ -108,36 +108,38 @@ export class PdsSelect {
   render() {
     return (
       <Host aria-disabled={this.disabled ? 'true' : null}>
-        <PdsLabel htmlFor={this.componentId} text={this.label} />
-        <select
-          autocomplete={this.autocomplete}
-          class="pds-select__field"
-          disabled={this.disabled}
-          id={this.componentId}
-          name={this.name}
-          onChange={this.onSelectEvent}
-          required={this.required}
-          ref={(el) => (this.selectEl = el as HTMLSelectElement)}
-        ></select>
-        <div aria-hidden="true" class="hidden" ref={(el) => (this.slotContainer = el)}>
-          <slot onSlotchange={this.handleSlotChange}></slot>
-        </div>
-        {(this.helperMessage || this.errorMessage) && (
-          <div class="pds-select__message">
-            {this.helperMessage && (
-              <p class="pds-select__helper-message" id={messageId(this.componentId, 'helper')}>
-                {this.helperMessage}
-              </p>
-            )}
-            {this.errorMessage && (
-              <p class="pds-select__error-message" id={messageId(this.componentId, 'error')} aria-live="assertive">
-                <pds-icon icon={danger} size="small" />
-                {this.errorMessage}
-              </p>
-            )}
+        <div class="pds-select">
+          <PdsLabel htmlFor={this.componentId} text={this.label} />
+          <select
+            autocomplete={this.autocomplete}
+            class="pds-select__field"
+            disabled={this.disabled}
+            id={this.componentId}
+            name={this.name}
+            onChange={this.onSelectEvent}
+            required={this.required}
+            ref={(el) => (this.selectEl = el as HTMLSelectElement)}
+          ></select>
+          <div aria-hidden="true" class="hidden" ref={(el) => (this.slotContainer = el)}>
+            <slot onSlotchange={this.handleSlotChange}></slot>
           </div>
-        )}
-        <pds-icon class="pds-select__select-icon" icon={enlarge} />
+          {(this.helperMessage || this.errorMessage) && (
+            <div class="pds-select__message">
+              {this.helperMessage && (
+                <p class="pds-select__helper-message" id={messageId(this.componentId, 'helper')}>
+                  {this.helperMessage}
+                </p>
+              )}
+              {this.errorMessage && (
+                <p class="pds-select__error-message" id={messageId(this.componentId, 'error')} aria-live="assertive">
+                  <pds-icon icon={danger} size="small" />
+                  {this.errorMessage}
+                </p>
+              )}
+            </div>
+          )}
+          <pds-icon class="pds-select__select-icon" icon={enlarge} />
+        </div>
       </Host>
     );
   }
