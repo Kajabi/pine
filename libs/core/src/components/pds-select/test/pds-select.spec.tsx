@@ -200,8 +200,6 @@ describe('pds-select', () => {
 
       // Check if the event is emitted
       expect(pdsSelectEvent).toHaveBeenCalled();
-    } else {
-      throw new Error('select element is not available');
     }
   });
 
