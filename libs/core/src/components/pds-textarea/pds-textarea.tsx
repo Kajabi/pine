@@ -2,6 +2,7 @@ import { Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil
 import { assignDescription, isRequired, messageId } from '../../utils/form';
 import { TextareaChangeEventDetail } from './textarea-interface';
 import { PdsLabel } from '../_internal/pds-label/pds-label';
+import { danger } from '@pine-ds/icons/icons';
 
 @Component({
   tag: 'pds-textarea',
@@ -143,6 +144,7 @@ export class PdsTextarea {
               class="pds-textarea__error-message"
               id={messageId(this.componentId, 'error')}
             >
+              <pds-icon icon={danger} size="small" />
               {this.errorMessage}
             </p>
           }

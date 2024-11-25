@@ -31,6 +31,19 @@
 | `pdsTextareaChange` | Event emitted whenever the value of the textarea changes | `CustomEvent<TextareaChangeEventDetail>` |
 
 
+## Dependencies
+
+### Depends on
+
+- pds-icon
+
+### Graph
+```mermaid
+graph TD;
+  pds-textarea --> pds-icon
+  style pds-textarea fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 

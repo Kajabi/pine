@@ -25,6 +25,7 @@
   --spacing-margin-block-start-helper-message: var(--pine-spacing-100);
   --spacing-padding-block-field: var(--pine-spacing-100);
   --spacing-padding-inline-field: var(--pine-spacing-200);
+  --spacing-icon-error-message: var(--pine-spacing-050);
 
   --typography-message-default: var(--pine-typography-body-sm-default);
 
@@ -84,5 +85,8 @@ label {
 }
 
 .pds-textarea__error-message {
+  align-items: center;
   color: var(--color-text-message-error-default);
+  display: flex;
+  gap: var(--spacing-icon-error-message);
 }
