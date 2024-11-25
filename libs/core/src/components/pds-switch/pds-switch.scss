@@ -29,7 +29,7 @@
 
   --spacing-label-gap-size: var(--pine-spacing-150);
   --spacing-input-toggle-offset: calc(var(--pine-spacing-050) / 2);
-  --spacing-message-block: var(--pine-spacing-050);
+  --spacing-message-block: calc(var(--pine-spacing-150) / 2);
   --spacing-message-inline: calc(var(--dimension-input-width) + var(--spacing-label-gap-size));
 
   --number-transition-timing: 0.15s ease-out;
@@ -54,6 +54,10 @@
 
   input:focus-visible:not(:disabled):not(:checked) {
     box-shadow: var(--box-shadow-focus-error);
+  }
+
+  label {
+    color: var(--color-text-error);
   }
 }
 
@@ -106,17 +110,17 @@ label {
 .pds-switch__message {
   color: var(--color-message-text);
   flex: 1 0 100%;
-  font-size: var(--pine-font-size-body-sm);
-  line-height: var(--pine-line-height-sm);
+  font-size: var(--pine-font-size-body-md);
+  margin-block-start: var(--spacing-message-block);
   margin-inline-start: var(--spacing-message-inline);
-
-  + .pds-switch__message {
-    margin-block-start: var(--spacing-message-block);
-  }
 }
 
 .pds-switch__message--error {
+  align-items: center;
   color: inherit;
+  display: flex;
+  font-size: var(--pine-font-size-085);
+  gap: var(--pine-spacing-050);
 }
 
 // Disabled state

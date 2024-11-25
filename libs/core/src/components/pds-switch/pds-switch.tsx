@@ -1,6 +1,7 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
 import { PdsLabel } from '../_internal/pds-label/pds-label';
+import { danger } from '@pine-ds/icons/icons';
 
 @Component({
   tag: 'pds-switch',
@@ -119,6 +120,7 @@ export class PdsSwitch {
             id={messageId(this.componentId, 'error')}
             aria-live="assertive"
           >
+            <pds-icon icon={danger} size="small" />
             {this.errorMessage}
           </div>
         }
