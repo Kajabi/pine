@@ -222,4 +222,70 @@ describe('pds-select', () => {
       </pds-select>
     `);
   });
+
+  it('renders with autocomplete attribute set to "on"', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select autocomplete="on" component-id="field-1" label="Name"></pds-select>`,
+    });
+
+    expect(page.root).toEqualHtml(`
+      <pds-select autocomplete="on" component-id="field-1" label="Name">
+        <mock:shadow-root>
+          <div class="pds-select">
+            <label htmlFor="field-1">Name</label>
+            <select autocomplete="on" class="pds-select__field" id="field-1"></select>
+            <div aria-hidden="true" class="hidden">
+              <slot></slot>
+            </div>
+            <pds-icon class="pds-select__select-icon" name="enlarge"></pds-icon>
+          </div>
+        </mock:shadow-root>
+      </pds-select>
+    `);
+  });
+
+  it('renders with autocomplete attribute set to "off"', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select autocomplete="off" component-id="field-1" label="Name"></pds-select>`,
+    });
+
+    expect(page.root).toEqualHtml(`
+      <pds-select autocomplete="off" component-id="field-1" label="Name">
+        <mock:shadow-root>
+          <div class="pds-select">
+            <label htmlFor="field-1">Name</label>
+            <select autocomplete="off" class="pds-select__field" id="field-1"></select>
+            <div aria-hidden="true" class="hidden">
+              <slot></slot>
+            </div>
+            <pds-icon class="pds-select__select-icon" name="enlarge"></pds-icon>
+          </div>
+        </mock:shadow-root>
+      </pds-select>
+    `);
+  });
+
+  it('renders with autocomplete attribute set to "name"', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select autocomplete="name" component-id="field-1" label="Name"></pds-select>`,
+    });
+
+    expect(page.root).toEqualHtml(`
+      <pds-select autocomplete="name" component-id="field-1" label="Name">
+        <mock:shadow-root>
+          <div class="pds-select">
+            <label htmlFor="field-1">Name</label>
+            <select autocomplete="name" class="pds-select__field" id="field-1"></select>
+            <div aria-hidden="true" class="hidden">
+              <slot></slot>
+            </div>
+            <pds-icon class="pds-select__select-icon" name="enlarge"></pds-icon>
+          </div>
+        </mock:shadow-root>
+      </pds-select>
+    `);
+  });
 });
