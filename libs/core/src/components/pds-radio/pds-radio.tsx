@@ -1,6 +1,7 @@
 import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
 import { PdsLabel } from '../_internal/pds-label/pds-label';
+import { danger } from '@pine-ds/icons/icons';
 
 @Component({
   tag: 'pds-radio',
@@ -121,6 +122,7 @@ export class PdsRadio {
             id={messageId(this.componentId, 'error')}
             aria-live="assertive"
           >
+            <pds-icon icon={danger} size="small" />
             {this.errorMessage}
           </div>
         }
