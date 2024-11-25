@@ -32,6 +32,7 @@
 graph TD;
   pds-table-row --> pds-table-cell
   pds-table-row --> pds-checkbox
+  pds-checkbox --> pds-icon
   style pds-table-row fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
