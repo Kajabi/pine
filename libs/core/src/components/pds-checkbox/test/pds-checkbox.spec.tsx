@@ -1,5 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsCheckbox } from '../pds-checkbox';
+import { danger } from '@pine-ds/icons/icons';
 
 describe('pds-checkbox', () => {
   it('renders', async () => {
@@ -130,7 +131,10 @@ describe('pds-checkbox', () => {
         <mock:shadow-root>
           <input aria-invalid="true" id="default" type="checkbox">
           <label htmlfor="default">Label text</label>
-          <div aria-live="assertive" class="pds-checkbox__message pds-checkbox__message--error" id="default__error-message">This is a short error message.</div>
+          <div aria-live="assertive" class="pds-checkbox__message pds-checkbox__message--error" id="default__error-message">
+            <pds-icon icon="${danger}" size="small"></pds-icon>
+            This is a short error message.
+          </div>
         </mock:shadow-root>
       </pds-checkbox>
     `);
