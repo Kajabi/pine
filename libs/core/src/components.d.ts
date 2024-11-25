@@ -606,6 +606,10 @@ export namespace Components {
          */
         "label": string;
         /**
+          * Indicates whether multiple options can be selected.
+         */
+        "multiple": boolean;
+        /**
           * Specifies the name. Submitted with the form name/value pair.
          */
         "name": string;
@@ -1944,6 +1948,10 @@ declare namespace LocalJSX {
           * Text to be displayed as the select label.
          */
         "label"?: string;
+        /**
+          * Indicates whether multiple options can be selected.
+         */
+        "multiple"?: boolean;
         /**
           * Specifies the name. Submitted with the form name/value pair.
          */

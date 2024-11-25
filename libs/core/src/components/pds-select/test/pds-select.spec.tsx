@@ -288,4 +288,27 @@ describe('pds-select', () => {
       </pds-select>
     `);
   });
+
+  it('renders with the multiple attribute', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select component-id="field-1" multiple></pds-select>`,
+    });
+
+    expect(root).toEqualHtml(`
+      <pds-select component-id="field-1" multiple="">
+        <mock:shadow-root>
+          <div class="pds-select">
+            <label htmlFor="field-1"></label>
+            <select class="pds-select__field" id="field-1" multiple="">
+            </select>
+            <div aria-hidden="true" class="hidden">
+              <slot></slot>
+            </div>
+            <pds-icon class="pds-select__select-icon" name="enlarge"></pds-icon>
+          </div>
+        </mock:shadow-root>
+      </pds-select>
+    `);
+  });
 });

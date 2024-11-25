@@ -7,11 +7,19 @@ export default {
     disabled: false,
     errorMessage: null,
     helperMessage: null,
+    multiple: false,
   },
   argTypes: extractArgTypes('pds-select'),
   component: 'pds-select',
   title: 'components/Select',
 };
+
+const options = [
+  { value: 'paul', label: 'Paul McCartney' },
+  { value: 'john', label: 'John Lennon' },
+  { value: 'george', label: 'George Harrison' },
+  { value: 'ringo', label: 'Ringo Starr' },
+];
 
 const BaseTemplate = (args) =>
   html`<pds-select
@@ -21,14 +29,12 @@ const BaseTemplate = (args) =>
     error-message="${args.errorMessage}"
     helper-message="${args.helperMessage}"
     label="${args.label}"
+    multiple="${args.multiple}"
     name="${args.name}"
     required="${args.required}"
     type="${args.type}"
   >
-    <option value="paul">Paul McCartney</option>
-    <option value="john">John Lennon</option>
-    <option value="george">George Harrison</option>
-    <option value="ringo">Ringo Starr</option>
+    ${options.map((option) => html`<option value="${option.value}">${option.label}</option>`)}
   </pds-select>`;
 
 export const Default = BaseTemplate.bind({});
@@ -72,5 +78,15 @@ Autocomplete.args = {
   disabled: false,
   autocomplete: 'on',
   label: 'Select your favorite Beatle',
+  name: 'beatles',
+};
+
+export const Multiple = BaseTemplate.bind({});
+Multiple.args = {
+  componentId: 'pds-select-multiple-example',
+  disabled: false,
+  helperMessage: "Use 'Command' on your keyboard to select multiple options",
+  label: 'Select your favorite Beatle',
+  multiple: true,
   name: 'beatles',
 };

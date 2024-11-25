@@ -50,6 +50,11 @@ export class PdsSelect {
   @Prop() label: string;
 
   /**
+   * Indicates whether multiple options can be selected.
+   */
+  @Prop() multiple: boolean;
+
+  /**
    * Specifies the name. Submitted with the form name/value pair.
    */
   @Prop() name!: string;
@@ -79,6 +84,7 @@ export class PdsSelect {
    */
   private onSelectEvent = (ev: Event) => {
     const select = ev.target as HTMLSelectElement;
+    console.log(select.value);
     this.value = select.value;
     this.pdsSelect.emit(ev as InputEvent);
   };
@@ -114,6 +120,7 @@ export class PdsSelect {
             class="pds-select__field"
             disabled={this.disabled}
             id={this.componentId}
+            multiple={this.multiple}
             name={this.name}
             onChange={this.onSelectEvent}
             required={this.required}
