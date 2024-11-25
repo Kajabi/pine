@@ -60,9 +60,9 @@ Disabled.args = {
   type: 'checkbox',
 };
 
-export const HelperMessage = BaseTemplate.bind({});
+export const WithMessage = BaseTemplate.bind({});
 
-HelperMessage.args = {
+WithMessage.args = {
   checked: true,
   disabled: false,
   componentId: 'pds-switch-helper-example',

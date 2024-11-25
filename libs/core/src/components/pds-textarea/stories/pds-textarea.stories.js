@@ -94,8 +94,8 @@ Readonly.args = {
   value: 'Readonly Value'
 };
 
-export const Message = BaseTemplate.bind({});
-Message.args = {
+export const WithMessage = BaseTemplate.bind({});
+WithMessage.args = {
   componentId: 'pds-textarea-helper-example',
   helperMessage: 'Helper message text',
   label: 'Message',
