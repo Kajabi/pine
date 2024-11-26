@@ -197,6 +197,39 @@ import { components } from '../../../../dist/docs.json';
   </div>
 </DocCanvas>
 
+### Multiple
+
+<p>This example demonstrates the select component with the multiple attribute enabled. The user can select multiple options from the select component.</p>
+
+<DocCanvas
+  client:only
+  mdxSource={{
+    react: `
+      <PdsSelect multiple componentId="pds-select-multiple-example" label="Name">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </PdsSelect>`,
+    webComponent: `
+      <pds-select multiple component-id="pds-select-multiple-example" label="Name">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </pds-select>`,
+  }}
+>
+  <div style={{ padding: '20px', width: '100%' }}>
+    <pds-select multiple component-id="pds-select-multiple-example" label="Name">
+      <option value="paul">Paul McCartney</option>
+      <option value="john">John Lennon</option>
+      <option value="george">George Harrison</option>
+      <option value="ringo">Ringo Starr</option>
+    </pds-select>
+  </div>
+</DocCanvas>
+
 ## Additional Resources
 
 <p>[MDN Web Docs: Select](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select)</p>
