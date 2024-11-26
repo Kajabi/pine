@@ -21,6 +21,21 @@ const options = [
   { value: 'ringo', label: 'Ringo Starr' },
 ];
 
+const optgroupOptions = [
+  {
+    label: 'Correct answers',
+    options: [
+      { value: 'paul', label: 'Paul McCartney' },
+      { value: 'john', label: 'John Lennon' },
+      { value: 'george', label: 'George Harrison' },
+    ],
+  },
+  {
+    label: 'Incorrect answers',
+    options: [{ value: 'ringo', label: 'Ringo Starr' }],
+  },
+];
+
 const BaseTemplate = (args) =>
   html`<pds-select
     autocomplete="${args.autocomplete}"
