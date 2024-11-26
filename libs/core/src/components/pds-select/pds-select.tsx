@@ -101,11 +101,9 @@ export class PdsSelect {
     this.selectEl.innerHTML = '';
     const assignedElements = slot.assignedElements({ flatten: true }) as HTMLOptionElement[];
 
-    assignedElements.map((item: HTMLOptionElement) => {
-      const option = item;
-
-      if (option.tagName === 'OPTION') {
-        this.selectEl.appendChild(option.cloneNode(true));
+    assignedElements.forEach((item) => {
+      if (item.tagName === 'OPTION' || item.tagName === 'OPTGROUP') {
+        this.selectEl.appendChild(item.cloneNode(true));
       }
     });
   };
@@ -144,7 +142,7 @@ export class PdsSelect {
               )}
             </div>
           )}
-          <pds-icon class="pds-select__select-icon" name="enlarge" />
+          {!this.multiple && <pds-icon class="pds-select__select-icon" name="enlarge" />}
         </div>
       </Host>
     );

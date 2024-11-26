@@ -37,6 +37,24 @@ const BaseTemplate = (args) =>
     ${options.map((option) => html`<option value="${option.value}">${option.label}</option>`)}
   </pds-select>`;
 
+const OptgroupTemplate = (args) =>
+  html`<pds-select
+    autocomplete="${args.autocomplete}"
+    component-id="${args.componentId}"
+    disabled="${args.disabled}"
+    error-message="${args.errorMessage}"
+    helper-message="${args.helperMessage}"
+    label="${args.label}"
+    multiple="${args.multiple}"
+    name="${args.name}"
+    required="${args.required}"
+    type="${args.type}"
+  >
+    ${optgroupOptions.map(
+      (group) => html`<optgroup label="${group.label}">${group.options.map((option) => html`<option value="${option.value}">${option.label}</option>`)}</optgroup>`,
+    )}
+  </pds-select>`;
+
 export const Default = BaseTemplate.bind({});
 Default.args = {
   componentId: 'pds-select-default-example',
@@ -88,5 +106,13 @@ Multiple.args = {
   helperMessage: "Use 'Command' on your keyboard to select multiple options",
   label: 'Select your favorite Beatle',
   multiple: true,
+  name: 'beatles',
+};
+
+export const WithOptgroup = OptgroupTemplate.bind({});
+WithOptgroup.args = {
+  componentId: 'pds-select-optgroup-example',
+  disabled: false,
+  label: 'Select your favorite Beatle',
   name: 'beatles',
 };

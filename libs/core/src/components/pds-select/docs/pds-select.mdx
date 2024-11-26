@@ -230,6 +230,53 @@ import { components } from '../../../../dist/docs.json';
   </div>
 </DocCanvas>
 
+### With Optgroup
+
+<p>
+  This example demonstrates the select component with grouped options using the <code>optgroup</code> element. The user can choose from options within different groups.
+</p>
+
+<DocCanvas
+  client:only
+  mdxSource={{
+    react: `
+      <PdsSelect componentId="pds-select-optgroup-example" label="Name">
+        <optgroup label="Correct answers">
+          <option value="paul">Paul McCartney</option>
+          <option value="john">John Lennon</option>
+          <option value="george">George Harrison</option>
+        </optgroup>
+        <optgroup label="Incorrect answers">
+          <option value="ringo">Ringo Starr</option>
+        </optgroup>
+      </PdsSelect>`,
+    webComponent: `
+      <pds-select component-id="pds-select-optgroup-example" label="Name">
+        <optgroup label="Correct answers">
+          <option value="paul">Paul McCartney</option>
+          <option value="john">John Lennon</option>
+          <option value="george">George Harrison</option>
+        </optgroup>
+        <optgroup label="Incorrect answers">
+          <option value="ringo">Ringo Starr</option>
+        </optgroup>
+      </pds-select>`,
+  }}
+>
+  <div style={{ padding: '20px', width: '100%' }}>
+    <pds-select component-id="pds-select-optgroup-example" label="Name">
+      <optgroup label="Correct answers">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+      </optgroup>
+      <optgroup label="Incorrect answers">
+        <option value="ringo">Ringo Starr</option>
+      </optgroup>
+    </pds-select>
+  </div>
+</DocCanvas>
+
 ## Additional Resources
 
 <p>[MDN Web Docs: Select](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select)</p>

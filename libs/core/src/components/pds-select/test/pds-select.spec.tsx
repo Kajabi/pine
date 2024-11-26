@@ -305,7 +305,6 @@ describe('pds-select', () => {
             <div aria-hidden="true" class="hidden">
               <slot></slot>
             </div>
-            <pds-icon class="pds-select__select-icon" name="enlarge"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-select>
