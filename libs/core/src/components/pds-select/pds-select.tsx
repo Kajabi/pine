@@ -75,14 +75,36 @@ export class PdsSelect {
   @Event() pdsSelect: EventEmitter<InputEvent>;
 
   @Watch('value')
+  /**
+   * Handles the change in the value of the select component.
+   * This method is called whenever the value of the select component changes.
+   * It updates the selected option accordingly.
+   */
   valueChanged() {
     this.updateSelectedOption();
   }
 
+  /**
+   * Lifecycle method that is called just before the component is loaded.
+   * This method is used to perform any necessary updates to the selected option
+   * before the component is rendered.
+   *
+   * @returns {void}
+   */
   componentWillLoad() {
     this.updateSelectedOption();
   }
 
+  /**
+   * Updates the selected option in the select element based on the current value.
+   *
+   * This method iterates through all the options of the select element and sets the
+   * 'selected' attribute on the option that matches the current value. If an option
+   * does not match the current value, the 'selected' attribute is removed.
+   *
+   * @private
+   * @returns {void}
+   */
   private updateSelectedOption() {
     if (!this.selectEl) return;
     const options = this.selectEl.options;
