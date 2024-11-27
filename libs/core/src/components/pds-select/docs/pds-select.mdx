@@ -40,15 +40,15 @@ import { components } from '../../../../dist/docs.json';
   client:only
   mdxSource={{
     react: `
-      <PdsSelect componentId="pds-select-default-example" label="Name">
-        <option value="paul">Paul McCartney</option>
+      <PdsSelect componentId="pds-select-default-example" label="Name" value="paul">
+        <option value="paul" selected="true">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </PdsSelect>`,
     webComponent: `
-      <pds-select component-id="pds-select-default-example" label="Name">
-        <option value="paul">Paul McCartney</option>
+      <pds-select component-id="pds-select-default-example" label="Name" value="paul">
+        <option value="paul" selected="true">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
@@ -56,8 +56,10 @@ import { components } from '../../../../dist/docs.json';
   }}
 >
   <div style={{ padding: '20px', width: '100%' }}>
-    <pds-select component-id="pds-select-default-example" label="Name">
-      <option value="paul">Paul McCartney</option>
+    <pds-select component-id="pds-select-default-example" label="Name" value="paul">
+      <option value="paul" selected="true">
+        Paul McCartney
+      </option>
       <option value="john">John Lennon</option>
       <option value="george">George Harrison</option>
       <option value="ringo">Ringo Starr</option>
@@ -73,26 +75,28 @@ import { components } from '../../../../dist/docs.json';
   client:only
   mdxSource={{
     react: `
-      <PdsSelect componentId="pds-select-disabled-example" disabled="true" label="Name">
+      <PdsSelect componentId="pds-select-disabled-example" disabled="true" label="Name" value="george">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
-        <option value="george">George Harrison</option>
+        <option value="george" selected="true">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </PdsSelect>`,
     webComponent: `
-      <pds-select component-id="pds-select-disabled-example" disabled="true" label="Name">
+      <pds-select component-id="pds-select-disabled-example" disabled="true" label="Name" value="george">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
-        <option value="george">George Harrison</option>
+        <option value="george" selected="true">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </pds-select>`,
   }}
 >
   <div style={{ padding: '20px', width: '100%' }}>
-    <pds-select component-id="pds-select-disabled-example" disabled="true" label="Name">
+    <pds-select component-id="pds-select-disabled-example" disabled="true" label="Name" value="george">
       <option value="paul">Paul McCartney</option>
       <option value="john">John Lennon</option>
-      <option value="george">George Harrison</option>
+      <option value="george" selected="true">
+        George Harrison
+      </option>
       <option value="ringo">Ringo Starr</option>
     </pds-select>
   </div>
@@ -106,25 +110,27 @@ import { components } from '../../../../dist/docs.json';
   client:only
   mdxSource={{
     react: `
-      <PdsSelect componentId="pds-select-with-message-example" label="Name" helper-message="This is a helper message to convey extra context for the select">
+      <PdsSelect componentId="pds-select-with-message-example" label="Name" helper-message="This is a helper message to convey extra context for the select" value="john">
         <option value="paul">Paul McCartney</option>
-        <option value="john">John Lennon</option>
+        <option value="john" selected="true">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </PdsSelect>`,
     webComponent: `
-      <pds-select component-id="pds-select-with-message-example" label="Name" helper-message="This is a helper message to convey extra context for the select">
+      <pds-select component-id="pds-select-with-message-example" label="Name" helper-message="This is a helper message to convey extra context for the select" value="john">
         <option value="paul">Paul McCartney</option>
-        <option value="john">John Lennon</option>
+        <option value="john" selected="true">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </pds-select>`,
   }}
 >
   <div style={{ padding: '20px', width: '100%' }}>
-    <pds-select component-id="pds-select-with-message-example" helper-message="This is a helper message to convey extra context for the select" label="Name">
+    <pds-select component-id="pds-select-with-message-example" helper-message="This is a helper message to convey extra context for the select" label="Name" value="john">
       <option value="paul">Paul McCartney</option>
-      <option value="john">John Lennon</option>
+      <option value="john" selected="true">
+        John Lennon
+      </option>
       <option value="george">George Harrison</option>
       <option value="ringo">Ringo Starr</option>
     </pds-select>
@@ -139,27 +145,29 @@ import { components } from '../../../../dist/docs.json';
   client:only
   mdxSource={{
     react: `
-      <PdsSelect componentId="pds-select-invalid-example" label="Name" error-message="This is an error message to convey extra context for the select">
+      <PdsSelect componentId="pds-select-invalid-example" label="Name" error-message="This is an error message to convey extra context for the select" value="ringo">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
-        <option value="ringo">Ringo Starr</option>
+        <option value="ringo" selected="true">Ringo Starr</option>
       </PdsSelect>`,
     webComponent: `
-      <pds-select component-id="pds-select-invalid-example" label="Name" error-message="This is an error message to convey extra context for the select">
+      <pds-select component-id="pds-select-invalid-example" label="Name" error-message="This is an error message to convey extra context for the select" value="ringo">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
-        <option value="ringo">Ringo Starr</option>
+        <option value="ringo" selected="true">Ringo Starr</option>
       </pds-select>`,
   }}
 >
   <div style={{ padding: '20px', width: '100%' }}>
-    <pds-select component-id="pds-select-invalid-example" error-message="This is an error message to convey extra context for the select" label="Name">
+    <pds-select component-id="pds-select-invalid-example" error-message="This is an error message to convey extra context for the select" label="Name" value="ringo">
       <option value="paul">Paul McCartney</option>
       <option value="john">John Lennon</option>
       <option value="george">George Harrison</option>
-      <option value="ringo">Ringo Starr</option>
+      <option value="ringo" selected="true">
+        Ringo Starr
+      </option>
     </pds-select>
   </div>
 </DocCanvas>
@@ -172,15 +180,15 @@ import { components } from '../../../../dist/docs.json';
   client:only
   mdxSource={{
     react: `
-      <PdsSelect autocomplete="on" componentId="pds-select-autocomplete-example" label="Name">
-        <option value="paul">Paul McCartney</option>
+      <PdsSelect autocomplete="on" componentId="pds-select-autocomplete-example" label="Name" value="paul">
+        <option value="paul" selected="true">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </PdsSelect>`,
     webComponent: `
-      <pds-select autocomplete="on" component-id="pds-select-autocomplete-example" label="Name">
-        <option value="paul">Paul McCartney</option>
+      <pds-select autocomplete="on" component-id="pds-select-autocomplete-example" label="Name" value="paul">
+        <option value="paul" selected="true">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
@@ -188,8 +196,10 @@ import { components } from '../../../../dist/docs.json';
   }}
 >
   <div style={{ padding: '20px', width: '100%' }}>
-    <pds-select autocomplete="on" component-id="pds-select-autocomplete-example" label="Name">
-      <option value="paul">Paul McCartney</option>
+    <pds-select autocomplete="on" component-id="pds-select-autocomplete-example" label="Name" value="paul">
+      <option value="paul" selected="true">
+        Paul McCartney
+      </option>
       <option value="john">John Lennon</option>
       <option value="george">George Harrison</option>
       <option value="ringo">Ringo Starr</option>
@@ -240,22 +250,22 @@ import { components } from '../../../../dist/docs.json';
   client:only
   mdxSource={{
     react: `
-      <PdsSelect componentId="pds-select-optgroup-example" label="Name">
+      <PdsSelect componentId="pds-select-optgroup-example" label="Name" value="george">
         <optgroup label="Correct answers">
           <option value="paul">Paul McCartney</option>
           <option value="john">John Lennon</option>
-          <option value="george">George Harrison</option>
+          <option value="george" selected="true">George Harrison</option>
         </optgroup>
         <optgroup label="Incorrect answers">
           <option value="ringo">Ringo Starr</option>
         </optgroup>
       </PdsSelect>`,
     webComponent: `
-      <pds-select component-id="pds-select-optgroup-example" label="Name">
+      <pds-select component-id="pds-select-optgroup-example" label="Name" value="george">
         <optgroup label="Correct answers">
           <option value="paul">Paul McCartney</option>
           <option value="john">John Lennon</option>
-          <option value="george">George Harrison</option>
+          <option value="george" selected="true">George Harrison</option>
         </optgroup>
         <optgroup label="Incorrect answers">
           <option value="ringo">Ringo Starr</option>
@@ -264,11 +274,13 @@ import { components } from '../../../../dist/docs.json';
   }}
 >
   <div style={{ padding: '20px', width: '100%' }}>
-    <pds-select component-id="pds-select-optgroup-example" label="Name">
+    <pds-select component-id="pds-select-optgroup-example" label="Name" value="george">
       <optgroup label="Correct answers">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
-        <option value="george">George Harrison</option>
+        <option value="george" selected="true">
+          George Harrison
+        </option>
       </optgroup>
       <optgroup label="Incorrect answers">
         <option value="ringo">Ringo Starr</option>

@@ -8,6 +8,7 @@ export default {
     errorMessage: null,
     helperMessage: null,
     multiple: false,
+    value: null,
   },
   argTypes: extractArgTypes('pds-select'),
   component: 'pds-select',
@@ -48,6 +49,7 @@ const BaseTemplate = (args) =>
     name="${args.name}"
     required="${args.required}"
     type="${args.type}"
+    value="${args.value}"
   >
     ${options.map((option) => html`<option value="${option.value}">${option.label}</option>`)}
   </pds-select>`;
@@ -64,6 +66,7 @@ const OptgroupTemplate = (args) =>
     name="${args.name}"
     required="${args.required}"
     type="${args.type}"
+    value="${args.value}"
   >
     ${optgroupOptions.map(
       (group) => html`<optgroup label="${group.label}">${group.options.map((option) => html`<option value="${option.value}">${option.label}</option>`)}</optgroup>`,
@@ -77,6 +80,7 @@ Default.args = {
   label: 'Select your favorite Beatle',
   name: 'beatles',
   required: true,
+  value: 'paul',
 };
 
 export const Disabled = BaseTemplate.bind({});
@@ -85,6 +89,7 @@ Disabled.args = {
   disabled: true,
   label: 'Select your favorite Beatle',
   name: 'beatles',
+  value: 'george',
 };
 
 export const withMessage = BaseTemplate.bind({});
@@ -94,6 +99,7 @@ withMessage.args = {
   helperMessage: "Please don't pick Ringo",
   label: 'Select your favorite Beatle',
   name: 'beatles',
+  value: 'john',
 };
 
 export const Invalid = BaseTemplate.bind({});
@@ -103,6 +109,7 @@ Invalid.args = {
   errorMessage: 'Its not Ringo',
   label: 'Select your favorite Beatle',
   name: 'beatles',
+  value: 'ringo',
 };
 
 export const Autocomplete = BaseTemplate.bind({});
@@ -112,6 +119,7 @@ Autocomplete.args = {
   autocomplete: 'on',
   label: 'Select your favorite Beatle',
   name: 'beatles',
+  value: 'paul',
 };
 
 export const Multiple = BaseTemplate.bind({});
@@ -130,4 +138,5 @@ WithOptgroup.args = {
   disabled: false,
   label: 'Select your favorite Beatle',
   name: 'beatles',
+  value: 'george',
 };

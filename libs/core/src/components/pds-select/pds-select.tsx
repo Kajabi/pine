@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
 import { messageId } from '../../utils/form';
 import { PdsLabel } from '../_internal/pds-label/pds-label';
 
@@ -74,6 +74,29 @@ export class PdsSelect {
    */
   @Event() pdsSelect: EventEmitter<InputEvent>;
 
+  @Watch('value')
+  valueChanged() {
+    this.updateSelectedOption();
+  }
+
+  componentWillLoad() {
+    this.updateSelectedOption();
+  }
+
+  private updateSelectedOption() {
+    if (!this.selectEl) return;
+    const options = this.selectEl.options;
+    console.log('options', options);
+    console.log('this.value', this.value);
+    for (let i = 0; i < options.length; i++) {
+      if (options[i].value === this.value) {
+        options[i].setAttribute('selected', 'true');
+      } else {
+        options[i].removeAttribute('selected');
+      }
+    }
+  }
+
   /**
    * Handles the select event for the component.
    *
@@ -99,13 +122,20 @@ export class PdsSelect {
     const slot = this.slotContainer.querySelector('slot') as HTMLSlotElement;
 
     this.selectEl.innerHTML = '';
-    const assignedElements = slot.assignedElements({ flatten: true }) as HTMLOptionElement[];
+    const assignedElements = slot.assignedElements({ flatten: true }) as (HTMLOptionElement | HTMLOptGroupElement)[];
 
     assignedElements.forEach((item) => {
       if (item.tagName === 'OPTION' || item.tagName === 'OPTGROUP') {
-        this.selectEl.appendChild(item.cloneNode(true));
+        const clonedItem = item.cloneNode(true) as HTMLOptionElement | HTMLOptGroupElement;
+        if (clonedItem.tagName === 'OPTION' && (clonedItem as HTMLOptionElement).value === this.value) {
+          (clonedItem as HTMLOptionElement).selected = true;
+        }
+        // console.log('clonedItem"', clonedItem);
+        this.selectEl.appendChild(clonedItem);
       }
     });
+
+    this.updateSelectedOption();
   };
 
   render() {
