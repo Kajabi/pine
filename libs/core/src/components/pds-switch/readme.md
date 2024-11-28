@@ -28,6 +28,19 @@
 | `pdsSwitchChange` | Emits an event on input change | `CustomEvent<InputEvent>` |
 
 
+## Dependencies
+
+### Depends on
+
+- pds-icon
+
+### Graph
+```mermaid
+graph TD;
+  pds-switch --> pds-icon
+  style pds-switch fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 

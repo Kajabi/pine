@@ -1,5 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsRadio } from '../pds-radio';
+import { danger } from '@pine-ds/icons/icons';
 
 describe('pds-radio', () => {
   it('renders', async () => {
@@ -88,7 +89,8 @@ describe('pds-radio', () => {
       <pds-radio component-id="default" label="Label text" helper-message="This is short message text.">
         <input aria-describedby="default__helper-message" id="default" type="radio">
         <label htmlfor="default">Label text</label>
-        <div class="pds-radio__message" id="default__helper-message">This is short message text.</div>
+        <div class="pds-radio__message" id="default__helper-message">
+        This is short message text.</div>
       </pds-radio>
     `);
   });
@@ -103,7 +105,10 @@ describe('pds-radio', () => {
       <pds-radio class="is-invalid" component-id="default" error-message="This is a short error message." invalid="true" label="Label text">
         <input aria-invalid="true" id="default" type="radio">
         <label htmlfor="default">Label text</label>
-        <div aria-live="assertive" class="pds-radio__message pds-radio__message--error" id="default__error-message">This is a short error message.</div>
+        <div aria-live="assertive" class="pds-radio__message pds-radio__message--error" id="default__error-message">
+          <pds-icon icon="${danger}" size="small"></pds-icon>
+          This is a short error message.
+        </div>
       </pds-radio>
     `);
   });

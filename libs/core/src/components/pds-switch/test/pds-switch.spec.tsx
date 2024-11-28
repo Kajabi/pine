@@ -1,5 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsSwitch } from '../pds-switch';
+import { danger } from '@pine-ds/icons/icons';
 
 describe('pds-switch', () => {
   it('renders an input as a checkbox with label', async () => {
@@ -108,7 +109,10 @@ describe('pds-switch', () => {
         <mock:shadow-root>
           <input aria-invalid="true" id="pds-switch-err" name="pds-switch-err" class="pds-switch__input" type="checkbox">
           <label htmlFor="pds-switch-err" class="pds-switch__label">Switch error message</label>
-          <div aria-live="assertive" id="pds-switch-err__error-message"  class="pds-switch__message pds-switch__message--error">La croix blue bottle narwhal fam</div>
+          <div aria-live="assertive" id="pds-switch-err__error-message" class="pds-switch__message pds-switch__message--error">
+            <pds-icon icon="${danger}" size="small"></pds-icon>
+            La croix blue bottle narwhal fam
+          </div>
         </mock:shadow-root>
       </pds-switch>
     `);
@@ -134,7 +138,10 @@ describe('pds-switch', () => {
           <input aria-describedby="switch-with-description__error-message" aria-invalid="true" id="switch-with-description" name="switch-with-description" class="pds-switch__input" type="checkbox">
           <label htmlFor="switch-with-description" class="pds-switch__label">Switch with description</label>
           <div id="switch-with-description__helper-message"  class="pds-switch__message">This is a helper message</div>
-          <div aria-live="assertive" id="switch-with-description__error-message"  class="pds-switch__message pds-switch__message--error">This is an error message</div>
+          <div aria-live="assertive" id="switch-with-description__error-message" class="pds-switch__message pds-switch__message--error">
+            <pds-icon icon="${danger}" size="small"></pds-icon>
+            This is an error message
+          </div>
         </mock:shadow-root>
       </pds-switch>
     `);

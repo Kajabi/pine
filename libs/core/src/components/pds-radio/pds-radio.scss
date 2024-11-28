@@ -124,12 +124,20 @@ input {
 }
 
 label {
+  font-weight: var(--pine-font-weight-body-medium);
   margin-inline-start: 10px;
 }
 
 .pds-radio__message {
-  color: var(--pine-color-grey-800);
+  color: var(--pine-color-grey-700);
   margin-block-start: var(--sizing-margin-block-start);
   margin-inline-start: 26px;
   width: 100%;
+}
+
+.pds-radio__message--error {
+  align-items: center;
+  display: flex;
+  font-size: var(--pine-font-size-085);
+  gap: var(--pine-spacing-050);
 }

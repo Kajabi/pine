@@ -18,7 +18,7 @@
   --color-invalid: var(--pine-color-red-500);
   --color-invalid-hover: var(--pine-color-red-600);
   --color-text-disabled: var(--pine-color-grey-500);
-  --color-text-message: var(--pine-color-grey-800);
+  --color-text-message: var(--pine-color-grey-700);
 
   --sizing-input: var(--pine-font-size-116);
 
@@ -151,6 +151,7 @@ input {
 }
 
 label {
+  font-weight: var(--pine-font-weight-body-medium);
   margin-inline-start: 10px;
 }
 
@@ -172,4 +173,11 @@ label {
   margin-block-start: 6px;
   margin-inline-start: 26px;
   width: 100%;
+}
+
+.pds-checkbox__message--error {
+  align-items: center;
+  display: flex;
+  font-size: var(--pine-font-size-085);
+  gap: var(--pine-spacing-050);
 }

@@ -1,5 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsTextarea } from '../pds-textarea';
+import { danger } from '@pine-ds/icons/icons';
 
 describe('pds-textarea', () => {
   it('renders default textarea', async () => {
@@ -47,7 +48,10 @@ describe('pds-textarea', () => {
         <mock:shadow-root>
           <div class="pds-textarea">
             <textarea aria-invalid="true" class="pds-textarea__field is-invalid" id="pds-textarea-error" name="pds-textarea-error"></textarea>
-            <p aria-live="assertive" class="pds-textarea__error-message" id="pds-textarea-error__error-message">error</p>
+            <p aria-live="assertive" class="pds-textarea__error-message" id="pds-textarea-error__error-message">
+              <pds-icon icon="${danger}" size="small"></pds-icon>
+              error
+            </p>
           </div>
         </mock:shadow-root>
       </pds-textarea>
@@ -251,6 +255,7 @@ describe('pds-textarea', () => {
               This is a helper message
             </p>
             <p aria-live="assertive" id="textarea-with-description__error-message" class="pds-textarea__error-message">
+              <pds-icon icon="${danger}" size="small"></pds-icon>
               This is an error message
             </p>
           </div>

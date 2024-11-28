@@ -38,9 +38,14 @@
  - [pds-table-head](../pds-table/pds-table-head)
  - [pds-table-row](../pds-table/pds-table-row)
 
+### Depends on
+
+- pds-icon
+
 ### Graph
 ```mermaid
 graph TD;
+  pds-checkbox --> pds-icon
   pds-table-head --> pds-checkbox
   pds-table-row --> pds-checkbox
   style pds-checkbox fill:#f9f,stroke:#333,stroke-width:4px

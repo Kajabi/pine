@@ -33,6 +33,7 @@ graph TD;
   pds-table-head --> pds-table-head-cell
   pds-table-head --> pds-checkbox
   pds-table-head-cell --> pds-icon
+  pds-checkbox --> pds-icon
   style pds-table-head fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

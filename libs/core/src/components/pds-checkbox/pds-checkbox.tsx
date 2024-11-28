@@ -2,6 +2,7 @@ import { Component, h, Prop, Host, Event, EventEmitter, Watch } from '@stencil/c
 import { assignDescription, messageId } from '../../utils/form';
 import { PdsLabel } from '../_internal/pds-label/pds-label';
 import { CheckboxChangeEventDetail } from './checkbox-interface';
+import { danger } from '@pine-ds/icons/icons';
 
 @Component({
   tag: 'pds-checkbox',
@@ -145,6 +146,7 @@ export class PdsCheckbox {
             id={messageId(this.componentId, 'error')}
             aria-live="assertive"
           >
+            <pds-icon icon={danger} size="small" />
             {this.errorMessage}
           </div>
         }
