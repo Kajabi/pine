@@ -7,9 +7,11 @@
 
 ## Properties
 
-| Property      | Attribute      | Description                                                           | Type     | Default     |
-| ------------- | -------------- | --------------------------------------------------------------------- | -------- | ----------- |
-| `componentId` | `component-id` | A unique identifier used for the underlying component `id` attribute. | `string` | `undefined` |
+| Property              | Attribute               | Description                                                           | Type               | Default     |
+| --------------------- | ----------------------- | --------------------------------------------------------------------- | ------------------ | ----------- |
+| `active`              | `active`                |                                                                       | `boolean`          | `false`     |
+| `componentId`         | `component-id`          | A unique identifier used for the underlying component `id` attribute. | `string`           | `undefined` |
+| `popoverTargetAction` | `popover-target-action` |                                                                       | `"hide" \| "show"` | `'show'`    |
 
 
 ## Events

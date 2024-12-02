@@ -11,6 +11,10 @@ export class PdsPopover {
    */
   @Element() el: HTMLPdsPopoverElement;
 
+  @Prop() active = false;
+
+  @Prop() popoverTargetAction: 'show' | 'hide' = 'show';
+
   /**
    * A unique identifier used for the underlying component `id` attribute.
    */
@@ -20,6 +24,7 @@ export class PdsPopover {
    * Emits a custom event when the popover should be shown.
    */
   showPopover() {
+    this.active = true;
     this.emitEvent('showPopover');
   }
 
@@ -27,7 +32,16 @@ export class PdsPopover {
    * Emits a custom event when the popover should be hidden.
    */
   hidePopover() {
+    this.active = false;
     this.emitEvent('hidePopover');
+  }
+
+  private handlePopoverAction() {
+    if (this.popoverTargetAction === 'show') {
+      this.showPopover();
+    } else if (this.popoverTargetAction === 'hide') {
+      this.hidePopover();
+    }
   }
 
   private emitEvent(eventName: string) {
@@ -45,16 +59,24 @@ export class PdsPopover {
   render() {
     return (
       <Host>
-        <button popoverTarget="mypopover" popoverTargetAction="show">
-          Show popover
+        <button
+          popoverTarget={this.componentId}
+          popoverTargetAction="show"
+          onClick={this.handlePopoverAction}
+        >
+          Show Show popover
         </button>
-        <button popoverTarget="mypopover" popoverTargetAction="hide">
+        <button
+          popoverTarget={this.componentId}
+          popoverTargetAction="hide"
+          onClick={this.handlePopoverAction}
+        >
           Hide popover
         </button>
-        {/* <pds-button popoverTarget="mypopover" popoverTargetAction="hide">
-          Hide popover
-        </pds-button> */}
-        <div id="mypopover" popover="">
+        <div
+          id={this.componentId}
+          popover=""
+        >
           <slot></slot>
         </div>
       </Host>

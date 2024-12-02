@@ -477,10 +477,12 @@ export namespace Components {
         "variant": 'spinner' | 'typing';
     }
     interface PdsPopover {
+        "active": boolean;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
+        "popoverTargetAction": 'show' | 'hide';
     }
     interface PdsProgress {
         /**
@@ -1938,12 +1940,14 @@ declare namespace LocalJSX {
         "variant"?: 'spinner' | 'typing';
     }
     interface PdsPopover {
+        "active"?: boolean;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
         "onHide"?: (event: PdsPopoverCustomEvent<any>) => void;
         "onShow"?: (event: PdsPopoverCustomEvent<any>) => void;
+        "popoverTargetAction"?: 'show' | 'hide';
     }
     interface PdsProgress {
         /**
