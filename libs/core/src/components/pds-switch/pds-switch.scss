@@ -22,7 +22,7 @@
 }
 
 :host(.pds-switch--error) {
-  color: var(--pine-color-text-danger);
+  color: var(--pine-color-text-message-danger);
 
   input,
   input:checked,

@@ -2,22 +2,22 @@
   --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
 
   --color-background-accent-dot: var(--pine-color-purple-600);
-  --color-background-accent-hover: var(--pine-color-purple-200);
+  --color-background-accent-hover: var(--pine-color-purple-300);
 
   --color-background-danger-dot: var(--pine-color-red-600);
-  --color-background-danger-hover: var(--pine-color-red-200);
+  --color-background-danger-hover: var(--pine-color-red-300);
 
   --color-background-info-dot: var(--pine-color-blue-600);
-  --color-background-info-hover: var(--pine-color-blue-200);
+  --color-background-info-hover: var(--pine-color-blue-300);
 
   --color-background-neutral-dot: var(--pine-color-grey-600);
-  --color-background-neutral-hover: var(--pine-color-grey-400);
+  --color-background-neutral-hover: var(--pine-color-grey-300);
 
   --color-background-success-dot: var(--pine-color-green-600);
-  --color-background-success-hover: var(--pine-color-green-200);
+  --color-background-success-hover: var(--pine-color-green-300);
 
   --color-background-warning-dot: var(--pine-color-yellow-600);
-  --color-background-warning-hover: var(--pine-color-yellow-200);
+  --color-background-warning-hover: var(--pine-color-yellow-300);
 
   --spacing-sm: calc(var(--pine-dimension-150) / 2);
   --spacing-lg: calc(var(--pine-dimension-250) / 2);
@@ -34,12 +34,12 @@
 }
 
 $pds-chip-sentiment: (
-  accent: var(--pine-color-accent),
-  danger: var(--pine-color-danger),
-  info: var(--pine-color-info),
-  neutral: var(--pine-color-neutral),
-  success: var(--pine-color-success),
-  warning: var(--pine-color-warning),
+  accent: var(--pine-color-purple-100),
+  danger: var(--pine-color-mercury-100),
+  info: var(--pine-color-blue-100),
+  neutral: var(--pine-color-grey-100),
+  success: var(--pine-color-green-100),
+  warning: var(--pine-color-yellow-100),
 );
 
 $pds-chip-sentiment-text: (

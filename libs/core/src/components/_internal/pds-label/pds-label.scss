@@ -3,12 +3,10 @@
 }
 
 label, pds-label {
-  --color-text-default: var(--pine-color-grey-950);
-  --color-text-disabled: var(--pine-color-grey-600);
-
-  color: var(--color-text-default);
+  color: var(--pine-color-text-label);
+  font-weight: var(--pine-font-weight-medium);
 
   [disabled] &, *:disabled & {
-    color: var(--color-text-disabled);
+    color: var(--pine-color-text-label-disabled);
   }
 }

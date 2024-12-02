@@ -78,8 +78,7 @@ input {
 
   &:has(~.pds-input__error-message) {
 
-
-    background-color: var(--pine-color-danger);
+    background-color: var(--pine-color-red-050);
     border-color: var(--pine-color-border-danger);
 
     &:focus-visible {
@@ -93,12 +92,11 @@ input {
 .pds-input__error-message,
 .pds-input__helper-message {
   font-size: var(--pine-font-size);
-  font-weight: var(--pine-color-text-placeholder);
-  line-height: var(--pine-line-height-text-message);
+  font-weight: var(--pine-font-weight-medium);
   margin-block-end: 0;
   margin-block-start: var(--pine-dimension-xs);
 }
 
 .pds-input__error-message {
-  color: var(--pine-color-text-danger);
+  color: var(--pine-color-text-message-danger);
 }
