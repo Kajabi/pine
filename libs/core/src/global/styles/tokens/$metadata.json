@@ -3,6 +3,7 @@
     "base/core",
     "base/semantic",
     "components/chip",
+    "components/input",
     "brand/kajabi_products",
     "brand/kajabi_products/light",
     "brand/kajabi_products/dark"

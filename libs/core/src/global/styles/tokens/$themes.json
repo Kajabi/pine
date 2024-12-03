@@ -22,6 +22,7 @@
       "base/core": "enabled",
       "base/semantic": "enabled",
       "components/chip": "enabled",
+      "components/input": "enabled",
       "brand/kajabi_products": "enabled"
     },
     "$figmaCollectionId": "VariableCollectionId:175:2717",
@@ -324,6 +325,7 @@
       "base/core": "enabled",
       "base/semantic": "enabled",
       "components/chip": "enabled",
+      "components/input": "enabled",
       "brand/kajabi_products": "enabled",
       "brand/kajabi_products/light": "enabled"
     },
@@ -698,6 +700,7 @@
       "base/core": "enabled",
       "base/semantic": "enabled",
       "components/chip": "enabled",
+      "components/input": "enabled",
       "brand/kajabi_products": "enabled",
       "brand/kajabi_products/dark": "enabled"
     },

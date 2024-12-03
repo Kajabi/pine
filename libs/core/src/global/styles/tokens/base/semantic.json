@@ -260,6 +260,16 @@
           "type": "color"
         }
       },
+      "label" : {
+        "@": {
+          "value": "{color.grey.950}",
+          "type": "color"
+        },
+        "disabled": {
+          "value": "{color.grey.600}",
+          "type": "color"
+        }
+      },
       "message": {
         "@": {
           "value": "{color.grey.800}",
