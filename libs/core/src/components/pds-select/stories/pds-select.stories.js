@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+import { withActions } from '@storybook/addon-actions/decorator';
 
 export default {
   args: {
@@ -12,6 +13,12 @@ export default {
   },
   argTypes: extractArgTypes('pds-select'),
   component: 'pds-select',
+  decorators: [withActions],
+  parameters: {
+    actions: {
+      handles: ['onchange', 'pdsSelectChange'],
+    },
+  },
   title: 'components/Select',
 };
 
