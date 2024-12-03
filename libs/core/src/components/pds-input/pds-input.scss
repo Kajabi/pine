@@ -78,7 +78,7 @@ input {
 
   &:has(~.pds-input__error-message) {
 
-    background-color: var(--pine-color-red-050);
+    background-color: var(--pine-input-color-background-danger);
     border-color: var(--pine-color-border-danger);
 
     &:focus-visible {
