@@ -72,7 +72,7 @@ export class PdsSelect {
   /**
    * Emitted when a keyboard input occurred.
    */
-  @Event() pdsSelect: EventEmitter<InputEvent>;
+  @Event() pdsSelectChange: EventEmitter<InputEvent>;
 
   @Watch('value')
   /**
@@ -120,18 +120,12 @@ export class PdsSelect {
   }
 
   /**
-   * Handles the select event for the component.
-   *
-   * @param ev - The event object triggered by the select action.
-   * @remarks
-   * This method casts the event target to an HTMLSelectElement and updates the component's value
-   * with the selected option's value. It then emits a custom event (`pdsSelect`) with the original event.
-   */
-  private onSelectEvent = (ev: Event) => {
-    const select = ev.target as HTMLSelectElement;
-    console.log(select.value);
+   * Emits an event on input change
+  */
+  private onSelectUpdate = (e: Event) => {
+    const select = e.target as HTMLSelectElement;
     this.value = select.value;
-    this.pdsSelect.emit(ev as InputEvent);
+    this.pdsSelectChange.emit(e as InputEvent);
   };
 
   /**
@@ -172,7 +166,7 @@ export class PdsSelect {
             id={this.componentId}
             multiple={this.multiple}
             name={this.name}
-            onChange={this.onSelectEvent}
+            onChange={this.onSelectUpdate}
             required={this.required}
             ref={(el) => (this.selectEl = el as HTMLSelectElement)}
           ></select>

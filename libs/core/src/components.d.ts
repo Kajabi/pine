@@ -1111,7 +1111,7 @@ declare global {
         new (): HTMLPdsRowElement;
     };
     interface HTMLPdsSelectElementEventMap {
-        "pdsSelect": InputEvent;
+        "pdsSelectChange": InputEvent;
     }
     interface HTMLPdsSelectElement extends Components.PdsSelect, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsSelectElementEventMap>(type: K, listener: (this: HTMLPdsSelectElement, ev: PdsSelectCustomEvent<HTMLPdsSelectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1959,7 +1959,7 @@ declare namespace LocalJSX {
         /**
           * Emitted when a keyboard input occurred.
          */
-        "onPdsSelect"?: (event: PdsSelectCustomEvent<InputEvent>) => void;
+        "onPdsSelectChange"?: (event: PdsSelectCustomEvent<InputEvent>) => void;
         /**
           * Indicates whether or not the select field is required.
          */
