@@ -1,24 +1,6 @@
 :host {
   --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
 
-  --color-background-accent-dot: var(--pine-color-purple-600);
-  --color-background-accent-hover: var(--pine-color-purple-200);
-
-  --color-background-danger-dot: var(--pine-color-red-600);
-  --color-background-danger-hover: var(--pine-color-red-200);
-
-  --color-background-info-dot: var(--pine-color-blue-600);
-  --color-background-info-hover: var(--pine-color-blue-200);
-
-  --color-background-neutral-dot: var(--pine-color-grey-600);
-  --color-background-neutral-hover: var(--pine-color-grey-400);
-
-  --color-background-success-dot: var(--pine-color-green-600);
-  --color-background-success-hover: var(--pine-color-green-200);
-
-  --color-background-warning-dot: var(--pine-color-yellow-600);
-  --color-background-warning-hover: var(--pine-color-yellow-200);
-
   --spacing-sm: calc(var(--pine-dimension-150) / 2);
   --spacing-lg: calc(var(--pine-dimension-250) / 2);
   --spacing-xl: var(--pine-dimension-150);
@@ -34,12 +16,12 @@
 }
 
 $pds-chip-sentiment: (
-  accent: var(--pine-color-accent),
-  danger: var(--pine-color-danger),
-  info: var(--pine-color-info),
-  neutral: var(--pine-color-neutral),
-  success: var(--pine-color-success),
-  warning: var(--pine-color-warning),
+  accent: var(--pine-chip-color-accent),
+  danger: var(--pine-chip-color-danger),
+  info: var(--pine-chip-color-info),
+  neutral: var(--pine-chip-color-neutral),
+  success: var(--pine-chip-color-success),
+  warning: var(--pine-chip-color-warning),
 );
 
 $pds-chip-sentiment-text: (
@@ -52,21 +34,21 @@ $pds-chip-sentiment-text: (
 );
 
 $pds-chip-sentiment-dots: (
-  accent: var(--color-background-accent-dot),
-  danger: var(--color-background-danger-dot),
-  info: var(--color-background-info-dot),
-  neutral: var(--color-background-neutral-dot),
-  success: var(--color-background-success-dot),
-  warning: var(--color-background-warning-dot),
+  accent: var(--pine-chip-color-accent-dot),
+  danger: var(--pine-chip-color-danger-dot),
+  info: var(--pine-chip-color-info-dot),
+  neutral: var(--pine-chip-color-neutral-dot),
+  success: var(--pine-chip-color-success-dot),
+  warning: var(--pine-chip-color-warning-dot),
 );
 
 $pds-chip-sentiment-hover: (
-  accent: var(--pine-color-accent-hover),
-  danger: var(--color-background-danger-hover),
-  info: var(--color-background-info-hover),
-  neutral: var(--color-background-neutral-hover),
-  success: var(--color-background-success-hover),
-  warning: var(--color-background-warning-hover),
+  accent: var(--pine-chip-color-accent-hover),
+  danger: var(--pine-chip-color-danger-hover),
+  info: var(--pine-chip-color-info-hover),
+  neutral: var(--pine-chip-color-neutral-hover),
+  success: var(--pine-chip-color-success-hover),
+  warning: var(--pine-chip-color-warning-hover),
 );
 
 @each $sentiment, $value in $pds-chip-sentiment {

@@ -5,7 +5,6 @@
 div {
   // These custom props are not reachable
   --color-background-container: var(--pine-color-mercury-050);
-  --border-default: var(--pine-border-width-thin) solid var(--pine-color-grey-300);
 
   align-items: center;
   background-color: var(--color-background-container);
@@ -52,7 +51,7 @@ div {
 
 .pds-avatar__badge {
   background-color: var(--pine-color-background-container);
-  border: var(--border-default);
+  border: var(--pine-border);
   border-color: var(--pine-color-secondary);
   border-radius: var(--pine-border-radius-round);
   bottom: var(--pine-dimension-none);
