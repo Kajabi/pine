@@ -4,7 +4,7 @@ import { PdsLabel } from '../_internal/pds-label/pds-label';
 
 @Component({
   tag: 'pds-input',
-  styleUrls: ['pds-input.scss'],
+  styleUrls: ['pds-input.tokens.scss', 'pds-input.scss'],
   shadow: true,
 })
 export class PdsInput {
