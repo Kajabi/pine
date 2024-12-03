@@ -479,6 +479,7 @@ export namespace Components {
          */
         "componentId": string;
         "popoverTargetAction": 'show' | 'hide';
+        "text": string;
     }
     interface PdsProgress {
         /**
@@ -1063,8 +1064,8 @@ declare global {
         new (): HTMLPdsLoaderElement;
     };
     interface HTMLPdsPopoverElementEventMap {
-        "show": any;
-        "hide": any;
+        "showPdsPopover": any;
+        "hidePdsPopover": any;
     }
     interface HTMLPdsPopoverElement extends Components.PdsPopover, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsPopoverElementEventMap>(type: K, listener: (this: HTMLPdsPopoverElement, ev: PdsPopoverCustomEvent<HTMLPdsPopoverElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1800,9 +1801,13 @@ declare namespace LocalJSX {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
-        "onHide"?: (event: PdsPopoverCustomEvent<any>) => void;
-        "onShow"?: (event: PdsPopoverCustomEvent<any>) => void;
+        "onHidePdsPopover"?: (event: PdsPopoverCustomEvent<any>) => void;
+        /**
+          * Emits a custom event when the popover should be hidden.
+         */
+        "onShowPdsPopover"?: (event: PdsPopoverCustomEvent<any>) => void;
         "popoverTargetAction"?: 'show' | 'hide';
+        "text"?: string;
     }
     interface PdsProgress {
         /**
