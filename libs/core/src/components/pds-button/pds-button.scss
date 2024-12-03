@@ -12,6 +12,7 @@
   align-items: center;
   background-color: var(--color-background-default);
   border: var(--pine-border);
+  border-color: var(--color-border-default);
   border-radius: var(--pine-border-radius-round);
   color: var(--color-text-default); // Set in the variant classes below
   display: flex;
@@ -52,6 +53,8 @@
   --color-background-default: var(--pine-color-primary);
   --color-background-hover: var(--pine-color-primary-hover);
   --color-background-disabled: var(--pine-color-primary-disabled);
+  --color-border-default: var(--pine-color-primary);
+  --color-border-hover: var(--pine-color-primary-hover);
   --color-text-default: var(--pine-color-text-primary);
   --color-text-disabled: var(--pine-color-text-primary-disabled);
   --color-outline: var(--pine-color-focus-ring);
@@ -61,7 +64,9 @@
   --color-background-default: var(--pine-color-accent);
   --color-background-hover: var(--pine-color-accent-hover);
   --color-background-disabled: var(--pine-color-accent-disabled);
-  --color-text-default: var(--pine-color-text-accent);
+  --color-border-default: var(--pine-color-accent);
+  --color-border-hover: var(--pine-color-accent-hover);
+  --color-text-default: var(--pine-color-text-primary);
   --color-text-disabled: var(--pine-color-text-accent-disabled);
   --color-outline: var(--pine-color-focus-ring);
 }
@@ -70,7 +75,9 @@
   --color-background-default: var(--pine-color-danger);
   --color-background-hover: var(--pine-color-danger-hover);
   --color-background-disabled: var(--pine-color-danger-disabled);
-  --color-text-default: var(--pine-color-text-danger);
+  --color-border-default: var(--pine-color-danger);
+  --color-border-hover: var(--pine-color-danger-hover);
+  --color-text-default: var(--pine-color-text-primary);
   --color-text-disabled: var(--pine-color-text-danger-disabled);
   --color-outline: var(--pine-color-focus-ring-danger);
 

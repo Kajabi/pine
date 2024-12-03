@@ -58,10 +58,10 @@
   position: relative;
 
   span {
-    background-color: var(--pine-color-border);
-    block-size: 12px;
+    background-color: var(--pine-color-border-hover);
+    block-size: 6px;
     border-radius: var(--pine-border-radius-circle);
-    inline-size: 12px;
+    inline-size: 6px;
     opacity: var(--opacity-typing-dot-default);
 
     @for $i from 1 through 3 {
@@ -75,7 +75,7 @@
 @keyframes typing {
   50% {
     opacity: var(--opacity-typing-dot-active);
-    transform: scale(1.2);
+    transform: scale(1.25);
   }
 }
 
