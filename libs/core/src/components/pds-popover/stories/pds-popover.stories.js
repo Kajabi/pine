@@ -8,14 +8,14 @@ export default {
 	decorators: [withActions],
 	parameters: {
 		actions: {
-			handles: ['mouseEnter', 'mouseLeave'],
+			handles: ['mouseEnter', 'mouseLeave', 'hidePdsPopover', 'showPdsPopover'],
 		},
 	},
 	title: 'components/Popover'
 }
 
 const BaseTemplate = (args) => html`
-<pds-popover has-arrow=${args.hasArrow} max-width=${args.maxWidth} placement=${args.placement} html-content=${args.htmlContent}>
+<pds-popover text=${args.text} has-arrow=${args.hasArrow} max-width=${args.maxWidth} placement=${args.placement} html-content=${args.htmlContent}>
 	<div slot="trigger">
 		<pds-button variant="accent">Click</pds-button>
 	</div>
@@ -23,7 +23,8 @@ const BaseTemplate = (args) => html`
 		<p><strong>This is a popover</strong></p>
 		<p>Popovers are used to describe or identify an element. In most scenarios, popovers help the user understand the meaning, function or alt-text of an element.</p>
 	</div>
-</pds-popover>`;
+</pds-popover>
+`;
 
 export const Default = BaseTemplate.bind({});
 Default.args = {

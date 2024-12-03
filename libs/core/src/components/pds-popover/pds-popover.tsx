@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, Listen, h, Prop } from '@stencil/core';
 
 @Component({
   tag: 'pds-popover',
@@ -20,41 +20,45 @@ export class PdsPopover {
    */
   @Prop() componentId: string;
 
+  @Prop() text: string;
+
    /**
    * Emits a custom event when the popover should be shown.
    */
-  showPopover() {
-    this.active = true;
-    this.emitEvent('showPopover');
-  }
+  // showPopover() {
+  //   this.active = true;
+  //   this.emitEvent('showPdsPopover');
+  // }
 
   /**
    * Emits a custom event when the popover should be hidden.
    */
-  hidePopover() {
+  // hidePopover() {
+  //   this.active = false;
+  //   this.emitEvent('hidePdsPopover');
+  // }
+
+  @Event() showPdsPopover: EventEmitter;
+
+  @Event() hidePdsPopover: EventEmitter;
+
+  @Listen('showPdsPopover')
+  handleShowPopover() {
+    this.active = true;
+  }
+
+  @Listen('hidePdsPopover')
+  handleHidePopover() {
     this.active = false;
-    this.emitEvent('hidePopover');
   }
 
   private handlePopoverAction() {
     if (this.popoverTargetAction === 'show') {
-      this.showPopover();
+      this.showPdsPopover.emit();
     } else if (this.popoverTargetAction === 'hide') {
-      this.hidePopover();
+      this.hidePdsPopover.emit();
     }
   }
-
-  private emitEvent(eventName: string) {
-    const event = new CustomEvent(eventName, {
-      bubbles: true,
-      composed: true,
-    });
-    this.el.dispatchEvent(event);
-  }
-
-  @Event() show: EventEmitter;
-
-  @Event() hide: EventEmitter;
 
   render() {
     return (
@@ -62,16 +66,10 @@ export class PdsPopover {
         <button
           popoverTarget={this.componentId}
           popoverTargetAction="show"
-          onClick={this.handlePopoverAction}
+          // onClick={this.handlePopoverAction}
         >
-          Show Show popover
-        </button>
-        <button
-          popoverTarget={this.componentId}
-          popoverTargetAction="hide"
-          onClick={this.handlePopoverAction}
-        >
-          Hide popover
+          {this.text}
+          <pds-icon icon="chevron-down"></pds-icon>
         </button>
         <div
           id={this.componentId}
