@@ -3,10 +3,7 @@ import { components } from '../../../../dist/docs.json';
 
 # Select
 
-<p>
-  The select field, when combined with a label, helper message, and error text, offers a comprehensive control that provides a menu of options for user selection. This ensures
-  clarity and guidance for the user, enhancing the overall user experience.
-</p>
+The select field, when combined with a label, helper message, and error text, offers a comprehensive control that provides a menu of options for user selection. This ensures clarity and guidance for the user, enhancing the overall user experience.
 
 ## Guidelines
 
@@ -34,21 +31,21 @@ import { components } from '../../../../dist/docs.json';
 
 ### Default
 
-<p>This example shows the default state of the select component with a label and a list of options. The user can choose one of the options from the dropdown menu.</p>
+This example shows the default state of the select component with a label and a list of options. The user can choose one of the options from the dropdown menu.
 
 <DocCanvas
   client:only
   mdxSource={{
     react: `
       <PdsSelect componentId="pds-select-default-example" label="Name" value="paul">
-        <option value="paul" selected="true">Paul McCartney</option>
+        <option value="paul" selected>Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </PdsSelect>`,
     webComponent: `
       <pds-select component-id="pds-select-default-example" label="Name" value="paul">
-        <option value="paul" selected="true">Paul McCartney</option>
+        <option value="paul" selected>Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
@@ -57,7 +54,7 @@ import { components } from '../../../../dist/docs.json';
 >
   <div style={{ padding: '20px', width: '100%' }}>
     <pds-select component-id="pds-select-default-example" label="Name" value="paul">
-      <option value="paul" selected="true">
+      <option value="paul" selected>
         Paul McCartney
       </option>
       <option value="john">John Lennon</option>
@@ -69,7 +66,7 @@ import { components } from '../../../../dist/docs.json';
 
 ### Disabled
 
-<p>This example demonstrates the select component in a disabled state. The user cannot interact with the dropdown menu or select any options.</p>
+This example demonstrates the select component in a disabled state. The user cannot interact with the dropdown menu or select any options.
 
 <DocCanvas
   client:only
@@ -78,14 +75,14 @@ import { components } from '../../../../dist/docs.json';
       <PdsSelect componentId="pds-select-disabled-example" disabled="true" label="Name" value="george">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
-        <option value="george" selected="true">George Harrison</option>
+        <option value="george" selected>George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </PdsSelect>`,
     webComponent: `
       <pds-select component-id="pds-select-disabled-example" disabled="true" label="Name" value="george">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
-        <option value="george" selected="true">George Harrison</option>
+        <option value="george" selected>George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </pds-select>`,
   }}
@@ -94,7 +91,7 @@ import { components } from '../../../../dist/docs.json';
     <pds-select component-id="pds-select-disabled-example" disabled="true" label="Name" value="george">
       <option value="paul">Paul McCartney</option>
       <option value="john">John Lennon</option>
-      <option value="george" selected="true">
+      <option value="george" selected>
         George Harrison
       </option>
       <option value="ringo">Ringo Starr</option>
@@ -104,7 +101,7 @@ import { components } from '../../../../dist/docs.json';
 
 ### With Message
 
-<p>This example includes a helper message that provides additional context or instructions for the user. The helper message appears below the select component.</p>
+This example includes a helper message that provides additional context or instructions for the user. The helper message appears below the select component.
 
 <DocCanvas
   client:only
@@ -112,14 +109,14 @@ import { components } from '../../../../dist/docs.json';
     react: `
       <PdsSelect componentId="pds-select-with-message-example" label="Name" helper-message="This is a helper message to convey extra context for the select" value="john">
         <option value="paul">Paul McCartney</option>
-        <option value="john" selected="true">John Lennon</option>
+        <option value="john" selected>John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </PdsSelect>`,
     webComponent: `
       <pds-select component-id="pds-select-with-message-example" label="Name" helper-message="This is a helper message to convey extra context for the select" value="john">
         <option value="paul">Paul McCartney</option>
-        <option value="john" selected="true">John Lennon</option>
+        <option value="john" selected>John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </pds-select>`,
@@ -128,7 +125,7 @@ import { components } from '../../../../dist/docs.json';
   <div style={{ padding: '20px', width: '100%' }}>
     <pds-select component-id="pds-select-with-message-example" helper-message="This is a helper message to convey extra context for the select" label="Name" value="john">
       <option value="paul">Paul McCartney</option>
-      <option value="john" selected="true">
+      <option value="john" selected>
         John Lennon
       </option>
       <option value="george">George Harrison</option>
@@ -139,7 +136,7 @@ import { components } from '../../../../dist/docs.json';
 
 ### Invalid
 
-<p>This example shows the select component with an error message. The error message provides feedback to the user when there is an issue with their selection.</p>
+This example shows the select component with an error message. The error message provides feedback to the user when there is an issue with their selection.
 
 <DocCanvas
   client:only
@@ -149,14 +146,14 @@ import { components } from '../../../../dist/docs.json';
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
-        <option value="ringo" selected="true">Ringo Starr</option>
+        <option value="ringo" selected>Ringo Starr</option>
       </PdsSelect>`,
     webComponent: `
       <pds-select component-id="pds-select-invalid-example" label="Name" error-message="This is an error message to convey extra context for the select" value="ringo">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
-        <option value="ringo" selected="true">Ringo Starr</option>
+        <option value="ringo" selected>Ringo Starr</option>
       </pds-select>`,
   }}
 >
@@ -165,7 +162,7 @@ import { components } from '../../../../dist/docs.json';
       <option value="paul">Paul McCartney</option>
       <option value="john">John Lennon</option>
       <option value="george">George Harrison</option>
-      <option value="ringo" selected="true">
+      <option value="ringo" selected>
         Ringo Starr
       </option>
     </pds-select>
@@ -174,21 +171,21 @@ import { components } from '../../../../dist/docs.json';
 
 ### Autocomplete
 
-<p>This example demonstrates the select component with the autocomplete attribute enabled. The browser may provide autocomplete suggestions based on the user's input.</p>
+This example demonstrates the select component with the autocomplete attribute enabled. The browser may provide autocomplete suggestions based on the user's input.
 
 <DocCanvas
   client:only
   mdxSource={{
     react: `
       <PdsSelect autocomplete="on" componentId="pds-select-autocomplete-example" label="Name" value="paul">
-        <option value="paul" selected="true">Paul McCartney</option>
+        <option value="paul" selected>Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </PdsSelect>`,
     webComponent: `
       <pds-select autocomplete="on" component-id="pds-select-autocomplete-example" label="Name" value="paul">
-        <option value="paul" selected="true">Paul McCartney</option>
+        <option value="paul" selected>Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
@@ -197,7 +194,7 @@ import { components } from '../../../../dist/docs.json';
 >
   <div style={{ padding: '20px', width: '100%' }}>
     <pds-select autocomplete="on" component-id="pds-select-autocomplete-example" label="Name" value="paul">
-      <option value="paul" selected="true">
+      <option value="paul" selected>
         Paul McCartney
       </option>
       <option value="john">John Lennon</option>
@@ -209,7 +206,7 @@ import { components } from '../../../../dist/docs.json';
 
 ### Multiple
 
-<p>This example demonstrates the select component with the multiple attribute enabled. The user can select multiple options from the select component.</p>
+This example demonstrates the select component with the multiple attribute enabled. The user can select multiple options from the select component.
 
 <DocCanvas
   client:only
@@ -242,9 +239,7 @@ import { components } from '../../../../dist/docs.json';
 
 ### With Optgroup
 
-<p>
-  This example demonstrates the select component with grouped options using the <code>optgroup</code> element. The user can choose from options within different groups.
-</p>
+This example demonstrates the select component with grouped options using the <code>optgroup</code> element. The user can choose from options within different groups.
 
 <DocCanvas
   client:only
@@ -254,7 +249,7 @@ import { components } from '../../../../dist/docs.json';
         <optgroup label="Correct answers">
           <option value="paul">Paul McCartney</option>
           <option value="john">John Lennon</option>
-          <option value="george" selected="true">George Harrison</option>
+          <option value="george" selected>George Harrison</option>
         </optgroup>
         <optgroup label="Incorrect answers">
           <option value="ringo">Ringo Starr</option>
@@ -265,7 +260,7 @@ import { components } from '../../../../dist/docs.json';
         <optgroup label="Correct answers">
           <option value="paul">Paul McCartney</option>
           <option value="john">John Lennon</option>
-          <option value="george" selected="true">George Harrison</option>
+          <option value="george" selected>George Harrison</option>
         </optgroup>
         <optgroup label="Incorrect answers">
           <option value="ringo">Ringo Starr</option>
@@ -278,7 +273,7 @@ import { components } from '../../../../dist/docs.json';
       <optgroup label="Correct answers">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
-        <option value="george" selected="true">
+        <option value="george" selected>
           George Harrison
         </option>
       </optgroup>
@@ -291,5 +286,5 @@ import { components } from '../../../../dist/docs.json';
 
 ## Additional Resources
 
-<p>[MDN Web Docs: Select](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select)</p>
-<p>[MDN Web Docs: HTML autocomplete attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete)</p>
+[MDN Web Docs: Select](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select)
+[MDN Web Docs: HTML autocomplete attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete)
