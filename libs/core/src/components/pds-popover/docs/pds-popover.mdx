@@ -5,13 +5,7 @@ import { components } from '../../../../dist/docs.json';
 <pds-popover component-id="my-popover" text="Show popover">
     <p>Popover content</p>
     <p>Popover content</p>
-    <button popovertarget="mypopover" popovertargetaction="hide"
-        onClick={() => {
-      const popover = document.getElementById('my-popover');
-      if (popover) {
-        popover.dispatchEvent(new CustomEvent('hidePdsPopover'));
-      }
-    }}>
+    <button popovertarget="mypopover" popovertargetaction="hide">
       Hide popover
     </button>
     <pds-button variant="secondary" popovertarget="mypopover" popovertargetaction="hide">
