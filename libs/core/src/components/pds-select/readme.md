@@ -7,18 +7,18 @@
 
 ## Properties
 
-| Property                   | Attribute        | Description                                                                        | Type      | Default     |
-| -------------------------- | ---------------- | ---------------------------------------------------------------------------------- | --------- | ----------- |
-| `autocomplete`             | `autocomplete`   | Specifies if and how the browser provides `autocomplete` assistance for the field. | `string`  | `undefined` |
-| `componentId` _(required)_ | `component-id`   | A unique identifier used for the underlying component `id` attribute.              | `string`  | `undefined` |
-| `disabled`                 | `disabled`       | Indicates whether or not the select field is disabled.                             | `boolean` | `undefined` |
-| `errorMessage`             | `error-message`  | Specifies the error message and provides an error-themed treatment to the field.   | `string`  | `undefined` |
-| `helperMessage`            | `helper-message` | Displays a message or hint below the input field.                                  | `string`  | `undefined` |
-| `label`                    | `label`          | Text to be displayed as the select label.                                          | `string`  | `undefined` |
-| `multiple`                 | `multiple`       | Indicates whether multiple options can be selected.                                | `boolean` | `undefined` |
-| `name` _(required)_        | `name`           | Specifies the name. Submitted with the form name/value pair.                       | `string`  | `undefined` |
-| `required`                 | `required`       | Indicates whether or not the select field is required.                             | `boolean` | `undefined` |
-| `value`                    | `value`          | The value of the select field.                                                     | `string`  | `undefined` |
+| Property                   | Attribute        | Description                                                                        | Type                 | Default     |
+| -------------------------- | ---------------- | ---------------------------------------------------------------------------------- | -------------------- | ----------- |
+| `autocomplete`             | `autocomplete`   | Specifies if and how the browser provides `autocomplete` assistance for the field. | `string`             | `undefined` |
+| `componentId` _(required)_ | `component-id`   | A unique identifier used for the underlying component `id` attribute.              | `string`             | `undefined` |
+| `disabled`                 | `disabled`       | Indicates whether or not the select field is disabled.                             | `boolean`            | `undefined` |
+| `errorMessage`             | `error-message`  | Specifies the error message and provides an error-themed treatment to the field.   | `string`             | `undefined` |
+| `helperMessage`            | `helper-message` | Displays a message or hint below the input field.                                  | `string`             | `undefined` |
+| `label`                    | `label`          | Text to be displayed as the select label.                                          | `string`             | `undefined` |
+| `multiple`                 | `multiple`       | Indicates whether multiple options can be selected.                                | `boolean`            | `undefined` |
+| `name` _(required)_        | `name`           | Specifies the name. Submitted with the form name/value pair.                       | `string`             | `undefined` |
+| `required`                 | `required`       | Indicates whether or not the select field is required.                             | `boolean`            | `undefined` |
+| `value`                    | `value`          | The value(s) of the selected option(s).                                            | `string \| string[]` | `undefined` |
 
 
 ## Events

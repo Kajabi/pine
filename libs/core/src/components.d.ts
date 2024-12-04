@@ -618,9 +618,9 @@ export namespace Components {
          */
         "required": boolean;
         /**
-          * The value of the select field.
+          * The value(s) of the selected option(s).
          */
-        "value"?: string;
+        "value"?: string | string[];
     }
     interface PdsSortable {
         /**
@@ -1965,9 +1965,9 @@ declare namespace LocalJSX {
          */
         "required"?: boolean;
         /**
-          * The value of the select field.
+          * The value(s) of the selected option(s).
          */
-        "value"?: string;
+        "value"?: string | string[];
     }
     interface PdsSortable {
         /**

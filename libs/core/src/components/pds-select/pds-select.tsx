@@ -65,9 +65,10 @@ export class PdsSelect {
   @Prop() required: boolean;
 
   /**
-   * The value of the select field.
+   * The value(s) of the selected option(s).
+   *
    */
-  @Prop({ mutable: true }) value?: string;
+  @Prop({ mutable: true }) value?: string | string[];
 
   /**
    * Emitted when a keyboard input occurred.
@@ -106,23 +107,36 @@ export class PdsSelect {
    * @returns {void}
    */
   private updateSelectedOption() {
-    if (!this.selectEl) return;
-    const options = this.selectEl.options;
-    for (let i = 0; i < options.length; i++) {
-      if (options[i].value === this.value) {
-        options[i].setAttribute('selected', 'true');
-      } else {
-        options[i].removeAttribute('selected');
-      }
-    }
+    if (this.selectEl) {
+      const options = this.selectEl.options;
+
+      // Update the selected attribute for all options
+      Array.from(options).map((option: HTMLOptionElement) => {
+        if (Array.isArray(this.value)) {
+          option.selected = this.value.includes(option.value);
+        } else {
+          option.selected = this.value === option.value;
+        }
+      });
+    };
   }
 
   /**
    * Emits an event on input change
   */
   private onSelectUpdate = (e: Event) => {
-    const select = e.target as HTMLSelectElement;
-    this.value = select.value;
+    const target = e.target as HTMLSelectElement
+
+    const values = Array.from(target.options)
+        .filter((option) => ( option.selected))
+        .map((option) => ( option.value));
+
+    if (values.length === 1 && !this.multiple) {
+        this.value = values[0];
+    } else {
+        this.value = values;
+    }
+
     this.pdsSelectChange.emit(e as InputEvent);
   };
 

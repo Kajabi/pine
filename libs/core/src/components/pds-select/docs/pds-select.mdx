@@ -38,14 +38,14 @@ This example shows the default state of the select component with a label and a 
   mdxSource={{
     react: `
       <PdsSelect componentId="pds-select-default-example" label="Name" value="paul">
-        <option value="paul" selected>Paul McCartney</option>
+        <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </PdsSelect>`,
     webComponent: `
       <pds-select component-id="pds-select-default-example" label="Name" value="paul">
-        <option value="paul" selected>Paul McCartney</option>
+        <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
@@ -54,9 +54,7 @@ This example shows the default state of the select component with a label and a 
 >
   <div style={{ padding: '20px', width: '100%' }}>
     <pds-select component-id="pds-select-default-example" label="Name" value="paul">
-      <option value="paul" selected>
-        Paul McCartney
-      </option>
+      <option value="paul">Paul McCartney</option>
       <option value="john">John Lennon</option>
       <option value="george">George Harrison</option>
       <option value="ringo">Ringo Starr</option>
@@ -178,14 +176,14 @@ This example demonstrates the select component with the autocomplete attribute e
   mdxSource={{
     react: `
       <PdsSelect autocomplete="on" componentId="pds-select-autocomplete-example" label="Name" value="paul">
-        <option value="paul" selected>Paul McCartney</option>
+        <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </PdsSelect>`,
     webComponent: `
       <pds-select autocomplete="on" component-id="pds-select-autocomplete-example" label="Name" value="paul">
-        <option value="paul" selected>Paul McCartney</option>
+        <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
@@ -194,9 +192,7 @@ This example demonstrates the select component with the autocomplete attribute e
 >
   <div style={{ padding: '20px', width: '100%' }}>
     <pds-select autocomplete="on" component-id="pds-select-autocomplete-example" label="Name" value="paul">
-      <option value="paul" selected>
-        Paul McCartney
-      </option>
+      <option value="paul">Paul McCartney</option>
       <option value="john">John Lennon</option>
       <option value="george">George Harrison</option>
       <option value="ringo">Ringo Starr</option>
@@ -207,6 +203,7 @@ This example demonstrates the select component with the autocomplete attribute e
 ### Multiple
 
 This example demonstrates the select component with the multiple attribute enabled. The user can select multiple options from the select component.
+>Note: When the multiple attribute is enabled, the `value` property should be an array of selected values.
 
 <DocCanvas
   client:only
