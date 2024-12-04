@@ -3,13 +3,19 @@ import { components } from '../../../../dist/docs.json';
 
 # Text
 
-The Text component allows for a choice of common semantic tags used for headings or body text. This tag can be nested so `em` and `strong` can be used as well.
+The Text component allows for a choice of common semantic tags used for headings or body text. This tag can be nested to allow use of `em` and `strong`.
 
 ## Guidelines
 
 ### Accessibility
 
 Correct semantic tag usage is important for SEO as well as accessibility. Be sure to use the correct tag for semantic and hierarchical purposes and *not* for styling purposes. For example, if an `h2` needs to be bigger, use the `size` property to change the font size instead of changing the tag to `h1`. For more information, see the References section below.
+
+Be sure to not skip heading levels. Users of assitive technology rely on heading levels to determine page content. Skipping these levels may cause confusion.
+
+### `em` vs `strong`
+
+It's important to be aware of the semantic differences between the `em` and `strong` tags. `em` is used to emphasize a selection of text, while `strong` is used to indicate a selection of text is of strong importance or urgency. They should not be used interchangeably.
 
 ## Properties
 
@@ -43,10 +49,10 @@ Text can be aligned to the start, center, end, or justified.
 
 <DocCanvas client:only
   mdxSource={{
-    react: '<PdsText align="center" tag="em">"Had to be me. Someone else might have gotten it wrong."</PdsText>',
-    webComponent: '<pds-text align="center" tag="em">"Had to be me. Someone else might have gotten it wrong."</pds-text>'
+    react: '<PdsText align="center" tag="p">"Had to be me. Someone else might have gotten it wrong."</PdsText>',
+    webComponent: '<pds-text align="center" tag="p">"Had to be me. Someone else might have gotten it wrong."</pds-text>'
 }}>
-  <pds-text align="center" tag="em">"Had to be me. Someone else might have gotten it wrong."</pds-text>
+  <pds-text align="center" tag="p">"Had to be me. Someone else might have gotten it wrong."</pds-text>
 </DocCanvas>
 
 ## Color
@@ -127,6 +133,18 @@ Gutters, or margin spacing, can be added to the bottom of the component for spac
 }}>
   <pds-text gutter="lg" tag="h2">Title</pds-text>
   <pds-text tag="p">Body of text...</pds-text>
+</DocCanvas>
+
+## Italics
+
+The `em` element does not come italicized by default as it should not be used solely to italicize text. To italicize text, add the `italic` attribute to the component.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsText tag="p">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</PdsText>`,
+    webComponent: `<pds-text tag="p">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</pds-text>`
+}}>
+  <pds-text tag="p" italic>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</pds-text>
 </DocCanvas>
 
 ## Truncation

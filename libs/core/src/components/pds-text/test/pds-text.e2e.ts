@@ -9,6 +9,15 @@ describe('pds-text', () => {
     expect(element).toHaveClass('hydrated');
   });
 
+  it('renders with italic style when attribute is set', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-text tag="p" italic></pds-text>');
+
+    const el = await page.find('pds-text >>> p');
+
+    expect((await el.getComputedStyle()).getPropertyValue('font-style')).toBe('italic');
+  });
+
   it('renders with truncate style when attribute is set', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-text tag="h1" truncate></pds-text>');

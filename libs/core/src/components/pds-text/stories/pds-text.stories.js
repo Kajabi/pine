@@ -8,7 +8,8 @@ export default {
   title: 'components/Text',
 }
 
-const BaseTemplate = (args) => html`<pds-text
+const BaseTemplate = (args) => html`
+<pds-text
   align="${args.align}"
   color="${args.color}"
   size="${args.size}"
@@ -52,7 +53,8 @@ FontWeight.args = {
   tag: 'p',
 };
 
-const GutterTemplate = (args) => html`<pds-text
+const GutterTemplate = (args) => html`
+<pds-text
   align="${args.align}"
   color="${args.color}"
   gutter="${args.gutter}"
@@ -72,7 +74,26 @@ Gutter.args = {
   tag: 'h2',
 };
 
-const TruncateTemplate = (args) => html`<pds-text
+const ItalicTemplate = (args) => html`
+<pds-text
+  align="${args.align}"
+  color="${args.color}"
+  size="${args.size}"
+  tag="${args.tag}"
+  weight="${args.weight}"
+  italic
+>
+  ${args.slot}
+</pds-text>`;
+
+export const Italic = ItalicTemplate.bind();
+Italic.args = {
+  slot: 'Id irure id magna ipsum voluptate irure esse eu nulla',
+  tag: 'p',
+};
+
+const TruncateTemplate = (args) => html`
+<pds-text
   align="${args.align}"
   color="${args.color}"
   size="${args.size}"
