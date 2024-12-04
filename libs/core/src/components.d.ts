@@ -7,9 +7,11 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { BoxColumnType, BoxShadowSizeType, BoxTShirtSizeType } from "./utils/types";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
+import { TooltipPlacementType } from "./utils/types";
 import { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
 export { BoxColumnType, BoxShadowSizeType, BoxTShirtSizeType } from "./utils/types";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
+export { TooltipPlacementType } from "./utils/types";
 export { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
     interface PdsAccordion {
@@ -482,7 +484,16 @@ export namespace Components {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
+        /**
+          * Hides the popover by disabling the active state
+         */
+        "hide": () => Promise<void>;
+        "placement": TooltipPlacementType;
         "popoverTargetAction": 'show' | 'hide';
+        /**
+          * Shows the popover by enabling the active state
+         */
+        "show": () => Promise<void>;
         "text": string;
     }
     interface PdsProgress {
@@ -1947,10 +1958,8 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         "onHidePdsPopover"?: (event: PdsPopoverCustomEvent<any>) => void;
-        /**
-          * Emits a custom event when the popover should be hidden.
-         */
         "onShowPdsPopover"?: (event: PdsPopoverCustomEvent<any>) => void;
+        "placement"?: TooltipPlacementType;
         "popoverTargetAction"?: 'show' | 'hide';
         "text"?: string;
     }
