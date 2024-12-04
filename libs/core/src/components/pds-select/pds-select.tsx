@@ -108,8 +108,6 @@ export class PdsSelect {
   private updateSelectedOption() {
     if (!this.selectEl) return;
     const options = this.selectEl.options;
-    console.log('options', options);
-    console.log('this.value', this.value);
     for (let i = 0; i < options.length; i++) {
       if (options[i].value === this.value) {
         options[i].setAttribute('selected', 'true');
@@ -146,7 +144,6 @@ export class PdsSelect {
         if (clonedItem.tagName === 'OPTION' && (clonedItem as HTMLOptionElement).value === this.value) {
           (clonedItem as HTMLOptionElement).selected = true;
         }
-        // console.log('clonedItem"', clonedItem);
         this.selectEl.appendChild(clonedItem);
       }
     });
