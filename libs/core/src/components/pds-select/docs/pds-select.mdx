@@ -68,14 +68,14 @@ This example demonstrates the select component in a disabled state. The user can
       <PdsSelect componentId="pds-select-disabled-example" disabled="true" label="Name" value="george">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
-        <option value="george" selected>George Harrison</option>
+        <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </PdsSelect>`,
     webComponent: `
       <pds-select component-id="pds-select-disabled-example" disabled="true" label="Name" value="george">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
-        <option value="george" selected>George Harrison</option>
+        <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </pds-select>`,
   }}
@@ -84,9 +84,7 @@ This example demonstrates the select component in a disabled state. The user can
     <pds-select component-id="pds-select-disabled-example" disabled="true" label="Name" value="george">
       <option value="paul">Paul McCartney</option>
       <option value="john">John Lennon</option>
-      <option value="george" selected>
-        George Harrison
-      </option>
+      <option value="george">George Harrison</option>
       <option value="ringo">Ringo Starr</option>
     </pds-select>
   </div>
@@ -102,14 +100,14 @@ This example includes a helper message that provides additional context or instr
     react: `
       <PdsSelect componentId="pds-select-with-message-example" label="Name" helper-message="This is a helper message to convey extra context for the select" value="john">
         <option value="paul">Paul McCartney</option>
-        <option value="john" selected>John Lennon</option>
+        <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </PdsSelect>`,
     webComponent: `
       <pds-select component-id="pds-select-with-message-example" label="Name" helper-message="This is a helper message to convey extra context for the select" value="john">
         <option value="paul">Paul McCartney</option>
-        <option value="john" selected>John Lennon</option>
+        <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </pds-select>`,
@@ -118,9 +116,7 @@ This example includes a helper message that provides additional context or instr
   <div style={{ padding: '20px', width: '100%' }}>
     <pds-select component-id="pds-select-with-message-example" helper-message="This is a helper message to convey extra context for the select" label="Name" value="john">
       <option value="paul">Paul McCartney</option>
-      <option value="john" selected>
-        John Lennon
-      </option>
+      <option value="john">John Lennon</option>
       <option value="george">George Harrison</option>
       <option value="ringo">Ringo Starr</option>
     </pds-select>
@@ -139,14 +135,14 @@ This example shows the select component with an error message. The error message
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
-        <option value="ringo" selected>Ringo Starr</option>
+        <option value="ringo">Ringo Starr</option>
       </PdsSelect>`,
     webComponent: `
       <pds-select component-id="pds-select-invalid-example" label="Name" error-message="This is an error message to convey extra context for the select" value="ringo">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
-        <option value="ringo" selected>Ringo Starr</option>
+        <option value="ringo">Ringo Starr</option>
       </pds-select>`,
   }}
 >
@@ -155,9 +151,7 @@ This example shows the select component with an error message. The error message
       <option value="paul">Paul McCartney</option>
       <option value="john">John Lennon</option>
       <option value="george">George Harrison</option>
-      <option value="ringo" selected>
-        Ringo Starr
-      </option>
+      <option value="ringo">Ringo Starr</option>
     </pds-select>
   </div>
 </DocCanvas>
@@ -241,7 +235,7 @@ This example demonstrates the select component with grouped options using the <c
         <optgroup label="Correct answers">
           <option value="paul">Paul McCartney</option>
           <option value="john">John Lennon</option>
-          <option value="george" selected>George Harrison</option>
+          <option value="george">George Harrison</option>
         </optgroup>
         <optgroup label="Incorrect answers">
           <option value="ringo">Ringo Starr</option>
@@ -265,9 +259,7 @@ This example demonstrates the select component with grouped options using the <c
       <optgroup label="Correct answers">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
-        <option value="george" selected>
-          George Harrison
-        </option>
+        <option value="george">George Harrison</option>
       </optgroup>
       <optgroup label="Incorrect answers">
         <option value="ringo">Ringo Starr</option>
