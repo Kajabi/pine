@@ -25,7 +25,9 @@ It's important to be aware of the semantic differences between the `em` and `str
 
 Each semantic tag provided comes with default styling. If no `tag` prop is provided, the default tag will be set to `p`.
 
-<DocCanvas client:only
+<DocCanvas
+  client:only
+  display="block"
   mdxSource={{
     react: `
       <PdsText tag="h1" gutter="xs">Title</PdsText>
@@ -47,7 +49,9 @@ Each semantic tag provided comes with default styling. If no `tag` prop is provi
 
 Text can be aligned to the start, center, end, or justified.
 
-<DocCanvas client:only
+<DocCanvas
+  client:only
+  display="block"
   mdxSource={{
     react: '<PdsText align="center" tag="p">"Had to be me. Someone else might have gotten it wrong."</PdsText>',
     webComponent: '<pds-text align="center" tag="p">"Had to be me. Someone else might have gotten it wrong."</pds-text>'
@@ -120,7 +124,9 @@ Font weight can be set to common font weight values.
 
 Gutters, or margin spacing, can be added to the bottom of the component for spacing between blocks of text.
 
-<DocCanvas client:only
+<DocCanvas
+  display="block"
+  client:only
   mdxSource={{
     react: `
       <PdsText gutter="lg" tag="h2">Title</PdsText>

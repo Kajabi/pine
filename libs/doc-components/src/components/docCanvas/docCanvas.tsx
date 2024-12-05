@@ -18,6 +18,7 @@ interface SourceType {
 interface DocCanvasProps {
   activeTab: string
   children: React.ReactNode
+  display: string
   isMenuVisible: boolean
   mdxSource: SourceType
 }
@@ -25,6 +26,7 @@ interface DocCanvasProps {
 const docCanvas: React.FC<DocCanvasProps> = ({
   // activeTab = 'react',
   children,
+  display,
   // isMenuVisible = false,
   mdxSource
 }) => {
@@ -89,10 +91,11 @@ const docCanvas: React.FC<DocCanvasProps> = ({
       <> {buttons} </>
     )
   }
+
   return (
     <div className={`doc-canvas ${isMenuVisible ? 'doc-canvas--menu-visible' : ''}`}
       >
-        <div className="doc-canvas-preview">
+        <div className={`doc-canvas-preview ${display ? `doc-canvas-preview--${display}` : ''}`}>
         {children}
         </div>
         <div className="doc-canvas-actions">
