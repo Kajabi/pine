@@ -194,8 +194,8 @@ export class PdsSelect {
       <Host aria-disabled={this.disabled ? 'true' : null}>
         <div class="pds-select">
           <PdsLabel htmlFor={this.componentId} text={this.label} />
-          <select
-            autocomplete={this.autocomplete}
+            <select
+            autocomplete={this.autocomplete || undefined}
             class="pds-select__field"
             disabled={this.disabled}
             id={this.componentId}
@@ -204,7 +204,7 @@ export class PdsSelect {
             onChange={this.onSelectUpdate}
             required={this.required}
             ref={(el) => (this.selectEl = el as HTMLSelectElement)}
-          ></select>
+            ></select>
           <div aria-hidden="true" class="hidden" ref={(el) => (this.slotContainer = el)}>
             <slot onSlotchange={this.handleSlotChange}></slot>
           </div>
