@@ -8,15 +8,8 @@ import { PdsLabel } from '../_internal/pds-label/pds-label';
   shadow: true,
 })
 export class PdsSelect {
-  /**
-   * A reference to the HTMLSelectElement used in the component.
-   */
-  private selectEl!: HTMLSelectElement;
 
-  /**
-   * A reference to the HTMLDivElement that serves as the container for slot elements.
-   * This property is used to manipulate or access the slot container directly within the component.
-   */
+  private selectEl!: HTMLSelectElement;
   private slotContainer!: HTMLDivElement;
 
   /**
@@ -31,8 +24,9 @@ export class PdsSelect {
 
   /**
    * Indicates whether or not the select field is disabled.
+   * @defaultValue false
    */
-  @Prop() disabled: boolean;
+  @Prop() disabled = false
 
   /**
    * Specifies the error message and provides an error-themed treatment to the field.
@@ -51,8 +45,9 @@ export class PdsSelect {
 
   /**
    * Indicates whether multiple options can be selected.
+   * @defaultValue false
    */
-  @Prop() multiple: boolean;
+  @Prop() multiple = false;
 
   /**
    * Specifies the name. Submitted with the form name/value pair.
@@ -61,8 +56,9 @@ export class PdsSelect {
 
   /**
    * Indicates whether or not the select field is required.
+   * @defaultValue false
    */
-  @Prop() required: boolean;
+  @Prop() required = false;
 
   /**
    * The value(s) of the selected option(s).
@@ -155,7 +151,7 @@ export class PdsSelect {
     assignedElements.forEach((item) => {
       if (item.tagName === 'OPTION' || item.tagName === 'OPTGROUP') {
         const clonedItem = item.cloneNode(true) as HTMLOptionElement | HTMLOptGroupElement;
-        if (clonedItem.tagName === 'OPTION' && (clonedItem as HTMLOptionElement).value === this.value) {
+        if ( ['OPTION', 'OPTGROUP'].includes(item.tagName)) {
           (clonedItem as HTMLOptionElement).selected = true;
         }
         this.selectEl.appendChild(clonedItem);

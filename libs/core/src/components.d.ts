@@ -591,6 +591,7 @@ export namespace Components {
         "componentId": string;
         /**
           * Indicates whether or not the select field is disabled.
+          * @defaultValue false
          */
         "disabled": boolean;
         /**
@@ -607,6 +608,7 @@ export namespace Components {
         "label": string;
         /**
           * Indicates whether multiple options can be selected.
+          * @defaultValue false
          */
         "multiple": boolean;
         /**
@@ -615,6 +617,7 @@ export namespace Components {
         "name": string;
         /**
           * Indicates whether or not the select field is required.
+          * @defaultValue false
          */
         "required": boolean;
         /**
@@ -1934,6 +1937,7 @@ declare namespace LocalJSX {
         "componentId": string;
         /**
           * Indicates whether or not the select field is disabled.
+          * @defaultValue false
          */
         "disabled"?: boolean;
         /**
@@ -1950,6 +1954,7 @@ declare namespace LocalJSX {
         "label"?: string;
         /**
           * Indicates whether multiple options can be selected.
+          * @defaultValue false
          */
         "multiple"?: boolean;
         /**
@@ -1962,6 +1967,7 @@ declare namespace LocalJSX {
         "onPdsSelectChange"?: (event: PdsSelectCustomEvent<InputEvent>) => void;
         /**
           * Indicates whether or not the select field is required.
+          * @defaultValue false
          */
         "required"?: boolean;
         /**
