@@ -149,9 +149,9 @@ export class PdsSelect {
     const assignedElements = slot.assignedElements({ flatten: true }) as (HTMLOptionElement | HTMLOptGroupElement)[];
 
     assignedElements.forEach((item) => {
-      if (item.tagName === 'OPTION' || item.tagName === 'OPTGROUP') {
+      if ( ['OPTION', 'OPTGROUP'].includes(item.tagName)) {
         const clonedItem = item.cloneNode(true) as HTMLOptionElement | HTMLOptGroupElement;
-        if ( ['OPTION', 'OPTGROUP'].includes(item.tagName)) {
+        if (clonedItem.tagName === 'OPTION' && (clonedItem as HTMLOptionElement).value === this.value) {
           (clonedItem as HTMLOptionElement).selected = true;
         }
         this.selectEl.appendChild(clonedItem);
