@@ -14,6 +14,7 @@
 | `disabled`                 | `disabled`       | Indicates whether or not the select field is disabled.                             | `boolean`            | `false`     |
 | `errorMessage`             | `error-message`  | Specifies the error message and provides an error-themed treatment to the field.   | `string`             | `undefined` |
 | `helperMessage`            | `helper-message` | Displays a message or hint below the input field.                                  | `string`             | `undefined` |
+| `invalid`                  | `invalid`        | Indicates whether or not the input field is invalid or throws an error.            | `boolean`            | `undefined` |
 | `label`                    | `label`          | Text to be displayed as the select label.                                          | `string`             | `undefined` |
 | `multiple`                 | `multiple`       | Indicates whether multiple options can be selected.                                | `boolean`            | `false`     |
 | `name` _(required)_        | `name`           | Specifies the name. Submitted with the form name/value pair.                       | `string`             | `undefined` |

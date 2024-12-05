@@ -8,6 +8,7 @@ export default {
     disabled: false,
     errorMessage: null,
     helperMessage: null,
+    invalid: false,
     multiple: false,
     value: null,
   },
@@ -51,6 +52,7 @@ const BaseTemplate = (args) =>
     disabled="${args.disabled}"
     error-message="${args.errorMessage}"
     helper-message="${args.helperMessage}"
+    invalid="${args.invalid}"
     label="${args.label}"
     multiple="${args.multiple}"
     name="${args.name}"
@@ -68,6 +70,7 @@ const OptgroupTemplate = (args) =>
     disabled="${args.disabled}"
     error-message="${args.errorMessage}"
     helper-message="${args.helperMessage}"
+    invalid="${args.invalid}"
     label="${args.label}"
     multiple="${args.multiple}"
     name="${args.name}"
@@ -114,6 +117,7 @@ Invalid.args = {
   componentId: 'pds-select-invalid-example',
   disabled: false,
   errorMessage: 'Its not Ringo',
+  invalid: true,
   label: 'Select your favorite Beatle',
   name: 'beatles',
   value: 'ringo',

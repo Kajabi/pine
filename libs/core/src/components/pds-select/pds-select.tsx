@@ -39,6 +39,11 @@ export class PdsSelect {
   @Prop() helperMessage: string;
 
   /**
+   * Indicates whether or not the input field is invalid or throws an error.
+   */
+  @Prop() invalid?: boolean;
+
+  /**
    * Text to be displayed as the select label.
    */
   @Prop() label: string;
@@ -189,21 +194,30 @@ export class PdsSelect {
     );
   }
 
+  private classNames() {
+    const classNames = [];
+
+    if (this.invalid) { classNames.push('is-invalid'); }
+    if (this.disabled) { classNames.push('is-disabled'); }
+
+    return classNames.join('  ');
+  }
+
   render() {
     return (
-      <Host aria-disabled={this.disabled ? 'true' : null}>
+      <Host aria-disabled={this.disabled ? 'true' : null} class={this.classNames()}>
         <div class="pds-select">
           <PdsLabel htmlFor={this.componentId} text={this.label} />
             <select
-            autocomplete={this.autocomplete || undefined}
-            class="pds-select__field"
-            disabled={this.disabled}
-            id={this.componentId}
-            multiple={this.multiple}
-            name={this.name}
-            onChange={this.onSelectUpdate}
-            required={this.required}
-            ref={(el) => (this.selectEl = el as HTMLSelectElement)}
+              autocomplete={this.autocomplete || undefined}
+              class="pds-select__field"
+              disabled={this.disabled}
+              id={this.componentId}
+              multiple={this.multiple}
+              name={this.name}
+              onChange={this.onSelectUpdate}
+              required={this.required}
+              ref={(el) => (this.selectEl = el as HTMLSelectElement)}
             ></select>
           <div aria-hidden="true" class="hidden" ref={(el) => (this.slotContainer = el)}>
             <slot onSlotchange={this.handleSlotChange}></slot>

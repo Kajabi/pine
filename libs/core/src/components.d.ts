@@ -603,6 +603,10 @@ export namespace Components {
          */
         "helperMessage": string;
         /**
+          * Indicates whether or not the input field is invalid or throws an error.
+         */
+        "invalid"?: boolean;
+        /**
           * Text to be displayed as the select label.
          */
         "label": string;
@@ -1948,6 +1952,10 @@ declare namespace LocalJSX {
           * Displays a message or hint below the input field.
          */
         "helperMessage"?: string;
+        /**
+          * Indicates whether or not the input field is invalid or throws an error.
+         */
+        "invalid"?: boolean;
         /**
           * Text to be displayed as the select label.
          */

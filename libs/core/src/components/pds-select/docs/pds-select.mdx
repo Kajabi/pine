@@ -131,14 +131,14 @@ This example shows the select component with an error message. The error message
   client:only
   mdxSource={{
     react: `
-      <PdsSelect componentId="pds-select-invalid-example" label="Name" error-message="This is an error message to convey extra context for the select" value="ringo">
+      <PdsSelect componentId="pds-select-invalid-example" label="Name" invalid="true" error-message="This is an error message to convey extra context for the select" value="ringo">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </PdsSelect>`,
     webComponent: `
-      <pds-select component-id="pds-select-invalid-example" label="Name" error-message="This is an error message to convey extra context for the select" value="ringo">
+      <pds-select component-id="pds-select-invalid-example" label="Name" invalid="true" error-message="This is an error message to convey extra context for the select" value="ringo">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
@@ -147,7 +147,7 @@ This example shows the select component with an error message. The error message
   }}
 >
   <div style={{ padding: '20px', width: '100%' }}>
-    <pds-select component-id="pds-select-invalid-example" error-message="This is an error message to convey extra context for the select" label="Name" value="ringo">
+    <pds-select component-id="pds-select-invalid-example" invalid="true" error-message="This is an error message to convey extra context for the select" label="Name" value="ringo">
       <option value="paul">Paul McCartney</option>
       <option value="john">John Lennon</option>
       <option value="george">George Harrison</option>

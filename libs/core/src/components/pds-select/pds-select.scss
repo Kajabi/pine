@@ -98,6 +98,18 @@ select {
   }
 }
 
+:host(.is-invalid) {
+  select {
+    background-color: var(--color-background-error);
+    border-color: var(--color-border-error);
+
+    &:focus-visible {
+      box-shadow: var(--box-shadow-focus-error);
+      outline: none;
+    }
+  }
+}
+
 .pds-select__error-message,
 .pds-select__helper-message {
   font-size: var(--font-size-helper-message);

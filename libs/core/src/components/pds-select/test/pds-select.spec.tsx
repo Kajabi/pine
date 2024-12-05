@@ -108,7 +108,7 @@ describe('pds-select', () => {
     expect(helperMessage?.textContent).toBe('Helper text');
   });
 
-  it('renders with disabled attribute', async () => {
+  it('renders with disabled attribute and class', async () => {
     const page = await newSpecPage({
       components: [PdsSelect],
       html: `<pds-select aria-disabled="true" component-id="field-1" disabled></pds-select>`,
@@ -117,11 +117,37 @@ describe('pds-select', () => {
     await page.waitForChanges(); // Ensures component fully renders
 
     expect(page.root).toEqualHtml(`
-      <pds-select aria-disabled="true" component-id="field-1" disabled="">
+      <pds-select aria-disabled="true" class="is-disabled" component-id="field-1" disabled="">
         <mock:shadow-root>
           <div class="pds-select">
             <label htmlfor="field-1"></label>
             <select class="pds-select__field" disabled="" id="field-1">
+              <slot></slot>
+            </select>
+            <div aria-hidden="true" class="hidden">
+              <slot></slot>
+            </div>
+            <pds-icon class="pds-select__select-icon" name="enlarge"></pds-icon>
+          </div>
+        </mock:shadow-root>
+      </pds-select>
+    `);
+  });
+
+  it('renders with invalid class when prop set ', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select component-id="field-1" invalid="true"></pds-select>`,
+    });
+
+    await page.waitForChanges(); // Ensures component fully renders
+
+    expect(page.root).toEqualHtml(`
+      <pds-select class="is-invalid" component-id="field-1" invalid="true">
+        <mock:shadow-root>
+          <div class="pds-select">
+            <label htmlfor="field-1"></label>
+            <select class="pds-select__field" id="field-1">
               <slot></slot>
             </select>
             <div aria-hidden="true" class="hidden">
