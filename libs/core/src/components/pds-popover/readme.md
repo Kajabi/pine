@@ -9,19 +9,20 @@
 
 | Property              | Attribute               | Description                                                           | Type                                                                                                                                                                 | Default     |
 | --------------------- | ----------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `active`              | `active`                |                                                                       | `boolean`                                                                                                                                                            | `false`     |
 | `componentId`         | `component-id`          | A unique identifier used for the underlying component `id` attribute. | `string`                                                                                                                                                             | `undefined` |
-| `placement`           | `placement`             |                                                                       | `"bottom" \| "bottom-end" \| "bottom-start" \| "left" \| "left-end" \| "left-start" \| "right" \| "right-end" \| "right-start" \| "top" \| "top-end" \| "top-start"` | `'right'`   |
-| `popoverTargetAction` | `popover-target-action` |                                                                       | `"hide" \| "show"`                                                                                                                                                   | `'show'`    |
-| `text`                | `text`                  |                                                                       | `string`                                                                                                                                                             | `undefined` |
+| `maxWidth`            | `max-width`             | Sets the maximum width of the popover content                         | `string`                                                                                                                                                             | `'352px'`   |
+| `placement`           | `placement`             | Determines the preferred position of the popover                      | `"bottom" \| "bottom-end" \| "bottom-start" \| "left" \| "left-end" \| "left-start" \| "right" \| "right-end" \| "right-start" \| "top" \| "top-end" \| "top-start"` | `'right'`   |
+| `popoverTargetAction` | `popover-target-action` | Determines the action that triggers the popover                       | `"hide" \| "show"`                                                                                                                                                   | `'show'`    |
+| `popoverType`         | `popover-type`          |                                                                       | `"auto" \| "manual"`                                                                                                                                                 | `'auto'`    |
+| `text`                | `text`                  | Text that appears on the trigger element                              | `string`                                                                                                                                                             | `undefined` |
 
 
 ## Events
 
-| Event            | Description | Type               |
-| ---------------- | ----------- | ------------------ |
-| `hidePdsPopover` |             | `CustomEvent<any>` |
-| `showPdsPopover` |             | `CustomEvent<any>` |
+| Event            | Description                        | Type               |
+| ---------------- | ---------------------------------- | ------------------ |
+| `hidePdsPopover` | Emitted when the popover is hidden | `CustomEvent<any>` |
+| `showPdsPopover` | Emitted when the popover is shown  | `CustomEvent<any>` |
 
 
 ## Methods
@@ -46,19 +47,6 @@ Type: `Promise<void>`
 
 
 
-
-## Dependencies
-
-### Depends on
-
-- pds-icon
-
-### Graph
-```mermaid
-graph TD;
-  pds-popover --> pds-icon
-  style pds-popover fill:#f9f,stroke:#333,stroke-width:4px
-```
 
 ----------------------------------------------
 
