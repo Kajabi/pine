@@ -161,6 +161,34 @@ export class PdsSelect {
     this.updateSelectedOption();
   };
 
+  private getHelperMessage() {
+    return this.helperMessage && (
+      <p class="pds-select__helper-message" id={messageId(this.componentId, 'helper')}>
+        {this.helperMessage}
+      </p>
+    );
+  }
+
+  private getErrorMessage() {
+    return this.errorMessage && (
+      <p class="pds-select__error-message" id={messageId(this.componentId, 'error')} aria-live="assertive">
+        <pds-icon name="danger" size="small" />
+        {this.errorMessage}
+      </p>
+    );
+  }
+
+  private renderMessages() {
+    if (!this.helperMessage && !this.errorMessage) return null;
+
+    return (
+      <div class="pds-select__message">
+        {this.getHelperMessage()}
+        {this.getErrorMessage()}
+      </div>
+    );
+  }
+
   render() {
     return (
       <Host aria-disabled={this.disabled ? 'true' : null}>
@@ -180,21 +208,7 @@ export class PdsSelect {
           <div aria-hidden="true" class="hidden" ref={(el) => (this.slotContainer = el)}>
             <slot onSlotchange={this.handleSlotChange}></slot>
           </div>
-          {(this.helperMessage || this.errorMessage) && (
-            <div class="pds-select__message">
-              {this.helperMessage && (
-                <p class="pds-select__helper-message" id={messageId(this.componentId, 'helper')}>
-                  {this.helperMessage}
-                </p>
-              )}
-              {this.errorMessage && (
-                <p class="pds-select__error-message" id={messageId(this.componentId, 'error')} aria-live="assertive">
-                  <pds-icon name="danger" size="small" />
-                  {this.errorMessage}
-                </p>
-              )}
-            </div>
-          )}
+          {this.renderMessages()}
           {!this.multiple && <pds-icon class="pds-select__select-icon" name="enlarge" />}
         </div>
       </Host>
