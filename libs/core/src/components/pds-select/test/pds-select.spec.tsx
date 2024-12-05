@@ -310,4 +310,63 @@ describe('pds-select', () => {
       </pds-select>
     `);
   });
+
+  it('calls updateSelectedOption when value changes with multiple values', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select component-id="field-1" multiple></pds-select>`,
+    });
+
+    const component = page.rootInstance;
+    const updateSelectedOptionSpy = jest.spyOn(component, 'updateSelectedOption');
+
+    // Mock the selectEl and its options property
+    const mockOption1 = { value: 'option1', selected: false } as HTMLOptionElement;
+    const mockOption2 = { value: 'option2', selected: false } as HTMLOptionElement;
+    const mockOption3 = { value: 'option3', selected: false } as HTMLOptionElement;
+    const mockOptions = [mockOption1, mockOption2, mockOption3];
+    const mockSelectEl = {
+      options: mockOptions,
+    } as unknown as HTMLSelectElement;
+    component.selectEl = mockSelectEl;
+
+    // Change the value property to an array
+    component.value = ['option1', 'option3'];
+    await page.waitForChanges();
+
+    expect(updateSelectedOptionSpy).toHaveBeenCalled();
+    expect(mockOption1.selected).toBe(true);
+    expect(mockOption2.selected).toBe(false);
+    expect(mockOption3.selected).toBe(true);
+  });
+
+  it('calls updateSelectedOption when value changes with a single value', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select component-id="field-1"></pds-select>`,
+    });
+
+    const component = page.rootInstance;
+    const updateSelectedOptionSpy = jest.spyOn(component, 'updateSelectedOption');
+
+    // Mock the selectEl and its options property
+    const mockOption1 = { value: 'option1', selected: false } as HTMLOptionElement;
+    const mockOption2 = { value: 'option2', selected: false } as HTMLOptionElement;
+    const mockOption3 = { value: 'option3', selected: false } as HTMLOptionElement;
+    const mockOptions = [mockOption1, mockOption2, mockOption3];
+    const mockSelectEl = {
+      options: mockOptions,
+    } as unknown as HTMLSelectElement;
+    component.selectEl = mockSelectEl;
+
+    // Change the value property to a single string
+    component.value = 'option2';
+    await page.waitForChanges();
+
+    expect(updateSelectedOptionSpy).toHaveBeenCalled();
+    expect(mockOption1.selected).toBe(false);
+    expect(mockOption2.selected).toBe(true);
+    expect(mockOption3.selected).toBe(false);
+  });
+
 });
