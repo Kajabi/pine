@@ -18,7 +18,7 @@ interface SourceType {
 interface DocCanvasProps {
   activeTab: string
   children: React.ReactNode
-  display: string
+  display: 'inline' | 'block' | 'inline-block' | 'flex' | 'inline-flex'
   isMenuVisible: boolean
   mdxSource: SourceType
 }
