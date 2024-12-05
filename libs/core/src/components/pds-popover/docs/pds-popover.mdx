@@ -1,14 +1,30 @@
 import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
 
-# Popover
+<pds-popover onShowPdsPopover="this.showPopover()" component-id="my-popover" text="Show popover"></pds-popover>
+
 <pds-popover component-id="my-popover" text="Show popover">
     <p>Popover content</p>
     <p>Popover content</p>
-    <button popovertarget="mypopover" popovertargetaction="hide">
-      Hide popover
-    </button>
-    <pds-button variant="secondary" popovertarget="mypopover" popovertargetaction="hide">
-      Hide popover
-    </pds-button>
+    <button>Click me </button>
 </pds-popover>
+
+
+# Popover
+Popovers display contextual information when users click or fires a keyboard event on an element. They typically contain more information than tooltips and can include interactive elements.
+
+## Guidelines
+### Usage
+- Use popovers for complex information that might overwhelm the main content.
+- Consider using a tooltip for simpler explanations or brief labels.
+
+#### When not to use
+- Don't use popovers for critical information that must be readily available.
+
+## Properties
+<DocArgsTable componentName="pds-popover" docSource={components} />
+
+## Additional Resources
+[Mdn Web Docs: Popover Attribute](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/popover)
+
+[MDN Web Docs: Popover Api](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API)

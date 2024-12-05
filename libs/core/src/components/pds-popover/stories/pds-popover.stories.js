@@ -15,7 +15,7 @@ export default {
 }
 
 const BaseTemplate = (args) => html`
-<pds-popover component-id=${args.componentId} text=${args.text} has-arrow=${args.hasArrow} max-width=${args.maxWidth} placement=${args.placement} html-content=${args.htmlContent}>
+<pds-popover component-id=${args.componentId}  popover-type=${args.popoverType} text=${args.text} has-arrow=${args.hasArrow} max-width=${args.maxWidth} placement=${args.placement} html-content=${args.htmlContent}>
 	${args.slot}
 </pds-popover>
 `;
@@ -23,14 +23,18 @@ const BaseTemplate = (args) => html`
 export const Default = BaseTemplate.bind({});
 Default.args = {
 	componentId: 'popover-1',
-  placement: "top",
+  placement: "right",
   text: "Show popover",
 	slot: html`<p>Popover content</p>
-    <p>Popover content</p>
-    <button popovertarget="mypopover" popovertargetaction="hide">
-      Hide popover
-    </button>
-    <pds-button variant="secondary" popovertarget="mypopover" popovertargetaction="hide">
-      Hide popover
-    </pds-button>`
+    <p>Popover content</p>`
+};
+
+export const Manual = BaseTemplate.bind({});
+Manual.args = {
+	componentId: 'popover-1',
+  placement: "right",
+	popoverType: "manual",
+  text: "Show popover",
+	slot: html`<p>Popover content</p>
+    <p>Popover content</p>`
 };

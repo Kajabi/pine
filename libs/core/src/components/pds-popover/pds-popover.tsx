@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, Host, Listen, h, Method, Prop } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, Listen, h, Method, Prop, State , Build} from '@stencil/core';
 import { TooltipPlacementType } from '@utils/types';
 
 @Component({
@@ -12,21 +12,51 @@ export class PdsPopover {
    */
   @Element() el: HTMLPdsPopoverElement;
 
-  @Prop({ mutable: true }) active = false;
+  /**
+   * Determines when the popover is active
+   * @defaultValue false
+   */
+  @State() active = false;
 
+  /**
+   * Determines the action that triggers the popover
+   * @defaultValue "show"
+   */
   @Prop() popoverTargetAction: 'show' | 'hide' = 'show';
+
+  @Prop() popoverType: 'auto' | 'manual' = 'auto';
 
   /**
    * A unique identifier used for the underlying component `id` attribute.
    */
   @Prop() componentId: string;
 
+  /**
+   * Text that appears on the trigger element
+   */
   @Prop() text: string;
 
+  /**
+   * Sets the maximum width of the popover content
+   * @defaultValue "352px"
+   */
+  @Prop() maxWidth?: string = '352px';
+
+  /**
+   * Determines the preferred position of the popover
+   * @defaultValue "right"
+   */
   @Prop({ reflect: true }) placement: TooltipPlacementType = 'right';
 
+
+  /**
+   * Emitted when the popover is shown
+   */
   @Event() showPdsPopover: EventEmitter;
 
+  /**
+   * Emitted when the popover is hidden
+   */
   @Event() hidePdsPopover: EventEmitter;
 
   @Listen('keydown', {
@@ -38,7 +68,7 @@ export class PdsPopover {
         event.stopPropagation();
         return;
       }
-      const closestTarget = (event.target as HTMLElement).closest("div[slot='trigger']");
+      const closestTarget = (event.target as HTMLElement).shadowRoot.querySelector(".pds-popover__trigger");
       if (closestTarget) {
         event.preventDefault();
         event.stopPropagation();
@@ -57,18 +87,36 @@ export class PdsPopover {
     }
   }
 
+  // private getTargetOutsideSlot(event) {
+  //   const path = event.composedPath();
+
+  //   for (const node of path) {
+  //     if (node.tagName === 'SLOT') {
+  //       return null;
+  //     }
+  //   }
+
+  //   return event.target;
+  // }
+
   @Listen('click', {
     capture: true
   })
   handleClick(event: MouseEvent) {
-    const closestTarget = (event.target as HTMLElement).shadowRoot.querySelector(".pds-popover__trigger");
+    console.log('Handle Click');
+    console.log('Event Target: ', (event.target as HTMLElement).closest('pds-popover'));
+    console.log('event.composedPath(): ', event.composedPath());
 
-    if (!closestTarget) {
-      event.stopPropagation();
-      return;
-    }
+    // const targetOutsideSlot = this.getTargetOutsideSlot(event);
+    // if (!targetOutsideSlot) {
+    //   console.log('targetOutsideSlot');
+    //   return;
+    // }
 
+
+    console.log('Is Active: ', this.active);
     if (!this.active) {
+      console.log('Calling show');
       this.show();
     }
     event.stopPropagation();
@@ -78,8 +126,8 @@ export class PdsPopover {
   @Listen('click', {
     target: 'document'
   })
-  handleOutsideClick(event: MouseEvent) {
-    if (this.active) {
+  handleDocumentClick(event: MouseEvent) {
+    if (this.active && this.popoverType !== 'manual') {
       this.hide();
       event.stopPropagation();
     }
@@ -128,9 +176,18 @@ export class PdsPopover {
    */
   @Method()
   async show() {
-    console.log('show');
+    console.log('In show');
     this.active = true;
     this.handlePopoverPositioning();
+
+    const popoverElement = this.el.shadowRoot.querySelector('[popover]') as HTMLElement;
+    if (Build.isBrowser) {
+      popoverElement.showPopover();
+    }
+    // if (popoverElement instanceof HTMLElement) {
+      // popoverElement.showPopover();
+    // }
+
     this.showPdsPopover.emit();
   }
 
@@ -140,6 +197,13 @@ export class PdsPopover {
   @Method()
   async hide() {
     this.active = false;
+    const popoverElement = this.el.shadowRoot.querySelector('[popover]') as HTMLElement;
+
+    // if (popoverElement instanceof HTMLElement) {
+    if (Build.isBrowser) {
+      popoverElement.hidePopover();
+    }
+
     this.hidePdsPopover.emit();
   }
 
@@ -154,11 +218,12 @@ export class PdsPopover {
           onClick={this.handleClick}
         >
           {this.text}
-          <pds-icon icon="chevron-down"></pds-icon>
         </button>
         <div
+          class={`pds-popover ${this.active ? 'pds-popover--active' : ''}`}
           id={this.componentId}
-          popover=""
+          popover={this.popoverType}
+          style={{ maxWidth: this.maxWidth }}
         >
           <slot></slot>
         </div>

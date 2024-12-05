@@ -479,7 +479,6 @@ export namespace Components {
         "variant": 'spinner' | 'typing';
     }
     interface PdsPopover {
-        "active": boolean;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -488,12 +487,29 @@ export namespace Components {
           * Hides the popover by disabling the active state
          */
         "hide": () => Promise<void>;
+        /**
+          * Sets the maximum width of the popover content
+          * @defaultValue "352px"
+         */
+        "maxWidth"?: string;
+        /**
+          * Determines the preferred position of the popover
+          * @defaultValue "right"
+         */
         "placement": TooltipPlacementType;
+        /**
+          * Determines the action that triggers the popover
+          * @defaultValue "show"
+         */
         "popoverTargetAction": 'show' | 'hide';
+        "popoverType": 'auto' | 'manual';
         /**
           * Shows the popover by enabling the active state
          */
         "show": () => Promise<void>;
+        /**
+          * Text that appears on the trigger element
+         */
         "text": string;
     }
     interface PdsProgress {
@@ -1952,15 +1968,37 @@ declare namespace LocalJSX {
         "variant"?: 'spinner' | 'typing';
     }
     interface PdsPopover {
-        "active"?: boolean;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
+        /**
+          * Sets the maximum width of the popover content
+          * @defaultValue "352px"
+         */
+        "maxWidth"?: string;
+        /**
+          * Emitted when the popover is hidden
+         */
         "onHidePdsPopover"?: (event: PdsPopoverCustomEvent<any>) => void;
+        /**
+          * Emitted when the popover is shown
+         */
         "onShowPdsPopover"?: (event: PdsPopoverCustomEvent<any>) => void;
+        /**
+          * Determines the preferred position of the popover
+          * @defaultValue "right"
+         */
         "placement"?: TooltipPlacementType;
+        /**
+          * Determines the action that triggers the popover
+          * @defaultValue "show"
+         */
         "popoverTargetAction"?: 'show' | 'hide';
+        "popoverType"?: 'auto' | 'manual';
+        /**
+          * Text that appears on the trigger element
+         */
         "text"?: string;
     }
     interface PdsProgress {
