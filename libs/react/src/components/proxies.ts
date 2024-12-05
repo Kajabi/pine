@@ -32,6 +32,7 @@ import { defineCustomElement as definePdsTableHeadCell } from '@pine-ds/core/com
 import { defineCustomElement as definePdsTableRow } from '@pine-ds/core/components/pds-table-row.js';
 import { defineCustomElement as definePdsTabpanel } from '@pine-ds/core/components/pds-tabpanel.js';
 import { defineCustomElement as definePdsTabs } from '@pine-ds/core/components/pds-tabs.js';
+import { defineCustomElement as definePdsText } from '@pine-ds/core/components/pds-text.js';
 import { defineCustomElement as definePdsTextarea } from '@pine-ds/core/components/pds-textarea.js';
 import { defineCustomElement as definePdsTooltip } from '@pine-ds/core/components/pds-tooltip.js';
 
@@ -62,5 +63,6 @@ export const PdsTableHeadCell = /*@__PURE__*/createReactComponent<JSX.PdsTableHe
 export const PdsTableRow = /*@__PURE__*/createReactComponent<JSX.PdsTableRow, HTMLPdsTableRowElement>('pds-table-row', undefined, undefined, definePdsTableRow);
 export const PdsTabpanel = /*@__PURE__*/createReactComponent<JSX.PdsTabpanel, HTMLPdsTabpanelElement>('pds-tabpanel', undefined, undefined, definePdsTabpanel);
 export const PdsTabs = /*@__PURE__*/createReactComponent<JSX.PdsTabs, HTMLPdsTabsElement>('pds-tabs', undefined, undefined, definePdsTabs);
+export const PdsText = /*@__PURE__*/createReactComponent<JSX.PdsText, HTMLPdsTextElement>('pds-text', undefined, undefined, definePdsText);
 export const PdsTextarea = /*@__PURE__*/createReactComponent<JSX.PdsTextarea, HTMLPdsTextareaElement>('pds-textarea', undefined, undefined, definePdsTextarea);
 export const PdsTooltip = /*@__PURE__*/createReactComponent<JSX.PdsTooltip, HTMLPdsTooltipElement>('pds-tooltip', undefined, undefined, definePdsTooltip);

@@ -1,0 +1,174 @@
+import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+# Text
+
+The Text component allows for a choice of common semantic tags used for headings or body text. This tag can be nested to allow use of `em` and `strong`.
+
+## Guidelines
+
+### Accessibility
+
+Correct semantic tag usage is important for SEO as well as accessibility. Be sure to use the correct tag for semantic and hierarchical purposes and *not* for styling purposes. For example, if an `h2` needs to be bigger, use the `size` property to change the font size instead of changing the tag to `h1`. For more information, see the References section below.
+
+Be sure to not skip heading levels. Users of assitive technology rely on heading levels to determine page content. Skipping these levels may cause confusion.
+
+### `em` vs `strong`
+
+It's important to be aware of the semantic differences between the `em` and `strong` tags. `em` is used to emphasize a selection of text, while `strong` is used to indicate a selection of text is of strong importance or urgency. They should not be used interchangeably.
+
+## Properties
+
+<DocArgsTable componentName="pds-text" docSource={components} />
+
+## Default
+
+Each semantic tag provided comes with default styling. If no `tag` prop is provided, the default tag will be set to `p`.
+
+<DocCanvas
+  client:only
+  display="block"
+  mdxSource={{
+    react: `
+      <PdsText tag="h1" gutter="xs">Title</PdsText>
+      <PdsText tag="h2" gutter="lg">Subtitle</PdsText>
+      <PdsText tag="p">Excepteur nulla veniam ullamco tempor culpa magna occaecat culpa. Sunt cupidatat proident tempor labore cupidatat labore mollit ullamco esse culpa. Dolor aute consequat aliqua excepteur cillum. Tempor deserunt eiusmod nulla qui anim incididunt et nulla ex consequat sit Lorem.</PdsText>
+    `,
+    webComponent: `
+      <pds-text tag="h1" gutter="xs">Title</pds-text>
+      <pds-text tag="h2" gutter="lg">Subtitle</pds-text>
+      <pds-text tag="p">Excepteur nulla veniam ullamco tempor culpa magna occaecat culpa. Sunt cupidatat proident tempor labore cupidatat labore mollit ullamco esse culpa. Dolor aute consequat aliqua excepteur cillum. Tempor deserunt eiusmod nulla qui anim incididunt et nulla ex consequat sit Lorem.</pds-text>
+    `
+}}>
+  <pds-text tag="h1" gutter="xs">Hello World!</pds-text>
+  <pds-text tag="h2" gutter="lg">Subtitle</pds-text>
+  <pds-text tag="p">Excepteur nulla veniam ullamco tempor culpa magna occaecat culpa. Sunt cupidatat proident tempor labore cupidatat labore mollit ullamco esse culpa. Dolor aute consequat aliqua excepteur cillum. Tempor deserunt eiusmod nulla qui anim incididunt et nulla ex consequat sit Lorem.</pds-text>
+</DocCanvas>
+
+## Alignment
+
+Text can be aligned to the start, center, end, or justified.
+
+<DocCanvas
+  client:only
+  display="block"
+  mdxSource={{
+    react: '<PdsText align="center" tag="p">"Had to be me. Someone else might have gotten it wrong."</PdsText>',
+    webComponent: '<pds-text align="center" tag="p">"Had to be me. Someone else might have gotten it wrong."</pds-text>'
+}}>
+  <pds-text align="center" tag="p">"Had to be me. Someone else might have gotten it wrong."</pds-text>
+</DocCanvas>
+
+## Color
+
+Text color can align to our common variant/sentiment values.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsText style="background-color: #33; padding-inline: 8px" color="primary" tag="p">Zebstrika</PdsText>
+      <PdsText color="secondary" tag="p">Pangoro</PdsText>
+      <PdsText color="neutral" tag="p">Urshifu</PdsText>
+      <PdsText color="accent" tag="p">Sableye</PdsText>
+      <PdsText color="danger" tag="p">Arcanine</PdsText>
+      <PdsText color="info" tag="p">Garchomp</PdsText>
+      <PdsText color="success" tag="p">Sceptile</PdsText>
+      <PdsText color="warning" tag="p">Pikachu</PdsText>
+    `,
+    webComponent: `
+      <pds-text style="background-color: #333; padding-inline: 8px" color="primary" tag="p">Zebstrika</pds-text>
+      <pds-text color="secondary" tag="p">Pangoro</pds-text>
+      <pds-text color="neutral" tag="p">Urshifu</pds-text>
+      <pds-text color="accent" tag="p">Sableye</pds-text>
+      <pds-text color="danger" tag="p">Arcanine</pds-text>
+      <pds-text color="info" tag="p">Garchomp</pds-text>
+      <pds-text color="success" tag="p">Sceptile</pds-text>
+      <pds-text color="warning" tag="p">Pikachu</pds-text>
+    `
+}}>
+  <pds-text style={{backgroundColor: '#333', paddingInline: '8px'}} color="primary" tag="p">Zebstrika</pds-text>
+  <pds-text color="secondary" tag="p">Pangoro</pds-text>
+  <pds-text color="neutral" tag="p">Urshifu</pds-text>
+  <pds-text color="accent" tag="p">Sableye</pds-text>
+  <pds-text color="danger" tag="p">Arcanine</pds-text>
+  <pds-text color="info" tag="p">Garchomp</pds-text>
+  <pds-text color="success" tag="p">Sceptile</pds-text>
+  <pds-text color="warning" tag="p">Pikachu</pds-text>
+</DocCanvas>
+
+## Font Size
+
+Font size can be set to preset body text values.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsText size="2xl" tag="p">Hello World!</PdsText>',
+    webComponent: '<pds-text size="2xl" tag="p">Hello World!</pds-text>'
+}}>
+  <pds-text size="2xl" tag="p">Hello World!</pds-text>
+</DocCanvas>
+
+## Font Weight
+
+Font weight can be set to common font weight values.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsText weight="bold" tag="p">Hello World!</PdsText>',
+    webComponent: '<pds-text weight="bold" tag="p">Hello World!</pds-text>'
+}}>
+  <pds-text weight="bold" tag="p">Hello World!</pds-text>
+</DocCanvas>
+
+## Gutters
+
+Gutters, or margin spacing, can be added to the bottom of the component for spacing between blocks of text.
+
+<DocCanvas
+  display="block"
+  client:only
+  mdxSource={{
+    react: `
+      <PdsText gutter="lg" tag="h2">Title</PdsText>
+      <PdsText tag="p">Body of text...</PdsText>
+    `,
+    webComponent: `
+      <pds-text gutter="lg" tag="h2">Title</pds-text>
+      <pds-text tag="p">Body of text...</pds-text>
+    `
+}}>
+  <pds-text gutter="lg" tag="h2">Title</pds-text>
+  <pds-text tag="p">Body of text...</pds-text>
+</DocCanvas>
+
+## Italics
+
+The `em` element does not come italicized by default as it should not be used solely to italicize text. To italicize text, add the `italic` attribute to the component.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsText tag="p" italic>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</PdsText>`,
+    webComponent: `<pds-text tag="p" italic>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</pds-text>`
+}}>
+  <pds-text tag="p" italic>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</pds-text>
+</DocCanvas>
+
+## Truncation
+
+To truncate text, add the `truncate` attribute to the component. Text truncation will depend on the component's or parent container's width.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsText tag="p" truncate>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</PdsText>`,
+    webComponent: `<pds-text tag="p" truncate>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</pds-text>`
+}}>
+  <pds-text style={{maxWidth: '40ch'}} tag="p" truncate>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</pds-text>
+</DocCanvas>
+
+## References
+
+[MDN: Semantics](https://developer.mozilla.org/en-US/docs/Glossary/Semantics)
+
+[MDN: HTML Elements Reference](https://developer.mozilla.org/en-US/docs/Web/HTML/Element#text-level_semantics)
+
+[MDN: Heading Elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Heading_Elements)

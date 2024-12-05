@@ -37,6 +37,26 @@
   padding: var(--doc-canvas-spacing);
 }
 
+.doc-canvas-preview.doc-canvas-preview--block {
+  display: block;
+}
+
+.doc-canvas-preview.doc-canvas-preview--inline {
+  display: inline;
+}
+
+.doc-canvas-preview.doc-canvas-preview--inline-block {
+  display: inline-block;
+}
+
+.doc-canvas-preview.doc-canvas-preview--flex {
+  display: flex;
+}
+
+.doc-canvas-preview.doc-canvas-preview--inline-flex {
+  display: inline-flex;
+}
+
 .doc-canvas-actions {
   color: var(--doc-canvas-color);
   display: flex;
