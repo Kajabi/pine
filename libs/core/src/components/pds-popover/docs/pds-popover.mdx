@@ -21,12 +21,12 @@ Popovers display contextual information when users click or initiates a keyboard
 
 ### Behavior Types
 #### Auto (Default)
-Closes automatically when clicking outside.
+Closes automatically when clicking outside the popover content. Can also be closed by pressing the `Escape` key.
 
 <DocCanvas client:only
   mdxSource={{
     react: `
-      <PdsPopover component-id="auto" text="Auto Popover">
+      <PdsPopover componentId="auto" text="Auto Popover">
         <p>Clicks outside will close this popover</p>
       </PdsPopover>
     `,
@@ -47,7 +47,7 @@ Requires explicit interaction to close.
 <DocCanvas client:only
   mdxSource={{
     react: `
-      <PdsPopover componentId="manual" text="Manual Popover" popover-type="manual">
+      <PdsPopover componentId="manual" text="Manual Popover" popoverType="manual">
         <p>This popover requires explicit closing</p>
         <button>Close Popover</button>
       </PdsPopover>
@@ -95,7 +95,7 @@ Toggles the popover visibility state when triggered. Clicking the popover trigge
 <DocCanvas client:only
   mdxSource={{
     react: `
-      <PdsPopover component-id="toggle" text="Toggle Action" popoverTargetAction="toggle">
+      <PdsPopover componentId="toggle" text="Toggle Action" popoverTargetAction="toggle">
         <p>This popover uses the toggle action</p>
       </PdsPopover>
     `,
@@ -116,7 +116,7 @@ Hides the popover when triggered. Useful when combined with programmatic show/hi
 <DocCanvas client:only
   mdxSource={{
     react: `
-      <PdsPopover component-id="hide" text="Hide Action" popoverTargetAction="hide">
+      <PdsPopover componentId="hide" text="Hide Action" popoverTargetAction="hide">
         <p>This popover uses the hide action</p>
       </PdsPopover>
     `,
