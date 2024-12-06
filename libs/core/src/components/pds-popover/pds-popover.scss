@@ -17,11 +17,6 @@
     --border-width-default: var(--pine-border-width-thin);
     --border-width-unstyled: var(--pine-border-radius-0);
 
-    --color-border-default: transparent;
-    --color-border-disabled: transparent;
-    --color-border-focus: transparent;
-    --color-border-hover: transparent;
-
     // secondary
     --color-background-secondary-hover: var(--pine-color-grey-050);
     --color-border-secondary-default: var(--pine-color-grey-400);
@@ -31,9 +26,6 @@
     --color-text-secondary-default: var(--pine-color-grey-800);
     --color-text-secondary-disabled: var(--pine-color-grey-400);
     --color-outline-secondary: var(--pine-color-purple-300);
-    --color-background-default: transparent;
-    --color-background-hover: transparent;
-    --color-background-disabled: transparent;
     --color-border-disabled: var(--color-border-secondary-disabled);
     --color-border-focus: var(--color-border-secondary-focus);
     --color-border-hover: var(--color-border-secondary-hover);
@@ -45,21 +37,21 @@
     --spacing-padding-block: var(--pine-spacing-100);
     --spacing-padding-inline: var(--pine-spacing-200);
 
-    &:hover {
-      background-color: var(--color-background-secondary-hover);
-    }
-
     align-items: center;
     background-color: var(--color-background-default);
     border: var(--border-width-default) solid var(--color-border-default);
     border-radius: var(--pine-border-radius-circle);
     color: var(--color-text-default);
     display: flex;
-    font-weight: var(--pine-font-weight-body-medium);
-    font-size: var(--pine-font-size-100);
-    line-height: var(--pine-line-height-150);
     font-family: var(--pine-font-family-greet);
+    font-size: var(--pine-font-size-100);
+    font-weight: var(--pine-font-weight-body-medium);
+    line-height: var(--pine-line-height-150);
     min-height: 40px;
     padding: var(--spacing-padding-block) var(--spacing-padding-inline);
+
+    &:hover {
+      background-color: var(--color-background-secondary-hover);
+    }
   }
 }
