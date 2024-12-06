@@ -1,4 +1,4 @@
-export type TooltipPlacementType =
+export type PlacementType =
   | 'top-start'
   | 'top'
   | 'top-end'
