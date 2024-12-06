@@ -113,6 +113,16 @@ export class PdsPopover {
     }
   }
 
+  @Listen('scroll', {
+    target: 'window',
+    capture: true
+  })
+  handleScroll() {
+    if (this.active) {
+      this.handlePopoverPositioning();
+    }
+  }
+
   private handlePopoverPositioning() {
     const triggerEl = this.el.shadowRoot.querySelector('.pds-popover__trigger') as HTMLElement;
     const popoverEl = this.el.shadowRoot.querySelector('div[popover]') as HTMLElement;
