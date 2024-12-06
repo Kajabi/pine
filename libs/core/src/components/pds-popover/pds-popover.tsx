@@ -46,7 +46,7 @@ export class PdsPopover {
    * Determines the preferred position of the popover
    * @defaultValue "right"
    */
-  @Prop({ reflect: true }) placement: TooltipPlacementType = 'right';
+  @Prop({ mutable: true, reflect: true }) placement: TooltipPlacementType = 'right';
 
 
   /**
@@ -87,41 +87,21 @@ export class PdsPopover {
     }
   }
 
-  // private getTargetOutsideSlot(event) {
-  //   const path = event.composedPath();
-
-  //   for (const node of path) {
-  //     if (node.tagName === 'SLOT') {
-  //       return null;
-  //     }
-  //   }
-
-  //   return event.target;
-  // }
-
   @Listen('click', {
     capture: true
   })
   handleClick(event: MouseEvent) {
-    console.log('Handle Click');
-    console.log('Event Target: ', (event.target as HTMLElement).closest('pds-popover'));
-    console.log('event.composedPath(): ', event.composedPath());
 
-    // const targetOutsideSlot = this.getTargetOutsideSlot(event);
-    // if (!targetOutsideSlot) {
-    //   console.log('targetOutsideSlot');
-    //   return;
-    // }
+    if (event.composedPath()[0] !== this.el.shadowRoot.querySelector('.pds-popover__trigger')) {
+      event.stopPropagation();
+      return;
+    }
 
-
-    console.log('Is Active: ', this.active);
     if (!this.active) {
-      console.log('Calling show');
       this.show();
     }
     event.stopPropagation();
   }
-
 
   @Listen('click', {
     target: 'document'
@@ -145,8 +125,6 @@ export class PdsPopover {
     let top = 0;
     let left = 0;
     // right and bottom are working, but left and top are overlapping the trigger
-    // console.log('handlePopoverPositioning');
-    // console.log(triggerRect, popoverRect);
 
     switch (this.placement) {
       case 'top':
@@ -163,7 +141,7 @@ export class PdsPopover {
         break;
       case 'left':
         top = triggerRect.top + (triggerRect.height - popoverRect.height) / 2;
-        left = triggerRect.left - popoverRect.width;
+        left = triggerRect.left - popoverRect.width - triggerRect.width;
         break;
     }
 
@@ -176,7 +154,6 @@ export class PdsPopover {
    */
   @Method()
   async show() {
-    console.log('In show');
     this.active = true;
     this.handlePopoverPositioning();
 
@@ -184,9 +161,6 @@ export class PdsPopover {
     if (Build.isBrowser) {
       popoverElement.showPopover();
     }
-    // if (popoverElement instanceof HTMLElement) {
-      // popoverElement.showPopover();
-    // }
 
     this.showPdsPopover.emit();
   }
@@ -199,7 +173,6 @@ export class PdsPopover {
     this.active = false;
     const popoverElement = this.el.shadowRoot.querySelector('[popover]') as HTMLElement;
 
-    // if (popoverElement instanceof HTMLElement) {
     if (Build.isBrowser) {
       popoverElement.hidePopover();
     }
