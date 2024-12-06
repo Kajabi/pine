@@ -57,7 +57,6 @@ export class PdsButton {
   @Event() pdsClick: EventEmitter;
 
   private handleClick = (ev: Event) => {
-    console.log('button clicked');
     if (this.type != 'button') {
       // If button clicked IS NOT associated with a form
       if (hasShadowDom(this.el)) {
