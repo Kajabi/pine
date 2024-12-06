@@ -42,9 +42,9 @@ export class PdsPopover {
 
   /**
    * Sets the maximum width of the popover content
-   * @defaultValue "352px"
+   * @defaultValue 352
    */
-  @Prop() maxWidth?: string = '352px';
+  @Prop() maxWidth?: number = 352;
 
   /**
    * Determines the preferred position of the popover
@@ -210,7 +210,7 @@ export class PdsPopover {
           class={`pds-popover ${this.active ? 'pds-popover--active' : ''}`}
           id={this.componentId}
           popover={this.popoverType}
-          style={{ maxWidth: this.maxWidth }}
+          style={{ maxWidth: `${this.maxWidth}px` }}
         >
           <slot></slot>
         </div>

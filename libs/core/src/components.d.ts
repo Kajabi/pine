@@ -489,9 +489,9 @@ export namespace Components {
         "hide": () => Promise<void>;
         /**
           * Sets the maximum width of the popover content
-          * @defaultValue "352px"
+          * @defaultValue 352
          */
-        "maxWidth"?: string;
+        "maxWidth"?: number;
         /**
           * Determines the preferred position of the popover
           * @defaultValue "right"
@@ -1977,9 +1977,9 @@ declare namespace LocalJSX {
         "componentId"?: string;
         /**
           * Sets the maximum width of the popover content
-          * @defaultValue "352px"
+          * @defaultValue 352
          */
-        "maxWidth"?: string;
+        "maxWidth"?: number;
         /**
           * Emitted when the popover is hidden
          */
