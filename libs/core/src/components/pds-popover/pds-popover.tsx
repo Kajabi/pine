@@ -76,6 +76,7 @@ export class PdsPopover {
       if (closestTarget) {
         event.preventDefault();
         event.stopPropagation();
+        return;
       }
 
       this.show();
