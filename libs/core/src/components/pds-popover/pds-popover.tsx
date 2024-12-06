@@ -22,7 +22,7 @@ export class PdsPopover {
    * Determines the action that triggers the popover
    * @defaultValue "show"
    */
-  @Prop() popoverTargetAction: 'show' | 'hide' = 'show';
+  @Prop() popoverTargetAction: 'show' | 'toggle' | 'hide' = 'show';
 
   /**
    * Determines the type of popover. Auto popovers can be "light dismissed" by clicking outside of the popover.
@@ -76,7 +76,6 @@ export class PdsPopover {
       if (closestTarget) {
         event.preventDefault();
         event.stopPropagation();
-        return;
       }
 
       this.show();
@@ -201,7 +200,7 @@ export class PdsPopover {
         <button
           class="pds-popover__trigger"
           popoverTarget={this.componentId}
-          popoverTargetAction="show"
+          popoverTargetAction={this.popoverTargetAction}
           onKeyDown={this.handleKeyDown}
           onClick={this.handleClick}
         >
