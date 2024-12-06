@@ -86,13 +86,6 @@ export class PdsSelect {
     this.updateSelectedOption();
   }
 
-  /**
-   * Lifecycle method that is called just before the component is loaded.
-   * This method is used to perform any necessary updates to the selected option
-   * before the component is rendered.
-   *
-   * @returns {void}
-   */
   componentWillLoad() {
     this.updateSelectedOption();
   }
