@@ -24,6 +24,10 @@ export class PdsPopover {
    */
   @Prop() popoverTargetAction: 'show' | 'hide' = 'show';
 
+  /**
+   * Determines the type of popover. Auto popovers can be "light dismissed" by clicking outside of the popover.
+   * Manual popovers require the consumer to handle the visibility of the popover.
+   */
   @Prop() popoverType: 'auto' | 'manual' = 'auto';
 
   /**
