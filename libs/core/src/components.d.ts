@@ -502,6 +502,9 @@ export namespace Components {
           * @defaultValue "show"
          */
         "popoverTargetAction": 'show' | 'hide';
+        /**
+          * Determines the type of popover. Auto popovers can be "light dismissed" by clicking outside of the popover. Manual popovers require the consumer to handle the visibility of the popover.
+         */
         "popoverType": 'auto' | 'manual';
         /**
           * Shows the popover by enabling the active state
@@ -1995,6 +1998,9 @@ declare namespace LocalJSX {
           * @defaultValue "show"
          */
         "popoverTargetAction"?: 'show' | 'hide';
+        /**
+          * Determines the type of popover. Auto popovers can be "light dismissed" by clicking outside of the popover. Manual popovers require the consumer to handle the visibility of the popover.
+         */
         "popoverType"?: 'auto' | 'manual';
         /**
           * Text that appears on the trigger element
