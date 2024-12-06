@@ -65,6 +65,72 @@ Requires explicit interaction to close.
   </pds-popover>
 </DocCanvas>
 
+### Target Actions
+The `popoverTargetAction` prop determines how the trigger button interacts with the popover.
+
+#### Show (Default)
+Shows the popover when triggered. Clicking the popover trigger while open will not close the popover.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsPopover componentId="show" text="Show Action">
+        <p>This popover uses the show action</p>
+      </PdsPopover>
+    `,
+    webComponent: `
+      <pds-popover component-id="show" text="Show Action">
+        <p>This popover uses the show action</p>
+      </pds-popover>
+    `
+  }}>
+  <pds-popover component-id="show" text="Show Action">
+    <p>This popover uses the show action</p>
+  </pds-popover>
+</DocCanvas>
+
+#### Toggle
+Toggles the popover visibility state when triggered. Clicking the popover trigger while open will close the popover.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsPopover component-id="toggle" text="Toggle Action" popoverTargetAction="toggle">
+        <p>This popover uses the toggle action</p>
+      </PdsPopover>
+    `,
+    webComponent: `
+      <pds-popover component-id="toggle" text="Toggle Action" popover-target-action="toggle">
+        <p>This popover uses the toggle action</p>
+      </pds-popover>
+    `
+  }}>
+  <pds-popover component-id="toggle" text="Toggle Action" popover-target-action="toggle">
+    <p>This popover uses the toggle action</p>
+  </pds-popover>
+</DocCanvas>
+
+#### Hide
+Hides the popover when triggered. Useful when combined with programmatic show/hide control from an outside source.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsPopover component-id="hide" text="Hide Action" popoverTargetAction="hide">
+        <p>This popover uses the hide action</p>
+      </PdsPopover>
+    `,
+    webComponent: `
+      <pds-popover component-id="hide" text="Hide Action" popover-target-action="hide">
+        <p>This popover uses the hide action</p>
+      </pds-popover>
+    `
+  }}>
+  <pds-popover component-id="hide" text="Hide Action" popover-target-action="hide">
+    <p>This popover uses the hide action</p>
+  </pds-popover>
+</DocCanvas>
+
 ### Width/Sizing
 The `maxWidth` prop allows adjusting the maximum width of the popover content. Default is 352px.
 
@@ -85,6 +151,7 @@ The `maxWidth` prop allows adjusting the maximum width of the popover content. D
     <p>This is a wider popover with more content space available.</p>
   </pds-popover>
 </DocCanvas>
+
 
 ## Additional Resources
 [Mdn Web Docs: Popover Attribute](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/popover)
