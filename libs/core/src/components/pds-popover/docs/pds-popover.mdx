@@ -49,13 +49,13 @@ Requires explicit interaction to close.
     react: `
       <PdsPopover componentId="manual" text="Manual Popover" popover-type="manual">
         <p>This popover requires explicit closing</p>
-        <button onClick="this.closest('pds-popover').hide()">Close Popover</button>
+        <button>Close Popover</button>
       </PdsPopover>
     `,
     webComponent: `
       <pds-popover component-id="manual" text="Manual Popover" popover-type="manual">
         <p>This popover requires explicit closing</p>
-        <button onclick="this.closest('pds-popover').hide()">Close Popover</button>
+        <button>Close Popover</button>
       </pds-popover>
     `
   }}>
