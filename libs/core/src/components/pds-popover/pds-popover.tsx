@@ -52,7 +52,6 @@ export class PdsPopover {
    */
   @Prop({ reflect: true }) placement: PlacementType = 'right';
 
-
   /**
    * Emitted when the popover is shown
    */
