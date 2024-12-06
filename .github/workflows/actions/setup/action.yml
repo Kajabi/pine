@@ -1,0 +1,35 @@
+name: 'Setup action'
+description: 'Runs the prerequisites for the Jobs'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Get Latest
+      run: git pull
+      shell: bash
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: '.nvmrc'
+
+    - name: Verify NPM Cache
+      shell: bash
+      run: npm cache verify
+
+    - name: Get NPM cache directory
+      id: npm-cache-dir
+      shell: bash
+      run: echo "dir=$(npm config get cache)" >> $GITHUB_ENV
+
+    - name: Configure user
+      run: |
+        git config user.name "DSS Automation Bot"
+        git config user.email "dev+github-bot@kajabi.com"
+      shell: bash
+

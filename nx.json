@@ -1,25 +1,98 @@
 {
   "defaultBase": "origin/main",
+  "pluginsConfig": {
+    "@nx/js": {
+      "analyzeSourceFiles": false
+    }
+  },
   "targetDefaults": {
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "outputs": [
         "{projectRoot}/dist",
         "{projectRoot}/loader",
         "{projectRoot}/www"
-      ]
+      ],
+      "cache": true
     },
     "start": {
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "test": {
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"],
+      "cache": true
+    },
+    "e2e": {
+      "cache": true
+    },
+    "lint": {
+      "cache": true
+    }
+  },
+  "release": {
+    "changelog": {
+      "workspaceChangelog": {
+        "createRelease": "github"
+      }
+    },
+    "conventionalCommits": {
+      "types": {
+        "docs": {
+          "changelog": {
+            "hidden": false,
+            "title": "Documentation 📄"
+          }
+        },
+        "feat": {
+          "changelog": {
+            "hidden": false,
+            "title": "Features 🚀"
+          }
+        },
+        "fix": {
+          "changelog": {
+            "hidden": false,
+            "title": "Bug Fixes 🐛"
+          }
+        },
+        "perf": {
+          "changelog": {
+            "hidden": false,
+            "title": "Performance Improvements 🚀"
+          }
+        },
+        "refactor": {
+          "changelog": {
+            "hidden": false,
+            "title": "Code Refactoring 🔨"
+          }
+        },
+        "revert": {
+          "changelog": {
+            "hidden": false,
+            "title": "Reverts ↩️"
+          }
+        },
+        "style": {
+          "changelog": {
+            "hidden": false,
+            "title": "Styles 🎨"
+          }
+        },
+        "test": {
+          "changelog": {
+            "hidden": false,
+            "title": "Tests 🧪"
+          }
+        }
+      }
+    },
+    "git": {
+      "commitMessage": "chore(release): release {version}"
+    },
+    "projects": ["libs/*"],
+    "version": {
+      "conventionalCommits": true
     }
   }
 }
