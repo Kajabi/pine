@@ -7,11 +7,11 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { BoxColumnType, BoxShadowSizeType, BoxTShirtSizeType } from "./utils/types";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
-import { TooltipPlacementType } from "./utils/types";
+import { PlacementType } from "./utils/types";
 import { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
 export { BoxColumnType, BoxShadowSizeType, BoxTShirtSizeType } from "./utils/types";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
-export { TooltipPlacementType } from "./utils/types";
+export { PlacementType } from "./utils/types";
 export { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
     interface PdsAccordion {
@@ -496,7 +496,7 @@ export namespace Components {
           * Determines the preferred position of the popover
           * @defaultValue "right"
          */
-        "placement": TooltipPlacementType;
+        "placement": PlacementType;
         /**
           * Determines the action that triggers the popover
           * @defaultValue "show"
@@ -1992,7 +1992,7 @@ declare namespace LocalJSX {
           * Determines the preferred position of the popover
           * @defaultValue "right"
          */
-        "placement"?: TooltipPlacementType;
+        "placement"?: PlacementType;
         /**
           * Determines the action that triggers the popover
           * @defaultValue "show"

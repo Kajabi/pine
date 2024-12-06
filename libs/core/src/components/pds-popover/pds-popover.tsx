@@ -1,5 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, Listen, h, Method, Prop, State , Build} from '@stencil/core';
-import { TooltipPlacementType } from '@utils/types';
+import { PlacementType } from '@utils/types';
 
 @Component({
   tag: 'pds-popover',
@@ -50,7 +50,7 @@ export class PdsPopover {
    * Determines the preferred position of the popover
    * @defaultValue "right"
    */
-  @Prop({ mutable: true, reflect: true }) placement: TooltipPlacementType = 'right';
+  @Prop({ mutable: true, reflect: true }) placement: PlacementType = 'right';
 
 
   /**
