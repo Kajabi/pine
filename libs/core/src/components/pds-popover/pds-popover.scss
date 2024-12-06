@@ -55,7 +55,10 @@
     border-radius: var(--pine-border-radius-circle);
     color: var(--color-text-default);
     display: flex;
-    font: var(--typography-default);
+    font-weight: var(--pine-font-weight-body-medium);
+    font-size: var(--pine-font-size-100);
+    line-height: var(--pine-line-height-150);
+    font-family: var(--pine-font-family-greet);
     min-height: 40px;
     padding: var(--spacing-padding-block) var(--spacing-padding-inline);
   }
