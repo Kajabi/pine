@@ -1,30 +1,94 @@
 import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
 
-<pds-popover onShowPdsPopover="this.showPopover()" component-id="my-popover" text="Show popover"></pds-popover>
-
-<pds-popover component-id="my-popover" text="Show popover">
-    <p>Popover content</p>
-    <p>Popover content</p>
-    <button>Click me </button>
-</pds-popover>
-
-
 # Popover
 Popovers display contextual information when users click or fires a keyboard event on an element. They typically contain more information than tooltips and can include interactive elements.
 
 ## Guidelines
 ### Usage
-- Use popovers for complex information that might overwhelm the main content.
-- Consider using a tooltip for simpler explanations or brief labels.
+#### When to use
+- Use popovers for complex information that might overwhelm the main content
+- When content needs to include interactive elements
+- For non-essential information that requires user interaction to display
 
 #### When not to use
-- Don't use popovers for critical information that must be readily available.
+- Don't use popovers for critical information that must be readily available
+- Avoid using for simple text-only tooltips
+- Don't nest popovers within other popovers
 
 ## Properties
 <DocArgsTable componentName="pds-popover" docSource={components} />
+
+### Behavior Types
+#### Auto (Default)
+Closes automatically when clicking outside.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsPopover component-id="auto" text="Auto Popover">
+        <p>Clicks outside will close this popover</p>
+      </PdsPopover>
+    `,
+    webComponent: `
+      <pds-popover component-id="auto" text="Auto Popover">
+        <p>Clicks outside will close this popover</p>
+      </pds-popover>
+    `
+  }}>
+  <pds-popover component-id="auto" text="Auto Popover">
+    <p>Clicks outside will close this popover</p>
+  </pds-popover>
+</DocCanvas>
+
+#### Manual
+Requires explicit interaction to close.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsPopover componentId="manual" text="Manual Popover" popover-type="manual">
+        <p>This popover requires explicit closing</p>
+        <button onClick="this.closest('pds-popover').hide()">Close Popover</button>
+      </PdsPopover>
+    `,
+    webComponent: `
+      <pds-popover component-id="manual" text="Manual Popover" popover-type="manual">
+        <p>This popover requires explicit closing</p>
+        <button onclick="this.closest('pds-popover').hide()">Close Popover</button>
+      </pds-popover>
+    `
+  }}>
+  <pds-popover component-id="manual" text="Manual Popover" popover-type="manual">
+    <p>This popover requires explicit closing</p>
+    <button>Close Popover</button>
+  </pds-popover>
+</DocCanvas>
+
+### Width/Sizing
+The `maxWidth` prop allows adjusting the maximum width of the popover content. Default is 352px.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsPopover componentId="wide" text="Wide Popover" maxWidth="520px">
+        <p>This is a wider popover with more content space available.</p>
+      </PdsPopover>
+    `,
+    webComponent: `
+      <pds-popover component-id="wide" text="Wide Popover" max-width="520px">
+        <p>This is a wider popover with more content space available.</p>
+      </pds-popover>
+    `
+  }}>
+  <pds-popover component-id="wide" text="Wide Popover" max-width="520px">
+    <p>This is a wider popover with more content space available.</p>
+  </pds-popover>
+</DocCanvas>
 
 ## Additional Resources
 [Mdn Web Docs: Popover Attribute](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/popover)
 
 [MDN Web Docs: Popover Api](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API)
+
+[MDN: Using the Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API/Using)

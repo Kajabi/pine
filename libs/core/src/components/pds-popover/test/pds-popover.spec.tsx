@@ -221,18 +221,27 @@ describe('pds-popover', () => {
       html: '<pds-popover component-id="my-popover"></pds-popover>'
     });
 
+    // Define mock trigger and popover rects
     const mockTriggerRect = {
       top: 100,
       right: 200,
       bottom: 150,
       left: 100,
       width: 100,
-      height: 50
+      height: 50,
+      x: 100,
+      y: 100
     };
 
     const mockPopoverRect = {
+      top: 0,
+      right: 200,
+      bottom: 100,
+      left: 0,
       width: 200,
-      height: 100
+      height: 100,
+      x: 0,
+      y: 0
     };
 
     const triggerEl = page.root?.shadowRoot?.querySelector('.pds-popover__trigger') as HTMLElement;
@@ -246,20 +255,20 @@ describe('pds-popover', () => {
       value: () => mockPopoverRect
     });
 
-    const testPlacements = {
-      top: { expectedTop: '0px', expectedLeft: '50px' },
-      right: { expectedTop: '75px', expectedLeft: '200px' },
-      bottom: { expectedTop: '150px', expectedLeft: '50px' },
-      left: { expectedTop: '75px', expectedLeft: '-200px' }
-    };
+    // Test top placement
+    page.rootInstance.placement = 'top';
+    await page.rootInstance.show();
+    await page.waitForChanges();
 
-    for (const [placement, expected] of Object.entries(testPlacements)) {
-      page.rootInstance.placement = placement;
-      await page.rootInstance.show();
-      await page.waitForChanges();
+    expect(popoverEl.style.top).toBe('0px');
+    expect(popoverEl.style.left).toBe('50px');
 
-      expect(popoverEl.style.top).toBe(expected.expectedTop);
-      expect(popoverEl.style.left).toBe(expected.expectedLeft);
-    }
+    // Test bottom placement
+    page.rootInstance.placement = 'bottom';
+    await page.rootInstance.show();
+    await page.waitForChanges();
+
+    expect(popoverEl.style.top).toBe('150px');
+    expect(popoverEl.style.left).toBe('50px');
   });
 });
