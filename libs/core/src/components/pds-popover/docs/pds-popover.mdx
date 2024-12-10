@@ -42,26 +42,54 @@ Closes automatically when clicking outside the popover content. Can also be clos
 </DocCanvas>
 
 #### Manual
-Requires explicit interaction to close.
+Popovers with the `popoverType="manual"` require explicit user interaction to close. This means they won't automatically disappear when clicking outside or pressing Escape.
+
+To implement this:
+
+1. Create a Closing Function:
+
+    - Define a JavaScript function (e.g., `handleManualClose`) that will be responsible for closing the popover.
+    - Inside this function, you'll typically use `document.getElementById('manual').hide()` to call the `hide()` method on the popover element.
+    - Important: Ensure the id (`manual` in this example) matches the componentId prop of the `PdsPopover` component.
+
+2. Attach Function to onClick:
+
+    - Assign the `handleManualClose` function to the `onClick` event of the button within the popover.
+    - This ensures that when the user clicks the "Close Popover" button, the `handleManualClose` function is executed, and the popover is hidden.
+
+export const handleManualClose = () => {
+  const popover = document.querySelector('pds-popover[component-id="manual"]');
+  popover.hide();
+};
 
 <DocCanvas client:only
   mdxSource={{
     react: `
+      export const handleManualClose = () => {
+        const popover = document.querySelector('pds-popover[component-id="manual"]');
+        popover.hide();
+      };
+
       <PdsPopover componentId="manual" text="Manual Popover" popoverType="manual">
         <p>This popover requires explicit closing</p>
-        <button>Close Popover</button>
+        <button onClick={() => handleManualClose()}>Close Popover</button>
       </PdsPopover>
     `,
     webComponent: `
+      export const handleManualClose = () => {
+        const popover = document.querySelector('pds-popover[component-id="manual"]');
+        popover.hide();
+      };
+
       <pds-popover component-id="manual" text="Manual Popover" popover-type="manual">
         <p>This popover requires explicit closing</p>
-        <button>Close Popover</button>
+        <button onClick={() => handleManualClose()}>Close Popover</button>
       </pds-popover>
     `
   }}>
   <pds-popover component-id="manual" text="Manual Popover" popover-type="manual">
     <p>This popover requires explicit closing</p>
-    <button>Close Popover</button>
+    <pds-button onClick={() => handleManualClose()}>Close Popover</pds-button>
   </pds-popover>
 </DocCanvas>
 
