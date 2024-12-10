@@ -103,7 +103,6 @@ export class PdsPopover {
   handleClick(event: MouseEvent) {
 
     if (event.composedPath()[0] !== this.el.shadowRoot.querySelector('.pds-popover__trigger')) {
-      // event.stopPropagation();
       return;
     }
 

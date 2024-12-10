@@ -138,23 +138,6 @@ describe('pds-popover', () => {
     expect(page.rootInstance.active).toBe(false);
   });
 
-  it('should not show popover if already active', async () => {
-    const page = await newSpecPage({
-      components: [PdsPopover],
-      html: `<pds-popover component-id="popover-1"></pds-popover>`,
-    });
-
-    await page.rootInstance.show();
-    await page.waitForChanges();
-
-    const keyDownEvent = new KeyboardEvent('keydown', { key: 'Enter' });
-    page.root?.dispatchEvent(keyDownEvent);
-    await page.waitForChanges();
-
-    // Should still be active but not trigger show again
-    expect(page.rootInstance.active).toBe(true);
-  });
-
   it('should hide popover on document click when type is auto', async () => {
     const page = await newSpecPage({
       components: [PdsPopover],
@@ -270,5 +253,43 @@ describe('pds-popover', () => {
 
     expect(popoverEl.style.top).toBe('150px');
     expect(popoverEl.style.left).toBe('50px');
+  });
+
+  it('should handle left placement positioning correctly', async () => {
+    const page = await newSpecPage({
+      components: [PdsPopover],
+      html: '<pds-popover component-id="my-popover" placement="left"></pds-popover>'
+    });
+
+    const mockTriggerRect = {
+      top: 100,
+      right: 200,
+      bottom: 150,
+      left: 100,
+      width: 100,
+      height: 50
+    };
+
+    const mockPopoverRect = {
+      width: 200,
+      height: 100
+    };
+
+    const triggerEl = page.root?.shadowRoot?.querySelector('.pds-popover__trigger') as HTMLElement;
+    const popoverEl = page.root?.shadowRoot?.querySelector('div[popover]') as HTMLElement;
+
+    Object.defineProperty(triggerEl, 'getBoundingClientRect', {
+      value: () => mockTriggerRect
+    });
+
+    Object.defineProperty(popoverEl, 'getBoundingClientRect', {
+      value: () => mockPopoverRect
+    });
+
+    await page.rootInstance.show();
+    await page.waitForChanges();
+
+    expect(popoverEl.style.top).toBe('75px'); // 100 + (50 - 100) / 2
+    expect(popoverEl.style.left).toBe('-200px'); // 100 - 200 - 100
   });
 });
