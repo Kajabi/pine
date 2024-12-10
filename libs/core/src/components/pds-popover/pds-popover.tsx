@@ -66,21 +66,28 @@ export class PdsPopover {
     capture: true
   })
   handleKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Enter' || event.key === ' ' && !this.active) {
-      if (this.active) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      if (!this.active) {
+        if (this.active) {
+          event.stopPropagation();
+          return;
+        }
+        const closestTarget = (event.target as HTMLElement).shadowRoot.querySelector(".pds-popover__trigger");
+        if (closestTarget) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+
+        this.show();
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      } else {
+        this.hide();
+        event.preventDefault();
         event.stopPropagation();
         return;
       }
-      const closestTarget = (event.target as HTMLElement).shadowRoot.querySelector(".pds-popover__trigger");
-      if (closestTarget) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-
-      this.show();
-      event.preventDefault();
-      event.stopPropagation();
-      return;
     }
 
     if (event.key === 'Escape' && this.active) {
@@ -96,7 +103,7 @@ export class PdsPopover {
   handleClick(event: MouseEvent) {
 
     if (event.composedPath()[0] !== this.el.shadowRoot.querySelector('.pds-popover__trigger')) {
-      event.stopPropagation();
+      // event.stopPropagation();
       return;
     }
 
