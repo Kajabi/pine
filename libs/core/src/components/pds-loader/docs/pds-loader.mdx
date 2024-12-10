@@ -3,11 +3,22 @@ import { components } from '../../../../dist/docs.json';
 
 # Loader
 
-A Loader is used to denote content on the page that is currently processing or loading.
+The Loader component is a visual indicator that informs users an operation is in progress, enhancing the user experience by providing feedback during potentially time-consuming tasks.
 
 ## Guidelines
 
-### Accessibility
+### When to use
+
+- Display the Loader when retrieving data from an API or database to indicate that content is loading.
+- Use the Loader to show that a form is being submitted.
+- Implement the Loader during navigation between pages to indicate that a new page is loading.
+
+### When not to use
+
+- Avoid using the Loader for actions that complete quickly, as it may cause unncessary distraction.
+- Do not use the Loader for background tasks that do not require user interaction.
+
+## Accessibility
 
 Dynamic content on a page that does not require a page load is considered a live region. A loader can be used to convey to the user that the live region will be updated. The appropriate aria role, `aria-live`, is already set on the loader component when `is-loading` is set to `true`. When `is-loading` is set to `false`, `aria-hidden` is added to the component to hide it from the accessibility tree. For more information about live regions, please refer to [MDN's article.](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions)
 
