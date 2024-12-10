@@ -72,7 +72,7 @@ export const handleManualClose = () => {
 
       <PdsPopover componentId="manual" text="Manual Popover" popoverType="manual">
         <p>This popover requires explicit closing</p>
-        <button onClick={() => handleManualClose()}>Close Popover</button>
+        <pds-button onClick={() => handleManualClose()}>Close Popover</pds-button>
       </PdsPopover>
     `,
     webComponent: `
@@ -83,7 +83,7 @@ export const handleManualClose = () => {
 
       <pds-popover component-id="manual" text="Manual Popover" popover-type="manual">
         <p>This popover requires explicit closing</p>
-        <button onClick={() => handleManualClose()}>Close Popover</button>
+        <pds-button onClick={() => handleManualClose()}>Close Popover</pds-button>
       </pds-popover>
     `
   }}>
