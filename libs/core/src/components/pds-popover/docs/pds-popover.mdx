@@ -44,7 +44,9 @@ Closes automatically when clicking outside the popover content. Can also be clos
 #### Manual
 Popovers with the `popoverType="manual"` require explicit user interaction to close. This means they won't automatically disappear when clicking outside or pressing Escape.
 
-To implement this:
+- add `popoverTargetAction="toggle"` to the popover to allow the user to close it by clicking the trigger button.
+
+{/* To implement this:
 
 1. Create a Closing Function:
 
@@ -55,7 +57,7 @@ To implement this:
 2. Attach Function to onClick:
 
     - Assign the `handleManualClose` function to the `onClick` event of the button within the popover.
-    - This ensures that when the user clicks the "Close Popover" button, the `handleManualClose` function is executed, and the popover is hidden.
+    - This ensures that when the user clicks the "Close Popover" button, the `handleManualClose` function is executed, and the popover is hidden. */}
 
 export const handleManualClose = () => {
   const popover = document.querySelector('pds-popover[component-id="manual"]');
@@ -65,31 +67,18 @@ export const handleManualClose = () => {
 <DocCanvas client:only
   mdxSource={{
     react: `
-      export const handleManualClose = () => {
-        const popover = document.querySelector('pds-popover[component-id="manual"]');
-        popover.hide();
-      };
-
-      <PdsPopover componentId="manual" text="Manual Popover" popoverType="manual">
+      <PdsPopover componentId="manual" text="Manual Popover" popoverTargetAction="toggle" popoverType="manual">
         <p>This popover requires explicit closing</p>
-        <pds-button onClick={() => handleManualClose()}>Close Popover</pds-button>
       </PdsPopover>
     `,
     webComponent: `
-      export const handleManualClose = () => {
-        const popover = document.querySelector('pds-popover[component-id="manual"]');
-        popover.hide();
-      };
-
-      <pds-popover component-id="manual" text="Manual Popover" popover-type="manual">
+      <pds-popover component-id="manual" text="Manual Popover" popover-target-action="toggle" popover-type="manual">
         <p>This popover requires explicit closing</p>
-        <pds-button onClick={() => handleManualClose()}>Close Popover</pds-button>
       </pds-popover>
     `
   }}>
-  <pds-popover component-id="manual" text="Manual Popover" popover-type="manual">
+  <pds-popover component-id="manual" text="Manual Popover" popover-target-action="toggle" popover-type="manual">
     <p>This popover requires explicit closing</p>
-    <pds-button onClick={() => handleManualClose()}>Close Popover</pds-button>
   </pds-popover>
 </DocCanvas>
 
@@ -135,27 +124,6 @@ Toggles the popover visibility state when triggered. Clicking the popover trigge
   }}>
   <pds-popover component-id="toggle" text="Toggle Action" popover-target-action="toggle">
     <p>This popover uses the toggle action</p>
-  </pds-popover>
-</DocCanvas>
-
-#### Hide
-Hides the popover when triggered. Useful when combined with programmatic show/hide control from an outside source.
-
-<DocCanvas client:only
-  mdxSource={{
-    react: `
-      <PdsPopover componentId="hide" text="Hide Action" popoverTargetAction="hide">
-        <p>This popover uses the hide action</p>
-      </PdsPopover>
-    `,
-    webComponent: `
-      <pds-popover component-id="hide" text="Hide Action" popover-target-action="hide">
-        <p>This popover uses the hide action</p>
-      </pds-popover>
-    `
-  }}>
-  <pds-popover component-id="hide" text="Hide Action" popover-target-action="hide">
-    <p>This popover uses the hide action</p>
   </pds-popover>
 </DocCanvas>
 

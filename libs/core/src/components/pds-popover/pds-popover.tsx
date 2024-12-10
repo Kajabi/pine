@@ -22,7 +22,7 @@ export class PdsPopover {
    * Determines the action that triggers the popover
    * @defaultValue "show"
    */
-  @Prop() popoverTargetAction: 'show' | 'toggle' | 'hide' = 'show';
+  @Prop() popoverTargetAction: 'show' | 'toggle' = 'show';
 
   /**
    * Determines the type of popover. Auto popovers can be "light dismissed" by clicking outside of the popover.
@@ -68,22 +68,7 @@ export class PdsPopover {
   handleKeyDown(event: KeyboardEvent) {
     if (event.key === 'Enter' || event.key === ' ') {
       if (!this.active) {
-        if (this.active) {
-          event.stopPropagation();
-          return;
-        }
-        const closestTarget = (event.target as HTMLElement).shadowRoot.querySelector(".pds-popover__trigger");
-        if (closestTarget) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-
         this.show();
-        event.preventDefault();
-        event.stopPropagation();
-        return;
-      } else {
-        this.hide();
         event.preventDefault();
         event.stopPropagation();
         return;
@@ -101,11 +86,6 @@ export class PdsPopover {
     capture: true
   })
   handleClick(event: MouseEvent) {
-
-    if (event.composedPath()[0] !== this.el.shadowRoot.querySelector('.pds-popover__trigger')) {
-      return;
-    }
-
     if (!this.active) {
       this.show();
     }
