@@ -292,4 +292,26 @@ describe('pds-popover', () => {
     expect(popoverEl.style.top).toBe('75px'); // 100 + (50 - 100) / 2
     expect(popoverEl.style.left).toBe('-200px'); // 100 - 200 - 100
   });
+
+  it('should handle scroll events and update positioning when active', async () => {
+    const page = await newSpecPage({
+      components: [PdsPopover],
+      html: '<pds-popover component-id="my-popover"></pds-popover>'
+    });
+
+    const positioningSpy = jest.spyOn(page.rootInstance as any, 'handlePopoverPositioning');
+
+    window.dispatchEvent(new Event('scroll'));
+    await page.waitForChanges();
+    expect(positioningSpy).not.toHaveBeenCalled();
+
+    await page.rootInstance.show();
+    await page.waitForChanges();
+
+    positioningSpy.mockClear();
+
+    window.dispatchEvent(new Event('scroll'));
+    await page.waitForChanges();
+    expect(positioningSpy).toHaveBeenCalled();
+  });
 });
