@@ -484,10 +484,6 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Hides the popover by disabling the active state
-         */
-        "hide": () => Promise<void>;
-        /**
           * Sets the maximum width of the popover content
           * @defaultValue 352
          */
@@ -506,10 +502,6 @@ export namespace Components {
           * Determines the type of popover. Auto popovers can be "light dismissed" by clicking outside of the popover. Manual popovers require the consumer to handle the visibility of the popover.
          */
         "popoverType": 'auto' | 'manual';
-        /**
-          * Shows the popover by enabling the active state
-         */
-        "show": () => Promise<void>;
         /**
           * Text that appears on the trigger element
          */
@@ -1036,10 +1028,6 @@ export interface PdsInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsInputElement;
 }
-export interface PdsPopoverCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLPdsPopoverElement;
-}
 export interface PdsRadioCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsRadioElement;
@@ -1209,19 +1197,7 @@ declare global {
         prototype: HTMLPdsLoaderElement;
         new (): HTMLPdsLoaderElement;
     };
-    interface HTMLPdsPopoverElementEventMap {
-        "showPdsPopover": any;
-        "hidePdsPopover": any;
-    }
     interface HTMLPdsPopoverElement extends Components.PdsPopover, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLPdsPopoverElementEventMap>(type: K, listener: (this: HTMLPdsPopoverElement, ev: PdsPopoverCustomEvent<HTMLPdsPopoverElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLPdsPopoverElementEventMap>(type: K, listener: (this: HTMLPdsPopoverElement, ev: PdsPopoverCustomEvent<HTMLPdsPopoverElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsPopoverElement: {
         prototype: HTMLPdsPopoverElement;
@@ -1980,14 +1956,6 @@ declare namespace LocalJSX {
           * @defaultValue 352
          */
         "maxWidth"?: number;
-        /**
-          * Emitted when the popover is hidden
-         */
-        "onHidePdsPopover"?: (event: PdsPopoverCustomEvent<any>) => void;
-        /**
-          * Emitted when the popover is shown
-         */
-        "onShowPdsPopover"?: (event: PdsPopoverCustomEvent<any>) => void;
         /**
           * Determines the preferred position of the popover
           * @defaultValue "right"

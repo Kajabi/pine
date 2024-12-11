@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, Host, Listen, h, Method, Prop, State , Build} from '@stencil/core';
+import { Component, Element, Host, Listen, h, Prop, State } from '@stencil/core';
 import { PlacementType } from '@utils/types';
 
 @Component({
@@ -52,54 +52,15 @@ export class PdsPopover {
    */
   @Prop({ reflect: true }) placement: PlacementType = 'right';
 
-  /**
-   * Emitted when the popover is shown
-   */
-  @Event() showPdsPopover: EventEmitter;
-
-  /**
-   * Emitted when the popover is hidden
-   */
-  @Event() hidePdsPopover: EventEmitter;
-
-  @Listen('keydown', {
-    capture: true
-  })
-  handleKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Enter' || event.key === ' ') {
-      if (!this.active) {
-        this.show();
-        event.preventDefault();
-        event.stopPropagation();
-        return;
-      }
-    }
-
-    if (event.key === 'Escape' && this.active) {
-      this.hide();
-      event.preventDefault();
-      event.stopPropagation();
-    }
+  componentWillRender() {
+    this.handlePopoverPositioning();
   }
 
   @Listen('click', {
     capture: true
   })
-  handleClick(event: MouseEvent) {
-    if (!this.active) {
-      this.show();
-    }
-    event.stopPropagation();
-  }
-
-  @Listen('click', {
-    target: 'document'
-  })
-  handleDocumentClick(event: MouseEvent) {
-    if (this.active && this.popoverType !== 'manual') {
-      this.hide();
-      event.stopPropagation();
-    }
+  handleClick() {
+    this.active = !this.active;
   }
 
   @Listen('scroll', {
@@ -123,60 +84,29 @@ export class PdsPopover {
 
     let top = 0;
     let left = 0;
-    // right and bottom are working, but left and top are overlapping the trigger
+    const offset = 8
 
     switch (this.placement) {
       case 'top':
-        top = triggerRect.top - popoverRect.height;
-        left = triggerRect.left + (triggerRect.width - popoverRect.width) / 2;
+        top = triggerRect.top - popoverRect.height - offset;
+        left = triggerRect.left;
         break;
       case 'right':
-        top = triggerRect.top + (triggerRect.height - popoverRect.height) / 2;
-        left = triggerRect.right;
+        top = triggerRect.top;
+        left = triggerRect.right + offset;
         break;
       case 'bottom':
-        top = triggerRect.bottom;
-        left = triggerRect.left + (triggerRect.width - popoverRect.width) / 2;
+        top = triggerRect.bottom + offset;
+        left = triggerRect.left;
         break;
       case 'left':
-        top = triggerRect.top + (triggerRect.height - popoverRect.height) / 2;
-        left = triggerRect.left - popoverRect.width - triggerRect.width;
+        top = triggerRect.top;
+        left = triggerRect.left - popoverRect.width - offset;
         break;
     }
 
     popoverEl.style.top = `${top}px`;
     popoverEl.style.left = `${left}px`;
-  }
-
-  /**
-   * Shows the popover by enabling the active state
-   */
-  @Method()
-  async show() {
-    this.active = true;
-    this.handlePopoverPositioning();
-
-    const popoverElement = this.el.shadowRoot.querySelector('[popover]') as HTMLElement;
-    if (Build.isBrowser) {
-      popoverElement.showPopover();
-    }
-
-    this.showPdsPopover.emit();
-  }
-
-  /**
-   * Hides the popover by disabling the active state
-   */
-  @Method()
-  async hide() {
-    this.active = false;
-    const popoverElement = this.el.shadowRoot.querySelector('[popover]') as HTMLElement;
-
-    if (Build.isBrowser) {
-      popoverElement.hidePopover();
-    }
-
-    this.hidePdsPopover.emit();
   }
 
   render() {
@@ -186,7 +116,6 @@ export class PdsPopover {
           class="pds-popover__trigger"
           popoverTarget={this.componentId}
           popoverTargetAction={this.popoverTargetAction}
-          onKeyDown={this.handleKeyDown}
           onClick={this.handleClick}
         >
           {this.text}

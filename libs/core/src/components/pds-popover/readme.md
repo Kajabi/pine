@@ -17,37 +17,6 @@
 | `text`                | `text`                  | Text that appears on the trigger element                                                                                                                                                 | `string`                                                                                                                                                             | `undefined` |
 
 
-## Events
-
-| Event            | Description                        | Type               |
-| ---------------- | ---------------------------------- | ------------------ |
-| `hidePdsPopover` | Emitted when the popover is hidden | `CustomEvent<any>` |
-| `showPdsPopover` | Emitted when the popover is shown  | `CustomEvent<any>` |
-
-
-## Methods
-
-### `hide() => Promise<void>`
-
-Hides the popover by disabling the active state
-
-#### Returns
-
-Type: `Promise<void>`
-
-
-
-### `show() => Promise<void>`
-
-Shows the popover by enabling the active state
-
-#### Returns
-
-Type: `Promise<void>`
-
-
-
-
 ----------------------------------------------
 
 
