@@ -4,7 +4,7 @@ import { danger } from '@pine-ds/icons/icons';
 
 @Component({
   tag: 'pds-input',
-  styleUrls: ['pds-input.tokens.scss', 'pds-input.scss'],
+  styleUrls: ['pds-input.tokens.scss', '../../global/styles/utils/label.scss', 'pds-input.scss'],
   shadow: true,
 })
 export class PdsInput {
