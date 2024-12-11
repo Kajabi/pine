@@ -494,7 +494,7 @@ export namespace Components {
          */
         "placement": PlacementType;
         /**
-          * Determines the action that triggers the popover
+          * Determines the action that triggers the popover. For manual popovers, the consumer is responsible for toggling this value.
           * @defaultValue "show"
          */
         "popoverTargetAction": 'show' | 'toggle';
@@ -1962,7 +1962,7 @@ declare namespace LocalJSX {
          */
         "placement"?: PlacementType;
         /**
-          * Determines the action that triggers the popover
+          * Determines the action that triggers the popover. For manual popovers, the consumer is responsible for toggling this value.
           * @defaultValue "show"
          */
         "popoverTargetAction"?: 'show' | 'toggle';

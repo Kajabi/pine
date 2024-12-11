@@ -19,7 +19,7 @@ export class PdsPopover {
   @State() active = false;
 
   /**
-   * Determines the action that triggers the popover
+   * Determines the action that triggers the popover. For manual popovers, the consumer is responsible for toggling this value.
    * @defaultValue "show"
    */
   @Prop() popoverTargetAction: 'show' | 'toggle' = 'show';
