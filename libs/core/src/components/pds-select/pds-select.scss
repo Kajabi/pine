@@ -1,0 +1,142 @@
+:host {
+  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
+  --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-red-300);
+
+  --color-background-disabled: var(--pine-color-grey-100);
+  --color-background-error: var(--pine-color-red-050);
+  --color-border-active: var(--pine-color-grey-400);
+  --color-border-default: var(--pine-color-grey-300);
+  --color-border-disabled: var(--pine-color-grey-200);
+  --color-border-error: var(--pine-color-red-600);
+  --color-border-hover: var(--pine-color-grey-500);
+  --color-text-disabled: var(--pine-color-grey-600);
+  --color-text-error: var(--pine-color-red-600);
+
+  --font-size-helper-message: var(--pine-font-size-085);
+  --font-size-select-field: var(--pine-font-size-100);
+  --font-size-label: var(--pine-font-size-100);
+  --font-weight-helper-message: var(--pine-font-weight-normal);
+  --font-weight-select-field: var(--pine-font-weight-normal);
+  --font-weight-label: var(--pine-font-weight-medium);
+
+  --line-height-label: var(--pine-line-height-150);
+  --line-height-helper-message: var(--pine-line-height-125);
+  --line-height-select-field: var(--pine-line-height-150);
+
+  --spacing-error-message: var(--pine-spacing-050);
+  --spacing-field-padding-block: var(--pine-spacing-100);
+  --spacing-label-margin-block-end: var(--pine-spacing-100);
+  --spacing-margin-top-helper-message: var(--pine-spacing-100);
+  --spacing-select-field-padding-inline: var(--pine-spacing-150);
+  --spacing-select-field-icon-allowance: var(--pine-spacing-450);
+
+  .hidden,
+  :host([hidden]) {
+    display: none;
+  }
+}
+
+.pds-select {
+  display: grid;
+  flex-direction: column;
+  grid-template-areas:
+    'label label'
+    'field field'
+    'message message';
+  grid-template-columns: 1fr minmax(2rem, min-content);
+  grid-template-rows: min-content min-content min-content;
+  position: relative;
+  width: 100%;
+}
+
+label {
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-label);
+  grid-area: label;
+  line-height: var(--line-height-label);
+  margin-block-end: var(--spacing-label-margin-block-end);
+}
+
+select {
+  appearance: none;
+  border: 1px solid var(--color-border-default);
+  border-radius: 10px;
+  font-size: var(--font-size-select-field);
+  font-weight: var(--font-weight-select-field);
+  grid-area: field;
+  line-height: var(--line-height-select-field);
+  padding: var(--spacing-field-padding-block) var(--spacing-select-field-padding-inline);
+  padding-right: var(--spacing-select-field-icon-allowance);
+  position: relative;
+
+  &:hover {
+    border-color: var(--color-border-hover);
+    cursor: pointer;
+  }
+
+  &:focus-visible {
+    border-color: var(--color-border-active);
+    box-shadow: var(--box-shadow-focus);
+    outline: none;
+  }
+
+  &:disabled {
+    background-color: var(--color-background-disabled);
+    border-color: var(--color-border-disabled);
+    color: var(--color-text-disabled);
+    cursor: not-allowed;
+  }
+
+  &:has(~ .pds-select__message .pds-select__error-message) {
+    background-color: var(--color-background-error);
+    border-color: var(--color-border-error);
+
+    &:focus-visible {
+      box-shadow: var(--box-shadow-focus-error);
+      outline: none;
+    }
+  }
+}
+
+:host(.is-invalid) {
+  select {
+    background-color: var(--color-background-error);
+    border-color: var(--color-border-error);
+
+    &:focus-visible {
+      box-shadow: var(--box-shadow-focus-error);
+      outline: none;
+    }
+  }
+}
+
+.pds-select__error-message,
+.pds-select__helper-message {
+  font-size: var(--font-size-helper-message);
+  font-weight: var(--font-weight-helper-message);
+  line-height: var(--line-height-helper-message);
+  margin-block-end: 0;
+  margin-block-start: var(--spacing-margin-top-helper-message);
+}
+
+.pds-select__error-message {
+  align-items: center;
+  color: var(--color-text-error);
+  display: flex;
+  gap: var(--spacing-error-message);
+}
+
+.pds-select__message {
+  grid-area: message;
+}
+
+.pds-select__select-icon {
+  align-items: center;
+  display: flex;
+  grid-column: -1 / -2;
+  grid-row: 2 / 3;
+  height: 2.5rem;
+  pointer-events: none;
+  position: relative;
+  z-index: 1;
+}

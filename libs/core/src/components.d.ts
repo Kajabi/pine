@@ -584,6 +584,55 @@ export namespace Components {
          */
         "noWrap"?: boolean;
     }
+    interface PdsSelect {
+        /**
+          * Specifies if and how the browser provides `autocomplete` assistance for the field.
+         */
+        "autocomplete": string;
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * Indicates whether or not the select field is disabled.
+          * @defaultValue false
+         */
+        "disabled": boolean;
+        /**
+          * Specifies the error message and provides an error-themed treatment to the field.
+         */
+        "errorMessage": string;
+        /**
+          * Displays a message or hint below the input field.
+         */
+        "helperMessage": string;
+        /**
+          * Indicates whether or not the input field is invalid or throws an error.
+         */
+        "invalid"?: boolean;
+        /**
+          * Text to be displayed as the select label.
+         */
+        "label": string;
+        /**
+          * Indicates whether multiple options can be selected.
+          * @defaultValue false
+         */
+        "multiple": boolean;
+        /**
+          * Specifies the name. Submitted with the form name/value pair.
+         */
+        "name": string;
+        /**
+          * Indicates whether or not the select field is required.
+          * @defaultValue false
+         */
+        "required": boolean;
+        /**
+          * The value(s) of the selected option(s).
+         */
+        "value"?: string | string[];
+    }
     interface PdsSortable {
         /**
           * Determines whether `sortable` should have a border.
@@ -948,6 +997,10 @@ export interface PdsRadioCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsRadioElement;
 }
+export interface PdsSelectCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsSelectElement;
+}
 export interface PdsSortableCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsSortableElement;
@@ -1126,6 +1179,23 @@ declare global {
     var HTMLPdsRowElement: {
         prototype: HTMLPdsRowElement;
         new (): HTMLPdsRowElement;
+    };
+    interface HTMLPdsSelectElementEventMap {
+        "pdsSelectChange": InputEvent;
+    }
+    interface HTMLPdsSelectElement extends Components.PdsSelect, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsSelectElementEventMap>(type: K, listener: (this: HTMLPdsSelectElement, ev: PdsSelectCustomEvent<HTMLPdsSelectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsSelectElementEventMap>(type: K, listener: (this: HTMLPdsSelectElement, ev: PdsSelectCustomEvent<HTMLPdsSelectElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLPdsSelectElement: {
+        prototype: HTMLPdsSelectElement;
+        new (): HTMLPdsSelectElement;
     };
     interface HTMLPdsSortableElementEventMap {
         "pdsSortableItemMoved": any;
@@ -1322,6 +1392,7 @@ declare global {
         "pds-progress": HTMLPdsProgressElement;
         "pds-radio": HTMLPdsRadioElement;
         "pds-row": HTMLPdsRowElement;
+        "pds-select": HTMLPdsSelectElement;
         "pds-sortable": HTMLPdsSortableElement;
         "pds-sortable-item": HTMLPdsSortableItemElement;
         "pds-switch": HTMLPdsSwitchElement;
@@ -1933,6 +2004,59 @@ declare namespace LocalJSX {
          */
         "noWrap"?: boolean;
     }
+    interface PdsSelect {
+        /**
+          * Specifies if and how the browser provides `autocomplete` assistance for the field.
+         */
+        "autocomplete"?: string;
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * Indicates whether or not the select field is disabled.
+          * @defaultValue false
+         */
+        "disabled"?: boolean;
+        /**
+          * Specifies the error message and provides an error-themed treatment to the field.
+         */
+        "errorMessage"?: string;
+        /**
+          * Displays a message or hint below the input field.
+         */
+        "helperMessage"?: string;
+        /**
+          * Indicates whether or not the input field is invalid or throws an error.
+         */
+        "invalid"?: boolean;
+        /**
+          * Text to be displayed as the select label.
+         */
+        "label"?: string;
+        /**
+          * Indicates whether multiple options can be selected.
+          * @defaultValue false
+         */
+        "multiple"?: boolean;
+        /**
+          * Specifies the name. Submitted with the form name/value pair.
+         */
+        "name": string;
+        /**
+          * Emitted when a keyboard input occurred.
+         */
+        "onPdsSelectChange"?: (event: PdsSelectCustomEvent<InputEvent>) => void;
+        /**
+          * Indicates whether or not the select field is required.
+          * @defaultValue false
+         */
+        "required"?: boolean;
+        /**
+          * The value(s) of the selected option(s).
+         */
+        "value"?: string | string[];
+    }
     interface PdsSortable {
         /**
           * Determines whether `sortable` should have a border.
@@ -2317,6 +2441,7 @@ declare namespace LocalJSX {
         "pds-progress": PdsProgress;
         "pds-radio": PdsRadio;
         "pds-row": PdsRow;
+        "pds-select": PdsSelect;
         "pds-sortable": PdsSortable;
         "pds-sortable-item": PdsSortableItem;
         "pds-switch": PdsSwitch;
@@ -2353,6 +2478,7 @@ declare module "@stencil/core" {
             "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-radio": LocalJSX.PdsRadio & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
             "pds-row": LocalJSX.PdsRow & JSXBase.HTMLAttributes<HTMLPdsRowElement>;
+            "pds-select": LocalJSX.PdsSelect & JSXBase.HTMLAttributes<HTMLPdsSelectElement>;
             "pds-sortable": LocalJSX.PdsSortable & JSXBase.HTMLAttributes<HTMLPdsSortableElement>;
             "pds-sortable-item": LocalJSX.PdsSortableItem & JSXBase.HTMLAttributes<HTMLPdsSortableItemElement>;
             "pds-switch": LocalJSX.PdsSwitch & JSXBase.HTMLAttributes<HTMLPdsSwitchElement>;

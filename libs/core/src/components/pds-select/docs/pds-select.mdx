@@ -1,0 +1,274 @@
+import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+# Select
+
+The select field, when combined with a label, helper message, and error text, offers a comprehensive control that provides a menu of options for user selection. This ensures clarity and guidance for the user, enhancing the overall user experience.
+
+## Guidelines
+
+### Usage
+
+#### When to use
+
+- When you want to provide a list of options for the user to choose from.
+- **Example**: Use a select component to choose a state from a list of U.S. regions.
+
+### Accessibility
+
+- The select component comes with a built-in label through the `label` property, it is strongly encouraged that you include it.
+- Please provide clear and descriptive error, and helper-message text.
+- Selects can have a default option that is not selectable.
+
+## Properties
+
+<DocArgsTable componentName="pds-select" docSource={components} />
+
+### Default
+
+This example shows the default state of the select component with a label and a list of options. The user can choose one of the options from the dropdown menu.
+
+<DocCanvas
+  client:only
+  mdxSource={{
+    react: `
+      <PdsSelect componentId="pds-select-default-example" label="Name" value="paul">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </PdsSelect>`,
+    webComponent: `
+      <pds-select component-id="pds-select-default-example" label="Name" value="paul">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </pds-select>`,
+  }}
+>
+  <div style={{ padding: '20px', width: '100%' }}>
+    <pds-select component-id="pds-select-default-example" label="Name" value="paul">
+      <option value="paul">Paul McCartney</option>
+      <option value="john">John Lennon</option>
+      <option value="george">George Harrison</option>
+      <option value="ringo">Ringo Starr</option>
+    </pds-select>
+  </div>
+</DocCanvas>
+
+### Disabled
+
+This example demonstrates the select component in a disabled state. The user cannot interact with the dropdown menu or select any options.
+
+<DocCanvas
+  client:only
+  mdxSource={{
+    react: `
+      <PdsSelect componentId="pds-select-disabled-example" disabled="true" label="Name" value="george">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </PdsSelect>`,
+    webComponent: `
+      <pds-select component-id="pds-select-disabled-example" disabled="true" label="Name" value="george">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </pds-select>`,
+  }}
+>
+  <div style={{ padding: '20px', width: '100%' }}>
+    <pds-select component-id="pds-select-disabled-example" disabled="true" label="Name" value="george">
+      <option value="paul">Paul McCartney</option>
+      <option value="john">John Lennon</option>
+      <option value="george">George Harrison</option>
+      <option value="ringo">Ringo Starr</option>
+    </pds-select>
+  </div>
+</DocCanvas>
+
+### With Message
+
+This example includes a helper message that provides additional context or instructions for the user. The helper message appears below the select component.
+
+<DocCanvas
+  client:only
+  mdxSource={{
+    react: `
+      <PdsSelect componentId="pds-select-with-message-example" label="Name" helper-message="This is a helper message to convey extra context for the select" value="john">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </PdsSelect>`,
+    webComponent: `
+      <pds-select component-id="pds-select-with-message-example" label="Name" helper-message="This is a helper message to convey extra context for the select" value="john">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </pds-select>`,
+  }}
+>
+  <div style={{ padding: '20px', width: '100%' }}>
+    <pds-select component-id="pds-select-with-message-example" helper-message="This is a helper message to convey extra context for the select" label="Name" value="john">
+      <option value="paul">Paul McCartney</option>
+      <option value="john">John Lennon</option>
+      <option value="george">George Harrison</option>
+      <option value="ringo">Ringo Starr</option>
+    </pds-select>
+  </div>
+</DocCanvas>
+
+### Invalid
+
+This example shows the select component with an error message. The error message provides feedback to the user when there is an issue with their selection.
+
+<DocCanvas
+  client:only
+  mdxSource={{
+    react: `
+      <PdsSelect componentId="pds-select-invalid-example" label="Name" invalid="true" error-message="This is an error message to convey extra context for the select" value="ringo">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </PdsSelect>`,
+    webComponent: `
+      <pds-select component-id="pds-select-invalid-example" label="Name" invalid="true" error-message="This is an error message to convey extra context for the select" value="ringo">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </pds-select>`,
+  }}
+>
+  <div style={{ padding: '20px', width: '100%' }}>
+    <pds-select component-id="pds-select-invalid-example" invalid="true" error-message="This is an error message to convey extra context for the select" label="Name" value="ringo">
+      <option value="paul">Paul McCartney</option>
+      <option value="john">John Lennon</option>
+      <option value="george">George Harrison</option>
+      <option value="ringo">Ringo Starr</option>
+    </pds-select>
+  </div>
+</DocCanvas>
+
+### Autocomplete
+
+This example demonstrates the select component with the autocomplete attribute enabled. The browser may provide autocomplete suggestions based on the user's input.
+
+<DocCanvas
+  client:only
+  mdxSource={{
+    react: `
+      <PdsSelect autocomplete="on" componentId="pds-select-autocomplete-example" label="Name" value="paul">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </PdsSelect>`,
+    webComponent: `
+      <pds-select autocomplete="on" component-id="pds-select-autocomplete-example" label="Name" value="paul">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </pds-select>`,
+  }}
+>
+  <div style={{ padding: '20px', width: '100%' }}>
+    <pds-select autocomplete="on" component-id="pds-select-autocomplete-example" label="Name" value="paul">
+      <option value="paul">Paul McCartney</option>
+      <option value="john">John Lennon</option>
+      <option value="george">George Harrison</option>
+      <option value="ringo">Ringo Starr</option>
+    </pds-select>
+  </div>
+</DocCanvas>
+
+### Multiple
+
+This example demonstrates the select component with the multiple attribute enabled. The user can select multiple options from the select component.
+>Note: When the multiple attribute is enabled, the `value` property should be an array of selected values.
+
+<DocCanvas
+  client:only
+  mdxSource={{
+    react: `
+      <PdsSelect multiple componentId="pds-select-multiple-example" label="Name">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </PdsSelect>`,
+    webComponent: `
+      <pds-select multiple component-id="pds-select-multiple-example" label="Name">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </pds-select>`,
+  }}
+>
+  <div style={{ padding: '20px', width: '100%' }}>
+    <pds-select multiple component-id="pds-select-multiple-example" label="Name">
+      <option value="paul">Paul McCartney</option>
+      <option value="john">John Lennon</option>
+      <option value="george">George Harrison</option>
+      <option value="ringo">Ringo Starr</option>
+    </pds-select>
+  </div>
+</DocCanvas>
+
+### With Optgroup
+
+This example demonstrates the select component with grouped options using the <code>optgroup</code> element. The user can choose from options within different groups.
+
+<DocCanvas
+  client:only
+  mdxSource={{
+    react: `
+      <PdsSelect componentId="pds-select-optgroup-example" label="Name" value="george">
+        <optgroup label="Correct answers">
+          <option value="paul">Paul McCartney</option>
+          <option value="john">John Lennon</option>
+          <option value="george">George Harrison</option>
+        </optgroup>
+        <optgroup label="Incorrect answers">
+          <option value="ringo">Ringo Starr</option>
+        </optgroup>
+      </PdsSelect>`,
+    webComponent: `
+      <pds-select component-id="pds-select-optgroup-example" label="Name" value="george">
+        <optgroup label="Correct answers">
+          <option value="paul">Paul McCartney</option>
+          <option value="john">John Lennon</option>
+          <option value="george" selected>George Harrison</option>
+        </optgroup>
+        <optgroup label="Incorrect answers">
+          <option value="ringo">Ringo Starr</option>
+        </optgroup>
+      </pds-select>`,
+  }}
+>
+  <div style={{ padding: '20px', width: '100%' }}>
+    <pds-select component-id="pds-select-optgroup-example" label="Name" value="george">
+      <optgroup label="Correct answers">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+      </optgroup>
+      <optgroup label="Incorrect answers">
+        <option value="ringo">Ringo Starr</option>
+      </optgroup>
+    </pds-select>
+  </div>
+</DocCanvas>
+
+## Additional Resources
+
+[MDN Web Docs: Select](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select)
+[MDN Web Docs: HTML autocomplete attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete)
