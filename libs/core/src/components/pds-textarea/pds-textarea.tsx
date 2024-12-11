@@ -105,6 +105,7 @@ export class PdsTextarea {
     return (
       <Host
         aria-disabled={this.disabled ? 'true' : null}
+        aria-readonly={this.readonly ? 'true' : null}
       >
         <div class="pds-textarea">
           {this.label &&
