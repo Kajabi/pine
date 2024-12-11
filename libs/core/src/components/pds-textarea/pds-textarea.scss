@@ -6,15 +6,7 @@
   display: inline;
 }
 
-:host([aria-disabled="true"]) label {
-  color: var(--pine-color-text-label-disabled);
-}
-
 :host([aria-readonly="true"]) {
-  label {
-    color: var(--pine-color-text-label-readonly);
-  }
-
   textarea {
     background-color: var(--pine-color-background-container-disabled) ;
     color: var(--pine-color-text-readonly);
@@ -59,6 +51,7 @@ label {
   }
 
   &.is-invalid {
+    background-color: var(--pine-input-color-background-danger);
     border-color: var(--pine-color-border-danger);
 
     &:focus-visible {
