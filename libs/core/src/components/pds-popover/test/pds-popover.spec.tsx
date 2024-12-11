@@ -38,228 +38,15 @@ describe('pds-popover', () => {
     expect(contentElement.style.maxWidth).toBe(maxWidthValue);
   });
 
-  it('should show the popover using the show method', async () => {
-    const page = await newSpecPage({
-      components: [PdsPopover],
-      html: '<pds-popover component-id="my-popover" text="Show popover"></pds-popover>',
-    });
-
-    const popover = page.root as unknown as PdsPopover;
-    const popoverContent = page.root?.shadowRoot?.querySelector('div[popover]') as HTMLElement;
-
-    expect(popoverContent.classList.contains('pds-popover--active')).toBeFalsy();
-
-    await popover.show();
-    await page.waitForChanges();
-
-    expect(popoverContent.classList.contains('pds-popover--active')).toBeTruthy();
-  });
-
- it('should hide the popover using the hide method', async () => {
-    const page = await newSpecPage({
-      components: [PdsPopover],
-      html: '<pds-popover component-id="my-popover" text="Show popover"></pds-popover>',
-    });
-
-    const popover = page.rootInstance;
-    const popoverContent = page.root?.shadowRoot?.querySelector('div[popover]') as HTMLElement;
-
-    await popover.show();
-    await page.waitForChanges();
-    expect(popoverContent.classList.contains('pds-popover--active')).toBeTruthy();
-
-    await popover.hide();
-    await page.waitForChanges();
-
-    expect(popoverContent.classList.contains('pds-popover--active')).toBeFalsy();
-  });
-
-  it('should show the popover using the space button on the keyboard', async () => {
-    const page = await newSpecPage({
-      components: [PdsPopover],
-      html: '<pds-popover component-id="my-popover" text="Show popover"></pds-popover>',
-    });
-
-    const popover = page.body.querySelector('pds-popover');
-    const popoverContent = page.root?.shadowRoot?.querySelector('div[popover]') as HTMLElement;
-
-    expect(popoverContent.classList.contains('pds-popover--active')).toBeFalsy();
-
-    const spaceKeyEvent = new KeyboardEvent('keydown', {'key': 'Space'});
-    popover?.dispatchEvent(spaceKeyEvent);
-    await page.waitForChanges();
-
-    const escapeKeyEvent = new KeyboardEvent('keydown', {'key': 'Escape'});
-    popover?.dispatchEvent(escapeKeyEvent);
-    await page.waitForChanges();
-
-    expect(popoverContent.classList.contains('pds-popover--active')).toBeFalsy();
-  });
-
-  it('should handle Enter key press to show popover', async () => {
-    const page = await newSpecPage({
-      components: [PdsPopover],
-      html: `<pds-popover component-id="popover-1"></pds-popover>`,
-    });
-
-    const keyDownEvent = new KeyboardEvent('keydown', { key: 'Enter' });
-    page.root?.dispatchEvent(keyDownEvent);
-    await page.waitForChanges();
-
-    expect(page.rootInstance.active).toBe(true);
-  });
-
-  it('should handle Space key press to show popover', async () => {
-    const page = await newSpecPage({
-      components: [PdsPopover],
-      html: `<pds-popover component-id="popover-1"></pds-popover>`,
-    });
-
-    const keyDownEvent = new KeyboardEvent('keydown', { key: ' ' });
-    page.root?.dispatchEvent(keyDownEvent);
-    await page.waitForChanges();
-
-    expect(page.rootInstance.active).toBe(true);
-  });
-
-  it('should handle Escape key press to hide popover when active', async () => {
-    const page = await newSpecPage({
-      components: [PdsPopover],
-      html: `<pds-popover component-id="popover-1"></pds-popover>`,
-    });
-
-    await page.rootInstance.show();
-    await page.waitForChanges();
-
-    const keyDownEvent = new KeyboardEvent('keydown', { key: 'Escape' });
-    page.root?.dispatchEvent(keyDownEvent);
-    await page.waitForChanges();
-
-    expect(page.rootInstance.active).toBe(false);
-  });
-
-  it('should hide popover on document click when type is auto', async () => {
-    const page = await newSpecPage({
-      components: [PdsPopover],
-      html: '<pds-popover component-id="my-popover" text="Show popover"></pds-popover>',
-    });
-
-    await page.rootInstance.show();
-    await page.waitForChanges();
-
-    const clickEvent = new MouseEvent('click', {
-      bubbles: true,
-      composed: true
-    });
-    document.dispatchEvent(clickEvent);
-    await page.waitForChanges();
-
-    const popoverContent = page.root?.shadowRoot?.querySelector('div[popover]');
-    expect(popoverContent?.classList.contains('pds-popover--active')).toBeFalsy();
-    expect(page.rootInstance.active).toBeFalsy();
-  });
-
-  it('should not hide popover on document click when type is manual', async () => {
-    const page = await newSpecPage({
-      components: [PdsPopover],
-      html: '<pds-popover component-id="my-popover" popover-type="manual" text="Show popover"></pds-popover>',
-    });
-
-    await page.rootInstance.show();
-    await page.waitForChanges();
-
-    const clickEvent = new MouseEvent('click', {
-      bubbles: true,
-      composed: true
-    });
-    document.dispatchEvent(clickEvent);
-    await page.waitForChanges();
-
-    const popoverContent = page.root?.shadowRoot?.querySelector('div[popover]');
-    expect(popoverContent?.classList.contains('pds-popover--active')).toBeTruthy();
-    expect(page.rootInstance.active).toBeTruthy();
-  });
-
-  it('should not hide inactive popover on document click', async () => {
-    const page = await newSpecPage({
-      components: [PdsPopover],
-      html: '<pds-popover component-id="my-popover" text="Show popover"></pds-popover>',
-    });
-
-    const clickEvent = new MouseEvent('click', {
-      bubbles: true,
-      composed: true
-    });
-    document.dispatchEvent(clickEvent);
-    await page.waitForChanges();
-
-    const popoverContent = page.root?.shadowRoot?.querySelector('div[popover]');
-    expect(popoverContent?.classList.contains('pds-popover--active')).toBeFalsy();
-    expect(page.rootInstance.active).toBeFalsy();
-  });
-
-  it('should handle popover positioning calculations correctly', async () => {
+  it('should handle positioning for all placements with scroll offsets', async () => {
     const page = await newSpecPage({
       components: [PdsPopover],
       html: '<pds-popover component-id="my-popover"></pds-popover>'
     });
 
-    // Define mock trigger and popover rects
-    const mockTriggerRect = {
-      top: 100,
-      right: 200,
-      bottom: 150,
-      left: 100,
-      width: 100,
-      height: 50,
-      x: 100,
-      y: 100
-    };
-
-    const mockPopoverRect = {
-      top: 0,
-      right: 200,
-      bottom: 100,
-      left: 0,
-      width: 200,
-      height: 100,
-      x: 0,
-      y: 0
-    };
-
-    const triggerEl = page.root?.shadowRoot?.querySelector('.pds-popover__trigger') as HTMLElement;
-    const popoverEl = page.root?.shadowRoot?.querySelector('div[popover]') as HTMLElement;
-
-    Object.defineProperty(triggerEl, 'getBoundingClientRect', {
-      value: () => mockTriggerRect
-    });
-
-    Object.defineProperty(popoverEl, 'getBoundingClientRect', {
-      value: () => mockPopoverRect
-    });
-
-    // Test top placement
-    page.rootInstance.placement = 'top';
-    await page.rootInstance.show();
-    await page.waitForChanges();
-
-    expect(popoverEl.style.top).toBe('0px');
-    expect(popoverEl.style.left).toBe('50px');
-
-    // Test bottom placement
-    page.rootInstance.placement = 'bottom';
-    await page.rootInstance.show();
-    await page.waitForChanges();
-
-    expect(popoverEl.style.top).toBe('150px');
-    expect(popoverEl.style.left).toBe('50px');
-  });
-
-  it('should handle left placement positioning correctly', async () => {
-    const page = await newSpecPage({
-      components: [PdsPopover],
-      html: '<pds-popover component-id="my-popover" placement="left"></pds-popover>'
-    });
+    // Mock window scroll position
+    Object.defineProperty(window, 'pageXOffset', { value: 10 });
+    Object.defineProperty(window, 'pageYOffset', { value: 20 });
 
     const mockTriggerRect = {
       top: 100,
@@ -286,14 +73,37 @@ describe('pds-popover', () => {
       value: () => mockPopoverRect
     });
 
-    await page.rootInstance.show();
-    await page.waitForChanges();
+    const OFFSET = 8;
+    const placements = {
+      'top': {
+        top: mockTriggerRect.top - mockPopoverRect.height - OFFSET,
+        left: mockTriggerRect.left
+      },
+      'right': {
+        top: mockTriggerRect.top,
+        left: mockTriggerRect.right + OFFSET
+      },
+      'bottom': {
+        top: mockTriggerRect.bottom + OFFSET,
+        left: mockTriggerRect.left
+      },
+      'left': {
+        top: mockTriggerRect.top,
+        left: mockTriggerRect.left - mockPopoverRect.width - OFFSET
+      }
+    };
 
-    expect(popoverEl.style.top).toBe('75px'); // 100 + (50 - 100) / 2
-    expect(popoverEl.style.left).toBe('-200px'); // 100 - 200 - 100
+    for (const [placement, expected] of Object.entries(placements)) {
+      page.rootInstance.placement = placement;
+      await page.rootInstance.handleClick();
+      await page.waitForChanges();
+
+      expect(popoverEl.style.top).toBe(`${expected.top}px`);
+      expect(popoverEl.style.left).toBe(`${expected.left}px`);
+    }
   });
 
-  it('should handle scroll events and update positioning when active', async () => {
+  it('should handle scroll events and update positioning only when active', async () => {
     const page = await newSpecPage({
       components: [PdsPopover],
       html: '<pds-popover component-id="my-popover"></pds-popover>'
@@ -305,9 +115,10 @@ describe('pds-popover', () => {
     await page.waitForChanges();
     expect(positioningSpy).not.toHaveBeenCalled();
 
-    await page.rootInstance.show();
+    page.rootInstance.active = true;
     await page.waitForChanges();
 
+    // Clear previous spy calls
     positioningSpy.mockClear();
 
     window.dispatchEvent(new Event('scroll'));

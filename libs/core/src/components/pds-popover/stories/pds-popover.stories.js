@@ -4,6 +4,10 @@ import { withActions } from '@storybook/addon-actions/decorator';
 
 export default {
 	argTypes: extractArgTypes('pds-popover'),
+	args: {
+		popoverTargetAction: 'show',
+		popoverType: 'auto',
+	},
 	component: 'pds-popover',
 	decorators: [withActions],
 	parameters: {
@@ -24,7 +28,6 @@ export const Default = BaseTemplate.bind({});
 Default.args = {
 	componentId: 'popover-1',
   placement: "right",
-	popoverTargetAction: "show",
   text: "Show popover",
 	slot: html`<p>Popover content</p>
     <p>Popover content</p>`
@@ -33,10 +36,10 @@ Default.args = {
 export const Toggle = BaseTemplate.bind({});
 Toggle.args = {
 	componentId: 'popover-1',
-  placement: "right",
+  placement: "bottom",
 	popoverType: "manual",
 	popoverTargetAction: "toggle",
-  text: "Show popover",
+  text: "Toggle popover",
 	slot: html`<p>Popover content</p>
     <p>Popover content</p>`
 };
