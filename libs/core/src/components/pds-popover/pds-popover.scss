@@ -1,4 +1,6 @@
 :host {
+  --sizing-max-width-default: 352px;
+
   display: inline-block;
 
   [popover] {
@@ -7,6 +9,7 @@
     border-radius: var(--pine-border-radius-125);
     box-shadow: var(--pine-box-shadow-200);
     margin: 0;
+    max-width: var(--sizing-max-width-default);
     padding: var(--pine-spacing-300);
     position: fixed;
   }
