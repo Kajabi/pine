@@ -5,15 +5,7 @@
   display: inline;
 }
 
-:host([aria-disabled="true"]) label {
-  color: var(--pine-color-text-label-disabled);
-}
-
 :host([aria-readonly="true"]) {
-  label {
-    color: var(--pine-color-text-label-readonly);
-  }
-
   input {
     background-color: var(--pine-color-background-container-disabled) ;
     color: var(--pine-color-text-readonly);
