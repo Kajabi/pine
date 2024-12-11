@@ -211,7 +211,11 @@
         "type": "color"
       },
       "disabled": {
-        "value": "{color.grey.600}",
+        "value": "{color.grey.500}",
+        "type": "color"
+      },
+      "readonly": {
+        "value": "{color.grey.700}",
         "type": "color"
       },
       "active": {
@@ -266,7 +270,11 @@
           "type": "color"
         },
         "disabled": {
-          "value": "{color.grey.600}",
+          "value": "{color.grey.500}",
+          "type": "color"
+        },
+        "readonly": {
+          "value": "{color.grey.700}",
           "type": "color"
         }
       },

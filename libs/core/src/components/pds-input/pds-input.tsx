@@ -1,6 +1,5 @@
 import { Component, Event, EventEmitter, h, Host, Prop } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
-import { PdsLabel } from '../_internal/pds-label/pds-label';
 import { danger } from '@pine-ds/icons/icons';
 
 @Component({
@@ -94,9 +93,10 @@ export class PdsInput {
     return (
       <Host
         aria-disabled={this.disabled ? 'true' : null}
+        aria-readonly={this.readonly ? 'true' : null}
       >
         <div class="pds-input">
-          <PdsLabel htmlFor={this.componentId} text={this.label} />
+          <label htmlFor={this.componentId}>{this.label}</label>
           <input class="pds-input__field"
             aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
             aria-invalid={this.invalid ? "true" : undefined}

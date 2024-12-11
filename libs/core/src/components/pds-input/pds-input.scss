@@ -5,15 +5,29 @@
   display: inline;
 }
 
+:host([aria-disabled="true"]) label {
+  color: var(--pine-color-text-label-disabled);
+}
+
+:host([aria-readonly="true"]) {
+  label {
+    color: var(--pine-color-text-label-readonly);
+  }
+
+  input {
+    background-color: var(--pine-color-background-container-disabled) ;
+    color: var(--pine-color-text-readonly);
+  }
+}
+
 .pds-input {
   display: flex;
   flex-direction: column;
 }
 
 label {
+  color: var(--pine-color-text-label);
   font-weight: var(--pine-font-weight-medium);
-  line-height: var(--pine-line-height-body);
-  margin-block-end: var(--pine-dimension-xs);
 }
 
 input {
@@ -25,9 +39,9 @@ input {
   padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
 
   &:disabled {
-    background-color: var( --pine-color-background-container-disabled);
+    background-color: var(--pine-color-background-container-disabled);
     border-color: var(--pine-color-border-disabled);
-    color: var(--pine-color-text-disable);
+    color: var(--pine-color-text-disabled);
     cursor: not-allowed;
 
     /* stylelint-disable */
