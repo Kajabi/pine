@@ -285,7 +285,7 @@ export namespace Components {
          */
         "label": string;
         /**
-          * Indicates whether the chip should be displayed in a larger size.
+          * Determines whether the chip should be displayed in a larger size.
           * @defaultValue false
          */
         "large": boolean;
@@ -1689,12 +1689,12 @@ declare namespace LocalJSX {
          */
         "label"?: string;
         /**
-          * Indicates whether the chip should be displayed in a larger size.
+          * Determines whether the chip should be displayed in a larger size.
           * @defaultValue false
          */
         "large"?: boolean;
         /**
-          * Emits an event when the close button is clicked on a tag variant chip.
+          * Event emitted when the close button is clicked on a tag variant chip.
          */
         "onPdsTagCloseClick"?: (event: PdsChipCustomEvent<any>) => void;
         /**

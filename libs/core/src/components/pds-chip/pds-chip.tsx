@@ -24,7 +24,7 @@ export class PdsChip {
   @Prop() label: string;
 
   /**
-   * Indicates whether the chip should be displayed in a larger size.
+   * Determines whether the chip should be displayed in a larger size.
    * @defaultValue false
    */
   @Prop() large = false;
@@ -42,7 +42,7 @@ export class PdsChip {
   @Prop() variant: 'text' | 'tag' | 'dropdown' = 'text';
 
   /**
-   * Emits an event when the close button is clicked on a tag variant chip.
+   * Event emitted when the close button is clicked on a tag variant chip.
    */
   @Event() pdsTagCloseClick: EventEmitter;
 
