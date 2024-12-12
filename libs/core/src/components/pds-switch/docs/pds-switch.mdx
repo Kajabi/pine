@@ -3,19 +3,20 @@ import { components } from '../../../../dist/docs.json';
 
 # Switch
 
-Checkbox component styled to appear as a toggle.
+A styled checkbox component that functions as a toggle.
 
 ## Guidelines
 
-### Usage
+### When to use
+- Use the `Switch` when you need a binary choice in a compact form, like enabling or disabling a feature.
+- Ideal for toggling options in settings or preferences.
 
-- Use caution when enabling both `checked` and `disabled` on a control. Clearly describe why this item cannot be unselected.
-- `pdsSwitchChange` is a custom event emitted on input change. View the browser console on this page for an example.
+### When not to use
+- Avoid using for actions that require multiple options or a more complex selection (e.g., radio buttons).
+- Do not use for situations where the user's choice needs to be explicitly confirmed.
 
 ### Accessibility
-
-- The component will [append `aria-describedby` to the input](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-describedby) when an `error-message` is included.
-- With screen readers, the `error-message` using `aria-describedby` will be read *after* the label. Consider reading the combined error message and label out loud to ensure instructions are clear to the user.
+- The component includes `aria-describedby` when an error message is present, ensuring that screen readers announce the error after the label.
 
 ## Properties
 
@@ -23,9 +24,9 @@ Checkbox component styled to appear as a toggle.
 
 ## Variants
 
-### Checkbox (Default)
+### Default Switch
 
-The default switch style uses a checkbox input.
+The default switch style, which behaves like a checkbox input.
 
 <DocCanvas client:only
   mdxSource={{
@@ -41,9 +42,9 @@ The default switch style uses a checkbox input.
   </div>
 </DocCanvas>
 
-### Disabled
+### Disabled Switch
 
-Prevents user interaction on the input.
+Disables user interaction with the switch.
 
 <DocCanvas client:only
   mdxSource={{
@@ -58,9 +59,9 @@ Prevents user interaction on the input.
   ></pds-switch>
 </DocCanvas>
 
-### Helper message
+### Helper Message
 
-Displays additional descriptive text underneath the main label.
+Displays an additional descriptive message under the switch label.
 
 <DocCanvas client:only
   mdxSource={{
@@ -77,9 +78,9 @@ Displays additional descriptive text underneath the main label.
   </>
 </DocCanvas>
 
-### Invalid state
+### Invalid State
 
-An optional error message can be displayed for additional instructions, displayed independently from the helper message.
+Displays an error message with additional instructions, separate from the helper message.
 
 <DocCanvas client:only
   mdxSource={{
