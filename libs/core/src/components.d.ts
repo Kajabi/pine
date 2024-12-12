@@ -435,21 +435,22 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * When enabled, opens link in a new tab.
+          * Determines whether the link should open in a new tab.
           * @defaultValue false
          */
         "external": boolean;
         /**
-          * The Font size follows t-shirt model sm: 12px md: 14px lg: 16px
+          * The font size of the link's text.
           * @defaultValue lg
          */
         "fontSize": 'sm' | 'md' | 'lg';
         /**
-          * The URL that the hyperlink points to.
+          * The hyperlink's destination URL. If no text is provided in the custom slot, the href will be used.
          */
         "href": string;
         /**
-          * Modifies the look of the link
+          * Sets the link variant styles.
+          * @defaultValue inline
          */
         "variant": 'inline' | 'plain';
     }
@@ -1851,21 +1852,22 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
-          * When enabled, opens link in a new tab.
+          * Determines whether the link should open in a new tab.
           * @defaultValue false
          */
         "external"?: boolean;
         /**
-          * The Font size follows t-shirt model sm: 12px md: 14px lg: 16px
+          * The font size of the link's text.
           * @defaultValue lg
          */
         "fontSize"?: 'sm' | 'md' | 'lg';
         /**
-          * The URL that the hyperlink points to.
+          * The hyperlink's destination URL. If no text is provided in the custom slot, the href will be used.
          */
         "href": string;
         /**
-          * Modifies the look of the link
+          * Sets the link variant styles.
+          * @defaultValue inline
          */
         "variant"?: 'inline' | 'plain';
     }

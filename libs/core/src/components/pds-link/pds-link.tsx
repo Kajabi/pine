@@ -3,8 +3,8 @@ import { Component, h, Prop } from '@stencil/core';
 import { launch } from '@pine-ds/icons/icons';
 
 /**
- * @part link - The main link element that represents the link component.
- * @slot - Content is placed between the opening closing tags.
+ * @part link - Link element styles.
+ * @slot (default) - Text content placed between the opening and closing tags. If no text is provided, the **href** will be used as a fallback.
  */
 @Component({
   tag: 'pds-link',
@@ -18,29 +18,25 @@ export class PdsLink {
   @Prop() componentId: string;
 
   /**
-   * When enabled, opens link in a new tab.
+   * Determines whether the link should open in a new tab.
    * @defaultValue false
    */
   @Prop() external = false;
 
   /**
-   *
-   * Modifies the look of the link
+   * Sets the link variant styles.
+   * @defaultValue inline
    */
   @Prop() variant: 'inline' | 'plain' = 'inline';
 
   /**
-   *
-   * The Font size follows t-shirt model
-   * sm: 12px
-   * md: 14px
-   * lg: 16px
+   * The font size of the link's text.
    * @defaultValue lg
    */
   @Prop() fontSize: 'sm' | 'md' | 'lg' = 'lg';
 
   /**
-   * The URL that the hyperlink points to.
+   * The hyperlink's destination URL. If no text is provided in the custom slot, the href will be used.
    */
   @Prop() href!: string;
 
