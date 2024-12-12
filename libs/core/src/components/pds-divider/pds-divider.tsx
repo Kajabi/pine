@@ -17,7 +17,7 @@ export class PdsDivider {
   @Prop() offset: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
   /**
-   * Sets divider to display vertically
+   * Sets divider to display vertically.
    * @defaultValue false
    */
   @Prop() vertical = false;

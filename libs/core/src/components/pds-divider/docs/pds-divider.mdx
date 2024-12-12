@@ -1,9 +1,24 @@
-import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
+import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
 
 # Divider
 
-Use the divider to separate sections of content. You can also use them to override auto-layout padding.
+A divider is a used to create a clear visual separation between sections of content within a layout.
+
+## Usage Guidelines
+
+### When to use
+- To visually separate distinct sections of content for better readability.
+- To create full-width or full-height boundaries within a section or page.
+
+### When not to use
+- When the separation between sections is already visually clear due to ample spacing.
+- If the layout relies on other visual elements, such as cards or background shading, to define boundaries.
+- When excessive dividers could create visual clutter or detract from content hierarchy.
+
+### Accessibility
+- Ensure sufficient contrast between the divider and the background to meet WCAG contrast requirements.
+- Avoid using dividers as the sole method of separating content; support visual indicators with clear headings or labels.
 
 ## Properties
 
@@ -23,9 +38,9 @@ The default divider displays a horizontal line.
 
 ### Vertical
 
-To display the divider vertically, the `vertical` prop can be set to `true`.
+To display the divider vertically, set the `vertical` prop to `true`.
 
-**Note**: Vertical dividers are not displayed on small screen sizes less than 767px.
+**Note**: Vertical dividers are not displayed on screen sizes smaller than 767px.
 
 <DocCanvas client:only
   mdxSource={{
@@ -47,9 +62,9 @@ To display the divider vertically, the `vertical` prop can be set to `true`.
 
 ### Offsets
 
-Both horizontal and vertical dividers can be offset to create a full width/height bleed appearance.
+Both horizontal and vertical dividers can be offset to create a full-width or full-height bleed appearance.
 
-Offset sizes follow the global spacing sizes: `xxs`:4px, `xs`:8px, `sm`:12px,`md`:24px, `lg`:32px, `xl`:48px, `xxl`:64px.
+Offset sizes follow the global spacing sizes: `xxs`: 4px, `xs`: 8px, `sm`: 12px, `md`: 24px, `lg`: 32px, `xl`: 48px, `xxl`: 64px.
 
 <DocCanvas client:only
   mdxSource={{
@@ -59,7 +74,7 @@ Offset sizes follow the global spacing sizes: `xxs`:4px, `xs`:8px, `sm`:12px,`md
   <pds-divider offset="lg"></pds-divider>
 </DocCanvas>
 
-Below you will see a vertical divider using a large offset.
+Below, you will see a vertical divider using a large offset.
 
 <DocCanvas client:only
   mdxSource={{

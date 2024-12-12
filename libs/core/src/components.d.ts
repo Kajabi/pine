@@ -335,7 +335,7 @@ export namespace Components {
          */
         "offset": 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
         /**
-          * Sets divider to display vertically
+          * Sets divider to display vertically.
           * @defaultValue false
          */
         "vertical": boolean;
@@ -1747,7 +1747,7 @@ declare namespace LocalJSX {
          */
         "offset"?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
         /**
-          * Sets divider to display vertically
+          * Sets divider to display vertically.
           * @defaultValue false
          */
         "vertical"?: boolean;
