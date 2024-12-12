@@ -1,0 +1,157 @@
+import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+# Popover
+Popovers display contextual information when users click or initiates a keyboard event on an element. They typically contain more information than tooltips and can include interactive elements.
+
+## Guidelines
+
+#### When to use
+
+- Use popovers for complex information that might overwhelm the main content
+- When content needs to include interactive elements
+- For non-essential information that requires user interaction to display
+
+#### When not to use
+
+- Don't use popovers for critical information that must be readily available
+- Avoid using for simple text-only tooltips
+- Don't nest popovers within other popovers
+
+## Properties
+
+<DocArgsTable componentName="pds-popover" docSource={components} />
+
+### Behavior Types
+
+#### Auto (Default)
+
+Closes automatically when clicking outside the popover content. Can also be closed by pressing the `Escape` key.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsPopover componentId="auto" text="Auto Popover">
+        <p>Clicks outside will close this popover</p>
+      </PdsPopover>
+    `,
+    webComponent: `
+      <pds-popover component-id="auto" text="Auto Popover">
+        <p>Clicks outside will close this popover</p>
+      </pds-popover>
+    `
+  }}>
+  <pds-popover component-id="auto" text="Auto Popover">
+    <p>Clicks outside will close this popover</p>
+  </pds-popover>
+</DocCanvas>
+
+#### Manual
+
+Popovers with the `popoverType="manual"` require explicit user interaction to close. This means they won't automatically disappear when clicking outside or pressing Escape.
+
+The `popoverTargetAction` property determines how the trigger button interacts with the popover:
+- `show`: Only shows the popover (default)
+- `hide`: Only hides the popover
+- `toggle`: Alternates between showing and hiding
+
+For manual popovers, using `popoverTargetAction="toggle"` is recommended as it allows users to both open and close the popover using the trigger button.
+
+Learn more about popover target actions in the [MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/popoverTargetAction#showhide_popover_action_with_a_manual_popover).
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsPopover componentId="manual" text="Manual Popover" popoverTargetAction="toggle" popoverType="manual">
+        <p>This popover requires explicit closing</p>
+      </PdsPopover>
+    `,
+    webComponent: `
+      <pds-popover component-id="manual" text="Manual Popover" popover-target-action="toggle" popover-type="manual">
+        <p>This popover requires explicit closing</p>
+      </pds-popover>
+    `
+  }}>
+  <pds-popover component-id="manual" text="Manual Popover" popover-target-action="toggle" popover-type="manual">
+    <p>This popover requires explicit closing</p>
+  </pds-popover>
+</DocCanvas>
+
+### Target Actions
+
+The `popoverTargetAction` prop determines how the trigger button interacts with the popover.
+
+#### Show (Default)
+
+Shows the popover when triggered. Clicking the popover trigger while open will not close the popover.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsPopover componentId="show" text="Show Action">
+        <p>This popover uses the show action</p>
+      </PdsPopover>
+    `,
+    webComponent: `
+      <pds-popover component-id="show" text="Show Action">
+        <p>This popover uses the show action</p>
+      </pds-popover>
+    `
+  }}>
+  <pds-popover component-id="show" text="Show Action">
+    <p>This popover uses the show action</p>
+  </pds-popover>
+</DocCanvas>
+
+#### Toggle
+
+Toggles the popover visibility state when triggered. Clicking the popover trigger while open will close the popover.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsPopover componentId="toggle" text="Toggle Action" popoverTargetAction="toggle">
+        <p>This popover uses the toggle action</p>
+      </PdsPopover>
+    `,
+    webComponent: `
+      <pds-popover component-id="toggle" text="Toggle Action" popover-target-action="toggle">
+        <p>This popover uses the toggle action</p>
+      </pds-popover>
+    `
+  }}>
+  <pds-popover component-id="toggle" text="Toggle Action" popover-target-action="toggle">
+    <p>This popover uses the toggle action</p>
+  </pds-popover>
+</DocCanvas>
+
+### Width/Sizing
+
+The `maxWidth` prop allows adjusting the maximum width of the popover content. Default is 352px.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsPopover componentId="wide" text="Wide Popover" maxWidth="520px">
+        <p>This is a wider popover with more content space available.</p>
+      </PdsPopover>
+    `,
+    webComponent: `
+      <pds-popover component-id="wide" text="Wide Popover" max-width="520px">
+        <p>This is a wider popover with more content space available.</p>
+      </pds-popover>
+    `
+  }}>
+  <pds-popover component-id="wide" text="Wide Popover" max-width="520px">
+    <p>This is a wider popover with more content space available.</p>
+  </pds-popover>
+</DocCanvas>
+
+
+## Additional Resources
+
+[Mdn Web Docs: Popover Attribute](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/popover)
+
+[MDN Web Docs: Popover Api](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API)
+
+[MDN: Using the Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API/Using)
