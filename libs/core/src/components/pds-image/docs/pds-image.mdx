@@ -13,7 +13,11 @@ All images, regardless of use, _must_ have an appropriate alt text to describe t
 
 ### Responsiveness
 
-For more responsive images, be sure to take advantage of the `srcset` and `sizes` props. These are native attributes on the `<img>` tag that allow for greater flexbility across device sizes. A `srcset` allows the browser to choose from a set of predefined images and what sizes those images are. The `sizes` prop will tell the browser to use a specific image defined in the `srcset` to be used within a defined set of media queries. For more information, please see the MDN article on [responsive images](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images).
+For more responsive images, be sure to take advantage of the `srcset` and `sizes` props. These are native attributes on the `<img>` tag that allow for greater flexbility across device sizes. A `srcset` allows the browser to choose from a set of predefined images and what sizes those images are. The `sizes` prop will tell the browser which image defined in the `srcset` would be best served at a given viewport size. For more information, please see the MDN article on [responsive images](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images).
+
+### Image Optimization
+
+While images can provide useful information to convey to the user, when not careful, they can also increase page load times, sometimes by several seconds. For users with slower internet connections, this can lead to a poor user experience. Be mindful that the images used are optimized in their file size. Unless using images with transparency, formats like `.jpg` can help naturally reduce file size. If needed, consider using a tool to further reduce the image's size.
 
 ## Properties
 
