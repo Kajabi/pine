@@ -3,13 +3,25 @@ import { components } from '../../../../dist/docs.json';
 
 # Copy Text
 
-A component to use in places where "copy" text is provided to be copied elsewhere.
+The Copy Text component is a button that enables users to copy text to their clipboard upon interaction.
+
+## Guidelines
+
+### When to Use
+
+- When the user needs to copy specific, valuable text to the clipboard, such as URLs, emails, API keys, and other important information.
+
+### When Not to Use
+
+- When the user needs to copy a large amount of non-specific or dynamically-changing text.
 
 ## Properties
 
 <DocArgsTable componentName="pds-copytext" docSource={components} />
 
 ### Default
+
+The default copy text button.
 
 <DocCanvas client:only
   mdxSource={{
@@ -21,7 +33,7 @@ A component to use in places where "copy" text is provided to be copied elsewher
 
 ### Borderless
 
-When `border` is set to `false`, the component will not have a border.
+When `border` is set to `false`, the component will not have a visible border.
 
 <DocCanvas client:only
   mdxSource={{
@@ -33,7 +45,7 @@ When `border` is set to `false`, the component will not have a border.
 
 ### Full width
 
-When `full-width` is set to `true`, the component will take up the full width of its container.
+When `full-width` is set to `true`, the component will occupy the full width of its parent container.
 
 <DocCanvas client:only
   mdxSource={{
@@ -45,7 +57,7 @@ When `full-width` is set to `true`, the component will take up the full width of
 
 ### Truncate
 
-When `truncate` is set to `true`, the value text will be truncated and an ellipsis added.
+When `truncate` is set to `true`, long value text will be truncated with an ellipsis added to the end. The full value will still be copied to the clipboard when clicked.
 
 <DocCanvas client:only
   mdxSource={{

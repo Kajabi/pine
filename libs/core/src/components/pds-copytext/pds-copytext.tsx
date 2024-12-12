@@ -9,7 +9,7 @@ import { copy as copyIcon } from '@pine-ds/icons/icons';
 })
 export class PdsCopytext {
   /**
-   * Determines whether `copytext` should have a border.
+   * Determines whether `copytext` should have a visible border.
    * @defaultValue true
    */
   @Prop({ reflect: true }) border = true;
@@ -32,12 +32,12 @@ export class PdsCopytext {
   @Prop() truncate = false;
 
   /**
-   * String that is displayed and that is also copied to the clipboard upon interaction.
+   * The string displayed that is also copied to the clipboard upon interaction.
    */
   @Prop() value!: string;
 
   /**
-   * Event when copyText button is clicked.
+   * Event fired when copyText button is clicked.
    */
   @Event() pdsCopyTextClick: EventEmitter;
 
