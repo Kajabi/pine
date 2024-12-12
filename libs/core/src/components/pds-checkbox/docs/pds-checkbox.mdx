@@ -5,9 +5,23 @@ import { components } from '../../../../dist/docs.json';
 
 Checkboxes provide users with selectable options like toggling a single setting or selecting multiple options from a list.
 
+## Guidelines
+
+### When to use
+- Use checkboxes when users can select one or more options from a set.
+- Ideal for situations where multiple selections can be made.
+
+### When not to use
+- Avoid using checkboxes for single-choice selections, such as in forms where only one option should be selected. In such cases, consider using radios or a switch.
+
+### Accessibility
+- Provide a clear, descriptive label for each checkbox to ensure that screen readers can identify the option effectively.
+
 ## Properties
 
 <DocArgsTable componentName="pds-checkbox" docSource={components} />
+
+## Variants
 
 ### Default
 
@@ -35,7 +49,7 @@ Checkboxes appear as checked when activated.
 
 Component `indeterminate` prop is for visual styling only.
 
-Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes)
+Only JavaScript can set the object's `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes)
 
 <DocCanvas client:only
   mdxSource={{
@@ -71,9 +85,9 @@ Message is a string of text that displays below the label text.
 
 ### Invalid
 
-Invalid displays the checkbox in invalid state such as when required but is not checked.
+Displays the checkbox in an invalid state, such as when required but not checked.
 
-An optional error message can be displayed for additional instructions, displayed independently from the helper message.
+An optional error message can be displayed for additional instructions, shown independently from the helper message.
 
 <DocCanvas client:only
   mdxSource={{
@@ -86,8 +100,7 @@ An optional error message can be displayed for additional instructions, displaye
 ## Events
 
 ### pdsCheckboxChange
-Used when you want to peform an action when the checbox state changes. The returned structure is a `CheckboxChangeEventDetail`
-that contains `checked` and `value`.
+Used when you want to perform an action when the checkbox state changes. The returned structure is a `CheckboxChangeEventDetail` that contains `checked` and `value`.
 
 ## Additional Resources
 
