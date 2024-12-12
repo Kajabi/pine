@@ -194,20 +194,21 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Toggles disabled state of button
+          * Determines the button's disabled state.
           * @defaultValue false
          */
         "disabled"?: boolean;
         /**
-          * Displays icon before text when icon string matches an icon name
+          * Displays an icon before the text when the icon string matches an icon name.
+          * @defaultValue null
          */
         "icon"?: string;
         /**
-          * Provides button with a submittable name
+          * Provides the button with a submittable name.
          */
         "name"?: string;
         /**
-          * Provides button with a type
+          * Provides button with a type.
           * @defaultValue button
          */
         "type"?: 'button' | 'reset' | 'submit';
@@ -216,7 +217,8 @@ export namespace Components {
          */
         "value"?: string;
         /**
-          * Sets button variant styles as outlined in Figma documentation
+          * Sets the style variant of the button.
+          * @defaultValue primary
          */
         "variant": 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled';
     }
@@ -1593,20 +1595,21 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
-          * Toggles disabled state of button
+          * Determines the button's disabled state.
           * @defaultValue false
          */
         "disabled"?: boolean;
         /**
-          * Displays icon before text when icon string matches an icon name
+          * Displays an icon before the text when the icon string matches an icon name.
+          * @defaultValue null
          */
         "icon"?: string;
         /**
-          * Provides button with a submittable name
+          * Provides the button with a submittable name.
          */
         "name"?: string;
         /**
-          * Provides button with a type
+          * Provides button with a type.
           * @defaultValue button
          */
         "type"?: 'button' | 'reset' | 'submit';
@@ -1615,7 +1618,8 @@ declare namespace LocalJSX {
          */
         "value"?: string;
         /**
-          * Sets button variant styles as outlined in Figma documentation
+          * Sets the style variant of the button.
+          * @defaultValue primary
          */
         "variant"?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled';
     }

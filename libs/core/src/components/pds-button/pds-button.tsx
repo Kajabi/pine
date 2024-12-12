@@ -4,9 +4,9 @@ import { hasShadowDom } from '../../utils/utils';
 import { caretDown } from '@pine-ds/icons/icons';
 
 /**
- * @part button - The main button element that represents the button component.
- * @part caret - The caret icon element that appears when the button variant is 'disclosure'.
- * @part icon - The icon element that appears before the text in the button, if provided.
+ * @part button - Button element styles.
+ * @part caret - Caret icon styles. Appears only on the disclosure variant.
+ * @part icon - Icon element styles.
 */
 
 @Component({
@@ -23,18 +23,20 @@ export class PdsButton {
   @Prop() componentId: string;
 
   /**
-   * Toggles disabled state of button
+   * Determines the button's disabled state.
    * @defaultValue false
    */
   @Prop() disabled? = false;
 
   /**
-   * Displays icon before text when icon string matches an icon name
+   * Displays an icon before the text when
+   * the icon string matches an icon name.
+   * @defaultValue null
    */
   @Prop() icon?: string = null;
 
   /**
-   * Provides button with a submittable name
+   * Provides the button with a submittable name.
    */
   @Prop() name?: string;
 
@@ -44,13 +46,14 @@ export class PdsButton {
   @Prop() value?: string;
 
   /**
-   * Provides button with a type
+   * Provides button with a type.
    * @defaultValue button
    */
   @Prop() type?: 'button' | 'reset' | 'submit' = 'button';
 
   /**
-   * Sets button variant styles as outlined in Figma documentation
+   * Sets the style variant of the button.
+   * @defaultValue primary
    */
   @Prop() variant: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled' = 'primary';
 

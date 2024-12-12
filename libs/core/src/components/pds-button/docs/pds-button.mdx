@@ -3,15 +3,15 @@ import { components } from '../../../../dist/docs.json';
 
 # Button
 
-A button component to generate all versions of `pds-button` as outlined in [Figma](https://www.figma.com/file/sMbtLUHSt2vfKgKjyQ3052/%F0%9F%A7%A9-Sage-components?node-id=3%3A15&t=dIcvX1VtOu0FL0VE-0).
+A button is an interactive element that can be clicked to perform an action or submit a form.
 
 ## Usage Guidelines
 
 ### When to use
 
-- Communicating an action that will occur. (e.g. saving a page)
-- Triggering or enabling an action, such as submitting requested information. (e.g. forms)
-- Progressing or regressing a user through a step in a flow. (e.g. modals)
+- Communicating an action that will occur (e.g. saving a page).
+- Triggering or enabling an action, such as submitting requested information (e.g. forms).
+- Progressing or regressing a user through a step in a flow (e.g. modals).
 
 ### When not to use
 
@@ -20,9 +20,9 @@ A button component to generate all versions of `pds-button` as outlined in [Figm
 
 ## Accessibility
 
-When following our usage guidelines, pds-button should be accessible right out of the box but there are still a few general accessibility best practices to make sure you follow:
+While accessible out of the box, there are some best practices to keep in mind when using the component:
 
-- Buttons should always contain helpful text about what they do even if this text is expected to be visually hidden. (e.g. "submit form" or "delete account")
+- Buttons should always contain helpful text about what they do even if this text is expected to be visually hidden. (e.g. "submit form" or "delete account").
 - Buttons should not disable tabbing or keyboard navigation.
 - Buttons should always pass [color contrast best practices](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html).
 
@@ -32,9 +32,9 @@ When following our usage guidelines, pds-button should be accessible right out o
 
 ## Variant
 
-### Default (Primary)
+### Primary
 
-Default button styles, used with affirmative actions such as submitting, continuing, and saving
+The default button, intended to be used with affirmative actions such as submitting, continuing, and saving.
 
 <DocCanvas client:only
   mdxSource={{
@@ -56,7 +56,7 @@ Default button styles, used with affirmative actions such as submitting, continu
 
 ### Secondary
 
-Secondary button styles, used with neutral actions such as going back, saving as draft, and cancelling
+Secondary button variant, intended to be used as back buttons, for saving drafts, or cancelling actions.
 
 <DocCanvas client:only
   mdxSource={{
@@ -78,7 +78,7 @@ Secondary button styles, used with neutral actions such as going back, saving as
 
 ### Accent
 
-Accent button styles, used for tertiary actions or when more contrast is needed
+Accent button variant, intended to be used for tertiary actions or when higher contrast is needed.
 
 <DocCanvas client:only
   mdxSource={{
@@ -100,9 +100,9 @@ Accent button styles, used for tertiary actions or when more contrast is needed
 
 ### Disclosure
 
-Disclosure button styles, used to provide multiple options or more information within a button
+Disclosure button variant, intended to be used as a trigger to show or hide content elsewhere on the page.
 
-**Note**: Icon cannot be customized
+**Note**: Icon cannot be customized.
 
 <DocCanvas client:only
   mdxSource={{
@@ -121,7 +121,7 @@ Disclosure button styles, used to provide multiple options or more information w
 
 ### Destructive
 
-Destructive button styles, used with actions that delete information such as deleting an item or removing a contact
+Destructive button variant, intended to be used with destructive actions, such as deleting an item or removing a contact.
 
 <DocCanvas client:only
   mdxSource={{
@@ -143,13 +143,11 @@ Destructive button styles, used with actions that delete information such as del
 
 ## Type
 
-The type prop allows a `pds-button` to set [button type attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type).
+The type prop allows a `pds-button` to set a [button type attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type).
 
 ### Default (Button)
 
-The button has no default behavior, and does nothing when pressed by default. It can have client-side scripts listen to the element's events, which are triggered when the events occur.
-
-This is our default button type.
+The button has no default click behavior. It can have client-side scripts listen to the element's events, which are triggered when the events occur.
 
 ### Submit
 
@@ -157,8 +155,10 @@ The button submits the form data to the server.
 
 ### Reset
 
-The button resets all the controls to their initial values. [As noted on MDN, this behavior tends to annoy users](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type).
+The button resets all the controls to their initial values. [As noted on MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type), this behavior tends to annoy users.
 
 ## Additional Resources
 
-[CSS Tricks - Buttons vs. Links](https://css-tricks.com/buttons-vs-links/)
+[CSS Tricks: Buttons vs. Links](https://css-tricks.com/buttons-vs-links/)
+
+[MDN: Button Element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button)
