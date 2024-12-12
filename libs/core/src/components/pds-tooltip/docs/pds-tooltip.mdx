@@ -6,20 +6,20 @@ import { components } from '../../../../dist/docs.json';
 Tooltips display helpful popup text when users hover over or keyboard focus on an element.
 
 ## Guidelines
-### Usage
+
 #### When to use
-- To describe icon-only buttons
-- When adding more context or explanation to an element is helpful, but not essential
+- Use tooltips to provide additional context for elements like buttons or icons where extra explanation is helpful but not essential.
+- Ideal for non-essential information that enhances understanding without cluttering the interface.
 
 #### When not to use
-- Do not use a tooltip when information is essential to task completion.
-That information should remain visible.
+- Avoid using tooltips for critical information that users need for task completion. Essential information should be visible at all times.
 
 ## Properties
 
 <DocArgsTable componentName="pds-tooltip" docSource={components} />
 
 ## Variants
+
 ### Trigger
 Whether your trigger is text or an HTML element, it will be placed in the default slot between the opening and closing tags.
 
@@ -64,6 +64,7 @@ tooltip content is expected to be a string.
 </DocCanvas>
 
 #### HTML Element Content
+
 Tooltip content may contain HTML elements. In these cases,
 enable the `htmlContent` property and provide your element in the `content` slot.
 
