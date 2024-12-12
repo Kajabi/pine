@@ -522,11 +522,11 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Displays message text describing an invalid state.
+          * Displays error message text describing an invalid state.
          */
         "errorMessage": string;
         /**
-          * String used for helper message below radio.
+          * Displays helper message text below radio.
          */
         "helperMessage": string;
         /**
@@ -1938,11 +1938,11 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Displays message text describing an invalid state.
+          * Displays error message text describing an invalid state.
          */
         "errorMessage"?: string;
         /**
-          * String used for helper message below radio.
+          * Displays helper message text below radio.
          */
         "helperMessage"?: string;
         /**

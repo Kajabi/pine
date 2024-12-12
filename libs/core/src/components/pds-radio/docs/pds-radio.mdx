@@ -3,7 +3,25 @@ import { components } from '../../../../dist/docs.json';
 
 # Radio
 
-Radio components provide users a way to select only one option from a list of two or more options.
+Radio components allow users to select one option from a group of two or more choices.
+
+## Usage Guidelines
+
+### When to use
+- When users need to choose only one option from a predefined list.
+- For mutually exclusive options where one selection automatically deselects others.
+- When clarity about all possible options is critical for user decision-making.
+
+### When not to use
+- For binary yes/no choices; consider using a switch instead.
+- When users need to select multiple options; use checkboxes instead.
+- For dynamic options that aren't easily displayed together in a list.
+
+### Accessibility
+- Ensure the label is descriptive and clearly associated with the radio button.
+- Group radios logically using a `name` attribute to indicate relationships.
+- Use proper error messaging and states (e.g., `invalid`) for validation feedback.
+- Avoid disabling radios unless necessary; provide context for disabled options.
 
 ## Properties
 
@@ -31,7 +49,7 @@ Radios appear as checked when activated.
 
 ### Disabled
 
-Disabled visually indicates and functionally prevents interaction with the radio.
+Disabled radios visually indicate and functionally prevent user interaction.
 
 <DocCanvas client:only mdxSource={{
   react: `<PdsRadio componentId="disabled" label="Label" disabled={true} />`,
@@ -42,7 +60,7 @@ Disabled visually indicates and functionally prevents interaction with the radio
 
 ### Message
 
-Message is a string of text that displays below the label text.
+Displays helper text below the label to provide additional context.
 
 <DocCanvas client:only mdxSource={{
   react: `<PdsRadio componentId="message1" label="Label" helperMessage="This is short message text." />`,
@@ -53,9 +71,9 @@ Message is a string of text that displays below the label text.
 
 ### Invalid
 
-Invalid displays the radio in invalid state such as when required but is not checked.
+Displays the radio in an invalid state, such as when a required selection is missing.
 
-An optional error message can be displayed for additional instructions, displayed independently from the helper message.
+An optional error message can provide further instructions, displayed independently of the helper message.
 
 <DocCanvas client:only mdxSource={{
   react: `<PdsRadio componentId="invalid" label="Label" invalid errorMessage="This is a short error message" />`,
@@ -66,9 +84,9 @@ An optional error message can be displayed for additional instructions, displaye
 
 ### Group
 
-A radio group is defined by assigning each radio in the group the same `name`.
+A radio group is created by assigning the same `name` attribute to each radio.
 
-Once a radio group is created, only one radio at a time can be selected.
+Only one radio in the group can be selected at a time.
 
 <DocCanvas client:only mdxSource={{
   react: `<div>

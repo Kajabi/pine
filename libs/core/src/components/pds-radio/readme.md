@@ -12,8 +12,8 @@
 | `checked`                  | `checked`        | Determines whether or not the radio is checked.                                                     | `boolean` | `false`     |
 | `componentId` _(required)_ | `component-id`   | A unique identifier used for the underlying component `id` attribute and the label `for` attribute. | `string`  | `undefined` |
 | `disabled`                 | `disabled`       | Determines whether or not the radio is disabled.                                                    | `boolean` | `false`     |
-| `errorMessage`             | `error-message`  | Displays message text describing an invalid state.                                                  | `string`  | `undefined` |
-| `helperMessage`            | `helper-message` | String used for helper message below radio.                                                         | `string`  | `undefined` |
+| `errorMessage`             | `error-message`  | Displays error message text describing an invalid state.                                            | `string`  | `undefined` |
+| `helperMessage`            | `helper-message` | Displays helper message text below radio.                                                           | `string`  | `undefined` |
 | `invalid`                  | `invalid`        | Determines whether or not the radio is invalid.                                                     | `boolean` | `false`     |
 | `label`                    | `label`          | String used for label text next to radio.                                                           | `string`  | `undefined` |
 | `name`                     | `name`           | String used for radio `name` attribute.                                                             | `string`  | `undefined` |
