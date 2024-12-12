@@ -12,9 +12,9 @@
 | `autocomplete`             | `autocomplete`   | Specifies if and how the browser provides `autocomplete` assistance for the field. | `string`             | `undefined` |
 | `componentId` _(required)_ | `component-id`   | A unique identifier used for the underlying component `id` attribute.              | `string`             | `undefined` |
 | `disabled`                 | `disabled`       | Indicates whether or not the select field is disabled.                             | `boolean`            | `false`     |
-| `errorMessage`             | `error-message`  | Specifies the error message and provides an error-themed treatment to the field.   | `string`             | `undefined` |
-| `helperMessage`            | `helper-message` | Displays a message or hint below the input field.                                  | `string`             | `undefined` |
-| `invalid`                  | `invalid`        | Indicates whether or not the input field is invalid or throws an error.            | `boolean`            | `undefined` |
+| `errorMessage`             | `error-message`  | Displays error message text describing an invalid state.                           | `string`             | `undefined` |
+| `helperMessage`            | `helper-message` | Displays helper message text below select.                                         | `string`             | `undefined` |
+| `invalid`                  | `invalid`        | Determines whether or not the select is invalid.                                   | `boolean`            | `undefined` |
 | `label`                    | `label`          | Text to be displayed as the select label.                                          | `string`             | `undefined` |
 | `multiple`                 | `multiple`       | Indicates whether multiple options can be selected.                                | `boolean`            | `false`     |
 | `name` _(required)_        | `name`           | Specifies the name. Submitted with the form name/value pair.                       | `string`             | `undefined` |
@@ -24,9 +24,9 @@
 
 ## Events
 
-| Event             | Description                             | Type                      |
-| ----------------- | --------------------------------------- | ------------------------- |
-| `pdsSelectChange` | Emitted when a keyboard input occurred. | `CustomEvent<InputEvent>` |
+| Event             | Description                           | Type                      |
+| ----------------- | ------------------------------------- | ------------------------- |
+| `pdsSelectChange` | Emitted when a keyboard input occurs. | `CustomEvent<InputEvent>` |
 
 
 ## Dependencies

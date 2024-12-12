@@ -599,15 +599,15 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Specifies the error message and provides an error-themed treatment to the field.
+          * Displays error message text describing an invalid state.
          */
         "errorMessage": string;
         /**
-          * Displays a message or hint below the input field.
+          * Displays helper message text below select.
          */
         "helperMessage": string;
         /**
-          * Indicates whether or not the input field is invalid or throws an error.
+          * Determines whether or not the select is invalid.
          */
         "invalid"?: boolean;
         /**
@@ -2019,15 +2019,15 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Specifies the error message and provides an error-themed treatment to the field.
+          * Displays error message text describing an invalid state.
          */
         "errorMessage"?: string;
         /**
-          * Displays a message or hint below the input field.
+          * Displays helper message text below select.
          */
         "helperMessage"?: string;
         /**
-          * Indicates whether or not the input field is invalid or throws an error.
+          * Determines whether or not the select is invalid.
          */
         "invalid"?: boolean;
         /**
@@ -2044,7 +2044,7 @@ declare namespace LocalJSX {
          */
         "name": string;
         /**
-          * Emitted when a keyboard input occurred.
+          * Emitted when a keyboard input occurs.
          */
         "onPdsSelectChange"?: (event: PdsSelectCustomEvent<InputEvent>) => void;
         /**
