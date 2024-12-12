@@ -5,22 +5,27 @@ import { components } from '../../../../dist/docs.json';
 Popovers display contextual information when users click or initiates a keyboard event on an element. They typically contain more information than tooltips and can include interactive elements.
 
 ## Guidelines
-### Usage
+
 #### When to use
+
 - Use popovers for complex information that might overwhelm the main content
 - When content needs to include interactive elements
 - For non-essential information that requires user interaction to display
 
 #### When not to use
+
 - Don't use popovers for critical information that must be readily available
 - Avoid using for simple text-only tooltips
 - Don't nest popovers within other popovers
 
 ## Properties
+
 <DocArgsTable componentName="pds-popover" docSource={components} />
 
 ### Behavior Types
+
 #### Auto (Default)
+
 Closes automatically when clicking outside the popover content. Can also be closed by pressing the `Escape` key.
 
 <DocCanvas client:only
@@ -42,6 +47,7 @@ Closes automatically when clicking outside the popover content. Can also be clos
 </DocCanvas>
 
 #### Manual
+
 Popovers with the `popoverType="manual"` require explicit user interaction to close. This means they won't automatically disappear when clicking outside or pressing Escape.
 
 The `popoverTargetAction` property determines how the trigger button interacts with the popover:
@@ -72,9 +78,11 @@ Learn more about popover target actions in the [MDN Documentation](https://devel
 </DocCanvas>
 
 ### Target Actions
+
 The `popoverTargetAction` prop determines how the trigger button interacts with the popover.
 
 #### Show (Default)
+
 Shows the popover when triggered. Clicking the popover trigger while open will not close the popover.
 
 <DocCanvas client:only
@@ -96,6 +104,7 @@ Shows the popover when triggered. Clicking the popover trigger while open will n
 </DocCanvas>
 
 #### Toggle
+
 Toggles the popover visibility state when triggered. Clicking the popover trigger while open will close the popover.
 
 <DocCanvas client:only
@@ -117,6 +126,7 @@ Toggles the popover visibility state when triggered. Clicking the popover trigge
 </DocCanvas>
 
 ### Width/Sizing
+
 The `maxWidth` prop allows adjusting the maximum width of the popover content. Default is 352px.
 
 <DocCanvas client:only
@@ -139,6 +149,7 @@ The `maxWidth` prop allows adjusting the maximum width of the popover content. D
 
 
 ## Additional Resources
+
 [Mdn Web Docs: Popover Attribute](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/popover)
 
 [MDN Web Docs: Popover Api](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API)
