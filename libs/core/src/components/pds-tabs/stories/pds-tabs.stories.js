@@ -1,4 +1,4 @@
-import { html, render } from 'lit';
+import { html } from 'lit';
 import { withActions } from '@storybook/addon-actions/decorator';
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
@@ -12,7 +12,7 @@ export default {
     },
   },
   title: 'components/Tabs',
-}
+};
 
 const BaseTemplate = (args) => html`
 <pds-tabs active-tab-name=${args.activeTabName} variant=${args.variant} component-id=${args.componentId} tablist-label=${args.tablistLabel}>
@@ -24,6 +24,22 @@ const BaseTemplate = (args) => html`
   <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
 </pds-tabs>
 `;
+
+export const Default = BaseTemplate.bind({});
+Default.args = {
+  activeTabName: "Dollop",
+  componentId: "primary",
+  variant: "primary",
+  tablistLabel: "Foo",
+}
+
+export const Filter = BaseTemplate.bind({});
+Filter.args = {
+  activeTabName: "Sturdy",
+  componentId: "filter",
+  variant: 'filter',
+  tablistLabel: "Foo",
+}
 
 const AvailabilityTemplate = (args) => html`
 <div style="background-color: #ddd; padding: 20px;">
@@ -38,26 +54,10 @@ const AvailabilityTemplate = (args) => html`
 </div>
 `;
 
-export const Primary = BaseTemplate.bind({});
-Primary.args = {
-  activeTabName: "Dollop",
-  componentId: "primary",
-  variant: "primary",
-  tablistLabel: "Foo",
-}
-
 export const Availability = AvailabilityTemplate.bind({});
 Availability.args = {
   activeTabName: "tuesday",
   componentId: "availability",
   variant: 'availability',
-  tablistLabel: "Foo",
-}
-
-export const Filter = BaseTemplate.bind({});
-Filter.args = {
-  activeTabName: "Sturdy",
-  componentId: "filter",
-  variant: 'filter',
   tablistLabel: "Foo",
 }
