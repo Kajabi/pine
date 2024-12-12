@@ -8,32 +8,32 @@ import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 })
 export class PdsChip {
   /**
-   * A unique identifier used for the underlying component `id` attribute.
+   * A unique identifier for the component's `id` attribute.
    */
   @Prop() componentId: string;
 
   /**
-   * Sets the color scheme of the chip.
-   * @defaultValue 'neutral'
-   */
-  @Prop() sentiment: 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning' = 'neutral';
-
-  /**
-   * Determines whether a dot should be displayed on the chip.
+   * Specifies whether a dot should be displayed on the chip.
    * @defaultValue false
    */
   @Prop() dot = false;
 
   /**
-   *  Sets the text label content of the chip.
+   * Sets the text label content of the chip.
    */
   @Prop() label: string;
 
   /**
-   * Determines whether the chip should be rendered in a larger size.
+   * Indicates whether the chip should be displayed in a larger size.
    * @defaultValue false
    */
   @Prop() large = false;
+
+  /**
+   * Defines the color scheme of the chip.
+   * @defaultValue 'neutral'
+   */
+  @Prop() sentiment: 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning' = 'neutral';
 
   /**
    * Sets the style variant of the chip.
@@ -42,13 +42,13 @@ export class PdsChip {
   @Prop() variant: 'text' | 'tag' | 'dropdown' = 'text';
 
   /**
-   * Event when close button is clicked on tag variant.
+   * Emits an event when the close button is clicked on a tag variant chip.
    */
   @Event() pdsTagCloseClick: EventEmitter;
 
   private handleCloseClick = () => {
     this.pdsTagCloseClick.emit();
-  }
+  };
 
   private classNames() {
     const classNames = ['pds-chip'];
@@ -63,7 +63,7 @@ export class PdsChip {
       classNames.push('pds-chip--' + this.sentiment);
     }
 
-    return classNames.join('  ');
+    return classNames.join(' ');
   }
 
   private setChipContent() {

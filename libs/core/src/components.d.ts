@@ -272,11 +272,11 @@ export namespace Components {
     }
     interface PdsChip {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for the component's `id` attribute.
          */
         "componentId": string;
         /**
-          * Determines whether a dot should be displayed on the chip.
+          * Specifies whether a dot should be displayed on the chip.
           * @defaultValue false
          */
         "dot": boolean;
@@ -285,12 +285,12 @@ export namespace Components {
          */
         "label": string;
         /**
-          * Determines whether the chip should be rendered in a larger size.
+          * Indicates whether the chip should be displayed in a larger size.
           * @defaultValue false
          */
         "large": boolean;
         /**
-          * Sets the color scheme of the chip.
+          * Defines the color scheme of the chip.
           * @defaultValue 'neutral'
          */
         "sentiment": 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
@@ -1676,11 +1676,11 @@ declare namespace LocalJSX {
     }
     interface PdsChip {
         /**
-          * A unique identifier used for the underlying component `id` attribute.
+          * A unique identifier for the component's `id` attribute.
          */
         "componentId"?: string;
         /**
-          * Determines whether a dot should be displayed on the chip.
+          * Specifies whether a dot should be displayed on the chip.
           * @defaultValue false
          */
         "dot"?: boolean;
@@ -1689,16 +1689,16 @@ declare namespace LocalJSX {
          */
         "label"?: string;
         /**
-          * Determines whether the chip should be rendered in a larger size.
+          * Indicates whether the chip should be displayed in a larger size.
           * @defaultValue false
          */
         "large"?: boolean;
         /**
-          * Event when close button is clicked on tag variant.
+          * Emits an event when the close button is clicked on a tag variant chip.
          */
         "onPdsTagCloseClick"?: (event: PdsChipCustomEvent<any>) => void;
         /**
-          * Sets the color scheme of the chip.
+          * Defines the color scheme of the chip.
           * @defaultValue 'neutral'
          */
         "sentiment"?: 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
