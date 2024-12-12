@@ -44,17 +44,18 @@ The web component example utilizes vanilla JavaScript to access values directly 
           direction: '',
           notifications: false,
           message: '',
+          timeOfDay: '',
         });
 
         const handleSubmit = (e) => {
           e.preventDefault();
           // Validate required fields
-          const { name, email, subscribe, direction, notifications, message } = formData;
+          const { name, email, subscribe, direction, notifications, message, timeOfDay } = formData;
           if (!name || !email) {
             alert('Please fill out all required fields');
             return;
           }
-          console.log('Form Data:', JSON.stringify({ name, email, subscribe, direction, notifications, message }));
+          console.log('Form Data:', JSON.stringify({ name, email, subscribe, direction, notifications, message, timeOfDay }));
         };
 
         const handleChange = (e) => {
@@ -135,6 +136,22 @@ The web component example utilizes vanilla JavaScript to access values directly 
                 />
               </pds-box>
 
+              {/* Time of Day Select */}
+              <pds-box display="block" padding="sm" margin="sm">
+                <pds-select
+                  component-id="timeOfDay"
+                  label="Favorite Time of Day"
+                  name="timeOfDay"
+                  value={formData.timeOfDay}
+                  onChange={handleChange}
+                >
+                  <option value="">Select...</option>
+                  <option value="morning">Morning</option>
+                  <option value="noon">Noon</option>
+                  <option value="night">Night</option>
+                </pds-select>
+              </pds-box>
+
               {/* Message Textarea */}
               <pds-box display="block" padding="sm" margin="sm">
                 <pds-textarea
@@ -168,7 +185,8 @@ The web component example utilizes vanilla JavaScript to access values directly 
             subscribe: form.querySelector('[component-id="subscribe"]').checked,
             direction: form.querySelector('input[name="direction"]:checked')?.value,
             notifications: form.querySelector('[component-id="notifications"]').checked,
-            message: form.querySelector('[component-id="message"]').value
+            message: form.querySelector('[component-id="message"]').value,
+            timeOfDay: form.querySelector('[component-id="timeOfDay"]').value
           });
         }}>
           <pds-box display="block" padding="sm">
@@ -194,6 +212,15 @@ The web component example utilizes vanilla JavaScript to access values directly 
           </pds-box>
 
           <pds-box display="block" padding="sm">
+            <pds-select component-id="timeOfDay" label="Favorite Time of Day" name="timeOfDay">
+              <option value="">Select...</option>
+              <option value="morning">Morning</option>
+              <option value="noon">Noon</option>
+              <option value="night">Night</option>
+            </pds-select>
+          </pds-box>
+
+          <pds-box display="block" padding="sm">
             <pds-textarea component-id="message" label="Message"></pds-textarea>
           </pds-box>
 
@@ -215,7 +242,8 @@ The web component example utilizes vanilla JavaScript to access values directly 
       subscribe: form.querySelector('[component-id="subscribe"]').checked,
       direction: form.querySelector('input[name="direction"]:checked')?.value,
       notifications: form.querySelector('[component-id="notifications"]').checked,
-      message: form.querySelector('[component-id="message"]').value
+      message: form.querySelector('[component-id="message"]').value,
+      timeOfDay: form.querySelector('[component-id="timeOfDay"]').value
     });
   }}>
     <pds-box display="block" padding="sm">
@@ -238,6 +266,15 @@ The web component example utilizes vanilla JavaScript to access values directly 
 
     <pds-box display="block" padding="sm">
       <pds-switch component-id="notifications" label="Enable notifications"></pds-switch>
+    </pds-box>
+
+    <pds-box display="block" padding="sm">
+      <pds-select component-id="timeOfDay" label="Favorite Time of Day" name="timeOfDay">
+        <option value="">Select an option...</option>
+        <option value="morning">Morning</option>
+        <option value="noon">Noon</option>
+        <option value="night">Night</option>
+      </pds-select>
     </pds-box>
 
     <pds-box display="block" padding="sm">
