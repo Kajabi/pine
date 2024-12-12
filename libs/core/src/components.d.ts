@@ -272,11 +272,11 @@ export namespace Components {
     }
     interface PdsChip {
         /**
-          * A unique identifier for the component's `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
         /**
-          * Specifies whether a dot should be displayed on the chip.
+          * Determines whether a dot should be displayed on the chip.
           * @defaultValue false
          */
         "dot": boolean;
@@ -1676,11 +1676,11 @@ declare namespace LocalJSX {
     }
     interface PdsChip {
         /**
-          * A unique identifier for the component's `id` attribute.
+          * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
         /**
-          * Specifies whether a dot should be displayed on the chip.
+          * Determines whether a dot should be displayed on the chip.
           * @defaultValue false
          */
         "dot"?: boolean;

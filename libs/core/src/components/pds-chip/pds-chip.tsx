@@ -8,12 +8,12 @@ import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 })
 export class PdsChip {
   /**
-   * A unique identifier for the component's `id` attribute.
+   * A unique identifier used for the underlying component `id` attribute.
    */
   @Prop() componentId: string;
 
   /**
-   * Specifies whether a dot should be displayed on the chip.
+   * Determines whether a dot should be displayed on the chip.
    * @defaultValue false
    */
   @Prop() dot = false;
