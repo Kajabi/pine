@@ -287,12 +287,12 @@ export namespace Components {
          */
         "label": string;
         /**
-          * Determines whether the chip should be rendered in a larger size.
+          * Determines whether the chip should be displayed in a larger size.
           * @defaultValue false
          */
         "large": boolean;
         /**
-          * Sets the color scheme of the chip.
+          * Defines the color scheme of the chip.
           * @defaultValue 'neutral'
          */
         "sentiment": 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
@@ -1743,16 +1743,16 @@ declare namespace LocalJSX {
          */
         "label"?: string;
         /**
-          * Determines whether the chip should be rendered in a larger size.
+          * Determines whether the chip should be displayed in a larger size.
           * @defaultValue false
          */
         "large"?: boolean;
         /**
-          * Event when close button is clicked on tag variant.
+          * Event emitted when the close button is clicked on a tag variant chip.
          */
         "onPdsTagCloseClick"?: (event: PdsChipCustomEvent<any>) => void;
         /**
-          * Sets the color scheme of the chip.
+          * Defines the color scheme of the chip.
           * @defaultValue 'neutral'
          */
         "sentiment"?: 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';

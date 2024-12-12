@@ -3,7 +3,21 @@ import { components } from '../../../../dist/docs.json';
 
 # Chip
 
-Chips are used to inform users of the status of an object or to relate properties to a parent. Commonly used in tabular data to indicate status.
+Chips are used to inform users about the status of an object or to associate properties with a parent. Commonly used in tabular data to indicate status.
+
+## Usage Guidelines
+
+### When to use
+- To represent compact labels, statuses, or categories.
+- Ideal for conveying additional metadata in components like tables, cards, or filters.
+- Useful for dismissible tags or quick user actions.
+
+### When not to use
+- Avoid using Chips for long, descriptive information.
+- Do not use Chips as a primary action element in a UI.
+
+### Accessibility
+- Ensure proper color contrast for readability.
 
 ## Properties
 
@@ -84,8 +98,6 @@ A small circular indicator displayed within a chip. Dot colors are determined by
 ### Dropdown
 
 If the `variant` property is set to `"dropdown"`, the chip will be rendered in a dropdown style, altering its appearance and behavior accordingly.
-
-Should be used in conjunction with the `pds-dropdown` component. {/* TODO: Add link to dropdown component when available. */}
 
 <DocCanvas client:only
   mdxSource={{
