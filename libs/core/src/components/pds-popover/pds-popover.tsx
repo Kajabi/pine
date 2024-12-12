@@ -22,7 +22,7 @@ export class PdsPopover {
    * Determines the action that triggers the popover. For manual popovers, the consumer is responsible for toggling this value.
    * @defaultValue "show"
    */
-  @Prop() popoverTargetAction: 'show' | 'toggle' = 'show';
+  @Prop() popoverTargetAction: 'show' | 'toggle' | 'hide' = 'show';
 
   /**
    * Determines the type of popover. Auto popovers can be "light dismissed" by clicking outside of the popover.

@@ -44,25 +44,14 @@ Closes automatically when clicking outside the popover content. Can also be clos
 #### Manual
 Popovers with the `popoverType="manual"` require explicit user interaction to close. This means they won't automatically disappear when clicking outside or pressing Escape.
 
-- add `popoverTargetAction="toggle"` to the popover to allow the user to close it by clicking the trigger button.
+The `popoverTargetAction` property determines how the trigger button interacts with the popover:
+- `show`: Only shows the popover (default)
+- `hide`: Only hides the popover
+- `toggle`: Alternates between showing and hiding
 
-{/* To implement this:
+For manual popovers, using `popoverTargetAction="toggle"` is recommended as it allows users to both open and close the popover using the trigger button.
 
-1. Create a Closing Function:
-
-    - Define a JavaScript function (e.g., `handleManualClose`) that will be responsible for closing the popover.
-    - Inside this function, you'll typically use `document.getElementById('manual').hide()` to call the `hide()` method on the popover element.
-    - Important: Ensure the id (`manual` in this example) matches the componentId prop of the `PdsPopover` component.
-
-2. Attach Function to onClick:
-
-    - Assign the `handleManualClose` function to the `onClick` event of the button within the popover.
-    - This ensures that when the user clicks the "Close Popover" button, the `handleManualClose` function is executed, and the popover is hidden. */}
-
-export const handleManualClose = () => {
-  const popover = document.querySelector('pds-popover[component-id="manual"]');
-  popover.hide();
-};
+Learn more about popover target actions in the [MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/popoverTargetAction#showhide_popover_action_with_a_manual_popover).
 
 <DocCanvas client:only
   mdxSource={{
