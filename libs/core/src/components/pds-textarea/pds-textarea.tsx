@@ -29,7 +29,7 @@ export class PdsTextarea {
   @Prop() disabled = false;
 
   /**
-   * Specifies the error message and provides an error-themed treatment to the field.
+   * Displays an error message below the textarea field.
    */
   @Prop() errorMessage?: string;
 

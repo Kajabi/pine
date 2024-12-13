@@ -12,7 +12,7 @@
 | `autocomplete`             | `autocomplete`   | Specifies if and how the browser provides `autocomplete` assistance for the field.                   | `string`  | `undefined`        |
 | `componentId` _(required)_ | `component-id`   | A unique identifier used for the underlying component `id` attribute.                                | `string`  | `undefined`        |
 | `disabled`                 | `disabled`       | Determines whether or not the textarea is disabled.                                                  | `boolean` | `false`            |
-| `errorMessage`             | `error-message`  | Specifies the error message and provides an error-themed treatment to the field.                     | `string`  | `undefined`        |
+| `errorMessage`             | `error-message`  | Displays an error message below the textarea field.                                                  | `string`  | `undefined`        |
 | `helperMessage`            | `helper-message` | Displays a message or hint below the textarea field.                                                 | `string`  | `undefined`        |
 | `invalid`                  | `invalid`        | Determines whether or not the textarea is invalid or throws an error.                                | `boolean` | `false`            |
 | `label`                    | `label`          | Text to be displayed as the textarea label.                                                          | `string`  | `undefined`        |
