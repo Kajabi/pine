@@ -3,13 +3,29 @@ import { components } from '../../../../dist/docs.json';
 
 # Accordion
 
-An Accordion, composed of a single trigger button and a panel of custom content, is used to show and hide information. Use the provided slots to add custom content to both the trigger and the panel.
+An Accordion, composed of a single label and a panel of custom content, is used to show and hide information. They can be helpful for users to scan the contents of the page and find the information they need quickly and easily.
+
+Both the label and panel contain slots to use for custom content.
 
 ## Guidelines
+
+### When to Use
+
+- To display step-by-step processes and information
+- To group related, but independent, information together to prevent the need for having multiple accordions open
+
+### When Not to Use
+
+- When the user requires information from most or all content on the page
+- When information must be nested multiple levels deep
 
 ### Accessibility
 
 **Caution**: The label slot is built with the `<summary>` HTML component. Because the `<summary>`'s default accessibility role is `button`, it will strip all child elements of their own roles. This will prevent elements such as headings from being read as such for users of assistive technology. Exercise caution to not use the label as a substitute for a heading.
+
+### Accordions vs Tabs
+
+Though similar, tabs and accordions both offer different user experiences to keep in mind. Consider using accordions for shorter, independent content and on devices with smaller viewports and limited space. Consider using tabs for longer, related content under a main topic.
 
 ## Properties
 
@@ -65,6 +81,8 @@ When the slots are set, the accordion will render with the provided trigger labe
 </DocCanvas>
 
 ## References
+
+[NNGroup: Accordions on Desktop: When and How to Use](https://www.nngroup.com/articles/accordions-on-desktop/)
 
 [MDN: Details](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details)
 
