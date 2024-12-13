@@ -304,7 +304,7 @@ export namespace Components {
     }
     interface PdsCopytext {
         /**
-          * Determines whether `copytext` should have a border.
+          * Determines whether `copytext` should have a visible border.
           * @defaultValue true
          */
         "border": boolean;
@@ -323,7 +323,7 @@ export namespace Components {
          */
         "truncate": boolean;
         /**
-          * String that is displayed and that is also copied to the clipboard upon interaction.
+          * The string displayed that is also copied to the clipboard upon interaction.
          */
         "value": string;
     }
@@ -1764,7 +1764,7 @@ declare namespace LocalJSX {
     }
     interface PdsCopytext {
         /**
-          * Determines whether `copytext` should have a border.
+          * Determines whether `copytext` should have a visible border.
           * @defaultValue true
          */
         "border"?: boolean;
@@ -1778,7 +1778,7 @@ declare namespace LocalJSX {
          */
         "fullWidth"?: boolean;
         /**
-          * Event when copyText button is clicked.
+          * Event fired when copyText button is clicked.
          */
         "onPdsCopyTextClick"?: (event: PdsCopytextCustomEvent<any>) => void;
         /**
@@ -1787,7 +1787,7 @@ declare namespace LocalJSX {
          */
         "truncate"?: boolean;
         /**
-          * String that is displayed and that is also copied to the clipboard upon interaction.
+          * The string displayed that is also copied to the clipboard upon interaction.
          */
         "value": string;
     }
