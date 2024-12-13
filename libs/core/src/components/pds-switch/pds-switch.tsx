@@ -17,52 +17,52 @@ export class PdsSwitch {
   @Prop() componentId!: string;
 
   /**
-   * Determines the input 'checked' state
+   * Determines the input 'checked' state.
    */
   @Prop({ mutable: true }) checked = false;
 
   /**
-   * Determines the input 'disabled' state, preventing user interaction
+   * Determines the input 'disabled' state, preventing user interaction.
    */
   @Prop() disabled? = false;
 
   /**
-   * Displays message text describing an invalid state
+   * Displays message text describing an invalid state.
    */
   @Prop() errorMessage?: string;
 
   /**
-   * Displays help text for additional description of an input
+   * Displays help text for additional description of an input.
    */
   @Prop() helperMessage: string;
 
   /**
-   * Determines the input 'invalid' state, signifying an error is present
+   * Determines the input 'invalid' state, signifying an error is present.
    */
   @Prop() invalid? = false;
 
   /**
-   * Displays text to describe the input
+   * Displays text to describe the input.
    */
   @Prop() label!: string;
 
   /**
-   * Identifies form data and unifies a group of radio inputs for toggling a single property/value
+   * Identifies form data and unifies a group of radio inputs for toggling a single property/value.
    */
   @Prop() name: string;
 
   /**
-   * Determines the 'required' state of the input
+   * Determines the 'required' state of the input.
    */
   @Prop() required? = false;
 
   /**
-   * Provides input with a string submitted in form data, and can be used to distinguish radio inputs
+   * Provides input with a string submitted in form data.
    */
   @Prop() value: string;
 
   /**
-   * Emits an event on input change
+   * Emits an event on input change.
    */
   @Event() pdsSwitchChange: EventEmitter<InputEvent>;
 
@@ -74,9 +74,6 @@ export class PdsSwitch {
     this.pdsSwitchChange.emit(e as InputEvent);
   };
 
-  /**
-   * Generate switch classes
-   */
   private switchClassNames = () => {
     let switchClasses = `pds-switch`;
 

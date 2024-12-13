@@ -701,7 +701,7 @@ export namespace Components {
     }
     interface PdsSwitch {
         /**
-          * Determines the input 'checked' state
+          * Determines the input 'checked' state.
          */
         "checked": boolean;
         /**
@@ -709,35 +709,35 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Determines the input 'disabled' state, preventing user interaction
+          * Determines the input 'disabled' state, preventing user interaction.
          */
         "disabled"?: boolean;
         /**
-          * Displays message text describing an invalid state
+          * Displays message text describing an invalid state.
          */
         "errorMessage"?: string;
         /**
-          * Displays help text for additional description of an input
+          * Displays help text for additional description of an input.
          */
         "helperMessage": string;
         /**
-          * Determines the input 'invalid' state, signifying an error is present
+          * Determines the input 'invalid' state, signifying an error is present.
          */
         "invalid"?: boolean;
         /**
-          * Displays text to describe the input
+          * Displays text to describe the input.
          */
         "label": string;
         /**
-          * Identifies form data and unifies a group of radio inputs for toggling a single property/value
+          * Identifies form data and unifies a group of radio inputs for toggling a single property/value.
          */
         "name": string;
         /**
-          * Determines the 'required' state of the input
+          * Determines the 'required' state of the input.
          */
         "required"?: boolean;
         /**
-          * Provides input with a string submitted in form data, and can be used to distinguish radio inputs
+          * Provides input with a string submitted in form data.
          */
         "value": string;
     }
@@ -2181,7 +2181,7 @@ declare namespace LocalJSX {
     }
     interface PdsSwitch {
         /**
-          * Determines the input 'checked' state
+          * Determines the input 'checked' state.
          */
         "checked"?: boolean;
         /**
@@ -2189,39 +2189,39 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
-          * Determines the input 'disabled' state, preventing user interaction
+          * Determines the input 'disabled' state, preventing user interaction.
          */
         "disabled"?: boolean;
         /**
-          * Displays message text describing an invalid state
+          * Displays message text describing an invalid state.
          */
         "errorMessage"?: string;
         /**
-          * Displays help text for additional description of an input
+          * Displays help text for additional description of an input.
          */
         "helperMessage"?: string;
         /**
-          * Determines the input 'invalid' state, signifying an error is present
+          * Determines the input 'invalid' state, signifying an error is present.
          */
         "invalid"?: boolean;
         /**
-          * Displays text to describe the input
+          * Displays text to describe the input.
          */
         "label": string;
         /**
-          * Identifies form data and unifies a group of radio inputs for toggling a single property/value
+          * Identifies form data and unifies a group of radio inputs for toggling a single property/value.
          */
         "name"?: string;
         /**
-          * Emits an event on input change
+          * Emits an event on input change.
          */
         "onPdsSwitchChange"?: (event: PdsSwitchCustomEvent<InputEvent>) => void;
         /**
-          * Determines the 'required' state of the input
+          * Determines the 'required' state of the input.
          */
         "required"?: boolean;
         /**
-          * Provides input with a string submitted in form data, and can be used to distinguish radio inputs
+          * Provides input with a string submitted in form data.
          */
         "value"?: string;
     }
