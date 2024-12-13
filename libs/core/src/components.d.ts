@@ -905,51 +905,51 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Indicates whether or not the textarea is disabled
+          * Indicates whether or not the textarea is disabled.
           * @defaultValue false
          */
         "disabled": boolean;
         /**
-          * Specifies the error text and provides an error-themed treatment to the field
+          * Specifies the error message and provides an error-themed treatment to the field.
          */
         "errorMessage"?: string;
         /**
-          * Displays a hint or description of the textarea
+          * Displays a message or hint below the textarea field.
          */
         "helperMessage"?: string;
         /**
-          * Indicates whether or not the textarea is invalid or throws an error
+          * Indicates whether or not the textarea is invalid or throws an error.
           * @defaultValue false
          */
         "invalid": boolean;
         /**
-          * Text to be displayed as the textarea label
+          * Text to be displayed as the textarea label.
          */
         "label"?: string;
         /**
-          * Specifies the name, submitted with the form name/value pair. This value will mirror the componentId
+          * Specifies the name. Submitted with the form name/value pair. This value will mirror the componentId.
          */
         "name": string;
         /**
-          * Specifies a short hint that describes the expected value of the textarea
+          * Specifies a short hint that describes the expected value of the textarea.
          */
         "placeholder"?: string;
         /**
-          * Indicates whether or not the textarea is readonly
+          * Indicates whether or not the textarea is readonly.
           * @defaultValue false
          */
         "readonly": boolean;
         /**
-          * Indicates whether or not the textarea is required
+          * Indicates whether or not the textarea is required.
           * @defaultValue false
          */
         "required": boolean;
         /**
-          * Sets number of rows of text visible without needing to scroll in the textarea
+          * Sets number of rows of text visible without needing to scroll in the textarea.
          */
         "rows"?: number;
         /**
-          * The value of the textarea
+          * The value of the textarea.
          */
         "value"?: string;
     }
@@ -2410,55 +2410,55 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
-          * Indicates whether or not the textarea is disabled
+          * Indicates whether or not the textarea is disabled.
           * @defaultValue false
          */
         "disabled"?: boolean;
         /**
-          * Specifies the error text and provides an error-themed treatment to the field
+          * Specifies the error message and provides an error-themed treatment to the field.
          */
         "errorMessage"?: string;
         /**
-          * Displays a hint or description of the textarea
+          * Displays a message or hint below the textarea field.
          */
         "helperMessage"?: string;
         /**
-          * Indicates whether or not the textarea is invalid or throws an error
+          * Indicates whether or not the textarea is invalid or throws an error.
           * @defaultValue false
          */
         "invalid"?: boolean;
         /**
-          * Text to be displayed as the textarea label
+          * Text to be displayed as the textarea label.
          */
         "label"?: string;
         /**
-          * Specifies the name, submitted with the form name/value pair. This value will mirror the componentId
+          * Specifies the name. Submitted with the form name/value pair. This value will mirror the componentId.
          */
         "name"?: string;
         /**
-          * Event emitted whenever the value of the textarea changes
+          * Event emitted whenever the value of the textarea changes.
          */
         "onPdsTextareaChange"?: (event: PdsTextareaCustomEvent<TextareaChangeEventDetail>) => void;
         /**
-          * Specifies a short hint that describes the expected value of the textarea
+          * Specifies a short hint that describes the expected value of the textarea.
          */
         "placeholder"?: string;
         /**
-          * Indicates whether or not the textarea is readonly
+          * Indicates whether or not the textarea is readonly.
           * @defaultValue false
          */
         "readonly"?: boolean;
         /**
-          * Indicates whether or not the textarea is required
+          * Indicates whether or not the textarea is required.
           * @defaultValue false
          */
         "required"?: boolean;
         /**
-          * Sets number of rows of text visible without needing to scroll in the textarea
+          * Sets number of rows of text visible without needing to scroll in the textarea.
          */
         "rows"?: number;
         /**
-          * The value of the textarea
+          * The value of the textarea.
          */
         "value"?: string;
     }
