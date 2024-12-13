@@ -3,22 +3,24 @@ import { components } from '../../../../dist/docs.json';
 
 # Select
 
-The select field, when combined with a label, helper message, and error text, offers a comprehensive control that provides a menu of options for user selection. This ensures clarity and guidance for the user, enhancing the overall user experience.
+The select component provides a dropdown list of options, allowing users to make a selection from a predefined set.
 
 ## Guidelines
 
-### Usage
+### When to use
+- When a user needs to select options from a predefined list.
+- For forms with multiple dropdowns requiring consistent styling and behavior.
+- When displaying grouped or categorized options for easier navigation.
 
-#### When to use
-
-- When you want to provide a list of options for the user to choose from.
-- **Example**: Use a select component to choose a state from a list of U.S. regions.
+### When not to use
+- For binary choices; consider a radio or switch instead.
+- When users need to input free-form text; a text field may be better suited.
+- For very long lists of options where search or filtering would be more effective.
 
 ### Accessibility
-
-- The select component comes with a built-in label through the `label` property, it is strongly encouraged that you include it.
-- Please provide clear and descriptive error, and helper-message text.
-- Selects can have a default option that is not selectable.
+- Use meaningful labels and associate them clearly with the select element.
+- Provide helper text or error messages for guidance and validation.
+- Avoid overloading dropdowns with excessive options to prevent overwhelm.
 
 ## Properties
 
@@ -26,7 +28,7 @@ The select field, when combined with a label, helper message, and error text, of
 
 ### Default
 
-This example shows the default state of the select component with a label and a list of options. The user can choose one of the options from the dropdown menu.
+The default state of the select component displays a label alongside a list of options in a dropdown menu. The user can then choose one of the available options from the list.
 
 <DocCanvas
   client:only
@@ -59,7 +61,7 @@ This example shows the default state of the select component with a label and a 
 
 ### Disabled
 
-This example demonstrates the select component in a disabled state. The user cannot interact with the dropdown menu or select any options.
+When the select component is disabled, it prevents any user interaction. As a result, no options can be selected, providing a clear indication to the user that the field is not available for input.
 
 <DocCanvas
   client:only
@@ -92,7 +94,7 @@ This example demonstrates the select component in a disabled state. The user can
 
 ### With Message
 
-This example includes a helper message that provides additional context or instructions for the user. The helper message appears below the select component.
+A helper message provides additional context or instructions for the user and appears below the select component.
 
 <DocCanvas
   client:only
@@ -125,7 +127,7 @@ This example includes a helper message that provides additional context or instr
 
 ### Invalid
 
-This example shows the select component with an error message. The error message provides feedback to the user when there is an issue with their selection.
+The select component is shown invalid along with an error message, providing feedback to the user when there is an issue with their selection.
 
 <DocCanvas
   client:only
@@ -158,7 +160,7 @@ This example shows the select component with an error message. The error message
 
 ### Autocomplete
 
-This example demonstrates the select component with the autocomplete attribute enabled. The browser may provide autocomplete suggestions based on the user's input.
+With the autocomplete attribute enabled, the select component allows browsers to suggest previously entered values, improving the user’s input experience. This feature helps users fill out forms more quickly and accurately by displaying potential matches based on their past selections or input history.
 
 <DocCanvas
   client:only
@@ -191,7 +193,8 @@ This example demonstrates the select component with the autocomplete attribute e
 
 ### Multiple
 
-This example demonstrates the select component with the multiple attribute enabled. The user can select multiple options from the select component.
+With the `multiple` attribute enabled, the select component allows users to select more than one option at a time.
+
 >Note: When the multiple attribute is enabled, the `value` property should be an array of selected values.
 
 <DocCanvas
@@ -225,7 +228,7 @@ This example demonstrates the select component with the multiple attribute enabl
 
 ### With Optgroup
 
-This example demonstrates the select component with grouped options using the <code>optgroup</code> element. The user can choose from options within different groups.
+The `optgroup` element allows for grouping related options within the select component, making it easier for users to navigate large lists by categorizing options. This is especially useful when the list contains a variety of similar items, such as countries grouped by continents or product categories grouped by type.
 
 <DocCanvas
   client:only

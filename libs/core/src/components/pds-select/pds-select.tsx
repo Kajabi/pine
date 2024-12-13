@@ -29,17 +29,17 @@ export class PdsSelect {
   @Prop() disabled = false
 
   /**
-   * Specifies the error message and provides an error-themed treatment to the field.
+   * Displays error message text describing an invalid state.
    */
   @Prop() errorMessage: string;
 
   /**
-   * Displays a message or hint below the input field.
+   * Displays helper message text below select.
    */
   @Prop() helperMessage: string;
 
   /**
-   * Indicates whether or not the input field is invalid or throws an error.
+   * Determines whether or not the select is invalid.
    */
   @Prop() invalid?: boolean;
 
@@ -72,7 +72,7 @@ export class PdsSelect {
   @Prop({ mutable: true }) value?: string | string[];
 
   /**
-   * Emitted when a keyboard input occurred.
+   * Emitted when a keyboard input occurs.
    */
   @Event() pdsSelectChange: EventEmitter<InputEvent>;
 
@@ -104,7 +104,7 @@ export class PdsSelect {
     if (this.selectEl) {
       const options = this.selectEl.options;
 
-      // Update the selected attribute for all options
+      // Update the selected attribute for all options.
       Array.from(options).map((option: HTMLOptionElement) => {
         if (Array.isArray(this.value)) {
           option.selected = this.value.includes(option.value);
@@ -116,7 +116,7 @@ export class PdsSelect {
   }
 
   /**
-   * Emits an event on input change
+   * Emits an event on input change.
   */
   private onSelectUpdate = (e: Event) => {
     const target = e.target as HTMLSelectElement
