@@ -20,6 +20,8 @@ storybook-static
 *.sublime-project
 *.sublime-workspace
 
+.nx/
+
 # IDE - VSCode
 .vscode/*
 .vscode/settings.json
