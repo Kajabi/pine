@@ -37,21 +37,24 @@ This allows for flexibility with any CSS-supported color format.
 <DocCanvas client:only mdxSource={{
   react: `
 <PdsIcon name="bulb" color="red"></PdsIcon>
-<PdsIcon name="bulb" color="orange"></PdsIcon>
-<PdsIcon name="bulb" color="green"></PdsIcon>
-<PdsIcon name="bulb" color="blue"></PdsIcon>
+<PdsIcon name="bulb" color="#FFA500"></PdsIcon>
+<PdsIcon name="bulb" color="rgb(0, 190, 0)"></PdsIcon>
+<PdsIcon name="bulb" color="hsl(230, 100%, 50%)"></PdsIcon>
+<PdsIcon name="bulb" color="var(--pine-color-mercury-500)"></PdsIcon>
 `,
   webComponent: `
 <pds-icon name="bulb" color="red"></pds-icon>
-<pds-icon name="bulb" color="orange"></pds-icon>
-<pds-icon name="bulb" color="green"></pds-icon>
-<pds-icon name="bulb" color="blue"</pds-icon>`
+<pds-icon name="bulb" color="#FFA500"></pds-icon>
+<pds-icon name="bulb" color="rgb(0, 190, 0)"></pds-icon>
+<pds-icon name="bulb" color="hsl(230, 100%, 50%)"></pds-icon>
+<pds-icon name="bulb" color="var(--pine-color-mercury-500)"></pds-icon>`
 }}>
   <>
     <pds-icon name="bulb" color="red"></pds-icon>
-    <pds-icon name="bulb" color="orange"></pds-icon>
-    <pds-icon name="bulb" color="green"></pds-icon>
-    <pds-icon name="bulb" color="blue"></pds-icon>
+    <pds-icon name="bulb" color="#FFA500"></pds-icon>
+    <pds-icon name="bulb" color="rgb(0, 190, 0)"></pds-icon>
+    <pds-icon name="bulb" color="hsl(230, 100%, 50%)"></pds-icon>
+    <pds-icon name="bulb" color="var(--pine-color-mercury-500)"></pds-icon>
   </>
 </DocCanvas>
 
