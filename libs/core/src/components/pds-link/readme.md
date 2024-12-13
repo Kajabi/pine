@@ -7,27 +7,27 @@ Link is mainly used as navigational element and usually appear within or directl
 
 ## Properties
 
-| Property            | Attribute      | Description                                                           | Type                   | Default     |
-| ------------------- | -------------- | --------------------------------------------------------------------- | ---------------------- | ----------- |
-| `componentId`       | `component-id` | A unique identifier used for the underlying component `id` attribute. | `string`               | `undefined` |
-| `external`          | `external`     | When enabled, opens link in a new tab.                                | `boolean`              | `false`     |
-| `fontSize`          | `font-size`    |  The Font size follows t-shirt model sm: 12px md: 14px lg: 16px       | `"lg" \| "md" \| "sm"` | `'lg'`      |
-| `href` _(required)_ | `href`         | The URL that the hyperlink points to.                                 | `string`               | `undefined` |
-| `variant`           | `variant`      |  Modifies the look of the link                                        | `"inline" \| "plain"`  | `'inline'`  |
+| Property            | Attribute      | Description                                                                                        | Type                   | Default     |
+| ------------------- | -------------- | -------------------------------------------------------------------------------------------------- | ---------------------- | ----------- |
+| `componentId`       | `component-id` | A unique identifier used for the underlying component `id` attribute.                              | `string`               | `undefined` |
+| `external`          | `external`     | Determines whether the link should open in a new tab.                                              | `boolean`              | `false`     |
+| `fontSize`          | `font-size`    | The font size of the link's text.                                                                  | `"lg" \| "md" \| "sm"` | `'lg'`      |
+| `href` _(required)_ | `href`         | The hyperlink's destination URL. If no text is provided in the custom slot, the href will be used. | `string`               | `undefined` |
+| `variant`           | `variant`      | Sets the link variant styles.                                                                      | `"inline" \| "plain"`  | `'inline'`  |
 
 
 ## Slots
 
-| Slot | Description                                         |
-| ---- | --------------------------------------------------- |
-|      | Content is placed between the opening closing tags. |
+| Slot          | Description                                                                                                                |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `"(default)"` | Text content placed between the opening and closing tags. If no text is provided, the **href** will be used as a fallback. |
 
 
 ## Shadow Parts
 
-| Part     | Description                                               |
-| -------- | --------------------------------------------------------- |
-| `"link"` | The main link element that represents the link component. |
+| Part     | Description          |
+| -------- | -------------------- |
+| `"link"` | Link element styles. |
 
 
 ## Dependencies

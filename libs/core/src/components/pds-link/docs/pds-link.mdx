@@ -3,34 +3,21 @@ import { components } from '../../../../dist/docs.json';
 
 # Link
 
-<p>
-  Link is mainly used as navigational element and usually appear within or directly following a paragraph or sentence. The "plain link" is used for interactive user generated text
-  like product, post, and offer titles.
-</p>
+A hyperlink is used as a navigational element to direct users to another location on the website or application.
+
+## Guidelines
+
+### Buttons vs Links
+
+In many current web design patterns, buttons and links have evolved to look visually identical. However, for best practices, the fundamental differences between the two should be considered before using. Links are used to navigate the user to another page. Buttons are used to perform an action on the current page or submit a form.
 
 ## Properties
 
 <DocArgsTable componentName="pds-link" docSource={components} />
 
-## Variants
+### Default
 
-### External
-
-An `external` link is designed to redirect users to an external website or resource.
-
-Notably, it's styled visually with an icon to indicate its external nature and opens a new browser tab on interaction.
-
-<DocCanvas client:only
-  mdxSource={{
-    react: '<PdsLink href="#some-anchor" external="true"></PdsLink>',
-    webComponent: '<pds-link href="#some-anchor" external="true"></pds-link>'
-}}>
-  <pds-link href="#some-anchor" external="true"></pds-link>
-</DocCanvas>
-
-### Inline
-
-The `inline` variant displays a standard inline hyperlink. Visually, it maintains the typical underlined appearance of a hyperlink.
+The default `inline` link. Visually, it maintains the underlined appearance of a hyperlink.
 
 <DocCanvas client:only
   mdxSource={{
@@ -42,7 +29,7 @@ The `inline` variant displays a standard inline hyperlink. Visually, it maintain
 
 ### Plain
 
-The `plain` variant displays a standard plain hyperlink. Visually, it does not include an underline.
+The `plain` variant displays a standard plain hyperlink without an underline.
 
 <DocCanvas client:only
   mdxSource={{
@@ -52,7 +39,31 @@ The `plain` variant displays a standard plain hyperlink. Visually, it does not i
   <pds-link href="#some-anchor" variant="plain"></pds-link>
 </DocCanvas>
 
-### With Custom Text (uses slot)
+### External
+
+An `external` link is styled with an icon to indicate that it will redirect users to an external website or resource in a new tab.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsLink href="#some-anchor" external="true"></PdsLink>',
+    webComponent: '<pds-link href="#some-anchor" external="true"></pds-link>'
+}}>
+  <pds-link href="#some-anchor" external="true"></pds-link>
+</DocCanvas>
+
+### Font Size
+
+The `font-size` prop can be used to adjust the size of the link text. `sm` is 12px, `md` is 14px, and `lg` is 16px. `md` is the default size.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsLink href="#some-anchor" font-size="sm"></PdsLink>',
+    webComponent: '<pds-link href="#some-anchor" font-size="sm"></pds-link>'
+}}>
+  <pds-link href="#some-anchor" font-size="sm"></pds-link>
+</DocCanvas>
+
+### Custom Slot Text
 
 Providing text within the open and closing tags allows the default link text to be replaced with custom text.
 
@@ -64,7 +75,7 @@ Providing text within the open and closing tags allows the default link text to 
   <pds-link href="#some-anchor">Overrides default use of href</pds-link>
 </DocCanvas>
 
-### Without custom text in slot
+### No Custom Slot Text
 
 When no custom text is provided, the link will use the `href` as the link text.
 
@@ -75,3 +86,10 @@ When no custom text is provided, the link will use the `href` as the link text.
 }}>
   <pds-link href="#some-anchor"></pds-link>
 </DocCanvas>
+
+## References
+
+[CSS Tricks: Buttons vs. Links](https://css-tricks.com/buttons-vs-links/)
+
+[MDN: The Anchor Element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a)
+
