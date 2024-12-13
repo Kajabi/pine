@@ -3,34 +3,35 @@ import { components } from '../../../../dist/docs.json';
 
 # Input
 
-<p>
-  An input field coupled with a label and error text which allows for user input and feedback.
-</p>
+An input field coupled with a label and supplemental helper text that aids in user input and feedback.
 
 ## Guidelines
-### Usage
 
-#### When to use
-- To gather basic usage information
-- You want a response that is one line of text
+### When to use
 
-#### When not to use
-- You want a response longer than one line, use a [Textarea](/docs/components-textarea--default)
-- You want a response from a predefined list, use a select (TODO: create select and link here)
+- To gather basic usage information.
+- For responses that are a single line of text.
 
+### When not to use
+
+- For responses longer than one line. Consider using a [Textarea](/docs/components-textarea--docs).
+- For responses from a predefined list. Consider using a [Select](/docs/components-select--docs).
 
 ### Accessibility
-- The input component comes with a built-in label through the `label` property, it is strongly encouraged that you include it
-- Please provide clear and descriptive error, helper-message, and placeholder messages
-- Do not use a `placeholder` to communicate the field label, use a `label` property
+
+For accessibility, it is strongly encouraged to follow these best practices:
+
+- Use the `label` property to help screen reader users identify the purpose of the input.
+- Do not use a `placeholder` to communicate the field label, use a `label` property.
+- Provide clear and descriptive error, helper, and placeholder messages.
 
 ## Properties
+
 <DocArgsTable componentName="pds-input" docSource={components} />
 
-## Variants
+### Default
 
-### Text
-<p>The type of input used varies based on the type of information you look to capture. The `text` default type allows for any type of single line data.</p>
+The type of input used varies based on the type of information you look to capture. The `text` default type allows for any type of single line data. For more information on the types this component supports, please see the MDN article on the [input element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#input_types).
 
 <DocCanvas client:only
   mdxSource={{
@@ -40,19 +41,9 @@ import { components } from '../../../../dist/docs.json';
   <pds-input component-id="pds-input-text-example" label="Name" type="text" value="Frank Dux"></pds-input>
 </DocCanvas>
 
-### Email
-<p>This is used when the input type is `email`.</p>
-
-<DocCanvas client:only
-  mdxSource={{
-    react: '<PdsInput componentId="pds-input-email-example" label="Email Address" type="email" value="frank@example.com"></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-email-example" label="Email Address" type="email" value="frank@example.com"></pds-input>'
-}}>
-  <pds-input component-id="pds-input-email-example" label="Email Address" type="email" value="frank@example.com"></pds-input>
-</DocCanvas>
-
 ### Required
-<p>Indicates that the user must specify a value for the input before the owning form can be submitted.</p>
+
+Indicates that the user must specify a value for the input before the owning form can be submitted.
 
 <DocCanvas client:only
   mdxSource={{
@@ -63,7 +54,8 @@ import { components } from '../../../../dist/docs.json';
 </DocCanvas>
 
 ### Placeholder
-<p>Provides a short, non-essential hint about the expected input.</p>
+
+Provides a short, non-essential hint about the expected input.
 
 <DocCanvas client:only
   mdxSource={{
@@ -74,7 +66,8 @@ import { components } from '../../../../dist/docs.json';
 </DocCanvas>
 
 ### Disabled
-<p>Removes all interactive behavior from the text field and provides a visual treatment.</p>
+
+Removes all interactive behavior from the text field and provides a visual treatment.
 
 <DocCanvas client:only
   mdxSource={{
@@ -85,7 +78,8 @@ import { components } from '../../../../dist/docs.json';
 </DocCanvas>
 
 ### Readonly
-<p>Removes the ability to interact with the text field. If a value is present, that is still passed to the form.</p>
+
+Removes the ability to interact with the text field. If a value is present, that is still passed to the form.
 
 <DocCanvas client:only
   mdxSource={{
@@ -96,7 +90,8 @@ import { components } from '../../../../dist/docs.json';
 </DocCanvas>
 
 ### Helper Message
-<p>A `helper-message` is used to provide additional information about how to complete the text field.</p>
+
+A `helper-message` is used to provide additional information about how to complete the text field.
 
 <DocCanvas client:only
   mdxSource={{
@@ -107,7 +102,8 @@ import { components } from '../../../../dist/docs.json';
 </DocCanvas>
 
 ### Invalid
-<p>When `error-message` is present, the input displays the error message and provides a visual treatment.</p>
+
+When `error-message` is present, the input displays the error message and provides a visual treatment.
 
 <DocCanvas client:only
   mdxSource={{
@@ -117,7 +113,8 @@ import { components } from '../../../../dist/docs.json';
   <pds-input component-id="pds-input-error-example" label="Email address" type="email" error-message="Please provide a valid email address" value="Frank Dux"></pds-input>
 </DocCanvas>
 
-## Additional Resources
+## References
 
 [MDN Web Docs: Input](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
+
 [MDN Web Docs: HTML autocomplete attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete)

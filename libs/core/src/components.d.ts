@@ -1879,7 +1879,7 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Emitted when a keyboard input occurred.
+          * Emitted when a keyboard input occurs.
          */
         "onPdsInput"?: (event: PdsInputCustomEvent<InputEvent>) => void;
         /**

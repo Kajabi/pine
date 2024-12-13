@@ -26,9 +26,9 @@
 
 ## Events
 
-| Event      | Description                             | Type                      |
-| ---------- | --------------------------------------- | ------------------------- |
-| `pdsInput` | Emitted when a keyboard input occurred. | `CustomEvent<InputEvent>` |
+| Event      | Description                           | Type                      |
+| ---------- | ------------------------------------- | ------------------------- |
+| `pdsInput` | Emitted when a keyboard input occurs. | `CustomEvent<InputEvent>` |
 
 
 ## Dependencies
