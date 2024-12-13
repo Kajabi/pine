@@ -8,7 +8,9 @@ import { Component, Host, h, Prop } from '@stencil/core';
 export class PdsImage {
   /**
    * The image's alt tag. If none is provided,
-   * it will default to an empty string.
+   * it will default to an empty string, which is desired for
+   * decorative images.
+   * @defaultValue ''
    */
   @Prop() alt? = '';
 
@@ -26,12 +28,13 @@ export class PdsImage {
 
   /**
    * Indicates how the browser should load the image.
+   * @defaultValue eager
    */
   @Prop() loading?: 'eager' | 'lazy' = 'eager';
 
   /**
    * Determines the intended display size of an image
-   * within certian breakpoints. Has no effect if `srcset`
+   * within certain breakpoints. Has no effect if `srcset`
    * is not set or value has no width descriptor.
    */
   @Prop() sizes?: string;
@@ -42,7 +45,8 @@ export class PdsImage {
   @Prop() src: string;
 
   /**
-   * A set of image sources for the browser to use.
+   * A set of image sources for the browser to use
+   * for responsiveness.
    */
   @Prop() srcset?: string
 

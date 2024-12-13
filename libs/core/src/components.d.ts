@@ -344,7 +344,8 @@ export namespace Components {
     }
     interface PdsImage {
         /**
-          * The image's alt tag. If none is provided, it will default to an empty string.
+          * The image's alt tag. If none is provided, it will default to an empty string, which is desired for decorative images.
+          * @defaultValue ''
          */
         "alt"?: string;
         /**
@@ -357,10 +358,11 @@ export namespace Components {
         "height"?: number;
         /**
           * Indicates how the browser should load the image.
+          * @defaultValue eager
          */
         "loading"?: 'eager' | 'lazy';
         /**
-          * Determines the intended display size of an image within certian breakpoints. Has no effect if `srcset` is not set or value has no width descriptor.
+          * Determines the intended display size of an image within certain breakpoints. Has no effect if `srcset` is not set or value has no width descriptor.
          */
         "sizes"?: string;
         /**
@@ -368,7 +370,7 @@ export namespace Components {
          */
         "src": string;
         /**
-          * A set of image sources for the browser to use.
+          * A set of image sources for the browser to use for responsiveness.
          */
         "srcset"?: string;
         /**
@@ -1808,7 +1810,8 @@ declare namespace LocalJSX {
     }
     interface PdsImage {
         /**
-          * The image's alt tag. If none is provided, it will default to an empty string.
+          * The image's alt tag. If none is provided, it will default to an empty string, which is desired for decorative images.
+          * @defaultValue ''
          */
         "alt"?: string;
         /**
@@ -1821,10 +1824,11 @@ declare namespace LocalJSX {
         "height"?: number;
         /**
           * Indicates how the browser should load the image.
+          * @defaultValue eager
          */
         "loading"?: 'eager' | 'lazy';
         /**
-          * Determines the intended display size of an image within certian breakpoints. Has no effect if `srcset` is not set or value has no width descriptor.
+          * Determines the intended display size of an image within certain breakpoints. Has no effect if `srcset` is not set or value has no width descriptor.
          */
         "sizes"?: string;
         /**
@@ -1832,7 +1836,7 @@ declare namespace LocalJSX {
          */
         "src"?: string;
         /**
-          * A set of image sources for the browser to use.
+          * A set of image sources for the browser to use for responsiveness.
          */
         "srcset"?: string;
         /**
