@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.2](https://github.com/Kajabi/pine/compare/@pine-ds/doc-components@2.1.1...@pine-ds/doc-components@2.1.2) (2024-12-13)
+
+
+### Features
+
+* **text:** adds new component ([#294](https://github.com/Kajabi/pine/issues/294)) ([4f2ba2c](https://github.com/Kajabi/pine/commit/4f2ba2cc648f2aa6ea928b45b4fe8ff4041f8717))
+
+
+
+
+
 ## [2.1.1](https://github.com/Kajabi/pine/compare/@pine-ds/doc-components@2.1.0...@pine-ds/doc-components@2.1.1) (2024-11-22)
 
 

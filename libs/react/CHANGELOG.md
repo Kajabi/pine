@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.2](https://github.com/Kajabi/pine/compare/@pine-ds/react@2.1.1...@pine-ds/react@2.1.2) (2024-12-13)
+
+
+### Features
+
+* **popover:** add popover component ([#326](https://github.com/Kajabi/pine/issues/326)) ([0adb8d5](https://github.com/Kajabi/pine/commit/0adb8d537099ca3badf071eed440fddc441ed92c))
+* **select:** adds new component ([#310](https://github.com/Kajabi/pine/issues/310)) ([d1b3e68](https://github.com/Kajabi/pine/commit/d1b3e6809cba61e91814cccd6d2881206b47b3c1))
+* **text:** adds new component ([#294](https://github.com/Kajabi/pine/issues/294)) ([4f2ba2c](https://github.com/Kajabi/pine/commit/4f2ba2cc648f2aa6ea928b45b4fe8ff4041f8717))
+
+
+
+
+
 ## [2.1.1](https://github.com/Kajabi/pine/compare/@pine-ds/react@2.1.0...@pine-ds/react@2.1.1) (2024-11-22)
 
 **Note:** Version bump only for package @pine-ds/react
