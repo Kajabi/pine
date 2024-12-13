@@ -23,7 +23,7 @@ export class PdsTextarea {
   @Prop() componentId!: string;
 
   /**
-   * Indicates whether or not the textarea is disabled.
+   * Determines whether or not the textarea is disabled.
    * @defaultValue false
    */
   @Prop() disabled = false;
@@ -39,7 +39,7 @@ export class PdsTextarea {
   @Prop() helperMessage?: string;
 
   /**
-   * Indicates whether or not the textarea is invalid or throws an error.
+   * Determines whether or not the textarea is invalid or throws an error.
    * @defaultValue false
    */
   @Prop({mutable: true}) invalid = false;       // eslint-disable-line @stencil-community/strict-mutable
@@ -60,13 +60,13 @@ export class PdsTextarea {
   @Prop() placeholder?: string;
 
   /**
-   * Indicates whether or not the textarea is readonly.
+   * Determines whether or not the textarea is readonly.
    * @defaultValue false
    */
   @Prop() readonly = false;
 
   /**
-   * Indicates whether or not the textarea is required.
+   * Determines whether or not the textarea is required.
    * @defaultValue false
    */
   @Prop() required = false;

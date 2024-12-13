@@ -905,7 +905,7 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Indicates whether or not the textarea is disabled.
+          * Determines whether or not the textarea is disabled.
           * @defaultValue false
          */
         "disabled": boolean;
@@ -918,7 +918,7 @@ export namespace Components {
          */
         "helperMessage"?: string;
         /**
-          * Indicates whether or not the textarea is invalid or throws an error.
+          * Determines whether or not the textarea is invalid or throws an error.
           * @defaultValue false
          */
         "invalid": boolean;
@@ -935,12 +935,12 @@ export namespace Components {
          */
         "placeholder"?: string;
         /**
-          * Indicates whether or not the textarea is readonly.
+          * Determines whether or not the textarea is readonly.
           * @defaultValue false
          */
         "readonly": boolean;
         /**
-          * Indicates whether or not the textarea is required.
+          * Determines whether or not the textarea is required.
           * @defaultValue false
          */
         "required": boolean;
@@ -2410,7 +2410,7 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
-          * Indicates whether or not the textarea is disabled.
+          * Determines whether or not the textarea is disabled.
           * @defaultValue false
          */
         "disabled"?: boolean;
@@ -2423,7 +2423,7 @@ declare namespace LocalJSX {
          */
         "helperMessage"?: string;
         /**
-          * Indicates whether or not the textarea is invalid or throws an error.
+          * Determines whether or not the textarea is invalid or throws an error.
           * @defaultValue false
          */
         "invalid"?: boolean;
@@ -2444,12 +2444,12 @@ declare namespace LocalJSX {
          */
         "placeholder"?: string;
         /**
-          * Indicates whether or not the textarea is readonly.
+          * Determines whether or not the textarea is readonly.
           * @defaultValue false
          */
         "readonly"?: boolean;
         /**
-          * Indicates whether or not the textarea is required.
+          * Determines whether or not the textarea is required.
           * @defaultValue false
          */
         "required"?: boolean;
