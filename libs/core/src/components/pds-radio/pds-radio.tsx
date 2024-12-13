@@ -16,36 +16,36 @@ export class PdsRadio {
   @Prop() checked = false;
 
   /**
+   * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
+   */
+  @Prop() componentId!: string;
+
+  /**
    * Determines whether or not the radio is disabled.
    * @defaultValue false
    */
   @Prop() disabled = false;
 
   /**
-   * Displays message text describing an invalid state.
+   * Displays error message text describing an invalid state.
    */
   @Prop() errorMessage: string;
 
   /**
+   * Displays helper message text below radio.
+   */
+  @Prop() helperMessage: string;
+
+    /**
    * Determines whether or not the radio is invalid.
    * @defaultValue false
    */
-  @Prop() invalid = false;
-
-  /**
-   * A unique identifier used for the underlying component `id` attribute and the label `for` attribute.
-   */
-  @Prop() componentId!: string;
+    @Prop() invalid = false;
 
   /**
    * String used for label text next to radio.
    */
   @Prop() label: string;
-
-  /**
-   * String used for helper message below radio.
-   */
-  @Prop() helperMessage: string;
 
   /**
    * String used for radio `name` attribute.
