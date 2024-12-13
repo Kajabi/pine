@@ -5,13 +5,28 @@ import sampleImg from '../assets/demi_wilkinson.jpg';
 
 # Avatar
 
-Avatar is used for showing a thumbnail representation of an admin, customer, or business.
+The avatar component is used to display a thumbnail representation of an admin, customer, or business.
+
+## Guidelines
+
+### When to use
+- Use the `Avatar` to visually represent a user or entity, such as a profile picture, admin, or customer.
+- Ideal for applications where identifying users or roles with a small image is needed.
+
+### When not to use
+- Avoid using for large images or media that require detailed visibility.
+- Do not use for items that need a descriptive label or detailed information beyond a simple visual representation.
+
+### Accessibility
+- Always include an `alt` text description for profile images, ensuring users with visual impairments understand the context.
 
 ## Properties
 
 <DocArgsTable componentName="pds-avatar" docSource={components} />
 
-## Default
+### Default
+
+The default avatar style, typically used to represent a generic user or business.
 
 <DocCanvas client:only
   mdxSource={{
@@ -23,7 +38,7 @@ Avatar is used for showing a thumbnail representation of an admin, customer, or 
 
 ### Admin
 
-An admin variant of the avatar with less-rounded borders.
+An avatar variant specifically for admins, featuring less-rounded borders for distinction.
 
 <DocCanvas client:only
   mdxSource={{
@@ -35,7 +50,7 @@ An admin variant of the avatar with less-rounded borders.
 
 ### Badge
 
-An avatar with a badge.
+An avatar that displays a badge in addition to the profile image.
 
 <DocCanvas client:only
   mdxSource={{
@@ -45,10 +60,9 @@ An avatar with a badge.
   <pds-avatar badge="true"></pds-avatar>
 </DocCanvas>
 
-
 ### Custom Sizes
 
-An avatar with a custom size set on the prop.
+An avatar where the size can be customized through the `size` prop.
 
 <DocCanvas client:only
   mdxSource={{
@@ -72,7 +86,7 @@ Allows the avatar to be used as a dropdown trigger.
 
 ### Image
 
-An avatar using a user profile image. When not set, will default to the user icon.
+An avatar that displays a user's profile image. If no image is provided, a default user icon is shown.
 
 <DocCanvas client:only
   mdxSource={{
