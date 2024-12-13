@@ -753,7 +753,7 @@ export namespace Components {
     }
     interface PdsTable {
         /**
-          * Determines if table displays compact which reduces the spacing of table cells.
+          * Determines if the table displays with reduced table cell padding.
          */
         "compact": boolean;
         /**
@@ -761,7 +761,7 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Determines if table displays fixed column which fixes the first column of the table.
+          * Determines if the should display a fixed first column.
          */
         "fixedColumn": boolean;
         /**
@@ -769,7 +769,7 @@ export namespace Components {
          */
         "responsive": boolean;
         /**
-          * Determines if table displays checkboxes for selectable rows.
+          * Determines if the table displays checkboxes for selectable rows.
          */
         "selectable": boolean;
     }
@@ -783,11 +783,12 @@ export namespace Components {
     }
     interface PdsTableHead {
         /**
-          * Indicates that the selection state is indeterminate.
+          * Determines if the select all checkbox is in an indeterminate state.
          */
         "indeterminate"?: boolean;
         /**
-          * A local state to track whether the row is currently selected.
+          * Determines if the table row is currently selected.
+          * @defaultValue false
          */
         "isSelected": boolean;
     }
@@ -799,11 +800,11 @@ export namespace Components {
     }
     interface PdsTableRow {
         /**
-          * Indicates that the selection state is indeterminate.
+          * Determines if the row selected is in an indeterminate state.
          */
         "indeterminate"?: boolean;
         /**
-          * A local state to track whether the row is currently selected.
+          * Determines if the table row is currently selected.
          */
         "isSelected"?: boolean;
     }
@@ -2238,7 +2239,7 @@ declare namespace LocalJSX {
     }
     interface PdsTable {
         /**
-          * Determines if table displays compact which reduces the spacing of table cells.
+          * Determines if the table displays with reduced table cell padding.
          */
         "compact"?: boolean;
         /**
@@ -2246,7 +2247,7 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
-          * Determines if table displays fixed column which fixes the first column of the table.
+          * Determines if the should display a fixed first column.
          */
         "fixedColumn"?: boolean;
         /**
@@ -2262,7 +2263,7 @@ declare namespace LocalJSX {
          */
         "responsive"?: boolean;
         /**
-          * Determines if table displays checkboxes for selectable rows.
+          * Determines if the table displays checkboxes for selectable rows.
          */
         "selectable"?: boolean;
     }
@@ -2276,11 +2277,12 @@ declare namespace LocalJSX {
     }
     interface PdsTableHead {
         /**
-          * Indicates that the selection state is indeterminate.
+          * Determines if the select all checkbox is in an indeterminate state.
          */
         "indeterminate"?: boolean;
         /**
-          * A local state to track whether the row is currently selected.
+          * Determines if the table row is currently selected.
+          * @defaultValue false
          */
         "isSelected"?: boolean;
         /**
@@ -2300,11 +2302,11 @@ declare namespace LocalJSX {
     }
     interface PdsTableRow {
         /**
-          * Indicates that the selection state is indeterminate.
+          * Determines if the row selected is in an indeterminate state.
          */
         "indeterminate"?: boolean;
         /**
-          * A local state to track whether the row is currently selected.
+          * Determines if the table row is currently selected.
          */
         "isSelected"?: boolean;
         /**

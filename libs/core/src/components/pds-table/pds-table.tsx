@@ -9,7 +9,7 @@ export class PdsTable {
   @Element() el: HTMLPdsTableElement;
 
   /**
-   * Determines if table displays compact which reduces the spacing of table cells.
+   * Determines if the table displays with reduced table cell padding.
    */
   @Prop() compact: boolean;
 
@@ -24,16 +24,25 @@ export class PdsTable {
   @Prop() responsive: boolean;
 
   /**
-   * Determines if table displays fixed column which fixes the first column of the table.
+   * Determines if the should display a fixed first column.
    */
   @Prop() fixedColumn: boolean;
 
   /**
-   * Determines if table displays checkboxes for selectable rows.
+   * Determines if the table displays checkboxes for selectable rows.
    */
   @Prop() selectable: boolean;
 
+  /**
+   * The name of the column being sorted.
+   * @defaultValue null
+   */
   @State() sortingColumn: string | null = null;
+
+  /**
+   * The direction of sorting.
+   * @defaultValue 'asc'
+   */
   @State() sortingDirection: 'asc' | 'desc' = 'asc';
 
 

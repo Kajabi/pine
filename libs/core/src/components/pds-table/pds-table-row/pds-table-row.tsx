@@ -12,12 +12,12 @@ export class PdsTableRow {
   private tableRef: HTMLPdsTableElement;
 
   /**
-   * Indicates that the selection state is indeterminate.
-   * */
-  @Prop({ mutable: true }) indeterminate?: boolean
+    * Determines if the row selected is in an indeterminate state.
+    */
+  @Prop({ mutable: true }) indeterminate?: boolean;
 
   /**
-   * A local state to track whether the row is currently selected.
+   * Determines if the table row is currently selected.
    */
   @Prop({ mutable: true }) isSelected?: boolean;
 

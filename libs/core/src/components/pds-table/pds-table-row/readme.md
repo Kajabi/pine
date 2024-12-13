@@ -7,10 +7,10 @@
 
 ## Properties
 
-| Property        | Attribute       | Description                                                   | Type      | Default     |
-| --------------- | --------------- | ------------------------------------------------------------- | --------- | ----------- |
-| `indeterminate` | `indeterminate` | Indicates that the selection state is indeterminate.          | `boolean` | `undefined` |
-| `isSelected`    | `is-selected`   | A local state to track whether the row is currently selected. | `boolean` | `undefined` |
+| Property        | Attribute       | Description                                                  | Type      | Default     |
+| --------------- | --------------- | ------------------------------------------------------------ | --------- | ----------- |
+| `indeterminate` | `indeterminate` | Determines if the row selected is in an indeterminate state. | `boolean` | `undefined` |
+| `isSelected`    | `is-selected`   | Determines if the table row is currently selected.           | `boolean` | `undefined` |
 
 
 ## Events

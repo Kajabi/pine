@@ -10,11 +10,14 @@ export class PdsTableHead {
   @Element() hostElement: HTMLPdsTableHeadElement;
   private tableRef: HTMLPdsTableElement
 
-   /** Indicates that the selection state is indeterminate. */
-   @Prop({ mutable: true }) indeterminate?: boolean
+   /**
+    * Determines if the select all checkbox is in an indeterminate state.
+    */
+   @Prop({ mutable: true }) indeterminate?: boolean;
 
    /**
-   * A local state to track whether the row is currently selected.
+   * Determines if the table row is currently selected.
+   * @defaultValue false
    */
    @Prop({mutable: true}) isSelected: boolean;
 
