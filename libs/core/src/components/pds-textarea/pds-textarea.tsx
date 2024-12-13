@@ -23,66 +23,66 @@ export class PdsTextarea {
   @Prop() componentId!: string;
 
   /**
-   * Indicates whether or not the textarea is disabled
+   * Determines whether or not the textarea is disabled.
    * @defaultValue false
    */
   @Prop() disabled = false;
 
   /**
-   * Specifies the error text and provides an error-themed treatment to the field
+   * Displays an error message below the textarea field.
    */
   @Prop() errorMessage?: string;
 
   /**
-   * Displays a hint or description of the textarea
+   * Displays a message or hint below the textarea field.
    */
   @Prop() helperMessage?: string;
 
   /**
-   * Indicates whether or not the textarea is invalid or throws an error
+   * Determines whether or not the textarea is invalid or throws an error.
    * @defaultValue false
    */
   @Prop({mutable: true}) invalid = false;       // eslint-disable-line @stencil-community/strict-mutable
 
   /**
-   * Text to be displayed as the textarea label
+   * Text to be displayed as the textarea label.
    */
   @Prop() label?: string;
 
   /**
-   * Specifies the name, submitted with the form name/value pair. This value will mirror the componentId
+   * Specifies the name. Submitted with the form name/value pair. This value will mirror the componentId.
    */
   @Prop() name: string = this.componentId;
 
   /**
-   * Specifies a short hint that describes the expected value of the textarea
+   * Specifies a short hint that describes the expected value of the textarea.
    */
   @Prop() placeholder?: string;
 
   /**
-   * Indicates whether or not the textarea is readonly
+   * Determines whether or not the textarea is readonly.
    * @defaultValue false
    */
   @Prop() readonly = false;
 
   /**
-   * Indicates whether or not the textarea is required
+   * Determines whether or not the textarea is required.
    * @defaultValue false
    */
   @Prop() required = false;
 
   /**
-   * Sets number of rows of text visible without needing to scroll in the textarea
+   * Sets number of rows of text visible without needing to scroll in the textarea.
    */
   @Prop() rows?: number;
 
   /**
-   * The value of the textarea
+   * The value of the textarea.
    */
   @Prop({mutable: true}) value?: string;
 
   /**
-   * Event emitted whenever the value of the textarea changes
+   * Event emitted whenever the value of the textarea changes.
    */
   @Event() pdsTextareaChange: EventEmitter<TextareaChangeEventDetail>;
 

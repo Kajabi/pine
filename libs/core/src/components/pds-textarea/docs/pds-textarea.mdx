@@ -3,26 +3,33 @@ import { components } from '../../../../dist/docs.json';
 
 # Textarea
 
-A textarea field coupled with a label, helper message, and error message which allows for user input and feedback
+A textarea field coupled with a label and supplemental helper text that aids in user input and feedback.
 
 ## Guidelines
-### Usage
 
-#### When to use
-- You want a response longer than one line
+### When to use
 
-#### When not to use
-- To gather basic information, use an [Input](/docs/components-input--text)
-- You want a response that is one line of text, use an [Input](/docs/components-input--text)
+- For responses that require text longer than a single line.
+
+### When not to use
+
+- For responses that require basic information or a single line of text. Consider using an [Input](/docs/components-input--docs).
 
 ### Accessibility
-- The textarea component comes with a built-in label through the `label` property, it is strongly encouraged that you include it
-- Please provide clear and descriptive error, helper-message, and placeholder messages
+
+For accessibility, it is strongly encouraged to follow these best practices:
+
+- Use the label property to help screen reader users identify the purpose of the input.
+- Do not use a placeholder to communicate the field label, use a label property.
+- Provide clear and descriptive error, helper, and placeholder messages.
 
 ## Properties
+
 <DocArgsTable componentName="pds-textarea" docSource={components} />
 
-## Default
+### Default
+
+The default Textarea component, which allows for longer blocks of text.
 
 <DocCanvas client:only
   mdxSource={{
@@ -33,7 +40,8 @@ A textarea field coupled with a label, helper message, and error message which a
 </DocCanvas>
 
 ### Disabled
-Disabled states can be set by the `disabled` property
+
+Removes all interactive behavior from the text field and provides a visual treatment.
 
 <DocCanvas client:only
   mdxSource={{
@@ -45,9 +53,9 @@ Disabled states can be set by the `disabled` property
 
 ### Error Message
 
-Error messages are passed using the `error-message` property, textareas will only calculate their validity when on their `required` property is set to true
+Error messages are passed using the `error-message` property. Textarea fields will only calculate their validity when their `required` property is set to true.
 
-You can also manually pass in an invalid state by setting the `invalid` property to true but this property will be update whenever the `onChange` event is triggered.
+The `invalid` property can be manually set to `true` to enable the invalid state. This property will be updated when the `onChange` event is emitted.
 
 <DocCanvas client:only
   mdxSource={{
@@ -59,9 +67,9 @@ You can also manually pass in an invalid state by setting the `invalid` property
 
 ### Helper Message
 
-Helper messages are used to provide context about what is expected from the users
+A `helper-message` is used to provide additional information about how to complete the text field.
 
-Do not use helper messages to provide examples to users, please use the `placeholder` property instead
+Do not use helper messages to provide examples to users, please use the `placeholder` property instead.
 
 <DocCanvas client:only
   mdxSource={{
@@ -73,9 +81,7 @@ Do not use helper messages to provide examples to users, please use the `placeho
 
 ### Placeholder
 
-Placeholders should be examples of content that can be filled into the textarea
-
-Do not use placeholders to provide hints to users, please use the `helper-message` property instead
+Provides a short, non-essential hint about the expected input.
 
 <DocCanvas client:only
   mdxSource={{
@@ -87,7 +93,7 @@ Do not use placeholders to provide hints to users, please use the `helper-messag
 
 ### Readonly
 
-Readonly states can be used to display static content while preventing the user from editing
+Removes the ability to interact with the text field. If a value is present, that is still passed to the form.
 
 <DocCanvas client:only
   mdxSource={{
@@ -98,7 +104,8 @@ Readonly states can be used to display static content while preventing the user 
 </DocCanvas>
 
 ### Required
-It's recommended you also pass `error-message` on any required fields
+
+Indicates that the user must specify a value for the input before the owning form can be submitted. It's recommended to use `error-message` on any required fields.
 
 <DocCanvas client:only
   mdxSource={{
@@ -110,7 +117,7 @@ It's recommended you also pass `error-message` on any required fields
 
 ### Rows
 
-The rows property is used to pass a number of expected rows visible within the textarea
+The `rows` property is used to pass a number of expected rows visible within the textarea.
 
 <DocCanvas client:only
   mdxSource={{
@@ -120,6 +127,6 @@ The rows property is used to pass a number of expected rows visible within the t
   <pds-textarea name="Rows" label="Name" rows="4" component-id="textarea-rows"></pds-textarea>
 </DocCanvas>
 
-## Additional Resources
+## References
 
-[MDN Web Docs: HTML autocomplete attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete)
+[MDN: Autocomplete Attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete)
