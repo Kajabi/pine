@@ -5,6 +5,19 @@ import { components } from '../../../../dist/docs.json';
 
 Sortable is for creating containers of items that can be sorted via drag and drop functionality.
 
+## Usage Guidelines
+
+### When to use
+- Use the `sortable` component when you need to create an interface for reordering items through drag and drop.
+- Ideal for situations where users need to arrange content dynamically.
+
+### When not to use
+- Avoid using for small lists or static content where drag-and-drop functionality is unnecessary.
+- Not suitable for forms or content that does not require item reordering.
+
+### Accessibility
+- Ensure that drag-and-drop interactions are accessible by providing clear visual handles for reordering.
+
 ## Properties
 
 <DocArgsTable componentName='pds-sortable' docSource={components} />
@@ -17,7 +30,7 @@ The `pds-sortable-item` sub-component are the items that can be sorted within a 
 
 ### Default
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas display="block" client:only mdxSource={{
   react: `<PdsSortable componentId="default">
   <PdsSortableItem>Item 1</PdsSortableItem>
   <PdsSortableItem>Item 2</PdsSortableItem>
@@ -41,7 +54,7 @@ The `pds-sortable-item` sub-component are the items that can be sorted within a 
 
 When `border` is set to `true`, the component will render a border around all items.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas display="block" client:only mdxSource={{
   react:`<PdsSortable border componentId="bordered">
   <PdsSortableItem>Item 1</PdsSortableItem>
   <PdsSortableItem>Item 2</PdsSortableItem>
@@ -65,7 +78,7 @@ When `border` is set to `true`, the component will render a border around all it
 
 When `dividers` is set to `true`, a border will display between items.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas display="block" client:only mdxSource={{
   react: `<PdsSortable dividers>
   <PdsSortableItem>Item 1</PdsSortableItem>
   <PdsSortableItem>Item 2</PdsSortableItem>
@@ -89,7 +102,7 @@ When `dividers` is set to `true`, a border will display between items.
 
 When `show-handle` is set to `true` on a `pds-sortable-item`, a handle icon will be displayed within an item.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas display="block" client:only mdxSource={{
   react: `<PdsSortable componentId="handle" handleType="row">
   <PdsSortableItem showHandle={true}>Item 1</PdsSortableItem>
   <PdsSortableItem showHandle={true}>Item 2</PdsSortableItem>
@@ -109,11 +122,11 @@ When `show-handle` is set to `true` on a `pds-sortable-item`, a handle icon will
   </pds-sortable>
 </DocCanvas>
 
-#### Handle vs. Row `handle-type`
+### Handle vs. Row `handle-type`
 
 By default the full `row` is active for dragging/sorting. However, `handle-type` can be set to `handle` in order to allow only the handle to be used. This will also render a handle icon within the sortable items automatically.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas display="block" client:only mdxSource={{
   react: `<PdsSortable componentId="handle-only" handleType="handle">
   <PdsSortableItem>Item 1</PdsSortableItem>
   <PdsSortableItem>Item 2</PdsSortableItem>
@@ -138,7 +151,7 @@ The `enable-actions` property in the `pds-sortable-item` component determines wh
 
 The `sortable-item-actions` slot is provided to place content within the `pds-sortable-item__actions` element as children, but this slot is only rendered if the `enable-actions` property is set to `true`.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas display="block" client:only mdxSource={{
   react: `<PdsSortable componentId="actions">
   <PdsSortableItem enableActions={true}>
     <div>Item 1</div>
@@ -207,7 +220,7 @@ The `sortable-item-actions` slot is provided to place content within the `pds-so
 
 The following is a demo of how all the properties and slots can be used together to create a sortable list.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas display="block" client:only mdxSource={{
   react: `<PdsSortable border={true} dividers={true} componentId="demo" handleType="row">
   <PdsSortableItem enable-actions handle>
     <div>
