@@ -4,9 +4,9 @@ import { hasShadowDom } from '../../utils/utils';
 import { caretDown } from '@pine-ds/icons/icons';
 
 /**
- * @part button - Button element styles.
- * @part caret - Caret icon styles. Appears only on the disclosure variant.
- * @part icon - Icon element styles.
+ * @part button - Exposes the button element for styling.
+ * @part caret - Exposes the caret icon component for styling. Appears only on the disclosure variant.
+ * @part icon - Exposes the icon component for styling.
 */
 
 @Component({
