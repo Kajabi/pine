@@ -8,7 +8,7 @@ export default {
   decorators: [withActions],
   parameters: {
     actions: {
-      handles: ['onclick', 'pdsTableRowSelected', 'onclick', 'pdsTableSelectAll'],
+      handles: ['onclick', 'pdsTableRowSelected', 'onclick', 'pdsTableSelectAll', 'pdsTableSort'],
     },
   },
   title: 'components/Table',

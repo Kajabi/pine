@@ -3,7 +3,22 @@ import { components } from '../../../../dist/docs.json';
 
 # Table
 
-The table compononent should be used to display tabular data.
+The table, consisting of rows and columns, is used to display and organize tabular data.
+
+## Guidelines
+
+### When to use
+
+- For displaying important data to users in an organized format.
+- When the organized data needs to be sorted.
+
+### When Not to Use
+
+- For building layouts. Please use [Box](/docs/components-layout-box--docs) and [Row](/docs/components-layout-row--docs) instead.
+
+### Accessibility
+
+Be sure to make proper use of the subcomponents to ensure that the table is accessible to screen reader users.
 
 ## Properties
 
@@ -11,17 +26,25 @@ The table compononent should be used to display tabular data.
 
 ### Head Cell
 
+The table header cell. Equivalent to the `<th>` element.
+
 <DocArgsTable componentName="pds-table-head-cell" docSource={components} />
 
 ### Row
+
+The table row. Equivalent to the `<tr>` element.
 
 <DocArgsTable componentName="pds-table-row" docSource={components} />
 
 ### Cell
 
+The table body cell. Equivalent to the `<td>` element.
+
 <DocArgsTable componentName="pds-table-cell" docSource={components} />
 
 ## Default
+
+The default table, properly using all subcomponents.
 
 <DocCanvas mdxSource={{
   react: `<PdsTable componentId="default">
@@ -643,7 +666,7 @@ When the `fixed-column` prop is set to `true`, the first column of the table wil
 
 ### Fixed w/ Checkbox
 
-The `fixed-column` prop can be used in conjunction with the `selectable` prop to render an addition checkbox and they will both remain fixed in place while the rest of the table scrolls horizontally.
+The `fixed-column` prop can be used in conjunction with the `selectable` prop to render an additional checkbox, and they will both remain fixed in place while the rest of the table scrolls horizontally.
 
 <DocCanvas mdxSource={{
   react: `<PdsTable componentId="fixedcb" responsive={true} fixed-column={true} selectable={true}>
@@ -913,7 +936,7 @@ When the `truncate` prop is set to `true` on a `pds-table-cell` element, the cel
 
 Basic sorting can be enabled by adding the `sortable` attribute to a `pds-table-head-cell` element. The table will automatically sort in ascending or descending order when the cell is clicked.
 
-In cases where the default sorting functionality is not suitable, you can prevent it and use your own custom sorting mechanism by listening to the `pdsTableSort` event.
+In cases where the default sorting functionality is not suitable, it is possible to use a custom sorting function by listening to the `pdsTableSort` event.
 
 <DocCanvas mdxSource={{
   react: `<PdsTable componentId="sortable" selectable={true}>
@@ -1095,3 +1118,7 @@ In cases where the default sorting functionality is not suitable, you can preven
   </pds-table-body>
 </pds-table>
 </DocCanvas>
+
+## References
+
+[MDN: Table](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table)

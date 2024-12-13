@@ -24,6 +24,10 @@ export class PdsTableCell {
    */
   @Prop() truncate: boolean;
 
+  /**
+   * Determines if the table is currently scrolling.
+   * @defaultValue false
+   */
   @State() private tableScrolling: boolean = false;
 
   private classNames() {

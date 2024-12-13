@@ -21,11 +21,20 @@ export class PdsTableHeadCell {
    */
   @Event() pdsTableSort: EventEmitter<{ column: string; direction: string }>;
 
+  /**
+   * The direction of sorting.
+   */
   @State() private sortingDirection: 'asc' | 'desc' = 'asc';
+
+  /**
+   * Determines if the table is currently scrolling.
+   * @defaultValue false
+   */
   @State() private tableScrolling: boolean = false;
 
   /**
-   * A local state to track whether the row is currently selected.
+   * Determines if the table row is currently selected.
+   * @defaultValue false
    */
   @State() isSelected: boolean = false;
 
