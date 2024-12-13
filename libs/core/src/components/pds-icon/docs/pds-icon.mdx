@@ -1,67 +1,85 @@
 import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
-import {components as pdsDocsJson} from '@pine-ds/icons/dist/docs.json';
+import { components as pdsDocsJson } from '@pine-ds/icons/dist/docs.json';
 
 # Icon
-Displays Icons used with the Pine Design System
+The icon component is used to display scalable, customizable icons that represent various actions, statuses, or features.
 
 ## Guidelines
 
-Icons are an effective way to enforce the purpose of an experience. Icons are broken out into two main
-categories: Actions and Features. In order to ensure that the icons are adding to the clarity of an experience
-and not creating confusion, we adhere to two principles.
+### When to use
+- Use icons to visually represent actions, features, or common concepts to enhance the user experience.
+- Ideal for buttons, navigation elements, status indicators, or any context where small visual cues can add clarity.
 
-<DocCanvas client:only mdxSource={{
-  react: `<PdsIcon name="thumb-up-filled"></PdsIcon>`,
-  webComponent: `<pds-icon name="thumb-up-filled"></pds-icon>`
-}}>
-  <>
-    <pds-icon name="thumb-up-filled"></pds-icon>
-  </>
-</DocCanvas>
+### When not to use
+- Avoid using icons as the sole means of communication without accompanying text or labels, as this may confuse users.
+- Do not use icons for complex ideas that require explanation or context that cannot be clearly conveyed through visuals alone.
+
+### Accessibility
+- Ensure sufficient contrast between the icon and the background for visibility.
+- Don't rely solely on icons for critical actions.
 
 ## Properties
 
-<DocArgsTable componentName='pds-icon' docSource={pdsDocsJson} />
+<DocArgsTable componentName="pds-icon" docSource={pdsDocsJson} />
 
-### color
-The `color` property allows the icon to render in the specified color. This can be either string or hex format.
+### Color
+
+The `color` property allows the icon to be displayed in a specified color. Accepted formats include:
+
+- String: `red`
+- HEX:  `#FF0000`
+- RGB:  `rgb(255, 0, 0)`
+- HSL: `hsl(0, 100%, 50%)`
+- Pine CSS variables: `var(--pine-color-red-500)`
+
+This allows for flexibility with any CSS-supported color format.
 
 <DocCanvas client:only mdxSource={{
   react: `
-<PdsIcon name="bulb" size="small"></PdsIcon>
-<PdsIcon name="bulb" size="regular"></PdsIcon>
-<PdsIcon name="bulb" size="medium"></PdsIcon>
-<PdsIcon name="bulb" size="large"></PdsIcon>
+<PdsIcon name="bulb" color="red"></PdsIcon>
+<PdsIcon name="bulb" color="#FFA500"></PdsIcon>
+<PdsIcon name="bulb" color="rgb(0, 190, 0)"></PdsIcon>
+<PdsIcon name="bulb" color="hsl(230, 100%, 50%)"></PdsIcon>
+<PdsIcon name="bulb" color="var(--pine-color-mercury-500)"></PdsIcon>
 `,
   webComponent: `
-<pds-icon name="bulb" size="small"></pds-icon>
-<pds-icon name="bulb" size="regular"></pds-icon>
-<pds-icon name="bulb" size="medium"></pds-icon>
-<pds-icon name="bulb" size="large"></pds-icon>`
+<pds-icon name="bulb" color="red"></pds-icon>
+<pds-icon name="bulb" color="#FFA500"></pds-icon>
+<pds-icon name="bulb" color="rgb(0, 190, 0)"></pds-icon>
+<pds-icon name="bulb" color="hsl(230, 100%, 50%)"></pds-icon>
+<pds-icon name="bulb" color="var(--pine-color-mercury-500)"></pds-icon>`
 }}>
   <>
-    <pds-icon name="bulb" size="small"></pds-icon>
-    <pds-icon name="bulb" size="regular"></pds-icon>
-    <pds-icon name="bulb" size="medium"></pds-icon>
-    <pds-icon name="bulb" size="large"></pds-icon>
+    <pds-icon name="bulb" color="red"></pds-icon>
+    <pds-icon name="bulb" color="#FFA500"></pds-icon>
+    <pds-icon name="bulb" color="rgb(0, 190, 0)"></pds-icon>
+    <pds-icon name="bulb" color="hsl(230, 100%, 50%)"></pds-icon>
+    <pds-icon name="bulb" color="var(--pine-color-mercury-500)"></pds-icon>
   </>
 </DocCanvas>
 
-It also accepts any custom size attribute.
+### Size
+
+The `size` property allows the icon to be displayed at a specified size. Accepted formats include:
+
+- Predefined: `small` `regular` `medium` `large`
+- Custom: `2rem` `60px`
 
 <DocCanvas client:only mdxSource={{
   react: `
 <PdsIcon name="danger" size="60px"></PdsIcon>
 <PdsIcon name="danger" size="2rem"></PdsIcon>
+<PdsIcon name="danger" size="small"></PdsIcon>
 `,
   webComponent: `
 <pds-icon name="danger" size="60px"></pds-icon>
 <pds-icon name="danger" size="2rem"></pds-icon>
+<pds-icon name="danger" size="small"></pds-icon>
 `
 }}>
   <>
     <pds-icon name="danger" size="60px"></pds-icon>
     <pds-icon name="danger" size="2rem"></pds-icon>
+    <pds-icon name="danger" size="small"></pds-icon>
   </>
 </DocCanvas>
-
