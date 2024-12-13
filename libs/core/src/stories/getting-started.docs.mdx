@@ -1,0 +1,98 @@
+import { Meta, Story } from '@storybook/blocks';
+
+<Meta title="Resources/Get Started"/>
+
+# Getting Started
+
+This repository contains **Web Components** developed by the Design System Services team at Kajabi.
+
+## Repository
+
+The source code can be found in our [Github Repo](https://github.com/Kajabi/pine).
+
+## Design Files
+
+All component designs are maintained in the following Figma projects:
+
+- [Figma Project](https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH/%E2%9D%96-Mercury-components?m=auto&node-id=0-1&t=xybx2d1s26U4p0Jd-1)
+
+## Initial Setup
+
+Follow these steps to set up the repository locally:
+
+1. Clone the repository:
+```bash
+git clone git@github.com:Kajabi/pine.git
+```
+
+2. Move to the repository:
+```bash
+cd pine
+```
+
+3. Install the required dependencies:
+```bash
+brew install nss  # Required if using Firefox
+mkcert -install   # Add mkcert to trusted CAs
+npm run setup     # Use the correct Node.js version
+```
+
+4. Generate a local SSL certificate:
+```bash
+cd libs/core
+mkcert -cert-file pineLocalDev.pem -key-file pineLocalDev-key.pem localhost 7300
+```
+
+5. Start the development server:
+```bash
+cd ../../ # Return back to the root directory
+npm start
+```
+
+> Note: If the process hangs, restart it.
+
+## Generating Components
+
+1. Move to the core folder:
+```bash
+cd libs/core
+```
+
+2. Generate component
+```bash
+npm run stencil.generate pds-[component-name]
+```
+
+3. Choose `*.scss` format when prompted.
+
+4. Confirm all folders and files are aligned with other preexisting components.
+
+
+## Project Setup
+The project is divided into two folders `libs/core` and `libs/react`.
+
+### core
+The `core` folder houses all web component files. This is where we build new components in StencilJS.
+
+### react
+The `react` folder houses all exported react components.
+
+
+## Project Commands
+The project has multiple `package.json` files for each folder (core and react) as well as a top level `package.json`. Using `nx ...` commands, we can run commands from each `package.json`.
+
+### Commonly used Nx commands:
+
+- Run prettier to tidy up files: `npx nx prettier @pine-ds/core`
+
+- Start up in a local server: `npx nx start @pine-ds/core`
+
+- Run all tests and watch for changes: `npx nx test.watch @pine-ds/core`
+
+> **Note:** commands be also ran as such `npx nx [package]:task` e.g `npx nx run @pine-ds/core:prettier`
+
+> **Note:** VSCode developers may prefer to use the [Nx Console extension](https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console) for running commands.
+
+
+## Reporting Issues
+Please refer to the [get support](?path=/docs/resources-get-support--docs) page for more information on how to report issues.
