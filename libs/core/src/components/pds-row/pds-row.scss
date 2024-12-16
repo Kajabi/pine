@@ -19,11 +19,13 @@
   margin-inline-end: calc(var(--row-gap-x) * -1);
   margin-inline-start: calc(var(--row-gap-x) * -1);
 
+  @layer layout {
   > * {
-    padding-block-end: calc(var(--row-gap-y));
-    padding-block-start: calc(var(--row-gap-y));
-    padding-inline-end: calc(var(--row-gap-x));
-    padding-inline-start: calc(var(--row-gap-x));
+      padding-block-end: calc(var(--row-gap-y));
+      padding-block-start: calc(var(--row-gap-y));
+      padding-inline-end: calc(var(--row-gap-x));
+      padding-inline-start: calc(var(--row-gap-x));
+    }
   }
 }
 

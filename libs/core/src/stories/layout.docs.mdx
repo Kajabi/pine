@@ -1,25 +1,157 @@
 import { Meta } from '@storybook/blocks';
 import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 
+import image from '../stories/assets/offers.png';
+
 <Meta title="components/Layout"/>
 
 # Layout
-The Layout system is driven by `pds-box` and `pds-row`.
+The layout system is a flexible and customizable framework based on the `pds-box` and `pds-row` components,
+designed to create responsive, adaptable, and aesthetically pleasing grid layouts. This system leverages a 12-column
+grid, intuitive alignment properties, and powerful nesting capabilities to support a wide variety of use cases, from
+simple to highly complex layouts.
 
 ## `pds-box`
 
-The `pds-box` serves 2 main purposes:
-1. A fully customizable container for your content that allows customization of border, padding, background color, etc.
-2. A a grid column
+The `pds-box` serves two main purposes:
 
-In order to use the `pds-box` as a grid column, it **MUST**:
-- be a direct child of a `pds-row`
-- have a `size` property set.
+1. **Container**: Provides customizable styling options, including border, padding, background color, and alignment.
+2. **Grid Column**: Functions as a column within a `pds-row`.
+
+**Important Notes:**
+
+When used as a grid column, `pds-box` must be:
+  - A direct child of a `pds-row`.
+  - Assigned a `size` property (e.g., `size="4"` for a column spanning 4 grid units).
+Columns cannot exist inside `pds-box` components.
 
 ## `pds-row`
-The `pds-row` component is designed to create horizontal rows that contain a set of columns that are capable of altering sizes at different breakpoints. `pds-box`s that don't exist in `pds-row`s will not contain responsive functionality.
+
+The `pds-row` component defines a horizontal container for multiple columns (`pds-box` children). It provides the structural foundation for creating responsive, multi-column layouts.
+
+**Important Notes:**
+
+- `pds-row` supports responsive design with properties like `size-xs` or `offset-md`. The size modifier is the trigger for responsive behavior.
+- It ensures that the total column size per row does not exceed 12, maintaining the integrity of the grid system.
+
+
+## Best Practices for Layouts
+
+Use `pds-box` for Single-Column Layouts:
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsBox
+        alignItems="center"
+        justifyContent="center"
+        backgroundColor="#F5F5F5"
+        borderRadius="lg"
+        shadow="md"
+        direction="column"
+        fit="true"
+        minHeight="300px"
+      >
+        <h1>Explore Your Craft</h1>
+        <p>Discover new ways to grow your business with Kajabi.</p>
+        <pds-button>Get Started</pds-button>
+      </PdsBox>
+    `,
+    webComponent: `
+      <pds-box
+        align-items="center"
+        justify-content="center"
+        background-color="#F5F5F5"
+        border-radius="lg"
+        shadow="md"
+        direction="column"
+        fit="true"
+        min-height="300px"
+      >
+        <h1>Explore Your Craft</h1>
+        <p>Discover new ways to grow your business with Kajabi.</p>
+        <pds-button>Get Started</pds-button>
+      </pds-box>
+    `
+}}>
+  <pds-box
+    align-items="center"
+    justify-content="center"
+    background-color="#F5F5F5"
+    border-radius="lg"
+    shadow="md"
+    direction="column"
+    fit="true"
+    min-height="300px"
+  >
+    <h1>Explore Your Craft</h1>
+    <p>Discover new ways to grow your business with Kajabi.</p>
+    <pds-button>Get Started</pds-button>
+  </pds-box>
+</DocCanvas>
+
+Use `pds-row` for Multi-Column Layouts:
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsBox backgroundColor="#f5f5f5" fit="true">
+        <PdsRow>
+          <PdsBox size="8" padding="md" border="true">Column 1</PdsBox>
+          <PdsBox size="4" padding="md" border="true">Column 2</PdsBox>
+        </pds-row>
+      </PdsBox>
+    `,
+    webComponent: `
+      <pds-box background-color="#f5f5f5" fit="true">
+        <pds-row>
+          <pds-box size="8" padding="md" border="true">Column 1</pds-box>
+          <pds-box size="4" padding="md" border="true">Column 2</pds-box>
+        </pds-row>
+      </pds-box>
+    `
+}}>
+  <pds-box background-color="#f5f5f5" fit="true">
+    <pds-row>
+      <pds-box size="8" padding="md" border="true">Column 1</pds-box>
+      <pds-box size="4" padding="md" border="true">Column 2</pds-box>
+    </pds-row>
+  </pds-box>
+</DocCanvas>
+
+#### Make it responsive
+
+Add side modifiers to your child `pds-box` for responsive design
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsBox backgroundColor="#f5f5f5" fit="true">
+        <PdsRow>
+          <PdsBox sizeMd="8" padding="md" border="true">Column 1</PdsBox>
+          <PdsBox sizeMd="4" padding="md" border="true">Column 2</PdsBox>
+        </pds-row>
+      </PdsBox>
+    `,
+    webComponent: `
+      <pds-box background-color="#f5f5f5" fit="true">
+        <pds-row>
+          <pds-box size-md="8" padding="sm" border="true">Column 1</pds-box>
+          <pds-box size-md="4" padding="sm" border="true">Column 2</pds-box>
+        </pds-row>
+      </pds-box>
+    `
+}}>
+  <pds-box background-color="#f5f5f5" fit="true">
+    <pds-row>
+      <pds-box size-md="8" padding="sm" border="true">Column 1</pds-box>
+      <pds-box size-md="4" padding="sm" border="true">Column 2</pds-box>
+    </pds-row>
+  </pds-box>
+</DocCanvas>
 
 ## Examples
+
 ### Form Edit view
 <DocCanvas client:only
   mdxSource={{
@@ -253,7 +385,7 @@ The `pds-row` component is designed to create horizontal rows that contain a set
   >
     <pds-row col-gap="sm">
       <pds-box align-items="center" justify-content="center" size-sm="3">
-        <img src="../src/stories/assets/offers.png" />
+        <img src={image} />
       </pds-box>
       <pds-box size-sm="9">
         <pds-box direction="column">
