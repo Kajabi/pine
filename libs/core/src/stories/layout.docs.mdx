@@ -1,6 +1,8 @@
 import { Meta } from '@storybook/blocks';
 import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 
+import image from '../stories/assets/offers.png';
+
 <Meta title="components/Layout"/>
 
 # Layout
@@ -383,7 +385,7 @@ Add side modifiers to your child `pds-box` for responsive design
   >
     <pds-row col-gap="sm">
       <pds-box align-items="center" justify-content="center" size-sm="3">
-        <img src="../src/stories/assets/offers.png" />
+        <img src={image} />
       </pds-box>
       <pds-box size-sm="9">
         <pds-box direction="column">
