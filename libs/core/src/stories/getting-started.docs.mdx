@@ -8,11 +8,7 @@ Pine is a library of Web Components crafted by the Design System Services team a
 
 ## Repository
 
-The source code can be found in the [Github Repo](https://github.com/Kajabi/pine).
-
-## Design Files
-
-The component designs can be found in the [Figma Project](https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH/%E2%9D%96-Mercury-components?m=auto&node-id=0-1&t=xybx2d1s26U4p0Jd-1).
+The source code can be found in the [GitHub Repository](https://github.com/Kajabi/pine).
 
 ## Initial Setup
 
@@ -32,7 +28,7 @@ cd pine
 ```bash
 brew install nss  # Required if using Firefox
 mkcert -install   # Add mkcert to trusted CAs
-npm run setup     # Use the correct Node.js version
+npm run setup     # Use the correct Node.js version, found here [.tool-versions]
 ```
 
 4. Generate a local SSL certificate:
@@ -43,11 +39,11 @@ mkcert -cert-file pineLocalDev.pem -key-file pineLocalDev-key.pem localhost 7300
 
 5. Start the development server:
 ```bash
-cd ../../ # Return back to the root directory
+cd ../../ # Return to the root directory
 npm start
 ```
 
-> Note: If starting the development server process hangs, restart it.
+> **Note:** If starting the development server process hangs, restart it.
 
 ## Generating Components
 
@@ -56,7 +52,7 @@ npm start
 cd libs/core
 ```
 
-2. Generate component
+2. Generate component:
 ```bash
 npm run stencil.generate pds-[component-name]
 ```
@@ -67,7 +63,7 @@ npm run stencil.generate pds-[component-name]
 
 
 ## Project Setup
-The project is divided into two folders `libs/core` and `libs/react`.
+The project is divided into two folders, `libs/core` and `libs/react`.
 
 ### core
 The `core` folder houses all web component files. This is where we build new components in StencilJS.
@@ -87,10 +83,10 @@ The project has multiple `package.json` files for each folder (core and react) a
 
 - Run all tests and watch for changes: `npx nx test.watch @pine-ds/core`
 
-> **Note:** commands be also ran as such `npx nx [package]:task` e.g `npx nx run @pine-ds/core:prettier`
+> **Note:** commands can also be run as follows `npx nx [package]:task` e.g `npx nx run @pine-ds/core:prettier`
 
 > **Note:** VSCode developers may prefer to use the [Nx Console extension](https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console) for running commands.
 
 
 ## Reporting Issues
-Please refer to the [get support](?path=/docs/resources-get-support--docs) page for more information on how to report issues.
+Please refer to the [Get Support](?path=/docs/resources-get-support--docs) page for more information on how to report issues.
