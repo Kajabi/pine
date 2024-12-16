@@ -19,3 +19,15 @@ We firmly believe in fostering an inclusive and collaborative environment where 
 We continuously refine and expand our design system to meet evolving needs and expectations by encouraging open communication, feedback, and contributions from all stakeholders. This collaborative approach helps identify potential improvements and new ideas while promoting a shared sense of ownership and investment in the system's success.
 
 To facilitate this process, we provide [resources and guidelines](/docs/resources-contributing-to-the-design-system--page) for understanding, using, and contributing to the design system. By offering a clear path for participation, we aim to foster a thriving community of designers, developers, and users who work together to ensure the system remains relevant, effective, and resilient over time.
+
+## How to Use
+
+Using Pine's components involves two essential parts: the web components themselves and the design tokens for styling. The quickest way to start is by including the required files directly in your project using `<script>` and `<link>` tags.
+
+> **Note**: Replace `[VERSION]` with the desired version number.
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@pine-ds/core@[VERSION]/dist/pine-core/pine-core.css" />
+<script type="module" src="https://cdn.jsdelivr.net/npm/@pine-ds/core@[VERSION]/dist/pine-core/pine-core.esm.js"></script>
+<script nomodule src="https://cdn.jsdelivr.net/npm/@pine-ds/core@[VERSION]/dist/pine-core/index.esm.js"></script>
+```
