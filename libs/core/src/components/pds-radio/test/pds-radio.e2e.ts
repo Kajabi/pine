@@ -27,7 +27,7 @@ describe('pds-radio', () => {
     const component = await page.find('pds-radio');
     expect(component).toHaveClass('hydrated');
 
-    let radio = await page.find('pds-radio input');
+    const radio = await page.find('pds-radio input');
     component.setProperty('disabled', false);
     await page.waitForChanges();
     expect(await radio.getProperty('disabled')).toBe(false);
@@ -59,23 +59,6 @@ describe('pds-radio', () => {
     expect(eventSpy).not.toHaveReceivedEvent();
   });
 
-  // it('should submit the form with the correct value', async () => {
-  //   const page = await newE2EPage();
-  //   await page.setContent(`
-  //     <form id="myForm">
-  //       <pds-radio component-id="default" label="Label text" />
-  //       <button type="submit">Submit</button>
-  //     </form>
-  //   `);
-
-  //   const form = await page.find('#myForm');
-  //   const submitButton = await form.find('button');
-
-  //   await submitButton.click();
-
-  //   // Assert that the form data is sent correctly, e.g., by intercepting network requests
-  //   // or by checking the browser's console logs.
-  // });
   it('should set the form value and emit pdsRadioChange event when clicked', async () => {
     const page = await newE2EPage();
     await page.setContent(`
@@ -84,18 +67,20 @@ describe('pds-radio', () => {
       </form>
     `);
 
-    const radio = await page.find('pds-radio input');
-    const form = await page.find('#myForm');
+    const radio = await page.find('pds-radio >>> input');
     const pdsRadioChangeSpy = await page.spyOnEvent('pdsRadioChange');
 
     await radio.click();
     await page.waitForChanges();
 
-    // Assert form value change (adjust based on your testing framework)
-    const formData = new FormData(form as unknown as HTMLFormElement);
-    expect(formData.get('radioGroup')).toBe('radioValue');
+    // Check form value using evaluate
+    const formValue = await page.evaluate(() => {
+      const form = document.querySelector('#myForm');
+      const formData = new FormData(form as HTMLFormElement);
+      return formData.get('radioGroup');
+    });
 
-    // Assert pdsRadioChange event
+    expect(formValue).toBe('radioValue');
     expect(pdsRadioChangeSpy).toHaveReceivedEvent();
     expect(pdsRadioChangeSpy.firstEvent.detail).toBeTruthy();
   });
