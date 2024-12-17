@@ -13,9 +13,9 @@
 Pine can be added to any project via CDN. Add the following link and script tags to the `<head>`:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@pine-ds/core[VERSION]/dist/pine-core/pine-core.css" />
-<script type="module" src="https://cdn.jsdelivr.net/npm/@pine-ds/core[VERSION]/dist/pine-core/pine-core.esm.js"></script>
-<script nomodule src="https://cdn.jsdelivr.net/npm/@pine-ds/core[VERSION]/dist/pine-core/index.esm.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@pine-ds/core@[VERSION]/dist/pine-core/pine-core.css" />
+<script type="module" src="https://cdn.jsdelivr.net/npm/@pine-ds/core@[VERSION]/dist/pine-core/pine-core.esm.js"></script>
+<script nomodule src="https://cdn.jsdelivr.net/npm/@pine-ds/core@[VERSION]/dist/pine-core/index.esm.js"></script>
 ```
 
 Replace `[VERSION]` with the desired version number. For example, version 2.0.0 can be accessed as `core@2.0.0`. If the latest version is desired, use `core@latest`.
@@ -28,8 +28,8 @@ As Pine components are web components, they can be used as simply as any other H
 <pds-button variant="accent">Pine Button</pds-button>
 ```
 
-For the full list of properties available for each component and more robust documentation, please see Pine's [Storybook](https://pine-design-system.netlify.app/)
+For the full list of properties available for each component and more robust documentation, please see Pine's [Storybook](https://pine-design-system.netlify.app/).
 
 ## Contribution
 
-To learn more about contributing to Pine, please see the [Contribution](./contribution.md) docs.
+To learn more about contributing to Pine, please see the [Contribution](./CONTRIBUTING.md) docs.
