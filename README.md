@@ -4,7 +4,7 @@
   <img alt="Pine: Web Component Design System" src="./docs/assets/pine-logo.png">
 </picture>
 
-<h1 style="text-align: center;">Pine Design System</h1>
+<h1 align="center">Pine Design System</h1>
 
 > Pine is a design system that includes the building blocks necessary to create beautiful and accessible user interfaces and experiences. Our library of tools comes with design tokens in the form of CSS custom properties and web components that can be added to any existing project. Created by Kajabi.
 
