@@ -1,83 +1,35 @@
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./docs/assets/pine-logo-dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="./docs/assets/pine-logo.png">
-    <img alt="Pine: Web Component Design System" src="./docs/assets/pine-logo.png">
-  </picture>
-</p>
-<p align="center">
-  <a href="https://pine-design-system.netlify.app/">Documentation Site</a>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./docs/assets/pine-logo-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="./docs/assets/pine-logo.png">
+  <img alt="Pine: Web Component Design System" src="./docs/assets/pine-logo.png">
+</picture>
 
-Pine is a UI toolkit for building beautiful, accessible web applications.
-</p>
+<h1 style="text-align: center;">Pine Design System</h1>
 
-Pine is implemented as a collection of
-[web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components).
+> Pine is a design system that includes the building blocks necessary to create beautiful and accessible user interfaces and experiences. Our library of tools comes with design tokens in the form of CSS custom properties and web components that can be added to any existing project. Created by Kajabi.
 
-<!-- > Tip: Check out the our [quick start guide](docs/quick-start.md) to jump in. -->
+## Setup
 
-## Roadmap
+Pine can be added to any project via CDN. Add the following link and script tags to the `<head>`:
 
-**Alpha** components are in development and may have frequent breaking changes.
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@pine-ds/core[VERSION]/dist/pine-core/pine-core.css" />
+<script type="module" src="https://cdn.jsdelivr.net/npm/@pine-ds/core[VERSION]/dist/pine-core/pine-core.esm.js"></script>
+<script nomodule src="https://cdn.jsdelivr.net/npm/@pine-ds/core[VERSION]/dist/pine-core/index.esm.js"></script>
+```
 
-**Beta** components are mostly polished and ready for use, but may still have breaking changes.
+Replace `[VERSION]` with the desired version number. For example, version 2.0.0 can be accessed as `core@2.0.0`. If the latest version is desired, use `core@latest`.
 
-**Stable** components are reviewed, documented, and ready for use.
+## Usage
 
--   ❌ Not started
--   🟡 In progress
--   ✅ Complete
+As Pine components are web components, they can be used as simply as any other HTML tag. For example, to add an accent button to the project, add the following:
 
-### Pre-Release
+```html
+<pds-button variant="accent">Pine Button</pds-button>
+```
 
-Component                     | Alpha | Beta | Stable
------------------------------ | :---: | :--: | :----:
-Accordion                      | ✅     | ✅    | ❌
-Avatar                         | ✅     | ✅    | ❌
-Box                            | ✅     | ✅    | ❌
-Button                         | ✅     | ✅    | ❌
-Checkbox                       | ✅     | ✅    | ❌
-Chip                           | ✅     | ✅    | ❌
-Copy Text                      | ✅     | ✅    | ❌
-Divider                        | ✅     | ✅    | ❌
-Form Input                     | ✅     | ✅    | ❌
-Form Select                    | 🟡     | ❌    | ❌
-Form Textarea                  | ✅     | ✅    | ❌
-Icon                           | ✅     | ✅    | ❌
-Image                          | ✅     | ✅    | ❌
-Link                           | ✅     | ✅    | ❌
-Loader                         | 🟡     | ❌    | ❌
-Popover                        | ❌     | ❌    | ❌
-Progress                       | ✅     | ✅    | ❌
-Row                            | ✅     | ✅    | ❌
-Radio                          | ✅     | ✅    | ❌
-Sortable                       | ✅     | ✅    | ❌
-Switch                         | ✅     | ✅    | ❌
-Table                          | ✅     | ✅    | ❌
-Tabs                           | ✅     | ✅    | ❌
-Tooltip                        | ✅     | ✅    | ❌
+For the full list of properties available for each component and more robust documentation, please see Pine's [Storybook](https://pine-design-system.netlify.app/)
 
-### Future
+## Contribution
 
-These features are planned for a future release.
-
-Component                     | Alpha | Beta | Stable
------------------------------ | :---: | :--: | :----:
-Alert                         | ❌     | ❌    | ❌
-Banner                        | ❌     | ❌    | ❌
-Breadcrumbs                   | ❌     | ❌    | ❌
-Description                   | ❌     | ❌    | ❌
-Drawer                        | ❌     | ❌    | ❌
-Empty State                   | ❌     | ❌    | ❌
-Hero                          | ❌     | ❌    | ❌
-Modal                         | ❌     | ❌    | ❌
-Page Heading                  | ❌     | ❌    | ❌
-Pagination                    | ❌     | ❌    | ❌
-Search                        | ❌     | ❌    | ❌
-Toast                         | ❌     | ❌    | ❌
-Toolbar                       | ❌     | ❌    | ❌
-
-
-## Browser support
-
-This project aims to support the latest two major versions of browsers at the time of each release.
+To learn more about contributing to Pine, please see the [Contribution](./contribution.md) docs.
