@@ -9,7 +9,7 @@
 
   .args-table-header {
     color: rgba(46,52,56,0.6);
-    font-family: "Nunito Sans",-apple-system,".SFNSText-Regular","San Francisco",BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Inter",-apple-system,".SFNSText-Regular","San Francisco",BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 13px;
     font-weight: 700;
     padding: 10px;
@@ -34,7 +34,7 @@
 
 .arg-table-cell {
   color: #2E3438;
-  font-family: "Nunito Sans",-apple-system,".SFNSText-Regular","San Francisco",BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-family: "Inter",-apple-system,".SFNSText-Regular","San Francisco",BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
   font-size: 13px;;
   padding-inline-start: 10px;
 

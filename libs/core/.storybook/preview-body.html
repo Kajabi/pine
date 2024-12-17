@@ -1,7 +1,86 @@
+ <!-- Adds sb-unstyled class to the body -->
+<body class="sb-unstyled"></body>
+
 <style>
-  body {
-    margin: 0px;
-    padding: 0px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  /* Temp workaround because MDX2 broke styling in Storybook */
+  /* TODO: Use semantic tokens where necessary */
+  .sb-unstyled {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol' !important;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: -0.16px;
+    line-height: 1.425;
+    color: #343332;
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: "GreetStandard";
+      margin-block: 0 8px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 0.26px;
+      line-height: 1.25;
+    }
+
+    h2 {
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: 0.24px;
+      line-height: 1.25;
+      border-bottom: 1px solid #e4e4e4; /* Grey 200 */
+      padding-block: 0 4px;
+    }
+
+    h3 {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 0.22px;
+      line-height: 1.25;
+    }
+
+    h4 {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 0.20px;
+      line-height: 1.25;
+    }
+
+    h5 {
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: 0.18px;
+      line-height: 1.25;
+    }
+
+    h6 {
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.16px;
+      line-height: 1.25;
+    }
+
+    code, pre {
+      font-family: monospace;
+      letter-spacing: 0;
+      line-height: 1;
+    }
+
+    div + h2, div + h3, div + h4 {
+      margin-block-start: 24px;
+    }
+
+    p {
+      margin-block: 16px;
+    }
+
+    ul {
+      margin-block: 16px;
+    }
+
+    li + li {
+      margin-block-start: 8px;
+    }
   }
 </style>
