@@ -619,6 +619,10 @@
       "value": "40px",
       "type": "fontSizes"
     },
+    "300": {
+      "value": "42px",
+      "type": "fontSizes"
+    },
     "057": {
       "value": "8px",
       "type": "fontSizes"

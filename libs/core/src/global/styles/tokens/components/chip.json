@@ -10,7 +10,7 @@
           "value": "{color.purple.300}",
           "type": "color"
         },
-        "dot":{
+        "dot": {
           "value": "{color.purple.600}",
           "type": "color"
         }
@@ -24,7 +24,7 @@
           "value": "{color.red.300}",
           "type": "color"
         },
-        "dot":{
+        "dot": {
           "value": "{color.red.600}",
           "type": "color"
         }
@@ -38,7 +38,7 @@
           "value": "{color.blue.300}",
           "type": "color"
         },
-        "dot":{
+        "dot": {
           "value": "{color.blue.600}",
           "type": "color"
         }
@@ -52,7 +52,7 @@
           "value": "{color.grey.300}",
           "type": "color"
         },
-        "dot":{
+        "dot": {
           "value": "{color.grey.600}",
           "type": "color"
         }
@@ -66,7 +66,7 @@
           "value": "{color.green.300}",
           "type": "color"
         },
-        "dot":{
+        "dot": {
           "value": "{color.green.600}",
           "type": "color"
         }
@@ -80,7 +80,7 @@
           "value": "{color.yellow.300}",
           "type": "color"
         },
-        "dot":{
+        "dot": {
           "value": "{color.yellow.600}",
           "type": "color"
         }
