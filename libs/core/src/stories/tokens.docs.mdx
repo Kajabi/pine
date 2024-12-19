@@ -1,0 +1,142 @@
+import { Meta, Story } from '@storybook/blocks';
+import { default as TokenExample1 } from '../../assets/images/tokens/token-example1.png';
+import { default as TokenExample2 } from '../../assets/images/tokens/token-example2.png';
+import { default as TokenExample3 } from '../../assets/images/tokens/token-example3.png';
+
+<Meta title="Foundations/Design Tokens/Design Tokens"  parameters={{ previewTabs: { canvas: { hidden: true }, } }} />
+
+# Design Tokens
+
+Within the design system repository, all tokens are converted into **CSS custom properties** during the build process via [Style Dictionary](https://amzn.github.io/style-dictionary/#/README) once the PR from Tokens Studio is merged into the main branch. Custom properties are supported in every major browser and available globally within the Pine design system.
+
+## Why Style Dictionary?
+
+Style Dictionary has become an industry standard in building and managing design system tokens. Its robust library keeps scalability in mind while offering simplicity when design tokens need to be exported into a variety of different formats or themes. With Style Dictionary, we have the power to create individual, product-specific tokens within Kajabi along with their corresponding light and dark themes if needed.
+
+Integrating Style Dictionary with Tokens Studio provides us with an easy way to maintain a solid source of truth for tokens across design and development.
+
+## Tiered Tokens: An Introduction
+
+Pine tokens are broken up into a three-tiered system. This structure has been proven across the industry to be effective in helping design systems scale. It has also been proven to allow flexibility with theming and making sweeping changes to token values in the system without friction. Our tiers are as follows: Core, Semantic, and Component.
+
+### Core
+
+Core tokens, also known as “primitive” or “raw” tokens, are all token values in their most base form. These tokens will always equate to raw values.
+
+```
+color.purple.500: #6B62F2;
+font-size.100: 14px;
+```
+
+Ideally, core tokens wouldn't be used in code unless there are no semantic tokens that fulfill the contextual requirement and creating a component-level token doesn't make sense.
+
+### Semantic
+
+Semantic tokens, also known as “reference” or “alias” tokens, reference Core tokens as their values. They are intended to apply to **certain contexts** across the brand, product, or application, or in other words, used semantically. What makes these tokens useful is that any component referencing them will be updated appropriately when widespread changes are made to the system.
+
+These tokens are the driving force behind component styling and are intended to be used liberally.
+
+```
+color.accent: {color.purple.500}
+font-size.default: {font-size.100}
+```
+
+### Component
+
+Component-level tokens are defined and used locally within a component. These are created when it makes sense to apply component-specific styling in contexts where the value differs from a semantic token value or when it'd be easier than using a Core token directly.
+
+```
+chip.color.accent: {color.purple.100};
+```
+
+These are created on a case-by-case basis. If you are unsure of whether a component-level token should be added to the system, please ask!
+
+### Why Does Tiering Work Well? An Example…
+
+Container components such as the card, table, and box have been requested for their background colors to change from `color.white` to `color.grey.100`. How would it look to update these tokens?
+
+Scenario A, Using Core Tokens
+
+```css
+/* Card */
+background-color: var(--pine-color-white);
+/* Table */
+background-color: var(--pine-color-white);
+/* Box */
+background-color: var(--pine-color-white);
+```
+
+Scenario B, Using Semantic Tokens
+
+```css
+/* Card */
+background-color: var(--pine-color-background-container);
+/* Table */
+background-color: var(--pine-color-background-container);
+/* Box */
+background-color: var(--pine-color-background-container);
+```
+
+In scenario A, each component's background color is referencing the core tokens directly, meaning all components would have to be updated _separately_. In scenario B, however, all components are referencing the same semantic token for contextual usage. The only change needed would be to update the semantic token's reference. **Every component using that semantic token would have that change already applied.** And considering how semantic tokens are used in specific contexts, there would be little worry in making such a change. We can assure that every component that is or has a container will be appropriately updated.
+
+While this is a simple example, imagine a scenario where there are much more than three components to update, or the brand colors change across the entire product, or a theme's text colors need to be updated. It's easy to see that using semantic tokens in this tiering system will **save time** when vast changes are inevitably made.
+
+## Naming Convention
+
+Naming is hard, especially for design tokens. Our chosen naming convention aims to align closely with industry standards. It is meant to be as generic or granular as needed from core tokens down to component-level tokens.
+
+Overall, we follow this convention:
+
+namespace-base-context-modifier
+
+1. **Namespace:** Also referred to as the prefix, it refers to the name of the design system and/or component. The design system name is included automatically as tokens are transformed through Style Dictionary. This is important to include as it prevents conflicts with other custom properties with similar naming conventions that could become available across the product. The name of the component should only be used for component-level tokens.
+2. **Base:** The main body of the token, highlighting the category and/or property defined such as color, border, or font-size. These will primarily follow the main categories listed in Tokens Studio.
+3. **Context (optional):** Describes _where_ and _how_ the token will be used. These are important designators to separate core from semantic and component tokens. This includes contexts such as background or sentiment.
+4. **Modifier (optional):** Refers to any modifiers on the component to call out variants, states, scales, or themes such as hover, primary, 100, or disabled.
+
+### Examples:
+
+<img src={TokenExample1} />
+<img src={TokenExample2} />
+<img src={TokenExample3} />
+
+## Token Scale
+
+Within Pine, we use a simple scale to handle variations within categories such as dimensions and font sizes. This numbered scale works proportionally off the base value, which is denoted with a 100 modifier.
+
+For example, our base dimension token, 8px, is written as:
+
+`--pine-dimension-100`
+
+An easy method to calculate new tokens would be to multiply the desired token value by 100 and then divide by the base value. Let's say we'd like to add a new dimension token for 72px. We can do:
+
+`(72\*100)/8`
+
+…which would give us 900. Our final new token would be:
+
+`--pine-dimension-900: 72px`
+
+While this does free us from using the "t-shirt sizing" scale for core tokens and the headache that comes with adding new values, "t-shirt sizing" is still used for some of our semantic tokens. Contextually, it makes sense as we are consciously dictating what our scale will be with semantic tokens.
+
+## Dimension Tokens
+
+With the release of Tokens Studio version 2.0, the Tokens Studio team has decided to adopt `dimension` as a token category, recommended by the W3C Design Tokens Community Group (DTCG), to match the CSS data type of `<dimension>`. [Dimension tokens](https://docs.tokens.studio/token-types/token-type-dimension), like their CSS data type counterparts, are numbers followed by units. They are intended to cover the now-deprecated Tokens Studio categories of:
+
+- Space/Spacing
+- Size
+- Border Radius
+- Border Width
+- Background Blur
+- X and Y position
+
+Please be sure to use dimension tokens for these categories when making CSS changes.
+
+## Best Practices
+
+When creating, updating, and using the design system tokens, it's important to keep one tip in mind: **if you have questions, please ask!** Design tokens are notoriously difficult to get right, especially when created from scratch. They are the backbone of a design system and have far-reaching effects across a brand or product. The more consistent we can be in usage and naming, the less effort we'll need to exert when the inevitable name or value changes crop up.
+
+Our team is always open to feedback and improving the system overall. Please reach out to our support channels for help.
+
+## References
+
+[“Naming Tokens in Design Systems”](https://medium.com/eightshapes-llc/naming-tokens-in-design-systems-9e86c7444676) by Nathan Curtis
