@@ -19,7 +19,7 @@ const preview = {
     options: {
       storySort: {
         method: 'alphabetical',
-        order: ['Welcome', 'Foundations', 'Guides', 'Components', 'Resources'],
+        order: ['Introduction', ['Welcome', 'Get Started'], 'Foundations', 'Design Tokens', ['Tokens'], 'Guides', 'Components', 'Resources'],
         locales: 'en-US',
       },
     }
