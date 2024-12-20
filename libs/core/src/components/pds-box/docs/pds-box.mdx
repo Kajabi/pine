@@ -2,6 +2,7 @@ import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
 
 # Box
+
 Box is our primitive layout component. It is intended to be used as a building block for more complex layouts. It allows for custom sizing, colors, padding, and alignment while still adhering to Pine tokens and brand guidelines.
 
 ## Properties
@@ -15,26 +16,10 @@ By default Box has no border. Use `border` to add a border to the box. Use `bord
 
 <DocCanvas client:only
   mdxSource={{
-    react: `
-      <PdsBox
-        border="true"
-      >
-        Border
-      </PdsBox>
-    `,
-    webComponent: `
-      <pds-box
-        border="true"
-      >
-        Border
-      </pds-box>
-    `
+    react: `<PdsBox border="true">Border</PdsBox>`,
+    webComponent: `<pds-box border="true">Border</pds-box>`
 }}>
-  <pds-box
-    border="true"
-  >
-    Border
-  </pds-box>
+  <pds-box border="true">Border</pds-box>
 </DocCanvas>
 
 ### Border Color
@@ -42,80 +27,19 @@ Please refer to the color brand guidelines for the appropriate color to use. Use
 
 <DocCanvas client:only
   mdxSource={{
-    react: `
-      <PdsBox
-        border="true"
-      >
-        Border Color
-      </PdsBox>
-      <PdsBox
-        border="true"
-        border-color="#0072EF"
-      >
-        Border Color
-      </PdsBox>
-      <PdsBox
-        border="true"
-        border-color="#CF3C32"
-      >
-        Border Color
-      </PdsBox>
-      <PdsBox
-        border="true"
-        border-color="#FFC505"
-      >
-        Border Color
-      </PdsBox>
-    `,
-    webComponent: `
-      <pds-box
-        border="true"
-      >
-        Border Color
-      </pds-box>
-      <pds-box
-        border="true"
-        border-color="#0072EF"
-      >
-        Border Color
-      </pds-box>
-      <pds-box
-        border="true"
-        border-color="#CF3C32"
-      >
-        Border Color
-      </pds-box>
-      <pds-box
-        border="true"
-        border-color="#FFC505"
-      >
-        Border Color
-      </pds-box>
-    `
+    react: `<PdsBox border="true">Border Color</PdsBox>
+<PdsBox border="true" border-color="#0072EF">Border Color</PdsBox>
+<PdsBox border="true" border-color="#CF3C32">Border Color</PdsBox>
+<PdsBox border="true" border-color="#FFC505">Border Color</PdsBox>`,
+    webComponent: `<pds-box border="true">Border Color</pds-box>
+<pds-box border="true" border-color="#0072EF">Border Color</pds-box>
+<pds-box border="true" border-color="#CF3C32">Border Color</pds-box>
+<pds-box border="true" border-color="#FFC505">Border Color</pds-box>`
 }}>
-  <pds-box
-    border="true"
-  >
-    Border Color
-  </pds-box>
-  <pds-box
-    border="true"
-    border-color="#0072EF"
-  >
-    Border Color
-  </pds-box>
-  <pds-box
-    border="true"
-    border-color="#CF3C32"
-  >
-    Border Color
-  </pds-box>
-  <pds-box
-    border="true"
-    border-color="#FFC505"
-  >
-    Border Color
-  </pds-box>
+  <pds-box border="true">Border Color</pds-box>
+  <pds-box border="true" border-color="#0072EF">Border Color</pds-box>
+  <pds-box border="true" border-color="#CF3C32">Border Color</pds-box>
+  <pds-box border="true" border-color="#FFC505">Border Color</pds-box>
 </DocCanvas>
 
 ### Border Radius
@@ -123,155 +47,39 @@ By default Box has no border radius. Use `borderRadius` to change the rounding o
 
 <DocCanvas client:only
   mdxSource={{
-    react: `
-      <PdsBox
-        border="true"
-        border-radius="xs"
-      >
-        xs border radius
-      </PdsBox>
-      <PdsBox
-        border="true"
-        border-radius="sm"
-      >
-        sm border radius
-      </PdsBox>
-      <PdsBox
-        border="true"
-        border-radius="md"
-      >
-        md border radius
-      </PdsBox>
-      <PdsBox
-        border="true"
-        border-radius="lg"
-      >
-        lg border radius
-      </PdsBox>
-    `,
-    webComponent: `
-      <pds-box
-        border="true"
-        border-radius="xs"
-      >
-        xs border radius
-      </pds-box>
-      <pds-box
-        border="true"
-        border-radius="sm"
-      >
-        sm border radius
-      </pds-box>
-      <pds-box
-        border="true"
-        border-radius="md"
-      >
-        md border radius
-      </pds-box>
-      <pds-box
-        border="true"
-        border-radius="lg"
-      >
-        lg border radius
-      </pds-box>
-    `
+    react: `<PdsBox border="true" border-radius="xs">xs border radius</PdsBox>
+<PdsBox border="true" border-radius="sm">sm border radius</PdsBox>
+<PdsBox border="true" border-radius="md">md border radius</PdsBox>
+<PdsBox border="true" border-radius="lg">lg border radius</PdsBox>`,
+    webComponent: `<pds-box border="true" border-radius="xs">xs border radius</pds-box>
+<pds-box border="true" border-radius="sm">sm border radius</pds-box>
+<pds-box border="true" border-radius="md">md border radius</pds-box>
+<pds-box border="true" border-radius="lg">lg border radius</pds-box>`
 }}>
-  <pds-box
-    border="true"
-    border-radius="xs"
-  >
-    xs border radius
-  </pds-box>
-  <pds-box
-    border="true"
-    border-radius="sm"
-  >
-    sm border radius
-  </pds-box>
-  <pds-box
-    border="true"
-    border-radius="md"
-  >
-    md border radius
-  </pds-box>
-  <pds-box
-    border="true"
-    border-radius="lg"
-  >
-    lg border radius
-  </pds-box>
+  <pds-box border="true" border-radius="xs">xs border radius</pds-box>
+  <pds-box border="true" border-radius="sm">sm border radius</pds-box>
+  <pds-box border="true" border-radius="md">md border radius</pds-box>
+  <pds-box border="true" border-radius="lg">lg border radius</pds-box>
 </DocCanvas>
 
 ### Shadow
-By default Box has no shadow. Use `shadow` to add a shadow to the box. 
+By default Box has no shadow. Use `shadow` to add a shadow to the box.
 
 <DocCanvas client:only
   mdxSource={{
-    react: `
-      <PdsBox
-        shadow="xs"
-      >
-        Shadow xs
-      </PdsBox>
-      <PdsBox
-        shadow="sm"
-      >
-        Shadow sm
-      </PdsBox>
-      <PdsBox
-        shadow="md"
-      >
-        Shadow md
-      </PdsBox>
-      <PdsBox
-        shadow="lg"
-      >
-        Shadow lg
-      </PdsBox>
-    `,
-    webComponent: `
-      <pds-box
-        shadow="xs"
-      >
-        Shadow xs
-      </pds-box>
-      <pds-box
-        shadow="sm"
-      >
-        Shadow sm
-      </pds-box>
-      <pds-box
-        shadow="md"
-      >
-        Shadow md
-      </pds-box>
-      <pds-box
-        shadow="lg"
-      >
-        Shadow lg
-      </pds-box>
-    `
+    react: `<PdsBox shadow="xs">Shadow xs</PdsBox>
+<PdsBox shadow="sm">Shadow sm</PdsBox>
+<PdsBox shadow="md">Shadow md</PdsBox>
+<PdsBox shadow="lg">Shadow lg</PdsBox>`,
+    webComponent: `<pds-box shadow="xs">Shadow xs</pds-box>
+<pds-box shadow="sm">Shadow sm</pds-box>
+<pds-box shadow="md">Shadow md</pds-box>
+<pds-box shadow="lg">Shadow lg</pds-box>`
 }}>
-  <pds-box
-    shadow="xs"
-  >
-    Shadow xs
-  </pds-box>
-  <pds-box
-    shadow="sm"
-  >
-    Shadow sm
-  </pds-box>
-  <pds-box
-    shadow="md"
-  >
-    Shadow md
-  </pds-box>
-  <pds-box
-    shadow="lg"
-  >
-    Shadow lg
-  </pds-box>
+  <pds-box shadow="xs">Shadow xs</pds-box>
+  <pds-box shadow="sm">Shadow sm</pds-box>
+  <pds-box shadow="md">Shadow md</pds-box>
+  <pds-box shadow="lg">Shadow lg</pds-box>
 </DocCanvas>
 
 ### Padding
@@ -279,155 +87,28 @@ By default Box has no padding. Use `padding` to add padding to the box.
 
 <DocCanvas client:only
   mdxSource={{
-    react: `
-      <PdsBox
-        border="true"
-        padding="xxs"
-      >
-        Padding xxs
-      </PdsBox>
-      <PdsBox
-        border="true"
-        padding="xxs"
-      >
-        Padding xs
-      </PdsBox>
-      <PdsBox
-        border="true"
-        padding="xs"
-      >
-        Padding xxs
-      </PdsBox>
-      <PdsBox
-        border="true"
-        padding="sm"
-      >
-        Padding sm
-      </PdsBox>
-      <PdsBox
-        border="true"
-        padding="md"
-      >
-        Padding md
-      </PdsBox>
-      <PdsBox
-        border="true"
-        padding="lg"
-      >
-        Padding lg
-      </PdsBox>
-      <PdsBox
-        border="true"
-        padding="xl"
-      >
-        Padding xl
-      </PdsBox>
-      <PdsBox
-        border="true"
-        padding="xxl"
-      >
-        Padding xxl
-      </PdsBox>
-    `,
-    webComponent: `
-      <pds-box
-        border="true"
-        padding="xxs"
-      >
-        Padding xxs
-      </pds-box>
-      <pds-box
-        border="true"
-        padding="xxs"
-      >
-        Padding xs
-      </pds-box>
-      <pds-box
-        border="true"
-        padding="xs"
-      >
-        Padding xxs
-      </pds-box>
-      <pds-box
-        border="true"
-        padding="sm"
-      >
-        Padding sm
-      </pds-box>
-      <pds-box
-        border="true"
-        padding="md"
-      >
-        Padding md
-      </pds-box>
-      <pds-box
-        border="true"
-        padding="lg"
-      >
-        Padding lg
-      </pds-box>
-      <pds-box
-        border="true"
-        padding="xl"
-      >
-        Padding xl
-      </pds-box>
-      <pds-box
-        border="true"
-        padding="xxl"
-      >
-        Padding xxl
-      </pds-box>
-    `
+    react: `<PdsBox border="true" padding="xxs">Padding xxs</PdsBox>
+<PdsBox border="true" padding="xs">Padding xs</PdsBox>
+<PdsBox border="true" padding="sm">Padding sm</PdsBox>
+<PdsBox border="true" padding="md">Padding md</PdsBox>
+<PdsBox border="true" padding="lg">Padding lg</PdsBox>
+<PdsBox border="true" padding="xl">Padding xl</PdsBox>
+<PdsBox border="true" padding="xxl">Padding xxl</PdsBox>`,
+    webComponent: `<pds-box border="true" padding="xxs">Padding xxs</pds-box>
+<pds-box border="true" padding="xs">Padding xs</pds-box>
+<pds-box border="true" padding="sm">Padding sm</pds-box>
+<pds-box border="true" padding="md">Padding md</pds-box>
+<pds-box border="true" padding="lg">Padding lg</pds-box>
+<pds-box border="true" padding="xl">Padding xl</pds-box>
+<pds-box border="true" padding="xxl">Padding xxl</pds-box>`
 }}>
-  <pds-box
-    border="true"
-    padding="xxs"
-  >
-    Padding xxs
-  </pds-box>
-  <pds-box
-    border="true"
-    padding="xxs"
-  >
-    Padding xs
-  </pds-box>
-  <pds-box
-    border="true"
-    padding="xs"
-  >
-    Padding xxs
-  </pds-box>
-  <pds-box
-    border="true"
-    padding="sm"
-  >
-    Padding sm
-  </pds-box>
-  <pds-box
-    border="true"
-    padding="md"
-  >
-    Padding md
-  </pds-box>
-  <pds-box
-    border="true"
-    padding="lg"
-  >
-    Padding lg
-  </pds-box>
-  <pds-box
-    border="true"
-    padding="xl"
-  >
-    Padding xl
-  </pds-box>
-  <pds-box
-    border="true"
-    padding="xxl"
-  >
-    Padding xxl
-  </pds-box>
+  <pds-box border="true" padding="xxs">Padding xxs</pds-box>
+  <pds-box border="true" padding="xs">Padding xs</pds-box>
+  <pds-box border="true" padding="sm">Padding sm</pds-box>
+  <pds-box border="true" padding="md">Padding md</pds-box>
+  <pds-box border="true" padding="lg">Padding lg</pds-box>
+  <pds-box border="true" padding="xl">Padding xl</pds-box>
+  <pds-box border="true" padding="xxl">Padding xxl</pds-box>
 </DocCanvas>
 
 ### Display
@@ -438,47 +119,28 @@ By default Box is `flex-direction: row`. Use `direction` to change the direction
 
 <DocCanvas client:only
   mdxSource={{
-    react: `
-      <PdsBox
-        border="true"
-      >
-        <span>Item 1</span>
-        <span>Item 2</span>
-      </PdsBox>
-      <PdsBox
-        border="true"
-        direction="column"
-      >
-        <span>Item 1</span>
-        <span>Item 2</span>
-      </PdsBox>
-    `,
-    webComponent: `
-      <pds-box
-        border="true"
-      >
-        <span>Item 1</span>
-        <span>Item 2</span>
-      </pds-box>
-      <pds-box
-        border="true"
-        direction="column"
-      >
-        <span>Item 1</span>
-        <span>Item 2</span>
-      </pds-box>
-    `
+    react: `<PdsBox border="true">
+  <span>Item 1</span>
+  <span>Item 2</span>
+</PdsBox>
+<PdsBox border="true" direction="column">
+  <span>Item 1</span>
+  <span>Item 2</span>
+</PdsBox>`,
+    webComponent: `<pds-box border="true">
+  <span>Item 1</span>
+  <span>Item 2</span>
+</pds-box>
+<pds-box border="true" direction="column">
+  <span>Item 1</span>
+  <span>Item 2</span>
+</pds-box>`
 }}>
-  <pds-box
-    border="true"
-  >
+  <pds-box border="true">
     <span>Item 1</span>
     <span>Item 2</span>
   </pds-box>
-  <pds-box
-    border="true"
-    direction="column"
-  >
+  <pds-box border="true" direction="column">
     <span>Item 1</span>
     <span>Item 2</span>
   </pds-box>
