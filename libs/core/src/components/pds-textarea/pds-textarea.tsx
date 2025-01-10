@@ -1,4 +1,4 @@
-import { Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
+import { AttachInternals, Build, Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 import { assignDescription, isRequired, messageId } from '../../utils/form';
 import { TextareaChangeEventDetail } from './textarea-interface';
 import { PdsLabel } from '../_internal/pds-label/pds-label';
@@ -8,6 +8,7 @@ import { danger } from '@pine-ds/icons/icons';
   tag: 'pds-textarea',
   styleUrls: ['../../global/styles/base.scss', 'pds-textarea.scss'],
   shadow: true,
+  formAssociated: true
 })
 export class PdsTextarea {
   @Element() el: HTMLPdsTextareaElement;
@@ -86,6 +87,8 @@ export class PdsTextarea {
    */
   @Event() pdsTextareaChange: EventEmitter<TextareaChangeEventDetail>;
 
+  @AttachInternals() internals: ElementInternals;
+
   private onTextareaChange = (ev: Event) => {
     const textarea = ev.target as HTMLTextAreaElement;
     isRequired(textarea, this);
@@ -95,6 +98,12 @@ export class PdsTextarea {
     }
 
     this.pdsTextareaChange.emit({value: this.value, event: ev});
+
+    if (Build.isDev == false) {
+      if (this.internals && typeof this.internals.setFormValue === 'function') {
+        this.internals.setFormValue(this.value);
+      }
+    }
   };
 
   private textareaClassNames() {

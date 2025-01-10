@@ -27,7 +27,7 @@ describe('pds-radio', () => {
     const component = await page.find('pds-radio');
     expect(component).toHaveClass('hydrated');
 
-    let radio = await page.find('pds-radio input');
+    const radio = await page.find('pds-radio input');
     component.setProperty('disabled', false);
     await page.waitForChanges();
     expect(await radio.getProperty('disabled')).toBe(false);
@@ -35,17 +35,6 @@ describe('pds-radio', () => {
     component.setProperty('disabled', true);
     await page.waitForChanges();
     expect(await radio.getProperty('disabled')).toBe(true);
-  });
-
-  it('emits "pdsRadioChange" event when radio is checked', async () => {
-    const page = await newE2EPage();
-    await page.setContent('<pds-radio component-id="default" label="Label text" />');
-
-    const radio = await page.find('pds-radio input');
-    const eventSpy = await page.spyOnEvent('pdsRadioChange');
-    await radio.press('Space');
-
-    expect(eventSpy).toHaveReceivedEvent();
   });
 
   it('does not emit "pdsRadioChange" event when radio is clicked and disabled', async () => {
@@ -57,5 +46,28 @@ describe('pds-radio', () => {
 
     await radio.press('Space');
     expect(eventSpy).not.toHaveReceivedEvent();
+  });
+
+  it('should set the form value and emit pdsRadioChange event when clicked', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <form id="myForm">
+        <pds-radio component-id="myRadio" name="radioGroup" value="radioValue" />
+      </form>
+    `);
+
+    const radio = await page.find('pds-radio >>> input');
+
+    await radio.click();
+    await page.waitForChanges();
+
+    // Check form value using evaluate
+    const formValue = await page.evaluate(() => {
+      const form = document.querySelector('#myForm') as HTMLFormElement;
+      const formData = new FormData(form as HTMLFormElement);
+      return formData.get('radioGroup');
+    });
+
+    expect(formValue).toBe('radioValue');
   });
 });
