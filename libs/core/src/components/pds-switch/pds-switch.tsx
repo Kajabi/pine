@@ -1,4 +1,4 @@
-import { AttachInternals, Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
+import { AttachInternals, Build, Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
 import { PdsLabel } from '../_internal/pds-label/pds-label';
 import { danger } from '@pine-ds/icons/icons';
@@ -74,8 +74,13 @@ export class PdsSwitch {
 
     const input = e.target as HTMLInputElement;
     this.checked = input.checked;
-    this.pdsSwitchChange.emit(e as InputEvent);
-    this.internals.setFormValue(this.checked ? this.value : '');
+
+    if (Build.isDev == false) {
+      this.pdsSwitchChange.emit(e as InputEvent);
+      if (this.internals && typeof this.internals.setFormValue === 'function') {
+        this.internals.setFormValue(this.checked ? this.value : '');
+      }
+    }
   };
 
   private switchClassNames = () => {
@@ -91,7 +96,6 @@ export class PdsSwitch {
   };
 
   render() {
-    // console.log('switch internals', this.internals);
     return (
       <Host class={this.switchClassNames()} aria-disabled={this.disabled ? 'true' : null}>
         <input

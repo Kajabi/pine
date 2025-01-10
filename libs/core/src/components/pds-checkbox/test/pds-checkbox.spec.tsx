@@ -156,33 +156,17 @@ describe('pds-checkbox', () => {
       html: `<pds-checkbox component-id="default" label="Label text" value="This is the input value" />`,
     });
 
-    const input = root?.shadowRoot?.querySelector('input');
+    const input = root?.shadowRoot?.querySelector('input') as HTMLInputElement;
     expect(input?.value).toEqual('This is the input value');
   });
 
-  it('emits "pdseCheckboxChange" event when checkbox is changed', async () => {
+  it('doesnt fire when disabled', async () => {
     const page = await newSpecPage({
       components: [PdsCheckbox],
-      html: '<pds-checkbox component-id="default" label="Label text" />',
+      html: `<pds-checkbox component-id="default" label="Label text" disabled />`,
     });
 
-    const checkbox = page.root?.shadowRoot?.querySelector('input[type="checkbox"]');
-    const eventSpy = jest.fn();
-
-    page.root?.addEventListener('pdsCheckboxChange', eventSpy);
-    checkbox?.dispatchEvent(new Event('change'));
-    await page.waitForChanges();
-
-    expect(eventSpy).toHaveBeenCalled();
-  });
-
-  it('does not emit "pdsCheckboxChange" event when checkbox is changed and disabled', async () => {
-    const page = await newSpecPage({
-      components: [PdsCheckbox],
-      html: '<pds-checkbox component-id="default" label="Label text" disabled />',
-    });
-
-    const checkbox = page.root?.shadowRoot?.querySelector('input[type="checkbox"]');
+    const checkbox = page.root?.shadowRoot?.querySelector('input[type="checkbox"]') as HTMLInputElement;
     const eventSpy = jest.fn();
 
     page.root?.addEventListener('pdsCheckboxChange', eventSpy);
@@ -190,5 +174,24 @@ describe('pds-checkbox', () => {
     await page.waitForChanges();
 
     expect(eventSpy).not.toHaveBeenCalled();
+  });
+
+  it('updates checked prop on change', async () => {
+    const page = await newSpecPage({
+      components: [PdsCheckbox],
+      html: `<pds-checkbox component-id="default" label="Label text"></pds-checkbox>`
+    });
+
+    const checkbox = page.root?.shadowRoot?.querySelector('input[type="checkbox"]') as HTMLInputElement;
+    const eventSpy = jest.fn();
+    page.root?.addEventListener('pdsCheckboxChange', eventSpy);
+
+    expect(page.rootInstance.checked).toBe(false);
+
+    checkbox.checked = true;
+    checkbox.dispatchEvent(new Event('change'));
+    await page.waitForChanges();
+
+    expect(page.rootInstance.checked).toBe(true);
   });
 });

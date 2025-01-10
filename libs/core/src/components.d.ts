@@ -390,7 +390,7 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Indicates whether or not the input field is disabled.
+          * Determines whether or not the input field is disabled.
          */
         "disabled"?: boolean;
         /**
@@ -402,7 +402,7 @@ export namespace Components {
          */
         "helperMessage"?: string;
         /**
-          * Indicates whether or not the input field is invalid or throws an error.
+          * Determines whether or not the input field is invalid or throws an error.
          */
         "invalid"?: boolean;
         /**
@@ -418,11 +418,11 @@ export namespace Components {
          */
         "placeholder"?: string;
         /**
-          * Indicates whether or not the input field is readonly.
+          * Determines whether or not the input field is readonly.
          */
         "readonly"?: boolean;
         /**
-          * Indicates whether or not the input field is required.
+          * Determines whether or not the input field is required.
          */
         "required"?: boolean;
         /**
@@ -916,7 +916,7 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Specifies the error message and provides an error-themed treatment to the field.
+          * Displays an error message below the textarea field.
          */
         "errorMessage"?: string;
         /**
@@ -1860,7 +1860,7 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
-          * Indicates whether or not the input field is disabled.
+          * Determines whether or not the input field is disabled.
          */
         "disabled"?: boolean;
         /**
@@ -1872,7 +1872,7 @@ declare namespace LocalJSX {
          */
         "helperMessage"?: string;
         /**
-          * Indicates whether or not the input field is invalid or throws an error.
+          * Determines whether or not the input field is invalid or throws an error.
          */
         "invalid"?: boolean;
         /**
@@ -1892,11 +1892,11 @@ declare namespace LocalJSX {
          */
         "placeholder"?: string;
         /**
-          * Indicates whether or not the input field is readonly.
+          * Determines whether or not the input field is readonly.
          */
         "readonly"?: boolean;
         /**
-          * Indicates whether or not the input field is required.
+          * Determines whether or not the input field is required.
          */
         "required"?: boolean;
         /**
@@ -2427,7 +2427,7 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Specifies the error message and provides an error-themed treatment to the field.
+          * Displays an error message below the textarea field.
          */
         "errorMessage"?: string;
         /**

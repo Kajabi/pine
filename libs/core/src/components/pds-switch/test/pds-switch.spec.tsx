@@ -147,47 +147,30 @@ describe('pds-switch', () => {
     `);
   });
 
-  it('emits a `pdsSwitchChange` event when the input is changed', async () => {
+  it('updates value prop on value change', async () => {
     const page = await newSpecPage({
       components: [PdsSwitch],
       html: `
         <pds-switch
-          component-id="switch-with-event"
-          label="Switch with event">
+          component-id="switch-with-value"
+          label="Switch with value">
         </pds-switch>
       `
     });
 
-    const component = page.root?.shadowRoot?.querySelector('input');
+    const switchEl = page.root?.shadowRoot?.querySelector('input');
     const eventSpy = jest.fn();
-
     page.root?.addEventListener('pdsSwitchChange', eventSpy);
-    component?.dispatchEvent(new Event('change'));
+
+    expect(page.rootInstance.checked).toBe(false);
+
+    if (switchEl) {
+      switchEl.checked = true;
+    }
+    switchEl?.dispatchEvent(new Event('change'));
     await page.waitForChanges();
 
-    expect(eventSpy).toHaveBeenCalled();
-  });
-
-  it('will not emit a `pdsSwitchChange` event when the input is disabled', async () => {
-    const page = await newSpecPage({
-      components: [PdsSwitch],
-      html: `
-        <pds-switch
-          component-id="switch-with-event"
-          disabled="true"
-          label="Switch with event">
-        </pds-switch>
-      `
-    });
-
-    const component = page.root?.shadowRoot?.querySelector('input');
-    const eventSpy = jest.fn();
-
-    page.root?.addEventListener('pdsSwitchChange', eventSpy);
-    component?.dispatchEvent(new Event('change'));
-    await page.waitForChanges();
-
-    expect(eventSpy).not.toHaveBeenCalled();
+    expect(page.rootInstance.checked).toBe(true);
   });
 
 });

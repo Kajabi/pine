@@ -158,7 +158,7 @@ describe('pds-input', () => {
       html: `<pds-input helper-message="Use the correct syntax" component-id="field-1" value="Frank Dux"></pds-input>`
     });
 
-    const helperMessage = root.shadowRoot.querySelector('.pds-input__helper-message');
+    const helperMessage = root?.shadowRoot?.querySelector('.pds-input__helper-message');
     expect(helperMessage).not.toBeNull();
   });
 
@@ -168,7 +168,7 @@ describe('pds-input', () => {
       html: `<pds-input error-message="Please provide a helpful error message" component-id="field-1" value="Frank Dux"></pds-input>`
     });
 
-    const errorMessage = root.shadowRoot.querySelector('.pds-input__error-message');
+    const errorMessage = root?.shadowRoot?.querySelector('.pds-input__error-message');
     expect(errorMessage).not.toBeNull();
   });
 
@@ -177,22 +177,18 @@ describe('pds-input', () => {
       components: [PdsInput],
       html: `<pds-input value="yada-yada" />`,
     })
-    const pdsInput = page.root
-    expect(pdsInput.value).toBe('yada-yada')
+    const pdsInput = page.root;
+    expect(pdsInput?.value).toBe('yada-yada');
 
-    const input = pdsInput.shadowRoot.querySelector('input')
-    expect(input.value).toBe('yada-yada')
+    const input = pdsInput?.shadowRoot?.querySelector('input');
+    expect(input?.value).toBe('yada-yada');
 
-    input.value = 'yoda-yoda'
-    input.dispatchEvent(new Event('input'))
+    if (input) {
+      input.value = 'bang';
+      input.dispatchEvent(new Event('input'));
+    }
     await page.waitForChanges()
 
-    expect(input?.value).toEqual('yoda-yoda')
-
-    input.value = '';
-    input.dispatchEvent(new Event('input'));
-    await page.waitForChanges();
-
-    expect(input?.value).toEqual('');
+    expect(input?.value).toEqual('bang');
   })
 });

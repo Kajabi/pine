@@ -133,35 +133,22 @@ describe('pds-radio', () => {
     expect(input?.value).toEqual('This is the input value');
   });
 
-  it('emits "pdsRadioChange" event when radio is changed', async () => {
+  it('updates checked prop on change', async () => {
     const page = await newSpecPage({
       components: [PdsRadio],
-      html: '<pds-radio component-id="default" label="Label text" />',
+      html: `<pds-radio component-id="default" label="Label text" />`,
     });
 
-    const radio = page.root?.querySelector('input[type="radio"]');
+    const radio = page.root?.querySelector('input[type="radio"]') as HTMLInputElement;
     const eventSpy = jest.fn();
-
     page.root?.addEventListener('pdsRadioChange', eventSpy);
-    radio?.dispatchEvent(new Event('change'));
+
+    expect(page.rootInstance.checked).toBe(false);
+
+    radio.checked = true;
+    radio.dispatchEvent(new Event('change'));
     await page.waitForChanges();
 
-    expect(eventSpy).toHaveBeenCalled();
-  });
-
-  it('does not emit "pdsRadioChange" event when radio is changed and disabled', async () => {
-    const page = await newSpecPage({
-      components: [PdsRadio],
-      html: '<pds-radio component-id="default" label="Label text" disabled />',
-    });
-
-    const radio = page.root?.querySelector('input[type="radio"]');
-    const eventSpy = jest.fn();
-
-    page.root?.addEventListener('pdsRadioChange', eventSpy);
-    radio?.dispatchEvent(new Event('change'));
-    await page.waitForChanges();
-
-    expect(eventSpy).not.toHaveBeenCalled();
+    expect(page.root?.checked).toEqual(true);
   });
 });

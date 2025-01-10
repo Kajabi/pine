@@ -1,4 +1,4 @@
-import { Component, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
+import { AttachInternals, Build, Component, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
 import { messageId } from '../../utils/form';
 import { PdsLabel } from '../_internal/pds-label/pds-label';
 
@@ -90,6 +90,8 @@ export class PdsSelect {
     this.updateSelectedOption();
   }
 
+  @AttachInternals() internals: ElementInternals;
+
   /**
    * Updates the selected option in the select element based on the current value.
    *
@@ -127,8 +129,16 @@ export class PdsSelect {
 
     if (values.length === 1 && !this.multiple) {
         this.value = values[0];
+
+        if (Build.isDev == false) {
+          this.internals.setFormValue(this.value);
+        }
     } else {
         this.value = values;
+
+        if (Build.isDev == false) {
+          this.internals.setFormValue(Array.isArray(this.value) ? this.value.join(',') : this.value);
+        }
     }
 
     this.pdsSelectChange.emit(e as InputEvent);

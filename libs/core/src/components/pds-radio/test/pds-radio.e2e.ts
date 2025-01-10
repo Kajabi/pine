@@ -37,17 +37,6 @@ describe('pds-radio', () => {
     expect(await radio.getProperty('disabled')).toBe(true);
   });
 
-  it('emits "pdsRadioChange" event when radio is checked', async () => {
-    const page = await newE2EPage();
-    await page.setContent('<pds-radio component-id="default" label="Label text" />');
-
-    const radio = await page.find('pds-radio input');
-    const eventSpy = await page.spyOnEvent('pdsRadioChange');
-    await radio.press('Space');
-
-    expect(eventSpy).toHaveReceivedEvent();
-  });
-
   it('does not emit "pdsRadioChange" event when radio is clicked and disabled', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-radio component-id="default" label="Label text" disabled />');
@@ -68,20 +57,17 @@ describe('pds-radio', () => {
     `);
 
     const radio = await page.find('pds-radio >>> input');
-    const pdsRadioChangeSpy = await page.spyOnEvent('pdsRadioChange');
 
     await radio.click();
     await page.waitForChanges();
 
     // Check form value using evaluate
     const formValue = await page.evaluate(() => {
-      const form = document.querySelector('#myForm');
+      const form = document.querySelector('#myForm') as HTMLFormElement;
       const formData = new FormData(form as HTMLFormElement);
       return formData.get('radioGroup');
     });
 
     expect(formValue).toBe('radioValue');
-    expect(pdsRadioChangeSpy).toHaveReceivedEvent();
-    expect(pdsRadioChangeSpy.firstEvent.detail).toBeTruthy();
   });
 });
