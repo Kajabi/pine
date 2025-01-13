@@ -20,6 +20,12 @@ Pine can be added to any project via CDN. Add the following link and script tags
 
 Replace `[VERSION]` with the desired version number. For example, version 2.0.0 can be accessed as `core@2.0.0`. If the latest version is desired, use `core@latest`.
 
+To use the components within React projects, they must also be installed via npm:
+
+```
+npm install @pine-ds/react
+```
+
 ## Usage
 
 As Pine components are web components, they can be used as simply as any other HTML tag. For example, to add an accent button to the project, add the following:
