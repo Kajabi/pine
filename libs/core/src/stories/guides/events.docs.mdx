@@ -4,9 +4,9 @@ import { Meta, Story } from '@storybook/blocks';
 <Meta title="Guides/Events"/>
 
 # Event Handling
-Pine tries to adere to the browser standards whenever possible. However, with Web Components there are events that are a result of a direct user
+Pine tries to adhere to the browser standards whenever possible. However, with Web Components there are events that are a result of a direct user
 interaction, like `click`, `focus` that bubble just fine from inside a Web Component's shadow DOM into the light DOM. But then we have others,
-like `change` event, that don't. The differencce between those events is that the former are defined as
+like `change` event, that don't. The difference between those events is that the former are defined as
 [composed events](https://developer.mozilla.org/en-US/docs/Web/API/Event/composed), while the latter are not.
 
 
@@ -25,7 +25,7 @@ These examples show you how to use the custom "pds"-prefixed events with Vanilla
 ### Vanilla JS
 
 ```html
-<pds-checbox component-id="example" />
+<pds-checkbox component-id="example" />
 
 <script>
 const handleChange = () => {
