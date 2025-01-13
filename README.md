@@ -28,6 +28,12 @@ As Pine components are web components, they can be used as simply as any other H
 <pds-button variant="accent">Pine Button</pds-button>
 ```
 
+For use within React files, components should follow PascalCase to match React component convention:
+
+```html
+<PdsCopytext value="Copy this text" fullWidth="true"></PdsCopytext>
+```
+
 For the full list of properties available for each component and more robust documentation, please see Pine's [Storybook](https://pine-design-system.netlify.app/).
 
 ## Contribution
