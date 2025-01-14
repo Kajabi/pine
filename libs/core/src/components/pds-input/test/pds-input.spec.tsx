@@ -58,7 +58,7 @@ describe('pds-input', () => {
     `);
   });
 
-  it('renders readonly input', async () => {
+  it('renders required input', async () => {
     const { root } = await newSpecPage({
       components: [PdsInput],
       html: `<pds-input required="true" component-id="field-1" value="Frank Dux"></pds-input>`
@@ -102,7 +102,7 @@ describe('pds-input', () => {
     });
 
     expect(root).toEqualHtml(`
-    <pds-input component-id="field-1" readonly="true" value="Frank Dux">
+    <pds-input aria-readonly="true" component-id="field-1" readonly="true" value="Frank Dux">
       <mock:shadow-root>
         <div class="pds-input">
           <label htmlFor="field-1">
