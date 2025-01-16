@@ -1,28 +1,16 @@
-:host {
-  --color-background-default: var(--pine-color-grey-200);
-  --spacing-offset-xxs: var(--pine-spacing-050);
-  --spacing-offset-xs: var(--pine-spacing-100);
-  --spacing-offset-sm: var(--pine-spacing-200);
-  --spacing-offset-md: var(--pine-spacing-300);
-  --spacing-offset-lg: var(--pine-spacing-450);
-  --spacing-offset-xxl: var(--pine-spacing-800);
-}
-
 $pds-divider-offsets: (
-  xxs: var(--spacing-offset-xxs),
-  xs: var(--spacing-offset-xs),
-  sm: var(--spacing-offset-sm),
-  md: var(--spacing-offset-md),
-  lg: var(--spacing-offset-lg),
-  xl: var(--spacing-offset-xl),
-  xxl: var(--spacing-offset-xxl),
+  xxs: var(--pine-dimension-2xs),
+  xs: var(--pine-dimension-xs),
+  sm: var(--pine-dimension-sm),
+  md: var(--pine-dimension-md),
+  lg: var(--pine-dimension-lg),
+  xl: var(--pine-dimension-xl),
+  xxl: var(--pine-dimension-2xl),
 );
 
 .pds-divider {
-  background: var(--color-background-default);
-  border: 0;
+  background: var(--pine-color-neutral);
   display: flex;
-  height: 1px;
   margin: 0;
   width: 100%;
 }

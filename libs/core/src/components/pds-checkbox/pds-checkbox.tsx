@@ -6,7 +6,7 @@ import { danger } from '@pine-ds/icons/icons';
 
 @Component({
   tag: 'pds-checkbox',
-  styleUrls: ['../../global/styles/base.scss', 'pds-checkbox.scss'],
+  styleUrls: ['pds-checkbox.scss'],
   shadow: true,
 })
 export class PdsCheckbox {

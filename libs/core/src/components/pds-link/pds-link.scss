@@ -1,34 +1,19 @@
 :host {
 
-  --border-outline: 4px solid var(--pine-color-blue-200);
-  --border-radius: var(--pine-border-radius-075);
-  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
-
-  --color-text-default: var(--pine-color-text-default);
-  --color-text-hover: var(--pine-color-grey-900);
-
-  --font-size-default: var(--pine-font-size-body-md);
-  --font-size-sm: var(--pine-font-size-body-sm);
-  --font-size-xs: var(--pine-font-size-body-xs);
-  --font-weight: var(--pine-font-weight-body-medium);
-
-  --spacing-inline-start-margin: var(--pine-spacing-050);
-  --sizing-svg-lg: var(--font-size-default);
-  --sizing-svg-md: var(--font-size-sm);
-  --sizing-svg-sm: var(--font-size-xs);
+  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
 
   display: inline;
 
   pds-icon {
-    margin-inline-start: var(--spacing-inline-start-margin);
+    margin-inline-start: var(--pine-dimension-2xs);
   }
 }
 
 .pds-link {
   align-items: center;
-  color: var(--color-text);
+  color: var(--pine-color-text);
   display: inline-flex;
-  font-weight: var(--font-weight);
+  font-weight: var(--pine-font-weight-medium);
 
   &:focus-visible {
     // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
@@ -42,29 +27,29 @@
 // fonts will be REMs, box-model will be
 // discussed later px or (r)em's
 .pds-link--sm {
-  font-size: var(--font-size-xs);
+  font-size: var(--pine-font-size-body-xs);
 
   pds-icon {
-    height: var(--sizing-svg-sm);
-    width: var(--sizing-svg-sm);
+    height: var(--pine-dimension-xs);
+    width: var(--pine-dimension-xs);
   }
 }
 
 .pds-link--md {
-  font-size: var(--font-size-sm);
+  font-size: var(--pine-font-size-body-sm);
 
   pds-icon {
-    height: var(--sizing-svg-md);
-    width: var(--sizing-svg-md);
+    height: var(--pine-dimension-xs);
+    width: var(--pine-dimension-xs);
   }
 }
 
 .pds-link--lg {
-  font-size: var(--font-size-default);
+  font-size: var(--pine-font-size-body-md);
 
   pds-icon {
-    height: var(--sizing-svg-lg);
-    width: var(--sizing-svg-lg);
+    height: var(--pine-dimension-sm);
+    width: var(--pine-dimension-sm);
   }
 }
 
@@ -72,7 +57,7 @@
   text-decoration: none;
 
   &:hover {
-    color: var(--color-text-hover);
+    color: var(--pine-color-text-hover);
     text-decoration: underline;
   }
 }
@@ -82,7 +67,7 @@
   text-decoration: underline;
 
   &:hover {
-    color: var(--color-text-hover);
+    color: var(--pine-color-text-hover);
     text-decoration: none;
   }
 }

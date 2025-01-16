@@ -1,12 +1,15 @@
 import { Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 import { assignDescription, isRequired, messageId } from '../../utils/form';
 import { TextareaChangeEventDetail } from './textarea-interface';
-import { PdsLabel } from '../_internal/pds-label/pds-label';
 import { danger } from '@pine-ds/icons/icons';
 
 @Component({
   tag: 'pds-textarea',
-  styleUrls: ['../../global/styles/base.scss', 'pds-textarea.scss'],
+  styleUrls: [
+    '../../global/styles/utils/label.scss',
+    '../pds-input/pds-input.tokens.scss',
+    'pds-textarea.scss'
+  ],
   shadow: true,
 })
 export class PdsTextarea {
@@ -111,10 +114,11 @@ export class PdsTextarea {
     return (
       <Host
         aria-disabled={this.disabled ? 'true' : null}
+        aria-readonly={this.readonly ? 'true' : null}
       >
         <div class="pds-textarea">
           {this.label &&
-            <PdsLabel htmlFor={this.componentId} text={this.label} />
+            <label htmlFor={this.componentId}>{this.label}</label>
           }
           <textarea
             aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
