@@ -550,19 +550,19 @@
   },
   "font-family": {
     "greet": {
-      "value": "\"GreetStandard\", \"Inter\", -apple-system, system-ui, \"BlinkMacSystemFont\", \"Segoe UI\", \"Roboto\", \"Ubuntu\", sans-serif",
+      "value": "\"Greet Standard\", \"Inter\", -apple-system, system-ui, \"BlinkMacSystemFont\", \"Segoe UI\", \"Roboto\", \"Ubuntu\", sans-serif",
       "type": "fontFamilies"
     },
     "greet-condensed": {
-      "value": "\"GreetCondensed\", \"Inter\", -apple-system, system-ui, \"BlinkMacSystemFont\", \"Segoe UI\", \"Roboto\", \"Ubuntu\", sans-serif",
+      "value": "\"Greet Condensed\", \"Inter\", -apple-system, system-ui, \"BlinkMacSystemFont\", \"Segoe UI\", \"Roboto\", \"Ubuntu\", sans-serif",
       "type": "fontFamilies"
     },
     "inter": {
       "value": "\"Inter\", -apple-system, system-ui, \"BlinkMacSystemFont\", \"Segoe UI\", \"Roboto\", \"Ubuntu\", sans-serif",
       "type": "fontFamilies"
     },
-    "sprig": {
-      "value": "\"Sprig\"",
+    "faire-sprig": {
+      "value": "\"FAIRE Sprig\"",
       "type": "fontFamilies"
     }
   },
