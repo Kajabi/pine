@@ -264,7 +264,7 @@
           "type": "color"
         }
       },
-      "label" : {
+      "label": {
         "@": {
           "value": "{color.grey.950}",
           "type": "color"
