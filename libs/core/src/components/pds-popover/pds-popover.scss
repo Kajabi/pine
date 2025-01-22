@@ -6,7 +6,7 @@
   [popover] {
     background-color: var(--pine-color-white);
     border: 1px solid var(--pine-color-gray-200);
-    border-radius: var(--pine-border-radius-125);
+    border-radius: var(--pine-dimension-125);
     box-shadow: var(--pine-box-shadow-200);
     margin: 0;
     max-width: var(--sizing-max-width-default);
@@ -43,7 +43,7 @@
     align-items: center;
     background-color: var(--color-background-default);
     border: var(--border-width-default) solid var(--color-border-default);
-    border-radius: var(--pine-border-radius-circle);
+    border-radius: var(--pine-border-radius-full);
     color: var(--color-text-default);
     display: flex;
     font-family: var(--pine-font-family-greet);
