@@ -26,11 +26,7 @@
     }
   },
   "border-radius": {
-    "circle": {
-      "value": "50%",
-      "type": "borderRadius"
-    },
-    "round": {
+    "full": {
       "value": "9999px",
       "type": "borderRadius",
       "description": "this is to be used for rounded corners without specified dimensions"
