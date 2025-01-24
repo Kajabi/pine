@@ -543,7 +543,7 @@
           "fontFamily": "{font-family.greet}",
           "fontWeight": "{font-weight.semi-bold}",
           "fontSize": "{font-size.heading.1}",
-          "lineHeight": "{line-height.heading}",
+          "lineHeight": "{line-height.heading} * 100%",
           "letterSpacing": "{letter-spacing.185}"
         },
         "type": "typography"
@@ -553,7 +553,7 @@
           "fontFamily": "{font-family.greet}",
           "fontWeight": "{font-weight.semi-bold}",
           "fontSize": "{font-size.heading.2}",
-          "lineHeight": "{line-height.heading}",
+          "lineHeight": "{line-height.heading} * 100%",
           "letterSpacing": "{letter-spacing.171}"
         },
         "type": "typography"
@@ -562,7 +562,7 @@
         "value": {
           "fontFamily": "{font-family.greet}",
           "fontWeight": "{font-weight.semi-bold}",
-          "lineHeight": "{line-height.heading}",
+          "lineHeight": "{line-height.heading} * 100%",
           "letterSpacing": "{letter-spacing.157}",
           "fontSize": "{font-size.heading.3}"
         },
@@ -573,7 +573,7 @@
           "fontFamily": "{font-family.greet}",
           "fontWeight": "{font-weight.semi-bold}",
           "fontSize": "{font-size.heading.4}",
-          "lineHeight": "{line-height.heading}",
+          "lineHeight": "{line-height.heading} * 100%",
           "letterSpacing": "{letter-spacing.142}"
         },
         "type": "typography"
@@ -583,7 +583,7 @@
           "fontFamily": "{font-family.greet}",
           "fontWeight": "{font-weight.medium}",
           "fontSize": "{font-size.heading.5}",
-          "lineHeight": "{line-height.heading}",
+          "lineHeight": "{line-height.heading} * 100%",
           "letterSpacing": "{letter-spacing.128}"
         },
         "type": "typography"
@@ -593,7 +593,7 @@
           "fontFamily": "{font-family.greet}",
           "fontWeight": "{font-weight.medium}",
           "fontSize": "{font-size.heading.6}",
-          "lineHeight": "{line-height.heading}",
+          "lineHeight": "{line-height.heading} * 100%",
           "letterSpacing": "{letter-spacing.114}"
         },
         "type": "typography"
@@ -605,7 +605,7 @@
           "fontFamily": "{font-family.inter}",
           "fontWeight": "{font-weight.regular}",
           "fontSize": "{font-size.body.md}",
-          "lineHeight": "{line-height.body}",
+          "lineHeight": "{line-height.body} * 100%",
           "letterSpacing": "{letter-spacing.@}"
         },
         "type": "typography"
@@ -615,7 +615,7 @@
           "fontFamily": "{font-family.inter}",
           "fontWeight": "{font-weight.medium}",
           "fontSize": "{font-size.body.md}",
-          "lineHeight": "{line-height.body}",
+          "lineHeight": "{line-height.body} * 100%",
           "letterSpacing": "{letter-spacing.@}"
         },
         "type": "typography"
@@ -625,7 +625,7 @@
           "fontFamily": "{font-family.inter}",
           "fontWeight": "{font-weight.semi-bold}",
           "fontSize": "{font-size.body.md}",
-          "lineHeight": "{line-height.body}",
+          "lineHeight": "{line-height.body} * 100%",
           "letterSpacing": "{letter-spacing.@}"
         },
         "type": "typography"
@@ -635,7 +635,7 @@
           "fontFamily": "{font-family.inter}",
           "fontWeight": "{font-weight.bold}",
           "fontSize": "{font-size.body.md}",
-          "lineHeight": "{line-height.body}",
+          "lineHeight": "{line-height.body} * 100%",
           "letterSpacing": "{letter-spacing.@}"
         },
         "type": "typography"
@@ -645,7 +645,7 @@
           "fontFamily": "{font-family.greet}",
           "fontWeight": "{font-weight.medium}",
           "fontSize": "{font-size.body.md}",
-          "lineHeight": "{line-height.body}"
+          "lineHeight": "{line-height.body} * 100%"
         },
         "type": "typography",
         "description": "brand-label"
@@ -655,7 +655,7 @@
           "fontFamily": "{font-family.faire-sprig}",
           "fontWeight": "{font-weight.medium}",
           "fontSize": "{font-size.body.md}",
-          "lineHeight": "{line-height.body}"
+          "lineHeight": "{line-height.body} * 100%"
         },
         "type": "typography",
         "description": "brand-text"
@@ -667,7 +667,7 @@
           "fontFamily": "{font-family.inter}",
           "fontWeight": "{font-weight.regular}",
           "fontSize": "{font-size.body.sm}",
-          "lineHeight": "{line-height.body}"
+          "lineHeight": "{line-height.body} * 100%"
         },
         "type": "typography"
       },
@@ -676,7 +676,7 @@
           "fontFamily": "{font-family.inter}",
           "fontWeight": "{font-weight.medium}",
           "fontSize": "{font-size.body.sm}",
-          "lineHeight": "{line-height.body}"
+          "lineHeight": "{line-height.body} * 100%"
         },
         "type": "typography"
       },
@@ -685,7 +685,7 @@
           "fontFamily": "{font-family.inter}",
           "fontWeight": "{font-weight.bold}",
           "fontSize": "{font-size.body.sm}",
-          "lineHeight": "{line-height.body}"
+          "lineHeight": "{line-height.body} * 100%"
         },
         "type": "typography"
       },
@@ -694,7 +694,7 @@
           "fontFamily": "{font-family.greet}",
           "fontWeight": "{font-weight.medium}",
           "fontSize": "{font-size.body.sm}",
-          "lineHeight": "{line-height.body}"
+          "lineHeight": "{line-height.body} * 100%"
         },
         "type": "typography",
         "description": "brand-label"
@@ -704,7 +704,7 @@
           "fontFamily": "{font-family.faire-sprig}",
           "fontWeight": "{font-weight.medium}",
           "fontSize": "{font-size.body.sm}",
-          "lineHeight": "{line-height.body}"
+          "lineHeight": "{line-height.body} * 100%"
         },
         "type": "typography",
         "description": "brand-text"
