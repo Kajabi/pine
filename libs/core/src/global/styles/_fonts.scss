@@ -479,8 +479,8 @@ $sprig-font-family-name: "FAIRE Sprig";
   font-family: "#{$sprig-font-family-name}";
   font-style: normal;
   font-weight: 200;
-  src: local("#{$spile-font-name}-Thin"),
-    url("#{$sage-sprig-font-path}/#{$spile-font-name}-Thin.woff2?v=#{$body-font-version}") format("woff2");
+  src: local("#{$sprig-file-name}-Thin"),
+    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-Thin.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Thin Italic
@@ -489,8 +489,8 @@ $sprig-font-family-name: "FAIRE Sprig";
   font-family: "#{$sprig-font-family-name}";
   font-style: italic;
   font-weight: 200;
-  src: local("#{$spile-font-name}-ThinItalic"),
-    url("#{$sage-sprig-font-path}/#{$spile-font-name}-ThinItalic.woff2?v=#{$body-font-version}") format("woff2");
+  src: local("#{$sprig-file-name}-ThinItalic"),
+    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-ThinItalic.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Light
@@ -499,8 +499,8 @@ $sprig-font-family-name: "FAIRE Sprig";
   font-family: "#{$sprig-font-family-name}";
   font-style: normal;
   font-weight: 300;
-  src: local("#{$spile-font-name}-Light"),
-    url("#{$sage-sprig-font-path}/#{$spile-font-name}-Light.woff2?v=#{$body-font-version}") format("woff2");
+  src: local("#{$sprig-file-name}-Light"),
+    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-Light.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Light Italic
@@ -509,8 +509,8 @@ $sprig-font-family-name: "FAIRE Sprig";
   font-family: "#{$sprig-font-family-name}";
   font-style: italic;
   font-weight: 300;
-  src: local("#{$spile-font-name}-LightItalic"),
-    url("#{$sage-sprig-font-path}/#{$spile-font-name}-LightItalic.woff2?v=#{$body-font-version}") format("woff2");
+  src: local("#{$sprig-file-name}-LightItalic"),
+    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-LightItalic.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Regular
@@ -519,8 +519,8 @@ $sprig-font-family-name: "FAIRE Sprig";
   font-family: "#{$sprig-font-family-name}";
   font-style: normal;
   font-weight: 400;
-  src: local("#{$spile-font-name}-Regular"),
-    url("#{$sage-sprig-font-path}/#{$spile-font-name}-Regular.woff2?v=#{$body-font-version}") format("woff2");
+  src: local("#{$sprig-file-name}-Regular"),
+    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-Regular.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Regular Italic
@@ -529,8 +529,8 @@ $sprig-font-family-name: "FAIRE Sprig";
   font-family: "#{$sprig-font-family-name}";
   font-style: italic;
   font-weight: 400;
-  src: local("#{$spile-font-name}-RegularItalic"),
-    url("#{$sage-sprig-font-path}/#{$spile-font-name}-RegularItalic.woff2?v=#{$body-font-version}") format("woff2");
+  src: local("#{$sprig-file-name}-RegularItalic"),
+    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-RegularItalic.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Medium
@@ -539,8 +539,8 @@ $sprig-font-family-name: "FAIRE Sprig";
   font-family: "#{$sprig-font-family-name}";
   font-style: normal;
   font-weight: 500;
-  src: local("#{$spile-font-name}-Medium"),
-    url("#{$sage-sprig-font-path}/#{$spile-font-name}-Medium.woff2?v=#{$body-font-version}") format("woff2");
+  src: local("#{$sprig-file-name}-Medium"),
+    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-Medium.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Medium Italic
@@ -549,8 +549,8 @@ $sprig-font-family-name: "FAIRE Sprig";
   font-family: "#{$sprig-font-family-name}";
   font-style: italic;
   font-weight: 500;
-  src: local("#{$spile-font-name}-MediumItalic"),
-    url("#{$sage-sprig-font-path}/#{$spile-font-name}-MediumItalic.woff2?v=#{$body-font-version}") format("woff2");
+  src: local("#{$sprig-file-name}-MediumItalic"),
+    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-MediumItalic.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Bold
@@ -559,8 +559,8 @@ $sprig-font-family-name: "FAIRE Sprig";
   font-family: "#{$sprig-font-family-name}";
   font-style: normal;
   font-weight: 700;
-  src: local("#{$spile-font-name}-Bold"),
-    url("#{$sage-sprig-font-path}/#{$spile-font-name}-Bold.woff2?v=#{$body-font-version}") format("woff2");
+  src: local("#{$sprig-file-name}-Bold"),
+    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-Bold.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Bold Italic
@@ -569,8 +569,8 @@ $sprig-font-family-name: "FAIRE Sprig";
   font-family: "#{$sprig-font-family-name}";
   font-style: italic;
   font-weight: 700;
-  src: local("#{$spile-font-name}-BoldItalic"),
-    url("#{$sage-sprig-font-path}/#{$spile-font-name}-BoldItalic.woff2?v=#{$body-font-version}") format("woff2");
+  src: local("#{$sprig-file-name}-BoldItalic"),
+    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-BoldItalic.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Super
@@ -579,8 +579,8 @@ $sprig-font-family-name: "FAIRE Sprig";
   font-family: "#{$sprig-font-family-name}";
   font-style: normal;
   font-weight: 900;
-  src: local("#{$spile-font-name}-Super"),
-    url("#{$sage-sprig-font-path}/#{$spile-font-name}-Super.woff2?v=#{$body-font-version}") format("woff2");
+  src: local("#{$sprig-file-name}-Super"),
+    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-Super.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Super Italic
@@ -589,6 +589,6 @@ $sprig-font-family-name: "FAIRE Sprig";
   font-family: "#{$sprig-font-family-name}";
   font-style: italic;
   font-weight: 900;
-  src: local("#{$spile-font-name}-SuperItalic"),
-    url("#{$sage-sprig-font-path}/#{$spile-font-name}-SuperItalic.woff2?v=#{$body-font-version}") format("woff2");
+  src: local("#{$sprig-file-name}-SuperItalic"),
+    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-SuperItalic.woff2?v=#{$body-font-version}") format("woff2");
 }
