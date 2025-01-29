@@ -858,6 +858,11 @@ export namespace Components {
   | 'success'
   | 'warning';
         /**
+          * Sets the text decoration.
+         */
+        "decoration"?: | 'strikethrough'
+  | 'underline-dotted';
+        /**
           * Set the bottom margin for the text.
          */
         "gutter"?: | '2xl'
@@ -2368,6 +2373,11 @@ declare namespace LocalJSX {
   | 'info'
   | 'success'
   | 'warning';
+        /**
+          * Sets the text decoration.
+         */
+        "decoration"?: | 'strikethrough'
+  | 'underline-dotted';
         /**
           * Set the bottom margin for the text.
          */
