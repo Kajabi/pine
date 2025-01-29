@@ -15,6 +15,7 @@ const BaseTemplate = (args) => html`
   size="${args.size}"
   tag="${args.tag}"
   weight="${args.weight}"
+  decoration="${args.decoration}"
 >
   ${args.slot}
 </pds-text>`;
@@ -37,6 +38,13 @@ Color.args = {
   slot: 'Hello World',
   color: 'accent',
   tag: 'p',
+};
+
+export const Decoration = BaseTemplate.bind();
+Decoration.args = {
+  slot: 'Hello World',
+  tag: 'p',
+  decoration: 'underline-dotted',
 };
 
 export const FontSize = BaseTemplate.bind();
