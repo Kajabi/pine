@@ -96,6 +96,25 @@ Text color can align to our common variant/sentiment values.
   <pds-text color="warning" tag="p">Pikachu</pds-text>
 </DocCanvas>
 
+### Decoration
+
+Text decoration can be set to underline-dotted or strikethrough.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsText tag="p" decoration="strikethrough">Pangoro</PdsText>
+      <PdsText tag="p" decoration="underline-dotted">Sceptile</PdsText>
+    `,
+    webComponent: `
+      <pds-text tag="p" decoration="strikethrough">Pangoro</pds-text>
+      <pds-text tag="p" decoration="underline-dotted">Sceptile</pds-text>
+    `
+}}>
+  <pds-text tag="p" decoration="strikethrough">Pangoro</pds-text>
+  <pds-text tag="p" decoration="underline-dotted">Sceptile</pds-text>
+</DocCanvas>
+
 ### Font Size
 
 Font size can be set to preset body text values.

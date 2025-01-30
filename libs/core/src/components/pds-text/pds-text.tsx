@@ -26,6 +26,13 @@ export class PdsText {
   | 'warning';
 
   /**
+   * Sets the text decoration.
+   */
+  @Prop() decoration?:
+  | 'strikethrough'
+  | 'underline-dotted';
+
+  /**
    * Set the bottom margin for the text.
    */
   @Prop() gutter?:
@@ -86,6 +93,7 @@ export class PdsText {
       ${this.gutter !== undefined && this.gutter.trim() !== '' ? `pds-text--gutter-${this.gutter}` : ''}
       ${this.size !== undefined && this.size.trim() !== '' ? `pds-text--size-${this.size}` : ''}
       ${this.weight !== undefined && this.weight.trim() !== '' ? `pds-text--weight-${this.weight}` : ''}
+      ${this.decoration !== undefined && this.decoration.trim() !== '' ? `pds-text--decoration-${this.decoration}` : ''}
     `;
 
     return (
