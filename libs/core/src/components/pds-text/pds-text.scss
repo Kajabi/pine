@@ -2,6 +2,19 @@
   display: inline;
 }
 
+:host([decoration="underline-dotted"]) > * {
+  text-decoration-color: var(--pine-color-grey-600);
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 12%;
+  text-underline-offset: 0.3rem;
+  text-underline-position: under;
+}
+
+:host([decoration="strikethrough"])>* {
+  text-decoration: line-through;
+}
+
 // TODO: Update all values to match new semantic tokens, if applicable
 
 /* stylelint-disable */

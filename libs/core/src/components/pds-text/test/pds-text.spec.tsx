@@ -71,4 +71,18 @@ describe('pds-text', () => {
       </pds-text>
     `)
   });
+
+  it('renders with decoration class when prop is set', async ()=> {
+    const page = await newSpecPage({
+      components: [PdsText],
+      html: `<pds-text tag="p" decoration="underline-dotted"></pds-text>`,
+    });
+    expect(page.root).toEqualHtml(`
+      <pds-text tag="p" decoration="underline-dotted">
+        <mock:shadow-root>
+          <p class="pds-text pds-text--decoration-underline-dotted"><slot></slot></p>
+        </mock:shadow-root>
+      </pds-text>
+    `)
+  });
 });
