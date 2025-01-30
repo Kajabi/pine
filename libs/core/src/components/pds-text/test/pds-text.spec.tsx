@@ -80,7 +80,7 @@ describe('pds-text', () => {
     expect(page.root).toEqualHtml(`
       <pds-text tag="p" decoration="underline-dotted">
         <mock:shadow-root>
-          <p class="pds-text pds-text--underline-dotted"><slot></slot></p>
+          <p class="pds-text pds-text--decoration-underline-dotted"><slot></slot></p>
         </mock:shadow-root>
       </pds-text>
     `)
