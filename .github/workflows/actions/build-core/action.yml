@@ -10,7 +10,7 @@ runs:
   using: 'composite'
   steps:
     - name: Check out latest
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
         ref: ${{ github.event.pull_request.head.sha }}
@@ -30,7 +30,7 @@ runs:
       run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
 
     - name: Cache node_modules
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: cache-node-modules
       with:
         path: ${{ steps.npm-cache-dir.outputs.dir }}
@@ -39,7 +39,7 @@ runs:
           ${{ runner.os }}-
 
     - name: Set SHA
-      uses: nrwl/nx-set-shas@v3
+      uses: nrwl/nx-set-shas@v4
 
     - name: Install Dependencies
       if: steps.cache-node-modules.outputs.cache-hit != true

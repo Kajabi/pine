@@ -10,7 +10,7 @@ runs:
   using: 'composite'
   steps:
     - name: Check out latest
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
         ref: ${{ github.event.pull_request.head.sha }}
@@ -25,7 +25,7 @@ runs:
       run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
 
     - name: Cache node_modules
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: cache-node-modules
       env:
         cache-name: cache-node-modules

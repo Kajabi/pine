@@ -76,7 +76,7 @@ jobs:
 
     steps:
       - name: Set SHA
-        uses: nrwl/nx-set-shas@v3
+        uses: nrwl/nx-set-shas@v4
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -100,7 +100,7 @@ jobs:
 
     steps:
       - name: Set SHA
-        uses: nrwl/nx-set-shas@v3
+        uses: nrwl/nx-set-shas@v4
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -121,7 +121,7 @@ jobs:
 
     steps:
       - name: Set SHA
-        uses: nrwl/nx-set-shas@v3
+        uses: nrwl/nx-set-shas@v4
 
       - name: Checkout
         uses: actions/checkout@v4
