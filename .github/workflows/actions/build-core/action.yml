@@ -50,9 +50,9 @@ runs:
       run: npx nx run @pine-ds/core:build
       shell: bash
 
-    - name: Upload artifacts
-      uses: ./.github/workflows/actions/upload-archive
-      with:
-        name: pine-core-build
-        output: libs/core/CoreBuild.zip
-        paths: libs/core/components libs/core/css libs/core/dist libs/core/hydrate libs/core/loader libs/core/src/components.d.ts
+    # - name: Upload artifacts
+    #   uses: ./.github/workflows/actions/upload-archive
+    #   with:
+    #     name: pine-core-build--${{ inputs.node-version }}-${{ github.sha }}
+    #     output: libs/core/CoreBuild.zip
+    #     paths: libs/core/components libs/core/css libs/core/dist libs/core/hydrate libs/core/loader libs/core/src/components.d.ts

@@ -149,26 +149,26 @@ jobs:
       - name: Setup
         uses: ./.github/workflows/actions/setup
 
-      - name: Restore Core built Cache
-        uses: ./.github/workflows/actions/download-archive
-        with:
-          name: pine-core
-          path: libs/core
-          filename: CoreBuild.zip
+      # - name: Restore Core built Cache
+      #   uses: ./.github/workflows/actions/download-archive
+      #   with:
+      #     name: pine-core
+      #     path: libs/core
+      #     filename: CoreBuild.zip
 
-      - name: Restore React built Cache
-        uses: ./.github/workflows/actions/download-archive
-        with:
-          name: pine-react
-          path: libs/react
-          filename: ReactBuild.zip
+      # - name: Restore React built Cache
+      #   uses: ./.github/workflows/actions/download-archive
+      #   with:
+      #     name: pine-react
+      #     path: libs/react
+      #     filename: ReactBuild.zip
 
-      - name: Restore Doc Components built cache
-        uses: ./.github/workflows/actions/download-archive
-        with:
-          name: pine-doc-components
-          path: libs/doc-components
-          filename: DocComponentsBuild.zip
+      # - name: Restore Doc Components built cache
+      #   uses: ./.github/workflows/actions/download-archive
+      #   with:
+      #     name: pine-doc-components
+      #     path: libs/doc-components
+      #     filename: DocComponentsBuild.zip
 
       - name: Install Dependencies
         run: npm ci --ignore-scripts

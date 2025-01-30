@@ -50,9 +50,9 @@ runs:
       run: npx nx run @pine-ds/react:build
       shell: bash
 
-    - name: Upload artifacts
-      uses: ./.github/workflows/actions/upload-archive
-      with:
-        name: pine-react
-        output: libs/react/ReactBuild.zip
-        paths: libs/react/dist libs/react/css
+    # - name: Upload artifacts
+    #   uses: ./.github/workflows/actions/upload-archive
+    #   with:
+    #     name: pine-react--${{ inputs.node-version }}-${{ github.sha }}
+    #     output: libs/react/ReactBuild.zip
+    #     paths: libs/react/dist libs/react/css

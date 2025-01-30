@@ -50,9 +50,9 @@ runs:
       run: npx nx run @pine-ds/doc-components:build
       shell: bash
 
-    - name: Upload artifacts
-      uses: ./.github/workflows/actions/upload-archive
-      with:
-        name: pine-doc-components
-        output: libs/doc-components/DocComponentsBuild.zip
-        paths: libs/doc-components/dist libs/doc-components/css
+    # - name: Upload artifacts
+    #   uses: ./.github/workflows/actions/upload-archive
+    #   with:
+    #     name: pine-doc-components--${{ inputs.node-version }}-${{ github.sha }}
+    #     output: libs/doc-components/DocComponentsBuild.zip
+    #     paths: libs/doc-components/dist libs/doc-components/css
