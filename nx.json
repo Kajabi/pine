@@ -63,13 +63,13 @@
         },
         "refactor": {
           "changelog": {
-            "hidden": false,
+            "hidden": true,
             "title": "Code Refactoring 🔨"
           }
         },
         "revert": {
           "changelog": {
-            "hidden": false,
+            "hidden": true,
             "title": "Reverts ↩️"
           }
         },
@@ -81,7 +81,7 @@
         },
         "test": {
           "changelog": {
-            "hidden": false,
+            "hidden": true,
             "title": "Tests 🧪"
           }
         }
