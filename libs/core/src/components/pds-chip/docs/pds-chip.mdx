@@ -27,10 +27,10 @@ Chips are used to inform users about the status of an object or to associate pro
 
 <DocCanvas client:only
   mdxSource={{
-    react: '<pdsChip label="Label" />',
-    webComponent: '<pds-chip label="Label"></pds-chip>'
+    react: '<pdsChip>Label</pdsChip>',
+    webComponent: '<pds-chip>Label</pds-chip>'
 }}>
-  <pds-chip label="Label"></pds-chip>
+  <pds-chip>Label</pds-chip>
 </DocCanvas>
 
 ### Sentiment
@@ -40,28 +40,28 @@ The `sentiment` property represents the named color scheme of the chip component
 <DocCanvas client:only
   mdxSource={{
     react: `
-    <pdsChip label="Accent" sentiment="accent" />
-    <pdsChip label="Danger" sentiment="danger" />
-    <pdsChip label="Info" sentiment="info" />
-    <pdsChip label="Neutral" sentiment="neutral" />
-    <pdsChip label="Success" sentiment="success" />
-    <pdsChip label="Warning" sentiment="warning" />
+    <pdsChip sentiment="accent">Accent</pdsChip>
+    <pdsChip sentiment="danger">Danger</pdsChip>
+    <pdsChip sentiment="info">Info</pdsChip>
+    <pdsChip sentiment="neutral">Neutral</pdsChip>
+    <pdsChip sentiment="success">Success</pdsChip>
+    <pdsChip sentiment="warning">Warning</pdsChip>
     `,
     webComponent: `
-    <pds-chip label="Accent" sentiment="accent"></pds-chip>
-    <pds-chip label="Danger" sentiment="danger"></pds-chip>
-    <pds-chip label="Info" sentiment="info"></pds-chip>
-    <pds-chip label="Neutral" sentiment="neutral"></pds-chip>
-    <pds-chip label="Success" sentiment="success"></pds-chip>
-    <pds-chip label="Warning" sentiment="warning"></pds-chip>
+    <pds-chip sentiment="accent">Accent</pds-chip>
+    <pds-chip sentiment="danger">Danger</pds-chip>
+    <pds-chip sentiment="info">Info</pds-chip>
+    <pds-chip sentiment="neutral">Neutral</pds-chip>
+    <pds-chip sentiment="success">Success</pds-chip>
+    <pds-chip sentiment="warning">Warning</pds-chip>
     `
 }}>
-  <pds-chip label="Accent" sentiment="accent"></pds-chip>
-  <pds-chip label="Danger" sentiment="danger"></pds-chip>
-  <pds-chip label="Info" sentiment="info"></pds-chip>
-  <pds-chip label="Neutral" sentiment="neutral"></pds-chip>
-  <pds-chip label="Success" sentiment="success"></pds-chip>
-  <pds-chip label="Warning" sentiment="warning"></pds-chip>
+  <pds-chip sentiment="accent">Accent</pds-chip>
+  <pds-chip sentiment="danger">Danger</pds-chip>
+  <pds-chip sentiment="info">Info</pds-chip>
+  <pds-chip sentiment="neutral">Neutral</pds-chip>
+  <pds-chip sentiment="success">Success</pds-chip>
+  <pds-chip sentiment="warning">Warning</pds-chip>
 </DocCanvas>
 
 ### Dot
@@ -71,28 +71,20 @@ A small circular indicator displayed within a chip. Dot colors are determined by
 <DocCanvas client:only
   mdxSource={{
     react: `
-    <pdsChip label="Accent" sentiment="accent" dot />
-    <pdsChip label="Danger" sentiment="danger" dot />
-    <pdsChip label="Info" sentiment="info" dot />
-    <pdsChip label="Neutral" sentiment="neutral" dot/>
-    <pdsChip label="Success" sentiment="success" dot />
-    <pdsChip label="Warning" sentiment="warning" dot />
-    `,
-    webComponent: `
-    <pds-chip label="Accent" sentiment="accent" dot></pds-chip>
-    <pds-chip label="Danger" sentiment="danger" dot></pds-chip>
-    <pds-chip label="Info" sentiment="info" dot></pds-chip>
-    <pds-chip label="Neutral" sentiment="neutral" dot/>
-    <pds-chip label="Success" sentiment="success" dot></pds-chip>
-    <pds-chip label="Warning" sentiment="warning" dot></pds-chip>
+    <pdsChip sentiment="accent" dot>Accent</pdsChip>
+    <pdsChip sentiment="danger" dot>Danger</pdsChip>
+    <pdsChip sentiment="info" dot>Info</pdsChip>
+    <pdsChip sentiment="neutral" dot>Neutral</pdsChip>
+    <pds-chip sentiment="success" dot>Success</pds-chip>
+    <pds-chip sentiment="warning" dot>Warning</pds-chip>
     `
 }}>
-  <pds-chip label="Accent" sentiment="accent" dot></pds-chip>
-  <pds-chip label="Danger" sentiment="danger" dot></pds-chip>
-  <pds-chip label="Info" sentiment="info" dot></pds-chip>
-  <pds-chip label="Neutral" sentiment="neutral" dot/>
-  <pds-chip label="Success" sentiment="success" dot></pds-chip>
-  <pds-chip label="Warning" sentiment="warning" dot></pds-chip>
+  <pds-chip sentiment="accent" dot>Accent</pds-chip>
+  <pds-chip sentiment="danger" dot>Danger</pds-chip>
+  <pds-chip sentiment="info" dot>Info</pds-chip>
+  <pds-chip sentiment="neutral" dot>Neutral</pds-chip>
+  <pds-chip sentiment="success" dot>Success</pds-chip>
+  <pds-chip sentiment="warning" dot>Warning</pds-chip>
 </DocCanvas>
 
 ### Dropdown
@@ -102,28 +94,28 @@ If the `variant` property is set to `"dropdown"`, the chip will be rendered in a
 <DocCanvas client:only
   mdxSource={{
     react: `
-    <pdsChip label="Accent" sentiment="accent" variant="dropdown" />
-    <pdsChip label="Danger" sentiment="danger" variant="dropdown" />
-    <pdsChip label="Info" sentiment="info" variant="dropdown" />
-    <pdsChip label="Neutral" sentiment="neutral" variant="dropdown" />
-    <pdsChip label="Success" sentiment="success" variant="dropdown" />
-    <pdsChip label="Warning" sentiment="warning" variant="dropdown" />
+    <pdsChip sentiment="accent" variant="dropdown">Accent</pdsChip>
+    <pdsChip sentiment="danger" variant="dropdown">Danger</pdsChip>
+    <pdsChip sentiment="info" variant="dropdown">Info</pdsChip>
+    <pdsChip sentiment="neutral" variant="dropdown">Neutral</pdsChip>
+    <pdsChip sentiment="success" variant="dropdown">Success</pdsChip>
+    <pdsChip sentiment="warning" variant="dropdown">Warning</pdsChip>
     `,
     webComponent: `
-    <pds-chip label="Accent" sentiment="accent" variant="dropdown"></pds-chip>
-    <pds-chip label="Danger" sentiment="danger" variant="dropdown"></pds-chip>
-    <pds-chip label="Info" sentiment="info" variant="dropdown"></pds-chip>
-    <pds-chip label="Neutral" sentiment="neutral" variant="dropdown"></pds-chip>
-    <pds-chip label="Success" sentiment="success" variant="dropdown"></pds-chip>
-    <pds-chip label="Warning" sentiment="warning" variant="dropdown"></pds-chip>
+    <pds-chip sentiment="accent" variant="dropdown">Accent</pds-chip>
+    <pds-chip sentiment="danger" variant="dropdown">Danger</pds-chip>
+    <pds-chip sentiment="info" variant="dropdown">Info</pds-chip>
+    <pds-chip sentiment="neutral" variant="dropdown">Neutral</pds-chip>
+    <pds-chip sentiment="success" variant="dropdown">Success</pds-chip>
+    <pds-chip sentiment="warning" variant="dropdown">Warning</pds-chip>
     `
 }}>
-  <pds-chip label="Accent" sentiment="accent" variant="dropdown"></pds-chip>
-  <pds-chip label="Danger" sentiment="danger" variant="dropdown"></pds-chip>
-  <pds-chip label="Info" sentiment="info" variant="dropdown"></pds-chip>
-  <pds-chip label="Neutral" sentiment="neutral" variant="dropdown"></pds-chip>
-  <pds-chip label="Success" sentiment="success" variant="dropdown"></pds-chip>
-  <pds-chip label="Warning" sentiment="warning" variant="dropdown"></pds-chip>
+  <pds-chip sentiment="accent" variant="dropdown">Accent</pds-chip>
+  <pds-chip sentiment="danger" variant="dropdown">Danger</pds-chip>
+  <pds-chip sentiment="info" variant="dropdown">Info</pds-chip>
+  <pds-chip sentiment="neutral" variant="dropdown">Neutral</pds-chip>
+  <pds-chip sentiment="success" variant="dropdown">Success</pds-chip>
+  <pds-chip sentiment="warning" variant="dropdown">Warning</pds-chip>
 </DocCanvas>
 
 ## Tag
@@ -135,25 +127,25 @@ Tag is often used to represent a selected item or a removable element and includ
 <DocCanvas client:only
   mdxSource={{
     react: `
-    <pdsChip label="Danger" sentiment="danger" variant="tag" />
-    <pdsChip label="Info" sentiment="info" variant="tag" />
-    <pdsChip label="Neutral" sentiment="neutral" variant="tag" />
-    <pdsChip label="Success" sentiment="success" variant="tag" />
-    <pdsChip label="Warning" sentiment="warning" variant="tag" />
+    <pdsChip sentiment="danger" variant="tag">Danger</pdsChip>
+    <pdsChip sentiment="info" variant="tag">Info</pdsChip>
+    <pdsChip sentiment="neutral" variant="tag">Neutral</pdsChip>
+    <pdsChip sentiment="success" variant="tag">Success</pdsChip>
+    <pdsChip sentiment="warning" variant="tag">Warning</pdsChip>
     `,
     webComponent: `
-    <pds-chip label="Danger" sentiment="danger" variant="tag"></pds-chip>
-    <pds-chip label="Info" sentiment="info" variant="tag"></pds-chip>
-    <pds-chip label="Neutral" sentiment="neutral" variant="tag"></pds-chip>
-    <pds-chip label="Success" sentiment="success" variant="tag"></pds-chip>
-    <pds-chip label="Warning" sentiment="warning" variant="tag"></pds-chip>
+    <pds-chip sentiment="danger" variant="tag">Danger</pds-chip>
+    <pds-chip sentiment="info" variant="tag">Info</pds-chip>
+    <pds-chip sentiment="neutral" variant="tag">Neutral</pds-chip>
+    <pds-chip sentiment="success" variant="tag">Success</pds-chip>
+    <pds-chip sentiment="warning" variant="tag">Warning</pds-chip>
     `
 }}>
-  <pds-chip label="Danger" sentiment="danger" variant="tag"></pds-chip>
-  <pds-chip label="Info" sentiment="info" variant="tag"></pds-chip>
-  <pds-chip label="Neutral" sentiment="neutral" variant="tag"></pds-chip>
-  <pds-chip label="Success" sentiment="success" variant="tag"></pds-chip>
-  <pds-chip label="Warning" sentiment="warning" variant="tag"></pds-chip>
+  <pds-chip sentiment="danger" variant="tag">Danger</pds-chip>
+  <pds-chip sentiment="info" variant="tag">Info</pds-chip>
+  <pds-chip sentiment="neutral" variant="tag">Neutral</pds-chip>
+  <pds-chip sentiment="success" variant="tag">Success</pds-chip>
+  <pds-chip sentiment="warning" variant="tag">Warning</pds-chip>
 </DocCanvas>
 
 ### Large
@@ -163,20 +155,20 @@ Large chips will be displayed with a larger visual footprint compared to the def
 <DocCanvas client:only
   mdxSource={{
     react: `
-    <pdsChip label="Accent" sentiment="accent" variant="text" large />
-    <pdsChip label="Danger" sentiment="danger" dot large />
-    <pdsChip label="Info" sentiment="info" variant="dropdown" large />
-    <pdsChip label="Success" sentiment="success" variant="tag" large />
+    <pdsChip sentiment="accent" variant="text" large>Accent</pdsChip>
+    <pdsChip sentiment="danger" dot large>Danger</pdsChip>
+    <pdsChip sentiment="info" variant="dropdown" large>Info</pdsChip>
+    <pdsChip sentiment="success" variant="tag" large>Success</pdsChip>
     `,
     webComponent: `
-    <pds-chip label="Accent" sentiment="accent" variant="text" large></pds-chip>
-    <pds-chip label="Danger" sentiment="danger" dot large></pds-chip>
-    <pds-chip label="Info" sentiment="info" variant="dropdown" large></pds-chip>
-    <pds-chip label="Success" sentiment="success" variant="tag" large></pds-chip>
+    <pds-chip sentiment="accent" variant="text" large>Accent</pds-chip>
+    <pds-chip sentiment="danger" dot large>Danger</pds-chip>
+    <pds-chip sentiment="info" variant="dropdown" large>Info</pds-chip>
+    <pds-chip sentiment="success" variant="tag" large>Success</pds-chip>
     `
 }}>
-  <pds-chip label="Accent" sentiment="accent" variant="text" large></pds-chip>
-  <pds-chip label="Danger" sentiment="danger" dot large></pds-chip>
-  <pds-chip label="Info" sentiment="info" variant="dropdown" large></pds-chip>
-  <pds-chip label="Success" sentiment="success" variant="tag" large></pds-chip>
+  <pds-chip sentiment="accent" variant="text" large>Accent</pds-chip>
+  <pds-chip sentiment="danger" dot large>Danger</pds-chip>
+  <pds-chip sentiment="info" variant="dropdown" large>Info</pds-chip>
+  <pds-chip sentiment="success" variant="tag" large>Success</pds-chip>
 </DocCanvas>

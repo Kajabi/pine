@@ -1,6 +1,10 @@
 import { downSmall, remove } from '@pine-ds/icons/icons';
 import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 
+/**
+ * @slot (default) - The chip's label text.
+ */
+
 @Component({
   tag: 'pds-chip',
   styleUrls: ['pds-chip.tokens.scss', 'pds-chip.scss'],
@@ -71,13 +75,13 @@ export class PdsChip {
     const chipContent = isDropdown ? (
       <button class="pds-chip__button" type="button">
         {this.dot && <i class="pds-chip__dot" aria-hidden="true"></i>}
-        {this.label}
+        <slot></slot>
         <pds-icon icon={downSmall} size="12px" aria-hidden="true"></pds-icon>
       </button>
     ) : (
       <span class="pds-chip__label">
         {this.dot && <i class="pds-chip__dot" aria-hidden="true"></i>}
-        {this.label}
+        <slot></slot>
       </span>
     );
 

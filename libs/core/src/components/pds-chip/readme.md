@@ -24,6 +24,13 @@
 | `pdsTagCloseClick` | Event emitted when the close button is clicked on a tag variant chip. | `CustomEvent<any>` |
 
 
+## Slots
+
+| Slot          | Description            |
+| ------------- | ---------------------- |
+| `"(default)"` | The chip's label text. |
+
+
 ## Dependencies
 
 ### Depends on
