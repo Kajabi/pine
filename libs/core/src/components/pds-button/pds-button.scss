@@ -62,6 +62,7 @@
   border: var(--border-width-default) solid var(--color-border-default);
   border-radius: var(--pine-border-radius-circle);
   color: var(--color-text-default);
+  cursor: pointer;
   display: flex;
   font: var(--typography-default);
   min-height: 40px;
@@ -90,6 +91,7 @@
     background-color: var(--color-background-disabled);
     border-color: var(--color-border-disabled);
     color: var(--color-text-disabled);
+    pointer-events: none;
   }
 }
 
