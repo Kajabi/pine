@@ -1,0 +1,19 @@
+:host {
+  display: inline-block;
+}
+
+:host([aria-disabled="true"]) label {
+  color: var(--pine-color-text-label-disabled);
+}
+
+:host([aria-readonly="true"]) {
+  label {
+    color: var(--pine-color-text-label-readonly);
+  }
+}
+
+label {
+  color: var(--pine-color-text-label);
+  font-weight: var(--pine-font-weight-medium);
+
+}

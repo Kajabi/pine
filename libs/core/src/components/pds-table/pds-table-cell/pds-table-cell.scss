@@ -1,37 +1,24 @@
 :host {
   --box-shadow-fixed: 3px 3px 6px -2px rgba(0, 0, 0, 0.2);
 
-  --color-background-fixed: var(--pine-color-white);
-  --color-text-cell-default: var(--pine-color-grey-700);
-
-  --dimension-fixed-cell-position: 0;
-  --dimension-max-width-truncated: 100px;
-
-  --letter-spacing-default: var(--pine-letter-spacing-body-md);
-
-  --number-fixed-column-index: 0;
-
-  --spacing-line-height-cell-default: var(--pine-line-height-125);
-  --spacing-padding-cell-default: calc(var(--pine-spacing-300) / 2);
-  --spacing-padding-compact: var(--pine-spacing-050);
-
-  --typography-default: var(--pine-typography-body-md-default);
-
-  color: var(--color-text-cell-default);
+  color: var(--pine-color-text);
   display: table-cell;
-  font: var(--typography-default);
-  letter-spacing: var(--letter-spacing-default);
-  padding: var(--spacing-padding-cell-default);
+  font-family: var(--pine-font-family-body);
+  font-size: var(--pine-font-size);
+  font-weight: var(--pine-font-weight-regular);
+  letter-spacing: var(--pine-letter-spacing);
+  line-height: var(--pine-line-height-body);
+  padding: 12px;
   vertical-align: inherit;
 }
 
 :host(.is-compact) {
-  padding-block: var(--spacing-padding-compact);
+  padding-block: var(--pine-dimension-2xs)
 }
 
 :host(.is-fixed) {
-  background: var(--color-background-fixed);
-  left: var(--dimension-fixed-cell-position);
+  background: var(--pine-color-background-container);
+  left: 0;
   position: sticky;
   z-index: 1;
 }
@@ -42,7 +29,7 @@
 }
 
 :host(.is-truncated) {
-  max-width: var(--dimension-max-width-truncated);
+  max-width: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

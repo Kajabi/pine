@@ -5,7 +5,7 @@ import { danger } from '@pine-ds/icons/icons';
 
 @Component({
   tag: 'pds-switch',
-  styleUrls: ['../../global/styles/base.scss', 'pds-switch.scss'],
+  styleUrls: ['pds-switch.scss'],
   shadow: true,
 })
 export class PdsSwitch {
