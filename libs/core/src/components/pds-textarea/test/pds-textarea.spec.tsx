@@ -152,7 +152,7 @@ describe('pds-textarea', () => {
     });
 
     expect(root).toEqualHtml(`
-      <pds-textarea readonly="true">
+      <pds-textarea aria-readonly="true" readonly="true">
         <mock:shadow-root>
           <div class="pds-textarea">
             <textarea class="pds-textarea__field" readonly=""></textarea>

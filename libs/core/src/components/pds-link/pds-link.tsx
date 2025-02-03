@@ -8,7 +8,7 @@ import { launch } from '@pine-ds/icons/icons';
  */
 @Component({
   tag: 'pds-link',
-  styleUrls: ['../../global/styles/base.scss', 'pds-link.scss'],
+  styleUrls: ['pds-link.scss'],
   shadow: true,
 })
 export class PdsLink {

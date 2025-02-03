@@ -1,2 +1,7 @@
 @use 'tokens/index';
 @use 'fonts';
+
+// Fix issue with web components not being hidden when attribute is set
+[hidden] {
+  display: none !important;
+}

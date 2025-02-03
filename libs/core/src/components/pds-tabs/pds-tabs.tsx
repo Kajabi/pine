@@ -6,7 +6,7 @@ import { Component, Element, Host, h, Prop, Listen } from '@stencil/core';
  */
 @Component({
   tag: 'pds-tabs',
-  styleUrls: ['../../global/styles/base.scss', 'pds-tabs.scss'],
+  styleUrls: ['pds-tabs.scss'],
   shadow: true,
 })
 export class PdsTabs {
