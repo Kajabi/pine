@@ -22,10 +22,6 @@ export class PdsChip {
    */
   @Prop() dot = false;
 
-  /**
-   * Sets the text label content of the chip.
-   */
-  @Prop() label: string;
 
   /**
    * Determines whether the chip should be displayed in a larger size.

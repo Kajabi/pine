@@ -285,10 +285,6 @@ export namespace Components {
          */
         "dot": boolean;
         /**
-          * Sets the text label content of the chip.
-         */
-        "label": string;
-        /**
           * Determines whether the chip should be displayed in a larger size.
           * @defaultValue false
          */
@@ -1751,10 +1747,6 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "dot"?: boolean;
-        /**
-          * Sets the text label content of the chip.
-         */
-        "label"?: string;
         /**
           * Determines whether the chip should be displayed in a larger size.
           * @defaultValue false
