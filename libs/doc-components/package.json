@@ -22,11 +22,10 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc && vite build",
-    "build.watch": "tsc && vite build --watch",
+    "build": "tsc && npx vite build",
+    "build.watch": "tsc && npx vite build --watch",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "prepublishOnly": "npm run build",
-    "preview": "vite preview",
+    "preview": "npx vite preview",
     "start": "npm run build.watch"
   },
   "peerDependencies": {

@@ -92,7 +92,8 @@
     },
     "projects": ["libs/*"],
     "version": {
-      "conventionalCommits": true
+      "conventionalCommits": true,
+      "preVersionCommand": "npx nx run-many -t build"
     }
   }
 }
