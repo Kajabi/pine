@@ -149,8 +149,29 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup
-        uses: ./.github/workflows/actions/setup
+      - name: Get Latest
+        run: git pull
+        shell: bash
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Verify NPM Cache
+        shell: bash
+        run: npm cache verify
+
+      - name: Get NPM cache directory
+        id: npm-cache-dir
+        shell: bash
+        run: echo "dir=$(npm config get cache)" >> $GITHUB_ENV
+
+      - name: Configure user
+        run: |
+          git config user.name "DSS Automation Bot"
+          git config user.email "dev+github-bot@kajabi.com"
+        shell: bash
 
       # - name: Restore Core built Cache
       #   uses: ./.github/workflows/actions/download-archive
@@ -192,7 +213,6 @@ jobs:
         run: npx nx release --yes
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
 
       ### Steps below are used for releasing a specified version type (major, minor, patch, etc.)
