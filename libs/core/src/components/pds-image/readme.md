@@ -19,13 +19,6 @@
 | `width`       | `width`        | The width of the image in pixels. Setting this will devote space in the layout to prevent layout shifts when the image is loaded.                   | `number`            | `undefined` |
 
 
-## CSS Custom Properties
-
-| Name                   | Description               |
-| ---------------------- | ------------------------- |
-| `--image-aspect-ratio` | The image's aspect ratio. |
-
-
 ----------------------------------------------
 
 
