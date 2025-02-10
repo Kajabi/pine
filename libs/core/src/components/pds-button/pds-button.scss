@@ -18,7 +18,10 @@
   --color-outline-primary: var(--pine-color-purple-300);
 
   // secondary
+  --color-background-secondary-default: var(--pine-color-white);
   --color-background-secondary-hover: var(--pine-color-grey-050);
+  --color-background-secondary-disabled: var(--pine-color-white);
+  --color-background-secondary-disabled-hover: var(--pine-color-white);
   --color-border-secondary-default: var(--pine-color-grey-400);
   --color-border-secondary-disabled: var(--pine-color-grey-300);
   --color-border-secondary-focus: var(--pine-color-grey-300);
@@ -128,9 +131,9 @@
 
 .pds-button--secondary,
 .pds-button--disclosure {
-  --color-background-default: transparent;
-  --color-background-hover: transparent;
-  --color-background-disabled: transparent;
+  --color-background-default: var(--color-background-secondary-default);
+  --color-background-hover: var(--color-background-secondary-hover);
+  --color-background-disabled: var(--color-background-secondary-disabled);
   --color-border-disabled: var(--color-border-secondary-disabled);
   --color-border-focus: var(--color-border-secondary-focus);
   --color-border-hover: var(--color-border-secondary-hover);
