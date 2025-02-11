@@ -12,7 +12,7 @@ describe('pds-chip', () => {
     expect(page.root).toEqualHtml(`
     <pds-chip class="pds-chip pds-chip--neutral pds-chip--text">
         <mock:shadow-root>
-          <span class="pds-chip__label"></span>
+          <span class="pds-chip__label"><slot></slot></span>
         </mock:shadow-root>
       </pds-chip>
     `);
@@ -27,7 +27,7 @@ describe('pds-chip', () => {
     expect(page.root).toEqualHtml(`
       <pds-chip class="pds-chip pds-chip--neutral pds-chip--text" component-id="test" id="test">
         <mock:shadow-root>
-          <span class="pds-chip__label"></span>
+          <span class="pds-chip__label"><slot></slot></span>
         </mock:shadow-root>
       </pds-chip>
     `);
@@ -36,14 +36,15 @@ describe('pds-chip', () => {
   it('renders label text when label prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsChip],
-      html: `<pds-chip label="Progress" />`,
+      html: `<pds-chip>Progress</pds-chip>`,
     });
 
     expect(page.root).toEqualHtml(`
-    <pds-chip class="pds-chip pds-chip--neutral pds-chip--text" label="Progress">
+    <pds-chip class="pds-chip pds-chip--neutral pds-chip--text">
       <mock:shadow-root>
-        <span class="pds-chip__label">Progress</span>
+        <span class="pds-chip__label"><slot></slot></span>
       </mock:shadow-root>
+      Progress
     </pds-chip>
     `);
   });
@@ -57,7 +58,7 @@ describe('pds-chip', () => {
     expect(page.root).toEqualHtml(`
     <pds-chip class="pds-chip pds-chip--accent pds-chip--text" sentiment="accent">
       <mock:shadow-root>
-        <span class="pds-chip__label"></span>
+        <span class="pds-chip__label"><slot></slot></span>
       </mock:shadow-root>
     </pds-chip>
     `);
@@ -73,7 +74,8 @@ describe('pds-chip', () => {
     <pds-chip class="pds-chip pds-chip--neutral pds-chip--text" dot="true">
       <mock:shadow-root>
         <span class="pds-chip__label">
-        <i class="pds-chip__dot" aria-hidden="true"></i>
+          <i class="pds-chip__dot" aria-hidden="true"></i>
+          <slot></slot>
         </span>
       </mock:shadow-root>
     </pds-chip>
@@ -89,7 +91,7 @@ describe('pds-chip', () => {
     expect(page.root).toEqualHtml(`
     <pds-chip class="pds-chip pds-chip--neutral pds-chip--large pds-chip--text" large="true">
       <mock:shadow-root>
-        <span class="pds-chip__label"></span>
+        <span class="pds-chip__label"><slot></slot></span>
       </mock:shadow-root>
     </pds-chip>
     `);
@@ -104,7 +106,7 @@ describe('pds-chip', () => {
     expect(page.root).toEqualHtml(`
     <pds-chip class="pds-chip pds-chip--neutral pds-chip--tag" variant="tag">
       <mock:shadow-root>
-        <span class="pds-chip__label"></span>
+        <span class="pds-chip__label"><slot></slot></span>
         <button class="pds-chip__close" type="button" aria-label="Remove" >
           <pds-icon icon="${removeIcon}" size="12px"></pds-icon>
         </button>
@@ -123,6 +125,7 @@ describe('pds-chip', () => {
     <pds-chip class="pds-chip pds-chip--neutral pds-chip--dropdown" variant="dropdown">
       <mock:shadow-root>
         <button class="pds-chip__button" type="button">
+          <slot></slot>
           <pds-icon icon="${downSmall}" size="12px" aria-hidden="true"></pds-icon>
         </button>
       </mock:shadow-root>
@@ -141,6 +144,7 @@ describe('pds-chip', () => {
       <mock:shadow-root>
         <button class="pds-chip__button" type="button">
           <i class="pds-chip__dot" aria-hidden="true"></i>
+          <slot></slot>
           <pds-icon icon="${downSmall}" size="12px" aria-hidden="true"></pds-icon>
         </button>
       </mock:shadow-root>
@@ -152,7 +156,7 @@ describe('pds-chip', () => {
     const page = await newSpecPage({
       components: [PdsChip],
       html: `
-        <pds-chip variant="tag" label="Tag Chip" />
+        <pds-chip variant="tag">Tag Chip</pds-chip>
       `,
     });
 
