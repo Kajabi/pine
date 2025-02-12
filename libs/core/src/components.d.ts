@@ -7,10 +7,12 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { BoxColumnType, BoxShadowSizeType, BoxTShirtSizeType } from "./utils/types";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
+import { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 import { PlacementType } from "./utils/types";
 import { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
 export { BoxColumnType, BoxShadowSizeType, BoxTShirtSizeType } from "./utils/types";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
+export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 export { PlacementType } from "./utils/types";
 export { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
@@ -390,6 +392,10 @@ export namespace Components {
          */
         "componentId": string;
         /**
+          * Sets the number of milliseconds to wait before updating the value.
+         */
+        "debounce"?: number;
+        /**
           * Determines whether or not the input field is disabled.
          */
         "disabled"?: boolean;
@@ -426,6 +432,10 @@ export namespace Components {
          */
         "required"?: boolean;
         /**
+          * Sets focus on the native `input` in the `pds-input`. Use this method instead of the global `input.focus()`.
+         */
+        "setFocus": () => Promise<void>;
+        /**
           * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`
           * @defaultValue "text"
          */
@@ -433,7 +443,7 @@ export namespace Components {
         /**
           * The value of the input.
          */
-        "value"?: string;
+        "value"?: string | number | null;
     }
     interface PdsLink {
         /**
@@ -1180,7 +1190,10 @@ declare global {
         new (): HTMLPdsImageElement;
     };
     interface HTMLPdsInputElementEventMap {
-        "pdsInput": InputEvent;
+        "pdsBlur": FocusEvent;
+        "pdsChange": InputChangeEventDetail;
+        "pdsFocus": FocusEvent;
+        "pdsInput": InputInputEventDetail;
     }
     interface HTMLPdsInputElement extends Components.PdsInput, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsInputElementEventMap>(type: K, listener: (this: HTMLPdsInputElement, ev: PdsInputCustomEvent<HTMLPdsInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1865,6 +1878,10 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
+          * Sets the number of milliseconds to wait before updating the value.
+         */
+        "debounce"?: number;
+        /**
           * Determines whether or not the input field is disabled.
          */
         "disabled"?: boolean;
@@ -1889,9 +1906,21 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
+          * Emitted when the input loses focus.
+         */
+        "onPdsBlur"?: (event: PdsInputCustomEvent<FocusEvent>) => void;
+        /**
+          * Emitted when the value has changed.  This event will not emit when programmatically setting the `value` property.
+         */
+        "onPdsChange"?: (event: PdsInputCustomEvent<InputChangeEventDetail>) => void;
+        /**
+          * Emitted when the input has focus.
+         */
+        "onPdsFocus"?: (event: PdsInputCustomEvent<FocusEvent>) => void;
+        /**
           * Emitted when a keyboard input occurs.
          */
-        "onPdsInput"?: (event: PdsInputCustomEvent<InputEvent>) => void;
+        "onPdsInput"?: (event: PdsInputCustomEvent<InputInputEventDetail>) => void;
         /**
           * Specifies a short hint that describes the expected value of the input field.
          */
@@ -1912,7 +1941,7 @@ declare namespace LocalJSX {
         /**
           * The value of the input.
          */
-        "value"?: string;
+        "value"?: string | number | null;
     }
     interface PdsLink {
         /**

@@ -6,6 +6,7 @@ export default {
   argTypes: extractArgTypes('pds-input'),
   args: {
     autocomplete: null,
+    debounce: null,
     disabled: false,
     errorMessage: null,
     helperMessage: null,
@@ -19,7 +20,11 @@ export default {
   component: 'pds-input',
   parameters: {
     actions: {
-      handles: ['oninput', 'pdsInput'],
+      handles: [
+        'oninput', 'pdsInput',
+        'onchange', 'pdsChange',
+        'onblur', 'pdsBlur',
+        'onFocus', 'pdsFocus'],
     },
   },
   title: 'components/Input',
@@ -28,11 +33,12 @@ export default {
 
 const BaseTemplate = (args) => html`<pds-input
   autocomplete="${args.autocomplete}"
+  component-id="${args.componentId}"
+  debounce="${args.debounce}"
   disabled="${args.disabled}"
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
   invalid="${args.invalid}"
-  component-id="${args.componentId}"
   label="${args.label}"
   name="${args.name}"
   placeholder="${args.placeholder}"

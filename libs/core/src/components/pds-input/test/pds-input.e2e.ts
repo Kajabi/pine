@@ -47,4 +47,57 @@ describe('pds-input', () => {
     value = await input.getProperty('value');
     expect(inputSpy).toHaveReceivedEvent();
   });
+
+  it('emits the pdsfocus on the input element', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-input></pds-input>');
+
+    const pdsInput = await page.find('pds-input');
+
+    const inputSpy = await page.spyOnEvent('pdsFocus');
+    await pdsInput.callMethod('setFocus');
+    await page.waitForChanges();
+
+    expect(inputSpy).toHaveReceivedEvent();
+  });
+
+  it('emits the pdsBlur on the input element', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-input></pds-input>');
+
+    const pdsInput = await page.find('pds-input');
+
+    const inputSpy = await page.spyOnEvent('pdsBlur');
+    await pdsInput.callMethod('setFocus');
+    await page.waitForChanges();
+    await page.keyboard.press('Tab');
+    await page.waitForChanges();
+
+    expect(inputSpy).toHaveReceivedEvent();
+  });
+
+  it('emits the pdsChange event when the input value changes', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-input />')
+
+    const input = await page.find('pds-input >>> input');
+    let value = await input.getProperty('value');
+    expect(value).toBe('');
+
+
+    const pdsInput = await page.find('pds-input');
+    const inputSpy = await page.spyOnEvent('pdsChange');
+    await pdsInput.callMethod('setFocus');
+    await page.keyboard.type('yoda-yoda', {delay: 100});
+    await page.waitForChanges();
+
+
+    value = await input.getProperty('value');
+    expect(value).toBe('yoda-yoda');
+    await page.keyboard.press('Enter');
+
+    expect(inputSpy).toHaveReceivedEvent();
+
+    expect(inputSpy.events[0].detail.value).toBe('yoda-yoda');
+    })
 });
