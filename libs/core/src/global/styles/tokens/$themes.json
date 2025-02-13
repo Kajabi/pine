@@ -23,7 +23,8 @@
       "base/semantic": "enabled",
       "components/chip": "enabled",
       "components/input": "enabled",
-      "brand/kajabi_products": "enabled"
+      "brand/kajabi_products": "enabled",
+      "components/select": "disabled"
     },
     "$figmaCollectionId": "VariableCollectionId:175:2717",
     "$figmaModeId": "175:46",
@@ -256,9 +257,6 @@
       "color.text.secondary.@": "e7c6e0f469e9dbd19c78304197a7cb9a1474d928",
       "color.text.secondary.disabled": "e7a15248338719fa5fe16b8ee53395777810a5d2",
       "color.text.secondary.hover": "7304dbf160189c52357c75463b660637be56eafa",
-      "color.text.sucess.@": "63ff3ce5546bc6f59a5c92c9ee23bdf9982e2253",
-      "color.text.sucess.disabled": "5bbfc84c41941b5daa318cd00e8c71892e2409fd",
-      "color.text.sucess.hover": "15ce17d10d25c3883df5e5cf1a069d620b1dacc6",
       "color.text.warning.@": "673b0469803d6bcfbc18a3187097f0b99f310242",
       "color.text.warning.disabled": "ad200938d90059d6d3edebe2b1e9313f9fb9ee3f",
       "color.text.warning.hover": "a79253dd991a6af16ebbb38642c899791c800030",
@@ -313,7 +311,10 @@
       "spacing.gap.xl": "a983e2f7c8fac4ff9d9967f84c4cde56d9e525c0",
       "spacing.gap.2xl": "4ba2361fd7a3ba3a804c044ade624e3ffe3f8e72",
       "color.brand.@": "10e037cda087fd1327cadbba3a3be5b3028e6f59",
-      "border-radius.circle": "f323fb5f5d0dd1271806f5f161aca18b80a758e8"
+      "border-radius.circle": "f323fb5f5d0dd1271806f5f161aca18b80a758e8",
+      "color.text.success.@": "63ff3ce5546bc6f59a5c92c9ee23bdf9982e2253",
+      "color.text.success.disabled": "5bbfc84c41941b5daa318cd00e8c71892e2409fd",
+      "color.text.success.hover": "15ce17d10d25c3883df5e5cf1a069d620b1dacc6"
     },
     "group": "brand"
   },
@@ -327,7 +328,8 @@
       "components/chip": "enabled",
       "components/input": "enabled",
       "brand/kajabi_products": "enabled",
-      "brand/kajabi_products/light": "source"
+      "brand/kajabi_products/light": "source",
+      "components/select": "disabled"
     },
     "$figmaCollectionId": "VariableCollectionId:5636:12047",
     "$figmaModeId": "5636:2",
@@ -555,9 +557,6 @@
       "color.text.secondary.@": "886bba061ce84a21e10210c886669508c7ccbafb",
       "color.text.secondary.disabled": "5a61e80a07171222174d04c6e906c5cd088c35aa",
       "color.text.secondary.hover": "0753348dfcb2dff265c2c1f7541c77a5e700cb4f",
-      "color.text.sucess.@": "a57523d419d7833a4d3d5c062670bff2ef28e173",
-      "color.text.sucess.disabled": "2c10170d7460a34893a3223118ed629393ba8e5f",
-      "color.text.sucess.hover": "327684d52ba89e4bd7e4eb00af268102dbea80fd",
       "color.text.warning.@": "de60985fd320d507d53adfb943d259fc0015106a",
       "color.text.warning.disabled": "b644062165e94d7d07cb208cb23e27777a3fdb57",
       "color.text.warning.hover": "41433336a361b51f9b1e863fd32b0d09187e5e63",
@@ -627,7 +626,10 @@
       "chip.color.warning.@": "7a50752c5a449e8ef4fe0f60a9171575f1818df4",
       "chip.color.warning.hover": "99b48f2118b23387dd336dddc420fbcce10afdd0",
       "chip.color.warning.dot": "565ae335c5b33e56f6df007662c6c531a48f2154",
-      "input.color.background.danger.@": "8c0770b976d98b9615103f885d86425802681318"
+      "select.color.background.danger.@": "8c0770b976d98b9615103f885d86425802681318",
+      "color.text.success.@": "a57523d419d7833a4d3d5c062670bff2ef28e173",
+      "color.text.success.disabled": "2c10170d7460a34893a3223118ed629393ba8e5f",
+      "color.text.success.hover": "327684d52ba89e4bd7e4eb00af268102dbea80fd"
     },
     "group": "kajabi_products"
   },
@@ -733,7 +735,8 @@
       "components/chip": "enabled",
       "components/input": "enabled",
       "brand/kajabi_products": "enabled",
-      "brand/kajabi_products/dark": "source"
+      "brand/kajabi_products/dark": "source",
+      "components/select": "disabled"
     },
     "$figmaCollectionId": "VariableCollectionId:5636:12047",
     "$figmaModeId": "5636:3",
@@ -961,9 +964,6 @@
       "color.text.secondary.@": "886bba061ce84a21e10210c886669508c7ccbafb",
       "color.text.secondary.disabled": "5a61e80a07171222174d04c6e906c5cd088c35aa",
       "color.text.secondary.hover": "0753348dfcb2dff265c2c1f7541c77a5e700cb4f",
-      "color.text.sucess.@": "a57523d419d7833a4d3d5c062670bff2ef28e173",
-      "color.text.sucess.disabled": "2c10170d7460a34893a3223118ed629393ba8e5f",
-      "color.text.sucess.hover": "327684d52ba89e4bd7e4eb00af268102dbea80fd",
       "color.text.warning.@": "de60985fd320d507d53adfb943d259fc0015106a",
       "color.text.warning.disabled": "b644062165e94d7d07cb208cb23e27777a3fdb57",
       "color.text.warning.hover": "41433336a361b51f9b1e863fd32b0d09187e5e63",
@@ -1033,7 +1033,10 @@
       "chip.color.warning.@": "7a50752c5a449e8ef4fe0f60a9171575f1818df4",
       "chip.color.warning.hover": "99b48f2118b23387dd336dddc420fbcce10afdd0",
       "chip.color.warning.dot": "565ae335c5b33e56f6df007662c6c531a48f2154",
-      "input.color.background.danger.@": "8c0770b976d98b9615103f885d86425802681318"
+      "select.color.background.danger.@": "8c0770b976d98b9615103f885d86425802681318",
+      "color.text.success.@": "a57523d419d7833a4d3d5c062670bff2ef28e173",
+      "color.text.success.disabled": "2c10170d7460a34893a3223118ed629393ba8e5f",
+      "color.text.success.hover": "327684d52ba89e4bd7e4eb00af268102dbea80fd"
     },
     "group": "kajabi_products"
   }
