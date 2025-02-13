@@ -7,12 +7,12 @@
 
 ## Properties
 
-| Property                     | Attribute         | Description                                                                          | Type                                      | Default     |
-| ---------------------------- | ----------------- | ------------------------------------------------------------------------------------ | ----------------------------------------- | ----------- |
-| `activeTabName` _(required)_ | `active-tab-name` | Sets the starting active tab name and maintains the name as the component re-renders | `string`                                  | `undefined` |
-| `componentId` _(required)_   | `component-id`    | A unique identifier used for the underlying component `id` attribute.                | `string`                                  | `undefined` |
-| `tablistLabel` _(required)_  | `tablist-label`   | Sets the aria-label attached to the tablist element                                  | `string`                                  | `undefined` |
-| `variant` _(required)_       | `variant`         | Sets tabs variant styles as outlined in Figma documentation                          | `"availability" \| "filter" \| "primary"` | `undefined` |
+| Property                     | Attribute         | Description                                                                          | Type                                                | Default     |
+| ---------------------------- | ----------------- | ------------------------------------------------------------------------------------ | --------------------------------------------------- | ----------- |
+| `activeTabName` _(required)_ | `active-tab-name` | Sets the starting active tab name and maintains the name as the component re-renders | `string`                                            | `undefined` |
+| `componentId` _(required)_   | `component-id`    | A unique identifier used for the underlying component `id` attribute.                | `string`                                            | `undefined` |
+| `tablistLabel` _(required)_  | `tablist-label`   | Sets the aria-label attached to the tablist element                                  | `string`                                            | `undefined` |
+| `variant` _(required)_       | `variant`         | Sets tabs variant styles as outlined in Figma documentation                          | `"availability" \| "filter" \| "pill" \| "primary"` | `undefined` |
 
 
 ## Slots

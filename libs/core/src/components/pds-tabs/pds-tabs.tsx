@@ -28,7 +28,7 @@ export class PdsTabs {
   /**
    * Sets tabs variant styles as outlined in Figma documentation
    */
-  @Prop() variant!: 'primary' | 'availability' | 'filter';
+  @Prop() variant!: 'primary' | 'availability' | 'filter' | 'pill';
 
   /**
    * Sets the starting active tab name and maintains the name as the component re-renders

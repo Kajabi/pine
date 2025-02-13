@@ -839,7 +839,7 @@ export namespace Components {
         /**
           * Sets tabs variant styles as outlined in Figma documentation
          */
-        "variant": 'primary' | 'availability' | 'filter';
+        "variant": 'primary' | 'availability' | 'filter' | 'pill';
     }
     interface PdsText {
         /**
@@ -2355,7 +2355,7 @@ declare namespace LocalJSX {
         /**
           * Sets tabs variant styles as outlined in Figma documentation
          */
-        "variant": 'primary' | 'availability' | 'filter';
+        "variant": 'primary' | 'availability' | 'filter' | 'pill';
     }
     interface PdsText {
         /**

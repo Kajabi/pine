@@ -41,6 +41,12 @@ Filter.args = {
   tablistLabel: "Foo",
 }
 
+export const Pill = BaseTemplate.bind({});
+Pill.args = {
+  activeTabName: "Sturdy",
+  componentId: "pill",
+  variant: 'pill',
+}
 const AvailabilityTemplate = (args) => html`
 <div style="background-color: #ddd; padding: 20px;">
   <pds-tabs active-tab-name=${args.activeTabName} variant=${args.variant} component-id=${args.componentId} tablist-label=${args.tablistLabel}>
