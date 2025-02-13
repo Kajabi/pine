@@ -4,6 +4,7 @@
     "base/semantic",
     "components/chip",
     "components/input",
+    "components/select",
     "brand/kajabi_products",
     "brand/kajabi_products/light",
     "brand/kajabi_products/dark"

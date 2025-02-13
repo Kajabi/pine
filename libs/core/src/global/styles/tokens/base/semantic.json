@@ -336,7 +336,7 @@
           "type": "color"
         }
       },
-      "sucess": {
+      "success": {
         "@": {
           "value": "{color.green.900}",
           "type": "color"
