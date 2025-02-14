@@ -8,7 +8,7 @@
 
 :host([aria-readonly="true"]) {
   textarea {
-    background-color: var(--pine-color-background-container-disabled) ;
+    background-color: var(--pine-color-background-container-disabled);
     color: var(--pine-color-text-readonly);
   }
 }
@@ -62,17 +62,13 @@ label {
 
 .pds-textarea__error-message,
 .pds-textarea__helper-message {
-  font-family: var(--pine-font-family-body);
-  font-size: var(--pine-font-size);
-  font-weight: var(--pine-font-weight-medium);
-  letter-spacing: var(--pine-letter-spacing);
-  line-height: var(--pine-line-height-body);
+  font: var(--pine-typography-body-sm-medium);
   margin-block-start: var(--pine-dimension-xs);
 }
 
 .pds-textarea__error-message {
   align-items: center;
-  color: var(--pine-color-text-danger);
+  color: var(--pine-color-text-message-danger);
   display: flex;
-  gap: var(--spacing-icon-error-message);
+  gap: var(--pine-dimension-2xs);
 }

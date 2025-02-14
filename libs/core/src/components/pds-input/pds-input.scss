@@ -1,13 +1,13 @@
 :host {
-  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
-  --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-red-300);
+  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
+  --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring-danger);
 
   display: inline;
 }
 
 :host([aria-readonly="true"]) {
   input {
-    background-color: var(--pine-color-background-container-disabled) ;
+    background-color: var(--pine-color-background-container-disabled);
     color: var(--pine-color-text-readonly);
   }
 }
@@ -25,6 +25,7 @@ label {
 input {
   border: 1px solid var(--pine-color-border);
   border-radius: 10px;
+  color: var(--pine-color-text-active);
   font-size: var(--pine-font-size);
   font-weight: var(--pine-font-weight-regular);
   line-height: var(--pine-line-height-body);
@@ -97,16 +98,14 @@ input {
 
 .pds-input__error-message,
 .pds-input__helper-message {
-  font-size: var(--pine-font-size);
-  font-weight: var(--pine-font-weight-medium);
+  font: var(--pine-typography-body-sm-medium);
   margin-block-end: 0;
   margin-block-start: var(--pine-dimension-xs);
 }
 
 .pds-input__error-message {
   align-items: center;
-  color: var(--pine-color-text-danger);
+  color: var(--pine-color-text-message-danger);
   display: flex;
-  font-size: var(--font-size-helper-message);
-  gap: var(--spacing-icon-error-message);
+  gap: var(--pine-dimension-2xs);
 }

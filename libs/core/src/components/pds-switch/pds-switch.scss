@@ -4,20 +4,15 @@
   --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring-danger);
 
   // Need discussions
-  --dimension-input-height: 20px;
-  --dimension-input-width: 36px;
-  --sizing-input-toggle-size: calc(var(--dimension-input-height) - (var(--spacing-input-toggle-offset) * 2));
-  --spacing-label-gap-size: 12px;
-  --spacing-input-toggle-offset: 2px;
-  --spacing-message-inline: calc(var(--dimension-input-width) + var(--spacing-label-gap-size));
+  --sizing-input-toggle-size: calc(var(--pine-dimension-250) - (var(--pine-dimension-025) * 2));
+  --pine-dimension-025: 2px;
+  --spacing-message-inline: calc(var(--pine-dimension-450) + var(--pine-dimension-150));
   --number-transition-timing: 0.15s ease-out;
-
 
   align-items: flex-start;
   color: var(--pine-color-text);
   display: inline-flex;
   flex-flow: row wrap;
-  margin-block-end: var(--pine-spacing-md);
   position: relative;
 }
 
@@ -47,18 +42,18 @@ input {
   border-radius: var(--pine-dimension-sm);
   cursor: pointer;
   display: inline-block;
-  height: var(--dimension-input-height);
+  height: var(--pine-dimension-250);
   margin: 0;
   padding: 0;
   position: relative;
   transition: var(--number-transition-timing);
   transition-property: background, border, color;
-  width: var(--dimension-input-width);
+  width: var(--pine-dimension-450);
 
   // switch toggle
   &::after {
     background: var(--pine-color-secondary);
-    border-radius: 50%;
+    border-radius: var(--pine-border-radius-full);
     box-shadow: var(--pine-box-shadow);
     content: "";
     display: block;
@@ -77,7 +72,7 @@ label {
   display: inline-flex;
   flex-grow: 1;
   font-weight: var(--pine-font-weight-medium);
-  margin-inline-start: var(--spacing-label-gap-size);
+  margin-inline-start: var(--pine-dimension-150);
 
   .pds-switch--error & {
     color: inherit;
@@ -88,12 +83,11 @@ label {
 .pds-switch__message {
   color: var(--pine-color-text-message);
   flex: 1 0 100%;
-  font-size: var(--pine-font-size-body-md);
-  margin-block-start: var(--spacing-message-block);
-  margin-inline-start: var(--spacing-message-inline);
+  font: var(--pine-typography-body-sm-medium);
+  margin-block-start: var(--pine-dimension-xs);
 
   + .pds-switch__message {
-    margin-block-start: var(--pine-dimension-xs);
+    margin-block-start: var(--pine-dimension-2xs);
   }
 }
 
@@ -101,8 +95,7 @@ label {
   align-items: center;
   color: inherit;
   display: flex;
-  font-size: var(--pine-font-size-085);
-  gap: var(--pine-spacing-050);
+  gap: var(--pine-dimension-2xs);
 }
 
 // Disabled state

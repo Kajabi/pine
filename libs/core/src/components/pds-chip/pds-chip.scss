@@ -1,18 +1,13 @@
 :host {
   --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
 
-  --spacing-sm: calc(var(--pine-dimension-150) / 2);
-  --spacing-lg: calc(var(--pine-dimension-250) / 2);
-  --spacing-xl: var(--pine-dimension-150);
-  --spacing-xxl: calc(var(--pine-dimension-350) / 2);
-
   --sizing-close: 10px;
 
   align-items: center;
   border-radius: var(--pine-dimension-sm);
   display: inline-flex;
   padding-block: var(--pine-dimension-2xs);
-  padding-inline: var(--spacing-lg);
+  padding-inline: var(--pine-dimension-150);
 }
 
 $pds-chip-sentiment: (
@@ -29,7 +24,7 @@ $pds-chip-sentiment-text: (
   danger: var(--pine-color-text-danger),
   info: var(--pine-color-text-info),
   neutral: var(--pine-color-text-neutral),
-  success: var(--pine-color-text-sucess),
+  success: var(--pine-color-text-success),
   warning: var(--pine-color-text-warning),
 );
 
@@ -54,6 +49,7 @@ $pds-chip-sentiment-hover: (
 @each $sentiment, $value in $pds-chip-sentiment {
   :host(.pds-chip--#{$sentiment}) {
     background: $value;
+    border: var(--pine-border-width) solid var(--pine-chip-color-#{$sentiment}-hover);
 
     // dot colors
     .pds-chip__dot {
@@ -61,9 +57,10 @@ $pds-chip-sentiment-hover: (
       background: map-get($pds-chip-sentiment-dots, $sentiment);
     }
 
-    .pds-chip__label, .pds-chip__button {
+    .pds-chip__label, .pds-chip__button, .pds-chip__close {
       /* stylelint-disable-next-line */
       color: map-get($pds-chip-sentiment-text, $sentiment);
+      font-weight: var(--pine-font-weight-medium);
     }
 
     // tag close hover colors
@@ -80,8 +77,8 @@ $pds-chip-sentiment-hover: (
 }
 
 .pds-chip__dot {
-  border: 1px solid transparent;
-  border-radius: 50%;
+  border: var(--pine-border-width) solid transparent;
+  border-radius: var(--pine-border-radius-full);
   display: inline-block;
   height: var(--pine-dimension-2xs);
   margin-block-end: var(--pine-dimension-025);
@@ -89,16 +86,14 @@ $pds-chip-sentiment-hover: (
   width: var(--pine-dimension-2xs);
 }
 
-.pds-chip__label {
-  font-size: var(--pine-font-size-body-md);
-  font-weight: var(--pine-font-weight-medium);
+.pds-chip__label, .pds-chip__button {
+  font: var(--pine-typography-body-medium);
+  letter-spacing: var(--pine-letter-spacing);
 }
 
 // dropdown
 
 :host(.pds-chip--dropdown) {
-  padding: 0;
-
   .pds-chip__dot {
     margin-block-end: calc(var(--pine-dimension-025) / 4);
     margin-block-start: var(--pine-dimension-025);
@@ -109,12 +104,10 @@ $pds-chip-sentiment-hover: (
   align-items: center;
   appearance: none;
   background: transparent;
-  border: 0;
+  border: var(--pine-dimension-none);
   border-radius: var(--pine-dimension-sm);
   display: flex;
-  font-weight: var(--pine-font-weight-medium);
-  padding-block: var(--pine-dimension-2xs);
-  padding-inline: var(--spacing-lg);
+  padding: var(--pine-dimension-none);
 
   &:focus-visible {
     box-shadow: var(--box-shadow-focus);
@@ -127,17 +120,11 @@ $pds-chip-sentiment-hover: (
   }
 }
 
-// tag
-
-:host(.pds-chip--tag) {
-  padding-block: var(--pine-dimension-025);
-}
-
 .pds-chip__close {
   appearance: none;
   background: transparent;
   border: 0;
-  border-radius: 50%;
+  border-radius: var(--pine-border-radius-full);
   height: var(--sizing-close);
   margin-inline-end: calc(var(--pine-dimension-xs) * -1);
   margin-inline-start: var(--pine-dimension-2xs);
@@ -161,31 +148,11 @@ $pds-chip-sentiment-hover: (
 // large
 
 :host(.pds-chip--large) {
-  font-size: var(--pine-font-size-body-lg);
-  padding-block: var(--spacing-sm);
-  padding-inline: var(--spacing-xxl);
+  padding-block: var(--pine-dimension-2xs);
+  padding-inline: var(--pine-dimension-150);
 
-  &:host(.pds-chip--dropdown) {
-    padding-block: var(--pine-dimension-2xs);
-    padding-inline: var(--pine-dimension-025);
-
-    .pds-chip__dot {
-      margin-block-end: 0;
-    }
-  }
-
-  .pds-chip__button {
-    font-size: var(--pine-font-size-body-lg);
-    padding-inline: var(--spacing-xl)
-  }
-
-  .pds-chip__close {
-    height: var(--pine-dimension-md);
-    margin-inline-end: calc(var(--spacing-xl) * -1);
-    width: var(--pine-dimension-md);
-  }
-
-  &:host(.pds-chip--tag) {
-    padding-block: var(--pine-dimension-2xs);
+  .pds-chip__label, .pds-chip__button {
+    font: var(--pine-typography-heading-6);
+    letter-spacing: var(--pine-letter-spacing-heading-6);
   }
 }
