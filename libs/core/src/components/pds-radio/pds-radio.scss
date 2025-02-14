@@ -1,9 +1,6 @@
 :host {
-  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
-  --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-red-200);
-
-  --color-background-checked: var(--pine-color-purple-500);
-  --color-background-checked-hover: var(--pine-color-purple-600);
+  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
+  --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring-danger);
 
   --sizing-check-size: 6px;
   --sizing-input-size: var(--pine-dimension-sm);
@@ -54,17 +51,17 @@ input {
   }
 
   &:checked {
-    background: var(--color-background-checked);
-    border-color: var(--color-background-checked);
+    background: var(--pine-color-accent);
+    border-color: var(--pine-color-accent);
 
     &:hover {
-      background: var(--color-background-checked-hover);
+      background: var(--pine-color-accent-hover);
       border-color: var(--pine-color-accent-hover);
     }
 
     &::after {
       background: var(--pine-color-background-container);
-      border-radius: 50%;
+      border-radius: var(--pine-border-radius-full);
       content: "";
       display: block;
       height: var(--sizing-check-size);
@@ -82,7 +79,7 @@ input {
     cursor: not-allowed;
 
     &:checked {
-      background-color: var(--pine-color-purple-300);
+      background-color: var(--pine-color-accent-disabled);
       border-color: var(--pine-color-border-disabled);
 
       &::after {
@@ -122,6 +119,6 @@ label {
 .pds-radio__message--error {
   align-items: center;
   display: flex;
-  font-size: var(--pine-font-size-085);
-  gap: var(--pine-spacing-050);
+  font-size: var(--pine-font-size-body-sm);
+  gap: var(--pine-dimension-2xs);
 }

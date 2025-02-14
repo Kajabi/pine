@@ -8,7 +8,7 @@ div {
 
   align-items: center;
   background-color: var(--color-background-container);
-  border-radius: var(--border-radius-admin-round, var(--pine-border-radius-round));
+  border-radius: var(--border-radius-admin-round, var(--pine-border-radius-full));
   display: inline-flex;
   justify-content: center;
   position: relative;
@@ -37,7 +37,7 @@ div {
   appearance: none;
   background: transparent;
   border: var(--pine-dimension-none);
-  border-radius: var(--pine-border-radius-round);
+  border-radius: var(--pine-border-radius-full);
   cursor: pointer;
   display: flex;
   padding: var(--pine-dimension-none);
@@ -60,7 +60,7 @@ div {
 }
 
 img {
-  border-radius: var(--border-radius-admin-round, var(--pine-border-radius-round));
+  border-radius: var(--border-radius-admin-round, var(--pine-border-radius-full));
   height: 100%;
   object-fit: cover;
   width: 100%;

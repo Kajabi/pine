@@ -10,7 +10,7 @@
   pds-button {
     align-items: center;
     background: var(--pine-color-secondary);
-    border-radius: var(--pine-border-radius-round);
+    border-radius: var(--pine-border-radius-full);
     border-width: var(--pine-dimension-none);
     display: inline-flex;
     font-family: var(--pine-font-family-heading);
@@ -58,7 +58,7 @@
 
     span {
       border: var(--pine-border);
-      border-radius: var(--pine-border-radius-round);
+      border-radius: var(--pine-border-radius-full);
       margin-inline-end: var(--pine-dimension-sm);
       padding-block: var(--pine-dimension-xs);
       padding-inline: var(--pine-dimension-sm);

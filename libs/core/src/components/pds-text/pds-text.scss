@@ -19,59 +19,38 @@
 
 /* stylelint-disable */
 h1 {
-  font-family: "Greet Standard";
-  font-size: 28px;
-  font-weight: 600;
+  font: var(--pine-typography-heading-1);
   letter-spacing: 0.26px;
-  line-height: 1.25;
 }
 
 h2 {
-  font-family: "Greet Standard";
-  font-size: 26px;
-  font-weight: 600;
+  font: var(--pine-typography-heading-2);
   letter-spacing: 0.24px;
-  line-height: 1.25;
 }
 
 h3 {
-  font-family: "Greet Standard";
-  font-size: 22px;
-  font-weight: 600;
+  font: var(--pine-typography-heading-3);
   letter-spacing: 0.22px;
-  line-height: 1.25;
 }
 
 h4 {
-  font-family: "Greet Standard";
-  font-size: 20px;
-  font-weight: 600;
+  font: var(--pine-typography-heading-4);
   letter-spacing: 0.20px;
-  line-height: 1.25;
 }
 
 h5 {
-  font-family: "Greet Standard";
-  font-size: 18px;
-  font-weight: 500;
+  font: var(--pine-typography-heading-5);
   letter-spacing: 0.18px;
-  line-height: 1.25;
 }
 
 h6 {
-  font-family: "Greet Standard";
-  font-size: 16px;
-  font-weight: 500;
+  font: var(--pine-typography-heading-6);
   letter-spacing: 0.16px;
-  line-height: 1.25;
 }
 
 code, em, p, pre, strong {
-  font-family: "Inter";
-  font-size: 14px;
-  font-weight: 400;
+  font: var(--pine-typography-body);
   letter-spacing: -0.16px;
-  line-height: 1.425;
 }
 /* stylelint-enable */
 
@@ -90,8 +69,8 @@ strong {
 }
 
 h1, h2, h3, h4, h5, h6, p, code, pre, em, strong {
-  color: var(--pine-color-text-default);
-  margin: 0;
+  color: var(--pine-color-text);
+  margin: var(--pine-dimension-none);
 }
 
 :host([truncate]) > * {
@@ -101,20 +80,20 @@ h1, h2, h3, h4, h5, h6, p, code, pre, em, strong {
 }
 
 :host([italic]) > * {
-  font-style: italic
+  font-style: italic;
 }
 
 
 // Colors/Variants/Sentiment
 $type-colors: (
-  primary: var(--pine-color-white),
-  secondary: var(--pine-color-grey-800),
-  neutral: var(--pine-color-grey-900),
-  accent: var(--pine-color-purple-900),
-  danger: var(--pine-color-red-900),
-  info: var(--pine-color-blue-900),
-  success: var(--pine-color-green-900),
-  warning: var(--pine-color-yellow-900),
+  primary: var(--pine-color-text-primary),
+  secondary: var(--pine-color-text-secondary),
+  neutral: var(--pine-color-text-neutral),
+  accent: var(--pine-color-text-accent),
+  danger: var(--pine-color-text-danger),
+  info: var(--pine-color-text-info),
+  success: var(--pine-color-text-success),
+  warning: var(--pine-color-text-warning),
 );
 
 @mixin generate-type-colors($type-colors) {
@@ -129,13 +108,13 @@ $type-colors: (
 
 // Font Sizes
 $type-sizes: (
-  2xl: 20px,
-  xl: 18px,
-  lg: 16px,
-  md: 14px,
-  sm: 12px,
-  xs: 10px,
-  2xs: 8px,
+  2xl: var(--pine-font-size-body-2xl),
+  xl: var(--pine-font-size-body-xl),
+  lg: var(--pine-font-size-body-lg),
+  md: var(--pine-font-size-body-md),
+  sm: var(--pine-font-size-body-sm),
+  xs: var(--pine-font-size-body-xs),
+  2xs: var(--pine-font-size-body-2xs),
 );
 
 @mixin generate-type-sizes($type-sizes) {
@@ -150,12 +129,12 @@ $type-sizes: (
 
 // Font Weights
 $type-weights: (
-  extra-light: 200,
-  light: 300,
-  regular: 400,
-  medium: 500,
-  semibold: 600,
-  bold: 700,
+  extra-light: var(--pine-font-weight-extra-light),
+  light: var(--pine-font-weight-light),
+  regular: var(--pine-font-weight-regular),
+  medium: var(--pine-font-weight-medium),
+  semibold: var(--pine-font-weight-semi-bold),
+  bold: var(--pine-font-weight-bold),
 );
 
 @mixin generate-type-weights($type-weights) {
@@ -170,13 +149,13 @@ $type-weights: (
 
 // Gutter Sizes
 $type-gutters: (
-  2xl: 48px,
-  xl: 40px,
-  lg: 32px,
-  md: 24px,
-  sm: 16px,
-  xs: 8px,
-  2xs: 4px,
+  2xl: var(--pine-dimension-2xl),
+  xl: var(--pine-dimension-xl),
+  lg: var(--pine-dimension-lg),
+  md: var(--pine-dimension-md),
+  sm: var(--pine-dimension-sm),
+  xs: var(--pine-dimension-xs),
+  2xs: var(--pine-dimension-2xs),
 );
 
 @mixin generate-type-gutters($type-gutters) {
