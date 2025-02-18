@@ -289,29 +289,6 @@ describe('pds-textarea', () => {
     expect(textarea?.value).toBe('');
   });
 
-  it('onChange logic with valid `value` runs', async () => {
-    const page = await newSpecPage({
-      components: [PdsTextarea],
-      html: `<pds-textarea value="initial" required="true"></pds-textarea>`,
-    });
-    const pdsTextarea = page.root;
-    const eventSpy = jest.fn();
-    document.addEventListener('pdsTextareaChange', eventSpy);
-
-    const textarea = pdsTextarea?.shadowRoot?.querySelector<HTMLTextAreaElement>('textarea');
-    expect(pdsTextarea?.value).toEqual('initial');
-    expect(textarea?.innerHTML).toEqual('initial');
-
-    textarea.value = 'A';
-    textarea.checkValidity = jest.fn().mockReturnValue(true);
-    textarea.dispatchEvent(new Event('change'));
-    await page.waitForChanges();
-
-    expect(pdsTextarea?.value).toEqual('A');
-    expect(textarea?.innerHTML).toEqual('A');
-    expect(eventSpy).toHaveBeenCalled();
-  });
-
   it('onChange logic with invalid `value` runs', async () => {
     const page = await newSpecPage({
       components: [PdsTextarea],
@@ -322,7 +299,7 @@ describe('pds-textarea', () => {
     const textarea = pdsTextarea?.shadowRoot?.querySelector<HTMLTextAreaElement>('textarea');
     const eventSpy = jest.fn();
 
-    document.addEventListener('pdsTextareaChange', eventSpy);
+    pdsTextarea.addEventListener('pdsTextareaChange', eventSpy);
 
     expect(pdsTextarea?.value).toEqual('initial');
     expect(textarea?.innerHTML).toEqual('initial');
@@ -332,9 +309,100 @@ describe('pds-textarea', () => {
     textarea.dispatchEvent(new Event('change'));
     await page.waitForChanges();
 
-    expect(pdsTextarea?.value).toEqual('');
-    expect(textarea?.innerHTML).toEqual('');
     expect(textarea).toHaveClass('is-invalid');
     expect(eventSpy).toHaveBeenCalled();
+  });
+
+  it('should emit pdsTextareaChange event when value changes', async () => {
+    const page = await newSpecPage({
+      components: [PdsTextarea],
+      html: `<pds-textarea></pds-textarea>`,
+    });
+
+    const pdsTextarea = page.root;
+    const textarea = pdsTextarea?.shadowRoot?.querySelector('textarea');
+    const changeEventSpy = jest.fn();
+
+    pdsTextarea?.addEventListener('pdsTextareaChange', changeEventSpy);
+
+    // Simulate user typing
+    textarea.value = 'New input value';
+    textarea?.dispatchEvent(new Event('change'));
+
+    await page.waitForChanges();
+
+    expect(changeEventSpy).toHaveBeenCalled();
+    expect(changeEventSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        detail: { value: 'New input value', event: expect.any(Event) },
+      })
+    );
+  });
+
+  it('should emit pdsBlur event on blur', async () => {
+    const page = await newSpecPage({
+      components: [PdsTextarea],
+      html: `<pds-textarea></pds-textarea>`,
+    });
+
+    const textarea = page.root?.shadowRoot?.querySelector<HTMLTextAreaElement>('textarea');
+
+    const blurEventSpy = jest.fn();
+    page.root?.addEventListener('pdsBlur', blurEventSpy);
+    textarea?.dispatchEvent(new FocusEvent('blur'));
+    await page.waitForChanges();
+
+    expect(blurEventSpy).toHaveBeenCalled();
+  });
+
+  it('should emit pdsFocus event on focus', async () => {
+    const page = await newSpecPage({
+      components: [PdsTextarea],
+      html: `<pds-textarea value="initial" required="true"></pds-textarea>`,
+    });
+
+    const textarea = page.root?.shadowRoot?.querySelector<HTMLTextAreaElement>('textarea');
+    const focusEventSpy = jest.fn();
+    page.root?.addEventListener('pdsFocus', focusEventSpy);
+
+    textarea?.dispatchEvent(new FocusEvent('focus'));
+    await page.waitForChanges();
+
+    expect(focusEventSpy).toHaveBeenCalled();
+  });
+
+it('should set focus on the input element when setFocus is called', async() => {
+    const page = await newSpecPage({
+      components: [PdsTextarea],
+      html: `<pds-textarea></pds-textarea>`,
+    });
+
+    const component = page.rootInstance;
+
+    // Mock the native input element
+    const nativenTextarea = document.createElement('textarea');
+    jest.spyOn(nativenTextarea, 'focus');
+    component['nativeTextarea'] = nativenTextarea;
+    await component.setFocus();
+    expect(nativenTextarea.focus).toHaveBeenCalled();
+  });
+
+  it('should emit pdsInput event on input', async () => {
+    const page = await newSpecPage({
+      components: [PdsTextarea],
+      html: `<pds-textarea value="initial" required="true"></pds-textarea>`,
+    });
+
+    const textarea = page.root?.shadowRoot?.querySelector<HTMLTextAreaElement>('textarea');
+    const inputEventSpy = jest.fn();
+    page.root?.addEventListener('pdsInput', inputEventSpy);
+
+    if (textarea) {
+      textarea.value = 'Typing...';
+    }
+    textarea?.dispatchEvent(new Event('input'));
+    await page.waitForChanges();
+
+    expect(inputEventSpy).toHaveBeenCalled();
   });
 });

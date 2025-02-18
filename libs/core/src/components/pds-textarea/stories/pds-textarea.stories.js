@@ -5,7 +5,9 @@ import { withActions } from '@storybook/addon-actions/decorator';
 export default {
   args: {
     autocomplete: null,
+    clearOnEdit: false,
     componentId: null,
+    debounce: null,
     disabled: false,
     errorMessage: null,
     helperMessage: null,
@@ -22,7 +24,12 @@ export default {
   decorators: [withActions],
   parameters: {
     actions: {
-      handles: ['onchange', 'pdsTextareaChange'],
+      handles: [
+        'onblur', 'pdsBlur',
+        'onchange', 'pdsTextareaChange',
+        'onfocus', 'pdsFocus',
+        'oninput', 'pdsInput',
+      ],
     },
   },
   title: 'components/Textarea',
@@ -30,6 +37,7 @@ export default {
 
 const BaseTemplate = (args) => html`<pds-textarea
   autocomplete="${args.autocomplete}"
+  clear-on-edit="${args.clearOnEdit}"
   component-id="${args.componentId}"
   disabled="${args.disabled}"
   error-message="${args.errorMessage}"
@@ -43,6 +51,8 @@ const BaseTemplate = (args) => html`<pds-textarea
   required="${args.required}"
   rows="${args.rows}"
   value="${args.value}"
+  data-tooltip-id="foo"
+  title="bar"
   >
 </pds-textarea>`;
 

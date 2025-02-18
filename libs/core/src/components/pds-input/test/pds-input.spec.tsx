@@ -231,7 +231,7 @@ describe('pds-input', () => {
     expect(onFocusEvent).toHaveBeenCalled();
   });
 
-  it('should call emitValueChange when onChangeEvent is triggered', async () => {
+  it('should call onChangeEvent when value is changed', async () => {
     const page = await newSpecPage({
       components: [PdsInput],
       html: `<pds-input />`,
