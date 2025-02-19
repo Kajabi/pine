@@ -195,4 +195,94 @@ describe('pds-input', () => {
 
     expect(input?.value).toEqual('');
   })
+
+  it('calls onBlurEvent when loses focus', async () => {
+    const page = await newSpecPage({
+      components: [PdsInput],
+      html: `<pds-input />`,
+    });
+
+    const pdsInput = page.root;
+    const nativeInput = pdsInput?.shadowRoot?.querySelector('input')
+    const onBlurEvent = jest.fn();
+    pdsInput.addEventListener('pdsBlur', onBlurEvent);
+
+    nativeInput?.dispatchEvent(new Event('blur'));
+    await page.waitForChanges();
+
+    expect(onBlurEvent).toHaveBeenCalled();
+
+  });
+
+  it('calls onFocusEvent when gains focus', async () => {
+    const page = await newSpecPage({
+      components: [PdsInput],
+      html: `<pds-input />`,
+    });
+
+    const pdsInput = page.root;
+    const nativeInput = pdsInput?.shadowRoot?.querySelector('input')
+    const onFocusEvent = jest.fn();
+    pdsInput.addEventListener('pdsFocus', onFocusEvent);
+
+    nativeInput?.dispatchEvent(new Event('focus'));
+    await page.waitForChanges();
+
+    expect(onFocusEvent).toHaveBeenCalled();
+  });
+
+  it('should call onChangeEvent when value is changed', async () => {
+    const page = await newSpecPage({
+      components: [PdsInput],
+      html: `<pds-input />`,
+    });
+    const pdsInput = page.root;
+
+    const nativeInput = pdsInput?.shadowRoot?.querySelector('input')
+    nativeInput?.value = 'test';
+
+    const onChangeEvent = jest.fn();
+    pdsInput?.addEventListener('pdsChange', onChangeEvent);
+
+    nativeInput?.dispatchEvent(new Event('change'));
+    await page.waitForChanges();
+
+    expect(onChangeEvent).toHaveBeenCalled();
+
+  });
+
+  it('calls onChangeEvent when input value changes', async () => {
+    const page = await newSpecPage({
+      components: [PdsInput],
+      html: `<pds-input />`,
+    });
+    const component = page.rootInstance;
+    const mockEvent = new Event('change');
+    const pdsChangeSpy = jest.spyOn(component.pdsChange, 'emit');
+
+    component.value = 'Test Value';
+    component.emitValueChange(mockEvent);
+
+    expect(pdsChangeSpy).toHaveBeenCalledWith({
+      value: 'Test Value',
+      event: mockEvent,
+    });
+  });
+
+  it('should set focus on the input element when setFocus is called', async() => {
+    const page = await newSpecPage({
+      components: [PdsInput],
+      html: `<pds-input></pds-input>`,
+    });
+
+    const component = page.rootInstance;
+
+    // Mock the native input element
+    const nativeInput = document.createElement('input');
+    jest.spyOn(nativeInput, 'focus');
+    component['nativeInput'] = nativeInput;
+    await component.setFocus();
+    expect(nativeInput.focus).toHaveBeenCalled();
+  });
+
 });

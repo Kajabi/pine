@@ -7,12 +7,14 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { BoxColumnType, BoxShadowSizeType, BoxTShirtSizeType } from "./utils/types";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
+import { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 import { PlacementType } from "./utils/types";
-import { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
+import { TextareaChangeEventDetail, TextareaInputEventDetail } from "./components/pds-textarea/textarea-interface";
 export { BoxColumnType, BoxShadowSizeType, BoxTShirtSizeType } from "./utils/types";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
+export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 export { PlacementType } from "./utils/types";
-export { TextareaChangeEventDetail } from "./components/pds-textarea/textarea-interface";
+export { TextareaChangeEventDetail, TextareaInputEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
     interface PdsAccordion {
         /**
@@ -390,6 +392,10 @@ export namespace Components {
          */
         "componentId": string;
         /**
+          * Sets the number of milliseconds to wait before updating the value.
+         */
+        "debounce"?: number;
+        /**
           * Determines whether or not the input field is disabled.
          */
         "disabled"?: boolean;
@@ -426,6 +432,10 @@ export namespace Components {
          */
         "required"?: boolean;
         /**
+          * Sets focus on the native `input` in the `pds-input`. Use this method instead of the global `input.focus()`.
+         */
+        "setFocus": () => Promise<void>;
+        /**
           * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`
           * @defaultValue "text"
          */
@@ -433,7 +443,7 @@ export namespace Components {
         /**
           * The value of the input.
          */
-        "value"?: string;
+        "value"?: string | number | null;
     }
     interface PdsLink {
         /**
@@ -916,6 +926,10 @@ export namespace Components {
          */
         "componentId": string;
         /**
+          * The amount of time, in milliseconds, to wait to trigger the event after each keystroke.
+         */
+        "debounce"?: number;
+        /**
           * Determines whether or not the textarea is disabled.
           * @defaultValue false
          */
@@ -960,9 +974,13 @@ export namespace Components {
          */
         "rows"?: number;
         /**
+          * Sets focus on the native `textarea` in the `pds-texarea`. Use this method instead of the global `textarea.focus()`.
+         */
+        "setFocus": () => Promise<void>;
+        /**
           * The value of the textarea.
          */
-        "value"?: string;
+        "value"?: string | null;
     }
     interface PdsTooltip {
         /**
@@ -1180,7 +1198,10 @@ declare global {
         new (): HTMLPdsImageElement;
     };
     interface HTMLPdsInputElementEventMap {
-        "pdsInput": InputEvent;
+        "pdsBlur": FocusEvent;
+        "pdsChange": InputChangeEventDetail;
+        "pdsFocus": FocusEvent;
+        "pdsInput": InputInputEventDetail;
     }
     interface HTMLPdsInputElement extends Components.PdsInput, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsInputElementEventMap>(type: K, listener: (this: HTMLPdsInputElement, ev: PdsInputCustomEvent<HTMLPdsInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1417,6 +1438,9 @@ declare global {
         new (): HTMLPdsTextElement;
     };
     interface HTMLPdsTextareaElementEventMap {
+        "pdsBlur": FocusEvent;
+        "pdsFocus": FocusEvent;
+        "pdsInput": TextareaInputEventDetail;
         "pdsTextareaChange": TextareaChangeEventDetail;
     }
     interface HTMLPdsTextareaElement extends Components.PdsTextarea, HTMLStencilElement {
@@ -1865,6 +1889,10 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
+          * Sets the number of milliseconds to wait before updating the value.
+         */
+        "debounce"?: number;
+        /**
           * Determines whether or not the input field is disabled.
          */
         "disabled"?: boolean;
@@ -1889,9 +1917,21 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
+          * Emitted when the input loses focus.
+         */
+        "onPdsBlur"?: (event: PdsInputCustomEvent<FocusEvent>) => void;
+        /**
+          * Emitted when the value has changed.  This event will not emit when programmatically setting the `value` property.
+         */
+        "onPdsChange"?: (event: PdsInputCustomEvent<InputChangeEventDetail>) => void;
+        /**
+          * Emitted when the input has focus.
+         */
+        "onPdsFocus"?: (event: PdsInputCustomEvent<FocusEvent>) => void;
+        /**
           * Emitted when a keyboard input occurs.
          */
-        "onPdsInput"?: (event: PdsInputCustomEvent<InputEvent>) => void;
+        "onPdsInput"?: (event: PdsInputCustomEvent<InputInputEventDetail>) => void;
         /**
           * Specifies a short hint that describes the expected value of the input field.
          */
@@ -1912,7 +1952,7 @@ declare namespace LocalJSX {
         /**
           * The value of the input.
          */
-        "value"?: string;
+        "value"?: string | number | null;
     }
     interface PdsLink {
         /**
@@ -2432,6 +2472,10 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
+          * The amount of time, in milliseconds, to wait to trigger the event after each keystroke.
+         */
+        "debounce"?: number;
+        /**
           * Determines whether or not the textarea is disabled.
           * @defaultValue false
          */
@@ -2458,7 +2502,19 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Event emitted whenever the value of the textarea changes.
+          * Emitted when the input loses focus.
+         */
+        "onPdsBlur"?: (event: PdsTextareaCustomEvent<FocusEvent>) => void;
+        /**
+          * Emitted when the input has focus.
+         */
+        "onPdsFocus"?: (event: PdsTextareaCustomEvent<FocusEvent>) => void;
+        /**
+          * Emitted when a keyboard input occurs.  For elements that accept text input (`type=text`, `type=tel`, etc.), the interface is [`InputEvent`](https://developer.mozilla.org/en-US/docs/Web/API/InputEvent); for others, the interface is [`Event`](https://developer.mozilla.org/en-US/docs/Web/API/Event). If the input is cleared on edit, the type is `null`.
+         */
+        "onPdsInput"?: (event: PdsTextareaCustomEvent<TextareaInputEventDetail>) => void;
+        /**
+          * Event emitted whenever the value of the textarea changes.  This event will not emit when programmatically setting the `value` property.
          */
         "onPdsTextareaChange"?: (event: PdsTextareaCustomEvent<TextareaChangeEventDetail>) => void;
         /**
@@ -2482,7 +2538,7 @@ declare namespace LocalJSX {
         /**
           * The value of the textarea.
          */
-        "value"?: string;
+        "value"?: string | null;
     }
     interface PdsTooltip {
         /**

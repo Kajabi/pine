@@ -1,6 +1,9 @@
-import { Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, h, Method, Prop, State, Watch } from '@stencil/core';
 import { assignDescription, isRequired, messageId } from '../../utils/form';
-import { TextareaChangeEventDetail } from './textarea-interface';
+import { TextareaChangeEventDetail, TextareaInputEventDetail } from './textarea-interface';
+import { debounceEvent } from '@utils/utils';
+import type { Attributes } from '@utils/attributes';
+import { inheritAttributes, inheritAriaAttributes } from '@utils/attributes';
 import { danger } from '@pine-ds/icons/icons';
 
 @Component({
@@ -13,7 +16,50 @@ import { danger } from '@pine-ds/icons/icons';
   shadow: true,
 })
 export class PdsTextarea {
+  private nativeTextarea?: HTMLTextAreaElement
+  private focusedValue?: string | null;
+  private inheritedAttributes: Attributes = {};
+  private originalPdsInput?: EventEmitter<TextareaInputEventDetail>;
+
   @Element() el: HTMLPdsTextareaElement;
+
+  /**
+   * Emitted when the input loses focus.
+   */
+  @Event() pdsBlur!: EventEmitter<FocusEvent>;
+
+  /**
+   * Emitted when the input has focus.
+   */
+  @Event() pdsFocus!: EventEmitter<FocusEvent>;
+
+  /**
+   * Emitted when a keyboard input occurs.
+   *
+   * For elements that accept text input (`type=text`, `type=tel`, etc.), the interface
+   * is [`InputEvent`](https://developer.mozilla.org/en-US/docs/Web/API/InputEvent); for others,
+   * the interface is [`Event`](https://developer.mozilla.org/en-US/docs/Web/API/Event). If
+   * the input is cleared on edit, the type is `null`.
+   */
+  @Event() pdsInput: EventEmitter<TextareaInputEventDetail>;
+
+  /**
+   * Event emitted whenever the value of the textarea changes.
+   *
+   * This event will not emit when programmatically setting the `value` property.
+   */
+  @Event() pdsTextareaChange: EventEmitter<TextareaChangeEventDetail>;
+
+  /**
+   * Sets focus on the native `textarea` in the `pds-texarea`. Use this method instead of the global
+   * `textarea.focus()`.
+   */
+  @Method()
+  async setFocus() {
+    if (this.nativeTextarea) {
+      this.nativeTextarea.focus();
+    }
+  }
 
   /**
    * Specifies if and how the browser provides `autocomplete` assistance for the field.
@@ -30,6 +76,11 @@ export class PdsTextarea {
    * @defaultValue false
    */
   @Prop() disabled = false;
+
+  /**
+   * The amount of time, in milliseconds, to wait to trigger the event after each keystroke.
+   */
+  @Prop() debounce?: number;
 
   /**
    * Displays an error message below the textarea field.
@@ -82,22 +133,84 @@ export class PdsTextarea {
   /**
    * The value of the textarea.
    */
-  @Prop({mutable: true}) value?: string;
+  @Prop({mutable: true}) value?: string | null = '';
+
+  @State() hasFocus = false;
+
+  @Watch('debounce')
+  protected debounceChanged() {
+    const { pdsInput, debounce, originalPdsInput } = this;
+
+    this.pdsInput = debounce === undefined ? originalPdsInput ?? pdsInput : debounceEvent(pdsInput, debounce);
+  }
 
   /**
-   * Event emitted whenever the value of the textarea changes.
+   * Update the native input element when the value changes
    */
-  @Event() pdsTextareaChange: EventEmitter<TextareaChangeEventDetail>;
+  @Watch('value')
+  protected valueChanged() {
+    const nativeTextarea = this.nativeTextarea;
+    const value = this.getValue();
 
-  private onTextareaChange = (ev: Event) => {
-    const textarea = ev.target as HTMLTextAreaElement;
+    if (nativeTextarea && nativeTextarea.value !== value) {
+      nativeTextarea.value = value;
+    }
+  }
+
+  /**
+   * Emits an `pdsInput` event.
+   */
+  private emitInputChange(event?: Event) {
+    const { value } = this;
+    this.pdsInput.emit({ value, event });
+  }
+
+  /**
+   * Emits an `pdsTextareaChange` event.
+   */
+  private emitValueChange(event?: Event) {
+    const textarea = event.target as HTMLTextAreaElement;
     isRequired(textarea, this);
 
-    if (textarea) {
-      this.value = textarea.value;
+    const { value } = textarea;
+
+    // Checks for both null and undefined values
+    const newValue = value == null ? value : value.toString();
+    this.focusedValue = newValue;
+    this.pdsTextareaChange.emit({ value: newValue, event });
+  }
+
+  private getValue(): string {
+    return this.value || '';
+  }
+
+  private onBlur = (ev: FocusEvent) => {
+    this.hasFocus = false;
+
+    if (this.focusedValue !== this.value) {
+      this.emitValueChange(ev);
     }
 
-    this.pdsTextareaChange.emit({value: this.value, event: ev});
+    this.pdsBlur.emit(ev);
+  };
+
+  private onFocus = (ev: FocusEvent) => {
+    this.hasFocus = true;
+    this.focusedValue = this.value;
+
+    this.pdsFocus.emit(ev);
+  };
+
+  private onInput = (ev: Event) => {
+    const input = ev.target as HTMLTextAreaElement | null;
+    if (input) {
+      this.value = input.value || '';
+    }
+    this.emitInputChange(ev);
+  };
+
+  private onTextareaChange = (ev: Event) => {
+    this.emitValueChange(ev);
   };
 
   private textareaClassNames() {
@@ -110,7 +223,24 @@ export class PdsTextarea {
     return classNames.join('  ');
   }
 
+  connectedCallback() {
+    this.debounceChanged();
+  }
+
+  componentWillLoad() {
+    this.inheritedAttributes = {
+      ...inheritAriaAttributes(this.el),
+      ...inheritAttributes(this.el),
+    };
+  }
+
+  componentDidLoad() {
+    this.originalPdsInput = this.pdsInput;
+  }
+
   render() {
+    const value = this.getValue();
+
     return (
       <Host
         aria-disabled={this.disabled ? 'true' : null}
@@ -121,6 +251,7 @@ export class PdsTextarea {
             <label htmlFor={this.componentId}>{this.label}</label>
           }
           <textarea
+            ref={(el) => this.nativeTextarea = el }
             aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
             aria-invalid={this.invalid ? "true" : undefined}
             autocomplete={this.autocomplete}
@@ -132,8 +263,14 @@ export class PdsTextarea {
             readOnly={this.readonly}
             required={this.required}
             rows={this.rows}
+            onBlur={this.onBlur}
             onChange={this.onTextareaChange}
-          >{this.value}</textarea>
+            onFocus={this.onFocus}
+            onInput={this.onInput}
+            {...this.inheritedAttributes}
+          >
+            {value}
+          </textarea>
           {this.helperMessage &&
             <p
               class="pds-textarea__helper-message"
