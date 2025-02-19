@@ -97,6 +97,15 @@ export class PdsTooltip {
     this.el.addEventListener('focus', this.handleShow, true);
   }
 
+  componentDidLoad() {
+    // fix for Safari iOS back button issue
+    window.addEventListener('pageshow', this.handlePageShow);
+
+    return () => {
+      window.removeEventListener('pageshow', this.handlePageShow);
+    };
+  }
+
   componentDidUpdate() {
     if (this.opened) {
       this.showTooltip();
@@ -129,6 +138,10 @@ export class PdsTooltip {
 
   private handleShow = () => {
     this.showTooltip();
+  };
+
+  private handlePageShow = () => {
+    this.opened = false;
   };
 
   render() {
