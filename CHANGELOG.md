@@ -1,3 +1,13 @@
+## 2.16.0 (2025-02-19)
+
+### Features 🚀
+
+- **docTokenTale:** update to handle dimension tokens ([#371](https://github.com/Kajabi/pine/pull/371))
+
+### ❤️  Thank You
+
+- Julian Skinner @ju-Skinner
+
 ## 2.15.0 (2025-02-19)
 
 ### Features 🚀
