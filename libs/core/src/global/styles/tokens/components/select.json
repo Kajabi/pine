@@ -1,0 +1,14 @@
+{
+  "select": {
+    "color": {
+      "background": {
+        "danger": {
+          "@": {
+            "value": "{color.red.050}",
+            "type": "color"
+          }
+        }
+      }
+    }
+  }
+}

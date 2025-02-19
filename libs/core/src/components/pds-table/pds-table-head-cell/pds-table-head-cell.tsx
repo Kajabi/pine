@@ -4,7 +4,7 @@ import { downSmall, upSmall } from '@pine-ds/icons/icons';
 
 @Component({
   tag: 'pds-table-head-cell',
-  styleUrls: ['../../../global/styles/base.scss', 'pds-table-head-cell.scss'],
+  styleUrls: ['pds-table-head-cell.scss'],
   shadow: true,
 })
 export class PdsTableHeadCell {

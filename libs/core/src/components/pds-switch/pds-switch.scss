@@ -1,55 +1,28 @@
 :host {
-  --border-radius-input: var(--pine-border-radius-200);
 
-  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--color-outline-focus);
-  --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--color-outline-focus-error);
-  --box-shadow-input-toggle: 0 2px 4px 0 rgba(0, 0, 0, 0.12), 0 0 2px 0 rgba(0, 0, 0, 0.08);
+  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
+  --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring-danger);
 
-  --color-background-checked: var(--pine-color-purple-500);
-  --color-background-checked-hover: var(--pine-color-purple-600);
-  --color-background-error: var(--pine-color-red-500);
-  --color-background-input-disabled: var(--pine-color-grey-200);
-  --color-background-input-default: var(--pine-color-grey-300);
-  --color-background-input-hover: var(--pine-color-grey-400);
-  --color-input-toggle-default: var(--pine-color-white);
-  --color-input-toggle-disabled: var(--pine-color-grey-100);
-  --color-message-text: var(--pine-color-grey-700);
-  --color-outline-focus: var(--pine-color-purple-300);
-  --color-outline-focus-error: var(--pine-color-red-200);
-  --color-text-default: var(--pine-color-grey-900);
-  --color-text-disabled: var(--pine-color-grey-500);
-  --color-text-error: var(--pine-color-red-500);
-
-  --font-weight-label-default: var(--pine-font-weight-body-medium);
-
-  --dimension-input-height: 20px;
-  --dimension-input-width: 36px;
-
-  --sizing-input-toggle-size: calc(var(--dimension-input-height) - (var(--spacing-input-toggle-offset) * 2));
-
-  --spacing-label-gap-size: var(--pine-spacing-150);
-  --spacing-input-toggle-offset: calc(var(--pine-spacing-050) / 2);
-  --spacing-message-block: calc(var(--pine-spacing-150) / 2);
-  --spacing-message-inline: calc(var(--dimension-input-width) + var(--spacing-label-gap-size));
-
+  // Need discussions
+  --sizing-input-toggle-size: calc(var(--pine-dimension-250) - (var(--pine-dimension-025) * 2));
+  --pine-dimension-025: 2px;
+  --spacing-message-inline: calc(var(--pine-dimension-450) + var(--pine-dimension-150));
   --number-transition-timing: 0.15s ease-out;
 
-
   align-items: flex-start;
-  color: var(--color-text-default);
+  color: var(--pine-color-text);
   display: inline-flex;
   flex-flow: row wrap;
-  margin-block-end: var(--pine-spacing-md);
   position: relative;
 }
 
 :host(.pds-switch--error) {
-  color: var(--color-text-error);
+  color: var(--pine-color-text-message-danger);
 
   input,
   input:checked,
   input:hover:not(:disabled):not(:checked) {
-    background-color: var(--color-background-error);
+    background-color: var(--pine-color-danger);
   }
 
   input:focus-visible:not(:disabled):not(:checked) {
@@ -64,24 +37,24 @@
 // switch container
 input {
   appearance: none;
-  background: var(--color-background-input-default);
+  background: var(--pine-color-neutral);
   border: 0;
-  border-radius: var(--border-radius-input);
+  border-radius: var(--pine-dimension-sm);
   cursor: pointer;
   display: inline-block;
-  height: var(--dimension-input-height);
+  height: var(--pine-dimension-250);
   margin: 0;
   padding: 0;
   position: relative;
   transition: var(--number-transition-timing);
   transition-property: background, border, color;
-  width: var(--dimension-input-width);
+  width: var(--pine-dimension-450);
 
   // switch toggle
   &::after {
-    background: var(--color-input-toggle-default);
-    border-radius: 50%;
-    box-shadow: var(--box-shadow-input-toggle);
+    background: var(--pine-color-secondary);
+    border-radius: var(--pine-border-radius-full);
+    box-shadow: var(--pine-box-shadow);
     content: "";
     display: block;
     height: var(--sizing-input-toggle-size);
@@ -98,8 +71,8 @@ label {
   cursor: pointer;
   display: inline-flex;
   flex-grow: 1;
-  font-weight: var(--font-weight-label-default);
-  margin-inline-start: var(--spacing-label-gap-size);
+  font-weight: var(--pine-font-weight-medium);
+  margin-inline-start: var(--pine-dimension-150);
 
   .pds-switch--error & {
     color: inherit;
@@ -108,33 +81,35 @@ label {
 
 // Help and error messages
 .pds-switch__message {
-  color: var(--color-message-text);
+  color: var(--pine-color-text-message);
   flex: 1 0 100%;
-  font-size: var(--pine-font-size-body-md);
-  margin-block-start: var(--spacing-message-block);
-  margin-inline-start: var(--spacing-message-inline);
+  font: var(--pine-typography-body-sm-medium);
+  margin-block-start: var(--pine-dimension-xs);
+
+  + .pds-switch__message {
+    margin-block-start: var(--pine-dimension-2xs);
+  }
 }
 
 .pds-switch__message--error {
   align-items: center;
   color: inherit;
   display: flex;
-  font-size: var(--pine-font-size-085);
-  gap: var(--pine-spacing-050);
+  gap: var(--pine-dimension-2xs);
 }
 
 // Disabled state
 input:disabled {
-  background-color: var(--color-background-input-disabled);
+  background-color: var(--pine-color-neutral-disabled);
   cursor: not-allowed;
 
   ~ label {
-    color: var(--color-text-disabled);
+    color: var(--pine-color-text-disabled);
     cursor: initial;
   }
 
   &:hover::after {
-    background-color: var(--color-input-toggle-disabled);
+    background-color: var(--pine-color-background-container-disabled);
   }
 
   .pds-switch__message {
@@ -144,7 +119,7 @@ input:disabled {
 
 // Hover state
 input:hover:not(:disabled) {
-  background-color: var(--color-background-input-hover);
+  background-color: var(--pine-color-neutral-hover);
 }
 
  // Focus state
@@ -162,10 +137,10 @@ input:checked::after {
 // switch container
 input:checked:not(:disabled) {
   background-color: currentColor;
-  color: var(--color-background-checked);
+  color: var(--pine-color-accent);
 
   &:hover {
     border-color: currentColor;
-    color: var(--color-background-checked-hover);
+    color: var(--pine-color-accent-hover);
   }
 }

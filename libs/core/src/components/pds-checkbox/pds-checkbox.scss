@@ -1,26 +1,6 @@
 :host {
-  --border-default: var(--pine-border-interactive-default);
-  --border-hover: var(--pine-border-interactive-hover);
-
-  --border-radius: var(--pine-border-radius-050);
-
-  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
-  --box-shadow-focus-invalid: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-red-200);
-
-  --color-background: var(--pine-color-white);
-  --color-background-disabled: var(--pine-color-grey-100);
-  --color-background-hover: var(--pine-color-grey-100);
-  --color-background-checked: var(--pine-color-purple-500);
-  --color-background-checked-hover: var(--pine-color-purple-600);
-  --color-border-disabled: var(--pine-color-grey-300);
-  --color-border-icon: var(--pine-color-white);
-  --color-disabled: var(--pine-color-grey-300);
-  --color-invalid: var(--pine-color-red-500);
-  --color-invalid-hover: var(--pine-color-red-600);
-  --color-text-disabled: var(--pine-color-grey-500);
-  --color-text-message: var(--pine-color-grey-700);
-
-  --sizing-input: var(--pine-font-size-116);
+  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
+  --box-shadow-focus-invalid: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring-danger);
 
   align-items: center;
   display: flex;
@@ -29,14 +9,14 @@
 
 :host(.is-invalid) {
   input {
-    border-color: var(--color-invalid);
+    border-color: var(--pine-color-border-danger);
 
     &:checked {
-      background: var(--color-invalid);
+      background: var( --pine-color-danger);
 
       &:hover {
-        background: var(--color-invalid-hover);
-        border-color: var(--color-invalid-hover);
+        background: var(--pine-color-danger-hover);
+        border-color: var(--pine-color-border-danger-hover);
       }
     }
 
@@ -49,22 +29,22 @@
 
   label,
   .pds-checkbox__message--error {
-    color: var(--color-invalid);
+    color: var(--pine-color-text-message-danger);
   }
 }
 
 :host(.is-indeterminate) {
   input {
-    background: var(--color-background-checked);
-    border-color: var(--color-background-checked);
+    background: var(--pine-color-accent);
+    border-color: var(--pine-color-accent);
 
     &:hover {
-      background: var(--color-background-checked-hover);
-      border-color: var(--color-background-checked-hover);
+      background: var(--pine-color-accent);
+      border-color: var(--pine-color-accent-hover);
     }
 
     &::after {
-      border: 1px solid var(--color-border-icon);
+      border: 1px solid var(--pine-color-secondary);
       border-bottom: 0;
       border-left: 0;
       border-top: 0;
@@ -82,30 +62,30 @@
 
 input {
   appearance: none;
-  background-color: var(--color-background);
-  border: var(--border-default);
-  border-radius: var(--border-radius);
-  height: var(--sizing-input);
+  background-color: var(--pine-color-secondary);
+  border: var(--pine-border);
+  border-radius: var(--pine-dimension-2xs);
+  height: var(--pine-dimension-sm);
   margin: 0;
   position: relative;
-  width: var(--sizing-input);
+  width: var(--pine-dimension-sm);
 
   &:hover {
-    background: var(--color-background-hover);
-    border: var(--border-hover);
+    background: var(--pine-color-secondary-hover);
+    border: var(--pine-border-hover);
   }
 
   &:checked {
-    background: var(--color-background-checked);
-    border-color: var(--color-background-checked);
+    background: var(--pine-color-accent);
+    border-color: var(--pine-color-accent);
 
     &:hover {
-      background: var(--color-background-checked-hover);
-      border-color: var(--color-background-checked-hover);
+      background: var(--pine-color-accent-hover);
+      border-color: var(--pine-color-accent-hover);
     }
 
     &::after {
-      border: 1px solid var(--color-border-icon);
+      border: 1px solid var(--pine-color-secondary);
       border-left: 0;
       border-top: 0;
       content: "";
@@ -120,26 +100,26 @@ input {
   }
 
   &:disabled {
-    background: var(--color-background-disabled);
-    border-color: var(--color-disabled);
+    background: var(--pine-color-background-container-disabled);
+    border-color: var(--pine-color-border-disabled);
     cursor: not-allowed;
 
     &:checked {
-      background: var(--color-disabled);
-      border-color: var(--color-disabled);
+      background: var(--pine-color-background-container-disabled);
+      border-color: var(--pine-color-border-disabled);
 
       &::after {
-        border-color: var(--color-border-disabled);
+        border-color: var(--pine-color-grey-300);
       }
     }
 
     + label {
-      color: var(--color-text-disabled);
+      color: var(--pine-color-text-disabled);
       cursor: not-allowed;
     }
 
     ~ .pds-checkbox__message {
-      color: var(--color-text-disabled);
+      color: var(--pine-color-text-disabled);
     }
   }
 
@@ -169,7 +149,7 @@ label {
 }
 
 .pds-checkbox__message {
-  color: var(--color-text-message);
+  color: var(--pine-color-text-message);
   margin-block-start: 6px;
   margin-inline-start: 26px;
   width: 100%;

@@ -1,6 +1,7 @@
 import { Component, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
 import { messageId } from '../../utils/form';
 import { PdsLabel } from '../_internal/pds-label/pds-label';
+import { danger, enlarge } from '@pine-ds/icons/icons';
 
 @Component({
   tag: 'pds-select',
@@ -170,7 +171,7 @@ export class PdsSelect {
   private getErrorMessage() {
     return this.errorMessage && (
       <p class="pds-select__error-message" id={messageId(this.componentId, 'error')} aria-live="assertive">
-        <pds-icon name="danger" size="small" />
+        <pds-icon icon={danger} size="small"></pds-icon>
         {this.errorMessage}
       </p>
     );
@@ -216,7 +217,7 @@ export class PdsSelect {
             <slot onSlotchange={this.handleSlotChange}></slot>
           </div>
           {this.renderMessages()}
-          {!this.multiple && <pds-icon class="pds-select__select-icon" name="enlarge" />}
+          {!this.multiple && <pds-icon class="pds-select__select-icon" icon={enlarge} />}
         </div>
       </Host>
     );

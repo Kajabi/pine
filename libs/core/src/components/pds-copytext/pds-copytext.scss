@@ -1,56 +1,39 @@
 :host(.pds-copytext) {
 
-  --border-interactive-default: var(--pine-border-width-thin) solid var(--pine-color-grey-300);
-  --border-interactive-hover: var(--pine-border-width-thin) solid var(--pine-color-grey-400);
 
-  --border-radius-default: var(--pine-border-radius-circle);
+  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
 
-  --border-width-default: var(--pine-border-width-none);
-
-  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
-
-  --color-background-default: var(--pine-color-white);
-  --color-border-interactive-hover: var(--pine-color-grey-400);
-  --color-text-hover: var(--pine-color-grey-900);
   // Update custom prop usage in Button before changing
   --copytext-color-background-hover: var(--pine-color-grey-200);
 
-  --font-size-default: var(--pine-font-size-100);
-  --font-weight-default: var(--pine-font-weight-body-medium);
-
-  --spacing-bordered-margin-inline-end: var(--pine-spacing-200);
-  --spacing-bordered-padding-block: var(--pine-spacing-100);
-  --spacing-bordered-padding-inline: var(--pine-spacing-200);
-  --spacing-margin-inline-end: var(--pine-spacing-100);
-  --spacing-padding-block: var(--pine-spacing-050);
-  --spacing-padding-inline: var(--pine-spacing-100);
-  --spacing-padding-none: var(--pine-spacing-0);
-
-  --typography-default: var(--pine-font-weight-body-medium) var(--pine-font-size-body-md)/var(--pine-line-height-body) var(--pine-font-family-heading);
 
   pds-button {
     align-items: center;
-    background: var(--color-background-default);
-    border: var(--border-width-default);
-    border-radius: var(--border-radius-default);
+    background: var(--pine-color-secondary);
+    border-radius: var(--pine-border-radius-full);
+    border-width: var(--pine-dimension-none);
     display: inline-flex;
-    font: var(--typography-default);
+    font-family: var(--pine-font-family-heading);
+    font-size: var(--pine-font-size-body-md);
+    font-weight: var(--pine-font-weight-body-medium);
+    letter-spacing: var(--pine-letter-spacing);
+    line-height: var(--pine-line-height-body);
     max-width: 100%;
-    padding: var(--spacing-padding-block) var(--spacing-padding-inline);
+    padding: var(--pine-dimension-2xs) var(--pine-dimension-xs);
 
     &::part(button) {
-      padding-inline-end: calc(var(--spacing-padding-inline) / 2);
+      padding-inline-end: calc(var(--pine-dimension-xs) / 2);
     }
 
     &::part(button):hover {
       // Update custom prop usage in Button before changing
       background-color: var(--copytext-color-background-hover);
-      color: var(--color-text-hover);
+      color: var(--pine-color-text-secondary-hover);
     }
 
     span {
-      font-weight: var(--font-weight-default);
-      margin-inline-end: var(--spacing-margin-inline-end);
+      font-weight: var(--pine-font-weight-medium);
+      margin-inline-end: var(--pine-dimension-xs);
       white-space: nowrap;
     }
 
@@ -62,11 +45,11 @@
   // bordered
 
   &:host(.pds-copytext--bordered) {
-    border: var(--border-width-default);
-    padding: var(--spacing-padding-none);
+    border-width: var(--pine-dimension-none);
+    padding: var(--pine-dimension-none);
 
     pds-button {
-      padding: var(--spacing-padding-none);
+      padding: var(--pine-dimension-none);
 
       &:hover {
         background: none;
@@ -74,16 +57,16 @@
     }
 
     span {
-      border: var(--border-interactive-default);
-      border-radius: var(--border-radius-default);
-      margin-inline-end: var(--spacing-bordered-margin-inline-end);
-      padding-block: var(--spacing-bordered-padding-block);
-      padding-inline: var(--spacing-bordered-padding-inline);
+      border: var(--pine-border);
+      border-radius: var(--pine-border-radius-full);
+      margin-inline-end: var(--pine-dimension-sm);
+      padding-block: var(--pine-dimension-xs);
+      padding-inline: var(--pine-dimension-sm);
     }
 
     :hover {
       span {
-        border: var(--border-interactive-hover);
+        border: var(--pine-border-hover);
       }
     }
   }

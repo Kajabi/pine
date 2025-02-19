@@ -1,0 +1,10 @@
+{
+  "color": {
+    "brand": {
+      "@": {
+        "value": "{color.mercury.500}",
+        "type": "color"
+      }
+    }
+  }
+}

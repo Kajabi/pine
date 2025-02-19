@@ -3,38 +3,25 @@
 
   --box-shadow-default: 3px 3px 6px -2px rgba(0, 0, 0, 0.1);
 
-  --color-background-fixed: var(--pine-color-white);
-  --color-text-default: var(--pine-color-grey-800);
-  --color-text-active: var(--pine-color-grey-950);
-
-  --dimension-fixed-cell-position: 0;
-
-  --letter-spacing-default: var(--pine-letter-spacing-body-md);
-
-  --padding-cell-default: calc(var(--pine-spacing-300) / 2);
-
-  --spacing-margin-inline-start-arrow: var(--pine-spacing-050);
-  --spacing-padding-arrow: calc(var(--pine-spacing-050) / 2);
-  --spacing-padding-block-compact: var(--pine-spacing-050);
-
-  --typography-default: var(--pine-typography-body-md-medium);
-
   border-block-end: var(--border-head-cell-default);
-  color: var(--color-text-default);
+  color: var(--pine-color-text);
   display: table-cell;
-  font: var(--typography-default);
-  padding: var(--padding-cell-default);
+  font-family: var(--pine-font-family-body);
+  font-size: var(--pine-font-size);
+  font-weight: var(--pine-font-weight-regular);
+  line-height: var(--pine-line-height-body);
+  padding: 12px;
   text-align: start;
   vertical-align: inherit;
 }
 
 :host(.is-compact) {
-  padding-block: var(--spacing-padding-block-compact)
+  padding-block: var(--pine-dimension-2xs)
 }
 
 :host(.is-fixed) {
-  background: var(--color-background-fixed);
-  left: var(--dimension-fixed-cell-position);
+  background: var(--pine-color-background-container);
+  left: var(--pine-dimension-none);
   position: sticky;
   z-index: 1;
 }
@@ -48,13 +35,13 @@
   cursor: pointer;
 
   pds-icon {
-    margin-inline-start: var(--spacing-margin-inline-start-arrow);
-    padding-block-start: var(--spacing-padding-arrow);
+    margin-inline-start: var(--pine-dimension-2xs);
+    padding-block-start: 2px;
     position: absolute;
   }
 }
 
 :host(.is-sortable:hover),
 :host(.is-active) {
-  color: var(--color-text-active);
+  color: var(--pine-color-text-active);
 }

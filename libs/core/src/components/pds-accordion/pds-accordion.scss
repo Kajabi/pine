@@ -3,29 +3,14 @@
 }
 
 details {
-  --border-radius-default: var(--pine-border-radius-default);
 
-  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
-
-  --color-background-default: var(--pine-color-white);
-  --color-background-hover: var(--pine-color-grey-150);
-  --color-text-default: var(--pine-color-text-interactive-default);
-  --color-text-active: var(--pine-color-grey-950);
-  --color-text-hover: var(--pine-color-grey-800);
-
-  --font-weight-active: var(--pine-font-weight-semi-bold);
-
+  // TODO: Needs discussion
+  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
+  --color-text-hover: var(--pine-color-text-secondary);
   --number-animation-transform-timing: 200ms;
 
-  --spacing-details-padding-inline: var(--pine-spacing-150);
-  --spacing-details-padding-block-end: calc(var(--pine-spacing-200) + 2); //18 + 2 = 18px
-  --spacing-summary-padding-block: calc(var(--pine-spacing-150) / 2); //12 / 2 = 6px
-  --spacing-summary-padding-inline-start: var(--pine-spacing-100);
-  --spacing-summary-padding-inline-end: var(--pine-spacing-050);
 
-  --typography-default: var(--pine-typography-body-md-medium);
-
-  border-radius: var(--border-radius-default);
+  border-radius: var(--pine-dimension-xs);
 
   pds-icon {
     transform: scaleY(1);
@@ -34,11 +19,11 @@ details {
 
 /* stylelint-disable-next-line */
 details[open] {
-  background-color: var(--color-background-default);
+  background-color: var(--pine-color-background-container);
 
   summary {
-    color: var(--color-text-active);
-    font-weight: var(--font-weight-active);
+    color: var(--pine-color-text-active);
+    font-weight: var(--pine-font-weight-semi-bold);
 
     pds-icon {
       transform: scaleY(-1);
@@ -47,13 +32,17 @@ details[open] {
 }
 
 summary {
-  background-color: var(--color-background-default);
-  border-radius: var(--border-radius-default);
-  color: var(--color-text-default);
-  font: var(--typography-default);
-  padding-block: var(--spacing-summary-padding-block);
-  padding-inline-end: var(--spacing-summary-padding-inline-end);
-  padding-inline-start: var(--spacing-summary-padding-inline-start);
+  background-color: var(--pine-color-background-container);
+  border-radius: var(--pine-dimension-xs);
+  color: var(--pine-color-text);
+  font-family: var(--pine-font-family-body);
+  font-size: var(--pine-font-size-body-md);
+  font-weight: var(--pine-font-weight-medium);
+  letter-spacing: var(--pine-letter-spacing);
+  line-height: var(--pine-line-height-body);
+  padding-block: calc(var(--pine-dimension-2xs) * 1.5);
+  padding-inline-end: var(var(--pine-dimension-2xs));
+  padding-inline-start: var(var(--pine-dimension-xs));
 
   // Removes marker on Firefox/Chrome
   /* stylelint-disable-next-line */
@@ -66,7 +55,7 @@ summary {
   }
 
   &:hover {
-    background: var(--color-background-hover);
+    background: var(--pine-color-background-container-hover);
     color: var(--color-text-hover);
     cursor: pointer;
   }
@@ -84,6 +73,6 @@ summary {
 }
 
 .pds-accordion__body {
-  padding-block-end: var(--spacing-details-padding-block-end);
-  padding-inline: var(--spacing-details-padding-inline);
+  padding-block-end: calc(var(--pine-dimension-sm) + 2);
+  padding-inline: calc(var(--pine-dimension-2xs) * 1.5);
 }
