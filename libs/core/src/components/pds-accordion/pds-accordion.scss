@@ -41,8 +41,8 @@ summary {
   letter-spacing: var(--pine-letter-spacing);
   line-height: var(--pine-line-height-body);
   padding-block: calc(var(--pine-dimension-2xs) * 1.5);
-  padding-inline-end: var(var(--pine-dimension-2xs));
-  padding-inline-start: var(var(--pine-dimension-xs));
+  padding-inline-end: var(--pine-dimension-2xs);
+  padding-inline-start: var(--pine-dimension-xs);
 
   // Removes marker on Firefox/Chrome
   /* stylelint-disable-next-line */
