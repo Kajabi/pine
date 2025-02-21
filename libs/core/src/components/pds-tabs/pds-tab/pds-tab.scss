@@ -181,7 +181,7 @@ pds-tab {
   .pds-tab {
     background-color: var(--color-background-tab);
     border: var(--pine-border-width-thin) solid transparent;
-    border-radius: 8px;
+    border-radius: var(--pine-dimension-100);
     color: var(--color-text-default);
     height: 34px;
 
