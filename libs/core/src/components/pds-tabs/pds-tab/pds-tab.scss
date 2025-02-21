@@ -4,7 +4,8 @@ pds-tab {
 
   --outline: 4px solid var(--pine-color-focus-ring);
 
-  display: inline-block;
+  align-items: center;
+  display: inline-flex;
   position: relative;
 }
 
