@@ -1,15 +1,6 @@
 import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
 
-<pds-tabs active-tab-name="Dollop" variant="pill" component-id="primary" tablist-label="Foo">
-  <pds-tab name="Sturdy"><pds-icon name="arrow-left"></pds-icon><span class="visually-hidden">Previous</span></pds-tab>
-  <pds-tab name="Dollop"><pds-icon name="arrow-up"></pds-icon><span class="visually-hidden">Up</span></pds-tab>
-  <pds-tab name="Waffle"><pds-icon name="arrow-right"></pds-icon><span class="visually-hidden">Next</span></pds-tab>
-  <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
-  <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
-  <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
-</pds-tabs>
-
 # Tabs
 
 The Tabs component is used to separate and display different panels of related content activated by tab buttons.
@@ -73,6 +64,42 @@ The default style of Tabs.
 `
 }}>
   <pds-tabs active-tab-name="Dollop" variant="primary" component-id="primary" tablist-label="Foo">
+    <pds-tab name="Sturdy">Sturdy</pds-tab>
+    <pds-tab name="Dollop">Dollop</pds-tab>
+    <pds-tab name="Waffle">Waffle</pds-tab>
+    <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
+    <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
+    <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+  </pds-tabs>
+</DocCanvas>
+
+### Pill
+
+The Pill variant is to better display a list of items.
+
+<DocCanvas client:only mdxSource={{
+  react: `
+<PdsTabs activeTabName="Dollop" variant="pill" componentId="pill" tablistLabel="Foo">
+  <PdsTab name="Sturdy">Sturdy</PdsTab>
+  <PdsTab name="Dollop">Dollop</PdsTab>
+  <PdsTab name="Waffle">Waffle</PdsTab>
+  <PdsTabpanel name="Sturdy">Content Sturdy</PdsTabpanel>
+  <PdsTabpanel name="Dollop">Content Dollop</PdsTabpanel>
+  <PdsTabpanel name="Waffle">Content Waffle</PdsTabpanel>
+</PdsTabs>
+`,
+  webComponent: `
+<pds-tabs active-tab-name="Dollop" variant="pill" component-id="pill" tablist-label="Foo">
+  <pds-tab name="Sturdy">Sturdy</pds-tab>
+  <pds-tab name="Dollop">Dollop</pds-tab>
+  <pds-tab name="Waffle">Waffle</pds-tab>
+  <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
+  <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
+  <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+</pds-tabs>
+`
+}}>
+  <pds-tabs active-tab-name="Dollop" variant="pill" component-id="pill" tablist-label="Foo">
     <pds-tab name="Sturdy">Sturdy</pds-tab>
     <pds-tab name="Dollop">Dollop</pds-tab>
     <pds-tab name="Waffle">Waffle</pds-tab>
