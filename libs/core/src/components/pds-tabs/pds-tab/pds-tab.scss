@@ -4,7 +4,8 @@ pds-tab {
 
   --outline: 4px solid var(--pine-color-focus-ring);
 
-  display: inline-block;
+  align-items: center;
+  display: inline-flex;
   position: relative;
 }
 
@@ -170,6 +171,50 @@ pds-tab {
 
     &::after {
       content: unset;
+    }
+  }
+}
+
+.pds-tabs--pill {
+  --color-background-tab: transparent;
+
+  .pds-tab {
+    background-color: var(--color-background-tab);
+    border: var(--pine-border-width-thin) solid transparent;
+    border-radius: var(--pine-dimension-xs);
+    color: var(--color-text-default);
+    height: 34px;
+
+    .pds-tab__content {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      min-width: 90px;
+      padding-block-end: 0;
+    }
+
+    &.is-active,
+    &[aria-selected='true'] {
+      --color-background-tab: var(--pine-color-white);
+      border-color: var(--pine-color-border);
+      box-shadow: var(--pine-box-shadow-100);
+      z-index: 1;
+
+      &:focus-visible {
+        --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
+        border-color: var(--color-border-focus);
+        // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
+        box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
+        outline: none;
+      }
+
+      /* stylelint-disable max-nesting-depth */
+      .pds-tab__content {
+        &::after {
+          opacity: 0;
+        }
+      }
+      /* stylelint-enable max-nesting-depth */
     }
   }
 }

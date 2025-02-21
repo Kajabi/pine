@@ -26,3 +26,12 @@
 :host(.pds-tabs--filter) .pds-tabs__tablist {
   gap: var(--pine-dimension-sm);
 }
+
+:host(.pds-tabs--pill) .pds-tabs__tablist {
+  background-color: var(--pine-color-grey-100);
+  border: var(--pine-border-width-thin) solid var(--pine-color-grey-200);
+  border-radius: var(--pine-dimension-100);
+  display: inline-flex;
+  gap: 0;
+  height: var(--pine-dimension-450);
+}
