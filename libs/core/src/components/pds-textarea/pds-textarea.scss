@@ -20,7 +20,6 @@
 
 label {
   display: block;
-  font-weight: var(--pine-font-weight-medium);
   margin-block-end: var(--pine-dimension-xs);
 }
 
@@ -28,6 +27,8 @@ label {
   background-color: var(--pine-color-background-container);
   border: var(--pine-border);
   border-radius: calc(var(--pine-dimension-xs) * 1.25);
+  font: var(--pine-typography-body);
+  letter-spacing: var(--pine-letter-spacing);
   padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
 
   &:hover:not(:disabled, .is-invalid) {

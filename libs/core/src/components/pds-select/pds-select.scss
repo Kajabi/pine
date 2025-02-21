@@ -22,9 +22,7 @@
 }
 
 label {
-  font: var(--pine-typography-body-medium);
   grid-area: label;
-  letter-spacing: var(--pine-letter-spacing);
   margin-block-end: var(--pine-dimension-2xs);
 }
 
@@ -58,7 +56,7 @@ select {
   }
 
   &:has(~ .pds-select__message .pds-select__error-message) {
-    background-color: var(--pine-color-red-050);
+    background-color: var(--pine-select-color-background-danger);
     border-color: var(--pine-color-border-danger);
 
     &:focus-visible {
@@ -70,7 +68,7 @@ select {
 
 :host(.is-invalid) {
   select {
-    background-color: var(--pine-color-red-050);
+    background-color: var(--pine-select-color-background-danger);
     border-color: var(--pine-color-border-danger);
 
     &:focus-visible {

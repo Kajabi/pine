@@ -71,7 +71,6 @@ label {
   cursor: pointer;
   display: inline-flex;
   flex-grow: 1;
-  font-weight: var(--pine-font-weight-medium);
   margin-inline-start: var(--pine-dimension-150);
 
   .pds-switch--error & {
@@ -104,7 +103,6 @@ input:disabled {
   cursor: not-allowed;
 
   ~ label {
-    color: var(--pine-color-text-disabled);
     cursor: initial;
   }
 
