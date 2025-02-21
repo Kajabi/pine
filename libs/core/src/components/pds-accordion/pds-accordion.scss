@@ -34,7 +34,7 @@ details[open] {
 summary {
   background-color: var(--pine-color-background-container);
   border-radius: var(--pine-dimension-xs);
-  color: var(--pine-color-text);
+  color: var(--pine-color-text-readonly);
   font-family: var(--pine-font-family-body);
   font-size: var(--pine-font-size-body-md);
   font-weight: var(--pine-font-weight-medium);
@@ -56,7 +56,7 @@ summary {
 
   &:hover {
     background: var(--pine-color-background-container-hover);
-    color: var(--color-text-hover);
+    color: var(--pine-color-text);
     cursor: pointer;
   }
 
