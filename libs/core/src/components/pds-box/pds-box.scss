@@ -12,7 +12,6 @@ pds-box {
   background-color: var(--color-background-box);
   box-sizing: border-box;
   display: inline-flex;
-  min-height: var(--pine-dimension-none);
   min-width: var(--pine-dimension-none);
 
   // The immediate child of the row will fit the width of the row
