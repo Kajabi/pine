@@ -1,3 +1,20 @@
+## 2.16.1 (2025-02-21)
+
+### Bug Fixes 🐛
+
+- remove box min height ([#373](https://github.com/Kajabi/pine/pull/373))
+- add pill variant ([#368](https://github.com/Kajabi/pine/pull/368))
+
+### Styles 🎨
+
+- add pointer cursor ([#363](https://github.com/Kajabi/pine/pull/363))
+- **accordion:** fix misspelling for summary padding ([#372](https://github.com/Kajabi/pine/pull/372))
+
+### ❤️  Thank You
+
+- Julian Skinner @ju-Skinner
+- Quinton Jason
+
 ## 2.16.0 (2025-02-19)
 
 ### Features 🚀
