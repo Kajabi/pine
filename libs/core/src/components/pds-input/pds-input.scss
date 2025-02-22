@@ -18,17 +18,15 @@
 }
 
 label {
-  color: var(--pine-color-text-label);
-  font-weight: var(--pine-font-weight-medium);
+  margin-block-end: var(--pine-dimension-xs);
 }
 
 input {
   border: 1px solid var(--pine-color-border);
   border-radius: 10px;
   color: var(--pine-color-text-active);
-  font-size: var(--pine-font-size);
-  font-weight: var(--pine-font-weight-regular);
-  line-height: var(--pine-line-height-body);
+  font: var(--pine-typography-body);
+  letter-spacing: var(--pine-letter-spacing);
   padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
 
   &:disabled {

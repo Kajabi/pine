@@ -5,7 +5,7 @@ import { danger, enlarge } from '@pine-ds/icons/icons';
 
 @Component({
   tag: 'pds-select',
-  styleUrl: 'pds-select.scss',
+  styleUrls: ['pds-select.tokens.scss', '../../global/styles/utils/label.scss', 'pds-select.scss'],
   shadow: true,
 })
 export class PdsSelect {

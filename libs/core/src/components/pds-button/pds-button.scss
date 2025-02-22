@@ -17,10 +17,8 @@
   color: var(--color-text-default); // Set in the variant classes below
   cursor: pointer;
   display: flex;
-  font-family: var(--pine-font-family-greet);
-  font-size: var(--pine-font-size-body-md);
-  font-weight: var(--pine-font-weight-medium);
-  line-height: var(--pine-line-height-body);
+  font: var(--pine-typography-body-brand-label);
+  letter-spacing: var(--pine-letter-spacing);
   min-height: 40px;
   padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
 

@@ -114,7 +114,6 @@ input {
     }
 
     + label {
-      color: var(--pine-color-text-disabled);
       cursor: not-allowed;
     }
 
@@ -131,7 +130,6 @@ input {
 }
 
 label {
-  font-weight: var(--pine-font-weight-body-medium);
   margin-inline-start: 10px;
 }
 

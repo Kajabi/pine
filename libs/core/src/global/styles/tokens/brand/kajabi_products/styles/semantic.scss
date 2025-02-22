@@ -77,8 +77,8 @@
   --pine-color-warning-disabled: #fffbeb;
   --pine-color-warning-hover: #db7204;
   --pine-color-brand: #ff3e14;
-  --pine-font-family-heading: '"Greet Standard"', "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif;
-  --pine-font-family-body: "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif;
+  --pine-font-family-heading: 'Greet Standard', 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
+  --pine-font-family-body: 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
   --pine-font-size: 14px;
   --pine-font-size-body-2xs: 8px;
   --pine-font-size-body-xs: 10px;
@@ -125,21 +125,21 @@
   --pine-border-hover: 1px solid #bbbab9;
   --pine-border-none: 0px solid #d2d1d1;
   --pine-border-radius-full: 9999px; /* this is to be used for rounded corners without specified dimensions */
-  --pine-typography-heading-1: 600 28px/1.25 '"Greet Standard"', "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif;
-  --pine-typography-heading-2: 600 26px/1.25 '"Greet Standard"', "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif;
-  --pine-typography-heading-3: 600 22px/1.25 '"Greet Standard"', "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif;
-  --pine-typography-heading-4: 600 20px/1.25 '"Greet Standard"', "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif;
-  --pine-typography-heading-5: 500 18px/1.25 '"Greet Standard"', "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif;
-  --pine-typography-heading-6: 500 16px/1.25 '"Greet Standard"', "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif;
-  --pine-typography-body: 400 14px/1.425 "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif;
-  --pine-typography-body-medium: 500 14px/1.425 "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif;
-  --pine-typography-body-semi-bold: 600 14px/1.425 "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif;
-  --pine-typography-body-bold: 700 14px/1.425 "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif;
-  --pine-typography-body-brand-label: 500 14px/1.425 '"Greet Standard"', "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif; /* brand-label */
-  --pine-typography-body-brand-text: 500 14px/1.425 '"FAIRE Sprig"'; /* brand-text */
-  --pine-typography-body-sm: 400 12px/1.425 "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif;
-  --pine-typography-body-sm-medium: 500 12px/1.425 "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif;
-  --pine-typography-body-sm-bold: 700 12px/1.425 "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif;
-  --pine-typography-body-sm-brand-label: 500 12px/1.425 '"Greet Standard"', "Inter", -apple-system, system-ui, "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "Ubuntu", sans-serif; /* brand-label */
-  --pine-typography-body-sm-brand-text: 500 12px/1.425 '"FAIRE Sprig"'; /* brand-text */
+  --pine-typography-heading-1: 600 28px/1.25 'Greet Standard', 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
+  --pine-typography-heading-2: 600 26px/1.25 'Greet Standard', 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
+  --pine-typography-heading-3: 600 22px/1.25 'Greet Standard', 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
+  --pine-typography-heading-4: 600 20px/1.25 'Greet Standard', 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
+  --pine-typography-heading-5: 500 18px/1.25 'Greet Standard', 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
+  --pine-typography-heading-6: 500 16px/1.25 'Greet Standard', 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
+  --pine-typography-body: 400 14px/1.425 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
+  --pine-typography-body-medium: 500 14px/1.425 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
+  --pine-typography-body-semi-bold: 600 14px/1.425 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
+  --pine-typography-body-bold: 700 14px/1.425 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
+  --pine-typography-body-brand-label: 500 14px/1.425 'Greet Standard', 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif; /* brand-label */
+  --pine-typography-body-brand-text: 500 14px/1.425 'FAIRE Sprig'; /* brand-text */
+  --pine-typography-body-sm: 400 12px/1.425 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
+  --pine-typography-body-sm-medium: 500 12px/1.425 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
+  --pine-typography-body-sm-bold: 700 12px/1.425 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
+  --pine-typography-body-sm-brand-label: 500 12px/1.425 'Greet Standard', 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif; /* brand-label */
+  --pine-typography-body-sm-brand-text: 500 12px/1.425 'FAIRE Sprig'; /* brand-text */
 }
