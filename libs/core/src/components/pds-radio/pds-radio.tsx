@@ -5,7 +5,7 @@ import { danger } from '@pine-ds/icons/icons';
 
 @Component({
   tag: 'pds-radio',
-  styleUrls: ['pds-radio.scss'],
+  styleUrls: ['../../global/styles/utils/label.scss', 'pds-radio.scss'],
   scoped: true,
 })
 export class PdsRadio {

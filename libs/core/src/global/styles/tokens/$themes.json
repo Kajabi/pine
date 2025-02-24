@@ -24,7 +24,7 @@
       "components/chip": "enabled",
       "components/input": "enabled",
       "brand/kajabi_products": "enabled",
-      "components/select": "disabled"
+      "components/select": "enabled"
     },
     "$figmaCollectionId": "VariableCollectionId:175:2717",
     "$figmaModeId": "175:46",
@@ -329,7 +329,7 @@
       "components/input": "enabled",
       "brand/kajabi_products": "enabled",
       "brand/kajabi_products/light": "source",
-      "components/select": "disabled"
+      "components/select": "enabled"
     },
     "$figmaCollectionId": "VariableCollectionId:5636:12047",
     "$figmaModeId": "5636:2",
@@ -736,7 +736,7 @@
       "components/input": "enabled",
       "brand/kajabi_products": "enabled",
       "brand/kajabi_products/dark": "source",
-      "components/select": "disabled"
+      "components/select": "enabled"
     },
     "$figmaCollectionId": "VariableCollectionId:5636:12047",
     "$figmaModeId": "5636:3",
