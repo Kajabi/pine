@@ -122,7 +122,7 @@ export class PdsInput {
 
   /**
    * Determines the type of control that will be displayed
-   * `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`
+   * `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`, `'url'`
    * @defaultValue "text"
    */
   @Prop() type = 'text';
@@ -239,6 +239,16 @@ export class PdsInput {
     this.debounceChanged();
   }
 
+  private inputClassNames() {
+    const classNames = ['pds-input__field'];
+
+    if (this.invalid && this.invalid === true) {
+      classNames.push('is-invalid');
+    }
+
+    return classNames.join('  ');
+  }
+
   render() {
     return (
       <Host
@@ -247,7 +257,8 @@ export class PdsInput {
       >
         <div class="pds-input">
           <label htmlFor={this.componentId}>{this.label}</label>
-          <input class="pds-input__field"
+          <input
+            class={this.inputClassNames()}
             ref={(input) => this.nativeInput = input}
             aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
             aria-invalid={this.invalid ? "true" : undefined}
