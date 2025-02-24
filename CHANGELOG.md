@@ -1,3 +1,20 @@
+## 2.16.2 (2025-02-24)
+
+### Bug Fixes 🐛
+
+- **switch:** add margin inline start value ([#376](https://github.com/Kajabi/pine/pull/376))
+
+### Styles 🎨
+
+- adds proper font styles to form elements ([#375](https://github.com/Kajabi/pine/pull/375))
+- **accordion:** adjust summary colors ([#374](https://github.com/Kajabi/pine/pull/374))
+
+### ❤️  Thank You
+
+- Ashley E
+- Phillip Lovelace
+- Quinton Jason
+
 ## 2.16.1 (2025-02-21)
 
 ### Bug Fixes 🐛
