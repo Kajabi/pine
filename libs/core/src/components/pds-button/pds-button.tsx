@@ -29,6 +29,12 @@ export class PdsButton {
   @Prop() disabled? = false;
 
   /**
+   * Determines if the button should take up the full width of its container.
+   * @defaultValue false
+   */
+  @Prop() fullWidth? = false;
+
+  /**
    * Displays an icon before the text when
    * the icon string matches an icon name.
    * @defaultValue null
@@ -84,6 +90,10 @@ export class PdsButton {
 
     if (this.variant) {
       classNames.push('pds-button--' + this.variant);
+    }
+
+    if (this.fullWidth) {
+      classNames.push('pds-button--full-width');
     }
 
     return classNames.join('  ');
