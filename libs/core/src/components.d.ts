@@ -203,6 +203,11 @@ export namespace Components {
          */
         "disabled"?: boolean;
         /**
+          * Determines if the button should take up the full width of its container.
+          * @defaultValue false
+         */
+        "fullWidth"?: boolean;
+        /**
           * Displays an icon before the text when the icon string matches an icon name.
           * @defaultValue null
          */
@@ -1685,6 +1690,11 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "disabled"?: boolean;
+        /**
+          * Determines if the button should take up the full width of its container.
+          * @defaultValue false
+         */
+        "fullWidth"?: boolean;
         /**
           * Displays an icon before the text when the icon string matches an icon name.
           * @defaultValue null

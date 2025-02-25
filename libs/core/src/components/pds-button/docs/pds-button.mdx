@@ -143,6 +143,22 @@ Destructive button variant, intended to be used with destructive actions, such a
   <pds-button variant="destructive" icon="trash">Icon</pds-button>
 </DocCanvas>
 
+### Full Width
+
+Full width buttons are intended to be used when the button needs to take up the full width of its container.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+    <PdsButton variant="primary" fullWidth="true">Full Width</PdsButton>
+    `,
+    webComponent: `
+    <pds-button variant="primary" full-width="true">Full Width</pds-button>
+    `
+}}>
+  <pds-button variant="primary" full-width="true">Full Width</pds-button>
+</DocCanvas>
+
 ## Type
 
 The type prop allows a `pds-button` to set a [button type attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type).
