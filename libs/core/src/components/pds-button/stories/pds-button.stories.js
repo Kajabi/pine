@@ -21,6 +21,7 @@ const BaseTemplate = (args) => html`
     disabled=${args.disabled}
     full-width=${args.fullWidth}
     icon=${args.icon}
+    loading=${args.loading}
     name=${args.name}
     type=${args.type}
     value=${args.value}
@@ -32,6 +33,7 @@ export const Accent = BaseTemplate.bind();
 Accent.args = {
   disabled: false,
   fullWidth: false,
+  loading: false,
   slot: 'Accent',
   type: 'button',
   variant: 'accent',
@@ -41,6 +43,7 @@ export const Destructive = BaseTemplate.bind({});
 Destructive.args = {
   disabled: false,
   fullWidth: false,
+  loading: false,
   slot: 'Destructive',
   type: 'button',
   variant: 'destructive',
@@ -50,6 +53,7 @@ export const Disclosure = BaseTemplate.bind({});
 Disclosure.args = {
   disabled: false,
   fullWidth: false,
+  loading: false,
   slot: 'Disclosure',
   type: 'button',
   variant: 'disclosure'
@@ -64,6 +68,7 @@ export const FullWidth = BaseTemplate.bind({});
 FullWidth.args = {
   disabled: false,
   fullWidth: true,
+  loading: false,
   slot: 'Full Width',
   type: 'button',
   variant: 'primary'
@@ -73,6 +78,7 @@ export const Primary = BaseTemplate.bind({});
 Primary.args = {
   disabled: false,
   fullWidth: false,
+  loading: false,
   slot: 'Primary',
   type: 'button',
   variant: 'primary'
@@ -82,7 +88,18 @@ export const Secondary = BaseTemplate.bind({});
 Secondary.args = {
   disabled: false,
   fullWidth: false,
+  loading: false,
   slot: 'Secondary',
-  variant: 'secondary',
   type: 'button',
+  variant: 'secondary',
+}
+
+export const Loading = BaseTemplate.bind({});
+Loading.args = {
+  disabled: false,
+  fullWidth: false,
+  loading: true,
+  slot: 'Loading',
+  type: 'button',
+  variant: 'primary',
 }
