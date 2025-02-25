@@ -66,6 +66,22 @@ describe('pds-button', () => {
     `);
   });
 
+  it('renders full width button', async () => {
+    const {root} = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button full-width="true"></pds-button>`,
+    });
+    expect(root).toEqualHtml(`
+      <pds-button full-width="true" variant="primary">
+        <mock:shadow-root>
+          <button class="pds-button pds-button--primary pds-button--full-width" part="button" type="button">
+            <slot></slot>
+          </button>
+        </mock:shadow-root>
+      </pds-button>
+    `);
+  });
+
   it('renders with id when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsButton],
