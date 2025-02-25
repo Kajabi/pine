@@ -22,6 +22,19 @@
 | `"label"` | Default slot for Loader label text. |
 
 
+## Dependencies
+
+### Used by
+
+ - [pds-button](../pds-button)
+
+### Graph
+```mermaid
+graph TD;
+  pds-button --> pds-loader
+  style pds-loader fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 

@@ -159,6 +159,22 @@ Full width buttons are intended to be used when the button needs to take up the 
   <pds-button variant="primary" full-width="true">Full Width</pds-button>
 </DocCanvas>
 
+## Loading
+
+The loading prop allows a `pds-button` to display a loading state.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+    <PdsButton variant="primary" loading="true">Loading</PdsButton>
+    `,
+    webComponent: `
+    <pds-button variant="primary" loading="true">Loading</pds-button>
+    `
+}}>
+  <pds-button variant="primary" loading="true">Loading</pds-button>
+</DocCanvas>
+
 ## Type
 
 The type prop allows a `pds-button` to set a [button type attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type).

@@ -213,6 +213,11 @@ export namespace Components {
          */
         "icon"?: string;
         /**
+          * Determines if the button is in a loading state. When true, displays a loader and hides the button text.
+          * @defaultValue false
+         */
+        "loading"?: boolean;
+        /**
           * Provides the button with a submittable name.
          */
         "name"?: string;
@@ -1700,6 +1705,11 @@ declare namespace LocalJSX {
           * @defaultValue null
          */
         "icon"?: string;
+        /**
+          * Determines if the button is in a loading state. When true, displays a loader and hides the button text.
+          * @defaultValue false
+         */
+        "loading"?: boolean;
         /**
           * Provides the button with a submittable name.
          */
