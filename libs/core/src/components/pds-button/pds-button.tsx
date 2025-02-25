@@ -116,14 +116,22 @@ export class PdsButton {
   }
 
   render() {
+
+    const hostAttrs = {
+      'aria-disabled': this.disabled ? 'true' : null,
+      'id': this.componentId,
+      'variant': this.variant
+    };
+
+    if (this.loading) {
+      hostAttrs['aria-busy'] = 'true';
+      hostAttrs['aria-live'] = 'polite';
+    }
+
     return (
       <Host
-        aria-busy={this.loading ? 'true' : 'false'}
-        aria-disabled={this.disabled ? 'true' : null}
-        aria-live={this.loading ? 'polite' : null}
-        id={this.componentId}
+        {...hostAttrs}
         onClick={this.handleClick}
-        variant={this.variant}
       >
         <button
           class={this.classNames()}
