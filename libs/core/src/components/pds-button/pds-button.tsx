@@ -150,7 +150,6 @@ export class PdsButton {
               <span class="pds-button__loader">
                 <pds-loader
                   is-loading={true}
-                  part="loader"
                   size="var(--pine-font-size)"
                   variant="spinner"
                 >

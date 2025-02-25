@@ -34,7 +34,6 @@
 | `"button"` | Exposes the button element for styling.                                               |
 | `"caret"`  | Exposes the caret icon component for styling. Appears only on the disclosure variant. |
 | `"icon"`   | Exposes the icon component for styling.                                               |
-| `"loader"` |                                                                                       |
 
 
 ## Dependencies
