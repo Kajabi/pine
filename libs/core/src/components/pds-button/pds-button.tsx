@@ -112,7 +112,7 @@ export class PdsButton {
       classNames.push('pds-button--loading');
     }
 
-    return classNames.join('  ');
+    return classNames.join(' ');
   }
 
   render() {
@@ -124,7 +124,7 @@ export class PdsButton {
         variant={this.variant}
       >
         <button
-          aria-busy={this.loading ? 'true' : 'false'}
+          aria-busy={this.loading ? 'true' : null}
           aria-live={this.loading ? 'polite' : null}
           class={this.classNames()}
           disabled={this.disabled}
