@@ -8,6 +8,16 @@
   vertical-align: middle;
 }
 
+:host([full-width="true"]) {
+  display: flex;
+  width: 100%;
+
+  .pds-button--full-width {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
 .pds-button {
   align-items: center;
   background-color: var(--color-background-default);
