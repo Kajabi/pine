@@ -104,10 +104,6 @@ export class PdsButton {
       classNames.push('pds-button--' + this.variant);
     }
 
-    if (this.fullWidth) {
-      classNames.push('pds-button--full-width');
-    }
-
     if (this.loading) {
       classNames.push('pds-button--loading');
     }

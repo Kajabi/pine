@@ -173,7 +173,7 @@ describe('pds-button', () => {
     expect(root).toEqualHtml(`
       <pds-button full-width="true" variant="primary">
         <mock:shadow-root>
-          <button class="pds-button pds-button--primary pds-button--full-width" part="button" type="button">
+          <button class="pds-button pds-button--primary" part="button" type="button">
             <div class="pds-button__content">
               <span class="pds-button__text">
                 <slot></slot>
