@@ -218,21 +218,7 @@ jobs:
       ### Steps below are used for releasing a specified version type (major, minor, patch, etc.)
       - name: Release with Input Version
         if: ${{ inputs.version != '' }}
-        run: npx nx release version ${{ inputs.version }} --preid ${{ inputs.preid }}
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_CONFIG_PROVENANCE: true
-
-      - name: Create Change Log
-        if: ${{ inputs.version != '' }}
-        run: npx nx release changelog
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Publish
-        if: ${{ inputs.version != '' }}
-        run: npx nx release publish
+        run: npx nx release ${{ inputs.version }} --preid ${{ inputs.preid }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
