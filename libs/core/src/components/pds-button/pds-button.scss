@@ -159,10 +159,12 @@
 }
 
 .pds-button__loader {
+  height: var(--pine-dimension-250);
   left: 50%;
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
+  width: var(--pine-dimension-250);
 }
 
 .pds-button--loading {

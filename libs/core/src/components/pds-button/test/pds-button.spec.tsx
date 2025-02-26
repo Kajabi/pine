@@ -127,7 +127,7 @@ describe('pds-button', () => {
                 <slot></slot>
               </span>
               <span class="pds-button__loader">
-                <pds-loader is-loading size="var(--pine-font-size)" variant="spinner">Loading...</pds-loader>
+                <pds-loader is-loading size="var(--pine-font-size-body-2xl)" variant="spinner">Loading...</pds-loader>
               </span>
             </div>
           </button>
