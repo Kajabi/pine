@@ -126,7 +126,7 @@ describe('pds-input', () => {
           <label htmlFor="pds-input-invalid">
             Name
           </label>
-          <input aria-invalid="true" id="pds-input-invalid" class="pds-input__field" type="text" value="Frank Dux" />
+          <input aria-invalid="true" id="pds-input-invalid" class="is-invalid pds-input__field" type="text" value="Frank Dux" />
         </div>
       </mock:shadow-root>
     </pds-input>
