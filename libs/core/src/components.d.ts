@@ -436,7 +436,7 @@ export namespace Components {
          */
         "setFocus": () => Promise<void>;
         /**
-          * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`
+          * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`, `'url'`
           * @defaultValue "text"
          */
         "type": string;
@@ -1945,7 +1945,7 @@ declare namespace LocalJSX {
          */
         "required"?: boolean;
         /**
-          * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`
+          * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`, `'url'`
           * @defaultValue "text"
          */
         "type"?: string;

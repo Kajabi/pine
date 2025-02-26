@@ -21,13 +21,17 @@ label {
   margin-block-end: var(--pine-dimension-xs);
 }
 
-input {
+.pds-input__field {
   border: 1px solid var(--pine-color-border);
   border-radius: 10px;
   color: var(--pine-color-text-active);
   font: var(--pine-typography-body);
   letter-spacing: var(--pine-letter-spacing);
   padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
+
+  &:hover:not(:disabled, .is-invalid) {
+    border: var(--pine-border-hover);
+  }
 
   &:disabled {
     background-color: var(--pine-color-background-container-disabled);
@@ -80,18 +84,16 @@ input {
   &:-ms-input-placeholder {
     color: var(--pine-color-text-placeholder);
   }
+  /* stylelint-enable */
 
-  &:has(~.pds-input__error-message) {
-
+  &.is-invalid {
     background-color: var(--pine-input-color-background-danger);
     border-color: var(--pine-color-border-danger);
 
     &:focus-visible {
       box-shadow: var(--box-shadow-focus-error);
-      outline: none;
     }
   }
-  /* stylelint-enable */
 }
 
 .pds-input__error-message,
