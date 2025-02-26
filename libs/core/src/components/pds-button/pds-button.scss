@@ -90,9 +90,9 @@
 
 .pds-button--secondary,
 .pds-button--disclosure {
-  --color-background-default: transparent;
-  --color-background-hover: transparent;
-  --color-background-disabled: transparent;
+  --color-background-default: var(--pine-color-secondary);
+  --color-background-hover: var(--pine-color-secondary-hover);
+  --color-background-disabled: var(--pine-color-secondary-disabled);
   --color-border-disabled: var(--pine-color-border-disabled);
   --color-border-focus: var(--pine-color-border);
   --color-border-hover: var(--pine-color-border-hover);
