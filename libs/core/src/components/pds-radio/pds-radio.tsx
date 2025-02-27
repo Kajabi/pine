@@ -95,19 +95,21 @@ export class PdsRadio {
   render() {
     return (
       <Host class={this.classNames()}>
-        <input
-          aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
-          aria-invalid={this.invalid ? "true" : undefined}
-          type="radio"
-          id={this.componentId}
-          name={this.name}
-          value={this.value}
-          checked={this.checked}
-          required={this.required}
-          disabled={this.disabled}
-          onChange={this.handleRadioChange}
-        />
-        <PdsLabel htmlFor={this.componentId} text={this.label} />
+        <div class="pds-radio__container">
+          <input
+            aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
+            aria-invalid={this.invalid ? "true" : undefined}
+            type="radio"
+            id={this.componentId}
+            name={this.name}
+            value={this.value}
+            checked={this.checked}
+            required={this.required}
+            disabled={this.disabled}
+            onChange={this.handleRadioChange}
+          />
+          <PdsLabel htmlFor={this.componentId} text={this.label} />
+        </div>
         {this.helperMessage &&
           <div
             class={'pds-radio__message'}
