@@ -3,12 +3,29 @@
   --color-border-disabled: transparent;
   --color-border-focus: transparent;
   --color-border-hover: transparent;
+  --button-loader-color: var(--color-text-default);
 
   display: inline-flex;
   vertical-align: middle;
 }
 
+:host([full-width="true"]) {
+  display: flex;
+  width: 100%;
+
+  button {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+:host([loading="true"]) {
+  cursor: wait;
+  pointer-events: none;
+}
+
 .pds-button {
+  --pds-loader-color: var(--color-text-default);
   align-items: center;
   background-color: var(--color-background-default);
   border: var(--pine-border);
@@ -58,6 +75,7 @@
   --color-text-default: var(--pine-color-text-primary);
   --color-text-disabled: var(--pine-color-text-primary-disabled);
   --color-outline: var(--pine-color-focus-ring);
+  --button-loader-color: var(--pine-color-text-primary);
 }
 
 .pds-button--accent {
@@ -69,6 +87,7 @@
   --color-text-default: var(--pine-color-text-primary);
   --color-text-disabled: var(--pine-color-text-accent-disabled);
   --color-outline: var(--pine-color-focus-ring);
+  --button-loader-color: var(--pine-color-text-primary);
 }
 
 .pds-button--destructive {
@@ -80,6 +99,7 @@
   --color-text-default: var(--pine-color-text-primary);
   --color-text-disabled: var(--pine-color-text-danger-disabled);
   --color-outline: var(--pine-color-focus-ring-danger);
+  --button-loader-color: var(--pine-color-text-primary);
 
   &:focus-visible {
     --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-danger);
@@ -100,6 +120,7 @@
   --color-text-default: var(--pine-color-text-secondary);
   --color-text-disabled: var(--pine-color-text-secondary-disabled);
   --color-outline: var(--pine-color-focus-ring);
+  --button-loader-color: var(--pine-color-text-secondary);
 
   &:hover {
     background-color: var(--pine-color-secondary-hover);
@@ -118,9 +139,41 @@
   --color-background-hover: transparent;
   --color-background-disabled: transparent;
   --color-text-default: inherit;
+  --button-loader-color: inherit;
   border-width: var(--pine-dimension-none);
   margin: var(--pine-dimension-none);
   min-height: auto;
   padding: var(--pine-dimension-none);
   width: inherit;
+}
+
+.pds-button__content {
+  align-items: center;
+  display: inline-flex;
+  position: relative;
+}
+
+.pds-button__text--hidden,
+.pds-button__icon--hidden {
+  opacity: 0;
+}
+
+.pds-button__loader {
+  height: var(--pine-dimension-250);
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--pine-dimension-250);
+}
+
+.pds-button--loading {
+  cursor: wait;
+  pointer-events: none;
+
+  .pds-button__loader {
+    pds-loader {
+      --loader-color: var(--button-loader-color);
+    }
+  }
 }

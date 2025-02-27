@@ -203,10 +203,20 @@ export namespace Components {
          */
         "disabled"?: boolean;
         /**
+          * Determines if the button should take up the full width of its container.
+          * @defaultValue false
+         */
+        "fullWidth"?: boolean;
+        /**
           * Displays an icon before the text when the icon string matches an icon name.
           * @defaultValue null
          */
         "icon"?: string;
+        /**
+          * Determines if the button is in a loading state. When true, displays a loader and hides the button text.
+          * @defaultValue false
+         */
+        "loading"?: boolean;
         /**
           * Provides the button with a submittable name.
          */
@@ -1686,10 +1696,20 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
+          * Determines if the button should take up the full width of its container.
+          * @defaultValue false
+         */
+        "fullWidth"?: boolean;
+        /**
           * Displays an icon before the text when the icon string matches an icon name.
           * @defaultValue null
          */
         "icon"?: string;
+        /**
+          * Determines if the button is in a loading state. When true, displays a loader and hides the button text.
+          * @defaultValue false
+         */
+        "loading"?: boolean;
         /**
           * Provides the button with a submittable name.
          */

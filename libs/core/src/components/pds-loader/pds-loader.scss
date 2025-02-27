@@ -1,13 +1,15 @@
 :host {
+  --loader-color: var(--pine-color-brand);
   align-items: center;
   display: flex;
   flex-direction: column;
   gap: var(--pine-dimension-xs);
 }
 
+
 :host(.pds-loader--hidden),
 .pds-loader--hidden {
-  border-width: 0 ;
+  border-width: 0;
   clip: rect(0, 0, 0, 0);
   height: 1px;
   margin: -1px;
@@ -20,12 +22,11 @@
 
 // Default Loader
 .pds-loader--spinner svg {
-  --color-background-spinner: var(--pine-color-brand);
   --number-spinner-timing: 2s;
   --number-spinner-path-timing: 1.5s;
 
   animation: rotate var(--number-spinner-timing) linear infinite;
-  color: var(--color-background-spinner);
+  color: var(--loader-color);
 }
 
 .pds-loader__spinner-path {

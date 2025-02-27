@@ -29,11 +29,24 @@ export class PdsButton {
   @Prop() disabled? = false;
 
   /**
+   * Determines if the button should take up the full width of its container.
+   * @defaultValue false
+   */
+  @Prop() fullWidth? = false;
+
+  /**
    * Displays an icon before the text when
    * the icon string matches an icon name.
    * @defaultValue null
    */
   @Prop() icon?: string = null;
+
+  /**
+   * Determines if the button is in a loading state.
+   * When true, displays a loader and hides the button text.
+   * @defaultValue false
+   */
+  @Prop() loading? = false;
 
   /**
    * Provides the button with a submittable name.
@@ -60,6 +73,11 @@ export class PdsButton {
   @Event() pdsClick: EventEmitter;
 
   private handleClick = (ev: Event) => {
+    if (this.loading) {
+      ev.preventDefault();
+      return;
+    }
+
     if (this.type != 'button') {
       // If button clicked IS NOT associated with a form
       if (hasShadowDom(this.el)) {
@@ -86,7 +104,11 @@ export class PdsButton {
       classNames.push('pds-button--' + this.variant);
     }
 
-    return classNames.join('  ');
+    if (this.loading) {
+      classNames.push('pds-button--loading');
+    }
+
+    return classNames.join(' ');
   }
 
   render() {
@@ -98,6 +120,8 @@ export class PdsButton {
         variant={this.variant}
       >
         <button
+          aria-busy={this.loading ? 'true' : null}
+          aria-live={this.loading ? 'polite' : null}
           class={this.classNames()}
           disabled={this.disabled}
           name={this.name}
@@ -105,9 +129,39 @@ export class PdsButton {
           type={this.type}
           value={this.value}
         >
-          {this.icon && this.variant !== 'disclosure' && <pds-icon name={this.icon} part="icon"></pds-icon>}
-          <slot />
-          {this.variant === 'disclosure' && <pds-icon icon={caretDown} part="caret"></pds-icon>}
+          <div class="pds-button__content">
+            {this.icon && this.variant !== 'disclosure' &&
+              <pds-icon
+                class={this.loading ? 'pds-button__icon--hidden' : ''}
+                name={this.icon}
+                part="icon"
+              ></pds-icon>
+            }
+
+            <span class={`pds-button__text ${this.loading ? 'pds-button__text--hidden' : ''}`}>
+              <slot />
+            </span>
+
+            {this.loading &&
+              <span class="pds-button__loader">
+                <pds-loader
+                  is-loading={true}
+                  size="var(--pine-font-size-body-2xl)"
+                  variant="spinner"
+                >
+                  Loading...
+                </pds-loader>
+              </span>
+            }
+
+            {this.variant === 'disclosure' &&
+              <pds-icon
+                class={this.loading ? 'pds-button__icon--hidden' : ''}
+                icon={caretDown}
+                part="caret"
+              ></pds-icon>
+            }
+          </div>
         </button>
       </Host>
     );
