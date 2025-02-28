@@ -241,16 +241,28 @@ describe('pds-box', () => {
     expect(element).toHaveClass('pds-box-offset-xl-2');
   });
 
-  it('renders padding class when prop is set to sm', async () => {
-    const page = await newSpecPage({
-      components: [PdsBox],
-      html: `<pds-box padding="sm"></pds-box>`,
+  [  'xxs', 'xs', 'sm', 'md', 'lg', 'xl', 'xxl' ].forEach((size) => {
+    it(`renders padding class when prop is set to ${size}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box padding="${size}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-padding-${size}`);
     });
 
-    const element = page.root;
+    it(`renders gap class when prop is set to ${size}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box gap="${size}"></pds-box>`,
+      });
 
-    expect(element).toHaveClass('pds-padding-sm');
+      const element = page.root;
+      expect(element).toHaveClass(`pds-box-gap-${size}`);
+    });
   });
+
 
   it('renders shadow class when prop is set to xs', async () => {
     const page = await newSpecPage({
