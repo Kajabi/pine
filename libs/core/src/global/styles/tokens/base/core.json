@@ -679,6 +679,10 @@
       "value": "8px",
       "type": "dimension"
     },
+    "125": {
+      "value": "10px",
+      "type": "dimension"
+    },
     "150": {
       "value": "12px",
       "type": "dimension"
