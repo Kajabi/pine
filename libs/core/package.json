@@ -1,6 +1,6 @@
 {
   "name": "@pine-ds/core",
-  "version": "2.16.2",
+  "version": "2.16.3",
   "license": "MIT",
   "description": "Base components for Pine Design System",
   "author": "Kajabi Design System Services",
@@ -65,7 +65,7 @@
     "@babel/core": "^7.19.3",
     "@babel/preset-env": "^7.22.10",
     "@chromatic-com/storybook": "^3.2.2",
-    "@pine-ds/doc-components": "^2.16.2",
+    "@pine-ds/doc-components": "^2.16.3",
     "@pxtrn/storybook-addon-docs-stencil": "^6.4.1",
     "@stencil-community/eslint-plugin": "^0.5.0",
     "@stencil/react-output-target": "^0.5.3",

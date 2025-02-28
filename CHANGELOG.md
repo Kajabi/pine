@@ -1,3 +1,23 @@
+## 2.16.3 (2025-02-28)
+
+### Bug Fixes 🐛
+
+- update input invalid state styles ([#377](https://github.com/Kajabi/pine/pull/377))
+- removes unneeded label margin ([#383](https://github.com/Kajabi/pine/pull/383))
+- **button:** full width and loading state ([#380](https://github.com/Kajabi/pine/pull/380))
+
+### Styles 🎨
+
+- adds background color to secondary and disclosure buttons ([#379](https://github.com/Kajabi/pine/pull/379))
+- **box:** update classes to use correct dimension tokens ([#388](https://github.com/Kajabi/pine/pull/388))
+
+### ❤️ Thank You
+
+- Ashley E
+- Julian Skinner @ju-Skinner
+- Phillip Lovelace
+- Quinton Jason
+
 ## 2.16.2 (2025-02-24)
 
 ### Bug Fixes 🐛
