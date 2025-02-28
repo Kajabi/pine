@@ -1,12 +1,12 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: pine-react
-  description: The React library for the Pine design system
+  name: pine-doc-components
+  description: The Documentation Components library for the Pine design system
   tags:
     - javascript
     - typescript
-    - react
+    - documentation
 spec:
   type: library
   lifecycle: production
