@@ -241,8 +241,6 @@ jobs:
       - name: Report pine production deployment to GetDX
         if: ${{ success() }}
         uses: Kajabi/getdx-deployment-identifier-action@main
-        env:
-          POSTFIX: ${{ needs.setup.outputs.postfix }}
         with:
           getdx-instance-name: 'kajabi'
           getdx-token: ${{ secrets.GETDX_DEPLOYMENT_TOKEN }}
