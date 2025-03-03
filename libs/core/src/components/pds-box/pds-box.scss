@@ -12,7 +12,8 @@ pds-box {
   background-color: var(--color-background-box);
   box-sizing: border-box;
   display: inline-flex;
-  min-width: var(--pine-dimension-none);
+  min-height: var(--sizing-min-height-box);
+  min-width: var(--sizing-min-width-box);
 
   // The immediate child of the row will fit the width of the row
   .pds-row > & {
@@ -98,7 +99,7 @@ $pine-spacing-tokens: (
 }
 
 .pds-box--auto {
-  flex: 0 0 var(--pine-dimension-none, fit-content);
+  flex: 0 0 var(--sizing-min-width-box, fit-content);
   min-width: auto;
   width: auto;
 }
@@ -151,11 +152,11 @@ $pine-spacing-tokens: (
 }
 
 .pds-border-radius-xs {
-  border-radius: var(--pine-dimension-050);
+  border-radius: var(--pine-dimension-2xs);
 }
 
 .pds-border-radius-sm {
-  border-radius: var(--pine-dimension-075);
+  border-radius: var(--pine-dimension-xs);
 }
 
 .pds-border-radius-md {
@@ -163,11 +164,11 @@ $pine-spacing-tokens: (
 }
 
 .pds-border-radius-lg {
-  border-radius: var(--pine-dimension-200);
+  border-radius: var(--pine-dimension-sm);
 }
 
 .pds-border-radius-circle {
-  border-radius: 50%;
+  border-radius: var(--pine-border-radius-full);
 }
 
 // Box shadow helpers
