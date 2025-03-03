@@ -11,6 +11,7 @@
 .pds-select {
   display: grid;
   flex-direction: column;
+  gap: var(--pine-dimension-2xs);
   grid-template-areas:
     'label label'
     'field field'
@@ -23,7 +24,6 @@
 
 label {
   grid-area: label;
-  margin-block-end: var(--pine-dimension-2xs);
 }
 
 select {
@@ -82,7 +82,7 @@ select {
 .pds-select__helper-message {
   font: var(--pine-typography-body-sm-medium);
   margin-block-end: 0;
-  margin-block-start: var(--pine-dimension-xs);
+  margin-block-start: 0;
 }
 
 .pds-select__error-message {
