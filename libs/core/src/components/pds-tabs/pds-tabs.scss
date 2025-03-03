@@ -32,6 +32,7 @@
   border: var(--pine-border-width-thin) solid var(--pine-color-grey-200);
   border-radius: var(--pine-dimension-100);
   display: inline-flex;
+  display: flex;
   gap: 0;
   height: var(--pine-dimension-450);
 }
