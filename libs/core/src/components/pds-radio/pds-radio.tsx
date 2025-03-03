@@ -1,6 +1,5 @@
 import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
-import { PdsLabel } from '../_internal/pds-label/pds-label';
 import { danger } from '@pine-ds/icons/icons';
 
 @Component({
@@ -95,7 +94,8 @@ export class PdsRadio {
   render() {
     return (
       <Host class={this.classNames()}>
-        <div class="pds-radio__container">
+        <label htmlFor={this.componentId}>
+          {this.label}
           <input
             aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
             aria-invalid={this.invalid ? "true" : undefined}
@@ -108,8 +108,7 @@ export class PdsRadio {
             disabled={this.disabled}
             onChange={this.handleRadioChange}
           />
-          <PdsLabel htmlFor={this.componentId} text={this.label} />
-        </div>
+        </label>
         {this.helperMessage &&
           <div
             class={'pds-radio__message'}

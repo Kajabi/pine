@@ -106,17 +106,15 @@ input {
 }
 
 label {
-  margin-inline-start: 10px;
-}
-
-.pds-radio__container {
   display: flex;
+  flex-direction: row-reverse;
+  gap: var(--pine-dimension-xs);
 }
 
 .pds-radio__message {
   color: var(--pine-color-text-message);
   margin-block-start: var(--sizing-margin-block-start);
-  margin-inline-start: 26px;
+  margin-inline-start: 24px;
   width: 100%;
 }
 
