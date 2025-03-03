@@ -135,7 +135,6 @@ label {
   display: flex;
   flex-direction: row-reverse;
   gap: var(--pine-dimension-xs);
-  margin-inline-start: 10px;
 }
 
 .visually-hidden {
@@ -154,7 +153,7 @@ label {
 .pds-checkbox__message {
   color: var(--pine-color-text-message);
   margin-block-start: 6px;
-  margin-inline-start: 34px;
+  margin-inline-start: var(--pine-dimension-md);
   width: 100%;
 }
 
