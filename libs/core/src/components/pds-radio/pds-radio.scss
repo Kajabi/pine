@@ -40,8 +40,10 @@ input {
   appearance: none;
   border: var(--pine-border);
   border-radius: var(--pine-border-radius-full);
+  flex: none;
   height: var(--sizing-input-size);
   margin: 0;
+  margin-block-start: var(--pine-dimension-025);
   position: relative;
   width: var(--sizing-input-size);
 
@@ -104,13 +106,14 @@ input {
 }
 
 label {
-  margin-inline-start: 10px;
+  display: flex;
+  gap: var(--pine-dimension-xs);
 }
 
 .pds-radio__message {
   color: var(--pine-color-text-message);
   margin-block-start: var(--sizing-margin-block-start);
-  margin-inline-start: 26px;
+  margin-inline-start: var(--pine-dimension-md);
   width: 100%;
 }
 
