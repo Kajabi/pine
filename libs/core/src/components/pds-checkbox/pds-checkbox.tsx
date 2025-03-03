@@ -1,6 +1,5 @@
 import { Component, h, Prop, Host, Event, EventEmitter, Watch } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
-import { PdsLabel } from '../_internal/pds-label/pds-label';
 import { CheckboxChangeEventDetail } from './checkbox-interface';
 import { danger } from '@pine-ds/icons/icons';
 
@@ -117,7 +116,8 @@ export class PdsCheckbox {
   render() {
     return (
       <Host class={this.classNames()}>
-        <div class="pds-checkbox__container">
+        <label htmlFor={this.componentId}>
+          {this.label}
           <input
             type="checkbox"
             aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
@@ -132,8 +132,7 @@ export class PdsCheckbox {
             onChange={this.handleCheckboxChange}
             onInput={this.handleInput}
           />
-          <PdsLabel htmlFor={this.componentId} text={this.label} classNames={this.labelHidden ? 'visually-hidden' : ''} />
-        </div>
+        </label>
         {this.helperMessage &&
           <div
             class={'pds-checkbox__message'}
