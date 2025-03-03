@@ -114,7 +114,7 @@ label {
 .pds-radio__message {
   color: var(--pine-color-text-message);
   margin-block-start: var(--sizing-margin-block-start);
-  margin-inline-start: 24px;
+  margin-inline-start: var(--pine-dimension-md);
   width: 100%;
 }
 
