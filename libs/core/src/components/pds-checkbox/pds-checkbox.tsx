@@ -117,7 +117,6 @@ export class PdsCheckbox {
     return (
       <Host class={this.classNames()}>
         <label htmlFor={this.componentId}>
-          {this.label}
           <input
             type="checkbox"
             aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
@@ -132,6 +131,7 @@ export class PdsCheckbox {
             onChange={this.handleCheckboxChange}
             onInput={this.handleInput}
           />
+          {this.label}
         </label>
         {this.helperMessage &&
           <div
