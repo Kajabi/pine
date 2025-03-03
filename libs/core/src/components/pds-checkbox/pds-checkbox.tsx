@@ -1,6 +1,5 @@
 import { Component, h, Prop, Host, Event, EventEmitter, Watch } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
-import { PdsLabel } from '../_internal/pds-label/pds-label';
 import { CheckboxChangeEventDetail } from './checkbox-interface';
 import { danger } from '@pine-ds/icons/icons';
 
@@ -117,21 +116,23 @@ export class PdsCheckbox {
   render() {
     return (
       <Host class={this.classNames()}>
-        <input
-          type="checkbox"
-          aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
-          aria-invalid={this.invalid ? "true" : undefined}
-          id={this.componentId}
-          indeterminate={this.indeterminate}
-          name={this.name}
-          value={this.value}
-          checked={this.checked}
-          required={this.required}
-          disabled={this.disabled}
-          onChange={this.handleCheckboxChange}
-          onInput={this.handleInput}
-        />
-        <PdsLabel htmlFor={this.componentId} text={this.label} classNames={this.labelHidden ? 'visually-hidden' : ''} />
+        <label htmlFor={this.componentId}>
+          <input
+            type="checkbox"
+            aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
+            aria-invalid={this.invalid ? "true" : undefined}
+            id={this.componentId}
+            indeterminate={this.indeterminate}
+            name={this.name}
+            value={this.value}
+            checked={this.checked}
+            required={this.required}
+            disabled={this.disabled}
+            onChange={this.handleCheckboxChange}
+            onInput={this.handleInput}
+          />
+          {this.label}
+        </label>
         {this.helperMessage &&
           <div
             class={'pds-checkbox__message'}

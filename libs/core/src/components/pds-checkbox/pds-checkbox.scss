@@ -65,8 +65,10 @@ input {
   background-color: var(--pine-color-secondary);
   border: var(--pine-border);
   border-radius: var(--pine-dimension-2xs);
+  flex: none;
   height: var(--pine-dimension-sm);
   margin: 0;
+  margin-block-start: var(--pine-dimension-025);
   position: relative;
   width: var(--pine-dimension-sm);
 
@@ -130,7 +132,8 @@ input {
 }
 
 label {
-  margin-inline-start: 10px;
+  display: flex;
+  gap: var(--pine-dimension-xs);
 }
 
 .visually-hidden {
@@ -149,7 +152,7 @@ label {
 .pds-checkbox__message {
   color: var(--pine-color-text-message);
   margin-block-start: 6px;
-  margin-inline-start: 26px;
+  margin-inline-start: var(--pine-dimension-md);
   width: 100%;
 }
 
