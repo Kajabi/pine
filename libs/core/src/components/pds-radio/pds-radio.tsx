@@ -95,7 +95,6 @@ export class PdsRadio {
     return (
       <Host class={this.classNames()}>
         <label htmlFor={this.componentId}>
-          {this.label}
           <input
             aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
             aria-invalid={this.invalid ? "true" : undefined}
@@ -108,6 +107,7 @@ export class PdsRadio {
             disabled={this.disabled}
             onChange={this.handleRadioChange}
           />
+          {this.label}
         </label>
         {this.helperMessage &&
           <div
