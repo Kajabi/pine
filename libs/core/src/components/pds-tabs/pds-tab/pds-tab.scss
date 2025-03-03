@@ -7,6 +7,10 @@ pds-tab {
   align-items: center;
   display: inline-flex;
   position: relative;
+
+  .pds-tabs--pill & {
+    flex: 1;
+  }
 }
 
 ///
@@ -182,14 +186,15 @@ pds-tab {
     background-color: var(--color-background-tab);
     border: var(--pine-border-width-thin) solid transparent;
     border-radius: var(--pine-dimension-xs);
-    color: var(--color-text-default);
+    color: var(--pine-color-text-readonly);
+    flex: 1;
     height: 34px;
+    justify-content: center;
 
     .pds-tab__content {
       align-items: center;
       display: flex;
       justify-content: center;
-      min-width: 90px;
       padding-block-end: 0;
     }
 
@@ -198,6 +203,7 @@ pds-tab {
       --color-background-tab: var(--pine-color-white);
       border-color: var(--pine-color-border);
       box-shadow: var(--pine-box-shadow-100);
+      color: var(--pine-color-text-active);
       z-index: 1;
 
       &:focus-visible {
