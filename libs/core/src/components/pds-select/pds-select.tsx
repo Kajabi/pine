@@ -46,7 +46,7 @@ export class PdsSelect {
   /**
    * Text to be displayed as the select label.
    */
-  @Prop() label: string;
+  @Prop() label?: string;
 
   /**
    * Indicates whether multiple options can be selected.

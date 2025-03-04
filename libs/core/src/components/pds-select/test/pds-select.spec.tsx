@@ -12,7 +12,6 @@ describe('pds-select', () => {
       <pds-select component-id="field-1">
         <mock:shadow-root>
           <div class="pds-select">
-            <label htmlFor="field-1"></label>
             <select class="pds-select__field" id="field-1">
             </select>
             <div aria-hidden="true" class="hidden">
@@ -112,16 +111,16 @@ describe('pds-select', () => {
   it('renders with disabled attribute and class', async () => {
     const page = await newSpecPage({
       components: [PdsSelect],
-      html: `<pds-select aria-disabled="true" component-id="field-1" disabled></pds-select>`,
+      html: `<pds-select aria-disabled="true" component-id="field-1" disabled label="Disabled"></pds-select>`,
     });
 
     await page.waitForChanges(); // Ensures component fully renders
 
     expect(page.root).toEqualHtml(`
-      <pds-select aria-disabled="true" class="is-disabled" component-id="field-1" disabled="">
+      <pds-select aria-disabled="true" class="is-disabled" component-id="field-1" label="Disabled" disabled="">
         <mock:shadow-root>
           <div class="pds-select">
-            <label htmlfor="field-1"></label>
+            <label htmlfor="field-1">Disabled</label>
             <select class="pds-select__field" disabled="" id="field-1">
               <slot></slot>
             </select>
@@ -147,7 +146,6 @@ describe('pds-select', () => {
       <pds-select class="is-invalid" component-id="field-1" invalid="true">
         <mock:shadow-root>
           <div class="pds-select">
-            <label htmlfor="field-1"></label>
             <select class="pds-select__field" id="field-1">
               <slot></slot>
             </select>
@@ -215,7 +213,6 @@ describe('pds-select', () => {
       <pds-select component-id="field-1" multiple="">
         <mock:shadow-root>
           <div class="pds-select">
-            <label htmlFor="field-1"></label>
             <select class="pds-select__field" id="field-1" multiple="">
             </select>
             <div aria-hidden="true" class="hidden">
