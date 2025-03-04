@@ -1,6 +1,5 @@
 import { Component, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
 import { messageId } from '../../utils/form';
-import { PdsLabel } from '../_internal/pds-label/pds-label';
 import { danger, enlarge } from '@pine-ds/icons/icons';
 
 @Component({
@@ -201,18 +200,20 @@ export class PdsSelect {
     return (
       <Host aria-disabled={this.disabled ? 'true' : null} class={this.classNames()}>
         <div class="pds-select">
-          <PdsLabel htmlFor={this.componentId} text={this.label} />
-            <select
-              autocomplete={this.autocomplete || undefined}
-              class="pds-select__field"
-              disabled={this.disabled}
-              id={this.componentId}
-              multiple={this.multiple}
-              name={this.name}
-              onChange={this.onSelectUpdate}
-              required={this.required}
-              ref={(el) => (this.selectEl = el as HTMLSelectElement)}
-            ></select>
+          {this.label &&
+            <label htmlFor={this.componentId}>{this.label}</label>
+          }
+          <select
+            autocomplete={this.autocomplete || undefined}
+            class="pds-select__field"
+            disabled={this.disabled}
+            id={this.componentId}
+            multiple={this.multiple}
+            name={this.name}
+            onChange={this.onSelectUpdate}
+            required={this.required}
+            ref={(el) => (this.selectEl = el as HTMLSelectElement)}
+          ></select>
           <div aria-hidden="true" class="hidden" ref={(el) => (this.slotContainer = el)}>
             <slot onSlotchange={this.handleSlotChange}></slot>
           </div>
