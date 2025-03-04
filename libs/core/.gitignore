@@ -33,3 +33,9 @@ UserInterfaceState.xcuserstate
 
 /src/global/styles/tokens/core/*.json
 /src/global/styles/tokens/semantic/*.json
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
