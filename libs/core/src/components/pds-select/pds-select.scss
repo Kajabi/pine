@@ -29,7 +29,7 @@ label {
 select {
   appearance: none;
   border: var(--pine-border);
-  border-radius: 10px;
+  border-radius: var(--pine-dimension-125);
   font: var(--pine-typography-body);
   grid-area: field;
   letter-spacing: var(--pine-letter-spacing);

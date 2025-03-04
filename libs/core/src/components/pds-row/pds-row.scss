@@ -1,6 +1,6 @@
 :host {
-  --row-gap-y: 10px;
-  --row-gap-x: 10px;
+  --row-gap-y: var(--pine-dimension-125);
+  --row-gap-x: var(--pine-dimension-125);
 
   display: block;
   margin-block-end: calc(var(--row-gap-y) * -1);

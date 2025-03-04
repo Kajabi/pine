@@ -6,7 +6,7 @@
   [popover] {
     background-color: var(--pine-color-background-container);
     border: var(--pine-border);
-    border-radius: 10px;
+    border-radius: var(--pine-dimension-125);
     box-shadow: var(--pine-box-shadow-200);
     margin: var(--pine-dimension-none);
     max-width: var(--sizing-max-width-default);

@@ -1,7 +1,7 @@
 :host {
   --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
 
-  --sizing-close: 10px;
+  --sizing-close: var(--pine-dimension-125);
 
   align-items: center;
   border-radius: var(--pine-dimension-sm);
