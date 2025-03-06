@@ -153,6 +153,10 @@
   position: relative;
 }
 
+.pds-button__text {
+  display: inline-flex;
+}
+
 .pds-button__text--hidden,
 .pds-button__icon--hidden {
   opacity: 0;
