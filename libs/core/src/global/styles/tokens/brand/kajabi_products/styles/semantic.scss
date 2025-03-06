@@ -93,6 +93,7 @@
   --pine-font-size-heading-4: 20px;
   --pine-font-size-heading-5: 18px;
   --pine-font-size-heading-6: 16px;
+  --pine-font-size-heading-caption: 12px;
   --pine-font-weight-thin: 100;
   --pine-font-weight-extra-light: 200;
   --pine-font-weight-light: 300;
@@ -131,14 +132,17 @@
   --pine-typography-heading-4: 600 20px/1.25 'Greet Standard', 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
   --pine-typography-heading-5: 500 18px/1.25 'Greet Standard', 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
   --pine-typography-heading-6: 500 16px/1.25 'Greet Standard', 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
+  --pine-typography-heading-caption: 600 12px/1.25 'Greet Standard', 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
   --pine-typography-body: 400 14px/1.425 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
   --pine-typography-body-medium: 500 14px/1.425 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
+  --pine-typography-body-mono: 500 14px/1.425 monospace;
   --pine-typography-body-semi-bold: 600 14px/1.425 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
   --pine-typography-body-bold: 700 14px/1.425 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
   --pine-typography-body-brand-label: 500 14px/1.425 'Greet Standard', 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif; /* brand-label */
   --pine-typography-body-brand-text: 500 14px/1.425 'FAIRE Sprig'; /* brand-text */
   --pine-typography-body-sm: 400 12px/1.425 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
   --pine-typography-body-sm-medium: 500 12px/1.425 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
+  --pine-typography-body-sm-mono: 500 12px/1.425 monospace;
   --pine-typography-body-sm-bold: 700 12px/1.425 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
   --pine-typography-body-sm-brand-label: 500 12px/1.425 'Greet Standard', 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif; /* brand-label */
   --pine-typography-body-sm-brand-text: 500 12px/1.425 'FAIRE Sprig'; /* brand-text */
