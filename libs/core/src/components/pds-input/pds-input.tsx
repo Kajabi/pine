@@ -257,7 +257,7 @@ export class PdsInput {
       >
         <div class="pds-input">
           {this.label &&
-            <label htmlFor={this.componentId}>{this.label}</label>
+            <label class="pds-input__label" htmlFor={this.componentId}>{this.label}</label>
           }
           <input
             class={this.inputClassNames()}
