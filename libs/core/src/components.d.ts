@@ -669,7 +669,7 @@ export namespace Components {
         /**
           * Text to be displayed as the select label.
          */
-        "label": string;
+        "label"?: string;
         /**
           * Indicates whether multiple options can be selected.
           * @defaultValue false

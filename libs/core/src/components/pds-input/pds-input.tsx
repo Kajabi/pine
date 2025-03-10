@@ -256,7 +256,9 @@ export class PdsInput {
         aria-readonly={this.readonly ? 'true' : null}
       >
         <div class="pds-input">
-          <label htmlFor={this.componentId}>{this.label}</label>
+          {this.label &&
+            <label class="pds-input__label" htmlFor={this.componentId}>{this.label}</label>
+          }
           <input
             class={this.inputClassNames()}
             ref={(input) => this.nativeInput = input}
