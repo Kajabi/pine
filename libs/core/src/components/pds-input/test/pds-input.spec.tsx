@@ -11,8 +11,6 @@ describe('pds-input', () => {
     <pds-input component-id="field-1" value="Frank Dux">
       <mock:shadow-root>
         <div class="pds-input">
-          <label htmlFor="field-1">
-          </label>
           <input id="field-1" class="pds-input__field" type="text" value="Frank Dux" />
         </div>
       </mock:shadow-root>
@@ -29,7 +27,7 @@ describe('pds-input', () => {
     <pds-input component-id="field-1" label="Name" value="Frank Dux">
       <mock:shadow-root>
         <div class="pds-input">
-          <label htmlFor="field-1">
+          <label class="pds-input__label" htmlFor="field-1">
             Name
           </label>
           <input id="field-1" class="pds-input__field" type="text" value="Frank Dux" />
@@ -49,8 +47,6 @@ describe('pds-input', () => {
     <pds-input component-id="field-1" placeholder="placeholder text" value="Frank Dux">
       <mock:shadow-root>
         <div class="pds-input">
-          <label htmlFor="field-1">
-          </label>
           <input placeholder="placeholder text" id="field-1" class="pds-input__field" type="text" value="Frank Dux" />
         </div>
       </mock:shadow-root>
@@ -68,8 +64,6 @@ describe('pds-input', () => {
     <pds-input component-id="field-1" required="true" value="Frank Dux">
       <mock:shadow-root>
         <div class="pds-input">
-          <label htmlFor="field-1">
-          </label>
           <input required id="field-1" class="pds-input__field" type="text" value="Frank Dux" />
         </div>
       </mock:shadow-root>
@@ -86,8 +80,6 @@ describe('pds-input', () => {
     <pds-input aria-disabled="true" component-id="field-1" disabled="true" value="Frank Dux">
       <mock:shadow-root>
         <div class="pds-input">
-          <label htmlFor="field-1">
-          </label>
           <input disabled id="field-1" class="pds-input__field" type="text" value="Frank Dux" />
         </div>
       </mock:shadow-root>
@@ -105,8 +97,6 @@ describe('pds-input', () => {
     <pds-input aria-readonly="true" component-id="field-1" readonly="true" value="Frank Dux">
       <mock:shadow-root>
         <div class="pds-input">
-          <label htmlFor="field-1">
-          </label>
           <input readonly id="field-1" class="pds-input__field" type="text" value="Frank Dux" />
         </div>
       </mock:shadow-root>
@@ -123,7 +113,7 @@ describe('pds-input', () => {
     <pds-input component-id="pds-input-invalid" invalid="true" label="Name" value="Frank Dux">
       <mock:shadow-root>
         <div class="pds-input">
-          <label htmlFor="pds-input-invalid">
+          <label class="pds-input__label" htmlFor="pds-input-invalid">
             Name
           </label>
           <input aria-invalid="true" id="pds-input-invalid" class="is-invalid pds-input__field" type="text" value="Frank Dux" />
@@ -143,8 +133,6 @@ describe('pds-input', () => {
     <pds-input component-id="field-1" value="Frank Dux" autocomplete="given-name">
       <mock:shadow-root>
         <div class="pds-input">
-          <label htmlFor="field-1">
-          </label>
           <input id="field-1" class="pds-input__field" type="text" value="Frank Dux" autocomplete="given-name" />
         </div>
       </mock:shadow-root>
