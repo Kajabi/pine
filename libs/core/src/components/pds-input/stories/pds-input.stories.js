@@ -46,6 +46,8 @@ const BaseTemplate = (args) => html`<pds-input
   required="${args.required}"
   type="${args.type}"
   value="${args.value}">
+  <span slot="prefix">${args.prefix}</span>
+  <span slot="suffix">${args.suffix}</span>
 </pds-input>`;
 
 export const Text = BaseTemplate.bind({});

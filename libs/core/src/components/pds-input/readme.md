@@ -49,6 +49,14 @@ Type: `Promise<void>`
 
 
 
+## Slots
+
+| Slot       | Description              |
+| ---------- | ------------------------ |
+| `"prefix"` | Slot for prefix content. |
+| `"suffix"` | Slot for suffix content. |
+
+
 ## Dependencies
 
 ### Depends on
