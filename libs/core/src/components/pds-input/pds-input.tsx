@@ -8,6 +8,10 @@ import { inheritAriaAttributes } from '@utils/attributes';
 import type { Attributes } from '@utils/attributes';
 import type { InputChangeEventDetail, InputInputEventDetail } from './input-interface';
 
+/**
+ * @slot prefix - Slot for prefix content.
+ * @slot suffix - Slot for suffix content.
+ */
 @Component({
   tag: 'pds-input',
   styleUrls: ['pds-input.tokens.scss', '../../global/styles/utils/label.scss', 'pds-input.scss'],
@@ -137,6 +141,20 @@ export class PdsInput {
    */
   @State() hasFocus = false;
 
+  /**
+   * Check if prefix slot has content
+   */
+  private hasPrefix(): boolean {
+    return !!this.el.querySelector('[slot="prefix"]');
+  }
+
+  /**
+   * Check if suffix slot has content
+   */
+  private hasSuffix(): boolean {
+    return !!this.el.querySelector('[slot="suffix"]');
+  }
+
 
   @Watch('debounce')
   protected debounceChanged() {
@@ -250,37 +268,54 @@ export class PdsInput {
   }
 
   render() {
+    const hasPrefix = this.hasPrefix();
+    const hasSuffix = this.hasSuffix();
+
     return (
       <Host
         aria-disabled={this.disabled ? 'true' : null}
         aria-readonly={this.readonly ? 'true' : null}
+        has-prefix={hasPrefix ? 'true' : null}
+        has-suffix={hasSuffix ? 'true' : null}
       >
         <div class="pds-input">
           {this.label &&
             <label class="pds-input__label" htmlFor={this.componentId}>{this.label}</label>
           }
-          <input
-            class={this.inputClassNames()}
-            ref={(input) => this.nativeInput = input}
-            aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
-            aria-invalid={this.invalid ? "true" : undefined}
-            autocomplete={this.autocomplete}
-            disabled={this.disabled}
-            id={this.componentId}
-            name={this.name}
-            placeholder={this.placeholder}
-            readOnly={this.readonly}
-            required={this.required}
-            type={this.type}
-            value={this.value}
-            onInput={this.onInputEvent}
-            onChange={this.onChangeEvent}
-            onBlur={this.onBlurEvent}
-            onFocus={this.onFocusEvent}
-            onCompositionstart={this.onCompositionStart}
-            onCompositionend={this.onCompositionEnd}
-            {...this.inheritedAttributes}
-          />
+          <div class="pds-input__field-wrapper">
+            {hasPrefix &&
+              <div class="pds-input__prefix">
+                <slot name="prefix"></slot>
+              </div>
+            }
+            <input
+              class={this.inputClassNames()}
+              ref={(input) => this.nativeInput = input}
+              aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
+              aria-invalid={this.invalid ? "true" : undefined}
+              autocomplete={this.autocomplete}
+              disabled={this.disabled}
+              id={this.componentId}
+              name={this.name}
+              placeholder={this.placeholder}
+              readOnly={this.readonly}
+              required={this.required}
+              type={this.type}
+              value={this.value}
+              onInput={this.onInputEvent}
+              onChange={this.onChangeEvent}
+              onBlur={this.onBlurEvent}
+              onFocus={this.onFocusEvent}
+              onCompositionstart={this.onCompositionStart}
+              onCompositionend={this.onCompositionEnd}
+              {...this.inheritedAttributes}
+            />
+            {hasSuffix &&
+              <div class="pds-input__suffix">
+                <slot name="suffix"></slot>
+              </div>
+            }
+          </div>
           {this.helperMessage &&
             <p
               class="pds-input__helper-message"

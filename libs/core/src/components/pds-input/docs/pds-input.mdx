@@ -113,6 +113,25 @@ When `invalid` is true, the input displays the error message and provides a visu
   <pds-input component-id="pds-input-error-example" label="Email address" type="email" error-message="Please provide a valid email address" value="Frank Dux" invalid></pds-input>
 </DocCanvas>
 
+### Prefix and Suffix
+A prefix or suffix can be added to the input field to provide additional context or formatting.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsInput componentId="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux"><span slot="prefix">@</span><span slot="suffix">.com</span></PdsInput>',
+    webComponent: '<pds-input component-id="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux"><span slot="prefix">@</span><span slot="suffix">.com</span></pds-input>'
+  }}>
+  <pds-input component-id="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux">
+    <span slot="prefix">@</span>
+    <span slot="suffix">.com</span>
+  </pds-input>
+</DocCanvas>
+
+<pds-input component-id="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux">
+  <pds-icon slot="prefix" name="mail"></pds-icon>
+  <pds-button slot="suffix" variant="secondary"><pds-icon name="add-small"></pds-icon></pds-button>
+</pds-input>
+
 ## References
 
 [MDN Web Docs: Input](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
