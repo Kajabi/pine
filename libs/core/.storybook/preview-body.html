@@ -3,65 +3,48 @@
 
 <style>
   /* Temp workaround because MDX2 broke styling in Storybook */
-  /* TODO: Use semantic tokens where necessary */
   .sb-unstyled {
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol' !important;
-    font-size: 14px;
-    font-weight: 400;
-    letter-spacing: -0.16px;
-    line-height: 1.425;
-    color: #343332;
+    font: var(--pine-typography-body);
+    letter-spacing: var(--pine-letter-spacing);
+    color: var(--pine-color-text);
 
     h1, h2, h3, h4, h5, h6 {
-      font-family: "Greet Standard";
-      margin-block: 0 8px;
+      margin-block: 0 var(--pine-dimension-xs);
     }
 
     h1 {
-      font-size: 28px;
-      font-weight: 600;
-      letter-spacing: 0.26px;
-      line-height: 1.25;
+      font: var(--pine-typography-heading-1);
+      letter-spacing: var(--pine-letter-spacing-heading-1);
     }
 
     h2 {
-      font-size: 26px;
-      font-weight: 600;
-      letter-spacing: 0.24px;
-      line-height: 1.25;
-      border-bottom: 1px solid #e4e4e4; /* Grey 200 */
-      padding-block: 0 4px;
+      font: var(--pine-typography-heading-2);
+      letter-spacing: var(--pine-letter-spacing-heading-2);
+      border-bottom: var(--pine-border);
+      padding-block: 0 var(--pine-dimension-2xs);
     }
 
     h3 {
-      font-size: 22px;
-      font-weight: 600;
-      letter-spacing: 0.22px;
-      line-height: 1.25;
+      font: var(--pine-typography-heading-3);
+      letter-spacing: var(--pine-letter-spacing-heading-3);
     }
 
     h4 {
-      font-size: 20px;
-      font-weight: 600;
-      letter-spacing: 0.20px;
-      line-height: 1.25;
+      font: var(--pine-typography-heading-4);
+      letter-spacing: var(--pine-letter-spacing-heading-4);
     }
 
     h5 {
-      font-size: 18px;
-      font-weight: 500;
-      letter-spacing: 0.18px;
-      line-height: 1.25;
+      font: var(--pine-typography-heading-5);
+      letter-spacing: var(--pine-letter-spacing-heading-5);
     }
 
     h6 {
-      font-size: 16px;
-      font-weight: 500;
-      letter-spacing: 0.16px;
-      line-height: 1.25;
+      font: var(--pine-typography-heading-6);
+      letter-spacing: var(--pine-letter-spacing-heading-6);
     }
 
-    button {
+    button, input, select, textarea {
       font-family: inherit;
     }
 
@@ -71,20 +54,30 @@
       line-height: 1;
     }
 
-    div + h2, div + h3, div + h4 {
-      margin-block-start: 24px;
+    * + :is(h1, h2, h3, h4, h5, h6) {
+      margin-block-start: var(--pine-dimension-md);
     }
 
     p {
-      margin-block: 16px;
+      margin-block: var(--pine-dimension-sm);
     }
 
     ul {
-      margin-block: 16px;
+      margin-block: var(--pine-dimension-sm);
     }
 
     li + li {
-      margin-block-start: 8px;
+      margin-block-start: var(--pine-dimension-xs);
+    }
+
+    blockquote {
+      padding-inline: var(--pine-dimension-sm);
+      border-left: 4px solid var(--pine-color-border);
+      margin: var(--pine-dimension-none);
+
+      p {
+        color: var(--pine-color-grey-700);
+      }
     }
   }
 </style>
