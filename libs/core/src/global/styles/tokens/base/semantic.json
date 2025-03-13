@@ -161,7 +161,7 @@
         "type": "color"
       },
       "disabled": {
-        "value": "{color.grey.100}",
+        "value": "{color.grey.150}",
         "type": "color"
       },
       "hover": {
