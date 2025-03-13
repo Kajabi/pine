@@ -122,18 +122,26 @@ A prefix or suffix can be added to the input field to provide additional context
     webComponent: '<pds-input component-id="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux"><span slot="prefix">@</span><span slot="suffix">.com</span></pds-input>'
   }}>
   <pds-input component-id="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux">
-    <span slot="prefix">@</span>
-    <span slot="suffix">.com</span>
+    <pds-box slot="prefix"><pds-icon name="mail"></pds-icon></pds-box>
+    <pds-box slot="suffix">.com</pds-box>
   </pds-input>
 </DocCanvas>
 
 <pds-input component-id="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux">
-  <pds-icon slot="prefix" name="mail"></pds-icon>
-  <pds-button slot="suffix" variant="secondary"><pds-icon name="add-small"></pds-icon></pds-button>
+  <pds-button slot="prepend" variant="secondary"><pds-icon name="add-small"></pds-icon></pds-button>
+
+  <pds-box slot="prefix"><pds-icon name="mail"></pds-icon></pds-box>
+  <pds-button slot="append" variant="secondary"><pds-icon name="add-small"></pds-icon></pds-button>
 </pds-input>
+
+<pds-input component-id="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux">
+  <pds-button slot="prepend" variant="secondary"><pds-icon name="add-small"></pds-icon></pds-button>
+  <pds-button slot="append" variant="secondary"><pds-icon name="add-small"></pds-icon></pds-button>
+</pds-input>
+
 
 ## References
 
-[MDN Web Docs: Input](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
-
-[MDN Web Docs: HTML autocomplete attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete)
+For more information about using inputs, refer to:
+- [WAI-ARIA Input Practices](https://www.w3.org/WAI/ARIA/apg/patterns/textbox/)
+- [MDN Input Element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)

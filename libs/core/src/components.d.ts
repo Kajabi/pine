@@ -418,6 +418,22 @@ export namespace Components {
          */
         "helperMessage"?: string;
         /**
+          * If true, hide the append when the input is empty
+         */
+        "hideAppendOnEmpty": boolean;
+        /**
+          * If true, hide the prefix when the input is empty
+         */
+        "hidePrefixOnEmpty": boolean;
+        /**
+          * If true, hide the prepend when the input is empty
+         */
+        "hidePrependOnEmpty": boolean;
+        /**
+          * If true, hide the suffix when the input is empty
+         */
+        "hideSuffixOnEmpty": boolean;
+        /**
           * Determines whether or not the input field is invalid or throws an error.
          */
         "invalid"?: boolean;
@@ -1924,6 +1940,22 @@ declare namespace LocalJSX {
           * Displays a message or hint below the input field.
          */
         "helperMessage"?: string;
+        /**
+          * If true, hide the append when the input is empty
+         */
+        "hideAppendOnEmpty"?: boolean;
+        /**
+          * If true, hide the prefix when the input is empty
+         */
+        "hidePrefixOnEmpty"?: boolean;
+        /**
+          * If true, hide the prepend when the input is empty
+         */
+        "hidePrependOnEmpty"?: boolean;
+        /**
+          * If true, hide the suffix when the input is empty
+         */
+        "hideSuffixOnEmpty"?: boolean;
         /**
           * Determines whether or not the input field is invalid or throws an error.
          */

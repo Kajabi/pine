@@ -1,17 +1,11 @@
 import { Component, Element, Event, EventEmitter, h, Host, Method, Prop, State, Watch } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
+import { inheritAriaAttributes } from '@utils/attributes';
+import type { Attributes } from '@utils/attributes';
+import { InputChangeEventDetail, InputInputEventDetail } from './input-interface';
+import { debounceEvent } from '@utils/utils';
 import { danger } from '@pine-ds/icons/icons';
 
-import { debounceEvent } from '@utils/utils';
-import { inheritAriaAttributes } from '@utils/attributes';
-
-import type { Attributes } from '@utils/attributes';
-import type { InputChangeEventDetail, InputInputEventDetail } from './input-interface';
-
-/**
- * @slot prefix - Slot for prefix content.
- * @slot suffix - Slot for suffix content.
- */
 @Component({
   tag: 'pds-input',
   styleUrls: ['pds-input.tokens.scss', '../../global/styles/utils/label.scss', 'pds-input.scss'],
@@ -21,14 +15,52 @@ export class PdsInput {
   private nativeInput?: HTMLInputElement;
   private inheritedAttributes: Attributes = {};
   private isComposing = false;
-  /**
-   * The value of the input when the input is focused.
-   */
+  private prefixEl?: HTMLElement;
+  private suffixEl?: HTMLElement;
   private focusedValue?: string | number | null;
-
   private originalPdsInput?: EventEmitter<InputInputEventDetail>;
 
   @Element() el!: HTMLPdsInputElement;
+
+  /**
+   * If true, the input has prefix content (non-focusable)
+   */
+  @State() hasPrefix = false;
+
+  /**
+   * If true, the input has suffix content (non-focusable)
+   */
+  @State() hasSuffix = false;
+
+  /**
+   * If true, the input has prepend content (focusable)
+   */
+  @State() hasPrepend = false;
+
+  /**
+   * If true, the input has append content (focusable)
+   */
+  @State() hasAppend = false;
+
+  /**
+   * If true, hide the prefix when the input is empty
+   */
+  @Prop() hidePrefixOnEmpty = false;
+
+  /**
+   * If true, hide the suffix when the input is empty
+   */
+  @Prop() hideSuffixOnEmpty = false;
+
+  /**
+   * If true, hide the prepend when the input is empty
+   */
+  @Prop() hidePrependOnEmpty = false;
+
+  /**
+   * If true, hide the append when the input is empty
+   */
+  @Prop() hideAppendOnEmpty = false;
 
   /**
    * Emitted when the input loses focus.
@@ -36,7 +68,6 @@ export class PdsInput {
   @Event() pdsBlur!: EventEmitter<FocusEvent>;
 
   /**
-   *
    * Emitted when the value has changed.
    *
    * This event will not emit when programmatically setting the `value` property.
@@ -59,7 +90,7 @@ export class PdsInput {
    */
   @Method()
   async setFocus() {
-    if ( this.nativeInput ) {
+    if (this.nativeInput) {
       this.nativeInput.focus();
     }
   }
@@ -141,20 +172,101 @@ export class PdsInput {
    */
   @State() hasFocus = false;
 
-  /**
-   * Check if prefix slot has content
-   */
-  private hasPrefix(): boolean {
-    return !!this.el.querySelector('[slot="prefix"]');
+  private hasValue(): boolean {
+    return this.value !== undefined && this.value !== null && this.value !== '';
   }
 
-  /**
-   * Check if suffix slot has content
-   */
-  private hasSuffix(): boolean {
-    return !!this.el.querySelector('[slot="suffix"]');
+  private updateAddonWidths() {
+    requestAnimationFrame(() => {
+      if (this.prefixEl) {
+        const prefixWidth = this.prefixEl.offsetWidth;
+        this.el.style.setProperty('--prefix-width', `${prefixWidth}px`);
+      }
+
+      if (this.suffixEl) {
+        const suffixWidth = this.suffixEl.offsetWidth;
+        this.el.style.setProperty('--suffix-width', `${suffixWidth}px`);
+      }
+    });
   }
 
+  private renderPrefix() {
+    const hasPrefix = this.el.querySelector('[slot="prefix"]') !== null;
+    const shouldShow = !this.hidePrefixOnEmpty || this.hasValue();
+
+    if (hasPrefix && shouldShow) {
+      return (
+        <div class="pds-input__prefix" part="prefix" ref={(el) => this.prefixEl = el as HTMLElement}>
+          <slot name="prefix" onSlotchange={() => this.updateAddonWidths()}></slot>
+        </div>
+      );
+    }
+    return null;
+  }
+
+  private renderSuffix() {
+    const hasSuffix = this.el.querySelector('[slot="suffix"]') !== null;
+    const shouldShow = !this.hideSuffixOnEmpty || this.hasValue();
+
+    if (hasSuffix && shouldShow) {
+      return (
+        <div class="pds-input__suffix" part="suffix" ref={(el) => this.suffixEl = el as HTMLElement}>
+          <slot name="suffix" onSlotchange={() => this.updateAddonWidths()}></slot>
+        </div>
+      );
+    }
+    return null;
+  }
+
+  private renderPrepend() {
+    const hasPrepend = this.el.querySelector('[slot="prepend"]') !== null;
+    const shouldShow = !this.hidePrependOnEmpty || this.hasValue();
+
+    if (hasPrepend && shouldShow) {
+      return (
+        <div class="pds-input__prepend" part="prepend">
+          <slot name="prepend"></slot>
+        </div>
+      );
+    }
+    return null;
+  }
+
+  private renderAppend() {
+    const hasAppend = this.el.querySelector('[slot="append"]') !== null;
+    const shouldShow = !this.hideAppendOnEmpty || this.hasValue();
+
+    if (hasAppend && shouldShow) {
+      return (
+        <div class="pds-input__append" part="append">
+          <slot name="append"></slot>
+        </div>
+      );
+    }
+    return null;
+  }
+
+  componentWillLoad() {
+    this.inheritedAttributes = {
+      ...inheritAriaAttributes(this.el)
+    };
+    this.hasPrefix = this.el.querySelector('[slot="prefix"]') !== null;
+    this.hasSuffix = this.el.querySelector('[slot="suffix"]') !== null;
+    this.hasPrepend = this.el.querySelector('[slot="prepend"]') !== null;
+    this.hasAppend = this.el.querySelector('[slot="append"]') !== null;
+
+    // Store the original pdsInput event emitter
+    this.originalPdsInput = this.pdsInput;
+  }
+
+  componentDidLoad() {
+    this.debounceChanged();
+    this.updateAddonWidths();
+  }
+
+  componentDidUpdate() {
+    this.updateAddonWidths();
+  }
 
   @Watch('debounce')
   protected debounceChanged() {
@@ -234,7 +346,6 @@ export class PdsInput {
   }
 
   /**
-   *
    * Emits a `pdsInput` event
    */
   private emitInputChange(event?: Event) {
@@ -246,62 +357,65 @@ export class PdsInput {
     this.pdsInput.emit({ value: newValue, event });
   }
 
-
-  componentWillLoad() {
-    this.inheritedAttributes = {
-      ...inheritAriaAttributes(this.el)
-    }
-  }
-
-  componentDidLoad() {
-    this.debounceChanged();
-  }
-
-  private inputClassNames() {
-    const classNames = ['pds-input__field'];
-
-    if (this.invalid && this.invalid === true) {
-      classNames.push('is-invalid');
-    }
-
-    return classNames.join('  ');
-  }
-
   render() {
-    const hasPrefix = this.hasPrefix();
-    const hasSuffix = this.hasSuffix();
+    const {
+      componentId,
+      disabled,
+      errorMessage,
+      helperMessage,
+      invalid = false,
+      label,
+    } = this;
+
+    const value = this.getValue();
+    const hasValue = this.hasValue();
+
+    const inputWrapperClasses = {
+      'pds-input__field-wrapper': true,
+      'has-value': hasValue,
+      'has-focus': this.hasFocus,
+      'has-error': invalid || !!errorMessage,
+      'is-disabled': disabled,
+      'has-prefix': this.hasPrefix,
+      'has-suffix': this.hasSuffix,
+      'has-prepend': this.hasPrepend,
+      'has-append': this.hasAppend,
+    };
 
     return (
       <Host
         aria-disabled={this.disabled ? 'true' : null}
         aria-readonly={this.readonly ? 'true' : null}
-        has-prefix={hasPrefix ? 'true' : null}
-        has-suffix={hasSuffix ? 'true' : null}
+        has-prefix={this.hasPrefix ? 'true' : null}
+        has-suffix={this.hasSuffix ? 'true' : null}
+        has-prepend={this.hasPrepend ? 'true' : null}
+        has-append={this.hasAppend ? 'true' : null}
       >
         <div class="pds-input">
-          {this.label &&
-            <label class="pds-input__label" htmlFor={this.componentId}>{this.label}</label>
-          }
-          <div class="pds-input__field-wrapper">
-            {hasPrefix &&
-              <div class="pds-input__prefix">
-                <slot name="prefix"></slot>
-              </div>
-            }
+          {label && (
+            <label htmlFor={componentId} class="pds-input__label">
+              {label}
+              {this.required && <span class="pds-input__required-indicator"> *</span>}
+            </label>
+          )}
+
+          <div class={inputWrapperClasses}>
+            {this.renderPrepend()}
+            {this.renderPrefix()}
             <input
-              class={this.inputClassNames()}
-              ref={(input) => this.nativeInput = input}
-              aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
-              aria-invalid={this.invalid ? "true" : undefined}
+              ref={(input) => (this.nativeInput = input)}
+              class="pds-input__field"
+              aria-describedby={assignDescription(componentId, invalid, helperMessage)}
+              aria-invalid={invalid ? "true" : undefined}
               autocomplete={this.autocomplete}
-              disabled={this.disabled}
-              id={this.componentId}
+              disabled={disabled}
+              id={componentId}
               name={this.name}
               placeholder={this.placeholder}
               readOnly={this.readonly}
               required={this.required}
               type={this.type}
-              value={this.value}
+              value={value}
               onInput={this.onInputEvent}
               onChange={this.onChangeEvent}
               onBlur={this.onBlurEvent}
@@ -310,30 +424,22 @@ export class PdsInput {
               onCompositionend={this.onCompositionEnd}
               {...this.inheritedAttributes}
             />
-            {hasSuffix &&
-              <div class="pds-input__suffix">
-                <slot name="suffix"></slot>
-              </div>
-            }
+            {this.renderSuffix()}
+            {this.renderAppend()}
           </div>
-          {this.helperMessage &&
-            <p
-              class="pds-input__helper-message"
-              id={messageId(this.componentId, 'helper')}
-            >
-              {this.helperMessage}
+
+          {helperMessage && (
+            <p class="pds-input__helper-message" id={messageId(componentId, 'helper')}>
+              {helperMessage}
             </p>
-          }
-          {this.errorMessage &&
-            <p
-              class="pds-input__error-message"
-              id={messageId(this.componentId, 'error')}
-              aria-live="assertive"
-            >
+          )}
+
+          {errorMessage && (
+            <p class="pds-input__error-message" id={messageId(componentId, 'error')}>
               <pds-icon icon={danger} size="small" />
-              {this.errorMessage}
+              {errorMessage}
             </p>
-          }
+          )}
         </div>
       </Host>
     );
