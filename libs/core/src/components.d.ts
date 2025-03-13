@@ -76,6 +76,11 @@ export namespace Components {
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
+          * Defines the vertical alignment of the box items.
+          * @defaultValue start
+         */
+        "alignSelf"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
           * If `true`, the box will be sized to fit its contents.
          */
         "auto"?: boolean;
@@ -162,6 +167,16 @@ export namespace Components {
           * @defaultValue none
          */
         "padding"?: BoxTShirtSizeType;
+        /**
+          * Defines the top and bottom spacing.
+          * @defaultValue none
+         */
+        "paddingBlock"?: BoxTShirtSizeType;
+        /**
+          * Defines the left and right spacing.
+          * @defaultValue none
+         */
+        "paddingInline"?: BoxTShirtSizeType;
         /**
           * Defines the box shadow.
           * @defaultValue none
@@ -1569,6 +1584,11 @@ declare namespace LocalJSX {
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
+          * Defines the vertical alignment of the box items.
+          * @defaultValue start
+         */
+        "alignSelf"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
           * If `true`, the box will be sized to fit its contents.
          */
         "auto"?: boolean;
@@ -1655,6 +1675,16 @@ declare namespace LocalJSX {
           * @defaultValue none
          */
         "padding"?: BoxTShirtSizeType;
+        /**
+          * Defines the top and bottom spacing.
+          * @defaultValue none
+         */
+        "paddingBlock"?: BoxTShirtSizeType;
+        /**
+          * Defines the left and right spacing.
+          * @defaultValue none
+         */
+        "paddingInline"?: BoxTShirtSizeType;
         /**
           * Defines the box shadow.
           * @defaultValue none
