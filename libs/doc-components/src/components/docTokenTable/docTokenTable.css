@@ -20,13 +20,6 @@
 			background-color: #ffffff !important;
 		}
 
-		.variable {
-			background-color: var(--pine-color-accent);
-			border-radius: var(--pine-dimension-125);
-			color: var(--pine-color-text-primary);
-			padding: var(--pine-dimension-2xs) var(--pine-dimension-xs);
-		}
-
 		td {
 			border: var(--pine-border);
 			border-color: var(--pine-color-grey-200);

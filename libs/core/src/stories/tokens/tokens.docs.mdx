@@ -102,15 +102,19 @@ namespace-base-context-modifier
 
 ## Token Scale
 
-Within Pine, we use a simple scale to handle variations within categories such as dimensions and font sizes. This numbered scale works proportionally off the base value, which is denoted with a 100 modifier.
+Within Pine, we use a simple scale to handle variations within categories such as dimensions and font sizes. This numbered scale works proportionally off the base value, which is denoted with a `100` modifier.
 
 For example, our base dimension token, 8px, is written as:
 
 `--pine-dimension-100`
 
-An easy method to calculate new tokens would be to multiply the desired token value by 100 and then divide by the base value. Let's say we'd like to add a new dimension token for 72px. We can do:
+An easy method to calculate new tokens is represented by this formula:
 
-`(72\*100)/8`
+`(desired value * 100) / base value`
+
+Let's say we'd like to add a new dimension token for 72px. We can do:
+
+`(72*100)/8`
 
 …which would give us 900. Our final new token would be:
 
