@@ -28,33 +28,31 @@ const categoryStyleMapping: Record<string, Partial<React.CSSProperties>> = {
 const applyStyle = (category: string, value: string, use?: string): React.CSSProperties => {
   const style: React.CSSProperties = {};
   const categoryStyles = categoryStyleMapping[category];
-
-  if (value.endsWith('-@')) console.log(value)
+  const transformVal = (val: string) => `var(${val})`;
 
   Object.assign(style, categoryStyles);
 
   const styleMap: { [key: string]: (value: string) => void } = {
-    'border': (val) => style.border = `var(${val})`,
-    'color': (val) => style.backgroundColor = `var(${val})`,
+    'border': (val) => style.border = transformVal(val),
+    'color': (val) => style.backgroundColor = transformVal(val),
     'dimension': (val) => {
       if (use === 'spacing') {
-        style.margin = `var(${val})`; // Example: apply margin for spacing
+        style.margin = transformVal(val); // Example: apply margin for spacing
       } else {
-        style.borderRadius = `var(${val})`; // Default behavior
+        style.borderRadius = transformVal(val); // Default behavior
       }
     },
-    'border-width': (val) => style.borderWidth = `var(${val})`,
-    'box-shadow': (val) => style.boxShadow = `var(${val})`,
-    'font-family': (val) => style.fontFamily = `var(${val})`,
-    'font-size': (val) => style.fontSize = `var(${val})`,
-    'font-weight': (val) => style.fontWeight = `var(${val})`,
-    'letter-spacing': (val) => style.letterSpacing = `var(${val})`,
-    'line-height': (val) => style.lineHeight = `var(${val})`,
-    'typography': (val) => style.font = `var(${val})`,
+    'border-width': (val) => style.borderWidth = transformVal(val),
+    'box-shadow': (val) => style.boxShadow = transformVal(val),
+    'font-family': (val) => style.fontFamily = transformVal(val),
+    'font-size': (val) => style.fontSize = transformVal(val),
+    'font-weight': (val) => style.fontWeight = transformVal(val),
+    'letter-spacing': (val) => style.letterSpacing = transformVal(val),
+    'line-height': (val) => style.lineHeight = transformVal(val),
+    'typography': (val) => style.font = transformVal(val),
   };
 
   styleMap[category]?.(value);
-  // console.log(styleMap[category]?.(value));
 
   return style;
 }
@@ -139,9 +137,7 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
         return (
           <tr key={`${cssVariableName}-${new Date().getUTCMilliseconds()}`}>
             <td>{previewDiv}</td>
-            <td>
-              <span className="variable">{cssVariableName}</span>
-            </td>
+            <td>{cssVariableName}</td>
             <td>{cssPropertyValue}</td>
           </tr>
         );
