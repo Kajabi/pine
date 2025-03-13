@@ -62,7 +62,7 @@
 
 input {
   appearance: none;
-  background-color: var(--pine-color-secondary);
+  background: var(--pine-color-background-container);
   border: var(--pine-border);
   border-radius: var(--pine-dimension-2xs);
   flex: none;
@@ -73,7 +73,7 @@ input {
   width: var(--pine-dimension-sm);
 
   &:hover {
-    background: var(--pine-color-secondary-hover);
+    background: var(--pine-color-background-container-hover);
     border: var(--pine-border-hover);
   }
 
