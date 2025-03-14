@@ -8,8 +8,6 @@
     "brand/kajabi_products",
     "brand/kajabi_products/light",
     "brand/kajabi_products/dark",
-    "brand/bma",
-    "brand/bma/dark",
-    "brand/bma/light"
+    "brand/bma"
   ]
 }
