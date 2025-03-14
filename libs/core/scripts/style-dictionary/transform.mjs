@@ -9,10 +9,12 @@ register(StyleDictionary, {
 });
 
 const basePath = `src/global/styles/tokens`;
+const buildPath = `${basePath}/`;
 
 async function run() {
   const $themes = JSON.parse(await promises.readFile(`${basePath}/$themes.json`, 'utf-8'));
   const themes = permutateThemes($themes, { separator: '-' });
+  console.log('Generated themes:', themes);
 
 	const tokenSets = [
 		...new Set(
@@ -25,26 +27,85 @@ async function run() {
     return !Object.values(themes).every(sets => sets.includes(set));
 	});
 
-  const configs = Object.entries(themes).map(([theme, tokensets]) => ({
+  // Theme-specific configuration
+  const themeConfigs = Object.entries(themes).map(([theme, tokensets]) => {
+    const [themeName] = theme.toLowerCase().split('-');
+    const brandName = themeName === 'light' || themeName === 'dark'
+      ? 'kajabi_products'
+      : themeName;
+
+    return {
+      log: {
+        verbosity: 'verbose',
+      },
+      source: tokensets.map(tokenset => `${basePath}/${tokenset}.json`),
+      preprocessors: ['tokens-studio'],
+      platforms: {
+        css: {
+          transformGroup: 'tokens-studio',
+          transforms: ['attribute/themeable', 'name/kebab', 'color/hex', 'ts/resolveMath', 'size/px'],
+          buildPath: buildPath,
+          files: [
+            // Core and semantic files for the brand
+            {
+              destination: `brand/${brandName}/${brandName}.scss`,
+              format: 'css/variables',
+              filter: (token) => {
+                // Include core tokens
+                if (token.filePath.includes('base/core')) {
+                  return true;
+                }
+                // Include semantic tokens
+                if (token.filePath.includes('base/semantic')) {
+                  // For non-themeable tokens, always include
+                  if (!token.attributes.themeable) {
+                    return true;
+                  }
+                  // For themeable tokens, only include if this is kajabi_products
+                  if (brandName === 'kajabi_products') {
+                    return true;
+                  }
+                }
+                // Include themeable tokens for this brand
+                if (token.attributes.themeable && token.filePath.includes(`brand/${brandName}`)) {
+                  return true;
+                }
+                return false;
+              },
+              options: {
+                outputReferences: true
+              }
+            }
+          ],
+          prefix: 'pine'
+        },
+      },
+    };
+  });
+
+  // Component-specific configuration
+  const componentConfig = {
     log: {
       verbosity: 'verbose',
     },
-    source: tokensets.map(tokenset => `${basePath}/${tokenset}.json`),
-    preprocessors: ['tokens-studio'], // <-- since 0.16.0 this must be explicit
+    source: [
+      `${basePath}/base/core.json`,
+      `${basePath}/base/semantic.json`,
+      `${basePath}/components/*.json`
+    ],
+    preprocessors: ['tokens-studio'],
     platforms: {
       css: {
         transformGroup: 'tokens-studio',
         transforms: ['attribute/themeable', 'name/kebab', 'color/hex', 'ts/resolveMath', 'size/px'],
-				buildPath: `${basePath}/`,
-        files: [
-          ...generateCoreFiles(),
-					...generateSemanticFiles(theme),
-          ...generateComponentFiles(),
-        ],
-				prefix: 'pine'
+        buildPath: buildPath,
+        files: [...generateComponentFiles()],
+        prefix: 'pine'
       },
     },
-  }));
+  };
+
+  const configs = [...themeConfigs, componentConfig];
 
   for (const cfg of configs) {
     const sd = new StyleDictionary(cfg);
