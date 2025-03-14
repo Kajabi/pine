@@ -1,1 +1,1 @@
-export const coreFilter = (token) => token.filePath.endsWith("base/core.json");
+export const coreFilter = (token) => token.filePath.includes("base/core");

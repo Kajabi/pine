@@ -15,12 +15,12 @@ export const generateComponentFiles = () => {
   const components = fs.readdirSync(`${basePath}/components`).map((comp) => comp.replace(/.json$/g, ""));
 
   for (const comp of components) {
-    // theme-specific outputs
     const componentName = `${componentPrefix}-${comp}`;
 
+    // Component-specific tokens at host level
     filesArr.push({
       format,
-      filter: componentFilter(comp, true),
+      filter: componentFilter(comp),
       options: {
         selector: ":host",
         outputReferences: outputReferencesTransformed,

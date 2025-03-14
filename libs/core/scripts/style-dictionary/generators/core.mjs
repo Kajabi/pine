@@ -6,6 +6,9 @@ export const generateCoreFiles = () => [
   {
     destination: `base/_core.scss`,
     format,
-    filter: coreFilter
+    filter: coreFilter,
+    options: {
+      outputReferences: true
+    }
   }
 ];

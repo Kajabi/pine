@@ -4,21 +4,26 @@ const format = "css/variables";
 
 export const generateSemanticFiles = (theme) => {
   const filesArr = [];
-  const [themeName, mode] = theme.toLowerCase().split('-');
+  const [themeName] = theme.toLowerCase().split('-');
 
-  // theme-specific outputs
-  filesArr.push({
-    format,
-    filter: semanticFilter(true),
-    destination: `brand/${themeName}/styles/${mode}.scss`,
-  });
-
-
-  // not theme-specific outputs
+  // Base semantic tokens (non-themeable)
   filesArr.push({
     format,
     filter: semanticFilter(false),
-    destination: `brand/${themeName}/styles/semantic.scss`,
+    destination: `base/_semantic.scss`,
+    options: {
+      outputReferences: true
+    }
+  });
+
+  // Theme-specific semantic tokens
+  filesArr.push({
+    format,
+    filter: semanticFilter(true, themeName),
+    destination: `brand/${themeName}/${themeName}.scss`,
+    options: {
+      outputReferences: true
+    }
   });
 
   return filesArr;
