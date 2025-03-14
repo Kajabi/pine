@@ -24,9 +24,7 @@
       "components/chip": "enabled",
       "components/input": "enabled",
       "brand/kajabi_products": "enabled",
-      "components/select": "enabled",
-      "brand/bma/light": "disabled",
-      "brand/bma/dark": "disabled"
+      "components/select": "enabled"
     },
     "$figmaCollectionId": "VariableCollectionId:175:2717",
     "$figmaModeId": "175:46",
@@ -331,9 +329,7 @@
       "components/input": "enabled",
       "brand/kajabi_products": "enabled",
       "brand/kajabi_products/light": "source",
-      "components/select": "enabled",
-      "brand/bma/light": "disabled",
-      "brand/bma/dark": "disabled"
+      "components/select": "enabled"
     },
     "$figmaCollectionId": "VariableCollectionId:7078:306",
     "$figmaModeId": "7078:1",
@@ -746,9 +742,7 @@
       "components/input": "enabled",
       "brand/kajabi_products": "enabled",
       "brand/kajabi_products/dark": "source",
-      "components/select": "enabled",
-      "brand/bma/light": "disabled",
-      "brand/bma/dark": "disabled"
+      "components/select": "enabled"
     },
     "$figmaCollectionId": "VariableCollectionId:7078:306",
     "$figmaModeId": "7078:2",
@@ -1060,40 +1054,8 @@
     "name": "bma",
     "$figmaStyleReferences": {},
     "selectedTokenSets": {
-      "brand/bma": "enabled",
-      "brand/bma/light": "disabled",
-      "brand/bma/dark": "disabled"
+      "brand/bma": "enabled"
     },
     "group": "brand"
-  },
-  {
-    "id": "2ca7b9da23cddb9c5285e4e3645d39d1a22c0e9d",
-    "name": "light",
-    "$figmaStyleReferences": {},
-    "selectedTokenSets": {
-      "base/core": "enabled",
-      "base/semantic": "enabled",
-      "components/input": "enabled",
-      "components/chip": "enabled",
-      "components/select": "enabled",
-      "brand/bma": "enabled",
-      "brand/bma/light": "source"
-    },
-    "group": "bma"
-  },
-  {
-    "id": "66bde0a1ec6347f2f97ecaf50a8be812ccd7c9c0",
-    "name": "dark",
-    "$figmaStyleReferences": {},
-    "selectedTokenSets": {
-      "base/core": "enabled",
-      "base/semantic": "enabled",
-      "components/chip": "enabled",
-      "components/input": "enabled",
-      "components/select": "enabled",
-      "brand/bma": "enabled",
-      "brand/bma/dark": "source"
-    },
-    "group": "bma"
   }
 ]
