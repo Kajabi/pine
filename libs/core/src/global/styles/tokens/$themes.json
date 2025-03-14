@@ -24,7 +24,8 @@
       "components/chip": "enabled",
       "components/input": "enabled",
       "brand/kajabi_products": "enabled",
-      "components/select": "enabled"
+      "components/select": "enabled",
+      "brand/bma": "disabled"
     },
     "$figmaCollectionId": "VariableCollectionId:175:2717",
     "$figmaModeId": "175:46",
@@ -329,7 +330,8 @@
       "components/input": "enabled",
       "brand/kajabi_products": "enabled",
       "brand/kajabi_products/light": "source",
-      "components/select": "enabled"
+      "components/select": "enabled",
+      "brand/bma": "disabled"
     },
     "$figmaCollectionId": "VariableCollectionId:7078:306",
     "$figmaModeId": "7078:1",
@@ -742,7 +744,8 @@
       "components/input": "enabled",
       "brand/kajabi_products": "enabled",
       "brand/kajabi_products/dark": "source",
-      "components/select": "enabled"
+      "components/select": "enabled",
+      "brand/bma": "disabled"
     },
     "$figmaCollectionId": "VariableCollectionId:7078:306",
     "$figmaModeId": "7078:2",
@@ -1048,5 +1051,14 @@
       "select.color.background.danger.@": "7dbef512b5f83f738343106c1feb456be6ee8e5d"
     },
     "group": "kajabi_products"
+  },
+  {
+    "id": "2162b189277f09d6d904fcfb4569cab6393f0902",
+    "name": "bma",
+    "$figmaStyleReferences": {},
+    "selectedTokenSets": {
+      "brand/bma": "enabled"
+    },
+    "group": "brand"
   }
 ]
