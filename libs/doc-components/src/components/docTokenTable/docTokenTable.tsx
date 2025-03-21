@@ -23,11 +23,11 @@ interface CategoryLookup {
 }
 
 const categoryStyleMapping: Record<string, Partial<React.CSSProperties>> = {
-  color: { width: "100%", height: "40px", borderRadius: "4px"},
-  border: { width: "100%", height: "40px", borderRadius: "4px" },
-  "border-radius": { border: "1px solid #d3d5d9", width: "100%", height: "40px" },
-  "border-width": { border: "1px solid #d3d5d9", width: "100%", height: "40px" },
-  "box-shadow": { width: "100%", height: "40px" },
+  color: { width: "75%", height: "60px", border: "1px solid #d3d5d9", borderRadius: "4px"},
+  border: { width: "75%", height: "60px", border: "1px solid #d3d5d9", borderRadius: "4px" },
+  "border-radius": { border: "1px solid #d3d5d9", width: "75%", height: "60px" },
+  "border-width": { border: "1px solid #d3d5d9", width: "75%", height: "60px" },
+  "box-shadow": { width: "75%", height: "60px" },
 };
 
 const applyStyle = (category: string, value: string, use?: string): React.CSSProperties => {
@@ -46,7 +46,7 @@ const applyStyle = (category: string, value: string, use?: string): React.CSSPro
     'dimension': (val) => {
       if (use === 'spacing') {
         style.margin = transformVal(val); // Example: apply margin for spacing
-      } else if (use === 'border-radius') {
+      } else {
         style.borderRadius = transformVal(val);
       }
     },
@@ -69,6 +69,13 @@ const categoryLookup: CategoryLookup = {
     "semantic": ['border-radius', 'dimension'],
   },
 };
+
+const formattedCategoryName = {
+  "fontFamilies": "font-family",
+  "fontSizes": "font-size",
+  "fontWeights": "font-weight",
+  "lineHeights": "line-height",
+}
 
 const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) => {
   const [pineTokens, setPineTokens] = useState<Token | null>(null);
@@ -117,9 +124,13 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
 
     return data.map(([key, token]): JSX.Element => {
       const tokenKeyName = parentKey ? `${parentKey}-${key}` : key;
-      const label: string = token.type || category;
+      let label: string | Token | TokenEntry = token.type || category;
 
-      const cssVariableName = `--pine-${camelToKebab(label)}-${tokenKeyName}`.replace(/-@/g, '');
+      if (formattedCategoryName[token.type as keyof typeof formattedCategoryName]) {
+        label = formattedCategoryName[token.type as keyof typeof formattedCategoryName];
+      }
+
+      const cssVariableName = `--pine-${camelToKebab(label as string)}-${tokenKeyName}`.replace(/-@/g, '');
 
       if ('value' in token) {
         let cssPropertyValue: string | undefined;
@@ -150,7 +161,7 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
           style = applyStyle(category, cssVariableName, use);
 
           const isTextBasedStyle = ['letter-spacing', 'line-height', 'font-weight', 'font-family', 'font-size', 'typography'].includes(category);
-          previewDiv = isTextBasedStyle ? <div style={style}>Aa</div> : <div style={{ ...style, width: '75%', height: '60px', border: 'var(--pine-border)' }}></div>;
+          previewDiv = isTextBasedStyle ? <div style={style}>Aa</div> : <div style={{ ...style, width: '75%', height: '60px', }}></div>;
 
           switch (category) {
             case 'dimension':
