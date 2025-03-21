@@ -9,4 +9,7 @@
 
 img {
   aspect-ratio: var(--dimension-aspect-ratio);
+  display: block;
+  height: auto;
+  max-width: 100%;
 }
