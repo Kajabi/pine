@@ -178,8 +178,8 @@ To truncate text, add the `truncate` attribute to the component. Text truncation
 
 <DocCanvas client:only
   mdxSource={{
-    react: `<PdsText tag="p" truncate>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</PdsText>`,
-    webComponent: `<pds-text tag="p" truncate>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</pds-text>`
+    react: `<PdsText style={{maxWidth: '40ch'}} tag="p" truncate>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</PdsText>`,
+    webComponent: `<pds-text style={{maxWidth: '40ch'}} tag="p" truncate>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</pds-text>`
 }}>
   <pds-text style={{maxWidth: '40ch'}} tag="p" truncate>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</pds-text>
 </DocCanvas>

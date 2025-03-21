@@ -45,6 +45,11 @@ export class PdsText {
   | '2xs';
 
   /**
+   * If set or `true`, the text will be italic.
+   */
+  @Prop() italic?: boolean;
+
+  /**
    * Sets the font size.
    */
   @Prop() size?:
@@ -54,7 +59,13 @@ export class PdsText {
   | 'md'
   | 'sm'
   | 'xs'
-  | '2xs';
+  | '2xs'
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'h5'
+  | 'h6';
 
   /**
    * Sets the font weight.
@@ -82,6 +93,11 @@ export class PdsText {
   | 'pre'
   | 'strong'
   | 'em' = "p";
+
+  /**
+   * If set or `true`, the text will be truncated. Must add a `width` to the element.
+   */
+  @Prop() truncate?: boolean;
 
   render() {
     const Tag = this.tag;

@@ -893,6 +893,10 @@ export namespace Components {
   | 'xs'
   | '2xs';
         /**
+          * If set or `true`, the text will be italic.
+         */
+        "italic"?: boolean;
+        /**
           * Sets the font size.
          */
         "size"?: | '2xl'
@@ -901,7 +905,13 @@ export namespace Components {
   | 'md'
   | 'sm'
   | 'xs'
-  | '2xs';
+  | '2xs'
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'h5'
+  | 'h6';
         /**
           * Determines what semantic text tag to render.
          */
@@ -916,6 +926,10 @@ export namespace Components {
   | 'pre'
   | 'strong'
   | 'em';
+        /**
+          * If set or `true`, the text will be truncated. Must add a `width` to the element.
+         */
+        "truncate"?: boolean;
         /**
           * Sets the font weight.
          */
@@ -2449,6 +2463,10 @@ declare namespace LocalJSX {
   | 'xs'
   | '2xs';
         /**
+          * If set or `true`, the text will be italic.
+         */
+        "italic"?: boolean;
+        /**
           * Sets the font size.
          */
         "size"?: | '2xl'
@@ -2457,7 +2475,13 @@ declare namespace LocalJSX {
   | 'md'
   | 'sm'
   | 'xs'
-  | '2xs';
+  | '2xs'
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'h5'
+  | 'h6';
         /**
           * Determines what semantic text tag to render.
          */
@@ -2472,6 +2496,10 @@ declare namespace LocalJSX {
   | 'pre'
   | 'strong'
   | 'em';
+        /**
+          * If set or `true`, the text will be truncated. Must add a `width` to the element.
+         */
+        "truncate"?: boolean;
         /**
           * Sets the font weight.
          */
