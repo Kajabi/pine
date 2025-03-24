@@ -11,8 +11,8 @@ describe('pds-button', () => {
       <pds-button variant="primary">
         <mock:shadow-root>
           <button class="pds-button pds-button--primary" part="button" type="button">
-            <div class="pds-button__content">
-              <span class="pds-button__text">
+            <div class="pds-button__content" part="button-content">
+              <span class="pds-button__text" part="button-text">
                 <slot></slot>
               </span>
             </div>
@@ -31,8 +31,8 @@ describe('pds-button', () => {
       <pds-button variant="accent">
         <mock:shadow-root>
           <button class="pds-button pds-button--accent" part="button" type="button">
-            <div class="pds-button__content">
-              <span class="pds-button__text">
+            <div class="pds-button__content" part="button-content">
+              <span class="pds-button__text" part="button-text">
                 <slot></slot>
               </span>
             </div>
@@ -51,8 +51,8 @@ describe('pds-button', () => {
       <pds-button variant="unstyled">
         <mock:shadow-root>
           <button class="pds-button pds-button--unstyled" part="button" type="button">
-            <div class="pds-button__content">
-              <span class="pds-button__text">
+            <div class="pds-button__content" part="button-content">
+              <span class="pds-button__text" part="button-text">
                 <slot></slot>
               </span>
             </div>
@@ -71,8 +71,8 @@ describe('pds-button', () => {
       <pds-button disabled="true" aria-disabled="true" variant="primary">
         <mock:shadow-root>
           <button class="pds-button pds-button--primary" part="button" type="button" disabled>
-            <div class="pds-button__content">
-              <span class="pds-button__text">
+            <div class="pds-button__content" part="button-content">
+              <span class="pds-button__text" part="button-text">
                 <slot></slot>
               </span>
             </div>
@@ -92,8 +92,8 @@ describe('pds-button', () => {
       <pds-button component-id="test" id="test" variant="primary">
         <mock:shadow-root>
           <button class="pds-button pds-button--primary" part="button" type="button">
-            <div class="pds-button__content">
-              <span class="pds-button__text">
+            <div class="pds-button__content" part="button-content">
+              <span class="pds-button__text" part="button-text">
                 <slot></slot>
               </span>
             </div>
@@ -122,8 +122,8 @@ describe('pds-button', () => {
       <pds-button loading="true" variant="primary">
         <mock:shadow-root>
           <button aria-busy="true" aria-live="polite" class="pds-button pds-button--primary pds-button--loading" part="button" type="button">
-            <div class="pds-button__content">
-              <span class="pds-button__text pds-button__text--hidden">
+            <div class="pds-button__content" part="button-content">
+              <span class="pds-button__text pds-button__text--hidden" part="button-text">
                 <slot></slot>
               </span>
               <span class="pds-button__loader">
@@ -174,8 +174,8 @@ describe('pds-button', () => {
       <pds-button full-width="true" variant="primary">
         <mock:shadow-root>
           <button class="pds-button pds-button--primary" part="button" type="button">
-            <div class="pds-button__content">
-              <span class="pds-button__text">
+            <div class="pds-button__content" part="button-content">
+              <span class="pds-button__text" part="button-text">
                 <slot></slot>
               </span>
             </div>
