@@ -191,6 +191,56 @@ The button submits the form data to the server.
 
 The button resets all the controls to their initial values. [As noted on MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type), this behavior tends to annoy users.
 
+
+## Styling with CSS Parts
+
+The `pds-button` component provides CSS parts that allow for targeted customization. These parts should be used sparingly and only when the built-in props do not provide the necessary styling flexibility.
+
+### Important Considerations
+- **Encapsulation:** CSS parts allow direct styling of specific elements within the `pds-button` component, but **do not affect their child elements**. This ensures internal styles remain consistent and prevents unintended overrides.
+- **Best Practices:** Whenever possible, use props to modify the button's appearance. CSS parts should only be leveraged for advanced styling needs.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+    <style>
+    .custom-button::part(button-text) {
+      color: yellow;
+    }
+    .custom-button::part(button) {
+      background-color: #628b83;
+      border-color: #628b83;
+    }
+    </style>
+
+    <PdsButton className="custom-button" variant="primary">Button</PdsButton>
+    `,
+    webComponent: `
+    <style>
+    .custom-button::part(button-text) {
+      color: yellow;
+    }
+    .custom-button::part(button) {
+      background-color: #628b83;
+      border-color: #628b83;
+    }
+    </style>
+
+    <pds-button class="custom-button" variant="primary">Button</pds-button>
+    `
+}}>
+  <style dangerouslySetInnerHTML={{__html: `
+    .custom-button::part(button-text) {
+      color: yellow;
+    }
+    .custom-button::part(button) {
+      background-color: #628b83;
+      border-color: #628b83;
+    }
+  `}} />
+  <pds-button class="custom-button" variant="primary">Button</pds-button>
+</DocCanvas>
+
 ## Additional Resources
 
 [CSS Tricks: Buttons vs. Links](https://css-tricks.com/buttons-vs-links/)
