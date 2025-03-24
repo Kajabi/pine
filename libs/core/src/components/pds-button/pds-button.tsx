@@ -5,6 +5,8 @@ import { caretDown } from '@pine-ds/icons/icons';
 
 /**
  * @part button - Exposes the button element for styling.
+ * @part button-content - Exposes the button content for styling.
+ * @part button-text - Exposes the button text for styling.
  * @part caret - Exposes the caret icon component for styling. Appears only on the disclosure variant.
  * @part icon - Exposes the icon component for styling.
 */
@@ -129,7 +131,7 @@ export class PdsButton {
           type={this.type}
           value={this.value}
         >
-          <div class="pds-button__content">
+          <div class="pds-button__content" part="button-content">
             {this.icon && this.variant !== 'disclosure' &&
               <pds-icon
                 class={this.loading ? 'pds-button__icon--hidden' : ''}
@@ -138,7 +140,7 @@ export class PdsButton {
               ></pds-icon>
             }
 
-            <span class={`pds-button__text ${this.loading ? 'pds-button__text--hidden' : ''}`}>
+            <span class={`pds-button__text ${this.loading ? 'pds-button__text--hidden' : ''}`} part="button-text">
               <slot />
             </span>
 
