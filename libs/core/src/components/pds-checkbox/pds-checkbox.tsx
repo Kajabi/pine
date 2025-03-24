@@ -131,7 +131,9 @@ export class PdsCheckbox {
             onChange={this.handleCheckboxChange}
             onInput={this.handleInput}
           />
-          {this.label}
+          <span class={this.labelHidden ? 'visually-hidden' : ''}>
+            {this.label}
+          </span>
         </label>
         {this.helperMessage &&
           <div
