@@ -1,4 +1,5 @@
 :host {
+  --button-dimension: 40px;
   --color-border-default: transparent;
   --color-border-disabled: transparent;
   --color-border-focus: transparent;
@@ -42,7 +43,7 @@
   display: flex;
   font: var(--pine-typography-body-brand-label);
   letter-spacing: var(--pine-letter-spacing);
-  min-height: 40px;
+  min-height: var(--button-dimension);
   padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
   text-decoration: none;
 
@@ -194,12 +195,12 @@
 .pds-button--icon-only {
   align-items: center;
   border-radius: var(--pine-border-radius-full);
-  height: 40px;
+  height: var(--button-dimension);
   justify-content: center;
-  min-height: 40px;
-  min-width: 40px;
+  min-height: var(--button-dimension);
+  min-width: var(--button-dimension);
   padding: var(--pine-dimension-xs);
-  width: 40px;
+  width: var(--button-dimension);
 
   .pds-button__content {
     height: 100%;
