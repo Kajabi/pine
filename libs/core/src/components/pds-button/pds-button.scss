@@ -17,6 +17,11 @@
     justify-content: center;
     width: 100%;
   }
+
+  .pds-button__content {
+    justify-content: center;
+    text-align: center;
+  }
 }
 
 :host([loading="true"]) {
@@ -31,6 +36,7 @@
   border: var(--pine-border);
   border-color: var(--color-border-default);
   border-radius: var(--pine-border-radius-full);
+  box-sizing: border-box;
   color: var(--color-text-default); // Set in the variant classes below
   cursor: pointer;
   display: flex;
@@ -38,6 +44,7 @@
   letter-spacing: var(--pine-letter-spacing);
   min-height: 40px;
   padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
+  text-decoration: none;
 
   pds-icon {
     color: currentColor;
@@ -181,5 +188,39 @@
     pds-loader {
       --loader-color: var(--button-loader-color);
     }
+  }
+}
+
+.pds-button--icon-only {
+  align-items: center;
+  border-radius: var(--pine-border-radius-full);
+  height: 40px;
+  justify-content: center;
+  min-height: 40px;
+  min-width: 40px;
+  padding: var(--pine-dimension-xs);
+  width: 40px;
+
+  .pds-button__content {
+    height: 100%;
+    justify-content: center;
+    width: 100%;
+  }
+
+  pds-icon {
+    margin: 0;
+  }
+
+  .pds-button__text--hidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    clip-path: polygon(0 0, 0 0, 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
   }
 }
