@@ -37,11 +37,21 @@ export class PdsButton {
   @Prop() fullWidth? = false;
 
   /**
-   * Displays an icon before the text when
-   * the icon string matches an icon name.
+   * If provided, renders the component as an anchor (`<a>`) element instead of a button.
+   * When using href, button-specific props (type, name, value, loading) will be ignored.
+   */
+  @Prop() href?: string;
+
+  /**
+   * Displays an icon in the button.
    * @defaultValue null
    */
   @Prop() icon?: string = null;
+
+  /**
+   * When true, displays only the icon and visually hides the text (keeping it accessible).
+   */
+  @Prop() iconOnly? = false;
 
   /**
    * Determines if the button is in a loading state.
@@ -56,15 +66,21 @@ export class PdsButton {
   @Prop() name?: string;
 
   /**
-   * Provides button with a submittable value
+   * Specifies where to open the linked document when href is provided.
+   * Only applies when href is set.
    */
-  @Prop() value?: string;
+  @Prop() target?: '_blank' | '_self' | '_parent' | '_top';
 
   /**
    * Provides button with a type.
    * @defaultValue button
    */
   @Prop() type?: 'button' | 'reset' | 'submit' = 'button';
+
+  /**
+   * Provides button with a submittable value
+   */
+  @Prop() value?: string;
 
   /**
    * Sets the style variant of the button.
@@ -80,30 +96,34 @@ export class PdsButton {
       return;
     }
 
-    if (this.type != 'button') {
+    if (!this.href && this.type != 'button') {
       // If button clicked IS NOT associated with a form
       if (hasShadowDom(this.el)) {
-        const form = this.el.closest('form')
+        const form = this.el.closest('form');
         if (form) {
-          ev.preventDefault()
+          ev.preventDefault();
 
-          const fakeButton = document.createElement('button')
-          fakeButton.type = this.type
-          fakeButton.style.display = 'none'
-          form.appendChild(fakeButton)
-          fakeButton.click()
-          fakeButton.remove()
+          const fakeButton = document.createElement('button');
+          fakeButton.type = this.type;
+          fakeButton.style.display = 'none';
+          form.appendChild(fakeButton);
+          fakeButton.click();
+          fakeButton.remove();
         }
       }
     }
     this.pdsClick.emit(ev);
-  }
+  };
 
   private classNames() {
     const classNames = ['pds-button'];
 
     if (this.variant) {
       classNames.push('pds-button--' + this.variant);
+    }
+
+    if (this.iconOnly) {
+      classNames.push('pds-button--icon-only');
     }
 
     if (this.loading) {
@@ -114,6 +134,63 @@ export class PdsButton {
   }
 
   render() {
+    // Common props for both button and anchor elements
+    const commonProps = {
+      class: this.classNames(),
+      part: 'button',
+    };
+
+    const attributes = () => {
+      if (this.href) {
+        return {
+          // Anchor element props
+          ...commonProps,
+          href: this.disabled ? null : this.href,
+          target: this.target,
+        };
+      }
+
+      return {
+        // Button element props
+        ...commonProps,
+        'aria-busy': this.loading ? 'true' : null,
+        'aria-live': this.loading ? 'polite' : null,
+        'disabled': this.disabled,
+        'name': this.name,
+        'type': this.type,
+        'value': this.value,
+      };
+    };
+
+    const ContentElement = this.href ? 'a' : 'button';
+
+    // Hide text when loading or iconOnly is true
+    const hideText = this.loading || this.iconOnly;
+
+    const content = (
+      <div class="pds-button__content" part="button-content">
+        {this.icon && this.variant !== 'disclosure' &&
+          <pds-icon class={this.loading ? 'pds-button__icon--hidden' : ''} name={this.icon} part="icon"></pds-icon>
+        }
+
+        <span class={`pds-button__text ${hideText ? 'pds-button__text--hidden' : ''}`} part="button-text">
+          <slot />
+        </span>
+
+        {this.loading && (
+          <span class="pds-button__loader">
+            <pds-loader is-loading={true} size="var(--pine-font-size-body-2xl)" variant="spinner">
+              Loading...
+            </pds-loader>
+          </span>
+        )}
+
+        {this.variant === 'disclosure' &&
+          <pds-icon class={this.loading ? 'pds-button__icon--hidden' : ''} icon={caretDown} part="caret"></pds-icon>
+        }
+      </div>
+    );
+
     return (
       <Host
         aria-disabled={this.disabled ? 'true' : null}
@@ -121,50 +198,9 @@ export class PdsButton {
         onClick={this.handleClick}
         variant={this.variant}
       >
-        <button
-          aria-busy={this.loading ? 'true' : null}
-          aria-live={this.loading ? 'polite' : null}
-          class={this.classNames()}
-          disabled={this.disabled}
-          name={this.name}
-          part="button"
-          type={this.type}
-          value={this.value}
-        >
-          <div class="pds-button__content" part="button-content">
-            {this.icon && this.variant !== 'disclosure' &&
-              <pds-icon
-                class={this.loading ? 'pds-button__icon--hidden' : ''}
-                name={this.icon}
-                part="icon"
-              ></pds-icon>
-            }
-
-            <span class={`pds-button__text ${this.loading ? 'pds-button__text--hidden' : ''}`} part="button-text">
-              <slot />
-            </span>
-
-            {this.loading &&
-              <span class="pds-button__loader">
-                <pds-loader
-                  is-loading={true}
-                  size="var(--pine-font-size-body-2xl)"
-                  variant="spinner"
-                >
-                  Loading...
-                </pds-loader>
-              </span>
-            }
-
-            {this.variant === 'disclosure' &&
-              <pds-icon
-                class={this.loading ? 'pds-button__icon--hidden' : ''}
-                icon={caretDown}
-                part="caret"
-              ></pds-icon>
-            }
-          </div>
-        </button>
+        <ContentElement {...attributes()}>
+          {content}
+        </ContentElement>
       </Host>
     );
   }
