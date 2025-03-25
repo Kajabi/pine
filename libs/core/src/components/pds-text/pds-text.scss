@@ -15,42 +15,40 @@
   text-decoration: line-through;
 }
 
-// TODO: Update all values to match new semantic tokens, if applicable
-
 /* stylelint-disable */
 h1 {
   font: var(--pine-typography-heading-1);
-  letter-spacing: 0.26px;
+  letter-spacing: var(--pine-letter-spacing-heading-1);
 }
 
 h2 {
   font: var(--pine-typography-heading-2);
-  letter-spacing: 0.24px;
+  letter-spacing: var(--pine-letter-spacing-heading-2);
 }
 
 h3 {
   font: var(--pine-typography-heading-3);
-  letter-spacing: 0.22px;
+  letter-spacing: var(--pine-letter-spacing-heading-3);
 }
 
 h4 {
   font: var(--pine-typography-heading-4);
-  letter-spacing: 0.20px;
+  letter-spacing: var(--pine-letter-spacing-heading-4);
 }
 
 h5 {
   font: var(--pine-typography-heading-5);
-  letter-spacing: 0.18px;
+  letter-spacing: var(--pine-letter-spacing-heading-5);
 }
 
 h6 {
   font: var(--pine-typography-heading-6);
-  letter-spacing: 0.16px;
+  letter-spacing: var(--pine-letter-spacing-heading-6);
 }
 
 code, em, p, pre, strong {
   font: var(--pine-typography-body);
-  letter-spacing: -0.16px;
+  letter-spacing: var(--pine-letter-spacing-body);
 }
 /* stylelint-enable */
 
@@ -115,6 +113,12 @@ $type-sizes: (
   sm: var(--pine-font-size-body-sm),
   xs: var(--pine-font-size-body-xs),
   2xs: var(--pine-font-size-body-2xs),
+  h1: var(--pine-font-size-heading-1),
+  h2: var(--pine-font-size-heading-2),
+  h3: var(--pine-font-size-heading-3),
+  h4: var(--pine-font-size-heading-4),
+  h5: var(--pine-font-size-heading-5),
+  h6: var(--pine-font-size-heading-6),
 );
 
 @mixin generate-type-sizes($type-sizes) {
