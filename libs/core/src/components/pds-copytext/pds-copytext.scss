@@ -51,9 +51,10 @@
     pds-button {
       padding: var(--pine-dimension-none);
 
-      &:hover {
-        background: none;
-      }
+    }
+
+    &::part(button):hover {
+      background-color: transparent;
     }
 
     span {
@@ -93,8 +94,15 @@
 
   &:host(.pds-copytext--truncated) {
     pds-button {
-      display: flex;
+      display: inline-flex;
+      min-width: auto;
       width: 100%;
+
+      &::part(button-content),
+      &::part(button-text) {
+        flex-shrink: 1;
+        width: 100%;
+      }
 
       span {
         overflow: hidden;

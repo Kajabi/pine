@@ -29,11 +29,13 @@
 
 ## Shadow Parts
 
-| Part       | Description                                                                           |
-| ---------- | ------------------------------------------------------------------------------------- |
-| `"button"` | Exposes the button element for styling.                                               |
-| `"caret"`  | Exposes the caret icon component for styling. Appears only on the disclosure variant. |
-| `"icon"`   | Exposes the icon component for styling.                                               |
+| Part               | Description                                                                           |
+| ------------------ | ------------------------------------------------------------------------------------- |
+| `"button"`         | Exposes the button element for styling.                                               |
+| `"button-content"` | Exposes the button content for styling.                                               |
+| `"button-text"`    | Exposes the button text for styling.                                                  |
+| `"caret"`          | Exposes the caret icon component for styling. Appears only on the disclosure variant. |
+| `"icon"`           | Exposes the icon component for styling.                                               |
 
 
 ## Dependencies
