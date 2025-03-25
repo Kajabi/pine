@@ -1,7 +1,8 @@
 .doc-token-table {
+	border-collapse: collapse;
   table-layout: fixed;
   width: 100%;
-	
+
 	thead {
 		tr {
 			border-top: 0 !important
@@ -9,6 +10,7 @@
 
 		th {
 			border: 0 !important;
+			padding-block-end: var(--pine-dimension-xs);
 			text-align: left;
 		}
 	}
@@ -19,8 +21,11 @@
 		}
 
 		td {
+			border: var(--pine-border);
+			border-color: var(--pine-color-grey-200);
 			border-left: 0 !important;
 			border-right: 0 !important;
+			padding: var(--pine-dimension-150) var(--pine-dimension-150) var(--pine-dimension-150) var(--pine-dimension-none);
 		}
 	}
 }

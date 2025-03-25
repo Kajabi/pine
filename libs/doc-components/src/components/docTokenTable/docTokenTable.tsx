@@ -1,5 +1,4 @@
-import React from 'react';
-import allTokenJson from '../../../../core/src/global/styles/tokens/base/core.json';
+import React, { useEffect, useState } from 'react';
 
 import './docTokenTable.css';
 
@@ -14,40 +13,49 @@ interface Token {
 
 interface DocTokenTableProps {
   category: string;
-  use: string
+  tier: string;
+  use: string;
+}
+interface CategoryLookup {
+  [key: string]: {
+    [key: string]: string[];
+  }
 }
 
 const categoryStyleMapping: Record<string, Partial<React.CSSProperties>> = {
-  color: { width: "100%", height: "40px", borderRadius: "4px"},
-  border: { width: "100%", height: "40px", borderRadius: "4px" },
-  "border-radius": { border: "1px solid #d3d5d9", width: "100%", height: "40px" },
-  "border-width": { border: "1px solid #d3d5d9", width: "100%", height: "40px" },
-  "box-shadow": { width: "100%", height: "40px" },
+  color: { width: "75%", height: "60px", border: "1px solid #d3d5d9", borderRadius: "4px"},
+  border: { width: "75%", height: "60px", border: "1px solid #d3d5d9", borderRadius: "4px" },
+  "border-radius": { border: "1px solid #d3d5d9", width: "75%", height: "60px" },
+  "border-width": { border: "1px solid #d3d5d9", width: "75%", height: "60px" },
+  "box-shadow": { width: "75%", height: "60px" },
 };
 
 const applyStyle = (category: string, value: string, use?: string): React.CSSProperties => {
   const style: React.CSSProperties = {};
   const categoryStyles = categoryStyleMapping[category];
+  const transformVal = (val: string) => `var(${val})`;
 
   Object.assign(style, categoryStyles);
 
   const styleMap: { [key: string]: (value: string) => void } = {
-    'border': (val) => style.border = val,
-    'color': (val) => style.backgroundColor = val,
+    'border': (val) => style.border = transformVal(val),
+    'border-radius': (val) => style.borderRadius = transformVal(val),
+    'border-width': (val) => style.borderWidth = transformVal(val),
+    'box-shadow': (val) => style.boxShadow = transformVal(val),
+    'color': (val) => style.backgroundColor = transformVal(val),
     'dimension': (val) => {
       if (use === 'spacing') {
-        style.margin = val; // Example: apply margin for spacing
+        style.margin = transformVal(val); // Example: apply margin for spacing
       } else {
-        style.borderRadius = val; // Default behavior
+        style.borderRadius = transformVal(val);
       }
     },
-    'border-width': (val) => style.borderWidth = val,
-    'box-shadow': (val) => style.boxShadow = val,
-    'font-family': (val) => style.fontFamily = val,
-    'font-size': (val) => style.fontSize = val,
-    'font-weight': (val) => style.fontWeight = val,
-    'letter-spacing': (val) => style.letterSpacing = val,
-    'line-height': (val) => style.lineHeight = val,
+    'font-family': (val) => style.fontFamily = transformVal(val),
+    'font-size': (val) => style.fontSize = transformVal(val),
+    'font-weight': (val) => style.fontWeight = transformVal(val),
+    'letter-spacing': (val) => style.letterSpacing = transformVal(val),
+    'line-height': (val) => style.lineHeight = transformVal(val),
+    'typography': (val) => style.font = transformVal(val),
   };
 
   styleMap[category]?.(value);
@@ -55,14 +63,56 @@ const applyStyle = (category: string, value: string, use?: string): React.CSSPro
   return style;
 }
 
-const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, use }) => {
-  const pineTokens = allTokenJson[category as keyof typeof allTokenJson] as unknown as Token;
+const categoryLookup: CategoryLookup = {
+  "border-radius": {
+    "core": ['dimension'],
+    "semantic": ['border-radius', 'dimension'],
+  },
+};
+
+const formattedCategoryName = {
+  "fontFamilies": "font-family",
+  "fontSizes": "font-size",
+  "fontWeights": "font-weight",
+  "lineHeights": "line-height",
+}
+
+const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) => {
+  const [pineTokens, setPineTokens] = useState<Token | null>(null);
+
+  useEffect(() => {
+    const loadTokens = async () => {
+      try {
+        const tokenModule = await import(`../../../../core/src/global/styles/tokens/base/${tier}.json`);
+        const categories = categoryLookup[category]?.[tier] || null;
+        if (categories) {
+          const tempTokens: Token[] = [];
+          categories.forEach((cat: string) => {
+            tempTokens.push(tokenModule.default[cat as keyof typeof tokenModule.default]);
+          });
+          const mergedTokens = tempTokens.reduce((result, tokenObj) => ({...result, ...tokenObj}), {});
+          setPineTokens(mergedTokens as Token);
+        }
+        else {
+          setPineTokens(tokenModule.default[category as keyof typeof tokenModule.default] as Token);
+        }
+      } catch (error) {
+        console.error('Error loading token JSON:', error);
+      }
+    };
+
+    loadTokens();
+  }, [category, tier]);
 
   const buildValue = (item: string | Record<string, unknown> | ArrayLike<unknown>): string => {
     const boxShadowValue = Object.values(item) as unknown as string[];
     const filteredBoxShadowValue = boxShadowValue.filter(prop => prop !== 'dropShadow');
 
     return filteredBoxShadowValue.join(' ');
+  };
+
+  const camelToKebab = (str: string): string => {
+    return str.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
   };
 
   const renderTableRows = (tokens: Token, parentKey?: string): JSX.Element[] => {
@@ -73,9 +123,14 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, use }) => {
     const data = entries.sort((tokenKeyA, tokenKeyB) => parseInt(tokenKeyA[0]) - parseInt(tokenKeyB[0]));
 
     return data.map(([key, token]): JSX.Element => {
-
       const tokenKeyName = parentKey ? `${parentKey}-${key}` : key;
-      const cssVariableName =  `--pine-${category}-${tokenKeyName}`;
+      let label: string | Token | TokenEntry = token.type || category;
+
+      if (formattedCategoryName[token.type as keyof typeof formattedCategoryName]) {
+        label = formattedCategoryName[token.type as keyof typeof formattedCategoryName];
+      }
+
+      const cssVariableName = `--pine-${camelToKebab(label as string)}-${tokenKeyName}`.replace(/-@/g, '');
 
       if ('value' in token) {
         let cssPropertyValue: string | undefined;
@@ -85,7 +140,11 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, use }) => {
           if ('value' in token.value) {
             cssPropertyValue = token.value.value as string;
           }
-          else if (token.type === 'boxShadow') {
+          else if (
+            token.type === 'boxShadow'
+            || token.type === 'typography'
+            || token.type === 'border'
+          ) {
             if (Array.isArray(token.value)) {
               cssPropertyValue = (token.value as string[]).map(buildValue).join(', ');
             } else {
@@ -99,22 +158,22 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, use }) => {
         let previewDiv = <div style={style}>Aa</div>;
 
         if (cssPropertyValue) {
-          style = applyStyle(category, cssPropertyValue, use);
+          style = applyStyle(category, cssVariableName, use);
 
-          const isTextBasedStyle = ['letter-spacing', 'line-height', 'font-weight', 'font-family', 'font-size'].includes(category);
-          previewDiv = isTextBasedStyle ? <div style={style}>Aa</div> : <div style={{...style, width: '60px', height: '30px', border: 'var(--pine-border)'}}></div>;
+          const isTextBasedStyle = ['letter-spacing', 'line-height', 'font-weight', 'font-family', 'font-size', 'typography'].includes(category);
+          previewDiv = isTextBasedStyle ? <div style={style}>Aa</div> : <div style={{ ...style, width: '75%', height: '60px', }}></div>;
 
           switch (category) {
             case 'dimension':
               switch (use) {
                 case 'spacing':
                   previewDiv =
-                    <div style={{ display: 'flex', alignItems: 'center', gap: `var(${cssVariableName})`}}>
-                      <div key={`${Math.floor(Math.random() * (100000 - 1 + 1)) + 1}`} style={{ border: 'var(--pine-border)', width: '60px', height: '30px', borderRadius: '4px' }}></div>
-                      <div style={{ border: 'var(--pine-border)', width: '60px', height: '30px', borderRadius: '4px' }}></div>
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: `var(${cssVariableName})`}}>
+                      <div key={`${Math.floor(Math.random() * (100000 - 1 + 1)) + 1}`} style={{ border: 'var(--pine-border)', width: '60px', height: '60px', borderRadius: '4px' }}></div>
+                      <div style={{ border: 'var(--pine-border)', width: '60px', height: '60px', borderRadius: '4px' }}></div>
                     </div>
                   break;
-              }
+                }
               break;
           }
         }
@@ -145,7 +204,7 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, use }) => {
         </tr>
       </thead>
       <tbody>
-        {renderTableRows(pineTokens)}
+        {pineTokens && renderTableRows(pineTokens)}
       </tbody>
     </table>
   );
