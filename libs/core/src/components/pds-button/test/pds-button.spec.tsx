@@ -202,4 +202,45 @@ describe('pds-button', () => {
     await root.waitForChanges();
     expect(eventSpy).toHaveBeenCalled();
   });
+
+  it('renders an icon-only button', async () => {
+    const {root} = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button icon-only="true" icon="favorite"></pds-button>`,
+    });
+    expect(root).toEqualHtml(`
+      <pds-button icon-only="true" icon="favorite" variant="primary">
+        <mock:shadow-root>
+          <button class="pds-button pds-button--primary pds-button--icon-only" part="button" type="button">
+            <div class="pds-button__content" part="button-content">
+              <pds-icon name="favorite" part="icon"></pds-icon>
+              <span class="pds-button__text pds-button__text--hidden" part="button-text">
+                <slot></slot>
+              </span>
+            </div>
+          </button>
+        </mock:shadow-root>
+      </pds-button>
+    `);
+  });
+
+  it('renders as a link when using an href', async () => {
+    const {root} = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button href="https://example.com" target="_blank"></pds-button>`,
+    });
+    expect(root).toEqualHtml(`
+      <pds-button href="https://example.com" target="_blank" variant="primary">
+        <mock:shadow-root>
+          <a class="pds-button pds-button--primary" part="button" href="https://example.com" target="_blank">
+            <div class="pds-button__content" part="button-content">
+              <span class="pds-button__text" part="button-text">
+                <slot></slot>
+              </span>
+            </div>
+          </a>
+        </mock:shadow-root>
+      </pds-button>
+    `);
+  });
 });
