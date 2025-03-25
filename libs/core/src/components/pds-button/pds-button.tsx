@@ -170,7 +170,7 @@ export class PdsButton {
     const content = (
       <div class="pds-button__content" part="button-content">
         {this.icon && this.variant !== 'disclosure' &&
-          <pds-icon class={this.loading ? 'pds-button__icon--hidden' : ''} name={this.icon} part="icon"></pds-icon>
+          <pds-icon class={this.loading ? 'pds-button__icon--hidden' : ''} name={this.icon} part="icon" aria-hidden="true"></pds-icon>
         }
 
         <span class={`pds-button__text ${hideText ? 'pds-button__text--hidden' : ''}`} part="button-text">
@@ -186,7 +186,7 @@ export class PdsButton {
         )}
 
         {this.variant === 'disclosure' &&
-          <pds-icon class={this.loading ? 'pds-button__icon--hidden' : ''} icon={caretDown} part="caret"></pds-icon>
+          <pds-icon class={this.loading ? 'pds-button__icon--hidden' : ''} icon={caretDown} part="caret" aria-hidden="true"></pds-icon>
         }
       </div>
     );
