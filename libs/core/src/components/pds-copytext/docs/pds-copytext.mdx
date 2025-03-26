@@ -52,7 +52,9 @@ When `full-width` is set to `true`, the component will occupy the full width of 
     react: '<PdsCopytext value="Copy all of this text" fullWidth></PdsCopytext>',
     webComponent: '<pds-copytext value="Copy all of this text" full-width></pds-copytext>'
 }}>
-  <pds-copytext value="Copy all of this text" full-width></pds-copytext>
+  <div style={{ width: '100%' }}>
+    <pds-copytext value="Copy all of this text" full-width></pds-copytext>
+  </div>
 </DocCanvas>
 
 ### Truncate
