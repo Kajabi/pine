@@ -8,10 +8,16 @@ import { BoxColumnType, BoxTShirtSizeType, BoxShadowSizeType } from '../../utils
 })
 export class PdsBox {
   /**
-   * Defines the vertical alignment of the box items.
+   * Defines how items within the box are aligned.
    * @defaultValue start
   */
   @Prop() alignItems?: `start` | `center` | `end` | `baseline` | `stretch`;
+
+  /**
+   * Defines how the box is aligned within its container.
+   * @defaultValue start
+  */
+  @Prop() alignSelf?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
    * If `true`, the box will be sized to fit its contents.
@@ -121,6 +127,18 @@ export class PdsBox {
   @Prop() padding?: BoxTShirtSizeType;
 
   /**
+   * Defines the top and bottom spacing.
+   * @defaultValue none
+  */
+  @Prop() paddingBlock?: BoxTShirtSizeType;
+
+  /**
+   * Defines the left and right spacing.
+   * @defaultValue none
+  */
+  @Prop() paddingInline?: BoxTShirtSizeType;
+
+  /**
    * Defines the box shadow.
    * @defaultValue none
   */
@@ -159,6 +177,7 @@ export class PdsBox {
   render() {
     const boxClasses = `
     ${this.alignItems !== undefined && this.alignItems.trim() !== '' ? `pds-align-items-${this.alignItems}` : ''}
+    ${this.alignSelf !== undefined && this.alignSelf.trim() !== '' ? `pds-align-self-${this.alignSelf}` : ''}
     ${this.auto ? 'pds-box--auto' : ''}
     ${this.border ? 'pds-box--border' : ''}
     ${this.borderRadius !== undefined && this.borderRadius.trim() !== '' ? `pds-border-radius-${this.borderRadius}` : ''}
@@ -175,6 +194,8 @@ export class PdsBox {
     ${this.offsetLg !== undefined && this.offsetLg.trim() !== '' ? `pds-box-offset-lg-${this.offsetLg}` : ''}
     ${this.offsetXl !== undefined && this.offsetXl.trim() !== '' ? `pds-box-offset-xl-${this.offsetXl}` : ''}
     ${this.padding !== undefined && this.padding.trim() !== '' ? `pds-padding-${this.padding}` : ''}
+    ${this.paddingBlock !== undefined && this.paddingBlock.trim() !== '' ? `pds-padding-block-${this.paddingBlock}` : ''}
+    ${this.paddingInline !== undefined && this.paddingInline.trim() !== '' ? `pds-padding-inline-${this.paddingInline}` : ''}
     ${this.shadow !== undefined && this.shadow.trim() !== '' ? `pds-shadow-${this.shadow}` : ''}
     ${this.size !== undefined && this.size.trim() !== '' ? `pds-box pds-box-${this.size}` : ''}
     ${this.sizeXs !== undefined && this.sizeXs.trim() !== '' ? `pds-box-xs-${this.sizeXs}` : ''}

@@ -13,6 +13,7 @@ export default {
 const BaseTemplate = (args) => html`
 <pds-box
 	align-items="${args.alignItems}"
+  align-self="${args.alignSelf}"
   auto="${args.auto}"
   background-color="${args.backgroundColor}"
 	border="${args.border}"
@@ -31,6 +32,8 @@ const BaseTemplate = (args) => html`
   offset-lg="${args.offsetLg}"
   offset-xl="${args.offsetXl}"
   padding="${args.padding}"
+  padding-block="${args.paddingBlock}"
+  padding-inline="${args.paddingInline}"
   shadow="${args.shadow}"
   size="${args.size}"
   size-xs="${args.sizeXs}"

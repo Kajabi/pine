@@ -54,6 +54,17 @@ describe('pds-box', () => {
     expect(element).toHaveClass('pds-align-items-center');
   });
 
+  it('renders align-self class when prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsBox],
+      html: `<pds-box align-self="center"></pds-box>`,
+    });
+
+    const element = page.root;
+
+    expect(element).toHaveClass('pds-align-self-center');
+  });
+
   it('renders auto class when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsBox],
@@ -250,6 +261,26 @@ describe('pds-box', () => {
 
       const element = page.root;
       expect(element).toHaveClass(`pds-padding-${size}`);
+    });
+
+    it(`renders padding-block class when prop is set to ${size}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box padding-block="${size}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-padding-block-${size}`);
+    });
+
+    it(`renders padding-inline class when prop is set to ${size}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box padding-inline="${size}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-padding-inline-${size}`);
     });
 
     it(`renders gap class when prop is set to ${size}`, async () => {
