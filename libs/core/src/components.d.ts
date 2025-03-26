@@ -223,10 +223,18 @@ export namespace Components {
          */
         "fullWidth"?: boolean;
         /**
-          * Displays an icon before the text when the icon string matches an icon name.
+          * If provided, renders the component as an anchor (`<a>`) element instead of a button. When using href, button-specific props (type, name, value, loading) will be ignored.
+         */
+        "href"?: string;
+        /**
+          * Displays an icon in the button.
           * @defaultValue null
          */
         "icon"?: string;
+        /**
+          * When true, displays only the icon and visually hides the text (keeping it accessible).
+         */
+        "iconOnly"?: boolean;
         /**
           * Determines if the button is in a loading state. When true, displays a loader and hides the button text.
           * @defaultValue false
@@ -236,6 +244,10 @@ export namespace Components {
           * Provides the button with a submittable name.
          */
         "name"?: string;
+        /**
+          * Specifies where to open the linked document when href is provided. Only applies when href is set.
+         */
+        "target"?: '_blank' | '_self' | '_parent' | '_top';
         /**
           * Provides button with a type.
           * @defaultValue button
@@ -1745,10 +1757,18 @@ declare namespace LocalJSX {
          */
         "fullWidth"?: boolean;
         /**
-          * Displays an icon before the text when the icon string matches an icon name.
+          * If provided, renders the component as an anchor (`<a>`) element instead of a button. When using href, button-specific props (type, name, value, loading) will be ignored.
+         */
+        "href"?: string;
+        /**
+          * Displays an icon in the button.
           * @defaultValue null
          */
         "icon"?: string;
+        /**
+          * When true, displays only the icon and visually hides the text (keeping it accessible).
+         */
+        "iconOnly"?: boolean;
         /**
           * Determines if the button is in a loading state. When true, displays a loader and hides the button text.
           * @defaultValue false
@@ -1759,6 +1779,10 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         "onPdsClick"?: (event: PdsButtonCustomEvent<any>) => void;
+        /**
+          * Specifies where to open the linked document when href is provided. Only applies when href is set.
+         */
+        "target"?: '_blank' | '_self' | '_parent' | '_top';
         /**
           * Provides button with a type.
           * @defaultValue button

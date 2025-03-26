@@ -3,7 +3,7 @@ import { components } from '../../../../dist/docs.json';
 
 # Button
 
-A button is an interactive element that can be clicked to perform an action or submit a form.
+A button is an interactive element that can be clicked to perform various actions such as triggering an event, submitting data, or navigating to a different location.
 
 ## Guidelines
 
@@ -14,8 +14,6 @@ A button is an interactive element that can be clicked to perform an action or s
 - Progressing or regressing a user through a step in a flow (e.g. modals).
 
 ### When not to use
-
-- Directing users to a new page or different part within the same page. Instead, use [Link](/docs/components-link--external).
 - When space is limited consider an IconButton.
 
 ## Accessibility
@@ -100,27 +98,6 @@ Accent button variant, intended to be used for tertiary actions or when higher c
   <pds-button variant="accent" icon="trash">Icon</pds-button>
 </DocCanvas>
 
-### Disclosure
-
-Disclosure button variant, intended to be used as a trigger to show or hide content elsewhere on the page.
-
-**Note**: Icon cannot be customized.
-
-<DocCanvas client:only
-  mdxSource={{
-    react: `
-    <PdsButton variant="disclosure">Disclosure</PdsButton>
-    <PdsButton variant="disclosure" disabled="true">Disabled</PdsButton>
-    `,
-    webComponent: `
-    <pds-button variant="disclosure">Disclosure</pds-button>
-    <pds-button variant="disclosure" disabled="true">Disabled</pds-button>
-    `
-}}>
-  <pds-button variant="disclosure">Disclosure</pds-button>
-  <pds-button variant="disclosure" disabled="true">Disabled</pds-button>
-</DocCanvas>
-
 ### Destructive
 
 Destructive button variant, intended to be used with destructive actions, such as deleting an item or removing a contact.
@@ -141,6 +118,27 @@ Destructive button variant, intended to be used with destructive actions, such a
   <pds-button variant="destructive">Destructive</pds-button>
   <pds-button variant="destructive" disabled="true">Disabled</pds-button>
   <pds-button variant="destructive" icon="trash">Icon</pds-button>
+</DocCanvas>
+
+### Disclosure
+
+Disclosure button variant, intended to be used as a trigger to show or hide content elsewhere on the page.
+
+> **Note:** Icon cannot be customized.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+    <PdsButton variant="disclosure">Disclosure</PdsButton>
+    <PdsButton variant="disclosure" disabled="true">Disabled</PdsButton>
+    `,
+    webComponent: `
+    <pds-button variant="disclosure">Disclosure</pds-button>
+    <pds-button variant="disclosure" disabled="true">Disabled</pds-button>
+    `
+}}>
+  <pds-button variant="disclosure">Disclosure</pds-button>
+  <pds-button variant="disclosure" disabled="true">Disabled</pds-button>
 </DocCanvas>
 
 ### Full Width
@@ -175,9 +173,62 @@ The loading prop allows a `pds-button` to display a loading state.
   <pds-button variant="primary" loading="true">Loading</pds-button>
 </DocCanvas>
 
+## Icon Only
+
+The icon-only prop allows a `pds-button` to display an icon only.
+
+While the text is visually hidden, it is still remains accessible.
+
+> ***Note:*** An icon is required to be provided.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+    <PdsButton variant="primary" iconOnly="true" icon="favorite">Icon Only</PdsButton>
+    <PdsButton variant="secondary" iconOnly="true" icon="favorite">Icon Only</PdsButton>
+    <PdsButton variant="accent" iconOnly="true" icon="favorite">Icon Only</PdsButton>
+    <PdsButton variant="destructive" iconOnly="true" icon="favorite">Icon Only</PdsButton>
+    `,
+    webComponent: `
+    <pds-button variant="primary" icon-only="true" icon="favorite">Icon Only</pds-button>
+    <pds-button variant="secondary" icon-only="true" icon="favorite">Icon Only</pds-button>
+    <pds-button variant="accent" icon-only="true" icon="favorite">Icon Only</pds-button>
+    <pds-button variant="destructive" icon-only="true" icon="favorite">Icon Only</pds-button>
+    `
+}}>
+  <pds-button variant="primary" icon-only="true" icon="favorite">Icon Only</pds-button>
+  <pds-button variant="secondary" icon-only="true" icon="favorite">Icon Only</pds-button>
+  <pds-button variant="accent" icon-only="true" icon="favorite">Icon Only</pds-button>
+  <pds-button variant="destructive" icon-only="true" icon="favorite">Icon Only</pds-button>
+</DocCanvas>
+
+
+## Button Link
+
+The button link variant allows a `pds-button` to function as a link. By providing an `href` attribute, the button will render as an anchor (`<a>`) element while maintaining the visual appearance of a button. This is useful for creating call-to-action buttons that navigate to external resources or different parts of your application.
+
+> ***Note:*** When using the `href` attribute, button-specific props such as `type`, `name`, and `value` will be ignored. The component will maintain the same visual appearance but function as a link.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+    <PdsButton variant="primary" href="#">Create a product</PdsButton>
+    <PdsButton variant="secondary" href="#">Join community</PdsButton>
+    `,
+    webComponent: `
+    <pds-button variant="primary" href="#">Create a product</pds-button>
+    <pds-button variant="secondary" href="#">Join community</pds-button>
+    `
+}}>
+  <pds-button variant="primary" href="#">Create a product</pds-button>
+  <pds-button variant="secondary" href="#">Join community</pds-button>
+</DocCanvas>
+
 ## Type
 
 The type prop allows a `pds-button` to set a [button type attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type).
+
+> ***Note:*** The `type` prop does not apply to buttons with an `href` attribute. When an `href` is provided, the button will render as an anchor (`<a>`) element, and the types will be ignored.
 
 ### Default (Button)
 
