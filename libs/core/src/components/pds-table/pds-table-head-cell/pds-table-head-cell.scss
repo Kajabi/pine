@@ -1,16 +1,12 @@
 :host {
-  --border-head-cell-default: var(--pine-border-width-thin) solid var(--pine-color-grey-100);
-
   --box-shadow-default: 3px 3px 6px -2px rgba(0, 0, 0, 0.1);
 
-  border-block-end: var(--border-head-cell-default);
-  color: var(--pine-color-text);
+  border-block-end: var(--pine-border);
+  color: var(--pine-color-text-secondary);
   display: table-cell;
-  font-family: var(--pine-font-family-body);
-  font-size: var(--pine-font-size);
-  font-weight: var(--pine-font-weight-regular);
-  line-height: var(--pine-line-height-body);
-  padding: 12px;
+  font: var(--pine-typography-body-medium);
+  letter-spacing: var(--pine-letter-spacing-body);
+  padding: var(--pine-dimension-150);
   text-align: start;
   vertical-align: inherit;
 }

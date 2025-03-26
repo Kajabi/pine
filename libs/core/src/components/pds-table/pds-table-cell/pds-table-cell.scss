@@ -1,14 +1,12 @@
 :host {
   --box-shadow-fixed: 3px 3px 6px -2px rgba(0, 0, 0, 0.2);
 
-  color: var(--pine-color-text);
+  border-block-end: var(--pine-border);
+  color: var(--pine-color-text-readonly);
   display: table-cell;
-  font-family: var(--pine-font-family-body);
-  font-size: var(--pine-font-size);
-  font-weight: var(--pine-font-weight-regular);
+  font: var(--pine-typography-body);
   letter-spacing: var(--pine-letter-spacing);
-  line-height: var(--pine-line-height-body);
-  padding: 12px;
+  padding: var(--pine-dimension-xs) var(--pine-dimension-150);
   vertical-align: inherit;
 }
 
@@ -37,5 +35,5 @@
 
 :host(.has-checkbox) {
   vertical-align: middle;
-  width: 16px;
+  width: var(--pine-dimension-sm);
 }

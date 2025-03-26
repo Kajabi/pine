@@ -1,7 +1,6 @@
 :host {
-  --border-head-default: var(--pine-border-width-thin) solid var(--pine-color-grey-100);
-
   border-color: inherit;
+  border-radius: var(--pine-dimension-125);
   box-sizing: border-box;
   display: table-header-group;
   vertical-align: middle;
@@ -10,6 +9,7 @@
   // because it is in the ShadowDom
   &::part(checkbox-cell) {
     background-color: var(--pine-color-background-container);
+    border-top-left-radius: var(--pine-dimension-125);
     left: 0;
     position: sticky;
     z-index: 1;
@@ -17,5 +17,5 @@
 }
 
 :host pds-table-checkbox-cell {
-  border-block-end: var(--border-head-default);
+  border-block-end: var(--pine-border);
 }
