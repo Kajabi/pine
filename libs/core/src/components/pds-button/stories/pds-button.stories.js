@@ -44,6 +44,18 @@ Accent.args = {
   variant: 'accent',
 };
 
+export const ButtonLink = BaseTemplate.bind();
+ButtonLink.args = {
+  disabled: false,
+  fullWidth: false,
+  href: 'https://pine-design-system.netlify.app/',
+  iconOnly: false,
+  loading: false,
+  slot: 'Link Button',
+  target: '_blank',
+  variant: 'primary',
+};
+
 export const Destructive = BaseTemplate.bind({});
 Destructive.args = {
   disabled: false,
@@ -92,18 +104,6 @@ IconOnly.args = {
   slot: 'Icon Only',
   type: 'button',
   variant: 'secondary',
-};
-
-export const LinkButton = BaseTemplate.bind();
-LinkButton.args = {
-  disabled: false,
-  fullWidth: false,
-  href: 'https://pine-design-system.netlify.app/',
-  iconOnly: false,
-  loading: false,
-  slot: 'Link Button',
-  target: '_blank',
-  variant: 'primary',
 };
 
 export const Loading = BaseTemplate.bind({});
