@@ -111,6 +111,40 @@ By default Box has no padding. Use `padding` to add padding to the box.
   <pds-box border="true" padding="xxl">Padding xxl</pds-box>
 </DocCanvas>
 
+### Padding Properties Priority
+The Box component provides three padding properties with different levels of specificity:
+
+1. `padding` - Sets padding on all sides (lowest priority)
+2. `paddingBlock` - Sets padding on top and bottom (medium priority)
+3. `paddingInline` - Sets padding on left and right (medium priority)
+
+When multiple padding properties are set, the more specific properties take precedence. For example:
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsBox border="true" padding="md" paddingBlock="lg">
+  padding="md" is overridden by padding-block="lg"
+</PdsBox>
+<PdsBox border="true" padding="md" paddingInline="lg">
+  padding="md" is overridden by padding-inline="lg"
+</PdsBox>`,
+    webComponent: `<pds-box border="true" padding="md" padding-block="lg">
+  padding="md" is overridden by padding-block="lg"
+</pds-box>
+<pds-box border="true" padding="md" padding-inline="lg">
+  padding="md" is overridden by padding-inline="lg"
+</pds-box>`
+}}>
+  <pds-box border="true" padding="md" padding-block="lg">
+    padding="md" is overridden by padding-block="lg"
+  </pds-box>
+  <pds-box border="true" padding="md" padding-inline="lg">
+    padding="md" is overridden by padding-inline="lg"
+  </pds-box>
+</DocCanvas>
+
+This priority system allows for more granular control over padding while maintaining a predictable behavior. When you need to set different padding values for different sides, use the more specific properties (`paddingBlock` and `paddingInline`) to override the general `padding` property.
+
 ### Display
 By default Box is `display: inline-flex`. Use `display` to change the display property `flex` if the box is intended to fill the entire row.
 
