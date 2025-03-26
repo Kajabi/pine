@@ -44,18 +44,6 @@ Accent.args = {
   variant: 'accent',
 };
 
-export const CTAButton = BaseTemplate.bind();
-CTAButton.args = {
-  disabled: false,
-  fullWidth: false,
-  href: 'https://github.com/Kajabi/pine/releases',
-  iconOnly: false,
-  loading: false,
-  slot: 'View Release Notes',
-  target: '_blank',
-  variant: 'primary',
-};
-
 export const Destructive = BaseTemplate.bind({});
 Destructive.args = {
   disabled: false,
@@ -106,6 +94,18 @@ IconOnly.args = {
   variant: 'secondary',
 };
 
+export const LinkButton = BaseTemplate.bind();
+LinkButton.args = {
+  disabled: false,
+  fullWidth: false,
+  href: 'https://pine-design-system.netlify.app/',
+  iconOnly: false,
+  loading: false,
+  slot: 'Link Button',
+  target: '_blank',
+  variant: 'primary',
+};
+
 export const Loading = BaseTemplate.bind({});
 Loading.args = {
   disabled: false,
@@ -116,7 +116,6 @@ Loading.args = {
   type: 'button',
   variant: 'primary',
 }
-
 
 export const Primary = BaseTemplate.bind({});
 Primary.args = {
