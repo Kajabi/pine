@@ -71,12 +71,12 @@ export namespace Components {
     }
     interface PdsBox {
         /**
-          * Defines the vertical alignment of the box items.
+          * Defines how items within the box are aligned.
           * @defaultValue start
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines the vertical alignment of the box items.
+          * Defines how the box is aligned within its container.
           * @defaultValue start
          */
         "alignSelf"?: `start` | `center` | `end` | `baseline` | `stretch`;
@@ -1593,12 +1593,12 @@ declare namespace LocalJSX {
     }
     interface PdsBox {
         /**
-          * Defines the vertical alignment of the box items.
+          * Defines how items within the box are aligned.
           * @defaultValue start
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
-          * Defines the vertical alignment of the box items.
+          * Defines how the box is aligned within its container.
           * @defaultValue start
          */
         "alignSelf"?: `start` | `center` | `end` | `baseline` | `stretch`;

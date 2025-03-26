@@ -8,13 +8,13 @@ import { BoxColumnType, BoxTShirtSizeType, BoxShadowSizeType } from '../../utils
 })
 export class PdsBox {
   /**
-   * Defines the vertical alignment of the box items.
+   * Defines how items within the box are aligned.
    * @defaultValue start
   */
   @Prop() alignItems?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
-   * Defines the vertical alignment of the box items.
+   * Defines how the box is aligned within its container.
    * @defaultValue start
   */
   @Prop() alignSelf?: `start` | `center` | `end` | `baseline` | `stretch`;
@@ -177,6 +177,7 @@ export class PdsBox {
   render() {
     const boxClasses = `
     ${this.alignItems !== undefined && this.alignItems.trim() !== '' ? `pds-align-items-${this.alignItems}` : ''}
+    ${this.alignSelf !== undefined && this.alignSelf.trim() !== '' ? `pds-align-self-${this.alignSelf}` : ''}
     ${this.auto ? 'pds-box--auto' : ''}
     ${this.border ? 'pds-box--border' : ''}
     ${this.borderRadius !== undefined && this.borderRadius.trim() !== '' ? `pds-border-radius-${this.borderRadius}` : ''}

@@ -54,6 +54,17 @@ describe('pds-box', () => {
     expect(element).toHaveClass('pds-align-items-center');
   });
 
+  it('renders align-self class when prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsBox],
+      html: `<pds-box align-self="center"></pds-box>`,
+    });
+
+    const element = page.root;
+
+    expect(element).toHaveClass('pds-align-self-center');
+  });
+
   it('renders auto class when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsBox],
