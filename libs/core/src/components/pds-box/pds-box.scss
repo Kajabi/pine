@@ -284,7 +284,7 @@ $pine-spacing-tokens: (
 }
 
 .pds-padding-block-none {
-  padding-block: 0;
+  padding-block: var(--pine-dimension-none);
 }
 
 .pds-padding-block-xxs {
@@ -316,7 +316,7 @@ $pine-spacing-tokens: (
 }
 
 .pds-padding-inline-none {
-  padding-inline: 0;
+  padding-inline: var(--pine-dimension-none);
 }
 
 .pds-padding-inline-xxs {
