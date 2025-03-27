@@ -250,7 +250,232 @@ $pine-spacing-tokens: (
   gap: var(--pine-dimension-2xl);
 }
 
-// Spacing helpers
+.pds-box-gap-row-none {
+  row-gap: 0;
+}
+
+.pds-box-gap-row-xxs {
+  row-gap: var(--pine-dimension-2xs);
+}
+
+.pds-box-gap-row-xs {
+  row-gap: var(--pine-dimension-xs);
+}
+
+.pds-box-gap-row-sm {
+  row-gap: var(--pine-dimension-sm);
+}
+
+.pds-box-gap-row-md {
+  row-gap: var(--pine-dimension-md);
+}
+
+.pds-box-gap-row-lg {
+  row-gap: var(--pine-dimension-lg);
+}
+
+.pds-box-gap-row-xl {
+  row-gap: var(--pine-dimension-xl);
+}
+
+.pds-box-gap-row-xxl {
+  row-gap: var(--pine-dimension-2xl);
+}
+
+.pds-box-gap-column-none {
+  column-gap: 0;
+}
+
+.pds-box-gap-column-xxs {
+  column-gap: var(--pine-dimension-2xs);
+}
+
+.pds-box-gap-column-xs {
+  column-gap: var(--pine-dimension-xs);
+}
+
+.pds-box-gap-column-sm {
+  column-gap: var(--pine-dimension-sm);
+}
+
+.pds-box-gap-column-md {
+  column-gap: var(--pine-dimension-md);
+}
+
+.pds-box-gap-column-lg {
+  column-gap: var(--pine-dimension-lg);
+}
+
+.pds-box-gap-column-xl {
+  column-gap: var(--pine-dimension-xl);
+}
+
+.pds-box-gap-column-xxl {
+  column-gap: var(--pine-dimension-2xl);
+}
+
+// Margin helpers
+.pds-margin-none {
+  margin: 0;
+}
+
+.pds-margin-xxs {
+  margin: var(--pine-dimension-2xs);
+}
+
+.pds-margin-xs {
+  margin: var(--pine-dimension-xs);
+}
+
+.pds-margin-sm {
+  margin: var(--pine-dimension-sm);
+}
+
+.pds-margin-md {
+  margin: var(--pine-dimension-md);
+}
+
+.pds-margin-lg {
+  margin: var(--pine-dimension-lg);
+}
+
+.pds-margin-xl {
+  margin: var(--pine-dimension-xl);
+}
+
+.pds-margin-xxl {
+  margin: var(--pine-dimension-2xl);
+}
+
+.pds-margin-top-none {
+  margin-block-start: 0;
+}
+
+.pds-margin-top-xxs {
+  margin-block-start: var(--pine-dimension-2xs);
+}
+
+.pds-margin-top-xs {
+  margin-block-start: var(--pine-dimension-xs);
+}
+
+.pds-margin-top-sm {
+  margin-block-start: var(--pine-dimension-sm);
+}
+
+.pds-margin-top-md {
+  margin-block-start: var(--pine-dimension-md);
+}
+
+.pds-margin-top-lg {
+  margin-block-start: var(--pine-dimension-lg);
+}
+
+.pds-margin-top-xl {
+  margin-block-start: var(--pine-dimension-xl);
+}
+
+.pds-margin-top-xxl {
+  margin-block-start: var(--pine-dimension-2xl);
+}
+
+.pds-margin-left-none {
+  margin-inline-start: 0;
+}
+
+.pds-margin-left-xxs {
+  margin-inline-start: var(--pine-dimension-2xs);
+}
+
+.pds-margin-left-xs {
+  margin-inline-start: var(--pine-dimension-xs);
+}
+
+.pds-margin-left-sm {
+  margin-inline-start: var(--pine-dimension-sm);
+}
+
+.pds-margin-left-md {
+  margin-inline-start: var(--pine-dimension-md);
+}
+
+.pds-margin-left-lg {
+  margin-inline-start: var(--pine-dimension-lg);
+}
+
+.pds-margin-left-xl {
+  margin-inline-start: var(--pine-dimension-xl);
+}
+
+.pds-margin-left-xxl {
+  margin-inline-start: var(--pine-dimension-2xl);
+}
+
+.pds-margin-right-none {
+  margin-inline-end: 0;
+}
+
+.pds-margin-right-xxs {
+  margin-inline-end: var(--pine-dimension-2xs);
+}
+
+.pds-margin-right-xs {
+  margin-inline-end: var(--pine-dimension-xs);
+}
+
+.pds-margin-right-sm {
+  margin-inline-end: var(--pine-dimension-sm);
+}
+
+.pds-margin-right-md {
+  margin-inline-end: var(--pine-dimension-md);
+}
+
+.pds-margin-right-lg {
+  margin-inline-end: var(--pine-dimension-lg);
+}
+
+.pds-margin-right-xl {
+  margin-inline-end: var(--pine-dimension-xl);
+}
+
+.pds-margin-right-xxl {
+  margin-inline-end: var(--pine-dimension-2xl);
+}
+
+.pds-margin-bottom-none {
+  margin-block-end: 0;
+}
+
+.pds-margin-bottom-xxs {
+  margin-block-end: var(--pine-dimension-2xs);
+}
+
+.pds-margin-bottom-xs {
+  margin-block-end: var(--pine-dimension-xs);
+}
+
+.pds-margin-bottom-sm {
+  margin-block-end: var(--pine-dimension-sm);
+}
+
+.pds-margin-bottom-md {
+  margin-block-end: var(--pine-dimension-md);
+}
+
+.pds-margin-bottom-lg {
+  margin-block-end: var(--pine-dimension-lg);
+}
+
+.pds-margin-bottom-xl {
+  margin-block-end: var(--pine-dimension-xl);
+}
+
+.pds-margin-bottom-xxl {
+  margin-block-end: var(--pine-dimension-2xl);
+}
+
+// Padding helpers
 .pds-padding-none {
   padding: 0;
 }

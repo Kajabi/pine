@@ -69,6 +69,18 @@ export class PdsBox {
   @Prop() gap?: BoxTShirtSizeType;
 
   /**
+   * Defines the spacing between the box item rows.
+   * @defaultValue none
+  */
+  @Prop() gapRow?: BoxTShirtSizeType;
+
+  /**
+   * Defines the spacing between the box item columns.
+   * @defaultValue none
+  */
+  @Prop() gapColumn?: BoxTShirtSizeType;
+
+  /**
    * Defines how a box will grow or shrink to fit the space available in its container.
    * @defaultValue none
    */
@@ -79,6 +91,36 @@ export class PdsBox {
    * @defaultValue start
   */
   @Prop() justifyContent?: `start` | `center` | `end` | `space-between` | `space-around`;
+
+  /**
+   * Defines the outer spacing between the box and another element.
+   * @defaultValue none
+  */
+  @Prop() margin?: BoxTShirtSizeType;
+
+  /**
+   * Defines the box's outer top spacing.
+   * @defaultValue none
+  */
+  @Prop() marginTop?: BoxTShirtSizeType;
+
+  /**
+   * Defines the box's outer left spacing.
+   * @defaultValue none
+  */
+  @Prop() marginLeft?: BoxTShirtSizeType;
+
+  /**
+   * Defines the box's outer right spacing.
+   * @defaultValue none
+  */
+  @Prop() marginRight?: BoxTShirtSizeType;
+
+  /**
+   * Defines the box's outer bottom spacing.
+   * @defaultValue none
+  */
+  @Prop() marginBottom?: BoxTShirtSizeType;
 
   /**
    * The minimum height of the row. Used in conjunction with alignment props
@@ -185,8 +227,15 @@ export class PdsBox {
     ${this.display !== undefined && this.display.trim() !== '' ? `pds-box--display-${this.display}` : ''}
     ${this.fit ? 'pds-box--fit' : ''}
     ${this.gap !== undefined && this.gap.trim() !== '' ? `pds-box-gap-${this.gap}` : ''}
+    ${this.gapRow !== undefined && this.gapRow.trim() !== '' ? `pds-box-gap-row-${this.gapRow}` : ''}
+    ${this.gapColumn !== undefined && this.gapColumn.trim() !== '' ? `pds-box-gap-column-${this.gapColumn}` : ''}
     ${this.flex !== undefined && this.flex.trim() !== '' ? `pds-box--flex-${this.flex}` : ''}
     ${this.justifyContent !== undefined && this.justifyContent.trim() !== '' ? `pds-justify-content-${this.justifyContent}` : ''}
+    ${this.margin !== undefined && this.margin.trim() !== '' ? `pds-margin-${this.margin}` : ''}
+    ${this.marginTop !== undefined && this.marginTop.trim() !== '' ? `pds-margin-top-${this.marginTop}` : ''}
+    ${this.marginLeft !== undefined && this.marginLeft.trim() !== '' ? `pds-margin-left-${this.marginLeft}` : ''}
+    ${this.marginRight !== undefined && this.marginRight.trim() !== '' ? `pds-margin-right-${this.marginRight}` : ''}
+    ${this.marginBottom !== undefined && this.marginBottom.trim() !== '' ? `pds-margin-bottom-${this.marginBottom}` : ''}
     ${this.offset !== undefined && this.offset.trim() !== '' ? `pds-box-offset-${this.offset}` : ''}
     ${this.offsetXs !== undefined && this.offsetXs.trim() !== '' ? `pds-box-offset-xs-${this.offsetXs}` : ''}
     ${this.offsetSm !== undefined && this.offsetSm.trim() !== '' ? `pds-box-offset-sm-${this.offsetSm}` : ''}
