@@ -119,7 +119,7 @@ input:hover:not(:disabled) {
 
  // Focus state
 input:focus-visible:not(:disabled) {
-  outline: var(--pine-border-width-thick) solid var(--pine-color-focus-ring);
+  outline: var(--pine-outline-focus);
   outline-offset: var(--pine-border-width);
 }
 

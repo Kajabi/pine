@@ -42,7 +42,7 @@ select {
 
   &:focus-visible {
     border-color: var(--pine-color-border-active);
-    outline: var(--pine-border-width-thick) solid var(--pine-color-focus-ring);
+    outline: var(--pine-outline-focus);
     outline-offset: var(--pine-border-width);
   }
 

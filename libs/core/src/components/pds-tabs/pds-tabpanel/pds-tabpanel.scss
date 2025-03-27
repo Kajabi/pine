@@ -8,7 +8,7 @@
   padding: var(--tabs-dimension-panel-padding);
 
   &:focus-visible {
-    outline: var(--pine-border-width-thick) solid var(--pine-color-focus-ring);
+    outline: var(--pine-outline-focus);
     outline-offset: var(--pine-border-width);
   }
 
