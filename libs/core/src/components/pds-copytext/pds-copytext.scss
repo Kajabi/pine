@@ -72,26 +72,8 @@
     }
   }
 
-  // full width
-
-  &:host(.pds-copytext--full-width) {
-    display: flex;
-    width: 100%;
-
-    pds-button {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-
-      span {
-        text-align: left;
-        width: 100%;
-      }
-    }
-  }
-
-  // truncated
-
+  // full width and truncated
+  &:host(.pds-copytext--full-width),
   &:host(.pds-copytext--truncated) {
     pds-button {
       display: inline-flex;
@@ -105,11 +87,24 @@
       }
 
       span {
-        overflow: hidden;
         text-align: left;
-        text-overflow: ellipsis;
         width: 100%;
       }
+    }
+  }
+
+  // full width
+  &:host(.pds-copytext--full-width) {
+    pds-button {
+      justify-content: space-between;
+    }
+  }
+
+  // truncated
+  &:host(.pds-copytext--truncated) {
+    pds-button span {
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 }
