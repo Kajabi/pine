@@ -126,10 +126,45 @@ export namespace Components {
          */
         "gap"?: BoxTShirtSizeType;
         /**
+          * Defines the spacing between the box item columns.
+          * @defaultValue none
+         */
+        "gapColumn"?: BoxTShirtSizeType;
+        /**
+          * Defines the spacing between the box item rows.
+          * @defaultValue none
+         */
+        "gapRow"?: BoxTShirtSizeType;
+        /**
           * Defines the horizontal alignment of the box items.
           * @defaultValue start
          */
         "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
+        /**
+          * Defines the outer spacing between the box and another element.
+          * @defaultValue none
+         */
+        "margin"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer bottom spacing.
+          * @defaultValue none
+         */
+        "marginBottom"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer left spacing.
+          * @defaultValue none
+         */
+        "marginLeft"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer right spacing.
+          * @defaultValue none
+         */
+        "marginRight"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer top spacing.
+          * @defaultValue none
+         */
+        "marginTop"?: BoxTShirtSizeType;
         /**
           * The minimum height of the row. Used in conjunction with alignment props
          */
@@ -1668,10 +1703,45 @@ declare namespace LocalJSX {
          */
         "gap"?: BoxTShirtSizeType;
         /**
+          * Defines the spacing between the box item columns.
+          * @defaultValue none
+         */
+        "gapColumn"?: BoxTShirtSizeType;
+        /**
+          * Defines the spacing between the box item rows.
+          * @defaultValue none
+         */
+        "gapRow"?: BoxTShirtSizeType;
+        /**
           * Defines the horizontal alignment of the box items.
           * @defaultValue start
          */
         "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
+        /**
+          * Defines the outer spacing between the box and another element.
+          * @defaultValue none
+         */
+        "margin"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer bottom spacing.
+          * @defaultValue none
+         */
+        "marginBottom"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer left spacing.
+          * @defaultValue none
+         */
+        "marginLeft"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer right spacing.
+          * @defaultValue none
+         */
+        "marginRight"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer top spacing.
+          * @defaultValue none
+         */
+        "marginTop"?: BoxTShirtSizeType;
         /**
           * The minimum height of the row. Used in conjunction with alignment props
          */

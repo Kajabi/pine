@@ -82,6 +82,29 @@ By default Box has no shadow. Use `shadow` to add a shadow to the box.
   <pds-box shadow="lg">Shadow lg</pds-box>
 </DocCanvas>
 
+### Margin
+By default Box has no margin. Use `margin` to add margin around the box.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsBox border="true" margin="xxs">Margin xxs</PdsBox>
+<PdsBox border="true" margin="xs">Margin xs</PdsBox>
+<PdsBox border="true" margin="sm">Margin sm</PdsBox>
+<PdsBox border="true" margin="md">Margin md</PdsBox>
+<PdsBox border="true" margin="lg">Margin lg</PdsBox>`,
+    webComponent: `<pds-box border="true" margin="xxs">Margin xxs</pds-box>
+<pds-box border="true" margin="xs">Margin xs</pds-box>
+<pds-box border="true" margin="sm">Margin sm</pds-box>
+<pds-box border="true" margin="md">Margin md</pds-box>
+<pds-box border="true" margin="lg">Margin lg</pds-box>`
+}}>
+  <pds-box border="true" margin="xxs">Margin xxs</pds-box>
+  <pds-box border="true" margin="xs">Margin xs</pds-box>
+  <pds-box border="true" margin="sm">Margin sm</pds-box>
+  <pds-box border="true" margin="md">Margin md</pds-box>
+  <pds-box border="true" margin="lg">Margin lg</pds-box>
+</DocCanvas>
+
 ### Padding
 By default Box has no padding. Use `padding` to add padding to the box.
 
@@ -111,22 +134,22 @@ By default Box has no padding. Use `padding` to add padding to the box.
   <pds-box border="true" padding="xxl">Padding xxl</pds-box>
 </DocCanvas>
 
-### Padding Properties Priority
-The Box component provides three padding properties with different levels of specificity:
+### Spacing Properties Priority
+The Box component implements a consistent pattern for spacing properties (padding, margin, gap) with different levels of specificity. Each spacing property follows this hierarchy:
 
-1. `padding` - Sets padding on all sides (lowest priority)
-2. `paddingBlock` - Sets padding on top and bottom (medium priority)
-3. `paddingInline` - Sets padding on left and right (medium priority)
+1. General property (e.g., `padding`, `margin`, `gap`) - Sets spacing on all sides (lowest priority)
+2. Block/Inline property (e.g., `paddingBlock`, `marginInline`, `gapRow`) - Sets spacing on top and bottom or left and right (medium priority)
+3. Directional property (e.g., `marginLeft`) - Sets spacing on a specific side (highest priority)
 
-When multiple padding properties are set, the more specific properties take precedence. For example:
+When multiple spacing properties are set, the more specific properties take precedence. For example, with padding:
 
 <DocCanvas client:only
   mdxSource={{
     react: `<PdsBox border="true" padding="md" paddingBlock="lg">
-  padding="md" is overridden by padding-block="lg"
+  padding="md" is overridden by paddingBlock="lg"
 </PdsBox>
 <PdsBox border="true" padding="md" paddingInline="lg">
-  padding="md" is overridden by padding-inline="lg"
+  padding="md" is overridden by paddingInline="lg"
 </PdsBox>`,
     webComponent: `<pds-box border="true" padding="md" padding-block="lg">
   padding="md" is overridden by padding-block="lg"
@@ -143,7 +166,7 @@ When multiple padding properties are set, the more specific properties take prec
   </pds-box>
 </DocCanvas>
 
-This priority system allows for more granular control over padding while maintaining a predictable behavior. When you need to set different padding values for different sides, use the more specific properties (`paddingBlock` and `paddingInline`) to override the general `padding` property.
+This priority system allows for more granular control over spacing while maintaining a predictable behavior. When you need to set different spacing values for different sides, use the more specific properties (block and inline) to override the general property.
 
 ### Display
 By default Box is `display: inline-flex`. Use `display` to change the display property `flex` if the box is intended to fill the entire row.
