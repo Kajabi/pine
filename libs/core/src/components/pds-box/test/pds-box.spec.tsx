@@ -253,6 +253,56 @@ describe('pds-box', () => {
   });
 
   [  'xxs', 'xs', 'sm', 'md', 'lg', 'xl', 'xxl' ].forEach((size) => {
+    it(`renders margin class when prop is set to ${size}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box margin="${size}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-margin-${size}`);
+    });
+
+    it(`renders margin-top class when prop is set to ${size}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box margin-top="${size}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-margin-top-${size}`);
+    });
+
+    it(`renders margin-left class when prop is set to ${size}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box margin-left="${size}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-margin-left-${size}`);
+    });
+
+    it(`renders margin-right class when prop is set to ${size}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box margin-right="${size}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-margin-right-${size}`);
+    });
+
+    it(`renders margin-bottom class when prop is set to ${size}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box margin-bottom="${size}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-margin-bottom-${size}`);
+    });
+
     it(`renders padding class when prop is set to ${size}`, async () => {
       const page = await newSpecPage({
         components: [PdsBox],
@@ -291,6 +341,26 @@ describe('pds-box', () => {
 
       const element = page.root;
       expect(element).toHaveClass(`pds-box-gap-${size}`);
+    });
+
+    it(`renders gap-row class when prop is set to ${size}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box gap-row="${size}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-box-gap-row-${size}`);
+    });
+
+    it(`renders gap-column class when prop is set to ${size}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box gap-column="${size}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-box-gap-column-${size}`);
     });
   });
 
