@@ -1,7 +1,4 @@
 :host {
-  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
-  --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring-danger);
-
   --sizing-check-size: 6px;
   --sizing-input-size: var(--pine-dimension-sm);
   --sizing-margin-block-start: 6px;
@@ -25,8 +22,7 @@
     }
 
     &:focus-visible {
-      box-shadow: var(--box-shadow-focus-error);
-      outline: none;
+      outline-color: var(--pine-color-focus-ring-danger);
     }
   }
 
@@ -100,8 +96,7 @@ input {
   }
 
   &:focus-visible {
-    box-shadow: var(--box-shadow-focus);
-    outline: none;
+    outline: var(--pine-border-width-thick) solid var(--pine-color-focus-ring);
   }
 
 }

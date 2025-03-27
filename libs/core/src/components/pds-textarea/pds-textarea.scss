@@ -1,8 +1,4 @@
 :host {
-
-  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
-  --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring-danger);
-
   display: inline;
 }
 
@@ -42,9 +38,8 @@ label {
   }
 
   &:focus-visible {
-    // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
-    box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
-    outline: none;
+    outline: var(--pine-border-width-thick) solid var(--pine-color-focus-ring);
+    outline-offset: var(--pine-border-width);
   }
 
   &::placeholder {
@@ -56,7 +51,7 @@ label {
     border-color: var(--pine-color-border-danger);
 
     &:focus-visible {
-      box-shadow: var(--box-shadow-focus-error);
+      outline-color: var(--pine-color-focus-ring-danger);
     }
   }
 }

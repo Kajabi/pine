@@ -31,8 +31,6 @@ div {
 }
 
 .pds-avatar__button {
-  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
-
   align-items: center;
   appearance: none;
   background: transparent;
@@ -43,9 +41,7 @@ div {
   padding: var(--pine-dimension-none);
 
   &:focus-visible {
-    // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
-    box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
-    outline: none;
+    outline: var(--pine-border-width-thick) solid var(--pine-color-focus-ring);
   }
 }
 

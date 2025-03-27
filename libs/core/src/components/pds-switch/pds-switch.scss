@@ -1,9 +1,5 @@
 :host {
-
-  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
-  --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring-danger);
-
-  // Need discussions
+// Need discussions
   --sizing-input-toggle-size: calc(var(--pine-dimension-250) - (var(--pine-dimension-025) * 2));
   --pine-dimension-025: 2px;
   --spacing-message-inline: calc(var(--pine-dimension-450) + var(--pine-dimension-150));
@@ -26,7 +22,7 @@
   }
 
   input:focus-visible:not(:disabled):not(:checked) {
-    box-shadow: var(--box-shadow-focus-error);
+    outline-color: var(--pine-color-focus-ring-danger);
   }
 
   label {
@@ -123,8 +119,8 @@ input:hover:not(:disabled) {
 
  // Focus state
 input:focus-visible:not(:disabled) {
-  box-shadow: var(--box-shadow-focus);
-  outline: none;
+  outline: var(--pine-border-width-thick) solid var(--pine-color-focus-ring);
+  outline-offset: var(--pine-border-width);
 }
 
 // 'Checked' state

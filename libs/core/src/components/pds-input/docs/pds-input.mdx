@@ -103,14 +103,14 @@ A `helper-message` is used to provide additional information about how to comple
 
 ### Invalid
 
-When `error-message` is present, the input displays the error message and provides a visual treatment.
+When `invalid` is true, the input displays the error message and provides a visual treatment.
 
 <DocCanvas client:only
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-error-example" label="Email address" type="email" errorMessage="Please provide a valid email address" value="Frank Dux"></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-error-example" label="Email address" type="email" error-message="Please provide a valid email address" value="Frank Dux"></pds-input>'
+    react: '<PdsInput componentId="pds-input-error-example" label="Email address" type="email" errorMessage="Please provide a valid email address" value="Frank Dux" invalid></PdsInput>',
+    webComponent: '<pds-input component-id="pds-input-error-example" label="Email address" type="email" error-message="Please provide a valid email address" value="Frank Dux" invalid></pds-input>'
 }}>
-  <pds-input component-id="pds-input-error-example" label="Email address" type="email" error-message="Please provide a valid email address" value="Frank Dux"></pds-input>
+  <pds-input component-id="pds-input-error-example" label="Email address" type="email" error-message="Please provide a valid email address" value="Frank Dux" invalid></pds-input>
 </DocCanvas>
 
 ## References

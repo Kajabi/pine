@@ -1,6 +1,4 @@
 :host {
-  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
-
   --sizing-close: var(--pine-dimension-125);
 
   align-items: center;
@@ -86,6 +84,11 @@ $pds-chip-sentiment-hover: (
   width: var(--pine-dimension-2xs);
 }
 
+.pds-chip__label {
+  align-items: center;
+  display: flex;
+}
+
 .pds-chip__label, .pds-chip__button {
   font: var(--pine-typography-body-medium);
   letter-spacing: var(--pine-letter-spacing);
@@ -94,6 +97,8 @@ $pds-chip-sentiment-hover: (
 // dropdown
 
 :host(.pds-chip--dropdown) {
+  padding: var(--pine-dimension-none);
+
   .pds-chip__dot {
     margin-block-end: calc(var(--pine-dimension-025) / 4);
     margin-block-start: var(--pine-dimension-025);
@@ -106,12 +111,13 @@ $pds-chip-sentiment-hover: (
   background: transparent;
   border: var(--pine-dimension-none);
   border-radius: var(--pine-dimension-sm);
+  cursor: pointer;
   display: flex;
-  padding: var(--pine-dimension-none);
+  padding: var(--pine-dimension-2xs) var(--pine-dimension-150);
 
   &:focus-visible {
-    box-shadow: var(--box-shadow-focus);
-    outline: none;
+    outline: var(--pine-border-width-thick) solid var(--pine-color-focus-ring);
+    outline-offset: var(--pine-border-width);
   }
 
   pds-icon {
@@ -140,8 +146,7 @@ $pds-chip-sentiment-hover: (
   }
 
   &:focus-visible {
-    box-shadow: var(--box-shadow-focus);
-    outline: none;
+    outline: var(--pine-border-width-thick) solid var(--pine-color-focus-ring);
   }
 }
 
@@ -155,4 +160,8 @@ $pds-chip-sentiment-hover: (
     font: var(--pine-typography-heading-6);
     letter-spacing: var(--pine-letter-spacing-heading-6);
   }
+}
+
+:host(.pds-chip--large):has(.pds-chip__button) {
+  padding: var(--pine-dimension-none);
 }

@@ -1,7 +1,4 @@
 :host {
-  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
-  --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring-danger);
-
   display: inline;
 }
 
@@ -65,8 +62,8 @@
 
   &:focus-visible {
     border-color: var(--pine-color-border-active);
-    box-shadow: var(--box-shadow-focus);
-    outline: none;
+    outline: var(--pine-border-width-thick) solid var(--pine-color-focus-ring);
+    outline-offset: var(--pine-border-width);
   }
 
   /* stylelint-disable */
@@ -92,7 +89,7 @@
     border-color: var(--pine-color-border-danger);
 
     &:focus-visible {
-      box-shadow: var(--box-shadow-focus-error);
+      outline-color: var(--pine-color-focus-ring-danger);
     }
   }
 }

@@ -1,9 +1,4 @@
 pds-tab {
-
-  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
-
-  --outline: 4px solid var(--pine-color-focus-ring);
-
   align-items: center;
   display: inline-flex;
   position: relative;
@@ -51,9 +46,8 @@ pds-tab {
   }
 
   &:focus-visible {
-    // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
-    box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
-    outline: none;
+    outline: var(--pine-border-width-thick) solid var(--pine-color-focus-ring);
+    outline-offset: var(--pine-border-width);
   }
 
   .pds-tab__content {
@@ -207,11 +201,9 @@ pds-tab {
       z-index: 1;
 
       &:focus-visible {
-        --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-purple-300);
         border-color: var(--color-border-focus);
-        // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
-        box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
-        outline: none;
+        outline: var(--pine-border-width-thick) solid var(--pine-color-focus-ring);
+        outline-offset: var(--pine-border-width);
       }
 
       /* stylelint-disable max-nesting-depth */

@@ -7,6 +7,11 @@
   margin-top: var(--tabs-dimension-panel-margin-top);
   padding: var(--tabs-dimension-panel-padding);
 
+  &:focus-visible {
+    outline: var(--pine-border-width-thick) solid var(--pine-color-focus-ring);
+    outline-offset: var(--pine-border-width);
+  }
+
   &.is-active {
     display: block;
   }
