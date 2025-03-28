@@ -30,6 +30,10 @@
   pointer-events: none;
 }
 
+:host([disabled="true"]) {
+  pointer-events: none;
+}
+
 .pds-button {
   --pds-loader-color: var(--color-text-default);
   align-items: center;
