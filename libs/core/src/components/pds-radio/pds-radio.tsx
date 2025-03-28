@@ -47,6 +47,11 @@ export class PdsRadio {
   @Prop() label: string;
 
   /**
+   * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers.
+   */
+  @Prop() labelHidden: boolean;
+
+  /**
    * String used for radio `name` attribute.
    */
   @Prop() name: string;
@@ -107,7 +112,9 @@ export class PdsRadio {
             disabled={this.disabled}
             onChange={this.handleRadioChange}
           />
-          {this.label}
+          <span class={this.labelHidden ? 'visually-hidden' : ''}>
+            {this.label}
+          </span>
         </label>
         {this.helperMessage &&
           <div
