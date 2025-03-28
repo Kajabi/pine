@@ -1,6 +1,4 @@
 :host {
-  --color-background-interactive: var(--pine-color-grey-200);
-
   border-color: inherit;
   display: table-row;
   vertical-align: inherit;
@@ -15,11 +13,39 @@
   }
 }
 
+:host ::slotted(pds-table-cell:first-child) {
+  color: var(--pine-color-text);
+  font: var(--pine-typography-body-brand-label);
+}
+
+:host(:last-child) {
+  ::slotted(pds-table-cell) {
+    border-block-end: var(--pine-border-none);
+  }
+
+  ::slotted(pds-table-cell:first-child) {
+    border-bottom-left-radius: var(--pine-dimension-125);
+  }
+
+  ::slotted(pds-table-cell:last-child) {
+    border-bottom-right-radius: var(--pine-dimension-125);
+  }
+
+  .has-checkbox {
+    border-block-end: var(--pine-border-none);
+    border-bottom-left-radius: var(--pine-dimension-125);
+
+    + ::slotted(pds-table-cell) {
+      border-bottom-left-radius: var(--pine-dimension-none);
+    }
+  }
+}
+
 :host(:hover),
 :host(:hover)::part(checkbox-cell),
 :host(:hover) ::slotted(pds-table-cell),
 :host(.is-selected),
 :host(.is-selected)::part(checkbox-cell),
 :host(.is-selected) ::slotted(pds-table-cell) {
-  background: var(--color-background-interactive);
+  background: var(--pine-color-background-container-hover);
 }
