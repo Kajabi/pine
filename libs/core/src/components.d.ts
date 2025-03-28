@@ -622,6 +622,10 @@ export namespace Components {
          */
         "label": string;
         /**
+          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "labelHidden": boolean;
+        /**
           * String used for radio `name` attribute.
          */
         "name": string;
@@ -2181,6 +2185,10 @@ declare namespace LocalJSX {
           * String used for label text next to radio.
          */
         "label"?: string;
+        /**
+          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "labelHidden"?: boolean;
         /**
           * String used for radio `name` attribute.
          */
