@@ -99,28 +99,40 @@ export class PdsBox {
   @Prop() margin?: BoxTShirtSizeType;
 
   /**
+   * Defines the top and bottom outer spacing.
+   * @defaultValue none
+  */
+  @Prop() marginBlock?: BoxTShirtSizeType;
+
+  /**
+   * Defines the left and right spacing.
+   * @defaultValue none
+   */
+  @Prop() marginInline?: BoxTShirtSizeType;
+
+  /**
    * Defines the box's outer top spacing.
    * @defaultValue none
   */
-  @Prop() marginTop?: BoxTShirtSizeType;
+  @Prop() marginBlockStart?: BoxTShirtSizeType;
 
   /**
    * Defines the box's outer left spacing.
    * @defaultValue none
   */
-  @Prop() marginLeft?: BoxTShirtSizeType;
+  @Prop() marginInlineStart?: BoxTShirtSizeType;
 
   /**
    * Defines the box's outer right spacing.
    * @defaultValue none
   */
-  @Prop() marginRight?: BoxTShirtSizeType;
+  @Prop() marginInlineEnd?: BoxTShirtSizeType;
 
   /**
    * Defines the box's outer bottom spacing.
    * @defaultValue none
   */
-  @Prop() marginBottom?: BoxTShirtSizeType;
+  @Prop() marginBlockEnd?: BoxTShirtSizeType;
 
   /**
    * The minimum height of the row. Used in conjunction with alignment props
@@ -181,6 +193,30 @@ export class PdsBox {
   @Prop() paddingInline?: BoxTShirtSizeType;
 
   /**
+   * Defines the top spacing.
+   * @defaultValue none
+  */
+  @Prop() paddingBlockStart?: BoxTShirtSizeType;
+
+  /**
+   * Defines the bottom spacing.
+   * @defaultValue none
+  */
+  @Prop() paddingBlockEnd?: BoxTShirtSizeType;
+
+  /**
+   * Defines the left spacing.
+   * @defaultValue none
+  */
+  @Prop() paddingInlineStart?: BoxTShirtSizeType;
+
+  /**
+   * Defines the right spacing.
+   * @defaultValue none
+  */
+  @Prop() paddingInlineEnd?: BoxTShirtSizeType;
+
+  /**
    * Defines the box shadow.
    * @defaultValue none
   */
@@ -232,10 +268,12 @@ export class PdsBox {
     ${this.flex !== undefined && this.flex.trim() !== '' ? `pds-box--flex-${this.flex}` : ''}
     ${this.justifyContent !== undefined && this.justifyContent.trim() !== '' ? `pds-justify-content-${this.justifyContent}` : ''}
     ${this.margin !== undefined && this.margin.trim() !== '' ? `pds-margin-${this.margin}` : ''}
-    ${this.marginTop !== undefined && this.marginTop.trim() !== '' ? `pds-margin-top-${this.marginTop}` : ''}
-    ${this.marginLeft !== undefined && this.marginLeft.trim() !== '' ? `pds-margin-left-${this.marginLeft}` : ''}
-    ${this.marginRight !== undefined && this.marginRight.trim() !== '' ? `pds-margin-right-${this.marginRight}` : ''}
-    ${this.marginBottom !== undefined && this.marginBottom.trim() !== '' ? `pds-margin-bottom-${this.marginBottom}` : ''}
+    ${this.marginBlock !== undefined && this.marginBlock.trim() !== '' ? `pds-margin-block-${this.marginBlock}` : ''}
+    ${this.marginInline !== undefined && this.marginInline.trim() !== '' ? `pds-margin-inline-${this.marginInline}` : ''}
+    ${this.marginInlineStart !== undefined && this.marginInlineStart.trim() !== '' ? `pds-margin-inline-start-${this.marginInlineStart}` : ''}
+    ${this.marginInlineEnd !== undefined && this.marginInlineEnd.trim() !== '' ? `pds-margin-inline-end-${this.marginInlineEnd}` : ''}
+    ${this.marginBlockStart !== undefined && this.marginBlockStart.trim() !== '' ? `pds-margin-block-start-${this.marginBlockStart}` : ''}
+    ${this.marginBlockEnd !== undefined && this.marginBlockEnd.trim() !== '' ? `pds-margin-block-end-${this.marginBlockEnd}` : ''}
     ${this.offset !== undefined && this.offset.trim() !== '' ? `pds-box-offset-${this.offset}` : ''}
     ${this.offsetXs !== undefined && this.offsetXs.trim() !== '' ? `pds-box-offset-xs-${this.offsetXs}` : ''}
     ${this.offsetSm !== undefined && this.offsetSm.trim() !== '' ? `pds-box-offset-sm-${this.offsetSm}` : ''}
@@ -245,6 +283,10 @@ export class PdsBox {
     ${this.padding !== undefined && this.padding.trim() !== '' ? `pds-padding-${this.padding}` : ''}
     ${this.paddingBlock !== undefined && this.paddingBlock.trim() !== '' ? `pds-padding-block-${this.paddingBlock}` : ''}
     ${this.paddingInline !== undefined && this.paddingInline.trim() !== '' ? `pds-padding-inline-${this.paddingInline}` : ''}
+    ${this.paddingBlockStart !== undefined && this.paddingBlockStart.trim() !== '' ? `pds-padding-block-start-${this.paddingBlockStart}` : ''}
+    ${this.paddingBlockEnd !== undefined && this.paddingBlockEnd.trim() !== '' ? `pds-padding-block-end-${this.paddingBlockEnd}` : ''}
+    ${this.paddingInlineStart !== undefined && this.paddingInlineStart.trim() !== '' ? `pds-padding-inline-start-${this.paddingInlineStart}` : ''}
+    ${this.paddingInlineEnd !== undefined && this.paddingInlineEnd.trim() !== '' ? `pds-padding-inline-end-${this.paddingInlineEnd}` : ''}
     ${this.shadow !== undefined && this.shadow.trim() !== '' ? `pds-shadow-${this.shadow}` : ''}
     ${this.size !== undefined && this.size.trim() !== '' ? `pds-box pds-box-${this.size}` : ''}
     ${this.sizeXs !== undefined && this.sizeXs.trim() !== '' ? `pds-box-xs-${this.sizeXs}` : ''}

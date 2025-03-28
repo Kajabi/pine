@@ -146,25 +146,35 @@ export namespace Components {
          */
         "margin"?: BoxTShirtSizeType;
         /**
+          * Defines the top and bottom outer spacing.
+          * @defaultValue none
+         */
+        "marginBlock"?: BoxTShirtSizeType;
+        /**
           * Defines the box's outer bottom spacing.
           * @defaultValue none
          */
-        "marginBottom"?: BoxTShirtSizeType;
-        /**
-          * Defines the box's outer left spacing.
-          * @defaultValue none
-         */
-        "marginLeft"?: BoxTShirtSizeType;
-        /**
-          * Defines the box's outer right spacing.
-          * @defaultValue none
-         */
-        "marginRight"?: BoxTShirtSizeType;
+        "marginBlockEnd"?: BoxTShirtSizeType;
         /**
           * Defines the box's outer top spacing.
           * @defaultValue none
          */
-        "marginTop"?: BoxTShirtSizeType;
+        "marginBlockStart"?: BoxTShirtSizeType;
+        /**
+          * Defines the left and right spacing.
+          * @defaultValue none
+         */
+        "marginInline"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer right spacing.
+          * @defaultValue none
+         */
+        "marginInlineEnd"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer left spacing.
+          * @defaultValue none
+         */
+        "marginInlineStart"?: BoxTShirtSizeType;
         /**
           * The minimum height of the row. Used in conjunction with alignment props
          */
@@ -208,10 +218,30 @@ export namespace Components {
          */
         "paddingBlock"?: BoxTShirtSizeType;
         /**
+          * Defines the bottom spacing.
+          * @defaultValue none
+         */
+        "paddingBlockEnd"?: BoxTShirtSizeType;
+        /**
+          * Defines the top spacing.
+          * @defaultValue none
+         */
+        "paddingBlockStart"?: BoxTShirtSizeType;
+        /**
           * Defines the left and right spacing.
           * @defaultValue none
          */
         "paddingInline"?: BoxTShirtSizeType;
+        /**
+          * Defines the right spacing.
+          * @defaultValue none
+         */
+        "paddingInlineEnd"?: BoxTShirtSizeType;
+        /**
+          * Defines the left spacing.
+          * @defaultValue none
+         */
+        "paddingInlineStart"?: BoxTShirtSizeType;
         /**
           * Defines the box shadow.
           * @defaultValue none
@@ -1723,25 +1753,35 @@ declare namespace LocalJSX {
          */
         "margin"?: BoxTShirtSizeType;
         /**
+          * Defines the top and bottom outer spacing.
+          * @defaultValue none
+         */
+        "marginBlock"?: BoxTShirtSizeType;
+        /**
           * Defines the box's outer bottom spacing.
           * @defaultValue none
          */
-        "marginBottom"?: BoxTShirtSizeType;
-        /**
-          * Defines the box's outer left spacing.
-          * @defaultValue none
-         */
-        "marginLeft"?: BoxTShirtSizeType;
-        /**
-          * Defines the box's outer right spacing.
-          * @defaultValue none
-         */
-        "marginRight"?: BoxTShirtSizeType;
+        "marginBlockEnd"?: BoxTShirtSizeType;
         /**
           * Defines the box's outer top spacing.
           * @defaultValue none
          */
-        "marginTop"?: BoxTShirtSizeType;
+        "marginBlockStart"?: BoxTShirtSizeType;
+        /**
+          * Defines the left and right spacing.
+          * @defaultValue none
+         */
+        "marginInline"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer right spacing.
+          * @defaultValue none
+         */
+        "marginInlineEnd"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer left spacing.
+          * @defaultValue none
+         */
+        "marginInlineStart"?: BoxTShirtSizeType;
         /**
           * The minimum height of the row. Used in conjunction with alignment props
          */
@@ -1785,10 +1825,30 @@ declare namespace LocalJSX {
          */
         "paddingBlock"?: BoxTShirtSizeType;
         /**
+          * Defines the bottom spacing.
+          * @defaultValue none
+         */
+        "paddingBlockEnd"?: BoxTShirtSizeType;
+        /**
+          * Defines the top spacing.
+          * @defaultValue none
+         */
+        "paddingBlockStart"?: BoxTShirtSizeType;
+        /**
           * Defines the left and right spacing.
           * @defaultValue none
          */
         "paddingInline"?: BoxTShirtSizeType;
+        /**
+          * Defines the right spacing.
+          * @defaultValue none
+         */
+        "paddingInlineEnd"?: BoxTShirtSizeType;
+        /**
+          * Defines the left spacing.
+          * @defaultValue none
+         */
+        "paddingInlineStart"?: BoxTShirtSizeType;
         /**
           * Defines the box shadow.
           * @defaultValue none
