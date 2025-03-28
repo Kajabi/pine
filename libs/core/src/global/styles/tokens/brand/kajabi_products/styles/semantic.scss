@@ -146,4 +146,6 @@
   --pine-typography-body-sm-bold: 700 12px/1.425 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif;
   --pine-typography-body-sm-brand-label: 500 12px/1.425 'Greet Standard', 'Inter', system-ui, 'Segoe UI', 'Roboto', 'Ubuntu', sans-serif; /* brand-label */
   --pine-typography-body-sm-brand-text: 500 12px/1.425 'FAIRE Sprig'; /* brand-text */
+  --pine-outline-focus: 2px solid #a4acfd; /* Default focus ring */
+  --pine-outline-focus-danger: 2px solid #fca5a5; /* Focus ring for danger/invalid states */
 }

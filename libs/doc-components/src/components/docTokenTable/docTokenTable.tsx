@@ -55,6 +55,7 @@ const applyStyle = (category: string, value: string, use?: string): React.CSSPro
     'font-weight': (val) => style.fontWeight = transformVal(val),
     'letter-spacing': (val) => style.letterSpacing = transformVal(val),
     'line-height': (val) => style.lineHeight = transformVal(val),
+    'outline': (val) => style.outline = transformVal(val),
     'typography': (val) => style.font = transformVal(val),
   };
 
@@ -128,6 +129,11 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
 
       if (formattedCategoryName[token.type as keyof typeof formattedCategoryName]) {
         label = formattedCategoryName[token.type as keyof typeof formattedCategoryName];
+      }
+
+      // Rule for outline tokens since they are best handled as borders in Tokens Studio
+      if (category === 'outline') {
+        label = category;
       }
 
       const cssVariableName = `--pine-${camelToKebab(label as string)}-${tokenKeyName}`.replace(/-@/g, '');

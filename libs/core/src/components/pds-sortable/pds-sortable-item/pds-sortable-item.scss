@@ -1,6 +1,4 @@
 :host(.pds-sortable-item) {
-  --box-shadow: var(--pine-box-shadow-400);
-
   align-items: center;
   display: flex;
   padding-block: var(--pine-dimension-xs);
@@ -61,7 +59,7 @@
 :host(.pds-sortable-item--drag) {
   background-color: var(--pine-color-background-container);
   border-radius: 0;
-  box-shadow: var(--box-shadow);
+  box-shadow: var(--pine-box-shadow-400);
   opacity: 1;
 }
 
