@@ -1,6 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
-import { PdsLabel } from '../_internal/pds-label/pds-label';
 import { danger } from '@pine-ds/icons/icons';
 
 @Component({
@@ -47,6 +46,11 @@ export class PdsSwitch {
   @Prop() label!: string;
 
   /**
+   * Visually hides the label text for instances where only the switch should be displayed. Label remains accessible to assistive technology such as screen readers.
+   */
+  @Prop() labelHidden: boolean;
+
+  /**
    * Identifies form data and unifies a group of radio inputs for toggling a single property/value.
    */
   @Prop() name: string;
@@ -89,20 +93,24 @@ export class PdsSwitch {
   render() {
     return (
       <Host class={this.switchClassNames()} aria-disabled={this.disabled ? 'true' : null}>
-        <input
-          aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
-          aria-invalid={this.invalid ? "true" : undefined}
-          checked={this.checked}
-          class="pds-switch__input"
-          disabled={this.disabled}
-          id={this.componentId}
-          name={this.name ? this.name : this.componentId}
-          onChange={this.onSwitchUpdate}
-          required={this.required}
-          type="checkbox"
-          value={this.value}
-        />
-        <PdsLabel classNames="pds-switch__label" htmlFor={this.componentId} text={this.label} />
+        <label htmlFor={this.componentId}>
+          <input
+            aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
+            aria-invalid={this.invalid ? "true" : undefined}
+            checked={this.checked}
+            class="pds-switch__input"
+            disabled={this.disabled}
+            id={this.componentId}
+            name={this.name ? this.name : this.componentId}
+            onChange={this.onSwitchUpdate}
+            required={this.required}
+            type="checkbox"
+            value={this.value}
+          />
+          <span class={this.labelHidden ? 'visually-hidden' : ''}>
+            {this.label}
+          </span>
+        </label>
         {this.helperMessage &&
           <div
             class={`pds-switch__message`}

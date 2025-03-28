@@ -42,6 +42,7 @@ input {
   border-radius: var(--pine-dimension-sm);
   cursor: pointer;
   display: inline-block;
+  flex-shrink: 0;
   height: var(--pine-dimension-250);
   margin: 0;
   padding: 0;
@@ -68,14 +69,25 @@ input {
 }
 
 label {
-  cursor: pointer;
-  display: inline-flex;
-  flex-grow: 1;
-  margin-inline-start: var(--pine-dimension-150);
+  display: flex;
+  gap: var(--pine-dimension-xs);
 
   .pds-switch--error & {
     color: inherit;
   }
+}
+
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: polygon(0 0, 0 0, 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }
 
 // Help and error messages
@@ -84,10 +96,10 @@ label {
   flex: 1 0 100%;
   font: var(--pine-typography-body-sm-medium);
   margin-block-start: var(--pine-dimension-xs);
-  margin-inline-start: var(--pine-dimension-2xl);
+  margin-inline-start: 42px;
 
   + .pds-switch__message {
-    margin-block-start: var(--pine-dimension-2xs);
+    margin-block-start: 42px;
   }
 }
 
