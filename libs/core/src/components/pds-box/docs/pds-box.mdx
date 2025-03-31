@@ -135,38 +135,72 @@ By default Box has no padding. Use `padding` to add padding to the box.
 </DocCanvas>
 
 ### Spacing Properties Priority
-The Box component implements a consistent pattern for spacing properties (padding, margin, gap) with different levels of specificity. Each spacing property follows this hierarchy:
+The Box component implements a consistent pattern for spacing properties with different levels of specificity. Each spacing property follows this hierarchy:
 
 1. General property (e.g., `padding`, `margin`, `gap`) - Sets spacing on all sides (lowest priority)
 2. Block/Inline property (e.g., `paddingBlock`, `marginInline`, `gapRow`) - Sets spacing on top and bottom or left and right (medium priority)
-3. Directional property (e.g., `marginLeft`) - Sets spacing on a specific side (highest priority)
+3. Directional property (e.g., `marginInlineStart`) - Sets spacing on a specific side (highest priority)
 
-When multiple spacing properties are set, the more specific properties take precedence. For example, with padding:
+When multiple spacing properties are set, the more specific properties take precedence. For example:
 
 <DocCanvas client:only
   mdxSource={{
     react: `<PdsBox border="true" padding="md" paddingBlock="lg">
   padding="md" is overridden by paddingBlock="lg"
 </PdsBox>
-<PdsBox border="true" padding="md" paddingInline="lg">
-  padding="md" is overridden by paddingInline="lg"
+<PdsBox border="true" margin="md" marginInline="lg">
+  margin="md" is overridden by marginInline="lg"
+</PdsBox>
+<PdsBox border="true" gap="md" gapRow="lg">
+  gap="md" is overridden by gapRow="lg"
 </PdsBox>`,
     webComponent: `<pds-box border="true" padding="md" padding-block="lg">
   padding="md" is overridden by padding-block="lg"
 </pds-box>
-<pds-box border="true" padding="md" padding-inline="lg">
-  padding="md" is overridden by padding-inline="lg"
+<pds-box border="true" margin="md" margin-inline="lg">
+  margin="md" is overridden by margin-inline="lg"
+</pds-box>
+<pds-box border="true" gap="md" gap-row="lg">
+  gap="md" is overridden by gap-row="lg"
 </pds-box>`
 }}>
   <pds-box border="true" padding="md" padding-block="lg">
     padding="md" is overridden by padding-block="lg"
   </pds-box>
-  <pds-box border="true" padding="md" padding-inline="lg">
-    padding="md" is overridden by padding-inline="lg"
+  <pds-box border="true" margin="md" margin-inline="lg">
+    margin="md" is overridden by margin-inline="lg"
+  </pds-box>
+  <pds-box border="true" gap="md" gap-row="lg">
+    gap="md" is overridden by gap-row="lg"
   </pds-box>
 </DocCanvas>
 
-This priority system allows for more granular control over spacing while maintaining a predictable behavior. When you need to set different spacing values for different sides, use the more specific properties (block and inline) to override the general property.
+Available spacing properties and their variants:
+
+#### Padding
+- `padding` - Sets padding on all sides
+- `paddingBlock` - Sets padding on top and bottom
+- `paddingInline` - Sets padding on left and right
+- `paddingBlockEnd` - Sets padding on bottom
+- `paddingBlockStart` - Sets padding on top
+- `paddingInlineEnd` - Sets padding on right
+- `paddingInlineStart` - Sets padding on left
+
+#### Margin
+- `margin` - Sets margin on all sides
+- `marginBlock` - Sets margin on top and bottom
+- `marginInline` - Sets margin on left and right
+- `marginBlockStart` - Sets margin on top
+- `marginBlockEnd` - Sets margin on bottom
+- `marginInlineStart` - Sets margin on left
+- `marginInlineEnd` - Sets margin on right
+
+#### Gap
+- `gap` - Sets gap between all items
+- `gapRow` - Sets gap between rows
+- `gapColumn` - Sets gap between columns
+
+This priority system allows for more granular control over spacing while maintaining a predictable behavior. When you need to set different spacing values for different sides, use the more specific properties to override the general property.
 
 ### Display
 By default Box is `display: inline-flex`. Use `display` to change the display property `flex` if the box is intended to fill the entire row.
