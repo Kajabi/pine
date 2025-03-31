@@ -11,6 +11,7 @@ describe('pds-tooltip', () => {
 
     trigger.focus();
     await page.waitForChanges();
+    await new Promise(resolve => setTimeout(resolve, 300));
 
     expect(component).toHaveClass('pds-tooltip--is-open');
     expect(overlay.getAttribute('aria-hidden')).toBe('false');

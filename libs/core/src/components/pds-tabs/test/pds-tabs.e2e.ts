@@ -161,6 +161,10 @@ describe('pds-tabs', () => {
     tab = await page.find('pds-tab[name="two"] > button');
     tab.click();
     await page.waitForChanges();
+
+    // Add a small wait to ensure state updates are complete
+    await new Promise(resolve => setTimeout(resolve, 300));
+
     // Move focus to first tab
     page.keyboard.down("Home");
     await page.waitForChanges();
@@ -211,6 +215,9 @@ describe('pds-tabs', () => {
     // Click inactive tab
     tab.click();
     await page.waitForChanges();
+
+    // Add a small wait to ensure state updates are complete
+    await new Promise(resolve => setTimeout(resolve, 300));
 
     // Confirm previously active tab a11y
     tab = await page.find('pds-tab[name="two"] > button');

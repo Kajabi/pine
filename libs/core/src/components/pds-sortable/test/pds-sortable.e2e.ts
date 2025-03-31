@@ -55,8 +55,9 @@ describe('pds-sortable', () => {
       { x: item1BoundingBox.x + 5, y: item1BoundingBox.y + 5 },
       { x: item2BoundingBox.x + 5, y: item2BoundingBox.y + 5 }
     );
-    // Wait for sorting animation and changes to complete.
-    await page.waitForTimeout(300);
+
+    // Replace waitForTimeout with a Promise-based delay
+    await new Promise(resolve => setTimeout(resolve, 300));
     await page.waitForChanges();
 
     // Update references to items after the interaction.
