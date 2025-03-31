@@ -1,3 +1,32 @@
+## 2.17.0 (2025-03-31)
+
+### Features 🚀
+
+- adds more font size values and adds italics and truncate to docs table ([#403](https://github.com/Kajabi/pine/pull/403))
+
+### Bug Fixes 🐛
+
+- fixes icon alignment ([#405](https://github.com/Kajabi/pine/pull/405))
+- copy text hover and truncate adjustments ([#406](https://github.com/Kajabi/pine/pull/406))
+- add padding-block  padding-inline properties and align-self ([#399](https://github.com/Kajabi/pine/pull/399))
+- **button:** add disabled styles to host ([#411](https://github.com/Kajabi/pine/pull/411))
+- **checkbox:** label-hidden prop is not hiding label text ([#407](https://github.com/Kajabi/pine/pull/407))
+- **pds-copytext:** correct full-width and truncated styles, update docs ([#410](https://github.com/Kajabi/pine/pull/410))
+
+### Documentation 📄
+
+- adds semantic token pages and fixes token table styling ([#400](https://github.com/Kajabi/pine/pull/400))
+
+### Styles 🎨
+
+- re-adds responsive image styling ([#404](https://github.com/Kajabi/pine/pull/404))
+
+### ❤️ Thank You
+
+- Ashley E
+- Phillip Lovelace
+- Quinton Jason
+
 ## 2.16.4 (2025-03-17)
 
 ### Bug Fixes 🐛
