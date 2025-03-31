@@ -75,14 +75,30 @@ describe('pds-tabs', () => {
         <pds-tabpanel name="two">Content 2</pds-tabpanel>
       </pds-tabs>
     `);
-    const inactiveTabButton = await page.find(`pds-tab[name="one"] > button`);
-    const event = await page.spyOnEvent('pdsTabClick');
-    inactiveTabButton.click();
+
+    // Wait for initial render to complete
     await page.waitForChanges();
-    expect(event).toHaveReceivedEvent();
+
+    // Setup event spy before clicking
+    const event = await page.spyOnEvent('pdsTabClick');
+
+    // Find and click the inactive tab
+    const inactiveTabButton = await page.find(`pds-tab[name="one"] > button`);
+    await inactiveTabButton.click();
+
+    // Wait for click event and component updates
+    await event.next();
+    await page.waitForChanges();
+
+    // Wait for specific attribute/class changes
+    await page.waitForSelector('pds-tab[name="one"] > button[aria-selected="true"]');
+    await page.waitForSelector('pds-tabpanel[name="one"] > div.is-active');
+
+    // Verify final state
     const expectedActiveButton = await page.find(`pds-tab[name="one"] > button`);
-    expect(expectedActiveButton.getAttribute('aria-selected')).toMatch("true");
     const expectedActivePanel = await page.find(`pds-tabpanel[name="one"] > div`);
+
+    expect(expectedActiveButton.getAttribute('aria-selected')).toMatch("true");
     expect(expectedActivePanel).toHaveClass('is-active');
   });
 
@@ -212,12 +228,15 @@ describe('pds-tabs', () => {
     expect(tabpanel.getAttribute('aria-labelledby')).toMatch("one");
     expect(tabpanel.getAttribute('role')).toMatch("tabpanel");
 
-    // Click inactive tab
-    tab.click();
+    // Click inactive tab and wait for event
+    const event = await page.spyOnEvent('pdsTabClick');
+    await tab.click();
     await page.waitForChanges();
+    await event.next();
 
-    // Add a small wait to ensure state updates are complete
-    await new Promise(resolve => setTimeout(resolve, 300));
+    // Add explicit wait for attribute changes
+    await page.waitForSelector('pds-tab[name="one"] > button[aria-selected="true"]');
+    await page.waitForSelector('pds-tab[name="two"] > button[aria-selected="false"]');
 
     // Confirm previously active tab a11y
     tab = await page.find('pds-tab[name="two"] > button');
