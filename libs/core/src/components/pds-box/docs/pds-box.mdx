@@ -5,6 +5,26 @@ import { components } from '../../../../dist/docs.json';
 
 Box is our primitive layout component. It is intended to be used as a building block for more complex layouts. It allows for custom sizing, colors, padding, and alignment while still adhering to Pine tokens and brand guidelines.
 
+### Logical Properties
+The Box component uses CSS logical properties for layout and spacing, which means properties are defined relative to the content's writing direction rather than physical directions. This makes the component more adaptable to different writing modes and languages.
+
+Logical properties use two main concepts:
+- **Block**: The dimension perpendicular to the flow of text (vertical in horizontal writing modes, horizontal in vertical writing modes)
+- **Inline**: The dimension parallel to the flow of text (horizontal in horizontal writing modes, vertical in vertical writing modes)
+
+For example:
+- In left-to-right languages (like English):
+  - Block = vertical (top/bottom)
+  - Inline = horizontal (left/right)
+- In right-to-left languages (like Arabic):
+  - Block = vertical (top/bottom)
+  - Inline = horizontal (right/left)
+- In vertical writing modes (like Japanese):
+  - Block = horizontal (left/right)
+  - Inline = vertical (top/bottom)
+
+This approach ensures that your layouts will work correctly regardless of the text direction or writing mode.
+
 ## Properties
 
 <DocArgsTable componentName="pds-box" docSource={components} />
@@ -138,7 +158,7 @@ By default Box has no padding. Use `padding` to add padding to the box.
 The Box component implements a consistent pattern for spacing properties with different levels of specificity. Each spacing property follows this hierarchy:
 
 1. General property (e.g., `padding`, `margin`, `gap`) - Sets spacing on all sides (lowest priority)
-2. Block/Inline property (e.g., `paddingBlock`, `marginInline`, `gapRow`) - Sets spacing on top and bottom or left and right (medium priority)
+2. Block/Inline property (e.g., `paddingBlock`, `marginInline`, `gapRow`) - Sets spacing on block (top/bottom) or inline (start/end) sides (medium priority)
 3. Directional property (e.g., `marginInlineStart`) - Sets spacing on a specific side (highest priority)
 
 When multiple spacing properties are set, the more specific properties take precedence. For example:
@@ -179,28 +199,30 @@ Available spacing properties and their variants:
 
 #### Padding
 - `padding` - Sets padding on all sides
-- `paddingBlock` - Sets padding on top and bottom
-- `paddingInline` - Sets padding on left and right
-- `paddingBlockEnd` - Sets padding on bottom
-- `paddingBlockStart` - Sets padding on top
-- `paddingInlineEnd` - Sets padding on right
-- `paddingInlineStart` - Sets padding on left
+- `paddingBlock` - Sets padding on block (top/bottom) sides
+- `paddingInline` - Sets padding on inline (start/end) sides
+- `paddingBlockEnd` - Sets padding on block-end (bottom) side
+- `paddingBlockStart` - Sets padding on block-start (top) side
+- `paddingInlineEnd` - Sets padding on inline-end side
+- `paddingInlineStart` - Sets padding on inline-start side
 
 #### Margin
 - `margin` - Sets margin on all sides
-- `marginBlock` - Sets margin on top and bottom
-- `marginInline` - Sets margin on left and right
-- `marginBlockStart` - Sets margin on top
-- `marginBlockEnd` - Sets margin on bottom
-- `marginInlineStart` - Sets margin on left
-- `marginInlineEnd` - Sets margin on right
+- `marginBlock` - Sets margin on block (top/bottom) sides
+- `marginInline` - Sets margin on inline (start/end) sides
+- `marginBlockStart` - Sets margin on block-start (top) side
+- `marginBlockEnd` - Sets margin on block-end (bottom) side
+- `marginInlineStart` - Sets margin on inline-start side
+- `marginInlineEnd` - Sets margin on inline-end side
 
 #### Gap
 - `gap` - Sets gap between all items
-- `gapRow` - Sets gap between rows
-- `gapColumn` - Sets gap between columns
+- `gapRow` - Sets gap between rows (block dimension)
+- `gapColumn` - Sets gap between columns (inline dimension)
 
 This priority system allows for more granular control over spacing while maintaining a predictable behavior. When you need to set different spacing values for different sides, use the more specific properties to override the general property.
+
+Note: The Box component uses logical properties for spacing, which means the physical meaning of "inline" and "block" depends on the writing mode. In left-to-right languages (like English), "inline" corresponds to horizontal and "block" to vertical. In right-to-left languages (like Arabic), "inline" is reversed, and in vertical writing modes (like Japanese), "block" becomes horizontal.
 
 ### Display
 By default Box is `display: inline-flex`. Use `display` to change the display property `flex` if the box is intended to fill the entire row.
