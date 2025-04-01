@@ -285,6 +285,10 @@ export namespace Components {
          */
         "helperMessage": string;
         /**
+          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "hideLabel": boolean;
+        /**
           * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
          */
         "indeterminate": boolean;
@@ -296,10 +300,6 @@ export namespace Components {
           * String used for label text next to checkbox.
          */
         "label": string;
-        /**
-          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
-         */
-        "labelHidden": boolean;
         /**
           * String used for checkbox `name` attribute.
          */
@@ -1824,6 +1824,10 @@ declare namespace LocalJSX {
          */
         "helperMessage"?: string;
         /**
+          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "hideLabel"?: boolean;
+        /**
           * If `true`, the checkbox will visually appear as indeterminate. Only JavaScript can set the objects `indeterminate` property. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#indeterminate_state_checkboxes).
          */
         "indeterminate"?: boolean;
@@ -1835,10 +1839,6 @@ declare namespace LocalJSX {
           * String used for label text next to checkbox.
          */
         "label"?: string;
-        /**
-          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
-         */
-        "labelHidden"?: boolean;
         /**
           * String used for checkbox `name` attribute.
          */

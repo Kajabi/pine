@@ -9,7 +9,7 @@ export default {
     disabled: false,
     indeterminate: false,
     invalid: false,
-    labelHidden: false,
+    hideLabel: false,
     required: false,
   },
   component: 'pds-checkbox',
@@ -29,10 +29,10 @@ const BaseTemplate = (args) =>
     disabled=${args.disabled}
     error-message=${args.errorMessage}
     helper-message=${args.helperMessage}
+    hide-label=${args.hideLabel}
     indeterminate=${args.indeterminate}
     invalid=${args.invalid}
     label=${args.label}
-    label-hidden=${args.labelHidden}
     name=${args.name}
     required=${args.required}
     value=${args.value}

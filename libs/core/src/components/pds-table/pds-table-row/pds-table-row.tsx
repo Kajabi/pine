@@ -89,7 +89,7 @@ export class PdsTableRow {
               onClick={this.handleClick}
               indeterminate={this.indeterminate}
               label={"Select Row"}
-              labelHidden={true}
+              hideLabel={true}
               checked={this.isSelected}
             />
           </pds-table-cell>
