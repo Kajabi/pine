@@ -694,6 +694,10 @@ export namespace Components {
          */
         "helperMessage": string;
         /**
+          * Visually hides the label text for instances where only the select should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "hideLabel"?: boolean;
+        /**
           * Determines whether or not the select is invalid.
          */
         "invalid"?: boolean;
@@ -2265,6 +2269,10 @@ declare namespace LocalJSX {
           * Displays helper message text below select.
          */
         "helperMessage"?: string;
+        /**
+          * Visually hides the label text for instances where only the select should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "hideLabel"?: boolean;
         /**
           * Determines whether or not the select is invalid.
          */
