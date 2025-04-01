@@ -7,7 +7,7 @@ export default {
     checked: false,
     disabled: false,
     invalid: false,
-    labelHidden: false,
+    hideLabel: false,
     required: false,
   },
   argTypes: extractArgTypes('pds-radio'),
@@ -29,7 +29,7 @@ const BaseTemplate = (args) =>
     disabled=${args.disabled}
     error-message=${args.errorMessage}
     helper-message=${args.helperMessage}
-    label-hidden=${args.labelHidden}
+    hide-label=${args.hideLabel}
     name=${args.name}
     indeterminate=${args.indeterminate}
     required=${args.required}
