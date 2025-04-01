@@ -31,6 +31,11 @@ export class PdsSwitch {
   @Prop() errorMessage?: string;
 
   /**
+   * Visually hides the label text for instances where only the switch should be displayed. Label remains accessible to assistive technology such as screen readers.
+   */
+  @Prop() hideLabel: boolean;
+
+  /**
    * Displays help text for additional description of an input.
    */
   @Prop() helperMessage: string;
@@ -44,11 +49,6 @@ export class PdsSwitch {
    * Displays text to describe the input.
    */
   @Prop() label!: string;
-
-  /**
-   * Visually hides the label text for instances where only the switch should be displayed. Label remains accessible to assistive technology such as screen readers.
-   */
-  @Prop() labelHidden: boolean;
 
   /**
    * Identifies form data and unifies a group of radio inputs for toggling a single property/value.
@@ -107,7 +107,7 @@ export class PdsSwitch {
             type="checkbox"
             value={this.value}
           />
-          <span class={this.labelHidden ? 'visually-hidden' : ''}>
+          <span class={this.hideLabel ? 'visually-hidden' : ''}>
             {this.label}
           </span>
         </label>

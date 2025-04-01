@@ -777,6 +777,10 @@ export namespace Components {
          */
         "helperMessage": string;
         /**
+          * Visually hides the label text for instances where only the switch should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "hideLabel": boolean;
+        /**
           * Determines the input 'invalid' state, signifying an error is present.
          */
         "invalid"?: boolean;
@@ -784,10 +788,6 @@ export namespace Components {
           * Displays text to describe the input.
          */
         "label": string;
-        /**
-          * Visually hides the label text for instances where only the switch should be displayed. Label remains accessible to assistive technology such as screen readers.
-         */
-        "labelHidden": boolean;
         /**
           * Identifies form data and unifies a group of radio inputs for toggling a single property/value.
          */
@@ -2357,6 +2357,10 @@ declare namespace LocalJSX {
          */
         "helperMessage"?: string;
         /**
+          * Visually hides the label text for instances where only the switch should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "hideLabel"?: boolean;
+        /**
           * Determines the input 'invalid' state, signifying an error is present.
          */
         "invalid"?: boolean;
@@ -2364,10 +2368,6 @@ declare namespace LocalJSX {
           * Displays text to describe the input.
          */
         "label": string;
-        /**
-          * Visually hides the label text for instances where only the switch should be displayed. Label remains accessible to assistive technology such as screen readers.
-         */
-        "labelHidden"?: boolean;
         /**
           * Identifies form data and unifies a group of radio inputs for toggling a single property/value.
          */

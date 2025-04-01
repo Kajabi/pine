@@ -26,17 +26,17 @@ describe('pds-switch', () => {
     `);
   });
 
-  it('does not render a label when label-hidden is true', async () => {
+  it('does not render a label when hide-label is true', async () => {
     const page = await newSpecPage({
       components: [PdsSwitch],
       html: `
-        <pds-switch component-id="pds-switch-e1" label="Switch label" label-hidden="true">
+        <pds-switch component-id="pds-switch-e1" label="Switch label" hide-label="true">
         </pds-switch>
       `
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-switch component-id="pds-switch-e1" class="pds-switch" label="Switch label" label-hidden="true">
+      <pds-switch component-id="pds-switch-e1" class="pds-switch" label="Switch label" hide-label="true">
         <mock:shadow-root>
           <label htmlFor="pds-switch-e1">
             <input id="pds-switch-e1" name="pds-switch-e1" class="pds-switch__input" type="checkbox">
