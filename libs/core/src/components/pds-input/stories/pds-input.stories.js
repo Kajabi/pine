@@ -10,7 +10,9 @@ export default {
     disabled: false,
     errorMessage: null,
     helperMessage: null,
+    hideLabel: false,
     invalid: false,
+    label: null,
     name: null,
     placeholder: null,
     readonly: false,
@@ -40,6 +42,7 @@ const BaseTemplate = (args) => html`<pds-input
   helper-message="${args.helperMessage}"
   invalid="${args.invalid}"
   label="${args.label}"
+  hide-label="${args.hideLabel}"
   name="${args.name}"
   placeholder="${args.placeholder}"
   readonly="${args.readonly}"

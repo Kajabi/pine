@@ -28,9 +28,29 @@ describe('pds-input', () => {
       <mock:shadow-root>
         <div class="pds-input">
           <label class="pds-input__label" htmlFor="field-1">
-            Name
+            <span>Name</span>
           </label>
           <input id="field-1" class="pds-input__field" type="text" value="Frank Dux" />
+        </div>
+      </mock:shadow-root>
+    </pds-input>
+    `);
+  });
+
+  it('renders hidden label text when hide-label prop is set', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsInput],
+      html: `<pds-input component-id="field-1" label="Name" hide-label />`,
+    });
+
+    expect(root).toEqualHtml(`
+    <pds-input component-id="field-1" label="Name" hide-label>
+      <mock:shadow-root>
+        <div class="pds-input">
+          <label class="pds-input__label" htmlFor="field-1">
+            <span class="visually-hidden">Name</span>
+          </label>
+          <input class="pds-input__field" id="field-1" type="text" value="">
         </div>
       </mock:shadow-root>
     </pds-input>
@@ -114,7 +134,7 @@ describe('pds-input', () => {
       <mock:shadow-root>
         <div class="pds-input">
           <label class="pds-input__label" htmlFor="pds-input-invalid">
-            Name
+            <span>Name</span>
           </label>
           <input aria-invalid="true" id="pds-input-invalid" class="is-invalid pds-input__field" type="text" value="Frank Dux" />
         </div>

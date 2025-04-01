@@ -445,6 +445,10 @@ export namespace Components {
          */
         "helperMessage"?: string;
         /**
+          * Visually hides the label text for instances where only the input should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "hideLabel"?: boolean;
+        /**
           * Determines whether or not the input field is invalid or throws an error.
          */
         "invalid"?: boolean;
@@ -2000,6 +2004,10 @@ declare namespace LocalJSX {
           * Displays a message or hint below the input field.
          */
         "helperMessage"?: string;
+        /**
+          * Visually hides the label text for instances where only the input should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "hideLabel"?: boolean;
         /**
           * Determines whether or not the input field is invalid or throws an error.
          */
