@@ -45,10 +45,10 @@ describe('pds-radio', () => {
     expect(input?.checked).toBe(true);
   });
 
-  it('does not render label text when labelHidden prop is set', async () => {
+  it('does not render label text when hideLabel prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsRadio],
-      html: `<pds-radio component-id="default" label="Label text" label-hidden />`,
+      html: `<pds-radio component-id="default" label="Label text" hide-label />`,
     });
 
     const label = page.root?.querySelector('label');

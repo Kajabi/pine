@@ -613,6 +613,10 @@ export namespace Components {
          */
         "helperMessage": string;
         /**
+          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "hideLabel": boolean;
+        /**
           * Determines whether or not the radio is invalid.
           * @defaultValue false
          */
@@ -621,10 +625,6 @@ export namespace Components {
           * String used for label text next to radio.
          */
         "label": string;
-        /**
-          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers.
-         */
-        "labelHidden": boolean;
         /**
           * String used for radio `name` attribute.
          */
@@ -2177,6 +2177,10 @@ declare namespace LocalJSX {
          */
         "helperMessage"?: string;
         /**
+          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "hideLabel"?: boolean;
+        /**
           * Determines whether or not the radio is invalid.
           * @defaultValue false
          */
@@ -2185,10 +2189,6 @@ declare namespace LocalJSX {
           * String used for label text next to radio.
          */
         "label"?: string;
-        /**
-          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers.
-         */
-        "labelHidden"?: boolean;
         /**
           * String used for radio `name` attribute.
          */
