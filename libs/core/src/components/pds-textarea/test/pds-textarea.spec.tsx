@@ -103,7 +103,25 @@ describe('pds-textarea', () => {
       <pds-textarea label="label">
         <mock:shadow-root>
           <div class="pds-textarea">
-            <label>label</label>
+            <label><span>label</span></label>
+            <textarea class="pds-textarea__field"></textarea>
+          </div>
+        </mock:shadow-root>
+      </pds-textarea>
+    `);
+  });
+
+  it('renders hidden label text when hide-label prop is set', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsTextarea],
+      html: `<pds-textarea label="label" hide-label />`,
+    });
+
+    expect(root).toEqualHtml(`
+      <pds-textarea label="label" hide-label>
+        <mock:shadow-root>
+          <div class="pds-textarea">
+            <label><span class="visually-hidden">label</span></label>
             <textarea class="pds-textarea__field"></textarea>
           </div>
         </mock:shadow-root>
@@ -189,7 +207,7 @@ describe('pds-textarea', () => {
       <pds-textarea component-id="pds-textarea-id" label="label">
         <mock:shadow-root>
           <div class="pds-textarea">
-            <label htmlFor="pds-textarea-id">label</label>
+            <label htmlFor="pds-textarea-id"><span>label</span></label>
             <textarea class="pds-textarea__field" id="pds-textarea-id" name="pds-textarea-id"></textarea>
           </div>
         </mock:shadow-root>
@@ -249,7 +267,7 @@ describe('pds-textarea', () => {
       <pds-textarea component-id="textarea-with-description" label="Textarea with description" helper-message="This is a helper message" error-message="This is an error message" invalid="true">
         <mock:shadow-root>
           <div class="pds-textarea">
-            <label htmlFor="textarea-with-description">Textarea with description</label>
+            <label htmlFor="textarea-with-description"><span>Textarea with description</span></label>
             <textarea aria-describedby="textarea-with-description__error-message" aria-invalid="true"  class="is-invalid pds-textarea__field" id="textarea-with-description" name="textarea-with-description"></textarea>
             <p id="textarea-with-description__helper-message"  class="pds-textarea__helper-message">
               This is a helper message
