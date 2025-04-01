@@ -36,12 +36,13 @@ describe('pds-select', () => {
     // Trigger the handleSlotChange logic
     const slot = page.root?.shadowRoot?.querySelector('slot');
     const select = page.root?.shadowRoot?.querySelector('select');
-    const slottedOptions = slot?.assignedNodes?.({ flatten: true });
 
-    slottedOptions?.forEach((node) => {
-      if (node.nodeType === Node.ELEMENT_NODE) {
-        select?.appendChild(node.cloneNode(true));
-      }
+    // Get the actual slotted nodes
+    const slottedElements = slot?.assignedElements();
+
+    // Clone and append each option to the select
+    slottedElements?.forEach(element => {
+      select?.appendChild(element.cloneNode(true));
     });
 
     await page.waitForChanges();
@@ -51,7 +52,9 @@ describe('pds-select', () => {
         <mock:shadow-root>
           <div class="pds-select">
             <label htmlfor="field-1">Name</label>
-            <select class="pds-select__field" id="field-1"></select>
+            <select class="pds-select__field" id="field-1">
+              <option value="1">Option 1</option>
+              <option value="2">Option 2</option>
             </select>
             <div aria-hidden="true" class="hidden">
               <slot></slot>
