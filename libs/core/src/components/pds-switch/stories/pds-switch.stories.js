@@ -5,6 +5,7 @@ import { withActions } from '@storybook/addon-actions/decorator';
 export default {
   args: {
     disabled: false,
+    hideLabel: false,
     required: false,
   },
   argTypes: extractArgTypes('pds-switch'),
@@ -27,6 +28,7 @@ const BaseTemplate = (args) => html`
     helper-message=${args.helperMessage}
     invalid=${args.invalid}
     label=${args.label}
+    hide-label=${args.hideLabel}
     name=${args.name}
     onChange=${args.onChange}
     required=${args.required}

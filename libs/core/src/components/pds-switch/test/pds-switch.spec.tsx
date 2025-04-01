@@ -17,8 +17,31 @@ describe('pds-switch', () => {
     expect(page.root).toEqualHtml(`
       <pds-switch component-id="pds-switch-e1" class="pds-switch" label="Switch label">
         <mock:shadow-root>
-          <input id="pds-switch-e1" name="pds-switch-e1" class="pds-switch__input" type="checkbox">
-          <label htmlFor="pds-switch-e1" class="pds-switch__label">Switch label</label>
+          <label htmlFor="pds-switch-e1">
+            <input id="pds-switch-e1" name="pds-switch-e1" class="pds-switch__input" type="checkbox">
+            <span>Switch label</span>
+          </label>
+        </mock:shadow-root>
+      </pds-switch>
+    `);
+  });
+
+  it('does not render a label when hide-label is true', async () => {
+    const page = await newSpecPage({
+      components: [PdsSwitch],
+      html: `
+        <pds-switch component-id="pds-switch-e1" label="Switch label" hide-label="true">
+        </pds-switch>
+      `
+    });
+
+    expect(page.root).toEqualHtml(`
+      <pds-switch component-id="pds-switch-e1" class="pds-switch" label="Switch label" hide-label="true">
+        <mock:shadow-root>
+          <label htmlFor="pds-switch-e1">
+            <input id="pds-switch-e1" name="pds-switch-e1" class="pds-switch__input" type="checkbox">
+            <span class="visually-hidden">Switch label</span>
+          </label>
         </mock:shadow-root>
       </pds-switch>
     `);
@@ -39,8 +62,10 @@ describe('pds-switch', () => {
     expect(page.root).toEqualHtml(`
       <pds-switch component-id="pds-switch-disabled" class="pds-switch" label="Switch disabled" aria-disabled="true" disabled="true">
         <mock:shadow-root>
-          <input id="pds-switch-disabled" name="pds-switch-disabled" class="pds-switch__input" type="checkbox" disabled>
-          <label htmlFor="pds-switch-disabled" class="pds-switch__label">Switch disabled</label>
+          <label htmlFor="pds-switch-disabled">
+            <input id="pds-switch-disabled" name="pds-switch-disabled" class="pds-switch__input" type="checkbox" disabled>
+            <span>Switch disabled</span>
+          </label>
         </mock:shadow-root>
       </pds-switch>
     `);
@@ -61,8 +86,10 @@ describe('pds-switch', () => {
     expect(page.root).toEqualHtml(`
       <pds-switch component-id="pds-switch-required" class="pds-switch" label="Switch required" required="true">
         <mock:shadow-root>
-          <input id="pds-switch-required" name="pds-switch-required" class="pds-switch__input" type="checkbox" required>
-          <label htmlFor="pds-switch-required" class="pds-switch__label">Switch required</label>
+          <label htmlFor="pds-switch-required">
+            <input id="pds-switch-required" name="pds-switch-required" class="pds-switch__input" type="checkbox" required>
+            <span>Switch required</span>
+          </label>
         </mock:shadow-root>
       </pds-switch>
     `);
@@ -83,8 +110,10 @@ describe('pds-switch', () => {
     expect(page.root).toEqualHtml(`
       <pds-switch component-id="pds-switch-msg" class="pds-switch pds-switch--message" label="Switch helper message" helper-message="Direct trade next level slow-carb, hashtag distillery">
         <mock:shadow-root>
-          <input aria-describedby="pds-switch-msg__helper-message" id="pds-switch-msg" name="pds-switch-msg" class="pds-switch__input" type="checkbox">
-          <label htmlFor="pds-switch-msg" class="pds-switch__label">Switch helper message</label>
+          <label htmlFor="pds-switch-msg">
+            <input aria-describedby="pds-switch-msg__helper-message" id="pds-switch-msg" name="pds-switch-msg" class="pds-switch__input" type="checkbox">
+            <span>Switch helper message</span>
+          </label>
           <div id="pds-switch-msg__helper-message"  class="pds-switch__message">Direct trade next level slow-carb, hashtag distillery</div>
         </mock:shadow-root>
       </pds-switch>
@@ -107,8 +136,10 @@ describe('pds-switch', () => {
     expect(page.root).toEqualHtml(`
       <pds-switch component-id="pds-switch-err" class="pds-switch pds-switch--error" label="Switch error message" error-message="La croix blue bottle narwhal fam" invalid="true">
         <mock:shadow-root>
-          <input aria-invalid="true" id="pds-switch-err" name="pds-switch-err" class="pds-switch__input" type="checkbox">
-          <label htmlFor="pds-switch-err" class="pds-switch__label">Switch error message</label>
+          <label htmlFor="pds-switch-err">
+            <input aria-invalid="true" id="pds-switch-err" name="pds-switch-err" class="pds-switch__input" type="checkbox">
+            <span>Switch error message</span>
+          </label>
           <div aria-live="assertive" id="pds-switch-err__error-message" class="pds-switch__message pds-switch__message--error">
             <pds-icon icon="${danger}" size="small"></pds-icon>
             La croix blue bottle narwhal fam
@@ -135,13 +166,36 @@ describe('pds-switch', () => {
     expect(page.root).toEqualHtml(`
       <pds-switch component-id="switch-with-description" class="pds-switch pds-switch--message pds-switch--error" label="Switch with description" helper-message="This is a helper message" error-message="This is an error message" invalid="true">
         <mock:shadow-root>
-          <input aria-describedby="switch-with-description__error-message" aria-invalid="true" id="switch-with-description" name="switch-with-description" class="pds-switch__input" type="checkbox">
-          <label htmlFor="switch-with-description" class="pds-switch__label">Switch with description</label>
+          <label htmlFor="switch-with-description">
+            <input aria-describedby="switch-with-description__error-message" aria-invalid="true" id="switch-with-description" name="switch-with-description" class="pds-switch__input" type="checkbox">
+            <span>Switch with description</span>
+          </label>
           <div id="switch-with-description__helper-message"  class="pds-switch__message">This is a helper message</div>
           <div aria-live="assertive" id="switch-with-description__error-message" class="pds-switch__message pds-switch__message--error">
             <pds-icon icon="${danger}" size="small"></pds-icon>
             This is an error message
           </div>
+        </mock:shadow-root>
+      </pds-switch>
+    `);
+  });
+
+  it('renders a name attribute', async () => {
+    const page = await newSpecPage({
+      components: [PdsSwitch],
+      html: `
+        <pds-switch component-id="pds-switch-name" name="pds-switch-name" label="Switch name">
+        </pds-switch>
+      `
+    });
+
+    expect(page.root).toEqualHtml(`
+      <pds-switch component-id="pds-switch-name" class="pds-switch" name="pds-switch-name" label="Switch name">
+        <mock:shadow-root>
+          <label htmlFor="pds-switch-name">
+            <input id="pds-switch-name" name="pds-switch-name" class="pds-switch__input" type="checkbox">
+            <span>Switch name</span>
+          </label>
         </mock:shadow-root>
       </pds-switch>
     `);
