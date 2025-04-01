@@ -613,6 +613,10 @@ export namespace Components {
          */
         "helperMessage": string;
         /**
+          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "hideLabel": boolean;
+        /**
           * Determines whether or not the radio is invalid.
           * @defaultValue false
          */
@@ -2172,6 +2176,10 @@ declare namespace LocalJSX {
           * Displays helper message text below radio.
          */
         "helperMessage"?: string;
+        /**
+          * Visually hides the label text for instances where only the radio should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "hideLabel"?: boolean;
         /**
           * Determines whether or not the radio is invalid.
           * @defaultValue false

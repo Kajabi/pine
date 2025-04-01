@@ -13,6 +13,7 @@ describe('pds-radio', () => {
       <pds-radio>
         <label>
           <input type="radio">
+          <span></span>
         </label>
       </pds-radio>
     `);
@@ -28,7 +29,7 @@ describe('pds-radio', () => {
       <pds-radio component-id="default" label="Label text">
         <label htmlfor="default">
           <input id="default" type="radio">
-          Label text
+          <span>Label text</span>
         </label>
       </pds-radio>
     `);
@@ -42,6 +43,16 @@ describe('pds-radio', () => {
 
     const input = root?.querySelector('input');
     expect(input?.checked).toBe(true);
+  });
+
+  it('does not render label text when hideLabel prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: `<pds-radio component-id="default" label="Label text" hide-label />`,
+    });
+
+    const label = page.root?.querySelector('label');
+    expect(label?.querySelector('span')).toHaveClass('visually-hidden');
   });
 
   it('renders disabled input when disabled prop is set', async () => {
@@ -64,7 +75,7 @@ describe('pds-radio', () => {
       <pds-radio class="is-invalid" component-id="default" label="Label text" invalid>
         <label htmlfor="default">
           <input aria-invalid="true" id="default" type="radio">
-          Label text
+          <span>Label text</span>
         </label>
       </pds-radio>
     `);
@@ -80,7 +91,7 @@ describe('pds-radio', () => {
       <pds-radio component-id="default" label="This is label text">
         <label htmlfor="default">
           <input id="default" type="radio">
-          This is label text
+          <span>This is label text</span>
         </label>
       </pds-radio>
     `);
@@ -96,7 +107,7 @@ describe('pds-radio', () => {
       <pds-radio component-id="default" label="Label text" helper-message="This is short message text.">
         <label htmlfor="default">
           <input aria-describedby="default__helper-message" id="default" type="radio">
-          Label text
+          <span>Label text</span>
         </label>
         <div class="pds-radio__message" id="default__helper-message">
           This is short message text.
@@ -115,7 +126,7 @@ describe('pds-radio', () => {
       <pds-radio class="is-invalid" component-id="default" error-message="This is a short error message." invalid="true" label="Label text">
         <label htmlfor="default">
           <input aria-invalid="true" id="default" type="radio">
-          Label text
+          <span>Label text</span>
         </label>
         <div aria-live="assertive" class="pds-radio__message pds-radio__message--error" id="default__error-message">
           <pds-icon icon="${danger}" size="small"></pds-icon>
