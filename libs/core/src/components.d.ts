@@ -911,7 +911,8 @@ export namespace Components {
   | 'danger'
   | 'info'
   | 'success'
-  | 'warning';
+  | 'warning'
+  | string;
         /**
           * Sets the text decoration.
          */
@@ -2516,7 +2517,8 @@ declare namespace LocalJSX {
   | 'danger'
   | 'info'
   | 'success'
-  | 'warning';
+  | 'warning'
+  | string;
         /**
           * Sets the text decoration.
          */

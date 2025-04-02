@@ -61,39 +61,42 @@ Text can be aligned to the start, center, end, or justified.
 
 ### Color
 
-Text color can align to our common variant/sentiment values.
+Text color can align to our common variant/sentiment values, Pine tokens, or custom colors.
 
 <DocCanvas client:only
   mdxSource={{
     react: `
-      <PdsText style="background-color: #33; padding-inline: 8px" color="primary" tag="p">Zebstrika</PdsText>
-      <PdsText color="secondary" tag="p">Pangoro</PdsText>
-      <PdsText color="neutral" tag="p">Urshifu</PdsText>
-      <PdsText color="accent" tag="p">Sableye</PdsText>
-      <PdsText color="danger" tag="p">Arcanine</PdsText>
-      <PdsText color="info" tag="p">Garchomp</PdsText>
-      <PdsText color="success" tag="p">Sceptile</PdsText>
-      <PdsText color="warning" tag="p">Pikachu</PdsText>
+      <PdsText style="background-color: #33; padding-inline: 8px" color="primary" tag="h5">Zebstrika</PdsText>
+      <PdsText color="secondary" tag="h5">Pangoro</PdsText>
+      <PdsText color="neutral" tag="h5">Urshifu</PdsText>
+      <PdsText color="accent" tag="h5">Sableye</PdsText>
+      <PdsText color="danger" tag="h5">Arcanine</PdsText>
+      <PdsText color="info" tag="h5">Garchomp</PdsText>
+      <PdsText color="success" tag="h5">Sceptile</PdsText>
+      <PdsText color="warning" tag="h5">Pikachu</PdsText>
+      <PdsText color="--pine-color-purple-300" tag="h5">Ditto</PdsText>
     `,
     webComponent: `
-      <pds-text style="background-color: #333; padding-inline: 8px" color="primary" tag="p">Zebstrika</pds-text>
-      <pds-text color="secondary" tag="p">Pangoro</pds-text>
-      <pds-text color="neutral" tag="p">Urshifu</pds-text>
-      <pds-text color="accent" tag="p">Sableye</pds-text>
-      <pds-text color="danger" tag="p">Arcanine</pds-text>
-      <pds-text color="info" tag="p">Garchomp</pds-text>
-      <pds-text color="success" tag="p">Sceptile</pds-text>
-      <pds-text color="warning" tag="p">Pikachu</pds-text>
+      <pds-text style={{backgroundColor: '#333', paddingInline: '8px'}} color="primary" tag="h5">Zebstrika</pds-text>
+      <pds-text color="secondary" tag="h5">Pangoro</pds-text>
+      <pds-text color="neutral" tag="h5">Urshifu</pds-text>
+      <pds-text color="accent" tag="h5">Sableye</pds-text>
+      <pds-text color="danger" tag="h5">Arcanine</pds-text>
+      <pds-text color="info" tag="h5">Garchomp</pds-text>
+      <pds-text color="success" tag="h5">Sceptile</pds-text>
+      <pds-text color="warning" tag="h5">Pikachu</pds-text>
+      <pds-text color="--pine-color-purple-300" tag="h5">Ditto</pds-text>
     `
 }}>
-  <pds-text style={{backgroundColor: '#333', paddingInline: '8px'}} color="primary" tag="p">Zebstrika</pds-text>
-  <pds-text color="secondary" tag="p">Pangoro</pds-text>
-  <pds-text color="neutral" tag="p">Urshifu</pds-text>
-  <pds-text color="accent" tag="p">Sableye</pds-text>
-  <pds-text color="danger" tag="p">Arcanine</pds-text>
-  <pds-text color="info" tag="p">Garchomp</pds-text>
-  <pds-text color="success" tag="p">Sceptile</pds-text>
-  <pds-text color="warning" tag="p">Pikachu</pds-text>
+  <pds-text style={{backgroundColor: '#333', paddingInline: '8px'}} color="primary" tag="h5">Zebstrika</pds-text>
+  <pds-text color="secondary" tag="h5">Pangoro</pds-text>
+  <pds-text color="neutral" tag="h5">Urshifu</pds-text>
+  <pds-text color="accent" tag="h5">Sableye</pds-text>
+  <pds-text color="danger" tag="h5">Arcanine</pds-text>
+  <pds-text color="info" tag="h5">Garchomp</pds-text>
+  <pds-text color="success" tag="h5">Sceptile</pds-text>
+  <pds-text color="warning" tag="h5">Pikachu</pds-text>
+  <pds-text color="--pine-color-purple-300" tag="h5">Ditto</pds-text>
 </DocCanvas>
 
 ### Decoration

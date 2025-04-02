@@ -1,4 +1,4 @@
-import { Component, h, Prop } from '@stencil/core';
+import { Component, h, Prop, Element } from '@stencil/core';
 
 @Component({
   tag: 'pds-text',
@@ -6,7 +6,7 @@ import { Component, h, Prop } from '@stencil/core';
   shadow: true,
 })
 export class PdsText {
-
+  @Element() el: HTMLPdsTextElement;
   /**
    * Sets the text alignment.
    */
@@ -23,7 +23,8 @@ export class PdsText {
   | 'danger'
   | 'info'
   | 'success'
-  | 'warning';
+  | 'warning'
+  | string;
 
   /**
    * Sets the text decoration.
@@ -99,13 +100,40 @@ export class PdsText {
    */
   @Prop() truncate?: boolean;
 
+  private setColor() {
+    if (this.color === undefined) {
+      return;
+    }
+
+    const style = {};
+    const colors: { [key: string]: string } = {
+      primary: 'var(--pine-color-text-primary)',
+      secondary: 'var(--pine-color-text-secondary)',
+      neutral: 'var(--pine-color-text-neutral)',
+      accent: 'var(--pine-color-text-accent)',
+      danger: 'var(--pine-color-text-danger)',
+      info: 'var(--pine-color-text-info)',
+      success: 'var(--pine-color-text-success)',
+      warning: 'var(--pine-color-text-warning)',
+    }
+
+    if (colors.hasOwnProperty(this.color)) {
+      style['--color'] = colors[this.color];
+    } else if (this.color.startsWith('--')) {
+      style['--color'] = `var(${this.color})`;
+    } else {
+      style['--color'] = this.color;
+    }
+
+    return style;
+  }
+
   render() {
     const Tag = this.tag;
 
     const typeClasses = `
       pds-text
       ${this.align !== undefined && this.align.trim() !== '' ? `pds-text--align-${this.align}` : ''}
-      ${this.color !== undefined && this.color.trim() !== '' ? `pds-text--color-${this.color}` : ''}
       ${this.gutter !== undefined && this.gutter.trim() !== '' ? `pds-text--gutter-${this.gutter}` : ''}
       ${this.size !== undefined && this.size.trim() !== '' ? `pds-text--size-${this.size}` : ''}
       ${this.weight !== undefined && this.weight.trim() !== '' ? `pds-text--weight-${this.weight}` : ''}
@@ -113,7 +141,7 @@ export class PdsText {
     `;
 
     return (
-      <Tag class={typeClasses}>
+      <Tag style={this.color && this.setColor()} class={typeClasses}>
         <slot />
       </Tag>
     );
