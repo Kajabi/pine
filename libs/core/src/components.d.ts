@@ -126,30 +126,10 @@ export namespace Components {
          */
         "gap"?: BoxTShirtSizeType;
         /**
-          * Defines the spacing between the box item columns.
-          * @defaultValue none
-         */
-        "gapColumn"?: BoxTShirtSizeType;
-        /**
-          * Defines the spacing between the box item rows.
-          * @defaultValue none
-         */
-        "gapRow"?: BoxTShirtSizeType;
-        /**
           * Defines the horizontal alignment of the box items.
           * @defaultValue start
          */
         "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
-        /**
-          * Defines the outer spacing between the box and another element.
-          * @defaultValue none
-         */
-        "margin"?: BoxTShirtSizeType;
-        /**
-          * Defines the top and bottom outer spacing.
-          * @defaultValue none
-         */
-        "marginBlock"?: BoxTShirtSizeType;
         /**
           * Defines the box's outer bottom spacing.
           * @defaultValue none
@@ -160,11 +140,6 @@ export namespace Components {
           * @defaultValue none
          */
         "marginBlockStart"?: BoxTShirtSizeType;
-        /**
-          * Defines the left and right spacing.
-          * @defaultValue none
-         */
-        "marginInline"?: BoxTShirtSizeType;
         /**
           * Defines the box's outer right spacing.
           * @defaultValue none
@@ -213,11 +188,6 @@ export namespace Components {
          */
         "padding"?: BoxTShirtSizeType;
         /**
-          * Defines the top and bottom spacing.
-          * @defaultValue none
-         */
-        "paddingBlock"?: BoxTShirtSizeType;
-        /**
           * Defines the bottom spacing.
           * @defaultValue none
          */
@@ -227,11 +197,6 @@ export namespace Components {
           * @defaultValue none
          */
         "paddingBlockStart"?: BoxTShirtSizeType;
-        /**
-          * Defines the left and right spacing.
-          * @defaultValue none
-         */
-        "paddingInline"?: BoxTShirtSizeType;
         /**
           * Defines the right spacing.
           * @defaultValue none
@@ -1733,30 +1698,10 @@ declare namespace LocalJSX {
          */
         "gap"?: BoxTShirtSizeType;
         /**
-          * Defines the spacing between the box item columns.
-          * @defaultValue none
-         */
-        "gapColumn"?: BoxTShirtSizeType;
-        /**
-          * Defines the spacing between the box item rows.
-          * @defaultValue none
-         */
-        "gapRow"?: BoxTShirtSizeType;
-        /**
           * Defines the horizontal alignment of the box items.
           * @defaultValue start
          */
         "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
-        /**
-          * Defines the outer spacing between the box and another element.
-          * @defaultValue none
-         */
-        "margin"?: BoxTShirtSizeType;
-        /**
-          * Defines the top and bottom outer spacing.
-          * @defaultValue none
-         */
-        "marginBlock"?: BoxTShirtSizeType;
         /**
           * Defines the box's outer bottom spacing.
           * @defaultValue none
@@ -1767,11 +1712,6 @@ declare namespace LocalJSX {
           * @defaultValue none
          */
         "marginBlockStart"?: BoxTShirtSizeType;
-        /**
-          * Defines the left and right spacing.
-          * @defaultValue none
-         */
-        "marginInline"?: BoxTShirtSizeType;
         /**
           * Defines the box's outer right spacing.
           * @defaultValue none
@@ -1820,11 +1760,6 @@ declare namespace LocalJSX {
          */
         "padding"?: BoxTShirtSizeType;
         /**
-          * Defines the top and bottom spacing.
-          * @defaultValue none
-         */
-        "paddingBlock"?: BoxTShirtSizeType;
-        /**
           * Defines the bottom spacing.
           * @defaultValue none
          */
@@ -1834,11 +1769,6 @@ declare namespace LocalJSX {
           * @defaultValue none
          */
         "paddingBlockStart"?: BoxTShirtSizeType;
-        /**
-          * Defines the left and right spacing.
-          * @defaultValue none
-         */
-        "paddingInline"?: BoxTShirtSizeType;
         /**
           * Defines the right spacing.
           * @defaultValue none

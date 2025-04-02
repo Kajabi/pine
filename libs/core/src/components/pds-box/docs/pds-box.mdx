@@ -5,26 +5,6 @@ import { components } from '../../../../dist/docs.json';
 
 Box is our primitive layout component. It is intended to be used as a building block for more complex layouts. It allows for custom sizing, colors, padding, and alignment while still adhering to Pine tokens and brand guidelines.
 
-### Logical Properties
-The Box component uses CSS logical properties for layout and spacing, which means properties are defined relative to the content's writing direction rather than physical directions. This makes the component more adaptable to different writing modes and languages.
-
-Logical properties use two main concepts:
-- **Block**: The dimension perpendicular to the flow of text (vertical in horizontal writing modes, horizontal in vertical writing modes)
-- **Inline**: The dimension parallel to the flow of text (horizontal in horizontal writing modes, vertical in vertical writing modes)
-
-For example:
-- In left-to-right languages (like English):
-  - Block = vertical (top/bottom)
-  - Inline = horizontal (left/right)
-- In right-to-left languages (like Arabic):
-  - Block = vertical (top/bottom)
-  - Inline = horizontal (right/left)
-- In vertical writing modes (like Japanese):
-  - Block = horizontal (left/right)
-  - Inline = vertical (top/bottom)
-
-This approach ensures that your layouts will work correctly regardless of the text direction or writing mode.
-
 ## Properties
 
 <DocArgsTable componentName="pds-box" docSource={components} />
@@ -107,23 +87,23 @@ By default Box has no margin. Use `margin` to add margin around the box.
 
 <DocCanvas client:only
   mdxSource={{
-    react: `<PdsBox border="true" margin="xxs">Margin xxs</PdsBox>
-<PdsBox border="true" margin="xs">Margin xs</PdsBox>
-<PdsBox border="true" margin="sm">Margin sm</PdsBox>
-<PdsBox border="true" margin="md">Margin md</PdsBox>
-<PdsBox border="true" margin="lg">Margin lg</PdsBox>`,
-    webComponent: `<pds-box border="true" margin="xxs">Margin xxs</pds-box>
-<pds-box border="true" margin="xs">Margin xs</pds-box>
-<pds-box border="true" margin="sm">Margin sm</pds-box>
-<pds-box border="true" margin="md">Margin md</pds-box>
+    react: `<PdsBox border="true" marginBlockStart="xxs">Margin Block Start xxs</PdsBox>
+<PdsBox border="true" marginBlockEnd="xs">Margin Block End xs</PdsBox>
+<PdsBox border="true" marginInlineStart="sm">Margin Inline Start sm</PdsBox>
+<PdsBox border="true" marginInlineEnd="md">Margin Inline End md</PdsBox>`,
+    webComponent: `<pds-box border="true" margin-block-start="xxs">Margin Block Start xxs</pds-box>
+<pds-box border="true" margin-block-end="xs">Margin Block End xs</pds-box>
+<pds-box border="true" margin-inline-start="sm">Margin Inline Start sm</pds-box>
+<pds-box border="true" margin-inline-end="md">Margin Inline End md</pds-box>
 <pds-box border="true" margin="lg">Margin lg</pds-box>`
 }}>
-  <pds-box border="true" margin="xxs">Margin xxs</pds-box>
-  <pds-box border="true" margin="xs">Margin xs</pds-box>
-  <pds-box border="true" margin="sm">Margin sm</pds-box>
-  <pds-box border="true" margin="md">Margin md</pds-box>
-  <pds-box border="true" margin="lg">Margin lg</pds-box>
+  <pds-box border="true" margin-block-start="xxs">Margin Block Start xxs</pds-box>
+  <pds-box border="true" margin-block-end="xs">Margin Block End xs</pds-box>
+  <pds-box border="true" margin-inline-start="sm">Margin Inline Start sm</pds-box>
+  <pds-box border="true" margin-inline-end="md">Margin Inline End md</pds-box>
 </DocCanvas>
+
+> Note: Use `gap` in favor of `margin-*` whenever possible.
 
 ### Padding
 By default Box has no padding. Use `padding` to add padding to the box.
@@ -153,76 +133,6 @@ By default Box has no padding. Use `padding` to add padding to the box.
   <pds-box border="true" padding="xl">Padding xl</pds-box>
   <pds-box border="true" padding="xxl">Padding xxl</pds-box>
 </DocCanvas>
-
-### Spacing Properties Priority
-The Box component implements a consistent pattern for spacing properties with different levels of specificity. Each spacing property follows this hierarchy:
-
-1. General property (e.g., `padding`, `margin`, `gap`) - Sets spacing on all sides (lowest priority)
-2. Block/Inline property (e.g., `paddingBlock`, `marginInline`, `gapRow`) - Sets spacing on block (top/bottom) or inline (start/end) sides (medium priority)
-3. Directional property (e.g., `marginInlineStart`) - Sets spacing on a specific side (highest priority)
-
-When multiple spacing properties are set, the more specific properties take precedence. For example:
-
-<DocCanvas client:only
-  mdxSource={{
-    react: `<PdsBox border="true" padding="md" paddingBlock="lg">
-  padding="md" is overridden by paddingBlock="lg"
-</PdsBox>
-<PdsBox border="true" margin="md" marginInline="lg">
-  margin="md" is overridden by marginInline="lg"
-</PdsBox>
-<PdsBox border="true" gap="md" gapRow="lg">
-  gap="md" is overridden by gapRow="lg"
-</PdsBox>`,
-    webComponent: `<pds-box border="true" padding="md" padding-block="lg">
-  padding="md" is overridden by padding-block="lg"
-</pds-box>
-<pds-box border="true" margin="md" margin-inline="lg">
-  margin="md" is overridden by margin-inline="lg"
-</pds-box>
-<pds-box border="true" gap="md" gap-row="lg">
-  gap="md" is overridden by gap-row="lg"
-</pds-box>`
-}}>
-  <pds-box border="true" padding="md" padding-block="lg">
-    padding="md" is overridden by padding-block="lg"
-  </pds-box>
-  <pds-box border="true" margin="md" margin-inline="lg">
-    margin="md" is overridden by margin-inline="lg"
-  </pds-box>
-  <pds-box border="true" gap="md" gap-row="lg">
-    gap="md" is overridden by gap-row="lg"
-  </pds-box>
-</DocCanvas>
-
-Available spacing properties and their variants:
-
-#### Padding
-- `padding` - Sets padding on all sides
-- `paddingBlock` - Sets padding on block (top/bottom) sides
-- `paddingInline` - Sets padding on inline (start/end) sides
-- `paddingBlockEnd` - Sets padding on block-end (bottom) side
-- `paddingBlockStart` - Sets padding on block-start (top) side
-- `paddingInlineEnd` - Sets padding on inline-end side
-- `paddingInlineStart` - Sets padding on inline-start side
-
-#### Margin
-- `margin` - Sets margin on all sides
-- `marginBlock` - Sets margin on block (top/bottom) sides
-- `marginInline` - Sets margin on inline (start/end) sides
-- `marginBlockStart` - Sets margin on block-start (top) side
-- `marginBlockEnd` - Sets margin on block-end (bottom) side
-- `marginInlineStart` - Sets margin on inline-start side
-- `marginInlineEnd` - Sets margin on inline-end side
-
-#### Gap
-- `gap` - Sets gap between all items
-- `gapRow` - Sets gap between rows (block dimension)
-- `gapColumn` - Sets gap between columns (inline dimension)
-
-This priority system allows for more granular control over spacing while maintaining a predictable behavior. When you need to set different spacing values for different sides, use the more specific properties to override the general property.
-
-Note: The Box component uses logical properties for spacing, which means the physical meaning of "inline" and "block" depends on the writing mode. In left-to-right languages (like English), "inline" corresponds to horizontal and "block" to vertical. In right-to-left languages (like Arabic), "inline" is reversed, and in vertical writing modes (like Japanese), "block" becomes horizontal.
 
 ### Display
 By default Box is `display: inline-flex`. Use `display` to change the display property `flex` if the box is intended to fill the entire row.

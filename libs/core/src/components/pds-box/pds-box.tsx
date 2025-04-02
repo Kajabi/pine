@@ -69,18 +69,6 @@ export class PdsBox {
   @Prop() gap?: BoxTShirtSizeType;
 
   /**
-   * Defines the spacing between the box item rows.
-   * @defaultValue none
-  */
-  @Prop() gapRow?: BoxTShirtSizeType;
-
-  /**
-   * Defines the spacing between the box item columns.
-   * @defaultValue none
-  */
-  @Prop() gapColumn?: BoxTShirtSizeType;
-
-  /**
    * Defines how a box will grow or shrink to fit the space available in its container.
    * @defaultValue none
    */
@@ -91,24 +79,6 @@ export class PdsBox {
    * @defaultValue start
   */
   @Prop() justifyContent?: `start` | `center` | `end` | `space-between` | `space-around`;
-
-  /**
-   * Defines the outer spacing between the box and another element.
-   * @defaultValue none
-  */
-  @Prop() margin?: BoxTShirtSizeType;
-
-  /**
-   * Defines the top and bottom outer spacing.
-   * @defaultValue none
-  */
-  @Prop() marginBlock?: BoxTShirtSizeType;
-
-  /**
-   * Defines the left and right spacing.
-   * @defaultValue none
-   */
-  @Prop() marginInline?: BoxTShirtSizeType;
 
   /**
    * Defines the box's outer top spacing.
@@ -180,17 +150,6 @@ export class PdsBox {
   */
   @Prop() padding?: BoxTShirtSizeType;
 
-  /**
-   * Defines the top and bottom spacing.
-   * @defaultValue none
-  */
-  @Prop() paddingBlock?: BoxTShirtSizeType;
-
-  /**
-   * Defines the left and right spacing.
-   * @defaultValue none
-  */
-  @Prop() paddingInline?: BoxTShirtSizeType;
 
   /**
    * Defines the top spacing.
@@ -263,16 +222,11 @@ export class PdsBox {
     ${this.display !== undefined && this.display.trim() !== '' ? `pds-box--display-${this.display}` : ''}
     ${this.fit ? 'pds-box--fit' : ''}
     ${this.gap !== undefined && this.gap.trim() !== '' ? `pds-box-gap-${this.gap}` : ''}
-    ${this.gapRow !== undefined && this.gapRow.trim() !== '' ? `pds-box-gap-row-${this.gapRow}` : ''}
-    ${this.gapColumn !== undefined && this.gapColumn.trim() !== '' ? `pds-box-gap-column-${this.gapColumn}` : ''}
     ${this.flex !== undefined && this.flex.trim() !== '' ? `pds-box--flex-${this.flex}` : ''}
     ${this.justifyContent !== undefined && this.justifyContent.trim() !== '' ? `pds-justify-content-${this.justifyContent}` : ''}
-    ${this.margin !== undefined && this.margin.trim() !== '' ? `pds-margin-${this.margin}` : ''}
-    ${this.marginBlock !== undefined && this.marginBlock.trim() !== '' ? `pds-margin-block-${this.marginBlock}` : ''}
-    ${this.marginInline !== undefined && this.marginInline.trim() !== '' ? `pds-margin-inline-${this.marginInline}` : ''}
+    ${this.marginBlockStart !== undefined && this.marginBlockStart.trim() !== '' ? `pds-margin-block-start-${this.marginBlockStart}` : ''}
     ${this.marginInlineStart !== undefined && this.marginInlineStart.trim() !== '' ? `pds-margin-inline-start-${this.marginInlineStart}` : ''}
     ${this.marginInlineEnd !== undefined && this.marginInlineEnd.trim() !== '' ? `pds-margin-inline-end-${this.marginInlineEnd}` : ''}
-    ${this.marginBlockStart !== undefined && this.marginBlockStart.trim() !== '' ? `pds-margin-block-start-${this.marginBlockStart}` : ''}
     ${this.marginBlockEnd !== undefined && this.marginBlockEnd.trim() !== '' ? `pds-margin-block-end-${this.marginBlockEnd}` : ''}
     ${this.offset !== undefined && this.offset.trim() !== '' ? `pds-box-offset-${this.offset}` : ''}
     ${this.offsetXs !== undefined && this.offsetXs.trim() !== '' ? `pds-box-offset-xs-${this.offsetXs}` : ''}
@@ -281,8 +235,6 @@ export class PdsBox {
     ${this.offsetLg !== undefined && this.offsetLg.trim() !== '' ? `pds-box-offset-lg-${this.offsetLg}` : ''}
     ${this.offsetXl !== undefined && this.offsetXl.trim() !== '' ? `pds-box-offset-xl-${this.offsetXl}` : ''}
     ${this.padding !== undefined && this.padding.trim() !== '' ? `pds-padding-${this.padding}` : ''}
-    ${this.paddingBlock !== undefined && this.paddingBlock.trim() !== '' ? `pds-padding-block-${this.paddingBlock}` : ''}
-    ${this.paddingInline !== undefined && this.paddingInline.trim() !== '' ? `pds-padding-inline-${this.paddingInline}` : ''}
     ${this.paddingBlockStart !== undefined && this.paddingBlockStart.trim() !== '' ? `pds-padding-block-start-${this.paddingBlockStart}` : ''}
     ${this.paddingBlockEnd !== undefined && this.paddingBlockEnd.trim() !== '' ? `pds-padding-block-end-${this.paddingBlockEnd}` : ''}
     ${this.paddingInlineStart !== undefined && this.paddingInlineStart.trim() !== '' ? `pds-padding-inline-start-${this.paddingInlineStart}` : ''}
