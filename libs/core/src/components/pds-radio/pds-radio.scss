@@ -132,8 +132,11 @@ label {
 }
 
 .pds-radio__message--error {
-  align-items: center;
   display: flex;
   font-size: var(--pine-font-size-body-sm);
   gap: var(--pine-dimension-2xs);
+
+  pds-icon {
+    margin-block-start: var(--pine-dimension-025);
+  }
 }
