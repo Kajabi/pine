@@ -51,7 +51,7 @@ describe('pds-select', () => {
       <pds-select component-id="field-1" label="Name">
         <mock:shadow-root>
           <div class="pds-select">
-            <label htmlfor="field-1">Name</label>
+            <label htmlfor="field-1"><span>Name</span></label>
             <select class="pds-select__field" id="field-1">
               <option value="1">Option 1</option>
               <option value="2">Option 2</option>
@@ -77,7 +77,29 @@ describe('pds-select', () => {
       <pds-select component-id="field-1" label="Name">
         <mock:shadow-root>
           <div class="pds-select">
-            <label htmlFor="field-1">Name</label>
+            <label htmlFor="field-1"><span>Name</span></label>
+            <select class="pds-select__field" id="field-1"></select>
+            <div aria-hidden="true" class="hidden">
+              <slot></slot>
+            </div>
+            <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
+          </div>
+        </mock:shadow-root>
+      </pds-select>
+    `);
+  });
+
+  it('renders with hidden label text when hide-label prop is set', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select component-id="field-1" label="Name" hide-label></pds-select>`,
+    });
+
+    expect(root).toEqualHtml(`
+      <pds-select component-id="field-1" label="Name" hide-label>
+        <mock:shadow-root>
+          <div class="pds-select">
+            <label htmlFor="field-1"><span class="visually-hidden">Name</span></label>
             <select class="pds-select__field" id="field-1"></select>
             <div aria-hidden="true" class="hidden">
               <slot></slot>
@@ -123,7 +145,7 @@ describe('pds-select', () => {
       <pds-select aria-disabled="true" class="is-disabled" component-id="field-1" label="Disabled" disabled="">
         <mock:shadow-root>
           <div class="pds-select">
-            <label htmlfor="field-1">Disabled</label>
+            <label htmlfor="field-1"><span>Disabled</span></label>
             <select class="pds-select__field" disabled="" id="field-1">
               <slot></slot>
             </select>
@@ -172,7 +194,7 @@ describe('pds-select', () => {
       <pds-select autocomplete="off" component-id="field-1" label="Name">
         <mock:shadow-root>
           <div class="pds-select">
-            <label htmlFor="field-1">Name</label>
+            <label htmlFor="field-1"><span>Name</span></label>
             <select autocomplete="off" class="pds-select__field" id="field-1"></select>
             <div aria-hidden="true" class="hidden">
               <slot></slot>
@@ -194,7 +216,7 @@ describe('pds-select', () => {
       <pds-select autocomplete="on" component-id="field-1" label="Name">
         <mock:shadow-root>
           <div class="pds-select">
-            <label htmlFor="field-1">Name</label>
+            <label htmlFor="field-1"><span>Name</span></label>
             <select autocomplete="on" class="pds-select__field" id="field-1"></select>
             <div aria-hidden="true" class="hidden">
               <slot></slot>

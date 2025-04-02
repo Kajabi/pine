@@ -8,8 +8,13 @@ export default {
     disabled: false,
     errorMessage: null,
     helperMessage: null,
+    hideLabel: false,
     invalid: false,
+    label: null,
     multiple: false,
+    name: null,
+    required: false,
+    type: null,
     value: null,
   },
   argTypes: extractArgTypes('pds-select'),
@@ -51,6 +56,7 @@ const BaseTemplate = (args) =>
     component-id="${args.componentId}"
     disabled="${args.disabled}"
     error-message="${args.errorMessage}"
+    hide-label="${args.hideLabel}"
     helper-message="${args.helperMessage}"
     invalid="${args.invalid}"
     label="${args.label}"
@@ -69,6 +75,7 @@ const OptgroupTemplate = (args) =>
     component-id="${args.componentId}"
     disabled="${args.disabled}"
     error-message="${args.errorMessage}"
+    hide-label="${args.hideLabel}"
     helper-message="${args.helperMessage}"
     invalid="${args.invalid}"
     label="${args.label}"
