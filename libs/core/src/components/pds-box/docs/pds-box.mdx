@@ -3,7 +3,29 @@ import { components } from '../../../../dist/docs.json';
 
 # Box
 
-Box is our primitive layout component. It is intended to be used as a building block for more complex layouts. It allows for custom sizing, colors, padding, and alignment while still adhering to Pine tokens and brand guidelines.
+Box is our primitive layout component. It is intended to be used as a building block for more complex layouts. It allows for custom sizing, colors, padding, and alignment while still adhering to Pine tokens and brand guidelines. The component uses logical properties for margin and padding, making it adaptable to different writing modes and languages.
+
+### Logical Properties
+The Box component uses CSS logical properties for layout and spacing, which means properties are defined relative to the content's writing direction rather than physical directions. This makes the component more adaptable to different writing modes and languages.
+
+CSS was initially designed with only physical coordinates (top, bottom, left, right). The logical properties and values module defines flow-relative equivalents for many values and properties. Properties that once only accepted physical values now also accept flow-relative logical values (block-start, block-end, inline-start, inline-end).
+
+Logical properties use two main concepts:
+- **Block**: The dimension perpendicular to the flow of text (vertical in horizontal writing modes, horizontal in vertical writing modes)
+- **Inline**: The dimension parallel to the flow of text (horizontal in horizontal writing modes, vertical in vertical writing modes)
+
+For example:
+- In left-to-right languages (like English):
+  - Block = vertical (top/bottom)
+  - Inline = horizontal (left/right)
+- In right-to-left languages (like Arabic):
+  - Block = vertical (top/bottom)
+  - Inline = horizontal (right/left)
+- In vertical writing modes (like Japanese):
+  - Block = horizontal (left/right)
+  - Inline = vertical (top/bottom)
+
+This approach ensures that your layouts will work correctly regardless of the text direction or writing mode.
 
 ## Properties
 
