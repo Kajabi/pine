@@ -101,6 +101,11 @@ export class PdsInput {
   @Prop() label?: string;
 
   /**
+   * Visually hides the label text for instances where only the input should be displayed. Label remains accessible to assistive technology such as screen readers.
+   */
+  @Prop() hideLabel?: boolean;
+
+  /**
    * Specifies the name. Submitted with the form name/value pair.
    */
   @Prop() name?: string;
@@ -257,7 +262,11 @@ export class PdsInput {
       >
         <div class="pds-input">
           {this.label &&
-            <label class="pds-input__label" htmlFor={this.componentId}>{this.label}</label>
+            <label class="pds-input__label" htmlFor={this.componentId}>
+              <span class={this.hideLabel ? 'visually-hidden' : ''}>
+                {this.label}
+              </span>
+            </label>
           }
           <input
             class={this.inputClassNames()}
