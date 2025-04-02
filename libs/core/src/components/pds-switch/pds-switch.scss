@@ -93,10 +93,10 @@ label {
 // Help and error messages
 .pds-switch__message {
   color: var(--pine-color-text-message);
-  flex: 1 0 100%;
   font: var(--pine-typography-body-sm-medium);
   margin-block-start: var(--pine-dimension-xs);
   margin-inline-start: var(--spacing-message-inline);
+  width: 100%;
 
   + .pds-switch__message {
     margin-block-start: var(--spacing-message-inline);
@@ -104,10 +104,13 @@ label {
 }
 
 .pds-switch__message--error {
-  align-items: center;
   color: inherit;
   display: flex;
   gap: var(--pine-dimension-2xs);
+
+  pds-icon {
+    margin-block-start: var(--pine-dimension-025);
+  }
 }
 
 // Disabled state
