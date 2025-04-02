@@ -1,6 +1,7 @@
 :host {
   --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
   --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring-danger);
+  --pds-select-min-width: 200px;
 
   .hidden,
   :host([hidden]) {
@@ -34,6 +35,7 @@ select {
   font: var(--pine-typography-body);
   grid-area: field;
   letter-spacing: var(--pine-letter-spacing);
+  min-width: var(--pds-select-min-width);
   padding: var(--pine-dimension-xs) var(--pine-dimension-150);
   padding-right: var(--pine-dimension-450);
   position: relative;
