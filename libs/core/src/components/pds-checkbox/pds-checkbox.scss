@@ -157,8 +157,11 @@ label {
 }
 
 .pds-checkbox__message--error {
-  align-items: center;
   display: flex;
   font-size: var(--pine-font-size-085);
-  gap: var(--pine-spacing-050);
+  gap: var(--pine-dimension-050);
+
+  pds-icon {
+    margin-block-start: var(--pine-dimension-025);
+  }
 }
