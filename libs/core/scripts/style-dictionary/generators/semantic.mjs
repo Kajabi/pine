@@ -1,26 +1,11 @@
-import { semanticFilter } from "../filters/semantic.mjs";
-
-const format = "css/variables";
-
-export const generateSemanticFiles = (theme) => {
+export const generateSemanticFiles = () => {
   const filesArr = [];
-  const [themeName] = theme.toLowerCase().split('-');
 
   // Base semantic tokens (non-themeable)
   filesArr.push({
-    format,
-    filter: semanticFilter(false),
     destination: `base/_semantic.scss`,
-    options: {
-      outputReferences: true
-    }
-  });
-
-  // Theme-specific semantic tokens
-  filesArr.push({
-    format,
-    filter: semanticFilter(true, themeName),
-    destination: `brand/${themeName}/${themeName}.scss`,
+    format: 'css/variables',
+    filter: token => token.filePath.includes('base/semantic'),
     options: {
       outputReferences: true
     }
