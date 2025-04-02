@@ -30,9 +30,6 @@ async function run() {
   // Theme-specific configuration
   const themeConfigs = Object.entries(themes).map(([theme, tokensets]) => {
     const [themeName] = theme.toLowerCase().split('-');
-    const brandName = themeName === 'light' || themeName === 'dark'
-      ? 'kajabi_products'
-      : themeName;
 
     return {
       log: {
@@ -48,7 +45,7 @@ async function run() {
           files: [
             // Core and semantic files for the brand
             {
-              destination: `${brandName}/styles/${brandName}.scss`,
+              destination: `${themeName}/styles/${themeName}.scss`,
               format: 'css/variables',
               filter: (token) => {
                 // Include core tokens
@@ -57,19 +54,12 @@ async function run() {
                 }
                 // Include semantic tokens
                 if (token.filePath.includes('base/semantic')) {
-                  // For non-themeable tokens, always include
-                  if (!token.attributes.themeable) {
-                    return true;
-                  }
-                  // For themeable tokens, only include if this is kajabi_products
-                  if (brandName === 'kajabi_products') {
-                    return true;
-                  }
+                  return true; // Include all semantic tokens for all themes
                 }
                 // Include themeable tokens for this brand
                 if (token.attributes.themeable && (
-                  token.filePath.includes(`${brandName}.json`) ||
-                  token.filePath.includes(`${brandName}/`)
+                  token.filePath.includes(`${themeName}.json`) ||
+                  token.filePath.includes(`${themeName}/`)
                 )) {
                   return true;
                 }
@@ -103,23 +93,9 @@ async function run() {
         buildPath: buildPath,
         files: [
           // Core tokens
-          {
-            destination: `base/_core.scss`,
-            format: 'css/variables',
-            filter: token => token.filePath.includes('base/core'),
-            options: {
-              outputReferences: true
-            }
-          },
+         ...generateCoreFiles(),
           // Non-themeable semantic tokens
-          {
-            destination: `base/_semantic.scss`,
-            format: 'css/variables',
-            filter: token => token.filePath.includes('base/semantic'),
-            options: {
-              outputReferences: true
-            }
-          }
+          ...generateSemanticFiles()
         ],
         prefix: 'pine'
       },
