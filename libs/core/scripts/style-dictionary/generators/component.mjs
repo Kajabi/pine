@@ -25,7 +25,7 @@ export const generateComponentFiles = () => {
         selector: ":host",
         outputReferences: outputReferencesTransformed,
       },
-      destination: `../../../components/${componentName}/${componentName}.tokens.scss`,
+      destination: `../../../../components/${componentName}/${componentName}.tokens.scss`,
     });
   }
   return filesArr;

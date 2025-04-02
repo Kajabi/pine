@@ -6,15 +6,21 @@
 export const semanticFilter =
   (themeable = false, currentBrand = '') =>
   (token) => {
-    const tokenThemable = Boolean(token.attributes.themeable);
+    const tokenThemable = token.attributes?.themeable;
 
     // For non-themeable tokens, include from base/semantic
     if (!themeable) {
-      return !tokenThemable && token.filePath.includes(`base/semantic`);
+      // If token has no themeable attribute and is in base/semantic, treat as non-themeable
+      if (tokenThemable === undefined) {
+        return token.filePath.includes(`${basePath}/base/semantic`);
+      }
+      return !tokenThemable && token.filePath.includes(`${basePath}/base/semantic`);
     }
 
     // For themeable tokens, include from brand-specific files
-    // But only include tokens from the current brand's file
-    return tokenThemable &&
-           token.filePath.includes(`brand/${currentBrand}`);
+    // Check both the brand directory and any subdirectories
+    return tokenThemable && (
+      token.filePath.includes(`${basePath}/${currentBrand}.json`) ||
+      token.filePath.includes(`${basePath}/${currentBrand}/`)
+    );
   };

@@ -9,7 +9,7 @@ register(StyleDictionary, {
 });
 
 const basePath = `src/global/styles/tokens`;
-const buildPath = `${basePath}/`;
+const buildPath = `${basePath}/_output/`;
 
 async function run() {
   const $themes = JSON.parse(await promises.readFile(`${basePath}/$themes.json`, 'utf-8'));
@@ -48,7 +48,7 @@ async function run() {
           files: [
             // Core and semantic files for the brand
             {
-              destination: `brand/${brandName}/${brandName}.scss`,
+              destination: `${brandName}/styles/${brandName}.scss`,
               format: 'css/variables',
               filter: (token) => {
                 // Include core tokens
@@ -67,7 +67,10 @@ async function run() {
                   }
                 }
                 // Include themeable tokens for this brand
-                if (token.attributes.themeable && token.filePath.includes(`brand/${brandName}`)) {
+                if (token.attributes.themeable && (
+                  token.filePath.includes(`${brandName}.json`) ||
+                  token.filePath.includes(`${brandName}/`)
+                )) {
                   return true;
                 }
                 return false;
@@ -82,6 +85,46 @@ async function run() {
       },
     };
   });
+
+  // Base configuration for semantic files
+  const baseConfig = {
+    log: {
+      verbosity: 'verbose',
+    },
+    source: [
+      `${basePath}/base/core.json`,
+      `${basePath}/base/semantic.json`
+    ],
+    preprocessors: ['tokens-studio'],
+    platforms: {
+      css: {
+        transformGroup: 'tokens-studio',
+        transforms: ['attribute/themeable', 'name/kebab', 'color/hex', 'ts/resolveMath', 'size/px'],
+        buildPath: buildPath,
+        files: [
+          // Core tokens
+          {
+            destination: `base/_core.scss`,
+            format: 'css/variables',
+            filter: token => token.filePath.includes('base/core'),
+            options: {
+              outputReferences: true
+            }
+          },
+          // Non-themeable semantic tokens
+          {
+            destination: `base/_semantic.scss`,
+            format: 'css/variables',
+            filter: token => token.filePath.includes('base/semantic'),
+            options: {
+              outputReferences: true
+            }
+          }
+        ],
+        prefix: 'pine'
+      },
+    },
+  };
 
   // Component-specific configuration
   const componentConfig = {
@@ -105,11 +148,18 @@ async function run() {
     },
   };
 
-  const configs = [...themeConfigs, componentConfig];
+  // Build base files first
+  const sd = new StyleDictionary(baseConfig);
 
-  for (const cfg of configs) {
-    const sd = new StyleDictionary(cfg);
+  // Build component files
+  const componentSd = new StyleDictionary(componentConfig);
 
+  // Build theme files
+  const themeSds = themeConfigs.map(config => new StyleDictionary(config));
+
+  // Register transform for all configurations
+  const allSds = [sd, componentSd, ...themeSds];
+  for (const sd of allSds) {
     /**
      * This transform checks for each token whether that token's value could change
      * due to Tokens Studio theming.
@@ -157,7 +207,13 @@ async function run() {
     });
 
     await sd.cleanAllPlatforms();
-    await sd.buildAllPlatforms();
+  }
+
+  // Build all platforms in order
+  await sd.buildAllPlatforms();
+  await componentSd.buildAllPlatforms();
+  for (const themeSd of themeSds) {
+    await themeSd.buildAllPlatforms();
   }
 }
 
