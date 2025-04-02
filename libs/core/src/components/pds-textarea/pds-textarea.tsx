@@ -88,6 +88,11 @@ export class PdsTextarea {
   @Prop() errorMessage?: string;
 
   /**
+   * Visually hides the label text for instances where only the textarea should be displayed. Label remains accessible to assistive technology such as screen readers.
+   */
+  @Prop() hideLabel?: boolean;
+
+  /**
    * Displays a message or hint below the textarea field.
    */
   @Prop() helperMessage?: string;
@@ -248,7 +253,11 @@ export class PdsTextarea {
       >
         <div class="pds-textarea">
           {this.label &&
-            <label htmlFor={this.componentId}>{this.label}</label>
+            <label htmlFor={this.componentId}>
+              <span class={this.hideLabel ? 'visually-hidden' : ''}>
+                {this.label}
+              </span>
+            </label>
           }
           <textarea
             ref={(el) => this.nativeTextarea = el }

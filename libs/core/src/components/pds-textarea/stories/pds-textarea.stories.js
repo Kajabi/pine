@@ -10,6 +10,7 @@ export default {
     debounce: null,
     disabled: false,
     errorMessage: null,
+    hideLabel: false,
     helperMessage: null,
     invalid: false,
     label: null,
@@ -41,6 +42,7 @@ const BaseTemplate = (args) => html`<pds-textarea
   component-id="${args.componentId}"
   disabled="${args.disabled}"
   error-message="${args.errorMessage}"
+  hide-label="${args.hideLabel}"
   helper-message="${args.helperMessage}"
   invalid="${args.invalid}"
   label="${args.label}"

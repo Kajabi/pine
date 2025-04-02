@@ -998,6 +998,10 @@ export namespace Components {
          */
         "helperMessage"?: string;
         /**
+          * Visually hides the label text for instances where only the textarea should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "hideLabel"?: boolean;
+        /**
           * Determines whether or not the textarea is invalid or throws an error.
           * @defaultValue false
          */
@@ -2598,6 +2602,10 @@ declare namespace LocalJSX {
           * Displays a message or hint below the textarea field.
          */
         "helperMessage"?: string;
+        /**
+          * Visually hides the label text for instances where only the textarea should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "hideLabel"?: boolean;
         /**
           * Determines whether or not the textarea is invalid or throws an error.
           * @defaultValue false
