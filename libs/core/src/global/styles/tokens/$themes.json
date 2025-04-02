@@ -23,8 +23,9 @@
       "base/semantic": "enabled",
       "components/chip": "enabled",
       "components/input": "enabled",
-      "brand/kajabi_products": "enabled",
-      "components/select": "enabled"
+      "components/select": "enabled",
+      "kajabi_products": "enabled",
+      "kajabi_products/bma": "disabled"
     },
     "$figmaCollectionId": "VariableCollectionId:175:2717",
     "$figmaModeId": "175:46",
@@ -323,8 +324,8 @@
     "name": "bma",
     "$figmaStyleReferences": {},
     "selectedTokenSets": {
-      "brand/bma": "enabled",
-      "brand/kajabi_products": "source"
+      "kajabi_products": "disabled",
+      "kajabi_products/bma": "enabled"
     },
     "group": "brand"
   }
