@@ -72,7 +72,7 @@ export class PdsTableHead {
               indeterminate={this.indeterminate}
               onInput={this.handleInput}
               label={"Select All Rows"}
-              labelHidden={true}
+              hideLabel={true}
               checked={this.isSelected}
             />
           </pds-table-head-cell>

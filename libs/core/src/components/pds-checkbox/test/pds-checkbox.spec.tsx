@@ -113,14 +113,14 @@ describe('pds-checkbox', () => {
     `);
   });
 
-  it('renders hidden label text when label-hidden prop is set', async () => {
+  it('renders hidden label text when hide-label prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsCheckbox],
-      html: `<pds-checkbox component-id="default" label="This is label text" label-hidden />`,
+      html: `<pds-checkbox component-id="default" label="This is label text" hide-label />`,
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-checkbox component-id="default" label="This is label text" label-hidden>
+      <pds-checkbox component-id="default" label="This is label text" hide-label>
         <mock:shadow-root>
           <label htmlfor="default">
             <input type="checkbox" id="default">
