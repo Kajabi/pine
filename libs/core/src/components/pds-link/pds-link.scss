@@ -1,7 +1,4 @@
 :host {
-
-  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
-
   display: inline;
 
   pds-icon {
@@ -16,9 +13,9 @@
   font-weight: var(--pine-font-weight-medium);
 
   &:focus-visible {
-    // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
-    box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
-    outline: none;
+    border-radius: var(--pine-dimension-2xs);
+    outline: var(--pine-outline-focus);
+    outline-offset: var(--pine-border-width-thick);
     position: relative;
   }
 }

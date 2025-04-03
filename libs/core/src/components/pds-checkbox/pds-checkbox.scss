@@ -1,7 +1,4 @@
 :host {
-  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
-  --box-shadow-focus-invalid: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring-danger);
-
   align-items: center;
   display: flex;
   flex-flow: row wrap;
@@ -21,9 +18,7 @@
     }
 
     &:focus-visible {
-      // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
-      box-shadow: var(--box-shadow-focus-invalid); // Remove when outline radius is supported in Safari
-      outline: none;
+      outline-color: var(--pine-color-focus-ring-danger);
     }
   }
 
@@ -125,9 +120,7 @@ input {
   }
 
   &:focus-visible {
-    // outline: var(--pine-border-focus); Border radius for outline does not work in Safari
-    box-shadow: var(--box-shadow-focus); // Remove when outline radius is supported in Safari
-    outline: none;
+    outline: var(--pine-outline-focus);
   }
 }
 
