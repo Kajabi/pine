@@ -3,7 +3,29 @@ import { components } from '../../../../dist/docs.json';
 
 # Box
 
-Box is our primitive layout component. It is intended to be used as a building block for more complex layouts. It allows for custom sizing, colors, padding, and alignment while still adhering to Pine tokens and brand guidelines.
+Box is our primitive layout component. It is intended to be used as a building block for more complex layouts. It allows for custom sizing, colors, padding, and alignment while still adhering to Pine tokens and brand guidelines. The component uses logical properties for margin and padding, making it adaptable to different writing modes and languages.
+
+### Logical Properties
+The Box component uses CSS logical properties for layout and spacing, which means properties are defined relative to the content's writing direction rather than physical directions. This makes the component more adaptable to different writing modes and languages.
+
+CSS was initially designed with only physical coordinates (top, bottom, left, right). The logical properties and values module defines flow-relative equivalents for many values and properties. Properties that once only accepted physical values now also accept flow-relative logical values (block-start, block-end, inline-start, inline-end).
+
+Logical properties use two main concepts:
+- **Block**: The dimension perpendicular to the flow of text (vertical in horizontal writing modes, horizontal in vertical writing modes)
+- **Inline**: The dimension parallel to the flow of text (horizontal in horizontal writing modes, vertical in vertical writing modes)
+
+For example:
+- In left-to-right languages (like English):
+  - Block = vertical (top/bottom)
+  - Inline = horizontal (left/right)
+- In right-to-left languages (like Arabic):
+  - Block = vertical (top/bottom)
+  - Inline = horizontal (right/left)
+- In vertical writing modes (like Japanese):
+  - Block = horizontal (left/right)
+  - Inline = vertical (top/bottom)
+
+This approach ensures that your layouts will work correctly regardless of the text direction or writing mode.
 
 ## Properties
 
@@ -82,6 +104,29 @@ By default Box has no shadow. Use `shadow` to add a shadow to the box.
   <pds-box shadow="lg">Shadow lg</pds-box>
 </DocCanvas>
 
+### Margin
+By default Box has no margin. Use `margin` to add margin around the box.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsBox border="true" marginBlockStart="xxs">Margin Block Start xxs</PdsBox>
+<PdsBox border="true" marginBlockEnd="xs">Margin Block End xs</PdsBox>
+<PdsBox border="true" marginInlineStart="sm">Margin Inline Start sm</PdsBox>
+<PdsBox border="true" marginInlineEnd="md">Margin Inline End md</PdsBox>`,
+    webComponent: `<pds-box border="true" margin-block-start="xxs">Margin Block Start xxs</pds-box>
+<pds-box border="true" margin-block-end="xs">Margin Block End xs</pds-box>
+<pds-box border="true" margin-inline-start="sm">Margin Inline Start sm</pds-box>
+<pds-box border="true" margin-inline-end="md">Margin Inline End md</pds-box>
+<pds-box border="true" margin="lg">Margin lg</pds-box>`
+}}>
+  <pds-box border="true" margin-block-start="xxs">Margin Block Start xxs</pds-box>
+  <pds-box border="true" margin-block-end="xs">Margin Block End xs</pds-box>
+  <pds-box border="true" margin-inline-start="sm">Margin Inline Start sm</pds-box>
+  <pds-box border="true" margin-inline-end="md">Margin Inline End md</pds-box>
+</DocCanvas>
+
+> Note: Use `gap` in favor of `margin-*` whenever possible.
+
 ### Padding
 By default Box has no padding. Use `padding` to add padding to the box.
 
@@ -110,40 +155,6 @@ By default Box has no padding. Use `padding` to add padding to the box.
   <pds-box border="true" padding="xl">Padding xl</pds-box>
   <pds-box border="true" padding="xxl">Padding xxl</pds-box>
 </DocCanvas>
-
-### Padding Properties Priority
-The Box component provides three padding properties with different levels of specificity:
-
-1. `padding` - Sets padding on all sides (lowest priority)
-2. `paddingBlock` - Sets padding on top and bottom (medium priority)
-3. `paddingInline` - Sets padding on left and right (medium priority)
-
-When multiple padding properties are set, the more specific properties take precedence. For example:
-
-<DocCanvas client:only
-  mdxSource={{
-    react: `<PdsBox border="true" padding="md" paddingBlock="lg">
-  padding="md" is overridden by padding-block="lg"
-</PdsBox>
-<PdsBox border="true" padding="md" paddingInline="lg">
-  padding="md" is overridden by padding-inline="lg"
-</PdsBox>`,
-    webComponent: `<pds-box border="true" padding="md" padding-block="lg">
-  padding="md" is overridden by padding-block="lg"
-</pds-box>
-<pds-box border="true" padding="md" padding-inline="lg">
-  padding="md" is overridden by padding-inline="lg"
-</pds-box>`
-}}>
-  <pds-box border="true" padding="md" padding-block="lg">
-    padding="md" is overridden by padding-block="lg"
-  </pds-box>
-  <pds-box border="true" padding="md" padding-inline="lg">
-    padding="md" is overridden by padding-inline="lg"
-  </pds-box>
-</DocCanvas>
-
-This priority system allows for more granular control over padding while maintaining a predictable behavior. When you need to set different padding values for different sides, use the more specific properties (`paddingBlock` and `paddingInline`) to override the general `padding` property.
 
 ### Display
 By default Box is `display: inline-flex`. Use `display` to change the display property `flex` if the box is intended to fill the entire row.

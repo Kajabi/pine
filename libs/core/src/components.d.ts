@@ -131,6 +131,26 @@ export namespace Components {
          */
         "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
         /**
+          * Defines the box's outer bottom spacing.
+          * @defaultValue none
+         */
+        "marginBlockEnd"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer top spacing.
+          * @defaultValue none
+         */
+        "marginBlockStart"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer right spacing.
+          * @defaultValue none
+         */
+        "marginInlineEnd"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer left spacing.
+          * @defaultValue none
+         */
+        "marginInlineStart"?: BoxTShirtSizeType;
+        /**
           * The minimum height of the row. Used in conjunction with alignment props
          */
         "minHeight"?: string;
@@ -168,15 +188,25 @@ export namespace Components {
          */
         "padding"?: BoxTShirtSizeType;
         /**
-          * Defines the top and bottom spacing.
+          * Defines the bottom spacing.
           * @defaultValue none
          */
-        "paddingBlock"?: BoxTShirtSizeType;
+        "paddingBlockEnd"?: BoxTShirtSizeType;
         /**
-          * Defines the left and right spacing.
+          * Defines the top spacing.
           * @defaultValue none
          */
-        "paddingInline"?: BoxTShirtSizeType;
+        "paddingBlockStart"?: BoxTShirtSizeType;
+        /**
+          * Defines the right spacing.
+          * @defaultValue none
+         */
+        "paddingInlineEnd"?: BoxTShirtSizeType;
+        /**
+          * Defines the left spacing.
+          * @defaultValue none
+         */
+        "paddingInlineStart"?: BoxTShirtSizeType;
         /**
           * Defines the box shadow.
           * @defaultValue none
@@ -1669,6 +1699,26 @@ declare namespace LocalJSX {
          */
         "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
         /**
+          * Defines the box's outer bottom spacing.
+          * @defaultValue none
+         */
+        "marginBlockEnd"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer top spacing.
+          * @defaultValue none
+         */
+        "marginBlockStart"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer right spacing.
+          * @defaultValue none
+         */
+        "marginInlineEnd"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer left spacing.
+          * @defaultValue none
+         */
+        "marginInlineStart"?: BoxTShirtSizeType;
+        /**
           * The minimum height of the row. Used in conjunction with alignment props
          */
         "minHeight"?: string;
@@ -1706,15 +1756,25 @@ declare namespace LocalJSX {
          */
         "padding"?: BoxTShirtSizeType;
         /**
-          * Defines the top and bottom spacing.
+          * Defines the bottom spacing.
           * @defaultValue none
          */
-        "paddingBlock"?: BoxTShirtSizeType;
+        "paddingBlockEnd"?: BoxTShirtSizeType;
         /**
-          * Defines the left and right spacing.
+          * Defines the top spacing.
           * @defaultValue none
          */
-        "paddingInline"?: BoxTShirtSizeType;
+        "paddingBlockStart"?: BoxTShirtSizeType;
+        /**
+          * Defines the right spacing.
+          * @defaultValue none
+         */
+        "paddingInlineEnd"?: BoxTShirtSizeType;
+        /**
+          * Defines the left spacing.
+          * @defaultValue none
+         */
+        "paddingInlineStart"?: BoxTShirtSizeType;
         /**
           * Defines the box shadow.
           * @defaultValue none
