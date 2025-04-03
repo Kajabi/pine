@@ -904,15 +904,7 @@ export namespace Components {
         /**
           * Sets the text color.
          */
-        "color"?: | 'primary'
-  | 'secondary'
-  | 'neutral'
-  | 'accent'
-  | 'danger'
-  | 'info'
-  | 'success'
-  | 'warning'
-  | string;
+        "color"?: string;
         /**
           * Sets the text decoration.
          */
@@ -2510,15 +2502,7 @@ declare namespace LocalJSX {
         /**
           * Sets the text color.
          */
-        "color"?: | 'primary'
-  | 'secondary'
-  | 'neutral'
-  | 'accent'
-  | 'danger'
-  | 'info'
-  | 'success'
-  | 'warning'
-  | string;
+        "color"?: string;
         /**
           * Sets the text decoration.
          */

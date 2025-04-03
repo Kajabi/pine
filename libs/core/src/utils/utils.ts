@@ -19,3 +19,22 @@ export const debounce = (func: (...args: any[]) => void, wait = 0) => {
     timer = setTimeout(func, wait, ...args);
   };
 };
+
+export const setColor = (color: string) => {
+  if (!color) return;
+
+  const colors: Record<string, string> = {
+    primary: 'var(--pine-color-text-primary)',
+    secondary: 'var(--pine-color-text-secondary)',
+    neutral: 'var(--pine-color-text-neutral)',
+    accent: 'var(--pine-color-text-accent)',
+    danger: 'var(--pine-color-text-danger)',
+    info: 'var(--pine-color-text-info)',
+    success: 'var(--pine-color-text-success)',
+    warning: 'var(--pine-color-text-warning)',
+  };
+
+  return {
+    '--color': colors[color] ?? (color.startsWith('--') ? `var(${color})` : color)
+  };
+}

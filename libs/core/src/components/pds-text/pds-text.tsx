@@ -1,4 +1,5 @@
 import { Component, h, Prop, Element } from '@stencil/core';
+import { setColor } from '../../utils/utils';
 
 @Component({
   tag: 'pds-text',
@@ -15,16 +16,7 @@ export class PdsText {
   /**
    * Sets the text color.
    */
-  @Prop() color?:
-  | 'primary'
-  | 'secondary'
-  | 'neutral'
-  | 'accent'
-  | 'danger'
-  | 'info'
-  | 'success'
-  | 'warning'
-  | string;
+  @Prop() color?: string;
 
   /**
    * Sets the text decoration.
@@ -100,34 +92,6 @@ export class PdsText {
    */
   @Prop() truncate?: boolean;
 
-  private setColor() {
-    if (this.color === undefined) {
-      return;
-    }
-
-    const style = {};
-    const colors: { [key: string]: string } = {
-      primary: 'var(--pine-color-text-primary)',
-      secondary: 'var(--pine-color-text-secondary)',
-      neutral: 'var(--pine-color-text-neutral)',
-      accent: 'var(--pine-color-text-accent)',
-      danger: 'var(--pine-color-text-danger)',
-      info: 'var(--pine-color-text-info)',
-      success: 'var(--pine-color-text-success)',
-      warning: 'var(--pine-color-text-warning)',
-    }
-
-    if (colors.hasOwnProperty(this.color)) {
-      style['--color'] = colors[this.color];
-    } else if (this.color.startsWith('--')) {
-      style['--color'] = `var(${this.color})`;
-    } else {
-      style['--color'] = this.color;
-    }
-
-    return style;
-  }
-
   render() {
     const Tag = this.tag;
 
@@ -141,7 +105,7 @@ export class PdsText {
     `;
 
     return (
-      <Tag style={this.color && this.setColor()} class={typeClasses}>
+      <Tag style={this.color && setColor(this.color)} class={typeClasses}>
         <slot />
       </Tag>
     );
