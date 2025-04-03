@@ -30,7 +30,7 @@ describe('pds-text', () => {
     `);
   })
 
-  it('renders with color class when prop is set', async ()=> {
+  it('renders with predefined color style when prop is set', async ()=> {
     const page = await newSpecPage({
       components: [PdsText],
       html: `<pds-text tag="h1" color="accent"></pds-text>`,
@@ -38,11 +38,25 @@ describe('pds-text', () => {
     expect(page.root).toEqualHtml(`
       <pds-text tag="h1" color="accent">
         <mock:shadow-root>
-          <h1 class="pds-text pds-text--color-accent"><slot></slot></h1>
+          <h1 class="pds-text" style="--color: var(--pine-color-text-accent);"><slot></slot></h1>
         </mock:shadow-root>
       </pds-text>
     `)
   });
+
+  it('renders with custom color style when prop is set', async ()=> {
+    const page = await newSpecPage({
+      components: [PdsText],
+      html: `<pds-text tag="h1" color="var(--pine-color-green-400)"></pds-text>`,
+    });
+    expect(page.root).toEqualHtml(`
+      <pds-text tag="h1" color="var(--pine-color-green-400)">
+        <mock:shadow-root>
+          <h1 class="pds-text" style="--color: var(--pine-color-green-400);"><slot></slot></h1>
+        </mock:shadow-root>
+      </pds-text>
+    `)
+  })
 
   it('renders with size class when prop is set', async ()=> {
     const page = await newSpecPage({

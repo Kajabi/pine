@@ -48,7 +48,7 @@ h6 {
 
 code, em, p, pre, strong {
   font: var(--pine-typography-body);
-  letter-spacing: var(--pine-letter-spacing-body);
+  letter-spacing: var(--pine-letter-spacing);
 }
 /* stylelint-enable */
 
@@ -66,11 +66,6 @@ strong {
   font-weight: bolder;
 }
 
-h1, h2, h3, h4, h5, h6, p, code, pre, em, strong {
-  color: var(--pine-color-text);
-  margin: var(--pine-dimension-none);
-}
-
 :host([truncate]) > * {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -81,28 +76,14 @@ h1, h2, h3, h4, h5, h6, p, code, pre, em, strong {
   font-style: italic;
 }
 
-
 // Colors/Variants/Sentiment
-$type-colors: (
-  primary: var(--pine-color-text-primary),
-  secondary: var(--pine-color-text-secondary),
-  neutral: var(--pine-color-text-neutral),
-  accent: var(--pine-color-text-accent),
-  danger: var(--pine-color-text-danger),
-  info: var(--pine-color-text-info),
-  success: var(--pine-color-text-success),
-  warning: var(--pine-color-text-warning),
-);
 
-@mixin generate-type-colors($type-colors) {
-  @each $key, $value in $type-colors {
-    .pds-text--color-#{$key} {
-      color: $value;
-    }
-  }
+// Variable is set in TSX
+// If color prop value isn't valid, will default to body text color
+.pds-text {
+  color: var(--color, var(--pine-color-text));
+  margin: var(--pine-dimension-none);
 }
-
-@include generate-type-colors($type-colors);
 
 // Font Sizes
 $type-sizes: (

@@ -1,4 +1,5 @@
-import { Component, h, Prop } from '@stencil/core';
+import { Component, h, Prop, Element } from '@stencil/core';
+import { setColor } from '../../utils/utils';
 
 @Component({
   tag: 'pds-text',
@@ -6,7 +7,7 @@ import { Component, h, Prop } from '@stencil/core';
   shadow: true,
 })
 export class PdsText {
-
+  @Element() el: HTMLPdsTextElement;
   /**
    * Sets the text alignment.
    */
@@ -15,15 +16,7 @@ export class PdsText {
   /**
    * Sets the text color.
    */
-  @Prop() color?:
-  | 'primary'
-  | 'secondary'
-  | 'neutral'
-  | 'accent'
-  | 'danger'
-  | 'info'
-  | 'success'
-  | 'warning';
+  @Prop() color?: string;
 
   /**
    * Sets the text decoration.
@@ -105,7 +98,6 @@ export class PdsText {
     const typeClasses = `
       pds-text
       ${this.align !== undefined && this.align.trim() !== '' ? `pds-text--align-${this.align}` : ''}
-      ${this.color !== undefined && this.color.trim() !== '' ? `pds-text--color-${this.color}` : ''}
       ${this.gutter !== undefined && this.gutter.trim() !== '' ? `pds-text--gutter-${this.gutter}` : ''}
       ${this.size !== undefined && this.size.trim() !== '' ? `pds-text--size-${this.size}` : ''}
       ${this.weight !== undefined && this.weight.trim() !== '' ? `pds-text--weight-${this.weight}` : ''}
@@ -113,7 +105,7 @@ export class PdsText {
     `;
 
     return (
-      <Tag class={typeClasses}>
+      <Tag style={this.color && setColor(this.color)} class={typeClasses}>
         <slot />
       </Tag>
     );
