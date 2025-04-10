@@ -135,8 +135,13 @@ A prefix or suffix can be added to the input field to provide additional context
 </pds-input>
 
 <pds-input component-id="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux">
-  <pds-button slot="prepend" variant="secondary"><pds-icon name="add-small"></pds-icon></pds-button>
-  <pds-button slot="append" variant="secondary"><pds-icon name="add-small"></pds-icon></pds-button>
+  <pds-button class="pds-input__prefix" slot="prepend" variant="secondary"><pds-icon name="add-small"></pds-icon></pds-button>
+  <pds-button class="pds-input__suffix" slot="append" variant="secondary"><pds-icon name="add-small"></pds-icon></pds-button>
+</pds-input>
+
+<pds-input component-id="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux">
+  <pds-button class="pds-input__prefix" slot="prepend" variant="unstyled"><pds-icon name="add-small"></pds-icon></pds-button>
+  <pds-button class="pds-input__suffix" slot="append" variant="unstyled"><pds-icon name="add-small"></pds-icon></pds-button>
 </pds-input>
 
 
