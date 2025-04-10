@@ -19,6 +19,7 @@
   --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
   --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring-danger);
 
+  background-color: #ff0000;
   display: inline;
 }
 
@@ -34,9 +35,46 @@
   border-top-left-radius: 0;
 }
 
-:host([has-prepend]) .pds-input__field {
+:host([has-prepend="true"]) {
+  background-color: #ff0000;
+
+  .pds-input__field {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  pds-button::part(button) {
+    border-bottom-left-radius: var(--pds-input-border-radius);
+    border-bottom-right-radius: 0;
+    border-top-left-radius: var(--pds-input-border-radius);
+    border-top-right-radius: 0;
+    min-height: 36px;
+  }
+}
+
+
+
+:host([has-prepend]) pds-button {
+  background-color: #008000;
+  border-bottom-left-radius: var(--pds-input-border-radius);
   border-bottom-right-radius: 0;
+  border-top-left-radius: var(--pds-input-border-radius);
   border-top-right-radius: 0;
+  min-height: 36px;
+}
+
+.pds-input__prefix::part(button) {
+  background-color: #ffc0cb;
+}
+
+:host([has-prepend="true"]) pds-button {
+
+  background-color: #0000ff;
+  border-bottom-left-radius: var(--pds-input-border-radius);
+  border-bottom-right-radius: 0;
+  border-top-left-radius: var(--pds-input-border-radius);
+  border-top-right-radius: 0;
+  min-height: 36px;
 }
 
 .pds-input {
