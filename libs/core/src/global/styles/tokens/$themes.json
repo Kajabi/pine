@@ -19,13 +19,9 @@
       "box-shadow.050": "S:bf7eeae58cb56322fbecf849c1c2dfc4514d393e,"
     },
     "selectedTokenSets": {
-      "base/core": "enabled",
-      "base/semantic": "enabled",
-      "components/chip": "enabled",
-      "components/input": "enabled",
-      "components/select": "enabled",
-      "kajabi_products": "enabled",
-      "kajabi_products/bma": "disabled"
+      "base/core": "source",
+      "base/semantic": "source",
+      "kajabi_products": "enabled"
     },
     "$figmaCollectionId": "VariableCollectionId:175:2717",
     "$figmaModeId": "175:46",
