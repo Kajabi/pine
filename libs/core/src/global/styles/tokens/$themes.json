@@ -318,5 +318,18 @@
       "color.text.success.hover": "15ce17d10d25c3883df5e5cf1a069d620b1dacc6"
     },
     "group": "brand"
+  },
+  {
+    "id": "1b57bc9ab8b8aef666cb89d6456a3d24290380ae",
+    "name": "default",
+    "$figmaStyleReferences": {},
+    "selectedTokenSets": {
+      "base/core": "enabled",
+      "base/semantic": "enabled",
+      "components/chip": "enabled",
+      "components/input": "enabled",
+      "components/select": "enabled"
+    },
+    "group": "brand"
   }
 ]
