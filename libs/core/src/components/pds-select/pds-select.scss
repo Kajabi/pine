@@ -32,7 +32,7 @@ select {
   grid-area: field;
   letter-spacing: var(--pine-letter-spacing);
   padding: var(--pine-dimension-xs) var(--pine-dimension-150);
-  padding-right: var(--pine-dimension-450);
+  padding-inline-end: var(--pine-dimension-450);
   position: relative;
 
   &:hover {
