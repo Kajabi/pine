@@ -318,15 +318,5 @@
       "color.text.success.hover": "15ce17d10d25c3883df5e5cf1a069d620b1dacc6"
     },
     "group": "brand"
-  },
-  {
-    "id": "2162b189277f09d6d904fcfb4569cab6393f0902",
-    "name": "bma",
-    "$figmaStyleReferences": {},
-    "selectedTokenSets": {
-      "kajabi_products": "disabled",
-      "kajabi_products/bma": "enabled"
-    },
-    "group": "brand"
   }
 ]
