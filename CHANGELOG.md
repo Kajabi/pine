@@ -1,3 +1,33 @@
+# 3.0.0 (2025-04-11)
+
+### Features 🚀
+
+- **text:** expands text color prop ([#426](https://github.com/Kajabi/pine/pull/426))
+
+### Bug Fixes 🐛
+
+- **box:** directional margin and direction padding props ([#412](https://github.com/Kajabi/pine/pull/412))
+- **checkbox:** update prop name from label hidden to hide label ([#418](https://github.com/Kajabi/pine/pull/418))
+- ⚠️  **chip:** move value to slot ([#364](https://github.com/Kajabi/pine/pull/364))
+- **radio:** add hide label prop ([#414](https://github.com/Kajabi/pine/pull/414))
+- **switch:** add hide label prop ([#417](https://github.com/Kajabi/pine/pull/417))
+
+### Styles 🎨
+
+- updates component focus rings ([#413](https://github.com/Kajabi/pine/pull/413))
+- **checkbox:** resolve error message icon alignment and shrink ([#422](https://github.com/Kajabi/pine/pull/422))
+- **radio:** resolve error message icon alignment ([#423](https://github.com/Kajabi/pine/pull/423))
+- **switch:** resolve error message icon alignment and parent overflow ([#424](https://github.com/Kajabi/pine/pull/424))
+
+### ⚠️  Breaking Changes
+
+- ⚠️  **chip:** move value to slot ([#364](https://github.com/Kajabi/pine/pull/364))
+
+### ❤️ Thank You
+
+- Ashley E
+- Quinton Jason
+
 ## 2.17.0 (2025-03-31)
 
 ### Features 🚀
