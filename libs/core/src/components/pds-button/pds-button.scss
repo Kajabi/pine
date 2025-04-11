@@ -1,5 +1,9 @@
 :host {
-  --button-dimension: 40px;
+  --pds-button-background: var(--color-background-default);
+  --pds-button-border: var(--pine-border);
+  --pds-button-border-radius-start: var(--pine-border-radius-full);
+  --pds-button-border-radius-end: var(--pine-border-radius-full);
+  --pds-button-min-height: 40px;
   --color-border-default: transparent;
   --color-border-disabled: transparent;
   --color-border-focus: transparent;
@@ -37,18 +41,22 @@
 .pds-button {
   --pds-loader-color: var(--color-text-default);
   align-items: center;
-  background-color: var(--color-background-default);
-  border: var(--pine-border);
+  background-color: var(--pds-button-background);
+  border: var(--pds-button-border);
+  border-bottom-left-radius: var(--pds-button-border-radius-start);
+  border-bottom-right-radius: var(--pds-button-border-radius-end);
+  border-top-left-radius: var(--pds-button-border-radius-start);
+  border-top-right-radius: var(--pds-button-border-radius-end);
   border-color: var(--color-border-default);
-  border-radius: var(--pine-border-radius-full);
   box-sizing: border-box;
-  color: var(--color-text-default); // Set in the variant classes below
+  color: var(--color-text-default);
   cursor: pointer;
   display: flex;
   font: var(--pine-typography-body-brand-label);
   letter-spacing: var(--pine-letter-spacing);
-  min-height: var(--button-dimension);
+  min-height: var(--pds-button-min-height);
   padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
+  position: relative;
   text-decoration: none;
 
   pds-icon {

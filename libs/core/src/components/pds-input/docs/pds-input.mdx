@@ -118,32 +118,49 @@ A prefix or suffix can be added to the input field to provide additional context
 
 <DocCanvas client:only
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux"><span slot="prefix">@</span><span slot="suffix">.com</span></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux"><span slot="prefix">@</span><span slot="suffix">.com</span></pds-input>'
+    react: '<PdsInput componentId="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux"><pds-icon name="mail" slot="prefix"></pds-icon><pds-button class="pds-input__suffix" variant="unstyled" slot="suffix"><pds-icon name="remove-circle"></pds-icon></pds-button></PdsInput>',
+    webComponent: '<pds-input component-id="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux"><pds-icon name="mail" slot="prefix"></pds-icon><pds-button class="pds-input__suffix" variant="unstyled" slot="suffix"><pds-icon name="remove-circle"></pds-icon></pds-button></pds-input>'
   }}>
   <pds-input component-id="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux">
-    <pds-box slot="prefix"><pds-icon name="mail"></pds-icon></pds-box>
-    <pds-box slot="suffix">.com</pds-box>
+    <pds-icon name="mail" slot="prefix"></pds-icon>
+    <pds-button class="pds-input__suffix" variant="unstyled" slot="suffix"><pds-icon name="remove-circle"></pds-icon></pds-button>
   </pds-input>
 </DocCanvas>
 
+Prefix Icon
 <pds-input component-id="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux">
-  <pds-button slot="prepend" variant="secondary"><pds-icon name="add-small"></pds-icon></pds-button>
-
-  <pds-box slot="prefix"><pds-icon name="mail"></pds-icon></pds-box>
-  <pds-button slot="append" variant="secondary"><pds-icon name="add-small"></pds-icon></pds-button>
+  <pds-icon name="mail" slot="prefix"></pds-icon>
 </pds-input>
 
+Prepend Select
 <pds-input component-id="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux">
-  <pds-button class="pds-input__prefix" slot="prepend" variant="secondary"><pds-icon name="add-small"></pds-icon></pds-button>
-  <pds-button class="pds-input__suffix" slot="append" variant="secondary"><pds-icon name="add-small"></pds-icon></pds-button>
+  <pds-select class="pds-input__prefix" slot="prepend">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+  </pds-select>
 </pds-input>
 
+Prefix Icon and Append Select
 <pds-input component-id="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux">
-  <pds-button class="pds-input__prefix" slot="prepend" variant="unstyled"><pds-icon name="add-small"></pds-icon></pds-button>
-  <pds-button class="pds-input__suffix" slot="append" variant="unstyled"><pds-icon name="add-small"></pds-icon></pds-button>
+  <pds-icon name="dollar" slot="prefix"></pds-icon>
+  <pds-select class="pds-input__suffix" slot="append">
+    <option value="1">USD</option>
+    <option value="2">EUR</option>
+    <option value="3">GBP</option>
+  </pds-select>
 </pds-input>
 
+Unstyled button suffix
+<pds-input component-id="pds-input-prefix-suffix-example-2" label="Name" type="email" value="Frank Dux">
+  <pds-button class="pds-input__suffix" variant="unstyled" slot="suffix"><pds-icon name="remove-circle"></pds-icon></pds-button>
+</pds-input>
+
+Box in prepend and append slots
+<pds-input component-id="pds-input-prefix-suffix-example-2" label="Name" type="email" value="Frank Dux">
+  <pds-icon name="mail" slot="prefix"></pds-icon>
+  <pds-button class="pds-input__suffix" variant="unstyled" slot="suffix"><pds-icon name="remove-circle"></pds-icon></pds-button>
+</pds-input>
 
 ## References
 

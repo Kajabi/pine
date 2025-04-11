@@ -19,8 +19,44 @@
   --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
   --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring-danger);
 
-  background-color: #ff0000;
+  // background-color: #ff0000;
   display: inline;
+}
+
+/* stylelint-disable-next-line */
+:host([has-prepend]) ::slotted(pds-button[slot="prepend"]) {
+  --pds-button-background: var(--pds-input-addon-background);
+  --pds-button-border: 0;
+  --pds-button-border-radius-end: 0;
+  --pds-button-border-radius-start: var(--pds-input-border-radius);
+  --pds-button-min-height: 36px;
+}
+
+/* stylelint-disable-next-line */
+:host([has-append]) ::slotted(pds-button[slot="append"]) {
+  --pds-button-background: var(--pds-input-addon-background);
+  --pds-button-border: 0;
+  --pds-button-border-radius-end: var(--pds-input-border-radius);
+  --pds-button-border-radius-start: 0;
+  --pds-button-min-height: 36px;
+}
+
+/* stylelint-disable-next-line */
+:host([has-prepend]) ::slotted(pds-select[slot="prepend"]) {
+  --pds-select-background: var(--pds-input-addon-background);
+  --pds-select-border: 0;
+  --pds-select-border-radius-end: 0;
+  --pds-select-border-radius-start: var(--pds-input-border-radius);
+  --pds-select-min-height: 36px;
+}
+
+/* stylelint-disable-next-line */
+:host([has-append]) ::slotted(pds-select[slot="append"]) {
+  --pds-select-background: var(--pds-input-addon-background);
+  --pds-select-border: 0;
+  --pds-select-border-radius-end: var(--pds-input-border-radius);
+  --pds-select-border-radius-start: 0;
+  --pds-select-min-height: 36px;
 }
 
 :host([aria-readonly="true"]) {
@@ -28,53 +64,6 @@
     background-color: var(--pine-color-background-container-disabled);
     color: var(--pine-color-text-readonly);
   }
-}
-
-:host([has-append]) .pds-input__field {
-  border-bottom-left-radius: 0;
-  border-top-left-radius: 0;
-}
-
-:host([has-prepend="true"]) {
-  background-color: #ff0000;
-
-  .pds-input__field {
-    border-bottom-right-radius: 0;
-    border-top-right-radius: 0;
-  }
-
-  pds-button::part(button) {
-    border-bottom-left-radius: var(--pds-input-border-radius);
-    border-bottom-right-radius: 0;
-    border-top-left-radius: var(--pds-input-border-radius);
-    border-top-right-radius: 0;
-    min-height: 36px;
-  }
-}
-
-
-
-:host([has-prepend]) pds-button {
-  background-color: #008000;
-  border-bottom-left-radius: var(--pds-input-border-radius);
-  border-bottom-right-radius: 0;
-  border-top-left-radius: var(--pds-input-border-radius);
-  border-top-right-radius: 0;
-  min-height: 36px;
-}
-
-.pds-input__prefix::part(button) {
-  background-color: #ffc0cb;
-}
-
-:host([has-prepend="true"]) pds-button {
-
-  background-color: #0000ff;
-  border-bottom-left-radius: var(--pds-input-border-radius);
-  border-bottom-right-radius: 0;
-  border-top-left-radius: var(--pds-input-border-radius);
-  border-top-right-radius: 0;
-  min-height: 36px;
 }
 
 .pds-input {
@@ -224,4 +213,3 @@
   border-left: 0;
   border-top-right-radius: var(--pds-input-border-radius);
 }
-

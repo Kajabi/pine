@@ -1,4 +1,12 @@
 :host {
+  --pds-select-background: var(--pine-color-background-container);
+  --pds-select-border: var(--pine-border);
+  --pds-select-border-radius-start: var(--pine-dimension-125);
+  --pds-select-border-radius-end: var(--pine-dimension-125);
+  --pds-select-min-height: 36px;
+  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
+  --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring-danger);
+
   .hidden,
   :host([hidden]) {
     display: none;
@@ -25,12 +33,16 @@ label {
 
 select {
   appearance: none;
-  background: var(--pine-color-background-container);
-  border: var(--pine-border);
-  border-radius: var(--pine-dimension-125);
+  background-color: var(--pds-select-background);
+  border: var(--pds-select-border);
+  border-bottom-left-radius: var(--pds-select-border-radius-start);
+  border-bottom-right-radius: var(--pds-select-border-radius-end);
+  border-top-left-radius: var(--pds-select-border-radius-start);
+  border-top-right-radius: var(--pds-select-border-radius-end);
   font: var(--pine-typography-body);
   grid-area: field;
   letter-spacing: var(--pine-letter-spacing);
+  min-height: var(--pds-select-min-height);
   padding: var(--pine-dimension-xs) var(--pine-dimension-150);
   padding-right: var(--pine-dimension-450);
   position: relative;
@@ -97,7 +109,7 @@ select {
   display: flex;
   grid-column: -1 / -2;
   grid-row: 2 / 3;
-  height: 2.5rem;
+  height: var(--pds-select-min-height);
   pointer-events: none;
   position: relative;
   z-index: 1;
