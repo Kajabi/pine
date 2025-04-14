@@ -43,26 +43,6 @@ export class PdsInput {
   @State() hasAppend = false;
 
   /**
-   * If true, hide the prefix when the input is empty
-   */
-  @Prop() hidePrefixOnEmpty = false;
-
-  /**
-   * If true, hide the suffix when the input is empty
-   */
-  @Prop() hideSuffixOnEmpty = false;
-
-  /**
-   * If true, hide the prepend when the input is empty
-   */
-  @Prop() hidePrependOnEmpty = false;
-
-  /**
-   * If true, hide the append when the input is empty
-   */
-  @Prop() hideAppendOnEmpty = false;
-
-  /**
    * Emitted when the input loses focus.
    */
   @Event() pdsBlur!: EventEmitter<FocusEvent>;
@@ -172,10 +152,6 @@ export class PdsInput {
    */
   @State() hasFocus = false;
 
-  private hasValue(): boolean {
-    return this.value !== undefined && this.value !== null && this.value !== '';
-  }
-
   private updateAddonWidths() {
     requestAnimationFrame(() => {
       if (this.prefixEl) {
@@ -192,9 +168,7 @@ export class PdsInput {
 
   private renderPrefix() {
     const hasPrefix = this.el.querySelector('[slot="prefix"]') !== null;
-    const shouldShow = !this.hidePrefixOnEmpty || this.hasValue();
-
-    if (hasPrefix && shouldShow) {
+    if (hasPrefix) {
       return (
         <div class="pds-input__prefix" part="prefix" ref={(el) => this.prefixEl = el as HTMLElement}>
           <slot name="prefix" onSlotchange={() => this.updateAddonWidths()}></slot>
@@ -206,9 +180,7 @@ export class PdsInput {
 
   private renderSuffix() {
     const hasSuffix = this.el.querySelector('[slot="suffix"]') !== null;
-    const shouldShow = !this.hideSuffixOnEmpty || this.hasValue();
-
-    if (hasSuffix && shouldShow) {
+    if (hasSuffix) {
       return (
         <div class="pds-input__suffix" part="suffix" ref={(el) => this.suffixEl = el as HTMLElement}>
           <slot name="suffix" onSlotchange={() => this.updateAddonWidths()}></slot>
@@ -220,9 +192,7 @@ export class PdsInput {
 
   private renderPrepend() {
     const hasPrepend = this.el.querySelector('[slot="prepend"]') !== null;
-    const shouldShow = !this.hidePrependOnEmpty || this.hasValue();
-
-    if (hasPrepend && shouldShow) {
+    if (hasPrepend) {
       return (
         <div class="pds-input__prepend" part="prepend">
           <slot name="prepend"></slot>
@@ -234,9 +204,7 @@ export class PdsInput {
 
   private renderAppend() {
     const hasAppend = this.el.querySelector('[slot="append"]') !== null;
-    const shouldShow = !this.hideAppendOnEmpty || this.hasValue();
-
-    if (hasAppend && shouldShow) {
+    if (hasAppend) {
       return (
         <div class="pds-input__append" part="append">
           <slot name="append"></slot>
@@ -368,11 +336,9 @@ export class PdsInput {
     } = this;
 
     const value = this.getValue();
-    const hasValue = this.hasValue();
 
     const inputWrapperClasses = {
       'pds-input__field-wrapper': true,
-      'has-value': hasValue,
       'has-focus': this.hasFocus,
       'has-error': invalid || !!errorMessage,
       'is-disabled': disabled,
