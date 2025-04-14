@@ -27,8 +27,8 @@
 :host([has-prepend]) ::slotted(pds-button[slot="prepend"]) {
   --pds-button-background: var(--pds-input-addon-background);
   --pds-button-border: 0;
-  --pds-button-border-radius-end: 0;
-  --pds-button-border-radius-start: var(--pds-input-border-radius);
+  --pds-button-border-radius-end-end: 0;
+  --pds-button-border-radius-start-end: 0;
   --pds-button-min-height: 36px;
 }
 
@@ -36,8 +36,8 @@
 :host([has-append]) ::slotted(pds-button[slot="append"]) {
   --pds-button-background: var(--pds-input-addon-background);
   --pds-button-border: 0;
-  --pds-button-border-radius-end: var(--pds-input-border-radius);
-  --pds-button-border-radius-start: 0;
+  --pds-button-border-radius-end-start: 0;
+  --pds-button-border-radius-start-start: 0;
   --pds-button-min-height: 36px;
 }
 
@@ -45,8 +45,8 @@
 :host([has-prepend]) ::slotted(pds-select[slot="prepend"]) {
   --pds-select-background: var(--pds-input-addon-background);
   --pds-select-border: 0;
-  --pds-select-border-radius-end: 0;
-  --pds-select-border-radius-start: var(--pds-input-border-radius);
+  --pds-select-border-radius-end-end: 0;
+  --pds-select-border-radius-start-end: 0;
   --pds-select-min-height: 36px;
 }
 
@@ -54,8 +54,8 @@
 :host([has-append]) ::slotted(pds-select[slot="append"]) {
   --pds-select-background: var(--pds-input-addon-background);
   --pds-select-border: 0;
-  --pds-select-border-radius-end: var(--pds-input-border-radius);
-  --pds-select-border-radius-start: 0;
+  --pds-select-border-radius-end-start: 0;
+  --pds-select-border-radius-start-start: 0;
   --pds-select-min-height: 36px;
 }
 

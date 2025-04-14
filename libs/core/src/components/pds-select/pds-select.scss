@@ -1,8 +1,11 @@
 :host {
   --pds-select-background: var(--pine-color-background-container);
   --pds-select-border: var(--pine-border);
-  --pds-select-border-radius-start: var(--pine-dimension-125);
-  --pds-select-border-radius-end: var(--pine-dimension-125);
+  --pds-select-border-radius: var(--pine-dimension-125);
+  --pds-select-border-radius-start-end: var(--pine-dimension-125);
+  --pds-select-border-radius-start-start: var(--pine-dimension-125);
+  --pds-select-border-radius-end-end: var(--pine-dimension-125);
+  --pds-select-border-radius-end-start: var(--pine-dimension-125);
   --pds-select-min-height: 36px;
   --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
   --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring-danger);
@@ -35,10 +38,11 @@ select {
   appearance: none;
   background-color: var(--pds-select-background);
   border: var(--pds-select-border);
-  border-bottom-left-radius: var(--pds-select-border-radius-start);
-  border-bottom-right-radius: var(--pds-select-border-radius-end);
-  border-top-left-radius: var(--pds-select-border-radius-start);
-  border-top-right-radius: var(--pds-select-border-radius-end);
+  border-radius: var(--pds-select-border-radius);
+  border-bottom-left-radius: var(--pds-select-border-radius-end-start, var(--pds-select-border-radius));
+  border-bottom-right-radius: var(--pds-select-border-radius-end-end, var(--pds-select-border-radius));
+  border-top-left-radius: var(--pds-select-border-radius-start-start, var(--pds-select-border-radius));
+  border-top-right-radius: var(--pds-select-border-radius-start-end, var(--pds-select-border-radius));
   font: var(--pine-typography-body);
   grid-area: field;
   letter-spacing: var(--pine-letter-spacing);
