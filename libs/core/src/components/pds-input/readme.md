@@ -49,6 +49,16 @@ Type: `Promise<void>`
 
 
 
+## Slots
+
+| Slot        | Description                                                                      |
+| ----------- | -------------------------------------------------------------------------------- |
+| `"append"`  | Content to be displayed after the input field                                    |
+| `"prefix"`  | Content that is displayed visually within the input field before the input field |
+| `"prepend"` | Content to be displayed before the input field                                   |
+| `"suffix"`  | Content that is displayed visually within the input field after the input field  |
+
+
 ## Shadow Parts
 
 | Part        | Description |

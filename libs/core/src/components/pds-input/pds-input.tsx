@@ -6,6 +6,12 @@ import { InputChangeEventDetail, InputInputEventDetail } from './input-interface
 import { debounceEvent } from '@utils/utils';
 import { danger } from '@pine-ds/icons/icons';
 
+/**
+ * @slot append - Content to be displayed after the input field
+ * @slot prefix - Content that is displayed visually within the input field before the input field
+ * @slot prepend - Content to be displayed before the input field
+ * @slot suffix - Content that is displayed visually within the input field after the input field
+ */
 @Component({
   tag: 'pds-input',
   styleUrls: ['pds-input.tokens.scss', '../../global/styles/utils/label.scss', 'pds-input.scss'],
