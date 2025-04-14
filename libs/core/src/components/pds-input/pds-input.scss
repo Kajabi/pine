@@ -26,36 +26,36 @@
 /* stylelint-disable-next-line */
 :host([has-prepend]) ::slotted(pds-button[slot="prepend"]) {
   --pds-button-background: var(--pds-input-addon-background);
-  --pds-button-border: 0;
-  --pds-button-border-radius-end-end: 0;
-  --pds-button-border-radius-start-end: 0;
+  --pds-button-border: var(--pine-border-width-none);
+  --pds-button-border-radius-end-end: var(--pine-dimension-none);
+  --pds-button-border-radius-start-end: var(--pine-dimension-none);
   --pds-button-min-height: 36px;
 }
 
 /* stylelint-disable-next-line */
 :host([has-append]) ::slotted(pds-button[slot="append"]) {
   --pds-button-background: var(--pds-input-addon-background);
-  --pds-button-border: 0;
-  --pds-button-border-radius-end-start: 0;
-  --pds-button-border-radius-start-start: 0;
+  --pds-button-border: var(--pine-border-width-none);
+  --pds-button-border-radius-end-start: var(--pine-dimension-none);
+  --pds-button-border-radius-start-start: var(--pine-dimension-none);
   --pds-button-min-height: 36px;
 }
 
 /* stylelint-disable-next-line */
 :host([has-prepend]) ::slotted(pds-select[slot="prepend"]) {
   --pds-select-background: var(--pds-input-addon-background);
-  --pds-select-border: 0;
-  --pds-select-border-radius-end-end: 0;
-  --pds-select-border-radius-start-end: 0;
+  --pds-select-border: var(--pine-border-width-none);
+  --pds-select-border-radius-end-end: var(--pine-dimension-none);
+  --pds-select-border-radius-start-end: var(--pine-dimension-none);
   --pds-select-min-height: 36px;
 }
 
 /* stylelint-disable-next-line */
 :host([has-append]) ::slotted(pds-select[slot="append"]) {
   --pds-select-background: var(--pds-input-addon-background);
-  --pds-select-border: 0;
-  --pds-select-border-radius-end-start: 0;
-  --pds-select-border-radius-start-start: 0;
+  --pds-select-border: var(--pine-border-width-none);
+  --pds-select-border-radius-end-start: var(--pine-dimension-none);
+  --pds-select-border-radius-start-start: var(--pine-dimension-none);
   --pds-select-min-height: 36px;
 }
 
@@ -93,13 +93,13 @@
   }
 
   &.has-prepend .pds-input__field {
-    border-bottom-left-radius: 0;
-    border-top-left-radius: 0;
+    border-bottom-left-radius: var(--pine-dimension-none);
+    border-top-left-radius: var(--pine-dimension-none);
   }
 
   &.has-append .pds-input__field {
-    border-bottom-right-radius: 0;
-    border-top-right-radius: 0;
+    border-bottom-right-radius: var(--pine-dimension-none);
+    border-top-right-radius: var(--pine-dimension-none);
   }
 }
 
@@ -111,7 +111,7 @@
   flex: 1;
   font: var(--pds-input-font);
   letter-spacing: var(--pine-letter-spacing);
-  min-width: 0;
+  min-width: var(--pine-dimension-none);
   padding: var(--pds-input-padding-y) var(--pds-input-padding-x);
   transition: all 0.2s ease;
   width: 100%;
@@ -154,7 +154,7 @@
 .pds-input__error-message,
 .pds-input__helper-message {
   font: var(--pine-typography-body-sm-medium);
-  margin-block-end: 0;
+  margin-block-end: var(--pine-dimension-none);
   margin-block-start: var(--pine-dimension-2xs);
 }
 
@@ -180,14 +180,14 @@
 
 .pds-input__prefix {
   border-bottom-left-radius: var(--pds-input-border-radius);
-  border-right: 0;
+  border-right: var(--pine-border-width-none);
   border-top-left-radius: var(--pds-input-border-radius);
   left: var(--pds-input-padding-x);
 }
 
 .pds-input__suffix {
   border-bottom-right-radius: var(--pds-input-border-radius);
-  border-left: 0;
+  border-left: var(--pine-border-width-none);
   border-top-right-radius: var(--pds-input-border-radius);
   right: var(--pds-input-padding-x);
 }
@@ -204,12 +204,12 @@
 
 .pds-input__prepend {
   border-bottom-left-radius: var(--pds-input-border-radius);
-  border-right: 0;
+  border-right: var(--pine-border-width-none);
   border-top-left-radius: var(--pds-input-border-radius);
 }
 
 .pds-input__append {
   border-bottom-right-radius: var(--pds-input-border-radius);
-  border-left: 0;
+  border-left: var(--pine-border-width-none);
   border-top-right-radius: var(--pds-input-border-radius);
 }
