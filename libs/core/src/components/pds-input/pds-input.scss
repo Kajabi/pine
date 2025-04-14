@@ -116,8 +116,8 @@
   transition: all 0.2s ease;
   width: 100%;
 
-  &:hover:not(:disabled, .has-error) {
-    border-color: var(--pine-color-border-hover);
+  .has-error &:hover:not(:disabled) {
+    border-color: var(--pds-input-error-border);
   }
 
   &:focus-visible:not(.has-error) {
@@ -141,7 +141,7 @@
     }
   }
 
-  &.has-error {
+  .has-error & {
     background-color: var(--pds-input-error-background);
     border-color: var(--pds-input-error-border);
 
