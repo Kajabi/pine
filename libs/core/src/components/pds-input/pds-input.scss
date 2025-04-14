@@ -28,7 +28,7 @@
   --pds-button-border: var(--pine-border-width-none);
   --pds-button-border-radius-end-end: var(--pine-dimension-none);
   --pds-button-border-radius-start-end: var(--pine-dimension-none);
-  --pds-button-min-height: 36px;
+  --pds-button-min-height: var(--pine-dimension-450);
 }
 
 /* stylelint-disable-next-line */
@@ -37,7 +37,7 @@
   --pds-button-border: var(--pine-border-width-none);
   --pds-button-border-radius-end-start: var(--pine-dimension-none);
   --pds-button-border-radius-start-start: var(--pine-dimension-none);
-  --pds-button-min-height: 36px;
+  --pds-button-min-height: var(--pine-dimension-450);
 }
 
 /* stylelint-disable-next-line */
@@ -46,7 +46,7 @@
   --pds-select-border: var(--pine-border-width-none);
   --pds-select-border-radius-end-end: var(--pine-dimension-none);
   --pds-select-border-radius-start-end: var(--pine-dimension-none);
-  --pds-select-min-height: 36px;
+  --pds-select-min-height: var(--pine-dimension-450);
 }
 
 /* stylelint-disable-next-line */
@@ -55,7 +55,7 @@
   --pds-select-border: var(--pine-border-width-none);
   --pds-select-border-radius-end-start: var(--pine-dimension-none);
   --pds-select-border-radius-start-start: var(--pine-dimension-none);
-  --pds-select-min-height: 36px;
+  --pds-select-min-height: var(--pine-dimension-450);
 }
 
 :host([aria-readonly="true"]) {

@@ -118,12 +118,12 @@ A prefix or suffix can be added to the input field to provide additional context
 
 <DocCanvas client:only
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux"><pds-icon name="mail" slot="prefix"></pds-icon><pds-button class="pds-input__suffix" variant="unstyled" slot="suffix"><pds-icon name="remove-circle"></pds-icon></pds-button></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux"><pds-icon name="mail" slot="prefix"></pds-icon><pds-button class="pds-input__suffix" variant="unstyled" slot="suffix"><pds-icon name="remove-circle"></pds-icon></pds-button></pds-input>'
+    react: '<PdsInput componentId="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux"><PdsIcon name="mail" slot="prefix"></PdsIcon><PdsButton class="pds-input__suffix" variant="unstyled" slot="suffix" icon-only icon="remove-circle">Remove</PdsButton></PdsInput>',
+    webComponent: '<pds-input component-id="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux"><pds-icon name="mail" slot="prefix"></pds-icon><pds-button class="pds-input__suffix" variant="unstyled" slot="suffix" icon-only icon="remove-circle">Remove</pds-button></pds-input>'
   }}>
   <pds-input component-id="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux">
     <pds-icon name="mail" slot="prefix"></pds-icon>
-    <pds-button class="pds-input__suffix" variant="unstyled" slot="suffix"><pds-icon name="remove-circle"></pds-icon></pds-button>
+    <pds-button class="pds-input__suffix" variant="unstyled" slot="suffix" icon-only icon="remove-circle">Remove</pds-button>
   </pds-input>
 </DocCanvas>
 
@@ -194,6 +194,18 @@ Prepend and append elements are placed outside the input container, next to the 
   </pds-input>
 </DocCanvas>
 
+**Prefix text and suffix text**
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsInput componentId="pds-input-prefix-suffix-text" label="URL" type="text" value=""><PdsText class="pds-input__prefix" color="--pine-color-grey-700" slot="prefix">https://</PdsText><PdsText class="pds-input__suffix" color="--pine-color-grey-700" slot="suffix">mykajabi.com</PdsText></PdsInput>',
+    webComponent: '<pds-input component-id="pds-input-prefix-suffix-text" label="URL" type="text" value=""><pds-text class="pds-input__prefix" color="--pine-color-grey-700" slot="prefix">https://</pds-text><pds-text class="pds-input__suffix" color="--pine-color-grey-700" slot="suffix">mykajabi.com</pds-text></pds-input>'
+  }}>
+  <pds-input component-id="pds-input-prefix-suffix-text" label="URL" type="text" value="">
+    <pds-text class="pds-input__prefix" color="--pine-color-grey-700" slot="prefix">https://</pds-text>
+    <pds-text class="pds-input__suffix" color="--pine-color-grey-700" slot="suffix">mykajabi.com</pds-text>
+  </pds-input>
+</DocCanvas>
+
 **Unstyled button suffix**
 <DocCanvas client:only
   mdxSource={{
@@ -224,5 +236,5 @@ Prepend and append elements are placed outside the input container, next to the 
 ## References
 
 For more information about using inputs, refer to:
-- [WAI-ARIA Input Practices](https://www.w3.org/WAI/ARIA/apg/patterns/textbox/)
+- [MDN Web Docs: HTML autocomplete attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete)
 - [MDN Input Element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
