@@ -10,7 +10,7 @@
   // because it is in the ShadowDom
   &::part(checkbox-cell) {
     background-color: var(--pine-color-background-container);
-    inset-inline-start: 0;
+    inset-inline-start: var(--pine-dimension-none);
     position: sticky;
     z-index: 1;
   }

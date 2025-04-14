@@ -14,7 +14,7 @@ pds-tab {
 @mixin pds-button-style-reset {
   appearance: none;
   background-color: transparent;
-  border: var(--pine-dimension-none);
+  border: var(--pine-border-width-none);
   box-shadow: none;
   color: inherit;
   cursor: pointer;
@@ -63,9 +63,9 @@ pds-tab {
       background-color: var(--pine-color-brand);
       content: '';
       height: 3px;
-      inset-block-end: 0;
-      inset-inline-end: 0;
-      inset-inline-start: 0;
+      inset-block-end: var(--pine-dimension-none);
+      inset-inline-end: var(--pine-dimension-none);
+      inset-inline-start: var(--pine-dimension-none);
       opacity: 0;
       position: absolute;
     }
