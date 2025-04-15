@@ -50,9 +50,9 @@ div {
   border: var(--pine-border);
   border-color: var(--pine-color-secondary);
   border-radius: var(--pine-border-radius-round);
-  bottom: var(--pine-dimension-none);
+  inset-block-end: var(--pine-dimension-none);
+  inset-inline-end: var(--pine-dimension-none);
   position: absolute;
-  right: var(--pine-dimension-none);
 }
 
 img {
