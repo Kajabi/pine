@@ -157,7 +157,7 @@ Full width buttons are intended to be used when the button needs to take up the 
   <pds-button variant="primary" full-width="true">Full Width</pds-button>
 </DocCanvas>
 
-## Loading
+### Loading
 
 The loading prop allows a `pds-button` to display a loading state.
 
@@ -173,7 +173,7 @@ The loading prop allows a `pds-button` to display a loading state.
   <pds-button variant="primary" loading="true">Loading</pds-button>
 </DocCanvas>
 
-## Icon Only
+### Icon Only
 
 The icon-only prop allows a `pds-button` to display an icon only.
 
@@ -202,8 +202,23 @@ While the text is visually hidden, it is still remains accessible.
   <pds-button variant="destructive" icon-only="true" icon="favorite">Icon Only</pds-button>
 </DocCanvas>
 
+### Trailing Icon
 
-## Button Link
+The trailing icon prop allows a `pds-button` to display an icon after the button text. Does not render when `iconOnly` is true.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+    <PdsButton variant="primary" trailingIcon="add-image">Trailing Icon</PdsButton>
+    `,
+    webComponent: `
+    <pds-button variant="primary" trailing-icon="add-image">Trailing Icon</pds-button>
+    `
+  }}>
+  <pds-button variant="primary" trailing-icon="add-image">Trailing Icon</pds-button>
+</DocCanvas>
+
+### Button Link
 
 The button link variant allows a `pds-button` to function as a link. By providing an `href` attribute, the button will render as an anchor (`<a>`) element while maintaining the visual appearance of a button. This is useful for creating call-to-action buttons that navigate to external resources or different parts of your application.
 
@@ -224,21 +239,21 @@ The button link variant allows a `pds-button` to function as a link. By providin
   <pds-button variant="secondary" href="#">Join community</pds-button>
 </DocCanvas>
 
-## Type
+### Type
 
 The type prop allows a `pds-button` to set a [button type attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type).
 
 > ***Note:*** The `type` prop does not apply to buttons with an `href` attribute. When an `href` is provided, the button will render as an anchor (`<a>`) element, and the types will be ignored.
 
-### Default (Button)
+#### Default (Button)
 
 The button has no default click behavior. It can have client-side scripts listen to the element's events, which are triggered when the events occur.
 
-### Submit
+#### Submit
 
 The button submits the form data to the server.
 
-### Reset
+#### Reset
 
 The button resets all the controls to their initial values. [As noted on MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type), this behavior tends to annoy users.
 

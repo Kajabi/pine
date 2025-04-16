@@ -4,7 +4,7 @@ import { withActions } from '@storybook/addon-actions/decorator';
 import { customArgsWithIconControl } from '../../../stories/_helpers';
 
 export default {
-  argTypes: customArgsWithIconControl({ component: 'pds-button', property: 'icon' }),
+  argTypes: customArgsWithIconControl({ component: 'pds-button', property: ['icon', 'trailingIcon'] }),
   component: 'pds-button',
   decorators: [withActions],
   title: 'components/Button',
@@ -26,6 +26,7 @@ const BaseTemplate = (args) => html`
     loading=${args.loading}
     name=${args.name}
     target=${args.target}
+    trailing-icon=${args.trailingIcon}
     type=${args.type}
     value=${args.value}
     variant=${args.variant}
@@ -105,6 +106,18 @@ IconOnly.args = {
   type: 'button',
   variant: 'secondary',
 };
+
+export const TrailingIcon = BaseTemplate.bind({});
+TrailingIcon.args = {
+  disabled: false,
+  fullWidth: false,
+  iconOnly: false,
+  loading: false,
+  slot: 'Trailing Icon',
+  trailingIcon: 'add-image',
+  type: 'button',
+  variant: 'primary',
+}
 
 export const Loading = BaseTemplate.bind({});
 Loading.args = {

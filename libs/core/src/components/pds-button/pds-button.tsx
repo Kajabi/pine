@@ -43,7 +43,7 @@ export class PdsButton {
   @Prop() href?: string;
 
   /**
-   * Displays an icon in the button.
+   * Displays a leading icon in the button.
    * @defaultValue null
    */
   @Prop() icon?: string = null;
@@ -70,6 +70,12 @@ export class PdsButton {
    * Only applies when href is set.
    */
   @Prop() target?: '_blank' | '_self' | '_parent' | '_top';
+
+  /**
+   * Displays a trailing icon in the button. Does not render when iconOnly is true.
+   * @defaultValue null
+   */
+  @Prop() trailingIcon?: string = null;
 
   /**
    * Provides button with a type.
@@ -184,6 +190,10 @@ export class PdsButton {
             </pds-loader>
           </span>
         )}
+
+        {this.trailingIcon && this.variant !== 'disclosure' && !this.iconOnly &&
+          <pds-icon class={this.loading ? 'pds-button__icon--hidden' : ''} name={this.trailingIcon} part="icon" aria-hidden="true"></pds-icon>
+        }
 
         {this.variant === 'disclosure' &&
           <pds-icon class={this.loading ? 'pds-button__icon--hidden' : ''} icon={caretDown} part="caret" aria-hidden="true"></pds-icon>
