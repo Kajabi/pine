@@ -103,13 +103,46 @@ describe('pds-button', () => {
     `);
   });
 
-  it('renders icon button', async () => {
+  it('renders a leading icon', async () => {
     const { root } = await newSpecPage({
       components: [PdsButton],
-      html: `<pds-button icon="trashIcon"></pds-button>`,
+      html: `<pds-button icon="add-image"></pds-button>`,
     });
-    const icon = root?.shadowRoot?.querySelector('pds-icon');
-    expect(icon).not.toBeNull();
+    expect(root).toEqualHtml(`
+      <pds-button icon="add-image" variant="primary">
+        <mock:shadow-root>
+          <button class="pds-button pds-button--primary" part="button" type="button">
+            <div class="pds-button__content" part="button-content">
+              <pds-icon aria-hidden="true" name="add-image" part="icon"></pds-icon>
+              <span class="pds-button__text" part="button-text">
+                <slot></slot>
+              </span>
+            </div>
+          </button>
+        </mock:shadow-root>
+      </pds-button>
+    `);
+  });
+
+  it('renders a trailing icon', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button trailing-icon="add-image"></pds-button>`,
+    });
+    expect(root).toEqualHtml(`
+      <pds-button trailing-icon="add-image" variant="primary">
+        <mock:shadow-root>
+          <button class="pds-button pds-button--primary" part="button" type="button">
+            <div class="pds-button__content" part="button-content">
+              <span class="pds-button__text" part="button-text">
+                <slot></slot>
+              </span>
+              <pds-icon aria-hidden="true" name="add-image" part="icon"></pds-icon>
+            </div>
+          </button>
+        </mock:shadow-root>
+      </pds-button>
+    `);
   });
 
   it('renders loading button', async () => {
