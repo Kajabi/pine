@@ -9,10 +9,12 @@ register(StyleDictionary, {
 });
 
 const basePath = `src/global/styles/tokens`;
+const buildPath = `${basePath}/_output/`;
 
 async function run() {
   const $themes = JSON.parse(await promises.readFile(`${basePath}/$themes.json`, 'utf-8'));
   const themes = permutateThemes($themes, { separator: '-' });
+  console.log('Generated themes:', themes);
 
 	const tokenSets = [
 		...new Set(
@@ -25,30 +27,115 @@ async function run() {
     return !Object.values(themes).every(sets => sets.includes(set));
 	});
 
-  const configs = Object.entries(themes).map(([theme, tokensets]) => ({
+  // Theme-specific configuration
+  const themeConfigs = Object.entries(themes).map(([theme, tokensets]) => {
+    const [themeName] = theme.toLowerCase().split('-');
+
+    return {
+      log: {
+        verbosity: 'verbose',
+      },
+      source: tokensets.map(tokenset => `${basePath}/${tokenset}.json`),
+      preprocessors: ['tokens-studio'],
+      platforms: {
+        css: {
+          transformGroup: 'tokens-studio',
+          transforms: ['attribute/themeable', 'name/kebab', 'color/hex', 'ts/resolveMath', 'size/px'],
+          buildPath: buildPath,
+          files: [
+            // Core and semantic files for the brand
+            {
+              destination: `${themeName}/styles/${themeName}.scss`,
+              format: 'css/variables',
+              filter: (token) => {
+                // Include core tokens
+                if (token.filePath.includes('base/core')) {
+                  return true;
+                }
+                // Include semantic tokens
+                if (token.filePath.includes('base/semantic')) {
+                  return true; // Include all semantic tokens for all themes
+                }
+                // Include themeable tokens for this brand
+                if (token.attributes.themeable && (
+                  token.filePath.includes(`${themeName}.json`) ||
+                  token.filePath.includes(`${themeName}/`)
+                )) {
+                  return true;
+                }
+                return false;
+              },
+              options: {
+                outputReferences: true
+              }
+            }
+          ],
+          prefix: 'pine'
+        },
+      },
+    };
+  });
+
+  // Base configuration for semantic files
+  const baseConfig = {
     log: {
       verbosity: 'verbose',
     },
-    source: tokensets.map(tokenset => `${basePath}/${tokenset}.json`),
-    preprocessors: ['tokens-studio'], // <-- since 0.16.0 this must be explicit
+    source: [
+      `${basePath}/base/core.json`,
+      `${basePath}/base/semantic.json`
+    ],
+    preprocessors: ['tokens-studio'],
     platforms: {
       css: {
         transformGroup: 'tokens-studio',
         transforms: ['attribute/themeable', 'name/kebab', 'color/hex', 'ts/resolveMath', 'size/px'],
-				buildPath: `${basePath}/`,
+        buildPath: buildPath,
         files: [
-          ...generateCoreFiles(),
-					...generateSemanticFiles(theme),
-          ...generateComponentFiles(),
+          // Core tokens
+         ...generateCoreFiles(),
+          // Non-themeable semantic tokens
+          ...generateSemanticFiles()
         ],
-				prefix: 'pine'
+        prefix: 'pine'
       },
     },
-  }));
+  };
 
-  for (const cfg of configs) {
-    const sd = new StyleDictionary(cfg);
+  // Component-specific configuration
+  const componentConfig = {
+    log: {
+      verbosity: 'verbose',
+    },
+    source: [
+      `${basePath}/base/core.json`,
+      `${basePath}/base/semantic.json`,
+      `${basePath}/components/*.json`
+    ],
+    preprocessors: ['tokens-studio'],
+    platforms: {
+      css: {
+        transformGroup: 'tokens-studio',
+        transforms: ['attribute/themeable', 'name/kebab', 'color/hex', 'ts/resolveMath', 'size/px'],
+        buildPath: buildPath,
+        files: [...generateComponentFiles()],
+        prefix: 'pine'
+      },
+    },
+  };
 
+  // Build base files first
+  const sd = new StyleDictionary(baseConfig);
+
+  // Build component files
+  const componentSd = new StyleDictionary(componentConfig);
+
+  // Build theme files
+  const themeSds = themeConfigs.map(config => new StyleDictionary(config));
+
+  // Register transform for all configurations
+  const allSds = [sd, componentSd, ...themeSds];
+  for (const sd of allSds) {
     /**
      * This transform checks for each token whether that token's value could change
      * due to Tokens Studio theming.
@@ -96,7 +183,13 @@ async function run() {
     });
 
     await sd.cleanAllPlatforms();
-    await sd.buildAllPlatforms();
+  }
+
+  // Build all platforms in order
+  await sd.buildAllPlatforms();
+  await componentSd.buildAllPlatforms();
+  for (const themeSd of themeSds) {
+    await themeSd.buildAllPlatforms();
   }
 }
 
