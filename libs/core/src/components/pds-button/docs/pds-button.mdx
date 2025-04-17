@@ -173,6 +173,30 @@ The loading prop allows a `pds-button` to display a loading state.
   <pds-button variant="primary" loading="true">Loading</pds-button>
 </DocCanvas>
 
+### Start and End Slots
+
+The start and end slots allow content to be placed before and after the button text. These can be used to render icons. These slots will be hidden when `loading` is true.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+    <PdsButton variant="primary">
+      <pds-icon slot="start" name="favorite"></pds-icon>
+      Button with Icons
+      <pds-icon slot="end" name="add-image"></pds-icon>
+    </PdsButton>
+    `,
+    webComponent: `
+    <pds-button variant="primary">
+      <pds-icon slot="start" name="favorite"></pds-icon>
+      Button with Icons
+      <pds-icon slot="end" name="add-image"></pds-icon>
+    </pds-button>
+    `
+  }}>
+  <pds-button variant="primary"><pds-icon slot="start" name="favorite"></pds-icon>Button with Icons<pds-icon slot="end" name="add-image"></pds-icon></pds-button>
+</DocCanvas>
+
 ### Icon Only
 
 The icon-only prop allows a `pds-button` to display an icon only.
@@ -200,22 +224,6 @@ While the text is visually hidden, it is still remains accessible.
   <pds-button variant="secondary" icon-only="true" icon="favorite">Icon Only</pds-button>
   <pds-button variant="accent" icon-only="true" icon="favorite">Icon Only</pds-button>
   <pds-button variant="destructive" icon-only="true" icon="favorite">Icon Only</pds-button>
-</DocCanvas>
-
-### Trailing Icon
-
-The trailing icon prop allows a `pds-button` to display an icon after the button text. Does not render when `iconOnly` is true.
-
-<DocCanvas client:only
-  mdxSource={{
-    react: `
-    <PdsButton variant="primary" trailingIcon="add-image">Trailing Icon</PdsButton>
-    `,
-    webComponent: `
-    <pds-button variant="primary" trailing-icon="add-image">Trailing Icon</pds-button>
-    `
-  }}>
-  <pds-button variant="primary" trailing-icon="add-image">Trailing Icon</pds-button>
 </DocCanvas>
 
 ### Button Link

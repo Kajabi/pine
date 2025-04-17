@@ -279,11 +279,6 @@ export namespace Components {
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
         /**
-          * Displays a trailing icon in the button. Does not render when iconOnly is true.
-          * @defaultValue null
-         */
-        "trailingIcon"?: string;
-        /**
           * Provides button with a type.
           * @defaultValue button
          */
@@ -1845,11 +1840,6 @@ declare namespace LocalJSX {
           * Specifies where to open the linked document when href is provided. Only applies when href is set.
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
-        /**
-          * Displays a trailing icon in the button. Does not render when iconOnly is true.
-          * @defaultValue null
-         */
-        "trailingIcon"?: string;
         /**
           * Provides button with a type.
           * @defaultValue button
