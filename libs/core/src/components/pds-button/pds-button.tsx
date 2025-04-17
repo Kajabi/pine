@@ -142,9 +142,7 @@ export class PdsButton {
         <pds-icon class={this.loading ? 'pds-button__icon--hidden' : ''} name={this.icon} part="icon" aria-hidden="true"></pds-icon>
       );
     } else {
-      return (
-        <slot name="start" />
-      );
+      return <slot name="start" />;
     }
   }
 
@@ -154,9 +152,7 @@ export class PdsButton {
         <pds-icon class={this.loading ? 'pds-button__icon--hidden' : ''} icon={caretDown} part="caret" aria-hidden="true"></pds-icon>
       )
     } else {
-    return (
-      <slot name="end" />
-      );
+      return <slot name="end" />;
     }
   }
 
