@@ -55,6 +55,7 @@
     "test.watch": "stencil test --spec --e2e --watchAll --coverage"
   },
   "dependencies": {
+    "@kajabi-ui/styles": "*",
     "@pine-ds/icons": "*",
     "@stencil/core": "4.28.2",
     "sortablejs": "^1.15.0",
