@@ -10,7 +10,9 @@ $pds-divider-offsets: (
 
 .pds-divider {
   background: var(--pine-color-border);
+  border: 0;
   display: flex;
+  height: var(--pine-border-width);
   margin: 0;
   width: 100%;
 }
