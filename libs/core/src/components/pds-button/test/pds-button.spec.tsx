@@ -257,20 +257,21 @@ describe('pds-button', () => {
   it('renders an icon-only button', async () => {
     const {root} = await newSpecPage({
       components: [PdsButton],
-      html: `<pds-button icon-only="true" icon="favorite"></pds-button>`,
+      html: `<pds-button icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite" part="icon"></pds-icon></pds-button>`,
     });
     expect(root).toEqualHtml(`
-      <pds-button icon-only="true" icon="favorite" variant="primary">
+      <pds-button icon-only="true" variant="primary">
         <mock:shadow-root>
           <button class="pds-button pds-button--primary pds-button--icon-only" part="button" type="button">
             <div class="pds-button__content" part="button-content">
-              <pds-icon aria-hidden="true" name="favorite" part="icon"></pds-icon>
+              <slot name="start"></slot>
               <span class="pds-button__text pds-button__text--hidden" part="button-text">
                 <slot></slot>
               </span>
             </div>
           </button>
         </mock:shadow-root>
+        <pds-icon slot="start" aria-hidden="true" name="favorite" part="icon"></pds-icon>
       </pds-button>
     `);
   });

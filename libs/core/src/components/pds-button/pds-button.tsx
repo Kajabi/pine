@@ -46,8 +46,9 @@ export class PdsButton {
   @Prop() href?: string;
 
   /**
-   * Displays a leading icon in the button.
+   * Displays a leading icon in the button. DEPRECATED.
    * @defaultValue null
+   * @deprecated Use `start` slot instead.
    */
   @Prop() icon?: string = null;
 
