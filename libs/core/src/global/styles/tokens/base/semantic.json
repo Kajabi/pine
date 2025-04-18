@@ -723,7 +723,7 @@
       },
       "brand-label": {
         "value": {
-          "fontFamily": "{font-family.body}",
+          "fontFamily": "{font-family.heading}",
           "fontWeight": "{font-weight.medium}",
           "fontSize": "{font-size.body.sm}",
           "lineHeight": "{line-height.body} * 100%"
