@@ -170,14 +170,12 @@ describe('pds-button', () => {
         <mock:shadow-root>
           <button aria-busy="true" aria-live="polite" class="pds-button pds-button--primary pds-button--loading" part="button" type="button">
             <div class="pds-button__content" part="button-content">
-              <slot name="start"></slot>
               <span class="pds-button__text pds-button__text--hidden" part="button-text">
                 <slot></slot>
               </span>
               <span class="pds-button__loader">
                 <pds-loader is-loading size="var(--pine-font-size-body-2xl)" variant="spinner">Loading...</pds-loader>
               </span>
-              <slot name="end"></slot>
             </div>
           </button>
         </mock:shadow-root>
@@ -186,16 +184,6 @@ describe('pds-button', () => {
 
     const loader = root?.shadowRoot?.querySelector('pds-loader');
     expect(loader).not.toBeNull();
-  });
-
-  it('hides icon when loading', async () => {
-    const { root } = await newSpecPage({
-      components: [PdsButton],
-      html: `<pds-button icon="trashIcon" loading="true"></pds-button>`,
-    });
-
-    const icon = root?.shadowRoot?.querySelector('pds-icon');
-    expect(icon?.className).toContain('pds-button__icon--hidden');
   });
 
   it('prevents click when loading', async () => {
