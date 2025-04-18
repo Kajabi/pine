@@ -334,6 +334,7 @@
   --pine-color-brand: var(--pine-color-black);
   --pine-font-family-heading: var(--pine-font-family-greet);
   --pine-font-family-body: var(--pine-font-family-inter);
+  --pine-font-family-brand-text: var(--pine-font-family-faire-sprig);
   --pine-font-size: var(--pine-font-size-100);
   --pine-font-size-body-2xs: var(--pine-font-size-057);
   --pine-font-size-body-xs: var(--pine-font-size-071);
@@ -380,7 +381,6 @@
   --pine-border: var(--pine-border-width-thin) solid var(--pine-color-grey-300);
   --pine-border-hover: var(--pine-border-width-thin) solid var(--pine-color-grey-400);
   --pine-border-none: var(--pine-border-width-none) solid var(--pine-color-grey-300);
-  --pine-typography-body-brand-text: var(--pine-font-weight-medium) var(--pine-font-size-body-md)/var(--pine-line-height-body) var(--pine-font-family-faire-sprig); /* brand-text */
   --pine-typography-body-sm-brand-text: var(--pine-font-weight-medium) var(--pine-font-size-body-sm)/var(--pine-line-height-body) var(--pine-font-family-faire-sprig); /* brand-text */
   --pine-outline-focus: var(--pine-border-width-thick) solid var(--pine-color-focus-ring); /* Default focus ring */
   --pine-typography-heading-1: var(--pine-font-weight-semi-bold) var(--pine-font-size-heading-1)/var(--pine-line-height-heading) var(--pine-font-family-heading);
@@ -396,6 +396,7 @@
   --pine-typography-body-semi-bold: var(--pine-font-weight-semi-bold) var(--pine-font-size-body-md)/var(--pine-line-height-body) var(--pine-font-family-body);
   --pine-typography-body-bold: var(--pine-font-weight-bold) var(--pine-font-size-body-md)/var(--pine-line-height-body) var(--pine-font-family-body);
   --pine-typography-body-brand-label: var(--pine-font-weight-medium) var(--pine-font-size-body-md)/var(--pine-line-height-body) var(--pine-font-family-body); /* brand-label */
+  --pine-typography-body-brand-text: var(--pine-font-weight-medium) var(--pine-font-size-body-md)/var(--pine-line-height-body) var(--pine-font-family-brand-text); /* brand-text */
   --pine-typography-body-sm: var(--pine-font-weight-regular) var(--pine-font-size-body-sm)/var(--pine-line-height-body) var(--pine-font-family-body);
   --pine-typography-body-sm-medium: var(--pine-font-weight-medium) var(--pine-font-size-body-sm)/var(--pine-line-height-body) var(--pine-font-family-body);
   --pine-typography-body-sm-mono: var(--pine-font-weight-medium) var(--pine-font-size-body-sm)/var(--pine-line-height-body) monospace;

@@ -675,7 +675,7 @@
       },
       "brand-text": {
         "value": {
-          "fontFamily": "{font-family.faire-sprig}",
+          "fontFamily": "{font-family.brand-text}",
           "fontWeight": "{font-weight.medium}",
           "fontSize": "{font-size.body.md}",
           "lineHeight": "{line-height.body} * 100%"
@@ -784,6 +784,10 @@
     },
     "body": {
       "value": "{font-family.inter}",
+      "type": "fontFamilies"
+    },
+    "brand-text": {
+      "value": "{font-family.faire-sprig}",
       "type": "fontFamilies"
     }
   },

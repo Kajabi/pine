@@ -6,19 +6,19 @@
 :root[lang="he"], [lang="he"] {
   --pine-font-family-body: var(--pine-font-family-noto-hebrew);
   --pine-font-family-heading: var(--pine-font-family-noto-hebrew);
-  --pine-font-family-faire-sprig: var(--pine-font-family-noto-hebrew);
+  --pine-font-family-brand-text: var(--pine-font-family-noto-hebrew);
 }
 
 // Arabic
 :root[lang="ar"], [lang="ar"] {
   --pine-font-family-body: var(--pine-font-family-noto-arabic);
   --pine-font-family-heading: var(--pine-font-family-noto-arabic);
-  --pine-font-family-faire-sprig: var(--pine-font-family-noto-arabic);
+  --pine-font-family-brand-text: var(--pine-font-family-noto-arabic);
 }
 
 // Hindi
 :root[lang="hi"], [lang="hi"] {
   --pine-font-family-body: var(--pine-font-family-noto-devanagari);
   --pine-font-family-heading: var(--pine-font-family-noto-devanagari);
-  --pine-font-family-faire-sprig: var(--pine-font-family-noto-devanagari);
+  --pine-font-family-brand-text: var(--pine-font-family-noto-devanagari);
 }
