@@ -860,6 +860,18 @@
     "faire-sprig": {
       "value": "FAIRE Sprig",
       "type": "fontFamilies"
+    },
+    "noto-arabic": {
+      "value": "Noto Sans Arabic, Cairo, Amiri, tahoma, arial, system-ui, sans-serif",
+      "type": "fontFamilies"
+    },
+    "noto-hebrew": {
+      "value": "Noto Sans Hebrew, Arial Hebrew, Rubik, Frank Ruehl, tahoma, system-ui, sans-serif",
+      "type": "fontFamilies"
+    },
+    "noto-devanagari": {
+      "value": "Noto Sans Devanagari, Mangal, Kokila, Lohit Devanagari, Sahadeva, tahoma, system-ui, sans-serif",
+      "type": "fontFamilies"
     }
   },
   "font-size": {
