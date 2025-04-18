@@ -9,6 +9,9 @@ import { caretDown } from '@pine-ds/icons/icons';
  * @part button-text - Exposes the button text for styling.
  * @part caret - Exposes the caret icon component for styling. Appears only on the disclosure variant.
  * @part icon - Exposes the icon component for styling.
+ * @slot (default) - Button text.
+ * @slot start - Content to display before the button text.
+ * @slot end - Content to display after the button text.
 */
 
 @Component({
@@ -43,8 +46,9 @@ export class PdsButton {
   @Prop() href?: string;
 
   /**
-   * Displays an icon in the button.
+   * Displays a leading icon in the button. DEPRECATED.
    * @defaultValue null
+   * @deprecated Use `start` slot instead.
    */
   @Prop() icon?: string = null;
 
@@ -133,6 +137,34 @@ export class PdsButton {
     return classNames.join(' ');
   }
 
+  private renderStartContent() {
+    if (this.loading) {
+      return null;
+    }
+
+    if (this.icon && this.variant !== 'disclosure') {
+      return (
+        <pds-icon name={this.icon} part="icon" aria-hidden="true"></pds-icon>
+      );
+    } else {
+      return <slot name="start" />;
+    }
+  }
+
+  private renderEndContent() {
+    if (this.loading || this.iconOnly) {
+      return null;
+    }
+
+    if (this.variant === 'disclosure') {
+      return (
+        <pds-icon icon={caretDown} part="caret" aria-hidden="true"></pds-icon>
+      )
+    } else {
+      return <slot name="end" />;
+    }
+  }
+
   render() {
     // Common props for both button and anchor elements
     const commonProps = {
@@ -169,9 +201,7 @@ export class PdsButton {
 
     const content = (
       <div class="pds-button__content" part="button-content">
-        {this.icon && this.variant !== 'disclosure' &&
-          <pds-icon class={this.loading ? 'pds-button__icon--hidden' : ''} name={this.icon} part="icon" aria-hidden="true"></pds-icon>
-        }
+        {this.renderStartContent()}
 
         <span class={`pds-button__text ${hideText ? 'pds-button__text--hidden' : ''}`} part="button-text">
           <slot />
@@ -185,9 +215,7 @@ export class PdsButton {
           </span>
         )}
 
-        {this.variant === 'disclosure' &&
-          <pds-icon class={this.loading ? 'pds-button__icon--hidden' : ''} icon={caretDown} part="caret" aria-hidden="true"></pds-icon>
-        }
+        {!this.iconOnly && this.renderEndContent()}
       </div>
     );
 
