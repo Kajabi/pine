@@ -116,7 +116,7 @@ describe('pds-button', () => {
   it('renders a leading icon', async () => {
     const { root } = await newSpecPage({
       components: [PdsButton],
-      html: `<pds-button><pds-icon aria-hidden="true" slot="start" name="add-image" part="icon"></pds-icon></pds-button>`,
+      html: `<pds-button><pds-icon aria-hidden="true" slot="start" name="add-image"></pds-icon></pds-button>`,
     });
     expect(root).toEqualHtml(`
       <pds-button variant="primary">
@@ -131,7 +131,7 @@ describe('pds-button', () => {
             </div>
           </button>
         </mock:shadow-root>
-        <pds-icon slot="start" aria-hidden="true" name="add-image" part="icon"></pds-icon>
+        <pds-icon slot="start" aria-hidden="true" name="add-image"></pds-icon>
       </pds-button>
     `);
   });
@@ -139,7 +139,7 @@ describe('pds-button', () => {
   it('renders a trailing icon', async () => {
     const { root } = await newSpecPage({
       components: [PdsButton],
-      html: `<pds-button><pds-icon aria-hidden="true" slot="end" name="add-image" part="icon"></pds-icon></pds-button>`,
+      html: `<pds-button><pds-icon aria-hidden="true" slot="end" name="add-image"></pds-icon></pds-button>`,
     });
     expect(root).toEqualHtml(`
       <pds-button variant="primary">
@@ -154,7 +154,7 @@ describe('pds-button', () => {
             </div>
           </button>
         </mock:shadow-root>
-        <pds-icon slot="end" aria-hidden="true" name="add-image" part="icon"></pds-icon>
+        <pds-icon slot="end" aria-hidden="true" name="add-image"></pds-icon>
       </pds-button>
     `);
   });
@@ -245,7 +245,7 @@ describe('pds-button', () => {
   it('renders an icon-only button', async () => {
     const {root} = await newSpecPage({
       components: [PdsButton],
-      html: `<pds-button icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite" part="icon"></pds-icon></pds-button>`,
+      html: `<pds-button icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon></pds-button>`,
     });
     expect(root).toEqualHtml(`
       <pds-button icon-only="true" variant="primary">
@@ -259,7 +259,7 @@ describe('pds-button', () => {
             </div>
           </button>
         </mock:shadow-root>
-        <pds-icon slot="start" aria-hidden="true" name="favorite" part="icon"></pds-icon>
+        <pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>
       </pds-button>
     `);
   });
