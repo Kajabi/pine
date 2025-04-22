@@ -13,3 +13,4 @@ spec:
   owner: design-system-services
   system: pine
   subcomponentOf: pine
+  dependsOn: ds-tokens
