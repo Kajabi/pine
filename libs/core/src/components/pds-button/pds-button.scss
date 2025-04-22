@@ -155,11 +155,17 @@
   width: 100%;
 }
 
+// Fixes alignment by allowing icon slot to be a flex item
+.pds-button__icon {
+  display: contents;
+}
+
 .pds-button__text {
   align-items: center;
   display: inline-flex;
 }
 
+.pds-button__icon--hidden,
 .pds-button__text--hidden {
   opacity: 0;
 }

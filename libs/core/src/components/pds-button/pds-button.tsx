@@ -137,32 +137,40 @@ export class PdsButton {
     return classNames.join(' ');
   }
 
+  private hasSlotContent(slotName: string): boolean {
+    const elements = this.el.querySelectorAll(`[slot="${slotName}"]`);
+    return elements.length > 0;
+  }
+
   private renderStartContent() {
-    if (this.loading) {
-      return null;
+    const hasIcon = this.icon && this.variant !== 'disclosure';
+    const hasStartSlot = this.hasSlotContent('start');
+
+    if (Boolean(hasIcon)) {
+      return (
+        <pds-icon class={this.loading ? 'pds-button__icon--hidden' : ''} name={this.icon} part="icon" aria-hidden="true"></pds-icon>
+      );
+    } else if (Boolean(hasStartSlot)) {
+      return <span class={`pds-button__icon ${this.loading ? 'pds-button__icon--hidden' : ''}`}><slot name="start" /></span>;
     }
 
-    if (this.icon && this.variant !== 'disclosure') {
-      return (
-        <pds-icon name={this.icon} part="icon" aria-hidden="true"></pds-icon>
-      );
-    } else {
-      return <slot name="start" />;
-    }
+    return null;
   }
 
   private renderEndContent() {
-    if (this.loading || this.iconOnly) {
+    if (this.iconOnly) {
       return null;
     }
 
     if (this.variant === 'disclosure') {
       return (
-        <pds-icon icon={caretDown} part="caret" aria-hidden="true"></pds-icon>
-      )
-    } else {
-      return <slot name="end" />;
+        <pds-icon class={this.loading ? 'pds-button__icon--hidden' : ''} icon={caretDown} part="caret" aria-hidden="true"></pds-icon>
+      );
+    } else if (this.hasSlotContent('end')) {
+      return <span class={`pds-button__icon ${this.loading ? 'pds-button__icon--hidden' : ''}`}><slot name="end" /></span>;
     }
+
+    return null;
   }
 
   render() {
@@ -215,7 +223,7 @@ export class PdsButton {
           </span>
         )}
 
-        {!this.iconOnly && this.renderEndContent()}
+        {this.renderEndContent()}
       </div>
     );
 
