@@ -11,3 +11,4 @@ updates:
       interval: "daily"
     allow:
     - dependency-name: "@pine-ds/icons"
+    - dependency-name: "@kajabi-ui/styles"
