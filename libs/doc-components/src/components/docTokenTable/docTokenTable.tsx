@@ -84,7 +84,7 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
   useEffect(() => {
     const loadTokens = async () => {
       try {
-        const tokenModule = await import(`../../../../core/src/global/styles/tokens/base/${tier}.json`);
+        const tokenModule = await import(`../../../../../node_modules/@kajabi-ui/styles/dist/tokens/${tier}.json`);
         const categories = categoryLookup[category]?.[tier] || null;
         if (categories) {
           const tempTokens: Token[] = [];
