@@ -1,3 +1,23 @@
+## 3.0.1 (2025-04-25)
+
+### Bug Fixes 🐛
+
+- add logical properties ([#427](https://github.com/Kajabi/pine/pull/427))
+
+### Styles 🎨
+
+- update Divider styles ([#432](https://github.com/Kajabi/pine/pull/432))
+- remove token studio ([#434](https://github.com/Kajabi/pine/pull/434))
+- **tokens:** extended colors ([#425](https://github.com/Kajabi/pine/pull/425))
+- **typography:** adds Noto font family for language support ([#433](https://github.com/Kajabi/pine/pull/433))
+
+### ❤️ Thank You
+
+- Ashley E
+- Julian Skinner @ju-Skinner
+- Phillip Lovelace
+- Quinton Jason
+
 # 3.0.0 (2025-04-11)
 
 ### Features 🚀
