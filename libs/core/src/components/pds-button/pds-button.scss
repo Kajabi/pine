@@ -155,9 +155,8 @@
   width: 100%;
 }
 
-// Fixes alignment by allowing icon slot to be a flex item
 .pds-button__icon {
-  display: contents;
+  display: inline-flex;
 }
 
 .pds-button__text {

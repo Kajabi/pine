@@ -175,15 +175,15 @@ The loading prop allows a `pds-button` to display a loading state.
 
 ### Start and End Slots
 
-The start and end slots allow content to be placed before and after the button text. These can be used to render icons. These slots will be hidden when `loading` is true.
+The start and end slots allow content to be placed before and after the button text. These slots can be used to render icons, but will be hidden when `loading` is true.
 
 <DocCanvas client:only
   mdxSource={{
     react: `
     <PdsButton variant="primary">
-      <pds-icon slot="start" name="trash"></pds-icon>
+      <PdsIcon slot="start" name="trash"></PdsIcon>
       Button with Icons
-      <pds-icon slot="end" name="add-image"></pds-icon>
+      <PdsIcon slot="end" name="add-image"></PdsIcon>
     </PdsButton>
     `,
     webComponent: `
@@ -208,12 +208,12 @@ While the text is visually hidden, it is still remains accessible.
 <DocCanvas client:only
   mdxSource={{
     react: `
-    <PdsButton variant="primary" iconOnly="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only
+    <PdsButton variant="primary" iconOnly="true"><PdsIcon slot="start" aria-hidden="true" name="favorite"></PdsIcon>Icon Only
     </PdsButton>
-    <PdsButton variant="secondary" iconOnly="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only
+    <PdsButton variant="secondary" iconOnly="true"><PdsIcon slot="start" aria-hidden="true" name="favorite"></PdsIcon>Icon Only
     </PdsButton>
-    <PdsButton variant="accent" iconOnly="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</PdsButton>
-    <PdsButton variant="destructive" iconOnly="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</PdsButton>
+    <PdsButton variant="accent" iconOnly="true"><PdsIcon slot="start" aria-hidden="true" name="favorite"></PdsIcon>Icon Only</PdsButton>
+    <PdsButton variant="destructive" iconOnly="true"><PdsIcon slot="start" aria-hidden="true" name="favorite"></PdsIcon>Icon Only</PdsButton>
     `,
     webComponent: `
     <pds-button variant="primary" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
