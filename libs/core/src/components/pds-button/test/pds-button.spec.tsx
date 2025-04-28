@@ -147,6 +147,29 @@ describe('pds-button', () => {
     `);
   });
 
+  it('prioritizes icon prop over start slot when both are set', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button icon="trash" variant="primary"><pds-icon aria-hidden="true" slot="start" name="add-image"></pds-icon></pds-button>`,
+    });
+
+    expect(root).toEqualHtml(`
+      <pds-button icon="trash" variant="primary">
+        <mock:shadow-root>
+          <button class="pds-button pds-button--primary" part="button" type="button">
+            <div class="pds-button__content" part="button-content">
+              <pds-icon aria-hidden="true" name="trash" part="icon"></pds-icon>
+              <span class="pds-button__text" part="button-text">
+                <slot></slot>
+              </span>
+            </div>
+          </button>
+        </mock:shadow-root>
+        <pds-icon aria-hidden="true" name="add-image" slot="start"></pds-icon>
+      </pds-button>
+    `);
+  });
+
   it('renders loading button', async () => {
     const { root } = await newSpecPage({
       components: [PdsButton],
