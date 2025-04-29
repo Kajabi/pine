@@ -30,8 +30,10 @@ const BaseTemplate = (args) => html`
     value=${args.value}
     variant=${args.variant}
   >
-      ${args.slot}
-    </pds-button> `;
+    ${args.slot?.start}
+    ${args.slot?.default}
+    ${args.slot?.end}
+  </pds-button>`;
 
 export const Accent = BaseTemplate.bind();
 Accent.args = {
@@ -39,7 +41,9 @@ Accent.args = {
   fullWidth: false,
   iconOnly: false,
   loading: false,
-  slot: 'Accent',
+  slot: {
+    default: 'Accent',
+  },
   type: 'button',
   variant: 'accent',
 };
@@ -51,7 +55,9 @@ ButtonLink.args = {
   href: 'https://pine-design-system.netlify.app/',
   iconOnly: false,
   loading: false,
-  slot: 'Link Button',
+  slot: {
+    default: 'Link Button',
+  },
   target: '_blank',
   variant: 'primary',
 };
@@ -62,7 +68,9 @@ Destructive.args = {
   fullWidth: false,
   iconOnly: false,
   loading: false,
-  slot: 'Destructive',
+  slot: {
+    default: 'Destructive',
+  },
   type: 'button',
   variant: 'destructive',
 }
@@ -73,7 +81,9 @@ Disclosure.args = {
   fullWidth: false,
   iconOnly: false,
   loading: false,
-  slot: 'Disclosure',
+  slot: {
+    default: 'Disclosure',
+  },
   type: 'button',
   variant: 'disclosure'
 }
@@ -89,7 +99,24 @@ FullWidth.args = {
   fullWidth: true,
   iconOnly: false,
   loading: false,
-  slot: 'Full Width',
+  slot: {
+    default: 'Full Width',
+  },
+  type: 'button',
+  variant: 'primary'
+}
+
+export const StartAndEndSlots = BaseTemplate.bind({});
+StartAndEndSlots.args = {
+  disabled: false,
+  fullWidth: false,
+  iconOnly: false,
+  loading: false,
+  slot: {
+    start: html`<pds-icon slot="start" name="favorite"></pds-icon>`,
+    default: 'Button with Icons',
+    end: html`<pds-icon slot="end" name="add-image"></pds-icon>`
+  },
   type: 'button',
   variant: 'primary'
 }
@@ -101,7 +128,9 @@ IconOnly.args = {
   icon: 'favorite',
   iconOnly: true,
   loading: false,
-  slot: 'Icon Only',
+  slot: {
+    default: 'Icon Only',
+  },
   type: 'button',
   variant: 'secondary',
 };
@@ -112,7 +141,9 @@ Loading.args = {
   fullWidth: false,
   iconOnly: false,
   loading: true,
-  slot: 'Loading',
+  slot: {
+    default: 'Loading',
+  },
   type: 'button',
   variant: 'primary',
 }
@@ -123,7 +154,9 @@ Primary.args = {
   fullWidth: false,
   iconOnly: false,
   loading: false,
-  slot: 'Primary',
+  slot: {
+    default: 'Primary',
+  },
   type: 'button',
   variant: 'primary'
 }
@@ -134,7 +167,9 @@ Secondary.args = {
   fullWidth: false,
   iconOnly: false,
   loading: false,
-  slot: 'Secondary',
+  slot: {
+    default: 'Secondary',
+  },
   type: 'button',
   variant: 'secondary',
 }

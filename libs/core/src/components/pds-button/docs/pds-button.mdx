@@ -28,6 +28,25 @@ While accessible out of the box, there are some best practices to keep in mind w
 
 In many current web design patterns, buttons and links have evolved to look visually identical. However, for best practices, the fundamental differences between the two should be considered before using. Links are used to navigate the user to another page. Buttons are used to perform an action on the current page or submit a form.
 
+## Icon Slots
+
+The `start` and `end` slots allow icons to be placed before and after the button text but will be hidden when `loading` is true. For more information on web component slots, see the [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_templates_and_slots#adding_flexibility_with_slots).
+
+```html
+<pds-button>
+  <pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>
+  Start Icon
+</pds-button>
+```
+
+```html
+<pds-button>
+  End Icon
+  <pds-icon slot="end" aria-hidden="true" name="trash"></pds-icon>
+</pds-button>
+```
+
+
 ## Properties
 
 <DocArgsTable componentName="pds-button" docSource={components}/>
@@ -41,17 +60,17 @@ The default button, intended to be used with affirmative actions such as submitt
     react: `
     <PdsButton>Primary</PdsButton>
     <PdsButton disabled="true">Disabled</PdsButton>
-    <PdsButton icon="trash">Icon</PdsButton>
+    <PdsButton><PdsIcon slot="start" aria-hidden="true" name="trash"></PdsIcon>Icon</PdsButton>
     `,
     webComponent: `
     <pds-button>Primary</pds-button>
     <pds-button disabled="true">Disabled</pds-button>
-    <pds-button icon="trash">Icon</pds-button>
+    <pds-button><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>Icon</pds-button>
     `
 }}>
   <pds-button>Primary</pds-button>
   <pds-button disabled="true">Disabled</pds-button>
-  <pds-button icon="trash">Icon</pds-button>
+  <pds-button><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>Icon</pds-button>
 </DocCanvas>
 
 ### Secondary
@@ -63,17 +82,17 @@ Secondary button variant, intended to be used as back buttons, for saving drafts
     react: `
     <PdsButton variant="secondary">Secondary</PdsButton>
     <PdsButton variant="secondary" disabled="true">Disabled</PdsButton>
-    <PdsButton variant="secondary" icon="trash">Icon</PdsButton>
+    <PdsButton variant="secondary"><PdsIcon slot="start" aria-hidden="true" name="trash"></PdsIcon>Icon</PdsButton>
     `,
     webComponent: `
     <pds-button variant="secondary">Secondary</pds-button>
     <pds-button variant="secondary" disabled="true">Disabled</pds-button>
-    <pds-button variant="secondary" icon="trash">Icon</pds-button>
+    <pds-button variant="secondary"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>Icon</pds-button>
     `
 }}>
   <pds-button variant="secondary">Secondary</pds-button>
   <pds-button variant="secondary" disabled="true">Disabled</pds-button>
-  <pds-button variant="secondary" icon="trash">Icon</pds-button>
+  <pds-button variant="secondary"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>Icon</pds-button>
 </DocCanvas>
 
 ### Accent
@@ -85,17 +104,17 @@ Accent button variant, intended to be used for tertiary actions or when higher c
     react: `
     <PdsButton variant="accent">Accent</PdsButton>
     <PdsButton variant="accent" disabled="true">Disabled</PdsButton>
-    <PdsButton variant="accent" icon="trash">Icon</PdsButton>
+    <PdsButton variant="accent"><PdsIcon slot="start" aria-hidden="true" name="trash"></PdsIcon>Icon</PdsButton>
     `,
     webComponent: `
     <pds-button variant="accent">Accent</pds-button>
     <pds-button variant="accent" disabled="true">Disabled</pds-button>
-    <pds-button variant="accent" icon="trash">Icon</pds-button>
+    <pds-button variant="accent"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>Icon</pds-button>
     `
 }}>
   <pds-button variant="accent">Accent</pds-button>
   <pds-button variant="accent" disabled="true">Disabled</pds-button>
-  <pds-button variant="accent" icon="trash">Icon</pds-button>
+  <pds-button variant="accent"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>Icon</pds-button>
 </DocCanvas>
 
 ### Destructive
@@ -107,17 +126,17 @@ Destructive button variant, intended to be used with destructive actions, such a
     react: `
     <PdsButton variant="destructive">Destructive</PdsButton>
     <PdsButton variant="destructive" disabled="true">Disabled</PdsButton>
-    <PdsButton variant="destructive" icon="trash">Icon</PdsButton>
+    <PdsButton variant="destructive"><PdsIcon slot="start" aria-hidden="true" name="trash"></PdsIcon>Icon</PdsButton>
     `,
     webComponent: `
     <pds-button variant="destructive">Destructive</pds-button>
     <pds-button variant="destructive" disabled="true">Disabled</pds-button>
-    <pds-button variant="destructive" icon="trash">Icon</pds-button>
+    <pds-button variant="destructive"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>Icon</pds-button>
     `
 }}>
   <pds-button variant="destructive">Destructive</pds-button>
   <pds-button variant="destructive" disabled="true">Disabled</pds-button>
-  <pds-button variant="destructive" icon="trash">Icon</pds-button>
+  <pds-button variant="destructive"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>Icon</pds-button>
 </DocCanvas>
 
 ### Disclosure
@@ -157,7 +176,7 @@ Full width buttons are intended to be used when the button needs to take up the 
   <pds-button variant="primary" full-width="true">Full Width</pds-button>
 </DocCanvas>
 
-## Loading
+### Loading
 
 The loading prop allows a `pds-button` to display a loading state.
 
@@ -173,7 +192,7 @@ The loading prop allows a `pds-button` to display a loading state.
   <pds-button variant="primary" loading="true">Loading</pds-button>
 </DocCanvas>
 
-## Icon Only
+### Icon Only
 
 The icon-only prop allows a `pds-button` to display an icon only.
 
@@ -184,26 +203,27 @@ While the text is visually hidden, it is still remains accessible.
 <DocCanvas client:only
   mdxSource={{
     react: `
-    <PdsButton variant="primary" iconOnly="true" icon="favorite">Icon Only</PdsButton>
-    <PdsButton variant="secondary" iconOnly="true" icon="favorite">Icon Only</PdsButton>
-    <PdsButton variant="accent" iconOnly="true" icon="favorite">Icon Only</PdsButton>
-    <PdsButton variant="destructive" iconOnly="true" icon="favorite">Icon Only</PdsButton>
+    <PdsButton variant="primary" iconOnly="true"><PdsIcon slot="start" aria-hidden="true" name="favorite"></PdsIcon>Icon Only
+    </PdsButton>
+    <PdsButton variant="secondary" iconOnly="true"><PdsIcon slot="start" aria-hidden="true" name="favorite"></PdsIcon>Icon Only
+    </PdsButton>
+    <PdsButton variant="accent" iconOnly="true"><PdsIcon slot="start" aria-hidden="true" name="favorite"></PdsIcon>Icon Only</PdsButton>
+    <PdsButton variant="destructive" iconOnly="true"><PdsIcon slot="start" aria-hidden="true" name="favorite"></PdsIcon>Icon Only</PdsButton>
     `,
     webComponent: `
-    <pds-button variant="primary" icon-only="true" icon="favorite">Icon Only</pds-button>
-    <pds-button variant="secondary" icon-only="true" icon="favorite">Icon Only</pds-button>
-    <pds-button variant="accent" icon-only="true" icon="favorite">Icon Only</pds-button>
-    <pds-button variant="destructive" icon-only="true" icon="favorite">Icon Only</pds-button>
+    <pds-button variant="primary" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
+    <pds-button variant="secondary" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
+    <pds-button variant="accent" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
+    <pds-button variant="destructive" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
     `
 }}>
-  <pds-button variant="primary" icon-only="true" icon="favorite">Icon Only</pds-button>
-  <pds-button variant="secondary" icon-only="true" icon="favorite">Icon Only</pds-button>
-  <pds-button variant="accent" icon-only="true" icon="favorite">Icon Only</pds-button>
-  <pds-button variant="destructive" icon-only="true" icon="favorite">Icon Only</pds-button>
+  <pds-button variant="primary" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
+  <pds-button variant="secondary" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
+  <pds-button variant="accent" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
+  <pds-button variant="destructive" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
 </DocCanvas>
 
-
-## Button Link
+### Button Link
 
 The button link variant allows a `pds-button` to function as a link. By providing an `href` attribute, the button will render as an anchor (`<a>`) element while maintaining the visual appearance of a button. This is useful for creating call-to-action buttons that navigate to external resources or different parts of your application.
 
@@ -224,21 +244,21 @@ The button link variant allows a `pds-button` to function as a link. By providin
   <pds-button variant="secondary" href="#">Join community</pds-button>
 </DocCanvas>
 
-## Type
+### Type
 
 The type prop allows a `pds-button` to set a [button type attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type).
 
 > ***Note:*** The `type` prop does not apply to buttons with an `href` attribute. When an `href` is provided, the button will render as an anchor (`<a>`) element, and the types will be ignored.
 
-### Default (Button)
+#### Default (Button)
 
 The button has no default click behavior. It can have client-side scripts listen to the element's events, which are triggered when the events occur.
 
-### Submit
+#### Submit
 
 The button submits the form data to the server.
 
-### Reset
+#### Reset
 
 The button resets all the controls to their initial values. [As noted on MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attr-type), this behavior tends to annoy users.
 

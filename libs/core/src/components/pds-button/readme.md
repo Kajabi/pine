@@ -13,7 +13,7 @@
 | `disabled`    | `disabled`     | Determines the button's disabled state.                                                                                                                                   | `boolean`                                                                             | `false`     |
 | `fullWidth`   | `full-width`   | Determines if the button should take up the full width of its container.                                                                                                  | `boolean`                                                                             | `false`     |
 | `href`        | `href`         | If provided, renders the component as an anchor (`<a>`) element instead of a button. When using href, button-specific props (type, name, value, loading) will be ignored. | `string`                                                                              | `undefined` |
-| `icon`        | `icon`         | Displays an icon in the button.                                                                                                                                           | `string`                                                                              | `null`      |
+| `icon`        | `icon`         | <span style="color:red">**[DEPRECATED]**</span> Use `start` slot instead.<br/><br/>Displays a leading icon in the button. DEPRECATED.                                     | `string`                                                                              | `null`      |
 | `iconOnly`    | `icon-only`    | When true, displays only the icon and visually hides the text (keeping it accessible).                                                                                    | `boolean`                                                                             | `false`     |
 | `loading`     | `loading`      | Determines if the button is in a loading state. When true, displays a loader and hides the button text.                                                                   | `boolean`                                                                             | `false`     |
 | `name`        | `name`         | Provides the button with a submittable name.                                                                                                                              | `string`                                                                              | `undefined` |
@@ -28,6 +28,15 @@
 | Event      | Description | Type               |
 | ---------- | ----------- | ------------------ |
 | `pdsClick` |             | `CustomEvent<any>` |
+
+
+## Slots
+
+| Slot          | Description                                |
+| ------------- | ------------------------------------------ |
+| `"(default)"` | Button text.                               |
+| `"end"`       | Content to display after the button text.  |
+| `"start"`     | Content to display before the button text. |
 
 
 ## Shadow Parts

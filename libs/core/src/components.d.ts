@@ -257,8 +257,9 @@ export namespace Components {
          */
         "href"?: string;
         /**
-          * Displays an icon in the button.
+          * Displays a leading icon in the button. DEPRECATED.
           * @defaultValue null
+          * @deprecated Use `start` slot instead.
          */
         "icon"?: string;
         /**
@@ -1818,8 +1819,9 @@ declare namespace LocalJSX {
          */
         "href"?: string;
         /**
-          * Displays an icon in the button.
+          * Displays a leading icon in the button. DEPRECATED.
           * @defaultValue null
+          * @deprecated Use `start` slot instead.
          */
         "icon"?: string;
         /**

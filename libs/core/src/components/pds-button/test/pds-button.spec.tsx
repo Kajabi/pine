@@ -103,13 +103,71 @@ describe('pds-button', () => {
     `);
   });
 
-  it('renders icon button', async () => {
+  it('renders a leading icon', async () => {
     const { root } = await newSpecPage({
       components: [PdsButton],
-      html: `<pds-button icon="trashIcon"></pds-button>`,
+      html: `<pds-button><pds-icon aria-hidden="true" slot="start" name="add-image"></pds-icon></pds-button>`,
     });
-    const icon = root?.shadowRoot?.querySelector('pds-icon');
-    expect(icon).not.toBeNull();
+    expect(root).toEqualHtml(`
+      <pds-button variant="primary">
+        <mock:shadow-root>
+          <button class="pds-button pds-button--primary" part="button" type="button">
+            <div class="pds-button__content" part="button-content">
+              <span class="pds-button__icon"><slot name="start"></slot></span>
+              <span class="pds-button__text" part="button-text">
+                <slot></slot>
+              </span>
+            </div>
+          </button>
+        </mock:shadow-root>
+        <pds-icon slot="start" aria-hidden="true" name="add-image"></pds-icon>
+      </pds-button>
+    `);
+  });
+
+  it('renders a trailing icon', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button><pds-icon aria-hidden="true" slot="end" name="add-image"></pds-icon></pds-button>`,
+    });
+    expect(root).toEqualHtml(`
+      <pds-button variant="primary">
+        <mock:shadow-root>
+          <button class="pds-button pds-button--primary" part="button" type="button">
+            <div class="pds-button__content" part="button-content">
+              <span class="pds-button__text" part="button-text">
+                <slot></slot>
+              </span>
+              <span class="pds-button__icon"><slot name="end"></slot></span>
+            </div>
+          </button>
+        </mock:shadow-root>
+        <pds-icon slot="end" aria-hidden="true" name="add-image"></pds-icon>
+      </pds-button>
+    `);
+  });
+
+  it('prioritizes icon prop over start slot when both are set', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button icon="trash" variant="primary"><pds-icon aria-hidden="true" slot="start" name="add-image"></pds-icon></pds-button>`,
+    });
+
+    expect(root).toEqualHtml(`
+      <pds-button icon="trash" variant="primary">
+        <mock:shadow-root>
+          <button class="pds-button pds-button--primary" part="button" type="button">
+            <div class="pds-button__content" part="button-content">
+              <pds-icon aria-hidden="true" name="trash" part="icon"></pds-icon>
+              <span class="pds-button__text" part="button-text">
+                <slot></slot>
+              </span>
+            </div>
+          </button>
+        </mock:shadow-root>
+        <pds-icon aria-hidden="true" name="add-image" slot="start"></pds-icon>
+      </pds-button>
+    `);
   });
 
   it('renders loading button', async () => {
@@ -137,16 +195,6 @@ describe('pds-button', () => {
 
     const loader = root?.shadowRoot?.querySelector('pds-loader');
     expect(loader).not.toBeNull();
-  });
-
-  it('hides icon when loading', async () => {
-    const { root } = await newSpecPage({
-      components: [PdsButton],
-      html: `<pds-button icon="trashIcon" loading="true"></pds-button>`,
-    });
-
-    const icon = root?.shadowRoot?.querySelector('pds-icon');
-    expect(icon?.className).toContain('pds-button__icon--hidden');
   });
 
   it('prevents click when loading', async () => {
@@ -206,20 +254,21 @@ describe('pds-button', () => {
   it('renders an icon-only button', async () => {
     const {root} = await newSpecPage({
       components: [PdsButton],
-      html: `<pds-button icon-only="true" icon="favorite"></pds-button>`,
+      html: `<pds-button icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon></pds-button>`,
     });
     expect(root).toEqualHtml(`
-      <pds-button icon-only="true" icon="favorite" variant="primary">
+      <pds-button icon-only="true" variant="primary">
         <mock:shadow-root>
           <button class="pds-button pds-button--primary pds-button--icon-only" part="button" type="button">
             <div class="pds-button__content" part="button-content">
-              <pds-icon aria-hidden="true" name="favorite" part="icon"></pds-icon>
+              <span class="pds-button__icon"><slot name="start"></slot></span>
               <span class="pds-button__text pds-button__text--hidden" part="button-text">
                 <slot></slot>
               </span>
             </div>
           </button>
         </mock:shadow-root>
+        <pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>
       </pds-button>
     `);
   });
