@@ -28,6 +28,25 @@ While accessible out of the box, there are some best practices to keep in mind w
 
 In many current web design patterns, buttons and links have evolved to look visually identical. However, for best practices, the fundamental differences between the two should be considered before using. Links are used to navigate the user to another page. Buttons are used to perform an action on the current page or submit a form.
 
+## Icon Slots
+
+The `start` and `end` slots allow icons to be placed before and after the button text but will be hidden when `loading` is true. For more information on web component slots, see the [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_templates_and_slots#adding_flexibility_with_slots).
+
+```html
+<pds-button>
+  <pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>
+  Start Icon
+</pds-button>
+```
+
+```html
+<pds-button>
+  End Icon
+  <pds-icon slot="end" aria-hidden="true" name="trash"></pds-icon>
+</pds-button>
+```
+
+
 ## Properties
 
 <DocArgsTable componentName="pds-button" docSource={components}/>
@@ -171,30 +190,6 @@ The loading prop allows a `pds-button` to display a loading state.
     `
 }}>
   <pds-button variant="primary" loading="true">Loading</pds-button>
-</DocCanvas>
-
-### Start and End Slots
-
-The start and end slots allow content to be placed before and after the button text. These slots can be used to render icons, but will be hidden when `loading` is true.
-
-<DocCanvas client:only
-  mdxSource={{
-    react: `
-    <PdsButton variant="primary">
-      <PdsIcon slot="start" name="trash"></PdsIcon>
-      Button with Icons
-      <PdsIcon slot="end" name="add-image"></PdsIcon>
-    </PdsButton>
-    `,
-    webComponent: `
-    <pds-button variant="primary">
-      <pds-icon slot="start" name="trash"></pds-icon>
-      Button with Icons
-      <pds-icon slot="end" name="add-image"></pds-icon>
-    </pds-button>
-    `
-  }}>
-  <pds-button variant="primary"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>Button with Icons<pds-icon slot="end" aria-hidden="true" name="add-image"></pds-icon></pds-button>
 </DocCanvas>
 
 ### Icon Only
