@@ -68,7 +68,7 @@ describe('pds-switch', () => {
     const ariaInvalid = el.getAttribute('aria-invalid');
 
     expect(ariaInvalid).toBe("true");
-    expect(ariaDesc).toBe("pds-switch-err__error-message");
+    expect(ariaDesc).toBe("switch-with-error__error-message");
     expect(errText.textContent).toEqual(`Please correct this item`);
   });
 
