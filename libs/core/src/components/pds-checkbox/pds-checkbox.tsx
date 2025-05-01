@@ -119,7 +119,7 @@ export class PdsCheckbox {
         <label htmlFor={this.componentId}>
           <input
             type="checkbox"
-            aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
+            aria-describedby={assignDescription(this.componentId, this.invalid, this.errorMessage || this.helperMessage)}
             aria-invalid={this.invalid ? "true" : undefined}
             id={this.componentId}
             indeterminate={this.indeterminate}

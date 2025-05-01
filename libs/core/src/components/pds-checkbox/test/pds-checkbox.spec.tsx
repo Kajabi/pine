@@ -160,7 +160,7 @@ describe('pds-checkbox', () => {
       <pds-checkbox class="is-invalid" component-id="default" error-message="This is a short error message." invalid="true" label="Label text">
         <mock:shadow-root>
           <label htmlfor="default">
-            <input aria-invalid="true" id="default" type="checkbox">
+            <input aria-describedby="default__error-message" aria-invalid="true" id="default" type="checkbox">
             <span>Label text</span>
           </label>
           <div aria-live="assertive" class="pds-checkbox__message pds-checkbox__message--error" id="default__error-message">
