@@ -1,7 +1,10 @@
-import { Component, h, Prop, Host, Event, EventEmitter, Watch } from '@stencil/core';
+import { Component, Element, h, Prop, Host, Event, EventEmitter, Watch } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
 import { CheckboxChangeEventDetail } from './checkbox-interface';
 import { danger } from '@pine-ds/icons/icons';
+
+import { inheritAriaAttributes } from '@utils/attributes';
+import type { Attributes } from '@utils/attributes';
 
 @Component({
   tag: 'pds-checkbox',
@@ -9,6 +12,10 @@ import { danger } from '@pine-ds/icons/icons';
   shadow: true,
 })
 export class PdsCheckbox {
+  private inheritedAttributes: Attributes = {};
+
+  @Element() el: HTMLPdsCheckboxElement;
+
   /**
    * It determines whether or not the checkbox is checked.
    */
@@ -113,6 +120,12 @@ export class PdsCheckbox {
     return classNames.join('  ');
   }
 
+  componentWillLoad() {
+    this.inheritedAttributes = {
+      ...inheritAriaAttributes(this.el)
+    }
+  }
+
   render() {
     return (
       <Host class={this.classNames()}>
@@ -130,6 +143,7 @@ export class PdsCheckbox {
             disabled={this.disabled}
             onChange={this.handleCheckboxChange}
             onInput={this.handleInput}
+            {...this.inheritedAttributes}
           />
           <span class={this.hideLabel ? 'visually-hidden' : ''}>
             {this.label}
