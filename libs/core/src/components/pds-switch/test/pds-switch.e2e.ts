@@ -57,7 +57,7 @@ describe('pds-switch', () => {
 
   it('renders an invalid input with error message when toggled', async () => {
     const page = await newE2EPage();
-    await page.setContent('<pds-switch invalid="true" error-message="Please correct this item"></pds-switch>');
+    await page.setContent('<pds-switch component-id="switch-with-error" invalid="true" error-message="Please correct this item"></pds-switch>');
 
     const component = await page.find('pds-switch');
     expect(component).toHaveClass('hydrated');
@@ -68,7 +68,7 @@ describe('pds-switch', () => {
     const ariaInvalid = el.getAttribute('aria-invalid');
 
     expect(ariaInvalid).toBe("true");
-    expect(ariaDesc).toBeNull();
+    expect(ariaDesc).toBe("switch-with-error__error-message");
     expect(errText.textContent).toEqual(`Please correct this item`);
   });
 

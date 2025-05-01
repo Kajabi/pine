@@ -2,12 +2,17 @@ import { Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil
 import { assignDescription, messageId } from '../../utils/form';
 import { danger } from '@pine-ds/icons/icons';
 
+import { inheritAriaAttributes } from '@utils/attributes';
+import type { Attributes } from '@utils/attributes';
+
 @Component({
   tag: 'pds-switch',
   styleUrls: ['../../global/styles/utils/label.scss', 'pds-switch.scss'],
   shadow: true,
 })
 export class PdsSwitch {
+  private inheritedAttributes: Attributes = {};
+
   @Element() el: HTMLPdsSwitchElement;
 
   /**
@@ -90,12 +95,18 @@ export class PdsSwitch {
     return switchClasses;
   };
 
+  componentWillLoad() {
+    this.inheritedAttributes = {
+      ...inheritAriaAttributes(this.el)
+    }
+  }
+
   render() {
     return (
       <Host class={this.switchClassNames()} aria-disabled={this.disabled ? 'true' : null}>
         <label htmlFor={this.componentId}>
           <input
-            aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
+            aria-describedby={assignDescription(this.componentId, this.invalid, this.errorMessage || this.helperMessage)}
             aria-invalid={this.invalid ? "true" : undefined}
             checked={this.checked}
             class="pds-switch__input"
@@ -106,6 +117,7 @@ export class PdsSwitch {
             required={this.required}
             type="checkbox"
             value={this.value}
+            {...this.inheritedAttributes}
           />
           <span class={this.hideLabel ? 'visually-hidden' : ''}>
             {this.label}
