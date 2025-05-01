@@ -62,13 +62,3 @@
     text-decoration: underline;
   }
 }
-
-// Default = inline link
-.pds-link--default {
-  text-decoration: underline;
-
-  &:hover {
-    color: var(--pine-color-text-hover);
-    text-decoration: none;
-  }
-}
