@@ -1,4 +1,5 @@
 import { html } from 'lit';
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 import { withActions } from '@storybook/addon-actions/decorator';
 
@@ -20,7 +21,7 @@ export default {
 
 const BaseTemplate = (args) => html`
 <pds-popover component-id=${args.componentId}  popover-type=${args.popoverType} popover-target-action=${args.popoverTargetAction} text=${args.text} max-width=${args.maxWidth} placement=${args.placement}>
-	${args.slot}
+	${unsafeHTML(args.slot)}
 </pds-popover>
 `;
 
@@ -29,8 +30,7 @@ Default.args = {
 	componentId: 'popover-1',
   placement: "right",
   text: "Show popover",
-	slot: html`<p>Popover content</p>
-    <p>Popover content</p>`
+	slot: "<p>Popover content</p><p>Popover content</p>"
 };
 
 export const Toggle = BaseTemplate.bind({});
@@ -40,6 +40,5 @@ Toggle.args = {
 	popoverType: "manual",
 	popoverTargetAction: "toggle",
   text: "Toggle popover",
-	slot: html`<p>Popover content</p>
-    <p>Popover content</p>`
+	slot: "<p>Popover content</p><p>Popover content</p>"
 };
