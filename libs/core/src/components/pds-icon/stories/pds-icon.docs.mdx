@@ -6,6 +6,8 @@ import pdsIconsJson from '@pine-ds/icons/dist/pds-icons.json';
 
 import * as stories from './pds-icon.stories.js';
 
+import {CopyIcon} from './IconCopyComponent';
+
 import Docs from '../docs/pds-icon.mdx'
 
 <Meta of={stories} />
@@ -13,15 +15,12 @@ import Docs from '../docs/pds-icon.mdx'
 <Docs />
 
 ## All Icons
+__Note: Click to copy the icon code to clipboard.__
 
 <DocCanvas client:only mdxSource={{}}>
   <IconGallery>
-    {
-      Object.values(pdsIconsJson["icons"]).map((icon, index) => (
-        <IconItem conItem key={`item-${index}`} name={icon.name}>
-          <pds-icon name={icon.name}>{icon.name}</pds-icon>
-        </IconItem>
-      ))
-    }
+    {Object.values(pdsIconsJson["icons"]).map((icon, index) => (
+      <CopyIcon key={`item-${index}`} name={icon.name} />
+    ))}
   </IconGallery>
 </DocCanvas>
