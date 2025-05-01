@@ -33,13 +33,15 @@ export const CopyIcon = ({ name }) => {
       {showToast && (
         <div style={{
           position: 'fixed',
-          bottom: '20px',
-          right: '20px',
-          background: '#333',
-          color: 'white',
-          padding: '10px',
-          borderRadius: '4px',
-          zIndex: 9999
+          bottom: 'var(--pine-dimension-sm)',
+          right: 'var(--pine-dimension-sm)',
+          background: 'var(--pine-color-grey-950)',
+          color: 'var(--pine-color-text-primary)',
+          padding: 'var(--pine-dimension-sm)',
+          borderRadius: 'var(--pine-dimension-xs)',
+          zIndex: 9999,
+          boxShadow: 'var(--pine-box-shadow-100)',
+          border: '1px solid var(--pine-color-grey-200)',
         }}>
           {toastMessage}
         </div>
