@@ -18,6 +18,10 @@
     outline-offset: var(--pine-border-width-thick);
     position: relative;
   }
+
+  &:hover {
+    text-decoration: none;
+  }
 }
 
 // We have a small consensus stating that
