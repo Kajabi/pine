@@ -137,7 +137,7 @@ describe('pds-switch', () => {
       <pds-switch component-id="pds-switch-err" class="pds-switch pds-switch--error" label="Switch error message" error-message="La croix blue bottle narwhal fam" invalid="true">
         <mock:shadow-root>
           <label htmlFor="pds-switch-err">
-            <input aria-invalid="true" id="pds-switch-err" name="pds-switch-err" class="pds-switch__input" type="checkbox">
+            <input aria-describedby="pds-switch-err__error-message" aria-invalid="true" id="pds-switch-err" name="pds-switch-err" class="pds-switch__input" type="checkbox">
             <span>Switch error message</span>
           </label>
           <div aria-live="assertive" id="pds-switch-err__error-message" class="pds-switch__message pds-switch__message--error">

@@ -95,7 +95,7 @@ export class PdsSwitch {
       <Host class={this.switchClassNames()} aria-disabled={this.disabled ? 'true' : null}>
         <label htmlFor={this.componentId}>
           <input
-            aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
+            aria-describedby={assignDescription(this.componentId, this.invalid, this.errorMessage || this.helperMessage)}
             aria-invalid={this.invalid ? "true" : undefined}
             checked={this.checked}
             class="pds-switch__input"
