@@ -21,11 +21,13 @@ Both the label and panel contain slots to use for custom content.
 
 ### Accessibility
 
+The accordion can be navigated using a keyboard. The `Enter` and `Space` keys can be used to open and close the accordion. Interactive elements within the panel can be tabbed through only when the accordion is open.
+
 **Caution**: The label slot is built with the `<summary>` HTML component. Because the `<summary>`'s default accessibility role is `button`, it will strip all child elements of their own roles. This will prevent elements such as headings from being read as such for users of assistive technology. Exercise caution to not use the label as a substitute for a heading.
 
 ### Accordions vs Tabs
 
-Though similar, tabs and accordions both offer different user experiences to keep in mind. Consider using accordions for shorter, independent content and on devices with smaller viewports and limited space. Consider using tabs for longer, related content under a main topic.
+Though similar, tabs and accordions both offer different user experiences. Consider using accordions for shorter, independent content and on devices with smaller viewports and limited space. Consider using tabs for longer, related content under a main topic.
 
 ## Properties
 
