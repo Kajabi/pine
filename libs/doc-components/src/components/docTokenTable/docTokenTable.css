@@ -11,7 +11,7 @@
 		th {
 			border: 0 !important;
 			padding-block-end: var(--pine-dimension-xs);
-			text-align: left;
+			text-align: start;
 		}
 	}
 
