@@ -1461,6 +1461,7 @@ declare global {
     };
     interface HTMLPdsChipElementEventMap {
         "pdsTagCloseClick": any;
+        "pdsClick": any;
     }
     interface HTMLPdsChipElement extends Components.PdsChip, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsChipElementEventMap>(type: K, listener: (this: HTMLPdsChipElement, ev: PdsChipCustomEvent<HTMLPdsChipElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2310,6 +2311,10 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "large"?: boolean;
+        /**
+          * Event emitted when the dropdown button is clicked on a dropdown variant chip.
+         */
+        "onPdsClick"?: (event: PdsChipCustomEvent<any>) => void;
         /**
           * Event emitted when the close button is clicked on a tag variant chip.
          */
