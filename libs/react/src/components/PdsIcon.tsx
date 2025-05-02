@@ -7,9 +7,11 @@ import { createForwardRef } from './react-component-lib/utils';
 
 interface PdsIconProps {
   color?: string;
+  flipRtl?: boolean;
   icon?: string;
   name?: string;
   size?: string;
+  src?: string;
 }
 
 type InternalProps = PropsWithChildren<

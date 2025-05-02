@@ -8,7 +8,7 @@ export default {
   title: 'components/Icon'
 }
 
-const BaseTemplate = (args) => html`<pds-icon color=${args.color} name=${args.name} size=${args.size}></pds-icon>`;
+const BaseTemplate = (args) => html`<pds-icon color=${args.color} name=${args.name} size=${args.size} flip-rtl=${args.flipRtl}></pds-icon>`;
 
 export const Default = BaseTemplate.bind();
 Default.args = {
