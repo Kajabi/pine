@@ -18,6 +18,10 @@
     outline-offset: var(--pine-border-width-thick);
     position: relative;
   }
+
+  &:hover {
+    text-decoration: none;
+  }
 }
 
 // We have a small consensus stating that
@@ -56,15 +60,5 @@
   &:hover {
     color: var(--pine-color-text-hover);
     text-decoration: underline;
-  }
-}
-
-// Default = inline link
-.pds-link--default {
-  text-decoration: underline;
-
-  &:hover {
-    color: var(--pine-color-text-hover);
-    text-decoration: none;
   }
 }
