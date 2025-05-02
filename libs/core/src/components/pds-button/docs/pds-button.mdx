@@ -16,19 +16,19 @@ A button is an interactive element that can be clicked to perform various action
 ### When not to use
 - When space is limited consider an IconButton.
 
-## Accessibility
+### Accessibility
 
 While accessible out of the box, there are some best practices to keep in mind when using the component:
 
-- Buttons should always contain helpful text about what they do even if this text is expected to be visually hidden. (e.g. "submit form" or "delete account").
+- Use helpful text to describe the button's action even if this text is expected to be visually hidden (e.g. "submit form" or "delete account"). Visually hidden text will still be read by screen readers.
 - Buttons should not disable tabbing or keyboard navigation.
-- Buttons should always pass [color contrast best practices](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html).
+- Disabled buttons will not be read by screen readers.
 
 ### Buttons vs Links
 
 In many current web design patterns, buttons and links have evolved to look visually identical. However, for best practices, the fundamental differences between the two should be considered before using. Links are used to navigate the user to another page. Buttons are used to perform an action on the current page or submit a form.
 
-## Icon Slots
+### Icon Slots
 
 The `start` and `end` slots allow icons to be placed before and after the button text but will be hidden when `loading` is true. For more information on web component slots, see the [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_templates_and_slots#adding_flexibility_with_slots).
 
