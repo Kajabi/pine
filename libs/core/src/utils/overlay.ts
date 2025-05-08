@@ -1,12 +1,15 @@
 interface OverlayArgs {
-  elem: HTMLElement;
+  elem: HTMLElement | null;
   elemPlacement: string;
-  overlay: HTMLElement;
+  overlay: HTMLElement | null;
   offset?: number;
 }
 
-export const positionTooltip = ({elem, elemPlacement, overlay, offset = 8}: OverlayArgs) => {
-  if (!elem || !overlay) return;
+export const positionTooltip = ({elem, elemPlacement, overlay, offset = 8}: OverlayArgs): boolean => {
+  if (elem === null || overlay === null) return false;
+  if (typeof elemPlacement !== 'string' || elemPlacement.trim() === '') {
+    return false;
+  }
 
   const rect = elem.getBoundingClientRect();
   const contentRect = overlay.getBoundingClientRect();
@@ -69,7 +72,8 @@ export const positionTooltip = ({elem, elemPlacement, overlay, offset = 8}: Over
         overlay.style.left = `${rect.left}px`;
       }
       if (elemPlacement.includes('end')) {
-        overlay.style.left = `${rect.right - contentRect.width}px`;
+        overlay.style.left = 'initial';
+        overlay.style.right = '0px';
       }
       break;
     case elemPlacement.includes('top'):
@@ -79,8 +83,10 @@ export const positionTooltip = ({elem, elemPlacement, overlay, offset = 8}: Over
         overlay.style.left = `${rect.left}px`;
       }
       if (elemPlacement.includes('end')) {
-        overlay.style.left = `${rect.right - contentRect.width}px`;
+        overlay.style.left = 'initial';
+        overlay.style.right = '0';
       }
       break;
   }
+  return true;
 }

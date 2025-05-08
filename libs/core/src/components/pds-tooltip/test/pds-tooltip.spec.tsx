@@ -1,6 +1,20 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsTooltip } from '../pds-tooltip';
 
+// Mock MutationObserver
+global.MutationObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  disconnect: jest.fn(),
+  takeRecords: jest.fn(),
+}));
+
+// Mock ResizeObserver
+global.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}));
+
 describe('pds-tooltip', () => {
   it('renders the trigger', async () => {
     const { root } = await newSpecPage({
@@ -12,17 +26,10 @@ describe('pds-tooltip', () => {
     });
     expect(root).toEqualHtml(`
       <pds-tooltip placement="right">
-        <mock:shadow-root>
-        <div class="pds-tooltip pds-tooltip--right">
-          <span class="pds-tooltip__trigger">
-            <slot></slot>
-          </span>
-          <div class="pds-tooltip__content" aria-hidden="true" aria-live="off" role="tooltip" style="max-width: 352px; top: 50%; left: calc(0px + 8px); transform: translateY(-50%);">
-            <slot name="content"></slot>
-          </div>
-        </div>
-        </mock:shadow-root>
-        <pds-button variant="secondary">Secondary</pds-button>
+        <span class="pds-tooltip__trigger">
+          <pds-button variant="secondary">Secondary</pds-button>
+        </span>
+        <div class="pds-tooltip__content-slot-wrapper" style="display: none;"></div>
       </pds-tooltip>
     `);
   });
@@ -38,9 +45,9 @@ describe('pds-tooltip', () => {
     await page.root?.showTooltip();
     await page.waitForChanges();
 
-    const element = page.root?.shadowRoot;
-
-    expect(element?.querySelector('.pds-tooltip')).toHaveClass('pds-tooltip--is-open');
+    const tooltipPortal = page.body.querySelector('.pds-tooltip');
+    expect(tooltipPortal).not.toBeNull();
+    expect(tooltipPortal).toHaveClass('pds-tooltip--is-open');
   });
 
   it('should be able to call method to hide tooltip', async () => {
@@ -53,12 +60,21 @@ describe('pds-tooltip', () => {
     });
     await page.root?.showTooltip();
     await page.waitForChanges();
+    // Ensure it was opened first
+    let tooltipPortal = page.body.querySelector('.pds-tooltip');
+    expect(tooltipPortal).not.toBeNull();
+    expect(tooltipPortal).toHaveClass('pds-tooltip--is-open');
+
     await page.root?.hideTooltip();
     await page.waitForChanges();
 
-    const element = page.root?.shadowRoot;
-
-    expect(element?.querySelector('.pds-tooltip')).not.toHaveClass('pds-tooltip--is-open');
+    tooltipPortal = page.body.querySelector('.pds-tooltip');
+    if (tooltipPortal) {
+      expect(tooltipPortal).not.toHaveClass('pds-tooltip--is-open');
+    } else {
+      // If hiding removes the portal entirely, this is also valid
+      expect(tooltipPortal).toBeNull();
+    }
   });
 
   it('should update the placement', async () => {
@@ -98,11 +114,11 @@ describe('pds-tooltip', () => {
       </pds-tooltip>`
     });
 
-    await page.waitForChanges();
+    await page.waitForChanges(); // Ensure portal is created
 
-    const element = page.root?.shadowRoot;
-
-    expect(element?.querySelector('.pds-tooltip')).toHaveClass('pds-tooltip--is-open');
+    const tooltipPortal = page.body.querySelector('.pds-tooltip');
+    expect(tooltipPortal).not.toBeNull();
+    expect(tooltipPortal).toHaveClass('pds-tooltip--is-open');
   });
 
   it('should show the tooltip on focus', async () => {
@@ -114,11 +130,13 @@ describe('pds-tooltip', () => {
       </pds-tooltip>`
     });
 
-    const element = page.root;
-    element?.dispatchEvent(new FocusEvent('focus'));
+    const triggerElement = page.root?.querySelector('.pds-tooltip__trigger');
+    triggerElement?.dispatchEvent(new FocusEvent('focus'));
     await page.waitForChanges();
 
-    expect(element?.shadowRoot?.querySelector('.pds-tooltip')).toHaveClass('pds-tooltip--is-open');
+    const tooltipPortal = page.body.querySelector('.pds-tooltip');
+    expect(tooltipPortal).not.toBeNull();
+    expect(tooltipPortal).toHaveClass('pds-tooltip--is-open');
   })
 
   it('should hide the tooltip on blur', async () => {
@@ -130,15 +148,23 @@ describe('pds-tooltip', () => {
       </pds-tooltip>`
     });
 
-    const element = page.root;
-    element?.dispatchEvent(new FocusEvent('focus'));
-    await page.waitForChanges();
-    expect(element?.shadowRoot?.querySelector('.pds-tooltip')).toHaveClass('pds-tooltip--is-open');
-
-    element?.dispatchEvent(new FocusEvent('blur'));
+    const triggerElement = page.root?.querySelector('.pds-tooltip__trigger');
+    triggerElement?.dispatchEvent(new FocusEvent('focus'));
     await page.waitForChanges();
 
-    expect(element?.shadowRoot?.querySelector('.pds-tooltip')).not.toHaveClass('pds-tooltip--is-open');
+    let tooltipPortal = page.body.querySelector('.pds-tooltip');
+    expect(tooltipPortal).not.toBeNull();
+    expect(tooltipPortal).toHaveClass('pds-tooltip--is-open');
+
+    triggerElement?.dispatchEvent(new FocusEvent('blur'));
+    await page.waitForChanges();
+
+    tooltipPortal = page.body.querySelector('.pds-tooltip');
+    if (tooltipPortal) {
+      expect(tooltipPortal).not.toHaveClass('pds-tooltip--is-open');
+    } else {
+      expect(tooltipPortal).toBeNull();
+    }
   })
 
   it('should show the tooltip on mouseenter', async () => {
@@ -150,13 +176,16 @@ describe('pds-tooltip', () => {
       </pds-tooltip>`
     });
 
-    const element = page.root;
-    element?.dispatchEvent(new MouseEvent('mouseenter'));
+    const triggerElement = page.root?.querySelector('.pds-tooltip__trigger');
+    triggerElement?.dispatchEvent(new MouseEvent('mouseenter'));
     await page.waitForChanges();
-    expect(element?.shadowRoot?.querySelector('.pds-tooltip')).toHaveClass('pds-tooltip--is-open');
+
+    const tooltipPortal = page.body.querySelector('.pds-tooltip');
+    expect(tooltipPortal).not.toBeNull();
+    expect(tooltipPortal).toHaveClass('pds-tooltip--is-open');
   })
 
-  it('should show the tooltip on mouseleave', async () => {
+  it('should hide tooltip on mouseleave after mouseenter', async () => {
     const page = await newSpecPage({
       components: [PdsTooltip],
       html: `
@@ -165,15 +194,23 @@ describe('pds-tooltip', () => {
       </pds-tooltip>`
     });
 
-    const element = page.root;
-    element?.dispatchEvent(new MouseEvent('mouseenter'));
-    await page.waitForChanges();
-    expect(element?.shadowRoot?.querySelector('.pds-tooltip')).toHaveClass('pds-tooltip--is-open');
-
-    element?.dispatchEvent(new MouseEvent('mouseleave'));
+    const triggerElement = page.root?.querySelector('.pds-tooltip__trigger');
+    triggerElement?.dispatchEvent(new MouseEvent('mouseenter'));
     await page.waitForChanges();
 
-    expect(element?.shadowRoot?.querySelector('.pds-tooltip')).not.toHaveClass('pds-tooltip--is-open');
+    let tooltipPortal = page.body.querySelector('.pds-tooltip');
+    expect(tooltipPortal).not.toBeNull();
+    expect(tooltipPortal).toHaveClass('pds-tooltip--is-open');
+
+    triggerElement?.dispatchEvent(new MouseEvent('mouseleave'));
+    await page.waitForChanges();
+
+    tooltipPortal = page.body.querySelector('.pds-tooltip');
+    if (tooltipPortal) {
+      expect(tooltipPortal).not.toHaveClass('pds-tooltip--is-open');
+    } else {
+      expect(tooltipPortal).toBeNull();
+    }
   })
 
   it('should apply maxWidth to tooltip content', async () => {
@@ -181,13 +218,18 @@ describe('pds-tooltip', () => {
     const page = await newSpecPage({
       components: [PdsTooltip],
       html: `
-        <pds-tooltip max-width="${maxWidthValue}" content="Tooltip content">
+        <pds-tooltip max-width="${maxWidthValue}" content="Tooltip content" opened="true">
           <pds-button variant="secondary">Secondary</pds-button>
         </pds-tooltip>`
     });
 
-    const contentElement = page.root?.shadowRoot?.querySelector('.pds-tooltip__content') as HTMLElement;
+    await page.waitForChanges(); // Ensure component renders and portal is created
 
-    expect(contentElement.style.maxWidth).toBe(maxWidthValue);
+    const contentElement = page.body.querySelector('.pds-tooltip .pds-tooltip__content') as HTMLElement;
+
+    expect(contentElement).not.toBeNull(); // Add a check that element is found
+    if (contentElement !== null) { // Type guard, changed from if(contentElement)
+      expect(contentElement.style.maxWidth).toBe(maxWidthValue);
+    }
   });
 });
