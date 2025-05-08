@@ -104,9 +104,9 @@ export class PdsTooltip {
     window.addEventListener('pageshow', this.handlePageShow);
     this.triggerEl = this.el.querySelector('.pds-tooltip__trigger') as HTMLElement;
     const contentSlotWrapper = this.el.querySelector('.pds-tooltip__content-slot-wrapper');
-    if (contentSlotWrapper) {
+    if (contentSlotWrapper !== null) {
       this.slotMutationObserver = new MutationObserver(() => {
-        if (this.opened && this.portalEl) {
+        if (this.opened && this.portalEl !== null) {
           this.removePortal();
           this.createPortal();
         }
@@ -115,16 +115,16 @@ export class PdsTooltip {
     }
     return () => {
       window.removeEventListener('pageshow', this.handlePageShow);
-      if (this.slotMutationObserver) {
+      if (this.slotMutationObserver !== null) {
         this.slotMutationObserver.disconnect();
       }
     };
   }
 
   componentDidRender() {
-    if (this.opened && !this.portalEl) {
+    if (this.opened && this.portalEl === null) {
       this.createPortal();
-    } else if (!this.opened && this.portalEl) {
+    } else if (!this.opened && this.portalEl !== null) {
       this.removePortal();
     }
   }
@@ -195,12 +195,9 @@ export class PdsTooltip {
    * This helps with precise alignment.
    */
   private determinePositioningAnchor(): HTMLElement | null {
-    let positioningAnchor: HTMLElement | null = this.triggerEl; // Default to the span wrapper
+    let positioningAnchor: HTMLElement | null = this.triggerEl;
 
-    // Always try to find a more specific anchor within this.triggerEl (the span wrapper for the default slot)
-    // if this.triggerEl itself exists. This helps with precise alignment for any type of trigger element.
-    // The htmlContent prop determines the tooltip's overlay content, not the nature of the trigger.
-    if (this.triggerEl) {
+    if (this.triggerEl !== null) {
       const children = this.triggerEl.childNodes;
       for (let i = 0; i < children.length; i++) {
         const childNode = children[i];
@@ -222,7 +219,7 @@ export class PdsTooltip {
   private repositionPortal() {
     const anchor = this.determinePositioningAnchor();
 
-    if (anchor && this.contentDiv) {
+    if (anchor !== null && this.contentDiv !== null) {
       positionTooltip({ elem: anchor, elemPlacement: this.placement, overlay: this.contentDiv });
       const placementParts = this.placement.split('-');
       const primaryPlacement = placementParts[0];
@@ -252,12 +249,12 @@ export class PdsTooltip {
   }
 
   private createPortal() {
-    if (this.portalEl) return;
+    if (this.portalEl !== null) return;
     this.portalEl = document.createElement('div');
     this.portalEl.className = `pds-tooltip pds-tooltip--${this.placement} ${this.htmlContent ? 'pds-tooltip--has-html-content' : ''} ${this.opened ? 'pds-tooltip--is-open' : ''} ${this.hasArrow ? '' : 'pds-tooltip--no-arrow'}`;
     this.portalEl.style.position = 'fixed';
     this.portalEl.style.zIndex = '9999';
-    if (!this.portalEl.id) {
+    if (this.portalEl.id === '') {
       this.portalEl.id = this.componentId || this.el.id || `pds-tooltip-portal-${PdsTooltip.instanceCounter++}`;
     }
     if (this.portalEl.getAttribute('id') !== this.portalEl.id) {
@@ -278,7 +275,7 @@ export class PdsTooltip {
     const contentSlotWrapper = this.el.querySelector('.pds-tooltip__content-slot-wrapper');
     const slottedContentContainer = contentSlotWrapper?.querySelector('[slot="content"]') as HTMLElement | null;
     let hasSlottedContent = false;
-    if (slottedContentContainer) {
+    if (slottedContentContainer !== null) {
       const childrenToClone = Array.from(slottedContentContainer.childNodes);
       if (childrenToClone.length > 0) {
         const hasMeaningfulNode = childrenToClone.some(node =>
@@ -293,13 +290,11 @@ export class PdsTooltip {
             }
           });
         }
-      } else {
       }
-    } else {
     }
 
     if (!hasSlottedContent) {
-      if (this.content) {
+      if (this.content !== '') {
         this.contentDiv.textContent = this.content;
       }
     }
@@ -309,7 +304,7 @@ export class PdsTooltip {
 
     this.repositionPortal();
 
-    if (this.contentDiv) {
+    if (this.contentDiv !== null) {
       this.overlayResizeObserver = new ResizeObserver(() => {
         this.repositionPortal();
       });
@@ -322,18 +317,18 @@ export class PdsTooltip {
     window.addEventListener('hashchange', this.handleSpaNavigation, true);
 
     // Add ARIA attribute to trigger, now that portalEl and its ID are confirmed
-    if (this.triggerEl && this.portalEl.id) {
+    if (this.triggerEl !== null && this.portalEl.id !== '') {
       this.triggerEl.setAttribute('aria-describedby', this.portalEl.id);
     }
   }
 
   private removePortal() {
-    if (this.overlayResizeObserver && this.contentDiv) {
+    if (this.overlayResizeObserver !== null && this.contentDiv !== null) {
       this.overlayResizeObserver.unobserve(this.contentDiv);
       this.overlayResizeObserver = null;
     }
 
-    if (this.portalEl) {
+    if (this.portalEl !== null) {
       window.removeEventListener('scroll', this.handleScroll, true);
       window.removeEventListener('popstate', this.handleSpaNavigation, true);
       window.removeEventListener('hashchange', this.handleSpaNavigation, true);
@@ -342,7 +337,7 @@ export class PdsTooltip {
     }
 
     // Remove ARIA attribute from trigger
-    if (this.triggerEl) {
+    if (this.triggerEl !== null) {
       this.triggerEl.removeAttribute('aria-describedby');
     }
     this.contentDiv = null;
