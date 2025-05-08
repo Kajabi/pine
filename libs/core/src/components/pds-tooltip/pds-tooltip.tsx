@@ -257,11 +257,12 @@ export class PdsTooltip {
     this.portalEl.className = `pds-tooltip pds-tooltip--${this.placement} ${this.htmlContent ? 'pds-tooltip--has-html-content' : ''} ${this.opened ? 'pds-tooltip--is-open' : ''} ${this.hasArrow ? '' : 'pds-tooltip--no-arrow'}`;
     this.portalEl.style.position = 'fixed';
     this.portalEl.style.zIndex = '9999';
-    let portalIdToSet: string;
-    if (this.componentId) { portalIdToSet = this.componentId; }
-    else if (this.el.id) { portalIdToSet = this.el.id; }
-    else { portalIdToSet = `pds-tooltip-portal-${PdsTooltip.instanceCounter++}`; }
-    this.portalEl.setAttribute('id', portalIdToSet);
+    if (!this.portalEl.id) {
+      this.portalEl.id = this.componentId || this.el.id || `pds-tooltip-portal-${PdsTooltip.instanceCounter++}`;
+    }
+    if (this.portalEl.getAttribute('id') !== this.portalEl.id) {
+      this.portalEl.setAttribute('id', this.portalEl.id);
+    }
     this.portalEl.setAttribute('role', 'tooltip');
     this.portalEl.setAttribute('aria-hidden', this.opened ? 'false' : 'true');
     this.portalEl.setAttribute('aria-live', this.opened ? 'polite' : 'off');
@@ -320,71 +321,47 @@ export class PdsTooltip {
     window.addEventListener('popstate', this.handleSpaNavigation, true);
     window.addEventListener('hashchange', this.handleSpaNavigation, true);
 
-    // Link trigger aria
-    if (this.triggerEl && portalIdToSet) {
-      this.triggerEl.setAttribute('aria-describedby', portalIdToSet);
+    // Add ARIA attribute to trigger, now that portalEl and its ID are confirmed
+    if (this.triggerEl && this.portalEl.id) {
+      this.triggerEl.setAttribute('aria-describedby', this.portalEl.id);
     }
   }
 
   private removePortal() {
-    window.removeEventListener('scroll', this.handleScroll, true);
-    window.removeEventListener('popstate', this.handleSpaNavigation, true);
-    window.removeEventListener('hashchange', this.handleSpaNavigation, true);
-    if (this.overlayResizeObserver) {
-      this.overlayResizeObserver.disconnect();
+    if (this.overlayResizeObserver && this.contentDiv) {
+      this.overlayResizeObserver.unobserve(this.contentDiv);
       this.overlayResizeObserver = null;
     }
-    if (this.portalEl && this.portalEl.parentNode) {
-      this.portalEl.parentNode.removeChild(this.portalEl);
+
+    if (this.portalEl) {
+      window.removeEventListener('scroll', this.handleScroll, true);
+      window.removeEventListener('popstate', this.handleSpaNavigation, true);
+      window.removeEventListener('hashchange', this.handleSpaNavigation, true);
+      document.body.removeChild(this.portalEl);
       this.portalEl = null;
     }
-    this.contentDiv = null;
+
+    // Remove ARIA attribute from trigger
     if (this.triggerEl) {
       this.triggerEl.removeAttribute('aria-describedby');
     }
+    this.contentDiv = null;
   }
 
   render() {
-    const { componentId, placement, isOpen, opened, hasArrow, htmlContent } = this;
-    const hostId = componentId || undefined;
-    const triggerAriaDescribedBy = (isOpen || opened) && this.portalEl ? this.portalEl.id : undefined;
-
-    let hasActualSlotNodes = false;
-    const contentSlotWrapper = this.el.querySelector('.pds-tooltip__content-slot-wrapper');
-    // Check for an element with attribute slot="content" inside the wrapper
-    const slottedContentElement = contentSlotWrapper?.querySelector('[slot="content"]') as HTMLElement | null;
-    if (slottedContentElement && slottedContentElement.hasChildNodes()) {
-        // Check if any child is a meaningful node
-        hasActualSlotNodes = Array.from(slottedContentElement.childNodes).some(node =>
-            node.nodeType === Node.ELEMENT_NODE ||
-            (node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== '')
-        );
-    }
-
-    const tooltipClasses = {
-      'pds-tooltip': true,
-      [`pds-tooltip--${placement}`]: !!placement,
-      'pds-tooltip--is-open': isOpen || opened,
-      'pds-tooltip--no-arrow': !hasArrow,
-      'pds-tooltip--has-html-content': htmlContent || hasActualSlotNodes,
-    };
+    const hostId = this.componentId || undefined;
 
     return (
-      <Host
-        class={tooltipClasses}
-        id={hostId}
-        aria-describedby={triggerAriaDescribedBy}
-        onBlur={this.handleHide}
-        onFocus={this.handleShow}
-        onMouseEnter={this.handleShow}
-        onMouseLeave={this.handleHide}
-      >
+      <Host id={hostId} class={{ 'pds-tooltip--is-open': this.opened }}>
         <span
           class="pds-tooltip__trigger"
-          tabIndex={0}
-          ref={(el) => this.triggerEl = el as HTMLElement}
+          onMouseEnter={this.handleShow}
+          onMouseLeave={this.handleHide}
+          onFocus={this.handleShow}
+          onBlur={this.handleHide}
+          ref={el => this.triggerEl = el}
         >
-          <slot></slot>
+          <slot />
         </span>
         <div class="pds-tooltip__content-slot-wrapper" style={{ display: 'none' }}>
           <slot name="content"></slot>
