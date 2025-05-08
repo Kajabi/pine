@@ -1,7 +1,5 @@
 import { Component, Element, Host, Prop, State, h, Method, Watch } from '@stencil/core';
-import {
-  positionTooltip
-} from '../../utils/overlay';
+import { positionTooltip } from '../../utils/overlay';
 
 /**
  * @slot (default) - The tooltip's target element
@@ -11,10 +9,22 @@ import {
 @Component({
   tag: 'pds-tooltip',
   styleUrls: ['pds-tooltip.scss'],
-  shadow: true,
+  shadow: false,
 })
 export class PdsTooltip {
-  private contentEl: HTMLElement | null;
+  private static instanceCounter = 0;
+
+  /**
+   * Internal state: true if the tooltip was opened by user interaction (hover/focus),
+   * false if opened via the `opened` prop or currently closed.
+   */
+  @State() private _isInteractiveOpen = false;
+
+  private portalEl: HTMLElement | null = null;
+  private triggerEl: HTMLElement | null = null;
+  private contentDiv: HTMLElement | null = null;
+  private slotMutationObserver: MutationObserver | null = null;
+  private overlayResizeObserver: ResizeObserver | null = null;
 
   /**
    * Reference to the Host element
@@ -80,40 +90,43 @@ export class PdsTooltip {
   @Prop({mutable: true, reflect: true}) opened = false;
 
   @Watch('opened')
-  handleOpenToggle() {
-    if (this.opened) {
-      this.handleShow();
-    } else {
-      this.handleHide();
+  handleOpenToggle(newValue: boolean, oldValue: boolean) {
+    if (newValue === false && oldValue === true) {
+      this._isInteractiveOpen = false;
     }
   }
 
   componentWillLoad() {
-    if (this.opened) {
-      this.showTooltip();
-    }
-
-    this.el.addEventListener('blur', this.handleHide, true);
-    this.el.addEventListener('focus', this.handleShow, true);
+    this._isInteractiveOpen = false;
   }
 
   componentDidLoad() {
-    // fix for Safari iOS back button issue
     window.addEventListener('pageshow', this.handlePageShow);
-
+    this.triggerEl = this.el.querySelector('.pds-tooltip__trigger') as HTMLElement;
+    const contentSlotWrapper = this.el.querySelector('.pds-tooltip__content-slot-wrapper');
+    if (contentSlotWrapper) {
+      this.slotMutationObserver = new MutationObserver(() => {
+        if (this.opened && this.portalEl) {
+          this.removePortal();
+          this.createPortal();
+        }
+      });
+      this.slotMutationObserver.observe(contentSlotWrapper, { childList: true, subtree: false });
+    }
     return () => {
       window.removeEventListener('pageshow', this.handlePageShow);
+      if (this.slotMutationObserver) {
+        this.slotMutationObserver.disconnect();
+      }
     };
   }
 
-  componentDidUpdate() {
-    if (this.opened) {
-      this.showTooltip();
-    }
-  }
-
   componentDidRender() {
-    positionTooltip({elem: this.el, elemPlacement: this.placement, overlay: this.contentEl});
+    if (this.opened && !this.portalEl) {
+      this.createPortal();
+    } else if (!this.opened && this.portalEl) {
+      this.removePortal();
+    }
   }
 
   /**
@@ -133,54 +146,248 @@ export class PdsTooltip {
   }
 
   private handleHide = () => {
+    if (this.opened && !this._isInteractiveOpen) {
+      return;
+    }
     this.hideTooltip();
+    this._isInteractiveOpen = false;
   };
 
   private handleShow = () => {
+    if (this.opened && !this._isInteractiveOpen) {
+      return;
+    }
+    this._isInteractiveOpen = true;
     this.showTooltip();
   };
 
   private handlePageShow = () => {
+    if (this.opened && !this._isInteractiveOpen) {
+      return;
+    }
     this.opened = false;
+    this._isInteractiveOpen = false;
   };
 
+  private handleScroll = () => {
+    if (this.opened) {
+      if (!this._isInteractiveOpen) {
+        this.repositionPortal();
+      } else {
+        this.hideTooltip();
+        this._isInteractiveOpen = false;
+      }
+    }
+  };
+
+  private handleSpaNavigation = () => {
+    if (this.opened && !this._isInteractiveOpen) {
+      return;
+    }
+    this.hideTooltip();
+    this._isInteractiveOpen = false;
+  };
+
+  /**
+   * Determines the most accurate HTML element to use as the anchor for positioning the tooltip.
+   * If `htmlContent` is false, it attempts to find the actual element slotted as the trigger.
+   * Otherwise, or if no specific element is found, it defaults to the span wrapper around the trigger slot.
+   * This helps with precise alignment.
+   */
+  private determinePositioningAnchor(): HTMLElement | null {
+    let positioningAnchor: HTMLElement | null = this.triggerEl; // Default to the span wrapper
+
+    // Always try to find a more specific anchor within this.triggerEl (the span wrapper for the default slot)
+    // if this.triggerEl itself exists. This helps with precise alignment for any type of trigger element.
+    // The htmlContent prop determines the tooltip's overlay content, not the nature of the trigger.
+    if (this.triggerEl) {
+      const children = this.triggerEl.childNodes;
+      for (let i = 0; i < children.length; i++) {
+        const childNode = children[i];
+        if (childNode.nodeType === Node.ELEMENT_NODE) {
+          positioningAnchor = childNode as HTMLElement;
+          break; // Found the first element, use it as the anchor
+        }
+      }
+    }
+    // If no ELEMENT_NODE is found within this.triggerEl (e.g., if trigger is just text),
+    // positioningAnchor will correctly remain this.triggerEl (the span).
+    return positioningAnchor;
+  }
+
+  /**
+   * Centralized method to calculate and apply the tooltip's position.
+   * Uses the determined anchor element and the current content dimensions.
+   */
+  private repositionPortal() {
+    const anchor = this.determinePositioningAnchor();
+
+    if (anchor && this.contentDiv) {
+      positionTooltip({ elem: anchor, elemPlacement: this.placement, overlay: this.contentDiv });
+      const placementParts = this.placement.split('-');
+      const primaryPlacement = placementParts[0];
+      const isCardinalCenterPlacement = placementParts.length === 1;
+      if (isCardinalCenterPlacement) {
+        const anchorRect = anchor.getBoundingClientRect();
+        const overlayRect = this.contentDiv.getBoundingClientRect();
+        if (primaryPlacement === 'left' || primaryPlacement === 'right') {
+          const currentOverlayTop = parseFloat(this.contentDiv.style.top || '0');
+          const anchorCenterY = anchorRect.top + (anchorRect.height / 2);
+          const overlayCenterY = overlayRect.top + (overlayRect.height / 2);
+          const adjustmentY = anchorCenterY - overlayCenterY;
+          if (Math.abs(adjustmentY) > 0.5) {
+            this.contentDiv.style.top = `${currentOverlayTop + adjustmentY}px`;
+          }
+        } else if (primaryPlacement === 'top' || primaryPlacement === 'bottom') {
+          const currentOverlayLeft = parseFloat(this.contentDiv.style.left || '0');
+          const anchorCenterX = anchorRect.left + (anchorRect.width / 2);
+          const overlayCenterX = overlayRect.left + (overlayRect.width / 2);
+          const adjustmentX = anchorCenterX - overlayCenterX;
+          if (Math.abs(adjustmentX) > 0.5) {
+            this.contentDiv.style.left = `${currentOverlayLeft + adjustmentX}px`;
+          }
+        }
+      }
+    }
+  }
+
+  private createPortal() {
+    if (this.portalEl) return;
+    this.portalEl = document.createElement('div');
+    this.portalEl.className = `pds-tooltip pds-tooltip--${this.placement} ${this.htmlContent ? 'pds-tooltip--has-html-content' : ''} ${this.opened ? 'pds-tooltip--is-open' : ''} ${this.hasArrow ? '' : 'pds-tooltip--no-arrow'}`;
+    this.portalEl.style.position = 'fixed';
+    this.portalEl.style.zIndex = '9999';
+    let portalIdToSet: string;
+    if (this.componentId) { portalIdToSet = this.componentId; }
+    else if (this.el.id) { portalIdToSet = this.el.id; }
+    else { portalIdToSet = `pds-tooltip-portal-${PdsTooltip.instanceCounter++}`; }
+    this.portalEl.setAttribute('id', portalIdToSet);
+    this.portalEl.setAttribute('role', 'tooltip');
+    this.portalEl.setAttribute('aria-hidden', this.opened ? 'false' : 'true');
+    this.portalEl.setAttribute('aria-live', this.opened ? 'polite' : 'off');
+    this.portalEl.style.maxWidth = this.maxWidth;
+
+    this.contentDiv = document.createElement('div');
+    this.contentDiv.className = 'pds-tooltip__content';
+    this.contentDiv.setAttribute('aria-hidden', this.opened ? 'false' : 'true');
+    this.contentDiv.setAttribute('aria-live', this.opened ? 'polite' : 'off');
+    this.contentDiv.setAttribute('role', 'tooltip');
+    this.contentDiv.style.maxWidth = this.maxWidth;
+
+    const contentSlotWrapper = this.el.querySelector('.pds-tooltip__content-slot-wrapper');
+    const slottedContentContainer = contentSlotWrapper?.querySelector('[slot="content"]') as HTMLElement | null;
+    let hasSlottedContent = false;
+    if (slottedContentContainer) {
+      const childrenToClone = Array.from(slottedContentContainer.childNodes);
+      if (childrenToClone.length > 0) {
+        const hasMeaningfulNode = childrenToClone.some(node =>
+          node.nodeType === Node.ELEMENT_NODE ||
+          (node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== '')
+        );
+        if (hasMeaningfulNode) {
+          hasSlottedContent = true;
+          childrenToClone.forEach((node /*, index*/) => {
+            if (node.nodeType === Node.ELEMENT_NODE || (node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== '')) {
+              this.contentDiv.appendChild(node.cloneNode(true));
+            }
+          });
+        }
+      } else {
+      }
+    } else {
+    }
+
+    if (!hasSlottedContent) {
+      if (this.content) {
+        this.contentDiv.textContent = this.content;
+      }
+    }
+
+    this.portalEl.appendChild(this.contentDiv);
+    document.body.appendChild(this.portalEl);
+
+    this.repositionPortal();
+
+    if (this.contentDiv) {
+      this.overlayResizeObserver = new ResizeObserver(() => {
+        this.repositionPortal();
+      });
+      this.overlayResizeObserver.observe(this.contentDiv);
+    }
+
+    // Add global listeners when portal is created
+    window.addEventListener('scroll', this.handleScroll, true);
+    window.addEventListener('popstate', this.handleSpaNavigation, true);
+    window.addEventListener('hashchange', this.handleSpaNavigation, true);
+
+    // Link trigger aria
+    if (this.triggerEl && portalIdToSet) {
+      this.triggerEl.setAttribute('aria-describedby', portalIdToSet);
+    }
+  }
+
+  private removePortal() {
+    window.removeEventListener('scroll', this.handleScroll, true);
+    window.removeEventListener('popstate', this.handleSpaNavigation, true);
+    window.removeEventListener('hashchange', this.handleSpaNavigation, true);
+    if (this.overlayResizeObserver) {
+      this.overlayResizeObserver.disconnect();
+      this.overlayResizeObserver = null;
+    }
+    if (this.portalEl && this.portalEl.parentNode) {
+      this.portalEl.parentNode.removeChild(this.portalEl);
+      this.portalEl = null;
+    }
+    this.contentDiv = null;
+    if (this.triggerEl) {
+      this.triggerEl.removeAttribute('aria-describedby');
+    }
+  }
+
   render() {
+    const { componentId, placement, isOpen, opened, hasArrow, htmlContent } = this;
+    const hostId = componentId || undefined;
+    const triggerAriaDescribedBy = (isOpen || opened) && this.portalEl ? this.portalEl.id : undefined;
+
+    let hasActualSlotNodes = false;
+    const contentSlotWrapper = this.el.querySelector('.pds-tooltip__content-slot-wrapper');
+    // Check for an element with attribute slot="content" inside the wrapper
+    const slottedContentElement = contentSlotWrapper?.querySelector('[slot="content"]') as HTMLElement | null;
+    if (slottedContentElement && slottedContentElement.hasChildNodes()) {
+        // Check if any child is a meaningful node
+        hasActualSlotNodes = Array.from(slottedContentElement.childNodes).some(node =>
+            node.nodeType === Node.ELEMENT_NODE ||
+            (node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== '')
+        );
+    }
+
+    const tooltipClasses = {
+      'pds-tooltip': true,
+      [`pds-tooltip--${placement}`]: !!placement,
+      'pds-tooltip--is-open': isOpen || opened,
+      'pds-tooltip--no-arrow': !hasArrow,
+      'pds-tooltip--has-html-content': htmlContent || hasActualSlotNodes,
+    };
+
     return (
       <Host
+        class={tooltipClasses}
+        id={hostId}
+        aria-describedby={triggerAriaDescribedBy}
+        onBlur={this.handleHide}
+        onFocus={this.handleShow}
         onMouseEnter={this.handleShow}
         onMouseLeave={this.handleHide}
-        onFocusin={this.handleShow}
-        onFocusout={this.handleHide}
       >
-        <div
-          class={`
-            pds-tooltip
-            pds-tooltip--${this.placement}
-            ${this.htmlContent ? 'pds-tooltip--has-html-content' : ''}
-            ${this.opened ? 'pds-tooltip--is-open' : ''}
-            ${this.hasArrow ? '' : 'pds-tooltip--no-arrow'}
-          `}
+        <span
+          class="pds-tooltip__trigger"
+          tabIndex={0}
+          ref={(el) => this.triggerEl = el as HTMLElement}
         >
-          <span
-            aria-describedby={this.componentId}
-            class="pds-tooltip__trigger"
-          >
-            <slot />
-          </span>
-
-          <div class="pds-tooltip__content"
-            aria-hidden={this.opened ? 'false' : 'true'}
-            aria-live={this.opened ? 'polite' : 'off'}
-            id={this.componentId}
-            ref={(el) => (this.contentEl = el)}
-            role="tooltip"
-            style={{ maxWidth: this.maxWidth }}
-          >
-            <slot
-              name="content"
-            ></slot>
-            {this.content}
-          </div>
+          <slot></slot>
+        </span>
+        <div class="pds-tooltip__content-slot-wrapper" style={{ display: 'none' }}>
+          <slot name="content"></slot>
         </div>
       </Host>
     );
