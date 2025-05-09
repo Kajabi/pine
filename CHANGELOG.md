@@ -1,3 +1,31 @@
+## 3.1.0 (2025-05-09)
+
+### Features 🚀
+
+- **pds-icon:** add additional props for react pds icon ([#443](https://github.com/Kajabi/pine/pull/443))
+
+### Bug Fixes 🐛
+
+- **checkbox:** fixes checkbox not using error message for aria-describedby attribute ([#439](https://github.com/Kajabi/pine/pull/439))
+- **switch:** fixes component not using error message for aria-describedby attribute ([#441](https://github.com/Kajabi/pine/pull/441))
+
+### Documentation 📄
+
+- **accordion:** adds description for accessibility ([#446](https://github.com/Kajabi/pine/pull/446))
+- **button:** rewrites some accessibility info ([#447](https://github.com/Kajabi/pine/pull/447))
+- **popover:** using template literals needed to include unsafeHTML from lit ([#438](https://github.com/Kajabi/pine/pull/438))
+
+### Styles 🎨
+
+- update text alignment styles to logical ([#448](https://github.com/Kajabi/pine/pull/448))
+- **pds-link:** add hover style to remove text decoration ([#444](https://github.com/Kajabi/pine/pull/444))
+
+### ❤️ Thank You
+
+- Ashley E
+- Julian Skinner @ju-Skinner
+- Phillip Lovelace
+
 ## 3.0.3 (2025-04-29)
 
 This was a version bump only, there were no code changes.
