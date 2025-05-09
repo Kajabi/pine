@@ -11,6 +11,7 @@ import { positionTooltip } from '../../utils/overlay';
   styleUrls: ['pds-tooltip.scss'],
   shadow: false,
 })
+
 export class PdsTooltip {
   private static instanceCounter = 0;
 
@@ -90,6 +91,7 @@ export class PdsTooltip {
   @Prop({mutable: true, reflect: true}) opened = false;
 
   @Watch('opened')
+
   handleOpenToggle(newValue: boolean, oldValue: boolean) {
     if (newValue === false && oldValue === true) {
       this._isInteractiveOpen = false;
@@ -104,6 +106,7 @@ export class PdsTooltip {
     window.addEventListener('pageshow', this.handlePageShow);
     this.triggerEl = this.el.querySelector('.pds-tooltip__trigger') as HTMLElement;
     const contentSlotWrapper = this.el.querySelector('.pds-tooltip__content-slot-wrapper');
+
     if (contentSlotWrapper !== null) {
       this.slotMutationObserver = new MutationObserver(() => {
         if (this.opened && this.portalEl !== null) {
@@ -113,6 +116,7 @@ export class PdsTooltip {
       });
       this.slotMutationObserver.observe(contentSlotWrapper, { childList: true, subtree: false });
     }
+
     return () => {
       window.removeEventListener('pageshow', this.handlePageShow);
       if (this.slotMutationObserver !== null) {
@@ -149,6 +153,7 @@ export class PdsTooltip {
     if (this.opened && !this._isInteractiveOpen) {
       return;
     }
+
     this.hideTooltip();
     this._isInteractiveOpen = false;
   };
@@ -157,6 +162,7 @@ export class PdsTooltip {
     if (this.opened && !this._isInteractiveOpen) {
       return;
     }
+
     this._isInteractiveOpen = true;
     this.showTooltip();
   };
@@ -165,6 +171,7 @@ export class PdsTooltip {
     if (this.opened && !this._isInteractiveOpen) {
       return;
     }
+
     this.opened = false;
     this._isInteractiveOpen = false;
   };
@@ -184,6 +191,7 @@ export class PdsTooltip {
     if (this.opened && !this._isInteractiveOpen) {
       return;
     }
+
     this.hideTooltip();
     this._isInteractiveOpen = false;
   };
@@ -201,12 +209,14 @@ export class PdsTooltip {
       const children = this.triggerEl.childNodes;
       for (let i = 0; i < children.length; i++) {
         const childNode = children[i];
+
         if (childNode.nodeType === Node.ELEMENT_NODE) {
           positioningAnchor = childNode as HTMLElement;
           break; // Found the first element, use it as the anchor
         }
       }
     }
+
     // If no ELEMENT_NODE is found within this.triggerEl (e.g., if trigger is just text),
     // positioningAnchor will correctly remain this.triggerEl (the span).
     return positioningAnchor;
@@ -220,21 +230,26 @@ export class PdsTooltip {
     const anchor = this.determinePositioningAnchor();
 
     if (anchor !== null && this.contentDiv !== null) {
+
       positionTooltip({ elem: anchor, elemPlacement: this.placement, overlay: this.contentDiv });
       const placementParts = this.placement.split('-');
       const primaryPlacement = placementParts[0];
       const isCardinalCenterPlacement = placementParts.length === 1;
+
       if (isCardinalCenterPlacement) {
         const anchorRect = anchor.getBoundingClientRect();
         const overlayRect = this.contentDiv.getBoundingClientRect();
+
         if (primaryPlacement === 'left' || primaryPlacement === 'right') {
           const currentOverlayTop = parseFloat(this.contentDiv.style.top || '0');
           const anchorCenterY = anchorRect.top + (anchorRect.height / 2);
           const overlayCenterY = overlayRect.top + (overlayRect.height / 2);
           const adjustmentY = anchorCenterY - overlayCenterY;
+
           if (Math.abs(adjustmentY) > 0.5) {
             this.contentDiv.style.top = `${currentOverlayTop + adjustmentY}px`;
           }
+
         } else if (primaryPlacement === 'top' || primaryPlacement === 'bottom') {
           const currentOverlayLeft = parseFloat(this.contentDiv.style.left || '0');
           const anchorCenterX = anchorRect.left + (anchorRect.width / 2);
@@ -250,16 +265,20 @@ export class PdsTooltip {
 
   private createPortal() {
     if (this.portalEl !== null) return;
+
     this.portalEl = document.createElement('div');
     this.portalEl.className = `pds-tooltip pds-tooltip--${this.placement} ${this.htmlContent ? 'pds-tooltip--has-html-content' : ''} ${this.opened ? 'pds-tooltip--is-open' : ''} ${this.hasArrow ? '' : 'pds-tooltip--no-arrow'}`;
     this.portalEl.style.position = 'fixed';
     this.portalEl.style.zIndex = '9999';
+
     if (this.portalEl.id === '') {
       this.portalEl.id = this.componentId || this.el.id || `pds-tooltip-portal-${PdsTooltip.instanceCounter++}`;
     }
+
     if (this.portalEl.getAttribute('id') !== this.portalEl.id) {
       this.portalEl.setAttribute('id', this.portalEl.id);
     }
+
     this.portalEl.setAttribute('role', 'tooltip');
     this.portalEl.setAttribute('aria-hidden', this.opened ? 'false' : 'true');
     this.portalEl.setAttribute('aria-live', this.opened ? 'polite' : 'off');
@@ -275,13 +294,16 @@ export class PdsTooltip {
     const contentSlotWrapper = this.el.querySelector('.pds-tooltip__content-slot-wrapper');
     const slottedContentContainer = contentSlotWrapper?.querySelector('[slot="content"]') as HTMLElement | null;
     let hasSlottedContent = false;
+
     if (slottedContentContainer !== null) {
       const childrenToClone = Array.from(slottedContentContainer.childNodes);
+
       if (childrenToClone.length > 0) {
         const hasMeaningfulNode = childrenToClone.some(node =>
           node.nodeType === Node.ELEMENT_NODE ||
           (node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== '')
         );
+
         if (hasMeaningfulNode) {
           hasSlottedContent = true;
           childrenToClone.forEach((node /*, index*/) => {
