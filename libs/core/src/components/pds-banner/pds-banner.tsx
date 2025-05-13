@@ -14,15 +14,22 @@ export class PdsBanner {
   /**
    * Determines the banner variant.
    */
-  @Prop({ reflect: true }) variant: 'default' | 'secondary' | 'warning' | 'danger' = 'default';
+  @Prop() variant: 'default' | 'secondary' | 'warning' | 'danger' = 'default';
 
   render() {
     return (
-      <Host class="pds-banner" id={this.componentId}>
-        <pds-box background-color="var(--banner-background-color)" fit padding-block-start="sm" padding-block-end="sm" padding-inline-start="md" padding-inline-end="md">
+      <Host class="pds-banner" id={this.componentId} variant={this.variant}>
+        <pds-box
+          background-color="var(--banner-background-color)"
+          fit
+          padding-block-start="sm"
+          padding-block-end="sm"
+          padding-inline-start="md"
+          padding-inline-end="md"
+        >
           <pds-box display="flex" justify-content="space-between">
             <pds-box display="flex" align-items="center" gap="xs">
-              <pds-icon color="var(--banner-icon-color)" name="var(--banner-icon-name)"></pds-icon>
+              <pds-icon color="var(--banner-icon-color)" name={this.variant === 'danger' ? 'warning-filled' : 'info-circle-filled'}></pds-icon>
               <pds-text color="var(--banner-text-color)" tag="p">
                 <slot name="text"></slot>
               </pds-text>
