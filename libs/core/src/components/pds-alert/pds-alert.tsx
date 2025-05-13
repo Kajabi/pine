@@ -52,12 +52,6 @@ export class PdsAlert {
 
   @State() hasActionsContent = false;
 
-  private classNames() {
-    const classNames = ['pds-alert'];
-
-    return classNames.join(' ');
-  }
-
   private handleCloseClick = () => {
     this.pdsAlertCloseClick.emit();
   };
@@ -82,7 +76,7 @@ export class PdsAlert {
     const iconName = iconMap[this.variant] || iconMap.default;
 
     return (
-      <Host class={this.classNames()} id={this.componentId} variant={this.variant}>
+      <Host class="pds-alert" id={this.componentId} variant={this.variant}>
         <pds-box background-color="var(--pds-alert-current-bg)" border-color="var(--pds-alert-current-border)" border-radius="md" border display="block" padding="md">
           <pds-box gap="sm" display="flex">
             <pds-icon
