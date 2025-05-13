@@ -1,0 +1,62 @@
+import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+# Banner
+
+TBD
+
+## Properties
+
+<DocArgsTable componentName="pds-banner" docSource={components} />
+
+### Default
+
+<DocCanvas display="block" client:only
+  mdxSource={{
+    react: '<PdsBanner></PdsBanner>',
+    webComponent: '<pds-banner></pds-banner>'
+}}>
+  <pds-banner>
+    <span slot="text">You are currently editing Everything Wheels development site</span>
+    <pds-link slot="actions" href="#">Back to sites</pds-link>
+  </pds-banner>
+</DocCanvas>
+
+### Secondary
+
+<DocCanvas display="block" client:only
+  mdxSource={{
+    react: '<PdsBanner></PdsBanner>',
+    webComponent: '<pds-banner></pds-banner>'
+}}>
+  <pds-banner variant="secondary">
+    <span slot="text">You are currently editing Everything Wheels development site</span>
+    <pds-link slot="actions" href="#">Back to sites</pds-link>
+  </pds-banner>
+</DocCanvas>
+
+### Warning
+
+<DocCanvas display="block" client:only
+  mdxSource={{
+    react: '<PdsBanner></PdsBanner>',
+    webComponent: '<pds-banner></pds-banner>'
+}}>
+  <pds-banner variant="warning">
+    <span slot="text">You are currently editing Everything Wheels development site</span>
+    <pds-link slot="actions" href="#">Back to sites</pds-link>
+  </pds-banner>
+</DocCanvas>
+
+### Danger
+
+<DocCanvas display="block" client:only
+  mdxSource={{
+    react: '<PdsBanner></PdsBanner>',
+    webComponent: '<pds-banner></pds-banner>'
+}}>
+  <pds-banner variant="danger">
+    <span slot="text">You are currently editing Everything Wheels development site</span>
+    <pds-link slot="actions" href="#">Back to sites</pds-link>
+  </pds-banner>
+</DocCanvas>

@@ -8,6 +8,7 @@ import type { JSX } from '@pine-ds/core/components';
 import { defineCustomElement as definePdsAccordion } from '@pine-ds/core/components/pds-accordion.js';
 import { defineCustomElement as definePdsAlert } from '@pine-ds/core/components/pds-alert.js';
 import { defineCustomElement as definePdsAvatar } from '@pine-ds/core/components/pds-avatar.js';
+import { defineCustomElement as definePdsBanner } from '@pine-ds/core/components/pds-banner.js';
 import { defineCustomElement as definePdsBox } from '@pine-ds/core/components/pds-box.js';
 import { defineCustomElement as definePdsButton } from '@pine-ds/core/components/pds-button.js';
 import { defineCustomElement as definePdsCheckbox } from '@pine-ds/core/components/pds-checkbox.js';
@@ -42,6 +43,7 @@ import { defineCustomElement as definePdsTooltip } from '@pine-ds/core/component
 export const PdsAccordion = /*@__PURE__*/createReactComponent<JSX.PdsAccordion, HTMLPdsAccordionElement>('pds-accordion', undefined, undefined, definePdsAccordion);
 export const PdsAlert = /*@__PURE__*/createReactComponent<JSX.PdsAlert, HTMLPdsAlertElement>('pds-alert', undefined, undefined, definePdsAlert);
 export const PdsAvatar = /*@__PURE__*/createReactComponent<JSX.PdsAvatar, HTMLPdsAvatarElement>('pds-avatar', undefined, undefined, definePdsAvatar);
+export const PdsBanner = /*@__PURE__*/createReactComponent<JSX.PdsBanner, HTMLPdsBannerElement>('pds-banner', undefined, undefined, definePdsBanner);
 export const PdsBox = /*@__PURE__*/createReactComponent<JSX.PdsBox, HTMLPdsBoxElement>('pds-box', undefined, undefined, definePdsBox);
 export const PdsButton = /*@__PURE__*/createReactComponent<JSX.PdsButton, HTMLPdsButtonElement>('pds-button', undefined, undefined, definePdsButton);
 export const PdsCheckbox = /*@__PURE__*/createReactComponent<JSX.PdsCheckbox, HTMLPdsCheckboxElement>('pds-checkbox', undefined, undefined, definePdsCheckbox);

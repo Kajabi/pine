@@ -97,6 +97,16 @@ export namespace Components {
          */
         "variant"?: 'customer' | 'admin';
     }
+    interface PdsBanner {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * Determines the banner variant.
+         */
+        "variant": 'default' | 'secondary' | 'warning' | 'danger';
+    }
     interface PdsBox {
         /**
           * Defines how items within the box are aligned.
@@ -1238,6 +1248,12 @@ declare global {
         prototype: HTMLPdsAvatarElement;
         new (): HTMLPdsAvatarElement;
     };
+    interface HTMLPdsBannerElement extends Components.PdsBanner, HTMLStencilElement {
+    }
+    var HTMLPdsBannerElement: {
+        prototype: HTMLPdsBannerElement;
+        new (): HTMLPdsBannerElement;
+    };
     interface HTMLPdsBoxElement extends Components.PdsBox, HTMLStencilElement {
     }
     var HTMLPdsBoxElement: {
@@ -1595,6 +1611,7 @@ declare global {
         "pds-accordion": HTMLPdsAccordionElement;
         "pds-alert": HTMLPdsAlertElement;
         "pds-avatar": HTMLPdsAvatarElement;
+        "pds-banner": HTMLPdsBannerElement;
         "pds-box": HTMLPdsBoxElement;
         "pds-button": HTMLPdsButtonElement;
         "pds-checkbox": HTMLPdsCheckboxElement;
@@ -1712,6 +1729,16 @@ declare namespace LocalJSX {
           * @defaultValue customer
          */
         "variant"?: 'customer' | 'admin';
+    }
+    interface PdsBanner {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * Determines the banner variant.
+         */
+        "variant"?: 'default' | 'secondary' | 'warning' | 'danger';
     }
     interface PdsBox {
         /**
@@ -2830,6 +2857,7 @@ declare namespace LocalJSX {
         "pds-accordion": PdsAccordion;
         "pds-alert": PdsAlert;
         "pds-avatar": PdsAvatar;
+        "pds-banner": PdsBanner;
         "pds-box": PdsBox;
         "pds-button": PdsButton;
         "pds-checkbox": PdsCheckbox;
@@ -2869,6 +2897,7 @@ declare module "@stencil/core" {
             "pds-accordion": LocalJSX.PdsAccordion & JSXBase.HTMLAttributes<HTMLPdsAccordionElement>;
             "pds-alert": LocalJSX.PdsAlert & JSXBase.HTMLAttributes<HTMLPdsAlertElement>;
             "pds-avatar": LocalJSX.PdsAvatar & JSXBase.HTMLAttributes<HTMLPdsAvatarElement>;
+            "pds-banner": LocalJSX.PdsBanner & JSXBase.HTMLAttributes<HTMLPdsBannerElement>;
             "pds-box": LocalJSX.PdsBox & JSXBase.HTMLAttributes<HTMLPdsBoxElement>;
             "pds-button": LocalJSX.PdsButton & JSXBase.HTMLAttributes<HTMLPdsButtonElement>;
             "pds-checkbox": LocalJSX.PdsCheckbox & JSXBase.HTMLAttributes<HTMLPdsCheckboxElement>;
