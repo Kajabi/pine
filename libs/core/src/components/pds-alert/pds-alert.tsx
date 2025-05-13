@@ -87,7 +87,7 @@ export class PdsAlert {
             />
             <pds-box class="pds-alert__content-wrapper" direction="column" gap="xs" flex="grow">
               {this.heading && !this.small && (
-                <pds-text class={this.small ? 'pds-alert__heading--small' : 'pds-alert__heading'} color="var(--pds-alert-current-text-color)" size="h5" tag="h3" weight="medium">
+                <pds-text class="pds-alert__heading" color="var(--pds-alert-current-text-color)" size="h5" tag="h3" weight="medium">
                   {this.heading}
                 </pds-text>
               )}
