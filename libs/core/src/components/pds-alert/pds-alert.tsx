@@ -79,8 +79,8 @@ export class PdsAlert {
       <Host class="pds-alert" id={this.componentId} variant={this.variant}>
         <pds-box
           class={`pds-alert__container pds-alert__container--${this.variant}`}
-          background-color="var(--pds-alert-current-bg)"
-          border-color="var(--pds-alert-current-border)"
+          background-color="var(--pine-alert-background)"
+          border-color="var(--pine-alert-border-color)"
           border-radius="md"
           border
           display="block"
@@ -89,13 +89,13 @@ export class PdsAlert {
           <pds-box gap="sm" display="flex">
             <pds-icon
               class={`pds-alert__icon ${this.small ? 'pds-alert__icon--small' : ''}`}
-              color="var(--pds-alert-current-icon-color)"
+              color="var(--pine-alert-color-icon)"
               icon={iconName}
               size="var(--pds-alert-icon-size)"
             />
             <pds-box class="pds-alert__content-wrapper" direction="column" gap="xs" flex="grow">
               {this.heading && !this.small && (
-                <pds-text class="pds-alert__heading" color="var(--pds-alert-current-text-color)" size="h5" tag="h3" weight="medium">
+                <pds-text class="pds-alert__heading" color="var(--pine-alert-color-text)" size="h5" tag="h3" weight="medium">
                   {this.heading}
                 </pds-text>
               )}
@@ -105,7 +105,7 @@ export class PdsAlert {
                   <pds-text
                     truncate={this.small}
                     class={this.small ? 'pds-alert__description--small' : 'pds-alert__description'}
-                    color="var(--pds-alert-current-text-color)"
+                    color="var(--pine-alert-color-text)"
                     tag="p"
                   >
                     {this.description}
@@ -118,7 +118,7 @@ export class PdsAlert {
                 </pds-box>
               ) : (
                 <div>
-                  <pds-text class="pds-alert__description" color="var(--pds-alert-current-text-color)" tag="p">
+                  <pds-text class="pds-alert__description" color="var(--pine-alert-color-text)" tag="p">
                     {this.description}
                   </pds-text>
                   {this.hasActionsContent && (
@@ -132,7 +132,7 @@ export class PdsAlert {
 
             {this.dismissible && (
               <button class="pds-alert__close" type="button" aria-label="Dismiss alert" onClick={this.handleCloseClick}>
-                <pds-icon icon="remove" size="var(--pds-alert-icon-size)" aria-hidden="true" color="var(--pds-alert-close-color)" />
+                <pds-icon icon="remove" size="var(--pds-alert-icon-size)" aria-hidden="true" color="var(--pine-alert-color-dismiss)" />
               </button>
             )}
           </pds-box>
