@@ -5,51 +5,51 @@
 }
 
 .pds-alert__container {
-  --pine-alert-background: var(--pine-color-grey-150);
-  --pine-alert-border-color: var(--pine-color-border);
-  --pine-alert-color-icon: var(--pine-color-grey-700);
-  --pine-alert-color-text: var(--pine-color-grey-950);
-  --pine-alert-color-dismiss: var(--pine-color-grey-900);
-  --pine-alert-background-dismiss-hover: var(--pine-color-border);
+  --pds-alert-background: var(--pine-color-grey-150);
+  --pds-alert-border-color: var(--pine-color-grey-300);
+  --pds-alert-color-icon: var(--pine-color-grey-700);
+  --pds-alert-color-text: var(--pine-color-grey-950);
+  --pds-alert-color-dismiss: var(--pine-color-grey-900);
+  --pds-alert-background-dismiss-hover: var(--pine-color-grey-300);
 
   --pds-alert-icon-size: var(--pine-dimension-sm);
-  --pds-alert-border-dismiss-outline: 2px solid var(--pine-alert-color-dismiss);
+  --pds-alert-border-dismiss-outline: 2px solid var(--pds-alert-color-dismiss);
 }
 
 .pds-alert__container--danger {
-  --pine-alert-background: var(--pine-color-red-150);
-  --pine-alert-border-color: var(--pine-color-red-300);
-  --pine-alert-color-icon: var(--pine-color-red-700);
-  --pine-alert-color-dismiss: var(--pine-color-red-900);
-  --pine-alert-color-text: var(--pine-color-red-950);
-  --pine-alert-background-dismiss-hover: var(--pine-color-red-300);
+  --pds-alert-background: var(--pine-color-red-150);
+  --pds-alert-border-color: var(--pine-color-red-300);
+  --pds-alert-color-icon: var(--pine-color-red-700);
+  --pds-alert-color-dismiss: var(--pine-color-red-950);
+  --pds-alert-color-text: var(--pine-color-red-900);
+  --pds-alert-background-dismiss-hover: var(--pine-color-red-300);
 }
 
 .pds-alert__container--info {
-  --pine-alert-background: var(--pine-color-blue-150);
-  --pine-alert-border-color: var(--pine-color-blue-300);
-  --pine-alert-color-icon: var(--pine-color-blue-600);
-  --pine-alert-color-text: var(--pine-color-blue-950);
-  --pine-alert-color-dismiss: var(--pine-color-blue-900);
-  --pine-alert-background-dismiss-hover: var(--pine-color-blue-300);
+  --pds-alert-background: var(--pine-color-blue-150);
+  --pds-alert-border-color: var(--pine-color-blue-300);
+  --pds-alert-color-icon: var(--pine-color-blue-700);
+  --pds-alert-color-text: var(--pine-color-blue-950);
+  --pds-alert-color-dismiss: var(--pine-color-blue-900);
+  --pds-alert-background-dismiss-hover: var(--pine-color-blue-300);
 }
 
 .pds-alert__container--success {
-  --pine-alert-background: var(--pine-color-green-150);
-  --pine-alert-border-color: var(--pine-color-green-300);
-  --pine-alert-color-icon: var(--pine-color-green-700);
-  --pine-alert-color-text: var(--pine-color-green-950);
-  --pine-alert-color-dismiss: var(--pine-color-green-900);
-  --pine-alert-background-dismiss-hover: var(--pine-color-green-300);
+  --pds-alert-background: var(--pine-color-green-150);
+  --pds-alert-border-color: var(--pine-color-green-300);
+  --pds-alert-color-icon: var(--pine-color-green-700);
+  --pds-alert-color-text: var(--pine-color-green-950);
+  --pds-alert-color-dismiss: var(--pine-color-green-900);
+  --pds-alert-background-dismiss-hover: var(--pine-color-green-300);
 }
 
 .pds-alert__container--warning {
-  --pine-alert-background: var(--pine-color-yellow-150);
-  --pine-alert-border-color: var(--pine-color-yellow-300);
-  --pine-alert-color-icon: var(--pine-color-yellow-600);
-  --pine-alert-color-text: var(--pine-color-yellow-950);
-  --pine-alert-color-dismiss: var(--pine-color-yellow-900);
-  --pine-alert-background-dismiss-hover: var(--pine-color-yellow-300);
+  --pds-alert-background: var(--pine-color-yellow-150);
+  --pds-alert-border-color: var(--pine-color-yellow-300);
+  --pds-alert-color-icon: var(--pine-color-yellow-700);
+  --pds-alert-color-text: var(--pine-color-yellow-950);
+  --pds-alert-color-dismiss: var(--pine-color-yellow-900);
+  --pds-alert-background-dismiss-hover: var(--pine-color-yellow-300);
 }
 
 .pds-alert__icon {
@@ -57,7 +57,7 @@
 }
 
 .pds-alert__icon--small {
-  margin-block-start: calc(var(--pine-dimension-2xs) / 2);
+  margin-block-start: calc(var(--pine-dimension-2xs) / 2); // half the default icon margin
 }
 
 .pds-alert__content-wrapper {
@@ -81,7 +81,7 @@
 }
 
 .pds-alert__dismiss:hover {
-  background: var(--pine-alert-background-dismiss-hover);
+  background: var(--pds-alert-background-dismiss-hover);
   opacity: 0.8;
 }
 
