@@ -77,7 +77,15 @@ export class PdsAlert {
 
     return (
       <Host class="pds-alert" id={this.componentId} variant={this.variant}>
-        <pds-box background-color="var(--pds-alert-current-bg)" border-color="var(--pds-alert-current-border)" border-radius="md" border display="block" padding="md">
+        <pds-box
+          class={`pds-alert__container pds-alert__container--${this.variant}`}
+          background-color="var(--pds-alert-current-bg)"
+          border-color="var(--pds-alert-current-border)"
+          border-radius="md"
+          border
+          display="block"
+          padding="md"
+        >
           <pds-box gap="sm" display="flex">
             <pds-icon
               class={`pds-alert__icon ${this.small ? 'pds-alert__icon--small' : ''}`}
