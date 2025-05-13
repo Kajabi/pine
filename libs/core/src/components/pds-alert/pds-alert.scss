@@ -1,4 +1,10 @@
 :host {
+  display: block;
+  line-height: 1;
+  width: 100%;
+}
+
+.pds-alert__container {
   --pds-alert-current-bg: var(--pine-color-grey-150);
   --pds-alert-current-border: var(--pine-color-border);
   --pds-alert-current-icon-color: var(--pine-color-grey-700);
@@ -8,13 +14,9 @@
 
   --pds-alert-icon-size: 16px;
   --pds-alert-close-outline: 2px solid var(--pds-alert-close-color);
-
-  display: block;
-  line-height: 1;
-  width: 100%;
 }
 
-:host([variant="danger"]) {
+.pds-alert__container--danger {
   --pds-alert-current-bg: var(--pine-color-red-150);
   --pds-alert-current-border: var(--pine-color-red-300);
   --pds-alert-current-icon-color: var(--pine-color-red-700);
@@ -23,7 +25,7 @@
   --pds-alert-close-hover-bg: var(--pine-color-red-300);
 }
 
-:host([variant="info"]) {
+.pds-alert__container--info {
   --pds-alert-current-bg: var(--pine-color-blue-150);
   --pds-alert-current-border: var(--pine-color-blue-300);
   --pds-alert-current-icon-color: var(--pine-color-blue-600);
@@ -32,7 +34,7 @@
   --pds-alert-close-hover-bg: var(--pine-color-blue-300);
 }
 
-:host([variant="success"]) {
+.pds-alert__container--success {
   --pds-alert-current-bg: var(--pine-color-green-150);
   --pds-alert-current-border: var(--pine-color-green-300);
   --pds-alert-current-icon-color: var(--pine-color-green-700);
@@ -41,7 +43,7 @@
   --pds-alert-close-hover-bg: var(--pine-color-green-300);
 }
 
-:host([variant="warning"]) {
+.pds-alert__container--warning {
   --pds-alert-current-bg: var(--pine-color-yellow-150);
   --pds-alert-current-border: var(--pine-color-yellow-300);
   --pds-alert-current-icon-color: var(--pine-color-yellow-600);
