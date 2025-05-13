@@ -119,6 +119,7 @@ export class PdsTooltip {
 
     return () => {
       window.removeEventListener('pageshow', this.handlePageShow);
+
       if (this.slotMutationObserver !== null) {
         this.slotMutationObserver.disconnect();
       }
@@ -207,6 +208,7 @@ export class PdsTooltip {
 
     if (this.triggerEl !== null) {
       const children = this.triggerEl.childNodes;
+
       for (let i = 0; i < children.length; i++) {
         const childNode = children[i];
 
@@ -230,7 +232,6 @@ export class PdsTooltip {
     const anchor = this.determinePositioningAnchor();
 
     if (anchor !== null && this.contentDiv !== null) {
-
       positionTooltip({ elem: anchor, elemPlacement: this.placement, overlay: this.contentDiv });
       const placementParts = this.placement.split('-');
       const primaryPlacement = placementParts[0];
@@ -255,6 +256,7 @@ export class PdsTooltip {
           const anchorCenterX = anchorRect.left + (anchorRect.width / 2);
           const overlayCenterX = overlayRect.left + (overlayRect.width / 2);
           const adjustmentX = anchorCenterX - overlayCenterX;
+
           if (Math.abs(adjustmentX) > 0.5) {
             this.contentDiv.style.left = `${currentOverlayLeft + adjustmentX}px`;
           }

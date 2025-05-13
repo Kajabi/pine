@@ -22,7 +22,7 @@ describe('pds-tooltip', () => {
       html: `
        <pds-tooltip placement="right">
         <pds-button variant="secondary">Secondary</pds-button>
-       </pds-tooltip>`
+       </pds-tooltip>`,
     });
     expect(root).toEqualHtml(`
       <pds-tooltip placement="right">
@@ -40,7 +40,7 @@ describe('pds-tooltip', () => {
       html: `
       <pds-tooltip content="Tooltip content">
         <pds-button variant="secondary">Secondary</pds-button>
-      </pds-tooltip>`
+      </pds-tooltip>`,
     });
     await page.root?.showTooltip();
     await page.waitForChanges();
@@ -56,7 +56,7 @@ describe('pds-tooltip', () => {
       html: `
       <pds-tooltip content="Tooltip content">
         <pds-button variant="secondary">Secondary</pds-button>
-      </pds-tooltip>`
+      </pds-tooltip>`,
     });
     await page.root?.showTooltip();
     await page.waitForChanges();
@@ -69,6 +69,7 @@ describe('pds-tooltip', () => {
     await page.waitForChanges();
 
     tooltipPortal = page.body.querySelector('.pds-tooltip');
+
     if (tooltipPortal) {
       expect(tooltipPortal).not.toHaveClass('pds-tooltip--is-open');
     } else {
@@ -83,7 +84,7 @@ describe('pds-tooltip', () => {
       html: `
       <pds-tooltip placement="right" content="Tooltip content">
         <pds-button variant="secondary">Secondary</pds-button>
-      </pds-tooltip>`
+      </pds-tooltip>`,
     });
 
     const element = page.root?.shadowRoot;
@@ -97,7 +98,7 @@ describe('pds-tooltip', () => {
       html: `
       <pds-tooltip has-arrow="false" content="Tooltip content">
         <pds-button variant="secondary">Secondary</pds-button>
-      </pds-tooltip>`
+      </pds-tooltip>`,
     });
 
     const element = page.root?.shadowRoot;
@@ -111,7 +112,7 @@ describe('pds-tooltip', () => {
       html: `
       <pds-tooltip content="Tooltip content" opened="true">
         <pds-button variant="secondary">Secondary</pds-button>
-      </pds-tooltip>`
+      </pds-tooltip>`,
     });
 
     await page.waitForChanges(); // Ensure portal is created
@@ -127,7 +128,7 @@ describe('pds-tooltip', () => {
       html: `
       <pds-tooltip content="Tooltip content">
         <pds-button variant="secondary">Secondary</pds-button>
-      </pds-tooltip>`
+      </pds-tooltip>`,
     });
 
     const triggerElement = page.root?.querySelector('.pds-tooltip__trigger');
@@ -137,7 +138,7 @@ describe('pds-tooltip', () => {
     const tooltipPortal = page.body.querySelector('.pds-tooltip');
     expect(tooltipPortal).not.toBeNull();
     expect(tooltipPortal).toHaveClass('pds-tooltip--is-open');
-  })
+  });
 
   it('should hide the tooltip on blur', async () => {
     const page = await newSpecPage({
@@ -145,7 +146,7 @@ describe('pds-tooltip', () => {
       html: `
       <pds-tooltip content="Tooltip content">
         <pds-button variant="secondary">Secondary</pds-button>
-      </pds-tooltip>`
+      </pds-tooltip>`,
     });
 
     const triggerElement = page.root?.querySelector('.pds-tooltip__trigger');
@@ -160,12 +161,13 @@ describe('pds-tooltip', () => {
     await page.waitForChanges();
 
     tooltipPortal = page.body.querySelector('.pds-tooltip');
+
     if (tooltipPortal) {
       expect(tooltipPortal).not.toHaveClass('pds-tooltip--is-open');
     } else {
       expect(tooltipPortal).toBeNull();
     }
-  })
+  });
 
   it('should show the tooltip on mouseenter', async () => {
     const page = await newSpecPage({
@@ -173,7 +175,7 @@ describe('pds-tooltip', () => {
       html: `
       <pds-tooltip content="Tooltip content">
         <pds-button variant="secondary">Secondary</pds-button>
-      </pds-tooltip>`
+      </pds-tooltip>`,
     });
 
     const triggerElement = page.root?.querySelector('.pds-tooltip__trigger');
@@ -183,7 +185,7 @@ describe('pds-tooltip', () => {
     const tooltipPortal = page.body.querySelector('.pds-tooltip');
     expect(tooltipPortal).not.toBeNull();
     expect(tooltipPortal).toHaveClass('pds-tooltip--is-open');
-  })
+  });
 
   it('should hide tooltip on mouseleave after mouseenter', async () => {
     const page = await newSpecPage({
@@ -191,7 +193,7 @@ describe('pds-tooltip', () => {
       html: `
       <pds-tooltip content="Tooltip content">
         <pds-button variant="secondary">Secondary</pds-button>
-      </pds-tooltip>`
+      </pds-tooltip>`,
     });
 
     const triggerElement = page.root?.querySelector('.pds-tooltip__trigger');
@@ -206,12 +208,13 @@ describe('pds-tooltip', () => {
     await page.waitForChanges();
 
     tooltipPortal = page.body.querySelector('.pds-tooltip');
+
     if (tooltipPortal) {
       expect(tooltipPortal).not.toHaveClass('pds-tooltip--is-open');
     } else {
       expect(tooltipPortal).toBeNull();
     }
-  })
+  });
 
   it('should apply maxWidth to tooltip content', async () => {
     const maxWidthValue = '400px';
@@ -220,7 +223,7 @@ describe('pds-tooltip', () => {
       html: `
         <pds-tooltip max-width="${maxWidthValue}" content="Tooltip content" opened="true">
           <pds-button variant="secondary">Secondary</pds-button>
-        </pds-tooltip>`
+        </pds-tooltip>`,
     });
 
     await page.waitForChanges(); // Ensure component renders and portal is created
@@ -228,7 +231,9 @@ describe('pds-tooltip', () => {
     const contentElement = page.body.querySelector('.pds-tooltip .pds-tooltip__content') as HTMLElement;
 
     expect(contentElement).not.toBeNull(); // Add a check that element is found
-    if (contentElement !== null) { // Type guard, changed from if(contentElement)
+
+    if (contentElement !== null) {
+      // Type guard, changed from if(contentElement)
       expect(contentElement.style.maxWidth).toBe(maxWidthValue);
     }
   });
@@ -239,7 +244,7 @@ describe('pds-tooltip', () => {
       html: `
         <pds-tooltip content="Conditional Test">
           <button>Trigger</button>
-        </pds-tooltip>`
+        </pds-tooltip>`,
     });
 
     // First open the tooltip programmatically
@@ -266,6 +271,7 @@ describe('pds-tooltip', () => {
 
     // Verify it's closed
     tooltipPortal = page.body.querySelector('.pds-tooltip');
+
     if (tooltipPortal) {
       expect(tooltipPortal).not.toHaveClass('pds-tooltip--is-open');
     }
@@ -277,6 +283,7 @@ describe('pds-tooltip', () => {
 
     // Verify it's still closed
     tooltipPortal = page.body.querySelector('.pds-tooltip');
+
     if (tooltipPortal) {
       expect(tooltipPortal).not.toHaveClass('pds-tooltip--is-open');
     }
@@ -288,7 +295,7 @@ describe('pds-tooltip', () => {
       html: `
         <pds-tooltip placement="bottom" content="Repositioning Test" opened="true">
           <button>Trigger</button>
-        </pds-tooltip>`
+        </pds-tooltip>`,
     });
 
     await page.waitForChanges();
@@ -311,8 +318,7 @@ describe('pds-tooltip', () => {
     mockAnchor.getBoundingClientRect = jest.fn().mockReturnValue(mockAnchorRect);
 
     // Mock determinePositioningAnchor to return our mock anchor
-    const determineAnchorSpy = jest.spyOn(tooltipInstance, 'determinePositioningAnchor')
-      .mockReturnValue(mockAnchor);
+    const determineAnchorSpy = jest.spyOn(tooltipInstance, 'determinePositioningAnchor').mockReturnValue(mockAnchor);
 
     // Mock getBoundingClientRect for the contentDiv
     mockContentDiv.getBoundingClientRect = jest.fn().mockReturnValue(mockOverlayRect);
@@ -321,10 +327,9 @@ describe('pds-tooltip', () => {
     mockContentDiv.style.left = '75px';
 
     // Skip the actual repositioning logic
-    const repositionSpy = jest.spyOn(tooltipInstance, 'repositionPortal')
-      .mockImplementation(() => {
-        // This is a no-op mock implementation
-      });
+    const repositionSpy = jest.spyOn(tooltipInstance, 'repositionPortal').mockImplementation(() => {
+      // This is a no-op mock implementation
+    });
 
     // Verify the style is as expected
     expect(tooltipInstance.contentDiv.style.left).toBe('75px');
@@ -340,7 +345,7 @@ describe('pds-tooltip', () => {
       html: `
         <pds-tooltip content="Window Events Test">
           <button>Trigger</button>
-        </pds-tooltip>`
+        </pds-tooltip>`,
     });
 
     await page.waitForChanges();
@@ -371,7 +376,7 @@ describe('pds-tooltip', () => {
     (global.MutationObserver as jest.Mock).mockImplementation(() => ({
       observe: mockObserve,
       disconnect: jest.fn(),
-      takeRecords: jest.fn()
+      takeRecords: jest.fn(),
     }));
 
     const page = await newSpecPage({
@@ -382,7 +387,7 @@ describe('pds-tooltip', () => {
           <div slot="content">
             <p>Initial content</p>
           </div>
-        </pds-tooltip>`
+        </pds-tooltip>`,
     });
 
     await page.waitForChanges();
@@ -397,7 +402,7 @@ describe('pds-tooltip', () => {
       html: `
         <pds-tooltip content="Conditional Test">
           <button>Trigger</button>
-        </pds-tooltip>`
+        </pds-tooltip>`,
     });
 
     // First open the tooltip programmatically
@@ -424,6 +429,7 @@ describe('pds-tooltip', () => {
 
     // Verify it's closed
     tooltipPortal = page.body.querySelector('.pds-tooltip');
+
     if (tooltipPortal) {
       expect(tooltipPortal).not.toHaveClass('pds-tooltip--is-open');
     }
@@ -435,6 +441,7 @@ describe('pds-tooltip', () => {
 
     // Verify it's still closed
     tooltipPortal = page.body.querySelector('.pds-tooltip');
+
     if (tooltipPortal) {
       expect(tooltipPortal).not.toHaveClass('pds-tooltip--is-open');
     }
@@ -447,7 +454,7 @@ describe('pds-tooltip', () => {
       html: `
         <pds-tooltip placement="bottom" content="Bottom Test" opened="true">
           <button>Bottom Trigger</button>
-        </pds-tooltip>`
+        </pds-tooltip>`,
     });
 
     await bottomPage.waitForChanges();
@@ -462,7 +469,7 @@ describe('pds-tooltip', () => {
       html: `
         <pds-tooltip placement="top" content="Top Test" opened="true">
           <button>Top Trigger</button>
-        </pds-tooltip>`
+        </pds-tooltip>`,
     });
 
     await topPage.waitForChanges();
@@ -477,7 +484,7 @@ describe('pds-tooltip', () => {
       html: `
         <pds-tooltip placement="left" content="Left Test" opened="true">
           <button>Left Trigger</button>
-        </pds-tooltip>`
+        </pds-tooltip>`,
     });
 
     await leftPage.waitForChanges();
@@ -492,7 +499,7 @@ describe('pds-tooltip', () => {
       html: `
         <pds-tooltip placement="right" content="Right Test" opened="true">
           <button>Right Trigger</button>
-        </pds-tooltip>`
+        </pds-tooltip>`,
     });
 
     await rightPage.waitForChanges();
@@ -508,7 +515,7 @@ describe('pds-tooltip', () => {
       html: `
         <pds-tooltip content="Interactive Test">
           <button>Trigger</button>
-        </pds-tooltip>`
+        </pds-tooltip>`,
     });
 
     // Open tooltip interactively
@@ -548,7 +555,7 @@ describe('pds-tooltip', () => {
       html: `
         <pds-tooltip content="Basic Content Test" opened="true">
           <button>Trigger</button>
-        </pds-tooltip>`
+        </pds-tooltip>`,
     });
 
     await page.waitForChanges();
@@ -567,7 +574,7 @@ describe('pds-tooltip', () => {
           <div slot="content">
             <p>HTML Content</p>
           </div>
-        </pds-tooltip>`
+        </pds-tooltip>`,
     });
 
     await page.waitForChanges();
@@ -585,7 +592,7 @@ describe('pds-tooltip', () => {
       html: `
         <pds-tooltip content="Cleanup Test" opened="true">
           <button>Trigger</button>
-        </pds-tooltip>`
+        </pds-tooltip>`,
     });
 
     await page.waitForChanges();
@@ -605,177 +612,177 @@ describe('pds-tooltip', () => {
   });
 
   it('should test tooltip placement classes', async () => {
-// Test bottom placement
-const bottomPage = await newSpecPage({
-  components: [PdsTooltip],
-  html: `
-    <pds-tooltip placement="bottom" content="Bottom Test" opened="true">
-      <button>Bottom Trigger</button>
-    </pds-tooltip>`
-});
+    // Test bottom placement
+    const bottomPage = await newSpecPage({
+      components: [PdsTooltip],
+      html: `
+        <pds-tooltip placement="bottom" content="Bottom Test" opened="true">
+          <button>Bottom Trigger</button>
+        </pds-tooltip>`,
+    });
 
-await bottomPage.waitForChanges();
+    await bottomPage.waitForChanges();
 
-// Check for bottom placement class
-const bottomTooltip = bottomPage.body.querySelector('.pds-tooltip');
-expect(bottomTooltip).toHaveClass('pds-tooltip--bottom');
+    // Check for bottom placement class
+    const bottomTooltip = bottomPage.body.querySelector('.pds-tooltip');
+    expect(bottomTooltip).toHaveClass('pds-tooltip--bottom');
 
-// Test top placement
-const topPage = await newSpecPage({
-  components: [PdsTooltip],
-  html: `
-    <pds-tooltip placement="top" content="Top Test" opened="true">
-      <button>Top Trigger</button>
-    </pds-tooltip>`
-});
+    // Test top placement
+    const topPage = await newSpecPage({
+      components: [PdsTooltip],
+      html: `
+        <pds-tooltip placement="top" content="Top Test" opened="true">
+          <button>Top Trigger</button>
+        </pds-tooltip>`,
+    });
 
-await topPage.waitForChanges();
+    await topPage.waitForChanges();
 
-// Check for top placement class
-const topTooltip = topPage.body.querySelector('.pds-tooltip');
-expect(topTooltip).toHaveClass('pds-tooltip--top');
+    // Check for top placement class
+    const topTooltip = topPage.body.querySelector('.pds-tooltip');
+    expect(topTooltip).toHaveClass('pds-tooltip--top');
 
-// Test left placement
-const leftPage = await newSpecPage({
-  components: [PdsTooltip],
-  html: `
-    <pds-tooltip placement="left" content="Left Test" opened="true">
-      <button>Left Trigger</button>
-    </pds-tooltip>`
-});
+    // Test left placement
+    const leftPage = await newSpecPage({
+      components: [PdsTooltip],
+      html: `
+      <pds-tooltip placement="left" content="Left Test" opened="true">
+        <button>Left Trigger</button>
+      </pds-tooltip>`,
+    });
 
-await leftPage.waitForChanges();
+    await leftPage.waitForChanges();
 
-// Check for left placement class
-const leftTooltip = leftPage.body.querySelector('.pds-tooltip');
-expect(leftTooltip).toHaveClass('pds-tooltip--left');
+    // Check for left placement class
+    const leftTooltip = leftPage.body.querySelector('.pds-tooltip');
+    expect(leftTooltip).toHaveClass('pds-tooltip--left');
 
-// Test right placement
-const rightPage = await newSpecPage({
-  components: [PdsTooltip],
-  html: `
-    <pds-tooltip placement="right" content="Right Test" opened="true">
-      <button>Right Trigger</button>
-    </pds-tooltip>`
-});
+    // Test right placement
+    const rightPage = await newSpecPage({
+      components: [PdsTooltip],
+      html: `
+      <pds-tooltip placement="right" content="Right Test" opened="true">
+        <button>Right Trigger</button>
+      </pds-tooltip>`,
+    });
 
-await rightPage.waitForChanges();
+    await rightPage.waitForChanges();
 
-// Check for right placement class
-const rightTooltip = rightPage.body.querySelector('.pds-tooltip');
-expect(rightTooltip).toHaveClass('pds-tooltip--right');
-});
+    // Check for right placement class
+    const rightTooltip = rightPage.body.querySelector('.pds-tooltip');
+    expect(rightTooltip).toHaveClass('pds-tooltip--right');
+  });
 
-it('should handle interactive and programmatic opening', async () => {
-const page = await newSpecPage({
-  components: [PdsTooltip],
-  html: `
+  it('should handle interactive and programmatic opening', async () => {
+    const page = await newSpecPage({
+      components: [PdsTooltip],
+      html: `
     <pds-tooltip content="Interactive Test">
       <button>Trigger</button>
-    </pds-tooltip>`
-});
+    </pds-tooltip>`,
+    });
 
-// Open tooltip interactively
-const triggerElement = page.root?.querySelector('.pds-tooltip__trigger');
-triggerElement?.dispatchEvent(new MouseEvent('mouseenter'));
-await page.waitForChanges();
+    // Open tooltip interactively
+    const triggerElement = page.root?.querySelector('.pds-tooltip__trigger');
+    triggerElement?.dispatchEvent(new MouseEvent('mouseenter'));
+    await page.waitForChanges();
 
-// Verify tooltip is open
-let tooltipPortal = page.body.querySelector('.pds-tooltip');
-expect(tooltipPortal).toHaveClass('pds-tooltip--is-open');
+    // Verify tooltip is open
+    let tooltipPortal = page.body.querySelector('.pds-tooltip');
+    expect(tooltipPortal).toHaveClass('pds-tooltip--is-open');
 
-// Close tooltip
-triggerElement?.dispatchEvent(new MouseEvent('mouseleave'));
-await page.waitForChanges();
+    // Close tooltip
+    triggerElement?.dispatchEvent(new MouseEvent('mouseleave'));
+    await page.waitForChanges();
 
-// Now open programmatically
-page.rootInstance.opened = true;
-await page.waitForChanges();
+    // Now open programmatically
+    page.rootInstance.opened = true;
+    await page.waitForChanges();
 
-// Verify tooltip is open
-tooltipPortal = page.body.querySelector('.pds-tooltip');
-expect(tooltipPortal).toHaveClass('pds-tooltip--is-open');
+    // Verify tooltip is open
+    tooltipPortal = page.body.querySelector('.pds-tooltip');
+    expect(tooltipPortal).toHaveClass('pds-tooltip--is-open');
 
-// Try to close with mouse leave (should NOT close since it was opened programmatically)
-triggerElement?.dispatchEvent(new MouseEvent('mouseleave'));
-await page.waitForChanges();
+    // Try to close with mouse leave (should NOT close since it was opened programmatically)
+    triggerElement?.dispatchEvent(new MouseEvent('mouseleave'));
+    await page.waitForChanges();
 
-// Verify tooltip is still open
-tooltipPortal = page.body.querySelector('.pds-tooltip');
-expect(tooltipPortal).toHaveClass('pds-tooltip--is-open');
-});
+    // Verify tooltip is still open
+    tooltipPortal = page.body.querySelector('.pds-tooltip');
+    expect(tooltipPortal).toHaveClass('pds-tooltip--is-open');
+  });
 
-it('should test content updates', async () => {
-// Skip the mutation observer test entirely and just verify basic content rendering
-const page = await newSpecPage({
-  components: [PdsTooltip],
-  html: `
-    <pds-tooltip content="Basic Content Test" opened="true">
-      <button>Trigger</button>
-    </pds-tooltip>`
-});
+  it('should test content updates', async () => {
+    // Skip the mutation observer test entirely and just verify basic content rendering
+    const page = await newSpecPage({
+      components: [PdsTooltip],
+      html: `
+        <pds-tooltip content="Basic Content Test" opened="true">
+          <button>Trigger</button>
+        </pds-tooltip>`,
+    });
 
-await page.waitForChanges();
+    await page.waitForChanges();
 
-// Verify the tooltip content is rendered correctly
-const tooltipContent = page.body.querySelector('.pds-tooltip__content');
-expect(tooltipContent?.textContent?.trim()).toBe('Basic Content Test');
-});
+    // Verify the tooltip content is rendered correctly
+    const tooltipContent = page.body.querySelector('.pds-tooltip__content');
+    expect(tooltipContent?.textContent?.trim()).toBe('Basic Content Test');
+  });
 
-it('should handle html content in tooltip', async () => {
-const page = await newSpecPage({
-  components: [PdsTooltip],
-  html: `
-    <pds-tooltip html-content="true" opened="true">
-      <button>Trigger</button>
-      <div slot="content">
-        <p>HTML Content</p>
-      </div>
-    </pds-tooltip>`
-});
+  it('should handle html content in tooltip', async () => {
+    const page = await newSpecPage({
+      components: [PdsTooltip],
+      html: `
+      <pds-tooltip html-content="true" opened="true">
+        <button>Trigger</button>
+        <div slot="content">
+          <p>HTML Content</p>
+        </div>
+      </pds-tooltip>`,
+    });
 
-await page.waitForChanges();
+    await page.waitForChanges();
 
-// Verify the tooltip content is rendered correctly
-const tooltipContent = page.body.querySelector('.pds-tooltip__content');
-expect(tooltipContent?.textContent?.trim()).toBe('HTML Content');
-});
+    // Verify the tooltip content is rendered correctly
+    const tooltipContent = page.body.querySelector('.pds-tooltip__content');
+    expect(tooltipContent?.textContent?.trim()).toBe('HTML Content');
+  });
 
-it('should verify tooltip can be created and removed', async () => {
-// Create a simple test that verifies the tooltip can be created and removed
-// without relying on internal implementation details
-const page = await newSpecPage({
-  components: [PdsTooltip],
-  html: `
+  it('should verify tooltip can be created and removed', async () => {
+    // Create a simple test that verifies the tooltip can be created and removed
+    // without relying on internal implementation details
+    const page = await newSpecPage({
+      components: [PdsTooltip],
+      html: `
     <pds-tooltip content="Cleanup Test" opened="true">
       <button>Trigger</button>
-    </pds-tooltip>`
-});
+    </pds-tooltip>`,
+    });
 
-await page.waitForChanges();
+    await page.waitForChanges();
 
-// Verify tooltip is in the DOM
-const tooltipPortal = page.body.querySelector('.pds-tooltip');
-expect(tooltipPortal).not.toBeNull();
-expect(tooltipPortal).toHaveClass('pds-tooltip--is-open');
+    // Verify tooltip is in the DOM
+    const tooltipPortal = page.body.querySelector('.pds-tooltip');
+    expect(tooltipPortal).not.toBeNull();
+    expect(tooltipPortal).toHaveClass('pds-tooltip--is-open');
 
-// Remove the tooltip from the DOM
-page.setContent('');
-await page.waitForChanges();
+    // Remove the tooltip from the DOM
+    page.setContent('');
+    await page.waitForChanges();
 
-// Verify tooltip is removed
-const tooltipAfterRemoval = page.body.querySelector('.pds-tooltip');
-expect(tooltipAfterRemoval).toBeNull();
-});
+    // Verify tooltip is removed
+    const tooltipAfterRemoval = page.body.querySelector('.pds-tooltip');
+    expect(tooltipAfterRemoval).toBeNull();
+  });
 
-it('should handle cleanup properly', async () => {
+  it('should handle cleanup properly', async () => {
     // Test that the component can be created and destroyed without errors
     const page = await newSpecPage({
       components: [PdsTooltip],
       html: `
         <pds-tooltip content="Cleanup Test" opened="true">
           <button>Trigger</button>
-        </pds-tooltip>`
+        </pds-tooltip>`,
     });
 
     await page.waitForChanges();
