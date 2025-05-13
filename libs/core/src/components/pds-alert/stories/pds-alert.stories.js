@@ -8,7 +8,7 @@ export default {
   decorators: [withActions],
   parameters: {
     actions: {
-      handles: ['onclick', 'pdsAlertCloseClick'],
+      handles: ['onclick', 'pdsAlertDismissClick'],
     },
   },
   title: 'components/Alert',

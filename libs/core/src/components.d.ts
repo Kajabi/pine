@@ -38,7 +38,7 @@ export namespace Components {
          */
         "description": string;
         /**
-          * If true, shows the close button. If false, the close button is hidden.
+          * If true, shows the dismiss button. If false, the dismiss button is hidden.
           * @defaultValue false
          */
         "dismissible": boolean;
@@ -1216,7 +1216,7 @@ declare global {
         new (): HTMLPdsAccordionElement;
     };
     interface HTMLPdsAlertElementEventMap {
-        "pdsAlertCloseClick": void;
+        "pdsAlertDismissClick": void;
     }
     interface HTMLPdsAlertElement extends Components.PdsAlert, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsAlertElementEventMap>(type: K, listener: (this: HTMLPdsAlertElement, ev: PdsAlertCustomEvent<HTMLPdsAlertElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1650,7 +1650,7 @@ declare namespace LocalJSX {
          */
         "description"?: string;
         /**
-          * If true, shows the close button. If false, the close button is hidden.
+          * If true, shows the dismiss button. If false, the dismiss button is hidden.
           * @defaultValue false
          */
         "dismissible"?: boolean;
@@ -1659,9 +1659,9 @@ declare namespace LocalJSX {
          */
         "heading"?: string;
         /**
-          * Event emitted when the close button is clicked.
+          * Event emitted when the dismiss button is clicked.
          */
-        "onPdsAlertCloseClick"?: (event: PdsAlertCustomEvent<void>) => void;
+        "onPdsAlertDismissClick"?: (event: PdsAlertCustomEvent<void>) => void;
         /**
           * If true, the alert is displayed in a smaller size and description text is truncated. Heading is not displayed.
          */

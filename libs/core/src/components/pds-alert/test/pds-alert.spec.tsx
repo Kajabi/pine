@@ -111,7 +111,7 @@ describe('pds-alert', () => {
                   <pds-text class="pds-alert__description" color="var(--pine-alert-color-text)" tag="p">Alert with dismiss button</pds-text>
                 </div>
               </pds-box>
-              <button aria-label="Dismiss alert" class="pds-alert__close" type="button">
+              <button aria-label="Dismiss alert" class="pds-alert__dismiss" type="button">
                 <pds-icon aria-hidden="true" color="var(--pine-alert-color-dismiss)" icon="remove" size="var(--pds-alert-icon-size)"></pds-icon>
               </button>
             </pds-box>
@@ -121,7 +121,7 @@ describe('pds-alert', () => {
     `);
   });
 
-  it('emits pdsAlertCloseClick event when dismiss button is clicked', async () => {
+  it('emits pdsAlertDismissClick event when dismiss button is clicked', async () => {
     const page = await newSpecPage({
       components: [PdsAlert],
       html: `<pds-alert dismissible="true"></pds-alert>`,
@@ -132,11 +132,11 @@ describe('pds-alert', () => {
 
     // Add event listener to the component
     if (page.root) {
-      page.root.addEventListener('pdsAlertCloseClick', eventSpy);
+      page.root.addEventListener('pdsAlertDismissClick', eventSpy);
 
       // Find and click the dismiss button
       if (page.root.shadowRoot) {
-        const dismissButton = page.root.shadowRoot.querySelector('.pds-alert__close') as HTMLButtonElement;
+        const dismissButton = page.root.shadowRoot.querySelector('.pds-alert__dismiss') as HTMLButtonElement;
         if (dismissButton) {
           dismissButton.click();
 

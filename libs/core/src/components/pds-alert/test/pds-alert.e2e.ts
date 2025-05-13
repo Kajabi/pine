@@ -9,12 +9,12 @@ describe('pds-alert', () => {
     expect(element).toHaveClass('hydrated');
   });
 
-  it('emits "pdsAlertCloseClick" event when dismiss button is clicked', async () => {
+  it('emits "pdsAlertDismissClick" event when dismiss button is clicked', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-alert dismissible="true" description="Test alert with dismiss button"></pds-alert>');
 
-    const closeBtn = await page.find('pds-alert >>> .pds-alert__close');
-    const eventSpy = await page.spyOnEvent('pdsAlertCloseClick');
+    const closeBtn = await page.find('pds-alert >>> .pds-alert__dismiss');
+    const eventSpy = await page.spyOnEvent('pdsAlertDismissClick');
     await closeBtn.click();
 
     expect(eventSpy).toHaveReceivedEvent();

@@ -67,7 +67,7 @@
   width: 100%;
 }
 
-.pds-alert__close {
+.pds-alert__dismiss {
   align-items: center;
   background: none;
   border: 0;
@@ -80,12 +80,12 @@
   width: var(--pine-dimension-250);
 }
 
-.pds-alert__close:hover {
+.pds-alert__dismiss:hover {
   background: var(--pine-alert-background-dismiss-hover);
   opacity: 0.8;
 }
 
-.pds-alert__close:focus-visible {
+.pds-alert__dismiss:focus-visible {
   outline: var(--pds-alert-border-dismiss-outline);
 }
 

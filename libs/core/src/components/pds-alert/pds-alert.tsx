@@ -34,7 +34,7 @@ export class PdsAlert {
   @Prop() small = false;
 
   /**
-   * If true, shows the close button. If false, the close button is hidden.
+   * If true, shows the dismiss button. If false, the dismiss button is hidden.
    * @defaultValue false
    */
   @Prop() dismissible = false;
@@ -46,14 +46,14 @@ export class PdsAlert {
   @Prop() variant: 'default' | 'danger' | 'info' | 'success' | 'warning' = 'default';
 
   /**
-   * Event emitted when the close button is clicked.
+   * Event emitted when the dismiss button is clicked.
    */
-  @Event() pdsAlertCloseClick: EventEmitter<void>;
+  @Event() pdsAlertDismissClick: EventEmitter<void>;
 
   @State() hasActionsContent = false;
 
   private handleCloseClick = () => {
-    this.pdsAlertCloseClick.emit();
+    this.pdsAlertDismissClick.emit();
   };
 
   componentWillRender() {
@@ -131,7 +131,7 @@ export class PdsAlert {
             </pds-box>
 
             {this.dismissible && (
-              <button class="pds-alert__close" type="button" aria-label="Dismiss alert" onClick={this.handleCloseClick}>
+              <button class="pds-alert__dismiss" type="button" aria-label="Dismiss alert" onClick={this.handleCloseClick}>
                 <pds-icon icon="remove" size="var(--pds-alert-icon-size)" aria-hidden="true" color="var(--pine-alert-color-dismiss)" />
               </button>
             )}
