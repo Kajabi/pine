@@ -28,6 +28,34 @@ export namespace Components {
          */
         "isOpen": boolean;
     }
+    interface PdsAlert {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * Text displayed as the description of the alert.
+         */
+        "description": string;
+        /**
+          * If true, shows the close button. If false, the close button is hidden.
+          * @defaultValue false
+         */
+        "dismissible": boolean;
+        /**
+          * Text displayed as the heading of the alert.
+         */
+        "heading": string;
+        /**
+          * If true, the alert is displayed in a smaller size and description text is truncated. Heading is not displayed.
+         */
+        "small": boolean;
+        /**
+          * Sets the style variant of the alert.
+          * @defaultValue 'default'
+         */
+        "variant": 'default' | 'danger' | 'info' | 'success' | 'warning';
+    }
     interface PdsAvatar {
         /**
           * The alt for a custom user image.
@@ -1116,6 +1144,10 @@ export namespace Components {
         "showTooltip": () => Promise<void>;
     }
 }
+export interface PdsAlertCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsAlertElement;
+}
 export interface PdsButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsButtonElement;
@@ -1182,6 +1214,23 @@ declare global {
     var HTMLPdsAccordionElement: {
         prototype: HTMLPdsAccordionElement;
         new (): HTMLPdsAccordionElement;
+    };
+    interface HTMLPdsAlertElementEventMap {
+        "pdsAlertCloseClick": void;
+    }
+    interface HTMLPdsAlertElement extends Components.PdsAlert, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsAlertElementEventMap>(type: K, listener: (this: HTMLPdsAlertElement, ev: PdsAlertCustomEvent<HTMLPdsAlertElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsAlertElementEventMap>(type: K, listener: (this: HTMLPdsAlertElement, ev: PdsAlertCustomEvent<HTMLPdsAlertElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLPdsAlertElement: {
+        prototype: HTMLPdsAlertElement;
+        new (): HTMLPdsAlertElement;
     };
     interface HTMLPdsAvatarElement extends Components.PdsAvatar, HTMLStencilElement {
     }
@@ -1544,6 +1593,7 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "pds-accordion": HTMLPdsAccordionElement;
+        "pds-alert": HTMLPdsAlertElement;
         "pds-avatar": HTMLPdsAvatarElement;
         "pds-box": HTMLPdsBoxElement;
         "pds-button": HTMLPdsButtonElement;
@@ -1589,6 +1639,38 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "isOpen"?: boolean;
+    }
+    interface PdsAlert {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * Text displayed as the description of the alert.
+         */
+        "description"?: string;
+        /**
+          * If true, shows the close button. If false, the close button is hidden.
+          * @defaultValue false
+         */
+        "dismissible"?: boolean;
+        /**
+          * Text displayed as the heading of the alert.
+         */
+        "heading"?: string;
+        /**
+          * Event emitted when the close button is clicked.
+         */
+        "onPdsAlertCloseClick"?: (event: PdsAlertCustomEvent<void>) => void;
+        /**
+          * If true, the alert is displayed in a smaller size and description text is truncated. Heading is not displayed.
+         */
+        "small"?: boolean;
+        /**
+          * Sets the style variant of the alert.
+          * @defaultValue 'default'
+         */
+        "variant"?: 'default' | 'danger' | 'info' | 'success' | 'warning';
     }
     interface PdsAvatar {
         /**
@@ -2746,6 +2828,7 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "pds-accordion": PdsAccordion;
+        "pds-alert": PdsAlert;
         "pds-avatar": PdsAvatar;
         "pds-box": PdsBox;
         "pds-button": PdsButton;
@@ -2784,6 +2867,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "pds-accordion": LocalJSX.PdsAccordion & JSXBase.HTMLAttributes<HTMLPdsAccordionElement>;
+            "pds-alert": LocalJSX.PdsAlert & JSXBase.HTMLAttributes<HTMLPdsAlertElement>;
             "pds-avatar": LocalJSX.PdsAvatar & JSXBase.HTMLAttributes<HTMLPdsAvatarElement>;
             "pds-box": LocalJSX.PdsBox & JSXBase.HTMLAttributes<HTMLPdsBoxElement>;
             "pds-button": LocalJSX.PdsButton & JSXBase.HTMLAttributes<HTMLPdsButtonElement>;

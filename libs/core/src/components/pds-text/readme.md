@@ -20,6 +20,19 @@
 | `weight`     | `weight`     | Sets the font weight.                                                            | `"bold" \| "extra-light" \| "light" \| "medium" \| "regular" \| "semibold"`                              | `undefined` |
 
 
+## Dependencies
+
+### Used by
+
+ - [pds-alert](../pds-alert)
+
+### Graph
+```mermaid
+graph TD;
+  pds-alert --> pds-text
+  style pds-text fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 
