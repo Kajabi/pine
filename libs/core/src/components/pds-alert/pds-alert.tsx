@@ -63,6 +63,41 @@ export class PdsAlert {
     this.hasActionsContent = !!actionsSlot;
   }
 
+  private renderActions(isSmall: boolean) {
+    return (
+      <pds-box class={isSmall ? "pds-alert__actions--small" : "pds-alert__actions"} gap="sm" flex={isSmall ? "none" : undefined} align-items={isSmall ? undefined : "center"}>
+        <slot name="actions"></slot>
+      </pds-box>
+    );
+  }
+
+  private renderContent() {
+    if (this.small) {
+      return (
+        <pds-box display="flex" gap="md" align-items="center">
+          <pds-text
+            truncate={this.small}
+            class="pds-alert__description--small"
+            color="var(--pds-alert-color-text)"
+            tag="p"
+          >
+            {this.description}
+          </pds-text>
+          {this.hasActionsContent && this.renderActions(true)}
+        </pds-box>
+      );
+    }
+
+    return (
+      <div>
+        <pds-text class="pds-alert__description" color="var(--pds-alert-color-text)" tag="p">
+          {this.description}
+        </pds-text>
+        {this.hasActionsContent && this.renderActions(false)}
+      </div>
+    );
+  }
+
   render() {
     const iconMap = {
       danger: 'warning-filled',
@@ -100,34 +135,7 @@ export class PdsAlert {
                 </pds-text>
               )}
 
-              {this.small ? (
-                <pds-box display="flex" gap="md" align-items="center">
-                  <pds-text
-                    truncate={this.small}
-                    class={this.small ? 'pds-alert__description--small' : 'pds-alert__description'}
-                    color="var(--pds-alert-color-text)"
-                    tag="p"
-                  >
-                    {this.description}
-                  </pds-text>
-                  {this.hasActionsContent && (
-                    <pds-box class="pds-alert__actions--small" gap="sm" flex="none">
-                      <slot name="actions"></slot>
-                    </pds-box>
-                  )}
-                </pds-box>
-              ) : (
-                <div>
-                  <pds-text class="pds-alert__description" color="var(--pds-alert-color-text)" tag="p">
-                    {this.description}
-                  </pds-text>
-                  {this.hasActionsContent && (
-                    <pds-box class="pds-alert__actions" gap="sm" align-items="center">
-                      <slot name="actions"></slot>
-                    </pds-box>
-                  )}
-                </div>
-              )}
+              {this.renderContent()}
             </pds-box>
 
             {this.dismissible && (

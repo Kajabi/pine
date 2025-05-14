@@ -36,15 +36,15 @@
 ### Depends on
 
 - [pds-box](../pds-box)
-- pds-icon
 - [pds-text](../pds-text)
+- pds-icon
 
 ### Graph
 ```mermaid
 graph TD;
   pds-alert --> pds-box
-  pds-alert --> pds-icon
   pds-alert --> pds-text
+  pds-alert --> pds-icon
   style pds-alert fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
