@@ -52,7 +52,7 @@ Default.args = {
   componentId: 'default-alert',
   variant: 'default',
   heading: 'Default alert heading',
-  description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+  description: 'Alerts can also have description text that can be used to provide more information about the alert.',
   small: false,
   dismissible: false,
 };
@@ -62,7 +62,7 @@ Small.args = {
   componentId: 'small-alert',
   variant: 'default',
   heading: 'Small alert heading',
-  description:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+  description: 'Small alerts use the description to provide more information about the alert, but are truncated when the text becomes too long for the alert to fit the screen.',
   small: true,
   dismissible: true,
 };
@@ -72,7 +72,7 @@ Actions.args = {
   componentId: 'actions-alert',
   variant: 'default',
   heading: 'Alert with actions',
-  description: 'This alert includes action button and link in the actions slot',
+  description: 'This alert includes action button and link in the actions slot.',
   small: false,
   dismissible: true,
 };
