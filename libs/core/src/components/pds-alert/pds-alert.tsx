@@ -1,16 +1,16 @@
 import { Component, Host, h, Prop, Event, EventEmitter, Element, State } from '@stencil/core';
 
-
 /**
  * @slot actions - Slot for alert actions.
  */
 
 @Component({
   tag: 'pds-alert',
-  styleUrl: 'pds-alert.scss',
+  styleUrls: ['pds-alert.tokens.scss', 'pds-alert.scss'],
   shadow: true,
 })
 export class PdsAlert {
+
   @Element() el: HTMLPdsAlertElement;
 
   /**
