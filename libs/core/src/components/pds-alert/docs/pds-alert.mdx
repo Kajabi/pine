@@ -5,6 +5,24 @@ import { components } from '../../../../dist/docs.json';
 
 The alert component is used to display a message to the user. It can be used to display important information, success messages, warnings, or errors.
 
+## Guidelines
+
+### When to use
+- To provide important feedback or information that requires the user's attention.
+- To notify users about system status, success messages, warnings, or errors.
+- When an immediate user response or awareness is crucial for a particular state or action.
+- For critical updates that need to stand out from other page content.
+
+### When not to use
+- For non-essential information that can be displayed inline or in less obtrusive ways (e.g., tooltips, popovers).
+- As a primary method of navigation or user flow.
+- So frequently that they become disruptive or lead to "alert fatigue," causing users to ignore them.
+
+### Accessibility
+- The dismiss button has an `aria-label="Dismiss alert"` to ensure screen readers announce its purpose..
+- When using alerts, ensure content is clear and actionable.
+- The alert's variant colors help to provide semantic meaning that reinforces the alert's importance and type.
+
 ## Properties
 
 <DocArgsTable componentName="pds-alert" docSource={components} />
@@ -50,7 +68,7 @@ Action items such as buttons and links should be added to alerts using the `acti
 > **IMPORTANT:**
 > - In order to adhere to design and UX best practices, only links and buttons should be used in the actions slot.
 > - The `actions` slot uses a flex layout automatically, so the actions will be spaced and aligned properly.
-> - When using the small variant, only links should be used in the actions slot.
+> - When using the small variant, only links should be used in the actions slot due to the compact inline layout.
 
 <DocCanvas client:only
   mdxSource={{
@@ -95,9 +113,3 @@ An event `pdsAlertDismissClick` is emitted when the dismiss button is clicked, w
 }}>
   <pds-alert description="Small alerts use the description to provide more information about the alert, but are truncated when the text becomes too long for the alert to fit the screen." dismissible="true" heading="Alert heading text" small="true" variant="danger"></pds-alert>
 </DocCanvas>
-
-## Accessibility
-
-- The dismiss button has an `aria-label="Dismiss alert"` to ensure screen readers announce its purpose
-- When using alerts, ensure content is clear and actionable
-- The alert's variant colors help to provide semantic meaning that reinforces the alert's importance and type
