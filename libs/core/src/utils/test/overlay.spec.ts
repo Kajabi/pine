@@ -82,8 +82,8 @@ describe('positionTooltip', () => {
   it('positions the overlay to the bottom-end of the target', async () => {
     positionTooltip({elem: mockButton, elemPlacement: 'bottom-end', overlay: mockOverlay});
 
-    expect(mockOverlay.style.left).toEqual('initial');
-    expect(mockOverlay.style.right).toEqual('0px');
+    expect(mockOverlay.style.left).toEqual('0px');
+    expect(mockOverlay.style.right).toEqual('initial');
     expect(mockOverlay.style.top).toEqual('8px');
   })
 
@@ -104,8 +104,8 @@ describe('positionTooltip', () => {
   it('positions the overlay to the top-end of the target', async () => {
     positionTooltip({elem: mockButton, elemPlacement: 'top-end', overlay: mockOverlay});
 
-    expect(mockOverlay.style.left).toEqual('initial');
-    expect(mockOverlay.style.right).toEqual('0');
+    expect(mockOverlay.style.left).toEqual('0px');
+    expect(mockOverlay.style.right).toEqual('initial');
     expect(mockOverlay.style.top).toEqual('-8px');
   })
 });

@@ -72,8 +72,8 @@ export const positionTooltip = ({elem, elemPlacement, overlay, offset = 8}: Over
         overlay.style.left = `${rect.left}px`;
       }
       if (elemPlacement.includes('end')) {
-        overlay.style.left = 'initial';
-        overlay.style.right = '0px';
+        overlay.style.left = `${rect.right - contentRect.width}px`;
+        overlay.style.right = 'initial';
       }
       break;
     case elemPlacement.includes('top'):
@@ -83,8 +83,8 @@ export const positionTooltip = ({elem, elemPlacement, overlay, offset = 8}: Over
         overlay.style.left = `${rect.left}px`;
       }
       if (elemPlacement.includes('end')) {
-        overlay.style.left = 'initial';
-        overlay.style.right = '0';
+        overlay.style.left = `${rect.right - contentRect.width}px`;
+        overlay.style.right = 'initial';
       }
       break;
   }
