@@ -15,10 +15,10 @@ export default {
 }
 
 const BaseTemplate = (args) => html`
-  <pds-tooltip content=${args.content} max-width=${args.maxWidth} has-arrow=${args.hasArrow} placement=${args.placement}>${args.slot}</pds-tooltip>`;
+  <pds-tooltip content=${args.content} max-width=${args.maxWidth} has-arrow=${args.hasArrow} placement=${args.placement} opened=${args.opened}>${args.slot}</pds-tooltip>`;
 
 const HTMLContentTemplate = (args) => html`
-  <pds-tooltip has-arrow=${args.hasArrow} max-width=${args.maxWidth} placement=${args.placement} html-content=${args.htmlContent}>
+  <pds-tooltip has-arrow=${args.hasArrow} max-width=${args.maxWidth} placement=${args.placement} html-content=${args.htmlContent} opened=${args.opened}>
     <div slot="content">
       <p><strong>This is a tooltip</strong></p>
       <p>Tooltips are used to describe or identify an element. In most scenarios, tooltips help the user understand the meaning, function or alt-text of an element.</p>
@@ -79,25 +79,29 @@ const PositionTemplate = (args) => html`
 export const Default = BaseTemplate.bind({});
 Default.args = {
   content: "The tooltip content",
+  opened: false,
   placement: "right",
-  slot: "target text"
+  slot: "target text",
 };
 
 export const HTMLContent = HTMLContentTemplate.bind({});
 HTMLContent.args = {
   htmlContent: true,
+  opened: false,
   placement: "bottom-start",
 };
 
 export const Positioning = PositionTemplate.bind({});
 Positioning.args = {
   content: "Trigger",
+  opened: false
 };
 
 export const NoArrow = BaseTemplate.bind({});
 NoArrow.args = {
   content: "The tooltip content",
   hasArrow: false,
+  opened: false,
   placement: "bottom-start",
   slot: "target text"
 };

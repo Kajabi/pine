@@ -69,7 +69,7 @@ enable the `htmlContent` property and provide your element in the `content` slot
 <DocCanvas client:only
   mdxSource={{
     react: `
-      <PdsTooltip hasArrow="true" placement="right">
+      <PdsTooltip htmlContent="true" hasArrow="true" placement="right">
         text
         <div slot="content">
           <p>this is a sentence in a tooltip.</p>
@@ -78,7 +78,7 @@ enable the `htmlContent` property and provide your element in the `content` slot
       </PdsTooltip>
     `,
     webComponent: `
-      <pds-tooltip has-arrow="true" placement="right">
+      <pds-tooltip html-content="true" has-arrow="true" placement="right">
         text
         <div slot="content">
           <p>this is a sentence in a tooltip.</p>
@@ -87,9 +87,9 @@ enable the `htmlContent` property and provide your element in the `content` slot
       </pds-tooltip>
     `
 }}>
-  <pds-tooltip has-arrow="true" placement="right">
+  <pds-tooltip html-content="true" has-arrow="true" placement="right">
     text
-    <div class="sb-unstyled" slot="content">
+    <div slot="content">
       <p>this is a sentence in a tooltip.</p>
       <p>this is a sentence in a tooltip.</p>
     </div>
@@ -100,7 +100,7 @@ enable the `htmlContent` property and provide your element in the `content` slot
 Using the placement prop you can adjust where your tooltip will be displayed.
 
 
-### Arrow
+### No Arrow
 By default the arrow is visible but it can be hidden by disabling it when `has-arrow` is `false`.
 
 <DocCanvas client:only

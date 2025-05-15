@@ -1,6 +1,14 @@
 import { newE2EPage } from "@stencil/core/testing";
 
 describe('pds-tooltip', () => {
+  // Mock MutationObserver
+  const mutationObserverMock = jest.fn().mockImplementation(() => ({
+    observe: jest.fn(),
+    disconnect: jest.fn(),
+    takeRecords: jest.fn(),
+  }));
+  global.MutationObserver = mutationObserverMock;
+
   it('opens tooltip on hover', async () => {
     const page = await newE2EPage();
 
@@ -27,6 +35,16 @@ describe('pds-tooltip', () => {
       };
     }, '#trigger');
 
+    // Check if boundingBox or its properties are undefined
+    if (
+      boundingBox.x === undefined ||
+      boundingBox.y === undefined ||
+      boundingBox.width === undefined ||
+      boundingBox.height === undefined
+    ) {
+      throw new Error('Trigger element not found or dimensions are undefined');
+    }
+
     // Move mouse to center of trigger
     await page.mouse.move(
       boundingBox.x + boundingBox.width / 2,
@@ -37,10 +55,10 @@ describe('pds-tooltip', () => {
     // Wait for the tooltip to be visible
     const isVisible = await page.waitForFunction(
       () => {
-        const tooltip = document.querySelector('pds-tooltip')?.shadowRoot?.querySelector('.pds-tooltip');
-        const overlay = document.querySelector('pds-tooltip')?.shadowRoot?.querySelector('.pds-tooltip__content');
-        return tooltip?.classList.contains('pds-tooltip--is-open') &&
-               overlay?.getAttribute('aria-hidden') === 'false';
+        const tooltipPortal = document.querySelector('.pds-tooltip');
+        const contentOverlay = tooltipPortal?.querySelector('.pds-tooltip__content');
+        return tooltipPortal?.classList.contains('pds-tooltip--is-open') &&
+               contentOverlay?.getAttribute('aria-hidden') === 'false';
       },
       { timeout: 2000 }
     );
@@ -48,11 +66,17 @@ describe('pds-tooltip', () => {
     expect(isVisible).toBeTruthy();
 
     // Verify the tooltip state
-    const component = await page.find('pds-tooltip >>> .pds-tooltip');
-    const overlay = await page.find('pds-tooltip >>> .pds-tooltip__content');
+    const isOpen = await page.evaluate(() => {
+      const tooltipPortal = document.querySelector('.pds-tooltip');
+      return tooltipPortal?.classList.contains('pds-tooltip--is-open');
+    });
+    const overlayIsHidden = await page.evaluate(() => {
+      const contentOverlay = document.querySelector('.pds-tooltip .pds-tooltip__content');
+      return contentOverlay?.getAttribute('aria-hidden');
+    });
 
-    expect(await component.classList.contains('pds-tooltip--is-open')).toBe(true);
-    expect(await overlay.getAttribute('aria-hidden')).toBe('false');
+    expect(isOpen).toBe(true);
+    expect(overlayIsHidden).toBe('false');
 
     // Move mouse away to verify it closes
     await page.mouse.move(0, 0);
@@ -61,13 +85,21 @@ describe('pds-tooltip', () => {
     // Wait for tooltip to close
     const isClosed = await page.waitForFunction(
       () => {
-        const tooltip = document.querySelector('pds-tooltip')?.shadowRoot?.querySelector('.pds-tooltip');
-        return !tooltip?.classList.contains('pds-tooltip--is-open');
+        const tooltipPortal = document.querySelector('.pds-tooltip');
+        // Check if the portal element is gone OR if it's marked as not open
+        return !tooltipPortal || !tooltipPortal.classList.contains('pds-tooltip--is-open');
       },
       { timeout: 2000 }
     );
 
     expect(isClosed).toBeTruthy();
-    expect(await component.classList.contains('pds-tooltip--is-open')).toBe(false);
+    const isStillOpenAfterMouseOut = await page.evaluate(() => {
+      const tooltipPortal = document.querySelector('.pds-tooltip');
+      if (!tooltipPortal) {
+        return false; // Portal is removed, so it's not open
+      }
+      return tooltipPortal.classList.contains('pds-tooltip--is-open');
+    });
+    expect(isStillOpenAfterMouseOut).toBe(false);
   });
 });
