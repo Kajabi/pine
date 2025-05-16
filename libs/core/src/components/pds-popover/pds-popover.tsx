@@ -89,18 +89,50 @@ export class PdsPopover {
     switch (this.placement) {
       case 'top':
         top = triggerRect.top - popoverRect.height - offset;
+        left = triggerRect.left + (triggerRect.width - popoverRect.width) / 2;
+        break;
+      case 'top-start':
+        top = triggerRect.top - popoverRect.height - offset;
         left = triggerRect.left;
         break;
+      case 'top-end':
+        top = triggerRect.top - popoverRect.height - offset;
+        left = triggerRect.right - popoverRect.width;
+        break;
       case 'right':
+        top = triggerRect.top + (triggerRect.height - popoverRect.height) / 2;
+        left = triggerRect.right + offset;
+        break;
+      case 'right-start':
         top = triggerRect.top;
+        left = triggerRect.right + offset;
+        break;
+      case 'right-end':
+        top = triggerRect.bottom - popoverRect.height;
         left = triggerRect.right + offset;
         break;
       case 'bottom':
         top = triggerRect.bottom + offset;
+        left = triggerRect.left + (triggerRect.width - popoverRect.width) / 2;
+        break;
+      case 'bottom-start':
+        top = triggerRect.bottom + offset;
         left = triggerRect.left;
         break;
+      case 'bottom-end':
+        top = triggerRect.bottom + offset;
+        left = triggerRect.right - popoverRect.width;
+        break;
       case 'left':
+        top = triggerRect.top + (triggerRect.height - popoverRect.height) / 2;
+        left = triggerRect.left - popoverRect.width - offset;
+        break;
+      case 'left-start':
         top = triggerRect.top;
+        left = triggerRect.left - popoverRect.width - offset;
+        break;
+      case 'left-end':
+        top = triggerRect.bottom - popoverRect.height;
         left = triggerRect.left - popoverRect.width - offset;
         break;
     }
