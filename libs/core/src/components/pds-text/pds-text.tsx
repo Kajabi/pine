@@ -90,7 +90,7 @@ export class PdsText {
   /**
    * If set or `true`, the text will be truncated. Must add a `width` to the element.
    */
-  @Prop() truncate?: boolean;
+  @Prop({ reflect: true }) truncate?: boolean;
 
   render() {
     const Tag = this.tag;
