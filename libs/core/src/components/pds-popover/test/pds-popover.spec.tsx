@@ -77,18 +77,50 @@ describe('pds-popover', () => {
     const placements = {
       'top': {
         top: mockTriggerRect.top - mockPopoverRect.height - OFFSET,
+        left: mockTriggerRect.left + (mockTriggerRect.width - mockPopoverRect.width) / 2
+      },
+      'top-start': {
+        top: mockTriggerRect.top - mockPopoverRect.height - OFFSET,
         left: mockTriggerRect.left
       },
+      'top-end': {
+        top: mockTriggerRect.top - mockPopoverRect.height - OFFSET,
+        left: mockTriggerRect.right - mockPopoverRect.width
+      },
       'right': {
+        top: mockTriggerRect.top + (mockTriggerRect.height - mockPopoverRect.height) / 2,
+        left: mockTriggerRect.right + OFFSET
+      },
+      'right-start': {
         top: mockTriggerRect.top,
+        left: mockTriggerRect.right + OFFSET
+      },
+      'right-end': {
+        top: mockTriggerRect.bottom - mockPopoverRect.height,
         left: mockTriggerRect.right + OFFSET
       },
       'bottom': {
         top: mockTriggerRect.bottom + OFFSET,
+        left: mockTriggerRect.left + (mockTriggerRect.width - mockPopoverRect.width) / 2
+      },
+      'bottom-start': {
+        top: mockTriggerRect.bottom + OFFSET,
         left: mockTriggerRect.left
       },
+      'bottom-end': {
+        top: mockTriggerRect.bottom + OFFSET,
+        left: mockTriggerRect.right - mockPopoverRect.width
+      },
       'left': {
+        top: mockTriggerRect.top + (mockTriggerRect.height - mockPopoverRect.height) / 2,
+        left: mockTriggerRect.left - mockPopoverRect.width - OFFSET
+      },
+      'left-start': {
         top: mockTriggerRect.top,
+        left: mockTriggerRect.left - mockPopoverRect.width - OFFSET
+      },
+      'left-end': {
+        top: mockTriggerRect.bottom - mockPopoverRect.height,
         left: mockTriggerRect.left - mockPopoverRect.width - OFFSET
       }
     };
