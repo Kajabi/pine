@@ -1,4 +1,14 @@
-import { Component, Host, h, Prop } from '@stencil/core';
+import {
+  Component,
+  Element,
+  Event,
+  Host,
+  h,
+  Prop,
+  EventEmitter,
+  State,
+  Listen
+} from '@stencil/core';
 
 @Component({
   tag: 'pds-banner',
@@ -6,6 +16,13 @@ import { Component, Host, h, Prop } from '@stencil/core';
   shadow: true,
 })
 export class PdsBanner {
+  @Element() el: HTMLPdsBannerElement;
+
+  /**
+   * Determines if the banner is active.
+   */
+  @State() active = false;
+
   /**
    * A unique identifier used for the underlying component `id` attribute.
    */
@@ -16,9 +33,57 @@ export class PdsBanner {
    */
   @Prop() variant: 'default' | 'secondary' | 'warning' | 'danger' = 'default';
 
+  @Event() pdsToggle: EventEmitter;
+
+  /**
+   * Event emitted when a banner is activated
+   */
+  @Event() pdsBannerActivated: EventEmitter<string>;
+
+  /**
+   * Listen for banner activation events from other banners
+   */
+  @Listen('pdsBannerActivated', { target: 'window' })
+  handleBannerActivated(event: CustomEvent<string>) {
+    // If the activated banner is not the one targeted by the trigger,
+    // deactivate this banner
+    if (event.detail !== this.componentId && this.active) {
+      this.active = false;
+      this.el.classList.remove('pds-banner--active');
+    }
+  }
+
+  private toggleBanner = () => {
+    if (this.active) {
+      this.el.classList.remove('pds-banner--active');
+      this.active = false;
+    } else {
+      this.el.classList.add('pds-banner--active');
+      this.active = true;
+      // Notify other banners that this one has been activated
+      this.pdsBannerActivated.emit(this.componentId);
+    }
+    this.pdsToggle.emit();
+  }
+
+  private handleClick = (ev: Event) => {
+    const triggerButton = ev.target as HTMLElement;
+
+    if (triggerButton.hasAttribute('data-pds-banner-target')) {
+      const targetBannerId = triggerButton.getAttribute('data-pds-banner-target');
+      if (targetBannerId === this.componentId) {
+        this.toggleBanner();
+      }
+    }
+  }
+
+  componentWillLoad() {
+    document.addEventListener('click', this.handleClick);
+  }
+
   render() {
     return (
-      <Host class="pds-banner" id={this.componentId} variant={this.variant}>
+      <Host class={`pds-banner ${this.active ? 'pds-banner--active' : ''}`} id={this.componentId} variant={this.variant} active={this.active}>
         <pds-box
           background-color="var(--banner-background-color)"
           fit

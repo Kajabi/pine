@@ -1,31 +1,44 @@
-:host {
-  display: block;
+:host(:not(.hydrated)) {
+  display: none;
+  visibility: hidden;
+}
+
+:host(.pds-banner) {
+  inset-block-start: var(--pine-dimension-none);
+  inset-inline-start: var(--pine-dimension-none);
+  opacity: 0;
+  position: fixed;
+  transform: translateY(-100px);
+  transition: 0.3s ease-in-out;
+  transition-property: transform, opacity, z-index;
+  width: 100%;
+}
+
+:host(.pds-banner--active) {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 :host([variant="default"]) {
   --banner-background-color: var(--pine-color-accent-hover);
   --banner-text-color: var(--pine-color-text-primary);
   --banner-icon-color: var(--pine-color-text-primary);
-  --banner-icon-name: "info-circle-filled";
 }
 
 :host([variant="secondary"]) {
   --banner-background-color: var(--pine-color-grey-200);
   --banner-text-color: var(--pine-color-text-neutral);
   --banner-icon-color: var(--pine-color-text-readonly);
-  --banner-icon-name: "info-circle-filled";
 }
 
 :host([variant="warning"]) {
   --banner-background-color: var(--pine-color-yellow-400);
   --banner-text-color: var(--pine-color-text-warning-hover);
   --banner-icon-color: var(--pine-color-text-warning-hover);
-  --banner-icon-name: "info-circle-filled";
 }
 
 :host([variant="danger"]) {
   --banner-background-color: var(--pine-color-danger);
   --banner-text-color: var(--pine-color-text-primary);
   --banner-icon-color: var(--pine-color-text-primary);
-  --banner-icon-name: "warning-filled";
 }

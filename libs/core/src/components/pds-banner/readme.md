@@ -13,6 +13,14 @@
 | `variant`     | `variant`      | Determines the banner variant.                                        | `"danger" \| "default" \| "secondary" \| "warning"` | `'default'` |
 
 
+## Events
+
+| Event                | Description                              | Type                  |
+| -------------------- | ---------------------------------------- | --------------------- |
+| `pdsBannerActivated` | Event emitted when a banner is activated | `CustomEvent<string>` |
+| `pdsToggle`          |                                          | `CustomEvent<any>`    |
+
+
 ## Dependencies
 
 ### Depends on

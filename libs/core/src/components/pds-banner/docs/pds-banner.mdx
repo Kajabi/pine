@@ -16,11 +16,12 @@ TBD
     react: '<PdsBanner></PdsBanner>',
     webComponent: '<pds-banner></pds-banner>'
 }}>
-  <pds-banner>
+  <pds-banner component-id="default-banner">
     <span slot="text">This might be a Banner component. Maybe.</span>
     <pds-link slot="actions" href="#">Link</pds-link>
-    <pds-link slot="actions" href="#">Link</pds-link>
+    <pds-link slot="actions" href="#">Toggle Banner</pds-link>
   </pds-banner>
+  <pds-button data-pds-banner-target="default-banner">Toggle Banner</pds-button>
 </DocCanvas>
 
 ### Secondary
@@ -30,10 +31,11 @@ TBD
     react: '<PdsBanner></PdsBanner>',
     webComponent: '<pds-banner></pds-banner>'
 }}>
-  <pds-banner variant="secondary">
+  <pds-banner component-id="secondary-banner" variant="secondary">
     <span slot="text">This might be a Banner component. Maybe.</span>
     <pds-link slot="actions" href="#">Link</pds-link>
   </pds-banner>
+  <pds-button data-pds-banner-target="secondary-banner">Toggle Banner</pds-button>
 </DocCanvas>
 
 ### Warning
@@ -43,10 +45,11 @@ TBD
     react: '<PdsBanner></PdsBanner>',
     webComponent: '<pds-banner></pds-banner>'
 }}>
-  <pds-banner variant="warning">
+  <pds-banner component-id="warning-banner" variant="warning">
     <span slot="text">This might be a Banner component. Maybe.</span>
     <pds-link slot="actions" href="#">Link</pds-link>
   </pds-banner>
+  <pds-button data-pds-banner-target="warning-banner">Toggle Banner</pds-button>
 </DocCanvas>
 
 ### Danger
@@ -56,8 +59,9 @@ TBD
     react: '<PdsBanner></PdsBanner>',
     webComponent: '<pds-banner></pds-banner>'
 }}>
-  <pds-banner variant="danger">
+  <pds-banner component-id="danger-banner" variant="danger">
     <span slot="text">This might be a Banner component. Maybe.</span>
     <pds-link slot="actions" href="#">Link</pds-link>
   </pds-banner>
+  <pds-button data-pds-banner-target="danger-banner">Toggle Banner</pds-button>
 </DocCanvas>

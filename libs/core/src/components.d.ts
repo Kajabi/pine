@@ -1248,7 +1248,19 @@ declare global {
         prototype: HTMLPdsAvatarElement;
         new (): HTMLPdsAvatarElement;
     };
+    interface HTMLPdsBannerElementEventMap {
+        "pdsToggle": any;
+        "pdsBannerActivated": string;
+    }
     interface HTMLPdsBannerElement extends Components.PdsBanner, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsBannerElementEventMap>(type: K, listener: (this: HTMLPdsBannerElement, ev: PdsBannerCustomEvent<HTMLPdsBannerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsBannerElementEventMap>(type: K, listener: (this: HTMLPdsBannerElement, ev: PdsBannerCustomEvent<HTMLPdsBannerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsBannerElement: {
         prototype: HTMLPdsBannerElement;
@@ -1735,6 +1747,11 @@ declare namespace LocalJSX {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
+        /**
+          * Event emitted when a banner is activated
+         */
+        "onPdsBannerActivated"?: (event: PdsBannerCustomEvent<string>) => void;
+        "onPdsToggle"?: (event: PdsBannerCustomEvent<any>) => void;
         /**
           * Determines the banner variant.
          */
