@@ -6,8 +6,10 @@ export default {
   component: 'pds-modal',
   title: 'components/Modal',
   args: {
+    closeOnBackdropClick: true,
+    closeOnEsc: true,
     componentId: 'demo-modal',
-    heading: 'Modal Title',
+    size: 'md',
   },
 }
 
@@ -17,7 +19,13 @@ const BaseTemplate = (args) => html`
       Open Modal
     </pds-button>
 
-    <pds-modal id="${args.componentId}" heading="${args.heading}" component-id="${args.componentId}">
+    <pds-modal
+      id="${args.componentId}"
+      component-id="${args.componentId}"
+      size="${args.size}"
+      ?close-on-backdrop-click="${args.closeOnBackdropClick}"
+      ?close-on-esc="${args.closeOnEsc}"
+    >
       <div slot="header">
         <pds-box direction="column" fit padding="md">
           <pds-box
@@ -67,7 +75,7 @@ const BaseTemplate = (args) => html`
 export const Default = BaseTemplate.bind();
 Default.args = {
   componentId: 'demo-modal',
-  heading: 'Modal Title',
+  size: 'md',
 };
 
 const CustomContentTemplate = () => html`
@@ -76,7 +84,7 @@ const CustomContentTemplate = () => html`
         Open Form Modal
       </pds-button>
 
-      <pds-modal id="custom-modal" size="medium">
+      <pds-modal id="custom-modal" size="md" ?close-on-backdrop-click="${args.closeOnBackdropClick}" ?close-on-esc="${args.closeOnEsc}">
         <header slot="header">
           <pds-box direction="column" fit padding="md">
             <pds-box
@@ -142,7 +150,7 @@ const CustomContentTemplate = () => html`
 
 export const CustomContent = CustomContentTemplate.bind({});
 CustomContent.args = {
-  size: 'medium',
+  size: 'md',
 };
 
 export const LongContent = () => {
@@ -152,7 +160,7 @@ export const LongContent = () => {
         Open Scrolling Modal
       </pds-button>
 
-      <pds-modal id="scroll-modal">
+      <pds-modal id="scroll-modal" size="md">
         <header slot="header">
           <pds-box direction="column" fit padding="md">
             <pds-box
@@ -223,7 +231,6 @@ const FullscreenTemplate = (args) => html`
       <pds-modal
         id="demo-modal"
         size=${args.size}
-        .open=${args.open}
         ?show-close-button=${args.showCloseButton}
         ?close-on-backdrop-click=${args.closeOnBackdropClick}
         ?close-on-escape=${args.closeOnEscape}

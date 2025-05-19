@@ -587,7 +587,13 @@ export namespace Components {
     }
     interface PdsModal {
         /**
+          * Whether the modal can be closed by clicking the backdrop
+          * @default true
+         */
+        "closeOnBackdropClick": boolean;
+        /**
           * Whether the modal can be closed by pressing the escape key
+          * @default true
          */
         "closeOnEsc": boolean;
         /**
@@ -595,21 +601,23 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * The title of the modal
-         */
-        "heading": string;
-        /**
           * Closes the modal
          */
         "hideModal": () => Promise<void>;
         /**
           * Whether the modal is open
+          * @default false
          */
         "open": boolean;
         /**
           * Opens the modal
          */
         "showModal": () => Promise<void>;
+        /**
+          * The size of the modal
+          * @default 'md'
+         */
+        "size": 'sm' | 'md' | 'lg' | 'fullscreen';
     }
     interface PdsPopover {
         /**
@@ -2278,17 +2286,19 @@ declare namespace LocalJSX {
     }
     interface PdsModal {
         /**
+          * Whether the modal can be closed by clicking the backdrop
+          * @default true
+         */
+        "closeOnBackdropClick"?: boolean;
+        /**
           * Whether the modal can be closed by pressing the escape key
+          * @default true
          */
         "closeOnEsc"?: boolean;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
-        /**
-          * The title of the modal
-         */
-        "heading"?: string;
         /**
           * Emitted when the modal is closed
          */
@@ -2299,8 +2309,14 @@ declare namespace LocalJSX {
         "onPdsModalOpen"?: (event: PdsModalCustomEvent<void>) => void;
         /**
           * Whether the modal is open
+          * @default false
          */
         "open"?: boolean;
+        /**
+          * The size of the modal
+          * @default 'md'
+         */
+        "size"?: 'sm' | 'md' | 'lg' | 'fullscreen';
     }
     interface PdsPopover {
         /**
