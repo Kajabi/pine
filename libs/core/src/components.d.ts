@@ -585,6 +585,32 @@ export namespace Components {
          */
         "variant": 'spinner' | 'typing';
     }
+    interface PdsModal {
+        /**
+          * Whether the modal can be closed by pressing the escape key
+         */
+        "closeOnEsc": boolean;
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * The title of the modal
+         */
+        "heading": string;
+        /**
+          * Closes the modal
+         */
+        "hideModal": () => Promise<void>;
+        /**
+          * Whether the modal is open
+         */
+        "open": boolean;
+        /**
+          * Opens the modal
+         */
+        "showModal": () => Promise<void>;
+    }
     interface PdsPopover {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -1168,6 +1194,10 @@ export interface PdsInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsInputElement;
 }
+export interface PdsModalCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsModalElement;
+}
 export interface PdsRadioCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsRadioElement;
@@ -1356,6 +1386,24 @@ declare global {
     var HTMLPdsLoaderElement: {
         prototype: HTMLPdsLoaderElement;
         new (): HTMLPdsLoaderElement;
+    };
+    interface HTMLPdsModalElementEventMap {
+        "pdsModalOpen": void;
+        "pdsModalClose": void;
+    }
+    interface HTMLPdsModalElement extends Components.PdsModal, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsModalElementEventMap>(type: K, listener: (this: HTMLPdsModalElement, ev: PdsModalCustomEvent<HTMLPdsModalElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsModalElementEventMap>(type: K, listener: (this: HTMLPdsModalElement, ev: PdsModalCustomEvent<HTMLPdsModalElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLPdsModalElement: {
+        prototype: HTMLPdsModalElement;
+        new (): HTMLPdsModalElement;
     };
     interface HTMLPdsPopoverElement extends Components.PdsPopover, HTMLStencilElement {
     }
@@ -1605,6 +1653,7 @@ declare global {
         "pds-input": HTMLPdsInputElement;
         "pds-link": HTMLPdsLinkElement;
         "pds-loader": HTMLPdsLoaderElement;
+        "pds-modal": HTMLPdsModalElement;
         "pds-popover": HTMLPdsPopoverElement;
         "pds-progress": HTMLPdsProgressElement;
         "pds-radio": HTMLPdsRadioElement;
@@ -2227,6 +2276,32 @@ declare namespace LocalJSX {
          */
         "variant"?: 'spinner' | 'typing';
     }
+    interface PdsModal {
+        /**
+          * Whether the modal can be closed by pressing the escape key
+         */
+        "closeOnEsc"?: boolean;
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * The title of the modal
+         */
+        "heading"?: string;
+        /**
+          * Emitted when the modal is closed
+         */
+        "onPdsModalClose"?: (event: PdsModalCustomEvent<void>) => void;
+        /**
+          * Emitted when the modal is opened
+         */
+        "onPdsModalOpen"?: (event: PdsModalCustomEvent<void>) => void;
+        /**
+          * Whether the modal is open
+         */
+        "open"?: boolean;
+    }
     interface PdsPopover {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -2840,6 +2915,7 @@ declare namespace LocalJSX {
         "pds-input": PdsInput;
         "pds-link": PdsLink;
         "pds-loader": PdsLoader;
+        "pds-modal": PdsModal;
         "pds-popover": PdsPopover;
         "pds-progress": PdsProgress;
         "pds-radio": PdsRadio;
@@ -2879,6 +2955,7 @@ declare module "@stencil/core" {
             "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
             "pds-loader": LocalJSX.PdsLoader & JSXBase.HTMLAttributes<HTMLPdsLoaderElement>;
+            "pds-modal": LocalJSX.PdsModal & JSXBase.HTMLAttributes<HTMLPdsModalElement>;
             "pds-popover": LocalJSX.PdsPopover & JSXBase.HTMLAttributes<HTMLPdsPopoverElement>;
             "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-radio": LocalJSX.PdsRadio & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
