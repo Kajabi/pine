@@ -7,13 +7,13 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { BoxColumnType, BoxShadowSizeType, BoxTShirtSizeType } from "./utils/types";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
-import { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 import { PlacementType } from "./utils/types";
+import { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 import { TextareaChangeEventDetail, TextareaInputEventDetail } from "./components/pds-textarea/textarea-interface";
 export { BoxColumnType, BoxShadowSizeType, BoxTShirtSizeType } from "./utils/types";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
-export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 export { PlacementType } from "./utils/types";
+export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 export { TextareaChangeEventDetail, TextareaInputEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
     interface PdsAccordion {
@@ -409,6 +409,27 @@ export namespace Components {
           * @defaultValue false
          */
         "vertical": boolean;
+    }
+    interface PdsDropdown {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * The placement of the dropdown panel relative to the trigger.
+         */
+        "placement": PlacementType;
+    }
+    interface PdsDropdownItem {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * It determines whether or not the dropdown-item is disabled.
+          * @defaultValue false
+         */
+        "disabled": boolean;
     }
     interface PdsImage {
         /**
@@ -1270,6 +1291,18 @@ declare global {
         prototype: HTMLPdsDividerElement;
         new (): HTMLPdsDividerElement;
     };
+    interface HTMLPdsDropdownElement extends Components.PdsDropdown, HTMLStencilElement {
+    }
+    var HTMLPdsDropdownElement: {
+        prototype: HTMLPdsDropdownElement;
+        new (): HTMLPdsDropdownElement;
+    };
+    interface HTMLPdsDropdownItemElement extends Components.PdsDropdownItem, HTMLStencilElement {
+    }
+    var HTMLPdsDropdownItemElement: {
+        prototype: HTMLPdsDropdownItemElement;
+        new (): HTMLPdsDropdownItemElement;
+    };
     interface HTMLPdsImageElement extends Components.PdsImage, HTMLStencilElement {
     }
     var HTMLPdsImageElement: {
@@ -1551,6 +1584,8 @@ declare global {
         "pds-chip": HTMLPdsChipElement;
         "pds-copytext": HTMLPdsCopytextElement;
         "pds-divider": HTMLPdsDividerElement;
+        "pds-dropdown": HTMLPdsDropdownElement;
+        "pds-dropdown-item": HTMLPdsDropdownItemElement;
         "pds-image": HTMLPdsImageElement;
         "pds-input": HTMLPdsInputElement;
         "pds-link": HTMLPdsLinkElement;
@@ -1985,6 +2020,27 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "vertical"?: boolean;
+    }
+    interface PdsDropdown {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * The placement of the dropdown panel relative to the trigger.
+         */
+        "placement"?: PlacementType;
+    }
+    interface PdsDropdownItem {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * It determines whether or not the dropdown-item is disabled.
+          * @defaultValue false
+         */
+        "disabled"?: boolean;
     }
     interface PdsImage {
         /**
@@ -2753,6 +2809,8 @@ declare namespace LocalJSX {
         "pds-chip": PdsChip;
         "pds-copytext": PdsCopytext;
         "pds-divider": PdsDivider;
+        "pds-dropdown": PdsDropdown;
+        "pds-dropdown-item": PdsDropdownItem;
         "pds-image": PdsImage;
         "pds-input": PdsInput;
         "pds-link": PdsLink;
@@ -2791,6 +2849,8 @@ declare module "@stencil/core" {
             "pds-chip": LocalJSX.PdsChip & JSXBase.HTMLAttributes<HTMLPdsChipElement>;
             "pds-copytext": LocalJSX.PdsCopytext & JSXBase.HTMLAttributes<HTMLPdsCopytextElement>;
             "pds-divider": LocalJSX.PdsDivider & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
+            "pds-dropdown": LocalJSX.PdsDropdown & JSXBase.HTMLAttributes<HTMLPdsDropdownElement>;
+            "pds-dropdown-item": LocalJSX.PdsDropdownItem & JSXBase.HTMLAttributes<HTMLPdsDropdownItemElement>;
             "pds-image": LocalJSX.PdsImage & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
             "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
