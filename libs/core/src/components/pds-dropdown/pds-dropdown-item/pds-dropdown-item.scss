@@ -1,0 +1,16 @@
+:host {
+  cursor: pointer;
+  display: flex;
+  padding: var(--pine-dimension-xs);
+}
+
+/* Make the disabled styles more specific and add !important to ensure they apply */
+:host(.is-disabled) {
+  cursor: not-allowed !important;
+  opacity: 0.5 !important;
+
+  .pds-dropdown-item__content {
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+  }
+}

@@ -1,0 +1,16 @@
+:host {
+  display: block;
+}
+
+.is-hidden {
+  display: none;
+}
+
+.pds-dropdown--panel {
+  background-color: var(--pine-color-background-container);
+  left: var(--pine-dimension-none);
+  min-width: 170px;
+  padding: var(--pine-dimension-xs);
+  position: absolute;
+  z-index: 9999;
+}
