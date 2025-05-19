@@ -610,6 +610,11 @@ export namespace Components {
          */
         "open": boolean;
         /**
+          * Whether the modal content is scrollable
+          * @default false
+         */
+        "scrollable": boolean;
+        /**
           * Opens the modal
          */
         "showModal": () => Promise<void>;
@@ -2312,6 +2317,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "open"?: boolean;
+        /**
+          * Whether the modal content is scrollable
+          * @default false
+         */
+        "scrollable"?: boolean;
         /**
           * The size of the modal
           * @default 'md'

@@ -39,6 +39,12 @@ export class PdsModal {
   @Prop() size: 'sm' | 'md' | 'lg' | 'fullscreen' = 'md';
 
   /**
+   * Whether the modal content is scrollable
+   * @default false
+   */
+  @Prop() scrollable = false;
+
+  /**
    * Emitted when the modal is opened
    */
   @Event() pdsModalOpen: EventEmitter<void>;
@@ -165,10 +171,18 @@ export class PdsModal {
   render() {
     return (
       <div
-        class="pds-modal__backdrop"
+        class={{
+          'pds-modal__backdrop': true,
+          'open': this.open
+        }}
         onClick={this.handleBackdropClick}
       >
-        <div class={`pds-modal pds-modal--${this.size}`} role="dialog" aria-modal="true" aria-labelledby={`${this.componentId}-heading`}>
+        <div
+          class={`pds-modal pds-modal--${this.size} ${this.scrollable ? 'pds-modal--scrollable' : ''}`}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={`${this.componentId}-heading`}
+        >
           <header class="pds-modal__header">
             <slot name="header"></slot>
           </header>
