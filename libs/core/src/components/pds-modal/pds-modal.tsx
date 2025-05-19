@@ -10,24 +10,33 @@ export class PdsModal {
   @Element() el: HTMLPdsModalElement;
 
   /**
+   * Whether the modal can be closed by clicking the backdrop
+   * @default true
+   */
+  @Prop() closeOnBackdropClick = true;
+
+  /**
+   * Whether the modal can be closed by pressing the escape key
+   * @default true
+   */
+  @Prop() closeOnEsc = true;
+
+  /**
    * A unique identifier used for the underlying component `id` attribute.
    */
   @Prop() componentId: string;
 
   /**
-   * The title of the modal
-   */
-  @Prop() heading: string;
-
-  /**
    * Whether the modal is open
+   * @default false
    */
   @Prop({ mutable: true }) open = false;
 
   /**
-   * Whether the modal can be closed by pressing the escape key
+   * The size of the modal
+   * @default 'md'
    */
-  @Prop() closeOnEsc = true;
+  @Prop() size: 'sm' | 'md' | 'lg' | 'fullscreen' = 'md';
 
   /**
    * Emitted when the modal is opened
@@ -98,38 +107,57 @@ export class PdsModal {
   }
 
   private handleBackdropClick = (e: MouseEvent) => {
+    if (!this.closeOnBackdropClick || !this.open) return;
+
     if ((e.target as HTMLElement).classList.contains('pds-modal__backdrop')) {
       e.stopPropagation();
-      this.hideModal();
+
+      // Only close if this is the innermost modal
+      if (this.isInnermostModal()) {
+        this.hideModal();
+      }
     }
   };
 
-  private handleKeyDown = (e: KeyboardEvent) => {
-    if (!this.closeOnEsc || e.key !== 'Escape' || !this.open) return;
+  /**
+   * Gets the z-index of a modal's backdrop element
+   */
+  private getBackdropZIndex(modal: Element): number {
+    const backdrop = modal.querySelector('.pds-modal__backdrop');
+    return backdrop ? parseInt(getComputedStyle(backdrop).zIndex, 10) : -1;
+  }
 
+  /**
+   * Checks if this modal is the innermost (highest z-index) modal
+   */
+  private isInnermostModal(): boolean {
     // Find all open modals
     const openModals = Array.from(document.querySelectorAll('pds-modal')).filter(
       modal => modal.open
     );
 
-    if (openModals.length === 0) return;
+    if (openModals.length === 0) return false;
 
     // Get this modal's backdrop element
     const thisBackdrop = this.el.querySelector('.pds-modal__backdrop');
-    if (!thisBackdrop) return;
+    if (!thisBackdrop) return false;
 
     // Get computed z-index of all open modal backdrops
-    const modalZIndexes = openModals.map(modal => {
-      const backdrop = modal.querySelector('.pds-modal__backdrop');
-      return backdrop ? parseInt(getComputedStyle(backdrop).zIndex, 10) : -1;
-    });
+    const modalZIndexes = openModals.map(modal => this.getBackdropZIndex(modal));
 
     // Get the highest z-index
     const maxZIndex = Math.max(...modalZIndexes);
 
-    // Only close if this modal's backdrop has the highest z-index
-    const thisZIndex = parseInt(getComputedStyle(thisBackdrop).zIndex, 10);
-    if (thisZIndex === maxZIndex) {
+    // Check if this modal's backdrop has the highest z-index
+    const thisZIndex = this.getBackdropZIndex(this.el);
+    return thisZIndex === maxZIndex;
+  }
+
+  private handleKeyDown = (e: KeyboardEvent) => {
+    if (!this.closeOnEsc || e.key !== 'Escape' || !this.open) return;
+
+    // Only close if this is the innermost modal
+    if (this.isInnermostModal()) {
       this.hideModal();
     }
   };
@@ -140,7 +168,7 @@ export class PdsModal {
         class="pds-modal__backdrop"
         onClick={this.handleBackdropClick}
       >
-        <div class="pds-modal" role="dialog" aria-modal="true" aria-labelledby={`${this.componentId}-heading`}>
+        <div class={`pds-modal pds-modal--${this.size}`} role="dialog" aria-modal="true" aria-labelledby={`${this.componentId}-heading`}>
           <header class="pds-modal__header">
             <slot name="header"></slot>
           </header>

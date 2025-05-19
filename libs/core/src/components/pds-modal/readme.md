@@ -7,12 +7,13 @@
 
 ## Properties
 
-| Property      | Attribute      | Description                                                           | Type      | Default     |
-| ------------- | -------------- | --------------------------------------------------------------------- | --------- | ----------- |
-| `closeOnEsc`  | `close-on-esc` | Whether the modal can be closed by pressing the escape key            | `boolean` | `true`      |
-| `componentId` | `component-id` | A unique identifier used for the underlying component `id` attribute. | `string`  | `undefined` |
-| `heading`     | `heading`      | The title of the modal                                                | `string`  | `undefined` |
-| `open`        | `open`         | Whether the modal is open                                             | `boolean` | `false`     |
+| Property               | Attribute                 | Description                                                           | Type                                   | Default     |
+| ---------------------- | ------------------------- | --------------------------------------------------------------------- | -------------------------------------- | ----------- |
+| `closeOnBackdropClick` | `close-on-backdrop-click` | Whether the modal can be closed by clicking the backdrop              | `boolean`                              | `true`      |
+| `closeOnEsc`           | `close-on-esc`            | Whether the modal can be closed by pressing the escape key            | `boolean`                              | `true`      |
+| `componentId`          | `component-id`            | A unique identifier used for the underlying component `id` attribute. | `string`                               | `undefined` |
+| `open`                 | `open`                    | Whether the modal is open                                             | `boolean`                              | `false`     |
+| `size`                 | `size`                    | The size of the modal                                                 | `"fullscreen" \| "lg" \| "md" \| "sm"` | `'md'`      |
 
 
 ## Events
