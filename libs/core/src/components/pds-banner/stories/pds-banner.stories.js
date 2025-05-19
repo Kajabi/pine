@@ -24,6 +24,7 @@ const BaseTemplate = (args) => html`
   <pds-banner
     component-id="${args.componentId}"
     variant="${args.variant}"
+    dismissable="${args.dismissable}"
   >
     <span slot="text">This might be a Banner component. Maybe.</span>
     <pds-link slot="actions" href="#">Link</pds-link>
@@ -49,4 +50,11 @@ export const Danger = BaseTemplate.bind();
 Danger.args = {
   componentId: 'danger-banner',
   variant: 'danger',
+};
+
+export const Dismissable = BaseTemplate.bind();
+Dismissable.args = {
+  componentId: 'dismissable-banner',
+  variant: 'default',
+  dismissable: true,
 };

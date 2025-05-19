@@ -42,3 +42,19 @@
   --banner-text-color: var(--pine-color-text-primary);
   --banner-icon-color: var(--pine-color-text-primary);
 }
+
+.pds-banner__close {
+  align-items: center;
+  appearance: none;
+  background: none;
+  border: 0;
+  border-radius: var(--pine-border-radius-full);
+  cursor: pointer;
+  display: flex;
+  padding: var(--pine-dimension-xs);
+
+  &:focus-visible {
+    outline: var(--pine-outline-focus);
+    outline-offset: var(--pine-border-width);
+  }
+}

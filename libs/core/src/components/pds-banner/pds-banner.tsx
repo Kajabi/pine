@@ -24,6 +24,11 @@ export class PdsBanner {
   @State() active = false;
 
   /**
+   * If true, displays a close button to dismiss the banner.
+   */
+  @Prop() dismissable = false;
+
+  /**
    * A unique identifier used for the underlying component `id` attribute.
    */
   @Prop() componentId: string;
@@ -101,6 +106,11 @@ export class PdsBanner {
             </pds-box>
             <pds-box display="flex" align-items="center" gap="sm" justify-content="end">
               <slot name="actions"></slot>
+              {this.dismissable && (
+                <button class="pds-banner__close" onClick={this.toggleBanner} aria-label="Dismiss banner">
+                  <pds-icon color="var(--banner-icon-color)" name="remove" aria-hidden="true"></pds-icon>
+                </button>
+              )}
             </pds-box>
           </pds-box>
         </pds-box>

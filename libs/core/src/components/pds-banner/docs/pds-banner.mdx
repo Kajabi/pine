@@ -16,12 +16,12 @@ TBD
     react: '<PdsBanner></PdsBanner>',
     webComponent: '<pds-banner></pds-banner>'
 }}>
-  <pds-banner component-id="default-banner">
+  <pds-banner component-id="default-banner1">
     <span slot="text">This might be a Banner component. Maybe.</span>
     <pds-link slot="actions" href="#">Link</pds-link>
     <pds-link slot="actions" href="#">Toggle Banner</pds-link>
   </pds-banner>
-  <pds-button data-pds-banner-target="default-banner">Toggle Banner</pds-button>
+  <pds-button data-pds-banner-target="default-banner1">Toggle Banner</pds-button>
 </DocCanvas>
 
 ### Secondary
@@ -64,4 +64,18 @@ TBD
     <pds-link slot="actions" href="#">Link</pds-link>
   </pds-banner>
   <pds-button data-pds-banner-target="danger-banner">Toggle Banner</pds-button>
+</DocCanvas>
+
+### Dismissable
+
+<DocCanvas display="block" client:only
+  mdxSource={{
+    react: '<PdsBanner></PdsBanner>',
+    webComponent: '<pds-banner></pds-banner>'
+  }}>
+  <pds-banner component-id="dismissable-banner" dismissable>
+    <span slot="text">This might be a Banner component. Maybe.</span>
+    <pds-link slot="actions" href="#">Link</pds-link>
+  </pds-banner>
+  <pds-button data-pds-banner-target="dismissable-banner">Toggle Banner</pds-button>
 </DocCanvas>

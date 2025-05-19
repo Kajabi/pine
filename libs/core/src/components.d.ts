@@ -103,6 +103,10 @@ export namespace Components {
          */
         "componentId": string;
         /**
+          * If true, displays a close button to dismiss the banner.
+         */
+        "dismissable": boolean;
+        /**
           * Determines the banner variant.
          */
         "variant": 'default' | 'secondary' | 'warning' | 'danger';
@@ -1747,6 +1751,10 @@ declare namespace LocalJSX {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
+        /**
+          * If true, displays a close button to dismiss the banner.
+         */
+        "dismissable"?: boolean;
         /**
           * Event emitted when a banner is activated
          */

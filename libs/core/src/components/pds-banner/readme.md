@@ -10,6 +10,7 @@
 | Property      | Attribute      | Description                                                           | Type                                                | Default     |
 | ------------- | -------------- | --------------------------------------------------------------------- | --------------------------------------------------- | ----------- |
 | `componentId` | `component-id` | A unique identifier used for the underlying component `id` attribute. | `string`                                            | `undefined` |
+| `dismissable` | `dismissable`  | If true, displays a close button to dismiss the banner.               | `boolean`                                           | `false`     |
 | `variant`     | `variant`      | Determines the banner variant.                                        | `"danger" \| "default" \| "secondary" \| "warning"` | `'default'` |
 
 
