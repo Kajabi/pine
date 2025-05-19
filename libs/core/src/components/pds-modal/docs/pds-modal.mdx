@@ -1,0 +1,146 @@
+import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+# Modal
+
+## Guidelines
+
+### When to use
+
+- Use the Modal when you need to display content that requires user interaction.
+
+## Properties
+
+<DocArgsTable componentName="pds-modal" docSource={components} />
+
+### Default
+
+By default, the component is hidden and can be closed by:
+- Clicking the close button
+- Clicking outside the modal (on the backdrop)
+- Pressing the escape key (if `closeOnEsc` is true)
+
+<div>
+  <pds-button onClick={() => {
+    const modal = document.querySelector('#default-modal-1');
+    if (modal) modal.open = true;
+  }}>Open Modal</pds-button>
+
+  <pds-modal id="default-modal-1" component-id="default-modal-1" closeOnEsc={true}>
+    <div slot="header">
+      <pds-box direction="column" fit padding="md">
+        <pds-box
+          align-items="center"
+          fit
+          justify-content="space-between"
+        >
+          <pds-text tag="h2" size="h3">Modal Title</pds-text>
+          <pds-button
+            class="pds-modal__close"
+            variant="unstyled"
+            icon-only="true"
+            onclick="document.querySelector('#default-modal-1').open = false"
+            aria-label="Close modal"
+            part="close-button"
+          >
+            <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+          </pds-button>
+        </pds-box>
+        <pds-box>
+          <pds-text tag="p" size="md">Modal Subtitle</pds-text>
+        </pds-box>
+      </pds-box>
+    </div>
+    <pds-box fit direction="column" padding="md">
+      <p>This is the modal content. You can put any content here.</p>
+
+      <pds-text tag="h2" size="h3">Inner Modal</pds-text>
+      <pds-button onClick={() => {
+        const modal = document.querySelector('#default-modal-inner');
+        if (modal) modal.open = true;
+      }}>Open Modal</pds-button>
+
+      <pds-modal id="default-modal-inner" component-id="default-modal-inner" closeOnEsc={true}>
+        <div slot="header">
+          <pds-box direction="column" fit padding="md">
+            <pds-box
+              align-items="center"
+              fit
+              justify-content="space-between"
+            >
+              <pds-text tag="h2" size="h3">Inner Modal Title</pds-text>
+              <pds-button
+                class="pds-modal__close"
+                variant="unstyled"
+                icon-only="true"
+                onclick="document.querySelector('#default-modal-inner').open = false"
+                aria-label="Close modal"
+                part="close-button"
+              >
+                <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+              </pds-button>
+            </pds-box>
+            <pds-box>
+              <pds-text tag="p" size="md">Inner Modal Subtitle</pds-text>
+            </pds-box>
+          </pds-box>
+        </div>
+        <pds-box fit padding="md">
+          <p>This is the modal content. You can put any content here.</p>
+        </pds-box>
+        <div slot="footer">
+          <pds-box fit justify-content="end" padding="md" gap="sm">
+            <pds-button variant="secondary" onClick={() => {
+              const modal = document.querySelector('#default-modal-1');
+              if (modal) modal.open = false;
+            }}>Cancel</pds-button>
+            <pds-button onClick={() => {
+              const modal = document.querySelector('#default-modal-1');
+              if (modal) modal.open = false;
+            }}>Confirm</pds-button>
+          </pds-box>
+        </div>
+      </pds-modal>
+    </pds-box>
+    <div slot="footer">
+      <pds-box fit justify-content="end" padding="md" gap="sm">
+        <pds-button variant="secondary" onClick={() => {
+          const modal = document.querySelector('#default-modal-1');
+          if (modal) modal.open = false;
+        }}>Cancel</pds-button>
+        <pds-button>Confirm</pds-button>
+      </pds-box>
+    </div>
+  </pds-modal>
+</div>
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsModal></PdsModal>',
+    webComponent: '<pds-modal></pds-modal>'
+  }}
+>
+  <div>
+    <pds-button onClick={() => {
+      const modal = document.querySelector('#default-modal');
+      if (modal) modal.open = true;
+    }}>Open Modal</pds-button>
+
+    <pds-modal id="default-modal" heading="Modal Title" component-id="default-modal">
+      <p>This is the modal content. You can put any content here.</p>
+
+      <div slot="footer">
+        <pds-box fit justify-content="end" padding="md">
+          <pds-button variant="secondary" onClick={() => {
+            const modal = document.querySelector('#default-modal');
+            if (modal) modal.open = false;
+          }}>Cancel</pds-button>
+          <pds-button onClick={() => {
+            const modal = document.querySelector('#default-modal');
+            if (modal) modal.open = false;
+          }}>Confirm</pds-button>
+        </pds-box>
+      </div>
+    </pds-modal>
+  </div>
+</DocCanvas>
