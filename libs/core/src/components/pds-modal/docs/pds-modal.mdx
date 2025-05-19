@@ -7,18 +7,159 @@ import { components } from '../../../../dist/docs.json';
 
 ### When to use
 
-- Use the Modal when you need to display content that requires user interaction.
+- Use modals to display content that temporarily blocks interactions with the main view
+- For complex forms that need focused attention
+- To confirm important actions
+- To show detailed information without leaving the current context
+
+### When not to use
+
+- For non-critical information that doesn't require immediate attention
+- For complex workflows that require multiple steps
+- When the content can be displayed directly on the page
 
 ## Properties
 
 <DocArgsTable componentName="pds-modal" docSource={components} />
 
+## Variants
+
 ### Default
 
-By default, the component is hidden and can be closed by:
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+  <div>
+    <PdsButton onClick={() => {
+      const modal = document.querySelector('#default-modal');
+      if (modal) modal.open = true;
+    }}>Open Modal</PdsButton>
+
+    <PdsModal id="default-modal" component-id="default-modal">
+      <div slot="header">
+        <PdsBox direction="column" fit padding="md">
+          <PdsBox alignItems="center" fit justifyContent="space-between">
+            <PdsText tag="h2" size="h3">Modal Title</PdsText>
+            <PdsButton
+              class="pds-modal__close"
+              variant="unstyled"
+              iconOnly="true"
+              onclick="document.querySelector('#default-modal').open = false"
+              aria-label="Close modal"
+            >
+              <PdsIcon slot="start" name="remove" aria-hidden="true"></PdsIcon>
+            </PdsButton>
+          </PdsBox>
+        </PdsBox>
+      </div>
+      <PdsBox fit direction="column" paddingInlineStart="md" paddingInlineEnd="md">
+        <p>This is the modal content. You can put any content here.</p>
+      </PdsBox>
+      <div slot="footer">
+        <PdsBox fit justifyContent="end" padding="md">
+          <PdsButton variant="secondary" onClick={() => {
+            const modal = document.querySelector('#default-modal');
+            if (modal) modal.open = false;
+          }}>Cancel</PdsButton>
+          <PdsButton onClick={() => {
+            const modal = document.querySelector('#default-modal');
+            if (modal) modal.open = false;
+          }}>Confirm</PdsButton>
+        </PdsBox>
+      </div>
+    </PdsModal>
+  </div>
+  `,
+    webComponent: `
+  <div>
+    <pds-button onClick={() => {
+      const modal = document.querySelector('#default-modal');
+      if (modal) modal.open = true;
+    }}>Open Modal</pds-button>
+
+    <pds-modal id="default-modal" component-id="default-modal">
+      <div slot="header">
+        <pds-box direction="column" fit padding="md">
+          <pds-box align-items="center" fit justify-content="space-between">
+            <pds-text tag="h2" size="h3">Modal Title</pds-text>
+            <pds-button
+              class="pds-modal__close"
+              variant="unstyled"
+              icon-only="true"
+              onclick="document.querySelector('#default-modal').open = false"
+              aria-label="Close modal"
+            >
+              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+            </pds-button>
+          </pds-box>
+        </pds-box>
+      </div>
+      <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+        <p>This is the modal content. You can put any content here.</p>
+      </pds-box>
+      <div slot="footer">
+        <pds-box fit justify-content="end" padding="md">
+          <pds-button variant="secondary" onClick={() => {
+            const modal = document.querySelector('#default-modal');
+            if (modal) modal.open = false;
+          }}>Cancel</pds-button>
+          <pds-button onClick={() => {
+            const modal = document.querySelector('#default-modal');
+            if (modal) modal.open = false;
+          }}>Confirm</pds-button>
+        </pds-box>
+      </div>
+    </pds-modal>
+  </div>`
+  }}
+>
+  <div>
+    <pds-button onClick={() => {
+      const modal = document.querySelector('#default-modal');
+      if (modal) modal.open = true;
+    }}>Open Modal</pds-button>
+
+    <pds-modal id="default-modal" component-id="default-modal">
+      <div slot="header">
+        <pds-box direction="column" fit padding="md">
+          <pds-box align-items="center" fit justify-content="space-between">
+            <pds-text tag="h2" size="h3">Modal Title</pds-text>
+            <pds-button
+              class="pds-modal__close"
+              variant="unstyled"
+              icon-only="true"
+              onclick="document.querySelector('#default-modal').open = false"
+              aria-label="Close modal"
+            >
+              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+            </pds-button>
+          </pds-box>
+        </pds-box>
+      </div>
+      <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+        <p>This is the modal content. You can put any content here.</p>
+      </pds-box>
+      <div slot="footer">
+        <pds-box fit justify-content="end" padding="md">
+          <pds-button variant="secondary" onClick={() => {
+            const modal = document.querySelector('#default-modal');
+            if (modal) modal.open = false;
+          }}>Cancel</pds-button>
+          <pds-button onClick={() => {
+            const modal = document.querySelector('#default-modal');
+            if (modal) modal.open = false;
+          }}>Confirm</pds-button>
+        </pds-box>
+      </div>
+    </pds-modal>
+  </div>
+</DocCanvas>
+
+
+The standard modal with a header, content area, and footer. By default, it can be closed by:
 - Clicking the close button
-- Clicking outside the modal (on the backdrop)
-- Pressing the escape key (if `closeOnEsc` is true)
+- Clicking outside the modal (backdrop)
+- Pressing the escape key
 
 <div>
   <pds-button onClick={() => {
@@ -51,56 +192,8 @@ By default, the component is hidden and can be closed by:
         </pds-box>
       </pds-box>
     </div>
-    <pds-box fit direction="column" padding="md">
+    <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
       <p>This is the modal content. You can put any content here.</p>
-
-      <pds-text tag="h2" size="h3">Inner Modal</pds-text>
-      <pds-button onClick={() => {
-        const modal = document.querySelector('#default-modal-inner');
-        if (modal) modal.open = true;
-      }}>Open Modal</pds-button>
-
-      <pds-modal id="default-modal-inner" component-id="default-modal-inner" closeOnEsc={true}>
-        <div slot="header">
-          <pds-box direction="column" fit padding="md">
-            <pds-box
-              align-items="center"
-              fit
-              justify-content="space-between"
-            >
-              <pds-text tag="h2" size="h3">Inner Modal Title</pds-text>
-              <pds-button
-                class="pds-modal__close"
-                variant="unstyled"
-                icon-only="true"
-                onclick="document.querySelector('#default-modal-inner').open = false"
-                aria-label="Close modal"
-                part="close-button"
-              >
-                <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
-              </pds-button>
-            </pds-box>
-            <pds-box>
-              <pds-text tag="p" size="md">Inner Modal Subtitle</pds-text>
-            </pds-box>
-          </pds-box>
-        </div>
-        <pds-box fit padding="md">
-          <p>This is the modal content. You can put any content here.</p>
-        </pds-box>
-        <div slot="footer">
-          <pds-box fit justify-content="end" padding="md" gap="sm">
-            <pds-button variant="secondary" onClick={() => {
-              const modal = document.querySelector('#default-modal-1');
-              if (modal) modal.open = false;
-            }}>Cancel</pds-button>
-            <pds-button onClick={() => {
-              const modal = document.querySelector('#default-modal-1');
-              if (modal) modal.open = false;
-            }}>Confirm</pds-button>
-          </pds-box>
-        </div>
-      </pds-modal>
     </pds-box>
     <div slot="footer">
       <pds-box fit justify-content="end" padding="md" gap="sm">
@@ -108,7 +201,261 @@ By default, the component is hidden and can be closed by:
           const modal = document.querySelector('#default-modal-1');
           if (modal) modal.open = false;
         }}>Cancel</pds-button>
-        <pds-button>Confirm</pds-button>
+        <pds-button onClick={() => {
+          const modal = document.querySelector('#default-modal-1');
+          if (modal) modal.open = false;
+        }}>Confirm</pds-button>
+      </pds-box>
+    </div>
+  </pds-modal>
+</div>
+
+### Sizes
+
+Modals come in four sizes:
+- `sm` (520px) - For simple confirmations or short forms
+- `md` (700px) - Default size, suitable for most use cases
+- `lg` (900px) - For complex forms or detailed content
+- `fullscreen` - Takes up the entire viewport
+
+<div>
+  <pds-box gap="sm">
+    <pds-button onClick={() => {
+      const modal = document.querySelector('#size-modal-sm');
+      if (modal) modal.open = true;
+    }}>Small Modal</pds-button>
+
+    <pds-button onClick={() => {
+      const modal = document.querySelector('#size-modal-lg');
+      if (modal) modal.open = true;
+    }}>Large Modal</pds-button>
+
+    <pds-button onClick={() => {
+      const modal = document.querySelector('#size-modal-full');
+      if (modal) modal.open = true;
+    }}>Fullscreen Modal</pds-button>
+  </pds-box>
+
+  <pds-modal id="size-modal-sm" component-id="size-modal-sm" size="sm">
+    <div slot="header">
+      <pds-box direction="column" fit padding="md">
+        <pds-box align-items="center" fit justify-content="space-between">
+          <pds-text tag="h2" size="h3">Small Modal</pds-text>
+          <pds-button
+            class="pds-modal__close"
+            variant="unstyled"
+            icon-only="true"
+            onclick="document.querySelector('#size-modal-sm').open = false"
+            aria-label="Close modal"
+          >
+            <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+          </pds-button>
+        </pds-box>
+      </pds-box>
+    </div>
+    <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+      <p>This is a small modal, ideal for simple confirmations or short forms.</p>
+    </pds-box>
+  </pds-modal>
+
+  <pds-modal id="size-modal-lg" component-id="size-modal-lg" size="lg">
+    <div slot="header">
+      <pds-box direction="column" fit padding="md">
+        <pds-box align-items="center" fit justify-content="space-between">
+          <pds-text tag="h2" size="h3">Large Modal</pds-text>
+          <pds-button
+            class="pds-modal__close"
+            variant="unstyled"
+            icon-only="true"
+            onclick="document.querySelector('#size-modal-lg').open = false"
+            aria-label="Close modal"
+          >
+            <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+          </pds-button>
+        </pds-box>
+      </pds-box>
+    </div>
+    <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+      <p>This is a large modal, suitable for complex forms or detailed content.</p>
+    </pds-box>
+  </pds-modal>
+
+  <pds-modal id="size-modal-full" component-id="size-modal-full" size="fullscreen">
+    <div slot="header">
+      <pds-box direction="column" fit padding="md">
+        <pds-box align-items="center" fit justify-content="space-between">
+          <pds-text tag="h2" size="h3">Fullscreen Modal</pds-text>
+          <pds-button
+            class="pds-modal__close"
+            variant="unstyled"
+            icon-only="true"
+            onclick="document.querySelector('#size-modal-full').open = false"
+            aria-label="Close modal"
+          >
+            <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+          </pds-button>
+        </pds-box>
+      </pds-box>
+    </div>
+    <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+      <p>This is a fullscreen modal that takes up the entire viewport.</p>
+    </pds-box>
+  </pds-modal>
+</div>
+
+### Destructive Actions
+
+Use the destructive variant for actions that can't be undone.
+
+<div>
+  <pds-button onClick={() => {
+    const modal = document.querySelector('#destructive-modal');
+    if (modal) modal.open = true;
+  }}>Delete Item</pds-button>
+
+  <pds-modal id="destructive-modal" component-id="destructive-modal" size="sm">
+    <div slot="header">
+      <pds-box direction="column" fit padding="md">
+        <pds-box align-items="center" fit justify-content="space-between">
+          <pds-text tag="h2" size="h3">Delete Item</pds-text>
+          <pds-button
+            class="pds-modal__close"
+            variant="unstyled"
+            icon-only="true"
+            onclick="document.querySelector('#destructive-modal').open = false"
+            aria-label="Close modal"
+          >
+            <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+          </pds-button>
+        </pds-box>
+      </pds-box>
+    </div>
+    <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+      <p>Are you sure you want to delete this item? This action cannot be undone.</p>
+    </pds-box>
+    <div slot="footer">
+      <pds-box fit justify-content="end" padding="md" gap="sm">
+        <pds-button variant="secondary" onClick={() => {
+          const modal = document.querySelector('#destructive-modal');
+          if (modal) modal.open = false;
+        }}>Cancel</pds-button>
+        <pds-button variant="destructive">Delete</pds-button>
+      </pds-box>
+    </div>
+  </pds-modal>
+</div>
+
+### Scrollable Content
+
+For content that exceeds the viewport height, use the scrollable variant.
+
+<div>
+  <pds-button onClick={() => {
+    const modal = document.querySelector('#scroll-modal');
+    if (modal) modal.open = true;
+  }}>Scrollable Modal</pds-button>
+
+  <pds-modal id="scroll-modal" component-id="scroll-modal" scrollable={true}>
+    <div slot="header">
+      <pds-box direction="column" fit padding="md">
+        <pds-box align-items="center" fit justify-content="space-between">
+          <pds-text tag="h2" size="h3">Scrollable Content</pds-text>
+          <pds-button
+            class="pds-modal__close"
+            variant="unstyled"
+            icon-only="true"
+            onclick="document.querySelector('#scroll-modal').open = false"
+            aria-label="Close modal"
+          >
+            <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+          </pds-button>
+        </pds-box>
+      </pds-box>
+    </div>
+    <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+      {Array(20).fill().map((_, i) => (
+        <p key={i}>This is paragraph {i + 1} demonstrating scrollable content in the modal.</p>
+      ))}
+    </pds-box>
+    <div slot="footer">
+      <pds-box fit justify-content="end" padding="md" gap="sm">
+        <pds-button onClick={() => {
+          const modal = document.querySelector('#scroll-modal');
+          if (modal) modal.open = false;
+        }}>Close</pds-button>
+      </pds-box>
+    </div>
+  </pds-modal>
+</div>
+
+### Nested Modals
+
+Modals can be nested, with only the topmost modal responding to escape key and backdrop clicks.
+
+<div>
+  <pds-button onClick={() => {
+    const modal = document.querySelector('#nested-modal-1');
+    if (modal) modal.open = true;
+  }}>Open Nested Modal</pds-button>
+
+  <pds-modal id="nested-modal-1" component-id="nested-modal-1">
+    <div slot="header">
+      <pds-box direction="column" fit padding="md">
+        <pds-box align-items="center" fit justify-content="space-between">
+          <pds-text tag="h2" size="h3">Outer Modal</pds-text>
+          <pds-button
+            class="pds-modal__close"
+            variant="unstyled"
+            icon-only="true"
+            onclick="document.querySelector('#nested-modal-1').open = false"
+            aria-label="Close modal"
+          >
+            <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+          </pds-button>
+        </pds-box>
+      </pds-box>
+    </div>
+    <pds-box fit direction="column" padding="md" padding-block-start="none">
+      <p>This is the outer modal. Click the button below to open an inner modal.</p>
+      <pds-button onClick={() => {
+        const modal = document.querySelector('#nested-modal-2');
+        if (modal) modal.open = true;
+      }}>Open Inner Modal</pds-button>
+    </pds-box>
+  </pds-modal>
+
+  <pds-modal id="nested-modal-2" component-id="nested-modal-2">
+    <div slot="header">
+      <pds-box direction="column" fit padding="md">
+        <pds-box align-items="center" fit justify-content="space-between">
+          <pds-text tag="h2" size="h3">Inner Modal</pds-text>
+          <pds-button
+            class="pds-modal__close"
+            variant="unstyled"
+            icon-only="true"
+            onclick="document.querySelector('#nested-modal-2').open = false"
+            aria-label="Close modal"
+          >
+            <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+          </pds-button>
+        </pds-box>
+      </pds-box>
+    </div>
+    <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+      <p>This is the inner modal. Only this modal will respond to escape key and backdrop clicks.</p>
+    </pds-box>
+    <div slot="footer">
+      <pds-box fit justify-content="end" padding="md" gap="sm">
+        <pds-button onClick={() => {
+          const modal = document.querySelector('#nested-modal-2');
+          if (modal) modal.open = false;
+        }}>Close Inner</pds-button>
+        <pds-button onClick={() => {
+          const modal1 = document.querySelector('#nested-modal-1');
+          const modal2 = document.querySelector('#nested-modal-2');
+          if (modal1) modal1.open = false;
+          if (modal2) modal2.open = false;
+        }}>Close Both</pds-button>
       </pds-box>
     </div>
   </pds-modal>
@@ -126,9 +473,26 @@ By default, the component is hidden and can be closed by:
       if (modal) modal.open = true;
     }}>Open Modal</pds-button>
 
-    <pds-modal id="default-modal" heading="Modal Title" component-id="default-modal">
-      <p>This is the modal content. You can put any content here.</p>
-
+    <pds-modal id="default-modal" component-id="default-modal">
+      <div slot="header">
+        <pds-box direction="column" fit padding="md">
+          <pds-box align-items="center" fit justify-content="space-between">
+            <pds-text tag="h2" size="h3">Modal Title</pds-text>
+            <pds-button
+              class="pds-modal__close"
+              variant="unstyled"
+              icon-only="true"
+              onclick="document.querySelector('#default-modal').open = false"
+              aria-label="Close modal"
+            >
+              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+            </pds-button>
+          </pds-box>
+        </pds-box>
+      </div>
+      <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+        <p>This is the modal content. You can put any content here.</p>
+      </pds-box>
       <div slot="footer">
         <pds-box fit justify-content="end" padding="md">
           <pds-button variant="secondary" onClick={() => {
