@@ -53,11 +53,13 @@
 ### Used by
 
  - [pds-alert](../pds-alert)
+ - [pds-banner](../pds-banner)
 
 ### Graph
 ```mermaid
 graph TD;
   pds-alert --> pds-box
+  pds-banner --> pds-box
   style pds-box fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

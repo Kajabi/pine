@@ -25,11 +25,13 @@
 ### Used by
 
  - [pds-alert](../pds-alert)
+ - [pds-banner](../pds-banner)
 
 ### Graph
 ```mermaid
 graph TD;
   pds-alert --> pds-text
+  pds-banner --> pds-text
   style pds-text fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

@@ -1166,6 +1166,10 @@ export interface PdsAlertCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsAlertElement;
 }
+export interface PdsBannerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsBannerElement;
+}
 export interface PdsButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsButtonElement;
