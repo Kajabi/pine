@@ -14,7 +14,7 @@ export default {
   title: 'components/Banner',
   parameters: {
     actions: {
-      handles: ['pdsBannerActivated', 'pdsToggle'],
+      handles: ['pdsBannerActivated', 'pdsDismiss'],
     }
   }
 }
@@ -29,7 +29,7 @@ const BaseTemplate = (args) => html`
     <span slot="text">This might be a Banner component. Maybe.</span>
     <pds-link slot="actions" href="#">Link</pds-link>
   </pds-banner>
-  <pds-button data-pds-banner-target="${args.componentId}">Toggle Banner</pds-button>
+  <pds-button @click=${() => document.querySelector(`#${args.componentId}`).toggleAttribute('active')}>Toggle Banner</pds-button>
 </div>`;
 
 export const Default = BaseTemplate.bind();

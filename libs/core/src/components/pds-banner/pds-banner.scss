@@ -11,12 +11,14 @@
   transform: translateY(-100px);
   transition: 0.3s ease-in-out;
   transition-property: transform, opacity, z-index;
+  visibility: hidden;
   width: 100%;
 }
 
 :host(.pds-banner--active) {
   opacity: 1;
   transform: translateY(0);
+  visibility: visible;
 }
 
 :host([variant="default"]) {
@@ -51,7 +53,7 @@
   border-radius: var(--pine-border-radius-full);
   cursor: pointer;
   display: flex;
-  padding: var(--pine-dimension-xs);
+  padding: var(--pine-dimension-2xs);
 
   &:focus-visible {
     outline: var(--pine-outline-focus);

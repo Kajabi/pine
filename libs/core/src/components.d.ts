@@ -99,6 +99,10 @@ export namespace Components {
     }
     interface PdsBanner {
         /**
+          * Determines if the banner is active.
+         */
+        "active": boolean;
+        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
@@ -1253,7 +1257,7 @@ declare global {
         new (): HTMLPdsAvatarElement;
     };
     interface HTMLPdsBannerElementEventMap {
-        "pdsToggle": any;
+        "pdsDismiss": any;
         "pdsBannerActivated": string;
     }
     interface HTMLPdsBannerElement extends Components.PdsBanner, HTMLStencilElement {
@@ -1748,6 +1752,10 @@ declare namespace LocalJSX {
     }
     interface PdsBanner {
         /**
+          * Determines if the banner is active.
+         */
+        "active"?: boolean;
+        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
@@ -1756,10 +1764,13 @@ declare namespace LocalJSX {
          */
         "dismissable"?: boolean;
         /**
-          * Event emitted when a banner is activated
+          * Event emitted when a banner is currently active
          */
         "onPdsBannerActivated"?: (event: PdsBannerCustomEvent<string>) => void;
-        "onPdsToggle"?: (event: PdsBannerCustomEvent<any>) => void;
+        /**
+          * Event emitted when a banner is toggled
+         */
+        "onPdsDismiss"?: (event: PdsBannerCustomEvent<any>) => void;
         /**
           * Determines the banner variant.
          */

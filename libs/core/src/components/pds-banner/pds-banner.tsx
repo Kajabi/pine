@@ -6,8 +6,8 @@ import {
   h,
   Prop,
   EventEmitter,
-  State,
-  Listen
+  Listen,
+  Watch
 } from '@stencil/core';
 
 @Component({
@@ -21,7 +21,21 @@ export class PdsBanner {
   /**
    * Determines if the banner is active.
    */
-  @State() active = false;
+  @Prop({ mutable: true, reflect: true }) active = false;
+
+  /**
+   * Watch for changes to the active property
+   */
+  @Watch('active')
+  watchActiveHandler(newValue: boolean) {
+    if (newValue) {
+      this.el.classList.add('pds-banner--active');
+      // Notify other banners that this one has been activated
+      this.pdsBannerActivated.emit(this.componentId);
+    } else {
+      this.el.classList.remove('pds-banner--active');
+    }
+  }
 
   /**
    * If true, displays a close button to dismiss the banner.
@@ -38,10 +52,13 @@ export class PdsBanner {
    */
   @Prop() variant: 'default' | 'secondary' | 'warning' | 'danger' = 'default';
 
-  @Event() pdsToggle: EventEmitter;
+  /**
+   * Event emitted when a banner is toggled
+   */
+  @Event() pdsDismiss: EventEmitter;
 
   /**
-   * Event emitted when a banner is activated
+   * Event emitted when a banner is currently active
    */
   @Event() pdsBannerActivated: EventEmitter<string>;
 
@@ -54,36 +71,12 @@ export class PdsBanner {
     // deactivate this banner
     if (event.detail !== this.componentId && this.active) {
       this.active = false;
-      this.el.classList.remove('pds-banner--active');
     }
   }
 
-  private toggleBanner = () => {
-    if (this.active) {
-      this.el.classList.remove('pds-banner--active');
-      this.active = false;
-    } else {
-      this.el.classList.add('pds-banner--active');
-      this.active = true;
-      // Notify other banners that this one has been activated
-      this.pdsBannerActivated.emit(this.componentId);
-    }
-    this.pdsToggle.emit();
-  }
-
-  private handleClick = (ev: Event) => {
-    const triggerButton = ev.target as HTMLElement;
-
-    if (triggerButton.hasAttribute('data-pds-banner-target')) {
-      const targetBannerId = triggerButton.getAttribute('data-pds-banner-target');
-      if (targetBannerId === this.componentId) {
-        this.toggleBanner();
-      }
-    }
-  }
-
-  componentWillLoad() {
-    document.addEventListener('click', this.handleClick);
+  private dismissBanner = () => {
+    this.active = false;
+    this.pdsDismiss.emit();
   }
 
   render() {
@@ -107,7 +100,7 @@ export class PdsBanner {
             <pds-box display="flex" align-items="center" gap="sm" justify-content="end">
               <slot name="actions"></slot>
               {this.dismissable && (
-                <button class="pds-banner__close" onClick={this.toggleBanner} aria-label="Dismiss banner">
+                <button class="pds-banner__close" onClick={this.dismissBanner} aria-label="Dismiss banner">
                   <pds-icon color="var(--banner-icon-color)" name="remove" aria-hidden="true"></pds-icon>
                 </button>
               )}

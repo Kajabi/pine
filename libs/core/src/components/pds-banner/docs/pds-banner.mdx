@@ -3,79 +3,101 @@ import { components } from '../../../../dist/docs.json';
 
 # Banner
 
-TBD
+The Banner component is used to display system-wide notifications and events to the user.
+
+## Guidelines
+
+### When to use
+
+- When you need to display system-wide notifications to the user, such as new features or updates.
+
+### When not to use
+
+- When you need to display a notification to a specific user. Consider using Alert instead.
 
 ## Properties
 
 <DocArgsTable componentName="pds-banner" docSource={components} />
 
+> **Note**: The buttons are for demonstration purposes only.
+
 ### Default
+
+The default variant is used to display important information such as new features.
 
 <DocCanvas display="block" client:only
   mdxSource={{
-    react: '<PdsBanner></PdsBanner>',
-    webComponent: '<pds-banner></pds-banner>'
+    react: '<PdsBanner componentId="default-banner"><span slot="text">This might be a Banner component. Maybe.</span><PdsLink slot="actions" href="#">Link</PdsLink></PdsBanner>',
+    webComponent: '<pds-banner component-id="default-banner"><span slot="text">This might be a Banner component. Maybe.</span><pds-link slot="actions" href="#">Link</pds-link></pds-banner>'
 }}>
-  <pds-banner component-id="default-banner1">
+  <pds-banner component-id="default-banner">
     <span slot="text">This might be a Banner component. Maybe.</span>
     <pds-link slot="actions" href="#">Link</pds-link>
     <pds-link slot="actions" href="#">Toggle Banner</pds-link>
   </pds-banner>
-  <pds-button data-pds-banner-target="default-banner1">Toggle Banner</pds-button>
+  <pds-button onClick={() => document.querySelector('#default-banner').toggleAttribute('active')}>Toggle Banner</pds-button>
 </DocCanvas>
 
 ### Secondary
 
+The secondary variant is used to display low-priority information.
+
 <DocCanvas display="block" client:only
   mdxSource={{
-    react: '<PdsBanner></PdsBanner>',
-    webComponent: '<pds-banner></pds-banner>'
+    react: '<PdsBanner componentId="secondary-banner" variant="secondary"><span slot="text">This might be a Banner component. Maybe.</span><PdsLink slot="actions" href="#">Link</PdsLink></PdsBanner>',
+    webComponent: '<pds-banner component-id="secondary-banner" variant="secondary"><span slot="text">This might be a Banner component. Maybe.</span><pds-link slot="actions" href="#">Link</pds-link></pds-banner>'
 }}>
   <pds-banner component-id="secondary-banner" variant="secondary">
     <span slot="text">This might be a Banner component. Maybe.</span>
     <pds-link slot="actions" href="#">Link</pds-link>
   </pds-banner>
-  <pds-button data-pds-banner-target="secondary-banner">Toggle Banner</pds-button>
+  <pds-button onClick={() => document.querySelector('#secondary-banner').toggleAttribute('active')}>Toggle Banner</pds-button>
 </DocCanvas>
 
 ### Warning
 
+The warning variant is used to display information that requires the user's attention.
+
 <DocCanvas display="block" client:only
   mdxSource={{
-    react: '<PdsBanner></PdsBanner>',
-    webComponent: '<pds-banner></pds-banner>'
+    react: '<PdsBanner componentId="warning-banner"><span slot="text">This might be a Banner component. Maybe.</span><PdsLink slot="actions" href="#">Link</PdsLink></PdsBanner>',
+    webComponent: '<pds-banner component-id="warning-banner" variant="warning"><span slot="text">This might be a Banner component. Maybe.</span><pds-link slot="actions" href="#">Link</pds-link></pds-banner>'
 }}>
   <pds-banner component-id="warning-banner" variant="warning">
     <span slot="text">This might be a Banner component. Maybe.</span>
     <pds-link slot="actions" href="#">Link</pds-link>
   </pds-banner>
-  <pds-button data-pds-banner-target="warning-banner">Toggle Banner</pds-button>
+  <pds-button onClick={() => document.querySelector('#warning-banner').toggleAttribute('active')}>Toggle Banner</pds-button>
 </DocCanvas>
 
 ### Danger
 
+The danger variant is used to display critical information that requires immediate attention.
+
 <DocCanvas display="block" client:only
   mdxSource={{
-    react: '<PdsBanner></PdsBanner>',
-    webComponent: '<pds-banner></pds-banner>'
+    react: '<PdsBanner componentId="danger-banner" variant="danger"><span slot="text">This might be a Banner component. Maybe.</span><PdsLink slot="actions" href="#">Link</PdsLink></PdsBanner>',
+    webComponent: '<pds-banner component-id="danger-banner" variant="danger"><span slot="text">This might be a Banner component. Maybe.</span><pds-link slot="actions" href="#">Link</pds-link></pds-banner>'
 }}>
   <pds-banner component-id="danger-banner" variant="danger">
     <span slot="text">This might be a Banner component. Maybe.</span>
     <pds-link slot="actions" href="#">Link</pds-link>
   </pds-banner>
-  <pds-button data-pds-banner-target="danger-banner">Toggle Banner</pds-button>
+  <pds-button onClick={() => document.querySelector('#danger-banner').toggleAttribute('active')}>Toggle Banner</pds-button>
 </DocCanvas>
 
 ### Dismissable
 
+The dismissable variant adds a close button to the banner so it can be manually dismissed by the user.
+
 <DocCanvas display="block" client:only
   mdxSource={{
-    react: '<PdsBanner></PdsBanner>',
-    webComponent: '<pds-banner></pds-banner>'
+    react: '<PdsBanner componentId="dismissable-banner" dismissable><span slot="text">This might be a Banner component. Maybe.</span><PdsLink slot="actions" href="#">Link</PdsLink></PdsBanner>',
+    webComponent: '<pds-banner component-id="dismissable-banner" dismissable><span slot="text">This might be a Banner component. Maybe.</span><pds-link slot="actions" href="#">Link</pds-link></pds-banner>'
   }}>
   <pds-banner component-id="dismissable-banner" dismissable>
     <span slot="text">This might be a Banner component. Maybe.</span>
     <pds-link slot="actions" href="#">Link</pds-link>
   </pds-banner>
-  <pds-button data-pds-banner-target="dismissable-banner">Toggle Banner</pds-button>
+  <pds-button pdsClick={() => document.querySelector('#dismissable-banner').toggleAttribute('active')}>Toggle Banner</pds-button>
 </DocCanvas>
