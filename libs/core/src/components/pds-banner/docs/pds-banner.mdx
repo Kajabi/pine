@@ -99,5 +99,5 @@ The dismissable variant adds a close button to the banner so it can be manually 
     <span slot="text">This might be a Banner component. Maybe.</span>
     <pds-link slot="actions" href="#">Link</pds-link>
   </pds-banner>
-  <pds-button pdsClick={() => document.querySelector('#dismissable-banner').toggleAttribute('active')}>Toggle Banner</pds-button>
+  <pds-button onClick={() => document.querySelector('#dismissable-banner').toggleAttribute('active')}>Toggle Banner</pds-button>
 </DocCanvas>
