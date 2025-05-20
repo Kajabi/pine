@@ -5,6 +5,7 @@ import { createReactComponent } from './react-component-lib';
 
 import type { JSX } from '@pine-ds/core/components';
 
+import { defineCustomElement as defineMockPdsModal } from '@pine-ds/core/components/mock-pds-modal.js';
 import { defineCustomElement as definePdsAccordion } from '@pine-ds/core/components/pds-accordion.js';
 import { defineCustomElement as definePdsAvatar } from '@pine-ds/core/components/pds-avatar.js';
 import { defineCustomElement as definePdsBox } from '@pine-ds/core/components/pds-box.js';
@@ -39,6 +40,7 @@ import { defineCustomElement as definePdsText } from '@pine-ds/core/components/p
 import { defineCustomElement as definePdsTextarea } from '@pine-ds/core/components/pds-textarea.js';
 import { defineCustomElement as definePdsTooltip } from '@pine-ds/core/components/pds-tooltip.js';
 
+export const MockPdsModal = /*@__PURE__*/createReactComponent<JSX.MockPdsModal, HTMLMockPdsModalElement>('mock-pds-modal', undefined, undefined, defineMockPdsModal);
 export const PdsAccordion = /*@__PURE__*/createReactComponent<JSX.PdsAccordion, HTMLPdsAccordionElement>('pds-accordion', undefined, undefined, definePdsAccordion);
 export const PdsAvatar = /*@__PURE__*/createReactComponent<JSX.PdsAvatar, HTMLPdsAvatarElement>('pds-avatar', undefined, undefined, definePdsAvatar);
 export const PdsBox = /*@__PURE__*/createReactComponent<JSX.PdsBox, HTMLPdsBoxElement>('pds-box', undefined, undefined, definePdsBox);
