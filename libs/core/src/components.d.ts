@@ -569,6 +569,10 @@ export namespace Components {
     }
     interface PdsLink {
         /**
+          * Sets the link color.
+         */
+        "color"?: 'secondary' | 'accent' | 'danger';
+        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
@@ -2356,6 +2360,10 @@ declare namespace LocalJSX {
         "value"?: string | number | null;
     }
     interface PdsLink {
+        /**
+          * Sets the link color.
+         */
+        "color"?: 'secondary' | 'accent' | 'danger';
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
