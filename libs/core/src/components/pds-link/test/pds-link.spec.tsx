@@ -35,6 +35,22 @@ describe('pds-link', () => {
     `);
   });
 
+  it('renders with color', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsLink],
+      html: `<pds-link color="accent"></pds-link>`,
+    });
+    expect(root).toEqualHtml(`
+      <pds-link color="accent">
+        <mock:shadow-root>
+          <a class="pds-link pds-link--inline pds-link--lg" part="link">
+            <slot></slot>
+          </a>
+        </mock:shadow-root>
+      </pds-link>
+    `);
+  });
+
   it('renders with values', async () => {
     const { root } = await newSpecPage({
       components: [PdsLink],
