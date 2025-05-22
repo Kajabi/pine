@@ -7,13 +7,14 @@ Link is mainly used as navigational element and usually appear within or directl
 
 ## Properties
 
-| Property            | Attribute      | Description                                                                                        | Type                   | Default     |
-| ------------------- | -------------- | -------------------------------------------------------------------------------------------------- | ---------------------- | ----------- |
-| `componentId`       | `component-id` | A unique identifier used for the underlying component `id` attribute.                              | `string`               | `undefined` |
-| `external`          | `external`     | Determines whether the link should open in a new tab.                                              | `boolean`              | `false`     |
-| `fontSize`          | `font-size`    | The font size of the link's text.                                                                  | `"lg" \| "md" \| "sm"` | `'lg'`      |
-| `href` _(required)_ | `href`         | The hyperlink's destination URL. If no text is provided in the custom slot, the href will be used. | `string`               | `undefined` |
-| `variant`           | `variant`      | Sets the link variant styles.                                                                      | `"inline" \| "plain"`  | `'inline'`  |
+| Property            | Attribute      | Description                                                                                        | Type                                  | Default     |
+| ------------------- | -------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------- | ----------- |
+| `color`             | `color`        | Sets the link color.                                                                               | `"accent" \| "danger" \| "secondary"` | `undefined` |
+| `componentId`       | `component-id` | A unique identifier used for the underlying component `id` attribute.                              | `string`                              | `undefined` |
+| `external`          | `external`     | Determines whether the link should open in a new tab.                                              | `boolean`                             | `false`     |
+| `fontSize`          | `font-size`    | The font size of the link's text.                                                                  | `"lg" \| "md" \| "sm"`                | `'lg'`      |
+| `href` _(required)_ | `href`         | The hyperlink's destination URL. If no text is provided in the custom slot, the href will be used. | `string`                              | `undefined` |
+| `variant`           | `variant`      | Sets the link variant styles.                                                                      | `"inline" \| "plain"`                 | `'inline'`  |
 
 
 ## Slots

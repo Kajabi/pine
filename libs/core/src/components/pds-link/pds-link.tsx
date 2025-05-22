@@ -13,6 +13,11 @@ import { launch } from '@pine-ds/icons/icons';
 })
 export class PdsLink {
   /**
+   * Sets the link color.
+   */
+  @Prop() color?: 'secondary' | 'accent' | 'danger';
+
+  /**
    * A unique identifier used for the underlying component `id` attribute.
    */
   @Prop() componentId: string;
