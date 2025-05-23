@@ -40,6 +40,10 @@
 
   @media (min-width: 992px) {
     margin-block-start: 6vh;
+
+    &.pds-modal--scrollable {
+      max-height: calc(100vh - (calc(6vh + 96px)));
+    }
   }
 
   @media (min-width: 1200px) {
@@ -68,7 +72,7 @@
 }
 
 .pds-modal--scrollable {
-  max-height: calc(100vh - 48px);
+  max-height: calc(100vh - calc(48px * 1.5));
   overflow-y: auto;
 }
 
