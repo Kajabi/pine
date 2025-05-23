@@ -187,7 +187,7 @@ export class PdsBox {
   @Prop() size?: BoxColumnType;
 
   /**
-   * At the XS breakpoint (typically the smallest screen sizes, 0px to 575px), this will take the number of columns specified. This overrides the base size prop for this specific range.
+   * At the XS breakpoint, this prop will take the number of columns specified. This overrides the base size prop for this specific range.
    */
   @Prop() sizeXs?: BoxColumnType;
 
