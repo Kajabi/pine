@@ -1,11 +1,13 @@
-import { Component, Element, Event, EventEmitter, h, Method, Prop, Watch } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, h, Method, Prop, State, Watch } from '@stencil/core';
 
 @Component({
   tag: 'pds-modal',
   styleUrl: 'pds-modal.scss',
 })
 export class PdsModal {
-  private modalRef: HTMLElement;
+  private modalRef: HTMLDialogElement;
+  private previousActiveElement: HTMLElement;
+  private focusableElements: HTMLElement[] = [];
 
   @Element() el: HTMLPdsModalElement;
 
@@ -54,14 +56,13 @@ export class PdsModal {
    */
   @Event() pdsModalClose: EventEmitter<void>;
 
-  componentDidLoad() {
-    this.modalRef = this.el.querySelector('.pds-modal__backdrop');
-    if (this.modalRef) {
-      this.modalRef.setAttribute('popover', 'manual');
-      // Ensure modal is hidden by default
-      this.modalRef.hidePopover();
-    }
+  /**
+   * Stores the list of focusable elements in the modal
+   */
+  @State() focusableElementsArray: HTMLElement[] = [];
 
+  componentDidLoad() {
+    this.modalRef = this.el.querySelector('.pds-modal__backdrop') as HTMLDialogElement;
     // Add keyboard event listener
     document.addEventListener('keydown', this.handleKeyDown);
   }
@@ -81,15 +82,103 @@ export class PdsModal {
   }
 
   /**
+   * Updates the list of focusable elements in the modal
+   */
+  private updateFocusableElements() {
+    if (!this.modalRef) return;
+
+    // Get all focusable elements within the modal
+    const selector = [
+      'a[href]',
+      'button:not([disabled])',
+      'input:not([disabled])',
+      'select:not([disabled])',
+      'textarea:not([disabled])',
+      '[tabindex]:not([tabindex="-1"])',
+      'pds-button:not([disabled])',
+      'pds-link:not([disabled])',
+      'pds-input:not([disabled])',
+      'pds-checkbox:not([disabled])',
+      'pds-radio:not([disabled])',
+      'pds-switch:not([disabled])',
+      'pds-select:not([disabled])',
+    ].join(',');
+
+    this.focusableElements = Array.from(
+      this.modalRef.querySelectorAll(selector)
+    ) as HTMLElement[];
+
+    // Filter out elements with display: none or visibility: hidden
+    this.focusableElements = this.focusableElements.filter(el => {
+      const style = window.getComputedStyle(el);
+      return style.display !== 'none' && style.visibility !== 'hidden';
+    });
+  }
+
+  /**
+   * Sets focus to the first focusable element in the modal
+   */
+  private setInitialFocus() {
+    if (this.focusableElements.length === 0) return;
+
+    // Focus the first focusable element
+    const firstElement = this.focusableElements[0];
+
+    // For web components, we need to ensure they're properly focused
+    this.focusElement(firstElement);
+  }
+
+  /**
+   * Helper method to focus an element, with special handling for web components
+   */
+  private focusElement(element: HTMLElement) {
+    if (!element) return;
+
+    try {
+      // Try standard focus first
+      element.focus();
+
+      // Check if focus worked
+      setTimeout(() => {
+        if (document.activeElement !== element) {
+          // For web components, try to find a focusable element inside
+          if (element.shadowRoot) {
+            const focusableInShadow = element.shadowRoot.querySelector(
+              'button, [tabindex], input, a[href]'
+            ) as HTMLElement;
+
+            if (focusableInShadow) {
+              focusableInShadow.focus();
+            }
+          }
+        }
+      }, 0);
+    } catch (error) {
+      console.error('Error focusing element:', error);
+    }
+  }
+
+  /**
    * Opens the modal
    */
   @Method()
   async showModal() {
     if (this.modalRef) {
       try {
-        this.modalRef.showPopover();
+        // Store the currently focused element to restore focus when modal closes
+        this.previousActiveElement = document.activeElement as HTMLElement;
+
+        // Use native dialog showModal method which makes the rest of the page inert
+        this.modalRef.showModal();
         this.open = true;
-        this.pdsModalOpen.emit();
+
+        // Update focusable elements and set initial focus
+        // Using a longer timeout to ensure all components are fully rendered
+        setTimeout(() => {
+          this.updateFocusableElements();
+          this.setInitialFocus();
+          this.pdsModalOpen.emit();
+        }, 100);
       } catch (error) {
         console.error('Failed to show modal:', error);
       }
@@ -103,8 +192,14 @@ export class PdsModal {
   async hideModal() {
     if (this.modalRef) {
       try {
-        this.modalRef.hidePopover();
+        this.modalRef.close();
         this.open = false;
+
+        // Restore focus to the element that was focused before the modal was opened
+        if (this.previousActiveElement && typeof this.previousActiveElement.focus === 'function') {
+          this.previousActiveElement.focus();
+        }
+
         this.pdsModalClose.emit();
       } catch (error) {
         console.error('Failed to hide modal:', error);
@@ -160,17 +255,54 @@ export class PdsModal {
   }
 
   private handleKeyDown = (e: KeyboardEvent) => {
-    if (!this.closeOnEsc || e.key !== 'Escape' || !this.open) return;
+    // If the modal is not open, don't handle any keyboard events
+    if (!this.open) return;
 
-    // Only close if this is the innermost modal
-    if (this.isInnermostModal()) {
-      this.hideModal();
+    // Handle Escape key to close the modal
+    if (this.closeOnEsc && e.key === 'Escape') {
+      // Only close if this is the innermost modal
+      if (this.isInnermostModal()) {
+        e.preventDefault();
+        this.hideModal();
+      }
+      return;
+    }
+
+    // Handle Tab key for focus trapping
+    if (e.key === 'Tab') {
+      // If there are no focusable elements, do nothing
+      if (this.focusableElements.length === 0) return;
+
+      // Get the first and last focusable elements
+      const firstFocusableElement = this.focusableElements[0];
+      const lastFocusableElement = this.focusableElements[this.focusableElements.length - 1];
+
+      // Get the current active element
+      const activeElement = document.activeElement;
+
+      // Check if we need to wrap focus
+      const isFirstElement = activeElement === firstFocusableElement ||
+                            firstFocusableElement.contains(activeElement as Node);
+
+      const isLastElement = activeElement === lastFocusableElement ||
+                           lastFocusableElement.contains(activeElement as Node);
+
+      // If shift + tab is pressed and focus is on the first element, move to the last element
+      if (e.shiftKey && isFirstElement) {
+        e.preventDefault();
+        this.focusElement(lastFocusableElement);
+      }
+      // If tab is pressed and focus is on the last element, move to the first element
+      else if (!e.shiftKey && isLastElement) {
+        e.preventDefault();
+        this.focusElement(firstFocusableElement);
+      }
     }
   };
 
   render() {
     return (
-      <div
+      <dialog
         class={{
           'pds-modal__backdrop': true,
           'open': this.open
@@ -186,14 +318,14 @@ export class PdsModal {
           <header class="pds-modal__header">
             <slot name="header"></slot>
           </header>
-          <div class="pds-modal__content">
+          <div class="pds-modal__content" tabindex={this.scrollable ? '-1' : null}>
             <slot></slot>
           </div>
           <footer class="pds-modal__footer">
             <slot name="footer"></slot>
           </footer>
         </div>
-      </div>
+      </dialog>
     );
   }
 }
