@@ -211,72 +211,7 @@ export class PdsBox {
    */
   @Prop() sizeXl?: BoxColumnType;
 
-  /**
-   * @responsive Responsive Sizing Strategies & Examples
-   * 
-   * The `pds-box` component uses a mobile-first approach to responsive sizing. This means that styles cascade up from smaller breakpoints to larger ones, unless overridden at a specific breakpoint.
-   * 
-   * ### Understanding the Cascade
-   * 
-   * - The base `size` prop sets the default width that applies to all breakpoints unless overridden
-   * - Breakpoint-specific props (`sizeXs`, `sizeSm`, etc.) override the base size at their respective breakpoints and larger
-   * - Each breakpoint-specific prop overrides any sizes set by smaller breakpoint props
-   * 
-   * ### Breakpoint Ranges
-   * 
-   * - XS: 0-575px
-   * - SM: 576px and up
-   * - MD: 768px and up
-   * - LG: 992px and up
-   * - XL: 1200px and up
-   * 
-   * ### Common Patterns
-   * 
-   * #### Stacking on small screens, columns on larger screens
-   * 
-   * ```html
-   * <!-- Full width on mobile, half width on tablets and up -->
-   * <pds-box size="12" sizeMd="6"></pds-box>
-   * 
-   * <!-- Full width on mobile, one-third width on tablets and up -->
-   * <pds-box size="12" sizeMd="4"></pds-box>
-   * ```
-   * 
-   * #### Explicit full-width layout on small screens
-   * 
-   * ```html
-   * <!-- Explicit full width on mobile, different widths at different breakpoints -->
-   * <pds-box size="12" sizeSm="6" sizeLg="4"></pds-box>
-   * ```
-   * 
-   * #### When to use/avoid the base `size` prop
-   * 
-   * If you want consistent sizing across all breakpoints:
-   * 
-   * ```html
-   * <!-- Same width across all breakpoints -->
-   * <pds-box size="6"></pds-box>
-   * ```
-   * 
-   * If you need different sizes at different breakpoints:
-   * 
-   * ```html
-   * <!-- Different widths at different breakpoints -->
-   * <pds-box sizeSm="12" sizeMd="6" sizeLg="4"></pds-box>
-   * ```
-   * 
-   * ### Default Behavior
-   * 
-   * When no size props are provided, the box will use `flex-grow: 1` and `flex-basis: 0`, allowing it to grow and fill available space while maintaining equal widths with other flex items.
-   * 
-   * ```html
-   * <!-- These boxes will share available space equally -->
-   * <pds-row>
-   *   <pds-box></pds-box>
-   *   <pds-box></pds-box>
-   * </pds-row>
-   * ```
-   */
+
 
   render() {
     const boxClasses = `
