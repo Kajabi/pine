@@ -202,7 +202,7 @@ export class PdsBox {
   @Prop() sizeMd?: BoxColumnType;
 
   /**
-   * At screen sizes from the LG breakpoint and larger (992px and up), this will take the specified number of columns. This overrides any value set by size, sizeXs, sizeSm, and up.
+   * At screen sizes from the LG breakpoint and larger (992px and up), this will take the specified number of columns. This overrides any value set by size, sizeXs, and up.
    */
   @Prop() sizeLg?: BoxColumnType;
 
