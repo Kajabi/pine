@@ -182,34 +182,101 @@ export class PdsBox {
   @Prop() shadow?: BoxShadowSizeType;
 
   /**
-   * Size of the column for all screen sizes that are not explicitly set.
+   * Sets the default column width for the component. This value applies from the smallest screen size (XS) upwards, unless overridden by a breakpoint-specific size prop at that breakpoint or larger.
    */
   @Prop() size?: BoxColumnType;
 
   /**
-   * At screen sizes less than the `XS` breakpoint, this will take the number of columns specified.
+   * At the XS breakpoint (typically the smallest screen sizes, 0px to 575px), this will take the number of columns specified. This overrides the base size prop for this specific range.
    */
   @Prop() sizeXs?: BoxColumnType;
 
   /**
-   * At screen sizes greater than the `SM` breakpoint, this will take the number of columns specified.
+   * At screen sizes from the SM breakpoint and larger (576px and up), this will take the specified number of columns. This overrides any value set by size or sizeXs.
    */
   @Prop() sizeSm?: BoxColumnType;
 
   /**
-   * At screen sizes greater than the `MD` breakpoint, this will take the number of columns specified.
+   * At screen sizes from the MD breakpoint and larger (768px and up), this will take the specified number of columns. This overrides any value set by size, sizeXs, or sizeSm.
    */
   @Prop() sizeMd?: BoxColumnType;
 
   /**
-   * At screen sizes greater than the `LG` breakpoint, this will take the number of columns specified.
+   * At screen sizes from the LG breakpoint and larger (992px and up), this will take the specified number of columns. This overrides any value set by size, sizeXs, sizeSm, or sizeMd.
    */
   @Prop() sizeLg?: BoxColumnType;
 
   /**
-   * At screen sizes greater than the `XL` breakpoint, this will take the number of columns specified.
+   * At screen sizes from the XL breakpoint and larger (1200px and up), this will take the specified number of columns. This overrides any value set by size, sizeXs, sizeSm, sizeMd, or sizeLg.
    */
   @Prop() sizeXl?: BoxColumnType;
+
+  /**
+   * @responsive Responsive Sizing Strategies & Examples
+   * 
+   * The `pds-box` component uses a mobile-first approach to responsive sizing. This means that styles cascade up from smaller breakpoints to larger ones, unless overridden at a specific breakpoint.
+   * 
+   * ### Understanding the Cascade
+   * 
+   * - The base `size` prop sets the default width that applies to all breakpoints unless overridden
+   * - Breakpoint-specific props (`sizeXs`, `sizeSm`, etc.) override the base size at their respective breakpoints and larger
+   * - Each breakpoint-specific prop overrides any sizes set by smaller breakpoint props
+   * 
+   * ### Breakpoint Ranges
+   * 
+   * - XS: 0-575px
+   * - SM: 576px and up
+   * - MD: 768px and up
+   * - LG: 992px and up
+   * - XL: 1200px and up
+   * 
+   * ### Common Patterns
+   * 
+   * #### Stacking on small screens, columns on larger screens
+   * 
+   * ```html
+   * <!-- Full width on mobile, half width on tablets and up -->
+   * <pds-box size="12" sizeMd="6"></pds-box>
+   * 
+   * <!-- Full width on mobile, one-third width on tablets and up -->
+   * <pds-box size="12" sizeMd="4"></pds-box>
+   * ```
+   * 
+   * #### Explicit full-width layout on small screens
+   * 
+   * ```html
+   * <!-- Explicit full width on mobile, different widths at different breakpoints -->
+   * <pds-box size="12" sizeSm="6" sizeLg="4"></pds-box>
+   * ```
+   * 
+   * #### When to use/avoid the base `size` prop
+   * 
+   * If you want consistent sizing across all breakpoints:
+   * 
+   * ```html
+   * <!-- Same width across all breakpoints -->
+   * <pds-box size="6"></pds-box>
+   * ```
+   * 
+   * If you need different sizes at different breakpoints:
+   * 
+   * ```html
+   * <!-- Different widths at different breakpoints -->
+   * <pds-box sizeSm="12" sizeMd="6" sizeLg="4"></pds-box>
+   * ```
+   * 
+   * ### Default Behavior
+   * 
+   * When no size props are provided, the box will use `flex-grow: 1` and `flex-basis: 0`, allowing it to grow and fill available space while maintaining equal widths with other flex items.
+   * 
+   * ```html
+   * <!-- These boxes will share available space equally -->
+   * <pds-row>
+   *   <pds-box></pds-box>
+   *   <pds-box></pds-box>
+   * </pds-row>
+   * ```
+   */
 
   render() {
     const boxClasses = `
