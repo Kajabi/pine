@@ -42,34 +42,35 @@ Modals can be opened and closed programmatically using the `open` property:
           }}>Open Modal</PdsButton>
 
           <PdsModal id="control-modal" componentId="control-modal">
-            <PdsBox fit direction="column" paddingInlineStart="md" paddingInlineEnd="md">
-              <p>This modal is controlled by external buttons.</p>
-            </PdsBox>
-            
-            <PdsBox direction="column" fit padding="md" slot="header-content">
-              <PdsBox alignItems="center" fit justifyContent="space-between">
-                <PdsText tag="h2" size="h3">Controlled Modal</PdsText>
-                <PdsButton
-                  class="pds-modal__close"
-                  variant="unstyled"
-                  iconOnly
-                  onClick={() => {
-                    const modal = document.querySelector('#control-modal');
-                    if (modal) modal.open = false;
-                  }}
-                  aria-label="Close modal"
-                >
-                  <PdsIcon slot="start" name="remove" aria-hidden="true"></PdsIcon>
-                </PdsButton>
+            <PdsModalHeader>
+              <PdsBox direction="column" fit padding="md">
+                <PdsBox alignItems="center" fit justifyContent="space-between">
+                  <PdsText tag="h2" size="h3">Controlled Modal</PdsText>
+                  <PdsButton
+                    class="pds-modal__close"
+                    variant="unstyled"
+                    iconOnly
+                    onclick="document.querySelector('#control-modal').open = false"
+                    aria-label="Close modal"
+                  >
+                    <PdsIcon slot="start" name="remove" aria-hidden="true"></PdsIcon>
+                  </PdsButton>
+                </PdsBox>
               </PdsBox>
-            </PdsBox>
-            
-            <PdsBox fit justifyContent="end" padding="md" gap="sm" slot="footer-content">
-              <PdsButton onClick={() => {
-                const modal = document.querySelector('#control-modal');
-                if (modal) modal.open = false;
-              }}>Close</PdsButton>
-            </PdsBox>
+            </PdsModalHeader>
+            <PdsModalContent>
+              <PdsBox fit direction="column" paddingInlineStart="md" paddingInlineEnd="md">
+                <p>This modal is controlled by external buttons.</p>
+              </PdsBox>
+            </PdsModalContent>
+            <PdsModalFooter>
+              <PdsBox fit justifyContent="end" padding="md" gap="sm">
+                <PdsButton onClick={() => {
+                  const modal = document.querySelector('#control-modal');
+                  if (modal) modal.open = false;
+                }}>Close</PdsButton>
+              </PdsBox>
+            </PdsModalFooter>
           </PdsModal>
         </div>
       );
@@ -77,14 +78,55 @@ Modals can be opened and closed programmatically using the `open` property:
     `,
     webComponent: `
     <div>
-      <pds-button onclick="document.querySelector('#control-modal').open = true">Open Modal</pds-button>
+      <pds-button onClick={() => {
+        const modal = document.querySelector('#control-modal');
+        if (modal) modal.open = true;
+      }}>Open Modal</pds-button>
 
       <pds-modal id="control-modal" component-id="control-modal">
-        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-          <p>This modal is controlled by external buttons.</p>
-        </pds-box>
-        
-        <pds-box direction="column" fit padding="md" slot="header-content">
+        <pds-modal-header>
+          <pds-box direction="column" fit padding="md">
+            <pds-box align-items="center" fit justify-content="space-between">
+              <pds-text tag="h2" size="h3">Controlled Modal</pds-text>
+              <pds-button
+                class="pds-modal__close"
+                variant="unstyled"
+                icon-only="true"
+                onclick="document.querySelector('#control-modal').open = false"
+                aria-label="Close modal"
+              >
+                <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+              </pds-button>
+            </pds-box>
+          </pds-box>
+        </pds-modal-header>
+        <pds-modal-content>
+          <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+            <p>This modal is controlled by external buttons.</p>
+          </pds-box>
+        </pds-modal-content>
+        <pds-modal-footer>
+          <pds-box fit justify-content="end" padding="md" gap="sm">
+            <pds-button onClick={() => {
+              const modal = document.querySelector('#control-modal');
+              if (modal) modal.open = false;
+            }}>Close</pds-button>
+          </pds-box>
+        </pds-modal-footer>
+      </pds-modal>
+    </div>
+    `
+  }}
+>
+  <div>
+    <pds-button onClick={() => {
+      const modal = document.querySelector('#control-modal');
+      if (modal) modal.open = true;
+    }}>Open Modal</pds-button>
+
+    <pds-modal id="control-modal" component-id="control-modal">
+      <pds-modal-header>
+        <pds-box direction="column" fit padding="md">
           <pds-box align-items="center" fit justify-content="space-between">
             <pds-text tag="h2" size="h3">Controlled Modal</pds-text>
             <pds-button
@@ -98,47 +140,20 @@ Modals can be opened and closed programmatically using the `open` property:
             </pds-button>
           </pds-box>
         </pds-box>
-        
-        <pds-box fit justify-content="end" padding="md" gap="sm" slot="footer-content">
-          <pds-button onclick="document.querySelector('#control-modal').open = false">Close</pds-button>
+      </pds-modal-header>
+      <pds-modal-content>
+        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+          <p>This modal is controlled by external buttons.</p>
         </pds-box>
-      </pds-modal>
-    </div>
-    `
-  }}
->
-  <div>
-    <pds-button onClick={() => {
-      const modal = document.querySelector('#control-modal');
-      if (modal) modal.open = true;
-    }}>Open Modal</pds-button>
-
-    <pds-modal id="control-modal" component-id="control-modal">
-      <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-        <p>This modal is controlled by external buttons.</p>
-      </pds-box>
-      
-      <pds-box direction="column" fit padding="md" slot="header-content">
-        <pds-box align-items="center" fit justify-content="space-between">
-          <pds-text tag="h2" size="h3">Controlled Modal</pds-text>
-          <pds-button
-            class="pds-modal__close"
-            variant="unstyled"
-            icon-only="true"
-            onclick="document.querySelector('#control-modal').open = false"
-            aria-label="Close modal"
-          >
-            <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
-          </pds-button>
+      </pds-modal-content>
+      <pds-modal-footer>
+        <pds-box fit justify-content="end" padding="md" gap="sm">
+          <pds-button onClick={() => {
+            const modal = document.querySelector('#control-modal');
+            if (modal) modal.open = false;
+          }}>Close</pds-button>
         </pds-box>
-      </pds-box>
-      
-      <pds-box fit justify-content="end" padding="md" gap="sm" slot="footer-content">
-        <pds-button onClick={() => {
-          const modal = document.querySelector('#control-modal');
-          if (modal) modal.open = false;
-        }}>Close</pds-button>
-      </pds-box>
+      </pds-modal-footer>
     </pds-modal>
   </div>
 </DocCanvas>
@@ -180,67 +195,66 @@ Modals can be configured to close automatically in response to user actions:
 <DocCanvas client:only
   mdxSource={{
     react: `
-  <div>
-    <pds-button onClick={() => {
-      const modal = document.querySelector('#default-modal');
-      if (modal) modal.open = true;
-    }}>Open Modal</pds-button>
+      <div>
+        <PdsButton onClick={() => {
+          const modal = document.querySelector('#default-modal');
+          if (modal) modal.open = true;
+        }}>Open Modal</PdsButton>
 
-    <PdsModal id="default-modal" component-id="default-modal">
-      <PdsModalHeader>
-        <PdsBox direction="column" fit padding="md">
-          <PdsBox align-items="center" fit justify-content="space-between">
-            <PdsText tag="h2" size="h3">Modal Title</PdsText>
-              <PdsButton
-                class="pds-modal__close"
-                variant="unstyled"
-                iconOnly
-                onClick={() => {
-                  const modal = document.querySelector('#default-modal');
-                  if (modal) modal.open = false;
-                }}
-                aria-label="Close modal"
-              >
-                <PdsIcon slot="start" name="remove" aria-hidden="true"></PdsIcon>
-              </PdsButton>
+        <PdsModal id="default-modal" component-id="default-modal">
+          <PdsModalHeader>
+            <PdsBox direction="column" fit padding="md">
+              <PdsBox alignItems="center" fit justifyContent="space-between">
+                <PdsText tag="h2" size="h3">Modal Title</PdsText>
+                <PdsButton
+                  class="pds-modal__close"
+                  variant="unstyled"
+                  iconOnly
+                  onclick="document.querySelector('#default-modal').open = false"
+                  aria-label="Close modal"
+                >
+                  <PdsIcon slot="start" name="remove" aria-hidden="true"></PdsIcon>
+                </PdsButton>
+              </PdsBox>
             </PdsBox>
-          </PdsBox>
-        </PdsModalHeader>
-        <PdsBox fit direction="column" paddingInlineStart="md" paddingInlineEnd="md">
-          <p>This is the modal content. You can put any content here.</p>
-        </PdsBox>
-        <PdsModalFooter>
-          <PdsBox
-            justifyContent="space-between"
-            fit
-            padding="md"
-          >
-            <PdsButton variant="unstyled" onClick={() => {
-              const modal = document.querySelector('#default-modal');
-              if (modal) modal.open = false;
-            }}>Close</PdsButton>
-            <PdsBox gap="sm" justifyContent="end">
-              <PdsButton
-                variant="secondary"
-                onClick={() => {
-                  const modal = document.querySelector('#default-modal');
-                  if (modal) modal.open = false;
-                }}
-              >
-                Cancel
-              </PdsButton>
-              <PdsButton variant="primary">Confirm</PdsButton>
+          </PdsModalHeader>
+          <PdsModalContent>
+            <PdsBox fit direction="column" paddingInlineStart="md" paddingInlineEnd="md">
+              <p>This is the modal content. You can put any content here.</p>
             </PdsBox>
-          </PdsBox>
-        </PdsModalFooter>
-      </PdsModal>
-    </div>
+          </PdsModalContent>
+          <PdsModalFooter>
+            <PdsBox
+              justifyContent="space-between"
+              fit
+              padding="md"
+            >
+              <PdsButton variant="unstyled" onClick={() => {
+                const modal = document.querySelector('#default-modal');
+                if (modal) modal.open = false;
+              }}>Close</PdsButton>
+              <PdsBox gap="sm" justifyContent="end">
+                <PdsButton
+                  variant="secondary"
+                  onClick={() => {
+                    const modal = document.querySelector('#default-modal');
+                    if (modal) modal.open = false;
+                  }}>Cancel</PdsButton>
+                <PdsButton variant="primary">Confirm</PdsButton>
+              </PdsBox>
+            </PdsBox>
+          </PdsModalFooter>
+        </PdsModal>
+      </div>
     `,
     webComponent: `
     <div>
-      <pds-button onclick="document.querySelector('#default-modal-1').open = true">Open Modal</pds-button>
+      <pds-button onClick={() => {
+        const modal = document.querySelector('#default-modal');
+        if (modal) modal.open = true;
+      }}>Open Modal</pds-button>
 
-      <pds-modal id="default-modal-1" component-id="default-modal-1">
+      <pds-modal id="default-modal" component-id="default-modal">
         <pds-modal-header>
           <pds-box direction="column" fit padding="md">
             <pds-box align-items="center" fit justify-content="space-between">
@@ -249,7 +263,7 @@ Modals can be configured to close automatically in response to user actions:
                 class="pds-modal__close"
                 variant="unstyled"
                 icon-only="true"
-                onclick="document.querySelector('#default-modal-1').open = false"
+                onclick="document.querySelector('#default-modal').open = false"
                 aria-label="Close modal"
               >
                 <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
@@ -257,23 +271,28 @@ Modals can be configured to close automatically in response to user actions:
             </pds-box>
           </pds-box>
         </pds-modal-header>
-        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-          <p>This is the modal content. You can put any content here.</p>
-        </pds-box>
+        <pds-modal-content>
+          <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+            <p>This is the modal content. You can put any content here.</p>
+          </pds-box>
+        </pds-modal-content>
         <pds-modal-footer>
           <pds-box
             justify-content="space-between"
             fit
             padding="md"
           >
-            <pds-button variant="unstyled" onclick="document.querySelector('#default-modal-1').open = false">Close</pds-button>
+            <pds-button variant="unstyled" onClick={() => {
+              const modal = document.querySelector('#default-modal');
+              if (modal) modal.open = false;
+            }}>Close</pds-button>
             <pds-box gap="sm" justify-content="end">
               <pds-button
                 variant="secondary"
-                onclick="document.querySelector('#default-modal-1').open = false"
-              >
-                Cancel
-              </pds-button>
+                onClick={() => {
+                  const modal = document.querySelector('#default-modal');
+                  if (modal) modal.open = false;
+                }}>Cancel</pds-button>
               <pds-button variant="primary">Confirm</pds-button>
             </pds-box>
           </pds-box>
@@ -306,9 +325,11 @@ Modals can be configured to close automatically in response to user actions:
           </pds-box>
         </pds-box>
       </pds-modal-header>
-      <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-        <p>This is the modal content. You can put any content here.</p>
-      </pds-box>
+      <pds-modal-content>
+        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+          <p>This is the modal content. You can put any content here.</p>
+        </pds-box>
+      </pds-modal-content>
       <pds-modal-footer>
         <pds-box
           justify-content="space-between"
@@ -319,16 +340,13 @@ Modals can be configured to close automatically in response to user actions:
             const modal = document.querySelector('#default-modal');
             if (modal) modal.open = false;
           }}>Close</pds-button>
-          <pds-box gap="sm" justifyContent="end">
+          <pds-box gap="sm" justify-content="end">
             <pds-button
               variant="secondary"
               onClick={() => {
                 const modal = document.querySelector('#default-modal');
                 if (modal) modal.open = false;
-              }}
-            >
-              Cancel
-            </pds-button>
+              }}>Cancel</pds-button>
             <pds-button variant="primary">Confirm</pds-button>
           </pds-box>
         </pds-box>
@@ -379,9 +397,11 @@ The standard modal with a header, content area, and footer. By default, it can b
             </PdsBox>
           </PdsBox>
         </PdsModalHeader>
-        <PdsBox fit direction="column" paddingInlineStart="md" paddingInlineEnd="md">
-          <p>This is the modal content. You can put any content here.</p>
-        </PdsBox>
+        <PdsModalContent>
+          <PdsBox fit direction="column" paddingInlineStart="md" paddingInlineEnd="md">
+            <p>This is the modal content. You can put any content here.</p>
+          </PdsBox>
+        </PdsModalContent>
         <PdsModalFooter>
           <PdsBox fit justifyContent="end" padding="md" gap="sm">
             <PdsButton variant="secondary" onClick={() => {
@@ -426,9 +446,11 @@ The standard modal with a header, content area, and footer. By default, it can b
           </pds-box>
         </pds-box>
       </pds-modal-header>
-      <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-        <p>This is the modal content. You can put any content here.</p>
-      </pds-box>
+      <pds-modal-content>
+        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+          <p>This is the modal content. You can put any content here.</p>
+        </pds-box>
+      </pds-modal-content>
       <pds-modal-footer>
         <pds-box fit justify-content="end" padding="md" gap="sm">
           <pds-button variant="secondary" onClick={() => {
@@ -477,9 +499,11 @@ The standard modal with a header, content area, and footer. By default, it can b
           </pds-box>
         </pds-box>
       </pds-modal-header>
-      <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-        <p>This is the modal content. You can put any content here.</p>
-      </pds-box>
+      <pds-modal-content>
+        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+          <p>This is the modal content. You can put any content here.</p>
+        </pds-box>
+      </pds-modal-content>
       <pds-modal-footer>
         <pds-box fit justify-content="end" padding="md" gap="sm">
           <pds-button variant="secondary" onClick={() => {
@@ -539,9 +563,11 @@ Modals come in four sizes:
         </pds-box>
       </pds-box>
     </pds-modal-header>
-    <pds-box fit direction="column" padding-block-end="md" padding-inline-start="md" padding-inline-end="md">
-      <p>This is a small modal, ideal for simple confirmations or short forms.</p>
-    </pds-box>
+    <pds-modal-content>
+      <pds-box fit direction="column" padding-block-end="md" padding-inline-start="md" padding-inline-end="md">
+        <p>This is a small modal, ideal for simple confirmations or short forms.</p>
+      </pds-box>
+    </pds-modal-content>
   </pds-modal>
 
   <pds-modal id="size-modal-lg" component-id="size-modal-lg" size="lg">
@@ -561,9 +587,11 @@ Modals come in four sizes:
         </pds-box>
       </pds-box>
     </pds-modal-header>
-    <pds-box fit direction="column" padding-block-end="md" padding-inline-start="md" padding-inline-end="md">
-      <p>This is a large modal, suitable for complex forms or detailed content.</p>
-    </pds-box>
+    <pds-modal-content>
+      <pds-box fit direction="column" padding-block-end="md" padding-inline-start="md" padding-inline-end="md">
+        <p>This is a large modal, suitable for complex forms or detailed content.</p>
+      </pds-box>
+    </pds-modal-content>
   </pds-modal>
 
   <pds-modal id="size-modal-full" component-id="size-modal-full" size="fullscreen">
@@ -583,9 +611,11 @@ Modals come in four sizes:
         </pds-box>
       </pds-box>
     </pds-modal-header>
-    <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-      <p>This is a fullscreen modal that takes up the entire viewport.</p>
-    </pds-box>
+    <pds-modal-content>
+      <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+        <p>This is a fullscreen modal that takes up the entire viewport.</p>
+      </pds-box>
+    </pds-modal-content>
   </pds-modal>
 </div>
 
@@ -619,9 +649,11 @@ Use the destructive variant for actions that can't be undone.
             </PdsBox>
           </PdsBox>
         </PdsModalHeader>
-        <PdsBox fit direction="column" paddingInlineStart="md" paddingInlineEnd="md">
-          <p>Are you sure you want to delete this item? This action cannot be undone.</p>
-        </PdsBox>
+        <PdsModalContent>
+          <PdsBox fit direction="column" paddingInlineStart="md" paddingInlineEnd="md">
+            <p>Are you sure you want to delete this item? This action cannot be undone.</p>
+          </PdsBox>
+        </PdsModalContent>
         <PdsModalFooter>
           <PdsBox fit justifyContent="end" padding="md" gap="sm">
             <PdsButton variant="secondary" onClick={() => {
@@ -658,9 +690,11 @@ Use the destructive variant for actions that can't be undone.
             </pds-box>
           </pds-box>
         </pds-modal-header>
-        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-          <p>Are you sure you want to delete this item? This action cannot be undone.</p>
-        </pds-box>
+        <pds-modal-content>
+          <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+            <p>Are you sure you want to delete this item? This action cannot be undone.</p>
+          </pds-box>
+        </pds-modal-content>
         <pds-modal-footer>
           <pds-box fit justify-content="end" padding="md" gap="sm">
             <pds-button variant="secondary" onClick={() => {
@@ -744,11 +778,13 @@ For content that exceeds the viewport height, use the scrollable variant.
             </PdsBox>
           </PdsBox>
         </PdsModalHeader>
-        <PdsBox fit direction="column" paddingInlineStart="md" paddingInlineEnd="md">
-          {Array(20).fill().map((_, i) => (
-            <p key={i}>This is paragraph {i + 1} demonstrating scrollable content in the modal.</p>
-          ))}
-        </PdsBox>
+        <PdsModalContent>
+          <PdsBox fit direction="column" paddingInlineStart="md" paddingInlineEnd="md">
+            {Array(20).fill().map((_, i) => (
+              <p key={i}>This is paragraph {i + 1} demonstrating scrollable content in the modal.</p>
+            ))}
+          </PdsBox>
+        </PdsModalContent>
         <PdsModalFooter>
           <PdsBox fit justifyContent="end" padding="md" gap="sm">
             <PdsButton onClick={() => {
@@ -784,11 +820,13 @@ For content that exceeds the viewport height, use the scrollable variant.
             </pds-box>
           </pds-box>
         </pds-modal-header>
-        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-          {Array(20).fill().map((_, i) => (
-            <p key={i}>This is paragraph {i + 1} demonstrating scrollable content in the modal.</p>
-          ))}
-        </pds-box>
+        <pds-modal-content>
+          <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+            {Array(20).fill().map((_, i) => (
+              <p key={i}>This is paragraph {i + 1} demonstrating scrollable content in the modal.</p>
+            ))}
+          </pds-box>
+        </pds-modal-content>
         <pds-modal-footer>
           <pds-box fit justify-content="end" padding="md" gap="sm">
             <pds-button onClick={() => {
@@ -824,11 +862,13 @@ For content that exceeds the viewport height, use the scrollable variant.
           </pds-box>
         </pds-box>
       </pds-modal-header>
-      <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-        {Array(20).fill().map((_, i) => (
-          <p key={i}>This is paragraph {i + 1} demonstrating scrollable content in the modal.</p>
-        ))}
-      </pds-box>
+      <pds-modal-content>
+        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+          {Array(20).fill().map((_, i) => (
+            <p key={i}>This is paragraph {i + 1} demonstrating scrollable content in the modal.</p>
+          ))}
+        </pds-box>
+      </pds-modal-content>
       <pds-modal-footer>
         <pds-box fit justify-content="end" padding="md" gap="sm">
           <pds-button onClick={() => {
@@ -853,7 +893,7 @@ Modals can be nested, with only the topmost modal responding to escape key and b
         if (modal) modal.open = true;
       }}>Open Nested Modal</PdsButton>
 
-      <PdsModal id="nested-modal-1" componentId="nested-modal-1">
+      <PdsModal id="nested-modal-1" componentId="nested-modal-1" size="fullscreen">
         <PdsModalHeader>
           <PdsBox direction="column" fit padding="md">
             <PdsBox alignItems="center" fit justifyContent="space-between">
@@ -870,13 +910,15 @@ Modals can be nested, with only the topmost modal responding to escape key and b
             </PdsBox>
           </PdsBox>
         </PdsModalHeader>
-        <PdsBox fit direction="column" padding="md" paddingBlockStart="none">
-          <p>This is the outer modal. Click the button below to open an inner modal.</p>
-          <PdsButton onClick={() => {
-            const modal = document.querySelector('#nested-modal-2');
-            if (modal) modal.open = true;
-          }}>Open Inner Modal</PdsButton>
-        </PdsBox>
+        <PdsModalContent>
+          <PdsBox fit direction="column" padding="md" paddingBlockStart="none">
+            <p>This is the outer modal. Click the button below to open an inner modal.</p>
+            <PdsButton onClick={() => {
+              const modal = document.querySelector('#nested-modal-2');
+              if (modal) modal.open = true;
+            }}>Open Inner Modal</PdsButton>
+          </PdsBox>
+        </PdsModalContent>
       </PdsModal>
 
       <PdsModal id="nested-modal-2" componentId="nested-modal-2">
@@ -896,9 +938,11 @@ Modals can be nested, with only the topmost modal responding to escape key and b
             </PdsBox>
           </PdsBox>
         </PdsModalHeader>
-        <PdsBox fit direction="column" paddingInlineStart="md" paddingInlineEnd="md">
-          <p>This is the inner modal. Only this modal will respond to escape key and backdrop clicks.</p>
-        </PdsBox>
+        <PdsModalContent>
+          <PdsBox fit direction="column" paddingInlineStart="md" paddingInlineEnd="md">
+            <p>This is the inner modal. Only this modal will respond to escape key and backdrop clicks.</p>
+          </PdsBox>
+        </PdsModalContent>
         <PdsModalFooter>
           <PdsBox fit justifyContent="end" padding="md" gap="sm">
             <PdsButton onClick={() => {
@@ -923,7 +967,7 @@ Modals can be nested, with only the topmost modal responding to escape key and b
         if (modal) modal.open = true;
       }}>Open Nested Modal</pds-button>
 
-      <pds-modal id="nested-modal-1" component-id="nested-modal-1">
+      <pds-modal id="nested-modal-1" component-id="nested-modal-1" size="fullscreen">
         <pds-modal-header>
           <pds-box direction="column" fit padding="md">
             <pds-box align-items="center" fit justify-content="space-between">
@@ -940,13 +984,15 @@ Modals can be nested, with only the topmost modal responding to escape key and b
             </pds-box>
           </pds-box>
         </pds-modal-header>
-        <pds-box fit direction="column" padding="md" padding-block-start="none">
-          <p>This is the outer modal. Click the button below to open an inner modal.</p>
-          <pds-button onClick={() => {
-            const modal = document.querySelector('#nested-modal-2');
-            if (modal) modal.open = true;
-          }}>Open Inner Modal</pds-button>
-        </pds-box>
+        <pds-modal-content>
+          <pds-box fit direction="column" padding="md" padding-block-start="none">
+            <p>This is the outer modal. Click the button below to open an inner modal.</p>
+            <pds-button onClick={() => {
+              const modal = document.querySelector('#nested-modal-2');
+              if (modal) modal.open = true;
+            }}>Open Inner Modal</pds-button>
+          </pds-box>
+        </pds-modal-content>
       </pds-modal>
 
       <pds-modal id="nested-modal-2" component-id="nested-modal-2">
@@ -966,9 +1012,11 @@ Modals can be nested, with only the topmost modal responding to escape key and b
             </pds-box>
           </pds-box>
         </pds-modal-header>
-        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-          <p>This is the inner modal. Only this modal will respond to escape key and backdrop clicks.</p>
-        </pds-box>
+        <pds-modal-content>
+          <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+            <p>This is the inner modal. Only this modal will respond to escape key and backdrop clicks.</p>
+          </pds-box>
+        </pds-modal-content>
         <pds-modal-footer>
           <pds-box fit justify-content="end" padding="md" gap="sm">
             <pds-button onClick={() => {
@@ -994,7 +1042,7 @@ Modals can be nested, with only the topmost modal responding to escape key and b
       if (modal) modal.open = true;
     }}>Open Nested Modal</pds-button>
 
-    <pds-modal id="nested-modal-1" component-id="nested-modal-1">
+    <pds-modal id="nested-modal-1" component-id="nested-modal-1" size="fullscreen">
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
           <pds-box align-items="center" fit justify-content="space-between">
@@ -1011,13 +1059,16 @@ Modals can be nested, with only the topmost modal responding to escape key and b
           </pds-box>
         </pds-box>
       </pds-modal-header>
-      <pds-box fit direction="column" padding="md" padding-block-start="none">
-        <p>This is the outer modal. Click the button below to open an inner modal.</p>
-        <pds-button onClick={() => {
-          const modal = document.querySelector('#nested-modal-2');
-          if (modal) modal.open = true;
-        }}>Open Inner Modal</pds-button>
-      </pds-box>
+
+      <pds-modal-content>
+        <pds-box fit direction="column" padding="md" padding-block-start="none">
+          <p>This is the outer modal. Click the button below to open an inner modal.</p>
+          <pds-button onClick={() => {
+            const modal = document.querySelector('#nested-modal-2');
+            if (modal) modal.open = true;
+          }}>Open Inner Modal</pds-button>
+        </pds-box>
+      </pds-modal-content>
     </pds-modal>
 
     <pds-modal id="nested-modal-2" component-id="nested-modal-2">
@@ -1037,9 +1088,11 @@ Modals can be nested, with only the topmost modal responding to escape key and b
           </pds-box>
         </pds-box>
       </pds-modal-header>
-      <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-        <p>This is the inner modal. Only this modal will respond to escape key and backdrop clicks.</p>
-      </pds-box>
+      <pds-modal-content>
+        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+          <p>This is the inner modal. Only this modal will respond to escape key and backdrop clicks.</p>
+        </pds-box>
+      </pds-modal-content>
       <pds-modal-footer>
         <pds-box fit justify-content="end" padding="md" gap="sm">
           <pds-button onClick={() => {
