@@ -43,6 +43,23 @@ export class PdsModal {
   @Prop() scrollable = false;
 
   /**
+   * This is used internally to pass the scrollable property to the content component
+   * @internal
+   */
+  @Watch('scrollable')
+  handleScrollableChange() {
+    // Find the content component and set its scrollable attribute
+    const contentComponent = this.el.querySelector('pds-modal-content');
+    if (contentComponent) {
+      if (this.scrollable) {
+        contentComponent.setAttribute('scrollable', '');
+      } else {
+        contentComponent.removeAttribute('scrollable');
+      }
+    }
+  }
+
+  /**
    * Emitted when the modal is opened
    */
   @Event() pdsModalOpen: EventEmitter<void>;
@@ -311,15 +328,7 @@ export class PdsModal {
           aria-modal="true"
           aria-labelledby={`${this.componentId}-heading`}
         >
-          <header class="pds-modal__header">
-            <slot name="header"></slot>
-          </header>
-          <div class="pds-modal__content" tabindex={this.scrollable ? '-1' : null}>
-            <slot></slot>
-          </div>
-          <footer class="pds-modal__footer">
-            <slot name="footer"></slot>
-          </footer>
+          <slot></slot>
         </div>
       </dialog>
     );
