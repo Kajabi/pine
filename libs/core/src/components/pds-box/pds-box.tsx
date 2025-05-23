@@ -197,17 +197,17 @@ export class PdsBox {
   @Prop() sizeSm?: BoxColumnType;
 
   /**
-   * At screen sizes from the MD breakpoint and larger (768px and up), this will take the specified number of columns. This overrides any value set by size, sizeXs, or sizeSm.
+   * At screen sizes from the MD breakpoint and larger (768px and up), this will take the specified number of columns. This overrides any value set by size, sizeXs, and up.
    */
   @Prop() sizeMd?: BoxColumnType;
 
   /**
-   * At screen sizes from the LG breakpoint and larger (992px and up), this will take the specified number of columns. This overrides any value set by size, sizeXs, sizeSm, or sizeMd.
+   * At screen sizes from the LG breakpoint and larger (992px and up), this will take the specified number of columns. This overrides any value set by size, sizeXs, sizeSm, and up.
    */
   @Prop() sizeLg?: BoxColumnType;
 
   /**
-   * At screen sizes from the XL breakpoint and larger (1200px and up), this will take the specified number of columns. This overrides any value set by size, sizeXs, sizeSm, sizeMd, or sizeLg.
+   * At screen sizes from the XL breakpoint and larger (1200px and up), this will take the specified number of columns. This overrides any value set by size, sizeXs, and up.
    */
   @Prop() sizeXl?: BoxColumnType;
 
