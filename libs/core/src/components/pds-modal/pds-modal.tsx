@@ -17,11 +17,7 @@ export class PdsModal {
    */
   @Prop() closeOnBackdropClick = true;
 
-  /**
-   * Whether the modal can be closed by pressing the escape key
-   * @default true
-   */
-  @Prop() closeOnEsc = true;
+  // Escape key closing is always enabled for accessibility
 
   /**
    * A unique identifier used for the underlying component `id` attribute.
@@ -259,7 +255,7 @@ export class PdsModal {
     if (!this.open) return;
 
     // Handle Escape key to close the modal
-    if (this.closeOnEsc && e.key === 'Escape') {
+    if (e.key === 'Escape') {
       // Only close if this is the innermost modal
       if (this.isInnermostModal()) {
         e.preventDefault();

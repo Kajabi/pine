@@ -630,11 +630,6 @@ export namespace Components {
          */
         "closeOnBackdropClick": boolean;
         /**
-          * Whether the modal can be closed by pressing the escape key
-          * @default true
-         */
-        "closeOnEsc": boolean;
-        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
@@ -2399,11 +2394,6 @@ declare namespace LocalJSX {
           * @default true
          */
         "closeOnBackdropClick"?: boolean;
-        /**
-          * Whether the modal can be closed by pressing the escape key
-          * @default true
-         */
-        "closeOnEsc"?: boolean;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
