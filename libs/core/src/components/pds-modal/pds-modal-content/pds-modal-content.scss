@@ -1,0 +1,14 @@
+pds-modal-content {
+  display: block;
+  flex: 1 1 auto;
+  width: 100%;
+}
+
+.pds-modal__content {
+  width: 100%;
+}
+
+.pds-modal__content--scrollable {
+  max-height: 60vh;
+  overflow-y: auto;
+}

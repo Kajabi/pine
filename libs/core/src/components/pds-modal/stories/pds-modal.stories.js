@@ -28,7 +28,7 @@ const BaseTemplate = (args) => html`
       ?open="${args.open}"
       ?scrollable="${args.scrollable}"
     >
-      <div slot="header">
+      <pds-modal-header>
         <pds-box direction="column" fit padding="md">
           <pds-box
             align-items="center"
@@ -51,11 +51,15 @@ const BaseTemplate = (args) => html`
             <pds-text tag="p" size="md">Modal Subtitle</pds-text>
           </pds-box>
         </pds-box>
-      </div>
-      <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-        <p>This is the modal content. You can put any content here.</p>
-      </pds-box>
-      <footer slot="footer">
+      </pds-modal-header>
+
+      <pds-modal-content>
+        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+          <p>This is the modal content. You can put any content here.</p>
+        </pds-box>
+      </pds-modal-content>
+
+      <pds-modal-footer>
         <pds-box
           justify-content="space-between"
           fit
@@ -69,7 +73,7 @@ const BaseTemplate = (args) => html`
             <pds-button variant="primary">Confirm</pds-button>
           </pds-box>
         </pds-box>
-      </footer>
+      </pds-modal-footer>
     </pds-modal>
   </div>
 `;
@@ -92,7 +96,7 @@ const DestructiveTemplate = (args) => html`
       size="${args.size}"
       ?close-on-backdrop-click="${args.closeOnBackdropClick}"
     >
-      <div slot="header">
+      <pds-modal-header>
         <pds-box direction="column" fit padding="md">
           <pds-box
             align-items="center"
@@ -115,11 +119,14 @@ const DestructiveTemplate = (args) => html`
             <pds-text tag="p" size="md">Modal Subtitle</pds-text>
           </pds-box>
         </pds-box>
-      </div>
-      <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
-        <p>This is the modal content. You can put any content here.</p>
-      </pds-box>
-      <footer slot="footer">
+      </pds-modal-header>
+
+      <pds-modal-content>
+        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+          <p>This is the modal content. You can put any content here.</p>
+        </pds-box>
+      </pds-modal-content>
+      <pds-modal-footer>
         <pds-box
           justify-content="space-between"
           fit
@@ -133,7 +140,7 @@ const DestructiveTemplate = (args) => html`
             <pds-button variant="destructive">Confirm</pds-button>
           </pds-box>
         </pds-box>
-      </footer>
+      </pds-modal-footer>
     </pds-modal>
   </div>
 `;
@@ -149,8 +156,9 @@ const CustomContentTemplate = (args) => html`
         Open Form Modal
       </pds-button>
 
-      <pds-modal id="custom-modal" size="md" ?close-on-backdrop-click="${args.closeOnBackdropClick}" ?close-on-esc="${args.closeOnEsc}">
-        <header slot="header">
+      <pds-modal id="custom-modal" size="md" ?close-on-backdrop-click="${args.closeOnBackdropClick}">
+
+        <pds-modal-header>
           <pds-box direction="column" fit padding="md">
             <pds-box
               align-items="center"
@@ -173,45 +181,49 @@ const CustomContentTemplate = (args) => html`
               <pds-text tag="p" size="md">Modal Subtitle</pds-text>
             </pds-box>
           </pds-box>
-        </header>
-        <pds-box direction="column" padding-inline-start="md" padding-inline-end="md" fit>
-          <form
-            id="demo-form"
-            @submit=${(e) => {
-              e.preventDefault();
-              const modal = document.querySelector('#custom-modal');
-              modal?.close();
-            }}
-          >
-            <div style="display: grid; gap: 1rem;">
-              <pds-input label="Full Name" required></pds-input>
-              <pds-input label="Email" type="email" required></pds-input>
-              <pds-input label="Password" type="password" required></pds-input>
-              <pds-checkbox>I agree to the terms and conditions</pds-checkbox>
-            </div>
-          </form>
-        </pds-box>
-        <footer slot="footer">
+        </pds-modal-header>
+
+        <pds-modal-content>
+          <pds-box direction="column" padding-inline-start="md" padding-inline-end="md" fit>
+            <form
+              id="demo-form"
+              @submit=${(e) => {
+                e.preventDefault();
+                const modal = document.querySelector('#custom-modal');
+                modal?.close();
+              }}
+            >
+              <div style="display: grid; gap: 1rem;">
+                <pds-input label="Full Name" required></pds-input>
+                <pds-input label="Email" type="email" required></pds-input>
+                <pds-input label="Password" type="password" required></pds-input>
+                <pds-checkbox>I agree to the terms and conditions</pds-checkbox>
+              </div>
+            </form>
+          </pds-box>
+        </pds-modal-content>
+
+        <pds-modal-footer>
           <pds-box
             justify-content="space-between"
             fit
             padding="md"
-          >
-            <pds-button variant="unstyled" onclick="document.querySelector('#custom-modal').open = false">Close</pds-button>
-            <pds-box gap="sm" justify-content="end">
-              <pds-button
-                variant="secondary"
-                onclick="document.querySelector('#custom-modal').open = false"
-              >
-                Cancel
-              </pds-button>
-              <pds-button variant="primary">Confirm</pds-button>
-            </pds-box>
+        >
+          <pds-button variant="unstyled" onclick="document.querySelector('#custom-modal').open = false">Close</pds-button>
+          <pds-box gap="sm" justify-content="end">
+            <pds-button
+              variant="secondary"
+              onclick="document.querySelector('#custom-modal').open = false"
+            >
+              Cancel
+            </pds-button>
+            <pds-button variant="primary" form="demo-form" type="submit">Submit</pds-button>
           </pds-box>
-        </footer>
-      </pds-modal>
-    </div>
-  `;
+        </pds-box>
+      </pds-modal-footer>
+    </pds-modal>
+  </div>
+`;
 
 export const CustomContent = CustomContentTemplate.bind({});
 CustomContent.args = {
@@ -226,7 +238,7 @@ const ScrollableTemplate = (args) => {
       </pds-button>
 
       <pds-modal id="scroll-modal" size="md" ?scrollable="${args.scrollable}">
-        <header slot="header">
+        <pds-modal-header>
           <pds-box direction="column" fit padding="md">
             <pds-box
               align-items="center"
@@ -249,21 +261,24 @@ const ScrollableTemplate = (args) => {
               <pds-text tag="p" size="md">Modal Subtitle</pds-text>
             </pds-box>
           </pds-box>
-        </header>
-        <pds-box direction="column" padding="md">
-          ${Array(20)
-            .fill(0)
-            .map(
-              () => html`
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
-                  dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-                  ea commodo consequat.
-                </p>
-              `
-            )}
-        </pds-box>
-        <footer slot="footer">
+        </pds-modal-header>
+        <pds-modal-content>
+          <pds-box direction="column" padding="md">
+            ${Array(20)
+              .fill(0)
+              .map(
+                () => html`
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
+                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+                    ea commodo consequat.
+                  </p>
+                `
+              )}
+          </pds-box>
+        </pds-modal-content>
+
+        <pds-modal-footer>
           <pds-box
             justify-content="space-between"
             fit
@@ -280,7 +295,7 @@ const ScrollableTemplate = (args) => {
               <pds-button variant="primary">Confirm</pds-button>
             </pds-box>
           </pds-box>
-        </footer>
+        </pds-modal-footer>
       </pds-modal>
     </div>
   `;
@@ -302,11 +317,9 @@ const FullscreenTemplate = (args) => html`
       <pds-modal
         id="demo-modal"
         size=${args.size}
-        ?show-close-button=${args.showCloseButton}
         ?close-on-backdrop-click=${args.closeOnBackdropClick}
-        ?close-on-escape=${args.closeOnEscape}
       >
-        <header slot="header">
+        <pds-modal-header>
           <pds-box
             direction="column"
             fit
@@ -336,20 +349,22 @@ const FullscreenTemplate = (args) => html`
               </pds-box>
             </pds-box>
           </pds-box>
-        </header>
-        <pds-box direction="column" padding="md">
-          <p>This is a sample modal dialog. It demonstrates the basic features of the pds-modal component.</p>
-          <p>The modal supports:</p>
-          <ul>
-            <li>Different sizes (small, medium, large)</li>
-            <li>Optional close button</li>
-            <li>Backdrop click to close</li>
-            <li>Escape key to close</li>
-            <li>Focus management</li>
-            <li>ARIA attributes for accessibility</li>
-          </ul>
-        </pds-box>
-        <footer slot="footer">
+        </pds-modal-header>
+        <pds-modal-content>
+          <pds-box direction="column" padding="md">
+            <p>This is a sample modal dialog. It demonstrates the basic features of the pds-modal component.</p>
+            <p>The modal supports:</p>
+            <ul>
+              <li>Different sizes (small, medium, large)</li>
+              <li>Optional close button</li>
+              <li>Backdrop click to close</li>
+              <li>Escape key to close</li>
+              <li>Focus management</li>
+              <li>ARIA attributes for accessibility</li>
+            </ul>
+          </pds-box>
+        </pds-modal-content>
+        <pds-modal-footer>
           <pds-box
             justify-content="space-between"
             fit
@@ -366,7 +381,7 @@ const FullscreenTemplate = (args) => html`
               <pds-button variant="primary">Confirm</pds-button>
             </pds-box>
           </pds-box>
-        </footer>
+        </pds-modal-footer>
       </pds-modal>
     </div>
   `;

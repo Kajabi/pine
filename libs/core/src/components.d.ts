@@ -657,6 +657,17 @@ export namespace Components {
          */
         "size": 'sm' | 'md' | 'lg' | 'fullscreen';
     }
+    interface PdsModalContent {
+        /**
+          * Whether the modal content is scrollable
+          * @default false
+         */
+        "scrollable": boolean;
+    }
+    interface PdsModalFooter {
+    }
+    interface PdsModalHeader {
+    }
     interface PdsPopover {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -1474,6 +1485,24 @@ declare global {
         prototype: HTMLPdsModalElement;
         new (): HTMLPdsModalElement;
     };
+    interface HTMLPdsModalContentElement extends Components.PdsModalContent, HTMLStencilElement {
+    }
+    var HTMLPdsModalContentElement: {
+        prototype: HTMLPdsModalContentElement;
+        new (): HTMLPdsModalContentElement;
+    };
+    interface HTMLPdsModalFooterElement extends Components.PdsModalFooter, HTMLStencilElement {
+    }
+    var HTMLPdsModalFooterElement: {
+        prototype: HTMLPdsModalFooterElement;
+        new (): HTMLPdsModalFooterElement;
+    };
+    interface HTMLPdsModalHeaderElement extends Components.PdsModalHeader, HTMLStencilElement {
+    }
+    var HTMLPdsModalHeaderElement: {
+        prototype: HTMLPdsModalHeaderElement;
+        new (): HTMLPdsModalHeaderElement;
+    };
     interface HTMLPdsPopoverElement extends Components.PdsPopover, HTMLStencilElement {
     }
     var HTMLPdsPopoverElement: {
@@ -1724,6 +1753,9 @@ declare global {
         "pds-link": HTMLPdsLinkElement;
         "pds-loader": HTMLPdsLoaderElement;
         "pds-modal": HTMLPdsModalElement;
+        "pds-modal-content": HTMLPdsModalContentElement;
+        "pds-modal-footer": HTMLPdsModalFooterElement;
+        "pds-modal-header": HTMLPdsModalHeaderElement;
         "pds-popover": HTMLPdsPopoverElement;
         "pds-progress": HTMLPdsProgressElement;
         "pds-radio": HTMLPdsRadioElement;
@@ -2422,6 +2454,17 @@ declare namespace LocalJSX {
          */
         "size"?: 'sm' | 'md' | 'lg' | 'fullscreen';
     }
+    interface PdsModalContent {
+        /**
+          * Whether the modal content is scrollable
+          * @default false
+         */
+        "scrollable"?: boolean;
+    }
+    interface PdsModalFooter {
+    }
+    interface PdsModalHeader {
+    }
     interface PdsPopover {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -3037,6 +3080,9 @@ declare namespace LocalJSX {
         "pds-link": PdsLink;
         "pds-loader": PdsLoader;
         "pds-modal": PdsModal;
+        "pds-modal-content": PdsModalContent;
+        "pds-modal-footer": PdsModalFooter;
+        "pds-modal-header": PdsModalHeader;
         "pds-popover": PdsPopover;
         "pds-progress": PdsProgress;
         "pds-radio": PdsRadio;
@@ -3082,6 +3128,9 @@ declare module "@stencil/core" {
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
             "pds-loader": LocalJSX.PdsLoader & JSXBase.HTMLAttributes<HTMLPdsLoaderElement>;
             "pds-modal": LocalJSX.PdsModal & JSXBase.HTMLAttributes<HTMLPdsModalElement>;
+            "pds-modal-content": LocalJSX.PdsModalContent & JSXBase.HTMLAttributes<HTMLPdsModalContentElement>;
+            "pds-modal-footer": LocalJSX.PdsModalFooter & JSXBase.HTMLAttributes<HTMLPdsModalFooterElement>;
+            "pds-modal-header": LocalJSX.PdsModalHeader & JSXBase.HTMLAttributes<HTMLPdsModalHeaderElement>;
             "pds-popover": LocalJSX.PdsPopover & JSXBase.HTMLAttributes<HTMLPdsPopoverElement>;
             "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-radio": LocalJSX.PdsRadio & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
