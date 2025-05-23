@@ -7,7 +7,6 @@ export default {
   title: 'components/Modal',
   args: {
     closeOnBackdropClick: true,
-    closeOnEsc: true,
     componentId: 'demo-modal',
     open: false,
     scrollable: false,
@@ -26,7 +25,6 @@ const BaseTemplate = (args) => html`
       component-id="${args.componentId}"
       size="${args.size}"
       ?close-on-backdrop-click="${args.closeOnBackdropClick}"
-      ?close-on-esc="${args.closeOnEsc}"
       ?open="${args.open}"
       ?scrollable="${args.scrollable}"
     >
@@ -93,7 +91,6 @@ const DestructiveTemplate = (args) => html`
       component-id="${args.componentId}"
       size="${args.size}"
       ?close-on-backdrop-click="${args.closeOnBackdropClick}"
-      ?close-on-esc="${args.closeOnEsc}"
     >
       <div slot="header">
         <pds-box direction="column" fit padding="md">
