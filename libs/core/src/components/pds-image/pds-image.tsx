@@ -1,4 +1,6 @@
-import { Component, Host, h, Prop } from '@stencil/core';
+import { Component, Host, h, Prop, Element } from '@stencil/core';
+import { inheritAttributes } from '@utils/attributes';
+import type { Attributes } from '@utils/attributes';
 
 @Component({
   tag: 'pds-image',
@@ -6,56 +8,19 @@ import { Component, Host, h, Prop } from '@stencil/core';
   shadow: true,
 })
 export class PdsImage {
-  /**
-   * The image's alt tag. If none is provided,
-   * it will default to an empty string, which is desired for
-   * decorative images.
-   * @defaultValue ''
-   */
-  @Prop() alt? = '';
-
+  private inheritedImgSpecificAttrs: Attributes = {};
+  private imgAttributesToInherit: string[] = ['alt', 'height', 'loading', 'sizes', 'src', 'srcset', 'width'];
+  
+  @Element() el!: HTMLPdsImageElement;
+  
   /**
    * A unique identifier used for the underlying component `id` attribute.
    */
   @Prop() componentId: string;
 
-  /**
-   * The height of the image in pixels. Setting this will
-   * devote space in the layout to prevent layout
-   * shifts when the image is loaded.
-   */
-  @Prop() height?: number;
-
-  /**
-   * Indicates how the browser should load the image.
-   * @defaultValue eager
-   */
-  @Prop() loading?: 'eager' | 'lazy' = 'eager';
-
-  /**
-   * Determines the intended display size of an image
-   * within certain breakpoints. Has no effect if `srcset`
-   * is not set or value has no width descriptor.
-   */
-  @Prop() sizes?: string;
-
-  /**
-   * The image's source.
-   */
-  @Prop() src: string;
-
-  /**
-   * A set of image sources for the browser to use
-   * for responsiveness.
-   */
-  @Prop() srcset?: string
-
-  /**
-   * The width of the image in pixels. Setting this will
-   * devote space in the layout to prevent layout
-   * shifts when the image is loaded.
-   */
-  @Prop() width?: number;
+  componentWillLoad() {
+    this.inheritedImgSpecificAttrs = inheritAttributes(this.el, this.imgAttributesToInherit);
+  }
 
   render() {
     return (
@@ -66,13 +31,13 @@ export class PdsImage {
         id={this.componentId}
       >
         <img
-          alt={this.alt}
-          height={this.height}
-          loading={this.loading}
-          sizes={this.sizes}
-          src={this.src}
-          srcset={this.srcset}
-          width={this.width}
+          alt={this.inheritedImgSpecificAttrs.alt || ''}
+          height={this.inheritedImgSpecificAttrs.height}
+          loading={this.inheritedImgSpecificAttrs.loading || 'eager'}
+          sizes={this.inheritedImgSpecificAttrs.sizes}
+          src={this.inheritedImgSpecificAttrs.src}
+          srcset={this.inheritedImgSpecificAttrs.srcset}
+          width={this.inheritedImgSpecificAttrs.width}
         />
       </Host>
     );

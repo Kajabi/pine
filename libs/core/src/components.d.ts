@@ -440,39 +440,9 @@ export namespace Components {
     }
     interface PdsImage {
         /**
-          * The image's alt tag. If none is provided, it will default to an empty string, which is desired for decorative images.
-          * @defaultValue ''
-         */
-        "alt"?: string;
-        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
-        /**
-          * The height of the image in pixels. Setting this will devote space in the layout to prevent layout shifts when the image is loaded.
-         */
-        "height"?: number;
-        /**
-          * Indicates how the browser should load the image.
-          * @defaultValue eager
-         */
-        "loading"?: 'eager' | 'lazy';
-        /**
-          * Determines the intended display size of an image within certain breakpoints. Has no effect if `srcset` is not set or value has no width descriptor.
-         */
-        "sizes"?: string;
-        /**
-          * The image's source.
-         */
-        "src": string;
-        /**
-          * A set of image sources for the browser to use for responsiveness.
-         */
-        "srcset"?: string;
-        /**
-          * The width of the image in pixels. Setting this will devote space in the layout to prevent layout shifts when the image is loaded.
-         */
-        "width"?: number;
     }
     interface PdsInput {
         /**
@@ -2070,39 +2040,9 @@ declare namespace LocalJSX {
     }
     interface PdsImage {
         /**
-          * The image's alt tag. If none is provided, it will default to an empty string, which is desired for decorative images.
-          * @defaultValue ''
-         */
-        "alt"?: string;
-        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
-        /**
-          * The height of the image in pixels. Setting this will devote space in the layout to prevent layout shifts when the image is loaded.
-         */
-        "height"?: number;
-        /**
-          * Indicates how the browser should load the image.
-          * @defaultValue eager
-         */
-        "loading"?: 'eager' | 'lazy';
-        /**
-          * Determines the intended display size of an image within certain breakpoints. Has no effect if `srcset` is not set or value has no width descriptor.
-         */
-        "sizes"?: string;
-        /**
-          * The image's source.
-         */
-        "src"?: string;
-        /**
-          * A set of image sources for the browser to use for responsiveness.
-         */
-        "srcset"?: string;
-        /**
-          * The width of the image in pixels. Setting this will devote space in the layout to prevent layout shifts when the image is loaded.
-         */
-        "width"?: number;
     }
     interface PdsInput {
         /**

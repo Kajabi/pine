@@ -8,7 +8,7 @@ describe('pds-image', () => {
       html: `<pds-image class="pds-image" src="//source.unsplash.com/100x100"></pds-image>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-image class="pds-image" src="//source.unsplash.com/100x100">
+      <pds-image class="pds-image">
         <mock:shadow-root>
           <img alt="" loading="eager" src="//source.unsplash.com/100x100" />
         </mock:shadow-root>
@@ -23,7 +23,7 @@ describe('pds-image', () => {
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-image class="pds-image" component-id="test" id="test" src="//source.unsplash.com/100x100">
+      <pds-image class="pds-image" component-id="test" id="test">
         <mock:shadow-root>
           <img alt="" loading="eager" src="//source.unsplash.com/100x100" />
         </mock:shadow-root>
@@ -37,7 +37,7 @@ describe('pds-image', () => {
       html: `<pds-image class="pds-image" loading="lazy" src="//source.unsplash.com/100x100"></pds-image>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-image class="pds-image" loading="lazy" src="//source.unsplash.com/100x100">
+      <pds-image class="pds-image">
         <mock:shadow-root>
           <img alt="" loading="lazy" src="//source.unsplash.com/100x100" />
         </mock:shadow-root>
@@ -50,7 +50,7 @@ describe('pds-image', () => {
       html: `<pds-image class="pds-image" height="100" src="//source.unsplash.com/100x100"></pds-image>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-image class="pds-image" height="100" src="//source.unsplash.com/100x100">
+      <pds-image class="pds-image">
         <mock:shadow-root>
           <img alt="" height="100" loading="eager" src="//source.unsplash.com/100x100" />
         </mock:shadow-root>
@@ -63,7 +63,7 @@ describe('pds-image', () => {
       html: `<pds-image class="pds-image" src="//source.unsplash.com/100x100" width="100"></pds-image>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-image class="pds-image" src="//source.unsplash.com/100x100" width="100">
+      <pds-image class="pds-image">
         <mock:shadow-root>
           <img alt="" loading="eager" src="//source.unsplash.com/100x100" width="100" />
         </mock:shadow-root>
@@ -76,7 +76,7 @@ describe('pds-image', () => {
       html: `<pds-image class="pds-image" sizes="(max-width: 400px) 100px" src="//source.unsplash.com/100x100"></pds-image>`
     })
     expect(page.root).toEqualHtml(`
-      <pds-image class="pds-image" sizes="(max-width: 400px) 100px" src="//source.unsplash.com/100x100">
+      <pds-image class="pds-image">
         <mock:shadow-root>
           <img alt="" loading="eager" sizes="(max-width: 400px) 100px" src="//source.unsplash.com/100x100" />
         </mock:shadow-root>
@@ -90,7 +90,7 @@ describe('pds-image', () => {
         <pds-image class="pds-image" src="//source.unsplash.com/500x500" srcset="//source.unsplash.com/100x100 400px, //source.unsplash.com/500x500"></pds-image>`
     })
     expect(page.root).toEqualHtml(`
-      <pds-image class="pds-image" src="//source.unsplash.com/500x500" srcset="//source.unsplash.com/100x100 400px, //source.unsplash.com/500x500" />
+      <pds-image class="pds-image">
         <mock:shadow-root>
           <img alt="" loading="eager" src="//source.unsplash.com/500x500" srcset="//source.unsplash.com/100x100 400px, //source.unsplash.com/500x500" />
         </mock:shadow-root>
@@ -105,7 +105,7 @@ describe('pds-image', () => {
       `
     })
     expect(page.root).toEqualHtml(`
-      <pds-image class="pds-image" src="//source.unsplash.com/100x100" style="--image-aspect-ratio: 16 / 9">
+      <pds-image class="pds-image" style="--image-aspect-ratio: 16 / 9">
         <mock:shadow-root>
           <img alt="" loading="eager" src="//source.unsplash.com/100x100" />
         </mock:shadow-root>
