@@ -1,9 +1,11 @@
 import { html } from 'lit';
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+import { withActions } from '@storybook/addon-actions/decorator';
 
 export default {
   argTypes: extractArgTypes('pds-modal'),
   component: 'pds-modal',
+  decorators: [withActions],
   title: 'components/Modal',
   args: {
     closeOnBackdropClick: true,
@@ -12,6 +14,11 @@ export default {
     scrollable: false,
     size: 'md',
   },
+  parameters: {
+    actions: {
+      handles: ['pdsModalOpen', 'pdsModalClose'],
+    }
+  }
 }
 
 const BaseTemplate = (args) => html`

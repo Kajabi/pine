@@ -320,13 +320,12 @@ export class PdsModal {
           'pds-modal__backdrop': true,
           'open': this.open
         }}
+        aria-modal="true"
+        aria-labelledby={`${this.componentId}-heading`}
         onClick={this.handleBackdropClick}
       >
         <div
           class={`pds-modal pds-modal--${this.size} ${this.scrollable ? 'pds-modal--scrollable' : ''}`}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby={`${this.componentId}-heading`}
         >
           <slot></slot>
         </div>
