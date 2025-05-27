@@ -48,14 +48,16 @@ export class PdsModal {
    */
   @Watch('scrollable')
   handleScrollableChange() {
-    // Find the content component and set its scrollable attribute
-    const contentComponent = this.el.querySelector('pds-modal-content');
-    if (contentComponent) {
-      if (this.scrollable) {
-        contentComponent.setAttribute('scrollable', '');
-      } else {
-        contentComponent.removeAttribute('scrollable');
-      }
+    // Find all content components and set their scrollable attribute
+    const contentComponents = this.el.querySelectorAll('pds-modal-content');
+    if (contentComponents.length > 0) {
+      contentComponents.forEach(component => {
+        if (this.scrollable) {
+          component.setAttribute('scrollable', 'true');
+        } else {
+          component.removeAttribute('scrollable');
+        }
+      });
     }
   }
 
@@ -78,6 +80,8 @@ export class PdsModal {
     this.modalRef = this.el.querySelector('.pds-modal__backdrop') as HTMLDialogElement;
     // Add keyboard event listener
     document.addEventListener('keydown', this.handleKeyDown);
+    // Set initial scrollable state
+    this.handleScrollableChange();
   }
 
   disconnectedCallback() {

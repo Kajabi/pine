@@ -125,7 +125,7 @@ export class MockPdsModal {
 
     return (
       <div class={backdropClasses}>
-        <div 
+        <div
           class={modalClasses}
           role="dialog"
           aria-modal="true"
@@ -134,7 +134,7 @@ export class MockPdsModal {
           <div class="pds-modal__header">
             <slot name="header"></slot>
           </div>
-          <div class="pds-modal__content">
+          <div class="pds-modal-content">
             <slot></slot>
           </div>
           <div class="pds-modal__footer">

@@ -1,4 +1,4 @@
-import { Component, h, Prop } from '@stencil/core';
+import { Component, h, Prop, Host } from '@stencil/core';
 
 @Component({
   tag: 'pds-modal-content',
@@ -9,16 +9,18 @@ export class PdsModalContent {
    * Whether the modal content is scrollable
    * @default false
    */
-  @Prop() scrollable = false;
+  @Prop({ reflect: true }) scrollable = false;
 
   render() {
     return (
-      <div class={{
-        'pds-modal__content': true,
-        'pds-modal__content--scrollable': this.scrollable
-      }} tabindex={this.scrollable ? '-1' : null}>
-        <slot></slot>
-      </div>
+      <Host>
+        <div class={{
+          'pds-modal-content': true,
+          'pds-modal-content--scrollable': this.scrollable
+        }} tabindex={this.scrollable ? '-1' : null}>
+          <slot></slot>
+        </div>
+      </Host>
     );
   }
 }
