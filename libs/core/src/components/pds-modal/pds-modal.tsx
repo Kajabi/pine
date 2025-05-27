@@ -3,7 +3,6 @@ import { Component, Element, Event, EventEmitter, h, Method, Prop, State, Watch 
 @Component({
   tag: 'pds-modal',
   styleUrl: 'pds-modal.scss',
-  shadow: false
 })
 export class PdsModal {
   private modalRef: HTMLDialogElement;
