@@ -15,7 +15,6 @@ This component mimics the real PdsModal but without using the Popover API
 | Property               | Attribute                 | Description                                                  | Type                                   | Default     |
 | ---------------------- | ------------------------- | ------------------------------------------------------------ | -------------------------------------- | ----------- |
 | `closeOnBackdropClick` | `close-on-backdrop-click` | Whether the modal should close when clicking on the backdrop | `boolean`                              | `true`      |
-| `closeOnEsc`           | `close-on-esc`            | Whether the modal should close when pressing the Escape key  | `boolean`                              | `true`      |
 | `componentId`          | `component-id`            | The ID of the modal component                                | `string`                               | `undefined` |
 | `open`                 | `open`                    | Whether the modal is open                                    | `boolean`                              | `false`     |
 | `scrollable`           | `scrollable`              | Whether the modal content is scrollable                      | `boolean`                              | `false`     |

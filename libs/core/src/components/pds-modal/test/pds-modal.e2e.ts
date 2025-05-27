@@ -20,7 +20,7 @@ describe('pds-modal', () => {
     `);
 
     const modal = await page.find('pds-modal');
-    
+
     // Initially modal should be closed
     let isOpen = await modal.getProperty('open');
     expect(isOpen).toBe(false);
@@ -53,7 +53,7 @@ describe('pds-modal', () => {
     `);
 
     const modal = await page.find('pds-modal');
-    
+
     // Listen for events
     const openSpy = await page.spyOnEvent('pdsModalOpen');
     const closeSpy = await page.spyOnEvent('pdsModalClose');
@@ -68,20 +68,20 @@ describe('pds-modal', () => {
     await page.waitForChanges();
     expect(closeSpy).toHaveReceivedEvent();
   });
-  
+
   it('should handle different size props', async () => {
     const page = await newE2EPage();
     await page.setContent(`<pds-modal size="lg"></pds-modal>`);
 
     const modal = await page.find('pds-modal');
     expect(await modal.getProperty('size')).toBe('lg');
-    
+
     // Update the size property
     await modal.setProperty('size', 'sm');
     await page.waitForChanges();
     expect(await modal.getProperty('size')).toBe('sm');
   });
-  
+
   it('should handle scrollable prop', async () => {
     const page = await newE2EPage();
     await page.setContent(`<pds-modal scrollable="true"></pds-modal>`);
@@ -89,20 +89,12 @@ describe('pds-modal', () => {
     const modal = await page.find('pds-modal');
     expect(await modal.getProperty('scrollable')).toBe(true);
   });
-  
+
   it('should handle closeOnBackdropClick prop', async () => {
     const page = await newE2EPage();
     await page.setContent(`<pds-modal close-on-backdrop-click="false"></pds-modal>`);
 
     const modal = await page.find('pds-modal');
     expect(await modal.getProperty('closeOnBackdropClick')).toBe(false);
-  });
-  
-  it('should handle closeOnEsc prop', async () => {
-    const page = await newE2EPage();
-    await page.setContent(`<pds-modal close-on-esc="false"></pds-modal>`);
-
-    const modal = await page.find('pds-modal');
-    expect(await modal.getProperty('closeOnEsc')).toBe(false);
   });
 });

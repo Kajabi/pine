@@ -26,10 +26,6 @@ export namespace Components {
          */
         "closeOnBackdropClick": boolean;
         /**
-          * Whether the modal should close when pressing the Escape key
-         */
-        "closeOnEsc": boolean;
-        /**
           * The ID of the modal component
          */
         "componentId"?: string;
@@ -1788,10 +1784,6 @@ declare namespace LocalJSX {
           * Whether the modal should close when clicking on the backdrop
          */
         "closeOnBackdropClick"?: boolean;
-        /**
-          * Whether the modal should close when pressing the Escape key
-         */
-        "closeOnEsc"?: boolean;
         /**
           * The ID of the modal component
          */
