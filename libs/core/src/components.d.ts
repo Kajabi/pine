@@ -645,7 +645,11 @@ export namespace Components {
         "size": 'sm' | 'md' | 'lg' | 'fullscreen';
     }
     interface PdsModalContent {
-        "border": 'none' | 'both';
+        /**
+          * The border style for the content area. Automatically set based on available space of the modal content.
+          * @default 'none'
+         */
+        "border": 'none' | 'both' | 'top' | 'bottom';
     }
     interface PdsModalFooter {
     }
@@ -2425,7 +2429,11 @@ declare namespace LocalJSX {
         "size"?: 'sm' | 'md' | 'lg' | 'fullscreen';
     }
     interface PdsModalContent {
-        "border"?: 'none' | 'both';
+        /**
+          * The border style for the content area. Automatically set based on available space of the modal content.
+          * @default 'none'
+         */
+        "border"?: 'none' | 'both' | 'top' | 'bottom';
     }
     interface PdsModalFooter {
     }

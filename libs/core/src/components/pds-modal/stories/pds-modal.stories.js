@@ -306,8 +306,8 @@ const ScrollableTemplate = () => {
   `;
 };
 
-export const Scrollable = ScrollableTemplate.bind({});
-Scrollable.args = {
+export const ScrollableContent = ScrollableTemplate.bind({});
+ScrollableContent.args = {
   size: 'md',
   // Modal is always scrollable by default
 };

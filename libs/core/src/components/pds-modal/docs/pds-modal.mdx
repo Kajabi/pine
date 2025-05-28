@@ -22,6 +22,28 @@ import { components } from '../../../../dist/docs.json';
 
 <DocArgsTable componentName="pds-modal" docSource={components} />
 
+### Subcomponents
+
+The Modal component is composed of several subcomponents that work together to create a complete modal experience:
+
+#### Modal Content
+
+The `pds-modal-content` component provides a scrollable container for the main content of the modal. This component is always scrollable by default and automatically handles border visibility based on scroll state.
+
+<DocArgsTable componentName="pds-modal-content" docSource={components} />
+
+#### Modal Header
+
+The `pds-modal-header` component provides a consistent header area for the modal, typically containing a title and close button.
+
+{/* <DocArgsTable componentName="pds-modal-header" docSource={components} /> */}
+
+#### Modal Footer
+
+The `pds-modal-footer` component provides a consistent footer area for the modal, typically containing action buttons.
+
+{/* <DocArgsTable componentName="pds-modal-footer" docSource={components} /> */}
+
 ## Opening and Closing Modals
 
 There are several ways to control a modal's visibility:

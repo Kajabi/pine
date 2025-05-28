@@ -14,7 +14,11 @@ export class PdsModalContent {
 
   @Element() el: HTMLPdsModalContentElement;
 
-  @Prop({ reflect: true }) border: 'none' | 'both' = 'none';
+  /**
+   * The border style for the content area. Automatically set based on available space of the modal content.
+   * @default 'none'
+   */
+  @Prop({ reflect: true }) border: 'none' | 'both' | 'top' | 'bottom' = 'none';
 
   componentDidLoad() {
     const slotContent = this.el.firstElementChild as HTMLElement;
