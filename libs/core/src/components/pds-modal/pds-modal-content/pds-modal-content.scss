@@ -25,8 +25,7 @@ pds-modal-content {
 .pds-modal-content {
   display: block;
   flex: 1 1 auto;
-  // this needs to be updated to be max-height: calc(100vh - (pds-modal-header height + pds-modal-footer height)), but the header and footer height may need to be a custom prop that's passed in from a js function
-  max-height: 60vh;
+  // Max height is set via inline styles based on header and footer heights
   min-height: 0;
   overflow-y: auto;
   width: 100%;
