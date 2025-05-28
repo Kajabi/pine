@@ -7,9 +7,9 @@
 
 ## Properties
 
-| Property     | Attribute    | Description                             | Type      | Default |
-| ------------ | ------------ | --------------------------------------- | --------- | ------- |
-| `scrollable` | `scrollable` | Whether the modal content is scrollable | `boolean` | `false` |
+| Property | Attribute | Description | Type               | Default  |
+| -------- | --------- | ----------- | ------------------ | -------- |
+| `border` | `border`  |             | `"both" \| "none"` | `'none'` |
 
 
 ----------------------------------------------

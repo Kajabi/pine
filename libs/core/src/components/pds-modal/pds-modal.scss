@@ -39,14 +39,11 @@
   display: flex;
   flex-direction: column;
   margin: 24px;
+  max-height: calc(100vh - (calc(6vh + 96px)));
   width: 100%;
 
   @media (min-width: 992px) {
     margin-block-start: 6vh;
-
-    &.pds-modal--scrollable {
-      max-height: calc(100vh - (calc(6vh + 96px)));
-    }
   }
 
   @media (min-width: 1200px) {
@@ -74,31 +71,9 @@
   max-width: 100%;
 }
 
-.pds-modal--scrollable {
-  max-height: calc(100vh - calc(48px * 1.5));
-  overflow-y: auto;
-}
-
-.pds-modal__header {
-  .pds-modal--scrollable &,
-  .pds-modal--fullscreen & {
-    border-bottom: 1px solid #e5e7eb;
-  }
-}
-
 .pds-modal-content {
   .pds-modal--fullscreen & {
     flex: 1;
   }
-
-  .pds-modal--scrollable & {
-    overflow-y: auto;
-  }
 }
 
-.pds-modal__footer {
-  .pds-modal--scrollable &,
-  .pds-modal--fullscreen & {
-    border-top: 1px solid #e5e7eb;
-  }
-}

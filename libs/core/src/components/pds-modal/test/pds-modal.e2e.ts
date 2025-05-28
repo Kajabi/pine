@@ -82,13 +82,7 @@ describe('pds-modal', () => {
     expect(await modal.getProperty('size')).toBe('sm');
   });
 
-  it('should handle scrollable prop', async () => {
-    const page = await newE2EPage();
-    await page.setContent(`<pds-modal scrollable="true"></pds-modal>`);
-
-    const modal = await page.find('pds-modal');
-    expect(await modal.getProperty('scrollable')).toBe(true);
-  });
+  // Modal is always scrollable by default, no need to test scrollable property
 
   it('should handle closeOnBackdropClick prop', async () => {
     const page = await newE2EPage();

@@ -50,14 +50,7 @@ describe('pds-modal', () => {
     expect(fullscreenPage.root?.getAttribute('size')).toBe('fullscreen');
   });
 
-  it('should have the correct scrollable attribute', async () => {
-    const page = await newSpecPage({
-      components: [MockPdsModal],
-      html: `<mock-pds-modal scrollable="true"></pds-modal>`,
-    });
-    
-    expect(page.root?.getAttribute('scrollable')).toBe('true');
-  });
+  // Modal is always scrollable by default, no need to test scrollable attribute
 
   it('should have the correct closeOnBackdropClick attribute', async () => {
     // Default value should be true

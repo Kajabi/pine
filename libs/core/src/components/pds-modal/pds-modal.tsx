@@ -3,6 +3,7 @@ import { Component, Element, Event, EventEmitter, h, Method, Prop, State, Watch 
 @Component({
   tag: 'pds-modal',
   styleUrl: 'pds-modal.scss',
+  shadow: false
 })
 export class PdsModal {
   private modalRef: HTMLDialogElement;
@@ -36,30 +37,7 @@ export class PdsModal {
    */
   @Prop() size: 'sm' | 'md' | 'lg' | 'fullscreen' = 'md';
 
-  /**
-   * Whether the modal content is scrollable
-   * @default false
-   */
-  @Prop() scrollable = false;
-
-  /**
-   * This is used internally to pass the scrollable property to the content component
-   * @internal
-   */
-  @Watch('scrollable')
-  handleScrollableChange() {
-    // Find all content components and set their scrollable attribute
-    const contentComponents = this.el.querySelectorAll('pds-modal-content');
-    if (contentComponents.length > 0) {
-      contentComponents.forEach(component => {
-        if (this.scrollable) {
-          component.setAttribute('scrollable', 'true');
-        } else {
-          component.removeAttribute('scrollable');
-        }
-      });
-    }
-  }
+  // Modal content is always scrollable by default
 
   /**
    * Emitted when the modal is opened
@@ -80,8 +58,6 @@ export class PdsModal {
     this.modalRef = this.el.querySelector('.pds-modal__backdrop') as HTMLDialogElement;
     // Add keyboard event listener
     document.addEventListener('keydown', this.handleKeyDown);
-    // Set initial scrollable state
-    this.handleScrollableChange();
   }
 
   disconnectedCallback() {
@@ -329,7 +305,7 @@ export class PdsModal {
         onClick={this.handleBackdropClick}
       >
         <div
-          class={`pds-modal pds-modal--${this.size} ${this.scrollable ? 'pds-modal--scrollable' : ''}`}
+          class={`pds-modal pds-modal--${this.size} pds-modal--scrollable`}
         >
           <slot></slot>
         </div>

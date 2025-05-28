@@ -1,23 +1,33 @@
-import { Component, h, Prop, Host } from '@stencil/core';
+import { Component, h, Host, Prop, Element } from '@stencil/core';
+
+declare global {
+  interface HTMLPdsModalContentElement extends HTMLElement {
+    border: 'none' | 'both';
+  }
+}
 
 @Component({
   tag: 'pds-modal-content',
   styleUrl: 'pds-modal-content.scss',
 })
 export class PdsModalContent {
-  /**
-   * Whether the modal content is scrollable
-   * @default false
-   */
-  @Prop({ reflect: true }) scrollable = false;
 
+  @Element() el: HTMLPdsModalContentElement;
+
+  @Prop({ reflect: true }) border: 'none' | 'both' = 'none';
+
+  componentDidLoad() {
+    const slotContent = this.el.firstElementChild as HTMLElement;
+    const isScrollable = slotContent.scrollHeight > slotContent.clientHeight;
+    this.border = isScrollable ? 'both' : 'none';
+  }
   render() {
     return (
       <Host>
         <div class={{
           'pds-modal-content': true,
-          'pds-modal-content--scrollable': this.scrollable
-        }} tabindex={this.scrollable ? '-1' : null}>
+          [`pds-modal-content--border-${this.border}`]: true
+        }} tabindex="-1">
           <slot></slot>
         </div>
       </Host>

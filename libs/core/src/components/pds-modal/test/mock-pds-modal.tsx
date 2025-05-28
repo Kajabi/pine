@@ -31,10 +31,7 @@ export class MockPdsModal {
    */
   @Prop() size: 'sm' | 'md' | 'lg' | 'fullscreen' = 'md';
 
-  /**
-   * Whether the modal content is scrollable
-   */
-  @Prop() scrollable = false;
+  // Modal content is always scrollable by default
 
   /**
    * Whether the modal should close when clicking on the backdrop
@@ -115,7 +112,7 @@ export class MockPdsModal {
     const modalClasses = {
       'pds-modal': true,
       [`pds-modal--${this.size}`]: true,
-      'pds-modal--scrollable': this.scrollable,
+      'pds-modal--scrollable': true, // Always scrollable by default
     };
 
     const backdropClasses = {

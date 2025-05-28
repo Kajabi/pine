@@ -1,14 +1,34 @@
 pds-modal-content {
   display: block;
   flex: 1 1 auto;
+  overflow-y: auto;
   width: 100%;
+
+  &:has(.pds-modal-content--border-none) {
+    border: 0;
+  }
+
+  &:has(.pds-modal-content--border-both) {
+    border-block-end: 1px solid var(--pine-color-grey-200);
+    border-block-start: 1px solid var(--pine-color-grey-200);
+  }
+
+  &:has(.pds-modal-content--border-top) {
+    border-block-start: 1px solid var(--pine-color-grey-200);
+  }
+
+  &:has(.pds-modal-content--border-bottom) {
+    border-block-end: 1px solid var(--pine-color-grey-200);
+  }
 }
 
 .pds-modal-content {
-  width: 100%;
-}
-
-.pds-modal-content--scrollable {
+  display: block;
+  flex: 1 1 auto;
+  // this needs to be updated to be max-height: calc(100vh - (pds-modal-header height + pds-modal-footer height)), but the header and footer height may need to be a custom prop that's passed in from a js function
   max-height: 60vh;
+  min-height: 0;
   overflow-y: auto;
+  width: 100%;
+
 }

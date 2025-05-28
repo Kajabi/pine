@@ -38,10 +38,6 @@ export namespace Components {
          */
         "open": boolean;
         /**
-          * Whether the modal content is scrollable
-         */
-        "scrollable": boolean;
-        /**
           * Shows the modal
          */
         "showModal": () => Promise<void>;
@@ -639,11 +635,6 @@ export namespace Components {
          */
         "open": boolean;
         /**
-          * Whether the modal content is scrollable
-          * @default false
-         */
-        "scrollable": boolean;
-        /**
           * Opens the modal
          */
         "showModal": () => Promise<void>;
@@ -654,11 +645,7 @@ export namespace Components {
         "size": 'sm' | 'md' | 'lg' | 'fullscreen';
     }
     interface PdsModalContent {
-        /**
-          * Whether the modal content is scrollable
-          * @default false
-         */
-        "scrollable": boolean;
+        "border": 'none' | 'both';
     }
     interface PdsModalFooter {
     }
@@ -1805,10 +1792,6 @@ declare namespace LocalJSX {
          */
         "open"?: boolean;
         /**
-          * Whether the modal content is scrollable
-         */
-        "scrollable"?: boolean;
-        /**
           * The size of the modal
          */
         "size"?: 'sm' | 'md' | 'lg' | 'fullscreen';
@@ -2436,22 +2419,13 @@ declare namespace LocalJSX {
          */
         "open"?: boolean;
         /**
-          * Whether the modal content is scrollable
-          * @default false
-         */
-        "scrollable"?: boolean;
-        /**
           * The size of the modal
           * @default 'md'
          */
         "size"?: 'sm' | 'md' | 'lg' | 'fullscreen';
     }
     interface PdsModalContent {
-        /**
-          * Whether the modal content is scrollable
-          * @default false
-         */
-        "scrollable"?: boolean;
+        "border"?: 'none' | 'both';
     }
     interface PdsModalFooter {
     }

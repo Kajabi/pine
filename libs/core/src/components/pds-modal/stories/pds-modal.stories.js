@@ -9,9 +9,8 @@ export default {
   title: 'components/Modal',
   args: {
     closeOnBackdropClick: true,
-    componentId: 'demo-modal',
+    componentId: 'modal-demo',
     open: false,
-    scrollable: false,
     size: 'md',
   },
   parameters: {
@@ -33,7 +32,6 @@ const BaseTemplate = (args) => html`
       size="${args.size}"
       ?close-on-backdrop-click="${args.closeOnBackdropClick}"
       ?open="${args.open}"
-      ?scrollable="${args.scrollable}"
     >
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
@@ -237,14 +235,14 @@ CustomContent.args = {
   size: 'md',
 };
 
-const ScrollableTemplate = (args) => {
+const ScrollableTemplate = () => {
   return html`
     <div style="padding: 1rem;">
       <pds-button id="show-modal" onClick="document.querySelector('#scroll-modal').open = true">
         Open Scrolling Modal
       </pds-button>
 
-      <pds-modal id="scroll-modal" size="md" ?scrollable="${args.scrollable}">
+      <pds-modal id="scroll-modal" size="md">
         <pds-modal-header>
           <pds-box direction="column" fit padding="md">
             <pds-box
@@ -311,7 +309,7 @@ const ScrollableTemplate = (args) => {
 export const Scrollable = ScrollableTemplate.bind({});
 Scrollable.args = {
   size: 'md',
-  scrollable: true,
+  // Modal is always scrollable by default
 };
 
 const FullscreenTemplate = (args) => html`

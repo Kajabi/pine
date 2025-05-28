@@ -12,7 +12,6 @@
 | `closeOnBackdropClick` | `close-on-backdrop-click` | Whether the modal can be closed by clicking the backdrop              | `boolean`                              | `true`      |
 | `componentId`          | `component-id`            | A unique identifier used for the underlying component `id` attribute. | `string`                               | `undefined` |
 | `open`                 | `open`                    | Whether the modal is open                                             | `boolean`                              | `false`     |
-| `scrollable`           | `scrollable`              | Whether the modal content is scrollable                               | `boolean`                              | `false`     |
 | `size`                 | `size`                    | The size of the modal                                                 | `"fullscreen" \| "lg" \| "md" \| "sm"` | `'md'`      |
 
 

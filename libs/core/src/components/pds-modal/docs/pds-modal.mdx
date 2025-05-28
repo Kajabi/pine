@@ -750,7 +750,7 @@ Use the destructive variant for actions that can't be undone.
 
 ### Scrollable Content
 
-For content that exceeds the viewport height, use the scrollable variant.
+Modals are scrollable by default when content exceeds the viewport height.
 
 <DocCanvas client:only
   mdxSource={{
@@ -761,7 +761,7 @@ For content that exceeds the viewport height, use the scrollable variant.
         if (modal) modal.open = true;
       }}>Scrollable Modal</PdsButton>
 
-      <PdsModal id="scroll-modal" componentId="scroll-modal" scrollable={true}>
+      <PdsModal id="scroll-modal" componentId="scroll-modal">
         <PdsModalHeader>
           <PdsBox direction="column" fit padding="md">
             <PdsBox alignItems="center" fit justifyContent="space-between">
@@ -803,7 +803,7 @@ For content that exceeds the viewport height, use the scrollable variant.
         if (modal) modal.open = true;
       }}>Scrollable Modal</pds-button>
 
-      <pds-modal id="scroll-modal" component-id="scroll-modal" scrollable={true}>
+      <pds-modal id="scroll-modal" component-id="scroll-modal">
         <pds-modal-header>
           <pds-box direction="column" fit padding="md">
             <pds-box align-items="center" fit justify-content="space-between">
@@ -845,7 +845,7 @@ For content that exceeds the viewport height, use the scrollable variant.
       if (modal) modal.open = true;
     }}>Scrollable Modal</pds-button>
 
-    <pds-modal id="scroll-modal" component-id="scroll-modal" scrollable={true}>
+    <pds-modal id="scroll-modal" component-id="scroll-modal">
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
           <pds-box align-items="center" fit justify-content="space-between">
