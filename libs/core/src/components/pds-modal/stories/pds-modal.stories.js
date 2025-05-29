@@ -8,7 +8,7 @@ export default {
   decorators: [withActions],
   title: 'components/Modal',
   args: {
-    closeOnBackdropClick: true,
+    backdropDismiss: true,
     componentId: 'modal-demo',
     open: false,
     size: 'md',
@@ -30,7 +30,7 @@ const BaseTemplate = (args) => html`
       id="${args.componentId}"
       component-id="${args.componentId}"
       size="${args.size}"
-      ?close-on-backdrop-click="${args.closeOnBackdropClick}"
+      ?backdrop-dismiss="${args.backdropDismiss}"
       ?open="${args.open}"
     >
       <pds-modal-header>
@@ -100,7 +100,7 @@ const DestructiveTemplate = (args) => html`
       id="${args.componentId}"
       component-id="${args.componentId}"
       size="${args.size}"
-      ?close-on-backdrop-click="${args.closeOnBackdropClick}"
+      ?backdrop-dismiss="${args.backdropDismiss}"
       ?open="${args.open}"
     >
       <pds-modal-header>
@@ -166,7 +166,7 @@ const CustomContentTemplate = (args) => html`
       <pds-modal
         id="${args.componentId}"
         size="${args.size}"
-        ?close-on-backdrop-click="${args.closeOnBackdropClick}"
+        ?backdrop-dismiss="${args.backdropDismiss}"
         ?open="${args.open}"
       >
 
@@ -254,7 +254,7 @@ const ScrollableTemplate = (args) => {
       <pds-modal
         id="${args.componentId}"
         size="${args.size}"
-        ?close-on-backdrop-click="${args.closeOnBackdropClick}"
+        ?backdrop-dismiss="${args.backdropDismiss}"
         ?open="${args.open}"
       >
         <pds-modal-header>
@@ -337,7 +337,7 @@ const FullscreenTemplate = (args) => html`
     <pds-modal
       id="${args.componentId}"
       size=${args.size}
-      ?close-on-backdrop-click=${args.closeOnBackdropClick}
+      ?backdrop-dismiss=${args.backdropDismiss}
       ?open="${args.open}"
     >
       <pds-modal-header>

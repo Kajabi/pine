@@ -13,12 +13,10 @@ export class PdsModal {
   @Element() el: HTMLPdsModalElement;
 
   /**
-   * Whether the modal can be closed by clicking the backdrop
+   * Whether the modal can be dismissed by clicking the backdrop
    * @default true
    */
-  @Prop() closeOnBackdropClick = true;
-
-  // Escape key closing is always enabled for accessibility
+  @Prop() backdropDismiss = true;
 
   /**
    * A unique identifier used for the underlying component `id` attribute.
@@ -201,7 +199,7 @@ export class PdsModal {
   }
 
   private handleBackdropClick = (e: MouseEvent) => {
-    if (!this.closeOnBackdropClick || !this.open) return;
+    if (!this.backdropDismiss || !this.open) return;
 
     if ((e.target as HTMLElement).classList.contains('pds-modal__backdrop')) {
       e.stopPropagation();

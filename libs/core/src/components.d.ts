@@ -22,9 +22,9 @@ export namespace Components {
      */
     interface MockPdsModal {
         /**
-          * Whether the modal should close when clicking on the backdrop
+          * Whether the modal can be dismissed by clicking the backdrop
          */
-        "closeOnBackdropClick": boolean;
+        "backdropDismiss": boolean;
         /**
           * The ID of the modal component
          */
@@ -617,10 +617,10 @@ export namespace Components {
     }
     interface PdsModal {
         /**
-          * Whether the modal can be closed by clicking the backdrop
+          * Whether the modal can be dismissed by clicking the backdrop
           * @default true
          */
-        "closeOnBackdropClick": boolean;
+        "backdropDismiss": boolean;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -1214,6 +1214,10 @@ export namespace Components {
         "showTooltip": () => Promise<void>;
     }
 }
+export interface MockPdsModalCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLMockPdsModalElement;
+}
 export interface PdsAlertCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsAlertElement;
@@ -1772,9 +1776,9 @@ declare namespace LocalJSX {
      */
     interface MockPdsModal {
         /**
-          * Whether the modal should close when clicking on the backdrop
+          * Whether the modal can be dismissed by clicking the backdrop
          */
-        "closeOnBackdropClick"?: boolean;
+        "backdropDismiss"?: boolean;
         /**
           * The ID of the modal component
          */
@@ -2401,10 +2405,10 @@ declare namespace LocalJSX {
     }
     interface PdsModal {
         /**
-          * Whether the modal can be closed by clicking the backdrop
+          * Whether the modal can be dismissed by clicking the backdrop
           * @default true
          */
-        "closeOnBackdropClick"?: boolean;
+        "backdropDismiss"?: boolean;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */

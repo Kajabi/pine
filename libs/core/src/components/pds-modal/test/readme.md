@@ -12,12 +12,12 @@ This component mimics the real PdsModal but without using the Popover API
 
 ## Properties
 
-| Property               | Attribute                 | Description                                                  | Type                                   | Default     |
-| ---------------------- | ------------------------- | ------------------------------------------------------------ | -------------------------------------- | ----------- |
-| `closeOnBackdropClick` | `close-on-backdrop-click` | Whether the modal should close when clicking on the backdrop | `boolean`                              | `true`      |
-| `componentId`          | `component-id`            | The ID of the modal component                                | `string`                               | `undefined` |
-| `open`                 | `open`                    | Whether the modal is open                                    | `boolean`                              | `false`     |
-| `size`                 | `size`                    | The size of the modal                                        | `"fullscreen" \| "lg" \| "md" \| "sm"` | `'md'`      |
+| Property          | Attribute          | Description                                                 | Type                                   | Default     |
+| ----------------- | ------------------ | ----------------------------------------------------------- | -------------------------------------- | ----------- |
+| `backdropDismiss` | `backdrop-dismiss` | Whether the modal can be dismissed by clicking the backdrop | `boolean`                              | `true`      |
+| `componentId`     | `component-id`     | The ID of the modal component                               | `string`                               | `undefined` |
+| `open`            | `open`             | Whether the modal is open                                   | `boolean`                              | `false`     |
+| `size`            | `size`             | The size of the modal                                       | `"fullscreen" \| "lg" \| "md" \| "sm"` | `'md'`      |
 
 
 ## Events

@@ -9,7 +9,7 @@ describe('pds-modal', () => {
       components: [MockPdsModal],
       html: `<mock-pds-modal></mock-pds-modal>`,
     });
-    
+
     expect(page.root).not.toBeNull();
     expect(page.root?.tagName.toLowerCase()).toBe('mock-pds-modal');
   });
@@ -19,7 +19,7 @@ describe('pds-modal', () => {
       components: [MockPdsModal],
       html: `<mock-pds-modal component-id="test-modal" size="lg" scrollable="true"></mock-pds-modal>`,
     });
-    
+
     expect(page.root).not.toBeNull();
     expect(page.root?.getAttribute('component-id')).toBe('test-modal');
     expect(page.root?.getAttribute('size')).toBe('lg');
@@ -34,14 +34,14 @@ describe('pds-modal', () => {
       html: `<mock-pds-modal size="sm"></pds-modal>`,
     });
     expect(smallPage.root?.getAttribute('size')).toBe('sm');
-    
+
     // Test large size
     const largePage = await newSpecPage({
       components: [MockPdsModal],
       html: `<mock-pds-modal size="lg"></pds-modal>`,
     });
     expect(largePage.root?.getAttribute('size')).toBe('lg');
-    
+
     // Test fullscreen size
     const fullscreenPage = await newSpecPage({
       components: [MockPdsModal],
@@ -52,21 +52,21 @@ describe('pds-modal', () => {
 
   // Modal is always scrollable by default, no need to test scrollable attribute
 
-  it('should have the correct closeOnBackdropClick attribute', async () => {
+  it('should have the correct backdropDismiss attribute', async () => {
     // Default value should be true
     const defaultPage = await newSpecPage({
       components: [MockPdsModal],
       html: `<mock-pds-modal></mock-pds-modal>`,
     });
-    expect(defaultPage.root?.getAttribute('close-on-backdrop-click')).toBeNull(); // Default value is not set as attribute
-    
+    expect(defaultPage.root?.getAttribute('backdrop-dismiss')).toBeNull(); // Default value is not set as attribute
+
     // Explicit false value
     const page = await newSpecPage({
       components: [MockPdsModal],
-      html: `<mock-pds-modal close-on-backdrop-click="false"></pds-modal>`,
+      html: `<mock-pds-modal backdrop-dismiss="false"></pds-modal>`,
     });
-    
-    expect(page.root?.getAttribute('close-on-backdrop-click')).toBe('false');
+
+    expect(page.root?.getAttribute('backdrop-dismiss')).toBe('false');
   });
 
   it('should have the correct closeOnEsc attribute', async () => {
@@ -76,13 +76,13 @@ describe('pds-modal', () => {
       html: `<mock-pds-modal></mock-pds-modal>`,
     });
     expect(defaultPage.root?.getAttribute('close-on-esc')).toBeNull(); // Default value is not set as attribute
-    
+
     // Explicit false value
     const page = await newSpecPage({
       components: [MockPdsModal],
       html: `<mock-pds-modal close-on-esc="false"></pds-modal>`,
     });
-    
+
     expect(page.root?.getAttribute('close-on-esc')).toBe('false');
   });
 
@@ -93,13 +93,13 @@ describe('pds-modal', () => {
       html: `<mock-pds-modal></mock-pds-modal>`,
     });
     expect(defaultPage.root?.getAttribute('open')).toBeNull(); // Default value is not set as attribute
-    
+
     // Explicit true value
     const page = await newSpecPage({
       components: [MockPdsModal],
       html: `<mock-pds-modal open="true"></mock-pds-modal>`,
     });
-    
+
     expect(page.root?.getAttribute('open')).toBe('true');
   });
 
@@ -108,82 +108,82 @@ describe('pds-modal', () => {
       components: [MockPdsModal],
       html: `<mock-pds-modal></mock-pds-modal>`,
     });
-    
+
     // Set up event spies
     const openSpy = jest.fn();
     const closeSpy = jest.fn();
     page.root?.addEventListener('pdsModalOpen', openSpy);
     page.root?.addEventListener('pdsModalClose', closeSpy);
-    
+
     // Show the modal
     await page.rootInstance.showModal();
     expect(openSpy).toHaveBeenCalled();
     expect(page.rootInstance.open).toBe(true);
-    
+
     // Hide the modal
     await page.rootInstance.hideModal();
     expect(closeSpy).toHaveBeenCalled();
     expect(page.rootInstance.open).toBe(false);
   });
-  
-  it('should handle backdrop click when closeOnBackdropClick is true', async () => {
+
+  it('should handle backdrop click when backdropDismiss is true', async () => {
     const page = await newSpecPage({
       components: [MockPdsModal],
       html: `<mock-pds-modal></mock-pds-modal>`,
     });
-    
+
     // Open the modal
     page.rootInstance.open = true;
     await page.waitForChanges();
-    
+
     // Get the backdrop element
     const backdrop = page.root?.querySelector('.pds-modal__backdrop');
     expect(backdrop).not.toBeNull();
-    
+
     // Directly call the handler method with a mocked event
     const mockEvent = { target: backdrop } as MouseEvent;
     page.rootInstance.handleBackdropClick(mockEvent);
-    
+
     // Modal should be closed
     expect(page.rootInstance.open).toBe(false);
   });
-  
-  it('should not close on backdrop click when closeOnBackdropClick is false', async () => {
+
+  it('should not close on backdrop click when backdropDismiss is false', async () => {
     const page = await newSpecPage({
       components: [MockPdsModal],
-      html: `<mock-pds-modal close-on-backdrop-click="false"></mock-pds-modal>`,
+      html: `<mock-pds-modal backdrop-dismiss="false"></mock-pds-modal>`,
     });
-    
+
     // Open the modal
     page.rootInstance.open = true;
     await page.waitForChanges();
-    
+
     // Get the backdrop element
     const backdrop = page.root?.querySelector('.pds-modal__backdrop');
     expect(backdrop).not.toBeNull();
-    
+
     // Directly call the handler method with a mocked event
     const mockEvent = { target: backdrop } as MouseEvent;
     page.rootInstance.handleBackdropClick(mockEvent);
-    
+
     // Modal should still be open
     expect(page.rootInstance.open).toBe(true);
   });
-  
+
   it('should close on Escape key press (native dialog behavior)', async () => {
     const page = await newSpecPage({
       components: [MockPdsModal],
       html: `<mock-pds-modal></mock-pds-modal>`,
     });
-    
+
     // Open the modal
     page.rootInstance.open = true;
     await page.waitForChanges();
-    
+
     // Directly call the handler method with a mocked event
     const mockEvent = { key: 'Escape' } as KeyboardEvent;
     page.rootInstance.handleKeyDown(mockEvent);
-    
+
     // Modal should be closed
     expect(page.rootInstance.open).toBe(false);
   });

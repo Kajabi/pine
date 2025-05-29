@@ -7,12 +7,12 @@
 
 ## Properties
 
-| Property               | Attribute                 | Description                                                           | Type                                   | Default     |
-| ---------------------- | ------------------------- | --------------------------------------------------------------------- | -------------------------------------- | ----------- |
-| `closeOnBackdropClick` | `close-on-backdrop-click` | Whether the modal can be closed by clicking the backdrop              | `boolean`                              | `true`      |
-| `componentId`          | `component-id`            | A unique identifier used for the underlying component `id` attribute. | `string`                               | `undefined` |
-| `open`                 | `open`                    | Whether the modal is open                                             | `boolean`                              | `false`     |
-| `size`                 | `size`                    | The size of the modal                                                 | `"fullscreen" \| "lg" \| "md" \| "sm"` | `'md'`      |
+| Property          | Attribute          | Description                                                           | Type                                   | Default     |
+| ----------------- | ------------------ | --------------------------------------------------------------------- | -------------------------------------- | ----------- |
+| `backdropDismiss` | `backdrop-dismiss` | Whether the modal can be dismissed by clicking the backdrop           | `boolean`                              | `true`      |
+| `componentId`     | `component-id`     | A unique identifier used for the underlying component `id` attribute. | `string`                               | `undefined` |
+| `open`            | `open`             | Whether the modal is open                                             | `boolean`                              | `false`     |
+| `size`            | `size`             | The size of the modal                                                 | `"fullscreen" \| "lg" \| "md" \| "sm"` | `'md'`      |
 
 
 ## Events
