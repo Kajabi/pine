@@ -63,14 +63,14 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   private renderElement() {
     if (this.href) {
       return (
-        <a href={this.href} class="pds-dropdown-menu-item__content">
+        <a href={this.href} class="pds-dropdown-menu-item__content" tabIndex={-1}>
           <slot></slot>
         </a>
       );
     }
 
     return (
-      <button class="pds-dropdown-menu-item__content">
+      <button class="pds-dropdown-menu-item__content" tabIndex={-1}>
         <slot></slot>
       </button>
     );
