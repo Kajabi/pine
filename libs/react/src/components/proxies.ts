@@ -5,6 +5,7 @@ import { createReactComponent } from './react-component-lib';
 
 import type { JSX } from '@pine-ds/core/components';
 
+import { defineCustomElement as defineMockPdsModal } from '@pine-ds/core/components/mock-pds-modal.js';
 import { defineCustomElement as definePdsAccordion } from '@pine-ds/core/components/pds-accordion.js';
 import { defineCustomElement as definePdsAlert } from '@pine-ds/core/components/pds-alert.js';
 import { defineCustomElement as definePdsAvatar } from '@pine-ds/core/components/pds-avatar.js';
@@ -18,6 +19,10 @@ import { defineCustomElement as definePdsImage } from '@pine-ds/core/components/
 import { defineCustomElement as definePdsInput } from '@pine-ds/core/components/pds-input.js';
 import { defineCustomElement as definePdsLink } from '@pine-ds/core/components/pds-link.js';
 import { defineCustomElement as definePdsLoader } from '@pine-ds/core/components/pds-loader.js';
+import { defineCustomElement as definePdsModal } from '@pine-ds/core/components/pds-modal.js';
+import { defineCustomElement as definePdsModalContent } from '@pine-ds/core/components/pds-modal-content.js';
+import { defineCustomElement as definePdsModalFooter } from '@pine-ds/core/components/pds-modal-footer.js';
+import { defineCustomElement as definePdsModalHeader } from '@pine-ds/core/components/pds-modal-header.js';
 import { defineCustomElement as definePdsPopover } from '@pine-ds/core/components/pds-popover.js';
 import { defineCustomElement as definePdsProgress } from '@pine-ds/core/components/pds-progress.js';
 import { defineCustomElement as definePdsRadio } from '@pine-ds/core/components/pds-radio.js';
@@ -39,6 +44,7 @@ import { defineCustomElement as definePdsText } from '@pine-ds/core/components/p
 import { defineCustomElement as definePdsTextarea } from '@pine-ds/core/components/pds-textarea.js';
 import { defineCustomElement as definePdsTooltip } from '@pine-ds/core/components/pds-tooltip.js';
 
+export const MockPdsModal = /*@__PURE__*/createReactComponent<JSX.MockPdsModal, HTMLMockPdsModalElement>('mock-pds-modal', undefined, undefined, defineMockPdsModal);
 export const PdsAccordion = /*@__PURE__*/createReactComponent<JSX.PdsAccordion, HTMLPdsAccordionElement>('pds-accordion', undefined, undefined, definePdsAccordion);
 export const PdsAlert = /*@__PURE__*/createReactComponent<JSX.PdsAlert, HTMLPdsAlertElement>('pds-alert', undefined, undefined, definePdsAlert);
 export const PdsAvatar = /*@__PURE__*/createReactComponent<JSX.PdsAvatar, HTMLPdsAvatarElement>('pds-avatar', undefined, undefined, definePdsAvatar);
@@ -52,6 +58,10 @@ export const PdsImage = /*@__PURE__*/createReactComponent<JSX.PdsImage, HTMLPdsI
 export const PdsInput = /*@__PURE__*/createReactComponent<JSX.PdsInput, HTMLPdsInputElement>('pds-input', undefined, undefined, definePdsInput);
 export const PdsLink = /*@__PURE__*/createReactComponent<JSX.PdsLink, HTMLPdsLinkElement>('pds-link', undefined, undefined, definePdsLink);
 export const PdsLoader = /*@__PURE__*/createReactComponent<JSX.PdsLoader, HTMLPdsLoaderElement>('pds-loader', undefined, undefined, definePdsLoader);
+export const PdsModal = /*@__PURE__*/createReactComponent<JSX.PdsModal, HTMLPdsModalElement>('pds-modal', undefined, undefined, definePdsModal);
+export const PdsModalContent = /*@__PURE__*/createReactComponent<JSX.PdsModalContent, HTMLPdsModalContentElement>('pds-modal-content', undefined, undefined, definePdsModalContent);
+export const PdsModalFooter = /*@__PURE__*/createReactComponent<JSX.PdsModalFooter, HTMLPdsModalFooterElement>('pds-modal-footer', undefined, undefined, definePdsModalFooter);
+export const PdsModalHeader = /*@__PURE__*/createReactComponent<JSX.PdsModalHeader, HTMLPdsModalHeaderElement>('pds-modal-header', undefined, undefined, definePdsModalHeader);
 export const PdsPopover = /*@__PURE__*/createReactComponent<JSX.PdsPopover, HTMLPdsPopoverElement>('pds-popover', undefined, undefined, definePdsPopover);
 export const PdsProgress = /*@__PURE__*/createReactComponent<JSX.PdsProgress, HTMLPdsProgressElement>('pds-progress', undefined, undefined, definePdsProgress);
 export const PdsRadio = /*@__PURE__*/createReactComponent<JSX.PdsRadio, HTMLPdsRadioElement>('pds-radio', undefined, undefined, definePdsRadio);

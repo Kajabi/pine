@@ -16,6 +16,36 @@ export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-
 export { PlacementType } from "./utils/types";
 export { TextareaChangeEventDetail, TextareaInputEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
+    /**
+     * Mock PdsModal component for testing purposes
+     * This component mimics the real PdsModal but without using the Popover API
+     */
+    interface MockPdsModal {
+        /**
+          * Whether the modal should close when clicking on the backdrop
+         */
+        "closeOnBackdropClick": boolean;
+        /**
+          * The ID of the modal component
+         */
+        "componentId"?: string;
+        /**
+          * Hides the modal
+         */
+        "hideModal": () => Promise<void>;
+        /**
+          * Whether the modal is open
+         */
+        "open": boolean;
+        /**
+          * Shows the modal
+         */
+        "showModal": () => Promise<void>;
+        /**
+          * The size of the modal
+         */
+        "size": 'sm' | 'md' | 'lg' | 'fullscreen';
+    }
     interface PdsAccordion {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -584,6 +614,46 @@ export namespace Components {
           * Determines the type of loader.
          */
         "variant": 'spinner' | 'typing';
+    }
+    interface PdsModal {
+        /**
+          * Whether the modal can be closed by clicking the backdrop
+          * @default true
+         */
+        "closeOnBackdropClick": boolean;
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * Closes the modal
+         */
+        "hideModal": () => Promise<void>;
+        /**
+          * Whether the modal is open
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * Opens the modal
+         */
+        "showModal": () => Promise<void>;
+        /**
+          * The size of the modal
+          * @default 'md'
+         */
+        "size": 'sm' | 'md' | 'lg' | 'fullscreen';
+    }
+    interface PdsModalContent {
+        /**
+          * The border style for the content area. Automatically set based on available space of the modal content.
+          * @default 'none'
+         */
+        "border": 'none' | 'both' | 'top' | 'bottom';
+    }
+    interface PdsModalFooter {
+    }
+    interface PdsModalHeader {
     }
     interface PdsPopover {
         /**
@@ -1168,6 +1238,10 @@ export interface PdsInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsInputElement;
 }
+export interface PdsModalCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsModalElement;
+}
 export interface PdsRadioCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsRadioElement;
@@ -1209,6 +1283,29 @@ export interface PdsTextareaCustomEvent<T> extends CustomEvent<T> {
     target: HTMLPdsTextareaElement;
 }
 declare global {
+    interface HTMLMockPdsModalElementEventMap {
+        "pdsModalOpen": any;
+        "pdsModalClose": any;
+        "pdsModalBackdropClick": any;
+    }
+    /**
+     * Mock PdsModal component for testing purposes
+     * This component mimics the real PdsModal but without using the Popover API
+     */
+    interface HTMLMockPdsModalElement extends Components.MockPdsModal, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLMockPdsModalElementEventMap>(type: K, listener: (this: HTMLMockPdsModalElement, ev: MockPdsModalCustomEvent<HTMLMockPdsModalElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLMockPdsModalElementEventMap>(type: K, listener: (this: HTMLMockPdsModalElement, ev: MockPdsModalCustomEvent<HTMLMockPdsModalElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLMockPdsModalElement: {
+        prototype: HTMLMockPdsModalElement;
+        new (): HTMLMockPdsModalElement;
+    };
     interface HTMLPdsAccordionElement extends Components.PdsAccordion, HTMLStencilElement {
     }
     var HTMLPdsAccordionElement: {
@@ -1356,6 +1453,42 @@ declare global {
     var HTMLPdsLoaderElement: {
         prototype: HTMLPdsLoaderElement;
         new (): HTMLPdsLoaderElement;
+    };
+    interface HTMLPdsModalElementEventMap {
+        "pdsModalOpen": void;
+        "pdsModalClose": void;
+    }
+    interface HTMLPdsModalElement extends Components.PdsModal, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsModalElementEventMap>(type: K, listener: (this: HTMLPdsModalElement, ev: PdsModalCustomEvent<HTMLPdsModalElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsModalElementEventMap>(type: K, listener: (this: HTMLPdsModalElement, ev: PdsModalCustomEvent<HTMLPdsModalElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLPdsModalElement: {
+        prototype: HTMLPdsModalElement;
+        new (): HTMLPdsModalElement;
+    };
+    interface HTMLPdsModalContentElement extends Components.PdsModalContent, HTMLStencilElement {
+    }
+    var HTMLPdsModalContentElement: {
+        prototype: HTMLPdsModalContentElement;
+        new (): HTMLPdsModalContentElement;
+    };
+    interface HTMLPdsModalFooterElement extends Components.PdsModalFooter, HTMLStencilElement {
+    }
+    var HTMLPdsModalFooterElement: {
+        prototype: HTMLPdsModalFooterElement;
+        new (): HTMLPdsModalFooterElement;
+    };
+    interface HTMLPdsModalHeaderElement extends Components.PdsModalHeader, HTMLStencilElement {
+    }
+    var HTMLPdsModalHeaderElement: {
+        prototype: HTMLPdsModalHeaderElement;
+        new (): HTMLPdsModalHeaderElement;
     };
     interface HTMLPdsPopoverElement extends Components.PdsPopover, HTMLStencilElement {
     }
@@ -1592,6 +1725,7 @@ declare global {
         new (): HTMLPdsTooltipElement;
     };
     interface HTMLElementTagNameMap {
+        "mock-pds-modal": HTMLMockPdsModalElement;
         "pds-accordion": HTMLPdsAccordionElement;
         "pds-alert": HTMLPdsAlertElement;
         "pds-avatar": HTMLPdsAvatarElement;
@@ -1605,6 +1739,10 @@ declare global {
         "pds-input": HTMLPdsInputElement;
         "pds-link": HTMLPdsLinkElement;
         "pds-loader": HTMLPdsLoaderElement;
+        "pds-modal": HTMLPdsModalElement;
+        "pds-modal-content": HTMLPdsModalContentElement;
+        "pds-modal-footer": HTMLPdsModalFooterElement;
+        "pds-modal-header": HTMLPdsModalHeaderElement;
         "pds-popover": HTMLPdsPopoverElement;
         "pds-progress": HTMLPdsProgressElement;
         "pds-radio": HTMLPdsRadioElement;
@@ -1628,6 +1766,40 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    /**
+     * Mock PdsModal component for testing purposes
+     * This component mimics the real PdsModal but without using the Popover API
+     */
+    interface MockPdsModal {
+        /**
+          * Whether the modal should close when clicking on the backdrop
+         */
+        "closeOnBackdropClick"?: boolean;
+        /**
+          * The ID of the modal component
+         */
+        "componentId"?: string;
+        /**
+          * Event emitted when the backdrop is clicked
+         */
+        "onPdsModalBackdropClick"?: (event: MockPdsModalCustomEvent<any>) => void;
+        /**
+          * Event emitted when the modal is closed
+         */
+        "onPdsModalClose"?: (event: MockPdsModalCustomEvent<any>) => void;
+        /**
+          * Event emitted when the modal is opened
+         */
+        "onPdsModalOpen"?: (event: MockPdsModalCustomEvent<any>) => void;
+        /**
+          * Whether the modal is open
+         */
+        "open"?: boolean;
+        /**
+          * The size of the modal
+         */
+        "size"?: 'sm' | 'md' | 'lg' | 'fullscreen';
+    }
     interface PdsAccordion {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -2226,6 +2398,46 @@ declare namespace LocalJSX {
           * Determines the type of loader.
          */
         "variant"?: 'spinner' | 'typing';
+    }
+    interface PdsModal {
+        /**
+          * Whether the modal can be closed by clicking the backdrop
+          * @default true
+         */
+        "closeOnBackdropClick"?: boolean;
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * Emitted when the modal is closed
+         */
+        "onPdsModalClose"?: (event: PdsModalCustomEvent<void>) => void;
+        /**
+          * Emitted when the modal is opened
+         */
+        "onPdsModalOpen"?: (event: PdsModalCustomEvent<void>) => void;
+        /**
+          * Whether the modal is open
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * The size of the modal
+          * @default 'md'
+         */
+        "size"?: 'sm' | 'md' | 'lg' | 'fullscreen';
+    }
+    interface PdsModalContent {
+        /**
+          * The border style for the content area. Automatically set based on available space of the modal content.
+          * @default 'none'
+         */
+        "border"?: 'none' | 'both' | 'top' | 'bottom';
+    }
+    interface PdsModalFooter {
+    }
+    interface PdsModalHeader {
     }
     interface PdsPopover {
         /**
@@ -2827,6 +3039,7 @@ declare namespace LocalJSX {
     | 'left-end';
     }
     interface IntrinsicElements {
+        "mock-pds-modal": MockPdsModal;
         "pds-accordion": PdsAccordion;
         "pds-alert": PdsAlert;
         "pds-avatar": PdsAvatar;
@@ -2840,6 +3053,10 @@ declare namespace LocalJSX {
         "pds-input": PdsInput;
         "pds-link": PdsLink;
         "pds-loader": PdsLoader;
+        "pds-modal": PdsModal;
+        "pds-modal-content": PdsModalContent;
+        "pds-modal-footer": PdsModalFooter;
+        "pds-modal-header": PdsModalHeader;
         "pds-popover": PdsPopover;
         "pds-progress": PdsProgress;
         "pds-radio": PdsRadio;
@@ -2866,6 +3083,11 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            /**
+             * Mock PdsModal component for testing purposes
+             * This component mimics the real PdsModal but without using the Popover API
+             */
+            "mock-pds-modal": LocalJSX.MockPdsModal & JSXBase.HTMLAttributes<HTMLMockPdsModalElement>;
             "pds-accordion": LocalJSX.PdsAccordion & JSXBase.HTMLAttributes<HTMLPdsAccordionElement>;
             "pds-alert": LocalJSX.PdsAlert & JSXBase.HTMLAttributes<HTMLPdsAlertElement>;
             "pds-avatar": LocalJSX.PdsAvatar & JSXBase.HTMLAttributes<HTMLPdsAvatarElement>;
@@ -2879,6 +3101,10 @@ declare module "@stencil/core" {
             "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
             "pds-loader": LocalJSX.PdsLoader & JSXBase.HTMLAttributes<HTMLPdsLoaderElement>;
+            "pds-modal": LocalJSX.PdsModal & JSXBase.HTMLAttributes<HTMLPdsModalElement>;
+            "pds-modal-content": LocalJSX.PdsModalContent & JSXBase.HTMLAttributes<HTMLPdsModalContentElement>;
+            "pds-modal-footer": LocalJSX.PdsModalFooter & JSXBase.HTMLAttributes<HTMLPdsModalFooterElement>;
+            "pds-modal-header": LocalJSX.PdsModalHeader & JSXBase.HTMLAttributes<HTMLPdsModalHeaderElement>;
             "pds-popover": LocalJSX.PdsPopover & JSXBase.HTMLAttributes<HTMLPdsPopoverElement>;
             "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-radio": LocalJSX.PdsRadio & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;

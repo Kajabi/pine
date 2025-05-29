@@ -1,0 +1,83 @@
+.pds-modal__backdrop {
+  align-items: flex-start;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 0;
+  display: flex;
+  height: 100%;
+  inset: 0;
+  justify-content: center;
+  margin: 0;
+  max-height: 100%;
+  max-width: 100%;
+  opacity: 0;
+  padding: 0;
+  position: fixed;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  visibility: hidden;
+  width: 100%;
+  z-index: 1000;
+
+  @supports (backdrop-filter: blur(3px)) {
+    backdrop-filter: blur(3px);
+  }
+
+  // Increase z-index for nested modals
+  pds-modal & {
+    z-index: 1001;
+  }
+
+  &::backdrop {
+    background: transparent;
+  }
+
+  &.open {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.pds-modal {
+  background: var(--pine-color-background-container);
+  border-radius: var(--pine-dimension-sm);
+  box-shadow: var(--pine-box-shadow-400);
+  display: flex;
+  flex-direction: column;
+  margin: var(--pine-dimension-md);
+  max-height: calc(100vh - (calc(6vh + 96px)));
+  width: 100%;
+
+  @media (min-width: 992px) {
+    margin-block-start: 6vh;
+  }
+
+  @media (min-width: 1200px) {
+    margin-block-start: 8vh;
+  }
+}
+
+.pds-modal--sm {
+  max-width: 520px;
+}
+
+.pds-modal--md {
+  max-width: 700px;
+}
+
+.pds-modal--lg {
+  max-width: 900px;
+}
+
+.pds-modal--fullscreen {
+  border-radius: 0;
+  height: 100%;
+  margin: 0;
+  max-height: 100vh;
+  max-width: 100%;
+}
+
+.pds-modal-content {
+  .pds-modal--fullscreen & {
+    flex: 1;
+  }
+}
+
