@@ -136,7 +136,7 @@ describe('pds-toast', () => {
     `);
   });
 
-  // Test for renderIcon() returning null (line 101)
+  // Test for renderIcon() returning null
   it('renders without icon when no icon prop and type is default', async () => {
     const page = await newSpecPage({
       components: [PdsToast],
@@ -153,7 +153,7 @@ describe('pds-toast', () => {
     expect(loaderElement).toBeNull();
   });
 
-  // Test for dismiss() method (lines 71-88)
+  // Test for dismiss() method
   it('should call dismiss method and emit event', async () => {
     const page = await newSpecPage({
       components: [PdsToast],
@@ -169,7 +169,7 @@ describe('pds-toast', () => {
     expect(dismissSpy).toHaveBeenCalledWith({ componentId: 'test-toast' });
   });
 
-  // Test for button onClick calling dismiss (line 145)
+  // Test for button onClick calling dismiss
   it('should dismiss when dismiss button is clicked', async () => {
     const page = await newSpecPage({
       components: [PdsToast],
