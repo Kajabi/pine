@@ -87,6 +87,7 @@ export const Default = BaseTemplate.bind();
 Default.args = {
   componentId: 'demo-modal',
   size: 'md',
+  open: false,
 };
 
 const DestructiveTemplate = (args) => html`
@@ -100,6 +101,7 @@ const DestructiveTemplate = (args) => html`
       component-id="${args.componentId}"
       size="${args.size}"
       ?close-on-backdrop-click="${args.closeOnBackdropClick}"
+      ?open="${args.open}"
     >
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
@@ -157,11 +159,16 @@ Destructive.args = {
 
 const CustomContentTemplate = (args) => html`
     <div style="padding: 1rem;">
-      <pds-button id="show-modal" onClick="document.querySelector('#custom-modal').open = true">
+      <pds-button id="show-modal" onClick="document.querySelector('#${args.componentId}').open = true">
         Open Form Modal
       </pds-button>
 
-      <pds-modal id="custom-modal" size="md" ?close-on-backdrop-click="${args.closeOnBackdropClick}">
+      <pds-modal
+        id="${args.componentId}"
+        size="${args.size}"
+        ?close-on-backdrop-click="${args.closeOnBackdropClick}"
+        ?open="${args.open}"
+      >
 
         <pds-modal-header>
           <pds-box direction="column" fit padding="md">
@@ -175,7 +182,7 @@ const CustomContentTemplate = (args) => html`
                 class="pds-modal__close"
                 variant="unstyled"
                 icon-only="true"
-                onclick="document.querySelector('#custom-modal').open = false"
+                onclick="document.querySelector('#${args.componentId}').open = false"
                 aria-label="Close modal"
                 part="close-button"
               >
@@ -194,7 +201,7 @@ const CustomContentTemplate = (args) => html`
               id="demo-form"
               @submit=${(e) => {
                 e.preventDefault();
-                const modal = document.querySelector('#custom-modal');
+                const modal = document.querySelector('#${args.componentId}');
                 modal?.close();
               }}
             >
@@ -214,11 +221,11 @@ const CustomContentTemplate = (args) => html`
             fit
             padding="md"
         >
-          <pds-button variant="unstyled" onclick="document.querySelector('#custom-modal').open = false">Close</pds-button>
+          <pds-button variant="unstyled" onclick="document.querySelector('#${args.componentId}').open = false">Close</pds-button>
           <pds-box gap="sm" justify-content="end">
             <pds-button
               variant="secondary"
-              onclick="document.querySelector('#custom-modal').open = false"
+              onclick="document.querySelector('#${args.componentId}').open = false"
             >
               Cancel
             </pds-button>
@@ -232,17 +239,24 @@ const CustomContentTemplate = (args) => html`
 
 export const CustomContent = CustomContentTemplate.bind({});
 CustomContent.args = {
+  componentId: 'custom-modal',
   size: 'md',
+  open: false,
 };
 
-const ScrollableTemplate = () => {
+const ScrollableTemplate = (args) => {
   return html`
     <div style="padding: 1rem;">
-      <pds-button id="show-modal" onClick="document.querySelector('#scroll-modal').open = true">
+      <pds-button id="show-modal" onClick="document.querySelector('#${args.componentId}').open = true">
         Open Scrolling Modal
       </pds-button>
 
-      <pds-modal id="scroll-modal" size="md">
+      <pds-modal
+        id="${args.componentId}"
+        size="${args.size}"
+        ?close-on-backdrop-click="${args.closeOnBackdropClick}"
+        ?open="${args.open}"
+      >
         <pds-modal-header>
           <pds-box direction="column" fit padding="md">
             <pds-box
@@ -255,7 +269,7 @@ const ScrollableTemplate = () => {
                 class="pds-modal__close"
                 variant="unstyled"
                 icon-only="true"
-                onclick="document.querySelector('#scroll-modal').open = false"
+                onclick="document.querySelector('#${args.componentId}').open = false"
                 aria-label="Close modal"
                 part="close-button"
               >
@@ -289,11 +303,11 @@ const ScrollableTemplate = () => {
             fit
             padding="md"
           >
-            <pds-button variant="unstyled" onclick="document.querySelector('#scroll-modal').open = false">Close</pds-button>
+            <pds-button variant="unstyled" onclick="document.querySelector('#${args.componentId}').open = false">Close</pds-button>
             <pds-box gap="sm" justify-content="end">
               <pds-button
                 variant="secondary"
-                onclick="document.querySelector('#scroll-modal').open = false"
+                onclick="document.querySelector('#${args.componentId}').open = false"
               >
                 Cancel
               </pds-button>
@@ -309,89 +323,93 @@ const ScrollableTemplate = () => {
 export const ScrollableContent = ScrollableTemplate.bind({});
 ScrollableContent.args = {
   size: 'md',
-  // Modal is always scrollable by default
+  componentId: 'scrollable-modal',
+  open: false,
 };
 
 const FullscreenTemplate = (args) => html`
-    <div style="padding: 1rem;">
-      <pds-button
-        variant="primary"
-        onclick="document.querySelector('#demo-modal').open = true"
-      >Open Modal</pds-button>
+  <div style="padding: 1rem;">
+    <pds-button
+      variant="primary"
+      onclick="document.querySelector('#${args.componentId}').open = true"
+    >Open Modal</pds-button>
 
-      <pds-modal
-        id="demo-modal"
-        size=${args.size}
-        ?close-on-backdrop-click=${args.closeOnBackdropClick}
-      >
-        <pds-modal-header>
+    <pds-modal
+      id="${args.componentId}"
+      size=${args.size}
+      ?close-on-backdrop-click=${args.closeOnBackdropClick}
+      ?open="${args.open}"
+    >
+      <pds-modal-header>
+        <pds-box
+          direction="column"
+          fit
+          padding="md"
+          padding-block-start="xs"
+          padding-block-end="xs"
+        >
           <pds-box
-            direction="column"
+            align-items="center"
             fit
-            padding="md"
-            padding-block-start="xs"
-            padding-block-end="xs"
-          >
-            <pds-box
-              align-items="center"
-              fit
-              justify-content="space-between"
-            >
-              <pds-box flex="grow">
-                <pds-text tag="h2" size="h3">Modal Title</pds-text>
-              </pds-box>
-              <pds-box flex="shrink">
-                <pds-button
-                  class="pds-modal__close"
-                  variant="unstyled"
-                  icon-only="true"
-                  onclick="document.querySelector('#demo-modal').open = false"
-                  aria-label="Close modal"
-                  part="close-button"
-                >
-                  <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
-                </pds-button>
-              </pds-box>
-            </pds-box>
-          </pds-box>
-        </pds-modal-header>
-        <pds-modal-content>
-          <pds-box direction="column" padding="md">
-            <p>This is a sample modal dialog. It demonstrates the basic features of the pds-modal component.</p>
-            <p>The modal supports:</p>
-            <ul>
-              <li>Different sizes (small, medium, large)</li>
-              <li>Optional close button</li>
-              <li>Backdrop click to close</li>
-              <li>Escape key to close</li>
-              <li>Focus management</li>
-              <li>ARIA attributes for accessibility</li>
-            </ul>
-          </pds-box>
-        </pds-modal-content>
-        <pds-modal-footer>
-          <pds-box
             justify-content="space-between"
-            fit
-            padding="md"
           >
-            <pds-button variant="unstyled" onclick="document.querySelector('#demo-modal').open = false">Close</pds-button>
-            <pds-box gap="sm" justify-content="end">
+            <pds-box flex="grow">
+              <pds-text tag="h2" size="h3">Modal Title</pds-text>
+            </pds-box>
+            <pds-box flex="shrink">
               <pds-button
-                variant="secondary"
-                onclick="document.querySelector('#demo-modal').open = false"
+                class="pds-modal__close"
+                variant="unstyled"
+                icon-only="true"
+                onclick="document.querySelector('#${args.componentId}').open = false"
+                aria-label="Close modal"
+                part="close-button"
               >
-                Cancel
+                <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
               </pds-button>
-              <pds-button variant="primary">Confirm</pds-button>
             </pds-box>
           </pds-box>
-        </pds-modal-footer>
-      </pds-modal>
-    </div>
-  `;
+        </pds-box>
+      </pds-modal-header>
+      <pds-modal-content>
+        <pds-box direction="column" padding="md">
+          <p>This is a sample modal dialog. It demonstrates the basic features of the pds-modal component.</p>
+          <p>The modal supports:</p>
+          <ul>
+            <li>Different sizes (small, medium, large)</li>
+            <li>Optional close button</li>
+            <li>Backdrop click to close</li>
+            <li>Escape key to close</li>
+            <li>Focus management</li>
+            <li>ARIA attributes for accessibility</li>
+          </ul>
+        </pds-box>
+      </pds-modal-content>
+      <pds-modal-footer>
+        <pds-box
+          justify-content="space-between"
+          fit
+          padding="md"
+        >
+          <pds-button variant="unstyled" onclick="document.querySelector('#${args.componentId}').open = false">Close</pds-button>
+          <pds-box gap="sm" justify-content="end">
+            <pds-button
+              variant="secondary"
+              onclick="document.querySelector('#${args.componentId}').open = false"
+            >
+              Cancel
+            </pds-button>
+            <pds-button variant="primary">Confirm</pds-button>
+          </pds-box>
+        </pds-box>
+      </pds-modal-footer>
+    </pds-modal>
+  </div>
+`;
 
-  export const Fullscreen = FullscreenTemplate.bind({});
-  Fullscreen.args = {
-    size: 'fullscreen',
-  };
+export const Fullscreen = FullscreenTemplate.bind({});
+Fullscreen.args = {
+  size: 'fullscreen',
+  componentId: 'fullscreen-modal',
+  open: false,
+};
