@@ -34,9 +34,9 @@ export class MockPdsModal {
   // Modal content is always scrollable by default
 
   /**
-   * Whether clicking the backdrop to close the modal is disabled
+   * Whether the modal can be dismissed by clicking the backdrop
    */
-  @Prop() disableBackdropClick = false;
+  @Prop() backdropDismiss = true;
 
   // Native dialog element always closes on Escape key press, so no closeOnEsc property is needed
 
@@ -87,7 +87,7 @@ export class MockPdsModal {
   handleBackdropClick(event: MouseEvent) {
     const backdrop = this.el.querySelector('.pds-modal__backdrop');
     // Check if the click was directly on the backdrop (not on a child element)
-    if (event.target === backdrop && this.disableBackdropClick === false) {
+    if (event.target === backdrop && this.backdropDismiss === true) {
       this.pdsModalBackdropClick.emit();
       this.hideModal();
     }
