@@ -488,6 +488,11 @@ export namespace Components {
          */
         "componentId": string;
         /**
+          * It determines whether or not the dropdown-item is destructive.
+          * @defaultValue false
+         */
+        "destructive": boolean;
+        /**
           * It determines whether or not the dropdown-item is disabled.
           * @defaultValue false
          */
@@ -2331,6 +2336,11 @@ declare namespace LocalJSX {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
+        /**
+          * It determines whether or not the dropdown-item is destructive.
+          * @defaultValue false
+         */
+        "destructive"?: boolean;
         /**
           * It determines whether or not the dropdown-item is disabled.
           * @defaultValue false

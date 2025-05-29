@@ -15,6 +15,12 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   @Prop() componentId: string;
 
   /**
+   * It determines whether or not the dropdown-item is destructive.
+   * @defaultValue false
+   */
+  @Prop() destructive: boolean = false;
+
+  /**
    * It determines whether or not the dropdown-item is disabled.
    * @defaultValue false
    */
@@ -87,7 +93,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   render() {
     return (
       <Host id={this.componentId}
-        class={{ 'is-disabled': this.disabled }}
+        class={{ 'is-disabled': this.disabled, 'destructive': !this.disabled && this.destructive }}
         onClick={() => !this.disabled && this.handleClick()}
         onKeyDown={this.handleKeyDown}
         tabIndex={this.disabled ? -1 : 0}

@@ -31,3 +31,14 @@
     color: var(--pine-color-text-hover);
   }
 }
+
+:host(.destructive) {
+  .pds-dropdown-menu-item__content {
+    color: var(--pine-color-danger);
+
+    &:hover {
+      background-color: var(--pine-color-danger-disabled);
+      color: var(--pine-color-danger-hover);
+    }
+  }
+}
