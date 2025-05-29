@@ -1089,6 +1089,32 @@ export namespace Components {
          */
         "value"?: string | null;
     }
+    interface PdsToast {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        "dismiss": () => Promise<void>;
+        /**
+          * Whether the toast can be dismissed manually via the close button. Note: This only controls manual dismissal. Auto-dismissal via duration still applies.
+          * @default true
+         */
+        "dismissible": boolean;
+        /**
+          * The duration in milliseconds to show the toast before auto-dismissing. Set to 0 to disable auto-dismiss.
+          * @default 4500
+         */
+        "duration": number;
+        /**
+          * The icon to display in the toast.
+         */
+        "icon"?: string;
+        /**
+          * The type of toast to display. - default: Grey background (default) - danger: Red background - loading: With spinner animation
+          * @default 'default'
+         */
+        "type": 'default' | 'danger' | 'loading';
+    }
     interface PdsTooltip {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -1207,6 +1233,10 @@ export interface PdsTableRowCustomEvent<T> extends CustomEvent<T> {
 export interface PdsTextareaCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsTextareaElement;
+}
+export interface PdsToastCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsToastElement;
 }
 declare global {
     interface HTMLPdsAccordionElement extends Components.PdsAccordion, HTMLStencilElement {
@@ -1585,6 +1615,23 @@ declare global {
         prototype: HTMLPdsTextareaElement;
         new (): HTMLPdsTextareaElement;
     };
+    interface HTMLPdsToastElementEventMap {
+        "pdsToastDismissed": { componentId?: string };
+    }
+    interface HTMLPdsToastElement extends Components.PdsToast, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsToastElementEventMap>(type: K, listener: (this: HTMLPdsToastElement, ev: PdsToastCustomEvent<HTMLPdsToastElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsToastElementEventMap>(type: K, listener: (this: HTMLPdsToastElement, ev: PdsToastCustomEvent<HTMLPdsToastElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLPdsToastElement: {
+        prototype: HTMLPdsToastElement;
+        new (): HTMLPdsToastElement;
+    };
     interface HTMLPdsTooltipElement extends Components.PdsTooltip, HTMLStencilElement {
     }
     var HTMLPdsTooltipElement: {
@@ -1624,6 +1671,7 @@ declare global {
         "pds-tabs": HTMLPdsTabsElement;
         "pds-text": HTMLPdsTextElement;
         "pds-textarea": HTMLPdsTextareaElement;
+        "pds-toast": HTMLPdsToastElement;
         "pds-tooltip": HTMLPdsTooltipElement;
     }
 }
@@ -2780,6 +2828,35 @@ declare namespace LocalJSX {
          */
         "value"?: string | null;
     }
+    interface PdsToast {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * Whether the toast can be dismissed manually via the close button. Note: This only controls manual dismissal. Auto-dismissal via duration still applies.
+          * @default true
+         */
+        "dismissible"?: boolean;
+        /**
+          * The duration in milliseconds to show the toast before auto-dismissing. Set to 0 to disable auto-dismiss.
+          * @default 4500
+         */
+        "duration"?: number;
+        /**
+          * The icon to display in the toast.
+         */
+        "icon"?: string;
+        /**
+          * Event emitted when the toast is dismissed, either manually or automatically.
+         */
+        "onPdsToastDismissed"?: (event: PdsToastCustomEvent<{ componentId?: string }>) => void;
+        /**
+          * The type of toast to display. - default: Grey background (default) - danger: Red background - loading: With spinner animation
+          * @default 'default'
+         */
+        "type"?: 'default' | 'danger' | 'loading';
+    }
     interface PdsTooltip {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -2859,6 +2936,7 @@ declare namespace LocalJSX {
         "pds-tabs": PdsTabs;
         "pds-text": PdsText;
         "pds-textarea": PdsTextarea;
+        "pds-toast": PdsToast;
         "pds-tooltip": PdsTooltip;
     }
 }
@@ -2898,6 +2976,7 @@ declare module "@stencil/core" {
             "pds-tabs": LocalJSX.PdsTabs & JSXBase.HTMLAttributes<HTMLPdsTabsElement>;
             "pds-text": LocalJSX.PdsText & JSXBase.HTMLAttributes<HTMLPdsTextElement>;
             "pds-textarea": LocalJSX.PdsTextarea & JSXBase.HTMLAttributes<HTMLPdsTextareaElement>;
+            "pds-toast": LocalJSX.PdsToast & JSXBase.HTMLAttributes<HTMLPdsToastElement>;
             "pds-tooltip": LocalJSX.PdsTooltip & JSXBase.HTMLAttributes<HTMLPdsTooltipElement>;
         }
     }
