@@ -31,13 +31,9 @@ export class PdsImage {
         id={this.componentId}
       >
         <img
+          {...this.inheritedImgSpecificAttrs}
           alt={this.inheritedImgSpecificAttrs.alt || ''}
-          height={this.inheritedImgSpecificAttrs.height}
           loading={this.inheritedImgSpecificAttrs.loading || 'eager'}
-          sizes={this.inheritedImgSpecificAttrs.sizes}
-          src={this.inheritedImgSpecificAttrs.src}
-          srcset={this.inheritedImgSpecificAttrs.srcset}
-          width={this.inheritedImgSpecificAttrs.width}
         />
       </Host>
     );
