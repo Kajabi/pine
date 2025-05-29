@@ -52,7 +52,7 @@ describe('pds-modal', () => {
 
   // Modal is always scrollable by default, no need to test scrollable attribute
 
-  it('should have the correct closeOnBackdropClick attribute', async () => {
+  it('should have the correct disableBackdropClick attribute', async () => {
     // Default value should be true
     const defaultPage = await newSpecPage({
       components: [MockPdsModal],
@@ -126,7 +126,7 @@ describe('pds-modal', () => {
     expect(page.rootInstance.open).toBe(false);
   });
   
-  it('should handle backdrop click when closeOnBackdropClick is true', async () => {
+  it('should handle backdrop click when disableBackdropClick is false', async () => {
     const page = await newSpecPage({
       components: [MockPdsModal],
       html: `<mock-pds-modal></mock-pds-modal>`,
@@ -148,7 +148,7 @@ describe('pds-modal', () => {
     expect(page.rootInstance.open).toBe(false);
   });
   
-  it('should not close on backdrop click when closeOnBackdropClick is false', async () => {
+  it('should not close on backdrop click when disableBackdropClick is true', async () => {
     const page = await newSpecPage({
       components: [MockPdsModal],
       html: `<mock-pds-modal close-on-backdrop-click="false"></mock-pds-modal>`,

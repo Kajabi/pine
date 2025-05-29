@@ -202,10 +202,10 @@ modal.addEventListener('pds-modal-close', () => {
 Modals can be configured to close automatically in response to user actions:
 
 - Escape key - Always closes the modal (per accessibility guidelines)
-- `closeOnBackdropClick` (default: `true`) - Close when clicking outside the modal
+- `disableBackdropClick` (default: `false`) - Disable closing when clicking outside the modal
 
 ```html
-<pds-modal closeOnBackdropClick={false}>
+<pds-modal disableBackdropClick={true}>
   <!-- Modal content that can only be closed via explicit button clicks -->
 </pds-modal>
 ```

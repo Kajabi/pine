@@ -22,13 +22,13 @@ export namespace Components {
      */
     interface MockPdsModal {
         /**
-          * Whether the modal should close when clicking on the backdrop
-         */
-        "closeOnBackdropClick": boolean;
-        /**
           * The ID of the modal component
          */
         "componentId"?: string;
+        /**
+          * Whether clicking the backdrop to close the modal is disabled
+         */
+        "disableBackdropClick": boolean;
         /**
           * Hides the modal
          */
@@ -617,14 +617,14 @@ export namespace Components {
     }
     interface PdsModal {
         /**
-          * Whether the modal can be closed by clicking the backdrop
-          * @default true
-         */
-        "closeOnBackdropClick": boolean;
-        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
+        /**
+          * Whether clicking the backdrop to close the modal is disabled
+          * @default false
+         */
+        "disableBackdropClick": boolean;
         /**
           * Closes the modal
          */
@@ -1214,6 +1214,10 @@ export namespace Components {
         "showTooltip": () => Promise<void>;
     }
 }
+export interface MockPdsModalCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLMockPdsModalElement;
+}
 export interface PdsAlertCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsAlertElement;
@@ -1772,13 +1776,13 @@ declare namespace LocalJSX {
      */
     interface MockPdsModal {
         /**
-          * Whether the modal should close when clicking on the backdrop
-         */
-        "closeOnBackdropClick"?: boolean;
-        /**
           * The ID of the modal component
          */
         "componentId"?: string;
+        /**
+          * Whether clicking the backdrop to close the modal is disabled
+         */
+        "disableBackdropClick"?: boolean;
         /**
           * Event emitted when the backdrop is clicked
          */
@@ -2401,14 +2405,14 @@ declare namespace LocalJSX {
     }
     interface PdsModal {
         /**
-          * Whether the modal can be closed by clicking the backdrop
-          * @default true
-         */
-        "closeOnBackdropClick"?: boolean;
-        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
+        /**
+          * Whether clicking the backdrop to close the modal is disabled
+          * @default false
+         */
+        "disableBackdropClick"?: boolean;
         /**
           * Emitted when the modal is closed
          */
