@@ -558,6 +558,11 @@ Modals come in four sizes:
     }}>Small Modal</pds-button>
 
     <pds-button onClick={() => {
+      const modal = document.querySelector('#size-modal-md');
+      if (modal) modal.open = true;
+    }}>Medium Modal</pds-button>
+
+    <pds-button onClick={() => {
       const modal = document.querySelector('#size-modal-lg');
       if (modal) modal.open = true;
     }}>Large Modal</pds-button>
@@ -588,6 +593,30 @@ Modals come in four sizes:
     <pds-modal-content>
       <pds-box fit direction="column" padding-block-end="md" padding-inline-start="md" padding-inline-end="md">
         <p>This is a small modal, ideal for simple confirmations or short forms.</p>
+      </pds-box>
+    </pds-modal-content>
+  </pds-modal>
+
+  <pds-modal id="size-modal-md" component-id="size-modal-md" size="md">
+    <pds-modal-header>
+      <pds-box direction="column" fit padding="md">
+        <pds-box align-items="center" fit justify-content="space-between">
+          <pds-text tag="h2" size="h3">Medium Modal</pds-text>
+          <pds-button
+            class="pds-modal__close"
+            variant="unstyled"
+            icon-only="true"
+            onclick="document.querySelector('#size-modal-md').open = false"
+            aria-label="Close modal"
+          >
+            <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+          </pds-button>
+        </pds-box>
+      </pds-box>
+    </pds-modal-header>
+    <pds-modal-content>
+      <pds-box fit direction="column" padding-block-end="md" padding-inline-start="md" padding-inline-end="md">
+        <p>This is a medium modal, ideal for most use cases.</p>
       </pds-box>
     </pds-modal-content>
   </pds-modal>
