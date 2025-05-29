@@ -22,8 +22,8 @@
 ### Graph
 ```mermaid
 graph TD;
-  pds-dropdown --> pds-box
-  style pds-dropdown fill:#f9f,stroke:#333,stroke-width:4px
+  pds-dropdown-menu --> pds-box
+  style pds-dropdown-menu fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

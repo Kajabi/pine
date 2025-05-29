@@ -1,0 +1,33 @@
+:host {
+  cursor: pointer;
+  display: flex;
+  width: 100%; /* Ensure the host takes full width */
+}
+
+
+/* Make the disabled styles more specific and add !important to ensure they apply */
+:host(.is-disabled) {
+  cursor: not-allowed !important;
+  opacity: 0.5 !important;
+
+  .pds-dropdown-menu-item__content {
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+  }
+}
+
+.pds-dropdown-menu-item__content {
+  align-items: center;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  flex-grow: 1; /* Make it grow to fill available space */
+  padding: var(--pine-dimension-xs);
+  text-align: start; /* Ensure text aligns properly */
+  width: 100%; /* Ensure full width */
+
+  &:hover {
+    background-color: var(--pine-color-background-container-hover);
+    color: var(--pine-color-text-hover);
+  }
+}

@@ -1,0 +1,112 @@
+import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+# Dropdown Menu
+
+
+## Guidelines
+
+### When to use
+
+- To display a list of options that can be selected by the user.
+- Ideal for situations where users need to make a selection from a predefined set of options.
+
+### When not to use
+
+-
+-
+-
+
+### Accessibility
+
+-
+-
+
+
+## Properties
+
+<DocArgsTable componentName="pds-dropdown-menu" docSource={components} />
+
+### Dropdown Menu Item
+
+<DocArgsTable componentName="pds-dropdown-menu-item" docSource={components} />
+
+### Default
+
+The default dropdown menu displays a list of options that can be selected by the user.
+
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+<PdsDropdown>
+  <PdsButton slot="trigger">Trigger</PdsButton>
+  <PdsDropdownItem>Item 1</PdsDropdownItem>
+  <PdsDropdownItem>Item 2</PdsDropdownItem>
+  <PdsDropdownItem>Item 3</PdsDropdownItem>
+</PdsDropdown>
+`,
+    webComponent:`
+<pds-dropdown>
+  <pds-button slot="trigger">Trigger</pds-button>
+  <pds-dropdown-item>Item 1</pds-dropdown-item>
+  <pds-dropdown-item>Item 2</pds-dropdown-item>
+  <pds-dropdown-item>Item 3</pds-dropdown-item>
+</pds-dropdown>
+`
+  }}
+>
+<div style={{ height: '200px' }}>
+  <pds-dropdown-menu>
+    <pds-button slot="trigger">Trigger</pds-button>
+    <pds-dropdown-menu-item disabled><a href="https://www.google.com">Item 1</a></pds-dropdown-menu-item>
+    <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item>Item 3</pds-dropdown-menu-item>
+  </pds-dropdown-menu>
+</div>
+</DocCanvas>
+
+### w/ Separator
+
+The dropdown menu can also display a separator between items.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+<PdsDropdownMenu>
+  <PdsButton slot="trigger">Trigger</PdsButton>
+  <PdsDropdownMenuItem>Item 1</PdsDropdownMenuItem>
+  <PdsDropdownMenuSeparator />
+  <PdsDropdownMenuItem>Item 2</PdsDropdownMenuItem>
+  <PdsDropdownMenuSeparator />
+  <PdsDropdownMenuItem>Item 3</PdsDropdownMenuItem>
+</PdsDropdownMenu>
+`,
+    webComponent:`
+<pds-dropdown-menu>
+  <pds-button slot="trigger">Trigger</pds-button>
+  <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
+  <pds-dropdown-menu-separator />
+  <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
+  <pds-dropdown-menu-separator />
+  <pds-dropdown-menu-item>Item 3</pds-dropdown-menu-item>
+</pds-dropdown-menu>
+`
+  }}
+>
+<div style={{ height: '200px' }}>
+  <pds-dropdown-menu>
+    <pds-button slot="trigger">Trigger</pds-button>
+    <pds-dropdown-menu-item>
+      <pds-icon name="trash"></pds-icon> Item 1
+    </pds-dropdown-menu-item>
+    <pds-dropdown-menu-separator />
+    <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
+    <pds-dropdown-menu-separator />
+    <pds-dropdown-menu-item color="red">
+      <pds-icon name="trash" color="red"></pds-icon> Item 3
+    </pds-dropdown-menu-item>
+  </pds-dropdown-menu>
+</div>
+</DocCanvas>
+

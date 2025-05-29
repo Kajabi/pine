@@ -468,7 +468,7 @@ export namespace Components {
          */
         "vertical": boolean;
     }
-    interface PdsDropdown {
+    interface PdsDropdownMenu {
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -478,7 +478,26 @@ export namespace Components {
          */
         "placement": PlacementType;
     }
-    interface PdsDropdownItem {
+    interface PdsDropdownMenuItem {
+        /**
+          * Trigger the click event
+         */
+        "clickItem": () => Promise<void>;
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * It determines whether or not the dropdown-item is disabled.
+          * @defaultValue false
+         */
+        "disabled": boolean;
+        /**
+          * If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button.
+         */
+        "href": string;
+    }
+    interface PdsDropdownMenuSeparator {
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -1255,6 +1274,10 @@ export interface PdsCopytextCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsCopytextElement;
 }
+export interface PdsDropdownMenuItemCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsDropdownMenuItemElement;
+}
 export interface PdsInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsInputElement;
@@ -1437,17 +1460,34 @@ declare global {
         prototype: HTMLPdsDividerElement;
         new (): HTMLPdsDividerElement;
     };
-    interface HTMLPdsDropdownElement extends Components.PdsDropdown, HTMLStencilElement {
+    interface HTMLPdsDropdownMenuElement extends Components.PdsDropdownMenu, HTMLStencilElement {
     }
-    var HTMLPdsDropdownElement: {
-        prototype: HTMLPdsDropdownElement;
-        new (): HTMLPdsDropdownElement;
+    var HTMLPdsDropdownMenuElement: {
+        prototype: HTMLPdsDropdownMenuElement;
+        new (): HTMLPdsDropdownMenuElement;
     };
-    interface HTMLPdsDropdownItemElement extends Components.PdsDropdownItem, HTMLStencilElement {
+    interface HTMLPdsDropdownMenuItemElementEventMap {
+        "pdsClick": {itemIndex: number, item: HTMLPdsDropdownMenuItemElement, content: string};
     }
-    var HTMLPdsDropdownItemElement: {
-        prototype: HTMLPdsDropdownItemElement;
-        new (): HTMLPdsDropdownItemElement;
+    interface HTMLPdsDropdownMenuItemElement extends Components.PdsDropdownMenuItem, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsDropdownMenuItemElementEventMap>(type: K, listener: (this: HTMLPdsDropdownMenuItemElement, ev: PdsDropdownMenuItemCustomEvent<HTMLPdsDropdownMenuItemElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsDropdownMenuItemElementEventMap>(type: K, listener: (this: HTMLPdsDropdownMenuItemElement, ev: PdsDropdownMenuItemCustomEvent<HTMLPdsDropdownMenuItemElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLPdsDropdownMenuItemElement: {
+        prototype: HTMLPdsDropdownMenuItemElement;
+        new (): HTMLPdsDropdownMenuItemElement;
+    };
+    interface HTMLPdsDropdownMenuSeparatorElement extends Components.PdsDropdownMenuSeparator, HTMLStencilElement {
+    }
+    var HTMLPdsDropdownMenuSeparatorElement: {
+        prototype: HTMLPdsDropdownMenuSeparatorElement;
+        new (): HTMLPdsDropdownMenuSeparatorElement;
     };
     interface HTMLPdsImageElement extends Components.PdsImage, HTMLStencilElement {
     }
@@ -1768,8 +1808,9 @@ declare global {
         "pds-chip": HTMLPdsChipElement;
         "pds-copytext": HTMLPdsCopytextElement;
         "pds-divider": HTMLPdsDividerElement;
-        "pds-dropdown": HTMLPdsDropdownElement;
-        "pds-dropdown-item": HTMLPdsDropdownItemElement;
+        "pds-dropdown-menu": HTMLPdsDropdownMenuElement;
+        "pds-dropdown-menu-item": HTMLPdsDropdownMenuItemElement;
+        "pds-dropdown-menu-separator": HTMLPdsDropdownMenuSeparatorElement;
         "pds-image": HTMLPdsImageElement;
         "pds-input": HTMLPdsInputElement;
         "pds-link": HTMLPdsLinkElement;
@@ -2275,7 +2316,7 @@ declare namespace LocalJSX {
          */
         "vertical"?: boolean;
     }
-    interface PdsDropdown {
+    interface PdsDropdownMenu {
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -2285,7 +2326,28 @@ declare namespace LocalJSX {
          */
         "placement"?: PlacementType;
     }
-    interface PdsDropdownItem {
+    interface PdsDropdownMenuItem {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * It determines whether or not the dropdown-item is disabled.
+          * @defaultValue false
+         */
+        "disabled"?: boolean;
+        /**
+          * If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button.
+         */
+        "href"?: string;
+        /**
+          * Emitted when the dropdown-item is clicked.
+          * @type {EventEmitter<{itemIndex: number, item: HTMLPdsDropdownMenuItemElement, content: string}>}
+          * @memberof PdsDropdownMenuItem
+         */
+        "onPdsClick"?: (event: PdsDropdownMenuItemCustomEvent<{itemIndex: number, item: HTMLPdsDropdownMenuItemElement, content: string}>) => void;
+    }
+    interface PdsDropdownMenuSeparator {
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -3105,8 +3167,9 @@ declare namespace LocalJSX {
         "pds-chip": PdsChip;
         "pds-copytext": PdsCopytext;
         "pds-divider": PdsDivider;
-        "pds-dropdown": PdsDropdown;
-        "pds-dropdown-item": PdsDropdownItem;
+        "pds-dropdown-menu": PdsDropdownMenu;
+        "pds-dropdown-menu-item": PdsDropdownMenuItem;
+        "pds-dropdown-menu-separator": PdsDropdownMenuSeparator;
         "pds-image": PdsImage;
         "pds-input": PdsInput;
         "pds-link": PdsLink;
@@ -3155,8 +3218,9 @@ declare module "@stencil/core" {
             "pds-chip": LocalJSX.PdsChip & JSXBase.HTMLAttributes<HTMLPdsChipElement>;
             "pds-copytext": LocalJSX.PdsCopytext & JSXBase.HTMLAttributes<HTMLPdsCopytextElement>;
             "pds-divider": LocalJSX.PdsDivider & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
-            "pds-dropdown": LocalJSX.PdsDropdown & JSXBase.HTMLAttributes<HTMLPdsDropdownElement>;
-            "pds-dropdown-item": LocalJSX.PdsDropdownItem & JSXBase.HTMLAttributes<HTMLPdsDropdownItemElement>;
+            "pds-dropdown-menu": LocalJSX.PdsDropdownMenu & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuElement>;
+            "pds-dropdown-menu-item": LocalJSX.PdsDropdownMenuItem & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuItemElement>;
+            "pds-dropdown-menu-separator": LocalJSX.PdsDropdownMenuSeparator & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuSeparatorElement>;
             "pds-image": LocalJSX.PdsImage & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
             "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;

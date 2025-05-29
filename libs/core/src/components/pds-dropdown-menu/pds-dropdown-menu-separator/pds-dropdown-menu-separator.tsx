@@ -2,11 +2,11 @@ import { Component, Host, h, Prop } from '@stencil/core';
 import type { BasePdsProps } from '@utils/interfaces';
 
 @Component({
-  tag: 'pds-dropdown-item',
-  styleUrl: 'pds-dropdown-item.scss',
+  tag: 'pds-dropdown-menu-separator',
+  styleUrl: 'pds-dropdown-menu-separator.scss',
   shadow: true,
 })
-export class PdsDropdownItem implements BasePdsProps {
+export class PdsDropdownMenuSeparator implements BasePdsProps {
   /**
    * A unique identifier used for the underlying component `id` attribute.
    */
@@ -21,12 +21,8 @@ export class PdsDropdownItem implements BasePdsProps {
 
   render() {
     return (
-      <Host id={this.componentId}
-        class={{ 'is-disabled': this.disabled }}
-      >
-        <div class="pds-dropdown-item__content">
-          <slot></slot>
-        </div>
+      <Host id={this.componentId}>
+        <hr/>
       </Host>
     );
   }

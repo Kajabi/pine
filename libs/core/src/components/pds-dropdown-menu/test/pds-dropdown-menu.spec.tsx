@@ -1,11 +1,11 @@
 import { newSpecPage } from '@stencil/core/testing';
-import { PdsDropdown } from '../pds-dropdown';
+import { PdsDropdownMenu } from '../pds-dropdown-menu';
 
-describe('pds-dropdown', () => {
+describe('pds-dropdown-menu', () => {
   it('renders', async () => {
     const page = await newSpecPage({
-      components: [PdsDropdown],
-      html: `<pds-dropdown></pds-dropdown>`,
+      components: [PdsDropdownMenu],
+      html: `<pds-dropdown-menu></pds-dropdown-menu>`,
     });
     expect(page.root).toEqualHtml(`
       <pds-dropdown>
