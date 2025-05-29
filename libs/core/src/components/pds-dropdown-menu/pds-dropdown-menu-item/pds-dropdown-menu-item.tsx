@@ -69,14 +69,25 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   private renderElement() {
     if (this.href) {
       return (
-        <a href={this.href} class="pds-dropdown-menu-item__content" tabIndex={-1}>
+        <a
+          href={this.href}
+          class="pds-dropdown-menu-item__content"
+          tabIndex={this.disabled ? -1 : 0}
+          target="_blank"
+          onKeyDown={this.handleKeyDown}
+        >
           <slot></slot>
         </a>
       );
     }
 
     return (
-      <button class="pds-dropdown-menu-item__content" tabIndex={-1}>
+      <button
+        class="pds-dropdown-menu-item__content"
+        tabIndex={this.disabled ? -1 : 0}
+        type="button"
+        onKeyDown={this.handleKeyDown}
+      >
         <slot></slot>
       </button>
     );
@@ -84,8 +95,12 @@ export class PdsDropdownMenuItem implements BasePdsProps {
 
   private handleKeyDown = (event: KeyboardEvent) => {
     // Handle keyboard events
-    if (!this.disabled && (event.key === 'Enter' || event.key === ' ')) {
-      event.preventDefault();
+    if (!this.disabled && (event.key === 'Enter')) {
+      // Only prevent default for button elements or Space key
+      // For links with Enter key, we want the default navigation behavior
+      if (!this.href) {
+        event.preventDefault();
+      }
       this.handleClick();
     }
   }
@@ -95,9 +110,8 @@ export class PdsDropdownMenuItem implements BasePdsProps {
       <Host id={this.componentId}
         class={{ 'is-disabled': this.disabled, 'destructive': !this.disabled && this.destructive }}
         onClick={() => !this.disabled && this.handleClick()}
-        onKeyDown={this.handleKeyDown}
-        tabIndex={this.disabled ? -1 : 0}
-        role="menuitem"
+        role="none"
+        tabIndex={-1}
       >
           {this.renderElement()}
       </Host>

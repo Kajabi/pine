@@ -130,7 +130,20 @@ export class PdsDropdownMenu implements BasePdsProps {
   private focusItemByIndex(index: number): void {
     if (index >= 0 && index < this.menuItems.length) {
       this.currentFocusIndex = index;
-      this.menuItems[index].focus();
+
+      // Focus the inner button/link instead of the host element
+      const menuItem = this.menuItems[index];
+      const innerButton = menuItem.shadowRoot?.querySelector('button');
+      const innerLink = menuItem.shadowRoot?.querySelector('a');
+
+      if (innerButton) {
+        return innerButton.focus();
+      } else if (innerLink) {
+        return innerLink.focus();
+      } else {
+        // Fallback to focusing the host if we can't find the inner element
+        menuItem.focus();
+      }
     }
   }
 
@@ -200,7 +213,7 @@ export class PdsDropdownMenu implements BasePdsProps {
           // Let Shift+Tab navigate naturally from first item to trigger
           // For all other items, move to previous item
           const currentIndex = this.getFocusedItemIndex();
-          
+
           if (currentIndex > 0) {
             // If not on first item, prevent default and go to previous item
             event.preventDefault();
