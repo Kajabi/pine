@@ -43,7 +43,7 @@ describe('pds-link', () => {
     expect(root).toEqualHtml(`
       <pds-link color="accent">
         <mock:shadow-root>
-          <a class="pds-link pds-link--inline pds-link--lg" part="link">
+          <a class="pds-link pds-link--inline pds-link--lg" part="link" style="--color: var(--pine-color-accent);">
             <slot></slot>
           </a>
         </mock:shadow-root>
