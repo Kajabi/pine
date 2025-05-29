@@ -32,6 +32,7 @@ export class PdsImage {
       >
         <img
           {...this.inheritedImgSpecificAttrs}
+          alt={this.inheritedImgSpecificAttrs.alt || ''}
           loading={this.inheritedImgSpecificAttrs.loading || 'eager'}
         />
       </Host>
