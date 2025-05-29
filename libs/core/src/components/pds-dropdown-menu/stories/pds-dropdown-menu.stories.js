@@ -17,7 +17,7 @@ export default {
 const BaseTemplate = (args) => html`
   <pds-dropdown-menu
     component-id=${args.componentId}
-    on
+    placement=${args.placement}
   >
     <pds-button slot="trigger">My Trigger</pds-button>
     <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
@@ -30,7 +30,7 @@ const BaseTemplate = (args) => html`
     <pds-dropdown-menu-separator></pds-dropdown-menu-separator>
     <pds-dropdown-menu-item disabled>disabled</pds-dropdown-menu-item>
     <pds-dropdown-menu-separator></pds-dropdown-menu-separator>
-    <pds-dropdown-menu-item style="color: var(--pine-color-danger)"><pds-icon name="trash"></pds-icon> Delete</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item destructive><pds-icon name="trash"></pds-icon> Delete</pds-dropdown-menu-item>
     <pds-dropdown-menu-item href="https://wwww.google.com">Go to Google</pds-dropdown-menu-item>
     <pds-dropdown-menu-item href="https://wwww.google.com" disabled>Go to Google</pds-dropdown-menu-item>
   </pds-dropdown-menu>`;
@@ -39,4 +39,5 @@ const BaseTemplate = (args) => html`
 export const Default = BaseTemplate.bind();
 Default.args = {
   componentId: 'base-dropdown',
+  placement: 'bottom-start',
 }

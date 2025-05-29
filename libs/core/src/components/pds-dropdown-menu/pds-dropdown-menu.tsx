@@ -149,26 +149,40 @@ export class PdsDropdownMenu implements BasePdsProps {
 
   // Focus the next menu item
   private focusNextItem(): void {
-    const currentIndex = this.getFocusedItemIndex();
-
-    if (currentIndex === -1 && this.menuItems.length > 0) {
-      this.focusItemByIndex(0);
-    } else if (this.menuItems.length > 0) {
-      // Calculate the next index, wrapping around to the beginning if necessary
-      const nextIndex = (currentIndex + 1) % this.menuItems.length;
+    let nextIndex = (this.currentFocusIndex + 1) % this.menuItems.length;
+    
+    // Skip disabled items
+    let attempts = 0;
+    const maxAttempts = this.menuItems.length;
+    
+    while (attempts < maxAttempts && this.menuItems[nextIndex].disabled) {
+      nextIndex = (nextIndex + 1) % this.menuItems.length;
+      attempts++;
+    }
+    
+    // Only focus if we found a non-disabled item
+    if (attempts < maxAttempts) {
       this.focusItemByIndex(nextIndex);
     }
   }
 
   // Focus the previous menu item
   private focusPreviousItem(): void {
-    const currentIndex = this.getFocusedItemIndex();
-
-    if (currentIndex === -1 && this.menuItems.length > 0) {
-      this.focusItemByIndex(this.menuItems.length - 1);
-    } else if (this.menuItems.length > 0) {
-      // Calculate the previous index, wrapping around to the end if necessary
-      const prevIndex = (currentIndex - 1 + this.menuItems.length) % this.menuItems.length;
+    let prevIndex = this.currentFocusIndex <= 0 
+      ? this.menuItems.length - 1 
+      : this.currentFocusIndex - 1;
+    
+    // Skip disabled items
+    let attempts = 0;
+    const maxAttempts = this.menuItems.length;
+    
+    while (attempts < maxAttempts && this.menuItems[prevIndex].disabled) {
+      prevIndex = prevIndex <= 0 ? this.menuItems.length - 1 : prevIndex - 1;
+      attempts++;
+    }
+    
+    // Only focus if we found a non-disabled item
+    if (attempts < maxAttempts) {
       this.focusItemByIndex(prevIndex);
     }
   }
@@ -197,14 +211,28 @@ export class PdsDropdownMenu implements BasePdsProps {
       case 'Home':
         event.preventDefault();
         if (this.menuItems.length > 0) {
-          this.focusItemByIndex(0);
+          // Find first non-disabled item
+          let firstIndex = 0;
+          while (firstIndex < this.menuItems.length && this.menuItems[firstIndex].disabled) {
+            firstIndex++;
+          }
+          if (firstIndex < this.menuItems.length) {
+            this.focusItemByIndex(firstIndex);
+          }
         }
         break;
 
       case 'End':
         event.preventDefault();
         if (this.menuItems.length > 0) {
-          this.focusItemByIndex(this.menuItems.length - 1);
+          // Find last non-disabled item
+          let lastIndex = this.menuItems.length - 1;
+          while (lastIndex >= 0 && this.menuItems[lastIndex].disabled) {
+            lastIndex--;
+          }
+          if (lastIndex >= 0) {
+            this.focusItemByIndex(lastIndex);
+          }
         }
         break;
 
@@ -217,7 +245,7 @@ export class PdsDropdownMenu implements BasePdsProps {
           if (currentIndex > 0) {
             // If not on first item, prevent default and go to previous item
             event.preventDefault();
-            this.focusItemByIndex(currentIndex - 1);
+            this.focusPreviousItem(); // Use our method that skips disabled items
           }
           // If on first item or no item, let natural tab order move back to trigger
         } else {
@@ -227,19 +255,35 @@ export class PdsDropdownMenu implements BasePdsProps {
           const currentIndex = this.getFocusedItemIndex();
 
           if (isTriggerFocused && this.menuItems.length > 0) {
-            // If trigger is focused, move to first menu item
+            // If trigger is focused, move to first non-disabled menu item
             event.preventDefault();
-            this.focusItemByIndex(0);
+            
+            // Find the first non-disabled item
+            let firstFocusableIndex = 0;
+            while (firstFocusableIndex < this.menuItems.length && this.menuItems[firstFocusableIndex].disabled) {
+              firstFocusableIndex++;
+            }
+            
+            if (firstFocusableIndex < this.menuItems.length) {
+              this.focusItemByIndex(firstFocusableIndex);
+            }
           } else if (currentIndex === -1 && this.menuItems.length > 0) {
-            // If no menu item is focused, focus the first one
+            // If no menu item is focused, focus the first non-disabled one
             event.preventDefault();
-            this.focusItemByIndex(0);
+            
+            // Find the first non-disabled item
+            let firstFocusableIndex = 0;
+            while (firstFocusableIndex < this.menuItems.length && this.menuItems[firstFocusableIndex].disabled) {
+              firstFocusableIndex++;
+            }
+            
+            if (firstFocusableIndex < this.menuItems.length) {
+              this.focusItemByIndex(firstFocusableIndex);
+            }
           } else if (currentIndex !== -1) {
-            // If on last item, wrap around to first item
-            // Otherwise, move to next item
+            // Use our method that skips disabled items
             event.preventDefault();
-            const nextIndex = (currentIndex + 1) % this.menuItems.length;
-            this.focusItemByIndex(nextIndex);
+            this.focusNextItem();
           }
         }
         break;

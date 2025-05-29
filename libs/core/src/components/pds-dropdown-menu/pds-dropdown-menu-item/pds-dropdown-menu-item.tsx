@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, Host, h, Method, Prop } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, h, Host, Method, Prop, State } from '@stencil/core';
 import type { BasePdsProps } from '@utils/interfaces';
 
 @Component({
@@ -66,15 +66,31 @@ export class PdsDropdownMenuItem implements BasePdsProps {
     });
   }
 
+  @State() hasFocus: boolean = false;
+
+  private handleFocus = () => {
+    this.hasFocus = true;
+  }
+
+  private handleBlur = () => {
+    this.hasFocus = false;
+  }
+
   private renderElement() {
     if (this.href) {
       return (
         <a
-          href={this.href}
-          class="pds-dropdown-menu-item__content"
+          href={this.disabled ? null : this.href}
+          class={{
+            'pds-dropdown-menu-item__content': true,
+            'has-focus': this.hasFocus
+          }}
           tabIndex={this.disabled ? -1 : 0}
           target="_blank"
           onKeyDown={this.handleKeyDown}
+          onFocus={this.handleFocus}
+          onBlur={this.handleBlur}
+          aria-disabled={this.disabled ? 'true' : null}
         >
           <slot></slot>
         </a>
@@ -83,10 +99,17 @@ export class PdsDropdownMenuItem implements BasePdsProps {
 
     return (
       <button
-        class="pds-dropdown-menu-item__content"
+        class={{
+          'pds-dropdown-menu-item__content': true,
+          'has-focus': this.hasFocus
+        }}
         tabIndex={this.disabled ? -1 : 0}
         type="button"
         onKeyDown={this.handleKeyDown}
+        onFocus={this.handleFocus}
+        onBlur={this.handleBlur}
+        disabled={this.disabled}
+        aria-disabled={this.disabled ? 'true' : null}
       >
         <slot></slot>
       </button>
@@ -112,6 +135,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
         onClick={() => !this.disabled && this.handleClick()}
         role="none"
         tabIndex={-1}
+        aria-disabled={this.disabled ? 'true' : null}
       >
           {this.renderElement()}
       </Host>

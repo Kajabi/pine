@@ -4,7 +4,6 @@
   width: 100%; /* Ensure the host takes full width */
 }
 
-
 /* Make the disabled styles more specific and add !important to ensure they apply */
 :host(.is-disabled) {
   cursor: not-allowed !important;
@@ -21,7 +20,11 @@
   appearance: none;
   background: transparent;
   border: 0;
+  border-radius: var(--pine-dimension-xs);
+  display: flex;
   flex-grow: 1; /* Make it grow to fill available space */
+  font: var(--pine-typography-body-medium);
+  gap: var(--pine-dimension-xs);
   padding: var(--pine-dimension-xs);
   text-align: start; /* Ensure text aligns properly */
   width: 100%; /* Ensure full width */
@@ -29,6 +32,14 @@
   &:hover {
     background-color: var(--pine-color-background-container-hover);
     color: var(--pine-color-text-hover);
+  }
+
+  /* Focus styles applied via class + browser focus */
+  &:focus,
+  &:focus-visible,
+  &.has-focus {
+    outline: var(--pine-outline-focus);
+    outline-offset: var(--pine-border-width);
   }
 }
 
@@ -39,6 +50,14 @@
     &:hover {
       background-color: var(--pine-color-danger-disabled);
       color: var(--pine-color-danger-hover);
+    }
+
+    &:focus,
+    &:focus-visible,
+    &.has-focus {
+      background-color: var(--pine-color-danger-disabled);
+      outline: var(--pine-outline-focus-danger);
+      outline-offset: var(--pine-border-width);
     }
   }
 }
