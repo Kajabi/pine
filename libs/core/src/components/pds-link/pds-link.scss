@@ -8,7 +8,7 @@
 
 .pds-link {
   align-items: center;
-  color: var(--pine-color-text);
+  color: var(--color, var(--pine-color-text));
   display: inline-flex;
   font-weight: var(--pine-font-weight-medium);
 
@@ -20,7 +20,7 @@
   }
 
   &:hover {
-    color: var(--pine-color-text-hover);
+    color: var(--color, var(--pine-color-text-hover));
     text-decoration: none;
   }
 

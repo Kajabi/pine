@@ -571,7 +571,7 @@ export namespace Components {
         /**
           * Sets the link color.
          */
-        "color"?: 'secondary' | 'accent' | 'danger';
+        "color"?: string;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -2363,7 +2363,7 @@ declare namespace LocalJSX {
         /**
           * Sets the link color.
          */
-        "color"?: 'secondary' | 'accent' | 'danger';
+        "color"?: string;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */

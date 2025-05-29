@@ -29,21 +29,29 @@ The default `inline` link. Visually, it maintains the underlined appearance of a
 
 ### Colors
 
-The `color` prop can be used to change the color of the link. Available colors are `secondary`, `accent`, and `danger`.
+The `color` prop can be used to change the color of the link to any available preset or, Pine token, or custom color. The available preset colors are `secondary`, `accent`, and `danger`.
+
+>Note: Only presets have hover state colors.
 
 <DocCanvas client:only
   mdxSource={{
-    react: `<PdsLink href="https://www.google.com" color="secondary"></PdsLink>
-    <PdsLink href="https://www.google.com" color="danger"></PdsLink>
-    <PdsLink href="https://www.google.com" color="accent"></PdsLink>
+    react: `<PdsLink href="https://www.google.com" color="secondary">Link</PdsLink>
+    <PdsLink href="https://www.google.com" color="accent">Link</PdsLink>
+    <PdsLink href="https://www.google.com" color="danger">Link</PdsLink>
+    <PdsLink href="https://www.google.com" color="var(--pine-color-green-600)">Link</PdsLink>
+    <PdsLink href="https://www.google.com" color="#daa520">Link</PdsLink>
     `,
-    webComponent: `<pds-link href="https://www.google.com" color="secondary"></pds-link>
-    <pds-link href="https://www.google.com" color="danger"></pds-link>
-    <pds-link href="https://www.google.com" color="accent"></pds-link>`
+    webComponent: `<pds-link href="https://www.google.com" color="secondary">Link</pds-link>
+    <pds-link href="https://www.google.com" color="accent">Link</pds-link>
+    <pds-link href="https://www.google.com" color="danger">Link</pds-link>
+    <pds-link href="https://www.google.com" color="var(--pine-color-green-600)">Link</pds-link>
+    <pds-link href="https://www.google.com" color="#daa520">Link</pds-link>`
 }}>
-  <div style={{ backgroundColor: '#333', padding: '4px' }}><pds-link href="https://www.google.com" color="secondary"></pds-link></div>
-  <pds-link href="https://www.google.com" color="danger"></pds-link>
-  <pds-link href="https://www.google.com" color="accent"></pds-link>
+  <div style={{ backgroundColor: '#333', padding: '4px' }}><pds-link href="https://www.google.com" color="secondary">Link</pds-link></div>
+  <pds-link href="https://www.google.com" color="accent">Link</pds-link>
+  <pds-link href="https://www.google.com" color="danger">Link</pds-link>
+  <pds-link href="https://www.google.com" color="var(--pine-color-green-600)">Link</pds-link>
+  <pds-link href="https://www.google.com" color="#daa520">Link</pds-link>
 </DocCanvas>
 
 ### Plain

@@ -1,4 +1,5 @@
 import { Component, h, Prop } from '@stencil/core';
+import { setColor } from '../../utils/utils';
 
 import { launch } from '@pine-ds/icons/icons';
 
@@ -15,7 +16,7 @@ export class PdsLink {
   /**
    * Sets the link color.
    */
-  @Prop() color?: 'secondary' | 'accent' | 'danger';
+  @Prop() color?: string;
 
   /**
    * A unique identifier used for the underlying component `id` attribute.
@@ -59,6 +60,20 @@ export class PdsLink {
     return classNames.join(' ');
   }
 
+  private setLinkStyles() {
+    if (!this.color) return;
+
+    const linkColors = {
+      secondary: 'var(--pine-color-text-primary)',
+      accent: 'var(--pine-color-accent)',
+      danger: 'var(--pine-color-danger)',
+    }
+
+    const linkStyles = setColor(this.color, linkColors);
+
+    return linkStyles;
+  }
+
   render() {
 
     return (
@@ -66,8 +81,9 @@ export class PdsLink {
         class={this.classNames()}
         href={this.href}
         id={this.componentId}
-        target={this.external ? '_blank' : undefined}
         part="link"
+        target={this.external ? '_blank' : undefined}
+        style={this.setLinkStyles()}
       >
         <slot>{this.href}</slot>
         {this.external &&
