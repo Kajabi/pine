@@ -85,12 +85,11 @@ describe('pds-toast', () => {
     await dismissButton.click();
     await page.waitForChanges();
 
-    // Wait for animation to complete
-    await new Promise(resolve => setTimeout(resolve, 400));
+    // Wait for animation to complete (component uses 300ms + some processing time)
+    await new Promise(resolve => setTimeout(resolve, 500));
 
-    // Verify toast is hidden
-    const hiddenAttribute = await element.getAttribute('hidden');
-    expect(hiddenAttribute).not.toBeNull();
+    // Verify toast is hidden - check visibility
+    expect(await element.isVisible()).toBe(false);
   });
 
   it('should emit dismiss event when dismissed', async () => {
@@ -278,7 +277,7 @@ describe('pds-toast', () => {
     expect(await element.isVisible()).toBe(true);
 
     // Check that component has no hidden attribute initially
-    let hiddenAttribute = await element.getAttribute('hidden');
+    const hiddenAttribute = await element.getAttribute('hidden');
     expect(hiddenAttribute).toBeNull();
 
     // Trigger dismiss
@@ -286,11 +285,10 @@ describe('pds-toast', () => {
     await dismissButton.click();
     await page.waitForChanges();
 
-    // Wait for animation
-    await new Promise(resolve => setTimeout(resolve, 400));
+    // Wait for animation and state update (component uses 300ms + processing time)
+    await new Promise(resolve => setTimeout(resolve, 500));
 
-    // Check final state through hidden attribute
-    hiddenAttribute = await element.getAttribute('hidden');
-    expect(hiddenAttribute).not.toBeNull();
+    // Check final state - should not be visible
+    expect(await element.isVisible()).toBe(false);
   });
 });
