@@ -27,7 +27,7 @@ export class PdsToast {
   @Prop() duration: number = 4500;
 
   /**
-   * The icon to display in the toast.
+   * The name of the icon to display in the toast.
    */
   @Prop() icon?: string;
 
@@ -110,6 +110,7 @@ export class PdsToast {
   }
 
   private renderIcon() {
+    // Loading type takes priority
     if (this.type === 'loading') {
       return (
         <div class="pds-toast__loader">
@@ -120,11 +121,8 @@ export class PdsToast {
       );
     }
 
-    if (this.icon) {
-      return <pds-icon name={this.icon} class="pds-toast__icon" />;
-    }
-
-    return null;
+    // Return icon if provided, otherwise undefined (which renders as nothing)
+    return this.icon && <pds-icon name={this.icon} class="pds-toast__icon" />;
   }
 
   render() {

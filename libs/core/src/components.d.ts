@@ -1106,7 +1106,7 @@ export namespace Components {
          */
         "duration": number;
         /**
-          * The icon to display in the toast.
+          * The name of the icon to display in the toast.
          */
         "icon"?: string;
         /**
@@ -2844,7 +2844,7 @@ declare namespace LocalJSX {
          */
         "duration"?: number;
         /**
-          * The icon to display in the toast.
+          * The name of the icon to display in the toast.
          */
         "icon"?: string;
         /**
