@@ -10,7 +10,6 @@
 | Property      | Attribute      | Description                                                                                                    | Type                                                        | Default     |
 | ------------- | -------------- | -------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- | ----------- |
 | `componentId` | `component-id` | A unique identifier used for the underlying component `id` attribute.                                          | `string`                                                    | `undefined` |
-| `description` | `description`  | Text displayed as the description of the alert.                                                                | `string`                                                    | `undefined` |
 | `dismissible` | `dismissible`  | If true, shows the dismiss button. If false, the dismiss button is hidden.                                     | `boolean`                                                   | `false`     |
 | `heading`     | `heading`      | Text displayed as the heading of the alert.                                                                    | `string`                                                    | `undefined` |
 | `small`       | `small`        | If true, the alert is displayed in a smaller size and description text is truncated. Heading is not displayed. | `boolean`                                                   | `false`     |

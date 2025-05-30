@@ -34,10 +34,6 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Text displayed as the description of the alert.
-         */
-        "description": string;
-        /**
           * If true, shows the dismiss button. If false, the dismiss button is hidden.
           * @defaultValue false
          */
@@ -1645,10 +1641,6 @@ declare namespace LocalJSX {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
-        /**
-          * Text displayed as the description of the alert.
-         */
-        "description"?: string;
         /**
           * If true, shows the dismiss button. If false, the dismiss button is hidden.
           * @defaultValue false

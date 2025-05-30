@@ -15,7 +15,9 @@ describe('pds-alert', () => {
               <pds-icon class="pds-alert__icon" color="var(--pds-alert-color-icon)" icon="info-circle-filled" size="var(--pds-alert-icon-size)"></pds-icon>
               <pds-box class="pds-alert__content-wrapper" direction="column" flex="grow" gap="xs">
                 <div>
-                  <pds-text class="pds-alert__description" color="var(--pds-alert-color-text)" tag="p"></pds-text>
+                  <pds-text class="pds-alert__description" color="var(--pds-alert-color-text)" tag="p">
+                    <slot></slot>
+                  </pds-text>
                 </div>
               </pds-box>
             </pds-box>
@@ -39,7 +41,9 @@ describe('pds-alert', () => {
               <pds-box class="pds-alert__content-wrapper" direction="column" flex="grow" gap="xs">
                 <pds-text class="pds-alert__heading" color="var(--pds-alert-color-text)" size="h5" tag="h3" weight="medium">Test Alert Heading</pds-text>
                 <div>
-                  <pds-text class="pds-alert__description" color="var(--pds-alert-color-text)" tag="p"></pds-text>
+                  <pds-text class="pds-alert__description" color="var(--pds-alert-color-text)" tag="p">
+                    <slot></slot>
+                  </pds-text>
                 </div>
               </pds-box>
             </pds-box>
@@ -52,22 +56,25 @@ describe('pds-alert', () => {
   it('renders description when provided', async () => {
     const page = await newSpecPage({
       components: [PdsAlert],
-      html: `<pds-alert description="Test alert description text"></pds-alert>`,
+      html: `<pds-alert>Test alert description text</pds-alert>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-alert class="pds-alert" description="Test alert description text" variant="default">
+      <pds-alert class="pds-alert" variant="default">
         <mock:shadow-root>
           <pds-box class="pds-alert__container pds-alert__container--default" background-color="var(--pds-alert-background)" border="" border-color="var(--pds-alert-border-color)" border-radius="md" display="block" padding="md">
             <pds-box display="flex" gap="sm">
               <pds-icon class="pds-alert__icon" color="var(--pds-alert-color-icon)" icon="info-circle-filled" size="var(--pds-alert-icon-size)"></pds-icon>
               <pds-box class="pds-alert__content-wrapper" direction="column" flex="grow" gap="xs">
                 <div>
-                  <pds-text class="pds-alert__description" color="var(--pds-alert-color-text)" tag="p">Test alert description text</pds-text>
+                  <pds-text class="pds-alert__description" color="var(--pds-alert-color-text)" tag="p">
+                    <slot></slot>
+                  </pds-text>
                 </div>
               </pds-box>
             </pds-box>
           </pds-box>
         </mock:shadow-root>
+        Test alert description text
       </pds-alert>
     `);
   });
@@ -75,22 +82,25 @@ describe('pds-alert', () => {
   it('renders small variant when small prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsAlert],
-      html: `<pds-alert small="true" heading="This heading should not show" description="Small alert description"></pds-alert>`,
+      html: `<pds-alert small="true" heading="This heading should not show">Small alert description</pds-alert>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-alert class="pds-alert" description="Small alert description" heading="This heading should not show" small="true" variant="default">
+      <pds-alert class="pds-alert" heading="This heading should not show" small="true" variant="default">
         <mock:shadow-root>
           <pds-box class="pds-alert__container pds-alert__container--default" background-color="var(--pds-alert-background)" border="" border-color="var(--pds-alert-border-color)" border-radius="md" display="block" padding="md">
             <pds-box display="flex" gap="sm">
               <pds-icon class="pds-alert__icon pds-alert__icon--small" color="var(--pds-alert-color-icon)" icon="info-circle-filled" size="var(--pds-alert-icon-size)"></pds-icon>
               <pds-box class="pds-alert__content-wrapper" direction="column" flex="grow" gap="xs">
                 <pds-box align-items="center" display="flex" gap="md">
-                  <pds-text class="pds-alert__description--small" color="var(--pds-alert-color-text)" tag="p" truncate="">Small alert description</pds-text>
+                  <pds-text class="pds-alert__description--small" color="var(--pds-alert-color-text)" tag="p" truncate="">
+                    <slot></slot>
+                  </pds-text>
                 </pds-box>
               </pds-box>
             </pds-box>
           </pds-box>
         </mock:shadow-root>
+        Small alert description
       </pds-alert>
     `);
   });
@@ -98,17 +108,19 @@ describe('pds-alert', () => {
   it('renders dismiss button when dismissible prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsAlert],
-      html: `<pds-alert dismissible="true" description="Alert with dismiss button"></pds-alert>`,
+      html: `<pds-alert dismissible="true">Alert with dismiss button</pds-alert>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-alert class="pds-alert" description="Alert with dismiss button" dismissible="true" variant="default">
+      <pds-alert class="pds-alert" dismissible="true" variant="default">
         <mock:shadow-root>
           <pds-box class="pds-alert__container pds-alert__container--default" background-color="var(--pds-alert-background)" border="" border-color="var(--pds-alert-border-color)" border-radius="md" display="block" padding="md">
             <pds-box display="flex" gap="sm">
               <pds-icon class="pds-alert__icon" color="var(--pds-alert-color-icon)" icon="info-circle-filled" size="var(--pds-alert-icon-size)"></pds-icon>
               <pds-box class="pds-alert__content-wrapper" direction="column" flex="grow" gap="xs">
                 <div>
-                  <pds-text class="pds-alert__description" color="var(--pds-alert-color-text)" tag="p">Alert with dismiss button</pds-text>
+                  <pds-text class="pds-alert__description" color="var(--pds-alert-color-text)" tag="p">
+                    <slot></slot>
+                  </pds-text>
                 </div>
               </pds-box>
               <button aria-label="Dismiss alert" class="pds-alert__dismiss" type="button">
@@ -117,6 +129,7 @@ describe('pds-alert', () => {
             </pds-box>
           </pds-box>
         </mock:shadow-root>
+        Alert with dismiss button
       </pds-alert>
     `);
   });
@@ -151,7 +164,7 @@ describe('pds-alert', () => {
     const page = await newSpecPage({
       components: [PdsAlert],
       html: `
-        <pds-alert description="Alert with action buttons">
+        <pds-alert>Alert with action buttons
           <button slot="actions">Action Button</button>
           <a slot="actions" href="#">Action Link</a>
         </pds-alert>
@@ -184,7 +197,7 @@ describe('pds-alert', () => {
     for (const variant of variants) {
       const page = await newSpecPage({
         components: [PdsAlert],
-        html: `<pds-alert variant="${variant}" description="Variant test"></pds-alert>`,
+        html: `<pds-alert variant="${variant}">Variant test</pds-alert>`,
       });
 
       if (page.root) {
@@ -203,7 +216,7 @@ describe('pds-alert', () => {
     const page = await newSpecPage({
       components: [PdsAlert],
       html: `
-        <pds-alert small="true" description="Small alert with action">
+        <pds-alert small="true">Small alert with action
           <a slot="actions" href="#">Action Link</a>
         </pds-alert>
       `,
@@ -227,7 +240,7 @@ describe('pds-alert', () => {
   it('falls back to default icon when invalid variant is provided', async () => {
     const page = await newSpecPage({
       components: [PdsAlert],
-      html: `<pds-alert variant="invalid-variant" description="Testing fallback"></pds-alert>`,
+      html: `<pds-alert variant="invalid-variant">Testing fallback</pds-alert>`,
     });
 
     if (page.root && page.root.shadowRoot) {
@@ -240,14 +253,13 @@ describe('pds-alert', () => {
   it('applies correct description class when small is false', async () => {
     const page = await newSpecPage({
       components: [PdsAlert],
-      html: `<pds-alert small="false" description="Testing description class"></pds-alert>`,
+      html: `<pds-alert small="false">Testing description class</pds-alert>`,
     });
 
     if (page.root && page.root.shadowRoot) {
       // Verify the non-small description class is applied
       const descriptionText = page.root.shadowRoot.querySelector('.pds-alert__description');
       expect(descriptionText).not.toBeNull();
-      expect(descriptionText?.textContent).toBe('Testing description class');
 
       // Make sure the small class is not applied
       const smallDescriptionText = page.root.shadowRoot.querySelector('.pds-alert__description--small');

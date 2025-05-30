@@ -24,11 +24,6 @@ export class PdsAlert {
   @Prop() heading: string;
 
   /**
-   * Text displayed as the description of the alert.
-   */
-  @Prop() description: string;
-
-  /**
    * If true, the alert is displayed in a smaller size and description text is truncated. Heading is not displayed.
    */
   @Prop() small = false;
@@ -81,7 +76,7 @@ export class PdsAlert {
             color="var(--pds-alert-color-text)"
             tag="p"
           >
-            {this.description}
+            <slot></slot>
           </pds-text>
           {this.hasActionsContent && this.renderActions(true)}
         </pds-box>
@@ -91,7 +86,7 @@ export class PdsAlert {
     return (
       <div>
         <pds-text class="pds-alert__description" color="var(--pds-alert-color-text)" tag="p">
-          {this.description}
+          <slot></slot>
         </pds-text>
         {this.hasActionsContent && this.renderActions(false)}
       </div>

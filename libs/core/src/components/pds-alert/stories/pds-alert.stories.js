@@ -18,19 +18,18 @@ const BaseTemplate = (args) => html` <pds-alert
   component-id="${args.componentId}"
   variant="${args.variant}"
   heading="${args.heading}"
-  description="${args.description}"
   small="${args.small}"
   dismissible="${args.dismissible}"
-></pds-alert>`;
+>${args.description}</pds-alert>`;
 
 const ActionsTemplate = (args) => html` <pds-alert
   component-id="${args.componentId}"
   variant="${args.variant}"
   heading="${args.heading}"
-  description="${args.description}"
   small="${args.small}"
   dismissible="${args.dismissible}"
 >
+  ${args.description}
   <pds-button slot="actions" variant="primary">Button</pds-button>
   <pds-link slot="actions" variant="plain" href="#">Link</pds-link>
 </pds-alert>`;
@@ -39,10 +38,10 @@ const SmallActionsTemplate = (args) => html` <pds-alert
   component-id="${args.componentId}"
   variant="${args.variant}"
   heading="${args.heading}"
-  description="${args.description}"
   small="${args.small}"
   dismissible="${args.dismissible}"
 >
+  ${args.description}
   <pds-link slot="actions" variant="plain" href="#">Link</pds-link>
   <pds-link slot="actions" variant="plain" href="#">Link</pds-link>
 </pds-alert>`;

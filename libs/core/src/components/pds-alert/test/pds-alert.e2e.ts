@@ -11,7 +11,7 @@ describe('pds-alert', () => {
 
   it('emits "pdsAlertDismissClick" event when dismiss button is clicked', async () => {
     const page = await newE2EPage();
-    await page.setContent('<pds-alert dismissible="true" description="Test alert with dismiss button"></pds-alert>');
+    await page.setContent('<pds-alert dismissible="true">Test alert with dismiss button</pds-alert>');
 
     const closeBtn = await page.find('pds-alert >>> .pds-alert__dismiss');
     const eventSpy = await page.spyOnEvent('pdsAlertDismissClick');
