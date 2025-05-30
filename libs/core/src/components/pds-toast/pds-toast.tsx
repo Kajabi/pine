@@ -27,7 +27,7 @@ export class PdsToast {
   @Prop() duration: number = 4500;
 
   /**
-   * The icon to display in the toast.
+   * The name of the icon to display in the toast.
    */
   @Prop() icon?: string;
 
