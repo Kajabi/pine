@@ -171,6 +171,8 @@
 }
 
 // Animation for dismissing
-:host([hidden]) .pds-toast {
+:host([hidden]) .pds-toast,
+.pds-toast--animating-out {
   animation: pds-toast--animate-out var(--animation-duration) var(--animation-timing) forwards;
+  pointer-events: none; /* Prevent interaction during animation */
 }

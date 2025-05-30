@@ -27,7 +27,7 @@ export class PdsToast {
   @Prop() duration: number = 4500;
 
   /**
-   * The name of the icon to display in the toast.
+   * The icon to display in the toast.
    */
   @Prop() icon?: string;
 
@@ -44,6 +44,11 @@ export class PdsToast {
    * Whether the toast is currently visible.
    */
   @State() isVisible: boolean = true;
+
+  /**
+   * Whether the toast is animating out.
+   */
+  @State() isAnimatingOut: boolean = false;
 
   // Private properties
   /**
@@ -79,11 +84,13 @@ export class PdsToast {
 
   @Method()
   async dismiss(): Promise<void> {
+    // Start the animation out
+    this.isAnimatingOut = true;
+
+    // Wait for animation to complete before hiding and cleanup
+    await new Promise((resolve) => setTimeout(resolve, 300)); // Match --animation-duration
+
     this.isVisible = false;
-
-    // Wait for animation to complete before cleanup
-    await new Promise((resolve) => setTimeout(resolve, 300)); // Match --pds-toast-animation-duration
-
     this.cleanup();
     this.pdsToastDismissed.emit({ componentId: this.componentId });
   }
@@ -127,6 +134,7 @@ export class PdsToast {
           class={{
             'pds-toast': true,
             [`pds-toast--${this.type}`]: this.type !== 'default',
+            'pds-toast--animating-out': this.isAnimatingOut
           }}
           role="alert"
           aria-live="polite"
