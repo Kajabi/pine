@@ -35,6 +35,20 @@ Type: `Promise<void>`
 
 
 
+## Dependencies
+
+### Depends on
+
+- [pds-link](../../pds-link)
+
+### Graph
+```mermaid
+graph TD;
+  pds-dropdown-menu-item --> pds-link
+  pds-link --> pds-icon
+  style pds-dropdown-menu-item fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 

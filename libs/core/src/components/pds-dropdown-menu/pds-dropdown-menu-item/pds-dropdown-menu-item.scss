@@ -25,6 +25,7 @@
   flex-grow: 1; /* Make it grow to fill available space */
   font: var(--pine-typography-body-medium);
   gap: var(--pine-dimension-xs);
+  margin: calc(var(--pine-border-width) + 2px);
   padding: var(--pine-dimension-xs);
   text-align: start; /* Ensure text aligns properly */
   width: 100%; /* Ensure full width */
@@ -41,10 +42,12 @@
     outline: var(--pine-outline-focus);
     outline-offset: var(--pine-border-width);
   }
+
 }
 
 :host(.destructive) {
   .pds-dropdown-menu-item__content {
+    align-items: center;
     color: var(--pine-color-danger);
 
     &:hover {
@@ -60,4 +63,11 @@
       outline-offset: var(--pine-border-width);
     }
   }
+}
+
+/* Remove outline on contained links using the custom property */
+pds-link::part(link):focus,
+pds-link::part(link):focus-visible {
+  box-shadow: none;
+  outline: none;
 }

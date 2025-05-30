@@ -15,6 +15,7 @@ export default {
 }
 
 const BaseTemplate = (args) => html`
+<div style="height: 200px">
   <pds-dropdown-menu
     component-id=${args.componentId}
     placement=${args.placement}
@@ -33,7 +34,7 @@ const BaseTemplate = (args) => html`
     <pds-dropdown-menu-item destructive><pds-icon name="trash"></pds-icon> Delete</pds-dropdown-menu-item>
     <pds-dropdown-menu-item href="https://wwww.google.com">Go to Google</pds-dropdown-menu-item>
     <pds-dropdown-menu-item href="https://wwww.google.com" disabled>Go to Google</pds-dropdown-menu-item>
-  </pds-dropdown-menu>`;
+  </pds-dropdown-menu></div>`;
 
 
 export const Default = BaseTemplate.bind();

@@ -79,21 +79,20 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   private renderElement() {
     if (this.href) {
       return (
-        <a
+        <pds-link
           href={this.disabled ? null : this.href}
           class={{
             'pds-dropdown-menu-item__content': true,
             'has-focus': this.hasFocus
           }}
           tabIndex={this.disabled ? -1 : 0}
-          target="_blank"
           onKeyDown={this.handleKeyDown}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
           aria-disabled={this.disabled ? 'true' : null}
         >
           <slot></slot>
-        </a>
+        </pds-link>
       );
     }
 
