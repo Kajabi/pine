@@ -1,0 +1,121 @@
+import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+# Toast
+
+A toast notification component that displays temporary messages to users.
+
+## Guidelines
+
+### When to use
+
+- To provide feedback about an action that has occurred.
+- To display temporary notifications that don't require user interaction.
+- To show system status updates or alerts.
+
+### When not to use
+
+- For critical information that requires user acknowledgment.
+- For complex messages that require user interaction.
+- As a replacement for form validation messages.
+
+### Accessibility
+
+For accessibility, it is strongly encouraged to follow these best practices:
+
+- Keep toast messages concise and clear.
+- Use appropriate toast types (default, danger, loading) to convey the message importance.
+
+## Properties
+
+<DocArgsTable componentName="pds-toast" docSource={components} />
+
+## Examples
+
+> **NOTE:** For demonstration purposes, all examples below have `duration="0"` set to prevent auto-dismissal. In production, toasts should typically use the default duration or a custom duration appropriate for your use case.
+
+### Default
+
+A basic toast notification with a message.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsToast componentId="toast-default" duration={0}>This is a default toast</PdsToast>',
+    webComponent: '<pds-toast component-id="toast-default" duration="0">This is a default toast</pds-toast>'
+}}>
+  <pds-toast component-id="toast-default" duration="0">This is a default toast</pds-toast>
+</DocCanvas>
+
+### Danger
+
+A toast notification indicating an error or critical message.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsToast componentId="toast-danger" duration={0} type="danger">An error occurred</PdsToast>',
+    webComponent: '<pds-toast component-id="toast-danger" duration="0" type="danger">An error occurred</pds-toast>'
+}}>
+  <pds-toast component-id="toast-danger" duration="0" type="danger">An error occurred</pds-toast>
+</DocCanvas>
+
+### Loading
+
+A toast notification indicating a loading or processing state.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsToast componentId="toast-loading" duration={0} type="loading">Processing your request...</PdsToast>',
+    webComponent: '<pds-toast component-id="toast-loading" duration="0" type="loading">Processing your request...</pds-toast>'
+}}>
+  <pds-toast component-id="toast-loading" duration="0" type="loading">Processing your request...</pds-toast>
+</DocCanvas>
+
+### With Icon
+
+A toast notification with a custom icon.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsToast componentId="toast-icon" duration={0} icon="check-circle-filled">Successfully saved!</PdsToast>',
+    webComponent: '<pds-toast component-id="toast-icon" duration="0" icon="check-circle-filled">Successfully saved!</pds-toast>'
+}}>
+  <pds-toast component-id="toast-icon" duration="0" icon="check-circle-filled">Successfully saved!</pds-toast>
+</DocCanvas>
+
+### With Link
+
+A toast notification that includes a clickable link. Links are automatically styled to match the toast design.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsToast componentId="toast-link" duration={0}>New update available. <a href="#">Learn more</a></PdsToast>',
+    webComponent: '<pds-toast component-id="toast-link" duration="0">New update available. <a href="#">Learn more</a></pds-toast>'
+}}>
+  <div style={{ width: '100%', maxWidth: '300px' }}>
+  <pds-toast component-id="toast-link" duration="0">New update available. <a href="#">Learn more</a></pds-toast>
+  </div>
+</DocCanvas>
+
+### Complex Content
+
+A toast notification with rich content, demonstrating the flexibility of the default slot.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsToast componentId="toast-complex" duration={0}><strong>Success!</strong> Your profile has been updated with new information.</PdsToast>',
+    webComponent: '<pds-toast component-id="toast-complex" duration="0"><strong>Success!</strong> Your profile has been updated with new information.</pds-toast>'
+}}>
+  <pds-toast component-id="toast-complex" duration="0"><strong>Success!</strong> Your profile has been updated with new information.</pds-toast>
+</DocCanvas>
+
+### Non-dismissing Toast
+
+A toast notification that will remain visible until manually dismissed. This is achieved by setting the duration to 0.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsToast componentId="toast-persistent" duration={0}>This toast will stay until dismissed</PdsToast>',
+    webComponent: '<pds-toast component-id="toast-persistent" duration="0">This toast will stay until dismissed</pds-toast>'
+}}>
+  <pds-toast component-id="toast-persistent" duration="0">This toast will stay until dismissed</pds-toast>
+</DocCanvas>
