@@ -55,6 +55,7 @@
     "test.watch": "stencil test --spec --e2e --watchAll --coverage"
   },
   "dependencies": {
+    "@floating-ui/dom": "^1.7.0",
     "@kajabi-ui/styles": "*",
     "@pine-ds/icons": "*",
     "@stencil/core": "4.28.2",
@@ -117,5 +118,8 @@
         ]
       }
     }
+  },
+  "imports": {
+    "#utils/*": "./src/utils/*"
   }
 }
