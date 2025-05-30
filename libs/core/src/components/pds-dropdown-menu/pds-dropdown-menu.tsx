@@ -122,7 +122,8 @@ export class PdsDropdownMenu implements BasePdsProps {
 
   // Get the index of the currently focused menu item
   private getFocusedItemIndex(): number {
-    const activeElement = document.activeElement;
+    const activeElement = document.activeElement as HTMLPdsDropdownMenuItemElement | null;
+    if (!activeElement) return -1;
     return this.menuItems.findIndex(item => item === activeElement);
   }
 

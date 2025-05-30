@@ -30,13 +30,11 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   /**
    *  If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button.
    */
-  @Prop() href: string;
+  @Prop() href: string | undefined;
 
   /**
    * Emitted when the dropdown-item is clicked.
    *
-   * @type {EventEmitter<{itemIndex: number, item: HTMLPdsDropdownMenuItemElement, content: string}>}
-   * @memberof PdsDropdownMenuItem
    */
   @Event() pdsClick: EventEmitter<{itemIndex: number, item: HTMLPdsDropdownMenuItemElement, content: string}>;
 
@@ -49,7 +47,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   };
 
 
-  handleClick() {
+  private handleClick() {
     // Filter only pds-dropdown-menu-item elements and find the index of the current item
     const menuItems = Array.from(this.host.parentNode.children).filter(
       (child) => child.tagName.toLowerCase() === 'pds-dropdown-menu-item'
@@ -77,7 +75,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   }
 
   private renderElement() {
-    if (this.href) {
+    if (this.href !== undefined) {
       return (
         <pds-link
           href={this.disabled ? null : this.href}

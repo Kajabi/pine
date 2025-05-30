@@ -500,7 +500,7 @@ export namespace Components {
         /**
           * If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button.
          */
-        "href": string;
+        "href": string | undefined;
     }
     interface PdsDropdownMenuSeparator {
         /**
@@ -1258,6 +1258,10 @@ export namespace Components {
          */
         "showTooltip": () => Promise<void>;
     }
+}
+export interface MockPdsModalCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLMockPdsModalElement;
 }
 export interface PdsAlertCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2349,11 +2353,9 @@ declare namespace LocalJSX {
         /**
           * If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button.
          */
-        "href"?: string;
+        "href"?: string | undefined;
         /**
           * Emitted when the dropdown-item is clicked.
-          * @type {EventEmitter<{itemIndex: number, item: HTMLPdsDropdownMenuItemElement, content: string}>}
-          * @memberof PdsDropdownMenuItem
          */
         "onPdsClick"?: (event: PdsDropdownMenuItemCustomEvent<{itemIndex: number, item: HTMLPdsDropdownMenuItemElement, content: string}>) => void;
     }
