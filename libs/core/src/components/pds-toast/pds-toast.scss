@@ -1,7 +1,7 @@
 :host {
   --animation-duration: 0.3s;
   --animation-timing: cubic-bezier(0.4, 0, 0.2, 1);
-  --padding-inline: var(--pine-dimension-lg);
+  --padding-inline: var(--pine-dimension-md);
   --padding-inline-desktop: var(--pine-dimension-2xl);
   --sizing-height-default: 68px;
   --sizing-min-width: calc(var(--sizing-total-width) - (var(--padding-inline) * 2));
