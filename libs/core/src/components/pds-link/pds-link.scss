@@ -8,7 +8,7 @@
 
 .pds-link {
   align-items: center;
-  color: var(--pine-color-text);
+  color: var(--color, var(--pine-color-text));
   display: inline-flex;
   font-weight: var(--pine-font-weight-medium);
 
@@ -20,7 +20,32 @@
   }
 
   &:hover {
+    color: var(--color, var(--pine-color-text-hover));
     text-decoration: none;
+  }
+
+  :host([color="secondary"]) & {
+    color: var(--pine-color-text-primary);
+
+    &:hover {
+      color: var(--pine-color-grey-150);
+    }
+  }
+
+  :host([color="accent"]) & {
+    color: var(--pine-color-accent);
+
+    &:hover {
+      color: var(--pine-color-accent-hover);
+    }
+  }
+
+  :host([color="danger"]) & {
+    color: var(--pine-color-danger);
+
+    &:hover {
+      color: var(--pine-color-danger-hover);
+    }
   }
 }
 

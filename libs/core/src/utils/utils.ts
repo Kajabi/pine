@@ -20,10 +20,10 @@ export const debounce = (func: (...args: any[]) => void, wait = 0) => {
   };
 };
 
-export const setColor = (color: string) => {
+export const setColor = (color: string, customColors?: Record<string, string>) => {
   if (!color) return;
 
-  const colors: Record<string, string> = {
+  const defaultColors: Record<string, string> = {
     primary: 'var(--pine-color-text-primary)',
     secondary: 'var(--pine-color-text-secondary)',
     neutral: 'var(--pine-color-text-neutral)',
@@ -33,6 +33,8 @@ export const setColor = (color: string) => {
     success: 'var(--pine-color-text-success)',
     warning: 'var(--pine-color-text-warning)',
   };
+
+  const colors = customColors || defaultColors;
 
   return {
     '--color': colors[color] ?? (color.startsWith('--') ? `var(${color})` : color)
