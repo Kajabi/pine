@@ -45,6 +45,7 @@ import { defineCustomElement as definePdsTabpanel } from '@pine-ds/core/componen
 import { defineCustomElement as definePdsTabs } from '@pine-ds/core/components/pds-tabs.js';
 import { defineCustomElement as definePdsText } from '@pine-ds/core/components/pds-text.js';
 import { defineCustomElement as definePdsTextarea } from '@pine-ds/core/components/pds-textarea.js';
+import { defineCustomElement as definePdsToast } from '@pine-ds/core/components/pds-toast.js';
 import { defineCustomElement as definePdsTooltip } from '@pine-ds/core/components/pds-tooltip.js';
 
 export const MockPdsModal = /*@__PURE__*/createReactComponent<JSX.MockPdsModal, HTMLMockPdsModalElement>('mock-pds-modal', undefined, undefined, defineMockPdsModal);
@@ -87,4 +88,5 @@ export const PdsTabpanel = /*@__PURE__*/createReactComponent<JSX.PdsTabpanel, HT
 export const PdsTabs = /*@__PURE__*/createReactComponent<JSX.PdsTabs, HTMLPdsTabsElement>('pds-tabs', undefined, undefined, definePdsTabs);
 export const PdsText = /*@__PURE__*/createReactComponent<JSX.PdsText, HTMLPdsTextElement>('pds-text', undefined, undefined, definePdsText);
 export const PdsTextarea = /*@__PURE__*/createReactComponent<JSX.PdsTextarea, HTMLPdsTextareaElement>('pds-textarea', undefined, undefined, definePdsTextarea);
+export const PdsToast = /*@__PURE__*/createReactComponent<JSX.PdsToast, HTMLPdsToastElement>('pds-toast', undefined, undefined, definePdsToast);
 export const PdsTooltip = /*@__PURE__*/createReactComponent<JSX.PdsTooltip, HTMLPdsTooltipElement>('pds-tooltip', undefined, undefined, definePdsTooltip);
