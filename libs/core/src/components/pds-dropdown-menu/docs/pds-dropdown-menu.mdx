@@ -1,0 +1,249 @@
+import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+# Dropdown Menu
+
+
+## Guidelines
+
+### When to use
+
+- To display a list of options that can be interacted with by the user.
+- Ideal for situations where users need to interact with a predefined set of options.
+- When you need to conserve space by hiding options until they're needed.
+
+### When not to use
+
+- When you need a multi-select interface (consider using checkboxes instead)
+- When you have very few options that could fit directly in the UI without a dropdown
+
+### Accessibility
+
+- Implements the WAI-ARIA Menu Button Pattern for screen reader compatibility
+- Supports full keyboard navigation with arrow keys, Enter, Space, Home, and End
+- Traps focus within the dropdown when open
+- Provides high-contrast focus indicators for all interactive elements
+
+
+### Keyboard Interactions
+<pds-box border>
+  <pds-table component-id="keyboard-shortcuts" >
+    <pds-table-head>
+      <pds-table-head-cell>Key</pds-table-head-cell>
+      <pds-table-head-cell>Action</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell>Enter / Space (on trigger)</pds-table-cell>
+        <pds-table-cell>Opens the dropdown menu</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Escape</pds-table-cell>
+        <pds-table-cell>Closes the dropdown menu</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Tab</pds-table-cell>
+        <pds-table-cell>Moves focus to the next focusable element</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Arrow Down</pds-table-cell>
+        <pds-table-cell>Moves focus to the next menu item</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Arrow Up</pds-table-cell>
+        <pds-table-cell>Moves focus to the previous menu item</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Home</pds-table-cell>
+        <pds-table-cell>Moves focus to the first menu item</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>End</pds-table-cell>
+        <pds-table-cell>Moves focus to the last menu item</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Enter / Space (on menu item)</pds-table-cell>
+        <pds-table-cell>Activates the item</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
+## Properties
+
+<DocArgsTable componentName="pds-dropdown-menu" docSource={components} />
+
+### Dropdown Menu Item
+
+<DocArgsTable componentName="pds-dropdown-menu-item" docSource={components} />
+
+### Default
+
+The default dropdown menu displays a list of options that can be selected by the user.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+<PdsDropdown>
+  <PdsButton slot="trigger">Trigger</PdsButton>
+  <PdsDropdownItem>Item 1</PdsDropdownItem>
+  <PdsDropdownItem>Item 2</PdsDropdownItem>
+  <PdsDropdownItem>Item 3</PdsDropdownItem>
+</PdsDropdown>
+`,
+    webComponent:`
+<pds-dropdown>
+  <pds-button slot="trigger">Trigger</pds-button>
+  <pds-dropdown-item>Item 1</pds-dropdown-item>
+  <pds-dropdown-item>Item 2</pds-dropdown-item>
+  <pds-dropdown-item>Item 3</pds-dropdown-item>
+</pds-dropdown>
+`
+  }}
+>
+<div style={{ height: '200px', width: '100%', textAlign: 'center'}}>
+  <pds-dropdown-menu>
+    <pds-button slot="trigger">Trigger</pds-button>
+    <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item>Item 3</pds-dropdown-menu-item>
+  </pds-dropdown-menu>
+</div>
+</DocCanvas>
+
+### With Separator
+
+The dropdown menu can also display a separator between items.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+<PdsDropdownMenu>
+  <PdsButton slot="trigger">Trigger</PdsButton>
+  <PdsDropdownMenuItem>Item 1</PdsDropdownMenuItem>
+  <PdsDropdownMenuSeparator />
+  <PdsDropdownMenuItem>Item 2</PdsDropdownMenuItem>
+  <PdsDropdownMenuSeparator />
+  <PdsDropdownMenuItem>Item 3</PdsDropdownMenuItem>
+</PdsDropdownMenu>
+`,
+    webComponent:`
+<pds-dropdown-menu>
+  <pds-button slot="trigger">Trigger</pds-button>
+  <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
+  <pds-dropdown-menu-separator />
+  <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
+  <pds-dropdown-menu-separator />
+  <pds-dropdown-menu-item>Item 3</pds-dropdown-menu-item>
+</pds-dropdown-menu>
+`
+  }}
+>
+<div style={{ height: '200px', width: '100%', textAlign: 'center' }}>
+  <pds-dropdown-menu>
+    <pds-button slot="trigger">Trigger</pds-button>
+    <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
+    <pds-dropdown-menu-separator />
+    <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
+  </pds-dropdown-menu>
+</div>
+</DocCanvas>
+
+### With Links
+
+Menu items can function as links by using the href attribute.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+<PdsDropdownMenu>
+  <PdsButton slot="trigger">Navigation</PdsButton>
+  <PdsDropdownMenuItem href="/dashboard">Dashboard</PdsDropdownMenuItem>
+  <PdsDropdownMenuItem href="/profile">Profile</PdsDropdownMenuItem>
+  <PdsDropdownMenuItem href="/settings">Settings</PdsDropdownMenuItem>
+</PdsDropdownMenu>
+`,
+    webComponent:`
+<pds-dropdown-menu>
+  <pds-button slot="trigger">Navigation</pds-button>
+  <pds-dropdown-menu-item href="/dashboard">Dashboard</pds-dropdown-menu-item>
+  <pds-dropdown-menu-item href="/profile">Profile</pds-dropdown-menu-item>
+  <pds-dropdown-menu-item href="/settings">Settings</pds-dropdown-menu-item>
+</pds-dropdown-menu>
+`
+  }}
+>
+<div style={{ height: '200px', width: '100%', textAlign: 'center' }}>
+  <pds-dropdown-menu>
+    <pds-button slot="trigger">Navigation</pds-button><pds-dropdown-menu-item href="/dashboard">Dashboard</pds-dropdown-menu-item><pds-dropdown-menu-item href="/profile">Profile</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item href="/settings">Settings</pds-dropdown-menu-item>
+  </pds-dropdown-menu>
+</div>
+</DocCanvas>
+
+### With Disabled Items
+
+Menu items can be disabled using the disabled attribute.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+<PdsDropdownMenu>
+  <PdsButton slot="trigger">Navigation</PdsButton>
+  <PdsDropdownMenuItem disabled>Item 1</PdsDropdownMenuItem>
+  <PdsDropdownMenuItem>Item 2</PdsDropdownMenuItem>
+  <PdsDropdownMenuItem>Item 3</PdsDropdownMenuItem>
+</PdsDropdownMenu>
+`,
+    webComponent: `
+<pds-dropdown-menu>
+  <pds-button slot="trigger">Navigation</pds-button>
+  <pds-dropdown-menu-item disabled>Item 1</pds-dropdown-menu-item>
+  <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
+  <pds-dropdown-menu-item>Item 3</pds-dropdown-menu-item>
+</pds-dropdown-menu>
+`
+  }}
+>
+<div style={{ height: '200px', width: '100%', textAlign: 'center' }}>
+  <pds-dropdown-menu>
+    <pds-button slot="trigger">Navigation</pds-button>
+    <pds-dropdown-menu-item disabled>Item 1</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item>Item 3</pds-dropdown-menu-item>
+  </pds-dropdown-menu>
+</div>
+</DocCanvas>
+
+### With Custom Placement
+
+The dropdown menu can be positioned relative to the trigger using the placement property.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+<PdsDropdownMenu placement="bottom-end">
+  <PdsButton slot="trigger">Open Menu</PdsButton>
+  <PdsDropdownMenuItem>Item 1</PdsDropdownMenuItem>
+  <PdsDropdownMenuItem>Item 2</PdsDropdownMenuItem>
+</PdsDropdownMenu>
+`,
+    webComponent: `
+<pds-dropdown-menu placement="bottom-end">
+  <pds-button slot="trigger">Open Menu</pds-button>
+  <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
+  <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
+</pds-dropdown-menu>
+`
+  }}
+>
+<div style={{ height: '200px', width: '100%', textAlign: 'center' }}>
+  <pds-dropdown-menu>
+   <pds-chip slot="trigger" sentiment="success">My trigger <pds-icon name="caret-down"></pds-icon></pds-chip>
+   <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
+  </pds-dropdown-menu>
+
+</div>
+</DocCanvas>
+
+
+
