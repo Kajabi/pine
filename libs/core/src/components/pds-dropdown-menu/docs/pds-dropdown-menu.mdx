@@ -16,7 +16,6 @@ import { components } from '../../../../dist/docs.json';
 
 - When you need a multi-select interface (consider using checkboxes instead)
 - When you have very few options that could fit directly in the UI without a dropdown
-- When you need to display hierarchical data with nested levels (consider a tree component)
 
 ### Accessibility
 
@@ -28,46 +27,46 @@ import { components } from '../../../../dist/docs.json';
 
 ### Keyboard Interactions
 <pds-box border>
-<pds-table component-id="keyboard-shortcuts" >
-  <pds-table-head>
-    <pds-table-head-cell>Key</pds-table-head-cell>
-    <pds-table-head-cell>Action</pds-table-head-cell>
-  </pds-table-head>
-  <pds-table-body>
-    <pds-table-row>
-      <pds-table-cell>Enter / Space (on trigger)</pds-table-cell>
-      <pds-table-cell>Opens the dropdown menu</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Escape</pds-table-cell>
-      <pds-table-cell>Closes the dropdown menu</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Tab</pds-table-cell>
-      <pds-table-cell>Moves focus to the next focusable element</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Arrow Down</pds-table-cell>
-      <pds-table-cell>Moves focus to the next menu item</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Arrow Up</pds-table-cell>
-      <pds-table-cell>Moves focus to the previous menu item</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Home</pds-table-cell>
-      <pds-table-cell>Moves focus to the first menu item</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>End</pds-table-cell>
-      <pds-table-cell>Moves focus to the last menu item</pds-table-cell>
-    </pds-table-row>
-    <pds-table-row>
-      <pds-table-cell>Enter / Space (on menu item)</pds-table-cell>
-      <pds-table-cell>Activates the item</pds-table-cell>
-    </pds-table-row>
-  </pds-table-body>
-</pds-table>
+  <pds-table component-id="keyboard-shortcuts" >
+    <pds-table-head>
+      <pds-table-head-cell>Key</pds-table-head-cell>
+      <pds-table-head-cell>Action</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell>Enter / Space (on trigger)</pds-table-cell>
+        <pds-table-cell>Opens the dropdown menu</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Escape</pds-table-cell>
+        <pds-table-cell>Closes the dropdown menu</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Tab</pds-table-cell>
+        <pds-table-cell>Moves focus to the next focusable element</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Arrow Down</pds-table-cell>
+        <pds-table-cell>Moves focus to the next menu item</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Arrow Up</pds-table-cell>
+        <pds-table-cell>Moves focus to the previous menu item</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Home</pds-table-cell>
+        <pds-table-cell>Moves focus to the first menu item</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>End</pds-table-cell>
+        <pds-table-cell>Moves focus to the last menu item</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Enter / Space (on menu item)</pds-table-cell>
+        <pds-table-cell>Activates the item</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
 </pds-box>
 ## Properties
 
@@ -238,11 +237,11 @@ The dropdown menu can be positioned relative to the trigger using the placement 
   }}
 >
 <div style={{ height: '200px', width: '100%', textAlign: 'center' }}>
-  <pds-dropdown-menu placement="bottom-end">
-    <pds-button slot="trigger">Open Menu</pds-button>
-    <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
-    <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
+  <pds-dropdown-menu>
+   <pds-chip slot="trigger" sentiment="success">My trigger <pds-icon name="caret-down"></pds-icon></pds-chip>
+   <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
   </pds-dropdown-menu>
+
 </div>
 </DocCanvas>
 

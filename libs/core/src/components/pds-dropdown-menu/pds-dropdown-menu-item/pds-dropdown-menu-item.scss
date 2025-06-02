@@ -31,7 +31,7 @@
   width: 100%; /* Ensure full width */
 
   &:hover {
-    background-color: var(--pine-color-background-container-hover);
+    background-color: var(--pine-color-grey-150);
     color: var(--pine-color-text-hover);
   }
 
@@ -70,4 +70,11 @@ pds-link::part(link):focus,
 pds-link::part(link):focus-visible {
   box-shadow: none;
   outline: none;
+}
+
+pds-link::part(link) {
+  display: block;
+  margin-inline: calc(var(--pine-dimension-xs) * -1);
+  padding-inline: var(--pine-dimension-xs);
+  width: 100%
 }
