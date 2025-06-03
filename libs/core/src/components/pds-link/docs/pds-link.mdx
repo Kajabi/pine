@@ -27,6 +27,33 @@ The default `inline` link. Visually, it maintains the underlined appearance of a
   <pds-link href="https://www.google.com"></pds-link>
 </DocCanvas>
 
+### Colors
+
+The `color` prop can be used to change the color of the link to any available preset or, Pine token, or custom color. The available preset colors are `secondary`, `accent`, and `danger`.
+
+>Note: Only presets have hover state colors.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsLink href="https://www.google.com" color="secondary">Link</PdsLink>
+    <PdsLink href="https://www.google.com" color="accent">Link</PdsLink>
+    <PdsLink href="https://www.google.com" color="danger">Link</PdsLink>
+    <PdsLink href="https://www.google.com" color="var(--pine-color-green-600)">Link</PdsLink>
+    <PdsLink href="https://www.google.com" color="#daa520">Link</PdsLink>
+    `,
+    webComponent: `<pds-link href="https://www.google.com" color="secondary">Link</pds-link>
+    <pds-link href="https://www.google.com" color="accent">Link</pds-link>
+    <pds-link href="https://www.google.com" color="danger">Link</pds-link>
+    <pds-link href="https://www.google.com" color="var(--pine-color-green-600)">Link</pds-link>
+    <pds-link href="https://www.google.com" color="#daa520">Link</pds-link>`
+}}>
+  <div style={{ backgroundColor: '#333', padding: '4px' }}><pds-link href="https://www.google.com" color="secondary">Link</pds-link></div>
+  <pds-link href="https://www.google.com" color="accent">Link</pds-link>
+  <pds-link href="https://www.google.com" color="danger">Link</pds-link>
+  <pds-link href="https://www.google.com" color="var(--pine-color-green-600)">Link</pds-link>
+  <pds-link href="https://www.google.com" color="#daa520">Link</pds-link>
+</DocCanvas>
+
 ### Plain
 
 The `plain` variant displays a standard plain hyperlink without an underline.

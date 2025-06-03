@@ -4,12 +4,25 @@ import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 export default {
   argTypes: extractArgTypes('pds-link'),
   args: { href: '#some-anchor' },
+  argTypes: {
+    variant: {
+      control: 'radio',
+      options: ['inline', 'plain'],
+    },
+  },
   component: 'pds-link',
   title: 'components/Link'
 }
 
-const BaseTemplate = (args) => html`<pds-link external=${args.external} font-size=${args.fontSize} href=${args.href} component-id=${args.componentId} variant=${args.variant}></pds-link>`;
-const BaseTemplateWithSlot = (args) => html` <pds-link external=${args.external} font-size=${args.fontSize} href=${args.href} component-id=${args.componentId} variant=${args.variant}>${args.slot}</pds-link>`;
+const BaseTemplate = (args) => html`<pds-link color=${args.color} external=${args.external} font-size=${args.fontSize} href=${args.href} component-id=${args.componentId} variant=${args.variant}></pds-link>`;
+const BaseTemplateWithSlot = (args) => html` <pds-link color=${args.color} external=${args.external} font-size=${args.fontSize} href=${args.href} component-id=${args.componentId} variant=${args.variant}>${args.slot}</pds-link>`;
+
+export const Colors = BaseTemplate.bind();
+Colors.args = {
+  color: 'danger',
+  external: false,
+  fontSize: 'lg',
+};
 
 export const External = BaseTemplate.bind();
 External.args = {

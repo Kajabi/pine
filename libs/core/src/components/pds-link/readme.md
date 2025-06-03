@@ -9,6 +9,7 @@ Link is mainly used as navigational element and usually appear within or directl
 
 | Property            | Attribute      | Description                                                                                        | Type                   | Default     |
 | ------------------- | -------------- | -------------------------------------------------------------------------------------------------- | ---------------------- | ----------- |
+| `color`             | `color`        | Sets the link color.                                                                               | `string`               | `undefined` |
 | `componentId`       | `component-id` | A unique identifier used for the underlying component `id` attribute.                              | `string`               | `undefined` |
 | `external`          | `external`     | Determines whether the link should open in a new tab.                                              | `boolean`              | `false`     |
 | `fontSize`          | `font-size`    | The font size of the link's text.                                                                  | `"lg" \| "md" \| "sm"` | `'lg'`      |
