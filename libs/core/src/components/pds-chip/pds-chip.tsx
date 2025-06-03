@@ -46,17 +46,8 @@ export class PdsChip {
    */
   @Event() pdsTagCloseClick: EventEmitter;
 
-  /**
-   * Event emitted when the dropdown button is clicked on a dropdown variant chip.
-   */
-  @Event() pdsClick: EventEmitter;
-
   private handleCloseClick = () => {
     this.pdsTagCloseClick.emit();
-  };
-
-  private handleDropdownClick = () => {
-    this.pdsClick.emit();
   };
 
   private classNames() {
@@ -78,7 +69,7 @@ export class PdsChip {
   private setChipContent() {
     const isDropdown = this.variant === 'dropdown';
     const chipContent = isDropdown ? (
-      <button class="pds-chip__button" type="button" onClick={this.handleDropdownClick}>
+      <button class="pds-chip__button" type="button">
         {this.dot && <i class="pds-chip__dot" aria-hidden="true"></i>}
         <slot></slot>
         <pds-icon icon={downSmall} size="12px" aria-hidden="true"></pds-icon>

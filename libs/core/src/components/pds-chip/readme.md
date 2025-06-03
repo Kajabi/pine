@@ -18,10 +18,9 @@
 
 ## Events
 
-| Event              | Description                                                                   | Type               |
-| ------------------ | ----------------------------------------------------------------------------- | ------------------ |
-| `pdsClick`         | Event emitted when the dropdown button is clicked on a dropdown variant chip. | `CustomEvent<any>` |
-| `pdsTagCloseClick` | Event emitted when the close button is clicked on a tag variant chip.         | `CustomEvent<any>` |
+| Event              | Description                                                           | Type               |
+| ------------------ | --------------------------------------------------------------------- | ------------------ |
+| `pdsTagCloseClick` | Event emitted when the close button is clicked on a tag variant chip. | `CustomEvent<any>` |
 
 
 ## Slots
