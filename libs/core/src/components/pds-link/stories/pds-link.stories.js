@@ -5,10 +5,6 @@ export default {
   argTypes: extractArgTypes('pds-link'),
   args: { href: '#some-anchor' },
   argTypes: {
-    color: {
-      control: 'radio',
-      options: ['secondary', 'accent', 'danger'],
-    },
     variant: {
       control: 'radio',
       options: ['inline', 'plain'],
