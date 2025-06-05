@@ -40,7 +40,7 @@ describe('pds-box', () => {
 
     const element = page.root;
 
-    expect(element).toEqualAttribute('style', '--sizing-min-height-box: 300px;');
+    expect(element).toEqualAttribute('style', '--sizing-min-width-box: 300px;');
   });
 
   it('renders align-items class when prop is set', async () => {
