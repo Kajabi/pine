@@ -257,7 +257,7 @@ export class PdsBox {
       ...(this.backgroundColor && { '--color-background-box': this.backgroundColor }),
       ...(this.borderColor && { '--color-border-box': this.borderColor }),
       ...(this.minHeight && { '--sizing-min-height-box': this.minHeight }),
-      ...(this.minWidth && { '--sizing-min-height-box': this.minWidth }),
+      ...(this.minWidth && { '--sizing-min-width-box': this.minWidth }),
     };
 
     return (
