@@ -182,34 +182,36 @@ export class PdsBox {
   @Prop() shadow?: BoxShadowSizeType;
 
   /**
-   * Size of the column for all screen sizes that are not explicitly set.
+   * Sets the default column width for the component. This value applies from the smallest screen size (XS) upwards, unless overridden by a breakpoint-specific size prop at that breakpoint or larger.
    */
   @Prop() size?: BoxColumnType;
 
   /**
-   * At screen sizes less than the `XS` breakpoint, this will take the number of columns specified.
+   * At the XS breakpoint, this prop will take the number of columns specified. This overrides the base size prop for this specific range.
    */
   @Prop() sizeXs?: BoxColumnType;
 
   /**
-   * At screen sizes greater than the `SM` breakpoint, this will take the number of columns specified.
+   * At screen sizes from the SM breakpoint and larger (576px and up), this will take the specified number of columns. This overrides any value set by size or sizeXs.
    */
   @Prop() sizeSm?: BoxColumnType;
 
   /**
-   * At screen sizes greater than the `MD` breakpoint, this will take the number of columns specified.
+   * At screen sizes from the MD breakpoint and larger (768px and up), this will take the specified number of columns. This overrides any value set by size, sizeXs, and up.
    */
   @Prop() sizeMd?: BoxColumnType;
 
   /**
-   * At screen sizes greater than the `LG` breakpoint, this will take the number of columns specified.
+   * At screen sizes from the LG breakpoint and larger (992px and up), this will take the specified number of columns. This overrides any value set by size, sizeXs, and up.
    */
   @Prop() sizeLg?: BoxColumnType;
 
   /**
-   * At screen sizes greater than the `XL` breakpoint, this will take the number of columns specified.
+   * At screen sizes from the XL breakpoint and larger (1200px and up), this will take the specified number of columns. This overrides any value set by size, sizeXs, and up.
    */
   @Prop() sizeXl?: BoxColumnType;
+
+
 
   render() {
     const boxClasses = `
