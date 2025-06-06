@@ -8,7 +8,7 @@ export default {
   decorators: [withActions],
   parameters: {
     actions: {
-      handles: ['onclick', 'pdsTagCloseClick'],
+      handles: ['pdsTagCloseClick'],
     },
   },
   title: 'components/Chip'
