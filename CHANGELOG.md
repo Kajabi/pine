@@ -1,3 +1,33 @@
+## 3.2.0 (2025-06-06)
+
+### Features 🚀
+
+- **link:** adds color prop ([#458](https://github.com/Kajabi/pine/pull/458))
+- **pds-alert:** new alert component ([#452](https://github.com/Kajabi/pine/pull/452))
+- **pds-dropdown:** implementation ([#455](https://github.com/Kajabi/pine/pull/455))
+- **pds-toast:** add pds-toast component ([#462](https://github.com/Kajabi/pine/pull/462))
+
+### Bug Fixes 🐛
+
+- correct CSS variable naming in pds-box minWidth property ([#466](https://github.com/Kajabi/pine/pull/466))
+- **chip:** updates a11y docs ([#449](https://github.com/Kajabi/pine/pull/449))
+- **pds-alert:** remove description prop and use slot ([#463](https://github.com/Kajabi/pine/pull/463))
+- **pds-chip:** correct React syntax in documentation examples ([#465](https://github.com/Kajabi/pine/pull/465))
+- **pds-modal:** update closeonbackdropclick prop and auto generated file ([#461](https://github.com/Kajabi/pine/pull/461))
+- **pds-popover:** adds missing -start and -end positioning ([#454](https://github.com/Kajabi/pine/pull/454))
+
+### Documentation 📄
+
+- **pds-box:** improve responsive size prop documentation [DSS-1405] ([#459](https://github.com/Kajabi/pine/pull/459))
+- **pds-text:** fix invalid color token in example ([#464](https://github.com/Kajabi/pine/pull/464))
+
+### ❤️ Thank You
+
+- Ashley E
+- Julian Skinner @ju-Skinner
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.1.0 (2025-05-09)
 
 ### Features 🚀
