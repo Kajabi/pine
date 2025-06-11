@@ -18,6 +18,7 @@ const BaseTemplate = (args) => html`
 <pds-chip
   component-id="${args.componentId}"
   dot="${args.dot}"
+  icon="${args.icon}"
   large="${args.large}"
   sentiment="${args.sentiment}"
   variant="${args.variant}"
@@ -28,6 +29,7 @@ const BaseTemplate = (args) => html`
 export const Default = BaseTemplate.bind();
 Default.args = {
   dot: false,
+  icon: "",
   large: false,
   sentiment: "neutral",
   slot: "label",
@@ -38,6 +40,7 @@ export const Sentiment = BaseTemplate.bind();
 Sentiment.args = {
   dot: false,
   large: false,
+  icon: "",
   sentiment: "success",
   slot: "label",
   variant: "text",
@@ -46,6 +49,17 @@ Sentiment.args = {
 export const Dots = BaseTemplate.bind();
 Dots.args = {
   dot: true,
+  icon: "",
+  large: false,
+  sentiment: "neutral",
+  slot: "label",
+  variant: "text",
+}
+
+export const Icon = BaseTemplate.bind();
+Icon.args = {
+  dot: false,
+  icon: "check",
   large: false,
   sentiment: "neutral",
   slot: "label",
@@ -55,6 +69,7 @@ Dots.args = {
 export const Dropdown = BaseTemplate.bind();
 Dropdown.args = {
   dot: false,
+  icon: "",
   large: false,
   sentiment: "neutral",
   slot: "label",
@@ -64,6 +79,7 @@ Dropdown.args = {
 export const Tag = BaseTemplate.bind();
 Tag.args = {
   dot: false,
+  icon: "",
   large: false,
   sentiment: "neutral",
   slot: "label",
@@ -73,6 +89,7 @@ Tag.args = {
 export const Large = BaseTemplate.bind();
 Large.args = {
   dot: false,
+  icon: "",
   large: true,
   sentiment: "neutral",
   slot: "label",

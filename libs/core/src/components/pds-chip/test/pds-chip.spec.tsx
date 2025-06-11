@@ -133,6 +133,116 @@ describe('pds-chip', () => {
     `);
   });
 
+  it('renders with icon when icon prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip icon="archive" />`,
+    });
+
+    expect(page.root).toEqualHtml(`
+    <pds-chip class="pds-chip pds-chip--neutral pds-chip--text" icon="archive">
+      <mock:shadow-root>
+        <span class="pds-chip__label">
+          <pds-icon icon="archive" size="12px" aria-hidden="true"></pds-icon>
+          <slot></slot>
+        </span>
+      </mock:shadow-root>
+    </pds-chip>
+    `);
+  });
+
+  it('renders with icon in dropdown variant when icon prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip icon="archive" variant="dropdown" />`,
+    });
+
+    expect(page.root).toEqualHtml(`
+    <pds-chip class="pds-chip pds-chip--neutral pds-chip--dropdown" icon="archive" variant="dropdown">
+      <mock:shadow-root>
+        <button class="pds-chip__button" type="button">
+          <pds-icon icon="archive" size="12px" aria-hidden="true"></pds-icon>
+          <slot></slot>
+          <pds-icon icon="${downSmall}" size="12px" aria-hidden="true"></pds-icon>
+        </button>
+      </mock:shadow-root>
+    </pds-chip>
+    `);
+  });
+
+  it('renders with large icon when icon and large props are set', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip icon="archive" large="true" />`,
+    });
+
+    expect(page.root).toEqualHtml(`
+    <pds-chip class="pds-chip pds-chip--neutral pds-chip--large pds-chip--text" icon="archive" large="true">
+      <mock:shadow-root>
+        <span class="pds-chip__label">
+          <pds-icon icon="archive" size="14px" aria-hidden="true"></pds-icon>
+          <slot></slot>
+        </span>
+      </mock:shadow-root>
+    </pds-chip>
+    `);
+  });
+
+  it('renders with both icon and dot when both props are set', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip icon="archive" dot="true" />`,
+    });
+
+    expect(page.root).toEqualHtml(`
+    <pds-chip class="pds-chip pds-chip--neutral pds-chip--text" icon="archive" dot="true">
+      <mock:shadow-root>
+        <span class="pds-chip__label">
+          <pds-icon icon="archive" size="12px" aria-hidden="true"></pds-icon>
+          <i class="pds-chip__dot" aria-hidden="true"></i>
+          <slot></slot>
+        </span>
+      </mock:shadow-root>
+    </pds-chip>
+    `);
+  });
+
+  it('renders brand sentiment with icon but no dot when icon and dot props are set', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip icon="archive" dot="true" sentiment="brand" />`,
+    });
+
+    expect(page.root).toEqualHtml(`
+    <pds-chip class="pds-chip pds-chip--brand pds-chip--text" icon="archive" dot="true" sentiment="brand">
+      <mock:shadow-root>
+        <span class="pds-chip__label">
+          <pds-icon icon="archive" size="12px" aria-hidden="true"></pds-icon>
+          <slot></slot>
+        </span>
+      </mock:shadow-root>
+    </pds-chip>
+    `);
+  });
+
+  it('renders with large icons in tag variant when large prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip variant="tag" large="true" />`,
+    });
+
+    expect(page.root).toEqualHtml(`
+    <pds-chip class="pds-chip pds-chip--neutral pds-chip--large pds-chip--tag" variant="tag" large="true">
+      <mock:shadow-root>
+        <span class="pds-chip__label"><slot></slot></span>
+        <button class="pds-chip__close" type="button" aria-label="Remove" >
+          <pds-icon icon="${removeIcon}" size="14px"></pds-icon>
+        </button>
+      </mock:shadow-root>
+    </pds-chip>
+    `);
+  });
+
   it('renders dot within dropdown when variant is dropdown and dot prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsChip],

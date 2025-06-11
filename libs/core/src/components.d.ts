@@ -404,10 +404,14 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Determines whether a dot should be displayed on the chip.
+          * Determines whether a dot should be displayed on the chip. Note: This prop is ignored when sentiment is 'brand'.
           * @defaultValue false
          */
         "dot": boolean;
+        /**
+          * The name of the icon to display before the chip text.
+         */
+        "icon"?: string;
         /**
           * Determines whether the chip should be displayed in a larger size.
           * @defaultValue false
@@ -417,9 +421,9 @@ export namespace Components {
           * Defines the color scheme of the chip.
           * @defaultValue 'neutral'
          */
-        "sentiment": 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
+        "sentiment": 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
         /**
-          * Sets the style variant of the chip.
+          * Sets the style variant of the chip. Note: This prop is ignored when sentiment is 'brand'.
           * @defaultValue 'text'
          */
         "variant": 'text' | 'tag' | 'dropdown';
@@ -2301,10 +2305,14 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
-          * Determines whether a dot should be displayed on the chip.
+          * Determines whether a dot should be displayed on the chip. Note: This prop is ignored when sentiment is 'brand'.
           * @defaultValue false
          */
         "dot"?: boolean;
+        /**
+          * The name of the icon to display before the chip text.
+         */
+        "icon"?: string;
         /**
           * Determines whether the chip should be displayed in a larger size.
           * @defaultValue false
@@ -2318,9 +2326,9 @@ declare namespace LocalJSX {
           * Defines the color scheme of the chip.
           * @defaultValue 'neutral'
          */
-        "sentiment"?: 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
+        "sentiment"?: 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
         /**
-          * Sets the style variant of the chip.
+          * Sets the style variant of the chip. Note: This prop is ignored when sentiment is 'brand'.
           * @defaultValue 'text'
          */
         "variant"?: 'text' | 'tag' | 'dropdown';
