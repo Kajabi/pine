@@ -7,13 +7,14 @@
 
 ## Properties
 
-| Property      | Attribute      | Description                                                           | Type                                                                    | Default     |
-| ------------- | -------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------- | ----------- |
-| `componentId` | `component-id` | A unique identifier used for the underlying component `id` attribute. | `string`                                                                | `undefined` |
-| `dot`         | `dot`          | Determines whether a dot should be displayed on the chip.             | `boolean`                                                               | `false`     |
-| `large`       | `large`        | Determines whether the chip should be displayed in a larger size.     | `boolean`                                                               | `false`     |
-| `sentiment`   | `sentiment`    | Defines the color scheme of the chip.                                 | `"accent" \| "danger" \| "info" \| "neutral" \| "success" \| "warning"` | `'neutral'` |
-| `variant`     | `variant`      | Sets the style variant of the chip.                                   | `"dropdown" \| "tag" \| "text"`                                         | `'text'`    |
+| Property      | Attribute      | Description                                                                                                     | Type                                                                               | Default     |
+| ------------- | -------------- | --------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ----------- |
+| `componentId` | `component-id` | A unique identifier used for the underlying component `id` attribute.                                           | `string`                                                                           | `undefined` |
+| `dot`         | `dot`          | Determines whether a dot should be displayed on the chip. Note: This prop is ignored when sentiment is 'brand'. | `boolean`                                                                          | `false`     |
+| `icon`        | `icon`         | The name of the icon to display before the chip text.                                                           | `string`                                                                           | `undefined` |
+| `large`       | `large`        | Determines whether the chip should be displayed in a larger size.                                               | `boolean`                                                                          | `false`     |
+| `sentiment`   | `sentiment`    | Defines the color scheme of the chip.                                                                           | `"accent" \| "brand" \| "danger" \| "info" \| "neutral" \| "success" \| "warning"` | `'neutral'` |
+| `variant`     | `variant`      | Sets the style variant of the chip. Note: This prop is ignored when sentiment is 'brand'.                       | `"dropdown" \| "tag" \| "text"`                                                    | `'text'`    |
 
 
 ## Events
