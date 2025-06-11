@@ -42,6 +42,7 @@ The `sentiment` property represents the named color scheme of the chip component
   mdxSource={{
     react: `
     <PdsChip sentiment="accent">Accent</PdsChip>
+    <PdsChip sentiment="brand">Brand</PdsChip>
     <PdsChip sentiment="danger">Danger</PdsChip>
     <PdsChip sentiment="info">Info</PdsChip>
     <PdsChip sentiment="neutral">Neutral</PdsChip>
@@ -50,6 +51,7 @@ The `sentiment` property represents the named color scheme of the chip component
     `,
     webComponent: `
     <pds-chip sentiment="accent">Accent</pds-chip>
+    <pds-chip sentiment="brand">Brand</pds-chip>
     <pds-chip sentiment="danger">Danger</pds-chip>
     <pds-chip sentiment="info">Info</pds-chip>
     <pds-chip sentiment="neutral">Neutral</pds-chip>
@@ -58,11 +60,34 @@ The `sentiment` property represents the named color scheme of the chip component
     `
 }}>
   <pds-chip sentiment="accent">Accent</pds-chip>
+  <pds-chip sentiment="brand">Brand</pds-chip>
   <pds-chip sentiment="danger">Danger</pds-chip>
   <pds-chip sentiment="info">Info</pds-chip>
   <pds-chip sentiment="neutral">Neutral</pds-chip>
   <pds-chip sentiment="success">Success</pds-chip>
   <pds-chip sentiment="warning">Warning</pds-chip>
+</DocCanvas>
+
+#### Brand
+
+>**IMPORTANT**: The `brand` sentiment is a special case where only icon and large are supported. It does not support the `dot`, `dropdown`, or `tag` properties by design.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+    <PdsChip sentiment="brand">Brand</PdsChip>
+    <PdsChip sentiment="brand" icon="product">Brand</PdsChip>
+    <PdsChip sentiment="brand" size="large">Brand</PdsChip>
+    `,
+    webComponent: `
+    <pds-chip sentiment="brand">Brand</pds-chip>
+    <pds-chip sentiment="brand" icon="product">Brand</pds-chip>
+    <pds-chip sentiment="brand" size="large">Brand</pds-chip>
+    `
+}}>
+  <pds-chip sentiment="brand">Brand</pds-chip>
+  <pds-chip sentiment="brand" icon="product">Brand</pds-chip>
+  <pds-chip sentiment="brand" large>Brand</pds-chip>
 </DocCanvas>
 
 ### Dot
@@ -94,6 +119,40 @@ A small circular indicator displayed within a chip. Dot colors are determined by
   <pds-chip sentiment="neutral" dot>Neutral</pds-chip>
   <pds-chip sentiment="success" dot>Success</pds-chip>
   <pds-chip sentiment="warning" dot>Warning</pds-chip>
+</DocCanvas>
+
+### Icon
+
+The `icon` property can be used to display an icon within a chip.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+    <PdsChip sentiment="accent" icon="archive">Accent</PdsChip>
+    <PdsChip sentiment="brand" icon="product">Brand</PdsChip>
+    <PdsChip sentiment="danger" icon="danger">Danger</PdsChip>
+    <PdsChip sentiment="info" icon="info-circle">Info</PdsChip>
+    <PdsChip sentiment="neutral" icon="tag">Neutral</PdsChip>
+    <PdsChip sentiment="success" icon="check">Success</PdsChip>
+    <PdsChip sentiment="warning" icon="check">Warning</PdsChip>
+    `,
+    webComponent: `
+    <pds-chip sentiment="accent" icon="archive">Accent</pds-chip>
+    <pds-chip sentiment="brand" icon="product">Brand</pds-chip>
+    <pds-chip sentiment="danger" icon="danger">Danger</pds-chip>
+    <pds-chip sentiment="info" icon="info-circle">Info</pds-chip>
+    <pds-chip sentiment="neutral" icon="tag">Neutral</pds-chip>
+    <pds-chip sentiment="success" icon="check">Success</pds-chip>
+    <pds-chip sentiment="warning" icon="warning">Warning</pds-chip>
+    `
+}}>
+  <pds-chip sentiment="accent" icon="archive">Accent</pds-chip>
+  <pds-chip sentiment="brand" icon="product">Brand</pds-chip>
+  <pds-chip sentiment="danger" icon="danger">Danger</pds-chip>
+  <pds-chip sentiment="info" icon="info-circle">Info</pds-chip>
+  <pds-chip sentiment="neutral" icon="tag">Neutral</pds-chip>
+  <pds-chip sentiment="success" icon="check">Success</pds-chip>
+  <pds-chip sentiment="warning" icon="warning">Warning</pds-chip>
 </DocCanvas>
 
 ### Dropdown
@@ -164,19 +223,22 @@ Large chips will be displayed with a larger visual footprint compared to the def
 <DocCanvas client:only
   mdxSource={{
     react: `
-    <PdsChip sentiment="accent" variant="text" large>Accent</PdsChip>
+    <PdsChip sentiment="accent" large>Accent</PdsChip>
+    <PdsChip sentiment="brand" large>Brand</PdsChip>
     <PdsChip sentiment="danger" dot large>Danger</PdsChip>
     <PdsChip sentiment="info" variant="dropdown" large>Info</PdsChip>
     <PdsChip sentiment="success" variant="tag" large>Success</PdsChip>
     `,
     webComponent: `
-    <pds-chip sentiment="accent" variant="text" large>Accent</pds-chip>
+    <pds-chip sentiment="accent" large>Accent</pds-chip>
+    <pds-chip sentiment="brand" large>Brand</pds-chip>
     <pds-chip sentiment="danger" dot large>Danger</pds-chip>
     <pds-chip sentiment="info" variant="dropdown" large>Info</pds-chip>
     <pds-chip sentiment="success" variant="tag" large>Success</pds-chip>
     `
 }}>
-  <pds-chip sentiment="accent" variant="text" large>Accent</pds-chip>
+  <pds-chip sentiment="accent" large>Accent</pds-chip>
+  <pds-chip sentiment="brand" large>Brand</pds-chip>
   <pds-chip sentiment="danger" dot large>Danger</pds-chip>
   <pds-chip sentiment="info" variant="dropdown" large>Info</pds-chip>
   <pds-chip sentiment="success" variant="tag" large>Success</pds-chip>
