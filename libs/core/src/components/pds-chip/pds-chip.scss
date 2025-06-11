@@ -4,7 +4,7 @@
   align-items: center;
   border-radius: var(--pine-dimension-sm);
   display: inline-flex;
-  padding-block: var(--pine-dimension-2xs);
+  padding-block: var(--pine-dimension-025);
   padding-inline: var(--pine-dimension-150);
 }
 
@@ -111,7 +111,7 @@ $pds-chip-sentiment-hover: (
   border-radius: var(--pine-dimension-sm);
   cursor: pointer;
   display: flex;
-  padding: var(--pine-dimension-2xs) var(--pine-dimension-150);
+  padding: var(--pine-dimension-025) var(--pine-dimension-150);
 
   &:focus-visible {
     outline: var(--pine-outline-focus);
@@ -155,7 +155,7 @@ $pds-chip-sentiment-hover: (
 // large
 
 :host(.pds-chip--large) {
-  padding-block: var(--pine-dimension-2xs);
+  padding-block: var(--pine-dimension-025);
   padding-inline: var(--pine-dimension-150);
 
   .pds-chip__label, .pds-chip__button {
@@ -170,7 +170,7 @@ $pds-chip-sentiment-hover: (
   padding: var(--pine-dimension-none);
 
   .pds-chip__button {
-    padding: var(--pine-dimension-2xs) var(--pine-dimension-150);
+    padding: var(--pine-dimension-025) var(--pine-dimension-150);
   }
 }
 
@@ -185,7 +185,7 @@ $pds-chip-sentiment-hover: (
     border-radius: calc(var(--pine-dimension-sm) - 1px);
     color: var(--pine-color-text-neutral);
     font-weight: var(--pine-font-weight-medium);
-    padding: var(--pine-dimension-2xs) var(--pine-dimension-150);
+    padding: var(--pine-dimension-025) var(--pine-dimension-150);
     position: relative;
     z-index: 1;
 

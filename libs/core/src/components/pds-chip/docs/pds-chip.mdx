@@ -70,19 +70,20 @@ The `sentiment` property represents the named color scheme of the chip component
 
 #### Brand
 
->**IMPORTANT**: The `brand` sentiment is a special case where only icon and large are supported. It does not support the `dot`, `dropdown`, or `tag` properties by design.
+> **IMPORTANT**: The `brand` sentiment is a special case where only `icon` and `large` properties are supported.
+> The `dot`, `dropdown`, and `tag` properties are not supported by design.
 
 <DocCanvas client:only
   mdxSource={{
     react: `
     <PdsChip sentiment="brand">Brand</PdsChip>
     <PdsChip sentiment="brand" icon="product">Brand</PdsChip>
-    <PdsChip sentiment="brand" size="large">Brand</PdsChip>
+    <PdsChip sentiment="brand" large>Brand</PdsChip>
     `,
     webComponent: `
     <pds-chip sentiment="brand">Brand</pds-chip>
     <pds-chip sentiment="brand" icon="product">Brand</pds-chip>
-    <pds-chip sentiment="brand" size="large">Brand</pds-chip>
+    <pds-chip sentiment="brand" large>Brand</pds-chip>
     `
 }}>
   <pds-chip sentiment="brand">Brand</pds-chip>
