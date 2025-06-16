@@ -29,6 +29,13 @@
 | `pdsSelectChange` | Emitted when a keyboard input occurs. | `CustomEvent<InputEvent>` |
 
 
+## Shadow Parts
+
+| Part       | Description |
+| ---------- | ----------- |
+| `"select"` |             |
+
+
 ## Dependencies
 
 ### Depends on

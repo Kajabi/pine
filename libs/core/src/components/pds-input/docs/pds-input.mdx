@@ -118,12 +118,18 @@ A prefix or suffix can be added to the input field to provide additional context
 
 <DocCanvas client:only
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux"><PdsIcon name="mail" slot="prefix"></PdsIcon><PdsButton class="pds-input__suffix" variant="unstyled" slot="suffix" icon-only icon="remove-circle">Remove</PdsButton></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux"><pds-icon name="mail" slot="prefix"></pds-icon><pds-button class="pds-input__suffix" variant="unstyled" slot="suffix" icon-only icon="remove-circle">Remove</pds-button></pds-input>'
+    react: `<PdsInput componentId="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux">
+  <PdsIcon name="mail" slot="prefix"></PdsIcon>
+  <PdsButton variant="unstyled" slot="suffix" icon-only icon="remove-circle">Remove</PdsButton>
+</PdsInput>`,
+    webComponent: `<pds-input component-id="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux">
+  <pds-icon name="mail" slot="prefix"></pds-icon>
+  <pds-button variant="unstyled" slot="suffix" icon-only icon="remove-circle">Remove</pds-button>
+</pds-input>`
   }}>
   <pds-input component-id="pds-input-prefix-suffix-example" label="Name" type="email" value="Frank Dux">
     <pds-icon name="mail" slot="prefix"></pds-icon>
-    <pds-button class="pds-input__suffix" variant="unstyled" slot="suffix" icon-only icon="remove-circle">Remove</pds-button>
+    <pds-button variant="unstyled" slot="suffix" icon-only icon="remove-circle">Remove</pds-button>
   </pds-input>
 </DocCanvas>
 
@@ -132,15 +138,33 @@ Prepend and append elements are placed outside the input container, next to the 
 
 <DocCanvas client:only
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-prepend-append-example" label="Amount" type="text" value="100"><PdsSelect class="pds-input__prepend" slot="prepend"><option value="USD">USD</option><option value="EUR">EUR</option></PdsSelect><PdsSelect class="pds-input__append" slot="append"><option value="1">1</option><option value="2">2</option></PdsSelect></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-prepend-append-example" label="Amount" type="text" value="100"><pds-select class="pds-input__prepend" slot="prepend"><option value="USD">USD</option><option value="EUR">EUR</option></pds-select><pds-select class="pds-input__append" slot="append"><option value="1">1</option><option value="2">2</option></pds-select></pds-input>'
-  }}>
+    react: `<PdsInput componentId="pds-input-prepend-append-example" label="Amount" type="text" value="100">
+  <PdsSelect slot="prepend">
+    <option value="USD">USD</option>
+    <option value="EUR">EUR</option>
+  </PdsSelect>
+  <PdsSelect slot="append">
+    <option value="1">1</option>
+    <option value="2">2</option>
+  </PdsSelect>
+</PdsInput>`,
+    webComponent: `<pds-input component-id="pds-input-prepend-append-example" label="Amount" type="text" value="100">
+  <pds-select slot="prepend">
+    <option value="USD">USD</option>
+    <option value="EUR">EUR</option>
+  </pds-select>
+  <pds-select slot="append">
+    <option value="1">1</option>
+    <option value="2">2</option>
+  </pds-select>
+</pds-input>`
+}}>
   <pds-input component-id="pds-input-prepend-append-example" label="Amount" type="text" value="100">
-    <pds-select class="pds-input__prepend" slot="prepend">
+    <pds-select slot="prepend">
       <option value="USD">USD</option>
       <option value="EUR">EUR</option>
     </pds-select>
-    <pds-select class="pds-input__append" slot="append">
+    <pds-select slot="append">
       <option value="1">1</option>
       <option value="2">2</option>
     </pds-select>
@@ -155,8 +179,12 @@ Prepend and append elements are placed outside the input container, next to the 
 **Prefix Icon**
 <DocCanvas client:only
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-prefix-icon" label="Email" type="email" value="Frank Dux"><PdsIcon name="mail" slot="prefix"></PdsIcon></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-prefix-icon" label="Email" type="email" value="Frank Dux"><pds-icon name="mail" slot="prefix"></pds-icon></pds-input>'
+    react: `<PdsInput componentId="pds-input-prefix-icon" label="Email" type="email" value="Frank Dux">
+  <PdsIcon name="mail" slot="prefix"></PdsIcon>
+</PdsInput>`,
+    webComponent: `<pds-input component-id="pds-input-prefix-icon" label="Email" type="email" value="Frank Dux">
+  <pds-icon name="mail" slot="prefix"></pds-icon>
+</pds-input>`
   }}>
   <pds-input component-id="pds-input-prefix-icon" label="Email" type="email" value="Frank Dux">
     <pds-icon name="mail" slot="prefix"></pds-icon>
@@ -166,11 +194,23 @@ Prepend and append elements are placed outside the input container, next to the 
 **Prepend Select**
 <DocCanvas client:only
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-prepend-select" label="Amount" type="text" value="100"><PdsSelect class="pds-input__prepend" slot="prepend"><option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option></PdsSelect></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-prepend-select" label="Amount" type="text" value="100"><pds-select class="pds-input__prepend" slot="prepend"><option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option></pds-select></pds-input>'
-  }}>
+    react: `<PdsInput componentId="pds-input-prepend-select" label="Amount" type="text" value="100">
+  <PdsSelect slot="prepend">
+    <option value="USD">USD</option>
+    <option value="EUR">EUR</option>
+    <option value="GBP">GBP</option>
+  </PdsSelect>
+</PdsInput>`,
+    webComponent: `<pds-input component-id="pds-input-prepend-select" label="Amount" type="text" value="100">
+    <pds-select slot="prepend">
+      <option value="USD">USD</option>
+      <option value="EUR">EUR</option>
+      <option value="GBP">GBP</option>
+    </pds-select>
+  </pds-input>`
+}}>
   <pds-input component-id="pds-input-prepend-select" label="Amount" type="text" value="100">
-    <pds-select class="pds-input__prepend" slot="prepend">
+    <pds-select slot="prepend">
       <option value="USD">USD</option>
       <option value="EUR">EUR</option>
       <option value="GBP">GBP</option>
@@ -181,12 +221,26 @@ Prepend and append elements are placed outside the input container, next to the 
 **Prefix Icon and Append Select**
 <DocCanvas client:only
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-prefix-append" label="Amount" type="text" value="100"><PdsIcon name="dollar" slot="prefix"></PdsIcon><PdsSelect class="pds-input__append" slot="append"><option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option></PdsSelect></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-prefix-append" label="Amount" type="text" value="100"><pds-icon name="dollar" slot="prefix"></pds-icon><pds-select class="pds-input__append" slot="append"><option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option></pds-select></pds-input>'
+    react: `<PdsInput componentId="pds-input-prefix-append" label="Amount" type="text" value="100">
+      <PdsIcon name="dollar" slot="prefix"></PdsIcon>
+      <PdsSelect slot="append">
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+        <option value="GBP">GBP</option>
+      </PdsSelect>
+    </PdsInput>`,
+    webComponent: `<pds-input component-id="pds-input-prefix-append" label="Amount" type="text" value="100">
+      <pds-icon name="dollar" slot="prefix"></pds-icon>
+      <pds-select slot="append">
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+        <option value="GBP">GBP</option>
+      </pds-select>
+    </pds-input>`
   }}>
   <pds-input component-id="pds-input-prefix-append" label="Amount" type="text" value="100">
     <pds-icon name="dollar" slot="prefix"></pds-icon>
-    <pds-select class="pds-input__append" slot="append">
+    <pds-select slot="append">
       <option value="USD">USD</option>
       <option value="EUR">EUR</option>
       <option value="GBP">GBP</option>
@@ -197,23 +251,37 @@ Prepend and append elements are placed outside the input container, next to the 
 **Prefix text and suffix text**
 <DocCanvas client:only
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-prefix-suffix-text" label="URL" type="text" value=""><PdsText class="pds-input__prefix" color="--pine-color-grey-700" slot="prefix">https://</PdsText><PdsText class="pds-input__suffix" color="--pine-color-grey-700" slot="suffix">mykajabi.com</PdsText></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-prefix-suffix-text" label="URL" type="text" value=""><pds-text class="pds-input__prefix" color="--pine-color-grey-700" slot="prefix">https://</pds-text><pds-text class="pds-input__suffix" color="--pine-color-grey-700" slot="suffix">mykajabi.com</pds-text></pds-input>'
+    react: `<PdsInput componentId="pds-input-prefix-suffix-text" label="URL" type="text" value="">
+      <PdsText color="--pine-color-grey-700" slot="prefix">https://</PdsText>
+      <PdsText color="--pine-color-grey-700" slot="suffix">mykajabi.com</PdsText>
+    </PdsInput>`,
+    webComponent: `<pds-input component-id="pds-input-prefix-suffix-text" label="URL" type="text" value="">
+      <pds-text color="--pine-color-grey-700" slot="prefix">https://</pds-text>
+      <pds-text color="--pine-color-grey-700" slot="suffix">mykajabi.com</pds-text>
+    </pds-input>`
   }}>
   <pds-input component-id="pds-input-prefix-suffix-text" label="URL" type="text" value="">
-    <pds-text class="pds-input__prefix" color="--pine-color-grey-700" slot="prefix">https://</pds-text>
-    <pds-text class="pds-input__suffix" color="--pine-color-grey-700" slot="suffix">mykajabi.com</pds-text>
+    <pds-text color="--pine-color-grey-700" slot="prefix">https://</pds-text>
+    <pds-text color="--pine-color-grey-700" slot="suffix">mykajabi.com</pds-text>
   </pds-input>
 </DocCanvas>
 
 **Unstyled button suffix**
 <DocCanvas client:only
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-suffix-button" label="Search" type="text" value=""><PdsButton class="pds-input__suffix" variant="unstyled" slot="suffix"><PdsIcon name="search"></PdsIcon></PdsButton></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-suffix-button" label="Search" type="text" value=""><pds-button class="pds-input__suffix" variant="unstyled" slot="suffix"><pds-icon name="search"></pds-icon></pds-button></pds-input>'
+    react: `<PdsInput componentId="pds-input-suffix-button" label="Search" type="text" value="">
+      <PdsButton variant="unstyled" slot="suffix">
+        <PdsIcon name="search"></PdsIcon>
+      </PdsButton>
+    </PdsInput>`,
+    webComponent: `<pds-input component-id="pds-input-suffix-button" label="Search" type="text" value="">
+      <pds-button variant="unstyled" slot="suffix">
+        <pds-icon name="search"></pds-icon>
+      </pds-button>
+    </pds-input>`
   }}>
   <pds-input component-id="pds-input-suffix-button" label="Search" type="text" value="">
-    <pds-button class="pds-input__suffix" variant="unstyled" slot="suffix">
+    <pds-button variant="unstyled" slot="suffix">
       <pds-icon name="search"></pds-icon>
     </pds-button>
   </pds-input>
@@ -222,12 +290,22 @@ Prepend and append elements are placed outside the input container, next to the 
 **Prefix Icon and Suffix Button**
 <DocCanvas client:only
   mdxSource={{
-    react: '<PdsInput componentId="pds-input-prefix-suffix" label="Email" type="email" value="Frank Dux"><PdsIcon name="mail" slot="prefix"></PdsIcon><PdsButton class="pds-input__suffix" variant="unstyled" slot="suffix"><PdsIcon name="remove-circle"></PdsIcon></PdsButton></PdsInput>',
-    webComponent: '<pds-input component-id="pds-input-prefix-suffix" label="Email" type="email" value="Frank Dux"><pds-icon name="mail" slot="prefix"></pds-icon><pds-button class="pds-input__suffix" variant="unstyled" slot="suffix"><pds-icon name="remove-circle"></pds-icon></pds-button></pds-input>'
+    react: `<PdsInput componentId="pds-input-prefix-suffix" label="Email" type="email" value="Frank Dux">
+      <PdsIcon name="mail" slot="prefix"></PdsIcon>
+      <PdsButton variant="unstyled" slot="suffix">
+        <PdsIcon name="remove-circle"></PdsIcon>
+      </PdsButton>
+    </PdsInput>`,
+    webComponent: `<pds-input component-id="pds-input-prefix-suffix" label="Email" type="email" value="Frank Dux">
+      <pds-icon name="mail" slot="prefix"></pds-icon>
+      <pds-button variant="unstyled" slot="suffix">
+        <pds-icon name="remove-circle"></pds-icon>
+      </pds-button>
+    </pds-input>`
   }}>
   <pds-input component-id="pds-input-prefix-suffix" label="Email" type="email" value="Frank Dux">
     <pds-icon name="mail" slot="prefix"></pds-icon>
-    <pds-button class="pds-input__suffix" variant="unstyled" slot="suffix">
+    <pds-button variant="unstyled" slot="suffix">
       <pds-icon name="remove-circle"></pds-icon>
     </pds-button>
   </pds-input>

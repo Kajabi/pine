@@ -44,14 +44,14 @@
 .pds-button {
   --pds-loader-color: var(--color-text-default);
   align-items: center;
-  background-color: var(--pds-button-background);
+  background-color: var(--pds-button-background, var(--color-background-default));
   border: var(--pds-button-border);
-  border-radius: var(--pds-button-border-radius);
-  border-bottom-left-radius: var(--pds-button-border-radius-end-start, var(--pds-button-border-radius));
-  border-bottom-right-radius: var(--pds-button-border-radius-end-end, var(--pds-button-border-radius));
   border-color: var(--color-border-default);
-  border-top-left-radius: var(--pds-button-border-radius-start-start, var(--pds-button-border-radius));
-  border-top-right-radius: var(--pds-button-border-radius-start-end, var(--pds-button-border-radius));
+  border-end-end-radius: var(--pds-button-border-radius-end-end, var(--pds-button-border-radius));
+  border-end-start-radius: var(--pds-button-border-radius-end-start, var(--pds-button-border-radius));
+  border-radius: var(--pds-button-border-radius);
+  border-start-end-radius: var(--pds-button-border-radius-start-end, var(--pds-button-border-radius));
+  border-start-start-radius: var(--pds-button-border-radius-start-start, var(--pds-button-border-radius));
   box-sizing: border-box;
   color: var(--color-text-default);
   cursor: pointer;
