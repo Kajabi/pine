@@ -211,6 +211,7 @@ export class PdsSelect {
             multiple={this.multiple}
             name={this.name}
             onChange={this.onSelectUpdate}
+            part="select"
             required={this.required}
             ref={(el) => (this.selectEl = el as HTMLSelectElement)}
           ></select>

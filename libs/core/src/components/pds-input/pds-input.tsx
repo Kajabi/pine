@@ -1,13 +1,17 @@
 import { Component, Element, Event, EventEmitter, h, Host, Method, Prop, State, Watch } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
+import { inheritAriaAttributes } from '@utils/attributes';
+import type { Attributes } from '@utils/attributes';
+import { InputChangeEventDetail, InputInputEventDetail } from './input-interface';
+import { debounceEvent } from '@utils/utils';
 import { danger } from '@pine-ds/icons/icons';
 
-import { debounceEvent } from '@utils/utils';
-import { inheritAriaAttributes } from '@utils/attributes';
-
-import type { Attributes } from '@utils/attributes';
-import type { InputChangeEventDetail, InputInputEventDetail } from './input-interface';
-
+/**
+ * @slot append - Content to be displayed after the input field
+ * @slot prefix - Content that is displayed visually within the input field before the input field
+ * @slot prepend - Content to be displayed before the input field
+ * @slot suffix - Content that is displayed visually within the input field after the input field
+ */
 @Component({
   tag: 'pds-input',
   styleUrls: ['pds-input.tokens.scss', '../../global/styles/utils/label.scss', 'pds-input.scss'],
@@ -17,14 +21,32 @@ export class PdsInput {
   private nativeInput?: HTMLInputElement;
   private inheritedAttributes: Attributes = {};
   private isComposing = false;
-  /**
-   * The value of the input when the input is focused.
-   */
+  private prefixEl?: HTMLElement;
+  private suffixEl?: HTMLElement;
   private focusedValue?: string | number | null;
-
   private originalPdsInput?: EventEmitter<InputInputEventDetail>;
 
   @Element() el!: HTMLPdsInputElement;
+
+  /**
+   * If true, the input has prefix content (non-focusable)
+   */
+  @State() hasPrefix = false;
+
+  /**
+   * If true, the input has suffix content (non-focusable)
+   */
+  @State() hasSuffix = false;
+
+  /**
+   * If true, the input has prepend content (focusable)
+   */
+  @State() hasPrepend = false;
+
+  /**
+   * If true, the input has append content (focusable)
+   */
+  @State() hasAppend = false;
 
   /**
    * Emitted when the input loses focus.
@@ -32,7 +54,6 @@ export class PdsInput {
   @Event() pdsBlur!: EventEmitter<FocusEvent>;
 
   /**
-   *
    * Emitted when the value has changed.
    *
    * This event will not emit when programmatically setting the `value` property.
@@ -55,7 +76,7 @@ export class PdsInput {
    */
   @Method()
   async setFocus() {
-    if ( this.nativeInput ) {
+    if (this.nativeInput) {
       this.nativeInput.focus();
     }
   }
@@ -137,6 +158,89 @@ export class PdsInput {
    */
   @State() hasFocus = false;
 
+  private updateAddonWidths() {
+    requestAnimationFrame(() => {
+      if (this.prefixEl) {
+        const prefixWidth = this.prefixEl.offsetWidth;
+        this.el.style.setProperty('--prefix-width', `${prefixWidth}px`);
+      }
+
+      if (this.suffixEl) {
+        const suffixWidth = this.suffixEl.offsetWidth;
+        this.el.style.setProperty('--suffix-width', `${suffixWidth}px`);
+      }
+    });
+  }
+
+  private renderPrefix() {
+    const hasPrefix = this.el.querySelector('[slot="prefix"]') !== null;
+    if (hasPrefix) {
+      return (
+        <div class="pds-input__prefix" part="prefix" ref={(el) => this.prefixEl = el as HTMLElement}>
+          <slot name="prefix" onSlotchange={() => this.updateAddonWidths()}></slot>
+        </div>
+      );
+    }
+    return null;
+  }
+
+  private renderSuffix() {
+    const hasSuffix = this.el.querySelector('[slot="suffix"]') !== null;
+    if (hasSuffix) {
+      return (
+        <div class="pds-input__suffix" part="suffix" ref={(el) => this.suffixEl = el as HTMLElement}>
+          <slot name="suffix" onSlotchange={() => this.updateAddonWidths()}></slot>
+        </div>
+      );
+    }
+    return null;
+  }
+
+  private renderPrepend() {
+    const hasPrepend = this.el.querySelector('[slot="prepend"]') !== null;
+    if (hasPrepend) {
+      return (
+        <div class="pds-input__prepend" part="prepend">
+          <slot name="prepend"></slot>
+        </div>
+      );
+    }
+    return null;
+  }
+
+  private renderAppend() {
+    const hasAppend = this.el.querySelector('[slot="append"]') !== null;
+    if (hasAppend) {
+      return (
+        <div class="pds-input__append" part="append">
+          <slot name="append"></slot>
+        </div>
+      );
+    }
+    return null;
+  }
+
+  componentWillLoad() {
+    this.inheritedAttributes = {
+      ...inheritAriaAttributes(this.el)
+    };
+    this.hasPrefix = this.el.querySelector('[slot="prefix"]') !== null;
+    this.hasSuffix = this.el.querySelector('[slot="suffix"]') !== null;
+    this.hasPrepend = this.el.querySelector('[slot="prepend"]') !== null;
+    this.hasAppend = this.el.querySelector('[slot="append"]') !== null;
+
+    // Store the original pdsInput event emitter
+    this.originalPdsInput = this.pdsInput;
+  }
+
+  componentDidLoad() {
+    this.debounceChanged();
+    this.updateAddonWidths();
+  }
+
+  componentDidUpdate() {
+    this.updateAddonWidths();
+  }
 
   @Watch('debounce')
   protected debounceChanged() {
@@ -216,7 +320,6 @@ export class PdsInput {
   }
 
   /**
-   *
    * Emits a `pdsInput` event
    */
   private emitInputChange(event?: Event) {
@@ -228,77 +331,87 @@ export class PdsInput {
     this.pdsInput.emit({ value: newValue, event });
   }
 
-
-  componentWillLoad() {
-    this.inheritedAttributes = {
-      ...inheritAriaAttributes(this.el)
-    }
-  }
-
-  componentDidLoad() {
-    this.debounceChanged();
-  }
-
-  private inputClassNames() {
-    const classNames = ['pds-input__field'];
-
-    if (this.invalid && this.invalid === true) {
-      classNames.push('is-invalid');
-    }
-
-    return classNames.join('  ');
-  }
-
   render() {
+    const {
+      componentId,
+      disabled,
+      errorMessage,
+      helperMessage,
+      invalid = false,
+      label,
+    } = this;
+
+    const value = this.getValue();
+
+    const inputWrapperClasses = {
+      'pds-input__field-wrapper': true,
+      'has-focus': this.hasFocus,
+      'has-error': invalid || !!errorMessage,
+      'is-disabled': disabled,
+      'has-prefix': this.hasPrefix,
+      'has-suffix': this.hasSuffix,
+      'has-prepend': this.hasPrepend,
+      'has-append': this.hasAppend,
+    };
+
     return (
       <Host
         aria-disabled={this.disabled ? 'true' : null}
         aria-readonly={this.readonly ? 'true' : null}
+        has-prefix={this.hasPrefix ? 'true' : null}
+        has-suffix={this.hasSuffix ? 'true' : null}
+        has-prepend={this.hasPrepend ? 'true' : null}
+        has-append={this.hasAppend ? 'true' : null}
       >
         <div class="pds-input">
-          {this.label &&
-            <label class="pds-input__label" htmlFor={this.componentId}>{this.label}</label>
-          }
-          <input
-            class={this.inputClassNames()}
-            ref={(input) => this.nativeInput = input}
-            aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
-            aria-invalid={this.invalid ? "true" : undefined}
-            autocomplete={this.autocomplete}
-            disabled={this.disabled}
-            id={this.componentId}
-            name={this.name}
-            placeholder={this.placeholder}
-            readOnly={this.readonly}
-            required={this.required}
-            type={this.type}
-            value={this.value}
-            onInput={this.onInputEvent}
-            onChange={this.onChangeEvent}
-            onBlur={this.onBlurEvent}
-            onFocus={this.onFocusEvent}
-            onCompositionstart={this.onCompositionStart}
-            onCompositionend={this.onCompositionEnd}
-            {...this.inheritedAttributes}
-          />
-          {this.helperMessage &&
-            <p
-              class="pds-input__helper-message"
-              id={messageId(this.componentId, 'helper')}
-            >
-              {this.helperMessage}
+          {label && (
+            <label htmlFor={componentId} class="pds-input__label">
+              {label}
+              {this.required && <span class="pds-input__required-indicator"> *</span>}
+            </label>
+          )}
+
+          <div class={inputWrapperClasses}>
+            {this.renderPrepend()}
+            {this.renderPrefix()}
+            <input
+              ref={(input) => (this.nativeInput = input)}
+              class="pds-input__field"
+              aria-describedby={assignDescription(componentId, invalid, helperMessage)}
+              aria-invalid={invalid ? "true" : undefined}
+              autocomplete={this.autocomplete}
+              disabled={disabled}
+              id={componentId}
+              name={this.name}
+              placeholder={this.placeholder}
+              readOnly={this.readonly}
+              required={this.required}
+              type={this.type}
+              value={value}
+              onInput={this.onInputEvent}
+              onChange={this.onChangeEvent}
+              onBlur={this.onBlurEvent}
+              onFocus={this.onFocusEvent}
+              onCompositionstart={this.onCompositionStart}
+              onCompositionend={this.onCompositionEnd}
+              {...this.inheritedAttributes}
+            />
+            {this.renderSuffix()}
+            {this.renderAppend()}
+          </div>
+
+          {helperMessage && (
+            <p class="pds-input__helper-message" id={messageId(componentId, 'helper')}>
+              {helperMessage}
             </p>
-          }
-          {this.errorMessage &&
-            <p
-              class="pds-input__error-message"
-              id={messageId(this.componentId, 'error')}
-              aria-live="assertive"
-            >
+          )}
+
+          {errorMessage && (
+            <p class="pds-input__error-message" id={messageId(componentId, 'error')}>
               <pds-icon icon={danger} size="small" />
-              {this.errorMessage}
+              {errorMessage}
             </p>
-          }
+          )}
         </div>
       </Host>
     );
