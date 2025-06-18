@@ -4,17 +4,17 @@ figma.connect('https://www.figma.com/file/CC1YmaGKHnsvB28yLY9mEH?node-id=34433-2
   props: {
     label: figma.string('Label'),
     sentiment: figma.enum('Sentiment', {
-  "Accent": "accent",
-  "Danger": "danger",
-  "Info": "info",
-  "Neutral": "neutral",
+  "accent (purp)": "accent",
+  "danger (red)": "danger",
+  "info (blue)": "info",
+  "neutral (grey)": "neutral",
   "success (green)": "success",
-  "Warning": "warning"
+  "warning (yellow)": "warning"
 }),
     variant: figma.enum('Variant', {
-  "Text": "text",
-  "Tag": "tag",
-  "Dropdown": "dropdown"
+  "text": "text",
+  "tag": "tag",
+  "dropdown": "dropdown"
 }),
   },
   example: (props) => html`<pds-chip
