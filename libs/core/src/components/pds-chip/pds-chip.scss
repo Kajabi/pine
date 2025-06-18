@@ -4,7 +4,7 @@
   align-items: center;
   border-radius: var(--pine-dimension-sm);
   display: inline-flex;
-  padding-block: var(--pine-dimension-2xs);
+  padding-block: var(--pine-dimension-025);
   padding-inline: var(--pine-dimension-150);
 }
 
@@ -79,7 +79,6 @@ $pds-chip-sentiment-hover: (
   border-radius: var(--pine-border-radius-full);
   display: inline-block;
   height: var(--pine-dimension-2xs);
-  margin-block-end: var(--pine-dimension-025);
   margin-inline-end: var(--pine-dimension-2xs);
   width: var(--pine-dimension-2xs);
 }
@@ -87,6 +86,10 @@ $pds-chip-sentiment-hover: (
 .pds-chip__label {
   align-items: center;
   display: flex;
+
+  pds-icon {
+    margin-inline-end: var(--pine-dimension-2xs);
+  }
 }
 
 .pds-chip__label, .pds-chip__button {
@@ -98,11 +101,6 @@ $pds-chip-sentiment-hover: (
 
 :host(.pds-chip--dropdown) {
   padding: var(--pine-dimension-none);
-
-  .pds-chip__dot {
-    margin-block-end: calc(var(--pine-dimension-025) / 4);
-    margin-block-start: var(--pine-dimension-025);
-  }
 }
 
 .pds-chip__button {
@@ -113,14 +111,18 @@ $pds-chip-sentiment-hover: (
   border-radius: var(--pine-dimension-sm);
   cursor: pointer;
   display: flex;
-  padding: var(--pine-dimension-2xs) var(--pine-dimension-150);
+  padding: var(--pine-dimension-025) var(--pine-dimension-150);
 
   &:focus-visible {
     outline: var(--pine-outline-focus);
     outline-offset: var(--pine-border-width);
   }
 
-  pds-icon {
+  pds-icon:first-child {
+    margin-inline-end: var(--pine-dimension-2xs);
+  }
+
+  pds-icon:last-child {
     margin-inline-end: calc(var(--pine-dimension-025) * -1);
     margin-inline-start: var(--pine-dimension-2xs);
   }
@@ -153,15 +155,60 @@ $pds-chip-sentiment-hover: (
 // large
 
 :host(.pds-chip--large) {
-  padding-block: var(--pine-dimension-2xs);
+  padding-block: var(--pine-dimension-025);
   padding-inline: var(--pine-dimension-150);
 
   .pds-chip__label, .pds-chip__button {
-    font: var(--pine-typography-heading-6);
+    font-family: var(--pine-font-family-heading);
+    font-size: var(--pine-font-size-heading-6);
+    font-weight: var(--pine-font-weight-medium);
     letter-spacing: var(--pine-letter-spacing-heading-6);
   }
 }
 
-:host(.pds-chip--large):has(.pds-chip__button) {
+:host(.pds-chip--large.pds-chip--dropdown) {
   padding: var(--pine-dimension-none);
+
+  .pds-chip__button {
+    padding: var(--pine-dimension-025) var(--pine-dimension-150);
+  }
+}
+
+:host(.pds-chip--brand) {
+  background: linear-gradient(90deg, #FF3E14 0%, #6B62F2 100%);
+  border: 0;
+  padding: 1px;
+  position: relative;
+
+  .pds-chip__label {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: calc(var(--pine-dimension-sm) - 1px);
+    color: var(--pine-color-text-neutral);
+    font-weight: var(--pine-font-weight-medium);
+    padding: var(--pine-dimension-025) var(--pine-dimension-150);
+    position: relative;
+    z-index: 1;
+
+    pds-icon {
+      margin-inline-end: var(--pine-dimension-2xs);
+    }
+  }
+
+  .pds-chip__button, .pds-chip__close {
+    color: var(--pine-color-text-neutral);
+    font-weight: var(--pine-font-weight-medium);
+    position: relative;
+    z-index: 1;
+  }
+
+  .pds-chip__button {
+    pds-icon:first-child {
+      margin-inline-end: var(--pine-dimension-2xs);
+    }
+  }
+
+  // tag close hover colors
+  .pds-chip__close:hover {
+    background: rgba(255, 255, 255, 0.8);
+  }
 }

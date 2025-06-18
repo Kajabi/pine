@@ -18,10 +18,15 @@ export class PdsChip {
 
   /**
    * Determines whether a dot should be displayed on the chip.
+   * Note: This prop is ignored when sentiment is 'brand'.
    * @defaultValue false
    */
   @Prop() dot = false;
 
+  /**
+   * The name of the icon to display before the chip text.
+   */
+  @Prop() icon?: string;
 
   /**
    * Determines whether the chip should be displayed in a larger size.
@@ -33,10 +38,11 @@ export class PdsChip {
    * Defines the color scheme of the chip.
    * @defaultValue 'neutral'
    */
-  @Prop() sentiment: 'accent' | 'danger' | 'info' | 'neutral' | 'success' | 'warning' = 'neutral';
+  @Prop() sentiment: 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning' = 'neutral';
 
   /**
    * Sets the style variant of the chip.
+   * Note: This prop is ignored when sentiment is 'brand'.
    * @defaultValue 'text'
    */
   @Prop() variant: 'text' | 'tag' | 'dropdown' = 'text';
@@ -56,9 +62,13 @@ export class PdsChip {
     if (this.large) {
       classNames.push('pds-chip--large');
     }
-    if (this.variant) {
-      classNames.push('pds-chip--' + this.variant);
+
+    // For brand sentiment, always use text variant
+    const effectiveVariant = this.sentiment === 'brand' ? 'text' : this.variant;
+    if (effectiveVariant) {
+      classNames.push('pds-chip--' + effectiveVariant);
     }
+
     if (this.sentiment) {
       classNames.push('pds-chip--' + this.sentiment);
     }
@@ -66,17 +76,33 @@ export class PdsChip {
     return classNames.join(' ');
   }
 
+  private get effectiveVariant() {
+    // For brand sentiment, force text variant behavior
+    return this.sentiment === 'brand' ? 'text' : this.variant;
+  }
+
+  private get iconSize() {
+    // Icon size based on large prop
+    return this.large ? '14px' : '12px';
+  }
+
   private setChipContent() {
-    const isDropdown = this.variant === 'dropdown';
+    const isDropdown = this.effectiveVariant === 'dropdown';
+
+    // For brand sentiment, ignore dot prop
+    const showDot = this.sentiment === 'brand' ? false : this.dot;
+
     const chipContent = isDropdown ? (
       <button class="pds-chip__button" type="button">
-        {this.dot && <i class="pds-chip__dot" aria-hidden="true"></i>}
+        {this.icon && <pds-icon icon={this.icon} size={this.iconSize} aria-hidden="true"></pds-icon>}
+        {showDot && <i class="pds-chip__dot" aria-hidden="true"></i>}
         <slot></slot>
-        <pds-icon icon={downSmall} size="12px" aria-hidden="true"></pds-icon>
+        <pds-icon icon={downSmall} size={this.iconSize} aria-hidden="true"></pds-icon>
       </button>
     ) : (
       <span class="pds-chip__label">
-        {this.dot && <i class="pds-chip__dot" aria-hidden="true"></i>}
+        {this.icon && <pds-icon icon={this.icon} size={this.iconSize} aria-hidden="true"></pds-icon>}
+        {showDot && <i class="pds-chip__dot" aria-hidden="true"></i>}
         <slot></slot>
       </span>
     );
@@ -88,9 +114,9 @@ export class PdsChip {
     return (
       <Host class={this.classNames()} id={this.componentId}>
         {this.setChipContent()}
-        {this.variant === 'tag' && (
+        {this.effectiveVariant === 'tag' && (
           <button class="pds-chip__close" type="button" onClick={this.handleCloseClick} aria-label="Remove">
-            <pds-icon icon={remove} size="12px"></pds-icon>
+            <pds-icon icon={remove} size={this.iconSize}></pds-icon>
           </button>
         )}
       </Host>
