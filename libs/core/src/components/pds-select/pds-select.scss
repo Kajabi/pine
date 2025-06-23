@@ -31,7 +31,8 @@
 
 label {
   grid-area: label;
-  margin-block-end: var(--pine-dimension-2xs);
+  // margin-block-end: var(--pine-dimension-2xs);
+  margin: 0;
 }
 
 select {
@@ -118,3 +119,17 @@ select {
   position: relative;
   z-index: 1;
 }
+
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: polygon(0 0, 0 0, 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+

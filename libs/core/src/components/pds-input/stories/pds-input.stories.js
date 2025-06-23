@@ -151,7 +151,7 @@ withPrependSelect.args = {
   label: 'Amount',
   type: 'text',
   prepend: html`
-    <pds-select slot="prepend" class="pds-input__prepend">
+    <pds-select hide-label label="Currency" slot="prepend" class="pds-input__prepend">
       <option value="USD">USD</option>
       <option value="EUR">EUR</option>
       <option value="GBP">GBP</option>
