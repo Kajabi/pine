@@ -4,7 +4,7 @@ figma.connect('https://www.figma.com/file/CC1YmaGKHnsvB28yLY9mEH?node-id=34433-2
   props: {
     dot: figma.enum("Variant", {
       dot: true,
-      drop: true,
+      dropdown: true,
       false: undefined,
     }),
     label: figma.string('Label'),
