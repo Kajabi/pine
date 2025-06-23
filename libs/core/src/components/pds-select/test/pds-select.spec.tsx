@@ -12,7 +12,7 @@ describe('pds-select', () => {
       <pds-select component-id="field-1">
         <mock:shadow-root>
           <div class="pds-select">
-            <select class="pds-select__field" id="field-1">
+            <select class="pds-select__field" id="field-1" part="select">
             </select>
             <div aria-hidden="true" class="hidden">
               <slot></slot>
@@ -52,7 +52,7 @@ describe('pds-select', () => {
         <mock:shadow-root>
           <div class="pds-select">
             <label htmlfor="field-1">Name</label>
-            <select class="pds-select__field" id="field-1">
+            <select class="pds-select__field" id="field-1" part="select">
               <option value="1">Option 1</option>
               <option value="2">Option 2</option>
             </select>
@@ -78,7 +78,7 @@ describe('pds-select', () => {
         <mock:shadow-root>
           <div class="pds-select">
             <label htmlFor="field-1">Name</label>
-            <select class="pds-select__field" id="field-1"></select>
+            <select class="pds-select__field" id="field-1" part="select"></select>
             <div aria-hidden="true" class="hidden">
               <slot></slot>
             </div>
@@ -124,7 +124,7 @@ describe('pds-select', () => {
         <mock:shadow-root>
           <div class="pds-select">
             <label htmlfor="field-1">Disabled</label>
-            <select class="pds-select__field" disabled="" id="field-1">
+            <select class="pds-select__field" disabled="" id="field-1" part="select">
               <slot></slot>
             </select>
             <div aria-hidden="true" class="hidden">
@@ -149,7 +149,7 @@ describe('pds-select', () => {
       <pds-select class="is-invalid" component-id="field-1" invalid="true">
         <mock:shadow-root>
           <div class="pds-select">
-            <select class="pds-select__field" id="field-1">
+            <select class="pds-select__field" id="field-1" part="select">
               <slot></slot>
             </select>
             <div aria-hidden="true" class="hidden">
@@ -173,7 +173,7 @@ describe('pds-select', () => {
         <mock:shadow-root>
           <div class="pds-select">
             <label htmlFor="field-1">Name</label>
-            <select autocomplete="off" class="pds-select__field" id="field-1"></select>
+            <select autocomplete="off" class="pds-select__field" id="field-1" part="select"></select>
             <div aria-hidden="true" class="hidden">
               <slot></slot>
             </div>
@@ -195,7 +195,7 @@ describe('pds-select', () => {
         <mock:shadow-root>
           <div class="pds-select">
             <label htmlFor="field-1">Name</label>
-            <select autocomplete="on" class="pds-select__field" id="field-1"></select>
+            <select autocomplete="on" class="pds-select__field" id="field-1" part="select"></select>
             <div aria-hidden="true" class="hidden">
               <slot></slot>
             </div>
@@ -216,7 +216,7 @@ describe('pds-select', () => {
       <pds-select component-id="field-1" multiple="">
         <mock:shadow-root>
           <div class="pds-select">
-            <select class="pds-select__field" id="field-1" multiple="">
+            <select class="pds-select__field" id="field-1" multiple="" part="select">
             </select>
             <div aria-hidden="true" class="hidden">
               <slot></slot>
