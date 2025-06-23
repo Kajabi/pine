@@ -214,6 +214,13 @@
     border-color: var(--pine-color-border-active);
     outline: var(--pine-outline-focus);
     outline-offset: var(--pine-border-width);
+
+    :host([has-prepend]) &,
+    :host([has-append]) &,
+    :host([has-prefix]) &,
+    :host([has-suffix]) & {
+      outline-offset: var(--pine-dimension-none);
+    }
   }
 
   &::placeholder {
