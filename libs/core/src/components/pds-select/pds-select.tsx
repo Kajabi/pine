@@ -205,12 +205,15 @@ export class PdsSelect {
     return (
       <Host aria-disabled={this.disabled ? 'true' : null} class={this.classNames()}>
         <div class="pds-select">
-          <label htmlFor={this.componentId}>
-            <span class={this.hideLabel ? 'visually-hidden' : ''}>
-              {this.label}
-            </span>
-          </label>
+          {this.hideLabel && (
+            <label htmlFor={this.componentId}>
+              <span class={this.hideLabel ? 'visually-hidden' : ''}>
+                {this.label}
+              </span>
+            </label>
+          )}
           <select
+            aria-label={this.hideLabel ? undefined : this.label}
             autocomplete={this.autocomplete || undefined}
             class="pds-select__field"
             disabled={this.disabled}
