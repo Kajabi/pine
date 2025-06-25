@@ -5,7 +5,7 @@
   --pds-input-border-color-disabled: var(--pine-color-border-disabled);
 
   --pds-input-border-radius: var(--pine-dimension-125);
-  --pds-input-border-width: 1px;
+  --pds-input-border-width: var(--pine-border-width-thin);
   --pds-input-padding-x: var(--pine-dimension-150);
   --pds-input-padding-y: var(--pine-dimension-xs);
   --pds-input-font: var(--pine-typography-body);
@@ -20,7 +20,7 @@
   --pds-input-error-border-hover: var(--pine-color-border-danger-hover);
   --pds-input-addon-background: var(--pine-color-background-subtle);
   --pds-input-addon-color: var(--pine-color-text-secondary);
-  --pds-input-field-min-height: 38px;
+  --pds-input-field-min-height: calc(var(--pine-dimension-450) + 2px);
   --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
   --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring-danger);
 
@@ -29,10 +29,6 @@
   pds-select::part(select) {
     background-color: var(--pds-input-error-background);
     border-color: var(--pds-input-error-border);
-  }
-
-  pds-input pds-select::part(select-label) {
-    margin: 0;
   }
 
   &::part(prefix),
