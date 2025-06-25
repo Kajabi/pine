@@ -16,6 +16,9 @@ figma.connect('https://www.figma.com/file/CC1YmaGKHnsvB28yLY9mEH?node-id=34433-2
   "success (green)": "success",
   "warning (yellow)": "warning"
 }),
+    size: figma.enum("Size", {
+      lg: "true",
+    }),
     variant: figma.enum('Variant', {
   "text": "text",
   "tag": "tag",
@@ -24,6 +27,7 @@ figma.connect('https://www.figma.com/file/CC1YmaGKHnsvB28yLY9mEH?node-id=34433-2
   },
   example: (props) => html`<pds-chip
     dot=${props.dot}
+    large=${props.size}
     sentiment=${props.sentiment}
     variant=${props.variant}
   >${props.label}</pds-chip>`,
