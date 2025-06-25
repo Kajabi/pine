@@ -62,3 +62,28 @@ figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=4179-
     ${props.name}
   </pds-button>`,
 });
+
+figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=3672-21858', {
+  props: {
+    variant: figma.enum('Variant', {
+      "Left": "start",
+      "Gap": "space-between",
+      "Right": "end",
+    }),
+    button: figma.children("pds-button"),
+    link: figma.children("Link"),
+  },
+  example: (props) => {
+    // NOTE: this is not supported by figma, but awaiting the capability
+    // const linkBox = props.link ? html`<pds-box>${props.link}</pds-box>` : '';
+    // ${props.link ? html`<pds-box>${props.link}</pds-box>` : ''}
+    return html`
+      <pds-box fit>
+        <pds-box
+          justify-content=${props.variant}
+        >
+          ${props.button}
+        </pds-box>
+      </pds-box>`;
+  },
+});
