@@ -205,7 +205,7 @@ export class PdsSelect {
     return (
       <Host aria-disabled={this.disabled ? 'true' : null} class={this.classNames()}>
         <div class="pds-select">
-          {this.hideLabel && (
+          {!this.hideLabel && (
             <label htmlFor={this.componentId}>
               <span class={this.hideLabel ? 'visually-hidden' : ''}>
                 {this.label}
@@ -213,7 +213,7 @@ export class PdsSelect {
             </label>
           )}
           <select
-            aria-label={this.hideLabel ? undefined : this.label}
+            aria-label={this.hideLabel ? this.label : undefined}
             autocomplete={this.autocomplete || undefined}
             class="pds-select__field"
             disabled={this.disabled}
