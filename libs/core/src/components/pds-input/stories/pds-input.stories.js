@@ -165,7 +165,7 @@ withAppendSelect.args = {
   label: 'Phone',
   type: 'tel',
   append: html`
-    <pds-select slot="append" class="pds-input__append">
+    <pds-select hide-label slot="append" class="pds-input__append">
       <option value="mobile">Mobile</option>
       <option value="home">Home</option>
       <option value="work">Work</option>
@@ -180,7 +180,7 @@ withPrefixAndAppend.args = {
   type: 'text',
   prefix: html`<pds-icon name="dollar" size="small"></pds-icon>`,
   append: html`
-    <pds-select slot="append" class="pds-input__append">
+    <pds-select hide-label slot="append" class="pds-input__append">
       <option value="USD">USD</option>
       <option value="EUR">EUR</option>
       <option value="GBP">GBP</option>
@@ -194,7 +194,7 @@ withPrependAndSuffix.args = {
   label: 'Amount',
   type: 'text',
   prepend: html`
-    <pds-select slot="prepend" class="pds-input__prepend">
+    <pds-select hide-label slot="prepend" class="pds-input__prepend">
       <option value="USD">USD</option>
       <option value="EUR">EUR</option>
       <option value="GBP">GBP</option>
