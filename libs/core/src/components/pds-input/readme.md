@@ -17,10 +17,16 @@
 | `helperMessage`            | `helper-message` | Displays a message or hint below the input field.                                                                     | `string`           | `undefined` |
 | `invalid`                  | `invalid`        | Determines whether or not the input field is invalid or throws an error.                                              | `boolean`          | `undefined` |
 | `label`                    | `label`          | Text to be displayed as the input label.                                                                              | `string`           | `undefined` |
+| `max`                      | `max`            | Specifies the maximum value for the input field.                                                                      | `string`           | `undefined` |
+| `maxlength`                | `maxlength`      | Specifies the maximum number of characters allowed in the input field.                                                | `string`           | `undefined` |
+| `min`                      | `min`            | Specifies the minimum value for the input field.                                                                      | `string`           | `undefined` |
+| `minlength`                | `minlength`      | Specifies the minimum number of characters allowed in the input field.                                                | `string`           | `undefined` |
 | `name`                     | `name`           | Specifies the name. Submitted with the form name/value pair.                                                          | `string`           | `undefined` |
+| `pattern`                  | `pattern`        | Specifies the regular expression that the input value is checked against.                                             | `string`           | `undefined` |
 | `placeholder`              | `placeholder`    | Specifies a short hint that describes the expected value of the input field.                                          | `string`           | `undefined` |
 | `readonly`                 | `readonly`       | Determines whether or not the input field is readonly.                                                                | `boolean`          | `undefined` |
 | `required`                 | `required`       | Determines whether or not the input field is required.                                                                | `boolean`          | `undefined` |
+| `step`                     | `step`           | Works with the `min` and `max` attributes to define increments for the input field.                                   | `string`           | `undefined` |
 | `type`                     | `type`           | Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`, `'url'` | `string`           | `'text'`    |
 | `value`                    | `value`          | The value of the input.                                                                                               | `number \| string` | `''`        |
 

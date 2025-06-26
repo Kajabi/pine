@@ -156,6 +156,114 @@ describe('pds-input', () => {
     `);
   });
 
+  it('renders max attribute', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsInput],
+      html: `<pds-input component-id="field-1" value="Frank Dux" max="100"></pds-input>`
+    });
+    expect(root).toEqualHtml(`
+    <pds-input component-id="field-1" value="Frank Dux" max="100">
+      <mock:shadow-root>
+        <div class="pds-input">
+          <div class="pds-input__field-wrapper">
+            <input id="field-1" class="pds-input__field" type="text" value="Frank Dux" max="100" />
+          </div>
+        </div>
+      </mock:shadow-root>
+    </pds-input>
+    `);
+  });
+
+  it('renders maxlength attribute', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsInput],
+      html: `<pds-input component-id="field-1" value="Frank Dux" maxlength="100"></pds-input>`
+    });
+    expect(root).toEqualHtml(`
+    <pds-input component-id="field-1" value="Frank Dux" maxlength="100">
+      <mock:shadow-root>
+        <div class="pds-input">
+          <div class="pds-input__field-wrapper">
+            <input id="field-1" class="pds-input__field" type="text" value="Frank Dux" maxlength="100" />
+          </div>
+        </div>
+      </mock:shadow-root>
+    </pds-input>
+    `);
+  });
+
+  it('renders min attribute', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsInput],
+      html: `<pds-input component-id="field-1" value="Frank Dux" min="0"></pds-input>`
+    });
+    expect(root).toEqualHtml(`
+    <pds-input component-id="field-1" value="Frank Dux" min="0">
+      <mock:shadow-root>
+        <div class="pds-input">
+          <div class="pds-input__field-wrapper">
+            <input id="field-1" class="pds-input__field" type="text" value="Frank Dux" min="0" />
+          </div>
+        </div>
+      </mock:shadow-root>
+    </pds-input>
+    `);
+  });
+
+  it('renders minlength attribute', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsInput],
+      html: `<pds-input component-id="field-1" value="Frank Dux" minlength="100"></pds-input>`
+    });
+    expect(root).toEqualHtml(`
+    <pds-input component-id="field-1" value="Frank Dux" minlength="100">
+      <mock:shadow-root>
+        <div class="pds-input">
+          <div class="pds-input__field-wrapper">
+            <input id="field-1" class="pds-input__field" type="text" value="Frank Dux" minlength="100" />
+          </div>
+        </div>
+      </mock:shadow-root>
+    </pds-input>
+    `);
+  });
+
+  it('renders pattern attribute', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsInput],
+      html: `<pds-input component-id="field-1" value="Frank Dux" pattern="^[a-zA-Z]+$"></pds-input>`
+    });
+    expect(root).toEqualHtml(`
+    <pds-input component-id="field-1" value="Frank Dux" pattern="^[a-zA-Z]+$">
+      <mock:shadow-root>
+        <div class="pds-input">
+          <div class="pds-input__field-wrapper">
+            <input id="field-1" class="pds-input__field" type="text" value="Frank Dux" pattern="^[a-zA-Z]+$" />
+          </div>
+        </div>
+      </mock:shadow-root>
+    </pds-input>
+    `);
+  });
+
+  it('renders step attribute', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsInput],
+      html: `<pds-input component-id="field-1" value="Frank Dux" step="1"></pds-input>`
+    });
+    expect(root).toEqualHtml(`
+    <pds-input component-id="field-1" value="Frank Dux" step="1">
+      <mock:shadow-root>
+        <div class="pds-input">
+          <div class="pds-input__field-wrapper">
+            <input id="field-1" class="pds-input__field" type="text" value="Frank Dux" step="1" />
+          </div>
+        </div>
+      </mock:shadow-root>
+    </pds-input>
+    `);
+  });
+
   it('renders a helper message', async () => {
     const { root } = await newSpecPage({
       components: [PdsInput],
