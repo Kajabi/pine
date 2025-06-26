@@ -1,6 +1,8 @@
-import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
+import { Component, Host, h, Prop, Event, EventEmitter, Element } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
 import { danger } from '@pine-ds/icons/icons';
+import { inheritAriaAttributes, inheritNonStencilAttributesAuto } from '@utils/attributes';
+import type { Attributes } from '@utils/attributes';
 
 @Component({
   tag: 'pds-radio',
@@ -8,6 +10,8 @@ import { danger } from '@pine-ds/icons/icons';
   scoped: true,
 })
 export class PdsRadio {
+  @Element() el: HTMLPdsRadioElement;
+
   /**
    * Determines whether or not the radio is checked.
    * @defaultValue false
@@ -72,6 +76,15 @@ export class PdsRadio {
    */
   @Event() pdsRadioChange: EventEmitter<boolean>;
 
+  private inheritedAttributes: Attributes = {};
+
+  componentWillLoad() {
+    this.inheritedAttributes = {
+      ...inheritAriaAttributes(this.el),
+      ...inheritNonStencilAttributesAuto(this.el, this)
+    };
+  }
+
   private handleRadioChange = (e: Event) => {
     if (this.disabled) {
       return;
@@ -111,6 +124,7 @@ export class PdsRadio {
             required={this.required}
             disabled={this.disabled}
             onChange={this.handleRadioChange}
+            {...this.inheritedAttributes}
           />
           <span class={this.hideLabel ? 'visually-hidden' : ''}>
             {this.label}

@@ -3,7 +3,7 @@ import { assignDescription, isRequired, messageId } from '../../utils/form';
 import { TextareaChangeEventDetail, TextareaInputEventDetail } from './textarea-interface';
 import { debounceEvent } from '@utils/utils';
 import type { Attributes } from '@utils/attributes';
-import { inheritAttributes, inheritAriaAttributes } from '@utils/attributes';
+import { inheritAriaAttributes, inheritNonStencilAttributesAuto } from '@utils/attributes';
 import { danger } from '@pine-ds/icons/icons';
 
 @Component({
@@ -230,7 +230,7 @@ export class PdsTextarea {
   componentWillLoad() {
     this.inheritedAttributes = {
       ...inheritAriaAttributes(this.el),
-      ...inheritAttributes(this.el),
+      ...inheritNonStencilAttributesAuto(this.el, this)
     };
   }
 

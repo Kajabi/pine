@@ -3,7 +3,7 @@ import { assignDescription, messageId } from '../../utils/form';
 import { CheckboxChangeEventDetail } from './checkbox-interface';
 import { danger } from '@pine-ds/icons/icons';
 
-import { inheritAriaAttributes } from '@utils/attributes';
+import { inheritAriaAttributes, inheritNonStencilAttributesAuto } from '@utils/attributes';
 import type { Attributes } from '@utils/attributes';
 
 @Component({
@@ -122,8 +122,9 @@ export class PdsCheckbox {
 
   componentWillLoad() {
     this.inheritedAttributes = {
-      ...inheritAriaAttributes(this.el)
-    }
+      ...inheritAriaAttributes(this.el),
+      ...inheritNonStencilAttributesAuto(this.el, this)
+    };
   }
 
   render() {

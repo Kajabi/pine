@@ -1,6 +1,6 @@
 import { Component, Element, Event, EventEmitter, h, Host, Method, Prop, State, Watch } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
-import { inheritAriaAttributes } from '@utils/attributes';
+import { inheritAriaAttributes, inheritNonStencilAttributesAuto } from '@utils/attributes';
 import type { Attributes } from '@utils/attributes';
 import { InputChangeEventDetail, InputInputEventDetail } from './input-interface';
 import { debounceEvent } from '@utils/utils';
@@ -20,6 +20,7 @@ import { danger } from '@pine-ds/icons/icons';
 export class PdsInput {
   private nativeInput?: HTMLInputElement;
   private inheritedAttributes: Attributes = {};
+  private mutationObserver?: MutationObserver;
   private isComposing = false;
   private prefixEl?: HTMLElement;
   private suffixEl?: HTMLElement;
@@ -220,10 +221,34 @@ export class PdsInput {
     return null;
   }
 
-  componentWillLoad() {
+  connectedCallback() {
+    this.collectInheritedAttributes();
+    // Optionally, observe attribute changes for dynamic updates
+    this.mutationObserver = new MutationObserver(() => {
+      this.collectInheritedAttributes();
+    });
+    this.mutationObserver.observe(this.el, { attributes: true });
+  }
+
+  disconnectedCallback() {
+    this.mutationObserver?.disconnect();
+  }
+
+  componentDidLoad() {
+    this.collectInheritedAttributes();
+    this.debounceChanged();
+    this.updateAddonWidths();
+  }
+
+  private collectInheritedAttributes() {
     this.inheritedAttributes = {
-      ...inheritAriaAttributes(this.el)
+      ...inheritAriaAttributes(this.el),
+      ...inheritNonStencilAttributesAuto(this.el, this)
     };
+  }
+
+  componentWillLoad() {
+    // Remove attribute collection from here
     this.hasPrefix = this.el.querySelector('[slot="prefix"]') !== null;
     this.hasSuffix = this.el.querySelector('[slot="suffix"]') !== null;
     this.hasPrepend = this.el.querySelector('[slot="prepend"]') !== null;
@@ -231,11 +256,6 @@ export class PdsInput {
 
     // Store the original pdsInput event emitter
     this.originalPdsInput = this.pdsInput;
-  }
-
-  componentDidLoad() {
-    this.debounceChanged();
-    this.updateAddonWidths();
   }
 
   componentDidUpdate() {

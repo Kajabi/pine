@@ -2,7 +2,7 @@ import { Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil
 import { assignDescription, messageId } from '../../utils/form';
 import { danger } from '@pine-ds/icons/icons';
 
-import { inheritAriaAttributes } from '@utils/attributes';
+import { inheritAriaAttributes, inheritNonStencilAttributesAuto } from '@utils/attributes';
 import type { Attributes } from '@utils/attributes';
 
 @Component({
@@ -97,8 +97,9 @@ export class PdsSwitch {
 
   componentWillLoad() {
     this.inheritedAttributes = {
-      ...inheritAriaAttributes(this.el)
-    }
+      ...inheritAriaAttributes(this.el),
+      ...inheritNonStencilAttributesAuto(this.el, this)
+    };
   }
 
   render() {

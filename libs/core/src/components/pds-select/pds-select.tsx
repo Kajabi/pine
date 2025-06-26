@@ -1,6 +1,8 @@
-import { Component, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
+import { Component, Event, EventEmitter, Host, h, Prop, Watch, Element } from '@stencil/core';
 import { messageId } from '../../utils/form';
 import { danger, enlarge } from '@pine-ds/icons/icons';
+import { inheritAriaAttributes, inheritNonStencilAttributesAuto } from '@utils/attributes';
+import type { Attributes } from '@utils/attributes';
 
 @Component({
   tag: 'pds-select',
@@ -11,6 +13,8 @@ export class PdsSelect {
 
   private selectEl!: HTMLSelectElement;
   private slotContainer!: HTMLDivElement;
+  @Element() el: HTMLPdsSelectElement;
+  private inheritedAttributes: Attributes = {};
 
   /**
    * Specifies if and how the browser provides `autocomplete` assistance for the field.
@@ -92,6 +96,10 @@ export class PdsSelect {
   }
 
   componentWillLoad() {
+    this.inheritedAttributes = {
+      ...inheritAriaAttributes(this.el),
+      ...inheritNonStencilAttributesAuto(this.el, this)
+    };
     this.updateSelectedOption();
   }
 
@@ -224,6 +232,7 @@ export class PdsSelect {
             part="select"
             required={this.required}
             ref={(el) => (this.selectEl = el as HTMLSelectElement)}
+            {...this.inheritedAttributes}
           ></select>
           <div aria-hidden="true" class="hidden" ref={(el) => (this.slotContainer = el)}>
             <slot onSlotchange={this.handleSlotChange}></slot>
