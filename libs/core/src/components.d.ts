@@ -585,19 +585,19 @@ export namespace Components {
         /**
           * Specifies the maximum value for the input field.
          */
-        "max"?: string | number;
+        "max"?: string;
         /**
           * Specifies the maximum number of characters allowed in the input field.
          */
-        "maxlength"?: string | number;
+        "maxlength"?: string;
         /**
           * Specifies the minimum value for the input field.
          */
-        "min"?: string | number;
+        "min"?: string;
         /**
           * Specifies the minimum number of characters allowed in the input field.
          */
-        "minlength"?: string | number;
+        "minlength"?: string;
         /**
           * Specifies the name. Submitted with the form name/value pair.
          */
@@ -625,7 +625,7 @@ export namespace Components {
         /**
           * Works with the `min` and `max` attributes to define increments for the input field.
          */
-        "step"?: string | number;
+        "step"?: string;
         /**
           * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`, `'url'`
           * @defaultValue "text"
@@ -2522,19 +2522,19 @@ declare namespace LocalJSX {
         /**
           * Specifies the maximum value for the input field.
          */
-        "max"?: string | number;
+        "max"?: string;
         /**
           * Specifies the maximum number of characters allowed in the input field.
          */
-        "maxlength"?: string | number;
+        "maxlength"?: string;
         /**
           * Specifies the minimum value for the input field.
          */
-        "min"?: string | number;
+        "min"?: string;
         /**
           * Specifies the minimum number of characters allowed in the input field.
          */
-        "minlength"?: string | number;
+        "minlength"?: string;
         /**
           * Specifies the name. Submitted with the form name/value pair.
          */
@@ -2574,7 +2574,7 @@ declare namespace LocalJSX {
         /**
           * Works with the `min` and `max` attributes to define increments for the input field.
          */
-        "step"?: string | number;
+        "step"?: string;
         /**
           * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`, `'url'`
           * @defaultValue "text"

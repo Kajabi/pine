@@ -125,22 +125,22 @@ export class PdsInput {
   /**
    * Specifies the maximum value for the input field.
    */
-  @Prop() max?: string | number;
+  @Prop() max?: string;
 
   /**
    * Specifies the maximum number of characters allowed in the input field.
    */
-  @Prop() maxlength?: string | number;
+  @Prop() maxlength?: string;
 
   /**
    * Specifies the minimum value for the input field.
    */
-  @Prop() min?: string | number;
+  @Prop() min?: string;
 
   /**
    * Specifies the minimum number of characters allowed in the input field.
    */
-  @Prop() minlength?: string | number;
+  @Prop() minlength?: string;
 
   /**
    * Specifies the name. Submitted with the form name/value pair.
@@ -170,7 +170,7 @@ export class PdsInput {
   /**
    * Works with the `min` and `max` attributes to define increments for the input field.
    */
-  @Prop() step?: string | number;
+  @Prop() step?: string;
 
   /**
    * Determines the type of control that will be displayed
