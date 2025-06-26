@@ -583,9 +583,29 @@ export namespace Components {
          */
         "label"?: string;
         /**
+          * Specifies the maximum value for the input field.
+         */
+        "max"?: string | number;
+        /**
+          * Specifies the maximum number of characters allowed in the input field.
+         */
+        "maxlength"?: string | number;
+        /**
+          * Specifies the minimum value for the input field.
+         */
+        "min"?: string | number;
+        /**
+          * Specifies the minimum number of characters allowed in the input field.
+         */
+        "minlength"?: string | number;
+        /**
           * Specifies the name. Submitted with the form name/value pair.
          */
         "name"?: string;
+        /**
+          * Specifies the regular expression that the input value is checked against.
+         */
+        "pattern"?: string;
         /**
           * Specifies a short hint that describes the expected value of the input field.
          */
@@ -602,6 +622,10 @@ export namespace Components {
           * Sets focus on the native `input` in the `pds-input`. Use this method instead of the global `input.focus()`.
          */
         "setFocus": () => Promise<void>;
+        /**
+          * Works with the `min` and `max` attributes to define increments for the input field.
+         */
+        "step"?: string | number;
         /**
           * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`, `'url'`
           * @defaultValue "text"
@@ -2496,6 +2520,22 @@ declare namespace LocalJSX {
          */
         "label"?: string;
         /**
+          * Specifies the maximum value for the input field.
+         */
+        "max"?: string | number;
+        /**
+          * Specifies the maximum number of characters allowed in the input field.
+         */
+        "maxlength"?: string | number;
+        /**
+          * Specifies the minimum value for the input field.
+         */
+        "min"?: string | number;
+        /**
+          * Specifies the minimum number of characters allowed in the input field.
+         */
+        "minlength"?: string | number;
+        /**
           * Specifies the name. Submitted with the form name/value pair.
          */
         "name"?: string;
@@ -2516,6 +2556,10 @@ declare namespace LocalJSX {
          */
         "onPdsInput"?: (event: PdsInputCustomEvent<InputInputEventDetail>) => void;
         /**
+          * Specifies the regular expression that the input value is checked against.
+         */
+        "pattern"?: string;
+        /**
           * Specifies a short hint that describes the expected value of the input field.
          */
         "placeholder"?: string;
@@ -2527,6 +2571,10 @@ declare namespace LocalJSX {
           * Determines whether or not the input field is required.
          */
         "required"?: boolean;
+        /**
+          * Works with the `min` and `max` attributes to define increments for the input field.
+         */
+        "step"?: string | number;
         /**
           * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`, `'url'`
           * @defaultValue "text"

@@ -81,6 +81,7 @@ export class PdsInput {
     }
   }
 
+
   /**
    * Specifies if and how the browser provides `autocomplete` assistance for the field.
    */
@@ -122,9 +123,34 @@ export class PdsInput {
   @Prop() label?: string;
 
   /**
+   * Specifies the maximum value for the input field.
+   */
+  @Prop() max?: string | number;
+
+  /**
+   * Specifies the maximum number of characters allowed in the input field.
+   */
+  @Prop() maxlength?: string | number;
+
+  /**
+   * Specifies the minimum value for the input field.
+   */
+  @Prop() min?: string | number;
+
+  /**
+   * Specifies the minimum number of characters allowed in the input field.
+   */
+  @Prop() minlength?: string | number;
+
+  /**
    * Specifies the name. Submitted with the form name/value pair.
    */
   @Prop() name?: string;
+
+  /**
+   * Specifies the regular expression that the input value is checked against.
+   */
+  @Prop() pattern?: string;
 
   /**
    * Specifies a short hint that describes the expected value of the input field.
@@ -140,6 +166,11 @@ export class PdsInput {
    * Determines whether or not the input field is required.
    */
   @Prop() required?: boolean;
+
+  /**
+   * Works with the `min` and `max` attributes to define increments for the input field.
+   */
+  @Prop() step?: string | number;
 
   /**
    * Determines the type of control that will be displayed
@@ -382,10 +413,16 @@ export class PdsInput {
               autocomplete={this.autocomplete}
               disabled={disabled}
               id={componentId}
+              max={this.max}
+              maxlength={this.maxlength}
+              min={this.min}
+              minlength={this.minlength}
               name={this.name}
+              pattern={this.pattern}
               placeholder={this.placeholder}
               readOnly={this.readonly}
               required={this.required}
+              step={this.step}
               type={this.type}
               value={value}
               onInput={this.onInputEvent}
