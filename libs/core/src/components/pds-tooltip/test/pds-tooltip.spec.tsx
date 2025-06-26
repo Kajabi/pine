@@ -805,4 +805,75 @@ describe('pds-tooltip', () => {
     // This is a more reliable way to test cleanup without depending on
     // implementation details of how the tooltip portal is managed
   });
+
+  it('should close tooltip when pathname changes during SPA navigation', async () => {
+    // Mock window.location.pathname
+    const originalPathname = window.location.pathname;
+
+    // Mock setInterval and clearInterval for this test
+    const mockSetInterval = jest.fn();
+    const mockClearInterval = jest.fn();
+    const originalSetInterval = global.setInterval;
+    const originalClearInterval = global.clearInterval;
+
+    (global as any).setInterval = mockSetInterval;
+    (global as any).clearInterval = mockClearInterval;
+
+    const page = await newSpecPage({
+      components: [PdsTooltip],
+      html: `
+        <pds-tooltip content="Navigation Test">
+          <button>Trigger</button>
+        </pds-tooltip>`,
+    });
+
+    // Open tooltip interactively to trigger pathname monitoring
+    const triggerElement = page.root?.querySelector('.pds-tooltip__trigger');
+    triggerElement?.dispatchEvent(new MouseEvent('mouseenter'));
+    await page.waitForChanges();
+
+    // Verify tooltip is open and polling was started
+    let tooltipPortal = page.body.querySelector('.pds-tooltip');
+    expect(tooltipPortal).toHaveClass('pds-tooltip--is-open');
+    expect(mockSetInterval).toHaveBeenCalled();
+
+    // Get the pathname check callback from the setInterval call
+    const pathnameCheckCallback = mockSetInterval.mock.calls[0][0];
+
+    // Mock pathname change
+    Object.defineProperty(window, 'location', {
+      value: {
+        ...window.location,
+        pathname: '/new-page'
+      },
+      writable: true
+    });
+
+    // Call the pathname check callback to simulate the interval firing
+    pathnameCheckCallback();
+    await page.waitForChanges();
+
+    // Verify tooltip was closed due to pathname change
+    tooltipPortal = page.body.querySelector('.pds-tooltip');
+    if (tooltipPortal) {
+      expect(tooltipPortal).not.toHaveClass('pds-tooltip--is-open');
+    } else {
+      // If hiding removes the portal entirely, this is also valid
+      expect(tooltipPortal).toBeNull();
+    }
+
+    // Verify interval cleanup was called
+    expect(mockClearInterval).toHaveBeenCalled();
+
+    // Restore original implementations
+    global.setInterval = originalSetInterval;
+    global.clearInterval = originalClearInterval;
+    Object.defineProperty(window, 'location', {
+      value: {
+        ...window.location,
+        pathname: originalPathname
+      },
+      writable: true
+    });
+  });
 });

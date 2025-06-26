@@ -26,6 +26,8 @@ export class PdsTooltip {
   private contentDiv: HTMLElement | null = null;
   private slotMutationObserver: MutationObserver | null = null;
   private overlayResizeObserver: ResizeObserver | null = null;
+  private currentPathname: string = '';
+  private pathnameCheckInterval: NodeJS.Timeout | null = null;
 
   /**
    * Reference to the Host element
@@ -104,6 +106,7 @@ export class PdsTooltip {
 
   componentDidLoad() {
     window.addEventListener('pageshow', this.handlePageShow);
+    this.currentPathname = window.location.pathname;
     this.triggerEl = this.el.querySelector('.pds-tooltip__trigger') as HTMLElement;
     const contentSlotWrapper = this.el.querySelector('.pds-tooltip__content-slot-wrapper');
 
@@ -195,6 +198,13 @@ export class PdsTooltip {
 
     this.hideTooltip();
     this._isInteractiveOpen = false;
+  };
+
+  private checkPathnameChange = () => {
+    if (window.location.pathname !== this.currentPathname) {
+      this.currentPathname = window.location.pathname;
+      this.handleSpaNavigation();
+    }
   };
 
   /**
@@ -310,7 +320,7 @@ export class PdsTooltip {
           hasSlottedContent = true;
           childrenToClone.forEach((node /*, index*/) => {
             if (node.nodeType === Node.ELEMENT_NODE || (node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== '')) {
-              this.contentDiv.appendChild(node.cloneNode(true));
+              this.contentDiv.appendChild(node);
             }
           });
         }
@@ -340,6 +350,9 @@ export class PdsTooltip {
     window.addEventListener('popstate', this.handleSpaNavigation, true);
     window.addEventListener('hashchange', this.handleSpaNavigation, true);
 
+    // Start pathname change detection
+    this.pathnameCheckInterval = setInterval(this.checkPathnameChange, 100);
+
     // Add ARIA attribute to trigger, now that portalEl and its ID are confirmed
     if (this.triggerEl !== null && this.portalEl.id !== '') {
       this.triggerEl.setAttribute('aria-describedby', this.portalEl.id);
@@ -350,6 +363,12 @@ export class PdsTooltip {
     if (this.overlayResizeObserver !== null && this.contentDiv !== null) {
       this.overlayResizeObserver.unobserve(this.contentDiv);
       this.overlayResizeObserver = null;
+    }
+
+    // Stop pathname change detection
+    if (this.pathnameCheckInterval !== null) {
+      clearInterval(this.pathnameCheckInterval);
+      this.pathnameCheckInterval = null;
     }
 
     if (this.portalEl !== null) {
