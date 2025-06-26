@@ -320,7 +320,7 @@ export class PdsTooltip {
           hasSlottedContent = true;
           childrenToClone.forEach((node /*, index*/) => {
             if (node.nodeType === Node.ELEMENT_NODE || (node.nodeType === Node.TEXT_NODE && node.textContent?.trim() !== '')) {
-              this.contentDiv.appendChild(node);
+              this.contentDiv.appendChild(node.cloneNode(true));
             }
           });
         }
