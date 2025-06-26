@@ -7,6 +7,7 @@ export default {
     autocomplete: null,
     disabled: false,
     errorMessage: null,
+    hideLabel: false,
     helperMessage: null,
     invalid: false,
     multiple: false,
@@ -52,6 +53,7 @@ const BaseTemplate = (args) =>
     disabled="${args.disabled}"
     error-message="${args.errorMessage}"
     helper-message="${args.helperMessage}"
+    hide-label="${args.hideLabel}"
     invalid="${args.invalid}"
     label="${args.label}"
     multiple="${args.multiple}"

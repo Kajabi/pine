@@ -34,6 +34,11 @@ export class PdsSelect {
   @Prop() errorMessage: string;
 
   /**
+   * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
+   */
+  @Prop() hideLabel: boolean;
+
+  /**
    * Displays helper message text below select.
    */
   @Prop() helperMessage: string;
@@ -200,10 +205,15 @@ export class PdsSelect {
     return (
       <Host aria-disabled={this.disabled ? 'true' : null} class={this.classNames()}>
         <div class="pds-select">
-          {this.label &&
-            <label htmlFor={this.componentId}>{this.label}</label>
-          }
+          {!this.hideLabel && (
+            <label htmlFor={this.componentId}>
+              <span class={this.hideLabel ? 'visually-hidden' : ''}>
+                {this.label}
+              </span>
+            </label>
+          )}
           <select
+            aria-label={this.hideLabel ? this.label : undefined}
             autocomplete={this.autocomplete || undefined}
             class="pds-select__field"
             disabled={this.disabled}
@@ -211,6 +221,7 @@ export class PdsSelect {
             multiple={this.multiple}
             name={this.name}
             onChange={this.onSelectUpdate}
+            part="select"
             required={this.required}
             ref={(el) => (this.selectEl = el as HTMLSelectElement)}
           ></select>

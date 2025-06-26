@@ -27,12 +27,12 @@
 
 ## Events
 
-| Event       | Description                                                                                                        | Type                                  |
-| ----------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------- |
-| `pdsBlur`   | Emitted when the input loses focus.                                                                                | `CustomEvent<FocusEvent>`             |
-| `pdsChange` |  Emitted when the value has changed.  This event will not emit when programmatically setting the `value` property. | `CustomEvent<InputChangeEventDetail>` |
-| `pdsFocus`  | Emitted when the input has focus.                                                                                  | `CustomEvent<FocusEvent>`             |
-| `pdsInput`  | Emitted when a keyboard input occurs.                                                                              | `CustomEvent<InputInputEventDetail>`  |
+| Event       | Description                                                                                                       | Type                                  |
+| ----------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| `pdsBlur`   | Emitted when the input loses focus.                                                                               | `CustomEvent<FocusEvent>`             |
+| `pdsChange` | Emitted when the value has changed.  This event will not emit when programmatically setting the `value` property. | `CustomEvent<InputChangeEventDetail>` |
+| `pdsFocus`  | Emitted when the input has focus.                                                                                 | `CustomEvent<FocusEvent>`             |
+| `pdsInput`  | Emitted when a keyboard input occurs.                                                                             | `CustomEvent<InputInputEventDetail>`  |
 
 
 ## Methods
@@ -47,6 +47,26 @@ Sets focus on the native `input` in the `pds-input`. Use this method instead of 
 Type: `Promise<void>`
 
 
+
+
+## Slots
+
+| Slot        | Description                                                                      |
+| ----------- | -------------------------------------------------------------------------------- |
+| `"append"`  | Content to be displayed after the input field                                    |
+| `"prefix"`  | Content that is displayed visually within the input field before the input field |
+| `"prepend"` | Content to be displayed before the input field                                   |
+| `"suffix"`  | Content that is displayed visually within the input field after the input field  |
+
+
+## Shadow Parts
+
+| Part        | Description |
+| ----------- | ----------- |
+| `"append"`  |             |
+| `"prefix"`  |             |
+| `"prepend"` |             |
+| `"suffix"`  |             |
 
 
 ## Dependencies
