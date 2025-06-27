@@ -58,6 +58,18 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() triggerVariant: 'secondary' | 'primary' | 'accent' = 'secondary';
 
   /**
+   * Placement of the dropdown relative to the trigger.
+   * @default 'bottom-start'
+   */
+  @Prop() dropdownPlacement: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end' = 'bottom-start';
+
+  /**
+   * Width of the dropdown. Can be 'trigger' (match trigger width), 'auto', or a custom CSS value.
+   * @default 'trigger'
+   */
+  @Prop() dropdownWidth: 'trigger' | 'auto' | string = 'trigger';
+
+  /**
    * Emitted when the value changes.
    */
   @Event() pdsComboboxChange!: EventEmitter<{ value: string }>;
@@ -116,7 +128,7 @@ export class PdsCombobox implements BasePdsProps {
   private openDropdownPositioning() {
     if (this.triggerEl && this.listboxEl) {
       computePosition(this.triggerEl, this.listboxEl, {
-        placement: 'bottom-start',
+        placement: this.dropdownPlacement,
         middleware: [offset(12), flip(), shift({ padding: 5 })],
       }).then(({ x, y }) => {
         Object.assign(this.listboxEl.style, {
@@ -125,6 +137,14 @@ export class PdsCombobox implements BasePdsProps {
           position: 'absolute',
           zIndex: 1000,
         });
+        // Set width
+        if (this.dropdownWidth === 'trigger') {
+          this.listboxEl.style.width = `${this.triggerEl.offsetWidth}px`;
+        } else if (this.dropdownWidth === 'auto') {
+          this.listboxEl.style.width = 'auto';
+        } else if (typeof this.dropdownWidth === 'string') {
+          this.listboxEl.style.width = this.dropdownWidth;
+        }
       });
     }
   }
@@ -144,20 +164,8 @@ export class PdsCombobox implements BasePdsProps {
   };
 
   private handleBlur = () => {
-    setTimeout(() => {
-      this.isOpen = true;
-    }, 100);
+    // No longer needed, handled by focusout on wrapper
   };
-
-  private handleOptionClick(option: HTMLOptionElement) {
-    // Remove 'selected' from all options
-    this.optionEls.forEach(opt => opt.removeAttribute('selected'));
-    // Set 'selected' on the chosen option
-    option.setAttribute('selected', '');
-    this.value = option.label;
-    this.isOpen = false;
-    this.pdsComboboxChange.emit({ value: option.value });
-  }
 
   private handleKeyDown = (e: KeyboardEvent) => {
     if (!this.isOpen && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
@@ -232,6 +240,24 @@ export class PdsCombobox implements BasePdsProps {
     }
   };
 
+  // Close dropdown when focus leaves the combobox
+  private onComboboxFocusOut = (event: FocusEvent) => {
+    const relatedTarget = event.relatedTarget as Node | null;
+    if (!this.el.contains(relatedTarget)) {
+      this.isOpen = false;
+    }
+  };
+
+  private handleOptionClick(option: HTMLOptionElement) {
+    // Remove 'selected' from all options
+    this.optionEls.forEach(opt => opt.removeAttribute('selected'));
+    // Set 'selected' on the chosen option
+    option.setAttribute('selected', '');
+    this.value = option.label;
+    this.isOpen = false;
+    this.pdsComboboxChange.emit({ value: option.value });
+  }
+
   private renderDropdown() {
     if (!this.isOpen || this.filteredOptions.length === 0) return null;
     return (
@@ -272,7 +298,7 @@ export class PdsCombobox implements BasePdsProps {
     const triggerClass = `pds-combobox__button-trigger pds-combobox__button-trigger--${this.triggerVariant}`;
     return (
       <Host>
-        <div class="pds-combobox">
+        <div class="pds-combobox" tabIndex={-1} onFocusout={this.onComboboxFocusOut}>
           {this.label && (
             <label htmlFor={this.componentId} class="pds-combobox__label">
               {this.label}
@@ -319,7 +345,7 @@ export class PdsCombobox implements BasePdsProps {
               <span class="pds-combobox__button-trigger-label">
                 {this.selectedLabel || this.placeholder}
               </span>
-              <pds-icon name="chevron-down" class="pds-combobox__button-trigger-chevron" />
+              <pds-icon icon="caret-down" class="pds-combobox__button-trigger-chevron" />
             </div>
           )}
           {/* Hide the slot so options are not visible */}

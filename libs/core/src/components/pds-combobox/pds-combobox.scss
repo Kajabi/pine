@@ -14,12 +14,41 @@
 }
 
 .pds-combobox__input {
-  border: 1px solid #cccccc;
-  border-radius: 4px;
+  background: var(--pine-color-background-container);
+  border: 1px solid var(--pine-color-border);
+  border-radius: var(--pine-dimension-125);
   box-sizing: border-box;
-  font-size: 1rem;
-  padding: 0.5rem 0.75rem;
+  color: var(--pine-color-text-active);
+  flex: 1;
+  font: var(--pine-typography-body-medium);
+  padding: var(--pine-dimension-xs) var(--pine-dimension-150);
+  transition: border-color 0.2s ease;
   width: 100%;
+
+  &:hover:not(:disabled) {
+    border-color: var(--pine-color-border-hover);
+  }
+
+  &:disabled {
+    background: var(--pine-color-background-container-disabled);
+    border-color: var(--pine-color-border-disabled);
+    color: var(--pine-color-text-disabled);
+    cursor: not-allowed;
+
+    &::placeholder {
+      color: var(--pine-color-text-placeholder-disabled);
+    }
+  }
+
+  &:focus-visible {
+    border-color: var(--pine-color-border-active);
+    outline: var(--pine-outline-focus);
+    outline-offset: var(--pine-border-width);
+  }
+
+  &::placeholder {
+    color: var(--pine-color-text-placeholder);
+  }
 }
 
 .pds-combobox__listbox {
@@ -79,7 +108,7 @@
   outline: none;
   padding: 0 16px;
   transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
-  width: 100%;
+  width: fit-content;
 }
 
 .pds-combobox__button-trigger:focus {

@@ -189,6 +189,51 @@ Use the `triggerVariant` prop to control the style.
   </pds-combobox>
 </DocCanvas>
 
+## Dropdown Placement & Width
+
+You can control the dropdown's placement and width using the following props:
+
+- `dropdownPlacement`: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end' (default: 'bottom-start')
+- `dropdownWidth`: 'trigger' (match trigger width, default) | 'auto' | any CSS width value (e.g., '300px')
+
+### Custom Placement
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-placement-end" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only" dropdown-placement="bottom-end">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</pds-combobox>`
+  }}
+>
+  <pds-combobox component-id="combobox-placement-end" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only" dropdown-placement="bottom-end">
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="panda">Panda</option>
+    <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
+
+### Custom Width
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-width-custom" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only" dropdown-width="300px">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</pds-combobox>`
+  }}
+>
+  <pds-combobox component-id="combobox-width-custom" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only" dropdown-width="300px">
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="panda">Panda</option>
+    <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
+
 ## Example
 
 <DocCanvas client:only

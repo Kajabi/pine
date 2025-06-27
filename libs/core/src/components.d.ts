@@ -438,6 +438,16 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
+          * Placement of the dropdown relative to the trigger.
+          * @default 'bottom-start'
+         */
+        "dropdownPlacement": 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
+        /**
+          * Width of the dropdown. Can be 'trigger' (match trigger width), 'auto', or a custom CSS value.
+          * @default 'trigger'
+         */
+        "dropdownWidth": 'trigger' | 'auto' | string;
+        /**
           * Text to be displayed as the combobox label.
          */
         "label"?: string;
@@ -2433,6 +2443,16 @@ declare namespace LocalJSX {
           * If true, the combobox is disabled.
          */
         "disabled"?: boolean;
+        /**
+          * Placement of the dropdown relative to the trigger.
+          * @default 'bottom-start'
+         */
+        "dropdownPlacement"?: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
+        /**
+          * Width of the dropdown. Can be 'trigger' (match trigger width), 'auto', or a custom CSS value.
+          * @default 'trigger'
+         */
+        "dropdownWidth"?: 'trigger' | 'auto' | string;
         /**
           * Text to be displayed as the combobox label.
          */
