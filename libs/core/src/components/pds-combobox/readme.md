@@ -14,6 +14,7 @@
 | `label`                    | `label`        | Text to be displayed as the combobox label.                                                              | `string`                    | `undefined` |
 | `mode`                     | `mode`         | Determines the combobox mode: 'filter' (filter options as you type) or 'select-only' (show all options). | `"filter" \| "select-only"` | `'filter'`  |
 | `placeholder`              | `placeholder`  | Placeholder text for the input field.                                                                    | `string`                    | `undefined` |
+| `trigger`                  | `trigger`      | Determines the combobox trigger: 'input' (editable input) or 'button' (button-like, non-editable).       | `"button" \| "input"`       | `'input'`   |
 | `value`                    | `value`        | The value of the combobox input.                                                                         | `string`                    | `''`        |
 
 

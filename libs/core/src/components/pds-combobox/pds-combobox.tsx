@@ -45,6 +45,12 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() mode: 'filter' | 'select-only' = 'filter';
 
   /**
+   * Determines the combobox trigger: 'input' (editable input) or 'button' (button-like, non-editable).
+   * @default 'input'
+   */
+  @Prop() trigger: 'input' | 'button' = 'input';
+
+  /**
    * Emitted when the value changes.
    */
   @Event() pdsComboboxChange!: EventEmitter<{ value: string }>;
@@ -175,6 +181,28 @@ export class PdsCombobox implements BasePdsProps {
     event.preventDefault();
   };
 
+  // Get the label of the selected option
+  private get selectedLabel(): string {
+    const selected = this.optionEls.find(opt => opt.hasAttribute('selected'));
+    return selected ? selected.label : '';
+  }
+
+  // Handler for button trigger click
+  private onButtonTriggerClick = () => {
+    this.isOpen = !this.isOpen;
+  };
+
+  // Handler for button trigger keyboard events
+  private onButtonTriggerKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      this.isOpen = true;
+      this.highlightedIndex = 0;
+    } else if (e.key === 'Escape') {
+      this.isOpen = false;
+    }
+  };
+
   private renderDropdown() {
     if (!this.isOpen || this.filteredOptions.length === 0) return null;
     return (
@@ -219,26 +247,46 @@ export class PdsCombobox implements BasePdsProps {
               {this.label}
             </label>
           )}
-          <input
-            ref={el => (this.inputEl = el as HTMLInputElement)}
-            class="pds-combobox__input"
-            type="text"
-            role="combobox"
-            aria-autocomplete="list"
-            aria-controls="pds-combobox-listbox"
-            aria-activedescendant={this.highlightedIndex >= 0 ? `pds-combobox-option-${this.highlightedIndex}` : undefined}
-            aria-expanded={this.isOpen ? 'true' : 'false'}
-            aria-disabled={this.disabled ? 'true' : 'false'}
-            id={this.componentId}
-            value={this.value}
-            placeholder={this.placeholder}
-            disabled={this.disabled}
-            onInput={this.handleInput}
-            onFocus={this.handleFocus}
-            onBlur={this.handleBlur}
-            onKeyDown={this.handleKeyDown}
-            autocomplete="off"
-          />
+          {this.trigger === 'input' ? (
+            <input
+              ref={el => (this.inputEl = el as HTMLInputElement)}
+              class="pds-combobox__input"
+              type="text"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-controls="pds-combobox-listbox"
+              aria-activedescendant={this.highlightedIndex >= 0 ? `pds-combobox-option-${this.highlightedIndex}` : undefined}
+              aria-expanded={this.isOpen ? 'true' : 'false'}
+              aria-disabled={this.disabled ? 'true' : 'false'}
+              id={this.componentId}
+              value={this.value}
+              placeholder={this.placeholder}
+              disabled={this.disabled}
+              onInput={this.handleInput}
+              onFocus={this.handleFocus}
+              onBlur={this.handleBlur}
+              onKeyDown={this.handleKeyDown}
+              autocomplete="off"
+            />
+          ) : (
+            <div
+              class="pds-combobox__button-trigger"
+              role="combobox"
+              aria-haspopup="listbox"
+              aria-controls="pds-combobox-listbox"
+              aria-expanded={this.isOpen ? 'true' : 'false'}
+              aria-disabled={this.disabled ? 'true' : 'false'}
+              id={this.componentId}
+              tabIndex={0}
+              onClick={this.onButtonTriggerClick}
+              onKeyDown={this.onButtonTriggerKeyDown}
+            >
+              <span class="pds-combobox__button-trigger-label">
+                {this.selectedLabel || this.placeholder}
+              </span>
+              <pds-icon name="chevron-down" class="pds-combobox__button-trigger-chevron" />
+            </div>
+          )}
           {/* Hide the slot so options are not visible */}
           <div style={{ display: 'none' }}>
             <slot onSlotchange={() => this.updateOptions()}></slot>

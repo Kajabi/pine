@@ -33,6 +33,15 @@ The combobox supports two modes:
 
 Use the `mode` prop to control this behavior.
 
+## Triggers
+
+The combobox supports two trigger types:
+
+- **Input** (`trigger="input"`): Renders a text input (default, for filtering/autocomplete).
+- **Button** (`trigger="button"`): Renders a button-like div (for select-only, non-editable comboboxes).
+
+Use the `trigger` prop to control this behavior. See [WAI-ARIA Combobox Patterns](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/#examples) for more details.
+
 ### Filtering (default)
 
 <DocCanvas client:only
@@ -66,6 +75,46 @@ Use the `mode` prop to control this behavior.
   }}
 >
   <pds-combobox component-id="combobox-selectonly" label="Favorite Animal" placeholder="Type to search..." mode="select-only">
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="panda">Panda</option>
+    <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
+
+### Input Trigger (default)
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-trigger-input" label="Favorite Animal" placeholder="Type to search..." trigger="input">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</pds-combobox>`
+  }}
+>
+  <pds-combobox component-id="combobox-trigger-input" label="Favorite Animal" placeholder="Type to search..." trigger="input">
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="panda">Panda</option>
+    <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
+
+### Button Trigger (select-only)
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-trigger-button" label="Favorite Animal" placeholder="Select an animal" trigger="button" mode="select-only">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</pds-combobox>`
+  }}
+>
+  <pds-combobox component-id="combobox-trigger-button" label="Favorite Animal" placeholder="Select an animal" trigger="button" mode="select-only">
     <option value="cat">Cat</option>
     <option value="dog">Dog</option>
     <option value="panda">Panda</option>

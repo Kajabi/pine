@@ -455,6 +455,11 @@ export namespace Components {
          */
         "setFocus": () => Promise<void>;
         /**
+          * Determines the combobox trigger: 'input' (editable input) or 'button' (button-like, non-editable).
+          * @default 'input'
+         */
+        "trigger": 'input' | 'button';
+        /**
           * The value of the combobox input.
          */
         "value": string;
@@ -2440,6 +2445,11 @@ declare namespace LocalJSX {
           * Placeholder text for the input field.
          */
         "placeholder"?: string;
+        /**
+          * Determines the combobox trigger: 'input' (editable input) or 'button' (button-like, non-editable).
+          * @default 'input'
+         */
+        "trigger"?: 'input' | 'button';
         /**
           * The value of the combobox input.
          */

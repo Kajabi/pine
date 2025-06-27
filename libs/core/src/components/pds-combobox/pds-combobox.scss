@@ -65,3 +65,50 @@
   font-size: 1.5rem;
   margin-left: 16px;
 }
+
+.pds-combobox__button-trigger {
+  align-items: center;
+  background: var(--color-background-default, var(--pine-color-secondary));
+  border: 1px solid var(--color-border-default, var(--pine-color-border));
+  border-radius: 9999px;
+  color: var(--color-text-default, var(--pine-color-text-secondary));
+  cursor: pointer;
+  display: flex;
+  font: var(--pine-typography-body-medium);
+  justify-content: space-between;
+  min-height: 36px;
+  outline: none;
+  padding: 0 16px;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  width: 100%;
+}
+
+.pds-combobox__button-trigger:focus {
+  border-color: var(--color-border-focus, var(--pine-color-border));
+  box-shadow: 0 0 0 2px var(--color-outline, var(--pine-color-focus-ring));
+}
+
+.pds-combobox__button-trigger:hover {
+  background: var(--color-background-hover, var(--pine-color-secondary-hover));
+  border-color: var(--color-border-hover, var(--pine-color-border-hover));
+}
+
+.pds-combobox__button-trigger[aria-disabled='true'],
+.pds-combobox__button-trigger:disabled {
+  background: var(--color-background-disabled, var(--pine-color-secondary-disabled));
+  border-color: var(--color-border-disabled, var(--pine-color-border-disabled));
+  color: var(--color-text-disabled, var(--pine-color-text-secondary-disabled));
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.pds-combobox__button-trigger-label {
+  color: var(--pine-color-grey-900);
+  flex: 1 1 auto;
+  text-align: left;
+}
+
+.pds-combobox__button-trigger-chevron {
+  color: var(--pine-color-grey-500);
+  margin-left: 12px;
+}
