@@ -1,3 +1,24 @@
+## 3.3.0 (2025-06-27)
+
+### Features 🚀
+
+- **pds-chip:** adds brand sentiment and icon prop ([#467](https://github.com/Kajabi/pine/pull/467))
+- **pds-tooltip:** implement pathname change detection for SPA navigation ([#473](https://github.com/Kajabi/pine/pull/473))
+
+### Bug Fixes 🐛
+
+- add input props ([#472](https://github.com/Kajabi/pine/pull/472))
+- **input:** add prefix, suffix, prepend, and append ([#428](https://github.com/Kajabi/pine/pull/428))
+
+### Documentation 📄
+
+- add hide label to select slotted elements ([#470](https://github.com/Kajabi/pine/pull/470))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.2.0 (2025-06-06)
 
 ### Features 🚀
