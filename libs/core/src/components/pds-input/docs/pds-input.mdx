@@ -139,32 +139,32 @@ Prepend and append elements are placed outside the input container, next to the 
 <DocCanvas client:only
   mdxSource={{
     react: `<PdsInput componentId="pds-input-prepend-append-example" label="Amount" type="text" value="100">
-  <PdsSelect slot="prepend">
+  <PdsSelect hideLabel slot="prepend">
     <option value="USD">USD</option>
     <option value="EUR">EUR</option>
   </PdsSelect>
-  <PdsSelect slot="append">
+  <PdsSelect hideLabel slot="append">
     <option value="1">1</option>
     <option value="2">2</option>
   </PdsSelect>
 </PdsInput>`,
     webComponent: `<pds-input component-id="pds-input-prepend-append-example" label="Amount" type="text" value="100">
-  <pds-select slot="prepend">
+  <pds-select hide-label slot="prepend">
     <option value="USD">USD</option>
     <option value="EUR">EUR</option>
   </pds-select>
-  <pds-select slot="append">
+  <pds-select hide-label slot="append">
     <option value="1">1</option>
     <option value="2">2</option>
   </pds-select>
 </pds-input>`
 }}>
   <pds-input component-id="pds-input-prepend-append-example" label="Amount" type="text" value="100">
-    <pds-select slot="prepend">
+    <pds-select hide-label slot="prepend">
       <option value="USD">USD</option>
       <option value="EUR">EUR</option>
     </pds-select>
-    <pds-select slot="append">
+    <pds-select hide-label slot="append">
       <option value="1">1</option>
       <option value="2">2</option>
     </pds-select>
@@ -195,14 +195,14 @@ Prepend and append elements are placed outside the input container, next to the 
 <DocCanvas client:only
   mdxSource={{
     react: `<PdsInput componentId="pds-input-prepend-select" label="Amount" type="text" value="100">
-  <PdsSelect slot="prepend">
+  <PdsSelect hideLabel slot="prepend">
     <option value="USD">USD</option>
     <option value="EUR">EUR</option>
     <option value="GBP">GBP</option>
   </PdsSelect>
 </PdsInput>`,
     webComponent: `<pds-input component-id="pds-input-prepend-select" label="Amount" type="text" value="100">
-    <pds-select slot="prepend">
+    <pds-select hide-label slot="prepend">
       <option value="USD">USD</option>
       <option value="EUR">EUR</option>
       <option value="GBP">GBP</option>
@@ -210,7 +210,7 @@ Prepend and append elements are placed outside the input container, next to the 
   </pds-input>`
 }}>
   <pds-input component-id="pds-input-prepend-select" label="Amount" type="text" value="100">
-    <pds-select slot="prepend">
+    <pds-select hide-label slot="prepend">
       <option value="USD">USD</option>
       <option value="EUR">EUR</option>
       <option value="GBP">GBP</option>
@@ -223,7 +223,7 @@ Prepend and append elements are placed outside the input container, next to the 
   mdxSource={{
     react: `<PdsInput componentId="pds-input-prefix-append" label="Amount" type="text" value="100">
       <PdsIcon name="dollar" slot="prefix"></PdsIcon>
-      <PdsSelect slot="append">
+      <PdsSelect hideLabel slot="append">
         <option value="USD">USD</option>
         <option value="EUR">EUR</option>
         <option value="GBP">GBP</option>
@@ -231,7 +231,7 @@ Prepend and append elements are placed outside the input container, next to the 
     </PdsInput>`,
     webComponent: `<pds-input component-id="pds-input-prefix-append" label="Amount" type="text" value="100">
       <pds-icon name="dollar" slot="prefix"></pds-icon>
-      <pds-select slot="append">
+      <pds-select hide-label slot="append">
         <option value="USD">USD</option>
         <option value="EUR">EUR</option>
         <option value="GBP">GBP</option>
@@ -240,7 +240,7 @@ Prepend and append elements are placed outside the input container, next to the 
   }}>
   <pds-input component-id="pds-input-prefix-append" label="Amount" type="text" value="100">
     <pds-icon name="dollar" slot="prefix"></pds-icon>
-    <pds-select slot="append">
+    <pds-select hide-label slot="append">
       <option value="USD">USD</option>
       <option value="EUR">EUR</option>
       <option value="GBP">GBP</option>
