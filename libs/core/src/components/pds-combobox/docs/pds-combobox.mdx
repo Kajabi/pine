@@ -42,6 +42,73 @@ The combobox supports two trigger types:
 
 Use the `trigger` prop to control this behavior. See [WAI-ARIA Combobox Patterns](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/#examples) for more details.
 
+## Trigger Variants
+
+The button trigger supports the following visual variants, matching Pine button styles:
+
+- **secondary** (default)
+- **primary**
+- **accent**
+
+Use the `triggerVariant` prop to control the style.
+
+### Secondary (default)
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-trigger-secondary" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</pds-combobox>`
+  }}
+>
+  <pds-combobox component-id="combobox-trigger-secondary" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only">
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="panda">Panda</option>
+    <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
+
+### Primary
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-trigger-primary" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="primary" mode="select-only">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</pds-combobox>`
+  }}
+>
+  <pds-combobox component-id="combobox-trigger-primary" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="primary" mode="select-only">
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="panda">Panda</option>
+    <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
+
+### Accent
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-trigger-accent" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="accent" mode="select-only">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</pds-combobox>`
+  }}
+>
+  <pds-combobox component-id="combobox-trigger-accent" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="accent" mode="select-only">
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="panda">Panda</option>
+    <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
+
 ### Filtering (default)
 
 <DocCanvas client:only

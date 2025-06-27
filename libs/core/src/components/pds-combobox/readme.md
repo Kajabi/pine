@@ -7,15 +7,16 @@
 
 ## Properties
 
-| Property                   | Attribute      | Description                                                                                              | Type                        | Default     |
-| -------------------------- | -------------- | -------------------------------------------------------------------------------------------------------- | --------------------------- | ----------- |
-| `componentId` _(required)_ | `component-id` | A unique identifier used for the underlying component `id` attribute.                                    | `string`                    | `undefined` |
-| `disabled`                 | `disabled`     | If true, the combobox is disabled.                                                                       | `boolean`                   | `false`     |
-| `label`                    | `label`        | Text to be displayed as the combobox label.                                                              | `string`                    | `undefined` |
-| `mode`                     | `mode`         | Determines the combobox mode: 'filter' (filter options as you type) or 'select-only' (show all options). | `"filter" \| "select-only"` | `'filter'`  |
-| `placeholder`              | `placeholder`  | Placeholder text for the input field.                                                                    | `string`                    | `undefined` |
-| `trigger`                  | `trigger`      | Determines the combobox trigger: 'input' (editable input) or 'button' (button-like, non-editable).       | `"button" \| "input"`       | `'input'`   |
-| `value`                    | `value`        | The value of the combobox input.                                                                         | `string`                    | `''`        |
+| Property                   | Attribute         | Description                                                                                              | Type                                   | Default       |
+| -------------------------- | ----------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------- | ------------- |
+| `componentId` _(required)_ | `component-id`    | A unique identifier used for the underlying component `id` attribute.                                    | `string`                               | `undefined`   |
+| `disabled`                 | `disabled`        | If true, the combobox is disabled.                                                                       | `boolean`                              | `false`       |
+| `label`                    | `label`           | Text to be displayed as the combobox label.                                                              | `string`                               | `undefined`   |
+| `mode`                     | `mode`            | Determines the combobox mode: 'filter' (filter options as you type) or 'select-only' (show all options). | `"filter" \| "select-only"`            | `'filter'`    |
+| `placeholder`              | `placeholder`     | Placeholder text for the input field.                                                                    | `string`                               | `undefined`   |
+| `trigger`                  | `trigger`         | Determines the combobox trigger: 'input' (editable input) or 'button' (button-like, non-editable).       | `"button" \| "input"`                  | `'input'`     |
+| `triggerVariant`           | `trigger-variant` | The visual variant for the button trigger. Matches Pine button variants.                                 | `"accent" \| "primary" \| "secondary"` | `'secondary'` |
+| `value`                    | `value`           | The value of the combobox input.                                                                         | `string`                               | `''`          |
 
 
 ## Events

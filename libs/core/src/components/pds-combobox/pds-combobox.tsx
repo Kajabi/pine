@@ -51,6 +51,12 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() trigger: 'input' | 'button' = 'input';
 
   /**
+   * The visual variant for the button trigger. Matches Pine button variants.
+   * @default 'secondary'
+   */
+  @Prop() triggerVariant: 'secondary' | 'primary' | 'accent' = 'secondary';
+
+  /**
    * Emitted when the value changes.
    */
   @Event() pdsComboboxChange!: EventEmitter<{ value: string }>;
@@ -239,6 +245,7 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   render() {
+    const triggerClass = `pds-combobox__button-trigger pds-combobox__button-trigger--${this.triggerVariant}`;
     return (
       <Host>
         <div class="pds-combobox">
@@ -270,7 +277,7 @@ export class PdsCombobox implements BasePdsProps {
             />
           ) : (
             <div
-              class="pds-combobox__button-trigger"
+              class={triggerClass}
               role="combobox"
               aria-haspopup="listbox"
               aria-controls="pds-combobox-listbox"

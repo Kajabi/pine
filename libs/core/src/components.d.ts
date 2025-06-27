@@ -460,6 +460,11 @@ export namespace Components {
          */
         "trigger": 'input' | 'button';
         /**
+          * The visual variant for the button trigger. Matches Pine button variants.
+          * @default 'secondary'
+         */
+        "triggerVariant": 'secondary' | 'primary' | 'accent';
+        /**
           * The value of the combobox input.
          */
         "value": string;
@@ -2450,6 +2455,11 @@ declare namespace LocalJSX {
           * @default 'input'
          */
         "trigger"?: 'input' | 'button';
+        /**
+          * The visual variant for the button trigger. Matches Pine button variants.
+          * @default 'secondary'
+         */
+        "triggerVariant"?: 'secondary' | 'primary' | 'accent';
         /**
           * The value of the combobox input.
          */
