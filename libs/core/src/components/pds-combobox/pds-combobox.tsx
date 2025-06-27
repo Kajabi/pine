@@ -1,5 +1,6 @@
 import { Component, Element, Event, EventEmitter, h, Host, Prop, State, Watch, Method } from '@stencil/core';
 import type { BasePdsProps } from '@utils/interfaces';
+import { computePosition, flip, offset, shift } from '@floating-ui/dom';
 
 /**
  * @slot option - Option elements for the combobox dropdown
@@ -78,6 +79,8 @@ export class PdsCombobox implements BasePdsProps {
 
   private inputEl?: HTMLInputElement;
   private optionEls: HTMLOptionElement[] = [];
+  private triggerEl?: HTMLElement;
+  private listboxEl?: HTMLElement;
 
   componentWillLoad() {
     this.updateOptions();
@@ -110,16 +113,34 @@ export class PdsCombobox implements BasePdsProps {
     this.highlightedIndex = -1;
   }
 
+  private openDropdownPositioning() {
+    if (this.triggerEl && this.listboxEl) {
+      computePosition(this.triggerEl, this.listboxEl, {
+        placement: 'bottom-start',
+        middleware: [offset(12), flip(), shift({ padding: 5 })],
+      }).then(({ x, y }) => {
+        Object.assign(this.listboxEl.style, {
+          left: `${x}px`,
+          top: `${y}px`,
+          position: 'absolute',
+          zIndex: 1000,
+        });
+      });
+    }
+  }
+
   private handleInput = (e: Event) => {
     const target = e.target as HTMLInputElement;
     this.value = target.value;
     this.isOpen = true;
     this.filterOptions();
+    setTimeout(() => this.openDropdownPositioning(), 0);
   };
 
   private handleFocus = () => {
     this.isOpen = true;
     this.filterOptions();
+    setTimeout(() => this.openDropdownPositioning(), 0);
   };
 
   private handleBlur = () => {
@@ -196,6 +217,7 @@ export class PdsCombobox implements BasePdsProps {
   // Handler for button trigger click
   private onButtonTriggerClick = () => {
     this.isOpen = !this.isOpen;
+    if (this.isOpen) setTimeout(() => this.openDropdownPositioning(), 0);
   };
 
   // Handler for button trigger keyboard events
@@ -204,6 +226,7 @@ export class PdsCombobox implements BasePdsProps {
       e.preventDefault();
       this.isOpen = true;
       this.highlightedIndex = 0;
+      setTimeout(() => this.openDropdownPositioning(), 0);
     } else if (e.key === 'Escape') {
       this.isOpen = false;
     }
@@ -216,6 +239,7 @@ export class PdsCombobox implements BasePdsProps {
         class="pds-combobox__listbox"
         role="listbox"
         id="pds-combobox-listbox"
+        ref={el => (this.listboxEl = el as HTMLElement)}
       >
         {this.filteredOptions.map((option, idx) => {
           const isSelected = option.hasAttribute('selected');
@@ -256,7 +280,10 @@ export class PdsCombobox implements BasePdsProps {
           )}
           {this.trigger === 'input' ? (
             <input
-              ref={el => (this.inputEl = el as HTMLInputElement)}
+              ref={el => {
+                this.inputEl = el as HTMLInputElement;
+                this.triggerEl = el as HTMLElement;
+              }}
               class="pds-combobox__input"
               type="text"
               role="combobox"
@@ -287,6 +314,7 @@ export class PdsCombobox implements BasePdsProps {
               tabIndex={0}
               onClick={this.onButtonTriggerClick}
               onKeyDown={this.onButtonTriggerKeyDown}
+              ref={el => (this.triggerEl = el as HTMLElement)}
             >
               <span class="pds-combobox__button-trigger-label">
                 {this.selectedLabel || this.placeholder}
