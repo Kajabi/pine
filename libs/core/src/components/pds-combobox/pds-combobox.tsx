@@ -113,13 +113,18 @@ export class PdsCombobox implements BasePdsProps {
     }
   }
 
+  // Helper method to get option label, falling back to text content if no label attribute
+  private getOptionLabel(option: HTMLOptionElement): string {
+    return option.label || option.textContent || '';
+  }
+
   private filterOptions() {
     if (this.mode === 'select-only') {
       this.filteredOptions = this.optionEls;
     } else {
       const val = this.value.toLowerCase();
       this.filteredOptions = this.optionEls.filter(option =>
-        option.label.toLowerCase().includes(val)
+        this.getOptionLabel(option).toLowerCase().includes(val)
       );
     }
     this.highlightedIndex = -1;
@@ -219,7 +224,7 @@ export class PdsCombobox implements BasePdsProps {
   // Get the label of the selected option
   private get selectedLabel(): string {
     const selected = this.optionEls.find(opt => opt.hasAttribute('selected'));
-    return selected ? selected.label : '';
+    return selected ? this.getOptionLabel(selected) : '';
   }
 
   // Handler for button trigger click
@@ -253,7 +258,7 @@ export class PdsCombobox implements BasePdsProps {
     this.optionEls.forEach(opt => opt.removeAttribute('selected'));
     // Set 'selected' on the chosen option
     option.setAttribute('selected', '');
-    this.value = option.label;
+    this.value = this.getOptionLabel(option);
     this.isOpen = false;
     this.pdsComboboxChange.emit({ value: option.value });
   }
@@ -285,7 +290,7 @@ export class PdsCombobox implements BasePdsProps {
               onClick={this.onOptionClick}
               onMouseEnter={this.onOptionMouseEnter}
             >
-              {option.label}
+              {this.getOptionLabel(option)}
               {isSelected && <pds-icon icon="check" size="regular" class="pds-combobox__option-check" />}
             </li>
           );
