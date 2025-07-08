@@ -188,4 +188,98 @@ describe('pds-radio', () => {
     expect(eventSpy).not.toHaveBeenCalled();
   });
 
+  it('renders with default variant when variant prop is not set', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: `<pds-radio component-id="default" label="Label text" />`,
+    });
+
+    expect(page.root).not.toHaveClass('is-contained');
+    expect(page.root?.querySelector('pds-icon')).toBeNull();
+    expect(page.root?.querySelector('input[type="radio"]')).toBeTruthy();
+  });
+
+  it('renders with contained variant when variant="contained"', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: `<pds-radio component-id="contained" label="Label text" variant="contained" icon="star" />`,
+    });
+
+    expect(page.root).toHaveClass('is-contained');
+    expect(page.root?.querySelector('pds-icon')).toBeTruthy();
+    expect(page.root?.querySelector('input[type="radio"]')).toBeTruthy();
+  });
+
+  it('renders pds-icon with correct icon prop in contained variant', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: `<pds-radio component-id="contained" label="Label text" variant="contained" icon="heart" />`,
+    });
+
+    const icon = page.root?.querySelector('pds-icon');
+    expect(icon).toBeTruthy();
+    expect(icon?.getAttribute('icon')).toBe('heart');
+    expect(icon?.getAttribute('size')).toBe('16px');
+  });
+
+  it('does not render pds-icon in contained variant when icon prop is not provided', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: `<pds-radio component-id="contained" label="Label text" variant="contained" />`,
+    });
+
+    expect(page.root).toHaveClass('is-contained');
+    expect(page.root?.querySelector('pds-icon')).toBeNull();
+  });
+
+  it('does not render pds-icon in default variant even when icon prop is provided', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: `<pds-radio component-id="default" label="Label text" variant="default" icon="star" />`,
+    });
+
+    expect(page.root).not.toHaveClass('is-contained');
+    expect(page.root?.querySelector('pds-icon')).toBeNull();
+  });
+
+  it('maintains radio functionality in contained variant', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: '<pds-radio component-id="contained" label="Label text" variant="contained" icon="star" />',
+    });
+
+    const radio = page.root?.querySelector('input[type="radio"]');
+    const eventSpy = jest.fn();
+
+    page.root?.addEventListener('pdsRadioChange', eventSpy);
+    radio?.dispatchEvent(new Event('change'));
+    await page.waitForChanges();
+
+    expect(eventSpy).toHaveBeenCalled();
+  });
+
+  it('renders contained variant in disabled state correctly', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: `<pds-radio component-id="contained-disabled" label="Label text" variant="contained" icon="star" disabled />`,
+    });
+
+    expect(page.root).toHaveClass('is-contained');
+    expect(page.root).toHaveClass('is-disabled');
+    const input = page.root?.querySelector('input');
+    expect(input?.disabled).toBe(true);
+  });
+
+  it('renders contained variant in invalid state correctly', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: `<pds-radio component-id="contained-invalid" label="Label text" variant="contained" icon="star" invalid />`,
+    });
+
+    expect(page.root).toHaveClass('is-contained');
+    expect(page.root).toHaveClass('is-invalid');
+    const input = page.root?.querySelector('input');
+    expect(input?.getAttribute('aria-invalid')).toBe('true');
+  });
+
 });

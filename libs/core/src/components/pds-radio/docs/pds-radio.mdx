@@ -108,6 +108,44 @@ Only one radio in the group can be selected at a time.
   </>
 </DocCanvas>
 
+### Contained Variant
+
+The contained variant replaces the standard radio circle with an icon while maintaining all radio functionality.
+
+<DocCanvas client:only mdxSource={{
+  react: `<PdsRadio componentId="contained" label="Favorite item" variant="contained" icon="star" />`,
+  webComponent: `<pds-radio component-id="contained" label="Favorite item" variant="contained" icon="star"></pds-radio>`
+}}>
+  <pds-radio component-id="contained" label="Favorite item" variant="contained" icon="star"></pds-radio>
+</DocCanvas>
+
+### Contained Variant - Checked
+
+<DocCanvas client:only mdxSource={{
+  react: `<PdsRadio componentId="contained-checked" label="Selected item" variant="contained" icon="heart" checked />`,
+  webComponent: `<pds-radio component-id="contained-checked" label="Selected item" variant="contained" icon="heart" checked></pds-radio>`
+}}>
+  <pds-radio component-id="contained-checked" label="Selected item" variant="contained" icon="heart" checked></pds-radio>
+</DocCanvas>
+
+### Contained Variant - Disabled
+
+<DocCanvas client:only mdxSource={{
+  react: `<PdsRadio componentId="contained-disabled" label="Disabled option" variant="contained" icon="star" disabled />`,
+  webComponent: `<pds-radio component-id="contained-disabled" label="Disabled option" variant="contained" icon="star" disabled></pds-radio>`
+}}>
+  <pds-radio component-id="contained-disabled" label="Disabled option" variant="contained" icon="star" disabled></pds-radio>
+</DocCanvas>
+
+### Contained Variant - Invalid
+
+<DocCanvas client:only mdxSource={{
+  react: `<PdsRadio componentId="contained-invalid" label="Invalid option" variant="contained" icon="star" invalid errorMessage="This is a short error message" />`,
+  webComponent: `<pds-radio component-id="contained-invalid" label="Invalid option" variant="contained" icon="star" invalid error-message="This is a short error message"></pds-radio>`
+}}>
+  <pds-radio component-id="contained-invalid" label="Invalid option" variant="contained" icon="star" invalid error-message="This is a short error message"></pds-radio>
+</DocCanvas>
+
 ## Additional Resources
 
 [MDN Web Docs: Radio](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio)
