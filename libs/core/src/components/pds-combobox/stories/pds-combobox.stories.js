@@ -4,6 +4,15 @@ import { withActions } from '@storybook/addon-actions/decorator';
 
 export default {
   argTypes: extractArgTypes('pds-combobox'),
+  args: {
+    disabled: false,
+    dropdownPlacement: 'bottom-start',
+    dropdownWidth: 'trigger',
+    maxHeight: null,
+    mode: 'filter',
+    trigger: 'input',
+    triggerVariant: 'secondary',
+  },
   component: 'pds-combobox',
   decorators: [withActions],
   title: 'components/Combobox',
@@ -15,11 +24,15 @@ export default {
 const BaseTemplate = (args) => html`
 <pds-combobox
   component-id=${args.componentId}
+  disabled=${args.disabled}
+  dropdown-placement=${args.dropdownPlacement}
+  dropdown-width=${args.dropdownWidth}
+  max-height=${args.maxHeight}
   label=${args.label}
   placeholder=${args.placeholder}
+  mode=${args.mode}
   trigger=${args.trigger}
   trigger-variant=${args.triggerVariant}
-  mode=${args.mode}
 >
   <option value="cat">Cat</option>
   <option value="dog">Dog</option>
