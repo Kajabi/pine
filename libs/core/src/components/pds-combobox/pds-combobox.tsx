@@ -70,6 +70,12 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() dropdownWidth: 'trigger' | 'auto' | string = 'trigger';
 
   /**
+   * Maximum height of the dropdown. Can be any valid CSS height value (e.g., '200px', '10rem').
+   * When content exceeds this height, the dropdown will scroll.
+   */
+  @Prop() maxHeight?: string;
+
+  /**
    * Emitted when the value changes.
    */
   @Event() pdsComboboxChange!: EventEmitter<{ value: string }>;
@@ -149,6 +155,11 @@ export class PdsCombobox implements BasePdsProps {
           this.listboxEl.style.width = 'auto';
         } else if (typeof this.dropdownWidth === 'string') {
           this.listboxEl.style.width = this.dropdownWidth;
+        }
+
+        // Set max height
+        if (this.maxHeight) {
+          this.listboxEl.style.maxHeight = this.maxHeight;
         }
       });
     }

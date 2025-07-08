@@ -59,6 +59,7 @@
   list-style: none;
   margin: 0;
   min-width: 220px;
+  overflow-y: auto;
   padding: 8px;
 }
 
@@ -111,7 +112,7 @@
   width: fit-content;
 }
 
-.pds-combobox__button-trigger:focus {
+.pds-combobox__button-trigger:focus-visible {
   border-color: var(--color-border-focus, var(--pine-color-border));
   box-shadow: 0 0 0 2px var(--color-outline, var(--pine-color-focus-ring));
 }

@@ -452,6 +452,10 @@ export namespace Components {
          */
         "label"?: string;
         /**
+          * Maximum height of the dropdown. Can be any valid CSS height value (e.g., '200px', '10rem'). When content exceeds this height, the dropdown will scroll.
+         */
+        "maxHeight"?: string;
+        /**
           * Determines the combobox mode: 'filter' (filter options as you type) or 'select-only' (show all options).
           * @default 'filter'
          */
@@ -2457,6 +2461,10 @@ declare namespace LocalJSX {
           * Text to be displayed as the combobox label.
          */
         "label"?: string;
+        /**
+          * Maximum height of the dropdown. Can be any valid CSS height value (e.g., '200px', '10rem'). When content exceeds this height, the dropdown will scroll.
+         */
+        "maxHeight"?: string;
         /**
           * Determines the combobox mode: 'filter' (filter options as you type) or 'select-only' (show all options).
           * @default 'filter'
