@@ -2,15 +2,18 @@ import figma, { html } from '@figma/code-connect/html';
 
 figma.connect('https://www.figma.com/file/CC1YmaGKHnsvB28yLY9mEH?node-id=2757-22274', {
   props: {
+    action: figma.boolean("Action", {
+      true: html`<pds-link href="URL" color="var(--pine-color-white)">Visit</pds-link>`
+    }),
     dismissible: figma.boolean('Dismissible'),
+    message: figma.string('Message'),
     type: figma.enum('Variant', {
-  "Default": "default",
-  "Danger": "danger",
-  "Loading": "loading"
+  "default": "default",
+  "danger": "danger",
 }),
   },
   example: (props) => html`<pds-toast
-    ?dismissible=${props.dismissible}
+    dismissible=${props.dismissible}
     type=${props.type}
-  ></pds-toast>`,
+  >${props.message} ${props.action}</pds-toast>`,
 });
