@@ -257,6 +257,12 @@ export class PdsCombobox implements BasePdsProps {
     const relatedTarget = event.relatedTarget as Node | null;
     if (!this.el.contains(relatedTarget)) {
       this.isOpen = false;
+
+      // If there's a selected option but the input value doesn't match, restore the selected option's value
+      const selectedOption = this.optionEls.find(opt => opt.hasAttribute('selected'));
+      if (selectedOption && this.value !== this.getOptionLabel(selectedOption)) {
+        this.value = this.getOptionLabel(selectedOption);
+      }
     }
   };
 

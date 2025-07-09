@@ -701,4 +701,68 @@ describe('pds-combobox', () => {
 
     expect(input?.getAttribute('aria-activedescendant')).toBe('pds-combobox-option-0');
   });
+
+  it('restores selected option value when input is cleared and focus is lost', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
+    });
+
+    const component = page.rootInstance;
+    const combobox = page.root?.shadowRoot?.querySelector('.pds-combobox');
+
+    // Mock options with one selected
+    const mockSelectedOption = createMockOption('cat', 'Cat', true);
+    const mockUnselectedOption = createMockOption('dog', 'Dog', false);
+
+    component.optionEls = [mockSelectedOption, mockUnselectedOption];
+
+    // Initially set value to match selected option
+    component.value = 'Cat';
+    await page.waitForChanges();
+
+    // User clears the input (simulating typing and deleting all text)
+    component.value = '';
+    await page.waitForChanges();
+
+    // User removes focus from combobox
+    const focusoutEvent = new FocusEvent('focusout', {
+      relatedTarget: document.createElement('div'),
+    });
+    combobox?.dispatchEvent(focusoutEvent);
+    await page.waitForChanges();
+
+    // Value should be restored to the selected option's label
+    expect(component.value).toBe('Cat');
+  });
+
+  it('does not restore value when no option is selected and focus is lost', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
+    });
+
+    const component = page.rootInstance;
+    const combobox = page.root?.shadowRoot?.querySelector('.pds-combobox');
+
+    // Mock options with none selected
+    const mockOption1 = createMockOption('cat', 'Cat', false);
+    const mockOption2 = createMockOption('dog', 'Dog', false);
+
+    component.optionEls = [mockOption1, mockOption2];
+
+    // User types something that doesn't match any option
+    component.value = 'bird';
+    await page.waitForChanges();
+
+    // User removes focus from combobox
+    const focusoutEvent = new FocusEvent('focusout', {
+      relatedTarget: document.createElement('div'),
+    });
+    combobox?.dispatchEvent(focusoutEvent);
+    await page.waitForChanges();
+
+    // Value should remain unchanged since no option is selected
+    expect(component.value).toBe('bird');
+  });
 });
