@@ -448,6 +448,10 @@ export namespace Components {
          */
         "dropdownWidth": 'trigger' | 'auto' | string;
         /**
+          * Visually hides the label text for instances where only the combobox should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "hideLabel": boolean;
+        /**
           * Text to be displayed as the combobox label.
          */
         "label"?: string;
@@ -2457,6 +2461,10 @@ declare namespace LocalJSX {
           * @default 'trigger'
          */
         "dropdownWidth"?: 'trigger' | 'auto' | string;
+        /**
+          * Visually hides the label text for instances where only the combobox should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "hideLabel"?: boolean;
         /**
           * Text to be displayed as the combobox label.
          */

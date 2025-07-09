@@ -41,6 +41,70 @@ describe('pds-combobox', () => {
     expect(label?.textContent).toBe('Choose Option');
   });
 
+  it('renders with hidden label - label span has visually-hidden class', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" label="Choose Option" hide-label></pds-combobox>`,
+    });
+
+    const labelSpan = root?.shadowRoot?.querySelector('.pds-combobox__label span');
+    expect(labelSpan).not.toBeNull();
+    expect(labelSpan?.classList.contains('visually-hidden')).toBe(true);
+    expect(labelSpan?.textContent).toBe('Choose Option');
+  });
+
+  it('renders without visually-hidden class when hideLabel is false', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" label="Choose Option" hide-label="false"></pds-combobox>`,
+    });
+
+    const labelSpan = root?.shadowRoot?.querySelector('.pds-combobox__label span');
+    expect(labelSpan).not.toBeNull();
+    expect(labelSpan?.classList.contains('visually-hidden')).toBe(false);
+    expect(labelSpan?.textContent).toBe('Choose Option');
+  });
+
+  it('renders input trigger with aria-label when hideLabel is true', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" label="Choose Option" hide-label trigger="input"></pds-combobox>`,
+    });
+
+    const input = root?.shadowRoot?.querySelector('input');
+    expect(input?.getAttribute('aria-label')).toBe('Choose Option');
+  });
+
+  it('renders input trigger without aria-label when hideLabel is false', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" label="Choose Option" trigger="input"></pds-combobox>`,
+    });
+
+    const input = root?.shadowRoot?.querySelector('input');
+    expect(input?.getAttribute('aria-label')).toBeNull();
+  });
+
+  it('renders button trigger with aria-label when hideLabel is true', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" label="Choose Option" hide-label trigger="button"></pds-combobox>`,
+    });
+
+    const button = root?.shadowRoot?.querySelector('.pds-combobox__button-trigger');
+    expect(button?.getAttribute('aria-label')).toBe('Choose Option');
+  });
+
+  it('renders button trigger without aria-label when hideLabel is false', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" label="Choose Option" trigger="button"></pds-combobox>`,
+    });
+
+    const button = root?.shadowRoot?.querySelector('.pds-combobox__button-trigger');
+    expect(button?.getAttribute('aria-label')).toBeNull();
+  });
+
   it('renders with placeholder', async () => {
     const { root } = await newSpecPage({
       components: [PdsCombobox],

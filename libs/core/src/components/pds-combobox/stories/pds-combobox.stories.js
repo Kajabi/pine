@@ -8,6 +8,7 @@ export default {
     disabled: false,
     dropdownPlacement: 'bottom-start',
     dropdownWidth: 'trigger',
+    hideLabel: false,
     maxHeight: null,
     mode: 'filter',
     trigger: 'input',
@@ -27,6 +28,7 @@ const BaseTemplate = (args) => html`
   disabled=${args.disabled}
   dropdown-placement=${args.dropdownPlacement}
   dropdown-width=${args.dropdownWidth}
+  hide-label=${args.hideLabel}
   max-height=${args.maxHeight}
   label=${args.label}
   placeholder=${args.placeholder}
@@ -48,4 +50,15 @@ Default.args = {
   trigger: 'input',
   triggerVariant: 'secondary',
   mode: 'filter',
+};
+
+export const HiddenLabel = BaseTemplate.bind();
+HiddenLabel.args = {
+  componentId: 'combobox-hidden-label-story',
+  hideLabel: true,
+  label: 'Favorite Animal',
+  placeholder: 'Select an animal',
+  trigger: 'button',
+  triggerVariant: 'secondary',
+  mode: 'select-only',
 };

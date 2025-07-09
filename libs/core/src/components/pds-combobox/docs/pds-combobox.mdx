@@ -363,6 +363,34 @@ When dealing with long lists of options, you can set a maximum height for the dr
   </pds-combobox>
 </DocCanvas>
 
+## Hidden Label
+
+For cases where the combobox doesn't need a visible label (such as in compact layouts or when the context is clear), you can use the `hideLabel` prop. The label remains accessible to screen readers for accessibility.
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-hidden-label" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only" hide-label>
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="combobox-hidden-label" label="Favorite Animal" placeholder="Select an animal" trigger="button" triggerVariant="secondary" mode="select-only" hideLabel>
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="combobox-hidden-label" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only" hide-label>
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="panda">Panda</option>
+    <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
+
 ## Example
 
 Here's a basic example of the combobox component with filtering enabled. Type to search through the options, or use arrow keys to navigate and Enter to select.

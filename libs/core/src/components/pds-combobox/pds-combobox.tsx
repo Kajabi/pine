@@ -25,6 +25,12 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() label?: string;
 
   /**
+   * Visually hides the label text for instances where only the combobox should be displayed.
+   * Label remains accessible to assistive technology such as screen readers.
+   */
+  @Prop() hideLabel: boolean = false;
+
+  /**
    * Placeholder text for the input field.
    */
   @Prop() placeholder?: string;
@@ -317,7 +323,7 @@ export class PdsCombobox implements BasePdsProps {
         <div class="pds-combobox" tabIndex={-1} onFocusout={this.onComboboxFocusOut}>
           {this.label && (
             <label htmlFor={this.componentId} class="pds-combobox__label">
-              {this.label}
+              <span class={this.hideLabel ? 'visually-hidden' : ''}>{this.label}</span>
             </label>
           )}
           {this.trigger === 'input' ? (
@@ -334,6 +340,7 @@ export class PdsCombobox implements BasePdsProps {
               aria-activedescendant={this.highlightedIndex >= 0 ? `pds-combobox-option-${this.highlightedIndex}` : undefined}
               aria-expanded={this.isOpen ? 'true' : 'false'}
               aria-disabled={this.disabled ? 'true' : 'false'}
+              aria-label={this.hideLabel ? this.label : undefined}
               id={this.componentId}
               value={this.value}
               placeholder={this.placeholder}
@@ -352,6 +359,7 @@ export class PdsCombobox implements BasePdsProps {
               aria-controls="pds-combobox-listbox"
               aria-expanded={this.isOpen ? 'true' : 'false'}
               aria-disabled={this.disabled ? 'true' : 'false'}
+              aria-label={this.hideLabel ? this.label : undefined}
               id={this.componentId}
               tabIndex={0}
               onClick={this.onButtonTriggerClick}
