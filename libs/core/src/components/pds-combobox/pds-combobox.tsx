@@ -142,10 +142,22 @@ export class PdsCombobox implements BasePdsProps {
     this.highlightedIndex = -1;
   }
 
-  private openDropdownPositioning() {
+          private openDropdownPositioning() {
     if (this.triggerEl && this.listboxEl) {
+      // Apply width and max-height BEFORE positioning calculations
+      this.listboxEl.style.width = this.dropdownWidth;
+
+      if (this.maxHeight) {
+        this.listboxEl.style.maxHeight = this.maxHeight;
+        this.listboxEl.style.overflowY = 'auto';
+      }
+
+      // Force a reflow to ensure dimensions are calculated
+      this.listboxEl.offsetHeight;
+
       computePosition(this.triggerEl, this.listboxEl, {
         placement: this.dropdownPlacement,
+        strategy: 'absolute',
         middleware: [offset(12), flip(), shift({ padding: 5 })],
       }).then(({ x, y }) => {
         Object.assign(this.listboxEl.style, {
@@ -154,13 +166,6 @@ export class PdsCombobox implements BasePdsProps {
           position: 'absolute',
           zIndex: 1000,
         });
-        // Set width
-        this.listboxEl.style.width = this.dropdownWidth;
-
-        // Set max height
-        if (this.maxHeight) {
-          this.listboxEl.style.maxHeight = this.maxHeight;
-        }
       });
     }
   }

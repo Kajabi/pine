@@ -46,29 +46,18 @@ export const Default = BaseTemplate.bind();
 Default.args = {
   componentId: 'combobox-story',
   label: 'Favorite Animal',
-  placeholder: 'Type to search...',
+  placeholder: 'placeholder_text',
   trigger: 'input',
   triggerVariant: 'secondary',
   mode: 'filter',
 };
 
-export const HiddenLabel = BaseTemplate.bind();
-HiddenLabel.args = {
-  componentId: 'combobox-hidden-label-story',
-  hideLabel: true,
+export const ButtonTrigger = BaseTemplate.bind();
+ButtonTrigger.args = {
+  componentId: 'combobox-button-trigger-story',
   label: 'Favorite Animal',
   placeholder: 'Select an animal',
   trigger: 'button',
   triggerVariant: 'secondary',
-  mode: 'select-only',
-};
-
-export const DestructiveVariant = BaseTemplate.bind();
-DestructiveVariant.args = {
-  componentId: 'combobox-destructive-story',
-  label: 'Delete Item',
-  placeholder: 'Select item to delete',
-  trigger: 'button',
-  triggerVariant: 'destructive',
   mode: 'select-only',
 };

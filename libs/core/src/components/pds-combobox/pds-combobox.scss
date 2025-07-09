@@ -61,6 +61,8 @@
   min-width: 220px;
   overflow-y: auto;
   padding: var(--pine-dimension-xs);
+  position: absolute;
+  z-index: 1000;
 }
 
 .pds-combobox__option {
@@ -90,7 +92,7 @@
 }
 
 .pds-combobox__option-check {
-  color: var(--pine-color-text-primary);
+  color: currentColor;
   font-size: var(--pine-dimension-150);
   margin-inline-start: var(--pine-dimension-150);
 }
@@ -138,7 +140,7 @@
 }
 
 .pds-combobox__button-trigger-chevron {
-  color: var(--color-icon-fill);
+  color: currentColor;
   margin-inline-start: var(--pine-dimension-150);
 }
 
