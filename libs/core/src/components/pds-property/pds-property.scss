@@ -1,0 +1,29 @@
+:host {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.pds-property {
+  align-items: center;
+  color: var(--pine-color-text-message);
+  display: inline-flex;
+  font: var(--pine-typography-body-default);
+  gap: var(--pine-dimension-xs);
+}
+
+.pds-property__icon {
+  pds-icon {
+    color: var(--pine-color-text-message);
+    fill: currentColor;
+  }
+}
+
+.pds-property__text {
+  flex-basis: 100%;
+  line-height: 1.5;
+
+  span {
+    color: inherit;
+    font: inherit;
+  }
+}

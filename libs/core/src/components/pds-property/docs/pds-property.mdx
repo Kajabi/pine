@@ -1,0 +1,66 @@
+import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+# Property
+
+The Property component displays an icon and text together in a horizontal layout. It's useful for showing key-value pairs, status indicators, or labeled information.
+
+## Guidelines
+
+### When to use
+
+- Displaying key-value pairs or metadata with visual context.
+- Showing status indicators with accompanying text.
+- Providing labeled information with an icon for better visual recognition.
+- Creating compact property displays in lists, cards, or forms.
+
+### When not to use
+
+- For standalone text that doesn't benefit from an icon.
+- When space is extremely limited and the icon would cause clutter.
+- For complex layouts where a custom solution would be more appropriate.
+
+### Accessibility
+
+The Property component is designed with accessibility in mind:
+
+- Icons are marked with `aria-hidden="true"` as they are decorative and provide visual context rather than essential information.
+- Text content is properly exposed to screen readers through both prop and slot content.
+- The component supports proper keyboard navigation patterns when used in interactive contexts.
+
+## Properties
+
+<DocArgsTable componentName="pds-property" docSource={components} />
+
+### Default
+
+Basic property with icon and text.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsProperty icon="check-circle">Property text</PdsProperty>',
+    webComponent: '<pds-property icon="check-circle">Property text</pds-property>'
+}}>
+  <pds-property icon="check-circle">Property text</pds-property>
+</DocCanvas>
+
+### Various Icons
+
+Examples of properties with different icons for different contexts.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsProperty icon="user">John Doe</PdsProperty>
+<PdsProperty icon="location">San Francisco, CA</PdsProperty>
+<PdsProperty icon="calendarDate">March 15, 2024</PdsProperty>
+<PdsProperty icon="tag">Active</PdsProperty>`,
+    webComponent: `<pds-property icon="user">John Doe</pds-property>
+<pds-property icon="location">San Francisco, CA</pds-property>
+<pds-property icon="calendar-date">March 15, 2024</pds-property>
+<pds-property icon="tag">Active</pds-property>`
+}}>
+  <pds-property icon="user">John Doe</pds-property>
+  <pds-property icon="location">San Francisco, CA</pds-property>
+  <pds-property icon="calendar-date">March 15, 2024</pds-property>
+  <pds-property icon="tag">Active</pds-property>
+</DocCanvas>
