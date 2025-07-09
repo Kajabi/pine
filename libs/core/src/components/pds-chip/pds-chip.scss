@@ -1,3 +1,5 @@
+@use 'sass:map';
+
 :host {
   --sizing-close: var(--pine-dimension-125);
 
@@ -52,25 +54,25 @@ $pds-chip-sentiment-hover: (
     // dot colors
     .pds-chip__dot {
       /* stylelint-disable-next-line */
-      background: map-get($pds-chip-sentiment-dots, $sentiment);
+      background: map.get($pds-chip-sentiment-dots, $sentiment);
     }
 
     .pds-chip__label, .pds-chip__button, .pds-chip__close {
       /* stylelint-disable-next-line */
-      color: map-get($pds-chip-sentiment-text, $sentiment);
+      color: map.get($pds-chip-sentiment-text, $sentiment);
       font-weight: var(--pine-font-weight-medium);
     }
 
     // tag close hover colors
     .pds-chip__close:hover {
       /* stylelint-disable-next-line */
-      background: map-get($pds-chip-sentiment-hover, $sentiment);
+      background: map.get($pds-chip-sentiment-hover, $sentiment);
     }
   }
   // dropdown hover colors
   :host(.pds-chip--#{$sentiment}.pds-chip--dropdown:hover) {
     /* stylelint-disable-next-line */
-    background: map-get($pds-chip-sentiment-hover, $sentiment);
+    background: map.get($pds-chip-sentiment-hover, $sentiment);
   }
 }
 

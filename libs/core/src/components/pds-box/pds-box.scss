@@ -1,4 +1,4 @@
-@import './pds-box.mixins';
+@use './pds-box.mixins' as *;
 
 pds-box {
   --border-width-default: var(--pine-border-width-thin);
