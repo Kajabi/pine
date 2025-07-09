@@ -1,6 +1,9 @@
 import { Component, h, Prop, Element } from '@stencil/core';
 import { setColor } from '../../utils/utils';
 
+/**
+ * @part content - The text content container
+ */
 @Component({
   tag: 'pds-text',
   styleUrl: 'pds-text.scss',
@@ -105,7 +108,7 @@ export class PdsText {
     `;
 
     return (
-      <Tag style={this.color && setColor(this.color)} class={typeClasses}>
+      <Tag style={this.color && setColor(this.color)} class={typeClasses} part="content">
         <slot />
       </Tag>
     );
