@@ -185,10 +185,6 @@ export class PdsCombobox implements BasePdsProps {
     setTimeout(() => this.openDropdownPositioning(), 0);
   };
 
-  private handleBlur = () => {
-    // No longer needed, handled by focusout on wrapper
-  };
-
   private handleKeyDown = (e: KeyboardEvent) => {
     if (!this.isOpen && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
       this.isOpen = true;
