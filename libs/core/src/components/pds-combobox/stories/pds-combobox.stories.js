@@ -7,7 +7,7 @@ export default {
   args: {
     disabled: false,
     dropdownPlacement: 'bottom-start',
-    dropdownWidth: 'trigger',
+    dropdownWidth: '236px',
     hideLabel: false,
     maxHeight: null,
     mode: 'filter',

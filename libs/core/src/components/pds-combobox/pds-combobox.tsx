@@ -70,10 +70,10 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() dropdownPlacement: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end' = 'bottom-start';
 
   /**
-   * Width of the dropdown. Can be 'trigger' (match trigger width), 'auto', or a custom CSS value.
-   * @default 'trigger'
+   * Width of the dropdown. Any valid CSS width value.
+   * @default '236px'
    */
-  @Prop() dropdownWidth: 'trigger' | 'auto' | string = 'trigger';
+  @Prop() dropdownWidth: string = '236px';
 
   /**
    * Maximum height of the dropdown. Can be any valid CSS height value (e.g., '200px', '10rem').
@@ -155,13 +155,7 @@ export class PdsCombobox implements BasePdsProps {
           zIndex: 1000,
         });
         // Set width
-        if (this.dropdownWidth === 'trigger') {
-          this.listboxEl.style.width = `${this.triggerEl.offsetWidth}px`;
-        } else if (this.dropdownWidth === 'auto') {
-          this.listboxEl.style.width = 'auto';
-        } else if (typeof this.dropdownWidth === 'string') {
-          this.listboxEl.style.width = this.dropdownWidth;
-        }
+        this.listboxEl.style.width = this.dropdownWidth;
 
         // Set max height
         if (this.maxHeight) {
@@ -343,7 +337,6 @@ export class PdsCombobox implements BasePdsProps {
               disabled={this.disabled}
               onInput={this.handleInput}
               onFocus={this.handleFocus}
-              onBlur={this.handleBlur}
               onKeyDown={this.handleKeyDown}
               autocomplete="off"
             />

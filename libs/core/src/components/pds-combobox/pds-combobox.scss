@@ -98,8 +98,8 @@
 .pds-combobox__button-trigger {
   align-items: center;
   background: var(--color-background-default, var(--pine-color-secondary));
-  border: var(--pine-color-border);
-  border-radius: --pine-border-radius-full;
+  border: var(--pine-border);
+  border-radius: var(--pine-border-radius-full);
   color: var(--color-text-default, #ffffff);
   cursor: pointer;
   display: flex;

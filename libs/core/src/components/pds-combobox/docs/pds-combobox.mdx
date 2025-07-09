@@ -274,7 +274,7 @@ The button trigger renders as a button-like element instead of a text input. Thi
 You can control the dropdown's placement, width, and height using the following props:
 
 - `dropdownPlacement`: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end' (default: 'bottom-start')
-- `dropdownWidth`: 'trigger' (match trigger width, default) | 'auto' | any CSS width value (e.g., '300px')
+- `dropdownWidth`: Any valid CSS width value (default: '236px')
 - `maxHeight`: Any valid CSS height value (e.g., '200px', '10rem') to limit dropdown height with scrolling
 
 ### Custom Placement
@@ -305,7 +305,7 @@ You can control where the dropdown appears relative to the trigger element. This
 </DocCanvas>
 
 ### Custom Width
-The dropdown width can be customized to be wider or narrower than the trigger element. This example sets the dropdown to 300px wide.
+The dropdown width can be customized using any valid CSS width value. This example sets the dropdown to 300px wide.
 
 <DocCanvas client:only
   mdxSource={{

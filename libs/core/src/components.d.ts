@@ -443,10 +443,10 @@ export namespace Components {
          */
         "dropdownPlacement": 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
         /**
-          * Width of the dropdown. Can be 'trigger' (match trigger width), 'auto', or a custom CSS value.
-          * @default 'trigger'
+          * Width of the dropdown. Any valid CSS width value.
+          * @default '236px'
          */
-        "dropdownWidth": 'trigger' | 'auto' | string;
+        "dropdownWidth": string;
         /**
           * Visually hides the label text for instances where only the combobox should be displayed. Label remains accessible to assistive technology such as screen readers.
          */
@@ -2457,10 +2457,10 @@ declare namespace LocalJSX {
          */
         "dropdownPlacement"?: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
         /**
-          * Width of the dropdown. Can be 'trigger' (match trigger width), 'auto', or a custom CSS value.
-          * @default 'trigger'
+          * Width of the dropdown. Any valid CSS width value.
+          * @default '236px'
          */
-        "dropdownWidth"?: 'trigger' | 'auto' | string;
+        "dropdownWidth"?: string;
         /**
           * Visually hides the label text for instances where only the combobox should be displayed. Label remains accessible to assistive technology such as screen readers.
          */
