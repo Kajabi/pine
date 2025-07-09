@@ -181,6 +181,19 @@
   --color-outline: var(--pine-color-focus-ring);
 }
 
+.pds-combobox__button-trigger--destructive {
+  --color-background-default: var(--pine-color-danger);
+  --color-background-hover: var(--pine-color-danger-hover);
+  --color-background-disabled: var(--pine-color-danger-disabled);
+  --color-border-default: var(--pine-color-danger);
+  --color-border-hover: var(--pine-color-danger-hover);
+  --color-border-disabled: var(--pine-color-danger-disabled);
+  --color-border-focus: var(--pine-color-danger);
+  --color-text-default: var(--pine-color-text-primary);
+  --color-text-disabled: var(--pine-color-text-danger-disabled);
+  --color-outline: var(--pine-color-focus-ring-danger);
+}
+
 .visually-hidden {
   border: 0;
   clip: rect(0 0 0 0);

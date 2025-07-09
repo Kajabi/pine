@@ -62,3 +62,13 @@ HiddenLabel.args = {
   triggerVariant: 'secondary',
   mode: 'select-only',
 };
+
+export const DestructiveVariant = BaseTemplate.bind();
+DestructiveVariant.args = {
+  componentId: 'combobox-destructive-story',
+  label: 'Delete Item',
+  placeholder: 'Select item to delete',
+  trigger: 'button',
+  triggerVariant: 'destructive',
+  mode: 'select-only',
+};

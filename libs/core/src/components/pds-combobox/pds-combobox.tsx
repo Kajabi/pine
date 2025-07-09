@@ -61,7 +61,7 @@ export class PdsCombobox implements BasePdsProps {
    * The visual variant for the button trigger. Matches Pine button variants.
    * @default 'secondary'
    */
-  @Prop() triggerVariant: 'secondary' | 'primary' | 'accent' = 'secondary';
+  @Prop() triggerVariant: 'secondary' | 'primary' | 'accent' | 'destructive' = 'secondary';
 
   /**
    * Placement of the dropdown relative to the trigger.

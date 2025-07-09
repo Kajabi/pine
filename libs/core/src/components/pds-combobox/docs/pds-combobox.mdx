@@ -49,6 +49,7 @@ The button trigger supports the following visual variants, matching Pine button 
 - **secondary** (default)
 - **primary**
 - **accent**
+- **destructive**
 
 Use the `triggerVariant` prop to control the style.
 
@@ -130,6 +131,33 @@ The accent variant uses Pine's accent color scheme, providing a distinctive appe
     <option value="dog">Dog</option>
     <option value="panda">Panda</option>
     <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
+
+### Destructive
+The destructive variant uses Pine's destructive color scheme, providing a warning appearance suitable for destructive or dangerous actions like deleting items.
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-trigger-destructive" label="Delete Item" placeholder="Select item to delete" trigger="button" trigger-variant="destructive" mode="select-only">
+  <option value="file1">Document.pdf</option>
+  <option value="file2">Image.jpg</option>
+  <option value="file3">Spreadsheet.xlsx</option>
+  <option value="file4">Presentation.pptx</option>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="combobox-trigger-destructive" label="Delete Item" placeholder="Select item to delete" trigger="button" triggerVariant="destructive" mode="select-only">
+  <option value="file1">Document.pdf</option>
+  <option value="file2">Image.jpg</option>
+  <option value="file3">Spreadsheet.xlsx</option>
+  <option value="file4">Presentation.pptx</option>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="combobox-trigger-destructive" label="Delete Item" placeholder="Select item to delete" trigger="button" trigger-variant="destructive" mode="select-only">
+    <option value="file1">Document.pdf</option>
+    <option value="file2">Image.jpg</option>
+    <option value="file3">Spreadsheet.xlsx</option>
+    <option value="file4">Presentation.pptx</option>
   </pds-combobox>
 </DocCanvas>
 
