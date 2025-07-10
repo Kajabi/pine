@@ -68,6 +68,17 @@ export class PdsRadio {
   @Prop() value: string;
 
   /**
+   * Sets the style variant of the radio.
+   * @defaultValue 'default'
+   */
+  @Prop() variant: 'default' | 'contained' = 'default';
+
+  /**
+   * Icon name to display when using the contained variant.
+   */
+  @Prop() icon: string;
+
+  /**
    * Emits a boolean indicating whether the checkbox is currently checked or unchecked.
    */
   @Event() pdsRadioChange: EventEmitter<boolean>;
@@ -92,6 +103,9 @@ export class PdsRadio {
     if (this.disabled) {
       classNames.push('is-disabled');
     }
+    if (this.variant === 'contained') {
+      classNames.push('is-contained');
+    }
 
     return classNames.join('  ');
   }
@@ -112,6 +126,9 @@ export class PdsRadio {
             disabled={this.disabled}
             onChange={this.handleRadioChange}
           />
+          {this.variant === 'contained' && this.icon ? (
+            <pds-icon icon={this.icon} size="16px" />
+          ) : null}
           <span class={this.hideLabel ? 'visually-hidden' : ''}>
             {this.label}
           </span>
