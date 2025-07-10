@@ -1,0 +1,210 @@
+:host {
+  display: inline-block;
+}
+
+.pds-combobox {
+  position: relative;
+  width: 240px;
+}
+
+.pds-combobox__label {
+  display: block;
+  font-size: 0.95rem;
+  margin-block-end: var(--pine-dimension-150);
+}
+
+.pds-combobox__input {
+  background: var(--pine-color-background-container);
+  border: 1px solid var(--pine-color-border);
+  border-radius: var(--pine-dimension-125);
+  box-sizing: border-box;
+  color: var(--pine-color-text-active);
+  flex: 1;
+  font: var(--pine-typography-body-medium);
+  padding: var(--pine-dimension-xs) var(--pine-dimension-150);
+  transition: border-color 0.2s ease;
+  width: 100%;
+
+  &:hover:not(:disabled) {
+    border-color: var(--pine-color-border-hover);
+  }
+
+  &:disabled {
+    background: var(--pine-color-background-container-disabled);
+    border-color: var(--pine-color-border-disabled);
+    color: var(--pine-color-text-disabled);
+    cursor: not-allowed;
+
+    &::placeholder {
+      color: var(--pine-color-text-placeholder-disabled);
+    }
+  }
+
+  &:focus-visible {
+    border-color: var(--pine-color-border-active);
+    outline: var(--pine-outline-focus);
+    outline-offset: var(--pine-border-width);
+  }
+
+  &::placeholder {
+    color: var(--pine-color-text-placeholder);
+  }
+}
+
+.pds-combobox__listbox {
+  background: var(--pine-color-background-container);
+  border: 0;
+  border-radius: var(--pine-dimension-125);
+  box-shadow: var(--pine-box-shadow);
+  list-style: none;
+  margin: 0;
+  min-width: 220px;
+  overflow-y: auto;
+  padding: var(--pine-dimension-xs);
+  position: absolute;
+  z-index: 1000;
+}
+
+.pds-combobox__option {
+  align-items: center;
+  background: transparent;
+  border-radius: var(--pine-dimension-125);
+  cursor: pointer;
+  display: flex;
+  font: var(--pine-typography-body-medium);
+  justify-content: space-between;
+  padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
+  transition: background 0.15s;
+
+  &[aria-selected="true"] {
+    background: var(--pine-color-grey-150);
+  }
+}
+
+.pds-combobox__option:last-child {
+  margin-block-end: 0;
+}
+
+.pds-combobox__option--highlighted,
+.pds-combobox__option[selected],
+.pds-combobox__option--selected {
+  background: var(--pine-color-grey-150);
+}
+
+.pds-combobox__option-check {
+  color: currentColor;
+  font-size: var(--pine-dimension-150);
+  margin-inline-start: var(--pine-dimension-150);
+}
+
+.pds-combobox__button-trigger {
+  align-items: center;
+  background: var(--color-background-default, var(--pine-color-secondary));
+  border: var(--pine-border);
+  border-radius: var(--pine-border-radius-full);
+  color: var(--color-text-default, #ffffff);
+  cursor: pointer;
+  display: flex;
+  font: var(--pine-typography-body-medium);
+  justify-content: space-between;
+  min-height: var(--pine-dimension-450);
+  outline: none;
+  padding: 0 var(--pine-dimension-sm);
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  width: fit-content;
+}
+
+.pds-combobox__button-trigger:focus-visible {
+  border-color: var(--color-border-focus, var(--pine-color-border));
+  box-shadow: 0 0 0 2px var(--color-outline, var(--pine-color-focus-ring));
+}
+
+.pds-combobox__button-trigger:hover {
+  background: var(--color-background-hover, var(--pine-color-secondary-hover));
+  border-color: var(--color-border-hover, var(--pine-color-border-hover));
+}
+
+.pds-combobox__button-trigger[aria-disabled='true'],
+.pds-combobox__button-trigger:disabled {
+  background: var(--color-background-disabled, var(--pine-color-secondary-disabled));
+  border-color: var(--color-border-disabled, var(--pine-color-border-disabled));
+  color: var(--color-text-disabled, var(--pine-color-text-secondary-disabled));
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.pds-combobox__button-trigger-label {
+  color: inherit;
+  flex: 1 1 auto;
+  text-align: start;
+}
+
+.pds-combobox__button-trigger-chevron {
+  color: currentColor;
+  margin-inline-start: var(--pine-dimension-150);
+}
+
+.pds-combobox__button-trigger--primary {
+  --color-background-default: var(--pine-color-primary);
+  --color-background-hover: var(--pine-color-primary-hover);
+  --color-background-disabled: var(--pine-color-primary-disabled);
+  --color-border-default: var(--pine-color-primary);
+  --color-border-hover: var(--pine-color-primary-hover);
+  --color-border-disabled: var(--pine-color-primary-disabled);
+  --color-border-focus: var(--pine-color-primary);
+  --color-text-default: var(--pine-color-text-primary);
+  --color-text-disabled: var(--pine-color-text-primary-disabled);
+  --color-outline: var(--pine-color-focus-ring);
+}
+
+.pds-combobox__button-trigger--accent {
+  --color-background-default: var(--pine-color-accent);
+  --color-background-hover: var(--pine-color-accent-hover);
+  --color-background-disabled: var(--pine-color-accent-disabled);
+  --color-border-default: var(--pine-color-accent);
+  --color-border-hover: var(--pine-color-accent-hover);
+  --color-border-disabled: var(--pine-color-accent-disabled);
+  --color-border-focus: var(--pine-color-accent);
+  --color-text-default: var(--pine-color-text-primary);
+  --color-text-disabled: var(--pine-color-text-accent-disabled);
+  --color-outline: var(--pine-color-focus-ring);
+}
+
+.pds-combobox__button-trigger--secondary {
+  --color-background-default: var(--pine-color-secondary);
+  --color-background-hover: var(--pine-color-secondary-hover);
+  --color-background-disabled: var(--pine-color-secondary-disabled);
+  --color-border-default: var(--pine-color-border);
+  --color-border-hover: var(--pine-color-border-hover);
+  --color-border-disabled: var(--pine-color-border-disabled);
+  --color-border-focus: var(--pine-color-border);
+  --color-text-default: var(--pine-color-text-secondary);
+  --color-text-disabled: var(--pine-color-text-secondary-disabled);
+  --color-outline: var(--pine-color-focus-ring);
+}
+
+.pds-combobox__button-trigger--destructive {
+  --color-background-default: var(--pine-color-danger);
+  --color-background-hover: var(--pine-color-danger-hover);
+  --color-background-disabled: var(--pine-color-danger-disabled);
+  --color-border-default: var(--pine-color-danger);
+  --color-border-hover: var(--pine-color-danger-hover);
+  --color-border-disabled: var(--pine-color-danger-disabled);
+  --color-border-focus: var(--pine-color-danger);
+  --color-text-default: var(--pine-color-text-primary);
+  --color-text-disabled: var(--pine-color-text-danger-disabled);
+  --color-outline: var(--pine-color-focus-ring-danger);
+}
+
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: polygon(0 0, 0 0, 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}

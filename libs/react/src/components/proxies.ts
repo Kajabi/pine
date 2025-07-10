@@ -13,6 +13,7 @@ import { defineCustomElement as definePdsBox } from '@pine-ds/core/components/pd
 import { defineCustomElement as definePdsButton } from '@pine-ds/core/components/pds-button.js';
 import { defineCustomElement as definePdsCheckbox } from '@pine-ds/core/components/pds-checkbox.js';
 import { defineCustomElement as definePdsChip } from '@pine-ds/core/components/pds-chip.js';
+import { defineCustomElement as definePdsCombobox } from '@pine-ds/core/components/pds-combobox.js';
 import { defineCustomElement as definePdsCopytext } from '@pine-ds/core/components/pds-copytext.js';
 import { defineCustomElement as definePdsDivider } from '@pine-ds/core/components/pds-divider.js';
 import { defineCustomElement as definePdsDropdownMenu } from '@pine-ds/core/components/pds-dropdown-menu.js';
@@ -56,6 +57,7 @@ export const PdsBox = /*@__PURE__*/createReactComponent<JSX.PdsBox, HTMLPdsBoxEl
 export const PdsButton = /*@__PURE__*/createReactComponent<JSX.PdsButton, HTMLPdsButtonElement>('pds-button', undefined, undefined, definePdsButton);
 export const PdsCheckbox = /*@__PURE__*/createReactComponent<JSX.PdsCheckbox, HTMLPdsCheckboxElement>('pds-checkbox', undefined, undefined, definePdsCheckbox);
 export const PdsChip = /*@__PURE__*/createReactComponent<JSX.PdsChip, HTMLPdsChipElement>('pds-chip', undefined, undefined, definePdsChip);
+export const PdsCombobox = /*@__PURE__*/createReactComponent<JSX.PdsCombobox, HTMLPdsComboboxElement>('pds-combobox', undefined, undefined, definePdsCombobox);
 export const PdsCopytext = /*@__PURE__*/createReactComponent<JSX.PdsCopytext, HTMLPdsCopytextElement>('pds-copytext', undefined, undefined, definePdsCopytext);
 export const PdsDivider = /*@__PURE__*/createReactComponent<JSX.PdsDivider, HTMLPdsDividerElement>('pds-divider', undefined, undefined, definePdsDivider);
 export const PdsDropdownMenu = /*@__PURE__*/createReactComponent<JSX.PdsDropdownMenu, HTMLPdsDropdownMenuElement>('pds-dropdown-menu', undefined, undefined, definePdsDropdownMenu);

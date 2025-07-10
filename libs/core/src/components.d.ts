@@ -428,6 +428,65 @@ export namespace Components {
          */
         "variant": 'text' | 'tag' | 'dropdown';
     }
+    interface PdsCombobox {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * If true, the combobox is disabled.
+         */
+        "disabled": boolean;
+        /**
+          * Placement of the dropdown relative to the trigger.
+          * @default 'bottom-start'
+         */
+        "dropdownPlacement": 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
+        /**
+          * Width of the dropdown. Any valid CSS width value.
+          * @default '236px'
+         */
+        "dropdownWidth": string;
+        /**
+          * Visually hides the label text for instances where only the combobox should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "hideLabel": boolean;
+        /**
+          * Text to be displayed as the combobox label.
+         */
+        "label"?: string;
+        /**
+          * Maximum height of the dropdown. Can be any valid CSS height value (e.g., '200px', '10rem'). When content exceeds this height, the dropdown will scroll.
+         */
+        "maxHeight"?: string;
+        /**
+          * Determines the combobox mode: 'filter' (filter options as you type) or 'select-only' (show all options).
+          * @default 'filter'
+         */
+        "mode": 'filter' | 'select-only';
+        /**
+          * Placeholder text for the input field.
+         */
+        "placeholder"?: string;
+        /**
+          * Sets focus on the native input element.
+         */
+        "setFocus": () => Promise<void>;
+        /**
+          * Determines the combobox trigger: 'input' (editable input) or 'button' (button-like, non-editable).
+          * @default 'input'
+         */
+        "trigger": 'input' | 'button';
+        /**
+          * The visual variant for the button trigger. Matches Pine button variants.
+          * @default 'secondary'
+         */
+        "triggerVariant": 'secondary' | 'primary' | 'accent' | 'destructive';
+        /**
+          * The value of the combobox input.
+         */
+        "value": string;
+    }
     interface PdsCopytext {
         /**
           * Determines whether `copytext` should have a visible border.
@@ -1337,6 +1396,10 @@ export interface PdsChipCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsChipElement;
 }
+export interface PdsComboboxCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsComboboxElement;
+}
 export interface PdsCopytextCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsCopytextElement;
@@ -1507,6 +1570,23 @@ declare global {
     var HTMLPdsChipElement: {
         prototype: HTMLPdsChipElement;
         new (): HTMLPdsChipElement;
+    };
+    interface HTMLPdsComboboxElementEventMap {
+        "pdsComboboxChange": { value: string };
+    }
+    interface HTMLPdsComboboxElement extends Components.PdsCombobox, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsComboboxElementEventMap>(type: K, listener: (this: HTMLPdsComboboxElement, ev: PdsComboboxCustomEvent<HTMLPdsComboboxElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsComboboxElementEventMap>(type: K, listener: (this: HTMLPdsComboboxElement, ev: PdsComboboxCustomEvent<HTMLPdsComboboxElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLPdsComboboxElement: {
+        prototype: HTMLPdsComboboxElement;
+        new (): HTMLPdsComboboxElement;
     };
     interface HTMLPdsCopytextElementEventMap {
         "pdsCopyTextClick": any;
@@ -1894,6 +1974,7 @@ declare global {
         "pds-button": HTMLPdsButtonElement;
         "pds-checkbox": HTMLPdsCheckboxElement;
         "pds-chip": HTMLPdsChipElement;
+        "pds-combobox": HTMLPdsComboboxElement;
         "pds-copytext": HTMLPdsCopytextElement;
         "pds-divider": HTMLPdsDividerElement;
         "pds-dropdown-menu": HTMLPdsDropdownMenuElement;
@@ -2360,6 +2441,65 @@ declare namespace LocalJSX {
           * @defaultValue 'text'
          */
         "variant"?: 'text' | 'tag' | 'dropdown';
+    }
+    interface PdsCombobox {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * If true, the combobox is disabled.
+         */
+        "disabled"?: boolean;
+        /**
+          * Placement of the dropdown relative to the trigger.
+          * @default 'bottom-start'
+         */
+        "dropdownPlacement"?: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
+        /**
+          * Width of the dropdown. Any valid CSS width value.
+          * @default '236px'
+         */
+        "dropdownWidth"?: string;
+        /**
+          * Visually hides the label text for instances where only the combobox should be displayed. Label remains accessible to assistive technology such as screen readers.
+         */
+        "hideLabel"?: boolean;
+        /**
+          * Text to be displayed as the combobox label.
+         */
+        "label"?: string;
+        /**
+          * Maximum height of the dropdown. Can be any valid CSS height value (e.g., '200px', '10rem'). When content exceeds this height, the dropdown will scroll.
+         */
+        "maxHeight"?: string;
+        /**
+          * Determines the combobox mode: 'filter' (filter options as you type) or 'select-only' (show all options).
+          * @default 'filter'
+         */
+        "mode"?: 'filter' | 'select-only';
+        /**
+          * Emitted when the value changes.
+         */
+        "onPdsComboboxChange"?: (event: PdsComboboxCustomEvent<{ value: string }>) => void;
+        /**
+          * Placeholder text for the input field.
+         */
+        "placeholder"?: string;
+        /**
+          * Determines the combobox trigger: 'input' (editable input) or 'button' (button-like, non-editable).
+          * @default 'input'
+         */
+        "trigger"?: 'input' | 'button';
+        /**
+          * The visual variant for the button trigger. Matches Pine button variants.
+          * @default 'secondary'
+         */
+        "triggerVariant"?: 'secondary' | 'primary' | 'accent' | 'destructive';
+        /**
+          * The value of the combobox input.
+         */
+        "value"?: string;
     }
     interface PdsCopytext {
         /**
@@ -3318,6 +3458,7 @@ declare namespace LocalJSX {
         "pds-button": PdsButton;
         "pds-checkbox": PdsCheckbox;
         "pds-chip": PdsChip;
+        "pds-combobox": PdsCombobox;
         "pds-copytext": PdsCopytext;
         "pds-divider": PdsDivider;
         "pds-dropdown-menu": PdsDropdownMenu;
@@ -3370,6 +3511,7 @@ declare module "@stencil/core" {
             "pds-button": LocalJSX.PdsButton & JSXBase.HTMLAttributes<HTMLPdsButtonElement>;
             "pds-checkbox": LocalJSX.PdsCheckbox & JSXBase.HTMLAttributes<HTMLPdsCheckboxElement>;
             "pds-chip": LocalJSX.PdsChip & JSXBase.HTMLAttributes<HTMLPdsChipElement>;
+            "pds-combobox": LocalJSX.PdsCombobox & JSXBase.HTMLAttributes<HTMLPdsComboboxElement>;
             "pds-copytext": LocalJSX.PdsCopytext & JSXBase.HTMLAttributes<HTMLPdsCopytextElement>;
             "pds-divider": LocalJSX.PdsDivider & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
             "pds-dropdown-menu": LocalJSX.PdsDropdownMenu & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuElement>;

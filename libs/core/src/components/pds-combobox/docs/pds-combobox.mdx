@@ -1,0 +1,448 @@
+import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+# Combobox
+
+A combobox is a text input with a dropdown list of options, allowing users to filter and select from a list. It is useful for searchable selects and autocomplete scenarios.
+
+## Guidelines
+
+### When to use
+- When users need to select from a long or searchable list of options.
+- When you want to allow both typing and selection.
+
+### When not to use
+- For simple, short lists (use [Select](/docs/components-select--docs)).
+- For multi-select (use checkboxes or a multi-select component).
+
+### Accessibility
+- Implements the WAI-ARIA Combobox Pattern for screen reader compatibility.
+- Supports full keyboard navigation: Arrow keys, Enter, Escape.
+- Input is labelled and controls the listbox.
+
+## Properties
+
+<DocArgsTable componentName="pds-combobox" docSource={components} />
+
+## Modes
+
+The combobox supports two modes:
+
+- **Filtering** (`mode="filter"`): Filters options as you type (default).
+- **Select-only** (`mode="select-only"`): Always shows all options, regardless of input value.
+
+Use the `mode` prop to control this behavior.
+
+## Triggers
+
+The combobox supports two trigger types:
+
+- **Input** (`trigger="input"`): Renders a text input (default, for filtering/autocomplete).
+- **Button** (`trigger="button"`): Renders a button-like div (for select-only, non-editable comboboxes).
+
+Use the `trigger` prop to control this behavior. See [WAI-ARIA Combobox Patterns](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/#examples) for more details.
+
+## Trigger Variants
+
+The button trigger supports the following visual variants, matching Pine button styles:
+
+- **secondary** (default)
+- **primary**
+- **accent**
+- **destructive**
+
+Use the `triggerVariant` prop to control the style.
+
+### Secondary (default)
+The secondary variant provides a subtle button appearance with a white background and border. This is the default styling for button triggers.
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-trigger-secondary" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="combobox-trigger-secondary" label="Favorite Animal" placeholder="Select an animal" trigger="button" triggerVariant="secondary" mode="select-only">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="combobox-trigger-secondary" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only">
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="panda">Panda</option>
+    <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
+
+### Primary
+The primary variant uses Pine's primary color scheme, creating a more prominent button appearance suitable for primary actions.
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-trigger-primary" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="primary" mode="select-only">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="combobox-trigger-primary" label="Favorite Animal" placeholder="Select an animal" trigger="button" triggerVariant="primary" mode="select-only">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="combobox-trigger-primary" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="primary" mode="select-only">
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="panda">Panda</option>
+    <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
+
+### Accent
+The accent variant uses Pine's accent color scheme, providing a distinctive appearance for special or highlighted selections.
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-trigger-accent" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="accent" mode="select-only">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="combobox-trigger-accent" label="Favorite Animal" placeholder="Select an animal" trigger="button" triggerVariant="accent" mode="select-only">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="combobox-trigger-accent" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="accent" mode="select-only">
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="panda">Panda</option>
+    <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
+
+### Destructive
+The destructive variant uses Pine's destructive color scheme, providing a warning appearance suitable for destructive or dangerous actions like deleting items.
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-trigger-destructive" label="Delete Item" placeholder="Select item to delete" trigger="button" trigger-variant="destructive" mode="select-only">
+  <option value="file1">Document.pdf</option>
+  <option value="file2">Image.jpg</option>
+  <option value="file3">Spreadsheet.xlsx</option>
+  <option value="file4">Presentation.pptx</option>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="combobox-trigger-destructive" label="Delete Item" placeholder="Select item to delete" trigger="button" triggerVariant="destructive" mode="select-only">
+  <option value="file1">Document.pdf</option>
+  <option value="file2">Image.jpg</option>
+  <option value="file3">Spreadsheet.xlsx</option>
+  <option value="file4">Presentation.pptx</option>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="combobox-trigger-destructive" label="Delete Item" placeholder="Select item to delete" trigger="button" trigger-variant="destructive" mode="select-only">
+    <option value="file1">Document.pdf</option>
+    <option value="file2">Image.jpg</option>
+    <option value="file3">Spreadsheet.xlsx</option>
+    <option value="file4">Presentation.pptx</option>
+  </pds-combobox>
+</DocCanvas>
+
+### Filtering (default)
+In filtering mode, the combobox filters the available options as you type, making it easy to find specific items in large lists. This is the default behavior.
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-filter" label="Favorite Animal" placeholder="Type to search...">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="combobox-filter" label="Favorite Animal" placeholder="Type to search...">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="combobox-filter" label="Favorite Animal" placeholder="Type to search...">
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="panda">Panda</option>
+    <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
+
+### Select-only
+In select-only mode, all options are always shown regardless of what you type. This is useful when you want dropdown behavior without filtering.
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-selectonly" label="Favorite Animal" placeholder="Type to search..." mode="select-only">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="combobox-selectonly" label="Favorite Animal" placeholder="Type to search..." mode="select-only">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="combobox-selectonly" label="Favorite Animal" placeholder="Type to search..." mode="select-only">
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="panda">Panda</option>
+    <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
+
+### Input Trigger (default)
+The input trigger provides a text input field that users can type into. This is ideal for filtering and autocomplete scenarios where users need to search through options.
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-trigger-input" label="Favorite Animal" placeholder="Type to search..." trigger="input">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="combobox-trigger-input" label="Favorite Animal" placeholder="Type to search..." trigger="input">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="combobox-trigger-input" label="Favorite Animal" placeholder="Type to search..." trigger="input">
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="panda">Panda</option>
+    <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
+
+### Button Trigger (select-only)
+The button trigger renders as a button-like element instead of a text input. This is perfect for select-only scenarios where users choose from a dropdown without typing.
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-trigger-button" label="Favorite Animal" placeholder="Select an animal" trigger="button" mode="select-only">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="combobox-trigger-button" label="Favorite Animal" placeholder="Select an animal" trigger="button" mode="select-only">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="combobox-trigger-button" label="Favorite Animal" placeholder="Select an animal" trigger="button" mode="select-only">
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="panda">Panda</option>
+    <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
+
+## Dropdown Placement, Width & Height
+
+You can control the dropdown's placement, width, and height using the following props:
+
+- `dropdownPlacement`: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end' (default: 'bottom-start')
+- `dropdownWidth`: Any valid CSS width value (default: '236px')
+- `maxHeight`: Any valid CSS height value (e.g., '200px', '10rem') to limit dropdown height with scrolling
+
+### Custom Placement
+You can control where the dropdown appears relative to the trigger element. This example shows the dropdown aligned to the right edge (`bottom-end`).
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-placement-end" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only" dropdown-placement="bottom-end">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="combobox-placement-end" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only" dropdown-placement="bottom-end">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="combobox-placement-end" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only" dropdown-placement="bottom-end">
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="panda">Panda</option>
+    <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
+
+### Custom Width
+The dropdown width can be customized using any valid CSS width value. This example sets the dropdown to 300px wide.
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-width-custom" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only" dropdown-width="300px">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="combobox-width-custom" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only" dropdown-width="300px">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="combobox-width-custom" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only" dropdown-width="300px">
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="panda">Panda</option>
+    <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
+
+### Custom Max Height
+When dealing with long lists of options, you can set a maximum height for the dropdown. This example limits the dropdown to 200px height - when there are more options than can fit, users can scroll through them.
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-max-height" label="Choose a Country" placeholder="Select a country" trigger="button" trigger-variant="secondary" mode="select-only" max-height="200px">
+  <option value="us">United States</option>
+  <option value="ca">Canada</option>
+  <option value="mx">Mexico</option>
+  <option value="uk">United Kingdom</option>
+  <option value="de">Germany</option>
+  <option value="fr">France</option>
+  <option value="it">Italy</option>
+  <option value="es">Spain</option>
+  <option value="jp">Japan</option>
+  <option value="kr">South Korea</option>
+  <option value="cn">China</option>
+  <option value="au">Australia</option>
+  <option value="br">Brazil</option>
+  <option value="ar">Argentina</option>
+  <option value="in">India</option>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="combobox-max-height" label="Choose a Country" placeholder="Select a country" trigger="button" triggerVariant="secondary" mode="select-only" maxHeight="200px">
+  <option value="us">United States</option>
+  <option value="ca">Canada</option>
+  <option value="mx">Mexico</option>
+  <option value="uk">United Kingdom</option>
+  <option value="de">Germany</option>
+  <option value="fr">France</option>
+  <option value="it">Italy</option>
+  <option value="es">Spain</option>
+  <option value="jp">Japan</option>
+  <option value="kr">South Korea</option>
+  <option value="cn">China</option>
+  <option value="au">Australia</option>
+  <option value="br">Brazil</option>
+  <option value="ar">Argentina</option>
+  <option value="in">India</option>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="combobox-max-height" label="Choose a Country" placeholder="Select a country" trigger="button" trigger-variant="secondary" mode="select-only" max-height="200px">
+    <option value="us">United States</option>
+    <option value="ca">Canada</option>
+    <option value="mx">Mexico</option>
+    <option value="uk">United Kingdom</option>
+    <option value="de">Germany</option>
+    <option value="fr">France</option>
+    <option value="it">Italy</option>
+    <option value="es">Spain</option>
+    <option value="jp">Japan</option>
+    <option value="kr">South Korea</option>
+    <option value="cn">China</option>
+    <option value="au">Australia</option>
+    <option value="br">Brazil</option>
+    <option value="ar">Argentina</option>
+    <option value="in">India</option>
+  </pds-combobox>
+</DocCanvas>
+
+## Hidden Label
+
+For cases where the combobox doesn't need a visible label (such as in compact layouts or when the context is clear), you can use the `hideLabel` prop. The label remains accessible to screen readers for accessibility.
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-hidden-label" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only" hide-label>
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="combobox-hidden-label" label="Favorite Animal" placeholder="Select an animal" trigger="button" triggerVariant="secondary" mode="select-only" hideLabel>
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="combobox-hidden-label" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only" hide-label>
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="panda">Panda</option>
+    <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
+
+## Example
+
+Here's a basic example of the combobox component with filtering enabled. Type to search through the options, or use arrow keys to navigate and Enter to select.
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-example" label="Favorite Animal" placeholder="Type to search...">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="combobox-example" label="Favorite Animal" placeholder="Type to search...">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="combobox-example" label="Favorite Animal" placeholder="Type to search...">
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="panda">Panda</option>
+    <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
