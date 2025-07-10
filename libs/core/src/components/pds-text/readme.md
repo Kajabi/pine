@@ -20,6 +20,13 @@
 | `weight`     | `weight`     | Sets the font weight.                                                            | `"bold" \| "extra-light" \| "light" \| "medium" \| "regular" \| "semibold"`                              | `undefined` |
 
 
+## Shadow Parts
+
+| Part        | Description                |
+| ----------- | -------------------------- |
+| `"content"` | The text content container |
+
+
 ## Dependencies
 
 ### Used by
