@@ -54,12 +54,14 @@
 
  - [pds-alert](../pds-alert)
  - [pds-dropdown-menu](../pds-dropdown-menu)
+ - [pds-property](../pds-property)
 
 ### Graph
 ```mermaid
 graph TD;
   pds-alert --> pds-box
   pds-dropdown-menu --> pds-box
+  pds-property --> pds-box
   style pds-box fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
