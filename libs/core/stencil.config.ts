@@ -11,6 +11,14 @@ export const config: Config = {
     openBrowser: false,
     port: 7300,
   },
+  testing: {
+    browserHeadless: "shell",
+    browserArgs: [
+      '--no-sandbox',
+      '--disable-dev-shm-usage',
+      '--disable-gpu'
+    ],
+  },
   outputTargets: [
     {
       type: 'dist',
