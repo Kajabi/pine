@@ -20,7 +20,7 @@ describe('pds-combobox', () => {
       <pds-combobox component-id="test-combobox">
         <mock:shadow-root>
           <div class="pds-combobox" tabindex="-1">
-            <input aria-autocomplete="list" aria-controls="pds-combobox-listbox" aria-disabled="false" aria-expanded="false" autocomplete="off" class="pds-combobox__input" id="test-combobox" role="combobox" type="text" value="" />
+            <input aria-autocomplete="list" aria-controls="pds-combobox-listbox" aria-disabled="false" aria-expanded="false" autocomplete="off" class="pds-combobox__input" id="test-combobox" part="input" role="combobox" style="width: fit-content;" type="text" value="" />
             <div style="display: none;">
               <slot></slot>
             </div>
@@ -716,6 +716,8 @@ describe('pds-combobox', () => {
     const mockUnselectedOption = createMockOption('dog', 'Dog', false);
 
     component.optionEls = [mockSelectedOption, mockUnselectedOption];
+    // Set the selected option state to match what would happen in updateOptions
+    component.selectedOption = mockSelectedOption;
 
     // Initially set value to match selected option
     component.value = 'Cat';

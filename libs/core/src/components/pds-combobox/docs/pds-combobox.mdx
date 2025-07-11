@@ -10,6 +10,7 @@ A combobox is a text input with a dropdown list of options, allowing users to fi
 ### When to use
 - When users need to select from a long or searchable list of options.
 - When you want to allow both typing and selection.
+- When you need rich layouts in options or trigger content.
 
 ### When not to use
 - For simple, short lists (use [Select](/docs/components-select--docs)).
@@ -19,6 +20,7 @@ A combobox is a text input with a dropdown list of options, allowing users to fi
 - Implements the WAI-ARIA Combobox Pattern for screen reader compatibility.
 - Supports full keyboard navigation: Arrow keys, Enter, Escape.
 - Input is labelled and controls the listbox.
+- Custom layouts maintain proper ARIA attributes and focus management.
 
 ## Properties
 
@@ -269,12 +271,13 @@ The button trigger renders as a button-like element instead of a text input. Thi
   </pds-combobox>
 </DocCanvas>
 
-## Dropdown Placement, Width & Height
+## Sizing and Positioning
 
-You can control the dropdown's placement, width, and height using the following props:
+You can control the dropdown's placement, width, and height, as well as the trigger width using the following props:
 
 - `dropdownPlacement`: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end' (default: 'bottom-start')
 - `dropdownWidth`: Any valid CSS width value (default: '236px')
+- `triggerWidth`: Any valid CSS width value for both input and button triggers (default: 'fit-content')
 - `maxHeight`: Any valid CSS height value (e.g., '200px', '10rem') to limit dropdown height with scrolling
 
 ### Custom Placement
@@ -304,7 +307,7 @@ You can control where the dropdown appears relative to the trigger element. This
   </pds-combobox>
 </DocCanvas>
 
-### Custom Width
+### Custom Dropdown Width
 The dropdown width can be customized using any valid CSS width value. This example sets the dropdown to 300px wide.
 
 <DocCanvas client:only
@@ -324,6 +327,59 @@ The dropdown width can be customized using any valid CSS width value. This examp
   }}
 >
   <pds-combobox component-id="combobox-width-custom" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only" dropdown-width="300px">
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="panda">Panda</option>
+    <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
+
+### Custom Trigger Width
+The trigger width can be customized for both input and button triggers using any valid CSS width value. This example sets the button trigger to 300px wide.
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-trigger-width-custom" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only" trigger-width="300px">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="combobox-trigger-width-custom" label="Favorite Animal" placeholder="Select an animal" trigger="button" triggerVariant="secondary" mode="select-only" triggerWidth="300px">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="combobox-trigger-width-custom" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only" trigger-width="300px">
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="panda">Panda</option>
+    <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
+
+The `triggerWidth` prop also works with input triggers. This example shows an input trigger set to 280px wide.
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-input-width-custom" label="Favorite Animal" placeholder="Type to search..." trigger="input" trigger-width="280px">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="combobox-input-width-custom" label="Favorite Animal" placeholder="Type to search..." trigger="input" triggerWidth="280px">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="combobox-input-width-custom" label="Favorite Animal" placeholder="Type to search..." trigger="input" trigger-width="280px">
     <option value="cat">Cat</option>
     <option value="dog">Dog</option>
     <option value="panda">Panda</option>
@@ -419,30 +475,345 @@ For cases where the combobox doesn't need a visible label (such as in compact la
   </pds-combobox>
 </DocCanvas>
 
-## Example
 
-Here's a basic example of the combobox component with filtering enabled. Type to search through the options, or use arrow keys to navigate and Enter to select.
+## Layout Support
+
+The combobox supports custom layouts for both the button trigger and dropdown options, enabling rich content like the payment method selector shown in your design.
+
+### Combined Custom Trigger and Option Layouts
+
+For the most dynamic experience, combine both `customTriggerContent` and `customOptionLayouts`. The trigger will start with your custom slot content and then update to show the selected option's layout.
 
 <DocCanvas client:only
   mdxSource={{
-    webComponent: `<pds-combobox component-id="combobox-example" label="Favorite Animal" placeholder="Type to search...">
-  <option value="cat">Cat</option>
-  <option value="dog">Dog</option>
-  <option value="panda">Panda</option>
-  <option value="snake">Snake</option>
-</pds-combobox>`,
-    react: `<PdsCombobox componentId="combobox-example" label="Favorite Animal" placeholder="Type to search...">
-  <option value="cat">Cat</option>
-  <option value="dog">Dog</option>
-  <option value="panda">Panda</option>
-  <option value="snake">Snake</option>
-</PdsCombobox>`,
+    webComponent: `<div style={{ width: '100%' }}>
+    <pds-combobox
+      component-id="combobox-combined-custom"
+      custom-trigger-content="true"
+      custom-option-layouts="true"
+      label="Payment Method"
+      trigger="button"
+      trigger-variant="secondary"
+      trigger-width="500px"
+      mode="select-only"
+      dropdown-width="400px"
+      on-pds-combobox-change={(e) => console.log(e.detail.value)}
+    >
+      <pds-box
+        align-items="center"
+        class="payment-trigger-layout"
+        gap="sm"
+        slot="trigger-content"
+      >
+        <pds-box
+          align-items="center"
+          align-self="center"
+          background-color="var(--pine-color-grey-200)"
+          border-radius="md"
+          flex="shrink"
+          gap="sm"
+          justify-content="center"
+          min-height="48px"
+          min-width="48px"
+        >
+          <pds-icon icon="ban" color="var(--pine-color-text-neutral)"></pds-icon>
+        </pds-box>
+        <pds-box class="option-content" direction="column">
+          <pds-text size="md" weight="semibold" class="option-title">Payment Method</pds-text>
+          <pds-text size="sm" class="option-description"> payment option.</pds-text>
+        </pds-box>
+        <pds-icon icon="caret-down"></pds-icon>
+      </pds-box>
+
+      <option value="" data-layout data-search-text="None">
+        <pds-box class="payment-option-layout">
+          <pds-box
+            align-items="center"
+            align-self="center"
+            background-color="var(--pine-color-grey-200)"
+            border-radius="md"
+            flex="shrink"
+            gap="sm"
+            justify-content="center"
+            min-height="48px"
+            min-width="48px"
+          >
+            <pds-icon icon="ban" color="var(--pine-color-text-neutral)"></pds-icon>
+          </pds-box>
+          <pds-box class="option-content" direction="column">
+            <pds-text size="md" weight="semibold" class="option-title">None</pds-text>
+            <pds-text size="sm" class="option-description">No debit/credit card payments</pds-text>
+          </pds-box>
+        </pds-box>
+      </option>
+      <option value="stripe" data-layout data-search-text="Stripe credit card payment">
+        <pds-box class="payment-option-layout">
+          <pds-box
+            align-items="center"
+            align-self="center"
+            background-color="var(--pine-color-green-200)"
+            border-radius="md"
+            flex="shrink"
+            gap="sm"
+            justify-content="center"
+            min-height="48px"
+            min-width="48px"
+          >
+            <pds-icon icon="card-stripe"></pds-icon>
+          </pds-box>
+          <pds-box class="option-content" direction="column">
+            <pds-text size="md" weight="semibold" class="option-title">Stripe</pds-text>
+            <pds-text size="sm" class="option-description">Accept debit/credit cards through Stripe.</pds-text>
+          </pds-box>
+        </pds-box>
+      </option>
+      <option value="paypal" data-layout data-search-text="PayPal digital payments">
+        <pds-box class="payment-option-layout">
+          <pds-box
+            align-items="center"
+            align-self="center"
+            background-color="var(--pine-color-green-200)"
+            border-radius="md"
+            flex="shrink"
+            gap="sm"
+            justify-content="center"
+            min-height="48px"
+            min-width="48px"
+          >
+            <pds-icon icon="card-paypal"></pds-icon>
+          </pds-box>
+          <pds-box class="option-content" direction="column">
+            <pds-text size="md" weight="semibold" class="option-title">PayPal</pds-text>
+            <pds-text size="sm" class="option-description">Accept payments through PayPal.</pds-text>
+          </pds-box>
+        </pds-box>
+      </option>
+    </pds-combobox>
+  </div>`,
+    react: `<div style={{ width: '100%' }}>
+    <PdsCombobox
+      componentId="combobox-combined-custom"
+      customTriggerContent="true"
+      customOptionLayouts="true"
+      label="Payment Method"
+      trigger="button"
+      triggerVariant="secondary"
+      triggerWidth="500px"
+      mode="select-only"
+      dropdownWidth="400px"
+      onPdsComboboxChange={(e) => console.log(e.detail.value)}
+    >
+      <PdsBox
+        alignItems="center"
+        className="payment-trigger-layout"
+        gap="sm"
+        slot="triggerContent"
+      >
+        <PdsBox
+          alignItems="center"
+          alignSelf="center"
+          backgroundColor="var(--pine-color-grey-200)"
+          borderRadius="md"
+          flex="shrink"
+          gap="sm"
+          justifyContent="center"
+          minHeight="48px"
+          minWidth="48px"
+        >
+          <PdsIcon icon="ban" color="var(--pine-color-text-neutral)"></PdsIcon>
+        </PdsBox>
+        <PdsBox className="option-content" direction="column">
+          <PdsText size="md" weight="semibold" className="option-title">Payment Method</PdsText>
+          <PdsText size="sm" className="option-description"> payment option.</PdsText>
+        </PdsBox>
+        <PdsIcon icon="caret-down"></PdsIcon>
+      </PdsBox>
+
+      <option value="" data-layout data-search-text="None">
+        <PdsBox className="payment-option-layout">
+          <PdsBox
+            alignItems="center"
+            alignSelf="center"
+            backgroundColor="var(--pine-color-grey-200)"
+            borderRadius="md"
+            flex="shrink"
+            gap="sm"
+            justifyContent="center"
+            min-height="48px"
+            min-width="48px"
+          >
+            <PdsIcon icon="ban" color="var(--pine-color-text-neutral)"></PdsIcon>
+          </PdsBox>
+          <PdsBox className="option-content" direction="column">
+            <PdsText size="md" weight="semibold" className="option-title">None</PdsText>
+            <PdsText size="sm" className="option-description">No debit/credit card payments</PdsText>
+          </PdsBox>
+        </PdsBox>
+      </option>
+      <option value="stripe" data-layout data-search-text="Stripe credit card payment">
+        <PdsBox className="payment-option-layout">
+          <PdsBox
+            alignItems="center"
+            alignSelf="center"
+            backgroundColor="var(--pine-color-green-200)"
+            borderRadius="md"
+            flex="shrink"
+            gap="sm"
+            justifyContent="center"
+            minHeight="48px"
+            minWidth="48px"
+          >
+            <PdsIcon icon="card-stripe"></PdsIcon>
+          </PdsBox>
+          <PdsBox className="option-content" direction="column">
+            <PdsText size="md" weight="semibold" className="option-title">Stripe</PdsText>
+            <PdsText size="sm" className="option-description">Accept debit/credit cards through Stripe.</PdsText>
+          </PdsBox>
+        </PdsBox>
+      </option>
+      <option value="paypal" data-layout data-search-text="PayPal digital payments">
+        <PdsBox className="payment-option-layout">
+          <PdsBox
+            alignItems="center"
+            alignSelf="center"
+            backgroundColor="var(--pine-color-green-200)"
+            borderRadius="md"
+            flex="shrink"
+            gap="sm"
+            justifyContent="center"
+            minHeight="48px"
+            minWidth="48px"
+          >
+            <PdsIcon icon="card-paypal"></PdsIcon>
+          </PdsBox>
+          <PdsBox className="option-content" direction="column">
+            <PdsText size="md" weight="semibold" className="option-title">PayPal</PdsText>
+            <PdsText size="sm" className="option-description">Accept payments through PayPal.</PdsText>
+          </PdsBox>
+        </PdsBox>
+      </option>
+    </PdsCombobox>
+  </div>`,
   }}
 >
-  <pds-combobox component-id="combobox-example" label="Favorite Animal" placeholder="Type to search...">
-    <option value="cat">Cat</option>
-    <option value="dog">Dog</option>
-    <option value="panda">Panda</option>
-    <option value="snake">Snake</option>
-  </pds-combobox>
+  <div style={{ width: '100%' }}>
+    <pds-combobox
+      component-id="combobox-combined-custom"
+      custom-trigger-content="true"
+      custom-option-layouts="true"
+      label="Payment Method"
+      trigger="button"
+      trigger-variant="secondary"
+      trigger-width="500px"
+      mode="select-only"
+      dropdown-width="400px"
+      on-pds-combobox-change={(e) => console.log(e.detail.value)}
+    >
+      <pds-box
+        align-items="center"
+        class="payment-trigger-layout"
+        gap="sm"
+        slot="trigger-content"
+      >
+        <pds-box
+          align-items="center"
+          align-self="center"
+          background-color="var(--pine-color-grey-200)"
+          border-radius="md"
+          flex="shrink"
+          gap="sm"
+          justify-content="center"
+          min-height="48px"
+          min-width="48px"
+        >
+          <pds-icon icon="ban" color="var(--pine-color-text-neutral)"></pds-icon>
+        </pds-box>
+        <pds-box class="option-content" direction="column">
+          <pds-text size="md" weight="semibold" class="option-title">Payment Method</pds-text>
+          <pds-text size="sm" class="option-description"> payment option.</pds-text>
+        </pds-box>
+        <pds-icon icon="caret-down"></pds-icon>
+      </pds-box>
+
+      <option value="" data-layout data-search-text="None">
+        <pds-box class="payment-option-layout" align-items="center" gap="sm">
+          <pds-box
+            align-items="center"
+            align-self="center"
+            background-color="var(--pine-color-grey-200)"
+            border-radius="md"
+            flex="shrink"
+            gap="sm"
+            justify-content="center"
+            min-height="48px"
+            min-width="48px"
+          >
+            <pds-icon icon="ban" color="var(--pine-color-text-neutral)"></pds-icon>
+          </pds-box>
+          <pds-box class="option-content" direction="column">
+            <pds-text size="md" weight="semibold" class="option-title">None</pds-text>
+            <pds-text size="sm" class="option-description">No debit/credit card payments</pds-text>
+          </pds-box>
+        </pds-box>
+      </option>
+      <option value="stripe" data-layout data-search-text="Stripe credit card payment">
+        <pds-box class="payment-option-layout" align-items="center" gap="sm">
+          <pds-box
+            align-items="center"
+            align-self="center"
+            background-color="var(--pine-color-green-200)"
+            border-radius="md"
+            flex="shrink"
+            gap="sm"
+            justify-content="center"
+            min-height="48px"
+            min-width="48px"
+          >
+            <pds-icon icon="card-stripe"></pds-icon>
+          </pds-box>
+          <pds-box class="option-content" direction="column">
+            <pds-text size="md" weight="semibold" class="option-title">Stripe</pds-text>
+            <pds-text size="sm" class="option-description">Accept debit/credit cards through Stripe.</pds-text>
+          </pds-box>
+        </pds-box>
+      </option>
+      <option value="paypal" data-layout data-search-text="PayPal digital payments">
+        <pds-box class="payment-option-layout" align-items="center" gap="sm">
+          <pds-box
+            align-items="center"
+            align-self="center"
+            background-color="var(--pine-color-green-200)"
+            border-radius="md"
+            flex="shrink"
+            gap="sm"
+            justify-content="center"
+            min-height="48px"
+            min-width="48px"
+          >
+            <pds-icon icon="card-paypal"></pds-icon>
+          </pds-box>
+          <pds-box class="option-content" direction="column">
+            <pds-text size="md" weight="semibold" class="option-title">PayPal</pds-text>
+            <pds-text size="sm" class="option-description">Accept payments through PayPal.</pds-text>
+          </pds-box>
+        </pds-box>
+      </option>
+    </pds-combobox>
+  </div>
 </DocCanvas>
+
+### Layout Best Practices
+
+When using custom layouts:
+
+1. **Use semantic HTML**: Structure your layout with proper headings and content hierarchy
+2. **Include search text**: Add `data-search-text` attribute to layout options for filtering
+3. **Maintain accessibility**: Ensure custom content is screen reader accessible
+4. **Keep it simple**: Don't overcomplicate layouts - focus on essential information
+5. **Test thoroughly**: Verify keyboard navigation and screen reader compatibility
+
+Common layout patterns are pre-styled in the component:
+- `.payment-option-layout` / `.option-layout` for structured option content
+- `.option-content` for text content wrapper
+- `.option-title` for primary text
+- `.option-description` for secondary text

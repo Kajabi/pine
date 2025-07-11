@@ -4,6 +4,7 @@ import { computePosition, flip, offset, shift } from '@floating-ui/dom';
 
 /**
  * @slot option - Option elements for the combobox dropdown
+ * @slot trigger-content - Custom content for the button trigger when customTriggerContent is true
  */
 @Component({
   tag: 'pds-combobox',
@@ -64,6 +65,19 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() triggerVariant: 'secondary' | 'primary' | 'accent' | 'destructive' = 'secondary';
 
   /**
+   * Enable custom layout content for the button trigger via the trigger-content slot.
+   * When true, uses slot content for initial state but updates dynamically with selected option layout.
+   * @default false
+   */
+  @Prop() customTriggerContent: boolean = false;
+
+  /**
+   * Enable custom layout content for options. Options with data-layout attribute will render their HTML content.
+   * @default false
+   */
+  @Prop() customOptionLayouts: boolean = false;
+
+  /**
    * Placement of the dropdown relative to the trigger.
    * @default 'bottom-start'
    */
@@ -74,6 +88,12 @@ export class PdsCombobox implements BasePdsProps {
    * @default '236px'
    */
   @Prop() dropdownWidth: string = '236px';
+
+  /**
+   * Width of the trigger (button or input). Any valid CSS width value.
+   * @default 'fit-content'
+   */
+  @Prop() triggerWidth: string = 'fit-content';
 
   /**
    * Maximum height of the dropdown. Can be any valid CSS height value (e.g., '200px', '10rem').
@@ -101,6 +121,16 @@ export class PdsCombobox implements BasePdsProps {
    */
   @State() filteredOptions: HTMLOptionElement[] = [];
 
+  /**
+   * Internal state for the currently selected option
+   */
+  @State() selectedOption: HTMLOptionElement | null = null;
+
+  /**
+   * Internal state to force re-renders when trigger content should update
+   */
+  @State() triggerUpdateKey: number = 0;
+
   private inputEl?: HTMLInputElement;
   private optionEls: HTMLOptionElement[] = [];
   private triggerEl?: HTMLElement;
@@ -117,10 +147,14 @@ export class PdsCombobox implements BasePdsProps {
 
   private updateOptions() {
     // Get all <option> elements from the slot
-    const slot = this.el.shadowRoot?.querySelector('slot');
+    const slot = this.el.shadowRoot?.querySelector('slot[name="option"], slot:not([name])');
     if (slot) {
       this.optionEls = (slot as HTMLSlotElement).assignedElements({ flatten: true })
         .filter(el => el.tagName === 'OPTION') as HTMLOptionElement[];
+
+      // Set initial selected option if one exists
+      this.selectedOption = this.optionEls.find(opt => opt.hasAttribute('selected')) || null;
+
       this.filterOptions();
     }
   }
@@ -130,14 +164,29 @@ export class PdsCombobox implements BasePdsProps {
     return option.label || option.textContent || '';
   }
 
+  // Helper method to get option layout content
+  private getOptionLayoutContent(option: HTMLOptionElement): string {
+    return option.innerHTML || '';
+  }
+
+  // Helper method to check if option should render as layout
+  private isOptionLayout(option: HTMLOptionElement): boolean {
+    return this.customOptionLayouts && option.hasAttribute('data-layout');
+  }
+
   private filterOptions() {
     if (this.mode === 'select-only') {
       this.filteredOptions = this.optionEls;
     } else {
       const val = this.value.toLowerCase();
-      this.filteredOptions = this.optionEls.filter(option =>
-        this.getOptionLabel(option).toLowerCase().includes(val)
-      );
+      this.filteredOptions = this.optionEls.filter(option => {
+        // For layout options, search both text content and data-search-text attribute
+        if (this.isOptionLayout(option)) {
+          const searchText = option.getAttribute('data-search-text') || option.textContent || '';
+          return searchText.toLowerCase().includes(val);
+        }
+        return this.getOptionLabel(option).toLowerCase().includes(val);
+      });
     }
     this.highlightedIndex = -1;
   }
@@ -215,6 +264,14 @@ export class PdsCombobox implements BasePdsProps {
     this.inputEl?.focus();
   }
 
+  /**
+   * Gets the value of the currently selected option.
+   */
+  @Method()
+  async getSelectedValue(): Promise<string | null> {
+    return this.selectedOption ? this.selectedOption.value : null;
+  }
+
   // Event handler for option click
   private onOptionClick = (event: Event) => {
     const idx = Number((event.currentTarget as HTMLElement).getAttribute('data-option-index'));
@@ -235,8 +292,17 @@ export class PdsCombobox implements BasePdsProps {
 
   // Get the label of the selected option
   private get selectedLabel(): string {
-    const selected = this.optionEls.find(opt => opt.hasAttribute('selected'));
-    return selected ? this.getOptionLabel(selected) : '';
+    return this.selectedOption ? this.getOptionLabel(this.selectedOption) : '';
+  }
+
+  // Get the layout content of the selected option for button trigger
+  private get selectedLayoutContent(): string {
+    return this.selectedOption && this.isOptionLayout(this.selectedOption) ? this.getOptionLayoutContent(this.selectedOption) : '';
+  }
+
+  // Check if selected option has layout
+  private get selectedHasLayout(): boolean {
+    return this.selectedOption ? this.isOptionLayout(this.selectedOption) : false;
   }
 
   // Handler for button trigger click
@@ -264,18 +330,21 @@ export class PdsCombobox implements BasePdsProps {
       this.isOpen = false;
 
       // If there's a selected option but the input value doesn't match, restore the selected option's value
-      const selectedOption = this.optionEls.find(opt => opt.hasAttribute('selected'));
-      if (selectedOption && this.value !== this.getOptionLabel(selectedOption)) {
-        this.value = this.getOptionLabel(selectedOption);
+      if (this.selectedOption && this.value !== this.getOptionLabel(this.selectedOption)) {
+        this.value = this.getOptionLabel(this.selectedOption);
       }
     }
   };
 
-  private handleOptionClick(option: HTMLOptionElement) {
+    private handleOptionClick(option: HTMLOptionElement) {
     // Remove 'selected' from all options
     this.optionEls.forEach(opt => opt.removeAttribute('selected'));
     // Set 'selected' on the chosen option
     option.setAttribute('selected', '');
+    // Update reactive state
+    this.selectedOption = option;
+    this.triggerUpdateKey = this.triggerUpdateKey + 1; // Force re-render
+
     this.value = this.getOptionLabel(option);
     this.isOpen = false;
     this.pdsComboboxChange.emit({ value: option.value });
@@ -293,6 +362,8 @@ export class PdsCombobox implements BasePdsProps {
         {this.filteredOptions.map((option, idx) => {
           const isSelected = option.hasAttribute('selected');
           const isHighlighted = this.highlightedIndex === idx;
+          const isLayout = this.isOptionLayout(option);
+
           return (
             <li
               key={option.value}
@@ -302,13 +373,18 @@ export class PdsCombobox implements BasePdsProps {
               class={{
                 'pds-combobox__option': true,
                 'pds-combobox__option--highlighted': isHighlighted,
+                'pds-combobox__option--layout': isLayout,
               }}
               data-option-index={idx}
               onMouseDown={this.onOptionMouseDown}
               onClick={this.onOptionClick}
               onMouseEnter={this.onOptionMouseEnter}
             >
-              {this.getOptionLabel(option)}
+              {isLayout ? (
+                <pds-box class="pds-combobox__option-layout-wrapper" innerHTML={this.getOptionLayoutContent(option)} />
+              ) : (
+                this.getOptionLabel(option)
+              )}
               {isSelected && <pds-icon icon="check" size="regular" class="pds-combobox__option-check" />}
             </li>
           );
@@ -316,6 +392,37 @@ export class PdsCombobox implements BasePdsProps {
       </ul>
     );
   }
+
+        private renderButtonTriggerContent() {
+    // For custom trigger content, prioritize selected option layout if available
+    if (this.customTriggerContent) {
+      if (this.selectedHasLayout && this.selectedLayoutContent) {
+        // Use innerHTML to render the selected option's layout content
+        return [
+          <div class="pds-combobox__button-trigger-layout-wrapper" key={`trigger-${this.triggerUpdateKey}`} innerHTML={this.selectedLayoutContent} />,
+          <pds-icon icon="caret-down" class="pds-combobox__button-trigger-chevron" />
+        ];
+      }
+      // Fall back to slot content when no option is selected or option has no layout
+      return <slot name="trigger-content" />;
+    }
+
+    if (this.selectedHasLayout && this.selectedLayoutContent) {
+      return [
+        <div class="pds-combobox__button-trigger-layout-wrapper" innerHTML={this.selectedLayoutContent} />,
+        <pds-icon icon="caret-down" class="pds-combobox__button-trigger-chevron" />
+      ];
+    }
+
+    return [
+      <span class="pds-combobox__button-trigger-label">
+        {this.selectedLabel || this.placeholder}
+      </span>,
+      <pds-icon icon="caret-down" class="pds-combobox__button-trigger-chevron" />
+    ];
+  }
+
+
 
   render() {
     const triggerClass = `pds-combobox__button-trigger pds-combobox__button-trigger--${this.triggerVariant}`;
@@ -334,6 +441,7 @@ export class PdsCombobox implements BasePdsProps {
                 this.triggerEl = el as HTMLElement;
               }}
               class="pds-combobox__input"
+              style={{ width: this.triggerWidth }}
               type="text"
               role="combobox"
               aria-autocomplete="list"
@@ -350,10 +458,12 @@ export class PdsCombobox implements BasePdsProps {
               onFocus={this.handleFocus}
               onKeyDown={this.handleKeyDown}
               autocomplete="off"
+              part="input"
             />
           ) : (
             <div
               class={triggerClass}
+              style={{ width: this.triggerWidth }}
               role="combobox"
               aria-haspopup="listbox"
               aria-controls="pds-combobox-listbox"
@@ -363,13 +473,12 @@ export class PdsCombobox implements BasePdsProps {
               id={this.componentId}
               tabIndex={0}
               onClick={this.onButtonTriggerClick}
+              data-layout={this.customTriggerContent}
               onKeyDown={this.onButtonTriggerKeyDown}
               ref={el => (this.triggerEl = el as HTMLElement)}
+              part="button-trigger"
             >
-              <span class="pds-combobox__button-trigger-label">
-                {this.selectedLabel || this.placeholder}
-              </span>
-              <pds-icon icon="caret-down" class="pds-combobox__button-trigger-chevron" />
+              {this.renderButtonTriggerContent()}
             </div>
           )}
           {/* Hide the slot so options are not visible */}

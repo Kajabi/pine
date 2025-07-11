@@ -434,6 +434,16 @@ export namespace Components {
          */
         "componentId": string;
         /**
+          * Enable custom layout content for options. Options with data-layout attribute will render their HTML content.
+          * @default false
+         */
+        "customOptionLayouts": boolean;
+        /**
+          * Enable custom layout content for the button trigger via the trigger-content slot. When true, uses slot content for initial state but updates dynamically with selected option layout.
+          * @default false
+         */
+        "customTriggerContent": boolean;
+        /**
           * If true, the combobox is disabled.
          */
         "disabled": boolean;
@@ -447,6 +457,10 @@ export namespace Components {
           * @default '236px'
          */
         "dropdownWidth": string;
+        /**
+          * Gets the value of the currently selected option.
+         */
+        "getSelectedValue": () => Promise<string | null>;
         /**
           * Visually hides the label text for instances where only the combobox should be displayed. Label remains accessible to assistive technology such as screen readers.
          */
@@ -482,6 +496,11 @@ export namespace Components {
           * @default 'secondary'
          */
         "triggerVariant": 'secondary' | 'primary' | 'accent' | 'destructive';
+        /**
+          * Width of the trigger (button or input). Any valid CSS width value.
+          * @default 'fit-content'
+         */
+        "triggerWidth": string;
         /**
           * The value of the combobox input.
          */
@@ -2448,6 +2467,16 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
+          * Enable custom layout content for options. Options with data-layout attribute will render their HTML content.
+          * @default false
+         */
+        "customOptionLayouts"?: boolean;
+        /**
+          * Enable custom layout content for the button trigger via the trigger-content slot. When true, uses slot content for initial state but updates dynamically with selected option layout.
+          * @default false
+         */
+        "customTriggerContent"?: boolean;
+        /**
           * If true, the combobox is disabled.
          */
         "disabled"?: boolean;
@@ -2496,6 +2525,11 @@ declare namespace LocalJSX {
           * @default 'secondary'
          */
         "triggerVariant"?: 'secondary' | 'primary' | 'accent' | 'destructive';
+        /**
+          * Width of the trigger (button or input). Any valid CSS width value.
+          * @default 'fit-content'
+         */
+        "triggerWidth"?: string;
         /**
           * The value of the combobox input.
          */
