@@ -21,48 +21,10 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() componentId!: string;
 
   /**
-   * Text to be displayed as the combobox label.
+   * Enable custom layout content for options. Options with data-layout attribute will render their HTML content.
+   * @default false
    */
-  @Prop() label?: string;
-
-  /**
-   * Visually hides the label text for instances where only the combobox should be displayed.
-   * Label remains accessible to assistive technology such as screen readers.
-   */
-  @Prop() hideLabel: boolean = false;
-
-  /**
-   * Placeholder text for the input field.
-   */
-  @Prop() placeholder?: string;
-
-  /**
-   * The value of the combobox input.
-   */
-  @Prop({ mutable: true }) value: string = '';
-
-  /**
-   * If true, the combobox is disabled.
-   */
-  @Prop() disabled: boolean = false;
-
-  /**
-   * Determines the combobox mode: 'filter' (filter options as you type) or 'select-only' (show all options).
-   * @default 'filter'
-   */
-  @Prop() mode: 'filter' | 'select-only' = 'filter';
-
-  /**
-   * Determines the combobox trigger: 'input' (editable input) or 'button' (button-like, non-editable).
-   * @default 'input'
-   */
-  @Prop() trigger: 'input' | 'button' = 'input';
-
-  /**
-   * The visual variant for the button trigger. Matches Pine button variants.
-   * @default 'secondary'
-   */
-  @Prop() triggerVariant: 'secondary' | 'primary' | 'accent' | 'destructive' = 'secondary';
+  @Prop() customOptionLayouts: boolean = false;
 
   /**
    * Enable custom layout content for the button trigger via the trigger-content slot.
@@ -72,10 +34,9 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() customTriggerContent: boolean = false;
 
   /**
-   * Enable custom layout content for options. Options with data-layout attribute will render their HTML content.
-   * @default false
+   * If true, the combobox is disabled.
    */
-  @Prop() customOptionLayouts: boolean = false;
+  @Prop() disabled: boolean = false;
 
   /**
    * Placement of the dropdown relative to the trigger.
@@ -90,10 +51,15 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() dropdownWidth: string = '236px';
 
   /**
-   * Width of the trigger (button or input). Any valid CSS width value.
-   * @default 'fit-content'
+   * Visually hides the label text for instances where only the combobox should be displayed.
+   * Label remains accessible to assistive technology such as screen readers.
    */
-  @Prop() triggerWidth: string = 'fit-content';
+  @Prop() hideLabel: boolean = false;
+
+  /**
+   * Text to be displayed as the combobox label.
+   */
+  @Prop() label?: string;
 
   /**
    * Maximum height of the dropdown. Can be any valid CSS height value (e.g., '200px', '10rem').
@@ -102,14 +68,48 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() maxHeight?: string;
 
   /**
+   * Determines the combobox mode: 'filter' (filter options as you type) or 'select-only' (show all options).
+   * @default 'filter'
+   */
+  @Prop() mode: 'filter' | 'select-only' = 'filter';
+
+  /**
+   * Placeholder text for the input field.
+   */
+  @Prop() placeholder?: string;
+
+  /**
+   * Determines the combobox trigger: 'input' (editable input) or 'button' (button-like, non-editable).
+   * @default 'input'
+   */
+  @Prop() trigger: 'input' | 'button' = 'input';
+
+  /**
+   * Width of the trigger (button or input). Any valid CSS width value.
+   * @default 'fit-content'
+   */
+  @Prop() triggerWidth: string = 'fit-content';
+
+  /**
+   * The visual variant for the button trigger. Matches Pine button variants.
+   * @default 'secondary'
+   */
+  @Prop() triggerVariant: 'secondary' | 'primary' | 'accent' | 'destructive' = 'secondary';
+
+  /**
+   * The value of the combobox input.
+   */
+  @Prop({ mutable: true }) value: string = '';
+
+  /**
    * Emitted when the value changes.
    */
   @Event() pdsComboboxChange!: EventEmitter<{ value: string }>;
 
   /**
-   * Internal state for dropdown open/close
+   * Internal state for filtered options
    */
-  @State() isOpen: boolean = false;
+  @State() filteredOptions: HTMLOptionElement[] = [];
 
   /**
    * Internal state for the currently highlighted option index
@@ -117,9 +117,9 @@ export class PdsCombobox implements BasePdsProps {
   @State() highlightedIndex: number = -1;
 
   /**
-   * Internal state for filtered options
+   * Internal state for dropdown open/close
    */
-  @State() filteredOptions: HTMLOptionElement[] = [];
+  @State() isOpen: boolean = false;
 
   /**
    * Internal state for the currently selected option

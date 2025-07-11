@@ -69,7 +69,7 @@ ButtonTrigger.args = {
   triggerWidth: '250px',
 };
 
-export const CustomTriggerAndOptionLayouts = (args) => html`
+export const Custom = (args) => html`
 
 <div style="width: 100%;">
   <pds-combobox
@@ -111,7 +111,7 @@ export const CustomTriggerAndOptionLayouts = (args) => html`
     </pds-box>
 
     <option value="" data-layout data-search-text="None">
-      <pds-box class="payment-option-layout">
+      <pds-box class="payment-option-layout" align-items="center" gap="sm">
         <pds-box
           align-items="center"
           align-self="center"
@@ -132,7 +132,7 @@ export const CustomTriggerAndOptionLayouts = (args) => html`
       </pds-box>
     </option>
     <option value="stripe" data-layout data-search-text="Stripe credit card payment">
-      <pds-box class="payment-option-layout">
+      <pds-box class="payment-option-layout" align-items="center" gap="sm">
         <pds-box
           align-items="center"
           align-self="center"
@@ -153,7 +153,7 @@ export const CustomTriggerAndOptionLayouts = (args) => html`
       </pds-box>
     </option>
     <option value="paypal" data-layout data-search-text="PayPal digital payments">
-      <pds-box class="payment-option-layout">
+      <pds-box class="payment-option-layout" align-items="center" gap="sm">
         <pds-box
           align-items="center"
           align-self="center"
@@ -176,7 +176,7 @@ export const CustomTriggerAndOptionLayouts = (args) => html`
   </pds-combobox>
 </div>`;
 
-CustomTriggerAndOptionLayouts.args = {
+Custom.args = {
   componentId: 'combobox-custom-trigger-layouts',
   label: 'Payment Method',
   placeholder: 'Select a payment method',
@@ -184,6 +184,7 @@ CustomTriggerAndOptionLayouts.args = {
   triggerVariant: 'secondary',
   mode: 'select-only',
   triggerWidth: '500px',
+  dropdownWidth: '500px',
   customTriggerContent: true,
   customOptionLayouts: true,
 };
