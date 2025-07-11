@@ -53,12 +53,14 @@
 ### Used by
 
  - [pds-alert](../pds-alert)
+ - [pds-combobox](../pds-combobox)
  - [pds-dropdown-menu](../pds-dropdown-menu)
 
 ### Graph
 ```mermaid
 graph TD;
   pds-alert --> pds-box
+  pds-combobox --> pds-box
   pds-dropdown-menu --> pds-box
   style pds-box fill:#f9f,stroke:#333,stroke-width:4px
 ```

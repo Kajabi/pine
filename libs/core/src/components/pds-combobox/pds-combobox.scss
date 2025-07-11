@@ -1,10 +1,9 @@
 :host {
-  display: inline-block;
+  display: block;
 }
 
 .pds-combobox {
   position: relative;
-  width: 240px;
 }
 
 .pds-combobox__label {
@@ -79,6 +78,14 @@
   &[aria-selected="true"] {
     background: var(--pine-color-grey-150);
   }
+
+  .pds-combobox__option--layout {
+    .pds-combobox__option-layout-wrapper {
+      align-items: center;
+      display: flex;
+      width: 100%;
+    }
+  }
 }
 
 .pds-combobox__option:last-child {
@@ -112,6 +119,20 @@
   padding: 0 var(--pine-dimension-sm);
   transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
   width: fit-content;
+
+  // Common layout wrapper for all button trigger content
+  .pds-combobox__button-trigger-layout-wrapper {
+    align-items: center;
+    display: flex;
+    flex: 1;
+  }
+
+  // Custom content from slots
+  .trigger-content {
+    align-items: center;
+    display: flex;
+    width: 100%;
+  }
 }
 
 .pds-combobox__button-trigger:focus-visible {
@@ -207,4 +228,9 @@
   position: absolute;
   white-space: nowrap;
   width: 1px;
+}
+
+[data-layout] {
+  border-radius: var(--pine-dimension-125);
+  padding-block: var(--pine-dimension-xs);
 }
