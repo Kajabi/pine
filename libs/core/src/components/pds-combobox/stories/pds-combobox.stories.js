@@ -104,8 +104,7 @@ export const Custom = (args) => html`
         <pds-icon icon="ban" color="var(--pine-color-text-neutral)"></pds-icon>
       </pds-box>
       <pds-box class="option-content" direction="column">
-        <div class="option-title">Payment Method</div>
-        <div class="option-description"> payment option.</div>
+        <pds-text class="option-title">Select a payment method</pds-text>
       </pds-box>
       <pds-icon icon="caret-down"></pds-icon>
     </pds-box>
@@ -126,8 +125,8 @@ export const Custom = (args) => html`
           <pds-icon icon="ban" color="var(--pine-color-text-neutral)"></pds-icon>
         </pds-box>
         <pds-box class="option-content" direction="column">
-          <div class="option-title">None</div>
-          <div class="option-description">No debit/credit card payments</div>
+          <pds-text size="md" weight="semibold" class="option-title">None</pds-text>
+          <pds-text size="sm" class="option-description">No debit/credit card payments</pds-text>
         </pds-box>
       </pds-box>
     </option>
@@ -147,8 +146,8 @@ export const Custom = (args) => html`
           <pds-icon icon="card-stripe"></pds-icon>
         </pds-box>
         <pds-box class="option-content" direction="column">
-          <div class="option-title">Stripe</div>
-          <div class="option-description">Accept debit/credit cards through Stripe.</div>
+          <pds-text size="md" weight="semibold" class="option-title">Stripe</pds-text>
+          <pds-text size="sm" class="option-description">Accept debit/credit cards through Stripe.</pds-text>
         </pds-box>
       </pds-box>
     </option>
@@ -168,8 +167,8 @@ export const Custom = (args) => html`
           <pds-icon icon="card-paypal"></pds-icon>
         </pds-box>
         <pds-box class="option-content" direction="column">
-          <div class="option-title">PayPal</div>
-          <div class="option-description">Accept payments through PayPal.</div>
+          <pds-text size="md" weight="semibold" class="option-title">PayPal</pds-text>
+          <pds-text size="sm" class="option-description">Accept payments through PayPal.</pds-text>
         </pds-box>
       </pds-box>
     </option>
