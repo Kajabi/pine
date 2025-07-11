@@ -594,8 +594,11 @@ describe('pds-combobox', () => {
     const mockOption = {
       value: 'cat',
       label: 'Cat',
-      hasAttribute: jest.fn(() => true),
+      hasAttribute: jest.fn(() => false), // No longer relevant since we use React state
     } as unknown as HTMLOptionElement;
+
+    // Use centralized state management to set selection
+    (component as any).setSelectedOption(mockOption);
 
     component.filteredOptions = [mockOption];
     component.isOpen = true;
@@ -716,8 +719,8 @@ describe('pds-combobox', () => {
     const mockUnselectedOption = createMockOption('dog', 'Dog', false);
 
     component.optionEls = [mockSelectedOption, mockUnselectedOption];
-    // Set the selected option state to match what would happen in updateOptions
-    component.selectedOption = mockSelectedOption;
+    // Use centralized state management
+    (component as any).setSelectedOption(mockSelectedOption);
 
     // Initially set value to match selected option
     component.value = 'Cat';

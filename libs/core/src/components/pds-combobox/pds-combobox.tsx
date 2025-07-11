@@ -162,8 +162,11 @@ export class PdsCombobox implements BasePdsProps {
       this.optionEls = (slot as HTMLSlotElement).assignedElements({ flatten: true })
         .filter(el => el.tagName === 'OPTION') as HTMLOptionElement[];
 
-      // Set initial selected option if one exists
-      this.selectedOption = this.optionEls.find(opt => opt.hasAttribute('selected')) || null;
+      // Set initial selected option if one exists (only check DOM on initialization)
+      if (!this.selectedOption) {
+        const initialSelected = this.optionEls.find(opt => opt.hasAttribute('selected')) || null;
+        this.setSelectedOption(initialSelected);
+      }
 
       this.filterOptions();
     }
@@ -195,6 +198,16 @@ export class PdsCombobox implements BasePdsProps {
   // Helper method to check if option should render as layout
   private isOptionLayout(option: HTMLOptionElement): boolean {
     return this.customOptionLayouts && option.hasAttribute('data-layout');
+  }
+
+  // Helper method to check if option is selected (single source of truth)
+  private isOptionSelected(option: HTMLOptionElement): boolean {
+    return this.selectedOption === option;
+  }
+
+  // Helper method to set selected option (centralized state management)
+  private setSelectedOption(option: HTMLOptionElement | null): void {
+    this.selectedOption = option;
   }
 
   private filterOptions() {
@@ -360,12 +373,8 @@ export class PdsCombobox implements BasePdsProps {
   };
 
     private handleOptionClick(option: HTMLOptionElement) {
-    // Remove 'selected' from all options
-    this.optionEls.forEach(opt => opt.removeAttribute('selected'));
-    // Set 'selected' on the chosen option
-    option.setAttribute('selected', '');
-    // Update reactive state
-    this.selectedOption = option;
+    // Update reactive state - single source of truth
+    this.setSelectedOption(option);
 
     this.value = this.getOptionLabel(option);
     this.isOpen = false;
@@ -382,7 +391,7 @@ export class PdsCombobox implements BasePdsProps {
         ref={el => (this.listboxEl = el as HTMLElement)}
       >
         {this.filteredOptions.map((option, idx) => {
-          const isSelected = option.hasAttribute('selected');
+          const isSelected = this.isOptionSelected(option);
           const isHighlighted = this.highlightedIndex === idx;
           const isLayout = this.isOptionLayout(option);
 
