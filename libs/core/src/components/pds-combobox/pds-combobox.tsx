@@ -129,9 +129,9 @@ export class PdsCombobox implements BasePdsProps {
   @State() selectedOption: HTMLOptionElement | null = null;
 
   /**
-   * Internal state to force re-renders when trigger content should update
+   * Internal state for the sanitized layout content of the selected option
    */
-  @State() triggerUpdateKey: number = 0;
+  @State() selectedOptionLayoutContent: string = '';
 
   private inputEl?: HTMLInputElement;
   private optionEls: HTMLOptionElement[] = [];
@@ -145,6 +145,14 @@ export class PdsCombobox implements BasePdsProps {
   @Watch('value')
   handleValueChange() {
     this.filterOptions();
+  }
+
+  @Watch('selectedOption')
+  handleSelectedOptionChange() {
+    // Update the layout content when selected option changes
+    this.selectedOptionLayoutContent = this.selectedOption && this.isOptionLayout(this.selectedOption)
+      ? this.getOptionLayoutContent(this.selectedOption)
+      : '';
   }
 
   private updateOptions() {
@@ -312,7 +320,7 @@ export class PdsCombobox implements BasePdsProps {
 
   // Get the layout content of the selected option for button trigger
   private get selectedLayoutContent(): string {
-    return this.selectedOption && this.isOptionLayout(this.selectedOption) ? this.getOptionLayoutContent(this.selectedOption) : '';
+    return this.selectedOptionLayoutContent;
   }
 
   // Check if selected option has layout
@@ -358,7 +366,6 @@ export class PdsCombobox implements BasePdsProps {
     option.setAttribute('selected', '');
     // Update reactive state
     this.selectedOption = option;
-    this.triggerUpdateKey = this.triggerUpdateKey + 1; // Force re-render
 
     this.value = this.getOptionLabel(option);
     this.isOpen = false;
@@ -408,13 +415,13 @@ export class PdsCombobox implements BasePdsProps {
     );
   }
 
-        private renderButtonTriggerContent() {
+  private renderButtonTriggerContent() {
     // For custom trigger content, prioritize selected option layout if available
     if (this.customTriggerContent) {
       if (this.selectedHasLayout && this.selectedLayoutContent) {
         // Use innerHTML to render the selected option's layout content
         return [
-          <div class="pds-combobox__button-trigger-layout-wrapper" key={`trigger-${this.triggerUpdateKey}`} innerHTML={this.selectedLayoutContent} />,
+          <div class="pds-combobox__button-trigger-layout-wrapper" innerHTML={this.selectedLayoutContent} />,
           <pds-icon icon="caret-down" class="pds-combobox__button-trigger-chevron" />
         ];
       }

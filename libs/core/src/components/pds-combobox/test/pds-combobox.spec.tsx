@@ -912,8 +912,8 @@ describe('pds-combobox', () => {
       component.handleOptionClick(mockLayoutOption);
       await page.waitForChanges();
 
-      expect(component.selectedOption).toBe(mockLayoutOption);
-      expect(component.triggerUpdateKey).toBeGreaterThan(0);
+             expect(component.selectedOption).toBe(mockLayoutOption);
+       expect((component as any).selectedOptionLayoutContent).toContain('PayPal');
     });
   });
 
