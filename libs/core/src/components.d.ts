@@ -434,12 +434,12 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Enable custom layout content for options. Options with data-layout attribute will render their HTML content.
+          * Enable custom layout content for options. Options with data-layout attribute will render their HTML content. ⚠️ Security Warning: Only use with trusted content. Basic XSS protection is applied, but avoid user-generated content.
           * @default false
          */
         "customOptionLayouts": boolean;
         /**
-          * Enable custom layout content for the button trigger via the trigger-content slot. When true, uses slot content for initial state but updates dynamically with selected option layout.
+          * Enable custom layout content for the button trigger via the trigger-content slot. When true, uses slot content for initial state but updates dynamically with selected option layout. ⚠️ Security Warning: Only use with trusted content. Basic XSS protection is applied, but avoid user-generated content.
           * @default false
          */
         "customTriggerContent": boolean;
@@ -2467,12 +2467,12 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
-          * Enable custom layout content for options. Options with data-layout attribute will render their HTML content.
+          * Enable custom layout content for options. Options with data-layout attribute will render their HTML content. ⚠️ Security Warning: Only use with trusted content. Basic XSS protection is applied, but avoid user-generated content.
           * @default false
          */
         "customOptionLayouts"?: boolean;
         /**
-          * Enable custom layout content for the button trigger via the trigger-content slot. When true, uses slot content for initial state but updates dynamically with selected option layout.
+          * Enable custom layout content for the button trigger via the trigger-content slot. When true, uses slot content for initial state but updates dynamically with selected option layout. ⚠️ Security Warning: Only use with trusted content. Basic XSS protection is applied, but avoid user-generated content.
           * @default false
          */
         "customTriggerContent"?: boolean;

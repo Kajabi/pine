@@ -480,6 +480,8 @@ For cases where the combobox doesn't need a visible label (such as in compact la
 
 The combobox supports custom layouts for both the button trigger and dropdown options, enabling rich content like the payment method selector shown in your design.
 
+> **🔒 Security Warning**: Only use custom layouts with trusted, developer-controlled content. While basic XSS protection is applied (script tags, event handlers, and dangerous protocols are removed), you should never use this feature with user-generated content.
+
 ### Combined Custom Trigger and Option Layouts
 
 For the most dynamic experience, combine both `customTriggerContent` and `customOptionLayouts`. The trigger will start with your custom slot content and then update to show the selected option's layout.

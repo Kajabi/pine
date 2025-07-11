@@ -22,6 +22,7 @@ export class PdsCombobox implements BasePdsProps {
 
   /**
    * Enable custom layout content for options. Options with data-layout attribute will render their HTML content.
+   * ⚠️ Security Warning: Only use with trusted content. Basic XSS protection is applied, but avoid user-generated content.
    * @default false
    */
   @Prop() customOptionLayouts: boolean = false;
@@ -29,6 +30,7 @@ export class PdsCombobox implements BasePdsProps {
   /**
    * Enable custom layout content for the button trigger via the trigger-content slot.
    * When true, uses slot content for initial state but updates dynamically with selected option layout.
+   * ⚠️ Security Warning: Only use with trusted content. Basic XSS protection is applied, but avoid user-generated content.
    * @default false
    */
   @Prop() customTriggerContent: boolean = false;
@@ -166,7 +168,20 @@ export class PdsCombobox implements BasePdsProps {
 
   // Helper method to get option layout content
   private getOptionLayoutContent(option: HTMLOptionElement): string {
-    return option.innerHTML || '';
+    return this.sanitizeHtml(option.innerHTML || '');
+  }
+
+      // Basic HTML sanitization to prevent XSS attacks
+  private sanitizeHtml(html: string): string {
+    // Remove script tags and event handlers for basic XSS prevention
+    return html
+      .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '') // Remove script tags
+      .replace(/\s+on(click|load|error|focus|blur|change|submit|keydown|keyup|keypress|mousedown|mouseup|mouseover|mouseout|mousemove)\s*=\s*["'][^"']*["']/gi, '') // Remove specific event handlers
+      .replace(/\s+on(click|load|error|focus|blur|change|submit|keydown|keyup|keypress|mousedown|mouseup|mouseover|mouseout|mousemove)\s*=\s*[^"'\s>]+/gi, '') // Remove unquoted event handlers
+      .replace(/javascript\s*:/gi, '') // Remove javascript: protocol
+      .replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, '') // Remove iframe tags
+      .replace(/<object[^>]*>[\s\S]*?<\/object>/gi, '') // Remove object tags
+      .replace(/<embed[^>]*>/gi, ''); // Remove embed tags
   }
 
   // Helper method to check if option should render as layout
