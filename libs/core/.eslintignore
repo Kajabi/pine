@@ -2,4 +2,5 @@
 **/*.spec.tsx
 **/*.e2e.ts
 **/*.stories.*
+**/*.figma.ts
 stencil.config.ts
