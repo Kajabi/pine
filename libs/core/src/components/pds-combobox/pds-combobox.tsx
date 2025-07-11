@@ -415,33 +415,49 @@ export class PdsCombobox implements BasePdsProps {
     );
   }
 
+  // Helper method to render the caret icon
+  private renderCaretIcon() {
+    return <pds-icon icon="caret-down" aria-hidden="true" aria-label="dropdown indicator" class="pds-combobox__button-trigger-chevron" />;
+  }
+
+  // Helper method to render layout content
+  private renderLayoutContent() {
+    return (
+      <div class="pds-combobox__button-trigger-layout-wrapper" innerHTML={this.selectedLayoutContent} />
+    );
+  }
+
+  // Helper method to render default text content
+  private renderDefaultContent() {
+    return (
+      <span class="pds-combobox__button-trigger-label">
+        {this.selectedLabel || this.placeholder}
+      </span>
+    );
+  }
+
+  // Helper method to check if we should show layout content
+  private shouldShowLayoutContent(): boolean {
+    return this.selectedHasLayout && !!this.selectedLayoutContent;
+  }
+
   private renderButtonTriggerContent() {
-    // For custom trigger content, prioritize selected option layout if available
+    // Case 1: Custom trigger content with layout priority
     if (this.customTriggerContent) {
-      if (this.selectedHasLayout && this.selectedLayoutContent) {
-        // Use innerHTML to render the selected option's layout content
-        return [
-          <div class="pds-combobox__button-trigger-layout-wrapper" innerHTML={this.selectedLayoutContent} />,
-          <pds-icon icon="caret-down" class="pds-combobox__button-trigger-chevron" />
-        ];
+      if (this.shouldShowLayoutContent()) {
+        return [this.renderLayoutContent(), this.renderCaretIcon()];
       }
-      // Fall back to slot content when no option is selected or option has no layout
+      // Fall back to slot content when no layout is available
       return <slot name="trigger-content" />;
     }
 
-    if (this.selectedHasLayout && this.selectedLayoutContent) {
-      return [
-        <div class="pds-combobox__button-trigger-layout-wrapper" innerHTML={this.selectedLayoutContent} />,
-        <pds-icon icon="caret-down" class="pds-combobox__button-trigger-chevron" />
-      ];
+    // Case 2: Standard mode with layout content
+    if (this.shouldShowLayoutContent()) {
+      return [this.renderLayoutContent(), this.renderCaretIcon()];
     }
 
-    return [
-      <span class="pds-combobox__button-trigger-label">
-        {this.selectedLabel || this.placeholder}
-      </span>,
-      <pds-icon icon="caret-down" class="pds-combobox__button-trigger-chevron" />
-    ];
+    // Case 3: Standard mode with default text content
+    return [this.renderDefaultContent(), this.renderCaretIcon()];
   }
 
 
