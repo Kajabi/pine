@@ -1,0 +1,77 @@
+import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+# Property
+
+The Property component displays an icon and text together in a horizontal layout. It's useful for showing key-value pairs, status indicators, or labeled information. The component always displays an icon - if no icon is specified, it defaults to a star icon.
+
+## Guidelines
+
+### When to use
+
+- Display labeled information or metadata with consistent visual treatment
+- Show key-value pairs, properties, or attributes with icon context
+- Create status indicators or tags with accompanying text
+- Maintain consistent spacing and alignment between icons and text
+
+### When not to use
+
+- For plain text content that doesn't benefit from an icon
+- When you need interactive functionality (this is display-only)
+- For complex layouts requiring custom styling or multiple elements
+- When the icon would be redundant or confusing to users
+
+### Accessibility
+
+The Property component is designed with accessibility in mind:
+
+- Icons are marked with `aria-hidden="true"` as they are decorative and provide visual context rather than essential information.
+
+## Properties
+
+<DocArgsTable componentName="pds-property" docSource={components} />
+
+### Default
+
+Basic property with default star icon when no icon is specified.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsProperty>Property text</PdsProperty>',
+    webComponent: '<pds-property>Property text</pds-property>'
+}}>
+  <pds-property>Property text</pds-property>
+</DocCanvas>
+
+### With Custom Icon
+
+Property with a custom icon.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsProperty icon="check-circle">Property text</PdsProperty>',
+    webComponent: '<pds-property icon="check-circle">Property text</pds-property>'
+}}>
+  <pds-property icon="check-circle">Property text</pds-property>
+</DocCanvas>
+
+### Various Icons
+
+Examples of properties with different icons for different contexts.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsProperty icon="user">John Doe</PdsProperty>
+<PdsProperty icon="location">Newport Beach, CA</PdsProperty>
+<PdsProperty icon="calendarDate">March 15, 2025</PdsProperty>
+<PdsProperty icon="tag">Active</PdsProperty>`,
+    webComponent: `<pds-property icon="user">John Doe</pds-property>
+<pds-property icon="location">Newport Beach, CA</pds-property>
+<pds-property icon="calendar-date">March 15, 2025</pds-property>
+<pds-property icon="tag">Active</pds-property>`
+}}>
+  <pds-property icon="user">John Doe</pds-property>
+  <pds-property icon="location">Newport Beach, CA</pds-property>
+  <pds-property icon="calendar-date">March 15, 2025</pds-property>
+  <pds-property icon="tag">Active</pds-property>
+</DocCanvas>

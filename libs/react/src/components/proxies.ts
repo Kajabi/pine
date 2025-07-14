@@ -29,6 +29,7 @@ import { defineCustomElement as definePdsModalFooter } from '@pine-ds/core/compo
 import { defineCustomElement as definePdsModalHeader } from '@pine-ds/core/components/pds-modal-header.js';
 import { defineCustomElement as definePdsPopover } from '@pine-ds/core/components/pds-popover.js';
 import { defineCustomElement as definePdsProgress } from '@pine-ds/core/components/pds-progress.js';
+import { defineCustomElement as definePdsProperty } from '@pine-ds/core/components/pds-property.js';
 import { defineCustomElement as definePdsRadio } from '@pine-ds/core/components/pds-radio.js';
 import { defineCustomElement as definePdsRow } from '@pine-ds/core/components/pds-row.js';
 import { defineCustomElement as definePdsSelect } from '@pine-ds/core/components/pds-select.js';
@@ -73,6 +74,7 @@ export const PdsModalFooter = /*@__PURE__*/createReactComponent<JSX.PdsModalFoot
 export const PdsModalHeader = /*@__PURE__*/createReactComponent<JSX.PdsModalHeader, HTMLPdsModalHeaderElement>('pds-modal-header', undefined, undefined, definePdsModalHeader);
 export const PdsPopover = /*@__PURE__*/createReactComponent<JSX.PdsPopover, HTMLPdsPopoverElement>('pds-popover', undefined, undefined, definePdsPopover);
 export const PdsProgress = /*@__PURE__*/createReactComponent<JSX.PdsProgress, HTMLPdsProgressElement>('pds-progress', undefined, undefined, definePdsProgress);
+export const PdsProperty = /*@__PURE__*/createReactComponent<JSX.PdsProperty, HTMLPdsPropertyElement>('pds-property', undefined, undefined, definePdsProperty);
 export const PdsRadio = /*@__PURE__*/createReactComponent<JSX.PdsRadio, HTMLPdsRadioElement>('pds-radio', undefined, undefined, definePdsRadio);
 export const PdsRow = /*@__PURE__*/createReactComponent<JSX.PdsRow, HTMLPdsRowElement>('pds-row', undefined, undefined, definePdsRow);
 export const PdsSelect = /*@__PURE__*/createReactComponent<JSX.PdsSelect, HTMLPdsSelectElement>('pds-select', undefined, undefined, definePdsSelect);

@@ -846,6 +846,16 @@ export namespace Components {
          */
         "showPercent": boolean;
     }
+    interface PdsProperty {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * The name of the icon to display before the property text.
+         */
+        "icon": string;
+    }
     interface PdsRadio {
         /**
           * Determines whether or not the radio is checked.
@@ -1726,6 +1736,12 @@ declare global {
         prototype: HTMLPdsProgressElement;
         new (): HTMLPdsProgressElement;
     };
+    interface HTMLPdsPropertyElement extends Components.PdsProperty, HTMLStencilElement {
+    }
+    var HTMLPdsPropertyElement: {
+        prototype: HTMLPdsPropertyElement;
+        new (): HTMLPdsPropertyElement;
+    };
     interface HTMLPdsRadioElementEventMap {
         "pdsRadioChange": boolean;
     }
@@ -1990,6 +2006,7 @@ declare global {
         "pds-modal-header": HTMLPdsModalHeaderElement;
         "pds-popover": HTMLPdsPopoverElement;
         "pds-progress": HTMLPdsProgressElement;
+        "pds-property": HTMLPdsPropertyElement;
         "pds-radio": HTMLPdsRadioElement;
         "pds-row": HTMLPdsRowElement;
         "pds-select": HTMLPdsSelectElement;
@@ -2876,6 +2893,16 @@ declare namespace LocalJSX {
          */
         "showPercent"?: boolean;
     }
+    interface PdsProperty {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * The name of the icon to display before the property text.
+         */
+        "icon"?: string;
+    }
     interface PdsRadio {
         /**
           * Determines whether or not the radio is checked.
@@ -3474,6 +3501,7 @@ declare namespace LocalJSX {
         "pds-modal-header": PdsModalHeader;
         "pds-popover": PdsPopover;
         "pds-progress": PdsProgress;
+        "pds-property": PdsProperty;
         "pds-radio": PdsRadio;
         "pds-row": PdsRow;
         "pds-select": PdsSelect;
@@ -3527,6 +3555,7 @@ declare module "@stencil/core" {
             "pds-modal-header": LocalJSX.PdsModalHeader & JSXBase.HTMLAttributes<HTMLPdsModalHeaderElement>;
             "pds-popover": LocalJSX.PdsPopover & JSXBase.HTMLAttributes<HTMLPdsPopoverElement>;
             "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
+            "pds-property": LocalJSX.PdsProperty & JSXBase.HTMLAttributes<HTMLPdsPropertyElement>;
             "pds-radio": LocalJSX.PdsRadio & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
             "pds-row": LocalJSX.PdsRow & JSXBase.HTMLAttributes<HTMLPdsRowElement>;
             "pds-select": LocalJSX.PdsSelect & JSXBase.HTMLAttributes<HTMLPdsSelectElement>;
