@@ -795,7 +795,7 @@ export namespace Components {
         /**
           * The name of the icon to display before the property text.
          */
-        "icon"?: string;
+        "icon": string;
     }
     interface PdsRadio {
         /**

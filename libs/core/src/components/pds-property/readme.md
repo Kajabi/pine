@@ -10,7 +10,7 @@
 | Property      | Attribute      | Description                                                           | Type     | Default     |
 | ------------- | -------------- | --------------------------------------------------------------------- | -------- | ----------- |
 | `componentId` | `component-id` | A unique identifier used for the underlying component `id` attribute. | `string` | `undefined` |
-| `icon`        | `icon`         | The name of the icon to display before the property text.             | `string` | `undefined` |
+| `icon`        | `icon`         | The name of the icon to display before the property text.             | `string` | `'star'`    |
 
 
 ## Slots

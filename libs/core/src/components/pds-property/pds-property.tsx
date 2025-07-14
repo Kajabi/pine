@@ -18,24 +18,14 @@ export class PdsProperty {
   /**
    * The name of the icon to display before the property text.
    */
-  @Prop() icon?: string;
-
-  private classNames() {
-    return 'pds-property';
-  }
+  @Prop() icon: string = 'star';
 
   render() {
     return (
-      <Host class={this.classNames()} id={this.componentId}>
+      <Host id={this.componentId}>
         <pds-box align-items="center" gap="xs">
-          {this.icon && (
-            <pds-box align-items="center" justify-content="center" flex-shrink="0" class="pds-property__icon">
-              <pds-icon icon={this.icon} size="16px" aria-hidden="true"></pds-icon>
-            </pds-box>
-          )}
-          <pds-box align-items="center" class="pds-property__text">
-            <slot />
-          </pds-box>
+          <pds-icon icon={this.icon} size="var(--pine-dimension-sm)" aria-hidden="true"></pds-icon>
+          <slot />
         </pds-box>
       </Host>
     );
