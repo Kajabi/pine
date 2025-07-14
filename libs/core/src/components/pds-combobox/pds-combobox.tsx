@@ -184,15 +184,24 @@ export class PdsCombobox implements BasePdsProps {
 
       // Basic HTML sanitization to prevent XSS attacks
   private sanitizeHtml(html: string): string {
-    // Remove script tags and event handlers for basic XSS prevention
-    return html
-      .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '') // Remove script tags
-      .replace(/\s+on(click|load|error|focus|blur|change|submit|keydown|keyup|keypress|mousedown|mouseup|mouseover|mouseout|mousemove)\s*=\s*["'][^"']*["']/gi, '') // Remove specific event handlers
-      .replace(/\s+on(click|load|error|focus|blur|change|submit|keydown|keyup|keypress|mousedown|mouseup|mouseover|mouseout|mousemove)\s*=\s*[^"'\s>]+/gi, '') // Remove unquoted event handlers
-      .replace(/javascript\s*:/gi, '') // Remove javascript: protocol
-      .replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, '') // Remove iframe tags
-      .replace(/<object[^>]*>[\s\S]*?<\/object>/gi, '') // Remove object tags
-      .replace(/<embed[^>]*>/gi, ''); // Remove embed tags
+    let sanitized = html;
+    let previousLength;
+
+    // Apply sanitization repeatedly until no more changes occur
+    // This prevents nested malicious content from surviving sanitization
+    do {
+      previousLength = sanitized.length;
+      sanitized = sanitized
+        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '') // Remove script tags
+        .replace(/\s+on(click|load|error|focus|blur|change|submit|keydown|keyup|keypress|mousedown|mouseup|mouseover|mouseout|mousemove)\s*=\s*["'][^"']*["']/gi, '') // Remove specific event handlers
+        .replace(/\s+on(click|load|error|focus|blur|change|submit|keydown|keyup|keypress|mousedown|mouseup|mouseover|mouseout|mousemove)\s*=\s*[^"'\s>]+/gi, '') // Remove unquoted event handlers
+        .replace(/javascript\s*:/gi, '') // Remove javascript: protocol
+        .replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, '') // Remove iframe tags
+        .replace(/<object[^>]*>[\s\S]*?<\/object>/gi, '') // Remove object tags
+        .replace(/<embed[^>]*>/gi, ''); // Remove embed tags
+    } while (sanitized.length !== previousLength);
+
+    return sanitized;
   }
 
   // Helper method to check if option should render as layout
