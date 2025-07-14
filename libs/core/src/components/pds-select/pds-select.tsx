@@ -1,7 +1,10 @@
-import { Component, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
 import { messageId } from '../../utils/form';
 import { danger, enlarge } from '@pine-ds/icons/icons';
 
+/**
+ * @slot action - Content to be displayed in the label area, typically for help icons or links
+ */
 @Component({
   tag: 'pds-select',
   styleUrls: ['pds-select.tokens.scss', '../../global/styles/utils/label.scss', 'pds-select.scss'],
@@ -11,6 +14,8 @@ export class PdsSelect {
 
   private selectEl!: HTMLSelectElement;
   private slotContainer!: HTMLDivElement;
+
+  @Element() el: HTMLPdsSelectElement;
 
   /**
    * Specifies if and how the browser provides `autocomplete` assistance for the field.
@@ -201,16 +206,33 @@ export class PdsSelect {
     return classNames.join('  ');
   }
 
+  private renderAction() {
+    const hasAction = this.el.querySelector('[slot="action"]') !== null;
+    if (hasAction) {
+      return (
+        <div class="pds-select__action" part="action">
+          <slot name="action"></slot>
+        </div>
+      );
+    }
+    return null;
+  }
+
   render() {
+    const hasAction = this.el.querySelector('[slot="action"]') !== null;
+
     return (
-      <Host aria-disabled={this.disabled ? 'true' : null} class={this.classNames()}>
+      <Host aria-disabled={this.disabled ? 'true' : null} class={this.classNames()} has-action={hasAction && !this.hideLabel ? 'true' : null}>
         <div class="pds-select">
           {!this.hideLabel && (
-            <label htmlFor={this.componentId}>
-              <span class={this.hideLabel ? 'visually-hidden' : ''}>
-                {this.label}
-              </span>
-            </label>
+            <div class="pds-select__label-wrapper">
+              <label htmlFor={this.componentId}>
+                <span class={this.hideLabel ? 'visually-hidden' : ''}>
+                  {this.label}
+                </span>
+              </label>
+              {hasAction && this.renderAction()}
+            </div>
           )}
           <select
             aria-label={this.hideLabel ? this.label : undefined}

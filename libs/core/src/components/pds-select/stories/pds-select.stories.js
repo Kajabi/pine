@@ -62,6 +62,7 @@ const BaseTemplate = (args) =>
     type="${args.type}"
     value="${args.value}"
   >
+    ${args.action || ''}
     ${options.map((option) => html`<option value="${option.value}">${option.label}</option>`)}
   </pds-select>`;
 
@@ -80,6 +81,7 @@ const OptgroupTemplate = (args) =>
     type="${args.type}"
     value="${args.value}"
   >
+    ${args.action || ''}
     ${optgroupOptions.map(
       (group) => html`<optgroup label="${group.label}">${group.options.map((option) => html`<option value="${option.value}">${option.label}</option>`)}</optgroup>`,
     )}
@@ -153,3 +155,43 @@ WithOptgroup.args = {
   name: 'beatles',
   value: 'george',
 };
+
+export const withActionLink = (args) => html`<pds-select
+  autocomplete="${args.autocomplete}"
+  component-id="pds-select-action-link"
+  disabled="${args.disabled}"
+  error-message="${args.errorMessage}"
+  helper-message="${args.helperMessage}"
+  hide-label="${args.hideLabel}"
+  invalid="${args.invalid}"
+  label="Timezone"
+  multiple="${args.multiple}"
+  name="timezone"
+  required="${args.required}"
+  type="${args.type}"
+  value="${args.value}">
+  <pds-link href="#" slot="action">
+    Auto-detect
+  </pds-link>
+  ${options.map((option) => html`<option value="${option.value}">${option.label}</option>`)}
+</pds-select>`;
+
+export const withActionButton = (args) => html`<pds-select
+  autocomplete="${args.autocomplete}"
+  component-id="pds-select-action-button"
+  disabled="${args.disabled}"
+  error-message="${args.errorMessage}"
+  helper-message="${args.helperMessage}"
+  hide-label="${args.hideLabel}"
+  invalid="${args.invalid}"
+  label="Country"
+  multiple="${args.multiple}"
+  name="country"
+  required="${args.required}"
+  type="${args.type}"
+  value="${args.value}">
+  <pds-button slot="action" variant="unstyled">
+    <pds-icon name="question-circle"></pds-icon>
+  </pds-button>
+  ${options.map((option) => html`<option value="${option.value}">${option.label}</option>`)}
+</pds-select>`;

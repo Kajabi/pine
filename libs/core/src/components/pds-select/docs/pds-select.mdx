@@ -271,6 +271,109 @@ The `optgroup` element allows for grouping related options within the select com
   </div>
 </DocCanvas>
 
+### Action Slot
+
+The action slot allows you to add helpful content next to the select label, such as links or help buttons. This is useful for providing additional context or quick actions related to the selection.
+
+**Action Link**
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsSelect componentId="pds-select-action-link" label="Timezone" name="timezone">
+  <PdsLink href="#" slot="action">Auto-detect</PdsLink>
+  <option value="">Select timezone</option>
+  <option value="est">Eastern Time (EST)</option>
+  <option value="cst">Central Time (CST)</option>
+  <option value="mst">Mountain Time (MST)</option>
+  <option value="pst">Pacific Time (PST)</option>
+</PdsSelect>`,
+    webComponent: `<pds-select component-id="pds-select-action-link" label="Timezone" name="timezone">
+  <pds-link href="#" slot="action">Auto-detect</pds-link>
+  <option value="">Select timezone</option>
+  <option value="est">Eastern Time (EST)</option>
+  <option value="cst">Central Time (CST)</option>
+  <option value="mst">Mountain Time (MST)</option>
+  <option value="pst">Pacific Time (PST)</option>
+</pds-select>`
+}}>
+  <pds-select component-id="pds-select-action-link" label="Timezone" name="timezone">
+    <pds-link href="#" slot="action">Auto-detect</pds-link>
+    <option value="">Select timezone</option>
+    <option value="est">Eastern Time (EST)</option>
+    <option value="cst">Central Time (CST)</option>
+    <option value="mst">Mountain Time (MST)</option>
+    <option value="pst">Pacific Time (PST)</option>
+  </pds-select>
+</DocCanvas>
+
+**Action Button**
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsSelect componentId="pds-select-action-button" label="Language" name="language">
+  <PdsButton slot="action" variant="unstyled">Translate</PdsButton>
+  <option value="en">English</option>
+  <option value="es">Español</option>
+  <option value="fr">Français</option>
+  <option value="de">Deutsch</option>
+</PdsSelect>`,
+    webComponent: `<pds-select component-id="pds-select-action-button" label="Language" name="language">
+  <pds-button slot="action" variant="unstyled">Translate</pds-button>
+  <option value="en">English</option>
+  <option value="es">Español</option>
+  <option value="fr">Français</option>
+  <option value="de">Deutsch</option>
+</pds-select>`
+}}>
+  <pds-select component-id="pds-select-action-button" label="Language" name="language">
+    <pds-button slot="action" variant="unstyled">Translate</pds-button>
+    <option value="en">English</option>
+    <option value="es">Español</option>
+    <option value="fr">Français</option>
+    <option value="de">Deutsch</option>
+  </pds-select>
+</DocCanvas>
+
+**Action with Tooltip**
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsSelect componentId="pds-select-action-tooltip" label="Country" name="country" required>
+  <PdsTooltip slot="action" align="bottom-start">
+    <PdsIcon name="question-circle"></PdsIcon>
+    <span slot="content">Select your country of residence for shipping purposes</span>
+  </PdsTooltip>
+  <option value="">Choose a country</option>
+  <option value="us">United States</option>
+  <option value="ca">Canada</option>
+  <option value="uk">United Kingdom</option>
+  <option value="au">Australia</option>
+</PdsSelect>`,
+    webComponent: `<pds-select component-id="pds-select-action-tooltip" label="Country" name="country" required>
+  <pds-tooltip slot="action" align="bottom-start">
+    <pds-icon name="question-circle"></pds-icon>
+    <span slot="content">Select your country of residence for shipping purposes</span>
+  </pds-tooltip>
+  <option value="">Choose a country</option>
+  <option value="us">United States</option>
+  <option value="ca">Canada</option>
+  <option value="uk">United Kingdom</option>
+  <option value="au">Australia</option>
+</pds-select>`
+}}>
+  <pds-select component-id="pds-select-action-tooltip" label="Country" name="country" required>
+    <pds-tooltip slot="action" align="bottom-start">
+      <pds-icon name="question-circle"></pds-icon>
+      <span slot="content">Select your country of residence for shipping purposes</span>
+    </pds-tooltip>
+    <option value="">Choose a country</option>
+    <option value="us">United States</option>
+    <option value="ca">Canada</option>
+    <option value="uk">United Kingdom</option>
+    <option value="au">Australia</option>
+  </pds-select>
+</DocCanvas>
+
 ## Additional Resources
 
 [MDN Web Docs: Select](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select)
