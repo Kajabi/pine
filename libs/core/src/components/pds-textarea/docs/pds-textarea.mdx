@@ -188,21 +188,6 @@ The action slot allows you to add helpful content next to the textarea label, su
   </pds-textarea>
 </DocCanvas>
 
-**Action with Link**
-<DocCanvas client:only
-  mdxSource={{
-    react: `<PdsTextarea componentId="textarea-action-link" label="Terms & Conditions" readonly value="Please read and accept our terms..." rows="6">
-  <PdsLink slot="action" href="#" variant="inline" size="sm">View full terms</PdsLink>
-</PdsTextarea>`,
-    webComponent: `<pds-textarea component-id="textarea-action-link" label="Terms & Conditions" readonly value="Please read and accept our terms..." rows="6">
-  <pds-link slot="action" href="#" variant="inline" size="sm">View full terms</pds-link>
-</pds-textarea>`
-}}>
-  <pds-textarea component-id="textarea-action-link" label="Terms & Conditions" readonly value="Please read and accept our terms..." rows="6">
-    <pds-link slot="action" href="#" variant="inline" size="sm">View full terms</pds-link>
-  </pds-textarea>
-</DocCanvas>
-
 ## References
 
 [MDN: Autocomplete Attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete)
