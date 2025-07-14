@@ -45,7 +45,7 @@ const BaseTemplate = (args) => html`<pds-textarea
   invalid="${args.invalid}"
   label="${args.label}"
   name="${args.name}"
-  onChange=${args.onChange}"
+  onChange="${args.onChange}"
   placeholder="${args.placeholder}"
   readonly="${args.readonly}"
   required="${args.required}"
@@ -54,6 +54,7 @@ const BaseTemplate = (args) => html`<pds-textarea
   data-tooltip-id="foo"
   title="bar"
   >
+  ${args.action || ''}
 </pds-textarea>`;
 
 export const Default = BaseTemplate.bind({});
@@ -130,3 +131,49 @@ Autocomplete.args = {
   autocomplete: 'on',
   placeholder: 'Enter a message...',
 };
+
+export const withActionLink = (args) => html`<pds-textarea
+  autocomplete="${args.autocomplete}"
+  clear-on-edit="${args.clearOnEdit}"
+  component-id="pds-textarea-action-link"
+  disabled="${args.disabled}"
+  error-message="${args.errorMessage}"
+  helper-message="${args.helperMessage}"
+  invalid="${args.invalid}"
+  label="Notes"
+  name="${args.name}"
+  onChange="${args.onChange}"
+  placeholder="${args.placeholder}"
+  readonly="${args.readonly}"
+  required="${args.required}"
+  rows="3"
+  value="${args.value}"
+  data-tooltip-id="foo"
+  title="bar">
+  <pds-link href="#" slot="action">
+    View examples
+  </pds-link>
+</pds-textarea>`;
+
+export const withActionButton = (args) => html`<pds-textarea
+  autocomplete="${args.autocomplete}"
+  clear-on-edit="${args.clearOnEdit}"
+  component-id="pds-textarea-action-button"
+  disabled="${args.disabled}"
+  error-message="${args.errorMessage}"
+  helper-message="${args.helperMessage}"
+  invalid="${args.invalid}"
+  label="Description"
+  name="${args.name}"
+  onChange="${args.onChange}"
+  placeholder="${args.placeholder}"
+  readonly="${args.readonly}"
+  required="${args.required}"
+  rows="4"
+  value="${args.value}"
+  data-tooltip-id="foo"
+  title="bar">
+  <pds-button slot="action" variant="unstyled">
+    <pds-icon name="question-circle"></pds-icon>
+  </pds-button>
+</pds-textarea>`;

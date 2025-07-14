@@ -127,6 +127,82 @@ The `rows` property is used to pass a number of expected rows visible within the
   <pds-textarea name="Rows" label="Name" rows="4" component-id="textarea-rows"></pds-textarea>
 </DocCanvas>
 
+### Action Slot
+
+The action slot allows you to add helpful content next to the textarea label, such as links or help buttons. This is useful for providing additional context or quick actions related to the field.
+
+**Action Link**
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsTextarea componentId="pds-textarea-action-link" label="Notes" rows="3" helperMessage="Add any additional notes here">
+  <PdsLink href="#" slot="action">View examples</PdsLink>
+</PdsTextarea>`,
+    webComponent: `<pds-textarea component-id="pds-textarea-action-link" label="Notes" rows="3" helper-message="Add any additional notes here">
+  <pds-link href="#" slot="action">View examples</pds-link>
+</pds-textarea>`
+}}>
+  <pds-textarea component-id="pds-textarea-action-link" label="Notes" rows="3" helper-message="Add any additional notes here">
+    <pds-link href="#" slot="action">View examples</pds-link>
+  </pds-textarea>
+</DocCanvas>
+
+**Action Button**
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsTextarea componentId="pds-textarea-action-button" label="Description" rows="4" placeholder="Describe your issue...">
+  <PdsButton slot="action" variant="unstyled">Format</PdsButton>
+</PdsTextarea>`,
+    webComponent: `<pds-textarea component-id="pds-textarea-action-button" label="Description" rows="4" placeholder="Describe your issue...">
+  <pds-button slot="action" variant="unstyled">Format</pds-button>
+</pds-textarea>`
+}}>
+  <pds-textarea component-id="pds-textarea-action-button" label="Description" rows="4" placeholder="Describe your issue...">
+    <pds-button slot="action" variant="unstyled">Format</pds-button>
+  </pds-textarea>
+</DocCanvas>
+
+**Action with Tooltip**
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsTextarea componentId="pds-textarea-action-tooltip" label="Bio" rows="4" maxlength="500">
+  <PdsTooltip slot="action" align="bottom-start">
+    <PdsIcon name="question-circle"></PdsIcon>
+    <span slot="content">Tell us about yourself in 500 characters or less</span>
+  </PdsTooltip>
+</PdsTextarea>`,
+    webComponent: `<pds-textarea component-id="pds-textarea-action-tooltip" label="Bio" rows="4" maxlength="500">
+  <pds-tooltip slot="action" align="bottom-start">
+    <pds-icon name="question-circle"></pds-icon>
+    <span slot="content">Tell us about yourself in 500 characters or less</span>
+  </pds-tooltip>
+</pds-textarea>`
+}}>
+  <pds-textarea component-id="pds-textarea-action-tooltip" label="Bio" rows="4" maxlength="500">
+    <pds-tooltip slot="action" align="bottom-start">
+      <pds-icon name="question-circle"></pds-icon>
+      <span slot="content">Tell us about yourself in 500 characters or less</span>
+    </pds-tooltip>
+  </pds-textarea>
+</DocCanvas>
+
+**Action with Link**
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsTextarea componentId="textarea-action-link" label="Terms & Conditions" readonly value="Please read and accept our terms..." rows="6">
+  <PdsLink slot="action" href="#" variant="inline" size="sm">View full terms</PdsLink>
+</PdsTextarea>`,
+    webComponent: `<pds-textarea component-id="textarea-action-link" label="Terms & Conditions" readonly value="Please read and accept our terms..." rows="6">
+  <pds-link slot="action" href="#" variant="inline" size="sm">View full terms</pds-link>
+</pds-textarea>`
+}}>
+  <pds-textarea component-id="textarea-action-link" label="Terms & Conditions" readonly value="Please read and accept our terms..." rows="6">
+    <pds-link slot="action" href="#" variant="inline" size="sm">View full terms</pds-link>
+  </pds-textarea>
+</DocCanvas>
+
 ## References
 
 [MDN: Autocomplete Attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete)
