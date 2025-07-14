@@ -8,12 +8,11 @@ describe('pds-property', () => {
       html: `<pds-property>Property text</pds-property>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-property class="pds-property">
+      <pds-property>
         <mock:shadow-root>
           <pds-box align-items="center" gap="xs">
-            <pds-box align-items="center" class="pds-property__text">
-              <slot></slot>
-            </pds-box>
+            <pds-icon icon="star" size="var(--pine-dimension-sm)" aria-hidden="true"></pds-icon>
+            <slot></slot>
           </pds-box>
         </mock:shadow-root>
         Property text
@@ -27,15 +26,11 @@ describe('pds-property', () => {
       html: `<pds-property icon="check-circle">Property text</pds-property>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-property class="pds-property" icon="check-circle">
+      <pds-property icon="check-circle">
         <mock:shadow-root>
           <pds-box align-items="center" gap="xs">
-            <pds-box align-items="center" class="pds-property__icon" flex-shrink="0" justify-content="center">
-              <pds-icon icon="check-circle" size="16px" aria-hidden="true"></pds-icon>
-            </pds-box>
-            <pds-box align-items="center" class="pds-property__text">
-              <slot></slot>
-            </pds-box>
+            <pds-icon icon="check-circle" size="var(--pine-dimension-sm)" aria-hidden="true"></pds-icon>
+            <slot></slot>
           </pds-box>
         </mock:shadow-root>
         Property text
@@ -51,15 +46,11 @@ describe('pds-property', () => {
       </pds-property>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-property class="pds-property" icon="info-circle">
+      <pds-property icon="info-circle">
         <mock:shadow-root>
           <pds-box align-items="center" gap="xs">
-            <pds-box align-items="center" class="pds-property__icon" flex-shrink="0" justify-content="center">
-              <pds-icon icon="info-circle" size="16px" aria-hidden="true"></pds-icon>
-            </pds-box>
-            <pds-box align-items="center" class="pds-property__text">
-              <slot></slot>
-            </pds-box>
+            <pds-icon icon="info-circle" size="var(--pine-dimension-sm)" aria-hidden="true"></pds-icon>
+            <slot></slot>
           </pds-box>
         </mock:shadow-root>
         <span>Complex slot content</span>
@@ -67,18 +58,17 @@ describe('pds-property', () => {
     `);
   });
 
-  it('renders without icon', async () => {
+  it('renders without icon (uses default star)', async () => {
     const page = await newSpecPage({
       components: [PdsProperty],
       html: `<pds-property>Property text without icon</pds-property>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-property class="pds-property">
+      <pds-property>
         <mock:shadow-root>
           <pds-box align-items="center" gap="xs">
-            <pds-box align-items="center" class="pds-property__text">
-              <slot></slot>
-            </pds-box>
+            <pds-icon icon="star" size="var(--pine-dimension-sm)" aria-hidden="true"></pds-icon>
+            <slot></slot>
           </pds-box>
         </mock:shadow-root>
         Property text without icon
@@ -92,12 +82,11 @@ describe('pds-property', () => {
       html: `<pds-property component-id="test-property">Property text</pds-property>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-property class="pds-property" component-id="test-property" id="test-property">
+      <pds-property component-id="test-property" id="test-property">
         <mock:shadow-root>
           <pds-box align-items="center" gap="xs">
-            <pds-box align-items="center" class="pds-property__text">
-              <slot></slot>
-            </pds-box>
+            <pds-icon icon="star" size="var(--pine-dimension-sm)" aria-hidden="true"></pds-icon>
+            <slot></slot>
           </pds-box>
         </mock:shadow-root>
         Property text
