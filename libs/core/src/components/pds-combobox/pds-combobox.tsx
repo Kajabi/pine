@@ -183,95 +183,41 @@ export class PdsCombobox implements BasePdsProps {
     return this.sanitizeHtml(option.innerHTML || '');
   }
 
-      // HTML sanitization using DOMPurify library with fallback to prevent XSS attacks
+      // HTML sanitization using DOMPurify library to prevent XSS attacks
   private sanitizeHtml(html: string): string {
-    try {
-      // First try DOMPurify with custom configuration for Pine components
-      const config = {
-        // Allow all custom elements (including pds-* components)
-        CUSTOM_ELEMENT_HANDLING: {
-          tagNameCheck: (tagName: string) => {
-            // Allow all pds-* tags and standard safe HTML tags
-            return tagName.startsWith('pds-') || /^[a-z]+$/i.test(tagName);
-          },
-          attributeNameCheck: (attr: string) => {
-            // Allow standard HTML attributes, data-* attributes, and Pine component attributes
-            return /^[a-zA-Z][a-zA-Z0-9-]*$/.test(attr) || attr.startsWith('data-') || attr.startsWith('aria-');
-          },
-          allowCustomizedBuiltInElements: false,
+    // Configure DOMPurify to allow Pine Design System components while removing dangerous content
+    const config = {
+      // Allow all custom elements (including pds-* components)
+      CUSTOM_ELEMENT_HANDLING: {
+        tagNameCheck: (tagName: string) => {
+          // Allow all pds-* tags and standard safe HTML tags
+          return tagName.startsWith('pds-') || /^[a-z]+$/i.test(tagName);
         },
-        // Allow standard safe attributes
-        ALLOW_DATA_ATTR: true,
-        ALLOW_ARIA_ATTR: true,
-        // Specifically forbid dangerous tags
-        FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'form', 'input', 'textarea', 'select', 'button', 'style'],
-        // Forbid all event handler attributes
-        FORBID_ATTR: [
-          'onerror', 'onload', 'onclick', 'onmouseover', 'onmouseout', 'onmousemove',
-          'onfocus', 'onblur', 'onchange', 'onsubmit', 'onkeydown', 'onkeyup', 'onkeypress',
-          'onmousedown', 'onmouseup', 'ondblclick', 'oncontextmenu', 'onscroll'
-        ],
-        // Safe protocol whitelist
-        ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp|data):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
-      };
+        attributeNameCheck: (attr: string) => {
+          // Allow standard HTML attributes, data-* attributes, and Pine component attributes
+          return /^[a-zA-Z][a-zA-Z0-9-]*$/.test(attr) || attr.startsWith('data-') || attr.startsWith('aria-');
+        },
+        allowCustomizedBuiltInElements: false,
+      },
+      // Allow standard safe attributes
+      ALLOW_DATA_ATTR: true,
+      ALLOW_ARIA_ATTR: true,
+      // Specifically forbid dangerous tags
+      FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'form', 'input', 'textarea', 'select', 'button', 'style'],
+      // Forbid all event handler attributes
+      FORBID_ATTR: [
+        'onerror', 'onload', 'onclick', 'onmouseover', 'onmouseout', 'onmousemove',
+        'onfocus', 'onblur', 'onchange', 'onsubmit', 'onkeydown', 'onkeyup', 'onkeypress',
+        'onmousedown', 'onmouseup', 'ondblclick', 'oncontextmenu', 'onscroll'
+      ],
+      // Safe protocol whitelist
+      ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp|data):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
+    };
 
-      const sanitized = DOMPurify.sanitize(html, config);
-
-      // Verify that dangerous content was actually removed
-      if (this.hasDangerousContent(sanitized)) {
-        // If DOMPurify didn't work (e.g., in test environment), use fallback
-        return this.fallbackSanitize(html);
-      }
-
-      return sanitized;
-    } catch (error) {
-      // If DOMPurify fails, use fallback sanitization
-      console.warn('DOMPurify failed, using fallback sanitization:', error);
-      return this.fallbackSanitize(html);
-    }
+    return DOMPurify.sanitize(html, config);
   }
 
-  // Check if the content still contains dangerous elements
-  private hasDangerousContent(html: string): boolean {
-    const dangerousPatterns = [
-      /<script[\s\S]*?>/i,
-      /<iframe[\s\S]*?>/i,
-      /<object[\s\S]*?>/i,
-      /<embed[\s\S]*?>/i,
-      /javascript\s*:/i,
-      /on(click|load|error|focus|blur|change|submit|keydown|keyup|keypress|mousedown|mouseup|mouseover|mouseout|mousemove)\s*=/i
-    ];
 
-    return dangerousPatterns.some(pattern => pattern.test(html));
-  }
-
-  // Fallback sanitization method using proven regex approach
-  private fallbackSanitize(html: string): string {
-    let sanitized = html;
-    let previousLength;
-
-    // Apply sanitization repeatedly until no more changes occur
-    // This prevents nested malicious content from surviving sanitization
-    do {
-      previousLength = sanitized.length;
-      sanitized = sanitized
-        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '') // Remove script tags
-        .replace(/\s+on(click|load|error|focus|blur|change|submit|keydown|keyup|keypress|mousedown|mouseup|mouseover|mouseout|mousemove)\s*=\s*["'][^"']*["']/gi, '') // Remove specific event handlers
-        .replace(/\s+on(click|load|error|focus|blur|change|submit|keydown|keyup|keypress|mousedown|mouseup|mouseover|mouseout|mousemove)\s*=\s*[^"'\s>]+/gi, '') // Remove unquoted event handlers
-        .replace(/javascript\s*:/gi, '') // Remove javascript: protocol
-        .replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, '') // Remove iframe tags
-        .replace(/<object[^>]*>[\s\S]*?<\/object>/gi, '') // Remove object tags
-        .replace(/<embed[^>]*\/?>/gi, '') // Remove embed tags (self-closing)
-        .replace(/<form[^>]*>[\s\S]*?<\/form>/gi, '') // Remove form tags
-        .replace(/<input[^>]*>/gi, '') // Remove input tags (self-closing)
-        .replace(/<textarea[^>]*>[\s\S]*?<\/textarea>/gi, '') // Remove textarea tags
-        .replace(/<select[^>]*>[\s\S]*?<\/select>/gi, '') // Remove select tags
-        .replace(/<button[^>]*>[\s\S]*?<\/button>/gi, '') // Remove button tags
-        .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ''); // Remove style tags
-    } while (sanitized.length !== previousLength);
-
-    return sanitized;
-  }
 
   // Helper method to check if option should render as layout
   private isOptionLayout(option: HTMLOptionElement): boolean {
