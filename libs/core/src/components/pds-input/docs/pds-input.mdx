@@ -133,6 +133,67 @@ A prefix or suffix can be added to the input field to provide additional context
   </pds-input>
 </DocCanvas>
 
+### Action Slot
+
+The action slot allows you to add helpful content next to the input label, such as links or help buttons. This is useful for providing additional context or quick actions related to the field.
+
+**Action Link**
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsInput componentId="pds-input-action-link" label="Password" type="password" placeholder="Enter your password">
+  <PdsLink slot="action" href="#" variant="inline" size="sm">Forgot password?</PdsLink>
+</PdsInput>`,
+    webComponent: `<pds-input component-id="pds-input-action-link" label="Password" type="password" placeholder="Enter your password">
+  <pds-link slot="action" href="#" variant="inline" size="sm">Forgot password?</pds-link>
+</pds-input>`
+  }}>
+  <pds-input component-id="pds-input-action-link" label="Password" type="password" placeholder="Enter your password">
+    <pds-link slot="action" href="#" variant="inline" size="sm">Forgot?</pds-link>
+  </pds-input>
+</DocCanvas>
+
+**Action Button**
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsInput componentId="pds-input-action-button" label="API Key" type="text" value="sk_test_123456789">
+  <PdsButton slot="action" variant="unstyled">Copy</PdsButton>
+</PdsInput>`,
+    webComponent: `<pds-input component-id="pds-input-action-button" label="API Key" type="text" value="sk_test_123456789">
+  <pds-button slot="action" variant="unstyled">Copy</pds-button>
+</pds-input>`
+  }}>
+  <pds-input component-id="pds-input-action-button" label="API Key" type="text" value="sk_test_123456789">
+    <pds-button slot="action" variant="unstyled">Copy</pds-button>
+  </pds-input>
+</DocCanvas>
+
+**Action with Tooltip**
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsInput componentId="pds-input-action-button-tooltip" label="Account ID" type="text" value="123456789">
+  <PdsTooltip slot="action" align="bottom-start">
+    <PdsIcon name="question-circle"></PdsIcon>
+    <span slot="content">Find your account ID in your account page</span>
+  </PdsTooltip>
+</PdsInput>`,
+    webComponent: `<pds-input component-id="pds-input-action-button" label="API Key" type="text" value="sk_test_123456789">
+  <pds-tooltip slot="action" align="bottom-start">
+    <pds-icon name="question-circle"></pds-icon>
+    <span slot="content">Find your account ID in the URL of your account page</span>
+  </pds-tooltip>
+</pds-input>`
+  }}>
+  <pds-input component-id="pds-input-action-button-tooltip" label="Account ID" type="text" value="123456789">
+    <pds-tooltip slot="action" align="bottom-start">
+      <pds-icon name="question-circle"></pds-icon>
+      <span slot="content">Find your account ID in your account page</span>
+    </pds-tooltip>
+  </pds-input>
+</DocCanvas>
+
+
+
 ### Prepend and Append
 Prepend and append elements are placed outside the input container, next to the input field. These are typically used for larger elements or controls that need to be visually separated from the input.
 

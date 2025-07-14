@@ -59,6 +59,7 @@ Type: `Promise<void>`
 
 | Slot        | Description                                                                      |
 | ----------- | -------------------------------------------------------------------------------- |
+| `"action"`  | Content to be displayed in the label area, typically for help icons or links     |
 | `"append"`  | Content to be displayed after the input field                                    |
 | `"prefix"`  | Content that is displayed visually within the input field before the input field |
 | `"prepend"` | Content to be displayed before the input field                                   |
@@ -69,6 +70,7 @@ Type: `Promise<void>`
 
 | Part        | Description |
 | ----------- | ----------- |
+| `"action"`  |             |
 | `"append"`  |             |
 | `"prefix"`  |             |
 | `"prepend"` |             |

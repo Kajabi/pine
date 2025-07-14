@@ -11,6 +11,7 @@ import { danger } from '@pine-ds/icons/icons';
  * @slot prefix - Content that is displayed visually within the input field before the input field
  * @slot prepend - Content to be displayed before the input field
  * @slot suffix - Content that is displayed visually within the input field after the input field
+ * @slot action - Content to be displayed in the label area, typically for help icons or links
  */
 @Component({
   tag: 'pds-input',
@@ -47,6 +48,11 @@ export class PdsInput {
    * If true, the input has append content (focusable)
    */
   @State() hasAppend = false;
+
+  /**
+   * If true, the input has action content in the label area
+   */
+  @State() hasAction = false;
 
   /**
    * Emitted when the input loses focus.
@@ -251,6 +257,18 @@ export class PdsInput {
     return null;
   }
 
+  private renderAction() {
+    const hasAction = this.el.querySelector('[slot="action"]') !== null;
+    if (hasAction) {
+      return (
+        <div class="pds-input__action" part="action">
+          <slot name="action"></slot>
+        </div>
+      );
+    }
+    return null;
+  }
+
   componentWillLoad() {
     this.inheritedAttributes = {
       ...inheritAriaAttributes(this.el)
@@ -259,6 +277,7 @@ export class PdsInput {
     this.hasSuffix = this.el.querySelector('[slot="suffix"]') !== null;
     this.hasPrepend = this.el.querySelector('[slot="prepend"]') !== null;
     this.hasAppend = this.el.querySelector('[slot="append"]') !== null;
+    this.hasAction = this.el.querySelector('[slot="action"]') !== null;
 
     // Store the original pdsInput event emitter
     this.originalPdsInput = this.pdsInput;
@@ -393,13 +412,17 @@ export class PdsInput {
         has-suffix={this.hasSuffix ? 'true' : null}
         has-prepend={this.hasPrepend ? 'true' : null}
         has-append={this.hasAppend ? 'true' : null}
+        has-action={this.hasAction ? 'true' : null}
       >
         <div class="pds-input">
           {label && (
-            <label htmlFor={componentId} class="pds-input__label">
-              {label}
-              {this.required && <span class="pds-input__required-indicator"> *</span>}
-            </label>
+            <div class="pds-input__label-wrapper">
+              <label htmlFor={componentId} class="pds-input__label">
+                {label}
+                {this.required && <span class="pds-input__required-indicator"> *</span>}
+              </label>
+              {this.renderAction()}
+            </div>
           )}
 
           <div class={inputWrapperClasses}>
