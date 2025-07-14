@@ -1,7 +1,6 @@
 import { Component, Element, Event, EventEmitter, h, Host, Prop, State, Watch, Method } from '@stencil/core';
 import type { BasePdsProps } from '@utils/interfaces';
 import { computePosition, flip, offset, shift } from '@floating-ui/dom';
-import DOMPurify from 'dompurify';
 
 /**
  * @slot option - Option elements for the combobox dropdown
@@ -183,77 +182,26 @@ export class PdsCombobox implements BasePdsProps {
     return this.sanitizeHtml(option.innerHTML || '');
   }
 
-      // HTML sanitization using DOMPurify library with fallback to prevent XSS attacks
+            // HTML sanitization using iterative regex approach to prevent XSS attacks
   private sanitizeHtml(html: string): string {
-    try {
-      // First try DOMPurify with custom configuration for Pine components
-      const config = {
-        // Allow all custom elements (including pds-* components)
-        CUSTOM_ELEMENT_HANDLING: {
-          tagNameCheck: (tagName: string) => {
-            // Allow all pds-* tags and standard safe HTML tags
-            return tagName.startsWith('pds-') || /^[a-z]+$/i.test(tagName);
-          },
-          attributeNameCheck: (attr: string) => {
-            // Allow standard HTML attributes, data-* attributes, and Pine component attributes
-            return /^[a-zA-Z][a-zA-Z0-9-]*$/.test(attr) || attr.startsWith('data-') || attr.startsWith('aria-');
-          },
-          allowCustomizedBuiltInElements: false,
-        },
-        // Allow standard safe attributes
-        ALLOW_DATA_ATTR: true,
-        ALLOW_ARIA_ATTR: true,
-        // Specifically forbid dangerous tags
-        FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'form', 'input', 'textarea', 'select', 'button', 'style'],
-        // Forbid all event handler attributes
-        FORBID_ATTR: [
-          'onerror', 'onload', 'onclick', 'onmouseover', 'onmouseout', 'onmousemove',
-          'onfocus', 'onblur', 'onchange', 'onsubmit', 'onkeydown', 'onkeyup', 'onkeypress',
-          'onmousedown', 'onmouseup', 'ondblclick', 'oncontextmenu', 'onscroll'
-        ],
-        // Safe protocol whitelist
-        ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp|data):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
-      };
+    let sanitized = html;
+    let previousLength;
 
-      const sanitized = DOMPurify.sanitize(html, config);
+    // Apply sanitization repeatedly until no more changes occur
+    // This prevents nested malicious content from surviving sanitization
+    do {
+      previousLength = sanitized.length;
+      sanitized = sanitized
+        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '') // Remove script tags
+        .replace(/\s+on(click|load|error|focus|blur|change|submit|keydown|keyup|keypress|mousedown|mouseup|mouseover|mouseout|mousemove)\s*=\s*["'][^"']*["']/gi, '') // Remove quoted event handlers
+        .replace(/\s+on(click|load|error|focus|blur|change|submit|keydown|keyup|keypress|mousedown|mouseup|mouseover|mouseout|mousemove)\s*=\s*[^"'\s>]+/gi, '') // Remove unquoted event handlers
+        .replace(/javascript\s*:/gi, '') // Remove javascript: protocol
+        .replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, '') // Remove iframe tags
+        .replace(/<object[^>]*>[\s\S]*?<\/object>/gi, '') // Remove object tags
+        .replace(/<embed[^>]*>/gi, ''); // Remove embed tags
+    } while (sanitized.length !== previousLength);
 
-      // Verify that dangerous content was actually removed
-      if (this.hasDangerousContent(sanitized)) {
-        // If DOMPurify didn't work (e.g., in test environment), use fallback
-        return this.fallbackSanitize(html);
-      }
-
-      return sanitized;
-    } catch (error) {
-      // If DOMPurify fails, use fallback sanitization
-      console.warn('DOMPurify failed, using fallback sanitization:', error);
-      return this.fallbackSanitize(html);
-    }
-  }
-
-  // Check if the content still contains dangerous elements
-  private hasDangerousContent(html: string): boolean {
-    const dangerousPatterns = [
-      /<script[\s\S]*?>/i,
-      /<iframe[\s\S]*?>/i,
-      /<object[\s\S]*?>/i,
-      /<embed[\s\S]*?>/i,
-      /javascript\s*:/i,
-      /on(click|load|error|focus|blur|change|submit|keydown|keyup|keypress|mousedown|mouseup|mouseover|mouseout|mousemove)\s*=/i
-    ];
-
-    return dangerousPatterns.some(pattern => pattern.test(html));
-  }
-
-  // Fallback sanitization method using DOMPurify
-  private fallbackSanitize(html: string): string {
-    return DOMPurify.sanitize(html, {
-      ALLOWED_TAGS: ['pds-icon', 'pds-text', 'pds-box', 'pds-button', 'pds-chip', 'pds-copytext', 'pds-divider', 'pds-image', 'pds-link', 'pds-loader', 'pds-progress', 'pds-row', 'pds-text', 'pds-tooltip'],
-      ALLOWED_ATTR: ['icon', 'text', 'box', 'button', 'chip', 'copytext', 'divider', 'image', 'link', 'loader', 'progress', 'row', 'text', 'tooltip'],
-      FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'form', 'input', 'textarea', 'select', 'button', 'style'],
-      FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onmouseout', 'onmousemove', 'onfocus', 'onblur', 'onchange', 'onsubmit', 'onkeydown', 'onkeyup', 'onkeypress', 'onmousedown', 'onmouseup', 'ondblclick', 'oncontextmenu', 'onscroll'],
-      ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp|data):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
-    });
+    return sanitized;
   }
 
   // Helper method to check if option should render as layout
