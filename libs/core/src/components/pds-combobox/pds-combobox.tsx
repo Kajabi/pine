@@ -245,15 +245,32 @@ export class PdsCombobox implements BasePdsProps {
     return dangerousPatterns.some(pattern => pattern.test(html));
   }
 
-  // Fallback sanitization method using DOMPurify
+  // Fallback sanitization method using proven regex approach
   private fallbackSanitize(html: string): string {
-    return DOMPurify.sanitize(html, {
-      ALLOWED_TAGS: ['pds-icon', 'pds-text', 'pds-box', 'pds-button', 'pds-chip', 'pds-copytext', 'pds-divider', 'pds-image', 'pds-link', 'pds-loader', 'pds-progress', 'pds-row', 'pds-text', 'pds-tooltip'],
-      ALLOWED_ATTR: ['icon', 'text', 'box', 'button', 'chip', 'copytext', 'divider', 'image', 'link', 'loader', 'progress', 'row', 'text', 'tooltip'],
-      FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'form', 'input', 'textarea', 'select', 'button', 'style'],
-      FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onmouseout', 'onmousemove', 'onfocus', 'onblur', 'onchange', 'onsubmit', 'onkeydown', 'onkeyup', 'onkeypress', 'onmousedown', 'onmouseup', 'ondblclick', 'oncontextmenu', 'onscroll'],
-      ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp|data):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
-    });
+    let sanitized = html;
+    let previousLength;
+
+    // Apply sanitization repeatedly until no more changes occur
+    // This prevents nested malicious content from surviving sanitization
+    do {
+      previousLength = sanitized.length;
+      sanitized = sanitized
+        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '') // Remove script tags
+        .replace(/\s+on(click|load|error|focus|blur|change|submit|keydown|keyup|keypress|mousedown|mouseup|mouseover|mouseout|mousemove)\s*=\s*["'][^"']*["']/gi, '') // Remove specific event handlers
+        .replace(/\s+on(click|load|error|focus|blur|change|submit|keydown|keyup|keypress|mousedown|mouseup|mouseover|mouseout|mousemove)\s*=\s*[^"'\s>]+/gi, '') // Remove unquoted event handlers
+        .replace(/javascript\s*:/gi, '') // Remove javascript: protocol
+        .replace(/<iframe[^>]*>[\s\S]*?<\/iframe>/gi, '') // Remove iframe tags
+        .replace(/<object[^>]*>[\s\S]*?<\/object>/gi, '') // Remove object tags
+        .replace(/<embed[^>]*\/?>/gi, '') // Remove embed tags (self-closing)
+        .replace(/<form[^>]*>[\s\S]*?<\/form>/gi, '') // Remove form tags
+        .replace(/<input[^>]*>/gi, '') // Remove input tags (self-closing)
+        .replace(/<textarea[^>]*>[\s\S]*?<\/textarea>/gi, '') // Remove textarea tags
+        .replace(/<select[^>]*>[\s\S]*?<\/select>/gi, '') // Remove select tags
+        .replace(/<button[^>]*>[\s\S]*?<\/button>/gi, '') // Remove button tags
+        .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ''); // Remove style tags
+    } while (sanitized.length !== previousLength);
+
+    return sanitized;
   }
 
   // Helper method to check if option should render as layout
