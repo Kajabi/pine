@@ -141,14 +141,14 @@ The action slot allows you to add helpful content next to the input label, such 
 <DocCanvas client:only
   mdxSource={{
     react: `<PdsInput componentId="pds-input-action-link" label="Password" type="password" placeholder="Enter your password">
-  <PdsLink slot="action" href="#" variant="inline" size="sm">Forgot password?</PdsLink>
+  <PdsLink slot="action" href="#" variant="inline">Forgot?</PdsLink
 </PdsInput>`,
     webComponent: `<pds-input component-id="pds-input-action-link" label="Password" type="password" placeholder="Enter your password">
-  <pds-link slot="action" href="#" variant="inline" size="sm">Forgot password?</pds-link>
+  <pds-link slot="action" href="#" variant="inline">Forgot?</pds-link>
 </pds-input>`
   }}>
   <pds-input component-id="pds-input-action-link" label="Password" type="password" placeholder="Enter your password">
-    <pds-link slot="action" href="#" variant="inline" size="sm">Forgot?</pds-link>
+    <pds-link slot="action" href="#" variant="inline">Forgot?</pds-link>
   </pds-input>
 </DocCanvas>
 
@@ -172,20 +172,20 @@ The action slot allows you to add helpful content next to the input label, such 
 <DocCanvas client:only
   mdxSource={{
     react: `<PdsInput componentId="pds-input-action-button-tooltip" label="Account ID" type="text" value="123456789">
-  <PdsTooltip slot="action" align="bottom-start">
+  <PdsTooltip slot="action">
     <PdsIcon name="question-circle"></PdsIcon>
     <span slot="content">Find your account ID in your account page</span>
   </PdsTooltip>
 </PdsInput>`,
-    webComponent: `<pds-input component-id="pds-input-action-button" label="API Key" type="text" value="sk_test_123456789">
-  <pds-tooltip slot="action" align="bottom-start">
+    webComponent: `<pds-input component-id="pds-input-action-button-tooltip" label="Account ID" type="text" value="123456789">
+  <pds-tooltip slot="action">
     <pds-icon name="question-circle"></pds-icon>
     <span slot="content">Find your account ID in the URL of your account page</span>
   </pds-tooltip>
 </pds-input>`
   }}>
   <pds-input component-id="pds-input-action-button-tooltip" label="Account ID" type="text" value="123456789">
-    <pds-tooltip slot="action" align="bottom-start">
+    <pds-tooltip slot="action">
       <pds-icon name="question-circle"></pds-icon>
       <span slot="content">Find your account ID in your account page</span>
     </pds-tooltip>

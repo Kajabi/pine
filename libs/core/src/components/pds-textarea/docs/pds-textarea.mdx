@@ -168,20 +168,20 @@ The action slot allows you to add helpful content next to the textarea label, su
 <DocCanvas client:only
   mdxSource={{
     react: `<PdsTextarea componentId="pds-textarea-action-tooltip" label="Bio" rows="4" maxlength="500">
-  <PdsTooltip slot="action" align="bottom-start">
+  <PdsTooltip slot="action">
     <PdsIcon name="question-circle"></PdsIcon>
     <span slot="content">Tell us about yourself in 500 characters or less</span>
   </PdsTooltip>
 </PdsTextarea>`,
     webComponent: `<pds-textarea component-id="pds-textarea-action-tooltip" label="Bio" rows="4" maxlength="500">
-  <pds-tooltip slot="action" align="bottom-start">
+  <pds-tooltip slot="action">
     <pds-icon name="question-circle"></pds-icon>
     <span slot="content">Tell us about yourself in 500 characters or less</span>
   </pds-tooltip>
 </pds-textarea>`
 }}>
   <pds-textarea component-id="pds-textarea-action-tooltip" label="Bio" rows="4" maxlength="500">
-    <pds-tooltip slot="action" align="bottom-start">
+    <pds-tooltip slot="action">
       <pds-icon name="question-circle"></pds-icon>
       <span slot="content">Tell us about yourself in 500 characters or less</span>
     </pds-tooltip>
