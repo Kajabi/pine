@@ -30,10 +30,18 @@
 | `pdsSelectChange` | Emitted when a keyboard input occurs. | `CustomEvent<InputEvent>` |
 
 
+## Slots
+
+| Slot       | Description                                                                  |
+| ---------- | ---------------------------------------------------------------------------- |
+| `"action"` | Content to be displayed in the label area, typically for help icons or links |
+
+
 ## Shadow Parts
 
 | Part       | Description |
 | ---------- | ----------- |
+| `"action"` |             |
 | `"select"` |             |
 
 

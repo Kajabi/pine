@@ -34,14 +34,14 @@ The default state of the select component displays a label alongside a list of o
   client:only
   mdxSource={{
     react: `
-      <PdsSelect componentId="pds-select-default-example" label="Name" value="paul">
+      <PdsSelect componentId="pds-select-default-example" label="Name" name="name" value="paul">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </PdsSelect>`,
     webComponent: `
-      <pds-select component-id="pds-select-default-example" label="Name" value="paul">
+      <pds-select component-id="pds-select-default-example" label="Name" name="name" value="paul">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
@@ -50,7 +50,7 @@ The default state of the select component displays a label alongside a list of o
   }}
 >
   <div style={{ padding: '20px', width: '100%' }}>
-    <pds-select component-id="pds-select-default-example" label="Name" value="paul">
+    <pds-select component-id="pds-select-default-example" label="Name" name="name" value="paul">
       <option value="paul">Paul McCartney</option>
       <option value="john">John Lennon</option>
       <option value="george">George Harrison</option>
@@ -67,14 +67,14 @@ When the select component is disabled, it prevents any user interaction. As a re
   client:only
   mdxSource={{
     react: `
-      <PdsSelect componentId="pds-select-disabled-example" disabled="true" label="Name" value="george">
+      <PdsSelect componentId="pds-select-disabled-example" disabled="true" label="Name" name="name" value="george">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </PdsSelect>`,
     webComponent: `
-      <pds-select component-id="pds-select-disabled-example" disabled="true" label="Name" value="george">
+      <pds-select component-id="pds-select-disabled-example" disabled="true" label="Name" name="name" value="george">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
@@ -83,7 +83,7 @@ When the select component is disabled, it prevents any user interaction. As a re
   }}
 >
   <div style={{ padding: '20px', width: '100%' }}>
-    <pds-select component-id="pds-select-disabled-example" disabled="true" label="Name" value="george">
+    <pds-select component-id="pds-select-disabled-example" disabled="true" label="Name" name="name" value="george">
       <option value="paul">Paul McCartney</option>
       <option value="john">John Lennon</option>
       <option value="george">George Harrison</option>
@@ -100,14 +100,14 @@ A helper message provides additional context or instructions for the user and ap
   client:only
   mdxSource={{
     react: `
-      <PdsSelect componentId="pds-select-with-message-example" label="Name" helper-message="This is a helper message to convey extra context for the select" value="john">
+      <PdsSelect componentId="pds-select-with-message-example" label="Name" helperMessage="This is a helper message to convey extra context for the select" name="name" value="john">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </PdsSelect>`,
     webComponent: `
-      <pds-select component-id="pds-select-with-message-example" label="Name" helper-message="This is a helper message to convey extra context for the select" value="john">
+      <pds-select component-id="pds-select-with-message-example" label="Name" helper-message="This is a helper message to convey extra context for the select" name="name" value="john">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
@@ -116,7 +116,7 @@ A helper message provides additional context or instructions for the user and ap
   }}
 >
   <div style={{ padding: '20px', width: '100%' }}>
-    <pds-select component-id="pds-select-with-message-example" helper-message="This is a helper message to convey extra context for the select" label="Name" value="john">
+    <pds-select component-id="pds-select-with-message-example" helper-message="This is a helper message to convey extra context for the select" label="Name" name="name" value="john">
       <option value="paul">Paul McCartney</option>
       <option value="john">John Lennon</option>
       <option value="george">George Harrison</option>
@@ -133,14 +133,14 @@ The select component is shown invalid along with an error message, providing fee
   client:only
   mdxSource={{
     react: `
-      <PdsSelect componentId="pds-select-invalid-example" label="Name" invalid="true" error-message="This is an error message to convey extra context for the select" value="ringo">
+      <PdsSelect componentId="pds-select-invalid-example" label="Name" invalid="true" errorMessage="This is an error message to convey extra context for the select" name="name" value="ringo">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </PdsSelect>`,
     webComponent: `
-      <pds-select component-id="pds-select-invalid-example" label="Name" invalid="true" error-message="This is an error message to convey extra context for the select" value="ringo">
+      <pds-select component-id="pds-select-invalid-example" label="Name" invalid="true" error-message="This is an error message to convey extra context for the select" name="name" value="ringo">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
@@ -149,7 +149,7 @@ The select component is shown invalid along with an error message, providing fee
   }}
 >
   <div style={{ padding: '20px', width: '100%' }}>
-    <pds-select component-id="pds-select-invalid-example" invalid="true" error-message="This is an error message to convey extra context for the select" label="Name" value="ringo">
+    <pds-select component-id="pds-select-invalid-example" invalid="true" error-message="This is an error message to convey extra context for the select" label="Name" name="name" value="ringo">
       <option value="paul">Paul McCartney</option>
       <option value="john">John Lennon</option>
       <option value="george">George Harrison</option>
@@ -160,20 +160,20 @@ The select component is shown invalid along with an error message, providing fee
 
 ### Autocomplete
 
-With the autocomplete attribute enabled, the select component allows browsers to suggest previously entered values, improving the user’s input experience. This feature helps users fill out forms more quickly and accurately by displaying potential matches based on their past selections or input history.
+With the autocomplete attribute enabled, the select component allows browsers to suggest previously entered values, improving the user's input experience. This feature helps users fill out forms more quickly and accurately by displaying potential matches based on their past selections or input history.
 
 <DocCanvas
   client:only
   mdxSource={{
     react: `
-      <PdsSelect autocomplete="on" componentId="pds-select-autocomplete-example" label="Name" value="paul">
+      <PdsSelect autocomplete="on" componentId="pds-select-autocomplete-example" label="Name" name="name" value="paul">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </PdsSelect>`,
     webComponent: `
-      <pds-select autocomplete="on" component-id="pds-select-autocomplete-example" label="Name" value="paul">
+      <pds-select autocomplete="on" component-id="pds-select-autocomplete-example" label="Name" name="name" value="paul">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
@@ -182,7 +182,7 @@ With the autocomplete attribute enabled, the select component allows browsers to
   }}
 >
   <div style={{ padding: '20px', width: '100%' }}>
-    <pds-select autocomplete="on" component-id="pds-select-autocomplete-example" label="Name" value="paul">
+    <pds-select autocomplete="on" component-id="pds-select-autocomplete-example" label="Name" name="name" value="paul">
       <option value="paul">Paul McCartney</option>
       <option value="john">John Lennon</option>
       <option value="george">George Harrison</option>
@@ -201,14 +201,14 @@ With the `multiple` attribute enabled, the select component allows users to sele
   client:only
   mdxSource={{
     react: `
-      <PdsSelect multiple componentId="pds-select-multiple-example" label="Name">
+      <PdsSelect multiple componentId="pds-select-multiple-example" label="Name" name="name">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
         <option value="ringo">Ringo Starr</option>
       </PdsSelect>`,
     webComponent: `
-      <pds-select multiple component-id="pds-select-multiple-example" label="Name">
+      <pds-select multiple component-id="pds-select-multiple-example" label="Name" name="name">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
         <option value="george">George Harrison</option>
@@ -217,7 +217,7 @@ With the `multiple` attribute enabled, the select component allows users to sele
   }}
 >
   <div style={{ padding: '20px', width: '100%' }}>
-    <pds-select multiple component-id="pds-select-multiple-example" label="Name">
+    <pds-select multiple component-id="pds-select-multiple-example" label="Name" name="name">
       <option value="paul">Paul McCartney</option>
       <option value="john">John Lennon</option>
       <option value="george">George Harrison</option>
@@ -234,7 +234,7 @@ The `optgroup` element allows for grouping related options within the select com
   client:only
   mdxSource={{
     react: `
-      <PdsSelect componentId="pds-select-optgroup-example" label="Name" value="george">
+      <PdsSelect componentId="pds-select-optgroup-example" label="Name" name="name" value="george">
         <optgroup label="Correct answers">
           <option value="paul">Paul McCartney</option>
           <option value="john">John Lennon</option>
@@ -245,7 +245,7 @@ The `optgroup` element allows for grouping related options within the select com
         </optgroup>
       </PdsSelect>`,
     webComponent: `
-      <pds-select component-id="pds-select-optgroup-example" label="Name" value="george">
+      <pds-select component-id="pds-select-optgroup-example" label="Name" name="name" value="george">
         <optgroup label="Correct answers">
           <option value="paul">Paul McCartney</option>
           <option value="john">John Lennon</option>
@@ -258,7 +258,7 @@ The `optgroup` element allows for grouping related options within the select com
   }}
 >
   <div style={{ padding: '20px', width: '100%' }}>
-    <pds-select component-id="pds-select-optgroup-example" label="Name" value="george">
+    <pds-select component-id="pds-select-optgroup-example" label="Name" name="name" value="george">
       <optgroup label="Correct answers">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
@@ -269,6 +269,109 @@ The `optgroup` element allows for grouping related options within the select com
       </optgroup>
     </pds-select>
   </div>
+</DocCanvas>
+
+### Action Slot
+
+The action slot allows you to add helpful content next to the select label, such as links or help buttons. This is useful for providing additional context or quick actions related to the selection.
+
+**Action Link**
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsSelect componentId="pds-select-action-link" label="Timezone" name="timezone">
+  <PdsLink href="#" slot="action">Auto-detect</PdsLink>
+  <option value="">Select timezone</option>
+  <option value="est">Eastern Time (EST)</option>
+  <option value="cst">Central Time (CST)</option>
+  <option value="mst">Mountain Time (MST)</option>
+  <option value="pst">Pacific Time (PST)</option>
+</PdsSelect>`,
+    webComponent: `<pds-select component-id="pds-select-action-link" label="Timezone" name="timezone">
+  <pds-link href="#" slot="action">Auto-detect</pds-link>
+  <option value="">Select timezone</option>
+  <option value="est">Eastern Time (EST)</option>
+  <option value="cst">Central Time (CST)</option>
+  <option value="mst">Mountain Time (MST)</option>
+  <option value="pst">Pacific Time (PST)</option>
+</pds-select>`
+}}>
+  <pds-select component-id="pds-select-action-link" label="Timezone" name="timezone">
+    <pds-link href="#" slot="action">Auto-detect</pds-link>
+    <option value="">Select timezone</option>
+    <option value="est">Eastern Time (EST)</option>
+    <option value="cst">Central Time (CST)</option>
+    <option value="mst">Mountain Time (MST)</option>
+    <option value="pst">Pacific Time (PST)</option>
+  </pds-select>
+</DocCanvas>
+
+**Action Button**
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsSelect componentId="pds-select-action-button" label="Language" name="language">
+  <PdsButton slot="action" variant="unstyled">Translate</PdsButton>
+  <option value="en">English</option>
+  <option value="es">Español</option>
+  <option value="fr">Français</option>
+  <option value="de">Deutsch</option>
+</PdsSelect>`,
+    webComponent: `<pds-select component-id="pds-select-action-button" label="Language" name="language">
+  <pds-button slot="action" variant="unstyled">Translate</pds-button>
+  <option value="en">English</option>
+  <option value="es">Español</option>
+  <option value="fr">Français</option>
+  <option value="de">Deutsch</option>
+</pds-select>`
+}}>
+  <pds-select component-id="pds-select-action-button" label="Language" name="language">
+    <pds-button slot="action" variant="unstyled">Translate</pds-button>
+    <option value="en">English</option>
+    <option value="es">Español</option>
+    <option value="fr">Français</option>
+    <option value="de">Deutsch</option>
+  </pds-select>
+</DocCanvas>
+
+**Action with Tooltip**
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsSelect componentId="pds-select-action-tooltip" label="Country" name="country" required>
+  <PdsTooltip slot="action" placement="bottom-start">
+    <PdsIcon name="question-circle"></PdsIcon>
+    <span slot="content">Select your country of residence for shipping purposes</span>
+  </PdsTooltip>
+  <option value="">Choose a country</option>
+  <option value="us">United States</option>
+  <option value="ca">Canada</option>
+  <option value="uk">United Kingdom</option>
+  <option value="au">Australia</option>
+</PdsSelect>`,
+    webComponent: `<pds-select component-id="pds-select-action-tooltip" label="Country" name="country" required>
+  <pds-tooltip slot="action" placement="bottom-start">
+    <pds-icon name="question-circle"></pds-icon>
+    <span slot="content">Select your country of residence for shipping purposes</span>
+  </pds-tooltip>
+  <option value="">Choose a country</option>
+  <option value="us">United States</option>
+  <option value="ca">Canada</option>
+  <option value="uk">United Kingdom</option>
+  <option value="au">Australia</option>
+</pds-select>`
+}}>
+  <pds-select component-id="pds-select-action-tooltip" label="Country" name="country" required>
+    <pds-tooltip slot="action" align="bottom-start">
+      <pds-icon name="question-circle"></pds-icon>
+      <span slot="content">Select your country of residence for shipping purposes</span>
+    </pds-tooltip>
+    <option value="">Choose a country</option>
+    <option value="us">United States</option>
+    <option value="ca">Canada</option>
+    <option value="uk">United Kingdom</option>
+    <option value="au">Australia</option>
+  </pds-select>
 </DocCanvas>
 
 ## Additional Resources

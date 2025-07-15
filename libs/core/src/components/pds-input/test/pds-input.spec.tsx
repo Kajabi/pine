@@ -29,9 +29,11 @@ describe('pds-input', () => {
     <pds-input component-id="field-1" label="Name" value="Frank Dux">
       <mock:shadow-root>
         <div class="pds-input">
-          <label class="pds-input__label" htmlFor="field-1">
-            Name
-          </label>
+          <div class="pds-input__label-wrapper">
+            <label class="pds-input__label" htmlFor="field-1">
+              Name
+            </label>
+          </div>
           <div class="pds-input__field-wrapper">
             <input id="field-1" class="pds-input__field" type="text" value="Frank Dux" />
           </div>
@@ -125,9 +127,11 @@ describe('pds-input', () => {
     <pds-input component-id="pds-input-invalid" invalid="true" label="Name" value="Frank Dux">
       <mock:shadow-root>
         <div class="pds-input">
-          <label class="pds-input__label" htmlFor="pds-input-invalid">
-            Name
-          </label>
+          <div class="pds-input__label-wrapper">
+            <label class="pds-input__label" htmlFor="pds-input-invalid">
+              Name
+            </label>
+          </div>
           <div class="has-error pds-input__field-wrapper">
             <input aria-invalid="true" id="pds-input-invalid" class="pds-input__field" type="text" value="Frank Dux" />
           </div>
@@ -597,5 +601,155 @@ describe('pds-input', () => {
       expect(root.style.getPropertyValue('--prefix-width')).toBe('100px');
       expect(root.style.getPropertyValue('--suffix-width')).toBe('120px');
     }
+  });
+
+  describe('action slot', () => {
+    it('renders action slot content when provided', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsInput],
+        html: `
+          <pds-input component-id="field-1" label="Email">
+            <span slot="action">Help</span>
+          </pds-input>
+        `
+      });
+
+      expect(root).toEqualHtml(`
+        <pds-input component-id="field-1" has-action="true" label="Email">
+          <mock:shadow-root>
+            <div class="pds-input">
+              <div class="pds-input__label-wrapper">
+                <label class="pds-input__label" htmlFor="field-1">
+                  Email
+                </label>
+                <div class="pds-input__action" part="action">
+                  <slot name="action"></slot>
+                </div>
+              </div>
+              <div class="pds-input__field-wrapper">
+                <input id="field-1" class="pds-input__field" type="text" value="" />
+              </div>
+            </div>
+          </mock:shadow-root>
+          <span slot="action">Help</span>
+        </pds-input>
+      `);
+    });
+
+    it('does not render action slot when no content is provided', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsInput],
+        html: `<pds-input component-id="field-1" label="Email"></pds-input>`
+      });
+
+      expect(root).toEqualHtml(`
+        <pds-input component-id="field-1" label="Email">
+          <mock:shadow-root>
+            <div class="pds-input">
+              <div class="pds-input__label-wrapper">
+                <label class="pds-input__label" htmlFor="field-1">
+                  Email
+                </label>
+              </div>
+              <div class="pds-input__field-wrapper">
+                <input id="field-1" class="pds-input__field" type="text" value="" />
+              </div>
+            </div>
+          </mock:shadow-root>
+        </pds-input>
+      `);
+    });
+
+    it('sets has-action attribute when action slot content is present', async () => {
+      const page = await newSpecPage({
+        components: [PdsInput],
+        html: `
+          <pds-input component-id="field-1" label="Password">
+            <a slot="action" href="#">Forgot password?</a>
+          </pds-input>
+        `
+      });
+
+      const root = page.root;
+      expect(root?.getAttribute('has-action')).toBe('true');
+    });
+
+    it('properly detects action slot presence in componentWillLoad', async () => {
+      const page = await newSpecPage({
+        components: [PdsInput],
+        html: `
+          <pds-input component-id="field-1" label="Username">
+            <button slot="action">Help</button>
+          </pds-input>
+        `
+      });
+
+      const component = page.rootInstance;
+      expect(component.hasAction).toBe(true);
+    });
+
+    it('renders action slot with complex content', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsInput],
+        html: `
+          <pds-input component-id="field-1" label="API Key">
+            <button slot="action" type="button">
+              <span>Copy</span>
+            </button>
+          </pds-input>
+        `
+      });
+
+      const actionWrapper = root?.shadowRoot?.querySelector('.pds-input__action');
+      expect(actionWrapper).not.toBeNull();
+      expect(actionWrapper?.getAttribute('part')).toBe('action');
+    });
+
+    it('does not render label wrapper when no label is provided', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsInput],
+        html: `
+          <pds-input component-id="field-1">
+            <span slot="action">Help</span>
+          </pds-input>
+        `
+      });
+
+      const labelWrapper = root?.shadowRoot?.querySelector('.pds-input__label-wrapper');
+      expect(labelWrapper).toBeNull();
+    });
+
+    it('renders action slot alongside required indicator', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsInput],
+        html: `
+          <pds-input component-id="field-1" label="Email" required>
+            <span slot="action">Info</span>
+          </pds-input>
+        `
+      });
+
+      expect(root).toEqualHtml(`
+        <pds-input component-id="field-1" has-action="true" label="Email" required>
+          <mock:shadow-root>
+            <div class="pds-input">
+              <div class="pds-input__label-wrapper">
+                <label class="pds-input__label" htmlFor="field-1">
+                  Email
+                  <span class="pds-input__required-indicator"> *</span>
+                </label>
+                <div class="pds-input__action" part="action">
+                  <slot name="action"></slot>
+                </div>
+              </div>
+              <div class="pds-input__field-wrapper">
+                <input id="field-1" class="pds-input__field" type="text" value="" required />
+              </div>
+            </div>
+          </mock:shadow-root>
+          <span slot="action">Info</span>
+        </pds-input>
+      `);
+    });
   });
 });

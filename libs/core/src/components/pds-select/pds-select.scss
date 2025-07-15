@@ -29,9 +29,28 @@
   width: 100%;
 }
 
-label {
+.pds-select__label-wrapper {
+  align-items: center;
+  display: flex;
   grid-area: label;
+  justify-content: space-between;
   margin-block-end: var(--pine-dimension-2xs);
+}
+
+.pds-select__action {
+  align-items: center;
+  display: flex;
+  gap: var(--pine-dimension-xs);
+  margin-inline-start: var(--pine-dimension-xs);
+}
+
+label {
+  margin-block-end: var(--pine-dimension-2xs);
+}
+
+// When label is inside wrapper, remove its margin
+.pds-select__label-wrapper label {
+  margin-block-end: 0;
 }
 
 select {

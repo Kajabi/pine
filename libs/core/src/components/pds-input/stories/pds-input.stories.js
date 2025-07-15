@@ -52,10 +52,11 @@ const BaseTemplate = (args) => html`<pds-input
   required="${args.required}"
   type="${args.type}"
   value="${args.value}">
-  ${args.prefix}
-  ${args.suffix}
-  ${args.prepend}
-  ${args.append}
+  ${args.prefix || ''}
+  ${args.suffix || ''}
+  ${args.prepend || ''}
+  ${args.append || ''}
+  ${args.action || ''}
 </pds-input>`;
 
 export const Text = BaseTemplate.bind({});
@@ -208,3 +209,44 @@ withPrependAndSuffix.args = {
   `,
   suffix: html`<pds-button slot="suffix" variant="unstyled" class="pds-input__suffix"><pds-icon name="remove-circle" size="small"></pds-icon></pds-button>`,
 };
+
+export const withActionLink = (args) => html`<pds-input
+  autocomplete="${args.autocomplete}"
+  component-id="pds-input-action-link"
+  debounce="${args.debounce}"
+  disabled="${args.disabled}"
+  error-message="${args.errorMessage}"
+  helper-message="${args.helperMessage}"
+  invalid="${args.invalid}"
+  label="Password"
+  name="${args.name}"
+  placeholder="${args.placeholder}"
+  readonly="${args.readonly}"
+  required="true"
+  type="password"
+  value="${args.value}">
+  <pds-link href="#" slot="action">
+    Forgot password?
+  </pds-link>
+</pds-input>`;
+
+export const withActionButton = (args) => html`<pds-input
+  autocomplete="${args.autocomplete}"
+  component-id="pds-input-action-button"
+  debounce="${args.debounce}"
+  disabled="${args.disabled}"
+  error-message="${args.errorMessage}"
+  helper-message="Choose a unique username"
+  invalid="${args.invalid}"
+  label="Username"
+  name="${args.name}"
+  placeholder="${args.placeholder}"
+  readonly="${args.readonly}"
+  required="${args.required}"
+  type="text"
+  value="${args.value}">
+  <pds-button slot="action" variant="unstyled">
+    <pds-icon name="question-circle"></pds-icon>
+  </pds-button>
+</pds-input>`;
+

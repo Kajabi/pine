@@ -33,4 +33,40 @@ describe('pds-textarea', () => {
     expect(value).toBe('Hello');
     expect(event).toHaveReceivedEvent();
   });
+
+  it('renders action slot content when provided', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+        <pds-textarea label="Description">
+          <span slot="action">0/500</span>
+        </pds-textarea>
+      `);
+
+    const actionSlot = await page.find('pds-textarea >>> .pds-textarea__action');
+    expect(actionSlot).not.toBeNull();
+
+    const slotContent = await page.find('pds-textarea span[slot="action"]');
+    expect(await slotContent.innerText).toBe('0/500');
+  });
+
+  it('does not render action wrapper when no action content is provided', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-textarea label="Description"></pds-textarea>');
+
+    const actionSlot = await page.find('pds-textarea >>> .pds-textarea__action');
+    expect(actionSlot).toBeNull();
+  });
+
+  it('sets has-action attribute when action slot has content', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+        <pds-textarea label="Comments">
+          <a slot="action" href="#">View guidelines</a>
+        </pds-textarea>
+      `);
+
+    const component = await page.find('pds-textarea');
+    expect(component).toHaveAttribute('has-action');
+    expect(await component.getAttribute('has-action')).toBe('true');
+  });
 });

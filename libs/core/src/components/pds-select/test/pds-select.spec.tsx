@@ -12,9 +12,11 @@ describe('pds-select', () => {
       <pds-select component-id="field-1">
         <mock:shadow-root>
           <div class="pds-select">
-            <label htmlfor="field-1">
-              <span></span>
-            </label>
+            <div class="pds-select__label-wrapper">
+              <label htmlfor="field-1">
+                <span></span>
+              </label>
+            </div>
             <select class="pds-select__field" id="field-1" part="select">
             </select>
             <div aria-hidden="true" class="hidden">
@@ -54,9 +56,11 @@ describe('pds-select', () => {
       <pds-select component-id="field-1" label="Name">
         <mock:shadow-root>
           <div class="pds-select">
-            <label htmlfor="field-1">
-              <span>Name</span>
-            </label>
+            <div class="pds-select__label-wrapper">
+              <label htmlfor="field-1">
+                <span>Name</span>
+              </label>
+            </div>
             <select class="pds-select__field" id="field-1" part="select">
               <option value="1">Option 1</option>
               <option value="2">Option 2</option>
@@ -82,9 +86,11 @@ describe('pds-select', () => {
       <pds-select component-id="field-1" label="Name">
         <mock:shadow-root>
           <div class="pds-select">
-            <label htmlfor="field-1">
-              <span>Name</span>
-            </label>
+            <div class="pds-select__label-wrapper">
+              <label htmlfor="field-1">
+                <span>Name</span>
+              </label>
+            </div>
             <select class="pds-select__field" id="field-1" part="select"></select>
             <div aria-hidden="true" class="hidden">
               <slot></slot>
@@ -130,9 +136,11 @@ describe('pds-select', () => {
       <pds-select aria-disabled="true" class="is-disabled" component-id="field-1" label="Disabled" disabled="">
         <mock:shadow-root>
           <div class="pds-select">
-            <label htmlfor="field-1">
-              <span>Disabled</span>
-            </label>
+            <div class="pds-select__label-wrapper">
+              <label htmlfor="field-1">
+                <span>Disabled</span>
+              </label>
+            </div>
             <select class="pds-select__field" disabled="" id="field-1" part="select">
               <slot></slot>
             </select>
@@ -158,9 +166,11 @@ describe('pds-select', () => {
       <pds-select class="is-invalid" component-id="field-1" invalid="true">
         <mock:shadow-root>
           <div class="pds-select">
-            <label htmlfor="field-1">
-              <span></span>
-            </label>
+            <div class="pds-select__label-wrapper">
+              <label htmlfor="field-1">
+                <span></span>
+              </label>
+            </div>
             <select class="pds-select__field" id="field-1" part="select">
               <slot></slot>
             </select>
@@ -184,9 +194,11 @@ describe('pds-select', () => {
       <pds-select autocomplete="off" component-id="field-1" label="Name">
         <mock:shadow-root>
           <div class="pds-select">
-            <label htmlfor="field-1">
-              <span>Name</span>
-            </label>
+            <div class="pds-select__label-wrapper">
+              <label htmlfor="field-1">
+                <span>Name</span>
+              </label>
+            </div>
             <select autocomplete="off" class="pds-select__field" id="field-1" part="select"></select>
             <div aria-hidden="true" class="hidden">
               <slot></slot>
@@ -208,9 +220,11 @@ describe('pds-select', () => {
       <pds-select autocomplete="on" component-id="field-1" label="Name">
         <mock:shadow-root>
           <div class="pds-select">
-            <label htmlfor="field-1">
-              <span>Name</span>
-            </label>
+            <div class="pds-select__label-wrapper">
+              <label htmlfor="field-1">
+                <span>Name</span>
+              </label>
+            </div>
             <select autocomplete="on" class="pds-select__field" id="field-1" part="select"></select>
             <div aria-hidden="true" class="hidden">
               <slot></slot>
@@ -232,9 +246,11 @@ describe('pds-select', () => {
       <pds-select component-id="field-1" multiple="">
         <mock:shadow-root>
           <div class="pds-select">
-            <label htmlfor="field-1">
-              <span></span>
-            </label>
+            <div class="pds-select__label-wrapper">
+              <label htmlfor="field-1">
+                <span></span>
+              </label>
+            </div>
             <select class="pds-select__field" id="field-1" multiple="" part="select">
             </select>
             <div aria-hidden="true" class="hidden">
@@ -600,5 +616,160 @@ describe('onSelectUpdate', () => {
 
     expect(component.value).toEqual(['1', '2']);
     expect(pdsSelectChangeSpy).toHaveBeenCalled();
+  });
+});
+
+describe('action slot', () => {
+  it('renders action slot content when provided', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsSelect],
+      html: `
+        <pds-select component-id="select-1" label="Country" name="country">
+          <span slot="action">Help</span>
+          <option value="us">United States</option>
+          <option value="ca">Canada</option>
+        </pds-select>
+      `,
+    });
+
+    expect(root).toEqualHtml(`
+      <pds-select component-id="select-1" has-action="true" label="Country" name="country">
+        <mock:shadow-root>
+          <div class="pds-select">
+            <div class="pds-select__label-wrapper">
+              <label htmlfor="select-1">
+                <span>Country</span>
+              </label>
+              <div class="pds-select__action" part="action">
+                <slot name="action"></slot>
+              </div>
+            </div>
+            <select class="pds-select__field" id="select-1" name="country" part="select"></select>
+            <div aria-hidden="true" class="hidden">
+              <slot></slot>
+            </div>
+            <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
+          </div>
+        </mock:shadow-root>
+        <span slot="action">Help</span>
+        <option value="us">United States</option>
+        <option value="ca">Canada</option>
+      </pds-select>
+    `);
+  });
+
+  it('does not render action slot when no content is provided', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select component-id="select-1" label="Country" name="country"></pds-select>`,
+    });
+
+    expect(root).toEqualHtml(`
+      <pds-select component-id="select-1" label="Country" name="country">
+        <mock:shadow-root>
+          <div class="pds-select">
+            <div class="pds-select__label-wrapper">
+              <label htmlfor="select-1">
+                <span>Country</span>
+              </label>
+            </div>
+            <select class="pds-select__field" id="select-1" name="country" part="select"></select>
+            <div aria-hidden="true" class="hidden">
+              <slot></slot>
+            </div>
+            <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
+          </div>
+        </mock:shadow-root>
+      </pds-select>
+    `);
+  });
+
+  it('sets has-action attribute when action slot content is present', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `
+        <pds-select component-id="select-1" label="Language" name="language">
+          <button slot="action">Translate</button>
+          <option value="en">English</option>
+        </pds-select>
+      `,
+    });
+
+    const root = page.root;
+    expect(root?.getAttribute('has-action')).toBe('true');
+  });
+
+  it('renders action slot with complex content', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsSelect],
+      html: `
+        <pds-select component-id="select-1" label="Timezone" name="timezone">
+          <a slot="action" href="#">
+            <span>Auto-detect</span>
+          </a>
+          <option value="est">EST</option>
+        </pds-select>
+      `,
+    });
+
+    const actionWrapper = root?.shadowRoot?.querySelector('.pds-select__action');
+    expect(actionWrapper).not.toBeNull();
+    expect(actionWrapper?.getAttribute('part')).toBe('action');
+  });
+
+  it('does not render label wrapper when hideLabel is true', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsSelect],
+      html: `
+        <pds-select component-id="select-1" label="Country" name="country" hide-label>
+          <span slot="action">Help</span>
+          <option value="us">United States</option>
+        </pds-select>
+      `,
+    });
+
+    const labelWrapper = root?.shadowRoot?.querySelector('.pds-select__label-wrapper');
+    const actionSlot = root?.shadowRoot?.querySelector('.pds-select__action');
+    expect(labelWrapper).toBeNull();
+    expect(actionSlot).toBeNull();
+  });
+
+  it('renders action slot with error message', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `
+        <pds-select component-id="select-1" label="Country" name="country" error-message="Please select a country">
+          <span slot="action">Required</span>
+          <option value="">Choose...</option>
+          <option value="us">United States</option>
+        </pds-select>
+      `,
+    });
+
+    const actionWrapper = page.root?.shadowRoot?.querySelector('.pds-select__action');
+    const errorMessage = page.root?.shadowRoot?.querySelector('.pds-select__error-message');
+
+    expect(actionWrapper).not.toBeNull();
+    expect(errorMessage?.textContent).toContain('Please select a country');
+  });
+
+  it('renders action slot with multiple select', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsSelect],
+      html: `
+        <pds-select component-id="select-1" label="Skills" name="skills" multiple>
+          <span slot="action">Select all that apply</span>
+          <option value="js">JavaScript</option>
+          <option value="ts">TypeScript</option>
+          <option value="py">Python</option>
+        </pds-select>
+      `,
+    });
+
+    const actionWrapper = root?.shadowRoot?.querySelector('.pds-select__action');
+    const selectIcon = root?.shadowRoot?.querySelector('.pds-select__select-icon');
+
+    expect(actionWrapper).not.toBeNull();
+    expect(selectIcon).toBeNull(); // Multiple selects don't have the dropdown icon
   });
 });

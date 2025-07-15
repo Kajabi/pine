@@ -6,6 +6,9 @@ import type { Attributes } from '@utils/attributes';
 import { inheritAttributes, inheritAriaAttributes } from '@utils/attributes';
 import { danger } from '@pine-ds/icons/icons';
 
+/**
+ * @slot action - Content to be displayed in the label area, typically for help icons or links
+ */
 @Component({
   tag: 'pds-textarea',
   styleUrls: [
@@ -137,6 +140,11 @@ export class PdsTextarea {
 
   @State() hasFocus = false;
 
+  /**
+   * If true, the textarea has action content in the label area
+   */
+  @State() hasAction = false;
+
   @Watch('debounce')
   protected debounceChanged() {
     const { pdsInput, debounce, originalPdsInput } = this;
@@ -232,10 +240,23 @@ export class PdsTextarea {
       ...inheritAriaAttributes(this.el),
       ...inheritAttributes(this.el),
     };
+    this.hasAction = this.el.querySelector('[slot="action"]') !== null;
   }
 
   componentDidLoad() {
     this.originalPdsInput = this.pdsInput;
+  }
+
+  private renderAction() {
+    const hasAction = this.el.querySelector('[slot="action"]') !== null;
+    if (hasAction) {
+      return (
+        <div class="pds-textarea__action" part="action">
+          <slot name="action"></slot>
+        </div>
+      );
+    }
+    return null;
   }
 
   render() {
@@ -245,10 +266,14 @@ export class PdsTextarea {
       <Host
         aria-disabled={this.disabled ? 'true' : null}
         aria-readonly={this.readonly ? 'true' : null}
+        has-action={this.hasAction ? 'true' : null}
       >
         <div class="pds-textarea">
           {this.label &&
-            <label htmlFor={this.componentId}>{this.label}</label>
+            <div class="pds-textarea__label-wrapper">
+              <label htmlFor={this.componentId}>{this.label}</label>
+              {this.renderAction()}
+            </div>
           }
           <textarea
             ref={(el) => this.nativeTextarea = el }

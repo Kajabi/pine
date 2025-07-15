@@ -145,9 +145,28 @@
   gap: var(--pine-dimension-2xs);
 }
 
+.pds-input__label-wrapper {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-block-end: var(--pine-dimension-2xs);
+}
+
 .pds-input__label {
   color: var(--pine-color-text-active);
   margin-block-end: var(--pine-dimension-2xs);
+}
+
+// When label is inside wrapper, remove its margin
+.pds-input__label-wrapper .pds-input__label {
+  margin-block-end: 0;
+}
+
+.pds-input__action {
+  align-items: center;
+  display: flex;
+  gap: var(--pine-dimension-xs);
+  margin-inline-start: var(--pine-dimension-xs);
 }
 
 .pds-input__field-wrapper {

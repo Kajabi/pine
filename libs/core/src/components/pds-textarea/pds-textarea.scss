@@ -14,9 +14,28 @@
   flex-direction: column;
 }
 
+.pds-textarea__label-wrapper {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-block-end: var(--pine-dimension-xs);
+}
+
+.pds-textarea__action {
+  align-items: center;
+  display: flex;
+  gap: var(--pine-dimension-xs);
+  margin-inline-start: var(--pine-dimension-xs);
+}
+
 label {
   display: block;
   margin-block-end: var(--pine-dimension-xs);
+}
+
+// When label is inside wrapper, remove its margin
+.pds-textarea__label-wrapper label {
+  margin-block-end: 0;
 }
 
 .pds-textarea__field {

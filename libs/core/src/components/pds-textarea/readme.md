@@ -49,6 +49,20 @@ Type: `Promise<void>`
 
 
 
+## Slots
+
+| Slot       | Description                                                                  |
+| ---------- | ---------------------------------------------------------------------------- |
+| `"action"` | Content to be displayed in the label area, typically for help icons or links |
+
+
+## Shadow Parts
+
+| Part       | Description |
+| ---------- | ----------- |
+| `"action"` |             |
+
+
 ## Dependencies
 
 ### Depends on

@@ -1,4 +1,4 @@
-import { newE2EPage } from "@stencil/core/testing";
+import { newE2EPage } from '@stencil/core/testing';
 
 describe('pds-input', () => {
   it('renders toggle of disabled state', async () => {
@@ -102,5 +102,41 @@ describe('pds-input', () => {
 
     expect(inputSpy).toHaveReceivedEvent();
     expect(inputSpy.events[0].detail.value).toBe('yoda-yoda');
+  });
+
+  it('renders action slot content when provided', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+        <pds-input label="Email">
+          <a slot="action" href="#">Forgot password?</a>
+        </pds-input>
+      `);
+
+    const actionSlot = await page.find('pds-input >>> .pds-input__action');
+    expect(actionSlot).not.toBeNull();
+
+    const slotContent = await page.find('pds-input a[slot="action"]');
+    expect(await slotContent.innerText).toBe('Forgot password?');
+  });
+
+  it('does not render action wrapper when no action content is provided', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-input label="Email"></pds-input>');
+
+    const actionSlot = await page.find('pds-input >>> .pds-input__action');
+    expect(actionSlot).toBeNull();
+  });
+
+  it('sets has-action attribute when action slot has content', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+        <pds-input label="Username">
+          <button slot="action">Help</button>
+        </pds-input>
+      `);
+
+    const component = await page.find('pds-input');
+    expect(component).toHaveAttribute('has-action');
+    expect(await component.getAttribute('has-action')).toBe('true');
   });
 });
