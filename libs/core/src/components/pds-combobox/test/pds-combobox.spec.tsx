@@ -20,7 +20,7 @@ describe('pds-combobox', () => {
       <pds-combobox component-id="test-combobox">
         <mock:shadow-root>
           <div class="pds-combobox" tabindex="-1">
-            <input aria-autocomplete="list" aria-controls="pds-combobox-listbox" aria-disabled="false" aria-expanded="false" autocomplete="off" class="pds-combobox__input" id="test-combobox" role="combobox" type="text" value="" />
+            <input aria-autocomplete="list" aria-controls="pds-combobox-listbox" aria-disabled="false" aria-expanded="false" autocomplete="off" class="pds-combobox__input" id="test-combobox" part="input" role="combobox" style="width: fit-content;" type="text" value="" />
             <div style="display: none;">
               <slot></slot>
             </div>
@@ -594,8 +594,11 @@ describe('pds-combobox', () => {
     const mockOption = {
       value: 'cat',
       label: 'Cat',
-      hasAttribute: jest.fn(() => true),
+      hasAttribute: jest.fn(() => false), // No longer relevant since we use React state
     } as unknown as HTMLOptionElement;
+
+    // Use centralized state management to set selection
+    (component as any).setSelectedOption(mockOption);
 
     component.filteredOptions = [mockOption];
     component.isOpen = true;
@@ -716,6 +719,8 @@ describe('pds-combobox', () => {
     const mockUnselectedOption = createMockOption('dog', 'Dog', false);
 
     component.optionEls = [mockSelectedOption, mockUnselectedOption];
+    // Use centralized state management
+    (component as any).setSelectedOption(mockSelectedOption);
 
     // Initially set value to match selected option
     component.value = 'Cat';
@@ -764,5 +769,333 @@ describe('pds-combobox', () => {
 
     // Value should remain unchanged since no option is selected
     expect(component.value).toBe('bird');
+  });
+
+  // Tests for new custom layout features
+  describe('Custom Option Layouts', () => {
+    it('renders custom option layouts when enabled', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox" custom-option-layouts></pds-combobox>`,
+      });
+
+      const component = page.rootInstance;
+      expect(component.customOptionLayouts).toBe(true);
+    });
+
+    it('detects layout options correctly', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox" custom-option-layouts></pds-combobox>`,
+      });
+
+      const component = page.rootInstance;
+
+      // Mock option with data-layout attribute
+      const mockLayoutOption = {
+        ...createMockOption('paypal', 'PayPal'),
+        hasAttribute: jest.fn((attr: string) => attr === 'data-layout'),
+        innerHTML: '<pds-icon icon="card-paypal"></pds-icon>PayPal',
+      } as unknown as HTMLOptionElement;
+
+      const mockRegularOption = {
+        ...createMockOption('cash', 'Cash'),
+        hasAttribute: jest.fn((attr: string) => attr === 'selected' && false),
+      } as unknown as HTMLOptionElement;
+
+      expect(component.isOptionLayout(mockLayoutOption)).toBe(true);
+      expect(component.isOptionLayout(mockRegularOption)).toBe(false);
+    });
+
+    it('filters layout options by data-search-text', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox" custom-option-layouts mode="filter"></pds-combobox>`,
+      });
+
+      const component = page.rootInstance;
+
+      // Mock layout option with data-search-text
+      const mockLayoutOption = {
+        ...createMockOption('paypal', 'PayPal'),
+        hasAttribute: jest.fn((attr: string) => attr === 'data-layout'),
+        getAttribute: jest.fn((attr: string) => attr === 'data-search-text' ? 'PayPal digital payments' : null),
+        textContent: 'PayPal',
+      } as unknown as HTMLOptionElement;
+
+      component.optionEls = [mockLayoutOption];
+      component.value = 'digital';
+      component.filterOptions();
+
+      expect(component.filteredOptions).toContain(mockLayoutOption);
+    });
+
+    it('renders layout options with innerHTML', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox" custom-option-layouts></pds-combobox>`,
+      });
+
+      const component = page.rootInstance;
+
+      // Mock layout option
+      const mockLayoutOption = {
+        ...createMockOption('paypal', 'PayPal'),
+        hasAttribute: jest.fn((attr: string) => attr === 'data-layout'),
+        innerHTML: '<pds-icon icon="card-paypal"></pds-icon>PayPal',
+      } as unknown as HTMLOptionElement;
+
+      component.filteredOptions = [mockLayoutOption];
+      component.isOpen = true;
+      await page.waitForChanges();
+
+      const optionWrapper = page.root?.shadowRoot?.querySelector('.pds-combobox__option-layout-wrapper');
+      expect(optionWrapper).not.toBeNull();
+    });
+  });
+
+  describe('Custom Trigger Content', () => {
+    it('renders custom trigger content when enabled', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox" trigger="button" custom-trigger-content></pds-combobox>`,
+      });
+
+      const component = page.rootInstance;
+      expect(component.customTriggerContent).toBe(true);
+    });
+
+    it('uses selected option layout for trigger content', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox" trigger="button" custom-trigger-content custom-option-layouts></pds-combobox>`,
+      });
+
+      const component = page.rootInstance;
+
+      // Mock selected layout option
+      const mockLayoutOption = {
+        ...createMockOption('paypal', 'PayPal', true),
+        hasAttribute: jest.fn((attr: string) => attr === 'data-layout' || (attr === 'selected' && true)),
+        innerHTML: '<pds-icon icon="card-paypal"></pds-icon>PayPal',
+      } as unknown as HTMLOptionElement;
+
+      component.selectedOption = mockLayoutOption;
+      component.optionEls = [mockLayoutOption];
+      await page.waitForChanges();
+
+      expect(component.selectedHasLayout).toBe(true);
+      expect(component.selectedLayoutContent).toContain('PayPal');
+    });
+
+         it('updates trigger content when option selection changes', async () => {
+       const page = await newSpecPage({
+         components: [PdsCombobox],
+         html: `<pds-combobox component-id="test-combobox" trigger="button" custom-trigger-content custom-option-layouts></pds-combobox>`,
+       });
+
+       const component = page.rootInstance;
+
+       // Mock layout option
+       const mockLayoutOption = {
+         ...createMockOption('paypal', 'PayPal'),
+         hasAttribute: jest.fn((attr: string) => attr === 'data-layout'),
+         getAttribute: jest.fn((attr: string) => attr === 'data-search-text' ? null : null),
+         innerHTML: '<pds-icon icon="card-paypal"></pds-icon>PayPal',
+         setAttribute: jest.fn(),
+         removeAttribute: jest.fn(),
+       } as unknown as HTMLOptionElement;
+
+      component.optionEls = [mockLayoutOption];
+
+      // Initially no selection
+      expect(component.selectedOption).toBeNull();
+
+      // Select option
+      component.handleOptionClick(mockLayoutOption);
+      await page.waitForChanges();
+
+             expect(component.selectedOption).toBe(mockLayoutOption);
+       expect((component as any).selectedOptionLayoutContent).toContain('PayPal');
+    });
+  });
+
+
+
+  describe('Trigger Width', () => {
+    it('applies trigger width to input trigger', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox" trigger="input" trigger-width="300px"></pds-combobox>`,
+      });
+
+             const input = root?.shadowRoot?.querySelector('input') as HTMLInputElement;
+       expect(input?.style.width).toBe('300px');
+    });
+
+    it('applies trigger width to button trigger', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox" trigger="button" trigger-width="250px"></pds-combobox>`,
+      });
+
+             const button = root?.shadowRoot?.querySelector('.pds-combobox__button-trigger') as HTMLElement;
+       expect(button?.style.width).toBe('250px');
+    });
+
+    it('uses default trigger width when not specified', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox" trigger="input"></pds-combobox>`,
+      });
+
+             const input = root?.shadowRoot?.querySelector('input') as HTMLInputElement;
+       expect(input?.style.width).toBe('fit-content');
+    });
+  });
+
+  describe('Methods', () => {
+    it('getSelectedValue returns selected option value', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
+      });
+
+      const component = page.rootInstance;
+
+      // Mock selected option
+      const mockOption = createMockOption('paypal', 'PayPal', true);
+      component.selectedOption = mockOption;
+
+      const selectedValue = await component.getSelectedValue();
+      expect(selectedValue).toBe('paypal');
+    });
+
+    it('getSelectedValue returns null when no option is selected', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
+      });
+
+      const component = page.rootInstance;
+      component.selectedOption = null;
+
+      const selectedValue = await component.getSelectedValue();
+      expect(selectedValue).toBeNull();
+    });
+  });
+
+  describe('Combined Features', () => {
+         it('handles both custom trigger content and option layouts together', async () => {
+       const page = await newSpecPage({
+         components: [PdsCombobox],
+         html: `<pds-combobox component-id="test-combobox" trigger="button" custom-trigger-content custom-option-layouts></pds-combobox>`,
+       });
+
+       const component = page.rootInstance;
+
+       // Mock layout option
+       const mockLayoutOption = {
+         ...createMockOption('paypal', 'PayPal'),
+         hasAttribute: jest.fn((attr: string) => attr === 'data-layout'),
+         getAttribute: jest.fn((attr: string) => attr === 'data-search-text' ? null : null),
+         innerHTML: '<pds-icon icon="card-paypal"></pds-icon>PayPal',
+         setAttribute: jest.fn(),
+         removeAttribute: jest.fn(),
+       } as unknown as HTMLOptionElement;
+
+      component.optionEls = [mockLayoutOption];
+      component.filteredOptions = [mockLayoutOption];
+      component.isOpen = true;
+      await page.waitForChanges();
+
+      // Check that option renders with layout
+      const optionWrapper = page.root?.shadowRoot?.querySelector('.pds-combobox__option-layout-wrapper');
+      expect(optionWrapper).not.toBeNull();
+
+      // Select the option
+      component.handleOptionClick(mockLayoutOption);
+      await page.waitForChanges();
+
+      // Check that trigger content is updated
+      expect(component.selectedHasLayout).toBe(true);
+      expect(component.selectedLayoutContent).toContain('PayPal');
+    });
+
+    it('filters layout options correctly with search text', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox" custom-option-layouts mode="filter"></pds-combobox>`,
+      });
+
+      const component = page.rootInstance;
+
+      // Mock layout options with search text
+      const mockPayPalOption = {
+        ...createMockOption('paypal', 'PayPal'),
+        hasAttribute: jest.fn((attr: string) => attr === 'data-layout'),
+        getAttribute: jest.fn((attr: string) => attr === 'data-search-text' ? 'PayPal digital payments' : null),
+        textContent: 'PayPal',
+      } as unknown as HTMLOptionElement;
+
+      const mockStripeOption = {
+        ...createMockOption('stripe', 'Stripe'),
+        hasAttribute: jest.fn((attr: string) => attr === 'data-layout'),
+        getAttribute: jest.fn((attr: string) => attr === 'data-search-text' ? 'Stripe credit card' : null),
+        textContent: 'Stripe',
+      } as unknown as HTMLOptionElement;
+
+      component.optionEls = [mockPayPalOption, mockStripeOption];
+      component.value = 'digital';
+      component.filterOptions();
+
+      expect(component.filteredOptions).toContain(mockPayPalOption);
+      expect(component.filteredOptions).not.toContain(mockStripeOption);
+    });
+  });
+
+  describe('Accessibility', () => {
+    it('renders with proper CSS parts for external styling', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox" trigger="input"></pds-combobox>`,
+      });
+
+      const input = root?.shadowRoot?.querySelector('input');
+      expect(input?.getAttribute('part')).toBe('input');
+    });
+
+    it('renders button trigger with proper CSS parts', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox" trigger="button"></pds-combobox>`,
+      });
+
+      const button = root?.shadowRoot?.querySelector('.pds-combobox__button-trigger');
+      expect(button?.getAttribute('part')).toBe('button-trigger');
+    });
+
+    it('maintains proper ARIA attributes with custom layouts', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox" custom-option-layouts></pds-combobox>`,
+      });
+
+      const component = page.rootInstance;
+
+      // Mock layout option
+      const mockLayoutOption = {
+        ...createMockOption('paypal', 'PayPal'),
+        hasAttribute: jest.fn((attr: string) => attr === 'data-layout'),
+      } as unknown as HTMLOptionElement;
+
+      component.filteredOptions = [mockLayoutOption];
+      component.isOpen = true;
+      await page.waitForChanges();
+
+      const option = page.root?.shadowRoot?.querySelector('.pds-combobox__option');
+      expect(option?.getAttribute('role')).toBe('option');
+      expect(option?.getAttribute('aria-selected')).toBe('false');
+    });
   });
 });

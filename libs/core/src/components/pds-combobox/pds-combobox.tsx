@@ -1,9 +1,11 @@
 import { Component, Element, Event, EventEmitter, h, Host, Prop, State, Watch, Method } from '@stencil/core';
 import type { BasePdsProps } from '@utils/interfaces';
 import { computePosition, flip, offset, shift } from '@floating-ui/dom';
+import DOMPurify from 'dompurify';
 
 /**
  * @slot option - Option elements for the combobox dropdown
+ * @slot trigger-content - Custom content for the button trigger when customTriggerContent is true
  */
 @Component({
   tag: 'pds-combobox',
@@ -20,48 +22,24 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() componentId!: string;
 
   /**
-   * Text to be displayed as the combobox label.
+   * Enable custom layout content for options. Options with data-layout attribute will render their HTML content.
+   * ⚠️ Security Warning: Only use with trusted content. Basic XSS protection is applied, but avoid user-generated content.
+   * @default false
    */
-  @Prop() label?: string;
+  @Prop() customOptionLayouts: boolean = false;
 
   /**
-   * Visually hides the label text for instances where only the combobox should be displayed.
-   * Label remains accessible to assistive technology such as screen readers.
+   * Enable custom layout content for the button trigger via the trigger-content slot.
+   * When true, uses slot content for initial state but updates dynamically with selected option layout.
+   * ⚠️ Security Warning: Only use with trusted content. Basic XSS protection is applied, but avoid user-generated content.
+   * @default false
    */
-  @Prop() hideLabel: boolean = false;
-
-  /**
-   * Placeholder text for the input field.
-   */
-  @Prop() placeholder?: string;
-
-  /**
-   * The value of the combobox input.
-   */
-  @Prop({ mutable: true }) value: string = '';
+  @Prop() customTriggerContent: boolean = false;
 
   /**
    * If true, the combobox is disabled.
    */
   @Prop() disabled: boolean = false;
-
-  /**
-   * Determines the combobox mode: 'filter' (filter options as you type) or 'select-only' (show all options).
-   * @default 'filter'
-   */
-  @Prop() mode: 'filter' | 'select-only' = 'filter';
-
-  /**
-   * Determines the combobox trigger: 'input' (editable input) or 'button' (button-like, non-editable).
-   * @default 'input'
-   */
-  @Prop() trigger: 'input' | 'button' = 'input';
-
-  /**
-   * The visual variant for the button trigger. Matches Pine button variants.
-   * @default 'secondary'
-   */
-  @Prop() triggerVariant: 'secondary' | 'primary' | 'accent' | 'destructive' = 'secondary';
 
   /**
    * Placement of the dropdown relative to the trigger.
@@ -76,10 +54,55 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() dropdownWidth: string = '236px';
 
   /**
+   * Visually hides the label text for instances where only the combobox should be displayed.
+   * Label remains accessible to assistive technology such as screen readers.
+   */
+  @Prop() hideLabel: boolean = false;
+
+  /**
+   * Text to be displayed as the combobox label.
+   */
+  @Prop() label?: string;
+
+  /**
    * Maximum height of the dropdown. Can be any valid CSS height value (e.g., '200px', '10rem').
    * When content exceeds this height, the dropdown will scroll.
    */
   @Prop() maxHeight?: string;
+
+  /**
+   * Determines the combobox mode: 'filter' (filter options as you type) or 'select-only' (show all options).
+   * @default 'filter'
+   */
+  @Prop() mode: 'filter' | 'select-only' = 'filter';
+
+  /**
+   * Placeholder text for the input field.
+   */
+  @Prop() placeholder?: string;
+
+  /**
+   * Determines the combobox trigger: 'input' (editable input) or 'button' (button-like, non-editable).
+   * @default 'input'
+   */
+  @Prop() trigger: 'input' | 'button' = 'input';
+
+  /**
+   * Width of the trigger (button or input). Any valid CSS width value.
+   * @default 'fit-content'
+   */
+  @Prop() triggerWidth: string = 'fit-content';
+
+  /**
+   * The visual variant for the button trigger. Matches Pine button variants.
+   * @default 'secondary'
+   */
+  @Prop() triggerVariant: 'secondary' | 'primary' | 'accent' | 'destructive' = 'secondary';
+
+  /**
+   * The value of the combobox input.
+   */
+  @Prop({ mutable: true }) value: string = '';
 
   /**
    * Emitted when the value changes.
@@ -87,9 +110,9 @@ export class PdsCombobox implements BasePdsProps {
   @Event() pdsComboboxChange!: EventEmitter<{ value: string }>;
 
   /**
-   * Internal state for dropdown open/close
+   * Internal state for filtered options
    */
-  @State() isOpen: boolean = false;
+  @State() filteredOptions: HTMLOptionElement[] = [];
 
   /**
    * Internal state for the currently highlighted option index
@@ -97,9 +120,19 @@ export class PdsCombobox implements BasePdsProps {
   @State() highlightedIndex: number = -1;
 
   /**
-   * Internal state for filtered options
+   * Internal state for dropdown open/close
    */
-  @State() filteredOptions: HTMLOptionElement[] = [];
+  @State() isOpen: boolean = false;
+
+  /**
+   * Internal state for the currently selected option
+   */
+  @State() selectedOption: HTMLOptionElement | null = null;
+
+  /**
+   * Internal state for the sanitized layout content of the selected option
+   */
+  @State() selectedOptionLayoutContent: string = '';
 
   private inputEl?: HTMLInputElement;
   private optionEls: HTMLOptionElement[] = [];
@@ -115,12 +148,27 @@ export class PdsCombobox implements BasePdsProps {
     this.filterOptions();
   }
 
+  @Watch('selectedOption')
+  handleSelectedOptionChange() {
+    // Update the layout content when selected option changes
+    this.selectedOptionLayoutContent = this.selectedOption && this.isOptionLayout(this.selectedOption)
+      ? this.getOptionLayoutContent(this.selectedOption)
+      : '';
+  }
+
   private updateOptions() {
     // Get all <option> elements from the slot
-    const slot = this.el.shadowRoot?.querySelector('slot');
+    const slot = this.el.shadowRoot?.querySelector('slot[name="option"], slot:not([name])');
     if (slot) {
       this.optionEls = (slot as HTMLSlotElement).assignedElements({ flatten: true })
         .filter(el => el.tagName === 'OPTION') as HTMLOptionElement[];
+
+      // Set initial selected option if one exists (only check DOM on initialization)
+      if (!this.selectedOption) {
+        const initialSelected = this.optionEls.find(opt => opt.hasAttribute('selected')) || null;
+        this.setSelectedOption(initialSelected);
+      }
+
       this.filterOptions();
     }
   }
@@ -130,14 +178,75 @@ export class PdsCombobox implements BasePdsProps {
     return option.label || option.textContent || '';
   }
 
+  // Helper method to get option layout content
+  private getOptionLayoutContent(option: HTMLOptionElement): string {
+    return this.sanitizeHtml(option.innerHTML || '');
+  }
+
+      // HTML sanitization using DOMPurify library to prevent XSS attacks
+  private sanitizeHtml(html: string): string {
+    // Configure DOMPurify to allow Pine Design System components while removing dangerous content
+    const config = {
+      // Allow all custom elements (including pds-* components)
+      CUSTOM_ELEMENT_HANDLING: {
+        tagNameCheck: (tagName: string) => {
+          // Allow all pds-* tags and standard safe HTML tags
+          return tagName.startsWith('pds-') || /^[a-z]+$/i.test(tagName);
+        },
+        attributeNameCheck: (attr: string) => {
+          // Allow standard HTML attributes, data-* attributes, and Pine component attributes
+          return /^[a-zA-Z][a-zA-Z0-9-]*$/.test(attr) || attr.startsWith('data-') || attr.startsWith('aria-');
+        },
+        allowCustomizedBuiltInElements: false,
+      },
+      // Allow standard safe attributes
+      ALLOW_DATA_ATTR: true,
+      ALLOW_ARIA_ATTR: true,
+      // Specifically forbid dangerous tags
+      FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'form', 'input', 'textarea', 'select', 'button', 'style'],
+      // Forbid all event handler attributes
+      FORBID_ATTR: [
+        'onerror', 'onload', 'onclick', 'onmouseover', 'onmouseout', 'onmousemove',
+        'onfocus', 'onblur', 'onchange', 'onsubmit', 'onkeydown', 'onkeyup', 'onkeypress',
+        'onmousedown', 'onmouseup', 'ondblclick', 'oncontextmenu', 'onscroll'
+      ],
+      // Safe protocol whitelist
+      ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp|data):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
+    };
+
+    return DOMPurify.sanitize(html, config);
+  }
+
+
+
+  // Helper method to check if option should render as layout
+  private isOptionLayout(option: HTMLOptionElement): boolean {
+    return this.customOptionLayouts && option.hasAttribute('data-layout');
+  }
+
+  // Helper method to check if option is selected (single source of truth)
+  private isOptionSelected(option: HTMLOptionElement): boolean {
+    return this.selectedOption === option;
+  }
+
+  // Helper method to set selected option (centralized state management)
+  private setSelectedOption(option: HTMLOptionElement | null): void {
+    this.selectedOption = option;
+  }
+
   private filterOptions() {
     if (this.mode === 'select-only') {
       this.filteredOptions = this.optionEls;
     } else {
       const val = this.value.toLowerCase();
-      this.filteredOptions = this.optionEls.filter(option =>
-        this.getOptionLabel(option).toLowerCase().includes(val)
-      );
+      this.filteredOptions = this.optionEls.filter(option => {
+        // For layout options, search both text content and data-search-text attribute
+        if (this.isOptionLayout(option)) {
+          const searchText = option.getAttribute('data-search-text') || option.textContent || '';
+          return searchText.toLowerCase().includes(val);
+        }
+        return this.getOptionLabel(option).toLowerCase().includes(val);
+      });
     }
     this.highlightedIndex = -1;
   }
@@ -215,6 +324,14 @@ export class PdsCombobox implements BasePdsProps {
     this.inputEl?.focus();
   }
 
+  /**
+   * Gets the value of the currently selected option.
+   */
+  @Method()
+  async getSelectedValue(): Promise<string | null> {
+    return this.selectedOption ? this.selectedOption.value : null;
+  }
+
   // Event handler for option click
   private onOptionClick = (event: Event) => {
     const idx = Number((event.currentTarget as HTMLElement).getAttribute('data-option-index'));
@@ -235,8 +352,17 @@ export class PdsCombobox implements BasePdsProps {
 
   // Get the label of the selected option
   private get selectedLabel(): string {
-    const selected = this.optionEls.find(opt => opt.hasAttribute('selected'));
-    return selected ? this.getOptionLabel(selected) : '';
+    return this.selectedOption ? this.getOptionLabel(this.selectedOption) : '';
+  }
+
+  // Get the layout content of the selected option for button trigger
+  private get selectedLayoutContent(): string {
+    return this.selectedOptionLayoutContent;
+  }
+
+  // Check if selected option has layout
+  private get selectedHasLayout(): boolean {
+    return this.selectedOption ? this.isOptionLayout(this.selectedOption) : false;
   }
 
   // Handler for button trigger click
@@ -264,18 +390,16 @@ export class PdsCombobox implements BasePdsProps {
       this.isOpen = false;
 
       // If there's a selected option but the input value doesn't match, restore the selected option's value
-      const selectedOption = this.optionEls.find(opt => opt.hasAttribute('selected'));
-      if (selectedOption && this.value !== this.getOptionLabel(selectedOption)) {
-        this.value = this.getOptionLabel(selectedOption);
+      if (this.selectedOption && this.value !== this.getOptionLabel(this.selectedOption)) {
+        this.value = this.getOptionLabel(this.selectedOption);
       }
     }
   };
 
-  private handleOptionClick(option: HTMLOptionElement) {
-    // Remove 'selected' from all options
-    this.optionEls.forEach(opt => opt.removeAttribute('selected'));
-    // Set 'selected' on the chosen option
-    option.setAttribute('selected', '');
+    private handleOptionClick(option: HTMLOptionElement) {
+    // Update reactive state - single source of truth
+    this.setSelectedOption(option);
+
     this.value = this.getOptionLabel(option);
     this.isOpen = false;
     this.pdsComboboxChange.emit({ value: option.value });
@@ -291,8 +415,10 @@ export class PdsCombobox implements BasePdsProps {
         ref={el => (this.listboxEl = el as HTMLElement)}
       >
         {this.filteredOptions.map((option, idx) => {
-          const isSelected = option.hasAttribute('selected');
+          const isSelected = this.isOptionSelected(option);
           const isHighlighted = this.highlightedIndex === idx;
+          const isLayout = this.isOptionLayout(option);
+
           return (
             <li
               key={option.value}
@@ -302,13 +428,18 @@ export class PdsCombobox implements BasePdsProps {
               class={{
                 'pds-combobox__option': true,
                 'pds-combobox__option--highlighted': isHighlighted,
+                'pds-combobox__option--layout': isLayout,
               }}
               data-option-index={idx}
               onMouseDown={this.onOptionMouseDown}
               onClick={this.onOptionClick}
               onMouseEnter={this.onOptionMouseEnter}
             >
-              {this.getOptionLabel(option)}
+              {isLayout ? (
+                <pds-box class="pds-combobox__option-layout-wrapper" innerHTML={this.getOptionLayoutContent(option)} />
+              ) : (
+                this.getOptionLabel(option)
+              )}
               {isSelected && <pds-icon icon="check" size="regular" class="pds-combobox__option-check" />}
             </li>
           );
@@ -316,6 +447,53 @@ export class PdsCombobox implements BasePdsProps {
       </ul>
     );
   }
+
+  // Helper method to render the caret icon
+  private renderCaretIcon() {
+    return <pds-icon icon="caret-down" aria-hidden="true" aria-label="dropdown indicator" class="pds-combobox__button-trigger-chevron" />;
+  }
+
+  // Helper method to render layout content
+  private renderLayoutContent() {
+    return (
+      <div class="pds-combobox__button-trigger-layout-wrapper" innerHTML={this.selectedLayoutContent} />
+    );
+  }
+
+  // Helper method to render default text content
+  private renderDefaultContent() {
+    return (
+      <span class="pds-combobox__button-trigger-label">
+        {this.selectedLabel || this.placeholder}
+      </span>
+    );
+  }
+
+  // Helper method to check if we should show layout content
+  private shouldShowLayoutContent(): boolean {
+    return this.selectedHasLayout && !!this.selectedLayoutContent;
+  }
+
+  private renderButtonTriggerContent() {
+    // Case 1: Custom trigger content with layout priority
+    if (this.customTriggerContent) {
+      if (this.shouldShowLayoutContent()) {
+        return [this.renderLayoutContent(), this.renderCaretIcon()];
+      }
+      // Fall back to slot content when no layout is available
+      return <slot name="trigger-content" />;
+    }
+
+    // Case 2: Standard mode with layout content
+    if (this.shouldShowLayoutContent()) {
+      return [this.renderLayoutContent(), this.renderCaretIcon()];
+    }
+
+    // Case 3: Standard mode with default text content
+    return [this.renderDefaultContent(), this.renderCaretIcon()];
+  }
+
+
 
   render() {
     const triggerClass = `pds-combobox__button-trigger pds-combobox__button-trigger--${this.triggerVariant}`;
@@ -334,6 +512,7 @@ export class PdsCombobox implements BasePdsProps {
                 this.triggerEl = el as HTMLElement;
               }}
               class="pds-combobox__input"
+              style={{ width: this.triggerWidth }}
               type="text"
               role="combobox"
               aria-autocomplete="list"
@@ -350,10 +529,12 @@ export class PdsCombobox implements BasePdsProps {
               onFocus={this.handleFocus}
               onKeyDown={this.handleKeyDown}
               autocomplete="off"
+              part="input"
             />
           ) : (
             <div
               class={triggerClass}
+              style={{ width: this.triggerWidth }}
               role="combobox"
               aria-haspopup="listbox"
               aria-controls="pds-combobox-listbox"
@@ -363,13 +544,12 @@ export class PdsCombobox implements BasePdsProps {
               id={this.componentId}
               tabIndex={0}
               onClick={this.onButtonTriggerClick}
+              data-layout={this.customTriggerContent}
               onKeyDown={this.onButtonTriggerKeyDown}
               ref={el => (this.triggerEl = el as HTMLElement)}
+              part="button-trigger"
             >
-              <span class="pds-combobox__button-trigger-label">
-                {this.selectedLabel || this.placeholder}
-              </span>
-              <pds-icon icon="caret-down" class="pds-combobox__button-trigger-chevron" />
+              {this.renderButtonTriggerContent()}
             </div>
           )}
           {/* Hide the slot so options are not visible */}

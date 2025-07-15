@@ -59,6 +59,8 @@
     "@kajabi-ui/styles": "*",
     "@pine-ds/icons": "*",
     "@stencil/core": "4.28.2",
+    "@types/dompurify": "^3.0.5",
+    "dompurify": "^3.2.6",
     "sortablejs": "^1.15.0",
     "tslib": "^2.6.2"
   },
