@@ -136,79 +136,135 @@ Autocomplete.args = {
   autocomplete: 'given-name',
 };
 
-export const withPrefixIcon = BaseTemplate.bind({});
-withPrefixIcon.args = {
-  componentId: 'pds-input-prefix-icon',
-  label: 'Email',
-  type: 'email',
-  prefix: html`<pds-icon slot="prefix" name="mail" size="small"></pds-icon>`,
-};
+export const withPrefixIcon = (args) => html`<pds-input
+  autocomplete="${args.autocomplete}"
+  component-id="pds-input-prefix-icon"
+  debounce="${args.debounce}"
+  disabled="${args.disabled}"
+  error-message="${args.errorMessage}"
+  helper-message="${args.helperMessage}"
+  invalid="${args.invalid}"
+  label="Email"
+  name="${args.name}"
+  placeholder="${args.placeholder}"
+  readonly="${args.readonly}"
+  required="${args.required}"
+  type="email"
+  value="${args.value}">
+  <pds-icon slot="prefix" name="mail" size="small"></pds-icon>
+</pds-input>`;
 
-export const withSuffixButton = BaseTemplate.bind({});
-withSuffixButton.args = {
-  componentId: 'pds-input-suffix-button',
-  label: 'Search',
-  type: 'text',
-  suffix: html`<pds-button slot="suffix" variant="unstyled" class="pds-input__suffix"><pds-icon name="search" size="small"></pds-icon></pds-button>`,
-};
+export const withSuffixButton = (args) => html`<pds-input
+  autocomplete="${args.autocomplete}"
+  component-id="pds-input-suffix-button"
+  debounce="${args.debounce}"
+  disabled="${args.disabled}"
+  error-message="${args.errorMessage}"
+  helper-message="${args.helperMessage}"
+  invalid="${args.invalid}"
+  label="Search"
+  name="${args.name}"
+  placeholder="${args.placeholder}"
+  readonly="${args.readonly}"
+  required="${args.required}"
+  type="text"
+  value="${args.value}">
+  <pds-button slot="suffix" variant="unstyled" class="pds-input__suffix">
+    <pds-icon name="search" size="small"></pds-icon>
+  </pds-button>
+</pds-input>`;
 
-export const withPrependSelect = BaseTemplate.bind({});
-withPrependSelect.args = {
-  componentId: 'pds-input-prepend-select',
-  label: 'Amount',
-  type: 'text',
-  prepend: html`
-    <pds-select hide-label label="Currency" slot="prepend" class="pds-input__prepend">
-      <option value="USD">USD</option>
-      <option value="EUR">EUR</option>
-      <option value="GBP">GBP</option>
-    </pds-select>
-  `,
-};
+export const withPrependSelect = (args) => html`<pds-input
+  autocomplete="${args.autocomplete}"
+  component-id="pds-input-prepend-select"
+  debounce="${args.debounce}"
+  disabled="${args.disabled}"
+  error-message="${args.errorMessage}"
+  helper-message="${args.helperMessage}"
+  invalid="${args.invalid}"
+  label="Amount"
+  name="${args.name}"
+  placeholder="${args.placeholder}"
+  readonly="${args.readonly}"
+  required="${args.required}"
+  type="text"
+  value="${args.value}">
+  <pds-select hide-label label="Currency" slot="prepend" class="pds-input__prepend" name="currency">
+    <option value="USD">USD</option>
+    <option value="EUR">EUR</option>
+    <option value="GBP">GBP</option>
+  </pds-select>
+</pds-input>`;
 
-export const withAppendSelect = BaseTemplate.bind({});
-withAppendSelect.args = {
-  componentId: 'pds-input-append-select',
-  label: 'Phone',
-  type: 'tel',
-  append: html`
-    <pds-select hide-label slot="append" class="pds-input__append">
-      <option value="mobile">Mobile</option>
-      <option value="home">Home</option>
-      <option value="work">Work</option>
-    </pds-select>
-  `,
-};
+export const withAppendSelect = (args) => html`<pds-input
+  autocomplete="${args.autocomplete}"
+  component-id="pds-input-append-select"
+  debounce="${args.debounce}"
+  disabled="${args.disabled}"
+  error-message="${args.errorMessage}"
+  helper-message="${args.helperMessage}"
+  invalid="${args.invalid}"
+  label="Phone"
+  name="${args.name}"
+  placeholder="${args.placeholder}"
+  readonly="${args.readonly}"
+  required="${args.required}"
+  type="tel"
+  value="${args.value}">
+  <pds-select hide-label slot="append" class="pds-input__append" name="phone-type">
+    <option value="mobile">Mobile</option>
+    <option value="home">Home</option>
+    <option value="work">Work</option>
+  </pds-select>
+</pds-input>`;
 
-export const withPrefixAndAppend = BaseTemplate.bind({});
-withPrefixAndAppend.args = {
-  componentId: 'pds-input-prefix-append',
-  label: 'Amount',
-  type: 'text',
-  prefix: html`<pds-icon name="dollar" size="small"></pds-icon>`,
-  append: html`
-    <pds-select hide-label slot="append" class="pds-input__append">
-      <option value="USD">USD</option>
-      <option value="EUR">EUR</option>
-      <option value="GBP">GBP</option>
-    </pds-select>
-  `,
-};
+export const withPrefixAndAppend = (args) => html`<pds-input
+  autocomplete="${args.autocomplete}"
+  component-id="pds-input-prefix-append"
+  debounce="${args.debounce}"
+  disabled="${args.disabled}"
+  error-message="${args.errorMessage}"
+  helper-message="${args.helperMessage}"
+  invalid="${args.invalid}"
+  label="Amount"
+  name="${args.name}"
+  placeholder="${args.placeholder}"
+  readonly="${args.readonly}"
+  required="${args.required}"
+  type="text"
+  value="${args.value}">
+  <pds-icon slot="prefix" name="dollar" size="small"></pds-icon>
+  <pds-select hide-label slot="append" class="pds-input__append" name="currency">
+    <option value="USD">USD</option>
+    <option value="EUR">EUR</option>
+    <option value="GBP">GBP</option>
+  </pds-select>
+</pds-input>`;
 
-export const withPrependAndSuffix = BaseTemplate.bind({});
-withPrependAndSuffix.args = {
-  componentId: 'pds-input-prepend-suffix',
-  label: 'Amount',
-  type: 'text',
-  prepend: html`
-    <pds-select hide-label slot="prepend" class="pds-input__prepend">
-      <option value="USD">USD</option>
-      <option value="EUR">EUR</option>
-      <option value="GBP">GBP</option>
-    </pds-select>
-  `,
-  suffix: html`<pds-button slot="suffix" variant="unstyled" class="pds-input__suffix"><pds-icon name="remove-circle" size="small"></pds-icon></pds-button>`,
-};
+export const withPrependAndSuffix = (args) => html`<pds-input
+  autocomplete="${args.autocomplete}"
+  component-id="pds-input-prepend-suffix"
+  debounce="${args.debounce}"
+  disabled="${args.disabled}"
+  error-message="${args.errorMessage}"
+  helper-message="${args.helperMessage}"
+  invalid="${args.invalid}"
+  label="Amount"
+  name="${args.name}"
+  placeholder="${args.placeholder}"
+  readonly="${args.readonly}"
+  required="${args.required}"
+  type="text"
+  value="${args.value}">
+  <pds-select hide-label slot="prepend" class="pds-input__prepend" name="currency">
+    <option value="USD">USD</option>
+    <option value="EUR">EUR</option>
+    <option value="GBP">GBP</option>
+  </pds-select>
+  <pds-button slot="suffix" variant="unstyled" class="pds-input__suffix">
+    <pds-icon name="remove-circle" size="small"></pds-icon>
+  </pds-button>
+</pds-input>`;
 
 export const withActionLink = (args) => html`<pds-input
   autocomplete="${args.autocomplete}"
