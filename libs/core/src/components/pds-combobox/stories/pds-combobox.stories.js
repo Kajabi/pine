@@ -21,6 +21,11 @@ export default {
   decorators: [withActions],
   title: 'components/Combobox',
   parameters: {
+    actions: {
+      handles: [
+        'onpdscomboboxchange', 'pdsComboboxChange',
+      ],
+    },
     layout: 'centered',
   },
 };
