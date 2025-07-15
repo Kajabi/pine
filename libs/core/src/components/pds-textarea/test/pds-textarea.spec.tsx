@@ -412,143 +412,141 @@ it('should set focus on the input element when setFocus is called', async() => {
     expect(inputEventSpy).toHaveBeenCalled();
   });
 
-  describe('action slot', () => {
-    it('renders action slot content when provided', async () => {
-      const {root} = await newSpecPage({
-        components: [PdsTextarea],
-        html: `
-          <pds-textarea component-id="textarea-1" label="Description">
-            <span slot="action">0/500</span>
-          </pds-textarea>
-        `,
-      });
-
-      expect(root).toEqualHtml(`
-        <pds-textarea component-id="textarea-1" has-action="true" label="Description">
-          <mock:shadow-root>
-            <div class="pds-textarea">
-              <div class="pds-textarea__label-wrapper">
-                <label htmlFor="textarea-1">Description</label>
-                <div class="pds-textarea__action" part="action">
-                  <slot name="action"></slot>
-                </div>
-              </div>
-              <textarea class="pds-textarea__field" id="textarea-1" name="textarea-1"></textarea>
-            </div>
-          </mock:shadow-root>
+  it('renders action slot content when provided', async () => {
+    const {root} = await newSpecPage({
+      components: [PdsTextarea],
+      html: `
+        <pds-textarea component-id="textarea-1" label="Description">
           <span slot="action">0/500</span>
         </pds-textarea>
-      `);
+      `,
     });
 
-    it('does not render action slot when no content is provided', async () => {
-      const {root} = await newSpecPage({
-        components: [PdsTextarea],
-        html: `<pds-textarea component-id="textarea-1" label="Description"></pds-textarea>`,
-      });
-
-      expect(root).toEqualHtml(`
-        <pds-textarea component-id="textarea-1" label="Description">
-          <mock:shadow-root>
-            <div class="pds-textarea">
-              <div class="pds-textarea__label-wrapper">
-                <label htmlFor="textarea-1">Description</label>
+    expect(root).toEqualHtml(`
+      <pds-textarea component-id="textarea-1" has-action="true" label="Description">
+        <mock:shadow-root>
+          <div class="pds-textarea">
+            <div class="pds-textarea__label-wrapper">
+              <label htmlFor="textarea-1">Description</label>
+              <div class="pds-textarea__action" part="action">
+                <slot name="action"></slot>
               </div>
-              <textarea class="pds-textarea__field" id="textarea-1" name="textarea-1"></textarea>
             </div>
-          </mock:shadow-root>
+            <textarea class="pds-textarea__field" id="textarea-1" name="textarea-1"></textarea>
+          </div>
+        </mock:shadow-root>
+        <span slot="action">0/500</span>
+      </pds-textarea>
+    `);
+  });
+
+  it('does not render action slot when no content is provided', async () => {
+    const {root} = await newSpecPage({
+      components: [PdsTextarea],
+      html: `<pds-textarea component-id="textarea-1" label="Description"></pds-textarea>`,
+    });
+
+    expect(root).toEqualHtml(`
+      <pds-textarea component-id="textarea-1" label="Description">
+        <mock:shadow-root>
+          <div class="pds-textarea">
+            <div class="pds-textarea__label-wrapper">
+              <label htmlFor="textarea-1">Description</label>
+            </div>
+            <textarea class="pds-textarea__field" id="textarea-1" name="textarea-1"></textarea>
+          </div>
+        </mock:shadow-root>
+      </pds-textarea>
+    `);
+  });
+
+  it('sets has-action attribute when action slot content is present', async () => {
+    const page = await newSpecPage({
+      components: [PdsTextarea],
+      html: `
+        <pds-textarea component-id="textarea-1" label="Comments">
+          <a slot="action" href="#">View guidelines</a>
         </pds-textarea>
-      `);
+      `,
     });
 
-    it('sets has-action attribute when action slot content is present', async () => {
-      const page = await newSpecPage({
-        components: [PdsTextarea],
-        html: `
-          <pds-textarea component-id="textarea-1" label="Comments">
-            <a slot="action" href="#">View guidelines</a>
-          </pds-textarea>
-        `,
-      });
+    const root = page.root;
+    expect(root?.getAttribute('has-action')).toBe('true');
+  });
 
-      const root = page.root;
-      expect(root?.getAttribute('has-action')).toBe('true');
+  it('properly detects action slot presence in componentWillLoad', async () => {
+    const page = await newSpecPage({
+      components: [PdsTextarea],
+      html: `
+        <pds-textarea component-id="textarea-1" label="Bio">
+          <button slot="action">Help</button>
+        </pds-textarea>
+      `,
     });
 
-    it('properly detects action slot presence in componentWillLoad', async () => {
-      const page = await newSpecPage({
-        components: [PdsTextarea],
-        html: `
-          <pds-textarea component-id="textarea-1" label="Bio">
-            <button slot="action">Help</button>
-          </pds-textarea>
-        `,
-      });
+    const component = page.rootInstance;
+    expect(component.hasAction).toBe(true);
+  });
 
-      const component = page.rootInstance;
-      expect(component.hasAction).toBe(true);
+  it('renders action slot with complex content', async () => {
+    const {root} = await newSpecPage({
+      components: [PdsTextarea],
+      html: `
+        <pds-textarea component-id="textarea-1" label="Message">
+          <button slot="action" type="button">
+            <span>Attach file</span>
+          </button>
+        </pds-textarea>
+      `,
     });
 
-    it('renders action slot with complex content', async () => {
-      const {root} = await newSpecPage({
-        components: [PdsTextarea],
-        html: `
-          <pds-textarea component-id="textarea-1" label="Message">
-            <button slot="action" type="button">
-              <span>Attach file</span>
-            </button>
-          </pds-textarea>
-        `,
-      });
+    const actionWrapper = root?.shadowRoot?.querySelector('.pds-textarea__action');
+    expect(actionWrapper).not.toBeNull();
+    expect(actionWrapper?.getAttribute('part')).toBe('action');
+  });
 
-      const actionWrapper = root?.shadowRoot?.querySelector('.pds-textarea__action');
-      expect(actionWrapper).not.toBeNull();
-      expect(actionWrapper?.getAttribute('part')).toBe('action');
+  it('does not render label wrapper when no label is provided', async () => {
+    const {root} = await newSpecPage({
+      components: [PdsTextarea],
+      html: `
+        <pds-textarea component-id="textarea-1">
+          <span slot="action">Help</span>
+        </pds-textarea>
+      `,
     });
 
-    it('does not render label wrapper when no label is provided', async () => {
-      const {root} = await newSpecPage({
-        components: [PdsTextarea],
-        html: `
-          <pds-textarea component-id="textarea-1">
-            <span slot="action">Help</span>
-          </pds-textarea>
-        `,
-      });
+    const labelWrapper = root?.shadowRoot?.querySelector('.pds-textarea__label-wrapper');
+    expect(labelWrapper).toBeNull();
+  });
 
-      const labelWrapper = root?.shadowRoot?.querySelector('.pds-textarea__label-wrapper');
-      expect(labelWrapper).toBeNull();
-    });
-
-    it('renders action slot with value and helper message', async () => {
-      const {root} = await newSpecPage({
-        components: [PdsTextarea],
-        html: `
-          <pds-textarea component-id="textarea-1" label="Bio" value="Hello" helper-message="Max 500 characters">
-            <span slot="action">5/500</span>
-          </pds-textarea>
-        `,
-      });
-
-      expect(root).toEqualHtml(`
-        <pds-textarea component-id="textarea-1" has-action="true" helper-message="Max 500 characters" label="Bio" value="Hello">
-          <mock:shadow-root>
-            <div class="pds-textarea">
-              <div class="pds-textarea__label-wrapper">
-                <label htmlFor="textarea-1">Bio</label>
-                <div class="pds-textarea__action" part="action">
-                  <slot name="action"></slot>
-                </div>
-              </div>
-              <textarea aria-describedby="textarea-1__helper-message" class="pds-textarea__field" id="textarea-1" name="textarea-1">Hello</textarea>
-              <p class="pds-textarea__helper-message" id="textarea-1__helper-message">
-                Max 500 characters
-              </p>
-            </div>
-          </mock:shadow-root>
+  it('renders action slot with value and helper message', async () => {
+    const {root} = await newSpecPage({
+      components: [PdsTextarea],
+      html: `
+        <pds-textarea component-id="textarea-1" label="Bio" value="Hello" helper-message="Max 500 characters">
           <span slot="action">5/500</span>
         </pds-textarea>
-      `);
+      `,
     });
+
+    expect(root).toEqualHtml(`
+      <pds-textarea component-id="textarea-1" has-action="true" helper-message="Max 500 characters" label="Bio" value="Hello">
+        <mock:shadow-root>
+          <div class="pds-textarea">
+            <div class="pds-textarea__label-wrapper">
+              <label htmlFor="textarea-1">Bio</label>
+              <div class="pds-textarea__action" part="action">
+                <slot name="action"></slot>
+              </div>
+            </div>
+            <textarea aria-describedby="textarea-1__helper-message" class="pds-textarea__field" id="textarea-1" name="textarea-1">Hello</textarea>
+            <p class="pds-textarea__helper-message" id="textarea-1__helper-message">
+              Max 500 characters
+            </p>
+          </div>
+        </mock:shadow-root>
+        <span slot="action">5/500</span>
+      </pds-textarea>
+    `);
   });
 });
