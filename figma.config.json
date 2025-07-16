@@ -1,0 +1,12 @@
+{
+  "codeConnect": {
+    "include": ["libs/core/src/components/**/*.figma.ts"],
+    "parser": "html",
+    "importPaths": {
+      "@pine-ds/core/*": "pine"
+    },
+    "paths": {
+      "pine": ["libs/core/src/components"]
+    }
+  }
+}
