@@ -1,3 +1,26 @@
+## 3.4.0 (2025-07-17)
+
+### Features 🚀
+
+- action slot for pds-input, pds-select, & pds-textarea ([#485](https://github.com/Kajabi/pine/pull/485))
+- **combobox:** add combobox ([#476](https://github.com/Kajabi/pine/pull/476))
+- **pds-property:** add property component to system ([#479](https://github.com/Kajabi/pine/pull/479))
+- **pds-text:** add CSS part support to component ([#481](https://github.com/Kajabi/pine/pull/481))
+- **typography:** standardize form label typography ([#480](https://github.com/Kajabi/pine/pull/480))
+
+### Bug Fixes 🐛
+
+- resolve Sass deprecation warnings ([#482](https://github.com/Kajabi/pine/pull/482))
+
+### Documentation 📄
+
+- **pds-input:** update story implementations to use args for dynamic properties ([#487](https://github.com/Kajabi/pine/pull/487))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.3.0 (2025-06-27)
 
 ### Features 🚀
