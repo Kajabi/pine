@@ -903,6 +903,10 @@ export namespace Components {
          */
         "hideLabel": boolean;
         /**
+          * Icon name to display when using the contained variant.
+         */
+        "icon": string;
+        /**
           * Determines whether or not the radio is invalid.
           * @defaultValue false
          */
@@ -924,6 +928,11 @@ export namespace Components {
           * The value of the radio that is submitted with a form.
          */
         "value": string;
+        /**
+          * Sets the style variant of the radio.
+          * @defaultValue 'default'
+         */
+        "variant": 'default' | 'contained';
     }
     interface PdsRow {
         /**
@@ -2965,6 +2974,10 @@ declare namespace LocalJSX {
          */
         "hideLabel"?: boolean;
         /**
+          * Icon name to display when using the contained variant.
+         */
+        "icon"?: string;
+        /**
           * Determines whether or not the radio is invalid.
           * @defaultValue false
          */
@@ -2990,6 +3003,11 @@ declare namespace LocalJSX {
           * The value of the radio that is submitted with a form.
          */
         "value"?: string;
+        /**
+          * Sets the style variant of the radio.
+          * @defaultValue 'default'
+         */
+        "variant"?: 'default' | 'contained';
     }
     interface PdsRow {
         /**
