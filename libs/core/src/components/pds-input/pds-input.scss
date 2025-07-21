@@ -131,6 +131,10 @@
   }
 }
 
+:host([full-width="true"]) {
+  width: 100%;
+}
+
 :host([invalid="true"]) {
   &::part(prepend),
   &::part(append) {

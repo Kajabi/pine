@@ -191,6 +191,11 @@ export class PdsInput {
   @Prop({mutable: true}) value?: string | number | null = '';
 
   /**
+   * Determines whether or not the input field takes full width of its container.
+   */
+  @Prop() fullWidth?: boolean;
+
+  /**
    * Determines if the input has focus.
    */
   @State() hasFocus = false;
@@ -413,6 +418,7 @@ export class PdsInput {
         has-prepend={this.hasPrepend ? 'true' : null}
         has-append={this.hasAppend ? 'true' : null}
         has-action={this.hasAction ? 'true' : null}
+        full-width={this.fullWidth ? 'true' : null}
       >
         <div class="pds-input">
           {label && (

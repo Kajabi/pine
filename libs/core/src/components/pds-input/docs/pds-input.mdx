@@ -89,6 +89,18 @@ Removes the ability to interact with the text field. If a value is present, that
   <pds-input component-id="pds-input-readonly-example" label="Name" type="email" readonly="true" value="Frank Dux"></pds-input>
 </DocCanvas>
 
+### Full Width
+
+When `full-width` is set to `true`, the input component will occupy the full width of its parent container instead of using its natural inline width.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsInput componentId="pds-input-full-width-example" label="Full Width Input" type="text" fullWidth="true" placeholder="This input takes full width of its container"></PdsInput>',
+    webComponent: '<pds-input component-id="pds-input-full-width-example" label="Full Width Input" type="text" full-width="true" placeholder="This input takes full width of its container"></pds-input>'
+}}>
+  <pds-input component-id="pds-input-full-width-example" label="Full Width Input" type="text" full-width="true" placeholder="This input takes full width of its container"></pds-input>
+</DocCanvas>
+
 ### Helper Message
 
 A `helper-message` is used to provide additional information about how to complete the text field.

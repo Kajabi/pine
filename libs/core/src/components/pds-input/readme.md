@@ -14,6 +14,7 @@
 | `debounce`                 | `debounce`       | Sets the number of milliseconds to wait before updating the value.                                                    | `number`           | `undefined` |
 | `disabled`                 | `disabled`       | Determines whether or not the input field is disabled.                                                                | `boolean`          | `undefined` |
 | `errorMessage`             | `error-message`  | Specifies the error message and provides an error-themed treatment to the field.                                      | `string`           | `undefined` |
+| `fullWidth`                | `full-width`     | Determines whether or not the input field takes full width of its container.                                          | `boolean`          | `undefined` |
 | `helperMessage`            | `helper-message` | Displays a message or hint below the input field.                                                                     | `string`           | `undefined` |
 | `invalid`                  | `invalid`        | Determines whether or not the input field is invalid or throws an error.                                              | `boolean`          | `undefined` |
 | `label`                    | `label`          | Text to be displayed as the input label.                                                                              | `string`           | `undefined` |

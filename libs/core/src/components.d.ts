@@ -649,6 +649,10 @@ export namespace Components {
          */
         "errorMessage"?: string;
         /**
+          * Determines whether or not the input field takes full width of its container.
+         */
+        "fullWidth"?: boolean;
+        /**
           * Displays a message or hint below the input field.
          */
         "helperMessage"?: string;
@@ -2698,6 +2702,10 @@ declare namespace LocalJSX {
           * Specifies the error message and provides an error-themed treatment to the field.
          */
         "errorMessage"?: string;
+        /**
+          * Determines whether or not the input field takes full width of its container.
+         */
+        "fullWidth"?: boolean;
         /**
           * Displays a message or hint below the input field.
          */
