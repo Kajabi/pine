@@ -59,7 +59,7 @@
   font: var(--pine-typography-body-brand-label);
   letter-spacing: var(--pine-letter-spacing);
   min-height: var(--pds-button-min-height);
-  padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
+  padding: calc(var(--pine-dimension-xs) - var(--pine-border-width)) var(--pine-dimension-sm);
   position: relative;
   text-decoration: none;
 

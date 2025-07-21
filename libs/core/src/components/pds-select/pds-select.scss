@@ -66,7 +66,7 @@ select {
   grid-area: field;
   letter-spacing: var(--pine-letter-spacing);
   min-height: var(--pds-select-min-height);
-  padding: calc(var(--pine-dimension-xs) - 1px) var(--pine-dimension-150);
+  padding: calc(var(--pine-dimension-xs) - var(--pine-border-width)) var(--pine-dimension-150);
   padding-inline-end: var(--pine-dimension-450);
   position: relative;
 

@@ -7,7 +7,7 @@
   --pds-input-border-radius: var(--pine-dimension-125);
   --pds-input-border-width: var(--pine-border-width-thin);
   --pds-input-padding-x: var(--pine-dimension-150);
-  --pds-input-padding-y: calc(var(--pine-dimension-xs) - 1px);
+  --pds-input-padding-y: calc(var(--pine-dimension-xs) - var(--pine-border-width));
   --pds-input-font: var(--pine-typography-body);
   --pds-input-text-color: var(--pine-color-text-active);
   --pds-input-placeholder-color: var(--pine-color-text-placeholder);
