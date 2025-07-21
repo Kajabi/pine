@@ -6,7 +6,7 @@
   --pds-button-border-radius-start-start: var(--pine-border-radius-full);
   --pds-button-border-radius-end-end: var(--pine-border-radius-full);
   --pds-button-border-radius-end-start: var(--pine-border-radius-full);
-  --pds-button-min-height: 40px;
+  --pds-button-min-height: var(--pine-dimension-450);
   --color-border-default: transparent;
   --color-border-disabled: transparent;
   --color-border-focus: transparent;
