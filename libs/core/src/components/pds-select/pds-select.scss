@@ -66,7 +66,7 @@ select {
   grid-area: field;
   letter-spacing: var(--pine-letter-spacing);
   min-height: var(--pds-select-min-height);
-  padding: var(--pine-dimension-xs) var(--pine-dimension-150);
+  padding: calc(var(--pine-dimension-xs) - var(--pine-border-width)) var(--pine-dimension-150);
   padding-inline-end: var(--pine-dimension-450);
   position: relative;
 
@@ -111,6 +111,7 @@ select {
 
 .pds-select__error-message,
 .pds-select__helper-message {
+  color: var(--pine-color-text-message);
   font: var(--pine-typography-body-sm-medium);
   margin-block-end: 0;
   margin-block-start: var(--pine-dimension-2xs);
