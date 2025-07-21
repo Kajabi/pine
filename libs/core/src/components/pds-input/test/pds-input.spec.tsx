@@ -118,6 +118,25 @@ describe('pds-input', () => {
     `);
   });
 
+  it('renders full width input', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsInput],
+      html: `<pds-input full-width="true" component-id="field-1" value="Frank Dux"></pds-input>`
+    });
+
+    expect(root).toEqualHtml(`
+    <pds-input component-id="field-1" full-width="true" value="Frank Dux">
+      <mock:shadow-root>
+        <div class="pds-input">
+          <div class="pds-input__field-wrapper">
+            <input id="field-1" class="pds-input__field" type="text" value="Frank Dux" />
+          </div>
+        </div>
+      </mock:shadow-root>
+    </pds-input>
+    `);
+  });
+
   it('renders in invalid state when invalid prop is set', async () => {
     const { root } = await newSpecPage({
       components: [PdsInput],

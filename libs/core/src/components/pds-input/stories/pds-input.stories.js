@@ -9,6 +9,7 @@ export default {
     debounce: null,
     disabled: false,
     errorMessage: null,
+    fullWidth: false,
     helperMessage: null,
     invalid: false,
     max: null,
@@ -43,6 +44,7 @@ const BaseTemplate = (args) => html`<pds-input
   debounce="${args.debounce}"
   disabled="${args.disabled}"
   error-message="${args.errorMessage}"
+  full-width="${args.fullWidth}"
   helper-message="${args.helperMessage}"
   invalid="${args.invalid}"
   label="${args.label}"
@@ -134,6 +136,15 @@ Autocomplete.args = {
   label: 'First name',
   type: 'text',
   autocomplete: 'given-name',
+};
+
+export const FullWidth = BaseTemplate.bind({});
+FullWidth.args = {
+  componentId: 'pds-input-full-width-example',
+  label: 'Full Width Input',
+  type: 'text',
+  fullWidth: true,
+  placeholder: 'This input takes full width of its container',
 };
 
 export const withPrefixIcon = (args) => html`<pds-input
