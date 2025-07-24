@@ -5,7 +5,7 @@ figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=37112
   props: {
     variant: figma.enum('Variant', {
       "page": "primary",
-      "filter": "pill",
+      "filter": "filter",
       "availability": "availability",
     }),
     label: figma.textContent('Label'),
@@ -20,7 +20,7 @@ figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=2537-
   props: {
     variant: figma.enum('Variant', {
       "page": "primary",
-      "filter": "pill",
+      "filter": "filter",
       "availability": "availability",
     }),
     children: figma.children('.Tab base'),
