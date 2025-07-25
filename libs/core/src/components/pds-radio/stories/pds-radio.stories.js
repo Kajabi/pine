@@ -9,6 +9,7 @@ export default {
     invalid: false,
     hideLabel: false,
     required: false,
+    variant: 'default',
   },
   argTypes: extractArgTypes('pds-radio'),
   component: 'pds-radio',
@@ -35,6 +36,8 @@ const BaseTemplate = (args) =>
     required=${args.required}
     value=${args.value}
     invalid=${args.invalid}
+    variant=${args.variant}
+    icon=${args.icon}
   />`;
 
 export const Default = BaseTemplate.bind();
@@ -70,4 +73,40 @@ Invalid.args = {
   errorMessage: 'This is a short error message',
   label: 'Label text',
   invalid: true,
+};
+
+export const Contained = BaseTemplate.bind();
+Contained.args = {
+  componentId: 'contained',
+  label: 'Label text',
+  variant: 'contained',
+  icon: 'star',
+};
+
+export const ContainedChecked = BaseTemplate.bind();
+ContainedChecked.args = {
+  componentId: 'contained-checked',
+  label: 'Label text',
+  variant: 'contained',
+  icon: 'star',
+  checked: true,
+};
+
+export const ContainedDisabled = BaseTemplate.bind();
+ContainedDisabled.args = {
+  componentId: 'contained-disabled',
+  label: 'Label text',
+  variant: 'contained',
+  icon: 'star',
+  disabled: true,
+};
+
+export const ContainedInvalid = BaseTemplate.bind();
+ContainedInvalid.args = {
+  componentId: 'contained-invalid',
+  label: 'Label text',
+  variant: 'contained',
+  icon: 'star',
+  invalid: true,
+  errorMessage: 'This is a short error message',
 };
