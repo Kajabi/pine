@@ -132,6 +132,7 @@ export namespace Components {
      * **Layout Patterns:**
      * - **Horizontal Flow (Default)**: Items are placed side by side
      * - **Vertical Stacking**: Set `direction="column"` for items to stack vertically
+     * - **Main Containers**: Always use `direction="column"` and `fit="true"` for page sections and main content areas
      * - **Grid Layout**: Use inside `pds-row` with `size-*` props for responsive grid
      * **Key Props for Layout:**
      * - `direction`: **CRITICAL** - Controls item orientation (`row` = horizontal, `column` = vertical)
@@ -150,6 +151,15 @@ export namespace Components {
      * <pds-box direction="column" gap="md">
      *   <div>Item 1</div>
      *   <div>Item 2</div> // These will be VERTICAL
+     * </pds-box>
+     * // ✅ MAIN CONTAINERS should use direction="column" and fit="true"
+     * <pds-box direction="column" gap="lg" fit="true">
+     *   <h1>Page Title</h1>
+     *   <p>Page description</p>
+     *   <pds-box direction="row" gap="md">
+     *     <pds-button>Action 1</pds-button>
+     *     <pds-button variant="secondary">Action 2</pds-button>
+     *   </pds-box>
      * </pds-box>
      * // Grid layout inside pds-row
      * <pds-row>
@@ -1844,6 +1854,7 @@ declare global {
      * **Layout Patterns:**
      * - **Horizontal Flow (Default)**: Items are placed side by side
      * - **Vertical Stacking**: Set `direction="column"` for items to stack vertically
+     * - **Main Containers**: Always use `direction="column"` and `fit="true"` for page sections and main content areas
      * - **Grid Layout**: Use inside `pds-row` with `size-*` props for responsive grid
      * **Key Props for Layout:**
      * - `direction`: **CRITICAL** - Controls item orientation (`row` = horizontal, `column` = vertical)
@@ -1862,6 +1873,15 @@ declare global {
      * <pds-box direction="column" gap="md">
      *   <div>Item 1</div>
      *   <div>Item 2</div> // These will be VERTICAL
+     * </pds-box>
+     * // ✅ MAIN CONTAINERS should use direction="column" and fit="true"
+     * <pds-box direction="column" gap="lg" fit="true">
+     *   <h1>Page Title</h1>
+     *   <p>Page description</p>
+     *   <pds-box direction="row" gap="md">
+     *     <pds-button>Action 1</pds-button>
+     *     <pds-button variant="secondary">Action 2</pds-button>
+     *   </pds-box>
      * </pds-box>
      * // Grid layout inside pds-row
      * <pds-row>
@@ -2752,6 +2772,7 @@ declare namespace LocalJSX {
      * **Layout Patterns:**
      * - **Horizontal Flow (Default)**: Items are placed side by side
      * - **Vertical Stacking**: Set `direction="column"` for items to stack vertically
+     * - **Main Containers**: Always use `direction="column"` and `fit="true"` for page sections and main content areas
      * - **Grid Layout**: Use inside `pds-row` with `size-*` props for responsive grid
      * **Key Props for Layout:**
      * - `direction`: **CRITICAL** - Controls item orientation (`row` = horizontal, `column` = vertical)
@@ -2770,6 +2791,15 @@ declare namespace LocalJSX {
      * <pds-box direction="column" gap="md">
      *   <div>Item 1</div>
      *   <div>Item 2</div> // These will be VERTICAL
+     * </pds-box>
+     * // ✅ MAIN CONTAINERS should use direction="column" and fit="true"
+     * <pds-box direction="column" gap="lg" fit="true">
+     *   <h1>Page Title</h1>
+     *   <p>Page description</p>
+     *   <pds-box direction="row" gap="md">
+     *     <pds-button>Action 1</pds-button>
+     *     <pds-button variant="secondary">Action 2</pds-button>
+     *   </pds-box>
      * </pds-box>
      * // Grid layout inside pds-row
      * <pds-row>
@@ -4451,6 +4481,7 @@ declare module "@stencil/core" {
              * **Layout Patterns:**
              * - **Horizontal Flow (Default)**: Items are placed side by side
              * - **Vertical Stacking**: Set `direction="column"` for items to stack vertically
+             * - **Main Containers**: Always use `direction="column"` and `fit="true"` for page sections and main content areas
              * - **Grid Layout**: Use inside `pds-row` with `size-*` props for responsive grid
              * **Key Props for Layout:**
              * - `direction`: **CRITICAL** - Controls item orientation (`row` = horizontal, `column` = vertical)
@@ -4469,6 +4500,15 @@ declare module "@stencil/core" {
              * <pds-box direction="column" gap="md">
              *   <div>Item 1</div>
              *   <div>Item 2</div> // These will be VERTICAL
+             * </pds-box>
+             * // ✅ MAIN CONTAINERS should use direction="column" and fit="true"
+             * <pds-box direction="column" gap="lg" fit="true">
+             *   <h1>Page Title</h1>
+             *   <p>Page description</p>
+             *   <pds-box direction="row" gap="md">
+             *     <pds-button>Action 1</pds-button>
+             *     <pds-button variant="secondary">Action 2</pds-button>
+             *   </pds-box>
              * </pds-box>
              * // Grid layout inside pds-row
              * <pds-row>
