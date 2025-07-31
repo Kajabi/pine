@@ -123,9 +123,54 @@ export namespace Components {
          */
         "variant"?: 'customer' | 'admin';
     }
+    /**
+     * PdsBox - A flexible layout container component
+     * **⚠️ CRITICAL LAYOUT BEHAVIOR:**
+     * - **Default Direction**: Items flow HORIZONTALLY by default (`direction="row"`)
+     * - **For Vertical Stacking**: You MUST explicitly set `direction="column"`
+     * - **Common Mistake**: Expecting vertical stacking without setting direction
+     * **Layout Patterns:**
+     * - **Horizontal Flow (Default)**: Items are placed side by side
+     * - **Vertical Stacking**: Set `direction="column"` for items to stack vertically
+     * - **Main Containers**: Always use `direction="column"` and `fit="true"` for page sections and main content areas
+     * - **Grid Layout**: Use inside `pds-row` with `size-*` props for responsive grid
+     * **Key Props for Layout:**
+     * - `direction`: **CRITICAL** - Controls item orientation (`row` = horizontal, `column` = vertical)
+     * - `size`: Sets column width (1-12 grid system, works best inside pds-row)
+     * - `gap`: Controls spacing between items
+     * - `justifyContent`: Horizontal alignment of items
+     * - `alignItems`: Vertical alignment of items
+     * **Usage Examples:**
+     * ```tsx
+     * // ⚠️ HORIZONTAL flow (default behavior - items side by side)
+     * <pds-box gap="md">
+     *   <div>Item 1</div>
+     *   <div>Item 2</div> // These will be HORIZONTAL
+     * </pds-box>
+     * // ✅ VERTICAL stacking (explicit - items stacked)
+     * <pds-box direction="column" gap="md">
+     *   <div>Item 1</div>
+     *   <div>Item 2</div> // These will be VERTICAL
+     * </pds-box>
+     * // ✅ MAIN CONTAINERS should use direction="column" and fit="true"
+     * <pds-box direction="column" gap="lg" fit="true">
+     *   <h1>Page Title</h1>
+     *   <p>Page description</p>
+     *   <pds-box direction="row" gap="md">
+     *     <pds-button>Action 1</pds-button>
+     *     <pds-button variant="secondary">Action 2</pds-button>
+     *   </pds-box>
+     * </pds-box>
+     * // Grid layout inside pds-row
+     * <pds-row>
+     *   <pds-box size-md="6">Half width</pds-box>
+     *   <pds-box size-md="6">Half width</pds-box>
+     * </pds-row>
+     * ```
+     */
     interface PdsBox {
         /**
-          * Defines how items within the box are aligned.
+          * Defines how items within the box are aligned.  **Layout Impact:** - `start`: Items align to the start (top for column, left for row) - `center`: Items align to the center - `end`: Items align to the end (bottom for column, right for row) - `baseline`: Items align to their text baseline - `stretch`: Items stretch to fill the container (default)
           * @defaultValue start
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
@@ -156,12 +201,12 @@ export namespace Components {
          */
         "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
         /**
-          * Defines the orientation of the box items.
+          * Defines the orientation of the box items.  **⚠️ IMPORTANT LAYOUT BEHAVIOR:** - **Default is `row`**: Items flow horizontally by default - **For vertical stacking**: Explicitly set `direction="column"` - **Common pattern**: Use `direction="column"` when you want items to stack vertically - **Inside pds-row**: The default `row` direction works well for grid layouts  **Usage Examples:** ```tsx // Horizontal flow (default behavior) <pds-box>   <div>Item 1</div>   <div>Item 2</div> // These will be side by side </pds-box>  // Vertical stacking (explicit) <pds-box direction="column">   <div>Item 1</div>   <div>Item 2</div> // These will stack vertically </pds-box> ```
           * @defaultValue row
          */
         "direction"?: `row` | `column`;
         /**
-          * Defines the display style of the box.
+          * Defines the display style of the box.  **Layout Impact:** - `flex`: Creates a flex container (default) - `inline-flex`: Creates an inline flex container - `block`: Creates a block-level container - `inline-block`: Creates an inline-block container
           * @defaultValue flex
          */
         "display"?: `flex` | `inline-flex` | `block` | `inline-block`;
@@ -175,12 +220,12 @@ export namespace Components {
          */
         "flex"?: `none` | `grow` | `shrink`;
         /**
-          * Defines the spacing between the box items.
+          * Defines the spacing between the box items.  **Layout Impact:** - Controls the gap between flex items - Available sizes: `none`, `xxs`, `xs`, `sm`, `md`, `lg`, `xl`, `xxl` - Works with both `row` and `column` directions
           * @defaultValue none
          */
         "gap"?: BoxTShirtSizeType;
         /**
-          * Defines the horizontal alignment of the box items.
+          * Defines the horizontal alignment of the box items.  **Layout Impact:** - `start`: Items pack toward the start (left for row, top for column) - `center`: Items pack toward the center - `end`: Items pack toward the end (right for row, bottom for column) - `space-between`: Items are evenly distributed with first at start, last at end - `space-around`: Items are evenly distributed with equal space around them
           * @defaultValue start
          */
         "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
@@ -267,7 +312,7 @@ export namespace Components {
          */
         "shadow"?: BoxShadowSizeType;
         /**
-          * Sets the default column width for the component. This value applies from the smallest screen size (XS) upwards, unless overridden by a breakpoint-specific size prop at that breakpoint or larger.
+          * Sets the default column width for the component. This value applies from the smallest screen size (XS) upwards, unless overridden by a breakpoint-specific size prop at that breakpoint or larger.  **Grid System:** - Uses a 12-column grid system - Values range from 1-12 (e.g., `6` = 50% width, `12` = 100% width) - Most effective when used inside `pds-row` containers - Responsive variants available: `sizeXs`, `sizeSm`, `sizeMd`, `sizeLg`, `sizeXl`
          */
         "size"?: BoxColumnType;
         /**
@@ -428,6 +473,62 @@ export namespace Components {
          */
         "variant": 'text' | 'tag' | 'dropdown';
     }
+    /**
+     * PdsCombobox - An advanced searchable dropdown component with filtering and accessibility
+     * **⚠️ CRITICAL BEHAVIOR:**
+     * - **Search & Filter**: Real-time filtering of options as user types
+     * - **Multiple Modes**: Filter mode (search) or select-only mode (dropdown)
+     * - **Two Triggers**: Input trigger (editable) or button trigger (non-editable)
+     * - **Accessibility**: Full ARIA support with proper labeling and keyboard navigation
+     * - **Custom Layouts**: Support for rich option content with HTML layouts
+     * **⚠️ VISUAL PATTERN CLARIFICATION:**
+     * When analyzing screenshots or visual layouts:
+     * - **Text above combobox**: This is the combobox's LABEL, not a separate `pds-text` component
+     * - **Label Integration**: The `label` prop creates text that appears above the combobox field
+     * - **No Separate Text Needed**: Do not add `pds-text` components for combobox labels
+     * - **Visual Hierarchy**: Label text is styled and positioned automatically by the combobox component
+     * **Common Mistake**: Seeing text above a combobox and assuming it's a separate `pds-text` component
+     * **Correct Understanding**: The text is the combobox's integrated label created by the `label` prop
+     * **Usage Examples:**
+     * ```tsx
+     * // Basic combobox with input trigger
+     * <pds-combobox label="Search Users" component-id="users" placeholder="Type to search...">
+     *   <option value="user1">John Doe</option>
+     *   <option value="user2">Jane Smith</option>
+     *   <option value="user3">Bob Johnson</option>
+     * </pds-combobox>
+     * // Combobox with button trigger
+     * <pds-combobox
+     *   label="Select Category"
+     *   component-id="category"
+     *   trigger="button"
+     *   placeholder="Choose a category"
+     * >
+     *   <option value="tech">Technology</option>
+     *   <option value="design">Design</option>
+     *   <option value="marketing">Marketing</option>
+     * </pds-combobox>
+     * // Select-only mode (no filtering)
+     * <pds-combobox
+     *   label="Country"
+     *   component-id="country"
+     *   mode="select-only"
+     *   trigger="button"
+     * >
+     *   <option value="us">United States</option>
+     *   <option value="ca">Canada</option>
+     * </pds-combobox>
+     * // ❌ INCORRECT - Don't add separate text for labels
+     * <pds-text>Search Users</pds-text>
+     * <pds-combobox component-id="users">
+     *   <option value="user1">John Doe</option>
+     * </pds-combobox>
+     * // ✅ CORRECT - Use the label prop
+     * <pds-combobox label="Search Users" component-id="users">
+     *   <option value="user1">John Doe</option>
+     * </pds-combobox>
+     * ```
+     */
     interface PdsCombobox {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -466,7 +567,7 @@ export namespace Components {
          */
         "hideLabel": boolean;
         /**
-          * Text to be displayed as the combobox label.
+          * Text to be displayed as the combobox label.  **⚠️ CRITICAL VISUAL BEHAVIOR:** - **Integrated Label**: Creates text that appears ABOVE the combobox field - **Not Separate Component**: This is NOT a separate `pds-text` component - **Automatic Styling**: Label is styled and positioned by the combobox component - **Visual Hierarchy**: Creates proper visual relationship between label and combobox  **Accessibility Impact:** - Creates proper label-combobox association - Required for screen reader accessibility - Sets `for` attribute to link with combobox - Can be visually hidden with `hideLabel` prop while remaining accessible  **⚠️ COMMON MISTAKE**: When analyzing screenshots, text above a combobox is the LABEL, not a separate text component  **Best Practice**: Always provide descriptive labels for combobox fields  **Example**: `label="Search Users"` for user search combobox
          */
         "label"?: string;
         /**
@@ -627,6 +728,35 @@ export namespace Components {
          */
         "width"?: number;
     }
+    /**
+     * PdsInput - A form input component with validation and accessibility
+     * **⚠️ VISUAL PATTERN CLARIFICATION:**
+     * When analyzing screenshots or visual layouts:
+     * - **Text above input field**: This is the input's LABEL, not a separate `pds-text` component
+     * - **Label Integration**: The `label` prop creates text that appears above the input field
+     * - **No Separate Text Needed**: Do not add `pds-text` components for input labels
+     * - **Visual Hierarchy**: Label text is styled and positioned automatically by the input component
+     * **Common Mistake**: Seeing text above an input and assuming it's a separate `pds-text` component
+     * **Correct Understanding**: The text is the input's integrated label created by the `label` prop
+     * **Usage Examples:**
+     * ```tsx
+     * // Basic input
+     * <pds-input label="Name" component-id="name" required></pds-input>
+     * // Input with validation
+     * <pds-input
+     *   label="Email"
+     *   component-id="email"
+     *   type="email"
+     *   required
+     *   helper-message="We'll never share your email"
+     * ></pds-input>
+     * // ❌ INCORRECT - Don't add separate text for labels
+     * <pds-text>Name</pds-text>
+     * <pds-input component-id="name"></pds-input>
+     * // ✅ CORRECT - Use the label prop
+     * <pds-input label="Name" component-id="name"></pds-input>
+     * ```
+     */
     interface PdsInput {
         /**
           * Specifies if and how the browser provides `autocomplete` assistance for the field.
@@ -649,7 +779,7 @@ export namespace Components {
          */
         "errorMessage"?: string;
         /**
-          * Determines whether or not the input field takes full width of its container.
+          * Determines whether or not the input field takes full width of its container.  **Layout Impact:** - Makes input span 100% width of parent container - Useful for mobile layouts or form consistency - Works with all input types and states - Affects input field only, not label or messages  **Best Practice**: Use for form layouts where consistent width is needed  **Example**: `full-width="true"` for mobile-friendly forms
          */
         "fullWidth"?: boolean;
         /**
@@ -709,7 +839,7 @@ export namespace Components {
          */
         "step"?: string;
         /**
-          * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`, `'url'`
+          * Determines the type of control that will be displayed  **Input Types:** - `text`: Standard text input (default) - `email`: Email validation and mobile keyboard - `password`: Hidden text with security features - `number`: Numeric input with min/max/step validation - `tel`: Telephone input with mobile keyboard - `url`: URL validation and mobile keyboard  **Type-Specific Features:** - **email**: Browser email validation, mobile email keyboard - **password**: Hidden characters, security features - **number**: Up/down arrows, min/max validation - **tel**: Mobile phone keyboard, pattern validation - **url**: Browser URL validation, mobile URL keyboard  **Best Practice**: Choose type that matches expected input for better UX
           * @defaultValue "text"
          */
         "type": string;
@@ -929,9 +1059,47 @@ export namespace Components {
          */
         "value": string;
     }
+    /**
+     * PdsRow - A horizontal flex container for creating grid layouts
+     * **⚠️ CRITICAL LAYOUT BEHAVIOR:**
+     * - **Grid Container**: Creates a 12-column grid system for responsive layouts
+     * - **Flex Direction**: Always horizontal (row) - cannot be changed
+     * - **Child Requirements**: Direct children should be `pds-box` components with `size-*` props
+     * - **Column Sum Rule**: Total column sizes should not exceed 12 per row
+     * **Layout Patterns:**
+     * - **Grid Layout**: Use with `pds-box` children that have `size-*` props (1-12)
+     * - **Responsive Grid**: Use responsive size variants (e.g., `size-md="6"`)
+     * - **Equal Columns**: Children without `size` props become equal-width columns
+     * - **Wrapping**: Columns wrap to next line if total exceeds 12
+     * **Key Props for Layout:**
+     * - `colGap`: Controls spacing between columns
+     * - `justifyContent`: Horizontal alignment of columns
+     * - `alignItems`: Vertical alignment of columns
+     * - `noWrap`: Prevents column wrapping
+     * **Usage Examples:**
+     * ```tsx
+     * // Basic 2-column grid
+     * <pds-row>
+     *   <pds-box size-md="6">Left column</pds-box>
+     *   <pds-box size-md="6">Right column</pds-box>
+     * </pds-row>
+     * // Responsive 3-column grid
+     * <pds-row col-gap="md">
+     *   <pds-box size-md="4" size-lg="3">Column 1</pds-box>
+     *   <pds-box size-md="4" size-lg="6">Column 2</pds-box>
+     *   <pds-box size-md="4" size-lg="3">Column 3</pds-box>
+     * </pds-row>
+     * // Equal-width columns (no size props)
+     * <pds-row>
+     *   <pds-box>Auto width</pds-box>
+     *   <pds-box>Auto width</pds-box>
+     *   <pds-box>Auto width</pds-box>
+     * </pds-row>
+     * ```
+     */
     interface PdsRow {
         /**
-          * Defines the vertical alignment of the row items.
+          * Defines the vertical alignment of the row items.  **Layout Impact:** - `start`: Items align to the top of the row - `center`: Items align to the center of the row - `end`: Items align to the bottom of the row - `baseline`: Items align to their text baseline - `stretch`: Items stretch to fill the row height (default)  **Best Practice**: Use with `minHeight` for consistent vertical alignment
           * @defaultValue start
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
@@ -940,7 +1108,8 @@ export namespace Components {
          */
         "border"?: boolean;
         /**
-          * Defines the spacing between the row items.
+          * Defines the spacing between the row items.  **Layout Impact:** - Controls the gap between columns in the grid - Available sizes: `none`, `xxs`, `xs`, `sm`, `md`, `lg`, `xl`, `xxl` - Creates consistent spacing between all columns - Works with both fixed-size and auto-width columns  **Best Practice**: Use `md` or `lg` for comfortable spacing between content columns
+          * @defaultValue null (no gap)
          */
         "colGap"?: BoxTShirtSizeType | null;
         /**
@@ -948,19 +1117,76 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Defines the horizontal alignment of the row items.
+          * Defines the horizontal alignment of the row items.  **Layout Impact:** - `start`: Columns pack toward the left (default) - `center`: Columns pack toward the center - `end`: Columns pack toward the right - `space-between`: Columns are evenly distributed with first at start, last at end - `space-around`: Columns are evenly distributed with equal space around them  **Best Practice**: Use `space-between` for navigation or action buttons
           * @defaultValue start
          */
         "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
         /**
-          * The minimum height of the row. Used in conjunction with alignment props
+          * The minimum height of the row. Used in conjunction with alignment props  **Layout Impact:** - Ensures consistent row height for vertical alignment - Required for `alignItems="center"` to work properly - Prevents row height from collapsing when content is short  **Best Practice**: Use with `alignItems="center"` for vertically centered content  **Example**: `minHeight="100px"` or `minHeight="10rem"`
          */
         "minHeight"?: string;
         /**
-          * If `true`, the row items will not wrap to the next line if horizontal space is not available.
+          * If `true`, the row items will not wrap to the next line if horizontal space is not available.  **Layout Impact:** - Prevents columns from wrapping to new lines - Columns may overflow horizontally if total width exceeds container - Useful for navigation bars or horizontal scrolling layouts  **⚠️ Warning**: Can cause horizontal overflow if columns are too wide  **Best Practice**: Use sparingly, only when you need to prevent wrapping
+          * @defaultValue false
          */
         "noWrap"?: boolean;
     }
+    /**
+     * PdsSelect - A dropdown selection component with validation and accessibility
+     * **⚠️ CRITICAL BEHAVIOR:**
+     * - **Form Integration**: Automatically handles form submission and validation
+     * - **Validation States**: Supports error messages and invalid states
+     * - **Accessibility**: Full ARIA support with proper labeling and descriptions
+     * - **Multiple Selection**: Supports single and multiple option selection
+     * - **Option Management**: Uses slot-based option content for flexibility
+     * **⚠️ VISUAL PATTERN CLARIFICATION:**
+     * When analyzing screenshots or visual layouts:
+     * - **Text above select dropdown**: This is the select's LABEL, not a separate `pds-text` component
+     * - **Label Integration**: The `label` prop creates text that appears above the select field
+     * - **No Separate Text Needed**: Do not add `pds-text` components for select labels
+     * - **Visual Hierarchy**: Label text is styled and positioned automatically by the select component
+     * **Common Mistake**: Seeing text above a select dropdown and assuming it's a separate `pds-text` component
+     * **Correct Understanding**: The text is the select's integrated label created by the `label` prop
+     * **Usage Examples:**
+     * ```tsx
+     * // Basic select
+     * <pds-select label="Country" component-id="country" name="country">
+     *   <option value="us">United States</option>
+     *   <option value="ca">Canada</option>
+     *   <option value="uk">United Kingdom</option>
+     * </pds-select>
+     * // Select with validation
+     * <pds-select
+     *   label="Category"
+     *   component-id="category"
+     *   required
+     *   helper-message="Please select a category"
+     * >
+     *   <option value="">Select a category</option>
+     *   <option value="tech">Technology</option>
+     *   <option value="design">Design</option>
+     * </pds-select>
+     * // Multiple select
+     * <pds-select
+     *   label="Skills"
+     *   component-id="skills"
+     *   multiple="true"
+     * >
+     *   <option value="js">JavaScript</option>
+     *   <option value="react">React</option>
+     *   <option value="node">Node.js</option>
+     * </pds-select>
+     * // ❌ INCORRECT - Don't add separate text for labels
+     * <pds-text>Country</pds-text>
+     * <pds-select component-id="country">
+     *   <option value="us">United States</option>
+     * </pds-select>
+     * // ✅ CORRECT - Use the label prop
+     * <pds-select label="Country" component-id="country">
+     *   <option value="us">United States</option>
+     * </pds-select>
+     * ```
+     */
     interface PdsSelect {
         /**
           * Specifies if and how the browser provides `autocomplete` assistance for the field.
@@ -992,7 +1218,7 @@ export namespace Components {
          */
         "invalid"?: boolean;
         /**
-          * Text to be displayed as the select label.
+          * Text to be displayed as the select label.  **⚠️ CRITICAL VISUAL BEHAVIOR:** - **Integrated Label**: Creates text that appears ABOVE the select dropdown - **Not Separate Component**: This is NOT a separate `pds-text` component - **Automatic Styling**: Label is styled and positioned by the select component - **Visual Hierarchy**: Creates proper visual relationship between label and select  **Accessibility Impact:** - Creates proper label-select association - Required for screen reader accessibility - Shows required indicator (*) when `required="true"` - Sets `for` attribute to link with select  **⚠️ COMMON MISTAKE**: When analyzing screenshots, text above a select dropdown is the LABEL, not a separate text component  **Best Practice**: Always provide descriptive labels for select fields  **Example**: `label="Country"` for country selection
          */
         "label"?: string;
         /**
@@ -1190,6 +1416,38 @@ export namespace Components {
          */
         "variant": 'primary' | 'availability' | 'filter' | 'pill';
     }
+    /**
+     * PdsText - A versatile text component for content display
+     * **⚠️ CRITICAL USAGE CLARIFICATION:**
+     * - **Content Display**: Use for general text content, headings, paragraphs, etc.
+     * - **NOT for Input Labels**: Do NOT use for input field labels - use the `label` prop on input components instead
+     * - **Semantic Text**: Renders appropriate HTML tags (p, h1-h6, code, etc.)
+     * - **Typography Control**: Provides size, weight, color, and alignment options
+     * **Common Use Cases:**
+     * - **Headings**: Use with `tag="h1"` through `tag="h6"`
+     * - **Body Text**: Use with `tag="p"` for paragraphs
+     * - **Code**: Use with `tag="code"` or `tag="pre"` for code snippets
+     * - **Emphasis**: Use with `tag="strong"` or `tag="em"` for emphasis
+     * **⚠️ INPUT LABEL MISTAKE:**
+     * When you see text above an input field in a screenshot:
+     * - **That's the input's LABEL**, not a separate `pds-text` component
+     * - **Use the `label` prop** on the input component instead
+     * - **Example**: `<pds-input label="Email" component-id="email"></pds-input>`
+     * **Usage Examples:**
+     * ```tsx
+     * // Heading
+     * <pds-text tag="h1" size="h1" weight="bold">Page Title</pds-text>
+     * // Body text
+     * <pds-text tag="p" size="md">This is body text content.</pds-text>
+     * // Code snippet
+     * <pds-text tag="code" size="sm">const example = "code";</pds-text>
+     * // ❌ INCORRECT - Don't use for input labels
+     * <pds-text>Email Address</pds-text>
+     * <pds-input component-id="email"></pds-input>
+     * // ✅ CORRECT - Use input label prop
+     * <pds-input label="Email Address" component-id="email"></pds-input>
+     * ```
+     */
     interface PdsText {
         /**
           * Sets the text alignment.
@@ -1262,6 +1520,47 @@ export namespace Components {
   | 'semibold'
   | 'bold';
     }
+    /**
+     * PdsTextarea - A multi-line text input component with validation and accessibility
+     * **⚠️ CRITICAL BEHAVIOR:**
+     * - **Form Integration**: Automatically handles form submission and validation
+     * - **Validation States**: Supports error messages and invalid states
+     * - **Accessibility**: Full ARIA support with proper labeling and descriptions
+     * - **Event Handling**: Debounced input events and change detection
+     * - **Resizable**: Users can resize the textarea vertically
+     * **⚠️ VISUAL PATTERN CLARIFICATION:**
+     * When analyzing screenshots or visual layouts:
+     * - **Text above textarea**: This is the textarea's LABEL, not a separate `pds-text` component
+     * - **Label Integration**: The `label` prop creates text that appears above the textarea field
+     * - **No Separate Text Needed**: Do not add `pds-text` components for textarea labels
+     * - **Visual Hierarchy**: Label text is styled and positioned automatically by the textarea component
+     * **Common Mistake**: Seeing text above a textarea and assuming it's a separate `pds-text` component
+     * **Correct Understanding**: The text is the textarea's integrated label created by the `label` prop
+     * **Usage Examples:**
+     * ```tsx
+     * // Basic textarea
+     * <pds-textarea label="Description" component-id="description" rows="4"></pds-textarea>
+     * // Textarea with validation
+     * <pds-textarea
+     *   label="Comments"
+     *   component-id="comments"
+     *   required
+     *   helper-message="Please provide detailed feedback"
+     * ></pds-textarea>
+     * // Textarea with error state
+     * <pds-textarea
+     *   label="Bio"
+     *   component-id="bio"
+     *   invalid="true"
+     *   error-message="Bio must be at least 10 characters"
+     * ></pds-textarea>
+     * // ❌ INCORRECT - Don't add separate text for labels
+     * <pds-text>Description</pds-text>
+     * <pds-textarea component-id="description"></pds-textarea>
+     * // ✅ CORRECT - Use the label prop
+     * <pds-textarea label="Description" component-id="description"></pds-textarea>
+     * ```
+     */
     interface PdsTextarea {
         /**
           * Specifies if and how the browser provides `autocomplete` assistance for the field.
@@ -1294,7 +1593,7 @@ export namespace Components {
          */
         "invalid": boolean;
         /**
-          * Text to be displayed as the textarea label.
+          * Text to be displayed as the textarea label.  **⚠️ CRITICAL VISUAL BEHAVIOR:** - **Integrated Label**: Creates text that appears ABOVE the textarea field - **Not Separate Component**: This is NOT a separate `pds-text` component - **Automatic Styling**: Label is styled and positioned by the textarea component - **Visual Hierarchy**: Creates proper visual relationship between label and textarea  **Accessibility Impact:** - Creates proper label-textarea association - Required for screen reader accessibility - Shows required indicator (*) when `required="true"` - Sets `for` attribute to link with textarea  **⚠️ COMMON MISTAKE**: When analyzing screenshots, text above a textarea is the LABEL, not a separate text component  **Best Practice**: Always provide descriptive labels for textarea fields  **Example**: `label="Description"` for textarea input
          */
         "label"?: string;
         /**
@@ -1546,6 +1845,51 @@ declare global {
         prototype: HTMLPdsAvatarElement;
         new (): HTMLPdsAvatarElement;
     };
+    /**
+     * PdsBox - A flexible layout container component
+     * **⚠️ CRITICAL LAYOUT BEHAVIOR:**
+     * - **Default Direction**: Items flow HORIZONTALLY by default (`direction="row"`)
+     * - **For Vertical Stacking**: You MUST explicitly set `direction="column"`
+     * - **Common Mistake**: Expecting vertical stacking without setting direction
+     * **Layout Patterns:**
+     * - **Horizontal Flow (Default)**: Items are placed side by side
+     * - **Vertical Stacking**: Set `direction="column"` for items to stack vertically
+     * - **Main Containers**: Always use `direction="column"` and `fit="true"` for page sections and main content areas
+     * - **Grid Layout**: Use inside `pds-row` with `size-*` props for responsive grid
+     * **Key Props for Layout:**
+     * - `direction`: **CRITICAL** - Controls item orientation (`row` = horizontal, `column` = vertical)
+     * - `size`: Sets column width (1-12 grid system, works best inside pds-row)
+     * - `gap`: Controls spacing between items
+     * - `justifyContent`: Horizontal alignment of items
+     * - `alignItems`: Vertical alignment of items
+     * **Usage Examples:**
+     * ```tsx
+     * // ⚠️ HORIZONTAL flow (default behavior - items side by side)
+     * <pds-box gap="md">
+     *   <div>Item 1</div>
+     *   <div>Item 2</div> // These will be HORIZONTAL
+     * </pds-box>
+     * // ✅ VERTICAL stacking (explicit - items stacked)
+     * <pds-box direction="column" gap="md">
+     *   <div>Item 1</div>
+     *   <div>Item 2</div> // These will be VERTICAL
+     * </pds-box>
+     * // ✅ MAIN CONTAINERS should use direction="column" and fit="true"
+     * <pds-box direction="column" gap="lg" fit="true">
+     *   <h1>Page Title</h1>
+     *   <p>Page description</p>
+     *   <pds-box direction="row" gap="md">
+     *     <pds-button>Action 1</pds-button>
+     *     <pds-button variant="secondary">Action 2</pds-button>
+     *   </pds-box>
+     * </pds-box>
+     * // Grid layout inside pds-row
+     * <pds-row>
+     *   <pds-box size-md="6">Half width</pds-box>
+     *   <pds-box size-md="6">Half width</pds-box>
+     * </pds-row>
+     * ```
+     */
     interface HTMLPdsBoxElement extends Components.PdsBox, HTMLStencilElement {
     }
     var HTMLPdsBoxElement: {
@@ -1607,6 +1951,62 @@ declare global {
     interface HTMLPdsComboboxElementEventMap {
         "pdsComboboxChange": { value: string };
     }
+    /**
+     * PdsCombobox - An advanced searchable dropdown component with filtering and accessibility
+     * **⚠️ CRITICAL BEHAVIOR:**
+     * - **Search & Filter**: Real-time filtering of options as user types
+     * - **Multiple Modes**: Filter mode (search) or select-only mode (dropdown)
+     * - **Two Triggers**: Input trigger (editable) or button trigger (non-editable)
+     * - **Accessibility**: Full ARIA support with proper labeling and keyboard navigation
+     * - **Custom Layouts**: Support for rich option content with HTML layouts
+     * **⚠️ VISUAL PATTERN CLARIFICATION:**
+     * When analyzing screenshots or visual layouts:
+     * - **Text above combobox**: This is the combobox's LABEL, not a separate `pds-text` component
+     * - **Label Integration**: The `label` prop creates text that appears above the combobox field
+     * - **No Separate Text Needed**: Do not add `pds-text` components for combobox labels
+     * - **Visual Hierarchy**: Label text is styled and positioned automatically by the combobox component
+     * **Common Mistake**: Seeing text above a combobox and assuming it's a separate `pds-text` component
+     * **Correct Understanding**: The text is the combobox's integrated label created by the `label` prop
+     * **Usage Examples:**
+     * ```tsx
+     * // Basic combobox with input trigger
+     * <pds-combobox label="Search Users" component-id="users" placeholder="Type to search...">
+     *   <option value="user1">John Doe</option>
+     *   <option value="user2">Jane Smith</option>
+     *   <option value="user3">Bob Johnson</option>
+     * </pds-combobox>
+     * // Combobox with button trigger
+     * <pds-combobox
+     *   label="Select Category"
+     *   component-id="category"
+     *   trigger="button"
+     *   placeholder="Choose a category"
+     * >
+     *   <option value="tech">Technology</option>
+     *   <option value="design">Design</option>
+     *   <option value="marketing">Marketing</option>
+     * </pds-combobox>
+     * // Select-only mode (no filtering)
+     * <pds-combobox
+     *   label="Country"
+     *   component-id="country"
+     *   mode="select-only"
+     *   trigger="button"
+     * >
+     *   <option value="us">United States</option>
+     *   <option value="ca">Canada</option>
+     * </pds-combobox>
+     * // ❌ INCORRECT - Don't add separate text for labels
+     * <pds-text>Search Users</pds-text>
+     * <pds-combobox component-id="users">
+     *   <option value="user1">John Doe</option>
+     * </pds-combobox>
+     * // ✅ CORRECT - Use the label prop
+     * <pds-combobox label="Search Users" component-id="users">
+     *   <option value="user1">John Doe</option>
+     * </pds-combobox>
+     * ```
+     */
     interface HTMLPdsComboboxElement extends Components.PdsCombobox, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsComboboxElementEventMap>(type: K, listener: (this: HTMLPdsComboboxElement, ev: PdsComboboxCustomEvent<HTMLPdsComboboxElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1685,6 +2085,35 @@ declare global {
         "pdsFocus": FocusEvent;
         "pdsInput": InputInputEventDetail;
     }
+    /**
+     * PdsInput - A form input component with validation and accessibility
+     * **⚠️ VISUAL PATTERN CLARIFICATION:**
+     * When analyzing screenshots or visual layouts:
+     * - **Text above input field**: This is the input's LABEL, not a separate `pds-text` component
+     * - **Label Integration**: The `label` prop creates text that appears above the input field
+     * - **No Separate Text Needed**: Do not add `pds-text` components for input labels
+     * - **Visual Hierarchy**: Label text is styled and positioned automatically by the input component
+     * **Common Mistake**: Seeing text above an input and assuming it's a separate `pds-text` component
+     * **Correct Understanding**: The text is the input's integrated label created by the `label` prop
+     * **Usage Examples:**
+     * ```tsx
+     * // Basic input
+     * <pds-input label="Name" component-id="name" required></pds-input>
+     * // Input with validation
+     * <pds-input
+     *   label="Email"
+     *   component-id="email"
+     *   type="email"
+     *   required
+     *   helper-message="We'll never share your email"
+     * ></pds-input>
+     * // ❌ INCORRECT - Don't add separate text for labels
+     * <pds-text>Name</pds-text>
+     * <pds-input component-id="name"></pds-input>
+     * // ✅ CORRECT - Use the label prop
+     * <pds-input label="Name" component-id="name"></pds-input>
+     * ```
+     */
     interface HTMLPdsInputElement extends Components.PdsInput, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsInputElementEventMap>(type: K, listener: (this: HTMLPdsInputElement, ev: PdsInputCustomEvent<HTMLPdsInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1782,6 +2211,44 @@ declare global {
         prototype: HTMLPdsRadioElement;
         new (): HTMLPdsRadioElement;
     };
+    /**
+     * PdsRow - A horizontal flex container for creating grid layouts
+     * **⚠️ CRITICAL LAYOUT BEHAVIOR:**
+     * - **Grid Container**: Creates a 12-column grid system for responsive layouts
+     * - **Flex Direction**: Always horizontal (row) - cannot be changed
+     * - **Child Requirements**: Direct children should be `pds-box` components with `size-*` props
+     * - **Column Sum Rule**: Total column sizes should not exceed 12 per row
+     * **Layout Patterns:**
+     * - **Grid Layout**: Use with `pds-box` children that have `size-*` props (1-12)
+     * - **Responsive Grid**: Use responsive size variants (e.g., `size-md="6"`)
+     * - **Equal Columns**: Children without `size` props become equal-width columns
+     * - **Wrapping**: Columns wrap to next line if total exceeds 12
+     * **Key Props for Layout:**
+     * - `colGap`: Controls spacing between columns
+     * - `justifyContent`: Horizontal alignment of columns
+     * - `alignItems`: Vertical alignment of columns
+     * - `noWrap`: Prevents column wrapping
+     * **Usage Examples:**
+     * ```tsx
+     * // Basic 2-column grid
+     * <pds-row>
+     *   <pds-box size-md="6">Left column</pds-box>
+     *   <pds-box size-md="6">Right column</pds-box>
+     * </pds-row>
+     * // Responsive 3-column grid
+     * <pds-row col-gap="md">
+     *   <pds-box size-md="4" size-lg="3">Column 1</pds-box>
+     *   <pds-box size-md="4" size-lg="6">Column 2</pds-box>
+     *   <pds-box size-md="4" size-lg="3">Column 3</pds-box>
+     * </pds-row>
+     * // Equal-width columns (no size props)
+     * <pds-row>
+     *   <pds-box>Auto width</pds-box>
+     *   <pds-box>Auto width</pds-box>
+     *   <pds-box>Auto width</pds-box>
+     * </pds-row>
+     * ```
+     */
     interface HTMLPdsRowElement extends Components.PdsRow, HTMLStencilElement {
     }
     var HTMLPdsRowElement: {
@@ -1791,6 +2258,62 @@ declare global {
     interface HTMLPdsSelectElementEventMap {
         "pdsSelectChange": InputEvent;
     }
+    /**
+     * PdsSelect - A dropdown selection component with validation and accessibility
+     * **⚠️ CRITICAL BEHAVIOR:**
+     * - **Form Integration**: Automatically handles form submission and validation
+     * - **Validation States**: Supports error messages and invalid states
+     * - **Accessibility**: Full ARIA support with proper labeling and descriptions
+     * - **Multiple Selection**: Supports single and multiple option selection
+     * - **Option Management**: Uses slot-based option content for flexibility
+     * **⚠️ VISUAL PATTERN CLARIFICATION:**
+     * When analyzing screenshots or visual layouts:
+     * - **Text above select dropdown**: This is the select's LABEL, not a separate `pds-text` component
+     * - **Label Integration**: The `label` prop creates text that appears above the select field
+     * - **No Separate Text Needed**: Do not add `pds-text` components for select labels
+     * - **Visual Hierarchy**: Label text is styled and positioned automatically by the select component
+     * **Common Mistake**: Seeing text above a select dropdown and assuming it's a separate `pds-text` component
+     * **Correct Understanding**: The text is the select's integrated label created by the `label` prop
+     * **Usage Examples:**
+     * ```tsx
+     * // Basic select
+     * <pds-select label="Country" component-id="country" name="country">
+     *   <option value="us">United States</option>
+     *   <option value="ca">Canada</option>
+     *   <option value="uk">United Kingdom</option>
+     * </pds-select>
+     * // Select with validation
+     * <pds-select
+     *   label="Category"
+     *   component-id="category"
+     *   required
+     *   helper-message="Please select a category"
+     * >
+     *   <option value="">Select a category</option>
+     *   <option value="tech">Technology</option>
+     *   <option value="design">Design</option>
+     * </pds-select>
+     * // Multiple select
+     * <pds-select
+     *   label="Skills"
+     *   component-id="skills"
+     *   multiple="true"
+     * >
+     *   <option value="js">JavaScript</option>
+     *   <option value="react">React</option>
+     *   <option value="node">Node.js</option>
+     * </pds-select>
+     * // ❌ INCORRECT - Don't add separate text for labels
+     * <pds-text>Country</pds-text>
+     * <pds-select component-id="country">
+     *   <option value="us">United States</option>
+     * </pds-select>
+     * // ✅ CORRECT - Use the label prop
+     * <pds-select label="Country" component-id="country">
+     *   <option value="us">United States</option>
+     * </pds-select>
+     * ```
+     */
     interface HTMLPdsSelectElement extends Components.PdsSelect, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsSelectElementEventMap>(type: K, listener: (this: HTMLPdsSelectElement, ev: PdsSelectCustomEvent<HTMLPdsSelectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1955,6 +2478,38 @@ declare global {
         prototype: HTMLPdsTabsElement;
         new (): HTMLPdsTabsElement;
     };
+    /**
+     * PdsText - A versatile text component for content display
+     * **⚠️ CRITICAL USAGE CLARIFICATION:**
+     * - **Content Display**: Use for general text content, headings, paragraphs, etc.
+     * - **NOT for Input Labels**: Do NOT use for input field labels - use the `label` prop on input components instead
+     * - **Semantic Text**: Renders appropriate HTML tags (p, h1-h6, code, etc.)
+     * - **Typography Control**: Provides size, weight, color, and alignment options
+     * **Common Use Cases:**
+     * - **Headings**: Use with `tag="h1"` through `tag="h6"`
+     * - **Body Text**: Use with `tag="p"` for paragraphs
+     * - **Code**: Use with `tag="code"` or `tag="pre"` for code snippets
+     * - **Emphasis**: Use with `tag="strong"` or `tag="em"` for emphasis
+     * **⚠️ INPUT LABEL MISTAKE:**
+     * When you see text above an input field in a screenshot:
+     * - **That's the input's LABEL**, not a separate `pds-text` component
+     * - **Use the `label` prop** on the input component instead
+     * - **Example**: `<pds-input label="Email" component-id="email"></pds-input>`
+     * **Usage Examples:**
+     * ```tsx
+     * // Heading
+     * <pds-text tag="h1" size="h1" weight="bold">Page Title</pds-text>
+     * // Body text
+     * <pds-text tag="p" size="md">This is body text content.</pds-text>
+     * // Code snippet
+     * <pds-text tag="code" size="sm">const example = "code";</pds-text>
+     * // ❌ INCORRECT - Don't use for input labels
+     * <pds-text>Email Address</pds-text>
+     * <pds-input component-id="email"></pds-input>
+     * // ✅ CORRECT - Use input label prop
+     * <pds-input label="Email Address" component-id="email"></pds-input>
+     * ```
+     */
     interface HTMLPdsTextElement extends Components.PdsText, HTMLStencilElement {
     }
     var HTMLPdsTextElement: {
@@ -1967,6 +2522,47 @@ declare global {
         "pdsInput": TextareaInputEventDetail;
         "pdsTextareaChange": TextareaChangeEventDetail;
     }
+    /**
+     * PdsTextarea - A multi-line text input component with validation and accessibility
+     * **⚠️ CRITICAL BEHAVIOR:**
+     * - **Form Integration**: Automatically handles form submission and validation
+     * - **Validation States**: Supports error messages and invalid states
+     * - **Accessibility**: Full ARIA support with proper labeling and descriptions
+     * - **Event Handling**: Debounced input events and change detection
+     * - **Resizable**: Users can resize the textarea vertically
+     * **⚠️ VISUAL PATTERN CLARIFICATION:**
+     * When analyzing screenshots or visual layouts:
+     * - **Text above textarea**: This is the textarea's LABEL, not a separate `pds-text` component
+     * - **Label Integration**: The `label` prop creates text that appears above the textarea field
+     * - **No Separate Text Needed**: Do not add `pds-text` components for textarea labels
+     * - **Visual Hierarchy**: Label text is styled and positioned automatically by the textarea component
+     * **Common Mistake**: Seeing text above a textarea and assuming it's a separate `pds-text` component
+     * **Correct Understanding**: The text is the textarea's integrated label created by the `label` prop
+     * **Usage Examples:**
+     * ```tsx
+     * // Basic textarea
+     * <pds-textarea label="Description" component-id="description" rows="4"></pds-textarea>
+     * // Textarea with validation
+     * <pds-textarea
+     *   label="Comments"
+     *   component-id="comments"
+     *   required
+     *   helper-message="Please provide detailed feedback"
+     * ></pds-textarea>
+     * // Textarea with error state
+     * <pds-textarea
+     *   label="Bio"
+     *   component-id="bio"
+     *   invalid="true"
+     *   error-message="Bio must be at least 10 characters"
+     * ></pds-textarea>
+     * // ❌ INCORRECT - Don't add separate text for labels
+     * <pds-text>Description</pds-text>
+     * <pds-textarea component-id="description"></pds-textarea>
+     * // ✅ CORRECT - Use the label prop
+     * <pds-textarea label="Description" component-id="description"></pds-textarea>
+     * ```
+     */
     interface HTMLPdsTextareaElement extends Components.PdsTextarea, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsTextareaElementEventMap>(type: K, listener: (this: HTMLPdsTextareaElement, ev: PdsTextareaCustomEvent<HTMLPdsTextareaElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2167,9 +2763,54 @@ declare namespace LocalJSX {
          */
         "variant"?: 'customer' | 'admin';
     }
+    /**
+     * PdsBox - A flexible layout container component
+     * **⚠️ CRITICAL LAYOUT BEHAVIOR:**
+     * - **Default Direction**: Items flow HORIZONTALLY by default (`direction="row"`)
+     * - **For Vertical Stacking**: You MUST explicitly set `direction="column"`
+     * - **Common Mistake**: Expecting vertical stacking without setting direction
+     * **Layout Patterns:**
+     * - **Horizontal Flow (Default)**: Items are placed side by side
+     * - **Vertical Stacking**: Set `direction="column"` for items to stack vertically
+     * - **Main Containers**: Always use `direction="column"` and `fit="true"` for page sections and main content areas
+     * - **Grid Layout**: Use inside `pds-row` with `size-*` props for responsive grid
+     * **Key Props for Layout:**
+     * - `direction`: **CRITICAL** - Controls item orientation (`row` = horizontal, `column` = vertical)
+     * - `size`: Sets column width (1-12 grid system, works best inside pds-row)
+     * - `gap`: Controls spacing between items
+     * - `justifyContent`: Horizontal alignment of items
+     * - `alignItems`: Vertical alignment of items
+     * **Usage Examples:**
+     * ```tsx
+     * // ⚠️ HORIZONTAL flow (default behavior - items side by side)
+     * <pds-box gap="md">
+     *   <div>Item 1</div>
+     *   <div>Item 2</div> // These will be HORIZONTAL
+     * </pds-box>
+     * // ✅ VERTICAL stacking (explicit - items stacked)
+     * <pds-box direction="column" gap="md">
+     *   <div>Item 1</div>
+     *   <div>Item 2</div> // These will be VERTICAL
+     * </pds-box>
+     * // ✅ MAIN CONTAINERS should use direction="column" and fit="true"
+     * <pds-box direction="column" gap="lg" fit="true">
+     *   <h1>Page Title</h1>
+     *   <p>Page description</p>
+     *   <pds-box direction="row" gap="md">
+     *     <pds-button>Action 1</pds-button>
+     *     <pds-button variant="secondary">Action 2</pds-button>
+     *   </pds-box>
+     * </pds-box>
+     * // Grid layout inside pds-row
+     * <pds-row>
+     *   <pds-box size-md="6">Half width</pds-box>
+     *   <pds-box size-md="6">Half width</pds-box>
+     * </pds-row>
+     * ```
+     */
     interface PdsBox {
         /**
-          * Defines how items within the box are aligned.
+          * Defines how items within the box are aligned.  **Layout Impact:** - `start`: Items align to the start (top for column, left for row) - `center`: Items align to the center - `end`: Items align to the end (bottom for column, right for row) - `baseline`: Items align to their text baseline - `stretch`: Items stretch to fill the container (default)
           * @defaultValue start
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
@@ -2200,12 +2841,12 @@ declare namespace LocalJSX {
          */
         "borderRadius"?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
         /**
-          * Defines the orientation of the box items.
+          * Defines the orientation of the box items.  **⚠️ IMPORTANT LAYOUT BEHAVIOR:** - **Default is `row`**: Items flow horizontally by default - **For vertical stacking**: Explicitly set `direction="column"` - **Common pattern**: Use `direction="column"` when you want items to stack vertically - **Inside pds-row**: The default `row` direction works well for grid layouts  **Usage Examples:** ```tsx // Horizontal flow (default behavior) <pds-box>   <div>Item 1</div>   <div>Item 2</div> // These will be side by side </pds-box>  // Vertical stacking (explicit) <pds-box direction="column">   <div>Item 1</div>   <div>Item 2</div> // These will stack vertically </pds-box> ```
           * @defaultValue row
          */
         "direction"?: `row` | `column`;
         /**
-          * Defines the display style of the box.
+          * Defines the display style of the box.  **Layout Impact:** - `flex`: Creates a flex container (default) - `inline-flex`: Creates an inline flex container - `block`: Creates a block-level container - `inline-block`: Creates an inline-block container
           * @defaultValue flex
          */
         "display"?: `flex` | `inline-flex` | `block` | `inline-block`;
@@ -2219,12 +2860,12 @@ declare namespace LocalJSX {
          */
         "flex"?: `none` | `grow` | `shrink`;
         /**
-          * Defines the spacing between the box items.
+          * Defines the spacing between the box items.  **Layout Impact:** - Controls the gap between flex items - Available sizes: `none`, `xxs`, `xs`, `sm`, `md`, `lg`, `xl`, `xxl` - Works with both `row` and `column` directions
           * @defaultValue none
          */
         "gap"?: BoxTShirtSizeType;
         /**
-          * Defines the horizontal alignment of the box items.
+          * Defines the horizontal alignment of the box items.  **Layout Impact:** - `start`: Items pack toward the start (left for row, top for column) - `center`: Items pack toward the center - `end`: Items pack toward the end (right for row, bottom for column) - `space-between`: Items are evenly distributed with first at start, last at end - `space-around`: Items are evenly distributed with equal space around them
           * @defaultValue start
          */
         "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
@@ -2311,7 +2952,7 @@ declare namespace LocalJSX {
          */
         "shadow"?: BoxShadowSizeType;
         /**
-          * Sets the default column width for the component. This value applies from the smallest screen size (XS) upwards, unless overridden by a breakpoint-specific size prop at that breakpoint or larger.
+          * Sets the default column width for the component. This value applies from the smallest screen size (XS) upwards, unless overridden by a breakpoint-specific size prop at that breakpoint or larger.  **Grid System:** - Uses a 12-column grid system - Values range from 1-12 (e.g., `6` = 50% width, `12` = 100% width) - Most effective when used inside `pds-row` containers - Responsive variants available: `sizeXs`, `sizeSm`, `sizeMd`, `sizeLg`, `sizeXl`
          */
         "size"?: BoxColumnType;
         /**
@@ -2482,6 +3123,62 @@ declare namespace LocalJSX {
          */
         "variant"?: 'text' | 'tag' | 'dropdown';
     }
+    /**
+     * PdsCombobox - An advanced searchable dropdown component with filtering and accessibility
+     * **⚠️ CRITICAL BEHAVIOR:**
+     * - **Search & Filter**: Real-time filtering of options as user types
+     * - **Multiple Modes**: Filter mode (search) or select-only mode (dropdown)
+     * - **Two Triggers**: Input trigger (editable) or button trigger (non-editable)
+     * - **Accessibility**: Full ARIA support with proper labeling and keyboard navigation
+     * - **Custom Layouts**: Support for rich option content with HTML layouts
+     * **⚠️ VISUAL PATTERN CLARIFICATION:**
+     * When analyzing screenshots or visual layouts:
+     * - **Text above combobox**: This is the combobox's LABEL, not a separate `pds-text` component
+     * - **Label Integration**: The `label` prop creates text that appears above the combobox field
+     * - **No Separate Text Needed**: Do not add `pds-text` components for combobox labels
+     * - **Visual Hierarchy**: Label text is styled and positioned automatically by the combobox component
+     * **Common Mistake**: Seeing text above a combobox and assuming it's a separate `pds-text` component
+     * **Correct Understanding**: The text is the combobox's integrated label created by the `label` prop
+     * **Usage Examples:**
+     * ```tsx
+     * // Basic combobox with input trigger
+     * <pds-combobox label="Search Users" component-id="users" placeholder="Type to search...">
+     *   <option value="user1">John Doe</option>
+     *   <option value="user2">Jane Smith</option>
+     *   <option value="user3">Bob Johnson</option>
+     * </pds-combobox>
+     * // Combobox with button trigger
+     * <pds-combobox
+     *   label="Select Category"
+     *   component-id="category"
+     *   trigger="button"
+     *   placeholder="Choose a category"
+     * >
+     *   <option value="tech">Technology</option>
+     *   <option value="design">Design</option>
+     *   <option value="marketing">Marketing</option>
+     * </pds-combobox>
+     * // Select-only mode (no filtering)
+     * <pds-combobox
+     *   label="Country"
+     *   component-id="country"
+     *   mode="select-only"
+     *   trigger="button"
+     * >
+     *   <option value="us">United States</option>
+     *   <option value="ca">Canada</option>
+     * </pds-combobox>
+     * // ❌ INCORRECT - Don't add separate text for labels
+     * <pds-text>Search Users</pds-text>
+     * <pds-combobox component-id="users">
+     *   <option value="user1">John Doe</option>
+     * </pds-combobox>
+     * // ✅ CORRECT - Use the label prop
+     * <pds-combobox label="Search Users" component-id="users">
+     *   <option value="user1">John Doe</option>
+     * </pds-combobox>
+     * ```
+     */
     interface PdsCombobox {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -2516,7 +3213,7 @@ declare namespace LocalJSX {
          */
         "hideLabel"?: boolean;
         /**
-          * Text to be displayed as the combobox label.
+          * Text to be displayed as the combobox label.  **⚠️ CRITICAL VISUAL BEHAVIOR:** - **Integrated Label**: Creates text that appears ABOVE the combobox field - **Not Separate Component**: This is NOT a separate `pds-text` component - **Automatic Styling**: Label is styled and positioned by the combobox component - **Visual Hierarchy**: Creates proper visual relationship between label and combobox  **Accessibility Impact:** - Creates proper label-combobox association - Required for screen reader accessibility - Sets `for` attribute to link with combobox - Can be visually hidden with `hideLabel` prop while remaining accessible  **⚠️ COMMON MISTAKE**: When analyzing screenshots, text above a combobox is the LABEL, not a separate text component  **Best Practice**: Always provide descriptive labels for combobox fields  **Example**: `label="Search Users"` for user search combobox
          */
         "label"?: string;
         /**
@@ -2681,6 +3378,35 @@ declare namespace LocalJSX {
          */
         "width"?: number;
     }
+    /**
+     * PdsInput - A form input component with validation and accessibility
+     * **⚠️ VISUAL PATTERN CLARIFICATION:**
+     * When analyzing screenshots or visual layouts:
+     * - **Text above input field**: This is the input's LABEL, not a separate `pds-text` component
+     * - **Label Integration**: The `label` prop creates text that appears above the input field
+     * - **No Separate Text Needed**: Do not add `pds-text` components for input labels
+     * - **Visual Hierarchy**: Label text is styled and positioned automatically by the input component
+     * **Common Mistake**: Seeing text above an input and assuming it's a separate `pds-text` component
+     * **Correct Understanding**: The text is the input's integrated label created by the `label` prop
+     * **Usage Examples:**
+     * ```tsx
+     * // Basic input
+     * <pds-input label="Name" component-id="name" required></pds-input>
+     * // Input with validation
+     * <pds-input
+     *   label="Email"
+     *   component-id="email"
+     *   type="email"
+     *   required
+     *   helper-message="We'll never share your email"
+     * ></pds-input>
+     * // ❌ INCORRECT - Don't add separate text for labels
+     * <pds-text>Name</pds-text>
+     * <pds-input component-id="name"></pds-input>
+     * // ✅ CORRECT - Use the label prop
+     * <pds-input label="Name" component-id="name"></pds-input>
+     * ```
+     */
     interface PdsInput {
         /**
           * Specifies if and how the browser provides `autocomplete` assistance for the field.
@@ -2703,7 +3429,7 @@ declare namespace LocalJSX {
          */
         "errorMessage"?: string;
         /**
-          * Determines whether or not the input field takes full width of its container.
+          * Determines whether or not the input field takes full width of its container.  **Layout Impact:** - Makes input span 100% width of parent container - Useful for mobile layouts or form consistency - Works with all input types and states - Affects input field only, not label or messages  **Best Practice**: Use for form layouts where consistent width is needed  **Example**: `full-width="true"` for mobile-friendly forms
          */
         "fullWidth"?: boolean;
         /**
@@ -2743,7 +3469,7 @@ declare namespace LocalJSX {
          */
         "onPdsBlur"?: (event: PdsInputCustomEvent<FocusEvent>) => void;
         /**
-          * Emitted when the value has changed.  This event will not emit when programmatically setting the `value` property.
+          * Emitted when the value has changed.  **Event Behavior:** - Fires when value changes and input loses focus - Does not emit when programmatically setting the `value` property - Provides value and original event object - Used for form submission and final value handling  **Best Practice**: Use for form submission and final value processing  **Example**: `<pds-input onPdsChange={handleFormChange}>`
          */
         "onPdsChange"?: (event: PdsInputCustomEvent<InputChangeEventDetail>) => void;
         /**
@@ -2775,7 +3501,7 @@ declare namespace LocalJSX {
          */
         "step"?: string;
         /**
-          * Determines the type of control that will be displayed `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`, `'url'`
+          * Determines the type of control that will be displayed  **Input Types:** - `text`: Standard text input (default) - `email`: Email validation and mobile keyboard - `password`: Hidden text with security features - `number`: Numeric input with min/max/step validation - `tel`: Telephone input with mobile keyboard - `url`: URL validation and mobile keyboard  **Type-Specific Features:** - **email**: Browser email validation, mobile email keyboard - **password**: Hidden characters, security features - **number**: Up/down arrows, min/max validation - **tel**: Mobile phone keyboard, pattern validation - **url**: Browser URL validation, mobile URL keyboard  **Best Practice**: Choose type that matches expected input for better UX
           * @defaultValue "text"
          */
         "type"?: string;
@@ -2999,9 +3725,47 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
+    /**
+     * PdsRow - A horizontal flex container for creating grid layouts
+     * **⚠️ CRITICAL LAYOUT BEHAVIOR:**
+     * - **Grid Container**: Creates a 12-column grid system for responsive layouts
+     * - **Flex Direction**: Always horizontal (row) - cannot be changed
+     * - **Child Requirements**: Direct children should be `pds-box` components with `size-*` props
+     * - **Column Sum Rule**: Total column sizes should not exceed 12 per row
+     * **Layout Patterns:**
+     * - **Grid Layout**: Use with `pds-box` children that have `size-*` props (1-12)
+     * - **Responsive Grid**: Use responsive size variants (e.g., `size-md="6"`)
+     * - **Equal Columns**: Children without `size` props become equal-width columns
+     * - **Wrapping**: Columns wrap to next line if total exceeds 12
+     * **Key Props for Layout:**
+     * - `colGap`: Controls spacing between columns
+     * - `justifyContent`: Horizontal alignment of columns
+     * - `alignItems`: Vertical alignment of columns
+     * - `noWrap`: Prevents column wrapping
+     * **Usage Examples:**
+     * ```tsx
+     * // Basic 2-column grid
+     * <pds-row>
+     *   <pds-box size-md="6">Left column</pds-box>
+     *   <pds-box size-md="6">Right column</pds-box>
+     * </pds-row>
+     * // Responsive 3-column grid
+     * <pds-row col-gap="md">
+     *   <pds-box size-md="4" size-lg="3">Column 1</pds-box>
+     *   <pds-box size-md="4" size-lg="6">Column 2</pds-box>
+     *   <pds-box size-md="4" size-lg="3">Column 3</pds-box>
+     * </pds-row>
+     * // Equal-width columns (no size props)
+     * <pds-row>
+     *   <pds-box>Auto width</pds-box>
+     *   <pds-box>Auto width</pds-box>
+     *   <pds-box>Auto width</pds-box>
+     * </pds-row>
+     * ```
+     */
     interface PdsRow {
         /**
-          * Defines the vertical alignment of the row items.
+          * Defines the vertical alignment of the row items.  **Layout Impact:** - `start`: Items align to the top of the row - `center`: Items align to the center of the row - `end`: Items align to the bottom of the row - `baseline`: Items align to their text baseline - `stretch`: Items stretch to fill the row height (default)  **Best Practice**: Use with `minHeight` for consistent vertical alignment
           * @defaultValue start
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
@@ -3010,7 +3774,8 @@ declare namespace LocalJSX {
          */
         "border"?: boolean;
         /**
-          * Defines the spacing between the row items.
+          * Defines the spacing between the row items.  **Layout Impact:** - Controls the gap between columns in the grid - Available sizes: `none`, `xxs`, `xs`, `sm`, `md`, `lg`, `xl`, `xxl` - Creates consistent spacing between all columns - Works with both fixed-size and auto-width columns  **Best Practice**: Use `md` or `lg` for comfortable spacing between content columns
+          * @defaultValue null (no gap)
          */
         "colGap"?: BoxTShirtSizeType | null;
         /**
@@ -3018,19 +3783,76 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
-          * Defines the horizontal alignment of the row items.
+          * Defines the horizontal alignment of the row items.  **Layout Impact:** - `start`: Columns pack toward the left (default) - `center`: Columns pack toward the center - `end`: Columns pack toward the right - `space-between`: Columns are evenly distributed with first at start, last at end - `space-around`: Columns are evenly distributed with equal space around them  **Best Practice**: Use `space-between` for navigation or action buttons
           * @defaultValue start
          */
         "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
         /**
-          * The minimum height of the row. Used in conjunction with alignment props
+          * The minimum height of the row. Used in conjunction with alignment props  **Layout Impact:** - Ensures consistent row height for vertical alignment - Required for `alignItems="center"` to work properly - Prevents row height from collapsing when content is short  **Best Practice**: Use with `alignItems="center"` for vertically centered content  **Example**: `minHeight="100px"` or `minHeight="10rem"`
          */
         "minHeight"?: string;
         /**
-          * If `true`, the row items will not wrap to the next line if horizontal space is not available.
+          * If `true`, the row items will not wrap to the next line if horizontal space is not available.  **Layout Impact:** - Prevents columns from wrapping to new lines - Columns may overflow horizontally if total width exceeds container - Useful for navigation bars or horizontal scrolling layouts  **⚠️ Warning**: Can cause horizontal overflow if columns are too wide  **Best Practice**: Use sparingly, only when you need to prevent wrapping
+          * @defaultValue false
          */
         "noWrap"?: boolean;
     }
+    /**
+     * PdsSelect - A dropdown selection component with validation and accessibility
+     * **⚠️ CRITICAL BEHAVIOR:**
+     * - **Form Integration**: Automatically handles form submission and validation
+     * - **Validation States**: Supports error messages and invalid states
+     * - **Accessibility**: Full ARIA support with proper labeling and descriptions
+     * - **Multiple Selection**: Supports single and multiple option selection
+     * - **Option Management**: Uses slot-based option content for flexibility
+     * **⚠️ VISUAL PATTERN CLARIFICATION:**
+     * When analyzing screenshots or visual layouts:
+     * - **Text above select dropdown**: This is the select's LABEL, not a separate `pds-text` component
+     * - **Label Integration**: The `label` prop creates text that appears above the select field
+     * - **No Separate Text Needed**: Do not add `pds-text` components for select labels
+     * - **Visual Hierarchy**: Label text is styled and positioned automatically by the select component
+     * **Common Mistake**: Seeing text above a select dropdown and assuming it's a separate `pds-text` component
+     * **Correct Understanding**: The text is the select's integrated label created by the `label` prop
+     * **Usage Examples:**
+     * ```tsx
+     * // Basic select
+     * <pds-select label="Country" component-id="country" name="country">
+     *   <option value="us">United States</option>
+     *   <option value="ca">Canada</option>
+     *   <option value="uk">United Kingdom</option>
+     * </pds-select>
+     * // Select with validation
+     * <pds-select
+     *   label="Category"
+     *   component-id="category"
+     *   required
+     *   helper-message="Please select a category"
+     * >
+     *   <option value="">Select a category</option>
+     *   <option value="tech">Technology</option>
+     *   <option value="design">Design</option>
+     * </pds-select>
+     * // Multiple select
+     * <pds-select
+     *   label="Skills"
+     *   component-id="skills"
+     *   multiple="true"
+     * >
+     *   <option value="js">JavaScript</option>
+     *   <option value="react">React</option>
+     *   <option value="node">Node.js</option>
+     * </pds-select>
+     * // ❌ INCORRECT - Don't add separate text for labels
+     * <pds-text>Country</pds-text>
+     * <pds-select component-id="country">
+     *   <option value="us">United States</option>
+     * </pds-select>
+     * // ✅ CORRECT - Use the label prop
+     * <pds-select label="Country" component-id="country">
+     *   <option value="us">United States</option>
+     * </pds-select>
+     * ```
+     */
     interface PdsSelect {
         /**
           * Specifies if and how the browser provides `autocomplete` assistance for the field.
@@ -3062,7 +3884,7 @@ declare namespace LocalJSX {
          */
         "invalid"?: boolean;
         /**
-          * Text to be displayed as the select label.
+          * Text to be displayed as the select label.  **⚠️ CRITICAL VISUAL BEHAVIOR:** - **Integrated Label**: Creates text that appears ABOVE the select dropdown - **Not Separate Component**: This is NOT a separate `pds-text` component - **Automatic Styling**: Label is styled and positioned by the select component - **Visual Hierarchy**: Creates proper visual relationship between label and select  **Accessibility Impact:** - Creates proper label-select association - Required for screen reader accessibility - Shows required indicator (*) when `required="true"` - Sets `for` attribute to link with select  **⚠️ COMMON MISTAKE**: When analyzing screenshots, text above a select dropdown is the LABEL, not a separate text component  **Best Practice**: Always provide descriptive labels for select fields  **Example**: `label="Country"` for country selection
          */
         "label"?: string;
         /**
@@ -3293,6 +4115,38 @@ declare namespace LocalJSX {
          */
         "variant": 'primary' | 'availability' | 'filter' | 'pill';
     }
+    /**
+     * PdsText - A versatile text component for content display
+     * **⚠️ CRITICAL USAGE CLARIFICATION:**
+     * - **Content Display**: Use for general text content, headings, paragraphs, etc.
+     * - **NOT for Input Labels**: Do NOT use for input field labels - use the `label` prop on input components instead
+     * - **Semantic Text**: Renders appropriate HTML tags (p, h1-h6, code, etc.)
+     * - **Typography Control**: Provides size, weight, color, and alignment options
+     * **Common Use Cases:**
+     * - **Headings**: Use with `tag="h1"` through `tag="h6"`
+     * - **Body Text**: Use with `tag="p"` for paragraphs
+     * - **Code**: Use with `tag="code"` or `tag="pre"` for code snippets
+     * - **Emphasis**: Use with `tag="strong"` or `tag="em"` for emphasis
+     * **⚠️ INPUT LABEL MISTAKE:**
+     * When you see text above an input field in a screenshot:
+     * - **That's the input's LABEL**, not a separate `pds-text` component
+     * - **Use the `label` prop** on the input component instead
+     * - **Example**: `<pds-input label="Email" component-id="email"></pds-input>`
+     * **Usage Examples:**
+     * ```tsx
+     * // Heading
+     * <pds-text tag="h1" size="h1" weight="bold">Page Title</pds-text>
+     * // Body text
+     * <pds-text tag="p" size="md">This is body text content.</pds-text>
+     * // Code snippet
+     * <pds-text tag="code" size="sm">const example = "code";</pds-text>
+     * // ❌ INCORRECT - Don't use for input labels
+     * <pds-text>Email Address</pds-text>
+     * <pds-input component-id="email"></pds-input>
+     * // ✅ CORRECT - Use input label prop
+     * <pds-input label="Email Address" component-id="email"></pds-input>
+     * ```
+     */
     interface PdsText {
         /**
           * Sets the text alignment.
@@ -3365,6 +4219,47 @@ declare namespace LocalJSX {
   | 'semibold'
   | 'bold';
     }
+    /**
+     * PdsTextarea - A multi-line text input component with validation and accessibility
+     * **⚠️ CRITICAL BEHAVIOR:**
+     * - **Form Integration**: Automatically handles form submission and validation
+     * - **Validation States**: Supports error messages and invalid states
+     * - **Accessibility**: Full ARIA support with proper labeling and descriptions
+     * - **Event Handling**: Debounced input events and change detection
+     * - **Resizable**: Users can resize the textarea vertically
+     * **⚠️ VISUAL PATTERN CLARIFICATION:**
+     * When analyzing screenshots or visual layouts:
+     * - **Text above textarea**: This is the textarea's LABEL, not a separate `pds-text` component
+     * - **Label Integration**: The `label` prop creates text that appears above the textarea field
+     * - **No Separate Text Needed**: Do not add `pds-text` components for textarea labels
+     * - **Visual Hierarchy**: Label text is styled and positioned automatically by the textarea component
+     * **Common Mistake**: Seeing text above a textarea and assuming it's a separate `pds-text` component
+     * **Correct Understanding**: The text is the textarea's integrated label created by the `label` prop
+     * **Usage Examples:**
+     * ```tsx
+     * // Basic textarea
+     * <pds-textarea label="Description" component-id="description" rows="4"></pds-textarea>
+     * // Textarea with validation
+     * <pds-textarea
+     *   label="Comments"
+     *   component-id="comments"
+     *   required
+     *   helper-message="Please provide detailed feedback"
+     * ></pds-textarea>
+     * // Textarea with error state
+     * <pds-textarea
+     *   label="Bio"
+     *   component-id="bio"
+     *   invalid="true"
+     *   error-message="Bio must be at least 10 characters"
+     * ></pds-textarea>
+     * // ❌ INCORRECT - Don't add separate text for labels
+     * <pds-text>Description</pds-text>
+     * <pds-textarea component-id="description"></pds-textarea>
+     * // ✅ CORRECT - Use the label prop
+     * <pds-textarea label="Description" component-id="description"></pds-textarea>
+     * ```
+     */
     interface PdsTextarea {
         /**
           * Specifies if and how the browser provides `autocomplete` assistance for the field.
@@ -3397,7 +4292,7 @@ declare namespace LocalJSX {
          */
         "invalid"?: boolean;
         /**
-          * Text to be displayed as the textarea label.
+          * Text to be displayed as the textarea label.  **⚠️ CRITICAL VISUAL BEHAVIOR:** - **Integrated Label**: Creates text that appears ABOVE the textarea field - **Not Separate Component**: This is NOT a separate `pds-text` component - **Automatic Styling**: Label is styled and positioned by the textarea component - **Visual Hierarchy**: Creates proper visual relationship between label and textarea  **Accessibility Impact:** - Creates proper label-textarea association - Required for screen reader accessibility - Shows required indicator (*) when `required="true"` - Sets `for` attribute to link with textarea  **⚠️ COMMON MISTAKE**: When analyzing screenshots, text above a textarea is the LABEL, not a separate text component  **Best Practice**: Always provide descriptive labels for textarea fields  **Example**: `label="Description"` for textarea input
          */
         "label"?: string;
         /**
@@ -3577,10 +4472,111 @@ declare module "@stencil/core" {
             "pds-accordion": LocalJSX.PdsAccordion & JSXBase.HTMLAttributes<HTMLPdsAccordionElement>;
             "pds-alert": LocalJSX.PdsAlert & JSXBase.HTMLAttributes<HTMLPdsAlertElement>;
             "pds-avatar": LocalJSX.PdsAvatar & JSXBase.HTMLAttributes<HTMLPdsAvatarElement>;
+            /**
+             * PdsBox - A flexible layout container component
+             * **⚠️ CRITICAL LAYOUT BEHAVIOR:**
+             * - **Default Direction**: Items flow HORIZONTALLY by default (`direction="row"`)
+             * - **For Vertical Stacking**: You MUST explicitly set `direction="column"`
+             * - **Common Mistake**: Expecting vertical stacking without setting direction
+             * **Layout Patterns:**
+             * - **Horizontal Flow (Default)**: Items are placed side by side
+             * - **Vertical Stacking**: Set `direction="column"` for items to stack vertically
+             * - **Main Containers**: Always use `direction="column"` and `fit="true"` for page sections and main content areas
+             * - **Grid Layout**: Use inside `pds-row` with `size-*` props for responsive grid
+             * **Key Props for Layout:**
+             * - `direction`: **CRITICAL** - Controls item orientation (`row` = horizontal, `column` = vertical)
+             * - `size`: Sets column width (1-12 grid system, works best inside pds-row)
+             * - `gap`: Controls spacing between items
+             * - `justifyContent`: Horizontal alignment of items
+             * - `alignItems`: Vertical alignment of items
+             * **Usage Examples:**
+             * ```tsx
+             * // ⚠️ HORIZONTAL flow (default behavior - items side by side)
+             * <pds-box gap="md">
+             *   <div>Item 1</div>
+             *   <div>Item 2</div> // These will be HORIZONTAL
+             * </pds-box>
+             * // ✅ VERTICAL stacking (explicit - items stacked)
+             * <pds-box direction="column" gap="md">
+             *   <div>Item 1</div>
+             *   <div>Item 2</div> // These will be VERTICAL
+             * </pds-box>
+             * // ✅ MAIN CONTAINERS should use direction="column" and fit="true"
+             * <pds-box direction="column" gap="lg" fit="true">
+             *   <h1>Page Title</h1>
+             *   <p>Page description</p>
+             *   <pds-box direction="row" gap="md">
+             *     <pds-button>Action 1</pds-button>
+             *     <pds-button variant="secondary">Action 2</pds-button>
+             *   </pds-box>
+             * </pds-box>
+             * // Grid layout inside pds-row
+             * <pds-row>
+             *   <pds-box size-md="6">Half width</pds-box>
+             *   <pds-box size-md="6">Half width</pds-box>
+             * </pds-row>
+             * ```
+             */
             "pds-box": LocalJSX.PdsBox & JSXBase.HTMLAttributes<HTMLPdsBoxElement>;
             "pds-button": LocalJSX.PdsButton & JSXBase.HTMLAttributes<HTMLPdsButtonElement>;
             "pds-checkbox": LocalJSX.PdsCheckbox & JSXBase.HTMLAttributes<HTMLPdsCheckboxElement>;
             "pds-chip": LocalJSX.PdsChip & JSXBase.HTMLAttributes<HTMLPdsChipElement>;
+            /**
+             * PdsCombobox - An advanced searchable dropdown component with filtering and accessibility
+             * **⚠️ CRITICAL BEHAVIOR:**
+             * - **Search & Filter**: Real-time filtering of options as user types
+             * - **Multiple Modes**: Filter mode (search) or select-only mode (dropdown)
+             * - **Two Triggers**: Input trigger (editable) or button trigger (non-editable)
+             * - **Accessibility**: Full ARIA support with proper labeling and keyboard navigation
+             * - **Custom Layouts**: Support for rich option content with HTML layouts
+             * **⚠️ VISUAL PATTERN CLARIFICATION:**
+             * When analyzing screenshots or visual layouts:
+             * - **Text above combobox**: This is the combobox's LABEL, not a separate `pds-text` component
+             * - **Label Integration**: The `label` prop creates text that appears above the combobox field
+             * - **No Separate Text Needed**: Do not add `pds-text` components for combobox labels
+             * - **Visual Hierarchy**: Label text is styled and positioned automatically by the combobox component
+             * **Common Mistake**: Seeing text above a combobox and assuming it's a separate `pds-text` component
+             * **Correct Understanding**: The text is the combobox's integrated label created by the `label` prop
+             * **Usage Examples:**
+             * ```tsx
+             * // Basic combobox with input trigger
+             * <pds-combobox label="Search Users" component-id="users" placeholder="Type to search...">
+             *   <option value="user1">John Doe</option>
+             *   <option value="user2">Jane Smith</option>
+             *   <option value="user3">Bob Johnson</option>
+             * </pds-combobox>
+             * // Combobox with button trigger
+             * <pds-combobox
+             *   label="Select Category"
+             *   component-id="category"
+             *   trigger="button"
+             *   placeholder="Choose a category"
+             * >
+             *   <option value="tech">Technology</option>
+             *   <option value="design">Design</option>
+             *   <option value="marketing">Marketing</option>
+             * </pds-combobox>
+             * // Select-only mode (no filtering)
+             * <pds-combobox
+             *   label="Country"
+             *   component-id="country"
+             *   mode="select-only"
+             *   trigger="button"
+             * >
+             *   <option value="us">United States</option>
+             *   <option value="ca">Canada</option>
+             * </pds-combobox>
+             * // ❌ INCORRECT - Don't add separate text for labels
+             * <pds-text>Search Users</pds-text>
+             * <pds-combobox component-id="users">
+             *   <option value="user1">John Doe</option>
+             * </pds-combobox>
+             * // ✅ CORRECT - Use the label prop
+             * <pds-combobox label="Search Users" component-id="users">
+             *   <option value="user1">John Doe</option>
+             * </pds-combobox>
+             * ```
+             */
             "pds-combobox": LocalJSX.PdsCombobox & JSXBase.HTMLAttributes<HTMLPdsComboboxElement>;
             "pds-copytext": LocalJSX.PdsCopytext & JSXBase.HTMLAttributes<HTMLPdsCopytextElement>;
             "pds-divider": LocalJSX.PdsDivider & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
@@ -3588,6 +4584,35 @@ declare module "@stencil/core" {
             "pds-dropdown-menu-item": LocalJSX.PdsDropdownMenuItem & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuItemElement>;
             "pds-dropdown-menu-separator": LocalJSX.PdsDropdownMenuSeparator & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuSeparatorElement>;
             "pds-image": LocalJSX.PdsImage & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
+            /**
+             * PdsInput - A form input component with validation and accessibility
+             * **⚠️ VISUAL PATTERN CLARIFICATION:**
+             * When analyzing screenshots or visual layouts:
+             * - **Text above input field**: This is the input's LABEL, not a separate `pds-text` component
+             * - **Label Integration**: The `label` prop creates text that appears above the input field
+             * - **No Separate Text Needed**: Do not add `pds-text` components for input labels
+             * - **Visual Hierarchy**: Label text is styled and positioned automatically by the input component
+             * **Common Mistake**: Seeing text above an input and assuming it's a separate `pds-text` component
+             * **Correct Understanding**: The text is the input's integrated label created by the `label` prop
+             * **Usage Examples:**
+             * ```tsx
+             * // Basic input
+             * <pds-input label="Name" component-id="name" required></pds-input>
+             * // Input with validation
+             * <pds-input
+             *   label="Email"
+             *   component-id="email"
+             *   type="email"
+             *   required
+             *   helper-message="We'll never share your email"
+             * ></pds-input>
+             * // ❌ INCORRECT - Don't add separate text for labels
+             * <pds-text>Name</pds-text>
+             * <pds-input component-id="name"></pds-input>
+             * // ✅ CORRECT - Use the label prop
+             * <pds-input label="Name" component-id="name"></pds-input>
+             * ```
+             */
             "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
             "pds-loader": LocalJSX.PdsLoader & JSXBase.HTMLAttributes<HTMLPdsLoaderElement>;
@@ -3599,7 +4624,101 @@ declare module "@stencil/core" {
             "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-property": LocalJSX.PdsProperty & JSXBase.HTMLAttributes<HTMLPdsPropertyElement>;
             "pds-radio": LocalJSX.PdsRadio & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
+            /**
+             * PdsRow - A horizontal flex container for creating grid layouts
+             * **⚠️ CRITICAL LAYOUT BEHAVIOR:**
+             * - **Grid Container**: Creates a 12-column grid system for responsive layouts
+             * - **Flex Direction**: Always horizontal (row) - cannot be changed
+             * - **Child Requirements**: Direct children should be `pds-box` components with `size-*` props
+             * - **Column Sum Rule**: Total column sizes should not exceed 12 per row
+             * **Layout Patterns:**
+             * - **Grid Layout**: Use with `pds-box` children that have `size-*` props (1-12)
+             * - **Responsive Grid**: Use responsive size variants (e.g., `size-md="6"`)
+             * - **Equal Columns**: Children without `size` props become equal-width columns
+             * - **Wrapping**: Columns wrap to next line if total exceeds 12
+             * **Key Props for Layout:**
+             * - `colGap`: Controls spacing between columns
+             * - `justifyContent`: Horizontal alignment of columns
+             * - `alignItems`: Vertical alignment of columns
+             * - `noWrap`: Prevents column wrapping
+             * **Usage Examples:**
+             * ```tsx
+             * // Basic 2-column grid
+             * <pds-row>
+             *   <pds-box size-md="6">Left column</pds-box>
+             *   <pds-box size-md="6">Right column</pds-box>
+             * </pds-row>
+             * // Responsive 3-column grid
+             * <pds-row col-gap="md">
+             *   <pds-box size-md="4" size-lg="3">Column 1</pds-box>
+             *   <pds-box size-md="4" size-lg="6">Column 2</pds-box>
+             *   <pds-box size-md="4" size-lg="3">Column 3</pds-box>
+             * </pds-row>
+             * // Equal-width columns (no size props)
+             * <pds-row>
+             *   <pds-box>Auto width</pds-box>
+             *   <pds-box>Auto width</pds-box>
+             *   <pds-box>Auto width</pds-box>
+             * </pds-row>
+             * ```
+             */
             "pds-row": LocalJSX.PdsRow & JSXBase.HTMLAttributes<HTMLPdsRowElement>;
+            /**
+             * PdsSelect - A dropdown selection component with validation and accessibility
+             * **⚠️ CRITICAL BEHAVIOR:**
+             * - **Form Integration**: Automatically handles form submission and validation
+             * - **Validation States**: Supports error messages and invalid states
+             * - **Accessibility**: Full ARIA support with proper labeling and descriptions
+             * - **Multiple Selection**: Supports single and multiple option selection
+             * - **Option Management**: Uses slot-based option content for flexibility
+             * **⚠️ VISUAL PATTERN CLARIFICATION:**
+             * When analyzing screenshots or visual layouts:
+             * - **Text above select dropdown**: This is the select's LABEL, not a separate `pds-text` component
+             * - **Label Integration**: The `label` prop creates text that appears above the select field
+             * - **No Separate Text Needed**: Do not add `pds-text` components for select labels
+             * - **Visual Hierarchy**: Label text is styled and positioned automatically by the select component
+             * **Common Mistake**: Seeing text above a select dropdown and assuming it's a separate `pds-text` component
+             * **Correct Understanding**: The text is the select's integrated label created by the `label` prop
+             * **Usage Examples:**
+             * ```tsx
+             * // Basic select
+             * <pds-select label="Country" component-id="country" name="country">
+             *   <option value="us">United States</option>
+             *   <option value="ca">Canada</option>
+             *   <option value="uk">United Kingdom</option>
+             * </pds-select>
+             * // Select with validation
+             * <pds-select
+             *   label="Category"
+             *   component-id="category"
+             *   required
+             *   helper-message="Please select a category"
+             * >
+             *   <option value="">Select a category</option>
+             *   <option value="tech">Technology</option>
+             *   <option value="design">Design</option>
+             * </pds-select>
+             * // Multiple select
+             * <pds-select
+             *   label="Skills"
+             *   component-id="skills"
+             *   multiple="true"
+             * >
+             *   <option value="js">JavaScript</option>
+             *   <option value="react">React</option>
+             *   <option value="node">Node.js</option>
+             * </pds-select>
+             * // ❌ INCORRECT - Don't add separate text for labels
+             * <pds-text>Country</pds-text>
+             * <pds-select component-id="country">
+             *   <option value="us">United States</option>
+             * </pds-select>
+             * // ✅ CORRECT - Use the label prop
+             * <pds-select label="Country" component-id="country">
+             *   <option value="us">United States</option>
+             * </pds-select>
+             * ```
+             */
             "pds-select": LocalJSX.PdsSelect & JSXBase.HTMLAttributes<HTMLPdsSelectElement>;
             "pds-sortable": LocalJSX.PdsSortable & JSXBase.HTMLAttributes<HTMLPdsSortableElement>;
             "pds-sortable-item": LocalJSX.PdsSortableItem & JSXBase.HTMLAttributes<HTMLPdsSortableItemElement>;
@@ -3613,7 +4732,80 @@ declare module "@stencil/core" {
             "pds-table-row": LocalJSX.PdsTableRow & JSXBase.HTMLAttributes<HTMLPdsTableRowElement>;
             "pds-tabpanel": LocalJSX.PdsTabpanel & JSXBase.HTMLAttributes<HTMLPdsTabpanelElement>;
             "pds-tabs": LocalJSX.PdsTabs & JSXBase.HTMLAttributes<HTMLPdsTabsElement>;
+            /**
+             * PdsText - A versatile text component for content display
+             * **⚠️ CRITICAL USAGE CLARIFICATION:**
+             * - **Content Display**: Use for general text content, headings, paragraphs, etc.
+             * - **NOT for Input Labels**: Do NOT use for input field labels - use the `label` prop on input components instead
+             * - **Semantic Text**: Renders appropriate HTML tags (p, h1-h6, code, etc.)
+             * - **Typography Control**: Provides size, weight, color, and alignment options
+             * **Common Use Cases:**
+             * - **Headings**: Use with `tag="h1"` through `tag="h6"`
+             * - **Body Text**: Use with `tag="p"` for paragraphs
+             * - **Code**: Use with `tag="code"` or `tag="pre"` for code snippets
+             * - **Emphasis**: Use with `tag="strong"` or `tag="em"` for emphasis
+             * **⚠️ INPUT LABEL MISTAKE:**
+             * When you see text above an input field in a screenshot:
+             * - **That's the input's LABEL**, not a separate `pds-text` component
+             * - **Use the `label` prop** on the input component instead
+             * - **Example**: `<pds-input label="Email" component-id="email"></pds-input>`
+             * **Usage Examples:**
+             * ```tsx
+             * // Heading
+             * <pds-text tag="h1" size="h1" weight="bold">Page Title</pds-text>
+             * // Body text
+             * <pds-text tag="p" size="md">This is body text content.</pds-text>
+             * // Code snippet
+             * <pds-text tag="code" size="sm">const example = "code";</pds-text>
+             * // ❌ INCORRECT - Don't use for input labels
+             * <pds-text>Email Address</pds-text>
+             * <pds-input component-id="email"></pds-input>
+             * // ✅ CORRECT - Use input label prop
+             * <pds-input label="Email Address" component-id="email"></pds-input>
+             * ```
+             */
             "pds-text": LocalJSX.PdsText & JSXBase.HTMLAttributes<HTMLPdsTextElement>;
+            /**
+             * PdsTextarea - A multi-line text input component with validation and accessibility
+             * **⚠️ CRITICAL BEHAVIOR:**
+             * - **Form Integration**: Automatically handles form submission and validation
+             * - **Validation States**: Supports error messages and invalid states
+             * - **Accessibility**: Full ARIA support with proper labeling and descriptions
+             * - **Event Handling**: Debounced input events and change detection
+             * - **Resizable**: Users can resize the textarea vertically
+             * **⚠️ VISUAL PATTERN CLARIFICATION:**
+             * When analyzing screenshots or visual layouts:
+             * - **Text above textarea**: This is the textarea's LABEL, not a separate `pds-text` component
+             * - **Label Integration**: The `label` prop creates text that appears above the textarea field
+             * - **No Separate Text Needed**: Do not add `pds-text` components for textarea labels
+             * - **Visual Hierarchy**: Label text is styled and positioned automatically by the textarea component
+             * **Common Mistake**: Seeing text above a textarea and assuming it's a separate `pds-text` component
+             * **Correct Understanding**: The text is the textarea's integrated label created by the `label` prop
+             * **Usage Examples:**
+             * ```tsx
+             * // Basic textarea
+             * <pds-textarea label="Description" component-id="description" rows="4"></pds-textarea>
+             * // Textarea with validation
+             * <pds-textarea
+             *   label="Comments"
+             *   component-id="comments"
+             *   required
+             *   helper-message="Please provide detailed feedback"
+             * ></pds-textarea>
+             * // Textarea with error state
+             * <pds-textarea
+             *   label="Bio"
+             *   component-id="bio"
+             *   invalid="true"
+             *   error-message="Bio must be at least 10 characters"
+             * ></pds-textarea>
+             * // ❌ INCORRECT - Don't add separate text for labels
+             * <pds-text>Description</pds-text>
+             * <pds-textarea component-id="description"></pds-textarea>
+             * // ✅ CORRECT - Use the label prop
+             * <pds-textarea label="Description" component-id="description"></pds-textarea>
+             * ```
+             */
             "pds-textarea": LocalJSX.PdsTextarea & JSXBase.HTMLAttributes<HTMLPdsTextareaElement>;
             "pds-toast": LocalJSX.PdsToast & JSXBase.HTMLAttributes<HTMLPdsToastElement>;
             "pds-tooltip": LocalJSX.PdsTooltip & JSXBase.HTMLAttributes<HTMLPdsTooltipElement>;

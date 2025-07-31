@@ -219,17 +219,17 @@ The `pds-box` component uses a mobile-first approach to responsive sizing. This 
 
 ```html
 <!-- Full width on mobile, half width on tablets and up -->
-<pds-box size="12" sizeMd="6"></pds-box>
+<pds-box size-md="6"></pds-box>
 
 <!-- Full width on mobile, one-third width on tablets and up -->
-<pds-box size="12" sizeMd="4"></pds-box>
+<pds-box size-md="4"></pds-box>
 ```
 
 #### Explicit full-width layout on small screens
 
 ```html
 <!-- Explicit full width on mobile, different widths at different breakpoints -->
-<pds-box size="12" sizeSm="6" sizeLg="4"></pds-box>
+<pds-box size-md="6" size-lg="4"></pds-box>
 ```
 
 #### When to use/avoid the base `size` prop
@@ -245,7 +245,7 @@ If you need different sizes at different breakpoints:
 
 ```html
 <!-- Different widths at different breakpoints -->
-<pds-box sizeSm="12" sizeMd="6" sizeLg="4"></pds-box>
+<pds-box size-sm="12" size-md="6" size-lg="4"></pds-box>
 ```
 
 ### Default Behavior

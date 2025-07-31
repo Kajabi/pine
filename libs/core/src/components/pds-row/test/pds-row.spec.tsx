@@ -75,4 +75,16 @@ describe('pds-row', () => {
 
     expect(element).toHaveClass('pds-row--no-wrap');
   });
+
+  it('renders with default flex behavior', async () => {
+    const page = await newSpecPage({
+      components: [PdsRow],
+      html: `<pds-row></pds-row>`,
+    });
+
+    const element = page.root;
+
+    // Should have the base pds-row class for flex behavior
+    expect(element).toHaveClass('pds-row');
+  });
 });
