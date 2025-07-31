@@ -36,11 +36,11 @@ This allows for flexibility with any CSS-supported color format.
 
 <DocCanvas client:only mdxSource={{
   react: `
-<PdsIcon name="bulb" color="red"></PdsIcon>
-<PdsIcon name="bulb" color="#FFA500"></PdsIcon>
-<PdsIcon name="bulb" color="rgb(0, 190, 0)"></PdsIcon>
-<PdsIcon name="bulb" color="hsl(230, 100%, 50%)"></PdsIcon>
-<PdsIcon name="bulb" color="var(--pine-color-mercury-500)"></PdsIcon>
+<PdsIcon icon={bulb} color="red"></PdsIcon>
+<PdsIcon icon={bulb} color="#FFA500"></PdsIcon>
+<PdsIcon icon={bulb} color="rgb(0, 190, 0)"></PdsIcon>
+<PdsIcon icon={bulb} color="hsl(230, 100%, 50%)"></PdsIcon>
+<PdsIcon icon={bulb} color="var(--pine-color-mercury-500)"></PdsIcon>
 `,
   webComponent: `
 <pds-icon name="bulb" color="red"></pds-icon>
@@ -67,9 +67,9 @@ The `size` property allows the icon to be displayed at a specified size. Accepte
 
 <DocCanvas client:only mdxSource={{
   react: `
-<PdsIcon name="danger" size="60px"></PdsIcon>
-<PdsIcon name="danger" size="2rem"></PdsIcon>
-<PdsIcon name="danger" size="small"></PdsIcon>
+<PdsIcon icon={danger} size="60px"></PdsIcon>
+<PdsIcon icon={danger} size="2rem"></PdsIcon>
+<PdsIcon icon={danger} size="small"></PdsIcon>
 `,
   webComponent: `
 <pds-icon name="danger" size="60px"></pds-icon>
@@ -83,3 +83,92 @@ The `size` property allows the icon to be displayed at a specified size. Accepte
     <pds-icon name="danger" size="small"></pds-icon>
   </>
 </DocCanvas>
+
+## How to Use Icons
+
+### React Usage
+
+In React applications, icons must be imported from `@pine-ds/icons/icons` and passed to the `icon` property. The deprecated `name` property has no effect in React.
+
+```jsx
+import { bulb, danger, launch } from '@pine-ds/icons/icons';
+import { PdsIcon } from '@pine-ds/react';
+
+// Correct usage
+<PdsIcon icon={bulb} />
+<PdsIcon icon={danger} color="red" />
+<PdsIcon icon={launch} size="large" />
+```
+
+### Web Component Usage
+
+For web components, use the `name` property with the icon name as a string:
+
+```html
+<pds-icon name="bulb"></pds-icon>
+<pds-icon name="danger" color="red"></pds-icon>
+<pds-icon name="launch" size="large"></pds-icon>
+```
+
+## Common Patterns
+
+### Individual Icon Imports
+
+When you know exactly which icons you need, import them individually for optimal bundle size:
+
+```jsx
+import { danger, bulb } from '@pine-ds/icons/icons';
+
+<PdsIcon icon={danger} />
+<PdsIcon icon={bulb} />
+```
+
+### Multiple Icon Imports
+
+For components that use several icons, import multiple icons in a single statement:
+
+```jsx
+import { 
+  danger, 
+  bulb, 
+  launch, 
+  downSmall 
+} from '@pine-ds/icons/icons';
+```
+
+### Performance Considerations
+
+- **Individual imports**: Recommended for better tree-shaking and smaller bundle sizes
+- **Avoid wildcard imports**: Don't use `import * from '@pine-ds/icons/icons'` as this imports all icons
+- **Bundle size**: Each icon adds approximately 1-2KB to your bundle
+
+## Troubleshooting
+
+### Console Warning About Name Property
+
+If you see this warning in your console:
+
+> "In Pine React, you import icons from "@pine-ds/icons/icons" and set the icon you imported to the "icon" property. Setting the "name" property has no effect."
+
+**Solution**: Replace the `name` property with proper icon imports:
+
+```jsx
+// ❌ Incorrect - causes warning
+<PdsIcon name="danger" />
+
+// ✅ Correct - no warning
+import { danger } from '@pine-ds/icons/icons';
+<PdsIcon icon={danger} />
+```
+
+### Icon Not Showing Up
+
+1. **Check your import**: Ensure the icon is imported from `@pine-ds/icons/icons`
+2. **Verify icon name**: Check that the icon name matches exactly (case-sensitive)
+3. **React vs Web Component**: Use `icon` property for React, `name` for web components
+
+### Bundle Size Concerns
+
+- Import only the icons you need
+- Avoid importing icons in shared utility files unless necessary
+- Consider lazy loading for icons used in less common user flows
