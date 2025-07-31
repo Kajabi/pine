@@ -4,6 +4,70 @@ import { computePosition, flip, offset, shift } from '@floating-ui/dom';
 import DOMPurify from 'dompurify';
 
 /**
+ * PdsCombobox - An advanced searchable dropdown component with filtering and accessibility
+ *
+ * **⚠️ CRITICAL BEHAVIOR:**
+ * - **Search & Filter**: Real-time filtering of options as user types
+ * - **Multiple Modes**: Filter mode (search) or select-only mode (dropdown)
+ * - **Two Triggers**: Input trigger (editable) or button trigger (non-editable)
+ * - **Accessibility**: Full ARIA support with proper labeling and keyboard navigation
+ * - **Custom Layouts**: Support for rich option content with HTML layouts
+ *
+ * **⚠️ VISUAL PATTERN CLARIFICATION:**
+ *
+ * When analyzing screenshots or visual layouts:
+ * - **Text above combobox**: This is the combobox's LABEL, not a separate `pds-text` component
+ * - **Label Integration**: The `label` prop creates text that appears above the combobox field
+ * - **No Separate Text Needed**: Do not add `pds-text` components for combobox labels
+ * - **Visual Hierarchy**: Label text is styled and positioned automatically by the combobox component
+ *
+ * **Common Mistake**: Seeing text above a combobox and assuming it's a separate `pds-text` component
+ * **Correct Understanding**: The text is the combobox's integrated label created by the `label` prop
+ *
+ * **Usage Examples:**
+ * ```tsx
+ * // Basic combobox with input trigger
+ * <pds-combobox label="Search Users" component-id="users" placeholder="Type to search...">
+ *   <option value="user1">John Doe</option>
+ *   <option value="user2">Jane Smith</option>
+ *   <option value="user3">Bob Johnson</option>
+ * </pds-combobox>
+ *
+ * // Combobox with button trigger
+ * <pds-combobox
+ *   label="Select Category"
+ *   component-id="category"
+ *   trigger="button"
+ *   placeholder="Choose a category"
+ * >
+ *   <option value="tech">Technology</option>
+ *   <option value="design">Design</option>
+ *   <option value="marketing">Marketing</option>
+ * </pds-combobox>
+ *
+ * // Select-only mode (no filtering)
+ * <pds-combobox
+ *   label="Country"
+ *   component-id="country"
+ *   mode="select-only"
+ *   trigger="button"
+ * >
+ *   <option value="us">United States</option>
+ *   <option value="ca">Canada</option>
+ * </pds-combobox>
+ *
+ * // ❌ INCORRECT - Don't add separate text for labels
+ * <pds-text>Search Users</pds-text>
+ * <pds-combobox component-id="users">
+ *   <option value="user1">John Doe</option>
+ * </pds-combobox>
+ *
+ * // ✅ CORRECT - Use the label prop
+ * <pds-combobox label="Search Users" component-id="users">
+ *   <option value="user1">John Doe</option>
+ * </pds-combobox>
+ * ```
+ *
  * @slot option - Option elements for the combobox dropdown
  * @slot trigger-content - Custom content for the button trigger when customTriggerContent is true
  */
@@ -61,6 +125,24 @@ export class PdsCombobox implements BasePdsProps {
 
   /**
    * Text to be displayed as the combobox label.
+   *
+   * **⚠️ CRITICAL VISUAL BEHAVIOR:**
+   * - **Integrated Label**: Creates text that appears ABOVE the combobox field
+   * - **Not Separate Component**: This is NOT a separate `pds-text` component
+   * - **Automatic Styling**: Label is styled and positioned by the combobox component
+   * - **Visual Hierarchy**: Creates proper visual relationship between label and combobox
+   *
+   * **Accessibility Impact:**
+   * - Creates proper label-combobox association
+   * - Required for screen reader accessibility
+   * - Sets `for` attribute to link with combobox
+   * - Can be visually hidden with `hideLabel` prop while remaining accessible
+   *
+   * **⚠️ COMMON MISTAKE**: When analyzing screenshots, text above a combobox is the LABEL, not a separate text component
+   *
+   * **Best Practice**: Always provide descriptive labels for combobox fields
+   *
+   * **Example**: `label="Search Users"` for user search combobox
    */
   @Prop() label?: string;
 

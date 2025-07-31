@@ -2,6 +2,45 @@ import { Component, h, Prop, Element } from '@stencil/core';
 import { setColor } from '../../utils/utils';
 
 /**
+ * PdsText - A versatile text component for content display
+ *
+ * **⚠️ CRITICAL USAGE CLARIFICATION:**
+ * - **Content Display**: Use for general text content, headings, paragraphs, etc.
+ * - **NOT for Input Labels**: Do NOT use for input field labels - use the `label` prop on input components instead
+ * - **Semantic Text**: Renders appropriate HTML tags (p, h1-h6, code, etc.)
+ * - **Typography Control**: Provides size, weight, color, and alignment options
+ *
+ * **Common Use Cases:**
+ * - **Headings**: Use with `tag="h1"` through `tag="h6"`
+ * - **Body Text**: Use with `tag="p"` for paragraphs
+ * - **Code**: Use with `tag="code"` or `tag="pre"` for code snippets
+ * - **Emphasis**: Use with `tag="strong"` or `tag="em"` for emphasis
+ *
+ * **⚠️ INPUT LABEL MISTAKE:**
+ * When you see text above an input field in a screenshot:
+ * - **That's the input's LABEL**, not a separate `pds-text` component
+ * - **Use the `label` prop** on the input component instead
+ * - **Example**: `<pds-input label="Email" component-id="email"></pds-input>`
+ *
+ * **Usage Examples:**
+ * ```tsx
+ * // Heading
+ * <pds-text tag="h1" size="h1" weight="bold">Page Title</pds-text>
+ *
+ * // Body text
+ * <pds-text tag="p" size="md">This is body text content.</pds-text>
+ *
+ * // Code snippet
+ * <pds-text tag="code" size="sm">const example = "code";</pds-text>
+ *
+ * // ❌ INCORRECT - Don't use for input labels
+ * <pds-text>Email Address</pds-text>
+ * <pds-input component-id="email"></pds-input>
+ *
+ * // ✅ CORRECT - Use input label prop
+ * <pds-input label="Email Address" component-id="email"></pds-input>
+ * ```
+ *
  * @part content - The text content container
  */
 @Component({

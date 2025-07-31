@@ -7,6 +7,41 @@ import { debounceEvent } from '@utils/utils';
 import { danger } from '@pine-ds/icons/icons';
 
 /**
+ * PdsInput - A form input component with validation and accessibility
+ *
+ * **⚠️ VISUAL PATTERN CLARIFICATION:**
+ *
+ * When analyzing screenshots or visual layouts:
+ * - **Text above input field**: This is the input's LABEL, not a separate `pds-text` component
+ * - **Label Integration**: The `label` prop creates text that appears above the input field
+ * - **No Separate Text Needed**: Do not add `pds-text` components for input labels
+ * - **Visual Hierarchy**: Label text is styled and positioned automatically by the input component
+ *
+ * **Common Mistake**: Seeing text above an input and assuming it's a separate `pds-text` component
+ * **Correct Understanding**: The text is the input's integrated label created by the `label` prop
+ *
+ * **Usage Examples:**
+ * ```tsx
+ * // Basic input
+ * <pds-input label="Name" component-id="name" required></pds-input>
+ *
+ * // Input with validation
+ * <pds-input
+ *   label="Email"
+ *   component-id="email"
+ *   type="email"
+ *   required
+ *   helper-message="We'll never share your email"
+ * ></pds-input>
+ *
+ * // ❌ INCORRECT - Don't add separate text for labels
+ * <pds-text>Name</pds-text>
+ * <pds-input component-id="name"></pds-input>
+ *
+ * // ✅ CORRECT - Use the label prop
+ * <pds-input label="Name" component-id="name"></pds-input>
+ * ```
+ *
  * @slot append - Content to be displayed after the input field
  * @slot prefix - Content that is displayed visually within the input field before the input field
  * @slot prepend - Content to be displayed before the input field
@@ -62,7 +97,15 @@ export class PdsInput {
   /**
    * Emitted when the value has changed.
    *
-   * This event will not emit when programmatically setting the `value` property.
+   * **Event Behavior:**
+   * - Fires when value changes and input loses focus
+   * - Does not emit when programmatically setting the `value` property
+   * - Provides value and original event object
+   * - Used for form submission and final value handling
+   *
+   * **Best Practice**: Use for form submission and final value processing
+   *
+   * **Example**: `<pds-input onPdsChange={handleFormChange}>`
    */
   @Event() pdsChange!: EventEmitter<InputChangeEventDetail>;
 
@@ -86,7 +129,6 @@ export class PdsInput {
       this.nativeInput.focus();
     }
   }
-
 
   /**
    * Specifies if and how the browser provides `autocomplete` assistance for the field.
@@ -123,7 +165,7 @@ export class PdsInput {
    */
   @Prop() invalid?: boolean;
 
-  /**
+      /**
    * Text to be displayed as the input label.
    */
   @Prop() label?: string;
@@ -180,7 +222,24 @@ export class PdsInput {
 
   /**
    * Determines the type of control that will be displayed
-   * `'email'`, `'number'`, `'password'`, `'tel'`, `'text'`, `'url'`
+   *
+   * **Input Types:**
+   * - `text`: Standard text input (default)
+   * - `email`: Email validation and mobile keyboard
+   * - `password`: Hidden text with security features
+   * - `number`: Numeric input with min/max/step validation
+   * - `tel`: Telephone input with mobile keyboard
+   * - `url`: URL validation and mobile keyboard
+   *
+   * **Type-Specific Features:**
+   * - **email**: Browser email validation, mobile email keyboard
+   * - **password**: Hidden characters, security features
+   * - **number**: Up/down arrows, min/max validation
+   * - **tel**: Mobile phone keyboard, pattern validation
+   * - **url**: Browser URL validation, mobile URL keyboard
+   *
+   * **Best Practice**: Choose type that matches expected input for better UX
+   *
    * @defaultValue "text"
    */
   @Prop() type = 'text';
@@ -192,6 +251,16 @@ export class PdsInput {
 
   /**
    * Determines whether or not the input field takes full width of its container.
+   *
+   * **Layout Impact:**
+   * - Makes input span 100% width of parent container
+   * - Useful for mobile layouts or form consistency
+   * - Works with all input types and states
+   * - Affects input field only, not label or messages
+   *
+   * **Best Practice**: Use for form layouts where consistent width is needed
+   *
+   * **Example**: `full-width="true"` for mobile-friendly forms
    */
   @Prop() fullWidth?: boolean;
 

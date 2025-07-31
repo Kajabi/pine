@@ -7,6 +7,55 @@ import { inheritAttributes, inheritAriaAttributes } from '@utils/attributes';
 import { danger } from '@pine-ds/icons/icons';
 
 /**
+ * PdsTextarea - A multi-line text input component with validation and accessibility
+ *
+ * **⚠️ CRITICAL BEHAVIOR:**
+ * - **Form Integration**: Automatically handles form submission and validation
+ * - **Validation States**: Supports error messages and invalid states
+ * - **Accessibility**: Full ARIA support with proper labeling and descriptions
+ * - **Event Handling**: Debounced input events and change detection
+ * - **Resizable**: Users can resize the textarea vertically
+ *
+ * **⚠️ VISUAL PATTERN CLARIFICATION:**
+ *
+ * When analyzing screenshots or visual layouts:
+ * - **Text above textarea**: This is the textarea's LABEL, not a separate `pds-text` component
+ * - **Label Integration**: The `label` prop creates text that appears above the textarea field
+ * - **No Separate Text Needed**: Do not add `pds-text` components for textarea labels
+ * - **Visual Hierarchy**: Label text is styled and positioned automatically by the textarea component
+ *
+ * **Common Mistake**: Seeing text above a textarea and assuming it's a separate `pds-text` component
+ * **Correct Understanding**: The text is the textarea's integrated label created by the `label` prop
+ *
+ * **Usage Examples:**
+ * ```tsx
+ * // Basic textarea
+ * <pds-textarea label="Description" component-id="description" rows="4"></pds-textarea>
+ *
+ * // Textarea with validation
+ * <pds-textarea
+ *   label="Comments"
+ *   component-id="comments"
+ *   required
+ *   helper-message="Please provide detailed feedback"
+ * ></pds-textarea>
+ *
+ * // Textarea with error state
+ * <pds-textarea
+ *   label="Bio"
+ *   component-id="bio"
+ *   invalid="true"
+ *   error-message="Bio must be at least 10 characters"
+ * ></pds-textarea>
+ *
+ * // ❌ INCORRECT - Don't add separate text for labels
+ * <pds-text>Description</pds-text>
+ * <pds-textarea component-id="description"></pds-textarea>
+ *
+ * // ✅ CORRECT - Use the label prop
+ * <pds-textarea label="Description" component-id="description"></pds-textarea>
+ * ```
+ *
  * @slot action - Content to be displayed in the label area, typically for help icons or links
  */
 @Component({
@@ -103,6 +152,24 @@ export class PdsTextarea {
 
   /**
    * Text to be displayed as the textarea label.
+   *
+   * **⚠️ CRITICAL VISUAL BEHAVIOR:**
+   * - **Integrated Label**: Creates text that appears ABOVE the textarea field
+   * - **Not Separate Component**: This is NOT a separate `pds-text` component
+   * - **Automatic Styling**: Label is styled and positioned by the textarea component
+   * - **Visual Hierarchy**: Creates proper visual relationship between label and textarea
+   *
+   * **Accessibility Impact:**
+   * - Creates proper label-textarea association
+   * - Required for screen reader accessibility
+   * - Shows required indicator (*) when `required="true"`
+   * - Sets `for` attribute to link with textarea
+   *
+   * **⚠️ COMMON MISTAKE**: When analyzing screenshots, text above a textarea is the LABEL, not a separate text component
+   *
+   * **Best Practice**: Always provide descriptive labels for textarea fields
+   *
+   * **Example**: `label="Description"` for textarea input
    */
   @Prop() label?: string;
 

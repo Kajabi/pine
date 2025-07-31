@@ -3,6 +3,70 @@ import { messageId } from '../../utils/form';
 import { danger, enlarge } from '@pine-ds/icons/icons';
 
 /**
+ * PdsSelect - A dropdown selection component with validation and accessibility
+ *
+ * **⚠️ CRITICAL BEHAVIOR:**
+ * - **Form Integration**: Automatically handles form submission and validation
+ * - **Validation States**: Supports error messages and invalid states
+ * - **Accessibility**: Full ARIA support with proper labeling and descriptions
+ * - **Multiple Selection**: Supports single and multiple option selection
+ * - **Option Management**: Uses slot-based option content for flexibility
+ *
+ * **⚠️ VISUAL PATTERN CLARIFICATION:**
+ *
+ * When analyzing screenshots or visual layouts:
+ * - **Text above select dropdown**: This is the select's LABEL, not a separate `pds-text` component
+ * - **Label Integration**: The `label` prop creates text that appears above the select field
+ * - **No Separate Text Needed**: Do not add `pds-text` components for select labels
+ * - **Visual Hierarchy**: Label text is styled and positioned automatically by the select component
+ *
+ * **Common Mistake**: Seeing text above a select dropdown and assuming it's a separate `pds-text` component
+ * **Correct Understanding**: The text is the select's integrated label created by the `label` prop
+ *
+ * **Usage Examples:**
+ * ```tsx
+ * // Basic select
+ * <pds-select label="Country" component-id="country" name="country">
+ *   <option value="us">United States</option>
+ *   <option value="ca">Canada</option>
+ *   <option value="uk">United Kingdom</option>
+ * </pds-select>
+ *
+ * // Select with validation
+ * <pds-select
+ *   label="Category"
+ *   component-id="category"
+ *   required
+ *   helper-message="Please select a category"
+ * >
+ *   <option value="">Select a category</option>
+ *   <option value="tech">Technology</option>
+ *   <option value="design">Design</option>
+ * </pds-select>
+ *
+ * // Multiple select
+ * <pds-select
+ *   label="Skills"
+ *   component-id="skills"
+ *   multiple="true"
+ * >
+ *   <option value="js">JavaScript</option>
+ *   <option value="react">React</option>
+ *   <option value="node">Node.js</option>
+ * </pds-select>
+ *
+ * // ❌ INCORRECT - Don't add separate text for labels
+ * <pds-text>Country</pds-text>
+ * <pds-select component-id="country">
+ *   <option value="us">United States</option>
+ * </pds-select>
+ *
+ * // ✅ CORRECT - Use the label prop
+ * <pds-select label="Country" component-id="country">
+ *   <option value="us">United States</option>
+ * </pds-select>
+ * ```
+ *
  * @slot action - Content to be displayed in the label area, typically for help icons or links
  */
 @Component({
@@ -55,6 +119,24 @@ export class PdsSelect {
 
   /**
    * Text to be displayed as the select label.
+   *
+   * **⚠️ CRITICAL VISUAL BEHAVIOR:**
+   * - **Integrated Label**: Creates text that appears ABOVE the select dropdown
+   * - **Not Separate Component**: This is NOT a separate `pds-text` component
+   * - **Automatic Styling**: Label is styled and positioned by the select component
+   * - **Visual Hierarchy**: Creates proper visual relationship between label and select
+   *
+   * **Accessibility Impact:**
+   * - Creates proper label-select association
+   * - Required for screen reader accessibility
+   * - Shows required indicator (*) when `required="true"`
+   * - Sets `for` attribute to link with select
+   *
+   * **⚠️ COMMON MISTAKE**: When analyzing screenshots, text above a select dropdown is the LABEL, not a separate text component
+   *
+   * **Best Practice**: Always provide descriptive labels for select fields
+   *
+   * **Example**: `label="Country"` for country selection
    */
   @Prop() label?: string;
 
