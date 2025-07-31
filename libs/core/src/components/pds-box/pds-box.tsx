@@ -2,6 +2,47 @@ import { Component, h, Host, Prop } from '@stencil/core';
 
 import { BoxColumnType, BoxTShirtSizeType, BoxShadowSizeType } from '../../utils/types';
 
+/**
+ * PdsBox - A flexible layout container component
+ *
+ * **⚠️ CRITICAL LAYOUT BEHAVIOR:**
+ * - **Default Direction**: Items flow HORIZONTALLY by default (`direction="row"`)
+ * - **For Vertical Stacking**: You MUST explicitly set `direction="column"`
+ * - **Common Mistake**: Expecting vertical stacking without setting direction
+ *
+ * **Layout Patterns:**
+ * - **Horizontal Flow (Default)**: Items are placed side by side
+ * - **Vertical Stacking**: Set `direction="column"` for items to stack vertically
+ * - **Grid Layout**: Use inside `pds-row` with `size-*` props for responsive grid
+ *
+ * **Key Props for Layout:**
+ * - `direction`: **CRITICAL** - Controls item orientation (`row` = horizontal, `column` = vertical)
+ * - `size`: Sets column width (1-12 grid system, works best inside pds-row)
+ * - `gap`: Controls spacing between items
+ * - `justifyContent`: Horizontal alignment of items
+ * - `alignItems`: Vertical alignment of items
+ *
+ * **Usage Examples:**
+ * ```tsx
+ * // ⚠️ HORIZONTAL flow (default behavior - items side by side)
+ * <pds-box gap="md">
+ *   <div>Item 1</div>
+ *   <div>Item 2</div> // These will be HORIZONTAL
+ * </pds-box>
+ *
+ * // ✅ VERTICAL stacking (explicit - items stacked)
+ * <pds-box direction="column" gap="md">
+ *   <div>Item 1</div>
+ *   <div>Item 2</div> // These will be VERTICAL
+ * </pds-box>
+ *
+ * // Grid layout inside pds-row
+ * <pds-row>
+ *   <pds-box size-md="6">Half width</pds-box>
+ *   <pds-box size-md="6">Half width</pds-box>
+ * </pds-row>
+ * ```
+ */
 @Component({
   tag: 'pds-box',
   styleUrl: 'pds-box.scss',
@@ -9,6 +50,14 @@ import { BoxColumnType, BoxTShirtSizeType, BoxShadowSizeType } from '../../utils
 export class PdsBox {
   /**
    * Defines how items within the box are aligned.
+   *
+   * **Layout Impact:**
+   * - `start`: Items align to the start (top for column, left for row)
+   * - `center`: Items align to the center
+   * - `end`: Items align to the end (bottom for column, right for row)
+   * - `baseline`: Items align to their text baseline
+   * - `stretch`: Items stretch to fill the container (default)
+   *
    * @defaultValue start
   */
   @Prop() alignItems?: `start` | `center` | `end` | `baseline` | `stretch`;
@@ -23,6 +72,20 @@ export class PdsBox {
    * If `true`, the box will be sized to fit its contents.
    */
   @Prop() auto?: boolean;
+
+  /**
+   * ⚠️ LAYOUT RELATIONSHIP WITH PDS-ROW:
+   *
+   * When pds-box is used inside pds-row:
+   * - The default `direction="row"` works well for grid layouts
+   * - Use `size` props (1-12) to control column widths
+   * - The box becomes a grid column within the row
+   *
+   * When pds-box is used standalone:
+   * - Default `direction="row"` creates horizontal flow
+   * - Set `direction="column"` for vertical stacking
+   * - Size props have limited effect outside of pds-row
+   */
 
   /**
    *  Defines the background-color of the box.
@@ -45,14 +108,43 @@ export class PdsBox {
    */
   @Prop() borderRadius?: `none` | `xs`| `sm` | `md` | `lg` | `circle`;
 
-  /**
+      /**
    * Defines the orientation of the box items.
+   *
+   * **⚠️ IMPORTANT LAYOUT BEHAVIOR:**
+   * - **Default is `row`**: Items flow horizontally by default
+   * - **For vertical stacking**: Explicitly set `direction="column"`
+   * - **Common pattern**: Use `direction="column"` when you want items to stack vertically
+   * - **Inside pds-row**: The default `row` direction works well for grid layouts
+   *
+   * **Usage Examples:**
+   * ```tsx
+   * // Horizontal flow (default behavior)
+   * <pds-box>
+   *   <div>Item 1</div>
+   *   <div>Item 2</div> // These will be side by side
+   * </pds-box>
+   *
+   * // Vertical stacking (explicit)
+   * <pds-box direction="column">
+   *   <div>Item 1</div>
+   *   <div>Item 2</div> // These will stack vertically
+   * </pds-box>
+   * ```
+   *
    * @defaultValue row
    */
   @Prop() direction?: `row` | `column`;
 
   /**
    * Defines the display style of the box.
+   *
+   * **Layout Impact:**
+   * - `flex`: Creates a flex container (default)
+   * - `inline-flex`: Creates an inline flex container
+   * - `block`: Creates a block-level container
+   * - `inline-block`: Creates an inline-block container
+   *
    * @defaultValue flex
   */
   @Prop() display?: `flex` | `inline-flex` | `block` | `inline-block`;
@@ -64,6 +156,12 @@ export class PdsBox {
 
   /**
    * Defines the spacing between the box items.
+   *
+   * **Layout Impact:**
+   * - Controls the gap between flex items
+   * - Available sizes: `none`, `xxs`, `xs`, `sm`, `md`, `lg`, `xl`, `xxl`
+   * - Works with both `row` and `column` directions
+   *
    * @defaultValue none
   */
   @Prop() gap?: BoxTShirtSizeType;
@@ -76,6 +174,14 @@ export class PdsBox {
 
   /**
    * Defines the horizontal alignment of the box items.
+   *
+   * **Layout Impact:**
+   * - `start`: Items pack toward the start (left for row, top for column)
+   * - `center`: Items pack toward the center
+   * - `end`: Items pack toward the end (right for row, bottom for column)
+   * - `space-between`: Items are evenly distributed with first at start, last at end
+   * - `space-around`: Items are evenly distributed with equal space around them
+   *
    * @defaultValue start
   */
   @Prop() justifyContent?: `start` | `center` | `end` | `space-between` | `space-around`;
@@ -183,6 +289,12 @@ export class PdsBox {
 
   /**
    * Sets the default column width for the component. This value applies from the smallest screen size (XS) upwards, unless overridden by a breakpoint-specific size prop at that breakpoint or larger.
+   *
+   * **Grid System:**
+   * - Uses a 12-column grid system
+   * - Values range from 1-12 (e.g., `6` = 50% width, `12` = 100% width)
+   * - Most effective when used inside `pds-row` containers
+   * - Responsive variants available: `sizeXs`, `sizeSm`, `sizeMd`, `sizeLg`, `sizeXl`
    */
   @Prop() size?: BoxColumnType;
 
@@ -214,6 +326,9 @@ export class PdsBox {
 
 
   render() {
+    // Generate CSS classes based on props
+    // This creates utility classes for layout, spacing, sizing, and styling
+    // NOTE: direction defaults to 'row' (horizontal flow) - use 'column' for vertical stacking
     const boxClasses = `
     ${this.alignItems !== undefined && this.alignItems.trim() !== '' ? `pds-align-items-${this.alignItems}` : ''}
     ${this.alignSelf !== undefined && this.alignSelf.trim() !== '' ? `pds-align-self-${this.alignSelf}` : ''}

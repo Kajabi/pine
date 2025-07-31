@@ -19,12 +19,22 @@ The `pds-box` serves two main purposes:
 1. **Container**: Provides customizable styling options, including border, padding, background color, and alignment.
 2. **Grid Column**: Functions as a column within a `pds-row`.
 
+**⚠️ CRITICAL LAYOUT BEHAVIOR:**
+
+- **Default Direction**: Items flow **HORIZONTALLY** by default (`direction="row"`)
+- **For Vertical Stacking**: You **MUST** explicitly set `direction="column"`
+- **Common Mistake**: Expecting vertical stacking without setting direction
+
 **Important Notes:**
 
 When used as a grid column, `pds-box` must be:
   - A direct child of a `pds-row`.
   - Assigned a `size` property (e.g., `size="4"` for a column spanning 4 grid units).
 Columns cannot exist inside `pds-box` components.
+
+**Layout Context:**
+- **Standalone Usage**: Default horizontal flow, set `direction="column"` for vertical stacking
+- **Inside pds-row**: Default horizontal flow works well for grid layouts
 
 ## `pds-row`
 
@@ -39,6 +49,8 @@ The `pds-row` component defines a horizontal container for multiple columns (`pd
 ## Best Practices for Layouts
 
 Use `pds-box` for Single-Column Layouts:
+
+**Note**: This example explicitly sets `direction="column"` for vertical stacking. Without this, items would flow horizontally by default.
 
 <DocCanvas client:only
   mdxSource={{
@@ -345,7 +357,7 @@ Add size modifiers to your child `pds-box` for responsive design
             <PdsBox direction="column">
               <h3>Accept Kajabi Payments on all your Offers!</h3>
               <p>Convert credit card payments and enable Apple Pay, Google Pay, and Buy Now, Pay Later options with one-click.</p>
-              <PdsBox gap="sm">
+              <PdsBox direction="column" gap="sm">
                 <pds-button>Primary</pds-button>
                 <pds-button variant="secondary">Secondary</pds-button>
               </PdsBox>
@@ -369,7 +381,7 @@ Add size modifiers to your child `pds-box` for responsive design
             <pds-box direction="column">
               <h3>Accept Kajabi Payments on all your Offers!</h3>
               <p>Convert credit card payments and enable Apple Pay, Google Pay, and Buy Now, Pay Later options with one-click.</p>
-              <pds-box gap="sm">
+              <pds-box direction="column" gap="sm">
                 <pds-button>Primary</pds-button>
                 <pds-button variant="secondary">Secondary</pds-button>
               </pds-box>
@@ -677,6 +689,16 @@ This creates a two-column layout, and you can customize the `size` and arrangeme
 ## Responsive Design
 
 Using the size modifiers such as `-xs`, `-md`, etc, enable responsive behavior for you `pds-box`. The layout components are designed to be responsive, allowing you to create layouts that adapt to different screen sizes. Take advantage of properties like `size-xs`, `offset-sm`, etc., to customize the layout for specific breakpoints. Be sure to optimize your layout for mobile devices, as well as larger screens.
+
+**Size Prop Variants:**
+- `size`: Base size (applies to all screen sizes unless overridden)
+- `size-xs`: Extra small screens (up to 575px)
+- `size-sm`: Small screens (576px and up)
+- `size-md`: Medium screens (768px and up)
+- `size-lg`: Large screens (992px and up)
+- `size-xl`: Extra large screens (1200px and up)
+
+**Best Practice**: Use responsive variants (e.g., `size-md="6"`) instead of base `size` for better responsive control.
 
 <DocCanvas client:only
   mdxSource={{

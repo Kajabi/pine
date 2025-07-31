@@ -98,6 +98,17 @@ describe('pds-box', () => {
     expect(element).toHaveClass('pds-box--border');
   });
 
+  it('renders row direction when explicitly set', async () => {
+    const page = await newSpecPage({
+      components: [PdsBox],
+      html: `<pds-box direction="row"></pds-box>`,
+    });
+
+    const element = page.root;
+
+    expect(element).toHaveClass('pds-box-direction-row');
+  });
+
   it('renders border-color class when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsBox],
