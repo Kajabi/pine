@@ -104,7 +104,7 @@
   --pds-select-border: var(--pine-border-width-none);
   --pds-select-border-radius-end-end: var(--pine-dimension-none);
   --pds-select-border-radius-start-end: var(--pine-dimension-none);
-  --pds-select-min-height: var(--pine-dimension-450);
+  --pds-select-min-height: calc(var(--pine-dimension-450) - calc(2 * var(--pine-border-width)));
 }
 
 /* stylelint-disable-next-line */
@@ -113,7 +113,7 @@
   --pds-select-border: var(--pine-border-width-none);
   --pds-select-border-radius-end-start: var(--pine-dimension-none);
   --pds-select-border-radius-start-start: var(--pine-dimension-none);
-  --pds-select-min-height: var(--pine-dimension-450);
+  --pds-select-min-height: calc(var(--pine-dimension-450) - calc(2 * var(--pine-border-width)));
 }
 
 :host([aria-readonly="true"]) {
