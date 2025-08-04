@@ -16,6 +16,11 @@ import { PdsBox } from '@pine-ds/react';
  * - **Main Containers**: Always use `direction="column"` and `fit="true"` for page sections and main content areas
  * - **Grid Layout**: Use inside `pds-row` with `size-*` props for responsive grid
  *
+ * **⚠️ CRITICAL PADDING BEHAVIOR:**
+ * - **Container Boxes** (`direction="column"` + `fit="true"`): Should NOT have padding - let child boxes handle spacing
+ * - **Boxes Inside Rows**: Should have padding for proper spacing and visual separation
+ * - **Padding Hierarchy**: Container → no padding, Children → with padding
+ *
  * **Key Props for Layout:**
  * - `direction`: **CRITICAL** - Controls item orientation (`row` = horizontal, `column` = vertical)
  * - `size`: Sets column width (1-12 grid system, works best inside pds-row)
@@ -37,7 +42,7 @@ import { PdsBox } from '@pine-ds/react';
  *   <div>Item 2</div> // These will be VERTICAL
  * </pds-box>
  *
- * // ✅ MAIN CONTAINERS should use direction="column" and fit="true"
+ * // ✅ MAIN CONTAINERS: direction="column" + fit="true" + NO PADDING
  * <pds-box direction="column" gap="lg" fit="true">
  *   <h1>Page Title</h1>
  *   <p>Page description</p>
@@ -47,10 +52,10 @@ import { PdsBox } from '@pine-ds/react';
  *   </pds-box>
  * </pds-box>
  *
- * // Grid layout inside pds-row
+ * // ✅ Grid layout: Container no padding, children with padding
  * <pds-row>
- *   <pds-box size-md="6">Half width</pds-box>
- *   <pds-box size-md="6">Half width</pds-box>
+ *   <pds-box size-md="6" padding="md" border="true">Half width with padding</pds-box>
+ *   <pds-box size-md="6" padding="md" border="true">Half width with padding</pds-box>
  * </pds-row>
  * ```
  */
