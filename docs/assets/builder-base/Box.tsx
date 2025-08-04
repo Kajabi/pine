@@ -56,98 +56,134 @@ import { PdsBox } from '@pine-ds/react';
  */
 
 interface BoxProps {
-  children?: React.ReactNode;
-  display?: 'block' | 'flex' | 'inline' | 'inline-block' | 'inline-flex' | 'none';
-  direction?: 'row' | 'column' | 'row-reverse' | 'column-reverse';
-  wrap?: 'nowrap' | 'wrap' | 'wrap-reverse';
-  justifyContent?: 'start' | 'end' | 'center' | 'space-between' | 'space-around' | 'space-evenly';
   alignItems?: 'start' | 'end' | 'center' | 'baseline' | 'stretch';
   alignContent?: 'start' | 'end' | 'center' | 'space-between' | 'space-around' | 'stretch';
+  backgroundColor?: string;
+  border?: boolean;
+  borderColor?: string;
+  borderRadius?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  children?: React.ReactNode;
+  className?: string;
+  componentId?: string;
+  direction?: 'row' | 'column' | 'row-reverse' | 'column-reverse';
+  display?: 'block' | 'flex' | 'inline' | 'inline-block' | 'inline-flex' | 'none';
+  justifyContent?: 'start' | 'end' | 'center' | 'space-between' | 'space-around' | 'space-evenly';
   gap?: 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  fit?: boolean;
+  flex?: 'none' | 'auto' | 'initial' | 'grow' | 'shrink';
   padding?: 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
-  paddingTop?: 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  paddingBlockStart?: 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  paddingBlockEnd?: 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  paddingInlineStart?: 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  paddingInlineEnd?: 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
   paddingBottom?: 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
   paddingLeft?: 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
   paddingRight?: 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
-  margin?: 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
-  marginTop?: 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
-  marginBottom?: 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
-  marginLeft?: 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
-  marginRight?: 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
-  border?: boolean;
-  borderTop?: boolean;
-  borderBottom?: boolean;
-  borderLeft?: boolean;
-  borderRight?: boolean;
-  borderRadius?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
-  backgroundColor?: string;
-  borderColor?: string;
-  flex?: 'none' | 'auto' | 'initial' | 'grow' | 'shrink';
-  className?: string;
-  componentId?: string;
+  marginBlockStart?: 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  marginBlockEnd?: 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  marginInlineStart?: 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  marginInlineEnd?: 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  minHeight?: 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  minWidth?: 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  offset?: '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12';
+  offsetXs?: '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12';
+  offsetSm?: '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12';
+  offsetMd?: '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12';
+  offsetLg?: '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12';
+  offsetXl?: '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12';
+  shadow?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  size?: '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12';
+  sizeXs?: '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12';
+  sizeSm?: '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12';
+  sizeMd?: '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12';
+  sizeLg?: '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12';
+  sizeXl?: '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12';
+  wrap?: 'nowrap' | 'wrap' | 'wrap-reverse';
 }
 
 export const Box: React.FC<BoxProps> = ({
-  children,
-  display,
-  direction,
-  wrap,
-  justifyContent,
   alignItems,
   alignContent,
-  gap,
-  padding,
-  paddingTop,
-  paddingBottom,
-  paddingLeft,
-  paddingRight,
-  margin,
-  marginTop,
-  marginBottom,
-  marginLeft,
-  marginRight,
-  border,
-  borderTop,
-  borderBottom,
-  borderLeft,
-  borderRight,
-  borderRadius,
   backgroundColor,
+  border,
   borderColor,
-  flex,
+  borderRadius,
+  children,
   className = '',
-  componentId
+  componentId,
+  direction,
+  display,
+  fit,
+  flex,
+  gap,
+  justifyContent,
+  marginBlockStart,
+  marginBlockEnd,
+  marginInlineStart,
+  marginInlineEnd,
+  minHeight,
+  minWidth,
+  offset,
+  offsetXs,
+  offsetSm,
+  offsetMd,
+  offsetLg,
+  offsetXl,
+  padding,
+  paddingBlockStart,
+  paddingBlockEnd,
+  paddingInlineStart,
+  paddingInlineEnd,
+  shadow,
+  size,
+  sizeXs,
+  sizeSm,
+  sizeMd,
+  sizeLg,
+  sizeXl,
+  wrap,
 }) => {
   return (
     <PdsBox
-      display={display}
-      direction={direction}
-      wrap={wrap}
-      justifyContent={justifyContent}
       alignItems={alignItems}
       alignContent={alignContent}
-      gap={gap}
-      padding={padding}
-      paddingTop={paddingTop}
-      paddingBottom={paddingBottom}
-      paddingLeft={paddingLeft}
-      paddingRight={paddingRight}
-      margin={margin}
-      marginTop={marginTop}
-      marginBottom={marginBottom}
-      marginLeft={marginLeft}
-      marginRight={marginRight}
       border={border}
-      borderTop={borderTop}
-      borderBottom={borderBottom}
-      borderLeft={borderLeft}
-      borderRight={borderRight}
       borderRadius={borderRadius}
       backgroundColor={backgroundColor}
       borderColor={borderColor}
-      flex={flex}
       componentId={componentId}
       className={className}
+      direction={direction}
+      display={display}
+      fit={fit}
+      flex={flex}
+      gap={gap}
+      justifyContent={justifyContent}
+      padding={padding}
+      paddingBlockStart={paddingBlockStart}
+      paddingBlockEnd={paddingBlockEnd}
+      paddingInlineStart={paddingInlineStart}
+      paddingInlineEnd={paddingInlineEnd}
+      marginBlockStart={marginBlockStart}
+      marginBlockEnd={marginBlockEnd}
+      marginInlineStart={marginInlineStart}
+      marginInlineEnd={marginInlineEnd}
+      minHeight={minHeight}
+      minWidth={minWidth}
+      offset={offset}
+      offsetXs={offsetXs}
+      offsetSm={offsetSm}
+      offsetMd={offsetMd}
+      offsetLg={offsetLg}
+      offsetXl={offsetXl}
+      shadow={shadow}
+      size={size}
+      sizeXs={sizeXs}
+      sizeSm={sizeSm}
+      sizeMd={sizeMd}
+      sizeLg={sizeLg}
+      sizeXl={sizeXl}
+      wrap={wrap}
     >
       {children}
     </PdsBox>
