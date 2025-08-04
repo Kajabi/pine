@@ -22,6 +22,18 @@ The select component provides a dropdown list of options, allowing users to make
 - Provide helper text or error messages for guidance and validation.
 - Avoid overloading dropdowns with excessive options to prevent overwhelm.
 
+## Usage Notes
+
+### Working with Labels
+
+When analyzing designs or screenshots, text that appears above a select dropdown is the select's label, not a separate `pds-text` component. The `label` prop creates text that appears above the select field and integrates properly with the component's styling and accessibility features.
+
+### Form Integration Features
+
+- Full ARIA support with proper labeling and descriptions
+- Supports single and multiple option selection
+- Uses slot-based option content for flexibility
+
 ## Properties
 
 <DocArgsTable componentName="pds-select" docSource={components} />

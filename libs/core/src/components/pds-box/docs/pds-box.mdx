@@ -27,6 +27,39 @@ For example:
 
 This approach ensures that your layouts will work correctly regardless of the text direction or writing mode.
 
+## Usage Notes
+
+### Layout Essentials
+
+Items flow horizontally by default, so you'll need to explicitly set `direction="column"` for vertical stacking. This is the most common consideration when working with Box components.
+
+### Layout Patterns
+
+- Horizontal Flow (Default): Items are placed side by side
+- Vertical Stacking: Set `direction="column"` for items to stack vertically
+- Main Containers: Use `direction="column"` and `fit="true"` for page sections and main content areas
+- Grid Layout: Use inside `pds-row` with `size-*` props for responsive grid
+
+### Key Props for Layout
+
+- `direction`: Controls item orientation (`row` = horizontal, `column` = vertical)
+- `size`: Sets column width (1-12 grid system, works best inside pds-row)
+- `gap`: Controls spacing between items
+- `justifyContent`: Horizontal alignment of items
+- `alignItems`: Vertical alignment of items
+
+### Working with PDS-Row
+
+When pds-box is used inside pds-row:
+- The default `direction="row"` works well for grid layouts
+- Use `size` props (1-12) to control column widths
+- The box becomes a grid column within the row
+
+When pds-box is used standalone:
+- Default `direction="row"` creates horizontal flow
+- Set `direction="column"` for vertical stacking
+- Size props have limited effect outside of pds-row
+
 ## Properties
 
 <DocArgsTable componentName="pds-box" docSource={components} />
@@ -159,8 +192,20 @@ By default Box has no padding. Use `padding` to add padding to the box.
 ### Display
 By default Box is `display: inline-flex`. Use `display` to change the display property `flex` if the box is intended to fill the entire row.
 
+Layout impact:
+- `flex`: Creates a flex container (default)
+- `inline-flex`: Creates an inline flex container
+- `block`: Creates a block-level container
+- `inline-block`: Creates an inline-block container
+
 ### Direction
-By default Box is `flex-direction: row`. Use `direction` to change the direction property `column` if the box's contents are intended to stack vertically'.
+By default Box is `flex-direction: row`. Use `direction` to change the direction property `column` if the box's contents are intended to stack vertically.
+
+Layout behavior:
+- Default is `row`: Items flow horizontally by default
+- For vertical stacking: Explicitly set `direction="column"`
+- Common pattern: Use `direction="column"` when you want items to stack vertically
+- Inside pds-row: The default `row` direction works well for grid layouts
 
 <DocCanvas client:only
   mdxSource={{
@@ -191,6 +236,36 @@ By default Box is `flex-direction: row`. Use `direction` to change the direction
   </pds-box>
 </DocCanvas>
 
+
+### Align Items
+
+Defines how items within the box are aligned.
+
+Layout impact:
+- `start`: Items align to the start (top for column, left for row)
+- `center`: Items align to the center
+- `end`: Items align to the end (bottom for column, right for row)
+- `baseline`: Items align to their text baseline
+- `stretch`: Items stretch to fill the container (default)
+
+### Justify Content
+
+Defines the horizontal alignment of the box items.
+
+Layout impact:
+- `start`: Items pack toward the start (left for row, top for column)
+- `center`: Items pack toward the center
+- `end`: Items pack toward the end (right for row, bottom for column)
+- `space-between`: Items are evenly distributed with first at start, last at end
+- `space-around`: Items are evenly distributed with equal space around them
+
+### Size
+
+Grid system:
+- Uses a 12-column grid system
+- Values range from 1-12 (e.g., `6` = 50% width, `12` = 100% width)
+- Most effective when used inside `pds-row` containers
+- Responsive variants available: `sizeXs`, `sizeSm`, `sizeMd`, `sizeLg`, `sizeXl`
 
 ### Layout Properties
 `pds-box` not only allows for custom element properties, but it also allows for a flexible layout system. The layout system is based on the [CSS Flexbox specification](https://drafts.csswg.org/css-flexbox/) and can be view on the [Layouts](/docs/components-layout--docs) page

@@ -9,6 +9,45 @@ import { components } from '../../../../dist/docs.json';
 
 <DocArgsTable componentName="pds-row" docSource={components} />
 
+## Usage Notes
+
+### Grid Layout Essentials
+
+The pds-row component creates a 12-column grid system for responsive layouts. It always maintains horizontal (row) direction and works best with pds-box children that have size props.
+
+### Layout Patterns
+
+- Grid Layout: Use with `pds-box` children that have `size-*` props (1-12)
+- Responsive Grid: Use responsive size variants (e.g., `size-md="6"`)
+- Equal Columns: Children without `size` props become equal-width columns
+- Wrapping: Columns wrap to next line if total exceeds 12
+
+### Key Props for Layout
+
+- `colGap`: Controls spacing between columns
+- `justifyContent`: Horizontal alignment of columns
+- `alignItems`: Vertical alignment of columns
+- `noWrap`: Prevents column wrapping
+
+### Working with PDS-Box
+
+pds-row is designed to work with pds-box children:
+- Direct Children: Only pds-box components should be direct children
+- Size Props: pds-box children should use size props (1-12) for grid layout
+- Direction: pds-box children default to `direction="row"` which works well in grid
+- Column Sum: Total of all size props should not exceed 12 per row
+
+### Common Patterns
+
+- `size="6"` + `size="6"` = 50/50 split
+- `size="4"` + `size="8"` = 33/67 split
+- `size="3"` + `size="3"` + `size="6"` = 25/25/50 split
+
+### Responsive Patterns
+
+- `size-md="6"` + `size-md="6"` = 50/50 on medium+ screens
+- `size-sm="12"` + `size-md="6"` = Full width on small, half on medium+
+
 ## Variants
 
 ### Default
@@ -70,6 +109,64 @@ If the size values equal more than 12, the boxes will wrap to the next line.
     <pds-box border size-xs="10">size-xs 10</pds-box>
   </pds-row>
 </DocCanvas>
+
+### Align Items
+
+Defines the vertical alignment of the row items.
+
+Layout impact:
+- `start`: Items align to the top of the row
+- `center`: Items align to the center of the row
+- `end`: Items align to the bottom of the row
+- `baseline`: Items align to their text baseline
+- `stretch`: Items stretch to fill the row height (default)
+
+Best practice: Use with `minHeight` for consistent vertical alignment
+
+### Column Gap
+
+Defines the spacing between the row items.
+
+Layout impact:
+- Controls the gap between columns in the grid
+- Available sizes: `none`, `xxs`, `xs`, `sm`, `md`, `lg`, `xl`, `xxl`
+- Creates consistent spacing between all columns
+- Works with both fixed-size and auto-width columns
+
+Best practice: Use `md` or `lg` for comfortable spacing between content columns
+
+### Justify Content
+
+Layout impact:
+- `start`: Columns pack toward the left (default)
+- `center`: Columns pack toward the center
+- `end`: Columns pack toward the right
+- `space-between`: Columns are evenly distributed with first at start, last at end
+- `space-around`: Columns are evenly distributed with equal space around them
+
+Best practice: Use `space-between` for navigation or action buttons
+
+### Min Height
+
+Layout impact:
+- Ensures consistent row height for vertical alignment
+- Required for `alignItems="center"` to work properly
+- Prevents row height from collapsing when content is short
+
+Best practice: Use with `alignItems="center"` for vertically centered content
+
+Example: `minHeight="100px"` or `minHeight="10rem"`
+
+### No Wrap
+
+Layout impact:
+- Prevents columns from wrapping to new lines
+- Columns may overflow horizontally if total width exceeds container
+- Useful for navigation bars or horizontal scrolling layouts
+
+Note: Can cause horizontal overflow if columns are too wide
+
+Best practice: Use sparingly, only when you need to prevent wrapping
 
 ### Layout Properties
 `pds-row` creates the horizontal rows that are used to contain a set of columns and can be view on the [Layouts](/docs/components-layout--docs) page.
