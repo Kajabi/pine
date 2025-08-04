@@ -16,8 +16,8 @@ export const Tooltip: React.FC<TooltipProps> = ({
   children,
   content,
   placement = 'top',
-  trigger = 'hover',
-  disabled = false,
+  trigger,
+  disabled,
   delay = 0,
   className = '',
   componentId
