@@ -1,5 +1,5 @@
 import React from 'react';
-import { PdsButton } from '@pine-ds/react';
+import { PdsButton, PdsBox } from '@pine-ds/react';
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -72,9 +72,9 @@ export const Button: React.FC<ButtonProps> = ({
       icon={icon} // deprecated but still supported
       onPdsClick={handleClick}
     >
-      {startIcon && <span slot="start">{startIcon}</span>}
+      {startIcon && <PdsBox slot="start">{startIcon}</PdsBox>}
       {children}
-      {endIcon && <span slot="end">{endIcon}</span>}
+      {endIcon && <PdsBox slot="end">{endIcon}</PdsBox>}
     </PdsButton>
   );
 };
