@@ -1,6 +1,43 @@
 import React from 'react';
 import { PdsInput } from '@pine-ds/react';
 
+/**
+ * PdsInput - A form input component with validation and accessibility
+ *
+ * **⚠️ VISUAL PATTERN CLARIFICATION:**
+ *
+ * When analyzing screenshots or visual layouts:
+ * - **Text above input field**: This is the input's LABEL, not a separate `pds-text` component
+ * - **Label Integration**: The `label` prop creates text that appears above the input field
+ * - **No Separate Text Needed**: Do not add `pds-text` components for input labels
+ * - **Visual Hierarchy**: Label text is styled and positioned automatically by the input component
+ *
+ * **Common Mistake**: Seeing text above an input and assuming it's a separate `pds-text` component
+ * **Correct Understanding**: The text is the input's integrated label created by the `label` prop
+ *
+ * **Usage Examples:**
+ * ```tsx
+ * // Basic input
+ * <pds-input label="Name" component-id="name" required></pds-input>
+ *
+ * // Input with validation
+ * <pds-input
+ *   label="Email"
+ *   component-id="email"
+ *   type="email"
+ *   required
+ *   helper-message="We'll never share your email"
+ * ></pds-input>
+ *
+ * // ❌ INCORRECT - Don't add separate text for labels
+ * <pds-text>Name</pds-text>
+ * <pds-input component-id="name"></pds-input>
+ *
+ * // ✅ CORRECT - Use the label prop
+ * <pds-input label="Name" component-id="name"></pds-input>
+ * ```
+ *
+ */
 interface InputChangeEventDetail {
   value: string | null;
   event: Event;
