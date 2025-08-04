@@ -17,12 +17,15 @@ import { danger } from '@pine-ds/icons/icons';
     'pds-textarea.scss'
   ],
   shadow: true,
+  formAssociated: true,
 })
 export class PdsTextarea {
+
   private nativeTextarea?: HTMLTextAreaElement
   private focusedValue?: string | null;
   private inheritedAttributes: Attributes = {};
   private originalPdsInput?: EventEmitter<TextareaInputEventDetail>;
+  private internals?: ElementInternals;
 
   @Element() el: HTMLPdsTextareaElement;
 
@@ -163,6 +166,9 @@ export class PdsTextarea {
     if (nativeTextarea && nativeTextarea.value !== value) {
       nativeTextarea.value = value;
     }
+
+    // Update form value for Form Associated Custom Elements API
+    this.updateFormValue();
   }
 
   /**
@@ -233,6 +239,10 @@ export class PdsTextarea {
 
   connectedCallback() {
     this.debounceChanged();
+    // Initialize ElementInternals for form association
+    if (this.el.attachInternals) {
+      this.internals = this.el.attachInternals();
+    }
   }
 
   componentWillLoad() {
@@ -245,6 +255,8 @@ export class PdsTextarea {
 
   componentDidLoad() {
     this.originalPdsInput = this.pdsInput;
+    // Set initial form value
+    this.updateFormValue();
   }
 
   private renderAction() {
@@ -257,6 +269,49 @@ export class PdsTextarea {
       );
     }
     return null;
+  }
+
+  /**
+   * Updates the form value using ElementInternals API
+   */
+  private updateFormValue() {
+    if (this.internals) {
+      const value = this.getValue();
+      this.internals.setFormValue(value || null);
+
+      // Set validity based on native textarea validation
+      if (this.nativeTextarea) {
+        this.internals.setValidity(
+          this.nativeTextarea.validity,
+          this.nativeTextarea.validationMessage,
+          this.nativeTextarea
+        );
+      }
+    }
+  }
+
+  /**
+   * Form Associated Custom Elements API: Called when the form is reset
+   */
+  formResetCallback() {
+    this.value = '';
+    this.updateFormValue();
+  }
+
+  /**
+   * Form Associated Custom Elements API: Called when the form is disabled
+   */
+  formDisabledCallback(disabled: boolean) {
+    this.disabled = disabled;
+  }
+
+  /**
+   * Form Associated Custom Elements API: Called to restore form state
+   */
+  formStateRestoreCallback(state: string | FormData | null) {
+    if (typeof state === 'string') {
+      this.value = state;
+    }
   }
 
   render() {

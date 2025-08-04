@@ -17,8 +17,10 @@ import { danger } from '@pine-ds/icons/icons';
   tag: 'pds-input',
   styleUrls: ['pds-input.tokens.scss', '../../global/styles/utils/label.scss', 'pds-input.scss'],
   shadow: true,
+  formAssociated: true,
 })
 export class PdsInput {
+
   private nativeInput?: HTMLInputElement;
   private inheritedAttributes: Attributes = {};
   private isComposing = false;
@@ -26,6 +28,7 @@ export class PdsInput {
   private suffixEl?: HTMLElement;
   private focusedValue?: string | number | null;
   private originalPdsInput?: EventEmitter<InputInputEventDetail>;
+  private internals?: ElementInternals;
 
   @Element() el!: HTMLPdsInputElement;
 
@@ -288,9 +291,18 @@ export class PdsInput {
     this.originalPdsInput = this.pdsInput;
   }
 
+  connectedCallback() {
+    // Initialize ElementInternals for form association
+    if (this.el.attachInternals) {
+      this.internals = this.el.attachInternals();
+    }
+  }
+
   componentDidLoad() {
     this.debounceChanged();
     this.updateAddonWidths();
+    // Set initial form value
+    this.updateFormValue();
   }
 
   componentDidUpdate() {
@@ -316,6 +328,9 @@ export class PdsInput {
     if (nativeInput && nativeInput.value !== value && !this.isComposing) {
       nativeInput.value = value;
     }
+
+    // Update form value for Form Associated Custom Elements API
+    this.updateFormValue();
   }
 
   private getValue(): string {
@@ -384,6 +399,49 @@ export class PdsInput {
     const newValue = value == null ? value : value.toString();
 
     this.pdsInput.emit({ value: newValue, event });
+  }
+
+  /**
+   * Updates the form value using ElementInternals API
+   */
+  private updateFormValue() {
+    if (this.internals) {
+      const value = this.getValue();
+      this.internals.setFormValue(value || null);
+
+      // Set validity based on native input validation
+      if (this.nativeInput) {
+        this.internals.setValidity(
+          this.nativeInput.validity,
+          this.nativeInput.validationMessage,
+          this.nativeInput
+        );
+      }
+    }
+  }
+
+  /**
+   * Form Associated Custom Elements API: Called when the form is reset
+   */
+  formResetCallback() {
+    this.value = '';
+    this.updateFormValue();
+  }
+
+  /**
+   * Form Associated Custom Elements API: Called when the form is disabled
+   */
+  formDisabledCallback(disabled: boolean) {
+    this.disabled = disabled;
+  }
+
+  /**
+   * Form Associated Custom Elements API: Called to restore form state
+   */
+  formStateRestoreCallback(state: string | FormData | null) {
+    if (typeof state === 'string') {
+      this.value = state;
+    }
   }
 
   render() {
