@@ -24,8 +24,8 @@ export const Text: React.FC<TextProps> = ({
   color,
   decoration,
   gutter,
-  italic = false,
-  truncate = false,
+  italic,
+  truncate,
   className = ''
 }) => {
   return (
