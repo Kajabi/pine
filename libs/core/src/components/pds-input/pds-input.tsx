@@ -329,7 +329,7 @@ export class PdsInput {
       nativeInput.value = value;
     }
 
-    // Update form value for Form Associated Custom Elements API
+    // Update form value when value changes
     this.updateFormValue();
   }
 
@@ -405,12 +405,12 @@ export class PdsInput {
    * Updates the form value using ElementInternals API
    */
   private updateFormValue() {
-    if (this.internals) {
+    if (this.internals && this.internals.setFormValue) {
       const value = this.getValue();
       this.internals.setFormValue(value || null);
 
       // Set validity based on native input validation
-      if (this.nativeInput) {
+      if (this.nativeInput && this.internals.setValidity) {
         this.internals.setValidity(
           this.nativeInput.validity,
           this.nativeInput.validationMessage,

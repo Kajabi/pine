@@ -275,12 +275,12 @@ export class PdsTextarea {
    * Updates the form value using ElementInternals API
    */
   private updateFormValue() {
-    if (this.internals) {
+    if (this.internals && this.internals.setFormValue) {
       const value = this.getValue();
       this.internals.setFormValue(value || null);
 
       // Set validity based on native textarea validation
-      if (this.nativeTextarea) {
+      if (this.nativeTextarea && this.internals.setValidity) {
         this.internals.setValidity(
           this.nativeTextarea.validity,
           this.nativeTextarea.validationMessage,

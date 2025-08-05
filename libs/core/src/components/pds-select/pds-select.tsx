@@ -237,7 +237,7 @@ export class PdsSelect {
    * Updates the form value using ElementInternals API
    */
   private updateFormValue() {
-    if (this.internals) {
+    if (this.internals && this.internals.setFormValue) {
       const value = this.value;
 
       // Handle multi-select arrays by converting to FormData or comma-separated string
@@ -257,7 +257,7 @@ export class PdsSelect {
       }
 
       // Set validity based on native select validation
-      if (this.selectEl) {
+      if (this.selectEl && this.internals.setValidity) {
         this.internals.setValidity(
           this.selectEl.validity,
           this.selectEl.validationMessage,
