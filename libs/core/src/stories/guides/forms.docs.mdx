@@ -31,6 +31,8 @@ The web component example utilizes vanilla JavaScript to access values directly 
 
 > **Note:** Be mindful of best practices for validation and form submission when using these examples as a reference.
 
+> **💡 Open your browser's developer console before submitting the form to see detailed debugging output!**
+
 <DocCanvas client:only
   mdxSource={{
     react: `
@@ -236,26 +238,83 @@ The web component example utilizes vanilla JavaScript to access values directly 
   <form onSubmit={(e) => {
     e.preventDefault();
     const form = e.target;
-    console.log('Form Data:', {
-      name: form.querySelector('[component-id="name"]').value,
-      email: form.querySelector('[component-id="email"]').value,
-      subscribe: form.querySelector('[component-id="subscribe"]').checked,
+
+    console.log('🚀 Form submitted! Check console for detailed debugging info...');
+    console.log('═══════════════════════════════════════════════════');
+
+    // Log FormData (includes form-associated custom elements)
+    const formData = new FormData(form);
+    console.log('📝 FormData entries:');
+    for (let [key, value] of formData.entries()) {
+      console.log(`  ${key}: ${value}`);
+    }
+
+    // Log component values directly
+    console.log('🎯 Component values:', {
+      name: form.querySelector('[component-id="name"]')?.value,
+      email: form.querySelector('[component-id="email"]')?.value,
+      subscribe: form.querySelector('[component-id="subscribe"]')?.checked,
       direction: form.querySelector('input[name="direction"]:checked')?.value,
-      notifications: form.querySelector('[component-id="notifications"]').checked,
-      message: form.querySelector('[component-id="message"]').value,
-      timeOfDay: form.querySelector('[component-id="timeOfDay"]').value
+      notifications: form.querySelector('[component-id="notifications"]')?.checked,
+      message: form.querySelector('[component-id="message"]')?.value,
+      timeOfDay: form.querySelector('[component-id="timeOfDay"]')?.value
     });
+
+    // Log native form elements
+    console.log('🔍 Native form elements:', {
+      elements: Array.from(form.elements).map(el => ({
+        name: el.name,
+        value: el.value,
+        type: el.type,
+        tagName: el.tagName.toLowerCase()
+      }))
+    });
+
+    console.log('═══════════════════════════════════════════════════');
+
+    // Also check form association status
+    console.log('🔍 Form association diagnostic:');
+
+    // Check custom element definitions
+    console.log('📦 Custom element definitions:', {
+      'pds-input': customElements.get('pds-input') ? '✅ Defined' : '❌ Not defined',
+      'pds-select': customElements.get('pds-select') ? '✅ Defined' : '❌ Not defined',
+      'pds-textarea': customElements.get('pds-textarea') ? '✅ Defined' : '❌ Not defined'
+    });
+
+    // Check if Pine components have form association
+    const formComponents = {
+      input: form.querySelector('pds-input[component-id="name"]'),
+      email: form.querySelector('pds-input[component-id="email"]'),
+      select: form.querySelector('pds-select[component-id="timeOfDay"]'),
+      textarea: form.querySelector('pds-textarea[component-id="message"]')
+    };
+
+    console.log('🌲 Pine components in form:', Object.keys(formComponents).reduce((acc, key) => {
+      acc[key] = formComponents[key] ? '✅ Found' : '❌ Not found';
+      return acc;
+    }, {}));
+
+    // Check form association status
+    console.log('✅ Form association status:', Object.keys(formComponents).reduce((acc, key) => {
+      const component = formComponents[key];
+      if (component) {
+        acc[key] = component.constructor?.formAssociated ? '✅ Associated' : '❌ Not associated';
+      }
+      return acc;
+    }, {}));
+
   }}>
     <pds-box display="block" padding="sm">
-      <pds-input component-id="name" label="Name" type="text"></pds-input>
+      <pds-input component-id="name" name="name" label="Name" type="text"></pds-input>
     </pds-box>
 
     <pds-box display="block" padding="sm">
-      <pds-input component-id="email" label="Email" type="email"></pds-input>
+      <pds-input component-id="email" name="email" label="Email" type="email"></pds-input>
     </pds-box>
 
     <pds-box display="block" padding="sm">
-      <pds-checkbox component-id="subscribe" label="Subscribe to newsletter"></pds-checkbox>
+      <pds-checkbox component-id="subscribe" name="subscribe" label="Subscribe to newsletter"></pds-checkbox>
     </pds-box>
 
     <pds-box display="flex" padding="sm" gap="sm">
@@ -265,7 +324,7 @@ The web component example utilizes vanilla JavaScript to access values directly 
     </pds-box>
 
     <pds-box display="block" padding="sm">
-      <pds-switch component-id="notifications" label="Enable notifications"></pds-switch>
+      <pds-switch component-id="notifications" name="notifications" label="Enable notifications"></pds-switch>
     </pds-box>
 
     <pds-box display="block" padding="sm">
@@ -278,7 +337,7 @@ The web component example utilizes vanilla JavaScript to access values directly 
     </pds-box>
 
     <pds-box display="block" padding="sm">
-      <pds-textarea component-id="message" label="Message"></pds-textarea>
+      <pds-textarea component-id="message" name="message" label="Message"></pds-textarea>
     </pds-box>
 
     <pds-box display="block" padding="sm">
@@ -288,6 +347,133 @@ The web component example utilizes vanilla JavaScript to access values directly 
 </pds-box>
 
 </DocCanvas>
+
+## Debugging and Testing Form Association
+
+Pine components use the **Form Associated Custom Elements API** to properly integrate with native HTML forms. This ensures that Pine form components participate in form submission, validation, and reset operations.
+
+### Comprehensive Form Debugging Example
+
+Here's a comprehensive debugging setup that helps verify form association is working correctly:
+
+```html
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.querySelector('form');
+
+  if (form) {
+    // Check custom element definitions on page load
+    setTimeout(() => {
+      console.log('🔍 Checking if custom elements are defined...');
+      console.log('pds-input defined:', customElements.get('pds-input'));
+      console.log('pds-select defined:', customElements.get('pds-select'));
+      console.log('pds-textarea defined:', customElements.get('pds-textarea'));
+
+      console.log('📊 Testing form elements access:');
+      console.log('Form elements:', form.elements);
+      console.log('Form elements length:', form.elements.length);
+      console.log('Named elements:', {
+        name: form.elements.namedItem('name'),
+        email: form.elements.namedItem('email'),
+        message: form.elements.namedItem('message')
+      });
+
+      // Check if Pine components have form association
+      const pdsInput = document.querySelector('pds-input');
+      const pdsSelect = document.querySelector('pds-select');
+      const pdsTextarea = document.querySelector('pds-textarea');
+
+      console.log('🌲 Pine components in DOM:', {
+        input: pdsInput,
+        select: pdsSelect,
+        textarea: pdsTextarea
+      });
+
+      if (pdsInput || pdsSelect || pdsTextarea) {
+        console.log('🔧 Component internals:', {
+          inputInternals: pdsInput?.internals,
+          selectInternals: pdsSelect?.internals,
+          textareaInternals: pdsTextarea?.internals
+        });
+
+        // Check if components are form-associated
+        console.log('✅ Form association check:', {
+          inputFormAssociated: pdsInput?.constructor?.formAssociated,
+          selectFormAssociated: pdsSelect?.constructor?.formAssociated,
+          textareaFormAssociated: pdsTextarea?.constructor?.formAssociated
+        });
+      } else {
+        console.error('❌ No Pine components found in DOM! Check if components are loading properly.');
+      }
+    }, 2000); // Wait for components to load
+
+    // Enhanced form submission debugging
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      console.log('🚀 Form submitted!');
+
+      // Log FormData (includes form-associated custom elements)
+      const formData = new FormData(form);
+      console.log('📝 FormData entries:');
+      for (let [key, value] of formData.entries()) {
+        console.log(`  ${key}: ${value}`);
+      }
+
+      // Log component values directly
+      console.log('🎯 Component values:', {
+        name: form.querySelector('[name="name"]')?.value,
+        email: form.querySelector('[name="email"]')?.value,
+        message: form.querySelector('[name="message"]')?.value
+      });
+
+      // Log native form elements
+      console.log('🔍 Native form elements:', {
+        elements: Array.from(form.elements).map(el => ({
+          name: el.name,
+          value: el.value,
+          type: el.type,
+          tagName: el.tagName.toLowerCase()
+        }))
+      });
+    });
+  }
+});
+</script>
+```
+
+### What to Look For
+
+When debugging Pine forms, check for these indicators of successful form association:
+
+1. **Custom Elements Defined**: All Pine components should be registered
+   ```javascript
+   console.log('pds-input defined:', customElements.get('pds-input')); // Should return constructor
+   ```
+
+2. **Form Association Active**: Components should have `formAssociated: true`
+   ```javascript
+   console.log('Form associated:', pdsInput?.constructor?.formAssociated); // Should be true
+   ```
+
+3. **Form Elements Collection**: Pine components should appear in `form.elements`
+   ```javascript
+   console.log('Form elements count:', form.elements.length); // Should include Pine components
+   ```
+
+4. **FormData Inclusion**: Pine component values should appear in FormData
+   ```javascript
+   const formData = new FormData(form);
+   for (let [key, value] of formData.entries()) {
+     console.log(`${key}: ${value}`); // Should include Pine component values
+   }
+   ```
+
+### Common Issues and Solutions
+
+- **Components not in FormData**: Ensure components have `name` attributes
+- **Form association not working**: Check that Pine components are fully loaded before form submission
+- **Missing values**: Verify that component values are being set properly and internals are initialized
 
 ## Guidelines and Recommendations
 
