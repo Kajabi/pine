@@ -9,11 +9,13 @@ import { danger, enlarge } from '@pine-ds/icons/icons';
   tag: 'pds-select',
   styleUrls: ['pds-select.tokens.scss', '../../global/styles/utils/label.scss', 'pds-select.scss'],
   shadow: true,
+  formAssociated: true,
 })
 export class PdsSelect {
 
   private selectEl!: HTMLSelectElement;
   private slotContainer!: HTMLDivElement;
+  private internals?: ElementInternals;
 
   @Element() el: HTMLPdsSelectElement;
 
@@ -94,10 +96,23 @@ export class PdsSelect {
    */
   valueChanged() {
     this.updateSelectedOption();
+    this.updateFormValue();
+  }
+
+  connectedCallback() {
+    // Initialize ElementInternals for form association
+    if (this.el.attachInternals) {
+      this.internals = this.el.attachInternals();
+    }
   }
 
   componentWillLoad() {
     this.updateSelectedOption();
+  }
+
+  componentDidLoad() {
+    // Set initial form value
+    this.updateFormValue();
   }
 
   /**
@@ -216,6 +231,74 @@ export class PdsSelect {
       );
     }
     return null;
+  }
+
+  /**
+   * Updates the form value using ElementInternals API
+   */
+  private updateFormValue() {
+    if (this.internals && this.internals.setFormValue) {
+      const value = this.value;
+
+      // Handle multi-select arrays by converting to FormData or comma-separated string
+      if (Array.isArray(value)) {
+        if (value.length > 1) {
+          // For multiple values, create FormData with multiple entries
+          const formData = new FormData();
+          value.forEach(val => formData.append(this.name || '', val));
+          this.internals.setFormValue(formData);
+        } else {
+          // Single value in array, use the string value
+          this.internals.setFormValue(value[0] || null);
+        }
+      } else {
+        // Single string value
+        this.internals.setFormValue(value || null);
+      }
+
+      // Set validity based on native select validation
+      if (this.selectEl && this.internals && this.internals.setValidity) {
+        this.internals.setValidity(
+          this.selectEl.validity,
+          this.selectEl.validationMessage,
+          this.selectEl
+        );
+      }
+    }
+  }
+
+  /**
+   * Form Associated Custom Elements API: Called when the form is reset
+   */
+  formResetCallback() {
+    this.value = '';
+    this.updateFormValue();
+  }
+
+  /**
+   * Form Associated Custom Elements API: Called when the form is disabled
+   */
+  formDisabledCallback(disabled: boolean) {
+    this.disabled = disabled;
+  }
+
+  /**
+   * Form Associated Custom Elements API: Called to restore form state
+   */
+  formStateRestoreCallback(state: string | FormData | null) {
+    if (typeof state === 'string') {
+      this.value = state;
+    } else if (state instanceof FormData && this.name) {
+      // Extract value(s) from FormData using the select's name
+      const values = state.getAll(this.name);
+      if (values.length > 1) {
+        // Multi-select: convert to string array
+        this.value = values.filter(v => typeof v === 'string') as string[];
+      } else if (values.length === 1 && typeof values[0] === 'string') {
+        // Single select: use string value
+        this.value = values[0];
+      }
+    }
   }
 
   render() {
