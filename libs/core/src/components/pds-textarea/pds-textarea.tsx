@@ -280,7 +280,7 @@ export class PdsTextarea {
       this.internals.setFormValue(value || null);
 
       // Set validity based on native textarea validation
-      if (this.nativeTextarea && this.internals.setValidity) {
+      if (this.nativeTextarea && this.internals && this.internals.setValidity) {
         this.internals.setValidity(
           this.nativeTextarea.validity,
           this.nativeTextarea.validationMessage,

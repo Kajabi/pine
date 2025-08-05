@@ -410,7 +410,7 @@ export class PdsInput {
       this.internals.setFormValue(value || null);
 
       // Set validity based on native input validation
-      if (this.nativeInput && this.internals.setValidity) {
+      if (this.nativeInput && this.internals && this.internals.setValidity) {
         this.internals.setValidity(
           this.nativeInput.validity,
           this.nativeInput.validationMessage,

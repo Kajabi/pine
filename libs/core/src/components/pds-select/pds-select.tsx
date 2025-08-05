@@ -257,7 +257,7 @@ export class PdsSelect {
       }
 
       // Set validity based on native select validation
-      if (this.selectEl && this.internals.setValidity) {
+      if (this.selectEl && this.internals && this.internals.setValidity) {
         this.internals.setValidity(
           this.selectEl.validity,
           this.selectEl.validationMessage,
