@@ -441,6 +441,12 @@ export class PdsInput {
   formStateRestoreCallback(state: string | FormData | null) {
     if (typeof state === 'string') {
       this.value = state;
+    } else if (state instanceof FormData && this.name) {
+      // Extract value from FormData using the input's name
+      const value = state.get(this.name);
+      if (typeof value === 'string') {
+        this.value = value;
+      }
     }
   }
 

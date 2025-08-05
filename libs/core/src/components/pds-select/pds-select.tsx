@@ -290,6 +290,16 @@ export class PdsSelect {
       this.value = state;
     } else if (Array.isArray(state)) {
       this.value = state;
+    } else if (state instanceof FormData && this.name) {
+      // Extract value(s) from FormData using the select's name
+      const values = state.getAll(this.name);
+      if (values.length > 1) {
+        // Multi-select: convert to string array
+        this.value = values.filter(v => typeof v === 'string') as string[];
+      } else if (values.length === 1 && typeof values[0] === 'string') {
+        // Single select: use string value
+        this.value = values[0];
+      }
     }
   }
 
