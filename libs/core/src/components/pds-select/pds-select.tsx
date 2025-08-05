@@ -288,8 +288,6 @@ export class PdsSelect {
   formStateRestoreCallback(state: string | FormData | null) {
     if (typeof state === 'string') {
       this.value = state;
-    } else if (Array.isArray(state)) {
-      this.value = state;
     } else if (state instanceof FormData && this.name) {
       // Extract value(s) from FormData using the select's name
       const values = state.getAll(this.name);
