@@ -25,6 +25,12 @@ For accessibility, it is strongly encouraged to follow these best practices:
 - Do not use a `placeholder` to communicate the field label, use a `label` property.
 - Provide clear and descriptive error, helper, and placeholder messages.
 
+## Usage Notes
+
+### Working with Labels
+
+When analyzing designs or screenshots, text that appears above an input field is the input's label, not a separate `pds-text` component. The `label` prop creates text that appears above the input field and integrates properly with the component's styling and accessibility features.
+
 ## Properties
 
 <DocArgsTable componentName="pds-input" docSource={components} />
@@ -40,6 +46,25 @@ The type of input used varies based on the type of information you look to captu
 }}>
   <pds-input component-id="pds-input-text-example" label="Name" type="text" value="Frank Dux"></pds-input>
 </DocCanvas>
+
+### Input Types
+
+Available input types:
+- `text`: Standard text input (default)
+- `email`: Email validation and mobile keyboard
+- `password`: Hidden text with security features
+- `number`: Numeric input with min/max/step validation
+- `tel`: Telephone input with mobile keyboard
+- `url`: URL validation and mobile keyboard
+
+Type-specific features:
+- `email`: Browser email validation, mobile email keyboard
+- `password`: Hidden characters, security features
+- `number`: Up/down arrows, min/max validation
+- `tel`: Mobile phone keyboard, pattern validation
+- `url`: Browser URL validation, mobile URL keyboard
+
+Best practice: Choose type that matches expected input for better UX
 
 ### Required
 
@@ -92,6 +117,16 @@ Removes the ability to interact with the text field. If a value is present, that
 ### Full Width
 
 When `full-width` is set to `true`, the input component will occupy the full width of its parent container instead of using its natural inline width.
+
+Layout impact:
+- Makes input span 100% width of parent container
+- Useful for mobile layouts or form consistency
+- Works with all input types and states
+- Affects input field only, not label or messages
+
+Best practice: Use for form layouts where consistent width is needed
+
+Example: `full-width="true"` for mobile-friendly forms
 
 <DocCanvas client:only
   mdxSource={{
@@ -383,6 +418,20 @@ Prepend and append elements are placed outside the input container, next to the 
     </pds-button>
   </pds-input>
 </DocCanvas>
+
+## Events
+
+### pdsChange Event
+
+Event behavior:
+- Fires when value changes and input loses focus
+- Does not emit when programmatically setting the `value` property
+- Provides value and original event object
+- Used for form submission and final value handling
+
+Best practice: Use for form submission and final value processing
+
+Example: `<pds-input onPdsChange={handleFormChange}>`
 
 ## References
 

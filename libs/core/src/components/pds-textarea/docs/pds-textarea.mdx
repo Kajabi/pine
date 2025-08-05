@@ -23,6 +23,19 @@ For accessibility, it is strongly encouraged to follow these best practices:
 - Do not use a placeholder to communicate the field label, use a label property.
 - Provide clear and descriptive error, helper, and placeholder messages.
 
+## Usage Notes
+
+### Working with Labels
+
+When analyzing designs or screenshots, text that appears above a textarea is the textarea's label, not a separate `pds-text` component. The `label` prop creates text that appears above the textarea field and integrates properly with the component's styling and accessibility features.
+
+### Form Integration Features
+
+- Supports error messages and invalid states
+- Full ARIA support with proper labeling and descriptions
+- Debounced input events and change detection
+- Users can resize the textarea vertically
+
 ## Properties
 
 <DocArgsTable componentName="pds-textarea" docSource={components} />
