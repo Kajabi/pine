@@ -45,8 +45,8 @@ Items flow horizontally by default, so you'll need to explicitly set `direction=
 - `direction`: Controls item orientation (`row` = horizontal, `column` = vertical)
 - `size`: Sets column width (1-12 grid system, works best inside pds-row)
 - `gap`: Controls spacing between items
-- `justifyContent`: Horizontal alignment of items
-- `alignItems`: Vertical alignment of items
+- `justify-content`: Horizontal alignment of items
+- `align-items`: Vertical alignment of items
 
 ### Working with PDS-Row
 
@@ -67,7 +67,7 @@ When pds-box is used standalone:
 ## Variants
 
 ### `border`
-By default Box has no border. Use `border` to add a border to the box. Use `borderColor` to change the color of the border. Use `borderRadius` to change the rounding of the box's corners.
+By default Box has no border. Use `border` to add a border to the box. Use `border-color` to change the color of the border. Use `border-radius` to change the rounding of the box's corners.
 
 <DocCanvas client:only
   mdxSource={{
@@ -78,7 +78,7 @@ By default Box has no border. Use `border` to add a border to the box. Use `bord
 </DocCanvas>
 
 ### Border Color
-Please refer to the color brand guidelines for the appropriate color to use. Use `borderColor` to change the color of the border. Accepts any valid color token or CSS color value.
+Please refer to the color brand guidelines for the appropriate color to use. Use `border-color` to change the color of the border. Accepts any valid color token or CSS color value.
 
 <DocCanvas client:only
   mdxSource={{
@@ -98,7 +98,7 @@ Please refer to the color brand guidelines for the appropriate color to use. Use
 </DocCanvas>
 
 ### Border Radius
-By default Box has no border radius. Use `borderRadius` to change the rounding of the box's corners.
+By default Box has no border radius. Use `border-radius` to change the rounding of the box's corners.
 
 <DocCanvas client:only
   mdxSource={{
@@ -265,7 +265,7 @@ Grid system:
 - Uses a 12-column grid system
 - Values range from 1-12 (e.g., `6` = 50% width, `12` = 100% width)
 - Most effective when used inside `pds-row` containers
-- Responsive variants available: `sizeXs`, `sizeSm`, `sizeMd`, `sizeLg`, `sizeXl`
+- Responsive variants available: `size-xs`, `size-sm`, `size-md`, `size-lg`, `size-xl`
 
 ### Layout Properties
 `pds-box` not only allows for custom element properties, but it also allows for a flexible layout system. The layout system is based on the [CSS Flexbox specification](https://drafts.csswg.org/css-flexbox/) and can be view on the [Layouts](/docs/components-layout--docs) page
@@ -294,17 +294,17 @@ The `pds-box` component uses a mobile-first approach to responsive sizing. This 
 
 ```html
 <!-- Full width on mobile, half width on tablets and up -->
-<pds-box size="12" sizeMd="6"></pds-box>
+<pds-box size="12" size-md="6"></pds-box>
 
 <!-- Full width on mobile, one-third width on tablets and up -->
-<pds-box size="12" sizeMd="4"></pds-box>
+<pds-box size="12" size-md="4"></pds-box>
 ```
 
 #### Explicit full-width layout on small screens
 
 ```html
 <!-- Explicit full width on mobile, different widths at different breakpoints -->
-<pds-box size="12" sizeSm="6" sizeLg="4"></pds-box>
+<pds-box size="12" size-sm="6" size-lg="4"></pds-box>
 ```
 
 #### When to use/avoid the base `size` prop
@@ -320,7 +320,7 @@ If you need different sizes at different breakpoints:
 
 ```html
 <!-- Different widths at different breakpoints -->
-<pds-box sizeSm="12" sizeMd="6" sizeLg="4"></pds-box>
+<pds-box size-sm="12" size-md="6" size-lg="4"></pds-box>
 ```
 
 ### Default Behavior
