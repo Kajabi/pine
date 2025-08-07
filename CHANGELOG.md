@@ -1,3 +1,28 @@
+## 3.4.1 (2025-08-07)
+
+### Bug Fixes 🐛
+
+- **form elements:** add form association and element internals ([#500](https://github.com/Kajabi/pine/pull/500))
+- **form-elements:** align height spacing and message color ([#488](https://github.com/Kajabi/pine/pull/488))
+- **pds-button:** add white space nowrap to button text ([#490](https://github.com/Kajabi/pine/pull/490))
+- **pds-input:** add full width variant  tests and docs ([#489](https://github.com/Kajabi/pine/pull/489))
+- **pds-input:** update select prepend and append height ([#496](https://github.com/Kajabi/pine/pull/496))
+- **pds-modal:** adjust max height ot remove double scrollbars ([#503](https://github.com/Kajabi/pine/pull/503))
+
+### Documentation 📄
+
+- remove camel case from documentation ([#504](https://github.com/Kajabi/pine/pull/504))
+- **icon:** Update for more detailed usage and troubleshooting guidelines ([#495](https://github.com/Kajabi/pine/pull/495))
+
+### Styles 🎨
+
+- **pds-box:** update md border radius ([#502](https://github.com/Kajabi/pine/pull/502))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.4.0 (2025-07-17)
 
 ### Features 🚀
