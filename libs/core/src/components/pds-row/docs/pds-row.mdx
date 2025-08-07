@@ -24,10 +24,10 @@ The pds-row component creates a 12-column grid system for responsive layouts. It
 
 ### Key Props for Layout
 
-- `colGap`: Controls spacing between columns
-- `justifyContent`: Horizontal alignment of columns
-- `alignItems`: Vertical alignment of columns
-- `noWrap`: Prevents column wrapping
+- `col-gap`: Controls spacing between columns
+- `justify-content`: Horizontal alignment of columns
+- `align-items`: Vertical alignment of columns
+- `no-wrap`: Prevents column wrapping
 
 ### Working with PDS-Box
 
@@ -121,7 +121,7 @@ Layout impact:
 - `baseline`: Items align to their text baseline
 - `stretch`: Items stretch to fill the row height (default)
 
-Best practice: Use with `minHeight` for consistent vertical alignment
+Best practice: Use with `min-height` for consistent vertical alignment
 
 ### Column Gap
 
@@ -150,12 +150,12 @@ Best practice: Use `space-between` for navigation or action buttons
 
 Layout impact:
 - Ensures consistent row height for vertical alignment
-- Required for `alignItems="center"` to work properly
+- Required for `align-items="center"` to work properly
 - Prevents row height from collapsing when content is short
 
-Best practice: Use with `alignItems="center"` for vertically centered content
+Best practice: Use with `align-items="center"` for vertically centered content
 
-Example: `minHeight="100px"` or `minHeight="10rem"`
+Example: `min-height="100px"` or `min-height="10rem"`
 
 ### No Wrap
 
