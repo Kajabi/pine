@@ -30,6 +30,56 @@
   .pds-radio__message--error {
     color: var(--pine-color-text-message-danger);
   }
+
+  &.is-contained {
+    pds-icon {
+      color: var(--pine-color-text-message-danger);
+
+      &:hover {
+        color: var(--pine-color-text-message-danger);
+      }
+    }
+  }
+}
+
+:host(.is-contained) {
+  input {
+    display: none;
+  }
+
+  pds-icon {
+    color: var(--pine-color-text-secondary);
+    cursor: pointer;
+    flex: none;
+    margin-block-start: var(--pine-dimension-025);
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--pine-color-text-primary);
+    }
+  }
+
+  &:has(input:checked) pds-icon {
+    color: var(--pine-color-accent);
+
+    &:hover {
+      color: var(--pine-color-accent-hover);
+    }
+  }
+
+  &:has(input:disabled) pds-icon {
+    color: var(--pine-color-text-disabled);
+    cursor: not-allowed;
+
+    &:hover {
+      color: var(--pine-color-text-disabled);
+    }
+  }
+
+  &:has(input:focus-visible) pds-icon {
+    outline: var(--pine-outline-focus);
+    outline-offset: 2px;
+  }
 }
 
 input {
