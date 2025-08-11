@@ -46,7 +46,8 @@ export const normalizeColorValue = (
 };
 
 export const setColor = (color: string, customColors?: Record<string, string>) => {
-  if (!color) return;
+  // Return an empty object for empty/whitespace/undefined inputs to avoid invalid CSS styles
+  if (!color) return {} as Record<string, string>;
 
   const defaultColors: Record<string, string> = {
     primary: 'var(--pine-color-text-primary)',

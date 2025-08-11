@@ -31,10 +31,20 @@ describe('color normalization utilities', () => {
       const custom = { customOnly: 'var(--pine-color-text-info)' };
       // Unresolvable input (whitespace) returns an empty object
       expect(setColor('   ', custom)).toEqual({});
+      // Also handle empty string explicitly
+      expect(setColor('', custom)).toEqual({});
       // Custom key resolves
       expect(setColor('customOnly', custom)).toEqual({ '--color': 'var(--pine-color-text-info)' });
       // Default key still resolves when custom is present due to merging
       expect(setColor('accent', custom)).toEqual({ '--color': 'var(--pine-color-text-accent)' });
+    });
+
+    it('customColors override defaults on key conflicts and trims input before resolution', () => {
+      const custom = { accent: 'var(--pine-color-text-success)' };
+      // Custom overrides default 'accent'
+      expect(setColor('accent', custom)).toEqual({ '--color': 'var(--pine-color-text-success)' });
+      // Input is trimmed before resolution
+      expect(setColor('  accent  ', custom)).toEqual({ '--color': 'var(--pine-color-text-success)' });
     });
 
     it('wraps raw token and passes through var(...)', () => {
@@ -47,4 +57,3 @@ describe('color normalization utilities', () => {
     });
   });
 });
-
