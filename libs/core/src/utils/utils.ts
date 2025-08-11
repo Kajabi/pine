@@ -27,6 +27,8 @@ export const normalizeColorValue = (
 ): string | undefined => {
   if (!value) return undefined;
   const trimmed = value.trim();
+  // Treat whitespace-only as undefined to avoid invalid CSS values
+  if (trimmed === '') return undefined;
 
   // If a semantic map is provided and the value matches a key, return mapped CSS var
   if (options?.semanticMap && options.semanticMap[trimmed]) {
@@ -57,10 +59,14 @@ export const setColor = (color: string, customColors?: Record<string, string>) =
     warning: 'var(--pine-color-text-warning)',
   };
 
-  const semanticMap = customColors || defaultColors;
+  // Merge defaults with any custom overrides so defaults are preserved
+  const semanticMap = { ...defaultColors, ...(customColors || {}) };
 
   // Use the shared normalizer so components accept semantic names, raw tokens, var(...), or literals
   const resolved = normalizeColorValue(color, { semanticMap });
+
+  // Ensure we never return an undefined style value; if unresolved, omit the property
+  if (!resolved) return {} as Record<string, string>;
 
   return {
     '--color': resolved
