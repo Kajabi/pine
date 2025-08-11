@@ -21,6 +21,12 @@ export const debounce = (func: (...args: any[]) => void, wait = 0) => {
 };
 
 // Add shared color normalization utility to unify token handling across components
+/**
+ * Normalizes color values to ensure consistent CSS variable usage
+ * @param value - Raw token (--token), CSS variable (var(--token)), semantic name, or literal color
+ * @param options.semanticMap - Optional mapping of semantic names to CSS variables
+ * @returns Normalized color value or undefined for invalid inputs
+ */
 export const normalizeColorValue = (
   value: string | undefined,
   options?: { semanticMap?: Record<string, string> }
