@@ -87,6 +87,26 @@ describe('pds-box', () => {
     expect(element).toEqualAttribute('style', '--color-background-box: #dedede;');
   });
 
+  it('passes through var(...) for background-color', async () => {
+    const page = await newSpecPage({
+      components: [PdsBox],
+      html: `<pds-box background-color="var(--pine-color-green-400)"></pds-box>`,
+    });
+
+    const element = page.root;
+    expect(element).toEqualAttribute('style', '--color-background-box: var(--pine-color-green-400);');
+  });
+
+  it('omits background-color when whitespace-only is provided', async () => {
+    const page = await newSpecPage({
+      components: [PdsBox],
+      html: `<pds-box background-color="   "></pds-box>`,
+    });
+
+    const element = page.root;
+    expect(element).not.toHaveAttribute('style');
+  });
+
   it('renders border class when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsBox],
@@ -107,6 +127,26 @@ describe('pds-box', () => {
     const element = page.root;
 
     expect(element).toEqualAttribute('style', '--color-border-box: #dedede;');
+  });
+
+  it('passes through var(...) for border-color', async () => {
+    const page = await newSpecPage({
+      components: [PdsBox],
+      html: `<pds-box border-color="var(--pine-color-green-400)"></pds-box>`,
+    });
+
+    const element = page.root;
+    expect(element).toEqualAttribute('style', '--color-border-box: var(--pine-color-green-400);');
+  });
+
+  it('omits border-color when whitespace-only is provided', async () => {
+    const page = await newSpecPage({
+      components: [PdsBox],
+      html: `<pds-box border-color="   "></pds-box>`,
+    });
+
+    const element = page.root;
+    expect(element).not.toHaveAttribute('style');
   });
 
   it('renders border-radius class when prop is set to none', async () => {
