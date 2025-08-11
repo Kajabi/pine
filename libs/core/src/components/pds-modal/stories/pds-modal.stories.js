@@ -30,8 +30,8 @@ const BaseTemplate = (args) => html`
       id="${args.componentId}"
       component-id="${args.componentId}"
       size="${args.size}"
-      ?backdrop-dismiss="${args.backdropDismiss}"
-      ?open="${args.open}"
+      .backdropDismiss=${args.backdropDismiss}
+      ?open=${args.open}
     >
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
@@ -100,8 +100,8 @@ const DestructiveTemplate = (args) => html`
       id="${args.componentId}"
       component-id="${args.componentId}"
       size="${args.size}"
-      ?backdrop-dismiss="${args.backdropDismiss}"
-      ?open="${args.open}"
+      .backdropDismiss=${args.backdropDismiss}
+      ?open=${args.open}
     >
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
@@ -166,8 +166,8 @@ const CustomContentTemplate = (args) => html`
       <pds-modal
         id="${args.componentId}"
         size="${args.size}"
-        ?backdrop-dismiss="${args.backdropDismiss}"
-        ?open="${args.open}"
+        .backdropDismiss=${args.backdropDismiss}
+        ?open=${args.open}
       >
 
         <pds-modal-header>
@@ -254,8 +254,8 @@ const ScrollableTemplate = (args) => {
       <pds-modal
         id="${args.componentId}"
         size="${args.size}"
-        ?backdrop-dismiss="${args.backdropDismiss}"
-        ?open="${args.open}"
+        .backdropDismiss=${args.backdropDismiss}
+        ?open=${args.open}
       >
         <pds-modal-header>
           <pds-box direction="column" fit padding="md">
@@ -337,8 +337,8 @@ const FullscreenTemplate = (args) => html`
     <pds-modal
       id="${args.componentId}"
       size=${args.size}
-      ?backdrop-dismiss=${args.backdropDismiss}
-      ?open="${args.open}"
+      .backdropDismiss=${args.backdropDismiss}
+      ?open=${args.open}
     >
       <pds-modal-header>
         <pds-box

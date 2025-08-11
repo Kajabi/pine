@@ -16,12 +16,12 @@ export default {
 
 const BaseTemplate = (args) => html`
   <pds-copytext
-    border="${args.border}"
-    full-width="${args.fullWidth}"
+    .border=${args.border}
+    .fullWidth=${args.fullWidth}
     component-id=${args.componentId}
     onClick=${args.onClick}
-    truncate="${args.truncate}"
-    value="${args.value}">
+    .truncate=${args.truncate}
+    .value=${args.value}>
   </pds-copytext>`;
 
 export const Default = BaseTemplate.bind();
