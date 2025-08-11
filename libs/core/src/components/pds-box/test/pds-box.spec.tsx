@@ -414,6 +414,22 @@ describe('pds-box', () => {
     expect(element).toEqualAttribute('style', '--color-border-box: var(--pine-color-green-400);');
   });
 
+  it('should normalize raw token values for backgroundColor', async () => {
+    const page = await newSpecPage({
+      components: [PdsBox],
+      html: `<pds-box background-color="--pine-color-green-400"></pds-box>`,
+    });
+    expect(page.root.style.cssText).toContain('--color-background-box: var(--pine-color-green-400);');
+  });
+
+  it('should normalize raw token values for borderColor', async () => {
+    const page = await newSpecPage({
+      components: [PdsBox],
+      html: `<pds-box border-color="--pine-color-blue-400"></pds-box>`,
+    });
+    expect(page.root.style.cssText).toContain('--color-border-box: var(--pine-color-blue-400);');
+  });
+
   it('renders shadow class when prop is set to xs', async () => {
     const page = await newSpecPage({
       components: [PdsBox],
