@@ -354,6 +354,25 @@ describe('pds-box', () => {
     });
   });
 
+  it('normalizes background-color when raw token is provided', async () => {
+    const page = await newSpecPage({
+      components: [PdsBox],
+      html: `<pds-box background-color="--pine-color-green-400"></pds-box>`,
+    });
+
+    const element = page.root;
+    expect(element).toEqualAttribute('style', '--color-background-box: var(--pine-color-green-400);');
+  });
+
+  it('normalizes border-color when raw token is provided', async () => {
+    const page = await newSpecPage({
+      components: [PdsBox],
+      html: `<pds-box border-color="--pine-color-green-400"></pds-box>`,
+    });
+
+    const element = page.root;
+    expect(element).toEqualAttribute('style', '--color-border-box: var(--pine-color-green-400);');
+  });
 
   it('renders shadow class when prop is set to xs', async () => {
     const page = await newSpecPage({

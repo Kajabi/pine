@@ -20,6 +20,29 @@ export const debounce = (func: (...args: any[]) => void, wait = 0) => {
   };
 };
 
+// Add shared color normalization utility to unify token handling across components
+export const normalizeColorValue = (
+  value: string | undefined,
+  options?: { semanticMap?: Record<string, string> }
+): string | undefined => {
+  if (!value) return undefined;
+  const trimmed = value.trim();
+
+  // If a semantic map is provided and the value matches a key, return mapped CSS var
+  if (options?.semanticMap && options.semanticMap[trimmed]) {
+    return options.semanticMap[trimmed];
+  }
+
+  // If already a CSS var, pass through
+  if (trimmed.startsWith('var(')) return trimmed;
+
+  // If raw token is provided (e.g., --pine-color-foo), wrap in var(...)
+  if (trimmed.startsWith('--')) return `var(${trimmed})`;
+
+  // Otherwise treat as literal CSS color value
+  return trimmed;
+};
+
 export const setColor = (color: string, customColors?: Record<string, string>) => {
   if (!color) return;
 
@@ -34,9 +57,12 @@ export const setColor = (color: string, customColors?: Record<string, string>) =
     warning: 'var(--pine-color-text-warning)',
   };
 
-  const colors = customColors || defaultColors;
+  const semanticMap = customColors || defaultColors;
+
+  // Use the shared normalizer so components accept semantic names, raw tokens, var(...), or literals
+  const resolved = normalizeColorValue(color, { semanticMap });
 
   return {
-    '--color': colors[color] ?? (color.startsWith('--') ? `var(${color})` : color)
+    '--color': resolved
   };
 }
