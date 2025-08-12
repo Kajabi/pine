@@ -18,12 +18,12 @@ export default {
 const BaseTemplate = (args) => html`
   <pds-button
     component-id=${args.componentId}
-    .disabled=${args.disabled}
-    .fullWidth=${args.fullWidth}
+    disabled=${args.disabled}
+    full-width=${args.fullWidth}
     href=${args.href}
-    .iconOnly=${args.iconOnly}
+    icon-only=${args.iconOnly}
     icon=${args.icon}
-    .loading=${args.loading}
+    loading=${args.loading}
     name=${args.name}
     target=${args.target}
     type=${args.type}

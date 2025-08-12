@@ -44,7 +44,7 @@ const BaseTemplate = (args) => html`<pds-input
   .debounce=${args.debounce}
   .disabled=${args.disabled}
   error-message="${args.errorMessage}"
-  .fullWidth=${args.fullWidth}
+  full-width=${args.fullWidth}
   helper-message="${args.helperMessage}"
   .invalid=${args.invalid}
   label="${args.label}"

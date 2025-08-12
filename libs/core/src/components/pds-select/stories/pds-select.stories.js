@@ -53,7 +53,7 @@ const BaseTemplate = (args) =>
     .disabled=${args.disabled}
     error-message="${args.errorMessage}"
     helper-message="${args.helperMessage}"
-    .hideLabel=${args.hideLabel}
+    hide-label=${args.hideLabel}
     .invalid=${args.invalid}
     label="${args.label}"
     .multiple=${args.multiple}
@@ -162,7 +162,7 @@ export const withActionLink = (args) => html`<pds-select
   .disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
-  .hideLabel=${args.hideLabel}
+  hide-label=${args.hideLabel}
   .invalid=${args.invalid}
   label="Timezone"
   .multiple=${args.multiple}
@@ -182,7 +182,7 @@ export const withActionButton = (args) => html`<pds-select
   .disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
-  .hideLabel=${args.hideLabel}
+  hide-label=${args.hideLabel}
   .invalid=${args.invalid}
   label="Country"
   .multiple=${args.multiple}
