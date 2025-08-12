@@ -146,7 +146,7 @@ export const withActionLink = (args) => html`<pds-textarea
   placeholder="${args.placeholder}"
   .readonly=${args.readonly}
   .required=${args.required}
-  rows="3"
+  .rows=${3}
   .value=${args.value}
   data-tooltip-id="foo"
   title="bar">
@@ -169,7 +169,7 @@ export const withActionButton = (args) => html`<pds-textarea
   placeholder="${args.placeholder}"
   .readonly=${args.readonly}
   .required=${args.required}
-  rows="4"
+  .rows=${4}
   .value=${args.value}
   data-tooltip-id="foo"
   title="bar">
