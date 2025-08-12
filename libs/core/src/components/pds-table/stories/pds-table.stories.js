@@ -16,11 +16,11 @@ export default {
 
 const BaseTemplate = (args) => html`
 <pds-table
-  compact="${args.compact}"
+  .compact=${args.compact}
   component-id="${args.componentId}"
-  fixed-column="${args.fixedColumn}"
-  responsive="${args.responsive}"
-  selectable="${args.selectable}"
+  .fixedColumn=${args.fixedColumn}
+  .responsive=${args.responsive}
+  .selectable=${args.selectable}
 >
   <pds-table-head>
     <pds-table-head-cell>Column Title</pds-table-head-cell>
@@ -48,11 +48,11 @@ const BaseTemplate = (args) => html`
 
 const ResponsiveTemplate = (args) => html`
 <pds-table
-  compact="${args.compact}"
+  .compact=${args.compact}
   component-id="${args.componentId}"
-  fixed-column="${args.fixedColumn}"
-  responsive="${args.responsive}"
-  selectable="${args.selectable}"
+  .fixedColumn=${args.fixedColumn}
+  .responsive=${args.responsive}
+  .selectable=${args.selectable}
 >
   <pds-table-head>
     <pds-table-head-cell>Column Title</pds-table-head-cell>
@@ -116,16 +116,16 @@ const ResponsiveTemplate = (args) => html`
 
 const SortableTemplate = (args) => html`
 <pds-table
-  compact="${args.compact}"
+  .compact=${args.compact}
   component-id="${args.componentId}"
-  fixed-column="${args.fixedColumn}"
-  responsive="${args.responsive}"
-  selectable="${args.selectable}"
+  .fixedColumn=${args.fixedColumn}
+  .responsive=${args.responsive}
+  .selectable=${args.selectable}
 >
   <pds-table-head>
-    <pds-table-head-cell sortable=${args.sortable}>Name</pds-table-head-cell>
-    <pds-table-head-cell sortable=${args.sortable}>Email</pds-table-head-cell>
-    <pds-table-head-cell sortable=${args.sortable}>Email Marketing</pds-table-head-cell>
+    <pds-table-head-cell .sortable=${args.sortable}>Name</pds-table-head-cell>
+    <pds-table-head-cell .sortable=${args.sortable}>Email</pds-table-head-cell>
+    <pds-table-head-cell .sortable=${args.sortable}>Email Marketing</pds-table-head-cell>
   </pds-table-head>
   <pds-table-body>
     <pds-table-row>
