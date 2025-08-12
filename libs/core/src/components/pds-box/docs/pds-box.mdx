@@ -267,6 +267,63 @@ Grid system:
 - Most effective when used inside `pds-row` containers
 - Responsive variants available: `size-xs`, `size-sm`, `size-md`, `size-lg`, `size-xl`
 
+### Flex
+The `flex` prop controls how a box grows or shrinks within its container. It accepts both predefined values and custom CSS flex values.
+
+#### Predefined Values
+- `none` - The box will not grow or shrink (equivalent to `flex: 0 0 auto`)
+- `grow` - The box will grow to fill available space (equivalent to `flex: 1 1 0`)
+- `shrink` - The box will shrink when space is limited (equivalent to `flex: 0 1 auto`)
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsBox>
+  <PdsBox border="true" flex="none">Flex: none</PdsBox>
+  <PdsBox border="true" flex="grow">Flex: grow</PdsBox>
+  <PdsBox border="true" flex="shrink">Flex: shrink</PdsBox>
+</PdsBox>`,
+    webComponent: `<pds-box>
+  <pds-box border="true" flex="none">Flex: none</pds-box>
+  <pds-box border="true" flex="grow">Flex: grow</pds-box>
+  <pds-box border="true" flex="shrink">Flex: shrink</pds-box>
+</pds-box>`
+}}>
+  <pds-box>
+    <pds-box border="true" flex="none">Flex: none</pds-box>
+    <pds-box border="true" flex="grow">Flex: grow</pds-box>
+    <pds-box border="true" flex="shrink">Flex: shrink</pds-box>
+  </pds-box>
+</DocCanvas>
+
+#### Custom Flex Values
+You can also provide custom CSS flex values as strings for precise control:
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsBox>
+  <PdsBox border="true" flex="1">Flex: 1</PdsBox>
+  <PdsBox border="true" flex="2">Flex: 2</PdsBox>
+  <PdsBox border="true" flex="0 1 100px">Flex: 0 1 100px</PdsBox>
+</PdsBox>`,
+    webComponent: `<pds-box>
+  <pds-box border="true" flex="1">Flex: 1</pds-box>
+  <pds-box border="true" flex="2">Flex: 2</pds-box>
+  <pds-box border="true" flex="0 1 100px">Flex: 0 1 100px</pds-box>
+</pds-box>`
+}}>
+  <pds-box>
+    <pds-box border="true" flex="1">Flex: 1</pds-box>
+    <pds-box border="true" flex="2">Flex: 2</pds-box>
+    <pds-box border="true" flex="0 1 100px">Flex: 0 1 100px</pds-box>
+  </pds-box>
+</DocCanvas>
+
+Common custom flex patterns:
+- `"1"`: Equal flex growth (equivalent to `flex: 1 1 0`)
+- `"2"`: Grows twice as much as `flex="1"` items
+- `"0 1 auto"`: No growth, can shrink, size based on content
+- `"0 0 200px"`: Fixed 200px width, no grow/shrink
+
 ### Layout Properties
 `pds-box` not only allows for custom element properties, but it also allows for a flexible layout system. The layout system is based on the [CSS Flexbox specification](https://drafts.csswg.org/css-flexbox/) and can be view on the [Layouts](/docs/components-layout--docs) page
 

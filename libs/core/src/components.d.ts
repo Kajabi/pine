@@ -170,10 +170,10 @@ export namespace Components {
          */
         "fit"?: boolean;
         /**
-          * Defines how a box will grow or shrink to fit the space available in its container.
+          * Defines how a box will grow or shrink to fit the space available in its container. Can be a predefined value ('none', 'grow', 'shrink') or a custom flex value (e.g., '1', '0 1 auto').
           * @defaultValue none
          */
-        "flex"?: `none` | `grow` | `shrink`;
+        "flex"?: `none` | `grow` | `shrink` | string;
         /**
           * Defines the spacing between the box items.
           * @defaultValue none
@@ -2214,10 +2214,10 @@ declare namespace LocalJSX {
          */
         "fit"?: boolean;
         /**
-          * Defines how a box will grow or shrink to fit the space available in its container.
+          * Defines how a box will grow or shrink to fit the space available in its container. Can be a predefined value ('none', 'grow', 'shrink') or a custom flex value (e.g., '1', '0 1 auto').
           * @defaultValue none
          */
-        "flex"?: `none` | `grow` | `shrink`;
+        "flex"?: `none` | `grow` | `shrink` | string;
         /**
           * Defines the spacing between the box items.
           * @defaultValue none
