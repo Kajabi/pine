@@ -13,8 +13,8 @@ export default {
 
 const BaseTemplate = (args) => html`
   <pds-loader
-    is-loading="${args.isLoading}"
-    show-label="${args.showLabel}"
+    .isLoading=${args.isLoading}
+    .showLabel=${args.showLabel}
     size="${args.size}"
     variant="${args.variant}"
   >
