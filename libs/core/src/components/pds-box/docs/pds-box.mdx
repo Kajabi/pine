@@ -270,7 +270,7 @@ Grid system:
 ### Flex
 The `flex` prop controls how a box grows or shrinks within its container. It accepts both predefined values and custom CSS flex values.
 
-**Important:** The `flex` prop only works when the parent element is another `pds-box` component. It does not work when the parent is `pds-row` or other elements, as those components use different layout systems.
+> **⚠️ CRITICAL CONSTRAINT:** The `flex` prop **ONLY** works when the parent element is another `pds-box` component. It does **NOT** work when the parent is `pds-row` or other elements, as those components use different layout systems. Always ensure the immediate parent is a `pds-box` when using flex properties.
 
 #### Predefined Values
 - `none` - The box will not grow or shrink (equivalent to `flex: 0 0 auto`)
@@ -326,7 +326,23 @@ Common custom flex patterns:
 - `"0 1 auto"`: No growth, can shrink, size based on content
 - `"0 0 200px"`: Fixed 200px width, no grow/shrink
 
-**Note:** Remember that these flex properties only work when the immediate parent is a `pds-box` component, not when inside `pds-row` or other containers.
+> **⚠️ REMINDER:** These flex properties only work when the immediate parent is a `pds-box` component, **NOT** when inside `pds-row` or other containers.
+
+#### ❌ Incorrect Usage (Will NOT Work)
+```tsx
+// DON'T DO THIS - flex props are ignored inside pds-row
+<pds-row>
+  <pds-box flex="grow">This flex prop will be ignored</pds-box>
+</pds-row>
+```
+
+#### ✅ Correct Usage (Will Work)
+```tsx
+// DO THIS - flex props work inside another pds-box
+<pds-box>
+  <pds-box flex="grow">This flex prop will work</pds-box>
+</pds-box>
+```
 
 ### Layout Properties
 `pds-box` not only allows for custom element properties, but it also allows for a flexible layout system. The layout system is based on the [CSS Flexbox specification](https://drafts.csswg.org/css-flexbox/) and can be view on the [Layouts](/docs/components-layout--docs) page
