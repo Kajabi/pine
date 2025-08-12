@@ -12,7 +12,7 @@ designed to create responsive, adaptable, and aesthetically pleasing grid layout
 grid, intuitive alignment properties, and powerful nesting capabilities to support a wide variety of use cases, from
 simple to highly complex layouts.
 
-## `pds-box`
+## pds-box
 
 The `pds-box` serves two main purposes:
 
@@ -28,7 +28,7 @@ Columns cannot exist inside `pds-box` components.
 
 > **⚠️ CRITICAL LAYOUT CONSTRAINT:** `pds-box` flex properties (`flex="grow"`, `flex="shrink"`, `flex="none"`, or custom flex values like `flex="1"`) do **NOT** work when the box is inside a `pds-row`. These flex properties only work when the immediate parent is another `pds-box` component. When inside `pds-row`, use `size` props to control column width instead.
 
-## `pds-row`
+## pds-row
 
 The `pds-row` component defines a horizontal container for multiple columns (`pds-box` children). It provides the structural foundation for creating responsive, multi-column layouts.
 
