@@ -25,16 +25,16 @@ export default {
 const BaseTemplate = (args) =>
   html` <pds-checkbox
     component-id=${args.componentId}
-    checked=${args.checked}
-    disabled=${args.disabled}
+    .checked=${args.checked}
+    .disabled=${args.disabled}
     error-message=${args.errorMessage}
     helper-message=${args.helperMessage}
-    hide-label=${args.hideLabel}
-    indeterminate=${args.indeterminate}
-    invalid=${args.invalid}
+    .hideLabel=${args.hideLabel}
+    .indeterminate=${args.indeterminate}
+    .invalid=${args.invalid}
     label=${args.label}
     name=${args.name}
-    required=${args.required}
+    .required=${args.required}
     value=${args.value}
   />`;
 
