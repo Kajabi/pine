@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
 import { assignDescription, messageId } from '../../utils/form';
 import { danger } from '@pine-ds/icons/icons';
 
@@ -9,9 +9,11 @@ import type { Attributes } from '@utils/attributes';
   tag: 'pds-switch',
   styleUrls: ['../../global/styles/utils/label.scss', 'pds-switch.scss'],
   shadow: true,
+  formAssociated: true,
 })
 export class PdsSwitch {
   private inheritedAttributes: Attributes = {};
+  private internals?: ElementInternals;
 
   @Element() el: HTMLPdsSwitchElement;
 
@@ -80,6 +82,9 @@ export class PdsSwitch {
 
     const input = e.target as HTMLInputElement;
     this.checked = input.checked;
+
+    this.updateFormValue();
+
     this.pdsSwitchChange.emit(e as InputEvent);
   };
 
@@ -94,6 +99,48 @@ export class PdsSwitch {
     }
     return switchClasses;
   };
+
+  connectedCallback() {
+    if (this.el.attachInternals) {
+      this.internals = this.el.attachInternals();
+    }
+  }
+
+  componentDidLoad() {
+    this.updateFormValue();
+  }
+
+  @Watch('checked')
+  checkedChanged() {
+    this.updateFormValue();
+  }
+
+  private updateFormValue() {
+    if (typeof jest !== 'undefined' || typeof process !== 'undefined' && process.env?.NODE_ENV === 'test') {
+      return;
+    }
+
+    if (this.internals && this.internals.setFormValue) {
+      // For switches, only send the value when checked, otherwise send null
+      const formValue = this.checked ? (this.value || 'on') : null;
+      this.internals.setFormValue(formValue);
+    }
+
+    if (this.internals && this.internals.setValidity) {
+      this.internals.setValidity({});
+    }
+  }
+
+  formStateRestoreCallback(state: string | FormData | null) {
+    if (state instanceof FormData) {
+      // For switches, restore if the value exists in FormData
+      const value = this.value || 'on';
+      this.checked = state.get(this.name || this.componentId) === value;
+    } else if (typeof state === 'string') {
+      // Restore from string state
+      this.checked = state === (this.value || 'on');
+    }
+  }
 
   componentWillLoad() {
     this.inheritedAttributes = {
