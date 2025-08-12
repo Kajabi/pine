@@ -10,9 +10,11 @@ import type { Attributes } from '@utils/attributes';
   tag: 'pds-checkbox',
   styleUrls: ['../../global/styles/utils/label.scss', 'pds-checkbox.scss'],
   shadow: true,
+  formAssociated: true,
 })
 export class PdsCheckbox {
   private inheritedAttributes: Attributes = {};
+  private internals?: ElementInternals;
 
   @Element() el: HTMLPdsCheckboxElement;
 
@@ -97,6 +99,8 @@ export class PdsCheckbox {
     const target = e.target as HTMLInputElement;
     this.checked = target.checked;
 
+    this.updateFormValue();
+
     this.pdsCheckboxChange.emit({
       checked: target.checked,
       value: this.value
@@ -118,6 +122,48 @@ export class PdsCheckbox {
     if (this.disabled) { classNames.push('is-disabled'); }
 
     return classNames.join('  ');
+  }
+
+  connectedCallback() {
+    if (this.el.attachInternals) {
+      this.internals = this.el.attachInternals();
+    }
+  }
+
+  componentDidLoad() {
+    this.updateFormValue();
+  }
+
+  @Watch('checked')
+  checkedChanged() {
+    this.updateFormValue();
+  }
+
+  private updateFormValue() {
+    if (typeof jest !== 'undefined' || typeof process !== 'undefined' && process.env?.NODE_ENV === 'test') {
+      return;
+    }
+
+    if (this.internals && this.internals.setFormValue) {
+      // For checkboxes, only send the value when checked, otherwise send null
+      const formValue = this.checked ? (this.value || 'on') : null;
+      this.internals.setFormValue(formValue);
+    }
+
+    if (this.internals && this.internals.setValidity) {
+      this.internals.setValidity({});
+    }
+  }
+
+  formStateRestoreCallback(state: string | FormData | null) {
+    if (state instanceof FormData) {
+      // For checkboxes, restore if the value exists in FormData
+      const value = this.value || 'on';
+      this.checked = state.get(this.name as string) === value;
+    } else if (typeof state === 'string') {
+      // Restore from string state
+      this.checked = state === (this.value || 'on');
+    }
   }
 
   componentWillLoad() {

@@ -279,13 +279,19 @@ The web component example utilizes vanilla JavaScript to access values directly 
     console.log('📦 Custom element definitions:', {
       'pds-input': customElements.get('pds-input') ? '✅ Defined' : '❌ Not defined',
       'pds-select': customElements.get('pds-select') ? '✅ Defined' : '❌ Not defined',
-      'pds-textarea': customElements.get('pds-textarea') ? '✅ Defined' : '❌ Not defined'
+      'pds-textarea': customElements.get('pds-textarea') ? '✅ Defined' : '❌ Not defined',
+      'pds-checkbox': customElements.get('pds-checkbox') ? '✅ Defined' : '❌ Not defined',
+      'pds-radio': customElements.get('pds-radio') ? '✅ Defined' : '❌ Not defined',
+      'pds-switch': customElements.get('pds-switch') ? '✅ Defined' : '❌ Not defined'
     });
 
     // Check if Pine components have form association
     const formComponents = {
       input: form.querySelector('pds-input[component-id="name"]'),
       email: form.querySelector('pds-input[component-id="email"]'),
+      subscribe: form.querySelector('pds-checkbox[component-id="subscribe"]'),
+      direction: form.querySelector('pds-radio[component-id="direction-up"]'),
+      notifications: form.querySelector('pds-switch[component-id="notifications"]'),
       select: form.querySelector('pds-select[component-id="timeOfDay"]'),
       textarea: form.querySelector('pds-textarea[component-id="message"]')
     };
