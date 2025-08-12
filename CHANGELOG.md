@@ -1,3 +1,15 @@
+## 3.4.2 (2025-08-12)
+
+### Bug Fixes 🐛
+
+- Unify color token handling across components (backward compatible) ([#506](https://github.com/Kajabi/pine/pull/506))
+- add form association and element internals to checkbox and switch ([#508](https://github.com/Kajabi/pine/pull/508))
+- **pds-box:** add custom flex values to flex prop ([#509](https://github.com/Kajabi/pine/pull/509))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 3.4.1 (2025-08-07)
 
 ### Bug Fixes 🐛
