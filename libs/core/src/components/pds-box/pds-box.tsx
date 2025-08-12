@@ -71,9 +71,10 @@ export class PdsBox {
 
   /**
    * Defines how a box will grow or shrink to fit the space available in its container.
+   * Can be a predefined value ('none', 'grow', 'shrink') or a custom flex value (e.g., '1', '0 1 auto').
    * @defaultValue none
    */
-  @Prop() flex?: `none` | `grow` | `shrink`;
+  @Prop() flex?: `none` | `grow` | `shrink` | string;
 
   /**
    * Defines the horizontal alignment of the box items.
@@ -225,7 +226,7 @@ export class PdsBox {
     ${this.display !== undefined && this.display.trim() !== '' ? `pds-box--display-${this.display}` : ''}
     ${this.fit ? 'pds-box--fit' : ''}
     ${this.gap !== undefined && this.gap.trim() !== '' ? `pds-box-gap-${this.gap}` : ''}
-    ${this.flex !== undefined && this.flex.trim() !== '' ? `pds-box--flex-${this.flex}` : ''}
+    ${this.flex !== undefined && this.flex.trim() !== '' && ['none', 'grow', 'shrink'].includes(this.flex) ? `pds-box--flex-${this.flex}` : ''}
     ${this.justifyContent !== undefined && this.justifyContent.trim() !== '' ? `pds-justify-content-${this.justifyContent}` : ''}
     ${this.marginBlockStart !== undefined && this.marginBlockStart.trim() !== '' ? `pds-margin-block-start-${this.marginBlockStart}` : ''}
     ${this.marginInlineStart !== undefined && this.marginInlineStart.trim() !== '' ? `pds-margin-inline-start-${this.marginInlineStart}` : ''}
@@ -265,6 +266,7 @@ export class PdsBox {
       ...(normalizedBorder && { '--color-border-box': normalizedBorder }),
       ...(this.minHeight && { '--sizing-min-height-box': this.minHeight }),
       ...(this.minWidth && { '--sizing-min-width-box': this.minWidth }),
+      ...(this.flex && !['none', 'grow', 'shrink'].includes(this.flex) && { 'flex': this.flex }),
     };
 
     return (

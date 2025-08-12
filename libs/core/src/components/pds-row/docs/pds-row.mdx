@@ -37,6 +37,8 @@ pds-row is designed to work with pds-box children:
 - Direction: pds-box children default to `direction="row"` which works well in grid
 - Column Sum: Total of all size props should not exceed 12 per row
 
+> **⚠️ IMPORTANT:** `pds-box` flex properties (`flex="grow"`, `flex="shrink"`, `flex="none"`, or custom flex strings like `flex="1"`) do **NOT** work when the box is a direct child of `pds-row`. The flex properties only work when the immediate parent is another `pds-box` component. Use the `size` props instead for controlling column width within rows.
+
 ### Common Patterns
 
 - `size="6"` + `size="6"` = 50/50 split

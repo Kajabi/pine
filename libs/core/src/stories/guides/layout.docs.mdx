@@ -12,7 +12,7 @@ designed to create responsive, adaptable, and aesthetically pleasing grid layout
 grid, intuitive alignment properties, and powerful nesting capabilities to support a wide variety of use cases, from
 simple to highly complex layouts.
 
-## `pds-box`
+## pds-box
 
 The `pds-box` serves two main purposes:
 
@@ -26,7 +26,9 @@ When used as a grid column, `pds-box` must be:
   - Assigned a `size` property (e.g., `size="4"` for a column spanning 4 grid units).
 Columns cannot exist inside `pds-box` components.
 
-## `pds-row`
+> **⚠️ CRITICAL LAYOUT CONSTRAINT:** `pds-box` flex properties (`flex="grow"`, `flex="shrink"`, `flex="none"`, or custom flex values like `flex="1"`) do **NOT** work when the box is inside a `pds-row`. These flex properties only work when the immediate parent is another `pds-box` component. When inside `pds-row`, use `size` props to control column width instead.
+
+## pds-row
 
 The `pds-row` component defines a horizontal container for multiple columns (`pds-box` children). It provides the structural foundation for creating responsive, multi-column layouts.
 
@@ -1126,11 +1128,11 @@ When a gap or gutter is needed between the columns, an additional child `pds-box
 
 If you encounter issues with your layout, here are some common problems and their solutions:
 
-### 1. Columns Not Aligning Correctly
+### 1. **Columns Not Aligning Correctly**
   - **Issue:** Columns are not aligning as expected.
   - **Solution:** Double-check the `align-items` and `justify-content` properties on the parent `pds-row` component. Ensure that the sum of the column sizes within the row is less than or equal to 12 for a 12-column grid. Colums sums greater than 12 will wrap the row to the next line.
 
-### 2. Unexpected Spacing
+### 2. **Unexpected Spacing**
   - **Issue:** Unexpected spacing between columns.
   - **Solution:** Check the `padding` property on the `pds-box` components. Adjust the padding values to achieve the desired spacing between columns.
 
@@ -1145,6 +1147,10 @@ If you encounter issues with your layout, here are some common problems and thei
 ### 5. **Performance Degradation due to Unnecessary Nesting**
   - **Issue:** Noticeable performance degradation, especially on complex layouts.
   - **Solution:** Review the nested `pds-box`s structure and minimize unnecessary nesting by flattening your layout structure where possible. Excessive nesting can cause performance issues, especially on complex layouts.
+
+### 6. **Flex Properties Not Working in Grid Layouts**
+  - **Issue:** Using `flex="grow"`, `flex="shrink"`, `flex="none"`, or custom flex values like `flex="1"` on `pds-box` inside `pds-row` has no effect.
+  - **Solution:** Flex properties only work when the immediate parent is another `pds-box`, not when inside `pds-row`. Use `size` props (e.g., `size="6"`) to control column width within rows. For flex behavior, nest the box inside another `pds-box` container instead of using it directly in `pds-row`.
 
 ## Related Components
 - [Box](/docs/components-box--docs)

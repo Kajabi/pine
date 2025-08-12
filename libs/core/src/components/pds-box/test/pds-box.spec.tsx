@@ -215,6 +215,90 @@ describe('pds-box', () => {
     expect(element).toHaveClass('pds-box--flex-grow');
   });
 
+  it('renders flex class when prop is set to none', async () => {
+    const page = await newSpecPage({
+      components: [PdsBox],
+      html: `<pds-box flex="none"></pds-box>`,
+    });
+
+    const element = page.root;
+
+    expect(element).toHaveClass('pds-box--flex-none');
+  });
+
+  it('renders flex class when prop is set to shrink', async () => {
+    const page = await newSpecPage({
+      components: [PdsBox],
+      html: `<pds-box flex="shrink"></pds-box>`,
+    });
+
+    const element = page.root;
+
+    expect(element).toHaveClass('pds-box--flex-shrink');
+  });
+
+  it('renders custom flex value as inline style when prop is set to "1"', async () => {
+    const page = await newSpecPage({
+      components: [PdsBox],
+      html: `<pds-box flex="1"></pds-box>`,
+    });
+
+    const element = page.root;
+
+    expect(element).toEqualAttribute('style', 'flex: 1;');
+    expect(element).not.toHaveClass('pds-box--flex-1');
+  });
+
+  it('renders custom flex value as inline style when prop is set to "2"', async () => {
+    const page = await newSpecPage({
+      components: [PdsBox],
+      html: `<pds-box flex="2"></pds-box>`,
+    });
+
+    const element = page.root;
+
+    expect(element).toEqualAttribute('style', 'flex: 2;');
+    expect(element).not.toHaveClass('pds-box--flex-2');
+  });
+
+  it('renders custom flex value as inline style when prop is set to "0 1 auto"', async () => {
+    const page = await newSpecPage({
+      components: [PdsBox],
+      html: `<pds-box flex="0 1 auto"></pds-box>`,
+    });
+
+    const element = page.root;
+
+    expect(element).toEqualAttribute('style', 'flex: 0 1 auto;');
+    expect(element).not.toHaveClass('pds-box--flex-0 1 auto');
+  });
+
+  it('renders custom flex value as inline style when prop is set to "0 0 200px"', async () => {
+    const page = await newSpecPage({
+      components: [PdsBox],
+      html: `<pds-box flex="0 0 200px"></pds-box>`,
+    });
+
+    const element = page.root;
+
+    expect(element).toEqualAttribute('style', 'flex: 0 0 200px;');
+    expect(element).not.toHaveClass('pds-box--flex-0 0 200px');
+  });
+
+  it('combines custom flex value with other inline styles', async () => {
+    const page = await newSpecPage({
+      components: [PdsBox],
+      html: `<pds-box flex="1" background-color="#ff0000" min-height="100px"></pds-box>`,
+    });
+
+    const element = page.root;
+
+    const styleAttr = element?.getAttribute('style');
+    expect(styleAttr).toContain('flex: 1');
+    expect(styleAttr).toContain('--color-background-box: #ff0000');
+    expect(styleAttr).toContain('--sizing-min-height-box: 100px');
+  });
+
   it('renders justify-content class when prop is set to center', async () => {
     const page = await newSpecPage({
       components: [PdsBox],
