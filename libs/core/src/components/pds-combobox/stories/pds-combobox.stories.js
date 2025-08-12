@@ -33,13 +33,13 @@ export default {
 const BaseTemplate = (args) => html`
 <pds-combobox
   component-id=${args.componentId}
-  custom-option-layouts=${args.customOptionLayouts}
-  custom-trigger-content=${args.customTriggerContent}
-  disabled=${args.disabled}
+  .customOptionLayouts=${args.customOptionLayouts}
+  .customTriggerContent=${args.customTriggerContent}
+  .disabled=${args.disabled}
   dropdown-placement=${args.dropdownPlacement}
   dropdown-width=${args.dropdownWidth}
-  hide-label=${args.hideLabel}
-  max-height=${args.maxHeight}
+  .hideLabel=${args.hideLabel}
+  .maxHeight=${args.maxHeight}
   label=${args.label}
   placeholder=${args.placeholder}
   mode=${args.mode}
@@ -79,8 +79,8 @@ export const Custom = (args) => html`
 <div style="width: 100%;">
   <pds-combobox
     component-id="combobox-custom-trigger-layouts"
-    custom-trigger-content=${args.customTriggerContent}
-    custom-option-layouts=${args.customOptionLayouts}
+    .customTriggerContent=${args.customTriggerContent}
+    .customOptionLayouts=${args.customOptionLayouts}
     label=${args.label}
     trigger=${args.trigger}
     trigger-variant=${args.triggerVariant}
