@@ -374,6 +374,9 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('pds-input defined:', customElements.get('pds-input'));
       console.log('pds-select defined:', customElements.get('pds-select'));
       console.log('pds-textarea defined:', customElements.get('pds-textarea'));
+      console.log('pds-checkbox defined:', customElements.get('pds-checkbox'));
+      console.log('pds-radio defined:', customElements.get('pds-radio'));
+      console.log('pds-switch defined:', customElements.get('pds-switch'));
 
       console.log('📊 Testing form elements access:');
       console.log('Form elements:', form.elements);
@@ -381,6 +384,9 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('Named elements:', {
         name: form.elements.namedItem('name'),
         email: form.elements.namedItem('email'),
+        subscribe: form.elements.namedItem('subscribe'),
+        direction: form.elements.namedItem('direction'),
+        notifications: form.elements.namedItem('notifications'),
         message: form.elements.namedItem('message')
       });
 
@@ -388,25 +394,37 @@ document.addEventListener('DOMContentLoaded', () => {
       const pdsInput = document.querySelector('pds-input');
       const pdsSelect = document.querySelector('pds-select');
       const pdsTextarea = document.querySelector('pds-textarea');
+      const pdsCheckbox = document.querySelector('pds-checkbox');
+      const pdsRadio = document.querySelector('pds-radio');
+      const pdsSwitch = document.querySelector('pds-switch');
 
       console.log('🌲 Pine components in DOM:', {
         input: pdsInput,
         select: pdsSelect,
-        textarea: pdsTextarea
+        textarea: pdsTextarea,
+        checkbox: pdsCheckbox,
+        radio: pdsRadio,
+        switch: pdsSwitch
       });
 
       if (pdsInput || pdsSelect || pdsTextarea) {
         console.log('🔧 Component internals:', {
           inputInternals: pdsInput?.internals,
           selectInternals: pdsSelect?.internals,
-          textareaInternals: pdsTextarea?.internals
+          textareaInternals: pdsTextarea?.internals,
+          checkboxInternals: pdsCheckbox?.internals,
+          radioInternals: pdsRadio?.internals,
+          switchInternals: pdsSwitch?.internals
         });
 
         // Check if components are form-associated
         console.log('✅ Form association check:', {
           inputFormAssociated: pdsInput?.constructor?.formAssociated,
           selectFormAssociated: pdsSelect?.constructor?.formAssociated,
-          textareaFormAssociated: pdsTextarea?.constructor?.formAssociated
+          textareaFormAssociated: pdsTextarea?.constructor?.formAssociated,
+          checkboxFormAssociated: pdsCheckbox?.constructor?.formAssociated,
+          radioFormAssociated: pdsRadio?.constructor?.formAssociated,
+          switchFormAssociated: pdsSwitch?.constructor?.formAssociated
         });
       } else {
         console.error('❌ No Pine components found in DOM! Check if components are loading properly.');
@@ -430,7 +448,11 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('🎯 Component values:', {
         name: form.querySelector('[name="name"]')?.value,
         email: form.querySelector('[name="email"]')?.value,
-        message: form.querySelector('[name="message"]')?.value
+        subscribe: form.querySelector('[name="subscribe"]')?.checked,
+        direction: form.querySelector('input[name="direction"]:checked')?.value,
+        notifications: form.querySelector('[name="notifications"]')?.checked,
+        message: form.querySelector('[name="message"]')?.value,
+        timeOfDay: form.querySelector('[name="timeOfDay"]')?.value
       });
 
       // Log native form elements
