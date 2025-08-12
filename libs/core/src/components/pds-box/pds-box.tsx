@@ -1,6 +1,7 @@
 import { Component, h, Host, Prop } from '@stencil/core';
 
 import { BoxColumnType, BoxTShirtSizeType, BoxShadowSizeType } from '../../utils/types';
+import { normalizeColorValue } from '../../utils/utils';
 
 @Component({
   tag: 'pds-box',
@@ -255,9 +256,13 @@ export class PdsBox {
       this.sizeXl == undefined ? 'pds-box' : ''}
     `;
 
+    // Normalize so pds-box accepts --token, var(--token), or literals (no semantic names)
+    const normalizedBackground = normalizeColorValue(this.backgroundColor);
+    const normalizedBorder = normalizeColorValue(this.borderColor);
+
     const boxInlineStyles = {
-      ...(this.backgroundColor && { '--color-background-box': this.backgroundColor }),
-      ...(this.borderColor && { '--color-border-box': this.borderColor }),
+      ...(normalizedBackground && { '--color-background-box': normalizedBackground }),
+      ...(normalizedBorder && { '--color-border-box': normalizedBorder }),
       ...(this.minHeight && { '--sizing-min-height-box': this.minHeight }),
       ...(this.minWidth && { '--sizing-min-width-box': this.minWidth }),
     };
