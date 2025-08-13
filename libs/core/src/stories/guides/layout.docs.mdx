@@ -38,6 +38,15 @@ The `pds-row` component defines a horizontal container for multiple columns (`pd
 - It ensures that the total column size per row does not exceed 12, maintaining the integrity of the grid system.
 
 
+## Quick Reference for LLMs
+
+> **🤖 AI/LLM Quick Rules:**
+> 1. **Flex props ONLY work inside `pds-box` parent** - NOT inside `pds-row`
+> 2. **Inside `pds-row`**: Use `size` props (1-12) for column width
+> 3. **Inside `pds-box`**: Use `flex` props for flexible sizing
+> 4. **For spacing**: Use `col-gap` on `pds-row`, `gap` on `pds-box`
+> 5. **Common mistake**: `<pds-row><pds-box flex="grow">` ❌ | `<pds-box><pds-box flex="grow">` ✅
+
 ## Best Practices for Layouts
 
 Use `pds-box` for Single-Column Layouts:

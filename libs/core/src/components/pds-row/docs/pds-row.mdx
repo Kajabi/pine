@@ -31,13 +31,16 @@ The pds-row component creates a 12-column grid system for responsive layouts. It
 
 ### Working with PDS-Box
 
-pds-row is designed to work with pds-box children:
-- Direct Children: Only pds-box components should be direct children
-- Size Props: pds-box children should use size props (1-12) for grid layout
-- Direction: pds-box children default to `direction="row"` which works well in grid
-- Column Sum: Total of all size props should not exceed 12 per row
+> **⚠️ CRITICAL:** `pds-row` transforms `pds-box` children into **grid columns**, not flexbox items. This changes how they behave.
 
-> **⚠️ IMPORTANT:** `pds-box` flex properties (`flex="grow"`, `flex="shrink"`, `flex="none"`, or custom flex strings like `flex="1"`) do **NOT** work when the box is a direct child of `pds-row`. The flex properties only work when the immediate parent is another `pds-box` component. Use the `size` props instead for controlling column width within rows.
+**Grid Column Behavior Inside pds-row:**
+- **REQUIRED:** Only `pds-box` components should be direct children
+- **USE:** `size` props (1-12) for column width control
+- **DEFAULT:** Children use `direction="row"` which works well in grid
+- **LIMIT:** Total of all size props should not exceed 12 per row
+- **FORBIDDEN:** Flex properties (`flex="grow"`, `flex="shrink"`, `flex="none"`, or custom values like `flex="1"`) are **ignored**
+
+> **🚨 COMMON MISTAKE:** Using `flex` props on boxes inside `pds-row` won't work. Use `size` props instead.
 
 ### Common Patterns
 

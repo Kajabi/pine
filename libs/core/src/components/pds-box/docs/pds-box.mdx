@@ -50,14 +50,18 @@ Items flow horizontally by default, so you'll need to explicitly set `direction=
 
 ### Working with PDS-Row
 
-When pds-box is used inside pds-row:
-- The default `direction="row"` works well for grid layouts
+> **⚠️ KEY LAYOUT RULE:** When `pds-box` is inside `pds-row`, it becomes a **grid column**. When `pds-box` is standalone, it becomes a **flexbox container**.
+
+**Inside pds-row (Grid Column Mode):**
 - Use `size` props (1-12) to control column widths
+- The default `direction="row"` works well for grid layouts
+- **DON'T use flex props** - they are ignored in grid mode
 - The box becomes a grid column within the row
 
-When pds-box is used standalone:
+**Standalone (Flexbox Container Mode):**
 - Default `direction="row"` creates horizontal flow
 - Set `direction="column"` for vertical stacking
+- **DO use flex props** - they work for child boxes
 - Size props have limited effect outside of pds-row
 
 ## Properties
