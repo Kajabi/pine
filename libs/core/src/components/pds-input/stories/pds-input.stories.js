@@ -41,19 +41,19 @@ export default {
 const BaseTemplate = (args) => html`<pds-input
   autocomplete="${args.autocomplete}"
   component-id="${args.componentId}"
-  debounce="${args.debounce}"
-  disabled="${args.disabled}"
+  .debounce=${args.debounce}
+  .disabled=${args.disabled}
   error-message="${args.errorMessage}"
-  full-width="${args.fullWidth}"
+  .full-width=${args.fullWidth}
   helper-message="${args.helperMessage}"
-  invalid="${args.invalid}"
+  .invalid=${args.invalid}
   label="${args.label}"
   name="${args.name}"
   placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="${args.required}"
+  .readonly=${args.readonly}
+  .required=${args.required}
   type="${args.type}"
-  value="${args.value}">
+  .value=${args.value}">
   ${args.prefix || ''}
   ${args.suffix || ''}
   ${args.prepend || ''}
@@ -150,36 +150,36 @@ FullWidth.args = {
 export const withPrefixIcon = (args) => html`<pds-input
   autocomplete="${args.autocomplete}"
   component-id="pds-input-prefix-icon"
-  debounce="${args.debounce}"
-  disabled="${args.disabled}"
+  .debounce=${args.debounce}
+  .disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
-  invalid="${args.invalid}"
+  .invalid=${args.invalid}
   label="Email"
   name="${args.name}"
   placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="${args.required}"
+  .readonly=${args.readonly}
+  .required=${args.required}
   type="email"
-  value="${args.value}">
+  .value=${args.value}">
   <pds-icon slot="prefix" name="mail" size="small"></pds-icon>
 </pds-input>`;
 
 export const withSuffixButton = (args) => html`<pds-input
   autocomplete="${args.autocomplete}"
   component-id="pds-input-suffix-button"
-  debounce="${args.debounce}"
-  disabled="${args.disabled}"
+  .debounce=${args.debounce}
+  .disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
-  invalid="${args.invalid}"
+  .invalid=${args.invalid}
   label="Search"
   name="${args.name}"
   placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="${args.required}"
+  .readonly=${args.readonly}
+  .required=${args.required}
   type="text"
-  value="${args.value}">
+  .value=${args.value}">
   <pds-button slot="suffix" variant="unstyled" class="pds-input__suffix">
     <pds-icon name="search" size="small"></pds-icon>
   </pds-button>
@@ -188,19 +188,19 @@ export const withSuffixButton = (args) => html`<pds-input
 export const withPrependSelect = (args) => html`<pds-input
   autocomplete="${args.autocomplete}"
   component-id="pds-input-prepend-select"
-  debounce="${args.debounce}"
-  disabled="${args.disabled}"
+  .debounce=${args.debounce}
+  .disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
-  invalid="${args.invalid}"
+  .invalid=${args.invalid}
   label="Amount"
   name="${args.name}"
   placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="${args.required}"
+  .readonly=${args.readonly}
+  .required=${args.required}
   type="text"
-  value="${args.value}">
-  <pds-select hide-label label="Currency" slot="prepend" class="pds-input__prepend" name="currency">
+  .value=${args.value}>
+  <pds-select .hide-label=${true} label="Currency" slot="prepend" class="pds-input__prepend" name="currency">
     <option value="USD">USD</option>
     <option value="EUR">EUR</option>
     <option value="GBP">GBP</option>
@@ -210,19 +210,19 @@ export const withPrependSelect = (args) => html`<pds-input
 export const withAppendSelect = (args) => html`<pds-input
   autocomplete="${args.autocomplete}"
   component-id="pds-input-append-select"
-  debounce="${args.debounce}"
-  disabled="${args.disabled}"
+  .debounce=${args.debounce}
+  .disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
-  invalid="${args.invalid}"
+  .invalid=${args.invalid}
   label="Phone"
   name="${args.name}"
   placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="${args.required}"
+  .readonly=${args.readonly}
+  .required=${args.required}
   type="tel"
-  value="${args.value}">
-  <pds-select hide-label slot="append" class="pds-input__append" name="phone-type">
+  .value=${args.value}>
+  <pds-select .hide-label=${true} slot="append" class="pds-input__append" name="phone-type">
     <option value="mobile">Mobile</option>
     <option value="home">Home</option>
     <option value="work">Work</option>
@@ -232,20 +232,20 @@ export const withAppendSelect = (args) => html`<pds-input
 export const withPrefixAndAppend = (args) => html`<pds-input
   autocomplete="${args.autocomplete}"
   component-id="pds-input-prefix-append"
-  debounce="${args.debounce}"
-  disabled="${args.disabled}"
+  .debounce=${args.debounce}
+  .disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
-  invalid="${args.invalid}"
+  .invalid=${args.invalid}
   label="Amount"
   name="${args.name}"
   placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="${args.required}"
+  .readonly=${args.readonly}
+  .required=${args.required}
   type="text"
-  value="${args.value}">
+  .value=${args.value}>
   <pds-icon slot="prefix" name="dollar" size="small"></pds-icon>
-  <pds-select hide-label slot="append" class="pds-input__append" name="currency">
+  <pds-select .hide-label=${true} slot="append" class="pds-input__append" name="currency">
     <option value="USD">USD</option>
     <option value="EUR">EUR</option>
     <option value="GBP">GBP</option>
@@ -255,19 +255,19 @@ export const withPrefixAndAppend = (args) => html`<pds-input
 export const withPrependAndSuffix = (args) => html`<pds-input
   autocomplete="${args.autocomplete}"
   component-id="pds-input-prepend-suffix"
-  debounce="${args.debounce}"
-  disabled="${args.disabled}"
+  .debounce=${args.debounce}
+  .disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
-  invalid="${args.invalid}"
+  .invalid=${args.invalid}
   label="Amount"
   name="${args.name}"
   placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="${args.required}"
+  .readonly=${args.readonly}
+  .required=${args.required}
   type="text"
-  value="${args.value}">
-  <pds-select hide-label slot="prepend" class="pds-input__prepend" name="currency">
+  .value=${args.value}>
+  <pds-select .hide-label=${true} slot="prepend" class="pds-input__prepend" name="currency">
     <option value="USD">USD</option>
     <option value="EUR">EUR</option>
     <option value="GBP">GBP</option>
@@ -280,18 +280,18 @@ export const withPrependAndSuffix = (args) => html`<pds-input
 export const withActionLink = (args) => html`<pds-input
   autocomplete="${args.autocomplete}"
   component-id="pds-input-action-link"
-  debounce="${args.debounce}"
-  disabled="${args.disabled}"
+  .debounce=${args.debounce}
+  .disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
-  invalid="${args.invalid}"
+  .invalid=${args.invalid}
   label="Password"
   name="${args.name}"
   placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="true"
+  .readonly=${args.readonly}
+  .required=${true}
   type="password"
-  value="${args.value}">
+  .value=${args.value}">
   <pds-link href="#" slot="action">
     Forgot password?
   </pds-link>
@@ -300,20 +300,19 @@ export const withActionLink = (args) => html`<pds-input
 export const withActionButton = (args) => html`<pds-input
   autocomplete="${args.autocomplete}"
   component-id="pds-input-action-button"
-  debounce="${args.debounce}"
-  disabled="${args.disabled}"
+  .debounce=${args.debounce}
+  .disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="Choose a unique username"
-  invalid="${args.invalid}"
+  .invalid=${args.invalid}
   label="Username"
   name="${args.name}"
   placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="${args.required}"
+  .readonly=${args.readonly}
+  .required=${args.required}
   type="text"
-  value="${args.value}">
+  .value=${args.value}">
   <pds-button slot="action" variant="unstyled">
     <pds-icon name="question-circle"></pds-icon>
   </pds-button>
 </pds-input>`;
-

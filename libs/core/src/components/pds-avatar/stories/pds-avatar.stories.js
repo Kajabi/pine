@@ -20,8 +20,8 @@ export default {
 
 const BaseTemplate = (args) => html`<pds-avatar
 	alt="${args.alt}"
-	badge="${args.badge}"
-	dropdown="${args.dropdown}"
+	.badge=${args.badge}
+	.dropdown=${args.dropdown}
 	component-id="${args.componentId}"
 	image="${args.image}"
 	size="${args.size}"
