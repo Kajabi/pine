@@ -1,4 +1,4 @@
-import { html } from 'lit';
+import { html } from 'lit-html';
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 import { withActions } from '@storybook/addon-actions/decorator';
 
@@ -8,19 +8,19 @@ export default {
   decorators: [withActions],
   parameters: {
     actions: {
-      handles: ['onclick', 'pdsCopyTextClick'],
+      handles: ['onclick', 'pdsCopied'],
     },
   },
-  title: 'components/Copy Text',
+  title: 'components/Copytext',
 }
 
 const BaseTemplate = (args) => html`
   <pds-copytext
-    border="${args.border}"
-    full-width="${args.fullWidth}"
+    .border=${args.border}
+    .full-width=${args.fullWidth}
     component-id=${args.componentId}
     onClick=${args.onClick}
-    truncate="${args.truncate}"
+    .truncate=${args.truncate}
     value="${args.value}">
   </pds-copytext>`;
 
@@ -53,5 +53,6 @@ Truncate.args = {
   border: true,
   fullWidth: false,
   truncate: true,
-  value: 'Copy all of this really long text that should be truncated in the UI, but will still be copied to the clipboard. This can be used in cases where the text is too long to fit in the UI, but the user still needs to copy the full text.',
+  value: 'This is a very long text that will be truncated when the truncate property is set to true. You can hover over the text to see the full content.',
 };
+

@@ -14,14 +14,14 @@ const BaseTemplate = (args) => html`
 <pds-box
 	align-items="${args.alignItems}"
   align-self="${args.alignSelf}"
-  auto="${args.auto}"
+  .auto=${args.auto}
   background-color="${args.backgroundColor}"
-	border="${args.border}"
+	.border=${args.border}
   border-color="${args.borderColor}"
 	border-radius="${args.borderRadius}"
   direction="${args.direction}"
 	display="${args.display}"
-  fit="${args.fit}"
+  .fit=${args.fit}
   flex="${args.flex}"
   gap="${args.gap}"
   justify-content="${args.justifyContent}"
@@ -59,3 +59,4 @@ Default.args = {
   border: true,
   minHeight: '100px',
 };
+
