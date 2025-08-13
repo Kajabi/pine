@@ -28,10 +28,10 @@ const BaseTemplate = (args) => html`
 
     <pds-modal
       id="${args.componentId}"
-      component-id="${args.componentId}"
-      size="${args.size}"
-      ?backdrop-dismiss="${args.backdropDismiss}"
-      ?open="${args.open}"
+      .componentId=${args.componentId}
+      .size=${args.size}
+      ?backdrop-dismiss=${args.backdropDismiss}
+      ?open=${args.open}
     >
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
@@ -98,10 +98,10 @@ const DestructiveTemplate = (args) => html`
 
     <pds-modal
       id="${args.componentId}"
-      component-id="${args.componentId}"
-      size="${args.size}"
-      ?backdrop-dismiss="${args.backdropDismiss}"
-      ?open="${args.open}"
+      .componentId=${args.componentId}
+      .size=${args.size}
+      ?backdrop-dismiss=${args.backdropDismiss}
+      ?open=${args.open}
     >
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
@@ -165,9 +165,9 @@ const CustomContentTemplate = (args) => html`
 
       <pds-modal
         id="${args.componentId}"
-        size="${args.size}"
-        ?backdrop-dismiss="${args.backdropDismiss}"
-        ?open="${args.open}"
+        .size=${args.size}
+        ?backdrop-dismiss=${args.backdropDismiss}
+        ?open=${args.open}
       >
 
         <pds-modal-header>
@@ -253,9 +253,9 @@ const ScrollableTemplate = (args) => {
 
       <pds-modal
         id="${args.componentId}"
-        size="${args.size}"
-        ?backdrop-dismiss="${args.backdropDismiss}"
-        ?open="${args.open}"
+        .size=${args.size}
+        ?backdrop-dismiss=${args.backdropDismiss}
+        ?open=${args.open}
       >
         <pds-modal-header>
           <pds-box direction="column" fit padding="md">
@@ -338,7 +338,7 @@ const FullscreenTemplate = (args) => html`
       id="${args.componentId}"
       size=${args.size}
       ?backdrop-dismiss=${args.backdropDismiss}
-      ?open="${args.open}"
+      ?open=${args.open}
     >
       <pds-modal-header>
         <pds-box

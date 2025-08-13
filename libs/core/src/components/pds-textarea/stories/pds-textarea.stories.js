@@ -36,21 +36,21 @@ export default {
 }
 
 const BaseTemplate = (args) => html`<pds-textarea
-  autocomplete="${args.autocomplete}"
-  clear-on-edit="${args.clearOnEdit}"
-  component-id="${args.componentId}"
-  disabled="${args.disabled}"
-  error-message="${args.errorMessage}"
-  helper-message="${args.helperMessage}"
-  invalid="${args.invalid}"
-  label="${args.label}"
-  name="${args.name}"
-  onChange="${args.onChange}"
-  placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="${args.required}"
-  rows="${args.rows}"
-  value="${args.value}"
+  .autocomplete=${args.autocomplete}
+  .clearOnEdit=${args.clearOnEdit}
+  .componentId=${args.componentId}
+  .disabled=${args.disabled}
+  .errorMessage=${args.errorMessage}
+  .helperMessage=${args.helperMessage}
+  .invalid=${args.invalid}
+  .label=${args.label}
+  .name=${args.name}
+  @change=${args.onChange}
+  .placeholder=${args.placeholder}
+  .readonly=${args.readonly}
+  .required=${args.required}
+  .rows=${args.rows}
+  .value=${args.value}
   data-tooltip-id="foo"
   title="bar"
   >
@@ -133,21 +133,21 @@ Autocomplete.args = {
 };
 
 export const withActionLink = (args) => html`<pds-textarea
-  autocomplete="${args.autocomplete}"
-  clear-on-edit="${args.clearOnEdit}"
-  component-id="pds-textarea-action-link"
-  disabled="${args.disabled}"
-  error-message="${args.errorMessage}"
-  helper-message="${args.helperMessage}"
-  invalid="${args.invalid}"
-  label="Notes"
-  name="${args.name}"
-  onChange="${args.onChange}"
-  placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="${args.required}"
-  rows="3"
-  value="${args.value}"
+  .autocomplete=${args.autocomplete}
+  .clearOnEdit=${args.clearOnEdit}
+  .componentId=${"pds-textarea-action-link"}
+  .disabled=${args.disabled}
+  .errorMessage=${args.errorMessage}
+  .helperMessage=${args.helperMessage}
+  .invalid=${args.invalid}
+  .label=${"Notes"}
+  .name=${args.name}
+  @change=${args.onChange}
+  .placeholder=${args.placeholder}
+  .readonly=${args.readonly}
+  .required=${args.required}
+  .rows=${3}
+  .value=${args.value}
   data-tooltip-id="foo"
   title="bar">
   <pds-link href="#" slot="action">
@@ -156,21 +156,21 @@ export const withActionLink = (args) => html`<pds-textarea
 </pds-textarea>`;
 
 export const withActionButton = (args) => html`<pds-textarea
-  autocomplete="${args.autocomplete}"
-  clear-on-edit="${args.clearOnEdit}"
-  component-id="pds-textarea-action-button"
-  disabled="${args.disabled}"
-  error-message="${args.errorMessage}"
-  helper-message="${args.helperMessage}"
-  invalid="${args.invalid}"
-  label="Description"
-  name="${args.name}"
-  onChange="${args.onChange}"
-  placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="${args.required}"
-  rows="4"
-  value="${args.value}"
+  .autocomplete=${args.autocomplete}
+  .clearOnEdit=${args.clearOnEdit}
+  .componentId=${"pds-textarea-action-button"}
+  .disabled=${args.disabled}
+  .errorMessage=${args.errorMessage}
+  .helperMessage=${args.helperMessage}
+  .invalid=${args.invalid}
+  .label=${"Description"}
+  .name=${args.name}
+  @change=${args.onChange}
+  .placeholder=${args.placeholder}
+  .readonly=${args.readonly}
+  .required=${args.required}
+  .rows=${4}
+  .value=${args.value}
   data-tooltip-id="foo"
   title="bar">
   <pds-button slot="action" variant="unstyled">

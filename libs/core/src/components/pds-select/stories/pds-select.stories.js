@@ -48,19 +48,19 @@ const optgroupOptions = [
 
 const BaseTemplate = (args) =>
   html`<pds-select
-    autocomplete="${args.autocomplete}"
-    component-id="${args.componentId}"
-    disabled="${args.disabled}"
-    error-message="${args.errorMessage}"
-    helper-message="${args.helperMessage}"
-    hide-label="${args.hideLabel}"
-    invalid="${args.invalid}"
-    label="${args.label}"
-    multiple="${args.multiple}"
-    name="${args.name}"
-    required="${args.required}"
-    type="${args.type}"
-    value="${args.value}"
+    .autocomplete=${args.autocomplete}
+    .componentId=${args.componentId}
+    .disabled=${args.disabled}
+    .errorMessage=${args.errorMessage}
+    .helperMessage=${args.helperMessage}
+    .hideLabel=${args.hideLabel}
+    .invalid=${args.invalid}
+    .label=${args.label}
+    .multiple=${args.multiple}
+    .name=${args.name}
+    .required=${args.required}
+    .type=${args.type}
+    .value=${args.value}
   >
     ${args.action || ''}
     ${options.map((option) => html`<option value="${option.value}">${option.label}</option>`)}
@@ -68,18 +68,18 @@ const BaseTemplate = (args) =>
 
 const OptgroupTemplate = (args) =>
   html`<pds-select
-    autocomplete="${args.autocomplete}"
-    component-id="${args.componentId}"
-    disabled="${args.disabled}"
-    error-message="${args.errorMessage}"
-    helper-message="${args.helperMessage}"
-    invalid="${args.invalid}"
-    label="${args.label}"
-    multiple="${args.multiple}"
-    name="${args.name}"
-    required="${args.required}"
-    type="${args.type}"
-    value="${args.value}"
+    .autocomplete=${args.autocomplete}
+    .componentId=${args.componentId}
+    .disabled=${args.disabled}
+    .errorMessage=${args.errorMessage}
+    .helperMessage=${args.helperMessage}
+    .invalid=${args.invalid}
+    .label=${args.label}
+    .multiple=${args.multiple}
+    .name=${args.name}
+    .required=${args.required}
+    .type=${args.type}
+    .value=${args.value}
   >
     ${args.action || ''}
     ${optgroupOptions.map(
@@ -157,19 +157,19 @@ WithOptgroup.args = {
 };
 
 export const withActionLink = (args) => html`<pds-select
-  autocomplete="${args.autocomplete}"
-  component-id="pds-select-action-link"
-  disabled="${args.disabled}"
-  error-message="${args.errorMessage}"
-  helper-message="${args.helperMessage}"
-  hide-label="${args.hideLabel}"
-  invalid="${args.invalid}"
-  label="Timezone"
-  multiple="${args.multiple}"
-  name="timezone"
-  required="${args.required}"
-  type="${args.type}"
-  value="${args.value}">
+  .autocomplete=${args.autocomplete}
+  .componentId=${"pds-select-action-link"}
+  .disabled=${args.disabled}
+  .errorMessage=${args.errorMessage}
+  .helperMessage=${args.helperMessage}
+  .hideLabel=${args.hideLabel}
+  .invalid=${args.invalid}
+  .label=${"Timezone"}
+  .multiple=${args.multiple}
+  .name=${"timezone"}
+  .required=${args.required}
+  .type=${args.type}
+  .value=${args.value}>
   <pds-link href="#" slot="action">
     Auto-detect
   </pds-link>
@@ -177,19 +177,19 @@ export const withActionLink = (args) => html`<pds-select
 </pds-select>`;
 
 export const withActionButton = (args) => html`<pds-select
-  autocomplete="${args.autocomplete}"
-  component-id="pds-select-action-button"
-  disabled="${args.disabled}"
-  error-message="${args.errorMessage}"
-  helper-message="${args.helperMessage}"
-  hide-label="${args.hideLabel}"
-  invalid="${args.invalid}"
-  label="Country"
-  multiple="${args.multiple}"
-  name="country"
-  required="${args.required}"
-  type="${args.type}"
-  value="${args.value}">
+  .autocomplete=${args.autocomplete}
+  .componentId=${"pds-select-action-button"}
+  .disabled=${args.disabled}
+  .errorMessage=${args.errorMessage}
+  .helperMessage=${args.helperMessage}
+  .hideLabel=${args.hideLabel}
+  .invalid=${args.invalid}
+  .label=${"Country"}
+  .multiple=${args.multiple}
+  .name=${"country"}
+  .required=${args.required}
+  .type=${args.type}
+  .value=${args.value}>
   <pds-button slot="action" variant="unstyled">
     <pds-icon name="question-circle"></pds-icon>
   </pds-button>
