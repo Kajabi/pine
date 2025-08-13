@@ -42,16 +42,16 @@ const BaseTemplate = (args) => html`<pds-input
   autocomplete="${args.autocomplete}"
   component-id="${args.componentId}"
   debounce="${args.debounce}"
-  disabled="${args.disabled}"
+  ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
-  full-width="${args.fullWidth}"
+  ?full-width=${args.fullWidth}
   helper-message="${args.helperMessage}"
-  invalid="${args.invalid}"
+  ?invalid=${args.invalid}
   label="${args.label}"
   name="${args.name}"
   placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="${args.required}"
+  ?readonly=${args.readonly}
+  ?required=${args.required}
   type="${args.type}"
   value="${args.value}">
   ${args.prefix || ''}
@@ -151,15 +151,15 @@ export const withPrefixIcon = (args) => html`<pds-input
   autocomplete="${args.autocomplete}"
   component-id="pds-input-prefix-icon"
   debounce="${args.debounce}"
-  disabled="${args.disabled}"
+  ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
-  invalid="${args.invalid}"
+  ?invalid=${args.invalid}
   label="Email"
   name="${args.name}"
   placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="${args.required}"
+  ?readonly=${args.readonly}
+  ?required=${args.required}
   type="email"
   value="${args.value}">
   <pds-icon slot="prefix" name="mail" size="small"></pds-icon>
@@ -169,15 +169,15 @@ export const withSuffixButton = (args) => html`<pds-input
   autocomplete="${args.autocomplete}"
   component-id="pds-input-suffix-button"
   debounce="${args.debounce}"
-  disabled="${args.disabled}"
+  ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
-  invalid="${args.invalid}"
+  ?invalid=${args.invalid}
   label="Search"
   name="${args.name}"
   placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="${args.required}"
+  ?readonly=${args.readonly}
+  ?required=${args.required}
   type="text"
   value="${args.value}">
   <pds-button slot="suffix" variant="unstyled" class="pds-input__suffix">
@@ -189,15 +189,15 @@ export const withPrependSelect = (args) => html`<pds-input
   autocomplete="${args.autocomplete}"
   component-id="pds-input-prepend-select"
   debounce="${args.debounce}"
-  disabled="${args.disabled}"
+  ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
-  invalid="${args.invalid}"
+  ?invalid=${args.invalid}
   label="Amount"
   name="${args.name}"
   placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="${args.required}"
+  ?readonly=${args.readonly}
+  ?required=${args.required}
   type="text"
   value="${args.value}">
   <pds-select hide-label label="Currency" slot="prepend" class="pds-input__prepend" name="currency">
@@ -211,15 +211,15 @@ export const withAppendSelect = (args) => html`<pds-input
   autocomplete="${args.autocomplete}"
   component-id="pds-input-append-select"
   debounce="${args.debounce}"
-  disabled="${args.disabled}"
+  ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
-  invalid="${args.invalid}"
+  ?invalid=${args.invalid}
   label="Phone"
   name="${args.name}"
   placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="${args.required}"
+  ?readonly=${args.readonly}
+  ?required=${args.required}
   type="tel"
   value="${args.value}">
   <pds-select hide-label slot="append" class="pds-input__append" name="phone-type">
@@ -233,15 +233,15 @@ export const withPrefixAndAppend = (args) => html`<pds-input
   autocomplete="${args.autocomplete}"
   component-id="pds-input-prefix-append"
   debounce="${args.debounce}"
-  disabled="${args.disabled}"
+  ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
-  invalid="${args.invalid}"
+  ?invalid=${args.invalid}
   label="Amount"
   name="${args.name}"
   placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="${args.required}"
+  ?readonly=${args.readonly}
+  ?required=${args.required}
   type="text"
   value="${args.value}">
   <pds-icon slot="prefix" name="dollar" size="small"></pds-icon>
@@ -256,15 +256,15 @@ export const withPrependAndSuffix = (args) => html`<pds-input
   autocomplete="${args.autocomplete}"
   component-id="pds-input-prepend-suffix"
   debounce="${args.debounce}"
-  disabled="${args.disabled}"
+  ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
-  invalid="${args.invalid}"
+  ?invalid=${args.invalid}
   label="Amount"
   name="${args.name}"
   placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="${args.required}"
+  ?readonly=${args.readonly}
+  ?required=${args.required}
   type="text"
   value="${args.value}">
   <pds-select hide-label slot="prepend" class="pds-input__prepend" name="currency">
@@ -281,15 +281,15 @@ export const withActionLink = (args) => html`<pds-input
   autocomplete="${args.autocomplete}"
   component-id="pds-input-action-link"
   debounce="${args.debounce}"
-  disabled="${args.disabled}"
+  ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
-  invalid="${args.invalid}"
+  ?invalid=${args.invalid}
   label="Password"
   name="${args.name}"
   placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="true"
+  ?readonly=${args.readonly}
+  required
   type="password"
   value="${args.value}">
   <pds-link href="#" slot="action">
@@ -301,15 +301,15 @@ export const withActionButton = (args) => html`<pds-input
   autocomplete="${args.autocomplete}"
   component-id="pds-input-action-button"
   debounce="${args.debounce}"
-  disabled="${args.disabled}"
+  ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="Choose a unique username"
-  invalid="${args.invalid}"
+  ?invalid=${args.invalid}
   label="Username"
   name="${args.name}"
   placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="${args.required}"
+  ?readonly=${args.readonly}
+  ?required=${args.required}
   type="text"
   value="${args.value}">
   <pds-button slot="action" variant="unstyled">

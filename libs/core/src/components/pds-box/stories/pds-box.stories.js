@@ -16,7 +16,7 @@ const BaseTemplate = (args) => html`
   align-self="${args.alignSelf}"
   auto="${args.auto}"
   background-color="${args.backgroundColor}"
-	border="${args.border}"
+	?border=${args.border}
   border-color="${args.borderColor}"
 	border-radius="${args.borderRadius}"
   direction="${args.direction}"

@@ -9,12 +9,12 @@ export default {
 
 const BaseTemplate = (args) =>
   html`<pds-progress
-    animated=${args.animated}
+    ?animated=${args.animated}
     component-id=${args.componentId}
     fill-color=${args.fillColor}
     label=${args.label}
     percent=${args.percent}
-    show-percent=${args.showPercent}
+    ?show-percent=${args.showPercent}
   ></pds-progress>`;
 
 

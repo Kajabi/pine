@@ -37,18 +37,18 @@ export default {
 
 const BaseTemplate = (args) => html`<pds-textarea
   autocomplete="${args.autocomplete}"
-  clear-on-edit="${args.clearOnEdit}"
+  ?clear-on-edit=${args.clearOnEdit}
   component-id="${args.componentId}"
-  disabled="${args.disabled}"
+  ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
-  invalid="${args.invalid}"
+  ?invalid=${args.invalid}
   label="${args.label}"
   name="${args.name}"
   onChange="${args.onChange}"
   placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="${args.required}"
+  ?readonly=${args.readonly}
+  ?required=${args.required}
   rows="${args.rows}"
   value="${args.value}"
   data-tooltip-id="foo"
@@ -134,18 +134,18 @@ Autocomplete.args = {
 
 export const withActionLink = (args) => html`<pds-textarea
   autocomplete="${args.autocomplete}"
-  clear-on-edit="${args.clearOnEdit}"
+  ?clear-on-edit=${args.clearOnEdit}
   component-id="pds-textarea-action-link"
-  disabled="${args.disabled}"
+  ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
-  invalid="${args.invalid}"
+  ?invalid=${args.invalid}
   label="Notes"
   name="${args.name}"
   onChange="${args.onChange}"
   placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="${args.required}"
+  ?readonly=${args.readonly}
+  ?required=${args.required}
   rows="3"
   value="${args.value}"
   data-tooltip-id="foo"
@@ -157,18 +157,18 @@ export const withActionLink = (args) => html`<pds-textarea
 
 export const withActionButton = (args) => html`<pds-textarea
   autocomplete="${args.autocomplete}"
-  clear-on-edit="${args.clearOnEdit}"
+  ?clear-on-edit=${args.clearOnEdit}
   component-id="pds-textarea-action-button"
-  disabled="${args.disabled}"
+  ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
-  invalid="${args.invalid}"
+  ?invalid=${args.invalid}
   label="Description"
   name="${args.name}"
   onChange="${args.onChange}"
   placeholder="${args.placeholder}"
-  readonly="${args.readonly}"
-  required="${args.required}"
+  ?readonly=${args.readonly}
+  ?required=${args.required}
   rows="4"
   value="${args.value}"
   data-tooltip-id="foo"

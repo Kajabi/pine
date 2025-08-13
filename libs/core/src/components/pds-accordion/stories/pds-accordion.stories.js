@@ -12,7 +12,7 @@ export default {
 }
 
 const BaseTemplate = (args) => html`
-	<pds-accordion component-id="${args.componentId}" open="${args.isOpen}">
+	<pds-accordion component-id="${args.componentId}" ?open=${args.isOpen}>
     <pds-box align-items="center" slot="label">
       <pds-icon name="product"></pds-icon>
       <span style="display: inline-block; margin-left: 8px;">Products</span>

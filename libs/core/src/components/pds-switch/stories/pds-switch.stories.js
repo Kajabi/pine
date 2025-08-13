@@ -21,17 +21,17 @@ export default {
 
 const BaseTemplate = (args) => html`
   <pds-switch
-    checked=${args.checked}
+    ?checked=${args.checked}
     component-id=${args.componentId}
-    disabled=${args.disabled}
+    ?disabled=${args.disabled}
     error-message=${args.errorMessage}
     helper-message=${args.helperMessage}
-    invalid=${args.invalid}
+    ?invalid=${args.invalid}
     label=${args.label}
-    hide-label=${args.hideLabel}
+    ?hide-label=${args.hideLabel}
     name=${args.name}
     onChange=${args.onChange}
-    required=${args.required}
+    ?required=${args.required}
     type=${args.type}
   />
 `;

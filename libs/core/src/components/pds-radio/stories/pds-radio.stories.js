@@ -25,16 +25,16 @@ const BaseTemplate = (args) =>
   html` <pds-radio
     component-id=${args.componentId}
     label=${args.label}
-    checked=${args.checked}
-    disabled=${args.disabled}
+    ?checked=${args.checked}
+    ?disabled=${args.disabled}
     error-message=${args.errorMessage}
     helper-message=${args.helperMessage}
-    hide-label=${args.hideLabel}
+    ?hide-label=${args.hideLabel}
     name=${args.name}
-    indeterminate=${args.indeterminate}
-    required=${args.required}
+    ?indeterminate=${args.indeterminate}
+    ?required=${args.required}
     value=${args.value}
-    invalid=${args.invalid}
+    ?invalid=${args.invalid}
   />`;
 
 export const Default = BaseTemplate.bind();

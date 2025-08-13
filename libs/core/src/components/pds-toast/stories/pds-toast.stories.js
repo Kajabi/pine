@@ -18,7 +18,7 @@ export default {
 
 const BaseTemplate = (args) => html`
 <pds-toast
-  .dismissible="${args.dismissible}"
+  ?dismissible=${args.dismissible}
   component-id="${args.componentId}"
   duration="${args.duration}"
   icon="${args.icon || ''}"
@@ -29,7 +29,7 @@ const BaseTemplate = (args) => html`
 
 const WithLinkTemplate = (args) => html`
 <pds-toast
-  .dismissible="${args.dismissible}"
+  ?dismissible=${args.dismissible}
   component-id="${args.componentId}"
   duration="${args.duration}"
   icon="${args.icon || ''}"
