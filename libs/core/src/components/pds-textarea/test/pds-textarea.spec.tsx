@@ -550,3 +550,4 @@ it('should set focus on the input element when setFocus is called', async() => {
     `);
   });
 });
+

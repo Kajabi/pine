@@ -188,3 +188,4 @@ describe('pds-modal', () => {
     expect(page.rootInstance.open).toBe(false);
   });
 });
+

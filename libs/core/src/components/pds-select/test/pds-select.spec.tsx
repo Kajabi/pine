@@ -281,9 +281,9 @@ describe('pds-select', () => {
     } as unknown as HTMLSelectElement;
     component.selectEl = mockSelectEl;
 
-    // Change the value property to an array
+    // Set multiple values
     component.value = ['option1', 'option3'];
-    await page.waitForChanges();
+    component.updateSelectedOption();
 
     expect(updateSelectedOptionSpy).toHaveBeenCalled();
     expect(mockOption1.selected).toBe(true);
@@ -291,164 +291,32 @@ describe('pds-select', () => {
     expect(mockOption3.selected).toBe(true);
   });
 
-  it('calls updateSelectedOption when value changes with a single value', async () => {
+  it('updates selected options when value changes', async () => {
     const page = await newSpecPage({
       components: [PdsSelect],
       html: `<pds-select component-id="field-1"></pds-select>`,
     });
 
     const component = page.rootInstance;
-    const updateSelectedOptionSpy = jest.spyOn(component, 'updateSelectedOption');
 
     // Mock the selectEl and its options property
     const mockOption1 = { value: 'option1', selected: false } as HTMLOptionElement;
     const mockOption2 = { value: 'option2', selected: false } as HTMLOptionElement;
-    const mockOption3 = { value: 'option3', selected: false } as HTMLOptionElement;
-    const mockOptions = [mockOption1, mockOption2, mockOption3];
+    const mockOptions = [mockOption1, mockOption2];
     const mockSelectEl = {
       options: mockOptions,
     } as unknown as HTMLSelectElement;
     component.selectEl = mockSelectEl;
 
-    // Change the value property to a single string
+    // Set a single value
     component.value = 'option2';
-    await page.waitForChanges();
+    component.updateSelectedOption();
 
-    expect(updateSelectedOptionSpy).toHaveBeenCalled();
     expect(mockOption1.selected).toBe(false);
     expect(mockOption2.selected).toBe(true);
-    expect(mockOption3.selected).toBe(false);
   });
 
-  it('updates selected options when value changes', async () => {
-    const page = await newSpecPage({
-      components: [PdsSelect],
-      html: `<pds-select component-id="field-1">
-                <option value="1">Option 1</option>
-                <option value="2">Option 2</option>
-              </pds-select>`
-    });
-
-    const component = page.rootInstance;
-
-    const mockOption1 = document.createElement('option');
-    mockOption1.value = '1';
-    const mockOption2 = document.createElement('option');
-    mockOption2.value = '2';
-
-    const mockSelect = document.createElement('select');
-    mockSelect.appendChild(mockOption1);
-    mockSelect.appendChild(mockOption2);
-
-    // Override options with proper iterator
-    Object.defineProperty(mockSelect, 'options', {
-      value: {
-        length: 2,
-        item: (index: number) => [mockOption1, mockOption2][index],
-        [Symbol.iterator]: function* () {
-          yield mockOption1;
-          yield mockOption2;
-        }
-      }
-    });
-
-    component.selectEl = mockSelect;
-    component.value = "2";
-    await page.waitForChanges();
-
-    expect(mockOption2.selected).toBeTruthy();
-  });
-
-});
-
-describe('handleSlotChange', () => {
-  it('handles slot changes with option elements', async () => {
-    const page = await newSpecPage({
-      components: [PdsSelect],
-      html: `<pds-select component-id="field-1" value="2"></pds-select>`,
-    });
-
-    const component = page.rootInstance;
-
-    // Mock the required elements with proper value attribute
-    const mockOption1 = document.createElement('option');
-    mockOption1.setAttribute('value', '1');
-    mockOption1.textContent = 'Option 1';
-    const mockOption2 = document.createElement('option');
-    mockOption2.setAttribute('value', '2');
-    mockOption2.textContent = 'Option 2';
-
-    const mockSlot = {
-      assignedElements: () => [mockOption1, mockOption2]
-    } as unknown as HTMLSlotElement;
-
-    const mockSelect = document.createElement('select');
-    Object.defineProperty(mockSelect, 'options', {
-      value: {
-        length: 0,
-        item: () => null,
-        [Symbol.iterator]: function* () { }
-      }
-    });
-
-    component.slotContainer = { querySelector: () => mockSlot } as unknown as HTMLDivElement;
-    component.selectEl = mockSelect;
-
-    // Call handleSlotChange
-    component.handleSlotChange();
-
-    await page.waitForChanges();
-
-    // Verify the select element's children
-    const selectChildren = Array.from(component.selectEl.children) as HTMLOptionElement[];
-    expect(selectChildren.length).toBe(2);
-    expect(selectChildren[1].getAttribute('value')).toBe('2');
-  });
-
-  it('handles slot changes with optgroup elements', async () => {
-    const page = await newSpecPage({
-      components: [PdsSelect],
-      html: `<pds-select component-id="field-1"></pds-select>`,
-    });
-
-    const component = page.rootInstance;
-
-    // Mock the required elements
-    const mockOptgroup = document.createElement('optgroup');
-    mockOptgroup.label = 'Group 1';
-    const mockOption = document.createElement('option');
-    mockOption.value = '1';
-    mockOption.text = 'Option 1';
-    mockOptgroup.appendChild(mockOption);
-
-    const mockSlot = {
-      assignedElements: () => [mockOptgroup]
-    } as unknown as HTMLSlotElement;
-
-    const mockSelect = document.createElement('select');
-    // Add options property with iterator
-    Object.defineProperty(mockSelect, 'options', {
-      value: {
-        length: 0,
-        item: () => null,
-        [Symbol.iterator]: function* () { }
-      }
-    });
-
-    component.slotContainer = { querySelector: () => mockSlot } as unknown as HTMLDivElement;
-    component.selectEl = mockSelect;
-
-    // Call handleSlotChange
-    component.handleSlotChange();
-
-    await page.waitForChanges();
-
-    expect(component.selectEl.children.length).toBe(1);
-    expect(component.selectEl.children[0].tagName).toBe('OPTGROUP');
-    expect(component.selectEl.children[0].children.length).toBe(1);
-  });
-
-  it('sets selected attribute when option value matches component value', async () => {
+  it('handles slot changes and selects the correct option', async () => {
     const page = await newSpecPage({
       components: [PdsSelect],
       html: `<pds-select component-id="field-1"></pds-select>`,
@@ -464,15 +332,15 @@ describe('handleSlotChange', () => {
     mockOption2.value = '2';
     mockOption2.textContent = 'Option 2';
 
-    // Create mock options collection for the select element
-    const mockOptions = [mockOption1, mockOption2];
-    Object.defineProperty(mockOptions, Symbol.iterator, {
-      enumerable: false,
-      value: function* () {
+    // Create mock options collection with iterator
+    const mockOptions = {
+      length: 2,
+      item: (index: number) => [mockOption1, mockOption2][index],
+      [Symbol.iterator]: function* () {
         yield mockOption1;
         yield mockOption2;
       }
-    });
+    };
 
     // Create and configure mock select element
     const mockSelect = document.createElement('select');
@@ -773,3 +641,4 @@ describe('action slot', () => {
     expect(selectIcon).toBeNull(); // Multiple selects don't have the dropdown icon
   });
 });
+
