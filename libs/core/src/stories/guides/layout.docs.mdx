@@ -99,25 +99,37 @@ Use `pds-row` for Multi-Column Layouts:
   mdxSource={{
     react: `
       <PdsBox backgroundColor="#f5f5f5" fit="true">
-        <PdsRow>
-          <PdsBox size="8" padding="md" border="true">Column 1</PdsBox>
-          <PdsBox size="4" padding="md" border="true">Column 2</PdsBox>
+        <PdsRow col-gap="sm">
+          <PdsBox size="8">
+            <pds-box border padding="md">Column 1</pds-box>
+          </pds-box>
+          <PdsBox size="4">
+            <pds-box border padding="md">Column 2</pds-box>
+          </pds-box>
         </pds-row>
       </PdsBox>
     `,
     webComponent: `
       <pds-box background-color="#f5f5f5" fit="true">
-        <pds-row>
-          <pds-box size="8" padding="md" border="true">Column 1</pds-box>
-          <pds-box size="4" padding="md" border="true">Column 2</pds-box>
+        <pds-row col-gap="sm">
+          <pds-box size="8">
+            <pds-box border padding="md">Column 1</pds-box>
+          </pds-box>
+          <pds-box size="4">
+            <pds-box border padding="md">Column 2</pds-box>
+          </pds-box>
         </pds-row>
       </pds-box>
     `
 }}>
   <pds-box background-color="#f5f5f5" fit="true">
-    <pds-row>
-      <pds-box size="8" padding="md" border="true">Column 1</pds-box>
-      <pds-box size="4" padding="md" border="true">Column 2</pds-box>
+    <pds-row col-gap="sm">
+      <pds-box size="8">
+        <pds-box border padding="md">Column 1</pds-box>
+      </pds-box>
+      <pds-box size="4">
+        <pds-box border padding="md">Column 2</pds-box>
+      </pds-box>
     </pds-row>
   </pds-box>
 </DocCanvas>
@@ -130,25 +142,37 @@ Add size modifiers to your child `pds-box` for responsive design
   mdxSource={{
     react: `
       <PdsBox backgroundColor="#f5f5f5" fit="true">
-        <PdsRow>
-          <PdsBox sizeMd="8" padding="md" border="true">Column 1</PdsBox>
-          <PdsBox sizeMd="4" padding="md" border="true">Column 2</PdsBox>
+        <PdsRow col-gap="sm">
+          <PdsBox sizeMd="8">
+            <pds-box border padding="md">Column 1</pds-box>
+          </pds-box>
+          <PdsBox sizeMd="4">
+            <pds-box border padding="md">Column 2</pds-box>
+          </pds-box>
         </pds-row>
       </PdsBox>
     `,
     webComponent: `
       <pds-box background-color="#f5f5f5" fit="true">
-        <pds-row>
-          <pds-box size-md="8" padding="sm" border="true">Column 1</pds-box>
-          <pds-box size-md="4" padding="sm" border="true">Column 2</pds-box>
+        <pds-row col-gap="sm">
+          <pds-box size-md="8">
+            <pds-box border padding="sm">Column 1</pds-box>
+          </pds-box>
+          <pds-box size-md="4">
+            <pds-box border padding="sm">Column 2</pds-box>
+          </pds-box>
         </pds-row>
       </pds-box>
     `
 }}>
   <pds-box background-color="#f5f5f5" fit="true">
-    <pds-row>
-      <pds-box size-md="8" padding="sm" border="true">Column 1</pds-box>
-      <pds-box size-md="4" padding="sm" border="true">Column 2</pds-box>
+    <pds-row col-gap="sm">
+      <pds-box size-md="8">
+        <pds-box border padding="sm">Column 1</pds-box>
+      </pds-box>
+      <pds-box size-md="4">
+        <pds-box border padding="sm">Column 2</pds-box>
+      </pds-box>
     </pds-row>
   </pds-box>
 </DocCanvas>
@@ -607,23 +631,30 @@ By combining the `pds-box` and `pds-row` components, you can easily create a 12-
   mdxSource={{
     react: `
       <PdsBox display="block">
-        <pdsRow>
-          <PdsBox border>
-            Content for column 1
+        <PdsRow>
+          <PdsBox>
+            <PdsBox border>
+              Content for column 1
+            </PdsBox>
           </PdsBox>
-          <PdsBox border>
-            Content for column 2
+          <PdsBox>
+            <PdsBox border>
+              Content for column 2
+            </PdsBox>
           </PdsBox>
-        </pdsRow>
+        </PdsRow>
       </PdsBox>
     `,
     webComponent: `
       <pds-box display="block">
-        <pds-row>
-          <pds-box border>
-            Content for column 1
+        <pds-row col-gap="sm">
+          <pds-box>
+            <pds-box border>
+              Content for column 1
+            </pds-box>
           </pds-box>
-          <pds-box border>
+          <pds-box>
+            <pds-box border>
             Content for column 2
           </pds-box>
         </pds-row>
@@ -631,9 +662,13 @@ By combining the `pds-box` and `pds-row` components, you can easily create a 12-
     `
 }}>
   <pds-box display="block">
-    <pds-row>
-      <pds-box border>Content for column 1</pds-box>
-      <pds-box border>Content for column 2</pds-box>
+    <pds-row col-gap="sm">
+      <pds-box>
+        <pds-box border>Content for column 1</pds-box>
+      </pds-box>
+      <pds-box>
+        <pds-box border>Content for column 2</pds-box>
+      </pds-box>
     </pds-row>
   </pds-box>
 </DocCanvas>
@@ -645,33 +680,44 @@ This creates a two-column layout, and you can customize the `size` and arrangeme
   mdxSource={{
     react: `
       <PdsBox display="block">
-        <PdsRow>
-          <PdsBox border size="4">
-            Content for column 1
+        <PdsRow col-gap="sm">
+          <PdsBox size="4">
+            <PdsBox border>
+              Content for column 1
+            </PdsBox>
           </PdsBox>
-          <PdsBox border size="8">
+          <PdsBox size="8">
             Content for column 2
+            </PdsBox>
           </PdsBox>
         </PdsRow>
       </PdsBox>
     `,
     webComponent: `
       <pds-box display="block">
-        <pds-row>
-          <pds-box border size="4">
-            Content for column 1
+        <pds-row col-gap="sm">
+          <pds-box size="4">
+            <pds-box border>
+              Content for column 1
+            </pds-box>
           </pds-box>
-          <pds-box border size="8">
-            Content for column 2
+          <pds-box size="8">
+            <pds-box border>
+              Content for column 2
+            </pds-box>
           </pds-box>
         </pds-row>
       </pds-box>
     `
 }}>
   <pds-box display="block">
-    <pds-row>
-      <pds-box border size="4">Content for column 1</pds-box>
-      <pds-box border size="8">Content for column 2</pds-box>
+    <pds-row col-gap="sm">
+      <pds-box size="4">
+        <pds-box border>Content for column 1</pds-box>
+      </pds-box>
+      <pds-box size="8">
+        <pds-box border>Content for column 2</pds-box>
+      </pds-box>
     </pds-row>
   </pds-box>
 </DocCanvas>
@@ -685,27 +731,45 @@ Using the size modifiers such as `-xs`, `-md`, etc, enable responsive behavior f
     react: `
       <PdsBox display="block">
         <PdsRow>
-          <PdsBox border sizeMd="6" sizeLg="4" sizeXl="3">Item 1</PdsBox>
-          <PdsBox border sizeMd="6" sizeLg="4" sizeXl="3">Item 2</PdsBox>
-          <PdsBox border sizeMd="6" sizeLg="4" sizeXl="3">Item 3</PdsBox>
+          <PdsBox sizeMd="6" sizeLg="4" sizeXl="3">
+            <PdsBox border>Item 1</PdsBox>
+          </PdsBox>
+          <PdsBox sizeMd="6" sizeLg="4" sizeXl="3">
+            <PdsBox border>Item 2</PdsBox>
+          </PdsBox>
+          <PdsBox sizeMd="6" sizeLg="4" sizeXl="3">
+            <PdsBox border>Item 3</PdsBox>
+          </PdsBox>
         </PdsRow>
       </PdsBox>
     `,
     webComponent: `
       <pds-box display="block">
-        <pds-row>
-          <pds-box border size-md="6" size-lg="4" size-xl="3">Item 1</pds-box>
-          <pds-box border size-md="6" size-lg="4" size-xl="3">Item 2</pds-box>
-          <pds-box border size-md="6" size-lg="4" size-xl="3">Item 3</pds-box>
+        <pds-row col-gap="sm">
+          <pds-box size-md="6" size-lg="4" size-xl="3">
+            <pds-box border>Item 1</pds-box>
+          </pds-box>
+          <pds-box size-md="6" size-lg="4" size-xl="3">
+            <pds-box border>Item 2</pds-box>
+          </pds-box>
+          <pds-box size-md="6" size-lg="4" size-xl="3">
+            <pds-box border>Item 3</pds-box>
+          </pds-box>
         </pds-row>
       </pds-box>
     `
 }}>
   <pds-box display="block">
-    <pds-row>
-      <pds-box border size-md="6" size-lg="4" size-xl="3">Item 1</pds-box>
-      <pds-box border size-md="6" size-lg="4" size-xl="3">Item 2</pds-box>
-      <pds-box border size-md="6" size-lg="4" size-xl="3">Item 3</pds-box>
+    <pds-row col-gap="sm">
+      <pds-box size-md="6" size-lg="4" size-xl="3">
+        <pds-box border>Item 1</pds-box>
+      </pds-box>
+      <pds-box size-md="6" size-lg="4" size-xl="3">
+        <pds-box border>Item 2</pds-box>
+      </pds-box>
+      <pds-box size-md="6" size-lg="4" size-xl="3">
+        <pds-box border>Item 3</pds-box>
+      </pds-box>
     </pds-row>
   </pds-box>
 </DocCanvas>
@@ -719,25 +783,37 @@ Using the size modifiers such as `-xs`, `-md`, etc, enable responsive behavior f
   mdxSource={{
     react: `
       <PdsBox display="block">
-        <PdsRow>
-          <PdsBox border sizeXs="0" sizeSm="0" sizeLg="12">Larger screen content</PdsBox>
-          <PdsBox border sizeMd="12" sizeLg="0">Small screen content</PdsBox>
+        <PdsRow col-gap="sm">
+          <PdsBox sizeXs="0" sizeSm="0" sizeLg="12">
+            <PdsBox border>Larger screen content</PdsBox>
+          </PdsBox>
+          <PdsBox sizeMd="12" sizeLg="0">
+            <PdsBox border>Small screen content</PdsBox>
+          </PdsBox>
         </PdsRow>
       </PdsBox>
     `,
     webComponent: `
       <pds-box display="block">
-        <pds-row>
-          <pds-box border size-xs="0" size-sm="0" size-lg="12">Larger screen content</pds-box>
-          <pds-box border size-md="12" size-lg="0">Small screen content</pds-box>
+        <pds-row col-gap="sm">
+          <pds-box size-xs="0" size-sm="0" size-lg="12">
+            <pds-box border>Larger screen content</pds-box>
+          </pds-box>
+          <pds-box size-md="12" size-lg="0">
+            <pds-box border>Small screen content</pds-box>
+          </pds-box>
         </pds-row>
       </pds-box>
     `
 }}>
   <pds-box display="block">
-    <pds-row>
-      <pds-box border size-xs="0" size-sm="0" size-lg="12">Larger screen content</pds-box>
-      <pds-box border size-md="12" size-lg="0">Small screen content</pds-box>
+    <pds-row col-gap="sm">
+      <pds-box size-xs="0" size-sm="0" size-lg="12">
+        <pds-box border>Larger screen content</pds-box>
+      </pds-box>
+      <pds-box size-md="12" size-lg="0">
+        <pds-box border>Small screen content</pds-box>
+      </pds-box>
     </pds-row>
   </pds-box>
 </DocCanvas>
@@ -750,43 +826,71 @@ Use the `offset` property to offset columns to the right. The `offset` property 
   mdxSource={{
     react: `
       <PdsBox direction="column" fit>
-        <PdsRow>
-          <PdsBox border size="4">Item 1</PdsBox>
-          <PdsBox border offset="4" size="4">Item 2</PdsBox>
+        <PdsRow col-gap="sm">
+          <PdsBox size="4">
+            <PdsBox border>Item 1</PdsBox>
+          </PdsBox>
+          <PdsBox offset="4" size="4">
+            <PdsBox border>Item 2</PdsBox>
+          </PdsBox>
         </PdsRow>
-        <PdsRow>
-          <PdsBox border sizeMd="4">Item 1</PdsBox>
-          <PdsBox border offsetMd="4" sizeMd="4">Item 2</PdsBox>
+        <PdsRow col-gap="sm">
+          <PdsBox sizeMd="4">
+            <PdsBox border>Item 1</PdsBox>
+          </PdsBox>
+          <PdsBox offsetMd="4" sizeMd="4">
+            <PdsBox border>Item 2</PdsBox>
+          </PdsBox>
         </PdsRow>
-        <PdsRow>
-          <PdsBox border offset="3" offsetXs="2" size="6" sizeXs="8">Item 1</PdsBox>
+        <PdsRow col-gap="sm">
+          <PdsBox offset="3" offsetXs="2" size="6" sizeXs="8">
+            <PdsBox border>Item 1</PdsBox>
+          </PdsBox>
         </PdsRow>
       </PdsBox>
     `,
     webComponent: `
       <pds-box direction="column" fit>
-        <pds-row>
-          <pds-box border size="4">Item 1</pds-box>
-          <pds-box border offset="4" size="4">Item 2</pds-box>
+        <pds-row col-gap="sm">
+          <pds-box size="4">
+            <pds-box border>Item 1</pds-box>
+          </pds-box>
+          <pds-box offset="4" size="4">
+            <pds-box border>Item 2</pds-box>
+          </pds-box>
         </pds-row>
-        <pds-row>
-          <pds-box border size-md="4">Item 1</pds-box>
-          <pds-box border offset-md="4" size-md="4">Item 2</pds-box>
+        <pds-row col-gap="sm">
+          <pds-box size-md="4">
+            <pds-box border>Item 1</pds-box>
+          </pds-box>
+          <pds-box offset-md="4" size-md="4">
+            <pds-box border>Item 2</pds-box>
+          </pds-box>
         </pds-row>
-        <pds-row>
-          <pds-box border offset="3" offset-xs="2" size="6" size-xs="8">Item 1</pds-box>
+        <pds-row col-gap="sm">
+          <pds-box offset="3" offset-xs="2" size="6" size-xs="8">
+            <pds-box border>Item 1</pds-box>
+          </pds-box>
         </pds-row>
       </pds-box>
     `
 }}>
   <pds-box direction="column" fit>
     <pds-row>
-      <pds-box border size="4">Item 1</pds-box>
-      <pds-box border offset="4" size="4">Item 2</pds-box>
+      <pds-box size="4">
+        <pds-box border>Item 1</pds-box>
+      </pds-box>
+      <pds-box offset="4" size="4">
+        <pds-box border>Item 2</pds-box>
+      </pds-box>
     </pds-row>
     <pds-row>
-      <pds-box border size-md="4">Item 1</pds-box>
-      <pds-box border offset-md="4" size-md="4">Item 2</pds-box>
+      <pds-box size-md="4">
+        <pds-box border>Item 1</pds-box>
+      </pds-box>
+      <pds-box offset-md="4" size-md="4">
+        <pds-box border>Item 2</pds-box>
+      </pds-box>
     </pds-row>
     <pds-row>
       <pds-box border offset="3" offset-xs="2" size="6" size-xs="8">Item 1</pds-box>
@@ -802,33 +906,38 @@ Adding either `flex` **`display`** property to the box will initiate alignment v
   mdxSource={{
     react: `
       <PdsBox display="block">
-        <PdsRow minHeight="100px">
-          <PdsBox
-            alignItems="start"
-            border="true"
-            display="flex"
-            justifyContent="center"
-            minHeight="200px"
-            padding="sm"
-          >
+        <PdsRow minHeight="100px" colGap="sm">
+          <PdsBox size="2">
+            <PdsBox
+              align-items="start"
+              border="true"
+              display="flex"
+              justify-content="center"
+              min-height="200px"
+              padding="sm"
+            >
             Content 1
+            </PdsBox>
           </PdsBox>
-          <PdsBox
-            alignItems="center"
-            border="true"
-            display="flex"
-            justifyContent="center"
-            padding="sm"
-          >
+          <PdsBox>
+            <PdsBox
+              alignItems="center"
+              border="true"
+              display="flex"
+              justifyContent="center"
+              padding="sm"
+            >
             Content2
+            </PdsBox>
           </PdsBox>
-          <PdsBox
-            alignItems="end"
-            border="true"
-            display="flex"
-            justifyContent="end"
-            padding="sm"
-          >
+          <PdsBox>
+            <PdsBox
+              alignItems="end"
+              border="true"
+              display="flex"
+              justifyContent="end"
+              padding="sm"
+            >
             Content 3
           </PdsBox>
         </PdsRow>
@@ -836,63 +945,69 @@ Adding either `flex` **`display`** property to the box will initiate alignment v
     `,
     webComponent: `
       <pds-box display="block">
-        <pds-row min-height="100px">
-          <pds-box
-            align-items="start"
-            border="true"
-            display="flex"
-            justify-content="center"
-            min-height="200px"
-            padding="sm"
-          >
-            Content 1
+        <pds-row min-height="100px" col-gap="sm">
+          <pds-box size="2">
+            <pds-box
+              align-items="start"
+              border="true"
+              display="flex"
+              justify-content="center"
+              min-height="200px"
+              padding="sm"
+            >Content 1</pds-box>
           </pds-box>
-          <pds-box
-            align-items="center"
-            border="true"
-            display="flex"
-            justify-content="center"
-            padding="sm"
-          >
-            Content2
+          <pds-box>
+            <pds-box
+              align-items="center"
+              border="true"
+              display="flex"
+              justify-content="center"
+              padding="sm"
+            >Content2</pds-box>
           </pds-box>
-          <pds-box
-            align-items="end"
-            border="true"
-            display="flex"
-            justify-content="end"
-            padding="sm"
-          >
-            Content 3
+          <pds-box>
+            <pds-box
+              align-items="end"
+              border="true"
+              display="flex"
+              justify-content="end"
+              padding="sm"
+            >Content 3</pds-box>
           </pds-box>
         </pds-row>
       </pds-box>
     `
 }}>
   <pds-box display="block">
-    <pds-row min-height="100px">
-      <pds-box
-        align-items="start"
-        border="true"
-        display="flex"
-        justify-content="center"
-        min-height="200px"
-        padding="sm"
-      >Content 1</pds-box>
-      <pds-box
-        align-items="center"
-        border="true"
-        display="flex"
-        justify-content="center"
-        padding="sm"
-      >Content2</pds-box>
-      <pds-box
-        align-items="end"
-        border="true"
-        display="flex"
-        justify-content="end"
-        padding="sm"
-      >Content 3</pds-box>
+    <pds-row min-height="100px" col-gap="sm">
+      <pds-box size="2">
+        <pds-box
+          align-items="start"
+          border="true"
+          display="flex"
+          justify-content="center"
+          min-height="200px"
+          padding="sm"
+        >Content 1</pds-box>
+      </pds-box>
+      <pds-box>
+        <pds-box
+          align-items="center"
+          border="true"
+          display="flex"
+          justify-content="center"
+          padding="sm"
+        >Content2</pds-box>
+      </pds-box>
+      <pds-box>
+        <pds-box
+          align-items="end"
+          border="true"
+          display="flex"
+          justify-content="end"
+          padding="sm"
+        >Content 3</pds-box>
+      </pds-box>
     </pds-row>
   </pds-box>
 </DocCanvas>
@@ -903,32 +1018,35 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
   mdxSource={{
     react: `
       <PdsBox display="block">
-        <PdsRow>
-          <PdsBox
-            alignItems="start"
-            border="true"
-            display="flex"
-            justifyContent="center"
-            padding="sm"
-          >
+        <PdsRow col-gap="sm">
+          <PdsBox size="2">
+            <PdsBox
+              alignItems="start"
+              border="true"
+              display="flex"
+              justifyContent="start"
+              padding="sm"
+            >
             Content 1
           </PdsBox>
-          <PdsBox
-            alignItems="center"
-            border="true"
-            display="flex"
-            justifyContent="center"
-            padding="sm"
-          >
+          <PdsBox>
+            <PdsBox
+              alignItems="center"
+              border="true"
+              display="flex"
+              justifyContent="center"
+              padding="sm"
+            >
             Content2
           </PdsBox>
-          <PdsBox
-            alignItems="end"
-            border="true"
-            display="flex"
-            justifyContent="end"
-            padding="sm"
-          >
+          <PdsBox size="2">
+            <PdsBox
+              alignItems="end"
+              border="true"
+              display="flex"
+              justifyContent="end"
+              padding="sm"
+            >
             Content 3
           </PdsBox>
         </PdsRow>
@@ -936,61 +1054,67 @@ Note - using **`min-height`** on the `Box` or the parent `Row` is recommended to
     `,
     webComponent: `
       <pds-box display="block">
-        <pds-row>
-          <pds-box
-            align-items="start"
-            border="true"
-            display="flex"
-            justify-content="center"
-            padding="sm"
-          >
-            Content 1
+        <pds-row col-gap="sm">
+          <pds-box size="2">
+            <pds-box
+              align-items="start"
+              border="true"
+              display="flex"
+              justify-content="start"
+              padding="sm"
+            >Content 1</pds-box>
           </pds-box>
-          <pds-box
-            align-items="center"
-            border="true"
-            display="flex"
-            justify-content="center"
-            padding="sm"
-          >
-            Content2
+          <pds-box>
+            <pds-box
+              align-items="center"
+              border="true"
+              display="flex"
+              justify-content="center"
+              padding="sm"
+            >Content2</pds-box>
           </pds-box>
-          <pds-box
-            align-items="end"
-            border="true"
-            display="flex"
-            justify-content="end"
-            padding="sm"
-          >
-            Content 3
+          <pds-box size="2">
+            <pds-box
+              align-items="end"
+              border="true"
+              display="flex"
+              justify-content="end"
+              padding="sm"
+            >Content 3</pds-box>
           </pds-box>
         </pds-row>
       </pds-box>
     `
 }}>
   <pds-box display="block">
-    <pds-row>
-      <pds-box
-        align-items="start"
-        border="true"
-        display="flex"
-        justify-content="center"
-        padding="sm"
-      >Content 1</pds-box>
-      <pds-box
-        align-items="center"
-        border="true"
-        display="flex"
-        justify-content="center"
-        padding="sm"
-      >Content2</pds-box>
-      <pds-box
-        align-items="end"
-        border="true"
-        display="flex"
-        justify-content="end"
-        padding="sm"
-      >Content 3</pds-box>
+    <pds-row col-gap="sm">
+      <pds-box size="2">
+        <pds-box
+          align-items="start"
+          border="true"
+          display="flex"
+          justify-content="start"
+          padding="sm"
+        >Content 1</pds-box>
+      </pds-box>
+      <pds-box>
+        <pds-box
+          align-items="center"
+          border="true"
+          display="flex"
+          justify-content="center"
+          padding="sm"
+        >Content2</pds-box>
+      </pds-box>
+      <pds-box size="2">
+        <pds-box
+          align-items="end"
+          border="true"
+          display="flex"
+          justify-content="end"
+          padding="sm"
+        >Content 3</pds-box>
+      </pds-box>
     </pds-row>
   </pds-box>
 </DocCanvas>
@@ -1003,48 +1127,43 @@ You can nest `pds-row` and `pds-box` components to create more complex layouts.
   mdxSource={{
     react: `
       <PdsBox display="block">
-        <PdsRow>
-          <PdsBox border display="block" sizeMd="8">
-            <PdsRow>
-              <PdsBox sizeXl="6">Column 1 Item 1</PdsBox>
-              <PdsBox sizeXl="6">Column 1 Item 2</PdsBox>
-            <PpdsRow>
+        <PdsRow colGap="sm">
+          <PdsBox sizeMd="8">
+            <PdsBox border>
+              <PdsRow>
+                <PdsBox sizeXl="6">Column 1 Item 1</PdsBox>
+                <PdsBox sizeXl="6">Column 1 Item 2</PdsBox>
+              </PdsRow>
+            </PdsBox>
           </PdsBox>
           <PdsBox
-            border
-            display="flex"
             sizeMd="4"
           >
             <PdsBox
-              display="flex"
               alignItems="center"
+              border="true"
+              display="flex"
               justifyContent="center"
             >
               Column 2
             </PdsBox>
           </PdsBox>
-        <PpdsRow>
+        </PdsRow>
       </PdsBox>
     `,
     webComponent: `
       <pds-box display="block">
-        <pds-row>
-          <pds-box border display="block" size-md="8">
-            <pds-row>
-              <pds-box size-xl="6">Column 1 Item 1</pds-box>
-              <pds-box size-xl="6">Column 1 Item 2</pds-box>
-            </pds-row>
+        <pds-row col-gap="sm">
+          <pds-box size-md="8">
+            <pds-box border>
+              <pds-row>
+                <pds-box size-xl="6">Column 1 Item 1</pds-box>
+                <pds-box size-xl="6">Column 1 Item 2</pds-box>
+              </pds-row>
+            </pds-box>
           </pds-box>
-          <pds-box
-            border
-            display="flex"
-            size-md="4"
-          >
-            <pds-box
-              display="flex"
-              align-items="center"
-              justify-content="center"
-            >
+          <pds-box size-md="4">
+            <pds-box border display="flex" align-items="center" justify-content="center">
               Column 2
             </pds-box>
           </pds-box>
@@ -1053,19 +1172,19 @@ You can nest `pds-row` and `pds-box` components to create more complex layouts.
     `
 }}>
   <pds-box display="block">
-    <pds-row>
-      <pds-box border display="block" size-md="8">
-        <pds-row>
-          <pds-box size-xl="6">Column 1 Item 1</pds-box>
-          <pds-box size-xl="6">Column 1 Item 2</pds-box>
-        </pds-row>
+    <pds-row col-gap="sm">
+      <pds-box size-md="8">
+        <pds-box border>
+          <pds-row>
+            <pds-box size-xl="6">Column 1 Item 1</pds-box>
+            <pds-box size-xl="6">Column 1 Item 2</pds-box>
+          </pds-row>
+        </pds-box>
       </pds-box>
-      <pds-box
-        border
-        display="flex"
-        size-md="4"
-      >
-        <pds-box display="flex" align-items="center" justify-content="center">Column 2</pds-box>
+      <pds-box size-md="4">
+        <pds-box border display="flex" align-items="center" justify-content="center">
+          Column 2
+        </pds-box>
       </pds-box>
     </pds-row>
   </pds-box>
