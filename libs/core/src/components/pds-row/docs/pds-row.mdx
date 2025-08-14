@@ -31,7 +31,7 @@ The pds-row component creates a 12-column grid system for responsive layouts. It
 
 ### Working with PDS-Box
 
-> **⚠️ CRITICAL:** `pds-row` transforms `pds-box` children into **grid columns**, not flexbox items. This changes how they behave.
+> **CRITICAL:** `pds-row` transforms `pds-box` children into **grid columns**, not flexbox items. This changes how they behave.
 
 **Grid Column Behavior Inside pds-row:**
 - **REQUIRED:** Only `pds-box` components should be direct children
@@ -40,7 +40,7 @@ The pds-row component creates a 12-column grid system for responsive layouts. It
 - **LIMIT:** Total of all size props should not exceed 12 per row
 - **FORBIDDEN:** Flex properties (`flex="grow"`, `flex="shrink"`, `flex="none"`, or custom values like `flex="1"`) are **ignored**
 
-> **🚨 COMMON MISTAKE:** Using `flex` props on boxes inside `pds-row` won't work. Use `size` props instead.
+> **COMMON MISTAKE:** Using `flex` props on boxes inside `pds-row` won't work. Use `size` props instead.
 
 ### Common Patterns
 
