@@ -54,10 +54,7 @@ progress::-moz-progress-bar {
   border-radius: var(--pine-dimension-2xs);
 }
 
-:host([fill-color]:not([fill-color=""])) progress::-webkit-progress-value {
-  background: var(--color-progress-fill);
-}
-
+:host([fill-color]:not([fill-color=""])) progress::-webkit-progress-value,
 :host([fill-color]:not([fill-color=""])) progress::-moz-progress-bar {
   background: var(--color-progress-fill);
 }
