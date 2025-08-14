@@ -11,7 +11,7 @@ const BaseTemplate = (args) => html` <pds-image
   alt="${args.alt}"
   height="${args.height}"
   component-id="${args.componentId}"
-  loading="${args.loading}"
+  ?loading=${args.loading}
   sizes="${args.sizes}"
   src="${args.src}"
   srcset="${args.srcset}"

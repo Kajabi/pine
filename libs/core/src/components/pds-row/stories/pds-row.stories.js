@@ -10,6 +10,7 @@ export default {
 const BaseTemplate = (args) => html`
 <pds-row
   align-items="${args.alignItems}"
+  ?border=${args.border}
   component-id="${args.componentId}"
   col-gap="${args.colGap}"
   justify-content="${args.justifyContent}"
@@ -30,7 +31,7 @@ const BaseTemplate = (args) => html`
 
 export const Default = BaseTemplate.bind();
 Default.args = {
-  border: "true",
+  border: true,
   componentId: 'opt0',
   colGap: '8px',
 };
@@ -38,7 +39,7 @@ Default.args = {
 const GapTemplate = (args) => html`
 <pds-row
   align-items="${args.alignItems}"
-  border="${args.border}"
+  ?border=${args.border}
   component-id="${args.componentId}"
   col-gap="${args.colGap}"
   justify-content="${args.justifyContent}"
@@ -70,7 +71,7 @@ const GapTemplate = (args) => html`
 
 export const Gap = GapTemplate.bind();
 Gap.args = {
-  border: "false",
+  border: false,
   componentId: 'opt0',
   colGap: 'sm',
 };

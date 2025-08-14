@@ -15,21 +15,21 @@ export default {
 };
 
 const BaseTemplate = (args) => html`
-<pds-sortable border="${args.border}" component-id="${args.componentId}" dividers="${args.dividers}" handle-type="${args.handleType}">
+<pds-sortable ?border=${args.border} component-id="${args.componentId}" ?dividers=${args.dividers} handle-type="${args.handleType}">
   <pds-sortable-item>Item 1</pds-sortable-item>
   <pds-sortable-item>Item 2</pds-sortable-item>
   <pds-sortable-item>Item 3</pds-sortable-item>
 </pds-sortable>`;
 
 const HandleTemplate = (args) => html`
-<pds-sortable border="${args.border}" component-id="${args.componentId}" dividers="${args.dividers}" handle-type="${args.handleType}">
+<pds-sortable ?border=${args.border} component-id="${args.componentId}" ?dividers=${args.dividers} handle-type="${args.handleType}">
   <pds-sortable-item>Item 1</pds-sortable-item>
   <pds-sortable-item>Item 2</pds-sortable-item>
   <pds-sortable-item>Item 3</pds-sortable-item>
 </pds-sortable>`;
 
 const ActionsTemplate = (args) => html`
-<pds-sortable border="${args.border}" component-id="${args.componentId}" dividers="${args.dividers}" handle-type="${args.handleType}">
+<pds-sortable ?border=${args.border} component-id="${args.componentId}" ?dividers=${args.dividers} handle-type="${args.handleType}">
   <pds-sortable-item enable-actions>
     <div>Item 1</div>
     <div slot="sortable-item-actions">
@@ -51,7 +51,7 @@ const ActionsTemplate = (args) => html`
 </pds-sortable>`;
 
 const FullDemoTemplate = (args) => html`
-<pds-sortable border="${args.border}" component-id="${args.componentId}" dividers="${args.dividers}" handle-type="${args.handleType}">
+<pds-sortable ?border=${args.border} component-id="${args.componentId}" ?dividers=${args.dividers} handle-type="${args.handleType}">
   <pds-sortable-item enable-actions>
     <div>
       <div><strong>Item 1</strong></div>
