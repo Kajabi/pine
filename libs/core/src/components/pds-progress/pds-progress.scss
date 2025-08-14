@@ -1,7 +1,6 @@
 :host {
-  --color-progress-fill: var(--pine-color-brand);
-  --progress-gradient-start: #FDA4AF;
-  --progress-gradient-end: #FF3E14;
+  --progress-gradient-start: #fda4af;
+  --progress-gradient-end: #ff3e14;
 
   --sizing-progress-bar-width: 100%;
 
@@ -46,13 +45,21 @@ progress::-webkit-progress-bar {
 }
 
 progress::-webkit-progress-value {
-  background: var(--color-progress-fill, linear-gradient(to right, var(--progress-gradient-start), var(--progress-gradient-end)));
+  background: linear-gradient(to right, var(--progress-gradient-start), var(--progress-gradient-end));
   border-radius: var(--pine-dimension-2xs);
 }
 
 progress::-moz-progress-bar {
-  background: var(--color-progress-fill, linear-gradient(to right, var(--progress-gradient-start), var(--progress-gradient-end)));
+  background: linear-gradient(to right, var(--progress-gradient-start), var(--progress-gradient-end));
   border-radius: var(--pine-dimension-2xs);
+}
+
+:host([fill-color]:not([fill-color=""])) progress::-webkit-progress-value {
+  background: var(--color-progress-fill);
+}
+
+:host([fill-color]:not([fill-color=""])) progress::-moz-progress-bar {
+  background: var(--color-progress-fill);
 }
 
 .pds-progress__label {
