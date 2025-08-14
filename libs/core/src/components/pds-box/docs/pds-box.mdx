@@ -33,12 +33,116 @@ This approach ensures that your layouts will work correctly regardless of the te
 
 Items flow horizontally by default, so you'll need to explicitly set `direction="column"` for vertical stacking. This is the most common consideration when working with Box components.
 
+### Direction: When to Use Column vs Row
+
+> **Direction Rules:** Choose based on how you want **direct children** to arrange:
+
+#### Use `direction="column"` (Vertical Stacking) When:
+- **Stacking content vertically** (headings, paragraphs, buttons)
+- **Creating page sections** (hero, content, footer)
+- **Making card layouts** (image, title, description, actions)
+- **Creating main containers** (usually with `fit="true"`)
+
+```tsx
+// ✅ Correct: Vertical content stacking
+<pds-box direction="column">
+  <h1>Page Title</h1>
+  <p>Description</p>
+  <pds-button>Action</pds-button>
+</pds-box>
+```
+
+#### Use `direction="row"` (Horizontal Flow) - DEFAULT When:
+- **Placing items side by side** (buttons, badges, icons)
+- **Creating navigation bars** (logo, menu items, user profile)
+- **Building toolbars** (action buttons in a row)
+- **Making inline layouts** (icon + text, multiple form fields)
+- **This is the DEFAULT** - no need to specify
+
+```html
+// ✅ Correct: Horizontal items (default behavior)
+<pds-box>
+  <pds-button>Save</pds-button>
+  <pds-button variant="secondary">Cancel</pds-button>
+</pds-box>
+```
+
+#### ❌ Common Mistakes:
+```html
+// DON'T: Using row direction for stacked content
+<pds-box direction="row">  // ❌ Will place items side by side
+  <h1>Title</h1>
+  <p>This will be next to the title, not below it</p>
+</pds-box>
+
+// DON'T: Using column direction for side-by-side items
+<pds-box direction="column">  // ❌ Will stack items vertically
+  <pds-button>Save</pds-button>
+  <pds-button>Cancel</pds-button>  // Will be below Save, not next to it
+</pds-box>
+```
+
 ### Layout Patterns
 
-- Horizontal Flow (Default): Items are placed side by side
-- Vertical Stacking: Set `direction="column"` for items to stack vertically
-- Main Containers: Use `direction="column"` and `fit="true"` for page sections and main content areas
-- Grid Layout: Use inside `pds-row` with `size-*` props for responsive grid
+- **Horizontal Flow (Default)**: Items are placed side by side - good for buttons, navigation
+- **Vertical Stacking**: Set `direction="column"` for content that should stack - good for pages, cards, forms
+- **Main Containers**: Use `direction="column"` and `fit="true"` for page sections and main content areas
+- **Grid Layout**: Use inside `pds-row` with `size-*` props for responsive grid
+
+### Direction Examples
+
+**Column Direction (Vertical Stacking):**
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsBox direction="column" border="true" padding="md">
+  <h3>Page Title</h3>
+  <p>This is a description that appears below the title.</p>
+  <PdsBox gap="sm">
+    <PdsButton>Primary Action</PdsButton>
+    <PdsButton variant="secondary">Secondary</PdsButton>
+  </PdsBox>
+</PdsBox>`,
+    webComponent: `<pds-box direction="column" border="true" padding="md">
+  <h3>Page Title</h3>
+  <p>This is a description that appears below the title.</p>
+  <pds-box gap="sm">
+    <pds-button>Primary Action</pds-button>
+    <pds-button variant="secondary">Secondary</pds-button>
+  </pds-box>
+</pds-box>`
+}}>
+  <pds-box direction="column" border="true" padding="md">
+    <h3>Page Title</h3>
+    <p>This is a description that appears below the title.</p>
+    <pds-box gap="sm">
+      <pds-button>Primary Action</pds-button>
+      <pds-button variant="secondary">Secondary</pds-button>
+    </pds-box>
+  </pds-box>
+</DocCanvas>
+
+**Row Direction (Horizontal Flow - Default):**
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsBox border="true" padding="md" align-items="center" gap="sm">
+  <PdsIcon name="info" />
+  <span>Status message</span>
+  <PdsButton size="sm">Action</PdsButton>
+</PdsBox>`,
+    webComponent: `<pds-box border="true" padding="md" align-items="center" gap="sm">
+  <pds-icon name="info"></pds-icon>
+  <span>Status message</span>
+  <pds-button size="sm">Action</pds-button>
+</pds-box>`
+}}>
+  <pds-box border="true" padding="md" align-items="center" gap="sm">
+    <pds-icon name="info"></pds-icon>
+    <span>Status message</span>
+    <pds-button size="sm">Action</pds-button>
+  </pds-box>
+</DocCanvas>
 
 ### Key Props for Layout
 
@@ -50,14 +154,18 @@ Items flow horizontally by default, so you'll need to explicitly set `direction=
 
 ### Working with PDS-Row
 
-When pds-box is used inside pds-row:
-- The default `direction="row"` works well for grid layouts
+> **KEY LAYOUT RULE:** When `pds-box` is inside `pds-row`, it becomes a **grid column**. When `pds-box` is standalone, it becomes a **flexbox container**.
+
+**Inside pds-row (Grid Column Mode):**
 - Use `size` props (1-12) to control column widths
+- The default `direction="row"` works well for grid layouts
+- **DON'T use flex props** - they are ignored in grid mode
 - The box becomes a grid column within the row
 
-When pds-box is used standalone:
+**Standalone (Flexbox Container Mode):**
 - Default `direction="row"` creates horizontal flow
 - Set `direction="column"` for vertical stacking
+- **DO use flex props** - they work for child boxes
 - Size props have limited effect outside of pds-row
 
 ## Properties
@@ -346,6 +454,54 @@ Common custom flex patterns:
 
 ### Layout Properties
 `pds-box` not only allows for custom element properties, but it also allows for a flexible layout system. The layout system is based on the [CSS Flexbox specification](https://drafts.csswg.org/css-flexbox/) and can be view on the [Layouts](/docs/components-layout--docs) page
+
+## Direction Troubleshooting
+
+### Problem: Items Not Arranging as Expected
+
+#### Issue: Content stacking when you want side-by-side
+```tsx
+// ❌ Problem: Buttons stack vertically instead of horizontally
+<PdsBox direction="column">
+  <PdsButton>Save</PdsButton>
+  <PdsButton>Cancel</PdsButton>
+</PdsBox>
+```
+
+**Solution:** Remove `direction="column"` or use `direction="row"` (default):
+```tsx
+// ✅ Solution: Buttons appear side by side
+<PdsBox>
+  <PdsButton>Save</PdsButton>
+  <PdsButton>Cancel</PdsButton>
+</PdsBox>
+```
+
+#### Issue: Content appearing side-by-side when you want stacking
+```tsx
+// ❌ Problem: Title and text appear next to each other
+<PdsBox>
+  <h1>Page Title</h1>
+  <p>Description text</p>
+</PdsBox>
+```
+
+**Solution:** Add `direction="column"`:
+```tsx
+// ✅ Solution: Title appears above description
+<PdsBox direction="column">
+  <h1>Page Title</h1>
+  <p>Description text</p>
+</PdsBox>
+```
+
+### Quick Decision Tree for LLMs:
+
+> ** Direction Decision Rules:**
+> 1. **Are you building a page/card/form?** → Use `direction="column"`
+> 2. **Are you placing buttons/badges/icons together?** → Use default (no direction needed)
+> 3. **Are children meant to stack vertically?** → Use `direction="column"`
+> 4. **Are children meant to flow horizontally?** → Use default (no direction needed)
 
 ## Responsive Sizing Strategies & Examples
 

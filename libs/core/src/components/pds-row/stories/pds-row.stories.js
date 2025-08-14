@@ -9,18 +9,21 @@ export default {
 
 const BaseTemplate = (args) => html`
 <pds-row
-  align-items="${args.alignItems}"  
-  border="${args.border}"
-  component-id="${args.componentId}" 
+  align-items="${args.alignItems}"
+  component-id="${args.componentId}"
   col-gap="${args.colGap}"
   justify-content="${args.justifyContent}"
   min-height="${args.minHeight}"
   no-wrap="${args.noWrap}"
 >
-  <pds-box border>Item 1</pds-box>
-  <pds-box border direction="column">
-    <p>Content 1</p>
-    <p>Content 2</p>
+  <pds-box>
+    <pds-box border>Item 1</pds-box>
+  </pds-box>
+  <pds-box>
+    <pds-box border direction="column">
+      <p>Content 1</p>
+      <p>Content 2</p>
+    </pds-box>
   </pds-box>
 </pds-row>
 `;
@@ -34,9 +37,9 @@ Default.args = {
 
 const GapTemplate = (args) => html`
 <pds-row
-  align-items="${args.alignItems}"  
+  align-items="${args.alignItems}"
   border="${args.border}"
-  component-id="${args.componentId}" 
+  component-id="${args.componentId}"
   col-gap="${args.colGap}"
   justify-content="${args.justifyContent}"
   min-height="${args.minHeight}"

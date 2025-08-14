@@ -31,13 +31,16 @@ The pds-row component creates a 12-column grid system for responsive layouts. It
 
 ### Working with PDS-Box
 
-pds-row is designed to work with pds-box children:
-- Direct Children: Only pds-box components should be direct children
-- Size Props: pds-box children should use size props (1-12) for grid layout
-- Direction: pds-box children default to `direction="row"` which works well in grid
-- Column Sum: Total of all size props should not exceed 12 per row
+> **CRITICAL:** `pds-row` transforms `pds-box` children into **grid columns**, not flexbox items. This changes how they behave.
 
-> **⚠️ IMPORTANT:** `pds-box` flex properties (`flex="grow"`, `flex="shrink"`, `flex="none"`, or custom flex strings like `flex="1"`) do **NOT** work when the box is a direct child of `pds-row`. The flex properties only work when the immediate parent is another `pds-box` component. Use the `size` props instead for controlling column width within rows.
+**Grid Column Behavior Inside pds-row:**
+- **REQUIRED:** Only `pds-box` components should be direct children
+- **USE:** `size` props (1-12) for column width control
+- **DEFAULT:** Children use `direction="row"` which works well in grid
+- **LIMIT:** Total of all size props should not exceed 12 per row
+- **FORBIDDEN:** Flex properties (`flex="grow"`, `flex="shrink"`, `flex="none"`, or custom values like `flex="1"`) are **ignored**
+
+> **COMMON MISTAKE:** Using `flex` props on boxes inside `pds-row` won't work. Use `size` props instead.
 
 ### Common Patterns
 
@@ -78,13 +81,19 @@ By default boxes with rows will be equal width if no size is specified.
       </pds-row>
     `
 }}>
-  <pds-row>
-    <pds-box>Item 1</pds-box>
-    <pds-box direction="column">
-      <p>Content 1</p>
-      <p>Content 2</p>
+  <pds-row col-gap="sm">
+    <pds-box>
+      <pds-box border>Item 1</pds-box>
     </pds-box>
-    <pds-box>Item 3</pds-box>
+    <pds-box>
+      <pds-box border direction="column">
+        <p>Content 1</p>
+        <p>Content 2</p>
+      </pds-box>
+    </pds-box>
+    <pds-box>
+      <pds-box border>Item 3</pds-box>
+    </pds-box>
   </pds-row>
 </DocCanvas>
 
@@ -94,21 +103,33 @@ If the size values equal more than 12, the boxes will wrap to the next line.
 <DocCanvas client:only
   mdxSource={{
     react: `
-      <PdsRow>
-        <PdsBox border size-xs="4">size-xs 4</PdsBox>
-        <PdsBox border size-xs="10">size-xs 10</PdsBox>
+      <PdsRow colGap="sm">
+        <PdsBox size-xs="4">
+          <pds-box border>size-xs 4</pds-box>
+        </pds-box>
+        <pds-box size-xs="10">
+          <pds-box border>size-xs 10</pds-box>
+        </pds-box>
       </PdsRow>
     `,
     webComponent: `
-      <pds-row>
-        <pds-box border size-xs="4">size-xs 4</pds-box>
-        <pds-box border size-xs="10">size-xs 10</pds-box>
+      <pds-row col-gap="sm">
+        <pds-box size-xs="4">
+          <pds-box border>size-xs 4</pds-box>
+        </pds-box>
+        <pds-box size-xs="10">
+          <pds-box border>size-xs 10</pds-box>
+        </pds-box>
       </pds-row>
     `
 }}>
-  <pds-row>
-    <pds-box border size-xs="4">size-xs 4</pds-box>
-    <pds-box border size-xs="10">size-xs 10</pds-box>
+  <pds-row col-gap="sm">
+    <pds-box size-xs="4">
+      <pds-box border>size-xs 4</pds-box>
+    </pds-box>
+    <pds-box size-xs="10">
+      <pds-box border>size-xs 10</pds-box>
+    </pds-box>
   </pds-row>
 </DocCanvas>
 
