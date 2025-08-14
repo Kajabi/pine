@@ -1,6 +1,6 @@
 :host {
-  --progress-gradient-start: #fda4af;
-  --progress-gradient-end: #ff3e14;
+  --progress-gradient-start: var(--pine-color-red-300);
+  --progress-gradient-end: var(--pine-color-brand);
 
   --sizing-progress-bar-width: 100%;
 
