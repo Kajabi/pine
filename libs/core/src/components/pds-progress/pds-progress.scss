@@ -1,5 +1,7 @@
 :host {
   --color-progress-fill: var(--pine-color-brand);
+  --progress-gradient-start: #FDA4AF;
+  --progress-gradient-end: #FF3E14;
 
   --sizing-progress-bar-width: 100%;
 
@@ -44,12 +46,12 @@ progress::-webkit-progress-bar {
 }
 
 progress::-webkit-progress-value {
-  background-color: var(--color-progress-fill, var(--pine-color-brand));
+  background: var(--color-progress-fill, linear-gradient(to right, var(--progress-gradient-start), var(--progress-gradient-end)));
   border-radius: var(--pine-dimension-2xs);
 }
 
 progress::-moz-progress-bar {
-  background-color: var(--color-progress-fill, var(--pine-color-brand));
+  background: var(--color-progress-fill, linear-gradient(to right, var(--progress-gradient-start), var(--progress-gradient-end)));
   border-radius: var(--pine-dimension-2xs);
 }
 
