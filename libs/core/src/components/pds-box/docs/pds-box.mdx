@@ -35,12 +35,11 @@ Items flow horizontally by default, so you'll need to explicitly set `direction=
 
 ### Direction: When to Use Column vs Row
 
-> **🤖 LLM Direction Rules:** Choose based on how you want **direct children** to arrange:
+> **Direction Rules:** Choose based on how you want **direct children** to arrange:
 
 #### Use `direction="column"` (Vertical Stacking) When:
 - **Stacking content vertically** (headings, paragraphs, buttons)
 - **Creating page sections** (hero, content, footer)
-- **Building forms** (label, input, label, input)
 - **Making card layouts** (image, title, description, actions)
 - **Creating main containers** (usually with `fit="true"`)
 
@@ -60,7 +59,7 @@ Items flow horizontally by default, so you'll need to explicitly set `direction=
 - **Making inline layouts** (icon + text, multiple form fields)
 - **This is the DEFAULT** - no need to specify
 
-```tsx
+```html
 // ✅ Correct: Horizontal items (default behavior)
 <pds-box>
   <pds-button>Save</pds-button>
@@ -68,8 +67,8 @@ Items flow horizontally by default, so you'll need to explicitly set `direction=
 </pds-box>
 ```
 
-#### ❌ Common LLM Mistakes:
-```tsx
+#### ❌ Common Mistakes:
+```html
 // DON'T: Using row direction for stacked content
 <pds-box direction="row">  // ❌ Will place items side by side
   <h1>Title</h1>
@@ -155,7 +154,7 @@ Items flow horizontally by default, so you'll need to explicitly set `direction=
 
 ### Working with PDS-Row
 
-> **⚠️ KEY LAYOUT RULE:** When `pds-box` is inside `pds-row`, it becomes a **grid column**. When `pds-box` is standalone, it becomes a **flexbox container**.
+> **KEY LAYOUT RULE:** When `pds-box` is inside `pds-row`, it becomes a **grid column**. When `pds-box` is standalone, it becomes a **flexbox container**.
 
 **Inside pds-row (Grid Column Mode):**
 - Use `size` props (1-12) to control column widths
@@ -498,7 +497,7 @@ Common custom flex patterns:
 
 ### Quick Decision Tree for LLMs:
 
-> **🤖 Direction Decision Rules:**
+> ** Direction Decision Rules:**
 > 1. **Are you building a page/card/form?** → Use `direction="column"`
 > 2. **Are you placing buttons/badges/icons together?** → Use default (no direction needed)
 > 3. **Are children meant to stack vertically?** → Use `direction="column"`
