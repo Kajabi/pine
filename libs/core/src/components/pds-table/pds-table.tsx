@@ -102,9 +102,9 @@ export class PdsTable {
       const valueB = b.querySelector(`pds-table-cell:nth-child(${columnIndex + 1})`).textContent.trim();
 
       if (direction === 'asc') {
-        return valueA.localeCompare(valueB);
+        return valueA.localeCompare(valueB, undefined, { sensitivity: 'base' });
       } else {
-        return valueB.localeCompare(valueA);
+        return valueB.localeCompare(valueA, undefined, { sensitivity: 'base' });
       }
     });
 
