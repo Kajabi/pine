@@ -20,6 +20,11 @@ export class PdsTableCell {
   }
 
   /**
+   * Sets the text alignment within the cell.
+   */
+  @Prop() cellAlign?: 'start' | 'center' | 'end' | 'justify';
+
+  /**
    * Truncates content to a max width of 100px and adds an ellipsis.
    */
   @Prop() truncate: boolean;
@@ -35,6 +40,10 @@ export class PdsTableCell {
 
     if (this.tableRef && this.tableRef.compact) {
       classNames.push('is-compact');
+    }
+
+    if (this.cellAlign) {
+      classNames.push(`pds-table-cell--align-${this.cellAlign}`);
     }
 
     if (this.truncate) {
