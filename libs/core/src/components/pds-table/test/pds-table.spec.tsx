@@ -139,6 +139,53 @@ describe('pds-table', () => {
     expect(values).toEqual(['C 2, Column 1', 'A 1, Column 1']);
   });
 
+  it('sorts the table case-insensitively when pdsTableSort event is triggered', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable, PdsTableHead, PdsTableHeadCell, PdsTableBody, PdsTableRow, PdsTableCell],
+      html: `
+        <pds-table component-id="test-table" responsive>
+          <pds-table-head>
+            <pds-table-head-cell sortable>Name</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>apple</pds-table-cell>
+            </pds-table-row>
+            <pds-table-row>
+              <pds-table-cell>Banana</pds-table-cell>
+            </pds-table-row>
+            <pds-table-row>
+              <pds-table-cell>Cherry</pds-table-cell>
+            </pds-table-row>
+            <pds-table-row>
+              <pds-table-cell>date</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      `,
+    });
+
+    const table = page.body.querySelector('pds-table') as HTMLElement;
+    const tableBody = page.body.querySelector('pds-table-body') as HTMLElement;
+
+    // Trigger the pdsTableSort event to simulate user interaction
+    table.dispatchEvent(
+      new CustomEvent('pdsTableSort', {
+        detail: { column: 'Name', direction: 'asc' },
+      }),
+    );
+
+    // Wait for changes to be applied
+    await page.waitForChanges();
+
+    // Check if the table rows are sorted correctly (case-insensitive)
+    const rows = Array.from(tableBody.querySelectorAll('pds-table-row')) as any;
+    const values = rows.map((row) => row.querySelector('pds-table-cell').textContent?.trim());
+
+    // Assert that the values are sorted in case-insensitive ascending order
+    // Expected order: apple, Banana, Cherry, date (case-insensitive alphabetical)
+    expect(values).toEqual(['apple', 'Banana', 'Cherry', 'date']);
+  });
 
   it('should select the header checkbox when all rows are selected', async () => {
     const page = await newSpecPage({
