@@ -1131,6 +1131,10 @@ export namespace Components {
     }
     interface PdsTableCell {
         /**
+          * Sets the text alignment within the cell.
+         */
+        "cellAlign"?: 'start' | 'center' | 'end' | 'justify';
+        /**
           * Truncates content to a max width of 100px and adds an ellipsis.
          */
         "truncate": boolean;
@@ -1147,6 +1151,10 @@ export namespace Components {
         "isSelected": boolean;
     }
     interface PdsTableHeadCell {
+        /**
+          * Sets the text alignment within the head cell.
+         */
+        "cellAlign"?: 'start' | 'center' | 'end' | 'justify';
         /**
           * Determines whether the table column is sortable when set to `true`.
          */
@@ -3222,6 +3230,10 @@ declare namespace LocalJSX {
     }
     interface PdsTableCell {
         /**
+          * Sets the text alignment within the cell.
+         */
+        "cellAlign"?: 'start' | 'center' | 'end' | 'justify';
+        /**
           * Truncates content to a max width of 100px and adds an ellipsis.
          */
         "truncate"?: boolean;
@@ -3242,6 +3254,10 @@ declare namespace LocalJSX {
         "onPdsTableSelectAll"?: (event: PdsTableHeadCustomEvent<{ isSelected: boolean }>) => void;
     }
     interface PdsTableHeadCell {
+        /**
+          * Sets the text alignment within the head cell.
+         */
+        "cellAlign"?: 'start' | 'center' | 'end' | 'justify';
         /**
           * Event emitted to signal that a table column header has been sorted, providing information about the sorted column's name and sorting direction.
          */
