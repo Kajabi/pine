@@ -1,3 +1,19 @@
+## 3.4.3 (2025-08-19)
+
+### Bug Fixes 🐛
+
+- **pds-button:** add button link to full width rule ([#513](https://github.com/Kajabi/pine/pull/513))
+
+### Documentation 📄
+
+- update row examples and box docs ([#510](https://github.com/Kajabi/pine/pull/510))
+- update story boolean attribute handling across components ([#514](https://github.com/Kajabi/pine/pull/514))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.4.2 (2025-08-12)
 
 ### Bug Fixes 🐛
