@@ -7,9 +7,10 @@
 
 ## Properties
 
-| Property   | Attribute  | Description                                                         | Type      | Default     |
-| ---------- | ---------- | ------------------------------------------------------------------- | --------- | ----------- |
-| `sortable` | `sortable` | Determines whether the table column is sortable when set to `true`. | `boolean` | `undefined` |
+| Property    | Attribute    | Description                                                         | Type                                        | Default     |
+| ----------- | ------------ | ------------------------------------------------------------------- | ------------------------------------------- | ----------- |
+| `cellAlign` | `cell-align` | Sets the text alignment within the head cell.                       | `"center" \| "end" \| "justify" \| "start"` | `undefined` |
+| `sortable`  | `sortable`   | Determines whether the table column is sortable when set to `true`. | `boolean`                                   | `undefined` |
 
 
 ## Events

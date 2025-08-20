@@ -932,6 +932,98 @@ When the `truncate` prop is set to `true` on a `pds-table-cell` element, the cel
   </pds-table>
 </DocCanvas>
 
+## Cell Alignment
+
+Text alignment can be controlled using the `cell-align` prop on both `pds-table-head-cell` and `pds-table-cell` elements. The available alignment options are `start`, `center`, `end`, and `justify`.
+
+<DocCanvas mdxSource={{
+  react: `<PdsTable componentId="alignment">
+  <PdsTableHead>
+    <PdsTableHeadCell cellAlign="start">Name</PdsTableHeadCell>
+    <PdsTableHeadCell cellAlign="center">Amount</PdsTableHeadCell>
+    <PdsTableHeadCell cellAlign="end">Status</PdsTableHeadCell>
+    <PdsTableHeadCell cellAlign="justify">Description</PdsTableHeadCell>
+  </PdsTableHead>
+  <PdsTableBody>
+    <PdsTableRow>
+      <PdsTableCell cellAlign="start">John Doe</PdsTableCell>
+      <PdsTableCell cellAlign="center">$1,234.56</PdsTableCell>
+      <PdsTableCell cellAlign="end">Active</PdsTableCell>
+      <PdsTableCell cellAlign="justify">This is a longer description that demonstrates justified text alignment in table cells. It shows how text wraps and aligns within the cell boundaries.</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell cellAlign="start">Jane Smith</PdsTableCell>
+      <PdsTableCell cellAlign="center">$987.65</PdsTableCell>
+      <PdsTableCell cellAlign="end">Inactive</PdsTableCell>
+      <PdsTableCell cellAlign="justify">Another example of justified text that spans multiple lines to show the alignment behavior in table cells with varying content lengths.</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell cellAlign="start">Michael Johnson</PdsTableCell>
+      <PdsTableCell cellAlign="center">$2,468.13</PdsTableCell>
+      <PdsTableCell cellAlign="end">Pending</PdsTableCell>
+      <PdsTableCell cellAlign="justify">Short justified text example.</PdsTableCell>
+    </PdsTableRow>
+  </PdsTableBody>
+</PdsTable>`,
+  webComponent: `<pds-table component-id="alignment">
+  <pds-table-head>
+    <pds-table-head-cell cell-align="start">Name</pds-table-head-cell>
+    <pds-table-head-cell cell-align="center">Amount</pds-table-head-cell>
+    <pds-table-head-cell cell-align="end">Status</pds-table-head-cell>
+    <pds-table-head-cell cell-align="justify">Description</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell cell-align="start">John Doe</pds-table-cell>
+      <pds-table-cell cell-align="center">$1,234.56</pds-table-cell>
+      <pds-table-cell cell-align="end">Active</pds-table-cell>
+      <pds-table-cell cell-align="justify">This is a longer description that demonstrates justified text alignment in table cells. It shows how text wraps and aligns within the cell boundaries.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell cell-align="start">Jane Smith</pds-table-cell>
+      <pds-table-cell cell-align="center">$987.65</pds-table-cell>
+      <pds-table-cell cell-align="end">Inactive</pds-table-cell>
+      <pds-table-cell cell-align="justify">Another example of justified text that spans multiple lines to show the alignment behavior in table cells with varying content lengths.</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell cell-align="start">Michael Johnson</pds-table-cell>
+      <pds-table-cell cell-align="center">$2,468.13</pds-table-cell>
+      <pds-table-cell cell-align="end">Pending</pds-table-cell>
+      <pds-table-cell cell-align="justify">Short justified text example.</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
+`}}>
+  <pds-table component-id="alignment">
+    <pds-table-head>
+      <pds-table-head-cell cell-align="start">Name</pds-table-head-cell>
+      <pds-table-head-cell cell-align="center">Amount</pds-table-head-cell>
+      <pds-table-head-cell cell-align="end">Status</pds-table-head-cell>
+      <pds-table-head-cell cell-align="justify">Description</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell cell-align="start">John Doe</pds-table-cell>
+        <pds-table-cell cell-align="center">$1,234.56</pds-table-cell>
+        <pds-table-cell cell-align="end">Active</pds-table-cell>
+        <pds-table-cell cell-align="justify">This is a longer description that demonstrates justified text alignment in table cells. It shows how text wraps and aligns within the cell boundaries.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell cell-align="start">Jane Smith</pds-table-cell>
+        <pds-table-cell cell-align="center">$987.65</pds-table-cell>
+        <pds-table-cell cell-align="end">Inactive</pds-table-cell>
+        <pds-table-cell cell-align="justify">Another example of justified text that spans multiple lines to show the alignment behavior in table cells with varying content lengths.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell cell-align="start">Michael Johnson</pds-table-cell>
+        <pds-table-cell cell-align="center">$2,468.13</pds-table-cell>
+        <pds-table-cell cell-align="end">Pending</pds-table-cell>
+        <pds-table-cell cell-align="justify">Short justified text example.</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</DocCanvas>
+
 ## Sorting
 
 Basic sorting can be enabled by adding the `sortable` attribute to a `pds-table-head-cell` element. The table will automatically sort in ascending or descending order when the cell is clicked.

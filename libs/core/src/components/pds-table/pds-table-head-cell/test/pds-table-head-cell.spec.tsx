@@ -93,4 +93,65 @@ describe('pds-table-head-cell', () => {
 
     expect(tableHeadCell.classList.contains('is-active')).toBe(true);
   });
+
+  it('renders without alignment class when cellAlign is not set', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableHeadCell],
+      html: `<pds-table-head-cell></pds-table-head-cell>`,
+    });
+
+    const tableHeadCell = page.body.querySelector('pds-table-head-cell') as HTMLElement;
+    expect(tableHeadCell.classList.toString()).not.toContain('pds-table-head-cell--align-');
+  });
+
+  it('renders with alignment class when cellAlign is set to start', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableHeadCell],
+      html: `<pds-table-head-cell cell-align="start"></pds-table-head-cell>`,
+    });
+
+    const tableHeadCell = page.body.querySelector('pds-table-head-cell') as HTMLElement;
+    expect(tableHeadCell).toHaveClass('pds-table-head-cell--align-start');
+  });
+
+  it('renders with alignment class when cellAlign is set to center', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableHeadCell],
+      html: `<pds-table-head-cell cell-align="center"></pds-table-head-cell>`,
+    });
+
+    const tableHeadCell = page.body.querySelector('pds-table-head-cell') as HTMLElement;
+    expect(tableHeadCell).toHaveClass('pds-table-head-cell--align-center');
+  });
+
+  it('renders with alignment class when cellAlign is set to end', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableHeadCell],
+      html: `<pds-table-head-cell cell-align="end"></pds-table-head-cell>`,
+    });
+
+    const tableHeadCell = page.body.querySelector('pds-table-head-cell') as HTMLElement;
+    expect(tableHeadCell).toHaveClass('pds-table-head-cell--align-end');
+  });
+
+  it('renders with alignment class when cellAlign is set to justify', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableHeadCell],
+      html: `<pds-table-head-cell cell-align="justify"></pds-table-head-cell>`,
+    });
+
+    const tableHeadCell = page.body.querySelector('pds-table-head-cell') as HTMLElement;
+    expect(tableHeadCell).toHaveClass('pds-table-head-cell--align-justify');
+  });
+
+  it('renders with both alignment and sortable classes when both props are set', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableHeadCell],
+      html: `<pds-table-head-cell cell-align="center" sortable="true"></pds-table-head-cell>`,
+    });
+
+    const tableHeadCell = page.body.querySelector('pds-table-head-cell') as HTMLElement;
+    expect(tableHeadCell).toHaveClass('pds-table-head-cell--align-center');
+    expect(tableHeadCell).toHaveClass('is-sortable');
+  });
 });

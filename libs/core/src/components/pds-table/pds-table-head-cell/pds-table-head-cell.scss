@@ -46,3 +46,20 @@
 :host(.is-active) {
   color: var(--pine-color-text-active);
 }
+
+// Text Alignment
+:host(.pds-table-head-cell--align-start) {
+  text-align: start;
+}
+
+:host(.pds-table-head-cell--align-center) {
+  text-align: center;
+}
+
+:host(.pds-table-head-cell--align-end) {
+  text-align: end;
+}
+
+:host(.pds-table-head-cell--align-justify) {
+  text-align: justify;
+}

@@ -76,4 +76,65 @@ describe('pds-table-cell', () => {
 
     expect(tableCell).not.toHaveClass('has-scrolled');
   });
+
+  it('renders without alignment class when cellAlign is not set', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableCell],
+      html: `<pds-table-cell></pds-table-cell>`,
+    });
+
+    const tableCell = page.body.querySelector('pds-table-cell') as HTMLElement;
+    expect(tableCell.classList.toString()).not.toContain('pds-table-cell--align-');
+  });
+
+  it('renders with alignment class when cellAlign is set to start', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableCell],
+      html: `<pds-table-cell cell-align="start"></pds-table-cell>`,
+    });
+
+    const tableCell = page.body.querySelector('pds-table-cell') as HTMLElement;
+    expect(tableCell).toHaveClass('pds-table-cell--align-start');
+  });
+
+  it('renders with alignment class when cellAlign is set to center', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableCell],
+      html: `<pds-table-cell cell-align="center"></pds-table-cell>`,
+    });
+
+    const tableCell = page.body.querySelector('pds-table-cell') as HTMLElement;
+    expect(tableCell).toHaveClass('pds-table-cell--align-center');
+  });
+
+  it('renders with alignment class when cellAlign is set to end', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableCell],
+      html: `<pds-table-cell cell-align="end"></pds-table-cell>`,
+    });
+
+    const tableCell = page.body.querySelector('pds-table-cell') as HTMLElement;
+    expect(tableCell).toHaveClass('pds-table-cell--align-end');
+  });
+
+  it('renders with alignment class when cellAlign is set to justify', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableCell],
+      html: `<pds-table-cell cell-align="justify"></pds-table-cell>`,
+    });
+
+    const tableCell = page.body.querySelector('pds-table-cell') as HTMLElement;
+    expect(tableCell).toHaveClass('pds-table-cell--align-justify');
+  });
+
+  it('renders with both alignment and truncate classes when both props are set', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableCell],
+      html: `<pds-table-cell cell-align="center" truncate="true"></pds-table-cell>`,
+    });
+
+    const tableCell = page.body.querySelector('pds-table-cell') as HTMLElement;
+    expect(tableCell).toHaveClass('pds-table-cell--align-center');
+    expect(tableCell).toHaveClass('is-truncated');
+  });
 });

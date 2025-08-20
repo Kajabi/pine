@@ -7,9 +7,10 @@
 
 ## Properties
 
-| Property   | Attribute  | Description                                                     | Type      | Default     |
-| ---------- | ---------- | --------------------------------------------------------------- | --------- | ----------- |
-| `truncate` | `truncate` | Truncates content to a max width of 100px and adds an ellipsis. | `boolean` | `undefined` |
+| Property    | Attribute    | Description                                                     | Type                                        | Default     |
+| ----------- | ------------ | --------------------------------------------------------------- | ------------------------------------------- | ----------- |
+| `cellAlign` | `cell-align` | Sets the text alignment within the cell.                        | `"center" \| "end" \| "justify" \| "start"` | `undefined` |
+| `truncate`  | `truncate`   | Truncates content to a max width of 100px and adds an ellipsis. | `boolean`                                   | `undefined` |
 
 
 ## Dependencies

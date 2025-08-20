@@ -40,3 +40,20 @@
   vertical-align: middle;
   width: 16px;
 }
+
+// Text Alignment
+:host(.pds-table-cell--align-start) {
+  text-align: start;
+}
+
+:host(.pds-table-cell--align-center) {
+  text-align: center;
+}
+
+:host(.pds-table-cell--align-end) {
+  text-align: end;
+}
+
+:host(.pds-table-cell--align-justify) {
+  text-align: justify;
+}

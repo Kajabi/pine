@@ -12,6 +12,11 @@ export class PdsTableHeadCell {
   private tableRef: HTMLPdsTableElement;
 
   /**
+   * Sets the text alignment within the head cell.
+   */
+  @Prop() cellAlign?: 'start' | 'center' | 'end' | 'justify';
+
+  /**
    * Determines whether the table column is sortable when set to `true`.
    */
   @Prop() sortable: boolean;
@@ -75,6 +80,10 @@ export class PdsTableHeadCell {
 
     if (this.tableRef && this.tableRef.compact) {
       classNames.push('is-compact');
+    }
+
+    if (this.cellAlign) {
+      classNames.push(`pds-table-head-cell--align-${this.cellAlign}`);
     }
 
     if (this.sortable) {
