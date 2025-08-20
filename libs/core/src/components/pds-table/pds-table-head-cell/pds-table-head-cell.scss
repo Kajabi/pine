@@ -10,7 +10,8 @@
   font-size: var(--pine-font-size);
   font-weight: var(--pine-font-weight-regular);
   line-height: var(--pine-line-height-body);
-  padding: 12px;
+  padding: var(--pine-dimension-150);
+  position: relative;
   text-align: start;
   vertical-align: inherit;
 }
