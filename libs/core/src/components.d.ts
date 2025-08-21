@@ -1336,7 +1336,7 @@ export namespace Components {
          */
         "rows"?: number;
         /**
-          * Sets focus on the native `textarea` in the `pds-texarea`. Use this method instead of the global `textarea.focus()`.
+          * Sets focus on the native `textarea` in the `pds-textarea`. Use this method instead of the global `textarea.focus()`.
          */
         "setFocus": () => Promise<void>;
         /**
