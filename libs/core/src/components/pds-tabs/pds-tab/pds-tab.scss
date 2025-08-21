@@ -145,22 +145,25 @@ pds-tab {
 }
 
 .pds-tabs--filter {
-  --color-background-tab: var(--pine-color-background-container);
-
   .pds-tab {
-    background-color: var(--color-background-tab);
+    background-color: var(--pine-color-background-container-disabled);
     border-radius: 50px;
     color: var(--pine-color-text);
     padding: 6px 15px;
 
     &.is-active,
     &[aria-selected='true'] {
-      --color-background-tab: var(--pine-color-primary);
+      background-color: var(--pine-color-primary);
       color: var(--pine-color-text-primary);
     }
 
+    &.is-active:hover,
+    &[aria-selected='true']:hover {
+      background-color: var(--pine-color-primary-hover);
+    }
+
     &:hover:not(.is-active, [aria-selected='true']) {
-      --color-background-tab: var(--pine-color-background-container-hover);
+      background-color: var(--pine-color-border-disabled);
     }
   }
 
