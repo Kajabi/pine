@@ -11,6 +11,7 @@ export default {
     disabled: false,
     errorMessage: null,
     helperMessage: null,
+    hideLabel: false,
     invalid: false,
     label: null,
     name: null,
@@ -42,6 +43,7 @@ const BaseTemplate = (args) => html`<pds-textarea
   ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
+  ?hide-label=${args.hideLabel}
   ?invalid=${args.invalid}
   label="${args.label}"
   name="${args.name}"
@@ -139,6 +141,7 @@ export const withActionLink = (args) => html`<pds-textarea
   ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
+  ?hide-label=${args.hideLabel}
   ?invalid=${args.invalid}
   label="Notes"
   name="${args.name}"
@@ -162,6 +165,7 @@ export const withActionButton = (args) => html`<pds-textarea
   ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
+  ?hide-label=${args.hideLabel}
   ?invalid=${args.invalid}
   label="Description"
   name="${args.name}"
