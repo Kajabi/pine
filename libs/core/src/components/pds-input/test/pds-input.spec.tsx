@@ -31,7 +31,9 @@ describe('pds-input', () => {
         <div class="pds-input">
           <div class="pds-input__label-wrapper">
             <label class="pds-input__label" htmlFor="field-1">
-              Name
+              <span>
+                Name
+              </span>
             </label>
           </div>
           <div class="pds-input__field-wrapper">
@@ -148,7 +150,9 @@ describe('pds-input', () => {
         <div class="pds-input">
           <div class="pds-input__label-wrapper">
             <label class="pds-input__label" htmlFor="pds-input-invalid">
-              Name
+              <span>
+                Name
+              </span>
             </label>
           </div>
           <div class="has-error pds-input__field-wrapper">
@@ -639,7 +643,9 @@ describe('pds-input', () => {
             <div class="pds-input">
               <div class="pds-input__label-wrapper">
                 <label class="pds-input__label" htmlFor="field-1">
-                  Email
+                  <span>
+                    Email
+                  </span>
                 </label>
                 <div class="pds-input__action" part="action">
                   <slot name="action"></slot>
@@ -667,7 +673,9 @@ describe('pds-input', () => {
             <div class="pds-input">
               <div class="pds-input__label-wrapper">
                 <label class="pds-input__label" htmlFor="field-1">
-                  Email
+                  <span>
+                    Email
+                  </span>
                 </label>
               </div>
               <div class="pds-input__field-wrapper">
@@ -754,8 +762,10 @@ describe('pds-input', () => {
             <div class="pds-input">
               <div class="pds-input__label-wrapper">
                 <label class="pds-input__label" htmlFor="field-1">
-                  Email
-                  <span class="pds-input__required-indicator"> *</span>
+                  <span>
+                    Email
+                    <span class="pds-input__required-indicator"> *</span>
+                  </span>
                 </label>
                 <div class="pds-input__action" part="action">
                   <slot name="action"></slot>
@@ -769,6 +779,74 @@ describe('pds-input', () => {
           <span slot="action">Info</span>
         </pds-input>
       `);
+    });
+  });
+
+  describe('hideLabel', () => {
+    it('renders label wrapper with visually-hidden class when hideLabel is true', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsInput],
+        html: `<pds-input component-id="field-1" label="Name" hide-label></pds-input>`,
+      });
+
+      const labelWrapper = root?.shadowRoot?.querySelector('.pds-input__label-wrapper');
+      const labelSpan = root?.shadowRoot?.querySelector('.pds-input__label span');
+
+      expect(labelWrapper).not.toBeNull();
+      expect(labelSpan?.classList.contains('visually-hidden')).toBe(true);
+      expect(labelSpan?.textContent?.trim()).toBe('Name');
+    });
+
+    it('does not set aria-label on input when hideLabel is true (label still in DOM)', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsInput],
+        html: `<pds-input component-id="field-1" label="Name" hide-label></pds-input>`,
+      });
+
+      const input = root?.shadowRoot?.querySelector('input');
+      expect(input?.hasAttribute('aria-label')).toBeFalsy();
+    });
+
+    it('does not show action slot when hideLabel is true', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsInput],
+        html: `
+          <pds-input component-id="field-1" label="Name" hide-label>
+            <span slot="action">Help</span>
+          </pds-input>
+        `,
+      });
+
+      const labelWrapper = root?.shadowRoot?.querySelector('.pds-input__label-wrapper');
+      const actionSlot = root?.shadowRoot?.querySelector('.pds-input__action');
+
+      expect(labelWrapper).not.toBeNull(); // Label wrapper still exists
+      expect(actionSlot).toBeNull(); // But action slot is hidden
+      expect(root?.getAttribute('has-action')).toBeNull();
+    });
+
+    it('renders label wrapper without visually-hidden class when hideLabel is false', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsInput],
+        html: `<pds-input component-id="field-1" label="Name" hide-label="false"></pds-input>`,
+      });
+
+      const labelWrapper = root?.shadowRoot?.querySelector('.pds-input__label-wrapper');
+      const labelSpan = root?.shadowRoot?.querySelector('.pds-input__label span');
+
+      expect(labelWrapper).not.toBeNull();
+      expect(labelSpan?.classList.contains('visually-hidden')).toBe(false);
+      expect(labelSpan?.textContent?.trim()).toBe('Name');
+    });
+
+    it('does not set aria-label on input when hideLabel is false', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsInput],
+        html: `<pds-input component-id="field-1" label="Name"></pds-input>`,
+      });
+
+      const input = root?.shadowRoot?.querySelector('input');
+      expect(input?.hasAttribute('aria-label')).toBeFalsy();
     });
   });
 });
