@@ -657,7 +657,7 @@ export namespace Components {
          */
         "helperMessage"?: string;
         /**
-          * Visually hides the label text for instances where only the input should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the input should be displayed. Label remains accessible to assistive technology such as screen readers. Note: When true, the action slot is also hidden to maintain a minimal UI.
          */
         "hideLabel": boolean;
         /**
@@ -988,7 +988,7 @@ export namespace Components {
          */
         "helperMessage": string;
         /**
-          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the select should be displayed. Label remains accessible to assistive technology such as screen readers. Note: When true, the action slot is also hidden to maintain a minimal UI.
          */
         "hideLabel": boolean;
         /**
@@ -1301,7 +1301,7 @@ export namespace Components {
          */
         "helperMessage"?: string;
         /**
-          * Visually hides the label text for instances where only the textarea should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the textarea should be displayed. Label remains accessible to assistive technology such as screen readers. Note: When true, the action slot is also hidden to maintain a minimal UI.
          */
         "hideLabel": boolean;
         /**
@@ -2727,7 +2727,7 @@ declare namespace LocalJSX {
          */
         "helperMessage"?: string;
         /**
-          * Visually hides the label text for instances where only the input should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the input should be displayed. Label remains accessible to assistive technology such as screen readers. Note: When true, the action slot is also hidden to maintain a minimal UI.
          */
         "hideLabel"?: boolean;
         /**
@@ -3074,7 +3074,7 @@ declare namespace LocalJSX {
          */
         "helperMessage"?: string;
         /**
-          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the select should be displayed. Label remains accessible to assistive technology such as screen readers. Note: When true, the action slot is also hidden to maintain a minimal UI.
          */
         "hideLabel"?: boolean;
         /**
@@ -3420,7 +3420,7 @@ declare namespace LocalJSX {
          */
         "helperMessage"?: string;
         /**
-          * Visually hides the label text for instances where only the textarea should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the textarea should be displayed. Label remains accessible to assistive technology such as screen readers. Note: When true, the action slot is also hidden to maintain a minimal UI.
          */
         "hideLabel"?: boolean;
         /**
