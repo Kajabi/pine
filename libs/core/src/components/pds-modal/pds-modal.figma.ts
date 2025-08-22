@@ -1,6 +1,6 @@
 import figma, { html } from '@figma/code-connect/html';
 
-figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=37395-6238', {
+figma.connect('<FIGMA_MODAL>', {
   props: {
     // description: figma.nestedProps('Header Container', {
     //   text: figma.textContent('Text Layer'),

@@ -1,6 +1,6 @@
 import figma, { html } from '@figma/code-connect/html';
 
-figma.connect('https://www.figma.com/file/CC1YmaGKHnsvB28yLY9mEH?node-id=34433-26027', {
+figma.connect('<FIGMA_CHIP>', {
   props: {
     dot: figma.enum("Variant", {
       dot: true,

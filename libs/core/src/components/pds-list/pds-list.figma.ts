@@ -1,7 +1,7 @@
 import figma, { html } from "@figma/code-connect";
 
 // PATTERNS
-figma.connect("https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=12602-23053", {
+figma.connect("<FIGMA_SORTABLE_ITEM_SIMPLE>", {
   example: () => html`<pds-sortable-item handle>
     <pds-box>
       <pds-text weight="bold">Product title</pds-text>
@@ -9,7 +9,7 @@ figma.connect("https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=12602
   </pds-sortable-item>`,
 });
 
-figma.connect("https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=12602-23702", {
+figma.connect("<FIGMA_SORTABLE_ITEM_DOWNLOADS>", {
   example: () => html`<pds-sortable-item enable-actions handle>
     <pds-box direction="column">
       <pds-text weight="bold">Download title</pds-text>
@@ -23,7 +23,7 @@ figma.connect("https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=12602
   </pds-sortable-item>`,
 });
 
-figma.connect("https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=12602-24027", {
+figma.connect("<FIGMA_SORTABLE_ITEM_NAV>", {
   example: () => html`<pds-sortable-item enable-actions handle>
     <pds-box direction="column">
       <pds-text weight="bold">Nav title</pds-text>
@@ -36,7 +36,7 @@ figma.connect("https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=12602
   </pds-sortable-item>`,
 });
 
-figma.connect("https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=12602-24109", {
+figma.connect("<FIGMA_SORTABLE_ITEM_FORM>", {
   example: () => html`<pds-sortable-item enable-actions handle>
     <pds-box direction="column">
       <pds-text weight="bold">Form field title</pds-text>
@@ -49,7 +49,7 @@ figma.connect("https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=12602
   </pds-sortable-item>`,
 });
 
-figma.connect("https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=12602-24199", {
+figma.connect("<FIGMA_SORTABLE_ITEM_LESSON>", {
   example: () => html`<pds-sortable-item enable-actions handle>
     <pds-box align-items="center" gap="sm">
       <pds-icon icon="file" />
@@ -64,7 +64,7 @@ figma.connect("https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=12602
   </pds-sortable-item>`,
 });
 
-figma.connect("https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=12602-24305", {
+figma.connect("<FIGMA_SORTABLE_LIST>", {
   props: {
     variant: figma.enum("Variant", {
       "Library sorting": html`<pds-sortable-item enable-actions handle>
@@ -203,7 +203,7 @@ figma.connect("https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=12602
 </pds-sortable>`,
 });
 
-figma.connect("https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=12826-29138", {
+figma.connect("<FIGMA_PRODUCT_LIST>", {
   props: {
     variant: figma.enum("Variant", {
       "All products": html`

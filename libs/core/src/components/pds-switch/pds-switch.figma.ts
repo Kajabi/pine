@@ -1,6 +1,6 @@
 import figma, { html } from '@figma/code-connect/html';
 
-figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=736-21748', {
+figma.connect('<FIGMA_SWITCH>', {
   props: {
     checked: figma.boolean('Pressed', {
       true: "true",

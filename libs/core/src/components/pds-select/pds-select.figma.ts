@@ -1,6 +1,6 @@
 import figma, { html } from '@figma/code-connect/html';
 
-figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=35938-20213', {
+figma.connect('<FIGMA_SELECT>', {
   props: {
     disabled: figma.enum("State", {
       disabled: "true",

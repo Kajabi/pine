@@ -1,6 +1,6 @@
 import figma, { html } from '@figma/code-connect/html';
 
-figma.connect('https://www.figma.com/file/CC1YmaGKHnsvB28yLY9mEH?node-id=34239-39546', {
+figma.connect('<FIGMA_ALERT>', {
   props: {
     actions: figma.enum('Actions', {
       "none": undefined,

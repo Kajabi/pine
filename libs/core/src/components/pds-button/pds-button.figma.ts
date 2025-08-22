@@ -18,7 +18,7 @@ const sharedProps = {
   }),
 }
 
-figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=34239-33855', {
+figma.connect('<FIGMA_BUTTON_PRIMARY>', {
   props: {
     ...sharedProps,
     variant: figma.enum('Variant', {
@@ -41,7 +41,7 @@ figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=34239
   </pds-button>`,
 });
 
-figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=4179-21327', {
+figma.connect('<FIGMA_BUTTON_ICON>', {
   props: {
     isDisabled: figma.enum("State",{
       disabled: true
@@ -63,7 +63,7 @@ figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=4179-
   </pds-button>`,
 });
 
-figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=3672-21858', {
+figma.connect('<FIGMA_BUTTON_GROUP>', {
   props: {
     variant: figma.enum('Variant', {
       "Left": "start",

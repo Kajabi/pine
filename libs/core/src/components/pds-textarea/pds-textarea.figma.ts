@@ -1,6 +1,6 @@
 import figma, { html } from '@figma/code-connect/html';
 
-figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=35829-10264', {
+figma.connect('<FIGMA_TEXTAREA>', {
   props: {
     helperMessage: figma.boolean("Help text", {
       true: figma.string("Help content"),

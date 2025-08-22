@@ -1,6 +1,6 @@
 import figma, { html } from '@figma/code-connect/html';
 
-figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=21674-33731', {
+figma.connect('<FIGMA_LOADER>', {
   props: {
     showLabel: figma.boolean("Show text", {
         true: figma.string("↳ ✏️Text"),
