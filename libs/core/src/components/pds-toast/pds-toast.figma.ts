@@ -1,6 +1,6 @@
 import figma, { html } from '@figma/code-connect/html';
 
-figma.connect('https://www.figma.com/file/CC1YmaGKHnsvB28yLY9mEH?node-id=2757-22274', {
+figma.connect('<FIGMA_TOAST>', {
   props: {
     action: figma.boolean("Action", {
       true: html`<pds-link href="URL" color="var(--pine-color-white)">Visit</pds-link>`

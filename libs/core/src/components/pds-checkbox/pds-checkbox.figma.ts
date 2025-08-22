@@ -1,6 +1,6 @@
 import figma, { html } from '@figma/code-connect/html';
 
-figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=34239-44824', {
+figma.connect('<FIGMA_CHECKBOX>', {
   props: {
     checked: figma.boolean('Checked', {
       true: "true",

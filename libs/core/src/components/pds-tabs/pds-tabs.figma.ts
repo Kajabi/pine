@@ -1,7 +1,7 @@
 import figma, { html } from '@figma/code-connect/html';
 
 // Tab
-figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=37112-19825', {
+figma.connect('<FIGMA_TABS_LIST>', {
   props: {
     variant: figma.enum('Variant', {
       "page": "primary",
@@ -16,7 +16,7 @@ figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=37112
 });
 
 // Tabs
-figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=2537-21031', {
+figma.connect('<FIGMA_TABS_TAB>', {
   props: {
     variant: figma.enum('Variant', {
       "page": "primary",

@@ -1,7 +1,7 @@
 import figma, { html } from '@figma/code-connect/html';
 
 // Page Heading - Composite Pattern (not a standalone component)
-figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=2643-22285', {
+figma.connect('<FIGMA_PAGE_HEADING>', {
   props: {
     actions: figma.boolean('Buttons', {
       true: html`

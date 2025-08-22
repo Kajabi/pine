@@ -1,6 +1,6 @@
 import figma, { html } from '@figma/code-connect/html';
 
-figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=823-30602', {
+figma.connect('<FIGMA_PROGRESS_BAR>', {
     props: {
       percent: figma.string("Progress"),
       showPercent: figma.enum("Label", {
@@ -15,7 +15,7 @@ figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=823-3
     `,
   });
 
-figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=37395-5953', {
+figma.connect('<FIGMA_PROGRESS_CIRCLE>', {
   props: {
     percent: figma.string("Completion"),
   },

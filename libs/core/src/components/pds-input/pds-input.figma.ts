@@ -30,7 +30,7 @@ const sharedProps = {
   }),
 }
 
-figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=34603-6095', {
+figma.connect('<FIGMA_INPUT_TEXT>', {
   props: {
     ...sharedProps,
   },
@@ -47,7 +47,7 @@ figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=34603
   `,
 });
 
-figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=35874-14473', {
+figma.connect('<FIGMA_INPUT_SEARCH>', {
   props: {
     ...sharedProps,
   },
@@ -65,7 +65,7 @@ figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=35874
   `,
 });
 
-figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=34603-6251', {
+figma.connect('<FIGMA_INPUT_EMAIL>', {
   props: {
     value: figma.string('Message'),
   },
@@ -74,7 +74,7 @@ figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=34603
   `,
 });
 
-figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=34603-6251', {
+figma.connect('<FIGMA_INPUT_EMAIL>', {
   props: {
     value: figma.string('Message'),
   },
@@ -83,7 +83,7 @@ figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=34603
   `,
 })
 
-figma.connect('https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=34603-6248', {
+figma.connect('<FIGMA_INPUT_PASSWORD>', {
   props: {
     errorMessage: figma.instance('Error message'),
   },

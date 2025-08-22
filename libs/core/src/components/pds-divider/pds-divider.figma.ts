@@ -1,6 +1,6 @@
 import figma, { html } from '@figma/code-connect/html';
 
-figma.connect('https://www.figma.com/file/CC1YmaGKHnsvB28yLY9mEH?node-id=4554-21304', {
+figma.connect('<FIGMA_DIVIDER>', {
   props: {
     offset: figma.enum('Bleed', {
       "16px bleed": "sm",
