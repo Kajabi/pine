@@ -259,6 +259,8 @@ Context menu component for actions and navigation options.
 - **`Label` → Use component's `label` prop** (e.g., `<Input label="Email" />` instead of separate label)
 - **`Span` → `Text`** with `tag="span"`
 - **`Divider` → `Divider`** for visual separators
+- **`● + Text` → `Chip`** with `dot="true"` (status indicators with colored dots)
+- **`Button` with nested Icon → `Button`** with `startIcon` or `endIcon` prop
 
 #### **❌ NEVER Create These Custom Components:**
 - **NO `<Card>`** - Use `Box` with styling props
@@ -266,6 +268,8 @@ Context menu component for actions and navigation options.
 - **NO `<Container>`** - Use `Box` for layout
 - **NO `<Flex>`** - Use `Box` with flex properties
 - **NO `<Grid>`** - Use `Row` + `Box` grid system
+- **NO `● + text`** - Use `Chip` with `dot="true"`
+- **NO nested Icons in Buttons** - Use `startIcon` or `endIcon` props
 - **NO custom styled `<div>`** - Use appropriate Pine component
 
 #### **🔄 Code Conversion Examples:**
@@ -322,6 +326,37 @@ Context menu component for actions and navigation options.
 </Box>
 ```
 
+**❌ AI Tool Generated (DON'T DO THIS):**
+```jsx
+<div className="status-item">
+  <span className="dot">●</span>
+  <span>Online</span>
+</div>
+```
+
+**✅ Pine Design System (DO THIS):**
+```jsx
+<Chip dot variant="success">Online</Chip>
+```
+
+**❌ AI Tool Generated (DON'T DO THIS):**
+```jsx
+<Button onClick={handleClick}>
+  <Icon name="cart" size="20px" />
+  Add to Cart
+</Button>
+```
+
+**✅ Pine Design System (DO THIS):**
+```jsx
+<Button
+  onClick={handleClick}
+  startIcon={<Icon name="cart" size="20px" />}
+>
+  Add to Cart
+</Button>
+```
+
 #### **📝 Prompt Templates for AI Tools:**
 
 **When using Bolt, V0, Claude, or other AI tools, include this in your prompt:**
@@ -336,11 +371,15 @@ Context menu component for actions and navigation options.
 > - Any button → Button
 > - Any input → Input
 > - Any text → Text with tag prop
+> - Dot + text (● Online) → Chip with dot="true"
+> - Button with nested Icon → Button with startIcon/endIcon prop
 >
 > **Requirements:**
 > - Use mobile-first design with sizeMd, sizeLg (never base size)
 > - Use Row for multi-column layouts
 > - Use semantic components before layout components
+> - Never use bullet points (●) or dots - use Chip with dot prop
+> - Never nest Icons inside Button content - use startIcon/endIcon props
 > - Never mix raw HTML with Pine components"
 
 #### **🔧 Quick Reference for AI Tool Integration:**
