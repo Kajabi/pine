@@ -11,6 +11,7 @@ export default {
     errorMessage: null,
     fullWidth: false,
     helperMessage: null,
+    hideLabel: false,
     invalid: false,
     max: null,
     maxlength: null,
@@ -46,6 +47,7 @@ const BaseTemplate = (args) => html`<pds-input
   error-message="${args.errorMessage}"
   ?full-width=${args.fullWidth}
   helper-message="${args.helperMessage}"
+  ?hide-label=${args.hideLabel}
   ?invalid=${args.invalid}
   label="${args.label}"
   name="${args.name}"
@@ -154,6 +156,7 @@ export const withPrefixIcon = (args) => html`<pds-input
   ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
+  ?hide-label=${args.hideLabel}
   ?invalid=${args.invalid}
   label="Email"
   name="${args.name}"
@@ -172,6 +175,7 @@ export const withSuffixButton = (args) => html`<pds-input
   ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
+  ?hide-label=${args.hideLabel}
   ?invalid=${args.invalid}
   label="Search"
   name="${args.name}"
@@ -192,6 +196,7 @@ export const withPrependSelect = (args) => html`<pds-input
   ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
+  ?hide-label=${args.hideLabel}
   ?invalid=${args.invalid}
   label="Amount"
   name="${args.name}"
@@ -214,6 +219,7 @@ export const withAppendSelect = (args) => html`<pds-input
   ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
+  ?hide-label=${args.hideLabel}
   ?invalid=${args.invalid}
   label="Phone"
   name="${args.name}"
@@ -236,6 +242,7 @@ export const withPrefixAndAppend = (args) => html`<pds-input
   ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
+  ?hide-label=${args.hideLabel}
   ?invalid=${args.invalid}
   label="Amount"
   name="${args.name}"
@@ -259,6 +266,7 @@ export const withPrependAndSuffix = (args) => html`<pds-input
   ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
+  ?hide-label=${args.hideLabel}
   ?invalid=${args.invalid}
   label="Amount"
   name="${args.name}"
@@ -284,6 +292,7 @@ export const withActionLink = (args) => html`<pds-input
   ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
+  ?hide-label=${args.hideLabel}
   ?invalid=${args.invalid}
   label="Password"
   name="${args.name}"
@@ -304,6 +313,7 @@ export const withActionButton = (args) => html`<pds-input
   ?disabled=${args.disabled}
   error-message="${args.errorMessage}"
   helper-message="Choose a unique username"
+  ?hide-label=${args.hideLabel}
   ?invalid=${args.invalid}
   label="Username"
   name="${args.name}"
@@ -316,4 +326,3 @@ export const withActionButton = (args) => html`<pds-input
     <pds-icon name="question-circle"></pds-icon>
   </pds-button>
 </pds-input>`;
-

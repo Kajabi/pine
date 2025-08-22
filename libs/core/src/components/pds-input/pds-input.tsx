@@ -132,6 +132,12 @@ export class PdsInput {
   @Prop() label?: string;
 
   /**
+   * Visually hides the label text for instances where only the input should be displayed. Label remains accessible to assistive technology such as screen readers.
+   * Note: When true, the action slot is also hidden to maintain a minimal UI.
+   */
+  @Prop() hideLabel: boolean;
+
+  /**
    * Specifies the maximum value for the input field.
    */
   @Prop() max?: string;
@@ -481,17 +487,19 @@ export class PdsInput {
         has-suffix={this.hasSuffix ? 'true' : null}
         has-prepend={this.hasPrepend ? 'true' : null}
         has-append={this.hasAppend ? 'true' : null}
-        has-action={this.hasAction ? 'true' : null}
+        has-action={this.hasAction && !this.hideLabel ? 'true' : null}
         full-width={this.fullWidth ? 'true' : null}
       >
         <div class="pds-input">
           {label && (
             <div class="pds-input__label-wrapper">
               <label htmlFor={componentId} class="pds-input__label">
-                {label}
-                {this.required && <span class="pds-input__required-indicator"> *</span>}
+                <span class={this.hideLabel ? 'visually-hidden' : ''}>
+                  {label}
+                  {this.required && <span class="pds-input__required-indicator"> *</span>}
+                </span>
               </label>
-              {this.renderAction()}
+              {!this.hideLabel && this.renderAction()}
             </div>
           )}
 

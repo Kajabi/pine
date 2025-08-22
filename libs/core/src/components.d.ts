@@ -657,6 +657,10 @@ export namespace Components {
          */
         "helperMessage"?: string;
         /**
+          * Visually hides the label text for instances where only the input should be displayed. Label remains accessible to assistive technology such as screen readers. Note: When true, the action slot is also hidden to maintain a minimal UI.
+         */
+        "hideLabel": boolean;
+        /**
           * Determines whether or not the input field is invalid or throws an error.
          */
         "invalid"?: boolean;
@@ -984,7 +988,7 @@ export namespace Components {
          */
         "helperMessage": string;
         /**
-          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the select should be displayed. Label remains accessible to assistive technology such as screen readers. Note: When true, the action slot is also hidden to maintain a minimal UI.
          */
         "hideLabel": boolean;
         /**
@@ -1297,6 +1301,10 @@ export namespace Components {
          */
         "helperMessage"?: string;
         /**
+          * Visually hides the label text for instances where only the textarea should be displayed. Label remains accessible to assistive technology such as screen readers. Note: When true, the action slot is also hidden to maintain a minimal UI.
+         */
+        "hideLabel": boolean;
+        /**
           * Determines whether or not the textarea is invalid or throws an error.
           * @defaultValue false
          */
@@ -1328,7 +1336,7 @@ export namespace Components {
          */
         "rows"?: number;
         /**
-          * Sets focus on the native `textarea` in the `pds-texarea`. Use this method instead of the global `textarea.focus()`.
+          * Sets focus on the native `textarea` in the `pds-textarea`. Use this method instead of the global `textarea.focus()`.
          */
         "setFocus": () => Promise<void>;
         /**
@@ -2719,6 +2727,10 @@ declare namespace LocalJSX {
          */
         "helperMessage"?: string;
         /**
+          * Visually hides the label text for instances where only the input should be displayed. Label remains accessible to assistive technology such as screen readers. Note: When true, the action slot is also hidden to maintain a minimal UI.
+         */
+        "hideLabel"?: boolean;
+        /**
           * Determines whether or not the input field is invalid or throws an error.
          */
         "invalid"?: boolean;
@@ -3062,7 +3074,7 @@ declare namespace LocalJSX {
          */
         "helperMessage"?: string;
         /**
-          * Visually hides the label text for instances where only the checkbox should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the select should be displayed. Label remains accessible to assistive technology such as screen readers. Note: When true, the action slot is also hidden to maintain a minimal UI.
          */
         "hideLabel"?: boolean;
         /**
@@ -3407,6 +3419,10 @@ declare namespace LocalJSX {
           * Displays a message or hint below the textarea field.
          */
         "helperMessage"?: string;
+        /**
+          * Visually hides the label text for instances where only the textarea should be displayed. Label remains accessible to assistive technology such as screen readers. Note: When true, the action slot is also hidden to maintain a minimal UI.
+         */
+        "hideLabel"?: boolean;
         /**
           * Determines whether or not the textarea is invalid or throws an error.
           * @defaultValue false

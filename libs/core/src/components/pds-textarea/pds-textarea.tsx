@@ -57,7 +57,7 @@ export class PdsTextarea {
   @Event() pdsTextareaChange: EventEmitter<TextareaChangeEventDetail>;
 
   /**
-   * Sets focus on the native `textarea` in the `pds-texarea`. Use this method instead of the global
+   * Sets focus on the native `textarea` in the `pds-textarea`. Use this method instead of the global
    * `textarea.focus()`.
    */
   @Method()
@@ -108,6 +108,12 @@ export class PdsTextarea {
    * Text to be displayed as the textarea label.
    */
   @Prop() label?: string;
+
+  /**
+   * Visually hides the label text for instances where only the textarea should be displayed. Label remains accessible to assistive technology such as screen readers.
+   * Note: When true, the action slot is also hidden to maintain a minimal UI.
+   */
+  @Prop() hideLabel: boolean;
 
   /**
    * Specifies the name. Submitted with the form name/value pair. This value will mirror the componentId.
@@ -327,13 +333,17 @@ export class PdsTextarea {
       <Host
         aria-disabled={this.disabled ? 'true' : null}
         aria-readonly={this.readonly ? 'true' : null}
-        has-action={this.hasAction ? 'true' : null}
+        has-action={this.hasAction && !this.hideLabel ? 'true' : null}
       >
         <div class="pds-textarea">
           {this.label &&
             <div class="pds-textarea__label-wrapper">
-              <label htmlFor={this.componentId}>{this.label}</label>
-              {this.renderAction()}
+              <label htmlFor={this.componentId}>
+                <span class={this.hideLabel ? 'visually-hidden' : ''}>
+                  {this.label}
+                </span>
+              </label>
+              {!this.hideLabel && this.renderAction()}
             </div>
           }
           <textarea

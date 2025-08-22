@@ -7,22 +7,23 @@
 
 ## Properties
 
-| Property                   | Attribute        | Description                                                                                          | Type      | Default            |
-| -------------------------- | ---------------- | ---------------------------------------------------------------------------------------------------- | --------- | ------------------ |
-| `autocomplete`             | `autocomplete`   | Specifies if and how the browser provides `autocomplete` assistance for the field.                   | `string`  | `undefined`        |
-| `componentId` _(required)_ | `component-id`   | A unique identifier used for the underlying component `id` attribute.                                | `string`  | `undefined`        |
-| `debounce`                 | `debounce`       | The amount of time, in milliseconds, to wait to trigger the event after each keystroke.              | `number`  | `undefined`        |
-| `disabled`                 | `disabled`       | Determines whether or not the textarea is disabled.                                                  | `boolean` | `false`            |
-| `errorMessage`             | `error-message`  | Displays an error message below the textarea field.                                                  | `string`  | `undefined`        |
-| `helperMessage`            | `helper-message` | Displays a message or hint below the textarea field.                                                 | `string`  | `undefined`        |
-| `invalid`                  | `invalid`        | Determines whether or not the textarea is invalid or throws an error.                                | `boolean` | `false`            |
-| `label`                    | `label`          | Text to be displayed as the textarea label.                                                          | `string`  | `undefined`        |
-| `name`                     | `name`           | Specifies the name. Submitted with the form name/value pair. This value will mirror the componentId. | `string`  | `this.componentId` |
-| `placeholder`              | `placeholder`    | Specifies a short hint that describes the expected value of the textarea.                            | `string`  | `undefined`        |
-| `readonly`                 | `readonly`       | Determines whether or not the textarea is readonly.                                                  | `boolean` | `false`            |
-| `required`                 | `required`       | Determines whether or not the textarea is required.                                                  | `boolean` | `false`            |
-| `rows`                     | `rows`           | Sets number of rows of text visible without needing to scroll in the textarea.                       | `number`  | `undefined`        |
-| `value`                    | `value`          | The value of the textarea.                                                                           | `string`  | `''`               |
+| Property                   | Attribute        | Description                                                                                                                                                                                                                                 | Type      | Default            |
+| -------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------------------ |
+| `autocomplete`             | `autocomplete`   | Specifies if and how the browser provides `autocomplete` assistance for the field.                                                                                                                                                          | `string`  | `undefined`        |
+| `componentId` _(required)_ | `component-id`   | A unique identifier used for the underlying component `id` attribute.                                                                                                                                                                       | `string`  | `undefined`        |
+| `debounce`                 | `debounce`       | The amount of time, in milliseconds, to wait to trigger the event after each keystroke.                                                                                                                                                     | `number`  | `undefined`        |
+| `disabled`                 | `disabled`       | Determines whether or not the textarea is disabled.                                                                                                                                                                                         | `boolean` | `false`            |
+| `errorMessage`             | `error-message`  | Displays an error message below the textarea field.                                                                                                                                                                                         | `string`  | `undefined`        |
+| `helperMessage`            | `helper-message` | Displays a message or hint below the textarea field.                                                                                                                                                                                        | `string`  | `undefined`        |
+| `hideLabel`                | `hide-label`     | Visually hides the label text for instances where only the textarea should be displayed. Label remains accessible to assistive technology such as screen readers. Note: When true, the action slot is also hidden to maintain a minimal UI. | `boolean` | `undefined`        |
+| `invalid`                  | `invalid`        | Determines whether or not the textarea is invalid or throws an error.                                                                                                                                                                       | `boolean` | `false`            |
+| `label`                    | `label`          | Text to be displayed as the textarea label.                                                                                                                                                                                                 | `string`  | `undefined`        |
+| `name`                     | `name`           | Specifies the name. Submitted with the form name/value pair. This value will mirror the componentId.                                                                                                                                        | `string`  | `this.componentId` |
+| `placeholder`              | `placeholder`    | Specifies a short hint that describes the expected value of the textarea.                                                                                                                                                                   | `string`  | `undefined`        |
+| `readonly`                 | `readonly`       | Determines whether or not the textarea is readonly.                                                                                                                                                                                         | `boolean` | `false`            |
+| `required`                 | `required`       | Determines whether or not the textarea is required.                                                                                                                                                                                         | `boolean` | `false`            |
+| `rows`                     | `rows`           | Sets number of rows of text visible without needing to scroll in the textarea.                                                                                                                                                              | `number`  | `undefined`        |
+| `value`                    | `value`          | The value of the textarea.                                                                                                                                                                                                                  | `string`  | `''`               |
 
 
 ## Events
@@ -39,7 +40,7 @@
 
 ### `setFocus() => Promise<void>`
 
-Sets focus on the native `textarea` in the `pds-texarea`. Use this method instead of the global
+Sets focus on the native `textarea` in the `pds-textarea`. Use this method instead of the global
 `textarea.focus()`.
 
 #### Returns

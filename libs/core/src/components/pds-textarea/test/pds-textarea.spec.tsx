@@ -104,7 +104,11 @@ describe('pds-textarea', () => {
         <mock:shadow-root>
           <div class="pds-textarea">
             <div class="pds-textarea__label-wrapper">
-              <label>label</label>
+              <label>
+                <span>
+                  label
+                </span>
+              </label>
             </div>
             <textarea class="pds-textarea__field"></textarea>
           </div>
@@ -192,7 +196,11 @@ describe('pds-textarea', () => {
         <mock:shadow-root>
           <div class="pds-textarea">
             <div class="pds-textarea__label-wrapper">
-              <label htmlFor="pds-textarea-id">label</label>
+              <label htmlFor="pds-textarea-id">
+                <span>
+                  label
+                </span>
+              </label>
             </div>
             <textarea class="pds-textarea__field" id="pds-textarea-id" name="pds-textarea-id"></textarea>
           </div>
@@ -254,7 +262,11 @@ describe('pds-textarea', () => {
         <mock:shadow-root>
           <div class="pds-textarea">
             <div class="pds-textarea__label-wrapper">
-              <label htmlFor="textarea-with-description">Textarea with description</label>
+              <label htmlFor="textarea-with-description">
+                <span>
+                  Textarea with description
+                </span>
+              </label>
             </div>
             <textarea aria-describedby="textarea-with-description__error-message" aria-invalid="true"  class="is-invalid pds-textarea__field" id="textarea-with-description" name="textarea-with-description"></textarea>
             <p id="textarea-with-description__helper-message"  class="pds-textarea__helper-message">
@@ -427,7 +439,11 @@ it('should set focus on the input element when setFocus is called', async() => {
         <mock:shadow-root>
           <div class="pds-textarea">
             <div class="pds-textarea__label-wrapper">
-              <label htmlFor="textarea-1">Description</label>
+              <label htmlFor="textarea-1">
+                <span>
+                  Description
+                </span>
+              </label>
               <div class="pds-textarea__action" part="action">
                 <slot name="action"></slot>
               </div>
@@ -451,7 +467,11 @@ it('should set focus on the input element when setFocus is called', async() => {
         <mock:shadow-root>
           <div class="pds-textarea">
             <div class="pds-textarea__label-wrapper">
-              <label htmlFor="textarea-1">Description</label>
+              <label htmlFor="textarea-1">
+                <span>
+                  Description
+                </span>
+              </label>
             </div>
             <textarea class="pds-textarea__field" id="textarea-1" name="textarea-1"></textarea>
           </div>
@@ -534,7 +554,11 @@ it('should set focus on the input element when setFocus is called', async() => {
         <mock:shadow-root>
           <div class="pds-textarea">
             <div class="pds-textarea__label-wrapper">
-              <label htmlFor="textarea-1">Bio</label>
+              <label htmlFor="textarea-1">
+                <span>
+                  Bio
+                </span>
+              </label>
               <div class="pds-textarea__action" part="action">
                 <slot name="action"></slot>
               </div>
@@ -548,5 +572,73 @@ it('should set focus on the input element when setFocus is called', async() => {
         <span slot="action">5/500</span>
       </pds-textarea>
     `);
+  });
+
+  describe('hideLabel', () => {
+    it('renders label wrapper with visually-hidden class when hideLabel is true', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-1" label="Description" hide-label></pds-textarea>`,
+      });
+
+      const labelWrapper = root?.shadowRoot?.querySelector('.pds-textarea__label-wrapper');
+      const labelSpan = root?.shadowRoot?.querySelector('.pds-textarea__label-wrapper span');
+
+      expect(labelWrapper).not.toBeNull();
+      expect(labelSpan?.classList.contains('visually-hidden')).toBe(true);
+      expect(labelSpan?.textContent?.trim()).toBe('Description');
+    });
+
+    it('does not set aria-label on textarea when hideLabel is true (label still in DOM)', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-1" label="Description" hide-label></pds-textarea>`,
+      });
+
+      const textarea = root?.shadowRoot?.querySelector('textarea');
+      expect(textarea?.hasAttribute('aria-label')).toBeFalsy();
+    });
+
+    it('does not show action slot when hideLabel is true', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsTextarea],
+        html: `
+          <pds-textarea component-id="textarea-1" label="Description" hide-label>
+            <span slot="action">Help</span>
+          </pds-textarea>
+        `,
+      });
+
+      const labelWrapper = root?.shadowRoot?.querySelector('.pds-textarea__label-wrapper');
+      const actionSlot = root?.shadowRoot?.querySelector('.pds-textarea__action');
+
+      expect(labelWrapper).not.toBeNull(); // Label wrapper still exists
+      expect(actionSlot).toBeNull(); // But action slot is hidden
+      expect(root?.getAttribute('has-action')).toBeNull();
+    });
+
+    it('renders label wrapper without visually-hidden class when hideLabel is false', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-1" label="Description" hide-label="false"></pds-textarea>`,
+      });
+
+      const labelWrapper = root?.shadowRoot?.querySelector('.pds-textarea__label-wrapper');
+      const labelSpan = root?.shadowRoot?.querySelector('.pds-textarea__label-wrapper span');
+
+      expect(labelWrapper).not.toBeNull();
+      expect(labelSpan?.classList.contains('visually-hidden')).toBe(false);
+      expect(labelSpan?.textContent?.trim()).toBe('Description');
+    });
+
+    it('does not set aria-label on textarea when hideLabel is false', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-1" label="Description"></pds-textarea>`,
+      });
+
+      const textarea = root?.shadowRoot?.querySelector('textarea');
+      expect(textarea?.hasAttribute('aria-label')).toBeFalsy();
+    });
   });
 });
