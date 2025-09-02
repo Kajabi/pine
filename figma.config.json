@@ -1,0 +1,48 @@
+{
+  "codeConnect": {
+    "include": ["libs/core/src/components/**/*.figma.ts"],
+    "parser": "html",
+    "importPaths": {
+      "@pine-ds/core/*": "pine"
+    },
+    "paths": {
+      "pine": ["libs/core/src/components"]
+    },
+    "documentUrlSubstitutions": {
+      "<FIGMA_BASE>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH",
+      "<FIGMA_ALERT>": "https://www.figma.com/file/CC1YmaGKHnsvB28yLY9mEH?node-id=34239-39546",
+      "<FIGMA_AVATAR>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=484-54749",
+      "<FIGMA_BUTTON_PRIMARY>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=34239-33855",
+      "<FIGMA_BUTTON_ICON>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=4179-21327",
+      "<FIGMA_BUTTON_GROUP>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=3672-21858",
+      "<FIGMA_CHECKBOX>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=34239-44824",
+      "<FIGMA_CHIP>": "https://www.figma.com/file/CC1YmaGKHnsvB28yLY9mEH?node-id=34433-26027",
+      "<FIGMA_DIVIDER>": "https://www.figma.com/file/CC1YmaGKHnsvB28yLY9mEH?node-id=4554-21304",
+      "<FIGMA_INPUT_TEXT>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=34603-6095",
+      "<FIGMA_INPUT_SEARCH>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=35874-14473",
+      "<FIGMA_INPUT_EMAIL>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=34603-6251",
+      "<FIGMA_INPUT_PASSWORD>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=34603-6248",
+      "<FIGMA_LINK>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=34239-44464",
+      "<FIGMA_LOADER>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=21674-33731",
+      "<FIGMA_MODAL>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=37395-6238",
+      "<FIGMA_PAGE_HEADING>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=2643-22285",
+      "<FIGMA_PROGRESS_BAR>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=823-30602",
+      "<FIGMA_PROGRESS_CIRCLE>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=37395-5953",
+      "<FIGMA_PROPERTY>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=4583-21358",
+      "<FIGMA_RADIO>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=36362-18524",
+      "<FIGMA_SELECT>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=35938-20213",
+      "<FIGMA_SWITCH>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=736-21748",
+      "<FIGMA_TABS_LIST>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=37112-19825",
+      "<FIGMA_TABS_TAB>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=2537-21031",
+      "<FIGMA_TEXTAREA>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=35829-10264",
+      "<FIGMA_TOAST>": "https://www.figma.com/file/CC1YmaGKHnsvB28yLY9mEH?node-id=2757-22274",
+      "<FIGMA_SORTABLE_ITEM_SIMPLE>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=12602-23053",
+      "<FIGMA_SORTABLE_ITEM_DOWNLOADS>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=12602-23702",
+      "<FIGMA_SORTABLE_ITEM_NAV>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=12602-24027",
+      "<FIGMA_SORTABLE_ITEM_FORM>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=12602-24109",
+      "<FIGMA_SORTABLE_ITEM_LESSON>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=12602-24199",
+      "<FIGMA_SORTABLE_LIST>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=12602-24305",
+      "<FIGMA_PRODUCT_LIST>": "https://www.figma.com/design/CC1YmaGKHnsvB28yLY9mEH?node-id=12826-29138"
+    }
+  }
+}
