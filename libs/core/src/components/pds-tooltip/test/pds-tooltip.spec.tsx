@@ -20,10 +20,11 @@ jest.mock('@floating-ui/dom', () => ({
   computePosition: jest.fn().mockResolvedValue({
     x: 100,
     y: 200,
+    placement: 'bottom',
   }),
-  flip: jest.fn(),
-  offset: jest.fn(),
-  shift: jest.fn(),
+  flip: jest.fn().mockReturnValue({}),
+  offset: jest.fn().mockReturnValue({}),
+  shift: jest.fn().mockReturnValue({}),
 }));
 
 describe('pds-tooltip', () => {
@@ -250,22 +251,21 @@ describe('pds-tooltip', () => {
   });
 
   it('should test placement classes', async () => {
-    const placements = ['top', 'right', 'bottom', 'left'];
+    const page = await newSpecPage({
+      components: [PdsTooltip],
+      html: `
+        <pds-tooltip placement="top" content="Test" opened="true">
+          <button>Trigger</button>
+        </pds-tooltip>`,
+    });
 
-    for (const placement of placements) {
-      const page = await newSpecPage({
-        components: [PdsTooltip],
-        html: `
-          <pds-tooltip placement="${placement}" content="Test" opened="true">
-            <button>Trigger</button>
-          </pds-tooltip>`,
-      });
+    await page.waitForChanges();
 
-      await page.waitForChanges();
-
-      const tooltip = page.body.querySelector('.pds-tooltip');
-      expect(tooltip).toHaveClass(`pds-tooltip--${placement}`);
-    }
+    const tooltip = page.body.querySelector('.pds-tooltip');
+    // With floating UI, the resolved placement will be 'bottom' from our mock
+    // The tooltip should exist and have the resolved placement class
+    expect(tooltip).toBeTruthy();
+    expect(tooltip).toHaveClass('pds-tooltip--bottom');
   });
 
   it('should hide arrow when has-arrow is false', async () => {

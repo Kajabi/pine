@@ -28,6 +28,7 @@ export class PdsTooltip {
   @State() private _isInteractiveOpen = false;
 
   private portalEl: HTMLElement | null = null;
+  private resolvedPlacement: PlacementType = 'right';
   private triggerEl: HTMLElement | null = null;
   private contentDiv: HTMLElement | null = null;
   private slotMutationObserver: MutationObserver | null = null;
@@ -96,6 +97,7 @@ export class PdsTooltip {
 
   componentWillLoad() {
     this._isInteractiveOpen = false;
+    this.resolvedPlacement = this.placement;
   }
 
   componentDidLoad() {
@@ -132,7 +134,7 @@ export class PdsTooltip {
 
     // Update portal class when opened state changes
     if (this.portalEl !== null) {
-      this.portalEl.className = `pds-tooltip pds-tooltip--${this.placement} ${this.htmlContent ? 'pds-tooltip--has-html-content' : ''} ${this.opened ? 'pds-tooltip--is-open' : ''} ${this.hasArrow ? '' : 'pds-tooltip--no-arrow'}`;
+      this.portalEl.className = `pds-tooltip pds-tooltip--${this.resolvedPlacement} ${this.htmlContent ? 'pds-tooltip--has-html-content' : ''} ${this.opened ? 'pds-tooltip--is-open' : ''} ${this.hasArrow ? '' : 'pds-tooltip--no-arrow'}`;
     }
   }
 
@@ -244,19 +246,25 @@ export class PdsTooltip {
 
     if (anchor !== null && this.portalEl !== null) {
       try {
-        const { x, y } = await computePosition(anchor, this.portalEl, {
+        const { x, y, placement: computedPlacement } = await computePosition(anchor, this.portalEl, {
           placement: this.placement,
           strategy: 'fixed',
           middleware: [offset(8), flip(), shift({ padding: 5 })],
         });
+
+        this.resolvedPlacement = computedPlacement as PlacementType;
 
         Object.assign(this.portalEl.style, {
           left: `${x}px`,
           top: `${y}px`,
           position: 'fixed',
         });
+
+        // Update CSS classes to match the resolved placement
+        this.portalEl.className = `pds-tooltip pds-tooltip--${this.resolvedPlacement} ${this.htmlContent ? 'pds-tooltip--has-html-content' : ''} ${this.opened ? 'pds-tooltip--is-open' : ''} ${this.hasArrow ? '' : 'pds-tooltip--no-arrow'}`;
       } catch (error) {
         console.warn('Failed to position tooltip:', error);
+        this.resolvedPlacement = this.placement; // Fallback to requested placement
         // Fallback to basic positioning if floating UI fails
         const anchorRect = anchor.getBoundingClientRect();
         this.portalEl.style.left = `${anchorRect.right + 8}px`;
@@ -270,7 +278,7 @@ export class PdsTooltip {
     if (this.portalEl !== null) return;
 
     this.portalEl = document.createElement('div');
-    this.portalEl.className = `pds-tooltip pds-tooltip--${this.placement} ${this.htmlContent ? 'pds-tooltip--has-html-content' : ''} ${this.opened ? 'pds-tooltip--is-open' : ''} ${this.hasArrow ? '' : 'pds-tooltip--no-arrow'}`;
+    this.portalEl.className = `pds-tooltip pds-tooltip--${this.resolvedPlacement} ${this.htmlContent ? 'pds-tooltip--has-html-content' : ''} ${this.opened ? 'pds-tooltip--is-open' : ''} ${this.hasArrow ? '' : 'pds-tooltip--no-arrow'}`;
     this.portalEl.style.position = 'fixed';
     this.portalEl.style.zIndex = '9999';
 
