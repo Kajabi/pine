@@ -1,5 +1,11 @@
 import { Component, Element, Host, Prop, State, h, Method, Watch } from '@stencil/core';
-import { positionTooltip } from '../../utils/overlay';
+import { PlacementType } from '@utils/types';
+import {
+  computePosition,
+  flip,
+  offset,
+  shift,
+} from '@floating-ui/dom';
 
 /**
  * @slot (default) - The tooltip's target element
@@ -66,19 +72,7 @@ export class PdsTooltip {
    * Determines the preferred position of the tooltip
    * @defaultValue "right"
    */
-  @Prop({ reflect: true }) placement:
-    'top'
-    | 'top-start'
-    | 'top-end'
-    | 'right'
-    | 'right-start'
-    | 'right-end'
-    | 'bottom'
-    | 'bottom-start'
-    | 'bottom-end'
-    | 'left'
-    | 'left-start'
-    | 'left-end' = 'right';
+  @Prop({ reflect: true }) placement: PlacementType = 'right';
 
   /**
    * Sets the maximum width of the tooltip content
@@ -135,6 +129,11 @@ export class PdsTooltip {
     } else if (!this.opened && this.portalEl !== null) {
       this.removePortal();
     }
+
+    // Update portal class when opened state changes
+    if (this.portalEl !== null) {
+      this.portalEl.className = `pds-tooltip pds-tooltip--${this.placement} ${this.htmlContent ? 'pds-tooltip--has-html-content' : ''} ${this.opened ? 'pds-tooltip--is-open' : ''} ${this.hasArrow ? '' : 'pds-tooltip--no-arrow'}`;
+    }
   }
 
   /**
@@ -183,7 +182,9 @@ export class PdsTooltip {
   private handleScroll = () => {
     if (this.opened) {
       if (!this._isInteractiveOpen) {
-        this.repositionPortal();
+        this.repositionPortal().catch(error => {
+          console.warn('Failed to reposition tooltip on scroll:', error);
+        });
       } else {
         this.hideTooltip();
         this._isInteractiveOpen = false;
@@ -235,42 +236,32 @@ export class PdsTooltip {
   }
 
   /**
-   * Centralized method to calculate and apply the tooltip's position.
-   * Uses the determined anchor element and the current content dimensions.
+   * Centralized method to calculate and apply the tooltip's position using floating UI.
+   * Uses the determined anchor element and applies computePosition with flip, offset, and shift.
    */
-  private repositionPortal() {
+  private async repositionPortal() {
     const anchor = this.determinePositioningAnchor();
 
-    if (anchor !== null && this.contentDiv !== null) {
-      positionTooltip({ elem: anchor, elemPlacement: this.placement, overlay: this.contentDiv });
-      const placementParts = this.placement.split('-');
-      const primaryPlacement = placementParts[0];
-      const isCardinalCenterPlacement = placementParts.length === 1;
+    if (anchor !== null && this.portalEl !== null) {
+      try {
+        const { x, y } = await computePosition(anchor, this.portalEl, {
+          placement: this.placement,
+          strategy: 'fixed',
+          middleware: [offset(8), flip(), shift({ padding: 5 })],
+        });
 
-      if (isCardinalCenterPlacement) {
+        Object.assign(this.portalEl.style, {
+          left: `${x}px`,
+          top: `${y}px`,
+          position: 'fixed',
+        });
+      } catch (error) {
+        console.warn('Failed to position tooltip:', error);
+        // Fallback to basic positioning if floating UI fails
         const anchorRect = anchor.getBoundingClientRect();
-        const overlayRect = this.contentDiv.getBoundingClientRect();
-
-        if (primaryPlacement === 'left' || primaryPlacement === 'right') {
-          const currentOverlayTop = parseFloat(this.contentDiv.style.top || '0');
-          const anchorCenterY = anchorRect.top + (anchorRect.height / 2);
-          const overlayCenterY = overlayRect.top + (overlayRect.height / 2);
-          const adjustmentY = anchorCenterY - overlayCenterY;
-
-          if (Math.abs(adjustmentY) > 0.5) {
-            this.contentDiv.style.top = `${currentOverlayTop + adjustmentY}px`;
-          }
-
-        } else if (primaryPlacement === 'top' || primaryPlacement === 'bottom') {
-          const currentOverlayLeft = parseFloat(this.contentDiv.style.left || '0');
-          const anchorCenterX = anchorRect.left + (anchorRect.width / 2);
-          const overlayCenterX = overlayRect.left + (overlayRect.width / 2);
-          const adjustmentX = anchorCenterX - overlayCenterX;
-
-          if (Math.abs(adjustmentX) > 0.5) {
-            this.contentDiv.style.left = `${currentOverlayLeft + adjustmentX}px`;
-          }
-        }
+        this.portalEl.style.left = `${anchorRect.right + 8}px`;
+        this.portalEl.style.top = `${anchorRect.top}px`;
+        this.portalEl.style.position = 'fixed';
       }
     }
   }
@@ -301,7 +292,6 @@ export class PdsTooltip {
     this.contentDiv.setAttribute('aria-hidden', this.opened ? 'false' : 'true');
     this.contentDiv.setAttribute('aria-live', this.opened ? 'polite' : 'off');
     this.contentDiv.setAttribute('role', 'tooltip');
-    this.contentDiv.style.maxWidth = this.maxWidth;
 
     const contentSlotWrapper = this.el.querySelector('.pds-tooltip__content-slot-wrapper');
     const slottedContentContainer = contentSlotWrapper?.querySelector('[slot="content"]') as HTMLElement | null;
@@ -336,13 +326,17 @@ export class PdsTooltip {
     this.portalEl.appendChild(this.contentDiv);
     document.body.appendChild(this.portalEl);
 
-    this.repositionPortal();
+    this.repositionPortal().catch(error => {
+      console.warn('Failed to position tooltip on creation:', error);
+    });
 
-    if (this.contentDiv !== null) {
+    if (this.portalEl !== null) {
       this.overlayResizeObserver = new ResizeObserver(() => {
-        this.repositionPortal();
+        this.repositionPortal().catch(error => {
+          console.warn('Failed to reposition tooltip on resize:', error);
+        });
       });
-      this.overlayResizeObserver.observe(this.contentDiv);
+      this.overlayResizeObserver.observe(this.portalEl);
     }
 
     // Add global listeners when portal is created
@@ -360,8 +354,8 @@ export class PdsTooltip {
   }
 
   private removePortal() {
-    if (this.overlayResizeObserver !== null && this.contentDiv !== null) {
-      this.overlayResizeObserver.unobserve(this.contentDiv);
+    if (this.overlayResizeObserver !== null && this.portalEl !== null) {
+      this.overlayResizeObserver.unobserve(this.portalEl);
       this.overlayResizeObserver = null;
     }
 
@@ -401,7 +395,7 @@ export class PdsTooltip {
         >
           <slot />
         </span>
-        <div class="pds-tooltip__content-slot-wrapper" style={{ display: 'none' }}>
+        <div class="pds-tooltip__content-slot-wrapper" hidden>
           <slot name="content"></slot>
         </div>
       </Host>

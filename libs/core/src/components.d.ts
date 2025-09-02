@@ -1407,18 +1407,7 @@ export namespace Components {
           * Determines the preferred position of the tooltip
           * @defaultValue "right"
          */
-        "placement": 'top'
-    | 'top-start'
-    | 'top-end'
-    | 'right'
-    | 'right-start'
-    | 'right-end'
-    | 'bottom'
-    | 'bottom-start'
-    | 'bottom-end'
-    | 'left'
-    | 'left-start'
-    | 'left-end';
+        "placement": PlacementType;
         /**
           * Shows the tooltip by enabling the opened property
          */
@@ -3537,18 +3526,7 @@ declare namespace LocalJSX {
           * Determines the preferred position of the tooltip
           * @defaultValue "right"
          */
-        "placement"?: 'top'
-    | 'top-start'
-    | 'top-end'
-    | 'right'
-    | 'right-start'
-    | 'right-end'
-    | 'bottom'
-    | 'bottom-start'
-    | 'bottom-end'
-    | 'left'
-    | 'left-start'
-    | 'left-end';
+        "placement"?: PlacementType;
     }
     interface IntrinsicElements {
         "mock-pds-modal": MockPdsModal;

@@ -97,7 +97,149 @@ enable the `htmlContent` property and provide your element in the `content` slot
 </DocCanvas>
 
 ### Positioning
-Using the placement prop you can adjust where your tooltip will be displayed.
+Using the placement prop you can adjust where your tooltip will be displayed. The tooltip uses intelligent positioning that automatically flips to the opposite side when there's not enough space and shifts to stay within viewport bounds.
+
+#### Basic Positions
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <div style={{display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap'}}>
+        <PdsTooltip content="Top placement" placement="top">
+          <PdsButton variant="secondary">Top</PdsButton>
+        </PdsTooltip>
+        <PdsTooltip content="Right placement" placement="right">
+          <PdsButton variant="secondary">Right</PdsButton>
+        </PdsTooltip>
+        <PdsTooltip content="Bottom placement" placement="bottom">
+          <PdsButton variant="secondary">Bottom</PdsButton>
+        </PdsTooltip>
+        <PdsTooltip content="Left placement" placement="left">
+          <PdsButton variant="secondary">Left</PdsButton>
+        </PdsTooltip>
+      </div>
+    `,
+    webComponent: `
+      <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+        <pds-tooltip content="Top placement" placement="top">
+          <pds-button variant="secondary">Top</pds-button>
+        </pds-tooltip>
+        <pds-tooltip content="Right placement" placement="right">
+          <pds-button variant="secondary">Right</pds-button>
+        </pds-tooltip>
+        <pds-tooltip content="Bottom placement" placement="bottom">
+          <pds-button variant="secondary">Bottom</pds-button>
+        </pds-tooltip>
+        <pds-tooltip content="Left placement" placement="left">
+          <pds-button variant="secondary">Left</pds-button>
+        </pds-tooltip>
+      </div>
+    `
+}}>
+  <div style={{display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap'}}>
+    <pds-tooltip content="Top placement" placement="top">
+      <pds-button variant="secondary">Top</pds-button>
+    </pds-tooltip>
+    <pds-tooltip content="Right placement" placement="right">
+      <pds-button variant="secondary">Right</pds-button>
+    </pds-tooltip>
+    <pds-tooltip content="Bottom placement" placement="bottom">
+      <pds-button variant="secondary">Bottom</pds-button>
+    </pds-tooltip>
+    <pds-tooltip content="Left placement" placement="left">
+      <pds-button variant="secondary">Left</pds-button>
+    </pds-tooltip>
+  </div>
+</DocCanvas>
+
+#### Aligned Positions
+You can also specify start and end alignments for more precise positioning:
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <div style={{display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap'}}>
+        <PdsTooltip content="Top start alignment" placement="top-start">
+          <PdsButton variant="secondary">Top Start</PdsButton>
+        </PdsTooltip>
+        <PdsTooltip content="Top end alignment" placement="top-end">
+          <PdsButton variant="secondary">Top End</PdsButton>
+        </PdsTooltip>
+        <PdsTooltip content="Bottom start alignment" placement="bottom-start">
+          <PdsButton variant="secondary">Bottom Start</PdsButton>
+        </PdsTooltip>
+        <PdsTooltip content="Bottom end alignment" placement="bottom-end">
+          <PdsButton variant="secondary">Bottom End</PdsButton>
+        </PdsTooltip>
+      </div>
+    `,
+    webComponent: `
+      <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+        <pds-tooltip content="Top start alignment" placement="top-start">
+          <pds-button variant="secondary">Top Start</pds-button>
+        </pds-tooltip>
+        <pds-tooltip content="Top end alignment" placement="top-end">
+          <pds-button variant="secondary">Top End</pds-button>
+        </pds-tooltip>
+        <pds-tooltip content="Bottom start alignment" placement="bottom-start">
+          <pds-button variant="secondary">Bottom Start</pds-button>
+        </pds-tooltip>
+        <pds-tooltip content="Bottom end alignment" placement="bottom-end">
+          <pds-button variant="secondary">Bottom End</pds-button>
+        </pds-tooltip>
+      </div>
+    `
+}}>
+  <div style={{display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap'}}>
+    <pds-tooltip content="Top start alignment" placement="top-start">
+      <pds-button variant="secondary">Top Start</pds-button>
+    </pds-tooltip>
+    <pds-tooltip content="Top end alignment" placement="top-end">
+      <pds-button variant="secondary">Top End</pds-button>
+    </pds-tooltip>
+    <pds-tooltip content="Bottom start alignment" placement="bottom-start">
+      <pds-button variant="secondary">Bottom Start</pds-button>
+    </pds-tooltip>
+    <pds-tooltip content="Bottom end alignment" placement="bottom-end">
+      <pds-button variant="secondary">Bottom End</pds-button>
+    </pds-tooltip>
+  </div>
+</DocCanvas>
+
+#### Smart Positioning
+The tooltip automatically adjusts its position when there's not enough space. Try hovering over these buttons near the edges of your screen:
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <div style={{display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap'}}>
+        <PdsTooltip content="This tooltip will flip to stay visible when near screen edges" placement="right">
+          <PdsButton variant="secondary">Smart Flip</PdsButton>
+        </PdsTooltip>
+        <PdsTooltip content="This tooltip shifts to stay within viewport bounds" placement="top">
+          <PdsButton variant="secondary">Smart Shift</PdsButton>
+        </PdsTooltip>
+      </div>
+    `,
+    webComponent: `
+      <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+        <pds-tooltip content="This tooltip will flip to stay visible when near screen edges" placement="right">
+          <pds-button variant="secondary">Smart Flip</pds-button>
+        </pds-tooltip>
+        <pds-tooltip content="This tooltip shifts to stay within viewport bounds" placement="top">
+          <pds-button variant="secondary">Smart Shift</pds-button>
+        </pds-tooltip>
+      </div>
+    `
+}}>
+  <div style={{display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap'}}>
+    <pds-tooltip content="This tooltip will flip to stay visible when near screen edges" placement="right">
+      <pds-button variant="secondary">Smart Flip</pds-button>
+    </pds-tooltip>
+    <pds-tooltip content="This tooltip shifts to stay within viewport bounds" placement="top">
+      <pds-button variant="secondary">Smart Shift</pds-button>
+    </pds-tooltip>
+  </div>
+</DocCanvas>
 
 
 ### No Arrow
