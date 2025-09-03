@@ -567,6 +567,15 @@ $pine-spacing-tokens: (
   flex-direction: column;
 }
 
+// Flex Wrap helpers
+.pds-box--wrap-nowrap {
+  flex-wrap: nowrap;
+}
+
+.pds-box--wrap-wrap {
+  flex-wrap: wrap;
+}
+
 // Justify Content helpers
 .pds-justify-content-start {
   justify-content: start;

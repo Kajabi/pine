@@ -290,6 +290,11 @@ export namespace Components {
           * At the XS breakpoint, this prop will take the number of columns specified. This overrides the base size prop for this specific range.
          */
         "sizeXs"?: BoxColumnType;
+        /**
+          * Defines whether flex items are forced onto one line or can wrap onto multiple lines.
+          * @defaultValue nowrap
+         */
+        "wrap"?: `nowrap` | `wrap`;
     }
     interface PdsButton {
         /**
@@ -2350,6 +2355,11 @@ declare namespace LocalJSX {
           * At the XS breakpoint, this prop will take the number of columns specified. This overrides the base size prop for this specific range.
          */
         "sizeXs"?: BoxColumnType;
+        /**
+          * Defines whether flex items are forced onto one line or can wrap onto multiple lines.
+          * @defaultValue nowrap
+         */
+        "wrap"?: `nowrap` | `wrap`;
     }
     interface PdsButton {
         /**
