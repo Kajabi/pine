@@ -457,14 +457,14 @@ Control whether flex items wrap to new lines when they don't fit in the containe
 
 <DocCanvas client:only
   mdxSource={{
-    react: `<PdsBox wrap="wrap" gap="sm" style={{width: '300px', border: '1px solid #ccc'}}>
+    react: `<PdsBox wrap="wrap" gap="sm" min-width="300px">
   <PdsBox border="true" padding="sm">Item 1</PdsBox>
   <PdsBox border="true" padding="sm">Item 2</PdsBox>
   <PdsBox border="true" padding="sm">Item 3</PdsBox>
   <PdsBox border="true" padding="sm">Item 4</PdsBox>
   <PdsBox border="true" padding="sm">Item 5</PdsBox>
 </PdsBox>`,
-    webComponent: `<pds-box wrap="wrap" gap="sm" style="width: 300px; border: 1px solid #ccc;">
+    webComponent: `<pds-box wrap="wrap" gap="sm" min-width="300px">
   <pds-box border="true" padding="sm">Item 1</pds-box>
   <pds-box border="true" padding="sm">Item 2</pds-box>
   <pds-box border="true" padding="sm">Item 3</pds-box>
@@ -472,7 +472,7 @@ Control whether flex items wrap to new lines when they don't fit in the containe
   <pds-box border="true" padding="sm">Item 5</pds-box>
 </pds-box>`
 }}>
-  <pds-box border="true" wrap="wrap" gap="sm" min-width="300px" >
+  <pds-box wrap="wrap" gap="sm" min-width="300px" >
     <pds-box border="true" padding="sm">Item 1</pds-box>
     <pds-box border="true" padding="sm">Item 2</pds-box>
     <pds-box border="true" padding="sm">Item 3</pds-box>
@@ -502,14 +502,11 @@ Control whether flex items wrap to new lines when they don't fit in the containe
   </pds-box>
 </div>`
 }}>
-  <div>
-
-    <pds-box border="true" wrap="nowrap" gap="sm" min-width="250px">
-      <pds-box border="true" padding="sm">Long Item 1</pds-box>
-      <pds-box border="true" padding="sm">Long Item 2</pds-box>
-      <pds-box border="true" padding="sm">Long Item 3</pds-box>
-    </pds-box>
-  </div>
+  <pds-box wrap="nowrap" gap="sm" min-width="250px">
+    <pds-box border="true" padding="sm">Long Item 1</pds-box>
+    <pds-box border="true" padding="sm">Long Item 2</pds-box>
+    <pds-box border="true" padding="sm">Long Item 3</pds-box>
+  </pds-box>
 </DocCanvas>
 
 <h4>Wrap</h4>
@@ -526,7 +523,7 @@ Control whether flex items wrap to new lines when they don't fit in the containe
     <pds-box border="true" padding="sm">Long Item 3</pds-box>
   </pds-box>`
 }}>
-<pds-box border="true" wrap="wrap" gap="sm" min-width="250px">
+<pds-box wrap="wrap" gap="sm" min-width="250px">
   <pds-box border="true" padding="sm">Long Item 1</pds-box>
   <pds-box border="true" padding="sm">Long Item 2</pds-box>
   <pds-box border="true" padding="sm">Long Item 3</pds-box>
