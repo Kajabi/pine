@@ -48,6 +48,7 @@
 | `"button-text"`    | Exposes the button text for styling.                                                  |
 | `"caret"`          | Exposes the caret icon component for styling. Appears only on the disclosure variant. |
 | `"icon"`           | Exposes the icon component for styling.                                               |
+| `"loader-svg"`     | Exposes the loader SVG element for color customization. Appears only when loading.    |
 
 
 ## Dependencies

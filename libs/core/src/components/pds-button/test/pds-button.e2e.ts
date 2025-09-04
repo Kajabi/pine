@@ -20,7 +20,7 @@ describe('pds-button', () => {
 
     const elementForm = await page.find('form');
     const elementFormEvent = await elementForm.spyOnEvent('submit');
-    await page.evaluate(() => document.querySelector('pds-button').click());
+    await page.evaluate(() => document.querySelector('pds-button')!.click());
     await page.waitForChanges();
 
     // Confirm onClick has been called
@@ -40,15 +40,15 @@ describe('pds-button', () => {
 
     const elementForm = await page.find('form');
     const elementFormEvent = await elementForm.spyOnEvent('reset');
-    page.evaluate(() => document.querySelector('input').value = 'test');
-    await page.evaluate(() => document.querySelector('pds-button').click());
+    page.evaluate(() => (document.querySelector('input') as HTMLInputElement).value = 'test');
+    await page.evaluate(() => document.querySelector('pds-button')!.click());
     await page.waitForChanges();
 
     // Confirm form received reset event
     expect(elementFormEvent).toHaveReceivedEvent();
 
     // Confirm input value was reset
-    const updatedFormInputValue = await page.evaluate(() => document.querySelector('input').value);
+    const updatedFormInputValue = await page.evaluate(() => (document.querySelector('input') as HTMLInputElement).value);
     expect(updatedFormInputValue).toBe('');
   });
 
@@ -89,5 +89,86 @@ describe('pds-button', () => {
 
     expect(icon).toBeTruthy();
     expect(iconName).toBe(caretDown);
+  });
+
+  it('allows loader color customization via CSS parts', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <style>
+        .custom-loader::part(loader-svg) {
+          color: rgb(255, 0, 0) !important;
+        }
+      </style>
+      <pds-button class="custom-loader" loading="true">Loading Button</pds-button>
+    `);
+
+    const button = await page.find('pds-button');
+    expect(button).toHaveClass('hydrated');
+
+    // Wait for the component to fully render
+    await page.waitForChanges();
+
+    // Get the loader SVG element via the exported part
+    const svgColor = await page.evaluate(() => {
+      const button = document.querySelector('pds-button');
+      const loader = button?.shadowRoot?.querySelector('pds-loader');
+      const svg = loader?.shadowRoot?.querySelector('svg[part="loader-svg"]');
+      return svg ? window.getComputedStyle(svg).color : null;
+    });
+
+    expect(svgColor).toBe('rgb(255, 0, 0)');
+  });
+
+  it('exports loader-svg part when loading', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-button loading="true">Loading</pds-button>');
+
+    await page.waitForChanges();
+
+    const hasLoaderPart = await page.evaluate(() => {
+      const button = document.querySelector('pds-button');
+      const loader = button?.shadowRoot?.querySelector('pds-loader[exportparts]');
+      return loader ? loader.getAttribute('exportparts') === 'loader-svg' : false;
+    });
+
+    expect(hasLoaderPart).toBe(true);
+  });
+
+  it('loader color customization works with different button variants', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <style>
+        .custom-accent::part(loader-svg) {
+          color: rgb(0, 255, 0) !important;
+        }
+        .custom-danger::part(loader-svg) {
+          color: rgb(255, 165, 0) !important;
+        }
+      </style>
+      <pds-button class="custom-accent" variant="primary" loading="true">Accent Loader</pds-button>
+      <pds-button class="custom-danger" variant="secondary" loading="true">Danger Loader</pds-button>
+    `);
+
+    await page.waitForChanges();
+
+    const [accentColor, dangerColor] = await page.evaluate(() => {
+      const buttons = document.querySelectorAll('pds-button');
+      const colors: (string | null)[] = [];
+
+      buttons.forEach(button => {
+        const loader = button.shadowRoot?.querySelector('pds-loader');
+        const svg = loader?.shadowRoot?.querySelector('svg[part="loader-svg"]');
+        if (svg) {
+          colors.push(window.getComputedStyle(svg).color);
+        } else {
+          colors.push(null);
+        }
+      });
+
+      return colors;
+    });
+
+    expect(accentColor).toBe('rgb(0, 255, 0)');
+    expect(dangerColor).toBe('rgb(255, 165, 0)');
   });
 });
