@@ -24,10 +24,10 @@ Whether your trigger is text or an HTML element, it will be placed in the defaul
 <DocCanvas client:only
   mdxSource={{
     react: `
-      <PdsTooltip content="this is tooltip content" has-arrow="true" placement="bottom-start">
+      <PdsTooltip content="this is tooltip content" hasArrow="true" placement="bottom-start">
         text
       </PdsTooltip>
-      <PdsTooltip content="this is tooltip content" has-arrow="true" placement="right-start">
+      <PdsTooltip content="this is tooltip content" hasArrow="true" placement="right-start">
         <PdsButton variant="secondary">Button</pds-button>
       </PdsTooltip>
     `,
@@ -97,7 +97,7 @@ enable the `htmlContent` property and provide your element in the `content` slot
 </DocCanvas>
 
 ### Positioning
-Using the placement prop you can adjust where your tooltip will be displayed. The tooltip uses intelligent positioning that automatically flips to the opposite side when there's not enough space and shifts to stay within viewport bounds.
+Use the `placement` prop to control where the tooltip appears. It automatically flips when space is insufficient and shifts to stay within viewport bounds.
 
 #### Basic Positions
 <DocCanvas client:only
@@ -247,7 +247,7 @@ By default the arrow is visible but it can be hidden by disabling it when `has-a
 
 <DocCanvas client:only
   mdxSource={{
-    react: '<PdsTooltip content="this is tooltip content" has-arrow="false" placement="right">text</PdsTooltip>',
+    react: '<PdsTooltip content="this is tooltip content" hasArrow="false" placement="right">text</PdsTooltip>',
     webComponent: '<pds-tooltip content="this is tooltip content" has-arrow="false" placement="right">text</pds-tooltip>'
 }}>
   <pds-tooltip content="this is tooltip content" has-arrow="false" placement="right">text</pds-tooltip>
@@ -255,11 +255,11 @@ By default the arrow is visible but it can be hidden by disabling it when `has-a
 
 
 ### Width/Sizing
-The `max-width` prop allows for adjust the maximum width for the tooltip content. The default max width is 352px, but it can be customized as needed by passing a new pixel value.
+The `max-width` prop lets you adjust the maximum width of the tooltip content. The default is 352px, but you can pass a different pixel value.
 
 <DocCanvas client:only
   mdxSource={{
-    react: '<PdsTooltip content="This is long tooltip content to demonstrate how the max-width can be used to expand or narrow the width of the tooltip content to fit one\'s use case and content needs. This example uses 520px to create a bit more width for this amount of content." max-width="520px" placement="right">text</PdsTooltip>',
+    react: '<PdsTooltip content="This is long tooltip content to demonstrate how the max-width can be used to expand or narrow the width of the tooltip content to fit one\'s use case and content needs. This example uses 520px to create a bit more width for this amount of content." maxWidth="520px" placement="right">text</PdsTooltip>',
     webComponent: '<pds-tooltip content="This is long tooltip content to demonstrate how the max-width can be used to expand or narrow the width of the tooltip content to fit one\'s use case and content needs. This example uses 520px to create a bit more width for this amount of content." max-width="520px" placement="right">text</pds-tooltip>'
 }}>
   <pds-tooltip content="This is long tooltip content to demonstrate how the max-width can be used to expand or narrow the width of the tooltip content to fit one's use case and content needs. This example uses 520px to create a bit more width for this amount of content." max-width="520px" placement="right">text</pds-tooltip>

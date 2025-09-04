@@ -139,6 +139,10 @@ export class PdsTooltip {
     // Update portal class when opened state changes
     if (this.portalEl !== null) {
       this.portalEl.className = `pds-tooltip pds-tooltip--${this.resolvedPlacement} ${this.htmlContent ? 'pds-tooltip--has-html-content' : ''} ${this.opened ? 'pds-tooltip--is-open' : ''} ${this.hasArrow ? '' : 'pds-tooltip--no-arrow'}`;
+
+      // Update ARIA attributes to stay in sync with visual open state
+      this.portalEl.setAttribute('aria-hidden', this.opened ? 'false' : 'true');
+      this.portalEl.setAttribute('aria-live', this.opened ? 'polite' : 'off');
     }
   }
 
