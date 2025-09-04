@@ -192,6 +192,52 @@ The loading prop allows a `pds-button` to display a loading state.
   <pds-button variant="primary" loading="true">Loading</pds-button>
 </DocCanvas>
 
+#### Customizing Loader Color
+
+The loader color can be customized using CSS parts.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+    <style>{\`
+      .custom-loader-accent::part(loader-svg) {
+        color: var(--pine-color-accent);
+      }
+      .custom-loader-danger::part(loader-svg) {
+        color: var(--pine-color-danger);
+      }
+    \`}</style>
+
+    <PdsButton className="custom-loader-accent" variant="primary" loading="true">Accent Loader</PdsButton>
+    <PdsButton className="custom-loader-danger" variant="secondary" loading="true">Danger Loader</PdsButton>
+    `,
+    webComponent: `
+    <style>
+      .custom-loader-accent::part(loader-svg) {
+        color: var(--pine-color-accent);
+      }
+      .custom-loader-danger::part(loader-svg) {
+        color: var(--pine-color-danger);
+      }
+    </style>
+
+    <pds-button class="custom-loader-accent" variant="primary" loading="true">Accent Loader</pds-button>
+    <pds-button class="custom-loader-danger" variant="secondary" loading="true">Danger Loader</pds-button>
+    `
+}}>
+  <style>{`
+    .custom-loader-accent::part(loader-svg) {
+      color: var(--pine-color-accent);
+    }
+    .custom-loader-danger::part(loader-svg) {
+      color: var(--pine-color-danger);
+    }
+  `}</style>
+
+  <pds-button class="custom-loader-accent" variant="primary" loading="true">Accent Loader</pds-button>
+  <pds-button class="custom-loader-danger" variant="secondary" loading="true">Danger Loader</pds-button>
+</DocCanvas>
+
 ### Icon Only
 
 The icon-only prop allows a `pds-button` to display an icon only.

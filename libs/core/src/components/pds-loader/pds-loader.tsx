@@ -1,6 +1,7 @@
 import { Component, Host, h, Prop } from '@stencil/core';
 
 /**
+ * @part loader-svg - Exposes the spinner SVG element for color customization.
  * @slot label - Default slot for Loader label text.
  */
 
@@ -66,7 +67,7 @@ export class PdsLoader {
       <Host class={`pds-loader ${this.isLoading ? '' : 'pds-loader--hidden'}`} aria-hidden={!this.isLoading} aria-busy={this.isLoading} aria-live="polite">
         {this.variant === 'spinner' && (
           <div class="pds-loader--spinner">
-            <svg style={this.style()} viewBox="0 0 200 200" fill="none">
+            <svg style={this.style()} viewBox="0 0 200 200" fill="none" part="loader-svg">
               <defs>
                 <linearGradient id="spinner-secondHalf">
                   <stop offset="0%" stop-opacity="0" stop-color="currentColor" />

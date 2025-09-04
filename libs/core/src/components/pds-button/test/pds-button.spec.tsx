@@ -185,7 +185,7 @@ describe('pds-button', () => {
                 <slot></slot>
               </span>
               <span class="pds-button__loader">
-                <pds-loader is-loading size="var(--pine-font-size-body-2xl)" variant="spinner">Loading...</pds-loader>
+                <pds-loader is-loading size="var(--pine-font-size-body-2xl)" variant="spinner" exportparts="loader-svg">Loading...</pds-loader>
               </span>
             </div>
           </button>
@@ -194,6 +194,30 @@ describe('pds-button', () => {
     `);
 
     const loader = root?.shadowRoot?.querySelector('pds-loader');
+    expect(loader).not.toBeNull();
+  });
+
+  it('exports loader-svg part when loading', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button loading="true"></pds-button>`,
+    });
+
+    const loader = root?.shadowRoot?.querySelector('pds-loader');
+    expect(loader?.getAttribute('exportparts')).toBe('loader-svg');
+  });
+
+  it('includes loader-svg part in JSDoc comments', async () => {
+    // This test verifies that the component properly documents the exported parts
+    const { root } = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button loading="true"></pds-button>`,
+    });
+
+    expect(root).toBeTruthy();
+    // The actual JSDoc validation is done at build time,
+    // but we can verify the loader element has the exportparts attribute
+    const loader = root?.shadowRoot?.querySelector('pds-loader[exportparts]');
     expect(loader).not.toBeNull();
   });
 

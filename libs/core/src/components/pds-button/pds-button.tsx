@@ -9,6 +9,7 @@ import { caretDown } from '@pine-ds/icons/icons';
  * @part button-text - Exposes the button text for styling.
  * @part caret - Exposes the caret icon component for styling. Appears only on the disclosure variant.
  * @part icon - Exposes the icon component for styling.
+ * @part loader-svg - Exposes the loader SVG element for color customization. Appears only when loading.
  * @slot (default) - Button text.
  * @slot start - Content to display before the button text.
  * @slot end - Content to display after the button text.
@@ -217,7 +218,7 @@ export class PdsButton {
 
         {this.loading && (
           <span class="pds-button__loader">
-            <pds-loader is-loading={true} size="var(--pine-font-size-body-2xl)" variant="spinner">
+            <pds-loader is-loading={true} size="var(--pine-font-size-body-2xl)" variant="spinner" exportparts="loader-svg">
               Loading...
             </pds-loader>
           </span>
