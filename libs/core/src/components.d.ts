@@ -1383,7 +1383,7 @@ export namespace Components {
           * Determines whether or not the tooltip has an arrow
           * @defaultValue true
          */
-        "hasArrow"?: boolean;
+        "hasArrow": boolean;
         /**
           * Hides the tooltip by disabling the opened property
          */

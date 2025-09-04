@@ -34,18 +34,12 @@ export class PdsTooltip {
   private slotMutationObserver: MutationObserver | null = null;
   private overlayResizeObserver: ResizeObserver | null = null;
   private currentPathname: string = '';
-  private pathnameCheckInterval: NodeJS.Timeout | null = null;
+  private pathnameCheckInterval: ReturnType<typeof setInterval> | null = null;
 
   /**
    * Reference to the Host element
    */
   @Element() el: HTMLPdsTooltipElement;
-
-  /**
-   * Determines when the tooltip is open
-   * @defaultValue false
-   */
-  @State() isOpen = false;
 
   /**
    * Content for the tooltip. If HTML is required, use the content slot
@@ -61,7 +55,7 @@ export class PdsTooltip {
    * Determines whether or not the tooltip has an arrow
    * @defaultValue true
    */
-  @Prop() hasArrow? = true;
+  @Prop() hasArrow = true;
 
   /**
    * Enable this option when using the content slot
