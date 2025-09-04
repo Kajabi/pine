@@ -212,14 +212,14 @@ The loader color can be customized using CSS parts.
     <PdsButton className="custom-loader-danger" variant="secondary" loading="true">Danger Loader</PdsButton>
     `,
     webComponent: `
-    <style>{\`
+    <style>
       .custom-loader-accent::part(loader-svg) {
         color: var(--pine-color-accent);
       }
       .custom-loader-danger::part(loader-svg) {
         color: var(--pine-color-danger);
       }
-    \`}</style>
+    </style>
 
     <pds-button class="custom-loader-accent" variant="primary" loading="true">Accent Loader</pds-button>
     <pds-button class="custom-loader-danger" variant="secondary" loading="true">Danger Loader</pds-button>

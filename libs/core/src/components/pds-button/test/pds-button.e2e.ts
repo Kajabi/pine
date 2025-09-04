@@ -40,7 +40,7 @@ describe('pds-button', () => {
 
     const elementForm = await page.find('form');
     const elementFormEvent = await elementForm.spyOnEvent('reset');
-    page.evaluate(() => (document.querySelector('input') as HTMLInputElement).value = 'test');
+    await page.evaluate(() => (document.querySelector('input') as HTMLInputElement).value = 'test');
     await page.evaluate(() => document.querySelector('pds-button')!.click());
     await page.waitForChanges();
 
