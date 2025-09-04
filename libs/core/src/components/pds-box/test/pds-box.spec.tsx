@@ -613,25 +613,36 @@ describe('pds-box', () => {
     expect(element).toHaveClass('pds-box');
   });
 
-  it('renders wrap class when prop is set', async () => {
+  it('renders wrap class when prop is set to true', async () => {
     const page = await newSpecPage({
       components: [PdsBox],
-      html: `<pds-box wrap="wrap"></pds-box>`,
+      html: `<pds-box wrap="true"></pds-box>`,
     });
 
     const element = page.root;
 
-    expect(element).toHaveClass('pds-box--wrap-wrap');
+    expect(element).toHaveClass('pds-box--wrap');
   });
 
-  it('renders nowrap class when prop is set', async () => {
+  it('does not render wrap class when prop is set to false', async () => {
     const page = await newSpecPage({
       components: [PdsBox],
-      html: `<pds-box wrap="nowrap"></pds-box>`,
+      html: `<pds-box wrap="false"></pds-box>`,
     });
 
     const element = page.root;
 
-    expect(element).toHaveClass('pds-box--wrap-nowrap');
+    expect(element).not.toHaveClass('pds-box--wrap');
+  });
+
+  it('does not render wrap class when prop is not set', async () => {
+    const page = await newSpecPage({
+      components: [PdsBox],
+      html: `<pds-box></pds-box>`,
+    });
+
+    const element = page.root;
+
+    expect(element).not.toHaveClass('pds-box--wrap');
   });
 });

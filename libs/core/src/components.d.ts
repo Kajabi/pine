@@ -292,9 +292,9 @@ export namespace Components {
         "sizeXs"?: BoxColumnType;
         /**
           * Defines whether flex items are forced onto one line or can wrap onto multiple lines.
-          * @defaultValue nowrap
+          * @defaultValue false
          */
-        "wrap"?: `nowrap` | `wrap`;
+        "wrap"?: boolean;
     }
     interface PdsButton {
         /**
@@ -2357,9 +2357,9 @@ declare namespace LocalJSX {
         "sizeXs"?: BoxColumnType;
         /**
           * Defines whether flex items are forced onto one line or can wrap onto multiple lines.
-          * @defaultValue nowrap
+          * @defaultValue false
          */
-        "wrap"?: `nowrap` | `wrap`;
+        "wrap"?: boolean;
     }
     interface PdsButton {
         /**

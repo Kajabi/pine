@@ -568,11 +568,7 @@ $pine-spacing-tokens: (
 }
 
 // Flex Wrap helpers
-.pds-box--wrap-nowrap {
-  flex-wrap: nowrap;
-}
-
-.pds-box--wrap-wrap {
+.pds-box--wrap {
   flex-wrap: wrap;
 }
 
