@@ -22,6 +22,13 @@
 | `"label"` | Default slot for Loader label text. |
 
 
+## Shadow Parts
+
+| Part           | Description                                              |
+| -------------- | -------------------------------------------------------- |
+| `"loader-svg"` | Exposes the spinner SVG element for color customization. |
+
+
 ## Dependencies
 
 ### Used by
