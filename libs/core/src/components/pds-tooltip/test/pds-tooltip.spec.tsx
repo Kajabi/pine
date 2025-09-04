@@ -111,7 +111,7 @@ describe('pds-tooltip', () => {
     expect(tooltipPortal).toHaveClass('pds-tooltip--is-open');
   });
 
-  it('should show the tooltip on focus', async () => {
+  it('should show the tooltip on focusin', async () => {
     const page = await newSpecPage({
       components: [PdsTooltip],
       html: `
@@ -121,7 +121,7 @@ describe('pds-tooltip', () => {
     });
 
     const triggerElement = page.root?.querySelector('.pds-tooltip__trigger');
-    triggerElement?.dispatchEvent(new FocusEvent('focus'));
+    triggerElement?.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
     await page.waitForChanges();
 
     const tooltipPortal = page.body.querySelector('.pds-tooltip');
@@ -129,7 +129,7 @@ describe('pds-tooltip', () => {
     expect(tooltipPortal).toHaveClass('pds-tooltip--is-open');
   });
 
-  it('should hide the tooltip on blur', async () => {
+  it('should hide the tooltip on focusout', async () => {
     const page = await newSpecPage({
       components: [PdsTooltip],
       html: `
@@ -139,14 +139,14 @@ describe('pds-tooltip', () => {
     });
 
     const triggerElement = page.root?.querySelector('.pds-tooltip__trigger');
-    triggerElement?.dispatchEvent(new FocusEvent('focus'));
+    triggerElement?.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
     await page.waitForChanges();
 
     let tooltipPortal = page.body.querySelector('.pds-tooltip');
     expect(tooltipPortal).not.toBeNull();
     expect(tooltipPortal).toHaveClass('pds-tooltip--is-open');
 
-    triggerElement?.dispatchEvent(new FocusEvent('blur'));
+    triggerElement?.dispatchEvent(new FocusEvent('focusout', { bubbles: true }));
     await page.waitForChanges();
 
     tooltipPortal = page.body.querySelector('.pds-tooltip');

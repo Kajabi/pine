@@ -110,13 +110,23 @@ export class PdsTooltip {
       this.slotMutationObserver.observe(contentSlotWrapper, { childList: true, subtree: false });
     }
 
-    return () => {
-      window.removeEventListener('pageshow', this.handlePageShow);
+    // no return; Stencil ignores teardown functions here
+  }
 
-      if (this.slotMutationObserver !== null) {
-        this.slotMutationObserver.disconnect();
-      }
-    };
+  disconnectedCallback() {
+    window.removeEventListener('pageshow', this.handlePageShow);
+    if (this.slotMutationObserver !== null) {
+      this.slotMutationObserver.disconnect();
+      this.slotMutationObserver = null;
+    }
+    // Ensure global listeners/intervals are removed if still present
+    if (this.portalEl !== null) {
+      this.removePortal();
+    }
+    if (this.pathnameCheckInterval !== null) {
+      clearInterval(this.pathnameCheckInterval);
+      this.pathnameCheckInterval = null;
+    }
   }
 
   componentDidRender() {
@@ -277,7 +287,9 @@ export class PdsTooltip {
     this.portalEl.style.zIndex = '9999';
 
     if (this.portalEl.id === '') {
-      this.portalEl.id = this.componentId || this.el.id || `pds-tooltip-portal-${PdsTooltip.instanceCounter++}`;
+      const suffix = PdsTooltip.instanceCounter++;
+      const baseId = this.componentId || this.el.id || 'pds-tooltip';
+      this.portalEl.id = `${baseId}-portal-${suffix}`;
     }
 
     if (this.portalEl.getAttribute('id') !== this.portalEl.id) {
@@ -293,7 +305,6 @@ export class PdsTooltip {
     this.contentDiv.className = 'pds-tooltip__content';
     this.contentDiv.setAttribute('aria-hidden', this.opened ? 'false' : 'true');
     this.contentDiv.setAttribute('aria-live', this.opened ? 'polite' : 'off');
-    this.contentDiv.setAttribute('role', 'tooltip');
 
     const contentSlotWrapper = this.el.querySelector('.pds-tooltip__content-slot-wrapper');
     const slottedContentContainer = contentSlotWrapper?.querySelector('[slot="content"]') as HTMLElement | null;
@@ -319,10 +330,8 @@ export class PdsTooltip {
       }
     }
 
-    if (!hasSlottedContent) {
-      if (this.content !== '') {
-        this.contentDiv.textContent = this.content;
-      }
+    if (!hasSlottedContent && typeof this.content === 'string' && this.content.trim() !== '') {
+      this.contentDiv.textContent = this.content;
     }
 
     this.portalEl.appendChild(this.contentDiv);
@@ -371,7 +380,17 @@ export class PdsTooltip {
       window.removeEventListener('scroll', this.handleScroll, true);
       window.removeEventListener('popstate', this.handleSpaNavigation, true);
       window.removeEventListener('hashchange', this.handleSpaNavigation, true);
-      document.body.removeChild(this.portalEl);
+
+      // Safely remove portal from DOM
+      try {
+        if (this.portalEl.parentNode) {
+          this.portalEl.parentNode.removeChild(this.portalEl);
+        }
+      } catch (error) {
+        // Portal might have already been removed by test cleanup
+        console.warn('Portal element could not be removed from DOM:', error);
+      }
+
       this.portalEl = null;
     }
 
@@ -391,8 +410,9 @@ export class PdsTooltip {
           class="pds-tooltip__trigger"
           onMouseEnter={this.handleShow}
           onMouseLeave={this.handleHide}
-          onFocus={this.handleShow}
-          onBlur={this.handleHide}
+          /* focusin/out bubble; ensure keyboard users see tooltips */
+          onFocusin={this.handleShow as any}
+          onFocusout={this.handleHide as any}
           ref={el => this.triggerEl = el}
         >
           <slot />
