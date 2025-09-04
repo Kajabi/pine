@@ -1,5 +1,12 @@
 import { Component, Element, Host, Prop, State, h, Method, Watch } from '@stencil/core';
-import { positionTooltip } from '../../utils/overlay';
+import { PlacementType } from '@utils/types';
+import {
+  autoUpdate,
+  computePosition,
+  flip,
+  offset,
+  shift,
+} from '@floating-ui/dom';
 
 /**
  * @slot (default) - The tooltip's target element
@@ -22,23 +29,18 @@ export class PdsTooltip {
   @State() private _isInteractiveOpen = false;
 
   private portalEl: HTMLElement | null = null;
+  private resolvedPlacement: PlacementType = 'right';
   private triggerEl: HTMLElement | null = null;
   private contentDiv: HTMLElement | null = null;
   private slotMutationObserver: MutationObserver | null = null;
-  private overlayResizeObserver: ResizeObserver | null = null;
   private currentPathname: string = '';
-  private pathnameCheckInterval: NodeJS.Timeout | null = null;
+  private pathnameCheckInterval: ReturnType<typeof setInterval> | null = null;
+  private stopAutoUpdate: (() => void) | null = null;
 
   /**
    * Reference to the Host element
    */
   @Element() el: HTMLPdsTooltipElement;
-
-  /**
-   * Determines when the tooltip is open
-   * @defaultValue false
-   */
-  @State() isOpen = false;
 
   /**
    * Content for the tooltip. If HTML is required, use the content slot
@@ -54,7 +56,7 @@ export class PdsTooltip {
    * Determines whether or not the tooltip has an arrow
    * @defaultValue true
    */
-  @Prop() hasArrow? = true;
+  @Prop() hasArrow = true;
 
   /**
    * Enable this option when using the content slot
@@ -66,19 +68,7 @@ export class PdsTooltip {
    * Determines the preferred position of the tooltip
    * @defaultValue "right"
    */
-  @Prop({ reflect: true }) placement:
-    'top'
-    | 'top-start'
-    | 'top-end'
-    | 'right'
-    | 'right-start'
-    | 'right-end'
-    | 'bottom'
-    | 'bottom-start'
-    | 'bottom-end'
-    | 'left'
-    | 'left-start'
-    | 'left-end' = 'right';
+  @Prop({ reflect: true }) placement: PlacementType = 'right';
 
   /**
    * Sets the maximum width of the tooltip content
@@ -102,6 +92,7 @@ export class PdsTooltip {
 
   componentWillLoad() {
     this._isInteractiveOpen = false;
+    this.resolvedPlacement = this.placement;
   }
 
   componentDidLoad() {
@@ -120,13 +111,28 @@ export class PdsTooltip {
       this.slotMutationObserver.observe(contentSlotWrapper, { childList: true, subtree: false });
     }
 
-    return () => {
-      window.removeEventListener('pageshow', this.handlePageShow);
+    // no return; Stencil ignores teardown functions here
+  }
 
-      if (this.slotMutationObserver !== null) {
-        this.slotMutationObserver.disconnect();
-      }
-    };
+  disconnectedCallback() {
+    window.removeEventListener('pageshow', this.handlePageShow);
+    if (this.slotMutationObserver !== null) {
+      this.slotMutationObserver.disconnect();
+      this.slotMutationObserver = null;
+    }
+    // Ensure global listeners/intervals are removed if still present
+    if (this.portalEl !== null) {
+      this.removePortal();
+    }
+    if (this.pathnameCheckInterval !== null) {
+      clearInterval(this.pathnameCheckInterval);
+      this.pathnameCheckInterval = null;
+    }
+    // Ensure autoUpdate is stopped if still present
+    if (this.stopAutoUpdate !== null) {
+      this.stopAutoUpdate();
+      this.stopAutoUpdate = null;
+    }
   }
 
   componentDidRender() {
@@ -134,6 +140,15 @@ export class PdsTooltip {
       this.createPortal();
     } else if (!this.opened && this.portalEl !== null) {
       this.removePortal();
+    }
+
+    // Update portal class when opened state changes
+    if (this.portalEl !== null) {
+      this.portalEl.className = `pds-tooltip pds-tooltip--${this.resolvedPlacement} ${this.htmlContent ? 'pds-tooltip--has-html-content' : ''} ${this.opened ? 'pds-tooltip--is-open' : ''} ${this.hasArrow ? '' : 'pds-tooltip--no-arrow'}`;
+
+      // Update ARIA attributes to stay in sync with visual open state
+      this.portalEl.setAttribute('aria-hidden', this.opened ? 'false' : 'true');
+      this.portalEl.setAttribute('aria-live', this.opened ? 'polite' : 'off');
     }
   }
 
@@ -180,16 +195,6 @@ export class PdsTooltip {
     this._isInteractiveOpen = false;
   };
 
-  private handleScroll = () => {
-    if (this.opened) {
-      if (!this._isInteractiveOpen) {
-        this.repositionPortal();
-      } else {
-        this.hideTooltip();
-        this._isInteractiveOpen = false;
-      }
-    }
-  };
 
   private handleSpaNavigation = () => {
     if (this.opened && !this._isInteractiveOpen) {
@@ -235,42 +240,38 @@ export class PdsTooltip {
   }
 
   /**
-   * Centralized method to calculate and apply the tooltip's position.
-   * Uses the determined anchor element and the current content dimensions.
+   * Centralized method to calculate and apply the tooltip's position using floating UI.
+   * Uses the determined anchor element and applies computePosition with flip, offset, and shift.
    */
-  private repositionPortal() {
+  private async repositionPortal() {
     const anchor = this.determinePositioningAnchor();
 
-    if (anchor !== null && this.contentDiv !== null) {
-      positionTooltip({ elem: anchor, elemPlacement: this.placement, overlay: this.contentDiv });
-      const placementParts = this.placement.split('-');
-      const primaryPlacement = placementParts[0];
-      const isCardinalCenterPlacement = placementParts.length === 1;
+    if (anchor !== null && this.portalEl !== null) {
+      try {
+        const { x, y, placement: computedPlacement } = await computePosition(anchor, this.portalEl, {
+          placement: this.placement,
+          strategy: 'fixed',
+          middleware: [offset(8), flip(), shift({ padding: 5 })],
+        });
 
-      if (isCardinalCenterPlacement) {
+        this.resolvedPlacement = computedPlacement as PlacementType;
+
+        Object.assign(this.portalEl.style, {
+          left: `${x}px`,
+          top: `${y}px`,
+          position: 'fixed',
+        });
+
+        // Update CSS classes to match the resolved placement
+        this.portalEl.className = `pds-tooltip pds-tooltip--${this.resolvedPlacement} ${this.htmlContent ? 'pds-tooltip--has-html-content' : ''} ${this.opened ? 'pds-tooltip--is-open' : ''} ${this.hasArrow ? '' : 'pds-tooltip--no-arrow'}`;
+      } catch (error) {
+        console.warn('Failed to position tooltip:', error);
+        this.resolvedPlacement = this.placement; // Fallback to requested placement
+        // Fallback to basic positioning if floating UI fails
         const anchorRect = anchor.getBoundingClientRect();
-        const overlayRect = this.contentDiv.getBoundingClientRect();
-
-        if (primaryPlacement === 'left' || primaryPlacement === 'right') {
-          const currentOverlayTop = parseFloat(this.contentDiv.style.top || '0');
-          const anchorCenterY = anchorRect.top + (anchorRect.height / 2);
-          const overlayCenterY = overlayRect.top + (overlayRect.height / 2);
-          const adjustmentY = anchorCenterY - overlayCenterY;
-
-          if (Math.abs(adjustmentY) > 0.5) {
-            this.contentDiv.style.top = `${currentOverlayTop + adjustmentY}px`;
-          }
-
-        } else if (primaryPlacement === 'top' || primaryPlacement === 'bottom') {
-          const currentOverlayLeft = parseFloat(this.contentDiv.style.left || '0');
-          const anchorCenterX = anchorRect.left + (anchorRect.width / 2);
-          const overlayCenterX = overlayRect.left + (overlayRect.width / 2);
-          const adjustmentX = anchorCenterX - overlayCenterX;
-
-          if (Math.abs(adjustmentX) > 0.5) {
-            this.contentDiv.style.left = `${currentOverlayLeft + adjustmentX}px`;
-          }
-        }
+        this.portalEl.style.left = `${anchorRect.right + 8}px`;
+        this.portalEl.style.top = `${anchorRect.top}px`;
+        this.portalEl.style.position = 'fixed';
       }
     }
   }
@@ -279,12 +280,14 @@ export class PdsTooltip {
     if (this.portalEl !== null) return;
 
     this.portalEl = document.createElement('div');
-    this.portalEl.className = `pds-tooltip pds-tooltip--${this.placement} ${this.htmlContent ? 'pds-tooltip--has-html-content' : ''} ${this.opened ? 'pds-tooltip--is-open' : ''} ${this.hasArrow ? '' : 'pds-tooltip--no-arrow'}`;
+    this.portalEl.className = `pds-tooltip pds-tooltip--${this.resolvedPlacement} ${this.htmlContent ? 'pds-tooltip--has-html-content' : ''} ${this.opened ? 'pds-tooltip--is-open' : ''} ${this.hasArrow ? '' : 'pds-tooltip--no-arrow'}`;
     this.portalEl.style.position = 'fixed';
     this.portalEl.style.zIndex = '9999';
 
     if (this.portalEl.id === '') {
-      this.portalEl.id = this.componentId || this.el.id || `pds-tooltip-portal-${PdsTooltip.instanceCounter++}`;
+      const suffix = PdsTooltip.instanceCounter++;
+      const baseId = this.componentId || this.el.id || 'pds-tooltip';
+      this.portalEl.id = `${baseId}-portal-${suffix}`;
     }
 
     if (this.portalEl.getAttribute('id') !== this.portalEl.id) {
@@ -300,8 +303,6 @@ export class PdsTooltip {
     this.contentDiv.className = 'pds-tooltip__content';
     this.contentDiv.setAttribute('aria-hidden', this.opened ? 'false' : 'true');
     this.contentDiv.setAttribute('aria-live', this.opened ? 'polite' : 'off');
-    this.contentDiv.setAttribute('role', 'tooltip');
-    this.contentDiv.style.maxWidth = this.maxWidth;
 
     const contentSlotWrapper = this.el.querySelector('.pds-tooltip__content-slot-wrapper');
     const slottedContentContainer = contentSlotWrapper?.querySelector('[slot="content"]') as HTMLElement | null;
@@ -327,26 +328,31 @@ export class PdsTooltip {
       }
     }
 
-    if (!hasSlottedContent) {
-      if (this.content !== '') {
-        this.contentDiv.textContent = this.content;
-      }
+    if (!hasSlottedContent && typeof this.content === 'string' && this.content.trim() !== '') {
+      this.contentDiv.textContent = this.content;
     }
 
     this.portalEl.appendChild(this.contentDiv);
     document.body.appendChild(this.portalEl);
 
-    this.repositionPortal();
+    this.repositionPortal().catch(error => {
+      console.warn('Failed to position tooltip on creation:', error);
+    });
 
-    if (this.contentDiv !== null) {
-      this.overlayResizeObserver = new ResizeObserver(() => {
-        this.repositionPortal();
-      });
-      this.overlayResizeObserver.observe(this.contentDiv);
+    // Use Floating UI's autoUpdate to handle scroll/resize automatically
+    if (this.triggerEl && this.portalEl) {
+      this.stopAutoUpdate = autoUpdate(
+        this.triggerEl,
+        this.portalEl,
+        () => {
+          this.repositionPortal().catch(error => {
+            console.warn('Failed to reposition tooltip on auto update:', error);
+          });
+        }
+      );
     }
 
-    // Add global listeners when portal is created
-    window.addEventListener('scroll', this.handleScroll, true);
+    // Keep only SPA navigation listeners (not handled by autoUpdate)
     window.addEventListener('popstate', this.handleSpaNavigation, true);
     window.addEventListener('hashchange', this.handleSpaNavigation, true);
 
@@ -360,9 +366,10 @@ export class PdsTooltip {
   }
 
   private removePortal() {
-    if (this.overlayResizeObserver !== null && this.contentDiv !== null) {
-      this.overlayResizeObserver.unobserve(this.contentDiv);
-      this.overlayResizeObserver = null;
+    // Stop Floating UI's autoUpdate
+    if (this.stopAutoUpdate !== null) {
+      this.stopAutoUpdate();
+      this.stopAutoUpdate = null;
     }
 
     // Stop pathname change detection
@@ -372,10 +379,20 @@ export class PdsTooltip {
     }
 
     if (this.portalEl !== null) {
-      window.removeEventListener('scroll', this.handleScroll, true);
+      // Remove only SPA navigation listeners (scroll/resize handled by autoUpdate)
       window.removeEventListener('popstate', this.handleSpaNavigation, true);
       window.removeEventListener('hashchange', this.handleSpaNavigation, true);
-      document.body.removeChild(this.portalEl);
+
+      // Safely remove portal from DOM
+      try {
+        if (this.portalEl.parentNode) {
+          this.portalEl.parentNode.removeChild(this.portalEl);
+        }
+      } catch (error) {
+        // Portal might have already been removed by test cleanup
+        console.warn('Portal element could not be removed from DOM:', error);
+      }
+
       this.portalEl = null;
     }
 
@@ -395,13 +412,14 @@ export class PdsTooltip {
           class="pds-tooltip__trigger"
           onMouseEnter={this.handleShow}
           onMouseLeave={this.handleHide}
-          onFocus={this.handleShow}
-          onBlur={this.handleHide}
+          /* focusin/out bubble; ensure keyboard users see tooltips */
+          onFocusin={this.handleShow as any}
+          onFocusout={this.handleHide as any}
           ref={el => this.triggerEl = el}
         >
           <slot />
         </span>
-        <div class="pds-tooltip__content-slot-wrapper" style={{ display: 'none' }}>
+        <div class="pds-tooltip__content-slot-wrapper" hidden>
           <slot name="content"></slot>
         </div>
       </Host>
