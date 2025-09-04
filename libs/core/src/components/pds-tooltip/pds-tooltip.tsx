@@ -1,6 +1,7 @@
 import { Component, Element, Host, Prop, State, h, Method, Watch } from '@stencil/core';
 import { PlacementType } from '@utils/types';
 import {
+  autoUpdate,
   computePosition,
   flip,
   offset,
@@ -32,9 +33,9 @@ export class PdsTooltip {
   private triggerEl: HTMLElement | null = null;
   private contentDiv: HTMLElement | null = null;
   private slotMutationObserver: MutationObserver | null = null;
-  private overlayResizeObserver: ResizeObserver | null = null;
   private currentPathname: string = '';
   private pathnameCheckInterval: ReturnType<typeof setInterval> | null = null;
+  private stopAutoUpdate: (() => void) | null = null;
 
   /**
    * Reference to the Host element
@@ -127,6 +128,11 @@ export class PdsTooltip {
       clearInterval(this.pathnameCheckInterval);
       this.pathnameCheckInterval = null;
     }
+    // Ensure autoUpdate is stopped if still present
+    if (this.stopAutoUpdate !== null) {
+      this.stopAutoUpdate();
+      this.stopAutoUpdate = null;
+    }
   }
 
   componentDidRender() {
@@ -189,18 +195,6 @@ export class PdsTooltip {
     this._isInteractiveOpen = false;
   };
 
-  private handleScroll = () => {
-    if (this.opened) {
-      if (!this._isInteractiveOpen) {
-        this.repositionPortal().catch(error => {
-          console.warn('Failed to reposition tooltip on scroll:', error);
-        });
-      } else {
-        this.hideTooltip();
-        this._isInteractiveOpen = false;
-      }
-    }
-  };
 
   private handleSpaNavigation = () => {
     if (this.opened && !this._isInteractiveOpen) {
@@ -345,17 +339,20 @@ export class PdsTooltip {
       console.warn('Failed to position tooltip on creation:', error);
     });
 
-    if (this.portalEl !== null) {
-      this.overlayResizeObserver = new ResizeObserver(() => {
-        this.repositionPortal().catch(error => {
-          console.warn('Failed to reposition tooltip on resize:', error);
-        });
-      });
-      this.overlayResizeObserver.observe(this.portalEl);
+    // Use Floating UI's autoUpdate to handle scroll/resize automatically
+    if (this.triggerEl && this.portalEl) {
+      this.stopAutoUpdate = autoUpdate(
+        this.triggerEl,
+        this.portalEl,
+        () => {
+          this.repositionPortal().catch(error => {
+            console.warn('Failed to reposition tooltip on auto update:', error);
+          });
+        }
+      );
     }
 
-    // Add global listeners when portal is created
-    window.addEventListener('scroll', this.handleScroll, true);
+    // Keep only SPA navigation listeners (not handled by autoUpdate)
     window.addEventListener('popstate', this.handleSpaNavigation, true);
     window.addEventListener('hashchange', this.handleSpaNavigation, true);
 
@@ -369,9 +366,10 @@ export class PdsTooltip {
   }
 
   private removePortal() {
-    if (this.overlayResizeObserver !== null && this.portalEl !== null) {
-      this.overlayResizeObserver.unobserve(this.portalEl);
-      this.overlayResizeObserver = null;
+    // Stop Floating UI's autoUpdate
+    if (this.stopAutoUpdate !== null) {
+      this.stopAutoUpdate();
+      this.stopAutoUpdate = null;
     }
 
     // Stop pathname change detection
@@ -381,7 +379,7 @@ export class PdsTooltip {
     }
 
     if (this.portalEl !== null) {
-      window.removeEventListener('scroll', this.handleScroll, true);
+      // Remove only SPA navigation listeners (scroll/resize handled by autoUpdate)
       window.removeEventListener('popstate', this.handleSpaNavigation, true);
       window.removeEventListener('hashchange', this.handleSpaNavigation, true);
 

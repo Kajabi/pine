@@ -353,35 +353,6 @@ describe('pds-tooltip', () => {
     }
   });
 
-  it('should handle window scroll events properly', async () => {
-    const page = await newSpecPage({
-      components: [PdsTooltip],
-      html: `
-        <pds-tooltip content="Window Events Test">
-          <button>Trigger</button>
-        </pds-tooltip>`,
-    });
-
-    await page.waitForChanges();
-
-    const tooltipInstance = page.rootInstance;
-
-    // Spy on hideTooltip method
-    const hideTooltipSpy = jest.spyOn(tooltipInstance, 'hideTooltip');
-
-    // Set up the necessary state for handleScroll to call hideTooltip
-    tooltipInstance.opened = true;
-    tooltipInstance._isInteractiveOpen = true;
-
-    // Call the handler directly
-    tooltipInstance.handleScroll();
-
-    // Verify hideTooltip was called
-    expect(hideTooltipSpy).toHaveBeenCalled();
-
-    // Clean up
-    hideTooltipSpy.mockRestore();
-  });
 
   it('should handle interactive vs programmatic opening', async () => {
     const page = await newSpecPage({
