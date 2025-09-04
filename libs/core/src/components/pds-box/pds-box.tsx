@@ -70,6 +70,12 @@ export class PdsBox {
   @Prop() gap?: BoxTShirtSizeType;
 
   /**
+   * Defines whether flex items are forced onto one line or can wrap onto multiple lines.
+   * @defaultValue false
+   */
+  @Prop() wrap?: boolean;
+
+  /**
    * Defines how a box will grow or shrink to fit the space available in its container.
    * Can be a predefined value ('none', 'grow', 'shrink') or a custom flex value (e.g., '1', '0 1 auto').
    * @defaultValue none
@@ -226,6 +232,7 @@ export class PdsBox {
     ${this.display !== undefined && this.display.trim() !== '' ? `pds-box--display-${this.display}` : ''}
     ${this.fit ? 'pds-box--fit' : ''}
     ${this.gap !== undefined && this.gap.trim() !== '' ? `pds-box-gap-${this.gap}` : ''}
+    ${this.wrap ? 'pds-box--wrap' : ''}
     ${this.flex !== undefined && this.flex.trim() !== '' && ['none', 'grow', 'shrink'].includes(this.flex) ? `pds-box--flex-${this.flex}` : ''}
     ${this.justifyContent !== undefined && this.justifyContent.trim() !== '' ? `pds-justify-content-${this.justifyContent}` : ''}
     ${this.marginBlockStart !== undefined && this.marginBlockStart.trim() !== '' ? `pds-margin-block-start-${this.marginBlockStart}` : ''}

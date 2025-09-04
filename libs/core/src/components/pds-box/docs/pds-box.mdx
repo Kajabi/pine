@@ -452,6 +452,64 @@ Common custom flex patterns:
 </pds-box>
 ```
 
+### Wrap
+Control whether flex items wrap to new lines when they don't fit in the container:
+
+#### Wrap Options
+- `false` (default): Items stay on one line and may overflow (equivalent to `flex-wrap: nowrap`)
+- `true`: Items wrap to new lines as needed (equivalent to `flex-wrap: wrap`)
+
+#### No Wrap (default)
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+  <PdsBox wrap={false} gap="sm" min-width="250px">
+    <PdsBox border="true" padding="sm">Long Item 1</PdsBox>
+    <PdsBox border="true" padding="sm">Long Item 2</PdsBox>
+    <PdsBox border="true" padding="sm">Long Item 3</PdsBox>
+  </PdsBox>
+`,
+    webComponent: `<pds-box wrap="false" gap="sm" min-width="250px">
+    <pds-box border="true" padding="sm">Long Item 1</pds-box>
+    <pds-box border="true" padding="sm">Long Item 2</pds-box>
+    <pds-box border="true" padding="sm">Long Item 3</pds-box>
+  </pds-box>`
+}}>
+  <pds-box wrap="false" gap="sm" min-width="250px">
+    <pds-box border="true" padding="sm">Long Item 1</pds-box>
+    <pds-box border="true" padding="sm">Long Item 2</pds-box>
+    <pds-box border="true" padding="sm">Long Item 3</pds-box>
+  </pds-box>
+</DocCanvas>
+
+#### Wrap
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsBox wrap={true} gap="sm" min-width="300px">
+  <PdsBox border="true" padding="sm">Item 1</PdsBox>
+  <PdsBox border="true" padding="sm">Item 2</PdsBox>
+  <PdsBox border="true" padding="sm">Item 3</PdsBox>
+  <PdsBox border="true" padding="sm">Item 4</PdsBox>
+  <PdsBox border="true" padding="sm">Item 5</PdsBox>
+</PdsBox>`,
+    webComponent: `<pds-box wrap="true" gap="sm" min-width="300px">
+  <pds-box border="true" padding="sm">Item 1</pds-box>
+  <pds-box border="true" padding="sm">Item 2</pds-box>
+  <pds-box border="true" padding="sm">Item 3</pds-box>
+  <pds-box border="true" padding="sm">Item 4</pds-box>
+  <pds-box border="true" padding="sm">Item 5</pds-box>
+</pds-box>`
+}}>
+  <pds-box wrap="true" gap="sm" min-width="300px" >
+    <pds-box border="true" padding="sm">Item 1</pds-box>
+    <pds-box border="true" padding="sm">Item 2</pds-box>
+    <pds-box border="true" padding="sm">Item 3</pds-box>
+    <pds-box border="true" padding="sm">Item 4</pds-box>
+    <pds-box border="true" padding="sm">Item 5</pds-box>
+  </pds-box>
+</DocCanvas>
+
 ### Layout Properties
 `pds-box` not only allows for custom element properties, but it also allows for a flexible layout system. The layout system is based on the [CSS Flexbox specification](https://drafts.csswg.org/css-flexbox/) and can be view on the [Layouts](/docs/components-layout--docs) page
 

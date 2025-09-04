@@ -46,6 +46,7 @@
 | `sizeSm`             | `size-sm`              | At screen sizes from the SM breakpoint and larger (576px and up), this will take the specified number of columns. This overrides any value set by size or sizeXs.                                  | `"0" \| "1" \| "10" \| "11" \| "12" \| "2" \| "3" \| "4" \| "5" \| "6" \| "7" \| "8" \| "9"` | `undefined` |
 | `sizeXl`             | `size-xl`              | At screen sizes from the XL breakpoint and larger (1200px and up), this will take the specified number of columns. This overrides any value set by size, sizeXs, and up.                           | `"0" \| "1" \| "10" \| "11" \| "12" \| "2" \| "3" \| "4" \| "5" \| "6" \| "7" \| "8" \| "9"` | `undefined` |
 | `sizeXs`             | `size-xs`              | At the XS breakpoint, this prop will take the number of columns specified. This overrides the base size prop for this specific range.                                                              | `"0" \| "1" \| "10" \| "11" \| "12" \| "2" \| "3" \| "4" \| "5" \| "6" \| "7" \| "8" \| "9"` | `undefined` |
+| `wrap`               | `wrap`                 | Defines whether flex items are forced onto one line or can wrap onto multiple lines.                                                                                                               | `boolean`                                                                                    | `undefined` |
 
 
 ## Dependencies
