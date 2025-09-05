@@ -60,21 +60,41 @@ describe('pds-table-head-cell', () => {
   it('toggles is-scrolled class when table has fixed column and is scrolled', async () => {
     const page = await newSpecPage({
       components: [PdsTableHeadCell, PdsTable],
-      html: `<pds-table responsive fixed-column><pds-table-head-cell></pds-table-head-cell></pds-table>`,
+      html: `<pds-table responsive fixed-column component-id="test-table"><pds-table-head-cell></pds-table-head-cell></pds-table>`,
     });
 
     const tableHeadCell = page.body.querySelector('pds-table-head-cell') as HTMLElement;
     const table = page.body.querySelector('pds-table') as HTMLElement;
 
-    table.scrollLeft = 10;
-    table.dispatchEvent(new Event('scroll'));
+    // Wait for container to be available and listeners set up
+    let container: HTMLElement | null = null;
+    let attempts = 0;
+    while (!container && attempts < 10) {
+      container = table.shadowRoot?.querySelector('.pds-table-responsive-container') as HTMLElement;
+      if (!container) {
+        await new Promise(resolve => setTimeout(resolve, 10));
+        await page.waitForChanges();
+        attempts++;
+      }
+    }
+
+    expect(container).toBeTruthy();
+
+    // Simulate scroll on the container element
+    if (container) {
+      container.scrollLeft = 10;
+      container.dispatchEvent(new Event('scroll'));
+    }
 
     await page.waitForChanges();
 
     expect(tableHeadCell).toHaveClass('has-scrolled');
 
-    table.scrollLeft = 0;
-    table.dispatchEvent(new Event('scroll'));
+    // Reset scroll
+    if (container) {
+      container.scrollLeft = 0;
+      container.dispatchEvent(new Event('scroll'));
+    }
 
     await page.waitForChanges();
 

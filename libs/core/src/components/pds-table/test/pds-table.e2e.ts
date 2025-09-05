@@ -12,11 +12,14 @@ describe('pds-table', () => {
   it('renders with compact and responsive configurations', async () => {
     const page = await newE2EPage();
     await page.setContent(`
-      <pds-table compact responsive></pds-table>
+      <pds-table compact responsive component-id="test-table"></pds-table>
     `);
     const table = await page.find('pds-table');
-    expect(table).toHaveClass('is-compact');
-    expect(table).toHaveClass('is-responsive');
+    expect(table).toHaveClass('pds-table-responsive-host');
+    // For responsive tables, the inner div has the table classes
+    const tableDiv = await page.find('pds-table >>> .pds-table');
+    expect(tableDiv).toHaveClass('is-compact');
+    expect(tableDiv).toHaveClass('is-responsive');
   });
 
   it('sorts the table when pdsTableSort event is triggered', async () => {

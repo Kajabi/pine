@@ -39,13 +39,21 @@ describe('pds-table', () => {
   it('renders responsive when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsTable],
-      html: `<pds-table responsive="true"></pds-table>`,
+      html: `<pds-table responsive="true" component-id="test-table"></pds-table>`,
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-table class="pds-table is-responsive" responsive="true" role="grid" tabindex="0">
+      <pds-table class="pds-table is-responsive pds-table-responsive-host" responsive="true" component-id="test-table" id="test-table" role="grid" tabindex="0">
         <mock:shadow-root>
-          <slot></slot>
+          <div class="scroll-shadow-left" style="opacity: 0;"></div>
+          <div class="scroll-shadow-right" style="opacity: 0;"></div>
+          <div class="pds-table-responsive-container">
+            <div class="pds-table-responsive-wrapper">
+              <div class="pds-table  is-responsive">
+                <slot></slot>
+              </div>
+            </div>
+          </div>
         </mock:shadow-root>
       </pds-table>
     `);

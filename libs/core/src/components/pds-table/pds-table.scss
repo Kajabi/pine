@@ -3,6 +3,7 @@
 
   background: var(--color-background-default);
   border-collapse: separate;
+  border-radius: inherit;
   box-sizing: border-box;
   display: table;
   width: 100%;
@@ -12,18 +13,82 @@
   outline: var(--pine-outline-focus);
 }
 
-:host(.is-responsive) {
-  background-attachment: local, local, scroll, scroll;
-  background-image: linear-gradient(to right, var(--color-background-default), var(--color-background-default)),
-                    linear-gradient(to right, var(--color-background-default), var(--color-background-default)),
-                    linear-gradient(to right, rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0)),
-                    linear-gradient(to left, rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0));
-  background-position: left center, right center, left center, right center;
-  background-repeat: no-repeat;
-  background-size: 4px 100%, 4px 100%, 4px 100%, 4px 100%;
-  display: block;
-  margin: 0 auto;
-  max-width: fit-content;
-  overflow-x: auto;
-  white-space: nowrap;
+/*
+ * Responsive Table Architecture
+ *
+ * When responsive=true, the table uses a nested structure to provide horizontal scrolling
+ * while maintaining proper width behavior and scroll shadows:
+ *
+ * Host (.pds-table-responsive-host)
+ * ├── Shadow Left (positioned fixed to left edge)
+ * ├── Shadow Right (positioned fixed to right edge)
+ * └── Container (.pds-table-responsive-container)
+ *     └── Wrapper (.pds-table-responsive-wrapper)
+ *         └── Table (.pds-table)
+ *
+ * - Host: Constrains everything to parent width, clips shadows to border-radius
+ * - Shadows: Stay fixed during scroll, provide visual scroll indicators
+ * - Container: Handles horizontal scrolling (overflow-x: auto)
+ * - Table: Expands to full width or scrolls based on content
+ */
+:host(.pds-table-responsive-host) {
+  border-radius: inherit;
+  box-sizing: border-box !important;
+  display: block !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  position: relative !important;
+  width: 100% !important;
+}
+
+.pds-table-responsive-container {
+  border-radius: inherit;
+  box-sizing: border-box !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  position: relative !important;
+  width: 100% !important;
+}
+
+.pds-table-responsive-wrapper {
+  border-radius: inherit;
+  box-sizing: border-box !important;
+  display: block !important;
+  position: relative !important;
+  width: 100% !important;
+}
+
+.pds-table-responsive-wrapper .pds-table {
+  display: table !important;
+  min-width: max-content !important;
+  table-layout: auto !important;
+  white-space: nowrap !important;
+  width: 100% !important;
+}
+
+/* Shadows positioned relative to host (non-scrolling), covering container edges */
+.scroll-shadow-left,
+.scroll-shadow-right {
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  transition: opacity 0.1s ease;
+  width: 4px;
+  z-index: 10;
+}
+
+.scroll-shadow-left {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.1), transparent);
+  border-bottom-left-radius: inherit;
+  border-top-left-radius: inherit;
+  left: 0;
+}
+
+.scroll-shadow-right {
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.1), transparent);
+  border-bottom-right-radius: inherit;
+  border-top-right-radius: inherit;
+  right: 0;
 }

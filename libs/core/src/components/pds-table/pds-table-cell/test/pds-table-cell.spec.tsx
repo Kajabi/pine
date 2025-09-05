@@ -21,7 +21,7 @@ describe('pds-table-cell', () => {
   it('renders truncated when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsTableCell],
-      html: `<pds-table-cell truncate="true"></pds-table>`,
+      html: `<pds-table-cell truncate="true"></pds-table-cell>`,
     });
 
     expect(page.root).toEqualHtml(`
@@ -56,21 +56,41 @@ describe('pds-table-cell', () => {
   it('toggles is-scrolled class when table is scrolled', async () => {
     const page = await newSpecPage({
       components: [PdsTableCell, PdsTable],
-      html: `<pds-table responsive fixed-column><pds-table-cell></pds-table-cell></pds-table>`,
+      html: `<pds-table responsive fixed-column component-id="test-table"><pds-table-cell></pds-table-cell></pds-table>`,
     });
 
     const tableCell = page.body.querySelector('pds-table-cell') as HTMLElement;
     const table = page.body.querySelector('pds-table') as HTMLElement;
 
-    table.scrollLeft = 10;
-    table.dispatchEvent(new Event('scroll'));
+    // Wait for container to be available and listeners set up
+    let container: HTMLElement | null = null;
+    let attempts = 0;
+    while (!container && attempts < 10) {
+      container = table.shadowRoot?.querySelector('.pds-table-responsive-container') as HTMLElement;
+      if (!container) {
+        await new Promise(resolve => setTimeout(resolve, 10));
+        await page.waitForChanges();
+        attempts++;
+      }
+    }
+
+    expect(container).toBeTruthy();
+
+    // Simulate scroll on the container element
+    if (container) {
+      container.scrollLeft = 10;
+      container.dispatchEvent(new Event('scroll'));
+    }
 
     await page.waitForChanges();
 
     expect(tableCell).toHaveClass('has-scrolled');
 
-    table.scrollLeft = 0;
-    table.dispatchEvent(new Event('scroll'));
+    // Reset scroll
+    if (container) {
+      container.scrollLeft = 0;
+      container.dispatchEvent(new Event('scroll'));
+    }
 
     await page.waitForChanges();
 
