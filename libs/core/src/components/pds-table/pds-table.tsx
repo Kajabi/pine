@@ -7,6 +7,11 @@ import { Component, Element, Event, EventEmitter, Host, h, Prop, State, Listen }
 })
 export class PdsTable {
   @Element() el: HTMLPdsTableElement;
+  private scrollContainer: HTMLElement | null = null;
+  private _responsiveHandleScroll: (() => void) | null = null;
+  private _responsiveHandleResize: (() => void) | null = null;
+  private _responsiveResizeObserver: ResizeObserver | null = null;
+  private _teardownResponsive: (() => void) | null = null;
 
   /**
    * Determines if the table displays with reduced table cell padding.
@@ -66,6 +71,13 @@ export class PdsTable {
     }
   }
 
+  disconnectedCallback() {
+    if (this._teardownResponsive) {
+      this._teardownResponsive();
+      this._teardownResponsive = null;
+    }
+  }
+
   /**
    * Sets up responsive scrolling behavior for the table.
    *
@@ -89,14 +101,19 @@ export class PdsTable {
 
     if (!container || !leftShadow || !rightShadow) return;
 
+    // Store container reference for cleanup
+    this.scrollContainer = container;
+
     /**
      * Updates the visibility of scroll shadows based on current scroll position.
      * Left shadow: Shows when scrolled away from start (hidden if fixedColumn is enabled)
      * Right shadow: Shows when there's content to scroll and not at the end
      */
-    const updateShadows = () => {
-      const scrollLeft = container.scrollLeft;
-      const maxScrollLeft = container.scrollWidth - container.clientWidth;
+    this._responsiveHandleScroll = () => {
+      if (!this.scrollContainer) return;
+
+      const scrollLeft = this.scrollContainer.scrollLeft;
+      const maxScrollLeft = this.scrollContainer.scrollWidth - this.scrollContainer.clientWidth;
 
       // Show left shadow when scrolled away from start, but not if there's a fixed column
       leftShadow.style.opacity = (scrollLeft > 0 && !this.fixedColumn) ? '1' : '0';
@@ -106,15 +123,15 @@ export class PdsTable {
     };
 
     // Add scroll event listener to container element
-    container.addEventListener('scroll', updateShadows);
+    this.scrollContainer.addEventListener('scroll', this._responsiveHandleScroll, { passive: true });
 
     // Add resize observer to update shadows when container size changes
     if (typeof window !== 'undefined' && window.ResizeObserver) {
       try {
-        const resizeObserver = new ResizeObserver(() => {
-          setTimeout(updateShadows, 0);
+        this._responsiveResizeObserver = new ResizeObserver(() => {
+          this._responsiveHandleScroll?.();
         });
-        resizeObserver.observe(container);
+        this._responsiveResizeObserver.observe(this.scrollContainer);
       } catch (error) {
         // ResizeObserver not available in some environments (e.g., tests)
         // Fall back to window resize listener only
@@ -123,14 +140,34 @@ export class PdsTable {
 
     // Listen for window resize as fallback
     if (typeof window !== 'undefined') {
-      const handleResize = () => {
-        setTimeout(updateShadows, 0);
+      this._responsiveHandleResize = () => {
+        this._responsiveHandleScroll?.();
       };
-      window.addEventListener('resize', handleResize);
+      window.addEventListener('resize', this._responsiveHandleResize);
     }
 
+    // Create teardown function for cleanup
+    this._teardownResponsive = () => {
+      if (this.scrollContainer && this._responsiveHandleScroll) {
+        this.scrollContainer.removeEventListener('scroll', this._responsiveHandleScroll);
+        this.scrollContainer = null;
+      }
+
+      if (this._responsiveResizeObserver) {
+        this._responsiveResizeObserver.disconnect();
+        this._responsiveResizeObserver = null;
+      }
+
+      if (typeof window !== 'undefined' && this._responsiveHandleResize) {
+        window.removeEventListener('resize', this._responsiveHandleResize);
+        this._responsiveHandleResize = null;
+      }
+
+      this._responsiveHandleScroll = null;
+    };
+
     // Initial check after setup
-    setTimeout(updateShadows, 0);
+    this._responsiveHandleScroll();
   }
 
 

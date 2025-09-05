@@ -62,19 +62,27 @@ describe('pds-table-cell', () => {
     const tableCell = page.body.querySelector('pds-table-cell') as HTMLElement;
     const table = page.body.querySelector('pds-table') as HTMLElement;
 
-    // Allow time for componentDidLoad to set up scroll listeners
-    await new Promise(resolve => setTimeout(resolve, 150));
+    // Wait for container to be available and listeners set up
+    let container: HTMLElement | null = null;
+    let attempts = 0;
+    while (!container && attempts < 10) {
+      container = table.shadowRoot?.querySelector('.pds-table-responsive-container') as HTMLElement;
+      if (!container) {
+        await new Promise(resolve => setTimeout(resolve, 10));
+        await page.waitForChanges();
+        attempts++;
+      }
+    }
 
-    // Simulate scroll on the container element (where scrolling actually happens)
-    const container = table.shadowRoot?.querySelector('.pds-table-responsive-container') as HTMLElement;
+    expect(container).toBeTruthy();
+
+    // Simulate scroll on the container element
     if (container) {
       container.scrollLeft = 10;
       container.dispatchEvent(new Event('scroll'));
     }
 
     await page.waitForChanges();
-    // Additional wait for state update
-    await new Promise(resolve => setTimeout(resolve, 50));
 
     expect(tableCell).toHaveClass('has-scrolled');
 
@@ -85,7 +93,6 @@ describe('pds-table-cell', () => {
     }
 
     await page.waitForChanges();
-    await new Promise(resolve => setTimeout(resolve, 50));
 
     expect(tableCell).not.toHaveClass('has-scrolled');
   });

@@ -8,6 +8,8 @@ import { Component, Element, Host, Prop, State, h } from '@stencil/core';
 export class PdsTableCell {
   @Element() hostElement: HTMLPdsTableCellElement;
   private tableRef: HTMLPdsTableElement;
+  private scrollContainer: HTMLElement | null = null;
+  private setupTimer: number | undefined;
 
   componentWillRender() {
     this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
@@ -17,23 +19,42 @@ export class PdsTableCell {
     if (this.tableRef && this.tableRef.responsive && this.tableRef.fixedColumn) {
       // For responsive tables with fixed columns, set up scroll detection
       // This enables the first column to show a shadow when the table is scrolled horizontally
-      setTimeout(() => {
-        if (!this.tableRef) {
-          return;
-        }
+      this.setupScrollListener();
+    }
+  }
 
-        try {
-          // Find the scrolling container inside the table's shadow DOM
-          const container = this.tableRef.shadowRoot?.querySelector('.pds-table-responsive-container');
-          if (container) {
-            container.addEventListener('scroll', this.handleScroll);
-          }
-          // Initial check in case already scrolled
-          this.handleScroll();
-        } catch (error) {
-          console.warn('Error setting up scroll listener:', error);
-        }
+  disconnectedCallback() {
+    this.cleanupScrollListener();
+  }
+
+  private setupScrollListener() {
+    if (!this.tableRef) return;
+
+    // Query shadowRoot once and cache the container
+    const container = this.tableRef.shadowRoot?.querySelector('.pds-table-responsive-container') as HTMLElement;
+
+    if (container) {
+      // Container available immediately
+      this.scrollContainer = container;
+      this.scrollContainer.addEventListener('scroll', this.handleScroll, { passive: true });
+      this.handleScroll(); // Initial check
+    } else {
+      // Container not ready, set up timer for retry
+      this.setupTimer = window.setTimeout(() => {
+        this.setupScrollListener();
       }, 100);
+    }
+  }
+
+  private cleanupScrollListener() {
+    if (this.scrollContainer) {
+      this.scrollContainer.removeEventListener('scroll', this.handleScroll);
+      this.scrollContainer = null;
+    }
+
+    if (this.setupTimer !== undefined) {
+      window.clearTimeout(this.setupTimer);
+      this.setupTimer = undefined;
     }
   }
 
@@ -81,16 +102,12 @@ export class PdsTableCell {
    * @private
    */
   private handleScroll = () => {
-    if (!this.tableRef) {
+    if (!this.scrollContainer) {
       return;
     }
 
     try {
-      // Check scroll position on the responsive container element
-      const container = this.tableRef.shadowRoot?.querySelector('.pds-table-responsive-container');
-      if (container) {
-        this.tableScrolling = container.scrollLeft > 0;
-      }
+      this.tableScrolling = this.scrollContainer.scrollLeft > 0;
     } catch (error) {
       console.warn('Scroll handler error:', error);
     }
