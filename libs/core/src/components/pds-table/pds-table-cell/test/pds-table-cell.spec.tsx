@@ -21,7 +21,7 @@ describe('pds-table-cell', () => {
   it('renders truncated when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsTableCell],
-      html: `<pds-table-cell truncate="true"></pds-table>`,
+      html: `<pds-table-cell truncate="true"></pds-table-cell>`,
     });
 
     expect(page.root).toEqualHtml(`
