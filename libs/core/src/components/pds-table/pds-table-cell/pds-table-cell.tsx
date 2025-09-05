@@ -10,6 +10,7 @@ export class PdsTableCell {
   private tableRef: HTMLPdsTableElement;
   private scrollContainer: HTMLElement | null = null;
   private setupTimer: number | undefined;
+  private setupRetries: number = 0;
 
   componentWillRender() {
     this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
@@ -38,10 +39,17 @@ export class PdsTableCell {
       this.scrollContainer = container;
       this.scrollContainer.addEventListener('scroll', this.handleScroll, { passive: true });
       this.handleScroll(); // Initial check
+      this.setupRetries = 0; // Reset counter on success
     } else {
-      // Container not ready, set up timer for retry
+      // Container not ready, set up timer for retry with bounds
       this.setupTimer = window.setTimeout(() => {
-        this.setupScrollListener();
+        if (this.scrollContainer) return; // Already found
+        this.setupRetries = (this.setupRetries || 0) + 1;
+        if (this.setupRetries <= 50) {
+          this.setupScrollListener();
+        } else {
+          console.warn('Failed to find responsive container after 50 attempts');
+        }
       }, 100);
     }
   }
@@ -56,6 +64,8 @@ export class PdsTableCell {
       window.clearTimeout(this.setupTimer);
       this.setupTimer = undefined;
     }
+
+    this.setupRetries = 0; // Reset retry counter
   }
 
   /**
