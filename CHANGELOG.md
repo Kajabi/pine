@@ -1,3 +1,27 @@
+## 3.5.0 (2025-09-05)
+
+### Features 🚀
+
+- add code connect ([#468](https://github.com/Kajabi/pine/pull/468))
+- **pds-table:** add alignment for cell and head cells in component ([#517](https://github.com/Kajabi/pine/pull/517))
+
+### Bug Fixes 🐛
+
+- **pds-box:** add wrap prop and tests ([#521](https://github.com/Kajabi/pine/pull/521))
+- **pds-input, pds-textarea:** adds hide-label prop to visually hide label text ([#519](https://github.com/Kajabi/pine/pull/519))
+- **pds-table:** case-insensitive sorting for the table component ([#516](https://github.com/Kajabi/pine/pull/516))
+- **pds-table:** refactor expanding width and scrolling for responsive table ([#523](https://github.com/Kajabi/pine/pull/523))
+- **pds-tooltip:** add floating UI for placement and smart positioning ([#520](https://github.com/Kajabi/pine/pull/520))
+
+### Styles 🎨
+
+- **pds-tab:** update background colors and hover states for filter tabs ([#518](https://github.com/Kajabi/pine/pull/518))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.4.3 (2025-08-19)
 
 ### Bug Fixes 🐛
