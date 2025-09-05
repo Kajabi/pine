@@ -15,7 +15,25 @@ export class PdsTableCell {
 
   componentDidLoad() {
     if (this.tableRef && this.tableRef.responsive && this.tableRef.fixedColumn) {
-      this.tableRef.addEventListener('scroll', this.handleScroll);
+      // For responsive tables with fixed columns, set up scroll detection
+      // This enables the first column to show a shadow when the table is scrolled horizontally
+      setTimeout(() => {
+        if (!this.tableRef) {
+          return;
+        }
+
+        try {
+          // Find the scrolling container inside the table's shadow DOM
+          const container = this.tableRef.shadowRoot?.querySelector('.pds-table-responsive-container');
+          if (container) {
+            container.addEventListener('scroll', this.handleScroll);
+          }
+          // Initial check in case already scrolled
+          this.handleScroll();
+        } catch (error) {
+          console.warn('Error setting up scroll listener:', error);
+        }
+      }, 100);
     }
   }
 
@@ -57,11 +75,24 @@ export class PdsTableCell {
     return classNames.join(' ');
   }
 
+  /**
+   * Handles scroll events to update fixed column shadow state.
+   * Updates the tableScrolling state to control CSS classes for fixed column shadows.
+   * @private
+   */
   private handleScroll = () => {
-    if (this.tableRef.scrollLeft > 0) {
-      this.tableScrolling = true;
-    } else {
-      this.tableScrolling = false;
+    if (!this.tableRef) {
+      return;
+    }
+
+    try {
+      // Check scroll position on the responsive container element
+      const container = this.tableRef.shadowRoot?.querySelector('.pds-table-responsive-container');
+      if (container) {
+        this.tableScrolling = container.scrollLeft > 0;
+      }
+    } catch (error) {
+      console.warn('Scroll handler error:', error);
     }
   };
 

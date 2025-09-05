@@ -60,6 +60,80 @@ export class PdsTable {
     this.sortingColumn = null;
   }
 
+  componentDidLoad() {
+    if (this.responsive) {
+      this.setupResponsiveScrolling();
+    }
+  }
+
+  /**
+   * Sets up responsive scrolling behavior for the table.
+   *
+   * This method creates a horizontal scrolling system where:
+   * - The table content can scroll horizontally when it exceeds the container width
+   * - Scroll shadows appear at the left/right edges to indicate scrollable content
+   * - Fixed columns remain sticky during horizontal scrolling
+   * - Shadows respect border-radius and don't appear when there's nothing to scroll
+   *
+   * Architecture:
+   * - Host element: Contains everything, respects parent constraints
+   * - Container element: Handles horizontal scrolling (overflow-x: auto)
+   * - Shadow elements: Positioned fixed relative to host, show scroll indicators
+   *
+   * @private
+   */
+  private setupResponsiveScrolling() {
+    const container = this.el.shadowRoot?.querySelector('.pds-table-responsive-container') as HTMLElement;
+    const leftShadow = this.el.shadowRoot?.querySelector('.scroll-shadow-left') as HTMLElement;
+    const rightShadow = this.el.shadowRoot?.querySelector('.scroll-shadow-right') as HTMLElement;
+
+    if (!container || !leftShadow || !rightShadow) return;
+
+    /**
+     * Updates the visibility of scroll shadows based on current scroll position.
+     * Left shadow: Shows when scrolled away from start (hidden if fixedColumn is enabled)
+     * Right shadow: Shows when there's content to scroll and not at the end
+     */
+    const updateShadows = () => {
+      const scrollLeft = container.scrollLeft;
+      const maxScrollLeft = container.scrollWidth - container.clientWidth;
+
+      // Show left shadow when scrolled away from start, but not if there's a fixed column
+      leftShadow.style.opacity = (scrollLeft > 0 && !this.fixedColumn) ? '1' : '0';
+
+      // Show right shadow only if there's content to scroll AND not at end
+      rightShadow.style.opacity = (maxScrollLeft > 0 && scrollLeft < maxScrollLeft - 1) ? '1' : '0';
+    };
+
+    // Add scroll event listener to container element
+    container.addEventListener('scroll', updateShadows);
+
+    // Add resize observer to update shadows when container size changes
+    if (typeof window !== 'undefined' && window.ResizeObserver) {
+      try {
+        const resizeObserver = new ResizeObserver(() => {
+          setTimeout(updateShadows, 0);
+        });
+        resizeObserver.observe(container);
+      } catch (error) {
+        // ResizeObserver not available in some environments (e.g., tests)
+        // Fall back to window resize listener only
+      }
+    }
+
+    // Listen for window resize as fallback
+    if (typeof window !== 'undefined') {
+      const handleResize = () => {
+        setTimeout(updateShadows, 0);
+      };
+      window.addEventListener('resize', handleResize);
+    }
+
+    // Initial check after setup
+    setTimeout(updateShadows, 0);
+  }
+
+
   private classNames() {
     const classNames = ['pds-table'];
 
@@ -151,6 +225,28 @@ export class PdsTable {
   }
 
   render() {
+    if (this.responsive) {
+      return (
+        <Host
+          class="pds-table is-responsive pds-table-responsive-host"
+          id={this.componentId}
+          role="grid"
+          selectable={this.selectable}
+          tabindex="0"
+        >
+          <div class="scroll-shadow-left"></div>
+          <div class="scroll-shadow-right"></div>
+          <div class="pds-table-responsive-container">
+            <div class="pds-table-responsive-wrapper">
+              <div class={this.classNames()}>
+                <slot></slot>
+              </div>
+            </div>
+          </div>
+        </Host>
+      );
+    }
+
     return (
       <Host
         class={this.classNames()}
