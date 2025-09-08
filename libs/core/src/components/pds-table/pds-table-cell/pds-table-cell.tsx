@@ -13,11 +13,40 @@ export class PdsTableCell {
   private setupRetries: number = 0;
 
   componentWillRender() {
-    this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+    this.tableRef = this.findParentTable();
+  }
+
+  /**
+   * Find the parent table element, handling both regular and slotted content
+   */
+  private findParentTable(): HTMLPdsTableElement | null {
+    // First try the standard closest query
+    const table = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+
+    if (table != null) {
+      return table;
+    }
+
+    // If that fails (e.g., when slotted), walk up the DOM tree manually
+    let element = this.hostElement.parentElement;
+    while (!!element) {
+      if (element.tagName === 'PDS-TABLE') {
+        return element as HTMLPdsTableElement;
+      }
+
+      // Check if we're in a slot and need to traverse to the host
+      if (!!element.assignedSlot) {
+        element = element.assignedSlot.getRootNode()['host'] as HTMLElement;
+      } else {
+        element = element.parentElement;
+      }
+    }
+
+    return null;
   }
 
   componentDidLoad() {
-    if (this.tableRef && this.tableRef.responsive && this.tableRef.fixedColumn) {
+    if (this.tableRef && this.tableRef.responsive && this.tableRef.fixedColumn && this.isFirstCellInRow()) {
       // For responsive tables with fixed columns, set up scroll detection
       // This enables the first column to show a shadow when the table is scrolled horizontally
       this.setupScrollListener();
@@ -29,12 +58,14 @@ export class PdsTableCell {
   }
 
   private setupScrollListener() {
-    if (!this.tableRef) return;
+    if (this.tableRef == null) {
+      return;
+    }
 
     // Query shadowRoot once and cache the container
     const container = this.tableRef.shadowRoot?.querySelector('.pds-table-responsive-container') as HTMLElement;
 
-    if (container) {
+    if (container != null) {
       // Container available immediately
       this.scrollContainer = container;
       this.scrollContainer.addEventListener('scroll', this.handleScroll, { passive: true });
@@ -91,7 +122,7 @@ export class PdsTableCell {
       classNames.push('is-compact');
     }
 
-    if (this.cellAlign) {
+    if (this.cellAlign != null) {
       classNames.push(`pds-table-cell--align-${this.cellAlign}`);
     }
 
@@ -99,11 +130,27 @@ export class PdsTableCell {
       classNames.push('is-truncated');
     }
 
-    if (this.tableRef && this.tableRef.fixedColumn && this.tableScrolling) {
+    // Check if this cell should be fixed (first cell in row + fixedColumn enabled)
+    if (this.tableRef && this.tableRef.fixedColumn && this.isFirstCellInRow()) {
+      classNames.push('is-fixed');
+    }
+
+    if (this.tableRef && this.tableRef.fixedColumn && this.isFirstCellInRow() && this.tableScrolling) {
       classNames.push('has-scrolled');
     }
 
     return classNames.join(' ');
+  }
+
+  /**
+   * Determines if this cell is the first cell in its parent row
+   */
+  private isFirstCellInRow(): boolean {
+    const parentRow = this.hostElement.parentElement;
+    if (!parentRow) return false;
+
+    const firstCell = parentRow.querySelector('pds-table-cell');
+    return firstCell === this.hostElement;
   }
 
   /**

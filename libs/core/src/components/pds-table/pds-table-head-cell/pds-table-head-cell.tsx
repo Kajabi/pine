@@ -47,11 +47,40 @@ export class PdsTableHeadCell {
   @State() isSelected: boolean = false;
 
   componentWillRender() {
-    this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+    this.tableRef = this.findParentTable();
+  }
+
+  /**
+   * Find the parent table element, handling both regular and slotted content
+   */
+  private findParentTable(): HTMLPdsTableElement | null {
+    // First try the standard closest query
+    const table = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+
+    if (table != null) {
+      return table;
+    }
+
+    // If that fails (e.g., when slotted), walk up the DOM tree manually
+    let element = this.hostElement.parentElement;
+    while (!!element) {
+      if (element.tagName === 'PDS-TABLE') {
+        return element as HTMLPdsTableElement;
+      }
+
+      // Check if we're in a slot and need to traverse to the host
+      if (!!element.assignedSlot) {
+        element = element.assignedSlot.getRootNode()['host'] as HTMLElement;
+      } else {
+        element = element.parentElement;
+      }
+    }
+
+    return null;
   }
 
   componentDidLoad() {
-    if (this.tableRef && this.tableRef.responsive && this.tableRef.fixedColumn) {
+    if (this.tableRef && this.tableRef.responsive && this.tableRef.fixedColumn && this.isFirstCellInHead()) {
       // For responsive tables with fixed columns, set up scroll detection
       // This enables the first column header to show a shadow when the table is scrolled horizontally
       this.setupScrollListener();
@@ -63,12 +92,14 @@ export class PdsTableHeadCell {
   }
 
   private setupScrollListener() {
-    if (!this.tableRef) return;
+    if (this.tableRef == null) {
+      return;
+    }
 
     // Query shadowRoot once and cache the container
     const container = this.tableRef.shadowRoot?.querySelector('.pds-table-responsive-container') as HTMLElement;
 
-    if (container) {
+    if (container != null) {
       // Container available immediately
       this.scrollContainer = container;
       this.scrollContainer.addEventListener('scroll', this.handleScroll, { passive: true });
@@ -140,7 +171,7 @@ export class PdsTableHeadCell {
       classNames.push('is-compact');
     }
 
-    if (this.cellAlign) {
+    if (this.cellAlign != null) {
       classNames.push(`pds-table-head-cell--align-${this.cellAlign}`);
     }
 
@@ -152,11 +183,36 @@ export class PdsTableHeadCell {
       classNames.push('sort-' + this.sortingDirection);
     }
 
-    if (this.tableRef && this.tableRef.fixedColumn && this.tableScrolling) {
+    // Check if this cell should be fixed (first cell in head + fixedColumn enabled)
+    if (this.tableRef && this.tableRef.fixedColumn && this.isFirstCellInHead()) {
+      classNames.push('is-fixed');
+    }
+
+    if (this.tableRef && this.tableRef.fixedColumn && this.isFirstCellInHead() && this.tableScrolling) {
       classNames.push('has-scrolled');
     }
 
     return classNames.join(' ');
+  }
+
+  /**
+   * Determines if this cell is the first cell in its parent table head
+   */
+  private isFirstCellInHead(): boolean {
+    const parentHead = this.hostElement.parentElement;
+    if (!parentHead) return false;
+
+    // Check if there's a checkbox cell first (for selectable tables)
+    const checkboxCell = parentHead.querySelector('pds-table-head-cell[part="checkbox-cell"]');
+    if (checkboxCell) {
+      // If there's a checkbox, this should be fixed if it's the second cell
+      const cells = Array.from(parentHead.querySelectorAll('pds-table-head-cell'));
+      return cells.indexOf(this.hostElement) === 1;
+    } else {
+      // No checkbox, this should be fixed if it's the first cell
+      const firstCell = parentHead.querySelector('pds-table-head-cell');
+      return firstCell === this.hostElement;
+    }
   }
 
   render() {

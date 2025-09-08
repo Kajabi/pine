@@ -39,6 +39,17 @@ export class PdsTable {
   @Prop() selectable: boolean;
 
   /**
+   * Determines if the table displays a fixed header that remains visible during vertical scrolling.
+   */
+  @Prop() fixedHeader: boolean;
+
+  /**
+   * Maximum height of the table container. When set, enables vertical scrolling.
+   * Accepts CSS height values like "400px", "50vh", etc.
+   */
+  @Prop() maxHeight: string;
+
+  /**
    * The name of the column being sorted.
    * @defaultValue null
    */
@@ -69,6 +80,11 @@ export class PdsTable {
     if (this.responsive) {
       this.setupResponsiveScrolling();
     }
+
+    // Synchronize fixed column widths after component loads
+    if (this.responsive && this.fixedHeader && this.fixedColumn) {
+      this.synchronizeFixedColumnWidths();
+    }
   }
 
   disconnectedCallback() {
@@ -98,28 +114,51 @@ export class PdsTable {
     const container = this.el.shadowRoot?.querySelector('.pds-table-responsive-container') as HTMLElement;
     const leftShadow = this.el.shadowRoot?.querySelector('.scroll-shadow-left') as HTMLElement;
     const rightShadow = this.el.shadowRoot?.querySelector('.scroll-shadow-right') as HTMLElement;
+    const topShadow = this.el.shadowRoot?.querySelector('.scroll-shadow-top') as HTMLElement;
+    const bottomShadow = this.el.shadowRoot?.querySelector('.scroll-shadow-bottom') as HTMLElement;
+    const headerWrapper = this.el.shadowRoot?.querySelector('.pds-table-header-wrapper') as HTMLElement;
 
-    if (!container || !leftShadow || !rightShadow) return;
+    if (container == null || leftShadow == null || rightShadow == null) {
+      return;
+    }
 
     // Store container reference for cleanup
     this.scrollContainer = container;
 
     /**
      * Updates the visibility of scroll shadows based on current scroll position.
-     * Left shadow: Shows when scrolled away from start (hidden if fixedColumn is enabled)
-     * Right shadow: Shows when there's content to scroll and not at the end
+     * Horizontal shadows:
+     * - Left shadow: Shows when scrolled away from start (hidden if fixedColumn is enabled)
+     * - Right shadow: Shows when there's content to scroll and not at the end
+     * Vertical shadows (when fixedHeader and maxHeight are enabled):
+     * - Top shadow: Shows when scrolled away from top
+     * - Bottom shadow: Shows when there's content to scroll and not at bottom
      */
     this._responsiveHandleScroll = () => {
       if (!this.scrollContainer) return;
 
       const scrollLeft = this.scrollContainer.scrollLeft;
+      const scrollTop = this.scrollContainer.scrollTop;
       const maxScrollLeft = this.scrollContainer.scrollWidth - this.scrollContainer.clientWidth;
+      const maxScrollTop = this.scrollContainer.scrollHeight - this.scrollContainer.clientHeight;
 
-      // Show left shadow when scrolled away from start, but not if there's a fixed column
+      // Horizontal shadow logic
       leftShadow.style.opacity = (scrollLeft > 0 && !this.fixedColumn) ? '1' : '0';
-
-      // Show right shadow only if there's content to scroll AND not at end
       rightShadow.style.opacity = (maxScrollLeft > 0 && scrollLeft < maxScrollLeft - 1) ? '1' : '0';
+
+      // Vertical shadow logic (only when fixed header is enabled)
+      if (this.fixedHeader && (this.maxHeight != null && this.maxHeight !== '') && topShadow != null && bottomShadow != null) {
+        topShadow.style.opacity = scrollTop > 0 ? '1' : '0';
+        bottomShadow.style.opacity = (maxScrollTop > 0 && scrollTop < maxScrollTop - 1) ? '1' : '0';
+      }
+
+      // Update header wrapper shadow (only when fixed header is enabled)
+      if (this.fixedHeader && headerWrapper != null) {
+        headerWrapper.classList.toggle('has-scrolled', scrollTop > 0);
+      }
+
+      // Update fixed column shadow state
+      this.updateCellScrollState();
     };
 
     // Add scroll event listener to container element
@@ -142,6 +181,10 @@ export class PdsTable {
     if (typeof window !== 'undefined') {
       this._responsiveHandleResize = () => {
         this._responsiveHandleScroll?.();
+        // Re-align columns on resize if using fixed header + column
+        if (this.fixedHeader && this.fixedColumn) {
+          setTimeout(() => this.alignFixedColumns(), 100);
+        }
       };
       window.addEventListener('resize', this._responsiveHandleResize);
     }
@@ -168,6 +211,92 @@ export class PdsTable {
 
     // Initial check after setup
     this._responsiveHandleScroll();
+
+    // Also trigger width sync after scroll setup if using fixed header + column
+    if (this.fixedHeader && this.fixedColumn) {
+      setTimeout(() => this.alignFixedColumns(), 100);
+    }
+  }
+
+  /**
+   * Updates the scroll state of fixed column cells to control shadow visibility.
+   * This method is called when horizontal scrolling occurs.
+   * @private
+   */
+  private updateCellScrollState() {
+    // Individual cells handle their own scroll state through their own scroll listeners
+    // This method is kept for backward compatibility but cells now self-manage
+    return;
+  }
+
+  /**
+   * Synchronizes the width of ALL columns between header and body to prevent misalignment
+   * @private
+   */
+  private synchronizeFixedColumnWidths() {
+    // Multiple attempts to handle different DOM ready states
+    setTimeout(() => this.alignFixedColumns(), 100);
+    setTimeout(() => this.alignFixedColumns(), 300);
+    setTimeout(() => this.alignFixedColumns(), 600);
+  }
+
+  /**
+   * Aligns columns by copying computed widths from body table to header table
+   * This ensures they use identical column sizing
+   */
+  private alignFixedColumns() {
+    setTimeout(() => {
+      const headerWrapper = this.el.shadowRoot?.querySelector('.pds-table-header-wrapper');
+      const bodyWrapper = this.el.shadowRoot?.querySelector('.pds-table-body-wrapper');
+
+      if (!headerWrapper || !bodyWrapper) return;
+
+      const bodyTable = bodyWrapper.querySelector('.pds-table');
+      const headerTable = headerWrapper.querySelector('.pds-table');
+
+      if (!bodyTable || !headerTable) return;
+
+      // Let the body table calculate its natural column widths first
+      (bodyTable as HTMLElement).style.tableLayout = 'auto';
+      (bodyTable as HTMLElement).style.width = '100%';
+
+      // Force reflow
+      (bodyTable as HTMLElement).offsetWidth;
+
+      // Get all body cells from first row to determine column widths
+      const firstBodyRow = bodyWrapper.querySelector('pds-table-row');
+      if (!firstBodyRow) return;
+
+      const bodyCells = firstBodyRow.querySelectorAll('pds-table-cell');
+      const headerCells = headerWrapper.querySelectorAll('pds-table-head-cell');
+
+      if (bodyCells.length !== headerCells.length) {
+        console.warn('Header and body column count mismatch');
+        return;
+      }
+
+      // Copy computed widths from body to header for ALL columns
+      const widths: number[] = [];
+
+      bodyCells.forEach((bodyCell, index) => {
+        const bodyRect = bodyCell.getBoundingClientRect();
+        widths[index] = bodyRect.width;
+      });
+
+      // Apply these exact widths to header cells
+      headerCells.forEach((headerCell, index) => {
+        const targetWidth = widths[index];
+        if (targetWidth > 0) {
+          (headerCell as HTMLElement).style.setProperty('width', `${targetWidth}px`, 'important');
+          (headerCell as HTMLElement).style.setProperty('min-width', `${targetWidth}px`, 'important');
+          (headerCell as HTMLElement).style.setProperty('max-width', `${targetWidth}px`, 'important');
+          (headerCell as HTMLElement).style.setProperty('box-sizing', 'border-box', 'important');
+        }
+      });
+
+      // Now that widths are explicitly set, use fixed layout for the header
+      (headerTable as HTMLElement).style.tableLayout = 'fixed';
+    }, 200);
   }
 
 
@@ -263,9 +392,27 @@ export class PdsTable {
 
   render() {
     if (this.responsive) {
+      const hostClasses = [
+        'pds-table',
+        'is-responsive',
+        'pds-table-responsive-host'
+      ];
+
+      if (this.fixedHeader) {
+        hostClasses.push('has-fixed-header');
+      }
+
+      if (this.maxHeight != null && this.maxHeight !== '') {
+        hostClasses.push('has-max-height');
+      }
+
+      const containerStyle = (this.maxHeight != null && this.maxHeight !== '')
+        ? { '--table-max-height': this.maxHeight }
+        : {};
+
       return (
         <Host
-          class="pds-table is-responsive pds-table-responsive-host"
+          class={hostClasses.join(' ')}
           id={this.componentId}
           role="grid"
           selectable={this.selectable}
@@ -273,12 +420,33 @@ export class PdsTable {
         >
           <div class="scroll-shadow-left"></div>
           <div class="scroll-shadow-right"></div>
-          <div class="pds-table-responsive-container">
-            <div class="pds-table-responsive-wrapper">
-              <div class={this.classNames()}>
-                <slot></slot>
+          {this.fixedHeader && <div class="scroll-shadow-top"></div>}
+          {this.fixedHeader && <div class="scroll-shadow-bottom"></div>}
+
+          <div
+            class={`pds-table-responsive-container ${this.fixedHeader ? 'has-fixed-header' : ''} ${(this.maxHeight != null && this.maxHeight !== '') ? 'has-max-height' : ''}`}
+            style={containerStyle}
+          >
+            {this.fixedHeader ? (
+              <div class="pds-table-fixed-content">
+                <div class="pds-table-header-wrapper">
+                  <div class={this.classNames()}>
+                    <slot name="header"></slot>
+                  </div>
+                </div>
+                <div class="pds-table-body-wrapper">
+                  <div class={this.classNames()}>
+                    <slot name="body"></slot>
+                  </div>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div class="pds-table-responsive-wrapper">
+                <div class={this.classNames()}>
+                  <slot></slot>
+                </div>
+              </div>
+            )}
           </div>
         </Host>
       );

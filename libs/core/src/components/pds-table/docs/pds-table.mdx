@@ -415,59 +415,23 @@ When the `responsive` prop is set to `true`, the table will render a horizontal 
     <pds-table-head>
       <pds-table-head-cell>Column Title</pds-table-head-cell>
       <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
-      <pds-table-head-cell>Column Title</pds-table-head-cell>
+
     </pds-table-head>
     <pds-table-body>
       <pds-table-row>
         <pds-table-cell>Row Item Alpha</pds-table-cell>
         <pds-table-cell>Row Item Beta</pds-table-cell>
-        <pds-table-cell>Row Item Charlie</pds-table-cell>
-        <pds-table-cell>Row Item Delta</pds-table-cell>
-        <pds-table-cell>Row Item Echo</pds-table-cell>
-        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
-        <pds-table-cell>Row Item Golf</pds-table-cell>
-        <pds-table-cell>Row Item Hotel</pds-table-cell>
-        <pds-table-cell>Row Item Juliett</pds-table-cell>
-        <pds-table-cell>Row Item Kilo</pds-table-cell>
-        <pds-table-cell>Row Item Lima</pds-table-cell>
-        <pds-table-cell>Row Item Mike</pds-table-cell>
+
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell>Row Item Alpha</pds-table-cell>
         <pds-table-cell>Row Item Beta</pds-table-cell>
-        <pds-table-cell>Row Item Charlie</pds-table-cell>
-        <pds-table-cell>Row Item Delta</pds-table-cell>
-        <pds-table-cell>Row Item Echo</pds-table-cell>
-        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
-        <pds-table-cell>Row Item Golf</pds-table-cell>
-        <pds-table-cell>Row Item Hotel</pds-table-cell>
-        <pds-table-cell>Row Item Juliett</pds-table-cell>
-        <pds-table-cell>Row Item Kilo</pds-table-cell>
-        <pds-table-cell>Row Item Lima</pds-table-cell>
-        <pds-table-cell>Row Item Mike</pds-table-cell>
+
       </pds-table-row>
       <pds-table-row>
         <pds-table-cell>Row Item Alpha</pds-table-cell>
         <pds-table-cell>Row Item Beta</pds-table-cell>
-        <pds-table-cell>Row Item Charlie</pds-table-cell>
-        <pds-table-cell>Row Item Delta</pds-table-cell>
-        <pds-table-cell>Row Item Echo</pds-table-cell>
-        <pds-table-cell>Row Item Foxtrot</pds-table-cell>
-        <pds-table-cell>Row Item Golf</pds-table-cell>
-        <pds-table-cell>Row Item Hotel</pds-table-cell>
-        <pds-table-cell>Row Item Juliett</pds-table-cell>
-        <pds-table-cell>Row Item Kilo</pds-table-cell>
-        <pds-table-cell>Row Item Lima</pds-table-cell>
-        <pds-table-cell>Row Item Mike</pds-table-cell>
+
       </pds-table-row>
     </pds-table-body>
   </pds-table>
@@ -847,6 +811,860 @@ webComponent: `<pds-table component-id="fixedcb" responsive fixed-column selecta
         <pds-table-cell>Row Item Kilo</pds-table-cell>
         <pds-table-cell>Row Item Lima</pds-table-cell>
         <pds-table-cell>Row Item Mike</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</DocCanvas>
+
+### Fixed Header with Vertical Scrolling
+
+When the `fixed-header` prop is set to `true` and `max-height` is specified, the table displays with a fixed header that remains visible during vertical scrolling. This is especially useful for tables with many rows where you need to keep column headers visible.
+
+**Note:** Fixed header must be used in conjunction with the `responsive` prop and requires the `max-height` prop to enable vertical scrolling. When using fixed headers, content should be placed in named slots: `slot="header"` for the table head and `slot="body"` for the table body.
+
+<DocCanvas mdxSource={{
+  react: `<PdsTable componentId="fixed-header" responsive fixedHeader maxHeight="300px">
+  <PdsTableHead slot="header">
+    <PdsTableHeadCell>Product Name</PdsTableHeadCell>
+    <PdsTableHeadCell>Category</PdsTableHeadCell>
+    <PdsTableHeadCell>Price</PdsTableHeadCell>
+    <PdsTableHeadCell>In Stock</PdsTableHeadCell>
+    <PdsTableHeadCell>Rating</PdsTableHeadCell>
+    <PdsTableHeadCell>Actions</PdsTableHeadCell>
+  </PdsTableHead>
+  <PdsTableBody slot="body">
+    <PdsTableRow>
+      <PdsTableCell>Wireless Headphones</PdsTableCell>
+      <PdsTableCell>Electronics</PdsTableCell>
+      <PdsTableCell>$99.99</PdsTableCell>
+      <PdsTableCell>Yes</PdsTableCell>
+      <PdsTableCell>4.5/5</PdsTableCell>
+      <PdsTableCell>Edit | Delete</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>Running Shoes</PdsTableCell>
+      <PdsTableCell>Footwear</PdsTableCell>
+      <PdsTableCell>$129.99</PdsTableCell>
+      <PdsTableCell>Yes</PdsTableCell>
+      <PdsTableCell>4.8/5</PdsTableCell>
+      <PdsTableCell>Edit | Delete</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>Coffee Maker</PdsTableCell>
+      <PdsTableCell>Appliances</PdsTableCell>
+      <PdsTableCell>$79.99</PdsTableCell>
+      <PdsTableCell>No</PdsTableCell>
+      <PdsTableCell>4.2/5</PdsTableCell>
+      <PdsTableCell>Edit | Delete</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>Yoga Mat</PdsTableCell>
+      <PdsTableCell>Fitness</PdsTableCell>
+      <PdsTableCell>$24.99</PdsTableCell>
+      <PdsTableCell>Yes</PdsTableCell>
+      <PdsTableCell>4.6/5</PdsTableCell>
+      <PdsTableCell>Edit | Delete</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>Laptop Stand</PdsTableCell>
+      <PdsTableCell>Office</PdsTableCell>
+      <PdsTableCell>$39.99</PdsTableCell>
+      <PdsTableCell>Yes</PdsTableCell>
+      <PdsTableCell>4.3/5</PdsTableCell>
+      <PdsTableCell>Edit | Delete</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>Bluetooth Speaker</PdsTableCell>
+      <PdsTableCell>Electronics</PdsTableCell>
+      <PdsTableCell>$59.99</PdsTableCell>
+      <PdsTableCell>Yes</PdsTableCell>
+      <PdsTableCell>4.4/5</PdsTableCell>
+      <PdsTableCell>Edit | Delete</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>Water Bottle</PdsTableCell>
+      <PdsTableCell>Sports</PdsTableCell>
+      <PdsTableCell>$19.99</PdsTableCell>
+      <PdsTableCell>Yes</PdsTableCell>
+      <PdsTableCell>4.7/5</PdsTableCell>
+      <PdsTableCell>Edit | Delete</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>Desk Lamp</PdsTableCell>
+      <PdsTableCell>Office</PdsTableCell>
+      <PdsTableCell>$34.99</PdsTableCell>
+      <PdsTableCell>No</PdsTableCell>
+      <PdsTableCell>4.1/5</PdsTableCell>
+      <PdsTableCell>Edit | Delete</PdsTableCell>
+    </PdsTableRow>
+  </PdsTableBody>
+</PdsTable>`,
+  webComponent: `<pds-table component-id="fixed-header" responsive fixed-header max-height="300px">
+  <pds-table-head slot="header">
+    <pds-table-head-cell>Product Name</pds-table-head-cell>
+    <pds-table-head-cell>Category</pds-table-head-cell>
+    <pds-table-head-cell>Price</pds-table-head-cell>
+    <pds-table-head-cell>In Stock</pds-table-head-cell>
+    <pds-table-head-cell>Rating</pds-table-head-cell>
+    <pds-table-head-cell>Actions</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body slot="body">
+    <pds-table-row>
+      <pds-table-cell>Wireless Headphones</pds-table-cell>
+      <pds-table-cell>Electronics</pds-table-cell>
+      <pds-table-cell>$99.99</pds-table-cell>
+      <pds-table-cell>Yes</pds-table-cell>
+      <pds-table-cell>4.5/5</pds-table-cell>
+      <pds-table-cell>Edit | Delete</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Running Shoes</pds-table-cell>
+      <pds-table-cell>Footwear</pds-table-cell>
+      <pds-table-cell>$129.99</pds-table-cell>
+      <pds-table-cell>Yes</pds-table-cell>
+      <pds-table-cell>4.8/5</pds-table-cell>
+      <pds-table-cell>Edit | Delete</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Coffee Maker</pds-table-cell>
+      <pds-table-cell>Appliances</pds-table-cell>
+      <pds-table-cell>$79.99</pds-table-cell>
+      <pds-table-cell>No</pds-table-cell>
+      <pds-table-cell>4.2/5</pds-table-cell>
+      <pds-table-cell>Edit | Delete</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Yoga Mat</pds-table-cell>
+      <pds-table-cell>Fitness</pds-table-cell>
+      <pds-table-cell>$24.99</pds-table-cell>
+      <pds-table-cell>Yes</pds-table-cell>
+      <pds-table-cell>4.6/5</pds-table-cell>
+      <pds-table-cell>Edit | Delete</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Laptop Stand</pds-table-cell>
+      <pds-table-cell>Office</pds-table-cell>
+      <pds-table-cell>$39.99</pds-table-cell>
+      <pds-table-cell>Yes</pds-table-cell>
+      <pds-table-cell>4.3/5</pds-table-cell>
+      <pds-table-cell>Edit | Delete</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Bluetooth Speaker</pds-table-cell>
+      <pds-table-cell>Electronics</pds-table-cell>
+      <pds-table-cell>$59.99</pds-table-cell>
+      <pds-table-cell>Yes</pds-table-cell>
+      <pds-table-cell>4.4/5</pds-table-cell>
+      <pds-table-cell>Edit | Delete</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Water Bottle</pds-table-cell>
+      <pds-table-cell>Sports</pds-table-cell>
+      <pds-table-cell>$19.99</pds-table-cell>
+      <pds-table-cell>Yes</pds-table-cell>
+      <pds-table-cell>4.7/5</pds-table-cell>
+      <pds-table-cell>Edit | Delete</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Desk Lamp</pds-table-cell>
+      <pds-table-cell>Office</pds-table-cell>
+      <pds-table-cell>$34.99</pds-table-cell>
+      <pds-table-cell>No</pds-table-cell>
+      <pds-table-cell>4.1/5</pds-table-cell>
+      <pds-table-cell>Edit | Delete</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
+`}}>
+  <pds-table component-id="fixed-header" responsive fixed-header max-height="300px">
+    <pds-table-head slot="header">
+      <pds-table-head-cell>Product Name</pds-table-head-cell>
+      <pds-table-head-cell>Category</pds-table-head-cell>
+      <pds-table-head-cell>Price</pds-table-head-cell>
+      <pds-table-head-cell>In Stock</pds-table-head-cell>
+      <pds-table-head-cell>Rating</pds-table-head-cell>
+      <pds-table-head-cell>Actions</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body slot="body">
+      <pds-table-row>
+        <pds-table-cell>Wireless Headphones</pds-table-cell>
+        <pds-table-cell>Electronics</pds-table-cell>
+        <pds-table-cell>$99.99</pds-table-cell>
+        <pds-table-cell>Yes</pds-table-cell>
+        <pds-table-cell>4.5/5</pds-table-cell>
+        <pds-table-cell>Edit | Delete</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Running Shoes</pds-table-cell>
+        <pds-table-cell>Footwear</pds-table-cell>
+        <pds-table-cell>$129.99</pds-table-cell>
+        <pds-table-cell>Yes</pds-table-cell>
+        <pds-table-cell>4.8/5</pds-table-cell>
+        <pds-table-cell>Edit | Delete</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Coffee Maker</pds-table-cell>
+        <pds-table-cell>Appliances</pds-table-cell>
+        <pds-table-cell>$79.99</pds-table-cell>
+        <pds-table-cell>No</pds-table-cell>
+        <pds-table-cell>4.2/5</pds-table-cell>
+        <pds-table-cell>Edit | Delete</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Yoga Mat</pds-table-cell>
+        <pds-table-cell>Fitness</pds-table-cell>
+        <pds-table-cell>$24.99</pds-table-cell>
+        <pds-table-cell>Yes</pds-table-cell>
+        <pds-table-cell>4.6/5</pds-table-cell>
+        <pds-table-cell>Edit | Delete</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Laptop Stand</pds-table-cell>
+        <pds-table-cell>Office</pds-table-cell>
+        <pds-table-cell>$39.99</pds-table-cell>
+        <pds-table-cell>Yes</pds-table-cell>
+        <pds-table-cell>4.3/5</pds-table-cell>
+        <pds-table-cell>Edit | Delete</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Bluetooth Speaker</pds-table-cell>
+        <pds-table-cell>Electronics</pds-table-cell>
+        <pds-table-cell>$59.99</pds-table-cell>
+        <pds-table-cell>Yes</pds-table-cell>
+        <pds-table-cell>4.4/5</pds-table-cell>
+        <pds-table-cell>Edit | Delete</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Water Bottle</pds-table-cell>
+        <pds-table-cell>Sports</pds-table-cell>
+        <pds-table-cell>$19.99</pds-table-cell>
+        <pds-table-cell>Yes</pds-table-cell>
+        <pds-table-cell>4.7/5</pds-table-cell>
+        <pds-table-cell>Edit | Delete</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Desk Lamp</pds-table-cell>
+        <pds-table-cell>Office</pds-table-cell>
+        <pds-table-cell>$34.99</pds-table-cell>
+        <pds-table-cell>No</pds-table-cell>
+        <pds-table-cell>4.1/5</pds-table-cell>
+        <pds-table-cell>Edit | Delete</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</DocCanvas>
+
+### Fixed Header with Fixed Column
+
+You can combine all three features - `responsive`, `fixed-header`, and `fixed-column` - to create a fully-featured data table. This configuration provides horizontal scrolling with a sticky first column, vertical scrolling with a fixed header, and visual scroll indicators for both axes.
+
+**Note:** This combination is ideal for large datasets where you need to maintain context for both row identifiers (first column) and column headers during scrolling.
+
+<DocCanvas mdxSource={{
+  react: `<PdsTable componentId="full-featured" responsive fixedHeader fixedColumn maxHeight="350px">
+  <PdsTableHead slot="header">
+    <PdsTableHeadCell>Employee ID</PdsTableHeadCell>
+    <PdsTableHeadCell>First Name</PdsTableHeadCell>
+    <PdsTableHeadCell>Last Name</PdsTableHeadCell>
+    <PdsTableHeadCell>Email Address</PdsTableHeadCell>
+    <PdsTableHeadCell>Department Name</PdsTableHeadCell>
+    <PdsTableHeadCell>Job Title</PdsTableHeadCell>
+    <PdsTableHeadCell>Start Date</PdsTableHeadCell>
+    <PdsTableHeadCell>Annual Salary</PdsTableHeadCell>
+    <PdsTableHeadCell>Office Location</PdsTableHeadCell>
+    <PdsTableHeadCell>Direct Manager</PdsTableHeadCell>
+    <PdsTableHeadCell>Employment Status</PdsTableHeadCell>
+    <PdsTableHeadCell>Phone Number</PdsTableHeadCell>
+    <PdsTableHeadCell>Years Experience</PdsTableHeadCell>
+    <PdsTableHeadCell>Skill Level</PdsTableHeadCell>
+    <PdsTableHeadCell>Performance Rating</PdsTableHeadCell>
+    <PdsTableHeadCell>Last Review Date</PdsTableHeadCell>
+  </PdsTableHead>
+  <PdsTableBody slot="body">
+    <PdsTableRow>
+      <PdsTableCell>EMP001</PdsTableCell>
+      <PdsTableCell>John</PdsTableCell>
+      <PdsTableCell>Smith</PdsTableCell>
+      <PdsTableCell>john.smith@company.com</PdsTableCell>
+      <PdsTableCell>Engineering</PdsTableCell>
+      <PdsTableCell>Senior Software Developer</PdsTableCell>
+      <PdsTableCell>2021-03-15</PdsTableCell>
+      <PdsTableCell>$95,000</PdsTableCell>
+      <PdsTableCell>New York, NY</PdsTableCell>
+      <PdsTableCell>Jane Doe</PdsTableCell>
+      <PdsTableCell>Active</PdsTableCell>
+      <PdsTableCell>(555) 123-4567</PdsTableCell>
+      <PdsTableCell>5 years</PdsTableCell>
+      <PdsTableCell>Senior</PdsTableCell>
+      <PdsTableCell>Excellent</PdsTableCell>
+      <PdsTableCell>2024-01-15</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>EMP002</PdsTableCell>
+      <PdsTableCell>Sarah</PdsTableCell>
+      <PdsTableCell>Johnson</PdsTableCell>
+      <PdsTableCell>sarah.johnson@company.com</PdsTableCell>
+      <PdsTableCell>Marketing</PdsTableCell>
+      <PdsTableCell>Marketing Manager</PdsTableCell>
+      <PdsTableCell>2020-08-22</PdsTableCell>
+      <PdsTableCell>$78,000</PdsTableCell>
+      <PdsTableCell>Los Angeles, CA</PdsTableCell>
+      <PdsTableCell>Mike Wilson</PdsTableCell>
+      <PdsTableCell>Active</PdsTableCell>
+      <PdsTableCell>(555) 234-5678</PdsTableCell>
+      <PdsTableCell>7 years</PdsTableCell>
+      <PdsTableCell>Senior</PdsTableCell>
+      <PdsTableCell>Very Good</PdsTableCell>
+      <PdsTableCell>2024-02-28</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>EMP003</PdsTableCell>
+      <PdsTableCell>Michael</PdsTableCell>
+      <PdsTableCell>Brown</PdsTableCell>
+      <PdsTableCell>michael.brown@company.com</PdsTableCell>
+      <PdsTableCell>Sales</PdsTableCell>
+      <PdsTableCell>Senior Sales Representative</PdsTableCell>
+      <PdsTableCell>2022-01-10</PdsTableCell>
+      <PdsTableCell>$65,000</PdsTableCell>
+      <PdsTableCell>Chicago, IL</PdsTableCell>
+      <PdsTableCell>Lisa Davis</PdsTableCell>
+      <PdsTableCell>Active</PdsTableCell>
+      <PdsTableCell>(555) 345-6789</PdsTableCell>
+      <PdsTableCell>3 years</PdsTableCell>
+      <PdsTableCell>Mid-level</PdsTableCell>
+      <PdsTableCell>Good</PdsTableCell>
+      <PdsTableCell>2024-01-22</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>EMP004</PdsTableCell>
+      <PdsTableCell>Emily</PdsTableCell>
+      <PdsTableCell>Davis</PdsTableCell>
+      <PdsTableCell>emily.davis@company.com</PdsTableCell>
+      <PdsTableCell>Human Resources</PdsTableCell>
+      <PdsTableCell>HR Business Partner</PdsTableCell>
+      <PdsTableCell>2019-11-05</PdsTableCell>
+      <PdsTableCell>$58,000</PdsTableCell>
+      <PdsTableCell>Austin, TX</PdsTableCell>
+      <PdsTableCell>Robert Kim</PdsTableCell>
+      <PdsTableCell>Active</PdsTableCell>
+      <PdsTableCell>(555) 456-7890</PdsTableCell>
+      <PdsTableCell>6 years</PdsTableCell>
+      <PdsTableCell>Senior</PdsTableCell>
+      <PdsTableCell>Excellent</PdsTableCell>
+      <PdsTableCell>2023-12-10</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>EMP005</PdsTableCell>
+      <PdsTableCell>David</PdsTableCell>
+      <PdsTableCell>Wilson</PdsTableCell>
+      <PdsTableCell>david.wilson@company.com</PdsTableCell>
+      <PdsTableCell>Finance</PdsTableCell>
+      <PdsTableCell>Senior Financial Analyst</PdsTableCell>
+      <PdsTableCell>2021-07-18</PdsTableCell>
+      <PdsTableCell>$72,000</PdsTableCell>
+      <PdsTableCell>Seattle, WA</PdsTableCell>
+      <PdsTableCell>Anna Garcia</PdsTableCell>
+      <PdsTableCell>Active</PdsTableCell>
+      <PdsTableCell>(555) 567-8901</PdsTableCell>
+      <PdsTableCell>4 years</PdsTableCell>
+      <PdsTableCell>Mid-level</PdsTableCell>
+      <PdsTableCell>Very Good</PdsTableCell>
+      <PdsTableCell>2024-03-05</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>EMP006</PdsTableCell>
+      <PdsTableCell>Jessica</PdsTableCell>
+      <PdsTableCell>Martinez</PdsTableCell>
+      <PdsTableCell>jessica.martinez@company.com</PdsTableCell>
+      <PdsTableCell>Product Design</PdsTableCell>
+      <PdsTableCell>Senior UX Designer</PdsTableCell>
+      <PdsTableCell>2020-12-03</PdsTableCell>
+      <PdsTableCell>$82,000</PdsTableCell>
+      <PdsTableCell>San Francisco, CA</PdsTableCell>
+      <PdsTableCell>Tom Lee</PdsTableCell>
+      <PdsTableCell>Active</PdsTableCell>
+      <PdsTableCell>(555) 678-9012</PdsTableCell>
+      <PdsTableCell>8 years</PdsTableCell>
+      <PdsTableCell>Senior</PdsTableCell>
+      <PdsTableCell>Excellent</PdsTableCell>
+      <PdsTableCell>2024-01-08</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>EMP007</PdsTableCell>
+      <PdsTableCell>Christopher</PdsTableCell>
+      <PdsTableCell>Anderson</PdsTableCell>
+      <PdsTableCell>chris.anderson@company.com</PdsTableCell>
+      <PdsTableCell>Operations</PdsTableCell>
+      <PdsTableCell>Senior Operations Manager</PdsTableCell>
+      <PdsTableCell>2018-04-12</PdsTableCell>
+      <PdsTableCell>$89,000</PdsTableCell>
+      <PdsTableCell>Denver, CO</PdsTableCell>
+      <PdsTableCell>Sarah Chen</PdsTableCell>
+      <PdsTableCell>Active</PdsTableCell>
+      <PdsTableCell>(555) 789-0123</PdsTableCell>
+      <PdsTableCell>9 years</PdsTableCell>
+      <PdsTableCell>Senior</PdsTableCell>
+      <PdsTableCell>Excellent</PdsTableCell>
+      <PdsTableCell>2023-11-20</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>EMP008</PdsTableCell>
+      <PdsTableCell>Amanda</PdsTableCell>
+      <PdsTableCell>Taylor</PdsTableCell>
+      <PdsTableCell>amanda.taylor@company.com</PdsTableCell>
+      <PdsTableCell>Legal Affairs</PdsTableCell>
+      <PdsTableCell>Senior Legal Counsel</PdsTableCell>
+      <PdsTableCell>2019-09-20</PdsTableCell>
+      <PdsTableCell>$125,000</PdsTableCell>
+      <PdsTableCell>Boston, MA</PdsTableCell>
+      <PdsTableCell>Kevin Park</PdsTableCell>
+      <PdsTableCell>Active</PdsTableCell>
+      <PdsTableCell>(555) 890-1234</PdsTableCell>
+      <PdsTableCell>12 years</PdsTableCell>
+      <PdsTableCell>Expert</PdsTableCell>
+      <PdsTableCell>Outstanding</PdsTableCell>
+      <PdsTableCell>2024-02-14</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>EMP009</PdsTableCell>
+      <PdsTableCell>James</PdsTableCell>
+      <PdsTableCell>Thompson</PdsTableCell>
+      <PdsTableCell>james.thompson@company.com</PdsTableCell>
+      <PdsTableCell>Engineering</PdsTableCell>
+      <PdsTableCell>Senior DevOps Engineer</PdsTableCell>
+      <PdsTableCell>2021-11-08</PdsTableCell>
+      <PdsTableCell>$92,000</PdsTableCell>
+      <PdsTableCell>Portland, OR</PdsTableCell>
+      <PdsTableCell>Jane Doe</PdsTableCell>
+      <PdsTableCell>Active</PdsTableCell>
+      <PdsTableCell>(555) 901-2345</PdsTableCell>
+      <PdsTableCell>6 years</PdsTableCell>
+      <PdsTableCell>Senior</PdsTableCell>
+      <PdsTableCell>Very Good</PdsTableCell>
+      <PdsTableCell>2024-01-30</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>EMP010</PdsTableCell>
+      <PdsTableCell>Lauren</PdsTableCell>
+      <PdsTableCell>White</PdsTableCell>
+      <PdsTableCell>lauren.white@company.com</PdsTableCell>
+      <PdsTableCell>Customer Success</PdsTableCell>
+      <PdsTableCell>Senior Customer Success Manager</PdsTableCell>
+      <PdsTableCell>2020-05-14</PdsTableCell>
+      <PdsTableCell>$68,000</PdsTableCell>
+      <PdsTableCell>Miami, FL</PdsTableCell>
+      <PdsTableCell>Rachel Green</PdsTableCell>
+      <PdsTableCell>Active</PdsTableCell>
+      <PdsTableCell>(555) 012-3456</PdsTableCell>
+      <PdsTableCell>5 years</PdsTableCell>
+      <PdsTableCell>Senior</PdsTableCell>
+      <PdsTableCell>Good</PdsTableCell>
+      <PdsTableCell>2023-12-18</PdsTableCell>
+    </PdsTableRow>
+  </PdsTableBody>
+</PdsTable>`,
+  webComponent: `<pds-table component-id="full-featured" responsive fixed-header fixed-column max-height="350px">
+  <pds-table-head slot="header">
+    <pds-table-head-cell>Employee ID</pds-table-head-cell>
+    <pds-table-head-cell>First Name</pds-table-head-cell>
+    <pds-table-head-cell>Last Name</pds-table-head-cell>
+    <pds-table-head-cell>Email Address</pds-table-head-cell>
+    <pds-table-head-cell>Department Name</pds-table-head-cell>
+    <pds-table-head-cell>Job Title</pds-table-head-cell>
+    <pds-table-head-cell>Start Date</pds-table-head-cell>
+    <pds-table-head-cell>Annual Salary</pds-table-head-cell>
+    <pds-table-head-cell>Office Location</pds-table-head-cell>
+    <pds-table-head-cell>Direct Manager</pds-table-head-cell>
+    <pds-table-head-cell>Employment Status</pds-table-head-cell>
+    <pds-table-head-cell>Phone Number</pds-table-head-cell>
+    <pds-table-head-cell>Years Experience</pds-table-head-cell>
+    <pds-table-head-cell>Skill Level</pds-table-head-cell>
+    <pds-table-head-cell>Performance Rating</pds-table-head-cell>
+    <pds-table-head-cell>Last Review Date</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body slot="body">
+    <pds-table-row>
+      <pds-table-cell>EMP001</pds-table-cell>
+      <pds-table-cell>John</pds-table-cell>
+      <pds-table-cell>Smith</pds-table-cell>
+      <pds-table-cell>john.smith@company.com</pds-table-cell>
+      <pds-table-cell>Engineering</pds-table-cell>
+      <pds-table-cell>Senior Software Developer</pds-table-cell>
+      <pds-table-cell>2021-03-15</pds-table-cell>
+      <pds-table-cell>$95,000</pds-table-cell>
+      <pds-table-cell>New York, NY</pds-table-cell>
+      <pds-table-cell>Jane Doe</pds-table-cell>
+      <pds-table-cell>Active</pds-table-cell>
+      <pds-table-cell>(555) 123-4567</pds-table-cell>
+      <pds-table-cell>5 years</pds-table-cell>
+      <pds-table-cell>Senior</pds-table-cell>
+      <pds-table-cell>Excellent</pds-table-cell>
+      <pds-table-cell>2024-01-15</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>EMP002</pds-table-cell>
+      <pds-table-cell>Sarah</pds-table-cell>
+      <pds-table-cell>Johnson</pds-table-cell>
+      <pds-table-cell>sarah.johnson@company.com</pds-table-cell>
+      <pds-table-cell>Marketing</pds-table-cell>
+      <pds-table-cell>Marketing Manager</pds-table-cell>
+      <pds-table-cell>2020-08-22</pds-table-cell>
+      <pds-table-cell>$78,000</pds-table-cell>
+      <pds-table-cell>Los Angeles, CA</pds-table-cell>
+      <pds-table-cell>Mike Wilson</pds-table-cell>
+      <pds-table-cell>Active</pds-table-cell>
+      <pds-table-cell>(555) 234-5678</pds-table-cell>
+      <pds-table-cell>7 years</pds-table-cell>
+      <pds-table-cell>Senior</pds-table-cell>
+      <pds-table-cell>Very Good</pds-table-cell>
+      <pds-table-cell>2024-02-28</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>EMP003</pds-table-cell>
+      <pds-table-cell>Michael</pds-table-cell>
+      <pds-table-cell>Brown</pds-table-cell>
+      <pds-table-cell>michael.brown@company.com</pds-table-cell>
+      <pds-table-cell>Sales</pds-table-cell>
+      <pds-table-cell>Senior Sales Representative</pds-table-cell>
+      <pds-table-cell>2022-01-10</pds-table-cell>
+      <pds-table-cell>$65,000</pds-table-cell>
+      <pds-table-cell>Chicago, IL</pds-table-cell>
+      <pds-table-cell>Lisa Davis</pds-table-cell>
+      <pds-table-cell>Active</pds-table-cell>
+      <pds-table-cell>(555) 345-6789</pds-table-cell>
+      <pds-table-cell>3 years</pds-table-cell>
+      <pds-table-cell>Mid-level</pds-table-cell>
+      <pds-table-cell>Good</pds-table-cell>
+      <pds-table-cell>2024-01-22</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>EMP004</pds-table-cell>
+      <pds-table-cell>Emily</pds-table-cell>
+      <pds-table-cell>Davis</pds-table-cell>
+      <pds-table-cell>emily.davis@company.com</pds-table-cell>
+      <pds-table-cell>Human Resources</pds-table-cell>
+      <pds-table-cell>HR Business Partner</pds-table-cell>
+      <pds-table-cell>2019-11-05</pds-table-cell>
+      <pds-table-cell>$58,000</pds-table-cell>
+      <pds-table-cell>Austin, TX</pds-table-cell>
+      <pds-table-cell>Robert Kim</pds-table-cell>
+      <pds-table-cell>Active</pds-table-cell>
+      <pds-table-cell>(555) 456-7890</pds-table-cell>
+      <pds-table-cell>6 years</pds-table-cell>
+      <pds-table-cell>Senior</pds-table-cell>
+      <pds-table-cell>Excellent</pds-table-cell>
+      <pds-table-cell>2023-12-10</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>EMP005</pds-table-cell>
+      <pds-table-cell>David</pds-table-cell>
+      <pds-table-cell>Wilson</pds-table-cell>
+      <pds-table-cell>david.wilson@company.com</pds-table-cell>
+      <pds-table-cell>Finance</pds-table-cell>
+      <pds-table-cell>Senior Financial Analyst</pds-table-cell>
+      <pds-table-cell>2021-07-18</pds-table-cell>
+      <pds-table-cell>$72,000</pds-table-cell>
+      <pds-table-cell>Seattle, WA</pds-table-cell>
+      <pds-table-cell>Anna Garcia</pds-table-cell>
+      <pds-table-cell>Active</pds-table-cell>
+      <pds-table-cell>(555) 567-8901</pds-table-cell>
+      <pds-table-cell>4 years</pds-table-cell>
+      <pds-table-cell>Mid-level</pds-table-cell>
+      <pds-table-cell>Very Good</pds-table-cell>
+      <pds-table-cell>2024-03-05</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>EMP006</pds-table-cell>
+      <pds-table-cell>Jessica</pds-table-cell>
+      <pds-table-cell>Martinez</pds-table-cell>
+      <pds-table-cell>jessica.martinez@company.com</pds-table-cell>
+      <pds-table-cell>Product Design</pds-table-cell>
+      <pds-table-cell>Senior UX Designer</pds-table-cell>
+      <pds-table-cell>2020-12-03</pds-table-cell>
+      <pds-table-cell>$82,000</pds-table-cell>
+      <pds-table-cell>San Francisco, CA</pds-table-cell>
+      <pds-table-cell>Tom Lee</pds-table-cell>
+      <pds-table-cell>Active</pds-table-cell>
+      <pds-table-cell>(555) 678-9012</pds-table-cell>
+      <pds-table-cell>8 years</pds-table-cell>
+      <pds-table-cell>Senior</pds-table-cell>
+      <pds-table-cell>Excellent</pds-table-cell>
+      <pds-table-cell>2024-01-08</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>EMP007</pds-table-cell>
+      <pds-table-cell>Christopher</pds-table-cell>
+      <pds-table-cell>Anderson</pds-table-cell>
+      <pds-table-cell>chris.anderson@company.com</pds-table-cell>
+      <pds-table-cell>Operations</pds-table-cell>
+      <pds-table-cell>Senior Operations Manager</pds-table-cell>
+      <pds-table-cell>2018-04-12</pds-table-cell>
+      <pds-table-cell>$89,000</pds-table-cell>
+      <pds-table-cell>Denver, CO</pds-table-cell>
+      <pds-table-cell>Sarah Chen</pds-table-cell>
+      <pds-table-cell>Active</pds-table-cell>
+      <pds-table-cell>(555) 789-0123</pds-table-cell>
+      <pds-table-cell>9 years</pds-table-cell>
+      <pds-table-cell>Senior</pds-table-cell>
+      <pds-table-cell>Excellent</pds-table-cell>
+      <pds-table-cell>2023-11-20</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>EMP008</pds-table-cell>
+      <pds-table-cell>Amanda</pds-table-cell>
+      <pds-table-cell>Taylor</pds-table-cell>
+      <pds-table-cell>amanda.taylor@company.com</pds-table-cell>
+      <pds-table-cell>Legal Affairs</pds-table-cell>
+      <pds-table-cell>Senior Legal Counsel</pds-table-cell>
+      <pds-table-cell>2019-09-20</pds-table-cell>
+      <pds-table-cell>$125,000</pds-table-cell>
+      <pds-table-cell>Boston, MA</pds-table-cell>
+      <pds-table-cell>Kevin Park</pds-table-cell>
+      <pds-table-cell>Active</pds-table-cell>
+      <pds-table-cell>(555) 890-1234</pds-table-cell>
+      <pds-table-cell>12 years</pds-table-cell>
+      <pds-table-cell>Expert</pds-table-cell>
+      <pds-table-cell>Outstanding</pds-table-cell>
+      <pds-table-cell>2024-02-14</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>EMP009</pds-table-cell>
+      <pds-table-cell>James</pds-table-cell>
+      <pds-table-cell>Thompson</pds-table-cell>
+      <pds-table-cell>james.thompson@company.com</pds-table-cell>
+      <pds-table-cell>Engineering</pds-table-cell>
+      <pds-table-cell>Senior DevOps Engineer</pds-table-cell>
+      <pds-table-cell>2021-11-08</pds-table-cell>
+      <pds-table-cell>$92,000</pds-table-cell>
+      <pds-table-cell>Portland, OR</pds-table-cell>
+      <pds-table-cell>Jane Doe</pds-table-cell>
+      <pds-table-cell>Active</pds-table-cell>
+      <pds-table-cell>(555) 901-2345</pds-table-cell>
+      <pds-table-cell>6 years</pds-table-cell>
+      <pds-table-cell>Senior</pds-table-cell>
+      <pds-table-cell>Very Good</pds-table-cell>
+      <pds-table-cell>2024-01-30</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>EMP010</pds-table-cell>
+      <pds-table-cell>Lauren</pds-table-cell>
+      <pds-table-cell>White</pds-table-cell>
+      <pds-table-cell>lauren.white@company.com</pds-table-cell>
+      <pds-table-cell>Customer Success</pds-table-cell>
+      <pds-table-cell>Senior Customer Success Manager</pds-table-cell>
+      <pds-table-cell>2020-05-14</pds-table-cell>
+      <pds-table-cell>$68,000</pds-table-cell>
+      <pds-table-cell>Miami, FL</pds-table-cell>
+      <pds-table-cell>Rachel Green</pds-table-cell>
+      <pds-table-cell>Active</pds-table-cell>
+      <pds-table-cell>(555) 012-3456</pds-table-cell>
+      <pds-table-cell>5 years</pds-table-cell>
+      <pds-table-cell>Senior</pds-table-cell>
+      <pds-table-cell>Good</pds-table-cell>
+      <pds-table-cell>2023-12-18</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
+`}}>
+  <pds-table component-id="full-featured" responsive fixed-header fixed-column max-height="350px">
+    <pds-table-head slot="header">
+      <pds-table-head-cell>Employee ID</pds-table-head-cell>
+      <pds-table-head-cell>First Name</pds-table-head-cell>
+      <pds-table-head-cell>Last Name</pds-table-head-cell>
+      <pds-table-head-cell>Email Address</pds-table-head-cell>
+      <pds-table-head-cell>Department Name</pds-table-head-cell>
+      <pds-table-head-cell>Job Title</pds-table-head-cell>
+      <pds-table-head-cell>Start Date</pds-table-head-cell>
+      <pds-table-head-cell>Annual Salary</pds-table-head-cell>
+      <pds-table-head-cell>Office Location</pds-table-head-cell>
+      <pds-table-head-cell>Direct Manager</pds-table-head-cell>
+      <pds-table-head-cell>Employment Status</pds-table-head-cell>
+      <pds-table-head-cell>Phone Number</pds-table-head-cell>
+      <pds-table-head-cell>Years Experience</pds-table-head-cell>
+      <pds-table-head-cell>Skill Level</pds-table-head-cell>
+      <pds-table-head-cell>Performance Rating</pds-table-head-cell>
+      <pds-table-head-cell>Last Review Date</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body slot="body">
+      <pds-table-row>
+        <pds-table-cell>EMP001</pds-table-cell>
+        <pds-table-cell>John</pds-table-cell>
+        <pds-table-cell>Smith</pds-table-cell>
+        <pds-table-cell>john.smith@company.com</pds-table-cell>
+        <pds-table-cell>Engineering</pds-table-cell>
+        <pds-table-cell>Senior Software Developer</pds-table-cell>
+        <pds-table-cell>2021-03-15</pds-table-cell>
+        <pds-table-cell>$95,000</pds-table-cell>
+        <pds-table-cell>New York, NY</pds-table-cell>
+        <pds-table-cell>Jane Doe</pds-table-cell>
+        <pds-table-cell>Active</pds-table-cell>
+        <pds-table-cell>(555) 123-4567</pds-table-cell>
+        <pds-table-cell>5 years</pds-table-cell>
+        <pds-table-cell>Senior</pds-table-cell>
+        <pds-table-cell>Excellent</pds-table-cell>
+        <pds-table-cell>2024-01-15</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>EMP002</pds-table-cell>
+        <pds-table-cell>Sarah</pds-table-cell>
+        <pds-table-cell>Johnson</pds-table-cell>
+        <pds-table-cell>sarah.johnson@company.com</pds-table-cell>
+        <pds-table-cell>Marketing</pds-table-cell>
+        <pds-table-cell>Marketing Manager</pds-table-cell>
+        <pds-table-cell>2020-08-22</pds-table-cell>
+        <pds-table-cell>$78,000</pds-table-cell>
+        <pds-table-cell>Los Angeles, CA</pds-table-cell>
+        <pds-table-cell>Mike Wilson</pds-table-cell>
+        <pds-table-cell>Active</pds-table-cell>
+        <pds-table-cell>(555) 234-5678</pds-table-cell>
+        <pds-table-cell>7 years</pds-table-cell>
+        <pds-table-cell>Senior</pds-table-cell>
+        <pds-table-cell>Very Good</pds-table-cell>
+        <pds-table-cell>2024-02-28</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>EMP003</pds-table-cell>
+        <pds-table-cell>Michael</pds-table-cell>
+        <pds-table-cell>Brown</pds-table-cell>
+        <pds-table-cell>michael.brown@company.com</pds-table-cell>
+        <pds-table-cell>Sales</pds-table-cell>
+        <pds-table-cell>Senior Sales Representative</pds-table-cell>
+        <pds-table-cell>2022-01-10</pds-table-cell>
+        <pds-table-cell>$65,000</pds-table-cell>
+        <pds-table-cell>Chicago, IL</pds-table-cell>
+        <pds-table-cell>Lisa Davis</pds-table-cell>
+        <pds-table-cell>Active</pds-table-cell>
+        <pds-table-cell>(555) 345-6789</pds-table-cell>
+        <pds-table-cell>3 years</pds-table-cell>
+        <pds-table-cell>Mid-level</pds-table-cell>
+        <pds-table-cell>Good</pds-table-cell>
+        <pds-table-cell>2024-01-22</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>EMP004</pds-table-cell>
+        <pds-table-cell>Emily</pds-table-cell>
+        <pds-table-cell>Davis</pds-table-cell>
+        <pds-table-cell>emily.davis@company.com</pds-table-cell>
+        <pds-table-cell>Human Resources</pds-table-cell>
+        <pds-table-cell>HR Business Partner</pds-table-cell>
+        <pds-table-cell>2019-11-05</pds-table-cell>
+        <pds-table-cell>$58,000</pds-table-cell>
+        <pds-table-cell>Austin, TX</pds-table-cell>
+        <pds-table-cell>Robert Kim</pds-table-cell>
+        <pds-table-cell>Active</pds-table-cell>
+        <pds-table-cell>(555) 456-7890</pds-table-cell>
+        <pds-table-cell>6 years</pds-table-cell>
+        <pds-table-cell>Senior</pds-table-cell>
+        <pds-table-cell>Excellent</pds-table-cell>
+        <pds-table-cell>2023-12-10</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>EMP005</pds-table-cell>
+        <pds-table-cell>David</pds-table-cell>
+        <pds-table-cell>Wilson</pds-table-cell>
+        <pds-table-cell>david.wilson@company.com</pds-table-cell>
+        <pds-table-cell>Finance</pds-table-cell>
+        <pds-table-cell>Senior Financial Analyst</pds-table-cell>
+        <pds-table-cell>2021-07-18</pds-table-cell>
+        <pds-table-cell>$72,000</pds-table-cell>
+        <pds-table-cell>Seattle, WA</pds-table-cell>
+        <pds-table-cell>Anna Garcia</pds-table-cell>
+        <pds-table-cell>Active</pds-table-cell>
+        <pds-table-cell>(555) 567-8901</pds-table-cell>
+        <pds-table-cell>4 years</pds-table-cell>
+        <pds-table-cell>Mid-level</pds-table-cell>
+        <pds-table-cell>Very Good</pds-table-cell>
+        <pds-table-cell>2024-03-05</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>EMP006</pds-table-cell>
+        <pds-table-cell>Jessica</pds-table-cell>
+        <pds-table-cell>Martinez</pds-table-cell>
+        <pds-table-cell>jessica.martinez@company.com</pds-table-cell>
+        <pds-table-cell>Product Design</pds-table-cell>
+        <pds-table-cell>Senior UX Designer</pds-table-cell>
+        <pds-table-cell>2020-12-03</pds-table-cell>
+        <pds-table-cell>$82,000</pds-table-cell>
+        <pds-table-cell>San Francisco, CA</pds-table-cell>
+        <pds-table-cell>Tom Lee</pds-table-cell>
+        <pds-table-cell>Active</pds-table-cell>
+        <pds-table-cell>(555) 678-9012</pds-table-cell>
+        <pds-table-cell>8 years</pds-table-cell>
+        <pds-table-cell>Senior</pds-table-cell>
+        <pds-table-cell>Excellent</pds-table-cell>
+        <pds-table-cell>2024-01-08</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>EMP007</pds-table-cell>
+        <pds-table-cell>Christopher</pds-table-cell>
+        <pds-table-cell>Anderson</pds-table-cell>
+        <pds-table-cell>chris.anderson@company.com</pds-table-cell>
+        <pds-table-cell>Operations</pds-table-cell>
+        <pds-table-cell>Senior Operations Manager</pds-table-cell>
+        <pds-table-cell>2018-04-12</pds-table-cell>
+        <pds-table-cell>$89,000</pds-table-cell>
+        <pds-table-cell>Denver, CO</pds-table-cell>
+        <pds-table-cell>Sarah Chen</pds-table-cell>
+        <pds-table-cell>Active</pds-table-cell>
+        <pds-table-cell>(555) 789-0123</pds-table-cell>
+        <pds-table-cell>9 years</pds-table-cell>
+        <pds-table-cell>Senior</pds-table-cell>
+        <pds-table-cell>Excellent</pds-table-cell>
+        <pds-table-cell>2023-11-20</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>EMP008</pds-table-cell>
+        <pds-table-cell>Amanda</pds-table-cell>
+        <pds-table-cell>Taylor</pds-table-cell>
+        <pds-table-cell>amanda.taylor@company.com</pds-table-cell>
+        <pds-table-cell>Legal Affairs</pds-table-cell>
+        <pds-table-cell>Senior Legal Counsel</pds-table-cell>
+        <pds-table-cell>2019-09-20</pds-table-cell>
+        <pds-table-cell>$125,000</pds-table-cell>
+        <pds-table-cell>Boston, MA</pds-table-cell>
+        <pds-table-cell>Kevin Park</pds-table-cell>
+        <pds-table-cell>Active</pds-table-cell>
+        <pds-table-cell>(555) 890-1234</pds-table-cell>
+        <pds-table-cell>12 years</pds-table-cell>
+        <pds-table-cell>Expert</pds-table-cell>
+        <pds-table-cell>Outstanding</pds-table-cell>
+        <pds-table-cell>2024-02-14</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>EMP009</pds-table-cell>
+        <pds-table-cell>James</pds-table-cell>
+        <pds-table-cell>Thompson</pds-table-cell>
+        <pds-table-cell>james.thompson@company.com</pds-table-cell>
+        <pds-table-cell>Engineering</pds-table-cell>
+        <pds-table-cell>Senior DevOps Engineer</pds-table-cell>
+        <pds-table-cell>2021-11-08</pds-table-cell>
+        <pds-table-cell>$92,000</pds-table-cell>
+        <pds-table-cell>Portland, OR</pds-table-cell>
+        <pds-table-cell>Jane Doe</pds-table-cell>
+        <pds-table-cell>Active</pds-table-cell>
+        <pds-table-cell>(555) 901-2345</pds-table-cell>
+        <pds-table-cell>6 years</pds-table-cell>
+        <pds-table-cell>Senior</pds-table-cell>
+        <pds-table-cell>Very Good</pds-table-cell>
+        <pds-table-cell>2024-01-30</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>EMP010</pds-table-cell>
+        <pds-table-cell>Lauren</pds-table-cell>
+        <pds-table-cell>White</pds-table-cell>
+        <pds-table-cell>lauren.white@company.com</pds-table-cell>
+        <pds-table-cell>Customer Success</pds-table-cell>
+        <pds-table-cell>Senior Customer Success Manager</pds-table-cell>
+        <pds-table-cell>2020-05-14</pds-table-cell>
+        <pds-table-cell>$68,000</pds-table-cell>
+        <pds-table-cell>Miami, FL</pds-table-cell>
+        <pds-table-cell>Rachel Green</pds-table-cell>
+        <pds-table-cell>Active</pds-table-cell>
+        <pds-table-cell>(555) 012-3456</pds-table-cell>
+        <pds-table-cell>5 years</pds-table-cell>
+        <pds-table-cell>Senior</pds-table-cell>
+        <pds-table-cell>Good</pds-table-cell>
+        <pds-table-cell>2023-12-18</pds-table-cell>
       </pds-table-row>
     </pds-table-body>
   </pds-table>

@@ -18,7 +18,9 @@
 }
 
 :host(.is-fixed) {
-  background: var(--pine-color-background-container);
+  background: var(--pine-color-background-container) !important;
+  /* Ensure background persists during all scroll states */
+  background-clip: padding-box !important;
   left: 0;
   position: sticky;
   z-index: 1;

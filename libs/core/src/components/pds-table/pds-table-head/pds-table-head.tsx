@@ -54,12 +54,36 @@ export class PdsTableHead {
   }
 
   componentWillRender() {
-    this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+    this.tableRef = this.findParentTable();
+  }
 
-    if (this.tableRef && this.tableRef.fixedColumn) {
-      const tableCell = this.hostElement.querySelector('pds-table-head-cell:first-child');
-      tableCell?.classList.add("is-fixed");
+  /**
+   * Find the parent table element, handling both regular and slotted content
+   */
+  private findParentTable(): HTMLPdsTableElement | null {
+    // First try the standard closest query
+    const table = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+
+    if (table != null) {
+      return table;
     }
+
+    // If that fails (e.g., when slotted), walk up the DOM tree manually
+    let element = this.hostElement.parentElement;
+    while (!!element) {
+      if (element.tagName === 'PDS-TABLE') {
+        return element as HTMLPdsTableElement;
+      }
+
+      // Check if we're in a slot and need to traverse to the host
+      if (!!element.assignedSlot) {
+        element = element.assignedSlot.getRootNode()['host'] as HTMLElement;
+      } else {
+        element = element.parentElement;
+      }
+    }
+
+    return null;
   }
 
   render() {

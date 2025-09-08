@@ -48,6 +48,18 @@
   overflow-y: visible !important;
   position: relative !important;
   width: 100% !important;
+
+  // Enable vertical scrolling when maxHeight is set
+  &.has-max-height {
+    max-height: var(--table-max-height);
+    overflow-y: auto !important;
+  }
+
+  // Fixed header layout
+  &.has-fixed-header {
+    display: flex !important;
+    flex-direction: column !important;
+  }
 }
 
 .pds-table-responsive-wrapper {
@@ -91,4 +103,96 @@
   border-bottom-right-radius: inherit;
   border-top-right-radius: inherit;
   right: 0;
+}
+
+/* New wrapper styles for fixed header layout */
+.pds-table-fixed-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.pds-table-header-wrapper {
+  background: var(--pine-color-background-container) !important;
+  /* Ensure background stays visible during all scroll states */
+  background-clip: padding-box !important;
+  border-radius: inherit;
+  box-sizing: border-box !important;
+  display: block !important;
+  flex-shrink: 0;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 2 !important;
+
+  .pds-table {
+    background: var(--pine-color-background-container) !important;
+    display: table !important;
+    min-width: max-content !important;
+    table-layout: auto !important; /* Revert to auto for content-driven sizing */
+    white-space: nowrap !important;
+    width: 100% !important;
+  }
+
+
+  &.has-scrolled {
+    /* Remove bottom shadow as there's already a border */
+    background: var(--pine-color-background-container) !important; /* Reinforce background */
+    box-shadow: none;
+  }
+}
+
+.pds-table-body-wrapper {
+  border-radius: inherit;
+  box-sizing: border-box !important;
+  display: block !important;
+  flex: 1 !important;
+  overflow: visible !important; /* Changed from hidden to visible to allow sticky positioning */
+  position: relative !important;
+
+  .pds-table {
+    display: table !important;
+    min-width: max-content !important;
+    table-layout: auto !important; /* Revert to auto for content-driven sizing */
+    white-space: nowrap !important;
+    width: 100% !important;
+  }
+}
+
+/* Enhanced synchronization for fixed header + fixed column */
+.pds-table-responsive-host.has-fixed-header.has-fixed-column {
+  .pds-table-header-wrapper,
+  .pds-table-body-wrapper {
+    .pds-table {
+      table-layout: auto !important; /* Keep auto layout for natural column sizing */
+      width: 100% !important;
+    }
+  }
+}
+
+/* Vertical scroll shadows */
+.scroll-shadow-top,
+.scroll-shadow-bottom {
+  height: 4px;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  transition: opacity 0.1s ease;
+  width: 100%;
+  z-index: 10;
+}
+
+.scroll-shadow-top {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), transparent);
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+  top: 0;
+}
+
+.scroll-shadow-bottom {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.1), transparent);
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit;
+  bottom: 0;
 }

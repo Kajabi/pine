@@ -1128,6 +1128,14 @@ export namespace Components {
          */
         "fixedColumn": boolean;
         /**
+          * Determines if the table displays a fixed header that remains visible during vertical scrolling.
+         */
+        "fixedHeader": boolean;
+        /**
+          * Maximum height of the table container. When set, enables vertical scrolling. Accepts CSS height values like "400px", "50vh", etc.
+         */
+        "maxHeight": string;
+        /**
           * Enables the table to be responsive by horizontally scrolling on smaller screens.
          */
         "responsive": boolean;
@@ -3220,6 +3228,14 @@ declare namespace LocalJSX {
           * Determines if the should display a fixed first column.
          */
         "fixedColumn"?: boolean;
+        /**
+          * Determines if the table displays a fixed header that remains visible during vertical scrolling.
+         */
+        "fixedHeader"?: boolean;
+        /**
+          * Maximum height of the table container. When set, enables vertical scrolling. Accepts CSS height values like "400px", "50vh", etc.
+         */
+        "maxHeight"?: string;
         /**
           * Event that is emitted when the checkbox is clicked, carrying the rowIndex and selected value.
          */

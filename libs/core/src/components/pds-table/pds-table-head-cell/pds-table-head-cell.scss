@@ -21,15 +21,17 @@
 }
 
 :host(.is-fixed) {
-  background: var(--pine-color-background-container);
+  background: var(--pine-color-background-container) !important;
+  /* Ensure background persists during all scroll states */
+  background-clip: padding-box !important;
   left: var(--pine-dimension-none);
   position: sticky;
-  z-index: 1;
+  z-index: 3; /* Higher than header wrapper to ensure proper stacking */
 }
 
-// box shadow when table has scrolled and cell is fixed
+// box shadow when table has scrolled and cell is fixed - only right shadow, no bottom
 :host(.has-scrolled.is-fixed) {
-  box-shadow: var(--box-shadow-default);
+  box-shadow: 3px 0 6px -2px rgba(0, 0, 0, 0.1); /* Right shadow only */
 }
 
 :host(.is-sortable) {
