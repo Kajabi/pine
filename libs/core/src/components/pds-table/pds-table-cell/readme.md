@@ -13,6 +13,13 @@
 | `truncate`  | `truncate`   | Truncates content to a max width of 100px and adds an ellipsis. | `boolean`                                   | `undefined` |
 
 
+## Shadow Parts
+
+| Part     | Description |
+| -------- | ----------- |
+| `"cell"` |             |
+
+
 ## Dependencies
 
 ### Used by

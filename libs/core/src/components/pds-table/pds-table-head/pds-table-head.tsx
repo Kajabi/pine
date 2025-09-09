@@ -64,7 +64,7 @@ export class PdsTableHead {
 
   render() {
     return (
-      <Host role="row">
+      <Host role="row" part="head">
         {this.tableRef && this.tableRef.selectable && (
           <pds-table-head-cell part={this.tableRef.selectable ? 'checkbox-cell' : ''}>
             <pds-checkbox
@@ -74,6 +74,7 @@ export class PdsTableHead {
               label={"Select All Rows"}
               hideLabel={true}
               checked={this.isSelected}
+              part="select-all-checkbox"
             />
           </pds-table-head-cell>
         )}

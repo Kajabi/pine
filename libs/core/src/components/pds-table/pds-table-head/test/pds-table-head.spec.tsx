@@ -9,7 +9,7 @@ describe('pds-table-head', () => {
       html: `<pds-table-head></pds-table-head>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-table-head role="row">
+      <pds-table-head role="row" part="head">
         <mock:shadow-root>
           <slot></slot>
         </mock:shadow-root>

@@ -13,7 +13,7 @@ describe('pds-table', () => {
       html: `<pds-table></pds-table>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-table class="pds-table" role="grid" tabindex="0">
+      <pds-table class="pds-table" role="grid" tabindex="0" part="table">
         <mock:shadow-root>
           <slot></slot>
         </mock:shadow-root>
@@ -28,7 +28,7 @@ describe('pds-table', () => {
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-table class="pds-table is-compact" compact="true" role="grid" tabindex="0">
+      <pds-table class="pds-table is-compact" compact="true" role="grid" tabindex="0" part="table">
         <mock:shadow-root>
           <slot></slot>
         </mock:shadow-root>
@@ -43,13 +43,13 @@ describe('pds-table', () => {
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-table class="pds-table is-responsive pds-table-responsive-host" responsive="true" component-id="test-table" id="test-table" role="grid" tabindex="0">
+      <pds-table class="pds-table is-responsive pds-table-responsive-host" responsive="true" component-id="test-table" id="test-table" role="grid" tabindex="0" part="table responsive-table">
         <mock:shadow-root>
-          <div class="scroll-shadow-left" style="opacity: 0;"></div>
-          <div class="scroll-shadow-right" style="opacity: 0;"></div>
-          <div class="pds-table-responsive-container">
-            <div class="pds-table-responsive-wrapper">
-              <div class="pds-table  is-responsive">
+          <div class="scroll-shadow-left" style="opacity: 0;" part="scroll-shadow-left"></div>
+          <div class="scroll-shadow-right" style="opacity: 0;" part="scroll-shadow-right"></div>
+          <div class="pds-table-responsive-container" part="responsive-container">
+            <div class="pds-table-responsive-wrapper" part="responsive-wrapper">
+              <div class="pds-table  is-responsive" part="table-inner">
                 <slot></slot>
               </div>
             </div>

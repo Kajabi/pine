@@ -128,6 +128,7 @@ export class PdsTableCell {
       <Host
         class={this.classNames()}
         role="gridcell"
+        part="cell"
         style={
           this.tableRef &&
           this.tableRef.fixedColumn &&

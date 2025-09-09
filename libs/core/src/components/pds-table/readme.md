@@ -24,6 +24,19 @@
 | `pdsTableSelectAll` | Event that is emitted when the select all checkbox is clicked, carrying the selected value.   | `CustomEvent<{ isSelected: boolean; }>`                   |
 
 
+## Shadow Parts
+
+| Part                     | Description |
+| ------------------------ | ----------- |
+| `"responsive-container"` |             |
+| `"responsive-table"`     |             |
+| `"responsive-wrapper"`   |             |
+| `"scroll-shadow-left"`   |             |
+| `"scroll-shadow-right"`  |             |
+| `"table"`                |             |
+| `"table-inner"`          |             |
+
+
 ----------------------------------------------
 
 

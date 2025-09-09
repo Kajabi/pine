@@ -20,6 +20,14 @@
 | `pdsTableSort` | Event emitted to signal that a table column header has been sorted, providing information about the sorted column's name and sorting direction. | `CustomEvent<{ column: string; direction: string; }>` |
 
 
+## Shadow Parts
+
+| Part          | Description |
+| ------------- | ----------- |
+| `"head-cell"` |             |
+| `"sort-icon"` |             |
+
+
 ## Dependencies
 
 ### Used by

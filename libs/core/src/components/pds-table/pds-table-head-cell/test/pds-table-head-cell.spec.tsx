@@ -11,7 +11,7 @@ describe('pds-table-head-cell', () => {
       html: `<pds-table-head-cell></pds-table-head-cell>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-table-head-cell role="columnheader">
+      <pds-table-head-cell role="columnheader" part="head-cell">
         <mock:shadow-root>
           <slot></slot>
         </mock:shadow-root>
@@ -25,10 +25,10 @@ describe('pds-table-head-cell', () => {
       html: `<pds-table-head-cell sortable="true"></pds-table-head-cell>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-table-head-cell class="is-sortable sort-asc" role="columnheader" sortable="true">
+      <pds-table-head-cell class="is-sortable sort-asc" role="columnheader" sortable="true" part="head-cell">
         <mock:shadow-root>
           <slot></slot>
-          <pds-icon icon="${upSmall}"></pds-icon>
+          <pds-icon icon="${upSmall}" part="sort-icon"></pds-icon>
         </mock:shadow-root>
       </pds-table-head-cell>
     `);
