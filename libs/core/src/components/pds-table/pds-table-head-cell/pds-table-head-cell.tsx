@@ -165,6 +165,7 @@ export class PdsTableHeadCell {
         class={this.classNames()}
         role="columnheader"
         onClick={this.toggleSort}
+        part="head-cell"
         style={
           this.tableRef &&
           this.tableRef.fixedColumn &&
@@ -175,7 +176,7 @@ export class PdsTableHeadCell {
       >
         <slot></slot>
         {this.sortable && (
-          <pds-icon icon={this.sortingDirection === 'asc' ? upSmall : downSmall} />
+          <pds-icon icon={this.sortingDirection === 'asc' ? upSmall : downSmall} part="sort-icon" />
         )}
       </Host>
     );

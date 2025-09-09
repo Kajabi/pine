@@ -81,9 +81,10 @@ export class PdsTableRow {
       <Host
         class={this.classNames()}
         role="row"
+        part="row"
       >
         {this.tableRef && this.tableRef.selectable && (
-          <pds-table-cell part={this.tableRef.fixedColumn ? 'checkbox-cell' : ''} class={this.tableRef.selectable ? 'has-checkbox' : ''} >
+          <pds-table-cell part={this.tableRef.fixedColumn ? 'checkbox-cell' : 'checkbox-cell'} class={this.tableRef.selectable ? 'has-checkbox' : ''} >
             <pds-checkbox
               componentId={this.generateUniqueId()}
               onClick={this.handleClick}
@@ -91,6 +92,7 @@ export class PdsTableRow {
               label={"Select Row"}
               hideLabel={true}
               checked={this.isSelected}
+              part="row-checkbox"
             />
           </pds-table-cell>
         )}

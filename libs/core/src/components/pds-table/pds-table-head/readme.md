@@ -20,6 +20,14 @@
 | `pdsTableSelectAll` | Event that is emitted when the select all checkbox is clicked, carrying the selected value. | `CustomEvent<{ isSelected: boolean; }>` |
 
 
+## Shadow Parts
+
+| Part                    | Description |
+| ----------------------- | ----------- |
+| `"head"`                |             |
+| `"select-all-checkbox"` |             |
+
+
 ## Dependencies
 
 ### Depends on

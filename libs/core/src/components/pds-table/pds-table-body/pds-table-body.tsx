@@ -9,7 +9,7 @@ export class PdsTableBody {
 
   render() {
     return (
-      <Host role="rowgroup">
+      <Host role="rowgroup" part="body">
         <slot></slot>
       </Host>
     );

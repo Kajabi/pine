@@ -10,7 +10,7 @@ describe('pds-table-cell', () => {
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-table-cell role="gridcell">
+      <pds-table-cell role="gridcell" part="cell">
         <mock:shadow-root>
           <slot></slot>
         </mock:shadow-root>
@@ -25,7 +25,7 @@ describe('pds-table-cell', () => {
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-table-cell role="gridcell" truncate="true" class="is-truncated">
+      <pds-table-cell role="gridcell" truncate="true" class="is-truncated" part="cell">
         <mock:shadow-root>
           <slot></slot>
         </mock:shadow-root>

@@ -270,12 +270,13 @@ export class PdsTable {
           role="grid"
           selectable={this.selectable}
           tabindex="0"
+          part="table responsive-table"
         >
-          <div class="scroll-shadow-left"></div>
-          <div class="scroll-shadow-right"></div>
-          <div class="pds-table-responsive-container">
-            <div class="pds-table-responsive-wrapper">
-              <div class={this.classNames()}>
+          <div class="scroll-shadow-left" part="scroll-shadow-left"></div>
+          <div class="scroll-shadow-right" part="scroll-shadow-right"></div>
+          <div class="pds-table-responsive-container" part="responsive-container">
+            <div class="pds-table-responsive-wrapper" part="responsive-wrapper">
+              <div class={this.classNames()} part="table-inner">
                 <slot></slot>
               </div>
             </div>
@@ -291,6 +292,7 @@ export class PdsTable {
         role="grid"
         selectable={this.selectable}
         tabindex="0"
+        part="table"
       >
         <slot></slot>
       </Host>

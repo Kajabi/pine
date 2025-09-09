@@ -20,6 +20,14 @@
 | `pdsTableRowSelected` | Event that is emitted when the checkbox is clicked, carrying the selected value. | `CustomEvent<{ rowIndex: number; isSelected: boolean; }>` |
 
 
+## Shadow Parts
+
+| Part             | Description |
+| ---------------- | ----------- |
+| `"row"`          |             |
+| `"row-checkbox"` |             |
+
+
 ## Dependencies
 
 ### Depends on
