@@ -1,3 +1,13 @@
+## 3.5.1 (2025-09-09)
+
+### Bug Fixes 🐛
+
+- **pds-table:** add shadow parts for improved styling ([#525](https://github.com/Kajabi/pine/pull/525))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+
 ## 3.5.0 (2025-09-05)
 
 ### Features 🚀
