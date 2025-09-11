@@ -12,8 +12,16 @@ pds-box {
   background-color: var(--color-background-box);
   box-sizing: border-box;
   display: inline-flex;
-  min-height: var(--sizing-min-height-box);
-  min-width: var(--sizing-min-width-box);
+  // min-height: var(--sizing-min-height-box);
+  // max-width: var(--sizing-max-width-box);
+
+  &[min-height] {
+    min-height: var(--sizing-min-height-box);
+  }
+
+  &[min-width] {
+    min-width: var(--sizing-min-width-box);
+  }
 
   // The immediate child of the row will fit the width of the row
   .pds-row > & {
@@ -731,6 +739,117 @@ $pine-spacing-tokens: (
 
 .pds-align-items-baseline {
   align-items: baseline;
+}
+
+// Responsive Align Items helpers
+@media (max-width: 575px) {
+  .pds-align-items-xs-start {
+    align-items: start;
+  }
+
+  .pds-align-items-xs-center {
+    align-items: center;
+  }
+
+  .pds-align-items-xs-end {
+    align-items: end;
+  }
+
+  .pds-align-items-xs-stretch {
+    align-items: stretch;
+  }
+
+  .pds-align-items-xs-baseline {
+    align-items: baseline;
+  }
+}
+
+@media (min-width: 576px) {
+  .pds-align-items-sm-start {
+    align-items: start;
+  }
+
+  .pds-align-items-sm-center {
+    align-items: center;
+  }
+
+  .pds-align-items-sm-end {
+    align-items: end;
+  }
+
+  .pds-align-items-sm-stretch {
+    align-items: stretch;
+  }
+
+  .pds-align-items-sm-baseline {
+    align-items: baseline;
+  }
+}
+
+@media (min-width: 768px) {
+  .pds-align-items-md-start {
+    align-items: start;
+  }
+
+  .pds-align-items-md-center {
+    align-items: center;
+  }
+
+  .pds-align-items-md-end {
+    align-items: end;
+  }
+
+  .pds-align-items-md-stretch {
+    align-items: stretch;
+  }
+
+  .pds-align-items-md-baseline {
+    align-items: baseline;
+  }
+}
+
+@media (min-width: 992px) {
+  .pds-align-items-lg-start {
+    align-items: start;
+  }
+
+  .pds-align-items-lg-center {
+    align-items: center;
+  }
+
+  .pds-align-items-lg-end {
+    align-items: end;
+  }
+
+  .pds-align-items-lg-stretch {
+    align-items: stretch;
+  }
+
+  .pds-align-items-lg-baseline {
+    align-items: baseline;
+  }
+}
+
+@media (min-width: 1200px) {
+  .pds-align-items-xl-start {
+    align-items: start;
+  }
+
+  .pds-align-items-xl-center {
+    align-items: center;
+  }
+
+  .pds-align-items-xl-end {
+    align-items: end;
+  }
+
+  .pds-align-items-xl-stretch {
+    align-items: stretch;
+  }
+
+  .pds-align-items-xl-baseline {
+    align-items: baseline;
+  }
 }
 
 // Align Self helpers

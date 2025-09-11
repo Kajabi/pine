@@ -15,6 +15,36 @@ export class PdsBox {
   @Prop() alignItems?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
+   * Defines how items within the box are aligned at the XS breakpoint.
+   * @defaultValue start
+  */
+  @Prop() alignItemsXs?: `start` | `center` | `end` | `baseline` | `stretch`;
+
+  /**
+   * Defines how items within the box are aligned at the SM breakpoint.
+   * @defaultValue start
+  */
+  @Prop() alignItemsSm?: `start` | `center` | `end` | `baseline` | `stretch`;
+
+  /**
+   * Defines how items within the box are aligned at the MD breakpoint.
+   * @defaultValue start
+  */
+  @Prop() alignItemsMd?: `start` | `center` | `end` | `baseline` | `stretch`;
+
+  /**
+   * Defines how items within the box are aligned at the LG breakpoint.
+   * @defaultValue start
+  */
+  @Prop() alignItemsLg?: `start` | `center` | `end` | `baseline` | `stretch`;
+
+  /**
+   * Defines how items within the box are aligned at the XL breakpoint.
+   * @defaultValue start
+  */
+  @Prop() alignItemsXl?: `start` | `center` | `end` | `baseline` | `stretch`;
+
+  /**
    * Defines how the box is aligned within its container.
    * @defaultValue start
   */
@@ -254,6 +284,11 @@ export class PdsBox {
   render() {
     const boxClasses = `
     ${this.alignItems !== undefined && this.alignItems.trim() !== '' ? `pds-align-items-${this.alignItems}` : ''}
+    ${this.alignItemsXs !== undefined && this.alignItemsXs.trim() !== '' ? `pds-align-items-xs-${this.alignItemsXs}` : ''}
+    ${this.alignItemsSm !== undefined && this.alignItemsSm.trim() !== '' ? `pds-align-items-sm-${this.alignItemsSm}` : ''}
+    ${this.alignItemsMd !== undefined && this.alignItemsMd.trim() !== '' ? `pds-align-items-md-${this.alignItemsMd}` : ''}
+    ${this.alignItemsLg !== undefined && this.alignItemsLg.trim() !== '' ? `pds-align-items-lg-${this.alignItemsLg}` : ''}
+    ${this.alignItemsXl !== undefined && this.alignItemsXl.trim() !== '' ? `pds-align-items-xl-${this.alignItemsXl}` : ''}
     ${this.alignSelf !== undefined && this.alignSelf.trim() !== '' ? `pds-align-self-${this.alignSelf}` : ''}
     ${this.auto ? 'pds-box--auto' : ''}
     ${this.border ? 'pds-box--border' : ''}

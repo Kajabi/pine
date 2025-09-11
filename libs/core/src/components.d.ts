@@ -130,6 +130,31 @@ export namespace Components {
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
+          * Defines how items within the box are aligned at the LG breakpoint.
+          * @defaultValue start
+         */
+        "alignItemsLg"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how items within the box are aligned at the MD breakpoint.
+          * @defaultValue start
+         */
+        "alignItemsMd"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how items within the box are aligned at the SM breakpoint.
+          * @defaultValue start
+         */
+        "alignItemsSm"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how items within the box are aligned at the XL breakpoint.
+          * @defaultValue start
+         */
+        "alignItemsXl"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how items within the box are aligned at the XS breakpoint.
+          * @defaultValue start
+         */
+        "alignItemsXs"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
           * Defines how the box is aligned within its container.
           * @defaultValue start
          */
@@ -2216,6 +2241,31 @@ declare namespace LocalJSX {
           * @defaultValue start
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how items within the box are aligned at the LG breakpoint.
+          * @defaultValue start
+         */
+        "alignItemsLg"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how items within the box are aligned at the MD breakpoint.
+          * @defaultValue start
+         */
+        "alignItemsMd"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how items within the box are aligned at the SM breakpoint.
+          * @defaultValue start
+         */
+        "alignItemsSm"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how items within the box are aligned at the XL breakpoint.
+          * @defaultValue start
+         */
+        "alignItemsXl"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how items within the box are aligned at the XS breakpoint.
+          * @defaultValue start
+         */
+        "alignItemsXs"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
           * Defines how the box is aligned within its container.
           * @defaultValue start
