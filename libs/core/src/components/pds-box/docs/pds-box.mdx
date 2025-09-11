@@ -149,8 +149,25 @@ Items flow horizontally by default, so you'll need to explicitly set `direction=
 - `direction`: Controls item orientation (`row` = horizontal, `column` = vertical)
 - `size`: Sets column width (1-12 grid system, works best inside pds-row)
 - `gap`: Controls spacing between items
-- `justify-content`: Horizontal alignment of items
-- `align-items`: Vertical alignment of items
+- `justify-content`: Horizontal alignment of items (with responsive variants: `justify-content-xs`, `justify-content-sm`, `justify-content-md`, `justify-content-lg`, `justify-content-xl`)
+- `align-items`: Vertical alignment of items (with responsive variants: `align-items-xs`, `align-items-sm`, `align-items-md`, `align-items-lg`, `align-items-xl`)
+- `align-self`: Individual box alignment within container (with responsive variants: `align-self-xs`, `align-self-sm`, `align-self-md`, `align-self-lg`, `align-self-xl`)
+
+### Responsive Breakpoints
+
+All responsive properties follow the same breakpoint system:
+
+- **Base (no suffix)**: Applies to all screen sizes unless overridden
+- **XS (`-xs`)**: 0-575px (mobile phones)
+- **SM (`-sm`)**: 576px and up (tablets)
+- **MD (`-md`)**: 768px and up (small desktops)
+- **LG (`-lg`)**: 992px and up (desktops)
+- **XL (`-xl`)**: 1200px and up (large desktops)
+
+**Examples:**
+- `justify-content="center"` - Center on all screen sizes
+- `justify-content="start" justify-content-md="center"` - Start on mobile, center on desktop
+- `align-items="stretch" align-items-lg="start"` - Stretch on mobile/tablet, start on desktop
 
 ### Working with PDS-Row
 
@@ -356,6 +373,230 @@ Layout impact:
 - `baseline`: Items align to their text baseline
 - `stretch`: Items stretch to fill the container (default)
 
+#### Basic Align Items Examples
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsBox direction="column" gap="sm">
+  <PdsBox border="true" padding="sm" alignItems="start" minHeight="130px">
+    <PdsBox flex="none" border="true" padding="xs">Item 1</PdsBox>
+    <PdsBox flex="none" border="true" padding="xs">Item 2</PdsBox>
+  </PdsBox>
+  <PdsBox border="true" padding="sm" alignItems="center" minHeight="130px">
+    <PdsBox flex="none" border="true" padding="xs">Item 1</PdsBox>
+    <PdsBox flex="none" border="true" padding="xs">Item 2</PdsBox>
+  </PdsBox>
+  <PdsBox border="true" padding="sm" alignItems="end" minHeight="130px">
+    <PdsBox flex="none" border="true" padding="xs">Item 1</PdsBox>
+    <PdsBox flex="none" border="true" padding="xs">Item 2</PdsBox>
+  </PdsBox>
+  <PdsBox border="true" padding="sm" alignItems="stretch" minHeight="130px">
+    <PdsBox flex="none" border="true" padding="xs">Item 1</PdsBox>
+    <PdsBox flex="none" border="true" padding="xs">Item 2</PdsBox>
+  </PdsBox>
+  <PdsBox border="true" padding="sm" alignItems="baseline" minHeight="130px">
+    <PdsBox flex="none" border="true" padding="xs">Item 1</PdsBox>
+    <PdsBox flex="none" border="true" padding="xs">Item 2</PdsBox>
+  </PdsBox>
+</PdsBox>`,
+    webComponent: `<pds-box direction="column" gap="sm">
+  <pds-box border="true" padding="sm" align-items="start" min-height="130px">
+    <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+    <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+  </pds-box>
+  <pds-box border="true" padding="sm" align-items="center" min-height="130px">
+    <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+    <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+  </pds-box>
+  <pds-box border="true" padding="sm" align-items="end" min-height="130px">
+    <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+    <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+  </pds-box>
+  <pds-box border="true" padding="sm" align-items="stretch" min-height="130px">
+    <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+    <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+  </pds-box>
+  <pds-box border="true" padding="sm" align-items="baseline" min-height="130px">
+    <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+    <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+  </pds-box>
+</pds-box>`
+}}>
+  <pds-box direction="column" gap="sm">
+    <pds-box border="true" padding="sm" align-items="start" min-height="130px">
+      <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+      <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+    </pds-box>
+    <pds-box border="true" padding="sm" align-items="center" min-height="130px">
+      <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+      <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+    </pds-box>
+    <pds-box border="true" padding="sm" align-items="end" min-height="130px">
+      <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+      <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+    </pds-box>
+    <pds-box border="true" padding="sm" align-items="stretch" min-height="130px">
+      <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+      <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+    </pds-box>
+    <pds-box border="true" padding="sm" align-items="baseline" min-height="130px">
+      <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+      <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+    </pds-box>
+  </pds-box>
+</DocCanvas>
+
+#### Responsive Align Items
+
+The align-items property supports responsive breakpoints, allowing you to change vertical alignment at different screen sizes using `align-items-xs`, `align-items-sm`, `align-items-md`, `align-items-lg`, and `align-items-xl`.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `// Start on mobile, center on tablets and up
+<PdsBox border="true" padding="sm" alignItems="start" alignItemsMd="center" minHeight="100px">
+  <PdsBox flex="none" border="true" padding="xs">Item 1</PdsBox>
+  <PdsBox flex="none" border="true" padding="xs">Item 2</PdsBox>
+  <PdsBox flex="none" border="true" padding="xs">Item 3</PdsBox>
+</PdsBox>
+
+// Center on mobile, stretch on desktop
+<PdsBox border="true" padding="sm" alignItems="center" alignItemsLg="stretch" minHeight="100px">
+  <PdsBox flex="none" border="true" padding="xs">Item A</PdsBox>
+  <PdsBox flex="none" border="true" padding="xs">Item B</PdsBox>
+</PdsBox>`,
+    webComponent: `<!-- Start on mobile, center on tablets and up -->
+<pds-box border="true" padding="sm" align-items="start" align-items-md="center" min-height="100px">
+  <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+  <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+  <pds-box flex="none" border="true" padding="xs">Item 3</pds-box>
+</pds-box>
+
+<!-- Center on mobile, stretch on desktop -->
+<pds-box border="true" padding="sm" align-items="center" align-items-lg="stretch" min-height="100px">
+  <pds-box flex="none" border="true" padding="xs">Item A</pds-box>
+  <pds-box flex="none" border="true" padding="xs">Item B</pds-box>
+</pds-box>`
+}}>
+  <pds-box direction="column" gap="sm">
+    <pds-box border="true" padding="sm" align-items="start" align-items-md="center" min-height="100px">
+      <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+      <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+      <pds-box flex="none" border="true" padding="xs">Item 3</pds-box>
+    </pds-box>
+    <pds-box border="true" padding="sm" align-items="center" align-items-lg="stretch" min-height="100px">
+      <pds-box flex="none" border="true" padding="xs">Item A</pds-box>
+      <pds-box flex="none" border="true" padding="xs">Item B</pds-box>
+    </pds-box>
+  </pds-box>
+</DocCanvas>
+
+#### Common Align Items Patterns
+
+```html
+<!-- Center content on mobile, align to top on desktop -->
+<pds-box align-items="center" align-items-lg="start">
+  <pds-text>Content</pds-text>
+</pds-box>
+
+<!-- Stretch items on mobile for touch targets, center on desktop -->
+<pds-box align-items="stretch" align-items-md="center">
+  <pds-button>Action 1</pds-button>
+  <pds-button>Action 2</pds-button>
+</pds-box>
+```
+
+### Align Self
+
+Defines how an individual box aligns itself within its parent container, overriding the parent's `align-items` setting.
+
+Layout impact:
+- `start`: Box aligns to the start (top for column, left for row)
+- `center`: Box aligns to the center
+- `end`: Box aligns to the end (bottom for column, right for row)
+- `baseline`: Box aligns to its text baseline
+- `stretch`: Box stretches to fill the container (default)
+
+#### Basic Align Self Examples
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsBox border="true" padding="sm" alignItems="center" minHeight="150px" gap="sm">
+  <PdsBox flex="none" border="true" padding="xs" alignSelf="start">Start</PdsBox>
+  <PdsBox flex="none" border="true" padding="xs" alignSelf="center">Center</PdsBox>
+  <PdsBox flex="none" border="true" padding="xs" alignSelf="end">End</PdsBox>
+  <PdsBox flex="none" border="true" padding="xs" alignSelf="stretch">Stretch</PdsBox>
+  <PdsBox flex="none" border="true" padding="xs" alignSelf="baseline">Baseline</PdsBox>
+</PdsBox>`,
+    webComponent: `<pds-box border="true" padding="sm" align-items="center" min-height="150px" gap="sm">
+  <pds-box flex="none" border="true" padding="xs" align-self="start">Start</pds-box>
+  <pds-box flex="none" border="true" padding="xs" align-self="center">Center</pds-box>
+  <pds-box flex="none" border="true" padding="xs" align-self="end">End</pds-box>
+  <pds-box flex="none" border="true" padding="xs" align-self="stretch">Stretch</pds-box>
+  <pds-box flex="none" border="true" padding="xs" align-self="baseline">Baseline</pds-box>
+</pds-box>`
+}}>
+  <pds-box border="true" padding="sm" align-items="center" min-height="150px" gap="sm">
+    <pds-box flex="none" border="true" padding="xs" align-self="start">Start</pds-box>
+    <pds-box flex="none" border="true" padding="xs" align-self="center">Center</pds-box>
+    <pds-box flex="none" border="true" padding="xs" align-self="end">End</pds-box>
+    <pds-box flex="none" border="true" padding="xs" align-self="stretch">Stretch</pds-box>
+    <pds-box flex="none" border="true" padding="xs" align-self="baseline">Baseline</pds-box>
+  </pds-box>
+</DocCanvas>
+
+#### Responsive Align Self
+
+The align-self property supports responsive breakpoints, allowing you to change individual box alignment at different screen sizes using `align-self-xs`, `align-self-sm`, `align-self-md`, `align-self-lg`, and `align-self-xl`.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsBox border="true" padding="sm" alignItems="center" minHeight="120px" gap="sm">
+  {/* This box changes from start on mobile to center on tablets+ */}
+  <PdsBox flex="none" border="true" padding="xs" alignSelf="start" alignSelfMd="center">
+    Responsive Box 1
+  </PdsBox>
+
+  {/* This box changes from stretch on mobile to end on desktop */}
+  <PdsBox flex="none" border="true" padding="xs" alignSelf="stretch" alignSelfLg="end">
+    Responsive Box 2
+  </PdsBox>
+</PdsBox>`,
+    webComponent: `<pds-box border="true" padding="sm" align-items="center" min-height="120px" gap="sm">
+  <!-- This box changes from start on mobile to center on tablets+ -->
+  <pds-box flex="none" border="true" padding="xs" align-self="start" align-self-md="center">
+    Responsive Box 1
+  </pds-box>
+
+  <!-- This box changes from stretch on mobile to end on desktop -->
+  <pds-box flex="none" border="true" padding="xs" align-self="stretch" align-self-lg="end">
+    Responsive Box 2
+  </pds-box>
+</pds-box>`
+}}>
+  <pds-box border="true" padding="sm" align-items="center" min-height="120px" gap="sm">
+    <pds-box flex="none" border="true" padding="xs" align-self="start" align-self-md="center">
+      Responsive Box 1
+    </pds-box>
+    <pds-box flex="none" border="true" padding="xs" align-self="stretch" align-self-lg="end">
+      Responsive Box 2
+    </pds-box>
+  </pds-box>
+</DocCanvas>
+
+#### Common Align Self Patterns
+
+```html
+<!-- Individual item that stands out on mobile, blends in on desktop -->
+<pds-box align-self="center" align-self-lg="start">
+  <pds-button variant="primary">Call to Action</pds-button>
+</pds-box>
+
+<!-- Sidebar that stretches on mobile, aligns to top on desktop -->
+<pds-box align-self="stretch" align-self-md="start">
+  <pds-text>Sidebar Content</pds-text>
+</pds-box>
+```
+
 ### Justify Content
 
 Defines the horizontal alignment of the box items.
@@ -366,6 +607,153 @@ Layout impact:
 - `end`: Items pack toward the end (right for row, bottom for column)
 - `space-between`: Items are evenly distributed with first at start, last at end
 - `space-around`: Items are evenly distributed with equal space around them
+- `space-evenly`: Items are evenly distributed with equal space around them
+
+#### Basic Justify Content Examples
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsBox direction="column" gap="sm">
+  <PdsBox border="true" padding="sm" justifyContent="start">
+    <PdsBox flex="none" border="true" padding="xs">Item 1</PdsBox>
+    <PdsBox flex="none" border="true" padding="xs">Item 2</PdsBox>
+  </PdsBox>
+  <PdsBox border="true" padding="sm" justifyContent="center">
+    <PdsBox flex="none" border="true" padding="xs">Item 1</PdsBox>
+    <PdsBox flex="none" border="true" padding="xs">Item 2</PdsBox>
+  </PdsBox>
+  <PdsBox border="true" padding="sm" justifyContent="end">
+    <PdsBox flex="none" border="true" padding="xs">Item 1</PdsBox>
+    <PdsBox flex="none" border="true" padding="xs">Item 2</PdsBox>
+  </PdsBox>
+  <PdsBox border="true" padding="sm" justifyContent="space-between">
+    <PdsBox flex="none" border="true" padding="xs">Item 1</PdsBox>
+    <PdsBox flex="none" border="true" padding="xs">Item 2</PdsBox>
+  </PdsBox>
+  <PdsBox border="true" padding="sm" justifyContent="space-around">
+    <PdsBox flex="none" border="true" padding="xs">Item 1</PdsBox>
+    <PdsBox flex="none" border="true" padding="xs">Item 2</PdsBox>
+  </PdsBox>
+  <PdsBox border="true" padding="sm" justifyContent="space-evenly">
+    <PdsBox flex="none" border="true" padding="xs">Item 1</PdsBox>
+    <PdsBox flex="none" border="true" padding="xs">Item 2</PdsBox>
+  </PdsBox>
+</PdsBox>`,
+    webComponent: `<pds-box direction="column" gap="sm">
+  <pds-box border="true" padding="sm" justify-content="start">
+    <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+    <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+  </pds-box>
+  <pds-box border="true" padding="sm" justify-content="center">
+    <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+    <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+  </pds-box>
+  <pds-box border="true" padding="sm" justify-content="end">
+    <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+    <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+  </pds-box>
+  <pds-box border="true" padding="sm" justify-content="space-between">
+    <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+    <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+  </pds-box>
+  <pds-box border="true" padding="sm" justify-content="space-around">
+    <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+    <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+  </pds-box>
+  <pds-box border="true" padding="sm" justify-content="space-evenly">
+    <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+    <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+  </pds-box>
+</pds-box>`
+}}>
+  <pds-box direction="column" gap="sm">
+    <pds-box border="true" padding="sm" justify-content="start">
+      <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+      <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+    </pds-box>
+    <pds-box border="true" padding="sm" justify-content="center">
+      <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+      <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+    </pds-box>
+    <pds-box border="true" padding="sm" justify-content="end">
+      <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+      <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+    </pds-box>
+    <pds-box border="true" padding="sm" justify-content="space-between">
+      <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+      <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+    </pds-box>
+    <pds-box border="true" padding="sm" justify-content="space-around">
+      <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+      <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+    </pds-box>
+    <pds-box border="true" padding="sm" justify-content="space-evenly">
+      <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+      <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+    </pds-box>
+  </pds-box>
+</DocCanvas>
+
+#### Responsive Justify Content
+
+The justify-content property supports responsive breakpoints, allowing you to change alignment at different screen sizes using `justify-content-xs`, `justify-content-sm`, `justify-content-md`, `justify-content-lg`, and `justify-content-xl`.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `// Center on mobile, space-between on tablets and up
+<PdsBox border="true" padding="sm" justifyContent="center" justifyContentMd="space-between">
+  <PdsBox flex="none" border="true" padding="xs">Item 1</PdsBox>
+  <PdsBox flex="none" border="true" padding="xs">Item 2</PdsBox>
+  <PdsBox flex="none" border="true" padding="xs">Item 3</PdsBox>
+</PdsBox>
+
+// Start on mobile, center on desktop
+<PdsBox border="true" padding="sm" justifyContent="start" justifyContentLg="center">
+  <PdsBox flex="none" border="true" padding="xs">Item A</PdsBox>
+  <PdsBox flex="none" border="true" padding="xs">Item B</PdsBox>
+</PdsBox>`,
+    webComponent: `<!-- Center on mobile, space-between on tablets and up -->
+<pds-box border="true" padding="sm" justify-content="center" justify-content-md="space-between">
+  <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+  <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+  <pds-box flex="none" border="true" padding="xs">Item 3</pds-box>
+</pds-box>
+
+<!-- Start on mobile, center on desktop -->
+<pds-box border="true" padding="sm" justify-content="start" justify-content-lg="center">
+  <pds-box flex="none" border="true" padding="xs">Item A</pds-box>
+  <pds-box flex="none" border="true" padding="xs">Item B</pds-box>
+</pds-box>`
+}}>
+  <pds-box direction="column" gap="sm">
+    <pds-box border="true" padding="sm" justify-content="center" justify-content-md="space-between">
+      <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+      <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+      <pds-box flex="none" border="true" padding="xs">Item 3</pds-box>
+    </pds-box>
+    <pds-box border="true" padding="sm" justify-content="start" justify-content-lg="center">
+      <pds-box flex="none" border="true" padding="xs">Item A</pds-box>
+      <pds-box flex="none" border="true" padding="xs">Item B</pds-box>
+    </pds-box>
+  </pds-box>
+</DocCanvas>
+
+#### Common Justify Content Patterns
+
+```html
+<!-- Center buttons on mobile, space them apart on desktop -->
+<pds-box justify-content="center" justify-content-lg="space-between">
+  <pds-button>Cancel</pds-button>
+  <pds-button variant="primary">Save</pds-button>
+</pds-box>
+
+<!-- Stack navigation items on mobile, spread them on tablet+ -->
+<pds-box justify-content="start" justify-content-sm="space-around">
+  <pds-link>Home</pds-link>
+  <pds-link>About</pds-link>
+  <pds-link>Contact</pds-link>
+</pds-box>
+```
 
 ### Size
 
@@ -571,13 +959,9 @@ The `pds-box` component uses a mobile-first approach to responsive sizing. This 
 - Breakpoint-specific props (`size-xs`, `size-sm`, etc.) override the base size at their respective breakpoints and larger
 - Each breakpoint-specific prop overrides any sizes set by smaller breakpoint props
 
-### Breakpoint Ranges
+### Breakpoint Behavior
 
-- XS: 0-575px
-- SM: 576px and up
-- MD: 768px and up
-- LG: 992px and up
-- XL: 1200px and up
+See the [Responsive Breakpoints](#responsive-breakpoints) section above for detailed breakpoint ranges.
 
 ### Common Patterns
 

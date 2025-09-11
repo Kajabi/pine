@@ -12,8 +12,14 @@ pds-box {
   background-color: var(--color-background-box);
   box-sizing: border-box;
   display: inline-flex;
-  min-height: var(--sizing-min-height-box);
-  min-width: var(--sizing-min-width-box);
+
+  &[min-height] {
+    min-height: var(--sizing-min-height-box);
+  }
+
+  &[min-width] {
+    min-width: var(--sizing-min-width-box);
+  }
 
   // The immediate child of the row will fit the width of the row
   .pds-row > & {
@@ -576,69 +582,90 @@ $pine-spacing-tokens: (
   flex-wrap: wrap;
 }
 
+// Maps for flex properties
+$justify-content-values: (
+  'start': start,
+  'center': center,
+  'end': end,
+  'space-between': space-between,
+  'space-around': space-around,
+  'space-evenly': space-evenly
+);
+
+$align-items-values: (
+  'start': start,
+  'center': center,
+  'end': end,
+  'baseline': baseline,
+  'stretch': stretch
+);
+
+$align-self-values: (
+  'start': start,
+  'center': center,
+  'end': end,
+  'baseline': baseline,
+  'stretch': stretch
+);
+
+$breakpoints: (
+  'xs': '(max-width: 575px)',
+  'sm': '(min-width: 576px)',
+  'md': '(min-width: 768px)',
+  'lg': '(min-width: 992px)',
+  'xl': '(min-width: 1200px)'
+);
+
 // Justify Content helpers
-.pds-justify-content-start {
-  justify-content: start;
+@each $name, $value in $justify-content-values {
+  .pds-justify-content-#{$name} {
+    justify-content: $value;
+  }
 }
 
-.pds-justify-content-center {
-  justify-content: center;
-}
-
-.pds-justify-content-end {
-  justify-content: end;
-}
-
-.pds-justify-content-space-between {
-  justify-content: space-between;
-}
-
-.pds-justify-content-space-around {
-  justify-content: space-around;
-}
-
-.pds-justify-content-space-evenly {
-  justify-content: space-evenly;
+// Responsive Justify Content helpers
+@each $breakpoint-name, $breakpoint-value in $breakpoints {
+  @media #{$breakpoint-value} {
+    @each $name, $value in $justify-content-values {
+      .pds-justify-content-#{$breakpoint-name}-#{$name} {
+        justify-content: $value;
+      }
+    }
+  }
 }
 
 // Align Items helpers
-.pds-align-items-start {
-  align-items: start;
+@each $name, $value in $align-items-values {
+  .pds-align-items-#{$name} {
+    align-items: $value;
+  }
 }
 
-.pds-align-items-center {
-  align-items: center;
-}
-
-.pds-align-items-end {
-  align-items: end;
-}
-
-.pds-align-items-stretch {
-  align-items: stretch;
-}
-
-.pds-align-items-baseline {
-  align-items: baseline;
+// Responsive Align Items helpers
+@each $breakpoint-name, $breakpoint-value in $breakpoints {
+  @media #{$breakpoint-value} {
+    @each $name, $value in $align-items-values {
+      .pds-align-items-#{$breakpoint-name}-#{$name} {
+        align-items: $value;
+      }
+    }
+  }
 }
 
 // Align Self helpers
-.pds-align-self-start {
-  align-self: start;
+@each $name, $value in $align-self-values {
+  .pds-align-self-#{$name} {
+    align-self: $value;
+  }
 }
 
-.pds-align-self-center {
-  align-self: center;
-}
-
-.pds-align-self-end {
-  align-self: end;
-}
-
-.pds-align-self-baseline {
-  align-self: baseline;
-}
-
-.pds-align-self-stretch {
-  align-self: stretch;
+// Responsive Align Self helpers
+@each $breakpoint-name, $breakpoint-value in $breakpoints {
+  @media #{$breakpoint-value} {
+    @each $name, $value in $align-self-values {
+      .pds-align-self-#{$breakpoint-name}-#{$name} {
+        align-self: $value;
+      }
+    }
+  }
 }

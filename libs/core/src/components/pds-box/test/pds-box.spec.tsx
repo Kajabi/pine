@@ -54,6 +54,68 @@ describe('pds-box', () => {
     expect(element).toHaveClass('pds-align-items-center');
   });
 
+  ['start', 'center', 'end', 'baseline', 'stretch'].forEach((value) => {
+    it(`renders align-items class when prop is set to ${value}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box align-items="${value}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-align-items-${value}`);
+    });
+
+    it(`renders align-items-xs class when prop is set to ${value}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box align-items-xs="${value}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-align-items-xs-${value}`);
+    });
+
+    it(`renders align-items-sm class when prop is set to ${value}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box align-items-sm="${value}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-align-items-sm-${value}`);
+    });
+
+    it(`renders align-items-md class when prop is set to ${value}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box align-items-md="${value}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-align-items-md-${value}`);
+    });
+
+    it(`renders align-items-lg class when prop is set to ${value}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box align-items-lg="${value}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-align-items-lg-${value}`);
+    });
+
+    it(`renders align-items-xl class when prop is set to ${value}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box align-items-xl="${value}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-align-items-xl-${value}`);
+    });
+  });
+
   it('renders align-self class when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsBox],
@@ -63,6 +125,68 @@ describe('pds-box', () => {
     const element = page.root;
 
     expect(element).toHaveClass('pds-align-self-center');
+  });
+
+  ['start', 'center', 'end', 'baseline', 'stretch'].forEach((value) => {
+    it(`renders align-self class when prop is set to ${value}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box align-self="${value}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-align-self-${value}`);
+    });
+
+    it(`renders align-self-xs class when prop is set to ${value}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box align-self-xs="${value}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-align-self-xs-${value}`);
+    });
+
+    it(`renders align-self-sm class when prop is set to ${value}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box align-self-sm="${value}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-align-self-sm-${value}`);
+    });
+
+    it(`renders align-self-md class when prop is set to ${value}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box align-self-md="${value}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-align-self-md-${value}`);
+    });
+
+    it(`renders align-self-lg class when prop is set to ${value}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box align-self-lg="${value}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-align-self-lg-${value}`);
+    });
+
+    it(`renders align-self-xl class when prop is set to ${value}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box align-self-xl="${value}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-align-self-xl-${value}`);
+    });
   });
 
   it('renders auto class when prop is set', async () => {
@@ -308,6 +432,68 @@ describe('pds-box', () => {
     const element = page.root;
 
     expect(element).toHaveClass('pds-justify-content-center');
+  });
+
+  ['start', 'center', 'end', 'space-between', 'space-around', 'space-evenly'].forEach((value) => {
+    it(`renders justify-content class when prop is set to ${value}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box justify-content="${value}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-justify-content-${value}`);
+    });
+
+    it(`renders justify-content-xs class when prop is set to ${value}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box justify-content-xs="${value}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-justify-content-xs-${value}`);
+    });
+
+    it(`renders justify-content-sm class when prop is set to ${value}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box justify-content-sm="${value}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-justify-content-sm-${value}`);
+    });
+
+    it(`renders justify-content-md class when prop is set to ${value}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box justify-content-md="${value}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-justify-content-md-${value}`);
+    });
+
+    it(`renders justify-content-lg class when prop is set to ${value}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box justify-content-lg="${value}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-justify-content-lg-${value}`);
+    });
+
+    it(`renders justify-content-xl class when prop is set to ${value}`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box justify-content-xl="${value}"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-justify-content-xl-${value}`);
+    });
   });
 
   it('renders offset class when prop is set to 2', async () => {

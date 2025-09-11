@@ -10,15 +10,75 @@ import { normalizeColorValue } from '../../utils/utils';
 export class PdsBox {
   /**
    * Defines how items within the box are aligned.
-   * @defaultValue start
+   * @defaultValue stretch
   */
-  @Prop() alignItems?: `start` | `center` | `end` | `baseline` | `stretch`;
+  @Prop() alignItems?: `start` | `center` | `end` | `baseline` | `stretch` ;
+
+  /**
+   * Defines how items within the box are aligned at the XS breakpoint.
+   * @defaultValue stretch
+  */
+  @Prop() alignItemsXs?: `start` | `center` | `end` | `baseline` | `stretch`;
+
+  /**
+   * Defines how items within the box are aligned at the SM breakpoint.
+   * @defaultValue stretch
+  */
+  @Prop() alignItemsSm?: `start` | `center` | `end` | `baseline` | `stretch`;
+
+  /**
+   * Defines how items within the box are aligned at the MD breakpoint.
+   * @defaultValue stretch
+  */
+  @Prop() alignItemsMd?: `start` | `center` | `end` | `baseline` | `stretch`;
+
+  /**
+   * Defines how items within the box are aligned at the LG breakpoint.
+   * @defaultValue stretch
+  */
+  @Prop() alignItemsLg?: `start` | `center` | `end` | `baseline` | `stretch`;
+
+  /**
+   * Defines how items within the box are aligned at the XL breakpoint.
+   * @defaultValue stretch
+  */
+  @Prop() alignItemsXl?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
    * Defines how the box is aligned within its container.
-   * @defaultValue start
+   * @defaultValue stretch
   */
   @Prop() alignSelf?: `start` | `center` | `end` | `baseline` | `stretch`;
+
+  /**
+   * Defines how the box is aligned within its container at the XS breakpoint.
+   *
+  */
+  @Prop() alignSelfXs?: `start` | `center` | `end` | `baseline` | `stretch`;
+
+  /**
+   * Defines how the box is aligned within its container at the SM breakpoint.
+   *
+  */
+  @Prop() alignSelfSm?: `start` | `center` | `end` | `baseline` | `stretch`;
+
+  /**
+   * Defines how the box is aligned within its container at the MD breakpoint.
+   *
+  */
+  @Prop() alignSelfMd?: `start` | `center` | `end` | `baseline` | `stretch`;
+
+  /**
+   * Defines how the box is aligned within its container at the LG breakpoint.
+   *
+  */
+  @Prop() alignSelfLg?: `start` | `center` | `end` | `baseline` | `stretch`;
+
+  /**
+   * Defines how the box is aligned within its container at the XL breakpoint.
+   *
+  */
+  @Prop() alignSelfXl?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
    * If `true`, the box will be sized to fit its contents.
@@ -86,7 +146,37 @@ export class PdsBox {
    * Defines the horizontal alignment of the box items.
    * @defaultValue start
   */
-  @Prop() justifyContent?: `start` | `center` | `end` | `space-between` | `space-around`;
+  @Prop() justifyContent?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
+
+  /**
+   * Defines the horizontal alignment of the box items at the XS breakpoint.
+   * @defaultValue start
+  */
+  @Prop() justifyContentXs?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
+
+  /**
+   * Defines the horizontal alignment of the box items at the SM breakpoint.
+   * @defaultValue start
+  */
+  @Prop() justifyContentSm?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
+
+  /**
+   * Defines the horizontal alignment of the box items at the MD breakpoint.
+   * @defaultValue start
+  */
+  @Prop() justifyContentMd?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
+
+  /**
+   * Defines the horizontal alignment of the box items at the LG breakpoint.
+   * @defaultValue start
+  */
+  @Prop() justifyContentLg?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
+
+  /**
+   * Defines the horizontal alignment of the box items at the XL breakpoint.
+   * @defaultValue start
+  */
+  @Prop() justifyContentXl?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
 
   /**
    * Defines the box's outer top spacing.
@@ -115,12 +205,12 @@ export class PdsBox {
   /**
    * The minimum height of the row. Used in conjunction with alignment props
    */
-  @Prop() minHeight?: string;
+  @Prop({ reflect: true }) minHeight?: string;
 
   /**
    * The minimum width of the row. Used in conjunction with alignment props
    */
-  @Prop() minWidth?: string;
+  @Prop({ reflect: true }) minWidth?: string;
 
   /**
    * Move columns to the end direction of the row for all screen sizes. Increases the starting margin of a column by specified number of columns.
@@ -224,7 +314,17 @@ export class PdsBox {
   render() {
     const boxClasses = `
     ${this.alignItems !== undefined && this.alignItems.trim() !== '' ? `pds-align-items-${this.alignItems}` : ''}
+    ${this.alignItemsXs !== undefined && this.alignItemsXs.trim() !== '' ? `pds-align-items-xs-${this.alignItemsXs}` : ''}
+    ${this.alignItemsSm !== undefined && this.alignItemsSm.trim() !== '' ? `pds-align-items-sm-${this.alignItemsSm}` : ''}
+    ${this.alignItemsMd !== undefined && this.alignItemsMd.trim() !== '' ? `pds-align-items-md-${this.alignItemsMd}` : ''}
+    ${this.alignItemsLg !== undefined && this.alignItemsLg.trim() !== '' ? `pds-align-items-lg-${this.alignItemsLg}` : ''}
+    ${this.alignItemsXl !== undefined && this.alignItemsXl.trim() !== '' ? `pds-align-items-xl-${this.alignItemsXl}` : ''}
     ${this.alignSelf !== undefined && this.alignSelf.trim() !== '' ? `pds-align-self-${this.alignSelf}` : ''}
+    ${this.alignSelfXs !== undefined && this.alignSelfXs.trim() !== '' ? `pds-align-self-xs-${this.alignSelfXs}` : ''}
+    ${this.alignSelfSm !== undefined && this.alignSelfSm.trim() !== '' ? `pds-align-self-sm-${this.alignSelfSm}` : ''}
+    ${this.alignSelfMd !== undefined && this.alignSelfMd.trim() !== '' ? `pds-align-self-md-${this.alignSelfMd}` : ''}
+    ${this.alignSelfLg !== undefined && this.alignSelfLg.trim() !== '' ? `pds-align-self-lg-${this.alignSelfLg}` : ''}
+    ${this.alignSelfXl !== undefined && this.alignSelfXl.trim() !== '' ? `pds-align-self-xl-${this.alignSelfXl}` : ''}
     ${this.auto ? 'pds-box--auto' : ''}
     ${this.border ? 'pds-box--border' : ''}
     ${this.borderRadius !== undefined && this.borderRadius.trim() !== '' ? `pds-border-radius-${this.borderRadius}` : ''}
@@ -235,6 +335,11 @@ export class PdsBox {
     ${this.wrap ? 'pds-box--wrap' : ''}
     ${this.flex !== undefined && this.flex.trim() !== '' && ['none', 'grow', 'shrink'].includes(this.flex) ? `pds-box--flex-${this.flex}` : ''}
     ${this.justifyContent !== undefined && this.justifyContent.trim() !== '' ? `pds-justify-content-${this.justifyContent}` : ''}
+    ${this.justifyContentXs !== undefined && this.justifyContentXs.trim() !== '' ? `pds-justify-content-xs-${this.justifyContentXs}` : ''}
+    ${this.justifyContentSm !== undefined && this.justifyContentSm.trim() !== '' ? `pds-justify-content-sm-${this.justifyContentSm}` : ''}
+    ${this.justifyContentMd !== undefined && this.justifyContentMd.trim() !== '' ? `pds-justify-content-md-${this.justifyContentMd}` : ''}
+    ${this.justifyContentLg !== undefined && this.justifyContentLg.trim() !== '' ? `pds-justify-content-lg-${this.justifyContentLg}` : ''}
+    ${this.justifyContentXl !== undefined && this.justifyContentXl.trim() !== '' ? `pds-justify-content-xl-${this.justifyContentXl}` : ''}
     ${this.marginBlockStart !== undefined && this.marginBlockStart.trim() !== '' ? `pds-margin-block-start-${this.marginBlockStart}` : ''}
     ${this.marginInlineStart !== undefined && this.marginInlineStart.trim() !== '' ? `pds-margin-inline-start-${this.marginInlineStart}` : ''}
     ${this.marginInlineEnd !== undefined && this.marginInlineEnd.trim() !== '' ? `pds-margin-inline-end-${this.marginInlineEnd}` : ''}

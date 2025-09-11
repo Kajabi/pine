@@ -126,14 +126,59 @@ export namespace Components {
     interface PdsBox {
         /**
           * Defines how items within the box are aligned.
-          * @defaultValue start
+          * @defaultValue stretch
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
+          * Defines how items within the box are aligned at the LG breakpoint.
+          * @defaultValue stretch
+         */
+        "alignItemsLg"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how items within the box are aligned at the MD breakpoint.
+          * @defaultValue stretch
+         */
+        "alignItemsMd"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how items within the box are aligned at the SM breakpoint.
+          * @defaultValue stretch
+         */
+        "alignItemsSm"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how items within the box are aligned at the XL breakpoint.
+          * @defaultValue stretch
+         */
+        "alignItemsXl"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how items within the box are aligned at the XS breakpoint.
+          * @defaultValue stretch
+         */
+        "alignItemsXs"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
           * Defines how the box is aligned within its container.
-          * @defaultValue start
+          * @defaultValue stretch
          */
         "alignSelf"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how the box is aligned within its container at the LG breakpoint.
+         */
+        "alignSelfLg"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how the box is aligned within its container at the MD breakpoint.
+         */
+        "alignSelfMd"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how the box is aligned within its container at the SM breakpoint.
+         */
+        "alignSelfSm"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how the box is aligned within its container at the XL breakpoint.
+         */
+        "alignSelfXl"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how the box is aligned within its container at the XS breakpoint.
+         */
+        "alignSelfXs"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
           * If `true`, the box will be sized to fit its contents.
          */
@@ -183,7 +228,32 @@ export namespace Components {
           * Defines the horizontal alignment of the box items.
           * @defaultValue start
          */
-        "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
+        "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
+        /**
+          * Defines the horizontal alignment of the box items at the LG breakpoint.
+          * @defaultValue start
+         */
+        "justifyContentLg"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
+        /**
+          * Defines the horizontal alignment of the box items at the MD breakpoint.
+          * @defaultValue start
+         */
+        "justifyContentMd"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
+        /**
+          * Defines the horizontal alignment of the box items at the SM breakpoint.
+          * @defaultValue start
+         */
+        "justifyContentSm"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
+        /**
+          * Defines the horizontal alignment of the box items at the XL breakpoint.
+          * @defaultValue start
+         */
+        "justifyContentXl"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
+        /**
+          * Defines the horizontal alignment of the box items at the XS breakpoint.
+          * @defaultValue start
+         */
+        "justifyContentXs"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
           * Defines the box's outer bottom spacing.
           * @defaultValue none
@@ -2188,14 +2258,59 @@ declare namespace LocalJSX {
     interface PdsBox {
         /**
           * Defines how items within the box are aligned.
-          * @defaultValue start
+          * @defaultValue stretch
          */
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
+          * Defines how items within the box are aligned at the LG breakpoint.
+          * @defaultValue stretch
+         */
+        "alignItemsLg"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how items within the box are aligned at the MD breakpoint.
+          * @defaultValue stretch
+         */
+        "alignItemsMd"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how items within the box are aligned at the SM breakpoint.
+          * @defaultValue stretch
+         */
+        "alignItemsSm"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how items within the box are aligned at the XL breakpoint.
+          * @defaultValue stretch
+         */
+        "alignItemsXl"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how items within the box are aligned at the XS breakpoint.
+          * @defaultValue stretch
+         */
+        "alignItemsXs"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
           * Defines how the box is aligned within its container.
-          * @defaultValue start
+          * @defaultValue stretch
          */
         "alignSelf"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how the box is aligned within its container at the LG breakpoint.
+         */
+        "alignSelfLg"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how the box is aligned within its container at the MD breakpoint.
+         */
+        "alignSelfMd"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how the box is aligned within its container at the SM breakpoint.
+         */
+        "alignSelfSm"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how the box is aligned within its container at the XL breakpoint.
+         */
+        "alignSelfXl"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how the box is aligned within its container at the XS breakpoint.
+         */
+        "alignSelfXs"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
           * If `true`, the box will be sized to fit its contents.
          */
@@ -2245,7 +2360,32 @@ declare namespace LocalJSX {
           * Defines the horizontal alignment of the box items.
           * @defaultValue start
          */
-        "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
+        "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
+        /**
+          * Defines the horizontal alignment of the box items at the LG breakpoint.
+          * @defaultValue start
+         */
+        "justifyContentLg"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
+        /**
+          * Defines the horizontal alignment of the box items at the MD breakpoint.
+          * @defaultValue start
+         */
+        "justifyContentMd"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
+        /**
+          * Defines the horizontal alignment of the box items at the SM breakpoint.
+          * @defaultValue start
+         */
+        "justifyContentSm"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
+        /**
+          * Defines the horizontal alignment of the box items at the XL breakpoint.
+          * @defaultValue start
+         */
+        "justifyContentXl"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
+        /**
+          * Defines the horizontal alignment of the box items at the XS breakpoint.
+          * @defaultValue start
+         */
+        "justifyContentXs"?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
         /**
           * Defines the box's outer bottom spacing.
           * @defaultValue none
