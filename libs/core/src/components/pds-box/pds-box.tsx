@@ -51,6 +51,36 @@ export class PdsBox {
   @Prop() alignSelf?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
+   * Defines how the box is aligned within its container at the XS breakpoint.
+   * @defaultValue start
+  */
+  @Prop() alignSelfXs?: `start` | `center` | `end` | `baseline` | `stretch`;
+
+  /**
+   * Defines how the box is aligned within its container at the SM breakpoint.
+   * @defaultValue start
+  */
+  @Prop() alignSelfSm?: `start` | `center` | `end` | `baseline` | `stretch`;
+
+  /**
+   * Defines how the box is aligned within its container at the MD breakpoint.
+   * @defaultValue start
+  */
+  @Prop() alignSelfMd?: `start` | `center` | `end` | `baseline` | `stretch`;
+
+  /**
+   * Defines how the box is aligned within its container at the LG breakpoint.
+   * @defaultValue start
+  */
+  @Prop() alignSelfLg?: `start` | `center` | `end` | `baseline` | `stretch`;
+
+  /**
+   * Defines how the box is aligned within its container at the XL breakpoint.
+   * @defaultValue start
+  */
+  @Prop() alignSelfXl?: `start` | `center` | `end` | `baseline` | `stretch`;
+
+  /**
    * If `true`, the box will be sized to fit its contents.
    */
   @Prop() auto?: boolean;
@@ -290,6 +320,11 @@ export class PdsBox {
     ${this.alignItemsLg !== undefined && this.alignItemsLg.trim() !== '' ? `pds-align-items-lg-${this.alignItemsLg}` : ''}
     ${this.alignItemsXl !== undefined && this.alignItemsXl.trim() !== '' ? `pds-align-items-xl-${this.alignItemsXl}` : ''}
     ${this.alignSelf !== undefined && this.alignSelf.trim() !== '' ? `pds-align-self-${this.alignSelf}` : ''}
+    ${this.alignSelfXs !== undefined && this.alignSelfXs.trim() !== '' ? `pds-align-self-xs-${this.alignSelfXs}` : ''}
+    ${this.alignSelfSm !== undefined && this.alignSelfSm.trim() !== '' ? `pds-align-self-sm-${this.alignSelfSm}` : ''}
+    ${this.alignSelfMd !== undefined && this.alignSelfMd.trim() !== '' ? `pds-align-self-md-${this.alignSelfMd}` : ''}
+    ${this.alignSelfLg !== undefined && this.alignSelfLg.trim() !== '' ? `pds-align-self-lg-${this.alignSelfLg}` : ''}
+    ${this.alignSelfXl !== undefined && this.alignSelfXl.trim() !== '' ? `pds-align-self-xl-${this.alignSelfXl}` : ''}
     ${this.auto ? 'pds-box--auto' : ''}
     ${this.border ? 'pds-box--border' : ''}
     ${this.borderRadius !== undefined && this.borderRadius.trim() !== '' ? `pds-border-radius-${this.borderRadius}` : ''}

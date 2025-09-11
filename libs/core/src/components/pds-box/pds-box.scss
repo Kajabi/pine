@@ -872,3 +872,114 @@ $pine-spacing-tokens: (
 .pds-align-self-stretch {
   align-self: stretch;
 }
+
+// Responsive Align Self helpers
+@media (max-width: 575px) {
+  .pds-align-self-xs-start {
+    align-self: start;
+  }
+
+  .pds-align-self-xs-center {
+    align-self: center;
+  }
+
+  .pds-align-self-xs-end {
+    align-self: end;
+  }
+
+  .pds-align-self-xs-baseline {
+    align-self: baseline;
+  }
+
+  .pds-align-self-xs-stretch {
+    align-self: stretch;
+  }
+}
+
+@media (min-width: 576px) {
+  .pds-align-self-sm-start {
+    align-self: start;
+  }
+
+  .pds-align-self-sm-center {
+    align-self: center;
+  }
+
+  .pds-align-self-sm-end {
+    align-self: end;
+  }
+
+  .pds-align-self-sm-baseline {
+    align-self: baseline;
+  }
+
+  .pds-align-self-sm-stretch {
+    align-self: stretch;
+  }
+}
+
+@media (min-width: 768px) {
+  .pds-align-self-md-start {
+    align-self: start;
+  }
+
+  .pds-align-self-md-center {
+    align-self: center;
+  }
+
+  .pds-align-self-md-end {
+    align-self: end;
+  }
+
+  .pds-align-self-md-baseline {
+    align-self: baseline;
+  }
+
+  .pds-align-self-md-stretch {
+    align-self: stretch;
+  }
+}
+
+@media (min-width: 992px) {
+  .pds-align-self-lg-start {
+    align-self: start;
+  }
+
+  .pds-align-self-lg-center {
+    align-self: center;
+  }
+
+  .pds-align-self-lg-end {
+    align-self: end;
+  }
+
+  .pds-align-self-lg-baseline {
+    align-self: baseline;
+  }
+
+  .pds-align-self-lg-stretch {
+    align-self: stretch;
+  }
+}
+
+@media (min-width: 1200px) {
+  .pds-align-self-xl-start {
+    align-self: start;
+  }
+
+  .pds-align-self-xl-center {
+    align-self: center;
+  }
+
+  .pds-align-self-xl-end {
+    align-self: end;
+  }
+
+  .pds-align-self-xl-baseline {
+    align-self: baseline;
+  }
+
+  .pds-align-self-xl-stretch {
+    align-self: stretch;
+  }
+}

@@ -160,6 +160,31 @@ export namespace Components {
          */
         "alignSelf"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
+          * Defines how the box is aligned within its container at the LG breakpoint.
+          * @defaultValue start
+         */
+        "alignSelfLg"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how the box is aligned within its container at the MD breakpoint.
+          * @defaultValue start
+         */
+        "alignSelfMd"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how the box is aligned within its container at the SM breakpoint.
+          * @defaultValue start
+         */
+        "alignSelfSm"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how the box is aligned within its container at the XL breakpoint.
+          * @defaultValue start
+         */
+        "alignSelfXl"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how the box is aligned within its container at the XS breakpoint.
+          * @defaultValue start
+         */
+        "alignSelfXs"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
           * If `true`, the box will be sized to fit its contents.
          */
         "auto"?: boolean;
@@ -2271,6 +2296,31 @@ declare namespace LocalJSX {
           * @defaultValue start
          */
         "alignSelf"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how the box is aligned within its container at the LG breakpoint.
+          * @defaultValue start
+         */
+        "alignSelfLg"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how the box is aligned within its container at the MD breakpoint.
+          * @defaultValue start
+         */
+        "alignSelfMd"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how the box is aligned within its container at the SM breakpoint.
+          * @defaultValue start
+         */
+        "alignSelfSm"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how the box is aligned within its container at the XL breakpoint.
+          * @defaultValue start
+         */
+        "alignSelfXl"?: `start` | `center` | `end` | `baseline` | `stretch`;
+        /**
+          * Defines how the box is aligned within its container at the XS breakpoint.
+          * @defaultValue start
+         */
+        "alignSelfXs"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
           * If `true`, the box will be sized to fit its contents.
          */
