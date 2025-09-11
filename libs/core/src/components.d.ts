@@ -185,6 +185,31 @@ export namespace Components {
          */
         "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
         /**
+          * Defines the horizontal alignment of the box items at the LG breakpoint.
+          * @defaultValue start
+         */
+        "justifyContentLg"?: `start` | `center` | `end` | `space-between` | `space-around`;
+        /**
+          * Defines the horizontal alignment of the box items at the MD breakpoint.
+          * @defaultValue start
+         */
+        "justifyContentMd"?: `start` | `center` | `end` | `space-between` | `space-around`;
+        /**
+          * Defines the horizontal alignment of the box items at the SM breakpoint.
+          * @defaultValue start
+         */
+        "justifyContentSm"?: `start` | `center` | `end` | `space-between` | `space-around`;
+        /**
+          * Defines the horizontal alignment of the box items at the XL breakpoint.
+          * @defaultValue start
+         */
+        "justifyContentXl"?: `start` | `center` | `end` | `space-between` | `space-around`;
+        /**
+          * Defines the horizontal alignment of the box items at the XS breakpoint.
+          * @defaultValue start
+         */
+        "justifyContentXs"?: `start` | `center` | `end` | `space-between` | `space-around`;
+        /**
           * Defines the box's outer bottom spacing.
           * @defaultValue none
          */
@@ -2246,6 +2271,31 @@ declare namespace LocalJSX {
           * @defaultValue start
          */
         "justifyContent"?: `start` | `center` | `end` | `space-between` | `space-around`;
+        /**
+          * Defines the horizontal alignment of the box items at the LG breakpoint.
+          * @defaultValue start
+         */
+        "justifyContentLg"?: `start` | `center` | `end` | `space-between` | `space-around`;
+        /**
+          * Defines the horizontal alignment of the box items at the MD breakpoint.
+          * @defaultValue start
+         */
+        "justifyContentMd"?: `start` | `center` | `end` | `space-between` | `space-around`;
+        /**
+          * Defines the horizontal alignment of the box items at the SM breakpoint.
+          * @defaultValue start
+         */
+        "justifyContentSm"?: `start` | `center` | `end` | `space-between` | `space-around`;
+        /**
+          * Defines the horizontal alignment of the box items at the XL breakpoint.
+          * @defaultValue start
+         */
+        "justifyContentXl"?: `start` | `center` | `end` | `space-between` | `space-around`;
+        /**
+          * Defines the horizontal alignment of the box items at the XS breakpoint.
+          * @defaultValue start
+         */
+        "justifyContentXs"?: `start` | `center` | `end` | `space-between` | `space-around`;
         /**
           * Defines the box's outer bottom spacing.
           * @defaultValue none

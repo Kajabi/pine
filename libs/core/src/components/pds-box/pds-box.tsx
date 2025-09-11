@@ -89,6 +89,36 @@ export class PdsBox {
   @Prop() justifyContent?: `start` | `center` | `end` | `space-between` | `space-around`;
 
   /**
+   * Defines the horizontal alignment of the box items at the XS breakpoint.
+   * @defaultValue start
+  */
+  @Prop() justifyContentXs?: `start` | `center` | `end` | `space-between` | `space-around`;
+
+  /**
+   * Defines the horizontal alignment of the box items at the SM breakpoint.
+   * @defaultValue start
+  */
+  @Prop() justifyContentSm?: `start` | `center` | `end` | `space-between` | `space-around`;
+
+  /**
+   * Defines the horizontal alignment of the box items at the MD breakpoint.
+   * @defaultValue start
+  */
+  @Prop() justifyContentMd?: `start` | `center` | `end` | `space-between` | `space-around`;
+
+  /**
+   * Defines the horizontal alignment of the box items at the LG breakpoint.
+   * @defaultValue start
+  */
+  @Prop() justifyContentLg?: `start` | `center` | `end` | `space-between` | `space-around`;
+
+  /**
+   * Defines the horizontal alignment of the box items at the XL breakpoint.
+   * @defaultValue start
+  */
+  @Prop() justifyContentXl?: `start` | `center` | `end` | `space-between` | `space-around`;
+
+  /**
    * Defines the box's outer top spacing.
    * @defaultValue none
   */
@@ -235,6 +265,11 @@ export class PdsBox {
     ${this.wrap ? 'pds-box--wrap' : ''}
     ${this.flex !== undefined && this.flex.trim() !== '' && ['none', 'grow', 'shrink'].includes(this.flex) ? `pds-box--flex-${this.flex}` : ''}
     ${this.justifyContent !== undefined && this.justifyContent.trim() !== '' ? `pds-justify-content-${this.justifyContent}` : ''}
+    ${this.justifyContentXs !== undefined && this.justifyContentXs.trim() !== '' ? `pds-justify-content-xs-${this.justifyContentXs}` : ''}
+    ${this.justifyContentSm !== undefined && this.justifyContentSm.trim() !== '' ? `pds-justify-content-sm-${this.justifyContentSm}` : ''}
+    ${this.justifyContentMd !== undefined && this.justifyContentMd.trim() !== '' ? `pds-justify-content-md-${this.justifyContentMd}` : ''}
+    ${this.justifyContentLg !== undefined && this.justifyContentLg.trim() !== '' ? `pds-justify-content-lg-${this.justifyContentLg}` : ''}
+    ${this.justifyContentXl !== undefined && this.justifyContentXl.trim() !== '' ? `pds-justify-content-xl-${this.justifyContentXl}` : ''}
     ${this.marginBlockStart !== undefined && this.marginBlockStart.trim() !== '' ? `pds-margin-block-start-${this.marginBlockStart}` : ''}
     ${this.marginInlineStart !== undefined && this.marginInlineStart.trim() !== '' ? `pds-margin-inline-start-${this.marginInlineStart}` : ''}
     ${this.marginInlineEnd !== undefined && this.marginInlineEnd.trim() !== '' ? `pds-margin-inline-end-${this.marginInlineEnd}` : ''}
