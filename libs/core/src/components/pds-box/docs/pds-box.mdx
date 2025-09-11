@@ -153,6 +153,22 @@ Items flow horizontally by default, so you'll need to explicitly set `direction=
 - `align-items`: Vertical alignment of items (with responsive variants: `align-items-xs`, `align-items-sm`, `align-items-md`, `align-items-lg`, `align-items-xl`)
 - `align-self`: Individual box alignment within container (with responsive variants: `align-self-xs`, `align-self-sm`, `align-self-md`, `align-self-lg`, `align-self-xl`)
 
+### Responsive Breakpoints
+
+All responsive properties follow the same breakpoint system:
+
+- **Base (no suffix)**: Applies to all screen sizes unless overridden
+- **XS (`-xs`)**: 0-575px (mobile phones)
+- **SM (`-sm`)**: 576px and up (tablets)
+- **MD (`-md`)**: 768px and up (small desktops)
+- **LG (`-lg`)**: 992px and up (desktops)
+- **XL (`-xl`)**: 1200px and up (large desktops)
+
+**Examples:**
+- `justify-content="center"` - Center on all screen sizes
+- `justify-content="start" justify-content-md="center"` - Start on mobile, center on desktop
+- `align-items="stretch" align-items-lg="start"` - Stretch on mobile/tablet, start on desktop
+
 ### Working with PDS-Row
 
 > **KEY LAYOUT RULE:** When `pds-box` is inside `pds-row`, it becomes a **grid column**. When `pds-box` is standalone, it becomes a **flexbox container**.
@@ -474,16 +490,7 @@ The align-items property supports responsive breakpoints, allowing you to change
   </pds-box>
 </DocCanvas>
 
-#### Responsive Breakpoints for Align Items
-
-- **Base (`align-items`)**: Applies to all screen sizes unless overridden
-- **XS (`align-items-xs`)**: 0-575px (mobile)
-- **SM (`align-items-sm`)**: 576px and up (tablets)
-- **MD (`align-items-md`)**: 768px and up (small desktops)
-- **LG (`align-items-lg`)**: 992px and up (desktops)
-- **XL (`align-items-xl`)**: 1200px and up (large desktops)
-
-#### Common Responsive Patterns
+#### Common Align Items Patterns
 
 ```html
 <!-- Center content on mobile, align to top on desktop -->
@@ -576,16 +583,7 @@ The align-self property supports responsive breakpoints, allowing you to change 
   </pds-box>
 </DocCanvas>
 
-#### Responsive Breakpoints for Align Self
-
-- **Base (`align-self`)**: Applies to all screen sizes unless overridden
-- **XS (`align-self-xs`)**: 0-575px (mobile)
-- **SM (`align-self-sm`)**: 576px and up (tablets)
-- **MD (`align-self-md`)**: 768px and up (small desktops)
-- **LG (`align-self-lg`)**: 992px and up (desktops)
-- **XL (`align-self-xl`)**: 1200px and up (large desktops)
-
-#### Common Responsive Patterns
+#### Common Align Self Patterns
 
 ```html
 <!-- Individual item that stands out on mobile, blends in on desktop -->
@@ -727,16 +725,7 @@ The justify-content property supports responsive breakpoints, allowing you to ch
   </pds-box>
 </DocCanvas>
 
-#### Responsive Breakpoints for Justify Content
-
-- **Base (`justify-content`)**: Applies to all screen sizes unless overridden
-- **XS (`justify-content-xs`)**: 0-575px (mobile)
-- **SM (`justify-content-sm`)**: 576px and up (tablets)
-- **MD (`justify-content-md`)**: 768px and up (small desktops)
-- **LG (`justify-content-lg`)**: 992px and up (desktops)
-- **XL (`justify-content-xl`)**: 1200px and up (large desktops)
-
-#### Common Responsive Patterns
+#### Common Justify Content Patterns
 
 ```html
 <!-- Center buttons on mobile, space them apart on desktop -->
@@ -957,13 +946,9 @@ The `pds-box` component uses a mobile-first approach to responsive sizing. This 
 - Breakpoint-specific props (`size-xs`, `size-sm`, etc.) override the base size at their respective breakpoints and larger
 - Each breakpoint-specific prop overrides any sizes set by smaller breakpoint props
 
-### Breakpoint Ranges
+### Breakpoint Behavior
 
-- XS: 0-575px
-- SM: 576px and up
-- MD: 768px and up
-- LG: 992px and up
-- XL: 1200px and up
+See the [Responsive Breakpoints](#responsive-breakpoints) section above for detailed breakpoint ranges.
 
 ### Common Patterns
 
