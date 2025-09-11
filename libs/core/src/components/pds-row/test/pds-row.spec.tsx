@@ -32,6 +32,28 @@ describe('pds-row', () => {
     expect(element).toEqualAttribute('style', '--row-gap-x: 1rem; --row-gap-y: 1rem;');
   });
 
+  it('renders a vertical gap when prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsRow],
+      html: `<pds-row col-gap-block="sm"></pds-row>`,
+    });
+
+    const element = page.root;
+
+    expect(element).toEqualAttribute('style', '--row-gap-y: 1rem;');
+  });
+
+  it('renders a horizontal gap when prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsRow],
+      html: `<pds-row col-gap-inline="sm"></pds-row>`,
+    });
+
+    const element = page.root;
+
+    expect(element).toEqualAttribute('style', '--row-gap-x: 1rem;');
+  });
+
   it('renders the align-items when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsRow],

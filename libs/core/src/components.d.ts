@@ -953,6 +953,14 @@ export namespace Components {
          */
         "colGap"?: BoxTShirtSizeType | null;
         /**
+          * Defines the spacing between the row items vertically.
+         */
+        "colGapBlock"?: BoxTShirtSizeType | null;
+        /**
+          * Defines the spacing between the row items horizontally.
+         */
+        "colGapInline"?: BoxTShirtSizeType | null;
+        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
@@ -3032,6 +3040,14 @@ declare namespace LocalJSX {
           * Defines the spacing between the row items.
          */
         "colGap"?: BoxTShirtSizeType | null;
+        /**
+          * Defines the spacing between the row items vertically.
+         */
+        "colGapBlock"?: BoxTShirtSizeType | null;
+        /**
+          * Defines the spacing between the row items horizontally.
+         */
+        "colGapInline"?: BoxTShirtSizeType | null;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */

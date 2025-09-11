@@ -148,15 +148,210 @@ Best practice: Use with `min-height` for consistent vertical alignment
 
 ### Column Gap
 
-Defines the spacing between the row items.
+The `pds-row` component provides flexible gap control with three different props for precise spacing management.
 
-Layout impact:
+#### Gap Props Overview
+
+- **`col-gap`**: Sets both horizontal and vertical spacing between items
+- **`col-gap-inline`**: Sets only horizontal spacing between items (overrides `col-gap` for horizontal)
+- **`col-gap-block`**: Sets only vertical spacing between items (overrides `col-gap` for vertical)
+
+Available sizes: `none`, `xxs`, `xs`, `sm`, `md`, `lg`, `xl`, `xxl`
+
+#### Basic Gap Usage
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsRow colGap="md">
+        <PdsBox size="4">
+          <pds-box border>Column 1</pds-box>
+        </PdsBox>
+        <PdsBox size="4">
+          <pds-box border>Column 2</pds-box>
+        </PdsBox>
+        <PdsBox size="4">
+          <pds-box border>Column 3</pds-box>
+        </PdsBox>
+      </PdsRow>
+    `,
+    webComponent: `
+      <pds-row col-gap="md">
+        <pds-box size="4">
+          <pds-box border>Column 1</pds-box>
+        </pds-box>
+        <pds-box size="4">
+          <pds-box border>Column 2</pds-box>
+        </pds-box>
+        <pds-box size="4">
+          <pds-box border>Column 3</pds-box>
+        </pds-box>
+      </pds-row>
+    `
+}}>
+  <pds-row col-gap="md">
+    <pds-box size="4">
+      <pds-box border>Column 1</pds-box>
+    </pds-box>
+    <pds-box size="4">
+      <pds-box border>Column 2</pds-box>
+    </pds-box>
+    <pds-box size="4">
+      <pds-box border>Column 3</pds-box>
+    </pds-box>
+  </pds-row>
+</DocCanvas>
+
+#### Directional Gap Control
+
+For more precise control, use `col-gap-inline` for horizontal spacing and `col-gap-block` for vertical spacing:
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsRow colGapInline="lg" colGapBlock="xs">
+        <PdsBox size="6">
+          <pds-box border>Wide horizontal gap</pds-box>
+        </PdsBox>
+        <PdsBox size="6">
+          <pds-box border>Between columns</pds-box>
+        </PdsBox>
+        <PdsBox size="4">
+          <pds-box border>Small vertical gap</pds-box>
+        </PdsBox>
+        <PdsBox size="4">
+          <pds-box border>When wrapping</pds-box>
+        </PdsBox>
+        <PdsBox size="4">
+          <pds-box border>To next line</pds-box>
+        </PdsBox>
+      </PdsRow>
+    `,
+    webComponent: `
+      <pds-row col-gap-inline="lg" col-gap-block="xs">
+        <pds-box size="6">
+          <pds-box border>Wide horizontal gap</pds-box>
+        </pds-box>
+        <pds-box size="6">
+          <pds-box border>Between columns</pds-box>
+        </pds-box>
+        <pds-box size="4">
+          <pds-box border>Small vertical gap</pds-box>
+        </pds-box>
+        <pds-box size="4">
+          <pds-box border>When wrapping</pds-box>
+        </pds-box>
+        <pds-box size="4">
+          <pds-box border>To next line</pds-box>
+        </pds-box>
+      </pds-row>
+    `
+}}>
+  <pds-row col-gap-inline="lg" col-gap-block="xs">
+    <pds-box size="6">
+      <pds-box border>Wide horizontal gap</pds-box>
+    </pds-box>
+    <pds-box size="6">
+      <pds-box border>Between columns</pds-box>
+    </pds-box>
+    <pds-box size="4">
+      <pds-box border>Small vertical gap</pds-box>
+    </pds-box>
+    <pds-box size="4">
+      <pds-box border>When wrapping</pds-box>
+    </pds-box>
+    <pds-box size="4">
+      <pds-box border>To next line</pds-box>
+    </pds-box>
+  </pds-row>
+</DocCanvas>
+
+#### Gap Size Comparison
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsBox direction="column" fit="true">
+        <PdsText tag="h4">Small Gap (xs)</PdsText>
+        <PdsRow colGap="xs">
+          <PdsBox size="6"><pds-box border>Column A</pds-box></PdsBox>
+          <PdsBox size="6"><pds-box border>Column B</pds-box></PdsBox>
+        </PdsRow>
+
+        <PdsText tag="h4">Medium Gap (md)</PdsText>
+        <PdsRow colGap="md">
+          <PdsBox size="6"><pds-box border>Column A</pds-box></PdsBox>
+          <PdsBox size="6"><pds-box border>Column B</pds-box></PdsBox>
+        </PdsRow>
+
+        <PdsText tag="h4">Large Gap (xl)</PdsText>
+        <PdsRow colGap="xl">
+          <PdsBox size="6"><pds-box border>Column A</pds-box></PdsBox>
+          <PdsBox size="6"><pds-box border>Column B</pds-box></PdsBox>
+        </PdsRow>
+      </PdsBox>
+    `,
+    webComponent: `
+      <pds-box direction="column" fit="true">
+        <pds-text tag="h4">Small Gap (xs)</pds-text>
+        <pds-row col-gap="xs">
+          <pds-box size="6"><pds-box border>Column A</pds-box></pds-box>
+          <pds-box size="6"><pds-box border>Column B</pds-box></pds-box>
+        </pds-row>
+
+        <pds-text tag="h4">Medium Gap (md)</pds-text>
+        <pds-row col-gap="md">
+          <pds-box size="6"><pds-box border>Column A</pds-box></pds-box>
+          <pds-box size="6"><pds-box border>Column B</pds-box></pds-box>
+        </pds-row>
+
+        <pds-text tag="h4">Large Gap (xl)</pds-text>
+        <pds-row col-gap="xl">
+          <pds-box size="6"><pds-box border>Column A</pds-box></pds-box>
+          <pds-box size="6"><pds-box border>Column B</pds-box></pds-box>
+        </pds-row>
+      </pds-box>
+    `
+}}>
+  <pds-box direction="column" fit="true">
+    <pds-text tag="h4">Small Gap (xs)</pds-text>
+    <pds-row col-gap="xs">
+      <pds-box size="6"><pds-box border>Column A</pds-box></pds-box>
+      <pds-box size="6"><pds-box border>Column B</pds-box></pds-box>
+    </pds-row>
+
+    <pds-text tag="h4">Medium Gap (md)</pds-text>
+    <pds-row col-gap="md">
+      <pds-box size="6"><pds-box border>Column A</pds-box></pds-box>
+      <pds-box size="6"><pds-box border>Column B</pds-box></pds-box>
+    </pds-row>
+
+    <pds-text tag="h4">Large Gap (xl)</pds-text>
+    <pds-row col-gap="xl">
+      <pds-box size="6"><pds-box border>Column A</pds-box></pds-box>
+      <pds-box size="6"><pds-box border>Column B</pds-box></pds-box>
+    </pds-row>
+  </pds-box>
+</DocCanvas>
+
+**Layout impact:**
 - Controls the gap between columns in the grid
-- Available sizes: `none`, `xxs`, `xs`, `sm`, `md`, `lg`, `xl`, `xxl`
 - Creates consistent spacing between all columns
 - Works with both fixed-size and auto-width columns
 
-Best practice: Use `md` or `lg` for comfortable spacing between content columns
+**Best practice:** Use `md` or `lg` for comfortable spacing between content columns
+
+#### When to Use Each Gap Prop
+
+- **`col-gap`**: Use when you want uniform spacing in both directions (most common)
+- **`col-gap-inline`**: Use when you need different horizontal spacing than vertical (e.g., wide columns, tight rows)
+- **`col-gap-block`**: Use when you need different vertical spacing than horizontal (e.g., tight columns, spaced rows)
+
+**Common Patterns:**
+- **Cards Layout**: `col-gap="lg"` for even spacing
+- **Form Layout**: `col-gap-inline="md" col-gap-block="sm"` for tighter vertical spacing
+- **Navigation**: `col-gap-inline="lg"` with no vertical gap
+- **Dense Grid**: `col-gap="xs"` for minimal spacing
 
 ### Justify Content
 

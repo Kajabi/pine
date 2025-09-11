@@ -97,22 +97,28 @@ Use `pds-row` for Multi-Column Layouts:
 <DocCanvas client:only
   mdxSource={{
     react: `
-      <PdsBox backgroundColor="#f5f5f5" fit="true">
+      <PdsBox fit="true">
         <PdsRow col-gap="sm">
           <PdsBox size="8">
-            <pds-box border padding="md">Column 1</pds-box>
-          </pds-box>
+            <PdsBox border padding="md">Column 1</PdsBox>
+          </PdsBox>
           <PdsBox size="4">
-            <pds-box border padding="md">Column 2</pds-box>
-          </pds-box>
+            <PdsBox border padding="md">Column 2</PdsBox>
+          </PdsBox>
+          <PdsBox size="4">
+            <PdsBox border padding="md">Column 2</PdsBox>
+          </PdsBox>
         </pds-row>
       </PdsBox>
     `,
     webComponent: `
-      <pds-box background-color="#f5f5f5" fit="true">
+      <pds-box fit="true">
         <pds-row col-gap="sm">
           <pds-box size="8">
             <pds-box border padding="md">Column 1</pds-box>
+          </pds-box>
+          <pds-box size="4">
+            <pds-box border padding="md">Column 2</pds-box>
           </pds-box>
           <pds-box size="4">
             <pds-box border padding="md">Column 2</pds-box>
@@ -121,10 +127,13 @@ Use `pds-row` for Multi-Column Layouts:
       </pds-box>
     `
 }}>
-  <pds-box background-color="#f5f5f5" fit="true">
+  <pds-box fit="true">
     <pds-row col-gap="sm">
       <pds-box size="8">
         <pds-box border padding="md">Column 1</pds-box>
+      </pds-box>
+      <pds-box size="4">
+        <pds-box border padding="md">Column 2</pds-box>
       </pds-box>
       <pds-box size="4">
         <pds-box border padding="md">Column 2</pds-box>
@@ -140,7 +149,7 @@ Add size modifiers to your child `pds-box` for responsive design
 <DocCanvas client:only
   mdxSource={{
     react: `
-      <PdsBox backgroundColor="#f5f5f5" fit="true">
+      <PdsBox fit="true">
         <PdsRow col-gap="sm">
           <PdsBox sizeMd="8">
             <pds-box border padding="md">Column 1</pds-box>
@@ -152,7 +161,7 @@ Add size modifiers to your child `pds-box` for responsive design
       </PdsBox>
     `,
     webComponent: `
-      <pds-box background-color="#f5f5f5" fit="true">
+      <pds-box fit="true">
         <pds-row col-gap="sm">
           <pds-box size-md="8">
             <pds-box border padding="sm">Column 1</pds-box>
@@ -164,10 +173,13 @@ Add size modifiers to your child `pds-box` for responsive design
       </pds-box>
     `
 }}>
-  <pds-box background-color="#f5f5f5" fit="true">
+  <pds-box fit="true">
     <pds-row col-gap="sm">
       <pds-box size-md="8">
         <pds-box border padding="sm">Column 1</pds-box>
+      </pds-box>
+      <pds-box size-md="4">
+        <pds-box border padding="sm">Column 2</pds-box>
       </pds-box>
       <pds-box size-md="4">
         <pds-box border padding="sm">Column 2</pds-box>

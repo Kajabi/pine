@@ -98,6 +98,10 @@ $pine-spacing-tokens: (
   flex-grow: 1;
 }
 
+.pds-row > .pds-box[class*='pds-box-'] {
+  flex-basis: auto;
+}
+
 .pds-box--auto {
   flex: 0 0 var(--sizing-min-width-box, fit-content);
   min-width: auto;

@@ -24,6 +24,16 @@ export class PdsRow {
   @Prop() colGap?: BoxTShirtSizeType | null;
 
   /**
+   * Defines the spacing between the row items vertically.
+   */
+  @Prop() colGapBlock?: BoxTShirtSizeType | null;
+
+  /**
+   * Defines the spacing between the row items horizontally.
+   */
+  @Prop() colGapInline?: BoxTShirtSizeType | null;
+
+  /**
    * A unique identifier used for the underlying component `id` attribute.
    */
   @Prop() componentId: string;
@@ -67,6 +77,12 @@ export class PdsRow {
       ...(this.colGap && {
         '--row-gap-x': this.colGap !== undefined && this.colGap.trim() !== '' ? this.colGapMap[this.colGap] : '',
         '--row-gap-y': this.colGap !== undefined && this.colGap.trim() !== '' ? this.colGapMap[this.colGap] : '',
+      }),
+      ...(this.colGapBlock && {
+        '--row-gap-y': this.colGapBlock !== undefined && this.colGapBlock.trim() !== '' ? this.colGapMap[this.colGapBlock] : '',
+      }),
+      ...(this.colGapInline && {
+        '--row-gap-x': this.colGapInline !== undefined && this.colGapInline.trim() !== '' ? this.colGapMap[this.colGapInline] : '',
       }),
       ...(this.minHeight && {
         'min-height': this.minHeight,
