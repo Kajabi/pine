@@ -271,67 +271,67 @@ For more precise control, use `col-gap-inline` for horizontal spacing and `col-g
 <DocCanvas client:only
   mdxSource={{
     react: `
-      <div>
-        <h4>Small Gap (xs)</h4>
+      <PdsBox direction="column" fit="true">
+        <PdsText tag="h4">Small Gap (xs)</PdsText>
         <PdsRow colGap="xs">
           <PdsBox size="6"><pds-box border>Column A</pds-box></PdsBox>
           <PdsBox size="6"><pds-box border>Column B</pds-box></PdsBox>
         </PdsRow>
 
-        <h4>Medium Gap (md)</h4>
+        <PdsText tag="h4">Medium Gap (md)</PdsText>
         <PdsRow colGap="md">
           <PdsBox size="6"><pds-box border>Column A</pds-box></PdsBox>
           <PdsBox size="6"><pds-box border>Column B</pds-box></PdsBox>
         </PdsRow>
 
-        <h4>Large Gap (xl)</h4>
+        <PdsText tag="h4">Large Gap (xl)</PdsText>
         <PdsRow colGap="xl">
           <PdsBox size="6"><pds-box border>Column A</pds-box></PdsBox>
           <PdsBox size="6"><pds-box border>Column B</pds-box></PdsBox>
         </PdsRow>
-      </div>
+      </PdsBox>
     `,
     webComponent: `
-      <div>
-        <h4>Small Gap (xs)</h4>
+      <pds-box direction="column" fit="true">
+        <pds-text tag="h4">Small Gap (xs)</pds-text>
         <pds-row col-gap="xs">
           <pds-box size="6"><pds-box border>Column A</pds-box></pds-box>
           <pds-box size="6"><pds-box border>Column B</pds-box></pds-box>
         </pds-row>
 
-        <h4>Medium Gap (md)</h4>
+        <pds-text tag="h4">Medium Gap (md)</pds-text>
         <pds-row col-gap="md">
           <pds-box size="6"><pds-box border>Column A</pds-box></pds-box>
           <pds-box size="6"><pds-box border>Column B</pds-box></pds-box>
         </pds-row>
 
-        <h4>Large Gap (xl)</h4>
+        <pds-text tag="h4">Large Gap (xl)</pds-text>
         <pds-row col-gap="xl">
           <pds-box size="6"><pds-box border>Column A</pds-box></pds-box>
           <pds-box size="6"><pds-box border>Column B</pds-box></pds-box>
         </pds-row>
-      </div>
+      </pds-box>
     `
 }}>
-  <div>
-    <h4>Small Gap (xs)</h4>
+  <pds-box direction="column" fit="true">
+    <pds-text tag="h4">Small Gap (xs)</pds-text>
     <pds-row col-gap="xs">
       <pds-box size="6"><pds-box border>Column A</pds-box></pds-box>
       <pds-box size="6"><pds-box border>Column B</pds-box></pds-box>
     </pds-row>
 
-    <h4>Medium Gap (md)</h4>
+    <pds-text tag="h4">Medium Gap (md)</pds-text>
     <pds-row col-gap="md">
       <pds-box size="6"><pds-box border>Column A</pds-box></pds-box>
       <pds-box size="6"><pds-box border>Column B</pds-box></pds-box>
     </pds-row>
 
-    <h4>Large Gap (xl)</h4>
+    <pds-text tag="h4">Large Gap (xl)</pds-text>
     <pds-row col-gap="xl">
       <pds-box size="6"><pds-box border>Column A</pds-box></pds-box>
       <pds-box size="6"><pds-box border>Column B</pds-box></pds-box>
     </pds-row>
-  </div>
+  </pds-box>
 </DocCanvas>
 
 **Layout impact:**

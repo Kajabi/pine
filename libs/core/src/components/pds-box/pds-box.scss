@@ -96,10 +96,10 @@ $pine-spacing-tokens: (
 .pds-box {
   flex-basis: 0;
   flex-grow: 1;
+}
 
-  &[class*='pds-box-'] {
-    flex-basis: auto;
-  }
+.pds-row > .pds-box[class*='pds-box-'] {
+  flex-basis: auto;
 }
 
 .pds-box--auto {
