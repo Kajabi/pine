@@ -54,7 +54,6 @@ describe('pds-box', () => {
     expect(element).toHaveClass('pds-align-items-center');
   });
 
-  // Test all align-items values
   ['start', 'center', 'end', 'baseline', 'stretch'].forEach((value) => {
     it(`renders align-items class when prop is set to ${value}`, async () => {
       const page = await newSpecPage({
@@ -128,7 +127,6 @@ describe('pds-box', () => {
     expect(element).toHaveClass('pds-align-self-center');
   });
 
-  // Test all align-self values
   ['start', 'center', 'end', 'baseline', 'stretch'].forEach((value) => {
     it(`renders align-self class when prop is set to ${value}`, async () => {
       const page = await newSpecPage({
@@ -436,7 +434,6 @@ describe('pds-box', () => {
     expect(element).toHaveClass('pds-justify-content-center');
   });
 
-  // Test all justify-content values
   ['start', 'center', 'end', 'space-between', 'space-around', 'space-evenly'].forEach((value) => {
     it(`renders justify-content class when prop is set to ${value}`, async () => {
       const page = await newSpecPage({
