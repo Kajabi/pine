@@ -437,7 +437,7 @@ describe('pds-box', () => {
   });
 
   // Test all justify-content values
-  ['start', 'center', 'end', 'space-between', 'space-around'].forEach((value) => {
+  ['start', 'center', 'end', 'space-between', 'space-around', 'space-evenly'].forEach((value) => {
     it(`renders justify-content class when prop is set to ${value}`, async () => {
       const page = await newSpecPage({
         components: [PdsBox],

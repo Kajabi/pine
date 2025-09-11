@@ -607,6 +607,7 @@ Layout impact:
 - `end`: Items pack toward the end (right for row, bottom for column)
 - `space-between`: Items are evenly distributed with first at start, last at end
 - `space-around`: Items are evenly distributed with equal space around them
+- `space-evenly`: Items are evenly distributed with equal space around them
 
 #### Basic Justify Content Examples
 
@@ -633,6 +634,10 @@ Layout impact:
     <PdsBox flex="none" border="true" padding="xs">Item 1</PdsBox>
     <PdsBox flex="none" border="true" padding="xs">Item 2</PdsBox>
   </PdsBox>
+  <PdsBox border="true" padding="sm" justifyContent="space-evenly">
+    <PdsBox flex="none" border="true" padding="xs">Item 1</PdsBox>
+    <PdsBox flex="none" border="true" padding="xs">Item 2</PdsBox>
+  </PdsBox>
 </PdsBox>`,
     webComponent: `<pds-box direction="column" gap="sm">
   <pds-box border="true" padding="sm" justify-content="start">
@@ -652,6 +657,10 @@ Layout impact:
     <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
   </pds-box>
   <pds-box border="true" padding="sm" justify-content="space-around">
+    <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+    <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+  </pds-box>
+  <pds-box border="true" padding="sm" justify-content="space-evenly">
     <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
     <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
   </pds-box>
@@ -675,6 +684,10 @@ Layout impact:
       <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
     </pds-box>
     <pds-box border="true" padding="sm" justify-content="space-around">
+      <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
+      <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
+    </pds-box>
+    <pds-box border="true" padding="sm" justify-content="space-evenly">
       <pds-box flex="none" border="true" padding="xs">Item 1</pds-box>
       <pds-box flex="none" border="true" padding="xs">Item 2</pds-box>
     </pds-box>

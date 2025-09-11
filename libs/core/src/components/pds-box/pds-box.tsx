@@ -10,73 +10,73 @@ import { normalizeColorValue } from '../../utils/utils';
 export class PdsBox {
   /**
    * Defines how items within the box are aligned.
-   * @defaultValue start
+   * @defaultValue stretch
   */
-  @Prop() alignItems?: `start` | `center` | `end` | `baseline` | `stretch`;
+  @Prop() alignItems?: `start` | `center` | `end` | `baseline` | `stretch` ;
 
   /**
    * Defines how items within the box are aligned at the XS breakpoint.
-   * @defaultValue start
+   * @defaultValue stretch
   */
   @Prop() alignItemsXs?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
    * Defines how items within the box are aligned at the SM breakpoint.
-   * @defaultValue start
+   * @defaultValue stretch
   */
   @Prop() alignItemsSm?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
    * Defines how items within the box are aligned at the MD breakpoint.
-   * @defaultValue start
+   * @defaultValue stretch
   */
   @Prop() alignItemsMd?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
    * Defines how items within the box are aligned at the LG breakpoint.
-   * @defaultValue start
+   * @defaultValue stretch
   */
   @Prop() alignItemsLg?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
    * Defines how items within the box are aligned at the XL breakpoint.
-   * @defaultValue start
+   * @defaultValue stretch
   */
   @Prop() alignItemsXl?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
    * Defines how the box is aligned within its container.
-   * @defaultValue start
+   * @defaultValue stretch
   */
   @Prop() alignSelf?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
    * Defines how the box is aligned within its container at the XS breakpoint.
-   * @defaultValue start
+   *
   */
   @Prop() alignSelfXs?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
    * Defines how the box is aligned within its container at the SM breakpoint.
-   * @defaultValue start
+   *
   */
   @Prop() alignSelfSm?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
    * Defines how the box is aligned within its container at the MD breakpoint.
-   * @defaultValue start
+   *
   */
   @Prop() alignSelfMd?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
    * Defines how the box is aligned within its container at the LG breakpoint.
-   * @defaultValue start
+   *
   */
   @Prop() alignSelfLg?: `start` | `center` | `end` | `baseline` | `stretch`;
 
   /**
    * Defines how the box is aligned within its container at the XL breakpoint.
-   * @defaultValue start
+   *
   */
   @Prop() alignSelfXl?: `start` | `center` | `end` | `baseline` | `stretch`;
 
@@ -146,37 +146,37 @@ export class PdsBox {
    * Defines the horizontal alignment of the box items.
    * @defaultValue start
   */
-  @Prop() justifyContent?: `start` | `center` | `end` | `space-between` | `space-around`;
+  @Prop() justifyContent?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
 
   /**
    * Defines the horizontal alignment of the box items at the XS breakpoint.
    * @defaultValue start
   */
-  @Prop() justifyContentXs?: `start` | `center` | `end` | `space-between` | `space-around`;
+  @Prop() justifyContentXs?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
 
   /**
    * Defines the horizontal alignment of the box items at the SM breakpoint.
    * @defaultValue start
   */
-  @Prop() justifyContentSm?: `start` | `center` | `end` | `space-between` | `space-around`;
+  @Prop() justifyContentSm?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
 
   /**
    * Defines the horizontal alignment of the box items at the MD breakpoint.
    * @defaultValue start
   */
-  @Prop() justifyContentMd?: `start` | `center` | `end` | `space-between` | `space-around`;
+  @Prop() justifyContentMd?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
 
   /**
    * Defines the horizontal alignment of the box items at the LG breakpoint.
    * @defaultValue start
   */
-  @Prop() justifyContentLg?: `start` | `center` | `end` | `space-between` | `space-around`;
+  @Prop() justifyContentLg?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
 
   /**
    * Defines the horizontal alignment of the box items at the XL breakpoint.
    * @defaultValue start
   */
-  @Prop() justifyContentXl?: `start` | `center` | `end` | `space-between` | `space-around`;
+  @Prop() justifyContentXl?: `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
 
   /**
    * Defines the box's outer top spacing.
@@ -205,12 +205,12 @@ export class PdsBox {
   /**
    * The minimum height of the row. Used in conjunction with alignment props
    */
-  @Prop() minHeight?: string;
+  @Prop({ reflect: true }) minHeight?: string;
 
   /**
    * The minimum width of the row. Used in conjunction with alignment props
    */
-  @Prop() minWidth?: string;
+  @Prop({ reflect: true }) minWidth?: string;
 
   /**
    * Move columns to the end direction of the row for all screen sizes. Increases the starting margin of a column by specified number of columns.

@@ -12,8 +12,6 @@ pds-box {
   background-color: var(--color-background-box);
   box-sizing: border-box;
   display: inline-flex;
-  // min-height: var(--sizing-min-height-box);
-  // max-width: var(--sizing-max-width-box);
 
   &[min-height] {
     min-height: var(--sizing-min-height-box);
@@ -630,6 +628,10 @@ $pine-spacing-tokens: (
   .pds-justify-content-xs-space-around {
     justify-content: space-around;
   }
+
+  .pds-justify-content-xs-space-evenly {
+    justify-content: space-evenly;
+  }
 }
 
 @media (min-width: 576px) {
@@ -651,6 +653,10 @@ $pine-spacing-tokens: (
 
   .pds-justify-content-sm-space-around {
     justify-content: space-around;
+  }
+
+  .pds-justify-content-sm-space-evenly {
+    justify-content: space-evenly;
   }
 }
 
@@ -674,6 +680,10 @@ $pine-spacing-tokens: (
   .pds-justify-content-md-space-around {
     justify-content: space-around;
   }
+
+  .pds-justify-content-md-space-evenly {
+    justify-content: space-evenly;
+  }
 }
 
 @media (min-width: 992px) {
@@ -696,6 +706,10 @@ $pine-spacing-tokens: (
   .pds-justify-content-lg-space-around {
     justify-content: space-around;
   }
+
+  .pds-justify-content-lg-space-evenly {
+    justify-content: space-evenly;
+  }
 }
 
 @media (min-width: 1200px) {
@@ -717,6 +731,10 @@ $pine-spacing-tokens: (
 
   .pds-justify-content-xl-space-around {
     justify-content: space-around;
+  }
+
+  .pds-justify-content-xl-space-evenly {
+    justify-content: space-evenly;
   }
 }
 
