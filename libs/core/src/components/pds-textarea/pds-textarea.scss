@@ -107,7 +107,7 @@ label {
 }
 
 .pds-textarea__character-counter {
-  background: rgba(255, 255, 255, 0.8);
+  background: color-mix(in srgb, var(--pine-color-background-container) 80%, transparent);
   border-radius: calc(var(--pine-dimension-2xs) * 0.5);
   color: var(--pine-color-text-readonly);
   font: var(--pine-typography-body-sm-medium);
