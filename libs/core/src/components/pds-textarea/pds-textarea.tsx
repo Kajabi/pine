@@ -147,7 +147,7 @@ export class PdsTextarea {
   /**
    * Specifies the maximum number of characters allowed in the textarea. When set, displays a character counter.
    */
-  @Prop() maxLength?: number;
+  @Prop({ reflect: true }) maxLength?: number;
 
   /**
    * The value of the textarea.
