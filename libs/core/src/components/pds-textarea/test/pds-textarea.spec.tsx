@@ -13,7 +13,9 @@ describe('pds-textarea', () => {
       <pds-textarea>
         <mock:shadow-root>
           <div class="pds-textarea">
-            <textarea class="pds-textarea__field"></textarea>
+            <div class="pds-textarea__field-wrapper">
+              <textarea class="pds-textarea__field"></textarea>
+            </div>
           </div>
         </mock:shadow-root>
       </pds-textarea>
@@ -30,7 +32,9 @@ describe('pds-textarea', () => {
       <pds-textarea aria-disabled="true" disabled="true">
         <mock:shadow-root>
           <div class="pds-textarea">
-            <textarea class="pds-textarea__field" disabled=""></textarea>
+            <div class="pds-textarea__field-wrapper">
+              <textarea class="pds-textarea__field" disabled=""></textarea>
+            </div>
           </div>
         </mock:shadow-root>
       </pds-textarea>
@@ -47,7 +51,9 @@ describe('pds-textarea', () => {
       <pds-textarea component-id="pds-textarea-error" invalid="true" error-message="error">
         <mock:shadow-root>
           <div class="pds-textarea">
-            <textarea aria-invalid="true" class="pds-textarea__field is-invalid" id="pds-textarea-error" name="pds-textarea-error"></textarea>
+            <div class="pds-textarea__field-wrapper">
+              <textarea aria-invalid="true" class="pds-textarea__field is-invalid" id="pds-textarea-error" name="pds-textarea-error"></textarea>
+            </div>
             <p aria-live="assertive" class="pds-textarea__error-message" id="pds-textarea-error__error-message">
               <pds-icon icon="${danger}" size="small"></pds-icon>
               error
@@ -68,7 +74,9 @@ describe('pds-textarea', () => {
       <pds-textarea invalid="false" error-message="error">
         <mock:shadow-root>
           <div class="pds-textarea">
-            <textarea class="pds-textarea__field"></textarea>
+            <div class="pds-textarea__field-wrapper">
+              <textarea class="pds-textarea__field"></textarea>
+            </div>
           </div>
         </mock:shadow-root>
       </pds-textarea>
@@ -85,7 +93,9 @@ describe('pds-textarea', () => {
       <pds-textarea component-id="pds-textarea-helper" helper-message="helper">
         <mock:shadow-root>
           <div class="pds-textarea">
-            <textarea aria-describedby="pds-textarea-helper__helper-message" class="pds-textarea__field" id="pds-textarea-helper" name="pds-textarea-helper"></textarea>
+            <div class="pds-textarea__field-wrapper">
+              <textarea aria-describedby="pds-textarea-helper__helper-message" class="pds-textarea__field" id="pds-textarea-helper" name="pds-textarea-helper"></textarea>
+            </div>
             <p class="pds-textarea__helper-message" id="pds-textarea-helper__helper-message">helper</p>
           </div>
         </mock:shadow-root>
@@ -110,7 +120,9 @@ describe('pds-textarea', () => {
                 </span>
               </label>
             </div>
-            <textarea class="pds-textarea__field"></textarea>
+            <div class="pds-textarea__field-wrapper">
+              <textarea class="pds-textarea__field"></textarea>
+            </div>
           </div>
         </mock:shadow-root>
       </pds-textarea>
@@ -127,7 +139,9 @@ describe('pds-textarea', () => {
       <pds-textarea name="foo">
         <mock:shadow-root>
           <div class="pds-textarea">
-            <textarea name="foo" class="pds-textarea__field"></textarea>
+            <div class="pds-textarea__field-wrapper">
+              <textarea name="foo" class="pds-textarea__field"></textarea>
+            </div>
           </div>
         </mock:shadow-root>
       </pds-textarea>
@@ -144,7 +158,9 @@ describe('pds-textarea', () => {
       <pds-textarea placeholder="Placeholder...">
         <mock:shadow-root>
           <div class="pds-textarea">
-            <textarea class="pds-textarea__field" placeholder="Placeholder..."></textarea>
+            <div class="pds-textarea__field-wrapper">
+              <textarea class="pds-textarea__field" placeholder="Placeholder..."></textarea>
+            </div>
           </div>
         </mock:shadow-root>
       </pds-textarea>
@@ -161,7 +177,9 @@ describe('pds-textarea', () => {
       <pds-textarea aria-readonly="true" readonly="true">
         <mock:shadow-root>
           <div class="pds-textarea">
-            <textarea class="pds-textarea__field" readonly=""></textarea>
+            <div class="pds-textarea__field-wrapper">
+              <textarea class="pds-textarea__field" readonly=""></textarea>
+            </div>
           </div>
         </mock:shadow-root>
       </pds-textarea>
@@ -178,7 +196,9 @@ describe('pds-textarea', () => {
       <pds-textarea required="true">
         <mock:shadow-root>
           <div class="pds-textarea">
-            <textarea class="pds-textarea__field" required=""></textarea>
+            <div class="pds-textarea__field-wrapper">
+              <textarea class="pds-textarea__field" required=""></textarea>
+            </div>
           </div>
         </mock:shadow-root>
       </pds-textarea>
@@ -202,7 +222,9 @@ describe('pds-textarea', () => {
                 </span>
               </label>
             </div>
-            <textarea class="pds-textarea__field" id="pds-textarea-id" name="pds-textarea-id"></textarea>
+            <div class="pds-textarea__field-wrapper">
+              <textarea class="pds-textarea__field" id="pds-textarea-id" name="pds-textarea-id"></textarea>
+            </div>
           </div>
         </mock:shadow-root>
       </pds-textarea>
@@ -219,7 +241,9 @@ describe('pds-textarea', () => {
       <pds-textarea value="foo">
         <mock:shadow-root>
           <div class="pds-textarea">
-            <textarea class="pds-textarea__field">foo</textarea>
+            <div class="pds-textarea__field-wrapper">
+              <textarea class="pds-textarea__field">foo</textarea>
+            </div>
           </div>
         </mock:shadow-root>
       </pds-textarea>
@@ -236,7 +260,9 @@ describe('pds-textarea', () => {
       <pds-textarea autocomplete="off">
         <mock:shadow-root>
           <div class="pds-textarea">
-            <textarea class="pds-textarea__field" autocomplete="off"></textarea>
+            <div class="pds-textarea__field-wrapper">
+              <textarea class="pds-textarea__field" autocomplete="off"></textarea>
+            </div>
           </div>
         </mock:shadow-root>
       </pds-textarea>
@@ -268,7 +294,9 @@ describe('pds-textarea', () => {
                 </span>
               </label>
             </div>
-            <textarea aria-describedby="textarea-with-description__error-message" aria-invalid="true"  class="is-invalid pds-textarea__field" id="textarea-with-description" name="textarea-with-description"></textarea>
+            <div class="pds-textarea__field-wrapper">
+              <textarea aria-describedby="textarea-with-description__error-message" aria-invalid="true"  class="is-invalid pds-textarea__field" id="textarea-with-description" name="textarea-with-description"></textarea>
+            </div>
             <p id="textarea-with-description__helper-message"  class="pds-textarea__helper-message">
               This is a helper message
             </p>
@@ -294,17 +322,21 @@ describe('pds-textarea', () => {
     const textarea = pdsTextarea?.shadowRoot?.querySelector<HTMLTextAreaElement>('textarea');
     expect(textarea?.innerHTML).toBe('initial');
 
-    textarea.value = 'new value';
-    textarea?.dispatchEvent(new Event('textareaInput'));
-    await page.waitForChanges();
+    if (textarea) {
+      textarea.value = 'new value';
+      textarea.dispatchEvent(new Event('input', { bubbles: true }));
+      await page.waitForChanges();
 
-    expect(textarea?.value).toBe('new value');
+      expect(textarea.value).toBe('new value');
+      expect(pdsTextarea?.value).toBe('new value');
 
-    textarea.value = '';
-    textarea?.dispatchEvent(new Event('textareaInput'));
-    await page.waitForChanges();
+      textarea.value = '';
+      textarea.dispatchEvent(new Event('input', { bubbles: true }));
+      await page.waitForChanges();
 
-    expect(textarea?.value).toBe('');
+      expect(textarea.value).toBe('');
+      expect(pdsTextarea?.value).toBe('');
+    }
   });
 
   it('onChange logic with invalid `value` runs', async () => {
@@ -317,15 +349,17 @@ describe('pds-textarea', () => {
     const textarea = pdsTextarea?.shadowRoot?.querySelector<HTMLTextAreaElement>('textarea');
     const eventSpy = jest.fn();
 
-    pdsTextarea.addEventListener('pdsTextareaChange', eventSpy);
+    pdsTextarea?.addEventListener('pdsTextareaChange', eventSpy);
 
     expect(pdsTextarea?.value).toEqual('initial');
     expect(textarea?.innerHTML).toEqual('initial');
 
-    textarea.value = '';
-    textarea.checkValidity = jest.fn().mockReturnValue(false);
-    textarea.dispatchEvent(new Event('change'));
-    await page.waitForChanges();
+    if (textarea) {
+      textarea.value = '';
+      textarea.checkValidity = jest.fn().mockReturnValue(false);
+      textarea.dispatchEvent(new Event('change'));
+      await page.waitForChanges();
+    }
 
     expect(textarea).toHaveClass('is-invalid');
     expect(eventSpy).toHaveBeenCalled();
@@ -344,8 +378,10 @@ describe('pds-textarea', () => {
     pdsTextarea?.addEventListener('pdsTextareaChange', changeEventSpy);
 
     // Simulate user typing
-    textarea.value = 'New input value';
-    textarea?.dispatchEvent(new Event('change'));
+    if (textarea) {
+      textarea.value = 'New input value';
+      textarea.dispatchEvent(new Event('change'));
+    }
 
     await page.waitForChanges();
 
@@ -448,7 +484,9 @@ it('should set focus on the input element when setFocus is called', async() => {
                 <slot name="action"></slot>
               </div>
             </div>
-            <textarea class="pds-textarea__field" id="textarea-1" name="textarea-1"></textarea>
+            <div class="pds-textarea__field-wrapper">
+              <textarea class="pds-textarea__field" id="textarea-1" name="textarea-1"></textarea>
+            </div>
           </div>
         </mock:shadow-root>
         <span slot="action">0/500</span>
@@ -473,7 +511,9 @@ it('should set focus on the input element when setFocus is called', async() => {
                 </span>
               </label>
             </div>
-            <textarea class="pds-textarea__field" id="textarea-1" name="textarea-1"></textarea>
+            <div class="pds-textarea__field-wrapper">
+              <textarea class="pds-textarea__field" id="textarea-1" name="textarea-1"></textarea>
+            </div>
           </div>
         </mock:shadow-root>
       </pds-textarea>
@@ -563,7 +603,9 @@ it('should set focus on the input element when setFocus is called', async() => {
                 <slot name="action"></slot>
               </div>
             </div>
-            <textarea aria-describedby="textarea-1__helper-message" class="pds-textarea__field" id="textarea-1" name="textarea-1">Hello</textarea>
+            <div class="pds-textarea__field-wrapper">
+              <textarea aria-describedby="textarea-1__helper-message" class="pds-textarea__field" id="textarea-1" name="textarea-1">Hello</textarea>
+            </div>
             <p class="pds-textarea__helper-message" id="textarea-1__helper-message">
               Max 500 characters
             </p>
@@ -639,6 +681,303 @@ it('should set focus on the input element when setFocus is called', async() => {
 
       const textarea = root?.shadowRoot?.querySelector('textarea');
       expect(textarea?.hasAttribute('aria-label')).toBeFalsy();
+    });
+  });
+
+  describe('character counter', () => {
+    it('renders character counter when maxLength is set', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-maxlength" label="Bio" max-length="120" value="Hello world"></pds-textarea>`,
+      });
+
+      const fieldWrapper = root?.shadowRoot?.querySelector('.pds-textarea__field-wrapper');
+      const counter = root?.shadowRoot?.querySelector('.pds-textarea__character-counter');
+      expect(fieldWrapper).not.toBeNull();
+      expect(counter).not.toBeNull();
+      expect(counter?.textContent?.trim()).toBe('11 / 120');
+
+      // Verify counter is positioned within field wrapper
+      expect(fieldWrapper?.contains(counter as Node)).toBe(true);
+    });
+
+    it('does not render character counter when maxLength is not set', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-no-maxlength" label="Bio" value="Hello world"></pds-textarea>`,
+      });
+
+      const counter = root?.shadowRoot?.querySelector('.pds-textarea__character-counter');
+      expect(counter).toBeNull();
+    });
+
+    it('updates character counter as value changes', async () => {
+      const page = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-counter" label="Bio" max-length="50" value="Hello"></pds-textarea>`,
+      });
+
+      const root = page.root;
+      let counter = root?.shadowRoot?.querySelector('.pds-textarea__character-counter');
+      expect(counter?.textContent?.trim()).toBe('5 / 50');
+
+      // Update value
+      if (root) {
+        root.value = 'Hello world!';
+        await page.waitForChanges();
+      }
+
+      counter = root?.shadowRoot?.querySelector('.pds-textarea__character-counter');
+      expect(counter?.textContent?.trim()).toBe('12 / 50');
+    });
+
+    it('shows 0 characters when value is empty', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-empty" label="Bio" max-length="100" value=""></pds-textarea>`,
+      });
+
+      const counter = root?.shadowRoot?.querySelector('.pds-textarea__character-counter');
+      expect(counter?.textContent?.trim()).toBe('0 / 100');
+    });
+
+    it('prevents input beyond maxLength', async () => {
+      const page = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-limit" label="Bio" max-length="5" value="Hello"></pds-textarea>`,
+      });
+
+      const component = page.rootInstance;
+
+      // Mock textarea with value exceeding limit
+      const mockEvent = {
+        target: {
+          value: 'Hello World!' // 12 characters, exceeding limit of 5
+        }
+      } as unknown as Event;
+
+      // Call onInput directly
+      component.onInput(mockEvent);
+      await page.waitForChanges();
+
+      // Value should be truncated to maxLength
+      expect(component.value).toBe('Hello');
+    });
+
+    it('renders character counter with disabled state', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-disabled-counter" label="Bio" max-length="100" disabled="true" value="Disabled text"></pds-textarea>`,
+      });
+
+      const counter = root?.shadowRoot?.querySelector('.pds-textarea__character-counter');
+      expect(counter).not.toBeNull();
+      expect(counter?.textContent?.trim()).toBe('13 / 100');
+    });
+
+    it('renders character counter with readonly state', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-readonly-counter" label="Bio" max-length="200" readonly="true" value="Readonly text"></pds-textarea>`,
+      });
+
+      const counter = root?.shadowRoot?.querySelector('.pds-textarea__character-counter');
+      expect(counter).not.toBeNull();
+      expect(counter?.textContent?.trim()).toBe('13 / 200');
+    });
+
+    it('renders maxlength attribute on native textarea when maxLength prop is set', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-attr" label="Bio" max-length="150"></pds-textarea>`,
+      });
+
+      const textarea = root?.shadowRoot?.querySelector<HTMLTextAreaElement>('textarea');
+      expect(textarea?.getAttribute('maxlength')).toBe('150');
+    });
+
+    it('handles null/undefined value gracefully in character counter', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-null" label="Bio" max-length="100"></pds-textarea>`,
+      });
+
+      const counter = root?.shadowRoot?.querySelector('.pds-textarea__character-counter');
+      expect(counter?.textContent?.trim()).toBe('0 / 100');
+    });
+  });
+
+  describe('ResizeObserver and positioning', () => {
+    beforeAll(() => {
+      // Mock ResizeObserver for these tests
+      global.ResizeObserver = jest.fn(() => ({
+        observe: jest.fn(),
+        disconnect: jest.fn(),
+        unobserve: jest.fn(),
+      })) as any;
+    });
+
+    afterAll(() => {
+      delete (global as any).ResizeObserver;
+    });
+
+    it('sets up ResizeObserver when maxLength is present and observer is available', async () => {
+      const page = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-resize" label="Bio" max-length="100"></pds-textarea>`,
+      });
+
+      const component = page.rootInstance;
+      expect(component.resizeObserver).toBeDefined();
+    });
+
+    it('cleans up ResizeObserver on disconnectedCallback', async () => {
+      const page = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-cleanup" label="Bio" max-length="100"></pds-textarea>`,
+      });
+
+      const component = page.rootInstance;
+      const disconnectSpy = jest.fn();
+      component.resizeObserver = { disconnect: disconnectSpy };
+
+      component.disconnectedCallback();
+      expect(disconnectSpy).toHaveBeenCalled();
+    });
+
+    it('handles updateCharacterCounterPosition when elements are missing', async () => {
+      const page = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-position" label="Bio" max-length="100"></pds-textarea>`,
+      });
+
+      const component = page.rootInstance;
+      component.characterCounter = null;
+      component.nativeTextarea = null;
+
+      // Should not throw when elements are missing
+      expect(() => component.updateCharacterCounterPosition()).not.toThrow();
+    });
+
+    it('updates counter position when value changes with ResizeObserver', async () => {
+      const originalRAF = global.requestAnimationFrame;
+      const rafSpy = jest.fn((cb: FrameRequestCallback) => {
+        cb(0);
+        return 1;
+      });
+      global.requestAnimationFrame = rafSpy;
+
+      const page = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-update" label="Bio" max-length="100" value="test"></pds-textarea>`,
+      });
+
+      const component = page.rootInstance;
+
+      // Simulate input event which triggers repositioning
+      component.value = 'updated text';
+      await page.waitForChanges();
+
+      expect(rafSpy).toHaveBeenCalled();
+
+      global.requestAnimationFrame = originalRAF;
+    });
+  });
+
+  describe('Form Associated Custom Elements API', () => {
+    it('calls formResetCallback and resets value', async () => {
+      const page = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-form" value="initial value"></pds-textarea>`,
+      });
+
+      const component = page.rootInstance;
+      expect(component.value).toBe('initial value');
+
+      component.formResetCallback();
+      expect(component.value).toBe('');
+    });
+
+    it('calls formDisabledCallback and updates disabled state', async () => {
+      const page = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-disabled"></pds-textarea>`,
+      });
+
+      const component = page.rootInstance;
+      expect(component.disabled).toBe(false);
+
+      component.formDisabledCallback(true);
+      expect(component.disabled).toBe(true);
+
+      component.formDisabledCallback(false);
+      expect(component.disabled).toBe(false);
+    });
+
+    it('calls formStateRestoreCallback with string state', async () => {
+      const page = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-restore"></pds-textarea>`,
+      });
+
+      const component = page.rootInstance;
+
+      component.formStateRestoreCallback('restored value');
+      expect(component.value).toBe('restored value');
+    });
+
+    it('calls formStateRestoreCallback with FormData state', async () => {
+      const page = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-formdata" name="textarea-name"></pds-textarea>`,
+      });
+
+      const component = page.rootInstance;
+      const formData = new FormData();
+      formData.set('textarea-name', 'formdata value');
+
+      component.formStateRestoreCallback(formData);
+      expect(component.value).toBe('formdata value');
+    });
+
+    it('calls formStateRestoreCallback with FormData but no matching name', async () => {
+      const page = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-nomatch" name="textarea-name"></pds-textarea>`,
+      });
+
+      const component = page.rootInstance;
+      const formData = new FormData();
+      formData.set('different-name', 'value');
+
+      const originalValue = component.value;
+      component.formStateRestoreCallback(formData);
+      expect(component.value).toBe(originalValue); // Should remain unchanged
+    });
+
+    it('calls updateFormValue when internals are available', async () => {
+      const page = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-internals" value="test"></pds-textarea>`,
+      });
+
+      const component = page.rootInstance;
+      const mockSetFormValue = jest.fn();
+      const mockSetValidity = jest.fn();
+
+      component.internals = {
+        setFormValue: mockSetFormValue,
+        setValidity: mockSetValidity,
+      };
+      component.nativeTextarea = {
+        validity: { valid: true },
+        validationMessage: '',
+      };
+
+      component.updateFormValue();
+
+      expect(mockSetFormValue).toHaveBeenCalledWith('test');
+      expect(mockSetValidity).toHaveBeenCalled();
     });
   });
 });

@@ -26,6 +26,8 @@ export class PdsTextarea {
   private inheritedAttributes: Attributes = {};
   private originalPdsInput?: EventEmitter<TextareaInputEventDetail>;
   private internals?: ElementInternals;
+  private resizeObserver?: ResizeObserver;
+  private characterCounter?: HTMLElement;
 
   @Element() el: HTMLPdsTextareaElement;
 
@@ -143,6 +145,11 @@ export class PdsTextarea {
   @Prop() rows?: number;
 
   /**
+   * Specifies the maximum number of characters allowed in the textarea. When set, displays a character counter.
+   */
+  @Prop({ reflect: true }) maxLength?: number;
+
+  /**
    * The value of the textarea.
    */
   @Prop({mutable: true}) value?: string | null = '';
@@ -175,6 +182,33 @@ export class PdsTextarea {
 
     // Update form value for Form Associated Custom Elements API
     this.updateFormValue();
+
+    // Update character counter position in case content changes affect sizing
+    if (this.maxLength && typeof ResizeObserver !== 'undefined') {
+      this.updateCharacterCounterPosition();
+    }
+  }
+
+  @Watch('maxLength')
+  protected maxLengthChanged() {
+    // Setup or teardown ResizeObserver based on maxLength
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+
+    if (this.maxLength && this.nativeTextarea) {
+      this.setupResizeObserver();
+    }
+
+    // Update ElementInternals validity when maxLength changes
+    if (this.internals && this.internals.setValidity && this.nativeTextarea) {
+      const isTooLong = this.nativeTextarea.value.length > (this.maxLength || 0);
+      this.internals.setValidity(
+        { tooLong: isTooLong },
+        isTooLong ? 'Value exceeds maxLength' : '',
+        this.nativeTextarea
+      );
+    }
   }
 
   /**
@@ -224,9 +258,22 @@ export class PdsTextarea {
   private onInput = (ev: Event) => {
     const input = ev.target as HTMLTextAreaElement | null;
     if (input) {
+      // Handle maxLength validation
+      if (this.maxLength && input.value.length > this.maxLength) {
+        // Prevent input beyond maxLength
+        input.value = input.value.substring(0, this.maxLength);
+      }
       this.value = input.value || '';
     }
     this.emitInputChange(ev);
+
+    // Update counter position when content changes
+    if (this.maxLength && typeof ResizeObserver !== 'undefined') {
+      // Use requestAnimationFrame to ensure DOM is updated
+      requestAnimationFrame(() => {
+        this.updateCharacterCounterPosition();
+      });
+    }
   };
 
   private onTextareaChange = (ev: Event) => {
@@ -251,6 +298,13 @@ export class PdsTextarea {
     }
   }
 
+  disconnectedCallback() {
+    // Clean up ResizeObserver
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+  }
+
   componentWillLoad() {
     this.inheritedAttributes = {
       ...inheritAriaAttributes(this.el),
@@ -263,6 +317,92 @@ export class PdsTextarea {
     this.originalPdsInput = this.pdsInput;
     // Set initial form value
     this.updateFormValue();
+
+    // Setup ResizeObserver for character counter positioning
+    this.setupResizeObserver();
+  }
+
+  /**
+   * Sets up ResizeObserver to track textarea resize for character counter positioning
+   */
+  private setupResizeObserver() {
+    if (!this.maxLength || !this.nativeTextarea) return;
+
+    // ResizeObserver may not be available in test environments
+    if (typeof ResizeObserver !== 'undefined') {
+      this.resizeObserver = new ResizeObserver(() => {
+        // Use requestAnimationFrame to ensure DOM updates are complete
+        requestAnimationFrame(() => {
+          this.updateCharacterCounterPosition();
+        });
+      });
+
+      this.resizeObserver.observe(this.nativeTextarea);
+
+      // Initial positioning with a small delay to ensure counter is rendered
+      requestAnimationFrame(() => {
+        this.updateCharacterCounterPosition();
+      });
+    }
+  }
+
+  /**
+   * Updates character counter position to stay within textarea boundaries during resize
+   */
+  private updateCharacterCounterPosition() {
+    if (!this.characterCounter || !this.nativeTextarea) return;
+
+    // Skip positioning in test environments where ResizeObserver isn't available
+    if (typeof ResizeObserver === 'undefined') return;
+
+    // Ensure the character counter has been rendered and has dimensions
+    if (this.characterCounter.offsetWidth === 0 || this.characterCounter.offsetHeight === 0) {
+      // Counter not ready or component hidden - return and let resize/input observers handle positioning later
+      return;
+    }
+
+    // Position based on textarea's actual dimensions (which change during manual resize)
+    const textareaWidth = this.nativeTextarea.offsetWidth;
+    const textareaHeight = this.nativeTextarea.offsetHeight;
+    const counterWidth = this.characterCounter.offsetWidth;
+    const counterHeight = this.characterCounter.offsetHeight;
+
+    // Calculate position within textarea boundaries with padding from edges
+    const rightPosition = textareaWidth - counterWidth - 8;
+    const bottomPosition = textareaHeight - counterHeight - 8;
+
+    // Ensure counter stays within textarea boundaries even when resized very small
+    const finalLeft = Math.max(8, Math.min(rightPosition, textareaWidth - counterWidth - 8));
+    const finalTop = Math.max(8, Math.min(bottomPosition, textareaHeight - counterHeight - 8));
+
+    // Apply absolute positioning within the field wrapper
+    this.characterCounter.style.position = 'absolute';
+    this.characterCounter.style.left = `${finalLeft}px`;
+    this.characterCounter.style.top = `${finalTop}px`;
+    this.characterCounter.style.right = 'auto';
+    this.characterCounter.style.bottom = 'auto';
+  }
+
+  /**
+   * Renders the character counter when maxLength is set
+   */
+  private renderCharacterCounter() {
+    if (!this.maxLength) {
+      return null;
+    }
+
+    const currentLength = this.getValue().length;
+    return (
+      <div
+        class="pds-textarea__character-counter"
+        ref={(el) => this.characterCounter = el}
+        role="status"
+        aria-live="polite"
+        aria-label={`${currentLength} of ${this.maxLength} characters`}
+      >
+        {currentLength} / {this.maxLength}
+      </div>
+    );
   }
 
   private renderAction() {
@@ -295,6 +435,7 @@ export class PdsTextarea {
       }
     }
   }
+
 
   /**
    * Form Associated Custom Elements API: Called when the form is reset
@@ -346,27 +487,31 @@ export class PdsTextarea {
               {!this.hideLabel && this.renderAction()}
             </div>
           }
-          <textarea
-            ref={(el) => this.nativeTextarea = el }
-            aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
-            aria-invalid={this.invalid ? "true" : undefined}
-            autocomplete={this.autocomplete}
-            class={this.textareaClassNames()}
-            disabled={this.disabled}
-            id={this.componentId}
-            name={this.name}
-            placeholder={this.placeholder}
-            readOnly={this.readonly}
-            required={this.required}
-            rows={this.rows}
-            onBlur={this.onBlur}
-            onChange={this.onTextareaChange}
-            onFocus={this.onFocus}
-            onInput={this.onInput}
-            {...this.inheritedAttributes}
-          >
-            {value}
-          </textarea>
+          <div class="pds-textarea__field-wrapper">
+            <textarea
+              ref={(el) => this.nativeTextarea = el }
+              aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
+              aria-invalid={this.invalid ? "true" : undefined}
+              autocomplete={this.autocomplete}
+              class={this.textareaClassNames()}
+              disabled={this.disabled}
+              id={this.componentId}
+              maxlength={this.maxLength}
+              name={this.name}
+              placeholder={this.placeholder}
+              readOnly={this.readonly}
+              required={this.required}
+              rows={this.rows}
+              onBlur={this.onBlur}
+              onChange={this.onTextareaChange}
+              onFocus={this.onFocus}
+              onInput={this.onInput}
+              {...this.inheritedAttributes}
+            >
+              {value}
+            </textarea>
+            {this.renderCharacterCounter()}
+          </div>
           {this.helperMessage &&
             <p
               class="pds-textarea__helper-message"

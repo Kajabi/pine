@@ -14,6 +14,7 @@ export default {
     hideLabel: false,
     invalid: false,
     label: null,
+    maxLength: null,
     name: null,
     placeholder: null,
     readonly: false,
@@ -46,6 +47,7 @@ const BaseTemplate = (args) => html`<pds-textarea
   ?hide-label=${args.hideLabel}
   ?invalid=${args.invalid}
   label="${args.label}"
+  max-length="${args.maxLength}"
   name="${args.name}"
   onChange="${args.onChange}"
   placeholder="${args.placeholder}"
@@ -181,3 +183,14 @@ export const withActionButton = (args) => html`<pds-textarea
     <pds-icon name="question-circle"></pds-icon>
   </pds-button>
 </pds-textarea>`;
+
+export const MaxLength = BaseTemplate.bind({});
+MaxLength.args = {
+  componentId: 'pds-textarea-maxlength-example',
+  label: 'Bio',
+  name: 'MaxLength',
+  maxLength: 120,
+  placeholder: 'Tell us about yourself...',
+  rows: 4,
+  value: 'Value',
+};

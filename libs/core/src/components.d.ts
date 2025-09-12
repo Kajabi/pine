@@ -1407,6 +1407,10 @@ export namespace Components {
          */
         "label"?: string;
         /**
+          * Specifies the maximum number of characters allowed in the textarea. When set, displays a character counter.
+         */
+        "maxLength"?: number;
+        /**
           * Specifies the name. Submitted with the form name/value pair. This value will mirror the componentId.
          */
         "name": string;
@@ -3607,6 +3611,10 @@ declare namespace LocalJSX {
           * Text to be displayed as the textarea label.
          */
         "label"?: string;
+        /**
+          * Specifies the maximum number of characters allowed in the textarea. When set, displays a character counter.
+         */
+        "maxLength"?: number;
         /**
           * Specifies the name. Submitted with the form name/value pair. This value will mirror the componentId.
          */
