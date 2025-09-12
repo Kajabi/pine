@@ -199,6 +199,16 @@ export class PdsTextarea {
     if (this.maxLength && this.nativeTextarea) {
       this.setupResizeObserver();
     }
+
+    // Update ElementInternals validity when maxLength changes
+    if (this.internals && this.internals.setValidity && this.nativeTextarea) {
+      const isTooLong = this.nativeTextarea.value.length > (this.maxLength || 0);
+      this.internals.setValidity(
+        { tooLong: isTooLong },
+        isTooLong ? 'Value exceeds maxLength' : '',
+        this.nativeTextarea
+      );
+    }
   }
 
   /**
