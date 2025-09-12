@@ -45,10 +45,11 @@ export class PdsModalContent {
     // Only set up scroll listener for border updates if borders are managed automatically
     if (!this.userSetBorder) {
       setTimeout(() => {
-        const contentElement = this.el.querySelector('.pds-modal-content') as HTMLElement;
-        if (contentElement) {
-          contentElement.addEventListener('scroll', this.updateBorders.bind(this));
-        }
+        // The scroll happens on the component element itself (this.el), not the inner div
+        console.log('Setting up scroll listener on component element:', this.el);
+        this.el.addEventListener('scroll', this.handleScroll.bind(this));
+        // Initial border update after everything is set up
+        setTimeout(() => this.updateBorders(), 100);
       }, 100);
     }
   }
@@ -58,15 +59,20 @@ export class PdsModalContent {
 
     // Clean up scroll listener only if it was set up
     if (!this.userSetBorder) {
-      const contentElement = this.el.querySelector('.pds-modal-content') as HTMLElement;
-      if (contentElement) {
-        contentElement.removeEventListener('scroll', this.updateBorders.bind(this));
-      }
+      this.el.removeEventListener('scroll', this.handleScroll.bind(this));
     }
 
     if (this.mutationObserver) {
       this.mutationObserver.disconnect();
     }
+  }
+
+  /**
+   * Handle scroll events
+   */
+  private handleScroll() {
+    console.log('Scroll event fired!');
+    this.updateBorders();
   }
 
   /**
@@ -103,12 +109,11 @@ export class PdsModalContent {
       return;
     }
 
-    // Get the content element
-    const contentElement = this.el.querySelector('.pds-modal-content') as HTMLElement;
-    if (!contentElement) return;
+    // The scrollable element is the component itself (this.el), not the inner div
+    const scrollableElement = this.el;
 
     // Check if content is actually scrollable
-    const isContentScrollable = contentElement.scrollHeight > contentElement.clientHeight;
+    const isContentScrollable = scrollableElement.scrollHeight > scrollableElement.clientHeight;
 
     if (!isContentScrollable) {
       this.border = 'none';
@@ -116,22 +121,41 @@ export class PdsModalContent {
     }
 
     // Determine border position based on scroll position
-    const { scrollTop, scrollHeight, clientHeight } = contentElement;
-    const isAtTop = scrollTop === 0;
-    const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1; // Allow for small rounding errors
+    const { scrollTop, scrollHeight, clientHeight } = scrollableElement;
+    const scrollBottom = scrollTop + clientHeight;
+
+    // More generous tolerance for scroll detection (3px instead of 1px)
+    const tolerance = 3;
+    const isAtTop = scrollTop <= tolerance;
+    const isAtBottom = scrollBottom >= scrollHeight - tolerance;
+
+    // Debug logging (can be removed later)
+    console.log('Border Debug:', {
+      scrollTop,
+      scrollHeight,
+      clientHeight,
+      scrollBottom,
+      isAtTop,
+      isAtBottom,
+      currentBorder: this.border
+    });
 
     if (isAtTop && isAtBottom) {
       // Content fits exactly, no borders needed
       this.border = 'none';
-    } else if (isAtTop) {
+      console.log('Content fits exactly, no borders needed');
+    } else if (isAtTop && !isAtBottom) {
       // At top, show bottom border only
       this.border = 'bottom';
-    } else if (isAtBottom) {
+      console.log('At top, show bottom border only');
+    } else if (!isAtTop && isAtBottom) {
       // At bottom, show top border only
       this.border = 'top';
+      console.log('At bottom, show top border only');
     } else {
       // In middle, show both borders
       this.border = 'both';
+      console.log('In middle, show both borders');
     }
   }
 
@@ -187,8 +211,8 @@ export class PdsModalContent {
         this.contentMaxHeight = 'none'; // Default fallback
       }
 
-      // Update borders after height calculations
-      setTimeout(() => this.updateBorders(), 50);
+      // Update borders after height calculations with longer delay
+      setTimeout(() => this.updateBorders(), 150);
     }, 100); // Delay to ensure DOM is fully rendered
 
     // Set up mutation observer if not already done

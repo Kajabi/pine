@@ -88,6 +88,8 @@
 // Scrollable modal styles (default behavior)
 .pds-modal--scrollable {
   pds-modal-content {
+    border-block-end: 1px solid transparent;
+    border-block-start: 1px solid transparent;
     overflow-y: auto;
   }
 }
