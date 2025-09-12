@@ -11,6 +11,7 @@ export default {
     backdropDismiss: true,
     componentId: 'modal-demo',
     open: false,
+    scrollable: true,
     size: 'md',
   },
   parameters: {
@@ -31,6 +32,7 @@ const BaseTemplate = (args) => html`
       component-id="${args.componentId}"
       size="${args.size}"
       ?backdrop-dismiss=${args.backdropDismiss}
+      ?scrollable=${args.scrollable}
       ?open=${args.open}
     >
       <pds-modal-header>
@@ -411,5 +413,86 @@ export const Fullscreen = FullscreenTemplate.bind({});
 Fullscreen.args = {
   size: 'fullscreen',
   componentId: 'fullscreen-modal',
+  open: false,
+};
+
+const NonScrollableTemplate = (args) => html`
+  <div style="padding: 1rem;">
+    <pds-button id="show-modal" onClick="document.querySelector('#${args.componentId}').open = true">
+      Open Non-Scrollable Modal
+    </pds-button>
+
+    <pds-modal
+      id="${args.componentId}"
+      component-id="${args.componentId}"
+      size="${args.size}"
+      ?backdrop-dismiss=${args.backdropDismiss}
+      ?scrollable=${args.scrollable}
+      ?open=${args.open}
+    >
+      <pds-modal-header>
+        <pds-box direction="column" fit padding="md">
+          <pds-box
+            align-items="center"
+            fit
+            justify-content="space-between"
+          >
+            <pds-text tag="h2" size="h3">Non-Scrollable Modal</pds-text>
+            <pds-button
+              class="pds-modal__close"
+              variant="unstyled"
+              icon-only="true"
+              onclick="document.querySelector('#${args.componentId}').open = false"
+              aria-label="Close modal"
+              part="close-button"
+            >
+              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+            </pds-button>
+          </pds-box>
+          <pds-box>
+            <pds-text tag="p" size="md">Content overflow is handled naturally</pds-text>
+          </pds-box>
+        </pds-box>
+      </pds-modal-header>
+      <pds-modal-content>
+        <pds-box direction="column" padding-inline-start="md" padding-inline-end="md">
+          <p>This modal has <code>scrollable={false}</code>, so content will overflow naturally without creating a scrollable area.</p>
+          <p>This is useful for:</p>
+          <ul>
+            <li>Fixed-height content</li>
+            <li>Custom overflow handling</li>
+            <li>Modals where you want content to extend beyond the modal bounds</li>
+          </ul>
+          <p>The content area will not have <code>overflow-y: auto</code> applied.</p>
+        </pds-box>
+      </pds-modal-content>
+
+      <pds-modal-footer>
+        <pds-box
+          justify-content="space-between"
+          fit
+          padding="md"
+        >
+          <pds-button variant="unstyled" onclick="document.querySelector('#${args.componentId}').open = false">Close</pds-button>
+          <pds-box gap="sm" justify-content="end">
+            <pds-button
+              variant="secondary"
+              onclick="document.querySelector('#${args.componentId}').open = false"
+            >
+              Cancel
+            </pds-button>
+            <pds-button variant="primary">Confirm</pds-button>
+          </pds-box>
+        </pds-box>
+      </pds-modal-footer>
+    </pds-modal>
+  </div>
+`;
+
+export const NonScrollable = NonScrollableTemplate.bind({});
+NonScrollable.args = {
+  size: 'md',
+  componentId: 'non-scrollable-modal',
+  scrollable: false,
   open: false,
 };

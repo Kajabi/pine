@@ -35,7 +35,11 @@ export class PdsModal {
    */
   @Prop() size: 'sm' | 'md' | 'lg' | 'fullscreen' = 'md';
 
-  // Modal content is always scrollable by default
+  /**
+   * Whether the modal content should be scrollable
+   * @default true
+   */
+  @Prop() scrollable = true;
 
   /**
    * Emitted when the modal is opened
@@ -303,7 +307,11 @@ export class PdsModal {
         onClick={this.handleBackdropClick}
       >
         <div
-          class={`pds-modal pds-modal--${this.size} pds-modal--scrollable`}
+          class={{
+            'pds-modal': true,
+            [`pds-modal--${this.size}`]: true,
+            'pds-modal--scrollable': this.scrollable
+          }}
         >
           <slot></slot>
         </div>

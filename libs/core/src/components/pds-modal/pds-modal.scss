@@ -43,8 +43,12 @@
   display: flex;
   flex-direction: column;
   margin: var(--pine-dimension-md);
-  max-height: calc(100vh - (calc(5vh + 96px)));
+  max-height: none;
   width: 100%;
+
+  &.pds-modal--scrollable {
+    max-height: calc(100vh - (calc(5vh + 96px)));
+  }
 
   @media (min-width: 992px) {
     margin-block-start: 6vh;
@@ -78,6 +82,20 @@
 .pds-modal-content {
   .pds-modal--fullscreen & {
     flex: 1;
+  }
+}
+
+// Scrollable modal styles (default behavior)
+.pds-modal--scrollable {
+  pds-modal-content {
+    overflow-y: auto;
+  }
+}
+
+// Non-scrollable modal styles
+.pds-modal:not(.pds-modal--scrollable) {
+  pds-modal-content {
+    overflow-y: visible;
   }
 }
 

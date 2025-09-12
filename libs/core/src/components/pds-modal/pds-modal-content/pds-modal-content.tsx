@@ -20,14 +20,22 @@ export class PdsModalContent {
    */
   @Prop({ reflect: true }) border: 'none' | 'both' | 'top' | 'bottom' = 'none';
 
-  @State() contentMaxHeight: string = '60vh';
+  @State() contentMaxHeight: string = 'none';
 
   componentDidLoad() {
-    const slotContent = this.el.firstElementChild as HTMLElement;
-    const isScrollable = slotContent.scrollHeight > slotContent.clientHeight;
-    this.border = isScrollable ? 'both' : 'none';
+    // Check if parent modal is scrollable first
+    const modalElement = this.el.closest('pds-modal');
+    const isModalScrollable = modalElement ? modalElement.scrollable !== false : true;
 
-    this.calculateMaxHeight();
+    // Only check content scrollability if modal is scrollable
+    if (isModalScrollable) {
+      const slotContent = this.el.firstElementChild as HTMLElement;
+      const isScrollable = slotContent?.scrollHeight > slotContent?.clientHeight;
+      this.border = isScrollable ? 'both' : 'none';
+      this.calculateMaxHeight();
+    } else {
+      this.border = 'none';
+    }
 
     window.addEventListener('resize', this.calculateMaxHeight.bind(this));
   }
@@ -49,11 +57,27 @@ export class PdsModalContent {
    * Calculates the max-height based on header and footer heights
    */
   private calculateMaxHeight() {
+    console.log('calculateMaxHeight');
+    console.log('this.el', this.el);
+
     // Find the modal element (parent of this component)
     const modalElement = this.el.closest('pds-modal');
     if (!modalElement) return;
 
+    // Check if the parent modal is scrollable
+    const isScrollable = modalElement.scrollable !== false;
+
     setTimeout(() => {
+      // If modal is not scrollable, don't apply max-height constraints
+      if (!isScrollable) {
+        this.contentMaxHeight = 'none';
+        const contentElement = this.el.querySelector('.pds-modal-content') as HTMLElement;
+        if (contentElement) {
+          contentElement.style.maxHeight = 'none';
+        }
+        return;
+      }
+
       // Find header and footer elements
       const headerElement = modalElement.querySelector('pds-modal-header');
       const footerElement = modalElement.querySelector('pds-modal-footer');
@@ -81,7 +105,7 @@ export class PdsModalContent {
           contentElement.style.maxHeight = this.contentMaxHeight;
         }
       } else {
-        this.contentMaxHeight = '60vh'; // Default fallback
+        this.contentMaxHeight = 'none'; // Default fallback
       }
     }, 100); // Delay to ensure DOM is fully rendered
 
@@ -101,6 +125,11 @@ export class PdsModalContent {
     }
   }
   render() {
+    // Only apply max-height style if it's not 'none'
+    const styleObj = this.contentMaxHeight !== 'none' ? { maxHeight: this.contentMaxHeight } : {};
+    console.log('styleObj', styleObj);
+    console.log('this.contentMaxHeight', this.contentMaxHeight);
+
     return (
       <Host>
         <div
@@ -108,7 +137,7 @@ export class PdsModalContent {
             'pds-modal-content': true,
             [`pds-modal-content--border-${this.border}`]: true
           }}
-          style={{ maxHeight: this.contentMaxHeight }}
+          style={styleObj}
           tabindex="-1"
         >
           <slot></slot>
