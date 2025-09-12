@@ -32,8 +32,9 @@ const BaseTemplate = (args) => html`
       component-id="${args.componentId}"
       size="${args.size}"
       ?backdrop-dismiss=${args.backdropDismiss}
-      ?scrollable=${args.scrollable}
+      scrollable="${args.scrollable}"
       ?open=${args.open}
+      key="${args.scrollable ? 'scrollable' : 'non-scrollable'}"
     >
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
@@ -427,8 +428,9 @@ const NonScrollableTemplate = (args) => html`
       component-id="${args.componentId}"
       size="${args.size}"
       ?backdrop-dismiss=${args.backdropDismiss}
-      ?scrollable=${args.scrollable}
+      scrollable="${args.scrollable}"
       ?open=${args.open}
+      key="${args.scrollable ? 'scrollable' : 'non-scrollable'}"
     >
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
