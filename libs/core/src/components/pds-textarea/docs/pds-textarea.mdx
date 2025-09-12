@@ -140,6 +140,20 @@ The `rows` property is used to pass a number of expected rows visible within the
   <pds-textarea name="Rows" label="Name" rows="4" component-id="textarea-rows"></pds-textarea>
 </DocCanvas>
 
+### Max Length
+
+When the `max-length` property is set, a character counter is displayed in the bottom-right corner showing current characters / maximum allowed characters. The textarea will prevent input beyond the maximum length.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsTextarea name="Bio" label="Bio" maxLength="120" rows="4" componentId="textarea-maxlength" placeholder="Tell us about yourself..."></PdsTextarea>',
+    webComponent: '<pds-textarea name="Bio" label="Bio" max-length="120" rows="4" component-id="textarea-maxlength" placeholder="Tell us about yourself..."></pds-textarea>'
+}}>
+  <pds-textarea name="Bio" label="Bio" max-length="120" rows="4" component-id="textarea-maxlength" placeholder="Tell us about yourself..."></pds-textarea>
+</DocCanvas>
+
+> **Note:** To prevent text overlap with the character counter, consider using the `rows` property to provide adequate textarea height for your expected content length.
+
 ### Action Slot
 
 The action slot allows you to add helpful content next to the textarea label, such as links or help buttons. This is useful for providing additional context or quick actions related to the field.
@@ -180,20 +194,20 @@ The action slot allows you to add helpful content next to the textarea label, su
 
 <DocCanvas client:only
   mdxSource={{
-    react: `<PdsTextarea componentId="pds-textarea-action-tooltip" label="Bio" rows="4" maxlength="500">
+    react: `<PdsTextarea componentId="pds-textarea-action-tooltip" label="Bio" rows="4" maxLength="500">
   <PdsTooltip slot="action">
     <PdsIcon name="question-circle"></PdsIcon>
     <span slot="content">Tell us about yourself in 500 characters or less</span>
   </PdsTooltip>
 </PdsTextarea>`,
-    webComponent: `<pds-textarea component-id="pds-textarea-action-tooltip" label="Bio" rows="4" maxlength="500">
+    webComponent: `<pds-textarea component-id="pds-textarea-action-tooltip" label="Bio" rows="4" max-length="500">
   <pds-tooltip slot="action">
     <pds-icon name="question-circle"></pds-icon>
     <span slot="content">Tell us about yourself in 500 characters or less</span>
   </pds-tooltip>
 </pds-textarea>`
 }}>
-  <pds-textarea component-id="pds-textarea-action-tooltip" label="Bio" rows="4" maxlength="500">
+  <pds-textarea component-id="pds-textarea-action-tooltip" label="Bio" rows="4" max-length="500">
     <pds-tooltip slot="action">
       <pds-icon name="question-circle"></pds-icon>
       <span slot="content">Tell us about yourself in 500 characters or less</span>
