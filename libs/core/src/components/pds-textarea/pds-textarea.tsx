@@ -357,8 +357,7 @@ export class PdsTextarea {
 
     // Ensure the character counter has been rendered and has dimensions
     if (this.characterCounter.offsetWidth === 0 || this.characterCounter.offsetHeight === 0) {
-      // Retry after a brief delay if counter isn't ready
-      setTimeout(() => this.updateCharacterCounterPosition(), 10);
+      // Counter not ready or component hidden - return and let resize/input observers handle positioning later
       return;
     }
 
