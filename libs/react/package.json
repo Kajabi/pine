@@ -1,6 +1,6 @@
 {
   "name": "@pine-ds/react",
-  "version": "3.5.1",
+  "version": "3.5.2",
   "license": "MIT",
   "description": "Pine Web Components React Wrapper",
   "author": "Kajabi Design System Services",
@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@kajabi-ui/styles": "*",
-    "@pine-ds/core": "^3.5.1",
+    "@pine-ds/core": "^3.5.2",
     "@pine-ds/icons": "*",
     "tslib": "*"
   },

@@ -1,3 +1,13 @@
+## 3.5.2 (2025-09-12)
+
+### Bug Fixes 🐛
+
+- **pds-box:** add responsive modifier to flex properties ([#527](https://github.com/Kajabi/pine/pull/527))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 3.5.1 (2025-09-09)
 
 ### Bug Fixes 🐛
