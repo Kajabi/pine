@@ -1,5 +1,6 @@
 :host {
-  display: inline;
+  display: inline-block;
+  width: 100%;
 }
 
 :host([aria-readonly="true"]) {
@@ -37,13 +38,44 @@ label {
   margin-block-end: 0;
 }
 
+.pds-textarea__helper-message {
+  color: var(--pine-color-text-message);
+  font: var(--pine-typography-body-sm-medium);
+  margin-block-start: var(--pine-dimension-2xs);
+}
+
+.pds-textarea__error-message {
+  align-items: center;
+  color: var(--pine-color-text-message-danger);
+  display: flex;
+  font: var(--pine-typography-body-sm-medium);
+  gap: var(--pine-dimension-2xs);
+  margin-block-start: var(--pine-dimension-2xs);
+}
+
+.pds-textarea__field-wrapper {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+}
+
 .pds-textarea__field {
   background-color: var(--pine-color-background-container);
   border: var(--pine-border);
   border-radius: calc(var(--pine-dimension-xs) * 1.25);
+  box-sizing: border-box;
   font: var(--pine-typography-body);
   letter-spacing: var(--pine-letter-spacing);
+  min-height: calc(var(--pine-dimension-xl) * 2);
+  min-width: calc(var(--pine-dimension-xl) * 2);
   padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
+  resize: both;
+  width: 100%;
+
+  // Add bottom padding when character counter is present
+  :host([max-length]) & {
+    padding-bottom: calc(var(--pine-dimension-xs) + var(--pine-dimension-md));
+  }
 
   &:hover:not(:disabled, .is-invalid) {
     border: var(--pine-border-hover);
@@ -74,18 +106,34 @@ label {
   }
 }
 
-.pds-textarea__error-message,
-.pds-textarea__helper-message {
-  color: var(--pine-color-text-message);
+.pds-textarea__character-counter {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: calc(var(--pine-dimension-2xs) * 0.5);
+  color: var(--pine-color-text-readonly);
   font: var(--pine-typography-body-sm-medium);
-  margin-block-start: var(--pine-dimension-xs);
-}
+  padding: calc(var(--pine-dimension-2xs) * 0.5) var(--pine-dimension-2xs);
+  pointer-events: none;
+  position: absolute;
+  user-select: none;
+  white-space: nowrap;
+  z-index: 2;
 
-.pds-textarea__error-message {
-  align-items: center;
-  color: var(--pine-color-text-message-danger);
-  display: flex;
-  gap: var(--pine-dimension-2xs);
+  // Match textarea disabled state
+  :host([aria-disabled="true"]) & {
+    background-color: var(--pine-color-background-container-disabled);
+    color: var(--pine-color-text-disabled);
+  }
+
+  // Match textarea readonly state
+  :host([aria-readonly="true"]) & {
+    background-color: var(--pine-color-background-container-disabled);
+    color: var(--pine-color-text-readonly);
+  }
+
+  // Match textarea invalid state - target when field has is-invalid class
+  .pds-textarea__field.is-invalid ~ & {
+    background-color: var(--pine-input-color-background-danger);
+  }
 }
 
 .visually-hidden {
