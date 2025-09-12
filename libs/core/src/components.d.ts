@@ -38,6 +38,11 @@ export namespace Components {
          */
         "open": boolean;
         /**
+          * Whether the modal content should be scrollable
+          * @default true
+         */
+        "scrollable": boolean;
+        /**
           * Shows the modal
          */
         "showModal": () => Promise<void>;
@@ -869,6 +874,11 @@ export namespace Components {
          */
         "open": boolean;
         /**
+          * Whether the modal content should be scrollable
+          * @default true
+         */
+        "scrollable": boolean;
+        /**
           * Opens the modal
          */
         "showModal": () => Promise<void>;
@@ -880,7 +890,7 @@ export namespace Components {
     }
     interface PdsModalContent {
         /**
-          * The border style for the content area. Automatically set based on available space of the modal content.
+          * The border style for the content area. When not explicitly set, automatically determined based on scroll state.
           * @default 'none'
          */
         "border": 'none' | 'both' | 'top' | 'bottom';
@@ -2170,6 +2180,11 @@ declare namespace LocalJSX {
          */
         "open"?: boolean;
         /**
+          * Whether the modal content should be scrollable
+          * @default true
+         */
+        "scrollable"?: boolean;
+        /**
           * The size of the modal
          */
         "size"?: 'sm' | 'md' | 'lg' | 'fullscreen';
@@ -3027,6 +3042,11 @@ declare namespace LocalJSX {
          */
         "open"?: boolean;
         /**
+          * Whether the modal content should be scrollable
+          * @default true
+         */
+        "scrollable"?: boolean;
+        /**
           * The size of the modal
           * @default 'md'
          */
@@ -3034,7 +3054,7 @@ declare namespace LocalJSX {
     }
     interface PdsModalContent {
         /**
-          * The border style for the content area. Automatically set based on available space of the modal content.
+          * The border style for the content area. When not explicitly set, automatically determined based on scroll state.
           * @default 'none'
          */
         "border"?: 'none' | 'both' | 'top' | 'bottom';

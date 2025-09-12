@@ -11,6 +11,7 @@ export default {
     backdropDismiss: true,
     componentId: 'modal-demo',
     open: false,
+    scrollable: true,
     size: 'md',
   },
   parameters: {
@@ -31,7 +32,9 @@ const BaseTemplate = (args) => html`
       component-id="${args.componentId}"
       size="${args.size}"
       ?backdrop-dismiss=${args.backdropDismiss}
+      scrollable="${args.scrollable}"
       ?open=${args.open}
+      key="${args.scrollable ? 'scrollable' : 'non-scrollable'}"
     >
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
@@ -412,4 +415,246 @@ Fullscreen.args = {
   size: 'fullscreen',
   componentId: 'fullscreen-modal',
   open: false,
+};
+
+const NonScrollableTemplate = (args) => html`
+  <div style="padding: 1rem;">
+    <pds-button id="show-modal" onClick="document.querySelector('#${args.componentId}').open = true">
+      Open Non-Scrollable Modal
+    </pds-button>
+
+    <pds-modal
+      id="${args.componentId}"
+      component-id="${args.componentId}"
+      size="${args.size}"
+      ?backdrop-dismiss=${args.backdropDismiss}
+      scrollable="${args.scrollable}"
+      ?open=${args.open}
+      key="${args.scrollable ? 'scrollable' : 'non-scrollable'}"
+    >
+      <pds-modal-header>
+        <pds-box direction="column" fit padding="md">
+          <pds-box
+            align-items="center"
+            fit
+            justify-content="space-between"
+          >
+            <pds-text tag="h2" size="h3">Non-Scrollable Modal</pds-text>
+            <pds-button
+              class="pds-modal__close"
+              variant="unstyled"
+              icon-only="true"
+              onclick="document.querySelector('#${args.componentId}').open = false"
+              aria-label="Close modal"
+              part="close-button"
+            >
+              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+            </pds-button>
+          </pds-box>
+          <pds-box>
+            <pds-text tag="p" size="md">Content overflow is handled naturally</pds-text>
+          </pds-box>
+        </pds-box>
+      </pds-modal-header>
+      <pds-modal-content>
+        <pds-box direction="column" padding-inline-start="md" padding-inline-end="md">
+          <p>This modal has scrollable=false, so content will overflow naturally.</p>
+          <p>Use this when you want to control overflow behavior differently.</p>
+          <p>This is ideal for modals with fixed-height content or custom overflow handling.</p>
+          <p>This modal has scrollable=false, so content will overflow naturally.</p>
+          <p>Use this when you want to control overflow behavior differently.</p>
+          <p>This is ideal for modals with fixed-height content or custom overflow handling.</p>
+          <p>This modal has scrollable=false, so content will overflow naturally.</p>
+          <p>Use this when you want to control overflow behavior differently.</p>
+          <p>This modal has scrollable=false, so content will overflow naturally.</p>
+          <p>Use this when you want to control overflow behavior differently.</p>
+          <p>This is ideal for modals with fixed-height content or custom overflow handling.</p>
+          <p>This modal has scrollable=false, so content will overflow naturally.</p>
+          <p>Use this when you want to control overflow behavior differently.</p>
+          <p>This is ideal for modals with fixed-height content or custom overflow handling.</p>
+          <p>This modal has scrollable=false, so content will overflow naturally.</p>
+          <p>Use this when you want to control overflow behavior differently.</p>
+          <p>This is ideal for modals with fixed-height content or custom overflow handling.</p>
+        </pds-box>
+      </pds-modal-content>
+
+      <pds-modal-footer>
+        <pds-box
+          justify-content="space-between"
+          fit
+          padding="md"
+        >
+          <pds-button variant="unstyled" onclick="document.querySelector('#${args.componentId}').open = false">Close</pds-button>
+          <pds-box gap="sm" justify-content="end">
+            <pds-button
+              variant="secondary"
+              onclick="document.querySelector('#${args.componentId}').open = false"
+            >
+              Cancel
+            </pds-button>
+            <pds-button variant="primary">Confirm</pds-button>
+          </pds-box>
+        </pds-box>
+      </pds-modal-footer>
+    </pds-modal>
+  </div>
+`;
+
+export const NonScrollable = NonScrollableTemplate.bind({});
+NonScrollable.args = {
+  size: 'md',
+  componentId: 'non-scrollable-modal',
+  scrollable: false,
+  open: false,
+};
+
+const CustomBordersTemplate = () => html`
+  <div style="padding: 1rem;">
+    <pds-box gap="sm" direction="column">
+      <pds-text tag="h3" size="h4">Border Examples</pds-text>
+      <pds-box gap="sm" wrap>
+        <pds-button id="show-modal-none" onClick="document.querySelector('#border-none-modal').open = true">
+          border="none"
+        </pds-button>
+        <pds-button id="show-modal-top" onClick="document.querySelector('#border-top-modal').open = true">
+          border="top"
+        </pds-button>
+        <pds-button id="show-modal-bottom" onClick="document.querySelector('#border-bottom-modal').open = true">
+          border="bottom"
+        </pds-button>
+        <pds-button id="show-modal-both" onClick="document.querySelector('#border-both-modal').open = true">
+          border="both"
+        </pds-button>
+      </pds-box>
+    </pds-box>
+
+    <!-- Border None Modal -->
+    <pds-modal id="border-none-modal" component-id="border-none-modal" size="sm">
+      <pds-modal-header>
+        <pds-box direction="column" fit padding="md">
+          <pds-box align-items="center" fit justify-content="space-between">
+            <pds-text tag="h2" size="h3">No Borders</pds-text>
+            <pds-button
+              class="pds-modal__close"
+              variant="unstyled"
+              icon-only="true"
+              onclick="document.querySelector('#border-none-modal').open = false"
+              aria-label="Close modal"
+            >
+              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+            </pds-button>
+          </pds-box>
+        </pds-box>
+      </pds-modal-header>
+      <pds-modal-content border="none">
+        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+          <p>This modal content has <code>border="none"</code></p>
+          <p>No borders will be shown regardless of content length or scroll position.</p>
+        </pds-box>
+      </pds-modal-content>
+      <pds-modal-footer>
+        <pds-box fit justify-content="end" padding="md" gap="sm">
+          <pds-button onclick="document.querySelector('#border-none-modal').open = false">Close</pds-button>
+        </pds-box>
+      </pds-modal-footer>
+    </pds-modal>
+
+    <!-- Border Top Modal -->
+    <pds-modal id="border-top-modal" component-id="border-top-modal" size="sm">
+      <pds-modal-header>
+        <pds-box direction="column" fit padding="md">
+          <pds-box align-items="center" fit justify-content="space-between">
+            <pds-text tag="h2" size="h3">Top Border Only</pds-text>
+            <pds-button
+              class="pds-modal__close"
+              variant="unstyled"
+              icon-only="true"
+              onclick="document.querySelector('#border-top-modal').open = false"
+              aria-label="Close modal"
+            >
+              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+            </pds-button>
+          </pds-box>
+        </pds-box>
+      </pds-modal-header>
+      <pds-modal-content border="top">
+        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+          <p>This modal content has <code>border="top"</code></p>
+          <p>Only the top border is visible, indicating there's content above.</p>
+        </pds-box>
+      </pds-modal-content>
+      <pds-modal-footer>
+        <pds-box fit justify-content="end" padding="md" gap="sm">
+          <pds-button onclick="document.querySelector('#border-top-modal').open = false">Close</pds-button>
+        </pds-box>
+      </pds-modal-footer>
+    </pds-modal>
+
+    <!-- Border Bottom Modal -->
+    <pds-modal id="border-bottom-modal" component-id="border-bottom-modal" size="sm">
+      <pds-modal-header>
+        <pds-box direction="column" fit padding="md">
+          <pds-box align-items="center" fit justify-content="space-between">
+            <pds-text tag="h2" size="h3">Bottom Border Only</pds-text>
+            <pds-button
+              class="pds-modal__close"
+              variant="unstyled"
+              icon-only="true"
+              onclick="document.querySelector('#border-bottom-modal').open = false"
+              aria-label="Close modal"
+            >
+              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+            </pds-button>
+          </pds-box>
+        </pds-box>
+      </pds-modal-header>
+      <pds-modal-content border="bottom">
+        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+          <p>This modal content has <code>border="bottom"</code></p>
+          <p>Only the bottom border is visible, indicating there's content below.</p>
+        </pds-box>
+      </pds-modal-content>
+      <pds-modal-footer>
+        <pds-box fit justify-content="end" padding="md" gap="sm">
+          <pds-button onclick="document.querySelector('#border-bottom-modal').open = false">Close</pds-button>
+        </pds-box>
+      </pds-modal-footer>
+    </pds-modal>
+
+    <!-- Border Both Modal -->
+    <pds-modal id="border-both-modal" component-id="border-both-modal" size="sm">
+      <pds-modal-header>
+        <pds-box direction="column" fit padding="md">
+          <pds-box align-items="center" fit justify-content="space-between">
+            <pds-text tag="h2" size="h3">Both Borders</pds-text>
+            <pds-button
+              class="pds-modal__close"
+              variant="unstyled"
+              icon-only="true"
+              onclick="document.querySelector('#border-both-modal').open = false"
+              aria-label="Close modal"
+            >
+              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+            </pds-button>
+          </pds-box>
+        </pds-box>
+      </pds-modal-header>
+      <pds-modal-content border="both">
+        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+          <p>This modal content has <code>border="both"</code></p>
+          <p>Both top and bottom borders are visible, indicating content above and below.</p>
+        </pds-box>
+      </pds-modal-content>
+      <pds-modal-footer>
+        <pds-box fit justify-content="end" padding="md" gap="sm">
+          <pds-button onclick="document.querySelector('#border-both-modal').open = false">Close</pds-button>
+        </pds-box>
+      </pds-modal-footer>
+    </pds-modal>
+  </div>
+`;
+
+export const CustomBorders = CustomBordersTemplate.bind({});
+CustomBorders.args = {
+  componentId: 'custom-borders-modal',
 };
