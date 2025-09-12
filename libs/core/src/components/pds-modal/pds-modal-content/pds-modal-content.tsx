@@ -15,37 +15,67 @@ export class PdsModalContent {
   @Element() el: HTMLPdsModalContentElement;
 
   /**
-   * The border style for the content area. Automatically set based on available space of the modal content.
+   * The border style for the content area. When not explicitly set, automatically determined based on scroll state.
    * @default 'none'
    */
   @Prop({ reflect: true }) border: 'none' | 'both' | 'top' | 'bottom' = 'none';
 
   @State() contentMaxHeight: string = 'none';
 
+  /**
+   * Tracks whether the border prop was explicitly set by the user
+   */
+  private userSetBorder = false;
+
+  componentWillLoad() {
+    // Check if border was explicitly set via attribute or property
+    const borderAttr = this.el.getAttribute('border');
+    const hasBorderAttribute = borderAttr !== null;
+
+    // If border attribute exists or border prop is not the default, user set it
+    this.userSetBorder = hasBorderAttribute || this.border !== 'none';
+  }
+
   componentDidLoad() {
-    // Check if parent modal is scrollable first
-    const modalElement = this.el.closest('pds-modal');
-    const isModalScrollable = modalElement ? modalElement.scrollable !== false : true;
+    this.calculateMaxHeight();
 
-    // Only check content scrollability if modal is scrollable
-    if (isModalScrollable) {
-      const slotContent = this.el.firstElementChild as HTMLElement;
-      const isScrollable = slotContent?.scrollHeight > slotContent?.clientHeight;
-      this.border = isScrollable ? 'both' : 'none';
-      this.calculateMaxHeight();
-    } else {
-      this.border = 'none';
+    // Set up resize listener
+    window.addEventListener('resize', this.handleResize.bind(this));
+
+    // Only set up scroll listener for border updates if borders are managed automatically
+    if (!this.userSetBorder) {
+      setTimeout(() => {
+        const contentElement = this.el.querySelector('.pds-modal-content') as HTMLElement;
+        if (contentElement) {
+          contentElement.addEventListener('scroll', this.updateBorders.bind(this));
+        }
+      }, 100);
     }
-
-    window.addEventListener('resize', this.calculateMaxHeight.bind(this));
   }
 
   disconnectedCallback() {
-    window.removeEventListener('resize', this.calculateMaxHeight.bind(this));
+    window.removeEventListener('resize', this.handleResize.bind(this));
+
+    // Clean up scroll listener only if it was set up
+    if (!this.userSetBorder) {
+      const contentElement = this.el.querySelector('.pds-modal-content') as HTMLElement;
+      if (contentElement) {
+        contentElement.removeEventListener('scroll', this.updateBorders.bind(this));
+      }
+    }
 
     if (this.mutationObserver) {
       this.mutationObserver.disconnect();
     }
+  }
+
+  /**
+   * Handle resize events
+   */
+  private handleResize() {
+    this.calculateMaxHeight();
+    // Update borders after resize as content scrollability might change
+    setTimeout(() => this.updateBorders(), 50);
   }
 
   /**
@@ -54,12 +84,61 @@ export class PdsModalContent {
   private mutationObserver: MutationObserver;
 
   /**
+   * Updates border visibility based on scroll state (only if not user-defined)
+   */
+  private updateBorders() {
+    // If user explicitly set a border value, don't override it
+    if (this.userSetBorder) {
+      return;
+    }
+
+    // Find the modal element (parent of this component)
+    const modalElement = this.el.closest('pds-modal');
+    if (!modalElement) return;
+
+    // Only apply border logic if modal is scrollable
+    const isModalScrollable = modalElement.scrollable !== false;
+    if (!isModalScrollable) {
+      this.border = 'none';
+      return;
+    }
+
+    // Get the content element
+    const contentElement = this.el.querySelector('.pds-modal-content') as HTMLElement;
+    if (!contentElement) return;
+
+    // Check if content is actually scrollable
+    const isContentScrollable = contentElement.scrollHeight > contentElement.clientHeight;
+
+    if (!isContentScrollable) {
+      this.border = 'none';
+      return;
+    }
+
+    // Determine border position based on scroll position
+    const { scrollTop, scrollHeight, clientHeight } = contentElement;
+    const isAtTop = scrollTop === 0;
+    const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1; // Allow for small rounding errors
+
+    if (isAtTop && isAtBottom) {
+      // Content fits exactly, no borders needed
+      this.border = 'none';
+    } else if (isAtTop) {
+      // At top, show bottom border only
+      this.border = 'bottom';
+    } else if (isAtBottom) {
+      // At bottom, show top border only
+      this.border = 'top';
+    } else {
+      // In middle, show both borders
+      this.border = 'both';
+    }
+  }
+
+  /**
    * Calculates the max-height based on header and footer heights
    */
   private calculateMaxHeight() {
-    console.log('calculateMaxHeight');
-    console.log('this.el', this.el);
-
     // Find the modal element (parent of this component)
     const modalElement = this.el.closest('pds-modal');
     if (!modalElement) return;
@@ -107,6 +186,9 @@ export class PdsModalContent {
       } else {
         this.contentMaxHeight = 'none'; // Default fallback
       }
+
+      // Update borders after height calculations
+      setTimeout(() => this.updateBorders(), 50);
     }, 100); // Delay to ensure DOM is fully rendered
 
     // Set up mutation observer if not already done
@@ -127,8 +209,6 @@ export class PdsModalContent {
   render() {
     // Only apply max-height style if it's not 'none'
     const styleObj = this.contentMaxHeight !== 'none' ? { maxHeight: this.contentMaxHeight } : {};
-    console.log('styleObj', styleObj);
-    console.log('this.contentMaxHeight', this.contentMaxHeight);
 
     return (
       <Host>

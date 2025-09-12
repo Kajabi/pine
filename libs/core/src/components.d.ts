@@ -890,7 +890,7 @@ export namespace Components {
     }
     interface PdsModalContent {
         /**
-          * The border style for the content area. Automatically set based on available space of the modal content.
+          * The border style for the content area. When not explicitly set, automatically determined based on scroll state.
           * @default 'none'
          */
         "border": 'none' | 'both' | 'top' | 'bottom';
@@ -3054,7 +3054,7 @@ declare namespace LocalJSX {
     }
     interface PdsModalContent {
         /**
-          * The border style for the content area. Automatically set based on available space of the modal content.
+          * The border style for the content area. When not explicitly set, automatically determined based on scroll state.
           * @default 'none'
          */
         "border"?: 'none' | 'both' | 'top' | 'bottom';

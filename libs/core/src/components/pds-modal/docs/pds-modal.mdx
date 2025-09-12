@@ -1079,6 +1079,161 @@ When `scrollable={false}`, the modal content will overflow naturally without cre
   </div>
 </DocCanvas>
 
+#### User-Defined Borders
+
+You can override the automatic border detection by explicitly setting the `border` prop on `pds-modal-content`. This is useful when you want specific border behavior regardless of scroll state.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+    <div>
+      <PdsButton onClick={() => {
+        const modal = document.querySelector('#border-demo-modal');
+        if (modal) modal.open = true;
+      }}>Custom Borders Demo</PdsButton>
+
+      <PdsModal id="border-demo-modal" componentId="border-demo-modal">
+        <PdsModalHeader>
+          <PdsBox direction="column" fit padding="md">
+            <PdsBox alignItems="center" fit justifyContent="space-between">
+              <PdsText tag="h2" size="h3">Custom Border Examples</PdsText>
+              <PdsButton
+                class="pds-modal__close"
+                variant="unstyled"
+                iconOnly="true"
+                onclick="document.querySelector('#border-demo-modal').open = false"
+                aria-label="Close modal"
+              >
+                <PdsIcon slot="start" name="remove" aria-hidden="true"></PdsIcon>
+              </PdsButton>
+            </PdsBox>
+          </PdsBox>
+        </PdsModalHeader>
+        <PdsModalContent border="both">
+          <PdsBox fit direction="column" paddingInlineStart="md" paddingInlineEnd="md">
+            <p><strong>This content has border="both"</strong></p>
+            <p>Notice the borders at top and bottom are always visible, regardless of scroll position.</p>
+            <p>Available border values:</p>
+            <ul>
+              <li><code>border="none"</code> - No borders</li>
+              <li><code>border="top"</code> - Top border only</li>
+              <li><code>border="bottom"</code> - Bottom border only</li>
+              <li><code>border="both"</code> - Top and bottom borders</li>
+            </ul>
+            <p>When you set a border value explicitly, the automatic scroll-based detection is disabled.</p>
+          </PdsBox>
+        </PdsModalContent>
+        <PdsModalFooter>
+          <PdsBox fit justifyContent="end" padding="md" gap="sm">
+            <PdsButton onClick={() => {
+              const modal = document.querySelector('#border-demo-modal');
+              if (modal) modal.open = false;
+            }}>Close</PdsButton>
+          </PdsBox>
+        </PdsModalFooter>
+      </PdsModal>
+    </div>
+    `,
+    webComponent: `
+    <div>
+      <pds-button onClick={() => {
+        const modal = document.querySelector('#border-demo-modal');
+        if (modal) modal.open = true;
+      }}>Custom Borders Demo</pds-button>
+
+      <pds-modal id="border-demo-modal" component-id="border-demo-modal">
+        <pds-modal-header>
+          <pds-box direction="column" fit padding="md">
+            <pds-box align-items="center" fit justify-content="space-between">
+              <pds-text tag="h2" size="h3">Custom Border Examples</pds-text>
+              <pds-button
+                class="pds-modal__close"
+                variant="unstyled"
+                icon-only="true"
+                onclick="document.querySelector('#border-demo-modal').open = false"
+                aria-label="Close modal"
+              >
+                <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+              </pds-button>
+            </pds-box>
+          </pds-box>
+        </pds-modal-header>
+        <pds-modal-content border="both">
+          <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+            <p><strong>This content has border="both"</strong></p>
+            <p>Notice the borders at top and bottom are always visible, regardless of scroll position.</p>
+            <p>Available border values:</p>
+            <ul>
+              <li><code>border="none"</code> - No borders</li>
+              <li><code>border="top"</code> - Top border only</li>
+              <li><code>border="bottom"</code> - Bottom border only</li>
+              <li><code>border="both"</code> - Top and bottom borders</li>
+            </ul>
+            <p>When you set a border value explicitly, the automatic scroll-based detection is disabled.</p>
+          </pds-box>
+        </pds-modal-content>
+        <pds-modal-footer>
+          <pds-box fit justify-content="end" padding="md" gap="sm">
+            <pds-button onClick={() => {
+              const modal = document.querySelector('#border-demo-modal');
+              if (modal) modal.open = false;
+            }}>Close</pds-button>
+          </pds-box>
+        </pds-modal-footer>
+      </pds-modal>
+    </div>
+    `
+  }}
+>
+  <div>
+    <pds-button onClick={() => {
+      const modal = document.querySelector('#border-demo-modal');
+      if (modal) modal.open = true;
+    }}>Custom Borders Demo</pds-button>
+
+    <pds-modal id="border-demo-modal" component-id="border-demo-modal">
+      <pds-modal-header>
+        <pds-box direction="column" fit padding="md">
+          <pds-box align-items="center" fit justify-content="space-between">
+            <pds-text tag="h2" size="h3">Custom Border Examples</pds-text>
+            <pds-button
+              class="pds-modal__close"
+              variant="unstyled"
+              icon-only="true"
+              onclick="document.querySelector('#border-demo-modal').open = false"
+              aria-label="Close modal"
+            >
+              <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+            </pds-button>
+          </pds-box>
+        </pds-box>
+      </pds-modal-header>
+      <pds-modal-content border="both">
+        <pds-box fit direction="column" padding-inline-start="md" padding-inline-end="md">
+          <p><strong>This content has border="both"</strong></p>
+          <p>Notice the borders at top and bottom are always visible, regardless of scroll position.</p>
+          <p>Available border values:</p>
+          <ul>
+            <li><code>border="none"</code> - No borders</li>
+            <li><code>border="top"</code> - Top border only</li>
+            <li><code>border="bottom"</code> - Bottom border only</li>
+            <li><code>border="both"</code> - Top and bottom borders</li>
+          </ul>
+          <p>When you set a border value explicitly, the automatic scroll-based detection is disabled.</p>
+        </pds-box>
+      </pds-modal-content>
+      <pds-modal-footer>
+        <pds-box fit justify-content="end" padding="md" gap="sm">
+          <pds-button onClick={() => {
+            const modal = document.querySelector('#border-demo-modal');
+            if (modal) modal.open = false;
+          }}>Close</pds-button>
+        </pds-box>
+      </pds-modal-footer>
+    </pds-modal>
+  </div>
+</DocCanvas>
+
 ### Nested Modals
 
 Modals can be nested, with only the topmost modal responding to escape key and backdrop clicks.
