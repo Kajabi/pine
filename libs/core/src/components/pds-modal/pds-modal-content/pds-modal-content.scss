@@ -3,21 +3,21 @@ pds-modal-content {
   flex: 1 1 auto;
   width: 100%;
 
-  &:has(.pds-modal-content--border-none) {
+  &:has(.pds-modal-content.pds-modal-content--border-none) {
     border: 0;
   }
 
-  &:has(.pds-modal-content--border-both) {
-    border-block-end: 1px solid var(--pine-color-grey-200) !important;
-    border-block-start: 1px solid var(--pine-color-grey-200) !important;
+  &:has(.pds-modal-content.pds-modal-content--border-both) {
+    border-block-end: 1px solid var(--pine-color-grey-200);
+    border-block-start: 1px solid var(--pine-color-grey-200);
   }
 
-  &:has(.pds-modal-content--border-top) {
-    border-block-start: 1px solid var(--pine-color-grey-200) !important;
+  &:has(.pds-modal-content.pds-modal-content--border-top) {
+    border-block-start: 1px solid var(--pine-color-grey-200);
   }
 
-  &:has(.pds-modal-content--border-bottom) {
-    border-block-end: 1px solid var(--pine-color-grey-200) !important;
+  &:has(.pds-modal-content.pds-modal-content--border-bottom) {
+    border-block-end: 1px solid var(--pine-color-grey-200);
   }
 }
 
