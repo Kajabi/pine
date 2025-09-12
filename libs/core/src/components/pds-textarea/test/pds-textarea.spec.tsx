@@ -324,17 +324,19 @@ describe('pds-textarea', () => {
 
     if (textarea) {
       textarea.value = 'new value';
-      textarea.dispatchEvent(new Event('textareaInput'));
+      textarea.dispatchEvent(new Event('input', { bubbles: true }));
       await page.waitForChanges();
 
       expect(textarea.value).toBe('new value');
+      expect(pdsTextarea?.value).toBe('new value');
 
       textarea.value = '';
-      textarea.dispatchEvent(new Event('textareaInput'));
+      textarea.dispatchEvent(new Event('input', { bubbles: true }));
       await page.waitForChanges();
-    }
 
-    expect(textarea?.value).toBe('');
+      expect(textarea.value).toBe('');
+      expect(pdsTextarea?.value).toBe('');
+    }
   });
 
   it('onChange logic with invalid `value` runs', async () => {
