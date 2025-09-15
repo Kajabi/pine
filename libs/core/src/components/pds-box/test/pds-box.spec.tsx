@@ -200,6 +200,18 @@ describe('pds-box', () => {
     expect(element).toHaveClass('pds-box--auto');
   });
 
+  ['xs', 'sm', 'md', 'lg', 'xl'].forEach((breakpoint) => {
+    it(`renders auto-${breakpoint} class when prop is set to true`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box auto-${breakpoint}="true"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-box--auto-${breakpoint}`);
+    });
+  });
+
   it('renders background-color class when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsBox],
@@ -317,6 +329,18 @@ describe('pds-box', () => {
     expect(element).toHaveClass('pds-box--fit');
   });
 
+  ['xs', 'sm', 'md', 'lg', 'xl'].forEach((breakpoint) => {
+    it(`renders fit-${breakpoint} class when prop is set to true`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box fit-${breakpoint}="true"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-box--fit-${breakpoint}`);
+    });
+  });
+
   it('renders gap class when prop is set to xs', async () => {
     const page = await newSpecPage({
       components: [PdsBox],
@@ -326,6 +350,20 @@ describe('pds-box', () => {
     const element = page.root;
 
     expect(element).toHaveClass('pds-box-gap-xs');
+  });
+
+  ['xs', 'sm', 'md', 'lg', 'xl'].forEach((breakpoint) => {
+    ['none', 'xxs', 'xs', 'sm', 'md', 'lg', 'xl', 'xxl'].forEach((size) => {
+      it(`renders gap-${breakpoint} class when prop is set to ${size}`, async () => {
+        const page = await newSpecPage({
+          components: [PdsBox],
+          html: `<pds-box gap-${breakpoint}="${size}"></pds-box>`,
+        });
+
+        const element = page.root;
+        expect(element).toHaveClass(`pds-box-gap-${breakpoint}-${size}`);
+      });
+    });
   });
 
   it('renders flex class when prop is set to grow', async () => {
@@ -662,6 +700,98 @@ describe('pds-box', () => {
       const element = page.root;
       expect(element).toHaveClass(`pds-box-gap-${size}`);
     });
+
+    ['xs', 'sm', 'md', 'lg', 'xl'].forEach((breakpoint) => {
+      it(`renders margin-block-start-${breakpoint} class when prop is set to ${size}`, async () => {
+        const page = await newSpecPage({
+          components: [PdsBox],
+          html: `<pds-box margin-block-start-${breakpoint}="${size}"></pds-box>`,
+        });
+
+        const element = page.root;
+        expect(element).toHaveClass(`pds-margin-block-start-${breakpoint}-${size}`);
+      });
+
+      it(`renders margin-inline-start-${breakpoint} class when prop is set to ${size}`, async () => {
+        const page = await newSpecPage({
+          components: [PdsBox],
+          html: `<pds-box margin-inline-start-${breakpoint}="${size}"></pds-box>`,
+        });
+
+        const element = page.root;
+        expect(element).toHaveClass(`pds-margin-inline-start-${breakpoint}-${size}`);
+      });
+
+      it(`renders margin-inline-end-${breakpoint} class when prop is set to ${size}`, async () => {
+        const page = await newSpecPage({
+          components: [PdsBox],
+          html: `<pds-box margin-inline-end-${breakpoint}="${size}"></pds-box>`,
+        });
+
+        const element = page.root;
+        expect(element).toHaveClass(`pds-margin-inline-end-${breakpoint}-${size}`);
+      });
+
+      it(`renders margin-block-end-${breakpoint} class when prop is set to ${size}`, async () => {
+        const page = await newSpecPage({
+          components: [PdsBox],
+          html: `<pds-box margin-block-end-${breakpoint}="${size}"></pds-box>`,
+        });
+
+        const element = page.root;
+        expect(element).toHaveClass(`pds-margin-block-end-${breakpoint}-${size}`);
+      });
+
+      it(`renders padding-${breakpoint} class when prop is set to ${size}`, async () => {
+        const page = await newSpecPage({
+          components: [PdsBox],
+          html: `<pds-box padding-${breakpoint}="${size}"></pds-box>`,
+        });
+
+        const element = page.root;
+        expect(element).toHaveClass(`pds-padding-${breakpoint}-${size}`);
+      });
+
+      it(`renders padding-block-start-${breakpoint} class when prop is set to ${size}`, async () => {
+        const page = await newSpecPage({
+          components: [PdsBox],
+          html: `<pds-box padding-block-start-${breakpoint}="${size}"></pds-box>`,
+        });
+
+        const element = page.root;
+        expect(element).toHaveClass(`pds-padding-block-start-${breakpoint}-${size}`);
+      });
+
+      it(`renders padding-block-end-${breakpoint} class when prop is set to ${size}`, async () => {
+        const page = await newSpecPage({
+          components: [PdsBox],
+          html: `<pds-box padding-block-end-${breakpoint}="${size}"></pds-box>`,
+        });
+
+        const element = page.root;
+        expect(element).toHaveClass(`pds-padding-block-end-${breakpoint}-${size}`);
+      });
+
+      it(`renders padding-inline-start-${breakpoint} class when prop is set to ${size}`, async () => {
+        const page = await newSpecPage({
+          components: [PdsBox],
+          html: `<pds-box padding-inline-start-${breakpoint}="${size}"></pds-box>`,
+        });
+
+        const element = page.root;
+        expect(element).toHaveClass(`pds-padding-inline-start-${breakpoint}-${size}`);
+      });
+
+      it(`renders padding-inline-end-${breakpoint} class when prop is set to ${size}`, async () => {
+        const page = await newSpecPage({
+          components: [PdsBox],
+          html: `<pds-box padding-inline-end-${breakpoint}="${size}"></pds-box>`,
+        });
+
+        const element = page.root;
+        expect(element).toHaveClass(`pds-padding-inline-end-${breakpoint}-${size}`);
+      });
+    });
   });
 
   it('normalizes background-color when raw token is provided', async () => {
@@ -830,5 +960,27 @@ describe('pds-box', () => {
     const element = page.root;
 
     expect(element).not.toHaveClass('pds-box--wrap');
+  });
+
+  ['xs', 'sm', 'md', 'lg', 'xl'].forEach((breakpoint) => {
+    it(`renders wrap-${breakpoint} class when prop is set to true`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box wrap-${breakpoint}="true"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).toHaveClass(`pds-box--wrap-${breakpoint}`);
+    });
+
+    it(`does not render wrap-${breakpoint} class when prop is set to false`, async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box wrap-${breakpoint}="false"></pds-box>`,
+      });
+
+      const element = page.root;
+      expect(element).not.toHaveClass(`pds-box--wrap-${breakpoint}`);
+    });
   });
 });

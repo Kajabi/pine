@@ -669,3 +669,128 @@ $breakpoints: (
     }
   }
 }
+
+// Responsive Flex Wrap helpers
+@each $breakpoint-name, $breakpoint-value in $breakpoints {
+  @media #{$breakpoint-value} {
+    .pds-box--wrap-#{$breakpoint-name} {
+      flex-wrap: wrap;
+    }
+  }
+}
+
+// Responsive Auto helpers
+@each $breakpoint-name, $breakpoint-value in $breakpoints {
+  @media #{$breakpoint-value} {
+    .pds-box--auto-#{$breakpoint-name} {
+      flex: 0 0 var(--sizing-min-width-box, fit-content);
+      min-width: auto;
+      width: auto;
+    }
+  }
+}
+
+// Responsive Fit helpers
+@each $breakpoint-name, $breakpoint-value in $breakpoints {
+  @media #{$breakpoint-value} {
+    .pds-box--fit-#{$breakpoint-name} {
+      max-width: 100%;
+      min-width: 100%;
+      width: 100%;
+    }
+  }
+}
+
+// Responsive Gap helpers
+$gap-values: (
+  'none': 0,
+  'xxs': var(--pine-dimension-2xs),
+  'xs': var(--pine-dimension-xs),
+  'sm': var(--pine-dimension-sm),
+  'md': var(--pine-dimension-md),
+  'lg': var(--pine-dimension-lg),
+  'xl': var(--pine-dimension-xl),
+  'xxl': var(--pine-dimension-2xl)
+);
+
+@each $breakpoint-name, $breakpoint-value in $breakpoints {
+  @media #{$breakpoint-value} {
+    @each $name, $value in $gap-values {
+      .pds-box-gap-#{$breakpoint-name}-#{$name} {
+        gap: $value;
+      }
+    }
+  }
+}
+
+// Responsive Margin helpers
+$margin-values: (
+  'none': 0,
+  'xxs': var(--pine-dimension-2xs),
+  'xs': var(--pine-dimension-xs),
+  'sm': var(--pine-dimension-sm),
+  'md': var(--pine-dimension-md),
+  'lg': var(--pine-dimension-lg),
+  'xl': var(--pine-dimension-xl),
+  'xxl': var(--pine-dimension-2xl)
+);
+
+@each $breakpoint-name, $breakpoint-value in $breakpoints {
+  @media #{$breakpoint-value} {
+    @each $name, $value in $margin-values {
+      .pds-margin-block-start-#{$breakpoint-name}-#{$name} {
+        margin-block-start: $value;
+      }
+
+      .pds-margin-inline-start-#{$breakpoint-name}-#{$name} {
+        margin-inline-start: $value;
+      }
+
+      .pds-margin-inline-end-#{$breakpoint-name}-#{$name} {
+        margin-inline-end: $value;
+      }
+
+      .pds-margin-block-end-#{$breakpoint-name}-#{$name} {
+        margin-block-end: $value;
+      }
+    }
+  }
+}
+
+// Responsive Padding helpers
+$padding-values: (
+  'none': var(--pine-dimension-none),
+  'xxs': var(--pine-dimension-2xs),
+  'xs': var(--pine-dimension-xs),
+  'sm': var(--pine-dimension-sm),
+  'md': var(--pine-dimension-md),
+  'lg': var(--pine-dimension-lg),
+  'xl': var(--pine-dimension-xl),
+  'xxl': var(--pine-dimension-2xl)
+);
+
+@each $breakpoint-name, $breakpoint-value in $breakpoints {
+  @media #{$breakpoint-value} {
+    @each $name, $value in $padding-values {
+      .pds-padding-#{$breakpoint-name}-#{$name} {
+        padding: $value;
+      }
+
+      .pds-padding-block-start-#{$breakpoint-name}-#{$name} {
+        padding-block-start: $value;
+      }
+
+      .pds-padding-block-end-#{$breakpoint-name}-#{$name} {
+        padding-block-end: $value;
+      }
+
+      .pds-padding-inline-start-#{$breakpoint-name}-#{$name} {
+        padding-inline-start: $value;
+      }
+
+      .pds-padding-inline-end-#{$breakpoint-name}-#{$name} {
+        padding-inline-end: $value;
+      }
+    }
+  }
+}

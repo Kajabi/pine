@@ -148,10 +148,16 @@ Items flow horizontally by default, so you'll need to explicitly set `direction=
 
 - `direction`: Controls item orientation (`row` = horizontal, `column` = vertical)
 - `size`: Sets column width (1-12 grid system, works best inside pds-row)
-- `gap`: Controls spacing between items
+- `gap`: Spacing between items (with responsive variants: `gap-xs`, `gap-sm`, `gap-md`, `gap-lg`, `gap-xl`)
 - `justify-content`: Horizontal alignment of items (with responsive variants: `justify-content-xs`, `justify-content-sm`, `justify-content-md`, `justify-content-lg`, `justify-content-xl`)
 - `align-items`: Vertical alignment of items (with responsive variants: `align-items-xs`, `align-items-sm`, `align-items-md`, `align-items-lg`, `align-items-xl`)
 - `align-self`: Individual box alignment within container (with responsive variants: `align-self-xs`, `align-self-sm`, `align-self-md`, `align-self-lg`, `align-self-xl`)
+- `padding`: Internal spacing (with responsive variants: `padding-xs`, `padding-sm`, `padding-md`, `padding-lg`, `padding-xl`)
+- `padding-block-start`, `padding-block-end`, `padding-inline-start`, `padding-inline-end`: Directional padding (with responsive variants for each)
+- `margin-block-start`, `margin-block-end`, `margin-inline-start`, `margin-inline-end`: Directional margins (with responsive variants for each)
+- `wrap`: Flex wrap behavior (with responsive variants: `wrap-xs`, `wrap-sm`, `wrap-md`, `wrap-lg`, `wrap-xl`)
+- `auto`: Auto-sizing behavior (with responsive variants: `auto-xs`, `auto-sm`, `auto-md`, `auto-lg`, `auto-xl`)
+- `fit`: Full-width behavior (with responsive variants: `fit-xs`, `fit-sm`, `fit-md`, `fit-lg`, `fit-xl`)
 
 ### Responsive Breakpoints
 
@@ -168,6 +174,10 @@ All responsive properties follow the same breakpoint system:
 - `justify-content="center"` - Center on all screen sizes
 - `justify-content="start" justify-content-md="center"` - Start on mobile, center on desktop
 - `align-items="stretch" align-items-lg="start"` - Stretch on mobile/tablet, start on desktop
+- `gap="xs" gap-md="lg"` - Small gap on mobile, large gap on desktop
+- `padding="sm" padding-lg="xl"` - Small padding on mobile, extra large on desktop
+- `wrap="false" wrap-md="true"` - No wrap on mobile, wrap on desktop
+- `auto="true" auto-lg="false"` - Auto-size on mobile, fixed size on desktop
 
 ### Working with PDS-Row
 
@@ -897,6 +907,94 @@ Control whether flex items wrap to new lines when they don't fit in the containe
     <pds-box border="true" padding="sm">Item 5</pds-box>
   </pds-box>
 </DocCanvas>
+
+## Responsive Properties
+
+All the following properties support responsive variants that allow different values at different screen sizes. This enables fine-grained control over layout behavior across devices.
+
+### Responsive Gap
+
+Control spacing between items at different breakpoints:
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsBox gap="xs" gap-md="lg" border="true" padding="sm">
+  <PdsBox border="true" padding="xs">Item 1</PdsBox>
+  <PdsBox border="true" padding="xs">Item 2</PdsBox>
+  <PdsBox border="true" padding="xs">Item 3</PdsBox>
+</PdsBox>`,
+    webComponent: `<pds-box gap="xs" gap-md="lg" border="true" padding="sm">
+  <pds-box border="true" padding="xs">Item 1</pds-box>
+  <pds-box border="true" padding="xs">Item 2</pds-box>
+  <pds-box border="true" padding="xs">Item 3</pds-box>
+</pds-box>`
+}}>
+  <pds-box gap="xs" gap-md="lg" border="true" padding="sm">
+    <pds-box border="true" padding="xs">Item 1</pds-box>
+    <pds-box border="true" padding="xs">Item 2</pds-box>
+    <pds-box border="true" padding="xs">Item 3</pds-box>
+  </pds-box>
+</DocCanvas>
+
+### Responsive Padding
+
+Control internal spacing at different breakpoints:
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsBox padding="xs" padding-md="lg" border="true">
+  Responsive padding content
+</PdsBox>`,
+    webComponent: `<pds-box padding="xs" padding-md="lg" border="true">
+  Responsive padding content
+</pds-box>`
+}}>
+  <pds-box padding="xs" padding-md="lg" border="true">
+    Responsive padding content
+  </pds-box>
+</DocCanvas>
+
+### Responsive Wrap
+
+Control flex wrap behavior at different breakpoints:
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsBox wrap="false" wrap-md="true" gap="sm" min-width="400px" border="true" padding="sm">
+  <PdsBox border="true" padding="sm" min-width="150px">Long Item 1</PdsBox>
+  <PdsBox border="true" padding="sm" min-width="150px">Long Item 2</PdsBox>
+  <PdsBox border="true" padding="sm" min-width="150px">Long Item 3</PdsBox>
+</PdsBox>`,
+    webComponent: `<pds-box wrap="false" wrap-md="true" gap="sm" min-width="400px" border="true" padding="sm">
+  <pds-box border="true" padding="sm" min-width="150px">Long Item 1</pds-box>
+  <pds-box border="true" padding="sm" min-width="150px">Long Item 2</pds-box>
+  <pds-box border="true" padding="sm" min-width="150px">Long Item 3</pds-box>
+</pds-box>`
+}}>
+  <pds-box wrap="false" wrap-md="true" gap="sm" min-width="400px" border="true" padding="sm">
+    <pds-box border="true" padding="sm" min-width="150px">Long Item 1</pds-box>
+    <pds-box border="true" padding="sm" min-width="150px">Long Item 2</pds-box>
+    <pds-box border="true" padding="sm" min-width="150px">Long Item 3</pds-box>
+  </pds-box>
+</DocCanvas>
+
+### Available Responsive Properties
+
+All of these properties support responsive variants with `-xs`, `-sm`, `-md`, `-lg`, `-xl` suffixes:
+
+- **gap**: `gap`, `gap-xs`, `gap-sm`, `gap-md`, `gap-lg`, `gap-xl`
+- **padding**: `padding`, `padding-xs`, `padding-sm`, `padding-md`, `padding-lg`, `padding-xl`
+- **padding-block-start**: `padding-block-start`, `padding-block-start-xs`, `padding-block-start-sm`, etc.
+- **padding-block-end**: `padding-block-end`, `padding-block-end-xs`, `padding-block-end-sm`, etc.
+- **padding-inline-start**: `padding-inline-start`, `padding-inline-start-xs`, `padding-inline-start-sm`, etc.
+- **padding-inline-end**: `padding-inline-end`, `padding-inline-end-xs`, `padding-inline-end-sm`, etc.
+- **margin-block-start**: `margin-block-start`, `margin-block-start-xs`, `margin-block-start-sm`, etc.
+- **margin-block-end**: `margin-block-end`, `margin-block-end-xs`, `margin-block-end-sm`, etc.
+- **margin-inline-start**: `margin-inline-start`, `margin-inline-start-xs`, `margin-inline-start-sm`, etc.
+- **margin-inline-end**: `margin-inline-end`, `margin-inline-end-xs`, `margin-inline-end-sm`, etc.
+- **wrap**: `wrap`, `wrap-xs`, `wrap-sm`, `wrap-md`, `wrap-lg`, `wrap-xl`
+- **auto**: `auto`, `auto-xs`, `auto-sm`, `auto-md`, `auto-lg`, `auto-xl`
+- **fit**: `fit`, `fit-xs`, `fit-sm`, `fit-md`, `fit-lg`, `fit-xl`
 
 ### Layout Properties
 `pds-box` not only allows for custom element properties, but it also allows for a flexible layout system. The layout system is based on the [CSS Flexbox specification](https://drafts.csswg.org/css-flexbox/) and can be view on the [Layouts](/docs/components-layout--docs) page
