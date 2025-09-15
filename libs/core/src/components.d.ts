@@ -189,6 +189,26 @@ export namespace Components {
          */
         "auto"?: boolean;
         /**
+          * If `true`, the box will be sized to fit its contents at the LG breakpoint.
+         */
+        "autoLg"?: boolean;
+        /**
+          * If `true`, the box will be sized to fit its contents at the MD breakpoint.
+         */
+        "autoMd"?: boolean;
+        /**
+          * If `true`, the box will be sized to fit its contents at the SM breakpoint.
+         */
+        "autoSm"?: boolean;
+        /**
+          * If `true`, the box will be sized to fit its contents at the XL breakpoint.
+         */
+        "autoXl"?: boolean;
+        /**
+          * If `true`, the box will be sized to fit its contents at the XS breakpoint.
+         */
+        "autoXs"?: boolean;
+        /**
           * Defines the background-color of the box.
          */
         "backgroundColor"?: string;
@@ -220,6 +240,26 @@ export namespace Components {
          */
         "fit"?: boolean;
         /**
+          * If `true`, sets the box `max-width` to `100%` at the LG breakpoint.
+         */
+        "fitLg"?: boolean;
+        /**
+          * If `true`, sets the box `max-width` to `100%` at the MD breakpoint.
+         */
+        "fitMd"?: boolean;
+        /**
+          * If `true`, sets the box `max-width` to `100%` at the SM breakpoint.
+         */
+        "fitSm"?: boolean;
+        /**
+          * If `true`, sets the box `max-width` to `100%` at the XL breakpoint.
+         */
+        "fitXl"?: boolean;
+        /**
+          * If `true`, sets the box `max-width` to `100%` at the XS breakpoint.
+         */
+        "fitXs"?: boolean;
+        /**
           * Defines how a box will grow or shrink to fit the space available in its container. Can be a predefined value ('none', 'grow', 'shrink') or a custom flex value (e.g., '1', '0 1 auto').
           * @defaultValue none
          */
@@ -229,6 +269,31 @@ export namespace Components {
           * @defaultValue none
          */
         "gap"?: BoxTShirtSizeType;
+        /**
+          * Defines the spacing between the box items at the LG breakpoint.
+          * @defaultValue none
+         */
+        "gapLg"?: BoxTShirtSizeType;
+        /**
+          * Defines the spacing between the box items at the MD breakpoint.
+          * @defaultValue none
+         */
+        "gapMd"?: BoxTShirtSizeType;
+        /**
+          * Defines the spacing between the box items at the SM breakpoint.
+          * @defaultValue none
+         */
+        "gapSm"?: BoxTShirtSizeType;
+        /**
+          * Defines the spacing between the box items at the XL breakpoint.
+          * @defaultValue none
+         */
+        "gapXl"?: BoxTShirtSizeType;
+        /**
+          * Defines the spacing between the box items at the XS breakpoint.
+          * @defaultValue none
+         */
+        "gapXs"?: BoxTShirtSizeType;
         /**
           * Defines the horizontal alignment of the box items.
           * @defaultValue start
@@ -265,20 +330,120 @@ export namespace Components {
          */
         "marginBlockEnd"?: BoxTShirtSizeType;
         /**
+          * Defines the box's outer bottom spacing at the LG breakpoint.
+          * @defaultValue none
+         */
+        "marginBlockEndLg"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer bottom spacing at the MD breakpoint.
+          * @defaultValue none
+         */
+        "marginBlockEndMd"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer bottom spacing at the SM breakpoint.
+          * @defaultValue none
+         */
+        "marginBlockEndSm"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer bottom spacing at the XL breakpoint.
+          * @defaultValue none
+         */
+        "marginBlockEndXl"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer bottom spacing at the XS breakpoint.
+          * @defaultValue none
+         */
+        "marginBlockEndXs"?: BoxTShirtSizeType;
+        /**
           * Defines the box's outer top spacing.
           * @defaultValue none
          */
         "marginBlockStart"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer top spacing at the LG breakpoint.
+          * @defaultValue none
+         */
+        "marginBlockStartLg"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer top spacing at the MD breakpoint.
+          * @defaultValue none
+         */
+        "marginBlockStartMd"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer top spacing at the SM breakpoint.
+          * @defaultValue none
+         */
+        "marginBlockStartSm"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer top spacing at the XL breakpoint.
+          * @defaultValue none
+         */
+        "marginBlockStartXl"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer top spacing at the XS breakpoint.
+          * @defaultValue none
+         */
+        "marginBlockStartXs"?: BoxTShirtSizeType;
         /**
           * Defines the box's outer right spacing.
           * @defaultValue none
          */
         "marginInlineEnd"?: BoxTShirtSizeType;
         /**
+          * Defines the box's outer right spacing at the LG breakpoint.
+          * @defaultValue none
+         */
+        "marginInlineEndLg"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer right spacing at the MD breakpoint.
+          * @defaultValue none
+         */
+        "marginInlineEndMd"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer right spacing at the SM breakpoint.
+          * @defaultValue none
+         */
+        "marginInlineEndSm"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer right spacing at the XL breakpoint.
+          * @defaultValue none
+         */
+        "marginInlineEndXl"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer right spacing at the XS breakpoint.
+          * @defaultValue none
+         */
+        "marginInlineEndXs"?: BoxTShirtSizeType;
+        /**
           * Defines the box's outer left spacing.
           * @defaultValue none
          */
         "marginInlineStart"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer left spacing at the LG breakpoint.
+          * @defaultValue none
+         */
+        "marginInlineStartLg"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer left spacing at the MD breakpoint.
+          * @defaultValue none
+         */
+        "marginInlineStartMd"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer left spacing at the SM breakpoint.
+          * @defaultValue none
+         */
+        "marginInlineStartSm"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer left spacing at the XL breakpoint.
+          * @defaultValue none
+         */
+        "marginInlineStartXl"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer left spacing at the XS breakpoint.
+          * @defaultValue none
+         */
+        "marginInlineStartXs"?: BoxTShirtSizeType;
         /**
           * The minimum height of the row. Used in conjunction with alignment props
          */
@@ -322,20 +487,145 @@ export namespace Components {
          */
         "paddingBlockEnd"?: BoxTShirtSizeType;
         /**
+          * Defines the bottom spacing at the LG breakpoint.
+          * @defaultValue none
+         */
+        "paddingBlockEndLg"?: BoxTShirtSizeType;
+        /**
+          * Defines the bottom spacing at the MD breakpoint.
+          * @defaultValue none
+         */
+        "paddingBlockEndMd"?: BoxTShirtSizeType;
+        /**
+          * Defines the bottom spacing at the SM breakpoint.
+          * @defaultValue none
+         */
+        "paddingBlockEndSm"?: BoxTShirtSizeType;
+        /**
+          * Defines the bottom spacing at the XL breakpoint.
+          * @defaultValue none
+         */
+        "paddingBlockEndXl"?: BoxTShirtSizeType;
+        /**
+          * Defines the bottom spacing at the XS breakpoint.
+          * @defaultValue none
+         */
+        "paddingBlockEndXs"?: BoxTShirtSizeType;
+        /**
           * Defines the top spacing.
           * @defaultValue none
          */
         "paddingBlockStart"?: BoxTShirtSizeType;
+        /**
+          * Defines the top spacing at the LG breakpoint.
+          * @defaultValue none
+         */
+        "paddingBlockStartLg"?: BoxTShirtSizeType;
+        /**
+          * Defines the top spacing at the MD breakpoint.
+          * @defaultValue none
+         */
+        "paddingBlockStartMd"?: BoxTShirtSizeType;
+        /**
+          * Defines the top spacing at the SM breakpoint.
+          * @defaultValue none
+         */
+        "paddingBlockStartSm"?: BoxTShirtSizeType;
+        /**
+          * Defines the top spacing at the XL breakpoint.
+          * @defaultValue none
+         */
+        "paddingBlockStartXl"?: BoxTShirtSizeType;
+        /**
+          * Defines the top spacing at the XS breakpoint.
+          * @defaultValue none
+         */
+        "paddingBlockStartXs"?: BoxTShirtSizeType;
         /**
           * Defines the right spacing.
           * @defaultValue none
          */
         "paddingInlineEnd"?: BoxTShirtSizeType;
         /**
+          * Defines the right spacing at the LG breakpoint.
+          * @defaultValue none
+         */
+        "paddingInlineEndLg"?: BoxTShirtSizeType;
+        /**
+          * Defines the right spacing at the MD breakpoint.
+          * @defaultValue none
+         */
+        "paddingInlineEndMd"?: BoxTShirtSizeType;
+        /**
+          * Defines the right spacing at the SM breakpoint.
+          * @defaultValue none
+         */
+        "paddingInlineEndSm"?: BoxTShirtSizeType;
+        /**
+          * Defines the right spacing at the XL breakpoint.
+          * @defaultValue none
+         */
+        "paddingInlineEndXl"?: BoxTShirtSizeType;
+        /**
+          * Defines the right spacing at the XS breakpoint.
+          * @defaultValue none
+         */
+        "paddingInlineEndXs"?: BoxTShirtSizeType;
+        /**
           * Defines the left spacing.
           * @defaultValue none
          */
         "paddingInlineStart"?: BoxTShirtSizeType;
+        /**
+          * Defines the left spacing at the LG breakpoint.
+          * @defaultValue none
+         */
+        "paddingInlineStartLg"?: BoxTShirtSizeType;
+        /**
+          * Defines the left spacing at the MD breakpoint.
+          * @defaultValue none
+         */
+        "paddingInlineStartMd"?: BoxTShirtSizeType;
+        /**
+          * Defines the left spacing at the SM breakpoint.
+          * @defaultValue none
+         */
+        "paddingInlineStartSm"?: BoxTShirtSizeType;
+        /**
+          * Defines the left spacing at the XL breakpoint.
+          * @defaultValue none
+         */
+        "paddingInlineStartXl"?: BoxTShirtSizeType;
+        /**
+          * Defines the left spacing at the XS breakpoint.
+          * @defaultValue none
+         */
+        "paddingInlineStartXs"?: BoxTShirtSizeType;
+        /**
+          * Defines the spacing between the box items at the LG breakpoint.
+          * @defaultValue none
+         */
+        "paddingLg"?: BoxTShirtSizeType;
+        /**
+          * Defines the spacing between the box items at the MD breakpoint.
+          * @defaultValue none
+         */
+        "paddingMd"?: BoxTShirtSizeType;
+        /**
+          * Defines the spacing between the box items at the SM breakpoint.
+          * @defaultValue none
+         */
+        "paddingSm"?: BoxTShirtSizeType;
+        /**
+          * Defines the spacing between the box items at the XL breakpoint.
+          * @defaultValue none
+         */
+        "paddingXl"?: BoxTShirtSizeType;
+        /**
+          * Defines the spacing between the box items at the XS breakpoint.
+          * @defaultValue none
+         */
+        "paddingXs"?: BoxTShirtSizeType;
         /**
           * Defines the box shadow.
           * @defaultValue none
@@ -370,6 +660,31 @@ export namespace Components {
           * @defaultValue false
          */
         "wrap"?: boolean;
+        /**
+          * Defines whether flex items can wrap onto multiple lines at the LG breakpoint.
+          * @defaultValue false
+         */
+        "wrapLg"?: boolean;
+        /**
+          * Defines whether flex items can wrap onto multiple lines at the MD breakpoint.
+          * @defaultValue false
+         */
+        "wrapMd"?: boolean;
+        /**
+          * Defines whether flex items can wrap onto multiple lines at the SM breakpoint.
+          * @defaultValue false
+         */
+        "wrapSm"?: boolean;
+        /**
+          * Defines whether flex items can wrap onto multiple lines at the XL breakpoint.
+          * @defaultValue false
+         */
+        "wrapXl"?: boolean;
+        /**
+          * Defines whether flex items can wrap onto multiple lines at the XS breakpoint.
+          * @defaultValue false
+         */
+        "wrapXs"?: boolean;
     }
     interface PdsButton {
         /**
@@ -2335,6 +2650,26 @@ declare namespace LocalJSX {
          */
         "auto"?: boolean;
         /**
+          * If `true`, the box will be sized to fit its contents at the LG breakpoint.
+         */
+        "autoLg"?: boolean;
+        /**
+          * If `true`, the box will be sized to fit its contents at the MD breakpoint.
+         */
+        "autoMd"?: boolean;
+        /**
+          * If `true`, the box will be sized to fit its contents at the SM breakpoint.
+         */
+        "autoSm"?: boolean;
+        /**
+          * If `true`, the box will be sized to fit its contents at the XL breakpoint.
+         */
+        "autoXl"?: boolean;
+        /**
+          * If `true`, the box will be sized to fit its contents at the XS breakpoint.
+         */
+        "autoXs"?: boolean;
+        /**
           * Defines the background-color of the box.
          */
         "backgroundColor"?: string;
@@ -2366,6 +2701,26 @@ declare namespace LocalJSX {
          */
         "fit"?: boolean;
         /**
+          * If `true`, sets the box `max-width` to `100%` at the LG breakpoint.
+         */
+        "fitLg"?: boolean;
+        /**
+          * If `true`, sets the box `max-width` to `100%` at the MD breakpoint.
+         */
+        "fitMd"?: boolean;
+        /**
+          * If `true`, sets the box `max-width` to `100%` at the SM breakpoint.
+         */
+        "fitSm"?: boolean;
+        /**
+          * If `true`, sets the box `max-width` to `100%` at the XL breakpoint.
+         */
+        "fitXl"?: boolean;
+        /**
+          * If `true`, sets the box `max-width` to `100%` at the XS breakpoint.
+         */
+        "fitXs"?: boolean;
+        /**
           * Defines how a box will grow or shrink to fit the space available in its container. Can be a predefined value ('none', 'grow', 'shrink') or a custom flex value (e.g., '1', '0 1 auto').
           * @defaultValue none
          */
@@ -2375,6 +2730,31 @@ declare namespace LocalJSX {
           * @defaultValue none
          */
         "gap"?: BoxTShirtSizeType;
+        /**
+          * Defines the spacing between the box items at the LG breakpoint.
+          * @defaultValue none
+         */
+        "gapLg"?: BoxTShirtSizeType;
+        /**
+          * Defines the spacing between the box items at the MD breakpoint.
+          * @defaultValue none
+         */
+        "gapMd"?: BoxTShirtSizeType;
+        /**
+          * Defines the spacing between the box items at the SM breakpoint.
+          * @defaultValue none
+         */
+        "gapSm"?: BoxTShirtSizeType;
+        /**
+          * Defines the spacing between the box items at the XL breakpoint.
+          * @defaultValue none
+         */
+        "gapXl"?: BoxTShirtSizeType;
+        /**
+          * Defines the spacing between the box items at the XS breakpoint.
+          * @defaultValue none
+         */
+        "gapXs"?: BoxTShirtSizeType;
         /**
           * Defines the horizontal alignment of the box items.
           * @defaultValue start
@@ -2411,20 +2791,120 @@ declare namespace LocalJSX {
          */
         "marginBlockEnd"?: BoxTShirtSizeType;
         /**
+          * Defines the box's outer bottom spacing at the LG breakpoint.
+          * @defaultValue none
+         */
+        "marginBlockEndLg"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer bottom spacing at the MD breakpoint.
+          * @defaultValue none
+         */
+        "marginBlockEndMd"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer bottom spacing at the SM breakpoint.
+          * @defaultValue none
+         */
+        "marginBlockEndSm"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer bottom spacing at the XL breakpoint.
+          * @defaultValue none
+         */
+        "marginBlockEndXl"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer bottom spacing at the XS breakpoint.
+          * @defaultValue none
+         */
+        "marginBlockEndXs"?: BoxTShirtSizeType;
+        /**
           * Defines the box's outer top spacing.
           * @defaultValue none
          */
         "marginBlockStart"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer top spacing at the LG breakpoint.
+          * @defaultValue none
+         */
+        "marginBlockStartLg"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer top spacing at the MD breakpoint.
+          * @defaultValue none
+         */
+        "marginBlockStartMd"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer top spacing at the SM breakpoint.
+          * @defaultValue none
+         */
+        "marginBlockStartSm"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer top spacing at the XL breakpoint.
+          * @defaultValue none
+         */
+        "marginBlockStartXl"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer top spacing at the XS breakpoint.
+          * @defaultValue none
+         */
+        "marginBlockStartXs"?: BoxTShirtSizeType;
         /**
           * Defines the box's outer right spacing.
           * @defaultValue none
          */
         "marginInlineEnd"?: BoxTShirtSizeType;
         /**
+          * Defines the box's outer right spacing at the LG breakpoint.
+          * @defaultValue none
+         */
+        "marginInlineEndLg"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer right spacing at the MD breakpoint.
+          * @defaultValue none
+         */
+        "marginInlineEndMd"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer right spacing at the SM breakpoint.
+          * @defaultValue none
+         */
+        "marginInlineEndSm"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer right spacing at the XL breakpoint.
+          * @defaultValue none
+         */
+        "marginInlineEndXl"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer right spacing at the XS breakpoint.
+          * @defaultValue none
+         */
+        "marginInlineEndXs"?: BoxTShirtSizeType;
+        /**
           * Defines the box's outer left spacing.
           * @defaultValue none
          */
         "marginInlineStart"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer left spacing at the LG breakpoint.
+          * @defaultValue none
+         */
+        "marginInlineStartLg"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer left spacing at the MD breakpoint.
+          * @defaultValue none
+         */
+        "marginInlineStartMd"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer left spacing at the SM breakpoint.
+          * @defaultValue none
+         */
+        "marginInlineStartSm"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer left spacing at the XL breakpoint.
+          * @defaultValue none
+         */
+        "marginInlineStartXl"?: BoxTShirtSizeType;
+        /**
+          * Defines the box's outer left spacing at the XS breakpoint.
+          * @defaultValue none
+         */
+        "marginInlineStartXs"?: BoxTShirtSizeType;
         /**
           * The minimum height of the row. Used in conjunction with alignment props
          */
@@ -2468,20 +2948,145 @@ declare namespace LocalJSX {
          */
         "paddingBlockEnd"?: BoxTShirtSizeType;
         /**
+          * Defines the bottom spacing at the LG breakpoint.
+          * @defaultValue none
+         */
+        "paddingBlockEndLg"?: BoxTShirtSizeType;
+        /**
+          * Defines the bottom spacing at the MD breakpoint.
+          * @defaultValue none
+         */
+        "paddingBlockEndMd"?: BoxTShirtSizeType;
+        /**
+          * Defines the bottom spacing at the SM breakpoint.
+          * @defaultValue none
+         */
+        "paddingBlockEndSm"?: BoxTShirtSizeType;
+        /**
+          * Defines the bottom spacing at the XL breakpoint.
+          * @defaultValue none
+         */
+        "paddingBlockEndXl"?: BoxTShirtSizeType;
+        /**
+          * Defines the bottom spacing at the XS breakpoint.
+          * @defaultValue none
+         */
+        "paddingBlockEndXs"?: BoxTShirtSizeType;
+        /**
           * Defines the top spacing.
           * @defaultValue none
          */
         "paddingBlockStart"?: BoxTShirtSizeType;
+        /**
+          * Defines the top spacing at the LG breakpoint.
+          * @defaultValue none
+         */
+        "paddingBlockStartLg"?: BoxTShirtSizeType;
+        /**
+          * Defines the top spacing at the MD breakpoint.
+          * @defaultValue none
+         */
+        "paddingBlockStartMd"?: BoxTShirtSizeType;
+        /**
+          * Defines the top spacing at the SM breakpoint.
+          * @defaultValue none
+         */
+        "paddingBlockStartSm"?: BoxTShirtSizeType;
+        /**
+          * Defines the top spacing at the XL breakpoint.
+          * @defaultValue none
+         */
+        "paddingBlockStartXl"?: BoxTShirtSizeType;
+        /**
+          * Defines the top spacing at the XS breakpoint.
+          * @defaultValue none
+         */
+        "paddingBlockStartXs"?: BoxTShirtSizeType;
         /**
           * Defines the right spacing.
           * @defaultValue none
          */
         "paddingInlineEnd"?: BoxTShirtSizeType;
         /**
+          * Defines the right spacing at the LG breakpoint.
+          * @defaultValue none
+         */
+        "paddingInlineEndLg"?: BoxTShirtSizeType;
+        /**
+          * Defines the right spacing at the MD breakpoint.
+          * @defaultValue none
+         */
+        "paddingInlineEndMd"?: BoxTShirtSizeType;
+        /**
+          * Defines the right spacing at the SM breakpoint.
+          * @defaultValue none
+         */
+        "paddingInlineEndSm"?: BoxTShirtSizeType;
+        /**
+          * Defines the right spacing at the XL breakpoint.
+          * @defaultValue none
+         */
+        "paddingInlineEndXl"?: BoxTShirtSizeType;
+        /**
+          * Defines the right spacing at the XS breakpoint.
+          * @defaultValue none
+         */
+        "paddingInlineEndXs"?: BoxTShirtSizeType;
+        /**
           * Defines the left spacing.
           * @defaultValue none
          */
         "paddingInlineStart"?: BoxTShirtSizeType;
+        /**
+          * Defines the left spacing at the LG breakpoint.
+          * @defaultValue none
+         */
+        "paddingInlineStartLg"?: BoxTShirtSizeType;
+        /**
+          * Defines the left spacing at the MD breakpoint.
+          * @defaultValue none
+         */
+        "paddingInlineStartMd"?: BoxTShirtSizeType;
+        /**
+          * Defines the left spacing at the SM breakpoint.
+          * @defaultValue none
+         */
+        "paddingInlineStartSm"?: BoxTShirtSizeType;
+        /**
+          * Defines the left spacing at the XL breakpoint.
+          * @defaultValue none
+         */
+        "paddingInlineStartXl"?: BoxTShirtSizeType;
+        /**
+          * Defines the left spacing at the XS breakpoint.
+          * @defaultValue none
+         */
+        "paddingInlineStartXs"?: BoxTShirtSizeType;
+        /**
+          * Defines the spacing between the box items at the LG breakpoint.
+          * @defaultValue none
+         */
+        "paddingLg"?: BoxTShirtSizeType;
+        /**
+          * Defines the spacing between the box items at the MD breakpoint.
+          * @defaultValue none
+         */
+        "paddingMd"?: BoxTShirtSizeType;
+        /**
+          * Defines the spacing between the box items at the SM breakpoint.
+          * @defaultValue none
+         */
+        "paddingSm"?: BoxTShirtSizeType;
+        /**
+          * Defines the spacing between the box items at the XL breakpoint.
+          * @defaultValue none
+         */
+        "paddingXl"?: BoxTShirtSizeType;
+        /**
+          * Defines the spacing between the box items at the XS breakpoint.
+          * @defaultValue none
+         */
+        "paddingXs"?: BoxTShirtSizeType;
         /**
           * Defines the box shadow.
           * @defaultValue none
@@ -2516,6 +3121,31 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "wrap"?: boolean;
+        /**
+          * Defines whether flex items can wrap onto multiple lines at the LG breakpoint.
+          * @defaultValue false
+         */
+        "wrapLg"?: boolean;
+        /**
+          * Defines whether flex items can wrap onto multiple lines at the MD breakpoint.
+          * @defaultValue false
+         */
+        "wrapMd"?: boolean;
+        /**
+          * Defines whether flex items can wrap onto multiple lines at the SM breakpoint.
+          * @defaultValue false
+         */
+        "wrapSm"?: boolean;
+        /**
+          * Defines whether flex items can wrap onto multiple lines at the XL breakpoint.
+          * @defaultValue false
+         */
+        "wrapXl"?: boolean;
+        /**
+          * Defines whether flex items can wrap onto multiple lines at the XS breakpoint.
+          * @defaultValue false
+         */
+        "wrapXs"?: boolean;
     }
     interface PdsButton {
         /**

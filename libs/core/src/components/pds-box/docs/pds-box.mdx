@@ -5,35 +5,35 @@ import { components } from '../../../../dist/docs.json';
 
 Box is our primitive layout component. It is intended to be used as a building block for more complex layouts. It allows for custom sizing, colors, padding, and alignment while still adhering to Pine tokens and brand guidelines. The component uses logical properties for margin and padding, making it adaptable to different writing modes and languages.
 
+## Quick Start
+
+### Essential Concepts
+- **Default behavior**: Items flow horizontally (row direction)
+- **For vertical stacking**: Use `direction="column"`
+- **Inside pds-row**: Box becomes a grid column (use `size` props)
+- **Standalone**: Box is a flexbox container (use alignment props)
+
+### Most Common Props
+- `direction`: `"row"` (default, horizontal) or `"column"` (vertical stacking)
+- `gap`: Spacing between items (`"none"`, `"xs"`, `"sm"`, `"md"`, `"lg"`, `"xl"`, `"xxl"`)
+- `padding`: Internal spacing (same size options as gap)
+- `justify-content`: Horizontal alignment (`"start"`, `"center"`, `"end"`, `"space-between"`, etc.)
+- `align-items`: Vertical alignment (`"start"`, `"center"`, `"end"`, `"baseline"`, `"stretch"`)
+
 ### Logical Properties
 The Box component uses CSS logical properties for layout and spacing, which means properties are defined relative to the content's writing direction rather than physical directions. This makes the component more adaptable to different writing modes and languages.
 
-CSS was initially designed with only physical coordinates (top, bottom, left, right). The logical properties and values module defines flow-relative equivalents for many values and properties. Properties that once only accepted physical values now also accept flow-relative logical values (block-start, block-end, inline-start, inline-end).
+**Key concepts:**
+- **Block**: Perpendicular to text flow (usually vertical)
+- **Inline**: Parallel to text flow (usually horizontal)
+- **Block-start/end**: Top/bottom in most languages
+- **Inline-start/end**: Left/right in LTR languages, right/left in RTL
 
-Logical properties use two main concepts:
-- **Block**: The dimension perpendicular to the flow of text (vertical in horizontal writing modes, horizontal in vertical writing modes)
-- **Inline**: The dimension parallel to the flow of text (horizontal in horizontal writing modes, vertical in vertical writing modes)
+This approach ensures layouts work correctly regardless of text direction or writing mode.
 
-For example:
-- In left-to-right languages (like English):
-  - Block = vertical (top/bottom)
-  - Inline = horizontal (left/right)
-- In right-to-left languages (like Arabic):
-  - Block = vertical (top/bottom)
-  - Inline = horizontal (right/left)
-- In vertical writing modes (like Japanese):
-  - Block = horizontal (left/right)
-  - Inline = vertical (top/bottom)
+## Layout Fundamentals
 
-This approach ensures that your layouts will work correctly regardless of the text direction or writing mode.
-
-## Usage Notes
-
-### Layout Essentials
-
-Items flow horizontally by default, so you'll need to explicitly set `direction="column"` for vertical stacking. This is the most common consideration when working with Box components.
-
-### Direction: When to Use Column vs Row
+### Direction: The Most Important Decision
 
 > **Direction Rules:** Choose based on how you want **direct children** to arrange:
 
@@ -43,76 +43,50 @@ Items flow horizontally by default, so you'll need to explicitly set `direction=
 - **Making card layouts** (image, title, description, actions)
 - **Creating main containers** (usually with `fit="true"`)
 
-```tsx
-// ✅ Correct: Vertical content stacking
-<pds-box direction="column">
-  <h1>Page Title</h1>
-  <p>Description</p>
-  <pds-button>Action</pds-button>
-</pds-box>
-```
-
 #### Use `direction="row"` (Horizontal Flow) - DEFAULT When:
 - **Placing items side by side** (buttons, badges, icons)
 - **Creating navigation bars** (logo, menu items, user profile)
 - **Building toolbars** (action buttons in a row)
 - **Making inline layouts** (icon + text, multiple form fields)
-- **This is the DEFAULT** - no need to specify
-
-```html
-// ✅ Correct: Horizontal items (default behavior)
-<pds-box>
-  <pds-button>Save</pds-button>
-  <pds-button variant="secondary">Cancel</pds-button>
-</pds-box>
-```
-
-#### ❌ Common Mistakes:
-```html
-// DON'T: Using row direction for stacked content
-<pds-box direction="row">  // ❌ Will place items side by side
-  <h1>Title</h1>
-  <p>This will be next to the title, not below it</p>
-</pds-box>
-
-// DON'T: Using column direction for side-by-side items
-<pds-box direction="column">  // ❌ Will stack items vertically
-  <pds-button>Save</pds-button>
-  <pds-button>Cancel</pds-button>  // Will be below Save, not next to it
-</pds-box>
-```
-
-### Layout Patterns
-
-- **Horizontal Flow (Default)**: Items are placed side by side - good for buttons, navigation
-- **Vertical Stacking**: Set `direction="column"` for content that should stack - good for pages, cards, forms
-- **Main Containers**: Use `direction="column"` and `fit="true"` for page sections and main content areas
-- **Grid Layout**: Use inside `pds-row` with `size-*` props for responsive grid
-
-### Direction Examples
-
-**Column Direction (Vertical Stacking):**
 
 <DocCanvas client:only
   mdxSource={{
-    react: `<PdsBox direction="column" border="true" padding="md">
-  <h3>Page Title</h3>
-  <p>This is a description that appears below the title.</p>
-  <PdsBox gap="sm">
-    <PdsButton>Primary Action</PdsButton>
-    <PdsButton variant="secondary">Secondary</PdsButton>
+    react: `<>
+  {/* Column: Vertical stacking */}
+  <PdsBox direction="column" border="true" padding="md" margin-block-end="md">
+    <h3>Page Title</h3>
+    <p>This is a description that appears below the title.</p>
+    <PdsBox gap="sm">
+      <PdsButton>Primary Action</PdsButton>
+      <PdsButton variant="secondary">Secondary</PdsButton>
+    </PdsBox>
   </PdsBox>
-</PdsBox>`,
-    webComponent: `<pds-box direction="column" border="true" padding="md">
+
+  {/* Row: Horizontal flow (default) */}
+  <PdsBox border="true" padding="md" align-items="center" gap="sm">
+    <PdsIcon name="info" />
+    <span>Status message</span>
+    <PdsButton size="sm">Action</PdsButton>
+  </PdsBox>
+</>`,
+    webComponent: `<!-- Column: Vertical stacking -->
+<pds-box direction="column" border="true" padding="md" margin-block-end="md">
   <h3>Page Title</h3>
   <p>This is a description that appears below the title.</p>
   <pds-box gap="sm">
     <pds-button>Primary Action</pds-button>
     <pds-button variant="secondary">Secondary</pds-button>
   </pds-box>
+</pds-box>
+
+<!-- Row: Horizontal flow (default) -->
+<pds-box border="true" padding="md" align-items="center" gap="sm">
+  <pds-icon name="info"></pds-icon>
+  <span>Status message</span>
+  <pds-button size="sm">Action</pds-button>
 </pds-box>`
 }}>
-  <pds-box direction="column" border="true" padding="md">
+  <pds-box direction="column" border="true" padding="md" margin-block-end="md">
     <h3>Page Title</h3>
     <p>This is a description that appears below the title.</p>
     <pds-box gap="sm">
@@ -120,54 +94,13 @@ Items flow horizontally by default, so you'll need to explicitly set `direction=
       <pds-button variant="secondary">Secondary</pds-button>
     </pds-box>
   </pds-box>
-</DocCanvas>
 
-**Row Direction (Horizontal Flow - Default):**
-
-<DocCanvas client:only
-  mdxSource={{
-    react: `<PdsBox border="true" padding="md" align-items="center" gap="sm">
-  <PdsIcon name="info" />
-  <span>Status message</span>
-  <PdsButton size="sm">Action</PdsButton>
-</PdsBox>`,
-    webComponent: `<pds-box border="true" padding="md" align-items="center" gap="sm">
-  <pds-icon name="info"></pds-icon>
-  <span>Status message</span>
-  <pds-button size="sm">Action</pds-button>
-</pds-box>`
-}}>
   <pds-box border="true" padding="md" align-items="center" gap="sm">
     <pds-icon name="info"></pds-icon>
     <span>Status message</span>
     <pds-button size="sm">Action</pds-button>
   </pds-box>
 </DocCanvas>
-
-### Key Props for Layout
-
-- `direction`: Controls item orientation (`row` = horizontal, `column` = vertical)
-- `size`: Sets column width (1-12 grid system, works best inside pds-row)
-- `gap`: Controls spacing between items
-- `justify-content`: Horizontal alignment of items (with responsive variants: `justify-content-xs`, `justify-content-sm`, `justify-content-md`, `justify-content-lg`, `justify-content-xl`)
-- `align-items`: Vertical alignment of items (with responsive variants: `align-items-xs`, `align-items-sm`, `align-items-md`, `align-items-lg`, `align-items-xl`)
-- `align-self`: Individual box alignment within container (with responsive variants: `align-self-xs`, `align-self-sm`, `align-self-md`, `align-self-lg`, `align-self-xl`)
-
-### Responsive Breakpoints
-
-All responsive properties follow the same breakpoint system:
-
-- **Base (no suffix)**: Applies to all screen sizes unless overridden
-- **XS (`-xs`)**: 0-575px (mobile phones)
-- **SM (`-sm`)**: 576px and up (tablets)
-- **MD (`-md`)**: 768px and up (small desktops)
-- **LG (`-lg`)**: 992px and up (desktops)
-- **XL (`-xl`)**: 1200px and up (large desktops)
-
-**Examples:**
-- `justify-content="center"` - Center on all screen sizes
-- `justify-content="start" justify-content-md="center"` - Start on mobile, center on desktop
-- `align-items="stretch" align-items-lg="start"` - Stretch on mobile/tablet, start on desktop
 
 ### Working with PDS-Row
 
@@ -177,30 +110,242 @@ All responsive properties follow the same breakpoint system:
 - Use `size` props (1-12) to control column widths
 - The default `direction="row"` works well for grid layouts
 - **DON'T use flex props** - they are ignored in grid mode
-- The box becomes a grid column within the row
 
 **Standalone (Flexbox Container Mode):**
 - Default `direction="row"` creates horizontal flow
 - Set `direction="column"` for vertical stacking
 - **DO use flex props** - they work for child boxes
-- Size props have limited effect outside of pds-row
+
+### Common Layout Patterns
+
+- **Horizontal Flow (Default)**: Items side by side - good for buttons, navigation
+- **Vertical Stacking**: `direction="column"` for content that should stack - pages, cards, forms
+- **Main Containers**: `direction="column"` and `fit="true"` for page sections
+- **Grid Layout**: Use inside `pds-row` with `size-*` props for responsive grid
 
 ## Properties
 
 <DocArgsTable componentName="pds-box" docSource={components} />
 
-## Variants
+## Property Groups
 
-### `border`
-By default Box has no border. Use `border` to add a border to the box. Use `border-color` to change the color of the border. Use `border-radius` to change the rounding of the box's corners.
+### Layout & Direction
+Control the fundamental layout behavior and item flow.
+
+### Spacing
+Control internal and external spacing with logical properties.
+
+### Alignment
+Control how items are positioned within the container.
+
+### Responsive Properties
+All major properties support responsive variants for different screen sizes.
+
+### Sizing & Behavior
+Control how the box itself behaves in different contexts.
+
+### Visual Styling
+Control borders, shadows, and visual appearance.
+
+---
+
+## Layout & Direction Properties
+
+### Direction
+Controls how items flow within the container.
+
+**Options:**
+- `"row"` (default): Items flow horizontally
+- `"column"`: Items stack vertically
+
+**When to use:**
+- Use default (`row`) for: buttons, navigation, inline content
+- Use `column` for: page sections, cards, forms, vertical content
 
 <DocCanvas client:only
   mdxSource={{
-    react: `<PdsBox border="true">Border</PdsBox>`,
-    webComponent: `<pds-box border="true">Border</pds-box>`
+    react: `<>
+  <PdsBox border="true" padding="sm" margin-block-end="sm">
+    <span>Item 1</span>
+    <span>Item 2</span>
+    <span>Item 3</span>
+  </PdsBox>
+  <PdsBox border="true" padding="sm" direction="column">
+    <span>Item 1</span>
+    <span>Item 2</span>
+    <span>Item 3</span>
+  </PdsBox>
+</>`,
+    webComponent: `<pds-box border="true" padding="sm" margin-block-end="sm">
+  <span>Item 1</span>
+  <span>Item 2</span>
+  <span>Item 3</span>
+</pds-box>
+<pds-box border="true" padding="sm" direction="column">
+  <span>Item 1</span>
+  <span>Item 2</span>
+  <span>Item 3</span>
+</pds-box>`
 }}>
-  <pds-box border="true">Border</pds-box>
+  <pds-box border="true" padding="sm" margin-block-end="sm">
+    <span>Item 1</span>
+    <span>Item 2</span>
+    <span>Item 3</span>
+  </pds-box>
+  <pds-box border="true" padding="sm" direction="column">
+    <span>Item 1</span>
+    <span>Item 2</span>
+    <span>Item 3</span>
+  </pds-box>
 </DocCanvas>
+
+### Wrap
+Controls whether flex items wrap to new lines when they don't fit in the container.
+
+**Options:**
+- `false` (default): Items stay on one line and may overflow
+- `true`: Items wrap to new lines as needed
+- **Responsive variants**: `wrap-xs`, `wrap-sm`, `wrap-md`, `wrap-lg`, `wrap-xl`
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<>
+  <PdsBox wrap={false} gap="sm" min-width="300px" border="true" padding="sm" margin-block-end="sm">
+    <PdsBox border="true" padding="xs" min-width="100px">Item 1</PdsBox>
+    <PdsBox border="true" padding="xs" min-width="100px">Item 2</PdsBox>
+    <PdsBox border="true" padding="xs" min-width="100px">Item 3</PdsBox>
+  </PdsBox>
+  <PdsBox wrap={true} gap="sm" min-width="300px" border="true" padding="sm">
+    <PdsBox border="true" padding="xs" min-width="100px">Item 1</PdsBox>
+    <PdsBox border="true" padding="xs" min-width="100px">Item 2</PdsBox>
+    <PdsBox border="true" padding="xs" min-width="100px">Item 3</PdsBox>
+  </PdsBox>
+</>`,
+    webComponent: `<pds-box wrap="false" gap="sm" min-width="300px" border="true" padding="sm" margin-block-end="sm">
+  <pds-box border="true" padding="xs" min-width="100px">Item 1</pds-box>
+  <pds-box border="true" padding="xs" min-width="100px">Item 2</pds-box>
+  <pds-box border="true" padding="xs" min-width="100px">Item 3</pds-box>
+</pds-box>
+<pds-box wrap="true" gap="sm" min-width="300px" border="true" padding="sm">
+  <pds-box border="true" padding="xs" min-width="100px">Item 1</pds-box>
+  <pds-box border="true" padding="xs" min-width="100px">Item 2</pds-box>
+  <pds-box border="true" padding="xs" min-width="100px">Item 3</pds-box>
+</pds-box>`
+}}>
+  <pds-box wrap="false" gap="sm" min-width="300px" border="true" padding="sm" margin-block-end="sm">
+    <pds-box border="true" padding="xs" min-width="100px">Item 1</pds-box>
+    <pds-box border="true" padding="xs" min-width="100px">Item 2</pds-box>
+    <pds-box border="true" padding="xs" min-width="100px">Item 3</pds-box>
+  </pds-box>
+  <pds-box wrap="true" gap="sm" min-width="300px" border="true" padding="sm">
+    <pds-box border="true" padding="xs" min-width="100px">Item 1</pds-box>
+    <pds-box border="true" padding="xs" min-width="100px">Item 2</pds-box>
+    <pds-box border="true" padding="xs" min-width="100px">Item 3</pds-box>
+  </pds-box>
+</DocCanvas>
+
+### Gap
+Controls spacing between items within the container.
+
+**Options:** `"none"`, `"xxs"`, `"xs"`, `"sm"`, `"md"`, `"lg"`, `"xl"`, `"xxl"`
+**Responsive variants**: `gap-xs`, `gap-sm`, `gap-md`, `gap-lg`, `gap-xl`
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<>
+  <PdsBox gap="none" border="true" padding="sm" margin-block-end="sm">
+    <PdsBox border="true" padding="xs">No Gap</PdsBox>
+    <PdsBox border="true" padding="xs">Between</PdsBox>
+    <PdsBox border="true" padding="xs">Items</PdsBox>
+  </PdsBox>
+  <PdsBox gap="lg" border="true" padding="sm">
+    <PdsBox border="true" padding="xs">Large Gap</PdsBox>
+    <PdsBox border="true" padding="xs">Between</PdsBox>
+    <PdsBox border="true" padding="xs">Items</PdsBox>
+  </PdsBox>
+</>`,
+    webComponent: `<pds-box gap="none" border="true" padding="sm" margin-block-end="sm">
+  <pds-box border="true" padding="xs">No Gap</pds-box>
+  <pds-box border="true" padding="xs">Between</pds-box>
+  <pds-box border="true" padding="xs">Items</pds-box>
+</pds-box>
+<pds-box gap="lg" border="true" padding="sm">
+  <pds-box border="true" padding="xs">Large Gap</pds-box>
+  <pds-box border="true" padding="xs">Between</pds-box>
+  <pds-box border="true" padding="xs">Items</pds-box>
+</pds-box>`
+}}>
+  <pds-box gap="none" border="true" padding="sm" margin-block-end="sm">
+    <pds-box border="true" padding="xs">No Gap</pds-box>
+    <pds-box border="true" padding="xs">Between</pds-box>
+    <pds-box border="true" padding="xs">Items</pds-box>
+  </pds-box>
+  <pds-box gap="lg" border="true" padding="sm">
+    <pds-box border="true" padding="xs">Large Gap</pds-box>
+    <pds-box border="true" padding="xs">Between</pds-box>
+    <pds-box border="true" padding="xs">Items</pds-box>
+  </pds-box>
+</DocCanvas>
+
+---
+
+## Spacing Properties
+
+### Padding
+Controls internal spacing within the container.
+
+**Options:** `"none"`, `"xxs"`, `"xs"`, `"sm"`, `"md"`, `"lg"`, `"xl"`, `"xxl"`
+**Responsive variants**: `padding-xs`, `padding-sm`, `padding-md`, `padding-lg`, `padding-xl`
+
+### Directional Padding
+Control padding on specific sides using logical properties:
+- `padding-block-start` / `padding-block-end` (top/bottom)
+- `padding-inline-start` / `padding-inline-end` (left/right in LTR)
+- **All support responsive variants**
+
+### Margin
+Controls external spacing around the container using logical properties:
+- `margin-block-start` / `margin-block-end` (top/bottom)
+- `margin-inline-start` / `margin-inline-end` (left/right in LTR)
+- **All support responsive variants**
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<>
+  <PdsBox padding="xs" border="true" margin-block-end="sm">
+    <span>Small padding</span>
+  </PdsBox>
+  <PdsBox padding="lg" border="true" margin-block-end="sm">
+    <span>Large padding</span>
+  </PdsBox>
+  <PdsBox padding-block-start="lg" padding-inline-start="xs" border="true">
+    <span>Directional padding (large top, small left)</span>
+  </PdsBox>
+</>`,
+    webComponent: `<pds-box padding="xs" border="true" margin-block-end="sm">
+  <span>Small padding</span>
+</pds-box>
+<pds-box padding="lg" border="true" margin-block-end="sm">
+  <span>Large padding</span>
+</pds-box>
+<pds-box padding-block-start="lg" padding-inline-start="xs" border="true">
+  <span>Directional padding (large top, small left)</span>
+</pds-box>`
+}}>
+  <pds-box padding="xs" border="true" margin-block-end="sm">
+    <span>Small padding</span>
+  </pds-box>
+  <pds-box padding="lg" border="true" margin-block-end="sm">
+    <span>Large padding</span>
+  </pds-box>
+  <pds-box padding-block-start="lg" padding-inline-start="xs" border="true">
+    <span>Directional padding (large top, small left)</span>
+  </pds-box>
+</DocCanvas>
+
+---
+
+## Alignment Properties
 
 ### Border Color
 Please refer to the color brand guidelines for the appropriate color to use. Use `border-color` to change the color of the border. Accepts any valid color token or CSS color value.
@@ -897,6 +1042,94 @@ Control whether flex items wrap to new lines when they don't fit in the containe
     <pds-box border="true" padding="sm">Item 5</pds-box>
   </pds-box>
 </DocCanvas>
+
+## Responsive Properties
+
+All the following properties support responsive variants that allow different values at different screen sizes. This enables fine-grained control over layout behavior across devices.
+
+### Responsive Gap
+
+Control spacing between items at different breakpoints:
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsBox gap="xs" gap-md="lg" border="true" padding="sm">
+  <PdsBox border="true" padding="xs">Item 1</PdsBox>
+  <PdsBox border="true" padding="xs">Item 2</PdsBox>
+  <PdsBox border="true" padding="xs">Item 3</PdsBox>
+</PdsBox>`,
+    webComponent: `<pds-box gap="xs" gap-md="lg" border="true" padding="sm">
+  <pds-box border="true" padding="xs">Item 1</pds-box>
+  <pds-box border="true" padding="xs">Item 2</pds-box>
+  <pds-box border="true" padding="xs">Item 3</pds-box>
+</pds-box>`
+}}>
+  <pds-box gap="xs" gap-md="lg" border="true" padding="sm">
+    <pds-box border="true" padding="xs">Item 1</pds-box>
+    <pds-box border="true" padding="xs">Item 2</pds-box>
+    <pds-box border="true" padding="xs">Item 3</pds-box>
+  </pds-box>
+</DocCanvas>
+
+### Responsive Padding
+
+Control internal spacing at different breakpoints:
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsBox padding="xs" padding-md="lg" border="true">
+  Responsive padding content
+</PdsBox>`,
+    webComponent: `<pds-box padding="xs" padding-md="lg" border="true">
+  Responsive padding content
+</pds-box>`
+}}>
+  <pds-box padding="xs" padding-md="lg" border="true">
+    Responsive padding content
+  </pds-box>
+</DocCanvas>
+
+### Responsive Wrap
+
+Control flex wrap behavior at different breakpoints:
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `<PdsBox wrap="false" wrap-md="true" gap="sm" min-width="400px" border="true" padding="sm">
+  <PdsBox border="true" padding="sm" min-width="150px">Long Item 1</PdsBox>
+  <PdsBox border="true" padding="sm" min-width="150px">Long Item 2</PdsBox>
+  <PdsBox border="true" padding="sm" min-width="150px">Long Item 3</PdsBox>
+</PdsBox>`,
+    webComponent: `<pds-box wrap="false" wrap-md="true" gap="sm" min-width="400px" border="true" padding="sm">
+  <pds-box border="true" padding="sm" min-width="150px">Long Item 1</pds-box>
+  <pds-box border="true" padding="sm" min-width="150px">Long Item 2</pds-box>
+  <pds-box border="true" padding="sm" min-width="150px">Long Item 3</pds-box>
+</pds-box>`
+}}>
+  <pds-box wrap="false" wrap-md="true" gap="sm" min-width="400px" border="true" padding="sm">
+    <pds-box border="true" padding="sm" min-width="150px">Long Item 1</pds-box>
+    <pds-box border="true" padding="sm" min-width="150px">Long Item 2</pds-box>
+    <pds-box border="true" padding="sm" min-width="150px">Long Item 3</pds-box>
+  </pds-box>
+</DocCanvas>
+
+### Available Responsive Properties
+
+All of these properties support responsive variants with `-xs`, `-sm`, `-md`, `-lg`, `-xl` suffixes:
+
+- **gap**: `gap`, `gap-xs`, `gap-sm`, `gap-md`, `gap-lg`, `gap-xl`
+- **padding**: `padding`, `padding-xs`, `padding-sm`, `padding-md`, `padding-lg`, `padding-xl`
+- **padding-block-start**: `padding-block-start`, `padding-block-start-xs`, `padding-block-start-sm`, etc.
+- **padding-block-end**: `padding-block-end`, `padding-block-end-xs`, `padding-block-end-sm`, etc.
+- **padding-inline-start**: `padding-inline-start`, `padding-inline-start-xs`, `padding-inline-start-sm`, etc.
+- **padding-inline-end**: `padding-inline-end`, `padding-inline-end-xs`, `padding-inline-end-sm`, etc.
+- **margin-block-start**: `margin-block-start`, `margin-block-start-xs`, `margin-block-start-sm`, etc.
+- **margin-block-end**: `margin-block-end`, `margin-block-end-xs`, `margin-block-end-sm`, etc.
+- **margin-inline-start**: `margin-inline-start`, `margin-inline-start-xs`, `margin-inline-start-sm`, etc.
+- **margin-inline-end**: `margin-inline-end`, `margin-inline-end-xs`, `margin-inline-end-sm`, etc.
+- **wrap**: `wrap`, `wrap-xs`, `wrap-sm`, `wrap-md`, `wrap-lg`, `wrap-xl`
+- **auto**: `auto`, `auto-xs`, `auto-sm`, `auto-md`, `auto-lg`, `auto-xl`
+- **fit**: `fit`, `fit-xs`, `fit-sm`, `fit-md`, `fit-lg`, `fit-xl`
 
 ### Layout Properties
 `pds-box` not only allows for custom element properties, but it also allows for a flexible layout system. The layout system is based on the [CSS Flexbox specification](https://drafts.csswg.org/css-flexbox/) and can be view on the [Layouts](/docs/components-layout--docs) page

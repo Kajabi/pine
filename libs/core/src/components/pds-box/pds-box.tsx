@@ -86,6 +86,31 @@ export class PdsBox {
   @Prop() auto?: boolean;
 
   /**
+   * If `true`, the box will be sized to fit its contents at the XS breakpoint.
+   */
+  @Prop() autoXs?: boolean;
+
+  /**
+   * If `true`, the box will be sized to fit its contents at the SM breakpoint.
+   */
+  @Prop() autoSm?: boolean;
+
+  /**
+   * If `true`, the box will be sized to fit its contents at the MD breakpoint.
+   */
+  @Prop() autoMd?: boolean;
+
+  /**
+   * If `true`, the box will be sized to fit its contents at the LG breakpoint.
+   */
+  @Prop() autoLg?: boolean;
+
+  /**
+   * If `true`, the box will be sized to fit its contents at the XL breakpoint.
+   */
+  @Prop() autoXl?: boolean;
+
+  /**
    *  Defines the background-color of the box.
    */
   @Prop() backgroundColor?: string;
@@ -124,16 +149,101 @@ export class PdsBox {
   @Prop() fit?: boolean;
 
   /**
+   * If `true`, sets the box `max-width` to `100%` at the XS breakpoint.
+   */
+  @Prop() fitXs?: boolean;
+
+  /**
+   * If `true`, sets the box `max-width` to `100%` at the SM breakpoint.
+   */
+  @Prop() fitSm?: boolean;
+
+  /**
+   * If `true`, sets the box `max-width` to `100%` at the MD breakpoint.
+   */
+  @Prop() fitMd?: boolean;
+
+  /**
+   * If `true`, sets the box `max-width` to `100%` at the LG breakpoint.
+   */
+  @Prop() fitLg?: boolean;
+
+  /**
+   * If `true`, sets the box `max-width` to `100%` at the XL breakpoint.
+   */
+  @Prop() fitXl?: boolean;
+
+  /**
    * Defines the spacing between the box items.
    * @defaultValue none
   */
   @Prop() gap?: BoxTShirtSizeType;
 
   /**
+   * Defines the spacing between the box items at the XS breakpoint.
+   * @defaultValue none
+  */
+  @Prop() gapXs?: BoxTShirtSizeType;
+
+  /**
+   * Defines the spacing between the box items at the SM breakpoint.
+   * @defaultValue none
+  */
+  @Prop() gapSm?: BoxTShirtSizeType;
+
+  /**
+   * Defines the spacing between the box items at the MD breakpoint.
+   * @defaultValue none
+  */
+  @Prop() gapMd?: BoxTShirtSizeType;
+
+  /**
+   * Defines the spacing between the box items at the LG breakpoint.
+   * @defaultValue none
+  */
+  @Prop() gapLg?: BoxTShirtSizeType;
+
+  /**
+   * Defines the spacing between the box items at the XL breakpoint.
+   * @defaultValue none
+  */
+  @Prop() gapXl?: BoxTShirtSizeType;
+
+  /**
    * Defines whether flex items are forced onto one line or can wrap onto multiple lines.
    * @defaultValue false
    */
   @Prop() wrap?: boolean;
+
+  /**
+   * Defines whether flex items can wrap onto multiple lines at the XS breakpoint.
+   * @defaultValue false
+   */
+  @Prop() wrapXs?: boolean;
+
+  /**
+   * Defines whether flex items can wrap onto multiple lines at the SM breakpoint.
+   * @defaultValue false
+   */
+  @Prop() wrapSm?: boolean;
+
+  /**
+   * Defines whether flex items can wrap onto multiple lines at the MD breakpoint.
+   * @defaultValue false
+   */
+  @Prop() wrapMd?: boolean;
+
+  /**
+   * Defines whether flex items can wrap onto multiple lines at the LG breakpoint.
+   * @defaultValue false
+   */
+  @Prop() wrapLg?: boolean;
+
+  /**
+   * Defines whether flex items can wrap onto multiple lines at the XL breakpoint.
+   * @defaultValue false
+   */
+  @Prop() wrapXl?: boolean;
 
   /**
    * Defines how a box will grow or shrink to fit the space available in its container.
@@ -185,10 +295,70 @@ export class PdsBox {
   @Prop() marginBlockStart?: BoxTShirtSizeType;
 
   /**
+   * Defines the box's outer top spacing at the XS breakpoint.
+   * @defaultValue none
+  */
+  @Prop() marginBlockStartXs?: BoxTShirtSizeType;
+
+  /**
+   * Defines the box's outer top spacing at the SM breakpoint.
+   * @defaultValue none
+  */
+  @Prop() marginBlockStartSm?: BoxTShirtSizeType;
+
+  /**
+   * Defines the box's outer top spacing at the MD breakpoint.
+   * @defaultValue none
+  */
+  @Prop() marginBlockStartMd?: BoxTShirtSizeType;
+
+  /**
+   * Defines the box's outer top spacing at the LG breakpoint.
+   * @defaultValue none
+  */
+  @Prop() marginBlockStartLg?: BoxTShirtSizeType;
+
+  /**
+   * Defines the box's outer top spacing at the XL breakpoint.
+   * @defaultValue none
+  */
+  @Prop() marginBlockStartXl?: BoxTShirtSizeType;
+
+  /**
    * Defines the box's outer left spacing.
    * @defaultValue none
   */
   @Prop() marginInlineStart?: BoxTShirtSizeType;
+
+  /**
+   * Defines the box's outer left spacing at the XS breakpoint.
+   * @defaultValue none
+  */
+  @Prop() marginInlineStartXs?: BoxTShirtSizeType;
+
+  /**
+   * Defines the box's outer left spacing at the SM breakpoint.
+   * @defaultValue none
+  */
+  @Prop() marginInlineStartSm?: BoxTShirtSizeType;
+
+  /**
+   * Defines the box's outer left spacing at the MD breakpoint.
+   * @defaultValue none
+  */
+  @Prop() marginInlineStartMd?: BoxTShirtSizeType;
+
+  /**
+   * Defines the box's outer left spacing at the LG breakpoint.
+   * @defaultValue none
+  */
+  @Prop() marginInlineStartLg?: BoxTShirtSizeType;
+
+  /**
+   * Defines the box's outer left spacing at the XL breakpoint.
+   * @defaultValue none
+  */
+  @Prop() marginInlineStartXl?: BoxTShirtSizeType;
 
   /**
    * Defines the box's outer right spacing.
@@ -197,10 +367,70 @@ export class PdsBox {
   @Prop() marginInlineEnd?: BoxTShirtSizeType;
 
   /**
+   * Defines the box's outer right spacing at the XS breakpoint.
+   * @defaultValue none
+  */
+  @Prop() marginInlineEndXs?: BoxTShirtSizeType;
+
+  /**
+   * Defines the box's outer right spacing at the SM breakpoint.
+   * @defaultValue none
+  */
+  @Prop() marginInlineEndSm?: BoxTShirtSizeType;
+
+  /**
+   * Defines the box's outer right spacing at the MD breakpoint.
+   * @defaultValue none
+  */
+  @Prop() marginInlineEndMd?: BoxTShirtSizeType;
+
+  /**
+   * Defines the box's outer right spacing at the LG breakpoint.
+   * @defaultValue none
+  */
+  @Prop() marginInlineEndLg?: BoxTShirtSizeType;
+
+  /**
+   * Defines the box's outer right spacing at the XL breakpoint.
+   * @defaultValue none
+  */
+  @Prop() marginInlineEndXl?: BoxTShirtSizeType;
+
+  /**
    * Defines the box's outer bottom spacing.
    * @defaultValue none
   */
   @Prop() marginBlockEnd?: BoxTShirtSizeType;
+
+  /**
+   * Defines the box's outer bottom spacing at the XS breakpoint.
+   * @defaultValue none
+  */
+  @Prop() marginBlockEndXs?: BoxTShirtSizeType;
+
+  /**
+   * Defines the box's outer bottom spacing at the SM breakpoint.
+   * @defaultValue none
+  */
+  @Prop() marginBlockEndSm?: BoxTShirtSizeType;
+
+  /**
+   * Defines the box's outer bottom spacing at the MD breakpoint.
+   * @defaultValue none
+  */
+  @Prop() marginBlockEndMd?: BoxTShirtSizeType;
+
+  /**
+   * Defines the box's outer bottom spacing at the LG breakpoint.
+   * @defaultValue none
+  */
+  @Prop() marginBlockEndLg?: BoxTShirtSizeType;
+
+  /**
+   * Defines the box's outer bottom spacing at the XL breakpoint.
+   * @defaultValue none
+  */
+  @Prop() marginBlockEndXl?: BoxTShirtSizeType;
 
   /**
    * The minimum height of the row. Used in conjunction with alignment props
@@ -248,6 +478,36 @@ export class PdsBox {
   */
   @Prop() padding?: BoxTShirtSizeType;
 
+  /**
+   * Defines the spacing between the box items at the XS breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingXs?: BoxTShirtSizeType;
+
+  /**
+   * Defines the spacing between the box items at the SM breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingSm?: BoxTShirtSizeType;
+
+  /**
+   * Defines the spacing between the box items at the MD breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingMd?: BoxTShirtSizeType;
+
+  /**
+   * Defines the spacing between the box items at the LG breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingLg?: BoxTShirtSizeType;
+
+  /**
+   * Defines the spacing between the box items at the XL breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingXl?: BoxTShirtSizeType;
+
 
   /**
    * Defines the top spacing.
@@ -256,10 +516,70 @@ export class PdsBox {
   @Prop() paddingBlockStart?: BoxTShirtSizeType;
 
   /**
+   * Defines the top spacing at the XS breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingBlockStartXs?: BoxTShirtSizeType;
+
+  /**
+   * Defines the top spacing at the SM breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingBlockStartSm?: BoxTShirtSizeType;
+
+  /**
+   * Defines the top spacing at the MD breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingBlockStartMd?: BoxTShirtSizeType;
+
+  /**
+   * Defines the top spacing at the LG breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingBlockStartLg?: BoxTShirtSizeType;
+
+  /**
+   * Defines the top spacing at the XL breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingBlockStartXl?: BoxTShirtSizeType;
+
+  /**
    * Defines the bottom spacing.
    * @defaultValue none
   */
   @Prop() paddingBlockEnd?: BoxTShirtSizeType;
+
+  /**
+   * Defines the bottom spacing at the XS breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingBlockEndXs?: BoxTShirtSizeType;
+
+  /**
+   * Defines the bottom spacing at the SM breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingBlockEndSm?: BoxTShirtSizeType;
+
+  /**
+   * Defines the bottom spacing at the MD breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingBlockEndMd?: BoxTShirtSizeType;
+
+  /**
+   * Defines the bottom spacing at the LG breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingBlockEndLg?: BoxTShirtSizeType;
+
+  /**
+   * Defines the bottom spacing at the XL breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingBlockEndXl?: BoxTShirtSizeType;
 
   /**
    * Defines the left spacing.
@@ -268,10 +588,70 @@ export class PdsBox {
   @Prop() paddingInlineStart?: BoxTShirtSizeType;
 
   /**
+   * Defines the left spacing at the XS breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingInlineStartXs?: BoxTShirtSizeType;
+
+  /**
+   * Defines the left spacing at the SM breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingInlineStartSm?: BoxTShirtSizeType;
+
+  /**
+   * Defines the left spacing at the MD breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingInlineStartMd?: BoxTShirtSizeType;
+
+  /**
+   * Defines the left spacing at the LG breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingInlineStartLg?: BoxTShirtSizeType;
+
+  /**
+   * Defines the left spacing at the XL breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingInlineStartXl?: BoxTShirtSizeType;
+
+  /**
    * Defines the right spacing.
    * @defaultValue none
   */
   @Prop() paddingInlineEnd?: BoxTShirtSizeType;
+
+  /**
+   * Defines the right spacing at the XS breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingInlineEndXs?: BoxTShirtSizeType;
+
+  /**
+   * Defines the right spacing at the SM breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingInlineEndSm?: BoxTShirtSizeType;
+
+  /**
+   * Defines the right spacing at the MD breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingInlineEndMd?: BoxTShirtSizeType;
+
+  /**
+   * Defines the right spacing at the LG breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingInlineEndLg?: BoxTShirtSizeType;
+
+  /**
+   * Defines the right spacing at the XL breakpoint.
+   * @defaultValue none
+  */
+  @Prop() paddingInlineEndXl?: BoxTShirtSizeType;
 
   /**
    * Defines the box shadow.
@@ -326,13 +706,33 @@ export class PdsBox {
     ${this.alignSelfLg !== undefined && this.alignSelfLg.trim() !== '' ? `pds-align-self-lg-${this.alignSelfLg}` : ''}
     ${this.alignSelfXl !== undefined && this.alignSelfXl.trim() !== '' ? `pds-align-self-xl-${this.alignSelfXl}` : ''}
     ${this.auto ? 'pds-box--auto' : ''}
+    ${this.autoXs ? 'pds-box--auto-xs' : ''}
+    ${this.autoSm ? 'pds-box--auto-sm' : ''}
+    ${this.autoMd ? 'pds-box--auto-md' : ''}
+    ${this.autoLg ? 'pds-box--auto-lg' : ''}
+    ${this.autoXl ? 'pds-box--auto-xl' : ''}
     ${this.border ? 'pds-box--border' : ''}
     ${this.borderRadius !== undefined && this.borderRadius.trim() !== '' ? `pds-border-radius-${this.borderRadius}` : ''}
     ${this.direction !== undefined && this.direction.trim() !== '' ? `pds-box-direction-${this.direction}` : ''}
     ${this.display !== undefined && this.display.trim() !== '' ? `pds-box--display-${this.display}` : ''}
     ${this.fit ? 'pds-box--fit' : ''}
+    ${this.fitXs ? 'pds-box--fit-xs' : ''}
+    ${this.fitSm ? 'pds-box--fit-sm' : ''}
+    ${this.fitMd ? 'pds-box--fit-md' : ''}
+    ${this.fitLg ? 'pds-box--fit-lg' : ''}
+    ${this.fitXl ? 'pds-box--fit-xl' : ''}
     ${this.gap !== undefined && this.gap.trim() !== '' ? `pds-box-gap-${this.gap}` : ''}
+    ${this.gapXs !== undefined && this.gapXs.trim() !== '' ? `pds-box-gap-xs-${this.gapXs}` : ''}
+    ${this.gapSm !== undefined && this.gapSm.trim() !== '' ? `pds-box-gap-sm-${this.gapSm}` : ''}
+    ${this.gapMd !== undefined && this.gapMd.trim() !== '' ? `pds-box-gap-md-${this.gapMd}` : ''}
+    ${this.gapLg !== undefined && this.gapLg.trim() !== '' ? `pds-box-gap-lg-${this.gapLg}` : ''}
+    ${this.gapXl !== undefined && this.gapXl.trim() !== '' ? `pds-box-gap-xl-${this.gapXl}` : ''}
     ${this.wrap ? 'pds-box--wrap' : ''}
+    ${this.wrapXs ? 'pds-box--wrap-xs' : ''}
+    ${this.wrapSm ? 'pds-box--wrap-sm' : ''}
+    ${this.wrapMd ? 'pds-box--wrap-md' : ''}
+    ${this.wrapLg ? 'pds-box--wrap-lg' : ''}
+    ${this.wrapXl ? 'pds-box--wrap-xl' : ''}
     ${this.flex !== undefined && this.flex.trim() !== '' && ['none', 'grow', 'shrink'].includes(this.flex) ? `pds-box--flex-${this.flex}` : ''}
     ${this.justifyContent !== undefined && this.justifyContent.trim() !== '' ? `pds-justify-content-${this.justifyContent}` : ''}
     ${this.justifyContentXs !== undefined && this.justifyContentXs.trim() !== '' ? `pds-justify-content-xs-${this.justifyContentXs}` : ''}
@@ -341,9 +741,29 @@ export class PdsBox {
     ${this.justifyContentLg !== undefined && this.justifyContentLg.trim() !== '' ? `pds-justify-content-lg-${this.justifyContentLg}` : ''}
     ${this.justifyContentXl !== undefined && this.justifyContentXl.trim() !== '' ? `pds-justify-content-xl-${this.justifyContentXl}` : ''}
     ${this.marginBlockStart !== undefined && this.marginBlockStart.trim() !== '' ? `pds-margin-block-start-${this.marginBlockStart}` : ''}
+    ${this.marginBlockStartXs !== undefined && this.marginBlockStartXs.trim() !== '' ? `pds-margin-block-start-xs-${this.marginBlockStartXs}` : ''}
+    ${this.marginBlockStartSm !== undefined && this.marginBlockStartSm.trim() !== '' ? `pds-margin-block-start-sm-${this.marginBlockStartSm}` : ''}
+    ${this.marginBlockStartMd !== undefined && this.marginBlockStartMd.trim() !== '' ? `pds-margin-block-start-md-${this.marginBlockStartMd}` : ''}
+    ${this.marginBlockStartLg !== undefined && this.marginBlockStartLg.trim() !== '' ? `pds-margin-block-start-lg-${this.marginBlockStartLg}` : ''}
+    ${this.marginBlockStartXl !== undefined && this.marginBlockStartXl.trim() !== '' ? `pds-margin-block-start-xl-${this.marginBlockStartXl}` : ''}
     ${this.marginInlineStart !== undefined && this.marginInlineStart.trim() !== '' ? `pds-margin-inline-start-${this.marginInlineStart}` : ''}
+    ${this.marginInlineStartXs !== undefined && this.marginInlineStartXs.trim() !== '' ? `pds-margin-inline-start-xs-${this.marginInlineStartXs}` : ''}
+    ${this.marginInlineStartSm !== undefined && this.marginInlineStartSm.trim() !== '' ? `pds-margin-inline-start-sm-${this.marginInlineStartSm}` : ''}
+    ${this.marginInlineStartMd !== undefined && this.marginInlineStartMd.trim() !== '' ? `pds-margin-inline-start-md-${this.marginInlineStartMd}` : ''}
+    ${this.marginInlineStartLg !== undefined && this.marginInlineStartLg.trim() !== '' ? `pds-margin-inline-start-lg-${this.marginInlineStartLg}` : ''}
+    ${this.marginInlineStartXl !== undefined && this.marginInlineStartXl.trim() !== '' ? `pds-margin-inline-start-xl-${this.marginInlineStartXl}` : ''}
     ${this.marginInlineEnd !== undefined && this.marginInlineEnd.trim() !== '' ? `pds-margin-inline-end-${this.marginInlineEnd}` : ''}
+    ${this.marginInlineEndXs !== undefined && this.marginInlineEndXs.trim() !== '' ? `pds-margin-inline-end-xs-${this.marginInlineEndXs}` : ''}
+    ${this.marginInlineEndSm !== undefined && this.marginInlineEndSm.trim() !== '' ? `pds-margin-inline-end-sm-${this.marginInlineEndSm}` : ''}
+    ${this.marginInlineEndMd !== undefined && this.marginInlineEndMd.trim() !== '' ? `pds-margin-inline-end-md-${this.marginInlineEndMd}` : ''}
+    ${this.marginInlineEndLg !== undefined && this.marginInlineEndLg.trim() !== '' ? `pds-margin-inline-end-lg-${this.marginInlineEndLg}` : ''}
+    ${this.marginInlineEndXl !== undefined && this.marginInlineEndXl.trim() !== '' ? `pds-margin-inline-end-xl-${this.marginInlineEndXl}` : ''}
     ${this.marginBlockEnd !== undefined && this.marginBlockEnd.trim() !== '' ? `pds-margin-block-end-${this.marginBlockEnd}` : ''}
+    ${this.marginBlockEndXs !== undefined && this.marginBlockEndXs.trim() !== '' ? `pds-margin-block-end-xs-${this.marginBlockEndXs}` : ''}
+    ${this.marginBlockEndSm !== undefined && this.marginBlockEndSm.trim() !== '' ? `pds-margin-block-end-sm-${this.marginBlockEndSm}` : ''}
+    ${this.marginBlockEndMd !== undefined && this.marginBlockEndMd.trim() !== '' ? `pds-margin-block-end-md-${this.marginBlockEndMd}` : ''}
+    ${this.marginBlockEndLg !== undefined && this.marginBlockEndLg.trim() !== '' ? `pds-margin-block-end-lg-${this.marginBlockEndLg}` : ''}
+    ${this.marginBlockEndXl !== undefined && this.marginBlockEndXl.trim() !== '' ? `pds-margin-block-end-xl-${this.marginBlockEndXl}` : ''}
     ${this.offset !== undefined && this.offset.trim() !== '' ? `pds-box-offset-${this.offset}` : ''}
     ${this.offsetXs !== undefined && this.offsetXs.trim() !== '' ? `pds-box-offset-xs-${this.offsetXs}` : ''}
     ${this.offsetSm !== undefined && this.offsetSm.trim() !== '' ? `pds-box-offset-sm-${this.offsetSm}` : ''}
@@ -351,10 +771,35 @@ export class PdsBox {
     ${this.offsetLg !== undefined && this.offsetLg.trim() !== '' ? `pds-box-offset-lg-${this.offsetLg}` : ''}
     ${this.offsetXl !== undefined && this.offsetXl.trim() !== '' ? `pds-box-offset-xl-${this.offsetXl}` : ''}
     ${this.padding !== undefined && this.padding.trim() !== '' ? `pds-padding-${this.padding}` : ''}
+    ${this.paddingXs !== undefined && this.paddingXs.trim() !== '' ? `pds-padding-xs-${this.paddingXs}` : ''}
+    ${this.paddingSm !== undefined && this.paddingSm.trim() !== '' ? `pds-padding-sm-${this.paddingSm}` : ''}
+    ${this.paddingMd !== undefined && this.paddingMd.trim() !== '' ? `pds-padding-md-${this.paddingMd}` : ''}
+    ${this.paddingLg !== undefined && this.paddingLg.trim() !== '' ? `pds-padding-lg-${this.paddingLg}` : ''}
+    ${this.paddingXl !== undefined && this.paddingXl.trim() !== '' ? `pds-padding-xl-${this.paddingXl}` : ''}
     ${this.paddingBlockStart !== undefined && this.paddingBlockStart.trim() !== '' ? `pds-padding-block-start-${this.paddingBlockStart}` : ''}
+    ${this.paddingBlockStartXs !== undefined && this.paddingBlockStartXs.trim() !== '' ? `pds-padding-block-start-xs-${this.paddingBlockStartXs}` : ''}
+    ${this.paddingBlockStartSm !== undefined && this.paddingBlockStartSm.trim() !== '' ? `pds-padding-block-start-sm-${this.paddingBlockStartSm}` : ''}
+    ${this.paddingBlockStartMd !== undefined && this.paddingBlockStartMd.trim() !== '' ? `pds-padding-block-start-md-${this.paddingBlockStartMd}` : ''}
+    ${this.paddingBlockStartLg !== undefined && this.paddingBlockStartLg.trim() !== '' ? `pds-padding-block-start-lg-${this.paddingBlockStartLg}` : ''}
+    ${this.paddingBlockStartXl !== undefined && this.paddingBlockStartXl.trim() !== '' ? `pds-padding-block-start-xl-${this.paddingBlockStartXl}` : ''}
     ${this.paddingBlockEnd !== undefined && this.paddingBlockEnd.trim() !== '' ? `pds-padding-block-end-${this.paddingBlockEnd}` : ''}
+    ${this.paddingBlockEndXs !== undefined && this.paddingBlockEndXs.trim() !== '' ? `pds-padding-block-end-xs-${this.paddingBlockEndXs}` : ''}
+    ${this.paddingBlockEndSm !== undefined && this.paddingBlockEndSm.trim() !== '' ? `pds-padding-block-end-sm-${this.paddingBlockEndSm}` : ''}
+    ${this.paddingBlockEndMd !== undefined && this.paddingBlockEndMd.trim() !== '' ? `pds-padding-block-end-md-${this.paddingBlockEndMd}` : ''}
+    ${this.paddingBlockEndLg !== undefined && this.paddingBlockEndLg.trim() !== '' ? `pds-padding-block-end-lg-${this.paddingBlockEndLg}` : ''}
+    ${this.paddingBlockEndXl !== undefined && this.paddingBlockEndXl.trim() !== '' ? `pds-padding-block-end-xl-${this.paddingBlockEndXl}` : ''}
     ${this.paddingInlineStart !== undefined && this.paddingInlineStart.trim() !== '' ? `pds-padding-inline-start-${this.paddingInlineStart}` : ''}
+    ${this.paddingInlineStartXs !== undefined && this.paddingInlineStartXs.trim() !== '' ? `pds-padding-inline-start-xs-${this.paddingInlineStartXs}` : ''}
+    ${this.paddingInlineStartSm !== undefined && this.paddingInlineStartSm.trim() !== '' ? `pds-padding-inline-start-sm-${this.paddingInlineStartSm}` : ''}
+    ${this.paddingInlineStartMd !== undefined && this.paddingInlineStartMd.trim() !== '' ? `pds-padding-inline-start-md-${this.paddingInlineStartMd}` : ''}
+    ${this.paddingInlineStartLg !== undefined && this.paddingInlineStartLg.trim() !== '' ? `pds-padding-inline-start-lg-${this.paddingInlineStartLg}` : ''}
+    ${this.paddingInlineStartXl !== undefined && this.paddingInlineStartXl.trim() !== '' ? `pds-padding-inline-start-xl-${this.paddingInlineStartXl}` : ''}
     ${this.paddingInlineEnd !== undefined && this.paddingInlineEnd.trim() !== '' ? `pds-padding-inline-end-${this.paddingInlineEnd}` : ''}
+    ${this.paddingInlineEndXs !== undefined && this.paddingInlineEndXs.trim() !== '' ? `pds-padding-inline-end-xs-${this.paddingInlineEndXs}` : ''}
+    ${this.paddingInlineEndSm !== undefined && this.paddingInlineEndSm.trim() !== '' ? `pds-padding-inline-end-sm-${this.paddingInlineEndSm}` : ''}
+    ${this.paddingInlineEndMd !== undefined && this.paddingInlineEndMd.trim() !== '' ? `pds-padding-inline-end-md-${this.paddingInlineEndMd}` : ''}
+    ${this.paddingInlineEndLg !== undefined && this.paddingInlineEndLg.trim() !== '' ? `pds-padding-inline-end-lg-${this.paddingInlineEndLg}` : ''}
+    ${this.paddingInlineEndXl !== undefined && this.paddingInlineEndXl.trim() !== '' ? `pds-padding-inline-end-xl-${this.paddingInlineEndXl}` : ''}
     ${this.shadow !== undefined && this.shadow.trim() !== '' ? `pds-shadow-${this.shadow}` : ''}
     ${this.size !== undefined && this.size.trim() !== '' ? `pds-box pds-box-${this.size}` : ''}
     ${this.sizeXs !== undefined && this.sizeXs.trim() !== '' ? `pds-box-xs-${this.sizeXs}` : ''}
