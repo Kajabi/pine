@@ -1381,6 +1381,11 @@ export namespace Components {
          */
         "errorMessage": string;
         /**
+          * Adds a border around the radio component for better visual separation.
+          * @defaultValue false
+         */
+        "hasBorder": boolean;
+        /**
           * Displays helper message text below radio.
          */
         "helperMessage": string;
@@ -3990,6 +3995,11 @@ declare namespace LocalJSX {
           * Displays error message text describing an invalid state.
          */
         "errorMessage"?: string;
+        /**
+          * Adds a border around the radio component for better visual separation.
+          * @defaultValue false
+         */
+        "hasBorder"?: boolean;
         /**
           * Displays helper message text below radio.
          */

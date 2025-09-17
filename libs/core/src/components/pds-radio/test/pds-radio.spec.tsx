@@ -188,4 +188,59 @@ describe('pds-radio', () => {
     expect(eventSpy).not.toHaveBeenCalled();
   });
 
+  it('renders with has-border class when hasBorder prop is true', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: `<pds-radio component-id="default" label="Label text" has-border />`,
+    });
+
+    expect(page.root).toHaveClass('has-border');
+  });
+
+  it('does not render with has-border class when hasBorder prop is false', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: `<pds-radio component-id="default" label="Label text" />`,
+    });
+
+    expect(page.root).not.toHaveClass('has-border');
+  });
+
+  it('renders with has-border class when hasBorder prop is explicitly set to true', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: `<pds-radio component-id="default" label="Label text" />`,
+    });
+
+    // Set hasBorder property programmatically
+    const component = page.root as HTMLPdsRadioElement;
+    component.hasBorder = true;
+    await page.waitForChanges();
+
+    expect(page.root).toHaveClass('has-border');
+  });
+
+  it('combines has-border class with other state classes', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: `<pds-radio component-id="default" label="Label text" has-border invalid disabled />`,
+    });
+
+    expect(page.root).toHaveClass('has-border');
+    expect(page.root).toHaveClass('is-invalid');
+    expect(page.root).toHaveClass('is-disabled');
+  });
+
+  it('renders correctly with hasBorder and helper message', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadio],
+      html: `<pds-radio component-id="default" label="Label text" has-border helper-message="Helper text" />`,
+    });
+
+    expect(page.root).toHaveClass('has-border');
+
+    const message = page.root?.querySelector('.pds-radio__message');
+    expect(message?.textContent).toBe('Helper text');
+  });
+
 });

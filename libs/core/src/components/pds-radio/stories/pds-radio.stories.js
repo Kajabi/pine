@@ -6,6 +6,7 @@ export default {
   args: {
     checked: false,
     disabled: false,
+    hasBorder: false,
     invalid: false,
     hideLabel: false,
     required: false,
@@ -28,6 +29,7 @@ const BaseTemplate = (args) =>
     ?checked=${args.checked}
     ?disabled=${args.disabled}
     error-message=${args.errorMessage}
+    ?has-border=${args.hasBorder}
     helper-message=${args.helperMessage}
     ?hide-label=${args.hideLabel}
     name=${args.name}
@@ -70,4 +72,12 @@ Invalid.args = {
   errorMessage: 'This is a short error message',
   label: 'Label text',
   invalid: true,
+};
+
+export const WithBorder = BaseTemplate.bind();
+WithBorder.args = {
+  componentId: 'with-border',
+  label: 'Label text',
+  hasBorder: true,
+  helperMessage: 'This radio has a border for better visual separation',
 };

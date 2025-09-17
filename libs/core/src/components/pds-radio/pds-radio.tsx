@@ -39,6 +39,12 @@ export class PdsRadio {
    */
   @Prop() helperMessage: string;
 
+  /**
+   * Adds a border around the radio component for better visual separation.
+   * @defaultValue false
+   */
+  @Prop() hasBorder = false;
+
     /**
    * Determines whether or not the radio is invalid.
    * @defaultValue false
@@ -96,6 +102,9 @@ export class PdsRadio {
     }
     if (this.disabled) {
       classNames.push('is-disabled');
+    }
+    if (this.hasBorder) {
+      classNames.push('has-border');
     }
 
     return classNames.join('  ');
