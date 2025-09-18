@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, h, Listen, Prop } from '@stencil/core';
 import { hasShadowDom } from '../../utils/utils';
 
 import { caretDown } from '@pine-ds/icons/icons';
@@ -95,6 +95,44 @@ export class PdsButton {
 
   @Event() pdsClick: EventEmitter;
 
+  /**
+   * Listen for Enter key presses on form inputs to trigger submit
+   */
+  @Listen('keydown', { target: 'body' })
+
+  handleFormKeyDown(event: KeyboardEvent) {
+    // Only handle Enter key for submit buttons
+    if (event.key !== 'Enter' || this.type !== 'submit' || this.href) {
+      return;
+    }
+
+    const target = event.target as Element;
+    const form = this.el.closest('form');
+
+    // Check if the Enter key was pressed in a form input within the same form
+    if (!form || !target || !form.contains(target)) {
+      return;
+    }
+
+    // Check if target is a form input element
+    const isFormInput = target.matches('input:not([type="submit"]):not([type="button"])') ||
+                       target.matches('pds-input') ||
+                       target.matches('pds-select') ||
+                       target.matches('pds-switch') ||
+                       target.matches('pds-checkbox') ||
+                       target.matches('pds-radio');
+
+    if (isFormInput) {
+      // Check if this is the first submit button in the form
+      const firstSubmitButton = form.querySelector('pds-button[type="submit"], button[type="submit"], input[type="submit"]');
+      if (firstSubmitButton === this.el) {
+        event.preventDefault();
+        this.el.click();
+      }
+    }
+  }
+
+
   private handleClick = (ev: Event) => {
     if (this.loading) {
       ev.preventDefault();
@@ -102,7 +140,7 @@ export class PdsButton {
     }
 
     if (!this.href && this.type != 'button') {
-      // If button clicked IS NOT associated with a form
+      // Handle form submission for Shadow DOM buttons
       if (hasShadowDom(this.el)) {
         const form = this.el.closest('form');
         if (form) {

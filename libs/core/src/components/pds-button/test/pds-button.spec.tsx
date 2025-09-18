@@ -1,5 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsButton } from '../pds-button';
+import { caretDown } from '@pine-ds/icons/icons';
 
 describe('pds-button', () => {
   it('renders default button', async () => {
@@ -315,5 +316,94 @@ describe('pds-button', () => {
         </mock:shadow-root>
       </pds-button>
     `);
+  });
+
+  describe('Enter key form submission', () => {
+    it('renders submit button that can be used for form submission', async () => {
+      const page = await newSpecPage({
+        components: [PdsButton],
+        html: `
+          <form>
+            <pds-button type="submit">Submit</pds-button>
+          </form>
+        `,
+      });
+
+      const button = page.root?.shadowRoot?.querySelector('button');
+      expect(button?.type).toBe('submit');
+
+      // Verify the button is in a form context
+      const form = page.doc.querySelector('form');
+      expect(form).toBeTruthy();
+      expect(form?.contains(page.root as Node)).toBe(true);
+    });
+
+    it('renders regular button that should not handle form submission', async () => {
+      const page = await newSpecPage({
+        components: [PdsButton],
+        html: `
+          <form>
+            <pds-button type="button">Regular Button</pds-button>
+          </form>
+        `,
+      });
+
+      const button = page.root?.shadowRoot?.querySelector('button');
+      expect(button?.type).toBe('button');
+    });
+
+    it('renders link button that should not handle form submission', async () => {
+      const page = await newSpecPage({
+        components: [PdsButton],
+        html: `
+          <form>
+            <pds-button type="submit" href="/test">Link Button</pds-button>
+          </form>
+        `,
+      });
+
+      const anchor = page.root?.shadowRoot?.querySelector('a');
+      const button = page.root?.shadowRoot?.querySelector('button');
+
+      expect(anchor).toBeTruthy();
+      expect(button).toBeFalsy();
+      expect(anchor?.href).toContain('/test');
+    });
+  });
+
+  describe('disclosure variant coverage', () => {
+    it('renders caret-down icon when variant is disclosure', async () => {
+      const {root} = await newSpecPage({
+        components: [PdsButton],
+        html: `<pds-button variant="disclosure"></pds-button>`,
+      });
+
+      const caretIcon = root?.shadowRoot?.querySelector('pds-icon[part="caret"]');
+      expect(caretIcon).toBeTruthy();
+      expect(caretIcon?.getAttribute('icon')).toBe(caretDown);
+    });
+
+    it('renders disclosure variant with loading state (covers hidden caret)', async () => {
+      const {root} = await newSpecPage({
+        components: [PdsButton],
+        html: `<pds-button variant="disclosure" loading="true"></pds-button>`,
+      });
+
+      // Should render caret icon with hidden class when loading
+      const caretIcon = root?.shadowRoot?.querySelector('pds-icon[part="caret"]');
+      expect(caretIcon).toBeTruthy();
+      expect(caretIcon?.classList.contains('pds-button__icon--hidden')).toBe(true);
+    });
+
+    it('does not render caret for disclosure variant when iconOnly is true', async () => {
+      const {root} = await newSpecPage({
+        components: [PdsButton],
+        html: `<pds-button variant="disclosure" icon-only="true"></pds-button>`,
+      });
+
+      // Should not render end content (caret) when iconOnly is true
+      const caretIcon = root?.shadowRoot?.querySelector('pds-icon[part="caret"]');
+      expect(caretIcon).toBeFalsy();
+    });
   });
 });
