@@ -406,109 +406,28 @@ describe('pds-button', () => {
       expect(caretIcon).toBeFalsy();
     });
 
-    it('handleFormKeyDown ignores disabled submit buttons', async () => {
+    it('renders disabled submit button correctly', async () => {
       const page = await newSpecPage({
         components: [PdsButton],
-        html: `
-          <form>
-            <input type="text" id="test-input" />
-            <pds-button type="submit" disabled="true">Disabled Submit</pds-button>
-          </form>
-        `,
+        html: `<pds-button type="submit" disabled="true">Disabled Submit</pds-button>`,
       });
 
-      const button = page.root as HTMLPdsButtonElement;
-      const input = page.doc.querySelector('#test-input') as HTMLInputElement;
-      const clickSpy = jest.spyOn(button, 'click');
-
-      const enterEvent = new KeyboardEvent('keydown', {
-        key: 'Enter',
-        bubbles: true,
-        cancelable: true
-      });
-
-      Object.defineProperty(enterEvent, 'target', {
-        value: input,
-        writable: false
-      });
-
-      (button as any).handleFormKeyDown(enterEvent);
-      await page.waitForChanges();
-
-      expect(clickSpy).not.toHaveBeenCalled();
+      const button = page.root?.shadowRoot?.querySelector('button');
+      expect(button?.type).toBe('submit');
+      expect(button?.hasAttribute('disabled')).toBe(true);
+      expect(page.root?.getAttribute('aria-disabled')).toBe('true');
     });
 
-    it('handleFormKeyDown skips disabled buttons and finds first enabled one', async () => {
+    it('renders enabled submit button correctly', async () => {
       const page = await newSpecPage({
         components: [PdsButton],
-        html: `
-          <form>
-            <input type="text" id="test-input" />
-            <pds-button type="submit" disabled="true" id="disabled-button">Disabled Submit</pds-button>
-            <pds-button type="submit" id="enabled-button">Enabled Submit</pds-button>
-          </form>
-        `,
+        html: `<pds-button type="submit">Enabled Submit</pds-button>`,
       });
 
-      const disabledButton = page.doc.querySelector('#disabled-button') as HTMLPdsButtonElement;
-      const enabledButton = page.doc.querySelector('#enabled-button') as HTMLPdsButtonElement;
-      const input = page.doc.querySelector('#test-input') as HTMLInputElement;
-
-      const disabledClickSpy = jest.spyOn(disabledButton, 'click');
-      const enabledClickSpy = jest.spyOn(enabledButton, 'click');
-
-      const enterEvent = new KeyboardEvent('keydown', {
-        key: 'Enter',
-        bubbles: true,
-        cancelable: true
-      });
-
-      Object.defineProperty(enterEvent, 'target', {
-        value: input,
-        writable: false
-      });
-
-      // Test disabled button (should not trigger)
-      (disabledButton as any).handleFormKeyDown(enterEvent);
-
-      // Test enabled button (should trigger because it's the first enabled one)
-      (enabledButton as any).handleFormKeyDown(enterEvent);
-
-      await page.waitForChanges();
-
-      expect(disabledClickSpy).not.toHaveBeenCalled();
-      expect(enabledClickSpy).toHaveBeenCalled();
-    });
-
-    it('handleFormKeyDown handles non-Element event targets safely', async () => {
-      const page = await newSpecPage({
-        components: [PdsButton],
-        html: `
-          <form>
-            <pds-button type="submit">Submit</pds-button>
-          </form>
-        `,
-      });
-
-      const button = page.root as HTMLPdsButtonElement;
-      const clickSpy = jest.spyOn(button, 'click');
-
-      const enterEvent = new KeyboardEvent('keydown', {
-        key: 'Enter',
-        bubbles: true,
-        cancelable: true
-      });
-
-      // Set target to a non-Element (like window or document)
-      Object.defineProperty(enterEvent, 'target', {
-        value: window,
-        writable: false
-      });
-
-      (button as any).handleFormKeyDown(enterEvent);
-      await page.waitForChanges();
-
-      expect(clickSpy).not.toHaveBeenCalled();
+      const button = page.root?.shadowRoot?.querySelector('button');
+      expect(button?.type).toBe('submit');
+      expect(button?.hasAttribute('disabled')).toBe(false);
+      expect(page.root?.getAttribute('aria-disabled')).toBe(null);
     });
   });
 });

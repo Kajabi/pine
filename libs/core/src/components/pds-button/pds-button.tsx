@@ -146,6 +146,12 @@ export class PdsButton {
       return;
     }
 
+    // Prevent form submission for disabled buttons
+    if (this.disabled) {
+      ev.preventDefault();
+      return;
+    }
+
     if (!this.href && this.type != 'button') {
       // Handle form submission for Shadow DOM buttons
       if (hasShadowDom(this.el)) {
