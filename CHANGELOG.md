@@ -1,3 +1,25 @@
+## 3.6.0 (2025-09-19)
+
+### Features 🚀
+
+- **pds-textarea:** add max-length character counter ([#529](https://github.com/Kajabi/pine/pull/529))
+
+### Bug Fixes 🐛
+
+- **pds-box:** add responsive modifiers to box model and layout props ([#531](https://github.com/Kajabi/pine/pull/531))
+- **pds-button:** add enter key handling for form submissions ([#532](https://github.com/Kajabi/pine/pull/532))
+- **pds-modal:** add scrollable boolean and resolve dynamic border positioning ([#528](https://github.com/Kajabi/pine/pull/528))
+- **pds-modal:** add dvh unit to heights ([#533](https://github.com/Kajabi/pine/pull/533))
+
+### Styles 🎨
+
+- **pds-modal:** fix max height for fullscreen modals ([#530](https://github.com/Kajabi/pine/pull/530))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.5.2 (2025-09-12)
 
 ### Bug Fixes 🐛
