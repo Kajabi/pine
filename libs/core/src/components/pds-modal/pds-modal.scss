@@ -48,14 +48,26 @@
 
   &.pds-modal--scrollable {
     max-height: calc(100vh - (calc(5vh + 96px)));
+
+    @supports (height: 100dvh) {
+      max-height: calc(100dvh - (calc(5vh + 96px)));
+    }
   }
 
   @media (min-width: 992px) {
     margin-block-start: 6vh;
+
+    @supports (height: 100dvh) {
+      margin-block-start: 6dvh;
+    }
   }
 
   @media (min-width: 1200px) {
     margin-block-start: 8vh;
+
+    @supports (height: 100dvh) {
+      margin-block-start: 8dvh;
+    }
   }
 }
 
@@ -78,8 +90,16 @@
   max-height: 100vh;
   max-width: 100%;
 
+  @supports (height: 100dvh) {
+    max-height: 100dvh;
+  }
+
   &.pds-modal--scrollable {
     max-height: 100vh;
+
+    @supports (height: 100dvh) {
+      max-height: 100dvh;
+    }
   }
 }
 
