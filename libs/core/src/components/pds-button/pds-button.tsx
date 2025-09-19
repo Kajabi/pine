@@ -119,8 +119,8 @@ export class PdsButton {
       return;
     }
 
-    // Check if target is a form input element
-    const isFormInput = target.matches('input:not([type="submit"]):not([type="button"])') ||
+    // Check if target is a form input element (exclude reset buttons)
+    const isFormInput = target.matches('input:not([type="submit"]):not([type="button"]):not([type="reset"])') ||
                        target.matches('pds-input') ||
                        target.matches('pds-select') ||
                        target.matches('pds-switch') ||
@@ -128,11 +128,19 @@ export class PdsButton {
                        target.matches('pds-radio');
 
     if (isFormInput) {
-      // Find the first enabled submit button in the form
-      const firstSubmitButton = form.querySelector('pds-button[type="submit"]:not([disabled]), button[type="submit"]:not([disabled]), input[type="submit"]:not([disabled])');
+      // Find all submit buttons in the form and check their actual properties
+      const allSubmitButtons = Array.from(form.querySelectorAll('pds-button, button[type="submit"], input[type="submit"]'));
+      const enabledSubmitButtons = allSubmitButtons.filter(button => {
+        if (button.tagName.toLowerCase() === 'pds-button') {
+          const pdsButton = button as HTMLPdsButtonElement;
+          return pdsButton.type === 'submit' && !pdsButton.disabled;
+        } else {
+          return !button.hasAttribute('disabled');
+        }
+      });
 
       // Only synthesize click if this button is strictly the first enabled submit button
-      if (firstSubmitButton === this.el) {
+      if (enabledSubmitButtons.length > 0 && enabledSubmitButtons[0] === this.el) {
         event.preventDefault();
         this.el.click();
       }
