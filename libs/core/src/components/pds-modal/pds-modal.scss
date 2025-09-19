@@ -50,7 +50,7 @@
     max-height: calc(100vh - (calc(5vh + 96px)));
 
     @supports (height: 100dvh) {
-      max-height: calc(100dvh - (calc(5vh + 96px)));
+      max-height: calc(100dvh - (calc(5dvh + 96px)));
     }
   }
 
