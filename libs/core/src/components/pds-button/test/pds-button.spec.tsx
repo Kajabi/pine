@@ -405,5 +405,110 @@ describe('pds-button', () => {
       const caretIcon = root?.shadowRoot?.querySelector('pds-icon[part="caret"]');
       expect(caretIcon).toBeFalsy();
     });
+
+    it('handleFormKeyDown ignores disabled submit buttons', async () => {
+      const page = await newSpecPage({
+        components: [PdsButton],
+        html: `
+          <form>
+            <input type="text" id="test-input" />
+            <pds-button type="submit" disabled="true">Disabled Submit</pds-button>
+          </form>
+        `,
+      });
+
+      const button = page.root as HTMLPdsButtonElement;
+      const input = page.doc.querySelector('#test-input') as HTMLInputElement;
+      const clickSpy = jest.spyOn(button, 'click');
+
+      const enterEvent = new KeyboardEvent('keydown', {
+        key: 'Enter',
+        bubbles: true,
+        cancelable: true
+      });
+
+      Object.defineProperty(enterEvent, 'target', {
+        value: input,
+        writable: false
+      });
+
+      (button as any).handleFormKeyDown(enterEvent);
+      await page.waitForChanges();
+
+      expect(clickSpy).not.toHaveBeenCalled();
+    });
+
+    it('handleFormKeyDown skips disabled buttons and finds first enabled one', async () => {
+      const page = await newSpecPage({
+        components: [PdsButton],
+        html: `
+          <form>
+            <input type="text" id="test-input" />
+            <pds-button type="submit" disabled="true" id="disabled-button">Disabled Submit</pds-button>
+            <pds-button type="submit" id="enabled-button">Enabled Submit</pds-button>
+          </form>
+        `,
+      });
+
+      const disabledButton = page.doc.querySelector('#disabled-button') as HTMLPdsButtonElement;
+      const enabledButton = page.doc.querySelector('#enabled-button') as HTMLPdsButtonElement;
+      const input = page.doc.querySelector('#test-input') as HTMLInputElement;
+
+      const disabledClickSpy = jest.spyOn(disabledButton, 'click');
+      const enabledClickSpy = jest.spyOn(enabledButton, 'click');
+
+      const enterEvent = new KeyboardEvent('keydown', {
+        key: 'Enter',
+        bubbles: true,
+        cancelable: true
+      });
+
+      Object.defineProperty(enterEvent, 'target', {
+        value: input,
+        writable: false
+      });
+
+      // Test disabled button (should not trigger)
+      (disabledButton as any).handleFormKeyDown(enterEvent);
+
+      // Test enabled button (should trigger because it's the first enabled one)
+      (enabledButton as any).handleFormKeyDown(enterEvent);
+
+      await page.waitForChanges();
+
+      expect(disabledClickSpy).not.toHaveBeenCalled();
+      expect(enabledClickSpy).toHaveBeenCalled();
+    });
+
+    it('handleFormKeyDown handles non-Element event targets safely', async () => {
+      const page = await newSpecPage({
+        components: [PdsButton],
+        html: `
+          <form>
+            <pds-button type="submit">Submit</pds-button>
+          </form>
+        `,
+      });
+
+      const button = page.root as HTMLPdsButtonElement;
+      const clickSpy = jest.spyOn(button, 'click');
+
+      const enterEvent = new KeyboardEvent('keydown', {
+        key: 'Enter',
+        bubbles: true,
+        cancelable: true
+      });
+
+      // Set target to a non-Element (like window or document)
+      Object.defineProperty(enterEvent, 'target', {
+        value: window,
+        writable: false
+      });
+
+      (button as any).handleFormKeyDown(enterEvent);
+      await page.waitForChanges();
+
+      expect(clickSpy).not.toHaveBeenCalled();
+    });
   });
 });

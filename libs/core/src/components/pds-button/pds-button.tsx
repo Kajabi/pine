@@ -101,12 +101,17 @@ export class PdsButton {
   @Listen('keydown', { target: 'body' })
 
   handleFormKeyDown(event: KeyboardEvent) {
-    // Only handle Enter key for submit buttons
-    if (event.key !== 'Enter' || this.type !== 'submit' || this.href) {
+    // Only handle Enter key for submit buttons that are not disabled
+    if (event.key !== 'Enter' || this.type !== 'submit' || this.href || this.disabled) {
       return;
     }
 
     const target = event.target as Element;
+
+    // Ensure event.target is an Element with matches method before proceeding
+    if (!target || typeof target.matches !== 'function') {
+      return;
+    }
     const form = this.el.closest('form');
 
     // Check if the Enter key was pressed in a form input within the same form
@@ -123,8 +128,10 @@ export class PdsButton {
                        target.matches('pds-radio');
 
     if (isFormInput) {
-      // Check if this is the first submit button in the form
-      const firstSubmitButton = form.querySelector('pds-button[type="submit"], button[type="submit"], input[type="submit"]');
+      // Find the first enabled submit button in the form
+      const firstSubmitButton = form.querySelector('pds-button[type="submit"]:not([disabled]), button[type="submit"]:not([disabled]), input[type="submit"]:not([disabled])');
+
+      // Only synthesize click if this button is strictly the first enabled submit button
       if (firstSubmitButton === this.el) {
         event.preventDefault();
         this.el.click();
