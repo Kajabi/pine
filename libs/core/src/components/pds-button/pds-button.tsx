@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, h, Listen, Prop } from '@stencil/core';
 import { hasShadowDom } from '../../utils/utils';
 
 import { caretDown } from '@pine-ds/icons/icons';
@@ -95,14 +95,73 @@ export class PdsButton {
 
   @Event() pdsClick: EventEmitter;
 
+  /**
+   * Listen for Enter key presses on form inputs to trigger submit
+   */
+  @Listen('keydown', { target: 'body' })
+
+  handleFormKeyDown(event: KeyboardEvent) {
+    // Only handle Enter key for submit buttons that are not disabled
+    if (event.key !== 'Enter' || this.type !== 'submit' || this.href || this.disabled) {
+      return;
+    }
+
+    const target = event.target as Element;
+
+    // Ensure event.target is an Element with matches method before proceeding
+    if (!target || typeof target.matches !== 'function') {
+      return;
+    }
+    const form = this.el.closest('form');
+
+    // Check if the Enter key was pressed in a form input within the same form
+    if (!form || !target || !form.contains(target)) {
+      return;
+    }
+
+    // Check if target is a form input element (exclude reset buttons)
+    const isFormInput = target.matches('input:not([type="submit"]):not([type="button"]):not([type="reset"])') ||
+                       target.matches('pds-input') ||
+                       target.matches('pds-select') ||
+                       target.matches('pds-switch') ||
+                       target.matches('pds-checkbox') ||
+                       target.matches('pds-radio');
+
+    if (isFormInput) {
+      // Find all submit buttons in the form and check their actual properties
+      const allSubmitButtons = Array.from(form.querySelectorAll('pds-button, button[type="submit"], input[type="submit"]'));
+      const enabledSubmitButtons = allSubmitButtons.filter(button => {
+        if (button.tagName.toLowerCase() === 'pds-button') {
+          const pdsButton = button as HTMLPdsButtonElement;
+          return pdsButton.type === 'submit' && !pdsButton.disabled;
+        } else {
+          return !button.hasAttribute('disabled');
+        }
+      });
+
+      // Only synthesize click if this button is strictly the first enabled submit button
+      if (enabledSubmitButtons.length > 0 && enabledSubmitButtons[0] === this.el) {
+        event.preventDefault();
+        this.el.click();
+      }
+    }
+  }
+
+
   private handleClick = (ev: Event) => {
     if (this.loading) {
       ev.preventDefault();
       return;
     }
 
+    // Prevent form submission for disabled buttons
+    if (this.disabled) {
+      ev.preventDefault();
+      return;
+    }
+
     if (!this.href && this.type != 'button') {
-      // If button clicked IS NOT associated with a form
+      // Handle form submission for Shadow DOM buttons
       if (hasShadowDom(this.el)) {
         const form = this.el.closest('form');
         if (form) {

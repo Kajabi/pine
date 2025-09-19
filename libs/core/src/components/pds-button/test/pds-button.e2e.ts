@@ -171,4 +171,73 @@ describe('pds-button', () => {
     expect(accentColor).toBe('rgb(0, 255, 0)');
     expect(dangerColor).toBe('rgb(255, 165, 0)');
   });
+
+  describe('Enter key form submission', () => {
+    it('submits form when Enter is pressed in input field', async () => {
+      const page = await newE2EPage({
+        html: `
+          <form>
+            <input type="text" id="test-input" />
+            <pds-button type="submit">Submit</pds-button>
+          </form>
+        `
+      });
+
+      const form = await page.find('form');
+      const input = await page.find('#test-input');
+      const formSubmitEvent = await form.spyOnEvent('submit');
+
+      // Focus the input and press Enter
+      await input.focus();
+      await page.keyboard.press('Enter');
+      await page.waitForChanges();
+
+      expect(formSubmitEvent).toHaveReceivedEvent();
+    });
+
+    it('does not submit form when Enter is pressed in textarea', async () => {
+      const page = await newE2EPage({
+        html: `
+          <form>
+            <textarea id="test-textarea"></textarea>
+            <pds-button type="submit">Submit</pds-button>
+          </form>
+        `
+      });
+
+      const form = await page.find('form');
+      const textarea = await page.find('#test-textarea');
+      const formSubmitEvent = await form.spyOnEvent('submit');
+
+      // Focus the textarea and press Enter
+      await textarea.focus();
+      await page.keyboard.press('Enter');
+      await page.waitForChanges();
+
+      // Should not have submitted
+      expect(formSubmitEvent).not.toHaveReceivedEvent();
+    });
+
+    it('button click still works normally', async () => {
+      const page = await newE2EPage({
+        html: `
+          <form>
+            <input type="text" id="test-input" />
+            <pds-button type="submit">Submit</pds-button>
+          </form>
+        `
+      });
+
+      const form = await page.find('form');
+      const button = await page.find('pds-button');
+      const formSubmitEvent = await form.spyOnEvent('submit');
+
+      // Click the button
+      await button.click();
+      await page.waitForChanges();
+
+      expect(formSubmitEvent).toHaveReceivedEvent();
+    });
+
+  });
 });
