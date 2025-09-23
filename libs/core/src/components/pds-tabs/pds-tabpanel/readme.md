@@ -12,13 +12,6 @@
 | `name` _(required)_ | `name`    | Sets the related tab name, this name must match a `pds-tab`'s tab name property | `string` | `undefined` |
 
 
-## Shadow Parts
-
-| Part          | Description                              |
-| ------------- | ---------------------------------------- |
-| `"tab-panel"` | Exposes the panel container for styling. |
-
-
 ----------------------------------------------
 
 

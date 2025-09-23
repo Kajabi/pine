@@ -1,9 +1,5 @@
 import { Component, Element, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
 
-/**
- * @part tab - Exposes the button element for styling.
- * @part tab-content - Exposes the content container for styling.
- */
 @Component({
   tag: 'pds-tab',
   styleUrl: 'pds-tab.scss',
@@ -69,11 +65,10 @@ export class PdsTab {
           aria-selected={this.selected ? "true" : "false"}
           class={this.selected ? "pds-tab is-active" : "pds-tab"}
           onClick={this.onTabClick.bind(this, this.index, this.parentComponentId)}
-          part="tab"
         >
           {this.variant === "availability" && availabilityTabEdgeInlineStart}
           {this.variant === "availability" && availabilityTabEdgeInlineEnd}
-          <div class="pds-tab__content" part="tab-content"><slot/></div>
+          <div class="pds-tab__content"><slot/></div>
         </button>
       </Host>
     );

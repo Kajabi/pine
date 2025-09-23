@@ -10,8 +10,8 @@ describe('pds-tabs', () => {
     });
     expect(page.root).toEqualHtml(`
     <pds-tab slot="tabs">
-      <button aria-controls="undefined__undefined-panel" id="undefined__undefined" aria-selected="false" class="pds-tab" part="tab" role="tab" tabindex="-1">
-        <div class="pds-tab__content" part="tab-content"></div>
+      <button aria-controls="undefined__undefined-panel" id="undefined__undefined" aria-selected="false" class="pds-tab" role="tab" tabindex="-1">
+        <div class="pds-tab__content"></div>
       </button>
     </pds-tab>
     `);
@@ -25,8 +25,8 @@ describe('pds-tabs', () => {
     await page.waitForChanges();
     expect(page.root).toEqualHtml(`
       <pds-tab slot="tabs" name="two" parent-component-id="foo" selected="false">
-        <button aria-controls="foo__two-panel" id="foo__two" aria-selected="false" class="pds-tab" part="tab" role="tab" tabindex="-1" id="two">
-          <div class="pds-tab__content" part="tab-content">Content</div>
+        <button aria-controls="foo__two-panel" id="foo__two" aria-selected="false" class="pds-tab" role="tab" tabindex="-1" id="two">
+          <div class="pds-tab__content">Content</div>
         </button>
       </pds-tab>
     `);
@@ -39,8 +39,8 @@ describe('pds-tabs', () => {
     });
     expect(page.root).toEqualHtml(`
       <pds-tab slot="tabs" name="two" parent-component-id="foo" selected="true">
-        <button aria-controls="foo__two-panel" aria-selected="true" class="pds-tab is-active" part="tab" role="tab" tabindex="0" id="foo__two">
-          <div class="pds-tab__content" part="tab-content">Content</div>
+        <button aria-controls="foo__two-panel" aria-selected="true" class="pds-tab is-active" role="tab" tabindex="0" id="foo__two">
+          <div class="pds-tab__content">Content</div>
         </button>
       </pds-tab>
     `);
@@ -65,10 +65,10 @@ describe('pds-tabs', () => {
     });
     expect(page.root).toEqualHtml(`
       <pds-tab slot="tabs" variant="availability" name="two" parent-component-id="foo" selected="true">
-        <button aria-controls="foo__two-panel" aria-selected="true" class="pds-tab is-active" part="tab" role="tab" tabindex="0" id="foo__two">
+        <button aria-controls="foo__two-panel" aria-selected="true" class="pds-tab is-active" role="tab" tabindex="0" id="foo__two">
           <span class="pds-tab-edge" role="presentation"></span>
           <span class="pds-tab-edge pds-tab-edge--end" role="presentation"></span>
-          <div class="pds-tab__content" part="tab-content">Content</div>
+          <div class="pds-tab__content">Content</div>
         </button>
       </pds-tab>
     `);
