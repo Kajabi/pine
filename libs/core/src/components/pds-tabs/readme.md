@@ -23,6 +23,13 @@
 | `"tabs"`      | Content is placed within the `div[role="tablist"]` element as children         |
 
 
+## Shadow Parts
+
+| Part         | Description                                                               |
+| ------------ | ------------------------------------------------------------------------- |
+| `"tab-list"` | Exposes the container element that holds all the tab buttons for styling. |
+
+
 ## CSS Custom Properties
 
 | Name                                | Description                    |

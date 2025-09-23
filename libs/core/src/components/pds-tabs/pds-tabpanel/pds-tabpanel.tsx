@@ -1,5 +1,8 @@
 import { Component, Element, Host, h, Prop } from '@stencil/core';
 
+/**
+ * @part tab-panel - Exposes the panel container for styling.
+ */
 @Component({
   tag: 'pds-tabpanel',
   styleUrl: 'pds-tabpanel.scss',
@@ -40,6 +43,7 @@ export class PdsTabpanel {
           tabindex="0"
           aria-labelledby={this.parentComponentId + "__" + this.name}
           class={this.selected ? "pds-tabpanel is-active" : "pds-tabpanel"}
+          part="tab-panel"
         >
           <slot />
         </div>

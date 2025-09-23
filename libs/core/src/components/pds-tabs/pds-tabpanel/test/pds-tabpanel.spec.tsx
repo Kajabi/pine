@@ -9,7 +9,7 @@ describe('pds-tabpanel', () => {
     });
     expect(page.root).toEqualHtml(`
       <pds-tabpanel slot="tabpanels">
-        <div class="pds-tabpanel" id="undefined__undefined-panel" role="tabpanel" tabindex="0" aria-labelledby="undefined__undefined"></div>
+        <div class="pds-tabpanel" id="undefined__undefined-panel" part="tab-panel" role="tabpanel" tabindex="0" aria-labelledby="undefined__undefined"></div>
       </pds-tabpanel>
     `);
   });
@@ -21,7 +21,7 @@ describe('pds-tabpanel', () => {
     });
     expect(page.root).toEqualHtml(`
       <pds-tabpanel slot="tabpanels" name="two" parent-component-id="foo" selected="false">
-        <div aria-labelledby="foo__two" class="pds-tabpanel" role="tabpanel" id="foo__two-panel" tabindex="0">
+        <div aria-labelledby="foo__two" class="pds-tabpanel" part="tab-panel" role="tabpanel" id="foo__two-panel" tabindex="0">
           Content
         </div>
       </pds-tabpanel>
@@ -36,7 +36,7 @@ describe('pds-tabpanel', () => {
     await page.waitForChanges();
     expect(page.root).toEqualHtml(`
       <pds-tabpanel slot="tabpanels" name="two" parent-component-id="foo" selected="true">
-        <div aria-labelledby="foo__two" class="pds-tabpanel is-active" role="tabpanel" id="foo__two-panel" tabindex="0">
+        <div aria-labelledby="foo__two" class="pds-tabpanel is-active" part="tab-panel" role="tabpanel" id="foo__two-panel" tabindex="0">
           Content
         </div>
       </pds-tabpanel>
