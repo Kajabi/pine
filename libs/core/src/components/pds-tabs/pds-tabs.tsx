@@ -3,6 +3,7 @@ import { Component, Element, Host, h, Prop, Listen } from '@stencil/core';
   /**
  * @slot tabs - Content is placed within the `div[role="tablist"]` element as children
  * @slot tabpanels - Content is placed directly after the `div[role="tablist"]` element as siblings
+ * @part tab-list - Exposes the container element that holds all the tab buttons for styling.
  */
 @Component({
   tag: 'pds-tabs',
@@ -132,7 +133,7 @@ export class PdsTabs {
   render() {
     return (
       <Host active-tab-name={this.activeTabName} class={this.classNames()} id={this.componentId}>
-        <div class="pds-tabs__tablist" role="tablist" aria-label={this.tablistLabel}>
+        <div class="pds-tabs__tablist" role="tablist" aria-label={this.tablistLabel} part="tab-list">
           <slot name="tabs" />
         </div>
         <slot name="tabpanels" />

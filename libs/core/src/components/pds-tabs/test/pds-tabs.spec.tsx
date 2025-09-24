@@ -12,7 +12,7 @@ describe('pds-tabs', () => {
     expect(page.root).toEqualHtml(`
       <pds-tabs class="pds-tabs">
         <mock:shadow-root>
-          <div class="pds-tabs__tablist" role="tablist">
+          <div class="pds-tabs__tablist" part="tab-list" role="tablist">
             <slot name="tabs"></slot>
           </div>
           <slot name="tabpanels"></slot>
@@ -29,7 +29,7 @@ it('renders variant prop', async () => {
     expect(page.root).toEqualHtml(`
       <pds-tabs active-tab-name="two" class="pds-tabs pds-tabs--availability" component-id="test" id="test" variant="availability">
         <mock:shadow-root>
-          <div class="pds-tabs__tablist" role="tablist">
+          <div class="pds-tabs__tablist" part="tab-list" role="tablist">
             <slot name="tabs"></slot>
           </div>
           <slot name="tabpanels"></slot>
@@ -46,7 +46,7 @@ it('renders variant prop', async () => {
     expect(page.root).toEqualHtml(`
       <pds-tabs active-tab-name="two" class="pds-tabs" component-id="test" id="test" tablist-label="test label">
         <mock:shadow-root>
-          <div class="pds-tabs__tablist" role="tablist" aria-label="test label">
+          <div class="pds-tabs__tablist" part="tab-list" role="tablist" aria-label="test label">
             <slot name="tabs"></slot>
           </div>
           <slot name="tabpanels"></slot>
