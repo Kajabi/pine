@@ -110,9 +110,9 @@ export class PdsCombobox implements BasePdsProps {
   @Event() pdsComboboxChange!: EventEmitter<{ value: string }>;
 
   /**
-   * Internal state for filtered options
+   * Internal state for filtered options and group labels
    */
-  @State() filteredOptions: HTMLOptionElement[] = [];
+  @State() filteredItems: (HTMLOptionElement | HTMLOptGroupElement | HTMLPdsTextElement)[] = [];
 
   /**
    * Internal state for the currently highlighted option index
@@ -136,6 +136,7 @@ export class PdsCombobox implements BasePdsProps {
 
   private inputEl?: HTMLInputElement;
   private optionEls: HTMLOptionElement[] = [];
+  private allItems: (HTMLOptionElement | HTMLOptGroupElement | HTMLPdsTextElement)[] = [];
   private triggerEl?: HTMLElement;
   private listboxEl?: HTMLElement;
 
@@ -157,11 +158,33 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   private updateOptions() {
-    // Get all <option> elements from the slot
+    // Get all elements from the slot
     const slot = this.el.shadowRoot?.querySelector('slot[name="option"], slot:not([name])');
     if (slot) {
-      this.optionEls = (slot as HTMLSlotElement).assignedElements({ flatten: true })
-        .filter(el => el.tagName === 'OPTION') as HTMLOptionElement[];
+      const allElements = (slot as HTMLSlotElement).assignedElements({ flatten: true });
+
+      // Separate options from group labels and flatten optgroups
+      this.allItems = [];
+      this.optionEls = [];
+
+      allElements.forEach(el => {
+        if (el.tagName === 'OPTION') {
+          this.optionEls.push(el as HTMLOptionElement);
+          this.allItems.push(el as HTMLOptionElement);
+        } else if (el.tagName === 'OPTGROUP') {
+          const optgroup = el as HTMLOptGroupElement;
+          this.allItems.push(optgroup);
+          // Add optgroup children (options)
+          Array.from(optgroup.children).forEach(child => {
+            if (child.tagName === 'OPTION') {
+              this.optionEls.push(child as HTMLOptionElement);
+              this.allItems.push(child as HTMLOptionElement);
+            }
+          });
+        } else if (el.tagName === 'PDS-TEXT') {
+          this.allItems.push(el as HTMLPdsTextElement);
+        }
+      });
 
       // Set initial selected option if one exists (only check DOM on initialization)
       if (!this.selectedOption) {
@@ -236,16 +259,33 @@ export class PdsCombobox implements BasePdsProps {
 
   private filterOptions() {
     if (this.mode === 'select-only') {
-      this.filteredOptions = this.optionEls;
+      this.filteredItems = this.allItems;
     } else {
       const val = this.value.toLowerCase();
-      this.filteredOptions = this.optionEls.filter(option => {
+      const filteredOptions = this.optionEls.filter(option => {
         // For layout options, search both text content and data-search-text attribute
         if (this.isOptionLayout(option)) {
           const searchText = option.getAttribute('data-search-text') || option.textContent || '';
           return searchText.toLowerCase().includes(val);
         }
         return this.getOptionLabel(option).toLowerCase().includes(val);
+      });
+
+      // Rebuild filtered items maintaining group structure - simplified approach
+      this.filteredItems = [];
+      let currentGroupLabel: HTMLOptGroupElement | HTMLPdsTextElement | null = null;
+
+      this.allItems.forEach(item => {
+        if (item.tagName === 'OPTGROUP' || item.tagName === 'PDS-TEXT') {
+          // This is a group label - store it but don't add yet
+          currentGroupLabel = item as HTMLOptGroupElement | HTMLPdsTextElement;
+        } else if (item.tagName === 'OPTION' && filteredOptions.includes(item as HTMLOptionElement)) {
+          // This is a matching option - add the group label first if we haven't already
+          if (currentGroupLabel && !this.filteredItems.includes(currentGroupLabel)) {
+            this.filteredItems.push(currentGroupLabel);
+          }
+          this.filteredItems.push(item);
+        }
       });
     }
     this.highlightedIndex = -1;
@@ -298,16 +338,20 @@ export class PdsCombobox implements BasePdsProps {
       this.isOpen = true;
       return;
     }
+
+    // Get only the option elements (skip group labels) for navigation
+    const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION') as HTMLOptionElement[];
+
     switch (e.key) {
       case 'ArrowDown':
-        this.highlightedIndex = Math.min(this.highlightedIndex + 1, this.filteredOptions.length - 1);
+        this.highlightedIndex = Math.min(this.highlightedIndex + 1, selectableOptions.length - 1);
         break;
       case 'ArrowUp':
         this.highlightedIndex = Math.max(this.highlightedIndex - 1, 0);
         break;
       case 'Enter':
-        if (this.isOpen && this.highlightedIndex >= 0 && this.highlightedIndex < this.filteredOptions.length) {
-          this.handleOptionClick(this.filteredOptions[this.highlightedIndex]);
+        if (this.isOpen && this.highlightedIndex >= 0 && this.highlightedIndex < selectableOptions.length) {
+          this.handleOptionClick(selectableOptions[this.highlightedIndex]);
         }
         break;
       case 'Escape':
@@ -335,7 +379,8 @@ export class PdsCombobox implements BasePdsProps {
   // Event handler for option click
   private onOptionClick = (event: Event) => {
     const idx = Number((event.currentTarget as HTMLElement).getAttribute('data-option-index'));
-    const option = this.filteredOptions[idx];
+    const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION') as HTMLOptionElement[];
+    const option = selectableOptions[idx];
     this.handleOptionClick(option);
   };
 
@@ -406,7 +451,10 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   private renderDropdown() {
-    if (!this.isOpen || this.filteredOptions.length === 0) return null;
+    if (!this.isOpen || this.filteredItems.length === 0) return null;
+
+    let optionIndex = 0;
+
     return (
       <ul
         class="pds-combobox__listbox"
@@ -414,35 +462,63 @@ export class PdsCombobox implements BasePdsProps {
         id="pds-combobox-listbox"
         ref={el => (this.listboxEl = el as HTMLElement)}
       >
-        {this.filteredOptions.map((option, idx) => {
-          const isSelected = this.isOptionSelected(option);
-          const isHighlighted = this.highlightedIndex === idx;
-          const isLayout = this.isOptionLayout(option);
+        {this.filteredItems.map((item, itemIdx) => {
+          if (item.tagName === 'OPTGROUP') {
+            const optgroup = item as HTMLOptGroupElement;
+            return (
+              <li
+                key={`optgroup-${itemIdx}`}
+                class="pds-combobox__group-label"
+                role="presentation"
+                aria-label={optgroup.label}
+              >
+                {optgroup.label}
+              </li>
+            );
+          } else if (item.tagName === 'PDS-TEXT') {
+            const pdsText = item as HTMLPdsTextElement;
+            return (
+              <li
+                key={`pds-text-${itemIdx}`}
+                class="pds-combobox__group-label"
+                role="presentation"
+              >
+                {pdsText.textContent}
+              </li>
+            );
+          } else if (item.tagName === 'OPTION') {
+            const option = item as HTMLOptionElement;
+            const isSelected = this.isOptionSelected(option);
+            const isHighlighted = this.highlightedIndex === optionIndex;
+            const isLayout = this.isOptionLayout(option);
+            const currentOptionIndex = optionIndex++;
 
-          return (
-            <li
-              key={option.value}
-              id={`pds-combobox-option-${idx}`}
-              role="option"
-              aria-selected={isSelected ? 'true' : 'false'}
-              class={{
-                'pds-combobox__option': true,
-                'pds-combobox__option--highlighted': isHighlighted,
-                'pds-combobox__option--layout': isLayout,
-              }}
-              data-option-index={idx}
-              onMouseDown={this.onOptionMouseDown}
-              onClick={this.onOptionClick}
-              onMouseEnter={this.onOptionMouseEnter}
-            >
-              {isLayout ? (
-                <pds-box class="pds-combobox__option-layout-wrapper" innerHTML={this.getOptionLayoutContent(option)} />
-              ) : (
-                this.getOptionLabel(option)
-              )}
-              {isSelected && <pds-icon icon="check" size="regular" class="pds-combobox__option-check" />}
-            </li>
-          );
+            return (
+              <li
+                key={option.value}
+                id={`pds-combobox-option-${currentOptionIndex}`}
+                role="option"
+                aria-selected={isSelected ? 'true' : 'false'}
+                class={{
+                  'pds-combobox__option': true,
+                  'pds-combobox__option--highlighted': isHighlighted,
+                  'pds-combobox__option--layout': isLayout,
+                }}
+                data-option-index={currentOptionIndex}
+                onMouseDown={this.onOptionMouseDown}
+                onClick={this.onOptionClick}
+                onMouseEnter={this.onOptionMouseEnter}
+              >
+                {isLayout ? (
+                  <pds-box class="pds-combobox__option-layout-wrapper" innerHTML={this.getOptionLayoutContent(option)} />
+                ) : (
+                  this.getOptionLabel(option)
+                )}
+                {isSelected && <pds-icon icon="check" size="regular" class="pds-combobox__option-check" />}
+              </li>
+            );
+          }
+          return null;
         })}
       </ul>
     );

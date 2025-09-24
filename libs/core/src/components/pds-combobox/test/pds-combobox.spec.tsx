@@ -219,7 +219,7 @@ describe('pds-combobox', () => {
     component.optionEls = mockOptions;
     component.filterOptions();
 
-    expect(component.filteredOptions.length).toBe(3);
+    expect(component.filteredItems.length).toBe(3);
   });
 
     it('filters options in filter mode', async () => {
@@ -240,8 +240,9 @@ describe('pds-combobox', () => {
     component.value = 'ca';
     component.filterOptions();
 
-    expect(component.filteredOptions.length).toBe(1);
-    expect(component.filteredOptions[0].value).toBe('cat');
+    const filteredOptions = component.filteredItems.filter(item => item.tagName === 'OPTION');
+    expect(filteredOptions.length).toBe(1);
+    expect(filteredOptions[0].value).toBe('cat');
   });
 
     it('does not filter options in select-only mode', async () => {
@@ -262,7 +263,7 @@ describe('pds-combobox', () => {
     component.value = 'ca';
     component.filterOptions();
 
-    expect(component.filteredOptions.length).toBe(3);
+    expect(component.filteredItems.length).toBe(3);
   });
 
   it('opens dropdown when input is focused', async () => {
@@ -334,7 +335,7 @@ describe('pds-combobox', () => {
     ];
 
     component.optionEls = mockOptions;
-    component.filteredOptions = mockOptions;
+    component.filteredItems = mockOptions;
     component.isOpen = true;
 
     // Test arrow down
@@ -371,7 +372,7 @@ describe('pds-combobox', () => {
     const mockOption = createMockOption('cat', 'Cat');
 
     component.optionEls = [mockOption];
-    component.filteredOptions = [mockOption];
+    component.filteredItems = [mockOption];
     component.isOpen = true;
     component.highlightedIndex = 0;
 
@@ -514,7 +515,7 @@ describe('pds-combobox', () => {
       { value: 'dog', label: 'Dog', hasAttribute: jest.fn(() => false) } as unknown as HTMLOptionElement,
     ];
 
-    component.filteredOptions = mockOptions;
+    component.filteredItems = mockOptions;
     component.isOpen = true;
     await page.waitForChanges();
 
@@ -539,7 +540,7 @@ describe('pds-combobox', () => {
       { value: 'dog', label: 'Dog', hasAttribute: jest.fn(() => false) } as unknown as HTMLOptionElement,
     ];
 
-    component.filteredOptions = mockOptions;
+    component.filteredItems = mockOptions;
     component.isOpen = true;
     await page.waitForChanges();
 
@@ -569,7 +570,7 @@ describe('pds-combobox', () => {
       { value: 'cat', label: 'Cat', hasAttribute: jest.fn(() => false) } as unknown as HTMLOptionElement,
     ];
 
-    component.filteredOptions = mockOptions;
+    component.filteredItems = mockOptions;
     component.isOpen = true;
     await page.waitForChanges();
 
@@ -600,7 +601,7 @@ describe('pds-combobox', () => {
     // Use centralized state management to set selection
     (component as any).setSelectedOption(mockOption);
 
-    component.filteredOptions = [mockOption];
+    component.filteredItems = [mockOption];
     component.isOpen = true;
     await page.waitForChanges();
 
@@ -624,7 +625,7 @@ describe('pds-combobox', () => {
     ];
 
     component.optionEls = mockOptions;
-    component.filteredOptions = mockOptions;
+    component.filteredItems = mockOptions;
 
     // Test Enter key
     const enterEvent = new KeyboardEvent('keydown', { key: 'Enter' });
@@ -827,7 +828,7 @@ describe('pds-combobox', () => {
       component.value = 'digital';
       component.filterOptions();
 
-      expect(component.filteredOptions).toContain(mockLayoutOption);
+      expect(component.filteredItems).toContain(mockLayoutOption);
     });
 
     it('renders layout options with innerHTML', async () => {
@@ -845,7 +846,7 @@ describe('pds-combobox', () => {
         innerHTML: '<pds-icon icon="card-paypal"></pds-icon>PayPal',
       } as unknown as HTMLOptionElement;
 
-      component.filteredOptions = [mockLayoutOption];
+      component.filteredItems = [mockLayoutOption];
       component.isOpen = true;
       await page.waitForChanges();
 
@@ -1005,7 +1006,7 @@ describe('pds-combobox', () => {
        } as unknown as HTMLOptionElement;
 
       component.optionEls = [mockLayoutOption];
-      component.filteredOptions = [mockLayoutOption];
+      component.filteredItems = [mockLayoutOption];
       component.isOpen = true;
       await page.waitForChanges();
 
@@ -1049,8 +1050,8 @@ describe('pds-combobox', () => {
       component.value = 'digital';
       component.filterOptions();
 
-      expect(component.filteredOptions).toContain(mockPayPalOption);
-      expect(component.filteredOptions).not.toContain(mockStripeOption);
+      expect(component.filteredItems).toContain(mockPayPalOption);
+      expect(component.filteredItems).not.toContain(mockStripeOption);
     });
   });
 
@@ -1089,7 +1090,7 @@ describe('pds-combobox', () => {
         hasAttribute: jest.fn((attr: string) => attr === 'data-layout'),
       } as unknown as HTMLOptionElement;
 
-      component.filteredOptions = [mockLayoutOption];
+      component.filteredItems = [mockLayoutOption];
       component.isOpen = true;
       await page.waitForChanges();
 

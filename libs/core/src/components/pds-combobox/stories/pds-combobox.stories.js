@@ -192,3 +192,106 @@ Custom.args = {
   customTriggerContent: true,
   customOptionLayouts: true,
 };
+
+export const OptionGroupsOptgroup = (args) => html`
+<pds-combobox
+  component-id="combobox-optgroups"
+  label=${args.label}
+  placeholder=${args.placeholder}
+  trigger=${args.trigger}
+  trigger-variant=${args.triggerVariant}
+  mode=${args.mode}
+  trigger-width=${args.triggerWidth}
+  dropdown-width=${args.dropdownWidth}
+  max-height=${args.maxHeight}
+>
+  <optgroup label="Mammals">
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="elephant">Elephant</option>
+    <option value="whale">Whale</option>
+    <option value="dolphin">Dolphin</option>
+    <option value="tiger">Tiger</option>
+  </optgroup>
+  <optgroup label="Birds">
+    <option value="eagle">Eagle</option>
+    <option value="parrot">Parrot</option>
+    <option value="penguin">Penguin</option>
+    <option value="owl">Owl</option>
+    <option value="falcon">Falcon</option>
+  </optgroup>
+  <optgroup label="Fish">
+    <option value="salmon">Salmon</option>
+    <option value="shark">Shark</option>
+    <option value="tuna">Tuna</option>
+    <option value="goldfish">Goldfish</option>
+  </optgroup>
+  <optgroup label="Reptiles">
+    <option value="snake">Snake</option>
+    <option value="lizard">Lizard</option>
+    <option value="turtle">Turtle</option>
+    <option value="crocodile">Crocodile</option>
+  </optgroup>
+</pds-combobox>`;
+
+OptionGroupsOptgroup.args = {
+  componentId: 'combobox-optgroups',
+  label: 'Select Animal',
+  placeholder: 'Choose an animal',
+  trigger: 'button',
+  triggerVariant: 'secondary',
+  mode: 'select-only',
+  triggerWidth: '280px',
+  dropdownWidth: '280px',
+  maxHeight: '280px',
+};
+
+export const OptionGroupsPdsText = (args) => html`
+<pds-combobox
+  component-id="combobox-pds-text-groups"
+  label=${args.label}
+  placeholder=${args.placeholder}
+  trigger=${args.trigger}
+  trigger-variant=${args.triggerVariant}
+  mode=${args.mode}
+  trigger-width=${args.triggerWidth}
+  dropdown-width=${args.dropdownWidth}
+  max-height=${args.maxHeight}
+>
+  <pds-text>Frontend Technologies</pds-text>
+  <option value="react">React</option>
+  <option value="vue">Vue.js</option>
+  <option value="angular">Angular</option>
+  <option value="svelte">Svelte</option>
+  <option value="nextjs">Next.js</option>
+
+  <pds-text>Backend Technologies</pds-text>
+  <option value="nodejs">Node.js</option>
+  <option value="python">Python</option>
+  <option value="java">Java</option>
+  <option value="golang">Go</option>
+  <option value="rust">Rust</option>
+
+  <pds-text>Databases</pds-text>
+  <option value="postgresql">PostgreSQL</option>
+  <option value="mongodb">MongoDB</option>
+  <option value="mysql">MySQL</option>
+  <option value="redis">Redis</option>
+
+  <pds-text>Cloud Services</pds-text>
+  <option value="aws">AWS</option>
+  <option value="azure">Azure</option>
+  <option value="gcp">Google Cloud</option>
+  <option value="vercel">Vercel</option>
+</pds-combobox>`;
+
+OptionGroupsPdsText.args = {
+  componentId: 'combobox-pds-text-groups',
+  label: 'Select Technology',
+  placeholder: 'Choose a technology',
+  trigger: 'input',
+  mode: 'filter',
+  triggerWidth: '300px',
+  dropdownWidth: '300px',
+  maxHeight: '280px',
+};
