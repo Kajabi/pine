@@ -373,7 +373,7 @@ export class PdsCombobox implements BasePdsProps {
    */
   @Method()
   async setFocus() {
-    this.inputEl?.focus();
+    (this.inputEl as HTMLElement | undefined)?.focus() ?? this.triggerEl?.focus();
   }
 
   /**
