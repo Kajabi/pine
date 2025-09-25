@@ -87,6 +87,8 @@ The secondary variant provides a subtle button appearance with a white backgroun
     <option value="panda">Panda</option>
     <option value="snake">Snake</option>
   </pds-combobox>
+
+> **Note**: The `pds-text` element above serves as a non-interactive group header. Users cannot select these labels - they only organize and categorize the selectable options below them.
 </DocCanvas>
 
 ### Primary
@@ -983,3 +985,12 @@ When using group labels:
 3. **Consider filtering behavior**: Group labels are preserved when filtering, but only groups with matching options will be shown
 4. **Use consistent styling**: Choose either `<optgroup>` or `<pds-text>` consistently within a single combobox
 5. **Test accessibility**: Ensure group labels work well with screen readers and keyboard navigation
+
+### ARIA and Accessibility Considerations
+
+Both `<optgroup>` and `<pds-text>` group labels are rendered as presentational items in the dropdown:
+
+- **`<optgroup>` elements**: Provide semantic grouping that is meaningful to screen readers. The `label` attribute is announced by assistive technology, helping users understand the relationship between options and their categories.
+- **`<pds-text>` elements**: Serve as visual group headers but are purely presentational. They do not provide semantic grouping information to screen readers.
+
+**Recommendation**: Use `<optgroup>` when semantic grouping is important for accessibility and screen reader users. Use `<pds-text>` when you only need visual organization without semantic meaning.
