@@ -1,0 +1,175 @@
+:host {
+  --box-shadow-focus: 0 0 0 1px var(--pine-color-white), 0 0 0 3px var(--pine-color-focus-ring);
+
+  display: inline-block;
+  position: relative;
+}
+
+.pds-filter__trigger {
+  align-items: center;
+  /* stylelint-disable-next-line property-no-unknown */
+  anchor-name: --filter-trigger;
+  background: var(--pine-color-background-container);
+  border: var(--pine-border-width-thin) solid var(--pine-color-border);
+  border-radius: var(--pine-dimension-100);
+  box-shadow: var(--pine-box-shadow-050);
+  box-sizing: border-box;
+  color: var(--pine-color-text-placeholder);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--pine-font-family-inter);
+  font-size: var(--pine-font-size-100);
+  font-weight: var(--pine-font-weight-400);
+  gap: var(--pine-dimension-050);
+  letter-spacing: var(--pine-letter-spacing-114);
+  line-height: var(--pine-line-height-150);
+  padding: var(--pine-dimension-025) var(--pine-dimension-125);
+  position: relative;
+  transition: all 0.2s ease;
+
+  pds-icon {
+    color: var(--pine-color-grey-800);
+    flex-shrink: 0;
+    height: var(--pine-font-size-100);
+    width: var(--pine-font-size-100);
+  }
+
+  &:hover,
+  &.pds-filter__trigger--open {
+    background-color: var(--pine-color-grey-100);
+    border-color: var(--pine-color-grey-400);
+    color: var(--pine-color-text-hover);
+
+    pds-icon {
+      color: var(--pine-color-grey-800);
+    }
+  }
+
+  &:focus-visible {
+    box-shadow: var(--box-shadow-focus);
+    outline: none;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.pds-filter__trigger--selected {
+  background-color: var(--pine-color-purple-050);
+  border-color: var(--pine-color-purple-500);
+  color: var(--pine-color-purple-600);
+
+  pds-icon {
+    color: var(--pine-color-purple-600);
+  }
+
+  &:hover,
+  &.pds-filter__trigger--open {
+    background-color: var(--pine-color-purple-100);
+    border-color: var(--pine-color-purple-500);
+    color: var(--pine-color-purple-600);
+
+    pds-icon {
+      color: var(--pine-color-purple-600);
+    }
+  }
+
+  &:focus-visible {
+    box-shadow: var(--box-shadow-focus);
+    outline: none;
+  }
+}
+
+.pds-filter__trigger--more {
+  background-color: var(--pine-color-grey-050);
+  border: var(--pine-border-width-thin) dashed var(--pine-color-grey-300);
+  color: var(--pine-color-text-placeholder);
+
+  pds-icon {
+    color: var(--pine-color-grey-800);
+  }
+
+  &:hover,
+  &.pds-filter__trigger--open {
+    background-color: var(--pine-color-grey-100);
+    border-color: var(--pine-color-grey-400);
+    color: var(--pine-color-text-hover);
+
+    pds-icon {
+      color: var(--pine-color-grey-800);
+    }
+  }
+
+  &:focus-visible {
+    box-shadow: var(--box-shadow-focus);
+    outline: none;
+  }
+}
+
+.pds-filter__trigger--clear {
+  background: transparent;
+  border: var(--pine-border-width-thin) solid transparent;
+  border-radius: var(--pine-dimension-100);
+  box-shadow: none;
+  color: var(--pine-color-purple-600);
+
+  pds-icon {
+    color: var(--pine-color-purple-600);
+  }
+
+  &:hover {
+    background-color: var(--pine-color-purple-100);
+    border-color: var(--pine-color-purple-100);
+    color: var(--pine-color-purple-600);
+
+    pds-icon {
+      color: var(--pine-color-purple-600);
+    }
+  }
+
+  &:focus-visible {
+    box-shadow: var(--box-shadow-focus);
+    outline: none;
+  }
+}
+
+.pds-filter__button-content {
+  align-items: center;
+  display: inline-flex;
+  gap: var(--pine-dimension-050);
+  max-width: 148px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pds-filter__button-text {
+  line-height: var(--pine-line-height-150);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pds-filter__dropdown-icon {
+  flex-shrink: 0;
+  height: var(--pine-dimension-200);
+  width: var(--pine-dimension-200);
+}
+
+
+.pds-filter__popover {
+  background-color: var(--pine-color-background-container);
+  border: 0;
+  border-radius: var(--pine-dimension-100);
+  box-shadow: var(--pine-box-shadow-100);
+  inset: unset;
+  /* stylelint-disable-next-line order/properties-alphabetical-order */
+  left: anchor(left);
+  padding: var(--pine-dimension-100);
+  /* stylelint-disable-next-line property-no-unknown */
+  position-anchor: --filter-trigger;
+  top: calc(anchor(bottom) + var(--pine-dimension-100));
+  width: 228px;
+}

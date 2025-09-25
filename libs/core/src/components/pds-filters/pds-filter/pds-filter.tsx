@@ -1,0 +1,316 @@
+import { Component, Element, Event, EventEmitter, Host, h, Prop, State, Method, Listen } from '@stencil/core';
+import type { BasePdsProps } from '@utils/interfaces';
+import type { PdsFilterOpenEventDetail, PdsFilterCloseEventDetail, PdsFilterClearEventDetail } from './filter-interface';
+
+import { enlarge, trash } from '@pine-ds/icons/icons';
+
+/**
+ * @part button - Exposes the trigger button element for styling.
+ * @part button-content - Exposes the button content container for styling.
+ * @part button-text - Exposes the button text for styling.
+ * @part icon - Exposes the icon component for styling.
+ * @part popover - Exposes the popover container for styling.
+ * @slot (default) - Popover content that will be displayed when the filter is open.
+ */
+
+@Component({
+  tag: 'pds-filter',
+  styleUrl: 'pds-filter.scss',
+  shadow: true,
+})
+export class PdsFilter implements BasePdsProps {
+  @Element() el!: HTMLPdsFilterElement;
+
+  private popoverEl: HTMLElement;
+
+  /**
+   * A unique identifier used for the underlying component `id` attribute.
+   */
+  @Prop() componentId!: string;
+
+  /**
+   * The variant style of the filter trigger.
+   * @defaultValue 'default'
+   */
+  @Prop() variant: 'default' | 'selected' | 'more' | 'clear' = 'default';
+
+  /**
+   * The name of the icon to display in the trigger button.
+   * For 'clear' variant, this is ignored as it always shows trash icon.
+   */
+  @Prop() icon?: string;
+
+  /**
+   * The text content displayed in the trigger button.
+   */
+  @Prop() text?: string;
+
+
+  /**
+   * State to track if the popover is open.
+   */
+  @State() isOpen = false;
+
+  /**
+   * Event emitted when the filter popover is opened.
+   */
+  @Event() pdsFilterOpen: EventEmitter<PdsFilterOpenEventDetail>;
+
+  /**
+   * Event emitted when the filter popover is closed.
+   */
+  @Event() pdsFilterClose: EventEmitter<PdsFilterCloseEventDetail>;
+
+  /**
+   * Event emitted when the clear variant is clicked.
+   */
+  @Event() pdsFilterClear: EventEmitter<PdsFilterClearEventDetail>;
+
+  componentDidRender() {
+    this.popoverEl = this.el.shadowRoot?.querySelector('.pds-filter__popover') as HTMLElement;
+  }
+
+  /**
+   * Opens the filter popover programmatically.
+   * Note: Clear variant does not support popover functionality.
+   */
+  @Method()
+  async showFilter() {
+    if (this.variant === 'clear') {
+      console.warn('Clear variant does not support showFilter method');
+      return;
+    }
+
+    if (this.popoverEl != null) {
+      this.popoverEl.showPopover();
+    }
+  }
+
+  /**
+   * Closes the filter popover programmatically.
+   * Note: Clear variant does not support popover functionality.
+   */
+  @Method()
+  async hideFilter() {
+    if (this.variant === 'clear') {
+      console.warn('Clear variant does not support hideFilter method');
+      return;
+    }
+
+    if (this.popoverEl != null) {
+      this.popoverEl.hidePopover();
+    }
+  }
+
+  /**
+   * Listen for native popover toggle events.
+   */
+  @Listen('toggle', { target: 'document' })
+  handlePopoverToggle(event: Event) {
+    const target = event.target as HTMLElement;
+    if (target.id === `${this.componentId}-popover`) {
+      this.isOpen = target.matches(':popover-open');
+
+      if (this.isOpen) {
+        this.pdsFilterOpen.emit({
+          componentId: this.componentId,
+          variant: this.variant,
+          text: this.text,
+        });
+      } else {
+        this.pdsFilterClose.emit({
+          componentId: this.componentId,
+          variant: this.variant,
+          text: this.text,
+        });
+      }
+    }
+  }
+
+  /**
+   * Listen for clicks to detect outside dismissal.
+   */
+  @Listen('click', { target: 'document' })
+  handleDocumentClick(event: Event) {
+    // Check if click is outside and popover gets closed
+    if (!this.el.contains(event.target as Node) && this.isOpen && this.variant !== 'clear') {
+      setTimeout(() => {
+        if (this.popoverEl && !this.popoverEl.matches(':popover-open') && this.isOpen) {
+          this.isOpen = false;
+          this.pdsFilterClose.emit({
+            componentId: this.componentId,
+            variant: this.variant,
+            text: this.text,
+          });
+        }
+      }, 0);
+    }
+  }
+
+  /**
+   * Listen for Escape key to ensure close event fires.
+   */
+  @Listen('keydown', { target: 'document' })
+  handleEscapeKey(event: KeyboardEvent) {
+    if (event.key === 'Escape' && this.isOpen && this.variant !== 'clear') {
+      // Check if popover was closed by Escape
+      setTimeout(() => {
+        if (this.popoverEl && !this.popoverEl.matches(':popover-open') && this.isOpen) {
+          this.isOpen = false;
+          this.pdsFilterClose.emit({
+            componentId: this.componentId,
+            variant: this.variant,
+            text: this.text,
+          });
+        }
+      }, 0);
+    }
+  }
+
+  /**
+   * Handle keyboard interactions for clear variant only.
+   */
+  private handleKeyDown = (event: KeyboardEvent) => {
+    // Only handle clear variant manually, let native API handle everything else
+    if (this.variant === 'clear' && (event.key === 'Enter' || event.key === ' ')) {
+      event.preventDefault();
+      this.handleClick();
+    }
+  };
+
+  /**
+   * Handle trigger button click.
+   */
+  private handleClick = () => {
+    // Clear variant doesn't open popover, just fires clear event
+    if (this.variant === 'clear') {
+      this.pdsFilterClear.emit({
+        componentId: this.componentId,
+        text: this.text,
+      });
+      return;
+    }
+
+    // For other variants, let the native popover API handle the toggle
+    // then track the state change for our events
+    setTimeout(() => {
+      if (this.popoverEl != null) {
+        const isNowOpen = this.popoverEl.matches(':popover-open');
+        if (isNowOpen !== this.isOpen) {
+          this.isOpen = isNowOpen;
+
+          if (this.isOpen) {
+            this.pdsFilterOpen.emit({
+              componentId: this.componentId,
+              variant: this.variant,
+              text: this.text,
+            });
+          } else {
+            this.pdsFilterClose.emit({
+              componentId: this.componentId,
+              variant: this.variant,
+              text: this.text,
+            });
+          }
+        }
+      }
+    }, 0);
+  };
+
+  /**
+   * Get the appropriate icon for the variant.
+   */
+  private getIcon() {
+    if (this.variant === 'clear') {
+      return trash;
+    }
+    return this.icon;
+  }
+
+  /**
+   * Get CSS classes for the trigger button.
+   */
+  private getTriggerClasses() {
+    const classes = ['pds-filter__trigger'];
+    classes.push(`pds-filter__trigger--${this.variant}`);
+
+    if (this.isOpen && this.variant !== 'clear') {
+      classes.push('pds-filter__trigger--open');
+    }
+
+    return classes.join(' ');
+  }
+
+  /**
+   * Render the trigger icon.
+   */
+  private renderIcon() {
+    const iconToRender = this.getIcon();
+    if (iconToRender == null || iconToRender === '') return null;
+
+    return (
+      <pds-icon
+        icon={iconToRender}
+        size="var(--pine-font-size-100)"
+        aria-hidden="true"
+        part="icon"
+      />
+    );
+  }
+
+  /**
+   * Render the dropdown icon for selected variant.
+   */
+  private renderDropdownIcon() {
+    if (this.variant === 'selected') {
+      return (
+        <pds-icon
+          icon={enlarge}
+          size="var(--pine-dimension-200)"
+          aria-hidden="true"
+          class="pds-filter__dropdown-icon"
+          part="icon"
+        />
+      );
+    }
+    return null;
+  }
+
+  render() {
+    return (
+      <Host id={this.componentId}>
+        <button
+          class={this.getTriggerClasses()}
+          type="button"
+          popoverTarget={this.variant !== 'clear' ? `${this.componentId}-popover` : undefined}
+          popoverTargetAction={this.variant !== 'clear' ? 'toggle' : undefined}
+          onKeyDown={this.variant === 'clear' ? this.handleKeyDown : undefined}
+          onClick={this.handleClick}
+          part="button"
+        >
+          <span class="pds-filter__button-content" part="button-content">
+            {this.renderIcon()}
+            {this.text && (
+              <span class="pds-filter__button-text" part="button-text">
+                {this.text}
+              </span>
+            )}
+            {this.renderDropdownIcon()}
+          </span>
+        </button>
+
+        {this.variant !== 'clear' && (
+          <div
+            ref={el => this.popoverEl = el}
+            id={`${this.componentId}-popover`}
+            class="pds-filter__popover"
+            popover="auto"
+            part="popover"
+          >
+            <slot />
+          </div>
+        )}
+      </Host>
+    );
+  }
+}

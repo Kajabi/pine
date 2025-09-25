@@ -19,6 +19,8 @@ import { defineCustomElement as definePdsDivider } from '@pine-ds/core/component
 import { defineCustomElement as definePdsDropdownMenu } from '@pine-ds/core/components/pds-dropdown-menu.js';
 import { defineCustomElement as definePdsDropdownMenuItem } from '@pine-ds/core/components/pds-dropdown-menu-item.js';
 import { defineCustomElement as definePdsDropdownMenuSeparator } from '@pine-ds/core/components/pds-dropdown-menu-separator.js';
+import { defineCustomElement as definePdsFilter } from '@pine-ds/core/components/pds-filter.js';
+import { defineCustomElement as definePdsFilters } from '@pine-ds/core/components/pds-filters.js';
 import { defineCustomElement as definePdsImage } from '@pine-ds/core/components/pds-image.js';
 import { defineCustomElement as definePdsInput } from '@pine-ds/core/components/pds-input.js';
 import { defineCustomElement as definePdsLink } from '@pine-ds/core/components/pds-link.js';
@@ -64,6 +66,8 @@ export const PdsDivider = /*@__PURE__*/createReactComponent<JSX.PdsDivider, HTML
 export const PdsDropdownMenu = /*@__PURE__*/createReactComponent<JSX.PdsDropdownMenu, HTMLPdsDropdownMenuElement>('pds-dropdown-menu', undefined, undefined, definePdsDropdownMenu);
 export const PdsDropdownMenuItem = /*@__PURE__*/createReactComponent<JSX.PdsDropdownMenuItem, HTMLPdsDropdownMenuItemElement>('pds-dropdown-menu-item', undefined, undefined, definePdsDropdownMenuItem);
 export const PdsDropdownMenuSeparator = /*@__PURE__*/createReactComponent<JSX.PdsDropdownMenuSeparator, HTMLPdsDropdownMenuSeparatorElement>('pds-dropdown-menu-separator', undefined, undefined, definePdsDropdownMenuSeparator);
+export const PdsFilter = /*@__PURE__*/createReactComponent<JSX.PdsFilter, HTMLPdsFilterElement>('pds-filter', undefined, undefined, definePdsFilter);
+export const PdsFilters = /*@__PURE__*/createReactComponent<JSX.PdsFilters, HTMLPdsFiltersElement>('pds-filters', undefined, undefined, definePdsFilters);
 export const PdsImage = /*@__PURE__*/createReactComponent<JSX.PdsImage, HTMLPdsImageElement>('pds-image', undefined, undefined, definePdsImage);
 export const PdsInput = /*@__PURE__*/createReactComponent<JSX.PdsInput, HTMLPdsInputElement>('pds-input', undefined, undefined, definePdsInput);
 export const PdsLink = /*@__PURE__*/createReactComponent<JSX.PdsLink, HTMLPdsLinkElement>('pds-link', undefined, undefined, definePdsLink);
