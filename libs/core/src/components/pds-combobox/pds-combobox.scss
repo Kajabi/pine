@@ -104,6 +104,21 @@
   margin-inline-start: var(--pine-dimension-150);
 }
 
+.pds-combobox__group-label {
+  color: var(--pine-color-text-secondary);
+  cursor: default;
+  font: var(--pine-typography-body-small);
+  font-weight: var(--pine-font-weight-semibold);
+  margin-block-end: var(--pine-dimension-2xs);
+  margin-block-start: var(--pine-dimension-xs);
+  padding: var(--pine-dimension-2xs) var(--pine-dimension-sm);
+  text-transform: uppercase;
+
+  &:first-child {
+    margin-block-start: 0;
+  }
+}
+
 .pds-combobox__button-trigger {
   align-items: center;
   background: var(--color-background-default, var(--pine-color-secondary));
