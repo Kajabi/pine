@@ -277,14 +277,22 @@ export class PdsCombobox implements BasePdsProps {
 
       this.allItems.forEach(item => {
         if (item.tagName === 'OPTGROUP' || item.tagName === 'PDS-TEXT') {
-          // This is a group label - store it but don't add yet
           currentGroupLabel = item as HTMLOptGroupElement | HTMLPdsTextElement;
         } else if (item.tagName === 'OPTION' && filteredOptions.includes(item as HTMLOptionElement)) {
-          // This is a matching option - add the group label first if we haven't already
-          if (currentGroupLabel && !this.filteredItems.includes(currentGroupLabel)) {
-            this.filteredItems.push(currentGroupLabel);
+          const optionEl = item as HTMLOptionElement;
+          const parent = optionEl.parentElement;
+          let labelToUse: HTMLOptGroupElement | HTMLPdsTextElement | null = null;
+          if (parent && parent.tagName === 'OPTGROUP') {
+            // Only use the actual parent optgroup as label
+            labelToUse = parent as HTMLOptGroupElement;
+          } else if (currentGroupLabel && currentGroupLabel.tagName === 'PDS-TEXT') {
+            // Allow pds-text to label subsequent top-level options until another label appears
+            labelToUse = currentGroupLabel as HTMLPdsTextElement;
           }
-          this.filteredItems.push(item);
+          if (labelToUse && !this.filteredItems.includes(labelToUse)) {
+            this.filteredItems.push(labelToUse);
+          }
+          this.filteredItems.push(optionEl);
         }
       });
     }
