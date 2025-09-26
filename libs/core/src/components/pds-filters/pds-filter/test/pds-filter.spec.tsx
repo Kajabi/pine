@@ -487,13 +487,17 @@ describe('pds-filter', () => {
 
       const mockPopover = {
         hidePopover: jest.fn(() => { throw new Error('Not supported'); }),
-        style: { display: 'block' }
+        style: { display: 'block' },
+        classList: {
+          remove: jest.fn()
+        }
       };
       component.popoverEl = mockPopover as any;
 
       component.disconnectedCallback();
 
       expect(mockPopover.style.display).toBe('none');
+      expect(mockPopover.classList.remove).toHaveBeenCalledWith('is-open');
     });
 
     it('disconnectedCallback does not throw when scrollRAF is null', async () => {
@@ -577,13 +581,15 @@ describe('pds-filter', () => {
       const component = page.rootInstance;
       component.popoverEl = {} as any;
 
-      // Mock shadowRoot.querySelector to return null (no trigger found)
-      const mockQuerySelector = jest.fn().mockReturnValue(null);
-      component.el.shadowRoot = { querySelector: mockQuerySelector } as any;
+      // Spy on the existing shadowRoot.querySelector and mock it to return null
+      const querySelectorSpy = jest.spyOn(component.el.shadowRoot!, 'querySelector').mockReturnValue(null);
 
       // Should return early without throwing
       expect(() => component.adjustPopoverPosition()).not.toThrow();
-      expect(mockQuerySelector).toHaveBeenCalledWith('.pds-filter__trigger');
+      expect(querySelectorSpy).toHaveBeenCalledWith('.pds-filter__trigger');
+
+      // Restore the spy
+      querySelectorSpy.mockRestore();
     });
 
     it('closeOtherPopovers skips current element', async () => {
@@ -686,15 +692,19 @@ describe('pds-filter', () => {
 
       const component = page.rootInstance;
 
-      // Mock shadowRoot.querySelector
+      // Mock popover element
       const mockPopover = {};
-      const mockQuerySelector = jest.fn().mockReturnValue(mockPopover);
-      component.el.shadowRoot = { querySelector: mockQuerySelector } as any;
+
+      // Spy on the existing shadowRoot.querySelector and mock it to return mockPopover
+      const querySelectorSpy = jest.spyOn(component.el.shadowRoot!, 'querySelector').mockReturnValue(mockPopover as any);
 
       component.componentDidRender();
 
-      expect(mockQuerySelector).toHaveBeenCalledWith('.pds-filter__popover');
+      expect(querySelectorSpy).toHaveBeenCalledWith('.pds-filter__popover');
       expect(component.popoverEl).toBe(mockPopover);
+
+      // Restore the spy
+      querySelectorSpy.mockRestore();
     });
   });
 

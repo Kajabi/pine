@@ -171,13 +171,13 @@
   z-index: 1000;
 
   /* stylelint-disable-next-line selector-pseudo-class-no-unknown */
-  &:popover-open {
+  &:popover-open,
+  &.is-open {
     display: block;
   }
 
   /* Modern browsers: CSS anchor positioning with JavaScript-controlled flipping */
   @supports (anchor-name: --test) {
-    /* stylelint-disable-next-line order/properties-alphabetical-order */
     left: anchor(--filter-trigger left);
     position: fixed; /* Anchor positioning requires fixed positioning */
     /* stylelint-disable-next-line property-no-unknown */
@@ -188,7 +188,6 @@
 
     /* Flipping classes applied by JavaScript for precise control */
     &.popover-flip-horizontal {
-      /* stylelint-disable-next-line order/properties-alphabetical-order */
       left: anchor(--filter-trigger right);
       transform: translateX(-100%);
     }
@@ -199,7 +198,23 @@
     }
 
     &.popover-flip-horizontal.popover-flip-vertical {
-      /* stylelint-disable-next-line order/properties-alphabetical-order */
+      left: anchor(--filter-trigger right);
+      top: anchor(--filter-trigger top);
+      transform: translate(-100%, calc(-100% - var(--pine-dimension-100)));
+    }
+
+    /* Ensure fallback class works with flipping in modern browsers */
+    &.is-open.popover-flip-horizontal {
+      left: anchor(--filter-trigger right);
+      transform: translateX(-100%);
+    }
+
+    &.is-open.popover-flip-vertical {
+      top: anchor(--filter-trigger top);
+      transform: translateY(calc(-100% - var(--pine-dimension-100)));
+    }
+
+    &.is-open.popover-flip-horizontal.popover-flip-vertical {
       left: anchor(--filter-trigger right);
       top: anchor(--filter-trigger top);
       transform: translate(-100%, calc(-100% - var(--pine-dimension-100)));

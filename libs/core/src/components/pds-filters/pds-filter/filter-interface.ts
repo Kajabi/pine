@@ -15,7 +15,7 @@ export interface PdsFilterClearEventDetail {
   text?: string;
 }
 
-export interface PdsFilterEvent<T> extends CustomEvent {
-  detail: T;
-  target: HTMLPdsFilterElement;
+export interface PdsFilterEvent<T> extends CustomEvent<T> {
+  readonly detail: T;
+  target: HTMLPdsFilterElement | null;
 }

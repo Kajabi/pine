@@ -94,6 +94,7 @@ export class PdsFilter implements BasePdsProps {
         this.popoverEl.hidePopover();
       } catch (error) {
         this.popoverEl.style.display = 'none';
+        this.popoverEl.classList.remove('is-open');
       }
     }
   }
@@ -153,11 +154,23 @@ export class PdsFilter implements BasePdsProps {
 
       const popover = filter.shadowRoot?.querySelector('.pds-filter__popover') as HTMLElement;
 
-      if (popover && popover.matches(':popover-open')) {
+      if (popover) {
+        // Check for popover API support to avoid crashes
+        let isPopoverOpen = false;
         try {
-          popover.hidePopover();
+          isPopoverOpen = popover.matches(':popover-open');
         } catch (error) {
-          popover.style.display = 'none';
+          // Fallback if :popover-open selector isn't supported
+          isPopoverOpen = popover.style.display === 'block';
+        }
+
+        if (isPopoverOpen) {
+          try {
+            popover.hidePopover();
+          } catch (error) {
+            popover.style.display = 'none';
+            popover.classList.remove('is-open');
+          }
         }
       }
     });
@@ -242,7 +255,13 @@ export class PdsFilter implements BasePdsProps {
     }
 
     if (this.popoverEl != null) {
-      this.popoverEl.showPopover();
+      try {
+        this.popoverEl.showPopover();
+      } catch (error) {
+        // Fallback for testing environment where showPopover is not available
+        this.popoverEl.style.display = 'block';
+        this.popoverEl.classList.add('is-open');
+      }
     }
   }
 
@@ -258,7 +277,13 @@ export class PdsFilter implements BasePdsProps {
     }
 
     if (this.popoverEl != null) {
-      this.popoverEl.hidePopover();
+      try {
+        this.popoverEl.hidePopover();
+      } catch (error) {
+        // Fallback for testing environment where hidePopover is not available
+        this.popoverEl.style.display = 'none';
+        this.popoverEl.classList.remove('is-open');
+      }
     }
   }
 
@@ -270,7 +295,13 @@ export class PdsFilter implements BasePdsProps {
     const target = event.target as HTMLElement;
 
     if (target.id === `${this.componentId}-popover`) {
-      this.isOpen = target.matches(':popover-open');
+      // Check for popover API support to avoid crashes
+      try {
+        this.isOpen = target.matches(':popover-open');
+      } catch (error) {
+        // Fallback if :popover-open selector isn't supported
+        this.isOpen = target.style.display === 'block';
+      }
 
       if (this.isOpen) {
         setTimeout(() => this.adjustPopoverPosition(), 0);
@@ -298,13 +329,35 @@ export class PdsFilter implements BasePdsProps {
     // Check if click is outside and popover gets closed
     if (!this.el.contains(event.target as Node) && this.isOpen && this.variant !== 'clear') {
       setTimeout(() => {
-        if (this.popoverEl && !this.popoverEl.matches(':popover-open') && this.isOpen) {
-          this.isOpen = false;
-          this.pdsFilterClose.emit({
-            componentId: this.componentId,
-            variant: this.variant,
-            text: this.text,
-          });
+        if (this.popoverEl && this.isOpen) {
+          // Check for popover API support to avoid crashes
+          const supportsPopoverAPI = HTMLElement.prototype.showPopover && !navigator.userAgent.includes('Firefox');
+
+          let popoverIsClosed = false;
+          if (supportsPopoverAPI) {
+            try {
+              popoverIsClosed = !this.popoverEl.matches(':popover-open');
+            } catch (error) {
+              // Fallback if :popover-open selector isn't supported
+              popoverIsClosed = this.popoverEl.style.display !== 'block';
+            }
+          } else {
+            // Manual fallback - assume popover was closed by outside click
+            popoverIsClosed = true;
+          }
+
+          if (popoverIsClosed) {
+            this.isOpen = false;
+            if (!supportsPopoverAPI) {
+              this.popoverEl.style.display = 'none';
+              this.popoverEl.classList.remove('is-open');
+            }
+            this.pdsFilterClose.emit({
+              componentId: this.componentId,
+              variant: this.variant,
+              text: this.text,
+            });
+          }
         }
       }, 0);
     }
@@ -318,13 +371,35 @@ export class PdsFilter implements BasePdsProps {
     if (event.key === 'Escape' && this.isOpen && this.variant !== 'clear') {
       // Check if popover was closed by Escape
       setTimeout(() => {
-        if (this.popoverEl && !this.popoverEl.matches(':popover-open') && this.isOpen) {
-          this.isOpen = false;
-          this.pdsFilterClose.emit({
-            componentId: this.componentId,
-            variant: this.variant,
-            text: this.text,
-          });
+        if (this.popoverEl && this.isOpen) {
+          // Check for popover API support to avoid crashes
+          const supportsPopoverAPI = HTMLElement.prototype.showPopover && !navigator.userAgent.includes('Firefox');
+
+          let popoverIsClosed = false;
+          if (supportsPopoverAPI) {
+            try {
+              popoverIsClosed = !this.popoverEl.matches(':popover-open');
+            } catch (error) {
+              // Fallback if :popover-open selector isn't supported
+              popoverIsClosed = this.popoverEl.style.display !== 'block';
+            }
+          } else {
+            // Manual fallback - assume popover was closed by Escape
+            popoverIsClosed = true;
+          }
+
+          if (popoverIsClosed) {
+            this.isOpen = false;
+            if (!supportsPopoverAPI) {
+              this.popoverEl.style.display = 'none';
+              this.popoverEl.classList.remove('is-open');
+            }
+            this.pdsFilterClose.emit({
+              componentId: this.componentId,
+              variant: this.variant,
+              text: this.text,
+            });
+          }
         }
       }, 0);
     }
@@ -357,31 +432,52 @@ export class PdsFilter implements BasePdsProps {
 
     setTimeout(() => {
       if (this.popoverEl != null) {
-        const isNowOpen = this.popoverEl.matches(':popover-open');
+        // Check for popover API support to avoid crashes
+        const supportsPopoverAPI = HTMLElement.prototype.showPopover && !navigator.userAgent.includes('Firefox');
 
-        // Manual fallback for browsers with limited popover API support
-        if (!HTMLElement.prototype.showPopover && navigator.userAgent.includes('Firefox')) {
+        if (supportsPopoverAPI) {
+          // Modern browsers with full popover API support
+          let isNowOpen = false;
+          try {
+            isNowOpen = this.popoverEl.matches(':popover-open');
+          } catch (error) {
+            // Fallback if :popover-open selector isn't supported
+            isNowOpen = this.popoverEl.style.display === 'block';
+          }
+
+          if (isNowOpen !== this.isOpen) {
+            this.isOpen = isNowOpen;
+
+            if (this.isOpen) {
+              this.adjustPopoverPosition();
+              this.pdsFilterOpen.emit({
+                componentId: this.componentId,
+                variant: this.variant,
+                text: this.text,
+              });
+            } else {
+              this.pdsFilterClose.emit({
+                componentId: this.componentId,
+                variant: this.variant,
+                text: this.text,
+              });
+            }
+          }
+        } else {
+          // Manual fallback for browsers with limited popover API support
           this.isOpen = !this.isOpen;
           if (this.isOpen) {
             this.popoverEl.style.display = 'block';
+            this.popoverEl.classList.add('is-open');
             this.adjustPopoverPosition();
-          } else {
-            this.popoverEl.style.display = 'none';
-          }
-        }
-
-        if (isNowOpen !== this.isOpen) {
-          this.isOpen = isNowOpen;
-
-          if (this.isOpen) {
-            this.adjustPopoverPosition();
-
             this.pdsFilterOpen.emit({
               componentId: this.componentId,
               variant: this.variant,
               text: this.text,
             });
           } else {
+            this.popoverEl.style.display = 'none';
+            this.popoverEl.classList.remove('is-open');
             this.pdsFilterClose.emit({
               componentId: this.componentId,
               variant: this.variant,
