@@ -914,6 +914,10 @@ describe('pds-filter', () => {
 
       const component = page.rootInstance;
 
+      // Capture original window dimensions
+      const originalInnerWidthDescriptor = Object.getOwnPropertyDescriptor(window, 'innerWidth');
+      const originalInnerHeightDescriptor = Object.getOwnPropertyDescriptor(window, 'innerHeight');
+
       // Mock modern browser with anchor positioning
       Object.defineProperty(document.documentElement.style, 'anchorName', {
         value: '',
@@ -943,16 +947,25 @@ describe('pds-filter', () => {
 
       const querySelectorSpy = jest.spyOn(component.el.shadowRoot!, 'querySelector').mockReturnValue(mockTrigger as any);
 
-      // Mock window dimensions
-      Object.defineProperty(window, 'innerWidth', { value: 1200, configurable: true });
-      Object.defineProperty(window, 'innerHeight', { value: 800, configurable: true });
+      try {
+        // Mock window dimensions
+        Object.defineProperty(window, 'innerWidth', { value: 1200, configurable: true });
+        Object.defineProperty(window, 'innerHeight', { value: 800, configurable: true });
 
-      component.adjustPopoverPosition();
+        component.adjustPopoverPosition();
 
-      expect(mockPopover.classList.remove).toHaveBeenCalledWith('popover-flip-horizontal', 'popover-flip-vertical');
-
-      querySelectorSpy.mockRestore();
-      delete (document.documentElement.style as any).anchorName;
+        expect(mockPopover.classList.remove).toHaveBeenCalledWith('popover-flip-horizontal', 'popover-flip-vertical');
+      } finally {
+        // Restore original window dimensions
+        if (originalInnerWidthDescriptor) {
+          Object.defineProperty(window, 'innerWidth', originalInnerWidthDescriptor);
+        }
+        if (originalInnerHeightDescriptor) {
+          Object.defineProperty(window, 'innerHeight', originalInnerHeightDescriptor);
+        }
+        querySelectorSpy.mockRestore();
+        delete (document.documentElement.style as any).anchorName;
+      }
     });
 
     it('adjustPopoverPosition applies horizontal flip when overflowing right', async () => {
@@ -962,6 +975,10 @@ describe('pds-filter', () => {
       });
 
       const component = page.rootInstance;
+
+      // Capture original window dimensions
+      const originalInnerWidthDescriptor = Object.getOwnPropertyDescriptor(window, 'innerWidth');
+      const originalInnerHeightDescriptor = Object.getOwnPropertyDescriptor(window, 'innerHeight');
 
       // Mock modern browser with anchor positioning
       Object.defineProperty(document.documentElement.style, 'anchorName', {
@@ -992,16 +1009,25 @@ describe('pds-filter', () => {
 
       const querySelectorSpy = jest.spyOn(component.el.shadowRoot!, 'querySelector').mockReturnValue(mockTrigger as any);
 
-      // Mock small window width to trigger overflow
-      Object.defineProperty(window, 'innerWidth', { value: 500, configurable: true });
-      Object.defineProperty(window, 'innerHeight', { value: 800, configurable: true });
+      try {
+        // Mock small window width to trigger overflow
+        Object.defineProperty(window, 'innerWidth', { value: 500, configurable: true });
+        Object.defineProperty(window, 'innerHeight', { value: 800, configurable: true });
 
-      component.adjustPopoverPosition();
+        component.adjustPopoverPosition();
 
-      expect(mockPopover.classList.add).toHaveBeenCalledWith('popover-flip-horizontal');
-
-      querySelectorSpy.mockRestore();
-      delete (document.documentElement.style as any).anchorName;
+        expect(mockPopover.classList.add).toHaveBeenCalledWith('popover-flip-horizontal');
+      } finally {
+        // Restore original window dimensions
+        if (originalInnerWidthDescriptor) {
+          Object.defineProperty(window, 'innerWidth', originalInnerWidthDescriptor);
+        }
+        if (originalInnerHeightDescriptor) {
+          Object.defineProperty(window, 'innerHeight', originalInnerHeightDescriptor);
+        }
+        querySelectorSpy.mockRestore();
+        delete (document.documentElement.style as any).anchorName;
+      }
     });
 
     it('adjustPopoverPosition applies vertical flip when overflowing bottom', async () => {
@@ -1011,6 +1037,10 @@ describe('pds-filter', () => {
       });
 
       const component = page.rootInstance;
+
+      // Capture original window dimensions
+      const originalInnerWidthDescriptor = Object.getOwnPropertyDescriptor(window, 'innerWidth');
+      const originalInnerHeightDescriptor = Object.getOwnPropertyDescriptor(window, 'innerHeight');
 
       // Mock modern browser with anchor positioning
       Object.defineProperty(document.documentElement.style, 'anchorName', {
@@ -1041,16 +1071,25 @@ describe('pds-filter', () => {
 
       const querySelectorSpy = jest.spyOn(component.el.shadowRoot!, 'querySelector').mockReturnValue(mockTrigger as any);
 
-      // Mock small window height to trigger overflow
-      Object.defineProperty(window, 'innerWidth', { value: 1200, configurable: true });
-      Object.defineProperty(window, 'innerHeight', { value: 450, configurable: true });
+      try {
+        // Mock small window height to trigger overflow
+        Object.defineProperty(window, 'innerWidth', { value: 1200, configurable: true });
+        Object.defineProperty(window, 'innerHeight', { value: 450, configurable: true });
 
-      component.adjustPopoverPosition();
+        component.adjustPopoverPosition();
 
-      expect(mockPopover.classList.add).toHaveBeenCalledWith('popover-flip-vertical');
-
-      querySelectorSpy.mockRestore();
-      delete (document.documentElement.style as any).anchorName;
+        expect(mockPopover.classList.add).toHaveBeenCalledWith('popover-flip-vertical');
+      } finally {
+        // Restore original window dimensions
+        if (originalInnerWidthDescriptor) {
+          Object.defineProperty(window, 'innerWidth', originalInnerWidthDescriptor);
+        }
+        if (originalInnerHeightDescriptor) {
+          Object.defineProperty(window, 'innerHeight', originalInnerHeightDescriptor);
+        }
+        querySelectorSpy.mockRestore();
+        delete (document.documentElement.style as any).anchorName;
+      }
     });
 
     it('adjustPopoverPosition applies JavaScript positioning for fallback browsers', async () => {
@@ -1060,6 +1099,10 @@ describe('pds-filter', () => {
       });
 
       const component = page.rootInstance;
+
+      // Capture original window dimensions
+      const originalInnerWidthDescriptor = Object.getOwnPropertyDescriptor(window, 'innerWidth');
+      const originalInnerHeightDescriptor = Object.getOwnPropertyDescriptor(window, 'innerHeight');
 
       // Ensure no anchor positioning support
       delete (document.documentElement.style as any).anchorName;
@@ -1087,16 +1130,25 @@ describe('pds-filter', () => {
 
       const querySelectorSpy = jest.spyOn(component.el.shadowRoot!, 'querySelector').mockReturnValue(mockTrigger as any);
 
-      Object.defineProperty(window, 'innerWidth', { value: 1200, configurable: true });
-      Object.defineProperty(window, 'innerHeight', { value: 800, configurable: true });
+      try {
+        Object.defineProperty(window, 'innerWidth', { value: 1200, configurable: true });
+        Object.defineProperty(window, 'innerHeight', { value: 800, configurable: true });
 
-      component.adjustPopoverPosition();
+        component.adjustPopoverPosition();
 
-      expect(mockPopover.style.cssText).toContain('position: fixed');
-      expect(mockPopover.style.cssText).toContain('left: 100px');
-      expect(mockPopover.style.cssText).toContain('top: 188px');
-
-      querySelectorSpy.mockRestore();
+        expect(mockPopover.style.cssText).toContain('position: fixed');
+        expect(mockPopover.style.cssText).toContain('left: 100px');
+        expect(mockPopover.style.cssText).toContain('top: 188px');
+      } finally {
+        // Restore original window dimensions
+        if (originalInnerWidthDescriptor) {
+          Object.defineProperty(window, 'innerWidth', originalInnerWidthDescriptor);
+        }
+        if (originalInnerHeightDescriptor) {
+          Object.defineProperty(window, 'innerHeight', originalInnerHeightDescriptor);
+        }
+        querySelectorSpy.mockRestore();
+      }
     });
   });
 
