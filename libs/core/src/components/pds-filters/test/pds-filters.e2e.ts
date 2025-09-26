@@ -76,8 +76,11 @@ describe('pds-filters e2e', () => {
     let popover3 = await page.find('pds-filter[component-id="filter3"] >>> .pds-filter__popover');
 
     expect(popover1).toBeTruthy();
-    expect(popover2).toBeFalsy();
-    expect(popover3).toBeFalsy();
+    expect(await popover1.isVisible()).toBe(true);
+    expect(popover2).toBeTruthy();
+    expect(await popover2.isVisible()).toBe(false);
+    expect(popover3).toBeTruthy();
+    expect(await popover3.isVisible()).toBe(false);
 
     // Open second filter - should close first
     await trigger2.click();
@@ -87,9 +90,12 @@ describe('pds-filters e2e', () => {
     popover2 = await page.find('pds-filter[component-id="filter2"] >>> .pds-filter__popover');
     popover3 = await page.find('pds-filter[component-id="filter3"] >>> .pds-filter__popover');
 
-    expect(popover1).toBeFalsy();
+    expect(popover1).toBeTruthy();
+    expect(await popover1.isVisible()).toBe(false);
     expect(popover2).toBeTruthy();
-    expect(popover3).toBeFalsy();
+    expect(await popover2.isVisible()).toBe(true);
+    expect(popover3).toBeTruthy();
+    expect(await popover3.isVisible()).toBe(false);
 
     // Open third filter - should close second
     await trigger3.click();
@@ -99,9 +105,12 @@ describe('pds-filters e2e', () => {
     popover2 = await page.find('pds-filter[component-id="filter2"] >>> .pds-filter__popover');
     popover3 = await page.find('pds-filter[component-id="filter3"] >>> .pds-filter__popover');
 
-    expect(popover1).toBeFalsy();
-    expect(popover2).toBeFalsy();
+    expect(popover1).toBeTruthy();
+    expect(await popover1.isVisible()).toBe(false);
+    expect(popover2).toBeTruthy();
+    expect(await popover2.isVisible()).toBe(false);
     expect(popover3).toBeTruthy();
+    expect(await popover3.isVisible()).toBe(true);
   });
 
   it('works with different filter variants', async () => {
@@ -131,11 +140,13 @@ describe('pds-filters e2e', () => {
     await page.waitForChanges();
     let popover = await page.find('pds-filter[component-id="default"] >>> .pds-filter__popover');
     expect(popover).toBeTruthy();
+    expect(await popover.isVisible()).toBe(true);
 
     await selectedTrigger.click();
     await page.waitForChanges();
     popover = await page.find('pds-filter[component-id="selected"] >>> .pds-filter__popover');
     expect(popover).toBeTruthy();
+    expect(await popover.isVisible()).toBe(true);
   });
 
   it('handles responsive behavior', async () => {
@@ -185,7 +196,13 @@ describe('pds-filters e2e', () => {
     await page.waitForChanges();
 
     // One popover should be open
-    const openPopovers = await page.findAll('pds-filter >>> .pds-filter__popover');
-    expect(openPopovers.length).toBeLessThanOrEqual(1);
+    const allPopovers = await page.findAll('pds-filter >>> .pds-filter__popover');
+    const visiblePopovers = [];
+    for (const popover of allPopovers) {
+      if (await popover.isVisible()) {
+        visiblePopovers.push(popover);
+      }
+    }
+    expect(visiblePopovers.length).toBeLessThanOrEqual(1);
   });
 });

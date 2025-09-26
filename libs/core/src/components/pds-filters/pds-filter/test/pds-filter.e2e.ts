@@ -19,9 +19,11 @@ describe('pds-filter e2e', () => {
 
     const trigger = await page.find('pds-filter >>> .pds-filter__trigger');
 
-    // Initially no popover
+    // Initially popover is closed
     let popover = await page.find('pds-filter >>> .pds-filter__popover');
-    expect(popover).toBeFalsy();
+    expect(popover).toBeTruthy();
+    expect(await popover.getAttribute('popover')).toBe('auto');
+    expect(await popover.isVisible()).toBe(false);
 
     // Click to open
     await trigger.click();
@@ -29,13 +31,15 @@ describe('pds-filter e2e', () => {
 
     popover = await page.find('pds-filter >>> .pds-filter__popover');
     expect(popover).toBeTruthy();
+    expect(await popover.isVisible()).toBe(true);
 
     // Click again to close
     await trigger.click();
     await page.waitForChanges();
 
     popover = await page.find('pds-filter >>> .pds-filter__popover');
-    expect(popover).toBeFalsy();
+    expect(popover).toBeTruthy();
+    expect(await popover.isVisible()).toBe(false);
   });
 
   it('emits pds-filter-open and pds-filter-close events', async () => {
@@ -94,7 +98,7 @@ describe('pds-filter e2e', () => {
     await trigger.click();
     await page.waitForChanges();
 
-    // Should not have popover
+    // Clear variant should not have popover
     const popover = await page.find('pds-filter >>> .pds-filter__popover');
     expect(popover).toBeFalsy();
   });
@@ -118,13 +122,15 @@ describe('pds-filter e2e', () => {
 
     let popover = await page.find('pds-filter >>> .pds-filter__popover');
     expect(popover).toBeTruthy();
+    expect(await popover.isVisible()).toBe(true);
 
     // Press Escape to close
     await page.keyboard.press('Escape');
     await page.waitForChanges();
 
     popover = await page.find('pds-filter >>> .pds-filter__popover');
-    expect(popover).toBeFalsy();
+    expect(popover).toBeTruthy();
+    expect(await popover.isVisible()).toBe(false);
   });
 
   it('supports Space key activation', async () => {
@@ -143,6 +149,7 @@ describe('pds-filter e2e', () => {
 
     const popover = await page.find('pds-filter >>> .pds-filter__popover');
     expect(popover).toBeTruthy();
+    expect(await popover.isVisible()).toBe(true);
   });
 
   it('closes on outside click', async () => {
@@ -165,13 +172,15 @@ describe('pds-filter e2e', () => {
 
     let popover = await page.find('pds-filter >>> .pds-filter__popover');
     expect(popover).toBeTruthy();
+    expect(await popover.isVisible()).toBe(true);
 
     // Click outside
     await outside.click();
     await page.waitForChanges();
 
     popover = await page.find('pds-filter >>> .pds-filter__popover');
-    expect(popover).toBeFalsy();
+    expect(popover).toBeTruthy();
+    expect(await popover.isVisible()).toBe(false);
   });
 
   it('opens and closes programmatically', async () => {
@@ -190,13 +199,15 @@ describe('pds-filter e2e', () => {
 
     let popover = await page.find('pds-filter >>> .pds-filter__popover');
     expect(popover).toBeTruthy();
+    expect(await popover.isVisible()).toBe(true);
 
     // Close programmatically
     await filter.callMethod('hideFilter');
     await page.waitForChanges();
 
     popover = await page.find('pds-filter >>> .pds-filter__popover');
-    expect(popover).toBeFalsy();
+    expect(popover).toBeTruthy();
+    expect(await popover.isVisible()).toBe(false);
   });
 
   it('shows different variants correctly', async () => {
@@ -263,7 +274,9 @@ describe('pds-filter e2e', () => {
     let popover2 = await page.find('pds-filter[component-id="filter2"] >>> .pds-filter__popover');
 
     expect(popover1).toBeTruthy();
-    expect(popover2).toBeFalsy();
+    expect(await popover1.isVisible()).toBe(true);
+    expect(popover2).toBeTruthy();
+    expect(await popover2.isVisible()).toBe(false);
 
     // Open second popover - should close first
     await trigger2.click();
@@ -272,8 +285,10 @@ describe('pds-filter e2e', () => {
     popover1 = await page.find('pds-filter[component-id="filter1"] >>> .pds-filter__popover');
     popover2 = await page.find('pds-filter[component-id="filter2"] >>> .pds-filter__popover');
 
-    expect(popover1).toBeFalsy();
+    expect(popover1).toBeTruthy();
+    expect(await popover1.isVisible()).toBe(false);
     expect(popover2).toBeTruthy();
+    expect(await popover2.isVisible()).toBe(true);
   });
 
   it('has proper ARIA attributes', async () => {

@@ -24,7 +24,7 @@ describe('pds-filters', () => {
       html: `<pds-filters component-id="test-filters"></pds-filters>`,
     });
 
-    expect(page.root.id).toBe('test-filters');
+    expect(page.root?.id).toBe('test-filters');
   });
 
   it('has correct CSS classes for layout', async () => {
@@ -33,7 +33,7 @@ describe('pds-filters', () => {
       html: `<pds-filters></pds-filters>`,
     });
 
-    const container = page.root.shadowRoot.querySelector('.pds-filters');
+    const container = page.root?.shadowRoot?.querySelector('.pds-filters');
     expect(container).toBeTruthy();
   });
 
@@ -47,7 +47,7 @@ describe('pds-filters', () => {
       `,
     });
 
-    const slot = page.root.shadowRoot.querySelector('slot');
+    const slot = page.root?.shadowRoot?.querySelector('slot');
     expect(slot).toBeTruthy();
   });
 });

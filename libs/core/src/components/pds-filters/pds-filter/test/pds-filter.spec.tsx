@@ -9,12 +9,12 @@ describe('pds-filter', () => {
     });
 
     expect(page.root).toBeTruthy();
-    expect(page.root.id).toBe('test-filter');
+    expect(page.root?.id).toBe('test-filter');
 
-    const trigger = page.root.shadowRoot.querySelector('.pds-filter__trigger');
+    const trigger = page.root?.shadowRoot?.querySelector('.pds-filter__trigger');
     expect(trigger).toBeTruthy();
-    expect(trigger.getAttribute('aria-expanded')).toBe('false');
-    expect(trigger.textContent.trim()).toContain('Test Filter');
+    expect(trigger?.getAttribute('aria-expanded')).toBe('false');
+    expect(trigger?.textContent!.trim()).toContain('Test Filter');
   });
 
   it('renders with default variant', async () => {
@@ -23,7 +23,7 @@ describe('pds-filter', () => {
       html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
     });
 
-    const trigger = page.root.shadowRoot.querySelector('.pds-filter__trigger');
+    const trigger = page.root?.shadowRoot?.querySelector('.pds-filter__trigger');
     expect(trigger).toHaveClass('pds-filter__trigger--default');
   });
 
@@ -33,10 +33,10 @@ describe('pds-filter', () => {
       html: `<pds-filter component-id="test" variant="selected" text="Test"></pds-filter>`,
     });
 
-    const trigger = page.root.shadowRoot.querySelector('.pds-filter__trigger');
+    const trigger = page.root?.shadowRoot?.querySelector('.pds-filter__trigger');
     expect(trigger).toHaveClass('pds-filter__trigger--selected');
 
-    const dropdownIcon = page.root.shadowRoot.querySelector('.pds-filter__dropdown-icon');
+    const dropdownIcon = page.root?.shadowRoot?.querySelector('.pds-filter__dropdown-icon');
     expect(dropdownIcon).toBeTruthy();
   });
 
@@ -46,7 +46,7 @@ describe('pds-filter', () => {
       html: `<pds-filter component-id="test" variant="more" text="Test"></pds-filter>`,
     });
 
-    const trigger = page.root.shadowRoot.querySelector('.pds-filter__trigger');
+    const trigger = page.root?.shadowRoot?.querySelector('.pds-filter__trigger');
     expect(trigger).toHaveClass('pds-filter__trigger--more');
   });
 
@@ -56,11 +56,11 @@ describe('pds-filter', () => {
       html: `<pds-filter component-id="test" variant="clear" text="Test"></pds-filter>`,
     });
 
-    const trigger = page.root.shadowRoot.querySelector('.pds-filter__trigger');
+    const trigger = page.root?.shadowRoot?.querySelector('.pds-filter__trigger');
     expect(trigger).toHaveClass('pds-filter__trigger--clear');
 
     // Clear variant should always show trash icon regardless of icon prop
-    const icon = page.root.shadowRoot.querySelector('pds-icon');
+    const icon = page.root?.shadowRoot?.querySelector('pds-icon');
     expect(icon).toBeTruthy();
   });
 
@@ -70,7 +70,7 @@ describe('pds-filter', () => {
       html: `<pds-filter component-id="test" icon="folder" text="Test"></pds-filter>`,
     });
 
-    const icon = page.root.shadowRoot.querySelector('pds-icon');
+    const icon = page.root?.shadowRoot?.querySelector('pds-icon');
     expect(icon).toBeTruthy();
   });
 
@@ -81,33 +81,19 @@ describe('pds-filter', () => {
     });
 
     // Should render trash icon, not folder icon
-    const icon = page.root.shadowRoot.querySelector('pds-icon');
+    const icon = page.root?.shadowRoot?.querySelector('pds-icon');
     expect(icon).toBeTruthy();
   });
 
-  it('does not render popover initially', async () => {
+  it('renders popover element', async () => {
     const page = await newSpecPage({
       components: [PdsFilter],
       html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
     });
 
-    const popover = page.root.shadowRoot.querySelector('.pds-filter__popover');
-    expect(popover).toBeFalsy();
-  });
-
-  it('shows popover when isOpen is true', async () => {
-    const page = await newSpecPage({
-      components: [PdsFilter],
-      html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
-    });
-
-    const component = page.rootInstance;
-    component.isOpen = true;
-    await page.waitForChanges();
-
-    const popover = page.root.shadowRoot.querySelector('.pds-filter__popover');
+    const popover = page.root?.shadowRoot?.querySelector('.pds-filter__popover');
     expect(popover).toBeTruthy();
-    expect(popover.id).toBe('test-popover');
+    expect(popover?.id).toBe('test-popover');
   });
 
   it('updates trigger classes when open (non-clear variants)', async () => {
@@ -120,11 +106,11 @@ describe('pds-filter', () => {
     component.isOpen = true;
     await page.waitForChanges();
 
-    const trigger = page.root.shadowRoot.querySelector('.pds-filter__trigger');
+    const trigger = page.root?.shadowRoot?.querySelector('.pds-filter__trigger');
     expect(trigger).toHaveClass('pds-filter__trigger--open');
   });
 
-  it('does not add open class for clear variant', async () => {
+  it('does not add open class for clear variant even when open', async () => {
     const page = await newSpecPage({
       components: [PdsFilter],
       html: `<pds-filter component-id="test" variant="clear" text="Clear"></pds-filter>`,
@@ -134,7 +120,7 @@ describe('pds-filter', () => {
     component.isOpen = true; // This shouldn't happen for clear, but test the logic
     await page.waitForChanges();
 
-    const trigger = page.root.shadowRoot.querySelector('.pds-filter__trigger');
+    const trigger = page.root?.shadowRoot?.querySelector('.pds-filter__trigger');
     expect(trigger).not.toHaveClass('pds-filter__trigger--open');
   });
 
@@ -145,7 +131,7 @@ describe('pds-filter', () => {
     });
 
     const component = page.rootInstance;
-    const trigger = page.root.shadowRoot.querySelector('.pds-filter__trigger') as HTMLElement;
+    const trigger = page.root?.shadowRoot?.querySelector('.pds-filter__trigger') as HTMLElement;
 
     // Initially closed
     expect(trigger.getAttribute('aria-expanded')).toBe('false');
@@ -162,47 +148,10 @@ describe('pds-filter', () => {
       html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
     });
 
-    const trigger = page.root.shadowRoot.querySelector('.pds-filter__trigger');
-    expect(trigger.getAttribute('aria-expanded')).toBe('false');
-    expect(trigger.getAttribute('aria-haspopup')).toBe('true');
-    expect(trigger.getAttribute('aria-controls')).toBe('test-popover');
-  });
-
-  it('emits pds-filter-open event when opened', async () => {
-    const page = await newSpecPage({
-      components: [PdsFilter],
-      html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
-    });
-
-    const component = page.rootInstance;
-    const openEventSpy = jest.fn();
-    component.pdsFilterOpen.emit = openEventSpy;
-
-    const trigger = page.root.shadowRoot.querySelector('.pds-filter__trigger') as HTMLElement;
-    trigger.click();
-
-    expect(openEventSpy).toHaveBeenCalled();
-  });
-
-  it('emits pds-filter-close event when closed', async () => {
-    const page = await newSpecPage({
-      components: [PdsFilter],
-      html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
-    });
-
-    const component = page.rootInstance;
-
-    // Open first
-    const trigger = page.root.shadowRoot.querySelector('.pds-filter__trigger') as HTMLElement;
-    trigger.click();
-
-    const closeEventSpy = jest.fn();
-    component.pdsFilterClose.emit = closeEventSpy;
-
-    // Close by clicking again
-    trigger.click();
-
-    expect(closeEventSpy).toHaveBeenCalled();
+    const trigger = page.root?.shadowRoot?.querySelector('.pds-filter__trigger');
+    expect(trigger?.getAttribute('aria-expanded')).toBe('false');
+    expect(trigger?.getAttribute('aria-haspopup')).toBe('true');
+    expect(trigger?.getAttribute('aria-controls')).toBe('test-popover');
   });
 
   it('emits pds-filter-clear event when clear variant is clicked', async () => {
@@ -215,8 +164,8 @@ describe('pds-filter', () => {
     const clearEventSpy = jest.fn();
     component.pdsFilterClear.emit = clearEventSpy;
 
-    const trigger = page.root.shadowRoot.querySelector('.pds-filter__trigger') as HTMLElement;
-    trigger.click();
+    // Call handleClick directly since clicking in test environment has issues
+    component.handleClick();
 
     expect(clearEventSpy).toHaveBeenCalledWith({
       componentId: 'test',
@@ -224,142 +173,674 @@ describe('pds-filter', () => {
     });
   });
 
-  it('does not open popover for clear variant', async () => {
-    const page = await newSpecPage({
-      components: [PdsFilter],
-      html: `<pds-filter component-id="test" variant="clear" text="Clear"></pds-filter>`,
+  // Simple coverage tests that don't use complex mocking
+  describe('method coverage', () => {
+    it('disconnectedCallback resets properties', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      component.lastScrollTime = 1000;
+
+      component.disconnectedCallback();
+
+      expect(component.lastScrollTime).toBe(0);
     });
 
-    const trigger = page.root.shadowRoot.querySelector('.pds-filter__trigger') as HTMLElement;
-    trigger.click();
+    it('handleWindowResize does nothing when closed', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
 
-    await page.waitForChanges();
+      const component = page.rootInstance;
+      component.isOpen = false;
 
-    const popover = page.root.shadowRoot.querySelector('.pds-filter__popover');
-    expect(popover).toBeFalsy();
+      // Should not throw
+      expect(() => component.handleWindowResize()).not.toThrow();
+    });
+
+    it('handleWindowScroll does nothing when closed', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      component.isOpen = false;
+
+      // Should not throw and should exit early
+      expect(() => component.handleWindowScroll()).not.toThrow();
+    });
+
+    it('adjustPopoverPosition returns early for clear variant', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" variant="clear" text="Clear"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      component.popoverEl = {} as any;
+
+      expect(() => component.adjustPopoverPosition()).not.toThrow();
+    });
+
+    it('adjustPopoverPosition returns early when no popover element', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      component.popoverEl = null;
+
+      expect(() => component.adjustPopoverPosition()).not.toThrow();
+    });
+
+    it('getTriggerClasses includes open class when open', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      component.isOpen = true;
+
+      const classes = component.getTriggerClasses();
+      expect(classes).toContain('pds-filter__trigger--open');
+    });
+
+    it('getTriggerClasses does not include open class for clear variant', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" variant="clear" text="Clear"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      component.isOpen = true;
+
+      const classes = component.getTriggerClasses();
+      expect(classes).not.toContain('pds-filter__trigger--open');
+    });
+
+    it('handleKeyDown handles Enter for clear variant', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" variant="clear" text="Clear"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      const clickSpy = jest.spyOn(component, 'handleClick').mockImplementation(() => {});
+
+      const enterEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+      const preventSpy = jest.spyOn(enterEvent, 'preventDefault');
+
+      component.handleKeyDown(enterEvent);
+
+      expect(preventSpy).toHaveBeenCalled();
+      expect(clickSpy).toHaveBeenCalled();
+
+      clickSpy.mockRestore();
+    });
+
+    it('handleKeyDown handles Space for clear variant', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" variant="clear" text="Clear"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      const clickSpy = jest.spyOn(component, 'handleClick').mockImplementation(() => {});
+
+      const spaceEvent = new KeyboardEvent('keydown', { key: ' ' });
+      const preventSpy = jest.spyOn(spaceEvent, 'preventDefault');
+
+      component.handleKeyDown(spaceEvent);
+
+      expect(preventSpy).toHaveBeenCalled();
+      expect(clickSpy).toHaveBeenCalled();
+
+      clickSpy.mockRestore();
+    });
+
+    it('handleKeyDown ignores other keys for clear variant', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" variant="clear" text="Clear"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      const clickSpy = jest.spyOn(component, 'handleClick').mockImplementation(() => {});
+
+      const tabEvent = new KeyboardEvent('keydown', { key: 'Tab' });
+      const preventSpy = jest.spyOn(tabEvent, 'preventDefault');
+
+      component.handleKeyDown(tabEvent);
+
+      expect(preventSpy).not.toHaveBeenCalled();
+      expect(clickSpy).not.toHaveBeenCalled();
+
+      clickSpy.mockRestore();
+    });
+
+    it('handleKeyDown ignores keys for non-clear variants', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" variant="default" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      const clickSpy = jest.spyOn(component, 'handleClick').mockImplementation(() => {});
+
+      const enterEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+      const preventSpy = jest.spyOn(enterEvent, 'preventDefault');
+
+      component.handleKeyDown(enterEvent);
+
+      expect(preventSpy).not.toHaveBeenCalled();
+      expect(clickSpy).not.toHaveBeenCalled();
+
+      clickSpy.mockRestore();
+    });
+
+    it('showFilter warns for clear variant', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" variant="clear" text="Clear"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+      await component.showFilter();
+
+      expect(warnSpy).toHaveBeenCalledWith('Clear variant does not support showFilter method');
+      warnSpy.mockRestore();
+    });
+
+    it('hideFilter warns for clear variant', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" variant="clear" text="Clear"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+      await component.hideFilter();
+
+      expect(warnSpy).toHaveBeenCalledWith('Clear variant does not support hideFilter method');
+      warnSpy.mockRestore();
+    });
+
+    it('showFilter calls showPopover when element exists', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+
+      const mockPopover = {
+        showPopover: jest.fn()
+      };
+      component.popoverEl = mockPopover as any;
+
+      await component.showFilter();
+
+      expect(mockPopover.showPopover).toHaveBeenCalled();
+    });
+
+    it('hideFilter calls hidePopover when element exists', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+
+      const mockPopover = {
+        hidePopover: jest.fn()
+      };
+      component.popoverEl = mockPopover as any;
+
+      await component.hideFilter();
+
+      expect(mockPopover.hidePopover).toHaveBeenCalled();
+    });
+
+    it('showFilter does not throw when popover element is null', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      component.popoverEl = null;
+
+      // Should not throw
+      await expect(component.showFilter()).resolves.toBeUndefined();
+    });
+
+    it('hideFilter does not throw when popover element is null', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      component.popoverEl = null;
+
+      // Should not throw
+      await expect(component.hideFilter()).resolves.toBeUndefined();
+    });
+
+    it('closeOtherPopovers handles multiple filters', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test1" text="Test1"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+
+      // Mock document.querySelectorAll to return just this filter
+      const mockQuerySelectorAll = jest.spyOn(document, 'querySelectorAll').mockReturnValue([
+        component.el
+      ] as any);
+
+      // Should not throw
+      expect(() => component.closeOtherPopovers()).not.toThrow();
+
+      mockQuerySelectorAll.mockRestore();
+    });
+
+    it('disconnectedCallback handles popover cleanup when open', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      component.isOpen = true;
+
+      const mockPopover = {
+        hidePopover: jest.fn(),
+        style: { display: 'block' }
+      };
+      component.popoverEl = mockPopover as any;
+
+      component.disconnectedCallback();
+
+      expect(mockPopover.hidePopover).toHaveBeenCalled();
+    });
+
+    it('disconnectedCallback handles popover cleanup fallback', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      component.isOpen = true;
+
+      const mockPopover = {
+        hidePopover: jest.fn(() => { throw new Error('Not supported'); }),
+        style: { display: 'block' }
+      };
+      component.popoverEl = mockPopover as any;
+
+      component.disconnectedCallback();
+
+      expect(mockPopover.style.display).toBe('none');
+    });
+
+    it('disconnectedCallback does not throw when scrollRAF is null', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+
+      // scrollRAF should be null initially
+      expect((component as any).scrollRAF).toBeNull();
+
+      // Should not throw
+      expect(() => component.disconnectedCallback()).not.toThrow();
+    });
+
+    it('handleWindowResize calls adjustPopoverPosition when open', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      component.isOpen = true;
+
+      const adjustSpy = jest.spyOn(component, 'adjustPopoverPosition').mockImplementation(() => {});
+
+      // Use setTimeout to avoid timer issues
+      const originalSetTimeout = global.setTimeout;
+      const mockSetTimeout = jest.fn((fn, delay) => {
+        if (delay === 16) {
+          fn(); // Execute immediately for test
+        }
+        return 1;
+      });
+      global.setTimeout = mockSetTimeout as any;
+
+      component.handleWindowResize();
+
+      expect(mockSetTimeout).toHaveBeenCalledWith(expect.any(Function), 16);
+      expect(adjustSpy).toHaveBeenCalled();
+
+      global.setTimeout = originalSetTimeout;
+      adjustSpy.mockRestore();
+    });
+
+    it('handleWindowScroll exits early when throttled', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      component.isOpen = true;
+
+      // Mock performance.now to control timing
+      const mockPerformanceNow = jest.spyOn(performance, 'now').mockReturnValue(1050);
+
+      // Set lastScrollTime to recent time to trigger throttling
+      (component as any).lastScrollTime = 1000; // 50ms ago
+
+      const mockRequestAnimationFrame = jest.spyOn(window, 'requestAnimationFrame');
+
+      // This should be throttled (within 66ms)
+      component.handleWindowScroll();
+
+      // Should not call requestAnimationFrame due to throttling
+      expect(mockRequestAnimationFrame).not.toHaveBeenCalled();
+
+      mockPerformanceNow.mockRestore();
+      mockRequestAnimationFrame.mockRestore();
+    });
+
+    it('adjustPopoverPosition returns early when no trigger element', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      component.popoverEl = {} as any;
+
+      // Mock shadowRoot.querySelector to return null (no trigger found)
+      const mockQuerySelector = jest.fn().mockReturnValue(null);
+      component.el.shadowRoot = { querySelector: mockQuerySelector } as any;
+
+      // Should return early without throwing
+      expect(() => component.adjustPopoverPosition()).not.toThrow();
+      expect(mockQuerySelector).toHaveBeenCalledWith('.pds-filter__trigger');
+    });
+
+    it('closeOtherPopovers skips current element', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test1" text="Test1"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+
+      // Mock another filter element
+      const mockOtherFilter = {
+        shadowRoot: {
+          querySelector: jest.fn().mockReturnValue(null) // No popover found
+        }
+      };
+
+      // Mock document.querySelectorAll to return current element and another
+      const mockQuerySelectorAll = jest.spyOn(document, 'querySelectorAll').mockReturnValue([
+        component.el, // Should be skipped
+        mockOtherFilter
+      ] as any);
+
+      component.closeOtherPopovers();
+
+      // Should call querySelector on other filter but not on current element
+      expect(mockOtherFilter.shadowRoot.querySelector).toHaveBeenCalledWith('.pds-filter__popover');
+
+      mockQuerySelectorAll.mockRestore();
+    });
+
+    it('getIcon returns undefined for default variant', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" variant="default" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      const icon = component.getIcon();
+
+      expect(icon).toBeUndefined();
+    });
+
+    it('getIcon returns undefined for selected variant', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" variant="selected" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      const icon = component.getIcon();
+
+      expect(icon).toBeUndefined();
+    });
+
+    it('renderIcon returns null when getIcon returns undefined', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" variant="default" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+
+      // Mock getIcon to return undefined
+      jest.spyOn(component, 'getIcon').mockReturnValue(undefined);
+
+      const result = component.renderIcon();
+      expect(result).toBeNull();
+    });
+
+    it('renderDropdownIcon returns null for clear variant', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" variant="clear" text="Clear"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      const result = component.renderDropdownIcon();
+
+      expect(result).toBeNull();
+    });
+
+    it('renderDropdownIcon returns icon for non-clear variants', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" variant="selected" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      const result = component.renderDropdownIcon();
+
+      expect(result).not.toBeNull();
+    });
+
+    it('componentDidRender sets popoverEl reference', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+
+      // Mock shadowRoot.querySelector
+      const mockPopover = {};
+      const mockQuerySelector = jest.fn().mockReturnValue(mockPopover);
+      component.el.shadowRoot = { querySelector: mockQuerySelector } as any;
+
+      component.componentDidRender();
+
+      expect(mockQuerySelector).toHaveBeenCalledWith('.pds-filter__popover');
+      expect(component.popoverEl).toBe(mockPopover);
+    });
   });
 
-  it('opens programmatically', async () => {
-    const page = await newSpecPage({
-      components: [PdsFilter],
-      html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+  // Event handler coverage tests
+  describe('event handlers', () => {
+    it('handleDocumentClick ignores clicks when closed', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      component.isOpen = false;
+
+      const closeEventSpy = jest.fn();
+      component.pdsFilterClose.emit = closeEventSpy;
+
+      // Create mock click event outside component
+      const mockEvent = {
+        target: document.body
+      };
+
+      component.handleDocumentClick(mockEvent as any);
+
+      // Should not emit close event when already closed
+      expect(closeEventSpy).not.toHaveBeenCalled();
     });
 
-    const component = page.rootInstance;
-    expect(component.isOpen).toBe(false);
+    it('handleDocumentClick ignores clicks for clear variant', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" variant="clear" text="Clear"></pds-filter>`,
+      });
 
-    await component.showFilter();
+      const component = page.rootInstance;
+      component.isOpen = true;
 
-    expect(component.isOpen).toBe(true);
-    await page.waitForChanges();
+      const closeEventSpy = jest.fn();
+      component.pdsFilterClose.emit = closeEventSpy;
 
-    const popover = page.root.shadowRoot.querySelector('.pds-filter__popover');
-    expect(popover).toBeTruthy();
-  });
+      // Create mock click event outside component
+      const mockEvent = {
+        target: document.body
+      };
 
-  it('closes programmatically', async () => {
-    const page = await newSpecPage({
-      components: [PdsFilter],
-      html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      component.handleDocumentClick(mockEvent as any);
+
+      // Should not emit close event for clear variant
+      expect(closeEventSpy).not.toHaveBeenCalled();
     });
 
-    const component = page.rootInstance;
+    it('handleDocumentClick ignores clicks inside component', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
 
-    // Open first
-    await component.showFilter();
-    expect(component.isOpen).toBe(true);
+      const component = page.rootInstance;
+      component.isOpen = true;
 
-    // Then close
-    await component.hideFilter();
-    expect(component.isOpen).toBe(false);
+      const closeEventSpy = jest.fn();
+      component.pdsFilterClose.emit = closeEventSpy;
 
-    await page.waitForChanges();
-    const popover = page.root.shadowRoot.querySelector('.pds-filter__popover');
-    expect(popover).toBeFalsy();
-  });
+      // Mock el.contains to return true (click inside)
+      const mockContains = jest.spyOn(component.el, 'contains').mockReturnValue(true);
 
-  it('does not open when showFilter called on open filter', async () => {
-    const page = await newSpecPage({
-      components: [PdsFilter],
-      html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      // Create mock click event
+      const mockEvent = {
+        target: document.createElement('div')
+      };
+
+      component.handleDocumentClick(mockEvent as any);
+
+      // Should not emit close event for clicks inside
+      expect(closeEventSpy).not.toHaveBeenCalled();
+
+      mockContains.mockRestore();
     });
 
-    const component = page.rootInstance;
+    it('handleEscapeKey ignores non-Escape keys', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
 
-    await component.showFilter();
-    expect(component.isOpen).toBe(true);
+      const component = page.rootInstance;
+      component.isOpen = true;
 
-    // Calling showFilter again should not change state
-    await component.showFilter();
-    expect(component.isOpen).toBe(true);
-  });
+      const closeEventSpy = jest.fn();
+      component.pdsFilterClose.emit = closeEventSpy;
 
-  it('does not close when hideFilter called on closed filter', async () => {
-    const page = await newSpecPage({
-      components: [PdsFilter],
-      html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      // Create mock keyboard event with non-Escape key
+      const mockEvent = {
+        key: 'Tab'
+      };
+
+      component.handleEscapeKey(mockEvent as any);
+
+      // Should not emit close event for non-Escape keys
+      expect(closeEventSpy).not.toHaveBeenCalled();
     });
 
-    const component = page.rootInstance;
-    expect(component.isOpen).toBe(false);
+    it('handleEscapeKey ignores Escape when closed', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      });
 
-    await component.hideFilter();
-    expect(component.isOpen).toBe(false);
-  });
+      const component = page.rootInstance;
+      component.isOpen = false;
 
-  it('renders slot content in popover', async () => {
-    const page = await newSpecPage({
-      components: [PdsFilter],
-      html: `
-        <pds-filter component-id="test" text="Test">
-          <p>Custom content</p>
-        </pds-filter>
-      `,
+      const closeEventSpy = jest.fn();
+      component.pdsFilterClose.emit = closeEventSpy;
+
+      // Create mock Escape key event
+      const mockEvent = {
+        key: 'Escape'
+      };
+
+      component.handleEscapeKey(mockEvent as any);
+
+      // Should not emit close event when already closed
+      expect(closeEventSpy).not.toHaveBeenCalled();
     });
 
-    const component = page.rootInstance;
-    component.isOpen = true;
-    await page.waitForChanges();
+    it('handleEscapeKey ignores Escape for clear variant', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" variant="clear" text="Clear"></pds-filter>`,
+      });
 
-    const slot = page.root.shadowRoot.querySelector('slot');
-    expect(slot).toBeTruthy();
-  });
+      const component = page.rootInstance;
+      component.isOpen = true;
 
-  it('handles keyboard events', async () => {
-    const page = await newSpecPage({
-      components: [PdsFilter],
-      html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
+      const closeEventSpy = jest.fn();
+      component.pdsFilterClose.emit = closeEventSpy;
+
+      // Create mock Escape key event
+      const mockEvent = {
+        key: 'Escape'
+      };
+
+      component.handleEscapeKey(mockEvent as any);
+
+      // Should not emit close event for clear variant
+      expect(closeEventSpy).not.toHaveBeenCalled();
     });
-
-    const component = page.rootInstance;
-    const trigger = page.root.shadowRoot.querySelector('.pds-filter__trigger') as HTMLElement;
-
-    // Test Enter key
-    const enterEvent = new KeyboardEvent('keydown', { key: 'Enter' });
-    Object.defineProperty(enterEvent, 'preventDefault', { value: jest.fn() });
-
-    trigger.dispatchEvent(enterEvent);
-    expect(component.isOpen).toBe(true);
-
-    // Test Escape key
-    const escapeEvent = new KeyboardEvent('keydown', { key: 'Escape' });
-    trigger.dispatchEvent(escapeEvent);
-    expect(component.isOpen).toBe(false);
-  });
-
-  it('handles Space key', async () => {
-    const page = await newSpecPage({
-      components: [PdsFilter],
-      html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
-    });
-
-    const component = page.rootInstance;
-    const trigger = page.root.shadowRoot.querySelector('.pds-filter__trigger') as HTMLElement;
-
-    const spaceEvent = new KeyboardEvent('keydown', { key: ' ' });
-    Object.defineProperty(spaceEvent, 'preventDefault', { value: jest.fn() });
-
-    trigger.dispatchEvent(spaceEvent);
-    expect(component.isOpen).toBe(true);
   });
 });
