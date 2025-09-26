@@ -5,6 +5,14 @@
 <!-- Auto Generated Below -->
 
 
+## Overview
+
+Individual filter component with cross-browser popover positioning.
+
+Uses a hybrid approach for optimal cross-browser compatibility:
+- Modern browsers: CSS anchor positioning + JavaScript flip classes
+- Fallback browsers: JavaScript positioning with viewport boundary detection
+
 ## Properties
 
 | Property                   | Attribute      | Description                                                                                                                | Type                                           | Default     |

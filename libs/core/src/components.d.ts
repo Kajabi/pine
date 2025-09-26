@@ -988,6 +988,12 @@ export namespace Components {
          */
         "disabled": boolean;
     }
+    /**
+     * Individual filter component with cross-browser popover positioning.
+     * Uses a hybrid approach for optimal cross-browser compatibility:
+     * - Modern browsers: CSS anchor positioning + JavaScript flip classes
+     * - Fallback browsers: JavaScript positioning with viewport boundary detection
+     */
     interface PdsFilter {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -2134,6 +2140,12 @@ declare global {
         "pdsFilterClose": PdsFilterCloseEventDetail;
         "pdsFilterClear": PdsFilterClearEventDetail;
     }
+    /**
+     * Individual filter component with cross-browser popover positioning.
+     * Uses a hybrid approach for optimal cross-browser compatibility:
+     * - Modern browsers: CSS anchor positioning + JavaScript flip classes
+     * - Fallback browsers: JavaScript positioning with viewport boundary detection
+     */
     interface HTMLPdsFilterElement extends Components.PdsFilter, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsFilterElementEventMap>(type: K, listener: (this: HTMLPdsFilterElement, ev: PdsFilterCustomEvent<HTMLPdsFilterElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3523,6 +3535,12 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
     }
+    /**
+     * Individual filter component with cross-browser popover positioning.
+     * Uses a hybrid approach for optimal cross-browser compatibility:
+     * - Modern browsers: CSS anchor positioning + JavaScript flip classes
+     * - Fallback browsers: JavaScript positioning with viewport boundary detection
+     */
     interface PdsFilter {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -4526,6 +4544,12 @@ declare module "@stencil/core" {
             "pds-dropdown-menu": LocalJSX.PdsDropdownMenu & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuElement>;
             "pds-dropdown-menu-item": LocalJSX.PdsDropdownMenuItem & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuItemElement>;
             "pds-dropdown-menu-separator": LocalJSX.PdsDropdownMenuSeparator & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuSeparatorElement>;
+            /**
+             * Individual filter component with cross-browser popover positioning.
+             * Uses a hybrid approach for optimal cross-browser compatibility:
+             * - Modern browsers: CSS anchor positioning + JavaScript flip classes
+             * - Fallback browsers: JavaScript positioning with viewport boundary detection
+             */
             "pds-filter": LocalJSX.PdsFilter & JSXBase.HTMLAttributes<HTMLPdsFilterElement>;
             "pds-filters": LocalJSX.PdsFilters & JSXBase.HTMLAttributes<HTMLPdsFiltersElement>;
             "pds-image": LocalJSX.PdsImage & JSXBase.HTMLAttributes<HTMLPdsImageElement>;

@@ -164,12 +164,46 @@
   border: 0;
   border-radius: var(--pine-dimension-100);
   box-shadow: var(--pine-box-shadow-100);
+  display: none;
   inset: unset;
-  /* stylelint-disable-next-line order/properties-alphabetical-order */
-  left: anchor(left);
   padding: var(--pine-dimension-100);
-  /* stylelint-disable-next-line property-no-unknown */
-  position-anchor: --filter-trigger;
-  top: calc(anchor(bottom) + var(--pine-dimension-100));
   width: 228px;
+  z-index: 1000;
+
+  /* stylelint-disable-next-line selector-pseudo-class-no-unknown */
+  &:popover-open {
+    display: block;
+  }
+
+  /* Modern browsers: CSS anchor positioning with JavaScript-controlled flipping */
+  @supports (anchor-name: --test) {
+    /* stylelint-disable-next-line order/properties-alphabetical-order */
+    left: anchor(--filter-trigger left);
+    position: fixed; /* Anchor positioning requires fixed positioning */
+    /* stylelint-disable-next-line property-no-unknown */
+    position-anchor: --filter-trigger;
+    top: calc(anchor(--filter-trigger bottom) + var(--pine-dimension-100));
+
+    /* CSS position-try disabled for precise JavaScript-controlled flipping */
+
+    /* Flipping classes applied by JavaScript for precise control */
+    &.popover-flip-horizontal {
+      /* stylelint-disable-next-line order/properties-alphabetical-order */
+      left: anchor(--filter-trigger right);
+      transform: translateX(-100%);
+    }
+
+    &.popover-flip-vertical {
+      top: anchor(--filter-trigger top);
+      transform: translateY(calc(-100% - var(--pine-dimension-100)));
+    }
+
+    &.popover-flip-horizontal.popover-flip-vertical {
+      /* stylelint-disable-next-line order/properties-alphabetical-order */
+      left: anchor(--filter-trigger right);
+      top: anchor(--filter-trigger top);
+      transform: translate(-100%, calc(-100% - var(--pine-dimension-100)));
+    }
+
+  }
 }
