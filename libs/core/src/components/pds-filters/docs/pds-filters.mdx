@@ -1,0 +1,171 @@
+import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+# Filters
+
+The filters component provides a flexible system for creating filter interfaces with popover content. It consists of a parent `pds-filters` container that manages layout and a child `pds-filter` component for individual filters.
+
+## Guidelines
+
+### When to use
+
+- When users need to filter or search through data sets
+- For interfaces that require multiple filter options
+- When you need custom content within filter popovers
+- For creating clear/reset filter functionality
+
+### When not to use
+
+- For simple single-select dropdowns (use [Select](/docs/components-select--docs))
+- For navigation menus (use [Dropdown Menu](/docs/components-dropdown-menu--docs))
+- For single action buttons (use [Button](/docs/components-button--docs))
+
+### Accessibility
+
+- Full keyboard support: Tab navigation, Enter/Space to activate, Escape to close
+- Proper ARIA attributes for screen readers (`aria-expanded`, `aria-haspopup`, `aria-controls`)
+- Focus management between trigger and popover content
+- Only one popover open at a time to prevent confusion
+
+## Properties
+
+### pds-filters Properties
+
+<DocArgsTable componentName="pds-filters" docSource={components} />
+
+### pds-filter Properties
+
+<DocArgsTable componentName="pds-filter" docSource={components} />
+
+## Variants
+
+The `pds-filter` component supports four variants:
+
+### Default
+
+Standard filter appearance with border and background.
+
+<DocCanvas client:only mdxSource={{
+  react: `
+<PdsFilters>
+  <PdsFilter componentId="default-example" variant="default" text="Trigger" icon="flash">
+    <p>Filter options go here</p>
+  </PdsFilter>
+</PdsFilters>
+  `,
+  webComponent: `
+<pds-filters>
+  <pds-filter component-id="default-example" variant="default" text="Trigger" icon="flash">
+    <p>Filter options go here</p>
+  </pds-filter>
+</pds-filters>
+  `
+}}>
+  <pds-filters>
+    <pds-filter component-id="default-example" variant="default" text="Trigger" icon="flash">
+      <p>Filter options go here</p>
+    </pds-filter>
+  </pds-filters>
+</DocCanvas>
+
+### Selected
+
+Used for active filters with different colors and dropdown icon.
+
+<DocCanvas client:only mdxSource={{
+  react: `
+<PdsFilters>
+  <PdsFilter componentId="selected-example" variant="selected" text="Grant an offer" icon="switch-vertical">
+    <p>Currently applied filter</p>
+  </PdsFilter>
+</PdsFilters>
+  `,
+  webComponent: `
+<pds-filters>
+  <pds-filter component-id="selected-example" variant="selected" text="Grant an offer" icon="switch-vertical">
+    <p>Currently applied filter</p>
+  </pds-filter>
+</pds-filters>
+  `
+}}>
+  <pds-filters>
+    <pds-filter component-id="selected-example" variant="selected" text="Grant an offer" icon="switch-vertical">
+      <p>Currently applied filter</p>
+    </pds-filter>
+  </pds-filters>
+</DocCanvas>
+
+### More
+
+For additional filter options with dashed border.
+
+<DocCanvas client:only mdxSource={{
+  react: `
+<PdsFilters>
+  <PdsFilter componentId="more-example" variant="more" text="More filters" icon="add-circle">
+    <p>Additional filter options</p>
+  </PdsFilter>
+</PdsFilters>
+  `,
+  webComponent: `
+<pds-filters>
+  <pds-filter component-id="more-example" variant="more" text="More filters" icon="add-circle">
+    <p>Additional filter options</p>
+  </pds-filter>
+</pds-filters>
+  `
+}}>
+  <pds-filters>
+    <pds-filter component-id="more-example" variant="more" text="More filters" icon="add-circle">
+      <p>Additional filter options</p>
+    </pds-filter>
+  </pds-filters>
+</DocCanvas>
+
+### Clear
+
+For clear/reset actions, always shows trash icon. The clear variant does not open a popover - it fires an event when clicked for clearing other filters.
+
+<DocCanvas client:only mdxSource={{
+  react: `
+<PdsFilters>
+  <PdsFilter componentId="clear-example" variant="clear" text="Clear filters">
+  </PdsFilter>
+</PdsFilters>
+  `,
+  webComponent: `
+<pds-filters>
+  <pds-filter component-id="clear-example" variant="clear" text="Clear filters">
+  </pds-filter>
+</pds-filters>
+  `
+}}>
+  <pds-filters>
+    <pds-filter component-id="clear-example" variant="clear" text="Clear filters">
+    </pds-filter>
+  </pds-filters>
+</DocCanvas>
+
+## Events
+
+### pds-filter-open
+
+Emitted when a filter popover is opened. Clear variant does not emit this event.
+
+### pds-filter-close
+
+Emitted when a filter popover is closed. Clear variant does not emit this event.
+
+### pds-filter-clear
+
+Emitted when a clear variant is clicked. Use this event to clear/reset other filters.
+
+## Methods
+
+### showFilter()
+
+Opens the filter popover programmatically. Clear variant will log a warning if this method is called.
+
+### hideFilter()
+
+Closes the filter popover programmatically. Clear variant will log a warning if this method is called.
