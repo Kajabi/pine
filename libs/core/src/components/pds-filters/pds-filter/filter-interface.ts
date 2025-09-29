@@ -1,12 +1,14 @@
+export type PdsFilterVariant = 'default' | 'selected' | 'more' | 'clear';
+
 export interface PdsFilterOpenEventDetail {
   componentId: string;
-  variant: string;
+  variant: PdsFilterVariant;
   text?: string;
 }
 
 export interface PdsFilterCloseEventDetail {
   componentId: string;
-  variant: string;
+  variant: PdsFilterVariant;
   text?: string;
 }
 
@@ -17,5 +19,5 @@ export interface PdsFilterClearEventDetail {
 
 export interface PdsFilterEvent<T> extends CustomEvent<T> {
   readonly detail: T;
-  target: HTMLPdsFilterElement | null;
+  readonly target: HTMLPdsFilterElement | null;
 }

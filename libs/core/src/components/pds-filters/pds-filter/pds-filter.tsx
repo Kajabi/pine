@@ -1,6 +1,6 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop, State, Method, Listen } from '@stencil/core';
 import type { BasePdsProps } from '@utils/interfaces';
-import type { PdsFilterOpenEventDetail, PdsFilterCloseEventDetail, PdsFilterClearEventDetail } from './filter-interface';
+import type { PdsFilterOpenEventDetail, PdsFilterCloseEventDetail, PdsFilterClearEventDetail, PdsFilterVariant } from './filter-interface';
 
 import { enlarge, trash } from '@pine-ds/icons/icons';
 
@@ -40,7 +40,7 @@ export class PdsFilter implements BasePdsProps {
    * The variant style of the filter trigger.
    * @defaultValue 'default'
    */
-  @Prop() variant: 'default' | 'selected' | 'more' | 'clear' = 'default';
+  @Prop() variant: PdsFilterVariant = 'default';
 
   /**
    * The name of the icon to display in the trigger button.
