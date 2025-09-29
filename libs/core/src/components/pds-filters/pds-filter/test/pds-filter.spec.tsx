@@ -687,7 +687,7 @@ describe('pds-filter', () => {
       expect(result).not.toBeNull();
     });
 
-    it('componentDidRender sets up event listeners when popoverEl exists', async () => {
+    it('componentDidRender sets up native event listeners for supported browsers', async () => {
       const page = await newSpecPage({
         components: [PdsFilter],
         html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
@@ -704,23 +704,70 @@ describe('pds-filter', () => {
       // Set popoverEl directly (as it would be set by the ref callback)
       component.popoverEl = mockPopover as any;
 
+      // Mock browser support (Chrome/Safari)
+      const originalShowPopover = HTMLElement.prototype.showPopover;
+      const originalUserAgent = navigator.userAgent;
+
+      Object.defineProperty(HTMLElement.prototype, 'showPopover', {
+        value: jest.fn(),
+        configurable: true
+      });
+      Object.defineProperty(navigator, 'userAgent', {
+        value: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+        configurable: true
+      });
+
       component.componentDidRender();
 
-      expect(mockPopover.removeEventListener).toHaveBeenCalledWith('toggle', component.handleDirectPopoverToggle);
-      expect(mockPopover.addEventListener).toHaveBeenCalledWith('toggle', component.handleDirectPopoverToggle);
+      expect(mockPopover.removeEventListener).toHaveBeenCalledWith('toggle', component.handleNativePopoverToggle);
+      expect(mockPopover.addEventListener).toHaveBeenCalledWith('toggle', component.handleNativePopoverToggle);
+
+      // Restore original values
+      if (originalShowPopover) {
+        HTMLElement.prototype.showPopover = originalShowPopover;
+      } else {
+        delete (HTMLElement.prototype as any).showPopover;
+      }
+      Object.defineProperty(navigator, 'userAgent', {
+        value: originalUserAgent,
+        configurable: true
+      });
     });
 
-    it('componentDidRender handles case when popoverEl does not exist', async () => {
+    it('componentDidRender skips native listeners for Firefox', async () => {
       const page = await newSpecPage({
         components: [PdsFilter],
-        html: `<pds-filter component-id="test" variant="clear" text="Clear"></pds-filter>`,
+        html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
       });
 
       const component = page.rootInstance;
-      component.popoverEl = null;
 
-      // Should not throw an error
-      expect(() => component.componentDidRender()).not.toThrow();
+      // Mock popover element with event listener methods
+      const mockPopover = {
+        removeEventListener: jest.fn(),
+        addEventListener: jest.fn()
+      };
+
+      // Set popoverEl directly (as it would be set by the ref callback)
+      component.popoverEl = mockPopover as any;
+
+      // Mock Firefox user agent
+      const originalUserAgent = navigator.userAgent;
+      Object.defineProperty(navigator, 'userAgent', {
+        value: 'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0',
+        configurable: true
+      });
+
+      component.componentDidRender();
+
+      expect(mockPopover.removeEventListener).not.toHaveBeenCalled();
+      expect(mockPopover.addEventListener).not.toHaveBeenCalled();
+
+      // Restore original value
+      Object.defineProperty(navigator, 'userAgent', {
+        value: originalUserAgent,
+        configurable: true
+      });
     });
   });
 

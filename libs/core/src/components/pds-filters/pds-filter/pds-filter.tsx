@@ -88,9 +88,12 @@ export class PdsFilter implements BasePdsProps {
 
     this.lastScrollTime = 0;
 
-    // Clean up event listeners
+    // Clean up native popover event listeners
     if (this.popoverEl) {
-      this.popoverEl.removeEventListener('toggle', this.handleDirectPopoverToggle);
+      const supportsPopoverAPI = HTMLElement.prototype.showPopover && !navigator.userAgent.includes('Firefox');
+      if (supportsPopoverAPI) {
+        this.popoverEl.removeEventListener('toggle', this.handleNativePopoverToggle);
+      }
     }
 
     // Ensure popover is closed
@@ -106,24 +109,30 @@ export class PdsFilter implements BasePdsProps {
 
 
   componentDidRender() {
-    // Add direct event listeners to the popover element as a backup
     // Note: popoverEl is set via ref callback in render method
+    // For browsers with native popover API, we need direct element listeners
+    // since the document listener may not capture native popover toggle events
     if (this.popoverEl) {
-      // Remove any existing listeners to avoid duplicates
-      this.popoverEl.removeEventListener('toggle', this.handleDirectPopoverToggle);
-      // Add the listener
-      this.popoverEl.addEventListener('toggle', this.handleDirectPopoverToggle);
+      const supportsPopoverAPI = HTMLElement.prototype.showPopover && !navigator.userAgent.includes('Firefox');
+
+      if (supportsPopoverAPI) {
+        // Remove any existing listeners to avoid duplicates
+        this.popoverEl.removeEventListener('toggle', this.handleNativePopoverToggle);
+        // Add direct listener for native popover events
+        this.popoverEl.addEventListener('toggle', this.handleNativePopoverToggle);
+      }
     }
   }
 
   /**
-   * Direct event listener for popover toggle events as a backup to document listener
+   * Handle native popover toggle events directly on the element
+   * This is needed for browsers with native Popover API support
    */
-  private handleDirectPopoverToggle = (event: Event) => {
+  private handleNativePopoverToggle = (event: Event) => {
     const target = event.target as HTMLElement;
 
-    if (target.id === `${this.componentId}-popover`) {
-      // Check for popover API support to avoid crashes
+    if (target && target.id === `${this.componentId}-popover`) {
+      // Check current popover state
       let isCurrentlyOpen = false;
       try {
         isCurrentlyOpen = target.matches(':popover-open');
@@ -337,13 +346,16 @@ export class PdsFilter implements BasePdsProps {
   }
 
   /**
-   * Listen for native popover toggle events to track state changes and emit events.
+   * Listen for popover toggle events for browsers without native Popover API (fallback).
+   * Native API browsers use direct element listeners to avoid conflicts.
    */
   @Listen('toggle', { target: 'document' })
   handlePopoverToggle(event: Event) {
     const target = event.target as HTMLElement;
+    const supportsPopoverAPI = HTMLElement.prototype.showPopover && !navigator.userAgent.includes('Firefox');
 
-    if (target.id === `${this.componentId}-popover`) {
+    // Only handle events for fallback browsers (Firefox) to avoid duplicate handling
+    if (!supportsPopoverAPI && target && target.id === `${this.componentId}-popover`) {
       // Check for popover API support to avoid crashes
       let isCurrentlyOpen = false;
       try {
