@@ -479,7 +479,8 @@ describe('pds-filter', () => {
 
       const mockPopover = {
         hidePopover: jest.fn(),
-        style: { display: 'block' }
+        style: { display: 'block' },
+        removeEventListener: jest.fn()
       };
       component.popoverEl = mockPopover as any;
 
@@ -502,7 +503,8 @@ describe('pds-filter', () => {
         style: { display: 'block' },
         classList: {
           remove: jest.fn()
-        }
+        },
+        removeEventListener: jest.fn()
       };
       component.popoverEl = mockPopover as any;
 
@@ -685,7 +687,7 @@ describe('pds-filter', () => {
       expect(result).not.toBeNull();
     });
 
-    it('componentDidRender sets popoverEl reference', async () => {
+    it('componentDidRender sets up event listeners when popoverEl exists', async () => {
       const page = await newSpecPage({
         components: [PdsFilter],
         html: `<pds-filter component-id="test" text="Test"></pds-filter>`,
@@ -693,19 +695,32 @@ describe('pds-filter', () => {
 
       const component = page.rootInstance;
 
-      // Mock popover element
-      const mockPopover = {};
+      // Mock popover element with event listener methods
+      const mockPopover = {
+        removeEventListener: jest.fn(),
+        addEventListener: jest.fn()
+      };
 
-      // Spy on the existing shadowRoot.querySelector and mock it to return mockPopover
-      const querySelectorSpy = jest.spyOn(component.el.shadowRoot!, 'querySelector').mockReturnValue(mockPopover as any);
+      // Set popoverEl directly (as it would be set by the ref callback)
+      component.popoverEl = mockPopover as any;
 
       component.componentDidRender();
 
-      expect(querySelectorSpy).toHaveBeenCalledWith('.pds-filter__popover');
-      expect(component.popoverEl).toBe(mockPopover);
+      expect(mockPopover.removeEventListener).toHaveBeenCalledWith('toggle', component.handleDirectPopoverToggle);
+      expect(mockPopover.addEventListener).toHaveBeenCalledWith('toggle', component.handleDirectPopoverToggle);
+    });
 
-      // Restore the spy
-      querySelectorSpy.mockRestore();
+    it('componentDidRender handles case when popoverEl does not exist', async () => {
+      const page = await newSpecPage({
+        components: [PdsFilter],
+        html: `<pds-filter component-id="test" variant="clear" text="Clear"></pds-filter>`,
+      });
+
+      const component = page.rootInstance;
+      component.popoverEl = null;
+
+      // Should not throw an error
+      expect(() => component.componentDidRender()).not.toThrow();
     });
   });
 
