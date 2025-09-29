@@ -276,7 +276,8 @@ describe('pds-button', () => {
       const icon = await element.find('pds-icon');
 
       expect(component).toHaveClass('hydrated');
-      expect(element.getProperty('disabled')).resolves.toBe(true);
+      const disabled = await element.getProperty('disabled');
+      expect(disabled).toBe(true);
       expect(icon).toBeTruthy();
     });
 
@@ -305,7 +306,7 @@ describe('pds-button', () => {
       expect(component).toHaveClass('hydrated');
       expect(element).toBeTruthy();
       expect(icon).toBeTruthy();
-      expect(element.getProperty('href')).resolves.toContain('/test');
+      await expect(element.getProperty('href')).resolves.toContain('/test');
     });
 
     it('filter variant can be clicked and emits events', async () => {
