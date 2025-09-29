@@ -45,6 +45,10 @@ pds-tab {
     color: var(--pine-color-text);
   }
 
+  &:focus {
+    outline: none;
+  }
+
   &:focus-visible {
     outline: var(--pine-outline-focus);
     outline-offset: var(--pine-border-width);
