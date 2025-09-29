@@ -154,6 +154,18 @@ describe('pds-filter', () => {
     expect(trigger?.getAttribute('aria-controls')).toBe('test-popover');
   });
 
+  it('clear variant has proper ARIA attributes (no popover)', async () => {
+    const page = await newSpecPage({
+      components: [PdsFilter],
+      html: `<pds-filter component-id="test" variant="clear" text="Clear"></pds-filter>`,
+    });
+
+    const trigger = page.root?.shadowRoot?.querySelector('.pds-filter__trigger');
+    expect(trigger?.getAttribute('aria-expanded')).toBe('false');
+    expect(trigger?.getAttribute('aria-haspopup')).toBeNull();
+    expect(trigger?.getAttribute('aria-controls')).toBeNull();
+  });
+
   it('emits pds-filter-clear event when clear variant is clicked', async () => {
     const page = await newSpecPage({
       components: [PdsFilter],

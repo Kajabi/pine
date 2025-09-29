@@ -106,9 +106,8 @@ export class PdsFilter implements BasePdsProps {
 
 
   componentDidRender() {
-    this.popoverEl = this.el.shadowRoot?.querySelector('.pds-filter__popover') as HTMLElement;
-
     // Add direct event listeners to the popover element as a backup
+    // Note: popoverEl is set via ref callback in render method
     if (this.popoverEl) {
       // Remove any existing listeners to avoid duplicates
       this.popoverEl.removeEventListener('toggle', this.handleDirectPopoverToggle);
@@ -593,7 +592,7 @@ export class PdsFilter implements BasePdsProps {
           onClick={(event) => this.handleClick(event)}
           part="button"
           aria-expanded={this.isOpen ? 'true' : 'false'}
-          aria-haspopup="true"
+          aria-haspopup={this.variant !== 'clear' ? 'true' : undefined}
           aria-controls={this.variant !== 'clear' ? `${this.componentId}-popover` : undefined}
         >
           <span class="pds-filter__button-content" part="button-content">
