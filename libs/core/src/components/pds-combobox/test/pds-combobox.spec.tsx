@@ -5,9 +5,12 @@ import { PdsCombobox } from '../pds-combobox';
 const createMockOption = (value: string, label: string, selected: boolean = false) => ({
   value,
   label,
+  tagName: 'OPTION',
+  textContent: label,
   hasAttribute: jest.fn((attr: string) => attr === 'selected' && selected),
   setAttribute: jest.fn(),
   removeAttribute: jest.fn(),
+  getAttribute: jest.fn(),
 } as unknown as HTMLOptionElement);
 
 describe('pds-combobox', () => {
@@ -511,8 +514,8 @@ describe('pds-combobox', () => {
 
     // Mock options
     const mockOptions = [
-      { value: 'cat', label: 'Cat', hasAttribute: jest.fn(() => false) } as unknown as HTMLOptionElement,
-      { value: 'dog', label: 'Dog', hasAttribute: jest.fn(() => false) } as unknown as HTMLOptionElement,
+      createMockOption('cat', 'Cat'),
+      createMockOption('dog', 'Dog'),
     ];
 
     component.filteredItems = mockOptions;
@@ -536,8 +539,8 @@ describe('pds-combobox', () => {
 
     // Mock options
     const mockOptions = [
-      { value: 'cat', label: 'Cat', hasAttribute: jest.fn(() => false) } as unknown as HTMLOptionElement,
-      { value: 'dog', label: 'Dog', hasAttribute: jest.fn(() => false) } as unknown as HTMLOptionElement,
+      createMockOption('cat', 'Cat'),
+      createMockOption('dog', 'Dog'),
     ];
 
     component.filteredItems = mockOptions;
@@ -567,7 +570,7 @@ describe('pds-combobox', () => {
 
     // Mock options
     const mockOptions = [
-      { value: 'cat', label: 'Cat', hasAttribute: jest.fn(() => false) } as unknown as HTMLOptionElement,
+      createMockOption('cat', 'Cat'),
     ];
 
     component.filteredItems = mockOptions;
@@ -592,11 +595,7 @@ describe('pds-combobox', () => {
     const component = page.rootInstance;
 
     // Mock selected option
-    const mockOption = {
-      value: 'cat',
-      label: 'Cat',
-      hasAttribute: jest.fn(() => false), // No longer relevant since we use React state
-    } as unknown as HTMLOptionElement;
+    const mockOption = createMockOption('cat', 'Cat');
 
     // Use centralized state management to set selection
     (component as any).setSelectedOption(mockOption);

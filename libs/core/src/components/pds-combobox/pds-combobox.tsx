@@ -258,8 +258,13 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   private filterOptions() {
+    // Ensure allItems includes optionEls if not already populated (for testing scenarios)
+    if (this.allItems.length === 0 && this.optionEls.length > 0) {
+      this.allItems = [...this.optionEls];
+    }
+
     if (this.mode === 'select-only') {
-      this.filteredItems = this.allItems;
+      this.filteredItems = [...this.allItems];
     } else {
       const val = this.value.toLowerCase();
       const filteredOptions = this.optionEls.filter(option => {
@@ -352,10 +357,20 @@ export class PdsCombobox implements BasePdsProps {
 
     switch (e.key) {
       case 'ArrowDown':
-        this.highlightedIndex = Math.min(this.highlightedIndex + 1, selectableOptions.length - 1);
+        // If no option is highlighted and we have options, start at 0
+        if (this.highlightedIndex < 0 && selectableOptions.length > 0) {
+          this.highlightedIndex = 0;
+        } else {
+          this.highlightedIndex = Math.min(this.highlightedIndex + 1, selectableOptions.length - 1);
+        }
         break;
       case 'ArrowUp':
-        this.highlightedIndex = Math.max(this.highlightedIndex - 1, 0);
+        // If no option is highlighted and we have options, start at last option
+        if (this.highlightedIndex < 0 && selectableOptions.length > 0) {
+          this.highlightedIndex = selectableOptions.length - 1;
+        } else {
+          this.highlightedIndex = Math.max(this.highlightedIndex - 1, 0);
+        }
         break;
       case 'Enter':
         if (this.isOpen && this.highlightedIndex >= 0 && this.highlightedIndex < selectableOptions.length) {
