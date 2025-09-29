@@ -28,10 +28,10 @@
   transition: all 0.2s ease;
 
   pds-icon {
+    block-size: var(--pine-font-size-100);
     color: var(--pine-color-grey-800);
     flex-shrink: 0;
-    height: var(--pine-font-size-100);
-    width: var(--pine-font-size-100);
+    inline-size: var(--pine-font-size-100);
   }
 
   &:hover,
@@ -139,7 +139,7 @@
   align-items: center;
   display: inline-flex;
   gap: var(--pine-dimension-050);
-  max-width: 148px;
+  max-inline-size: 148px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -153,9 +153,9 @@
 }
 
 .pds-filter__dropdown-icon {
+  block-size: var(--pine-dimension-200);
   flex-shrink: 0;
-  height: var(--pine-dimension-200);
-  width: var(--pine-dimension-200);
+  inline-size: var(--pine-dimension-200);
 }
 
 
@@ -165,9 +165,9 @@
   border-radius: var(--pine-dimension-100);
   box-shadow: var(--pine-box-shadow-100);
   display: none;
+  inline-size: 228px;
   inset: unset;
   padding: var(--pine-dimension-100);
-  width: 228px;
   z-index: 1000;
 
   /* stylelint-disable-next-line selector-pseudo-class-no-unknown */
@@ -178,45 +178,45 @@
 
   /* Modern browsers: CSS anchor positioning with JavaScript-controlled flipping */
   @supports (anchor-name: --test) {
-    left: anchor(--filter-trigger left);
+    inset-block-start: calc(anchor(--filter-trigger bottom) + var(--pine-dimension-100));
+    inset-inline-start: anchor(--filter-trigger left);
     position: fixed; /* Anchor positioning requires fixed positioning */
     /* stylelint-disable-next-line property-no-unknown */
     position-anchor: --filter-trigger;
-    top: calc(anchor(--filter-trigger bottom) + var(--pine-dimension-100));
 
     /* CSS position-try disabled for precise JavaScript-controlled flipping */
 
     /* Flipping classes applied by JavaScript for precise control */
     &.popover-flip-horizontal {
-      left: anchor(--filter-trigger right);
+      inset-inline-start: anchor(--filter-trigger right);
       transform: translateX(-100%);
     }
 
     &.popover-flip-vertical {
-      top: anchor(--filter-trigger top);
+      inset-block-start: anchor(--filter-trigger top);
       transform: translateY(calc(-100% - var(--pine-dimension-100)));
     }
 
     &.popover-flip-horizontal.popover-flip-vertical {
-      left: anchor(--filter-trigger right);
-      top: anchor(--filter-trigger top);
+      inset-block-start: anchor(--filter-trigger top);
+      inset-inline-start: anchor(--filter-trigger right);
       transform: translate(-100%, calc(-100% - var(--pine-dimension-100)));
     }
 
     /* Ensure fallback class works with flipping in modern browsers */
     &.is-open.popover-flip-horizontal {
-      left: anchor(--filter-trigger right);
+      inset-inline-start: anchor(--filter-trigger right);
       transform: translateX(-100%);
     }
 
     &.is-open.popover-flip-vertical {
-      top: anchor(--filter-trigger top);
+      inset-block-start: anchor(--filter-trigger top);
       transform: translateY(calc(-100% - var(--pine-dimension-100)));
     }
 
     &.is-open.popover-flip-horizontal.popover-flip-vertical {
-      left: anchor(--filter-trigger right);
-      top: anchor(--filter-trigger top);
+      inset-block-start: anchor(--filter-trigger top);
+      inset-inline-start: anchor(--filter-trigger right);
       transform: translate(-100%, calc(-100% - var(--pine-dimension-100)));
     }
 
