@@ -88,6 +88,11 @@ export class PdsFilter implements BasePdsProps {
 
     this.lastScrollTime = 0;
 
+    // Clean up event listeners
+    if (this.popoverEl) {
+      this.popoverEl.removeEventListener('toggle', this.handleDirectPopoverToggle);
+    }
+
     // Ensure popover is closed
     if (this.isOpen && this.popoverEl) {
       try {
@@ -102,7 +107,52 @@ export class PdsFilter implements BasePdsProps {
 
   componentDidRender() {
     this.popoverEl = this.el.shadowRoot?.querySelector('.pds-filter__popover') as HTMLElement;
+
+    // Add direct event listeners to the popover element as a backup
+    if (this.popoverEl) {
+      // Remove any existing listeners to avoid duplicates
+      this.popoverEl.removeEventListener('toggle', this.handleDirectPopoverToggle);
+      // Add the listener
+      this.popoverEl.addEventListener('toggle', this.handleDirectPopoverToggle);
+    }
   }
+
+  /**
+   * Direct event listener for popover toggle events as a backup to document listener
+   */
+  private handleDirectPopoverToggle = (event: Event) => {
+    const target = event.target as HTMLElement;
+
+    if (target.id === `${this.componentId}-popover`) {
+      // Check for popover API support to avoid crashes
+      let isCurrentlyOpen = false;
+      try {
+        isCurrentlyOpen = target.matches(':popover-open');
+      } catch (error) {
+        // Fallback if :popover-open selector isn't supported
+        isCurrentlyOpen = target.style.display === 'block';
+      }
+
+      // Update state
+      this.isOpen = isCurrentlyOpen;
+
+      if (this.isOpen) {
+        setTimeout(() => this.adjustPopoverPosition(), 0);
+
+        this.pdsFilterOpen.emit({
+          componentId: this.componentId,
+          variant: this.variant,
+          text: this.text,
+        });
+      } else {
+        this.pdsFilterClose.emit({
+          componentId: this.componentId,
+          variant: this.variant,
+          text: this.text,
+        });
+      }
+    }
+  };
 
   /**
    * Reposition popovers on window resize.
@@ -296,12 +346,16 @@ export class PdsFilter implements BasePdsProps {
 
     if (target.id === `${this.componentId}-popover`) {
       // Check for popover API support to avoid crashes
+      let isCurrentlyOpen = false;
       try {
-        this.isOpen = target.matches(':popover-open');
+        isCurrentlyOpen = target.matches(':popover-open');
       } catch (error) {
         // Fallback if :popover-open selector isn't supported
-        this.isOpen = target.style.display === 'block';
+        isCurrentlyOpen = target.style.display === 'block';
       }
+
+      // Update state
+      this.isOpen = isCurrentlyOpen;
 
       if (this.isOpen) {
         setTimeout(() => this.adjustPopoverPosition(), 0);
@@ -419,7 +473,7 @@ export class PdsFilter implements BasePdsProps {
   /**
    * Handle trigger button click. Clear variant emits event, others toggle popover.
    */
-  private handleClick = () => {
+  private handleClick = (event?: Event) => {
     if (this.variant === 'clear') {
       this.pdsFilterClear.emit({
         componentId: this.componentId,
@@ -430,41 +484,18 @@ export class PdsFilter implements BasePdsProps {
 
     this.closeOtherPopovers();
 
-    setTimeout(() => {
-      if (this.popoverEl != null) {
-        // Check for popover API support to avoid crashes
-        const supportsPopoverAPI = HTMLElement.prototype.showPopover && !navigator.userAgent.includes('Firefox');
+    // Check for popover API support
+    const supportsPopoverAPI = HTMLElement.prototype.showPopover && !navigator.userAgent.includes('Firefox');
 
-        if (supportsPopoverAPI) {
-          // Modern browsers with full popover API support
-          let isNowOpen = false;
-          try {
-            isNowOpen = this.popoverEl.matches(':popover-open');
-          } catch (error) {
-            // Fallback if :popover-open selector isn't supported
-            isNowOpen = this.popoverEl.style.display === 'block';
-          }
+    if (!supportsPopoverAPI) {
+      // Manual fallback for browsers without popover API support
+      // Prevent default to avoid conflicts with any native behavior
+      if (event) {
+        event.preventDefault();
+      }
 
-          if (isNowOpen !== this.isOpen) {
-            this.isOpen = isNowOpen;
-
-            if (this.isOpen) {
-              this.adjustPopoverPosition();
-              this.pdsFilterOpen.emit({
-                componentId: this.componentId,
-                variant: this.variant,
-                text: this.text,
-              });
-            } else {
-              this.pdsFilterClose.emit({
-                componentId: this.componentId,
-                variant: this.variant,
-                text: this.text,
-              });
-            }
-          }
-        } else {
-          // Manual fallback for browsers with limited popover API support
+      setTimeout(() => {
+        if (this.popoverEl != null) {
           this.isOpen = !this.isOpen;
           if (this.isOpen) {
             this.popoverEl.style.display = 'block';
@@ -485,8 +516,10 @@ export class PdsFilter implements BasePdsProps {
             });
           }
         }
-      }
-    }, 0);
+      }, 0);
+    }
+    // For browsers with native popover API, let the native behavior handle the toggle
+    // The toggle event listener will capture the state change and emit events
   };
 
   /**
@@ -557,7 +590,7 @@ export class PdsFilter implements BasePdsProps {
           popoverTarget={this.variant !== 'clear' ? `${this.componentId}-popover` : undefined}
           popoverTargetAction={this.variant !== 'clear' ? 'toggle' : undefined}
           onKeyDown={this.variant === 'clear' ? this.handleKeyDown : undefined}
-          onClick={this.handleClick}
+          onClick={(event) => this.handleClick(event)}
           part="button"
           aria-expanded={this.isOpen ? 'true' : 'false'}
           aria-haspopup="true"
