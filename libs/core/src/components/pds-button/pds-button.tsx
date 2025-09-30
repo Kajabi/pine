@@ -1,7 +1,7 @@
 import { Component, Element, Event, EventEmitter, Host, h, Listen, Prop } from '@stencil/core';
 import { hasShadowDom } from '../../utils/utils';
 
-import { caretDown } from '@pine-ds/icons/icons';
+import { caretDown, addCircle } from '@pine-ds/icons/icons';
 
 /**
  * @part button - Exposes the button element for styling.
@@ -91,7 +91,7 @@ export class PdsButton {
    * Sets the style variant of the button.
    * @defaultValue primary
    */
-  @Prop() variant: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled' = 'primary';
+  @Prop() variant: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled' | 'filter' = 'primary';
 
   @Event() pdsClick: EventEmitter;
 
@@ -203,10 +203,14 @@ export class PdsButton {
   }
 
   private renderStartContent() {
-    const hasIcon = this.icon && this.variant !== 'disclosure';
+    const hasIcon = this.icon && this.variant !== 'disclosure' && this.variant !== 'filter';
     const hasStartSlot = this.hasSlotContent('start');
 
-    if (Boolean(hasIcon)) {
+    if (this.variant === 'filter') {
+      return (
+        <pds-icon class={this.loading ? 'pds-button__icon--hidden' : ''} icon={addCircle} part="icon" aria-hidden="true"></pds-icon>
+      );
+    } else if (Boolean(hasIcon)) {
       return (
         <pds-icon class={this.loading ? 'pds-button__icon--hidden' : ''} name={this.icon} part="icon" aria-hidden="true"></pds-icon>
       );

@@ -160,6 +160,29 @@ Disclosure button variant, intended to be used as a trigger to show or hide cont
   <pds-button variant="disclosure" disabled="true">Disabled</pds-button>
 </DocCanvas>
 
+### Filter
+
+Filter button variant, intended to be used for filter options in menus and interfaces.
+
+> **Note:** This variant should only be used in conjunction with the `pds-filters` component.
+
+> **Note:** Icon cannot be customized.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+    <PdsButton variant="filter">Filter option</PdsButton>
+    <PdsButton variant="filter" disabled="true">Disabled</PdsButton>
+    `,
+    webComponent: `
+    <pds-button variant="filter">Filter option</pds-button>
+    <pds-button variant="filter" disabled="true">Disabled</pds-button>
+    `
+}}>
+  <pds-button variant="filter">Filter option</pds-button>
+  <pds-button variant="filter" disabled="true">Disabled</pds-button>
+</DocCanvas>
+
 ### Full Width
 
 Full width buttons are intended to be used when the button needs to take up the full width of its container.

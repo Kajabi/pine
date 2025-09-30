@@ -741,7 +741,7 @@ export namespace Components {
           * Sets the style variant of the button.
           * @defaultValue primary
          */
-        "variant": 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled';
+        "variant": 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled' | 'filter';
     }
     interface PdsCheckbox {
         /**
@@ -3203,7 +3203,7 @@ declare namespace LocalJSX {
           * Sets the style variant of the button.
           * @defaultValue primary
          */
-        "variant"?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled';
+        "variant"?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled' | 'filter';
     }
     interface PdsCheckbox {
         /**

@@ -1,5 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
-import { caretDown } from '@pine-ds/icons/icons';
+import { caretDown, addCircle } from '@pine-ds/icons/icons';
 
 describe('pds-button', () => {
   it('renders', async () => {
@@ -239,5 +239,87 @@ describe('pds-button', () => {
       expect(formSubmitEvent).toHaveReceivedEvent();
     });
 
+  });
+
+  describe('filter variant E2E', () => {
+    it('renders add-circle icon when variant is filter', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button variant="filter">Filter option</pds-button>');
+
+      const element = await page.find('pds-button >>> button');
+      const icon = await element.find('pds-icon');
+      const iconName = await icon.getProperty('icon');
+
+      expect(icon).toBeTruthy();
+      expect(iconName).toBe(addCircle);
+    });
+
+    it('ignores icon prop and always shows add-circle for filter variant', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button variant="filter" icon="favorite">Filter option</pds-button>');
+
+      const element = await page.find('pds-button >>> button');
+      const icon = await element.find('pds-icon');
+      const iconName = await icon.getProperty('icon');
+
+      // Should still render add-circle, not favorite
+      expect(icon).toBeTruthy();
+      expect(iconName).toBe(addCircle);
+    });
+
+    it('filter variant works with disabled state', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button variant="filter" disabled="true">Filter option</pds-button>');
+
+      const component = await page.find('pds-button');
+      const element = await page.find('pds-button >>> button');
+      const icon = await element.find('pds-icon');
+
+      expect(component).toHaveClass('hydrated');
+      const disabled = await element.getProperty('disabled');
+      expect(disabled).toBe(true);
+      expect(icon).toBeTruthy();
+    });
+
+    it('filter variant works with loading state', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button variant="filter" loading="true">Filter option</pds-button>');
+
+      const component = await page.find('pds-button');
+      const element = await page.find('pds-button >>> button');
+      const icon = await element.find('pds-icon');
+      const loader = await element.find('pds-loader');
+
+      expect(component).toHaveClass('hydrated');
+      expect(icon).toBeTruthy();
+      expect(loader).toBeTruthy();
+    });
+
+    it('filter variant works as link when href provided', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button variant="filter" href="/test">Filter option</pds-button>');
+
+      const component = await page.find('pds-button');
+      const element = await page.find('pds-button >>> a');
+      const icon = await element.find('pds-icon');
+
+      expect(component).toHaveClass('hydrated');
+      expect(element).toBeTruthy();
+      expect(icon).toBeTruthy();
+      await expect(element.getProperty('href')).resolves.toContain('/test');
+    });
+
+    it('filter variant can be clicked and emits events', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button variant="filter">Filter option</pds-button>');
+
+      const component = await page.find('pds-button');
+      const clickEvent = await component.spyOnEvent('pdsClick');
+
+      await component.click();
+      await page.waitForChanges();
+
+      expect(clickEvent).toHaveReceivedEvent();
+    });
   });
 });

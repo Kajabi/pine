@@ -1,6 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsButton } from '../pds-button';
-import { caretDown } from '@pine-ds/icons/icons';
+import { caretDown, addCircle } from '@pine-ds/icons/icons';
 
 describe('pds-button', () => {
   it('renders default button', async () => {
@@ -428,6 +428,90 @@ describe('pds-button', () => {
       expect(button?.type).toBe('submit');
       expect(button?.hasAttribute('disabled')).toBe(false);
       expect(page.root?.getAttribute('aria-disabled')).toBe(null);
+    });
+  });
+
+  describe('filter variant coverage', () => {
+    it('renders add-circle icon when variant is filter', async () => {
+      const {root} = await newSpecPage({
+        components: [PdsButton],
+        html: `<pds-button variant="filter">Filter option</pds-button>`,
+      });
+
+      const filterIcon = root?.shadowRoot?.querySelector('pds-icon[part="icon"]');
+      expect(filterIcon).toBeTruthy();
+      expect(filterIcon?.getAttribute('icon')).toBe(addCircle);
+    });
+
+    it('ignores icon prop when variant is filter', async () => {
+      const {root} = await newSpecPage({
+        components: [PdsButton],
+        html: `<pds-button variant="filter" icon="favorite">Filter option</pds-button>`,
+      });
+
+      // Should still render add-circle icon, not favorite
+      const filterIcon = root?.shadowRoot?.querySelector('pds-icon[part="icon"]');
+      expect(filterIcon).toBeTruthy();
+      expect(filterIcon?.getAttribute('icon')).toBe(addCircle);
+      expect(filterIcon?.getAttribute('name')).toBe(null);
+    });
+
+    it('renders filter variant with loading state (covers hidden icon)', async () => {
+      const {root} = await newSpecPage({
+        components: [PdsButton],
+        html: `<pds-button variant="filter" loading="true">Filter option</pds-button>`,
+      });
+
+      // Should render add-circle icon with hidden class when loading
+      const filterIcon = root?.shadowRoot?.querySelector('pds-icon[part="icon"]');
+      expect(filterIcon).toBeTruthy();
+      expect(filterIcon?.classList.contains('pds-button__icon--hidden')).toBe(true);
+    });
+
+    it('renders filter variant with disabled state', async () => {
+      const {root} = await newSpecPage({
+        components: [PdsButton],
+        html: `<pds-button variant="filter" disabled="true">Filter option</pds-button>`,
+      });
+
+      const filterIcon = root?.shadowRoot?.querySelector('pds-icon[part="icon"]');
+      const button = root?.shadowRoot?.querySelector('button');
+
+      expect(filterIcon).toBeTruthy();
+      expect(filterIcon?.getAttribute('icon')).toBe(addCircle);
+      expect(button?.hasAttribute('disabled')).toBe(true);
+      expect(root?.getAttribute('aria-disabled')).toBe('true');
+    });
+
+    it('does not render start slot content when variant is filter', async () => {
+      const {root} = await newSpecPage({
+        components: [PdsButton],
+        html: `<pds-button variant="filter"><pds-icon slot="start" name="favorite"></pds-icon>Filter option</pds-button>`,
+      });
+
+      // Should render hardcoded add-circle icon, not slot content
+      const filterIcon = root?.shadowRoot?.querySelector('pds-icon[part="icon"]');
+      expect(filterIcon).toBeTruthy();
+      expect(filterIcon?.getAttribute('icon')).toBe(addCircle);
+
+      // Should not render start slot
+      const slotSpan = root?.shadowRoot?.querySelector('.pds-button__icon');
+      expect(slotSpan).toBeFalsy();
+    });
+
+    it('renders filter variant as anchor when href is provided', async () => {
+      const {root} = await newSpecPage({
+        components: [PdsButton],
+        html: `<pds-button variant="filter" href="/test">Filter option</pds-button>`,
+      });
+
+      const anchor = root?.shadowRoot?.querySelector('a');
+      const filterIcon = root?.shadowRoot?.querySelector('pds-icon[part="icon"]');
+
+      expect(anchor).toBeTruthy();
+      expect(filterIcon).toBeTruthy();
+      expect(filterIcon?.getAttribute('icon')).toBe(addCircle);
+      expect(anchor?.href).toContain('/test');
     });
   });
 });

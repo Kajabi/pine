@@ -4,7 +4,15 @@ import { withActions } from '@storybook/addon-actions/decorator';
 import { customArgsWithIconControl } from '../../../stories/_helpers';
 
 export default {
-  argTypes: customArgsWithIconControl({ component: 'pds-button', property: 'icon' }),
+  argTypes: {
+    ...customArgsWithIconControl({ component: 'pds-button', property: 'icon' }),
+    variant: {
+      control: {
+        type: 'select',
+      },
+      options: ['primary', 'secondary', 'accent', 'disclosure', 'destructive', 'unstyled', 'filter'],
+    },
+  },
   component: 'pds-button',
   decorators: [withActions],
   title: 'components/Button',
@@ -90,6 +98,25 @@ Disclosure.args = {
 
 // We do not want to show Icon control, but icon is hard coded
 Disclosure.parameters = {
+  controls: { exclude: 'icon' }
+}
+
+export const Filter = BaseTemplate.bind({});
+
+Filter.args = {
+  disabled: false,
+  fullWidth: false,
+  iconOnly: false,
+  loading: false,
+  slot: {
+    default: 'Filter option',
+  },
+  type: 'button',
+  variant: 'filter'
+};
+
+// We do not want to show Icon control, icon is hard coded
+Filter.parameters = {
   controls: { exclude: 'icon' }
 }
 
