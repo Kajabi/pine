@@ -25,7 +25,7 @@ describe('pds-combobox', () => {
           <div class="pds-combobox" tabindex="-1">
             <div class="pds-combobox__input-wrapper" style="width: fit-content;">
               <input aria-autocomplete="list" aria-controls="pds-combobox-listbox" aria-disabled="false" aria-expanded="false" autocomplete="off" class="pds-combobox__input" id="test-combobox" part="input" role="combobox" type="text" value="" />
-              <pds-icon aria-hidden="true" aria-label="dropdown indicator" class="pds-combobox__input-chevron" icon="enlarge"></pds-icon>
+              <pds-icon aria-hidden="true" aria-label="dropdown indicator" class="pds-combobox__input-icon" icon="enlarge"></pds-icon>
             </div>
             <div style="display: none;">
               <slot></slot>

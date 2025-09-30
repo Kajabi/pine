@@ -2,6 +2,13 @@
   display: block;
 }
 
+:host([disabled="true"]) {
+  .pds-combobox__input-icon {
+    color: var(--pine-color-text-disabled);
+    pointer-events: none;
+  }
+}
+
 .pds-combobox {
   position: relative;
 }
@@ -57,7 +64,7 @@
   }
 }
 
-.pds-combobox__input-chevron {
+.pds-combobox__input-icon {
   color: var(--pine-color-text-secondary);
   pointer-events: none;
   position: absolute;

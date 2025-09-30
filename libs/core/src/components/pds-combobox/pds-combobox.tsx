@@ -634,7 +634,7 @@ export class PdsCombobox implements BasePdsProps {
                 autocomplete="off"
                 part="input"
               />
-              <pds-icon icon="enlarge" aria-hidden="true" class="pds-combobox__input-chevron" />
+              <pds-icon icon="enlarge" aria-hidden="true" class="pds-combobox__input-icon" />
             </div>
           ) : (
             <div
