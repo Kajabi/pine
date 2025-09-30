@@ -68,6 +68,7 @@
   align-items: center;
   background: transparent;
   border-radius: var(--pine-dimension-125);
+  color: var(--pine-color-text-secondary);
   cursor: pointer;
   display: flex;
   font: var(--pine-typography-body-medium);
@@ -105,12 +106,11 @@
 }
 
 .pds-combobox__group-label {
-  color: var(--pine-color-text-secondary);
+  color: var(--pine-color-text-placeholder);
   cursor: default;
-  font: var(--pine-typography-body-small);
-  font-weight: var(--pine-font-weight-semibold);
+  font: var(--pine-typography-heading-caption);
   margin-block-end: var(--pine-dimension-2xs);
-  margin-block-start: var(--pine-dimension-xs);
+  margin-block-start: var(--pine-dimension-150);
   padding: var(--pine-dimension-2xs) var(--pine-dimension-sm);
   text-transform: uppercase;
 

@@ -258,27 +258,27 @@ export const OptionGroupsPdsText = (args) => html`
   dropdown-width=${args.dropdownWidth}
   max-height=${args.maxHeight}
 >
-  <pds-text>Frontend Technologies</pds-text>
+  <pds-text color="secondary">Frontend Technologies</pds-text>
   <option value="react">React</option>
   <option value="vue">Vue.js</option>
   <option value="angular">Angular</option>
   <option value="svelte">Svelte</option>
   <option value="nextjs">Next.js</option>
 
-  <pds-text>Backend Technologies</pds-text>
+  <pds-text color="secondary">Backend Technologies</pds-text>
   <option value="nodejs">Node.js</option>
   <option value="python">Python</option>
   <option value="java">Java</option>
   <option value="golang">Go</option>
   <option value="rust">Rust</option>
 
-  <pds-text>Databases</pds-text>
+  <pds-text color="secondary">Databases</pds-text>
   <option value="postgresql">PostgreSQL</option>
   <option value="mongodb">MongoDB</option>
   <option value="mysql">MySQL</option>
   <option value="redis">Redis</option>
 
-  <pds-text>Cloud Services</pds-text>
+  <pds-text color="secondary">Cloud Services</pds-text>
   <option value="aws">AWS</option>
   <option value="azure">Azure</option>
   <option value="gcp">Google Cloud</option>
