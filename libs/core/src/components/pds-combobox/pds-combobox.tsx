@@ -347,38 +347,95 @@ export class PdsCombobox implements BasePdsProps {
   };
 
   private handleKeyDown = (e: KeyboardEvent) => {
-    if (!this.isOpen && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+    if (!this.isOpen && (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Alt+ArrowDown')) {
+      e.preventDefault();
       this.isOpen = true;
+      this.filterOptions();
+      // Set highlighted index immediately for testing
+      const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION');
+      if (selectableOptions.length > 0) {
+        this.highlightedIndex = 0;
+      }
+      setTimeout(() => {
+        this.openDropdownPositioning();
+        this.focusFirstOption();
+      }, 0);
       return;
     }
+
+    if (!this.isOpen) return;
 
     // Get only the option elements (skip group labels) for navigation
     const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION') as HTMLOptionElement[];
 
     switch (e.key) {
       case 'ArrowDown':
+        e.preventDefault();
         // If no option is highlighted and we have options, start at 0
         if (this.highlightedIndex < 0 && selectableOptions.length > 0) {
           this.highlightedIndex = 0;
         } else {
           this.highlightedIndex = Math.min(this.highlightedIndex + 1, selectableOptions.length - 1);
         }
+        this.updateOptionFocus();
         break;
       case 'ArrowUp':
+        e.preventDefault();
         // If no option is highlighted and we have options, start at last option
         if (this.highlightedIndex < 0 && selectableOptions.length > 0) {
           this.highlightedIndex = selectableOptions.length - 1;
         } else {
           this.highlightedIndex = Math.max(this.highlightedIndex - 1, 0);
         }
+        this.updateOptionFocus();
+        break;
+      case 'Home':
+        e.preventDefault();
+        if (selectableOptions.length > 0) {
+          this.highlightedIndex = 0;
+          this.updateOptionFocus();
+        }
+        break;
+      case 'End':
+        e.preventDefault();
+        if (selectableOptions.length > 0) {
+          this.highlightedIndex = selectableOptions.length - 1;
+          this.updateOptionFocus();
+        }
+        break;
+      case 'PageDown':
+        e.preventDefault();
+        if (selectableOptions.length > 0) {
+          const nextIndex = Math.min(this.highlightedIndex + 10, selectableOptions.length - 1);
+          this.highlightedIndex = nextIndex;
+          this.updateOptionFocus();
+        }
+        break;
+      case 'PageUp':
+        e.preventDefault();
+        if (selectableOptions.length > 0) {
+          const prevIndex = Math.max(this.highlightedIndex - 10, 0);
+          this.highlightedIndex = prevIndex;
+          this.updateOptionFocus();
+        }
         break;
       case 'Enter':
-        if (this.isOpen && this.highlightedIndex >= 0 && this.highlightedIndex < selectableOptions.length) {
+        e.preventDefault();
+        if (this.highlightedIndex >= 0 && this.highlightedIndex < selectableOptions.length) {
           this.handleOptionClick(selectableOptions[this.highlightedIndex]);
+          this.restoreFocusToTrigger();
         }
         break;
       case 'Escape':
+        e.preventDefault();
         this.isOpen = false;
+        this.highlightedIndex = -1;
+        this.restoreFocusToTrigger();
+        break;
+      case 'Tab':
+        // Allow normal tab behavior to close dropdown and move focus
+        this.isOpen = false;
+        this.highlightedIndex = -1;
         break;
     }
   };
@@ -393,6 +450,108 @@ export class PdsCombobox implements BasePdsProps {
     } else {
       this.triggerEl?.focus();
     }
+  }
+
+  /**
+   * Focus management helper - moves focus to the first option when dropdown opens
+   */
+  private focusFirstOption() {
+    if (this.isOpen) {
+      const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION');
+      if (selectableOptions.length > 0) {
+        this.highlightedIndex = 0;
+        // DON'T focus the option elements - keep focus on trigger and use aria-activedescendant
+        // This prevents the focusout event that was closing the dropdown
+        // But still call updateOptionFocus for scrolling
+        if (this.listboxEl) {
+          this.updateOptionFocus();
+        }
+      }
+    }
+  }
+
+  /**
+   * Focus management helper - actually focuses the first option when opened via arrow keys
+   */
+  private focusFirstOptionForArrowKeys() {
+    if (this.isOpen) {
+      const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION');
+      if (selectableOptions.length > 0) {
+        this.highlightedIndex = 0;
+        // For arrow key navigation, actually focus the first option
+        if (this.listboxEl) {
+          const optionElements = this.listboxEl.querySelectorAll('[role="option"]');
+          const firstOption = optionElements[0] as HTMLElement;
+          if (firstOption) {
+            // Remove tabindex from all options first
+            optionElements.forEach(option => {
+              (option as HTMLElement).setAttribute('tabindex', '-1');
+            });
+            // Set tabindex and focus on first option
+            firstOption.setAttribute('tabindex', '0');
+            firstOption.focus();
+            firstOption.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          }
+        }
+        // Update aria-activedescendant on trigger
+        this.updateAriaActiveDescendant();
+      }
+    }
+  }
+
+  /**
+   * Focus management helper - updates visual state and scrolling for the currently highlighted option
+   * Note: We don't actually focus the option to prevent focusout events that close the dropdown
+   */
+  private updateOptionFocus() {
+    if (!this.listboxEl || this.highlightedIndex < 0) return;
+
+    const optionElements = this.listboxEl.querySelectorAll('[role="option"]');
+    const currentOption = optionElements[this.highlightedIndex] as HTMLElement;
+
+    if (currentOption) {
+      // Check if any option currently has focus (indicating we're in arrow-key navigation mode)
+      const focusedOption = optionElements[Array.from(optionElements).findIndex(el => el === document.activeElement)];
+
+      if (focusedOption) {
+        // We're in arrow-key navigation mode, so actually move focus between options
+        optionElements.forEach(option => {
+          (option as HTMLElement).setAttribute('tabindex', '-1');
+        });
+        currentOption.setAttribute('tabindex', '0');
+        currentOption.focus();
+      }
+
+      // Always scroll the option into view
+      currentOption.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+
+    // Always update aria-activedescendant on the trigger element
+    this.updateAriaActiveDescendant();
+  }
+
+  /**
+   * Updates aria-activedescendant on the trigger element
+   */
+  private updateAriaActiveDescendant() {
+    if (this.triggerEl && this.highlightedIndex >= 0) {
+      this.triggerEl.setAttribute('aria-activedescendant', `pds-combobox-option-${this.highlightedIndex}`);
+    } else if (this.triggerEl) {
+      this.triggerEl.removeAttribute('aria-activedescendant');
+    }
+  }
+
+  /**
+   * Focus management helper - restores focus to the trigger element
+   */
+  private restoreFocusToTrigger() {
+    setTimeout(() => {
+      if (this.inputEl) {
+        this.inputEl.focus();
+      } else if (this.triggerEl) {
+        this.triggerEl.focus();
+      }
+    }, 0);
   }
 
   /**
@@ -422,6 +581,12 @@ export class PdsCombobox implements BasePdsProps {
     event.preventDefault();
   };
 
+  // Event handler for option keyboard events
+  private onOptionKeyDown = (event: KeyboardEvent) => {
+    // Delegate to main keyboard handler
+    this.handleKeyDown(event);
+  };
+
   // Get the label of the selected option
   private get selectedLabel(): string {
     return this.selectedOption ? this.getOptionLabel(this.selectedOption) : '';
@@ -445,13 +610,48 @@ export class PdsCombobox implements BasePdsProps {
 
   // Handler for button trigger keyboard events
   private onButtonTriggerKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown' || e.key === 'ArrowUp') {
       e.preventDefault();
-      this.isOpen = true;
-      this.highlightedIndex = 0;
-      setTimeout(() => this.openDropdownPositioning(), 0);
+      e.stopPropagation(); // Prevent the event from bubbling and triggering click
+
+      if (!this.isOpen) {
+        this.isOpen = false;
+        this.filterOptions();
+        // Set highlighted index immediately for testing
+        const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION');
+        if (selectableOptions.length > 0) {
+          this.highlightedIndex = 0;
+        }
+        setTimeout(() => {
+          this.openDropdownPositioning();
+          // For arrow keys, focus the first option so subsequent navigation works
+          // For space/enter, keep focus on trigger (handled in focusFirstOption)
+          if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+            this.focusFirstOptionForArrowKeys();
+          } else {
+            this.focusFirstOption();
+          }
+        }, 0);
+      }
     } else if (e.key === 'Escape') {
-      this.isOpen = false;
+      e.preventDefault();
+      if (this.isOpen) {
+        this.isOpen = false;
+        this.highlightedIndex = -1;
+        this.updateAriaActiveDescendant(); // Clear aria-activedescendant
+        this.restoreFocusToTrigger();
+      }
+    } else if (this.isOpen) {
+      // Delegate other keys to main keyboard handler when dropdown is open
+      this.handleKeyDown(e);
+    }
+  };
+
+  // Handler for button trigger keyup events - prevents space key from triggering synthetic click
+  private onButtonTriggerKeyUp = (e: KeyboardEvent) => {
+    if (e.key === ' ') {
+      e.preventDefault();
+      e.stopPropagation();
     }
   };
 
@@ -460,6 +660,8 @@ export class PdsCombobox implements BasePdsProps {
     const relatedTarget = event.relatedTarget as Node | null;
     if (!this.el.contains(relatedTarget)) {
       this.isOpen = false;
+      this.highlightedIndex = -1;
+      this.updateAriaActiveDescendant(); // Clear aria-activedescendant
 
       // If there's a selected option but the input value doesn't match, restore the selected option's value
       if (this.selectedOption && this.value !== this.getOptionLabel(this.selectedOption)) {
@@ -481,12 +683,15 @@ export class PdsCombobox implements BasePdsProps {
     if (!this.isOpen || this.filteredItems.length === 0) return null;
 
     let optionIndex = 0;
+    const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION') as HTMLOptionElement[];
 
     return (
       <ul
         class="pds-combobox__listbox"
         role="listbox"
         id="pds-combobox-listbox"
+        aria-label={this.label || 'Options'}
+        aria-multiselectable="false"
         ref={el => (this.listboxEl = el as HTMLElement)}
       >
         {this.filteredItems.map((item, itemIdx) => {
@@ -526,6 +731,10 @@ export class PdsCombobox implements BasePdsProps {
                 id={`pds-combobox-option-${currentOptionIndex}`}
                 role="option"
                 aria-selected={isSelected ? 'true' : 'false'}
+                aria-setsize={selectableOptions.length}
+                aria-posinset={currentOptionIndex + 1}
+                aria-label={isLayout ? option.getAttribute('aria-label') || this.getOptionLabel(option) : undefined}
+                tabindex={isHighlighted ? '0' : '-1'}
                 class={{
                   'pds-combobox__option': true,
                   'pds-combobox__option--highlighted': isHighlighted,
@@ -535,6 +744,7 @@ export class PdsCombobox implements BasePdsProps {
                 onMouseDown={this.onOptionMouseDown}
                 onClick={this.onOptionClick}
                 onMouseEnter={this.onOptionMouseEnter}
+                onKeyDown={this.onOptionKeyDown}
               >
                 {isLayout ? (
                   <pds-box class="pds-combobox__option-layout-wrapper" innerHTML={this.getOptionLayoutContent(option)} />
@@ -643,14 +853,16 @@ export class PdsCombobox implements BasePdsProps {
               role="combobox"
               aria-haspopup="listbox"
               aria-controls="pds-combobox-listbox"
+              aria-activedescendant={this.isOpen && this.highlightedIndex >= 0 ? `pds-combobox-option-${this.highlightedIndex}` : undefined}
               aria-expanded={this.isOpen ? 'true' : 'false'}
               aria-disabled={this.disabled ? 'true' : 'false'}
               aria-label={this.hideLabel ? this.label : undefined}
               id={this.componentId}
-              tabIndex={0}
+              tabIndex={this.disabled ? -1 : 0}
               onClick={this.onButtonTriggerClick}
               data-layout={this.customTriggerContent}
               onKeyDown={this.onButtonTriggerKeyDown}
+              onKeyUp={this.onButtonTriggerKeyUp}
               ref={el => (this.triggerEl = el as HTMLElement)}
               part="button-trigger"
             >
