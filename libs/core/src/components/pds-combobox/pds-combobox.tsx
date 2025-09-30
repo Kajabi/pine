@@ -553,7 +553,7 @@ export class PdsCombobox implements BasePdsProps {
 
   // Helper method to render the caret icon
   private renderCaretIcon() {
-    return <pds-icon icon="caret-down" aria-hidden="true" aria-label="dropdown indicator" class="pds-combobox__button-trigger-chevron" />;
+    return <pds-icon icon="caret-down" aria-hidden="true" class="pds-combobox__button-trigger-chevron" />;
   }
 
   // Helper method to render layout content
@@ -634,7 +634,7 @@ export class PdsCombobox implements BasePdsProps {
                 autocomplete="off"
                 part="input"
               />
-              <pds-icon icon="enlarge" aria-hidden="true" aria-label="dropdown indicator" class="pds-combobox__input-chevron" />
+              <pds-icon icon="enlarge" aria-hidden="true" class="pds-combobox__input-chevron" />
             </div>
           ) : (
             <div
