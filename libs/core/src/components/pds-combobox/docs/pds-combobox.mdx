@@ -81,11 +81,14 @@ The secondary variant provides a subtle button appearance with a white backgroun
   }}
 >
   <pds-combobox component-id="combobox-trigger-secondary" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only">
+    <pds-text>Mammals</pds-text>
     <option value="cat">Cat</option>
     <option value="dog">Dog</option>
     <option value="panda">Panda</option>
     <option value="snake">Snake</option>
   </pds-combobox>
+
+> **Note**: The `pds-text` element above serves as a non-interactive group header. Users cannot select these labels - they only organize and categorize the selectable options below them.
 </DocCanvas>
 
 ### Primary
@@ -819,3 +822,175 @@ When using custom layouts:
 3. **Maintain accessibility**: Ensure custom content is screen reader accessible
 4. **Keep it simple**: Don't overcomplicate layouts - focus on essential information
 5. **Test thoroughly**: Verify keyboard navigation and screen reader compatibility
+
+## Group Labels
+
+The combobox supports organizing options with group labels using either HTML `<optgroup>` elements or `<pds-text>` components. Group labels help categorize related options and improve the user experience when dealing with long lists.
+
+### Using Optgroup
+
+Use standard HTML `<optgroup>` elements to create semantic groupings:
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox
+  component-id="combobox-optgroup-example"
+  label="Select Animal"
+  placeholder="Choose an animal"
+  trigger="button"
+  trigger-variant="secondary"
+  mode="select-only">
+  <optgroup label="Mammals">
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="elephant">Elephant</option>
+  </optgroup>
+  <optgroup label="Birds">
+    <option value="eagle">Eagle</option>
+    <option value="parrot">Parrot</option>
+    <option value="penguin">Penguin</option>
+  </optgroup>
+  <optgroup label="Fish">
+    <option value="salmon">Salmon</option>
+    <option value="shark">Shark</option>
+    <option value="tuna">Tuna</option>
+  </optgroup>
+</pds-combobox>`,
+    react: `<PdsCombobox
+  componentId="combobox-optgroup-example"
+  label="Select Animal"
+  placeholder="Choose an animal"
+  trigger="button"
+  triggerVariant="secondary"
+  mode="select-only">
+  <optgroup label="Mammals">
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="elephant">Elephant</option>
+  </optgroup>
+  <optgroup label="Birds">
+    <option value="eagle">Eagle</option>
+    <option value="parrot">Parrot</option>
+    <option value="penguin">Penguin</option>
+  </optgroup>
+  <optgroup label="Fish">
+    <option value="salmon">Salmon</option>
+    <option value="shark">Shark</option>
+    <option value="tuna">Tuna</option>
+  </optgroup>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox
+    component-id="combobox-optgroup-example"
+    label="Select Animal"
+    placeholder="Choose an animal"
+    trigger="button"
+    trigger-variant="secondary"
+    mode="select-only">
+    <optgroup label="Mammals">
+      <option value="cat">Cat</option>
+      <option value="dog">Dog</option>
+      <option value="elephant">Elephant</option>
+    </optgroup>
+    <optgroup label="Birds">
+      <option value="eagle">Eagle</option>
+      <option value="parrot">Parrot</option>
+      <option value="penguin">Penguin</option>
+    </optgroup>
+    <optgroup label="Fish">
+      <option value="salmon">Salmon</option>
+      <option value="shark">Shark</option>
+      <option value="tuna">Tuna</option>
+    </optgroup>
+  </pds-combobox>
+</DocCanvas>
+
+### Using PDS Text Components
+
+Alternatively, use `<pds-text>` components as group labels for more styling control:
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox
+  component-id="combobox-pds-text-example"
+  label="Select Product"
+  placeholder="Choose a product"
+  trigger="button"
+  trigger-variant="primary"
+  mode="select-only">
+  <pds-text color="secondary">Software</pds-text>
+  <option value="ide">IDE</option>
+  <option value="editor">Code Editor</option>
+  <option value="compiler">Compiler</option>
+  <pds-text color="secondary">Hardware</pds-text>
+  <option value="laptop">Laptop</option>
+  <option value="monitor">Monitor</option>
+  <option value="keyboard">Keyboard</option>
+  <pds-text color="secondary">Services</pds-text>
+  <option value="hosting">Web Hosting</option>
+  <option value="domain">Domain Registration</option>
+  <option value="ssl">SSL Certificate</option>
+</pds-combobox>`,
+    react: `<PdsCombobox
+  componentId="combobox-pds-text-example"
+  label="Select Product"
+  placeholder="Choose a product"
+  trigger="button"
+  triggerVariant="primary"
+  mode="select-only">
+  <PdsText color="secondary">Software</PdsText>
+  <option value="ide">IDE</option>
+  <option value="editor">Code Editor</option>
+  <option value="compiler">Compiler</option>
+  <PdsText color="secondary">Hardware</PdsText>
+  <option value="laptop">Laptop</option>
+  <option value="monitor">Monitor</option>
+  <option value="keyboard">Keyboard</option>
+  <PdsText color="secondary">Services</PdsText>
+  <option value="hosting">Web Hosting</option>
+  <option value="domain">Domain Registration</option>
+  <option value="ssl">SSL Certificate</option>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox
+    component-id="combobox-pds-text-example"
+    label="Select Product"
+    placeholder="Choose a product"
+    trigger="button"
+    trigger-variant="primary"
+    mode="select-only">
+    <pds-text color="secondary">Software</pds-text>
+    <option value="ide">IDE</option>
+    <option value="editor">Code Editor</option>
+    <option value="compiler">Compiler</option>
+    <pds-text color="secondary">Hardware</pds-text>
+    <option value="laptop">Laptop</option>
+    <option value="monitor">Monitor</option>
+    <option value="keyboard">Keyboard</option>
+    <pds-text color="secondary">Services</pds-text>
+    <option value="hosting">Web Hosting</option>
+    <option value="domain">Domain Registration</option>
+    <option value="ssl">SSL Certificate</option>
+  </pds-combobox>
+</DocCanvas>
+
+### Group Labels Best Practices
+
+When using group labels:
+
+1. **Keep labels concise**: Use short, descriptive labels that clearly categorize the options
+2. **Maintain logical grouping**: Group related options together in a way that makes sense to users
+3. **Consider filtering behavior**: Group labels are preserved when filtering, but only groups with matching options will be shown
+4. **Use consistent styling**: Choose either `<optgroup>` or `<pds-text>` consistently within a single combobox
+5. **Test accessibility**: Ensure group labels work well with screen readers and keyboard navigation
+
+### ARIA and Accessibility Considerations
+
+Both `<optgroup>` and `<pds-text>` group labels are rendered as presentational items in the dropdown:
+
+- **`<optgroup>` elements**: Provide semantic grouping that is meaningful to screen readers. The `label` attribute is announced by assistive technology, helping users understand the relationship between options and their categories.
+- **`<pds-text>` elements**: Serve as visual group headers but are purely presentational. They do not provide semantic grouping information to screen readers.
+
+**Recommendation**: Use `<optgroup>` when semantic grouping is important for accessibility and screen reader users. Use `<pds-text>` when you only need visual organization without semantic meaning.
