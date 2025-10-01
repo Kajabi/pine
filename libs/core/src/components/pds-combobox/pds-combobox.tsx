@@ -150,12 +150,8 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   @Watch('isOpen')
-  handleIsOpenChange(newValue: boolean, oldValue: boolean) {
-    console.log('[PDS-COMBOBOX] isOpen changed:', {
-      from: oldValue,
-      to: newValue,
-      stack: new Error().stack?.split('\n').slice(1, 4).join('\n')
-    });
+  handleIsOpenChange() {
+    // isOpen state changed - could add analytics or other side effects here if needed
   }
 
   @Watch('selectedOption')
@@ -314,14 +310,7 @@ export class PdsCombobox implements BasePdsProps {
   }
 
           private openDropdownPositioning() {
-    console.log('[PDS-COMBOBOX] openDropdownPositioning called:', {
-      triggerEl: !!this.triggerEl,
-      listboxEl: !!this.listboxEl,
-      isOpen: this.isOpen
-    });
-
     if (this.triggerEl && this.listboxEl) {
-      console.log('[PDS-COMBOBOX] Applying dropdown styles and positioning');
       // Apply width and max-height BEFORE positioning calculations
       this.listboxEl.style.width = this.dropdownWidth;
 
@@ -338,19 +327,12 @@ export class PdsCombobox implements BasePdsProps {
         strategy: 'absolute',
         middleware: [offset(12), flip(), shift({ padding: 5 })],
       }).then(({ x, y }) => {
-        console.log('[PDS-COMBOBOX] Positioning dropdown at:', { x, y });
         Object.assign(this.listboxEl.style, {
           left: `${x}px`,
           top: `${y}px`,
           position: 'absolute',
           zIndex: 1000,
         });
-        console.log('[PDS-COMBOBOX] Dropdown positioning complete');
-      });
-    } else {
-      console.warn('[PDS-COMBOBOX] Cannot position dropdown - missing elements:', {
-        triggerEl: !!this.triggerEl,
-        listboxEl: !!this.listboxEl
       });
     }
   }
@@ -370,29 +352,16 @@ export class PdsCombobox implements BasePdsProps {
   };
 
   private handleKeyDown = (e: KeyboardEvent) => {
-    console.log('[PDS-COMBOBOX] handleKeyDown called:', {
-      key: e.key,
-      isOpen: this.isOpen,
-      target: e.target,
-      currentTarget: e.currentTarget,
-      highlightedIndex: this.highlightedIndex
-    });
-
     if (!this.isOpen && (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Alt+ArrowDown')) {
-      console.log('[PDS-COMBOBOX] Opening dropdown via keyboard:', e.key);
       e.preventDefault();
       this.isOpen = true;
-      console.log('[PDS-COMBOBOX] isOpen set to:', this.isOpen);
       this.filterOptions();
       // Set highlighted index immediately for testing
       const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION');
-      console.log('[PDS-COMBOBOX] Selectable options found:', selectableOptions.length);
       if (selectableOptions.length > 0) {
         this.highlightedIndex = 0;
-        console.log('[PDS-COMBOBOX] highlightedIndex set to:', this.highlightedIndex);
       }
       setTimeout(() => {
-        console.log('[PDS-COMBOBOX] Executing delayed dropdown positioning and focus');
         this.openDropdownPositioning();
         this.focusFirstOption();
       }, 0);
@@ -400,44 +369,25 @@ export class PdsCombobox implements BasePdsProps {
     }
 
     if (!this.isOpen) {
-      console.log('[PDS-COMBOBOX] Dropdown not open, ignoring key:', e.key);
       return;
     }
 
     // Get only the option elements (skip group labels) for navigation
     const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION') as HTMLOptionElement[];
-    console.log('[PDS-COMBOBOX] Navigation - selectableOptions:', selectableOptions.length, 'current highlightedIndex:', this.highlightedIndex);
 
     switch (e.key) {
       case 'ArrowDown':
-        console.log('[PDS-COMBOBOX] ArrowDown pressed');
         e.preventDefault();
-
-        // If we're not in arrow-key navigation mode yet, enable it now
-        if (!this.isArrowKeyNavigationMode) {
-          console.log('[PDS-COMBOBOX] Enabling arrow-key navigation mode from dropdown');
-          this.isArrowKeyNavigationMode = true;
-        }
-
         // If no option is highlighted and we have options, start at 0
         if (this.highlightedIndex < 0 && selectableOptions.length > 0) {
           this.highlightedIndex = 0;
-          console.log('[PDS-COMBOBOX] Starting navigation at index 0');
         } else {
           this.highlightedIndex = Math.min(this.highlightedIndex + 1, selectableOptions.length - 1);
-          console.log('[PDS-COMBOBOX] Moving down to index:', this.highlightedIndex);
         }
         this.updateOptionFocus();
         break;
       case 'ArrowUp':
         e.preventDefault();
-
-        // If we're not in arrow-key navigation mode yet, enable it now
-        if (!this.isArrowKeyNavigationMode) {
-          console.log('[PDS-COMBOBOX] Enabling arrow-key navigation mode from dropdown');
-          this.isArrowKeyNavigationMode = true;
-        }
-
         // If no option is highlighted and we have options, start at last option
         if (this.highlightedIndex < 0 && selectableOptions.length > 0) {
           this.highlightedIndex = selectableOptions.length - 1;
@@ -515,25 +465,15 @@ export class PdsCombobox implements BasePdsProps {
    * Focus management helper - moves focus to the first option when dropdown opens
    */
   private focusFirstOption() {
-    console.log('[PDS-COMBOBOX] focusFirstOption called:', {
-      isOpen: this.isOpen,
-      filteredItemsLength: this.filteredItems.length
-    });
-
     if (this.isOpen) {
       const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION');
-      console.log('[PDS-COMBOBOX] focusFirstOption - selectableOptions:', selectableOptions.length);
       if (selectableOptions.length > 0) {
         this.highlightedIndex = 0;
-        console.log('[PDS-COMBOBOX] focusFirstOption - highlightedIndex set to:', this.highlightedIndex);
         // DON'T focus the option elements - keep focus on trigger and use aria-activedescendant
         // This prevents the focusout event that was closing the dropdown
         // But still call updateOptionFocus for scrolling
         if (this.listboxEl) {
-          console.log('[PDS-COMBOBOX] focusFirstOption - calling updateOptionFocus');
           this.updateOptionFocus();
-        } else {
-          console.warn('[PDS-COMBOBOX] focusFirstOption - no listboxEl available');
         }
       }
     }
@@ -543,29 +483,18 @@ export class PdsCombobox implements BasePdsProps {
    * Focus management helper - actually focuses the first option when opened via arrow keys
    */
   private focusFirstOptionForArrowKeys() {
-    console.log('[PDS-COMBOBOX] focusFirstOptionForArrowKeys called:', {
-      isOpen: this.isOpen,
-      filteredItemsLength: this.filteredItems.length,
-      listboxEl: !!this.listboxEl
-    });
-
     if (this.isOpen) {
       // Set arrow-key navigation mode
       this.isArrowKeyNavigationMode = true;
-      console.log('[PDS-COMBOBOX] Arrow-key navigation mode enabled');
 
       const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION');
-      console.log('[PDS-COMBOBOX] focusFirstOptionForArrowKeys - selectableOptions:', selectableOptions.length);
       if (selectableOptions.length > 0) {
         this.highlightedIndex = 0;
-        console.log('[PDS-COMBOBOX] focusFirstOptionForArrowKeys - highlightedIndex set to:', this.highlightedIndex);
         // For arrow key navigation, actually focus the first option
         if (this.listboxEl) {
           const optionElements = this.listboxEl.querySelectorAll('[role="option"]');
-          console.log('[PDS-COMBOBOX] focusFirstOptionForArrowKeys - found option elements:', optionElements.length);
           const firstOption = optionElements[0] as HTMLElement;
           if (firstOption) {
-            console.log('[PDS-COMBOBOX] focusFirstOptionForArrowKeys - focusing first option:', firstOption);
             // Remove tabindex from all options first
             optionElements.forEach(option => {
               (option as HTMLElement).setAttribute('tabindex', '-1');
@@ -574,12 +503,7 @@ export class PdsCombobox implements BasePdsProps {
             firstOption.setAttribute('tabindex', '0');
             firstOption.focus();
             firstOption.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-            console.log('[PDS-COMBOBOX] focusFirstOptionForArrowKeys - focus set on first option');
-          } else {
-            console.warn('[PDS-COMBOBOX] focusFirstOptionForArrowKeys - no first option found');
           }
-        } else {
-          console.warn('[PDS-COMBOBOX] focusFirstOptionForArrowKeys - no listboxEl available');
         }
         // Update aria-activedescendant on trigger
         this.updateAriaActiveDescendant();
@@ -604,16 +528,8 @@ export class PdsCombobox implements BasePdsProps {
       // Check if any option currently has focus OR if we're in arrow-key navigation mode
       const hasOptionFocus = Array.from(optionElements).some(el => el === document.activeElement);
 
-      console.log('[PDS-COMBOBOX] updateOptionFocus:', {
-        highlightedIndex: this.highlightedIndex,
-        hasOptionFocus: hasOptionFocus,
-        isArrowKeyNavigationMode: this.isArrowKeyNavigationMode,
-        activeElement: document.activeElement
-      });
-
       if (hasOptionFocus || this.isArrowKeyNavigationMode) {
         // We're in arrow-key navigation mode, so actually move focus between options
-        console.log('[PDS-COMBOBOX] Moving actual DOM focus to option:', this.highlightedIndex);
         optionElements.forEach(option => {
           (option as HTMLElement).setAttribute('tabindex', '-1');
         });
@@ -709,42 +625,22 @@ export class PdsCombobox implements BasePdsProps {
 
   // Handler for button trigger keyboard events
   private onButtonTriggerKeyDown = (e: KeyboardEvent) => {
-    console.log('[PDS-COMBOBOX] onButtonTriggerKeyDown called:', {
-      key: e.key,
-      isOpen: this.isOpen,
-      target: e.target,
-      triggerEl: this.triggerEl
-    });
-
     if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      console.log('[PDS-COMBOBOX] Button trigger activation key pressed:', e.key);
       e.preventDefault();
       e.stopPropagation(); // Prevent the event from bubbling and triggering click
 
       if (!this.isOpen) {
-        console.log('[PDS-COMBOBOX] Opening dropdown from button trigger');
-        this.isOpen = true; // CRITICAL FIX: This was incorrectly set to false, preventing dropdown from opening!
-        console.log('[PDS-COMBOBOX] isOpen set to:', this.isOpen);
+        this.isOpen = true;
         this.filterOptions();
         // Set highlighted index immediately for testing
         const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION');
-        console.log('[PDS-COMBOBOX] Button trigger - selectableOptions found:', selectableOptions.length);
         if (selectableOptions.length > 0) {
           this.highlightedIndex = 0;
-          console.log('[PDS-COMBOBOX] Button trigger - highlightedIndex set to:', this.highlightedIndex);
         }
         setTimeout(() => {
-          console.log('[PDS-COMBOBOX] Button trigger - executing delayed positioning and focus');
           this.openDropdownPositioning();
-          // For arrow keys, focus the first option so subsequent navigation works
-          // For space/enter, keep focus on trigger (handled in focusFirstOption)
-          if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-            console.log('[PDS-COMBOBOX] Using focusFirstOptionForArrowKeys for:', e.key);
-            this.focusFirstOptionForArrowKeys();
-          } else {
-            console.log('[PDS-COMBOBOX] Using focusFirstOption for:', e.key);
-            this.focusFirstOption();
-          }
+          // For all button trigger keyboard opening, focus the first option so subsequent navigation works
+          this.focusFirstOptionForArrowKeys();
         }, 0);
       }
     } else if (e.key === 'Escape') {
@@ -777,17 +673,8 @@ export class PdsCombobox implements BasePdsProps {
     const isRelatedTargetInListbox = relatedTarget && this.listboxEl?.contains(relatedTarget);
     const isRelatedTargetInCombobox = this.el.contains(relatedTarget);
 
-    console.log('[PDS-COMBOBOX] onComboboxFocusOut called:', {
-      target: event.target,
-      relatedTarget: relatedTarget,
-      elContainsRelatedTarget: isRelatedTargetInCombobox,
-      isRelatedTargetInListbox: isRelatedTargetInListbox,
-      isOpen: this.isOpen
-    });
-
     // Don't close if focus is moving to an option in the listbox or staying within the combobox
     if (!isRelatedTargetInCombobox && !isRelatedTargetInListbox) {
-      console.log('[PDS-COMBOBOX] Focus left combobox - closing dropdown');
       this.isOpen = false;
       this.highlightedIndex = -1;
       this.isArrowKeyNavigationMode = false; // Reset arrow-key navigation mode
@@ -797,8 +684,6 @@ export class PdsCombobox implements BasePdsProps {
       if (this.selectedOption && this.value !== this.getOptionLabel(this.selectedOption)) {
         this.value = this.getOptionLabel(this.selectedOption);
       }
-    } else {
-      console.log('[PDS-COMBOBOX] Focus stayed within combobox or moved to listbox - keeping dropdown open');
     }
   };
 
@@ -812,13 +697,7 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   private renderDropdown() {
-    console.log('[PDS-COMBOBOX] renderDropdown called:', {
-      isOpen: this.isOpen,
-      filteredItemsLength: this.filteredItems.length
-    });
-
     if (!this.isOpen || this.filteredItems.length === 0) {
-      console.log('[PDS-COMBOBOX] renderDropdown returning null - not open or no items');
       return null;
     }
 
