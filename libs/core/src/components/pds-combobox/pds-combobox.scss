@@ -104,10 +104,7 @@
   }
 
   &:focus-visible {
-    border-color: var(--pine-color-border);
-    box-shadow: 0 0 0 2px var(--pine-color-focus-ring);
     outline: 0;
-    z-index: 1;
   }
 
   .pds-combobox__option--layout {

@@ -346,9 +346,18 @@ export class PdsCombobox implements BasePdsProps {
   };
 
   private handleFocus = () => {
-    this.isOpen = true;
-    this.filterOptions();
-    setTimeout(() => this.openDropdownPositioning(), 0);
+    // Don't automatically open dropdown on focus - wait for user interaction
+    // This matches the behavior of the button trigger variant
+    // The dropdown will open when user starts typing (handleInput) or presses arrow keys (handleKeyDown)
+  };
+
+  private handleInputClick = () => {
+    // Open dropdown when input is clicked (but not when tabbed into)
+    if (!this.isOpen) {
+      this.isOpen = true;
+      this.filterOptions();
+      setTimeout(() => this.openDropdownPositioning(), 0);
+    }
   };
 
   private handleKeyDown = (e: KeyboardEvent) => {

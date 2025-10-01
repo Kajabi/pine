@@ -272,7 +272,7 @@ describe('pds-combobox', () => {
     expect(component.filteredItems.length).toBe(3);
   });
 
-  it('opens dropdown when input is focused', async () => {
+  it('does not open dropdown when input is focused (consistent with button trigger)', async () => {
     const page = await newSpecPage({
       components: [PdsCombobox],
       html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
@@ -281,7 +281,41 @@ describe('pds-combobox', () => {
     const component = page.rootInstance;
     const input = page.root?.shadowRoot?.querySelector('input');
 
+    // Focus alone should not open the dropdown
     input?.dispatchEvent(new Event('focus'));
+    await page.waitForChanges();
+
+    expect(component.isOpen).toBe(false);
+
+    // But typing should open the dropdown
+    const inputEvent = new Event('input');
+    Object.defineProperty(inputEvent, 'target', {
+      value: { value: 'test' },
+      enumerable: true,
+    });
+    input?.dispatchEvent(inputEvent);
+    await page.waitForChanges();
+
+    expect(component.isOpen).toBe(true);
+  });
+
+  it('opens dropdown when input is clicked', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
+    });
+
+    const component = page.rootInstance;
+    const input = page.root?.shadowRoot?.querySelector('input');
+
+    // Click should open the dropdown
+    input?.dispatchEvent(new Event('click'));
+    await page.waitForChanges();
+
+    expect(component.isOpen).toBe(true);
+
+    // Clicking again when already open should not close it (different from button behavior)
+    input?.dispatchEvent(new Event('click'));
     await page.waitForChanges();
 
     expect(component.isOpen).toBe(true);
