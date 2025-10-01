@@ -149,11 +149,6 @@ export class PdsCombobox implements BasePdsProps {
     this.filterOptions();
   }
 
-  @Watch('isOpen')
-  handleIsOpenChange() {
-    // isOpen state changed - could add analytics or other side effects here if needed
-  }
-
   @Watch('selectedOption')
   handleSelectedOptionChange() {
     // Update the layout content when selected option changes
@@ -245,8 +240,6 @@ export class PdsCombobox implements BasePdsProps {
     return DOMPurify.sanitize(html, config);
   }
 
-
-
   // Helper method to check if option should render as layout
   private isOptionLayout(option: HTMLOptionElement): boolean {
     return this.customOptionLayouts && option.hasAttribute('data-layout');
@@ -263,7 +256,7 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   private filterOptions() {
-    // Ensure allItems includes optionEls if not already populated (for testing scenarios)
+    // Ensure allItems includes optionEls if not already populated (for edge cases)
     if (this.allItems.length === 0 && this.optionEls.length > 0) {
       this.allItems = [...this.optionEls];
     }
@@ -343,12 +336,6 @@ export class PdsCombobox implements BasePdsProps {
     this.isOpen = true;
     this.filterOptions();
     setTimeout(() => this.openDropdownPositioning(), 0);
-  };
-
-  private handleFocus = () => {
-    // Don't automatically open dropdown on focus - wait for user interaction
-    // This matches the behavior of the button trigger variant
-    // The dropdown will open when user starts typing (handleInput) or presses arrow keys (handleKeyDown)
   };
 
   private handleInputClick = () => {
@@ -641,7 +628,7 @@ export class PdsCombobox implements BasePdsProps {
       if (!this.isOpen) {
         this.isOpen = true;
         this.filterOptions();
-        // Set highlighted index immediately for testing
+        // Set highlighted index immediately
         const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION');
         if (selectableOptions.length > 0) {
           this.highlightedIndex = 0;
