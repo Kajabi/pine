@@ -348,7 +348,7 @@ export class PdsCombobox implements BasePdsProps {
   };
 
   private handleKeyDown = (e: KeyboardEvent) => {
-    if (!this.isOpen && (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Alt+ArrowDown')) {
+    if (!this.isOpen && (e.key === 'ArrowDown' || e.key === 'ArrowUp' || (e.altKey && e.key === 'ArrowDown'))) {
       e.preventDefault();
       this.isOpen = true;
       this.filterOptions();
@@ -359,7 +359,12 @@ export class PdsCombobox implements BasePdsProps {
       }
       setTimeout(() => {
         this.openDropdownPositioning();
-        this.focusFirstOption();
+        // For input trigger, use focusFirstOptionForArrowKeys to enable proper keyboard navigation
+        if (this.trigger === 'input') {
+          this.focusFirstOptionForArrowKeys();
+        } else {
+          this.focusFirstOption();
+        }
       }, 0);
       return;
     }
