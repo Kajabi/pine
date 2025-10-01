@@ -622,29 +622,40 @@ export class PdsCombobox implements BasePdsProps {
   // Handler for button trigger click
   private onButtonTriggerClick = () => {
     this.isOpen = !this.isOpen;
-    if (this.isOpen) setTimeout(() => this.openDropdownPositioning(), 0);
+    if (this.isOpen) {
+      this.filterOptions();
+      // Set highlighted index and prepare for keyboard navigation
+      const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION');
+      if (selectableOptions.length > 0) {
+        this.highlightedIndex = 0;
+        // For button trigger, prepare for arrow-key navigation mode
+        this.isArrowKeyNavigationMode = true;
+      }
+      setTimeout(() => this.openDropdownPositioning(), 0);
+    } else {
+      // Reset navigation mode when closing
+      this.isArrowKeyNavigationMode = false;
+    }
   };
 
   // Handler for button trigger keyboard events
   private onButtonTriggerKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    if ((e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown' || e.key === 'ArrowUp') && !this.isOpen) {
       e.preventDefault();
       e.stopPropagation(); // Prevent the event from bubbling and triggering click
 
-      if (!this.isOpen) {
-        this.isOpen = true;
-        this.filterOptions();
-        // Set highlighted index immediately
-        const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION');
-        if (selectableOptions.length > 0) {
-          this.highlightedIndex = 0;
-        }
-        setTimeout(() => {
-          this.openDropdownPositioning();
-          // For all button trigger keyboard opening, focus the first option so subsequent navigation works
-          this.focusFirstOptionForArrowKeys();
-        }, 0);
+      this.isOpen = true;
+      this.filterOptions();
+      // Set highlighted index immediately
+      const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION');
+      if (selectableOptions.length > 0) {
+        this.highlightedIndex = 0;
       }
+      setTimeout(() => {
+        this.openDropdownPositioning();
+        // For all button trigger keyboard opening, focus the first option so subsequent navigation works
+        this.focusFirstOptionForArrowKeys();
+      }, 0);
     } else if (e.key === 'Escape') {
       e.preventDefault();
       if (this.isOpen) {
