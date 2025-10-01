@@ -553,7 +553,7 @@ export class PdsCombobox implements BasePdsProps {
 
   // Helper method to render the caret icon
   private renderCaretIcon() {
-    return <pds-icon icon="caret-down" aria-hidden="true" aria-label="dropdown indicator" class="pds-combobox__button-trigger-chevron" />;
+    return <pds-icon icon="caret-down" aria-hidden="true" class="pds-combobox__button-trigger-chevron" />;
   }
 
   // Helper method to render layout content
@@ -609,31 +609,33 @@ export class PdsCombobox implements BasePdsProps {
             </label>
           )}
           {this.trigger === 'input' ? (
-            <input
-              ref={el => {
-                this.inputEl = el as HTMLInputElement;
-                this.triggerEl = el as HTMLElement;
-              }}
-              class="pds-combobox__input"
-              style={{ width: this.triggerWidth }}
-              type="text"
-              role="combobox"
-              aria-autocomplete="list"
-              aria-controls="pds-combobox-listbox"
-              aria-activedescendant={this.highlightedIndex >= 0 ? `pds-combobox-option-${this.highlightedIndex}` : undefined}
-              aria-expanded={this.isOpen ? 'true' : 'false'}
-              aria-disabled={this.disabled ? 'true' : 'false'}
-              aria-label={this.hideLabel ? this.label : undefined}
-              id={this.componentId}
-              value={this.value}
-              placeholder={this.placeholder}
-              disabled={this.disabled}
-              onInput={this.handleInput}
-              onFocus={this.handleFocus}
-              onKeyDown={this.handleKeyDown}
-              autocomplete="off"
-              part="input"
-            />
+            <div class="pds-combobox__input-wrapper" style={{ width: this.triggerWidth }}>
+              <input
+                ref={el => {
+                  this.inputEl = el as HTMLInputElement;
+                  this.triggerEl = el as HTMLElement;
+                }}
+                class="pds-combobox__input"
+                type="text"
+                role="combobox"
+                aria-autocomplete="list"
+                aria-controls="pds-combobox-listbox"
+                aria-activedescendant={this.highlightedIndex >= 0 ? `pds-combobox-option-${this.highlightedIndex}` : undefined}
+                aria-expanded={this.isOpen ? 'true' : 'false'}
+                aria-disabled={this.disabled ? 'true' : 'false'}
+                aria-label={this.hideLabel ? this.label : undefined}
+                id={this.componentId}
+                value={this.value}
+                placeholder={this.placeholder}
+                disabled={this.disabled}
+                onInput={this.handleInput}
+                onFocus={this.handleFocus}
+                onKeyDown={this.handleKeyDown}
+                autocomplete="off"
+                part="input"
+              />
+              <pds-icon icon="enlarge" aria-hidden="true" class="pds-combobox__input-icon" />
+            </div>
           ) : (
             <div
               class={triggerClass}

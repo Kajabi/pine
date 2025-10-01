@@ -23,7 +23,10 @@ describe('pds-combobox', () => {
       <pds-combobox component-id="test-combobox">
         <mock:shadow-root>
           <div class="pds-combobox" tabindex="-1">
-            <input aria-autocomplete="list" aria-controls="pds-combobox-listbox" aria-disabled="false" aria-expanded="false" autocomplete="off" class="pds-combobox__input" id="test-combobox" part="input" role="combobox" style="width: fit-content;" type="text" value="" />
+            <div class="pds-combobox__input-wrapper" style="width: fit-content;">
+              <input aria-autocomplete="list" aria-controls="pds-combobox-listbox" aria-disabled="false" aria-expanded="false" autocomplete="off" class="pds-combobox__input" id="test-combobox" part="input" role="combobox" type="text" value="" />
+              <pds-icon aria-hidden="true" class="pds-combobox__input-icon" icon="enlarge"></pds-icon>
+            </div>
             <div style="display: none;">
               <slot></slot>
             </div>
@@ -929,9 +932,9 @@ describe('pds-combobox', () => {
         html: `<pds-combobox component-id="test-combobox" trigger="input" trigger-width="300px"></pds-combobox>`,
       });
 
-             const input = root?.shadowRoot?.querySelector('input') as HTMLInputElement;
-       expect(input?.style.width).toBe('300px');
-    });
+             const inputWrapper = root?.shadowRoot?.querySelector('.pds-combobox__input-wrapper') as HTMLElement;
+      expect(inputWrapper?.style.width).toBe('300px');
+   });
 
     it('applies trigger width to button trigger', async () => {
       const { root } = await newSpecPage({
@@ -949,8 +952,8 @@ describe('pds-combobox', () => {
         html: `<pds-combobox component-id="test-combobox" trigger="input"></pds-combobox>`,
       });
 
-             const input = root?.shadowRoot?.querySelector('input') as HTMLInputElement;
-       expect(input?.style.width).toBe('fit-content');
+             const inputWrapper = root?.shadowRoot?.querySelector('.pds-combobox__input-wrapper') as HTMLElement;
+      expect(inputWrapper?.style.width).toBe('fit-content');
     });
   });
 
