@@ -862,7 +862,7 @@ export class PdsCombobox implements BasePdsProps {
                 role="combobox"
                 aria-autocomplete="list"
                 aria-controls="pds-combobox-listbox"
-                aria-activedescendant={this.highlightedIndex >= 0 ? `pds-combobox-option-${this.highlightedIndex}` : undefined}
+                aria-activedescendant={this.isOpen && this.highlightedIndex >= 0 ? `pds-combobox-option-${this.highlightedIndex}` : undefined}
                 aria-expanded={this.isOpen ? 'true' : 'false'}
                 aria-disabled={this.disabled ? 'true' : 'false'}
                 aria-label={this.hideLabel ? this.label : undefined}
@@ -871,7 +871,7 @@ export class PdsCombobox implements BasePdsProps {
                 placeholder={this.placeholder}
                 disabled={this.disabled}
                 onInput={this.handleInput}
-                onFocus={this.handleFocus}
+                onClick={this.handleInputClick}
                 onKeyDown={this.handleKeyDown}
                 autocomplete="off"
                 part="input"
