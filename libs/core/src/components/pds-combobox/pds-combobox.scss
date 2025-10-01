@@ -96,10 +96,15 @@
   font: var(--pine-typography-body-medium);
   justify-content: space-between;
   padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
+  position: relative;
   transition: background 0.15s;
 
   &[aria-selected="true"] {
     background: var(--pine-color-grey-150);
+  }
+
+  &:focus-visible {
+    outline: 0;
   }
 
   .pds-combobox__option--layout {

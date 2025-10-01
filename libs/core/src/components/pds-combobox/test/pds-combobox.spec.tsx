@@ -272,7 +272,7 @@ describe('pds-combobox', () => {
     expect(component.filteredItems.length).toBe(3);
   });
 
-  it('opens dropdown when input is focused', async () => {
+  it('does not open dropdown when input is focused (consistent with button trigger)', async () => {
     const page = await newSpecPage({
       components: [PdsCombobox],
       html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
@@ -281,7 +281,41 @@ describe('pds-combobox', () => {
     const component = page.rootInstance;
     const input = page.root?.shadowRoot?.querySelector('input');
 
+    // Focus alone should not open the dropdown
     input?.dispatchEvent(new Event('focus'));
+    await page.waitForChanges();
+
+    expect(component.isOpen).toBe(false);
+
+    // But typing should open the dropdown
+    const inputEvent = new Event('input');
+    Object.defineProperty(inputEvent, 'target', {
+      value: { value: 'test' },
+      enumerable: true,
+    });
+    input?.dispatchEvent(inputEvent);
+    await page.waitForChanges();
+
+    expect(component.isOpen).toBe(true);
+  });
+
+  it('opens dropdown when input is clicked', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
+    });
+
+    const component = page.rootInstance;
+    const input = page.root?.shadowRoot?.querySelector('input');
+
+    // Click should open the dropdown
+    input?.dispatchEvent(new Event('click'));
+    await page.waitForChanges();
+
+    expect(component.isOpen).toBe(true);
+
+    // Clicking again when already open should not close it (different from button behavior)
+    input?.dispatchEvent(new Event('click'));
     await page.waitForChanges();
 
     expect(component.isOpen).toBe(true);
@@ -409,6 +443,124 @@ describe('pds-combobox', () => {
     await page.waitForChanges();
 
     expect(component.isOpen).toBe(false);
+  });
+
+  it('handles Home key to jump to first option', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
+    });
+
+    const component = page.rootInstance;
+    const input = page.root?.shadowRoot?.querySelector('input');
+
+    const mockOptions = [
+      createMockOption('cat', 'Cat'),
+      createMockOption('dog', 'Dog'),
+      createMockOption('bird', 'Bird'),
+    ];
+
+    component.optionEls = mockOptions;
+    component.filteredItems = mockOptions;
+    component.isOpen = true;
+    component.highlightedIndex = 2; // Start at last option
+
+    const homeEvent = new KeyboardEvent('keydown', { key: 'Home' });
+    input?.dispatchEvent(homeEvent);
+    await page.waitForChanges();
+
+    expect(component.highlightedIndex).toBe(0);
+  });
+
+  it('handles End key to jump to last option', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
+    });
+
+    const component = page.rootInstance;
+    const input = page.root?.shadowRoot?.querySelector('input');
+
+    const mockOptions = [
+      createMockOption('cat', 'Cat'),
+      createMockOption('dog', 'Dog'),
+      createMockOption('bird', 'Bird'),
+    ];
+
+    component.optionEls = mockOptions;
+    component.filteredItems = mockOptions;
+    component.isOpen = true;
+    component.highlightedIndex = 0; // Start at first option
+
+    const endEvent = new KeyboardEvent('keydown', { key: 'End' });
+    input?.dispatchEvent(endEvent);
+    await page.waitForChanges();
+
+    expect(component.highlightedIndex).toBe(2);
+  });
+
+  it('handles PageDown key to jump forward by 10 options', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
+    });
+
+    const component = page.rootInstance;
+    const input = page.root?.shadowRoot?.querySelector('input');
+
+    // Create 15 options
+    const mockOptions = Array.from({ length: 15 }, (_, i) =>
+      createMockOption(`option${i}`, `Option ${i}`)
+    );
+
+    component.optionEls = mockOptions;
+    component.filteredItems = mockOptions;
+    component.isOpen = true;
+    component.highlightedIndex = 0;
+
+    const pageDownEvent = new KeyboardEvent('keydown', { key: 'PageDown' });
+    input?.dispatchEvent(pageDownEvent);
+    await page.waitForChanges();
+
+    expect(component.highlightedIndex).toBe(10);
+
+    // Test that it doesn't go beyond last option
+    input?.dispatchEvent(pageDownEvent);
+    await page.waitForChanges();
+
+    expect(component.highlightedIndex).toBe(14); // Last option
+  });
+
+  it('handles PageUp key to jump backward by 10 options', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
+    });
+
+    const component = page.rootInstance;
+    const input = page.root?.shadowRoot?.querySelector('input');
+
+    // Create 15 options
+    const mockOptions = Array.from({ length: 15 }, (_, i) =>
+      createMockOption(`option${i}`, `Option ${i}`)
+    );
+
+    component.optionEls = mockOptions;
+    component.filteredItems = mockOptions;
+    component.isOpen = true;
+    component.highlightedIndex = 14; // Start at last option
+
+    const pageUpEvent = new KeyboardEvent('keydown', { key: 'PageUp' });
+    input?.dispatchEvent(pageUpEvent);
+    await page.waitForChanges();
+
+    expect(component.highlightedIndex).toBe(4);
+
+    // Test that it doesn't go below 0
+    input?.dispatchEvent(pageUpEvent);
+    await page.waitForChanges();
+
+    expect(component.highlightedIndex).toBe(0); // First option
   });
 
   it('updates value when typing in input', async () => {
@@ -652,6 +804,61 @@ describe('pds-combobox', () => {
     await page.waitForChanges();
 
     expect(component.isOpen).toBe(true);
+
+    // Test ArrowUp key
+    component.isOpen = false;
+    const arrowUpEvent = new KeyboardEvent('keydown', { key: 'ArrowUp' });
+    button?.dispatchEvent(arrowUpEvent);
+    await page.waitForChanges();
+
+    expect(component.isOpen).toBe(true);
+  });
+
+  it('handles button trigger escape key to close dropdown', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" trigger="button"></pds-combobox>`,
+    });
+
+    const component = page.rootInstance;
+    const button = page.root?.shadowRoot?.querySelector('.pds-combobox__button-trigger');
+
+    component.isOpen = true;
+    await page.waitForChanges();
+
+    const escapeEvent = new KeyboardEvent('keydown', { key: 'Escape' });
+    button?.dispatchEvent(escapeEvent);
+    await page.waitForChanges();
+
+    expect(component.isOpen).toBe(false);
+    expect(component.highlightedIndex).toBe(-1);
+  });
+
+  it('delegates keyboard events to main handler when dropdown is open for button trigger', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" trigger="button"></pds-combobox>`,
+    });
+
+    const component = page.rootInstance;
+    const button = page.root?.shadowRoot?.querySelector('.pds-combobox__button-trigger');
+
+    const mockOptions = [
+      createMockOption('cat', 'Cat'),
+      createMockOption('dog', 'Dog'),
+    ];
+
+    component.optionEls = mockOptions;
+    component.filteredItems = mockOptions;
+    component.isOpen = true;
+    component.highlightedIndex = 0;
+
+    // Test that Home key works when dropdown is open
+    const homeEvent = new KeyboardEvent('keydown', { key: 'Home' });
+    button?.dispatchEvent(homeEvent);
+    await page.waitForChanges();
+
+    expect(component.highlightedIndex).toBe(0);
   });
 
   it('handles disabled state for button trigger', async () => {
@@ -693,7 +900,7 @@ describe('pds-combobox', () => {
     expect(input?.getAttribute('aria-expanded')).toBe('true');
   });
 
-  it('updates aria-activedescendant when option is highlighted', async () => {
+  it('updates aria-activedescendant when option is highlighted and dropdown is open', async () => {
     const page = await newSpecPage({
       components: [PdsCombobox],
       html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
@@ -702,10 +909,148 @@ describe('pds-combobox', () => {
     const component = page.rootInstance;
     const input = page.root?.shadowRoot?.querySelector('input');
 
+    // Test that aria-activedescendant is not set when dropdown is closed
     component.highlightedIndex = 0;
+    component.isOpen = false;
+    await page.waitForChanges();
+
+    expect(input?.getAttribute('aria-activedescendant')).toBeNull();
+
+    // Test that aria-activedescendant is set when dropdown is open
+    component.isOpen = true;
     await page.waitForChanges();
 
     expect(input?.getAttribute('aria-activedescendant')).toBe('pds-combobox-option-0');
+  });
+
+  it('updates aria-activedescendant for button trigger when option is highlighted', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" trigger="button"></pds-combobox>`,
+    });
+
+    const component = page.rootInstance;
+    const button = page.root?.shadowRoot?.querySelector('.pds-combobox__button-trigger');
+
+    component.highlightedIndex = 0;
+    component.isOpen = true;
+    await page.waitForChanges();
+
+    expect(button?.getAttribute('aria-activedescendant')).toBe('pds-combobox-option-0');
+  });
+
+  it('renders options with proper ARIA attributes', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
+    });
+
+    const component = page.rootInstance;
+
+    const mockOptions = [
+      createMockOption('cat', 'Cat'),
+      createMockOption('dog', 'Dog'),
+    ];
+
+    component.filteredItems = mockOptions;
+    component.isOpen = true;
+    component.highlightedIndex = 0;
+    await page.waitForChanges();
+
+    const options = page.root?.shadowRoot?.querySelectorAll('.pds-combobox__option');
+    const firstOption = options?.[0];
+    const secondOption = options?.[1];
+
+    // Test aria-setsize and aria-posinset
+    expect(firstOption?.getAttribute('aria-setsize')).toBe('2');
+    expect(firstOption?.getAttribute('aria-posinset')).toBe('1');
+    expect(secondOption?.getAttribute('aria-setsize')).toBe('2');
+    expect(secondOption?.getAttribute('aria-posinset')).toBe('2');
+
+    // Test tabindex for highlighted vs non-highlighted options
+    expect(firstOption?.getAttribute('tabindex')).toBe('0');
+    expect(secondOption?.getAttribute('tabindex')).toBe('-1');
+  });
+
+  it('renders listbox with proper ARIA attributes', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" label="Choose Pet"></pds-combobox>`,
+    });
+
+    const component = page.rootInstance;
+
+    const mockOptions = [
+      createMockOption('cat', 'Cat'),
+    ];
+
+    component.filteredItems = mockOptions;
+    component.isOpen = true;
+    await page.waitForChanges();
+
+    const listbox = page.root?.shadowRoot?.querySelector('.pds-combobox__listbox');
+
+    expect(listbox?.getAttribute('role')).toBe('listbox');
+    expect(listbox?.getAttribute('aria-label')).toBe('Choose Pet');
+    expect(listbox?.getAttribute('aria-multiselectable')).toBe('false');
+  });
+
+  it('handles Tab key to close dropdown and allow normal focus flow', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
+    });
+
+    const component = page.rootInstance;
+    const input = page.root?.shadowRoot?.querySelector('input');
+
+    component.isOpen = true;
+    component.highlightedIndex = 0;
+    await page.waitForChanges();
+
+    const tabEvent = new KeyboardEvent('keydown', { key: 'Tab' });
+    input?.dispatchEvent(tabEvent);
+    await page.waitForChanges();
+
+    expect(component.isOpen).toBe(false);
+    expect(component.highlightedIndex).toBe(-1);
+  });
+
+  it('handles space key on button trigger without triggering double toggle', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" trigger="button"></pds-combobox>`,
+    });
+
+    const component = page.rootInstance;
+    const button = page.root?.shadowRoot?.querySelector('.pds-combobox__button-trigger');
+
+    const mockOptions = [
+      createMockOption('cat', 'Cat'),
+      createMockOption('dog', 'Dog'),
+    ];
+
+    component.optionEls = mockOptions;
+    component.filteredItems = mockOptions;
+
+    // Test space key - should open dropdown and stay open
+    const spaceKeyDownEvent = new KeyboardEvent('keydown', { key: ' ' });
+    const spaceKeyUpEvent = new KeyboardEvent('keyup', { key: ' ' });
+
+    button?.dispatchEvent(spaceKeyDownEvent);
+    button?.dispatchEvent(spaceKeyUpEvent);
+    await page.waitForChanges();
+
+    expect(component.isOpen).toBe(true);
+    expect(component.highlightedIndex).toBe(0);
+
+    // Verify that clicking doesn't interfere with keyboard behavior
+    component.isOpen = false;
+    const clickEvent = new MouseEvent('click');
+    button?.dispatchEvent(clickEvent);
+    await page.waitForChanges();
+
+    expect(component.isOpen).toBe(true);
   });
 
   it('restores selected option value when input is cleared and focus is lost', async () => {
