@@ -359,11 +359,12 @@ export class PdsCombobox implements BasePdsProps {
       }
       setTimeout(() => {
         this.openDropdownPositioning();
-        // For input trigger, use focusFirstOptionForArrowKeys to enable proper keyboard navigation
+        // For input trigger, keep focus on input and use aria-activedescendant
+        // For button trigger, move focus to first option for keyboard navigation
         if (this.trigger === 'input') {
-          this.focusFirstOptionForArrowKeys();
-        } else {
           this.focusFirstOption();
+        } else {
+          this.focusFirstOptionForArrowKeys();
         }
       }, 0);
       return;
