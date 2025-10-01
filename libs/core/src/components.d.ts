@@ -8,11 +8,13 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { BoxColumnType, BoxShadowSizeType, BoxTShirtSizeType } from "./utils/types";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 import { PlacementType } from "./utils/types";
+import { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 import { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 import { TextareaChangeEventDetail, TextareaInputEventDetail } from "./components/pds-textarea/textarea-interface";
 export { BoxColumnType, BoxShadowSizeType, BoxTShirtSizeType } from "./utils/types";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 export { PlacementType } from "./utils/types";
+export { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 export { TextareaChangeEventDetail, TextareaInputEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
@@ -986,6 +988,45 @@ export namespace Components {
          */
         "disabled": boolean;
     }
+    /**
+     * Individual filter component with cross-browser popover positioning.
+     * Uses a hybrid approach for optimal cross-browser compatibility:
+     * - Modern browsers: CSS anchor positioning + JavaScript flip classes
+     * - Fallback browsers: JavaScript positioning with viewport boundary detection
+     */
+    interface PdsFilter {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * Closes the filter popover programmatically. Note: Clear variant does not support popover functionality.
+         */
+        "hideFilter": () => Promise<void>;
+        /**
+          * The name of the icon to display in the trigger button. For 'clear' variant, this is ignored as it always shows trash icon.
+         */
+        "icon"?: string;
+        /**
+          * Opens the filter popover programmatically. Note: Clear variant does not support popover functionality.
+         */
+        "showFilter": () => Promise<void>;
+        /**
+          * The text content displayed in the trigger button.
+         */
+        "text"?: string;
+        /**
+          * The variant style of the filter trigger.
+          * @defaultValue 'default'
+         */
+        "variant": PdsFilterVariant;
+    }
+    interface PdsFilters {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+    }
     interface PdsImage {
         /**
           * The image's alt tag. If none is provided, it will default to an empty string, which is desired for decorative images.
@@ -1858,6 +1899,10 @@ export interface PdsDropdownMenuItemCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsDropdownMenuItemElement;
 }
+export interface PdsFilterCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsFilterElement;
+}
 export interface PdsInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsInputElement;
@@ -2089,6 +2134,37 @@ declare global {
     var HTMLPdsDropdownMenuSeparatorElement: {
         prototype: HTMLPdsDropdownMenuSeparatorElement;
         new (): HTMLPdsDropdownMenuSeparatorElement;
+    };
+    interface HTMLPdsFilterElementEventMap {
+        "pdsFilterOpen": PdsFilterOpenEventDetail;
+        "pdsFilterClose": PdsFilterCloseEventDetail;
+        "pdsFilterClear": PdsFilterClearEventDetail;
+    }
+    /**
+     * Individual filter component with cross-browser popover positioning.
+     * Uses a hybrid approach for optimal cross-browser compatibility:
+     * - Modern browsers: CSS anchor positioning + JavaScript flip classes
+     * - Fallback browsers: JavaScript positioning with viewport boundary detection
+     */
+    interface HTMLPdsFilterElement extends Components.PdsFilter, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsFilterElementEventMap>(type: K, listener: (this: HTMLPdsFilterElement, ev: PdsFilterCustomEvent<HTMLPdsFilterElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsFilterElementEventMap>(type: K, listener: (this: HTMLPdsFilterElement, ev: PdsFilterCustomEvent<HTMLPdsFilterElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLPdsFilterElement: {
+        prototype: HTMLPdsFilterElement;
+        new (): HTMLPdsFilterElement;
+    };
+    interface HTMLPdsFiltersElement extends Components.PdsFilters, HTMLStencilElement {
+    }
+    var HTMLPdsFiltersElement: {
+        prototype: HTMLPdsFiltersElement;
+        new (): HTMLPdsFiltersElement;
     };
     interface HTMLPdsImageElement extends Components.PdsImage, HTMLStencilElement {
     }
@@ -2436,6 +2512,8 @@ declare global {
         "pds-dropdown-menu": HTMLPdsDropdownMenuElement;
         "pds-dropdown-menu-item": HTMLPdsDropdownMenuItemElement;
         "pds-dropdown-menu-separator": HTMLPdsDropdownMenuSeparatorElement;
+        "pds-filter": HTMLPdsFilterElement;
+        "pds-filters": HTMLPdsFiltersElement;
         "pds-image": HTMLPdsImageElement;
         "pds-input": HTMLPdsInputElement;
         "pds-link": HTMLPdsLinkElement;
@@ -3457,6 +3535,49 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
     }
+    /**
+     * Individual filter component with cross-browser popover positioning.
+     * Uses a hybrid approach for optimal cross-browser compatibility:
+     * - Modern browsers: CSS anchor positioning + JavaScript flip classes
+     * - Fallback browsers: JavaScript positioning with viewport boundary detection
+     */
+    interface PdsFilter {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * The name of the icon to display in the trigger button. For 'clear' variant, this is ignored as it always shows trash icon.
+         */
+        "icon"?: string;
+        /**
+          * Event emitted when the clear variant is clicked.
+         */
+        "onPdsFilterClear"?: (event: PdsFilterCustomEvent<PdsFilterClearEventDetail>) => void;
+        /**
+          * Event emitted when the filter popover is closed.
+         */
+        "onPdsFilterClose"?: (event: PdsFilterCustomEvent<PdsFilterCloseEventDetail>) => void;
+        /**
+          * Event emitted when the filter popover is opened.
+         */
+        "onPdsFilterOpen"?: (event: PdsFilterCustomEvent<PdsFilterOpenEventDetail>) => void;
+        /**
+          * The text content displayed in the trigger button.
+         */
+        "text"?: string;
+        /**
+          * The variant style of the filter trigger.
+          * @defaultValue 'default'
+         */
+        "variant"?: PdsFilterVariant;
+    }
+    interface PdsFilters {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+    }
     interface PdsImage {
         /**
           * The image's alt tag. If none is provided, it will default to an empty string, which is desired for decorative images.
@@ -4367,6 +4488,8 @@ declare namespace LocalJSX {
         "pds-dropdown-menu": PdsDropdownMenu;
         "pds-dropdown-menu-item": PdsDropdownMenuItem;
         "pds-dropdown-menu-separator": PdsDropdownMenuSeparator;
+        "pds-filter": PdsFilter;
+        "pds-filters": PdsFilters;
         "pds-image": PdsImage;
         "pds-input": PdsInput;
         "pds-link": PdsLink;
@@ -4421,6 +4544,14 @@ declare module "@stencil/core" {
             "pds-dropdown-menu": LocalJSX.PdsDropdownMenu & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuElement>;
             "pds-dropdown-menu-item": LocalJSX.PdsDropdownMenuItem & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuItemElement>;
             "pds-dropdown-menu-separator": LocalJSX.PdsDropdownMenuSeparator & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuSeparatorElement>;
+            /**
+             * Individual filter component with cross-browser popover positioning.
+             * Uses a hybrid approach for optimal cross-browser compatibility:
+             * - Modern browsers: CSS anchor positioning + JavaScript flip classes
+             * - Fallback browsers: JavaScript positioning with viewport boundary detection
+             */
+            "pds-filter": LocalJSX.PdsFilter & JSXBase.HTMLAttributes<HTMLPdsFilterElement>;
+            "pds-filters": LocalJSX.PdsFilters & JSXBase.HTMLAttributes<HTMLPdsFiltersElement>;
             "pds-image": LocalJSX.PdsImage & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
             "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
             "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
