@@ -1,6 +1,9 @@
 :host {
   hr {
-    border: 1px solid var(--pine-color-border);
+    border: 0;
+    border-top: 1px solid var(--pine-color-border);
+    height: 0;
     margin-block: var(--pine-dimension-xs);
+    margin-inline: calc(var(--pine-dimension-xs) * -1);
   }
 }
