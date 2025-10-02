@@ -83,20 +83,20 @@ The default dropdown menu displays a list of options that can be selected by the
 <DocCanvas client:only
   mdxSource={{
     react: `
-<PdsDropdown>
+<PdsDropdownMenu>
   <PdsButton slot="trigger">Trigger</PdsButton>
   <PdsDropdownItem>Item 1</PdsDropdownItem>
   <PdsDropdownItem>Item 2</PdsDropdownItem>
   <PdsDropdownItem>Item 3</PdsDropdownItem>
-</PdsDropdown>
+</PdsDropdownMenu>
 `,
     webComponent:`
-<pds-dropdown>
+<pds-dropdown-menu>
   <pds-button slot="trigger">Trigger</pds-button>
   <pds-dropdown-item>Item 1</pds-dropdown-item>
   <pds-dropdown-item>Item 2</pds-dropdown-item>
   <pds-dropdown-item>Item 3</pds-dropdown-item>
-</pds-dropdown>
+</pds-dropdown-menu>
 `
   }}
 >
@@ -144,6 +144,8 @@ The dropdown menu can also display a separator between items.
     <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
     <pds-dropdown-menu-separator />
     <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
+    <pds-dropdown-menu-separator />
+    <pds-dropdown-menu-item>Item 3</pds-dropdown-menu-item>
   </pds-dropdown-menu>
 </div>
 </DocCanvas>
