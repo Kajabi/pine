@@ -80,8 +80,8 @@ By default boxes with rows will be equal width if no size is specified.
         <pds-box>Item 3</pds-box>
       </pds-row>
     `
-}}>
-  <pds-row col-gap="sm">
+  }}>
+  <pds-row>
     <pds-box>
       <pds-box border>Item 1</pds-box>
     </pds-box>
@@ -104,12 +104,12 @@ If the size values equal more than 12, the boxes will wrap to the next line.
   mdxSource={{
     react: `
       <PdsRow colGap="sm">
-        <PdsBox size-xs="4">
-          <pds-box border>size-xs 4</pds-box>
-        </pds-box>
-        <pds-box size-xs="10">
-          <pds-box border>size-xs 10</pds-box>
-        </pds-box>
+        <PdsBox sizeXs="4">
+          <PdsBox border>size-xs 4</PdsBox>
+        </PdsBox>
+        <PdsBox sizeXs="10">
+          <PdsBox border>size-xs 10</PdsBox>
+        </PdsBox>
       </PdsRow>
     `,
     webComponent: `

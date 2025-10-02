@@ -250,7 +250,7 @@ The `optgroup` element allows for grouping related options within the select com
         <optgroup label="Correct answers">
           <option value="paul">Paul McCartney</option>
           <option value="john">John Lennon</option>
-          <option value="george">George Harrison</option>
+          <option value="george" selected>George Harrison</option>
         </optgroup>
         <optgroup label="Incorrect answers">
           <option value="ringo">Ringo Starr</option>
@@ -274,7 +274,7 @@ The `optgroup` element allows for grouping related options within the select com
       <optgroup label="Correct answers">
         <option value="paul">Paul McCartney</option>
         <option value="john">John Lennon</option>
-        <option value="george">George Harrison</option>
+        <option value="george" selected>George Harrison</option>
       </optgroup>
       <optgroup label="Incorrect answers">
         <option value="ringo">Ringo Starr</option>
@@ -374,7 +374,7 @@ The action slot allows you to add helpful content next to the select label, such
 </pds-select>`
 }}>
   <pds-select component-id="pds-select-action-tooltip" label="Country" name="country" required>
-    <pds-tooltip slot="action" align="bottom-start">
+    <pds-tooltip slot="action" placement="bottom-start">
       <pds-icon name="question-circle"></pds-icon>
       <span slot="content">Select your country of residence for shipping purposes</span>
     </pds-tooltip>

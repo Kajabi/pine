@@ -81,14 +81,12 @@ The secondary variant provides a subtle button appearance with a white backgroun
   }}
 >
   <pds-combobox component-id="combobox-trigger-secondary" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only">
-    <pds-text>Mammals</pds-text>
     <option value="cat">Cat</option>
     <option value="dog">Dog</option>
     <option value="panda">Panda</option>
     <option value="snake">Snake</option>
   </pds-combobox>
 </DocCanvas>
-> **Note**: The `pds-text` element above serves as a non-interactive group header. Users cannot select these labels - they only organize and categorize the selectable options below them.
 
 ### Primary
 The primary variant uses Pine's primary color scheme, creating a more prominent button appearance suitable for primary actions.
@@ -908,6 +906,8 @@ Use standard HTML `<optgroup>` elements to create semantic groupings:
 ### Using PDS Text Components
 
 Alternatively, use `<pds-text>` components as group labels for more styling control:
+
+> **Note**: The `pds-text` element serves as a non-interactive group header. Users cannot select these labels - they only organize and categorize the selectable options below them.
 
 <DocCanvas client:only
   mdxSource={{
