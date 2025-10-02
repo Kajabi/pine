@@ -1,3 +1,28 @@
+## 3.7.0 (2025-10-02)
+
+### Features 🚀
+
+- **pds-filters:** adds pds-filter and pds-filters to system ([#536](https://github.com/Kajabi/pine/pull/536))
+
+### Bug Fixes 🐛
+
+- add combobox option group labels ([#535](https://github.com/Kajabi/pine/pull/535))
+- **docs:** correct typos and improve consistency in docs across multiple components ([#544](https://github.com/Kajabi/pine/pull/544))
+- **pds-button:** add 'filter' variant with specific styles and icon ([#538](https://github.com/Kajabi/pine/pull/538))
+- **pds-combobox:** add enlarge icon to input trigger ([#540](https://github.com/Kajabi/pine/pull/540))
+- **pds-combobox:** update keyboard button trigger open close functionality ([#541](https://github.com/Kajabi/pine/pull/541))
+- **pds-tab:** remove browser default focus ring ([#537](https://github.com/Kajabi/pine/pull/537))
+- **pds-tabs:** add shadow parts for tab components ([#534](https://github.com/Kajabi/pine/pull/534))
+
+### Styles 🎨
+
+- **pds-dropdown-menu-separator:** update separator styles for improved appearance ([#543](https://github.com/Kajabi/pine/pull/543))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.6.0 (2025-09-19)
 
 ### Features 🚀
