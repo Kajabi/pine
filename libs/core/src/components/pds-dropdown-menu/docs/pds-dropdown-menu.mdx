@@ -26,7 +26,7 @@ import { components } from '../../../../dist/docs.json';
 
 
 ### Keyboard Interactions
-<pds-box border>
+<pds-box border border-radius="sm" fit>
   <pds-table component-id="keyboard-shortcuts" >
     <pds-table-head>
       <pds-table-head-cell>Key</pds-table-head-cell>
@@ -222,14 +222,14 @@ The dropdown menu can be positioned relative to the trigger using the placement 
   mdxSource={{
     react: `
 <PdsDropdownMenu placement="bottom-end">
-  <PdsButton slot="trigger">Open Menu</PdsButton>
+  <PdsChip slot="trigger" sentiment="success" variant="dropdown">Trigger/PdsChip>
   <PdsDropdownMenuItem>Item 1</PdsDropdownMenuItem>
   <PdsDropdownMenuItem>Item 2</PdsDropdownMenuItem>
 </PdsDropdownMenu>
 `,
     webComponent: `
 <pds-dropdown-menu placement="bottom-end">
-  <pds-button slot="trigger">Open Menu</pds-button>
+  <pds-chip slot="trigger" sentiment="success" variant="dropdown">Trigger</pds-chip>
   <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
   <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
 </pds-dropdown-menu>
@@ -237,13 +237,10 @@ The dropdown menu can be positioned relative to the trigger using the placement 
   }}
 >
 <div style={{ height: '200px', width: '100%', textAlign: 'center' }}>
-  <pds-dropdown-menu>
-   <pds-chip slot="trigger" sentiment="success">My trigger <pds-icon name="caret-down"></pds-icon></pds-chip>
+  <pds-dropdown-menu placement="bottom-end">
+   <pds-chip slot="trigger" sentiment="success" variant="dropdown">Trigger</pds-chip>
    <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
+   <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
   </pds-dropdown-menu>
-
 </div>
 </DocCanvas>
-
-
-
