@@ -10,12 +10,14 @@ import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-in
 import { PlacementType } from "./utils/types";
 import { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 import { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
+import { PdsPopoverEventDetail } from "./components/pds-popover/popover-interface";
 import { TextareaChangeEventDetail, TextareaInputEventDetail } from "./components/pds-textarea/textarea-interface";
 export { BoxColumnType, BoxShadowSizeType, BoxTShirtSizeType } from "./utils/types";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 export { PlacementType } from "./utils/types";
 export { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
+export { PdsPopoverEventDetail } from "./components/pds-popover/popover-interface";
 export { TextareaChangeEventDetail, TextareaInputEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
     /**
@@ -1261,6 +1263,10 @@ export namespace Components {
          */
         "componentId": string;
         /**
+          * Closes the popover programmatically
+         */
+        "hide": () => Promise<void>;
+        /**
           * Sets the maximum width of the popover content
           * @defaultValue 352
          */
@@ -1280,9 +1286,17 @@ export namespace Components {
          */
         "popoverType": 'auto' | 'manual';
         /**
+          * Opens the popover programmatically
+         */
+        "show": () => Promise<void>;
+        /**
           * Text that appears on the trigger element
          */
         "text": string;
+        /**
+          * Toggles the popover open/closed state programmatically
+         */
+        "toggle": () => Promise<void>;
     }
     interface PdsProgress {
         /**
@@ -1911,6 +1925,10 @@ export interface PdsModalCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsModalElement;
 }
+export interface PdsPopoverCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsPopoverElement;
+}
 export interface PdsRadioCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsRadioElement;
@@ -2240,7 +2258,19 @@ declare global {
         prototype: HTMLPdsModalHeaderElement;
         new (): HTMLPdsModalHeaderElement;
     };
+    interface HTMLPdsPopoverElementEventMap {
+        "pdsPopoverOpen": PdsPopoverEventDetail;
+        "pdsPopoverClose": PdsPopoverEventDetail;
+    }
     interface HTMLPdsPopoverElement extends Components.PdsPopover, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsPopoverElementEventMap>(type: K, listener: (this: HTMLPdsPopoverElement, ev: PdsPopoverCustomEvent<HTMLPdsPopoverElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsPopoverElementEventMap>(type: K, listener: (this: HTMLPdsPopoverElement, ev: PdsPopoverCustomEvent<HTMLPdsPopoverElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLPdsPopoverElement: {
         prototype: HTMLPdsPopoverElement;
@@ -3828,6 +3858,14 @@ declare namespace LocalJSX {
           * @defaultValue 352
          */
         "maxWidth"?: number;
+        /**
+          * Emitted when the popover is closed
+         */
+        "onPdsPopoverClose"?: (event: PdsPopoverCustomEvent<PdsPopoverEventDetail>) => void;
+        /**
+          * Emitted when the popover is opened
+         */
+        "onPdsPopoverOpen"?: (event: PdsPopoverCustomEvent<PdsPopoverEventDetail>) => void;
         /**
           * Determines the preferred position of the popover
           * @defaultValue "right"

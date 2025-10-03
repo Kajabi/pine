@@ -13,7 +13,7 @@ export default {
 	decorators: [withActions],
 	parameters: {
 		actions: {
-			handles: ['mouseEnter', 'mouseLeave', 'hidePdsPopover', 'showPdsPopover'],
+			handles: ['pdsPopoverOpen', 'pdsPopoverClose'],
 		},
 	},
 	title: 'components/Popover'

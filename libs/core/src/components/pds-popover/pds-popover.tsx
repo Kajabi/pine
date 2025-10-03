@@ -1,5 +1,6 @@
-import { Component, Element, Host, Listen, h, Prop, State } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, Listen, h, Method, Prop, State } from '@stencil/core';
 import { PlacementType } from '@utils/types';
+import { PdsPopoverEventDetail, ToggleEvent } from './popover-interface';
 
 @Component({
   tag: 'pds-popover',
@@ -17,6 +18,26 @@ export class PdsPopover {
    * @defaultValue false
    */
   @State() active = false;
+
+  /**
+   * Bound reference to the toggle handler for proper cleanup
+   */
+  private boundToggleHandler: (event: Event) => void;
+
+  /**
+   * Tracks if the component is still mounted to prevent memory leaks
+   */
+  private isComponentMounted = true;
+
+  /**
+   * Emitted when the popover is opened
+   */
+  @Event() pdsPopoverOpen: EventEmitter<PdsPopoverEventDetail>;
+
+  /**
+   * Emitted when the popover is closed
+   */
+  @Event() pdsPopoverClose: EventEmitter<PdsPopoverEventDetail>;
 
   /**
    * Determines the action that triggers the popover. For manual popovers, the consumer is responsible for toggling this value.
@@ -52,15 +73,107 @@ export class PdsPopover {
    */
   @Prop({ reflect: true }) placement: PlacementType = 'right';
 
-  componentWillRender() {
-    this.handlePopoverPositioning();
+  componentDidLoad() {
+    // Attach toggle event listener to the popover element
+    const popoverEl = this.el.shadowRoot?.querySelector('div[popover]');
+    if (popoverEl != null) {
+      this.boundToggleHandler = this.handleToggle.bind(this);
+      popoverEl.addEventListener('toggle', this.boundToggleHandler);
+    }
   }
 
-  @Listen('click', {
-    capture: true
-  })
-  handleClick() {
-    this.active = !this.active;
+  disconnectedCallback() {
+    this.isComponentMounted = false;
+
+    // Clean up event listener
+    const popoverEl = this.el.shadowRoot?.querySelector('div[popover]');
+    if (popoverEl != null && this.boundToggleHandler != null) {
+      popoverEl.removeEventListener('toggle', this.boundToggleHandler);
+    }
+  }
+
+  /**
+   * Opens the popover programmatically
+   */
+  @Method()
+  async show() {
+    const popoverEl = this.el.shadowRoot?.querySelector('div[popover]') as HTMLElement & { showPopover?: () => void } | null;
+    if (popoverEl != null && typeof popoverEl.showPopover === 'function') {
+      try {
+        popoverEl.showPopover();
+      } catch (e) {
+        // Popover might already be open
+        console.warn('Failed to show popover:', e);
+      }
+    }
+  }
+
+  /**
+   * Closes the popover programmatically
+   */
+  @Method()
+  async hide() {
+    const popoverEl = this.el.shadowRoot?.querySelector('div[popover]') as HTMLElement & { hidePopover?: () => void } | null;
+    if (popoverEl != null && typeof popoverEl.hidePopover === 'function') {
+      try {
+        popoverEl.hidePopover();
+      } catch (e) {
+        // Popover might already be closed
+        console.warn('Failed to hide popover:', e);
+      }
+    }
+  }
+
+  /**
+   * Toggles the popover open/closed state programmatically
+   */
+  @Method()
+  async toggle() {
+    const popoverEl = this.el.shadowRoot?.querySelector('div[popover]') as HTMLElement & { togglePopover?: () => void } | null;
+    if (popoverEl != null && typeof popoverEl.togglePopover === 'function') {
+      try {
+        popoverEl.togglePopover();
+      } catch (e) {
+        console.warn('Failed to toggle popover:', e);
+      }
+    }
+  }
+
+  private handleToggle(event: Event) {
+    const toggleEvent = event as ToggleEvent;
+
+    // Prepare event detail
+    const eventDetail: PdsPopoverEventDetail = {
+      componentId: this.componentId,
+      popoverType: this.popoverType,
+      text: this.text,
+    };
+
+    // Update internal state based on native popover state
+    if (toggleEvent.newState === 'open') {
+      this.active = true;
+      const popoverEl = this.el.shadowRoot?.querySelector('div[popover]');
+
+      // Remove positioned class to hide popover via CSS
+      if (popoverEl != null) {
+        popoverEl.classList.remove('pds-popover--positioned');
+      }
+
+      // Position after the browser has rendered the popover, then show it
+      requestAnimationFrame(() => {
+        // Prevent memory leak if component unmounts during animation frame
+        if (!this.isComponentMounted) return;
+
+        this.handlePopoverPositioning();
+        if (popoverEl != null) {
+          popoverEl.classList.add('pds-popover--positioned');
+        }
+      });
+      this.pdsPopoverOpen.emit(eventDetail);
+    } else if (toggleEvent.newState === 'closed') {
+      this.active = false;
+      this.pdsPopoverClose.emit(eventDetail);
+    }
   }
 
   @Listen('scroll', {
@@ -68,19 +181,25 @@ export class PdsPopover {
     capture: true
   })
   handleScroll() {
-    if (this.active) {
+    // Only reposition if the popover is actually open
+    const popoverEl = this.el.shadowRoot?.querySelector('div[popover]');
+    if (popoverEl != null && this.active === true) {
       this.handlePopoverPositioning();
     }
   }
 
   private handlePopoverPositioning() {
-    const triggerEl = this.el.shadowRoot.querySelector('.pds-popover__trigger') as HTMLElement;
-    const popoverEl = this.el.shadowRoot.querySelector('div[popover]') as HTMLElement;
+    const triggerEl = this.el.shadowRoot.querySelector('.pds-popover__trigger');
+    const popoverEl = this.el.shadowRoot.querySelector('div[popover]');
 
-    if (!triggerEl || !popoverEl) return;
+    if (triggerEl == null || popoverEl == null) return;
 
-    const triggerRect = triggerEl.getBoundingClientRect();
-    const popoverRect = popoverEl.getBoundingClientRect();
+    // Cast to HTMLElement after null check for proper typing
+    const triggerElement = triggerEl as HTMLElement;
+    const popoverElement = popoverEl as HTMLElement;
+
+    const triggerRect = triggerElement.getBoundingClientRect();
+    const popoverRect = popoverElement.getBoundingClientRect();
 
     let top = 0;
     let left = 0;
@@ -137,8 +256,8 @@ export class PdsPopover {
         break;
     }
 
-    popoverEl.style.top = `${top}px`;
-    popoverEl.style.left = `${left}px`;
+    popoverElement.style.top = `${top}px`;
+    popoverElement.style.left = `${left}px`;
   }
 
   render() {
@@ -148,7 +267,6 @@ export class PdsPopover {
           class="pds-popover__trigger"
           popoverTarget={this.componentId}
           popoverTargetAction={this.popoverTargetAction}
-          onClick={this.handleClick}
         >
           {this.text}
         </button>
