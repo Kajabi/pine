@@ -1,6 +1,6 @@
 import { Component, Element, Event, EventEmitter, Host, Listen, h, Method, Prop, State } from '@stencil/core';
 import { PlacementType } from '@utils/types';
-import { PdsPopoverEventDetail } from './popover-interface';
+import { PdsPopoverEventDetail, ToggleEvent } from './popover-interface';
 
 @Component({
   tag: 'pds-popover',
@@ -23,6 +23,11 @@ export class PdsPopover {
    * Bound reference to the toggle handler for proper cleanup
    */
   private boundToggleHandler: (event: Event) => void;
+
+  /**
+   * Tracks if the component is still mounted to prevent memory leaks
+   */
+  private isComponentMounted = true;
 
   /**
    * Emitted when the popover is opened
@@ -78,6 +83,8 @@ export class PdsPopover {
   }
 
   disconnectedCallback() {
+    this.isComponentMounted = false;
+
     // Clean up event listener
     const popoverEl = this.el.shadowRoot?.querySelector('div[popover]');
     if (popoverEl != null && this.boundToggleHandler != null) {
@@ -154,6 +161,9 @@ export class PdsPopover {
 
       // Position after the browser has rendered the popover, then show it
       requestAnimationFrame(() => {
+        // Prevent memory leak if component unmounts during animation frame
+        if (!this.isComponentMounted) return;
+
         this.handlePopoverPositioning();
         if (popoverEl != null) {
           popoverEl.classList.add('pds-popover--positioned');
