@@ -133,17 +133,26 @@ FullWidth.args = {
   variant: 'primary'
 }
 
-export const StartAndEndSlots = BaseTemplate.bind({});
+export const StartAndEndSlots = (args) => html`
+  <pds-button
+    component-id=${args.componentId}
+    ?disabled=${args.disabled}
+    ?full-width=${args.fullWidth}
+    ?icon-only=${args.iconOnly}
+    ?loading=${args.loading}
+    type=${args.type}
+    variant=${args.variant}
+  >
+    <pds-icon slot="start" name="favorite"></pds-icon>
+    Button with Icons
+    <pds-icon slot="end" name="add-image"></pds-icon>
+  </pds-button>
+`;
 StartAndEndSlots.args = {
   disabled: false,
   fullWidth: false,
   iconOnly: false,
   loading: false,
-  slot: {
-    start: html`<pds-icon slot="start" name="favorite"></pds-icon>`,
-    default: 'Button with Icons',
-    end: html`<pds-icon slot="end" name="add-image"></pds-icon>`
-  },
   type: 'button',
   variant: 'primary'
 }

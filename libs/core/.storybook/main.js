@@ -12,7 +12,6 @@ const config = {
     "@storybook/addon-a11y",
     "@storybook/addon-actions",
     "@pxtrn/storybook-addon-docs-stencil",
-    "@storybook/addon-mdx-gfm",
     "@chromatic-com/storybook"
   ],
 
