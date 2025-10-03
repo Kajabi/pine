@@ -12,6 +12,12 @@
     max-width: var(--sizing-max-width-default);
     padding: var(--pine-dimension-md);
     position: fixed;
+
+    // Hide popover initially to prevent flash before positioning
+    // stylelint-disable-next-line selector-pseudo-class-no-unknown
+    &:popover-open:not(.pds-popover--positioned) {
+      visibility: hidden;
+    }
   }
 
   button {

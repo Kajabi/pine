@@ -17,6 +17,47 @@
 | `text`                | `text`                  | Text that appears on the trigger element                                                                                                                                                 | `string`                                                                                                                                                             | `undefined` |
 
 
+## Events
+
+| Event             | Description                        | Type                                 |
+| ----------------- | ---------------------------------- | ------------------------------------ |
+| `pdsPopoverClose` | Emitted when the popover is closed | `CustomEvent<PdsPopoverEventDetail>` |
+| `pdsPopoverOpen`  | Emitted when the popover is opened | `CustomEvent<PdsPopoverEventDetail>` |
+
+
+## Methods
+
+### `hide() => Promise<void>`
+
+Closes the popover programmatically
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `show() => Promise<void>`
+
+Opens the popover programmatically
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `toggle() => Promise<void>`
+
+Toggles the popover open/closed state programmatically
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+
 ----------------------------------------------
 
 
