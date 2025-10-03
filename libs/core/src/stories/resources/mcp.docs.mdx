@@ -1,0 +1,107 @@
+import { Meta, Story } from '@storybook/blocks';
+
+<Meta title="Resources/Pine MCP"/>
+
+# Pine MCP
+
+The Pine MCP is a **Model Context Protocol (MCP) server** that provides AI assistants with intelligent access to the Pine Design System. It allows AI tools to understand and work with Pine components, design tokens, and best practices.
+
+## What is Pine MCP?
+
+Pine MCP bridges the gap between AI assistants and the Pine Design System by providing:
+
+- **Component Discovery** - AI can find and understand all Pine components
+- **Design Token Access** - Intelligent recommendations for colors, spacing, typography
+- **Code Generation** - AI generates code that follows Pine guidelines
+- **Validation** - Automatic checking of implementations against Pine rules
+- **Documentation Access** - Real-time access to Pine component docs and examples
+
+Instead of AI assistants making up component names or using incorrect properties, they can query Pine MCP to get accurate, up-to-date information about what's actually available in the Pine Design System.
+
+## Available Tools
+
+- **Component Information** - Get details about any Pine component with examples (markup, props, events, etc.)
+- **Design Tokens** - Access colors, spacing, typography tokens with CSS examples (semantic and core tokens)
+- **Documentation** - Browse Pine design guidelines and best practices
+- **Layout Validation** - Check if generated layout code follows Pine patterns
+
+## Integration with AI Applications
+
+Pine MCP can be integrated with various AI applications that support the Model Context Protocol. Popular applications include:
+
+- **ChatGPT** - OpenAI's chatbot
+- **Claude Code** - Anthropic's code assistant
+- **Claude Desktop** - Anthropic's desktop application
+- **Cursor** - AI-powered IDE
+- **Visual Studio Code** - Microsoft's code editor
+- **Windsurf** - AI-powered IDE
+
+The configuration depends on how the application handles MCP server connections:
+
+### Applications with Native HTTP Support
+
+Some applications can directly connect to remote MCP servers over HTTP. For these applications, use:
+
+```json
+{
+  "mcpServers": {
+    "pine-mcp": {
+      "url": "https://pine-mcp.netlify.app/mcp"
+    }
+  }
+}
+```
+
+### Applications Requiring a Proxy Adapter
+
+Other applications expect MCP servers to run as local processes. For these applications, use a proxy adapter to bridge the connection:
+
+```json
+{
+  "mcpServers": {
+    "pine-mcp": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://pine-mcp.netlify.app/mcp"
+      ]
+    }
+  }
+}
+```
+
+## How to Know Which to Use
+
+- **Try the direct HTTP configuration first** (simpler setup)
+- **If that doesn't work**, use the proxy configuration with `mcp-remote`
+- Check your application's documentation for MCP integration examples
+
+Both configurations provide the same Pine MCP functionality - they just accommodate different application architectures for MCP server communication.
+
+## Example Usage
+
+Once connected, AI assistants can:
+
+```
+Ask: "Show me how to create a button with Pine components"
+→ AI queries Pine MCP and gets current `pds-button` documentation
+
+Ask: "Show me all of the properties that are available for the pds-input component?"
+→ AI queries Pine MCP and gets current `pds-input` properties
+
+Ask: "What color tokens are available in the Pine Design System?"
+→ AI gets filtered list of color tokens with CSS examples
+
+Ask: "Validate this Pine layout code"
+→ AI checks code against Pine rules and suggests fixes
+```
+
+## Benefits
+
+- **Accurate Information** - AI gets real, current Pine component data
+- **Consistent Code** - Generated code follows Pine patterns automatically
+- **Time Savings** - No need to manually lookup component documentation
+- **Quality Assurance** - Built-in validation prevents common mistakes
+- **Up-to-date** - Always uses latest Pine component information
+
+Pine MCP makes it easy for AI assistants to work intelligently with the Pine Design System, ensuring consistent, compliant code generation and reducing the need for manual documentation lookups.
