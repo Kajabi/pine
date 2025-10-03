@@ -15,10 +15,10 @@
     letter-spacing: var(--pine-letter-spacing);
     line-height: var(--pine-line-height-body);
     max-width: 100%;
-    padding: var(--pine-dimension-2xs) var(--pine-dimension-xs);
 
     &::part(button) {
-      padding-inline-end: calc(var(--pine-dimension-xs) / 2);
+      padding-block: var(--pine-dimension-2xs);
+      padding-inline: var(--pine-dimension-xs);
     }
 
     &::part(button):hover {
@@ -47,10 +47,13 @@
     pds-button {
       padding: var(--pine-dimension-none);
 
-    }
+      &::part(button) {
+        padding: var(--pine-dimension-none);
+      }
 
-    &::part(button):hover {
-      background-color: transparent;
+      &::part(button):hover {
+        background-color: transparent;
+      }
     }
 
     span {
