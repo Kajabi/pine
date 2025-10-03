@@ -71,7 +71,7 @@ export class PdsCopytext {
       classNames.push('pds-copytext--truncated');
     }
 
-    return classNames.join('  ');
+    return classNames.join(' ');
   }
 
   render() {

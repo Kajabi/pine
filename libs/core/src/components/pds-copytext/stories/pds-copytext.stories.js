@@ -16,7 +16,7 @@ export default {
 
 const BaseTemplate = (args) => html`
   <pds-copytext
-    ?border=${args.border}
+    .border=${args.border}
     ?full-width=${args.fullWidth}
     component-id=${args.componentId}
     onClick=${args.onClick}
