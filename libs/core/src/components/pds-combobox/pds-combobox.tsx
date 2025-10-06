@@ -324,7 +324,7 @@ export class PdsCombobox implements BasePdsProps {
           left: `${x}px`,
           top: `${y}px`,
           position: 'absolute',
-          zIndex: 1000,
+          zIndex: 'var(--pine-z-index-raised)',
         });
       });
     }

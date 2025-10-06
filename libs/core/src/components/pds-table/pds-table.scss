@@ -76,7 +76,7 @@
   top: 0;
   transition: opacity 0.1s ease;
   width: 4px;
-  z-index: 10;
+  z-index: var(--pine-z-index-raised);
 }
 
 .scroll-shadow-left {

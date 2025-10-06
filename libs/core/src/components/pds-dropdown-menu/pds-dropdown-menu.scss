@@ -12,5 +12,5 @@
   min-width: 170px;
   padding: var(--pine-dimension-xs);
   position: absolute;
-  z-index: 9999;
+  z-index: var(--pine-z-index-overlay);
 }
