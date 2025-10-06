@@ -442,8 +442,8 @@
   }
 }
 
-// Chip trigger variant styles
-.pds-combobox__chip-trigger--dropdown {
+// Chip trigger variant styles - exclude brand chips to preserve their 1px padding for gradient border
+.pds-combobox__chip-trigger--dropdown:not(.pds-combobox__chip-trigger--brand) {
   padding: var(--pine-dimension-none);
 
   .pds-combobox__chip-trigger-label {
