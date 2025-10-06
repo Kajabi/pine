@@ -7,6 +7,7 @@
   --pds-button-border-radius-end-end: var(--pine-border-radius-full);
   --pds-button-border-radius-end-start: var(--pine-border-radius-full);
   --pds-button-min-height: var(--pine-dimension-450);
+  --pds-button-outline-offset: var(--pine-border-width);
   --color-border-default: transparent;
   --color-border-disabled: transparent;
   --color-border-focus: transparent;
@@ -48,9 +49,10 @@
   background-color: var(--pds-button-background, var(--color-background-default));
   border: var(--pds-button-border);
   border-color: var(--color-border-default);
+  border-radius: var(--pds-button-border-radius);
+  /* stylelint-disable-next-line order/properties-alphabetical-order */
   border-end-end-radius: var(--pds-button-border-radius-end-end, var(--pds-button-border-radius));
   border-end-start-radius: var(--pds-button-border-radius-end-start, var(--pds-button-border-radius));
-  border-radius: var(--pds-button-border-radius);
   border-start-end-radius: var(--pds-button-border-radius-start-end, var(--pds-button-border-radius));
   border-start-start-radius: var(--pds-button-border-radius-start-start, var(--pds-button-border-radius));
   box-sizing: border-box;
@@ -76,8 +78,9 @@
 
   &:focus-visible {
     border-color: var(--color-border-focus);
-    outline: var(--pine-outline-focus);
-    outline-offset: var(--pine-border-width);
+    box-shadow: var(--pds-button-box-shadow-focus, none);
+    outline: var(--pds-button-outline-focus, var(--pine-outline-focus));
+    outline-offset: var(--pds-button-outline-offset);
   }
 
   &:disabled {

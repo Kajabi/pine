@@ -65,6 +65,7 @@
     border: var(--pds-input-border-width) solid var(--pds-input-border-color);
     color: var(--pds-input-addon-color);
     display: flex;
+    overflow: visible;
   }
 
   &::part(prepend) {
@@ -84,18 +85,28 @@
 :host([has-prepend]) ::slotted(pds-button[slot="prepend"]) {
   --pds-button-background: var(--pds-input-addon-background);
   --pds-button-border: var(--pine-border-width-none);
+  --pds-button-border-radius: var(--pine-dimension-none);
   --pds-button-border-radius-end-end: var(--pine-dimension-none);
   --pds-button-border-radius-start-end: var(--pine-dimension-none);
-  --pds-button-min-height: var(--pine-dimension-450);
+  --pds-button-border-radius-start-start: var(--pds-input-border-radius);
+  --pds-button-border-radius-end-start: var(--pds-input-border-radius);
+  --pds-button-min-height: calc(var(--pine-dimension-450) - calc(2 * var(--pine-border-width)));
+  --pds-button-box-shadow-focus: 0 0 0 3px var(--pine-color-focus-ring);
+  --pds-button-outline-focus: none;
 }
 
 /* stylelint-disable-next-line */
 :host([has-append]) ::slotted(pds-button[slot="append"]) {
   --pds-button-background: var(--pds-input-addon-background);
   --pds-button-border: var(--pine-border-width-none);
+  --pds-button-border-radius: var(--pine-dimension-none);
   --pds-button-border-radius-end-start: var(--pine-dimension-none);
   --pds-button-border-radius-start-start: var(--pine-dimension-none);
-  --pds-button-min-height: var(--pine-dimension-450);
+  --pds-button-border-radius-start-end: var(--pds-input-border-radius);
+  --pds-button-border-radius-end-end: var(--pds-input-border-radius);
+  --pds-button-min-height: calc(var(--pine-dimension-450) - calc(2 * var(--pine-border-width)));
+  --pds-button-box-shadow-focus: 0 0 0 3px var(--pine-color-focus-ring);
+  --pds-button-outline-focus: none;
 }
 
 /* stylelint-disable-next-line */
@@ -235,6 +246,8 @@
     border-color: var(--pine-color-border-active);
     outline: var(--pine-outline-focus);
     outline-offset: var(--pine-border-width);
+    position: relative;
+    z-index: 1;
 
     :host([has-prepend]) &,
     :host([has-append]) &,
@@ -254,6 +267,8 @@
 
     &:focus-visible {
       outline-color: var(--pine-color-focus-ring-danger);
+      position: relative;
+      z-index: 1;
     }
   }
 }
