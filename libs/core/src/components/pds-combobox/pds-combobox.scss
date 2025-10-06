@@ -16,7 +16,7 @@
 .pds-combobox__label {
   display: block;
   font-size: 0.95rem;
-  margin-block-end: var(--pine-dimension-150);
+  margin-block-end: var(--pine-dimension-2xs);
 }
 
 .pds-combobox__input-wrapper {
@@ -277,10 +277,30 @@
   padding-block: var(--pine-dimension-xs);
 }
 
-// Chip trigger styles
 .pds-combobox__chip-trigger {
+  align-items: center;
+  border-radius: var(--pine-dimension-sm);
   cursor: pointer;
+  display: inline-flex;
+  font: var(--pine-typography-body-medium);
+  justify-content: space-between;
+  outline: none;
+  padding-block: var(--pine-dimension-025);
+  padding-inline: var(--pine-dimension-150);
   transition: all 0.15s ease;
+  width: fit-content;
+
+  .pds-combobox__chip-trigger-layout-wrapper {
+    align-items: center;
+    display: flex;
+    flex: 1;
+  }
+
+  .trigger-content {
+    align-items: center;
+    display: flex;
+    width: 100%;
+  }
 
   &:focus-visible {
     outline: var(--pine-outline-focus);
@@ -297,4 +317,184 @@
   color: inherit;
   flex: 1 1 auto;
   text-align: start;
+}
+
+.pds-combobox__chip-trigger-chevron {
+  color: currentColor;
+  margin-inline-start: var(--pine-dimension-150);
+}
+
+.pds-combobox__chip-trigger-icon {
+  margin-inline-end: var(--pine-dimension-2xs);
+}
+
+// Chip trigger sentiment variants - mirroring chip component styles
+.pds-combobox__chip-trigger--neutral {
+  background: var(--pine-chip-color-neutral);
+  border: var(--pine-border-width) solid var(--pine-chip-color-neutral-hover);
+  color: var(--pine-color-text-neutral);
+
+  &:hover:not([aria-disabled='true']) {
+    background: var(--pine-chip-color-neutral-hover);
+  }
+
+  &:focus-visible {
+    border-color: var(--pine-chip-color-neutral-hover);
+  }
+}
+
+.pds-combobox__chip-trigger--accent {
+  background: var(--pine-chip-color-accent);
+  border: var(--pine-border-width) solid var(--pine-chip-color-accent-hover);
+  color: var(--pine-color-text-accent);
+
+  &:hover:not([aria-disabled='true']) {
+    background: var(--pine-chip-color-accent-hover);
+  }
+
+  &:focus-visible {
+    border-color: var(--pine-chip-color-accent-hover);
+  }
+}
+
+.pds-combobox__chip-trigger--success {
+  background: var(--pine-chip-color-success);
+  border: var(--pine-border-width) solid var(--pine-chip-color-success-hover);
+  color: var(--pine-color-text-success);
+
+  &:hover:not([aria-disabled='true']) {
+    background: var(--pine-chip-color-success-hover);
+  }
+
+  &:focus-visible {
+    border-color: var(--pine-chip-color-success-hover);
+  }
+}
+
+.pds-combobox__chip-trigger--warning {
+  background: var(--pine-chip-color-warning);
+  border: var(--pine-border-width) solid var(--pine-chip-color-warning-hover);
+  color: var(--pine-color-text-warning);
+
+  &:hover:not([aria-disabled='true']) {
+    background: var(--pine-chip-color-warning-hover);
+  }
+
+  &:focus-visible {
+    border-color: var(--pine-chip-color-warning-hover);
+  }
+}
+
+.pds-combobox__chip-trigger--danger {
+  background: var(--pine-chip-color-danger);
+  border: var(--pine-border-width) solid var(--pine-chip-color-danger-hover);
+  color: var(--pine-color-text-danger);
+
+  &:hover:not([aria-disabled='true']) {
+    background: var(--pine-chip-color-danger-hover);
+  }
+
+  &:focus-visible {
+    border-color: var(--pine-chip-color-danger-hover);
+  }
+}
+
+.pds-combobox__chip-trigger--info {
+  background: var(--pine-chip-color-info);
+  border: var(--pine-border-width) solid var(--pine-chip-color-info-hover);
+  color: var(--pine-color-text-info);
+
+  &:hover:not([aria-disabled='true']) {
+    background: var(--pine-chip-color-info-hover);
+  }
+
+  &:focus-visible {
+    border-color: var(--pine-chip-color-info-hover);
+  }
+}
+
+.pds-combobox__chip-trigger--brand {
+  background: linear-gradient(90deg, #FF3E14 0%, #6B62F2 100%);
+  border: 0;
+  color: var(--pine-color-text-neutral);
+  padding: 1px;
+  position: relative;
+
+  .pds-combobox__chip-trigger-label {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: calc(var(--pine-dimension-sm) - 1px);
+    color: var(--pine-color-text-neutral);
+    font-weight: var(--pine-font-weight-medium);
+    padding: var(--pine-dimension-025) var(--pine-dimension-150);
+    position: relative;
+    z-index: 1;
+  }
+
+  .pds-combobox__chip-trigger-chevron {
+    position: relative;
+    z-index: 1;
+  }
+
+  &:hover:not([aria-disabled='true']) {
+    .pds-combobox__chip-trigger-label {
+      background: rgba(255, 255, 255, 0.8);
+    }
+  }
+}
+
+// Chip trigger variant styles
+.pds-combobox__chip-trigger--dropdown {
+  padding: var(--pine-dimension-none);
+
+  .pds-combobox__chip-trigger-label {
+    padding: var(--pine-dimension-025) var(--pine-dimension-150);
+  }
+}
+
+// Large chip trigger
+.pds-combobox__chip-trigger--large {
+  .pds-combobox__chip-trigger-label {
+    font-family: var(--pine-font-family-heading);
+    font-size: var(--pine-font-size-heading-6);
+    font-weight: var(--pine-font-weight-medium);
+    letter-spacing: var(--pine-letter-spacing-heading-6);
+  }
+}
+
+// Chip trigger with dot
+.pds-combobox__chip-trigger--dot {
+  .pds-combobox__chip-trigger-label::before {
+    border: var(--pine-border-width) solid transparent;
+    border-radius: var(--pine-border-radius-full);
+    content: '';
+    display: inline-block;
+    height: var(--pine-dimension-2xs);
+    margin-inline-end: var(--pine-dimension-2xs);
+    width: var(--pine-dimension-2xs);
+  }
+}
+
+// Dot colors for each sentiment
+.pds-combobox__chip-trigger--neutral.pds-combobox__chip-trigger--dot .pds-combobox__chip-trigger-label::before {
+  background: var(--pine-chip-color-neutral-dot);
+}
+
+.pds-combobox__chip-trigger--accent.pds-combobox__chip-trigger--dot .pds-combobox__chip-trigger-label::before {
+  background: var(--pine-chip-color-accent-dot);
+}
+
+.pds-combobox__chip-trigger--success.pds-combobox__chip-trigger--dot .pds-combobox__chip-trigger-label::before {
+  background: var(--pine-chip-color-success-dot);
+}
+
+.pds-combobox__chip-trigger--warning.pds-combobox__chip-trigger--dot .pds-combobox__chip-trigger-label::before {
+  background: var(--pine-chip-color-warning-dot);
+}
+
+.pds-combobox__chip-trigger--danger.pds-combobox__chip-trigger--dot .pds-combobox__chip-trigger-label::before {
+  background: var(--pine-chip-color-danger-dot);
+}
+
+.pds-combobox__chip-trigger--info.pds-combobox__chip-trigger--dot .pds-combobox__chip-trigger-label::before {
+  background: var(--pine-chip-color-info-dot);
 }

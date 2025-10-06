@@ -954,6 +954,29 @@ export class PdsCombobox implements BasePdsProps {
     return this.selectedHasLayout && !!this.selectedLayoutContent;
   }
 
+  // Helper method to build chip trigger CSS classes
+  private getChipTriggerClass(): string {
+    const classes = ['pds-combobox__chip-trigger'];
+
+    // Add sentiment class
+    classes.push(`pds-combobox__chip-trigger--${this.selectedChipSentiment}`);
+
+    // Add variant class
+    classes.push(`pds-combobox__chip-trigger--${this.selectedChipVariant}`);
+
+    // Add large class if needed
+    if (this.selectedChipLarge) {
+      classes.push('pds-combobox__chip-trigger--large');
+    }
+
+    // Add dot class if needed
+    if (this.selectedChipDot) {
+      classes.push('pds-combobox__chip-trigger--dot');
+    }
+
+    return classes.join(' ');
+  }
+
   private renderButtonTriggerContent() {
     // Case 1: Custom trigger content with layout priority
     if (this.customTriggerContent) {
@@ -977,24 +1000,61 @@ export class PdsCombobox implements BasePdsProps {
     // Case 1: Custom trigger content with layout priority
     if (this.customTriggerContent) {
       if (this.shouldShowLayoutContent()) {
-        return [this.renderLayoutContent(), this.renderCaretIcon()];
+        // When using custom layouts, the chip handles its own dropdown arrow
+        return this.renderChipTriggerLayoutContent();
       }
-      // Fall back to slot content when no layout is available
+      // Fall back to slot content when no layout is available - chip handles its own dropdown arrow
       return <slot name="trigger-content" />;
     }
 
     // Case 2: Standard mode with layout content
     if (this.shouldShowLayoutContent()) {
-      return [this.renderLayoutContent(), this.renderCaretIcon()];
+      // When using custom layouts, the chip handles its own dropdown arrow
+      return this.renderChipTriggerLayoutContent();
     }
 
     // Case 3: Standard mode with default text content
     return [
-      <span class="pds-combobox__chip-trigger-label">
-        {this.selectedLabel || this.placeholder}
-      </span>,
+      this.renderChipTriggerDefaultContent(),
       this.renderCaretIcon()
     ];
+  }
+
+  // Helper method to render chip trigger layout content
+  private renderChipTriggerLayoutContent() {
+    return (
+      <div class="pds-combobox__chip-trigger-layout-wrapper" innerHTML={this.getModifiedLayoutContentForTrigger()} />
+    );
+  }
+
+  // Helper method to modify layout content for trigger use (ensure dropdown variant)
+  private getModifiedLayoutContentForTrigger(): string {
+    let content = this.selectedLayoutContent;
+
+    // If the content contains a pds-chip, ensure it has variant="dropdown"
+    if (content.includes('<pds-chip')) {
+      // Use a temporary div to parse and modify the HTML
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = content;
+
+      const chipElement = tempDiv.querySelector('pds-chip');
+      if (chipElement) {
+        chipElement.setAttribute('variant', 'dropdown');
+        content = tempDiv.innerHTML;
+      }
+    }
+
+    return content;
+  }
+
+  // Helper method to render chip trigger default content
+  private renderChipTriggerDefaultContent() {
+    return (
+      <span class="pds-combobox__chip-trigger-label">
+        {this.selectedChipIcon && <pds-icon icon={this.selectedChipIcon} class="pds-combobox__chip-trigger-icon" />}
+        {this.selectedLabel || this.placeholder}
+      </span>
+    );
   }
 
 
@@ -1038,8 +1098,8 @@ export class PdsCombobox implements BasePdsProps {
               <pds-icon icon="enlarge" aria-hidden="true" class="pds-combobox__input-icon" />
             </div>
           ) : this.trigger === 'chip' ? (
-            <pds-chip
-              class="pds-combobox__chip-trigger"
+            <div
+              class={this.getChipTriggerClass()}
               style={{ width: this.triggerWidth }}
               role="combobox"
               aria-haspopup="listbox"
@@ -1051,18 +1111,14 @@ export class PdsCombobox implements BasePdsProps {
               id={this.componentId}
               tabIndex={this.disabled ? -1 : 0}
               onClick={this.onButtonTriggerClick}
+              data-layout={this.customTriggerContent}
               onKeyDown={this.onButtonTriggerKeyDown}
               onKeyUp={this.onButtonTriggerKeyUp}
               ref={el => (this.triggerEl = el as HTMLElement)}
               part="chip-trigger"
-              sentiment={this.selectedChipSentiment}
-              variant={this.selectedChipVariant}
-              large={this.selectedChipLarge}
-              icon={this.selectedChipIcon}
-              dot={this.selectedChipDot}
             >
               {this.renderChipTriggerContent()}
-            </pds-chip>
+            </div>
           ) : (
             <div
               class={triggerClass}

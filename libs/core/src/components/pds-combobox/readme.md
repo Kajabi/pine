@@ -84,15 +84,12 @@ Type: `Promise<void>`
 
 - [pds-box](../pds-box)
 - pds-icon
-- [pds-chip](../pds-chip)
 
 ### Graph
 ```mermaid
 graph TD;
   pds-combobox --> pds-box
   pds-combobox --> pds-icon
-  pds-combobox --> pds-chip
-  pds-chip --> pds-icon
   style pds-combobox fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

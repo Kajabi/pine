@@ -16,6 +16,11 @@ export default {
     trigger: 'input',
     triggerVariant: 'secondary',
     triggerWidth: 'fit-content',
+    chipSentiment: 'neutral',
+    chipVariant: 'dropdown',
+    chipLarge: false,
+    chipIcon: null,
+    chipDot: false,
   },
   component: 'pds-combobox',
   decorators: [withActions],
@@ -46,6 +51,11 @@ const BaseTemplate = (args) => html`
   trigger=${args.trigger}
   trigger-variant=${args.triggerVariant}
   trigger-width=${args.triggerWidth}
+  chip-sentiment=${args.chipSentiment}
+  chip-variant=${args.chipVariant}
+  chip-large=${args.chipLarge}
+  chip-icon=${args.chipIcon}
+  chip-dot=${args.chipDot}
 >
   <option value="cat">Cat</option>
   <option value="dog">Dog</option>
@@ -74,9 +84,55 @@ ButtonTrigger.args = {
   triggerWidth: '250px',
 };
 
+export const ChipTriggerWithCustomLayouts = (args) => html`
+<pds-box min-width="100%" direction="row" gap="sm" wrap>
+  <pds-combobox
+    component-id=${args.componentId}
+    label="Draft Status"
+    placeholder="Draft"
+    trigger="chip"
+    mode="select-only"
+    custom-option-layouts="true"
+    custom-trigger-content="true"
+    trigger-width="fit-content"
+  >
+    <pds-chip slot="trigger-content" sentiment="neutral" variant="dropdown" dot>Draft</pds-chip>
+    <option value="draft" selected data-layout><pds-chip sentiment="neutral" dot>Draft</pds-chip></option>
+    <option value="published" data-layout><pds-chip sentiment="success" dot>Published</pds-chip></option>
+    <option value="archived" data-layout><pds-chip sentiment="warning" dot>Archived</pds-chip></option>
+  </pds-combobox>
+</pds-box>`;
+
+ChipTriggerWithCustomLayouts.args = {
+  componentId: 'combobox-chip-custom-layouts',
+};
+
+export const ChipTriggerWithCustomLayoutsAndIcons = (args) => html`
+<pds-box min-width="100%" direction="row" gap="sm" wrap>
+  <pds-combobox
+    component-id=${args.componentId}
+    label="Draft Status"
+    placeholder="Draft"
+    trigger="chip"
+    mode="select-only"
+    custom-option-layouts="true"
+    custom-trigger-content="true"
+    trigger-width="fit-content"
+  >
+    <pds-chip slot="trigger-content" sentiment="neutral" variant="dropdown" icon="info-circle">Draft</pds-chip>
+    <option value="draft" selected data-layout><pds-chip sentiment="neutral" icon="info-circle">Draft</pds-chip></option>
+    <option value="published" data-layout><pds-chip sentiment="success" icon="check">Published</pds-chip></option>
+    <option value="archived" data-layout><pds-chip sentiment="warning" icon="warning">Archived</pds-chip></option>
+  </pds-combobox>
+</pds-box>`;
+
+ChipTriggerWithCustomLayoutsAndIcons.args = {
+  componentId: 'combobox-chip-custom-layouts-and-icons',
+};
+
 export const Custom = (args) => html`
 
-<div style="width: 100%;">
+<pds-box min-width="100%">
   <pds-combobox
     component-id="combobox-custom-trigger-layouts"
     custom-trigger-content=${args.customTriggerContent}
@@ -178,7 +234,7 @@ export const Custom = (args) => html`
       </pds-box>
     </option>
   </pds-combobox>
-</div>`;
+</pds-box>`;
 
 Custom.args = {
   componentId: 'combobox-custom-trigger-layouts',

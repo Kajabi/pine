@@ -316,25 +316,25 @@ The chip trigger supports different sentiments for various use cases, perfect fo
   mdxSource={{
     webComponent: `<pds-box direction="row" gap="sm" wrap>
   <pds-combobox component-id="chip-draft" label="Status" placeholder="Draft" trigger="chip" mode="select-only" custom-option-layouts="true" custom-trigger-content="true">
-    <pds-chip slot="trigger-content" sentiment="neutral" dot>Draft</pds-chip>
+    <pds-chip slot="trigger-content" sentiment="neutral" variant="dropdown" dot>Draft</pds-chip>
     <option value="draft" selected data-layout><pds-chip sentiment="neutral" dot>Draft</pds-chip></option>
     <option value="published" data-layout><pds-chip sentiment="success" dot>Published</pds-chip></option>
     <option value="archived" data-layout><pds-chip sentiment="warning" dot>Archived</pds-chip></option>
   </pds-combobox>
   <pds-combobox component-id="chip-published" label="Status" placeholder="Published" trigger="chip" mode="select-only" custom-option-layouts="true" custom-trigger-content="true">
-    <pds-chip slot="trigger-content" sentiment="success" dot>Published</pds-chip>
+    <pds-chip slot="trigger-content" sentiment="success" variant="dropdown" dot>Published</pds-chip>
     <option value="draft" data-layout><pds-chip sentiment="neutral" dot>Draft</pds-chip></option>
     <option value="published" selected data-layout><pds-chip sentiment="success" dot>Published</pds-chip></option>
     <option value="archived" data-layout><pds-chip sentiment="warning" dot>Archived</pds-chip></option>
   </pds-combobox>
   <pds-combobox component-id="chip-drip" label="Status" placeholder="Drip" trigger="chip" mode="select-only" custom-option-layouts="true" custom-trigger-content="true">
-    <pds-chip slot="trigger-content" sentiment="info" dot>Drip</pds-chip>
+    <pds-chip slot="trigger-content" sentiment="info" variant="dropdown" dot>Drip</pds-chip>
     <option value="draft" data-layout><pds-chip sentiment="neutral" dot>Draft</pds-chip></option>
     <option value="drip" selected data-layout><pds-chip sentiment="info" dot>Drip</pds-chip></option>
     <option value="locked" data-layout><pds-chip sentiment="accent" dot>Locked</pds-chip></option>
   </pds-combobox>
   <pds-combobox component-id="chip-locked" label="Status" placeholder="Locked" trigger="chip" mode="select-only" custom-option-layouts="true" custom-trigger-content="true">
-    <pds-chip slot="trigger-content" sentiment="accent" dot>Locked</pds-chip>
+    <pds-chip slot="trigger-content" sentiment="accent" variant="dropdown" dot>Locked</pds-chip>
     <option value="drip" data-layout><pds-chip sentiment="info" dot>Drip</pds-chip></option>
     <option value="locked" selected data-layout><pds-chip sentiment="accent" dot>Locked</pds-chip></option>
     <option value="archived" data-layout><pds-chip sentiment="warning" dot>Archived</pds-chip></option>
@@ -342,25 +342,25 @@ The chip trigger supports different sentiments for various use cases, perfect fo
 </pds-box>`,
     react: `<PdsBox direction="row" gap="sm" wrap>
   <PdsCombobox componentId="chip-draft" label="Status" placeholder="Draft" trigger="chip" mode="select-only" customOptionLayouts={true} customTriggerContent={true}>
-    <PdsChip slot="trigger-content" sentiment="neutral" dot>Draft</PdsChip>
+    <PdsChip slot="trigger-content" sentiment="neutral" variant="dropdown" dot>Draft</PdsChip>
     <option value="draft" selected data-layout><PdsChip sentiment="neutral" dot>Draft</PdsChip></option>
     <option value="published" data-layout><PdsChip sentiment="success" dot>Published</PdsChip></option>
     <option value="archived" data-layout><PdsChip sentiment="warning" dot>Archived</PdsChip></option>
   </PdsCombobox>
   <PdsCombobox componentId="chip-published" label="Status" placeholder="Published" trigger="chip" mode="select-only" customOptionLayouts={true} customTriggerContent={true}>
-    <PdsChip slot="trigger-content" sentiment="success" dot>Published</PdsChip>
+    <PdsChip slot="trigger-content" sentiment="success" variant="dropdown" dot>Published</PdsChip>
     <option value="draft" data-layout><PdsChip sentiment="neutral" dot>Draft</PdsChip></option>
     <option value="published" selected data-layout><PdsChip sentiment="success" dot>Published</PdsChip></option>
     <option value="archived" data-layout><PdsChip sentiment="warning" dot>Archived</PdsChip></option>
   </PdsCombobox>
   <PdsCombobox componentId="chip-drip" label="Status" placeholder="Drip" trigger="chip" mode="select-only" customOptionLayouts={true} customTriggerContent={true}>
-    <PdsChip slot="trigger-content" sentiment="info" dot>Drip</PdsChip>
+    <PdsChip slot="trigger-content" sentiment="info" variant="dropdown" dot>Drip</PdsChip>
     <option value="draft" data-layout><PdsChip sentiment="neutral" dot>Draft</PdsChip></option>
     <option value="drip" selected data-layout><PdsChip sentiment="info" dot>Drip</PdsChip></option>
     <option value="locked" data-layout><PdsChip sentiment="accent" dot>Locked</PdsChip></option>
   </PdsCombobox>
   <PdsCombobox componentId="chip-locked" label="Status" placeholder="Locked" trigger="chip" mode="select-only" customOptionLayouts={true} customTriggerContent={true}>
-    <PdsChip slot="trigger-content" sentiment="accent" dot>Locked</PdsChip>
+    <PdsChip slot="trigger-content" sentiment="accent" variant="dropdown" dot>Locked</PdsChip>
     <option value="drip" data-layout><PdsChip sentiment="info" dot>Drip</PdsChip></option>
     <option value="locked" selected data-layout><PdsChip sentiment="accent" dot>Locked</PdsChip></option>
     <option value="archived" data-layout><PdsChip sentiment="warning" dot>Archived</PdsChip></option>
@@ -370,25 +370,25 @@ The chip trigger supports different sentiments for various use cases, perfect fo
 >
   <pds-box direction="row" gap="sm" wrap>
     <pds-combobox component-id="chip-draft" label="Status" placeholder="Draft" trigger="chip" mode="select-only" custom-option-layouts="true" custom-trigger-content="true">
-      <pds-chip slot="trigger-content" sentiment="neutral" dot>Draft</pds-chip>
+      <pds-chip slot="trigger-content" sentiment="neutral" variant="dropdown" dot>Draft</pds-chip>
       <option value="draft" selected data-layout><pds-chip sentiment="neutral" dot>Draft</pds-chip></option>
       <option value="published" data-layout><pds-chip sentiment="success" dot>Published</pds-chip></option>
       <option value="archived" data-layout><pds-chip sentiment="warning" dot>Archived</pds-chip></option>
     </pds-combobox>
     <pds-combobox component-id="chip-published" label="Status" placeholder="Published" trigger="chip" mode="select-only" custom-option-layouts="true" custom-trigger-content="true">
-      <pds-chip slot="trigger-content" sentiment="success" dot>Published</pds-chip>
+      <pds-chip slot="trigger-content" sentiment="success" variant="dropdown" dot>Published</pds-chip>
       <option value="draft" data-layout><pds-chip sentiment="neutral" dot>Draft</pds-chip></option>
       <option value="published" selected data-layout><pds-chip sentiment="success" dot>Published</pds-chip></option>
       <option value="archived" data-layout><pds-chip sentiment="warning" dot>Archived</pds-chip></option>
     </pds-combobox>
     <pds-combobox component-id="chip-drip" label="Status" placeholder="Drip" trigger="chip" mode="select-only" custom-option-layouts="true" custom-trigger-content="true">
-      <pds-chip slot="trigger-content" sentiment="info" dot>Drip</pds-chip>
+      <pds-chip slot="trigger-content" sentiment="info" variant="dropdown" dot>Drip</pds-chip>
       <option value="draft" data-layout><pds-chip sentiment="neutral" dot>Draft</pds-chip></option>
       <option value="drip" selected data-layout><pds-chip sentiment="info" dot>Drip</pds-chip></option>
       <option value="locked" data-layout><pds-chip sentiment="accent" dot>Locked</pds-chip></option>
     </pds-combobox>
     <pds-combobox component-id="chip-locked" label="Status" placeholder="Locked" trigger="chip" mode="select-only" custom-option-layouts="true" custom-trigger-content="true">
-      <pds-chip slot="trigger-content" sentiment="accent" dot>Locked</pds-chip>
+      <pds-chip slot="trigger-content" sentiment="accent" variant="dropdown" dot>Locked</pds-chip>
       <option value="drip" data-layout><pds-chip sentiment="info" dot>Drip</pds-chip></option>
       <option value="locked" selected data-layout><pds-chip sentiment="accent" dot>Locked</pds-chip></option>
       <option value="archived" data-layout><pds-chip sentiment="warning" dot>Archived</pds-chip></option>
@@ -402,6 +402,8 @@ The chip trigger supports different sentiments for various use cases, perfect fo
 > 3. **Component props**: Fallback to `chipSentiment`, `chipVariant`, etc.
 >
 > This ensures the trigger always reflects the currently selected option's styling while providing a proper initial state.
+>
+> **📝 Best Practice**: Always use `variant="dropdown"` on `<pds-chip slot="trigger-content">` elements to match the combobox's dropdown behavior and ensure proper styling.
 
 ### Chip with Icon
 Add an icon to the chip trigger for better visual context:
