@@ -1,6 +1,10 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsPopover } from '../pds-popover';
 
+interface ToggleEvent extends Event {
+  newState: 'open' | 'closed';
+}
+
 describe('pds-popover', () => {
   it('renders', async () => {
     const page = await newSpecPage({
@@ -127,7 +131,8 @@ describe('pds-popover', () => {
 
     for (const [placement, expected] of Object.entries(placements)) {
       page.rootInstance.placement = placement;
-      await page.rootInstance.handleClick();
+      // Directly call the private positioning method
+      (page.rootInstance as any).handlePopoverPositioning();
       await page.waitForChanges();
 
       expect(popoverEl.style.top).toBe(`${expected.top}px`);
@@ -156,5 +161,107 @@ describe('pds-popover', () => {
     window.dispatchEvent(new Event('scroll'));
     await page.waitForChanges();
     expect(positioningSpy).toHaveBeenCalled();
+  });
+
+  it('should call native showPopover when show() method is called', async () => {
+    const page = await newSpecPage({
+      components: [PdsPopover],
+      html: '<pds-popover component-id="my-popover"></pds-popover>'
+    });
+
+    const popoverEl = page.root?.shadowRoot?.querySelector('div[popover]') as HTMLElement & { showPopover?: jest.Mock };
+    popoverEl.showPopover = jest.fn();
+
+    await page.rootInstance.show();
+    expect(popoverEl.showPopover).toHaveBeenCalled();
+  });
+
+  it('should call native hidePopover when hide() method is called', async () => {
+    const page = await newSpecPage({
+      components: [PdsPopover],
+      html: '<pds-popover component-id="my-popover"></pds-popover>'
+    });
+
+    const popoverEl = page.root?.shadowRoot?.querySelector('div[popover]') as HTMLElement & { hidePopover?: jest.Mock };
+    popoverEl.hidePopover = jest.fn();
+
+    await page.rootInstance.hide();
+    expect(popoverEl.hidePopover).toHaveBeenCalled();
+  });
+
+  it('should call native togglePopover when toggle() method is called', async () => {
+    const page = await newSpecPage({
+      components: [PdsPopover],
+      html: '<pds-popover component-id="my-popover"></pds-popover>'
+    });
+
+    const popoverEl = page.root?.shadowRoot?.querySelector('div[popover]') as HTMLElement & { togglePopover?: jest.Mock };
+    popoverEl.togglePopover = jest.fn();
+
+    await page.rootInstance.toggle();
+    expect(popoverEl.togglePopover).toHaveBeenCalled();
+  });
+
+  it('should emit pdsPopoverOpen event with details when toggle event fires with open state', async () => {
+    const page = await newSpecPage({
+      components: [PdsPopover],
+      html: '<pds-popover component-id="test-popover" popover-type="auto" text="Test"></pds-popover>'
+    });
+
+    const openEventSpy = jest.fn();
+    page.root?.addEventListener('pdsPopoverOpen', openEventSpy);
+
+    // Simulate toggle event with open state
+    const toggleEvent = new Event('toggle') as ToggleEvent;
+    Object.defineProperty(toggleEvent, 'newState', { value: 'open' });
+
+    (page.rootInstance as any).handleToggle(toggleEvent);
+    await page.waitForChanges();
+
+    expect(openEventSpy).toHaveBeenCalled();
+    expect(page.rootInstance.active).toBe(true);
+  });
+
+  it('should emit pdsPopoverClose event with details when toggle event fires with closed state', async () => {
+    const page = await newSpecPage({
+      components: [PdsPopover],
+      html: '<pds-popover component-id="test-popover" popover-type="auto" text="Test"></pds-popover>'
+    });
+
+    const closeEventSpy = jest.fn();
+    page.root?.addEventListener('pdsPopoverClose', closeEventSpy);
+
+    // Set active to true first
+    page.rootInstance.active = true;
+
+    // Simulate toggle event with closed state
+    const toggleEvent = new Event('toggle') as ToggleEvent;
+    Object.defineProperty(toggleEvent, 'newState', { value: 'closed' });
+
+    (page.rootInstance as any).handleToggle(toggleEvent);
+    await page.waitForChanges();
+
+    expect(closeEventSpy).toHaveBeenCalled();
+    expect(page.rootInstance.active).toBe(false);
+  });
+
+  it('should handle different popoverTargetAction values', async () => {
+    const page = await newSpecPage({
+      components: [PdsPopover],
+      html: '<pds-popover component-id="my-popover" popover-target-action="toggle"></pds-popover>'
+    });
+
+    const triggerButton = page.root?.shadowRoot?.querySelector('.pds-popover__trigger') as HTMLButtonElement;
+    expect(triggerButton.getAttribute('popovertargetaction')).toBe('toggle');
+  });
+
+  it('should handle different popoverType values', async () => {
+    const page = await newSpecPage({
+      components: [PdsPopover],
+      html: '<pds-popover component-id="my-popover" popover-type="manual"></pds-popover>'
+    });
+
+    const popoverEl = page.root?.shadowRoot?.querySelector('div[popover]') as HTMLElement;
+    expect(popoverEl.getAttribute('popover')).toBe('manual');
   });
 });
