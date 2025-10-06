@@ -212,6 +212,27 @@ export const withPrependSelect = (args) => html`<pds-input
   </pds-select>
 </pds-input>`;
 
+export const withPrependButton = (args) => html`<pds-input
+  autocomplete="${args.autocomplete}"
+  component-id="pds-input-prepend-secondary-button"
+  debounce="${args.debounce}"
+  ?disabled=${args.disabled}
+  error-message="${args.errorMessage}"
+  helper-message="${args.helperMessage}"
+  ?hide-label=${args.hideLabel}
+  ?invalid=${args.invalid}
+  label="Search Query"
+  name="${args.name}"
+  placeholder="Enter your search terms..."
+  ?readonly=${args.readonly}
+  ?required=${args.required}
+  type="text"
+  value="${args.value}">
+  <pds-button slot="prepend" variant="secondary" class="pds-input__prepend">
+    Filter
+  </pds-button>
+</pds-input>`;
+
 export const withAppendSelect = (args) => html`<pds-input
   autocomplete="${args.autocomplete}"
   component-id="pds-input-append-select"
@@ -233,6 +254,27 @@ export const withAppendSelect = (args) => html`<pds-input
     <option value="home">Home</option>
     <option value="work">Work</option>
   </pds-select>
+</pds-input>`;
+
+export const withAppendButton = (args) => html`<pds-input
+  autocomplete="${args.autocomplete}"
+  component-id="pds-input-append-secondary-button"
+  debounce="${args.debounce}"
+  ?disabled=${args.disabled}
+  error-message="${args.errorMessage}"
+  helper-message="${args.helperMessage}"
+  ?hide-label=${args.hideLabel}
+  ?invalid=${args.invalid}
+  label="Search Query"
+  name="${args.name}"
+  placeholder="Enter your search terms..."
+  ?readonly=${args.readonly}
+  ?required=${args.required}
+  type="text"
+  value="${args.value}">
+  <pds-button slot="append" variant="secondary" class="pds-input__append">
+    Search
+  </pds-button>
 </pds-input>`;
 
 export const withPrefixAndAppend = (args) => html`<pds-input
