@@ -190,12 +190,12 @@ describe('pds-combobox', () => {
       html: `<pds-combobox component-id="test-combobox" trigger="chip"></pds-combobox>`,
     });
 
-    const chip = root?.shadowRoot?.querySelector('pds-chip');
-    expect(chip).not.toBeNull();
-    expect(chip?.getAttribute('role')).toBe('combobox');
-    expect(chip?.getAttribute('aria-haspopup')).toBe('listbox');
-    expect(chip?.getAttribute('sentiment')).toBe('neutral');
-    expect(chip?.getAttribute('variant')).toBe('dropdown');
+    const chipTrigger = root?.shadowRoot?.querySelector('.pds-combobox__chip-trigger');
+    expect(chipTrigger).not.toBeNull();
+    expect(chipTrigger?.getAttribute('role')).toBe('combobox');
+    expect(chipTrigger?.getAttribute('aria-haspopup')).toBe('listbox');
+    expect(chipTrigger?.classList.contains('pds-combobox__chip-trigger--neutral')).toBe(true);
+    expect(chipTrigger?.classList.contains('pds-combobox__chip-trigger--dropdown')).toBe(true);
   });
 
   it('renders chip trigger with custom sentiment and variant', async () => {
@@ -204,9 +204,9 @@ describe('pds-combobox', () => {
       html: `<pds-combobox component-id="test-combobox" trigger="chip" chip-sentiment="accent" chip-variant="tag"></pds-combobox>`,
     });
 
-    const chip = root?.shadowRoot?.querySelector('pds-chip');
-    expect(chip?.getAttribute('sentiment')).toBe('accent');
-    expect(chip?.getAttribute('variant')).toBe('tag');
+    const chipTrigger = root?.shadowRoot?.querySelector('.pds-combobox__chip-trigger');
+    expect(chipTrigger?.classList.contains('pds-combobox__chip-trigger--accent')).toBe(true);
+    expect(chipTrigger?.classList.contains('pds-combobox__chip-trigger--tag')).toBe(true);
   });
 
   it('renders chip trigger with icon and dot', async () => {
@@ -215,9 +215,10 @@ describe('pds-combobox', () => {
       html: `<pds-combobox component-id="test-combobox" trigger="chip" chip-icon="star" chip-dot="true"></pds-combobox>`,
     });
 
-    const chip = root?.shadowRoot?.querySelector('pds-chip');
-    expect(chip?.getAttribute('icon')).toBe('star');
-    expect(chip?.getAttribute('dot')).toBe('true');
+    const chipTrigger = root?.shadowRoot?.querySelector('.pds-combobox__chip-trigger');
+    expect(chipTrigger?.classList.contains('pds-combobox__chip-trigger--dot')).toBe(true);
+    const icon = chipTrigger?.querySelector('pds-icon');
+    expect(icon?.getAttribute('icon')).toBe('star');
   });
 
   it('renders chip trigger with large size', async () => {
@@ -226,8 +227,8 @@ describe('pds-combobox', () => {
       html: `<pds-combobox component-id="test-combobox" trigger="chip" chip-large="true"></pds-combobox>`,
     });
 
-    const chip = root?.shadowRoot?.querySelector('pds-chip');
-    expect(chip?.getAttribute('large')).toBe('true');
+    const chipTrigger = root?.shadowRoot?.querySelector('.pds-combobox__chip-trigger');
+    expect(chipTrigger?.classList.contains('pds-combobox__chip-trigger--large')).toBe(true);
   });
 
   it('renders with select-only mode', async () => {
