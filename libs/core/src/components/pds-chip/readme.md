@@ -33,6 +33,10 @@
 
 ## Dependencies
 
+### Used by
+
+ - [pds-combobox](../pds-combobox)
+
 ### Depends on
 
 - pds-icon
@@ -41,6 +45,7 @@
 ```mermaid
 graph TD;
   pds-chip --> pds-icon
+  pds-combobox --> pds-chip
   style pds-chip fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

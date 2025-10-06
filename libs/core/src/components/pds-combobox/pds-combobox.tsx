@@ -82,10 +82,10 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() placeholder?: string;
 
   /**
-   * Determines the combobox trigger: 'input' (editable input) or 'button' (button-like, non-editable).
+   * Determines the combobox trigger: 'input' (editable input), 'button' (button-like, non-editable), or 'chip' (chip-like, non-editable).
    * @default 'input'
    */
-  @Prop() trigger: 'input' | 'button' = 'input';
+  @Prop() trigger: 'input' | 'button' | 'chip' = 'input';
 
   /**
    * Width of the trigger (button or input). Any valid CSS width value.
@@ -98,6 +98,35 @@ export class PdsCombobox implements BasePdsProps {
    * @default 'secondary'
    */
   @Prop() triggerVariant: 'secondary' | 'primary' | 'accent' | 'destructive' = 'secondary';
+
+  /**
+   * The sentiment for the chip trigger. Matches Pine chip sentiments.
+   * @default 'neutral'
+   */
+  @Prop() chipSentiment: 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning' = 'neutral';
+
+  /**
+   * The variant for the chip trigger. Matches Pine chip variants.
+   * @default 'dropdown'
+   */
+  @Prop() chipVariant: 'text' | 'tag' | 'dropdown' = 'dropdown';
+
+  /**
+   * Whether the chip trigger should be displayed in a larger size.
+   * @default false
+   */
+  @Prop() chipLarge: boolean = false;
+
+  /**
+   * The name of the icon to display in the chip trigger.
+   */
+  @Prop() chipIcon?: string;
+
+  /**
+   * Whether a dot should be displayed on the chip trigger.
+   * @default false
+   */
+  @Prop() chipDot: boolean = false;
 
   /**
    * The value of the combobox input.
@@ -619,6 +648,112 @@ export class PdsCombobox implements BasePdsProps {
     return this.selectedOption ? this.isOptionLayout(this.selectedOption) : false;
   }
 
+  // Extract chip sentiment from selected option's layout content or slotted trigger content
+  private get selectedChipSentiment(): 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning' {
+    // First priority: Check selected option's layout content (when something is selected)
+    if (this.selectedOption && this.isOptionLayout(this.selectedOption)) {
+      const chipElement = this.selectedOption.querySelector('pds-chip');
+      const sentiment = chipElement?.getAttribute('sentiment') as 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
+      if (sentiment) return sentiment;
+    }
+
+    // Second priority: Check if we have custom trigger content with a chip (initial state)
+    if (this.customTriggerContent) {
+      const slottedChip = this.el.querySelector('pds-chip[slot="trigger-content"]');
+      if (slottedChip) {
+        const sentiment = slottedChip.getAttribute('sentiment') as 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
+        if (sentiment) return sentiment;
+      }
+    }
+
+    // Fallback: Use component props
+    return this.chipSentiment;
+  }
+
+  // Extract chip variant from selected option's layout content or slotted trigger content
+  private get selectedChipVariant(): 'text' | 'tag' | 'dropdown' {
+    // First priority: Check selected option's layout content (when something is selected)
+    if (this.selectedOption && this.isOptionLayout(this.selectedOption)) {
+      const chipElement = this.selectedOption.querySelector('pds-chip');
+      const variant = chipElement?.getAttribute('variant') as 'text' | 'tag' | 'dropdown';
+      if (variant) return variant;
+    }
+
+    // Second priority: Check if we have custom trigger content with a chip (initial state)
+    if (this.customTriggerContent) {
+      const slottedChip = this.el.querySelector('pds-chip[slot="trigger-content"]');
+      if (slottedChip) {
+        const variant = slottedChip.getAttribute('variant') as 'text' | 'tag' | 'dropdown';
+        if (variant) return variant;
+      }
+    }
+
+    // Fallback: Use component props
+    return this.chipVariant;
+  }
+
+  // Extract chip large from selected option's layout content or slotted trigger content
+  private get selectedChipLarge(): boolean {
+    // First priority: Check selected option's layout content (when something is selected)
+    if (this.selectedOption && this.isOptionLayout(this.selectedOption)) {
+      const chipElement = this.selectedOption.querySelector('pds-chip');
+      if (chipElement?.hasAttribute('large')) return true;
+    }
+
+    // Second priority: Check if we have custom trigger content with a chip (initial state)
+    if (this.customTriggerContent) {
+      const slottedChip = this.el.querySelector('pds-chip[slot="trigger-content"]');
+      if (slottedChip && slottedChip.hasAttribute('large')) {
+        return true;
+      }
+    }
+
+    // Fallback: Use component props
+    return this.chipLarge;
+  }
+
+  // Extract chip icon from selected option's layout content or slotted trigger content
+  private get selectedChipIcon(): string | undefined {
+    // First priority: Check selected option's layout content (when something is selected)
+    if (this.selectedOption && this.isOptionLayout(this.selectedOption)) {
+      const chipElement = this.selectedOption.querySelector('pds-chip');
+      const icon = chipElement?.getAttribute('icon');
+      if (icon) return icon;
+    }
+
+    // Second priority: Check if we have custom trigger content with a chip (initial state)
+    if (this.customTriggerContent) {
+      const slottedChip = this.el.querySelector('pds-chip[slot="trigger-content"]');
+      if (slottedChip) {
+        const icon = slottedChip.getAttribute('icon');
+        if (icon) return icon;
+      }
+    }
+
+    // Fallback: Use component props
+    return this.chipIcon;
+  }
+
+  // Extract chip dot from selected option's layout content or slotted trigger content
+  private get selectedChipDot(): boolean {
+    // First priority: Check selected option's layout content (when something is selected)
+    if (this.selectedOption && this.isOptionLayout(this.selectedOption)) {
+      const chipElement = this.selectedOption.querySelector('pds-chip');
+      if (chipElement?.hasAttribute('dot')) return true;
+    }
+
+    // Second priority: Check if we have custom trigger content with a chip (initial state)
+    if (this.customTriggerContent) {
+      const slottedChip = this.el.querySelector('pds-chip[slot="trigger-content"]');
+      if (slottedChip && slottedChip.hasAttribute('dot')) {
+        return true;
+      }
+    }
+
+    // Fallback: Use component props
+    return this.chipDot;
+  }
+
   // Handler for button trigger click
   private onButtonTriggerClick = () => {
     this.isOpen = !this.isOpen;
@@ -838,6 +973,30 @@ export class PdsCombobox implements BasePdsProps {
     return [this.renderDefaultContent(), this.renderCaretIcon()];
   }
 
+  private renderChipTriggerContent() {
+    // Case 1: Custom trigger content with layout priority
+    if (this.customTriggerContent) {
+      if (this.shouldShowLayoutContent()) {
+        return [this.renderLayoutContent(), this.renderCaretIcon()];
+      }
+      // Fall back to slot content when no layout is available
+      return <slot name="trigger-content" />;
+    }
+
+    // Case 2: Standard mode with layout content
+    if (this.shouldShowLayoutContent()) {
+      return [this.renderLayoutContent(), this.renderCaretIcon()];
+    }
+
+    // Case 3: Standard mode with default text content
+    return [
+      <span class="pds-combobox__chip-trigger-label">
+        {this.selectedLabel || this.placeholder}
+      </span>,
+      this.renderCaretIcon()
+    ];
+  }
+
 
 
   render() {
@@ -878,6 +1037,32 @@ export class PdsCombobox implements BasePdsProps {
               />
               <pds-icon icon="enlarge" aria-hidden="true" class="pds-combobox__input-icon" />
             </div>
+          ) : this.trigger === 'chip' ? (
+            <pds-chip
+              class="pds-combobox__chip-trigger"
+              style={{ width: this.triggerWidth }}
+              role="combobox"
+              aria-haspopup="listbox"
+              aria-controls="pds-combobox-listbox"
+              aria-activedescendant={this.isOpen && this.highlightedIndex >= 0 ? `pds-combobox-option-${this.highlightedIndex}` : undefined}
+              aria-expanded={this.isOpen ? 'true' : 'false'}
+              aria-disabled={this.disabled ? 'true' : 'false'}
+              aria-label={this.hideLabel ? this.label : undefined}
+              id={this.componentId}
+              tabIndex={this.disabled ? -1 : 0}
+              onClick={this.onButtonTriggerClick}
+              onKeyDown={this.onButtonTriggerKeyDown}
+              onKeyUp={this.onButtonTriggerKeyUp}
+              ref={el => (this.triggerEl = el as HTMLElement)}
+              part="chip-trigger"
+              sentiment={this.selectedChipSentiment}
+              variant={this.selectedChipVariant}
+              large={this.selectedChipLarge}
+              icon={this.selectedChipIcon}
+              dot={this.selectedChipDot}
+            >
+              {this.renderChipTriggerContent()}
+            </pds-chip>
           ) : (
             <div
               class={triggerClass}

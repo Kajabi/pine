@@ -827,6 +827,30 @@ export namespace Components {
     }
     interface PdsCombobox {
         /**
+          * Whether a dot should be displayed on the chip trigger.
+          * @default false
+         */
+        "chipDot": boolean;
+        /**
+          * The name of the icon to display in the chip trigger.
+         */
+        "chipIcon"?: string;
+        /**
+          * Whether the chip trigger should be displayed in a larger size.
+          * @default false
+         */
+        "chipLarge": boolean;
+        /**
+          * The sentiment for the chip trigger. Matches Pine chip sentiments.
+          * @default 'neutral'
+         */
+        "chipSentiment": 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
+        /**
+          * The variant for the chip trigger. Matches Pine chip variants.
+          * @default 'dropdown'
+         */
+        "chipVariant": 'text' | 'tag' | 'dropdown';
+        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
@@ -884,10 +908,10 @@ export namespace Components {
          */
         "setFocus": () => Promise<void>;
         /**
-          * Determines the combobox trigger: 'input' (editable input) or 'button' (button-like, non-editable).
+          * Determines the combobox trigger: 'input' (editable input), 'button' (button-like, non-editable), or 'chip' (chip-like, non-editable).
           * @default 'input'
          */
-        "trigger": 'input' | 'button';
+        "trigger": 'input' | 'button' | 'chip';
         /**
           * The visual variant for the button trigger. Matches Pine button variants.
           * @default 'secondary'
@@ -3374,6 +3398,30 @@ declare namespace LocalJSX {
     }
     interface PdsCombobox {
         /**
+          * Whether a dot should be displayed on the chip trigger.
+          * @default false
+         */
+        "chipDot"?: boolean;
+        /**
+          * The name of the icon to display in the chip trigger.
+         */
+        "chipIcon"?: string;
+        /**
+          * Whether the chip trigger should be displayed in a larger size.
+          * @default false
+         */
+        "chipLarge"?: boolean;
+        /**
+          * The sentiment for the chip trigger. Matches Pine chip sentiments.
+          * @default 'neutral'
+         */
+        "chipSentiment"?: 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
+        /**
+          * The variant for the chip trigger. Matches Pine chip variants.
+          * @default 'dropdown'
+         */
+        "chipVariant"?: 'text' | 'tag' | 'dropdown';
+        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
@@ -3427,10 +3475,10 @@ declare namespace LocalJSX {
          */
         "placeholder"?: string;
         /**
-          * Determines the combobox trigger: 'input' (editable input) or 'button' (button-like, non-editable).
+          * Determines the combobox trigger: 'input' (editable input), 'button' (button-like, non-editable), or 'chip' (chip-like, non-editable).
           * @default 'input'
          */
-        "trigger"?: 'input' | 'button';
+        "trigger"?: 'input' | 'button' | 'chip';
         /**
           * The visual variant for the button trigger. Matches Pine button variants.
           * @default 'secondary'

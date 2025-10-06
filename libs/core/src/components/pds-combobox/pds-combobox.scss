@@ -276,3 +276,25 @@
   border-radius: var(--pine-dimension-125);
   padding-block: var(--pine-dimension-xs);
 }
+
+// Chip trigger styles
+.pds-combobox__chip-trigger {
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:focus-visible {
+    outline: var(--pine-outline-focus);
+    outline-offset: var(--pine-border-width);
+  }
+
+  &[aria-disabled='true'] {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.pds-combobox__chip-trigger-label {
+  color: inherit;
+  flex: 1 1 auto;
+  text-align: start;
+}

@@ -184,6 +184,52 @@ describe('pds-combobox', () => {
     expect(button?.classList.contains('pds-combobox__button-trigger--accent')).toBe(true);
   });
 
+  it('renders chip trigger with default props', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" trigger="chip"></pds-combobox>`,
+    });
+
+    const chip = root?.shadowRoot?.querySelector('pds-chip');
+    expect(chip).not.toBeNull();
+    expect(chip?.getAttribute('role')).toBe('combobox');
+    expect(chip?.getAttribute('aria-haspopup')).toBe('listbox');
+    expect(chip?.getAttribute('sentiment')).toBe('neutral');
+    expect(chip?.getAttribute('variant')).toBe('dropdown');
+  });
+
+  it('renders chip trigger with custom sentiment and variant', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" trigger="chip" chip-sentiment="accent" chip-variant="tag"></pds-combobox>`,
+    });
+
+    const chip = root?.shadowRoot?.querySelector('pds-chip');
+    expect(chip?.getAttribute('sentiment')).toBe('accent');
+    expect(chip?.getAttribute('variant')).toBe('tag');
+  });
+
+  it('renders chip trigger with icon and dot', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" trigger="chip" chip-icon="star" chip-dot="true"></pds-combobox>`,
+    });
+
+    const chip = root?.shadowRoot?.querySelector('pds-chip');
+    expect(chip?.getAttribute('icon')).toBe('star');
+    expect(chip?.getAttribute('dot')).toBe('true');
+  });
+
+  it('renders chip trigger with large size', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" trigger="chip" chip-large="true"></pds-combobox>`,
+    });
+
+    const chip = root?.shadowRoot?.querySelector('pds-chip');
+    expect(chip?.getAttribute('large')).toBe('true');
+  });
+
   it('renders with select-only mode', async () => {
     const page = await newSpecPage({
       components: [PdsCombobox],
