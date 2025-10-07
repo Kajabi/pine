@@ -737,6 +737,63 @@ This creates a two-column layout, and you can customize the `size` and arrangeme
 
 Using the size modifiers such as `-xs`, `-md`, etc, enable responsive behavior for you `pds-box`. The layout components are designed to be responsive, allowing you to create layouts that adapt to different screen sizes. Take advantage of properties like `size-xs`, `offset-sm`, etc., to customize the layout for specific breakpoints. Be sure to optimize your layout for mobile devices, as well as larger screens.
 
+### Responsive Breakpoints
+
+The layout system uses the following breakpoints for responsive sizing and properties:
+
+<pds-box border border-radius="sm" fit>
+  <pds-table component-id="layout-breakpoints" responsive>
+    <pds-table-head>
+      <pds-table-head-cell>Breakpoint</pds-table-head-cell>
+      <pds-table-head-cell>Suffix</pds-table-head-cell>
+      <pds-table-head-cell>Media Query</pds-table-head-cell>
+      <pds-table-head-cell>Screen Size</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell>Extra Small</pds-table-cell>
+        <pds-table-cell><code>-xs</code></pds-table-cell>
+        <pds-table-cell><code>max-width: 575px</code></pds-table-cell>
+        <pds-table-cell>Up to 575px (mobile devices)</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Small</pds-table-cell>
+        <pds-table-cell><code>-sm</code></pds-table-cell>
+        <pds-table-cell><code>min-width: 576px</code></pds-table-cell>
+        <pds-table-cell>576px and up (tablets)</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Medium</pds-table-cell>
+        <pds-table-cell><code>-md</code></pds-table-cell>
+        <pds-table-cell><code>min-width: 768px</code></pds-table-cell>
+        <pds-table-cell>768px and up (larger tablets, small desktops)</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Large</pds-table-cell>
+        <pds-table-cell><code>-lg</code></pds-table-cell>
+        <pds-table-cell><code>min-width: 992px</code></pds-table-cell>
+        <pds-table-cell>992px and up (desktops)</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Extra Large</pds-table-cell>
+        <pds-table-cell><code>-xl</code></pds-table-cell>
+        <pds-table-cell><code>min-width: 1200px</code></pds-table-cell>
+        <pds-table-cell>1200px and up (large desktops)</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
+
+**How breakpoints work:**
+- **`xs`**: Applies only on extra small screens (up to 575px)
+- **`sm`, `md`, `lg`, `xl`**: Apply at their breakpoint and larger (mobile-first approach)
+- **Cascading**: Larger breakpoints override smaller ones
+
+**Common responsive patterns:**
+- Stack on mobile, columns on tablet: Use `size-xs="12" size-sm="6"`
+- Progressive refinement: Use `size-md="6" size-lg="4" size-xl="3"` for 2/3/4 column layouts
+- Hide/show at breakpoints: Use `size-xs="0" size-md="12"` to hide on mobile
+
 <DocCanvas client:only
   mdxSource={{
     react: `
