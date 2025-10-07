@@ -87,3 +87,18 @@ figma.connect('<FIGMA_BUTTON_GROUP>', {
       </pds-box>`;
   },
 });
+
+figma.connect('<FIGMA_BUTTON_FILTER>', {
+  props: {
+    isDisabled: figma.enum("Property 1",{
+      disabled: true
+    }),
+  },
+  example: (props) => html`\
+  <pds-button
+    disabled=${props.isDisabled}
+    variant="filter"
+  >
+    Filter option
+  </pds-button>`,
+});
