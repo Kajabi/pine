@@ -295,7 +295,7 @@ export class PdsFilter implements BasePdsProps {
         position: fixed;
         left: ${left}px;
         top: ${top}px;
-        z-index: 1000;
+        z-index: var(--pine-z-index-overlay);
         transform-origin: ${transformOrigin};
       `;
     }

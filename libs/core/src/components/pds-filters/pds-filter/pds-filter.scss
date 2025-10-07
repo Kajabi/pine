@@ -168,7 +168,7 @@
   inline-size: 228px;
   inset: unset;
   padding: var(--pine-dimension-100);
-  z-index: 1000;
+  z-index: var(--pine-z-index-overlay);
 
   /* stylelint-disable-next-line selector-pseudo-class-no-unknown */
   &:popover-open,

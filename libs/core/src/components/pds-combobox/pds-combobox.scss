@@ -69,7 +69,7 @@
   pointer-events: none;
   position: absolute;
   right: var(--pine-dimension-150);
-  z-index: 1;
+  z-index: var(--pine-z-index-raised);
 }
 
 .pds-combobox__listbox {
@@ -83,7 +83,7 @@
   overflow-y: auto;
   padding: var(--pine-dimension-xs);
   position: absolute;
-  z-index: 1000;
+  z-index: var(--pine-z-index-raised);
 }
 
 .pds-combobox__option {

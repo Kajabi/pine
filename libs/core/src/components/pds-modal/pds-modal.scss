@@ -15,7 +15,7 @@
   transition: opacity 0.2s ease, visibility 0.2s ease;
   visibility: hidden;
   width: 100%;
-  z-index: 1000;
+  z-index: var(--pine-z-index-modal);
 
   @supports (backdrop-filter: blur(3px)) {
     backdrop-filter: blur(3px);
@@ -23,7 +23,7 @@
 
   // Increase z-index for nested modals
   pds-modal & {
-    z-index: 1001;
+    z-index: var(--pine-z-index-priority);
   }
 
   &::backdrop {

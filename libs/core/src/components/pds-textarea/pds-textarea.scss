@@ -116,7 +116,7 @@ label {
   position: absolute;
   user-select: none;
   white-space: nowrap;
-  z-index: 2;
+  z-index: var(--pine-z-index);
 
   // Match textarea disabled state
   :host([aria-disabled="true"]) & {

@@ -136,6 +136,11 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
         label = category;
       }
 
+      // Rule for z-index tokens since they use "other" type in Token Studio
+      if (category === 'z-index') {
+        label = 'z-index';
+      }
+
       const cssVariableName = `--pine-${camelToKebab(label as string)}-${tokenKeyName}`.replace(/-@/g, '');
 
       if ('value' in token) {

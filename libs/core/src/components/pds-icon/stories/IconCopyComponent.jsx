@@ -39,7 +39,7 @@ export const CopyIcon = ({ name }) => {
           color: 'var(--pine-color-text-primary)',
           padding: 'var(--pine-dimension-sm)',
           borderRadius: 'var(--pine-dimension-xs)',
-          zIndex: 9999,
+          zIndex: 'var(--pine-z-index-nuclear)',
           boxShadow: 'var(--pine-box-shadow-100)',
           border: '1px solid var(--pine-color-grey-200)',
         }}>

@@ -282,7 +282,7 @@ export class PdsTooltip {
     this.portalEl = document.createElement('div');
     this.portalEl.className = `pds-tooltip pds-tooltip--${this.resolvedPlacement} ${this.htmlContent ? 'pds-tooltip--has-html-content' : ''} ${this.opened ? 'pds-tooltip--is-open' : ''} ${this.hasArrow ? '' : 'pds-tooltip--no-arrow'}`;
     this.portalEl.style.position = 'fixed';
-    this.portalEl.style.zIndex = '9999';
+    this.portalEl.style.zIndex = 'var(--pine-z-index-nuclear)';
 
     if (this.portalEl.id === '') {
       const suffix = PdsTooltip.instanceCounter++;

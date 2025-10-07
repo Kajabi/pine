@@ -97,7 +97,7 @@ pds-tab {
       }
 
       .pds-tab-edge {
-        z-index: 1;
+        z-index: var(--pine-z-index-raised);
       }
     }
 
@@ -205,7 +205,7 @@ pds-tab {
       border-color: var(--pine-color-border);
       box-shadow: var(--pine-box-shadow-100);
       color: var(--pine-color-text-active);
-      z-index: 1;
+      z-index: var(--pine-z-index-raised);
 
       &:focus-visible {
         border-color: var(--color-border-focus);
