@@ -12,6 +12,7 @@ import DOMPurify from 'dompurify';
   tag: 'pds-combobox',
   styleUrl: 'pds-combobox.scss',
   shadow: true,
+  formAssociated: true,
 })
 export class PdsCombobox implements BasePdsProps {
   /** Reference to the host element */
@@ -169,6 +170,15 @@ export class PdsCombobox implements BasePdsProps {
   private allItems: (HTMLOptionElement | HTMLOptGroupElement | HTMLPdsTextElement)[] = [];
   private triggerEl?: HTMLElement;
   private listboxEl?: HTMLElement;
+  private internals?: ElementInternals;
+  private isUpdatingFromSelection: boolean = false;
+
+  connectedCallback() {
+    // Initialize ElementInternals for form association
+    if (this.el.attachInternals) {
+      this.internals = this.el.attachInternals();
+    }
+  }
 
   componentWillLoad() {
     this.updateOptions();
@@ -182,11 +192,50 @@ export class PdsCombobox implements BasePdsProps {
         this.setSelectedOption(initialSelected);
       }
     }
+
+    // Check for value-based preselection if no option is selected yet
+    if (!this.selectedOption && this.value && this.optionEls.length > 0) {
+      const matchingOption = this.optionEls.find(opt => opt.value === this.value);
+      if (matchingOption) {
+        this.setSelectedOption(matchingOption);
+        // Update the display value to show the option's text content
+        this.isUpdatingFromSelection = true;
+        this.value = this.getOptionLabel(matchingOption);
+        this.isUpdatingFromSelection = false;
+      }
+    }
+
+    // Initialize form value with current value
+    if (this.internals && this.value) {
+      this.internals.setFormValue(this.value);
+    }
   }
 
   @Watch('value')
   handleValueChange() {
     this.filterOptions();
+    // Sync with form internals for form association
+    if (this.internals) {
+      this.internals.setFormValue(this.value);
+    }
+
+    // Find and select option that matches the value (for external value changes)
+    // Only do this if we're not already updating from a selection and the value doesn't match display text
+    if (!this.isUpdatingFromSelection && this.value && this.optionEls.length > 0) {
+      const currentDisplayText = this.selectedOption ? this.getOptionLabel(this.selectedOption) : null;
+
+      // If the value matches an option's value but not the display text, we need to update
+      if (this.value !== currentDisplayText) {
+        const matchingOption = this.optionEls.find(opt => opt.value === this.value);
+        if (matchingOption) {
+          this.isUpdatingFromSelection = true;
+          this.setSelectedOption(matchingOption);
+          // Update the display value to show the option's text content, not the value
+          this.value = this.getOptionLabel(matchingOption);
+          this.isUpdatingFromSelection = false;
+        }
+      }
+    }
   }
 
   @Watch('selectedOption')
@@ -234,6 +283,17 @@ export class PdsCombobox implements BasePdsProps {
       // Set initial selected option if one exists
       // Always check for selected options when updateOptions is called (including slot changes)
       let initialSelected = this.optionEls.find(opt => opt.hasAttribute('selected')) || null;
+
+      // If no selected attribute found, check if value property matches any option
+      if (!initialSelected && this.value) {
+        initialSelected = this.optionEls.find(opt => opt.value === this.value) || null;
+        if (initialSelected) {
+          // Update the display value to show the option's text content
+          this.isUpdatingFromSelection = true;
+          this.value = this.getOptionLabel(initialSelected);
+          this.isUpdatingFromSelection = false;
+        }
+      }
 
       // For chip triggers, ensure we always have a selected option
       if (!initialSelected && this.trigger === 'chip' && this.optionEls.length > 0) {
@@ -900,7 +960,9 @@ export class PdsCombobox implements BasePdsProps {
 
       // If there's a selected option but the input value doesn't match, restore the selected option's value
       if (this.selectedOption && this.value !== this.getOptionLabel(this.selectedOption)) {
+        this.isUpdatingFromSelection = true;
         this.value = this.getOptionLabel(this.selectedOption);
+        this.isUpdatingFromSelection = false;
       }
     }
   };
@@ -909,7 +971,9 @@ export class PdsCombobox implements BasePdsProps {
     // Update reactive state - single source of truth
     this.setSelectedOption(option);
 
+    this.isUpdatingFromSelection = true;
     this.value = this.getOptionLabel(option);
+    this.isUpdatingFromSelection = false;
     this.isOpen = false;
     this.pdsComboboxChange.emit({ value: option.value });
   }
