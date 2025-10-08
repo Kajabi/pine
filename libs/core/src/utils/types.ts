@@ -46,3 +46,17 @@ export type BoxColumnType =
   | '300'
   | '400'
   | '500'
+
+export type ChipSentimentType =
+  'accent'
+  | 'brand'
+  | 'danger'
+  | 'info'
+  | 'neutral'
+  | 'success'
+  | 'warning';
+
+export type ChipVariantType =
+  'text'
+  | 'tag'
+  | 'dropdown';

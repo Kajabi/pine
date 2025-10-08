@@ -1,5 +1,6 @@
 import { Component, Element, Event, EventEmitter, h, Host, Prop, State, Watch, Method } from '@stencil/core';
 import type { BasePdsProps } from '@utils/interfaces';
+import type { ChipSentimentType } from '@utils/types';
 import { computePosition, flip, offset, shift } from '@floating-ui/dom';
 import DOMPurify from 'dompurify';
 
@@ -103,7 +104,7 @@ export class PdsCombobox implements BasePdsProps {
    * The sentiment for the chip trigger. Matches Pine chip sentiments.
    * @default 'neutral'
    */
-  @Prop() chipSentiment: 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning' = 'neutral';
+  @Prop() chipSentiment: ChipSentimentType = 'neutral';
 
 
   /**
@@ -700,17 +701,17 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   // Extract chip sentiment from selected option's attributes, layout content, or slotted trigger content
-  private get selectedChipSentiment(): 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning' {
+  private get selectedChipSentiment(): ChipSentimentType {
     // First priority: Check selected option's chip attributes (new automatic approach)
     if (this.selectedOption && this.isOptionChip(this.selectedOption)) {
-      const sentiment = this.selectedOption.getAttribute('chip-sentiment') as 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
+      const sentiment = this.selectedOption.getAttribute('chip-sentiment') as ChipSentimentType;
       if (sentiment) return sentiment;
     }
 
     // Second priority: Check selected option's layout content (existing custom layout approach)
     if (this.selectedOption && this.isOptionLayout(this.selectedOption)) {
       const chipElement = this.selectedOption.querySelector('pds-chip');
-      const sentiment = chipElement?.getAttribute('sentiment') as 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
+      const sentiment = chipElement?.getAttribute('sentiment') as ChipSentimentType;
       if (sentiment) return sentiment;
     }
 
@@ -718,7 +719,7 @@ export class PdsCombobox implements BasePdsProps {
     if (this.customTriggerContent) {
       const slottedChip = this.el.querySelector('pds-chip[slot="trigger-content"]');
       if (slottedChip) {
-        const sentiment = slottedChip.getAttribute('sentiment') as 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
+        const sentiment = slottedChip.getAttribute('sentiment') as ChipSentimentType;
         if (sentiment) return sentiment;
       }
     }

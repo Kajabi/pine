@@ -7,13 +7,13 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { BoxColumnType, BoxShadowSizeType, BoxTShirtSizeType } from "./utils/types";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
-import { PlacementType } from "./utils/types";
+import { ChipSentimentType, ChipVariantType, PlacementType } from "./utils/types";
 import { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 import { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 import { TextareaChangeEventDetail, TextareaInputEventDetail } from "./components/pds-textarea/textarea-interface";
 export { BoxColumnType, BoxShadowSizeType, BoxTShirtSizeType } from "./utils/types";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
-export { PlacementType } from "./utils/types";
+export { ChipSentimentType, ChipVariantType, PlacementType } from "./utils/types";
 export { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 export { TextareaChangeEventDetail, TextareaInputEventDetail } from "./components/pds-textarea/textarea-interface";
@@ -818,12 +818,12 @@ export namespace Components {
           * Defines the color scheme of the chip.
           * @defaultValue 'neutral'
          */
-        "sentiment": 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
+        "sentiment": ChipSentimentType;
         /**
           * Sets the style variant of the chip. Note: This prop is ignored when sentiment is 'brand'.
           * @defaultValue 'text'
          */
-        "variant": 'text' | 'tag' | 'dropdown';
+        "variant": ChipVariantType;
     }
     interface PdsCombobox {
         /**
@@ -844,7 +844,7 @@ export namespace Components {
           * The sentiment for the chip trigger. Matches Pine chip sentiments.
           * @default 'neutral'
          */
-        "chipSentiment": 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
+        "chipSentiment": ChipSentimentType;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -3384,12 +3384,12 @@ declare namespace LocalJSX {
           * Defines the color scheme of the chip.
           * @defaultValue 'neutral'
          */
-        "sentiment"?: 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
+        "sentiment"?: ChipSentimentType;
         /**
           * Sets the style variant of the chip. Note: This prop is ignored when sentiment is 'brand'.
           * @defaultValue 'text'
          */
-        "variant"?: 'text' | 'tag' | 'dropdown';
+        "variant"?: ChipVariantType;
     }
     interface PdsCombobox {
         /**
@@ -3410,7 +3410,7 @@ declare namespace LocalJSX {
           * The sentiment for the chip trigger. Matches Pine chip sentiments.
           * @default 'neutral'
          */
-        "chipSentiment"?: 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
+        "chipSentiment"?: ChipSentimentType;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
