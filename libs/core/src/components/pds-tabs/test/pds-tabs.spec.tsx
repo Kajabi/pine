@@ -91,10 +91,10 @@ it('renders variant prop', async () => {
     expect(page.body.querySelector('pds-tab[name="two"] > button')).toHaveClass('is-active');
     expect(page.body.querySelector('pds-tab[name="three"] > button')).not.toHaveClass('is-active');
 
-    // Create and dispatch `ArrowLeft` keydown
-    const event = new KeyboardEvent('keydown', {'key': 'ArrowLeft'});
-    const tabs = page.body.querySelector('pds-tabs');
-    tabs?.dispatchEvent(event);
+    // Create and dispatch `ArrowLeft` keydown on the active tab button
+    const event = new KeyboardEvent('keydown', {'key': 'ArrowLeft', bubbles: true});
+    const activeTabButton = page.body.querySelector('pds-tab[name="two"] > button');
+    activeTabButton?.dispatchEvent(event);
     await page.waitForChanges();
 
     // Expect active tab to have shifted
@@ -121,10 +121,10 @@ it('renders variant prop', async () => {
     expect(page.body.querySelector('pds-tab[name="two"] > button')).not.toHaveClass('is-active');
     expect(page.body.querySelector('pds-tab[name="three"] > button')).not.toHaveClass('is-active');
 
-    // Create and dispatch `ArrowLeft` keydown
-    const event = new KeyboardEvent('keydown', {'key': 'ArrowLeft'});
-    const tabs = page.body.querySelector('pds-tabs');
-    tabs?.dispatchEvent(event);
+    // Create and dispatch `ArrowLeft` keydown on the active tab button
+    const event = new KeyboardEvent('keydown', {'key': 'ArrowLeft', bubbles: true});
+    const activeTabButton = page.body.querySelector('pds-tab[name="one"] > button');
+    activeTabButton?.dispatchEvent(event);
     await page.waitForChanges();
 
     // Expect active tab to have shifted
@@ -151,10 +151,10 @@ it('renders variant prop', async () => {
     expect(page.body.querySelector('pds-tab[name="two"] > button')).toHaveClass('is-active');
     expect(page.body.querySelector('pds-tab[name="three"] > button')).not.toHaveClass('is-active');
 
-    // Create and dispatch `ArrowLeft` keydown
-    const event = new KeyboardEvent('keydown', {'key': 'ArrowRight'});
-    const tabs = page.body.querySelector('pds-tabs');
-    tabs?.dispatchEvent(event);
+    // Create and dispatch `ArrowRight` keydown on the active tab button
+    const event = new KeyboardEvent('keydown', {'key': 'ArrowRight', bubbles: true});
+    const activeTabButton = page.body.querySelector('pds-tab[name="two"] > button');
+    activeTabButton?.dispatchEvent(event);
     await page.waitForChanges();
 
     // Expect active tab to have shifted
@@ -181,10 +181,10 @@ it('renders variant prop', async () => {
     expect(page.body.querySelector('pds-tab[name="two"] > button')).not.toHaveClass('is-active');
     expect(page.body.querySelector('pds-tab[name="three"] > button')).toHaveClass('is-active');
 
-    // Create and dispatch `ArrowLeft` keydown
-    const event = new KeyboardEvent('keydown', {'key': 'ArrowRight'});
-    const tabs = page.body.querySelector('pds-tabs');
-    tabs?.dispatchEvent(event);
+    // Create and dispatch `ArrowRight` keydown on the active tab button
+    const event = new KeyboardEvent('keydown', {'key': 'ArrowRight', bubbles: true});
+    const activeTabButton = page.body.querySelector('pds-tab[name="three"] > button');
+    activeTabButton?.dispatchEvent(event);
     await page.waitForChanges();
 
     // Expect active tab to have shifted
@@ -211,10 +211,10 @@ it('renders variant prop', async () => {
     expect(page.body.querySelector('pds-tab[name="two"] > button')).toHaveClass('is-active');
     expect(page.body.querySelector('pds-tab[name="three"] > button')).not.toHaveClass('is-active');
 
-    // Create and dispatch `ArrowLeft` keydown
-    const event = new KeyboardEvent('keydown', {'key': 'Home'});
-    const tabs = page.body.querySelector('pds-tabs');
-    tabs?.dispatchEvent(event);
+    // Create and dispatch `Home` keydown on the active tab button
+    const event = new KeyboardEvent('keydown', {'key': 'Home', bubbles: true});
+    const activeTabButton = page.body.querySelector('pds-tab[name="two"] > button');
+    activeTabButton?.dispatchEvent(event);
     await page.waitForChanges();
 
     // Expect active tab to have shifted
@@ -241,15 +241,46 @@ it('renders variant prop', async () => {
     expect(page.body.querySelector('pds-tab[name="two"] > button')).toHaveClass('is-active');
     expect(page.body.querySelector('pds-tab[name="three"] > button')).not.toHaveClass('is-active');
 
-    // Create and dispatch `ArrowLeft` keydown
-    const event = new KeyboardEvent('keydown', {'key': 'End'});
-    const tabs = page.body.querySelector('pds-tabs');
-    tabs?.dispatchEvent(event);
+    // Create and dispatch `End` keydown on the active tab button
+    const event = new KeyboardEvent('keydown', {'key': 'End', bubbles: true});
+    const activeTabButton = page.body.querySelector('pds-tab[name="two"] > button');
+    activeTabButton?.dispatchEvent(event);
     await page.waitForChanges();
 
     // Expect active tab to have shifted
     expect(page.body.querySelector('pds-tab[name="one"] > button')).not.toHaveClass('is-active');
     expect(page.body.querySelector('pds-tab[name="two"] > button')).not.toHaveClass('is-active');
     expect(page.body.querySelector('pds-tab[name="three"] > button')).toHaveClass('is-active');
+  });
+
+  it('ignores keyboard events from panel content', async () => {
+    const page = await newSpecPage({
+      components: [PdsTabs, PdsTab, PdsTabpanel],
+      html: `
+        <pds-tabs active-tab-name="one" tablist-label="test label" component-id="test" variant="primary">
+          <pds-tab name="one">One</pds-tab>
+          <pds-tab name="two">Two</pds-tab>
+          <pds-tabpanel name="one">
+            <input type="text" id="test-input" />
+          </pds-tabpanel>
+          <pds-tabpanel name="two">Two</pds-tabpanel>
+        </pds-tabs>`,
+    });
+
+    await page.waitForChanges();
+
+    // Verify initial state
+    expect(page.body.querySelector('pds-tab[name="one"] > button')).toHaveClass('is-active');
+    expect(page.body.querySelector('pds-tab[name="two"] > button')).not.toHaveClass('is-active');
+
+    // Dispatch ArrowRight from input (should NOT trigger navigation)
+    const event = new KeyboardEvent('keydown', {'key': 'ArrowRight', bubbles: true});
+    const input = page.body.querySelector('#test-input');
+    input?.dispatchEvent(event);
+    await page.waitForChanges();
+
+    // Active tab should remain unchanged
+    expect(page.body.querySelector('pds-tab[name="one"] > button')).toHaveClass('is-active');
+    expect(page.body.querySelector('pds-tab[name="two"] > button')).not.toHaveClass('is-active');
   });
 });

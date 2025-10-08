@@ -56,7 +56,15 @@ export class PdsTabs {
   handleKeyDown(ev: KeyboardEvent) {
     const keySet = ["ArrowLeft", "ArrowRight", "Home", "End"];
 
-    if (keySet.includes(ev.key)) {
+    // Only handle keyboard navigation if the event originated from a tab button
+    // that belongs to THIS tabs component
+    const target = ev.target as HTMLElement;
+    const targetTab = target.closest('pds-tab');
+
+    // Check if the tab belongs to this tabs instance (not a nested one)
+    const isOwnTab = targetTab && targetTab.closest('pds-tabs') === this.el;
+
+    if (keySet.includes(ev.key) && isOwnTab) {
       ev.preventDefault();
       this.moveActiveTab(ev.key);
     }
@@ -90,8 +98,13 @@ export class PdsTabs {
   }
 
   private findAllChildren() {
-    this.tabs = this.el.querySelectorAll('pds-tab');
-    this.tabPanels = this.el.querySelectorAll('pds-tabpanel');
+    // Only select direct children tabs/tabpanels, not nested ones
+    const allTabs = Array.from(this.el.querySelectorAll('pds-tab'));
+    const allTabPanels = Array.from(this.el.querySelectorAll('pds-tabpanel'));
+
+    // Filter to only include tabs that belong to this tabs component (not nested)
+    this.tabs = allTabs.filter(tab => tab.closest('pds-tabs') === this.el);
+    this.tabPanels = allTabPanels.filter(panel => panel.closest('pds-tabs') === this.el);
   }
 
   private propGeneration(child, index = 0) {
