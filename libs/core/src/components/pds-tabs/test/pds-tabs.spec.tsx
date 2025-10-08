@@ -252,4 +252,35 @@ it('renders variant prop', async () => {
     expect(page.body.querySelector('pds-tab[name="two"] > button')).not.toHaveClass('is-active');
     expect(page.body.querySelector('pds-tab[name="three"] > button')).toHaveClass('is-active');
   });
+
+  it('ignores keyboard events from panel content', async () => {
+    const page = await newSpecPage({
+      components: [PdsTabs, PdsTab, PdsTabpanel],
+      html: `
+        <pds-tabs active-tab-name="one" tablist-label="test label" component-id="test" variant="primary">
+          <pds-tab name="one">One</pds-tab>
+          <pds-tab name="two">Two</pds-tab>
+          <pds-tabpanel name="one">
+            <input type="text" id="test-input" />
+          </pds-tabpanel>
+          <pds-tabpanel name="two">Two</pds-tabpanel>
+        </pds-tabs>`,
+    });
+
+    await page.waitForChanges();
+
+    // Verify initial state
+    expect(page.body.querySelector('pds-tab[name="one"] > button')).toHaveClass('is-active');
+    expect(page.body.querySelector('pds-tab[name="two"] > button')).not.toHaveClass('is-active');
+
+    // Dispatch ArrowRight from input (should NOT trigger navigation)
+    const event = new KeyboardEvent('keydown', {'key': 'ArrowRight', bubbles: true});
+    const input = page.body.querySelector('#test-input');
+    input?.dispatchEvent(event);
+    await page.waitForChanges();
+
+    // Active tab should remain unchanged
+    expect(page.body.querySelector('pds-tab[name="one"] > button')).toHaveClass('is-active');
+    expect(page.body.querySelector('pds-tab[name="two"] > button')).not.toHaveClass('is-active');
+  });
 });
