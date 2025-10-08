@@ -861,6 +861,105 @@ describe('pds-combobox', () => {
     expect(component.highlightedIndex).toBe(0);
   });
 
+  it('highlights selected option when dropdown reopens', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `
+        <pds-combobox component-id="test-combobox">
+          <option value="dog">Dog</option>
+          <option value="cat">Cat</option>
+          <option value="bird">Bird</option>
+        </pds-combobox>
+      `,
+    });
+
+    const component = page.rootInstance;
+    const mockOptions = [
+      createMockOption('dog', 'Dog', false),
+      createMockOption('cat', 'Cat', true), // Selected
+      createMockOption('bird', 'Bird', false),
+    ];
+
+    component.optionEls = mockOptions;
+    component.filteredItems = mockOptions;
+    (component as any).setSelectedOption(mockOptions[1]);
+
+    // Open dropdown
+    component.isOpen = true;
+    (component as any).setInitialHighlightedIndex();
+    await page.waitForChanges();
+
+    // Should highlight the selected option (index 1), not the first option (index 0)
+    expect(component.highlightedIndex).toBe(1);
+  });
+
+  it('highlights first option when no option is selected', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `
+        <pds-combobox component-id="test-combobox">
+          <option value="dog">Dog</option>
+          <option value="cat">Cat</option>
+          <option value="bird">Bird</option>
+        </pds-combobox>
+      `,
+    });
+
+    const component = page.rootInstance;
+    const mockOptions = [
+      createMockOption('dog', 'Dog', false),
+      createMockOption('cat', 'Cat', false),
+      createMockOption('bird', 'Bird', false),
+    ];
+
+    component.optionEls = mockOptions;
+    component.filteredItems = mockOptions;
+    // No selected option set
+
+    // Open dropdown
+    component.isOpen = true;
+    (component as any).setInitialHighlightedIndex();
+    await page.waitForChanges();
+
+    // Should highlight the first option (index 0)
+    expect(component.highlightedIndex).toBe(0);
+  });
+
+  it('highlights first option when selected option is filtered out', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `
+        <pds-combobox component-id="test-combobox">
+          <option value="dog">Dog</option>
+          <option value="cat">Cat</option>
+          <option value="bird">Bird</option>
+        </pds-combobox>
+      `,
+    });
+
+    const component = page.rootInstance;
+    const allOptions = [
+      createMockOption('dog', 'Dog', false),
+      createMockOption('cat', 'Cat', true), // Selected
+      createMockOption('bird', 'Bird', false),
+    ];
+
+    // Only show filtered options (cat is filtered out)
+    const filteredOptions = [allOptions[0], allOptions[2]]; // dog and bird only
+
+    component.optionEls = allOptions;
+    component.filteredItems = filteredOptions;
+    (component as any).setSelectedOption(allOptions[1]); // cat is selected but filtered out
+
+    // Open dropdown
+    component.isOpen = true;
+    (component as any).setInitialHighlightedIndex();
+    await page.waitForChanges();
+
+    // Should highlight the first visible option (index 0) since selected option is not visible
+    expect(component.highlightedIndex).toBe(0);
+  });
+
   it('handles disabled state for button trigger', async () => {
     const { root } = await newSpecPage({
       components: [PdsCombobox],
