@@ -96,9 +96,8 @@ export const ChipTriggerAndLayout = (args) => html`
     custom-trigger-content=${args.customTriggerContent}
     trigger-width=${args.triggerWidth}
   >
-    <pds-chip slot="trigger-content" sentiment="neutral" variant="dropdown" dot>Draft</pds-chip>
-    <option value="draft" selected data-layout><pds-chip sentiment="neutral" dot>Draft</pds-chip></option>
-    <option value="published" data-layout><pds-chip sentiment="success" dot>Published</pds-chip></option>
+    <option value="draft" data-layout><pds-chip sentiment="neutral" dot>Draft</pds-chip></option>
+    <option value="published" selected data-layout><pds-chip sentiment="success" dot>Published</pds-chip></option>
     <option value="archived" data-layout><pds-chip sentiment="warning" dot>Archived</pds-chip></option>
   </pds-combobox>
 </pds-box>`;
@@ -126,21 +125,19 @@ export const ChipTriggerLayoutWithIcons = (args) => html`
     custom-trigger-content=${args.customTriggerContent}
     trigger-width=${args.triggerWidth}
   >
-    <pds-chip slot="trigger-content" sentiment="neutral" variant="dropdown" icon="info-circle">Draft</pds-chip>
-    <option value="draft" selected data-layout><pds-chip sentiment="neutral" icon="info-circle">Draft</pds-chip></option>
-    <option value="published" data-layout><pds-chip sentiment="success" icon="check">Published</pds-chip></option>
-    <option value="archived" data-layout><pds-chip sentiment="warning" icon="warning">Archived</pds-chip></option>
+    <option value="low" chip-sentiment="info" chip-icon="info-circle">Low</option>
+    <option value="medium" chip-sentiment="warning" chip-icon="warning">Medium</option>
+    <option value="high" selected chip-sentiment="danger" chip-icon="warning">High</option>
+    <option value="critical" chip-sentiment="danger" chip-icon="danger">Critical</option>
   </pds-combobox>
 </pds-box>`;
 
 ChipTriggerLayoutWithIcons.args = {
-  componentId: 'combobox-chip-custom-layouts-and-icons',
-  mode: 'select-only',
-  customOptionLayouts: true,
-  customTriggerContent: true,
-  label: 'Draft Status',
-  placeholder: 'Draft',
+  componentId: 'combobox-chip-automatic',
+  label: 'Status',
+  placeholder: 'Select a status',
   trigger: 'chip',
+  mode: 'select-only',
   triggerWidth: 'fit-content',
 };
 

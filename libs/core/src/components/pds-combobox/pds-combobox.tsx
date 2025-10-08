@@ -163,6 +163,11 @@ export class PdsCombobox implements BasePdsProps {
    */
   @State() selectedOptionLayoutContent: string = '';
 
+  /**
+   * Internal state to track chip properties for automatic rendering
+   */
+  @State() selectedOptionChipProps: any = null;
+
   private inputEl?: HTMLInputElement;
   private optionEls: HTMLOptionElement[] = [];
   private allItems: (HTMLOptionElement | HTMLOptGroupElement | HTMLPdsTextElement)[] = [];
@@ -171,6 +176,16 @@ export class PdsCombobox implements BasePdsProps {
 
   componentWillLoad() {
     this.updateOptions();
+  }
+
+  componentDidLoad() {
+    // Double-check selection after DOM is fully loaded
+    if (!this.selectedOption && this.trigger === 'chip') {
+      const initialSelected = this.optionEls.find(opt => opt.hasAttribute('selected'));
+      if (initialSelected) {
+        this.setSelectedOption(initialSelected);
+      }
+    }
   }
 
   @Watch('value')
@@ -184,6 +199,11 @@ export class PdsCombobox implements BasePdsProps {
     this.selectedOptionLayoutContent = this.selectedOption && this.isOptionLayout(this.selectedOption)
       ? this.getOptionLayoutContent(this.selectedOption)
       : '';
+
+    // Update chip properties for automatic rendering when selected option changes
+    this.selectedOptionChipProps = this.selectedOption && this.isOptionChip(this.selectedOption)
+      ? this.getOptionChipProps(this.selectedOption)
+      : null;
   }
 
   private updateOptions() {
@@ -215,9 +235,20 @@ export class PdsCombobox implements BasePdsProps {
         }
       });
 
-      // Set initial selected option if one exists (only check DOM on initialization)
-      if (!this.selectedOption) {
-        const initialSelected = this.optionEls.find(opt => opt.hasAttribute('selected')) || null;
+      // Set initial selected option if one exists
+      // Always check for selected options when updateOptions is called (including slot changes)
+      let initialSelected = this.optionEls.find(opt => opt.hasAttribute('selected')) || null;
+
+      // For chip triggers, ensure we always have a selected option
+      if (!initialSelected && this.trigger === 'chip' && this.optionEls.length > 0) {
+        initialSelected = this.optionEls[0]; // Select first option as default
+        console.warn('PDS Combobox: Chip triggers should always have a selected option. Automatically selected the first option.');
+      }
+
+      // Update selection if we found a different selected option or if we don't have one
+      if (initialSelected && initialSelected !== this.selectedOption) {
+        this.setSelectedOption(initialSelected);
+      } else if (!this.selectedOption && initialSelected) {
         this.setSelectedOption(initialSelected);
       }
 
@@ -274,6 +305,26 @@ export class PdsCombobox implements BasePdsProps {
     return this.customOptionLayouts && option.hasAttribute('data-layout');
   }
 
+  // Helper method to check if option has chip attributes (new automatic approach)
+  private isOptionChip(option: HTMLOptionElement): boolean {
+    return option.hasAttribute('chip-sentiment') ||
+           option.hasAttribute('chip-variant') ||
+           option.hasAttribute('chip-large') ||
+           option.hasAttribute('chip-icon') ||
+           option.hasAttribute('chip-dot');
+  }
+
+  // Helper method to get chip properties from option attributes
+  private getOptionChipProps(option: HTMLOptionElement) {
+    return {
+      sentiment: option.getAttribute('chip-sentiment') || 'neutral',
+      variant: option.getAttribute('chip-variant') || 'text', // Note: dropdown options use 'text' variant
+      large: option.hasAttribute('chip-large'),
+      icon: option.getAttribute('chip-icon') || undefined,
+      dot: option.hasAttribute('chip-dot')
+    };
+  }
+
   // Helper method to check if option is selected (single source of truth)
   private isOptionSelected(option: HTMLOptionElement): boolean {
     return this.selectedOption === option;
@@ -282,6 +333,13 @@ export class PdsCombobox implements BasePdsProps {
   // Helper method to set selected option (centralized state management)
   private setSelectedOption(option: HTMLOptionElement | null): void {
     this.selectedOption = option;
+
+    // Immediately update chip properties for automatic rendering to ensure reactivity
+    if (option && this.isOptionChip(option)) {
+      this.selectedOptionChipProps = this.getOptionChipProps(option);
+    } else {
+      this.selectedOptionChipProps = null;
+    }
   }
 
   private filterOptions() {
@@ -648,16 +706,22 @@ export class PdsCombobox implements BasePdsProps {
     return this.selectedOption ? this.isOptionLayout(this.selectedOption) : false;
   }
 
-  // Extract chip sentiment from selected option's layout content or slotted trigger content
+  // Extract chip sentiment from selected option's attributes, layout content, or slotted trigger content
   private get selectedChipSentiment(): 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning' {
-    // First priority: Check selected option's layout content (when something is selected)
+    // First priority: Check selected option's chip attributes (new automatic approach)
+    if (this.selectedOption && this.isOptionChip(this.selectedOption)) {
+      const sentiment = this.selectedOption.getAttribute('chip-sentiment') as 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
+      if (sentiment) return sentiment;
+    }
+
+    // Second priority: Check selected option's layout content (existing custom layout approach)
     if (this.selectedOption && this.isOptionLayout(this.selectedOption)) {
       const chipElement = this.selectedOption.querySelector('pds-chip');
       const sentiment = chipElement?.getAttribute('sentiment') as 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
       if (sentiment) return sentiment;
     }
 
-    // Second priority: Check if we have custom trigger content with a chip (initial state)
+    // Third priority: Check if we have custom trigger content with a chip (initial state)
     if (this.customTriggerContent) {
       const slottedChip = this.el.querySelector('pds-chip[slot="trigger-content"]');
       if (slottedChip) {
@@ -670,16 +734,22 @@ export class PdsCombobox implements BasePdsProps {
     return this.chipSentiment;
   }
 
-  // Extract chip variant from selected option's layout content or slotted trigger content
+  // Extract chip variant from selected option's attributes, layout content, or slotted trigger content
   private get selectedChipVariant(): 'text' | 'tag' | 'dropdown' {
-    // First priority: Check selected option's layout content (when something is selected)
+    // First priority: Check selected option's chip attributes (new automatic approach)
+    if (this.selectedOption && this.isOptionChip(this.selectedOption)) {
+      const variant = this.selectedOption.getAttribute('chip-variant') as 'text' | 'tag' | 'dropdown';
+      if (variant) return variant;
+    }
+
+    // Second priority: Check selected option's layout content (existing custom layout approach)
     if (this.selectedOption && this.isOptionLayout(this.selectedOption)) {
       const chipElement = this.selectedOption.querySelector('pds-chip');
       const variant = chipElement?.getAttribute('variant') as 'text' | 'tag' | 'dropdown';
       if (variant) return variant;
     }
 
-    // Second priority: Check if we have custom trigger content with a chip (initial state)
+    // Third priority: Check if we have custom trigger content with a chip (initial state)
     if (this.customTriggerContent) {
       const slottedChip = this.el.querySelector('pds-chip[slot="trigger-content"]');
       if (slottedChip) {
@@ -692,15 +762,20 @@ export class PdsCombobox implements BasePdsProps {
     return this.chipVariant;
   }
 
-  // Extract chip large from selected option's layout content or slotted trigger content
+  // Extract chip large from selected option's attributes, layout content, or slotted trigger content
   private get selectedChipLarge(): boolean {
-    // First priority: Check selected option's layout content (when something is selected)
+    // First priority: Check selected option's chip attributes (new automatic approach)
+    if (this.selectedOption && this.isOptionChip(this.selectedOption)) {
+      if (this.selectedOption.hasAttribute('chip-large')) return true;
+    }
+
+    // Second priority: Check selected option's layout content (existing custom layout approach)
     if (this.selectedOption && this.isOptionLayout(this.selectedOption)) {
       const chipElement = this.selectedOption.querySelector('pds-chip');
       if (chipElement?.hasAttribute('large')) return true;
     }
 
-    // Second priority: Check if we have custom trigger content with a chip (initial state)
+    // Third priority: Check if we have custom trigger content with a chip (initial state)
     if (this.customTriggerContent) {
       const slottedChip = this.el.querySelector('pds-chip[slot="trigger-content"]');
       if (slottedChip && slottedChip.hasAttribute('large')) {
@@ -712,16 +787,22 @@ export class PdsCombobox implements BasePdsProps {
     return this.chipLarge;
   }
 
-  // Extract chip icon from selected option's layout content or slotted trigger content
+  // Extract chip icon from selected option's attributes, layout content, or slotted trigger content
   private get selectedChipIcon(): string | undefined {
-    // First priority: Check selected option's layout content (when something is selected)
+    // First priority: Check selected option's chip attributes (new automatic approach)
+    if (this.selectedOption && this.isOptionChip(this.selectedOption)) {
+      const icon = this.selectedOption.getAttribute('chip-icon');
+      if (icon) return icon;
+    }
+
+    // Second priority: Check selected option's layout content (existing custom layout approach)
     if (this.selectedOption && this.isOptionLayout(this.selectedOption)) {
       const chipElement = this.selectedOption.querySelector('pds-chip');
       const icon = chipElement?.getAttribute('icon');
       if (icon) return icon;
     }
 
-    // Second priority: Check if we have custom trigger content with a chip (initial state)
+    // Third priority: Check if we have custom trigger content with a chip (initial state)
     if (this.customTriggerContent) {
       const slottedChip = this.el.querySelector('pds-chip[slot="trigger-content"]');
       if (slottedChip) {
@@ -734,15 +815,20 @@ export class PdsCombobox implements BasePdsProps {
     return this.chipIcon;
   }
 
-  // Extract chip dot from selected option's layout content or slotted trigger content
+  // Extract chip dot from selected option's attributes, layout content, or slotted trigger content
   private get selectedChipDot(): boolean {
-    // First priority: Check selected option's layout content (when something is selected)
+    // First priority: Check selected option's chip attributes (new automatic approach)
+    if (this.selectedOption && this.isOptionChip(this.selectedOption)) {
+      if (this.selectedOption.hasAttribute('chip-dot')) return true;
+    }
+
+    // Second priority: Check selected option's layout content (existing custom layout approach)
     if (this.selectedOption && this.isOptionLayout(this.selectedOption)) {
       const chipElement = this.selectedOption.querySelector('pds-chip');
       if (chipElement?.hasAttribute('dot')) return true;
     }
 
-    // Second priority: Check if we have custom trigger content with a chip (initial state)
+    // Third priority: Check if we have custom trigger content with a chip (initial state)
     if (this.customTriggerContent) {
       const slottedChip = this.el.querySelector('pds-chip[slot="trigger-content"]');
       if (slottedChip && slottedChip.hasAttribute('dot')) {
@@ -890,6 +976,7 @@ export class PdsCombobox implements BasePdsProps {
             const isSelected = this.isOptionSelected(option);
             const isHighlighted = this.highlightedIndex === optionIndex;
             const isLayout = this.isOptionLayout(option);
+            const isChip = this.isOptionChip(option);
             const currentOptionIndex = optionIndex++;
 
             return (
@@ -900,12 +987,13 @@ export class PdsCombobox implements BasePdsProps {
                 aria-selected={isSelected ? 'true' : 'false'}
                 aria-setsize={selectableOptions.length}
                 aria-posinset={currentOptionIndex + 1}
-                aria-label={isLayout ? option.getAttribute('aria-label') || this.getOptionLabel(option) : undefined}
+                aria-label={isLayout || isChip ? option.getAttribute('aria-label') || this.getOptionLabel(option) : undefined}
                 tabindex={isHighlighted ? '0' : '-1'}
                 class={{
                   'pds-combobox__option': true,
                   'pds-combobox__option--highlighted': isHighlighted,
                   'pds-combobox__option--layout': isLayout,
+                  'pds-combobox__option--chip': isChip,
                 }}
                 data-option-index={currentOptionIndex}
                 onMouseDown={this.onOptionMouseDown}
@@ -915,6 +1003,8 @@ export class PdsCombobox implements BasePdsProps {
               >
                 {isLayout ? (
                   <pds-box class="pds-combobox__option-layout-wrapper" innerHTML={this.getOptionLayoutContent(option)} />
+                ) : isChip ? (
+                  this.renderOptionChip(option)
                 ) : (
                   this.getOptionLabel(option)
                 )}
@@ -1013,11 +1103,35 @@ export class PdsCombobox implements BasePdsProps {
       return this.renderChipTriggerLayoutContent();
     }
 
-    // Case 3: Standard mode with default text content
+    // Case 3: Automatic chip mode - selected option has chip attributes
+    if (this.selectedOption && this.selectedOptionChipProps) {
+      // Render as chip automatically - chip handles its own dropdown arrow
+      return this.renderSelectedOptionAsChip();
+    }
+
+    // Case 4: Standard mode with default text content
     return [
       this.renderChipTriggerDefaultContent(),
       this.renderCaretIcon()
     ];
+  }
+
+  // Helper method to render selected option as chip for trigger (automatic approach)
+  private renderSelectedOptionAsChip() {
+    if (!this.selectedOption || !this.selectedOptionChipProps) return null;
+
+    return (
+      <pds-chip
+        sentiment={this.selectedOptionChipProps.sentiment as any}
+        variant="dropdown" // Always use dropdown variant for triggers
+        large={this.selectedOptionChipProps.large}
+        icon={this.selectedOptionChipProps.icon}
+        dot={this.selectedOptionChipProps.dot}
+        class="pds-combobox__chip-trigger-auto"
+      >
+        {this.getOptionLabel(this.selectedOption)}
+      </pds-chip>
+    );
   }
 
   // Helper method to render chip trigger layout content
@@ -1054,6 +1168,23 @@ export class PdsCombobox implements BasePdsProps {
         {this.selectedChipIcon && <pds-icon icon={this.selectedChipIcon} class="pds-combobox__chip-trigger-icon" />}
         {this.selectedLabel || this.placeholder}
       </span>
+    );
+  }
+
+  // Helper method to render option as chip (new automatic approach)
+  private renderOptionChip(option: HTMLOptionElement) {
+    const chipProps = this.getOptionChipProps(option);
+    return (
+      <pds-chip
+        sentiment={chipProps.sentiment as any}
+        variant={chipProps.variant as any}
+        large={chipProps.large}
+        icon={chipProps.icon}
+        dot={chipProps.dot}
+        class="pds-combobox__option-chip"
+      >
+        {this.getOptionLabel(option)}
+      </pds-chip>
     );
   }
 
