@@ -43,10 +43,11 @@ Use the `mode` prop to control this behavior.
 
 ## Triggers
 
-The combobox supports two trigger types:
+The combobox supports three trigger types:
 
 - **Input** (`trigger="input"`): Renders a text input (default, for filtering/autocomplete).
 - **Button** (`trigger="button"`): Renders a button-like div (for select-only, non-editable comboboxes).
+- **Chip** (`trigger="chip"`): Renders a chip component (for select-only, styled as a chip).
 
 Use the `trigger` prop to control this behavior. See [WAI-ARIA Combobox Patterns](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/#examples) for more details.
 
@@ -274,6 +275,57 @@ The button trigger renders as a button-like element instead of a text input. Thi
     <option value="dog">Dog</option>
     <option value="panda">Panda</option>
     <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
+
+### Chip Trigger (select-only)
+The chip trigger renders as a chip component instead of a text input or button. This provides a more compact, tag-like appearance perfect for select-only scenarios where you want the trigger to look like a chip.
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="chip-draft" label="Status" trigger="chip" mode="select-only">
+  <option value="draft" selected chip-sentiment="neutral" chip-dot="true">Draft</option>
+  <option value="published" chip-sentiment="success" chip-dot="true">Published</option>
+  <option value="archived" chip-sentiment="warning" chip-dot="true">Archived</option>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="chip-draft" label="Status" trigger="chip" mode="select-only">
+  <option value="draft" selected chip-sentiment="neutral" chip-dot="true">Draft</option>
+  <option value="published" chip-sentiment="success" chip-dot="true">Published</option>
+  <option value="archived" chip-sentiment="warning" chip-dot="true">Archived</option>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="chip-draft" label="Status" trigger="chip" mode="select-only">
+    <option value="draft" selected chip-sentiment="neutral" chip-dot="true">Draft</option>
+    <option value="published" chip-sentiment="success" chip-dot="true">Published</option>
+    <option value="archived" chip-sentiment="warning" chip-dot="true">Archived</option>
+  </pds-combobox>
+</DocCanvas>
+
+### Chip with Icon
+Add an icon to the chip trigger for better visual context using the automatic approach:
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="chip-icon-auto" label="Priority Level" trigger="chip" mode="select-only">
+  <option value="low" chip-sentiment="info" chip-icon="info-circle">Low</option>
+  <option value="medium" chip-sentiment="warning" chip-icon="warning">Medium</option>
+  <option value="high" selected chip-sentiment="danger" chip-icon="warning">High</option>
+  <option value="critical" chip-sentiment="danger" chip-icon="danger">Critical</option>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="chip-icon-auto" label="Priority Level" trigger="chip" mode="select-only">
+  <option value="low" chip-sentiment="info" chip-icon="info-circle">Low</option>
+  <option value="medium" chip-sentiment="warning" chip-icon="warning">Medium</option>
+  <option value="high" selected chip-sentiment="danger" chip-icon="warning">High</option>
+  <option value="critical" chip-sentiment="danger" chip-icon="danger">Critical</option>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="chip-icon-auto" label="Priority Level" trigger="chip" mode="select-only">
+    <option value="low" chip-sentiment="info" chip-icon="info-circle">Low</option>
+    <option value="medium" chip-sentiment="warning" chip-icon="warning">Medium</option>
+    <option value="high" selected chip-sentiment="danger" chip-icon="warning">High</option>
+    <option value="critical" chip-sentiment="danger" chip-icon="danger">Critical</option>
   </pds-combobox>
 </DocCanvas>
 

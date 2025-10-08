@@ -1,5 +1,6 @@
 import { downSmall, remove } from '@pine-ds/icons/icons';
 import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
+import type { ChipSentimentType, ChipVariantType } from '@utils/types';
 
 /**
  * @slot (default) - The chip's label text.
@@ -38,14 +39,14 @@ export class PdsChip {
    * Defines the color scheme of the chip.
    * @defaultValue 'neutral'
    */
-  @Prop() sentiment: 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning' = 'neutral';
+  @Prop() sentiment: ChipSentimentType = 'neutral';
 
   /**
    * Sets the style variant of the chip.
    * Note: This prop is ignored when sentiment is 'brand'.
    * @defaultValue 'text'
    */
-  @Prop() variant: 'text' | 'tag' | 'dropdown' = 'text';
+  @Prop() variant: ChipVariantType = 'text';
 
   /**
    * Event emitted when the close button is clicked on a tag variant chip.

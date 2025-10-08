@@ -7,14 +7,14 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { BoxColumnType, BoxShadowSizeType, BoxTShirtSizeType } from "./utils/types";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
-import { PlacementType } from "./utils/types";
+import { ChipSentimentType, ChipVariantType, PlacementType } from "./utils/types";
 import { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 import { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 import { PdsPopoverEventDetail } from "./components/pds-popover/popover-interface";
 import { TextareaChangeEventDetail, TextareaInputEventDetail } from "./components/pds-textarea/textarea-interface";
 export { BoxColumnType, BoxShadowSizeType, BoxTShirtSizeType } from "./utils/types";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
-export { PlacementType } from "./utils/types";
+export { ChipSentimentType, ChipVariantType, PlacementType } from "./utils/types";
 export { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 export { PdsPopoverEventDetail } from "./components/pds-popover/popover-interface";
@@ -820,14 +820,33 @@ export namespace Components {
           * Defines the color scheme of the chip.
           * @defaultValue 'neutral'
          */
-        "sentiment": 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
+        "sentiment": ChipSentimentType;
         /**
           * Sets the style variant of the chip. Note: This prop is ignored when sentiment is 'brand'.
           * @defaultValue 'text'
          */
-        "variant": 'text' | 'tag' | 'dropdown';
+        "variant": ChipVariantType;
     }
     interface PdsCombobox {
+        /**
+          * Whether a dot should be displayed on the chip trigger.
+          * @default false
+         */
+        "chipDot": boolean;
+        /**
+          * The name of the icon to display in the chip trigger.
+         */
+        "chipIcon"?: string;
+        /**
+          * Whether the chip trigger should be displayed in a larger size.
+          * @default false
+         */
+        "chipLarge": boolean;
+        /**
+          * The sentiment for the chip trigger. Matches Pine chip sentiments.
+          * @default 'neutral'
+         */
+        "chipSentiment": ChipSentimentType;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -886,10 +905,10 @@ export namespace Components {
          */
         "setFocus": () => Promise<void>;
         /**
-          * Determines the combobox trigger: 'input' (editable input) or 'button' (button-like, non-editable).
+          * Determines the combobox trigger: 'input' (editable input), 'button' (button-like, non-editable), or 'chip' (chip-like, non-editable).
           * @default 'input'
          */
-        "trigger": 'input' | 'button';
+        "trigger": 'input' | 'button' | 'chip';
         /**
           * The visual variant for the button trigger. Matches Pine button variants.
           * @default 'secondary'
@@ -3395,14 +3414,33 @@ declare namespace LocalJSX {
           * Defines the color scheme of the chip.
           * @defaultValue 'neutral'
          */
-        "sentiment"?: 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
+        "sentiment"?: ChipSentimentType;
         /**
           * Sets the style variant of the chip. Note: This prop is ignored when sentiment is 'brand'.
           * @defaultValue 'text'
          */
-        "variant"?: 'text' | 'tag' | 'dropdown';
+        "variant"?: ChipVariantType;
     }
     interface PdsCombobox {
+        /**
+          * Whether a dot should be displayed on the chip trigger.
+          * @default false
+         */
+        "chipDot"?: boolean;
+        /**
+          * The name of the icon to display in the chip trigger.
+         */
+        "chipIcon"?: string;
+        /**
+          * Whether the chip trigger should be displayed in a larger size.
+          * @default false
+         */
+        "chipLarge"?: boolean;
+        /**
+          * The sentiment for the chip trigger. Matches Pine chip sentiments.
+          * @default 'neutral'
+         */
+        "chipSentiment"?: ChipSentimentType;
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */
@@ -3457,10 +3495,10 @@ declare namespace LocalJSX {
          */
         "placeholder"?: string;
         /**
-          * Determines the combobox trigger: 'input' (editable input) or 'button' (button-like, non-editable).
+          * Determines the combobox trigger: 'input' (editable input), 'button' (button-like, non-editable), or 'chip' (chip-like, non-editable).
           * @default 'input'
          */
-        "trigger"?: 'input' | 'button';
+        "trigger"?: 'input' | 'button' | 'chip';
         /**
           * The visual variant for the button trigger. Matches Pine button variants.
           * @default 'secondary'

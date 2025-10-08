@@ -184,6 +184,53 @@ describe('pds-combobox', () => {
     expect(button?.classList.contains('pds-combobox__button-trigger--accent')).toBe(true);
   });
 
+  it('renders chip trigger with default props', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" trigger="chip"></pds-combobox>`,
+    });
+
+    const chipTrigger = root?.shadowRoot?.querySelector('.pds-combobox__chip-trigger');
+    expect(chipTrigger).not.toBeNull();
+    expect(chipTrigger?.getAttribute('role')).toBe('combobox');
+    expect(chipTrigger?.getAttribute('aria-haspopup')).toBe('listbox');
+    expect(chipTrigger?.classList.contains('pds-combobox__chip-trigger--neutral')).toBe(true);
+    expect(chipTrigger?.classList.contains('pds-combobox__chip-trigger--dropdown')).toBe(true);
+  });
+
+  it('renders chip trigger with custom sentiment', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" trigger="chip" chip-sentiment="accent"></pds-combobox>`,
+    });
+
+    const chipTrigger = root?.shadowRoot?.querySelector('.pds-combobox__chip-trigger');
+    expect(chipTrigger?.classList.contains('pds-combobox__chip-trigger--accent')).toBe(true);
+    expect(chipTrigger?.classList.contains('pds-combobox__chip-trigger--dropdown')).toBe(true);
+  });
+
+  it('renders chip trigger with icon and dot', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" trigger="chip" chip-icon="star" chip-dot="true"></pds-combobox>`,
+    });
+
+    const chipTrigger = root?.shadowRoot?.querySelector('.pds-combobox__chip-trigger');
+    expect(chipTrigger?.classList.contains('pds-combobox__chip-trigger--dot')).toBe(true);
+    const icon = chipTrigger?.querySelector('pds-icon');
+    expect(icon?.getAttribute('icon')).toBe('star');
+  });
+
+  it('renders chip trigger with large size', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" trigger="chip" chip-large="true"></pds-combobox>`,
+    });
+
+    const chipTrigger = root?.shadowRoot?.querySelector('.pds-combobox__chip-trigger');
+    expect(chipTrigger?.classList.contains('pds-combobox__chip-trigger--large')).toBe(true);
+  });
+
   it('renders with select-only mode', async () => {
     const page = await newSpecPage({
       components: [PdsCombobox],
