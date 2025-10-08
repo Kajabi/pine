@@ -185,14 +185,6 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   componentDidLoad() {
-    // Double-check selection after DOM is fully loaded
-    if (!this.selectedOption && this.trigger === 'chip') {
-      const initialSelected = this.optionEls.find(opt => opt.hasAttribute('selected'));
-      if (initialSelected) {
-        this.setSelectedOption(initialSelected);
-      }
-    }
-
     // Check for value-based preselection if no option is selected yet
     if (!this.selectedOption && this.value && this.optionEls.length > 0) {
       const matchingOption = this.optionEls.find(opt => opt.value === this.value);
@@ -280,12 +272,11 @@ export class PdsCombobox implements BasePdsProps {
         }
       });
 
-      // Set initial selected option if one exists
-      // Always check for selected options when updateOptions is called (including slot changes)
-      let initialSelected = this.optionEls.find(opt => opt.hasAttribute('selected')) || null;
+      // Set initial selected option based on value property
+      let initialSelected: HTMLOptionElement | null = null;
 
-      // If no selected attribute found, check if value property matches any option
-      if (!initialSelected && this.value) {
+      // Check if value property matches any option
+      if (this.value) {
         initialSelected = this.optionEls.find(opt => opt.value === this.value) || null;
         if (initialSelected) {
           // Update the display value to show the option's text content

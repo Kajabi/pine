@@ -93,9 +93,10 @@ export const ChipTriggerAndLayout = (args) => html`
     custom-option-layouts=${args.customOptionLayouts}
     custom-trigger-content=${args.customTriggerContent}
     trigger-width=${args.triggerWidth}
+    value=${args.value}
   >
     <option value="draft" data-layout><pds-chip sentiment="neutral" dot>Draft</pds-chip></option>
-    <option value="published" selected data-layout><pds-chip sentiment="success" dot>Published</pds-chip></option>
+    <option value="published" data-layout><pds-chip sentiment="success" dot>Published</pds-chip></option>
     <option value="archived" data-layout><pds-chip sentiment="warning" dot>Archived</pds-chip></option>
   </pds-combobox>
 </pds-box>`;
@@ -109,6 +110,7 @@ ChipTriggerAndLayout.args = {
   mode: 'select-only',
   trigger: 'chip',
   triggerWidth: 'fit-content',
+  value: 'published',
 };
 
 export const ChipTriggerLayoutWithIcons = (args) => html`
@@ -122,10 +124,11 @@ export const ChipTriggerLayoutWithIcons = (args) => html`
     custom-option-layouts=${args.customOptionLayouts}
     custom-trigger-content=${args.customTriggerContent}
     trigger-width=${args.triggerWidth}
+    value=${args.value}
   >
     <option value="low" chip-sentiment="info" chip-icon="info-circle">Low</option>
     <option value="medium" chip-sentiment="warning" chip-icon="warning">Medium</option>
-    <option value="high" selected chip-sentiment="danger" chip-icon="warning">High</option>
+    <option value="high" chip-sentiment="danger" chip-icon="warning">High</option>
     <option value="critical" chip-sentiment="danger" chip-icon="danger">Critical</option>
   </pds-combobox>
 </pds-box>`;
@@ -137,6 +140,7 @@ ChipTriggerLayoutWithIcons.args = {
   trigger: 'chip',
   mode: 'select-only',
   triggerWidth: 'fit-content',
+  value: 'high',
 };
 
 export const Custom = (args) => html`

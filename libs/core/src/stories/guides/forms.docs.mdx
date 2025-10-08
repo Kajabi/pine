@@ -47,19 +47,19 @@ The web component example utilizes vanilla JavaScript to access values directly 
           notifications: false,
           message: '',
           timeOfDay: '',
-          favoriteAnimal: 'panda',
           favoriteColor: 'blue',
+          status: 'published',
         });
 
         const handleSubmit = (e) => {
           e.preventDefault();
           // Validate required fields
-          const { name, email, subscribe, direction, notifications, message, timeOfDay, favoriteAnimal, favoriteColor } = formData;
+          const { name, email, subscribe, direction, notifications, message, timeOfDay, favoriteColor, status } = formData;
           if (!name || !email) {
             alert('Please fill out all required fields');
             return;
           }
-          console.log('Form Data:', JSON.stringify({ name, email, subscribe, direction, notifications, message, timeOfDay, favoriteAnimal, favoriteColor }));
+          console.log('Form Data:', JSON.stringify({ name, email, subscribe, direction, notifications, message, timeOfDay, favoriteColor, status }));
         };
 
         const handleChange = (e) => {
@@ -156,29 +156,6 @@ The web component example utilizes vanilla JavaScript to access values directly 
                 </pds-select>
               </pds-box>
 
-              {/* Favorite Animal Combobox */}
-              <pds-box display="block" padding="sm" margin="sm">
-                <pds-combobox
-                  component-id="favoriteAnimal"
-                  label="Favorite Animal"
-                  name="favoriteAnimal"
-                  placeholder="Type to search or select..."
-                  mode="filter"
-                  trigger="input"
-                  value={formData.favoriteAnimal}
-                  onChange={handleChange}
-                >
-                  <option value="cat">Cat</option>
-                  <option value="dog">Dog</option>
-                  <option value="elephant">Elephant</option>
-                  <option value="tiger">Tiger</option>
-                  <option value="panda">Panda</option>
-                  <option value="snake">Snake</option>
-                  <option value="eagle">Eagle</option>
-                  <option value="dolphin">Dolphin</option>
-                </pds-combobox>
-              </pds-box>
-
               {/* Favorite Color Combobox - Button Trigger */}
               <pds-box display="block" padding="sm" margin="sm">
                 <pds-combobox
@@ -201,6 +178,23 @@ The web component example utilizes vanilla JavaScript to access values directly 
                   <option value="orange">Orange</option>
                   <option value="pink">Pink</option>
                   <option value="black">Black</option>
+                </pds-combobox>
+              </pds-box>
+
+              {/* Status Combobox - Chip Trigger */}
+              <pds-box display="block" padding="sm" margin="sm">
+                <pds-combobox
+                  component-id="status"
+                  label="Status"
+                  name="status"
+                  trigger="chip"
+                  mode="select-only"
+                  value={formData.status}
+                  onChange={handleChange}
+                >
+                  <option value="draft" chip-sentiment="neutral" chip-dot="true">Draft</option>
+                  <option value="published" chip-sentiment="success" chip-dot="true">Published</option>
+                  <option value="archived" chip-sentiment="warning" chip-dot="true">Archived</option>
                 </pds-combobox>
               </pds-box>
 
@@ -239,8 +233,8 @@ The web component example utilizes vanilla JavaScript to access values directly 
             notifications: form.querySelector('[component-id="notifications"]').checked,
             message: form.querySelector('[component-id="message"]').value,
             timeOfDay: form.querySelector('[component-id="timeOfDay"]').value,
-            favoriteAnimal: form.querySelector('[component-id="favoriteAnimal"]').value,
-            favoriteColor: form.querySelector('[component-id="favoriteColor"]').value
+            favoriteColor: form.querySelector('[component-id="favoriteColor"]').value,
+            status: form.querySelector('[component-id="status"]').value
           });
         }}>
           <pds-box display="block" padding="sm">
@@ -275,19 +269,6 @@ The web component example utilizes vanilla JavaScript to access values directly 
           </pds-box>
 
           <pds-box display="block" padding="sm">
-            <pds-combobox component-id="favoriteAnimal" label="Favorite Animal" name="favoriteAnimal" placeholder="Type to search or select..." mode="filter" trigger="input" value="panda">
-              <option value="cat">Cat</option>
-              <option value="dog">Dog</option>
-              <option value="elephant">Elephant</option>
-              <option value="tiger">Tiger</option>
-              <option value="panda">Panda</option>
-              <option value="snake">Snake</option>
-              <option value="eagle">Eagle</option>
-              <option value="dolphin">Dolphin</option>
-            </pds-combobox>
-          </pds-box>
-
-          <pds-box display="block" padding="sm">
             <pds-combobox component-id="favoriteColor" label="Favorite Color" name="favoriteColor" placeholder="Select a color..." mode="select-only" trigger="button" trigger-variant="secondary" trigger-width="250px" value="blue">
               <option value="red">Red</option>
               <option value="blue">Blue</option>
@@ -297,6 +278,14 @@ The web component example utilizes vanilla JavaScript to access values directly 
               <option value="orange">Orange</option>
               <option value="pink">Pink</option>
               <option value="black">Black</option>
+            </pds-combobox>
+          </pds-box>
+
+          <pds-box display="block" padding="sm">
+            <pds-combobox component-id="status" label="Status" name="status" trigger="chip" mode="select-only" value="published">
+              <option value="draft" chip-sentiment="neutral" chip-dot="true">Draft</option>
+              <option value="published" chip-sentiment="success" chip-dot="true">Published</option>
+              <option value="archived" chip-sentiment="warning" chip-dot="true">Archived</option>
             </pds-combobox>
           </pds-box>
 
@@ -336,8 +325,8 @@ The web component example utilizes vanilla JavaScript to access values directly 
       notifications: form.querySelector('[component-id="notifications"]')?.checked,
       message: form.querySelector('[component-id="message"]')?.value,
       timeOfDay: form.querySelector('[component-id="timeOfDay"]')?.value,
-      favoriteAnimal: form.querySelector('[component-id="favoriteAnimal"]')?.value,
-      favoriteColor: form.querySelector('[component-id="favoriteColor"]')?.value
+      favoriteColor: form.querySelector('[component-id="favoriteColor"]')?.value,
+      status: form.querySelector('[component-id="status"]')?.value
     });
 
     // Log native form elements
@@ -425,19 +414,6 @@ The web component example utilizes vanilla JavaScript to access values directly 
     </pds-box>
 
     <pds-box display="block" padding="sm">
-      <pds-combobox component-id="favoriteAnimal" label="Favorite Animal" name="favoriteAnimal" placeholder="Type to search or select..." mode="filter" trigger="input" value="panda">
-        <option value="cat">Cat</option>
-        <option value="dog">Dog</option>
-        <option value="elephant">Elephant</option>
-        <option value="tiger">Tiger</option>
-        <option value="panda">Panda</option>
-        <option value="snake">Snake</option>
-        <option value="eagle">Eagle</option>
-        <option value="dolphin">Dolphin</option>
-      </pds-combobox>
-    </pds-box>
-
-    <pds-box display="block" padding="sm">
       <pds-combobox component-id="favoriteColor" label="Favorite Color" name="favoriteColor" placeholder="Select a color..." mode="select-only" trigger="button" trigger-variant="secondary" trigger-width="250px" value="blue">
         <option value="red">Red</option>
         <option value="blue">Blue</option>
@@ -451,12 +427,13 @@ The web component example utilizes vanilla JavaScript to access values directly 
     </pds-box>
 
     <pds-box display="block" padding="sm">
-      <pds-combobox component-id="chip-draft" label="Status" trigger="chip" mode="select-only" value="published">
+      <pds-combobox component-id="status" label="Status" name="status" trigger="chip" mode="select-only" value="published">
         <option value="draft" chip-sentiment="neutral" chip-dot="true">Draft</option>
         <option value="published" chip-sentiment="success" chip-dot="true">Published</option>
         <option value="archived" chip-sentiment="warning" chip-dot="true">Archived</option>
       </pds-combobox>
     </pds-box>
+
 
     <pds-box display="block" padding="sm">
       <pds-textarea component-id="message" name="message" label="Message"></pds-textarea>
@@ -504,16 +481,16 @@ document.addEventListener('DOMContentLoaded', () => {
         subscribe: form.elements.namedItem('subscribe'),
         direction: form.elements.namedItem('direction'),
         notifications: form.elements.namedItem('notifications'),
-        favoriteAnimal: form.elements.namedItem('favoriteAnimal'),
         favoriteColor: form.elements.namedItem('favoriteColor'),
+        status: form.elements.namedItem('status'),
         message: form.elements.namedItem('message')
       });
 
       // Check if Pine components have form association
       const pdsInput = document.querySelector('pds-input');
       const pdsSelect = document.querySelector('pds-select');
-      const pdsCombobox = document.querySelector('pds-combobox');
       const pdsComboboxColor = document.querySelector('pds-combobox[component-id="favoriteColor"]');
+      const pdsComboboxStatus = document.querySelector('pds-combobox[component-id="status"]');
       const pdsTextarea = document.querySelector('pds-textarea');
       const pdsCheckbox = document.querySelector('pds-checkbox');
       const pdsRadio = document.querySelector('pds-radio');
@@ -522,20 +499,20 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('🌲 Pine components in DOM:', {
         input: pdsInput,
         select: pdsSelect,
-        combobox: pdsCombobox,
         comboboxColor: pdsComboboxColor,
+        comboboxStatus: pdsComboboxStatus,
         textarea: pdsTextarea,
         checkbox: pdsCheckbox,
         radio: pdsRadio,
         switch: pdsSwitch
       });
 
-      if (pdsInput || pdsSelect || pdsCombobox || pdsTextarea) {
+      if (pdsInput || pdsSelect || pdsComboboxColor || pdsTextarea) {
         console.log('🔧 Component internals:', {
           inputInternals: pdsInput?.internals,
           selectInternals: pdsSelect?.internals,
-          comboboxInternals: pdsCombobox?.internals,
           comboboxColorInternals: pdsComboboxColor?.internals,
+          comboboxStatusInternals: pdsComboboxStatus?.internals,
           textareaInternals: pdsTextarea?.internals,
           checkboxInternals: pdsCheckbox?.internals,
           radioInternals: pdsRadio?.internals,
@@ -546,8 +523,8 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('✅ Form association check:', {
           inputFormAssociated: pdsInput?.constructor?.formAssociated,
           selectFormAssociated: pdsSelect?.constructor?.formAssociated,
-          comboboxFormAssociated: pdsCombobox?.constructor?.formAssociated,
           comboboxColorFormAssociated: pdsComboboxColor?.constructor?.formAssociated,
+          comboboxStatusFormAssociated: pdsComboboxStatus?.constructor?.formAssociated,
           textareaFormAssociated: pdsTextarea?.constructor?.formAssociated,
           checkboxFormAssociated: pdsCheckbox?.constructor?.formAssociated,
           radioFormAssociated: pdsRadio?.constructor?.formAssociated,
