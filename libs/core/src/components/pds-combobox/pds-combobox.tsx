@@ -424,6 +424,7 @@ export class PdsCombobox implements BasePdsProps {
     if (!this.isOpen) {
       this.isOpen = true;
       this.filterOptions();
+      this.setInitialHighlightedIndex();
       setTimeout(() => this.openDropdownPositioning(), 0);
     }
   };
@@ -434,10 +435,7 @@ export class PdsCombobox implements BasePdsProps {
       this.isOpen = true;
       this.filterOptions();
       // Set highlighted index immediately for testing
-      const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION');
-      if (selectableOptions.length > 0) {
-        this.highlightedIndex = 0;
-      }
+      this.setInitialHighlightedIndex();
       setTimeout(() => {
         this.openDropdownPositioning();
         // For input trigger, keep focus on input and use aria-activedescendant
@@ -545,13 +543,38 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   /**
+   * Sets the initial highlighted index when dropdown opens.
+   * If there's a selected option, highlight it. Otherwise, highlight the first option.
+   */
+  private setInitialHighlightedIndex() {
+    const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION') as HTMLOptionElement[];
+
+    if (selectableOptions.length === 0) {
+      this.highlightedIndex = -1;
+      return;
+    }
+
+    // If there's a selected option, find its index in the filtered options
+    if (this.selectedOption) {
+      const selectedIndex = selectableOptions.findIndex(option => option === this.selectedOption);
+      if (selectedIndex >= 0) {
+        this.highlightedIndex = selectedIndex;
+        return;
+      }
+    }
+
+    // No selected option or selected option not in filtered results, highlight first option
+    this.highlightedIndex = 0;
+  }
+
+  /**
    * Focus management helper - moves focus to the first option when dropdown opens
    */
   private focusFirstOption() {
     if (this.isOpen) {
       const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION');
       if (selectableOptions.length > 0) {
-        this.highlightedIndex = 0;
+        this.setInitialHighlightedIndex();
         // DON'T focus the option elements - keep focus on trigger and use aria-activedescendant
         // This prevents the focusout event that was closing the dropdown
         // But still call updateOptionFocus for scrolling
@@ -572,20 +595,20 @@ export class PdsCombobox implements BasePdsProps {
 
       const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION');
       if (selectableOptions.length > 0) {
-        this.highlightedIndex = 0;
-        // For arrow key navigation, actually focus the first option
+        this.setInitialHighlightedIndex();
+        // For arrow key navigation, actually focus the highlighted option
         if (this.listboxEl) {
           const optionElements = this.listboxEl.querySelectorAll('[role="option"]');
-          const firstOption = optionElements[0] as HTMLElement;
-          if (firstOption) {
+          const highlightedOption = optionElements[this.highlightedIndex] as HTMLElement;
+          if (highlightedOption) {
             // Remove tabindex from all options first
             optionElements.forEach(option => {
               (option as HTMLElement).setAttribute('tabindex', '-1');
             });
-            // Set tabindex and focus on first option
-            firstOption.setAttribute('tabindex', '0');
-            firstOption.focus();
-            firstOption.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            // Set tabindex and focus on highlighted option
+            highlightedOption.setAttribute('tabindex', '0');
+            highlightedOption.focus();
+            highlightedOption.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
           }
         }
         // Update aria-activedescendant on trigger
@@ -813,12 +836,9 @@ export class PdsCombobox implements BasePdsProps {
     if (this.isOpen) {
       this.filterOptions();
       // Set highlighted index and prepare for keyboard navigation
-      const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION');
-      if (selectableOptions.length > 0) {
-        this.highlightedIndex = 0;
-        // For button trigger, prepare for arrow-key navigation mode
-        this.isArrowKeyNavigationMode = true;
-      }
+      this.setInitialHighlightedIndex();
+      // For button trigger, prepare for arrow-key navigation mode
+      this.isArrowKeyNavigationMode = true;
       setTimeout(() => this.openDropdownPositioning(), 0);
     } else {
       // Reset navigation mode when closing
@@ -835,10 +855,7 @@ export class PdsCombobox implements BasePdsProps {
       this.isOpen = true;
       this.filterOptions();
       // Set highlighted index immediately
-      const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION');
-      if (selectableOptions.length > 0) {
-        this.highlightedIndex = 0;
-      }
+      this.setInitialHighlightedIndex();
       setTimeout(() => {
         this.openDropdownPositioning();
         // For all button trigger keyboard opening, focus the first option so subsequent navigation works
