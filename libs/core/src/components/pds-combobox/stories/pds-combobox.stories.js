@@ -17,7 +17,6 @@ export default {
     triggerVariant: 'secondary',
     triggerWidth: 'fit-content',
     chipSentiment: 'neutral',
-    chipVariant: 'dropdown',
     chipLarge: false,
     chipIcon: null,
     chipDot: false,
@@ -52,7 +51,6 @@ const BaseTemplate = (args) => html`
   trigger-variant=${args.triggerVariant}
   trigger-width=${args.triggerWidth}
   chip-sentiment=${args.chipSentiment}
-  chip-variant=${args.chipVariant}
   chip-large=${args.chipLarge}
   chip-icon=${args.chipIcon}
   chip-dot=${args.chipDot}

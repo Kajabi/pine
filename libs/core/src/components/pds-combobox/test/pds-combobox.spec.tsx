@@ -198,15 +198,15 @@ describe('pds-combobox', () => {
     expect(chipTrigger?.classList.contains('pds-combobox__chip-trigger--dropdown')).toBe(true);
   });
 
-  it('renders chip trigger with custom sentiment and variant', async () => {
+  it('renders chip trigger with custom sentiment', async () => {
     const { root } = await newSpecPage({
       components: [PdsCombobox],
-      html: `<pds-combobox component-id="test-combobox" trigger="chip" chip-sentiment="accent" chip-variant="tag"></pds-combobox>`,
+      html: `<pds-combobox component-id="test-combobox" trigger="chip" chip-sentiment="accent"></pds-combobox>`,
     });
 
     const chipTrigger = root?.shadowRoot?.querySelector('.pds-combobox__chip-trigger');
     expect(chipTrigger?.classList.contains('pds-combobox__chip-trigger--accent')).toBe(true);
-    expect(chipTrigger?.classList.contains('pds-combobox__chip-trigger--tag')).toBe(true);
+    expect(chipTrigger?.classList.contains('pds-combobox__chip-trigger--dropdown')).toBe(true);
   });
 
   it('renders chip trigger with icon and dot', async () => {

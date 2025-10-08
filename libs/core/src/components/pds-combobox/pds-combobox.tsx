@@ -105,11 +105,6 @@ export class PdsCombobox implements BasePdsProps {
    */
   @Prop() chipSentiment: 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning' = 'neutral';
 
-  /**
-   * The variant for the chip trigger. Matches Pine chip variants.
-   * @default 'dropdown'
-   */
-  @Prop() chipVariant: 'text' | 'tag' | 'dropdown' = 'dropdown';
 
   /**
    * Whether the chip trigger should be displayed in a larger size.
@@ -308,7 +303,6 @@ export class PdsCombobox implements BasePdsProps {
   // Helper method to check if option has chip attributes (new automatic approach)
   private isOptionChip(option: HTMLOptionElement): boolean {
     return option.hasAttribute('chip-sentiment') ||
-           option.hasAttribute('chip-variant') ||
            option.hasAttribute('chip-large') ||
            option.hasAttribute('chip-icon') ||
            option.hasAttribute('chip-dot');
@@ -318,7 +312,6 @@ export class PdsCombobox implements BasePdsProps {
   private getOptionChipProps(option: HTMLOptionElement) {
     return {
       sentiment: option.getAttribute('chip-sentiment') || 'neutral',
-      variant: option.getAttribute('chip-variant') || 'text', // Note: dropdown options use 'text' variant
       large: option.hasAttribute('chip-large'),
       icon: option.getAttribute('chip-icon') || undefined,
       dot: option.hasAttribute('chip-dot')
@@ -734,33 +727,6 @@ export class PdsCombobox implements BasePdsProps {
     return this.chipSentiment;
   }
 
-  // Extract chip variant from selected option's attributes, layout content, or slotted trigger content
-  private get selectedChipVariant(): 'text' | 'tag' | 'dropdown' {
-    // First priority: Check selected option's chip attributes (new automatic approach)
-    if (this.selectedOption && this.isOptionChip(this.selectedOption)) {
-      const variant = this.selectedOption.getAttribute('chip-variant') as 'text' | 'tag' | 'dropdown';
-      if (variant) return variant;
-    }
-
-    // Second priority: Check selected option's layout content (existing custom layout approach)
-    if (this.selectedOption && this.isOptionLayout(this.selectedOption)) {
-      const chipElement = this.selectedOption.querySelector('pds-chip');
-      const variant = chipElement?.getAttribute('variant') as 'text' | 'tag' | 'dropdown';
-      if (variant) return variant;
-    }
-
-    // Third priority: Check if we have custom trigger content with a chip (initial state)
-    if (this.customTriggerContent) {
-      const slottedChip = this.el.querySelector('pds-chip[slot="trigger-content"]');
-      if (slottedChip) {
-        const variant = slottedChip.getAttribute('variant') as 'text' | 'tag' | 'dropdown';
-        if (variant) return variant;
-      }
-    }
-
-    // Fallback: Use component props
-    return this.chipVariant;
-  }
 
   // Extract chip large from selected option's attributes, layout content, or slotted trigger content
   private get selectedChipLarge(): boolean {
@@ -1051,8 +1017,8 @@ export class PdsCombobox implements BasePdsProps {
     // Add sentiment class
     classes.push(`pds-combobox__chip-trigger--${this.selectedChipSentiment}`);
 
-    // Add variant class
-    classes.push(`pds-combobox__chip-trigger--${this.selectedChipVariant}`);
+    // Always use dropdown variant for chip triggers
+    classes.push('pds-combobox__chip-trigger--dropdown');
 
     // Add large class if needed
     if (this.selectedChipLarge) {
@@ -1177,7 +1143,7 @@ export class PdsCombobox implements BasePdsProps {
     return (
       <pds-chip
         sentiment={chipProps.sentiment as any}
-        variant={chipProps.variant as any}
+        variant="text" // Dropdown options use text variant, not dropdown
         large={chipProps.large}
         icon={chipProps.icon}
         dot={chipProps.dot}

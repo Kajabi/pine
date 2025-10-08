@@ -846,11 +846,6 @@ export namespace Components {
          */
         "chipSentiment": 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
         /**
-          * The variant for the chip trigger. Matches Pine chip variants.
-          * @default 'dropdown'
-         */
-        "chipVariant": 'text' | 'tag' | 'dropdown';
-        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
@@ -3416,11 +3411,6 @@ declare namespace LocalJSX {
           * @default 'neutral'
          */
         "chipSentiment"?: 'accent' | 'brand' | 'danger' | 'info' | 'neutral' | 'success' | 'warning';
-        /**
-          * The variant for the chip trigger. Matches Pine chip variants.
-          * @default 'dropdown'
-         */
-        "chipVariant"?: 'text' | 'tag' | 'dropdown';
         /**
           * A unique identifier used for the underlying component `id` attribute.
          */

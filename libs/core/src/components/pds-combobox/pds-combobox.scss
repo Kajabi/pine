@@ -482,27 +482,3 @@
   }
 }
 
-// Dot colors for each sentiment
-.pds-combobox__chip-trigger--neutral.pds-combobox__chip-trigger--dot .pds-combobox__chip-trigger-label::before {
-  background: var(--pine-chip-color-neutral-dot);
-}
-
-.pds-combobox__chip-trigger--accent.pds-combobox__chip-trigger--dot .pds-combobox__chip-trigger-label::before {
-  background: var(--pine-chip-color-accent-dot);
-}
-
-.pds-combobox__chip-trigger--success.pds-combobox__chip-trigger--dot .pds-combobox__chip-trigger-label::before {
-  background: var(--pine-chip-color-success-dot);
-}
-
-.pds-combobox__chip-trigger--warning.pds-combobox__chip-trigger--dot .pds-combobox__chip-trigger-label::before {
-  background: var(--pine-chip-color-warning-dot);
-}
-
-.pds-combobox__chip-trigger--danger.pds-combobox__chip-trigger--dot .pds-combobox__chip-trigger-label::before {
-  background: var(--pine-chip-color-danger-dot);
-}
-
-.pds-combobox__chip-trigger--info.pds-combobox__chip-trigger--dot .pds-combobox__chip-trigger-label::before {
-  background: var(--pine-chip-color-info-dot);
-}
