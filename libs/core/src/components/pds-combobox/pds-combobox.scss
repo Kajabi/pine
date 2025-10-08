@@ -337,88 +337,66 @@
 }
 
 // Chip trigger sentiment variants - mirroring chip component styles
-.pds-combobox__chip-trigger--neutral {
-  background: var(--pine-chip-color-neutral);
-  border: var(--pine-border-width) solid var(--pine-chip-color-neutral-hover);
-  color: var(--pine-color-text-neutral);
+.pds-combobox__chip-trigger--neutral,
+.pds-combobox__chip-trigger--accent,
+.pds-combobox__chip-trigger--success,
+.pds-combobox__chip-trigger--warning,
+.pds-combobox__chip-trigger--danger,
+.pds-combobox__chip-trigger--info {
+  background: var(--chip-bg);
+  border: var(--pine-border-width) solid var(--chip-border);
+  color: var(--chip-text);
 
   &:hover:not([aria-disabled='true']) {
-    background: var(--pine-chip-color-neutral-hover);
+    background: var(--chip-bg-hover);
   }
 
   &:focus-visible {
-    border-color: var(--pine-chip-color-neutral-hover);
+    border-color: var(--chip-border);
   }
+}
+
+// Variant-specific color definitions
+.pds-combobox__chip-trigger--neutral {
+  --chip-bg: var(--pine-chip-color-neutral);
+  --chip-bg-hover: var(--pine-chip-color-neutral-hover);
+  --chip-border: var(--pine-chip-color-neutral-hover);
+  --chip-text: var(--pine-color-text-neutral);
 }
 
 .pds-combobox__chip-trigger--accent {
-  background: var(--pine-chip-color-accent);
-  border: var(--pine-border-width) solid var(--pine-chip-color-accent-hover);
-  color: var(--pine-color-text-accent);
-
-  &:hover:not([aria-disabled='true']) {
-    background: var(--pine-chip-color-accent-hover);
-  }
-
-  &:focus-visible {
-    border-color: var(--pine-chip-color-accent-hover);
-  }
+  --chip-bg: var(--pine-chip-color-accent);
+  --chip-bg-hover: var(--pine-chip-color-accent-hover);
+  --chip-border: var(--pine-chip-color-accent-hover);
+  --chip-text: var(--pine-color-text-accent);
 }
 
 .pds-combobox__chip-trigger--success {
-  background: var(--pine-chip-color-success);
-  border: var(--pine-border-width) solid var(--pine-chip-color-success-hover);
-  color: var(--pine-color-text-success);
-
-  &:hover:not([aria-disabled='true']) {
-    background: var(--pine-chip-color-success-hover);
-  }
-
-  &:focus-visible {
-    border-color: var(--pine-chip-color-success-hover);
-  }
+  --chip-bg: var(--pine-chip-color-success);
+  --chip-bg-hover: var(--pine-chip-color-success-hover);
+  --chip-border: var(--pine-chip-color-success-hover);
+  --chip-text: var(--pine-color-text-success);
 }
 
 .pds-combobox__chip-trigger--warning {
-  background: var(--pine-chip-color-warning);
-  border: var(--pine-border-width) solid var(--pine-chip-color-warning-hover);
-  color: var(--pine-color-text-warning);
-
-  &:hover:not([aria-disabled='true']) {
-    background: var(--pine-chip-color-warning-hover);
-  }
-
-  &:focus-visible {
-    border-color: var(--pine-chip-color-warning-hover);
-  }
+  --chip-bg: var(--pine-chip-color-warning);
+  --chip-bg-hover: var(--pine-chip-color-warning-hover);
+  --chip-border: var(--pine-chip-color-warning-hover);
+  --chip-text: var(--pine-color-text-warning);
 }
 
 .pds-combobox__chip-trigger--danger {
-  background: var(--pine-chip-color-danger);
-  border: var(--pine-border-width) solid var(--pine-chip-color-danger-hover);
-  color: var(--pine-color-text-danger);
-
-  &:hover:not([aria-disabled='true']) {
-    background: var(--pine-chip-color-danger-hover);
-  }
-
-  &:focus-visible {
-    border-color: var(--pine-chip-color-danger-hover);
-  }
+  --chip-bg: var(--pine-chip-color-danger);
+  --chip-bg-hover: var(--pine-chip-color-danger-hover);
+  --chip-border: var(--pine-chip-color-danger-hover);
+  --chip-text: var(--pine-color-text-danger);
 }
 
 .pds-combobox__chip-trigger--info {
-  background: var(--pine-chip-color-info);
-  border: var(--pine-border-width) solid var(--pine-chip-color-info-hover);
-  color: var(--pine-color-text-info);
-
-  &:hover:not([aria-disabled='true']) {
-    background: var(--pine-chip-color-info-hover);
-  }
-
-  &:focus-visible {
-    border-color: var(--pine-chip-color-info-hover);
-  }
+  --chip-bg: var(--pine-chip-color-info);
+  --chip-bg-hover: var(--pine-chip-color-info-hover);
+  --chip-border: var(--pine-chip-color-info-hover);
+  --chip-text: var(--pine-color-text-info);
 }
 
 .pds-combobox__chip-trigger--brand {
