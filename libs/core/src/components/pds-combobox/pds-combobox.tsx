@@ -209,7 +209,11 @@ export class PdsCombobox implements BasePdsProps {
 
     // Initialize form value with current value
     if (this.internals) {
-      this.internals.setFormValue(this.selectedOption?.value ?? this.value ?? '');
+      try {
+        this.internals.setFormValue(this.selectedOption?.value ?? this.value ?? '');
+      } catch (e) {
+        // ElementInternals.setFormValue not available in unit tests
+      }
     }
   }
 
@@ -218,7 +222,11 @@ export class PdsCombobox implements BasePdsProps {
     this.filterOptions();
     // Sync with form internals for form association
     if (this.internals) {
-      this.internals.setFormValue(this.value);
+      try {
+        this.internals.setFormValue(this.value);
+      } catch (e) {
+        // ElementInternals.setFormValue not available in unit tests
+      }
     }
 
     // Find and select option that matches the value (for external value changes)
@@ -259,13 +267,21 @@ export class PdsCombobox implements BasePdsProps {
       this.value = this.selectedOption.value;
       // Update form internals with the actual option value
       if (this.internals) {
-        this.internals.setFormValue(this.selectedOption.value);
+        try {
+          this.internals.setFormValue(this.selectedOption.value);
+        } catch (e) {
+          // ElementInternals.setFormValue not available in unit tests
+        }
       }
     } else {
       this.displayText = '';
       this.value = '';
       if (this.internals) {
-        this.internals.setFormValue('');
+        try {
+          this.internals.setFormValue('');
+        } catch (e) {
+          // ElementInternals.setFormValue not available in unit tests
+        }
       }
     }
   }
