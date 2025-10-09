@@ -1,5 +1,5 @@
 import { Component, Element, h, Prop, Host, Event, EventEmitter, Watch } from '@stencil/core';
-import { assignDescription, messageId } from '../../utils/form';
+import { assignDescription, messageId, exposeTypeProperty } from '../../utils/form';
 import { CheckboxChangeEventDetail } from './checkbox-interface';
 import { danger } from '@pine-ds/icons/icons';
 
@@ -15,6 +15,7 @@ import type { Attributes } from '@utils/attributes';
 export class PdsCheckbox {
   private inheritedAttributes: Attributes = {};
   private internals?: ElementInternals;
+  private readonly _type = 'checkbox' as const;
 
   @Element() el: HTMLPdsCheckboxElement;
 
@@ -79,6 +80,7 @@ export class PdsCheckbox {
    */
   @Prop() value: string;
 
+
   /**
    * Event emitted that contains the `value` and `checked`.
    */
@@ -128,6 +130,9 @@ export class PdsCheckbox {
     if (this.el.attachInternals) {
       this.internals = this.el.attachInternals();
     }
+
+    // Expose type property on the element instance to match native form element behavior
+    exposeTypeProperty(this.el, () => this._type);
   }
 
   componentDidLoad() {

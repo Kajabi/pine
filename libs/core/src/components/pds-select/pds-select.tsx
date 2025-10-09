@@ -1,5 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
-import { messageId } from '../../utils/form';
+import { messageId, exposeTypeProperty } from '../../utils/form';
 import { danger, enlarge } from '@pine-ds/icons/icons';
 
 /**
@@ -16,6 +16,7 @@ export class PdsSelect {
   private selectEl!: HTMLSelectElement;
   private slotContainer!: HTMLDivElement;
   private internals?: ElementInternals;
+  private _type: 'select-one' | 'select-multiple' = 'select-one';
 
   @Element() el: HTMLPdsSelectElement;
 
@@ -84,6 +85,7 @@ export class PdsSelect {
    */
   @Prop({ mutable: true }) value?: string | string[];
 
+
   /**
    * Emitted when a keyboard input occurs.
    */
@@ -100,14 +102,31 @@ export class PdsSelect {
     this.updateFormValue();
   }
 
+  @Watch('multiple')
+  /**
+   * Updates the type property when multiple changes to match native select behavior.
+   */
+  multipleChanged() {
+    this.updateType();
+  }
+
+  private updateType() {
+    this._type = this.multiple ? 'select-multiple' : 'select-one';
+  }
+
   connectedCallback() {
     // Initialize ElementInternals for form association
     if (this.el.attachInternals) {
       this.internals = this.el.attachInternals();
     }
+
+    // Expose type property on the element instance to match native form element behavior
+    exposeTypeProperty(this.el, () => this._type);
   }
 
   componentWillLoad() {
+    // Set initial type based on multiple prop
+    this.updateType();
     this.updateSelectedOption();
   }
 
