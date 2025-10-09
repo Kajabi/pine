@@ -897,6 +897,10 @@ export namespace Components {
          */
         "mode": 'filter' | 'select-only';
         /**
+          * The name of the form control. Submitted with the form as part of a name/value pair.
+         */
+        "name"?: string;
+        /**
           * Placeholder text for the input field.
          */
         "placeholder"?: string;
@@ -3486,6 +3490,10 @@ declare namespace LocalJSX {
           * @default 'filter'
          */
         "mode"?: 'filter' | 'select-only';
+        /**
+          * The name of the form control. Submitted with the form as part of a name/value pair.
+         */
+        "name"?: string;
         /**
           * Emitted when the value changes.
          */

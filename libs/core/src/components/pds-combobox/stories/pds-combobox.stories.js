@@ -37,6 +37,7 @@ export default {
 const BaseTemplate = (args) => html`
 <pds-combobox
   component-id=${args.componentId}
+  name=${args.name}
   custom-option-layouts=${args.customOptionLayouts}
   custom-trigger-content=${args.customTriggerContent}
   disabled=${args.disabled}
@@ -54,6 +55,7 @@ const BaseTemplate = (args) => html`
   chip-large=${args.chipLarge}
   chip-icon=${args.chipIcon}
   chip-dot=${args.chipDot}
+  value=${args.value}
 >
   <option value="cat">Cat</option>
   <option value="dog">Dog</option>
@@ -64,22 +66,26 @@ const BaseTemplate = (args) => html`
 export const Default = BaseTemplate.bind();
 Default.args = {
   componentId: 'combobox-story',
+  name: 'favoriteAnimal',
   label: 'Favorite Animal',
   placeholder: 'placeholder_text',
   trigger: 'input',
   triggerVariant: 'secondary',
   mode: 'filter',
+  value: 'panda',
 };
 
 export const ButtonTrigger = BaseTemplate.bind();
 ButtonTrigger.args = {
   componentId: 'combobox-button-trigger-story',
+  name: 'favoriteAnimal',
   label: 'Favorite Animal',
   placeholder: 'Select an animal',
   trigger: 'button',
   triggerVariant: 'secondary',
   mode: 'select-only',
   triggerWidth: '250px',
+  value: 'dog',
 };
 
 export const ChipTriggerAndLayout = (args) => html`
@@ -103,6 +109,7 @@ export const ChipTriggerAndLayout = (args) => html`
 
 ChipTriggerAndLayout.args = {
   componentId: 'combobox-chip-custom-layouts',
+  name: 'draftStatus',
   customOptionLayouts: true,
   customTriggerContent: true,
   label: 'Draft Status',
@@ -135,6 +142,7 @@ export const ChipTriggerLayoutWithIcons = (args) => html`
 
 ChipTriggerLayoutWithIcons.args = {
   componentId: 'combobox-chip-automatic',
+  name: 'status',
   label: 'Status',
   placeholder: 'Select a status',
   trigger: 'chip',

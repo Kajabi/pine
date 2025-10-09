@@ -24,6 +24,11 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() componentId!: string;
 
   /**
+   * The name of the form control. Submitted with the form as part of a name/value pair.
+   */
+  @Prop({ reflect: true }) name?: string;
+
+  /**
    * Enable custom layout content for options. Options with data-layout attribute will render their HTML content.
    * ⚠️ Security Warning: Only use with trusted content. Basic XSS protection is applied, but avoid user-generated content.
    * @default false
@@ -784,7 +789,7 @@ export class PdsCombobox implements BasePdsProps {
 
   // Get the label of the selected option
   private get selectedLabel(): string {
-    return this.selectedOption ? this.getOptionLabel(this.selectedOption) : '';
+    return this.displayText || '';
   }
 
   // Get the layout content of the selected option for button trigger
