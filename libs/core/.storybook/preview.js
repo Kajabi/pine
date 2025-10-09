@@ -15,6 +15,8 @@ if (docsJson) { setStencilDocJson(docsJson) }
 
 const preview = {
   parameters: {
+    // Note: For explicit actions, use fn() from @storybook/test in your stories
+    // See: https://storybook.js.org/docs/essentials/actions#via-storybooktest-fn-spy-function
     actions: { argTypesRegex: '^on.*' },
     options: {
       storySort: {
