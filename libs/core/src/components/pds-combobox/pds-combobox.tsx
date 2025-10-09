@@ -12,6 +12,7 @@ import DOMPurify from 'dompurify';
   tag: 'pds-combobox',
   styleUrl: 'pds-combobox.scss',
   shadow: true,
+  formAssociated: true,
 })
 export class PdsCombobox implements BasePdsProps {
   /** Reference to the host element */
@@ -21,6 +22,11 @@ export class PdsCombobox implements BasePdsProps {
    * A unique identifier used for the underlying component `id` attribute.
    */
   @Prop() componentId!: string;
+
+  /**
+   * The name of the form control. Submitted with the form as part of a name/value pair.
+   */
+  @Prop({ reflect: true }) name?: string;
 
   /**
    * Enable custom layout content for options. Options with data-layout attribute will render their HTML content.
@@ -135,6 +141,11 @@ export class PdsCombobox implements BasePdsProps {
   @Event() pdsComboboxChange!: EventEmitter<{ value: string }>;
 
   /**
+   * Internal state for the display text shown in the input/trigger
+   */
+  @State() displayText: string = '';
+
+  /**
    * Internal state for filtered options and group labels
    */
   @State() filteredItems: (HTMLOptionElement | HTMLOptGroupElement | HTMLPdsTextElement)[] = [];
@@ -169,17 +180,39 @@ export class PdsCombobox implements BasePdsProps {
   private allItems: (HTMLOptionElement | HTMLOptGroupElement | HTMLPdsTextElement)[] = [];
   private triggerEl?: HTMLElement;
   private listboxEl?: HTMLElement;
+  private internals?: ElementInternals;
+  private isUpdatingFromSelection: boolean = false;
+
+  connectedCallback() {
+    // Initialize ElementInternals for form association
+    if (this.el.attachInternals) {
+      this.internals = this.el.attachInternals();
+    }
+  }
 
   componentWillLoad() {
     this.updateOptions();
   }
 
   componentDidLoad() {
-    // Double-check selection after DOM is fully loaded
-    if (!this.selectedOption && this.trigger === 'chip') {
-      const initialSelected = this.optionEls.find(opt => opt.hasAttribute('selected'));
-      if (initialSelected) {
-        this.setSelectedOption(initialSelected);
+    // Check for value-based preselection if no option is selected yet
+    if (!this.selectedOption && this.value && this.optionEls.length > 0) {
+      const matchingOption = this.optionEls.find(opt => opt.value === this.value);
+      if (matchingOption) {
+        this.setSelectedOption(matchingOption);
+        // Update the display text to show the option's text content
+        this.displayText = this.getOptionLabel(matchingOption);
+        // Keep this.value as the actual option value
+        // this.value remains unchanged (already matches matchingOption.value)
+      }
+    }
+
+    // Initialize form value with current value
+    if (this.internals) {
+      try {
+        this.internals.setFormValue(this.selectedOption?.value ?? this.value ?? '');
+      } catch (e) {
+        // ElementInternals.setFormValue not available in unit tests
       }
     }
   }
@@ -187,6 +220,33 @@ export class PdsCombobox implements BasePdsProps {
   @Watch('value')
   handleValueChange() {
     this.filterOptions();
+    // Sync with form internals for form association
+    if (this.internals) {
+      try {
+        this.internals.setFormValue(this.value);
+      } catch (e) {
+        // ElementInternals.setFormValue not available in unit tests
+      }
+    }
+
+    // Find and select option that matches the value (for external value changes)
+    // Only do this if we're not already updating from a selection
+    if (!this.isUpdatingFromSelection && this.value && this.optionEls.length > 0) {
+      const currentSelectedValue = this.selectedOption ? this.selectedOption.value : null;
+
+      // If the value doesn't match the currently selected option's value, we need to update
+      if (this.value !== currentSelectedValue) {
+        const matchingOption = this.optionEls.find(opt => opt.value === this.value);
+        if (matchingOption) {
+          this.isUpdatingFromSelection = true;
+          this.setSelectedOption(matchingOption);
+          // Update the display text to show the option's text content
+          this.displayText = this.getOptionLabel(matchingOption);
+          // Keep this.value as the actual option value (already correct)
+          this.isUpdatingFromSelection = false;
+        }
+      }
+    }
   }
 
   @Watch('selectedOption')
@@ -200,6 +260,30 @@ export class PdsCombobox implements BasePdsProps {
     this.selectedOptionChipProps = this.selectedOption && this.isOptionChip(this.selectedOption)
       ? this.getOptionChipProps(this.selectedOption)
       : null;
+
+    // Update display text when selected option changes
+    if (this.selectedOption) {
+      this.displayText = this.getOptionLabel(this.selectedOption);
+      this.value = this.selectedOption.value;
+      // Update form internals with the actual option value
+      if (this.internals) {
+        try {
+          this.internals.setFormValue(this.selectedOption.value);
+        } catch (e) {
+          // ElementInternals.setFormValue not available in unit tests
+        }
+      }
+    } else {
+      this.displayText = '';
+      this.value = '';
+      if (this.internals) {
+        try {
+          this.internals.setFormValue('');
+        } catch (e) {
+          // ElementInternals.setFormValue not available in unit tests
+        }
+      }
+    }
   }
 
   private updateOptions() {
@@ -231,13 +315,24 @@ export class PdsCombobox implements BasePdsProps {
         }
       });
 
-      // Set initial selected option if one exists
-      // Always check for selected options when updateOptions is called (including slot changes)
-      let initialSelected = this.optionEls.find(opt => opt.hasAttribute('selected')) || null;
+      // Set initial selected option based on value property
+      let initialSelected: HTMLOptionElement | null = null;
+
+      // Check if value property matches any option
+      if (this.value) {
+        initialSelected = this.optionEls.find(opt => opt.value === this.value) || null;
+        if (initialSelected) {
+          // Update the display text to show the option's text content
+          this.displayText = this.getOptionLabel(initialSelected);
+          // Keep this.value as the actual option value (already correct)
+        }
+      }
 
       // For chip triggers, ensure we always have a selected option
       if (!initialSelected && this.trigger === 'chip' && this.optionEls.length > 0) {
         initialSelected = this.optionEls[0]; // Select first option as default
+        this.value = initialSelected.value;
+        this.displayText = this.getOptionLabel(initialSelected);
         console.warn('PDS Combobox: Chip triggers should always have a selected option. Automatically selected the first option.');
       }
 
@@ -345,7 +440,7 @@ export class PdsCombobox implements BasePdsProps {
     if (this.mode === 'select-only') {
       this.filteredItems = [...this.allItems];
     } else {
-      const val = this.value.toLowerCase();
+      const val = this.displayText.toLowerCase();
       const filteredOptions = this.optionEls.filter(option => {
         // For layout options, search both text content and data-search-text attribute
         if (this.isOptionLayout(option)) {
@@ -413,7 +508,7 @@ export class PdsCombobox implements BasePdsProps {
 
   private handleInput = (e: Event) => {
     const target = e.target as HTMLInputElement;
-    this.value = target.value;
+    this.displayText = target.value;
     this.isOpen = true;
     this.filterOptions();
     setTimeout(() => this.openDropdownPositioning(), 0);
@@ -710,7 +805,7 @@ export class PdsCombobox implements BasePdsProps {
 
   // Get the label of the selected option
   private get selectedLabel(): string {
-    return this.selectedOption ? this.getOptionLabel(this.selectedOption) : '';
+    return this.displayText || '';
   }
 
   // Get the layout content of the selected option for button trigger
@@ -898,18 +993,19 @@ export class PdsCombobox implements BasePdsProps {
       this.isArrowKeyNavigationMode = false; // Reset arrow-key navigation mode
       this.updateAriaActiveDescendant(); // Clear aria-activedescendant
 
-      // If there's a selected option but the input value doesn't match, restore the selected option's value
-      if (this.selectedOption && this.value !== this.getOptionLabel(this.selectedOption)) {
-        this.value = this.getOptionLabel(this.selectedOption);
+      // If there's a selected option but the display text doesn't match, restore the selected option's display text
+      if (this.selectedOption && this.displayText !== this.getOptionLabel(this.selectedOption)) {
+        this.displayText = this.getOptionLabel(this.selectedOption);
+        // The @Watch('selectedOption') will handle value and form internals if needed
       }
     }
   };
 
     private handleOptionClick(option: HTMLOptionElement) {
     // Update reactive state - single source of truth
+    // The @Watch('selectedOption') will handle displayText, value, and form internals
     this.setSelectedOption(option);
 
-    this.value = this.getOptionLabel(option);
     this.isOpen = false;
     this.pdsComboboxChange.emit({ value: option.value });
   }
@@ -1201,7 +1297,7 @@ export class PdsCombobox implements BasePdsProps {
                 aria-disabled={this.disabled ? 'true' : 'false'}
                 aria-label={this.hideLabel ? this.label : undefined}
                 id={this.componentId}
-                value={this.value}
+                value={this.displayText}
                 placeholder={this.placeholder}
                 disabled={this.disabled}
                 onInput={this.handleInput}

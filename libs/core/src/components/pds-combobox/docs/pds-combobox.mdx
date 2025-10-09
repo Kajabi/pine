@@ -283,20 +283,20 @@ The chip trigger renders as a chip component instead of a text input or button. 
 
 <DocCanvas client:only
   mdxSource={{
-    webComponent: `<pds-combobox component-id="chip-draft" label="Status" trigger="chip" mode="select-only">
-  <option value="draft" selected chip-sentiment="neutral" chip-dot="true">Draft</option>
+    webComponent: `<pds-combobox component-id="chip-draft" label="Status" trigger="chip" mode="select-only" value="draft">
+  <option value="draft" chip-sentiment="neutral" chip-dot="true">Draft</option>
   <option value="published" chip-sentiment="success" chip-dot="true">Published</option>
   <option value="archived" chip-sentiment="warning" chip-dot="true">Archived</option>
 </pds-combobox>`,
-    react: `<PdsCombobox componentId="chip-draft" label="Status" trigger="chip" mode="select-only">
-  <option value="draft" selected chip-sentiment="neutral" chip-dot="true">Draft</option>
+    react: `<PdsCombobox componentId="chip-draft" label="Status" trigger="chip" mode="select-only" value="draft">
+  <option value="draft" chip-sentiment="neutral" chip-dot="true">Draft</option>
   <option value="published" chip-sentiment="success" chip-dot="true">Published</option>
   <option value="archived" chip-sentiment="warning" chip-dot="true">Archived</option>
 </PdsCombobox>`,
   }}
 >
-  <pds-combobox component-id="chip-draft" label="Status" trigger="chip" mode="select-only">
-    <option value="draft" selected chip-sentiment="neutral" chip-dot="true">Draft</option>
+  <pds-combobox component-id="chip-draft" label="Status" trigger="chip" mode="select-only" value="draft">
+    <option value="draft" chip-sentiment="neutral" chip-dot="true">Draft</option>
     <option value="published" chip-sentiment="success" chip-dot="true">Published</option>
     <option value="archived" chip-sentiment="warning" chip-dot="true">Archived</option>
   </pds-combobox>
@@ -307,27 +307,89 @@ Add an icon to the chip trigger for better visual context using the automatic ap
 
 <DocCanvas client:only
   mdxSource={{
-    webComponent: `<pds-combobox component-id="chip-icon-auto" label="Priority Level" trigger="chip" mode="select-only">
+    webComponent: `<pds-combobox component-id="chip-icon-auto" label="Priority Level" trigger="chip" mode="select-only" value="high">
   <option value="low" chip-sentiment="info" chip-icon="info-circle">Low</option>
   <option value="medium" chip-sentiment="warning" chip-icon="warning">Medium</option>
-  <option value="high" selected chip-sentiment="danger" chip-icon="warning">High</option>
+  <option value="high" chip-sentiment="danger" chip-icon="warning">High</option>
   <option value="critical" chip-sentiment="danger" chip-icon="danger">Critical</option>
 </pds-combobox>`,
-    react: `<PdsCombobox componentId="chip-icon-auto" label="Priority Level" trigger="chip" mode="select-only">
+    react: `<PdsCombobox componentId="chip-icon-auto" label="Priority Level" trigger="chip" mode="select-only" value="high">
   <option value="low" chip-sentiment="info" chip-icon="info-circle">Low</option>
   <option value="medium" chip-sentiment="warning" chip-icon="warning">Medium</option>
-  <option value="high" selected chip-sentiment="danger" chip-icon="warning">High</option>
+  <option value="high" chip-sentiment="danger" chip-icon="warning">High</option>
   <option value="critical" chip-sentiment="danger" chip-icon="danger">Critical</option>
 </PdsCombobox>`,
   }}
 >
-  <pds-combobox component-id="chip-icon-auto" label="Priority Level" trigger="chip" mode="select-only">
+  <pds-combobox component-id="chip-icon-auto" label="Priority Level" trigger="chip" mode="select-only" value="high">
     <option value="low" chip-sentiment="info" chip-icon="info-circle">Low</option>
     <option value="medium" chip-sentiment="warning" chip-icon="warning">Medium</option>
-    <option value="high" selected chip-sentiment="danger" chip-icon="warning">High</option>
+    <option value="high" chip-sentiment="danger" chip-icon="warning">High</option>
     <option value="critical" chip-sentiment="danger" chip-icon="danger">Critical</option>
   </pds-combobox>
 </DocCanvas>
+
+## Preselected Options
+
+The combobox supports preselecting options using the `value` property on the combobox component. This approach is consistent with other form components and works well with frameworks like React.
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-preselected-value" label="Favorite Animal" placeholder="Select an animal" trigger="button" mode="select-only" value="panda">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="combobox-preselected-value" label="Favorite Animal" placeholder="Select an animal" trigger="button" mode="select-only" value="panda">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="panda">Panda</option>
+  <option value="snake">Snake</option>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="combobox-preselected-value" label="Favorite Animal" placeholder="Select an animal" trigger="button" mode="select-only" value="panda">
+    <option value="cat">Cat</option>
+    <option value="dog">Dog</option>
+    <option value="panda">Panda</option>
+    <option value="snake">Snake</option>
+  </pds-combobox>
+</DocCanvas>
+
+### Preselection with Input Trigger
+
+Preselection also works with input triggers, showing the selected option's text in the input field:
+
+<DocCanvas client:only
+  mdxSource={{
+    webComponent: `<pds-combobox component-id="combobox-preselected-input" label="Favorite Color" placeholder="Type to search..." mode="filter" trigger="input" value="blue">
+  <option value="red">Red</option>
+  <option value="blue">Blue</option>
+  <option value="green">Green</option>
+  <option value="yellow">Yellow</option>
+</pds-combobox>`,
+    react: `<PdsCombobox componentId="combobox-preselected-input" label="Favorite Color" placeholder="Type to search..." mode="filter" trigger="input" value="blue">
+  <option value="red">Red</option>
+  <option value="blue">Blue</option>
+  <option value="green">Green</option>
+  <option value="yellow">Yellow</option>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox component-id="combobox-preselected-input" label="Favorite Color" placeholder="Type to search..." mode="filter" trigger="input" value="blue">
+    <option value="red">Red</option>
+    <option value="blue">Blue</option>
+    <option value="green">Green</option>
+    <option value="yellow">Yellow</option>
+  </pds-combobox>
+</DocCanvas>
+
+### Important Notes
+
+- **Value vs. Display Text**: When using the `value` property, provide the option's `value` attribute (e.g., `value="panda"`), not the display text. The combobox will automatically show the corresponding option's text content (e.g., "Panda").
+- **Form Integration**: Preselected options work seamlessly with forms and will be included in form submissions.
+- **Dynamic Updates**: The `value` property can be updated programmatically to change the selection at runtime.
 
 ## Sizing and Positioning
 
