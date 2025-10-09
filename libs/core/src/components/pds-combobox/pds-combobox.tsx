@@ -609,6 +609,13 @@ export class PdsCombobox implements BasePdsProps {
           this.restoreFocusToTrigger();
         }
         break;
+      case ' ':
+        e.preventDefault();
+        if (this.highlightedIndex >= 0 && this.highlightedIndex < selectableOptions.length) {
+          this.handleOptionClick(selectableOptions[this.highlightedIndex]);
+          this.restoreFocusToTrigger();
+        }
+        break;
       case 'Escape':
         e.preventDefault();
         this.isOpen = false;
