@@ -1,5 +1,5 @@
-import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
-import { assignDescription, messageId } from '../../utils/form';
+import { Component, Host, h, Prop, Event, EventEmitter, Element } from '@stencil/core';
+import { assignDescription, messageId, exposeTypeProperty } from '../../utils/form';
 import { danger } from '@pine-ds/icons/icons';
 
 @Component({
@@ -8,6 +8,10 @@ import { danger } from '@pine-ds/icons/icons';
   scoped: true,
 })
 export class PdsRadio {
+  private readonly _type = 'radio' as const;
+
+  @Element() el: HTMLPdsRadioElement;
+
   /**
    * Determines whether or not the radio is checked.
    * @defaultValue false
@@ -67,6 +71,7 @@ export class PdsRadio {
    */
   @Prop() value: string;
 
+
   /**
    * Emits a boolean indicating whether the checkbox is currently checked or unchecked.
    */
@@ -94,6 +99,11 @@ export class PdsRadio {
     }
 
     return classNames.join('  ');
+  }
+
+  connectedCallback() {
+    // Expose type property on the element instance to match native form element behavior
+    exposeTypeProperty(this.el, () => this._type);
   }
 
   render() {

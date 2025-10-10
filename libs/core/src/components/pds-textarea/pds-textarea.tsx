@@ -1,5 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, h, Method, Prop, State, Watch } from '@stencil/core';
-import { assignDescription, isRequired, messageId } from '../../utils/form';
+import { assignDescription, isRequired, messageId, exposeTypeProperty } from '../../utils/form';
 import { TextareaChangeEventDetail, TextareaInputEventDetail } from './textarea-interface';
 import { debounceEvent } from '@utils/utils';
 import type { Attributes } from '@utils/attributes';
@@ -28,6 +28,7 @@ export class PdsTextarea {
   private internals?: ElementInternals;
   private resizeObserver?: ResizeObserver;
   private characterCounter?: HTMLElement;
+  private readonly _type = 'textarea' as const;
 
   @Element() el: HTMLPdsTextareaElement;
 
@@ -155,6 +156,7 @@ export class PdsTextarea {
   @Prop({mutable: true}) value?: string | null = '';
 
   @State() hasFocus = false;
+
 
   /**
    * If true, the textarea has action content in the label area
@@ -320,6 +322,9 @@ export class PdsTextarea {
 
     // Setup ResizeObserver for character counter positioning
     this.setupResizeObserver();
+
+    // Expose type property on the element instance to match native form element behavior
+    exposeTypeProperty(this.el, () => this._type);
   }
 
   /**
