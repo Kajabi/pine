@@ -497,6 +497,34 @@ describe('pds-combobox', () => {
     expect(pdsComboboxChangeSpy).toHaveBeenCalledWith({ value: 'cat' });
   });
 
+  it('handles Space key to select option', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
+    });
+
+    const component = page.rootInstance;
+    const input = page.root?.shadowRoot?.querySelector('input');
+    const pdsComboboxChangeSpy = jest.spyOn(component.pdsComboboxChange, 'emit');
+
+    const mockOption = createMockOption('dog', 'Dog');
+
+    component.optionEls = [mockOption];
+    component.filteredItems = [mockOption];
+    component.isOpen = true;
+    component.highlightedIndex = 0;
+
+    // Test Space key
+    const spaceEvent = new KeyboardEvent('keydown', { key: ' ' });
+    input?.dispatchEvent(spaceEvent);
+    await page.waitForChanges();
+
+    expect(component.value).toBe('dog'); // Should be actual option value
+    expect(component.displayText).toBe('Dog'); // Should be display text
+    expect(component.isOpen).toBe(false);
+    expect(pdsComboboxChangeSpy).toHaveBeenCalledWith({ value: 'dog' });
+  });
+
   it('handles Escape key to close dropdown', async () => {
     const page = await newSpecPage({
       components: [PdsCombobox],
