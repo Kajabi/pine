@@ -14,8 +14,10 @@
 }
 
 .pds-combobox__label {
+  color: var(--pine-color-text-label);
   display: block;
-  font-size: 0.95rem;
+  font: var(--pine-typography-body-medium);
+  letter-spacing: var(--pine-letter-spacing);
   margin-block-end: var(--pine-dimension-2xs);
 }
 

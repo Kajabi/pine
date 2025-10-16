@@ -1,3 +1,29 @@
+## 3.8.0 (2025-10-15)
+
+### Features 🚀
+
+- implements z-index values across components using new tokens ([#549](https://github.com/Kajabi/pine/pull/549))
+- add readonly type property to form components ([#559](https://github.com/Kajabi/pine/pull/559))
+- **pds-popover:** implement methods control and events ([#548](https://github.com/Kajabi/pine/pull/548))
+
+### Bug Fixes 🐛
+
+- **pds-combobox:** add chip trigger variant ([#550](https://github.com/Kajabi/pine/pull/550))
+- **pds-combobox:** update highlighted option logic when selected ([#554](https://github.com/Kajabi/pine/pull/554))
+- **pds-combobox:** add attachInternals and add to form docs ([#556](https://github.com/Kajabi/pine/pull/556))
+- **pds-combobox:** update docs and space key functionality ([#560](https://github.com/Kajabi/pine/pull/560))
+- **pds-copytext:** update button padding and class name syntax in stories ([#546](https://github.com/Kajabi/pine/pull/546))
+- **pds-tabs:** correct keyboard navigation for tabs when panels have focusable elements ([#555](https://github.com/Kajabi/pine/pull/555))
+
+### Styles 🎨
+
+- **pds-input:** correct styles for append/prepend button height ([#551](https://github.com/Kajabi/pine/pull/551))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.7.0 (2025-10-02)
 
 ### Features 🚀
