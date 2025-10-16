@@ -32,7 +32,7 @@ const addVersionToSidebar = () => {
   return false;
 };
 
-// Retry logic with exponential backoff
+// Retry logic with linear backoff
 let attempts = 0;
 const maxAttempts = 5;
 
