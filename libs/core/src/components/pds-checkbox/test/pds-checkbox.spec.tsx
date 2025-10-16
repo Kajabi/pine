@@ -3,6 +3,19 @@ import { PdsCheckbox } from '../pds-checkbox';
 import { danger } from '@pine-ds/icons/icons';
 
 describe('pds-checkbox', () => {
+  // Suppress ElementInternals console errors in unit tests (not supported in mock-doc)
+  const originalError = console.error;
+  beforeAll(() => {
+    console.error = jest.fn((message) => {
+      if (!message?.includes?.('ElementInternals')) {
+        originalError(message);
+      }
+    });
+  });
+  afterAll(() => {
+    console.error = originalError;
+  });
+
   it('renders', async () => {
     const page = await newSpecPage({
       components: [PdsCheckbox],

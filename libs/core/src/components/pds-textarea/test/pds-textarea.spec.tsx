@@ -3,6 +3,19 @@ import { PdsTextarea } from '../pds-textarea';
 import { danger } from '@pine-ds/icons/icons';
 
 describe('pds-textarea', () => {
+  // Suppress ElementInternals console errors in unit tests (not supported in mock-doc)
+  const originalError = console.error;
+  beforeAll(() => {
+    console.error = jest.fn((message) => {
+      if (!message?.includes?.('ElementInternals')) {
+        originalError(message);
+      }
+    });
+  });
+  afterAll(() => {
+    console.error = originalError;
+  });
+
   it('renders default textarea', async () => {
     const {root} = await newSpecPage({
       components: [PdsTextarea],

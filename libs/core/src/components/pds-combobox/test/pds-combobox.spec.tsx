@@ -1,6 +1,19 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsCombobox } from '../pds-combobox';
 
+// Suppress ElementInternals console errors in unit tests (not supported in mock-doc)
+const originalError = console.error;
+beforeAll(() => {
+  console.error = jest.fn((message) => {
+    if (!message?.includes?.('ElementInternals')) {
+      originalError(message);
+    }
+  });
+});
+afterAll(() => {
+  console.error = originalError;
+});
+
 // Helper function to create mock options
 const createMockOption = (value: string, label: string, selected: boolean = false) => ({
   value,

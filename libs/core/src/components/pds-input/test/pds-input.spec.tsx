@@ -2,6 +2,19 @@ import { newSpecPage } from '@stencil/core/testing';
 import { PdsInput } from '../pds-input';
 
 describe('pds-input', () => {
+  // Suppress ElementInternals console errors in unit tests (not supported in mock-doc)
+  const originalError = console.error;
+  beforeAll(() => {
+    console.error = jest.fn((message) => {
+      if (!message?.includes?.('ElementInternals')) {
+        originalError(message);
+      }
+    });
+  });
+  afterAll(() => {
+    console.error = originalError;
+  });
+
   it('renders a value when prop is set', async () => {
     const { root } = await newSpecPage({
       components: [PdsInput],

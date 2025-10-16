@@ -3,6 +3,19 @@ import { PdsSelect } from '../pds-select';
 import { enlarge } from '@pine-ds/icons/icons';
 
 describe('pds-select', () => {
+  // Suppress ElementInternals console errors in unit tests (not supported in mock-doc)
+  const originalError = console.error;
+  beforeAll(() => {
+    console.error = jest.fn((message) => {
+      if (!message?.includes?.('ElementInternals')) {
+        originalError(message);
+      }
+    });
+  });
+  afterAll(() => {
+    console.error = originalError;
+  });
+
   it('renders', async () => {
     const { root } = await newSpecPage({
       components: [PdsSelect],
