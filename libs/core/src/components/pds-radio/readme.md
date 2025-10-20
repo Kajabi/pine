@@ -25,9 +25,9 @@
 
 ## Events
 
-| Event            | Description                                                                        | Type                   |
-| ---------------- | ---------------------------------------------------------------------------------- | ---------------------- |
-| `pdsRadioChange` | Emits a boolean indicating whether the checkbox is currently checked or unchecked. | `CustomEvent<boolean>` |
+| Event            | Description                                                                     | Type                   |
+| ---------------- | ------------------------------------------------------------------------------- | ---------------------- |
+| `pdsRadioChange` | Emits a boolean indicating whether the radio is currently checked or unchecked. | `CustomEvent<boolean>` |
 
 
 ## Slots

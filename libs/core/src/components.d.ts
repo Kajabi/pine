@@ -4022,7 +4022,7 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Emits a boolean indicating whether the checkbox is currently checked or unchecked.
+          * Emits a boolean indicating whether the radio is currently checked or unchecked.
          */
         "onPdsRadioChange"?: (event: PdsRadioCustomEvent<boolean>) => void;
         /**

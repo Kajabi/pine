@@ -48,7 +48,7 @@
   }
 
   &:has(input:checked) {
-    box-shadow: 0 0 0 2px var(--pine-color-primary-hover)
+    box-shadow: 0 0 0 2px var(--pine-color-primary-hover);
   }
 
   label {
@@ -249,13 +249,6 @@ label {
     grid-area: message;
     margin-block-start: 0;
     margin-inline-start: 0;
-  }
-
-  // When radio is checked, show visual feedback on the image container
-
-  // Focus styles for accessibility
-  &:has(input:focus-visible) .pds-radio__image-container {
-    outline: var(--pine-outline-focus);
   }
 
   // Disabled state

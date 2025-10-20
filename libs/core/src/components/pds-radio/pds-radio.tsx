@@ -83,7 +83,7 @@ export class PdsRadio {
 
 
   /**
-   * Emits a boolean indicating whether the checkbox is currently checked or unchecked.
+   * Emits a boolean indicating whether the radio is currently checked or unchecked.
    */
   @Event() pdsRadioChange: EventEmitter<boolean>;
 
@@ -123,7 +123,7 @@ export class PdsRadio {
       classNames.push('has-image');
     }
 
-    return classNames.join('  ');
+    return classNames.join(' ');
   }
 
   connectedCallback() {
