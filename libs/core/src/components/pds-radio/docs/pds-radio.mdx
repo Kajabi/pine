@@ -143,6 +143,152 @@ Radio groups can also use borders for enhanced visual organization, particularly
   </pds-box>
 </DocCanvas>
 
+### With Image
+
+Radio buttons can display custom images instead of the default radio input in a bordered card layout. The image replaces the visual radio button while maintaining all functionality and accessibility features.
+
+You can provide images by using the `image` slot.
+
+<DocCanvas client:only mdxSource={{
+  react: `<PdsRadio
+  componentId="image-radio"
+  label="Profile Picture"
+  helperMessage="Select your profile avatar">
+  <PdsBox slot="image" backgroundColor="var(--pine-color-accent)" borderRadius="full" padding="sm">
+    <PdsIcon icon="danger" size="medium" color="var(--pine-color-white)" />
+  </PdsBox>
+</PdsRadio>`,
+  webComponent: `<pds-radio
+  component-id="image-radio"
+  label="Profile Picture"
+  helper-message="Select your profile avatar">
+  <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+    <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
+  </pds-box>
+</pds-radio>`
+}}>
+  <pds-radio
+    component-id="image-radio"
+    label="Profile Picture"
+    helper-message="Select your profile avatar">
+    <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+      <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
+    </pds-box>
+  </pds-radio>
+</DocCanvas>
+
+### Image Group
+
+Image-based radios work seamlessly in groups with the same bordered card layout, showing visual selection feedback with border highlights and checkmark overlays.
+
+<DocCanvas client:only mdxSource={{
+  react: `<PdsBox gap="sm">
+  <PdsRadio
+    componentId="avatar1"
+    label="John Doe"
+    name="avatar-selection"
+    value="john"
+    checked={true}
+    helperMessage="Senior Developer"
+  >
+    <PdsBox slot="image" backgroundColor="var(--pine-color-accent)" borderRadius="full" padding="sm">
+      <PdsIcon icon="danger" size="medium" color="var(--pine-color-white)" />
+    </PdsBox>
+  </PdsRadio>
+  <PdsRadio
+    componentId="avatar2"
+    label="Jane Smith"
+    name="avatar-selection"
+    value="jane"
+    imageUrl="https://via.placeholder.com/24x24/10b981/ffffff?text=JS"
+    helperMessage="Product Manager"
+  >
+    <PdsBox slot="image" backgroundColor="var(--pine-color-accent)" borderRadius="full" padding="sm">
+      <PdsIcon icon="danger" size="medium" color="var(--pine-color-white)" />
+    </PdsBox>
+  </PdsRadio>
+  <PdsRadio
+    componentId="avatar3"
+    label="Mike Johnson"
+    name="avatar-selection"
+    value="mike"
+    imageUrl="https://via.placeholder.com/24x24/f59e0b/ffffff?text=MJ"
+    helperMessage="UX Designer"
+  >
+    <PdsBox slot="image" backgroundColor="var(--pine-color-accent)" borderRadius="full" padding="sm">
+      <PdsIcon icon="danger" size="medium" color="var(--pine-color-white)" />
+    </PdsBox>
+  </PdsRadio>
+</PdsBox>`,
+  webComponent: `<pds-box gap="sm">
+  <pds-radio
+    component-id="avatar1"
+    label="John Doe"
+    name="avatar-selection"
+    value="john"
+    checked
+    helper-message="Senior Developer">
+    <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+      <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
+    </pds-box>
+  </pds-radio>
+  <pds-radio
+    component-id="avatar2"
+    label="Jane Smith"
+    name="avatar-selection"
+    value="jane"
+    helper-message="Product Manager">
+    <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+      <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
+    </pds-box>
+  </pds-radio>
+  <pds-radio
+    component-id="avatar3"
+    label="Mike Johnson"
+    name="avatar-selection"
+    value="mike"
+    helper-message="UX Designer">
+    <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+      <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
+    </pds-box>
+  </pds-radio>
+</pds-box>`
+}}>
+  <pds-box gap="sm">
+    <pds-radio
+      component-id="avatar1"
+      label="John Doe"
+      name="avatar-selection"
+      value="john"
+      checked
+      helper-message="Senior Developer">
+      <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+        <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
+      </pds-box>
+    </pds-radio>
+    <pds-radio
+      component-id="avatar2"
+      label="Jane Smith"
+      name="avatar-selection"
+      value="jane"
+      helper-message="Product Manager">
+      <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+        <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
+      </pds-box>
+    </pds-radio>
+    <pds-radio
+      component-id="avatar3"
+      label="Mike Johnson"
+      name="avatar-selection"
+      value="mike"
+      helper-message="UX Designer">
+      <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+        <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
+      </pds-box>
+    </pds-radio>
+  </pds-box>
+</DocCanvas>
+
 ## Additional Resources
 
 [MDN Web Docs: Radio](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio)

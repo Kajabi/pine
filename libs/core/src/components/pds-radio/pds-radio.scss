@@ -80,6 +80,20 @@ input {
   position: relative;
   width: var(--sizing-input-size);
 
+  /* stylelint-disable-next-line selector-no-qualifying-type */
+  &.visually-hidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    clip-path: polygon(0 0, 0 0, 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+
   &:hover {
     background: var(--pine-color-background-container-hover);
     border: var(--pine-border-hover);
@@ -157,18 +171,147 @@ label {
 
 .pds-radio__message {
   color: var(--pine-color-text-message);
-  font: var(--pine-typography-body-sm-medium);
-  margin-block-start: var(--sizing-margin-block-start);
+  font: var(--pine-typography-body);
   margin-inline-start: var(--pine-dimension-md);
   width: 100%;
 }
 
 .pds-radio__message--error {
   display: flex;
-  font-size: var(--pine-font-size-body-sm);
   gap: var(--pine-dimension-2xs);
 
   pds-icon {
     margin-block-start: var(--pine-dimension-025);
+  }
+}
+
+// Image-based radio styles - matches bordered layout
+:host(.has-image) {
+  align-items: center;
+  border: var(--pine-border);
+  border-radius: var(--pine-dimension-125);
+  column-gap: var(--pine-dimension-xs);
+  display: flex;
+  flex: 1;
+  padding: var(--pine-dimension-md);
+
+  &:hover {
+    border: var(--pine-border-hover);
+  }
+
+  &:has(input:checked) {
+    box-shadow: 0 0 0 2px var(--pine-color-primary-hover);
+  }
+
+  label {
+    color: var(--pine-color-text);
+    display: flex;
+    font-weight: var(--pine-font-weight-semi-bold);
+    gap: var(--pine-dimension-xs);
+
+    &::after {
+      content: "";
+      cursor: pointer;
+      height: 100%;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      z-index: 1;
+    }
+  }
+
+  .pds-radio__image-container {
+    align-items: center;
+    align-self: center;
+    border-radius: var(--pine-border-radius-full);
+    cursor: pointer;
+    display: flex;
+    flex: none;
+    grid-area: image;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border: var(--pine-border-hover);
+    }
+
+    .pds-radio__image {
+      height: 100%;
+      object-fit: cover;
+      width: 100%;
+    }
+  }
+
+  .pds-radio__message {
+    grid-area: message;
+    margin-block-start: 0;
+    margin-inline-start: 0;
+  }
+
+  // When radio is checked, show visual feedback on the image container
+
+  // Focus styles for accessibility
+  &:has(input:focus-visible) .pds-radio__image-container {
+    outline: var(--pine-outline-focus);
+  }
+
+  // Disabled state
+  &.is-disabled {
+    .pds-radio__image-container {
+      border-color: var(--pine-color-border-disabled);
+      cursor: not-allowed;
+      opacity: 0.6;
+
+      &:hover {
+        border-color: var(--pine-color-border-disabled);
+      }
+    }
+
+    label {
+      cursor: not-allowed;
+    }
+  }
+
+  // Invalid state
+  &.is-invalid {
+    .pds-radio__image-container {
+      border-color: var(--pine-color-border-danger);
+
+      &:hover {
+        border-color: var(--pine-color-border-danger-hover);
+      }
+    }
+
+    &:has(input:checked) {
+      box-shadow: 0 0 0 2px var(--pine-color-border-danger);
+
+      .pds-radio__image-container {
+        border-color: var(--pine-color-border-danger);
+        box-shadow: 0 0 0 2px var(--pine-color-border-danger);
+
+        /* stylelint-disable-next-line */
+        &::after {
+          background: var(--pine-color-border-danger);
+        }
+
+        /* stylelint-disable-next-line */
+        &:hover {
+          border-color: var(--pine-color-border-danger-hover);
+          box-shadow: 0 0 0 2px var(--pine-color-border-danger-hover);
+        }
+      }
+
+      &:hover {
+        box-shadow: 0 0 0 2px var(--pine-color-border-danger-hover);
+      }
+    }
+
+    label,
+    .pds-radio__message--error {
+      color: var(--pine-color-text-message-danger);
+    }
   }
 }

@@ -30,6 +30,20 @@
 | `pdsRadioChange` | Emits a boolean indicating whether the checkbox is currently checked or unchecked. | `CustomEvent<boolean>` |
 
 
+## Slots
+
+| Slot      | Description                                                        |
+| --------- | ------------------------------------------------------------------ |
+| `"image"` | Custom image content to display instead of the default radio input |
+
+
+## Shadow Parts
+
+| Part                | Description                 |
+| ------------------- | --------------------------- |
+| `"image-container"` | The container for the image |
+
+
 ## Dependencies
 
 ### Depends on
