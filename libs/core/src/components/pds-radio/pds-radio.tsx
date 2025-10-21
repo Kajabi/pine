@@ -133,7 +133,7 @@ export class PdsRadio {
 
   render() {
     const renderLabelAndMessages = () => [
-      <label htmlFor={this.componentId}>
+      <label htmlFor={this.componentId} key={`${this.componentId}-label`}>
         <input
           aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
           aria-invalid={this.invalid ? "true" : undefined}
@@ -153,6 +153,7 @@ export class PdsRadio {
       </label>,
       this.helperMessage && (
         <div
+          key={`${this.componentId}-helper`}
           class={'pds-radio__message'}
           id={messageId(this.componentId, 'helper')}
         >
@@ -161,6 +162,7 @@ export class PdsRadio {
       ),
       this.errorMessage && (
         <div
+          key={`${this.componentId}-error`}
           class={`pds-radio__message pds-radio__message--error`}
           id={messageId(this.componentId, 'error')}
           aria-live="assertive"
