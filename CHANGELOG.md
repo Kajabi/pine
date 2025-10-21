@@ -1,3 +1,17 @@
+## 3.8.1 (2025-10-21)
+
+### Documentation 📄
+
+- display pine version in storybook ([#561](https://github.com/Kajabi/pine/pull/561))
+
+### Styles 🎨
+
+- **pds-tab:** remove z-index from pill variant ([#563](https://github.com/Kajabi/pine/pull/563))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+
 ## 3.8.0 (2025-10-15)
 
 ### Features 🚀
