@@ -77,6 +77,17 @@ Allows for `pds-progress` to be filled with a custom color. Accepts any valid co
   <pds-progress component-id="fillcolor" label="Fill color" percent="95" fill-color="#86D5BC"></pds-progress>
 </DocCanvas>
 
+### Fill Color with Gradient
+
+You can also use CSS gradients for more visual interest.
+
+<DocCanvas client:only mdxSource={{
+  react: `<PdsProgress componentId="fillcolor-gradient" label="Gradient fill color" percent="75" fillColor="linear-gradient(to right, var(--pine-color-red-300), var(--pine-color-green-300))"></PdsProgress>`,
+  webComponent: `<pds-progress component-id="fillcolor-gradient" label="Gradient fill color" percent="75" fill-color="linear-gradient(to right, var(--pine-color-red-300), var(--pine-color-green-300))"></pds-progress>
+`}}>
+  <pds-progress component-id="fillcolor-gradient" label="Gradient fill color" percent="75" fill-color="linear-gradient(to right, var(--pine-color-red-300), var(--pine-color-green-300))"></pds-progress>
+</DocCanvas>
+
 ### Tooltip
 
 A tooltip can be added by combining the `progress` component with a [tooltip](/docs/components-tooltip--default).
