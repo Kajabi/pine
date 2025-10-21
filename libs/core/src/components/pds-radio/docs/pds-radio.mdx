@@ -147,7 +147,7 @@ Radio groups can also use borders for enhanced visual organization, particularly
 
 Radio buttons can display custom images instead of the default radio input in a bordered card layout. The image replaces the visual radio button while maintaining all functionality and accessibility features.
 
-You can provide images by using the `image` slot.
+**Note:** Images must be provided via the `image` slot.
 
 <DocCanvas client:only mdxSource={{
   react: `<PdsRadio
@@ -200,7 +200,6 @@ Image-based radios work seamlessly in groups with the same bordered card layout,
     label="Jane Smith"
     name="avatar-selection"
     value="jane"
-    imageUrl="https://via.placeholder.com/24x24/10b981/ffffff?text=JS"
     helperMessage="Product Manager"
   >
     <PdsBox slot="image" backgroundColor="var(--pine-color-accent)" borderRadius="full" padding="sm">
@@ -212,7 +211,6 @@ Image-based radios work seamlessly in groups with the same bordered card layout,
     label="Mike Johnson"
     name="avatar-selection"
     value="mike"
-    imageUrl="https://via.placeholder.com/24x24/f59e0b/ffffff?text=MJ"
     helperMessage="UX Designer"
   >
     <PdsBox slot="image" backgroundColor="var(--pine-color-accent)" borderRadius="full" padding="sm">
