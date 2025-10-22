@@ -1,7 +1,11 @@
-import { Component, Host, h, Prop, Event, EventEmitter, Element } from '@stencil/core';
+import { Component, Host, h, Prop, Event, EventEmitter, Element, State } from '@stencil/core';
 import { assignDescription, messageId, exposeTypeProperty } from '../../utils/form';
 import { danger } from '@pine-ds/icons/icons';
 
+/**
+ * @slot image - Custom image content to display instead of the default radio input
+ * @part image-container - The container for the image
+ */
 @Component({
   tag: 'pds-radio',
   styleUrls: ['../../global/styles/utils/label.scss', 'pds-radio.scss'],
@@ -11,6 +15,8 @@ export class PdsRadio {
   private readonly _type = 'radio' as const;
 
   @Element() el: HTMLPdsRadioElement;
+
+  @State() private _hasImage = false;
 
   /**
    * Determines whether or not the radio is checked.
@@ -38,6 +44,12 @@ export class PdsRadio {
    * Displays helper message text below radio.
    */
   @Prop() helperMessage: string;
+
+  /**
+   * Adds a border around the radio component for better visual separation.
+   * @defaultValue false
+   */
+  @Prop() hasBorder = false;
 
     /**
    * Determines whether or not the radio is invalid.
@@ -73,7 +85,7 @@ export class PdsRadio {
 
 
   /**
-   * Emits a boolean indicating whether the checkbox is currently checked or unchecked.
+   * Emits a boolean indicating whether the radio is currently checked or unchecked.
    */
   @Event() pdsRadioChange: EventEmitter<boolean>;
 
@@ -88,6 +100,15 @@ export class PdsRadio {
     this.pdsRadioChange.emit(isChecked);
   }
 
+  private hasImageSlot(): boolean {
+    const imageSlot = this.el.querySelector('[slot="image"]');
+    return !!imageSlot;
+  }
+
+  private hasImage(): boolean {
+    return this._hasImage;
+  }
+
   private classNames() {
     const classNames = [];
 
@@ -97,8 +118,18 @@ export class PdsRadio {
     if (this.disabled) {
       classNames.push('is-disabled');
     }
+    if (this.hasBorder) {
+      classNames.push('has-border');
+    }
+    if (this.hasImage()) {
+      classNames.push('has-image');
+    }
 
-    return classNames.join('  ');
+    return classNames.join(' ');
+  }
+
+  componentWillLoad() {
+    this._hasImage = this.hasImageSlot();
   }
 
   connectedCallback() {
@@ -107,43 +138,61 @@ export class PdsRadio {
   }
 
   render() {
+    const renderLabelAndMessages = () => [
+      <label htmlFor={this.componentId} key={`${this.componentId}-label`}>
+        <input
+          aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
+          aria-invalid={this.invalid ? "true" : undefined}
+          type="radio"
+          id={this.componentId}
+          name={this.name}
+          value={this.value}
+          checked={this.checked}
+          required={this.required}
+          disabled={this.disabled}
+          onChange={this.handleRadioChange}
+          class={this.hasImage() ? 'visually-hidden' : ''}
+        />
+        <span class={this.hideLabel ? 'visually-hidden' : ''}>
+          {this.label}
+        </span>
+      </label>,
+      this.helperMessage && (
+        <div
+          key={`${this.componentId}-helper`}
+          class={'pds-radio__message'}
+          id={messageId(this.componentId, 'helper')}
+        >
+          {this.helperMessage}
+        </div>
+      ),
+      this.errorMessage && (
+        <div
+          key={`${this.componentId}-error`}
+          class={`pds-radio__message pds-radio__message--error`}
+          id={messageId(this.componentId, 'error')}
+          aria-live="assertive"
+        >
+          <pds-icon icon={danger} size="small" />
+          {this.errorMessage}
+        </div>
+      )
+    ];
+
     return (
       <Host class={this.classNames()}>
-        <label htmlFor={this.componentId}>
-          <input
-            aria-describedby={assignDescription(this.componentId, this.invalid, this.helperMessage)}
-            aria-invalid={this.invalid ? "true" : undefined}
-            type="radio"
-            id={this.componentId}
-            name={this.name}
-            value={this.value}
-            checked={this.checked}
-            required={this.required}
-            disabled={this.disabled}
-            onChange={this.handleRadioChange}
-          />
-          <span class={this.hideLabel ? 'visually-hidden' : ''}>
-            {this.label}
-          </span>
-        </label>
-        {this.helperMessage &&
-          <div
-            class={'pds-radio__message'}
-            id={messageId(this.componentId, 'helper')}
-          >
-            {this.helperMessage}
+        {this.hasImage() && (
+          <div class="pds-radio__image-container" part="image-container">
+            <slot name="image" onSlotchange={() => (this._hasImage = this.hasImageSlot())} />
           </div>
-        }
-        {this.errorMessage &&
-          <div
-            class={`pds-radio__message pds-radio__message--error`}
-            id={messageId(this.componentId, 'error')}
-            aria-live="assertive"
-          >
-            <pds-icon icon={danger} size="small" />
-            {this.errorMessage}
+        )}
+        {this.hasImage() ? (
+          <div class="pds-radio__content-wrapper">
+            {renderLabelAndMessages()}
           </div>
-        }
+        ) : (
+          renderLabelAndMessages()
+        )}
       </Host>
     );
   }

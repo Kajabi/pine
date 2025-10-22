@@ -82,6 +82,17 @@ An optional error message can provide further instructions, displayed independen
   <pds-radio component-id="invalid" label="Label" invalid error-message="This is a short error message"></pds-radio>
 </DocCanvas>
 
+### With Border
+
+Add a border around the radio component for better visual separation, useful for card-like layouts or when radios need more visual emphasis.
+
+<DocCanvas client:only mdxSource={{
+  react: `<PdsRadio componentId="border" label="Label" hasBorder={true} helperMessage="This radio has enhanced visual separation" />`,
+  webComponent: `<pds-radio component-id="border" label="Label" has-border helper-message="This radio has enhanced visual separation"></pds-radio>`
+}}>
+  <pds-radio component-id="border" label="Label" has-border helper-message="This radio has enhanced visual separation"></pds-radio>
+</DocCanvas>
+
 ### Group
 
 A radio group is created by assigning the same `name` attribute to each radio.
@@ -106,6 +117,174 @@ Only one radio in the group can be selected at a time.
     <pds-radio component-id="default2" label="Label" name="radio"></pds-radio>
     <pds-radio component-id="default3" label="Label" name="radio"></pds-radio>
   </>
+</DocCanvas>
+
+### Group with Border
+
+Radio groups can also use borders for enhanced visual organization, particularly useful in forms or selection interfaces.
+
+<DocCanvas client:only mdxSource={{
+  react: `<PdsBox gap="sm">
+  <PdsRadio componentId="bordered1" label="Option 1" name="bordered-radio" checked={true} hasBorder={true} />
+  <PdsRadio componentId="bordered2" label="Option 2" name="bordered-radio" hasBorder={true} />
+  <PdsRadio componentId="bordered3" label="Option 3" name="bordered-radio" hasBorder={true} />
+</PdsBox>
+  `,
+  webComponent: `<pds-box gap="sm">
+  <pds-radio component-id="bordered1" label="Option 1" name="bordered-radio" checked has-border></pds-radio>
+  <pds-radio component-id="bordered2" label="Option 2" name="bordered-radio" has-border></pds-radio>
+  <pds-radio component-id="bordered3" label="Option 3" name="bordered-radio" has-border></pds-radio>
+</pds-box>
+`}}>
+  <pds-box gap="sm">
+    <pds-radio component-id="bordered1" label="Option 1" name="bordered-radio" checked has-border></pds-radio>
+    <pds-radio component-id="bordered2" label="Option 2" name="bordered-radio" has-border></pds-radio>
+    <pds-radio component-id="bordered3" label="Option 3" name="bordered-radio" has-border></pds-radio>
+  </pds-box>
+</DocCanvas>
+
+### With Image
+
+Radio buttons can display custom images instead of the default radio input in a bordered card layout. The image replaces the visual radio button while maintaining all functionality and accessibility features.
+
+**Note:** Images must be provided via the `image` slot.
+
+<DocCanvas client:only mdxSource={{
+  react: `<PdsRadio
+  componentId="image-radio"
+  label="Profile Picture"
+  helperMessage="Select your profile avatar">
+  <PdsBox slot="image" backgroundColor="var(--pine-color-accent)" borderRadius="full" padding="sm">
+    <PdsIcon icon="danger" size="medium" color="var(--pine-color-white)" />
+  </PdsBox>
+</PdsRadio>`,
+  webComponent: `<pds-radio
+  component-id="image-radio"
+  label="Profile Picture"
+  helper-message="Select your profile avatar">
+  <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+    <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
+  </pds-box>
+</pds-radio>`
+}}>
+  <pds-radio
+    component-id="image-radio"
+    label="Profile Picture"
+    helper-message="Select your profile avatar">
+    <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+      <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
+    </pds-box>
+  </pds-radio>
+</DocCanvas>
+
+### Image Group
+
+Image-based radios work seamlessly in groups with the same bordered card layout, showing visual selection feedback with border highlights and checkmark overlays.
+
+<DocCanvas client:only mdxSource={{
+  react: `<PdsBox gap="sm">
+  <PdsRadio
+    componentId="avatar1"
+    label="John Doe"
+    name="avatar-selection"
+    value="john"
+    checked={true}
+    helperMessage="Senior Developer"
+  >
+    <PdsBox slot="image" backgroundColor="var(--pine-color-accent)" borderRadius="full" padding="sm">
+      <PdsIcon icon="danger" size="medium" color="var(--pine-color-white)" />
+    </PdsBox>
+  </PdsRadio>
+  <PdsRadio
+    componentId="avatar2"
+    label="Jane Smith"
+    name="avatar-selection"
+    value="jane"
+    helperMessage="Product Manager"
+  >
+    <PdsBox slot="image" backgroundColor="var(--pine-color-accent)" borderRadius="full" padding="sm">
+      <PdsIcon icon="danger" size="medium" color="var(--pine-color-white)" />
+    </PdsBox>
+  </PdsRadio>
+  <PdsRadio
+    componentId="avatar3"
+    label="Mike Johnson"
+    name="avatar-selection"
+    value="mike"
+    helperMessage="UX Designer"
+  >
+    <PdsBox slot="image" backgroundColor="var(--pine-color-accent)" borderRadius="full" padding="sm">
+      <PdsIcon icon="danger" size="medium" color="var(--pine-color-white)" />
+    </PdsBox>
+  </PdsRadio>
+</PdsBox>`,
+  webComponent: `<pds-box gap="sm">
+  <pds-radio
+    component-id="avatar1"
+    label="John Doe"
+    name="avatar-selection"
+    value="john"
+    checked
+    helper-message="Senior Developer">
+    <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+      <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
+    </pds-box>
+  </pds-radio>
+  <pds-radio
+    component-id="avatar2"
+    label="Jane Smith"
+    name="avatar-selection"
+    value="jane"
+    helper-message="Product Manager">
+    <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+      <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
+    </pds-box>
+  </pds-radio>
+  <pds-radio
+    component-id="avatar3"
+    label="Mike Johnson"
+    name="avatar-selection"
+    value="mike"
+    helper-message="UX Designer">
+    <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+      <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
+    </pds-box>
+  </pds-radio>
+</pds-box>`
+}}>
+  <pds-box gap="sm">
+    <pds-radio
+      component-id="avatar1"
+      label="John Doe"
+      name="avatar-selection"
+      value="john"
+      checked
+      helper-message="Senior Developer">
+      <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+        <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
+      </pds-box>
+    </pds-radio>
+    <pds-radio
+      component-id="avatar2"
+      label="Jane Smith"
+      name="avatar-selection"
+      value="jane"
+      helper-message="Product Manager">
+      <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+        <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
+      </pds-box>
+    </pds-radio>
+    <pds-radio
+      component-id="avatar3"
+      label="Mike Johnson"
+      name="avatar-selection"
+      value="mike"
+      helper-message="UX Designer">
+      <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+        <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
+      </pds-box>
+    </pds-radio>
+  </pds-box>
 </DocCanvas>
 
 ## Additional Resources

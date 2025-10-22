@@ -1381,6 +1381,11 @@ export namespace Components {
          */
         "errorMessage": string;
         /**
+          * Adds a border around the radio component for better visual separation.
+          * @defaultValue false
+         */
+        "hasBorder": boolean;
+        /**
           * Displays helper message text below radio.
          */
         "helperMessage": string;
@@ -3991,6 +3996,11 @@ declare namespace LocalJSX {
          */
         "errorMessage"?: string;
         /**
+          * Adds a border around the radio component for better visual separation.
+          * @defaultValue false
+         */
+        "hasBorder"?: boolean;
+        /**
           * Displays helper message text below radio.
          */
         "helperMessage"?: string;
@@ -4012,7 +4022,7 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Emits a boolean indicating whether the checkbox is currently checked or unchecked.
+          * Emits a boolean indicating whether the radio is currently checked or unchecked.
          */
         "onPdsRadioChange"?: (event: PdsRadioCustomEvent<boolean>) => void;
         /**

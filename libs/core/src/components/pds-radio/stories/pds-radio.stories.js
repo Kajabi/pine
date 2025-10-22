@@ -6,6 +6,7 @@ export default {
   args: {
     checked: false,
     disabled: false,
+    hasBorder: false,
     invalid: false,
     hideLabel: false,
     required: false,
@@ -28,6 +29,7 @@ const BaseTemplate = (args) =>
     ?checked=${args.checked}
     ?disabled=${args.disabled}
     error-message=${args.errorMessage}
+    ?has-border=${args.hasBorder}
     helper-message=${args.helperMessage}
     ?hide-label=${args.hideLabel}
     name=${args.name}
@@ -70,4 +72,39 @@ Invalid.args = {
   errorMessage: 'This is a short error message',
   label: 'Label text',
   invalid: true,
+};
+
+export const WithBorder = BaseTemplate.bind();
+WithBorder.args = {
+  componentId: 'with-border',
+  label: 'Label text',
+  hasBorder: true,
+  helperMessage: 'This radio has a border for better visual separation',
+};
+
+const ImageTemplate = (args) =>
+  html` <pds-radio
+    component-id=${args.componentId}
+    label=${args.label}
+    ?checked=${args.checked}
+    ?disabled=${args.disabled}
+    error-message=${args.errorMessage}
+    ?has-border=${args.hasBorder}
+    helper-message=${args.helperMessage}
+    ?hide-label=${args.hideLabel}
+    name=${args.name}
+    ?required=${args.required}
+    value=${args.value}
+    ?invalid=${args.invalid}
+  >
+    <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+      <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
+    </pds-box>
+  </pds-radio>`;
+
+export const WithImage = ImageTemplate.bind();
+WithImage.args = {
+  componentId: 'with-image',
+  label: 'Option with image',
+  helperMessage: 'This radio includes an image using the image slot',
 };
