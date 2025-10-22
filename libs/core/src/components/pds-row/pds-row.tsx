@@ -1,6 +1,6 @@
 import { Component, Prop, h, Host } from '@stencil/core';
 
-import { BoxTShirtSizeType } from '../../utils/types';
+import { BoxSpacingType } from '../../utils/types';
 
 @Component({
   tag: 'pds-row',
@@ -21,17 +21,17 @@ export class PdsRow {
   /**
    * Defines the spacing between the row items.
    */
-  @Prop() colGap?: BoxTShirtSizeType | null;
+  @Prop() colGap?: BoxSpacingType | null;
 
   /**
    * Defines the spacing between the row items vertically.
    */
-  @Prop() colGapBlock?: BoxTShirtSizeType | null;
+  @Prop() colGapBlock?: BoxSpacingType | null;
 
   /**
    * Defines the spacing between the row items horizontally.
    */
-  @Prop() colGapInline?: BoxTShirtSizeType | null;
+  @Prop() colGapInline?: BoxSpacingType | null;
 
   /**
    * A unique identifier used for the underlying component `id` attribute.
@@ -54,7 +54,7 @@ export class PdsRow {
    */
   @Prop() noWrap? = false;
 
-  private colGapMap: { [key in BoxTShirtSizeType]: string } = {
+  private colGapMap: { [key in BoxSpacingType]: string } = {
     none: '0',
     xxs: '.25rem',
     xs: '.5rem',
@@ -63,6 +63,24 @@ export class PdsRow {
     lg: '2.25rem',
     xl: '3rem',
     xxl: '4rem',
+    '025': 'var(--pine-dimension-025)',
+    '050': 'var(--pine-dimension-050)',
+    '100': 'var(--pine-dimension-100)',
+    '125': 'var(--pine-dimension-125)',
+    '150': 'var(--pine-dimension-150)',
+    '200': 'var(--pine-dimension-200)',
+    '250': 'var(--pine-dimension-250)',
+    '300': 'var(--pine-dimension-300)',
+    '350': 'var(--pine-dimension-350)',
+    '400': 'var(--pine-dimension-400)',
+    '450': 'var(--pine-dimension-450)',
+    '500': 'var(--pine-dimension-500)',
+    '550': 'var(--pine-dimension-550)',
+    '600': 'var(--pine-dimension-600)',
+    '650': 'var(--pine-dimension-650)',
+    '700': 'var(--pine-dimension-700)',
+    '750': 'var(--pine-dimension-750)',
+    '800': 'var(--pine-dimension-800)'
   };
 
   render() {

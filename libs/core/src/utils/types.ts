@@ -27,7 +27,7 @@ export type BoxColumnType =
   | '11'
   | '12';
 
-  export type BoxTShirtSizeType =
+export type BoxSpacingType =
   'none'
   | 'xxs'
   | 'xs'
@@ -36,8 +36,26 @@ export type BoxColumnType =
   | 'lg'
   | 'xl'
   | 'xxl'
+  | '025'
+  | '050'
+  | '100'
+  | '125'
+  | '150'
+  | '200'
+  | '250'
+  | '300'
+  | '350'
+  | '400'
+  | '450'
+  | '500'
+  | '550'
+  | '600'
+  | '650'
+  | '700'
+  | '750'
+  | '800';
 
-  export type BoxShadowSizeType =
+export type BoxShadowSizeType =
   'none'
   | '050'
   | '100'
