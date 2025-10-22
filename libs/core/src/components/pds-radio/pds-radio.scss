@@ -224,6 +224,7 @@ label {
   .pds-radio__image-container {
     align-items: center;
     align-self: center;
+    border: var(--pine-border);
     border-radius: var(--pine-border-radius-full);
     cursor: pointer;
     display: flex;
@@ -235,7 +236,7 @@ label {
     transition: all 0.2s ease;
 
     &:hover {
-      border: var(--pine-border-hover);
+      border-color: var(--pine-color-border-hover);
     }
 
     .pds-radio__image {
