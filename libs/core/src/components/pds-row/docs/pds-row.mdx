@@ -168,39 +168,39 @@ Available sizes: `none`, `xxs`, `xs`, `sm`, `md`, `lg`, `xl`, `xxl`
   mdxSource={{
     react: `
       <PdsRow colGap="md">
-        <PdsBox size="4">
+        <PdsBox sizeMd="4">
           <pds-box border>Column 1</pds-box>
         </PdsBox>
-        <PdsBox size="4">
+        <PdsBox sizeMd="4">
           <pds-box border>Column 2</pds-box>
         </PdsBox>
-        <PdsBox size="4">
+        <PdsBox sizeMd="4">
           <pds-box border>Column 3</pds-box>
         </PdsBox>
       </PdsRow>
     `,
     webComponent: `
       <pds-row col-gap="md">
-        <pds-box size="4">
+        <pds-box size-md="4">
           <pds-box border>Column 1</pds-box>
         </pds-box>
-        <pds-box size="4">
+        <pds-box size-md="4">
           <pds-box border>Column 2</pds-box>
         </pds-box>
-        <pds-box size="4">
+        <pds-box size-md="4">
           <pds-box border>Column 3</pds-box>
         </pds-box>
       </pds-row>
     `
 }}>
   <pds-row col-gap="md">
-    <pds-box size="4">
+    <pds-box size-md="4">
       <pds-box border>Column 1</pds-box>
     </pds-box>
-    <pds-box size="4">
+    <pds-box size-md="4">
       <pds-box border>Column 2</pds-box>
     </pds-box>
-    <pds-box size="4">
+    <pds-box size-md="4">
       <pds-box border>Column 3</pds-box>
     </pds-box>
   </pds-row>
@@ -214,57 +214,57 @@ For more precise control, use `col-gap-inline` for horizontal spacing and `col-g
   mdxSource={{
     react: `
       <PdsRow colGapInline="lg" colGapBlock="xs">
-        <PdsBox size="6">
+        <PdsBox sizeMd="6">
           <pds-box border>Wide horizontal gap</pds-box>
         </PdsBox>
-        <PdsBox size="6">
+        <PdsBox sizeMd="6">
           <pds-box border>Between columns</pds-box>
         </PdsBox>
-        <PdsBox size="4">
+        <PdsBox sizeMd="4">
           <pds-box border>Small vertical gap</pds-box>
         </PdsBox>
-        <PdsBox size="4">
+        <PdsBox sizeMd="4">
           <pds-box border>When wrapping</pds-box>
         </PdsBox>
-        <PdsBox size="4">
+        <PdsBox sizeMd="4">
           <pds-box border>To next line</pds-box>
         </PdsBox>
       </PdsRow>
     `,
     webComponent: `
       <pds-row col-gap-inline="lg" col-gap-block="xs">
-        <pds-box size="6">
+        <pds-box size-md="6">
           <pds-box border>Wide horizontal gap</pds-box>
         </pds-box>
-        <pds-box size="6">
+        <pds-box size-md="6">
           <pds-box border>Between columns</pds-box>
         </pds-box>
-        <pds-box size="4">
+        <pds-box size-md="4">
           <pds-box border>Small vertical gap</pds-box>
         </pds-box>
-        <pds-box size="4">
+        <pds-box size-md="4">
           <pds-box border>When wrapping</pds-box>
         </pds-box>
-        <pds-box size="4">
+        <pds-box size-md="4">
           <pds-box border>To next line</pds-box>
         </pds-box>
       </pds-row>
     `
 }}>
   <pds-row col-gap-inline="lg" col-gap-block="xs">
-    <pds-box size="6">
+    <pds-box size-md="6">
       <pds-box border>Wide horizontal gap</pds-box>
     </pds-box>
-    <pds-box size="6">
+    <pds-box size-md="6">
       <pds-box border>Between columns</pds-box>
     </pds-box>
-    <pds-box size="4">
+    <pds-box size-md="4">
       <pds-box border>Small vertical gap</pds-box>
     </pds-box>
-    <pds-box size="4">
+    <pds-box size-md="4">
       <pds-box border>When wrapping</pds-box>
     </pds-box>
-    <pds-box size="4">
+    <pds-box size-md="4">
       <pds-box border>To next line</pds-box>
     </pds-box>
   </pds-row>
@@ -278,20 +278,20 @@ For more precise control, use `col-gap-inline` for horizontal spacing and `col-g
       <PdsBox direction="column" fit="true">
         <PdsText tag="h4">Small Gap (xs)</PdsText>
         <PdsRow colGap="xs">
-          <PdsBox size="6"><pds-box border>Column A</pds-box></PdsBox>
-          <PdsBox size="6"><pds-box border>Column B</pds-box></PdsBox>
+          <PdsBox sizeMd="6"><pds-box border>Column A</pds-box></PdsBox>
+          <PdsBox sizeMd="6"><pds-box border>Column B</pds-box></PdsBox>
         </PdsRow>
 
         <PdsText tag="h4">Medium Gap (md)</PdsText>
         <PdsRow colGap="md">
-          <PdsBox size="6"><pds-box border>Column A</pds-box></PdsBox>
-          <PdsBox size="6"><pds-box border>Column B</pds-box></PdsBox>
+          <PdsBox sizeMd="6"><pds-box border>Column A</pds-box></PdsBox>
+          <PdsBox sizeMd="6"><pds-box border>Column B</pds-box></PdsBox>
         </PdsRow>
 
         <PdsText tag="h4">Large Gap (xl)</PdsText>
         <PdsRow colGap="xl">
-          <PdsBox size="6"><pds-box border>Column A</pds-box></PdsBox>
-          <PdsBox size="6"><pds-box border>Column B</pds-box></PdsBox>
+          <PdsBox sizeMd="6"><pds-box border>Column A</pds-box></PdsBox>
+          <PdsBox sizeMd="6"><pds-box border>Column B</pds-box></PdsBox>
         </PdsRow>
       </PdsBox>
     `,
@@ -299,20 +299,20 @@ For more precise control, use `col-gap-inline` for horizontal spacing and `col-g
       <pds-box direction="column" fit="true">
         <pds-text tag="h4">Small Gap (xs)</pds-text>
         <pds-row col-gap="xs">
-          <pds-box size="6"><pds-box border>Column A</pds-box></pds-box>
-          <pds-box size="6"><pds-box border>Column B</pds-box></pds-box>
+          <pds-box size-md="6"><pds-box border>Column A</pds-box></pds-box>
+          <pds-box size-md="6"><pds-box border>Column B</pds-box></pds-box>
         </pds-row>
 
         <pds-text tag="h4">Medium Gap (md)</pds-text>
         <pds-row col-gap="md">
-          <pds-box size="6"><pds-box border>Column A</pds-box></pds-box>
-          <pds-box size="6"><pds-box border>Column B</pds-box></pds-box>
+          <pds-box size-md="6"><pds-box border>Column A</pds-box></pds-box>
+          <pds-box size-md="6"><pds-box border>Column B</pds-box></pds-box>
         </pds-row>
 
         <pds-text tag="h4">Large Gap (xl)</pds-text>
         <pds-row col-gap="xl">
-          <pds-box size="6"><pds-box border>Column A</pds-box></pds-box>
-          <pds-box size="6"><pds-box border>Column B</pds-box></pds-box>
+          <pds-box size-md="6"><pds-box border>Column A</pds-box></pds-box>
+          <pds-box size-md="6"><pds-box border>Column B</pds-box></pds-box>
         </pds-row>
       </pds-box>
     `
@@ -320,20 +320,20 @@ For more precise control, use `col-gap-inline` for horizontal spacing and `col-g
   <pds-box direction="column" fit="true">
     <pds-text tag="h4">Small Gap (xs)</pds-text>
     <pds-row col-gap="xs">
-      <pds-box size="6"><pds-box border>Column A</pds-box></pds-box>
-      <pds-box size="6"><pds-box border>Column B</pds-box></pds-box>
+      <pds-box size-md="6"><pds-box border>Column A</pds-box></pds-box>
+      <pds-box size-md="6"><pds-box border>Column B</pds-box></pds-box>
     </pds-row>
 
     <pds-text tag="h4">Medium Gap (md)</pds-text>
     <pds-row col-gap="md">
-      <pds-box size="6"><pds-box border>Column A</pds-box></pds-box>
-      <pds-box size="6"><pds-box border>Column B</pds-box></pds-box>
+      <pds-box size-md="6"><pds-box border>Column A</pds-box></pds-box>
+      <pds-box size-md="6"><pds-box border>Column B</pds-box></pds-box>
     </pds-row>
 
     <pds-text tag="h4">Large Gap (xl)</pds-text>
     <pds-row col-gap="xl">
-      <pds-box size="6"><pds-box border>Column A</pds-box></pds-box>
-      <pds-box size="6"><pds-box border>Column B</pds-box></pds-box>
+      <pds-box size-md="6"><pds-box border>Column A</pds-box></pds-box>
+      <pds-box size-md="6"><pds-box border>Column B</pds-box></pds-box>
     </pds-row>
   </pds-box>
 </DocCanvas>
