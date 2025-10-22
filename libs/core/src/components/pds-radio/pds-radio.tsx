@@ -1,4 +1,4 @@
-import { Component, Host, h, Prop, Event, EventEmitter, Element } from '@stencil/core';
+import { Component, Host, h, Prop, Event, EventEmitter, Element, State } from '@stencil/core';
 import { assignDescription, messageId, exposeTypeProperty } from '../../utils/form';
 import { danger } from '@pine-ds/icons/icons';
 
@@ -15,6 +15,8 @@ export class PdsRadio {
   private readonly _type = 'radio' as const;
 
   @Element() el: HTMLPdsRadioElement;
+
+  @State() private _hasImage = false;
 
   /**
    * Determines whether or not the radio is checked.
@@ -104,7 +106,7 @@ export class PdsRadio {
   }
 
   private hasImage(): boolean {
-    return this.hasImageSlot();
+    return this._hasImage;
   }
 
   private classNames() {
@@ -124,6 +126,10 @@ export class PdsRadio {
     }
 
     return classNames.join(' ');
+  }
+
+  componentWillLoad() {
+    this._hasImage = this.hasImageSlot();
   }
 
   connectedCallback() {
@@ -177,7 +183,7 @@ export class PdsRadio {
       <Host class={this.classNames()}>
         {this.hasImage() && (
           <div class="pds-radio__image-container" part="image-container">
-            <slot name="image" />
+            <slot name="image" onSlotchange={() => (this._hasImage = this.hasImageSlot())} />
           </div>
         )}
         {this.hasImage() ? (
