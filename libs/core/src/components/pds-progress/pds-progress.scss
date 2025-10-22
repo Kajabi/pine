@@ -44,12 +44,12 @@ progress::-webkit-progress-bar {
 }
 
 progress::-webkit-progress-value {
-  background-color: var(--color-progress-fill, var(--pine-color-brand));
+  background: var(--color-progress-fill, var(--pine-color-brand));
   border-radius: var(--pine-dimension-2xs);
 }
 
 progress::-moz-progress-bar {
-  background-color: var(--color-progress-fill, var(--pine-color-brand));
+  background: var(--color-progress-fill, var(--pine-color-brand));
   border-radius: var(--pine-dimension-2xs);
 }
 
