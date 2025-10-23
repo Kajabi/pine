@@ -12,6 +12,7 @@ export default {
     fullWidth: false,
     helperMessage: null,
     hideLabel: false,
+    highlight: false,
     invalid: false,
     max: null,
     maxlength: null,
@@ -55,7 +56,8 @@ const BaseTemplate = (args) => html`<pds-input
   ?readonly=${args.readonly}
   ?required=${args.required}
   type="${args.type}"
-  value="${args.value}">
+  value="${args.value}"
+  .highlight=${args.highlight}>
   ${args.prefix || ''}
   ${args.suffix || ''}
   ${args.prepend || ''}
@@ -149,6 +151,31 @@ FullWidth.args = {
   placeholder: 'This input takes full width of its container',
 };
 
+export const Highlight = (args) => html`<pds-input
+  autocomplete="${args.autocomplete}"
+  component-id="pds-input-highlight-example"
+  debounce="${args.debounce}"
+  ?disabled=${args.disabled}
+  error-message="${args.errorMessage}"
+  ?full-width=${args.fullWidth}
+  helper-message="${args.helperMessage}"
+  ?hide-label=${args.hideLabel}
+  .highlight=${args.highlight}
+  ?invalid=${args.invalid}
+  label="${args.label || 'Label'}"
+  name="${args.name}"
+  placeholder="${args.placeholder}"
+  ?readonly=${args.readonly}
+  ?required=${args.required}
+  type="${args.type || 'text'}"
+  value="${args.value}">
+  <pds-icon slot="prefix" name="mail" size="small"></pds-icon>
+</pds-input>`;
+Highlight.args = {
+  highlight: true,
+  value: 'This input is highlighted',
+};
+
 export const withPrefixIcon = (args) => html`<pds-input
   autocomplete="${args.autocomplete}"
   component-id="pds-input-prefix-icon"
@@ -157,6 +184,7 @@ export const withPrefixIcon = (args) => html`<pds-input
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
   ?hide-label=${args.hideLabel}
+  .highlight=${args.highlight}
   ?invalid=${args.invalid}
   label="Email"
   name="${args.name}"
@@ -176,6 +204,7 @@ export const withSuffixButton = (args) => html`<pds-input
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
   ?hide-label=${args.hideLabel}
+  .highlight=${args.highlight}
   ?invalid=${args.invalid}
   label="Search"
   name="${args.name}"
@@ -197,6 +226,7 @@ export const withPrependSelect = (args) => html`<pds-input
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
   ?hide-label=${args.hideLabel}
+  .highlight=${args.highlight}
   ?invalid=${args.invalid}
   label="Amount"
   name="${args.name}"
@@ -220,6 +250,7 @@ export const withPrependButton = (args) => html`<pds-input
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
   ?hide-label=${args.hideLabel}
+  .highlight=${args.highlight}
   ?invalid=${args.invalid}
   label="Search Query"
   name="${args.name}"
@@ -241,6 +272,7 @@ export const withAppendSelect = (args) => html`<pds-input
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
   ?hide-label=${args.hideLabel}
+  .highlight=${args.highlight}
   ?invalid=${args.invalid}
   label="Phone"
   name="${args.name}"
@@ -264,6 +296,7 @@ export const withAppendButton = (args) => html`<pds-input
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
   ?hide-label=${args.hideLabel}
+  .highlight=${args.highlight}
   ?invalid=${args.invalid}
   label="Search Query"
   name="${args.name}"
@@ -285,6 +318,7 @@ export const withPrefixAndAppend = (args) => html`<pds-input
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
   ?hide-label=${args.hideLabel}
+  .highlight=${args.highlight}
   ?invalid=${args.invalid}
   label="Amount"
   name="${args.name}"
@@ -309,6 +343,7 @@ export const withPrependAndSuffix = (args) => html`<pds-input
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
   ?hide-label=${args.hideLabel}
+  .highlight=${args.highlight}
   ?invalid=${args.invalid}
   label="Amount"
   name="${args.name}"
@@ -335,6 +370,7 @@ export const withActionLink = (args) => html`<pds-input
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
   ?hide-label=${args.hideLabel}
+  .highlight=${args.highlight}
   ?invalid=${args.invalid}
   label="Password"
   name="${args.name}"
@@ -356,6 +392,7 @@ export const withActionButton = (args) => html`<pds-input
   error-message="${args.errorMessage}"
   helper-message="Choose a unique username"
   ?hide-label=${args.hideLabel}
+  .highlight=${args.highlight}
   ?invalid=${args.invalid}
   label="Username"
   name="${args.name}"
