@@ -10,6 +10,23 @@
   }
 }
 
+:host([highlight]:not([disabled]):not([aria-readonly="true"])) {
+  .pds-textarea__field:not(.is-invalid) {
+    background-color: var(--pine-color-accent-disabled);
+    border-color: var(--pine-color-accent);
+    color: var(--pine-color-purple-700);
+
+    &:hover {
+      border-color: var(--pine-color-accent-hover);
+    }
+  }
+
+  .pds-textarea__character-counter {
+    background: color-mix(in srgb, var(--pine-color-accent-disabled) 80%, transparent);
+    color: var(--pine-color-purple-700);
+  }
+}
+
 .pds-textarea {
   display: flex;
   flex-direction: column;
