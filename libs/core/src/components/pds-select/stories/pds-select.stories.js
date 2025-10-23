@@ -9,6 +9,7 @@ export default {
     errorMessage: null,
     hideLabel: false,
     helperMessage: null,
+    highlight: false,
     invalid: false,
     multiple: false,
     value: null,
@@ -54,6 +55,7 @@ const BaseTemplate = (args) =>
     error-message="${args.errorMessage}"
     helper-message="${args.helperMessage}"
     ?hide-label=${args.hideLabel}
+    .highlight=${args.highlight}
     ?invalid=${args.invalid}
     label="${args.label}"
     ?multiple=${args.multiple}
@@ -73,6 +75,7 @@ const OptgroupTemplate = (args) =>
     ?disabled=${args.disabled}
     error-message="${args.errorMessage}"
     helper-message="${args.helperMessage}"
+    .highlight=${args.highlight}
     ?invalid=${args.invalid}
     label="${args.label}"
     ?multiple=${args.multiple}
@@ -104,6 +107,15 @@ Disabled.args = {
   label: 'Select your favorite Beatle',
   name: 'beatles',
   value: 'george',
+};
+
+export const Highlight = BaseTemplate.bind({});
+Highlight.args = {
+  componentId: 'pds-select-highlight-example',
+  highlight: true,
+  label: 'Select your favorite Beatle',
+  name: 'beatles',
+  value: 'paul',
 };
 
 export const withMessage = BaseTemplate.bind({});
@@ -163,6 +175,7 @@ export const withActionLink = (args) => html`<pds-select
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
   ?hide-label=${args.hideLabel}
+  .highlight=${args.highlight}
   ?invalid=${args.invalid}
   label="Timezone"
   ?multiple=${args.multiple}
@@ -183,6 +196,7 @@ export const withActionButton = (args) => html`<pds-select
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
   ?hide-label=${args.hideLabel}
+  .highlight=${args.highlight}
   ?invalid=${args.invalid}
   label="Country"
   ?multiple=${args.multiple}
