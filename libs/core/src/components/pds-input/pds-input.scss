@@ -154,7 +154,7 @@
   }
 }
 
-:host([highlight]:not([disabled]):not([invalid]):not([aria-readonly="true"])) {
+:host([highlight]:not([disabled]):not([aria-disabled="true"]):not([invalid]):not([aria-readonly="true"])) {
   --pds-input-background: var(--pine-color-accent-disabled);
   --pds-input-border-color: var(--pine-color-accent);
   --pds-input-border-color-hover: var(--pine-color-accent-hover);
