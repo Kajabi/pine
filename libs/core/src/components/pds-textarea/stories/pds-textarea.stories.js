@@ -46,7 +46,7 @@ const BaseTemplate = (args) => html`<pds-textarea
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
   ?hide-label=${args.hideLabel}
-  .highlight=${args.highlight}
+  ?highlight=${args.highlight}
   ?invalid=${args.invalid}
   label="${args.label}"
   max-length="${args.maxLength}"
@@ -155,7 +155,7 @@ export const withActionLink = (args) => html`<pds-textarea
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
   ?hide-label=${args.hideLabel}
-  .highlight=${args.highlight}
+  ?highlight=${args.highlight}
   ?invalid=${args.invalid}
   label="Notes"
   name="${args.name}"
@@ -180,7 +180,7 @@ export const withActionButton = (args) => html`<pds-textarea
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
   ?hide-label=${args.hideLabel}
-  .highlight=${args.highlight}
+  ?highlight=${args.highlight}
   ?invalid=${args.invalid}
   label="Description"
   name="${args.name}"
