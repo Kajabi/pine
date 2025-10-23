@@ -154,15 +154,19 @@
   }
 }
 
-:host([highlight]:not([disabled]):not([aria-disabled="true"]):not([invalid]):not([aria-readonly="true"])) {
+:host([highlight]:not([disabled]):not([aria-disabled="true"]):not([invalid]):not([aria-readonly="true"]):not(:has(.pds-input__error-message))) {
   --pds-input-background: var(--pine-color-accent-disabled);
   --pds-input-border-color: var(--pine-color-accent);
   --pds-input-border-color-hover: var(--pine-color-accent-hover);
-  --pds-input-text-color: var(--pine-color-purple-700);
+  --pds-input-text-color: var(--pine-color-text-accent);
 
   &::part(prefix),
   &::part(suffix) {
-    color: var(--pine-color-purple-700);
+    color: var(--pine-color-text-accent);
+  }
+
+  .pds-input__field:focus-visible {
+    outline-color: var(--pine-color-focus-ring);
   }
 }
 
