@@ -49,6 +49,7 @@ const BaseTemplate = (args) => html`<pds-input
   ?full-width=${args.fullWidth}
   helper-message="${args.helperMessage}"
   ?hide-label=${args.hideLabel}
+  ?highlight=${args.highlight}
   ?invalid=${args.invalid}
   label="${args.label}"
   name="${args.name}"
@@ -56,8 +57,7 @@ const BaseTemplate = (args) => html`<pds-input
   ?readonly=${args.readonly}
   ?required=${args.required}
   type="${args.type}"
-  value="${args.value}"
-  ?highlight=${args.highlight}>
+  value="${args.value}">
   ${args.prefix || ''}
   ${args.suffix || ''}
   ${args.prepend || ''}
