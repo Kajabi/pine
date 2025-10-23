@@ -109,7 +109,7 @@ select {
   }
 }
 
-:host([highlight]:not(.is-disabled):not(.is-invalid):not(:has(.pds-select__error-message))) {
+:host([highlight]:not(.is-disabled):not(.is-invalid)) {
   select {
     background-color: var(--pine-color-accent-disabled);
     border-color: var(--pine-color-accent);
