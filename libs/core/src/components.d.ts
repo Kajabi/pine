@@ -27,6 +27,7 @@ export namespace Components {
     interface MockPdsModal {
         /**
           * Whether the modal can be dismissed by clicking the backdrop
+          * @default true
          */
         "backdropDismiss": boolean;
         /**
@@ -39,6 +40,7 @@ export namespace Components {
         "hideModal": () => Promise<void>;
         /**
           * Whether the modal is open
+          * @default false
          */
         "open": boolean;
         /**
@@ -52,6 +54,7 @@ export namespace Components {
         "showModal": () => Promise<void>;
         /**
           * The size of the modal
+          * @default 'md'
          */
         "size": 'sm' | 'md' | 'lg' | 'fullscreen';
     }
@@ -83,6 +86,7 @@ export namespace Components {
         "heading": string;
         /**
           * If true, the alert is displayed in a smaller size and description text is truncated. Heading is not displayed.
+          * @default false
          */
         "small": boolean;
         /**
@@ -218,6 +222,7 @@ export namespace Components {
         "backgroundColor"?: string;
         /**
           * If `true`, the box will have a border.
+          * @default false
          */
         "border"?: boolean;
         /**
@@ -717,6 +722,7 @@ export namespace Components {
         "icon"?: string;
         /**
           * When true, displays only the icon and visually hides the text (keeping it accessible).
+          * @default false
          */
         "iconOnly"?: boolean;
         /**
@@ -750,6 +756,7 @@ export namespace Components {
     interface PdsCheckbox {
         /**
           * It determines whether or not the checkbox is checked.
+          * @default false
          */
         "checked"?: boolean;
         /**
@@ -863,6 +870,7 @@ export namespace Components {
         "customTriggerContent": boolean;
         /**
           * If true, the combobox is disabled.
+          * @default false
          */
         "disabled": boolean;
         /**
@@ -881,6 +889,7 @@ export namespace Components {
         "getSelectedValue": () => Promise<string | null>;
         /**
           * Visually hides the label text for instances where only the combobox should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * @default false
          */
         "hideLabel": boolean;
         /**
@@ -925,6 +934,7 @@ export namespace Components {
         "triggerWidth": string;
         /**
           * The value of the combobox input.
+          * @default ''
          */
         "value": string;
     }
@@ -975,6 +985,7 @@ export namespace Components {
         "componentId": string;
         /**
           * The placement of the dropdown panel relative to the trigger.
+          * @default 'bottom-start'
          */
         "placement": PlacementType;
     }
@@ -1180,6 +1191,7 @@ export namespace Components {
         "type": string;
         /**
           * The value of the input.
+          * @default ''
          */
         "value"?: string | number | null;
     }
@@ -1215,14 +1227,17 @@ export namespace Components {
     interface PdsLoader {
         /**
           * If false, the loader will be hidden.
+          * @default true
          */
         "isLoading": boolean;
         /**
           * Determines whether the loader should display a label.
+          * @default false
          */
         "showLabel"?: boolean;
         /**
           * Sets the size of the spinner loader. Value can be preset or custom.
+          * @default 'md'
          */
         "size"?: | 'xs' // 24px
   | 'sm' // 32px
@@ -1232,6 +1247,7 @@ export namespace Components {
   | string;
         /**
           * Determines the type of loader.
+          * @default 'spinner'
          */
         "variant": 'spinner' | 'typing';
     }
@@ -1306,6 +1322,7 @@ export namespace Components {
         "popoverTargetAction": 'show' | 'toggle' | 'hide';
         /**
           * Determines the type of popover. Auto popovers can be "light dismissed" by clicking outside of the popover. Manual popovers require the consumer to handle the visibility of the popover.
+          * @default 'auto'
          */
         "popoverType": 'auto' | 'manual';
         /**
@@ -1358,6 +1375,7 @@ export namespace Components {
         "componentId": string;
         /**
           * The name of the icon to display before the property text.
+          * @default 'star'
          */
         "icon": string;
     }
@@ -1424,6 +1442,7 @@ export namespace Components {
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
           * If `true`, the row will have a border.
+          * @default false
          */
         "border"?: boolean;
         /**
@@ -1453,6 +1472,7 @@ export namespace Components {
         "minHeight"?: string;
         /**
           * If `true`, the row items will not wrap to the next line if horizontal space is not available.
+          * @default false
          */
         "noWrap"?: boolean;
     }
@@ -1482,6 +1502,10 @@ export namespace Components {
           * Visually hides the label text for instances where only the select should be displayed. Label remains accessible to assistive technology such as screen readers. Note: When true, the action slot is also hidden to maintain a minimal UI.
          */
         "hideLabel": boolean;
+        /**
+          * Applies highlight styling to the select field.
+         */
+        "highlight"?: boolean;
         /**
           * Determines whether or not the select is invalid.
          */
@@ -1521,10 +1545,12 @@ export namespace Components {
         "componentId": string;
         /**
           * Deternines whether `sortable` items should be divided with border.
+          * @default false
          */
         "dividers": boolean;
         /**
           * Determines the grabbable area for the `pds-sortable-item`.
+          * @default 'row'
          */
         "handleType": 'handle' | 'row';
     }
@@ -1547,6 +1573,7 @@ export namespace Components {
     interface PdsSwitch {
         /**
           * Determines the input 'checked' state.
+          * @default false
          */
         "checked": boolean;
         /**
@@ -1555,6 +1582,7 @@ export namespace Components {
         "componentId": string;
         /**
           * Determines the input 'disabled' state, preventing user interaction.
+          * @default false
          */
         "disabled"?: boolean;
         /**
@@ -1571,6 +1599,7 @@ export namespace Components {
         "hideLabel": boolean;
         /**
           * Determines the input 'invalid' state, signifying an error is present.
+          * @default false
          */
         "invalid"?: boolean;
         /**
@@ -1583,6 +1612,7 @@ export namespace Components {
         "name": string;
         /**
           * Determines the 'required' state of the input.
+          * @default false
          */
         "required"?: boolean;
         /**
@@ -1597,6 +1627,9 @@ export namespace Components {
          */
         "name": string;
         "parentComponentId": string;
+        /**
+          * @default false
+         */
         "selected": boolean;
         "variant": string;
     }
@@ -1671,6 +1704,9 @@ export namespace Components {
          */
         "name": string;
         "parentComponentId": string;
+        /**
+          * @default false
+         */
         "selected": boolean;
         "variant": string;
     }
@@ -1739,6 +1775,7 @@ export namespace Components {
   | 'h6';
         /**
           * Determines what semantic text tag to render.
+          * @default "p"
          */
         "tag": | 'h1'
   | 'h2'
@@ -1810,6 +1847,7 @@ export namespace Components {
         "maxLength"?: number;
         /**
           * Specifies the name. Submitted with the form name/value pair. This value will mirror the componentId.
+          * @default this.componentId
          */
         "name": string;
         /**
@@ -1836,6 +1874,7 @@ export namespace Components {
         "setFocus": () => Promise<void>;
         /**
           * The value of the textarea.
+          * @default ''
          */
         "value"?: string | null;
     }
@@ -2612,6 +2651,7 @@ declare namespace LocalJSX {
     interface MockPdsModal {
         /**
           * Whether the modal can be dismissed by clicking the backdrop
+          * @default true
          */
         "backdropDismiss"?: boolean;
         /**
@@ -2632,6 +2672,7 @@ declare namespace LocalJSX {
         "onPdsModalOpen"?: (event: MockPdsModalCustomEvent<any>) => void;
         /**
           * Whether the modal is open
+          * @default false
          */
         "open"?: boolean;
         /**
@@ -2641,6 +2682,7 @@ declare namespace LocalJSX {
         "scrollable"?: boolean;
         /**
           * The size of the modal
+          * @default 'md'
          */
         "size"?: 'sm' | 'md' | 'lg' | 'fullscreen';
     }
@@ -2676,6 +2718,7 @@ declare namespace LocalJSX {
         "onPdsAlertDismissClick"?: (event: PdsAlertCustomEvent<void>) => void;
         /**
           * If true, the alert is displayed in a smaller size and description text is truncated. Heading is not displayed.
+          * @default false
          */
         "small"?: boolean;
         /**
@@ -2811,6 +2854,7 @@ declare namespace LocalJSX {
         "backgroundColor"?: string;
         /**
           * If `true`, the box will have a border.
+          * @default false
          */
         "border"?: boolean;
         /**
@@ -3310,6 +3354,7 @@ declare namespace LocalJSX {
         "icon"?: string;
         /**
           * When true, displays only the icon and visually hides the text (keeping it accessible).
+          * @default false
          */
         "iconOnly"?: boolean;
         /**
@@ -3344,6 +3389,7 @@ declare namespace LocalJSX {
     interface PdsCheckbox {
         /**
           * It determines whether or not the checkbox is checked.
+          * @default false
          */
         "checked"?: boolean;
         /**
@@ -3466,6 +3512,7 @@ declare namespace LocalJSX {
         "customTriggerContent"?: boolean;
         /**
           * If true, the combobox is disabled.
+          * @default false
          */
         "disabled"?: boolean;
         /**
@@ -3480,6 +3527,7 @@ declare namespace LocalJSX {
         "dropdownWidth"?: string;
         /**
           * Visually hides the label text for instances where only the combobox should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * @default false
          */
         "hideLabel"?: boolean;
         /**
@@ -3524,6 +3572,7 @@ declare namespace LocalJSX {
         "triggerWidth"?: string;
         /**
           * The value of the combobox input.
+          * @default ''
          */
         "value"?: string;
     }
@@ -3578,6 +3627,7 @@ declare namespace LocalJSX {
         "componentId"?: string;
         /**
           * The placement of the dropdown panel relative to the trigger.
+          * @default 'bottom-start'
          */
         "placement"?: PlacementType;
     }
@@ -3799,6 +3849,7 @@ declare namespace LocalJSX {
         "type"?: string;
         /**
           * The value of the input.
+          * @default ''
          */
         "value"?: string | number | null;
     }
@@ -3834,14 +3885,17 @@ declare namespace LocalJSX {
     interface PdsLoader {
         /**
           * If false, the loader will be hidden.
+          * @default true
          */
         "isLoading"?: boolean;
         /**
           * Determines whether the loader should display a label.
+          * @default false
          */
         "showLabel"?: boolean;
         /**
           * Sets the size of the spinner loader. Value can be preset or custom.
+          * @default 'md'
          */
         "size"?: | 'xs' // 24px
   | 'sm' // 32px
@@ -3851,6 +3905,7 @@ declare namespace LocalJSX {
   | string;
         /**
           * Determines the type of loader.
+          * @default 'spinner'
          */
         "variant"?: 'spinner' | 'typing';
     }
@@ -3929,6 +3984,7 @@ declare namespace LocalJSX {
         "popoverTargetAction"?: 'show' | 'toggle' | 'hide';
         /**
           * Determines the type of popover. Auto popovers can be "light dismissed" by clicking outside of the popover. Manual popovers require the consumer to handle the visibility of the popover.
+          * @default 'auto'
          */
         "popoverType"?: 'auto' | 'manual';
         /**
@@ -3973,6 +4029,7 @@ declare namespace LocalJSX {
         "componentId"?: string;
         /**
           * The name of the icon to display before the property text.
+          * @default 'star'
          */
         "icon"?: string;
     }
@@ -4043,6 +4100,7 @@ declare namespace LocalJSX {
         "alignItems"?: `start` | `center` | `end` | `baseline` | `stretch`;
         /**
           * If `true`, the row will have a border.
+          * @default false
          */
         "border"?: boolean;
         /**
@@ -4072,6 +4130,7 @@ declare namespace LocalJSX {
         "minHeight"?: string;
         /**
           * If `true`, the row items will not wrap to the next line if horizontal space is not available.
+          * @default false
          */
         "noWrap"?: boolean;
     }
@@ -4101,6 +4160,10 @@ declare namespace LocalJSX {
           * Visually hides the label text for instances where only the select should be displayed. Label remains accessible to assistive technology such as screen readers. Note: When true, the action slot is also hidden to maintain a minimal UI.
          */
         "hideLabel"?: boolean;
+        /**
+          * Applies highlight styling to the select field.
+         */
+        "highlight"?: boolean;
         /**
           * Determines whether or not the select is invalid.
          */
@@ -4144,10 +4207,12 @@ declare namespace LocalJSX {
         "componentId": string;
         /**
           * Deternines whether `sortable` items should be divided with border.
+          * @default false
          */
         "dividers"?: boolean;
         /**
           * Determines the grabbable area for the `pds-sortable-item`.
+          * @default 'row'
          */
         "handleType"?: 'handle' | 'row';
         /**
@@ -4174,6 +4239,7 @@ declare namespace LocalJSX {
     interface PdsSwitch {
         /**
           * Determines the input 'checked' state.
+          * @default false
          */
         "checked"?: boolean;
         /**
@@ -4182,6 +4248,7 @@ declare namespace LocalJSX {
         "componentId": string;
         /**
           * Determines the input 'disabled' state, preventing user interaction.
+          * @default false
          */
         "disabled"?: boolean;
         /**
@@ -4198,6 +4265,7 @@ declare namespace LocalJSX {
         "hideLabel"?: boolean;
         /**
           * Determines the input 'invalid' state, signifying an error is present.
+          * @default false
          */
         "invalid"?: boolean;
         /**
@@ -4214,6 +4282,7 @@ declare namespace LocalJSX {
         "onPdsSwitchChange"?: (event: PdsSwitchCustomEvent<InputEvent>) => void;
         /**
           * Determines the 'required' state of the input.
+          * @default false
          */
         "required"?: boolean;
         /**
@@ -4229,6 +4298,9 @@ declare namespace LocalJSX {
         "name": string;
         "onPdsTabClick"?: (event: PdsTabCustomEvent<object>) => void;
         "parentComponentId"?: string;
+        /**
+          * @default false
+         */
         "selected"?: boolean;
         "variant"?: string;
     }
@@ -4323,6 +4395,9 @@ declare namespace LocalJSX {
          */
         "name": string;
         "parentComponentId"?: string;
+        /**
+          * @default false
+         */
         "selected"?: boolean;
         "variant"?: string;
     }
@@ -4391,6 +4466,7 @@ declare namespace LocalJSX {
   | 'h6';
         /**
           * Determines what semantic text tag to render.
+          * @default "p"
          */
         "tag"?: | 'h1'
   | 'h2'
@@ -4462,6 +4538,7 @@ declare namespace LocalJSX {
         "maxLength"?: number;
         /**
           * Specifies the name. Submitted with the form name/value pair. This value will mirror the componentId.
+          * @default this.componentId
          */
         "name"?: string;
         /**
@@ -4500,6 +4577,7 @@ declare namespace LocalJSX {
         "rows"?: number;
         /**
           * The value of the textarea.
+          * @default ''
          */
         "value"?: string | null;
     }

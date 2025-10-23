@@ -80,6 +80,11 @@ export class PdsSelect {
   @Prop() required = false;
 
   /**
+   * Applies highlight styling to the select field.
+   */
+  @Prop({ reflect: true }) highlight?: boolean;
+
+  /**
    * The value(s) of the selected option(s).
    *
    */
