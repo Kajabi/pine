@@ -10,7 +10,7 @@
   }
 }
 
-:host([highlight]:not([disabled]):not([aria-readonly="true"])) {
+:host([highlight]:not([disabled]):not([aria-disabled="true"]):not([aria-readonly="true"])) {
   .pds-textarea__field:not(.is-invalid) {
     background-color: var(--pine-color-accent-disabled);
     border-color: var(--pine-color-accent);
