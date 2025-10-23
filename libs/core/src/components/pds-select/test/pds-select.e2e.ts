@@ -102,4 +102,40 @@ describe('pds-select', () => {
     const actionSlot = await page.find('pds-select >>> .pds-select__action');
     expect(actionSlot).toBeNull();
   });
+
+  it('applies highlight styling when highlight prop is set', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-select highlight label="Name" name="name"><option value="1">Option 1</option></pds-select>');
+
+    const component = await page.find('pds-select');
+    expect(component).toHaveClass('hydrated');
+    expect(component).toHaveAttribute('highlight');
+
+    // Verify highlight attribute is reflected
+    const hasHighlight = await component.getAttribute('highlight');
+    expect(hasHighlight).not.toBeNull();
+  });
+
+  it('toggles highlight attribute when property changes', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-select label="Name" name="name"><option value="1">Option 1</option></pds-select>');
+    const component = await page.find('pds-select');
+
+    // Initially no highlight
+    expect(component).not.toHaveAttribute('highlight');
+
+    // Set highlight property
+    component.setProperty('highlight', true);
+    await page.waitForChanges();
+
+    // Should have highlight attribute
+    expect(component).toHaveAttribute('highlight');
+
+    // Unset highlight property
+    component.setProperty('highlight', false);
+    await page.waitForChanges();
+
+    // Should not have highlight attribute
+    expect(component).not.toHaveAttribute('highlight');
+  });
 });
