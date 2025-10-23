@@ -15,10 +15,50 @@ Box is our primitive layout component. It is intended to be used as a building b
 
 ### Most Common Props
 - `direction`: `"row"` (default, horizontal) or `"column"` (vertical stacking)
-- `gap`: Spacing between items (`"none"`, `"xs"`, `"sm"`, `"md"`, `"lg"`, `"xl"`, `"xxl"`)
+- `gap`: Spacing between items - accepts t-shirt sizes (`"none"`, `"xxs"`, `"xs"`, `"sm"`, `"md"`, `"lg"`, `"xl"`, `"xxl"`) or core spacing tokens (`"025"`, `"050"`, `"100"`, `"125"`, `"150"`, `"200"`, `"250"`, `"300"`, `"350"`, `"400"`, `"450"`, `"500"`, `"550"`, `"600"`, `"650"`, `"700"`, `"750"`, `"800"`)
 - `padding`: Internal spacing (same size options as gap)
 - `justify-content`: Horizontal alignment (`"start"`, `"center"`, `"end"`, `"space-between"`, etc.)
 - `align-items`: Vertical alignment (`"start"`, `"center"`, `"end"`, `"baseline"`, `"stretch"`)
+
+### Spacing Value Reference
+
+**Core Spacing Tokens** map to specific pixel values from the Pine design system:
+
+| Token | Pixel Value |
+|-------|-------------|
+| `"025"` | 2px |
+| `"050"` | 4px |
+| `"100"` | 8px |
+| `"125"` | 10px |
+| `"150"` | 12px |
+| `"200"` | 16px |
+| `"250"` | 20px |
+| `"300"` | 24px |
+| `"350"` | 28px |
+| `"400"` | 32px |
+| `"450"` | 36px |
+| `"500"` | 40px |
+| `"550"` | 44px |
+| `"600"` | 48px |
+| `"650"` | 52px |
+| `"700"` | 56px |
+| `"750"` | 60px |
+| `"800"` | 64px |
+
+**T-shirt Sizes** provide semantic spacing that adapts to the design system's scale:
+
+| Size | Pixel Value |
+|------|-------------|
+| `"none"` | 0px |
+| `"xxs"` | 2px |
+| `"xs"` | 4px |
+| `"sm"` | 8px |
+| `"md"` | 16px |
+| `"lg"` | 24px |
+| `"xl"` | 32px |
+| `"xxl"` | 40px |
+
+Use t-shirt sizes for consistent, design-system-aligned spacing, and core tokens when you need precise pixel control.
 
 ### Logical Properties
 The Box component uses CSS logical properties for layout and spacing, which means properties are defined relative to the content's writing direction rather than physical directions. This makes the component more adaptable to different writing modes and languages.
@@ -247,7 +287,10 @@ Controls whether flex items wrap to new lines when they don't fit in the contain
 ### Gap
 Controls spacing between items within the container.
 
-**Options:** `"none"`, `"xxs"`, `"xs"`, `"sm"`, `"md"`, `"lg"`, `"xl"`, `"xxl"`
+**Options:**
+- **T-shirt sizes:** `"none"`, `"xxs"`, `"xs"`, `"sm"`, `"md"`, `"lg"`, `"xl"`, `"xxl"`
+- **Core spacing tokens:** `"025"` through `"800"` (see [Spacing Value Reference](#spacing-value-reference) for exact pixel values)
+
 **Responsive variants**: `gap-xs`, `gap-sm`, `gap-md`, `gap-lg`, `gap-xl`
 
 <DocCanvas client:only
@@ -294,17 +337,20 @@ Controls spacing between items within the container.
 ### Padding
 Controls internal spacing within the container.
 
-**Options:** `"none"`, `"xxs"`, `"xs"`, `"sm"`, `"md"`, `"lg"`, `"xl"`, `"xxl"`
+**Options:**
+- **T-shirt sizes:** `"none"`, `"xxs"`, `"xs"`, `"sm"`, `"md"`, `"lg"`, `"xl"`, `"xxl"`
+- **Core spacing tokens:** `"025"` through `"800"` (see [Spacing Value Reference](#spacing-value-reference) for exact pixel values)
+
 **Responsive variants**: `padding-xs`, `padding-sm`, `padding-md`, `padding-lg`, `padding-xl`
 
 ### Directional Padding
-Control padding on specific sides using logical properties:
+Control padding on specific sides using logical properties (accepts both t-shirt sizes and core spacing tokens):
 - `padding-block-start` / `padding-block-end` (top/bottom)
 - `padding-inline-start` / `padding-inline-end` (left/right in LTR)
 - **All support responsive variants**
 
 ### Margin
-Controls external spacing around the container using logical properties:
+Controls external spacing around the container using logical properties (accepts both t-shirt sizes and core spacing tokens):
 - `margin-block-start` / `margin-block-end` (top/bottom)
 - `margin-inline-start` / `margin-inline-end` (left/right in LTR)
 - **All support responsive variants**

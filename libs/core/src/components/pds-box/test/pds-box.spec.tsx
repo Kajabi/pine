@@ -353,7 +353,7 @@ describe('pds-box', () => {
   });
 
   ['xs', 'sm', 'md', 'lg', 'xl'].forEach((breakpoint) => {
-    ['none', 'xxs', 'xs', 'sm', 'md', 'lg', 'xl', 'xxl'].forEach((size) => {
+    ['none', 'xxs', 'xs', 'sm', 'md', 'lg', 'xl', 'xxl', '025', '050', '100', '125', '150', '200', '250', '300', '350', '400', '450', '500', '550', '600', '650', '700', '750', '800'].forEach((size) => {
       it(`renders gap-${breakpoint} class when prop is set to ${size}`, async () => {
         const page = await newSpecPage({
           components: [PdsBox],
@@ -600,7 +600,7 @@ describe('pds-box', () => {
     expect(element).toHaveClass('pds-box-offset-xl-2');
   });
 
-  [  'xxs', 'xs', 'sm', 'md', 'lg', 'xl', 'xxl' ].forEach((size) => {
+  [  'xxs', 'xs', 'sm', 'md', 'lg', 'xl', 'xxl', '025', '050', '100', '125', '150', '200', '250', '300', '350', '400', '450', '500', '550', '600', '650', '700', '750', '800' ].forEach((size) => {
     it(`renders margin-block-start class when prop is set to ${size}`, async () => {
       const page = await newSpecPage({
         components: [PdsBox],

@@ -1,6 +1,6 @@
 import { Component, h, Host, Prop } from '@stencil/core';
 
-import { BoxColumnType, BoxTShirtSizeType, BoxShadowSizeType } from '../../utils/types';
+import { BoxColumnType, BoxSpacingType, BoxShadowSizeType } from '../../utils/types';
 import { normalizeColorValue } from '../../utils/utils';
 
 @Component({
@@ -177,37 +177,37 @@ export class PdsBox {
    * Defines the spacing between the box items.
    * @defaultValue none
   */
-  @Prop() gap?: BoxTShirtSizeType;
+  @Prop() gap?: BoxSpacingType;
 
   /**
    * Defines the spacing between the box items at the XS breakpoint.
    * @defaultValue none
   */
-  @Prop() gapXs?: BoxTShirtSizeType;
+  @Prop() gapXs?: BoxSpacingType;
 
   /**
    * Defines the spacing between the box items at the SM breakpoint.
    * @defaultValue none
   */
-  @Prop() gapSm?: BoxTShirtSizeType;
+  @Prop() gapSm?: BoxSpacingType;
 
   /**
    * Defines the spacing between the box items at the MD breakpoint.
    * @defaultValue none
   */
-  @Prop() gapMd?: BoxTShirtSizeType;
+  @Prop() gapMd?: BoxSpacingType;
 
   /**
    * Defines the spacing between the box items at the LG breakpoint.
    * @defaultValue none
   */
-  @Prop() gapLg?: BoxTShirtSizeType;
+  @Prop() gapLg?: BoxSpacingType;
 
   /**
    * Defines the spacing between the box items at the XL breakpoint.
    * @defaultValue none
   */
-  @Prop() gapXl?: BoxTShirtSizeType;
+  @Prop() gapXl?: BoxSpacingType;
 
   /**
    * Defines whether flex items are forced onto one line or can wrap onto multiple lines.
@@ -292,145 +292,145 @@ export class PdsBox {
    * Defines the box's outer top spacing.
    * @defaultValue none
   */
-  @Prop() marginBlockStart?: BoxTShirtSizeType;
+  @Prop() marginBlockStart?: BoxSpacingType;
 
   /**
    * Defines the box's outer top spacing at the XS breakpoint.
    * @defaultValue none
   */
-  @Prop() marginBlockStartXs?: BoxTShirtSizeType;
+  @Prop() marginBlockStartXs?: BoxSpacingType;
 
   /**
    * Defines the box's outer top spacing at the SM breakpoint.
    * @defaultValue none
   */
-  @Prop() marginBlockStartSm?: BoxTShirtSizeType;
+  @Prop() marginBlockStartSm?: BoxSpacingType;
 
   /**
    * Defines the box's outer top spacing at the MD breakpoint.
    * @defaultValue none
   */
-  @Prop() marginBlockStartMd?: BoxTShirtSizeType;
+  @Prop() marginBlockStartMd?: BoxSpacingType;
 
   /**
    * Defines the box's outer top spacing at the LG breakpoint.
    * @defaultValue none
   */
-  @Prop() marginBlockStartLg?: BoxTShirtSizeType;
+  @Prop() marginBlockStartLg?: BoxSpacingType;
 
   /**
    * Defines the box's outer top spacing at the XL breakpoint.
    * @defaultValue none
   */
-  @Prop() marginBlockStartXl?: BoxTShirtSizeType;
+  @Prop() marginBlockStartXl?: BoxSpacingType;
 
   /**
    * Defines the box's outer left spacing.
    * @defaultValue none
   */
-  @Prop() marginInlineStart?: BoxTShirtSizeType;
+  @Prop() marginInlineStart?: BoxSpacingType;
 
   /**
    * Defines the box's outer left spacing at the XS breakpoint.
    * @defaultValue none
   */
-  @Prop() marginInlineStartXs?: BoxTShirtSizeType;
+  @Prop() marginInlineStartXs?: BoxSpacingType;
 
   /**
    * Defines the box's outer left spacing at the SM breakpoint.
    * @defaultValue none
   */
-  @Prop() marginInlineStartSm?: BoxTShirtSizeType;
+  @Prop() marginInlineStartSm?: BoxSpacingType;
 
   /**
    * Defines the box's outer left spacing at the MD breakpoint.
    * @defaultValue none
   */
-  @Prop() marginInlineStartMd?: BoxTShirtSizeType;
+  @Prop() marginInlineStartMd?: BoxSpacingType;
 
   /**
    * Defines the box's outer left spacing at the LG breakpoint.
    * @defaultValue none
   */
-  @Prop() marginInlineStartLg?: BoxTShirtSizeType;
+  @Prop() marginInlineStartLg?: BoxSpacingType;
 
   /**
    * Defines the box's outer left spacing at the XL breakpoint.
    * @defaultValue none
   */
-  @Prop() marginInlineStartXl?: BoxTShirtSizeType;
+  @Prop() marginInlineStartXl?: BoxSpacingType;
 
   /**
    * Defines the box's outer right spacing.
    * @defaultValue none
   */
-  @Prop() marginInlineEnd?: BoxTShirtSizeType;
+  @Prop() marginInlineEnd?: BoxSpacingType;
 
   /**
    * Defines the box's outer right spacing at the XS breakpoint.
    * @defaultValue none
   */
-  @Prop() marginInlineEndXs?: BoxTShirtSizeType;
+  @Prop() marginInlineEndXs?: BoxSpacingType;
 
   /**
    * Defines the box's outer right spacing at the SM breakpoint.
    * @defaultValue none
   */
-  @Prop() marginInlineEndSm?: BoxTShirtSizeType;
+  @Prop() marginInlineEndSm?: BoxSpacingType;
 
   /**
    * Defines the box's outer right spacing at the MD breakpoint.
    * @defaultValue none
   */
-  @Prop() marginInlineEndMd?: BoxTShirtSizeType;
+  @Prop() marginInlineEndMd?: BoxSpacingType;
 
   /**
    * Defines the box's outer right spacing at the LG breakpoint.
    * @defaultValue none
   */
-  @Prop() marginInlineEndLg?: BoxTShirtSizeType;
+  @Prop() marginInlineEndLg?: BoxSpacingType;
 
   /**
    * Defines the box's outer right spacing at the XL breakpoint.
    * @defaultValue none
   */
-  @Prop() marginInlineEndXl?: BoxTShirtSizeType;
+  @Prop() marginInlineEndXl?: BoxSpacingType;
 
   /**
    * Defines the box's outer bottom spacing.
    * @defaultValue none
   */
-  @Prop() marginBlockEnd?: BoxTShirtSizeType;
+  @Prop() marginBlockEnd?: BoxSpacingType;
 
   /**
    * Defines the box's outer bottom spacing at the XS breakpoint.
    * @defaultValue none
   */
-  @Prop() marginBlockEndXs?: BoxTShirtSizeType;
+  @Prop() marginBlockEndXs?: BoxSpacingType;
 
   /**
    * Defines the box's outer bottom spacing at the SM breakpoint.
    * @defaultValue none
   */
-  @Prop() marginBlockEndSm?: BoxTShirtSizeType;
+  @Prop() marginBlockEndSm?: BoxSpacingType;
 
   /**
    * Defines the box's outer bottom spacing at the MD breakpoint.
    * @defaultValue none
   */
-  @Prop() marginBlockEndMd?: BoxTShirtSizeType;
+  @Prop() marginBlockEndMd?: BoxSpacingType;
 
   /**
    * Defines the box's outer bottom spacing at the LG breakpoint.
    * @defaultValue none
   */
-  @Prop() marginBlockEndLg?: BoxTShirtSizeType;
+  @Prop() marginBlockEndLg?: BoxSpacingType;
 
   /**
    * Defines the box's outer bottom spacing at the XL breakpoint.
    * @defaultValue none
   */
-  @Prop() marginBlockEndXl?: BoxTShirtSizeType;
+  @Prop() marginBlockEndXl?: BoxSpacingType;
 
   /**
    * The minimum height of the row. Used in conjunction with alignment props
@@ -476,182 +476,182 @@ export class PdsBox {
    * Defines the spacing between the box items.
    * @defaultValue none
   */
-  @Prop() padding?: BoxTShirtSizeType;
+  @Prop() padding?: BoxSpacingType;
 
   /**
    * Defines the spacing between the box items at the XS breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingXs?: BoxTShirtSizeType;
+  @Prop() paddingXs?: BoxSpacingType;
 
   /**
    * Defines the spacing between the box items at the SM breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingSm?: BoxTShirtSizeType;
+  @Prop() paddingSm?: BoxSpacingType;
 
   /**
    * Defines the spacing between the box items at the MD breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingMd?: BoxTShirtSizeType;
+  @Prop() paddingMd?: BoxSpacingType;
 
   /**
    * Defines the spacing between the box items at the LG breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingLg?: BoxTShirtSizeType;
+  @Prop() paddingLg?: BoxSpacingType;
 
   /**
    * Defines the spacing between the box items at the XL breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingXl?: BoxTShirtSizeType;
+  @Prop() paddingXl?: BoxSpacingType;
 
 
   /**
    * Defines the top spacing.
    * @defaultValue none
   */
-  @Prop() paddingBlockStart?: BoxTShirtSizeType;
+  @Prop() paddingBlockStart?: BoxSpacingType;
 
   /**
    * Defines the top spacing at the XS breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingBlockStartXs?: BoxTShirtSizeType;
+  @Prop() paddingBlockStartXs?: BoxSpacingType;
 
   /**
    * Defines the top spacing at the SM breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingBlockStartSm?: BoxTShirtSizeType;
+  @Prop() paddingBlockStartSm?: BoxSpacingType;
 
   /**
    * Defines the top spacing at the MD breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingBlockStartMd?: BoxTShirtSizeType;
+  @Prop() paddingBlockStartMd?: BoxSpacingType;
 
   /**
    * Defines the top spacing at the LG breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingBlockStartLg?: BoxTShirtSizeType;
+  @Prop() paddingBlockStartLg?: BoxSpacingType;
 
   /**
    * Defines the top spacing at the XL breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingBlockStartXl?: BoxTShirtSizeType;
+  @Prop() paddingBlockStartXl?: BoxSpacingType;
 
   /**
    * Defines the bottom spacing.
    * @defaultValue none
   */
-  @Prop() paddingBlockEnd?: BoxTShirtSizeType;
+  @Prop() paddingBlockEnd?: BoxSpacingType;
 
   /**
    * Defines the bottom spacing at the XS breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingBlockEndXs?: BoxTShirtSizeType;
+  @Prop() paddingBlockEndXs?: BoxSpacingType;
 
   /**
    * Defines the bottom spacing at the SM breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingBlockEndSm?: BoxTShirtSizeType;
+  @Prop() paddingBlockEndSm?: BoxSpacingType;
 
   /**
    * Defines the bottom spacing at the MD breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingBlockEndMd?: BoxTShirtSizeType;
+  @Prop() paddingBlockEndMd?: BoxSpacingType;
 
   /**
    * Defines the bottom spacing at the LG breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingBlockEndLg?: BoxTShirtSizeType;
+  @Prop() paddingBlockEndLg?: BoxSpacingType;
 
   /**
    * Defines the bottom spacing at the XL breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingBlockEndXl?: BoxTShirtSizeType;
+  @Prop() paddingBlockEndXl?: BoxSpacingType;
 
   /**
    * Defines the left spacing.
    * @defaultValue none
   */
-  @Prop() paddingInlineStart?: BoxTShirtSizeType;
+  @Prop() paddingInlineStart?: BoxSpacingType;
 
   /**
    * Defines the left spacing at the XS breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingInlineStartXs?: BoxTShirtSizeType;
+  @Prop() paddingInlineStartXs?: BoxSpacingType;
 
   /**
    * Defines the left spacing at the SM breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingInlineStartSm?: BoxTShirtSizeType;
+  @Prop() paddingInlineStartSm?: BoxSpacingType;
 
   /**
    * Defines the left spacing at the MD breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingInlineStartMd?: BoxTShirtSizeType;
+  @Prop() paddingInlineStartMd?: BoxSpacingType;
 
   /**
    * Defines the left spacing at the LG breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingInlineStartLg?: BoxTShirtSizeType;
+  @Prop() paddingInlineStartLg?: BoxSpacingType;
 
   /**
    * Defines the left spacing at the XL breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingInlineStartXl?: BoxTShirtSizeType;
+  @Prop() paddingInlineStartXl?: BoxSpacingType;
 
   /**
    * Defines the right spacing.
    * @defaultValue none
   */
-  @Prop() paddingInlineEnd?: BoxTShirtSizeType;
+  @Prop() paddingInlineEnd?: BoxSpacingType;
 
   /**
    * Defines the right spacing at the XS breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingInlineEndXs?: BoxTShirtSizeType;
+  @Prop() paddingInlineEndXs?: BoxSpacingType;
 
   /**
    * Defines the right spacing at the SM breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingInlineEndSm?: BoxTShirtSizeType;
+  @Prop() paddingInlineEndSm?: BoxSpacingType;
 
   /**
    * Defines the right spacing at the MD breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingInlineEndMd?: BoxTShirtSizeType;
+  @Prop() paddingInlineEndMd?: BoxSpacingType;
 
   /**
    * Defines the right spacing at the LG breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingInlineEndLg?: BoxTShirtSizeType;
+  @Prop() paddingInlineEndLg?: BoxSpacingType;
 
   /**
    * Defines the right spacing at the XL breakpoint.
    * @defaultValue none
   */
-  @Prop() paddingInlineEndXl?: BoxTShirtSizeType;
+  @Prop() paddingInlineEndXl?: BoxSpacingType;
 
   /**
    * Defines the box shadow.

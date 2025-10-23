@@ -710,7 +710,25 @@ $gap-values: (
   'md': var(--pine-dimension-md),
   'lg': var(--pine-dimension-lg),
   'xl': var(--pine-dimension-xl),
-  'xxl': var(--pine-dimension-2xl)
+  'xxl': var(--pine-dimension-2xl),
+  '025': var(--pine-dimension-025),
+  '050': var(--pine-dimension-050),
+  '100': var(--pine-dimension-100),
+  '125': var(--pine-dimension-125),
+  '150': var(--pine-dimension-150),
+  '200': var(--pine-dimension-200),
+  '250': var(--pine-dimension-250),
+  '300': var(--pine-dimension-300),
+  '350': var(--pine-dimension-350),
+  '400': var(--pine-dimension-400),
+  '450': var(--pine-dimension-450),
+  '500': var(--pine-dimension-500),
+  '550': var(--pine-dimension-550),
+  '600': var(--pine-dimension-600),
+  '650': var(--pine-dimension-650),
+  '700': var(--pine-dimension-700),
+  '750': var(--pine-dimension-750),
+  '800': var(--pine-dimension-800)
 );
 
 @each $breakpoint-name, $breakpoint-value in $breakpoints {
@@ -732,7 +750,25 @@ $margin-values: (
   'md': var(--pine-dimension-md),
   'lg': var(--pine-dimension-lg),
   'xl': var(--pine-dimension-xl),
-  'xxl': var(--pine-dimension-2xl)
+  'xxl': var(--pine-dimension-2xl),
+  '025': var(--pine-dimension-025),
+  '050': var(--pine-dimension-050),
+  '100': var(--pine-dimension-100),
+  '125': var(--pine-dimension-125),
+  '150': var(--pine-dimension-150),
+  '200': var(--pine-dimension-200),
+  '250': var(--pine-dimension-250),
+  '300': var(--pine-dimension-300),
+  '350': var(--pine-dimension-350),
+  '400': var(--pine-dimension-400),
+  '450': var(--pine-dimension-450),
+  '500': var(--pine-dimension-500),
+  '550': var(--pine-dimension-550),
+  '600': var(--pine-dimension-600),
+  '650': var(--pine-dimension-650),
+  '700': var(--pine-dimension-700),
+  '750': var(--pine-dimension-750),
+  '800': var(--pine-dimension-800)
 );
 
 @each $breakpoint-name, $breakpoint-value in $breakpoints {
@@ -766,7 +802,25 @@ $padding-values: (
   'md': var(--pine-dimension-md),
   'lg': var(--pine-dimension-lg),
   'xl': var(--pine-dimension-xl),
-  'xxl': var(--pine-dimension-2xl)
+  'xxl': var(--pine-dimension-2xl),
+  '025': var(--pine-dimension-025),
+  '050': var(--pine-dimension-050),
+  '100': var(--pine-dimension-100),
+  '125': var(--pine-dimension-125),
+  '150': var(--pine-dimension-150),
+  '200': var(--pine-dimension-200),
+  '250': var(--pine-dimension-250),
+  '300': var(--pine-dimension-300),
+  '350': var(--pine-dimension-350),
+  '400': var(--pine-dimension-400),
+  '450': var(--pine-dimension-450),
+  '500': var(--pine-dimension-500),
+  '550': var(--pine-dimension-550),
+  '600': var(--pine-dimension-600),
+  '650': var(--pine-dimension-650),
+  '700': var(--pine-dimension-700),
+  '750': var(--pine-dimension-750),
+  '800': var(--pine-dimension-800)
 );
 
 @each $breakpoint-name, $breakpoint-value in $breakpoints {
