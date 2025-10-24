@@ -4,3 +4,4 @@
 **/*.stories.*
 **/*.figma.ts
 stencil.config.ts
+src/utils/test/setup.ts
