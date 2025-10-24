@@ -151,6 +151,11 @@ export class PdsTextarea {
   @Prop({ reflect: true }) maxLength?: number;
 
   /**
+   * Applies highlight styling to the textarea field.
+   */
+  @Prop({ reflect: true }) highlight?: boolean;
+
+  /**
    * The value of the textarea.
    */
   @Prop({mutable: true}) value?: string | null = '';

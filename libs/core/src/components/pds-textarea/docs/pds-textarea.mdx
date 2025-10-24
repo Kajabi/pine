@@ -116,6 +116,18 @@ Removes the ability to interact with the text field. If a value is present, that
   <pds-textarea name="Readonly" label="Name" readonly="true" value="Readonly Value" component-id="textarea-readonly"></pds-textarea>
 </DocCanvas>
 
+### Highlight
+
+Applies accent styling to the textarea field with a purple background, border, and text color to draw attention to important fields.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsTextarea name="Highlight" label="Message" highlight="true" value="This textarea is highlighted" componentId="textarea-highlight"></PdsTextarea>',
+    webComponent: '<pds-textarea name="Highlight" label="Message" highlight="true" value="This textarea is highlighted" component-id="textarea-highlight"></pds-textarea>'
+}}>
+  <pds-textarea name="Highlight" label="Message" highlight="true" value="This textarea is highlighted" component-id="textarea-highlight"></pds-textarea>
+</DocCanvas>
+
 ### Required
 
 Indicates that the user must specify a value for the input before the owning form can be submitted. It's recommended to use `error-message` on any required fields.
