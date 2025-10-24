@@ -13,8 +13,8 @@ class MockElementInternals {
   private _formValue: FormData | string | null = null;
   // @ts-expect-error - Stored for mock completeness
   private _formState: FormData | string | null = null;
-  private validationMessage = '';
-  private validity: ValidityState = {
+  private _validationMessage = '';
+  private _validity: ValidityState = {
     badInput: false,
     customError: false,
     patternMismatch: false,
@@ -49,23 +49,23 @@ class MockElementInternals {
     _anchor?: HTMLElement,
   ): void {
     if (flags) {
-      this.validity = { ...this.validity, ...flags, valid: !Object.values(flags).some(Boolean) };
+      this._validity = { ...this._validity, ...flags, valid: !Object.values(flags).some(Boolean) };
     }
-    this.validationMessage = message || '';
+    this._validationMessage = message || '';
   }
 
   /**
    * Checks if the element will pass validation
    */
   checkValidity(): boolean {
-    return this.validity.valid;
+    return this._validity.valid;
   }
 
   /**
    * Checks validity and fires invalid event if not valid
    */
   reportValidity(): boolean {
-    return this.validity.valid;
+    return this._validity.valid;
   }
 
   /**
@@ -78,15 +78,15 @@ class MockElementInternals {
   /**
    * Returns the validation message
    */
-  get validationMessage_(): string {
-    return this.validationMessage;
+  get validationMessage(): string {
+    return this._validationMessage;
   }
 
   /**
    * Returns the validity state
    */
-  get validity_(): ValidityState {
-    return this.validity;
+  get validity(): ValidityState {
+    return this._validity;
   }
 
   /**
