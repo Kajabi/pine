@@ -1,3 +1,23 @@
+## 3.8.2 (2025-10-24)
+
+### Bug Fixes 🐛
+
+- **pds-box:** add core tokens to spacing set ([#565](https://github.com/Kajabi/pine/pull/565))
+- **pds-radio:** add contained variant and image slot ([#562](https://github.com/Kajabi/pine/pull/562))
+
+### Documentation 📄
+
+- **pds-row:** add modifiers to size prop in examples ([#566](https://github.com/Kajabi/pine/pull/566))
+
+### Styles 🎨
+
+- **pds-progress:** update progress bar styles and add gradient fill color documentation ([#564](https://github.com/Kajabi/pine/pull/564))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.8.1 (2025-10-21)
 
 ### Documentation 📄
