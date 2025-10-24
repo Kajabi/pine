@@ -205,6 +205,11 @@ export class PdsInput {
   @Prop() fullWidth?: boolean;
 
   /**
+   * Applies highlight styling to the input field.
+   */
+  @Prop({ reflect: true }) highlight?: boolean;
+
+  /**
    * Determines if the input has focus.
    */
   @State() hasFocus = false;

@@ -139,4 +139,40 @@ describe('pds-input', () => {
     expect(component).toHaveAttribute('has-action');
     expect(await component.getAttribute('has-action')).toBe('true');
   });
+
+  it('applies highlight styling when highlight prop is set', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-input highlight value="test"></pds-input>');
+
+    const component = await page.find('pds-input');
+    expect(component).toHaveClass('hydrated');
+    expect(component).toHaveAttribute('highlight');
+
+    // Verify highlight attribute is reflected
+    const hasHighlight = await component.getAttribute('highlight');
+    expect(hasHighlight).not.toBeNull();
+  });
+
+  it('toggles highlight attribute when property changes', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-input></pds-input>');
+    const component = await page.find('pds-input');
+
+    // Initially no highlight
+    expect(component).not.toHaveAttribute('highlight');
+
+    // Set highlight property
+    component.setProperty('highlight', true);
+    await page.waitForChanges();
+
+    // Should have highlight attribute
+    expect(component).toHaveAttribute('highlight');
+
+    // Unset highlight property
+    component.setProperty('highlight', false);
+    await page.waitForChanges();
+
+    // Should not have highlight attribute
+    expect(component).not.toHaveAttribute('highlight');
+  });
 });

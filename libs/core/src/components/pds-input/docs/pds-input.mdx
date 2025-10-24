@@ -114,6 +114,18 @@ Removes the ability to interact with the text field. If a value is present, that
   <pds-input component-id="pds-input-readonly-example" label="Name" type="email" readonly="true" value="Frank Dux"></pds-input>
 </DocCanvas>
 
+### Highlight
+
+Applies accent styling to the input field with a purple background, border, and text color to draw attention to important fields.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: '<PdsInput componentId="pds-input-highlight-example" label="Label" type="text" highlight="true" value="This input is highlighted"></PdsInput>',
+    webComponent: '<pds-input component-id="pds-input-highlight-example" label="Label" type="text" highlight="true" value="This input is highlighted"></pds-input>'
+}}>
+  <pds-input component-id="pds-input-highlight-example" label="Label" type="text" highlight="true" value="This input is highlighted"></pds-input>
+</DocCanvas>
+
 ### Full Width
 
 When `full-width` is set to `true`, the input component will occupy the full width of its parent container instead of using its natural inline width.

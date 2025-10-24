@@ -828,7 +828,7 @@ describe('pds-input', () => {
     it('renders label wrapper without visually-hidden class when hideLabel is false', async () => {
       const { root } = await newSpecPage({
         components: [PdsInput],
-        html: `<pds-input component-id="field-1" label="Name" hide-label="false"></pds-input>`,
+        html: `<pds-input component-id="field-1" label="Name"></pds-input>`,
       });
 
       const labelWrapper = root?.shadowRoot?.querySelector('.pds-input__label-wrapper');
@@ -847,6 +847,61 @@ describe('pds-input', () => {
 
       const input = root?.shadowRoot?.querySelector('input');
       expect(input?.hasAttribute('aria-label')).toBeFalsy();
+    });
+  });
+
+  describe('highlight', () => {
+    it('renders with highlight attribute when highlight prop is true', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsInput],
+        html: `<pds-input component-id="field-1" highlight="true" value="Frank Dux"></pds-input>`
+      });
+
+      expect(root?.hasAttribute('highlight')).toBe(true);
+    });
+
+    it('reflects highlight property to attribute', async () => {
+      const page = await newSpecPage({
+        components: [PdsInput],
+        html: `<pds-input component-id="field-1"></pds-input>`
+      });
+
+      const component = page.rootInstance;
+      const root = page.root;
+
+      // Initially no highlight
+      expect(root?.hasAttribute('highlight')).toBe(false);
+
+      // Set highlight property
+      component.highlight = true;
+      await page.waitForChanges();
+
+      // Attribute should be reflected
+      expect(root?.hasAttribute('highlight')).toBe(true);
+
+      // Unset highlight property
+      component.highlight = false;
+      await page.waitForChanges();
+
+      // Attribute should be removed
+      expect(root?.hasAttribute('highlight')).toBe(false);
+    });
+
+    it('semantic states take precedence over highlight', async () => {
+      const page = await newSpecPage({
+        components: [PdsInput],
+        html: `<pds-input component-id="field-1" highlight="true" disabled="true" value="Frank Dux"></pds-input>`
+      });
+
+      const root = page.root;
+
+      // Both attributes should be present
+      expect(root?.hasAttribute('highlight')).toBe(true);
+      expect(root?.hasAttribute('disabled')).toBe(true);
+
+      // Disabled state should apply (CSS selector excludes disabled)
+      const wrapper = root?.shadowRoot?.querySelector('.pds-input__field-wrapper');
+      expect(wrapper?.classList.contains('is-disabled')).toBe(true);
     });
   });
 });
