@@ -124,13 +124,18 @@ if (typeof HTMLElement !== 'undefined' && typeof HTMLElement.prototype.attachInt
 const originalConsoleError = console.error;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 console.error = (...args: any[]) => {
+  const message = typeof args[0] === 'string' ? args[0] : '';
+  
   // Filter out the ElementInternals warning since we're mocking it
-  if (
-    typeof args[0] === 'string' &&
-    args[0].includes('Property setFormValue was accessed on ElementInternals')
-  ) {
+  if (message.includes('Property setFormValue was accessed on ElementInternals')) {
     return;
   }
+  
+  // Filter out SVG icon 404 errors in e2e tests (icons aren't available on test server)
+  if (message.includes('Failed to load resource') && message.includes('pds-icons/svg')) {
+    return;
+  }
+  
   originalConsoleError.apply(console, args);
 };
 
