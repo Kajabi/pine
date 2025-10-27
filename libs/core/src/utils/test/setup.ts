@@ -122,21 +122,35 @@ if (typeof HTMLElement !== 'undefined' && typeof HTMLElement.prototype.attachInt
  * Suppress specific console warnings that are expected in test environment
  */
 const originalConsoleError = console.error;
+const originalConsoleWarn = console.warn;
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 console.error = (...args: any[]) => {
   const message = typeof args[0] === 'string' ? args[0] : '';
-  
+
   // Filter out the ElementInternals warning since we're mocking it
   if (message.includes('Property setFormValue was accessed on ElementInternals')) {
     return;
   }
-  
+
   // Filter out SVG icon 404 errors in e2e tests (icons aren't available on test server)
   if (message.includes('Failed to load resource') && message.includes('pds-icons/svg')) {
     return;
   }
-  
+
   originalConsoleError.apply(console, args);
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+console.warn = (...args: any[]) => {
+  const message = typeof args[0] === 'string' ? args[0] : '';
+
+  // Filter out SVG icon loading warnings in e2e tests (icons aren't available on test server)
+  if (message.includes('Failed to load SVG') && message.includes('pds-icons/svg')) {
+    return;
+  }
+
+  originalConsoleWarn.apply(console, args);
 };
 
 export {};
