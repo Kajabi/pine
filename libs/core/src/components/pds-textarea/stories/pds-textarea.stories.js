@@ -12,6 +12,7 @@ export default {
     errorMessage: null,
     helperMessage: null,
     hideLabel: false,
+    highlight: false,
     invalid: false,
     label: null,
     maxLength: null,
@@ -45,6 +46,7 @@ const BaseTemplate = (args) => html`<pds-textarea
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
   ?hide-label=${args.hideLabel}
+  ?highlight=${args.highlight}
   ?invalid=${args.invalid}
   label="${args.label}"
   max-length="${args.maxLength}"
@@ -109,6 +111,15 @@ Readonly.args = {
   value: 'Readonly Value'
 };
 
+export const Highlight = BaseTemplate.bind({});
+Highlight.args = {
+  componentId: 'pds-textarea-highlight-example',
+  highlight: true,
+  label: 'Message',
+  name: 'Highlight',
+  value: 'This textarea is highlighted',
+};
+
 export const WithMessage = BaseTemplate.bind({});
 WithMessage.args = {
   componentId: 'pds-textarea-helper-example',
@@ -144,6 +155,7 @@ export const withActionLink = (args) => html`<pds-textarea
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
   ?hide-label=${args.hideLabel}
+  ?highlight=${args.highlight}
   ?invalid=${args.invalid}
   label="Notes"
   name="${args.name}"
@@ -168,6 +180,7 @@ export const withActionButton = (args) => html`<pds-textarea
   error-message="${args.errorMessage}"
   helper-message="${args.helperMessage}"
   ?hide-label=${args.hideLabel}
+  ?highlight=${args.highlight}
   ?invalid=${args.invalid}
   label="Description"
   name="${args.name}"

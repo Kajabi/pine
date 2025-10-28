@@ -10,6 +10,27 @@
   }
 }
 
+:host([highlight]:not([disabled]):not([aria-disabled="true"]):not([aria-readonly="true"])) {
+  .pds-textarea__field:not(.is-invalid) {
+    background-color: var(--pine-color-accent-disabled);
+    border-color: var(--pine-color-accent);
+    color: var(--pine-color-text-accent);
+
+    &:hover {
+      border-color: var(--pine-color-accent-hover);
+    }
+
+    &:focus-visible {
+      outline-color: var(--pine-color-focus-ring);
+    }
+
+    ~ .pds-textarea__character-counter {
+      background: color-mix(in srgb, var(--pine-color-accent-disabled) 80%, transparent);
+      color: var(--pine-color-text-accent);
+    }
+  }
+}
+
 .pds-textarea {
   display: flex;
   flex-direction: column;

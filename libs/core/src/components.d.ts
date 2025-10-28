@@ -1833,6 +1833,10 @@ export namespace Components {
          */
         "hideLabel": boolean;
         /**
+          * Applies highlight styling to the textarea field.
+         */
+        "highlight"?: boolean;
+        /**
           * Determines whether or not the textarea is invalid or throws an error.
           * @defaultValue false
          */
@@ -4523,6 +4527,10 @@ declare namespace LocalJSX {
           * Visually hides the label text for instances where only the textarea should be displayed. Label remains accessible to assistive technology such as screen readers. Note: When true, the action slot is also hidden to maintain a minimal UI.
          */
         "hideLabel"?: boolean;
+        /**
+          * Applies highlight styling to the textarea field.
+         */
+        "highlight"?: boolean;
         /**
           * Determines whether or not the textarea is invalid or throws an error.
           * @defaultValue false

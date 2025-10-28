@@ -662,7 +662,7 @@ it('should set focus on the input element when setFocus is called', async() => {
     it('renders label wrapper without visually-hidden class when hideLabel is false', async () => {
       const { root } = await newSpecPage({
         components: [PdsTextarea],
-        html: `<pds-textarea component-id="textarea-1" label="Description" hide-label="false"></pds-textarea>`,
+        html: `<pds-textarea component-id="textarea-1" label="Description"></pds-textarea>`,
       });
 
       const labelWrapper = root?.shadowRoot?.querySelector('.pds-textarea__label-wrapper');
@@ -978,6 +978,61 @@ it('should set focus on the input element when setFocus is called', async() => {
 
       expect(mockSetFormValue).toHaveBeenCalledWith('test');
       expect(mockSetValidity).toHaveBeenCalled();
+    });
+  });
+
+  describe('highlight', () => {
+    it('renders with highlight attribute when highlight prop is true', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-1" highlight="true" value="test"></pds-textarea>`,
+      });
+
+      expect(root?.hasAttribute('highlight')).toBe(true);
+    });
+
+    it('reflects highlight property to attribute', async () => {
+      const page = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-1"></pds-textarea>`,
+      });
+
+      const component = page.rootInstance;
+      const root = page.root;
+
+      // Initially no highlight
+      expect(root?.hasAttribute('highlight')).toBe(false);
+
+      // Set highlight property
+      component.highlight = true;
+      await page.waitForChanges();
+
+      // Attribute should be reflected
+      expect(root?.hasAttribute('highlight')).toBe(true);
+
+      // Unset highlight property
+      component.highlight = false;
+      await page.waitForChanges();
+
+      // Attribute should be removed
+      expect(root?.hasAttribute('highlight')).toBe(false);
+    });
+
+    it('semantic states take precedence over highlight', async () => {
+      const page = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="textarea-1" highlight="true" disabled="true" value="test"></pds-textarea>`,
+      });
+
+      const root = page.root;
+
+      // Both attributes should be present
+      expect(root?.hasAttribute('highlight')).toBe(true);
+      expect(root?.hasAttribute('disabled')).toBe(true);
+
+      // Disabled state should apply (CSS selector excludes disabled)
+      const textarea = root?.shadowRoot?.querySelector('textarea');
+      expect(textarea?.hasAttribute('disabled')).toBe(true);
     });
   });
 });
