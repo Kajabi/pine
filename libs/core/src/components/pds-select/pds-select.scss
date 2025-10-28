@@ -109,6 +109,26 @@ select {
   }
 }
 
+:host([highlight]:not(.is-disabled):not(.is-invalid)) {
+  select {
+    background-color: var(--pine-color-accent-disabled);
+    border-color: var(--pine-color-accent);
+    color: var(--pine-color-text-accent);
+
+    &:hover:not(:disabled) {
+      border-color: var(--pine-color-accent-hover);
+    }
+
+    &:focus-visible {
+      outline-color: var(--pine-color-focus-ring);
+    }
+  }
+
+  .pds-select__select-icon {
+    color: var(--pine-color-text-accent);
+  }
+}
+
 .pds-select__error-message,
 .pds-select__helper-message {
   color: var(--pine-color-text-message);

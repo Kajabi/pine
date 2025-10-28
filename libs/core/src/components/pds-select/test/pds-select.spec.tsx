@@ -773,3 +773,57 @@ describe('action slot', () => {
     expect(selectIcon).toBeNull(); // Multiple selects don't have the dropdown icon
   });
 });
+
+describe('highlight', () => {
+  it('renders with highlight attribute when highlight prop is true', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select component-id="select-1" highlight="true" label="Name" name="name"></pds-select>`,
+    });
+
+    expect(root?.hasAttribute('highlight')).toBe(true);
+  });
+
+  it('reflects highlight property to attribute', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select component-id="select-1" label="Name" name="name"></pds-select>`,
+    });
+
+    const component = page.rootInstance;
+    const root = page.root;
+
+    // Initially no highlight
+    expect(root?.hasAttribute('highlight')).toBe(false);
+
+    // Set highlight property
+    component.highlight = true;
+    await page.waitForChanges();
+
+    // Attribute should be reflected
+    expect(root?.hasAttribute('highlight')).toBe(true);
+
+    // Unset highlight property
+    component.highlight = false;
+    await page.waitForChanges();
+
+    // Attribute should be removed
+    expect(root?.hasAttribute('highlight')).toBe(false);
+  });
+
+  it('semantic states take precedence over highlight', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select component-id="select-1" highlight="true" disabled label="Name" name="name"></pds-select>`,
+    });
+
+    const root = page.root;
+
+    // Both attributes should be present
+    expect(root?.hasAttribute('highlight')).toBe(true);
+    expect(root?.hasAttribute('disabled')).toBe(true);
+
+    // Disabled state should apply (CSS selector excludes disabled)
+    expect(root?.classList.contains('is-disabled')).toBe(true);
+  });
+});

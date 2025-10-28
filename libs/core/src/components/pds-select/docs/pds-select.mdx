@@ -104,6 +104,39 @@ When the select component is disabled, it prevents any user interaction. As a re
   </div>
 </DocCanvas>
 
+### Highlight
+
+Applies accent styling to the select field with a purple background, border, text, and icon color to draw attention to important fields.
+
+<DocCanvas
+  client:only
+  mdxSource={{
+    react: `
+      <PdsSelect componentId="pds-select-highlight-example" highlight="true" label="Name" name="name" value="paul">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </PdsSelect>`,
+    webComponent: `
+      <pds-select component-id="pds-select-highlight-example" highlight="true" label="Name" name="name" value="paul">
+        <option value="paul">Paul McCartney</option>
+        <option value="john">John Lennon</option>
+        <option value="george">George Harrison</option>
+        <option value="ringo">Ringo Starr</option>
+      </pds-select>`,
+  }}
+>
+  <div style={{ padding: '20px', width: '100%' }}>
+    <pds-select component-id="pds-select-highlight-example" highlight="true" label="Name" name="name" value="paul">
+      <option value="paul">Paul McCartney</option>
+      <option value="john">John Lennon</option>
+      <option value="george">George Harrison</option>
+      <option value="ringo">Ringo Starr</option>
+    </pds-select>
+  </div>
+</DocCanvas>
+
 ### With Message
 
 A helper message provides additional context or instructions for the user and appears below the select component.

@@ -1507,6 +1507,10 @@ export namespace Components {
          */
         "hideLabel": boolean;
         /**
+          * Applies highlight styling to the select field.
+         */
+        "highlight"?: boolean;
+        /**
           * Determines whether or not the select is invalid.
          */
         "invalid"?: boolean;
@@ -4168,6 +4172,10 @@ declare namespace LocalJSX {
           * Visually hides the label text for instances where only the select should be displayed. Label remains accessible to assistive technology such as screen readers. Note: When true, the action slot is also hidden to maintain a minimal UI.
          */
         "hideLabel"?: boolean;
+        /**
+          * Applies highlight styling to the select field.
+         */
+        "highlight"?: boolean;
         /**
           * Determines whether or not the select is invalid.
          */
