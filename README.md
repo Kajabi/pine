@@ -42,6 +42,14 @@ For use within React files, components should follow PascalCase to match React c
 
 For the full list of properties available for each component and more robust documentation, please see Pine's [Storybook](https://pine-design-system.netlify.app/).
 
+## Changelogs
+
+Stay up to date with the latest releases and updates across the Pine Design System:
+
+- **Pine**: [View Releases](https://github.com/Kajabi/pine/releases)
+- **Pine Icons**: [View Releases](https://github.com/Kajabi/pine-icons/releases)
+- **Design Tokens**: [View Releases](https://github.com/Kajabi/ds-tokens/releases)
+
 ## Contribution
 
 To learn more about contributing to Pine, please see the [Contribution](./CONTRIBUTING.md) docs.
