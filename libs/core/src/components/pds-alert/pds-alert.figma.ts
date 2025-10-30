@@ -21,7 +21,7 @@ figma.connect('<FIGMA_ALERT>', {
     }),
   },
   example: (props) => html`<pds-alert
-    dismissable=${props.dismissable}
+    dismissible=${props.dismissable}
     heading=${props.heading}
     variant=${props.variant}
     small=${props.small}
