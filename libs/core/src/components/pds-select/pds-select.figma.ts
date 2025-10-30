@@ -12,6 +12,10 @@ figma.connect('<FIGMA_SELECT>', {
       true: figma.string("↪️ Message"),
       false: undefined,
     }),
+    highlight: figma.boolean("Highlight", {
+      true: "true",
+      false: undefined,
+    }),
     label: figma.boolean("Label", {
       true: figma.string("↪️ Message"),
       false: undefined,
@@ -29,6 +33,7 @@ figma.connect('<FIGMA_SELECT>', {
     disabled=${props.disabled}
     error-message=${props.errorMessage.text}
     helper-message=${props.helperMessage}
+    highlight=${props.highlight}
     label=${props.label}
     readonly=${props.readonly}
     value=${props.value.text}

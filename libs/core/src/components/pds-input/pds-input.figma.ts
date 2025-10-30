@@ -11,6 +11,10 @@ const sharedProps = {
     true: figma.string("Help message"),
     false: undefined,
   }),
+  highlight: figma.boolean("Highlight", {
+    true: "true",
+    false: undefined,
+  }),
   invalid: figma.enum("State", {
     error: "true",
   }),
@@ -39,6 +43,7 @@ figma.connect('<FIGMA_INPUT_TEXT>', {
       disabled=${props.disabled}
       error-message=${props.errorMessage.text}
       helper-message=${props.helperMessage}
+      highlight=${props.highlight}
       invalid=${props.invalid}
       label=${props.label}
       readonly=${props.readonly}
@@ -56,6 +61,7 @@ figma.connect('<FIGMA_INPUT_SEARCH>', {
       disabled=${props.disabled}
       error-message=${props.errorMessage.text}
       helper-message=${props.helperMessage}
+      highlight=${props.highlight}
       invalid=${props.invalid}
       label=${props.label}
       readonly=${props.readonly}

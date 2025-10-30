@@ -16,6 +16,10 @@ figma.connect('<FIGMA_TEXTAREA>', {
     errorMessage: figma.nestedProps(".error-message", {
       text: figma.string("Error content"),
     }),
+    highlight: figma.boolean("Highlight", {
+      true: "true",
+      false: undefined,
+    }),
     invalid: figma.enum("State", {
       error: "true",
     }),
@@ -31,6 +35,7 @@ figma.connect('<FIGMA_TEXTAREA>', {
       disabled=${props.disabled}
       error-message=${props.errorMessage.text}
       helper-message=${props.helperMessage}
+      highlight=${props.highlight}
       invalid=${props.invalid}
       label=${props.label}
       readonly=${props.readonly}
