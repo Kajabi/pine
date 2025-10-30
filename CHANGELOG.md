@@ -1,3 +1,24 @@
+## 3.9.0 (2025-10-30)
+
+### Features 🚀
+
+- **pds-input:** add highlight prop and styling ([#567](https://github.com/Kajabi/pine/pull/567))
+- **pds-select:** add highlight prop and styling ([#568](https://github.com/Kajabi/pine/pull/568))
+- **pds-textarea:** add highlight prop and styling ([#569](https://github.com/Kajabi/pine/pull/569))
+
+### Bug Fixes 🐛
+
+- **pds-accordion:** add accordion-icon part for styling ([#572](https://github.com/Kajabi/pine/pull/572))
+
+### Documentation 📄
+
+- add changelogs to storybook documentation ([#571](https://github.com/Kajabi/pine/pull/571))
+- add highlight prop to figma code connect files ([#573](https://github.com/Kajabi/pine/pull/573))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+
 ## 3.8.2 (2025-10-24)
 
 ### Bug Fixes 🐛
