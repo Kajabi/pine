@@ -14,7 +14,7 @@ describe('pds-accordion', () => {
             <details>
               <summary part="accordion-button">
                 <slot name="label">Details</slot>
-                <pds-icon icon="${downSmall}"></pds-icon>
+                <pds-icon icon="${downSmall}" part="accordion-icon"></pds-icon>
               </summary>
               <div part="accordion-body" class="pds-accordion__body">
                 <slot />
@@ -36,7 +36,7 @@ describe('pds-accordion', () => {
             <details open>
               <summary part="accordion-button">
                 <slot name="label">Details</slot>
-                <pds-icon icon="${downSmall}"></pds-icon>
+                <pds-icon icon="${downSmall}" part="accordion-icon"></pds-icon>
               </summary>
               <div part="accordion-body" class="pds-accordion__body">
                 <slot />
@@ -59,7 +59,7 @@ describe('pds-accordion', () => {
           <details>
             <summary part="accordion-button">
               <slot name="label">Details</slot>
-              <pds-icon icon="${downSmall}"></pds-icon>
+              <pds-icon icon="${downSmall}" part="accordion-icon"></pds-icon>
             </summary>
             <div part="accordion-body" class="pds-accordion__body">
               <slot />
@@ -82,7 +82,7 @@ describe('pds-accordion', () => {
           <details>
             <summary part="accordion-button">
               <slot name="label">Details</slot>
-              <pds-icon icon="${downSmall}"></pds-icon>
+              <pds-icon icon="${downSmall}" part="accordion-icon"></pds-icon>
             </summary>
             <div part="accordion-body" class="pds-accordion__body">
               <slot />
@@ -106,7 +106,7 @@ describe('pds-accordion', () => {
           <details>
             <summary part="accordion-button">
               <slot name="label">Details</slot>
-              <pds-icon icon="${downSmall}"></pds-icon>
+              <pds-icon icon="${downSmall}" part="accordion-icon"></pds-icon>
             </summary>
             <div part="accordion-body" class="pds-accordion__body">
               <slot />
@@ -130,7 +130,7 @@ describe('pds-accordion', () => {
           <details open>
             <summary part="accordion-button">
               <slot name="label">Details</slot>
-              <pds-icon icon="${downSmall}"></pds-icon>
+              <pds-icon icon="${downSmall}" part="accordion-icon"></pds-icon>
             </summary>
             <div part="accordion-body" class="pds-accordion__body">
               <slot />

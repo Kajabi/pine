@@ -27,6 +27,7 @@
 | -------------------- | -------------------------------- |
 | `"accordion-body"`   | Accordion body styles.           |
 | `"accordion-button"` | Accordion button/trigger styles. |
+| `"accordion-icon"`   | Accordion icon styles.           |
 
 
 ## Dependencies
