@@ -11,6 +11,15 @@ export const config: Config = {
     openBrowser: false,
     port: 7300,
   },
+  testing: {
+    setupFilesAfterEnv: ['<rootDir>/src/utils/test/setup.ts'],
+    coveragePathIgnorePatterns: [
+      '/node_modules/',
+      '/dist/',
+      '/www/',
+      'setup.ts'
+    ],
+  },
   outputTargets: [
     {
       type: 'dist',
