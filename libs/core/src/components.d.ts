@@ -1334,10 +1334,6 @@ export namespace Components {
          */
         "show": () => Promise<void>;
         /**
-          * Text that appears on the trigger element
-         */
-        "text": string;
-        /**
           * Toggles the popover open/closed state programmatically
          */
         "toggle": () => Promise<void>;
@@ -3999,10 +3995,6 @@ declare namespace LocalJSX {
           * @default 'auto'
          */
         "popoverType"?: 'auto' | 'manual';
-        /**
-          * Text that appears on the trigger element
-         */
-        "text"?: string;
     }
     interface PdsProgress {
         /**
