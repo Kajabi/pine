@@ -3,43 +3,13 @@
 
   display: inline-block;
 
-  [popover] {
-    background-color: var(--pine-color-background-container);
-    border: var(--pine-border);
-    border-radius: var(--pine-dimension-125);
-    box-shadow: var(--pine-box-shadow-200);
-    margin: var(--pine-dimension-none);
-    max-width: var(--sizing-max-width-default);
-    padding: var(--pine-dimension-md);
-    position: fixed;
-
-    // Hide popover initially to prevent flash before positioning
-    // stylelint-disable-next-line selector-pseudo-class-no-unknown
-    &:popover-open:not(.pds-popover--positioned) {
-      visibility: hidden;
-    }
+  // Trigger wrapper for slotted content
+  .pds-popover__trigger-wrapper {
+    display: inline-block;
   }
 
-  button {
-    align-items: center;
-    background-color: var(--pine-color-secondary);
-    border: var(--pine-border);
-    border-radius: var(--pine-border-radius-full);
-    color: var(--pine-color-text-secondary);
-    display: flex;
-    font: var(--pine-typography-body-medium);
-    font-family: var(--pine-font-family-heading);
-    letter-spacing: var(--pine-letter-spacing);
-    min-height: 40px;
-    padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
-
-    &:focus-visible {
-      outline: var(--pine-outline-focus);
-      outline-offset: var(--pine-border-width);
-    }
-
-    &:hover {
-      background-color: var(--pine-color-secondary-hover);
-    }
+  // Content slot wrapper is hidden (content is rendered in portal)
+  .pds-popover__content-slot-wrapper {
+    display: none;
   }
 }
