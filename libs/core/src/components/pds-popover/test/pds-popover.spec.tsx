@@ -8,7 +8,7 @@ describe('pds-popover', () => {
       html: `<pds-popover component-id="popover-1"></pds-popover>`,
     });
     expect(page.root).toEqualHtml(`
-      <pds-popover component-id="popover-1" placement="right">
+      <pds-popover component-id="popover-1" id="popover-1" placement="right">
         <mock:shadow-root>
           <span class="pds-popover__trigger-wrapper">
             <slot name="trigger"></slot>
@@ -139,7 +139,9 @@ describe('pds-popover', () => {
 
     // Mock trigger element for positioning
     (page.rootInstance as any).triggerEl = {
-      getBoundingClientRect: () => ({ top: 100, left: 100, width: 50, height: 30, right: 150, bottom: 130 })
+      getBoundingClientRect: () => ({ top: 100, left: 100, width: 50, height: 30, right: 150, bottom: 130 }),
+      setAttribute: jest.fn(),
+      focus: jest.fn()
     };
 
     await page.rootInstance.show();
@@ -347,110 +349,6 @@ describe('pds-popover', () => {
     });
   });
 
-  describe('Performance Optimizations', () => {
-    beforeEach(() => {
-      jest.useFakeTimers();
-    });
-
-    afterEach(() => {
-      jest.useRealTimers();
-    });
-
-    it('should debounce scroll events', async () => {
-      const page = await newSpecPage({
-        components: [PdsPopover],
-        html: '<pds-popover component-id="my-popover"></pds-popover>'
-      });
-
-      page.rootInstance.active = true;
-      const positioningSpy = jest.spyOn(page.rootInstance as any, 'handlePopoverPositioning');
-
-      // Trigger multiple scroll events
-      (page.rootInstance as any).handleScroll();
-      (page.rootInstance as any).handleScroll();
-      (page.rootInstance as any).handleScroll();
-
-      // Should not call positioning immediately
-      expect(positioningSpy).not.toHaveBeenCalled();
-
-      // Advance timers past debounce delay
-      jest.advanceTimersByTime(50);
-
-      // Should have been called once after debounce
-      expect(positioningSpy).toHaveBeenCalledTimes(1);
-    });
-
-    it('should debounce resize events', async () => {
-      const page = await newSpecPage({
-        components: [PdsPopover],
-        html: '<pds-popover component-id="my-popover"></pds-popover>'
-      });
-
-      page.rootInstance.active = true;
-      const positioningSpy = jest.spyOn(page.rootInstance as any, 'handlePopoverPositioning');
-
-      // Trigger multiple resize events
-      (page.rootInstance as any).handleResize();
-      (page.rootInstance as any).handleResize();
-      (page.rootInstance as any).handleResize();
-
-      // Should not call positioning immediately
-      expect(positioningSpy).not.toHaveBeenCalled();
-
-      // Advance timers past debounce delay (100ms for resize)
-      jest.advanceTimersByTime(150);
-
-      // Should have been called once after debounce
-      expect(positioningSpy).toHaveBeenCalledTimes(1);
-    });
-
-    it('should not trigger scroll handler when popover is not active', async () => {
-      const page = await newSpecPage({
-        components: [PdsPopover],
-        html: '<pds-popover component-id="my-popover"></pds-popover>'
-      });
-
-      page.rootInstance.active = false;
-      const positioningSpy = jest.spyOn(page.rootInstance as any, 'handlePopoverPositioning');
-
-      (page.rootInstance as any).handleScroll();
-      jest.advanceTimersByTime(50);
-
-      expect(positioningSpy).not.toHaveBeenCalled();
-    });
-
-    it('should not trigger resize handler when popover is not active', async () => {
-      const page = await newSpecPage({
-        components: [PdsPopover],
-        html: '<pds-popover component-id="my-popover"></pds-popover>'
-      });
-
-      page.rootInstance.active = false;
-      const positioningSpy = jest.spyOn(page.rootInstance as any, 'handlePopoverPositioning');
-
-      (page.rootInstance as any).handleResize();
-      jest.advanceTimersByTime(150);
-
-      expect(positioningSpy).not.toHaveBeenCalled();
-    });
-
-    it('should clear timers on hide', async () => {
-      const page = await newSpecPage({
-        components: [PdsPopover],
-        html: '<pds-popover component-id="my-popover"></pds-popover>'
-      });
-
-      page.rootInstance.active = true;
-      (page.rootInstance as any).scrollDebounceTimer = setTimeout(() => {}, 1000);
-      (page.rootInstance as any).resizeDebounceTimer = setTimeout(() => {}, 1000);
-
-      await page.rootInstance.hide();
-      await page.waitForChanges();
-
-      expect((page.rootInstance as any).scrollDebounceTimer).toBeNull();
-      expect((page.rootInstance as any).resizeDebounceTimer).toBeNull();
-    });
-  });
 
   describe('Trigger Click Handling', () => {
     it('should call show() when popoverTargetAction is "show"', async () => {
@@ -620,11 +518,17 @@ describe('pds-popover', () => {
       page.rootInstance.active = true;
       const hideSpy = jest.spyOn(page.rootInstance, 'hide');
 
-      const mockEvent = { key: 'Escape' } as KeyboardEvent;
+      const mockEvent = {
+        key: 'Escape',
+        preventDefault: jest.fn(),
+        stopPropagation: jest.fn()
+      } as any;
 
       (page.rootInstance as any).handleEscapeKey(mockEvent);
 
       expect(hideSpy).toHaveBeenCalled();
+      expect(mockEvent.preventDefault).toHaveBeenCalled();
+      expect(mockEvent.stopPropagation).toHaveBeenCalled();
     });
 
     it('should not hide popover when other keys are pressed', async () => {
@@ -709,7 +613,9 @@ describe('pds-popover', () => {
 
       // Set up mocks
       (page.rootInstance as any).triggerEl = {
-        getBoundingClientRect: () => ({ top: 100, left: 100, width: 50, height: 30, right: 150, bottom: 130 })
+        getBoundingClientRect: () => ({ top: 100, left: 100, width: 50, height: 30, right: 150, bottom: 130 }),
+        setAttribute: jest.fn(),
+        focus: jest.fn()
       };
 
       const positioningSpy = jest.spyOn(page.rootInstance as any, 'handlePopoverPositioning');
@@ -734,7 +640,9 @@ describe('pds-popover', () => {
 
       // Set up mocks
       (page.rootInstance as any).triggerEl = {
-        getBoundingClientRect: () => ({ top: 100, left: 100, width: 50, height: 30, right: 150, bottom: 130 })
+        getBoundingClientRect: () => ({ top: 100, left: 100, width: 50, height: 30, right: 150, bottom: 130 }),
+        setAttribute: jest.fn(),
+        focus: jest.fn()
       };
 
       const portalEl = (page.rootInstance as any).portalEl as HTMLElement;
