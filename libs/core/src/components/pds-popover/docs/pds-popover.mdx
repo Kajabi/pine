@@ -22,6 +22,84 @@ Popovers display contextual information when users click or initiates a keyboard
 
 <DocArgsTable componentName="pds-popover" docSource={components} />
 
+## Usage
+
+### Trigger Slot
+
+Use the `trigger` slot to provide the element that will open the popover. You can use any Pine component - buttons, chips, avatars, or other interactive elements.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsBox display="flex" gap="md" align-items="center" flex-wrap="wrap">
+        <PdsPopover componentId="button-trigger" placement="bottom-start" popoverTargetAction="toggle">
+          <PdsButton slot="trigger">Button Trigger</PdsButton>
+          <p>Popover content is displayed here</p>
+        </PdsPopover>
+
+        <PdsPopover componentId="icon-trigger" placement="bottom-start" popoverTargetAction="toggle">
+          <PdsButton slot="trigger" variant="secondary" iconOnly icon="info-circle" ariaLabel="Information" />
+          <p>Popover content is displayed here</p>
+        </PdsPopover>
+
+        <PdsPopover componentId="chip-trigger" placement="bottom-start" popoverTargetAction="toggle">
+          <PdsChip slot="trigger" variant="dropdown">Chip Trigger</PdsChip>
+          <p>Popover content is displayed here</p>
+        </PdsPopover>
+
+        <PdsPopover componentId="avatar-trigger" placement="bottom-start" popoverTargetAction="toggle">
+          <PdsAvatar slot="trigger" name="John Doe" size="md" dropdown={true} />
+          <p>Popover content is displayed here</p>
+        </PdsPopover>
+      </PdsBox>
+    `,
+    webComponent: `
+      <pds-box display="flex" gap="md" align-items="center" flex-wrap="wrap">
+        <pds-popover component-id="button-trigger" placement="bottom-start" popover-target-action="toggle">
+          <pds-button slot="trigger">Button Trigger</pds-button>
+          <p>Popover content is displayed here</p>
+        </pds-popover>
+
+        <pds-popover component-id="icon-trigger" placement="bottom-start" popover-target-action="toggle">
+          <pds-button slot="trigger" variant="secondary" icon-only icon="info-circle" aria-label="Information"></pds-button>
+          <p>Popover content is displayed here</p>
+        </pds-popover>
+
+        <pds-popover component-id="chip-trigger" placement="bottom-start" popover-target-action="toggle">
+          <pds-chip slot="trigger" variant="dropdown">Chip Trigger</pds-chip>
+          <p>Popover content is displayed here</p>
+        </pds-popover>
+
+        <pds-popover component-id="avatar-trigger" placement="bottom-start" popover-target-action="toggle">
+          <pds-avatar slot="trigger" name="John Doe" size="md" dropdown="true"></pds-avatar>
+          <p>Popover content is displayed here</p>
+        </pds-popover>
+      </pds-box>
+    `
+  }}>
+  <pds-box display="flex" gap="md" align-items="center" flex-wrap="wrap">
+    <pds-popover component-id="button-trigger" placement="bottom-start" popover-target-action="toggle">
+      <pds-button slot="trigger">Button Trigger</pds-button>
+      <p>Popover content is displayed here</p>
+    </pds-popover>
+
+    <pds-popover component-id="icon-trigger" placement="bottom-start" popover-target-action="toggle">
+      <pds-button slot="trigger" variant="secondary" icon-only icon="info-circle" aria-label="Information"></pds-button>
+      <p>Popover content is displayed here</p>
+    </pds-popover>
+
+    <pds-popover component-id="chip-trigger" placement="bottom-start" popover-target-action="toggle">
+      <pds-chip slot="trigger" variant="dropdown">Chip Trigger</pds-chip>
+      <p>Popover content is displayed here</p>
+    </pds-popover>
+
+    <pds-popover component-id="avatar-trigger" placement="bottom-start" popover-target-action="toggle">
+      <pds-avatar slot="trigger" name="John Doe" size="md" dropdown="true"></pds-avatar>
+      <p>Popover content is displayed here</p>
+    </pds-popover>
+  </pds-box>
+</DocCanvas>
+
 ### Behavior Types
 
 #### Auto (Default)
@@ -31,17 +109,20 @@ Closes automatically when clicking outside the popover content. Can also be clos
 <DocCanvas client:only
   mdxSource={{
     react: `
-      <PdsPopover componentId="auto" text="Auto Popover">
+      <PdsPopover componentId="auto" placement="bottom-start">
+        <PdsButton slot="trigger">Auto Popover</PdsButton>
         <p>Clicks outside will close this popover</p>
       </PdsPopover>
     `,
     webComponent: `
-      <pds-popover component-id="auto" text="Auto Popover">
+      <pds-popover component-id="auto" placement="bottom-start">
+        <pds-button slot="trigger">Auto Popover</pds-button>
         <p>Clicks outside will close this popover</p>
       </pds-popover>
     `
   }}>
-  <pds-popover component-id="auto" text="Auto Popover">
+  <pds-popover component-id="auto" placement="bottom-start">
+    <pds-button slot="trigger">Auto Popover</pds-button>
     <p>Clicks outside will close this popover</p>
   </pds-popover>
 </DocCanvas>
@@ -62,17 +143,20 @@ Learn more about popover target actions in the [MDN Documentation](https://devel
 <DocCanvas client:only
   mdxSource={{
     react: `
-      <PdsPopover componentId="manual" text="Manual Popover" popoverTargetAction="toggle" popoverType="manual">
+      <PdsPopover componentId="manual" placement="bottom-start" popoverTargetAction="toggle" popoverType="manual">
+        <PdsButton slot="trigger">Manual Popover</PdsButton>
         <p>This popover requires explicit closing</p>
       </PdsPopover>
     `,
     webComponent: `
-      <pds-popover component-id="manual" text="Manual Popover" popover-target-action="toggle" popover-type="manual">
+      <pds-popover component-id="manual" placement="bottom-start" popover-target-action="toggle" popover-type="manual">
+        <pds-button slot="trigger">Manual Popover</pds-button>
         <p>This popover requires explicit closing</p>
       </pds-popover>
     `
   }}>
-  <pds-popover component-id="manual" text="Manual Popover" popover-target-action="toggle" popover-type="manual">
+  <pds-popover component-id="manual" placement="bottom-start" popover-target-action="toggle" popover-type="manual">
+    <pds-button slot="trigger">Manual Popover</pds-button>
     <p>This popover requires explicit closing</p>
   </pds-popover>
 </DocCanvas>
@@ -88,17 +172,20 @@ Shows the popover when triggered. Clicking the popover trigger while open will n
 <DocCanvas client:only
   mdxSource={{
     react: `
-      <PdsPopover componentId="show" text="Show Action">
+      <PdsPopover componentId="show" placement="bottom-start">
+        <PdsButton slot="trigger">Show Action</PdsButton>
         <p>This popover uses the show action</p>
       </PdsPopover>
     `,
     webComponent: `
-      <pds-popover component-id="show" text="Show Action">
+      <pds-popover component-id="show" placement="bottom-start">
+        <pds-button slot="trigger">Show Action</pds-button>
         <p>This popover uses the show action</p>
       </pds-popover>
     `
   }}>
-  <pds-popover component-id="show" text="Show Action">
+  <pds-popover component-id="show" placement="bottom-start">
+    <pds-button slot="trigger">Show Action</pds-button>
     <p>This popover uses the show action</p>
   </pds-popover>
 </DocCanvas>
@@ -110,17 +197,20 @@ Toggles the popover visibility state when triggered. Clicking the popover trigge
 <DocCanvas client:only
   mdxSource={{
     react: `
-      <PdsPopover componentId="toggle" text="Toggle Action" popoverTargetAction="toggle">
+      <PdsPopover componentId="toggle" placement="bottom-start" popoverTargetAction="toggle">
+        <PdsButton slot="trigger">Toggle Action</PdsButton>
         <p>This popover uses the toggle action</p>
       </PdsPopover>
     `,
     webComponent: `
-      <pds-popover component-id="toggle" text="Toggle Action" popover-target-action="toggle">
+      <pds-popover component-id="toggle" placement="bottom-start" popover-target-action="toggle">
+        <pds-button slot="trigger">Toggle Action</pds-button>
         <p>This popover uses the toggle action</p>
       </pds-popover>
     `
   }}>
-  <pds-popover component-id="toggle" text="Toggle Action" popover-target-action="toggle">
+  <pds-popover component-id="toggle" placement="bottom-start" popover-target-action="toggle">
+    <pds-button slot="trigger">Toggle Action</pds-button>
     <p>This popover uses the toggle action</p>
   </pds-popover>
 </DocCanvas>
@@ -132,26 +222,20 @@ The `max-width` prop allows adjusting the maximum width of the popover content. 
 <DocCanvas client:only
   mdxSource={{
     react: `
-      <PdsPopover componentId="wide" text="Wide Popover" maxWidth="520px">
+      <PdsPopover componentId="wide" placement="bottom-start" maxWidth="520px">
+        <PdsButton slot="trigger">Wide Popover</PdsButton>
         <p>This is a wider popover with more content space available.</p>
       </PdsPopover>
     `,
     webComponent: `
-      <pds-popover component-id="wide" text="Wide Popover" max-width="520px">
+      <pds-popover component-id="wide" placement="bottom-start" max-width="520px">
+        <pds-button slot="trigger">Wide Popover</pds-button>
         <p>This is a wider popover with more content space available.</p>
       </pds-popover>
     `
   }}>
-  <pds-popover component-id="wide" text="Wide Popover" max-width="520px">
+  <pds-popover component-id="wide" placement="bottom-start" max-width="520px">
+    <pds-button slot="trigger">Wide Popover</pds-button>
     <p>This is a wider popover with more content space available.</p>
   </pds-popover>
 </DocCanvas>
-
-
-## Additional Resources
-
-[Mdn Web Docs: Popover Attribute](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/popover)
-
-[MDN Web Docs: Popover Api](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API)
-
-[MDN: Using the Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API/Using)

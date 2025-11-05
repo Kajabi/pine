@@ -1,13 +1,14 @@
 import { html } from 'lit';
-import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 import { withActions } from '@storybook/addon-actions/decorator';
 
 export default {
 	argTypes: extractArgTypes('pds-popover'),
 	args: {
-		popoverTargetAction: 'show',
+		popoverTargetAction: 'toggle',
 		popoverType: 'auto',
+		placement: 'bottom-start',
+		componentId: 'popover-playground',
 	},
 	component: 'pds-popover',
 	decorators: [withActions],
@@ -20,25 +21,54 @@ export default {
 }
 
 const BaseTemplate = (args) => html`
-<pds-popover component-id=${args.componentId}  popover-type=${args.popoverType} popover-target-action=${args.popoverTargetAction} text=${args.text} max-width=${args.maxWidth} placement=${args.placement}>
-	${unsafeHTML(args.slot)}
-</pds-popover>
+	<pds-popover
+		component-id=${args.componentId}
+		popover-target-action=${args.popoverTargetAction}
+		popover-type=${args.popoverType}
+		placement=${args.placement}
+		.maxWidth=${args.maxWidth}
+	>
+		<pds-button slot="trigger">Show popover</pds-button>
+		<p>This is popover content that can be configured using the controls below.</p>
+	</pds-popover>
 `;
 
 export const Default = BaseTemplate.bind({});
-Default.args = {
-	componentId: 'popover-1',
-  placement: "right",
-  text: "Show popover",
-	slot: "<p>Popover content</p><p>Popover content</p>"
-};
 
-export const Toggle = BaseTemplate.bind({});
-Toggle.args = {
-	componentId: 'popover-1',
-  placement: "bottom",
-	popoverType: "manual",
-	popoverTargetAction: "toggle",
-  text: "Toggle popover",
-	slot: "<p>Popover content</p><p>Popover content</p>"
-};
+export const Toggle = () => html`
+	<pds-popover component-id="popover-toggle" popover-target-action="toggle" placement="bottom-start">
+		<pds-button slot="trigger">Toggle popover</pds-button>
+		<p>Click the trigger again to close this popover.</p>
+	</pds-popover>
+`;
+
+export const WithContent = () => html`
+	<pds-popover component-id="popover-rich" popover-target-action="toggle" placement="bottom-start">
+		<pds-button slot="trigger" variant="accent">Popover trigger</pds-button>
+		<pds-box direction="column" gap="md" fit="true">
+			<!-- Header with title and close button -->
+			<pds-box direction="column" gap="xs">
+				<pds-box display="flex" direction="row" justify-content="space-between" align-items="center" gap="300">
+					<pds-text tag="h3" size="xl" weight="semibold">Popover Heading</pds-text>
+					<pds-button
+						variant="unstyled"
+						icon-only
+						onclick="document.getElementById('popover-rich').hide()"
+						aria-label="Close"
+					>
+						<pds-icon slot="start" name="remove"></pds-icon>
+						Close
+					</pds-button>
+				</pds-box>
+				<pds-text tag="p" size="sm" color="secondary">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</pds-text>
+			</pds-box>
+
+			<!-- Footer with buttons and page indicator -->
+			<pds-box justify-content="space-between" align-items="center" gap="200">
+				<pds-button variant="secondary" size="small">Previous</pds-button>
+				<pds-text tag="span" size="sm" weight="medium" color="secondary">1 / 3</pds-text>
+				<pds-button variant="primary" size="small">Next</pds-button>
+			</pds-box>
+		</pds-box>
+	</pds-popover>
+`;
