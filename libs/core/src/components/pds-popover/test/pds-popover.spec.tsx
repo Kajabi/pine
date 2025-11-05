@@ -202,37 +202,40 @@ describe('pds-popover', () => {
     it('should initialize trigger in componentDidLoad as fallback', async () => {
       const page = await newSpecPage({
         components: [PdsPopover],
-        html: `
-          <pds-popover component-id="test-popover">
-            <button slot="trigger" id="fallback-btn">Fallback</button>
-          </pds-popover>
-        `,
-        supportsShadowDom: false
+        html: `<pds-popover component-id="test-popover"></pds-popover>`
       });
 
-      // Manually clear triggerEl to simulate slot change not firing
-      (page.rootInstance as any).triggerEl = null;
+      // Create a mock button element
+      const mockButton = {
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        setAttribute: jest.fn(),
+        focus: jest.fn()
+      };
 
-      const button = page.root?.querySelector('#fallback-btn') as HTMLElement;
-      const addEventListenerSpy = jest.spyOn(button, 'addEventListener');
-
-      // Mock the shadowRoot and slot
+      // Mock the shadowRoot and slot to return our mock button
       const mockSlot = {
-        assignedElements: () => [button]
+        assignedElements: jest.fn().mockReturnValue([mockButton])
       };
       const mockShadowRoot = {
         querySelector: jest.fn().mockReturnValue(mockSlot)
       };
+
       Object.defineProperty(page.root, 'shadowRoot', {
         value: mockShadowRoot,
-        configurable: true
+        configurable: true,
+        writable: true
       });
+
+      // Clear triggerEl to simulate scenario where slot change didn't fire
+      (page.rootInstance as any).triggerEl = null;
 
       // Manually call componentDidLoad
       await (page.rootInstance as any).componentDidLoad();
 
-      expect((page.rootInstance as any).triggerEl).toBe(button);
-      expect(addEventListenerSpy).toHaveBeenCalledWith('click', expect.any(Function));
+      // Verify trigger was initialized from slot as fallback
+      expect((page.rootInstance as any).triggerEl).toBe(mockButton);
+      expect(mockButton.addEventListener).toHaveBeenCalledWith('click', expect.any(Function));
     });
 
     it('should render with slotted trigger', async () => {
