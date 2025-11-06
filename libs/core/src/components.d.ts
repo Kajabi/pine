@@ -735,6 +735,11 @@ export namespace Components {
          */
         "name"?: string;
         /**
+          * Sets the size of the button.
+          * @defaultValue default
+         */
+        "size"?: 'default' | 'small' | 'micro';
+        /**
           * Specifies where to open the linked document when href is provided. Only applies when href is set.
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
@@ -751,7 +756,7 @@ export namespace Components {
           * Sets the style variant of the button.
           * @defaultValue primary
          */
-        "variant": 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled' | 'filter';
+        "variant": 'primary' | 'secondary' | 'tertiary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled' | 'filter';
     }
     interface PdsCheckbox {
         /**
@@ -3376,6 +3381,11 @@ declare namespace LocalJSX {
         "name"?: string;
         "onPdsClick"?: (event: PdsButtonCustomEvent<any>) => void;
         /**
+          * Sets the size of the button.
+          * @defaultValue default
+         */
+        "size"?: 'default' | 'small' | 'micro';
+        /**
           * Specifies where to open the linked document when href is provided. Only applies when href is set.
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
@@ -3392,7 +3402,7 @@ declare namespace LocalJSX {
           * Sets the style variant of the button.
           * @defaultValue primary
          */
-        "variant"?: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled' | 'filter';
+        "variant"?: 'primary' | 'secondary' | 'tertiary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled' | 'filter';
     }
     interface PdsCheckbox {
         /**
