@@ -241,6 +241,155 @@ describe('pds-button', () => {
 
   });
 
+  describe('size prop E2E', () => {
+    it('renders small button correctly', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button size="small">Small</pds-button>');
+
+      const component = await page.find('pds-button');
+      const element = await page.find('pds-button >>> button');
+
+      expect(component).toHaveClass('hydrated');
+      expect(element).toBeTruthy();
+      expect(component.textContent).toMatch('Small');
+    });
+
+    it('renders micro button correctly', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button size="micro">Micro</pds-button>');
+
+      const component = await page.find('pds-button');
+      const element = await page.find('pds-button >>> button');
+
+      expect(component).toHaveClass('hydrated');
+      expect(element).toBeTruthy();
+      expect(component.textContent).toMatch('Micro');
+    });
+
+    it('renders small icon-only button correctly', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button size="small" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Small Icon</pds-button>');
+
+      const component = await page.find('pds-button');
+      const element = await page.find('pds-button >>> button');
+
+      expect(component).toHaveClass('hydrated');
+      expect(element).toBeTruthy();
+    });
+
+    it('renders micro icon-only button correctly', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button size="micro" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Micro Icon</pds-button>');
+
+      const component = await page.find('pds-button');
+      const element = await page.find('pds-button >>> button');
+
+      expect(component).toHaveClass('hydrated');
+      expect(element).toBeTruthy();
+    });
+
+    it('small button can be clicked and emits events', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button size="small">Small</pds-button>');
+
+      const component = await page.find('pds-button');
+      const clickEvent = await component.spyOnEvent('pdsClick');
+
+      await component.click();
+      await page.waitForChanges();
+
+      expect(clickEvent).toHaveReceivedEvent();
+    });
+
+    it('micro button can be clicked and emits events', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button size="micro">Micro</pds-button>');
+
+      const component = await page.find('pds-button');
+      const clickEvent = await component.spyOnEvent('pdsClick');
+
+      await component.click();
+      await page.waitForChanges();
+
+      expect(clickEvent).toHaveReceivedEvent();
+    });
+
+    it('size prop works with different variants', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-button size="small" variant="primary">Small Primary</pds-button>
+        <pds-button size="micro" variant="secondary">Micro Secondary</pds-button>
+      `);
+
+      const buttons = await page.findAll('pds-button');
+
+      expect(buttons[0]).toHaveClass('hydrated');
+      expect(buttons[1]).toHaveClass('hydrated');
+    });
+  });
+
+  describe('tertiary variant E2E', () => {
+    it('renders tertiary button correctly', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button variant="tertiary">Tertiary</pds-button>');
+
+      const component = await page.find('pds-button');
+      const element = await page.find('pds-button >>> button');
+
+      expect(component).toHaveClass('hydrated');
+      expect(element).toBeTruthy();
+      expect(component.textContent).toMatch('Tertiary');
+    });
+
+    it('tertiary variant works with disabled state', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button variant="tertiary" disabled="true">Tertiary</pds-button>');
+
+      const component = await page.find('pds-button');
+      const element = await page.find('pds-button >>> button');
+
+      expect(component).toHaveClass('hydrated');
+      const disabled = await element.getProperty('disabled');
+      expect(disabled).toBe(true);
+    });
+
+    it('tertiary variant works with icon', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button variant="tertiary"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Tertiary</pds-button>');
+
+      const component = await page.find('pds-button');
+      const element = await page.find('pds-button >>> button');
+
+      expect(component).toHaveClass('hydrated');
+      expect(element).toBeTruthy();
+    });
+
+    it('tertiary variant works with loading state', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button variant="tertiary" loading="true">Tertiary</pds-button>');
+
+      const component = await page.find('pds-button');
+      const element = await page.find('pds-button >>> button');
+      const loader = await element.find('pds-loader');
+
+      expect(component).toHaveClass('hydrated');
+      expect(loader).toBeTruthy();
+    });
+
+    it('tertiary variant can be clicked and emits events', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button variant="tertiary">Tertiary</pds-button>');
+
+      const component = await page.find('pds-button');
+      const clickEvent = await component.spyOnEvent('pdsClick');
+
+      await component.click();
+      await page.waitForChanges();
+
+      expect(clickEvent).toHaveReceivedEvent();
+    });
+  });
+
   describe('filter variant E2E', () => {
     it('renders add-circle icon when variant is filter', async () => {
       const page = await newE2EPage();

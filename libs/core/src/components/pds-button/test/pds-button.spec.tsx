@@ -43,6 +43,110 @@ describe('pds-button', () => {
     `);
   });
 
+  it('renders tertiary button', async () => {
+    const {root} = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button variant="tertiary"></pds-button>`,
+    });
+    expect(root).toEqualHtml(`
+      <pds-button variant="tertiary">
+        <mock:shadow-root>
+          <button class="pds-button pds-button--tertiary" part="button" type="button">
+            <div class="pds-button__content" part="button-content">
+              <span class="pds-button__text" part="button-text">
+                <slot></slot>
+              </span>
+            </div>
+          </button>
+        </mock:shadow-root>
+      </pds-button>
+    `);
+  });
+
+  it('renders small button', async () => {
+    const {root} = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button size="small"></pds-button>`,
+    });
+    expect(root).toEqualHtml(`
+      <pds-button size="small" variant="primary">
+        <mock:shadow-root>
+          <button class="pds-button pds-button--primary pds-button--small" part="button" type="button">
+            <div class="pds-button__content" part="button-content">
+              <span class="pds-button__text" part="button-text">
+                <slot></slot>
+              </span>
+            </div>
+          </button>
+        </mock:shadow-root>
+      </pds-button>
+    `);
+  });
+
+  it('renders micro button', async () => {
+    const {root} = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button size="micro"></pds-button>`,
+    });
+    expect(root).toEqualHtml(`
+      <pds-button size="micro" variant="primary">
+        <mock:shadow-root>
+          <button class="pds-button pds-button--primary pds-button--micro" part="button" type="button">
+            <div class="pds-button__content" part="button-content">
+              <span class="pds-button__text" part="button-text">
+                <slot></slot>
+              </span>
+            </div>
+          </button>
+        </mock:shadow-root>
+      </pds-button>
+    `);
+  });
+
+  it('renders small icon-only button', async () => {
+    const {root} = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button size="small" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon></pds-button>`,
+    });
+    expect(root).toEqualHtml(`
+      <pds-button size="small" icon-only="true" variant="primary">
+        <mock:shadow-root>
+          <button class="pds-button pds-button--primary pds-button--small pds-button--icon-only" part="button" type="button">
+            <div class="pds-button__content" part="button-content">
+              <span class="pds-button__icon"><slot name="start"></slot></span>
+              <span class="pds-button__text pds-button__text--hidden" part="button-text">
+                <slot></slot>
+              </span>
+            </div>
+          </button>
+        </mock:shadow-root>
+        <pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>
+      </pds-button>
+    `);
+  });
+
+  it('renders micro icon-only button', async () => {
+    const {root} = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button size="micro" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon></pds-button>`,
+    });
+    expect(root).toEqualHtml(`
+      <pds-button size="micro" icon-only="true" variant="primary">
+        <mock:shadow-root>
+          <button class="pds-button pds-button--primary pds-button--micro pds-button--icon-only" part="button" type="button">
+            <div class="pds-button__content" part="button-content">
+              <span class="pds-button__icon"><slot name="start"></slot></span>
+              <span class="pds-button__text pds-button__text--hidden" part="button-text">
+                <slot></slot>
+              </span>
+            </div>
+          </button>
+        </mock:shadow-root>
+        <pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>
+      </pds-button>
+    `);
+  });
+
   it('renders unstyled button', async () => {
     const {root} = await newSpecPage({
       components: [PdsButton],
