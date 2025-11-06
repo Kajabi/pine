@@ -6,11 +6,17 @@ import { customArgsWithIconControl } from '../../../stories/_helpers';
 export default {
   argTypes: {
     ...customArgsWithIconControl({ component: 'pds-button', property: 'icon' }),
+    size: {
+      control: {
+        type: 'select',
+      },
+      options: ['default', 'small', 'micro'],
+    },
     variant: {
       control: {
         type: 'select',
       },
-      options: ['primary', 'secondary', 'accent', 'disclosure', 'destructive', 'unstyled', 'filter'],
+      options: ['primary', 'secondary', 'tertiary', 'accent', 'disclosure', 'destructive', 'unstyled', 'filter'],
     },
   },
   component: 'pds-button',
@@ -19,6 +25,9 @@ export default {
   parameters: {
     actions: {
       handles: ['pdsClick'],
+    },
+    controls: {
+      exclude: ['icon']
     }
   }
 }
@@ -33,6 +42,7 @@ const BaseTemplate = (args) => html`
     icon=${args.icon}
     ?loading=${args.loading}
     name=${args.name}
+    size=${args.size}
     target=${args.target}
     type=${args.type}
     value=${args.value}
@@ -42,6 +52,45 @@ const BaseTemplate = (args) => html`
     ${args.slot?.default}
     ${args.slot?.end}
   </pds-button>`;
+
+export const Primary = BaseTemplate.bind({});
+Primary.args = {
+  disabled: false,
+  fullWidth: false,
+  iconOnly: false,
+  loading: false,
+  slot: {
+    default: 'Primary',
+  },
+  type: 'button',
+  variant: 'primary'
+}
+
+export const Secondary = BaseTemplate.bind({});
+Secondary.args = {
+  disabled: false,
+  fullWidth: false,
+  iconOnly: false,
+  loading: false,
+  slot: {
+    default: 'Secondary',
+  },
+  type: 'button',
+  variant: 'secondary',
+}
+
+export const Tertiary = BaseTemplate.bind({});
+Tertiary.args = {
+  disabled: false,
+  fullWidth: false,
+  iconOnly: false,
+  loading: false,
+  slot: {
+    default: 'Tertiary',
+  },
+  type: 'button',
+  variant: 'tertiary',
+}
 
 export const Accent = BaseTemplate.bind();
 Accent.args = {
@@ -54,20 +103,6 @@ Accent.args = {
   },
   type: 'button',
   variant: 'accent',
-};
-
-export const ButtonLink = BaseTemplate.bind();
-ButtonLink.args = {
-  disabled: false,
-  fullWidth: false,
-  href: 'https://pine-design-system.netlify.app/',
-  iconOnly: false,
-  loading: false,
-  slot: {
-    default: 'Link Button',
-  },
-  target: '_blank',
-  variant: 'primary',
 };
 
 export const Destructive = BaseTemplate.bind({});
@@ -101,6 +136,20 @@ Disclosure.parameters = {
   controls: { exclude: 'icon' }
 }
 
+export const IconOnly = BaseTemplate.bind();
+IconOnly.args = {
+  disabled: false,
+  fullWidth: false,
+  icon: 'favorite',
+  iconOnly: true,
+  loading: false,
+  slot: {
+    default: 'Icon Only',
+  },
+  type: 'button',
+  variant: 'secondary',
+};
+
 export const Filter = BaseTemplate.bind({});
 
 Filter.args = {
@@ -120,6 +169,20 @@ Filter.parameters = {
   controls: { exclude: 'icon' }
 }
 
+export const ButtonLink = BaseTemplate.bind();
+ButtonLink.args = {
+  disabled: false,
+  fullWidth: false,
+  href: 'https://pine-design-system.netlify.app/',
+  iconOnly: false,
+  loading: false,
+  slot: {
+    default: 'Link Button',
+  },
+  target: '_blank',
+  variant: 'primary',
+};
+
 export const FullWidth = BaseTemplate.bind({});
 FullWidth.args = {
   disabled: false,
@@ -132,35 +195,6 @@ FullWidth.args = {
   type: 'button',
   variant: 'primary'
 }
-
-export const StartAndEndSlots = BaseTemplate.bind({});
-StartAndEndSlots.args = {
-  disabled: false,
-  fullWidth: false,
-  iconOnly: false,
-  loading: false,
-  slot: {
-    start: html`<pds-icon slot="start" name="favorite"></pds-icon>`,
-    default: 'Button with Icons',
-    end: html`<pds-icon slot="end" name="add-image"></pds-icon>`
-  },
-  type: 'button',
-  variant: 'primary'
-}
-
-export const IconOnly = BaseTemplate.bind();
-IconOnly.args = {
-  disabled: false,
-  fullWidth: false,
-  icon: 'favorite',
-  iconOnly: true,
-  loading: false,
-  slot: {
-    default: 'Icon Only',
-  },
-  type: 'button',
-  variant: 'secondary',
-};
 
 export const Loading = BaseTemplate.bind({});
 Loading.args = {
@@ -175,28 +209,75 @@ Loading.args = {
   variant: 'primary',
 }
 
-export const Primary = BaseTemplate.bind({});
-Primary.args = {
+export const StartAndEndSlots = {
+  render: (args) => html`
+    <pds-button
+      component-id=${args.componentId}
+      ?disabled=${args.disabled}
+      ?full-width=${args.fullWidth}
+      href=${args.href}
+      ?icon-only=${args.iconOnly}
+      icon=${args.icon}
+      ?loading=${args.loading}
+      name=${args.name}
+      size=${args.size}
+      target=${args.target}
+      type=${args.type}
+      value=${args.value}
+      variant=${args.variant}
+    >
+      <pds-icon slot="start" name="favorite"></pds-icon>
+      Button with Icons
+      <pds-icon slot="end" name="add-image"></pds-icon>
+    </pds-button>
+  `,
+  args: {
+    disabled: false,
+    fullWidth: false,
+    iconOnly: false,
+    loading: false,
+    type: 'button',
+    variant: 'primary'
+  }
+};
+
+export const SizeDefault = BaseTemplate.bind({});
+SizeDefault.args = {
   disabled: false,
   fullWidth: false,
   iconOnly: false,
   loading: false,
   slot: {
-    default: 'Primary',
+    default: 'Default',
   },
   type: 'button',
   variant: 'primary'
 }
 
-export const Secondary = BaseTemplate.bind({});
-Secondary.args = {
+export const SizeSmall = BaseTemplate.bind({});
+SizeSmall.args = {
   disabled: false,
   fullWidth: false,
   iconOnly: false,
   loading: false,
+  size: 'small',
   slot: {
-    default: 'Secondary',
+    default: 'Small',
   },
   type: 'button',
-  variant: 'secondary',
+  variant: 'primary'
+}
+
+export const SizeMicro = BaseTemplate.bind({});
+SizeMicro.args = {
+  disabled: false,
+  fullWidth: false,
+  iconOnly: false,
+  loading: false,
+  size: 'micro',
+  slot: {
+    default: 'Micro',
+  },
+  type: 'button',
+  variant: 'primary'
 }
