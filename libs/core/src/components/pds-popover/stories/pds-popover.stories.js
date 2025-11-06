@@ -35,15 +35,30 @@ const BaseTemplate = (args) => html`
 
 export const Default = BaseTemplate.bind({});
 
-export const Toggle = () => html`
-	<pds-popover component-id="popover-toggle" popover-target-action="toggle" placement="bottom-start">
+export const Toggle = (args) => html`
+	<pds-popover
+		component-id=${args.componentId || 'popover-toggle'}
+		popover-target-action=${args.popoverTargetAction}
+		popover-type=${args.popoverType}
+		placement=${args.placement}
+		.maxWidth=${args.maxWidth}
+	>
 		<pds-button slot="trigger">Toggle popover</pds-button>
 		<p>Click the trigger again to close this popover.</p>
 	</pds-popover>
 `;
+Toggle.args = {
+	componentId: 'popover-toggle'
+};
 
-export const WithContent = () => html`
-	<pds-popover component-id="popover-rich" popover-target-action="toggle" placement="bottom-start">
+export const WithContent = (args) => html`
+	<pds-popover
+		component-id=${args.componentId || 'popover-rich'}
+		popover-target-action=${args.popoverTargetAction}
+		popover-type=${args.popoverType}
+		placement=${args.placement}
+		.maxWidth=${args.maxWidth}
+	>
 		<pds-button slot="trigger" variant="accent">Popover trigger</pds-button>
 		<pds-box direction="column" gap="md" fit="true">
 			<!-- Header with title and close button -->
@@ -53,7 +68,7 @@ export const WithContent = () => html`
 					<pds-button
 						variant="unstyled"
 						icon-only
-						onclick="document.getElementById('popover-rich').hide()"
+						onclick="document.getElementById('${args.componentId || 'popover-rich'}').hide()"
 						aria-label="Close"
 					>
 						<pds-icon slot="start" name="remove"></pds-icon>
@@ -72,3 +87,6 @@ export const WithContent = () => html`
 		</pds-box>
 	</pds-popover>
 `;
+WithContent.args = {
+	componentId: 'popover-rich'
+};
