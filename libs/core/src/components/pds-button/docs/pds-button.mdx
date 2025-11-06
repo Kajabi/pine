@@ -95,9 +95,31 @@ Secondary button variant, intended to be used as back buttons, for saving drafts
   <pds-button variant="secondary"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>Icon</pds-button>
 </DocCanvas>
 
+### Tertiary
+
+Tertiary button variant, intended to be used for low-emphasis actions or when a subtler button style is needed.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+    <PdsButton variant="tertiary">Tertiary</PdsButton>
+    <PdsButton variant="tertiary" disabled="true">Disabled</PdsButton>
+    <PdsButton variant="tertiary"><PdsIcon slot="start" aria-hidden="true" name="trash"></PdsIcon>Icon</PdsButton>
+    `,
+    webComponent: `
+    <pds-button variant="tertiary">Tertiary</pds-button>
+    <pds-button variant="tertiary" disabled="true">Disabled</pds-button>
+    <pds-button variant="tertiary"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>Icon</pds-button>
+    `
+}}>
+  <pds-button variant="tertiary">Tertiary</pds-button>
+  <pds-button variant="tertiary" disabled="true">Disabled</pds-button>
+  <pds-button variant="tertiary"><pds-icon slot="start" aria-hidden="true" name="trash"></pds-icon>Icon</pds-button>
+</DocCanvas>
+
 ### Accent
 
-Accent button variant, intended to be used for tertiary actions or when higher contrast is needed.
+Accent button variant, intended to be used for special emphasis or when higher contrast is needed.
 
 <DocCanvas client:only
   mdxSource={{
@@ -278,18 +300,70 @@ While the text is visually hidden, it is still remains accessible.
     </PdsButton>
     <PdsButton variant="accent" iconOnly="true"><PdsIcon slot="start" aria-hidden="true" name="favorite"></PdsIcon>Icon Only</PdsButton>
     <PdsButton variant="destructive" iconOnly="true"><PdsIcon slot="start" aria-hidden="true" name="favorite"></PdsIcon>Icon Only</PdsButton>
+    <PdsButton variant="tertiary" iconOnly="true"><PdsIcon slot="start" aria-hidden="true" name="favorite"></PdsIcon>Icon Only
+    </PdsButton>
     `,
     webComponent: `
     <pds-button variant="primary" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
     <pds-button variant="secondary" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
     <pds-button variant="accent" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
     <pds-button variant="destructive" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
+    <pds-button variant="tertiary" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
     `
 }}>
   <pds-button variant="primary" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
   <pds-button variant="secondary" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
   <pds-button variant="accent" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
   <pds-button variant="destructive" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
+  <pds-button variant="tertiary" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Icon Only</pds-button>
+</DocCanvas>
+
+### Sizes
+
+Buttons come in three sizes: default, small, and micro. The size prop allows you to control the button's height and spacing.
+
+- **Default**: Standard button size - used when no size prop is specified
+- **Small**: Smaller button size
+- **Micro**: Smallest button size with reduced font size
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+    <PdsButton variant="primary">Default</PdsButton>
+    <PdsButton variant="primary" size="small">Small</PdsButton>
+    <PdsButton variant="primary" size="micro">Micro</PdsButton>
+    `,
+    webComponent: `
+    <pds-button variant="primary">Default</pds-button>
+    <pds-button variant="primary" size="small">Small</pds-button>
+    <pds-button variant="primary" size="micro">Micro</pds-button>
+    `
+}}>
+  <pds-button variant="primary">Default</pds-button>
+  <pds-button variant="primary" size="small">Small</pds-button>
+  <pds-button variant="primary" size="micro">Micro</pds-button>
+</DocCanvas>
+
+#### Icon Only Sizes
+
+Sizes also apply to icon-only buttons, adjusting the button dimensions accordingly.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+    <PdsButton variant="primary" iconOnly="true"><PdsIcon slot="start" aria-hidden="true" name="favorite"></PdsIcon>Default</PdsButton>
+    <PdsButton variant="primary" iconOnly="true" size="small"><PdsIcon slot="start" aria-hidden="true" name="favorite" size="var(--pine-dimension-sm)"></PdsIcon>Small</PdsButton>
+    <PdsButton variant="primary" iconOnly="true" size="micro"><PdsIcon slot="start" aria-hidden="true" name="favorite" size="var(--pine-dimension-150)"></PdsIcon>Micro</PdsButton>
+    `,
+    webComponent: `
+    <pds-button variant="primary" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Default</pds-button>
+    <pds-button variant="primary" icon-only="true" size="small"><pds-icon slot="start" aria-hidden="true" name="favorite" size="var(--pine-dimension-sm)"></pds-icon>Small</pds-button>
+    <pds-button variant="primary" icon-only="true" size="micro"><pds-icon slot="start" aria-hidden="true" name="favorite" size="var(--pine-dimension-150)"></pds-icon>Micro</pds-button>
+    `
+}}>
+  <pds-button variant="primary" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Default</pds-button>
+  <pds-button variant="primary" icon-only="true" size="small"><pds-icon slot="start" aria-hidden="true" name="favorite" size="var(--pine-dimension-sm)"></pds-icon>Small</pds-button>
+  <pds-button variant="primary" icon-only="true" size="micro"><pds-icon slot="start" aria-hidden="true" name="favorite" size="var(--pine-dimension-150)"></pds-icon>Micro</pds-button>
 </DocCanvas>
 
 ### Button Link
