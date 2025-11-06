@@ -617,7 +617,7 @@ export class PdsPopover {
 
     let top = 0;
     let left = 0;
-    const offset = 8
+    const offset = 8;
 
     switch (this.placement) {
       case 'top':
