@@ -163,6 +163,15 @@ export class PdsPopover {
   };
 
   /**
+   * Handles changes to the default slot (popover content)
+   * When the popover is active, re-sync content with portal to handle dynamic updates
+   */
+  private handleContentSlotChange = () => {
+    if (!this.active) return;
+    this.updatePortalContent();
+  };
+
+  /**
    * Handles clicks on the trigger element
    */
   private handleTriggerClick = (event: Event) => {
@@ -678,7 +687,7 @@ export class PdsPopover {
         </span>
 
         <div class="pds-popover__content-slot-wrapper">
-          <slot></slot>
+          <slot onSlotchange={this.handleContentSlotChange}></slot>
         </div>
       </Host>
     );

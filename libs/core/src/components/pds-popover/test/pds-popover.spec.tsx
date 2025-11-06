@@ -352,6 +352,43 @@ describe('pds-popover', () => {
     });
   });
 
+  describe('Content Slot Changes', () => {
+    it('should update portal content when slot changes while popover is active', async () => {
+      const page = await newSpecPage({
+        components: [PdsPopover],
+        html: '<pds-popover component-id="test-popover"></pds-popover>'
+      });
+
+      // Set popover to active state
+      page.rootInstance.active = true;
+
+      // Spy on updatePortalContent
+      const updateSpy = jest.spyOn(page.rootInstance as any, 'updatePortalContent');
+
+      // Simulate slot change
+      await (page.rootInstance as any).handleContentSlotChange();
+
+      expect(updateSpy).toHaveBeenCalled();
+    });
+
+    it('should not update portal content when slot changes while popover is inactive', async () => {
+      const page = await newSpecPage({
+        components: [PdsPopover],
+        html: '<pds-popover component-id="test-popover"></pds-popover>'
+      });
+
+      // Set popover to inactive state
+      page.rootInstance.active = false;
+
+      // Spy on updatePortalContent
+      const updateSpy = jest.spyOn(page.rootInstance as any, 'updatePortalContent');
+
+      // Simulate slot change
+      await (page.rootInstance as any).handleContentSlotChange();
+
+      expect(updateSpy).not.toHaveBeenCalled();
+    });
+  });
 
   describe('Trigger Click Handling', () => {
     it('should call show() when popoverTargetAction is "show"', async () => {
