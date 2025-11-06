@@ -150,6 +150,19 @@
   }
 }
 
+.pds-button--tertiary {
+  --color-background-default: transparent;
+  --color-background-hover: var(--pine-color-grey-100);
+  --color-background-disabled: transparent;
+  --color-border-default: transparent;
+  --color-border-hover: var(--pine-color-grey-100);
+  --color-border-disabled: transparent;
+  --color-text-default: var(--pine-color-text-secondary);
+  --color-text-disabled: var(--pine-color-text-secondary-disabled);
+  --color-outline: var(--pine-color-focus-ring);
+  --button-loader-color: var(--pine-color-text-secondary);
+}
+
 .pds-button--filter {
   --color-background-default: var(--pine-color-white);
   --color-background-hover: var(--pine-color-grey-100);
@@ -230,6 +243,18 @@
   }
 }
 
+.pds-button--small {
+  min-height: var(--pine-dimension-400);
+  padding: calc(var(--pine-dimension-2xs) - var(--pine-border-width)) var(--pine-dimension-sm);
+}
+
+.pds-button--micro {
+  font-size: var(--pine-font-size-085);
+  min-height: var(--pine-dimension-300);
+  padding: var(--pine-dimension-025) var(--pine-dimension-xs);
+}
+
+
 .pds-button--icon-only {
   align-items: center;
   border-radius: var(--pine-border-radius-full);
@@ -257,5 +282,21 @@
     position: absolute;
     white-space: nowrap;
     width: 1px;
+  }
+
+  &.pds-button--small {
+    height: var(--pine-dimension-400);
+    min-height: var(--pine-dimension-400);
+    min-width: var(--pine-dimension-400);
+    padding: var(--pine-dimension-2xs);
+    width: var(--pine-dimension-400);
+  }
+
+  &.pds-button--micro {
+    height: var(--pine-dimension-300);
+    min-height: var(--pine-dimension-300);
+    min-width: var(--pine-dimension-300);
+    padding: var(--pine-dimension-3xs);
+    width: var(--pine-dimension-300);
   }
 }
