@@ -2,6 +2,17 @@ import { newSpecPage } from '@stencil/core/testing';
 import { PdsPopover } from '../pds-popover';
 
 describe('pds-popover', () => {
+  // Clean up portal elements after each test to prevent test pollution
+  afterEach(() => {
+    // Remove all portal elements
+    const portals = document.querySelectorAll('[id*="pds-popover-portal"]');
+    portals.forEach(portal => portal.remove());
+    
+    // Remove all portal focus style elements
+    const styles = document.querySelectorAll('style[data-pds-popover-focus]');
+    styles.forEach(style => style.remove());
+  });
+
   it('renders', async () => {
     const page = await newSpecPage({
       components: [PdsPopover],
