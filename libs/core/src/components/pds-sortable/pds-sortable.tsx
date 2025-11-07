@@ -72,7 +72,7 @@ export class PdsSortable {
       };
     }
 
-    Sortable.create(this.el, sortableOptions);
+    Sortable.create(this.el as any as HTMLElement, sortableOptions);
   }
 
   render() {
