@@ -1,7 +1,11 @@
-import { Component, Element, Event, EventEmitter, Host, Listen, h, Method, Prop, State } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, h, Method, Prop, State } from '@stencil/core';
 import { PlacementType } from '@utils/types';
-import { PdsPopoverEventDetail, ToggleEvent } from './popover-interface';
+import { PdsPopoverEventDetail } from './popover-interface';
 
+/**
+ * @slot trigger - The trigger element for the popover
+ * @slot (default) - The content to display inside the popover
+ */
 @Component({
   tag: 'pds-popover',
   styleUrl: 'pds-popover.scss',
@@ -20,14 +24,53 @@ export class PdsPopover {
   @State() active = false;
 
   /**
-   * Bound reference to the toggle handler for proper cleanup
-   */
-  private boundToggleHandler: (event: Event) => void;
-
-  /**
    * Tracks if the component is still mounted to prevent memory leaks
    */
   private isComponentMounted = true;
+
+  /**
+   * Reference to the trigger element
+   */
+  private triggerEl: HTMLElement | null = null;
+
+  /**
+   * Portal element rendered in document.body
+   */
+  private portalEl: HTMLElement | null = null;
+
+  /**
+   * Guard to prevent repositioning loops
+   */
+  private isRepositioning = false;
+
+  /**
+   * Debounce timers for performance optimization
+   */
+  private scrollDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+  private resizeDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+
+  /**
+   * Track moved nodes and their placeholders for restoration
+   */
+  private movedNodes: Array<{ node: Node; placeholder: Comment }> = [];
+
+  /**
+   * Timestamp when popover was opened (for preventing immediate close)
+   */
+  private openTimestamp = 0;
+
+  /**
+   * Instance counter for unique IDs
+   */
+  private static instanceCounter = 0;
+
+  /**
+   * Bound handlers for cleanup
+   */
+  private boundClickOutsideHandler: (event: MouseEvent) => void;
+  private boundEscapeKeyHandler: (event: KeyboardEvent) => void;
+  private boundScrollHandler: () => void;
+  private boundResizeHandler: () => void;
 
   /**
    * Emitted when the popover is opened
@@ -57,11 +100,6 @@ export class PdsPopover {
   @Prop() componentId: string;
 
   /**
-   * Text that appears on the trigger element
-   */
-  @Prop() text: string;
-
-  /**
    * Sets the maximum width of the popover content
    * @defaultValue 352
    */
@@ -74,22 +112,264 @@ export class PdsPopover {
   @Prop({ reflect: true }) placement: PlacementType = 'right';
 
   componentDidLoad() {
-    // Attach toggle event listener to the popover element
-    const popoverEl = this.el.shadowRoot?.querySelector('div[popover]');
-    if (popoverEl != null) {
-      this.boundToggleHandler = this.handleToggle.bind(this);
-      popoverEl.addEventListener('toggle', this.boundToggleHandler);
+    // Bind event handlers for cleanup
+    this.boundClickOutsideHandler = this.handleClickOutside.bind(this);
+    this.boundEscapeKeyHandler = this.handleEscapeKey.bind(this);
+    this.boundScrollHandler = this.handleScroll.bind(this);
+    this.boundResizeHandler = this.handleResize.bind(this);
+
+    // Create portal element
+    this.createPortal();
+
+    // Initialize trigger element by calling slot change handler
+    // This is a fallback for environments where slot change might not fire reliably
+    const triggerSlot = this.el.shadowRoot?.querySelector('slot[name="trigger"]') as HTMLSlotElement;
+    if (triggerSlot && this.triggerEl == null) {
+      const CustomEvent = (typeof window !== 'undefined' ? window.Event : global.Event) as any;
+      const slotChangeEvent = new CustomEvent('slotchange');
+      Object.defineProperty(slotChangeEvent, 'target', { value: triggerSlot, enumerable: true });
+      this.handleTriggerSlotChange(slotChangeEvent);
     }
   }
+
+  /**
+   * Handles changes to the trigger slot
+   */
+  private handleTriggerSlotChange = (event: Event) => {
+    const slot = event.target as HTMLSlotElement;
+    const assignedElements = slot.assignedElements();
+
+    // Clean up previous trigger's event listener if it exists
+    if (this.triggerEl != null) {
+      this.triggerEl.removeEventListener('click', this.handleTriggerClick);
+    }
+
+    if (assignedElements.length > 0) {
+      // Use the first assigned element as the trigger
+      this.triggerEl = assignedElements[0] as HTMLElement;
+
+      // Set ARIA attributes to establish relationship between trigger and popover
+      // This mirrors the native Popover API's accessibility behavior
+      if (this.portalEl) {
+        this.triggerEl.setAttribute('aria-expanded', String(this.active));
+        this.triggerEl.setAttribute('aria-controls', this.portalEl.id);
+      }
+
+      // Attach click listener to handle popover visibility
+      this.triggerEl.addEventListener('click', this.handleTriggerClick);
+    } else {
+      this.triggerEl = null;
+    }
+  };
+
+  /**
+   * Handles changes to the default slot (popover content)
+   * When the popover is active, re-sync content with portal to handle dynamic updates
+   */
+  private handleContentSlotChange = () => {
+    if (!this.active) return;
+    this.updatePortalContent();
+  };
+
+  /**
+   * Handles clicks on the trigger element
+   */
+  private handleTriggerClick = (event: Event) => {
+    // Only prevent default if the trigger is not an anchor with href
+    // This allows link navigation while still controlling popover visibility
+    const composedPath = event.composedPath();
+    const anchorWithHref = composedPath.find(
+      (el) => el instanceof HTMLAnchorElement && (el as HTMLAnchorElement).href
+    );
+
+    if (!anchorWithHref) {
+      event.preventDefault();
+    }
+
+    // Execute the appropriate action based on popoverTargetAction prop
+    switch (this.popoverTargetAction) {
+      case 'show':
+        this.show();
+        break;
+      case 'hide':
+        this.hide();
+        break;
+      case 'toggle':
+      default:
+        this.toggle();
+        break;
+    }
+  };
 
   disconnectedCallback() {
     this.isComponentMounted = false;
 
-    // Clean up event listener
-    const popoverEl = this.el.shadowRoot?.querySelector('div[popover]');
-    if (popoverEl != null && this.boundToggleHandler != null) {
-      popoverEl.removeEventListener('toggle', this.boundToggleHandler);
+    // Clean up trigger click event listener
+    if (this.triggerEl != null) {
+      this.triggerEl.removeEventListener('click', this.handleTriggerClick);
     }
+
+    // Clean up all event listeners
+    this.removeLightDismissListeners();
+    this.removeScrollAndResizeListeners();
+
+    // Clear any pending debounce timers
+    this.clearDebounceTimers();
+
+    // Remove portal from DOM
+    this.removePortal();
+  }
+
+  /**
+   * Clears any pending debounce timers
+   */
+  private clearDebounceTimers() {
+    if (this.scrollDebounceTimer !== null) {
+      clearTimeout(this.scrollDebounceTimer);
+      this.scrollDebounceTimer = null;
+    }
+    if (this.resizeDebounceTimer !== null) {
+      clearTimeout(this.resizeDebounceTimer);
+      this.resizeDebounceTimer = null;
+    }
+  }
+
+  private createPortal() {
+    if (this.portalEl !== null) return;
+
+    this.portalEl = document.createElement('div');
+    this.portalEl.className = 'pds-popover';
+
+    // Apply all styles inline since portal is outside shadow DOM
+    this.portalEl.style.position = 'fixed';
+    this.portalEl.style.zIndex = 'var(--pine-z-index-raised)';
+    this.portalEl.style.maxWidth = `${this.maxWidth}px`;
+    this.portalEl.style.display = 'none';
+    this.portalEl.style.opacity = '0';
+    this.portalEl.style.visibility = 'hidden';
+    this.portalEl.style.backgroundColor = 'var(--pine-color-background-container)';
+    this.portalEl.style.borderRadius = 'var(--pine-dimension-125)';
+    this.portalEl.style.boxShadow = 'var(--pine-box-shadow-200)';
+    this.portalEl.style.margin = 'var(--pine-dimension-none)';
+    this.portalEl.style.padding = 'var(--pine-dimension-md)';
+
+    // Generate unique ID
+    if (!this.componentId) {
+      const suffix = PdsPopover.instanceCounter++;
+      this.portalEl.id = `pds-popover-portal-${suffix}`;
+    } else {
+      this.portalEl.id = `${this.componentId}-portal`;
+    }
+
+    // Add accessibility attributes for screen readers
+    // Note: Native Popover API doesn't add a specific role, keeping semantic HTML
+    this.portalEl.setAttribute('aria-modal', 'false'); // Not a modal, can interact with rest of page
+
+    // Append to body
+    document.body.appendChild(this.portalEl);
+
+    // Add global focus styles to match Pine design system
+    // This is done after appending to ensure it's part of the document and can access CSS variables
+    this.addPortalFocusStyles();
+  }
+
+  /**
+   * Adds Pine design system focus styles to the portal element
+   * Uses CSS variables from Pine's design tokens
+   */
+  private addPortalFocusStyles() {
+    if (!this.portalEl) return;
+
+    const portalId = this.portalEl.id;
+
+    // Check if style element already exists
+    const existingStyle = document.querySelector(`style[data-pds-popover-focus="${portalId}"]`);
+    if (existingStyle) return;
+
+    // Create style element with Pine's focus ring styles
+    const styleEl = document.createElement('style');
+    styleEl.setAttribute('data-pds-popover-focus', portalId);
+    styleEl.textContent = `
+      #${portalId}:focus {
+        outline: var(--pine-outline-focus, 2px solid var(--pine-color-focus-ring, #6366f1)) !important;
+        outline-offset: var(--pine-border-width, 1px);
+      }
+      #${portalId}:focus:not(:focus-visible) {
+        outline: none;
+      }
+    `;
+
+    document.head.appendChild(styleEl);
+  }
+
+  /**
+   * Moves slot content into portal (preserves event handlers and component instances)
+   */
+  private updatePortalContent() {
+    if (!this.portalEl) return;
+
+    const contentSlotWrapper = this.el.shadowRoot?.querySelector('.pds-popover__content-slot-wrapper');
+    const defaultSlot = contentSlotWrapper?.querySelector('slot');
+
+    if (defaultSlot) {
+      const assignedNodes = defaultSlot.assignedNodes();
+
+      // Move each node into portal and track with placeholder for restoration
+      assignedNodes.forEach(node => {
+        // Skip if node is already in the portal or already tracked
+        const isAlreadyInPortal = node.parentNode === this.portalEl;
+        const isAlreadyTracked = this.movedNodes.some(moved => moved.node === node);
+
+        if (isAlreadyInPortal || isAlreadyTracked) {
+          return;
+        }
+
+        // Create a placeholder comment to mark original position
+        const placeholder = document.createComment('pds-popover-placeholder');
+
+        // Insert placeholder before moving the node
+        node.parentNode?.insertBefore(placeholder, node);
+
+        // Move the actual node to portal (preserves all handlers and state)
+        this.portalEl!.appendChild(node);
+
+        // Track for restoration
+        this.movedNodes.push({ node, placeholder });
+      });
+    }
+  }
+
+  /**
+   * Restores moved nodes back to their original positions
+   */
+  private restorePortalContent() {
+    // Restore each moved node to its original position
+    this.movedNodes.forEach(({ node, placeholder }) => {
+      if (placeholder.parentNode) {
+        placeholder.parentNode.insertBefore(node, placeholder);
+        placeholder.parentNode.removeChild(placeholder);
+      }
+    });
+
+    // Clear tracking array
+    this.movedNodes = [];
+  }
+
+  private removePortal() {
+    if (this.portalEl) {
+      // Remove the portal element from DOM
+      if (this.portalEl.parentNode) {
+        this.portalEl.parentNode.removeChild(this.portalEl);
+      }
+
+      // Remove the associated focus style element
+      const portalId = this.portalEl.id;
+      const styleEl = document.querySelector(`style[data-pds-popover-focus="${portalId}"]`);
+      if (styleEl && styleEl.parentNode) {
+        styleEl.parentNode.removeChild(styleEl);
+      }
+    }
+    this.portalEl = null;
   }
 
   /**
@@ -97,15 +377,45 @@ export class PdsPopover {
    */
   @Method()
   async show() {
-    const popoverEl = this.el.shadowRoot?.querySelector('div[popover]') as HTMLElement & { showPopover?: () => void } | null;
-    if (popoverEl != null && typeof popoverEl.showPopover === 'function') {
-      try {
-        popoverEl.showPopover();
-      } catch (e) {
-        // Popover might already be open
-        console.warn('Failed to show popover:', e);
-      }
+    if (this.active || !this.portalEl) return;
+
+    this.active = true;
+
+    // Record open timestamp to prevent immediate close from opening click
+    this.openTimestamp = Date.now();
+
+    // Update ARIA expanded state on trigger
+    if (this.triggerEl) {
+      this.triggerEl.setAttribute('aria-expanded', 'true');
     }
+
+    // Update portal content with latest slot content
+    this.updatePortalContent();
+
+    // Show portal
+    this.portalEl.style.display = 'block';
+    this.portalEl.style.opacity = '1';
+    this.portalEl.style.visibility = 'visible';
+
+    // Position the popover
+    requestAnimationFrame(() => {
+      if (!this.isComponentMounted) return;
+      this.handlePopoverPositioning();
+    });
+
+    // Add scroll and resize listeners for repositioning (always)
+    this.addScrollAndResizeListeners();
+
+    // Add document listeners for light dismiss and escape key (auto type only)
+    if (this.popoverType === 'auto') {
+      this.addLightDismissListeners();
+    }
+
+    // Emit open event
+    this.pdsPopoverOpen.emit({
+      componentId: this.componentId,
+      popoverType: this.popoverType,
+    });
   }
 
   /**
@@ -113,15 +423,39 @@ export class PdsPopover {
    */
   @Method()
   async hide() {
-    const popoverEl = this.el.shadowRoot?.querySelector('div[popover]') as HTMLElement & { hidePopover?: () => void } | null;
-    if (popoverEl != null && typeof popoverEl.hidePopover === 'function') {
-      try {
-        popoverEl.hidePopover();
-      } catch (e) {
-        // Popover might already be closed
-        console.warn('Failed to hide popover:', e);
-      }
+    if (!this.active || !this.portalEl) return;
+
+    this.active = false;
+
+    // Update ARIA expanded state on trigger
+    if (this.triggerEl) {
+      this.triggerEl.setAttribute('aria-expanded', 'false');
     }
+
+    // Restore content back to original slot positions
+    this.restorePortalContent();
+
+    // Hide portal
+    this.portalEl.style.display = 'none';
+    this.portalEl.style.opacity = '0';
+    this.portalEl.style.visibility = 'hidden';
+
+    // Return focus to trigger for keyboard accessibility
+    // This mirrors native Popover API behavior on close
+    this.returnFocusToTrigger();
+
+    // Remove all listeners
+    this.removeLightDismissListeners();
+    this.removeScrollAndResizeListeners();
+
+    // Clear any pending timers
+    this.clearDebounceTimers();
+
+    // Emit close event
+    this.pdsPopoverClose.emit({
+      componentId: this.componentId,
+      popoverType: this.popoverType,
+    });
   }
 
   /**
@@ -129,81 +463,161 @@ export class PdsPopover {
    */
   @Method()
   async toggle() {
-    const popoverEl = this.el.shadowRoot?.querySelector('div[popover]') as HTMLElement & { togglePopover?: () => void } | null;
-    if (popoverEl != null && typeof popoverEl.togglePopover === 'function') {
-      try {
-        popoverEl.togglePopover();
-      } catch (e) {
-        console.warn('Failed to toggle popover:', e);
-      }
+    if (this.active) {
+      this.hide();
+    } else {
+      this.show();
     }
   }
 
-  private handleToggle(event: Event) {
-    const toggleEvent = event as ToggleEvent;
+  /**
+   * Adds light dismiss listeners (click outside and escape key)
+   */
+  private addLightDismissListeners() {
+    // Add listeners immediately - handleClickOutside will check timestamp
+    document.addEventListener('click', this.boundClickOutsideHandler, true);
+    document.addEventListener('keydown', this.boundEscapeKeyHandler);
+  }
 
-    // Prepare event detail
-    const eventDetail: PdsPopoverEventDetail = {
-      componentId: this.componentId,
-      popoverType: this.popoverType,
-      text: this.text,
-    };
+  /**
+   * Removes light dismiss listeners
+   */
+  private removeLightDismissListeners() {
+    document.removeEventListener('click', this.boundClickOutsideHandler, true);
+    document.removeEventListener('keydown', this.boundEscapeKeyHandler);
+  }
 
-    // Update internal state based on native popover state
-    if (toggleEvent.newState === 'open') {
-      this.active = true;
-      const popoverEl = this.el.shadowRoot?.querySelector('div[popover]');
+  /**
+   * Adds scroll and resize listeners for repositioning
+   */
+  private addScrollAndResizeListeners() {
+    window.addEventListener('scroll', this.boundScrollHandler, true);
+    window.addEventListener('resize', this.boundResizeHandler);
+  }
 
-      // Remove positioned class to hide popover via CSS
-      if (popoverEl != null) {
-        popoverEl.classList.remove('pds-popover--positioned');
-      }
+  /**
+   * Removes scroll and resize listeners
+   */
+  private removeScrollAndResizeListeners() {
+    window.removeEventListener('scroll', this.boundScrollHandler, true);
+    window.removeEventListener('resize', this.boundResizeHandler);
+  }
 
-      // Position after the browser has rendered the popover, then show it
-      requestAnimationFrame(() => {
-        // Prevent memory leak if component unmounts during animation frame
-        if (!this.isComponentMounted) return;
+  /**
+   * Handles clicks outside the popover for light dismiss (auto type only)
+   */
+  private handleClickOutside(event: MouseEvent) {
+    // Ignore events that occurred at or before the popover opened
+    // This prevents the opening click from immediately closing the popover
+    // Convert event.timeStamp (DOMHighResTimeStamp from performance.now()) to epoch time
+    // by calculating: currentEpochTime - (currentPerfTime - eventPerfTime)
+    const eventTime = event.timeStamp
+      ? Date.now() - (performance.now() - event.timeStamp)
+      : Date.now();
 
-        this.handlePopoverPositioning();
-        if (popoverEl != null) {
-          popoverEl.classList.add('pds-popover--positioned');
-        }
-      });
-      this.pdsPopoverOpen.emit(eventDetail);
-    } else if (toggleEvent.newState === 'closed') {
-      this.active = false;
-      this.pdsPopoverClose.emit(eventDetail);
+    if (eventTime <= this.openTimestamp) {
+      return;
+    }
+
+    const target = event.target as Node;
+
+    // Check if click is outside both the popover portal and the trigger
+    const clickedInsidePopover = this.portalEl?.contains(target);
+    const clickedInsideTrigger = this.triggerEl?.contains(target);
+
+    if (!clickedInsidePopover && !clickedInsideTrigger) {
+      this.hide();
     }
   }
 
-  @Listen('scroll', {
-    target: 'window',
-    capture: true
-  })
-  handleScroll() {
-    // Only reposition if the popover is actually open
-    const popoverEl = this.el.shadowRoot?.querySelector('div[popover]');
-    if (popoverEl != null && this.active === true) {
+  /**
+   * Returns focus to the trigger element with visible focus indicator
+   * This ensures focus rings/outlines are shown as they would be with keyboard navigation
+   */
+  private returnFocusToTrigger() {
+    if (!this.triggerEl) return;
+
+    // Focus immediately while still in keyboard event context
+    // This ensures the browser treats it as keyboard-initiated and shows focus ring
+    this.triggerEl.focus({ preventScroll: true });
+  }
+
+  /**
+   * Handles escape key press to close the popover
+   * Mirrors native Popover API: Escape closes and returns focus to trigger
+   */
+  private handleEscapeKey(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      // Prevent default Escape behavior and stop propagation
+      // This mirrors native Popover API which handles Escape exclusively
+      event.preventDefault();
+      event.stopPropagation();
+
+      // Close popover and return focus to trigger
+      this.hide();
+    }
+  }
+
+  /**
+   * Handles scroll events to reposition the popover (debounced for performance)
+   */
+  private handleScroll() {
+    if (!this.active) return;
+
+    if (this.scrollDebounceTimer !== null) {
+      clearTimeout(this.scrollDebounceTimer);
+    }
+
+    this.scrollDebounceTimer = setTimeout(() => {
       this.handlePopoverPositioning();
-    }
+      this.scrollDebounceTimer = null;
+    }, 10); // 10ms debounce for smooth repositioning
   }
 
+  /**
+   * Handles resize events to reposition the popover (debounced for performance)
+   */
+  private handleResize() {
+    if (!this.active) return;
+
+    if (this.resizeDebounceTimer !== null) {
+      clearTimeout(this.resizeDebounceTimer);
+    }
+
+    this.resizeDebounceTimer = setTimeout(() => {
+      this.handlePopoverPositioning();
+      this.resizeDebounceTimer = null;
+    }, 100); // 100ms debounce for resize
+  }
+
+  /**
+   * Positions the popover relative to its trigger element
+   */
   private handlePopoverPositioning() {
-    const triggerEl = this.el.shadowRoot.querySelector('.pds-popover__trigger');
-    const popoverEl = this.el.shadowRoot.querySelector('div[popover]');
+    // Prevent repositioning loops
+    if (this.isRepositioning) {
+      return;
+    }
 
-    if (triggerEl == null || popoverEl == null) return;
+    this.isRepositioning = true;
 
-    // Cast to HTMLElement after null check for proper typing
-    const triggerElement = triggerEl as HTMLElement;
-    const popoverElement = popoverEl as HTMLElement;
+    if (this.triggerEl == null || this.portalEl == null) {
+      this.isRepositioning = false;
+      return;
+    }
 
-    const triggerRect = triggerElement.getBoundingClientRect();
-    const popoverRect = popoverElement.getBoundingClientRect();
+    const triggerRect = this.triggerEl.getBoundingClientRect();
+    const popoverRect = this.portalEl.getBoundingClientRect();
+
+    // Safety check: ensure trigger has valid dimensions (is rendered and visible)
+    if (triggerRect.width === 0 || triggerRect.height === 0) {
+      this.isRepositioning = false;
+      return;
+    }
 
     let top = 0;
     let left = 0;
-    const offset = 8
+    const offset = 8;
 
     switch (this.placement) {
       case 'top':
@@ -256,27 +670,24 @@ export class PdsPopover {
         break;
     }
 
-    popoverElement.style.top = `${top}px`;
-    popoverElement.style.left = `${left}px`;
+    this.portalEl.style.top = `${top}px`;
+    this.portalEl.style.left = `${left}px`;
+
+    // Reset the repositioning guard after a short delay
+    setTimeout(() => {
+      this.isRepositioning = false;
+    }, 16); // ~1 frame at 60fps
   }
 
   render() {
     return (
-      <Host>
-        <button
-          class="pds-popover__trigger"
-          popoverTarget={this.componentId}
-          popoverTargetAction={this.popoverTargetAction}
-        >
-          {this.text}
-        </button>
-        <div
-          class={`pds-popover ${this.active ? 'pds-popover--active' : ''}`}
-          id={this.componentId}
-          popover={this.popoverType}
-          style={{ maxWidth: `${this.maxWidth}px` }}
-        >
-          <slot></slot>
+      <Host id={this.componentId}>
+        <span class="pds-popover__trigger-wrapper">
+          <slot name="trigger" onSlotchange={this.handleTriggerSlotChange}></slot>
+        </span>
+
+        <div class="pds-popover__content-slot-wrapper">
+          <slot onSlotchange={this.handleContentSlotChange}></slot>
         </div>
       </Host>
     );
