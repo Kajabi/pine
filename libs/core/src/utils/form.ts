@@ -32,11 +32,11 @@ export const isRequired = (target, component) => {
  * Exposes a readonly type property on a custom form element to match native form element behavior.
  * This makes the type property enumerable and accessible via element.type, matching native HTML elements.
  * The property is non-configurable, preventing it from being redefined or deleted at runtime.
- * 
+ *
  * @param element - The custom element to add the type property to
  * @param type - The type value (string literal) or a getter function that returns the type
  */
-export function exposeTypeProperty(element: HTMLElement, type: string | (() => string)) {
+export function exposeTypeProperty(element: Element, type: string | (() => string)) {
   Object.defineProperty(element, 'type', {
     get: typeof type === 'function' ? type : () => type,
     enumerable: true,
