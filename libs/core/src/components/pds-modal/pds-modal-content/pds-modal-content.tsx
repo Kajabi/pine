@@ -1,11 +1,5 @@
 import { Component, h, Host, Prop, Element, State } from '@stencil/core';
 
-declare global {
-  interface HTMLPdsModalContentElement extends HTMLElement {
-    border: 'none' | 'both';
-  }
-}
-
 @Component({
   tag: 'pds-modal-content',
   styleUrl: 'pds-modal-content.scss',
