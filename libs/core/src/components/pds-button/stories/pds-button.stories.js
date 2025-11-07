@@ -241,42 +241,15 @@ export const StartAndEndSlots = {
   }
 };
 
-export const SizeDefault = BaseTemplate.bind({});
-SizeDefault.args = {
-  disabled: false,
-  fullWidth: false,
-  iconOnly: false,
-  loading: false,
-  slot: {
-    default: 'Default',
-  },
-  type: 'button',
-  variant: 'primary'
-}
-
-export const SizeSmall = BaseTemplate.bind({});
-SizeSmall.args = {
-  disabled: false,
-  fullWidth: false,
-  iconOnly: false,
-  loading: false,
-  size: 'small',
-  slot: {
-    default: 'Small',
-  },
-  type: 'button',
-  variant: 'primary'
-}
-
-export const SizeMicro = BaseTemplate.bind({});
-SizeMicro.args = {
+export const Sizes = BaseTemplate.bind({});
+Sizes.args = {
   disabled: false,
   fullWidth: false,
   iconOnly: false,
   loading: false,
   size: 'micro',
   slot: {
-    default: 'Micro',
+    default: 'Micro Button',
   },
   type: 'button',
   variant: 'primary'
