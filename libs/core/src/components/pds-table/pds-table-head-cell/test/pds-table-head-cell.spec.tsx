@@ -28,7 +28,7 @@ describe('pds-table-head-cell', () => {
       <pds-table-head-cell class="is-sortable sort-asc" role="columnheader" sortable="true" part="head-cell">
         <mock:shadow-root>
           <slot></slot>
-          <pds-icon icon="${upSmall}" part="sort-icon"></pds-icon>
+          <pds-icon icon="${upSmall}"></pds-icon>
         </mock:shadow-root>
       </pds-table-head-cell>
     `);
