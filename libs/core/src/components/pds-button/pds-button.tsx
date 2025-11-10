@@ -88,10 +88,16 @@ export class PdsButton {
   @Prop() value?: string;
 
   /**
+   * Sets the size of the button.
+   * @defaultValue default
+   */
+  @Prop() size?: 'default' | 'small' | 'micro' = 'default';
+
+  /**
    * Sets the style variant of the button.
    * @defaultValue primary
    */
-  @Prop() variant: 'primary' | 'secondary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled' | 'filter' = 'primary';
+  @Prop() variant: 'primary' | 'secondary' | 'tertiary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled' | 'filter' = 'primary';
 
   @Event() pdsClick: EventEmitter;
 
@@ -184,6 +190,10 @@ export class PdsButton {
 
     if (this.variant) {
       classNames.push('pds-button--' + this.variant);
+    }
+
+    if (this.size && this.size !== 'default') {
+      classNames.push('pds-button--' + this.size);
     }
 
     if (this.iconOnly) {
