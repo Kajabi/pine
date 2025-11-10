@@ -30,7 +30,7 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "The details for version *${{ env.VERSION }}* can be found at the link provided below.\n\n*Release*: ${{ env.RELEASE_URL }}"
+				"text": "The details for version *${{ env.VERSION }}* can be found at the link provided below.\n\n*Release*: <${{ env.RELEASE_URL }}>"
 			}
 		}
 	]
