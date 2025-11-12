@@ -5,7 +5,7 @@ export type Attributes = { [key: string]: any };
  * @param el - Host element
  * @param attributes - Array of attributes to inherit
  */
-export const inheritAttributes = (el: HTMLElement, attributes: string[] = []) => {
+export const inheritAttributes = (el: Element, attributes: string[] = []) => {
   const attributeObject: Attributes = {};
 
   attributes.forEach((attr) => {
@@ -82,7 +82,7 @@ const ariaAttributes = [
 ];
 
 
- export const inheritAriaAttributes = (el: HTMLElement, ignoreList?: string[]) => {
+ export const inheritAriaAttributes = (el: Element, ignoreList?: string[]) => {
   let attributesToInherit = ariaAttributes;
   if (ignoreList && ignoreList.length > 0) {
     attributesToInherit = ariaAttributes.filter(attr => !ignoreList.includes(attr));

@@ -263,7 +263,7 @@ describe('pds-button', () => {
         <mock:shadow-root>
           <button class="pds-button pds-button--primary" part="button" type="button">
             <div class="pds-button__content" part="button-content">
-              <pds-icon aria-hidden="true" name="trash" part="icon"></pds-icon>
+              <pds-icon aria-hidden="true" name="trash"></pds-icon>
               <span class="pds-button__text" part="button-text">
                 <slot></slot>
               </span>
@@ -482,7 +482,7 @@ describe('pds-button', () => {
         html: `<pds-button variant="disclosure"></pds-button>`,
       });
 
-      const caretIcon = root?.shadowRoot?.querySelector('pds-icon[part="caret"]');
+      const caretIcon = root?.shadowRoot?.querySelector('pds-icon');
       expect(caretIcon).toBeTruthy();
       expect(caretIcon?.getAttribute('icon')).toBe(caretDown);
     });
@@ -493,8 +493,7 @@ describe('pds-button', () => {
         html: `<pds-button variant="disclosure" loading="true"></pds-button>`,
       });
 
-      // Should render caret icon with hidden class when loading
-      const caretIcon = root?.shadowRoot?.querySelector('pds-icon[part="caret"]');
+      const caretIcon = root?.shadowRoot?.querySelector('pds-icon');
       expect(caretIcon).toBeTruthy();
       expect(caretIcon?.classList.contains('pds-button__icon--hidden')).toBe(true);
     });
@@ -505,8 +504,7 @@ describe('pds-button', () => {
         html: `<pds-button variant="disclosure" icon-only="true"></pds-button>`,
       });
 
-      // Should not render end content (caret) when iconOnly is true
-      const caretIcon = root?.shadowRoot?.querySelector('pds-icon[part="caret"]');
+      const caretIcon = root?.shadowRoot?.querySelector('pds-icon');
       expect(caretIcon).toBeFalsy();
     });
 
@@ -542,7 +540,7 @@ describe('pds-button', () => {
         html: `<pds-button variant="filter">Filter option</pds-button>`,
       });
 
-      const filterIcon = root?.shadowRoot?.querySelector('pds-icon[part="icon"]');
+      const filterIcon = root?.shadowRoot?.querySelector('pds-icon');
       expect(filterIcon).toBeTruthy();
       expect(filterIcon?.getAttribute('icon')).toBe(addCircle);
     });
@@ -553,8 +551,7 @@ describe('pds-button', () => {
         html: `<pds-button variant="filter" icon="favorite">Filter option</pds-button>`,
       });
 
-      // Should still render add-circle icon, not favorite
-      const filterIcon = root?.shadowRoot?.querySelector('pds-icon[part="icon"]');
+      const filterIcon = root?.shadowRoot?.querySelector('pds-icon');
       expect(filterIcon).toBeTruthy();
       expect(filterIcon?.getAttribute('icon')).toBe(addCircle);
       expect(filterIcon?.getAttribute('name')).toBe(null);
@@ -566,8 +563,7 @@ describe('pds-button', () => {
         html: `<pds-button variant="filter" loading="true">Filter option</pds-button>`,
       });
 
-      // Should render add-circle icon with hidden class when loading
-      const filterIcon = root?.shadowRoot?.querySelector('pds-icon[part="icon"]');
+      const filterIcon = root?.shadowRoot?.querySelector('pds-icon');
       expect(filterIcon).toBeTruthy();
       expect(filterIcon?.classList.contains('pds-button__icon--hidden')).toBe(true);
     });
@@ -578,7 +574,7 @@ describe('pds-button', () => {
         html: `<pds-button variant="filter" disabled="true">Filter option</pds-button>`,
       });
 
-      const filterIcon = root?.shadowRoot?.querySelector('pds-icon[part="icon"]');
+      const filterIcon = root?.shadowRoot?.querySelector('pds-icon');
       const button = root?.shadowRoot?.querySelector('button');
 
       expect(filterIcon).toBeTruthy();
@@ -593,8 +589,7 @@ describe('pds-button', () => {
         html: `<pds-button variant="filter"><pds-icon slot="start" name="favorite"></pds-icon>Filter option</pds-button>`,
       });
 
-      // Should render hardcoded add-circle icon, not slot content
-      const filterIcon = root?.shadowRoot?.querySelector('pds-icon[part="icon"]');
+      const filterIcon = root?.shadowRoot?.querySelector('pds-icon');
       expect(filterIcon).toBeTruthy();
       expect(filterIcon?.getAttribute('icon')).toBe(addCircle);
 
@@ -610,7 +605,7 @@ describe('pds-button', () => {
       });
 
       const anchor = root?.shadowRoot?.querySelector('a');
-      const filterIcon = root?.shadowRoot?.querySelector('pds-icon[part="icon"]');
+      const filterIcon = root?.shadowRoot?.querySelector('pds-icon');
 
       expect(anchor).toBeTruthy();
       expect(filterIcon).toBeTruthy();

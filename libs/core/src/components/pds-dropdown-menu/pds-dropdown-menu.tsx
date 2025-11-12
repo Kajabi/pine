@@ -83,7 +83,7 @@ export class PdsDropdownMenu implements BasePdsProps {
 
   // Open the dropdown and position it
   private openDropdown = () => {
-    computePosition(this.triggerEl, this.panelEl, {
+    computePosition(this.triggerEl, this.panelEl as HTMLElement, {
       placement: this.placement,
       middleware: [offset(6), flip(), shift({padding: 5})],
     }).then(({ x, y }) => {

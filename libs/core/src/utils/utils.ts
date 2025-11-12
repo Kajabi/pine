@@ -1,6 +1,6 @@
 import type { EventEmitter } from "@stencil/core";
 
-export const hasShadowDom = (el: HTMLElement) => {
+export const hasShadowDom = (el: Element) => {
   return !!el.shadowRoot && !!(el as any).attachShadow
 }
 
