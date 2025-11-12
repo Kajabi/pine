@@ -1,3 +1,13 @@
+## 3.11.0 (2025-11-12)
+
+### Bug Fixes 🐛
+
+- **deps:** update @pine-ds/icons to 9.12.0 with Stencil 4.38.3 ([#580](https://github.com/Kajabi/pine/pull/580))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+
 ## 3.10.0 (2025-11-12)
 
 ### Features 🚀
