@@ -1,3 +1,17 @@
+## 3.10.0 (2025-11-12)
+
+### Features 🚀
+
+- **pds-button:** add tertiary variant and sizing prop ([#575](https://github.com/Kajabi/pine/pull/575))
+
+### Bug Fixes 🐛
+
+- **pds-popover:** convert to slot for trigger and portal rendering ([#574](https://github.com/Kajabi/pine/pull/574))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+
 ## 3.9.0 (2025-10-30)
 
 ### Features 🚀
