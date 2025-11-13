@@ -231,3 +231,35 @@ jobs:
           getdx-instance-name: 'kajabi'
           getdx-token: ${{ secrets.GETDX_DEPLOYMENT_TOKEN }}
           service-name: 'pine'
+
+  send-slack-notification:
+    runs-on: ubuntu-latest
+    needs: release
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get latest
+        run: git pull
+        shell: bash
+
+      - name: Setup ENV Vars
+        run: |
+          echo 'PACKAGE_JSON<<EOF' >> $GITHUB_ENV
+          cat ./package.json >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+          echo "CURRENT_DATE=$(date +'%B %d, %Y')" >> $GITHUB_ENV
+
+      - name: Send Slack Notification
+        uses: slackapi/slack-github-action@v1.26.0
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          DATE: ${{ env.CURRENT_DATE }}
+          RELEASE_URL: "${{ format('https://github.com/{0}/releases/tag/v{1}', github.repository, fromJSON(env.PACKAGE_JSON).version) }}"
+          VERSION: ${{ fromJson(env.PACKAGE_JSON).version }}
+        with:
+          channel-id: ${{ vars.SLACK_CHANNEL_NAME }}
+          payload-file-path: "./.github/workflows/slack_payloads/release-info.json"
