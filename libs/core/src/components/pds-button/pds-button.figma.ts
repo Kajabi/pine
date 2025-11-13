@@ -16,6 +16,11 @@ const sharedProps = {
   isLoading: figma.enum("State",{
     loading: true
   }),
+  size: figma.enum("Size", {
+    "default - 36px": undefined,
+    "small - 32px": "small",
+    "micro - 24px": "micro",
+  }),
 }
 
 figma.connect('<FIGMA_BUTTON_PRIMARY>', {
@@ -24,6 +29,7 @@ figma.connect('<FIGMA_BUTTON_PRIMARY>', {
     variant: figma.enum('Variant', {
       "primary": "primary",
       "secondary": "secondary",
+      "tertiary": "tertiary",
       "destructive": "destructive",
       "accent": "accent",
     }),
@@ -33,6 +39,7 @@ figma.connect('<FIGMA_BUTTON_PRIMARY>', {
   <pds-button
     disabled=${props.isDisabled}
     loading=${props.isLoading}
+    size=${props.size}
     variant=${props.variant}
   >
     ${props.iconStart}
