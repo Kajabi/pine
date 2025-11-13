@@ -2,13 +2,13 @@ import figma, { html } from '@figma/code-connect/html';
 
 figma.connect('<FIGMA_AVATAR>', {
   props: {
-    badge: figma.boolean('Member'),
+    badge: figma.boolean('Badge'),
     size: figma.enum('Size', {
-      "xsm": "xs",
-      "sm": "sm",
-      "md": "md",
-      "lg": "lg",
-      "xl": "xl",
+      "xsm - 24px": "xs",
+      "sm - 32px": "sm",
+      "md - 40px": "md",
+      "lg - 56px": "lg",
+      "xl - 64px": "xl",
     }),
     type: figma.enum('Type', {
       "user": "ASSET_URL",

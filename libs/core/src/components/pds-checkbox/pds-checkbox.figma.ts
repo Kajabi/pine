@@ -9,8 +9,8 @@ figma.connect('<FIGMA_CHECKBOX>', {
     disabled: figma.enum("State", {
       disabled: "true",
     }),
-    helperMessage: figma.boolean("Supporting text", {
-      true: figma.string("↪️ Message"),
+    helperMessage: figma.boolean("Helper message", {
+      true: figma.string("↳ ✏️Message"),
       false: undefined,
     }),
     indeterminate: figma.boolean('Indeterminate', {
@@ -18,7 +18,7 @@ figma.connect('<FIGMA_CHECKBOX>', {
       false: undefined,
     }),
     label: figma.boolean("Label", {
-      true: figma.string("↪️ Message"),
+      true: figma.string("↳ ✏️Message"),
       false: undefined,
     }),
   },
