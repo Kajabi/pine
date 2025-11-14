@@ -5,8 +5,12 @@ import {  computePosition,
   flip,
   offset,
   shift,
+  autoUpdate,
 } from '@floating-ui/dom';
 
+/**
+ * @part menu-panel - Exposes the dropdown menu container for styling.
+ */
 @Component({
   tag: 'pds-dropdown-menu',
   styleUrl: 'pds-dropdown-menu.scss',
@@ -18,6 +22,7 @@ export class PdsDropdownMenu implements BasePdsProps {
   private panelEl: HTMLPdsBoxElement;
   private isOpen: boolean = false;
   private menuItems: HTMLPdsDropdownMenuItemElement[] = [];
+  private cleanupAutoUpdate: (() => void) | null = null;
 
   @Element() host: HTMLPdsDropdownMenuElement;
 
@@ -35,6 +40,14 @@ export class PdsDropdownMenu implements BasePdsProps {
 
   componentDidRender() {
     this.panelEl = this.host.shadowRoot?.querySelector('pds-box') as HTMLPdsBoxElement;
+  }
+
+  disconnectedCallback() {
+    // Clean up auto-update when component is removed from DOM
+    if (this.cleanupAutoUpdate) {
+      this.cleanupAutoUpdate();
+      this.cleanupAutoUpdate = null;
+    }
   }
 
   private handleTriggerSlotChange = (event: Event) => {
@@ -83,15 +96,27 @@ export class PdsDropdownMenu implements BasePdsProps {
 
   // Open the dropdown and position it
   private openDropdown = () => {
-    computePosition(this.triggerEl, this.panelEl as HTMLElement, {
-      placement: this.placement,
-      middleware: [offset(6), flip(), shift({padding: 5})],
-    }).then(({ x, y }) => {
-      Object.assign(this.panelEl.style, {
-        left: `${x}px`,
-        top: `${y}px`,
+    const updatePosition = () => {
+      computePosition(this.triggerEl, this.panelEl as HTMLElement, {
+        placement: this.placement,
+        middleware: [offset(6), flip(), shift({padding: 5})],
+      }).then(({ x, y }) => {
+        Object.assign(this.panelEl.style, {
+          left: `${x}px`,
+          top: `${y}px`,
+        });
       });
-    });
+    };
+
+    // Initial position
+    updatePosition();
+
+    // Set up auto-update for window resize and scroll
+    this.cleanupAutoUpdate = autoUpdate(
+      this.triggerEl,
+      this.panelEl as HTMLElement,
+      updatePosition
+    );
 
     this.host.shadowRoot?.querySelector('pds-box').classList.remove('is-hidden');
     this.isOpen = true;
@@ -104,6 +129,12 @@ export class PdsDropdownMenu implements BasePdsProps {
   private closeDropdown = () => {
     this.host.shadowRoot?.querySelector('pds-box').classList.add('is-hidden');
     this.isOpen = false;
+
+    // Clean up auto-update
+    if (this.cleanupAutoUpdate) {
+      this.cleanupAutoUpdate();
+      this.cleanupAutoUpdate = null;
+    }
 
     // Update ARIA attributes
     this.triggerEl.setAttribute('aria-expanded', 'false');
@@ -315,6 +346,7 @@ export class PdsDropdownMenu implements BasePdsProps {
           shadow="100"
           role="menu"
           aria-orientation="vertical"
+          part="menu-panel"
         >
           <slot onSlotchange={this.handleSlotChange}></slot>
         </pds-box>
