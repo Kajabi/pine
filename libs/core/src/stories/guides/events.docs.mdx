@@ -7,7 +7,7 @@ import { Meta, Story } from '@storybook/blocks';
 Pine tries to adhere to the browser standards whenever possible. However, with Web Components there are events that are a result of a direct user
 interaction, like `click`, `focus` that bubble just fine from inside a Web Component's shadow DOM into the light DOM. But then we have others,
 like `change` event, that don't. The difference between those events is that the former are defined as
-[composed events](https://developer.mozilla.org/en-US/docs/Web/API/Event/composed), while the latter are not.
+<pds-link href="https://developer.mozilla.org/en-US/docs/Web/API/Event/composed" external>composed events</pds-link>, while the latter are not.
 
 
 We also try to dispatch non-composed events by manually creating them on Web Component's host elements, but they do not behave 1:1 like their native

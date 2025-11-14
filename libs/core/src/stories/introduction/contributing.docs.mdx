@@ -3,33 +3,153 @@ import { Meta, Story } from '@storybook/blocks';
 
 <Meta title="Introduction/Contributing"  parameters={{ previewTabs: { canvas: { hidden: true }, } }} />
 
-# Introduction
-The Pine Design System is built using Stencil JS web components, providing a standardized set of UI components and guidelines for making consistent user interfaces across products. The purpose of this guide is to outline how Developers and Designers can contribute to the Pine Design System.
+# Contributing
 
-## Getting Started
-Before contributing to the Pine Design System, Developers and Designers should familiarize themselves with its architecture, components, and design guidelines.
+We welcome and encourage contributions to the Pine Design System! Whether you're fixing a bug, improving documentation, or proposing a new component, your contributions help make Pine better for everyone. This guide will help you get started and ensure your contributions align with our standards and best practices.
 
-## Architecture
-Pine is built on the Stencil JS web component library. Developers should understand how web components work and how to use Stencil JS to create them.
+Pine is built using <pds-link href="https://stenciljs.com/" external>Stencil.js</pds-link>, which allows us to create web components with TypeScript that work across all frameworks.
 
-## Components
-Pine includes a set of UI components used to build consistent user interfaces. Developers should familiarize themselves with the components available in Pine and how to use them.
+## Prerequisites
 
-## Design Guidelines
-Pine has a set of design guidelines defined as Tokens, which outline how components should be used and how they should look. Designers should familiarize themselves with these guidelines to ensure they align with the system's visual language.
+Before contributing to the Pine Design System, ensure you have the following:
 
-## Contributing as a Developer
-As a Developer, you can contribute to Pine by creating new components, improving existing components, or fixing bugs. Here are the steps you can take to contribute:
-1. Fork the Pine repository on GitHub.
-2. Create a new branch for your changes.
-3. Make your changes to the code.
-4. Test your changes locally to ensure they work as expected.
-5. Submit a pull request to the Pine repository.
+### Dependencies
 
-When submitting a pull request, include a detailed description of your changes and any relevant documentation or tests.
+Pine requires Node `>=16`.
 
-## Contributing as a Designer
-Coming soon
+### Knowledge Requirements
 
-## Conclusion
-The Pine Design System is a collaborative effort that relies on the contributions of developers and designers to maintain and improve. By following these guidelines, developers, and designers can work together to create a robust and user-friendly design system.
+**Web Components & Stencil.js**
+Pine is built on the <pds-link href="https://stenciljs.com/" external>Stencil.js</pds-link> web component library. Contributors should have a basic understanding of how web components work and how to use Stencil.js to create them.
+
+**Pine Components**
+Familiarize yourself with the existing Pine components and how they work. Browse through the component documentation to understand our patterns and conventions.
+
+**Design Tokens**
+Understanding Pine's design token system will help you apply styling consistently across components.
+
+## Setting Up Your Development Environment
+
+### Fork and Clone
+
+<pds-link href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo" external>Fork and clone</pds-link> the <pds-link href="https://github.com/Kajabi/pine" external>Pine GitHub repository</pds-link>.
+
+### Installation
+
+Run the following commands for initial setup:
+
+1. `cd pine`
+2. `npm install`
+3. `brew install mkcert`, if using Firefox run `brew install nss` instead
+4. `mkcert -install`
+5. `npm run setup`
+6. `cd libs/core`
+7. `mkcert -cert-file pineLocalDev.pem -key-file pineLocalDev-key.pem localhost 7300`
+8. `cd ../..`
+
+### Start the Development Server
+
+To spin up a local dev server and test your changes, run:
+
+```zsh
+npm run start
+```
+
+A local instance of Storybook will be served at `http://localhost:6006`.
+
+## Making Changes
+
+### Branch Naming Convention
+
+Before you start coding, create a new branch using our conventional branch naming convention. Branches that don't adhere to this style won't be able to be pushed, so be sure your branch begins with one of the accepted prefixes.
+
+Common prefixes include:
+- `feat/` - New features
+- `fix/` - Bug fixes
+- `docs/` - Documentation changes
+- `style/` - CSS/styling changes
+- `refactor/` - Code refactoring
+- `test/` - Adding or updating tests
+
+Example:
+
+```zsh
+style/button-accent-update
+```
+
+### Creating a New Component
+
+To add new components, run the following command:
+
+```zsh
+npm run stencil.generate pds-[component name]
+```
+
+When prompted, choose `*.scss Format`, then confirm. The initial component files will be generated. Once they are, you will need them to match other components. It may be best to copy any missing folders such as `stories/` and `docs/` from other components and update any imports or text to match.
+
+### Modifying Existing Components
+
+When modifying existing components:
+1. Locate the component in `libs/core/src/components/`
+2. Make your changes to the component files
+3. Update documentation in the `docs/` folder if needed
+4. Update or add stories in the `stories/` folder
+5. Test your changes in Storybook
+
+## Quality & Standards
+
+Every component in Pine is well-tested. We ask that for any new features added to components that the corresponding documentation, end-to-end (E2E) tests, and spec tests are added for quality assurance.
+
+### Linting
+
+We use prettier for linting. To check your code:
+
+```zsh
+npm run lint.all
+```
+
+### Testing
+
+We use Stencil's built-in testing suite for testing TypeScript. To run tests:
+
+```zsh
+npm run test.all
+```
+
+This runs both spec tests and E2E tests to ensure your changes work correctly and don't break existing functionality.
+
+## Submitting Your Contribution
+
+### Commit Messages
+
+We use <pds-link href="https://www.conventionalcommits.org/en/v1.0.0/" external>Conventional Commits</pds-link>, so please ensure your commit messages adhere to these standards.
+
+### Creating a Pull Request
+
+First, ensure that the `main` branch is up to date:
+
+```zsh
+git checkout main
+git pull upstream main
+```
+
+Then, rebase your branch against `main` and resolve any conflicts:
+
+```zsh
+git checkout your/branch-name
+git rebase main
+```
+
+Once rebased, push your branch and create a pull request. When creating your pull request:
+- Fill out the template with as much detail as possible
+- Include before and after screenshots for visual changes
+- Tag `Kajabi/dss-devs` to notify the Design System team
+- Our standards require at least two accepted reviews before merging
+
+## Troubleshooting
+
+Sometimes, the development environment will experience rendering issues while hot reloading. In most cases, this can be fixed by re-running the `npm run start` command. For any cases where this doesn't resolve the issue, please feel free to reach out to the team for support.
+
+## Get Help
+
+If you have questions or need assistance, reach out to us through our support channels. We're here to help make your contribution experience as smooth as possible!
