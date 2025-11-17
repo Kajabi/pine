@@ -18,9 +18,9 @@
 
 ## Events
 
-| Event              | Description                                  | Type               |
-| ------------------ | -------------------------------------------- | ------------------ |
-| `pdsCopyTextClick` | Event fired when copyText button is clicked. | `CustomEvent<any>` |
+| Event              | Description                                  | Type                  |
+| ------------------ | -------------------------------------------- | --------------------- |
+| `pdsCopyTextClick` | Event fired when copyText button is clicked. | `CustomEvent<string>` |
 
 
 ## Dependencies

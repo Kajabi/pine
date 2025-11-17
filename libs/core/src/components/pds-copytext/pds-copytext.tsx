@@ -39,7 +39,7 @@ export class PdsCopytext {
   /**
    * Event fired when copyText button is clicked.
    */
-  @Event() pdsCopyTextClick: EventEmitter;
+  @Event() pdsCopyTextClick: EventEmitter<string>;
 
   private copyToClipboard = async (value: string) => {
     try {
