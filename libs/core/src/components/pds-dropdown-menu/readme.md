@@ -13,6 +13,13 @@
 | `placement`   | `placement`    | The placement of the dropdown panel relative to the trigger.          | `"bottom" \| "bottom-end" \| "bottom-start" \| "left" \| "left-end" \| "left-start" \| "right" \| "right-end" \| "right-start" \| "top" \| "top-end" \| "top-start"` | `'bottom-start'` |
 
 
+## Shadow Parts
+
+| Part           | Description                                      |
+| -------------- | ------------------------------------------------ |
+| `"menu-panel"` | Exposes the dropdown menu container for styling. |
+
+
 ## Dependencies
 
 ### Depends on

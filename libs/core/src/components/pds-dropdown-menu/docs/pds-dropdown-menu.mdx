@@ -76,6 +76,8 @@ import { components } from '../../../../dist/docs.json';
 
 <DocArgsTable componentName="pds-dropdown-menu-item" docSource={components} />
 
+## Examples
+
 ### Default
 
 The default dropdown menu displays a list of options that can be selected by the user.
@@ -243,6 +245,86 @@ The dropdown menu can be positioned relative to the trigger using the placement 
    <pds-chip slot="trigger" sentiment="success" variant="dropdown">Trigger</pds-chip>
    <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
    <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
+  </pds-dropdown-menu>
+</div>
+</DocCanvas>
+
+### Scrollable Menu
+
+The `menu-panel` CSS part can be used to customize the menu container's dimensions and enable scrolling for long lists as needed.
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+<style>
+{\`
+  .scrollable-menu::part(menu-panel) {
+    max-height: 200px;
+    overflow-y: auto;
+    min-width: 250px;
+  }
+\`}
+</style>
+<PdsDropdownMenu className="scrollable-menu">
+  <PdsButton slot="trigger">Options</PdsButton>
+  <PdsDropdownMenuItem>Item 1</PdsDropdownMenuItem>
+  <PdsDropdownMenuItem>Item 2</PdsDropdownMenuItem>
+  <PdsDropdownMenuItem>Item 3</PdsDropdownMenuItem>
+  <PdsDropdownMenuItem>Item 4</PdsDropdownMenuItem>
+  <PdsDropdownMenuItem>Item 5</PdsDropdownMenuItem>
+  <PdsDropdownMenuItem>Item 6</PdsDropdownMenuItem>
+  <PdsDropdownMenuItem>Item 7</PdsDropdownMenuItem>
+  <PdsDropdownMenuItem>Item 8</PdsDropdownMenuItem>
+  <PdsDropdownMenuItem>Item 9</PdsDropdownMenuItem>
+  <PdsDropdownMenuItem>Item 10</PdsDropdownMenuItem>
+</PdsDropdownMenu>
+`,
+    webComponent:`
+<style>
+  .scrollable-menu::part(menu-panel) {
+    max-height: 200px;
+    overflow-y: auto;
+    min-width: 250px;
+  }
+</style>
+<pds-dropdown-menu class="scrollable-menu">
+  <pds-button slot="trigger">Options</pds-button>
+  <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
+  <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
+  <pds-dropdown-menu-item>Item 3</pds-dropdown-menu-item>
+  <pds-dropdown-menu-item>Item 4</pds-dropdown-menu-item>
+  <pds-dropdown-menu-item>Item 5</pds-dropdown-menu-item>
+  <pds-dropdown-menu-item>Item 6</pds-dropdown-menu-item>
+  <pds-dropdown-menu-item>Item 7</pds-dropdown-menu-item>
+  <pds-dropdown-menu-item>Item 8</pds-dropdown-menu-item>
+  <pds-dropdown-menu-item>Item 9</pds-dropdown-menu-item>
+  <pds-dropdown-menu-item>Item 10</pds-dropdown-menu-item>
+</pds-dropdown-menu>
+`
+  }}
+>
+<style>
+{`
+  .scrollable-menu::part(menu-panel) {
+    max-height: 200px;
+    overflow-y: auto;
+    min-width: 250px;
+  }
+`}
+</style>
+<div style={{ height: '300px', width: '100%', textAlign: 'center'}}>
+  <pds-dropdown-menu class="scrollable-menu">
+    <pds-button slot="trigger">Options</pds-button>
+    <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item>Item 2</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item>Item 3</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item>Item 4</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item>Item 5</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item>Item 6</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item>Item 7</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item>Item 8</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item>Item 9</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item>Item 10</pds-dropdown-menu-item>
   </pds-dropdown-menu>
 </div>
 </DocCanvas>
