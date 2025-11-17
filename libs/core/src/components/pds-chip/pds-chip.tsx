@@ -51,7 +51,7 @@ export class PdsChip {
   /**
    * Event emitted when the close button is clicked on a tag variant chip.
    */
-  @Event() pdsTagCloseClick: EventEmitter;
+  @Event() pdsTagCloseClick: EventEmitter<void>;
 
   private handleCloseClick = () => {
     this.pdsTagCloseClick.emit();
