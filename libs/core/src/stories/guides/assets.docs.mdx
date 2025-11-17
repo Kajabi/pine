@@ -6,14 +6,14 @@ import { Meta, Story } from '@storybook/blocks';
 
 The icon component require static assets during runtime.
 
-By default, Pine and `pds-icon` components will fetch these assets via [jsDelivr](https://www.jsdelivr.com/). JsDelivr is a free CDN for open source projects. However, as we cannot guarantee the availability and performance of this CDN, we recommend bundling the assets with your application.
+By default, Pine and `pds-icon` components will fetch these assets via <pds-link href="https://www.jsdelivr.com/" external>jsDelivr</pds-link>. JsDelivr is a free CDN for open source projects. However, as we cannot guarantee the availability and performance of this CDN, we recommend bundling the assets with your application.
 
 Copy the assets from the Pine Design System package to your application. We recommend including copying these assets in your build process, which ensures that the assets are always up to date.
 
 
   You should add the copied assets (e.g. <code>public/assets/pine-ds/svg/*</code>) to your <code>.gitignore</code> file.
 
-For the following example, we assume you are using [Vite](https://vitejs.dev/). By default, Vite uses the `public` folder for static assets. To include the Pine Design System assets in your output bundle, you can copy them to this folder.
+For the following example, we assume you are using <pds-link href="https://vitejs.dev/" external>Vite</pds-link>. By default, Vite uses the `public` folder for static assets. To include the Pine Design System assets in your output bundle, you can copy them to this folder.
 
 First, install the `rollup-plugin-copy` plugin. This plugin allows you to copy files and folders while building.
 
