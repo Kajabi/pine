@@ -99,7 +99,7 @@ export class PdsButton {
    */
   @Prop() variant: 'primary' | 'secondary' | 'tertiary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled' | 'filter' = 'primary';
 
-  @Event() pdsClick: EventEmitter;
+  @Event() pdsClick: EventEmitter<Event>;
 
   /**
    * Listen for Enter key presses on form inputs to trigger submit

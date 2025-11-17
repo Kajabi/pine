@@ -26,9 +26,9 @@
 
 ## Events
 
-| Event      | Description | Type               |
-| ---------- | ----------- | ------------------ |
-| `pdsClick` |             | `CustomEvent<any>` |
+| Event      | Description | Type                 |
+| ---------- | ----------- | -------------------- |
+| `pdsClick` |             | `CustomEvent<Event>` |
 
 
 ## Slots
