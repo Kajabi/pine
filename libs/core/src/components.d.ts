@@ -6,18 +6,22 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { BoxColumnType, BoxShadowSizeType, BoxSpacingType } from "./utils/types";
+import { Event } from "@stencil/core";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 import { ChipSentimentType, ChipVariantType, PlacementType } from "./utils/types";
 import { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 import { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 import { PdsPopoverEventDetail } from "./components/pds-popover/popover-interface";
+import { SortableEvent } from "sortablejs";
 import { TextareaChangeEventDetail, TextareaInputEventDetail } from "./components/pds-textarea/textarea-interface";
 export { BoxColumnType, BoxShadowSizeType, BoxSpacingType } from "./utils/types";
+export { Event } from "@stencil/core";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 export { ChipSentimentType, ChipVariantType, PlacementType } from "./utils/types";
 export { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 export { PdsPopoverEventDetail } from "./components/pds-popover/popover-interface";
+export { SortableEvent } from "sortablejs";
 export { TextareaChangeEventDetail, TextareaInputEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
     /**
@@ -2051,9 +2055,9 @@ export interface PdsToastCustomEvent<T> extends CustomEvent<T> {
 }
 declare global {
     interface HTMLMockPdsModalElementEventMap {
-        "pdsModalOpen": any;
-        "pdsModalClose": any;
-        "pdsModalBackdropClick": any;
+        "pdsModalOpen": void;
+        "pdsModalClose": void;
+        "pdsModalBackdropClick": void;
     }
     /**
      * Mock PdsModal component for testing purposes
@@ -2109,7 +2113,7 @@ declare global {
         new (): HTMLPdsBoxElement;
     };
     interface HTMLPdsButtonElementEventMap {
-        "pdsClick": any;
+        "pdsClick": Event;
     }
     interface HTMLPdsButtonElement extends Components.PdsButton, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsButtonElementEventMap>(type: K, listener: (this: HTMLPdsButtonElement, ev: PdsButtonCustomEvent<HTMLPdsButtonElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2144,7 +2148,7 @@ declare global {
         new (): HTMLPdsCheckboxElement;
     };
     interface HTMLPdsChipElementEventMap {
-        "pdsTagCloseClick": any;
+        "pdsTagCloseClick": void;
     }
     interface HTMLPdsChipElement extends Components.PdsChip, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsChipElementEventMap>(type: K, listener: (this: HTMLPdsChipElement, ev: PdsChipCustomEvent<HTMLPdsChipElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2178,7 +2182,7 @@ declare global {
         new (): HTMLPdsComboboxElement;
     };
     interface HTMLPdsCopytextElementEventMap {
-        "pdsCopyTextClick": any;
+        "pdsCopyTextClick": string;
     }
     interface HTMLPdsCopytextElement extends Components.PdsCopytext, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsCopytextElementEventMap>(type: K, listener: (this: HTMLPdsCopytextElement, ev: PdsCopytextCustomEvent<HTMLPdsCopytextElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2405,7 +2409,7 @@ declare global {
         new (): HTMLPdsSelectElement;
     };
     interface HTMLPdsSortableElementEventMap {
-        "pdsSortableItemMoved": any;
+        "pdsSortableItemMoved": SortableEvent;
     }
     interface HTMLPdsSortableElement extends Components.PdsSortable, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsSortableElementEventMap>(type: K, listener: (this: HTMLPdsSortableElement, ev: PdsSortableCustomEvent<HTMLPdsSortableElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2670,15 +2674,15 @@ declare namespace LocalJSX {
         /**
           * Event emitted when the backdrop is clicked
          */
-        "onPdsModalBackdropClick"?: (event: MockPdsModalCustomEvent<any>) => void;
+        "onPdsModalBackdropClick"?: (event: MockPdsModalCustomEvent<void>) => void;
         /**
           * Event emitted when the modal is closed
          */
-        "onPdsModalClose"?: (event: MockPdsModalCustomEvent<any>) => void;
+        "onPdsModalClose"?: (event: MockPdsModalCustomEvent<void>) => void;
         /**
           * Event emitted when the modal is opened
          */
-        "onPdsModalOpen"?: (event: MockPdsModalCustomEvent<any>) => void;
+        "onPdsModalOpen"?: (event: MockPdsModalCustomEvent<void>) => void;
         /**
           * Whether the modal is open
           * @default false
@@ -3375,7 +3379,7 @@ declare namespace LocalJSX {
           * Provides the button with a submittable name.
          */
         "name"?: string;
-        "onPdsClick"?: (event: PdsButtonCustomEvent<any>) => void;
+        "onPdsClick"?: (event: PdsButtonCustomEvent<Event>) => void;
         /**
           * Sets the size of the button.
           * @defaultValue default
@@ -3478,7 +3482,7 @@ declare namespace LocalJSX {
         /**
           * Event emitted when the close button is clicked on a tag variant chip.
          */
-        "onPdsTagCloseClick"?: (event: PdsChipCustomEvent<any>) => void;
+        "onPdsTagCloseClick"?: (event: PdsChipCustomEvent<void>) => void;
         /**
           * Defines the color scheme of the chip.
           * @defaultValue 'neutral'
@@ -3608,7 +3612,7 @@ declare namespace LocalJSX {
         /**
           * Event fired when copyText button is clicked.
          */
-        "onPdsCopyTextClick"?: (event: PdsCopytextCustomEvent<any>) => void;
+        "onPdsCopyTextClick"?: (event: PdsCopytextCustomEvent<string>) => void;
         /**
           * Determines whether the `value` should truncate and display with an ellipsis.
           * @defaultValue false
@@ -4232,7 +4236,7 @@ declare namespace LocalJSX {
         /**
           * Event emitted when a sortable item is moved.
          */
-        "onPdsSortableItemMoved"?: (event: PdsSortableCustomEvent<any>) => void;
+        "onPdsSortableItemMoved"?: (event: PdsSortableCustomEvent<SortableEvent>) => void;
     }
     interface PdsSortableItem {
         /**
