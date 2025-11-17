@@ -23,11 +23,11 @@ This component mimics the real PdsModal but without using the Popover API
 
 ## Events
 
-| Event                   | Description                                | Type               |
-| ----------------------- | ------------------------------------------ | ------------------ |
-| `pdsModalBackdropClick` | Event emitted when the backdrop is clicked | `CustomEvent<any>` |
-| `pdsModalClose`         | Event emitted when the modal is closed     | `CustomEvent<any>` |
-| `pdsModalOpen`          | Event emitted when the modal is opened     | `CustomEvent<any>` |
+| Event                   | Description                                | Type                |
+| ----------------------- | ------------------------------------------ | ------------------- |
+| `pdsModalBackdropClick` | Event emitted when the backdrop is clicked | `CustomEvent<void>` |
+| `pdsModalClose`         | Event emitted when the modal is closed     | `CustomEvent<void>` |
+| `pdsModalOpen`          | Event emitted when the modal is opened     | `CustomEvent<void>` |
 
 
 ## Methods
