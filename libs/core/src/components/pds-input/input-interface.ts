@@ -9,6 +9,6 @@ export interface InputInputEventDetail {
 }
 
 export interface InputEvent <T = InputChangeEventDetail> extends CustomEvent {
-  detai: T;
+  detail: T;
   target: HTMLPdsInputElement;
 }
