@@ -88,8 +88,12 @@ A toast notification that includes a clickable link. Links are automatically sty
 
 <DocCanvas client:only
   mdxSource={{
-    react: '<PdsToast componentId="toast-link" duration={0}>New update available. <a href="#">Learn more</a></PdsToast>',
-    webComponent: '<pds-toast component-id="toast-link" duration="0">New update available. <a href="#">Learn more</a></pds-toast>'
+    react: `<PdsToast componentId="toast-link" duration={0}>
+  New update available. <a href="#">Learn more</a>
+</PdsToast>`,
+    webComponent: `<pds-toast component-id="toast-link" duration="0">
+  New update available. <a href="#">Learn more</a>
+</pds-toast>`
 }}>
   <div style={{ width: '100%', maxWidth: '300px' }}>
   <pds-toast component-id="toast-link" duration="0">New update available. <a href="#">Learn more</a></pds-toast>
@@ -102,8 +106,12 @@ A toast notification with rich content, demonstrating the flexibility of the def
 
 <DocCanvas client:only
   mdxSource={{
-    react: '<PdsToast componentId="toast-complex" duration={0}><strong>Success!</strong> Your profile has been updated with new information.</PdsToast>',
-    webComponent: '<pds-toast component-id="toast-complex" duration="0"><strong>Success!</strong> Your profile has been updated with new information.</pds-toast>'
+    react: `<PdsToast componentId="toast-complex" duration={0}>
+  <strong>Success!</strong> Your profile has been updated with new information.
+</PdsToast>`,
+    webComponent: `<pds-toast component-id="toast-complex" duration="0">
+  <strong>Success!</strong> Your profile has been updated with new information.
+</pds-toast>`
 }}>
   <pds-toast component-id="toast-complex" duration="0"><strong>Success!</strong> Your profile has been updated with new information.</pds-toast>
 </DocCanvas>
