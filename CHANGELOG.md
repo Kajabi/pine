@@ -1,3 +1,21 @@
+## 3.11.1 (2025-11-19)
+
+### Bug Fixes 🐛
+
+- update code connect mappings to match latest component updates ([#581](https://github.com/Kajabi/pine/pull/581))
+- **deps:** update glob from 10.3.10 to 11.1.0 to resolve security vulnerability ([#590](https://github.com/Kajabi/pine/pull/590))
+- **input-interface:** correct typo in event detail property name ([#587](https://github.com/Kajabi/pine/pull/587))
+
+### Documentation 📄
+
+- Improve docs navigation & support resources ([#585](https://github.com/Kajabi/pine/pull/585))
+- add intro image to welcome page ([#586](https://github.com/Kajabi/pine/pull/586))
+- **pds-alert, pds-toast:** improve DocCanvas formatting for readability ([#591](https://github.com/Kajabi/pine/pull/591))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+
 ## 3.11.0 (2025-11-12)
 
 ### Bug Fixes 🐛
