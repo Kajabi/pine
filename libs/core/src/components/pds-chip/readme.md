@@ -19,9 +19,9 @@
 
 ## Events
 
-| Event              | Description                                                           | Type               |
-| ------------------ | --------------------------------------------------------------------- | ------------------ |
-| `pdsTagCloseClick` | Event emitted when the close button is clicked on a tag variant chip. | `CustomEvent<any>` |
+| Event              | Description                                                           | Type                |
+| ------------------ | --------------------------------------------------------------------- | ------------------- |
+| `pdsTagCloseClick` | Event emitted when the close button is clicked on a tag variant chip. | `CustomEvent<void>` |
 
 
 ## Slots

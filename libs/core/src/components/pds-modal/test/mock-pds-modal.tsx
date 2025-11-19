@@ -54,17 +54,17 @@ export class MockPdsModal {
   /**
    * Event emitted when the modal is opened
    */
-  @Event() pdsModalOpen: EventEmitter;
+  @Event() pdsModalOpen: EventEmitter<void>;
 
   /**
    * Event emitted when the modal is closed
    */
-  @Event() pdsModalClose: EventEmitter;
+  @Event() pdsModalClose: EventEmitter<void>;
 
   /**
    * Event emitted when the backdrop is clicked
    */
-  @Event() pdsModalBackdropClick: EventEmitter;
+  @Event() pdsModalBackdropClick: EventEmitter<void>;
 
   /**
    * Shows the modal

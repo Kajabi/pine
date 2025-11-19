@@ -17,9 +17,9 @@
 
 ## Events
 
-| Event                  | Description                                  | Type               |
-| ---------------------- | -------------------------------------------- | ------------------ |
-| `pdsSortableItemMoved` | Event emitted when a sortable item is moved. | `CustomEvent<any>` |
+| Event                  | Description                                  | Type                         |
+| ---------------------- | -------------------------------------------- | ---------------------------- |
+| `pdsSortableItemMoved` | Event emitted when a sortable item is moved. | `CustomEvent<SortableEvent>` |
 
 
 ----------------------------------------------

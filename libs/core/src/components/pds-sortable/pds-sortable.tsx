@@ -1,4 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
+import type { SortableEvent } from 'sortablejs';
 import { SortableType } from './sortable-interface';
 import Sortable from 'sortablejs';
 
@@ -13,7 +14,7 @@ export class PdsSortable {
   /**
    * Event emitted when a sortable item is moved.
    */
-  @Event() pdsSortableItemMoved: EventEmitter;
+  @Event() pdsSortableItemMoved: EventEmitter<SortableEvent>;
 
   /**
    * Determines whether `sortable` should have a border.
