@@ -29,7 +29,8 @@ The alert component is used to display a message to the user. It can be used to 
 
 <DocArgsTable componentName="pds-alert" docSource={components} />
 
-## Variants
+## Examples
+### Variants
 
 The alert component supports multiple style variants to indicate different types of messages:
 
@@ -71,7 +72,8 @@ Text in small alerts is truncated when it becomes too long for the alert descrip
   <pds-alert heading="Alert heading text" small="true" variant="info">Small alerts use the description to provide more information about the alert, but are truncated when the text becomes too long for the alert to fit the screen.</pds-alert>
 </DocCanvas>
 
-## Actions
+
+### Actions
 
 Action items such as buttons and links should be added to alerts using the `actions` slot.
 
@@ -116,7 +118,8 @@ When using the small variant, actions are displayed on the same line as the desc
   <pds-alert heading="Alert heading text" small="true" variant="warning">Alerts can also have description text that can be used to provide more information about the alert.<pds-link href="#" slot="actions" variant="plain">Action link</pds-link> <pds-link href="#" slot="actions" variant="plain">Action link</pds-link></pds-alert>
 </DocCanvas>
 
-## Dismissible
+
+### Dismissible
 
 Alerts can be set to be dismissible using the `dismissible` property. This will add a close button to the alert.
 

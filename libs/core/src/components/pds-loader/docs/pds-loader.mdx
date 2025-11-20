@@ -18,13 +18,21 @@ The Loader component is a visual indicator that informs users an operation is in
 - Avoid using the Loader for actions that complete quickly, as it may cause unnecessary distraction.
 - Do not use the Loader for background tasks that do not require user interaction.
 
-## Accessibility
+
+### Accessibility
 
 Dynamic content on a page that does not require a page load is considered a live region. A loader can be used to convey to the user that the live region will be updated. The appropriate aria role, `aria-live`, is already set on the loader component when `is-loading` is set to `true`. When `is-loading` is set to `false`, `aria-hidden` is added to the component to hide it from the accessibility tree. For more information about live regions, please refer to [MDN's article.](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions)
+
+### Technical Details
+
+- `<pds-loader>` toggles `aria-live="polite"`, `aria-hidden`, and `aria-busy` as `is-loading` changes. Add `role="status"` yourself when you want the loader to be announced as the primary status region. Provide specific copy (“Saving profile…”) instead of generic text when possible.
+- The default “Loading…” string is injected through the unnamed slot even when `show-label="false"`. This keeps the label available to screen readers. Supply a `<span slot="label">` to customise the announcement.
 
 ## Properties
 
 <DocArgsTable componentName="pds-loader" docSource={components} />
+
+## Examples
 
 ### Default
 
@@ -75,7 +83,7 @@ The default loader's size can be changed to a either a preset value or a custom 
 </DocCanvas>
 
 
-## Typing
+### Typing
 
 Setting the `variant` prop to `typing` will display a typing loader. This loader is not affected by any changes to the `size` prop.
 
@@ -87,6 +95,6 @@ Setting the `variant` prop to `typing` will display a typing loader. This loader
   <pds-loader is-loading="true" variant="typing"></pds-loader>
 </DocCanvas>
 
-## References
+## Additional Resources
 
 [MDN: Live Regions](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions)
