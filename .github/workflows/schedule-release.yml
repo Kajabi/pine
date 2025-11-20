@@ -246,6 +246,10 @@ jobs:
         run: git pull
         shell: bash
 
+      - name: Fetch latest tags
+        run: git fetch --tags
+        shell: bash
+
       - name: Setup ENV Vars
         run: |
           # Get the latest git tag (which is the version just released)
