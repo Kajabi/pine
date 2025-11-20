@@ -27,6 +27,8 @@ Radio components allow users to select one option from a group of two or more ch
 
 <DocArgsTable componentName='pds-radio' docSource={components} />
 
+## Examples
+
 ### Default
 
 <DocCanvas client:only mdxSource={{
@@ -286,6 +288,12 @@ Image-based radios work seamlessly in groups with the same bordered card layout,
     </pds-radio>
   </pds-box>
 </DocCanvas>
+
+## Form Integration
+
+- Assign the same `name` to each radio in a group so only one option submits with the form.
+- Set a unique `value` on every radio to identify the selected option inside `FormData`.
+- Apply `required` (typically on the first radio in the group) plus `invalid`/`errorMessage` to surface validation feedback when no choice is selected.
 
 ## Additional Resources
 

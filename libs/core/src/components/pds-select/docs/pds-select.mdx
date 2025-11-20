@@ -28,15 +28,11 @@ The select component provides a dropdown list of options, allowing users to make
 
 When analyzing designs or screenshots, text that appears above a select dropdown is the select's label, not a separate `pds-text` component. The `label` prop creates text that appears above the select field and integrates properly with the component's styling and accessibility features.
 
-### Form Integration Features
-
-- Full ARIA support with proper labeling and descriptions
-- Supports single and multiple option selection
-- Uses slot-based option content for flexibility
-
 ## Properties
 
 <DocArgsTable componentName="pds-select" docSource={components} />
+
+## Examples
 
 ### Default
 
@@ -418,6 +414,15 @@ The action slot allows you to add helpful content next to the select label, such
     <option value="au">Australia</option>
   </pds-select>
 </DocCanvas>
+
+## Form Integration
+
+- Provide a `name` so the chosen option is included in `FormData` (disabled selects are skipped automatically).
+- Manage selection via the `value` prop plus `onPdsSelectChange` for controlled React usage; rely on native selection/default values for uncontrolled forms.
+- Combine `required`, `errorMessage`, and `invalid` to mirror native validation flows, especially when the first option is a disabled placeholder.
+- Labels are wired automatically through the native `<label>` element, and helper/error props render standardized messaging so you don’t need duplicate markup.
+- Use slot-based option content for flexible layouts (icons, descriptions) without breaking form submission.
+- Supports both single and (where applicable) multiple-option scenarios; ensure each option has a unique `value`.
 
 ## Additional Resources
 
