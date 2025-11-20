@@ -31,6 +31,7 @@
     "**/*.stories.ts",
     "**/*.stories.tsx",
     "**/*.figma.ts",
-    "scripts/custom-elements"
+    "scripts/custom-elements",
+    "src/utils/test/setup.ts"
   ]
 }
