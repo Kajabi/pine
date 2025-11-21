@@ -18,6 +18,8 @@ Tooltips display helpful popup text when users hover over or keyboard focus on a
 
 <DocArgsTable componentName="pds-tooltip" docSource={components} />
 
+## Examples
+
 ### Trigger
 Whether your trigger is text or an HTML element, it will be placed in the default slot between the opening and closing tags.
 
@@ -264,6 +266,51 @@ The `max-width` prop lets you adjust the maximum width of the tooltip content. T
 }}>
   <pds-tooltip content="This is long tooltip content to demonstrate how the max-width can be used to expand or narrow the width of the tooltip content to fit one's use case and content needs. This example uses 520px to create a bit more width for this amount of content." max-width="520px" placement="right">text</pds-tooltip>
 </DocCanvas>
+
+## Technical Notes
+
+- The trigger element receives `aria-describedby` referencing an ID that the component creates. Provide meaningful button/link labels so the tooltip content is read *after* the control name. When combining multiple tooltips on the same control, set `aria-describedby` manually to avoid duplication.
+- Tooltips do not announce themselves automatically because they use `aria-live="off"`. Reserve tooltips for purely supplemental information and display critical validation or blocking instructions inline.
+- Use the `opened` property when the tooltip should persist for longer than a hover/focus interaction (for example, guided tours). Because `opened` reflects as an attribute, you can also toggle it declaratively via frameworks or CSS selectors.
+- Call the public methods `showTooltip()` and `hideTooltip()` for advanced interactions (focus trapping, commanded display, or analytics). These methods return a promise that resolves once the visibility state changes.
+- When `html-content="true"`, avoid placing focusable elements inside the `content` slot. Tooltips are not intended for interactive elements. If you require buttons or links, switch to `<pds-popover>`, which manages focus and dismissal affordances.
+
+```tsx
+// React example showing imperative control
+const FieldWithTooltip = () => {
+  const tooltipRef = useRef<HTMLPdsTooltipElement>(null);
+
+  return (
+    <PdsTooltip
+      ref={tooltipRef}
+      content="Passwords must be at least 16 characters."
+      placement="right"
+    >
+      <PdsButton
+        variant="secondary"
+        onFocus={() => tooltipRef.current?.showTooltip()}
+        onBlur={() => tooltipRef.current?.hideTooltip()}
+      >
+        Password help
+      </PdsButton>
+    </PdsTooltip>
+  );
+};
+```
+
+```html
+<!-- Vanilla JS -->
+<pds-tooltip id="status-tooltip" opened="false" content="Synced 2 minutes ago">
+  <pds-icon-button icon="info" aria-label="Sync status"></pds-icon-button>
+</pds-tooltip>
+
+<script type="module">
+  const tooltip = document.getElementById('status-tooltip');
+  const icon = tooltip.querySelector('pds-icon-button');
+  icon.addEventListener('mouseenter', () => tooltip.showTooltip());
+  icon.addEventListener('mouseleave', () => tooltip.hideTooltip());
+</script>
+```
 
 ## Additional Resources
 

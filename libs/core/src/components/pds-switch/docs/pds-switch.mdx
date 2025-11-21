@@ -22,6 +22,7 @@ A styled checkbox component that functions as a toggle.
 
 <DocArgsTable componentName="pds-switch" docSource={components} />
 
+## Examples
 
 ### Default
 
@@ -95,3 +96,9 @@ Displays an error message with additional instructions, separate from the helper
     required="true"
   ></pds-switch>
 </DocCanvas>
+## Form Integration
+
+- Provide a `name` so the switch contributes a value to `FormData` when checked; unchecked switches are omitted like native checkboxes.
+- Use `value` (default `"on"`) to differentiate multiple switches that share the same `name`.
+- Combine `checked`, `onPdsSwitchChange`, and state management for controlled React usage, and pair `required`/`invalid` to enforce acknowledgements such as terms of service.
+

@@ -42,7 +42,8 @@ The table body cell. Equivalent to the `<td>` element.
 
 <DocArgsTable componentName="pds-table-cell" docSource={components} />
 
-## Default
+## Examples
+### Default
 
 The default table, properly using all subcomponents.
 
@@ -123,7 +124,8 @@ The default table, properly using all subcomponents.
   </pds-table>
 </DocCanvas>
 
-## Compact
+
+### Compact
 
 A compact table is a table with a reduced row spacing. This is useful for tables with a large number of rows.
 
@@ -204,7 +206,8 @@ A compact table is a table with a reduced row spacing. This is useful for tables
   </pds-table>
 </DocCanvas>
 
-## Selectable
+
+### Selectable
 
 When the `selectable` prop is set to `true`, the table will render a checkbox in the first column of each row.
 
@@ -285,7 +288,8 @@ When the `selectable` prop is set to `true`, the table will render a checkbox in
   </pds-table>
 </DocCanvas>
 
-## Responsive
+
+### Responsive
 
 When the `responsive` prop is set to `true`, the table will render a horizontal scrollbar when the table width exceeds the width of the container.
 
@@ -474,7 +478,8 @@ When the `responsive` prop is set to `true`, the table will render a horizontal 
 </DocCanvas>
 
 
-## Fixed Column
+
+### Fixed Column
 
 When the `fixed-column` prop is set to `true`, the first column of the table will be fixed in place while the rest of the table scrolls horizontally.
 
@@ -852,7 +857,8 @@ webComponent: `<pds-table component-id="fixedcb" responsive fixed-column selecta
   </pds-table>
 </DocCanvas>
 
-## Cell Truncation
+
+### Cell Truncation
 
 When the `truncate` prop is set to `true` on a `pds-table-cell` element, the cell will visually truncate the text and add an ellipsis when the text exceeds the max-width (100px) of the cell.
 
@@ -932,7 +938,8 @@ When the `truncate` prop is set to `true` on a `pds-table-cell` element, the cel
   </pds-table>
 </DocCanvas>
 
-## Cell Alignment
+
+### Cell Alignment
 
 Text alignment can be controlled using the `cell-align` prop on both `pds-table-head-cell` and `pds-table-cell` elements. The available alignment options are `start`, `center`, `end`, and `justify`.
 
@@ -1024,11 +1031,20 @@ Text alignment can be controlled using the `cell-align` prop on both `pds-table-
   </pds-table>
 </DocCanvas>
 
-## Sorting
+
+### Sorting
 
 Basic sorting can be enabled by adding the `sortable` attribute to a `pds-table-head-cell` element. The table will automatically sort in ascending or descending order when the cell is clicked.
 
 In cases where the default sorting functionality is not suitable, it is possible to use a custom sorting function by listening to the `pdsTableSort` event.
+
+### Event payload
+
+`pdsTableSort` dispatches from the clicked `<pds-table-head-cell>` and bubbles up to `<pds-table>`.
+
+### Preventing built-in sorting
+
+If you need full control over the rendered rows (for example, remote sorting), prevent the table from mutating the DOM by intercepting the event during the capture phase.
 
 <DocCanvas mdxSource={{
   react: `<PdsTable componentId="sortable" selectable={true}>
@@ -1211,6 +1227,6 @@ In cases where the default sorting functionality is not suitable, it is possible
 </pds-table>
 </DocCanvas>
 
-## References
+## Additional Resources
 
 [MDN: Table](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table)

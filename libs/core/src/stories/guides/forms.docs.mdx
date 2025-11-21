@@ -33,6 +33,12 @@ The web component example utilizes vanilla JavaScript to access values directly 
 
 > **💡 Open your browser's developer console before submitting the form to see detailed debugging output!**
 
+## Validation Patterns
+
+- **Inline validation**: Most Pine inputs support the `invalid` attribute and an `error` message prop. Toggle these in response to the component's event and display contextual feedback beneath the field.
+- **Summary validation**: Combine multiple messages into a `<pds-alert>` after form submission fails. Remember to move focus to the first invalid control.
+- **Async validation**: Use the `loading` state (e.g., `pds-button` with a loader) while waiting for server-side responses and apply `aria-busy="true"` to the container so assistive technologies know updates are pending.
+
 <DocCanvas client:only
   mdxSource={{
     react: `

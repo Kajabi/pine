@@ -1107,3 +1107,14 @@ Both `<optgroup>` and `<pds-text>` group labels are rendered as presentational i
 - **`<pds-text>` elements**: Serve as visual group headers but are purely presentational. They do not provide semantic grouping information to screen readers.
 
 **Recommendation**: Use `<optgroup>` when semantic grouping is important for accessibility and screen reader users. Use `<pds-text>` when you only need visual organization without semantic meaning.
+
+## Form Integration
+
+`pds-combobox` is a <pds-link href="https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals/formAssociated" external>form-associated custom element</pds-link>. This means the component participates in `<form>` submission just like native `<select>` / `<input>` controls.
+
+- Provide a `name` attribute so the selected value is included in `FormData`. Without `name`, the control is ignored during submission.
+- The submitted value always matches the option's `value` attribute, even when a custom layout/chip trigger is used.
+- `mode="filter"` behaves like an `<input>` plus `<datalist>`: users can type new text, but the submitted value will still be one of the predefined options.
+- `mode="select-only"` works closer to a `<select>`: typing is disabled for button/chip triggers, and only explicit option values can be submitted.
+- Update the `value` prop to control the selection from a parent component (React state, framework store, etc.). The component automatically syncs the input text/trigger label to match the selected option.
+

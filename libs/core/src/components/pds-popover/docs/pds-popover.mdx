@@ -18,11 +18,15 @@ Popovers display contextual information when users click or initiates a keyboard
 - Avoid using for simple text-only tooltips
 - Don't nest popovers within other popovers
 
+## Usage Notes
+
+Keep popover content concise and ensure every trigger element is focusable so keyboard users can open and dismiss the overlay reliably.
+
 ## Properties
 
 <DocArgsTable componentName="pds-popover" docSource={components} />
 
-## Usage
+## Examples
 
 ### Trigger Slot
 
@@ -239,3 +243,9 @@ The `max-width` prop allows adjusting the maximum width of the popover content. 
     <p>This is a wider popover with more content space available.</p>
   </pds-popover>
 </DocCanvas>
+
+## Technical Notes
+
+- The trigger slot automatically receives `aria-expanded` and `aria-controls` attributes when the component is hydrated. Use focusable elements (buttons, chips, avatar with `dropdown="true"`, etc.) so that keyboard users can open the popover with Enter or Space.
+- Content is teleported to `document.body` via a portal to ensure it is correctly layered above other UI. Because the markup is outside the component's DOM tree, associate it with the trigger via `aria-labelledby` or `aria-describedby` when the content needs more context (for example, referencing the trigger text).
+- Auto popovers (`popover-type="auto"`) listen for outside clicks and Escape to close the overlay. Manual popovers must expose their own dismissal affordance—include a close button in the content and wire it to `popover.hide()`.

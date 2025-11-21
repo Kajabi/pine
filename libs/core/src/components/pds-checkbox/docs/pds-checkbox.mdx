@@ -22,6 +22,8 @@ Checkboxes provide users with selectable options like toggling a single setting 
 
 <DocArgsTable componentName="pds-checkbox" docSource={components} />
 
+## Examples
+
 ### Default
 
 <DocCanvas client:only
@@ -100,6 +102,12 @@ An optional error message can be displayed for additional instructions, shown in
 
 ### pdsCheckboxChange
 Used when you want to perform an action when the checkbox state changes. The returned structure is a `CheckboxChangeEventDetail` that contains `checked` and `value`.
+
+## Form Integration
+
+- Set the `name` attribute so each checked box contributes its `value` to `FormData`; unchecked boxes are omitted automatically.
+- Give every checkbox in a group a distinct `value` so the server can differentiate selections.
+- Pair `required`, `invalid`, and `errorMessage` when you need inline validation.
 
 ## Additional Resources
 

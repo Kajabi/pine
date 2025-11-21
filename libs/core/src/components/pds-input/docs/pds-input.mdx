@@ -35,6 +35,8 @@ When analyzing designs or screenshots, text that appears above an input field is
 
 <DocArgsTable componentName="pds-input" docSource={components} />
 
+## Examples
+
 ### Default
 
 The type of input used varies based on the type of information you look to capture. The `text` default type allows for any type of single line data. For more information on the types this component supports, please see the MDN article on the [input element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#input_types).
@@ -445,7 +447,13 @@ Best practice: Use for form submission and final value processing
 
 Example: `<pds-input onPdsChange={handleFormChange}>`
 
-## References
+## Form Integration
+
+- Provide a `name` so the field participates in `FormData` submissions whenever it holds a non-empty value (empty strings are skipped, matching the built-in ElementInternals behavior).
+- Use the `value` prop with `onPdsInputChange` when you need a controlled field; omit `value` for uncontrolled forms.
+- Pair `required`, `pattern`, `errorMessage`, and `invalid` to surface validation rules inline with native form semantics.
+
+## Additional Resources
 
 For more information about using inputs, refer to:
 - [MDN Web Docs: HTML autocomplete attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete)

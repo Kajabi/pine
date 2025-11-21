@@ -18,6 +18,12 @@ Due to that, our components dispatch custom events that are named like the nativ
 like `pds-checkbox`, for example, dispatch an `pdsCheckboxChange` event. Which custom events are available can be found in the "Events" section of each component's
 properties table.
 
+## Event Patterns
+
+- **Composition**: All Pine custom events are composed and bubble so you can listen on ancestor elements or `document`.
+- **Detail payload**: Events include a `detail` object containing the component's value/state. Check the component docs for the exact payload.
+- **Preventing defaults**: Certain custom events support interruption using `event.preventDefault()` or `stopImmediatePropagation()` to implement custom behaviors.
+
 ## Examples
 
 These examples show you how to use the custom "pds"-prefixed events with Vanilla JS and React.

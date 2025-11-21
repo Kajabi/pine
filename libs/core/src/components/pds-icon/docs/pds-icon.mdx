@@ -22,6 +22,8 @@ The icon component is used to display scalable, customizable icons that represen
 
 <DocArgsTable componentName="pds-icon" docSource={pdsDocsJson} />
 
+## Examples
+
 ### Color
 
 The `color` property allows the icon to be displayed in a specified color. Accepted formats include:
@@ -84,7 +86,7 @@ The `size` property allows the icon to be displayed at a specified size. Accepte
   </>
 </DocCanvas>
 
-## How to Use Icons
+### How to Use Icons
 
 ### React Usage
 
@@ -110,7 +112,8 @@ For web components, use the `name` property with the icon name as a string:
 <pds-icon name="launch" size="large"></pds-icon>
 ```
 
-## Common Patterns
+
+### Common Patterns
 
 ### Individual Icon Imports
 
@@ -128,11 +131,11 @@ import { danger, bulb } from '@pine-ds/icons/icons';
 For components that use several icons, import multiple icons in a single statement:
 
 ```jsx
-import { 
-  danger, 
-  bulb, 
-  launch, 
-  downSmall 
+import {
+  danger,
+  bulb,
+  launch,
+  downSmall
 } from '@pine-ds/icons/icons';
 ```
 
@@ -142,7 +145,8 @@ import {
 - **Avoid wildcard imports**: Don't use `import * from '@pine-ds/icons/icons'` as this imports all icons
 - **Bundle size**: Each icon adds approximately 1-2KB to your bundle
 
-## Troubleshooting
+
+### Troubleshooting
 
 ### Console Warning About Name Property
 
