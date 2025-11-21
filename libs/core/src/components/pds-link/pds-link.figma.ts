@@ -22,6 +22,7 @@ figma.connect('<FIGMA_LINK>', {
   },
   example: (props) => html`\
   <pds-link
+    href="#"
     color=${props.color}
     external=${props.external}
     font-size=${props.fontSize}
