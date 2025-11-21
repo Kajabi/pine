@@ -11,7 +11,7 @@ figma.connect('<FIGMA_LINK>', {
       'external': true,
     }),
     fontSize: figma.enum('Size', {
-      'md': 'md',
+      'md': undefined,
       'sm': 'sm',
     }),
     label: figma.string('Label'),
