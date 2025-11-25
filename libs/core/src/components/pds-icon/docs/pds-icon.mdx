@@ -176,3 +176,10 @@ import { danger } from '@pine-ds/icons/icons';
 - Import only the icons you need
 - Avoid importing icons in shared utility files unless necessary
 - Consider lazy loading for icons used in less common user flows
+
+## Technical Notes
+
+- React uses the `icon` property while web components use `name`. This difference is intentional and optimized for each framework's strengths.
+- In React, icons are imported as objects from `@pine-ds/icons/icons` and passed to the `icon` property. This provides type safety, editor autocomplete, and tree-shaking—only imported icons are bundled.
+- In web components, the `name` property accepts string values for simpler HTML-like syntax, following standard web component attribute patterns.
+- Setting the `name` property in React has no effect and will trigger a console warning directing developers to use the `icon` property instead.
