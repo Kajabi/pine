@@ -1,11 +1,7 @@
 import { html } from 'lit-html';
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
-import { withActions } from '@storybook/addon-actions/decorator';
 
 export default {
-  argTypes: extractArgTypes('pds-tabpanel'),
   component: 'pds-tabpanel',
-  decorators: [withActions],
   title: 'components/Tabs/Tabpanel',
 }
 

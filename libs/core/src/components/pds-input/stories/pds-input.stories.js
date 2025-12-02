@@ -1,9 +1,8 @@
 import { html } from 'lit';
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
-import { withActions } from '@storybook/addon-actions/decorator';
+
 
 export default {
-  argTypes: extractArgTypes('pds-input'),
+
   args: {
     autocomplete: null,
     debounce: null,
@@ -37,7 +36,6 @@ export default {
     },
   },
   title: 'components/Input',
-  decorators: [withActions],
 }
 
 const BaseTemplate = (args) => html`<pds-input

@@ -1,8 +1,8 @@
 import { html } from 'lit';
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
-import { withActions } from '@storybook/addon-actions/decorator';
+
 
 export default {
+
   args: {
     autocomplete: null,
     clearOnEdit: false,
@@ -22,9 +22,7 @@ export default {
     required: false,
     value: null,
   },
-  argTypes: extractArgTypes('pds-textarea'),
   component: 'pds-textarea',
-  decorators: [withActions],
   parameters: {
     actions: {
       handles: [

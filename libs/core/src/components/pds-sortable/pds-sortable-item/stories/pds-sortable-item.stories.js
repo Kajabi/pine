@@ -1,8 +1,6 @@
 import { html } from 'lit-html';
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 export default {
-  argTypes: extractArgTypes('pds-sortable-item'),
   component: 'pds-sortable-item',
   title: 'components/Sortable/Sortable Item',
 };

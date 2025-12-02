@@ -1,10 +1,7 @@
 import { html } from 'lit-html';
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
-import { withActions } from '@storybook/addon-actions/decorator';
 
 export default {
   argTypes: {
-    ...extractArgTypes('pds-table-cell'),
     cellAlign: {
       control: {
         type: 'select',
@@ -13,7 +10,6 @@ export default {
     },
   },
   component: 'pds-table-cell',
-  decorators: [withActions],
   title: 'components/Table/Cells',
 };
 

@@ -1,9 +1,8 @@
 import { html } from 'lit';
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
-import { withActions } from '@storybook/addon-actions/decorator';
+
 
 export default {
-	argTypes: extractArgTypes('pds-popover'),
+
 	args: {
 		popoverTargetAction: 'toggle',
 		popoverType: 'auto',
@@ -11,7 +10,6 @@ export default {
 		componentId: 'popover-playground',
 	},
 	component: 'pds-popover',
-	decorators: [withActions],
 	parameters: {
 		actions: {
 			handles: ['pdsPopoverOpen', 'pdsPopoverClose'],

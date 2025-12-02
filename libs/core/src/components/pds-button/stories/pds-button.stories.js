@@ -1,5 +1,5 @@
 import { html } from 'lit';
-import { withActions } from '@storybook/addon-actions/decorator';
+
 
 import { customArgsWithIconControl } from '../../../stories/_helpers';
 
@@ -20,8 +20,8 @@ export default {
     },
   },
   component: 'pds-button',
-  decorators: [withActions],
   title: 'components/Button',
+
   parameters: {
     actions: {
       handles: ['pdsClick'],
