@@ -82,6 +82,17 @@ const config = {
     config.optimizeDeps.exclude = config.optimizeDeps.exclude || [];
     config.optimizeDeps.exclude.push('@mdx-js/react');
 
+    // Force Vite to not watch the loader/dist directories during HMR
+    // This prevents Storybook from breaking when tests rebuild these files
+    config.server.watch = config.server.watch || {};
+    config.server.watch.ignored = config.server.watch.ignored || [];
+    config.server.watch.ignored.push(
+      '**/loader/**',
+      '**/dist/**',
+      '**/www/**',
+      '**/components/**'
+    );
+
     // Dedupe lit to avoid "Multiple versions of Lit loaded" warning
     config.resolve.dedupe = config.resolve.dedupe || [];
     config.resolve.dedupe.push('lit', 'lit-html', 'lit-element', '@lit/reactive-element');
