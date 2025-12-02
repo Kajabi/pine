@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-icon.stories.js';
+
 import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 import { components as pdsDocsJson } from '@pine-ds/icons/dist/docs.json';
+
+<Meta of={stories} />
 
 # Icon
 The icon component is used to display scalable, customizable icons that represent various actions, statuses, or features.
@@ -36,7 +41,7 @@ The `color` property allows the icon to be displayed in a specified color. Accep
 
 This allows for flexibility with any CSS-supported color format.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `
 <PdsIcon icon={bulb} color="red"></PdsIcon>
 <PdsIcon icon={bulb} color="#FFA500"></PdsIcon>
@@ -67,7 +72,7 @@ The `size` property allows the icon to be displayed at a specified size. Accepte
 - Predefined: `small` `regular` `medium` `large`
 - Custom: `2rem` `60px`
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `
 <PdsIcon icon={danger} size="60px"></PdsIcon>
 <PdsIcon icon={danger} size="2rem"></PdsIcon>
@@ -183,3 +188,9 @@ import { danger } from '@pine-ds/icons/icons';
 - In React, icons are imported as objects from `@pine-ds/icons/icons` and passed to the `icon` property. This provides type safety, editor autocomplete, and tree-shaking—only imported icons are bundled.
 - In web components, the `name` property accepts string values for simpler HTML-like syntax, following standard web component attribute patterns.
 - Setting the `name` property in React has no effect and will trigger a console warning directing developers to use the `icon` property instead.
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

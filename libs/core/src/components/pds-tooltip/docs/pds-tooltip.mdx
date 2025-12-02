@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-tooltip.stories.js';
+
 import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Tooltip
 
@@ -23,7 +28,7 @@ Tooltips display helpful popup text when users hover over or keyboard focus on a
 ### Trigger
 Whether your trigger is text or an HTML element, it will be placed in the default slot between the opening and closing tags.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
       <PdsTooltip content="this is tooltip content" hasArrow="true" placement="bottom-start">
@@ -55,7 +60,7 @@ Whether your trigger is text or an HTML element, it will be placed in the defaul
 Text-based content is generated using the `content` prop. Use this option only when the
 tooltip content is expected to be a string.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsTooltip content="this is tooltip content" hasArrow="true" placement="right">text</PdsTooltip>',
     webComponent: '<pds-tooltip content="this is tooltip content" has-arrow="true" placement="right">text</pds-tooltip>'
@@ -68,7 +73,7 @@ tooltip content is expected to be a string.
 Tooltip content may contain HTML elements. In these cases,
 enable the `htmlContent` property and provide your element in the `content` slot.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
       <PdsTooltip htmlContent="true" hasArrow="true" placement="right">
@@ -102,7 +107,7 @@ enable the `htmlContent` property and provide your element in the `content` slot
 Use the `placement` prop to control where the tooltip appears. It automatically flips when space is insufficient and shifts to stay within viewport bounds.
 
 #### Basic Positions
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
       <div style={{display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap'}}>
@@ -156,7 +161,7 @@ Use the `placement` prop to control where the tooltip appears. It automatically 
 #### Aligned Positions
 You can also specify start and end alignments for more precise positioning:
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
       <div style={{display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap'}}>
@@ -210,7 +215,7 @@ You can also specify start and end alignments for more precise positioning:
 #### Smart Positioning
 The tooltip automatically adjusts its position when there's not enough space. Try hovering over these buttons near the edges of your screen:
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
       <div style={{display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap'}}>
@@ -247,7 +252,7 @@ The tooltip automatically adjusts its position when there's not enough space. Tr
 ### No Arrow
 By default the arrow is visible but it can be hidden by disabling it when `has-arrow` is `false`.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsTooltip content="this is tooltip content" hasArrow="false" placement="right">text</PdsTooltip>',
     webComponent: '<pds-tooltip content="this is tooltip content" has-arrow="false" placement="right">text</pds-tooltip>'
@@ -259,7 +264,7 @@ By default the arrow is visible but it can be hidden by disabling it when `has-a
 ### Width/Sizing
 The `max-width` prop lets you adjust the maximum width of the tooltip content. The default is 352px, but you can pass a different pixel value.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsTooltip content="This is long tooltip content to demonstrate how the max-width can be used to expand or narrow the width of the tooltip content to fit one\'s use case and content needs. This example uses 520px to create a bit more width for this amount of content." maxWidth="520px" placement="right">text</PdsTooltip>',
     webComponent: '<pds-tooltip content="This is long tooltip content to demonstrate how the max-width can be used to expand or narrow the width of the tooltip content to fit one\'s use case and content needs. This example uses 520px to create a bit more width for this amount of content." max-width="520px" placement="right">text</pds-tooltip>'
@@ -315,3 +320,9 @@ const FieldWithTooltip = () => {
 ## Additional Resources
 
 [W3 Aria Tooltip Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/)
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

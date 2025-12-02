@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-divider.stories.js';
+
 import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Divider
 
@@ -30,7 +35,7 @@ A divider is used to create a clear visual separation between sections of conten
 
 The default divider displays a horizontal line.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsDivider />',
     webComponent: '<pds-divider></pds-divider>'
@@ -46,7 +51,7 @@ To display the divider vertically, set the `vertical` prop to `true`.
 
 **Note**: Vertical dividers are not displayed on screen sizes smaller than 767px.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
 <div style={{ height: '150px' }}>
@@ -70,7 +75,7 @@ Both horizontal and vertical dividers can be offset to create a full-width or fu
 
 Offset sizes follow the global spacing sizes: `xxs`: 4px, `xs`: 8px, `sm`: 12px, `md`: 24px, `lg`: 32px, `xl`: 48px, `xxl`: 64px.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsDivider offset="lg" />',
     webComponent: '<pds-divider offset="lg"></pds-divider>'
@@ -82,7 +87,7 @@ Offset sizes follow the global spacing sizes: `xxs`: 4px, `xs`: 8px, `sm`: 12px,
 
 Below, you will see a vertical divider using a large offset.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
 <div style={{ height: '150px' }}>
@@ -99,3 +104,9 @@ Below, you will see a vertical divider using a large offset.
     <pds-divider offset="lg" vertical="true"></pds-divider>
   </div>
 </DocCanvas>
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

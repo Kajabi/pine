@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-chip.stories.js';
+
 import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Chip
 
@@ -28,7 +33,7 @@ The `dropdown` variant and the icon within the `tag` variant of the chip compone
 
 ### Default
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsChip>Label</PdsChip>',
     webComponent: '<pds-chip>Label</pds-chip>'
@@ -40,7 +45,7 @@ The `dropdown` variant and the icon within the `tag` variant of the chip compone
 
 The `sentiment` property represents the named color scheme of the chip component.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <PdsChip sentiment="accent">Accent</PdsChip>
@@ -75,7 +80,7 @@ The `sentiment` property represents the named color scheme of the chip component
 > **IMPORTANT**: The `brand` sentiment is a special case where only `icon` and `large` properties are supported.
 > The `dot`, `dropdown`, and `tag` properties are not supported by design.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <PdsChip sentiment="brand">Brand</PdsChip>
@@ -97,7 +102,7 @@ The `sentiment` property represents the named color scheme of the chip component
 
 A small circular indicator displayed within a chip. Dot colors are determined by the `sentiment` prop.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <PdsChip sentiment="accent" dot>Accent</PdsChip>
@@ -128,7 +133,7 @@ A small circular indicator displayed within a chip. Dot colors are determined by
 
 The `icon` property can be used to display an icon within a chip.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <PdsChip sentiment="accent" icon="archive">Accent</PdsChip>
@@ -162,7 +167,7 @@ The `icon` property can be used to display an icon within a chip.
 
 If the `variant` property is set to `"dropdown"`, the chip will be rendered in a dropdown style, altering its appearance and behavior accordingly.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <PdsChip sentiment="accent" variant="dropdown">Accent</PdsChip>
@@ -195,7 +200,7 @@ If the `variant` property is set to `"tag"`, the chip will be rendered in a tag 
 
 Tag is often used to represent a selected item or a removable element and includes a close button that can be clicked to perform an associated action.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <PdsChip sentiment="danger" variant="tag">Danger</PdsChip>
@@ -223,7 +228,7 @@ Tag is often used to represent a selected item or a removable element and includ
 
 Large chips will be displayed with a larger visual footprint compared to the default size.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <PdsChip sentiment="accent" large>Accent</PdsChip>
@@ -246,3 +251,9 @@ Large chips will be displayed with a larger visual footprint compared to the def
   <pds-chip sentiment="info" variant="dropdown" large>Info</pds-chip>
   <pds-chip sentiment="success" variant="tag" large>Success</pds-chip>
 </DocCanvas>
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

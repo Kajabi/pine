@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-switch.stories.js';
+
 import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Switch
 
@@ -28,7 +33,7 @@ A styled checkbox component that functions as a toggle.
 
 The default switch style, which behaves like a checkbox input.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsSwitch componentId="pds-switch-default-example" label="Default Switch" name="pds-switch-default" />',
     webComponent: '<pds-switch component-id="pds-switch-default-example" label="Default Switch" name="pds-switch-default"></pds-switch>'
@@ -46,7 +51,7 @@ The default switch style, which behaves like a checkbox input.
 
 Disables user interaction with the switch.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<PdsSwitch componentId="pds-switch-disabled-example" disabled="true" label="Can't touch this" name="pds-switch-disabled"/>`,
     webComponent: `<pds-switch component-id="pds-switch-disabled-example" disabled="true" label="Can't touch this" name="pds-switch-disabled"></pds-switch>`
@@ -63,7 +68,7 @@ Disables user interaction with the switch.
 
 Displays an additional descriptive message under the switch label.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsSwitch componentId="pds-switch-helper-example" helperMessage="Save my login details for next time." label="Remember me" name="pds-switch-helper"/>',
     webComponent: '<pds-switch component-id="pds-switch-helper-example" helper-message="Save my login details for next time." label="Remember me" name="pds-switch-helper"></pds-switch>'
@@ -82,7 +87,7 @@ Displays an additional descriptive message under the switch label.
 
 Displays an error message with additional instructions, separate from the helper message.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsSwitch componentId="pds-switch-invalid-example" errorMessage="Terms and conditions must be accepted to continue" invalid="true" label="I agree to the terms and conditions" name="pds-switch-invalid" required="true"/>',
     webComponent: '<pds-switch component-id="pds-switch-invalid-example" error-message="Terms and conditions must be accepted to continue" invalid="true" label="I agree to the terms and conditions" name="pds-switch-invalid" required="true"></pds-switch>'
@@ -102,3 +107,8 @@ Displays an error message with additional instructions, separate from the helper
 - Use `value` (default `"on"`) to differentiate multiple switches that share the same `name`.
 - Combine `checked`, `onPdsSwitchChange`, and state management for controlled React usage, and pair `required`/`invalid` to enforce acknowledgements such as terms of service.
 
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

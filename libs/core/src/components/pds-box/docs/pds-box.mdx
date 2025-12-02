@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-box.stories.js';
+
 import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Box
 
@@ -89,7 +94,7 @@ This approach ensures layouts work correctly regardless of text direction or wri
 - **Building toolbars** (action buttons in a row)
 - **Making inline layouts** (icon + text, multiple form fields)
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<>
   {/* Column: Vertical stacking */}
@@ -202,7 +207,7 @@ Controls how items flow within the container.
 - Use default (`row`) for: buttons, navigation, inline content
 - Use `column` for: page sections, cards, forms, vertical content
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<>
   <PdsBox border="true" padding="sm" margin-block-end="sm">
@@ -247,7 +252,7 @@ Controls whether flex items wrap to new lines when they don't fit in the contain
 - `true`: Items wrap to new lines as needed
 - **Responsive variants**: `wrap-xs`, `wrap-sm`, `wrap-md`, `wrap-lg`, `wrap-xl`
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<>
   <PdsBox wrap={false} gap="sm" min-width="300px" border="true" padding="sm" margin-block-end="sm">
@@ -293,7 +298,7 @@ Controls spacing between items within the container.
 
 **Responsive variants**: `gap-xs`, `gap-sm`, `gap-md`, `gap-lg`, `gap-xl`
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<>
   <PdsBox gap="none" border="true" padding="sm" margin-block-end="sm">
@@ -355,7 +360,7 @@ Controls external spacing around the container using logical properties (accepts
 - `margin-inline-start` / `margin-inline-end` (left/right in LTR)
 - **All support responsive variants**
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<>
   <PdsBox padding="xs" border="true" margin-block-end="sm">
@@ -396,7 +401,7 @@ Controls external spacing around the container using logical properties (accepts
 ### Border Color
 Please refer to the color brand guidelines for the appropriate color to use. Use `border-color` to change the color of the border. Accepts any valid color token or CSS color value.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<PdsBox border="true">Border Color</PdsBox>
 <PdsBox border="true" border-color="#0072EF">Border Color</PdsBox>
@@ -416,7 +421,7 @@ Please refer to the color brand guidelines for the appropriate color to use. Use
 ### Border Radius
 By default Box has no border radius. Use `border-radius` to change the rounding of the box's corners.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<PdsBox border="true" border-radius="xs">xs border radius</PdsBox>
 <PdsBox border="true" border-radius="sm">sm border radius</PdsBox>
@@ -436,7 +441,7 @@ By default Box has no border radius. Use `border-radius` to change the rounding 
 ### Shadow
 By default Box has no shadow. Use `shadow` to add a shadow to the box.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<PdsBox shadow="xs">Shadow xs</PdsBox>
 <PdsBox shadow="sm">Shadow sm</PdsBox>
@@ -456,7 +461,7 @@ By default Box has no shadow. Use `shadow` to add a shadow to the box.
 ### Margin
 By default Box has no margin. Use `margin` to add margin around the box.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<PdsBox border="true" marginBlockStart="xxs">Margin Block Start xxs</PdsBox>
 <PdsBox border="true" marginBlockEnd="xs">Margin Block End xs</PdsBox>
@@ -478,7 +483,7 @@ By default Box has no margin. Use `margin` to add margin around the box.
 ### Padding
 By default Box has no padding. Use `padding` to add padding to the box.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<PdsBox border="true" padding="xxs">Padding xxs</PdsBox>
 <PdsBox border="true" padding="xs">Padding xs</PdsBox>
@@ -522,7 +527,7 @@ Layout behavior:
 - Common pattern: Use `direction="column"` when you want items to stack vertically
 - Inside pds-row: The default `row` direction works well for grid layouts
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<PdsBox border="true">
   <span>Item 1</span>
@@ -565,7 +570,7 @@ Layout impact:
 
 #### Basic Align Items Examples
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<PdsBox direction="column" gap="sm">
   <PdsBox border="true" padding="sm" alignItems="start" minHeight="130px">
@@ -640,7 +645,7 @@ Layout impact:
 
 The align-items property supports responsive breakpoints, allowing you to change vertical alignment at different screen sizes using `align-items-xs`, `align-items-sm`, `align-items-md`, `align-items-lg`, and `align-items-xl`.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `// Start on mobile, center on tablets and up
 <PdsBox border="true" padding="sm" alignItems="start" alignItemsMd="center" minHeight="100px">
@@ -708,7 +713,7 @@ Layout impact:
 
 #### Basic Align Self Examples
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<PdsBox border="true" padding="sm" alignItems="center" minHeight="150px" gap="sm">
   <PdsBox flex="none" border="true" padding="xs" alignSelf="start">Start</PdsBox>
@@ -738,7 +743,7 @@ Layout impact:
 
 The align-self property supports responsive breakpoints, allowing you to change individual box alignment at different screen sizes using `align-self-xs`, `align-self-sm`, `align-self-md`, `align-self-lg`, and `align-self-xl`.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<PdsBox border="true" padding="sm" alignItems="center" minHeight="120px" gap="sm">
   {/* This box changes from start on mobile to center on tablets+ */}
@@ -801,7 +806,7 @@ Layout impact:
 
 #### Basic Justify Content Examples
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<PdsBox direction="column" gap="sm">
   <PdsBox border="true" padding="sm" justifyContent="start">
@@ -888,7 +893,7 @@ Layout impact:
 
 The justify-content property supports responsive breakpoints, allowing you to change alignment at different screen sizes using `justify-content-xs`, `justify-content-sm`, `justify-content-md`, `justify-content-lg`, and `justify-content-xl`.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `// Center on mobile, space-between on tablets and up
 <PdsBox border="true" padding="sm" justifyContent="center" justifyContentMd="space-between">
@@ -963,7 +968,7 @@ The `flex` prop controls how a box grows or shrinks within its container. It acc
 - `grow` - The box will grow to fill available space (equivalent to `flex: 1 1 0`)
 - `shrink` - The box will shrink when space is limited (equivalent to `flex: 0 1 auto`)
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<PdsBox>
   <PdsBox border="true" flex="none">Flex: none</PdsBox>
@@ -986,7 +991,7 @@ The `flex` prop controls how a box grows or shrinks within its container. It acc
 #### Custom Flex Values
 You can also provide custom CSS flex values as strings for precise control:
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<PdsBox>
   <PdsBox border="true" flex="1">Flex: 1</PdsBox>
@@ -1038,7 +1043,7 @@ Control whether flex items wrap to new lines when they don't fit in the containe
 - `true`: Items wrap to new lines as needed (equivalent to `flex-wrap: wrap`)
 
 #### No Wrap (default)
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
   <PdsBox wrap={false} gap="sm" min-width="250px">
@@ -1062,7 +1067,7 @@ Control whether flex items wrap to new lines when they don't fit in the containe
 
 #### Wrap
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<PdsBox wrap={true} gap="sm" min-width="300px">
   <PdsBox border="true" padding="sm">Item 1</PdsBox>
@@ -1100,7 +1105,7 @@ For detailed information about responsive breakpoints and how they work with the
 
 Control spacing between items at different breakpoints:
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<PdsBox gap="xs" gap-md="lg" border="true" padding="sm">
   <PdsBox border="true" padding="xs">Item 1</PdsBox>
@@ -1124,7 +1129,7 @@ Control spacing between items at different breakpoints:
 
 Control internal spacing at different breakpoints:
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<PdsBox padding="xs" padding-md="lg" border="true">
   Responsive padding content
@@ -1142,7 +1147,7 @@ Control internal spacing at different breakpoints:
 
 Control flex wrap behavior at different breakpoints:
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<PdsBox wrap="false" wrap-md="true" gap="sm" min-width="400px" border="true" padding="sm">
   <PdsBox border="true" padding="sm" min-width="150px">Long Item 1</PdsBox>
@@ -1292,3 +1297,8 @@ When no size props are provided, the box will use `flex-grow: 1` and `flex-basis
 </pds-row>
 ```
 
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

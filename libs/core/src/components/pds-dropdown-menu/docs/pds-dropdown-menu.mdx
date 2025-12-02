@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-dropdown-menu.stories.js';
+
 import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Dropdown Menu
 
@@ -82,7 +87,7 @@ import { components } from '../../../../dist/docs.json';
 
 The default dropdown menu displays a list of options that can be selected by the user.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
 <PdsDropdownMenu>
@@ -116,7 +121,7 @@ The default dropdown menu displays a list of options that can be selected by the
 
 The dropdown menu can also display a separator between items.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
 <PdsDropdownMenu>
@@ -156,7 +161,7 @@ The dropdown menu can also display a separator between items.
 
 Menu items can function as links by using the href attribute.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
 <PdsDropdownMenu>
@@ -188,7 +193,7 @@ Menu items can function as links by using the href attribute.
 
 Menu items can be disabled using the disabled attribute.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
 <PdsDropdownMenu>
@@ -222,7 +227,7 @@ Menu items can be disabled using the disabled attribute.
 
 The dropdown menu can be positioned relative to the trigger using the placement property.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
 <PdsDropdownMenu placement="bottom-end">
@@ -253,7 +258,7 @@ The dropdown menu can be positioned relative to the trigger using the placement 
 
 The `menu-panel` CSS part can be used to customize the menu container's dimensions and enable scrolling for long lists as needed.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
 <style>
@@ -328,3 +333,9 @@ The `menu-panel` CSS part can be used to customize the menu container's dimensio
   </pds-dropdown-menu>
 </div>
 </DocCanvas>
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

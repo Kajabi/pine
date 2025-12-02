@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-tabs.stories.js';
+
 import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Tabs
 
@@ -43,7 +48,7 @@ For best practices in accessibility, be sure to provide a `tablist-label` and a 
 
 The default style of Tabs.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `
 <PdsTabs activeTabName="Dollop" variant="primary" componentId="primary" tablistLabel="Foo">
   <PdsTab name="Sturdy">Sturdy</PdsTab>
@@ -79,7 +84,7 @@ The default style of Tabs.
 
 The Pill variant is to better display a list of items.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `
 <PdsTabs activeTabName="Dollop" variant="pill" componentId="pill" tablistLabel="Foo">
   <PdsTab name="Sturdy">Sturdy</PdsTab>
@@ -115,7 +120,7 @@ The Pill variant is to better display a list of items.
 
 The Availability variant is to better display dates and/or times.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `
 <div style="background-color: #ddd; padding: 20px;">
   <PdsTabs activeTabName="tuesday" variant="availability" componentId="availability" tablistLabel="Foo">
@@ -157,7 +162,7 @@ The Availability variant is to better display dates and/or times.
 
 The Filter variant can be used to better display filtered data.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `
 <PdsTabs activeTabName="Sturdy" variant="filter" componentId="filter" tablistLabel="Foo">
   <PdsTab name="Sturdy">Sturdy</PdsTab>
@@ -192,3 +197,9 @@ The Filter variant can be used to better display filtered data.
 ## Additional Resources
 
 [W3C: Tabs Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/)
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

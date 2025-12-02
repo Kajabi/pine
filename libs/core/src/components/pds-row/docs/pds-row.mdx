@@ -1,6 +1,11 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-row.stories.js';
+
 import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
 
+
+<Meta of={stories} />
 
 # Row
 `pds-row` is a flexbox-based grid system that allows you to create complex layouts with rows and columns. It is based on the 12 column grid system and is used to create horizontal rows that contain a set of columns.
@@ -62,7 +67,7 @@ For detailed information about responsive breakpoints and how they work with the
 ### Default
 By default boxes with rows will be equal width if no size is specified.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
       <PdsRow>
@@ -104,7 +109,7 @@ By default boxes with rows will be equal width if no size is specified.
 ### Wrapping
 If the size values equal more than 12, the boxes will wrap to the next line.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
       <PdsRow colGap="sm">
@@ -164,7 +169,7 @@ Available sizes: `none`, `xxs`, `xs`, `sm`, `md`, `lg`, `xl`, `xxl`
 
 #### Basic Gap Usage
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
       <PdsRow colGap="md">
@@ -210,7 +215,7 @@ Available sizes: `none`, `xxs`, `xs`, `sm`, `md`, `lg`, `xl`, `xxl`
 
 For more precise control, use `col-gap-inline` for horizontal spacing and `col-gap-block` for vertical spacing:
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
       <PdsRow colGapInline="lg" colGapBlock="xs">
@@ -272,7 +277,7 @@ For more precise control, use `col-gap-inline` for horizontal spacing and `col-g
 
 #### Gap Size Comparison
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
       <PdsBox direction="column" fit="true">
@@ -392,3 +397,9 @@ Best practice: Use sparingly, only when you need to prevent wrapping
 
 ### Layout Properties
 `pds-row` creates the horizontal rows that are used to contain a set of columns and can be view on the [Layouts](/docs/components-layout--docs) page.
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

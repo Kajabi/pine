@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-radio.stories.js';
+
 import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Radio
 
@@ -31,7 +36,7 @@ Radio components allow users to select one option from a group of two or more ch
 
 ### Default
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `<PdsRadio componentId="default" label="Label" />`,
   webComponent: `<pds-radio component-id="default" label="Label"></pds-radio>`
 }}>
@@ -42,7 +47,7 @@ Radio components allow users to select one option from a group of two or more ch
 
 Radios appear as checked when activated.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `<PdsRadio componentId="checked" label="Label" checked={true} />`,
   webComponent: `<pds-radio component-id="checked" label="Label" checked></pds-radio>`
 }}>
@@ -53,7 +58,7 @@ Radios appear as checked when activated.
 
 Disabled radios visually indicate and functionally prevent user interaction.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `<PdsRadio componentId="disabled" label="Label" disabled={true} />`,
   webComponent: `<pds-radio component-id="disabled" label="Label" disabled></pds-radio>`
 }}>
@@ -64,7 +69,7 @@ Disabled radios visually indicate and functionally prevent user interaction.
 
 Displays helper text below the label to provide additional context.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `<PdsRadio componentId="message1" label="Label" helperMessage="This is short message text." />`,
   webComponent: `<pds-radio component-id="message1" label="Label" helper-message="This is short message text."></pds-radio>`
 }}>
@@ -77,7 +82,7 @@ Displays the radio in an invalid state, such as when a required selection is mis
 
 An optional error message can provide further instructions, displayed independently of the helper message.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `<PdsRadio componentId="invalid" label="Label" invalid errorMessage="This is a short error message" />`,
   webComponent: `<pds-radio component-id="invalid" label="Label" invalid error-message="This is a short error message"></pds-radio>`
 }}>
@@ -88,7 +93,7 @@ An optional error message can provide further instructions, displayed independen
 
 Add a border around the radio component for better visual separation, useful for card-like layouts or when radios need more visual emphasis.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `<PdsRadio componentId="border" label="Label" hasBorder={true} helperMessage="This radio has enhanced visual separation" />`,
   webComponent: `<pds-radio component-id="border" label="Label" has-border helper-message="This radio has enhanced visual separation"></pds-radio>`
 }}>
@@ -101,7 +106,7 @@ A radio group is created by assigning the same `name` attribute to each radio.
 
 Only one radio in the group can be selected at a time.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `<div>
   <PdsRadio componentId="default1" label="Label" name="radio" checked={true} />
   <PdsRadio componentId="default2" label="Label" name="radio" />
@@ -125,7 +130,7 @@ Only one radio in the group can be selected at a time.
 
 Radio groups can also use borders for enhanced visual organization, particularly useful in forms or selection interfaces.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `<PdsBox gap="sm">
   <PdsRadio componentId="bordered1" label="Option 1" name="bordered-radio" checked={true} hasBorder={true} />
   <PdsRadio componentId="bordered2" label="Option 2" name="bordered-radio" hasBorder={true} />
@@ -151,7 +156,7 @@ Radio buttons can display custom images instead of the default radio input in a 
 
 **Note:** Images must be provided via the `image` slot.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `<PdsRadio
   componentId="image-radio"
   label="Profile Picture"
@@ -183,7 +188,7 @@ Radio buttons can display custom images instead of the default radio input in a 
 
 Image-based radios work seamlessly in groups with the same bordered card layout, showing visual selection feedback with border highlights and checkmark overlays.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `<PdsBox gap="sm">
   <PdsRadio
     componentId="avatar1"
@@ -298,3 +303,9 @@ Image-based radios work seamlessly in groups with the same bordered card layout,
 ## Additional Resources
 
 [MDN Web Docs: Radio](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio)
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

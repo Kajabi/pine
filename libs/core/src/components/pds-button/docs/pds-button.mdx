@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-button.stories.js';
+
 import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Button
 
@@ -57,7 +62,7 @@ The `start` and `end` slots allow icons to be placed before and after the button
 
 The default button, intended to be used with affirmative actions such as submitting, continuing, and saving.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <PdsButton>Primary</PdsButton>
@@ -79,7 +84,7 @@ The default button, intended to be used with affirmative actions such as submitt
 
 Secondary button variant, intended to be used as back buttons, for saving drafts, or cancelling actions.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <PdsButton variant="secondary">Secondary</PdsButton>
@@ -101,7 +106,7 @@ Secondary button variant, intended to be used as back buttons, for saving drafts
 
 Tertiary button variant, intended to be used for low-emphasis actions or when a subtler button style is needed.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <PdsButton variant="tertiary">Tertiary</PdsButton>
@@ -123,7 +128,7 @@ Tertiary button variant, intended to be used for low-emphasis actions or when a 
 
 Accent button variant, intended to be used for special emphasis or when higher contrast is needed.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <PdsButton variant="accent">Accent</PdsButton>
@@ -145,7 +150,7 @@ Accent button variant, intended to be used for special emphasis or when higher c
 
 Destructive button variant, intended to be used with destructive actions, such as deleting an item or removing a contact.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <PdsButton variant="destructive">Destructive</PdsButton>
@@ -169,7 +174,7 @@ Disclosure button variant, intended to be used as a trigger to show or hide cont
 
 > **Note:** Icon cannot be customized.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <PdsButton variant="disclosure">Disclosure</PdsButton>
@@ -192,7 +197,7 @@ Filter button variant, intended to be used for filter options in menus and inter
 
 > **Note:** Icon cannot be customized.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <PdsButton variant="filter">Filter option</PdsButton>
@@ -211,7 +216,7 @@ Filter button variant, intended to be used for filter options in menus and inter
 
 Full width buttons are intended to be used when the button needs to take up the full width of its container.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <PdsButton variant="primary" fullWidth="true">Full Width</PdsButton>
@@ -227,7 +232,7 @@ Full width buttons are intended to be used when the button needs to take up the 
 
 The loading prop allows a `pds-button` to display a loading state.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <PdsButton variant="primary" loading="true">Loading</PdsButton>
@@ -243,7 +248,7 @@ The loading prop allows a `pds-button` to display a loading state.
 
 The loader color can be customized using CSS parts.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <style>{\`
@@ -293,7 +298,7 @@ While the text is visually hidden, it is still remains accessible.
 
 > ***Note:*** An icon is required to be provided.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <PdsButton variant="primary" iconOnly="true"><PdsIcon slot="start" aria-hidden="true" name="favorite"></PdsIcon>Icon Only
@@ -328,7 +333,7 @@ Buttons come in three sizes: default, small, and micro. The size prop allows you
 - **Small**: Smaller button size
 - **Micro**: Smallest button size with reduced font size
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <PdsButton variant="primary">Default</PdsButton>
@@ -350,7 +355,7 @@ Buttons come in three sizes: default, small, and micro. The size prop allows you
 
 Sizes also apply to icon-only buttons, adjusting the button dimensions accordingly.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <PdsButton variant="primary" iconOnly="true"><PdsIcon slot="start" aria-hidden="true" name="favorite"></PdsIcon>Default</PdsButton>
@@ -374,7 +379,7 @@ The button link variant allows a `pds-button` to function as a link. By providin
 
 > ***Note:*** When using the `href` attribute, button-specific props such as `type`, `name`, and `value` will be ignored. The component will maintain the same visual appearance but function as a link.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <PdsButton variant="primary" href="#">Create a product</PdsButton>
@@ -412,3 +417,9 @@ The button resets all the controls to their initial values. [As noted on MDN](ht
 [CSS Tricks: Buttons vs. Links](https://css-tricks.com/buttons-vs-links/)
 
 [MDN: Button Element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button)
+
+## Playground
+
+<Canvas of={stories.Primary} />
+
+<Controls of={stories.Primary} />
