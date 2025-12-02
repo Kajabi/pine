@@ -29,7 +29,11 @@ export const config: Config = {
     },
     {
       type: 'docs-json',
-      file: './dist/docs.json', // Used to extract documentation data for Storybook
+      file: './custom-elements.json', // Used for Storybook 10 web-components integration
+    },
+    {
+      type: 'docs-json',
+      file: './dist/docs.json', // Used by custom @pine-ds/doc-components in component MDX files
     },
     {
       type: 'docs-readme',
