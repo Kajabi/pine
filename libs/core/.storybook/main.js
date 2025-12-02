@@ -30,6 +30,14 @@ const config = {
   async viteFinal(config) {
     config.plugins = config.plugins || [];
 
+    const currentDir = dirname(fileURLToPath(import.meta.url));
+    config.resolve = config.resolve || {};
+    config.resolve.alias = config.resolve.alias || {};
+
+    // Resolve @pine-ds/doc-components to source files (no pre-build needed)
+    config.resolve.alias['@pine-ds/doc-components'] = join(currentDir, '../../doc-components/src');
+
+
     // Add React plugin to support React components in MDX (for @pine-ds/doc-components)
     config.plugins.push(react({
       include: /\.(mdx|js|jsx|ts|tsx)$/,
@@ -73,6 +81,10 @@ const config = {
     // Exclude MDX files from optimization to prevent issues
     config.optimizeDeps.exclude = config.optimizeDeps.exclude || [];
     config.optimizeDeps.exclude.push('@mdx-js/react');
+
+    // Dedupe lit to avoid "Multiple versions of Lit loaded" warning
+    config.resolve.dedupe = config.resolve.dedupe || [];
+    config.resolve.dedupe.push('lit', 'lit-html', 'lit-element', '@lit/reactive-element');
 
     return config;
   }

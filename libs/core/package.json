@@ -62,6 +62,7 @@
     "lint.eslint": "eslint src",
     "lint.styles": "stylelint \"./src/**/*.*css\"",
     "prettier": "prettier \"./src/**/*.{html,ts,tsx,js,jsx}\"",
+    "prestart": "npm run build",
     "start": "run-p start.*",
     "start.stencil": "stencil build --docs --dev --watch --serve --config=stencil.local.config.ts",
     "start.storybook": "storybook dev -p 6006",

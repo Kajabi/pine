@@ -1,6 +1,8 @@
-import { defineCustomElements } from '../loader';
 import { setCustomElementsManifest } from '@storybook/web-components';
 import stencilDocs from '../dist/docs.json';
+
+// Import defineCustomElements from loader (prestart runs build first to generate polyfills)
+import { defineCustomElements } from '../loader';
 
 // Register Stencil custom elements
 defineCustomElements();
