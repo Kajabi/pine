@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react';
 const config = {
   stories: [
     "../src/**/docs/*.mdx",
+    "../src/stories/**/*.docs.mdx",
     "../src/**/*.stories.@(js|jsx|ts|tsx)"
   ],
 
