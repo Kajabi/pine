@@ -23,7 +23,7 @@ interface DocCanvasProps {
   mdxSource: SourceType
 }
 
-const docCanvas: React.FC<DocCanvasProps> = ({
+const DocCanvas: React.FC<DocCanvasProps> = ({
   // activeTab = 'react',
   children,
   display,
@@ -65,16 +65,21 @@ const docCanvas: React.FC<DocCanvasProps> = ({
   }
 
   const renderSource = () => {
+    if (!mdxSource) return null;
+
     return (
       <SyntaxHighlighter language="jsx" style={prism}>
-        {mdxSource?.[activeTab]}
+        {mdxSource[activeTab]}
       </SyntaxHighlighter>
     )
   }
 
   const createViewCodeButtons = () => {
+    if (!mdxSource) return null;
+
     const buttons = Object.keys(mdxSource).map((key) => (
       <button
+        key={key}
         className={`
         doc-canvas-action
           ${isMenuVisible && activeTab === key ? 'doc-canvas-action--active' : ''}
@@ -132,4 +137,4 @@ const docCanvas: React.FC<DocCanvasProps> = ({
   )
 }
 
-export default docCanvas;
+export default DocCanvas;
