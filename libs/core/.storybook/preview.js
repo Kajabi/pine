@@ -1,4 +1,6 @@
 import { setCustomElementsManifest } from '@storybook/web-components';
+import { useEffect } from 'storybook/preview-api';
+import { action } from 'storybook/actions';
 import stencilDocs from '../dist/docs.json';
 
 // Import defineCustomElements from loader (prestart runs build first to generate polyfills)
@@ -6,6 +8,44 @@ import { defineCustomElements } from '../loader';
 
 // Register Stencil custom elements
 defineCustomElements();
+
+// Get all custom event names from Stencil docs
+const allEventNames = stencilDocs.components
+  .flatMap(component => component.events?.map(event => event.event) || [])
+  .filter(Boolean);
+
+// Decorator to capture custom events and log them to the Actions panel
+const withCustomEventActions = (StoryFn, context) => {
+  useEffect(() => {
+    // Use document to capture bubbling events
+    const handlers = {};
+
+    // Create handlers for each event
+    allEventNames.forEach(eventName => {
+      handlers[eventName] = (event) => {
+        // Log event with more details
+        action(eventName)({
+          detail: event.detail,
+          target: event.target?.tagName?.toLowerCase(),
+          type: event.type,
+          timeStamp: event.timeStamp,
+          bubbles: event.bubbles,
+          composed: event.composed,
+        });
+      };
+      document.addEventListener(eventName, handlers[eventName]);
+    });
+
+    // Cleanup
+    return () => {
+      allEventNames.forEach(eventName => {
+        document.removeEventListener(eventName, handlers[eventName]);
+      });
+    };
+  }, [context.id]);
+
+  return StoryFn();
+};
 
 // Transform Stencil's docs-json to Custom Elements Manifest format
 // This enables automatic argTypes extraction for controls
@@ -62,8 +102,9 @@ const customElementsManifest = {
 setCustomElementsManifest(customElementsManifest);
 
 const preview = {
+  decorators: [withCustomEventActions],
+
   parameters: {
-    actions: { argTypesRegex: '^on.*' },
     options: {
       storySort: {
         method: 'alphabetical',
