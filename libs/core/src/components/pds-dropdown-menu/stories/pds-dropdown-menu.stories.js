@@ -5,11 +5,7 @@ export default {
 
   component: 'pds-dropdown-menu',
   title: 'components/Dropdown Menu',
-  parameters: {
-    actions: {
-      handles: ['pdsClick'],
-    }
-  }
+  parameters: {}
 }
 
 const BaseTemplate = (args) => html`

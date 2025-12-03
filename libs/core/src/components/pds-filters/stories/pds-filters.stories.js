@@ -4,11 +4,7 @@ import { html } from 'lit';
 export default {
 
   component: 'pds-filters',
-  parameters: {
-    actions: {
-      handles: ['pdsFilterOpen', 'pdsFilterClose', 'pdsFilterClear'],
-    },
-  },
+  parameters: {},
   title: 'components/Filters',
 };
 

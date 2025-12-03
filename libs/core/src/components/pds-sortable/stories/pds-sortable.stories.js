@@ -4,11 +4,7 @@ import { html } from 'lit-html';
 export default {
 
   component: 'pds-sortable',
-  parameters: {
-    actions: {
-      handles: ['onchange', 'pdsSortableItemMoved'],
-    },
-  },
+  parameters: {},
   title: 'components/Sortable',
 };
 

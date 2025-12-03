@@ -4,11 +4,7 @@ import { html } from 'lit';
 export default {
 
   component: 'pds-chip',
-  parameters: {
-    actions: {
-      handles: ['pdsTagCloseClick'],
-    },
-  },
+  parameters: {},
   title: 'components/Chip'
 }
 

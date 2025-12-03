@@ -15,11 +15,7 @@ export default {
     value: null,
   },
   component: 'pds-select',
-  parameters: {
-    actions: {
-      handles: ['onchange', 'pdsSelectChange'],
-    },
-  },
+  parameters: {},
   title: 'components/Select',
 };
 

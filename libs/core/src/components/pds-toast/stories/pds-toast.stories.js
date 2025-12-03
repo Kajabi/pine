@@ -5,13 +5,7 @@ export default {
 
   component: 'pds-toast',
   title: 'components/Toast',
-  parameters: {
-    actions: {
-      handles: [
-        'pdsToastDismissed'
-      ],
-    },
-  },
+  parameters: {},
 }
 
 const BaseTemplate = (args) => html`

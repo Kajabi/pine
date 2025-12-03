@@ -4,11 +4,7 @@ import { html } from 'lit';
 export default {
 
   component: 'pds-tabs',
-  parameters: {
-    actions: {
-      handles: ['pdsTabClick']
-    },
-  },
+  parameters: {},
   title: 'components/Tabs',
 };
 

@@ -4,11 +4,7 @@ import { html } from 'lit';
 export default {
 
   component: 'pds-alert',
-  parameters: {
-    actions: {
-      handles: ['onclick', 'pdsAlertDismissClick'],
-    },
-  },
+  parameters: {},
   title: 'components/Alert',
 };
 

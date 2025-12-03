@@ -4,11 +4,7 @@ import { html } from 'lit';
 export default {
 
   component: 'pds-copytext',
-  parameters: {
-    actions: {
-      handles: ['onclick', 'pdsCopyTextClick'],
-    },
-  },
+  parameters: {},
   title: 'components/Copy Text',
 }
 

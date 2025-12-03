@@ -23,16 +23,7 @@ export default {
     value: null,
   },
   component: 'pds-textarea',
-  parameters: {
-    actions: {
-      handles: [
-        'onblur', 'pdsBlur',
-        'onchange', 'pdsTextareaChange',
-        'onfocus', 'pdsFocus',
-        'oninput', 'pdsInput',
-      ],
-    },
-  },
+  parameters: {},
   title: 'components/Textarea',
 }
 

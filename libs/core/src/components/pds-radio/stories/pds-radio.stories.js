@@ -12,11 +12,7 @@ export default {
     required: false,
   },
   component: 'pds-radio',
-  parameters: {
-    actions: {
-      handles: ['onchange', 'pdsRadioChange'],
-    },
-  },
+  parameters: {},
   title: 'components/Radio',
 }
 

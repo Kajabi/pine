@@ -14,6 +14,9 @@ const allEventNames = stencilDocs.components
   .flatMap(component => component.events?.map(event => event.event) || [])
   .filter(Boolean);
 
+// Track processed events to prevent duplicates
+const processedEvents = new Set();
+
 // Decorator to capture custom events and log them to the Actions panel
 const withCustomEventActions = (StoryFn, context) => {
   useEffect(() => {
@@ -23,14 +26,23 @@ const withCustomEventActions = (StoryFn, context) => {
     // Create handlers for each event
     allEventNames.forEach(eventName => {
       handlers[eventName] = (event) => {
-        // Log event with more details
+        // Create unique key for this event instance
+        const eventKey = `${eventName}-${event.timeStamp}`;
+
+        // Skip if we've already processed this exact event
+        if (processedEvents.has(eventKey)) return;
+        processedEvents.add(eventKey);
+
+        // Clean up old entries (keep set small)
+        if (processedEvents.size > 100) {
+          const entries = Array.from(processedEvents);
+          entries.slice(0, 50).forEach(e => processedEvents.delete(e));
+        }
+
+        // Log event with details
         action(eventName)({
           detail: event.detail,
           target: event.target?.tagName?.toLowerCase(),
-          type: event.type,
-          timeStamp: event.timeStamp,
-          bubbles: event.bubbles,
-          composed: event.composed,
         });
       };
       document.addEventListener(eventName, handlers[eventName]);

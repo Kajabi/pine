@@ -10,11 +10,7 @@ export default {
     required: false,
   },
   component: 'pds-checkbox',
-  parameters: {
-    actions: {
-      handles: ['onchange', 'pdsCheckboxChange'],
-    },
-  },
+  parameters: {},
   title: 'components/Checkbox',
 }
 

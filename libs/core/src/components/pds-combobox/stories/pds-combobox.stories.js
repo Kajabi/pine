@@ -23,11 +23,6 @@ export default {
   component: 'pds-combobox',
   title: 'components/Combobox',
   parameters: {
-    actions: {
-      handles: [
-        'onpdscomboboxchange', 'pdsComboboxChange',
-      ],
-    },
     layout: 'centered',
   },
 };

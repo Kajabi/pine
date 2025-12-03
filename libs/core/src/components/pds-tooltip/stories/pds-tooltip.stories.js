@@ -4,11 +4,7 @@ import { html } from 'lit';
 export default {
 
   component: 'pds-tooltip',
-  parameters: {
-    actions: {
-      handles: [],
-    },
-  },
+  parameters: {},
   title: 'components/Tooltip'
 }
 

@@ -12,11 +12,7 @@ export default {
     scrollable: true,
     size: 'md',
   },
-  parameters: {
-    actions: {
-      handles: ['pdsModalOpen', 'pdsModalClose'],
-    }
-  }
+  parameters: {}
 }
 
 const BaseTemplate = (args) => html`

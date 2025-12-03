@@ -10,11 +10,7 @@ export default {
 		componentId: 'popover-playground',
 	},
 	component: 'pds-popover',
-	parameters: {
-		actions: {
-			handles: ['pdsPopoverOpen', 'pdsPopoverClose'],
-		},
-	},
+	parameters: {},
 	title: 'components/Popover'
 }
 

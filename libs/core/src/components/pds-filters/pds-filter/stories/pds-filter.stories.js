@@ -12,11 +12,7 @@ export default {
     },
   },
   component: 'pds-filter',
-  parameters: {
-    actions: {
-      handles: ['pdsFilterOpen', 'pdsFilterClose', 'pdsFilterClear'],
-    },
-  },
+  parameters: {},
   title: 'components/Filters/Filter',
 };
 

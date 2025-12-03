@@ -4,11 +4,7 @@ import { html } from 'lit-html';
 export default {
 
   component: 'pds-table-row',
-  parameters: {
-    actions: {
-      handles: ['onclick', 'pdsTableRowSelected'],
-    },
-  },
+  parameters: {},
   title: 'components/Table/Rows',
 };
 

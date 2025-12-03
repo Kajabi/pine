@@ -23,9 +23,6 @@ export default {
   title: 'components/Button',
 
   parameters: {
-    actions: {
-      handles: ['pdsClick'],
-    },
     controls: {
       exclude: ['icon']
     }

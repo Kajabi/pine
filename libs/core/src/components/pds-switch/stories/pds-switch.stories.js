@@ -9,11 +9,7 @@ export default {
     required: false,
   },
   component: 'pds-switch',
-  parameters: {
-    actions: {
-      handles: ['onchange', 'pdsSwitchChange'],
-    },
-  },
+  parameters: {},
   title: 'components/Switch',
 }
 

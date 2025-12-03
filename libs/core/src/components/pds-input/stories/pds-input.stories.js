@@ -26,15 +26,7 @@ export default {
     type: 'text'
   },
   component: 'pds-input',
-  parameters: {
-    actions: {
-      handles: [
-        'oninput', 'pdsInput',
-        'onchange', 'pdsChange',
-        'onblur', 'pdsBlur',
-        'onFocus', 'pdsFocus'],
-    },
-  },
+  parameters: {},
   title: 'components/Input',
 }
 
