@@ -3,3 +3,22 @@
 <script nomodule src="/pine-core/index.esm.js"></script>
 
 <link rel="stylesheet" href="/pine-core/pine-core.css" />
+
+
+<style>
+body {
+    background-color: var(--pine-color-background-app);
+  }
+
+  .sb-unstyled {
+    background-color: var(--pine-color-background-app);
+  }
+
+  /* Dark mode token overrides - tokens inherit through Shadow DOM */
+  [data-theme="dark"] {
+    /* Background colors */
+
+    /* Primary button colors */
+    --pine-color-primary-hover: var(--pine-color-white);
+  }
+</style>
