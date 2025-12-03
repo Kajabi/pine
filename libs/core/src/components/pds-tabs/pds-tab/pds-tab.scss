@@ -86,11 +86,13 @@ pds-tab {
   .pds-tab {
     background-color: var(--color-background-tab);
     border-radius: calc(var(--pine-dimension-xs) * 1.25) calc(var(--pine-dimension-xs) * 1.25) var(--pine-dimension-none) var(--pine-dimension-none);
+    color: var(--pine-color-grey-800);
     padding: 8px 16px 13px;
 
     &.is-active,
     &[aria-selected='true'] {
       --color-background-tab: var(--pine-color-secondary);
+      color: var(--pine-color-text);
 
       .pds-tab__content::after {
         opacity: 1;
@@ -103,6 +105,7 @@ pds-tab {
 
     &:hover:not(.is-active, [aria-selected='true']) {
       --color-background-tab: var(--pine-color-secondary-hover);
+      color: var(--pine-color-text);
     }
 
     &:focus-visible {
@@ -201,7 +204,7 @@ pds-tab {
 
     &.is-active,
     &[aria-selected='true'] {
-      --color-background-tab: var(--pine-color-white);
+      --color-background-tab: var(--pine-color-background-container);
       border-color: var(--pine-color-border);
       box-shadow: var(--pine-box-shadow-100);
       color: var(--pine-color-text-active);
