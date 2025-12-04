@@ -120,10 +120,10 @@ describe('pds-radio-group', () => {
     expect(await helperMessage.textContent).toBe('This is a helper message');
   });
 
-  it('displays group label when label is set', async () => {
+  it('displays group label when group-label is set', async () => {
     const page = await newE2EPage();
     await page.setContent(`
-      <pds-radio-group name="test-group" label="Comments">
+      <pds-radio-group name="test-group" group-label="Comments">
         <pds-radio component-id="radio1" label="Option 1" value="1"></pds-radio>
       </pds-radio-group>
     `);

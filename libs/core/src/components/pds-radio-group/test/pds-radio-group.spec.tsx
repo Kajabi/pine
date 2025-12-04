@@ -126,10 +126,10 @@ describe('pds-radio-group', () => {
     });
   });
 
-  it('renders group label when label prop is set', async () => {
+  it('renders group label when group-label prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsRadioGroup],
-      html: `<pds-radio-group label="Comments"></pds-radio-group>`,
+      html: `<pds-radio-group group-label="Comments"></pds-radio-group>`,
     });
 
     const label = page.root?.querySelector('.pds-radio-group__label');
