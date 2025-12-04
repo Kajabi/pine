@@ -179,6 +179,7 @@ label:has(input:disabled) {
 
 .pds-radio__message {
   color: var(--pine-color-text-message);
+  flex-basis: 100%; // Ensure message wraps to new line in flex container
   font: var(--pine-typography-body);
   margin-inline-start: var(--pine-dimension-md);
   width: 100%;

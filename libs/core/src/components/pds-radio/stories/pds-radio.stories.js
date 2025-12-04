@@ -13,7 +13,7 @@ export default {
   },
   component: 'pds-radio',
   parameters: {},
-  title: 'components/Radio',
+  title: 'components/Radio Group/Radio',
 }
 
 const BaseTemplate = (args) =>
