@@ -1,10 +1,9 @@
 import { html } from 'lit';
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
-import { withActions } from '@storybook/addon-actions/decorator';
+
 
 export default {
+
   argTypes: {
-    ...extractArgTypes('pds-filter'),
     variant: {
       control: {
         type: 'select',
@@ -13,12 +12,7 @@ export default {
     },
   },
   component: 'pds-filter',
-  decorators: [withActions],
-  parameters: {
-    actions: {
-      handles: ['pdsFilterOpen', 'pdsFilterClose', 'pdsFilterClear'],
-    },
-  },
+  parameters: {},
   title: 'components/Filters/Filter',
 };
 

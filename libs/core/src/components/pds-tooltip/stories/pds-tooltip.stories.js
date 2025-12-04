@@ -1,16 +1,10 @@
 import { html } from 'lit';
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
-import { withActions } from '@storybook/addon-actions/decorator';
+
 
 export default {
-  argTypes: extractArgTypes('pds-tooltip'),
+
   component: 'pds-tooltip',
-  decorators: [withActions],
-  parameters: {
-    actions: {
-      handles: [],
-    },
-  },
+  parameters: {},
   title: 'components/Tooltip'
 }
 

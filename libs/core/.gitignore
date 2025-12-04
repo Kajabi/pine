@@ -3,6 +3,8 @@ hydrate/
 www/
 loader/
 /components/
+custom-elements.json
+custom-elements.d.ts
 
 scripts/**/*.js
 

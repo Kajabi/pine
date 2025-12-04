@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-combobox.stories.js';
+
 import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Combobox
 
@@ -65,7 +70,7 @@ Use the `triggerVariant` prop to control the style.
 ### Secondary (default)
 The secondary variant provides a subtle button appearance with a white background and border. This is the default styling for button triggers.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     webComponent: `<pds-combobox component-id="combobox-trigger-secondary" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only">
   <option value="cat">Cat</option>
@@ -92,7 +97,7 @@ The secondary variant provides a subtle button appearance with a white backgroun
 ### Primary
 The primary variant uses Pine's primary color scheme, creating a more prominent button appearance suitable for primary actions.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     webComponent: `<pds-combobox component-id="combobox-trigger-primary" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="primary" mode="select-only">
   <option value="cat">Cat</option>
@@ -119,7 +124,7 @@ The primary variant uses Pine's primary color scheme, creating a more prominent 
 ### Accent
 The accent variant uses Pine's accent color scheme, providing a distinctive appearance for special or highlighted selections.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     webComponent: `<pds-combobox component-id="combobox-trigger-accent" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="accent" mode="select-only">
   <option value="cat">Cat</option>
@@ -146,7 +151,7 @@ The accent variant uses Pine's accent color scheme, providing a distinctive appe
 ### Destructive
 The destructive variant uses Pine's destructive color scheme, providing a warning appearance suitable for destructive or dangerous actions like deleting items.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     webComponent: `<pds-combobox component-id="combobox-trigger-destructive" label="Delete Item" placeholder="Select item to delete" trigger="button" trigger-variant="destructive" mode="select-only">
   <option value="file1">Document.pdf</option>
@@ -173,7 +178,7 @@ The destructive variant uses Pine's destructive color scheme, providing a warnin
 ### Filtering (default)
 In filtering mode, the combobox filters the available options as you type, making it easy to find specific items in large lists. This is the default behavior.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     webComponent: `<pds-combobox component-id="combobox-filter" label="Favorite Animal" placeholder="Type to search...">
   <option value="cat">Cat</option>
@@ -200,7 +205,7 @@ In filtering mode, the combobox filters the available options as you type, makin
 ### Select-only
 In select-only mode, all options are always shown regardless of what you type. This is useful when you want dropdown behavior without filtering.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     webComponent: `<pds-combobox component-id="combobox-selectonly" label="Favorite Animal" placeholder="Type to search..." mode="select-only">
   <option value="cat">Cat</option>
@@ -227,7 +232,7 @@ In select-only mode, all options are always shown regardless of what you type. T
 ### Input Trigger (default)
 The input trigger provides a text input field that users can type into. This is ideal for filtering and autocomplete scenarios where users need to search through options.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     webComponent: `<pds-combobox component-id="combobox-trigger-input" label="Favorite Animal" placeholder="Type to search..." trigger="input">
   <option value="cat">Cat</option>
@@ -254,7 +259,7 @@ The input trigger provides a text input field that users can type into. This is 
 ### Button Trigger (select-only)
 The button trigger renders as a button-like element instead of a text input. This is perfect for select-only scenarios where users choose from a dropdown without typing.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     webComponent: `<pds-combobox component-id="combobox-trigger-button" label="Favorite Animal" placeholder="Select an animal" trigger="button" mode="select-only">
   <option value="cat">Cat</option>
@@ -281,7 +286,7 @@ The button trigger renders as a button-like element instead of a text input. Thi
 ### Chip Trigger (select-only)
 The chip trigger renders as a chip component instead of a text input or button. This provides a more compact, tag-like appearance perfect for select-only scenarios where you want the trigger to look like a chip.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     webComponent: `<pds-combobox component-id="chip-draft" label="Status" trigger="chip" mode="select-only" value="draft">
   <option value="draft" chip-sentiment="neutral" chip-dot="true">Draft</option>
@@ -305,7 +310,7 @@ The chip trigger renders as a chip component instead of a text input or button. 
 ### Chip with Icon
 Add an icon to the chip trigger for better visual context using the automatic approach:
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     webComponent: `<pds-combobox component-id="chip-icon-auto" label="Priority Level" trigger="chip" mode="select-only" value="high">
   <option value="low" chip-sentiment="info" chip-icon="info-circle">Low</option>
@@ -333,7 +338,7 @@ Add an icon to the chip trigger for better visual context using the automatic ap
 
 The combobox supports preselecting options using the `value` property on the combobox component. This approach is consistent with other form components and works well with frameworks like React.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     webComponent: `<pds-combobox component-id="combobox-preselected-value" label="Favorite Animal" placeholder="Select an animal" trigger="button" mode="select-only" value="panda">
   <option value="cat">Cat</option>
@@ -361,7 +366,7 @@ The combobox supports preselecting options using the `value` property on the com
 
 Preselection also works with input triggers, showing the selected option's text in the input field:
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     webComponent: `<pds-combobox component-id="combobox-preselected-input" label="Favorite Color" placeholder="Type to search..." mode="filter" trigger="input" value="blue">
   <option value="red">Red</option>
@@ -403,7 +408,7 @@ You can control the dropdown's placement, width, and height, as well as the trig
 ### Custom Placement
 You can control where the dropdown appears relative to the trigger element. This example shows the dropdown aligned to the right edge (`bottom-end`).
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     webComponent: `<pds-combobox component-id="combobox-placement-end" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only" dropdown-placement="bottom-end">
   <option value="cat">Cat</option>
@@ -430,7 +435,7 @@ You can control where the dropdown appears relative to the trigger element. This
 ### Custom Dropdown Width
 The dropdown width can be customized using any valid CSS width value. This example sets the dropdown to 300px wide.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     webComponent: `<pds-combobox component-id="combobox-width-custom" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only" dropdown-width="300px">
   <option value="cat">Cat</option>
@@ -457,7 +462,7 @@ The dropdown width can be customized using any valid CSS width value. This examp
 ### Custom Trigger Width
 The trigger width can be customized for both input and button triggers using any valid CSS width value. This example sets the button trigger to 300px wide.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     webComponent: `<pds-combobox component-id="combobox-trigger-width-custom" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only" trigger-width="300px">
   <option value="cat">Cat</option>
@@ -483,7 +488,7 @@ The trigger width can be customized for both input and button triggers using any
 
 The `triggerWidth` prop also works with input triggers. This example shows an input trigger set to 280px wide.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     webComponent: `<pds-combobox component-id="combobox-input-width-custom" label="Favorite Animal" placeholder="Type to search..." trigger="input" trigger-width="280px">
   <option value="cat">Cat</option>
@@ -510,7 +515,7 @@ The `triggerWidth` prop also works with input triggers. This example shows an in
 ### Custom Max Height
 When dealing with long lists of options, you can set a maximum height for the dropdown. This example limits the dropdown to 200px height - when there are more options than can fit, users can scroll through them.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     webComponent: `<pds-combobox component-id="combobox-max-height" label="Choose a Country" placeholder="Select a country" trigger="button" trigger-variant="secondary" mode="select-only" max-height="200px">
   <option value="us">United States</option>
@@ -571,7 +576,7 @@ When dealing with long lists of options, you can set a maximum height for the dr
 
 For cases where the combobox doesn't need a visible label (such as in compact layouts or when the context is clear), you can use the `hideLabel` prop. The label remains accessible to screen readers for accessibility.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     webComponent: `<pds-combobox component-id="combobox-hidden-label" label="Favorite Animal" placeholder="Select an animal" trigger="button" trigger-variant="secondary" mode="select-only" hide-label>
   <option value="cat">Cat</option>
@@ -606,7 +611,7 @@ The combobox supports custom layouts for both the button trigger and dropdown op
 
 For the most dynamic experience, combine both `customTriggerContent` and `customOptionLayouts`. The trigger will start with your custom slot content and then update to show the selected option's layout.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     webComponent: `<div style={{ width: '100%' }}>
     <pds-combobox
@@ -942,7 +947,7 @@ The combobox supports organizing options with group labels using either HTML `<o
 
 Use standard HTML `<optgroup>` elements to create semantic groupings:
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     webComponent: `<pds-combobox
   component-id="combobox-optgroup-example"
@@ -1023,7 +1028,7 @@ Alternatively, use `<pds-text>` components as group labels for more styling cont
 
 > **Note**: The `pds-text` element serves as a non-interactive group header. Users cannot select these labels - they only organize and categorize the selectable options below them.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     webComponent: `<pds-combobox
   component-id="combobox-pds-text-example"
@@ -1118,3 +1123,8 @@ Both `<optgroup>` and `<pds-text>` group labels are rendered as presentational i
 - `mode="select-only"` works closer to a `<select>`: typing is disabled for button/chip triggers, and only explicit option values can be submitted.
 - Update the `value` prop to control the selection from a parent component (React state, framework store, etc.). The component automatically syncs the input text/trigger label to match the selected option.
 
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

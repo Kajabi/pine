@@ -1,16 +1,10 @@
 import { html } from 'lit';
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
-import { withActions } from '@storybook/addon-actions/decorator';
+
 
 export default {
-  argTypes: extractArgTypes('pds-copytext'),
+
   component: 'pds-copytext',
-  decorators: [withActions],
-  parameters: {
-    actions: {
-      handles: ['onclick', 'pdsCopyTextClick'],
-    },
-  },
+  parameters: {},
   title: 'components/Copy Text',
 }
 

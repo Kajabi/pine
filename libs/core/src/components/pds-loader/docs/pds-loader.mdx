@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-loader.stories.js';
+
 import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Loader
 
@@ -38,7 +43,7 @@ Dynamic content on a page that does not require a page load is considered a live
 
 By default, the prop `is-loading` is true, which displays the loader. Setting it to false will hide the loader as needed.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsLoader isLoading="true" variant="spinner"></PdsLoader>',
     webComponent: '<pds-loader is-loading="true" variant="spinner"></pds-loader>'
@@ -50,7 +55,7 @@ By default, the prop `is-loading` is true, which displays the loader. Setting it
 
 The loader label is visually hidden by default, but still read by screenreaders. Set `showLabel` to `true` to make the label visible.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsLoader isLoading="true" showLabel="true" variant="spinner"></PdsLoader>',
     webComponent: '<pds-loader is-loading="true" show-label="true" variant="spinner"></pds-loader>'
@@ -64,7 +69,7 @@ The default loader's size can be changed to a either a preset value or a custom 
 
 #### Preset
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsLoader isLoading="true" size="xs" variant="spinner"></PdsLoader>',
     webComponent: '<pds-loader is-loading="true" size="xs" variant="spinner"></pds-loader>'
@@ -74,7 +79,7 @@ The default loader's size can be changed to a either a preset value or a custom 
 
 #### Custom
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsLoader isLoading="true" size="128px" variant="spinner"></PdsLoader>',
     webComponent: '<pds-loader is-loading="true" size="128px" variant="spinner"></pds-loader>'
@@ -87,7 +92,7 @@ The default loader's size can be changed to a either a preset value or a custom 
 
 Setting the `variant` prop to `typing` will display a typing loader. This loader is not affected by any changes to the `size` prop.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsLoader isLoading="true" variant="typing"></PdsLoader>',
     webComponent: '<pds-loader is-loading="true" variant="typing"></pds-loader>'
@@ -98,3 +103,9 @@ Setting the `variant` prop to `typing` will display a typing loader. This loader
 ## Additional Resources
 
 [MDN: Live Regions](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions)
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

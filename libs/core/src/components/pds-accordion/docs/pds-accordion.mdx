@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-accordion.stories.js';
+
 import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Accordion
 
@@ -38,7 +43,7 @@ Though similar, tabs and accordions both offer different user experiences. Consi
 
 With neither slot set, the accordion will render with a default trigger label and no panel content.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsAccordion></PdsAccordion>',
     webComponent: '<pds-accordion></pds-accordion>'
@@ -51,7 +56,7 @@ With neither slot set, the accordion will render with a default trigger label an
 
 When the slots are set, the accordion will render with the provided trigger label and panel content. HTML markup or Pine components can be used inside the panel slot.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
       <PdsAccordion>
@@ -91,3 +96,9 @@ When the slots are set, the accordion will render with the provided trigger labe
 [MDN: Details](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details)
 
 [MDN: Summary](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/summary)
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

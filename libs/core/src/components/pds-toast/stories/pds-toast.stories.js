@@ -1,19 +1,11 @@
 import { html } from 'lit';
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
-import { withActions } from '@storybook/addon-actions/decorator';
+
 
 export default {
-  argTypes: extractArgTypes('pds-toast'),
+
   component: 'pds-toast',
   title: 'components/Toast',
-  decorators: [withActions],
-  parameters: {
-    actions: {
-      handles: [
-        'pdsToastDismissed'
-      ],
-    },
-  },
+  parameters: {},
 }
 
 const BaseTemplate = (args) => html`

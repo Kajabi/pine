@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-alert.stories.js';
+
 import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Alert
 
@@ -42,7 +47,7 @@ The alert component supports multiple style variants to indicate different types
 
 ### Default
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<pdsAlert heading="Alert heading text" variant="default">
   Alerts can also have description text that can be used to provide more information about the alert.
@@ -60,7 +65,7 @@ Small alerts are used to display a message in a compact form.
 
 Text in small alerts is truncated when it becomes too long for the alert description to fit the screen.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<pdsAlert heading="Alert heading text" small="true" variant="info">
   Small alerts use the description to provide more information about the alert, but are truncated when the text becomes too long for the alert to fit the screen.
@@ -82,7 +87,7 @@ Action items such as buttons and links should be added to alerts using the `acti
 > - The `actions` slot uses a flex layout automatically, so the actions will be spaced and aligned properly.
 > - When using the small variant, only links should be used in the actions slot due to the compact inline layout.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<pdsAlert heading="Alert heading text" variant="success">
   Alerts can also have description text that can be used to provide more information about the alert.
@@ -102,7 +107,7 @@ Action items such as buttons and links should be added to alerts using the `acti
 
 When using the small variant, actions are displayed on the same line as the description.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<pdsAlert heading="Alert heading text" small="true" variant="warning">
   Alerts can also have description text that can be used to provide more information about the alert.
@@ -125,7 +130,7 @@ Alerts can be set to be dismissible using the `dismissible` property. This will 
 
 An event `pdsAlertDismissClick` is emitted when the dismiss button is clicked, which can be used to hide the alert.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<pdsAlert dismissible="true" heading="Alert heading text" variant="danger">
   Alerts can also have description text that can be used to provide more information about the alert.
@@ -139,7 +144,7 @@ An event `pdsAlertDismissClick` is emitted when the dismiss button is clicked, w
 
 ### Small dismissible
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<pdsAlert dismissible="true" heading="Alert heading text" small="true" variant="danger">
   Small alerts use the description to provide more information about the alert, but are truncated when the text becomes too long for the alert to fit the screen.
@@ -150,3 +155,9 @@ An event `pdsAlertDismissClick` is emitted when the dismiss button is clicked, w
 }}>
   <pds-alert dismissible="true" heading="Alert heading text" small="true" variant="danger">Small alerts use the description to provide more information about the alert, but are truncated when the text becomes too long for the alert to fit the screen.</pds-alert>
 </DocCanvas>
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

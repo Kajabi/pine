@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-sortable.stories.js';
+
 import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components'
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Sortable
 
@@ -32,7 +37,7 @@ The `pds-sortable-item` sub-component are the items that can be sorted within a 
 
 ### Default
 
-<DocCanvas display="block" client:only mdxSource={{
+<DocCanvas display="block" mdxSource={{
   react: `<PdsSortable componentId="default">
   <PdsSortableItem>Item 1</PdsSortableItem>
   <PdsSortableItem>Item 2</PdsSortableItem>
@@ -56,7 +61,7 @@ The `pds-sortable-item` sub-component are the items that can be sorted within a 
 
 When `border` is set to `true`, the component will render a border around all items.
 
-<DocCanvas display="block" client:only mdxSource={{
+<DocCanvas display="block" mdxSource={{
   react:`<PdsSortable border componentId="bordered">
   <PdsSortableItem>Item 1</PdsSortableItem>
   <PdsSortableItem>Item 2</PdsSortableItem>
@@ -80,7 +85,7 @@ When `border` is set to `true`, the component will render a border around all it
 
 When `dividers` is set to `true`, a border will display between items.
 
-<DocCanvas display="block" client:only mdxSource={{
+<DocCanvas display="block" mdxSource={{
   react: `<PdsSortable dividers>
   <PdsSortableItem>Item 1</PdsSortableItem>
   <PdsSortableItem>Item 2</PdsSortableItem>
@@ -104,7 +109,7 @@ When `dividers` is set to `true`, a border will display between items.
 
 When `show-handle` is set to `true` on a `pds-sortable-item`, a handle icon will be displayed within an item.
 
-<DocCanvas display="block" client:only mdxSource={{
+<DocCanvas display="block" mdxSource={{
   react: `<PdsSortable componentId="handle" handleType="row">
   <PdsSortableItem showHandle={true}>Item 1</PdsSortableItem>
   <PdsSortableItem showHandle={true}>Item 2</PdsSortableItem>
@@ -128,7 +133,7 @@ When `show-handle` is set to `true` on a `pds-sortable-item`, a handle icon will
 
 By default the full `row` is active for dragging/sorting. However, `handle-type` can be set to `handle` in order to allow only the handle to be used. This will also render a handle icon within the sortable items automatically.
 
-<DocCanvas display="block" client:only mdxSource={{
+<DocCanvas display="block" mdxSource={{
   react: `<PdsSortable componentId="handle-only" handleType="handle">
   <PdsSortableItem>Item 1</PdsSortableItem>
   <PdsSortableItem>Item 2</PdsSortableItem>
@@ -153,7 +158,7 @@ The `enable-actions` property in the `pds-sortable-item` component determines wh
 
 The `sortable-item-actions` slot is provided to place content within the `pds-sortable-item__actions` element as children, but this slot is only rendered if the `enable-actions` property is set to `true`.
 
-<DocCanvas display="block" client:only mdxSource={{
+<DocCanvas display="block" mdxSource={{
   react: `<PdsSortable componentId="actions">
   <PdsSortableItem enableActions={true}>
     <div>Item 1</div>
@@ -222,7 +227,7 @@ The `sortable-item-actions` slot is provided to place content within the `pds-so
 
 The following is a demo of how all the properties and slots can be used together to create a sortable list.
 
-<DocCanvas display="block" client:only mdxSource={{
+<DocCanvas display="block" mdxSource={{
   react: `<PdsSortable border={true} dividers={true} componentId="demo" handleType="row">
   <PdsSortableItem enable-actions handle>
     <div>
@@ -313,3 +318,9 @@ The following is a demo of how all the properties and slots can be used together
     </pds-sortable-item>
   </pds-sortable>
 </DocCanvas>
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

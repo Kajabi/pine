@@ -1,8 +1,8 @@
 import { html } from 'lit';
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
-import { withActions } from '@storybook/addon-actions/decorator';
+
 
 export default {
+
   args: {
     checked: false,
     disabled: false,
@@ -11,14 +11,8 @@ export default {
     hideLabel: false,
     required: false,
   },
-  argTypes: extractArgTypes('pds-radio'),
   component: 'pds-radio',
-  decorators: [withActions],
-  parameters: {
-    actions: {
-      handles: ['onchange', 'pdsRadioChange'],
-    },
-  },
+  parameters: {},
   title: 'components/Radio',
 }
 

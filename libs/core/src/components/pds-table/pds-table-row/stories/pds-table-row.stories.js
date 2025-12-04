@@ -1,16 +1,10 @@
 import { html } from 'lit-html';
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
-import { withActions } from '@storybook/addon-actions/decorator';
+
 
 export default {
-  argTypes: extractArgTypes('pds-table-row'),
+
   component: 'pds-table-row',
-  decorators: [withActions],
-  parameters: {
-    actions: {
-      handles: ['onclick', 'pdsTableRowSelected'],
-    },
-  },
+  parameters: {},
   title: 'components/Table/Rows',
 };
 

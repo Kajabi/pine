@@ -1,7 +1,6 @@
 import { html } from 'lit';
 import imgFile from '../assets/demi_wilkinson.jpg';
 
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 export default {
   args: {
@@ -13,7 +12,6 @@ export default {
     size: null,
     variant: 'customer',
   },
-  argTypes: extractArgTypes('pds-avatar'),
   component: 'pds-avatar',
   title: 'components/Avatar',
 }

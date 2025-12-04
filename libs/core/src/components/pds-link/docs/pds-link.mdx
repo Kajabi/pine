@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-link.stories.js';
+
 import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Link
 
@@ -21,7 +26,7 @@ In many current web design patterns, buttons and links have evolved to look visu
 
 The default `inline` link. Visually, it maintains the underlined appearance of a hyperlink.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsLink href="https://www.google.com"></PdsLink>',
     webComponent: '<pds-link href="https://www.google.com"></pds-link>'
@@ -35,7 +40,7 @@ The `color` prop can be used to change the color of the link to any available pr
 
 >Note: Only presets have hover state colors.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<PdsLink href="https://www.google.com" color="secondary">Link</PdsLink>
     <PdsLink href="https://www.google.com" color="accent">Link</PdsLink>
@@ -60,7 +65,7 @@ The `color` prop can be used to change the color of the link to any available pr
 
 The `plain` variant displays a standard plain hyperlink without an underline.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsLink href="#some-anchor" variant="plain"></PdsLink>',
     webComponent: '<pds-link href="#some-anchor" variant="plain"></pds-link>'
@@ -72,7 +77,7 @@ The `plain` variant displays a standard plain hyperlink without an underline.
 
 An `external` link is styled with an icon to indicate that it will redirect users to an external website or resource in a new tab.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsLink href="#some-anchor" external="true"></PdsLink>',
     webComponent: '<pds-link href="#some-anchor" external="true"></pds-link>'
@@ -84,7 +89,7 @@ An `external` link is styled with an icon to indicate that it will redirect user
 
 The `font-size` prop can be used to adjust the size of the link text. `sm` is 12px, `md` is 14px, and `lg` is 16px. `md` is the default size.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsLink href="#some-anchor" font-size="sm"></PdsLink>',
     webComponent: '<pds-link href="#some-anchor" font-size="sm"></pds-link>'
@@ -96,7 +101,7 @@ The `font-size` prop can be used to adjust the size of the link text. `sm` is 12
 
 Providing text within the open and closing tags allows the default link text to be replaced with custom text.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsLink href="#some-anchor">Overrides default use of href</PdsLink>',
     webComponent: '<pds-link href="#some-anchor">Overrides default use of href</pds-link>'
@@ -108,7 +113,7 @@ Providing text within the open and closing tags allows the default link text to 
 
 When no custom text is provided, the link will use the `href` as the link text.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsLink href="#some-anchor"></PdsLink>',
     webComponent: '<pds-link href="#some-anchor"></pds-link>'
@@ -122,3 +127,8 @@ When no custom text is provided, the link will use the `href` as the link text.
 
 [MDN: The Anchor Element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a)
 
+## Playground
+
+<Canvas of={stories.Colors} />
+
+<Controls of={stories.Colors} />

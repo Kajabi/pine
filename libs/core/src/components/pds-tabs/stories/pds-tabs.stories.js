@@ -1,16 +1,10 @@
 import { html } from 'lit';
-import { withActions } from '@storybook/addon-actions/decorator';
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
+
 
 export default {
-  argTypes: extractArgTypes('pds-tabs'),
+
   component: 'pds-tabs',
-  decorators: [withActions],
-  parameters: {
-    actions: {
-      handles: ['pdsTabClick']
-    },
-  },
+  parameters: {},
   title: 'components/Tabs',
 };
 

@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-image.stories.js';
+
 import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Image
 
@@ -29,7 +34,7 @@ While images can provide useful information to convey to the user, when not care
 
 A default image with a `src` and `alt`.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsImage src="https://placebear.com/200/300" alt="Random Bear"></PdsImage>',
     webComponent: '<pds-image src="https://placebear.com/200/300" alt="Random Bear"></pds-image>'
@@ -41,7 +46,7 @@ A default image with a `src` and `alt`.
 
 An image with `srcset` and `sizes` props set. Refresh the browser at `400px` and below and the browser will select the smaller image to render.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
 <PdsImage
@@ -73,3 +78,9 @@ An image with `srcset` and `sizes` props set. Refresh the browser at `400px` and
 [MDN: Image](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img)
 
 [HTML Standard: Image](https://html.spec.whatwg.org/multipage/images.html)
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

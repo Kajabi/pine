@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-toast.stories.js';
+
 import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Toast
 
@@ -38,7 +43,7 @@ For accessibility, it is strongly encouraged to follow these best practices:
 
 A basic toast notification with a message.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsToast componentId="toast-default" duration={0}>This is a default toast</PdsToast>',
     webComponent: '<pds-toast component-id="toast-default" duration="0">This is a default toast</pds-toast>'
@@ -50,7 +55,7 @@ A basic toast notification with a message.
 
 A toast notification indicating an error or critical message.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsToast componentId="toast-danger" duration={0} type="danger">An error occurred</PdsToast>',
     webComponent: '<pds-toast component-id="toast-danger" duration="0" type="danger">An error occurred</pds-toast>'
@@ -62,7 +67,7 @@ A toast notification indicating an error or critical message.
 
 A toast notification indicating a loading or processing state.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsToast componentId="toast-loading" duration={0} type="loading">Processing your request...</PdsToast>',
     webComponent: '<pds-toast component-id="toast-loading" duration="0" type="loading">Processing your request...</pds-toast>'
@@ -74,7 +79,7 @@ A toast notification indicating a loading or processing state.
 
 A toast notification with a custom icon.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsToast componentId="toast-icon" duration={0} icon="check-circle-filled">Successfully saved!</PdsToast>',
     webComponent: '<pds-toast component-id="toast-icon" duration="0" icon="check-circle-filled">Successfully saved!</pds-toast>'
@@ -86,7 +91,7 @@ A toast notification with a custom icon.
 
 A toast notification that includes a clickable link. Links are automatically styled to match the toast design.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<PdsToast componentId="toast-link" duration={0}>
   New update available. <a href="#">Learn more</a>
@@ -104,7 +109,7 @@ A toast notification that includes a clickable link. Links are automatically sty
 
 A toast notification with rich content, demonstrating the flexibility of the default slot.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<PdsToast componentId="toast-complex" duration={0}>
   <strong>Success!</strong> Your profile has been updated with new information.
@@ -120,10 +125,16 @@ A toast notification with rich content, demonstrating the flexibility of the def
 
 A toast notification that will remain visible until manually dismissed. This is achieved by setting the duration to 0.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsToast componentId="toast-persistent" duration={0}>This toast will stay until dismissed</PdsToast>',
     webComponent: '<pds-toast component-id="toast-persistent" duration="0">This toast will stay until dismissed</pds-toast>'
 }}>
   <pds-toast component-id="toast-persistent" duration="0">This toast will stay until dismissed</pds-toast>
 </DocCanvas>
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

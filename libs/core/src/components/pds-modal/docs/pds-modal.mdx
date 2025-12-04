@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-modal.stories.js';
+
 import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Modal
 
@@ -49,7 +54,7 @@ The `pds-modal-footer` component provides a consistent footer area for the modal
 
 ### Default
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
       <div>
@@ -217,7 +222,7 @@ The standard modal with a header, content area, and footer. By default, it can b
 - Clicking outside the modal (backdrop)
 - Pressing the escape key
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <div>
@@ -509,7 +514,7 @@ Modals come in four sizes:
 
 Use the destructive variant for actions that can't be undone.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <div>
@@ -642,7 +647,7 @@ Modals can be configured to handle content overflow in different ways using the 
 
 By default, modals are scrollable when content exceeds the viewport height. The content area becomes scrollable while the header and footer remain fixed.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <div>
@@ -775,7 +780,7 @@ By default, modals are scrollable when content exceeds the viewport height. The 
 
 When `scrollable={false}`, the modal content will overflow naturally without creating a scrollable area. This can be useful for modals with fixed-height content or when you want to handle overflow differently.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <div>
@@ -918,7 +923,7 @@ When `scrollable={false}`, the modal content will overflow naturally without cre
 
 You can override the automatic border detection by explicitly setting the `border` prop on `pds-modal-content`. This is useful when you want specific border behavior regardless of scroll state.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <div>
@@ -1072,7 +1077,7 @@ You can override the automatic border detection by explicitly setting the `borde
 ### Nested Modals
 
 Modals can be nested, with only the topmost modal responding to escape key and backdrop clicks.
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     <div>
@@ -1313,7 +1318,7 @@ There are several ways to control a modal's visibility:
 
 Modals can be opened and closed programmatically using the `open` property:
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
     function ModalControl() {
@@ -1471,3 +1476,8 @@ Modals can be configured to close automatically in response to user actions:
 </pds-modal>
 ```
 
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

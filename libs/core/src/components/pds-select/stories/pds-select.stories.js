@@ -1,8 +1,8 @@
 import { html } from 'lit';
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
-import { withActions } from '@storybook/addon-actions/decorator';
+
 
 export default {
+
   args: {
     autocomplete: null,
     disabled: false,
@@ -14,14 +14,8 @@ export default {
     multiple: false,
     value: null,
   },
-  argTypes: extractArgTypes('pds-select'),
   component: 'pds-select',
-  decorators: [withActions],
-  parameters: {
-    actions: {
-      handles: ['onchange', 'pdsSelectChange'],
-    },
-  },
+  parameters: {},
   title: 'components/Select',
 };
 

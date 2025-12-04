@@ -1,7 +1,12 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-avatar.stories.js';
+
 import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
 
 import sampleImg from '../assets/demi_wilkinson.jpg';
+
+<Meta of={stories} />
 
 # Avatar
 
@@ -30,7 +35,7 @@ The avatar component is used to display a thumbnail representation of an admin, 
 
 The default avatar style, typically used to represent a generic user or business.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsAvatar></PdsAvatar>',
     webComponent: '<pds-avatar></pds-avatar>'
@@ -42,7 +47,7 @@ The default avatar style, typically used to represent a generic user or business
 
 An avatar variant specifically for admins, featuring less-rounded borders for distinction.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsAvatar variant="admin"></PdsAvatar>',
     webComponent: '<pds-avatar variant="admin"></pds-avatar>'
@@ -54,7 +59,7 @@ An avatar variant specifically for admins, featuring less-rounded borders for di
 
 An avatar that displays a badge in addition to the profile image.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsAvatar badge={true}></PdsAvatar>',
     webComponent: '<pds-avatar badge="true"></pds-avatar>'
@@ -66,7 +71,7 @@ An avatar that displays a badge in addition to the profile image.
 
 An avatar where the size can be customized through the `size` prop.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsAvatar size="128px"></PdsAvatar>',
     webComponent: '<pds-avatar size="128px"></pds-avatar>'
@@ -78,7 +83,7 @@ An avatar where the size can be customized through the `size` prop.
 
 Allows the avatar to be used as a dropdown trigger.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsAvatar dropdown={true}></PdsAvatar>',
     webComponent: '<pds-avatar dropdown="true"></pds-avatar>'
@@ -90,10 +95,16 @@ Allows the avatar to be used as a dropdown trigger.
 
 An avatar that displays a user's profile image. If no image is provided, a default user icon is shown.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsAvatar alt="Customer Profile" image="../assets/demi_wilkinson.jpg"></PdsAvatar>',
     webComponent: '<pds-avatar alt="Customer Profile" image="../assets/demi_wilkinson.jpg"></pds-avatar>'
 }}>
   <pds-avatar alt="Customer Profile" image={sampleImg}></pds-avatar>
 </DocCanvas>
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

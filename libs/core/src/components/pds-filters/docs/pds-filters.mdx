@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-filters.stories.js';
+
 import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Filters
 
@@ -43,7 +48,7 @@ The filters component provides a flexible system for creating filter interfaces 
 
 Standard filter appearance with border and background.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `
 <PdsFilters>
   <PdsFilter componentId="default-example" variant="default" text="Trigger" icon="flash">
@@ -70,7 +75,7 @@ Standard filter appearance with border and background.
 
 Used for active filters with different colors and dropdown icon.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `
 <PdsFilters>
   <PdsFilter componentId="selected-example" variant="selected" text="Grant an offer" icon="switch-vertical">
@@ -97,7 +102,7 @@ Used for active filters with different colors and dropdown icon.
 
 For additional filter options with dashed border.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `
 <PdsFilters>
   <PdsFilter componentId="more-example" variant="more" text="More filters" icon="add-circle">
@@ -124,7 +129,7 @@ For additional filter options with dashed border.
 
 For clear/reset actions, always shows trash icon. The clear variant does not open a popover - it fires an event when clicked for clearing other filters.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `
 <PdsFilters>
   <PdsFilter componentId="clear-example" variant="clear" text="Clear filters">
@@ -168,3 +173,9 @@ Opens the filter popover programmatically. Clear variant will log a warning if t
 ### hideFilter()
 
 Closes the filter popover programmatically. Clear variant will log a warning if this method is called.
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

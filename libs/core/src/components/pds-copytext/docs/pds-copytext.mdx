@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-copytext.stories.js';
+
 import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Copy Text
 
@@ -25,7 +30,7 @@ The Copy Text component is a button that enables users to copy text to their cli
 
 The default copy text button.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsCopytext value="Copy this text"></PdsCopytext>',
     webComponent: '<pds-copytext value="Copy this text"></pds-copytext>'
@@ -37,7 +42,7 @@ The default copy text button.
 
 When `border` is set to `false`, the component will not have a visible border.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsCopytext value="Copy that text" border="false"></PdsCopytext>',
     webComponent: '<pds-copytext value="Copy that text" border="false"></pds-copytext>'
@@ -49,7 +54,7 @@ When `border` is set to `false`, the component will not have a visible border.
 
 When `full-width` is set to `true`, the component will occupy the full width of its parent container.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsCopytext value="Copy all of this text" fullWidth></PdsCopytext>',
     webComponent: '<pds-copytext value="Copy all of this text" full-width></pds-copytext>'
@@ -63,7 +68,7 @@ When `full-width` is set to `true`, the component will occupy the full width of 
 
 When `truncate` is set to `true`, long value text will be truncated with an ellipsis added to the end. The full value will still be copied to the clipboard when clicked.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: '<PdsCopytext value="Copy all of this really long text that should be truncated in the UI, but will still be copied to the clipboard." truncate="true"></PdsCopytext>',
     webComponent: '<pds-copytext value="Copy all of this really long text that should be truncated in the UI, but will still be copied to the clipboard." truncate="true"></pds-copytext>'
@@ -72,3 +77,9 @@ When `truncate` is set to `true`, long value text will be truncated with an elli
     <pds-copytext value="Copy all of this really long text that should be truncated in the UI, but will still be copied to the clipboard." truncate="true"></pds-copytext>
   </div>
 </DocCanvas>
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

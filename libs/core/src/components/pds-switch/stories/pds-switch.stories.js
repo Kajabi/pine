@@ -1,21 +1,15 @@
 import { html } from 'lit';
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
-import { withActions } from '@storybook/addon-actions/decorator';
+
 
 export default {
+
   args: {
     disabled: false,
     hideLabel: false,
     required: false,
   },
-  argTypes: extractArgTypes('pds-switch'),
   component: 'pds-switch',
-  decorators: [withActions],
-  parameters: {
-    actions: {
-      handles: ['onchange', 'pdsSwitchChange'],
-    },
-  },
+  parameters: {},
   title: 'components/Switch',
 }
 

@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-popover.stories.js';
+
 import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Popover
 Popovers display contextual information when users click or initiates a keyboard event on an element. They typically contain more information than tooltips and can include interactive elements.
@@ -32,7 +37,7 @@ Keep popover content concise and ensure every trigger element is focusable so ke
 
 Use the `trigger` slot to provide the element that will open the popover. You can use any Pine component - buttons, chips, avatars, or other interactive elements.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
       <PdsBox display="flex" gap="md" align-items="center" flex-wrap="wrap">
@@ -110,7 +115,7 @@ Use the `trigger` slot to provide the element that will open the popover. You ca
 
 Closes automatically when clicking outside the popover content. Can also be closed by pressing the `Escape` key.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
       <PdsPopover componentId="auto" placement="bottom-start">
@@ -144,7 +149,7 @@ For manual popovers, using `popoverTargetAction="toggle"` is recommended as it a
 
 Learn more about popover target actions in the [MDN Documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement/popoverTargetAction#showhide_popover_action_with_a_manual_popover).
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
       <PdsPopover componentId="manual" placement="bottom-start" popoverTargetAction="toggle" popoverType="manual">
@@ -173,7 +178,7 @@ The `popoverTargetAction` prop determines how the trigger button interacts with 
 
 Shows the popover when triggered. Clicking the popover trigger while open will not close the popover.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
       <PdsPopover componentId="show" placement="bottom-start">
@@ -198,7 +203,7 @@ Shows the popover when triggered. Clicking the popover trigger while open will n
 
 Toggles the popover visibility state when triggered. Clicking the popover trigger while open will close the popover.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
       <PdsPopover componentId="toggle" placement="bottom-start" popoverTargetAction="toggle">
@@ -223,7 +228,7 @@ Toggles the popover visibility state when triggered. Clicking the popover trigge
 
 The `max-width` prop allows adjusting the maximum width of the popover content. Default is 352px.
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `
       <PdsPopover componentId="wide" placement="bottom-start" maxWidth="520px">
@@ -249,3 +254,9 @@ The `max-width` prop allows adjusting the maximum width of the popover content. 
 - The trigger slot automatically receives `aria-expanded` and `aria-controls` attributes when the component is hydrated. Use focusable elements (buttons, chips, avatar with `dropdown="true"`, etc.) so that keyboard users can open the popover with Enter or Space.
 - Content is teleported to `document.body` via a portal to ensure it is correctly layered above other UI. Because the markup is outside the component's DOM tree, associate it with the trigger via `aria-labelledby` or `aria-describedby` when the content needs more context (for example, referencing the trigger text).
 - Auto popovers (`popover-type="auto"`) listen for outside clicks and Escape to close the overlay. Manual popovers must expose their own dismissal affordance—include a close button in the content and wire it to `popover.hide()`.
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

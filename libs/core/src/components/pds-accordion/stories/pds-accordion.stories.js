@@ -1,12 +1,10 @@
 import { html } from 'lit';
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
 
 export default {
   args: {
     componentId: '',
     isOpen: false,
   },
-  argTypes: extractArgTypes('pds-accordion'),
   component: 'pds-accordion',
   title: 'components/Accordion',
 }

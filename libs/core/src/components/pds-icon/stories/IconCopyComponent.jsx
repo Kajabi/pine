@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { IconItem } from '@storybook/blocks';
+import { IconItem } from '@storybook/addon-docs/blocks';
 
 export const CopyIcon = ({ name }) => {
   const [showToast, setShowToast] = useState(false);

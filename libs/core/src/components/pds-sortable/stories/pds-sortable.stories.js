@@ -1,16 +1,10 @@
 import { html } from 'lit-html';
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
-import { withActions } from '@storybook/addon-actions/decorator';
+
 
 export default {
-  argTypes: extractArgTypes('pds-sortable'),
+
   component: 'pds-sortable',
-  decorators: [withActions],
-  parameters: {
-    actions: {
-      handles: ['onchange', 'pdsSortableItemMoved'],
-    },
-  },
+  parameters: {},
   title: 'components/Sortable',
 };
 

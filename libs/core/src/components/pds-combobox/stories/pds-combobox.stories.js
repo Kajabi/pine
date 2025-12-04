@@ -1,9 +1,8 @@
 import { html } from 'lit';
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
-import { withActions } from '@storybook/addon-actions/decorator';
+
 
 export default {
-  argTypes: extractArgTypes('pds-combobox'),
+
   args: {
     customOptionLayouts: false,
     customTriggerContent: false,
@@ -22,14 +21,8 @@ export default {
     chipDot: false,
   },
   component: 'pds-combobox',
-  decorators: [withActions],
   title: 'components/Combobox',
   parameters: {
-    actions: {
-      handles: [
-        'onpdscomboboxchange', 'pdsComboboxChange',
-      ],
-    },
     layout: 'centered',
   },
 };

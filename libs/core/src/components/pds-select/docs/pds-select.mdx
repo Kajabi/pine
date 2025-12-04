@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-select.stories.js';
+
 import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Select
 
@@ -39,7 +44,7 @@ When analyzing designs or screenshots, text that appears above a select dropdown
 The default state of the select component displays a label alongside a list of options in a dropdown menu. The user can then choose one of the available options from the list.
 
 <DocCanvas
-  client:only
+ 
   mdxSource={{
     react: `
       <PdsSelect componentId="pds-select-default-example" label="Name" name="name" value="paul">
@@ -72,7 +77,7 @@ The default state of the select component displays a label alongside a list of o
 When the select component is disabled, it prevents any user interaction. As a result, no options can be selected, providing a clear indication to the user that the field is not available for input.
 
 <DocCanvas
-  client:only
+ 
   mdxSource={{
     react: `
       <PdsSelect componentId="pds-select-disabled-example" disabled="true" label="Name" name="name" value="george">
@@ -105,7 +110,7 @@ When the select component is disabled, it prevents any user interaction. As a re
 Applies accent styling to the select field with a purple background, border, text, and icon color to draw attention to important fields.
 
 <DocCanvas
-  client:only
+ 
   mdxSource={{
     react: `
       <PdsSelect componentId="pds-select-highlight-example" highlight="true" label="Name" name="name" value="paul">
@@ -138,7 +143,7 @@ Applies accent styling to the select field with a purple background, border, tex
 A helper message provides additional context or instructions for the user and appears below the select component.
 
 <DocCanvas
-  client:only
+ 
   mdxSource={{
     react: `
       <PdsSelect componentId="pds-select-with-message-example" label="Name" helperMessage="This is a helper message to convey extra context for the select" name="name" value="john">
@@ -171,7 +176,7 @@ A helper message provides additional context or instructions for the user and ap
 The select component is shown invalid along with an error message, providing feedback to the user when there is an issue with their selection.
 
 <DocCanvas
-  client:only
+ 
   mdxSource={{
     react: `
       <PdsSelect componentId="pds-select-invalid-example" label="Name" invalid="true" errorMessage="This is an error message to convey extra context for the select" name="name" value="ringo">
@@ -204,7 +209,7 @@ The select component is shown invalid along with an error message, providing fee
 With the autocomplete attribute enabled, the select component allows browsers to suggest previously entered values, improving the user's input experience. This feature helps users fill out forms more quickly and accurately by displaying potential matches based on their past selections or input history.
 
 <DocCanvas
-  client:only
+ 
   mdxSource={{
     react: `
       <PdsSelect autocomplete="on" componentId="pds-select-autocomplete-example" label="Name" name="name" value="paul">
@@ -239,7 +244,7 @@ With the `multiple` attribute enabled, the select component allows users to sele
 >Note: When the multiple attribute is enabled, the `value` property should be an array of selected values.
 
 <DocCanvas
-  client:only
+ 
   mdxSource={{
     react: `
       <PdsSelect multiple componentId="pds-select-multiple-example" label="Name" name="name">
@@ -272,7 +277,7 @@ With the `multiple` attribute enabled, the select component allows users to sele
 The `optgroup` element allows for grouping related options within the select component, making it easier for users to navigate large lists by categorizing options. This is especially useful when the list contains a variety of similar items, such as countries grouped by continents or product categories grouped by type.
 
 <DocCanvas
-  client:only
+ 
   mdxSource={{
     react: `
       <PdsSelect componentId="pds-select-optgroup-example" label="Name" name="name" value="george">
@@ -318,7 +323,7 @@ The action slot allows you to add helpful content next to the select label, such
 
 **Action Link**
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<PdsSelect componentId="pds-select-action-link" label="Timezone" name="timezone">
   <PdsLink href="#" slot="action">Auto-detect</PdsLink>
@@ -349,7 +354,7 @@ The action slot allows you to add helpful content next to the select label, such
 
 **Action Button**
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<PdsSelect componentId="pds-select-action-button" label="Language" name="language">
   <PdsButton slot="action" variant="unstyled">Translate</PdsButton>
@@ -377,7 +382,7 @@ The action slot allows you to add helpful content next to the select label, such
 
 **Action with Tooltip**
 
-<DocCanvas client:only
+<DocCanvas
   mdxSource={{
     react: `<PdsSelect componentId="pds-select-action-tooltip" label="Country" name="country" required>
   <PdsTooltip slot="action" placement="bottom-start">
@@ -428,3 +433,9 @@ The action slot allows you to add helpful content next to the select label, such
 
 [MDN Web Docs: Select](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select)
 [MDN Web Docs: HTML autocomplete attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete)
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-progress.stories.js';
+
 import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Progress
 
@@ -31,7 +36,7 @@ The Progress component shows the progress of a task or process. It's great for h
 
 ### Default
 _`percent` value used in source is only for demonstration purposes, otherwise progress bar would not appear_
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `<PdsProgress componentId="default" label="Default" percent="15"></PdsProgress>`,
   webComponent: `<pds-progress component-id="default" label="Default" percent="15"></pds-progress>`
 }}>
@@ -42,7 +47,7 @@ _`percent` value used in source is only for demonstration purposes, otherwise pr
 
 The percent of how much the `pds-progress` is filled. Should be a number ranging from 0 to 100.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `<PdsProgress componentId="percent" label="percent" percent="25"></PdsProgress>`,
   webComponent: `<pds-progress component-id="percent" label="percent" percent="25"></pds-progress>`
 }}>
@@ -53,7 +58,7 @@ The percent of how much the `pds-progress` is filled. Should be a number ranging
 
 Displays the `percent` value as text beside the progress.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `<PdsProgress componentId="show-percent" label="Show percent" percent="50" showPercent={true}></PdsProgress>`,
   webComponent: `<pds-progress component-id="show-percent" label="Show percent" percent="50" show-percent></pds-progress>`
 }}>
@@ -64,7 +69,7 @@ Displays the `percent` value as text beside the progress.
 
 When `animated`, progress will animate from 0 to the `percent` value.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `<PdsProgress componentId="animated" label="Animated " percent="75" animated={true}></PdsProgress>`,
   webComponent: `<pds-progress component-id="animated" label="Animated " percent="75" animated></pds-progress>`
 }}>
@@ -75,7 +80,7 @@ When `animated`, progress will animate from 0 to the `percent` value.
 
 Allows for `pds-progress` to be filled with a custom color. Accepts any valid color token or CSS color value.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `<PdsProgress componentId="fillcolor" label="Fill color" percent="95" fillColor="#86D5BC"></PdsProgress>`,
   webComponent: `<pds-progress component-id="fillcolor" label="Fill color" percent="95" fill-color="#86D5BC"></pds-progress>
 `}}>
@@ -86,7 +91,7 @@ Allows for `pds-progress` to be filled with a custom color. Accepts any valid co
 
 You can also use CSS gradients for more visual interest.
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `<PdsProgress componentId="fillcolor-gradient" label="Gradient fill color" percent="75" fillColor="linear-gradient(to right, var(--pine-color-red-300), var(--pine-color-green-300))"></PdsProgress>`,
   webComponent: `<pds-progress component-id="fillcolor-gradient" label="Gradient fill color" percent="75" fill-color="linear-gradient(to right, var(--pine-color-red-300), var(--pine-color-green-300))"></pds-progress>
 `}}>
@@ -97,7 +102,7 @@ You can also use CSS gradients for more visual interest.
 
 A tooltip can be added by combining the `progress` component with a [tooltip](/docs/components-tooltip--default).
 
-<DocCanvas client:only mdxSource={{
+<DocCanvas mdxSource={{
   react: `<PdsTooltip content="50%" hasArrow="false" placement="top" style={{ width: '100%' }}>
     <PdsProgress componentId="tooltip-demo" label="Progress w/ tooltip" percent="50"></PdsProgress>
   </PdsTooltip>`,
@@ -113,3 +118,9 @@ A tooltip can be added by combining the `progress` component with a [tooltip](/d
 ## Additional Resources
 
 [MDN Web Docs: Progress](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress)
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />

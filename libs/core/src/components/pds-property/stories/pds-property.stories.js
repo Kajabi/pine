@@ -1,11 +1,7 @@
 import { html } from 'lit';
-import { extractArgTypes } from '@pxtrn/storybook-addon-docs-stencil';
-import { withActions } from '@storybook/addon-actions/decorator';
 
 export default {
-  argTypes: extractArgTypes('pds-property'),
   component: 'pds-property',
-  decorators: [withActions],
   title: 'components/Property',
 };
 

@@ -198,9 +198,9 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
         );
       }
       else {
-        return <>
+        return <React.Fragment key={tokenKeyName}>
           { renderTableRows(token as Token, tokenKeyName) }
-        </>;
+        </React.Fragment>;
       }
     });
   };

@@ -1,5 +1,10 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-table.stories.js';
+
 import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
 import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
 
 # Table
 
@@ -1230,3 +1235,9 @@ If you need full control over the rendered rows (for example, remote sorting), p
 ## Additional Resources
 
 [MDN: Table](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table)
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />
