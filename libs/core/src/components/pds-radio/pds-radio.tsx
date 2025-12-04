@@ -97,6 +97,12 @@ export class PdsRadio {
     const target = e.target as HTMLInputElement;
     const isChecked = target.checked;
 
+    // If this radio is inside a pds-radio-group, don't emit the individual event
+    // The group will handle emitting its own event
+    if (this.el.closest('pds-radio-group')) {
+      return;
+    }
+
     this.pdsRadioChange.emit(isChecked);
   }
 
