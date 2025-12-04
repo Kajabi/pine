@@ -10,7 +10,7 @@ describe('pds-alert', () => {
     expect(page.root).toEqualHtml(`
       <pds-alert class="pds-alert" variant="default">
         <mock:shadow-root>
-          <pds-box class="pds-alert__container pds-alert__container--default" background-color="var(--pds-alert-background)" border="" border-color="var(--pds-alert-border-color)" border-radius="md" display="block" padding="md">
+          <pds-box class="pds-alert__container pds-alert__container--default" background-color="var(--pds-alert-background)" border="" border-color="var(--pds-alert-border-color)" border-radius="md" display="block">
             <pds-box display="flex" gap="sm">
               <pds-icon class="pds-alert__icon" color="var(--pds-alert-color-icon)" icon="info-circle-filled" size="var(--pds-alert-icon-size)"></pds-icon>
               <pds-box class="pds-alert__content-wrapper" direction="column" flex="grow" gap="xs">
@@ -35,7 +35,7 @@ describe('pds-alert', () => {
     expect(page.root).toEqualHtml(`
       <pds-alert class="pds-alert" heading="Test Alert Heading" variant="default">
         <mock:shadow-root>
-          <pds-box class="pds-alert__container pds-alert__container--default" background-color="var(--pds-alert-background)" border="" border-color="var(--pds-alert-border-color)" border-radius="md" display="block" padding="md">
+          <pds-box class="pds-alert__container pds-alert__container--default" background-color="var(--pds-alert-background)" border="" border-color="var(--pds-alert-border-color)" border-radius="md" display="block">
             <pds-box display="flex" gap="sm">
               <pds-icon class="pds-alert__icon" color="var(--pds-alert-color-icon)" icon="info-circle-filled" size="var(--pds-alert-icon-size)"></pds-icon>
               <pds-box class="pds-alert__content-wrapper" direction="column" flex="grow" gap="xs">
@@ -61,7 +61,7 @@ describe('pds-alert', () => {
     expect(page.root).toEqualHtml(`
       <pds-alert class="pds-alert" variant="default">
         <mock:shadow-root>
-          <pds-box class="pds-alert__container pds-alert__container--default" background-color="var(--pds-alert-background)" border="" border-color="var(--pds-alert-border-color)" border-radius="md" display="block" padding="md">
+          <pds-box class="pds-alert__container pds-alert__container--default" background-color="var(--pds-alert-background)" border="" border-color="var(--pds-alert-border-color)" border-radius="md" display="block">
             <pds-box display="flex" gap="sm">
               <pds-icon class="pds-alert__icon" color="var(--pds-alert-color-icon)" icon="info-circle-filled" size="var(--pds-alert-icon-size)"></pds-icon>
               <pds-box class="pds-alert__content-wrapper" direction="column" flex="grow" gap="xs">
@@ -87,7 +87,7 @@ describe('pds-alert', () => {
     expect(page.root).toEqualHtml(`
       <pds-alert class="pds-alert" heading="This heading should not show" small="true" variant="default">
         <mock:shadow-root>
-          <pds-box class="pds-alert__container pds-alert__container--default" background-color="var(--pds-alert-background)" border="" border-color="var(--pds-alert-border-color)" border-radius="md" display="block" padding="md">
+          <pds-box class="pds-alert__container pds-alert__container--default" background-color="var(--pds-alert-background)" border="" border-color="var(--pds-alert-border-color)" border-radius="md" display="block">
             <pds-box display="flex" gap="sm">
               <pds-icon class="pds-alert__icon pds-alert__icon--small" color="var(--pds-alert-color-icon)" icon="info-circle-filled" size="var(--pds-alert-icon-size)"></pds-icon>
               <pds-box class="pds-alert__content-wrapper" direction="column" flex="grow" gap="xs">
@@ -113,7 +113,7 @@ describe('pds-alert', () => {
     expect(page.root).toEqualHtml(`
       <pds-alert class="pds-alert" dismissible="true" variant="default">
         <mock:shadow-root>
-          <pds-box class="pds-alert__container pds-alert__container--default" background-color="var(--pds-alert-background)" border="" border-color="var(--pds-alert-border-color)" border-radius="md" display="block" padding="md">
+          <pds-box class="pds-alert__container pds-alert__container--default" background-color="var(--pds-alert-background)" border="" border-color="var(--pds-alert-border-color)" border-radius="md" display="block">
             <pds-box display="flex" gap="sm">
               <pds-icon class="pds-alert__icon" color="var(--pds-alert-color-icon)" icon="info-circle-filled" size="var(--pds-alert-icon-size)"></pds-icon>
               <pds-box class="pds-alert__content-wrapper" direction="column" flex="grow" gap="xs">
