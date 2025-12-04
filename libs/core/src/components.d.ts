@@ -1470,6 +1470,10 @@ export namespace Components {
          */
         "gap": string;
         /**
+          * String used for group label/heading.
+         */
+        "groupLabel": string;
+        /**
           * Displays helper message text below the radio group.
          */
         "helperMessage": string;
@@ -1478,10 +1482,6 @@ export namespace Components {
           * @defaultValue false
          */
         "invalid": boolean;
-        /**
-          * String used for group label/heading.
-         */
-        "label": string;
         /**
           * String used for radio `name` attribute. Applied to all child radios.
          */
@@ -4206,6 +4206,10 @@ declare namespace LocalJSX {
          */
         "gap"?: string;
         /**
+          * String used for group label/heading.
+         */
+        "groupLabel"?: string;
+        /**
           * Displays helper message text below the radio group.
          */
         "helperMessage"?: string;
@@ -4214,10 +4218,6 @@ declare namespace LocalJSX {
           * @defaultValue false
          */
         "invalid"?: boolean;
-        /**
-          * String used for group label/heading.
-         */
-        "label"?: string;
         /**
           * String used for radio `name` attribute. Applied to all child radios.
          */

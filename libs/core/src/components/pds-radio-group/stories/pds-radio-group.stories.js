@@ -21,7 +21,7 @@ const BaseTemplate = (args) =>
     gap=${args.gap}
     helper-message=${args.helperMessage}
     ?invalid=${args.invalid}
-    label=${args.label}
+    group-label=${args.groupLabel}
     name=${args.name}
     ?required=${args.required}
   >
@@ -40,7 +40,7 @@ export const Disabled = BaseTemplate.bind();
 Disabled.args = {
   componentId: 'disabled-group',
   disabled: true,
-  label: 'Comments',
+  groupLabel: 'Comments',
   name: 'disabled-group',
 };
 
@@ -48,7 +48,7 @@ export const withMessage = BaseTemplate.bind();
 withMessage.args = {
   componentId: 'helper-group',
   helperMessage: 'Select one option from the list',
-  label: 'Comments',
+  groupLabel: 'Comments',
   name: 'helper-group',
 };
 
@@ -57,7 +57,7 @@ Invalid.args = {
   componentId: 'error-group',
   errorMessage: 'Please select an option',
   invalid: true,
-  label: 'Comments',
+  groupLabel: 'Comments',
   name: 'error-group',
 };
 
@@ -70,7 +70,7 @@ const BorderTemplate = (args) =>
     gap=${args.gap}
     helper-message=${args.helperMessage}
     ?invalid=${args.invalid}
-    label=${args.label}
+    group-label=${args.groupLabel}
     name=${args.name}
     ?required=${args.required}
   >
@@ -83,7 +83,7 @@ export const WithBorder = BorderTemplate.bind();
 WithBorder.args = {
   componentId: 'bordered-group',
   direction: 'row',
-  label: 'Comments',
+  groupLabel: 'Comments',
   name: 'bordered-group',
 };
 
@@ -96,7 +96,7 @@ const ImageTemplate = (args) =>
     gap=${args.gap}
     helper-message=${args.helperMessage}
     ?invalid=${args.invalid}
-    label=${args.label}
+    group-label=${args.groupLabel}
     name=${args.name}
     ?required=${args.required}
   >
@@ -121,7 +121,7 @@ export const WithImage = ImageTemplate.bind();
 WithImage.args = {
   componentId: 'image-group',
   direction: 'row',
-  label: 'Select Team Member',
+  groupLabel: 'Select Team Member',
   name: 'image-group',
 };
 

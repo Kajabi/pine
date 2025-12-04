@@ -56,7 +56,7 @@ export class PdsRadioGroup {
   /**
    * String used for group label/heading.
    */
-  @Prop() label: string;
+  @Prop() groupLabel: string;
 
   /**
    * String used for radio `name` attribute. Applied to all child radios.
@@ -181,9 +181,9 @@ export class PdsRadioGroup {
           '--pds-radio-group-gap': gapValue,
         }}
       >
-        {this.label && (
+        {this.groupLabel && (
           <div class="pds-radio-group__label">
-            {this.label}
+            {this.groupLabel}
           </div>
         )}
         <div class={{

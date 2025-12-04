@@ -14,9 +14,9 @@
 | `disabled`      | `disabled`       | Determines whether or not the radio group is disabled.                                                                                | `boolean`           | `false`     |
 | `errorMessage`  | `error-message`  | Displays error message text describing an invalid state for the entire group.                                                         | `string`            | `undefined` |
 | `gap`           | `gap`            | Spacing between radio items. Accepts t-shirt sizes (none, xxs, xs, sm, md, lg, xl, xxl) or core spacing tokens (025, 050, 100, etc.). | `string`            | `'sm'`      |
+| `groupLabel`    | `group-label`    | String used for group label/heading.                                                                                                  | `string`            | `undefined` |
 | `helperMessage` | `helper-message` | Displays helper message text below the radio group.                                                                                   | `string`            | `undefined` |
 | `invalid`       | `invalid`        | Determines whether or not the radio group is invalid.                                                                                 | `boolean`           | `false`     |
-| `label`         | `label`          | String used for group label/heading.                                                                                                  | `string`            | `undefined` |
 | `name`          | `name`           | String used for radio `name` attribute. Applied to all child radios.                                                                  | `string`            | `undefined` |
 | `required`      | `required`       | Determines whether or not the radio group is required.                                                                                | `boolean`           | `false`     |
 
