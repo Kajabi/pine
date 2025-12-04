@@ -114,7 +114,6 @@ export class PdsAlert {
           border-radius="md"
           border
           display="block"
-          padding="md"
         >
           <pds-box gap="sm" display="flex">
             <pds-icon

@@ -14,6 +14,8 @@
   --pds-alert-color-text: var(--pine-alert-color-text);
   --pds-alert-color-dismiss: var(--pine-alert-color-dismiss);
   --pds-alert-background-dismiss-hover: var(--pine-alert-color-dismiss-hover);
+
+  padding: var(--pine-dimension-250);
 }
 
 .pds-alert__container--danger {
