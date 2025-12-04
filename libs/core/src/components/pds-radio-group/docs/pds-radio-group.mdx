@@ -1,0 +1,283 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-radio-group.stories.js';
+
+import { DocArgsTable, DocCanvas } from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
+
+# Radio Group
+
+Radio Group components wrap multiple `pds-radio` components and display a single error message for the entire group, providing a cleaner interface for grouped radio selections.
+
+## Guidelines
+
+### When to use
+- When you have multiple radio options that belong to the same selection group
+- When you want a single error message displayed for the entire group instead of individual error messages
+- For form validation where the group must have a selection
+
+### When not to use
+- For single radio buttons; use `pds-radio` directly
+- When each radio needs its own individual error message
+- For checkboxes; use `pds-checkbox` components instead
+
+### Accessibility
+- Ensure the group label is descriptive and clearly identifies the selection group
+- Use proper error messaging and states (e.g., `invalid`) for validation feedback
+- The `name` attribute is automatically applied to all child radios to ensure proper grouping
+
+## Properties
+
+<DocArgsTable componentName='pds-radio-group' docSource={components} />
+
+## Examples
+
+### Default
+
+A basic radio group with three options.
+
+<DocCanvas mdxSource={{
+  react: `<PdsRadioGroup name="example-default">
+  <PdsRadio componentId="default-radio1" label="Option 1" value="1" checked={true} />
+  <PdsRadio componentId="default-radio2" label="Option 2" value="2" />
+  <PdsRadio componentId="default-radio3" label="Option 3" value="3" />
+</PdsRadioGroup>`,
+  webComponent: `<pds-radio-group name="example-default">
+  <pds-radio component-id="default-radio1" label="Option 1" value="1" checked></pds-radio>
+  <pds-radio component-id="default-radio2" label="Option 2" value="2"></pds-radio>
+  <pds-radio component-id="default-radio3" label="Option 3" value="3"></pds-radio>
+</pds-radio-group>`
+}}>
+  <pds-radio-group name="example-default">
+    <pds-radio component-id="default-radio1" label="Option 1" value="1" checked></pds-radio>
+    <pds-radio component-id="default-radio2" label="Option 2" value="2"></pds-radio>
+    <pds-radio component-id="default-radio3" label="Option 3" value="3"></pds-radio>
+  </pds-radio-group>
+</DocCanvas>
+
+### With Label
+
+Radio groups can include a label to identify the selection group.
+
+<DocCanvas mdxSource={{
+  react: `<PdsRadioGroup name="example-labeled" label="Comments">
+  <PdsRadio componentId="labeled-radio1" label="Visible" value="visible" checked={true} />
+  <PdsRadio componentId="labeled-radio2" label="Hidden" value="hidden" />
+  <PdsRadio componentId="labeled-radio3" label="Locked" value="locked" />
+</PdsRadioGroup>`,
+  webComponent: `<pds-radio-group name="example-labeled" label="Comments">
+  <pds-radio component-id="labeled-radio1" label="Visible" value="visible" checked></pds-radio>
+  <pds-radio component-id="labeled-radio2" label="Hidden" value="hidden"></pds-radio>
+  <pds-radio component-id="labeled-radio3" label="Locked" value="locked"></pds-radio>
+</pds-radio-group>`
+}}>
+  <pds-radio-group name="example-labeled" label="Comments">
+    <pds-radio component-id="labeled-radio1" label="Visible" value="visible" checked></pds-radio>
+    <pds-radio component-id="labeled-radio2" label="Hidden" value="hidden"></pds-radio>
+    <pds-radio component-id="labeled-radio3" label="Locked" value="locked"></pds-radio>
+  </pds-radio-group>
+</DocCanvas>
+
+### With Error
+
+Displays the radio group in an invalid state with a single error message for the entire group.
+
+<DocCanvas mdxSource={{
+  react: `<PdsRadioGroup name="example-error" label="Comments" invalid errorMessage="Please select an option">
+  <PdsRadio componentId="error-radio1" label="Visible" value="visible" />
+  <PdsRadio componentId="error-radio2" label="Hidden" value="hidden" />
+  <PdsRadio componentId="error-radio3" label="Locked" value="locked" />
+</PdsRadioGroup>`,
+  webComponent: `<pds-radio-group name="example-error" label="Comments" invalid error-message="Please select an option">
+  <pds-radio component-id="error-radio1" label="Visible" value="visible"></pds-radio>
+  <pds-radio component-id="error-radio2" label="Hidden" value="hidden"></pds-radio>
+  <pds-radio component-id="error-radio3" label="Locked" value="locked"></pds-radio>
+</pds-radio-group>`
+}}>
+  <pds-radio-group name="example-error" label="Comments" invalid error-message="Please select an option">
+    <pds-radio component-id="error-radio1" label="Visible" value="visible"></pds-radio>
+    <pds-radio component-id="error-radio2" label="Hidden" value="hidden"></pds-radio>
+    <pds-radio component-id="error-radio3" label="Locked" value="locked"></pds-radio>
+  </pds-radio-group>
+</DocCanvas>
+
+### With Helper Message
+
+Displays helper text below the radio group to provide additional context.
+
+<DocCanvas mdxSource={{
+  react: `<PdsRadioGroup name="example-helper" label="Comments" helperMessage="Select one option from the list">
+  <PdsRadio componentId="helper-radio1" label="Visible" value="visible" checked={true} />
+  <PdsRadio componentId="helper-radio2" label="Hidden" value="hidden" />
+  <PdsRadio componentId="helper-radio3" label="Locked" value="locked" />
+</PdsRadioGroup>`,
+  webComponent: `<pds-radio-group name="example-helper" label="Comments" helper-message="Select one option from the list">
+  <pds-radio component-id="helper-radio1" label="Visible" value="visible" checked></pds-radio>
+  <pds-radio component-id="helper-radio2" label="Hidden" value="hidden"></pds-radio>
+  <pds-radio component-id="helper-radio3" label="Locked" value="locked"></pds-radio>
+</pds-radio-group>`
+}}>
+  <pds-radio-group name="example-helper" label="Comments" helper-message="Select one option from the list">
+    <pds-radio component-id="helper-radio1" label="Visible" value="visible" checked></pds-radio>
+    <pds-radio component-id="helper-radio2" label="Hidden" value="hidden"></pds-radio>
+    <pds-radio component-id="helper-radio3" label="Locked" value="locked"></pds-radio>
+  </pds-radio-group>
+</DocCanvas>
+
+### Disabled
+
+Disables all radios in the group, preventing user interaction. Useful when a form section is not applicable or when the user doesn't have permission to make a selection.
+
+<DocCanvas mdxSource={{
+  react: `<PdsRadioGroup name="example-disabled" label="Comments" disabled>
+  <PdsRadio componentId="disabled-radio1" label="Visible" value="visible" checked={true} />
+  <PdsRadio componentId="disabled-radio2" label="Hidden" value="hidden" />
+  <PdsRadio componentId="disabled-radio3" label="Locked" value="locked" />
+</PdsRadioGroup>`,
+  webComponent: `<pds-radio-group name="example-disabled" label="Comments" disabled>
+  <pds-radio component-id="disabled-radio1" label="Visible" value="visible" checked></pds-radio>
+  <pds-radio component-id="disabled-radio2" label="Hidden" value="hidden"></pds-radio>
+  <pds-radio component-id="disabled-radio3" label="Locked" value="locked"></pds-radio>
+</pds-radio-group>`
+}}>
+  <pds-radio-group name="example-disabled" label="Comments" disabled>
+    <pds-radio component-id="disabled-radio1" label="Visible" value="visible" checked></pds-radio>
+    <pds-radio component-id="disabled-radio2" label="Hidden" value="hidden"></pds-radio>
+    <pds-radio component-id="disabled-radio3" label="Locked" value="locked"></pds-radio>
+  </pds-radio-group>
+</DocCanvas>
+
+### Horizontal Layout
+
+Radio groups can be displayed horizontally using the `direction="row"` prop. The label remains above the radios.
+
+<DocCanvas mdxSource={{
+  react: `<PdsRadioGroup name="example-horizontal" direction="row">
+  <PdsRadio componentId="horizontal-radio1" label="Option 1" value="1" checked={true} />
+  <PdsRadio componentId="horizontal-radio2" label="Option 2" value="2" />
+  <PdsRadio componentId="horizontal-radio3" label="Option 3" value="3" />
+</PdsRadioGroup>`,
+  webComponent: `<pds-radio-group name="example-horizontal" direction="row">
+  <pds-radio component-id="horizontal-radio1" label="Option 1" value="1" checked></pds-radio>
+  <pds-radio component-id="horizontal-radio2" label="Option 2" value="2"></pds-radio>
+  <pds-radio component-id="horizontal-radio3" label="Option 3" value="3"></pds-radio>
+</pds-radio-group>`
+}}>
+  <pds-radio-group name="example-horizontal" direction="row">
+    <pds-radio component-id="horizontal-radio1" label="Option 1" value="1" checked></pds-radio>
+    <pds-radio component-id="horizontal-radio2" label="Option 2" value="2"></pds-radio>
+    <pds-radio component-id="horizontal-radio3" label="Option 3" value="3"></pds-radio>
+  </pds-radio-group>
+</DocCanvas>
+
+### With Border
+
+Radio groups work with bordered radio buttons for enhanced visual organization.
+
+<DocCanvas mdxSource={{
+  react: `<PdsBox gap="sm" display="block" fit="true">
+  <PdsRadioGroup name="example-bordered" label="Comments" direction="row">
+    <PdsRadio componentId="bordered-radio1" label="Visible" value="visible" hasBorder={true} checked={true} />
+    <PdsRadio componentId="bordered-radio2" label="Hidden" value="hidden" hasBorder={true} />
+    <PdsRadio componentId="bordered-radio3" label="Locked" value="locked" hasBorder={true} />
+  </PdsRadioGroup>
+</PdsBox>`,
+  webComponent: `<pds-box gap="sm" display="block" fit="true">
+  <pds-radio-group name="example-bordered" label="Comments" direction="row">
+    <pds-radio component-id="bordered-radio1" label="Visible" value="visible" has-border checked></pds-radio>
+    <pds-radio component-id="bordered-radio2" label="Hidden" value="hidden" has-border></pds-radio>
+    <pds-radio component-id="bordered-radio3" label="Locked" value="locked" has-border></pds-radio>
+  </pds-radio-group>
+</pds-box>`
+}}>
+  <pds-box gap="sm" display="block" fit="true">
+    <pds-radio-group name="example-bordered" label="Comments" direction="row">
+      <pds-radio component-id="bordered-radio1" label="Visible" value="visible" has-border checked></pds-radio>
+      <pds-radio component-id="bordered-radio2" label="Hidden" value="hidden" has-border></pds-radio>
+      <pds-radio component-id="bordered-radio3" label="Locked" value="locked" has-border></pds-radio>
+    </pds-radio-group>
+  </pds-box>
+</DocCanvas>
+
+### With Images
+
+Radio groups work seamlessly with image-based radios.
+
+<DocCanvas mdxSource={{
+  react: `<PdsBox gap="sm" display="block" fit="true">
+  <PdsRadioGroup name="example-image" label="Select Team Member" direction="row">
+    <PdsRadio componentId="image-radio1" label="John Doe" value="john" helperMessage="Senior Developer" checked={true}>
+      <PdsBox slot="image" backgroundColor="var(--pine-color-accent)" borderRadius="full" padding="sm">
+        <PdsIcon icon="danger" size="medium" color="var(--pine-color-white)" />
+      </PdsBox>
+    </PdsRadio>
+    <PdsRadio componentId="image-radio2" label="Jane Smith" value="jane" helperMessage="Product Manager">
+      <PdsBox slot="image" backgroundColor="var(--pine-color-accent)" borderRadius="full" padding="sm">
+        <PdsIcon icon="danger" size="medium" color="var(--pine-color-white)" />
+      </PdsBox>
+    </PdsRadio>
+    <PdsRadio componentId="image-radio3" label="Mike Johnson" value="mike" helperMessage="UX Designer">
+      <PdsBox slot="image" backgroundColor="var(--pine-color-accent)" borderRadius="full" padding="sm">
+        <PdsIcon icon="danger" size="medium" color="var(--pine-color-white)" />
+      </PdsBox>
+    </PdsRadio>
+  </PdsRadioGroup>
+</PdsBox>`,
+  webComponent: `<pds-box gap="sm" display="block" fit="true">
+  <pds-radio-group name="example-image" label="Select Team Member" direction="row">
+    <pds-radio component-id="image-radio1" label="John Doe" value="john" helper-message="Senior Developer" checked>
+      <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+        <pds-icon icon="danger" size="medium" color="var(--pine-color-white)"></pds-icon>
+      </pds-box>
+    </pds-radio>
+    <pds-radio component-id="image-radio2" label="Jane Smith" value="jane" helper-message="Product Manager">
+      <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+        <pds-icon icon="danger" size="medium" color="var(--pine-color-white)"></pds-icon>
+      </pds-box>
+    </pds-radio>
+    <pds-radio component-id="image-radio3" label="Mike Johnson" value="mike" helper-message="UX Designer">
+      <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+        <pds-icon icon="danger" size="medium" color="var(--pine-color-white)"></pds-icon>
+      </pds-box>
+    </pds-radio>
+  </pds-radio-group>
+</pds-box>`
+}}>
+  <pds-box gap="sm" display="block" fit="true">
+    <pds-radio-group name="example-image" label="Select Team Member" direction="row">
+      <pds-radio component-id="image-radio1" label="John Doe" value="john" helper-message="Senior Developer" checked>
+        <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+          <pds-icon icon="danger" size="medium" color="var(--pine-color-white)"></pds-icon>
+        </pds-box>
+      </pds-radio>
+      <pds-radio component-id="image-radio2" label="Jane Smith" value="jane" helper-message="Product Manager">
+        <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+          <pds-icon icon="danger" size="medium" color="var(--pine-color-white)"></pds-icon>
+        </pds-box>
+      </pds-radio>
+      <pds-radio component-id="image-radio3" label="Mike Johnson" value="mike" helper-message="UX Designer">
+        <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
+          <pds-icon icon="danger" size="medium" color="var(--pine-color-white)"></pds-icon>
+        </pds-box>
+      </pds-radio>
+    </pds-radio-group>
+  </pds-box>
+</DocCanvas>
+
+## Form Integration
+
+- The `name` prop is automatically applied to all child radios, ensuring proper form grouping
+- Set `required` on the group to mark all radios as required for form validation
+- Use `invalid` and `errorMessage` to display validation feedback when no choice is selected
+- Each radio should have a unique `componentId` and `value` for proper form submission
+
+## Additional Resources
+
+[MDN Web Docs: Radio](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio)
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />
