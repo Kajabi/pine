@@ -66,6 +66,13 @@
       z-index: 1;
     }
   }
+
+  // Invalid state for bordered radios
+  &.is-invalid {
+    label {
+      color: var(--pine-color-text-message-danger);
+    }
+  }
 }
 
 input {
@@ -177,12 +184,9 @@ label {
 }
 
 .pds-radio__message--error {
+  align-items: center;
   display: flex;
   gap: var(--pine-dimension-2xs);
-
-  pds-icon {
-    margin-block-start: var(--pine-dimension-025);
-  }
 }
 
 // Image-based radio styles - matches bordered layout
