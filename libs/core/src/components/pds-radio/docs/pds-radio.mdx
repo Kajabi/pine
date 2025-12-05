@@ -153,7 +153,7 @@ When grouping multiple radios, the <pds-link href="../?path=/docs/components-rad
 
 - **Automatic prop propagation**: The group automatically applies `name`, `disabled`, `invalid`, and `required` attributes to all child radios, ensuring consistent state across the group
 - **Group-level messaging**: Displays a single error message or helper message for the entire group instead of individual messages on each radio
-- **Group label**: Supports an optional group-level `label` prop that appears above all radios
+- **Group label**: Supports an optional group-level `groupLabel` prop (React) or `group-label` attribute (Web Components) that appears above all radios
 - **Layout control**: Use the `direction` prop to arrange radios horizontally (`row`) or vertically (`column`), with the label always remaining above the radios
 - **Layout support**: Works seamlessly with standard radios, bordered radios (`hasBorder`), and radios with images
 - **Event handling**: Emits `pdsRadioGroupChange` when a radio in the group is selected, providing the selected `value` and `componentId` in the event detail
