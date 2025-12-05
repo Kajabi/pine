@@ -254,8 +254,10 @@ describe('pds-radio-group', () => {
     // Wait for the slot change to process
     await page.waitForChanges();
 
-    // Manually call updateChildRadios since the slotchange event might not fire in test environment
-    // Access the private method through the component instance
+    // NOTE: Manually calling private method due to test harness limitations.
+    // The slotchange event may not fire reliably in the test environment.
+    // If the test harness ever supports reliably triggering slotchange events,
+    // this test should be refactored to use black-box interactions instead.
     (component as any).updateChildRadios();
 
     await page.waitForChanges();
@@ -281,9 +283,12 @@ describe('pds-radio-group', () => {
     await page.waitForChanges();
 
     const component = page.rootInstance as PdsRadioGroup;
-    const eventSpy = jest.fn();
-    component.pdsRadioGroupChange.emit = eventSpy;
+    const eventSpy = jest.spyOn(component.pdsRadioGroupChange, 'emit');
 
+    // NOTE: Manually calling private handler method due to test harness limitations.
+    // Native change events may not bubble reliably to the body listener in test environment.
+    // If the test harness ever supports reliably triggering native change events end-to-end,
+    // this test should be refactored to dispatch events on the input and let them bubble naturally.
     // Simulate a native change event on the input
     const radio1 = page.root?.querySelector('pds-radio[component-id="radio1"]') as HTMLPdsRadioElement;
     const input = radio1?.querySelector('input') as HTMLInputElement;
@@ -332,9 +337,12 @@ describe('pds-radio-group', () => {
     await page.waitForChanges();
 
     const component = page.rootInstance as PdsRadioGroup;
-    const eventSpy = jest.fn();
-    component.pdsRadioGroupChange.emit = eventSpy;
+    const eventSpy = jest.spyOn(component.pdsRadioGroupChange, 'emit');
 
+    // NOTE: Manually calling private handler method due to test harness limitations.
+    // Native change events may not bubble reliably to the body listener in test environment.
+    // If the test harness ever supports reliably triggering native change events end-to-end,
+    // this test should be refactored to dispatch events on the input and let them bubble naturally.
     // Simulate unchecking the first radio (should not emit)
     const radio1 = page.root?.querySelector('pds-radio[component-id="radio1"]') as HTMLPdsRadioElement;
     const input1 = radio1?.querySelector('input') as HTMLInputElement;
