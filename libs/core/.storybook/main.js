@@ -1,5 +1,6 @@
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "path";
+import { copyFileSync, mkdirSync, existsSync } from "fs";
 import react from '@vitejs/plugin-react';
 
 const config = {
@@ -23,7 +24,7 @@ const config = {
     options: {}
   },
 
-  staticDirs: ['../dist', '../assets'],
+  staticDirs: ['../dist', '../assets', './static'],
 
   docs: {},
 
@@ -31,6 +32,46 @@ const config = {
     config.plugins = config.plugins || [];
 
     const currentDir = dirname(fileURLToPath(import.meta.url));
+
+    // Copy CHANGELOG.md from root to static directory during build
+    // This ensures it's available in both dev and production builds (including Netlify)
+    const changelogSource = join(currentDir, '../../../../CHANGELOG.md');
+    const staticDir = join(currentDir, 'static');
+    const changelogDest = join(staticDir, 'CHANGELOG.md');
+
+    // Function to copy CHANGELOG.md
+    const copyChangelog = () => {
+      // Ensure static directory exists
+      if (!existsSync(staticDir)) {
+        mkdirSync(staticDir, { recursive: true });
+      }
+
+      // Copy CHANGELOG.md if it exists
+      if (existsSync(changelogSource)) {
+        copyFileSync(changelogSource, changelogDest);
+      }
+    };
+
+    // Copy immediately (for both dev and build)
+    copyChangelog();
+
+    // Add Vite plugin to watch CHANGELOG.md and copy on changes (dev mode)
+    config.plugins.push({
+      name: 'copy-changelog',
+      buildStart() {
+        copyChangelog();
+      },
+      configureServer(server) {
+        // Watch for changes to CHANGELOG.md and copy it
+        server.watcher.add(changelogSource);
+        server.watcher.on('change', (file) => {
+          if (file === changelogSource) {
+            copyChangelog();
+          }
+        });
+      },
+    });
+
     config.resolve = config.resolve || {};
     config.resolve.alias = config.resolve.alias || {};
 

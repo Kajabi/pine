@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false,
+    "baseUrl": "../..",
+    "declaration": false,
+    "lib": ["dom", "es2015", "es2017"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "moduleResolution": "node",
+    "module": "esnext",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "target": "es2017"
+  },
+  "include": ["**/*.tsx", "**/*.ts"],
+  "exclude": ["node_modules"]
+}
+
