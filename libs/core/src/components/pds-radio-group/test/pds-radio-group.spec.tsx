@@ -402,5 +402,25 @@ describe('pds-radio-group', () => {
       })
     );
   });
+
+  it('applies correct gap CSS variable when gap prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadioGroup],
+      html: `<pds-radio-group gap="lg"></pds-radio-group>`,
+    });
+
+    const style = page.root?.style.getPropertyValue('--pds-radio-group-gap');
+    expect(style).toBe('var(--pine-dimension-lg)');
+  });
+
+  it('handles numeric gap values as dimension tokens', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadioGroup],
+      html: `<pds-radio-group gap="100"></pds-radio-group>`,
+    });
+
+    const style = page.root?.style.getPropertyValue('--pds-radio-group-gap');
+    expect(style).toBe('var(--pine-dimension-100)');
+  });
 });
 

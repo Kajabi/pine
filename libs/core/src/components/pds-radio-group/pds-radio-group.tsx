@@ -191,13 +191,30 @@ export class PdsRadioGroup {
     return `var(--pine-dimension-${this.gap})`;
   }
 
+  private getAriaDescribedBy(): string | undefined {
+    const messageIds: string[] = [];
+
+    if (this.errorMessage) {
+      messageIds.push(messageId(this._groupId, 'error'));
+    }
+
+    if (this.helperMessage) {
+      messageIds.push(messageId(this._groupId, 'helper'));
+    }
+
+    return messageIds.length > 0 ? messageIds.join(' ') : undefined;
+  }
+
   render() {
     const gapValue = this.getGapValue();
+    const ariaDescribedBy = this.getAriaDescribedBy();
 
     return (
       <Host
         class={this.classNames()}
         id={this._groupId}
+        role="group"
+        aria-describedby={ariaDescribedBy}
         style={{
           '--pds-radio-group-gap': gapValue,
         }}
