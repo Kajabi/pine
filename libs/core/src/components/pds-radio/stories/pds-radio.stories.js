@@ -13,7 +13,7 @@ export default {
   },
   component: 'pds-radio',
   parameters: {},
-  title: 'components/Radio',
+  title: 'components/Radio Group/Radio',
 }
 
 const BaseTemplate = (args) =>
@@ -27,7 +27,6 @@ const BaseTemplate = (args) =>
     helper-message=${args.helperMessage}
     ?hide-label=${args.hideLabel}
     name=${args.name}
-    ?indeterminate=${args.indeterminate}
     ?required=${args.required}
     value=${args.value}
     ?invalid=${args.invalid}
