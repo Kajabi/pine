@@ -286,31 +286,32 @@ describe('pds-radio-group', () => {
     const eventSpy = jest.spyOn(component.pdsRadioGroupChange, 'emit');
 
     // NOTE: Manually calling private handler method due to test harness limitations.
-    // Native change events may not bubble reliably to the body listener in test environment.
+    // Native change events may not bubble reliably in test environment.
     // If the test harness ever supports reliably triggering native change events end-to-end,
     // this test should be refactored to dispatch events on the input and let them bubble naturally.
     // Simulate a native change event on the input
     const radio1 = page.root?.querySelector('pds-radio[component-id="radio1"]') as HTMLPdsRadioElement;
+    expect(radio1).toBeTruthy();
+
     const input = radio1?.querySelector('input') as HTMLInputElement;
+    expect(input).toBeTruthy();
 
-    if (input && radio1) {
-      input.checked = true;
+    input.checked = true;
 
-      // Create a native change event
-      const changeEvent = new Event('change', {
-        bubbles: true,
-        composed: true,
-      });
+    // Create a native change event
+    const changeEvent = new Event('change', {
+      bubbles: true,
+      composed: true,
+    });
 
-      // Set the target to the input element
-      Object.defineProperty(changeEvent, 'target', {
-        value: input,
-        writable: false,
-      });
+    // Set the target to the input element
+    Object.defineProperty(changeEvent, 'target', {
+      value: input,
+      writable: false,
+    });
 
-      // Manually call the handler
-      component.handleRadioChange(changeEvent as any);
-    }
+    // Manually call the handler
+    component.handleRadioChange(changeEvent as any);
 
     await page.waitForChanges();
 
@@ -340,28 +341,29 @@ describe('pds-radio-group', () => {
     const eventSpy = jest.spyOn(component.pdsRadioGroupChange, 'emit');
 
     // NOTE: Manually calling private handler method due to test harness limitations.
-    // Native change events may not bubble reliably to the body listener in test environment.
+    // Native change events may not bubble reliably in test environment.
     // If the test harness ever supports reliably triggering native change events end-to-end,
     // this test should be refactored to dispatch events on the input and let them bubble naturally.
     // Simulate unchecking the first radio (should not emit)
     const radio1 = page.root?.querySelector('pds-radio[component-id="radio1"]') as HTMLPdsRadioElement;
+    expect(radio1).toBeTruthy();
+
     const input1 = radio1?.querySelector('input') as HTMLInputElement;
+    expect(input1).toBeTruthy();
 
-    if (input1) {
-      input1.checked = false;
+    input1.checked = false;
 
-      const changeEvent = new Event('change', {
-        bubbles: true,
-        composed: true,
-      });
+    const changeEvent1 = new Event('change', {
+      bubbles: true,
+      composed: true,
+    });
 
-      Object.defineProperty(changeEvent, 'target', {
-        value: input1,
-        writable: false,
-      });
+    Object.defineProperty(changeEvent1, 'target', {
+      value: input1,
+      writable: false,
+    });
 
-      component.handleRadioChange(changeEvent as any);
-    }
+    component.handleRadioChange(changeEvent1 as any);
 
     await page.waitForChanges();
 
@@ -370,23 +372,24 @@ describe('pds-radio-group', () => {
 
     // Now check the second radio (should emit)
     const radio2 = page.root?.querySelector('pds-radio[component-id="radio2"]') as HTMLPdsRadioElement;
+    expect(radio2).toBeTruthy();
+
     const input2 = radio2?.querySelector('input') as HTMLInputElement;
+    expect(input2).toBeTruthy();
 
-    if (input2) {
-      input2.checked = true;
+    input2.checked = true;
 
-      const changeEvent = new Event('change', {
-        bubbles: true,
-        composed: true,
-      });
+    const changeEvent2 = new Event('change', {
+      bubbles: true,
+      composed: true,
+    });
 
-      Object.defineProperty(changeEvent, 'target', {
-        value: input2,
-        writable: false,
-      });
+    Object.defineProperty(changeEvent2, 'target', {
+      value: input2,
+      writable: false,
+    });
 
-      component.handleRadioChange(changeEvent as any);
-    }
+    component.handleRadioChange(changeEvent2 as any);
 
     await page.waitForChanges();
 
