@@ -15,11 +15,6 @@ export class PdsRadioGroup {
   @Element() el: HTMLPdsRadioGroupElement;
 
   /**
-   * Instance counter for deterministic ID generation
-   */
-  private static radioGroupIdCounter = 0;
-
-  /**
    * A unique identifier used for the underlying component `id` attribute.
    */
   @Prop() componentId: string;
@@ -88,14 +83,12 @@ export class PdsRadioGroup {
     this.updateChildRadios();
   }
 
-  @Listen('change', {
-    target: 'body',
-  })
+  @Listen('change')
   handleRadioChange(event: Event) {
     const target = event.target as HTMLInputElement;
 
-    // Only handle events from radio inputs within this group
-    if (target.type !== 'radio' || !this.el.contains(target.closest('pds-radio'))) {
+    // Only handle events from radio inputs
+    if (target.type !== 'radio') {
       return;
     }
 
@@ -179,7 +172,7 @@ export class PdsRadioGroup {
   }
 
   render() {
-    const groupId = this.componentId || `radio-group-${++PdsRadioGroup.radioGroupIdCounter}`;
+    const groupId = this.componentId || `radio-group-${crypto.randomUUID()}`;
     const gapValue = this.getGapValue();
 
     return (
