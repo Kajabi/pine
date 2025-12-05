@@ -1483,7 +1483,7 @@ export namespace Components {
          */
         "invalid": boolean;
         /**
-          * String used for radio `name` attribute. Applied to all child radios.
+          * String used for radio `name` attribute. Applied to all child radios. Required for proper radio group behavior (mutual exclusivity and form submission).
          */
         "name": string;
         /**
@@ -4219,7 +4219,7 @@ declare namespace LocalJSX {
          */
         "invalid"?: boolean;
         /**
-          * String used for radio `name` attribute. Applied to all child radios.
+          * String used for radio `name` attribute. Applied to all child radios. Required for proper radio group behavior (mutual exclusivity and form submission).
          */
         "name"?: string;
         /**

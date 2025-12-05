@@ -15,6 +15,11 @@ export class PdsRadioGroup {
   @Element() el: HTMLPdsRadioGroupElement;
 
   /**
+   * Instance counter for deterministic ID generation
+   */
+  private static radioGroupIdCounter = 0;
+
+  /**
    * A unique identifier used for the underlying component `id` attribute.
    */
   @Prop() componentId: string;
@@ -60,6 +65,7 @@ export class PdsRadioGroup {
 
   /**
    * String used for radio `name` attribute. Applied to all child radios.
+   * Required for proper radio group behavior (mutual exclusivity and form submission).
    */
   @Prop() name: string;
 
@@ -131,6 +137,9 @@ export class PdsRadioGroup {
   }
 
   componentDidLoad() {
+    if (!this.name) {
+      console.warn('pds-radio-group: name prop is required for proper radio group functionality');
+    }
     this.updateChildRadios();
   }
 
@@ -170,7 +179,7 @@ export class PdsRadioGroup {
   }
 
   render() {
-    const groupId = this.componentId || `radio-group-${Math.random().toString(36).substr(2, 9)}`;
+    const groupId = this.componentId || `radio-group-${++PdsRadioGroup.radioGroupIdCounter}`;
     const gapValue = this.getGapValue();
 
     return (
