@@ -209,6 +209,31 @@ describe('pds-radio-group', () => {
     expect(radio?.getAttribute('name')).toBe('group2');
   });
 
+  it('removes name attribute from child radios when name prop becomes empty', async () => {
+    const page = await newSpecPage({
+      components: [PdsRadioGroup, PdsRadio],
+      html: `
+        <pds-radio-group name="group1">
+          <pds-radio component-id="radio1" label="Option 1" value="1"></pds-radio>
+        </pds-radio-group>
+      `,
+    });
+
+    await page.waitForChanges();
+
+    // Verify name is initially set
+    const radio = page.root?.querySelector('pds-radio');
+    expect(radio?.getAttribute('name')).toBe('group1');
+
+    // Clear the name prop
+    const component = page.rootInstance as PdsRadioGroup;
+    component.name = '';
+    await page.waitForChanges();
+
+    // Verify name attribute is removed
+    expect(radio?.getAttribute('name')).toBeNull();
+  });
+
   it('updates child radios when invalid prop changes', async () => {
     const page = await newSpecPage({
       components: [PdsRadioGroup, PdsRadio],
