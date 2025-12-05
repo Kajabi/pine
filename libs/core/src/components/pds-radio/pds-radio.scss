@@ -27,6 +27,14 @@
   flex-direction: column;
   padding: var(--pine-dimension-md);
 
+  // On small screens, ensure full width when in a row layout
+  @media (max-width: 767px) {
+    box-sizing: border-box;
+    flex: 1 1 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
   &:hover {
     border: var(--pine-border-hover);
   }
@@ -200,6 +208,14 @@ label:has(input:disabled) {
   display: flex;
   flex: 1;
   padding: var(--pine-dimension-md);
+
+  // On small screens, ensure full width when in a row layout
+  @media (max-width: 767px) {
+    box-sizing: border-box;
+    flex: 1 1 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
 
   &:hover {
     border: var(--pine-border-hover);
