@@ -20,6 +20,12 @@ export class PdsRadioGroup {
   @Prop() componentId: string;
 
   /**
+   * Stable group ID generated once during component initialization.
+   * Used to maintain DOM stability and accessibility relationships across re-renders.
+   */
+  private _groupId: string;
+
+  /**
    * Layout direction for the radio group.
    * @defaultValue column
    */
@@ -129,6 +135,20 @@ export class PdsRadioGroup {
     });
   }
 
+  componentWillLoad() {
+    // Generate stable group ID once during initialization
+    // This ensures DOM stability and accessibility relationships remain consistent across re-renders
+    if (this.componentId) {
+      this._groupId = this.componentId;
+    } else {
+      // Generate unique ID with fallback for test environments where crypto.randomUUID may not be available
+      const uniqueId = typeof crypto !== 'undefined' && crypto.randomUUID
+        ? crypto.randomUUID()
+        : `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+      this._groupId = `radio-group-${uniqueId}`;
+    }
+  }
+
   componentDidLoad() {
     if (!this.name) {
       console.warn('pds-radio-group: name prop is required for proper radio group functionality');
@@ -172,17 +192,12 @@ export class PdsRadioGroup {
   }
 
   render() {
-    // Generate unique ID with fallback
-    const uniqueId = typeof crypto !== 'undefined' && crypto.randomUUID
-      ? crypto.randomUUID()
-      : `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-    const groupId = this.componentId || `radio-group-${uniqueId}`;
     const gapValue = this.getGapValue();
 
     return (
       <Host
         class={this.classNames()}
-        id={groupId}
+        id={this._groupId}
         style={{
           '--pds-radio-group-gap': gapValue,
         }}
@@ -202,7 +217,7 @@ export class PdsRadioGroup {
         {this.helperMessage && (
           <div
             class="pds-radio-group__message"
-            id={messageId(groupId, 'helper')}
+            id={messageId(this._groupId, 'helper')}
           >
             {this.helperMessage}
           </div>
@@ -210,7 +225,7 @@ export class PdsRadioGroup {
         {this.errorMessage && (
           <div
             class="pds-radio-group__message pds-radio-group__message--error"
-            id={messageId(groupId, 'error')}
+            id={messageId(this._groupId, 'error')}
             aria-live="assertive"
           >
             <pds-icon icon={danger} size="small" />
