@@ -82,7 +82,8 @@ describe('pds-radio-group', () => {
 
     await page.waitForChanges();
 
-    const errorMessage = await page.find('.pds-radio-group__message--error');
+    // Scoped component (not shadow DOM), so use descendant selector scoped through host
+    const errorMessage = await page.find('pds-radio-group .pds-radio-group__message--error');
     expect(errorMessage).toBeTruthy();
     expect(await errorMessage.textContent).toContain('Please select an option');
   });
@@ -115,7 +116,8 @@ describe('pds-radio-group', () => {
 
     await page.waitForChanges();
 
-    const helperMessage = await page.find('.pds-radio-group__message:not(.pds-radio-group__message--error)');
+    // Scoped component (not shadow DOM), so use descendant selector scoped through host
+    const helperMessage = await page.find('pds-radio-group .pds-radio-group__message:not(.pds-radio-group__message--error)');
     expect(helperMessage).toBeTruthy();
     expect(await helperMessage.textContent).toBe('This is a helper message');
   });
@@ -130,7 +132,8 @@ describe('pds-radio-group', () => {
 
     await page.waitForChanges();
 
-    const label = await page.find('.pds-radio-group__label');
+    // Scoped component (not shadow DOM), so use descendant selector scoped through host
+    const label = await page.find('pds-radio-group .pds-radio-group__label');
     expect(label).toBeTruthy();
     expect(await label.textContent).toBe('Comments');
   });
