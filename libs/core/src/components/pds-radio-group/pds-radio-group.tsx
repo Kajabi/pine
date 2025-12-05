@@ -116,6 +116,8 @@ export class PdsRadioGroup {
     radios.forEach((radio) => {
       if (this.name) {
         radio.setAttribute('name', this.name);
+      } else {
+        radio.removeAttribute('name');
       }
       if (this.disabled) {
         radio.setAttribute('disabled', 'true');
