@@ -172,7 +172,11 @@ export class PdsRadioGroup {
   }
 
   render() {
-    const groupId = this.componentId || `radio-group-${crypto.randomUUID()}`;
+    // Generate unique ID with fallback
+    const uniqueId = typeof crypto !== 'undefined' && crypto.randomUUID
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    const groupId = this.componentId || `radio-group-${uniqueId}`;
     const gapValue = this.getGapValue();
 
     return (
