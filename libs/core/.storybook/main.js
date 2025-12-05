@@ -82,16 +82,33 @@ const config = {
     config.optimizeDeps.exclude = config.optimizeDeps.exclude || [];
     config.optimizeDeps.exclude.push('@mdx-js/react');
 
-    // Force Vite to not watch the loader/dist directories during HMR
-    // This prevents Storybook from breaking when tests rebuild these files
+    // Configure Vite watch settings for HMR
+    // The key issue: Storybook loads from dist/, so we need Vite to watch dist/ files
+    // But we also need to watch source files so changes trigger reloads
     config.server.watch = config.server.watch || {};
     config.server.watch.ignored = config.server.watch.ignored || [];
+
+    // Only ignore specific build artifacts that shouldn't trigger reloads
+    // Don't ignore dist/ entirely - we need to watch dist/docs.json and dist/collection for changes
     config.server.watch.ignored.push(
-      '**/loader/**',
-      '**/dist/**',
-      '**/www/**',
-      '**/components/**'
+      '**/loader/**',  // Ignore loader to prevent test rebuild issues
+      '**/www/**',     // Ignore www build output
+      '**/node_modules/**',
+      '**/coverage/**',
+      // Ignore specific dist subdirectories that aren't used by Storybook
+      '**/dist/cjs/**',
+      '**/dist/esm-es5/**',
+      '**/dist/pine-core/**',
+      '**/dist/types/**',
+      // Note: We DO want to watch dist/docs.json and dist/collection/** for component changes
     );
+
+    // Enable HMR for better live reload experience
+    config.server.hmr = config.server.hmr || {};
+    config.server.hmr.overlay = true;
+
+    // Configure Vite to use native file system events (faster than polling)
+    config.server.watch.usePolling = false;
 
     // Dedupe lit to avoid "Multiple versions of Lit loaded" warning
     config.resolve.dedupe = config.resolve.dedupe || [];
