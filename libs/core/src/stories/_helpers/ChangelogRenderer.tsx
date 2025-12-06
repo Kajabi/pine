@@ -83,8 +83,9 @@ export const ChangelogRenderer: React.FC<ChangelogRendererProps> = ({ changelogC
               component: 'a',
               props: {
                 style: {
-                  color: 'var(--pine-color-text-accent)',
-                  textDecoration: 'none',
+                  color: 'var(--pine-color-text)',
+                  textDecoration: 'underline',
+                  fontWeight: 'var(--pine-font-weight-semi-bold)',
                 },
               },
             },
