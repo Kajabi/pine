@@ -9,6 +9,7 @@ loader/
 www/
 
 storybook-static
+libs/core/.storybook/static/
 
 # IDEs and editors
 .idea/
