@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react';
 
 // Get directory paths
 const currentDir = dirname(fileURLToPath(import.meta.url));
-const changelogSource = join(currentDir, '../../../../CHANGELOG.md');
+const changelogSource = join(currentDir, '../../../CHANGELOG.md');
 const staticDir = join(currentDir, 'static');
 const changelogDest = join(staticDir, 'CHANGELOG.md');
 
