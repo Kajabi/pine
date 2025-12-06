@@ -11,12 +11,14 @@ export const ChangelogLoader: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const loadChangelog = async () => {
       try {
         setLoading(true);
         // Try to fetch from static directory (configured in Storybook main.js)
         // The file should be accessible at /CHANGELOG.md when served from staticDirs
-        const response = await fetch('/CHANGELOG.md');
+        const response = await fetch('/CHANGELOG.md', { signal: controller.signal });
         if (!response.ok) {
           throw new Error(`Failed to load changelog: ${response.statusText}`);
         }
@@ -24,16 +26,25 @@ export const ChangelogLoader: React.FC = () => {
         setContent(text);
         setError(null);
       } catch (err) {
+        // Ignore AbortError when component unmounts
+        if (err instanceof Error && err.name === 'AbortError') {
+          return;
+        }
         // If loading fails, show error with link to GitHub
         setError(err instanceof Error ? err.message : 'Failed to load changelog');
         console.error('Error loading changelog:', err);
-        console.log('Changelog file should be accessible at /CHANGELOG.md from staticDirs');
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     };
 
     loadChangelog();
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   if (loading) {

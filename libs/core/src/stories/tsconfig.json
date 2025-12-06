@@ -11,6 +11,9 @@
     "module": "esnext",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "paths": {
+      "@utils/*": ["src/utils/*"]
+    },
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "target": "es2017"
