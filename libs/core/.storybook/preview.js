@@ -1,7 +1,6 @@
 import { setCustomElementsManifest } from '@storybook/web-components';
 import { useEffect } from 'storybook/preview-api';
 import { action } from 'storybook/actions';
-import { withThemeByDataAttribute } from '@storybook/addon-themes';
 import stencilDocs from '../dist/docs.json';
 
 // Import pine-core ESM bundle which auto-registers all custom elements on import
@@ -114,18 +113,41 @@ const customElementsManifest = {
 
 setCustomElementsManifest(customElementsManifest);
 
+// Theme decorator that applies data-theme attribute
+const withTheme = (StoryFn, context) => {
+  const theme = context.globals.theme || 'light';
+
+  // Apply to document elements - runs on every render
+  document.documentElement.setAttribute('data-theme', theme);
+  document.body.setAttribute('data-theme', theme);
+
+  return StoryFn();
+};
+
 const preview = {
   decorators: [
     withCustomEventActions,
-    withThemeByDataAttribute({
-      themes: {
-        light: 'light',
-        dark: 'dark',
-      },
-      defaultTheme: 'light',
-      attributeName: 'data-theme',
-    }),
+    withTheme,
   ],
+
+  globalTypes: {
+    theme: {
+      description: 'Global theme for components',
+      toolbar: {
+        title: 'Theme',
+        icon: 'paintbrush',
+        items: [
+          { value: 'light', title: 'Light', icon: 'sun' },
+          { value: 'dark', title: 'Dark', icon: 'moon' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+  },
+
+  initialGlobals: {
+    theme: 'light',
+  },
 
   parameters: {
     options: {

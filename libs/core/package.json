@@ -91,7 +91,6 @@
     "@storybook/addon-a11y": "^10.1.3",
     "@storybook/addon-docs": "^10.1.3",
     "@storybook/addon-links": "^10.1.3",
-    "@storybook/addon-themes": "^10.1.3",
     "@storybook/web-components": "^10.1.3",
     "@storybook/web-components-vite": "^10.1.3",
     "@types/jest": "^29.5.14",

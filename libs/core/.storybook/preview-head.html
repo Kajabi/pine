@@ -17,8 +17,159 @@ body {
   /* Dark mode token overrides - tokens inherit through Shadow DOM */
   [data-theme="dark"] {
     /* Background colors */
+    --pine-color-background-app: #1a1a1a;
+    --pine-color-background-container: #2d2d2d;
+    --pine-color-background-surface: #252525;
+
+    /* Text colors */
+    --pine-color-text-primary: #ffffff;
+    --pine-color-text-secondary: #a0a0a0;
+    --pine-color-text-neutral: #808080;
+
+    /* Border colors */
+    --pine-color-border-default: #404040;
+    --pine-color-border-subtle: #333333;
 
     /* Primary button colors */
     --pine-color-primary-hover: var(--pine-color-white);
+  }
+
+  /* Dark mode styles for Storybook docs */
+  [data-theme="dark"] .sbdocs,
+  [data-theme="dark"] .docs-story {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+  }
+
+  [data-theme="dark"] .sbdocs-wrapper {
+    background-color: #1a1a1a;
+  }
+
+  [data-theme="dark"] .sbdocs-content {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+  }
+
+  [data-theme="dark"] .docblock-argstable .docblock-argstable-body > tr > * {
+    background-color: #2d2d2d;
+  }
+
+  /* Docs headings */
+  [data-theme="dark"] .sbdocs h1,
+  [data-theme="dark"] .sbdocs h2,
+  [data-theme="dark"] .sbdocs h3,
+  [data-theme="dark"] .sbdocs h4,
+  [data-theme="dark"] .sbdocs h5,
+  [data-theme="dark"] .sbdocs h6 {
+    color: #ffffff;
+  }
+
+  /* Docs paragraphs and text */
+  [data-theme="dark"] .sbdocs p,
+  [data-theme="dark"] .sbdocs li,
+  [data-theme="dark"] .sbdocs span {
+    /* color: #d0d0d0; */
+    color: #e0e0e0;;
+  }
+
+  /* Docs links */
+  [data-theme="dark"] .sbdocs a {
+    color: #6b9f36;
+  }
+
+  [data-theme="dark"] .sbdocs a:hover {
+    color: #8bc34a;
+  }
+
+  /* Docs code blocks */
+  [data-theme="dark"] .sbdocs pre,
+  [data-theme="dark"] .sbdocs code {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+  }
+
+  [data-theme="dark"] .sbdocs pre {
+    border-color: #404040;
+  }
+
+  /* Docs tables */
+  [data-theme="dark"] .sbdocs table {
+    background-color: #252525;
+  }
+
+  [data-theme="dark"] .sbdocs th {
+    background-color: #2d2d2d;
+    color: #ffffff;
+    border-color: #404040;
+  }
+
+  [data-theme="dark"] .sbdocs td {
+    border-color: #404040;
+    color: #d0d0d0;
+  }
+
+  [data-theme="dark"] .sbdocs tr:nth-child(even) {
+    background-color: #2a2a2a;
+  }
+
+  /* Docs blockquotes */
+  [data-theme="dark"] .sbdocs blockquote {
+    background-color: #252525;
+    border-left-color: #6b9f36;
+    color: #b0b0b0;
+  }
+
+  /* Docs horizontal rules */
+  [data-theme="dark"] .sbdocs hr {
+    border-color: #404040;
+  }
+
+  /* ArgTypes/Props table */
+  [data-theme="dark"] .docblock-argstable {
+    background-color: #252525;
+  }
+
+  [data-theme="dark"] .docblock-argstable th,
+  [data-theme="dark"] .docblock-argstable td {
+    border-color: #404040;
+    color: #d0d0d0;
+  }
+
+  [data-theme="dark"] .docblock-argstable thead {
+    background-color: #2d2d2d;
+  }
+
+  [data-theme="dark"] .docblock-argstable thead th {
+    color: #ffffff;
+  }
+
+  /* Story canvas/preview area */
+  [data-theme="dark"] .innerZoomElementWrapper > div {
+    background-color: #1a1a1a;
+  }
+
+  /* Unstyled stories container */
+  [data-theme="dark"] .sb-unstyled {
+    background-color: #1a1a1a;
+  }
+
+  [data-theme="dark"] .args-table {
+    background-color: #1a1a1a;
+  }
+
+  [data-theme="dark"] .sbdocs-content .args-table-header {
+    color: #e0e0e0;
+  }
+
+  [data-theme="dark"] .sbdocs-content .arg-table-cell {
+    color: #e0e0e0;
+  }
+
+  [data-theme="dark"] .sbdocs-content .docblock-argstable-body button + span {
+    color: #2e3338;
+  }
+
+  [data-theme="dark"] .sbdocs-content .docblock-argstable-body input + span + span {
+    color: #2e3338;
   }
 </style>

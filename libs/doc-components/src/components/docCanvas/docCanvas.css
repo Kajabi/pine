@@ -7,8 +7,17 @@
   --doc-canvas-radius: 8px;
   --doc-canvas-spacing: 10px;
   --doc-canvas-spacing-sm: 8px;
-  --doc-canvas-color-light: #fff;
-  --doc-canvas-color: #333;
+  --doc-canvas-color-light: #ffffff;
+  --doc-canvas-color: #333333;
+}
+
+[data-theme="dark"] {
+  --doc-canvas-background: #1a1a1a;
+  --doc-canvas-border: 1px solid #2d2d2d;
+  --doc-canvas-grey: #2d2d2d;
+  --doc-canvas-green: #628b83;
+  --doc-canvas-color-light: #000000;
+  --doc-canvas-color: #ffffff;
 }
 
 .doc-canvas {
@@ -79,6 +88,10 @@
   padding: var(--doc-canvas-spacing-sm);
   text-align: center;
   text-transform: uppercase;
+
+  [data-theme="dark"] &:hover {
+    color: #ffffff;
+  }
 }
 
 .doc-canvas-action:first-child {
@@ -124,6 +137,10 @@
   border-radius: var(--doc-canvas-radius-sm);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
   overflow: hidden;
+
+  [data-theme="dark"] & {
+    background-color: #2d2d2d;
+  }
 }
 
 .doc-canvas-code-wrapper {
