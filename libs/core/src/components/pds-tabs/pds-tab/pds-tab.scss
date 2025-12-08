@@ -86,7 +86,7 @@ pds-tab {
   .pds-tab {
     background-color: var(--color-background-tab);
     border-radius: calc(var(--pine-dimension-xs) * 1.25) calc(var(--pine-dimension-xs) * 1.25) var(--pine-dimension-none) var(--pine-dimension-none);
-    color: var(--pine-color-grey-800);
+    color: var(--pine-color-text-secondary);
     padding: 8px 16px 13px;
 
     &.is-active,
@@ -190,7 +190,7 @@ pds-tab {
     background-color: var(--color-background-tab);
     border: var(--pine-border-width-thin) solid transparent;
     border-radius: var(--pine-dimension-xs);
-    color: var(--pine-color-text-readonly);
+    color: var(--pine-color-text-muted);
     flex: 1;
     height: 34px;
     justify-content: center;

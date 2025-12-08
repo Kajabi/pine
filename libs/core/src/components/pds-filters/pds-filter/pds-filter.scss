@@ -14,7 +14,7 @@
   border-radius: var(--pine-dimension-100);
   box-shadow: var(--pine-box-shadow-050);
   box-sizing: border-box;
-  color: var(--pine-color-text-placeholder);
+  color: var(--pine-color-text-tertiary);
   cursor: pointer;
   display: inline-flex;
   font-family: var(--pine-font-family-inter);
@@ -29,7 +29,7 @@
 
   pds-icon {
     block-size: var(--pine-font-size-100);
-    color: var(--pine-color-grey-800);
+    color: var(--pine-color-text-secondary);
     flex-shrink: 0;
     inline-size: var(--pine-font-size-100);
   }
@@ -41,7 +41,7 @@
     color: var(--pine-color-text-hover);
 
     pds-icon {
-      color: var(--pine-color-grey-800);
+      color: var(--pine-color-text-secondary);
     }
   }
 
@@ -85,10 +85,10 @@
 .pds-filter__trigger--more {
   background-color: var(--pine-color-grey-050);
   border: var(--pine-border-width-thin) dashed var(--pine-color-grey-300);
-  color: var(--pine-color-text-placeholder);
+  color: var(--pine-color-text-tertiary);
 
   pds-icon {
-    color: var(--pine-color-grey-800);
+    color: var(--pine-color-text-secondary);
   }
 
   &:hover,
@@ -98,7 +98,7 @@
     color: var(--pine-color-text-hover);
 
     pds-icon {
-      color: var(--pine-color-grey-800);
+      color: var(--pine-color-text-secondary);
     }
   }
 

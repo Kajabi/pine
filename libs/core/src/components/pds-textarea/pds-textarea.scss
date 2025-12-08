@@ -130,7 +130,7 @@ label {
 .pds-textarea__character-counter {
   background: color-mix(in srgb, var(--pine-color-background-container) 80%, transparent);
   border-radius: calc(var(--pine-dimension-2xs) * 0.5);
-  color: var(--pine-color-text-readonly);
+  color: var(--pine-color-text-muted);
   font: var(--pine-typography-body-sm-medium);
   padding: calc(var(--pine-dimension-2xs) * 0.5) var(--pine-dimension-2xs);
   pointer-events: none;
