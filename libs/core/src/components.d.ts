@@ -1466,7 +1466,7 @@ export namespace Components {
         "errorMessage": string;
         /**
           * Spacing between radio items. Accepts t-shirt sizes (none, xxs, xs, sm, md, lg, xl, xxl) or core spacing tokens (025, 050, 100, etc.).
-          * @defaultValue sm
+          * @defaultValue xs
          */
         "gap": string;
         /**
@@ -4202,7 +4202,7 @@ declare namespace LocalJSX {
         "errorMessage"?: string;
         /**
           * Spacing between radio items. Accepts t-shirt sizes (none, xxs, xs, sm, md, lg, xl, xxl) or core spacing tokens (025, 050, 100, etc.).
-          * @defaultValue sm
+          * @defaultValue xs
          */
         "gap"?: string;
         /**

@@ -125,7 +125,7 @@ WithImage.args = {
   name: 'image-group',
 };
 
-export const Horizontal = BaseTemplate.bind();
+export const Horizontal = BorderTemplate.bind();
 Horizontal.args = {
   componentId: 'horizontal-group',
   direction: 'row',

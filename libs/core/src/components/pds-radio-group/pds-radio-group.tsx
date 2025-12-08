@@ -43,9 +43,9 @@ export class PdsRadioGroup {
 
   /**
    * Spacing between radio items. Accepts t-shirt sizes (none, xxs, xs, sm, md, lg, xl, xxl) or core spacing tokens (025, 050, 100, etc.).
-   * @defaultValue sm
+   * @defaultValue xs
    */
-  @Prop() gap: string = 'sm';
+  @Prop() gap: string = 'xs';
 
   /**
    * Determines whether or not the radio group is disabled.

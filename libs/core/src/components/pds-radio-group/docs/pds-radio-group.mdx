@@ -175,52 +175,29 @@ Disables all radios in the group, preventing user interaction. Useful when a for
 
 ### Horizontal Layout
 
-Radio groups can be displayed horizontally using the `direction="row"` prop. The label remains above the radios.
-
-<DocCanvas mdxSource={{
-  react: `<PdsRadioGroup name="example-horizontal" direction="row">
-  <PdsRadio componentId="horizontal-radio1" label="Option 1" value="1" checked={true} />
-  <PdsRadio componentId="horizontal-radio2" label="Option 2" value="2" />
-  <PdsRadio componentId="horizontal-radio3" label="Option 3" value="3" />
-</PdsRadioGroup>`,
-  webComponent: `<pds-radio-group name="example-horizontal" direction="row">
-  <pds-radio component-id="horizontal-radio1" label="Option 1" value="1" checked></pds-radio>
-  <pds-radio component-id="horizontal-radio2" label="Option 2" value="2"></pds-radio>
-  <pds-radio component-id="horizontal-radio3" label="Option 3" value="3"></pds-radio>
-</pds-radio-group>`
-}}>
-  <pds-radio-group name="example-horizontal" direction="row">
-    <pds-radio component-id="horizontal-radio1" label="Option 1" value="1" checked></pds-radio>
-    <pds-radio component-id="horizontal-radio2" label="Option 2" value="2"></pds-radio>
-    <pds-radio component-id="horizontal-radio3" label="Option 3" value="3"></pds-radio>
-  </pds-radio-group>
-</DocCanvas>
-
-### With Border
-
-Radio groups work with bordered radio buttons for enhanced visual organization.
+Radio groups can be displayed horizontally using the `direction="row"` prop. The label remains above the radios. We recommend using bordered radios for horizontal layouts.
 
 <DocCanvas mdxSource={{
   react: `<PdsBox gap="sm" display="block" fit="true">
-  <PdsRadioGroup name="example-bordered" groupLabel="Comments" direction="row">
-    <PdsRadio componentId="bordered-radio1" label="Visible" value="visible" hasBorder={true} checked={true} />
-    <PdsRadio componentId="bordered-radio2" label="Hidden" value="hidden" hasBorder={true} />
-    <PdsRadio componentId="bordered-radio3" label="Locked" value="locked" hasBorder={true} />
+  <PdsRadioGroup name="example-horizontal" direction="row">
+    <PdsRadio componentId="horizontal-radio1" label="Option 1" value="1" hasBorder={true} checked={true} />
+    <PdsRadio componentId="horizontal-radio2" label="Option 2" value="2" hasBorder={true} />
+    <PdsRadio componentId="horizontal-radio3" label="Option 3" value="3" hasBorder={true} />
   </PdsRadioGroup>
 </PdsBox>`,
   webComponent: `<pds-box gap="sm" display="block" fit="true">
-  <pds-radio-group name="example-bordered" group-label="Comments" direction="row">
-    <pds-radio component-id="bordered-radio1" label="Visible" value="visible" has-border checked></pds-radio>
-    <pds-radio component-id="bordered-radio2" label="Hidden" value="hidden" has-border></pds-radio>
-    <pds-radio component-id="bordered-radio3" label="Locked" value="locked" has-border></pds-radio>
+  <pds-radio-group name="example-horizontal" direction="row">
+    <pds-radio component-id="horizontal-radio1" label="Option 1" value="1" has-border checked></pds-radio>
+    <pds-radio component-id="horizontal-radio2" label="Option 2" value="2" has-border></pds-radio>
+    <pds-radio component-id="horizontal-radio3" label="Option 3" value="3" has-border></pds-radio>
   </pds-radio-group>
 </pds-box>`
 }}>
   <pds-box gap="sm" display="block" fit="true">
-    <pds-radio-group name="example-bordered" group-label="Comments" direction="row">
-      <pds-radio component-id="bordered-radio1" label="Visible" value="visible" has-border checked></pds-radio>
-      <pds-radio component-id="bordered-radio2" label="Hidden" value="hidden" has-border></pds-radio>
-      <pds-radio component-id="bordered-radio3" label="Locked" value="locked" has-border></pds-radio>
+    <pds-radio-group name="example-horizontal" direction="row">
+      <pds-radio component-id="horizontal-radio1" label="Option 1" value="1" has-border checked></pds-radio>
+      <pds-radio component-id="horizontal-radio2" label="Option 2" value="2" has-border></pds-radio>
+      <pds-radio component-id="horizontal-radio3" label="Option 3" value="3" has-border></pds-radio>
     </pds-radio-group>
   </pds-box>
 </DocCanvas>

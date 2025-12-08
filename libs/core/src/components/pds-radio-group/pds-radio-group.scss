@@ -1,7 +1,7 @@
 :host {
   display: flex;
   flex-direction: column;
-  gap: var(--pds-radio-group-gap, var(--pine-dimension-sm));
+  gap: var(--pine-dimension-sm);
 }
 
 :host(.is-invalid) {
@@ -19,7 +19,7 @@
 
 .pds-radio-group__radios {
   display: flex;
-  gap: var(--pds-radio-group-gap, var(--pine-dimension-sm));
+  gap: var(--pds-radio-group-gap, var(--pine-dimension-xs));
 }
 
 .pds-radio-group__radios--row {
