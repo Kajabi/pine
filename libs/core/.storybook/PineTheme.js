@@ -7,8 +7,8 @@ export default create({
   colorSecondary: '#040506',
 
   // UI
-  appBg: '#f8f8f8', // --pine-color-grey-100 (background-app)
-  appContentBg: '#f8f8f8', // match background-app for consistency
+  appBg: '#f8f8f8',
+  appContentBg: '#f8f8f8',
   appBorderColor: '#eceeef',
   appBorderRadius: 6,
 
