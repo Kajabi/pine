@@ -117,9 +117,23 @@ setCustomElementsManifest(customElementsManifest);
 const withTheme = (StoryFn, context) => {
   const theme = context.globals.theme || 'light';
 
-  // Apply to document elements - runs on every render
+  // Apply immediately for initial render
   document.documentElement.setAttribute('data-theme', theme);
   document.body.setAttribute('data-theme', theme);
+
+  // Also apply reactively when theme changes via toolbar
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.body.setAttribute('data-theme', theme);
+
+    // Notify parent window of theme change (for docs pages)
+    try {
+      window.parent.document.documentElement.setAttribute('data-theme', theme);
+      window.parent.document.body.setAttribute('data-theme', theme);
+    } catch (e) {
+      // Cross-origin access may fail, that's ok
+    }
+  }, [theme]);
 
   return StoryFn();
 };

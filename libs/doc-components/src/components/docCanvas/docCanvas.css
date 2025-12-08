@@ -1,6 +1,7 @@
 :root {
   --doc-canvas-background: #f9fafa;
   --doc-canvas-border: 1px solid #eceeef;
+  --doc-canvas-border-color: #eceeef;
   --doc-canvas-grey: #ececec;
   --doc-canvas-green: #628b83;
   --doc-canvas-radius-sm: 4px;
@@ -9,15 +10,24 @@
   --doc-canvas-spacing-sm: 8px;
   --doc-canvas-color-light: #ffffff;
   --doc-canvas-color: #333333;
+  --doc-canvas-color-muted: rgba(46, 52, 56, 0.6);
+  --doc-canvas-color-on-accent: #ffffff;
+  --doc-canvas-code-background: #f7fafc;
+  --doc-canvas-shadow: rgba(0, 0, 0, 0.1);
 }
 
 [data-theme="dark"] {
   --doc-canvas-background: #1a1a1a;
   --doc-canvas-border: 1px solid #2d2d2d;
+  --doc-canvas-border-color: #2d2d2d;
   --doc-canvas-grey: #2d2d2d;
   --doc-canvas-green: #628b83;
   --doc-canvas-color-light: #000000;
   --doc-canvas-color: #ffffff;
+  --doc-canvas-color-muted: rgba(255, 255, 255, 0.6);
+  --doc-canvas-color-on-accent: #ffffff;
+  --doc-canvas-code-background: #2d2d2d;
+  --doc-canvas-shadow: rgba(0, 0, 0, 0.3);
 }
 
 .doc-canvas {

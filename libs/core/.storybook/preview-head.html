@@ -4,6 +4,56 @@
 
 <link rel="stylesheet" href="/pine-core/pine-core.css" />
 
+<script>
+  // Apply theme attribute to document
+  const applyTheme = (theme) => {
+    document.documentElement.setAttribute('data-theme', theme);
+    if (document.body) {
+      document.body.setAttribute('data-theme', theme);
+    }
+  };
+
+  // Get theme from URL globals parameter (Storybook encodes globals in URL)
+  const getThemeFromUrl = () => {
+    const url = new URL(window.location.href);
+    const globals = url.searchParams.get('globals');
+    if (globals) {
+      // Parse globals format: "theme:dark" or "theme:light;other:value"
+      const parts = globals.split(';');
+      for (const part of parts) {
+        const [key, value] = part.split(':');
+        if (key === 'theme' && value) {
+          return value;
+        }
+      }
+    }
+    return 'light';
+  };
+
+  // Apply theme from URL
+  const checkAndApplyTheme = () => {
+    const theme = getThemeFromUrl();
+    applyTheme(theme);
+  };
+
+  // Watch for URL changes (when user toggles theme in toolbar)
+  let lastUrl = window.location.href;
+  const urlObserver = setInterval(() => {
+    if (window.location.href !== lastUrl) {
+      lastUrl = window.location.href;
+      checkAndApplyTheme();
+    }
+  }, 100);
+
+  // Apply immediately
+  checkAndApplyTheme();
+
+  // Re-apply once body is available
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', checkAndApplyTheme);
+  }
+</script>
+
 
 <style>
 body {
