@@ -1,6 +1,7 @@
 import { setCustomElementsManifest } from '@storybook/web-components';
 import { useEffect } from 'storybook/preview-api';
 import { action } from 'storybook/actions';
+import { withThemeByDataAttribute } from '@storybook/addon-themes';
 import stencilDocs from '../dist/docs.json';
 
 // Import pine-core ESM bundle which auto-registers all custom elements on import
@@ -114,7 +115,17 @@ const customElementsManifest = {
 setCustomElementsManifest(customElementsManifest);
 
 const preview = {
-  decorators: [withCustomEventActions],
+  decorators: [
+    withCustomEventActions,
+    withThemeByDataAttribute({
+      themes: {
+        light: 'light',
+        dark: 'dark',
+      },
+      defaultTheme: 'light',
+      attributeName: 'data-theme',
+    }),
+  ],
 
   parameters: {
     options: {
