@@ -36,8 +36,8 @@
 
   &:hover,
   &.pds-filter__trigger--open {
-    background-color: var(--pine-color-grey-100);
-    border-color: var(--pine-color-grey-400);
+    background-color: var(--pine-color-background-subtle);
+    border-color: var(--pine-color-border-hover);
     color: var(--pine-color-text-hover);
 
     pds-icon {
@@ -83,8 +83,8 @@
 }
 
 .pds-filter__trigger--more {
-  background-color: var(--pine-color-grey-050);
-  border: var(--pine-border-width-thin) dashed var(--pine-color-grey-300);
+  background-color: var(--pine-color-background-container-hover);
+  border: var(--pine-border-width-thin) dashed var(--pine-color-border);
   color: var(--pine-color-text-tertiary);
 
   pds-icon {
@@ -93,8 +93,8 @@
 
   &:hover,
   &.pds-filter__trigger--open {
-    background-color: var(--pine-color-grey-100);
-    border-color: var(--pine-color-grey-400);
+    background-color: var(--pine-color-background-subtle);
+    border-color: var(--pine-color-border-hover);
     color: var(--pine-color-text-hover);
 
     pds-icon {

@@ -9,7 +9,7 @@
   --pds-input-padding-x: var(--pine-dimension-150);
   --pds-input-padding-y: calc(var(--pine-dimension-xs) - var(--pine-border-width));
   --pds-input-font: var(--pine-typography-body);
-  --pds-input-text-color: var(--pine-color-text-active);
+  --pds-input-text-color: var(--pine-color-text-strong);
   --pds-input-placeholder-color: var(--pine-color-text-placeholder);
   --pds-input-icon-color: var(--pine-color-text-secondary);
   --pds-input-disabled-background: var(--pine-color-background-container-disabled);
@@ -183,7 +183,7 @@
 }
 
 .pds-input__label {
-  color: var(--pine-color-text-active);
+  color: var(--pine-color-text-strong);
   margin-block-end: var(--pine-dimension-2xs);
 }
 

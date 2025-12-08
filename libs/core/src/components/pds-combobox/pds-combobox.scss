@@ -33,7 +33,7 @@
   border: 1px solid var(--pine-color-border);
   border-radius: var(--pine-dimension-125);
   box-sizing: border-box;
-  color: var(--pine-color-text-active);
+  color: var(--pine-color-text-strong);
   flex: 1;
   font: var(--pine-typography-body-medium);
   padding: var(--pine-dimension-xs) var(--pine-dimension-450) var(--pine-dimension-xs) var(--pine-dimension-150);
@@ -102,7 +102,7 @@
   transition: background 0.15s;
 
   &[aria-selected="true"] {
-    background: var(--pine-color-grey-150);
+    background: var(--pine-color-background-muted);
   }
 
   &:focus-visible {
@@ -133,7 +133,7 @@
 .pds-combobox__option--highlighted,
 .pds-combobox__option[selected],
 .pds-combobox__option--selected {
-  background: var(--pine-color-grey-150);
+  background: var(--pine-color-background-muted);
 }
 
 .pds-combobox__option-check {

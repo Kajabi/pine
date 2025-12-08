@@ -8,16 +8,16 @@ pds-modal-content {
   }
 
   &:has(.pds-modal-content.pds-modal-content--border-both) {
-    border-block-end: 1px solid var(--pine-color-grey-200);
-    border-block-start: 1px solid var(--pine-color-grey-200);
+    border-block-end: 1px solid var(--pine-color-border-subtle);
+    border-block-start: 1px solid var(--pine-color-border-subtle);
   }
 
   &:has(.pds-modal-content.pds-modal-content--border-top) {
-    border-block-start: 1px solid var(--pine-color-grey-200);
+    border-block-start: 1px solid var(--pine-color-border-subtle);
   }
 
   &:has(.pds-modal-content.pds-modal-content--border-bottom) {
-    border-block-end: 1px solid var(--pine-color-grey-200);
+    border-block-end: 1px solid var(--pine-color-border-subtle);
   }
 }
 
