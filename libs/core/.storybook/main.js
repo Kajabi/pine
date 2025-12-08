@@ -1,6 +1,27 @@
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "path";
+import { copyFileSync, mkdirSync, existsSync } from "fs";
 import react from '@vitejs/plugin-react';
+
+// Get directory paths
+const currentDir = dirname(fileURLToPath(import.meta.url));
+const changelogSource = join(currentDir, '../../../CHANGELOG.md');
+const staticDir = join(currentDir, 'static');
+const changelogDest = join(staticDir, 'CHANGELOG.md');
+
+// Copy CHANGELOG.md to static directory at module load time
+// This ensures it exists before Storybook validates staticDirs
+const copyChangelog = () => {
+  if (!existsSync(staticDir)) {
+    mkdirSync(staticDir, { recursive: true });
+  }
+  if (existsSync(changelogSource)) {
+    copyFileSync(changelogSource, changelogDest);
+  }
+};
+
+// Run immediately when config is loaded
+copyChangelog();
 
 const config = {
   stories: [
@@ -23,14 +44,29 @@ const config = {
     options: {}
   },
 
-  staticDirs: ['../dist', '../assets'],
+  staticDirs: ['../dist', '../assets', './static'],
 
   docs: {},
 
   async viteFinal(config) {
     config.plugins = config.plugins || [];
 
-    const currentDir = dirname(fileURLToPath(import.meta.url));
+    // Add Vite plugin to watch CHANGELOG.md and copy on changes (dev mode)
+    config.plugins.push({
+      name: 'copy-changelog',
+      buildStart() {
+        copyChangelog();
+      },
+      configureServer(server) {
+        server.watcher.add(changelogSource);
+        server.watcher.on('change', (file) => {
+          if (file === changelogSource) {
+            copyChangelog();
+          }
+        });
+      },
+    });
+
     config.resolve = config.resolve || {};
     config.resolve.alias = config.resolve.alias || {};
 
