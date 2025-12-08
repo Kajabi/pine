@@ -82,6 +82,10 @@ const config = {
     config.optimizeDeps.exclude = config.optimizeDeps.exclude || [];
     config.optimizeDeps.exclude.push('@mdx-js/react');
 
+    // Exclude Stencil loader from Vite analysis to prevent "dist/esm" resolution errors
+    // The loader references dist/esm which only exists in production builds
+    config.optimizeDeps.exclude.push('@pine-ds/core/loader');
+
     // Configure Vite watch settings for HMR
     // The key issue: Storybook loads from dist/, so we need Vite to watch dist/ files
     // But we also need to watch source files so changes trigger reloads

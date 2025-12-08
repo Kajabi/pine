@@ -3,11 +3,11 @@ import { useEffect } from 'storybook/preview-api';
 import { action } from 'storybook/actions';
 import stencilDocs from '../dist/docs.json';
 
-// Import defineCustomElements from loader (prestart runs build first to generate polyfills)
-import { defineCustomElements } from '../loader';
-
-// Register Stencil custom elements
-defineCustomElements();
+// Import pine-core ESM bundle which auto-registers all custom elements on import
+// Note: We use dist/pine-core instead of loader because:
+// - loader/index.js references dist/esm which only exists in production builds (buildEs5: 'prod')
+// - dist/pine-core is always built, even in dev mode
+import '../dist/pine-core/pine-core.esm.js';
 
 // Get all custom event names from Stencil docs
 const allEventNames = stencilDocs.components
