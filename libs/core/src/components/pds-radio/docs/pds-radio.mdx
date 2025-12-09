@@ -102,53 +102,7 @@ Add a border around the radio component for better visual separation, useful for
 
 ### Group
 
-A radio group is created by assigning the same `name` attribute to each radio.
-
-Only one radio in the group can be selected at a time.
-
-<DocCanvas mdxSource={{
-  react: `<div>
-  <PdsRadio componentId="default1" label="Label" name="radio" checked={true} />
-  <PdsRadio componentId="default2" label="Label" name="radio" />
-  <PdsRadio componentId="default3" label="Label" name="radio" />
-</div>
-  `,
-  webComponent: `<div>
-  <pds-radio component-id="default1" label="Label" name="radio" checked />
-  <pds-radio component-id="default2" label="Label" name="radio"></pds-radio>
-  <pds-radio component-id="default3" label="Label" name="radio"></pds-radio>
-</div>
-`}}>
-  <>
-    <pds-radio component-id="default1" label="Label" name="radio" checked></pds-radio>
-    <pds-radio component-id="default2" label="Label" name="radio"></pds-radio>
-    <pds-radio component-id="default3" label="Label" name="radio"></pds-radio>
-  </>
-</DocCanvas>
-
-### Group with Border
-
-Radio groups can also use borders for enhanced visual organization, particularly useful in forms or selection interfaces.
-
-<DocCanvas mdxSource={{
-  react: `<PdsBox gap="sm">
-  <PdsRadio componentId="bordered1" label="Option 1" name="bordered-radio" checked={true} hasBorder={true} />
-  <PdsRadio componentId="bordered2" label="Option 2" name="bordered-radio" hasBorder={true} />
-  <PdsRadio componentId="bordered3" label="Option 3" name="bordered-radio" hasBorder={true} />
-</PdsBox>
-  `,
-  webComponent: `<pds-box gap="sm">
-  <pds-radio component-id="bordered1" label="Option 1" name="bordered-radio" checked has-border></pds-radio>
-  <pds-radio component-id="bordered2" label="Option 2" name="bordered-radio" has-border></pds-radio>
-  <pds-radio component-id="bordered3" label="Option 3" name="bordered-radio" has-border></pds-radio>
-</pds-box>
-`}}>
-  <pds-box gap="sm">
-    <pds-radio component-id="bordered1" label="Option 1" name="bordered-radio" checked has-border></pds-radio>
-    <pds-radio component-id="bordered2" label="Option 2" name="bordered-radio" has-border></pds-radio>
-    <pds-radio component-id="bordered3" label="Option 3" name="bordered-radio" has-border></pds-radio>
-  </pds-box>
-</DocCanvas>
+For grouping multiple radios together, use <pds-link href="../?path=/docs/components-radio-group--docs">pds-radio-group</pds-link> instead of manually grouping radios.
 
 ### With Image
 
@@ -184,121 +138,28 @@ Radio buttons can display custom images instead of the default radio input in a 
   </pds-radio>
 </DocCanvas>
 
-### Image Group
-
-Image-based radios work seamlessly in groups with the same bordered card layout, showing visual selection feedback with border highlights and checkmark overlays.
-
-<DocCanvas mdxSource={{
-  react: `<PdsBox gap="sm">
-  <PdsRadio
-    componentId="avatar1"
-    label="John Doe"
-    name="avatar-selection"
-    value="john"
-    checked={true}
-    helperMessage="Senior Developer"
-  >
-    <PdsBox slot="image" backgroundColor="var(--pine-color-accent)" borderRadius="full" padding="sm">
-      <PdsIcon icon="danger" size="medium" color="var(--pine-color-white)" />
-    </PdsBox>
-  </PdsRadio>
-  <PdsRadio
-    componentId="avatar2"
-    label="Jane Smith"
-    name="avatar-selection"
-    value="jane"
-    helperMessage="Product Manager"
-  >
-    <PdsBox slot="image" backgroundColor="var(--pine-color-accent)" borderRadius="full" padding="sm">
-      <PdsIcon icon="danger" size="medium" color="var(--pine-color-white)" />
-    </PdsBox>
-  </PdsRadio>
-  <PdsRadio
-    componentId="avatar3"
-    label="Mike Johnson"
-    name="avatar-selection"
-    value="mike"
-    helperMessage="UX Designer"
-  >
-    <PdsBox slot="image" backgroundColor="var(--pine-color-accent)" borderRadius="full" padding="sm">
-      <PdsIcon icon="danger" size="medium" color="var(--pine-color-white)" />
-    </PdsBox>
-  </PdsRadio>
-</PdsBox>`,
-  webComponent: `<pds-box gap="sm">
-  <pds-radio
-    component-id="avatar1"
-    label="John Doe"
-    name="avatar-selection"
-    value="john"
-    checked
-    helper-message="Senior Developer">
-    <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
-      <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
-    </pds-box>
-  </pds-radio>
-  <pds-radio
-    component-id="avatar2"
-    label="Jane Smith"
-    name="avatar-selection"
-    value="jane"
-    helper-message="Product Manager">
-    <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
-      <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
-    </pds-box>
-  </pds-radio>
-  <pds-radio
-    component-id="avatar3"
-    label="Mike Johnson"
-    name="avatar-selection"
-    value="mike"
-    helper-message="UX Designer">
-    <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
-      <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
-    </pds-box>
-  </pds-radio>
-</pds-box>`
-}}>
-  <pds-box gap="sm">
-    <pds-radio
-      component-id="avatar1"
-      label="John Doe"
-      name="avatar-selection"
-      value="john"
-      checked
-      helper-message="Senior Developer">
-      <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
-        <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
-      </pds-box>
-    </pds-radio>
-    <pds-radio
-      component-id="avatar2"
-      label="Jane Smith"
-      name="avatar-selection"
-      value="jane"
-      helper-message="Product Manager">
-      <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
-        <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
-      </pds-box>
-    </pds-radio>
-    <pds-radio
-      component-id="avatar3"
-      label="Mike Johnson"
-      name="avatar-selection"
-      value="mike"
-      helper-message="UX Designer">
-      <pds-box slot="image" background-color="var(--pine-color-accent)" border-radius="full" padding="sm">
-        <pds-icon icon="danger" size="medium" color="var(--pine-color-white)" />
-      </pds-box>
-    </pds-radio>
-  </pds-box>
-</DocCanvas>
-
 ## Form Integration
 
 - Assign the same `name` to each radio in a group so only one option submits with the form.
 - Set a unique `value` on every radio to identify the selected option inside `FormData`.
 - Apply `required` (typically on the first radio in the group) plus `invalid`/`errorMessage` to surface validation feedback when no choice is selected.
+- For grouped radios with a single error message, use `pds-radio-group` which automatically handles `name` propagation and displays a single error message for the entire group.
+
+## Technical Notes
+
+### Using pds-radio-group
+
+When grouping multiple radios, the <pds-link href="../?path=/docs/components-radio-group--docs">pds-radio-group</pds-link> component provides several advantages over manually grouping radios:
+
+- **Automatic prop propagation**: The group automatically applies `name`, `disabled`, `invalid`, and `required` attributes to all child radios, ensuring consistent state across the group
+- **Group-level messaging**: Displays a single error message or helper message for the entire group instead of individual messages on each radio
+- **Group label**: Supports an optional group-level `groupLabel` prop (React) or `group-label` attribute (Web Components) that appears above all radios
+- **Layout control**: Use the `direction` prop to arrange radios horizontally (`row`) or vertically (`column`), with the label always remaining above the radios
+- **Layout support**: Works seamlessly with standard radios, bordered radios (`hasBorder`), and radios with images
+- **Event handling**: Emits `pdsRadioGroupChange` when a radio in the group is selected, providing the selected `value` and `componentId` in the event detail
+- **Group states**: Supports `disabled` and `invalid` states that automatically propagate to all radios in the group
+
+This simplifies form management by handling common group-level concerns automatically and reduces the need to manually coordinate props across multiple radio components.
 
 ## Additional Resources
 

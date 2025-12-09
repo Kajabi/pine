@@ -12,6 +12,7 @@ import { ChipSentimentType, ChipVariantType, PlacementType } from "./utils/types
 import { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 import { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 import { PdsPopoverEventDetail } from "./components/pds-popover/popover-interface";
+import { RadioGroupChangeEventDetail } from "./components/pds-radio-group/radio-group-interface";
 import { SortableEvent } from "sortablejs";
 import { TextareaChangeEventDetail, TextareaInputEventDetail } from "./components/pds-textarea/textarea-interface";
 export { BoxColumnType, BoxShadowSizeType, BoxSpacingType } from "./utils/types";
@@ -21,6 +22,7 @@ export { ChipSentimentType, ChipVariantType, PlacementType } from "./utils/types
 export { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 export { PdsPopoverEventDetail } from "./components/pds-popover/popover-interface";
+export { RadioGroupChangeEventDetail } from "./components/pds-radio-group/radio-group-interface";
 export { SortableEvent } from "sortablejs";
 export { TextareaChangeEventDetail, TextareaInputEventDetail } from "./components/pds-textarea/textarea-interface";
 export namespace Components {
@@ -1443,6 +1445,53 @@ export namespace Components {
          */
         "value": string;
     }
+    interface PdsRadioGroup {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * Layout direction for the radio group.
+          * @defaultValue column
+         */
+        "direction": 'row' | 'column';
+        /**
+          * Determines whether or not the radio group is disabled.
+          * @defaultValue false
+         */
+        "disabled": boolean;
+        /**
+          * Displays error message text describing an invalid state for the entire group.
+         */
+        "errorMessage": string;
+        /**
+          * Spacing between radio items. Accepts t-shirt sizes (none, xxs, xs, sm, md, lg, xl, xxl) or core spacing tokens (025, 050, 100, etc.).
+          * @defaultValue xs
+         */
+        "gap": string;
+        /**
+          * String used for group label/heading.
+         */
+        "groupLabel": string;
+        /**
+          * Displays helper message text below the radio group.
+         */
+        "helperMessage": string;
+        /**
+          * Determines whether or not the radio group is invalid.
+          * @defaultValue false
+         */
+        "invalid": boolean;
+        /**
+          * String used for radio `name` attribute. Applied to all child radios. Required for proper radio group behavior (mutual exclusivity and form submission).
+         */
+        "name": string;
+        /**
+          * Determines whether or not the radio group is required.
+          * @defaultValue false
+         */
+        "required": boolean;
+    }
     interface PdsRow {
         /**
           * Defines the vertical alignment of the row items.
@@ -2013,6 +2062,10 @@ export interface PdsRadioCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsRadioElement;
 }
+export interface PdsRadioGroupCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsRadioGroupElement;
+}
 export interface PdsSelectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsSelectElement;
@@ -2385,6 +2438,23 @@ declare global {
         prototype: HTMLPdsRadioElement;
         new (): HTMLPdsRadioElement;
     };
+    interface HTMLPdsRadioGroupElementEventMap {
+        "pdsRadioGroupChange": RadioGroupChangeEventDetail;
+    }
+    interface HTMLPdsRadioGroupElement extends Components.PdsRadioGroup, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsRadioGroupElementEventMap>(type: K, listener: (this: HTMLPdsRadioGroupElement, ev: PdsRadioGroupCustomEvent<HTMLPdsRadioGroupElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsRadioGroupElementEventMap>(type: K, listener: (this: HTMLPdsRadioGroupElement, ev: PdsRadioGroupCustomEvent<HTMLPdsRadioGroupElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLPdsRadioGroupElement: {
+        prototype: HTMLPdsRadioGroupElement;
+        new (): HTMLPdsRadioGroupElement;
+    };
     interface HTMLPdsRowElement extends Components.PdsRow, HTMLStencilElement {
     }
     var HTMLPdsRowElement: {
@@ -2636,6 +2706,7 @@ declare global {
         "pds-progress": HTMLPdsProgressElement;
         "pds-property": HTMLPdsPropertyElement;
         "pds-radio": HTMLPdsRadioElement;
+        "pds-radio-group": HTMLPdsRadioGroupElement;
         "pds-row": HTMLPdsRowElement;
         "pds-select": HTMLPdsSelectElement;
         "pds-sortable": HTMLPdsSortableElement;
@@ -4110,6 +4181,57 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
+    interface PdsRadioGroup {
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId"?: string;
+        /**
+          * Layout direction for the radio group.
+          * @defaultValue column
+         */
+        "direction"?: 'row' | 'column';
+        /**
+          * Determines whether or not the radio group is disabled.
+          * @defaultValue false
+         */
+        "disabled"?: boolean;
+        /**
+          * Displays error message text describing an invalid state for the entire group.
+         */
+        "errorMessage"?: string;
+        /**
+          * Spacing between radio items. Accepts t-shirt sizes (none, xxs, xs, sm, md, lg, xl, xxl) or core spacing tokens (025, 050, 100, etc.).
+          * @defaultValue xs
+         */
+        "gap"?: string;
+        /**
+          * String used for group label/heading.
+         */
+        "groupLabel"?: string;
+        /**
+          * Displays helper message text below the radio group.
+         */
+        "helperMessage"?: string;
+        /**
+          * Determines whether or not the radio group is invalid.
+          * @defaultValue false
+         */
+        "invalid"?: boolean;
+        /**
+          * String used for radio `name` attribute. Applied to all child radios. Required for proper radio group behavior (mutual exclusivity and form submission).
+         */
+        "name"?: string;
+        /**
+          * Emits when a radio in the group is selected, providing the selected value and component ID.
+         */
+        "onPdsRadioGroupChange"?: (event: PdsRadioGroupCustomEvent<RadioGroupChangeEventDetail>) => void;
+        /**
+          * Determines whether or not the radio group is required.
+          * @defaultValue false
+         */
+        "required"?: boolean;
+    }
     interface PdsRow {
         /**
           * Defines the vertical alignment of the row items.
@@ -4696,6 +4818,7 @@ declare namespace LocalJSX {
         "pds-progress": PdsProgress;
         "pds-property": PdsProperty;
         "pds-radio": PdsRadio;
+        "pds-radio-group": PdsRadioGroup;
         "pds-row": PdsRow;
         "pds-select": PdsSelect;
         "pds-sortable": PdsSortable;
@@ -4758,6 +4881,7 @@ declare module "@stencil/core" {
             "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-property": LocalJSX.PdsProperty & JSXBase.HTMLAttributes<HTMLPdsPropertyElement>;
             "pds-radio": LocalJSX.PdsRadio & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
+            "pds-radio-group": LocalJSX.PdsRadioGroup & JSXBase.HTMLAttributes<HTMLPdsRadioGroupElement>;
             "pds-row": LocalJSX.PdsRow & JSXBase.HTMLAttributes<HTMLPdsRowElement>;
             "pds-select": LocalJSX.PdsSelect & JSXBase.HTMLAttributes<HTMLPdsSelectElement>;
             "pds-sortable": LocalJSX.PdsSortable & JSXBase.HTMLAttributes<HTMLPdsSortableElement>;

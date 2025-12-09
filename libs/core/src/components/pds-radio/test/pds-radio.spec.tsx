@@ -188,6 +188,28 @@ describe('pds-radio', () => {
     expect(eventSpy).not.toHaveBeenCalled();
   });
 
+  it('does not emit "pdsRadioChange" event when radio is inside a pds-radio-group', async () => {
+    const { PdsRadioGroup } = await import('../../pds-radio-group/pds-radio-group');
+    const page = await newSpecPage({
+      components: [PdsRadio, PdsRadioGroup],
+      html: `
+        <pds-radio-group name="test-group">
+          <pds-radio component-id="radio1" label="Option 1" value="option1"></pds-radio>
+        </pds-radio-group>
+      `,
+    });
+
+    const radio = page.doc.querySelector('pds-radio[component-id="radio1"]');
+    const input = radio?.querySelector('input[type="radio"]');
+    const eventSpy = jest.fn();
+
+    radio?.addEventListener('pdsRadioChange', eventSpy);
+    input?.dispatchEvent(new Event('change'));
+    await page.waitForChanges();
+
+    expect(eventSpy).not.toHaveBeenCalled();
+  });
+
   it('renders with has-border class when hasBorder prop is true', async () => {
     const page = await newSpecPage({
       components: [PdsRadio],
