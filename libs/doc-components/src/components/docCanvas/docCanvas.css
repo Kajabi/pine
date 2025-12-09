@@ -112,7 +112,7 @@
 .doc-canvas-action:hover {
   background: rgba(204, 204, 204, 0.28);
   box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.3);
-  color: #000;
+  color: #000000;
 }
 
 .doc-canvas-action--active {
@@ -143,7 +143,7 @@
 }
 
 .doc-cavas-actions-toggle {
-  background-color: #eee;
+  background-color: #eeeeee;
   border-radius: var(--doc-canvas-radius-sm);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
   overflow: hidden;
