@@ -46,9 +46,9 @@ div {
 }
 
 .pds-avatar__badge {
-  background-color: var(--pine-color-background-container);
-  border: var(--pine-border);
-  border-color: var(--pine-color-secondary);
+  background-color: transparent;
+  border: var(--pine-dimension-none);
+  border-color: transparent;
   border-radius: var(--pine-border-radius-round);
   inset-block-end: var(--pine-dimension-none);
   inset-inline-end: var(--pine-dimension-none);

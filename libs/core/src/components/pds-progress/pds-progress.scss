@@ -1,5 +1,5 @@
 :host {
-  --color-progress-fill: var(--pine-color-brand);
+  --color-progress-fill: var(--pine-color-primary);
 
   --sizing-progress-bar-width: 100%;
 
@@ -44,12 +44,12 @@ progress::-webkit-progress-bar {
 }
 
 progress::-webkit-progress-value {
-  background: var(--color-progress-fill, var(--pine-color-brand));
+  background: var(--color-progress-fill, var(--pine-color-primary));
   border-radius: var(--pine-dimension-2xs);
 }
 
 progress::-moz-progress-bar {
-  background: var(--color-progress-fill, var(--pine-color-brand));
+  background: var(--color-progress-fill, var(--pine-color-primary));
   border-radius: var(--pine-dimension-2xs);
 }
 

@@ -191,8 +191,8 @@
   --color-background-default: transparent;
   --color-background-hover: transparent;
   --color-background-disabled: transparent;
-  --color-text-default: inherit;
-  --button-loader-color: inherit;
+  --color-text-default: var(--pine-color-text);
+  --button-loader-color: var(--pine-color-text);
   border-width: var(--pine-dimension-none);
   margin: var(--pine-dimension-none);
   min-height: auto;
