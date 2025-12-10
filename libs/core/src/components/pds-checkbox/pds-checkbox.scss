@@ -39,7 +39,7 @@
     }
 
     &::after {
-      border: 1px solid var(--pine-color-secondary);
+      border: 1px solid var(--pine-color-white);
       border-block-end: var(--pine-border-width-none);
       border-block-start: var(--pine-border-width-none);
       border-inline-start: var(--pine-border-width-none);
@@ -82,7 +82,7 @@ input {
     }
 
     &::after {
-      border: 1px solid var(--pine-color-secondary);
+      border: 1px solid var(--pine-color-white);
       border-block-start: var(--pine-border-width-none);
       border-inline-start: var(--pine-border-width-none);
       content: "";
