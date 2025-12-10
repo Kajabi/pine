@@ -47,15 +47,15 @@ Use `pds-box` for Single-Column Layouts:
       <PdsBox
         alignItems="center"
         justifyContent="center"
-        backgroundColor="#F5F5F5"
+        backgroundColor="var(--pine-color-background-subtle)"
         borderRadius="lg"
         shadow="md"
         direction="column"
         fit="true"
         minHeight="300px"
       >
-        <h1>Explore Your Craft</h1>
-        <p>Discover new ways to grow your business with Kajabi.</p>
+        <pds-text tag="h1" gutter="lg">Explore Your Craft</pds-text>
+        <pds-text gutter="sm">Discover new ways to grow your business with Kajabi.</pds-text>
         <pds-button>Get Started</pds-button>
       </PdsBox>
     `,
@@ -63,15 +63,15 @@ Use `pds-box` for Single-Column Layouts:
       <pds-box
         align-items="center"
         justify-content="center"
-        background-color="#F5F5F5"
+        background-color="var(--pine-color-background-subtle)"
         border-radius="lg"
         shadow="md"
         direction="column"
         fit="true"
         min-height="300px"
       >
-        <h1>Explore Your Craft</h1>
-        <p>Discover new ways to grow your business with Kajabi.</p>
+        <pds-text tag="h1" gutter="lg">Explore Your Craft</pds-text>
+        <pds-text gutter="sm">Discover new ways to grow your business with Kajabi.</pds-text>
         <pds-button>Get Started</pds-button>
       </pds-box>
     `
@@ -79,15 +79,15 @@ Use `pds-box` for Single-Column Layouts:
   <pds-box
     align-items="center"
     justify-content="center"
-    background-color="#F5F5F5"
+    background-color="var(--pine-color-background-subtle)"
     border-radius="lg"
     shadow="md"
     direction="column"
     fit="true"
     min-height="300px"
   >
-    <h1>Explore Your Craft</h1>
-    <p>Discover new ways to grow your business with Kajabi.</p>
+    <pds-text tag="h1" gutter="lg">Explore Your Craft</pds-text>
+    <pds-text gutter="sm">Discover new ways to grow your business with Kajabi.</pds-text>
     <pds-button>Get Started</pds-button>
   </pds-box>
 </DocCanvas>
@@ -380,11 +380,11 @@ Add size modifiers to your child `pds-box` for responsive design
           </PdsBox>
           <PdsBox sizeSm="9">
             <PdsBox direction="column">
-              <h3>Accept Kajabi Payments on all your Offers!</h3>
-              <p>Convert credit card payments and enable Apple Pay, Google Pay, and Buy Now, Pay Later options with one-click.</p>
+              <PdsText tag="h3" color="var(--pine-color-grey-900)" gutter="sm">Accept Kajabi Payments on all your Offers!</PdsText>
+              <PdsText color="var(--pine-color-grey-800)" gutter="sm">Convert credit card payments and enable Apple Pay, Google Pay, and Buy Now, Pay Later options with one-click.</PdsText>
               <PdsBox gap="sm">
-                <pds-button>Primary</pds-button>
-                <pds-button variant="secondary">Secondary</pds-button>
+                <PdsButton>Primary</PdsButton>
+                <PdsButton variant="secondary">Secondary</PdsButton>
               </PdsBox>
             </PdsBox>
           </PdsBox>
@@ -404,8 +404,8 @@ Add size modifiers to your child `pds-box` for responsive design
           </pds-box>
           <pds-box size-sm="9">
             <pds-box direction="column">
-              <h3>Accept Kajabi Payments on all your Offers!</h3>
-              <p>Convert credit card payments and enable Apple Pay, Google Pay, and Buy Now, Pay Later options with one-click.</p>
+              <pds-text tag="h3" color="var(--pine-color-grey-900)" gutter="sm">Accept Kajabi Payments on all your Offers!</pds-text>
+              <pds-text color="var(--pine-color-grey-800)" gutter="sm">Convert credit card payments and enable Apple Pay, Google Pay, and Buy Now, Pay Later options with one-click.</pds-text>
               <pds-box gap="sm">
                 <pds-button>Primary</pds-button>
                 <pds-button variant="secondary">Secondary</pds-button>
@@ -428,8 +428,8 @@ Add size modifiers to your child `pds-box` for responsive design
       </pds-box>
       <pds-box size-sm="9">
         <pds-box direction="column">
-          <h3>Accept Kajabi Payments on all your Offers!</h3>
-          <p>Convert credit card payments and enable Apple Pay, Google Pay, and Buy Now, Pay Later options with one-click.</p>
+          <pds-text tag="h3" color="var(--pine-color-grey-900)" gutter="sm">Accept Kajabi Payments on all your Offers!</pds-text>
+          <pds-text color="var(--pine-color-grey-800)" gutter="sm">Convert credit card payments and enable Apple Pay, Google Pay, and Buy Now, Pay Later options with one-click.</pds-text>
           <pds-box gap="sm">
             <pds-button>Primary</pds-button>
             <pds-button variant="secondary">Secondary</pds-button>
@@ -454,11 +454,11 @@ Add size modifiers to your child `pds-box` for responsive design
               direction="column"
               padding="sm"
             >
-              <h3>Transactions</h3>
+              <PdsText tag="h3" gutter="sm">Transactions</PdsText>
               <PdsBox gap="sm" justifyContent="space-between">
                 <PdsBox direction="column">
-                  <span>0</span>
-                  <span>Successful transactions</span>
+                  <PdsText gutter="sm">0</PdsText>
+                  <PdsText gutter="sm">Successful transactions</PdsText>
                 </PdsBox>
                 <PdsBox auto="true" alignItems="center">
                   <pds-icon name="caret-right"></pds-icon>
@@ -473,11 +473,11 @@ Add size modifiers to your child `pds-box` for responsive design
               direction="column"
               padding="sm"
             >
-              <h3>Transactions</h3>
+              <PdsText tag="h3" gutter="sm">Transactions</PdsText>
               <PdsBox gap="sm" justifyContent="space-between">
                 <PdsBox direction="column">
-                  <span>0</span>
-                  <span>Successful transactions</span>
+                  <PdsText gutter="sm">0</PdsText>
+                  <PdsText gutter="sm">Successful transactions</PdsText>
                 </PdsBox>
                 <PdsBox auto="true" alignItems="center">
                   <pds-icon name="caret-right"></pds-icon>
@@ -492,7 +492,7 @@ Add size modifiers to your child `pds-box` for responsive design
               direction="column"
               padding="sm"
             >
-              <h3>Transactions</h3>
+              <PdsText tag="h3" gutter="sm">Transactions</PdsText>
               <PdsBox gap="sm" justifyContent="space-between">
                 <PdsBox direction="column">
                   <span>0</span>
@@ -558,8 +558,8 @@ Add size modifiers to your child `pds-box` for responsive design
               <h3>Transactions</h3>
               <pds-box gap="sm" justify-content="space-between">
                 <pds-box direction="column">
-                  <span>0</span>
-                  <span>Successful transactions</span>
+                  <pds-text gutter="sm">0</pds-text>
+                  <pds-text gutter="sm">Successful transactions</pds-text>
                 </pds-box>
                 <pds-box auto="true" align-items="center">
                   <pds-icon name="caret-right"></pds-icon>
@@ -580,11 +580,11 @@ Add size modifiers to your child `pds-box` for responsive design
           direction="column"
           padding="sm"
         >
-          <h3>Transactions</h3>
+          <pds-text tag="h3" gutter="sm">Transactions</pds-text>
           <pds-box gap="sm" justify-content="space-between">
             <pds-box direction="column">
-              <span>0</span>
-              <span>Successful transactions</span>
+              <pds-text gutter="sm">0</pds-text>
+              <pds-text gutter="sm">Successful transactions</pds-text>
             </pds-box>
             <pds-box auto="true" align-items="center">
               <pds-icon name="caret-right"></pds-icon>
@@ -599,11 +599,11 @@ Add size modifiers to your child `pds-box` for responsive design
           direction="column"
           padding="sm"
         >
-          <h3>Transactions</h3>
+          <pds-text tag="h3" gutter="sm">Transactions</pds-text>
           <pds-box gap="sm" justify-content="space-between">
             <pds-box direction="column">
-              <span>0</span>
-              <span>Successful transactions</span>
+              <pds-text gutter="sm">0</pds-text>
+              <pds-text gutter="sm">Successful transactions</pds-text>
             </pds-box>
             <pds-box auto="true" align-items="center">
               <pds-icon name="caret-right"></pds-icon>
@@ -618,11 +618,11 @@ Add size modifiers to your child `pds-box` for responsive design
           direction="column"
           padding="sm"
         >
-          <h3>Transactions</h3>
+          <pds-text tag="h3" gutter="sm">Transactions</pds-text>
           <pds-box gap="sm" justify-content="space-between">
             <pds-box direction="column">
-              <span>0</span>
-              <span>Successful transactions</span>
+              <pds-text gutter="sm">0</pds-text>
+              <pds-text gutter="sm">Successful transactions</pds-text>
             </pds-box>
             <pds-box auto="true" align-items="center">
               <pds-icon name="caret-right"></pds-icon>
@@ -645,12 +645,12 @@ By combining the `pds-box` and `pds-row` components, you can easily create a 12-
         <PdsRow>
           <PdsBox>
             <PdsBox border>
-              Content for column 1
+              <PdsText gutter="sm">Content for column 1</PdsText>
             </PdsBox>
           </PdsBox>
           <PdsBox>
             <PdsBox border>
-              Content for column 2
+              <PdsText gutter="sm">Content for column 2</PdsText>
             </PdsBox>
           </PdsBox>
         </PdsRow>
@@ -661,12 +661,12 @@ By combining the `pds-box` and `pds-row` components, you can easily create a 12-
         <pds-row col-gap="sm">
           <pds-box>
             <pds-box border>
-              Content for column 1
+              <pds-text gutter="sm">Content for column 1</pds-text>
             </pds-box>
           </pds-box>
           <pds-box>
             <pds-box border>
-            Content for column 2
+              <pds-text gutter="sm">Content for column 2</pds-text>
           </pds-box>
         </pds-row>
       </pds-box>
@@ -675,10 +675,14 @@ By combining the `pds-box` and `pds-row` components, you can easily create a 12-
   <pds-box display="block">
     <pds-row col-gap="sm">
       <pds-box>
-        <pds-box border>Content for column 1</pds-box>
+        <pds-box border>
+          <pds-text gutter="sm">Content for column 1</pds-text>
+        </pds-box>
       </pds-box>
       <pds-box>
-        <pds-box border>Content for column 2</pds-box>
+        <pds-box border>
+          <pds-text gutter="sm">Content for column 2</pds-text>
+        </pds-box>
       </pds-box>
     </pds-row>
   </pds-box>
@@ -694,11 +698,11 @@ This creates a two-column layout, and you can customize the `size` and arrangeme
         <PdsRow col-gap="sm">
           <PdsBox size="4">
             <PdsBox border>
-              Content for column 1
+              <PdsText gutter="sm">Content for column 1</PdsText>
             </PdsBox>
           </PdsBox>
           <PdsBox size="8">
-            Content for column 2
+            <PdsText gutter="sm">Content for column 2</PdsText>
             </PdsBox>
           </PdsBox>
         </PdsRow>
@@ -709,12 +713,12 @@ This creates a two-column layout, and you can customize the `size` and arrangeme
         <pds-row col-gap="sm">
           <pds-box size="4">
             <pds-box border>
-              Content for column 1
+              <pds-text gutter="sm">Content for column 1</pds-text>
             </pds-box>
           </pds-box>
           <pds-box size="8">
             <pds-box border>
-              Content for column 2
+              <pds-text gutter="sm">Content for column 2</pds-text>
             </pds-box>
           </pds-box>
         </pds-row>
@@ -724,7 +728,9 @@ This creates a two-column layout, and you can customize the `size` and arrangeme
   <pds-box display="block">
     <pds-row col-gap="sm">
       <pds-box size="4">
-        <pds-box border>Content for column 1</pds-box>
+        <pds-box border>
+          <pds-text gutter="sm">Content for column 1</pds-text>
+        </pds-box>
       </pds-box>
       <pds-box size="8">
         <pds-box border>Content for column 2</pds-box>

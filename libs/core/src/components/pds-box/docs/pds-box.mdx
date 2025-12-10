@@ -99,8 +99,8 @@ This approach ensures layouts work correctly regardless of text direction or wri
     react: `<>
   {/* Column: Vertical stacking */}
   <PdsBox direction="column" border="true" padding="md" margin-block-end="md">
-    <h3>Page Title</h3>
-    <p>This is a description that appears below the title.</p>
+    <pds-text tag="h3" gutter="lg">Page Title</pds-text>
+    <pds-text gutter="sm">This is a description that appears below the title.</pds-text>
     <PdsBox gap="sm">
       <PdsButton>Primary Action</PdsButton>
       <PdsButton variant="secondary">Secondary</PdsButton>
@@ -110,14 +110,14 @@ This approach ensures layouts work correctly regardless of text direction or wri
   {/* Row: Horizontal flow (default) */}
   <PdsBox border="true" padding="md" align-items="center" gap="sm">
     <PdsIcon name="info" />
-    <span>Status message</span>
+    <pds-text gutter="sm">Status message</pds-text>
     <PdsButton size="sm">Action</PdsButton>
   </PdsBox>
 </>`,
     webComponent: `<!-- Column: Vertical stacking -->
 <pds-box direction="column" border="true" padding="md" margin-block-end="md">
-  <h3>Page Title</h3>
-  <p>This is a description that appears below the title.</p>
+  <pds-text tag="h3" gutter="lg">Page Title</pds-text>
+  <pds-text gutter="sm">This is a description that appears below the title.</pds-text>
   <pds-box gap="sm">
     <pds-button>Primary Action</pds-button>
     <pds-button variant="secondary">Secondary</pds-button>
@@ -127,13 +127,13 @@ This approach ensures layouts work correctly regardless of text direction or wri
 <!-- Row: Horizontal flow (default) -->
 <pds-box border="true" padding="md" align-items="center" gap="sm">
   <pds-icon name="info"></pds-icon>
-  <span>Status message</span>
+  <pds-text gutter="sm">Status message</pds-text>
   <pds-button size="sm">Action</pds-button>
 </pds-box>`
 }}>
   <pds-box direction="column" border="true" padding="md" margin-block-end="md">
-    <h3>Page Title</h3>
-    <p>This is a description that appears below the title.</p>
+    <pds-text tag="h3" gutter="lg">Page Title</pds-text>
+    <pds-text gutter="sm">This is a description that appears below the title.</pds-text>
     <pds-box gap="sm">
       <pds-button>Primary Action</pds-button>
       <pds-button variant="secondary">Secondary</pds-button>
@@ -142,7 +142,7 @@ This approach ensures layouts work correctly regardless of text direction or wri
 
   <pds-box border="true" padding="md" align-items="center" gap="sm">
     <pds-icon name="info"></pds-icon>
-    <span>Status message</span>
+    <pds-text gutter="sm">Status message</pds-text>
     <pds-button size="sm">Action</pds-button>
   </pds-box>
 </DocCanvas>
@@ -211,36 +211,36 @@ Controls how items flow within the container.
   mdxSource={{
     react: `<>
   <PdsBox border="true" padding="sm" margin-block-end="sm">
-    <span>Item 1</span>
-    <span>Item 2</span>
-    <span>Item 3</span>
+    <pds-text gutter="sm">Item 1</pds-text>
+    <pds-text gutter="sm">Item 2</pds-text>
+    <pds-text gutter="sm">Item 3</pds-text>
   </PdsBox>
   <PdsBox border="true" padding="sm" direction="column">
-    <span>Item 1</span>
-    <span>Item 2</span>
-    <span>Item 3</span>
+    <pds-text gutter="sm">Item 1</pds-text>
+    <pds-text gutter="sm">Item 2</pds-text>
+    <pds-text gutter="sm">Item 3</pds-text>
   </PdsBox>
 </>`,
     webComponent: `<pds-box border="true" padding="sm" margin-block-end="sm">
-  <span>Item 1</span>
-  <span>Item 2</span>
-  <span>Item 3</span>
+  <pds-text gutter="sm">Item 1</pds-text>
+  <pds-text gutter="sm">Item 2</pds-text>
+  <pds-text gutter="sm">Item 3</pds-text>
 </pds-box>
 <pds-box border="true" padding="sm" direction="column">
-  <span>Item 1</span>
-  <span>Item 2</span>
-  <span>Item 3</span>
+  <pds-text gutter="sm">Item 1</pds-text>
+  <pds-text gutter="sm">Item 2</pds-text>
+  <pds-text gutter="sm">Item 3</pds-text>
 </pds-box>`
 }}>
   <pds-box border="true" padding="sm" margin-block-end="sm">
-    <span>Item 1</span>
-    <span>Item 2</span>
-    <span>Item 3</span>
+    <pds-text gutter="sm">Item 1</pds-text>
+    <pds-text gutter="sm">Item 2</pds-text>
+    <pds-text gutter="sm">Item 3</pds-text>
   </pds-box>
   <pds-box border="true" padding="sm" direction="column">
-    <span>Item 1</span>
-    <span>Item 2</span>
-    <span>Item 3</span>
+    <pds-text gutter="sm">Item 1</pds-text>
+    <pds-text gutter="sm">Item 2</pds-text>
+    <pds-text gutter="sm">Item 3</pds-text>
   </pds-box>
 </DocCanvas>
 
@@ -364,33 +364,33 @@ Controls external spacing around the container using logical properties (accepts
   mdxSource={{
     react: `<>
   <PdsBox padding="xs" border="true" margin-block-end="sm">
-    <span>Small padding</span>
+    <pds-text gutter="sm">Small padding</pds-text>
   </PdsBox>
   <PdsBox padding="lg" border="true" margin-block-end="sm">
-    <span>Large padding</span>
+    <pds-text gutter="sm">Large padding</pds-text>
   </PdsBox>
   <PdsBox padding-block-start="lg" padding-inline-start="xs" border="true">
-    <span>Directional padding (large top, small left)</span>
+    <pds-text gutter="sm">Directional padding (large top, small left)</pds-text>
   </PdsBox>
 </>`,
     webComponent: `<pds-box padding="xs" border="true" margin-block-end="sm">
-  <span>Small padding</span>
+  <pds-text gutter="sm">Small padding</pds-text>
 </pds-box>
 <pds-box padding="lg" border="true" margin-block-end="sm">
-  <span>Large padding</span>
+  <pds-text gutter="sm">Large padding</pds-text>
 </pds-box>
 <pds-box padding-block-start="lg" padding-inline-start="xs" border="true">
-  <span>Directional padding (large top, small left)</span>
+  <pds-text gutter="sm">Directional padding (large top, small left)</pds-text>
 </pds-box>`
 }}>
   <pds-box padding="xs" border="true" margin-block-end="sm">
-    <span>Small padding</span>
+    <pds-text gutter="sm">Small padding</pds-text>
   </pds-box>
   <pds-box padding="lg" border="true" margin-block-end="sm">
-    <span>Large padding</span>
+    <pds-text gutter="sm">Large padding</pds-text>
   </pds-box>
   <pds-box padding-block-start="lg" padding-inline-start="xs" border="true">
-    <span>Directional padding (large top, small left)</span>
+    <pds-text gutter="sm">Directional padding (large top, small left)</pds-text>
   </pds-box>
 </DocCanvas>
 
@@ -530,29 +530,29 @@ Layout behavior:
 <DocCanvas
   mdxSource={{
     react: `<PdsBox border="true">
-  <span>Item 1</span>
-  <span>Item 2</span>
+  <pds-text gutter="sm">Item 1</pds-text>
+  <pds-text gutter="sm">Item 2</pds-text>
 </PdsBox>
 <PdsBox border="true" direction="column">
-  <span>Item 1</span>
-  <span>Item 2</span>
+  <pds-text gutter="sm">Item 1</pds-text>
+  <pds-text gutter="sm">Item 2</pds-text>
 </PdsBox>`,
     webComponent: `<pds-box border="true">
-  <span>Item 1</span>
-  <span>Item 2</span>
+  <pds-text gutter="sm">Item 1</pds-text>
+  <pds-text gutter="sm">Item 2</pds-text>
 </pds-box>
 <pds-box border="true" direction="column">
-  <span>Item 1</span>
-  <span>Item 2</span>
+  <pds-text gutter="sm">Item 1</pds-text>
+  <pds-text gutter="sm">Item 2</pds-text>
 </pds-box>`
 }}>
   <pds-box border="true">
-    <span>Item 1</span>
-    <span>Item 2</span>
+    <pds-text gutter="sm">Item 1</pds-text>
+    <pds-text gutter="sm">Item 2</pds-text>
   </pds-box>
   <pds-box border="true" direction="column">
-    <span>Item 1</span>
-    <span>Item 2</span>
+    <pds-text gutter="sm">Item 1</pds-text>
+    <pds-text gutter="sm">Item 2</pds-text>
   </pds-box>
 </DocCanvas>
 

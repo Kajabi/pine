@@ -85,6 +85,7 @@ label {
   border: var(--pine-border);
   border-radius: calc(var(--pine-dimension-xs) * 1.25);
   box-sizing: border-box;
+  color: var(--pine-color-text);
   font: var(--pine-typography-body);
   letter-spacing: var(--pine-letter-spacing);
   min-height: calc(var(--pine-dimension-xl) * 2);
