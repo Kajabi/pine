@@ -256,6 +256,10 @@
 
   .has-error &:hover:not(:disabled) {
     border-color: var(--pds-input-error-border-hover);
+
+    [data-theme="dark"] & {
+      border-color: var(--pine-color-red-950);
+    }
   }
 
   &:focus-visible:not(.has-error) {
@@ -280,6 +284,10 @@
   .has-error & {
     background-color: var(--pds-input-error-background);
     border-color: var(--pds-input-error-border);
+
+    :host-context([data-theme="dark"]) & {
+      background-color: var(--pine-color-red-950);
+    }
 
     &:focus-visible {
       outline-color: var(--pine-color-focus-ring-danger);

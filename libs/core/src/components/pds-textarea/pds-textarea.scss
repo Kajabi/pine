@@ -122,6 +122,10 @@ label {
     background-color: var(--pine-input-color-background-danger);
     border-color: var(--pine-color-border-danger);
 
+    :host-context([data-theme="dark"]) & {
+      background-color: var(--pine-color-red-950);
+    }
+
     &:focus-visible {
       outline-color: var(--pine-color-focus-ring-danger);
     }
@@ -155,6 +159,10 @@ label {
   // Match textarea invalid state - target when field has is-invalid class
   .pds-textarea__field.is-invalid ~ & {
     background-color: var(--pine-input-color-background-danger);
+
+    :host-context([data-theme="dark"]) & {
+      background-color: var(--pine-color-red-950);
+    }
   }
 }
 
