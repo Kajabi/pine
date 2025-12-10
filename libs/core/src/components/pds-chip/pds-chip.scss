@@ -23,7 +23,7 @@ $pds-chip-sentiment-text: (
   accent: var(--pine-color-text-accent),
   danger: var(--pine-color-text-danger),
   info: var(--pine-color-text-info),
-  neutral: var(--pine-color-text-neutral),
+  neutral: var(--pine-color-grey-900),
   success: var(--pine-color-text-success),
   warning: var(--pine-color-text-warning),
 );
@@ -185,7 +185,7 @@ $pds-chip-sentiment-hover: (
   .pds-chip__label {
     background: rgba(255, 255, 255, 0.9);
     border-radius: calc(var(--pine-dimension-sm) - 1px);
-    color: var(--pine-color-text-neutral);
+    color: var(--pine-color-grey-900);
     font-weight: var(--pine-font-weight-medium);
     padding: var(--pine-dimension-025) var(--pine-dimension-150);
     position: relative;
@@ -197,7 +197,7 @@ $pds-chip-sentiment-hover: (
   }
 
   .pds-chip__button, .pds-chip__close {
-    color: var(--pine-color-text-neutral);
+    color: var(--pine-color-grey-900);
     font-weight: var(--pine-font-weight-medium);
     position: relative;
     z-index: var(--pine-z-index-raised);

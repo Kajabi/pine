@@ -30,7 +30,7 @@
 
 .pds-combobox__input {
   background: var(--pine-color-background-container);
-  border: 1px solid var(--pine-color-border);
+  border: var(--pine-border);
   border-radius: var(--pine-dimension-125);
   box-sizing: border-box;
   color: var(--pine-color-text-strong);
@@ -238,7 +238,7 @@
   --color-border-hover: var(--pine-color-accent-hover);
   --color-border-disabled: var(--pine-color-accent-disabled);
   --color-border-focus: var(--pine-color-accent);
-  --color-text-default: var(--pine-color-text-primary);
+  --color-text-default: var(--pine-color-white);
   --color-text-disabled: var(--pine-color-text-accent-disabled);
   --color-outline: var(--pine-color-focus-ring);
 }
@@ -264,7 +264,7 @@
   --color-border-hover: var(--pine-color-danger-hover);
   --color-border-disabled: var(--pine-color-danger-disabled);
   --color-border-focus: var(--pine-color-danger);
-  --color-text-default: var(--pine-color-text-primary);
+  --color-text-default: var(--pine-color-white);
   --color-text-disabled: var(--pine-color-text-danger-disabled);
   --color-outline: var(--pine-color-focus-ring-danger);
 }

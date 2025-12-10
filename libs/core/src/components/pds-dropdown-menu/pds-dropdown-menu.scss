@@ -8,9 +8,14 @@
 
 .pds-dropdown-menu--panel {
   background-color: var(--pine-color-background-container);
+  border-radius: var(--pine-dimension-xs);
   left: var(--pine-dimension-none);
   min-width: 170px;
   padding: var(--pine-dimension-xs);
   position: absolute;
   z-index: var(--pine-z-index-overlay);
+
+  :host-context([data-theme="dark"]) & {
+    border: var(--pine-border);
+  }
 }
