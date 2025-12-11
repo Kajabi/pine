@@ -92,15 +92,15 @@ Action items such as buttons and links should be added to alerts using the `acti
     react: `<pdsAlert heading="Alert heading text" variant="success">
   Alerts can also have description text that can be used to provide more information about the alert.
   <pdsButton slot="actions" variant="primary">Action button</pdsButton>
-  <pdsLink href="#" slot="actions" variant="plain">Action link</pdsLink>
+  <pdsLink href="#" slot="actions" variant="plain" color="var(--pine-color-grey-900)">Action link</pdsLink>
 </pdsAlert>`,
     webComponent: `<pds-alert heading="Alert heading text" variant="success">
   Alerts can also have description text that can be used to provide more information about the alert.
   <pds-button slot="actions" variant="primary">Action button</pds-button>
-  <pds-link href="#" slot="actions" variant="plain">Action link</pds-link>
+  <pds-link href="#" slot="actions" variant="plain" color="var(--pine-color-grey-900)">Action link</pds-link>
 </pds-alert>`
 }}>
-  <pds-alert heading="Alert heading text" variant="success">Alerts can also have description text that can be used to provide more information about the alert.<pds-button slot="actions" variant="primary">Action button</pds-button><pds-link href="#" slot="actions" variant="plain">Action link</pds-link></pds-alert>
+  <pds-alert heading="Alert heading text" variant="success">Alerts can also have description text that can be used to provide more information about the alert.<pds-button slot="actions" variant="primary">Action button</pds-button><pds-link href="#" slot="actions" variant="plain" color="var(--pine-color-grey-900)">Action link</pds-link></pds-alert>
 </DocCanvas>
 
 ### Small with actions
@@ -111,16 +111,16 @@ When using the small variant, actions are displayed on the same line as the desc
   mdxSource={{
     react: `<pdsAlert heading="Alert heading text" small="true" variant="warning">
   Alerts can also have description text that can be used to provide more information about the alert.
-  <pdsLink href="#" slot="actions" variant="plain">Action link</pdsLink>
-  <pdsLink href="#" slot="actions" variant="plain">Action link</pdsLink>
+  <pdsLink href="#" slot="actions" variant="plain" color="var(--pine-color-grey-900)">Action link</pdsLink>
+  <pdsLink href="#" slot="actions" variant="plain" color="var(--pine-color-grey-900)">Action link</pdsLink>
 </pdsAlert>`,
     webComponent: `<pds-alert heading="Alert heading text" small="true" variant="warning">
   Alerts can also have description text that can be used to provide more information about the alert.
-  <pds-link href="#" slot="actions" variant="plain">Action link</pds-link>
-  <pds-link href="#" slot="actions" variant="plain">Action link</pds-link>
+  <pds-link href="#" slot="actions" variant="plain" color="var(--pine-color-grey-900)">Action link</pds-link>
+  <pds-link href="#" slot="actions" variant="plain" color="var(--pine-color-grey-900)">Action link</pds-link>
 </pds-alert>`
 }}>
-  <pds-alert heading="Alert heading text" small="true" variant="warning">Alerts can also have description text that can be used to provide more information about the alert.<pds-link href="#" slot="actions" variant="plain">Action link</pds-link> <pds-link href="#" slot="actions" variant="plain">Action link</pds-link></pds-alert>
+  <pds-alert heading="Alert heading text" small="true" variant="warning">Alerts can also have description text that can be used to provide more information about the alert.<pds-link href="#" slot="actions" variant="plain" color="var(--pine-color-grey-900)">Action link</pds-link> <pds-link href="#" slot="actions" variant="plain" color="var(--pine-color-grey-900)">Action link</pds-link></pds-alert>
 </DocCanvas>
 
 

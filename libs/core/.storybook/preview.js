@@ -113,8 +113,55 @@ const customElementsManifest = {
 
 setCustomElementsManifest(customElementsManifest);
 
+// Theme decorator that applies data-theme attribute
+const withTheme = (StoryFn, context) => {
+  const theme = context.globals.theme || 'light';
+
+  // Apply immediately for initial render
+  document.documentElement.setAttribute('data-theme', theme);
+  document.body.setAttribute('data-theme', theme);
+
+  // Also apply reactively when theme changes via toolbar
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.body.setAttribute('data-theme', theme);
+
+    // Notify parent window of theme change (for docs pages)
+    try {
+      window.parent.document.documentElement.setAttribute('data-theme', theme);
+      window.parent.document.body.setAttribute('data-theme', theme);
+    } catch (e) {
+      // Cross-origin access may fail, that's ok
+    }
+  }, [theme]);
+
+  return StoryFn();
+};
+
 const preview = {
-  decorators: [withCustomEventActions],
+  decorators: [
+    withCustomEventActions,
+    withTheme,
+  ],
+
+  globalTypes: {
+    theme: {
+      description: 'Global theme for components',
+      toolbar: {
+        title: 'Theme',
+        icon: 'paintbrush',
+        items: [
+          { value: 'light', title: 'Light', icon: 'sun' },
+          { value: 'dark', title: 'Dark', icon: 'moon' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+  },
+
+  initialGlobals: {
+    theme: 'light',
+  },
 
   parameters: {
     options: {

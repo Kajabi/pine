@@ -1,4 +1,5 @@
 .args-table {
+  background-color: var(--doc-canvas-color-light);
   border-top-width: 0;
   display: grid;
 
@@ -8,7 +9,7 @@
   }
 
   .args-table-header {
-    color: rgba(46,52,56,0.6);
+    color: var(--doc-canvas-color-muted);
     font-family: "Inter",-apple-system,".SFNSText-Regular","San Francisco",BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 13px;
     font-weight: 600;
@@ -18,9 +19,9 @@
 }
 
 .arg-table-row {
-  border: 1px solid hsla(203, 50%, 30%, 0.15);
+  border: 1px solid var(--doc-canvas-border-color);
   border-width: 0 1px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
+  box-shadow: 0 1px 3px var(--doc-canvas-shadow);
   display: grid;
   grid-column-end: 4;
   grid-column-gap: 0;
@@ -33,7 +34,7 @@
 }
 
 .arg-table-cell {
-  color: #2E3438;
+  color: var(--doc-canvas-color);
   font-family: "Inter",-apple-system,".SFNSText-Regular","San Francisco",BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
   font-size: 13px;;
   padding-inline-start: 10px;
@@ -52,8 +53,8 @@
   }
 
   code {
-    background-color: #F7FAFC;
-    border: 1px solid #ECF4F9;
+    background-color: var(--doc-canvas-code-background);
+    border: 1px solid var(--doc-canvas-grey);
     border-radius: 3px;
     flex: 0 0 auto;
     font-family: ui-monospace,Menlo,Monaco,"Roboto Mono","Oxygen Mono","Ubuntu Monospace","Source Code Pro","Droid Sans Mono","Courier New",monospace;
@@ -73,12 +74,10 @@
 }
 
 section {
-  /* background-color: #F6F9FC; */
-  background-color: #628B83;
-  border: 1px solid hsla(203, 50%, 30%, 0.15);
-  box-shadow: -1px 0 3px rgba(0, 0, 0, 0.358);
-  color: rgb(255, 255, 255);
-  /* color: rgba(46,52,56,0.6); */
+  background-color: var(--doc-canvas-green);
+  border: 1px solid var(--doc-canvas-border-color);
+  box-shadow: -1px 0 3px var(--doc-canvas-shadow);
+  color: var(--doc-canvas-color-on-accent);
   display: flex;
   flex-direction: column;
   font-size: 11px;

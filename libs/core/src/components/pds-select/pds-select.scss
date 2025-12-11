@@ -63,6 +63,7 @@ select {
   border-bottom-right-radius: var(--pds-select-border-radius-end-end, var(--pds-select-border-radius));
   border-top-left-radius: var(--pds-select-border-radius-start-start, var(--pds-select-border-radius));
   border-top-right-radius: var(--pds-select-border-radius-start-end, var(--pds-select-border-radius));
+  color: var(--pine-color-text);
   font: var(--pine-typography-body);
   grid-area: field;
   letter-spacing: var(--pine-letter-spacing);
@@ -93,6 +94,10 @@ select {
     background-color: var(--pine-select-color-background-danger);
     border-color: var(--pine-color-border-danger);
 
+    :host-context([data-theme="dark"]) & {
+      background-color: var(--pine-color-red-950);
+    }
+
     &:focus-visible {
       outline-color: var(--pine-color-focus-ring-danger);
     }
@@ -103,6 +108,10 @@ select {
   select {
     background-color: var(--pine-select-color-background-danger);
     border-color: var(--pine-color-border-danger);
+
+    :host-context([data-theme="dark"]) & {
+      background-color: var(--pine-color-red-950);
+    }
 
     &:focus-visible {
       outline-color: var(--pine-color-focus-ring-danger);

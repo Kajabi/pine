@@ -9,7 +9,7 @@
   --pds-input-padding-x: var(--pine-dimension-150);
   --pds-input-padding-y: calc(var(--pine-dimension-xs) - var(--pine-border-width));
   --pds-input-font: var(--pine-typography-body);
-  --pds-input-text-color: var(--pine-color-text-active);
+  --pds-input-text-color: var(--pine-color-text-strong);
   --pds-input-placeholder-color: var(--pine-color-text-placeholder);
   --pds-input-icon-color: var(--pine-color-text-secondary);
   --pds-input-disabled-background: var(--pine-color-background-container-disabled);
@@ -183,7 +183,7 @@
 }
 
 .pds-input__label {
-  color: var(--pine-color-text-active);
+  color: var(--pine-color-text-strong);
   margin-block-end: var(--pine-dimension-2xs);
 }
 
@@ -256,6 +256,10 @@
 
   .has-error &:hover:not(:disabled) {
     border-color: var(--pds-input-error-border-hover);
+
+    [data-theme="dark"] & {
+      border-color: var(--pine-color-red-950);
+    }
   }
 
   &:focus-visible:not(.has-error) {
@@ -280,6 +284,10 @@
   .has-error & {
     background-color: var(--pds-input-error-background);
     border-color: var(--pds-input-error-border);
+
+    :host-context([data-theme="dark"]) & {
+      background-color: var(--pine-color-red-950);
+    }
 
     &:focus-visible {
       outline-color: var(--pine-color-focus-ring-danger);

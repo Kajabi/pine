@@ -1,5 +1,5 @@
 :host {
-  --loader-color: var(--pine-color-brand);
+  --loader-color: var(--pine-color-primary);
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -47,7 +47,7 @@
   --opacity-typing-dot-active: 1;
 
   align-items: center;
-  background-color: var(--pine-color-background-container-disabled);
+  background-color: var(--pine-color-background-muted);
   border-radius: var(--pine-dimension-sm);
   box-shadow: var(--pine-box-shadow);
   display: inline-flex;

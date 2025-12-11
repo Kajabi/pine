@@ -3,7 +3,12 @@
 
 <style>
   /* Temp workaround because MDX2 broke styling in Storybook */
+
+  .sbdocs-wrapper {
+    background-color: var(--pine-color-background-container);
+  }
   .sb-unstyled {
+    background-color: var(--pine-color-background-app);
     font: var(--pine-typography-body);
     letter-spacing: var(--pine-letter-spacing);
     color: var(--pine-color-text);
@@ -79,5 +84,9 @@
         color: var(--pine-color-grey-700);
       }
     }
+  }
+
+  body {
+    background-color: var(--pine-color-background-app);
   }
 </style>

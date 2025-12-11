@@ -10,11 +10,11 @@
   /* stylelint-disable-next-line property-no-unknown */
   anchor-name: --filter-trigger;
   background: var(--pine-color-background-container);
-  border: var(--pine-border-width-thin) solid var(--pine-color-border);
+  border: var(--pine-border);
   border-radius: var(--pine-dimension-100);
   box-shadow: var(--pine-box-shadow-050);
   box-sizing: border-box;
-  color: var(--pine-color-text-placeholder);
+  color: var(--pine-color-text-tertiary);
   cursor: pointer;
   display: inline-flex;
   font-family: var(--pine-font-family-inter);
@@ -29,19 +29,19 @@
 
   pds-icon {
     block-size: var(--pine-font-size-100);
-    color: var(--pine-color-grey-800);
+    color: var(--pine-color-text-secondary);
     flex-shrink: 0;
     inline-size: var(--pine-font-size-100);
   }
 
   &:hover,
   &.pds-filter__trigger--open {
-    background-color: var(--pine-color-grey-100);
-    border-color: var(--pine-color-grey-400);
+    background-color: var(--pine-color-background-subtle);
+    border-color: var(--pine-color-border-hover);
     color: var(--pine-color-text-hover);
 
     pds-icon {
-      color: var(--pine-color-grey-800);
+      color: var(--pine-color-text-secondary);
     }
   }
 
@@ -83,22 +83,22 @@
 }
 
 .pds-filter__trigger--more {
-  background-color: var(--pine-color-grey-050);
-  border: var(--pine-border-width-thin) dashed var(--pine-color-grey-300);
-  color: var(--pine-color-text-placeholder);
+  background-color: var(--pine-color-background-container-hover);
+  border: var(--pine-border-width-thin) dashed var(--pine-color-border);
+  color: var(--pine-color-text-tertiary);
 
   pds-icon {
-    color: var(--pine-color-grey-800);
+    color: var(--pine-color-text-secondary);
   }
 
   &:hover,
   &.pds-filter__trigger--open {
-    background-color: var(--pine-color-grey-100);
-    border-color: var(--pine-color-grey-400);
+    background-color: var(--pine-color-background-subtle);
+    border-color: var(--pine-color-border-hover);
     color: var(--pine-color-text-hover);
 
     pds-icon {
-      color: var(--pine-color-grey-800);
+      color: var(--pine-color-text-secondary);
     }
   }
 

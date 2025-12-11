@@ -85,6 +85,7 @@ label {
   border: var(--pine-border);
   border-radius: calc(var(--pine-dimension-xs) * 1.25);
   box-sizing: border-box;
+  color: var(--pine-color-text);
   font: var(--pine-typography-body);
   letter-spacing: var(--pine-letter-spacing);
   min-height: calc(var(--pine-dimension-xl) * 2);
@@ -121,6 +122,10 @@ label {
     background-color: var(--pine-input-color-background-danger);
     border-color: var(--pine-color-border-danger);
 
+    :host-context([data-theme="dark"]) & {
+      background-color: var(--pine-color-red-950);
+    }
+
     &:focus-visible {
       outline-color: var(--pine-color-focus-ring-danger);
     }
@@ -130,7 +135,7 @@ label {
 .pds-textarea__character-counter {
   background: color-mix(in srgb, var(--pine-color-background-container) 80%, transparent);
   border-radius: calc(var(--pine-dimension-2xs) * 0.5);
-  color: var(--pine-color-text-readonly);
+  color: var(--pine-color-text-muted);
   font: var(--pine-typography-body-sm-medium);
   padding: calc(var(--pine-dimension-2xs) * 0.5) var(--pine-dimension-2xs);
   pointer-events: none;
@@ -154,6 +159,10 @@ label {
   // Match textarea invalid state - target when field has is-invalid class
   .pds-textarea__field.is-invalid ~ & {
     background-color: var(--pine-input-color-background-danger);
+
+    :host-context([data-theme="dark"]) & {
+      background-color: var(--pine-color-red-950);
+    }
   }
 }
 

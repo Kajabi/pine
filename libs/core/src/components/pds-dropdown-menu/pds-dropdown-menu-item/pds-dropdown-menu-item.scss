@@ -21,6 +21,7 @@
   background: transparent;
   border: 0;
   border-radius: var(--pine-dimension-xs);
+  color: var(--pine-color-text);
   display: flex;
   flex-grow: 1; /* Make it grow to fill available space */
   font: var(--pine-typography-body-medium);
@@ -31,7 +32,7 @@
   width: 100%; /* Ensure full width */
 
   &:hover {
-    background-color: var(--pine-color-grey-150);
+    background-color: var(--pine-color-background-muted);
     color: var(--pine-color-text-hover);
   }
 

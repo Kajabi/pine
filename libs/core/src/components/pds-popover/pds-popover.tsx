@@ -274,7 +274,7 @@ export class PdsPopover {
   }
 
   /**
-   * Adds Pine design system focus styles to the portal element
+   * Adds Pine design system focus styles and dark mode border to the portal element
    * Uses CSS variables from Pine's design tokens
    */
   private addPortalFocusStyles() {
@@ -286,7 +286,7 @@ export class PdsPopover {
     const existingStyle = document.querySelector(`style[data-pds-popover-focus="${portalId}"]`);
     if (existingStyle) return;
 
-    // Create style element with Pine's focus ring styles
+    // Create style element with Pine's focus ring styles and dark mode border
     const styleEl = document.createElement('style');
     styleEl.setAttribute('data-pds-popover-focus', portalId);
     styleEl.textContent = `
@@ -296,6 +296,9 @@ export class PdsPopover {
       }
       #${portalId}:focus:not(:focus-visible) {
         outline: none;
+      }
+      [data-theme="dark"] #${portalId} {
+        border: var(--pine-border);
       }
     `;
 

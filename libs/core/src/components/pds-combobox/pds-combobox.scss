@@ -30,10 +30,10 @@
 
 .pds-combobox__input {
   background: var(--pine-color-background-container);
-  border: 1px solid var(--pine-color-border);
+  border: var(--pine-border);
   border-radius: var(--pine-dimension-125);
   box-sizing: border-box;
-  color: var(--pine-color-text-active);
+  color: var(--pine-color-text-strong);
   flex: 1;
   font: var(--pine-typography-body-medium);
   padding: var(--pine-dimension-xs) var(--pine-dimension-450) var(--pine-dimension-xs) var(--pine-dimension-150);
@@ -102,7 +102,7 @@
   transition: background 0.15s;
 
   &[aria-selected="true"] {
-    background: var(--pine-color-grey-150);
+    background: var(--pine-color-background-muted);
   }
 
   &:focus-visible {
@@ -133,7 +133,7 @@
 .pds-combobox__option--highlighted,
 .pds-combobox__option[selected],
 .pds-combobox__option--selected {
-  background: var(--pine-color-grey-150);
+  background: var(--pine-color-background-muted);
 }
 
 .pds-combobox__option-check {
@@ -143,7 +143,7 @@
 }
 
 .pds-combobox__group-label {
-  color: var(--pine-color-text-placeholder);
+  color: var(--pine-color-text-tertiary);
   cursor: default;
   font: var(--pine-typography-heading-caption);
   margin-block-end: var(--pine-dimension-2xs);
@@ -238,7 +238,7 @@
   --color-border-hover: var(--pine-color-accent-hover);
   --color-border-disabled: var(--pine-color-accent-disabled);
   --color-border-focus: var(--pine-color-accent);
-  --color-text-default: var(--pine-color-text-primary);
+  --color-text-default: var(--pine-color-white);
   --color-text-disabled: var(--pine-color-text-accent-disabled);
   --color-outline: var(--pine-color-focus-ring);
 }
@@ -264,7 +264,7 @@
   --color-border-hover: var(--pine-color-danger-hover);
   --color-border-disabled: var(--pine-color-danger-disabled);
   --color-border-focus: var(--pine-color-danger);
-  --color-text-default: var(--pine-color-text-primary);
+  --color-text-default: var(--pine-color-white);
   --color-text-disabled: var(--pine-color-text-danger-disabled);
   --color-outline: var(--pine-color-focus-ring-danger);
 }

@@ -152,10 +152,10 @@
 
 .pds-button--tertiary {
   --color-background-default: transparent;
-  --color-background-hover: var(--pine-color-grey-100);
+  --color-background-hover: var(--pine-color-background-subtle);
   --color-background-disabled: transparent;
   --color-border-default: transparent;
-  --color-border-hover: var(--pine-color-grey-100);
+  --color-border-hover: var(--pine-color-background-subtle);
   --color-border-disabled: transparent;
   --color-text-default: var(--pine-color-text-secondary);
   --color-text-disabled: var(--pine-color-text-secondary-disabled);
@@ -164,8 +164,8 @@
 }
 
 .pds-button--filter {
-  --color-background-default: var(--pine-color-white);
-  --color-background-hover: var(--pine-color-grey-100);
+  --color-background-default: var(--pine-color-background-container);
+  --color-background-hover: var(--pine-color-background-subtle);
   --color-background-disabled: var(--pine-color-white);
   --color-border-default: transparent;
   --color-border-hover: transparent;
@@ -182,6 +182,10 @@
   --pds-button-border-radius-end-start: var(--pine-dimension-125);
   padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
 
+  &:disabled {
+    background-color: var(--pine-color-background-container);
+  }
+
   &:hover {
     color: var(--color-text-hover);
   }
@@ -191,8 +195,8 @@
   --color-background-default: transparent;
   --color-background-hover: transparent;
   --color-background-disabled: transparent;
-  --color-text-default: inherit;
-  --button-loader-color: inherit;
+  --color-text-default: var(--pine-color-text);
+  --button-loader-color: var(--pine-color-text);
   border-width: var(--pine-dimension-none);
   margin: var(--pine-dimension-none);
   min-height: auto;
