@@ -509,6 +509,57 @@ By default Box has no padding. Use `padding` to add padding to the box.
   <pds-box border="true" padding="xxl">Padding xxl</pds-box>
 </DocCanvas>
 
+### Using Core Spacing Tokens
+When you need precise pixel control that doesn't align with t-shirt sizes, use core spacing tokens. These are numeric values that map to specific pixel sizes (see [Spacing Value Reference](#spacing-value-reference) for the full list).
+
+<DocCanvas
+  mdxSource={{
+    react: `<>
+  {/* 12px padding - between xs (8px) and sm (16px) */}
+  <PdsBox border="true" padding="150">
+    <pds-text gutter="sm">padding="150" (12px)</pds-text>
+  </PdsBox>
+  {/* 20px padding */}
+  <PdsBox border="true" padding="250">
+    <pds-text gutter="sm">padding="250" (20px)</pds-text>
+  </PdsBox>
+  {/* 10px gap between items */}
+  <PdsBox border="true" padding="sm" gap="125">
+    <PdsBox border="true" padding="xs">Item 1</PdsBox>
+    <PdsBox border="true" padding="xs">Item 2</PdsBox>
+    <PdsBox border="true" padding="xs">Item 3</PdsBox>
+  </PdsBox>
+</>`,
+    webComponent: `<!-- 12px padding - between xs (8px) and sm (16px) -->
+<pds-box border="true" padding="150">
+  <pds-text gutter="sm">padding="150" (12px)</pds-text>
+</pds-box>
+<!-- 20px padding -->
+<pds-box border="true" padding="250">
+  <pds-text gutter="sm">padding="250" (20px)</pds-text>
+</pds-box>
+<!-- 10px gap between items -->
+<pds-box border="true" padding="sm" gap="125">
+  <pds-box border="true" padding="xs">Item 1</pds-box>
+  <pds-box border="true" padding="xs">Item 2</pds-box>
+  <pds-box border="true" padding="xs">Item 3</pds-box>
+</pds-box>`
+}}>
+  <pds-box direction="column" gap="sm">
+    <pds-box border="true" padding="150">
+      <pds-text gutter="sm">padding="150" (12px)</pds-text>
+    </pds-box>
+    <pds-box border="true" padding="250">
+      <pds-text gutter="sm">padding="250" (20px)</pds-text>
+    </pds-box>
+    <pds-box border="true" padding="sm" gap="125">
+      <pds-box border="true" padding="xs">Item 1</pds-box>
+      <pds-box border="true" padding="xs">Item 2</pds-box>
+      <pds-box border="true" padding="xs">Item 3</pds-box>
+    </pds-box>
+  </pds-box>
+</DocCanvas>
+
 ### Display
 By default Box is `display: inline-flex`. Use `display` to change the display property `flex` if the box is intended to fill the entire row.
 
