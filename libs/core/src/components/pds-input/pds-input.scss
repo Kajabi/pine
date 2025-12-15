@@ -257,7 +257,7 @@
   .has-error &:hover:not(:disabled) {
     border-color: var(--pds-input-error-border-hover);
 
-    [data-theme="dark"] & {
+    :host-context([data-theme="dark"]) & {
       border-color: var(--pine-color-red-950);
     }
   }
