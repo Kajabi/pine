@@ -227,327 +227,102 @@ $pine-spacing-tokens: (
   box-shadow: var(--pine-box-shadow-200);
 }
 
+// Spacing values map - includes semantic sizes and numeric tokens
+// Used for gap, margin, and padding helpers
+$spacing-values: (
+  'none': 0,
+  'xxs': var(--pine-dimension-2xs),
+  'xs': var(--pine-dimension-xs),
+  'sm': var(--pine-dimension-sm),
+  'md': var(--pine-dimension-md),
+  'lg': var(--pine-dimension-lg),
+  'xl': var(--pine-dimension-xl),
+  'xxl': var(--pine-dimension-2xl),
+  '025': var(--pine-dimension-025),
+  '050': var(--pine-dimension-050),
+  '100': var(--pine-dimension-100),
+  '125': var(--pine-dimension-125),
+  '150': var(--pine-dimension-150),
+  '200': var(--pine-dimension-200),
+  '250': var(--pine-dimension-250),
+  '300': var(--pine-dimension-300),
+  '350': var(--pine-dimension-350),
+  '400': var(--pine-dimension-400),
+  '450': var(--pine-dimension-450),
+  '500': var(--pine-dimension-500),
+  '550': var(--pine-dimension-550),
+  '600': var(--pine-dimension-600),
+  '650': var(--pine-dimension-650),
+  '700': var(--pine-dimension-700),
+  '750': var(--pine-dimension-750),
+  '800': var(--pine-dimension-800)
+);
+
 // Gap helpers
-.pds-box-gap-none {
-  gap: 0;
-}
-
-.pds-box-gap-xxs {
-  gap: var(--pine-dimension-2xs);
-}
-
-.pds-box-gap-xs {
-  gap: var(--pine-dimension-xs);
-}
-
-.pds-box-gap-sm {
-  gap: var(--pine-dimension-sm);
-}
-
-.pds-box-gap-md {
-  gap: var(--pine-dimension-md);
-}
-
-.pds-box-gap-lg {
-  gap: var(--pine-dimension-lg);
-}
-
-.pds-box-gap-xl {
-  gap: var(--pine-dimension-xl);
-}
-
-.pds-box-gap-xxl {
-  gap: var(--pine-dimension-2xl);
+@each $name, $value in $spacing-values {
+  .pds-box-gap-#{$name} {
+    gap: $value;
+  }
 }
 
 // Margin helpers
-.pds-margin-block-start-xxs {
-  margin-block-start: var(--pine-dimension-2xs);
+@each $name, $value in $spacing-values {
+  .pds-margin-block-start-#{$name} {
+    margin-block-start: $value;
+  }
 }
 
-.pds-margin-block-start-xs {
-  margin-block-start: var(--pine-dimension-xs);
+@each $name, $value in $spacing-values {
+  .pds-margin-inline-start-#{$name} {
+    margin-inline-start: $value;
+  }
 }
 
-.pds-margin-block-start-sm {
-  margin-block-start: var(--pine-dimension-sm);
+@each $name, $value in $spacing-values {
+  .pds-margin-inline-end-#{$name} {
+    margin-inline-end: $value;
+  }
 }
 
-.pds-margin-block-start-md {
-  margin-block-start: var(--pine-dimension-md);
-}
-
-.pds-margin-block-start-lg {
-  margin-block-start: var(--pine-dimension-lg);
-}
-
-.pds-margin-block-start-xl {
-  margin-block-start: var(--pine-dimension-xl);
-}
-
-.pds-margin-block-start-xxl {
-  margin-block-start: var(--pine-dimension-2xl);
-}
-
-.pds-margin-inline-start-none {
-  margin-inline-start: 0;
-}
-
-.pds-margin-inline-start-xxs {
-  margin-inline-start: var(--pine-dimension-2xs);
-}
-
-.pds-margin-inline-start-xs {
-  margin-inline-start: var(--pine-dimension-xs);
-}
-
-.pds-margin-inline-start-sm {
-  margin-inline-start: var(--pine-dimension-sm);
-}
-
-.pds-margin-inline-start-md {
-  margin-inline-start: var(--pine-dimension-md);
-}
-
-.pds-margin-inline-start-lg {
-  margin-inline-start: var(--pine-dimension-lg);
-}
-
-.pds-margin-inline-start-xl {
-  margin-inline-start: var(--pine-dimension-xl);
-}
-
-.pds-margin-inline-start-xxl {
-  margin-inline-start: var(--pine-dimension-2xl);
-}
-
-.pds-margin-inline-end-none {
-  margin-inline-end: 0;
-}
-
-.pds-margin-inline-end-xxs {
-  margin-inline-end: var(--pine-dimension-2xs);
-}
-
-.pds-margin-inline-end-xs {
-  margin-inline-end: var(--pine-dimension-xs);
-}
-
-.pds-margin-inline-end-sm {
-  margin-inline-end: var(--pine-dimension-sm);
-}
-
-.pds-margin-inline-end-md {
-  margin-inline-end: var(--pine-dimension-md);
-}
-
-.pds-margin-inline-end-lg {
-  margin-inline-end: var(--pine-dimension-lg);
-}
-
-.pds-margin-inline-end-xl {
-  margin-inline-end: var(--pine-dimension-xl);
-}
-
-.pds-margin-inline-end-xxl {
-  margin-inline-end: var(--pine-dimension-2xl);
-}
-
-.pds-margin-block-end-none {
-  margin-block-end: 0;
-}
-
-.pds-margin-block-end-xxs {
-  margin-block-end: var(--pine-dimension-2xs);
-}
-
-.pds-margin-block-end-xs {
-  margin-block-end: var(--pine-dimension-xs);
-}
-
-.pds-margin-block-end-sm {
-  margin-block-end: var(--pine-dimension-sm);
-}
-
-.pds-margin-block-end-md {
-  margin-block-end: var(--pine-dimension-md);
-}
-
-.pds-margin-block-end-lg {
-  margin-block-end: var(--pine-dimension-lg);
-}
-
-.pds-margin-block-end-xl {
-  margin-block-end: var(--pine-dimension-xl);
-}
-
-.pds-margin-block-end-xxl {
-  margin-block-end: var(--pine-dimension-2xl);
+@each $name, $value in $spacing-values {
+  .pds-margin-block-end-#{$name} {
+    margin-block-end: $value;
+  }
 }
 
 // Padding helpers
-.pds-padding-none {
-  padding: 0;
-}
-
-.pds-padding-xxs {
-  padding: var(--pine-dimension-2xs);
-}
-
-.pds-padding-xs {
-  padding: var(--pine-dimension-xs);
-}
-
-.pds-padding-sm {
-  padding: var(--pine-dimension-sm);
-}
-
-.pds-padding-md {
-  padding: var(--pine-dimension-md);
-}
-
-.pds-padding-lg {
-  padding: var(--pine-dimension-lg);
-}
-
-.pds-padding-xl {
-  padding: var(--pine-dimension-xl);
-}
-
-.pds-padding-xxl {
-  padding: var(--pine-dimension-2xl);
+@each $name, $value in $spacing-values {
+  .pds-padding-#{$name} {
+    padding: $value;
+  }
 }
 
 // Padding block start helpers
-.pds-padding-block-start-none {
-  padding-block-start: var(--pine-dimension-none);
-}
-
-.pds-padding-block-start-xxs {
-  padding-block-start: var(--pine-dimension-2xs);
-}
-
-.pds-padding-block-start-xs {
-  padding-block-start: var(--pine-dimension-xs);
-}
-
-.pds-padding-block-start-sm {
-  padding-block-start: var(--pine-dimension-sm);
-}
-
-.pds-padding-block-start-md {
-  padding-block-start: var(--pine-dimension-md);
-}
-
-.pds-padding-block-start-lg {
-  padding-block-start: var(--pine-dimension-lg);
-}
-
-.pds-padding-block-start-xl {
-  padding-block-start: var(--pine-dimension-xl);
-}
-
-.pds-padding-block-start-xxl {
-  padding-block-start: var(--pine-dimension-2xl);
+@each $name, $value in $spacing-values {
+  .pds-padding-block-start-#{$name} {
+    padding-block-start: $value;
+  }
 }
 
 // Padding block end helpers
-.pds-padding-block-end-none {
-  padding-block-end: var(--pine-dimension-none);
-}
-
-.pds-padding-block-end-xxs {
-  padding-block-end: var(--pine-dimension-2xs);
-}
-
-.pds-padding-block-end-xs {
-  padding-block-end: var(--pine-dimension-xs);
-}
-
-.pds-padding-block-end-sm {
-  padding-block-end: var(--pine-dimension-sm);
-}
-
-.pds-padding-block-end-md {
-  padding-block-end: var(--pine-dimension-md);
-}
-
-.pds-padding-block-end-lg {
-  padding-block-end: var(--pine-dimension-lg);
-}
-
-.pds-padding-block-end-xl {
-  padding-block-end: var(--pine-dimension-xl);
-}
-
-.pds-padding-block-end-xxl {
-  padding-block-end: var(--pine-dimension-2xl);
+@each $name, $value in $spacing-values {
+  .pds-padding-block-end-#{$name} {
+    padding-block-end: $value;
+  }
 }
 
 // Padding inline start helpers
-.pds-padding-inline-start-none {
-  padding-inline-start: var(--pine-dimension-none);
-}
-
-.pds-padding-inline-start-xxs {
-  padding-inline-start: var(--pine-dimension-2xs);
-}
-
-.pds-padding-inline-start-xs {
-  padding-inline-start: var(--pine-dimension-xs);
-}
-
-.pds-padding-inline-start-sm {
-  padding-inline-start: var(--pine-dimension-sm);
-}
-
-.pds-padding-inline-start-md {
-  padding-inline-start: var(--pine-dimension-md);
-}
-
-.pds-padding-inline-start-lg {
-  padding-inline-start: var(--pine-dimension-lg);
-}
-
-.pds-padding-inline-start-xl {
-  padding-inline-start: var(--pine-dimension-xl);
-}
-
-.pds-padding-inline-start-xxl {
-  padding-inline-start: var(--pine-dimension-2xl);
+@each $name, $value in $spacing-values {
+  .pds-padding-inline-start-#{$name} {
+    padding-inline-start: $value;
+  }
 }
 
 // Padding inline end helpers
-.pds-padding-inline-end-none {
-  padding-inline-end: var(--pine-dimension-none);
-}
-
-.pds-padding-inline-end-xxs {
-  padding-inline-end: var(--pine-dimension-2xs);
-}
-
-.pds-padding-inline-end-xs {
-  padding-inline-end: var(--pine-dimension-xs);
-}
-
-.pds-padding-inline-end-sm {
-  padding-inline-end: var(--pine-dimension-sm);
-}
-
-.pds-padding-inline-end-md {
-  padding-inline-end: var(--pine-dimension-md);
-}
-
-.pds-padding-inline-end-lg {
-  padding-inline-end: var(--pine-dimension-lg);
-}
-
-.pds-padding-inline-end-xl {
-  padding-inline-end: var(--pine-dimension-xl);
-}
-
-.pds-padding-inline-end-xxl {
-  padding-inline-end: var(--pine-dimension-2xl);
+@each $name, $value in $spacing-values {
+  .pds-padding-inline-end-#{$name} {
+    padding-inline-end: $value;
+  }
 }
 
 
@@ -702,38 +477,9 @@ $breakpoints: (
 }
 
 // Responsive Gap helpers
-$gap-values: (
-  'none': 0,
-  'xxs': var(--pine-dimension-2xs),
-  'xs': var(--pine-dimension-xs),
-  'sm': var(--pine-dimension-sm),
-  'md': var(--pine-dimension-md),
-  'lg': var(--pine-dimension-lg),
-  'xl': var(--pine-dimension-xl),
-  'xxl': var(--pine-dimension-2xl),
-  '025': var(--pine-dimension-025),
-  '050': var(--pine-dimension-050),
-  '100': var(--pine-dimension-100),
-  '125': var(--pine-dimension-125),
-  '150': var(--pine-dimension-150),
-  '200': var(--pine-dimension-200),
-  '250': var(--pine-dimension-250),
-  '300': var(--pine-dimension-300),
-  '350': var(--pine-dimension-350),
-  '400': var(--pine-dimension-400),
-  '450': var(--pine-dimension-450),
-  '500': var(--pine-dimension-500),
-  '550': var(--pine-dimension-550),
-  '600': var(--pine-dimension-600),
-  '650': var(--pine-dimension-650),
-  '700': var(--pine-dimension-700),
-  '750': var(--pine-dimension-750),
-  '800': var(--pine-dimension-800)
-);
-
 @each $breakpoint-name, $breakpoint-value in $breakpoints {
   @media #{$breakpoint-value} {
-    @each $name, $value in $gap-values {
+    @each $name, $value in $spacing-values {
       .pds-box-gap-#{$breakpoint-name}-#{$name} {
         gap: $value;
       }
@@ -742,38 +488,9 @@ $gap-values: (
 }
 
 // Responsive Margin helpers
-$margin-values: (
-  'none': 0,
-  'xxs': var(--pine-dimension-2xs),
-  'xs': var(--pine-dimension-xs),
-  'sm': var(--pine-dimension-sm),
-  'md': var(--pine-dimension-md),
-  'lg': var(--pine-dimension-lg),
-  'xl': var(--pine-dimension-xl),
-  'xxl': var(--pine-dimension-2xl),
-  '025': var(--pine-dimension-025),
-  '050': var(--pine-dimension-050),
-  '100': var(--pine-dimension-100),
-  '125': var(--pine-dimension-125),
-  '150': var(--pine-dimension-150),
-  '200': var(--pine-dimension-200),
-  '250': var(--pine-dimension-250),
-  '300': var(--pine-dimension-300),
-  '350': var(--pine-dimension-350),
-  '400': var(--pine-dimension-400),
-  '450': var(--pine-dimension-450),
-  '500': var(--pine-dimension-500),
-  '550': var(--pine-dimension-550),
-  '600': var(--pine-dimension-600),
-  '650': var(--pine-dimension-650),
-  '700': var(--pine-dimension-700),
-  '750': var(--pine-dimension-750),
-  '800': var(--pine-dimension-800)
-);
-
 @each $breakpoint-name, $breakpoint-value in $breakpoints {
   @media #{$breakpoint-value} {
-    @each $name, $value in $margin-values {
+    @each $name, $value in $spacing-values {
       .pds-margin-block-start-#{$breakpoint-name}-#{$name} {
         margin-block-start: $value;
       }
@@ -794,38 +511,9 @@ $margin-values: (
 }
 
 // Responsive Padding helpers
-$padding-values: (
-  'none': var(--pine-dimension-none),
-  'xxs': var(--pine-dimension-2xs),
-  'xs': var(--pine-dimension-xs),
-  'sm': var(--pine-dimension-sm),
-  'md': var(--pine-dimension-md),
-  'lg': var(--pine-dimension-lg),
-  'xl': var(--pine-dimension-xl),
-  'xxl': var(--pine-dimension-2xl),
-  '025': var(--pine-dimension-025),
-  '050': var(--pine-dimension-050),
-  '100': var(--pine-dimension-100),
-  '125': var(--pine-dimension-125),
-  '150': var(--pine-dimension-150),
-  '200': var(--pine-dimension-200),
-  '250': var(--pine-dimension-250),
-  '300': var(--pine-dimension-300),
-  '350': var(--pine-dimension-350),
-  '400': var(--pine-dimension-400),
-  '450': var(--pine-dimension-450),
-  '500': var(--pine-dimension-500),
-  '550': var(--pine-dimension-550),
-  '600': var(--pine-dimension-600),
-  '650': var(--pine-dimension-650),
-  '700': var(--pine-dimension-700),
-  '750': var(--pine-dimension-750),
-  '800': var(--pine-dimension-800)
-);
-
 @each $breakpoint-name, $breakpoint-value in $breakpoints {
   @media #{$breakpoint-value} {
-    @each $name, $value in $padding-values {
+    @each $name, $value in $spacing-values {
       .pds-padding-#{$breakpoint-name}-#{$name} {
         padding: $value;
       }
