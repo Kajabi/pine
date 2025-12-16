@@ -32,7 +32,6 @@ interface VSCodeAttribute {
   name: string;
   description?: string | { kind: 'markdown' | 'plaintext'; value: string };
   values?: VSCodeAttributeValue[];
-  valueSet?: string;
   references?: VSCodeReference[];
 }
 
@@ -53,11 +52,12 @@ const DOCS_BASE_URL = 'https://pine-design-system.netlify.app';
 // Cache for component tag -> storybook title mapping
 let storyTitleCache: Map<string, string> | null = null;
 
-// Cache for component tag -> MDX documentation content
-let mdxDocsCache: Map<string, string> | null = null;
-
-// Cache for component tag -> example headings from MDX
-let mdxExamplesCache: Map<string, string[]> | null = null;
+// Cache for component tag -> parsed MDX data (docs and examples)
+interface MdxParsedData {
+  docs: string;
+  examples: string[];
+}
+let mdxCache: Map<string, MdxParsedData> | null = null;
 
 /**
  * Find the MDX documentation file for a component
@@ -140,8 +140,7 @@ function parseMdxToMarkdown(mdxContent: string): string {
   let foundHeader = false;
   const paragraphLines: string[] = [];
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
+  for (const line of lines) {
     const trimmedLine = line.trim();
 
     // Skip import statements and JSX at the top
@@ -175,80 +174,38 @@ function parseMdxToMarkdown(mdxContent: string): string {
 }
 
 /**
- * Build a cache mapping component tags to their parsed MDX documentation
+ * Get parsed MDX data for a component (with caching).
+ * Reads and parses the MDX file once, extracting both docs and examples.
  */
-function buildMdxDocsCache(): Map<string, string> {
-  if (mdxDocsCache) {
-    return mdxDocsCache;
+function getMdxData(componentTag: string): MdxParsedData {
+  if (!mdxCache) {
+    mdxCache = new Map();
   }
 
-  mdxDocsCache = new Map();
-  return mdxDocsCache;
-}
-
-/**
- * Get parsed MDX documentation for a component (with caching)
- */
-function getMdxDocs(componentTag: string): string | null {
-  const cache = buildMdxDocsCache();
-
-  if (cache.has(componentTag)) {
-    return cache.get(componentTag) || null;
+  const cached = mdxCache.get(componentTag);
+  if (cached) {
+    return cached;
   }
+
+  const emptyData: MdxParsedData = { docs: '', examples: [] };
 
   const mdxPath = findMdxFile(componentTag);
-  if (mdxPath === null) {
-    cache.set(componentTag, '');
-    return null;
+  if (!mdxPath) {
+    mdxCache.set(componentTag, emptyData);
+    return emptyData;
   }
 
   try {
     const mdxContent = fs.readFileSync(mdxPath, 'utf-8');
-    const parsed = parseMdxToMarkdown(mdxContent);
-    cache.set(componentTag, parsed);
-    return parsed;
+    const data: MdxParsedData = {
+      docs: parseMdxToMarkdown(mdxContent),
+      examples: parseMdxExamples(mdxContent),
+    };
+    mdxCache.set(componentTag, data);
+    return data;
   } catch {
-    cache.set(componentTag, '');
-    return null;
-  }
-}
-
-/**
- * Build the examples cache
- */
-function buildMdxExamplesCache(): Map<string, string[]> {
-  if (mdxExamplesCache) {
-    return mdxExamplesCache;
-  }
-
-  mdxExamplesCache = new Map();
-  return mdxExamplesCache;
-}
-
-/**
- * Get example headings from MDX for a component (with caching)
- */
-function getMdxExamples(componentTag: string): string[] {
-  const cache = buildMdxExamplesCache();
-
-  if (cache.has(componentTag)) {
-    return cache.get(componentTag) || [];
-  }
-
-  const mdxPath = findMdxFile(componentTag);
-  if (mdxPath === null) {
-    cache.set(componentTag, []);
-    return [];
-  }
-
-  try {
-    const mdxContent = fs.readFileSync(mdxPath, 'utf-8');
-    const examples = parseMdxExamples(mdxContent);
-    cache.set(componentTag, examples);
-    return examples;
-  } catch {
-    cache.set(componentTag, []);
-    return [];
+    mdxCache.set(componentTag, emptyData);
+    return emptyData;
   }
 }
 
@@ -368,19 +325,19 @@ function formatPropDescription(prop: JsonDocsProp): string {
   const parts: string[] = [];
 
   // Main description
-  if (prop.docs !== undefined && prop.docs !== '') {
+  if (prop.docs) {
     parts.push(prop.docs);
   }
 
-  // Type info
-  if (prop.type !== undefined && prop.type !== '' && prop.type !== 'string' && prop.type !== 'boolean') {
+  // Type info (skip common primitive types)
+  if (prop.type && prop.type !== 'string' && prop.type !== 'boolean') {
     parts.push(`\n\n**Type:** \`${prop.type}\``);
   }
 
   // Default value
   const defaultTag = prop.docsTags?.find((t) => t.name === 'default');
-  if ((defaultTag?.text !== undefined && defaultTag.text !== '') || prop.default !== undefined) {
-    const defaultValue = defaultTag?.text ?? prop.default;
+  const defaultValue = defaultTag?.text || prop.default;
+  if (defaultValue) {
     parts.push(`\n\n**Default:** \`${defaultValue}\``);
   }
 
@@ -395,23 +352,18 @@ function formatPropDescription(prop: JsonDocsProp): string {
 
 function formatComponentDescription(component: JsonDocsComponent): string {
   const parts: string[] = [];
+  const mdxData = getMdxData(component.tag);
 
-  // Try to get rich MDX documentation first
-  const mdxDocs = getMdxDocs(component.tag);
-
-  if (mdxDocs !== null && mdxDocs !== '') {
-    parts.push(mdxDocs);
-  } else {
-    // Fallback to JSDoc description
-    if (component.docs !== undefined && component.docs !== '') {
-      parts.push(component.docs);
-    }
+  // Try to get rich MDX documentation first, fallback to JSDoc description
+  if (mdxData.docs) {
+    parts.push(mdxData.docs);
+  } else if (component.docs) {
+    parts.push(component.docs);
   }
 
   // Add Examples section with links to MDX example headings
-  const examples = getMdxExamples(component.tag);
-  if (examples.length > 0) {
-    const exampleLinks = examples.map((heading) => {
+  if (mdxData.examples.length > 0) {
+    const exampleLinks = mdxData.examples.map((heading) => {
       const url = getExampleUrl(component.tag, heading);
       return `[${heading}](${url})`;
     });
@@ -518,17 +470,13 @@ function convertComponent(component: JsonDocsComponent): VSCodeTag | null {
     }
   }
 
-  // Add slot attributes for named slots (helps with autocomplete for slot="...")
-  // This is a bonus - VS Code will suggest slot names!
-
   return tag;
 }
 
 export function generateVSCodeCustomData(docs: JsonDocs, outputPath: string): void {
   // Reset caches for fresh generation
   storyTitleCache = null;
-  mdxDocsCache = null;
-  mdxExamplesCache = null;
+  mdxCache = null;
 
   const customData: VSCodeCustomData = {
     version: 1.1,
