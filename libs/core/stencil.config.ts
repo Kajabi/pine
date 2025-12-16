@@ -48,8 +48,8 @@ export const config: Config = {
     //   file: 'vscode-data.json',
     // },
     // Custom VS Code data generator (enhanced with full spec support)
-    // Output to project root (outside libs/core to avoid watch loops)
-    vscodeCustomDataOutputTarget('../../vscode.html-data.json'),
+    // Output to dist/ so it's included in the npm package
+    vscodeCustomDataOutputTarget('./dist/vscode.html-data.json'),
     {
       type: 'dist-hydrate-script',
     },
