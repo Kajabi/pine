@@ -4,6 +4,9 @@ import { reactOutputTarget } from '@stencil/react-output-target';
 // Plugins
 import { sass } from '@stencil/sass';
 
+// Custom output targets
+import vscodeCustomDataOutputTarget from './scripts/vscode-custom-data-generator';
+
 export const config: Config = {
   namespace: 'pine-core',
   globalStyle: 'src/global/styles/app.scss',
@@ -39,6 +42,14 @@ export const config: Config = {
       type: 'docs-readme',
       footer: '',
     },
+    // Built-in docs-vscode (basic)
+    // {
+    //   type: 'docs-vscode',
+    //   file: 'vscode-data.json',
+    // },
+    // Custom VS Code data generator (enhanced with full spec support)
+    // Output to project root (outside libs/core to avoid watch loops)
+    vscodeCustomDataOutputTarget('../../vscode.html-data.json'),
     {
       type: 'dist-hydrate-script',
     },
