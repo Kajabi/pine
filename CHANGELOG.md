@@ -1,3 +1,41 @@
+## 3.12.0 (2025-12-16)
+
+### Features 🚀
+
+- add custom data generator for autocomplete in vscode-html-language-server ([8140dfe8](https://github.com/Kajabi/pine/commit/8140dfe8))
+- clean up code ([2fee3f3c](https://github.com/Kajabi/pine/commit/2fee3f3c))
+- added vscode settings patcher as an install script ([c1b6386c](https://github.com/Kajabi/pine/commit/c1b6386c))
+
+### Bug Fixes 🐛
+
+- update semantic and core tokens in SCSS files ([#597](https://github.com/Kajabi/pine/pull/597))
+- add semantic tokens ([#606](https://github.com/Kajabi/pine/pull/606))
+- update to kajabi-ui styles to 1.0.3 ([#610](https://github.com/Kajabi/pine/pull/610))
+- update box spacing values ([#611](https://github.com/Kajabi/pine/pull/611))
+- **core:** export component types for TypeScript resolution ([#592](https://github.com/Kajabi/pine/pull/592))
+- **pds-alert:** update padding of alert to 20px ([#602](https://github.com/Kajabi/pine/pull/602))
+- **pds-divider, pds-link, pds-progress:** update code connect properties and examples ([#595](https://github.com/Kajabi/pine/pull/595))
+- **release:** update Slack notification workflow to use environment var ([#593](https://github.com/Kajabi/pine/pull/593))
+- **storybook:** update Vite watch config for HMR live reload ([#603](https://github.com/Kajabi/pine/pull/603))
+- **storybook:** use pine-core ESM bundle to fix HMR reload errors ([#605](https://github.com/Kajabi/pine/pull/605))
+
+### Documentation 📄
+
+- standardize docs sections and add form integration section to form components ([#594](https://github.com/Kajabi/pine/pull/594))
+- **pds-icon:** add technical notes on icon usage differences between React and web components ([#596](https://github.com/Kajabi/pine/pull/596))
+- **storybook:** update changelog page with actual list from changelog.md ([#604](https://github.com/Kajabi/pine/pull/604))
+
+### Styles 🎨
+
+- address transform minification warnings ([#612](https://github.com/Kajabi/pine/pull/612))
+- **pds-button:** adjust tertiary hover styles ([#613](https://github.com/Kajabi/pine/pull/613))
+
+### ❤️ Thank You
+
+- Jeremy Saenz @codegangsta
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.11.1 (2025-11-19)
 
 ### Bug Fixes 🐛
