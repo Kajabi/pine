@@ -12,7 +12,7 @@ export class PdsModalContent {
    * The border style for the content area. When not explicitly set, automatically determined based on scroll state.
    * @default 'none'
    */
-  @Prop({ reflect: true }) border: 'none' | 'both' | 'top' | 'bottom' = 'none';
+  @Prop({ reflect: true, mutable: true }) border: 'none' | 'both' | 'top' | 'bottom' = 'none';
 
   @State() contentMaxHeight: string = 'none';
 
@@ -40,7 +40,6 @@ export class PdsModalContent {
     if (!this.userSetBorder) {
       setTimeout(() => {
         // The scroll happens on the component element itself (this.el), not the inner div
-        console.log('Setting up scroll listener on component element:', this.el);
         this.el.addEventListener('scroll', this.handleScroll.bind(this));
         // Initial border update after everything is set up
         setTimeout(() => this.updateBorders(), 100);
@@ -65,7 +64,6 @@ export class PdsModalContent {
    * Handle scroll events
    */
   private handleScroll() {
-    console.log('Scroll event fired!');
     this.updateBorders();
   }
 
@@ -123,33 +121,18 @@ export class PdsModalContent {
     const isAtTop = scrollTop <= tolerance;
     const isAtBottom = scrollBottom >= scrollHeight - tolerance;
 
-    // Debug logging (can be removed later)
-    console.log('Border Debug:', {
-      scrollTop,
-      scrollHeight,
-      clientHeight,
-      scrollBottom,
-      isAtTop,
-      isAtBottom,
-      currentBorder: this.border
-    });
-
     if (isAtTop && isAtBottom) {
       // Content fits exactly, no borders needed
       this.border = 'none';
-      console.log('Content fits exactly, no borders needed');
     } else if (isAtTop && !isAtBottom) {
       // At top, show bottom border only
       this.border = 'bottom';
-      console.log('At top, show bottom border only');
     } else if (!isAtTop && isAtBottom) {
       // At bottom, show top border only
       this.border = 'top';
-      console.log('At bottom, show top border only');
     } else {
       // In middle, show both borders
       this.border = 'both';
-      console.log('In middle, show both borders');
     }
   }
 
