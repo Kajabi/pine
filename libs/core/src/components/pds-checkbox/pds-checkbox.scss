@@ -152,8 +152,7 @@ label {
 
 .pds-checkbox__message--error {
   display: flex;
-  font-size: var(--pine-font-size-085);
-  gap: var(--pine-dimension-050);
+  gap: var(--pine-dimension-2xs);
 
   pds-icon {
     margin-block-start: var(--pine-dimension-025);
