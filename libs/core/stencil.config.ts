@@ -5,7 +5,7 @@ import { reactOutputTarget } from '@stencil/react-output-target';
 import { sass } from '@stencil/sass';
 
 // Custom output targets
-import vscodeCustomDataOutputTarget from './scripts/vscode-custom-data-generator';
+import customElementsManifestOutputTarget from './scripts/custom-elements-manifest-generator';
 
 export const config: Config = {
   namespace: 'pine-core',
@@ -42,14 +42,9 @@ export const config: Config = {
       type: 'docs-readme',
       footer: '',
     },
-    // Built-in docs-vscode (basic)
-    // {
-    //   type: 'docs-vscode',
-    //   file: 'vscode-data.json',
-    // },
-    // Custom VS Code data generator (enhanced with full spec support)
-    // Output to dist/ so it's included in the npm package
-    vscodeCustomDataOutputTarget('./dist/vscode.html-data.json'),
+    // Custom Elements Manifest generator (CEM v1.0.0 spec)
+    // Used by Storybook, VS Code, JetBrains IDEs, and other tooling
+    customElementsManifestOutputTarget('./dist/custom-elements.json'),
     {
       type: 'dist-hydrate-script',
     },

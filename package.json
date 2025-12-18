@@ -10,7 +10,6 @@
   "scripts": {
     "build.all": "npx nx run-many --target=build",
     "commit": "npx cz",
-    "postinstall": "node libs/core/scripts/vscode-settings-patcher.cjs || true",
     "coverage": "open libs/core/coverage/lcov-report/index.html",
     "deploy": "npx nx run-many -t deploy -p core",
     "lint.all": "npx nx run-many --target=lint",
