@@ -33,6 +33,7 @@
   "collection": "dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
   "unpkg": "dist/pine-core/pine-core.esm.js",
+  "customElements": "dist/custom-elements.json",
   "publishConfig": {
     "access": "public",
     "directory": "dist"
@@ -53,8 +54,7 @@
   "scripts": {
     "build": "npm run build.stencil",
     "build.all": "run-s build.stencil build.storybook",
-    "build.stencil": "stencil build --docs && mkdir -p dist/scripts && cp scripts/vscode-settings-patcher.cjs dist/scripts/",
-    "postinstall": "node ./dist/scripts/vscode-settings-patcher.cjs || true",
+    "build.stencil": "stencil build --docs",
     "build.storybook": "storybook build",
     "build.ts": "tsc -p scripts/tsconfig.json",
     "deploy": "npm run build.all",
