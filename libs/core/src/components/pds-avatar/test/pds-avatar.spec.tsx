@@ -13,7 +13,7 @@ describe('pds-avatar', () => {
       <pds-avatar class="pds-avatar" size="lg" variant="customer">
         <mock:shadow-root>
           <div part="asset-wrapper" style="height: 56px; width: 56px;">
-            <pds-icon color="var(--pine-color-mercury-500)" icon="${userFilled}" size="33.53%"></pds-icon>
+            <pds-icon color="var(--pine-color-brand)" icon="${userFilled}" size="33.53%"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-avatar>
