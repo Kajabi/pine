@@ -5,7 +5,6 @@
 
   pds-button {
     align-items: center;
-    background: var(--pine-color-secondary);
     border-radius: var(--pine-border-radius-full);
     border-width: var(--pine-dimension-none);
     display: inline-flex;
@@ -28,6 +27,7 @@
     }
 
     span {
+      background: var(--pine-color-secondary);
       font-weight: var(--pine-font-weight-medium);
       margin-inline-end: var(--pine-dimension-xs);
       white-space: nowrap;
