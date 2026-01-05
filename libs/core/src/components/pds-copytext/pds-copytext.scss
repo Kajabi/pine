@@ -27,7 +27,6 @@
     }
 
     span {
-      background: var(--pine-color-secondary);
       font-weight: var(--pine-font-weight-medium);
       margin-inline-end: var(--pine-dimension-xs);
       white-space: nowrap;
@@ -57,6 +56,7 @@
     }
 
     span {
+      background: var(--pine-color-secondary);
       border: var(--pine-border);
       border-radius: var(--pine-border-radius-full);
       margin-inline-end: var(--pine-dimension-sm);
