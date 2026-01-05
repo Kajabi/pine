@@ -8,7 +8,8 @@
 
 .pds-link {
   align-items: center;
-  color: var(--color, var(--pine-color-text));
+  // Priority: 1) explicit --color prop, 2) context variable, 3) default
+  color: var(--color, var(--pds-context-link-color, var(--pine-color-text)));
   display: inline-flex;
   font-weight: var(--pine-font-weight-medium);
 
@@ -20,7 +21,7 @@
   }
 
   &:hover {
-    color: var(--color, var(--pine-color-text-hover));
+    color: var(--color, var(--pds-context-link-color-hover, var(--pine-color-text-hover)));
     text-decoration: none;
   }
 
@@ -83,7 +84,7 @@
   text-decoration: none;
 
   &:hover {
-    color: var(--pine-color-text-hover);
+    color: var(--color, var(--pds-context-link-color-hover, var(--pine-color-text-hover)));
     text-decoration: underline;
   }
 }

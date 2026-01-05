@@ -8,6 +8,10 @@
   --sizing-min-width-desktop: calc(var(--sizing-total-width) - (var(--padding-inline-desktop) * 2));
   --sizing-total-width: 350px;
 
+  // Context link colors for slotted pds-link components (light text on dark backgrounds)
+  --pds-context-link-color: var(--pine-color-text-inverse);
+  --pds-context-link-color-hover: var(--pine-color-text-inverse-emphasis);
+
   box-sizing: border-box;
   display: block;
   font: var(--pine-typography-body-medium);
