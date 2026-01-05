@@ -85,15 +85,9 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
   const [pineTokens, setPineTokens] = useState<Token | null>(null);
   const [coreTokens, setCoreTokens] = useState<CoreTokens | null>(null);
 
-  // Resolve a reference like {color.grey.100} to its actual value from core tokens
-  const resolveReference = (value: string, cores: CoreTokens): string => {
-    if (typeof value !== 'string') return value;
-
-    // Match references like {color.grey.100} or {font-size.100}
-    const refMatch = value.match(/^\{([^}]+)\}$/);
-    if (!refMatch || !cores) return value;
-
-    const refPath = refMatch[1]; // e.g., "color.grey.100" or "font-size.100"
+  // Look up a single reference path in the core tokens
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const lookupCoreValue = (refPath: string, cores: CoreTokens): any => {
     const parts = refPath.split('.');
 
     // Navigate through the core tokens to find the value
@@ -103,8 +97,7 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
       if (current && typeof current === 'object' && part in current) {
         current = current[part];
       } else {
-        // If we can't find the path, return the original reference
-        return value;
+        return null; // Path not found
       }
     }
 
@@ -113,7 +106,51 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
       return current.value;
     }
 
-    return value;
+    return null;
+  };
+
+  // Convert a complex value (like box-shadow object) to a string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const complexValueToString = (value: any): string => {
+    if (typeof value === 'string') return value;
+
+    // Handle box-shadow array of objects
+    if (Array.isArray(value)) {
+      return value.map(item => {
+        if (typeof item === 'object' && item !== null) {
+          // Box shadow object: { x, y, blur, spread, color, type }
+          const { x, y, blur, spread, color } = item;
+          return `${x} ${y} ${blur} ${spread} ${color}`.trim();
+        }
+        return String(item);
+      }).join(', ');
+    }
+
+    // Handle single box-shadow object
+    if (typeof value === 'object' && value !== null) {
+      const { x, y, blur, spread, color } = value;
+      if (x !== undefined) {
+        return `${x} ${y} ${blur} ${spread} ${color}`.trim();
+      }
+      // For other objects, try to extract values
+      return Object.values(value).filter(v => v !== 'dropShadow').join(' ');
+    }
+
+    return String(value);
+  };
+
+  // Resolve references in a value string to actual core values
+  const resolveReferences = (value: string, cores: CoreTokens): string => {
+    if (typeof value !== 'string') return String(value);
+
+    // Replace all references like {color.grey.100} with their resolved values
+    return value.replace(/\{([^}]+)\}/g, (match, refPath) => {
+      const resolvedValue = lookupCoreValue(refPath, cores);
+      if (resolvedValue !== null) {
+        return complexValueToString(resolvedValue);
+      }
+      return match; // Keep original if not found
+    });
   };
 
   useEffect(() => {
@@ -208,7 +245,7 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
 
         // Resolve references to actual values for semantic tier
         if (tier === 'semantic' && coreTokens && cssPropertyValue) {
-          cssPropertyValue = resolveReference(cssPropertyValue, coreTokens);
+          cssPropertyValue = resolveReferences(cssPropertyValue, coreTokens);
         }
 
         let style: React.CSSProperties = {};
