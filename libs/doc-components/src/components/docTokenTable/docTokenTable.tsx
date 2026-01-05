@@ -11,6 +11,9 @@ interface Token {
   [key: string]: TokenEntry | Token;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type CoreTokens = Record<string, any>;
+
 interface DocTokenTableProps {
   category: string;
   tier: string;
@@ -80,11 +83,50 @@ const formattedCategoryName = {
 
 const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) => {
   const [pineTokens, setPineTokens] = useState<Token | null>(null);
+  const [coreTokens, setCoreTokens] = useState<CoreTokens | null>(null);
+
+  // Resolve a reference like {color.grey.100} to its actual value from core tokens
+  const resolveReference = (value: string, cores: CoreTokens): string => {
+    if (typeof value !== 'string') return value;
+
+    // Match references like {color.grey.100} or {font-size.100}
+    const refMatch = value.match(/^\{([^}]+)\}$/);
+    if (!refMatch || !cores) return value;
+
+    const refPath = refMatch[1]; // e.g., "color.grey.100" or "font-size.100"
+    const parts = refPath.split('.');
+
+    // Navigate through the core tokens to find the value
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let current: any = cores;
+    for (const part of parts) {
+      if (current && typeof current === 'object' && part in current) {
+        current = current[part];
+      } else {
+        // If we can't find the path, return the original reference
+        return value;
+      }
+    }
+
+    // If we found a token entry with a value, return it
+    if (current && typeof current === 'object' && 'value' in current) {
+      return current.value;
+    }
+
+    return value;
+  };
 
   useEffect(() => {
     const loadTokens = async () => {
       try {
         const tokenModule = await import(`../../../../../node_modules/@kajabi-ui/styles/dist/tokens/${tier}.json`);
+
+        // Also load core tokens when viewing semantic tier
+        if (tier === 'semantic') {
+          const coreModule = await import(`../../../../../node_modules/@kajabi-ui/styles/dist/tokens/core.json`);
+          setCoreTokens(coreModule.default as CoreTokens);
+        }
+
         const categories = categoryLookup[category]?.[tier] || null;
         if (categories) {
           const tempTokens: Token[] = [];
@@ -162,6 +204,11 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
               cssPropertyValue = buildValue(token.value);
             }
           }
+        }
+
+        // Resolve references to actual values for semantic tier
+        if (tier === 'semantic' && coreTokens && cssPropertyValue) {
+          cssPropertyValue = resolveReference(cssPropertyValue, coreTokens);
         }
 
         let style: React.CSSProperties = {};
