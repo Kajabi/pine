@@ -114,13 +114,20 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
   const complexValueToString = (value: any): string => {
     if (typeof value === 'string') return value;
 
+    // Helper to build box-shadow string from object, filtering out missing values
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const boxShadowObjectToString = (obj: any): string => {
+      const { x, y, blur, spread, color } = obj;
+      return [x, y, blur, spread, color]
+        .filter(v => v != null && v !== '')
+        .join(' ');
+    };
+
     // Handle box-shadow array of objects
     if (Array.isArray(value)) {
       return value.map(item => {
         if (typeof item === 'object' && item !== null) {
-          // Box shadow object: { x, y, blur, spread, color, type }
-          const { x, y, blur, spread, color } = item;
-          return `${x} ${y} ${blur} ${spread} ${color}`.trim();
+          return boxShadowObjectToString(item);
         }
         return String(item);
       }).join(', ');
@@ -128,12 +135,14 @@ const DocTokenTable: React.FC<DocTokenTableProps> = ({ category, tier, use }) =>
 
     // Handle single box-shadow object
     if (typeof value === 'object' && value !== null) {
-      const { x, y, blur, spread, color } = value;
+      const { x } = value;
       if (x !== undefined) {
-        return `${x} ${y} ${blur} ${spread} ${color}`.trim();
+        return boxShadowObjectToString(value);
       }
       // For other objects, try to extract values
-      return Object.values(value).filter(v => v !== 'dropShadow').join(' ');
+      return Object.values(value)
+        .filter(v => v != null && v !== '' && v !== 'dropShadow')
+        .join(' ');
     }
 
     return String(value);
