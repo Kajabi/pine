@@ -1,3 +1,19 @@
+## 3.12.1 (2026-01-06)
+
+### Bug Fixes 🐛
+
+- bump token version and component adjustment to align with brand updates ([#622](https://github.com/Kajabi/pine/pull/622))
+- **pds-modal:** make border prop mutable and remove debug logging ([#616](https://github.com/Kajabi/pine/pull/616))
+
+### Styles 🎨
+
+- **pds-copytext:** move background color to span element ([#623](https://github.com/Kajabi/pine/pull/623))
+- **pds-input, pds-checkbox:** standardize helper and error message typography ([#617](https://github.com/Kajabi/pine/pull/617))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+
 ## 3.12.0 (2025-12-16)
 
 ### Features 🚀
