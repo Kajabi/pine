@@ -203,33 +203,46 @@ module.exports = stylelint.createPlugin(ruleName, (primaryOption, secondaryOptio
 
       const propertyContext = getPropertyContext(prop);
 
+      // Collect replacements to apply in one pass
+      const replacements = [];
+
       for (const match of coreTokenMatches) {
         const { primarySuggestion, allSuggestions } = getSuggestions(match.token, propertyContext);
 
-        // If in fix mode and we have a primary suggestion, apply fix
-        if (context && context.fix && primarySuggestion) {
-          const newValue = decl.value.replace(
-            match.full,
-            `var(--pine-color-${primarySuggestion})`
-          );
-          decl.value = newValue;
-          continue;
+        // Collect replacement if we have a primary suggestion
+        if (primarySuggestion) {
+          replacements.push({
+            original: match.full,
+            replacement: `var(--pine-color-${primarySuggestion})`
+          });
         }
 
-        const message = buildErrorMessage(
-          match.token,
-          propertyContext,
-          primarySuggestion,
-          allSuggestions
-        );
+        // Report if not in fix mode or no primary suggestion
+        if (!(context && context.fix && primarySuggestion)) {
+          const message = buildErrorMessage(
+            match.token,
+            propertyContext,
+            primarySuggestion,
+            allSuggestions
+          );
 
-        stylelint.utils.report({
-          ruleName,
-          result,
-          node: decl,
-          message,
-          word: match.full,
-        });
+          stylelint.utils.report({
+            ruleName,
+            result,
+            node: decl,
+            message,
+            word: match.full,
+          });
+        }
+      }
+
+      // Apply all replacements in one pass when fixing
+      if (context && context.fix && replacements.length > 0) {
+        let newValue = value; // Use original value
+        for (const { original, replacement } of replacements) {
+          newValue = newValue.replace(original, replacement);
+        }
+        decl.value = newValue;
       }
     });
   };

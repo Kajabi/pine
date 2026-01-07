@@ -252,6 +252,9 @@ module.exports = stylelint.createPlugin(ruleName, (primaryOption, secondaryOptio
         });
       }
 
+      // Collect replacements to apply in one pass
+      const replacements = [];
+
       for (const { hex, index } of hexMatches) {
         const beforeHex = value.substring(0, index);
 
@@ -266,9 +269,12 @@ module.exports = stylelint.createPlugin(ruleName, (primaryOption, secondaryOptio
 
           const shouldFix = suggestionData && suggestionData.autoFix && suggestionData.suggestion;
 
-          if (shouldFix && context && context.fix) {
-            decl.value = decl.value.replace(hex, suggestionData.suggestion);
-          } else {
+          if (shouldFix) {
+            // Collect replacement for later batch application
+            replacements.push({ original: hex, replacement: suggestionData.suggestion });
+          }
+
+          if (!shouldFix || !(context && context.fix)) {
             stylelint.utils.report({
               ruleName,
               result,
@@ -278,6 +284,15 @@ module.exports = stylelint.createPlugin(ruleName, (primaryOption, secondaryOptio
             });
           }
         }
+      }
+
+      // Apply all replacements in one pass when fixing
+      if (context && context.fix && replacements.length > 0) {
+        let newValue = value; // Use original value, not mutated decl.value
+        for (const { original, replacement } of replacements) {
+          newValue = newValue.replace(original, replacement);
+        }
+        decl.value = newValue;
       }
     });
   };

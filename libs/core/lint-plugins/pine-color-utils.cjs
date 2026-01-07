@@ -7,18 +7,30 @@
 
 /**
  * Convert hex color to RGB values
- * @param {string} hex - Hex color string (e.g., "#ffffff" or "ffffff")
+ * @param {string} hex - Hex color string (e.g., "#ffffff", "fff", "#ffffff00", "#fff0")
  * @returns {{r: number, g: number, b: number} | null}
  */
 function hexToRgb(hex) {
   // Remove # if present and normalize to lowercase
   const cleanHex = hex.replace(/^#/, '').toLowerCase();
 
-  // Handle shorthand hex (e.g., "fff" -> "ffffff")
-  const fullHex = cleanHex.length === 3
-    ? cleanHex.split('').map(c => c + c).join('')
-    : cleanHex;
+  let fullHex;
+  if (cleanHex.length === 3) {
+    // Expand 3-digit: "fff" -> "ffffff"
+    fullHex = cleanHex.split('').map(c => c + c).join('');
+  } else if (cleanHex.length === 4) {
+    // Expand 4-digit RGBA: "fff0" -> "ffffff00", then take first 6 chars
+    fullHex = cleanHex.split('').map(c => c + c).join('').substring(0, 6);
+  } else if (cleanHex.length === 6) {
+    fullHex = cleanHex;
+  } else if (cleanHex.length === 8) {
+    // 8-digit RRGGBBAA: strip alpha, take first 6 chars
+    fullHex = cleanHex.substring(0, 6);
+  } else {
+    return null;
+  }
 
+  // Validate that we have exactly 6 hex characters
   if (!/^[0-9a-f]{6}$/.test(fullHex)) {
     return null;
   }
@@ -153,14 +165,25 @@ function findClosestCoreToken(hex, hexToCore) {
 
 /**
  * Normalize hex color to lowercase with # prefix
+ * Handles 3, 4, 6, and 8 character hex inputs
  * @param {string} hex - Hex color string
  * @returns {string} - Normalized hex string
  */
 function normalizeHex(hex) {
   const cleanHex = hex.replace(/^#/, '').toLowerCase();
-  const fullHex = cleanHex.length === 3
-    ? cleanHex.split('').map(c => c + c).join('')
-    : cleanHex;
+
+  let fullHex;
+  if (cleanHex.length === 3) {
+    // Expand 3-digit: "abc" -> "aabbcc"
+    fullHex = cleanHex.split('').map(c => c + c).join('');
+  } else if (cleanHex.length === 4) {
+    // Expand 4-digit with alpha: "abcd" -> "aabbccdd"
+    fullHex = cleanHex.split('').map(c => c + c).join('');
+  } else {
+    // 6 or 8 digit: keep as-is
+    fullHex = cleanHex;
+  }
+
   return `#${fullHex}`;
 }
 
