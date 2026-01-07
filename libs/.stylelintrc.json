@@ -4,7 +4,13 @@
     "stylelint-config-sass-guidelines",
     "stylelint-config-prettier"
   ],
+  "plugins": [
+    "./core/lint-plugins/stylelint-plugin-pine-colors.cjs",
+    "./core/lint-plugins/stylelint-plugin-pine-semantic-tokens.cjs"
+  ],
   "rules": {
+    "pine-design-system/no-hardcoded-colors": true,
+    "pine-design-system/prefer-semantic-tokens": true,
     "at-rule-no-unknown": null,
     "color-hex-length": "long",
     "length-zero-no-unit": [
