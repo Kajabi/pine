@@ -1,7 +1,31 @@
 :host {
+  // Context link colors for slotted pds-link components (default variant)
+  --pds-context-link-color: var(--pine-alert-color-link);
+  --pds-context-link-color-hover: var(--pine-alert-color-link-hover);
+
   display: block;
   line-height: 1;
   width: 100%;
+}
+
+:host([variant="danger"]) {
+  --pds-context-link-color: var(--pine-alert-color-danger-link);
+  --pds-context-link-color-hover: var(--pine-alert-color-danger-link-hover);
+}
+
+:host([variant="info"]) {
+  --pds-context-link-color: var(--pine-alert-color-info-link);
+  --pds-context-link-color-hover: var(--pine-alert-color-info-link-hover);
+}
+
+:host([variant="success"]) {
+  --pds-context-link-color: var(--pine-alert-color-success-link);
+  --pds-context-link-color-hover: var(--pine-alert-color-success-link-hover);
+}
+
+:host([variant="warning"]) {
+  --pds-context-link-color: var(--pine-alert-color-warning-link);
+  --pds-context-link-color-hover: var(--pine-alert-color-warning-link-hover);
 }
 
 .pds-alert__container {
