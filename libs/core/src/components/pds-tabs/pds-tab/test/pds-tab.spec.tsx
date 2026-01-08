@@ -73,4 +73,30 @@ describe('pds-tabs', () => {
       </pds-tab>
     `);
   });
+
+  it('renders disabled tab with passed disabled prop', async () => {
+    const page = await newSpecPage({
+      components: [PdsTab],
+      html: `<pds-tab disabled="true" parent-component-id="foo" name="two">Content</pds-tab>`,
+    });
+    expect(page.root).toEqualHtml(`
+      <pds-tab slot="tabs" disabled="true" name="two" parent-component-id="foo">
+        <button aria-controls="foo__two-panel" aria-disabled="true" aria-selected="false" class="pds-tab is-disabled" disabled role="tab" tabindex="-1" id="foo__two">
+          <div class="pds-tab__content">Content</div>
+        </button>
+      </pds-tab>
+    `);
+  });
+
+  it('onclick does not fire event when disabled', async () => {
+    const page = await newSpecPage({
+      components: [PdsTab],
+      html: `<pds-tab disabled="true" parent-component-id="foo" name="two">Content</pds-tab>`,
+    });
+    const eventSpy = jest.fn();
+    document.addEventListener('pdsTabClick', eventSpy);
+    const component = page.doc.getElementById("foo__two");
+    component?.click();
+    expect(eventSpy).not.toHaveBeenCalled();
+  });
 });

@@ -1679,6 +1679,11 @@ export namespace Components {
         "value": string;
     }
     interface PdsTab {
+        /**
+          * Determines the tab's disabled state.
+          * @defaultValue false
+         */
+        "disabled"?: boolean;
         "index": number;
         /**
           * Sets the related tab name, this name must match a `pds-tabpanel`'s tab name property
@@ -4431,6 +4436,11 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     interface PdsTab {
+        /**
+          * Determines the tab's disabled state.
+          * @defaultValue false
+         */
+        "disabled"?: boolean;
         "index"?: number;
         /**
           * Sets the related tab name, this name must match a `pds-tabpanel`'s tab name property
