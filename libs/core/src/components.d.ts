@@ -32,7 +32,7 @@ export namespace Components {
      */
     interface MockPdsModal {
         /**
-          * Whether the modal can be dismissed by clicking the backdrop
+          * Whether the modal can be dismissed by clicking the backdrop or pressing Escape
           * @default true
          */
         "backdropDismiss": boolean;
@@ -2734,7 +2734,7 @@ declare namespace LocalJSX {
      */
     interface MockPdsModal {
         /**
-          * Whether the modal can be dismissed by clicking the backdrop
+          * Whether the modal can be dismissed by clicking the backdrop or pressing Escape
           * @default true
          */
         "backdropDismiss"?: boolean;

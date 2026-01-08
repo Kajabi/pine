@@ -69,23 +69,6 @@ describe('pds-modal', () => {
     expect(page.root?.getAttribute('backdrop-dismiss')).toBe('false');
   });
 
-  it('should have the correct closeOnEsc attribute', async () => {
-    // Default value should be true
-    const defaultPage = await newSpecPage({
-      components: [MockPdsModal],
-      html: `<mock-pds-modal></mock-pds-modal>`,
-    });
-    expect(defaultPage.root?.getAttribute('close-on-esc')).toBeNull(); // Default value is not set as attribute
-
-    // Explicit false value
-    const page = await newSpecPage({
-      components: [MockPdsModal],
-      html: `<mock-pds-modal close-on-esc="false"></pds-modal>`,
-    });
-
-    expect(page.root?.getAttribute('close-on-esc')).toBe('false');
-  });
-
   it('should have the correct open attribute', async () => {
     // Default value should be false
     const defaultPage = await newSpecPage({
@@ -170,7 +153,7 @@ describe('pds-modal', () => {
     expect(page.rootInstance.open).toBe(true);
   });
 
-  it('should close on Escape key press (native dialog behavior)', async () => {
+  it('should close on Escape key press when backdropDismiss is true (default)', async () => {
     const page = await newSpecPage({
       components: [MockPdsModal],
       html: `<mock-pds-modal></mock-pds-modal>`,
@@ -181,10 +164,28 @@ describe('pds-modal', () => {
     await page.waitForChanges();
 
     // Directly call the handler method with a mocked event
-    const mockEvent = { key: 'Escape' } as KeyboardEvent;
+    const mockEvent = { key: 'Escape', preventDefault: jest.fn() } as unknown as KeyboardEvent;
     page.rootInstance.handleKeyDown(mockEvent);
 
     // Modal should be closed
     expect(page.rootInstance.open).toBe(false);
+  });
+
+  it('should not close on Escape key press when backdropDismiss is false', async () => {
+    const page = await newSpecPage({
+      components: [MockPdsModal],
+      html: `<mock-pds-modal backdrop-dismiss="false"></mock-pds-modal>`,
+    });
+
+    // Open the modal
+    page.rootInstance.open = true;
+    await page.waitForChanges();
+
+    // Directly call the handler method with a mocked event
+    const mockEvent = { key: 'Escape', preventDefault: jest.fn() } as unknown as KeyboardEvent;
+    page.rootInstance.handleKeyDown(mockEvent);
+
+    // Modal should still be open
+    expect(page.rootInstance.open).toBe(true);
   });
 });
