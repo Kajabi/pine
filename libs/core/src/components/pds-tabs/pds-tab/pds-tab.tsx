@@ -54,10 +54,12 @@ export class PdsTab {
   }
 
   private classNames() {
-    let classNames = 'pds-tab';
-    if (this.selected) classNames += ' is-active';
-    if (this.disabled) classNames += ' is-disabled';
-    return classNames;
+    const classes = [
+      'pds-tab',
+      this.selected && 'is-active',
+      this.disabled && 'is-disabled',
+    ];
+    return classes.filter(Boolean).join(' ');
   }
 
   render() {
