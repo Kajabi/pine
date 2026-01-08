@@ -9,6 +9,12 @@ export class PdsTab {
   @Element() el: HTMLPdsTabElement;
 
   /**
+   * Determines the tab's disabled state.
+   * @defaultValue false
+   */
+  @Prop() disabled? = false;
+
+  /**
    * Sets the related tab name, this name must match a `pds-tabpanel`'s tab name property
    */
   @Prop() name!: string;
@@ -43,7 +49,15 @@ export class PdsTab {
   /** @internal */
   @Event() pdsTabClick: EventEmitter<object>;
   private onTabClick(index, parentComponentId) {
+    if (this.disabled) return;
     this.pdsTabClick.emit([index, parentComponentId]);
+  }
+
+  private classNames() {
+    let classNames = 'pds-tab';
+    if (this.selected) classNames += ' is-active';
+    if (this.disabled) classNames += ' is-disabled';
+    return classNames;
   }
 
   render() {
@@ -61,9 +75,11 @@ export class PdsTab {
           role="tab"
           id={this.parentComponentId + "__" + this.name}
           aria-controls={this.parentComponentId + "__" + this.name + "-panel"}
-          tabindex={this.selected ? "0" : "-1"}
+          tabindex={this.disabled ? "-1" : (this.selected ? "0" : "-1")}
           aria-selected={this.selected ? "true" : "false"}
-          class={this.selected ? "pds-tab is-active" : "pds-tab"}
+          aria-disabled={this.disabled ? "true" : null}
+          disabled={this.disabled}
+          class={this.classNames()}
           onClick={this.onTabClick.bind(this, this.index, this.parentComponentId)}
         >
           {this.variant === "availability" && availabilityTabEdgeInlineStart}

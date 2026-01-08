@@ -194,6 +194,42 @@ The Filter variant can be used to better display filtered data.
   </pds-tabs>
 </DocCanvas>
 
+### Disabled
+
+Individual tabs can be disabled using the `disabled` prop. Disabled tabs cannot be clicked or focused and are visually styled to indicate their disabled state.
+
+<DocCanvas mdxSource={{
+  react: `
+<PdsTabs activeTabName="Sturdy" variant="primary" componentId="disabled-example" tablistLabel="Foo">
+  <PdsTab name="Sturdy">Sturdy</PdsTab>
+  <PdsTab name="Dollop" disabled>Dollop (Disabled)</PdsTab>
+  <PdsTab name="Waffle">Waffle</PdsTab>
+  <PdsTabpanel name="Sturdy">Content Sturdy</PdsTabpanel>
+  <PdsTabpanel name="Dollop">Content Dollop</PdsTabpanel>
+  <PdsTabpanel name="Waffle">Content Waffle</PdsTabpanel>
+</PdsTabs>
+`,
+  webComponent: `
+<pds-tabs active-tab-name="Sturdy" variant="primary" component-id="disabled-example" tablist-label="Foo">
+  <pds-tab name="Sturdy">Sturdy</pds-tab>
+  <pds-tab name="Dollop" disabled>Dollop (Disabled)</pds-tab>
+  <pds-tab name="Waffle">Waffle</pds-tab>
+  <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
+  <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
+  <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+</pds-tabs>
+`
+}}>
+  <pds-tabs active-tab-name="Sturdy" variant="primary" component-id="disabled-example" tablist-label="Foo">
+    <pds-tab name="Sturdy">Sturdy</pds-tab>
+    <pds-tab name="Dollop" disabled>Dollop (Disabled)</pds-tab>
+    <pds-tab name="Waffle">Waffle</pds-tab>
+    <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
+    <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
+    <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+  </pds-tabs>
+</DocCanvas>
+
 ## Additional Resources
 
 [W3C: Tabs Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/)
