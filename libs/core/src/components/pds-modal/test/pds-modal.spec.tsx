@@ -167,6 +167,8 @@ describe('pds-modal', () => {
     const mockEvent = { key: 'Escape', preventDefault: jest.fn() } as unknown as KeyboardEvent;
     page.rootInstance.handleKeyDown(mockEvent);
 
+    // Should prevent default browser behavior
+    expect(mockEvent.preventDefault).toHaveBeenCalled();
     // Modal should be closed
     expect(page.rootInstance.open).toBe(false);
   });
@@ -185,6 +187,8 @@ describe('pds-modal', () => {
     const mockEvent = { key: 'Escape', preventDefault: jest.fn() } as unknown as KeyboardEvent;
     page.rootInstance.handleKeyDown(mockEvent);
 
+    // Should still prevent default browser behavior even when not closing
+    expect(mockEvent.preventDefault).toHaveBeenCalled();
     // Modal should still be open
     expect(page.rootInstance.open).toBe(true);
   });
