@@ -255,9 +255,10 @@ export class PdsModal {
 
     // Handle Escape key to close the modal
     if (e.key === 'Escape') {
-      // Only close if this is the innermost modal
-      if (this.isInnermostModal()) {
-        e.preventDefault();
+      // Always prevent native dialog close behavior
+      e.preventDefault();
+      // Only close if backdropDismiss is enabled and this is the innermost modal
+      if (this.backdropDismiss && this.isInnermostModal()) {
         this.hideModal();
       }
       return;

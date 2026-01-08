@@ -336,7 +336,7 @@ The standard modal with a header, content area, and footer. By default, it can b
       if (modal) modal.open = true;
     }}>Open Modal</pds-button>
 
-    <pds-modal id="default-modal-1" component-id="default-modal-1" closeOnEsc={true}>
+    <pds-modal id="default-modal-1" component-id="default-modal-1">
       <pds-modal-header>
         <pds-box direction="column" fit padding="md">
           <pds-box
@@ -1467,14 +1467,16 @@ modal.addEventListener('pds-modal-close', () => {
 
 Modals can be configured to close automatically in response to user actions:
 
-- Escape key - Always closes the modal (per accessibility guidelines)
-- `backdropDismiss` (default: `true`) - Allow closing when clicking outside the modal
+- `backdropDismiss` (default: `true`) - Controls whether the modal can be dismissed by clicking outside the modal OR pressing the Escape key
 
 ```html
-<pds-modal backdropDismiss={false}>
+<!-- Non-dismissible modal: backdrop clicks and Escape key are both disabled -->
+<pds-modal backdrop-dismiss="false">
   <!-- Modal content that can only be closed via explicit button clicks -->
 </pds-modal>
 ```
+
+> **Note:** While WAI-ARIA guidelines recommend Escape-to-close for standard modals, setting `backdrop-dismiss="false"` disables this for use cases requiring explicit user action (e.g., required onboarding flows, critical confirmations). Ensure users have a clear, accessible path to complete the required action.
 
 ## Playground
 

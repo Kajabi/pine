@@ -38,11 +38,9 @@ export class MockPdsModal {
   @Prop() scrollable = true;
 
   /**
-   * Whether the modal can be dismissed by clicking the backdrop
+   * Whether the modal can be dismissed by clicking the backdrop or pressing Escape
    */
   @Prop() backdropDismiss = true;
-
-  // Native dialog element always closes on Escape key press, so no closeOnEsc property is needed
 
   /**
    * Whether the modal is open
@@ -99,12 +97,17 @@ export class MockPdsModal {
 
   /**
    * Listen for keydown events to handle Escape key
-   * Native dialog element always closes on Escape key press
+   * Should only close on Escape if backdropDismiss is enabled
    */
   // Using direct method instead of @Listen to avoid ESLint warning
   handleKeyDown(event: KeyboardEvent) {
     if (event.key === 'Escape' && this.open === true) {
-      this.hideModal();
+      // Always prevent default to mirror native dialog behavior blocking
+      event.preventDefault();
+      // Only close if backdropDismiss is enabled
+      if (this.backdropDismiss === true) {
+        this.hideModal();
+      }
     }
   }
 
