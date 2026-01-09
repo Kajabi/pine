@@ -1742,7 +1742,7 @@ export namespace Components {
          */
         "background": boolean;
         /**
-          * Adds a bottom border to the table head.
+          * Adds top and bottom borders to the table head.
           * @defaultValue false
          */
         "border": boolean;
@@ -4523,7 +4523,7 @@ declare namespace LocalJSX {
          */
         "background"?: boolean;
         /**
-          * Adds a bottom border to the table head.
+          * Adds top and bottom borders to the table head.
           * @defaultValue false
          */
         "border"?: boolean;

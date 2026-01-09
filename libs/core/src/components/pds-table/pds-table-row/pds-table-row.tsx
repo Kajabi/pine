@@ -10,8 +10,8 @@ import { closest } from '../../../utils/closest';
 export class PdsTableRow {
   @Element() hostElement: HTMLPdsTableRowElement;
   private tableRef: HTMLPdsTableElement;
-  private observer: MutationObserver;
-  private bodyObserver: MutationObserver;
+  private observer: MutationObserver | null = null;
+  private bodyObserver: MutationObserver | null = null;
 
   /**
     * Determines if the row selected is in an indeterminate state.

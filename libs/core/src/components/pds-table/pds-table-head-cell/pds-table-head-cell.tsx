@@ -13,7 +13,7 @@ export class PdsTableHeadCell {
   private scrollContainer: HTMLElement | null = null;
   private setupTimer: number | undefined;
   private setupRetries: number = 0;
-  private headObserver: MutationObserver;
+  private headObserver?: MutationObserver;
 
   /**
    * Sets the text alignment within the head cell.

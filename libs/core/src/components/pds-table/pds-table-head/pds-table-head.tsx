@@ -22,7 +22,7 @@ export class PdsTableHead {
    @Prop({mutable: true}) isSelected: boolean;
 
   /**
-   * Adds a bottom border to the table head.
+   * Adds top and bottom borders to the table head.
    * @defaultValue false
    */
   @Prop({ reflect: true }) border = false;
