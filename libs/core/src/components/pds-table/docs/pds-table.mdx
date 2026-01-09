@@ -222,7 +222,7 @@ A compact table is a table with a reduced row spacing. This is useful for tables
 When the `border` and `background` props are set to `true` on `pds-table-head`, the header will display top and bottom borders and a subtle background color to visually distinguish it from the table body. When the `row-dividers` prop is set to `true` on `pds-table`, divider borders will be added between rows for clear separation. The last row will not have a bottom border.
 
 <DocCanvas mdxSource={{
-  react: `<PdsTable componentId="head-background-dividers">
+  react: `<PdsTable componentId="head-background-dividers" rowDividers={true}>
     <PdsTableHead background={true} border={true}>
       <PdsTableHeadCell>Column Title</PdsTableHeadCell>
       <PdsTableHeadCell>Column Title</PdsTableHeadCell>
