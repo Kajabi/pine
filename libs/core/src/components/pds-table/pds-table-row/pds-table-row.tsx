@@ -11,6 +11,7 @@ export class PdsTableRow {
   @Element() hostElement: HTMLPdsTableRowElement;
   private tableRef: HTMLPdsTableElement;
   private observer: MutationObserver;
+  private bodyObserver: MutationObserver;
 
   /**
     * Determines if the row selected is in an indeterminate state.
@@ -86,19 +87,46 @@ export class PdsTableRow {
   }
 
   componentWillLoad() {
+    // Handle initial selection state
     if (this.isSelected) {
       this.handleSelect(this.isSelected);
     }
-    // Set tableRef and initial state for row dividers
+    // Note: tableRef, observers, and divider state are set up in connectedCallback
+    // which runs before componentWillLoad and also handles row re-attachment after sorting
+  }
+
+  connectedCallback() {
+    // When a row is re-attached to the DOM (e.g., after sorting),
+    // we need to re-setup the observers since disconnectedCallback cleared them
+    // Note: componentDidLoad only fires once, but connectedCallback fires every time
+    // the element is attached to the DOM (including after being moved)
     this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+    this.setupObservers();
     this.updateDividerState();
   }
 
-  componentDidLoad() {
+  disconnectedCallback() {
+    this.cleanupObservers();
+  }
+
+  private cleanupObservers() {
+    if (this.observer) {
+      this.observer.disconnect();
+      this.observer = null;
+    }
+    if (this.bodyObserver) {
+      this.bodyObserver.disconnect();
+      this.bodyObserver = null;
+    }
+  }
+
+  private setupObservers() {
+    // Clean up any existing observers first
+    this.cleanupObservers();
+
     // Watch for changes to the parent table's row-dividers attribute
     if (this.tableRef && typeof MutationObserver !== 'undefined') {
       this.observer = new MutationObserver(() => {
-        // Update state when row-dividers attribute changes
         this.updateDividerState();
       });
 
@@ -107,11 +135,17 @@ export class PdsTableRow {
         attributeFilter: ['row-dividers']
       });
     }
-  }
 
-  disconnectedCallback() {
-    if (this.observer) {
-      this.observer.disconnect();
+    // Watch for child list changes in table body (e.g., when rows are reordered during sorting)
+    const tableBody = this.hostElement.closest('pds-table-body');
+    if (tableBody && typeof MutationObserver !== 'undefined') {
+      this.bodyObserver = new MutationObserver(() => {
+        this.updateLastRowState();
+      });
+
+      this.bodyObserver.observe(tableBody, {
+        childList: true
+      });
     }
   }
 
