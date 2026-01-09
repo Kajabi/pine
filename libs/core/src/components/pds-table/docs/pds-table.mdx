@@ -217,13 +217,13 @@ A compact table is a table with a reduced row spacing. This is useful for tables
   </pds-table>
 </DocCanvas>
 
-### Head Background and Dividers
+### Head Background and Row Dividers
 
-A table with a background color applied to the header and divider borders between rows. The header background helps distinguish the header from the table body, while row dividers provide clear separation between data rows. The last row does not have a bottom border.
+When the `border` and `background` props are set to `true` on `pds-table-head`, the header will display top and bottom borders and a subtle background color to visually distinguish it from the table body. When the `row-dividers` prop is set to `true` on `pds-table`, divider borders will be added between rows for clear separation. The last row will not have a bottom border.
 
 <DocCanvas mdxSource={{
   react: `<PdsTable componentId="head-background-dividers">
-    <PdsTableHead background={true}>
+    <PdsTableHead background={true} border={true}>
       <PdsTableHeadCell>Column Title</PdsTableHeadCell>
       <PdsTableHeadCell>Column Title</PdsTableHeadCell>
       <PdsTableHeadCell>Column Title</PdsTableHeadCell>
@@ -248,7 +248,7 @@ A table with a background color applied to the header and divider borders betwee
   </PdsTable>`,
   webComponent: `
   <pds-table component-id="head-background-dividers" row-dividers>
-    <pds-table-head background>
+    <pds-table-head background border>
       <pds-table-head-cell>Column Title</pds-table-head-cell>
       <pds-table-head-cell>Column Title</pds-table-head-cell>
       <pds-table-head-cell>Column Title</pds-table-head-cell>
@@ -273,7 +273,7 @@ A table with a background color applied to the header and divider borders betwee
   </pds-table>
 `}}>
   <pds-table component-id="head-background-dividers" row-dividers>
-    <pds-table-head background>
+    <pds-table-head background border>
       <pds-table-head-cell>Column Title</pds-table-head-cell>
       <pds-table-head-cell>Column Title</pds-table-head-cell>
       <pds-table-head-cell>Column Title</pds-table-head-cell>
