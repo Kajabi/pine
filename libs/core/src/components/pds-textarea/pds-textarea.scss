@@ -66,12 +66,15 @@ label {
 }
 
 .pds-textarea__error-message {
-  align-items: center;
   color: var(--pine-color-text-message-danger);
   display: flex;
   font: var(--pine-typography-body-sm-medium);
   gap: var(--pine-dimension-2xs);
   margin-block-start: var(--pine-dimension-2xs);
+
+  pds-icon {
+    margin-block-start: var(--pine-dimension-025);
+  }
 }
 
 .pds-textarea__field-wrapper {
