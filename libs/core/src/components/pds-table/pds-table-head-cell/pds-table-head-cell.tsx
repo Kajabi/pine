@@ -90,10 +90,6 @@ export class PdsTableHeadCell {
         attributes: true,
         attributeFilter: ['border', 'background']
       });
-
-      // Initial state update
-      this.hasHeadBorder = tableHead.hasAttribute('border');
-      this.hasHeadBackground = tableHead.hasAttribute('background');
     }
   }
 

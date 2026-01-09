@@ -33,10 +33,9 @@
   background-color: var(--pine-color-background-subtle);
 }
 
-// When parent table-head has border prop, use more prominent border on top and bottom
+// When parent table-head has border prop, add top border (bottom already set in :host)
 :host(.has-head-border) {
-  border-block-end: var(--pine-border-width-thin) solid var(--pine-color-border-subtle);
-  border-block-start: var(--pine-border-width-thin) solid var(--pine-color-border-subtle);
+  border-block-start: var(--border-head-cell-default);
 }
 
 // box shadow when table has scrolled and cell is fixed

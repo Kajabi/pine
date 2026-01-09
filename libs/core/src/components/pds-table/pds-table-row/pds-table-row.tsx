@@ -71,7 +71,7 @@ export class PdsTableRow {
       classNames.push("is-last-row");
     }
 
-    return classNames.join('  ');
+    return classNames.join(' ');
   }
 
   componentWillRender() {
@@ -96,8 +96,6 @@ export class PdsTableRow {
 
   componentDidLoad() {
     // Watch for changes to the parent table's row-dividers attribute
-    this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
-
     if (this.tableRef && typeof MutationObserver !== 'undefined') {
       this.observer = new MutationObserver(() => {
         // Update state when row-dividers attribute changes
