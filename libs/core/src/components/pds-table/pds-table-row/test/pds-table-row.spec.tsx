@@ -76,4 +76,45 @@ describe('pds-table-row', () => {
 
     expect((row as PdsTableRow).indeterminate).toBe(false);
   });
+
+  it('renders with has-divider class when table has rowDividers prop', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable, PdsTableBody, PdsTableRow],
+      html: `
+      <pds-table row-dividers="true">
+        <pds-table-body>
+          <pds-table-row>
+            <pds-table-cell>Row 1</pds-table-cell>
+          </pds-table-row>
+          <pds-table-row>
+            <pds-table-cell>Row 2</pds-table-cell>
+          </pds-table-row>
+        </pds-table-body>
+      </pds-table>
+      `,
+    });
+
+    const rows = page.root?.querySelectorAll('pds-table-row');
+    rows?.forEach((row) => {
+      expect(row?.classList.contains('has-divider')).toBe(true);
+    });
+  });
+
+  it('does not render with has-divider class when table does not have rowDividers prop', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable, PdsTableBody, PdsTableRow],
+      html: `
+      <pds-table>
+        <pds-table-body>
+          <pds-table-row>
+            <pds-table-cell>Row 1</pds-table-cell>
+          </pds-table-row>
+        </pds-table-body>
+      </pds-table>
+      `,
+    });
+
+    const row = page.root?.querySelector('pds-table-row');
+    expect(row?.classList.contains('has-divider')).toBe(false);
+  });
 });

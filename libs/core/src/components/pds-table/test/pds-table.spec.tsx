@@ -59,6 +59,15 @@ describe('pds-table', () => {
     `);
   });
 
+  it('renders with rowDividers prop set', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable],
+      html: `<pds-table row-dividers="true" component-id="test-table"></pds-table>`,
+    });
+
+    expect(page.root).toHaveAttribute('row-dividers');
+  });
+
   it('sorts the table when pdsTableSort event is triggered', async () => {
     const page = await newSpecPage({
       components: [PdsTable, PdsTableHead, PdsTableHeadCell, PdsTableBody, PdsTableRow, PdsTableCell],
