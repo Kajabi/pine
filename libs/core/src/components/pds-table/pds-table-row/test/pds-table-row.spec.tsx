@@ -31,7 +31,7 @@ describe('pds-table-row', () => {
     });
 
     const row = page.root?.querySelector('pds-table-row');
-    const checkbox = row?.shadowRoot?.querySelector('pds-checkbox') as HTMLFormElement;
+    const checkbox = row?.shadowRoot?.querySelector('pds-checkbox') as HTMLElement;
 
     checkbox.click();
     await page.waitForChanges();
@@ -68,13 +68,13 @@ describe('pds-table-row', () => {
     });
 
     const row = page.root?.querySelector('pds-table-row');
-    const checkbox = row?.shadowRoot?.querySelector('pds-checkbox') as HTMLFormElement;
+    const checkbox = row?.shadowRoot?.querySelector('pds-checkbox') as HTMLElement;
 
 
     checkbox.click();
     await page.waitForChanges();
 
-    expect((row as PdsTableRow).indeterminate).toBe(false);
+    expect((row as HTMLPdsTableRowElement).indeterminate).toBe(false);
   });
 
   it('renders with has-divider class when table has rowDividers prop', async () => {
@@ -94,9 +94,17 @@ describe('pds-table-row', () => {
       `,
     });
 
+    // Wait for MutationObserver updates to complete
+    await page.waitForChanges();
+
     const rows = page.root?.querySelectorAll('pds-table-row');
+
+    // Ensure rows exist before asserting
+    expect(rows).toBeDefined();
+    expect(rows?.length).toBeGreaterThan(0);
+
     rows?.forEach((row) => {
-      expect(row?.classList.contains('has-divider')).toBe(true);
+      expect(row.classList.contains('has-divider')).toBe(true);
     });
 
     // Verify is-last-row class is only on the last row
