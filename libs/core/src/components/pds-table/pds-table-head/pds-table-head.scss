@@ -19,3 +19,21 @@
 :host pds-table-checkbox-cell {
   border-block-end: var(--border-head-default);
 }
+
+:host([border]) {
+  border-block-end: var(--pine-border-width-thin) solid var(--pine-color-border-subtle);
+  border-block-start: var(--pine-border-width-thin) solid var(--pine-color-border-subtle);
+}
+
+:host([border]) pds-table-head-cell {
+  border-block-end: var(--pine-border-width-thin) solid var(--pine-color-border-subtle);
+  border-block-start: var(--pine-border-width-thin) solid var(--pine-color-border-subtle);
+}
+
+:host([background]) {
+  background-color: var(--pine-color-background-subtle);
+}
+
+:host([background]) pds-table-head-cell {
+  background-color: var(--pine-color-background-subtle);
+}

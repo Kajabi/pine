@@ -127,5 +127,30 @@ describe('pds-table-head', () => {
 
     // Check if isSelected is toggled
     expect((head as unknown as PdsTableHead).isSelected).toBe(true);
-  })
+  });
+
+  it('renders with border attribute when border prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableHead],
+      html: `<pds-table-head border="true"></pds-table-head>`,
+    });
+    expect(page.root).toHaveAttribute('border');
+  });
+
+  it('renders with background attribute when background prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableHead],
+      html: `<pds-table-head background="true"></pds-table-head>`,
+    });
+    expect(page.root).toHaveAttribute('background');
+  });
+
+  it('renders with both border and background attributes when both props are set', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableHead],
+      html: `<pds-table-head border="true" background="true"></pds-table-head>`,
+    });
+    expect(page.root).toHaveAttribute('border');
+    expect(page.root).toHaveAttribute('background');
+  });
 });

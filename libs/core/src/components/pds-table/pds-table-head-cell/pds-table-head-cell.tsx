@@ -13,6 +13,7 @@ export class PdsTableHeadCell {
   private scrollContainer: HTMLElement | null = null;
   private setupTimer: number | undefined;
   private setupRetries: number = 0;
+  private headObserver?: MutationObserver;
 
   /**
    * Sets the text alignment within the head cell.
@@ -46,8 +47,27 @@ export class PdsTableHeadCell {
    */
   @State() isSelected: boolean = false;
 
-  componentWillRender() {
+  /**
+   * Determines if the parent table-head has the border attribute.
+   * @defaultValue false
+   */
+  @State() private hasHeadBorder: boolean = false;
+
+  /**
+   * Determines if the parent table-head has the background attribute.
+   * @defaultValue false
+   */
+  @State() private hasHeadBackground: boolean = false;
+
+  componentWillLoad() {
+    // Set initial references and state before first render
     this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+
+    const tableHead = this.hostElement.closest('pds-table-head') as HTMLElement;
+    if (tableHead) {
+      this.hasHeadBorder = tableHead.hasAttribute('border');
+      this.hasHeadBackground = tableHead.hasAttribute('background');
+    }
   }
 
   componentDidLoad() {
@@ -56,11 +76,36 @@ export class PdsTableHeadCell {
       // This enables the first column header to show a shadow when the table is scrolled horizontally
       this.setupScrollListener();
     }
+
+    // Watch for changes to the parent table-head's border and background attributes
+    const tableHead = this.hostElement.closest('pds-table-head') as HTMLElement;
+    if (tableHead && typeof MutationObserver !== 'undefined') {
+      // Defensive guard: disconnect existing observer before creating a new one
+      if (this.headObserver) {
+        this.headObserver.disconnect();
+      }
+
+      this.headObserver = new MutationObserver(() => {
+        // Update state when border or background attributes change
+        this.hasHeadBorder = tableHead.hasAttribute('border');
+        this.hasHeadBackground = tableHead.hasAttribute('background');
+      });
+
+      this.headObserver.observe(tableHead, {
+        attributes: true,
+        attributeFilter: ['border', 'background']
+      });
+    }
   }
 
   disconnectedCallback() {
     this.cleanupScrollListener();
+
+    if (this.headObserver) {
+      this.headObserver.disconnect();
+    }
   }
+
 
   private setupScrollListener() {
     if (!this.tableRef) return;
@@ -154,6 +199,14 @@ export class PdsTableHeadCell {
 
     if (this.tableRef && this.tableRef.fixedColumn && this.tableScrolling) {
       classNames.push('has-scrolled');
+    }
+
+    if (this.hasHeadBackground) {
+      classNames.push('has-head-background');
+    }
+
+    if (this.hasHeadBorder) {
+      classNames.push('has-head-border');
     }
 
     return classNames.join(' ');
