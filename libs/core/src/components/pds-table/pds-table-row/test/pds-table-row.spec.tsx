@@ -98,6 +98,10 @@ describe('pds-table-row', () => {
     rows?.forEach((row) => {
       expect(row?.classList.contains('has-divider')).toBe(true);
     });
+
+    // Verify is-last-row class is only on the last row
+    expect(rows?.[0]?.classList.contains('is-last-row')).toBe(false);
+    expect(rows?.[rows.length - 1]?.classList.contains('is-last-row')).toBe(true);
   });
 
   it('does not render with has-divider class when table does not have rowDividers prop', async () => {
