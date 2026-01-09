@@ -47,14 +47,26 @@ export class PdsTableHeadCell {
    */
   @State() isSelected: boolean = false;
 
+  /**
+   * Determines if the parent table-head has the border attribute.
+   * @defaultValue false
+   */
+  @State() private hasHeadBorder: boolean = false;
+
+  /**
+   * Determines if the parent table-head has the background attribute.
+   * @defaultValue false
+   */
+  @State() private hasHeadBackground: boolean = false;
+
   componentWillRender() {
     this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
 
-    // Ensure classes are set before render
+    // Update state from parent table-head attributes
     const tableHead = this.hostElement.closest('pds-table-head') as HTMLElement;
     if (tableHead) {
-      this.hostElement.classList.toggle('has-head-border', tableHead.hasAttribute('border'));
-      this.hostElement.classList.toggle('has-head-background', tableHead.hasAttribute('background'));
+      this.hasHeadBorder = tableHead.hasAttribute('border');
+      this.hasHeadBackground = tableHead.hasAttribute('background');
     }
   }
 
@@ -69,8 +81,9 @@ export class PdsTableHeadCell {
     const tableHead = this.hostElement.closest('pds-table-head') as HTMLElement;
     if (tableHead && typeof MutationObserver !== 'undefined') {
       this.headObserver = new MutationObserver(() => {
-        // Update classes when border or background attributes change
-        this.updateHeadClasses();
+        // Update state when border or background attributes change
+        this.hasHeadBorder = tableHead.hasAttribute('border');
+        this.hasHeadBackground = tableHead.hasAttribute('background');
       });
 
       this.headObserver.observe(tableHead, {
@@ -78,8 +91,9 @@ export class PdsTableHeadCell {
         attributeFilter: ['border', 'background']
       });
 
-      // Initial class update
-      this.updateHeadClasses();
+      // Initial state update
+      this.hasHeadBorder = tableHead.hasAttribute('border');
+      this.hasHeadBackground = tableHead.hasAttribute('background');
     }
   }
 
@@ -91,16 +105,6 @@ export class PdsTableHeadCell {
     }
   }
 
-  private updateHeadClasses() {
-    const tableHead = this.hostElement.closest('pds-table-head') as HTMLElement;
-    if (!tableHead) return;
-
-    // Update border class
-    this.hostElement.classList.toggle('has-head-border', tableHead.hasAttribute('border'));
-
-    // Update background class
-    this.hostElement.classList.toggle('has-head-background', tableHead.hasAttribute('background'));
-  }
 
   private setupScrollListener() {
     if (!this.tableRef) return;
@@ -196,14 +200,11 @@ export class PdsTableHeadCell {
       classNames.push('has-scrolled');
     }
 
-    // Check if parent table-head has background prop
-    const tableHead = this.hostElement.closest('pds-table-head') as HTMLElement;
-    if (tableHead && tableHead.hasAttribute('background')) {
+    if (this.hasHeadBackground) {
       classNames.push('has-head-background');
     }
 
-    // Check if parent table-head has border prop
-    if (tableHead && tableHead.hasAttribute('border')) {
+    if (this.hasHeadBorder) {
       classNames.push('has-head-border');
     }
 
