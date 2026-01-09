@@ -306,10 +306,13 @@
 }
 
 .pds-input__error-message {
-  align-items: center;
   color: var(--pds-input-error-color);
   display: flex;
   gap: var(--pine-dimension-2xs);
+
+  pds-icon {
+    margin-block-start: var(--pine-dimension-025);
+  }
 }
 
 .visually-hidden {
