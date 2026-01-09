@@ -29,6 +29,12 @@ Be sure to make proper use of the subcomponents to ensure that the table is acce
 
 <DocArgsTable componentName="pds-table" docSource={components} />
 
+### Head
+
+The table header. Equivalent to the `<thead>` element.
+
+<DocArgsTable componentName="pds-table-head" docSource={components} />
+
 ### Head Cell
 
 The table header cell. Equivalent to the `<th>` element.
@@ -187,6 +193,87 @@ A compact table is a table with a reduced row spacing. This is useful for tables
 `}}>
   <pds-table component-id="compact" compact>
     <pds-table-head>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</DocCanvas>
+
+### Head Background and Dividers
+
+A table with a background color applied to the header and divider borders between rows. The header background helps distinguish the header from the table body, while row dividers provide clear separation between data rows. The last row does not have a bottom border.
+
+<DocCanvas mdxSource={{
+  react: `<PdsTable componentId="head-background-dividers">
+    <PdsTableHead background={true}>
+      <PdsTableHeadCell>Column Title</PdsTableHeadCell>
+      <PdsTableHeadCell>Column Title</PdsTableHeadCell>
+      <PdsTableHeadCell>Column Title</PdsTableHeadCell>
+    </PdsTableHead>
+    <PdsTableBody>
+      <PdsTableRow>
+        <PdsTableCell>Row Item Alpha</PdsTableCell>
+        <PdsTableCell>Row Item Beta</PdsTableCell>
+        <PdsTableCell>Row Item Charlie</PdsTableCell>
+      </PdsTableRow>
+      <PdsTableRow>
+        <PdsTableCell>Row Item Alpha</PdsTableCell>
+        <PdsTableCell>Row Item Beta</PdsTableCell>
+        <PdsTableCell>Row Item Charlie</PdsTableCell>
+      </PdsTableRow>
+      <PdsTableRow>
+        <PdsTableCell>Row Item Alpha</PdsTableCell>
+        <PdsTableCell>Row Item Beta</PdsTableCell>
+        <PdsTableCell>Row Item Charlie</PdsTableCell>
+      </PdsTableRow>
+    </PdsTableBody>
+  </PdsTable>`,
+  webComponent: `
+  <pds-table component-id="head-background-dividers" row-dividers>
+    <pds-table-head background>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+`}}>
+  <pds-table component-id="head-background-dividers" row-dividers>
+    <pds-table-head background>
       <pds-table-head-cell>Column Title</pds-table-head-cell>
       <pds-table-head-cell>Column Title</pds-table-head-cell>
       <pds-table-head-cell>Column Title</pds-table-head-cell>

@@ -2,10 +2,29 @@ import { html } from 'lit-html';
 
 
 export default {
-
   component: 'pds-table',
   parameters: {},
   title: 'components/Table',
+  argTypes: {
+    border: {
+      control: { type: 'boolean' },
+      description: 'Adds top and bottom borders to the table head',
+      table: {
+        category: 'Table Head',
+      },
+    },
+    background: {
+      control: { type: 'boolean' },
+      description: 'Adds a subtle background color to the table head',
+      table: {
+        category: 'Table Head',
+      },
+    },
+    rowDividers: {
+      control: { type: 'boolean' },
+      description: 'Adds divider borders between table rows. The last row will not have a bottom border',
+    },
+  },
 };
 
 const BaseTemplate = (args) => html`
@@ -14,9 +33,13 @@ const BaseTemplate = (args) => html`
   component-id="${args.componentId}"
   ?fixed-column=${args.fixedColumn}
   ?responsive=${args.responsive}
+  ?row-dividers=${args.rowDividers}
   ?selectable=${args.selectable}
 >
-  <pds-table-head>
+  <pds-table-head
+    ?border=${args.border}
+    ?background=${args.background}
+  >
     <pds-table-head-cell>Column Title</pds-table-head-cell>
     <pds-table-head-cell>Column Title</pds-table-head-cell>
     <pds-table-head-cell>Column Title</pds-table-head-cell>
@@ -46,9 +69,13 @@ const AlignmentTemplate = (args) => html`
   component-id="${args.componentId}"
   ?fixed-column=${args.fixedColumn}
   ?responsive=${args.responsive}
+  ?row-dividers=${args.rowDividers}
   ?selectable=${args.selectable}
 >
-  <pds-table-head>
+  <pds-table-head
+    ?border=${args.border}
+    ?background=${args.background}
+  >
     <pds-table-head-cell cell-align="start">Name</pds-table-head-cell>
     <pds-table-head-cell cell-align="center">Amount</pds-table-head-cell>
     <pds-table-head-cell cell-align="end">Status</pds-table-head-cell>
@@ -82,9 +109,13 @@ const ResponsiveTemplate = (args) => html`
   component-id="${args.componentId}"
   ?fixed-column=${args.fixedColumn}
   ?responsive=${args.responsive}
+  ?row-dividers=${args.rowDividers}
   ?selectable=${args.selectable}
 >
-  <pds-table-head>
+  <pds-table-head
+    ?border=${args.border}
+    ?background=${args.background}
+  >
     <pds-table-head-cell>Column Title</pds-table-head-cell>
     <pds-table-head-cell>Column Title</pds-table-head-cell>
     <pds-table-head-cell>Column Title</pds-table-head-cell>
@@ -150,9 +181,13 @@ const SortableTemplate = (args) => html`
   component-id="${args.componentId}"
   ?fixed-column=${args.fixedColumn}
   ?responsive=${args.responsive}
+  ?row-dividers=${args.rowDividers}
   ?selectable=${args.selectable}
 >
-  <pds-table-head>
+  <pds-table-head
+    ?border=${args.border}
+    ?background=${args.background}
+  >
     <pds-table-head-cell sortable=${args.sortable}>Name</pds-table-head-cell>
     <pds-table-head-cell sortable=${args.sortable}>Email</pds-table-head-cell>
     <pds-table-head-cell sortable=${args.sortable}>Email Marketing</pds-table-head-cell>
@@ -206,7 +241,10 @@ Default.args = {
   compact: false,
   componentId: 'default',
   fixedColumn: false,
+  border: false,
+  background: false,
   responsive: false,
+  rowDividers: false,
   selectable: false,
 };
 
@@ -215,7 +253,10 @@ Alignment.args = {
   compact: false,
   componentId: 'alignment',
   fixedColumn: false,
+  border: false,
+  background: false,
   responsive: false,
+  rowDividers: false,
   selectable: false,
 };
 
@@ -224,7 +265,10 @@ Compact.args = {
   compact: true,
   componentId: 'compact',
   fixedColumn: false,
+  border: false,
+  background: false,
   responsive: false,
+  rowDividers: false,
   selectable: false,
 };
 
@@ -233,7 +277,10 @@ Selectable.args = {
   compact: false,
   componentId: 'selectable',
   fixedColumn: false,
+  border: false,
+  background: false,
   responsive: false,
+  rowDividers: false,
   selectable: true,
 };
 
@@ -242,7 +289,10 @@ Responsive.args = {
   compact: false,
   componentId: 'responsive',
   fixedColumn: false,
+  border: false,
+  background: false,
   responsive: true,
+  rowDividers: false,
   selectable: false,
 };
 
@@ -251,7 +301,10 @@ fixedColumn.args = {
   compact: false,
   componentId: 'responsive',
   fixedColumn: true,
+  border: false,
+  background: false,
   responsive: true,
+  rowDividers: false,
   selectable: false,
 };
 
@@ -260,7 +313,70 @@ Sortable.args = {
   compact: false,
   componentId: 'sortable',
   fixedColumn: false,
+  border: false,
+  background: false,
   responsive: false,
+  rowDividers: false,
   selectable: false,
   sortable: true,
+};
+
+export const HeadWithBorder = BaseTemplate.bind();
+HeadWithBorder.args = {
+  compact: false,
+  componentId: 'head-border',
+  fixedColumn: false,
+  border: true,
+  background: false,
+  responsive: false,
+  rowDividers: false,
+  selectable: false,
+};
+
+export const HeadWithBackground = BaseTemplate.bind();
+HeadWithBackground.args = {
+  compact: false,
+  componentId: 'head-background',
+  fixedColumn: false,
+  border: false,
+  background: true,
+  responsive: false,
+  rowDividers: false,
+  selectable: false,
+};
+
+export const HeadWithBorderAndBackground = BaseTemplate.bind();
+HeadWithBorderAndBackground.args = {
+  compact: false,
+  componentId: 'head-border-background',
+  fixedColumn: false,
+  border: true,
+  background: true,
+  responsive: false,
+  rowDividers: false,
+  selectable: false,
+};
+
+export const RowDividers = BaseTemplate.bind();
+RowDividers.args = {
+  compact: false,
+  componentId: 'row-dividers',
+  fixedColumn: false,
+  border: false,
+  background: false,
+  responsive: false,
+  rowDividers: true,
+  selectable: false,
+};
+
+export const AllFeatures = BaseTemplate.bind();
+AllFeatures.args = {
+  compact: false,
+  componentId: 'all-features',
+  fixedColumn: false,
+  border: true,
+  background: true,
+  responsive: false,
+  rowDividers: true,
+  selectable: false,
 };
