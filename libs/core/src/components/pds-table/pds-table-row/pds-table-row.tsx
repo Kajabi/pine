@@ -119,7 +119,7 @@ export class PdsTableRow {
     if (!this.tableRef) {
       this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
     }
-    // rowDividers prop has reflect: true, so we can rely solely on the prop value
+    // Reads the parent pds-table component's rowDividers property value directly
     return !!(this.tableRef && this.tableRef.rowDividers);
   }
 

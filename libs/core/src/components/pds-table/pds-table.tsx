@@ -42,7 +42,7 @@ export class PdsTable {
    * Adds divider borders between table rows. The last row will not have a bottom border.
    * @defaultValue false
    */
-  @Prop({ reflect: true }) rowDividers: boolean;
+  @Prop({ reflect: true }) rowDividers: boolean = false;
 
   /**
    * The name of the column being sorted.

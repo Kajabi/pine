@@ -80,6 +80,11 @@ export class PdsTableHeadCell {
     // Watch for changes to the parent table-head's border and background attributes
     const tableHead = this.hostElement.closest('pds-table-head') as HTMLElement;
     if (tableHead && typeof MutationObserver !== 'undefined') {
+      // Defensive guard: disconnect existing observer before creating a new one
+      if (this.headObserver) {
+        this.headObserver.disconnect();
+      }
+
       this.headObserver = new MutationObserver(() => {
         // Update state when border or background attributes change
         this.hasHeadBorder = tableHead.hasAttribute('border');
