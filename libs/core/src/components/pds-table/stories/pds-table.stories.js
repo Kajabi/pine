@@ -321,42 +321,6 @@ Sortable.args = {
   sortable: true,
 };
 
-export const HeadWithBorder = BaseTemplate.bind();
-HeadWithBorder.args = {
-  compact: false,
-  componentId: 'head-border',
-  fixedColumn: false,
-  border: true,
-  background: false,
-  responsive: false,
-  rowDividers: false,
-  selectable: false,
-};
-
-export const HeadWithBackground = BaseTemplate.bind();
-HeadWithBackground.args = {
-  compact: false,
-  componentId: 'head-background',
-  fixedColumn: false,
-  border: false,
-  background: true,
-  responsive: false,
-  rowDividers: false,
-  selectable: false,
-};
-
-export const HeadWithBorderAndBackground = BaseTemplate.bind();
-HeadWithBorderAndBackground.args = {
-  compact: false,
-  componentId: 'head-border-background',
-  fixedColumn: false,
-  border: true,
-  background: true,
-  responsive: false,
-  rowDividers: false,
-  selectable: false,
-};
-
 export const RowDividers = BaseTemplate.bind();
 RowDividers.args = {
   compact: false,
@@ -364,18 +328,6 @@ RowDividers.args = {
   fixedColumn: false,
   border: false,
   background: false,
-  responsive: false,
-  rowDividers: true,
-  selectable: false,
-};
-
-export const AllFeatures = BaseTemplate.bind();
-AllFeatures.args = {
-  compact: false,
-  componentId: 'all-features',
-  fixedColumn: false,
-  border: true,
-  background: true,
   responsive: false,
   rowDividers: true,
   selectable: false,
