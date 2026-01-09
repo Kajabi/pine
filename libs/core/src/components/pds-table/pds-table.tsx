@@ -39,6 +39,12 @@ export class PdsTable {
   @Prop() selectable: boolean;
 
   /**
+   * Adds divider borders between table rows. The last row will not have a bottom border.
+   * @defaultValue false
+   */
+  @Prop() rowDividers: boolean;
+
+  /**
    * The name of the column being sorted.
    * @defaultValue null
    */

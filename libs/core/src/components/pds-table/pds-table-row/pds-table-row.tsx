@@ -10,6 +10,7 @@ import { closest } from '../../../utils/closest';
 export class PdsTableRow {
   @Element() hostElement: HTMLPdsTableRowElement;
   private tableRef: HTMLPdsTableElement;
+  private observer: MutationObserver;
 
   /**
     * Determines if the row selected is in an indeterminate state.
@@ -50,10 +51,37 @@ export class PdsTableRow {
       classNames.push("is-selected");
     }
 
+    // Ensure tableRef is available
+    if (!this.tableRef) {
+      this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+    }
+
+    // Check for rowDividers prop or attribute
+    const hasRowDividers = this.tableRef && (
+      this.tableRef.rowDividers ||
+      this.tableRef.hasAttribute('row-dividers')
+    );
+
+    if (hasRowDividers) {
+      classNames.push("has-divider");
+
+      // Check if this is the last row in the table body
+      const tableBody = this.hostElement.closest('pds-table-body');
+      if (tableBody) {
+        const rows = Array.from(tableBody.querySelectorAll('pds-table-row'));
+        const isLastRow = rows[rows.length - 1] === this.hostElement;
+        if (isLastRow) {
+          classNames.push("is-last-row");
+        }
+      }
+    }
+
     return classNames.join('  ');
   }
 
   componentWillRender() {
+    // Always refresh tableRef to get latest prop values
+    // This ensures we pick up changes to parent table props
     this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
 
     if (this.tableRef && this.tableRef.fixedColumn) {
@@ -65,6 +93,54 @@ export class PdsTableRow {
   componentWillLoad() {
     if (this.isSelected) {
       this.handleSelect(this.isSelected);
+    }
+  }
+
+  componentDidLoad() {
+    // Watch for changes to the parent table's row-dividers attribute
+    this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+
+    if (this.tableRef && typeof MutationObserver !== 'undefined') {
+      this.observer = new MutationObserver(() => {
+        // Force re-render when row-dividers attribute changes
+        this.hostElement.classList.toggle('has-divider', this.shouldHaveDivider());
+        this.updateLastRowClass();
+      });
+
+      this.observer.observe(this.tableRef, {
+        attributes: true,
+        attributeFilter: ['row-dividers']
+      });
+    }
+  }
+
+  disconnectedCallback() {
+    if (this.observer) {
+      this.observer.disconnect();
+    }
+  }
+
+  private shouldHaveDivider(): boolean {
+    if (!this.tableRef) {
+      this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+    }
+    return !!(this.tableRef && (
+      this.tableRef.rowDividers ||
+      this.tableRef.hasAttribute('row-dividers')
+    ));
+  }
+
+  private updateLastRowClass() {
+    if (!this.shouldHaveDivider()) {
+      this.hostElement.classList.remove('is-last-row');
+      return;
+    }
+
+    const tableBody = this.hostElement.closest('pds-table-body');
+    if (tableBody) {
+      const rows = Array.from(tableBody.querySelectorAll('pds-table-row'));
+      const isLastRow = rows[rows.length - 1] === this.hostElement;
+      this.hostElement.classList.toggle('is-last-row', isLastRow);
     }
   }
 

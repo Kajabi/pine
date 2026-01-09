@@ -22,6 +22,18 @@ export class PdsTableHead {
    @Prop({mutable: true}) isSelected: boolean;
 
   /**
+   * Adds a bottom border to the table head.
+   * @defaultValue false
+   */
+  @Prop({ reflect: true }) border = false;
+
+  /**
+   * Adds a subtle background color to the table head.
+   * @defaultValue false
+   */
+  @Prop({ reflect: true }) background = false;
+
+  /**
    * Event that is emitted when the select all checkbox is clicked, carrying the selected value.
    */
   @Event() pdsTableSelectAll: EventEmitter<{ isSelected: boolean }>;

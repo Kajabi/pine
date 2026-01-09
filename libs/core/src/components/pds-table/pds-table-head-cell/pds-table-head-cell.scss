@@ -1,5 +1,5 @@
 :host {
-  --border-head-cell-default: var(--pine-border-width-thin) solid var(--pine-color-background-subtle);
+  --border-head-cell-default: var(--pine-border-width-thin) solid var(--pine-color-border-subtle);
 
   --box-shadow-default: 3px 3px 6px -2px rgba(0, 0, 0, 0.1);
 
@@ -25,6 +25,17 @@
   left: var(--pine-dimension-none);
   position: sticky;
   z-index: var(--pine-z-index-raised);
+}
+
+// When parent table-head has background, fixed cells should inherit it
+:host(.is-fixed.has-head-background) {
+  background-color: var(--pine-color-background-subtle);
+}
+
+// When parent table-head has border prop, use more prominent border on top and bottom
+:host(.has-head-border) {
+  border-block-end: var(--pine-border-width-thin) solid var(--pine-color-border-subtle);
+  border-block-start: var(--pine-border-width-thin) solid var(--pine-color-border-subtle);
 }
 
 // box shadow when table has scrolled and cell is fixed

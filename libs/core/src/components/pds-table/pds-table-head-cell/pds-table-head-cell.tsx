@@ -13,6 +13,7 @@ export class PdsTableHeadCell {
   private scrollContainer: HTMLElement | null = null;
   private setupTimer: number | undefined;
   private setupRetries: number = 0;
+  private headObserver: MutationObserver;
 
   /**
    * Sets the text alignment within the head cell.
@@ -48,6 +49,13 @@ export class PdsTableHeadCell {
 
   componentWillRender() {
     this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+
+    // Ensure classes are set before render
+    const tableHead = this.hostElement.closest('pds-table-head') as HTMLElement;
+    if (tableHead) {
+      this.hostElement.classList.toggle('has-head-border', tableHead.hasAttribute('border'));
+      this.hostElement.classList.toggle('has-head-background', tableHead.hasAttribute('background'));
+    }
   }
 
   componentDidLoad() {
@@ -56,10 +64,42 @@ export class PdsTableHeadCell {
       // This enables the first column header to show a shadow when the table is scrolled horizontally
       this.setupScrollListener();
     }
+
+    // Watch for changes to the parent table-head's border and background attributes
+    const tableHead = this.hostElement.closest('pds-table-head') as HTMLElement;
+    if (tableHead && typeof MutationObserver !== 'undefined') {
+      this.headObserver = new MutationObserver(() => {
+        // Update classes when border or background attributes change
+        this.updateHeadClasses();
+      });
+
+      this.headObserver.observe(tableHead, {
+        attributes: true,
+        attributeFilter: ['border', 'background']
+      });
+
+      // Initial class update
+      this.updateHeadClasses();
+    }
   }
 
   disconnectedCallback() {
     this.cleanupScrollListener();
+
+    if (this.headObserver) {
+      this.headObserver.disconnect();
+    }
+  }
+
+  private updateHeadClasses() {
+    const tableHead = this.hostElement.closest('pds-table-head') as HTMLElement;
+    if (!tableHead) return;
+
+    // Update border class
+    this.hostElement.classList.toggle('has-head-border', tableHead.hasAttribute('border'));
+
+    // Update background class
+    this.hostElement.classList.toggle('has-head-background', tableHead.hasAttribute('background'));
   }
 
   private setupScrollListener() {
@@ -154,6 +194,17 @@ export class PdsTableHeadCell {
 
     if (this.tableRef && this.tableRef.fixedColumn && this.tableScrolling) {
       classNames.push('has-scrolled');
+    }
+
+    // Check if parent table-head has background prop
+    const tableHead = this.hostElement.closest('pds-table-head') as HTMLElement;
+    if (tableHead && tableHead.hasAttribute('background')) {
+      classNames.push('has-head-background');
+    }
+
+    // Check if parent table-head has border prop
+    if (tableHead && tableHead.hasAttribute('border')) {
+      classNames.push('has-head-border');
     }
 
     return classNames.join(' ');
