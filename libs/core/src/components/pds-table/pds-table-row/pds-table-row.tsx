@@ -1,4 +1,4 @@
-import { Component, Element, Host, h, Event, EventEmitter, Prop } from '@stencil/core';
+import { Component, Element, Host, h, Event, EventEmitter, Prop, State } from '@stencil/core';
 
 import { closest } from '../../../utils/closest';
 
@@ -21,6 +21,18 @@ export class PdsTableRow {
    * Determines if the table row is currently selected.
    */
   @Prop({ mutable: true }) isSelected?: boolean;
+
+  /**
+   * Determines if the row should have a divider border.
+   * @defaultValue false
+   */
+  @State() private hasDivider: boolean = false;
+
+  /**
+   * Determines if this is the last row in the table body.
+   * @defaultValue false
+   */
+  @State() private isLastRow: boolean = false;
 
   /**
    * Event that is emitted when the checkbox is clicked, carrying the selected value.
@@ -51,29 +63,12 @@ export class PdsTableRow {
       classNames.push("is-selected");
     }
 
-    // Ensure tableRef is available
-    if (!this.tableRef) {
-      this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+    if (this.hasDivider) {
+      classNames.push("has-divider");
     }
 
-    // Check for rowDividers prop or attribute
-    const hasRowDividers = this.tableRef && (
-      this.tableRef.rowDividers ||
-      this.tableRef.hasAttribute('row-dividers')
-    );
-
-    if (hasRowDividers) {
-      classNames.push("has-divider");
-
-      // Check if this is the last row in the table body
-      const tableBody = this.hostElement.closest('pds-table-body');
-      if (tableBody) {
-        const rows = Array.from(tableBody.querySelectorAll('pds-table-row'));
-        const isLastRow = rows[rows.length - 1] === this.hostElement;
-        if (isLastRow) {
-          classNames.push("is-last-row");
-        }
-      }
+    if (this.isLastRow) {
+      classNames.push("is-last-row");
     }
 
     return classNames.join('  ');
@@ -94,6 +89,9 @@ export class PdsTableRow {
     if (this.isSelected) {
       this.handleSelect(this.isSelected);
     }
+    // Set tableRef and initial state for row dividers
+    this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
+    this.updateDividerState();
   }
 
   componentDidLoad() {
@@ -102,9 +100,8 @@ export class PdsTableRow {
 
     if (this.tableRef && typeof MutationObserver !== 'undefined') {
       this.observer = new MutationObserver(() => {
-        // Force re-render when row-dividers attribute changes
-        this.hostElement.classList.toggle('has-divider', this.shouldHaveDivider());
-        this.updateLastRowClass();
+        // Update state when row-dividers attribute changes
+        this.updateDividerState();
       });
 
       this.observer.observe(this.tableRef, {
@@ -130,17 +127,23 @@ export class PdsTableRow {
     ));
   }
 
-  private updateLastRowClass() {
-    if (!this.shouldHaveDivider()) {
-      this.hostElement.classList.remove('is-last-row');
+  private updateDividerState() {
+    this.hasDivider = this.shouldHaveDivider();
+    this.updateLastRowState();
+  }
+
+  private updateLastRowState() {
+    if (!this.hasDivider) {
+      this.isLastRow = false;
       return;
     }
 
     const tableBody = this.hostElement.closest('pds-table-body');
     if (tableBody) {
       const rows = Array.from(tableBody.querySelectorAll('pds-table-row'));
-      const isLastRow = rows[rows.length - 1] === this.hostElement;
-      this.hostElement.classList.toggle('is-last-row', isLastRow);
+      this.isLastRow = rows[rows.length - 1] === this.hostElement;
+    } else {
+      this.isLastRow = false;
     }
   }
 
