@@ -39,8 +39,11 @@
 }
 
 .pds-radio-group__message--error {
-  align-items: center;
   display: flex;
   gap: var(--pine-dimension-2xs);
+
+  pds-icon {
+    margin-block-start: var(--pine-dimension-050);
+  }
 }
 
