@@ -194,9 +194,12 @@ label:has(input:disabled) {
 }
 
 .pds-radio__message--error {
-  align-items: center;
   display: flex;
   gap: var(--pine-dimension-2xs);
+
+  pds-icon {
+    margin-block-start: var(--pine-dimension-025);
+  }
 }
 
 // Image-based radio styles - matches bordered layout
