@@ -119,10 +119,8 @@ export class PdsTableRow {
     if (!this.tableRef) {
       this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
     }
-    return !!(this.tableRef && (
-      this.tableRef.rowDividers ||
-      this.tableRef.hasAttribute('row-dividers')
-    ));
+    // rowDividers prop has reflect: true, so we can rely solely on the prop value
+    return !!(this.tableRef && this.tableRef.rowDividers);
   }
 
   private updateDividerState() {

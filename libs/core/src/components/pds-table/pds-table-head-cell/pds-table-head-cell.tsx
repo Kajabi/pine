@@ -59,10 +59,10 @@ export class PdsTableHeadCell {
    */
   @State() private hasHeadBackground: boolean = false;
 
-  componentWillRender() {
+  componentWillLoad() {
+    // Set initial references and state before first render
     this.tableRef = this.hostElement.closest('pds-table') as HTMLPdsTableElement;
 
-    // Update state from parent table-head attributes
     const tableHead = this.hostElement.closest('pds-table-head') as HTMLElement;
     if (tableHead) {
       this.hasHeadBorder = tableHead.hasAttribute('border');
