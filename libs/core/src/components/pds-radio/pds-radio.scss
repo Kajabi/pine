@@ -120,6 +120,7 @@ input {
     }
 
     &::after {
+      /* stylelint-disable-next-line pine-design-system/prefer-semantic-tokens */
       background: var(--pine-color-white);
       border-radius: var(--pine-border-radius-full);
       content: "";

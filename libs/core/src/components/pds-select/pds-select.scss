@@ -7,8 +7,8 @@
   --pds-select-border-radius-end-end: var(--pine-dimension-125);
   --pds-select-border-radius-end-start: var(--pine-dimension-125);
   --pds-select-min-height: 36px;
-  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
-  --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring-danger);
+  --box-shadow-focus: 0 0 0 1px var(--pine-color-background-container), 0 0 0 3px var(--pine-color-focus-ring);
+  --box-shadow-focus-error: 0 0 0 1px var(--pine-color-background-container), 0 0 0 3px var(--pine-color-focus-ring-danger);
 
   .hidden,
   :host([hidden]) {
