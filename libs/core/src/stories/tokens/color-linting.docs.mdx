@@ -1,17 +1,19 @@
-# Pine Design System Color Linting Rules
+import { Meta } from '@storybook/addon-docs/blocks';
 
-This directory contains Stylelint plugins that enforce proper usage of Pine semantic color tokens in SCSS files.
+<Meta title="Design Tokens/Color Linting" parameters={{ previewTabs: { canvas: { hidden: true } } }} />
+
+# Color Linting Rules
+
+Stylelint plugins enforce proper usage of Pine semantic color tokens in SCSS files to ensure consistent theming and dark mode support.
 
 ## Overview
 
-To ensure consistent theming and dark mode support, Pine components should use **semantic** color tokens instead of hardcoded hex values or core tokens.
-
 | Rule | Purpose |
 |------|---------|
-| `pine-design-system/no-hardcoded-colors` | Blocks hardcoded colors (hex, rgb, rgba, hsl, hsla), suggests closest Pine token |
+| `pine-design-system/no-hardcoded-colors` | Blocks hex colors, suggests closest Pine token |
 | `pine-design-system/prefer-semantic-tokens` | Blocks core tokens (grey-*, white, black), suggests semantic alternatives |
 
-### Why Semantic Tokens?
+## Why Semantic Tokens?
 
 Core tokens like `--pine-color-grey-900` have fixed values that don't adapt to dark mode. Semantic tokens like `--pine-color-text` automatically switch values based on the theme:
 
@@ -23,25 +25,13 @@ Core tokens like `--pine-color-grey-900` have fixed values that don't adapt to d
 
 ## What's Blocked
 
-### 1. Hardcoded Colors (Hex, RGB, RGBA, HSL, HSLA)
+### 1. Hardcoded Hex Colors
 
 ```scss
-// ❌ BLOCKED - Hex colors
+// ❌ BLOCKED
 .pds-component {
   background-color: #ffffff;
   color: #343332;
-}
-
-// ❌ BLOCKED - RGB/RGBA colors
-.pds-component {
-  background-color: rgb(255, 255, 255);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-// ❌ BLOCKED - HSL/HSLA colors
-.pds-component {
-  color: hsl(0, 0%, 20%);
-  border-color: hsla(0, 0%, 0%, 0.5);
 }
 ```
 
@@ -147,23 +137,12 @@ The rules support auto-fix when the property context is clear:
 - `border-color` → border tokens
 - `box-shadow` → border tokens
 
-**Note:** Colors with alpha values (e.g., `rgba(0, 0, 0, 0.1)`) are NOT auto-fixed since they may need special handling (shadows, overlays, etc.). Use `stylelint-disable-next-line` to ignore these cases.
-
 ## Token Mappings Source
 
-Token mappings are loaded from `@kajabi-ui/styles/lint-mappings`. This JSON file is generated from the core and semantic token definitions in [ds-tokens](https://github.com/Kajabi/ds-tokens).
-
-## Files
-
-| File | Description |
-|------|-------------|
-| `pine-color-utils.cjs` | Color parsing (hex, rgb, rgba, hsl, hsla) and distance algorithm for token matching |
-| `stylelint-plugin-pine-colors.cjs` | Catches hardcoded colors (hex, rgb, rgba, hsl, hsla) |
-| `stylelint-plugin-pine-semantic-tokens.cjs` | Catches core tokens, suggests semantic alternatives |
-| `eslint-plugin-pine-colors.cjs` | ESLint version (not currently enabled) |
+Token mappings are loaded from `@kajabi-ui/styles/lint-mappings`. This JSON file is generated from the core and semantic token definitions in <pds-link href="https://github.com/Kajabi/ds-tokens" external>ds-tokens</pds-link>.
 
 ## Related Documentation
 
-- [Pine Semantic Colors](https://pine-design-system.netlify.app/?path=/docs/design-tokens-semantic-color--docs)
-- [ds-tokens Repository](https://github.com/Kajabi/ds-tokens)
+- <pds-link href="?path=/docs/design-tokens-semantic-color--docs">Semantic Color Tokens</pds-link>
+- <pds-link href="https://github.com/Kajabi/ds-tokens" external>ds-tokens Repository</pds-link>
 
