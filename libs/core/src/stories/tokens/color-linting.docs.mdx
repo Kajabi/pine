@@ -8,30 +8,77 @@ Stylelint plugins enforce proper usage of Pine semantic color tokens in SCSS fil
 
 ## Overview
 
-| Rule | Purpose |
-|------|---------|
-| `pine-design-system/no-hardcoded-colors` | Blocks hex colors, suggests closest Pine token |
-| `pine-design-system/prefer-semantic-tokens` | Blocks core tokens (grey-*, white, black), suggests semantic alternatives |
+<pds-box border border-radius="sm" fit>
+  <pds-table component-id="overview-table" responsive>
+    <pds-table-head>
+      <pds-table-head-cell>Rule</pds-table-head-cell>
+      <pds-table-head-cell>Purpose</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell><code>pine-design-system/no-hardcoded-colors</code></pds-table-cell>
+        <pds-table-cell>Blocks hardcoded colors (hex, rgb, rgba, hsl, hsla), suggests closest Pine token</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pine-design-system/prefer-semantic-tokens</code></pds-table-cell>
+        <pds-table-cell>Blocks core tokens (grey-*, white, black), suggests semantic alternatives</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
 
 ## Why Semantic Tokens?
 
 Core tokens like `--pine-color-grey-900` have fixed values that don't adapt to dark mode. Semantic tokens like `--pine-color-text` automatically switch values based on the theme:
 
-| Token | Light Mode | Dark Mode |
-|-------|------------|-----------|
-| `--pine-color-text` | grey-900 | grey-100 |
-| `--pine-color-background-container` | white | black |
-| `--pine-color-border` | grey-300 | grey-600 |
+<pds-box border border-radius="sm" fit>
+  <pds-table component-id="semantic-tokens-table" responsive>
+    <pds-table-head>
+      <pds-table-head-cell>Token</pds-table-head-cell>
+      <pds-table-head-cell>Light Mode</pds-table-head-cell>
+      <pds-table-head-cell>Dark Mode</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell><code>--pine-color-text</code></pds-table-cell>
+        <pds-table-cell>grey-900</pds-table-cell>
+        <pds-table-cell>grey-100</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>--pine-color-background-container</code></pds-table-cell>
+        <pds-table-cell>white</pds-table-cell>
+        <pds-table-cell>black</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>--pine-color-border</code></pds-table-cell>
+        <pds-table-cell>grey-300</pds-table-cell>
+        <pds-table-cell>grey-600</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
 
 ## What's Blocked
 
-### 1. Hardcoded Hex Colors
+### 1. Hardcoded Colors (Hex, RGB, RGBA, HSL, HSLA)
 
 ```scss
-// ❌ BLOCKED
+// ❌ BLOCKED - Hex colors
 .pds-component {
   background-color: #ffffff;
   color: #343332;
+}
+
+// ❌ BLOCKED - RGB/RGBA colors
+.pds-component {
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+// ❌ BLOCKED - HSL/HSLA colors
+.pds-component {
+  color: hsl(0, 0%, 20%);
+  border-color: hsla(0, 0%, 0%, 0.5);
 }
 ```
 
@@ -61,42 +108,149 @@ Core tokens like `--pine-color-grey-900` have fixed values that don't adapt to d
 
 ### Text Colors
 
-| Core Token | Semantic Token | Use Case |
-|------------|----------------|----------|
-| `grey-950` | `text-strong` | Strong/emphasized text |
-| `grey-900` | `text` | Default body text |
-| `grey-800` | `text-secondary` | Secondary text |
-| `grey-700` | `text-muted` | Muted text |
-| `grey-600` | `text-tertiary` | Tertiary text |
-| `grey-500` | `text-subtle` | Subtle text |
-| `black` | `text-emphasis` | Maximum emphasis |
+<pds-box border border-radius="sm" fit>
+  <pds-table component-id="text-colors-table" responsive>
+    <pds-table-head>
+      <pds-table-head-cell>Core Token</pds-table-head-cell>
+      <pds-table-head-cell>Semantic Token</pds-table-head-cell>
+      <pds-table-head-cell>Use Case</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell><code>grey-950</code></pds-table-cell>
+        <pds-table-cell><code>text-strong</code></pds-table-cell>
+        <pds-table-cell>Strong/emphasized text</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>grey-900</code></pds-table-cell>
+        <pds-table-cell><code>text</code></pds-table-cell>
+        <pds-table-cell>Default body text</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>grey-800</code></pds-table-cell>
+        <pds-table-cell><code>text-secondary</code></pds-table-cell>
+        <pds-table-cell>Secondary text</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>grey-700</code></pds-table-cell>
+        <pds-table-cell><code>text-muted</code></pds-table-cell>
+        <pds-table-cell>Muted text</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>grey-600</code></pds-table-cell>
+        <pds-table-cell><code>text-tertiary</code></pds-table-cell>
+        <pds-table-cell>Tertiary text</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>grey-500</code></pds-table-cell>
+        <pds-table-cell><code>text-subtle</code></pds-table-cell>
+        <pds-table-cell>Subtle text</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>black</code></pds-table-cell>
+        <pds-table-cell><code>text-emphasis</code></pds-table-cell>
+        <pds-table-cell>Maximum emphasis</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
 
 ### Background Colors
 
-| Core Token | Semantic Token | Use Case |
-|------------|----------------|----------|
-| `white` | `background-container` | Card/panel backgrounds |
-| `grey-050` | `background-container-hover` | Hover states |
-| `grey-100` | `background-subtle` / `background-app` | Subtle backgrounds |
-| `grey-150` | `background-muted` | Muted backgrounds |
-| `grey-200` | `background-inset` | Inset/recessed areas |
+<pds-box border border-radius="sm" fit>
+  <pds-table component-id="background-colors-table" responsive>
+    <pds-table-head>
+      <pds-table-head-cell>Core Token</pds-table-head-cell>
+      <pds-table-head-cell>Semantic Token</pds-table-head-cell>
+      <pds-table-head-cell>Use Case</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell><code>white</code></pds-table-cell>
+        <pds-table-cell><code>background-container</code></pds-table-cell>
+        <pds-table-cell>Card/panel backgrounds</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>grey-050</code></pds-table-cell>
+        <pds-table-cell><code>background-container-hover</code></pds-table-cell>
+        <pds-table-cell>Hover states</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>grey-100</code></pds-table-cell>
+        <pds-table-cell><code>background-subtle</code> / <code>background-app</code></pds-table-cell>
+        <pds-table-cell>Subtle backgrounds</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>grey-150</code></pds-table-cell>
+        <pds-table-cell><code>background-muted</code></pds-table-cell>
+        <pds-table-cell>Muted backgrounds</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>grey-200</code></pds-table-cell>
+        <pds-table-cell><code>background-inset</code></pds-table-cell>
+        <pds-table-cell>Inset/recessed areas</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
 
 ### Border Colors
 
-| Core Token | Semantic Token | Use Case |
-|------------|----------------|----------|
-| `grey-200` | `border-disabled` / `border-subtle` | Subtle/disabled borders |
-| `grey-300` | `border` | Default borders |
-| `grey-400` | `border-hover` | Hover state borders |
+<pds-box border border-radius="sm" fit>
+  <pds-table component-id="border-colors-table" responsive>
+    <pds-table-head>
+      <pds-table-head-cell>Core Token</pds-table-head-cell>
+      <pds-table-head-cell>Semantic Token</pds-table-head-cell>
+      <pds-table-head-cell>Use Case</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell><code>grey-200</code></pds-table-cell>
+        <pds-table-cell><code>border-disabled</code> / <code>border-subtle</code></pds-table-cell>
+        <pds-table-cell>Subtle/disabled borders</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>grey-300</code></pds-table-cell>
+        <pds-table-cell><code>border</code></pds-table-cell>
+        <pds-table-cell>Default borders</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>grey-400</code></pds-table-cell>
+        <pds-table-cell><code>border-hover</code></pds-table-cell>
+        <pds-table-cell>Hover state borders</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
 
 ### Inverse Tokens (for dark backgrounds)
 
-| Core Token | Inverse Semantic Token |
-|------------|------------------------|
-| `grey-100` | `text-inverse` |
-| `grey-150` | `text-inverse-secondary` |
-| `grey-300` | `text-inverse-tertiary` |
-| `white` | `text-inverse-emphasis` |
+<pds-box border border-radius="sm" fit>
+  <pds-table component-id="inverse-tokens-table" responsive>
+    <pds-table-head>
+      <pds-table-head-cell>Core Token</pds-table-head-cell>
+      <pds-table-head-cell>Inverse Semantic Token</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell><code>grey-100</code></pds-table-cell>
+        <pds-table-cell><code>text-inverse</code></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>grey-150</code></pds-table-cell>
+        <pds-table-cell><code>text-inverse-secondary</code></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>grey-300</code></pds-table-cell>
+        <pds-table-cell><code>text-inverse-tertiary</code></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>white</code></pds-table-cell>
+        <pds-table-cell><code>text-inverse-emphasis</code></pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
 
 ## Handling Inverse Context
 
@@ -137,6 +291,8 @@ The rules support auto-fix when the property context is clear:
 - `border-color` → border tokens
 - `box-shadow` → border tokens
 
+**Note:** Colors with alpha values (e.g., `rgba(0, 0, 0, 0.1)`) are NOT auto-fixed since they may need special handling (shadows, overlays, etc.). Use `stylelint-disable-next-line` to ignore these cases.
+
 ## Token Mappings Source
 
 Token mappings are loaded from `@kajabi-ui/styles/lint-mappings`. This JSON file is generated from the core and semantic token definitions in <pds-link href="https://github.com/Kajabi/ds-tokens" external>ds-tokens</pds-link>.
@@ -145,4 +301,3 @@ Token mappings are loaded from `@kajabi-ui/styles/lint-mappings`. This JSON file
 
 - <pds-link href="?path=/docs/design-tokens-semantic-color--docs">Semantic Color Tokens</pds-link>
 - <pds-link href="https://github.com/Kajabi/ds-tokens" external>ds-tokens Repository</pds-link>
-
