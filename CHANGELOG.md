@@ -1,3 +1,23 @@
+## 3.13.0 (2026-01-12)
+
+### Features 🚀
+
+- **pds-table:** add head border, background, and row divider props ([#629](https://github.com/Kajabi/pine/pull/629))
+
+### Bug Fixes 🐛
+
+- **pds-tab:** add add disabled prop ([#626](https://github.com/Kajabi/pine/pull/626))
+
+### Styles 🎨
+
+- update alert dark mode link hover style ([#620](https://github.com/Kajabi/pine/pull/620))
+- **form-inputs:** align error icon with top of multi-line messages ([#627](https://github.com/Kajabi/pine/pull/627))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.12.1 (2026-01-06)
 
 ### Bug Fixes 🐛
