@@ -161,7 +161,7 @@
   background: var(--color-background-default, var(--pine-color-secondary));
   border: var(--pine-border);
   border-radius: var(--pine-border-radius-full);
-  color: var(--color-text-default, #ffffff);
+  color: var(--color-text-default, var(--pine-color-text-inverse-emphasis));
   cursor: pointer;
   display: flex;
   font: var(--pine-typography-body-medium);
@@ -238,6 +238,7 @@
   --color-border-hover: var(--pine-color-accent-hover);
   --color-border-disabled: var(--pine-color-accent-disabled);
   --color-border-focus: var(--pine-color-accent);
+  /* stylelint-disable-next-line pine-design-system/prefer-semantic-tokens */
   --color-text-default: var(--pine-color-white);
   --color-text-disabled: var(--pine-color-text-accent-disabled);
   --color-outline: var(--pine-color-focus-ring);
@@ -264,6 +265,7 @@
   --color-border-hover: var(--pine-color-danger-hover);
   --color-border-disabled: var(--pine-color-danger-disabled);
   --color-border-focus: var(--pine-color-danger);
+  /* stylelint-disable-next-line pine-design-system/prefer-semantic-tokens */
   --color-text-default: var(--pine-color-white);
   --color-text-disabled: var(--pine-color-text-danger-disabled);
   --color-outline: var(--pine-color-focus-ring-danger);
@@ -402,6 +404,7 @@
 }
 
 .pds-combobox__chip-trigger--brand {
+  /* stylelint-disable-next-line pine-design-system/no-hardcoded-colors */
   background: linear-gradient(90deg, #FF3E14 0%, #6B62F2 100%);
   border: 0;
   color: var(--pine-color-text-neutral);
@@ -409,6 +412,7 @@
   position: relative;
 
   .pds-combobox__chip-trigger-label {
+    /* stylelint-disable-next-line pine-design-system/no-hardcoded-colors */
     background: rgba(255, 255, 255, 0.9);
     border-radius: calc(var(--pine-dimension-sm) - 1px);
     color: var(--pine-color-text-neutral);
@@ -425,6 +429,7 @@
 
   &:hover:not([aria-disabled='true']) {
     .pds-combobox__chip-trigger-label {
+      /* stylelint-disable-next-line pine-design-system/no-hardcoded-colors */
       background: rgba(255, 255, 255, 0.8);
     }
   }

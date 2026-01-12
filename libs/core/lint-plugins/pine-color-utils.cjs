@@ -5,6 +5,28 @@
  * for the Pine Design System linting rules.
  */
 
+// =============================================================================
+// Regex patterns for color function detection
+// =============================================================================
+
+/**
+ * Regex to match rgb() and rgba() color functions
+ * Captures: rgb(r, g, b) or rgba(r, g, b, a)
+ * Supports both comma and space syntax, with optional alpha
+ */
+const RGB_RGBA_REGEX = /rgba?\(\s*(\d{1,3})\s*[,\s]\s*(\d{1,3})\s*[,\s]\s*(\d{1,3})(?:\s*[,\/]\s*([\d.]+%?))?\s*\)/gi;
+
+/**
+ * Regex to match hsl() and hsla() color functions
+ * Captures: hsl(h, s%, l%) or hsla(h, s%, l%, a)
+ * Supports both comma and space syntax, with optional alpha
+ */
+const HSL_HSLA_REGEX = /hsla?\(\s*(\d{1,3}(?:\.\d+)?)\s*[,\s]\s*(\d{1,3}(?:\.\d+)?)%?\s*[,\s]\s*(\d{1,3}(?:\.\d+)?)%?(?:\s*[,\/]\s*([\d.]+%?))?\s*\)/gi;
+
+// =============================================================================
+// Color conversion functions
+// =============================================================================
+
 /**
  * Convert hex color to RGB values
  * @param {string} hex - Hex color string (e.g., "#ffffff", "fff", "#ffffff00", "#fff0")
@@ -40,6 +62,164 @@ function hexToRgb(hex) {
     g: parseInt(fullHex.substring(2, 4), 16),
     b: parseInt(fullHex.substring(4, 6), 16)
   };
+}
+
+/**
+ * Convert RGB values to hex string
+ * @param {number} r - Red (0-255)
+ * @param {number} g - Green (0-255)
+ * @param {number} b - Blue (0-255)
+ * @returns {string} - Hex color string (e.g., "#ffffff")
+ */
+function rgbToHex(r, g, b) {
+  const toHex = (n) => {
+    const clamped = Math.max(0, Math.min(255, Math.round(n)));
+    return clamped.toString(16).padStart(2, '0');
+  };
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
+/**
+ * Convert HSL values to RGB
+ * @param {number} h - Hue (0-360)
+ * @param {number} s - Saturation (0-100)
+ * @param {number} l - Lightness (0-100)
+ * @returns {{r: number, g: number, b: number}}
+ */
+function hslToRgb(h, s, l) {
+  // Normalize values
+  h = h % 360;
+  s = s / 100;
+  l = l / 100;
+
+  const c = (1 - Math.abs(2 * l - 1)) * s;
+  const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+  const m = l - c / 2;
+
+  let r, g, b;
+
+  if (h >= 0 && h < 60) {
+    [r, g, b] = [c, x, 0];
+  } else if (h >= 60 && h < 120) {
+    [r, g, b] = [x, c, 0];
+  } else if (h >= 120 && h < 180) {
+    [r, g, b] = [0, c, x];
+  } else if (h >= 180 && h < 240) {
+    [r, g, b] = [0, x, c];
+  } else if (h >= 240 && h < 300) {
+    [r, g, b] = [x, 0, c];
+  } else {
+    [r, g, b] = [c, 0, x];
+  }
+
+  return {
+    r: Math.round((r + m) * 255),
+    g: Math.round((g + m) * 255),
+    b: Math.round((b + m) * 255)
+  };
+}
+
+/**
+ * Parse an rgb() or rgba() color string and return hex equivalent
+ * @param {string} colorStr - Color string like "rgb(255, 0, 0)" or "rgba(0, 0, 0, 0.5)"
+ * @returns {{hex: string, alpha: number | null, original: string} | null}
+ */
+function parseRgbColor(colorStr) {
+  const match = colorStr.match(/rgba?\(\s*(\d{1,3})\s*[,\s]\s*(\d{1,3})\s*[,\s]\s*(\d{1,3})(?:\s*[,\/]\s*([\d.]+%?))?\s*\)/i);
+  if (!match) return null;
+
+  const r = parseInt(match[1], 10);
+  const g = parseInt(match[2], 10);
+  const b = parseInt(match[3], 10);
+
+  let alpha = null;
+  if (match[4] !== undefined) {
+    if (match[4].endsWith('%')) {
+      alpha = parseFloat(match[4]) / 100;
+    } else {
+      alpha = parseFloat(match[4]);
+    }
+  }
+
+  return {
+    hex: rgbToHex(r, g, b),
+    alpha,
+    original: colorStr
+  };
+}
+
+/**
+ * Parse an hsl() or hsla() color string and return hex equivalent
+ * @param {string} colorStr - Color string like "hsl(0, 100%, 50%)" or "hsla(0, 100%, 50%, 0.5)"
+ * @returns {{hex: string, alpha: number | null, original: string} | null}
+ */
+function parseHslColor(colorStr) {
+  const match = colorStr.match(/hsla?\(\s*(\d{1,3}(?:\.\d+)?)\s*[,\s]\s*(\d{1,3}(?:\.\d+)?)%?\s*[,\s]\s*(\d{1,3}(?:\.\d+)?)%?(?:\s*[,\/]\s*([\d.]+%?))?\s*\)/i);
+  if (!match) return null;
+
+  const h = parseFloat(match[1]);
+  const s = parseFloat(match[2]);
+  const l = parseFloat(match[3]);
+
+  let alpha = null;
+  if (match[4] !== undefined) {
+    if (match[4].endsWith('%')) {
+      alpha = parseFloat(match[4]) / 100;
+    } else {
+      alpha = parseFloat(match[4]);
+    }
+  }
+
+  const rgb = hslToRgb(h, s, l);
+  return {
+    hex: rgbToHex(rgb.r, rgb.g, rgb.b),
+    alpha,
+    original: colorStr
+  };
+}
+
+/**
+ * Extract all color function calls from a CSS value string
+ * @param {string} value - CSS value string
+ * @returns {Array<{type: string, hex: string, alpha: number | null, original: string, index: number}>}
+ */
+function extractColorFunctions(value) {
+  const results = [];
+
+  // Find all rgb/rgba matches
+  let match;
+  const rgbRegex = /rgba?\(\s*\d{1,3}\s*[,\s]\s*\d{1,3}\s*[,\s]\s*\d{1,3}(?:\s*[,\/]\s*[\d.]+%?)?\s*\)/gi;
+  while ((match = rgbRegex.exec(value)) !== null) {
+    const parsed = parseRgbColor(match[0]);
+    if (parsed) {
+      results.push({
+        type: match[0].toLowerCase().startsWith('rgba') ? 'rgba' : 'rgb',
+        hex: parsed.hex,
+        alpha: parsed.alpha,
+        original: match[0],
+        index: match.index
+      });
+    }
+  }
+
+  // Find all hsl/hsla matches
+  const hslRegex = /hsla?\(\s*\d{1,3}(?:\.\d+)?\s*[,\s]\s*\d{1,3}(?:\.\d+)?%?\s*[,\s]\s*\d{1,3}(?:\.\d+)?%?(?:\s*[,\/]\s*[\d.]+%?)?\s*\)/gi;
+  while ((match = hslRegex.exec(value)) !== null) {
+    const parsed = parseHslColor(match[0]);
+    if (parsed) {
+      results.push({
+        type: match[0].toLowerCase().startsWith('hsla') ? 'hsla' : 'hsl',
+        hex: parsed.hex,
+        alpha: parsed.alpha,
+        original: match[0],
+        index: match.index
+      });
+    }
+  }
+
+  // Sort by index to maintain order
+  results.sort((a, b) => a.index - b.index);
+  return results;
 }
 
 /**
@@ -189,9 +369,16 @@ function normalizeHex(hex) {
 
 module.exports = {
   hexToRgb,
+  rgbToHex,
+  hslToRgb,
+  parseRgbColor,
+  parseHslColor,
+  extractColorFunctions,
   colorDistance,
   findClosestCoreToken,
   normalizeHex,
+  RGB_RGBA_REGEX,
+  HSL_HSLA_REGEX,
   CLOSE_MATCH_THRESHOLD,
   WARNING_THRESHOLD
 };

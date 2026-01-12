@@ -109,6 +109,7 @@
   --color-background-disabled: var(--pine-color-accent-disabled);
   --color-border-default: var(--pine-color-accent);
   --color-border-hover: var(--pine-color-accent-hover);
+  /* stylelint-disable-next-line pine-design-system/prefer-semantic-tokens */
   --color-text-default: var(--pine-color-white);
   --color-text-disabled: var(--pine-color-text-accent-disabled);
   --color-outline: var(--pine-color-focus-ring);
@@ -121,6 +122,7 @@
   --color-background-disabled: var(--pine-color-danger-disabled);
   --color-border-default: var(--pine-color-danger);
   --color-border-hover: var(--pine-color-danger-hover);
+  /* stylelint-disable-next-line pine-design-system/prefer-semantic-tokens */
   --color-text-default: var(--pine-color-white);
   --color-text-disabled: var(--pine-color-text-danger-disabled);
   --color-outline: var(--pine-color-focus-ring-danger);
@@ -166,6 +168,7 @@
 .pds-button--filter {
   --color-background-default: var(--pine-color-background-container);
   --color-background-hover: var(--pine-color-background-subtle);
+  /* stylelint-disable-next-line pine-design-system/prefer-semantic-tokens */
   --color-background-disabled: var(--pine-color-white);
   --color-border-default: transparent;
   --color-border-hover: transparent;

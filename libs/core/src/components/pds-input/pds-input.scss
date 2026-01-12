@@ -21,8 +21,8 @@
   --pds-input-addon-background: var(--pine-color-background-subtle);
   --pds-input-addon-color: var(--pine-color-text-secondary);
   --pds-input-field-min-height: var(--pine-dimension-450);
-  --box-shadow-focus: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring);
-  --box-shadow-focus-error: 0 0 0 1px #ffffff, 0 0 0 3px var(--pine-color-focus-ring-danger);
+  --box-shadow-focus: 0 0 0 1px var(--pine-color-background-container), 0 0 0 3px var(--pine-color-focus-ring);
+  --box-shadow-focus-error: 0 0 0 1px var(--pine-color-background-container), 0 0 0 3px var(--pine-color-focus-ring-danger);
 
   display: inline;
 

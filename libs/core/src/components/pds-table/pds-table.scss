@@ -80,6 +80,7 @@
 }
 
 .scroll-shadow-left {
+  /* stylelint-disable-next-line pine-design-system/no-hardcoded-colors */
   background: linear-gradient(to right, rgba(0, 0, 0, 0.1), transparent);
   border-bottom-left-radius: inherit;
   border-top-left-radius: inherit;
@@ -87,6 +88,7 @@
 }
 
 .scroll-shadow-right {
+  /* stylelint-disable-next-line pine-design-system/no-hardcoded-colors */
   background: linear-gradient(to left, rgba(0, 0, 0, 0.1), transparent);
   border-bottom-right-radius: inherit;
   border-top-right-radius: inherit;

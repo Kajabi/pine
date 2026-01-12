@@ -19,6 +19,7 @@ $pds-chip-sentiment: (
   warning: var(--pine-chip-color-warning),
 );
 
+/* stylelint-disable pine-design-system/prefer-semantic-tokens */
 $pds-chip-sentiment-text: (
   accent: var(--pine-color-text-accent),
   danger: var(--pine-color-text-danger),
@@ -27,6 +28,7 @@ $pds-chip-sentiment-text: (
   success: var(--pine-color-text-success),
   warning: var(--pine-color-text-warning),
 );
+/* stylelint-enable pine-design-system/prefer-semantic-tokens */
 
 $pds-chip-sentiment-dots: (
   accent: var(--pine-chip-color-accent-dot),
@@ -177,14 +179,17 @@ $pds-chip-sentiment-hover: (
 }
 
 :host(.pds-chip--brand) {
+  /* stylelint-disable-next-line pine-design-system/no-hardcoded-colors */
   background: linear-gradient(90deg, #FF3E14 0%, #6B62F2 100%);
   border: 0;
   padding: 1px;
   position: relative;
 
   .pds-chip__label {
+    /* stylelint-disable-next-line pine-design-system/no-hardcoded-colors */
     background: rgba(255, 255, 255, 0.9);
     border-radius: calc(var(--pine-dimension-sm) - 1px);
+    /* stylelint-disable-next-line pine-design-system/prefer-semantic-tokens */
     color: var(--pine-color-grey-900);
     font-weight: var(--pine-font-weight-medium);
     padding: var(--pine-dimension-025) var(--pine-dimension-150);
@@ -197,6 +202,7 @@ $pds-chip-sentiment-hover: (
   }
 
   .pds-chip__button, .pds-chip__close {
+    /* stylelint-disable-next-line pine-design-system/prefer-semantic-tokens */
     color: var(--pine-color-grey-900);
     font-weight: var(--pine-font-weight-medium);
     position: relative;
@@ -211,6 +217,7 @@ $pds-chip-sentiment-hover: (
 
   // tag close hover colors
   .pds-chip__close:hover {
+    /* stylelint-disable-next-line pine-design-system/no-hardcoded-colors */
     background: rgba(255, 255, 255, 0.8);
   }
 }

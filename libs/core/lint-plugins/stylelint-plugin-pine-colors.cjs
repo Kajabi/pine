@@ -7,7 +7,7 @@
  */
 
 const stylelint = require('stylelint');
-const { findClosestCoreToken, WARNING_THRESHOLD } = require('./pine-color-utils.cjs');
+const { findClosestCoreToken, extractColorFunctions, WARNING_THRESHOLD } = require('./pine-color-utils.cjs');
 
 // Load token mappings from @kajabi-ui/styles
 let tokenMappings;
@@ -124,6 +124,71 @@ function getSuggestions(coreToken, context) {
 }
 
 /**
+ * Build an error message for a hardcoded color function (rgb/rgba/hsl/hsla) with closest token suggestion
+ */
+function buildColorFunctionErrorMessage(colorFunc, hex, match, context, alpha) {
+  const lines = [];
+  const colorType = colorFunc.toUpperCase().replace(/\(.*/, '');
+
+  if (!match) {
+    lines.push(`Hard-coded ${colorType} color "${colorFunc}" is not allowed.`);
+    lines.push('Use Pine design system tokens like var(--pine-color-*) instead.');
+    if (alpha !== null && alpha < 1) {
+      lines.push(`Note: This color has alpha=${alpha}. Consider using a Pine shadow or opacity token.`);
+    }
+    lines.push('');
+    lines.push(`Docs: ${tokenMappings.docsUrl}`);
+    return lines.join('\n');
+  }
+
+  const coreToken = match.token;
+  const coreTokenVar = `var(--pine-color-${coreToken})`;
+  const { primarySuggestion, allSuggestions } = getSuggestions(coreToken, context);
+
+  if (match.isExact) {
+    lines.push(`Hard-coded ${colorType} color "${colorFunc}" should use Pine token.`);
+  } else if (match.isClose) {
+    lines.push(`Hard-coded ${colorType} color "${colorFunc}" is close to Pine token "${coreToken}".`);
+  } else if (match.needsWarning) {
+    lines.push(`Hard-coded ${colorType} color "${colorFunc}" - closest Pine token is "${coreToken}".`);
+    lines.push(`⚠️  Note: Color differs slightly from Pine token (distance: ${match.distance.toFixed(0)})`);
+  } else {
+    lines.push(`Hard-coded ${colorType} color "${colorFunc}" - closest Pine token is "${coreToken}".`);
+    lines.push(`⚠️  Warning: Color differs significantly from Pine token (distance: ${match.distance.toFixed(0)})`);
+    lines.push('   Consider if this should be a custom color or if a closer Pine token exists.');
+  }
+
+  // Add note about alpha if present
+  if (alpha !== null && alpha < 1) {
+    lines.push(`Note: This color has alpha=${alpha}. If using for shadows, consider Pine shadow tokens.`);
+  }
+
+  lines.push('');
+
+  if (primarySuggestion) {
+    lines.push(`Suggested: var(--pine-color-${primarySuggestion})`);
+    if (!match.isExact && match.token) {
+      lines.push(`  (via core token: ${coreTokenVar})`);
+    }
+  } else if (allSuggestions.length > 0 && context) {
+    lines.push(`Available ${context} tokens:`);
+    allSuggestions.forEach((suggestion) => {
+      lines.push(`  → var(--pine-color-${suggestion})`);
+    });
+  } else {
+    lines.push(`Suggested: ${coreTokenVar}`);
+    if (coreToken.startsWith('grey-') || coreToken === 'white' || coreToken === 'black') {
+      lines.push('  (No semantic mapping available - consider if a semantic token fits your use case)');
+    }
+  }
+
+  lines.push('');
+  lines.push(`Docs: ${tokenMappings.docsUrl}`);
+
+  return lines.join('\n');
+}
+
+/**
  * Build an error message for a hardcoded hex color with closest token suggestion
  */
 function buildHexErrorMessage(hex, match, context) {
@@ -211,6 +276,42 @@ function getHexSuggestion(hex, context) {
   };
 }
 
+/**
+ * Get the suggested replacement value for a color function (rgb/rgba/hsl/hsla)
+ * Note: Color functions with alpha are not auto-fixed since they may need special handling
+ */
+function getColorFunctionSuggestion(hex, context, alpha) {
+  const match = findClosestCoreToken(hex, tokenMappings.hexToCore);
+
+  if (!match) {
+    return null;
+  }
+
+  if (match.isFar) {
+    return { match, suggestion: null, autoFix: false };
+  }
+
+  const coreToken = match.token;
+  const { primarySuggestion } = getSuggestions(coreToken, context);
+
+  // Don't auto-fix if there's an alpha value - these need manual review
+  const hasAlpha = alpha !== null && alpha < 1;
+
+  if (primarySuggestion) {
+    return {
+      match,
+      suggestion: `var(--pine-color-${primarySuggestion})`,
+      autoFix: !hasAlpha && (match.isExact || match.isClose),
+    };
+  }
+
+  return {
+    match,
+    suggestion: `var(--pine-color-${coreToken})`,
+    autoFix: !hasAlpha && (match.isExact || match.isClose),
+  };
+}
+
 // =============================================================================
 // Main Plugin
 // =============================================================================
@@ -286,10 +387,60 @@ module.exports = stylelint.createPlugin(ruleName, (primaryOption, secondaryOptio
         }
       }
 
-      // Apply all replacements in one pass when fixing
+      // Apply all hex replacements in one pass when fixing
       if (context && context.fix && replacements.length > 0) {
         let newValue = value; // Use original value, not mutated decl.value
         for (const { original, replacement } of replacements) {
+          newValue = newValue.replace(original, replacement);
+        }
+        decl.value = newValue;
+      }
+
+      // Check for color functions (rgb, rgba, hsl, hsla)
+      const colorFunctions = extractColorFunctions(value);
+      const colorFuncReplacements = [];
+
+      for (const colorFunc of colorFunctions) {
+        const beforeColor = value.substring(0, colorFunc.index);
+
+        // Check if color function is inside a comment (basic check)
+        const commentCount = (beforeColor.match(/\/\*/g) || []).length;
+        const commentEndCount = (beforeColor.match(/\*\//g) || []).length;
+
+        if (commentCount <= commentEndCount) {
+          const match = findClosestCoreToken(colorFunc.hex, tokenMappings.hexToCore);
+          const message = buildColorFunctionErrorMessage(
+            colorFunc.original,
+            colorFunc.hex,
+            match,
+            propertyContext,
+            colorFunc.alpha
+          );
+          const suggestionData = getColorFunctionSuggestion(colorFunc.hex, propertyContext, colorFunc.alpha);
+
+          const shouldFix = suggestionData && suggestionData.autoFix && suggestionData.suggestion;
+
+          if (shouldFix) {
+            // Collect replacement for later batch application
+            colorFuncReplacements.push({ original: colorFunc.original, replacement: suggestionData.suggestion });
+          }
+
+          if (!shouldFix || !(context && context.fix)) {
+            stylelint.utils.report({
+              ruleName,
+              result,
+              node: decl,
+              message: messages.rejectedHex(message),
+              word: colorFunc.original,
+            });
+          }
+        }
+      }
+
+      // Apply all color function replacements in one pass when fixing
+      if (context && context.fix && colorFuncReplacements.length > 0) {
+        let newValue = decl.value; // Use current decl.value (may have been modified by hex fixes)
+        for (const { original, replacement } of colorFuncReplacements) {
           newValue = newValue.replace(original, replacement);
         }
         decl.value = newValue;
