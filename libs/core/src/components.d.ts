@@ -1714,6 +1714,11 @@ export namespace Components {
          */
         "responsive": boolean;
         /**
+          * Adds divider borders between table rows. The last row will not have a bottom border.
+          * @defaultValue false
+         */
+        "rowDividers": boolean;
+        /**
           * Determines if the table displays checkboxes for selectable rows.
          */
         "selectable": boolean;
@@ -1731,6 +1736,16 @@ export namespace Components {
         "truncate": boolean;
     }
     interface PdsTableHead {
+        /**
+          * Adds a subtle background color to the table head.
+          * @defaultValue false
+         */
+        "background": boolean;
+        /**
+          * Adds top and bottom borders to the table head.
+          * @defaultValue false
+         */
+        "border": boolean;
         /**
           * Determines if the select all checkbox is in an indeterminate state.
          */
@@ -4480,6 +4495,11 @@ declare namespace LocalJSX {
          */
         "responsive"?: boolean;
         /**
+          * Adds divider borders between table rows. The last row will not have a bottom border.
+          * @defaultValue false
+         */
+        "rowDividers"?: boolean;
+        /**
           * Determines if the table displays checkboxes for selectable rows.
          */
         "selectable"?: boolean;
@@ -4497,6 +4517,16 @@ declare namespace LocalJSX {
         "truncate"?: boolean;
     }
     interface PdsTableHead {
+        /**
+          * Adds a subtle background color to the table head.
+          * @defaultValue false
+         */
+        "background"?: boolean;
+        /**
+          * Adds top and bottom borders to the table head.
+          * @defaultValue false
+         */
+        "border"?: boolean;
         /**
           * Determines if the select all checkbox is in an indeterminate state.
          */

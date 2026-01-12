@@ -31,7 +31,7 @@ describe('pds-table-row', () => {
     });
 
     const row = page.root?.querySelector('pds-table-row');
-    const checkbox = row?.shadowRoot?.querySelector('pds-checkbox') as HTMLFormElement;
+    const checkbox = row?.shadowRoot?.querySelector('pds-checkbox') as HTMLElement;
 
     checkbox.click();
     await page.waitForChanges();
@@ -68,12 +68,65 @@ describe('pds-table-row', () => {
     });
 
     const row = page.root?.querySelector('pds-table-row');
-    const checkbox = row?.shadowRoot?.querySelector('pds-checkbox') as HTMLFormElement;
+    const checkbox = row?.shadowRoot?.querySelector('pds-checkbox') as HTMLElement;
 
 
     checkbox.click();
     await page.waitForChanges();
 
-    expect((row as PdsTableRow).indeterminate).toBe(false);
+    expect((row as HTMLPdsTableRowElement).indeterminate).toBe(false);
+  });
+
+  it('renders with has-divider class when table has rowDividers prop', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable, PdsTableBody, PdsTableRow],
+      html: `
+      <pds-table row-dividers="true">
+        <pds-table-body>
+          <pds-table-row>
+            <pds-table-cell>Row 1</pds-table-cell>
+          </pds-table-row>
+          <pds-table-row>
+            <pds-table-cell>Row 2</pds-table-cell>
+          </pds-table-row>
+        </pds-table-body>
+      </pds-table>
+      `,
+    });
+
+    // Wait for MutationObserver updates to complete
+    await page.waitForChanges();
+
+    const rows = page.root?.querySelectorAll('pds-table-row');
+
+    // Ensure rows exist before asserting
+    expect(rows).toBeDefined();
+    expect(rows?.length).toBeGreaterThan(0);
+
+    rows?.forEach((row) => {
+      expect(row.classList.contains('has-divider')).toBe(true);
+    });
+
+    // Verify is-last-row class is only on the last row
+    expect(rows?.[0]?.classList.contains('is-last-row')).toBe(false);
+    expect(rows?.[rows.length - 1]?.classList.contains('is-last-row')).toBe(true);
+  });
+
+  it('does not render with has-divider class when table does not have rowDividers prop', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable, PdsTableBody, PdsTableRow],
+      html: `
+      <pds-table>
+        <pds-table-body>
+          <pds-table-row>
+            <pds-table-cell>Row 1</pds-table-cell>
+          </pds-table-row>
+        </pds-table-body>
+      </pds-table>
+      `,
+    });
+
+    const row = page.root?.querySelector('pds-table-row');
+    expect(row?.classList.contains('has-divider')).toBe(false);
   });
 });

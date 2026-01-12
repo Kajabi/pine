@@ -23,3 +23,13 @@
 :host(.is-selected) ::slotted(pds-table-cell) {
   background: var(--color-background-interactive);
 }
+
+:host(.has-divider) ::slotted(pds-table-cell),
+:host(.has-divider) pds-table-cell {
+  border-block-end: var(--pine-border-width-thin) solid var(--pine-color-border-subtle);
+}
+
+:host(.has-divider.is-last-row) ::slotted(pds-table-cell),
+:host(.has-divider.is-last-row) pds-table-cell {
+  border-block-end: 0;
+}
