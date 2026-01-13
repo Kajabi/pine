@@ -475,4 +475,20 @@ describe('pds-table-head-cell', () => {
     expect(tableHeadCell).toHaveClass('is-active');
     expect(tableHeadCell).toHaveClass('sort-asc');
   });
+
+  it('does not set active sort state on non-sortable column', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableHeadCell, PdsTable],
+      html: `<pds-table><pds-table-head-cell>Column</pds-table-head-cell></pds-table>`,
+    });
+
+    const tableHeadCell = page.body.querySelector('pds-table-head-cell') as any;
+
+    // Call setActiveSort on non-sortable column
+    await tableHeadCell.setActiveSort('desc');
+    await page.waitForChanges();
+
+    // Should not have is-active class
+    expect(tableHeadCell).not.toHaveClass('is-active');
+  });
 });

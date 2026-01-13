@@ -66,6 +66,8 @@ export class PdsTableHeadCell {
    */
   @Method()
   async setActiveSort(direction: 'asc' | 'desc') {
+    if (!this.sortable) return;
+
     this.sortingDirection = direction;
     this.hostElement.classList.add('is-active');
   }
