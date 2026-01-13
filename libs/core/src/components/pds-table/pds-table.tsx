@@ -45,6 +45,19 @@ export class PdsTable {
   @Prop({ reflect: true }) rowDividers: boolean = false;
 
   /**
+   * The name of the column to sort by on initial load.
+   * Must match the text content of a sortable column header.
+   */
+  @Prop() defaultSortColumn?: string;
+
+  /**
+   * The direction to sort the default column on initial load.
+   * Only applies if `defaultSortColumn` is set.
+   * @defaultValue 'asc'
+   */
+  @Prop() defaultSortDirection?: 'asc' | 'desc' = 'asc';
+
+  /**
    * The name of the column being sorted.
    * @defaultValue null
    */
@@ -67,13 +80,45 @@ export class PdsTable {
    */
   @Event() pdsTableSelectAll: EventEmitter<{ isSelected: boolean }>;
 
-  componentWillLoad() {
-    this.sortingColumn = null;
-  }
-
   componentDidLoad() {
     if (this.responsive) {
       this.setupResponsiveScrolling();
+    }
+
+    // Apply default sort if specified
+    if (this.defaultSortColumn) {
+      this.applyDefaultSort();
+    }
+  }
+
+  /**
+   * Applies the default sort configuration on initial load.
+   * Finds the matching column header and activates its sort state.
+   * @private
+   */
+  private async applyDefaultSort() {
+    const direction = this.defaultSortDirection || 'asc';
+
+    // Find the matching sortable header cell
+    const columnHeaderCells = Array.from(
+      this.el.querySelectorAll('pds-table-head-cell[sortable]')
+    ) as HTMLElement[];
+
+    const matchingCell = columnHeaderCells.find(
+      (cell) => cell.innerText.trim() === this.defaultSortColumn
+    );
+
+    if (matchingCell) {
+      // Sort the table data
+      this.sortTable(this.defaultSortColumn, direction);
+      this.sortingColumn = this.defaultSortColumn;
+      this.sortingDirection = direction;
+
+      // Activate the visual state on the header cell
+      // Type assertion needed as setActiveSort is added via @Method() decorator
+      await (matchingCell as HTMLPdsTableHeadCellElement & { setActiveSort: (direction: 'asc' | 'desc') => Promise<void> }).setActiveSort(direction);
+    } else {
+      console.warn(`Default sort column "${this.defaultSortColumn}" not found.`);
     }
   }
 
