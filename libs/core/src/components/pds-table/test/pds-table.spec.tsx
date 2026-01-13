@@ -329,6 +329,49 @@ describe('pds-table', () => {
     });
   });
 
+  it('should not sort if event.defaultPrevented is true in handleTableSort', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable, PdsTableHead, PdsTableHeadCell, PdsTableBody, PdsTableRow, PdsTableCell],
+      html: `
+        <pds-table component-id="test-table">
+          <pds-table-head>
+            <pds-table-head-cell sortable>Name</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>Charlie</pds-table-cell>
+            </pds-table-row>
+            <pds-table-row>
+              <pds-table-cell>Alice</pds-table-cell>
+            </pds-table-row>
+            <pds-table-row>
+              <pds-table-cell>Bob</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      `,
+    });
+
+    const pdsTable = page.rootInstance;
+
+    const event = new CustomEvent('pdsTableSort', {
+      detail: { column: 'Name', direction: 'asc' },
+    });
+
+    Object.defineProperty(event, 'defaultPrevented', { value: true });
+
+    pdsTable.handleTableSort(event);
+
+    await page.waitForChanges();
+
+    const tableBody = page.body.querySelector('pds-table-body') as HTMLElement;
+    const rows = Array.from(tableBody.querySelectorAll('pds-table-row')) as any;
+    const values = rows.map((row) => row.querySelector('pds-table-cell').textContent?.trim());
+
+    // Should remain in original order (unsorted) because preventDefault was called
+    expect(values).toEqual(['Charlie', 'Alice', 'Bob']);
+  });
+
   it('applies default sort in ascending order on initial load', async () => {
     const page = await newSpecPage({
       components: [PdsTable, PdsTableHead, PdsTableHeadCell, PdsTableBody, PdsTableRow, PdsTableCell],

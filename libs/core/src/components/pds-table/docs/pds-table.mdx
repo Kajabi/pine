@@ -1136,7 +1136,16 @@ In cases where the default sorting functionality is not suitable, it is possible
 
 ### Preventing built-in sorting
 
-If you need full control over the rendered rows (for example, remote sorting), prevent the table from mutating the DOM by intercepting the event during the capture phase.
+If you need full control over the rendered rows (for example, server-side sorting), call `event.preventDefault()` on the `pdsTableSort` event to prevent the table from reordering the DOM.
+
+```javascript
+document.addEventListener('pdsTableSort', (event) => {
+  event.preventDefault();
+
+  const { column, direction } = event.detail;
+  // Handle sorting via server request, state management, etc.
+});
+```
 
 <DocCanvas mdxSource={{
   react: `<PdsTable componentId="sortable" selectable={true}>

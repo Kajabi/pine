@@ -31,7 +31,7 @@ Used by pds-table to apply a default sort on initial load.
 
 | Name        | Type              | Description                                     |
 | ----------- | ----------------- | ----------------------------------------------- |
-| `direction` | `"asc" \| "desc"` | - The sort direction to apply ('asc' or 'desc') |
+| `direction` | `"desc" \| "asc"` | - The sort direction to apply ('asc' or 'desc') |
 
 #### Returns
 

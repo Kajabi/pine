@@ -285,6 +285,8 @@ export class PdsTable {
 
   @Listen('pdsTableSort')
   handleTableSort(event: CustomEvent<{ column: string; direction: 'asc' | 'desc' }>) {
+    if (event.defaultPrevented) return;
+
     const { direction } = event.detail;
     this.sortTable(event.detail.column, direction);
     this.sortingColumn = event.detail.column;
