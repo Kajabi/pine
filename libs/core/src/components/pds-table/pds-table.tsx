@@ -112,9 +112,10 @@ export class PdsTable {
     );
 
     if (matchingCell) {
+      const columnName = (matchingCell.textContent ?? '').trim();
       // Sort the table data
-      this.sortTable(this.defaultSortColumn, direction);
-      this.sortingColumn = this.defaultSortColumn;
+      this.sortTable(columnName, direction);
+      this.sortingColumn = columnName;
       this.sortingDirection = direction;
 
       // Activate the visual state on the header cell
