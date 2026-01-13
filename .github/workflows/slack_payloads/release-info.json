@@ -4,7 +4,7 @@
 			"type": "header",
 			"text": {
 				"type": "plain_text",
-				"text": ":pine:  Pine Release v${{ env.VERSION }} :pine:"
+				"text": ":pine:  Pine Release ${{ env.VERSION }} :pine:"
 			}
 		},
 		{
