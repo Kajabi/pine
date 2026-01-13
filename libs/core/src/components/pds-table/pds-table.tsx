@@ -87,7 +87,9 @@ export class PdsTable {
 
     // Apply default sort if specified
     if (this.defaultSortColumn) {
-      this.applyDefaultSort();
+      void this.applyDefaultSort().catch((err) => {
+        console.warn('Failed to apply default sort.', err);
+      });
     }
   }
 
@@ -97,15 +99,16 @@ export class PdsTable {
    * @private
    */
   private async applyDefaultSort() {
-    const direction = this.defaultSortDirection;
+    // Normalize direction to handle invalid HTML attribute values
+    const direction: 'asc' | 'desc' = this.defaultSortDirection === 'desc' ? 'desc' : 'asc';
 
     // Find the matching sortable header cell
     const columnHeaderCells = Array.from(
       this.el.querySelectorAll('pds-table-head-cell[sortable]')
-    ) as HTMLElement[];
+    ) as HTMLPdsTableHeadCellElement[];
 
     const matchingCell = columnHeaderCells.find(
-      (cell) => cell.innerText.trim() === this.defaultSortColumn
+      (cell) => (cell.textContent ?? '').trim() === this.defaultSortColumn
     );
 
     if (matchingCell) {
@@ -115,8 +118,7 @@ export class PdsTable {
       this.sortingDirection = direction;
 
       // Activate the visual state on the header cell
-      // Type assertion needed as setActiveSort is added via @Method() decorator
-      await (matchingCell as HTMLPdsTableHeadCellElement & { setActiveSort: (direction: 'asc' | 'desc') => Promise<void> }).setActiveSort(direction);
+      await matchingCell.setActiveSort(direction);
     } else {
       console.warn(`Default sort column "${this.defaultSortColumn}" not found.`);
     }
