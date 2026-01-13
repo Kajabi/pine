@@ -97,7 +97,7 @@ export class PdsTable {
    * @private
    */
   private async applyDefaultSort() {
-    const direction = this.defaultSortDirection || 'asc';
+    const direction = this.defaultSortDirection;
 
     // Find the matching sortable header cell
     const columnHeaderCells = Array.from(
@@ -238,6 +238,9 @@ export class PdsTable {
 
   private sortTable(column: string, direction: 'asc' | 'desc') {
     const tableBody = this.el.querySelector('pds-table-body');
+
+    // Return early if no table body exists
+    if (!tableBody) return;
 
     // Get the rows in the table body
     const tableRows = Array.from(tableBody.querySelectorAll('pds-table-row'));

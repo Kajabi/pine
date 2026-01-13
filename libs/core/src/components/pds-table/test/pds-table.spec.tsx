@@ -491,4 +491,23 @@ describe('pds-table', () => {
     // Should remain in original order (unsorted)
     expect(values).toEqual(['Charlie', 'Alice', 'Bob']);
   });
+
+  it('does not crash when sorting a table without a body', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable, PdsTableHead, PdsTableHeadCell],
+      html: `
+        <pds-table component-id="no-body-test" default-sort-column="Name">
+          <pds-table-head>
+            <pds-table-head-cell sortable>Name</pds-table-head-cell>
+          </pds-table-head>
+        </pds-table>
+      `,
+    });
+
+    await page.waitForChanges();
+
+    // Should not throw and header should still be marked active
+    const headCell = page.body.querySelector('pds-table-head-cell');
+    expect(headCell).toHaveClass('is-active');
+  });
 });
