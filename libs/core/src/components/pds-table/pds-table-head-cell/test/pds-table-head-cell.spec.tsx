@@ -437,4 +437,42 @@ describe('pds-table-head-cell', () => {
 
     expect(true).toBe(true);
   });
+
+  it('sets active sort state via setActiveSort method', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableHeadCell, PdsTable],
+      html: `<pds-table><pds-table-head-cell sortable>Column</pds-table-head-cell></pds-table>`,
+    });
+
+    const tableHeadCell = page.body.querySelector('pds-table-head-cell') as any;
+
+    // Initially should have sort-asc class (default) and no is-active
+    expect(tableHeadCell).toHaveClass('sort-asc');
+    expect(tableHeadCell).not.toHaveClass('is-active');
+
+    // Call setActiveSort with 'desc'
+    await tableHeadCell.setActiveSort('desc');
+    await page.waitForChanges();
+
+    // Should now have is-active class and sort-desc class
+    expect(tableHeadCell).toHaveClass('is-active');
+    expect(tableHeadCell).toHaveClass('sort-desc');
+  });
+
+  it('sets active sort state to asc via setActiveSort method', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableHeadCell, PdsTable],
+      html: `<pds-table><pds-table-head-cell sortable>Column</pds-table-head-cell></pds-table>`,
+    });
+
+    const tableHeadCell = page.body.querySelector('pds-table-head-cell') as any;
+
+    // Call setActiveSort with 'asc'
+    await tableHeadCell.setActiveSort('asc');
+    await page.waitForChanges();
+
+    // Should have is-active class and sort-asc class
+    expect(tableHeadCell).toHaveClass('is-active');
+    expect(tableHeadCell).toHaveClass('sort-asc');
+  });
 });
