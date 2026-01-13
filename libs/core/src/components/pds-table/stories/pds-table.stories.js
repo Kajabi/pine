@@ -24,6 +24,21 @@ export default {
       control: { type: 'boolean' },
       description: 'Adds divider borders between table rows. The last row will not have a bottom border',
     },
+    defaultSortColumn: {
+      control: { type: 'text' },
+      description: 'The name of the column to sort by on initial load. Must match the text content of a sortable column header.',
+      table: {
+        category: 'Sorting',
+      },
+    },
+    defaultSortDirection: {
+      control: { type: 'select' },
+      options: ['asc', 'desc'],
+      description: 'The direction to sort the default column on initial load.',
+      table: {
+        category: 'Sorting',
+      },
+    },
   },
 };
 
@@ -236,6 +251,54 @@ const SortableTemplate = (args) => html`
   </pds-table-body>
 </pds-table>`;
 
+const DefaultSortTemplate = (args) => html`
+<pds-table
+  ?compact=${args.compact}
+  component-id="${args.componentId}"
+  ?fixed-column=${args.fixedColumn}
+  ?responsive=${args.responsive}
+  ?row-dividers=${args.rowDividers}
+  ?selectable=${args.selectable}
+  default-sort-column="${args.defaultSortColumn}"
+  default-sort-direction="${args.defaultSortDirection}"
+>
+  <pds-table-head
+    ?border=${args.border}
+    ?background=${args.background}
+  >
+    <pds-table-head-cell sortable>Name</pds-table-head-cell>
+    <pds-table-head-cell sortable>Email</pds-table-head-cell>
+    <pds-table-head-cell sortable>Account</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell>John Doe</pds-table-cell>
+      <pds-table-cell>john.doe@example.com</pds-table-cell>
+      <pds-table-cell>47321</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Jane Smith</pds-table-cell>
+      <pds-table-cell>jane.smith@example.com</pds-table-cell>
+      <pds-table-cell>89654</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Michael Johnson</pds-table-cell>
+      <pds-table-cell>michael.johnson@example.com</pds-table-cell>
+      <pds-table-cell>21578</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Susan Brown</pds-table-cell>
+      <pds-table-cell>susan.brown@example.com</pds-table-cell>
+      <pds-table-cell>63920</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>William Davis</pds-table-cell>
+      <pds-table-cell>william.davis@example.com</pds-table-cell>
+      <pds-table-cell>17436</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>`;
+
 export const Default = BaseTemplate.bind();
 Default.args = {
   compact: false,
@@ -319,6 +382,20 @@ Sortable.args = {
   rowDividers: false,
   selectable: false,
   sortable: true,
+};
+
+export const DefaultSorting = DefaultSortTemplate.bind();
+DefaultSorting.args = {
+  compact: false,
+  componentId: 'default-sort',
+  fixedColumn: false,
+  border: false,
+  background: false,
+  responsive: false,
+  rowDividers: false,
+  selectable: false,
+  defaultSortColumn: 'Name',
+  defaultSortDirection: 'desc',
 };
 
 export const RowDividers = BaseTemplate.bind();

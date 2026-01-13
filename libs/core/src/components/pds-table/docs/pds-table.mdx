@@ -1319,6 +1319,116 @@ If you need full control over the rendered rows (for example, remote sorting), p
 </pds-table>
 </DocCanvas>
 
+### Default Sort
+
+To display the table with a pre-sorted column on initial load, use the `defaultSortColumn` and `defaultSortDirection` properties. The `defaultSortColumn` value must match the text content of a sortable column header exactly.
+
+<DocCanvas mdxSource={{
+  react: `<PdsTable componentId="default-sort" defaultSortColumn="Name" defaultSortDirection="desc">
+  <PdsTableHead>
+    <PdsTableHeadCell sortable={true}>Name</PdsTableHeadCell>
+    <PdsTableHeadCell sortable={true}>Email</PdsTableHeadCell>
+    <PdsTableHeadCell sortable={true}>Account</PdsTableHeadCell>
+  </PdsTableHead>
+  <PdsTableBody>
+    <PdsTableRow>
+      <PdsTableCell>John Doe</PdsTableCell>
+      <PdsTableCell>john.doe@example.com</PdsTableCell>
+      <PdsTableCell>47321</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>Jane Smith</PdsTableCell>
+      <PdsTableCell>jane.smith@example.com</PdsTableCell>
+      <PdsTableCell>89654</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>Michael Johnson</PdsTableCell>
+      <PdsTableCell>michael.johnson@example.com</PdsTableCell>
+      <PdsTableCell>21578</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>Susan Brown</PdsTableCell>
+      <PdsTableCell>susan.brown@example.com</PdsTableCell>
+      <PdsTableCell>63920</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>William Davis</PdsTableCell>
+      <PdsTableCell>william.davis@example.com</PdsTableCell>
+      <PdsTableCell>17436</PdsTableCell>
+    </PdsTableRow>
+  </PdsTableBody>
+</PdsTable>`,
+  webComponent: `<pds-table component-id="default-sort" default-sort-column="Name" default-sort-direction="desc">
+  <pds-table-head>
+    <pds-table-head-cell sortable>Name</pds-table-head-cell>
+    <pds-table-head-cell sortable>Email</pds-table-head-cell>
+    <pds-table-head-cell sortable>Account</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell>John Doe</pds-table-cell>
+      <pds-table-cell>john.doe@example.com</pds-table-cell>
+      <pds-table-cell>47321</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Jane Smith</pds-table-cell>
+      <pds-table-cell>jane.smith@example.com</pds-table-cell>
+      <pds-table-cell>89654</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Michael Johnson</pds-table-cell>
+      <pds-table-cell>michael.johnson@example.com</pds-table-cell>
+      <pds-table-cell>21578</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Susan Brown</pds-table-cell>
+      <pds-table-cell>susan.brown@example.com</pds-table-cell>
+      <pds-table-cell>63920</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>William Davis</pds-table-cell>
+      <pds-table-cell>william.davis@example.com</pds-table-cell>
+      <pds-table-cell>17436</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
+`}}>
+<pds-table component-id="default-sort" default-sort-column="Name" default-sort-direction="desc">
+  <pds-table-head>
+    <pds-table-head-cell sortable>Name</pds-table-head-cell>
+    <pds-table-head-cell sortable>Email</pds-table-head-cell>
+    <pds-table-head-cell sortable>Account</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell>John Doe</pds-table-cell>
+      <pds-table-cell>john.doe@example.com</pds-table-cell>
+      <pds-table-cell>47321</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Jane Smith</pds-table-cell>
+      <pds-table-cell>jane.smith@example.com</pds-table-cell>
+      <pds-table-cell>89654</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Michael Johnson</pds-table-cell>
+      <pds-table-cell>michael.johnson@example.com</pds-table-cell>
+      <pds-table-cell>21578</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Susan Brown</pds-table-cell>
+      <pds-table-cell>susan.brown@example.com</pds-table-cell>
+      <pds-table-cell>63920</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>William Davis</pds-table-cell>
+      <pds-table-cell>william.davis@example.com</pds-table-cell>
+      <pds-table-cell>17436</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
+</DocCanvas>
+
 ## Additional Resources
 
 [MDN: Table](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table)
