@@ -2498,6 +2498,9 @@ declare global {
     };
     interface HTMLPdsSelectElementEventMap {
         "pdsSelectChange": InputEvent;
+        "pdsBlur": FocusEvent;
+        "pdsFocus": FocusEvent;
+        "pdsKeyDown": KeyboardEvent;
     }
     interface HTMLPdsSelectElement extends Components.PdsSelect, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsSelectElementEventMap>(type: K, listener: (this: HTMLPdsSelectElement, ev: PdsSelectCustomEvent<HTMLPdsSelectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4362,7 +4365,19 @@ declare namespace LocalJSX {
          */
         "name": string;
         /**
-          * Emitted when a keyboard input occurs.
+          * Emitted when the select loses focus.
+         */
+        "onPdsBlur"?: (event: PdsSelectCustomEvent<FocusEvent>) => void;
+        /**
+          * Emitted when the select gains focus.
+         */
+        "onPdsFocus"?: (event: PdsSelectCustomEvent<FocusEvent>) => void;
+        /**
+          * Emitted when a key is pressed down in the select.
+         */
+        "onPdsKeyDown"?: (event: PdsSelectCustomEvent<KeyboardEvent>) => void;
+        /**
+          * Emitted when the select value changes.
          */
         "onPdsSelectChange"?: (event: PdsSelectCustomEvent<InputEvent>) => void;
         /**
