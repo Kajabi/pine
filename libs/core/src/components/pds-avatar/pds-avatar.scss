@@ -61,3 +61,17 @@ img {
   object-fit: cover;
   width: 100%;
 }
+
+.pds-avatar__initials {
+  color: var(--pine-color-brand);
+  fill: var(--pine-color-brand);
+  font-size: var(--pine-font-size-085);
+  font-weight: var(--pine-font-weight-semi-bold);
+  height: 100%;
+  text-align: center;
+  width: 100%;
+
+  text {
+    text-anchor: middle;
+  }
+}

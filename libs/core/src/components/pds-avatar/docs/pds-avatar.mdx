@@ -103,6 +103,30 @@ An avatar that displays a user's profile image. If no image is provided, a defau
   <pds-avatar alt="Customer Profile" image={sampleImg}></pds-avatar>
 </DocCanvas>
 
+### Initials
+
+An avatar that displays user initials when no profile image is available. This is useful for representing users with their initials as a fallback.
+
+<DocCanvas
+  mdxSource={{
+    react: '<PdsAvatar initials="KJ"></PdsAvatar>',
+    webComponent: '<pds-avatar initials="KJ"></pds-avatar>'
+}}>
+  <pds-avatar initials="KJ"></pds-avatar>
+</DocCanvas>
+
+### Initials with Badge
+
+An avatar displaying initials along with a badge indicator.
+
+<DocCanvas
+  mdxSource={{
+    react: '<PdsAvatar initials="KJ" badge={true}></PdsAvatar>',
+    webComponent: '<pds-avatar initials="KJ" badge="true"></pds-avatar>'
+}}>
+  <pds-avatar initials="KJ" badge="true"></pds-avatar>
+</DocCanvas>
+
 ## Playground
 
 <Canvas of={stories.Default} />
