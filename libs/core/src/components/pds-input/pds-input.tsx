@@ -80,6 +80,11 @@ export class PdsInput {
   @Event() pdsInput: EventEmitter<InputInputEventDetail>;
 
   /**
+   * Emitted when a key is pressed down in the input.
+   */
+  @Event() pdsKeyDown!: EventEmitter<KeyboardEvent>;
+
+  /**
    * Sets focus on the native `input` in the `pds-input`. Use this method instead of the global
    * `input.focus()`.
    */
@@ -389,6 +394,10 @@ export class PdsInput {
     this.isComposing = false;
   }
 
+  private onKeyDownEvent = (ev: KeyboardEvent) => {
+    this.pdsKeyDown.emit(ev);
+  };
+
   /**
    * Emits a pdsChange event
    */
@@ -535,6 +544,7 @@ export class PdsInput {
               onChange={this.onChangeEvent}
               onBlur={this.onBlurEvent}
               onFocus={this.onFocusEvent}
+              onKeyDown={this.onKeyDownEvent}
               onCompositionstart={this.onCompositionStart}
               onCompositionend={this.onCompositionEnd}
               {...this.inheritedAttributes}

@@ -2362,6 +2362,7 @@ declare global {
         "pdsChange": InputChangeEventDetail;
         "pdsFocus": FocusEvent;
         "pdsInput": InputInputEventDetail;
+        "pdsKeyDown": KeyboardEvent;
     }
     interface HTMLPdsInputElement extends Components.PdsInput, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsInputElementEventMap>(type: K, listener: (this: HTMLPdsInputElement, ev: PdsInputCustomEvent<HTMLPdsInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3949,6 +3950,10 @@ declare namespace LocalJSX {
           * Emitted when a keyboard input occurs.
          */
         "onPdsInput"?: (event: PdsInputCustomEvent<InputInputEventDetail>) => void;
+        /**
+          * Emitted when a key is pressed down in the input.
+         */
+        "onPdsKeyDown"?: (event: PdsInputCustomEvent<KeyboardEvent>) => void;
         /**
           * Specifies the regular expression that the input value is checked against.
          */
