@@ -2674,6 +2674,7 @@ declare global {
         "pdsFocus": FocusEvent;
         "pdsInput": TextareaInputEventDetail;
         "pdsTextareaChange": TextareaChangeEventDetail;
+        "pdsKeyDown": KeyboardEvent;
     }
     interface HTMLPdsTextareaElement extends Components.PdsTextarea, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsTextareaElementEventMap>(type: K, listener: (this: HTMLPdsTextareaElement, ev: PdsTextareaCustomEvent<HTMLPdsTextareaElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4765,6 +4766,10 @@ declare namespace LocalJSX {
           * Emitted when a keyboard input occurs.  For elements that accept text input (`type=text`, `type=tel`, etc.), the interface is [`InputEvent`](https://developer.mozilla.org/en-US/docs/Web/API/InputEvent); for others, the interface is [`Event`](https://developer.mozilla.org/en-US/docs/Web/API/Event). If the input is cleared on edit, the type is `null`.
          */
         "onPdsInput"?: (event: PdsTextareaCustomEvent<TextareaInputEventDetail>) => void;
+        /**
+          * Emitted when a key is pressed down in the textarea.
+         */
+        "onPdsKeyDown"?: (event: PdsTextareaCustomEvent<KeyboardEvent>) => void;
         /**
           * Event emitted whenever the value of the textarea changes.  This event will not emit when programmatically setting the `value` property.
          */

@@ -60,6 +60,11 @@ export class PdsTextarea {
   @Event() pdsTextareaChange: EventEmitter<TextareaChangeEventDetail>;
 
   /**
+   * Emitted when a key is pressed down in the textarea.
+   */
+  @Event() pdsKeyDown!: EventEmitter<KeyboardEvent>;
+
+  /**
    * Sets focus on the native `textarea` in the `pds-textarea`. Use this method instead of the global
    * `textarea.focus()`.
    */
@@ -285,6 +290,10 @@ export class PdsTextarea {
 
   private onTextareaChange = (ev: Event) => {
     this.emitValueChange(ev);
+  };
+
+  private onKeyDown = (ev: KeyboardEvent) => {
+    this.pdsKeyDown.emit(ev);
   };
 
   private textareaClassNames() {
@@ -516,6 +525,7 @@ export class PdsTextarea {
               onChange={this.onTextareaChange}
               onFocus={this.onFocus}
               onInput={this.onInput}
+              onKeyDown={this.onKeyDown}
               {...this.inheritedAttributes}
             >
               {value}
