@@ -1,5 +1,10 @@
 name: "Pine Continuous Deployment"
 
+# Restrict default permissions to read-only for security (principle of least privilege)
+# Jobs that need more permissions (like release) explicitly override this
+permissions:
+  contents: read
+
 on:
   ## We will uncomment this when we settle on a deployment schedule
   # schedule:
