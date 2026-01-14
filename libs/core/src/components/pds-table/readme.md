@@ -7,14 +7,16 @@
 
 ## Properties
 
-| Property                   | Attribute      | Description                                                                          | Type      | Default     |
-| -------------------------- | -------------- | ------------------------------------------------------------------------------------ | --------- | ----------- |
-| `compact`                  | `compact`      | Determines if the table displays with reduced table cell padding.                    | `boolean` | `undefined` |
-| `componentId` _(required)_ | `component-id` | A unique identifier used for the table `id` attribute.                               | `string`  | `undefined` |
-| `fixedColumn`              | `fixed-column` | Determines if the should display a fixed first column.                               | `boolean` | `undefined` |
-| `responsive`               | `responsive`   | Enables the table to be responsive by horizontally scrolling on smaller screens.     | `boolean` | `undefined` |
-| `rowDividers`              | `row-dividers` | Adds divider borders between table rows. The last row will not have a bottom border. | `boolean` | `false`     |
-| `selectable`               | `selectable`   | Determines if the table displays checkboxes for selectable rows.                     | `boolean` | `undefined` |
+| Property                   | Attribute                | Description                                                                                                 | Type              | Default     |
+| -------------------------- | ------------------------ | ----------------------------------------------------------------------------------------------------------- | ----------------- | ----------- |
+| `compact`                  | `compact`                | Determines if the table displays with reduced table cell padding.                                           | `boolean`         | `undefined` |
+| `componentId` _(required)_ | `component-id`           | A unique identifier used for the table `id` attribute.                                                      | `string`          | `undefined` |
+| `defaultSortColumn`        | `default-sort-column`    | The name of the column to sort by on initial load. Must match the text content of a sortable column header. | `string`          | `undefined` |
+| `defaultSortDirection`     | `default-sort-direction` | The direction to sort the default column on initial load. Only applies if `defaultSortColumn` is set.       | `"asc" \| "desc"` | `'asc'`     |
+| `fixedColumn`              | `fixed-column`           | Determines if the should display a fixed first column.                                                      | `boolean`         | `undefined` |
+| `responsive`               | `responsive`             | Enables the table to be responsive by horizontally scrolling on smaller screens.                            | `boolean`         | `undefined` |
+| `rowDividers`              | `row-dividers`           | Adds divider borders between table rows. The last row will not have a bottom border.                        | `boolean`         | `false`     |
+| `selectable`               | `selectable`             | Determines if the table displays checkboxes for selectable rows.                                            | `boolean`         | `undefined` |
 
 
 ## Events

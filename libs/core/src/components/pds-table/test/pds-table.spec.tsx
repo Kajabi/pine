@@ -328,4 +328,229 @@ describe('pds-table', () => {
       expect(row.isSelected).toBeUndefined();
     });
   });
+
+  it('should not sort if event.defaultPrevented is true in handleTableSort', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable, PdsTableHead, PdsTableHeadCell, PdsTableBody, PdsTableRow, PdsTableCell],
+      html: `
+        <pds-table component-id="test-table">
+          <pds-table-head>
+            <pds-table-head-cell sortable>Name</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>Charlie</pds-table-cell>
+            </pds-table-row>
+            <pds-table-row>
+              <pds-table-cell>Alice</pds-table-cell>
+            </pds-table-row>
+            <pds-table-row>
+              <pds-table-cell>Bob</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      `,
+    });
+
+    const pdsTable = page.rootInstance;
+
+    const event = new CustomEvent('pdsTableSort', {
+      detail: { column: 'Name', direction: 'asc' },
+    });
+
+    Object.defineProperty(event, 'defaultPrevented', { value: true });
+
+    pdsTable.handleTableSort(event);
+
+    await page.waitForChanges();
+
+    const tableBody = page.body.querySelector('pds-table-body') as HTMLElement;
+    const rows = Array.from(tableBody.querySelectorAll('pds-table-row')) as any;
+    const values = rows.map((row) => row.querySelector('pds-table-cell').textContent?.trim());
+
+    // Should remain in original order (unsorted) because preventDefault was called
+    expect(values).toEqual(['Charlie', 'Alice', 'Bob']);
+  });
+
+  it('applies default sort in ascending order on initial load', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable, PdsTableHead, PdsTableHeadCell, PdsTableBody, PdsTableRow, PdsTableCell],
+      html: `
+        <pds-table component-id="default-sort-test" default-sort-column="Name">
+          <pds-table-head>
+            <pds-table-head-cell sortable>Name</pds-table-head-cell>
+            <pds-table-head-cell sortable>Email</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>Charlie</pds-table-cell>
+              <pds-table-cell>charlie@example.com</pds-table-cell>
+            </pds-table-row>
+            <pds-table-row>
+              <pds-table-cell>Alice</pds-table-cell>
+              <pds-table-cell>alice@example.com</pds-table-cell>
+            </pds-table-row>
+            <pds-table-row>
+              <pds-table-cell>Bob</pds-table-cell>
+              <pds-table-cell>bob@example.com</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      `,
+    });
+
+    await page.waitForChanges();
+
+    const tableBody = page.body.querySelector('pds-table-body') as HTMLElement;
+    const rows = Array.from(tableBody.querySelectorAll('pds-table-row')) as any;
+    const values = rows.map((row) => row.querySelector('pds-table-cell').textContent?.trim());
+
+    // Should be sorted in ascending order by default
+    expect(values).toEqual(['Alice', 'Bob', 'Charlie']);
+  });
+
+  it('applies default sort in descending order when defaultSortDirection is desc', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable, PdsTableHead, PdsTableHeadCell, PdsTableBody, PdsTableRow, PdsTableCell],
+      html: `
+        <pds-table component-id="default-sort-desc-test" default-sort-column="Name" default-sort-direction="desc">
+          <pds-table-head>
+            <pds-table-head-cell sortable>Name</pds-table-head-cell>
+            <pds-table-head-cell sortable>Email</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>Alice</pds-table-cell>
+              <pds-table-cell>alice@example.com</pds-table-cell>
+            </pds-table-row>
+            <pds-table-row>
+              <pds-table-cell>Charlie</pds-table-cell>
+              <pds-table-cell>charlie@example.com</pds-table-cell>
+            </pds-table-row>
+            <pds-table-row>
+              <pds-table-cell>Bob</pds-table-cell>
+              <pds-table-cell>bob@example.com</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      `,
+    });
+
+    await page.waitForChanges();
+
+    const tableBody = page.body.querySelector('pds-table-body') as HTMLElement;
+    const rows = Array.from(tableBody.querySelectorAll('pds-table-row')) as any;
+    const values = rows.map((row) => row.querySelector('pds-table-cell').textContent?.trim());
+
+    // Should be sorted in descending order
+    expect(values).toEqual(['Charlie', 'Bob', 'Alice']);
+  });
+
+  it('marks the correct header cell as active when default sort is applied', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable, PdsTableHead, PdsTableHeadCell, PdsTableBody, PdsTableRow, PdsTableCell],
+      html: `
+        <pds-table component-id="default-sort-active-test" default-sort-column="Name" default-sort-direction="desc">
+          <pds-table-head>
+            <pds-table-head-cell sortable>Name</pds-table-head-cell>
+            <pds-table-head-cell sortable>Email</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>Alice</pds-table-cell>
+              <pds-table-cell>alice@example.com</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      `,
+    });
+
+    await page.waitForChanges();
+
+    const headCells = page.body.querySelectorAll('pds-table-head-cell');
+    const nameCell = headCells[0];
+    const emailCell = headCells[1];
+
+    // Name cell should be active
+    expect(nameCell).toHaveClass('is-active');
+    // Email cell should not be active
+    expect(emailCell).not.toHaveClass('is-active');
+  });
+
+  it('logs a warning when default sort column is not found', async () => {
+    const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+
+    const page = await newSpecPage({
+      components: [PdsTable, PdsTableHead, PdsTableHeadCell, PdsTableBody, PdsTableRow, PdsTableCell],
+      html: `
+        <pds-table component-id="default-sort-warning-test" default-sort-column="NonExistent">
+          <pds-table-head>
+            <pds-table-head-cell sortable>Name</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>Alice</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      `,
+    });
+
+    await page.waitForChanges();
+
+    expect(consoleWarnSpy).toHaveBeenCalledWith('Default sort column "NonExistent" not found.');
+    consoleWarnSpy.mockRestore();
+  });
+
+  it('does not apply default sort when defaultSortColumn is not set', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable, PdsTableHead, PdsTableHeadCell, PdsTableBody, PdsTableRow, PdsTableCell],
+      html: `
+        <pds-table component-id="no-default-sort-test">
+          <pds-table-head>
+            <pds-table-head-cell sortable>Name</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>Charlie</pds-table-cell>
+            </pds-table-row>
+            <pds-table-row>
+              <pds-table-cell>Alice</pds-table-cell>
+            </pds-table-row>
+            <pds-table-row>
+              <pds-table-cell>Bob</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      `,
+    });
+
+    await page.waitForChanges();
+
+    const tableBody = page.body.querySelector('pds-table-body') as HTMLElement;
+    const rows = Array.from(tableBody.querySelectorAll('pds-table-row')) as any;
+    const values = rows.map((row) => row.querySelector('pds-table-cell').textContent?.trim());
+
+    // Should remain in original order (unsorted)
+    expect(values).toEqual(['Charlie', 'Alice', 'Bob']);
+  });
+
+  it('does not crash when sorting a table without a body', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable, PdsTableHead, PdsTableHeadCell],
+      html: `
+        <pds-table component-id="no-body-test" default-sort-column="Name">
+          <pds-table-head>
+            <pds-table-head-cell sortable>Name</pds-table-head-cell>
+          </pds-table-head>
+        </pds-table>
+      `,
+    });
+
+    await page.waitForChanges();
+
+    // Should not throw and header should still be marked active
+    const headCell = page.body.querySelector('pds-table-head-cell');
+    expect(headCell).toHaveClass('is-active');
+  });
 });

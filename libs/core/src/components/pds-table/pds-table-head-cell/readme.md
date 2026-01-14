@@ -20,6 +20,26 @@
 | `pdsTableSort` | Event emitted to signal that a table column header has been sorted, providing information about the sorted column's name and sorting direction. | `CustomEvent<{ column: string; direction: string; }>` |
 
 
+## Methods
+
+### `setActiveSort(direction: "asc" | "desc") => Promise<void>`
+
+Programmatically sets this column as the active sort column with the specified direction.
+Used by pds-table to apply a default sort on initial load.
+
+#### Parameters
+
+| Name        | Type              | Description                                     |
+| ----------- | ----------------- | ----------------------------------------------- |
+| `direction` | `"desc" \| "asc"` | - The sort direction to apply ('asc' or 'desc') |
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+
 ## Shadow Parts
 
 | Part          | Description |

@@ -1,4 +1,4 @@
-import { Component, Element, Host, Prop, h, Event, EventEmitter, State } from '@stencil/core';
+import { Component, Element, Host, Prop, h, Event, EventEmitter, State, Method } from '@stencil/core';
 
 import { downSmall, upSmall } from '@pine-ds/icons/icons';
 
@@ -58,6 +58,19 @@ export class PdsTableHeadCell {
    * @defaultValue false
    */
   @State() private hasHeadBackground: boolean = false;
+
+  /**
+   * Programmatically sets this column as the active sort column with the specified direction.
+   * Used by pds-table to apply a default sort on initial load.
+   * @param direction - The sort direction to apply ('asc' or 'desc')
+   */
+  @Method()
+  async setActiveSort(direction: 'asc' | 'desc') {
+    if (!this.sortable) return;
+
+    this.sortingDirection = direction;
+    this.hostElement.classList.add('is-active');
+  }
 
   componentWillLoad() {
     // Set initial references and state before first render

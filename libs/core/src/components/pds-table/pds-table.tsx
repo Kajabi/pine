@@ -45,6 +45,19 @@ export class PdsTable {
   @Prop({ reflect: true }) rowDividers: boolean = false;
 
   /**
+   * The name of the column to sort by on initial load.
+   * Must match the text content of a sortable column header.
+   */
+  @Prop() defaultSortColumn?: string;
+
+  /**
+   * The direction to sort the default column on initial load.
+   * Only applies if `defaultSortColumn` is set.
+   * @defaultValue 'asc'
+   */
+  @Prop() defaultSortDirection?: 'asc' | 'desc' = 'asc';
+
+  /**
    * The name of the column being sorted.
    * @defaultValue null
    */
@@ -67,13 +80,48 @@ export class PdsTable {
    */
   @Event() pdsTableSelectAll: EventEmitter<{ isSelected: boolean }>;
 
-  componentWillLoad() {
-    this.sortingColumn = null;
-  }
-
   componentDidLoad() {
     if (this.responsive) {
       this.setupResponsiveScrolling();
+    }
+
+    // Apply default sort if specified
+    if (this.defaultSortColumn) {
+      void this.applyDefaultSort().catch((err) => {
+        console.warn('Failed to apply default sort.', err);
+      });
+    }
+  }
+
+  /**
+   * Applies the default sort configuration on initial load.
+   * Finds the matching column header and activates its sort state.
+   * @private
+   */
+  private async applyDefaultSort() {
+    // Normalize direction to handle invalid HTML attribute values
+    const direction: 'asc' | 'desc' = this.defaultSortDirection === 'desc' ? 'desc' : 'asc';
+
+    // Find the matching sortable header cell
+    const columnHeaderCells = Array.from(
+      this.el.querySelectorAll('pds-table-head-cell[sortable]')
+    ) as HTMLPdsTableHeadCellElement[];
+
+    const matchingCell = columnHeaderCells.find(
+      (cell) => (cell.textContent ?? '').trim() === this.defaultSortColumn
+    );
+
+    if (matchingCell) {
+      const columnName = (matchingCell.textContent ?? '').trim();
+      // Sort the table data
+      this.sortTable(columnName, direction);
+      this.sortingColumn = columnName;
+      this.sortingDirection = direction;
+
+      // Activate the visual state on the header cell
+      await matchingCell.setActiveSort(direction);
+    } else {
+      console.warn(`Default sort column "${this.defaultSortColumn}" not found.`);
     }
   }
 
@@ -194,6 +242,9 @@ export class PdsTable {
   private sortTable(column: string, direction: 'asc' | 'desc') {
     const tableBody = this.el.querySelector('pds-table-body');
 
+    // Return early if no table body exists
+    if (!tableBody) return;
+
     // Get the rows in the table body
     const tableRows = Array.from(tableBody.querySelectorAll('pds-table-row'));
 
@@ -234,6 +285,8 @@ export class PdsTable {
 
   @Listen('pdsTableSort')
   handleTableSort(event: CustomEvent<{ column: string; direction: 'asc' | 'desc' }>) {
+    if (event.defaultPrevented) return;
+
     const { direction } = event.detail;
     this.sortTable(event.detail.column, direction);
     this.sortingColumn = event.detail.column;

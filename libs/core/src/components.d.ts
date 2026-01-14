@@ -1706,6 +1706,15 @@ export namespace Components {
          */
         "componentId": string;
         /**
+          * The name of the column to sort by on initial load. Must match the text content of a sortable column header.
+         */
+        "defaultSortColumn"?: string;
+        /**
+          * The direction to sort the default column on initial load. Only applies if `defaultSortColumn` is set.
+          * @defaultValue 'asc'
+         */
+        "defaultSortDirection"?: 'asc' | 'desc';
+        /**
           * Determines if the should display a fixed first column.
          */
         "fixedColumn": boolean;
@@ -1761,6 +1770,11 @@ export namespace Components {
           * Sets the text alignment within the head cell.
          */
         "cellAlign"?: 'start' | 'center' | 'end' | 'justify';
+        /**
+          * Programmatically sets this column as the active sort column with the specified direction. Used by pds-table to apply a default sort on initial load.
+          * @param direction - The sort direction to apply ('asc' or 'desc')
+         */
+        "setActiveSort": (direction: "asc" | "desc") => Promise<void>;
         /**
           * Determines whether the table column is sortable when set to `true`.
          */
@@ -4478,6 +4492,15 @@ declare namespace LocalJSX {
           * A unique identifier used for the table `id` attribute.
          */
         "componentId": string;
+        /**
+          * The name of the column to sort by on initial load. Must match the text content of a sortable column header.
+         */
+        "defaultSortColumn"?: string;
+        /**
+          * The direction to sort the default column on initial load. Only applies if `defaultSortColumn` is set.
+          * @defaultValue 'asc'
+         */
+        "defaultSortDirection"?: 'asc' | 'desc';
         /**
           * Determines if the should display a fixed first column.
          */
