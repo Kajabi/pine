@@ -9,6 +9,7 @@ export default {
 		componentId: null,
     dropdown: false,
     image: null,
+    initials: null,
     size: null,
     variant: 'customer',
   },
@@ -22,6 +23,7 @@ const BaseTemplate = (args) => html`<pds-avatar
 	dropdown="${args.dropdown}"
 	component-id="${args.componentId}"
 	image="${args.image}"
+	initials="${args.initials}"
 	size="${args.size}"
 	variant="${args.variant}"
 >
@@ -60,4 +62,17 @@ Image.args = {
 	alt: 'Customer Profile',
 	image: imgFile,
 	size: 'xl'
+}
+
+export const Initials = BaseTemplate.bind();
+Initials.args = {
+	initials: 'KJ',
+	size: 'lg'
+}
+
+export const InitialsWithBadge = BaseTemplate.bind();
+InitialsWithBadge.args = {
+	badge: true,
+	initials: 'KJ',
+	size: 'lg'
 }

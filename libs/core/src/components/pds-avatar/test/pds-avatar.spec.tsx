@@ -185,4 +185,57 @@ describe('pds-avatar', () => {
     `);
   });
 
+  it('renders initials when prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsAvatar],
+      html: `<pds-avatar initials="KJ"></pds-avatar>`,
+    });
+    expect(page.root).toEqualHtml(`
+      <pds-avatar class="pds-avatar pds-avatar--has-initials" initials="KJ" size="lg" variant="customer">
+        <mock:shadow-root>
+          <div part="asset-wrapper" style="height: 56px; width: 56px;">
+            <svg class="pds-avatar__initials" viewBox="0 0 32 32">
+              <text x="16" y="20">KJ</text>
+            </svg>
+          </div>
+        </mock:shadow-root>
+      </pds-avatar>
+    `);
+  });
+
+  it('renders image over initials when both are provided', async () => {
+    const page = await newSpecPage({
+      components: [PdsAvatar],
+      html: `<pds-avatar image="https://placehold.co/64x64" initials="KJ"></pds-avatar>`,
+    });
+    expect(page.root).toEqualHtml(`
+      <pds-avatar class="pds-avatar pds-avatar--has-image pds-avatar--has-initials" image="https://placehold.co/64x64" initials="KJ" size="lg" variant="customer">
+        <mock:shadow-root>
+          <div part="asset-wrapper" style="height: 56px; width: 56px;">
+            <img src="https://placehold.co/64x64"/>
+          </div>
+        </mock:shadow-root>
+      </pds-avatar>
+    `);
+  });
+
+  it('renders initials with badge when both props are set', async () => {
+    const page = await newSpecPage({
+      components: [PdsAvatar],
+      html: `<pds-avatar initials="KJ" badge="true"></pds-avatar>`,
+    });
+    expect(page.root).toEqualHtml(`
+      <pds-avatar class="pds-avatar pds-avatar--has-initials" initials="KJ" badge="true" size="lg" variant="customer">
+        <mock:shadow-root>
+          <div part="asset-wrapper" style="height: 56px; width: 56px;">
+            <svg class="pds-avatar__initials" viewBox="0 0 32 32">
+              <text x="16" y="20">KJ</text>
+            </svg>
+            <pds-icon class="pds-avatar__badge" color="var(--pine-color-purple-600)" icon="${checkCircleFilled}" size="33.53%"></pds-icon>
+          </div>
+        </mock:shadow-root>
+      </pds-avatar>
+    `);
+  });
+
 });

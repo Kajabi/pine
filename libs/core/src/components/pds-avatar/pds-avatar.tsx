@@ -41,6 +41,12 @@ export class PdsAvatar {
   @Prop() image?: string | null = null;
 
   /**
+   * The initials to display in the avatar when no image is provided.
+   * @defaultValue null
+   */
+  @Prop() initials?: string | null = null;
+
+  /**
    * Size of the avatar. Value can be preset or custom.
    * @defaultValue lg
    */
@@ -108,19 +114,30 @@ export class PdsAvatar {
       && <pds-icon color="var(--pine-color-purple-600)" class="pds-avatar__badge" icon={checkCircleFilled} size="33.53%"></pds-icon>
   );
 
-  private renderIconOrImage = () => (
-    this.image
-      ? <img alt={this.alt} src={this.image} />
-      // Percentage is average size of icon in relation to total avatar size
-      // of all preset sizes found in Figma.
-      // Used to allow icons to scale to container size
-      : <pds-icon color="var(--pine-color-brand)" icon={userFilled} size="33.53%"></pds-icon>
-  );
+  private renderIconOrImage = () => {
+    if (this.image) {
+      return <img alt={this.alt} src={this.image} />;
+    }
+
+    if (this.initials) {
+      return (
+        <svg class="pds-avatar__initials" viewBox="0 0 32 32">
+          <text x="16" y="20">{this.initials}</text>
+        </svg>
+      );
+    }
+
+    // Percentage is average size of icon in relation to total avatar size
+    // of all preset sizes found in Figma.
+    // Used to allow icons to scale to container size
+    return <pds-icon color="var(--pine-color-brand)" icon={userFilled} size="33.53%"></pds-icon>;
+  };
 
   private classNames = () => (
     {
       'pds-avatar': true,
       [`pds-avatar--has-image`]: this.image !== '' && this.image !== null, // Remove when FF supports :has selector
+      [`pds-avatar--has-initials`]: this.initials !== '' && this.initials !== null,
       [`pds-avatar--${this.variant}`]: this.variant === 'admin'
     }
   );

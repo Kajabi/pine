@@ -127,6 +127,11 @@ export namespace Components {
          */
         "image"?: string | null;
         /**
+          * The initials to display in the avatar when no image is provided.
+          * @defaultValue null
+         */
+        "initials"?: string | null;
+        /**
           * Size of the avatar. Value can be preset or custom.
           * @defaultValue lg
          */
@@ -2870,6 +2875,11 @@ declare namespace LocalJSX {
           * @defaultValue null
          */
         "image"?: string | null;
+        /**
+          * The initials to display in the avatar when no image is provided.
+          * @defaultValue null
+         */
+        "initials"?: string | null;
         /**
           * Size of the avatar. Value can be preset or custom.
           * @defaultValue lg
