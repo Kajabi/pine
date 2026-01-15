@@ -1,3 +1,29 @@
+## 3.14.0 (2026-01-15)
+
+### Features 🚀
+
+- **core:** Add keyboard and focus events to form components ([#636](https://github.com/Kajabi/pine/pull/636))
+- **pds-avatar:** add initials props ([#635](https://github.com/Kajabi/pine/pull/635))
+
+### Bug Fixes 🐛
+
+- add ds token mapping ([#624](https://github.com/Kajabi/pine/pull/624))
+- update release-info.json to remove template typo for version ([#631](https://github.com/Kajabi/pine/pull/631))
+- upgrade typescript-eslint to v8 and stencil eslint plugin to v0.10 ([bdbde453](https://github.com/Kajabi/pine/commit/bdbde453))
+- regenerate package-lock.json with --legacy-peer-deps to match CI ([ea4e0d91](https://github.com/Kajabi/pine/commit/ea4e0d91))
+- update package-lock.json preserving v3.13.0 resolutions ([9df9d5f0](https://github.com/Kajabi/pine/commit/9df9d5f0))
+- add --legacy-peer-deps to release job for consistency with build jobs ([c22a078b](https://github.com/Kajabi/pine/commit/c22a078b))
+- **pds-table:** add default sorting props ([#633](https://github.com/Kajabi/pine/pull/633))
+
+### Styles 🎨
+
+- **pds-dropdown-menu-item:** adjust link styles for improved clickable area ([#630](https://github.com/Kajabi/pine/pull/630))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.13.0 (2026-01-12)
 
 ### Features 🚀
