@@ -460,6 +460,46 @@ it('should set focus on the input element when setFocus is called', async() => {
     expect(inputEventSpy).toHaveBeenCalled();
   });
 
+  it('emits pdsKeyDown event when a key is pressed', async () => {
+    const page = await newSpecPage({
+      components: [PdsTextarea],
+      html: `<pds-textarea></pds-textarea>`,
+    });
+
+    const pdsTextarea = page.root;
+    const nativeTextarea = pdsTextarea?.shadowRoot?.querySelector('textarea');
+    const onKeyDownEvent = jest.fn();
+    pdsTextarea?.addEventListener('pdsKeyDown', onKeyDownEvent);
+
+    const keyboardEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+    nativeTextarea?.dispatchEvent(keyboardEvent);
+    await page.waitForChanges();
+
+    expect(onKeyDownEvent).toHaveBeenCalled();
+  });
+
+  it('emits pdsKeyDown event with correct key information', async () => {
+    const page = await newSpecPage({
+      components: [PdsTextarea],
+      html: `<pds-textarea></pds-textarea>`,
+    });
+
+    const pdsTextarea = page.root;
+    const nativeTextarea = pdsTextarea?.shadowRoot?.querySelector('textarea');
+    let receivedEvent: KeyboardEvent | null = null;
+
+    pdsTextarea?.addEventListener('pdsKeyDown', (e: CustomEvent<KeyboardEvent>) => {
+      receivedEvent = e.detail;
+    });
+
+    const keyboardEvent = new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape' });
+    nativeTextarea?.dispatchEvent(keyboardEvent);
+    await page.waitForChanges();
+
+    expect(receivedEvent).not.toBeNull();
+    expect(receivedEvent?.key).toBe('Escape');
+  });
+
   it('renders action slot content when provided', async () => {
     const {root} = await newSpecPage({
       components: [PdsTextarea],

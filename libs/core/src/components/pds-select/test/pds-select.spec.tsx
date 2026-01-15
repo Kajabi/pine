@@ -619,6 +619,82 @@ describe('onSelectUpdate', () => {
   });
 });
 
+describe('event emitters', () => {
+  it('emits pdsBlur event when select loses focus', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select component-id="field-1" name="test"></pds-select>`,
+    });
+
+    const pdsSelect = page.root;
+    const nativeSelect = pdsSelect?.shadowRoot?.querySelector('select');
+    const onBlurEvent = jest.fn();
+    pdsSelect?.addEventListener('pdsBlur', onBlurEvent);
+
+    nativeSelect?.dispatchEvent(new FocusEvent('blur'));
+    await page.waitForChanges();
+
+    expect(onBlurEvent).toHaveBeenCalled();
+  });
+
+  it('emits pdsFocus event when select gains focus', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select component-id="field-1" name="test"></pds-select>`,
+    });
+
+    const pdsSelect = page.root;
+    const nativeSelect = pdsSelect?.shadowRoot?.querySelector('select');
+    const onFocusEvent = jest.fn();
+    pdsSelect?.addEventListener('pdsFocus', onFocusEvent);
+
+    nativeSelect?.dispatchEvent(new FocusEvent('focus'));
+    await page.waitForChanges();
+
+    expect(onFocusEvent).toHaveBeenCalled();
+  });
+
+  it('emits pdsKeyDown event when a key is pressed', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select component-id="field-1" name="test"></pds-select>`,
+    });
+
+    const pdsSelect = page.root;
+    const nativeSelect = pdsSelect?.shadowRoot?.querySelector('select');
+    const onKeyDownEvent = jest.fn();
+    pdsSelect?.addEventListener('pdsKeyDown', onKeyDownEvent);
+
+    const keyboardEvent = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+    nativeSelect?.dispatchEvent(keyboardEvent);
+    await page.waitForChanges();
+
+    expect(onKeyDownEvent).toHaveBeenCalled();
+  });
+
+  it('emits pdsKeyDown event with correct key information', async () => {
+    const page = await newSpecPage({
+      components: [PdsSelect],
+      html: `<pds-select component-id="field-1" name="test"></pds-select>`,
+    });
+
+    const pdsSelect = page.root;
+    const nativeSelect = pdsSelect?.shadowRoot?.querySelector('select');
+    let receivedEvent: KeyboardEvent | null = null;
+
+    pdsSelect?.addEventListener('pdsKeyDown', (e: CustomEvent<KeyboardEvent>) => {
+      receivedEvent = e.detail;
+    });
+
+    const keyboardEvent = new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter' });
+    nativeSelect?.dispatchEvent(keyboardEvent);
+    await page.waitForChanges();
+
+    expect(receivedEvent).not.toBeNull();
+    expect(receivedEvent?.key).toBe('Enter');
+  });
+});
+
 describe('action slot', () => {
   it('renders action slot content when provided', async () => {
     const { root } = await newSpecPage({

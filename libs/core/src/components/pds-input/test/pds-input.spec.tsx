@@ -446,6 +446,46 @@ describe('pds-input', () => {
     expect(onFocusEvent).toHaveBeenCalled();
   });
 
+  it('emits pdsKeyDown event when a key is pressed', async () => {
+    const page = await newSpecPage({
+      components: [PdsInput],
+      html: `<pds-input />`,
+    });
+
+    const pdsInput = page.root;
+    const nativeInput = pdsInput?.shadowRoot?.querySelector('input');
+    const onKeyDownEvent = jest.fn();
+    pdsInput?.addEventListener('pdsKeyDown', onKeyDownEvent);
+
+    const keyboardEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+    nativeInput?.dispatchEvent(keyboardEvent);
+    await page.waitForChanges();
+
+    expect(onKeyDownEvent).toHaveBeenCalled();
+  });
+
+  it('emits pdsKeyDown event with correct key information', async () => {
+    const page = await newSpecPage({
+      components: [PdsInput],
+      html: `<pds-input />`,
+    });
+
+    const pdsInput = page.root;
+    const nativeInput = pdsInput?.shadowRoot?.querySelector('input');
+    let receivedEvent: KeyboardEvent | null = null;
+
+    pdsInput?.addEventListener('pdsKeyDown', (e: CustomEvent<KeyboardEvent>) => {
+      receivedEvent = e.detail;
+    });
+
+    const keyboardEvent = new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape' });
+    nativeInput?.dispatchEvent(keyboardEvent);
+    await page.waitForChanges();
+
+    expect(receivedEvent).not.toBeNull();
+    expect(receivedEvent?.key).toBe('Escape');
+  });
+
   it('should call onChangeEvent when value is changed', async () => {
     const page = await newSpecPage({
       components: [PdsInput],

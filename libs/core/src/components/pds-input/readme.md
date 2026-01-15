@@ -36,12 +36,13 @@
 
 ## Events
 
-| Event       | Description                                                                                                       | Type                                  |
-| ----------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
-| `pdsBlur`   | Emitted when the input loses focus.                                                                               | `CustomEvent<FocusEvent>`             |
-| `pdsChange` | Emitted when the value has changed.  This event will not emit when programmatically setting the `value` property. | `CustomEvent<InputChangeEventDetail>` |
-| `pdsFocus`  | Emitted when the input has focus.                                                                                 | `CustomEvent<FocusEvent>`             |
-| `pdsInput`  | Emitted when a keyboard input occurs.                                                                             | `CustomEvent<InputInputEventDetail>`  |
+| Event        | Description                                                                                                       | Type                                  |
+| ------------ | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| `pdsBlur`    | Emitted when the input loses focus.                                                                               | `CustomEvent<FocusEvent>`             |
+| `pdsChange`  | Emitted when the value has changed.  This event will not emit when programmatically setting the `value` property. | `CustomEvent<InputChangeEventDetail>` |
+| `pdsFocus`   | Emitted when the input has focus.                                                                                 | `CustomEvent<FocusEvent>`             |
+| `pdsInput`   | Emitted when a keyboard input occurs.                                                                             | `CustomEvent<InputInputEventDetail>`  |
+| `pdsKeyDown` | Emitted when a key is pressed down in the input.                                                                  | `CustomEvent<KeyboardEvent>`          |
 
 
 ## Methods

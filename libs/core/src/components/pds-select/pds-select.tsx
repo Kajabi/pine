@@ -92,9 +92,24 @@ export class PdsSelect {
 
 
   /**
-   * Emitted when a keyboard input occurs.
+   * Emitted when the select value changes.
    */
   @Event() pdsSelectChange: EventEmitter<InputEvent>;
+
+  /**
+   * Emitted when the select loses focus.
+   */
+  @Event() pdsBlur!: EventEmitter<FocusEvent>;
+
+  /**
+   * Emitted when the select gains focus.
+   */
+  @Event() pdsFocus!: EventEmitter<FocusEvent>;
+
+  /**
+   * Emitted when a key is pressed down in the select.
+   */
+  @Event() pdsKeyDown!: EventEmitter<KeyboardEvent>;
 
   @Watch('value')
   /**
@@ -182,6 +197,18 @@ export class PdsSelect {
     }
 
     this.pdsSelectChange.emit(e as InputEvent);
+  };
+
+  private onBlur = (ev: FocusEvent) => {
+    this.pdsBlur.emit(ev);
+  };
+
+  private onFocus = (ev: FocusEvent) => {
+    this.pdsFocus.emit(ev);
+  };
+
+  private onKeyDown = (ev: KeyboardEvent) => {
+    this.pdsKeyDown.emit(ev);
   };
 
   /**
@@ -350,7 +377,10 @@ export class PdsSelect {
             id={this.componentId}
             multiple={this.multiple}
             name={this.name}
+            onBlur={this.onBlur}
             onChange={this.onSelectUpdate}
+            onFocus={this.onFocus}
+            onKeyDown={this.onKeyDown}
             part="select"
             required={this.required}
             ref={(el) => (this.selectEl = el as HTMLSelectElement)}

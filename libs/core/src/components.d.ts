@@ -2367,6 +2367,7 @@ declare global {
         "pdsChange": InputChangeEventDetail;
         "pdsFocus": FocusEvent;
         "pdsInput": InputInputEventDetail;
+        "pdsKeyDown": KeyboardEvent;
     }
     interface HTMLPdsInputElement extends Components.PdsInput, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsInputElementEventMap>(type: K, listener: (this: HTMLPdsInputElement, ev: PdsInputCustomEvent<HTMLPdsInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2502,6 +2503,9 @@ declare global {
     };
     interface HTMLPdsSelectElementEventMap {
         "pdsSelectChange": InputEvent;
+        "pdsBlur": FocusEvent;
+        "pdsFocus": FocusEvent;
+        "pdsKeyDown": KeyboardEvent;
     }
     interface HTMLPdsSelectElement extends Components.PdsSelect, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsSelectElementEventMap>(type: K, listener: (this: HTMLPdsSelectElement, ev: PdsSelectCustomEvent<HTMLPdsSelectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2678,6 +2682,7 @@ declare global {
         "pdsFocus": FocusEvent;
         "pdsInput": TextareaInputEventDetail;
         "pdsTextareaChange": TextareaChangeEventDetail;
+        "pdsKeyDown": KeyboardEvent;
     }
     interface HTMLPdsTextareaElement extends Components.PdsTextarea, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsTextareaElementEventMap>(type: K, listener: (this: HTMLPdsTextareaElement, ev: PdsTextareaCustomEvent<HTMLPdsTextareaElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3960,6 +3965,10 @@ declare namespace LocalJSX {
          */
         "onPdsInput"?: (event: PdsInputCustomEvent<InputInputEventDetail>) => void;
         /**
+          * Emitted when a key is pressed down in the input.
+         */
+        "onPdsKeyDown"?: (event: PdsInputCustomEvent<KeyboardEvent>) => void;
+        /**
           * Specifies the regular expression that the input value is checked against.
          */
         "pattern"?: string;
@@ -4366,7 +4375,19 @@ declare namespace LocalJSX {
          */
         "name": string;
         /**
-          * Emitted when a keyboard input occurs.
+          * Emitted when the select loses focus.
+         */
+        "onPdsBlur"?: (event: PdsSelectCustomEvent<FocusEvent>) => void;
+        /**
+          * Emitted when the select gains focus.
+         */
+        "onPdsFocus"?: (event: PdsSelectCustomEvent<FocusEvent>) => void;
+        /**
+          * Emitted when a key is pressed down in the select.
+         */
+        "onPdsKeyDown"?: (event: PdsSelectCustomEvent<KeyboardEvent>) => void;
+        /**
+          * Emitted when the select value changes.
          */
         "onPdsSelectChange"?: (event: PdsSelectCustomEvent<InputEvent>) => void;
         /**
@@ -4770,6 +4791,10 @@ declare namespace LocalJSX {
           * Emitted when a keyboard input occurs.  For elements that accept text input (`type=text`, `type=tel`, etc.), the interface is [`InputEvent`](https://developer.mozilla.org/en-US/docs/Web/API/InputEvent); for others, the interface is [`Event`](https://developer.mozilla.org/en-US/docs/Web/API/Event). If the input is cleared on edit, the type is `null`.
          */
         "onPdsInput"?: (event: PdsTextareaCustomEvent<TextareaInputEventDetail>) => void;
+        /**
+          * Emitted when a key is pressed down in the textarea.
+         */
+        "onPdsKeyDown"?: (event: PdsTextareaCustomEvent<KeyboardEvent>) => void;
         /**
           * Event emitted whenever the value of the textarea changes.  This event will not emit when programmatically setting the `value` property.
          */
