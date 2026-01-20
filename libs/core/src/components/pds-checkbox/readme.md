@@ -35,6 +35,7 @@
 
 ### Used by
 
+ - [pds-multiselect](../pds-multiselect)
  - [pds-table-head](../pds-table/pds-table-head)
  - [pds-table-row](../pds-table/pds-table-row)
 
@@ -46,6 +47,7 @@
 ```mermaid
 graph TD;
   pds-checkbox --> pds-icon
+  pds-multiselect --> pds-checkbox
   pds-table-head --> pds-checkbox
   pds-table-row --> pds-checkbox
   style pds-checkbox fill:#f9f,stroke:#333,stroke-width:4px

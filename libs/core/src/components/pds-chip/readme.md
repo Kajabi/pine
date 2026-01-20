@@ -36,6 +36,7 @@
 ### Used by
 
  - [pds-combobox](../pds-combobox)
+ - [pds-multiselect](../pds-multiselect)
 
 ### Depends on
 
@@ -46,6 +47,7 @@
 graph TD;
   pds-chip --> pds-icon
   pds-combobox --> pds-chip
+  pds-multiselect --> pds-chip
   style pds-chip fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
