@@ -156,14 +156,23 @@ export class PdsMultiselect {
 
   componentWillLoad() {
     this.originalSearchEmitter = this.pdsMultiselectSearch;
-    this.updateOptionsFromSlot();
     this.syncSelectedItems();
   }
 
   componentDidLoad() {
     this.setupDebounce();
     this.setupMutationObserver();
+    this.setupSlotChangeListener();
     this.updateFormValue();
+  }
+
+  private setupSlotChangeListener() {
+    const slot = this.el.shadowRoot?.querySelector('slot:not([name])') as HTMLSlotElement;
+    if (slot) {
+      slot.addEventListener('slotchange', () => this.updateOptionsFromSlot());
+      // Also call it immediately in case content is already slotted
+      this.updateOptionsFromSlot();
+    }
   }
 
   disconnectedCallback() {
@@ -222,6 +231,8 @@ export class PdsMultiselect {
         text: opt.textContent || opt.value,
       }));
 
+    // Only update if we actually found options AND we're not using async/external options
+    // Don't clear internalOptions if slot returns empty (might be mid-DOM-update)
     if (options.length > 0 && !this.asyncUrl && !this.options) {
       this.internalOptions = options;
     }
@@ -403,11 +414,23 @@ export class PdsMultiselect {
     }
   };
 
-  private handleContainerFocusOut = (e: FocusEvent) => {
-    const relatedTarget = e.relatedTarget as Node | null;
-    if (!this.containerEl?.contains(relatedTarget)) {
-      this.closeDropdown();
-    }
+  private handleContainerFocusOut = () => {
+    // Use requestAnimationFrame to delay the check - this allows click events to complete
+    // before we decide to close the dropdown
+    requestAnimationFrame(() => {
+      if (!this.isOpen) return;
+
+      const activeElement = document.activeElement;
+
+      // Check if focus is within our component
+      const isInContainer = this.containerEl?.contains(activeElement);
+      const isInDropdown = this.listboxEl?.contains(activeElement);
+      const isInShadowRoot = activeElement && this.el.shadowRoot?.contains(activeElement);
+
+      if (!isInContainer && !isInDropdown && !isInShadowRoot) {
+        this.closeDropdown();
+      }
+    });
   };
 
   private openDropdown() {
@@ -488,9 +511,8 @@ export class PdsMultiselect {
     this.inputEl?.focus();
   }
 
-  private handleOptionClick = (option: MultiselectOption) => (e: Event) => {
-    e.preventDefault();
-    e.stopPropagation();
+  private handleOptionMouseDown = (option: MultiselectOption) => (e: MouseEvent) => {
+    e.preventDefault(); // Prevent focus change
     this.selectOption(option);
   };
 
@@ -515,16 +537,6 @@ export class PdsMultiselect {
         page: this.currentPage + 1,
       });
       this.fetchOptions(this.searchQuery, this.currentPage + 1);
-    }
-  };
-
-  private handleCheckboxChange = (option: MultiselectOption) => (e: Event) => {
-    e.stopPropagation();
-    const isSelected = this.value.includes(String(option.id));
-    if (isSelected) {
-      this.removeSelection(option);
-    } else {
-      this.selectOption(option);
     }
   };
 
@@ -594,14 +606,13 @@ export class PdsMultiselect {
               role="option"
               aria-selected="false"
               data-index={index}
-              onClick={this.handleOptionClick(option)}
+              onMouseDown={this.handleOptionMouseDown(option)}
               onMouseEnter={this.handleOptionMouseEnter(index)}
             >
               <pds-checkbox
                 componentId={`${this.componentId}-checkbox-${index}`}
                 checked={false}
                 label={option.text}
-                onChange={this.handleCheckboxChange(option)}
               />
             </li>
           );
@@ -671,7 +682,7 @@ export class PdsMultiselect {
                 onKeyDown={this.handleInputKeyDown}
               />
             </div>
-            <pds-icon class="pds-multiselect__icon" icon={enlarge} size="small" />
+            <pds-icon class="pds-multiselect__icon" icon={enlarge}  />
           </div>
 
           {this.renderDropdown()}
@@ -691,7 +702,7 @@ export class PdsMultiselect {
 
           {/* Hidden slot for static options */}
           <div style={{ display: 'none' }}>
-            <slot onSlotchange={() => this.updateOptionsFromSlot()} />
+            <slot />
           </div>
         </div>
       </Host>

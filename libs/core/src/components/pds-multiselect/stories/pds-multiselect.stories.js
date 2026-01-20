@@ -48,6 +48,10 @@ export default {
       control: 'text',
       description: 'Helper message below the input',
     },
+    value: {
+      control: 'object',
+      description: 'Array of selected option values',
+    },
   },
 };
 
@@ -67,12 +71,15 @@ export const Default = {
     componentId: 'multiselect-default',
     label: 'Select Tags',
     placeholder: 'Search tags...',
+    value: [],
   },
-  render: (args) => html`
+  render: (args, { updateArgs }) => html`
     <pds-multiselect
       component-id="${args.componentId}"
       label="${args.label}"
       placeholder="${args.placeholder}"
+      .value=${args.value}
+      @pdsMultiselectChange=${(e) => updateArgs({ value: e.detail.values })}
     >
       ${unsafeHTML(defaultOptions)}
     </pds-multiselect>
@@ -84,13 +91,15 @@ export const WithPreselectedValues = {
     componentId: 'multiselect-preselected',
     label: 'Departments',
     placeholder: 'Search departments...',
+    value: ['1', '3'],
   },
-  render: (args) => html`
+  render: (args, { updateArgs }) => html`
     <pds-multiselect
       component-id="${args.componentId}"
       label="${args.label}"
       placeholder="${args.placeholder}"
-      .value=${['1', '3']}
+      .value=${args.value}
+      @pdsMultiselectChange=${(e) => updateArgs({ value: e.detail.values })}
     >
       ${unsafeHTML(defaultOptions)}
     </pds-multiselect>
@@ -103,13 +112,16 @@ export const MaxSelections = {
     label: 'Select Up to 3 Tags',
     placeholder: 'Search...',
     maxSelections: 3,
+    value: [],
   },
-  render: (args) => html`
+  render: (args, { updateArgs }) => html`
     <pds-multiselect
       component-id="${args.componentId}"
       label="${args.label}"
       placeholder="${args.placeholder}"
       max-selections="${args.maxSelections}"
+      .value=${args.value}
+      @pdsMultiselectChange=${(e) => updateArgs({ value: e.detail.values })}
     >
       ${unsafeHTML(defaultOptions)}
     </pds-multiselect>
@@ -125,13 +137,16 @@ export const WithHelperMessage = {
     label: 'Categories',
     placeholder: 'Search categories...',
     helperMessage: 'Select one or more categories to organize your content.',
+    value: [],
   },
-  render: (args) => html`
+  render: (args, { updateArgs }) => html`
     <pds-multiselect
       component-id="${args.componentId}"
       label="${args.label}"
       placeholder="${args.placeholder}"
       helper-message="${args.helperMessage}"
+      .value=${args.value}
+      @pdsMultiselectChange=${(e) => updateArgs({ value: e.detail.values })}
     >
       ${unsafeHTML(defaultOptions)}
     </pds-multiselect>
@@ -145,14 +160,17 @@ export const WithError = {
     placeholder: 'Search tags...',
     errorMessage: 'Please select at least one tag.',
     invalid: true,
+    value: [],
   },
-  render: (args) => html`
+  render: (args, { updateArgs }) => html`
     <pds-multiselect
       component-id="${args.componentId}"
       label="${args.label}"
       placeholder="${args.placeholder}"
       error-message="${args.errorMessage}"
       ?invalid=${args.invalid}
+      .value=${args.value}
+      @pdsMultiselectChange=${(e) => updateArgs({ value: e.detail.values })}
     >
       ${unsafeHTML(defaultOptions)}
     </pds-multiselect>
@@ -165,14 +183,16 @@ export const Disabled = {
     label: 'Disabled Multiselect',
     placeholder: 'Cannot select...',
     disabled: true,
+    value: ['1', '2'],
   },
-  render: (args) => html`
+  render: (args, { updateArgs }) => html`
     <pds-multiselect
       component-id="${args.componentId}"
       label="${args.label}"
       placeholder="${args.placeholder}"
       ?disabled=${args.disabled}
-      .value=${['1', '2']}
+      .value=${args.value}
+      @pdsMultiselectChange=${(e) => updateArgs({ value: e.detail.values })}
     >
       ${unsafeHTML(defaultOptions)}
     </pds-multiselect>
@@ -185,13 +205,16 @@ export const HiddenLabel = {
     label: 'Tags (visually hidden)',
     placeholder: 'Search tags...',
     hideLabel: true,
+    value: [],
   },
-  render: (args) => html`
+  render: (args, { updateArgs }) => html`
     <pds-multiselect
       component-id="${args.componentId}"
       label="${args.label}"
       placeholder="${args.placeholder}"
       ?hide-label=${args.hideLabel}
+      .value=${args.value}
+      @pdsMultiselectChange=${(e) => updateArgs({ value: e.detail.values })}
     >
       ${unsafeHTML(defaultOptions)}
     </pds-multiselect>
@@ -204,13 +227,16 @@ export const LongList = {
     label: 'Select Countries',
     placeholder: 'Search countries...',
     maxHeight: '200px',
+    value: [],
   },
-  render: (args) => html`
+  render: (args, { updateArgs }) => html`
     <pds-multiselect
       component-id="${args.componentId}"
       label="${args.label}"
       placeholder="${args.placeholder}"
       max-height="${args.maxHeight}"
+      .value=${args.value}
+      @pdsMultiselectChange=${(e) => updateArgs({ value: e.detail.values })}
     >
       <option value="us">United States</option>
       <option value="ca">Canada</option>
@@ -241,8 +267,9 @@ export const ConsumerManagedAsync = {
     componentId: 'multiselect-async-consumer',
     label: 'Search Contacts',
     placeholder: 'Type to search...',
+    value: [],
   },
-  render: (args) => {
+  render: (args, { updateArgs }) => {
     // Simulated contact data
     const allContacts = [
       { id: '1', text: 'Alice Johnson' },
@@ -260,6 +287,7 @@ export const ConsumerManagedAsync = {
         label="${args.label}"
         placeholder="${args.placeholder}"
         .options=${allContacts}
+        .value=${args.value}
         @pdsMultiselectSearch=${(e) => {
           console.log('Search query:', e.detail.query);
           // In a real app, you would filter/fetch data here
@@ -267,6 +295,7 @@ export const ConsumerManagedAsync = {
         @pdsMultiselectChange=${(e) => {
           console.log('Selected values:', e.detail.values);
           console.log('Selected items:', e.detail.items);
+          updateArgs({ value: e.detail.values });
         }}
       >
       </pds-multiselect>
@@ -282,13 +311,16 @@ export const CustomEmptyState = {
     componentId: 'multiselect-custom-empty',
     label: 'Search Products',
     placeholder: 'Type to search products...',
+    value: [],
   },
-  render: (args) => html`
+  render: (args, { updateArgs }) => html`
     <pds-multiselect
       component-id="${args.componentId}"
       label="${args.label}"
       placeholder="${args.placeholder}"
       .options=${[]}
+      .value=${args.value}
+      @pdsMultiselectChange=${(e) => updateArgs({ value: e.detail.values })}
     >
       <div slot="empty" style="text-align: center; padding: var(--pine-dimension-md);">
         <pds-icon icon="search" size="large" style="color: var(--pine-color-text-tertiary);"></pds-icon>

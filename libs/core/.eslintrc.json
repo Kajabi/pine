@@ -13,6 +13,6 @@
         "varsIgnorePattern": "^h$"
       }
     ]
-  }
+  },
+  "ignorePatterns": ["**/*.stories.js"]
 }
-

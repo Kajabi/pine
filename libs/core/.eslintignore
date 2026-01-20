@@ -3,4 +3,5 @@
 **/*.e2e.ts
 **/*.stories.*
 **/*.figma.ts
+**/stories/_helpers/**
 stencil.config.ts

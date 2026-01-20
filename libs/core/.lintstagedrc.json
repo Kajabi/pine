@@ -2,7 +2,7 @@
   "*.{css,scss}": [
     "stylelint"
   ],
-  "*.{js,jsx,ts,tsx}": [
-    "eslint "
+  "*.{ts,tsx}": [
+    "eslint"
   ]
 }

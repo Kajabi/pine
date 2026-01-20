@@ -109,7 +109,7 @@
 }
 
 .pds-multiselect__icon {
-  color: var(--pine-color-text-secondary);
+  color: var(--pine-color-icon);
   pointer-events: none;
   position: absolute;
   right: var(--pine-dimension-150);
@@ -157,7 +157,7 @@
 .pds-multiselect__empty,
 .pds-multiselect__loading {
   align-items: center;
-  color: var(--pine-color-text-secondary);
+  color: var(--pine-color-text-muted);
   display: flex;
   font: var(--pine-typography-body);
   justify-content: center;
@@ -172,17 +172,17 @@
 }
 
 .pds-multiselect__helper {
-  color: var(--pine-color-text-secondary);
-  font: var(--pine-typography-body-small);
+  color: var(--pine-color-text-message);
+  font: var(--pine-typography-body-sm);
   margin-block-start: var(--pine-dimension-2xs);
   margin-inline-start: 0;
 }
 
 .pds-multiselect__error {
   align-items: flex-start;
-  color: var(--pine-color-text-danger);
+  color: var(--pine-color-text-message-danger);
   display: flex;
-  font: var(--pine-typography-body-small);
+  font: var(--pine-typography-body-sm);
   gap: var(--pine-dimension-2xs);
   margin-block-start: var(--pine-dimension-2xs);
   margin-inline-start: 0;
