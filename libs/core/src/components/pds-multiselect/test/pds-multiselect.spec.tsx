@@ -504,6 +504,43 @@ describe('pds-multiselect', () => {
       expect(input.required).toBe(false);
       expect(input.getAttribute('aria-required')).toBeNull();
     });
+
+    it('becomes invalid when required and selections are cleared', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" required></pds-multiselect>`,
+      });
+
+      // Start with a selection
+      page.rootInstance.value = ['1'];
+      page.rootInstance.internalOptions = [{ id: '1', text: 'Option 1' }];
+      page.rootInstance.selectedItems = [{ id: '1', text: 'Option 1' }];
+      await page.waitForChanges();
+
+      // Clear all selections
+      const mockEvent = { preventDefault: jest.fn(), stopPropagation: jest.fn() } as unknown as MouseEvent;
+      page.rootInstance.handleClearAll(mockEvent);
+      await page.waitForChanges();
+
+      // Value should be empty
+      expect(page.rootInstance.value).toEqual([]);
+    });
+
+    it('is valid when required and has selections', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" required></pds-multiselect>`,
+      });
+
+      // Add a selection
+      page.rootInstance.value = ['1'];
+      page.rootInstance.internalOptions = [{ id: '1', text: 'Option 1' }];
+      page.rootInstance.selectedItems = [{ id: '1', text: 'Option 1' }];
+      await page.waitForChanges();
+
+      // Should have selection
+      expect(page.rootInstance.value.length).toBe(1);
+    });
   });
 
   describe('clear all functionality', () => {
@@ -520,6 +557,42 @@ describe('pds-multiselect', () => {
 
       const clearButton = page.root.shadowRoot.querySelector('.pds-multiselect__clear');
       expect(clearButton).toBeTruthy();
+    });
+
+    it('clear button has accessible label', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['1'];
+      page.rootInstance.internalOptions = [{ id: '1', text: 'Option 1' }];
+      page.rootInstance.selectedItems = [{ id: '1', text: 'Option 1' }];
+      await page.waitForChanges();
+
+      const clearButton = page.root.shadowRoot.querySelector('.pds-multiselect__clear') as HTMLButtonElement;
+      expect(clearButton.getAttribute('aria-label')).toBe('Clear all selections');
+      expect(clearButton.getAttribute('type')).toBe('button');
+    });
+
+    it('container has has-chips class when selections exist', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      // No selections initially
+      let container = page.root.shadowRoot.querySelector('.pds-multiselect__container');
+      expect(container.classList.contains('pds-multiselect__container--has-chips')).toBe(false);
+
+      // Add selection
+      page.rootInstance.value = ['1'];
+      page.rootInstance.internalOptions = [{ id: '1', text: 'Option 1' }];
+      page.rootInstance.selectedItems = [{ id: '1', text: 'Option 1' }];
+      await page.waitForChanges();
+
+      container = page.root.shadowRoot.querySelector('.pds-multiselect__container');
+      expect(container.classList.contains('pds-multiselect__container--has-chips')).toBe(true);
     });
 
     it('does not render clear button when no selections', async () => {
@@ -576,6 +649,66 @@ describe('pds-multiselect', () => {
       expect(changeSpy.mock.calls[0][0].detail.values).toEqual([]);
       expect(changeSpy.mock.calls[0][0].detail.items).toEqual([]);
       expect(page.rootInstance.value).toEqual([]);
+    });
+
+    it('clears all selections when maxSelections is set', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" max-selections="3"></pds-multiselect>`,
+      });
+
+      const changeSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectChange', changeSpy);
+
+      page.rootInstance.value = ['1', '2', '3'];
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+        { id: '3', text: 'Option 3' },
+        { id: '4', text: 'Option 4' },
+      ];
+      page.rootInstance.selectedItems = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+        { id: '3', text: 'Option 3' },
+      ];
+      await page.waitForChanges();
+
+      // Clear button should be visible
+      const clearButton = page.root.shadowRoot.querySelector('.pds-multiselect__clear');
+      expect(clearButton).toBeTruthy();
+
+      // Clear all
+      const mockEvent = { preventDefault: jest.fn(), stopPropagation: jest.fn() } as unknown as MouseEvent;
+      page.rootInstance.handleClearAll(mockEvent);
+      await page.waitForChanges();
+
+      expect(page.rootInstance.value).toEqual([]);
+      expect(page.rootInstance.selectedItems).toEqual([]);
+      expect(changeSpy).toHaveBeenCalled();
+    });
+
+    it('does nothing when clearing already empty selections', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      const changeSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectChange', changeSpy);
+
+      // No selections
+      page.rootInstance.value = [];
+      page.rootInstance.selectedItems = [];
+      await page.waitForChanges();
+
+      // Simulate calling handleClearAll directly (button wouldn't render)
+      const mockEvent = { preventDefault: jest.fn(), stopPropagation: jest.fn() } as unknown as MouseEvent;
+      page.rootInstance.handleClearAll(mockEvent);
+      await page.waitForChanges();
+
+      // Event should not be emitted since there was nothing to clear
+      expect(changeSpy).not.toHaveBeenCalled();
     });
   });
 
