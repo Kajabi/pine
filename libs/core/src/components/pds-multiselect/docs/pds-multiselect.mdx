@@ -189,7 +189,18 @@ Fetch options from a remote API endpoint. The component expects responses in the
 />`,
   }}
 >
+  <pds-multiselect
+    component-id="async-select"
+    label="Search Products"
+    placeholder="Type to search..."
+  >
+    <option value="1">Product A</option>
+    <option value="2">Product B</option>
+    <option value="3">Product C</option>
+  </pds-multiselect>
 </DocCanvas>
+
+> **Note:** The live preview uses static options. In production, options are fetched from the API endpoint.
 
 ### Consumer-Managed Async
 
@@ -215,7 +226,18 @@ For complex async scenarios (React Query, custom caching), manage data externall
 />`,
   }}
 >
+  <pds-multiselect
+    component-id="consumer-async"
+    label="Contacts"
+    placeholder="Search contacts..."
+  >
+    <option value="1">Alice Johnson</option>
+    <option value="2">Bob Smith</option>
+    <option value="3">Charlie Brown</option>
+  </pds-multiselect>
 </DocCanvas>
+
+> **Note:** The live preview uses static options. In production, pass options via the `options` prop and listen to `pdsMultiselectSearch` events.
 
 ### With Error State
 
