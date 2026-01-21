@@ -31,6 +31,19 @@ describe('pds-multiselect', () => {
     expect(input.placeholder).toBe('Search...');
   });
 
+  it('renders with proper ARIA attributes', async () => {
+    const page = await newSpecPage({
+      components: [PdsMultiselect],
+      html: `<pds-multiselect component-id="test" label="Test"></pds-multiselect>`,
+    });
+
+    const input = page.root.shadowRoot.querySelector('.pds-multiselect__input') as HTMLInputElement;
+    expect(input.getAttribute('role')).toBe('combobox');
+    expect(input.getAttribute('aria-haspopup')).toBe('listbox');
+    expect(input.getAttribute('aria-autocomplete')).toBe('list');
+    expect(input.getAttribute('aria-expanded')).toBe('false');
+  });
+
   it('renders static options from slot', async () => {
     const page = await newSpecPage({
       components: [PdsMultiselect],
@@ -360,6 +373,60 @@ describe('pds-multiselect', () => {
 
       expect(changeSpy).toHaveBeenCalled();
       expect(changeSpy.mock.calls[0][0].detail.values).toContain('1');
+    });
+
+    it('selects highlighted option on Space key', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      const changeSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectChange', changeSpy);
+
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+      ];
+      page.rootInstance.isOpen = true;
+      page.rootInstance.highlightedIndex = 0;
+      page.rootInstance.searchQuery = '';
+      await page.waitForChanges();
+
+      const event = new KeyboardEvent('keydown', { key: ' ' });
+      Object.defineProperty(event, 'preventDefault', { value: jest.fn() });
+      page.rootInstance.handleInputKeyDown(event);
+      await page.waitForChanges();
+
+      expect(changeSpy).toHaveBeenCalled();
+      expect(changeSpy.mock.calls[0][0].detail.values).toContain('1');
+    });
+
+    it('does not select on Space when search query has text', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      const changeSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectChange', changeSpy);
+
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+      ];
+      page.rootInstance.isOpen = true;
+      page.rootInstance.highlightedIndex = 0;
+      page.rootInstance.searchQuery = 'test';
+      await page.waitForChanges();
+
+      const event = new KeyboardEvent('keydown', { key: ' ' });
+      Object.defineProperty(event, 'preventDefault', { value: jest.fn() });
+      page.rootInstance.handleInputKeyDown(event);
+      await page.waitForChanges();
+
+      // Should NOT select since user is typing in search
+      expect(changeSpy).not.toHaveBeenCalled();
     });
 
     it('closes dropdown on Tab key', async () => {

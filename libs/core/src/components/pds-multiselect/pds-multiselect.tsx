@@ -426,6 +426,11 @@ export class PdsMultiselect {
         break;
 
       case 'Enter':
+      case ' ':
+        // Don't prevent default for Space when typing in the search input
+        if (e.key === ' ' && this.searchQuery !== '') {
+          break;
+        }
         e.preventDefault();
         if (this.isOpen && this.highlightedIndex >= 0) {
           const option = filteredOptions[this.highlightedIndex];
@@ -761,6 +766,7 @@ export class PdsMultiselect {
                 aria-describedby={assignDescription(this.componentId, this.invalid, this.errorMessage || this.helperMessage)}
                 aria-invalid={this.invalid ? 'true' : undefined}
                 role="combobox"
+                aria-haspopup="listbox"
                 aria-autocomplete="list"
                 autocomplete="off"
                 onInput={this.handleInputChange}
