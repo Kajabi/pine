@@ -4,3 +4,4 @@
 **/*.stories.*
 **/*.figma.ts
 stencil.config.ts
+src/stories/_helpers/**

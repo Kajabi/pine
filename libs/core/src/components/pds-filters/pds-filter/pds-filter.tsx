@@ -100,7 +100,7 @@ export class PdsFilter implements BasePdsProps {
     if (this.isOpen && this.popoverEl) {
       try {
         this.popoverEl.hidePopover();
-      } catch (error) {
+      } catch {
         this.popoverEl.style.display = 'none';
         this.popoverEl.classList.remove('is-open');
       }
@@ -136,7 +136,7 @@ export class PdsFilter implements BasePdsProps {
       let isCurrentlyOpen = false;
       try {
         isCurrentlyOpen = target.matches(':popover-open');
-      } catch (error) {
+      } catch {
         // Fallback if :popover-open selector isn't supported
         isCurrentlyOpen = target.style.display === 'block';
       }
@@ -217,7 +217,7 @@ export class PdsFilter implements BasePdsProps {
         let isPopoverOpen = false;
         try {
           isPopoverOpen = popover.matches(':popover-open');
-        } catch (error) {
+        } catch {
           // Fallback if :popover-open selector isn't supported
           isPopoverOpen = popover.style.display === 'block';
         }
@@ -225,7 +225,7 @@ export class PdsFilter implements BasePdsProps {
         if (isPopoverOpen) {
           try {
             popover.hidePopover();
-          } catch (error) {
+          } catch {
             popover.style.display = 'none';
             popover.classList.remove('is-open');
           }
@@ -315,7 +315,7 @@ export class PdsFilter implements BasePdsProps {
     if (this.popoverEl != null) {
       try {
         this.popoverEl.showPopover();
-      } catch (error) {
+      } catch {
         // Fallback for testing environment where showPopover is not available
         this.popoverEl.style.display = 'block';
         this.popoverEl.classList.add('is-open');
@@ -337,7 +337,7 @@ export class PdsFilter implements BasePdsProps {
     if (this.popoverEl != null) {
       try {
         this.popoverEl.hidePopover();
-      } catch (error) {
+      } catch {
         // Fallback for testing environment where hidePopover is not available
         this.popoverEl.style.display = 'none';
         this.popoverEl.classList.remove('is-open');
@@ -360,7 +360,7 @@ export class PdsFilter implements BasePdsProps {
       let isCurrentlyOpen = false;
       try {
         isCurrentlyOpen = target.matches(':popover-open');
-      } catch (error) {
+      } catch {
         // Fallback if :popover-open selector isn't supported
         isCurrentlyOpen = target.style.display === 'block';
       }
@@ -402,7 +402,7 @@ export class PdsFilter implements BasePdsProps {
           if (supportsPopoverAPI) {
             try {
               popoverIsClosed = !this.popoverEl.matches(':popover-open');
-            } catch (error) {
+            } catch {
               // Fallback if :popover-open selector isn't supported
               popoverIsClosed = this.popoverEl.style.display !== 'block';
             }
@@ -444,7 +444,7 @@ export class PdsFilter implements BasePdsProps {
           if (supportsPopoverAPI) {
             try {
               popoverIsClosed = !this.popoverEl.matches(':popover-open');
-            } catch (error) {
+            } catch {
               // Fallback if :popover-open selector isn't supported
               popoverIsClosed = this.popoverEl.style.display !== 'block';
             }

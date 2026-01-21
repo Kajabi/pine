@@ -172,7 +172,7 @@ export class PdsTableHeadCell {
 
     try {
       this.tableScrolling = this.scrollContainer.scrollLeft > 0;
-    } catch (error) {
+    } catch {
       console.warn('Scroll handler error:', error);
     }
   };

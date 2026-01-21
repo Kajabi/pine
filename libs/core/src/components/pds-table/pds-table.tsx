@@ -186,7 +186,7 @@ export class PdsTable {
           this._responsiveHandleScroll?.();
         });
         this._responsiveResizeObserver.observe(this.scrollContainer);
-      } catch (error) {
+      } catch {
         // ResizeObserver not available in some environments (e.g., tests)
         // Fall back to window resize listener only
       }

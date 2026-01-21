@@ -264,7 +264,7 @@ export class PdsTooltip {
 
         // Update CSS classes to match the resolved placement
         this.portalEl.className = `pds-tooltip pds-tooltip--${this.resolvedPlacement} ${this.htmlContent ? 'pds-tooltip--has-html-content' : ''} ${this.opened ? 'pds-tooltip--is-open' : ''} ${this.hasArrow ? '' : 'pds-tooltip--no-arrow'}`;
-      } catch (error) {
+      } catch {
         console.warn('Failed to position tooltip:', error);
         this.resolvedPlacement = this.placement; // Fallback to requested placement
         // Fallback to basic positioning if floating UI fails
@@ -388,7 +388,7 @@ export class PdsTooltip {
         if (this.portalEl.parentNode) {
           this.portalEl.parentNode.removeChild(this.portalEl);
         }
-      } catch (error) {
+      } catch {
         // Portal might have already been removed by test cleanup
         console.warn('Portal element could not be removed from DOM:', error);
       }

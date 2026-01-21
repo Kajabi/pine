@@ -24,7 +24,7 @@ export const assignDescription = (id: string, invalid: boolean, helperMessage: s
 export const isRequired = (target, component) => {
   if ( !target || !component ) return;
   if (component.required === true) {
-    (target.checkValidity() === false) ? component.invalid = true : component.invalid = false;
+    component.invalid = target.checkValidity() === false;
   }
 }
 

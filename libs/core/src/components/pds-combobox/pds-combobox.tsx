@@ -211,7 +211,7 @@ export class PdsCombobox implements BasePdsProps {
     if (this.internals) {
       try {
         this.internals.setFormValue(this.selectedOption?.value ?? this.value ?? '');
-      } catch (e) {
+      } catch {
         // ElementInternals.setFormValue not available in unit tests
       }
     }
@@ -224,7 +224,7 @@ export class PdsCombobox implements BasePdsProps {
     if (this.internals) {
       try {
         this.internals.setFormValue(this.value);
-      } catch (e) {
+      } catch {
         // ElementInternals.setFormValue not available in unit tests
       }
     }
@@ -269,7 +269,7 @@ export class PdsCombobox implements BasePdsProps {
       if (this.internals) {
         try {
           this.internals.setFormValue(this.selectedOption.value);
-        } catch (e) {
+        } catch {
           // ElementInternals.setFormValue not available in unit tests
         }
       }
@@ -279,7 +279,7 @@ export class PdsCombobox implements BasePdsProps {
       if (this.internals) {
         try {
           this.internals.setFormValue('');
-        } catch (e) {
+        } catch {
           // ElementInternals.setFormValue not available in unit tests
         }
       }
@@ -489,7 +489,7 @@ export class PdsCombobox implements BasePdsProps {
       }
 
       // Force a reflow to ensure dimensions are calculated
-      this.listboxEl.offsetHeight;
+      void this.listboxEl.offsetHeight;
 
       computePosition(this.triggerEl, this.listboxEl, {
         placement: this.dropdownPlacement,
