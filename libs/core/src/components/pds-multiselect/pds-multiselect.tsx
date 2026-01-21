@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, h, Host, Method, Prop, State, Watch } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, h, Host, Listen, Method, Prop, State, Watch } from '@stencil/core';
 import { computePosition, flip, offset, shift, size, autoUpdate } from '@floating-ui/dom';
 import { debounceEvent } from '@utils/utils';
 import { messageId, assignDescription } from '../../utils/form';
@@ -211,6 +211,21 @@ export class PdsMultiselect {
     this.inputEl?.focus();
   }
 
+  /**
+   * Handle global keyboard events for accessibility.
+   * Closes dropdown on Escape key press regardless of focus location.
+   */
+  @Listen('keydown', { target: 'window' })
+  handleWindowKeyDown(event: KeyboardEvent) {
+    if (!this.isOpen) return;
+
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      this.closeDropdown();
+      this.inputEl?.focus();
+    }
+  }
+
   private setupMutationObserver() {
     this.observer = new MutationObserver(() => {
       this.updateOptionsFromSlot();
@@ -397,10 +412,7 @@ export class PdsMultiselect {
         }
         break;
 
-      case 'Escape':
-        e.preventDefault();
-        this.closeDropdown();
-        break;
+      // Escape is handled by the global @Listen('keydown') handler
 
       case 'Backspace':
         if (this.searchQuery === '' && this.selectedItems.length > 0) {
