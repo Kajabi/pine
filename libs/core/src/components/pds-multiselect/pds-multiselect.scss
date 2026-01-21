@@ -120,9 +120,9 @@
   border: 0;
   border-radius: var(--pine-dimension-125);
   box-shadow: var(--pine-box-shadow);
+  box-sizing: border-box;
   list-style: none;
   margin: 0;
-  min-width: 100%;
   overflow-y: auto;
   padding: var(--pine-dimension-xs);
   position: absolute;

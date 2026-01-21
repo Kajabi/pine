@@ -1,5 +1,5 @@
 import { Component, Element, Event, EventEmitter, h, Host, Method, Prop, State, Watch } from '@stencil/core';
-import { computePosition, flip, offset, shift } from '@floating-ui/dom';
+import { computePosition, flip, offset, shift, size, autoUpdate } from '@floating-ui/dom';
 import { debounceEvent } from '@utils/utils';
 import { messageId, assignDescription } from '../../utils/form';
 import { danger, enlarge } from '@pine-ds/icons/icons';
@@ -29,6 +29,7 @@ export class PdsMultiselect {
   private internals?: ElementInternals;
   private abortController?: AbortController;
   private observer?: MutationObserver;
+  private cleanupAutoUpdate?: () => void;
 
   @Element() el!: HTMLPdsMultiselectElement;
 
@@ -178,6 +179,7 @@ export class PdsMultiselect {
   disconnectedCallback() {
     this.observer?.disconnect();
     this.abortController?.abort();
+    this.cleanupAutoUpdate?.();
   }
 
   @Watch('debounceMs')
@@ -453,21 +455,50 @@ export class PdsMultiselect {
     this.isOpen = false;
     this.highlightedIndex = -1;
     this.searchQuery = '';
+
+    // Clean up auto-update
+    if (this.cleanupAutoUpdate) {
+      this.cleanupAutoUpdate();
+      this.cleanupAutoUpdate = undefined;
+    }
   }
 
   private positionDropdown() {
     if (!this.containerEl || !this.listboxEl) return;
 
-    computePosition(this.containerEl, this.listboxEl, {
-      placement: 'bottom-start',
-      strategy: 'absolute',
-      middleware: [offset(4), flip(), shift({ padding: 8 })],
-    }).then(({ x, y }) => {
-      if (this.listboxEl) {
-        this.listboxEl.style.left = `${x}px`;
-        this.listboxEl.style.top = `${y}px`;
-      }
-    });
+    const updatePosition = () => {
+      computePosition(this.containerEl!, this.listboxEl!, {
+        placement: 'bottom-start',
+        strategy: 'absolute',
+        middleware: [
+          offset(4),
+          flip(),
+          shift({ padding: 8 }),
+          size({
+            apply({ rects, elements }) {
+              Object.assign(elements.floating.style, {
+                width: `${rects.reference.width}px`,
+              });
+            },
+          }),
+        ],
+      }).then(({ x, y }) => {
+        if (this.listboxEl) {
+          this.listboxEl.style.left = `${x}px`;
+          this.listboxEl.style.top = `${y}px`;
+        }
+      });
+    };
+
+    // Initial position
+    updatePosition();
+
+    // Set up auto-update for window resize and scroll
+    this.cleanupAutoUpdate = autoUpdate(
+      this.containerEl,
+      this.listboxEl,
+      updatePosition
+    );
   }
 
   private scrollOptionIntoView() {
