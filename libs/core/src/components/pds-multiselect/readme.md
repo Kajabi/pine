@@ -36,6 +36,7 @@ A multiselect component that allows users to select multiple options from a sear
 | `name`                     | `name`           | The name of the form control for form submission.                     | `string`                               | `undefined`   |
 | `options`                  | --               | Options provided externally (for consumer-managed async).             | `MultiselectOption[]`                  | `undefined`   |
 | `placeholder`              | `placeholder`    | Placeholder text for the search input.                                | `string`                               | `'Select...'` |
+| `required`                 | `required`       | Whether the multiselect is required.                                  | `boolean`                              | `false`       |
 | `value`                    | --               | Array of selected option values.                                      | `string[]`                             | `[]`          |
 
 

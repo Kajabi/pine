@@ -109,6 +109,11 @@ export class PdsMultiselect {
   @Prop() invalid?: boolean;
 
   /**
+   * Whether the multiselect is required.
+   */
+  @Prop() required: boolean = false;
+
+  /**
    * Whether the component is currently loading async options.
    */
   @Prop({ mutable: true }) loading: boolean = false;
@@ -203,6 +208,13 @@ export class PdsMultiselect {
     }
   }
 
+  @Watch('internalOptions')
+  protected internalOptionsChanged() {
+    // Re-sync selected items when options become available
+    // This handles the case where value is set before options are loaded (e.g., from slot)
+    this.syncSelectedItems();
+  }
+
   /**
    * Sets focus on the search input.
    */
@@ -293,6 +305,17 @@ export class PdsMultiselect {
         }
       });
       this.internals.setFormValue(formData);
+
+      // Update validity state for required validation
+      if (this.required && this.value.length === 0) {
+        this.internals.setValidity(
+          { valueMissing: true },
+          'Please select at least one option.',
+          this.inputEl
+        );
+      } else {
+        this.internals.setValidity({});
+      }
     }
   }
 
@@ -712,6 +735,8 @@ export class PdsMultiselect {
                 placeholder={hasChips ? '' : this.placeholder}
                 value={this.searchQuery}
                 disabled={this.disabled}
+                required={this.required}
+                aria-required={this.required ? 'true' : undefined}
                 aria-expanded={this.isOpen ? 'true' : 'false'}
                 aria-controls={`${this.componentId}-listbox`}
                 aria-activedescendant={this.highlightedIndex >= 0 ? `${this.componentId}-option-${this.highlightedIndex}` : undefined}

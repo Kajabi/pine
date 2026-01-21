@@ -482,6 +482,59 @@ describe('pds-multiselect', () => {
     });
   });
 
+  describe('required validation', () => {
+    it('renders with required attribute', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" required></pds-multiselect>`,
+      });
+
+      const input = page.root.shadowRoot.querySelector('.pds-multiselect__input') as HTMLInputElement;
+      expect(input.required).toBe(true);
+      expect(input.getAttribute('aria-required')).toBe('true');
+    });
+
+    it('does not have required attribute when not set', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      const input = page.root.shadowRoot.querySelector('.pds-multiselect__input') as HTMLInputElement;
+      expect(input.required).toBe(false);
+      expect(input.getAttribute('aria-required')).toBeNull();
+    });
+  });
+
+  describe('preselected values with slot options', () => {
+    it('syncs selected items when internalOptions changes', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      // Set value before options are available (simulating race condition)
+      page.rootInstance.value = ['1', '2'];
+      await page.waitForChanges();
+
+      // Initially no chips because options aren't loaded
+      expect(page.rootInstance.selectedItems.length).toBe(0);
+
+      // Now options become available (simulating slot content load)
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+        { id: '3', text: 'Option 3' },
+      ];
+      await page.waitForChanges();
+
+      // @Watch('internalOptions') should have triggered syncSelectedItems
+      expect(page.rootInstance.selectedItems.length).toBe(2);
+      expect(page.rootInstance.selectedItems[0].text).toBe('Option 1');
+      expect(page.rootInstance.selectedItems[1].text).toBe('Option 2');
+    });
+  });
+
   describe('loading and empty states', () => {
     it('renders loading state', async () => {
       const page = await newSpecPage({

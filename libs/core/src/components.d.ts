@@ -1395,6 +1395,11 @@ export namespace Components {
          */
         "placeholder"?: string;
         /**
+          * Whether the multiselect is required.
+          * @default false
+         */
+        "required": boolean;
+        /**
           * Sets focus on the search input.
          */
         "setFocus": () => Promise<void>;
@@ -4300,6 +4305,11 @@ declare namespace LocalJSX {
           * @default 'Select...'
          */
         "placeholder"?: string;
+        /**
+          * Whether the multiselect is required.
+          * @default false
+         */
+        "required"?: boolean;
         /**
           * Array of selected option values.
           * @default []
