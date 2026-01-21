@@ -679,6 +679,7 @@ export class PdsMultiselect {
                 componentId={`${this.componentId}-checkbox-${index}`}
                 checked={false}
                 label={option.text}
+                style={{ pointerEvents: 'none' }}
               />
             </li>
           );
