@@ -170,12 +170,22 @@ export class PdsMultiselect {
     this.setupMutationObserver();
     this.setupSlotChangeListener();
     this.updateFormValue();
+
+    // Ensure preselected values sync after DOM is fully ready
+    // This handles cases where slot content loads after initial render (e.g., in docs/MDX)
+    requestAnimationFrame(() => {
+      this.updateOptionsFromSlot();
+      this.syncSelectedItems();
+    });
   }
 
   private setupSlotChangeListener() {
     const slot = this.el.shadowRoot?.querySelector('slot:not([name])') as HTMLSlotElement;
     if (slot) {
-      slot.addEventListener('slotchange', () => this.updateOptionsFromSlot());
+      slot.addEventListener('slotchange', () => {
+        this.updateOptionsFromSlot();
+        this.syncSelectedItems();
+      });
       // Also call it immediately in case content is already slotted
       this.updateOptionsFromSlot();
     }
@@ -196,7 +206,21 @@ export class PdsMultiselect {
   }
 
   @Watch('value')
-  protected valueChanged() {
+  protected valueChanged(newValue: string[] | string) {
+    // Handle JSON string values (from HTML attributes)
+    if (typeof newValue === 'string') {
+      try {
+        const parsed = JSON.parse(newValue);
+        if (Array.isArray(parsed)) {
+          this.value = parsed;
+          return; // The assignment will trigger this watcher again with the array
+        }
+      } catch {
+        // Not valid JSON, treat as single value
+        this.value = newValue ? [newValue] : [];
+        return;
+      }
+    }
     this.syncSelectedItems();
     this.updateFormValue();
   }
@@ -268,10 +292,31 @@ export class PdsMultiselect {
   }
 
   private syncSelectedItems() {
+    // Ensure value is an array (may be string from HTML attribute)
+    const valueArray = this.ensureValueArray();
     const allOptions = this.getAllOptions();
-    this.selectedItems = this.value
+    this.selectedItems = valueArray
       .map(val => allOptions.find(opt => String(opt.id) === String(val)))
       .filter((opt): opt is MultiselectOption => opt !== undefined);
+  }
+
+  private ensureValueArray(): string[] {
+    // Handle JSON string values passed via HTML attribute
+    if (typeof this.value === 'string') {
+      try {
+        const parsed = JSON.parse(this.value as unknown as string);
+        if (Array.isArray(parsed)) {
+          this.value = parsed;
+          return parsed;
+        }
+      } catch {
+        // Not valid JSON, treat as single value
+        const singleValue = this.value as unknown as string;
+        this.value = singleValue ? [singleValue] : [];
+        return this.value;
+      }
+    }
+    return Array.isArray(this.value) ? this.value : [];
   }
 
   private getAllOptions(): MultiselectOption[] {
@@ -281,10 +326,11 @@ export class PdsMultiselect {
   private getFilteredOptions(): MultiselectOption[] {
     const allOptions = this.getAllOptions();
     const query = this.searchQuery.toLowerCase();
+    const valueArray = this.ensureValueArray();
 
     return allOptions.filter(opt => {
       // Filter out already selected items
-      const isSelected = this.value.includes(String(opt.id));
+      const isSelected = valueArray.includes(String(opt.id));
       if (isSelected) return false;
 
       // Filter by search query
@@ -297,9 +343,12 @@ export class PdsMultiselect {
 
   private updateFormValue() {
     if (this.internals?.setFormValue) {
+      // Ensure value is an array before iterating
+      const valueArray = this.ensureValueArray();
+
       // Submit as multiple values with same name (native select multiple behavior)
       const formData = new FormData();
-      this.value.forEach(val => {
+      valueArray.forEach(val => {
         if (this.name) {
           formData.append(this.name, val);
         }
@@ -307,7 +356,7 @@ export class PdsMultiselect {
       this.internals.setFormValue(formData);
 
       // Update validity state for required validation
-      if (this.required && this.value.length === 0) {
+      if (this.required && valueArray.length === 0) {
         this.internals.setValidity(
           { valueMissing: true },
           'Please select at least one option.',

@@ -85,19 +85,28 @@
   flex-wrap: wrap;
   gap: var(--pine-dimension-2xs);
   min-height: var(--pine-dimension-450);
+  min-width: 0; // Allow flex item to shrink below content size
   padding: var(--pine-dimension-2xs) var(--pine-dimension-xs);
+  position: relative;
 }
 
 .pds-multiselect__input {
   background: transparent;
   border: 0;
   color: var(--pine-color-text-strong);
-  flex: 1 1 auto;
+  flex: 1 1 60px; // Grow to fill space, can shrink, 60px basis for typing
   font: var(--pine-typography-body);
   letter-spacing: var(--pine-letter-spacing);
   min-width: 60px;
   outline: none;
   padding: var(--pine-dimension-2xs) 0;
+
+  // When chips are present, make input shrinkable to prevent unnecessary wrapping
+  .pds-multiselect__container--has-chips & {
+    flex: 0 1 auto;
+    min-width: 20px;
+    width: 20px;
+  }
 
   &::placeholder {
     color: var(--pine-color-text-placeholder);
@@ -118,6 +127,8 @@
   pointer-events: none;
   position: absolute;
   right: var(--pine-dimension-150);
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .pds-multiselect__clear {
@@ -132,6 +143,8 @@
   padding: var(--pine-dimension-2xs);
   position: absolute;
   right: var(--pine-dimension-450);
+  top: 50%;
+  transform: translateY(-50%);
   transition: background 0.15s, color 0.15s;
 
   &:hover {

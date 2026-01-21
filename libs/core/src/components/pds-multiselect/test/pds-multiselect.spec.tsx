@@ -120,6 +120,28 @@ describe('pds-multiselect', () => {
     expect(chips.length).toBe(2);
   });
 
+  it('parses JSON string value from HTML attribute', async () => {
+    const page = await newSpecPage({
+      components: [PdsMultiselect],
+      html: `<pds-multiselect component-id="test" value='["1", "2"]'></pds-multiselect>`,
+    });
+
+    page.rootInstance.internalOptions = [
+      { id: '1', text: 'Option 1' },
+      { id: '2', text: 'Option 2' },
+      { id: '3', text: 'Option 3' },
+    ];
+    await page.waitForChanges();
+
+    // Value should be parsed from JSON string to array
+    expect(Array.isArray(page.rootInstance.value)).toBe(true);
+    expect(page.rootInstance.value).toEqual(['1', '2']);
+
+    // Chips should be rendered
+    const chips = page.root.shadowRoot.querySelectorAll('pds-chip');
+    expect(chips.length).toBe(2);
+  });
+
   it('emits pdsMultiselectChange when selection changes', async () => {
     const page = await newSpecPage({
       components: [PdsMultiselect],
