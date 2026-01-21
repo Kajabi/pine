@@ -506,6 +506,79 @@ describe('pds-multiselect', () => {
     });
   });
 
+  describe('clear all functionality', () => {
+    it('renders clear button when there are selections', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['1'];
+      page.rootInstance.internalOptions = [{ id: '1', text: 'Option 1' }];
+      page.rootInstance.selectedItems = [{ id: '1', text: 'Option 1' }];
+      await page.waitForChanges();
+
+      const clearButton = page.root.shadowRoot.querySelector('.pds-multiselect__clear');
+      expect(clearButton).toBeTruthy();
+    });
+
+    it('does not render clear button when no selections', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      const clearButton = page.root.shadowRoot.querySelector('.pds-multiselect__clear');
+      expect(clearButton).toBeNull();
+    });
+
+    it('does not render clear button when disabled', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" disabled></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['1'];
+      page.rootInstance.internalOptions = [{ id: '1', text: 'Option 1' }];
+      page.rootInstance.selectedItems = [{ id: '1', text: 'Option 1' }];
+      await page.waitForChanges();
+
+      const clearButton = page.root.shadowRoot.querySelector('.pds-multiselect__clear');
+      expect(clearButton).toBeNull();
+    });
+
+    it('clears all selections when clear button is clicked', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      const changeSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectChange', changeSpy);
+
+      page.rootInstance.value = ['1', '2'];
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+      ];
+      page.rootInstance.selectedItems = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+      ];
+      await page.waitForChanges();
+
+      // Simulate clicking clear button
+      const mockEvent = { preventDefault: jest.fn(), stopPropagation: jest.fn() } as unknown as MouseEvent;
+      page.rootInstance.handleClearAll(mockEvent);
+      await page.waitForChanges();
+
+      expect(changeSpy).toHaveBeenCalled();
+      expect(changeSpy.mock.calls[0][0].detail.values).toEqual([]);
+      expect(changeSpy.mock.calls[0][0].detail.items).toEqual([]);
+      expect(page.rootInstance.value).toEqual([]);
+    });
+  });
+
   describe('preselected values with slot options', () => {
     it('syncs selected items when internalOptions changes', async () => {
       const page = await newSpecPage({

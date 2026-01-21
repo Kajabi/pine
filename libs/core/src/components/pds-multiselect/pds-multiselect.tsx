@@ -2,7 +2,7 @@ import { Component, Element, Event, EventEmitter, h, Host, Listen, Method, Prop,
 import { computePosition, flip, offset, shift, size, autoUpdate } from '@floating-ui/dom';
 import { debounceEvent } from '@utils/utils';
 import { messageId, assignDescription } from '../../utils/form';
-import { danger, enlarge } from '@pine-ds/icons/icons';
+import { danger, enlarge, remove } from '@pine-ds/icons/icons';
 import type {
   MultiselectOption,
   MultiselectChangeEventDetail,
@@ -590,6 +590,23 @@ export class PdsMultiselect {
     this.removeSelection(option);
   };
 
+  private handleClearAll = (e: MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (this.disabled || this.value.length === 0) return;
+
+    this.value = [];
+    this.selectedItems = [];
+
+    this.pdsMultiselectChange.emit({
+      values: [],
+      items: [],
+    });
+
+    this.inputEl?.focus();
+  };
+
   private handleScroll = (e: Event) => {
     if (!this.asyncUrl || !this.hasMore || this.loading) return;
 
@@ -751,7 +768,17 @@ export class PdsMultiselect {
                 onKeyDown={this.handleInputKeyDown}
               />
             </div>
-            <pds-icon class="pds-multiselect__icon" icon={enlarge}  />
+            {hasChips && !this.disabled && (
+              <button
+                type="button"
+                class="pds-multiselect__clear"
+                aria-label="Clear all selections"
+                onClick={this.handleClearAll}
+              >
+                <pds-icon icon={remove} size="small" />
+              </button>
+            )}
+            <pds-icon class="pds-multiselect__icon" icon={enlarge} />
           </div>
 
           {this.renderDropdown()}

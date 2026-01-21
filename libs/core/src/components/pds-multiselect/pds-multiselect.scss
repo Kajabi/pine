@@ -47,6 +47,11 @@
   position: relative;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
+  // Add extra padding when clear button is visible
+  &.pds-multiselect__container--has-chips:not(.pds-multiselect__container--disabled) {
+    padding-inline-end: var(--pine-dimension-700);
+  }
+
   &:hover:not(.pds-multiselect__container--disabled) {
     border-color: var(--pine-color-border-hover);
   }
@@ -113,6 +118,31 @@
   pointer-events: none;
   position: absolute;
   right: var(--pine-dimension-150);
+}
+
+.pds-multiselect__clear {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: var(--pine-dimension-xs);
+  color: var(--pine-color-icon);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  padding: var(--pine-dimension-2xs);
+  position: absolute;
+  right: var(--pine-dimension-450);
+  transition: background 0.15s, color 0.15s;
+
+  &:hover {
+    background: var(--pine-color-background-muted);
+    color: var(--pine-color-icon-hover);
+  }
+
+  &:focus-visible {
+    outline: var(--pine-outline-focus);
+    outline-offset: var(--pine-border-width);
+  }
 }
 
 .pds-multiselect__listbox {
