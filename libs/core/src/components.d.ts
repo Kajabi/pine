@@ -1400,7 +1400,7 @@ export namespace Components {
          */
         "required": boolean;
         /**
-          * Sets focus on the search input.
+          * Sets focus on the trigger button.
          */
         "setFocus": () => Promise<void>;
         /**

@@ -53,7 +53,7 @@ A multiselect component that allows users to select multiple options from a sear
 
 ### `setFocus() => Promise<void>`
 
-Sets focus on the search input.
+Sets focus on the trigger button.
 
 #### Returns
 
@@ -75,19 +75,16 @@ Type: `Promise<void>`
 
 ### Depends on
 
-- [pds-chip](../pds-chip)
+- pds-icon
 - [pds-loader](../pds-loader)
 - [pds-checkbox](../pds-checkbox)
-- pds-icon
 
 ### Graph
 ```mermaid
 graph TD;
-  pds-multiselect --> pds-chip
+  pds-multiselect --> pds-icon
   pds-multiselect --> pds-loader
   pds-multiselect --> pds-checkbox
-  pds-multiselect --> pds-icon
-  pds-chip --> pds-icon
   pds-checkbox --> pds-icon
   style pds-multiselect fill:#f9f,stroke:#333,stroke-width:4px
 ```

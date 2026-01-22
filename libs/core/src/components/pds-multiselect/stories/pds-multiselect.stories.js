@@ -7,7 +7,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: 'A multiselect component with typeahead search, checkboxes, and optional async data fetching.',
+        component: 'A multiselect component with a filter-style dropdown. Displays selected count in the trigger, with search and selected items shown in the dropdown panel.',
       },
     },
   },
@@ -22,7 +22,7 @@ export default {
     },
     placeholder: {
       control: 'text',
-      description: 'Placeholder text when no items are selected',
+      description: 'Placeholder text shown in the trigger when no items are selected. When items are selected, shows "X item(s)" instead.',
     },
     disabled: {
       control: 'boolean',
@@ -70,7 +70,7 @@ export const Default = {
   args: {
     componentId: 'multiselect-default',
     label: 'Select Tags',
-    placeholder: 'Search tags...',
+    placeholder: 'Select...',
     value: [],
   },
   render: (args, { updateArgs }) => html`
@@ -90,7 +90,7 @@ export const WithPreselectedValues = {
   args: {
     componentId: 'multiselect-preselected',
     label: 'Departments',
-    placeholder: 'Search departments...',
+    placeholder: 'Select...',
     value: ['1', '3'],
   },
   render: (args, { updateArgs }) => html`
@@ -110,7 +110,7 @@ export const MaxSelections = {
   args: {
     componentId: 'multiselect-max',
     label: 'Select Up to 3 Tags',
-    placeholder: 'Search...',
+    placeholder: 'Select...',
     maxSelections: 3,
     value: [],
   },
@@ -135,7 +135,7 @@ export const WithHelperMessage = {
   args: {
     componentId: 'multiselect-helper',
     label: 'Categories',
-    placeholder: 'Search categories...',
+    placeholder: 'Select...',
     helperMessage: 'Select one or more categories to organize your content.',
     value: [],
   },
@@ -157,7 +157,7 @@ export const WithError = {
   args: {
     componentId: 'multiselect-error',
     label: 'Required Tags',
-    placeholder: 'Search tags...',
+    placeholder: 'Select...',
     errorMessage: 'Please select at least one tag.',
     invalid: true,
     value: [],
@@ -203,7 +203,7 @@ export const HiddenLabel = {
   args: {
     componentId: 'multiselect-hidden-label',
     label: 'Tags (visually hidden)',
-    placeholder: 'Search tags...',
+    placeholder: 'Select...',
     hideLabel: true,
     value: [],
   },
@@ -225,7 +225,7 @@ export const LongList = {
   args: {
     componentId: 'multiselect-long',
     label: 'Select Countries',
-    placeholder: 'Search countries...',
+    placeholder: 'Select...',
     maxHeight: '200px',
     value: [],
   },
@@ -266,7 +266,7 @@ export const ConsumerManagedAsync = {
   args: {
     componentId: 'multiselect-async-consumer',
     label: 'Search Contacts',
-    placeholder: 'Type to search...',
+    placeholder: 'Select...',
     value: [],
   },
   render: (args, { updateArgs }) => {
@@ -310,7 +310,7 @@ export const CustomEmptyState = {
   args: {
     componentId: 'multiselect-custom-empty',
     label: 'Search Products',
-    placeholder: 'Type to search products...',
+    placeholder: 'Select...',
     value: [],
   },
   render: (args, { updateArgs }) => html`

@@ -2,7 +2,7 @@ import { Component, Element, Event, EventEmitter, h, Host, Listen, Method, Prop,
 import { computePosition, flip, offset, shift, size, autoUpdate } from '@floating-ui/dom';
 import { debounceEvent } from '@utils/utils';
 import { messageId, assignDescription } from '../../utils/form';
-import { danger, enlarge, remove } from '@pine-ds/icons/icons';
+import { danger, enlarge } from '@pine-ds/icons/icons';
 import type {
   MultiselectOption,
   MultiselectChangeEventDetail,
@@ -23,9 +23,11 @@ import type {
   formAssociated: true,
 })
 export class PdsMultiselect {
-  private inputEl?: HTMLInputElement;
+  private triggerEl?: HTMLButtonElement;
+  private searchInputEl?: HTMLInputElement;
   private containerEl?: HTMLElement;
   private listboxEl?: HTMLElement;
+  private panelEl?: HTMLElement;
   private internals?: ElementInternals;
   private abortController?: AbortController;
   private observer?: MutationObserver;
@@ -137,6 +139,9 @@ export class PdsMultiselect {
   @State() currentPage: number = 1;
   @State() hasMore: boolean = false;
 
+  // Flag to prevent focusout from closing during open transition
+  private isOpening: boolean = false;
+
   /**
    * Emitted when selection changes.
    */
@@ -240,11 +245,11 @@ export class PdsMultiselect {
   }
 
   /**
-   * Sets focus on the search input.
+   * Sets focus on the trigger button.
    */
   @Method()
   async setFocus() {
-    this.inputEl?.focus();
+    this.triggerEl?.focus();
   }
 
   /**
@@ -258,7 +263,7 @@ export class PdsMultiselect {
     if (event.key === 'Escape') {
       event.preventDefault();
       this.closeDropdown();
-      this.inputEl?.focus();
+      this.triggerEl?.focus();
     }
   }
 
@@ -326,14 +331,9 @@ export class PdsMultiselect {
   private getFilteredOptions(): MultiselectOption[] {
     const allOptions = this.getAllOptions();
     const query = this.searchQuery.toLowerCase();
-    const valueArray = this.ensureValueArray();
 
     return allOptions.filter(opt => {
-      // Filter out already selected items
-      const isSelected = valueArray.includes(String(opt.id));
-      if (isSelected) return false;
-
-      // Filter by search query
+      // Filter by search query only - don't filter out selected items
       if (query) {
         return opt.text.toLowerCase().includes(query);
       }
@@ -360,7 +360,7 @@ export class PdsMultiselect {
         this.internals.setValidity(
           { valueMissing: true },
           'Please select at least one option.',
-          this.inputEl
+          this.triggerEl
         );
       } else {
         this.internals.setValidity({});
@@ -428,14 +428,34 @@ export class PdsMultiselect {
     }
   }
 
-  private handleInputChange = (e: Event) => {
+  private handleTriggerClick = () => {
+    if (this.disabled) return;
+
+    if (this.isOpen) {
+      this.closeDropdown();
+    } else {
+      this.openDropdown();
+    }
+  };
+
+  private handleTriggerKeyDown = (e: KeyboardEvent) => {
+    switch (e.key) {
+      case 'ArrowDown':
+      case 'ArrowUp':
+      case 'Enter':
+      case ' ':
+        e.preventDefault();
+        if (!this.isOpen) {
+          this.openDropdown();
+        }
+        break;
+    }
+  };
+
+  private handleSearchInputChange = (e: Event) => {
     const target = e.target as HTMLInputElement;
     this.searchQuery = target.value;
     this.highlightedIndex = -1;
-
-    if (!this.isOpen) {
-      this.openDropdown();
-    }
 
     // Emit search event for consumer-managed async
     this.pdsMultiselectSearch.emit({ query: this.searchQuery });
@@ -446,42 +466,25 @@ export class PdsMultiselect {
     }
   };
 
-  private handleInputClick = () => {
-    if (!this.isOpen && !this.disabled) {
-      this.openDropdown();
-    }
-  };
-
-  private handleInputKeyDown = (e: KeyboardEvent) => {
+  private handleSearchInputKeyDown = (e: KeyboardEvent) => {
     const filteredOptions = this.getFilteredOptions();
 
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
-        if (!this.isOpen) {
-          this.openDropdown();
-        } else {
-          this.highlightedIndex = Math.min(this.highlightedIndex + 1, filteredOptions.length - 1);
-          this.scrollOptionIntoView();
-        }
+        this.highlightedIndex = Math.min(this.highlightedIndex + 1, filteredOptions.length - 1);
+        this.scrollOptionIntoView();
         break;
 
       case 'ArrowUp':
         e.preventDefault();
-        if (this.isOpen) {
-          this.highlightedIndex = Math.max(this.highlightedIndex - 1, 0);
-          this.scrollOptionIntoView();
-        }
+        this.highlightedIndex = Math.max(this.highlightedIndex - 1, 0);
+        this.scrollOptionIntoView();
         break;
 
       case 'Enter':
-      case ' ':
-        // Don't prevent default for Space when typing in the search input
-        if (e.key === ' ' && this.searchQuery !== '') {
-          break;
-        }
         e.preventDefault();
-        if (this.isOpen && this.highlightedIndex >= 0) {
+        if (this.highlightedIndex >= 0) {
           const option = filteredOptions[this.highlightedIndex];
           if (option) {
             this.selectOption(option);
@@ -491,14 +494,6 @@ export class PdsMultiselect {
 
       // Escape is handled by the global @Listen('keydown') handler
 
-      case 'Backspace':
-        if (this.searchQuery === '' && this.selectedItems.length > 0) {
-          // Remove the last selected item
-          const lastItem = this.selectedItems[this.selectedItems.length - 1];
-          this.removeSelection(lastItem);
-        }
-        break;
-
       case 'Tab':
         this.closeDropdown();
         break;
@@ -506,27 +501,30 @@ export class PdsMultiselect {
   };
 
   private handleContainerFocusOut = () => {
-    // Use requestAnimationFrame to delay the check - this allows click events to complete
+    // Use setTimeout to delay the check - this allows click events and focus transitions to complete
     // before we decide to close the dropdown
-    requestAnimationFrame(() => {
-      if (!this.isOpen) return;
+    setTimeout(() => {
+      // Don't close if we're in the middle of opening or already closed
+      if (!this.isOpen || this.isOpening) return;
 
       const activeElement = document.activeElement;
 
-      // Check if focus is within our component
-      const isInContainer = this.containerEl?.contains(activeElement);
-      const isInDropdown = this.listboxEl?.contains(activeElement);
-      const isInShadowRoot = activeElement && this.el.shadowRoot?.contains(activeElement);
+      // Check if focus is within our component's shadow root
+      const isInShadowRoot = this.el.shadowRoot?.contains(activeElement);
 
-      if (!isInContainer && !isInDropdown && !isInShadowRoot) {
+      // Also check if focus is on the host element itself
+      const isOnHost = activeElement === this.el;
+
+      if (!isInShadowRoot && !isOnHost) {
         this.closeDropdown();
       }
-    });
+    }, 0);
   };
 
   private openDropdown() {
     if (this.disabled) return;
 
+    this.isOpening = true;
     this.isOpen = true;
     this.highlightedIndex = -1;
 
@@ -537,6 +535,12 @@ export class PdsMultiselect {
 
     requestAnimationFrame(() => {
       this.positionDropdown();
+      // Focus the search input after the panel is positioned
+      this.searchInputEl?.focus();
+      // Clear the opening flag after focus has moved
+      setTimeout(() => {
+        this.isOpening = false;
+      }, 50);
     });
   }
 
@@ -553,10 +557,10 @@ export class PdsMultiselect {
   }
 
   private positionDropdown() {
-    if (!this.containerEl || !this.listboxEl) return;
+    if (!this.containerEl || !this.panelEl) return;
 
     const updatePosition = () => {
-      computePosition(this.containerEl!, this.listboxEl!, {
+      computePosition(this.containerEl!, this.panelEl!, {
         placement: 'bottom-start',
         strategy: 'absolute',
         middleware: [
@@ -572,9 +576,9 @@ export class PdsMultiselect {
           }),
         ],
       }).then(({ x, y }) => {
-        if (this.listboxEl) {
-          this.listboxEl.style.left = `${x}px`;
-          this.listboxEl.style.top = `${y}px`;
+        if (this.panelEl) {
+          this.panelEl.style.left = `${x}px`;
+          this.panelEl.style.top = `${y}px`;
         }
       });
     };
@@ -585,7 +589,7 @@ export class PdsMultiselect {
     // Set up auto-update for window resize and scroll
     this.cleanupAutoUpdate = autoUpdate(
       this.containerEl,
-      this.listboxEl,
+      this.panelEl,
       updatePosition
     );
   }
@@ -597,69 +601,55 @@ export class PdsMultiselect {
     });
   }
 
-  private selectOption(option: MultiselectOption) {
-    if (this.maxSelections && this.value.length >= this.maxSelections) {
-      return;
+  private toggleOption(option: MultiselectOption) {
+    const isSelected = this.value.includes(String(option.id));
+
+    if (isSelected) {
+      // Remove from selection
+      const newValue = this.value.filter(v => v !== String(option.id));
+      this.value = newValue;
+
+      const newSelectedItems = this.selectedItems.filter(item => String(item.id) !== String(option.id));
+
+      this.pdsMultiselectChange.emit({
+        values: newValue,
+        items: newSelectedItems,
+      });
+    } else {
+      // Add to selection
+      if (this.maxSelections && this.value.length >= this.maxSelections) {
+        return;
+      }
+
+      const newValue = [...this.value, String(option.id)];
+      this.value = newValue;
+
+      const newSelectedItems = [...this.selectedItems, option];
+
+      this.pdsMultiselectChange.emit({
+        values: newValue,
+        items: newSelectedItems,
+      });
     }
 
-    const newValue = [...this.value, String(option.id)];
-    this.value = newValue;
-
-    const newSelectedItems = [...this.selectedItems, option];
-
-    this.pdsMultiselectChange.emit({
-      values: newValue,
-      items: newSelectedItems,
-    });
-
-    this.searchQuery = '';
-    this.highlightedIndex = -1;
-    this.inputEl?.focus();
+    // Keep focus on search input, don't close dropdown
+    this.searchInputEl?.focus();
   }
 
-  private removeSelection(option: MultiselectOption) {
-    const newValue = this.value.filter(v => v !== String(option.id));
-    this.value = newValue;
-
-    const newSelectedItems = this.selectedItems.filter(item => String(item.id) !== String(option.id));
-
-    this.pdsMultiselectChange.emit({
-      values: newValue,
-      items: newSelectedItems,
-    });
-
-    this.inputEl?.focus();
+  private selectOption(option: MultiselectOption) {
+    // For keyboard navigation - toggle the option
+    this.toggleOption(option);
   }
 
   private handleOptionMouseDown = (option: MultiselectOption) => (e: MouseEvent) => {
     e.preventDefault(); // Prevent focus change
-    this.selectOption(option);
+    this.toggleOption(option);
   };
 
   private handleOptionMouseEnter = (index: number) => () => {
     this.highlightedIndex = index;
   };
 
-  private handleChipRemove = (option: MultiselectOption) => () => {
-    this.removeSelection(option);
-  };
-
-  private handleClearAll = (e: MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (this.disabled || this.value.length === 0) return;
-
-    this.value = [];
-    this.selectedItems = [];
-
-    this.pdsMultiselectChange.emit({
-      values: [],
-      items: [],
-    });
-
-    this.inputEl?.focus();
-  };
 
   private handleScroll = (e: Event) => {
     if (!this.asyncUrl || !this.hasMore || this.loading) return;
@@ -677,96 +667,142 @@ export class PdsMultiselect {
     }
   };
 
-  private renderChips() {
-    return this.selectedItems.map(item => (
-      <pds-chip
-        key={String(item.id)}
-        variant="tag"
-        sentiment="neutral"
-        onPdsTagCloseClick={this.handleChipRemove(item)}
-      >
-        {item.text}
-      </pds-chip>
-    ));
+
+  private renderSelectedItemsList() {
+    if (this.selectedItems.length === 0) return null;
+
+    return (
+      <div class="pds-multiselect__selected-section">
+        <ul class="pds-multiselect__selected-list" role="list">
+          {this.selectedItems.map(item => (
+            <li key={String(item.id)} class="pds-multiselect__selected-item">
+              {item.text}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
   }
 
   private renderDropdown() {
     if (!this.isOpen) return null;
 
     const filteredOptions = this.getFilteredOptions();
+    const valueArray = this.ensureValueArray();
     const hasSlottedEmpty = !!this.el.querySelector('[slot="empty"]');
     const hasSlottedLoading = !!this.el.querySelector('[slot="loading"]');
 
     return (
-      <ul
-        class="pds-multiselect__listbox"
-        role="listbox"
-        aria-multiselectable="true"
-        aria-label={this.label || 'Options'}
-        id={`${this.componentId}-listbox`}
-        ref={el => (this.listboxEl = el)}
-        style={{ maxHeight: this.maxHeight }}
-        onScroll={this.handleScroll}
+      <div
+        class="pds-multiselect__panel"
+        ref={el => (this.panelEl = el)}
       >
-        {this.loading && (
-          <li class="pds-multiselect__loading" role="presentation">
-            {hasSlottedLoading ? (
-              <slot name="loading" />
-            ) : (
-              <pds-loader size="small" />
-            )}
-          </li>
-        )}
+        {/* Search input */}
+        <div class="pds-multiselect__search">
+          <pds-icon name="search" size="small" />
+          <input
+            ref={el => (this.searchInputEl = el)}
+            type="text"
+            class="pds-multiselect__search-input"
+            placeholder="Find..."
+            value={this.searchQuery}
+            aria-label="Search options"
+            aria-controls={`${this.componentId}-listbox`}
+            aria-activedescendant={this.highlightedIndex >= 0 ? `${this.componentId}-option-${this.highlightedIndex}` : undefined}
+            role="combobox"
+            aria-haspopup="listbox"
+            aria-expanded="true"
+            aria-autocomplete="list"
+            autocomplete="off"
+            onInput={this.handleSearchInputChange}
+            onKeyDown={this.handleSearchInputKeyDown}
+          />
+        </div>
 
-        {!this.loading && filteredOptions.length === 0 && (
-          <li class="pds-multiselect__empty" role="presentation">
-            {hasSlottedEmpty ? (
-              <slot name="empty" />
-            ) : (
-              <span>No options found</span>
-            )}
-          </li>
-        )}
+        {/* Selected items section */}
+        {this.renderSelectedItemsList()}
 
-        {filteredOptions.map((option, index) => {
-          const isHighlighted = index === this.highlightedIndex;
-          const optionId = `${this.componentId}-option-${index}`;
-
-          return (
-            <li
-              key={String(option.id)}
-              id={optionId}
-              class={{
-                'pds-multiselect__option': true,
-                'pds-multiselect__option--highlighted': isHighlighted,
-              }}
-              role="option"
-              aria-selected="false"
-              data-index={index}
-              onMouseDown={this.handleOptionMouseDown(option)}
-              onMouseEnter={this.handleOptionMouseEnter(index)}
-            >
-              <pds-checkbox
-                componentId={`${this.componentId}-checkbox-${index}`}
-                checked={false}
-                label={option.text}
-                style={{ pointerEvents: 'none' }}
-              />
+        {/* Options list */}
+        <ul
+          class="pds-multiselect__listbox"
+          role="listbox"
+          aria-multiselectable="true"
+          aria-label={this.label || 'Options'}
+          id={`${this.componentId}-listbox`}
+          ref={el => (this.listboxEl = el)}
+          style={{ maxHeight: this.maxHeight }}
+          onScroll={this.handleScroll}
+        >
+          {this.loading && (
+            <li class="pds-multiselect__loading" role="presentation">
+              {hasSlottedLoading ? (
+                <slot name="loading" />
+              ) : (
+                <pds-loader size="small" />
+              )}
             </li>
-          );
-        })}
+          )}
 
-        {this.hasMore && !this.loading && (
-          <li class="pds-multiselect__load-more" role="presentation">
-            <pds-loader size="small" />
-          </li>
-        )}
-      </ul>
+          {!this.loading && filteredOptions.length === 0 && (
+            <li class="pds-multiselect__empty" role="presentation">
+              {hasSlottedEmpty ? (
+                <slot name="empty" />
+              ) : (
+                <span>No options found</span>
+              )}
+            </li>
+          )}
+
+          {filteredOptions.map((option, index) => {
+            const isSelected = valueArray.includes(String(option.id));
+            const isHighlighted = index === this.highlightedIndex;
+            const optionId = `${this.componentId}-option-${index}`;
+
+            return (
+              <li
+                key={String(option.id)}
+                id={optionId}
+                class={{
+                  'pds-multiselect__option': true,
+                  'pds-multiselect__option--highlighted': isHighlighted,
+                  'pds-multiselect__option--selected': isSelected,
+                }}
+                role="option"
+                aria-selected={isSelected ? 'true' : 'false'}
+                data-index={index}
+                onMouseDown={this.handleOptionMouseDown(option)}
+                onMouseEnter={this.handleOptionMouseEnter(index)}
+              >
+                <pds-checkbox
+                  componentId={`${this.componentId}-checkbox-${index}`}
+                  checked={isSelected}
+                  label={option.text}
+                  style={{ pointerEvents: 'none' }}
+                />
+              </li>
+            );
+          })}
+
+          {this.hasMore && !this.loading && (
+            <li class="pds-multiselect__load-more" role="presentation">
+              <pds-loader size="small" />
+            </li>
+          )}
+        </ul>
+      </div>
     );
   }
 
+  private getTriggerText(): string {
+    const count = this.selectedItems.length;
+    if (count === 0) {
+      return this.placeholder || 'Select...';
+    }
+    return `${count} item${count === 1 ? '' : 's'}`;
+  }
+
   render() {
-    const hasChips = this.selectedItems.length > 0;
+    const hasSelections = this.selectedItems.length > 0;
 
     return (
       <Host
@@ -786,57 +822,41 @@ export class PdsMultiselect {
           )}
 
           <div
-            class={{
-              'pds-multiselect__container': true,
-              'pds-multiselect__container--open': this.isOpen,
-              'pds-multiselect__container--disabled': this.disabled,
-              'pds-multiselect__container--invalid': this.invalid || !!this.errorMessage,
-              'pds-multiselect__container--has-chips': hasChips,
-            }}
+            class="pds-multiselect__wrapper"
             ref={el => (this.containerEl = el)}
             onFocusout={this.handleContainerFocusOut}
           >
-            <div class="pds-multiselect__pillbox">
-              {this.renderChips()}
-              <input
-                ref={el => (this.inputEl = el)}
-                type="text"
-                class="pds-multiselect__input"
-                id={this.componentId}
-                name={this.name}
-                placeholder={hasChips ? '' : this.placeholder}
-                value={this.searchQuery}
-                disabled={this.disabled}
-                required={this.required}
-                aria-required={this.required ? 'true' : undefined}
-                aria-expanded={this.isOpen ? 'true' : 'false'}
-                aria-controls={`${this.componentId}-listbox`}
-                aria-activedescendant={this.highlightedIndex >= 0 ? `${this.componentId}-option-${this.highlightedIndex}` : undefined}
-                aria-describedby={assignDescription(this.componentId, this.invalid, this.errorMessage || this.helperMessage)}
-                aria-invalid={this.invalid ? 'true' : undefined}
-                role="combobox"
-                aria-haspopup="listbox"
-                aria-autocomplete="list"
-                autocomplete="off"
-                onInput={this.handleInputChange}
-                onClick={this.handleInputClick}
-                onKeyDown={this.handleInputKeyDown}
-              />
-            </div>
-            {hasChips && !this.disabled && (
-              <button
-                type="button"
-                class="pds-multiselect__clear"
-                aria-label="Clear all selections"
-                onClick={this.handleClearAll}
-              >
-                <pds-icon icon={remove} size="small" />
-              </button>
-            )}
-            <pds-icon class="pds-multiselect__icon" icon={enlarge} />
-          </div>
+            <button
+              ref={el => (this.triggerEl = el)}
+              type="button"
+              class={{
+                'pds-multiselect__trigger': true,
+                'pds-multiselect__trigger--open': this.isOpen,
+                'pds-multiselect__trigger--disabled': this.disabled,
+                'pds-multiselect__trigger--invalid': this.invalid || !!this.errorMessage,
+                'pds-multiselect__trigger--has-value': hasSelections,
+              }}
+              id={this.componentId}
+              disabled={this.disabled}
+              aria-required={this.required ? 'true' : undefined}
+              aria-expanded={this.isOpen ? 'true' : 'false'}
+              aria-haspopup="listbox"
+              aria-describedby={assignDescription(this.componentId, this.invalid, this.errorMessage || this.helperMessage)}
+              aria-invalid={this.invalid ? 'true' : undefined}
+              onClick={this.handleTriggerClick}
+              onKeyDown={this.handleTriggerKeyDown}
+            >
+              <span class={{
+                'pds-multiselect__trigger-text': true,
+                'pds-multiselect__trigger-text--placeholder': !hasSelections,
+              }}>
+                {this.getTriggerText()}
+              </span>
+              <pds-icon class="pds-multiselect__icon" icon={enlarge} />
+            </button>
 
-          {this.renderDropdown()}
+            {this.renderDropdown()}
+          </div>
 
           {this.helperMessage && !this.errorMessage && (
             <p class="pds-multiselect__helper" id={messageId(this.componentId, 'helper')}>
