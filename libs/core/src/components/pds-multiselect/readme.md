@@ -33,10 +33,13 @@ A multiselect component that allows users to select multiple options from a sear
 | `loading`                  | `loading`        | Whether the component is currently loading async options.             | `boolean`                              | `false`       |
 | `maxHeight`                | `max-height`     | Maximum height of the dropdown before scrolling.                      | `string`                               | `'300px'`     |
 | `maxSelections`            | `max-selections` | Maximum number of selections allowed.                                 | `number`                               | `undefined`   |
+| `minWidth`                 | `min-width`      | Minimum width of the dropdown panel.                                  | `string`                               | `'250px'`     |
 | `name`                     | `name`           | The name of the form control for form submission.                     | `string`                               | `undefined`   |
 | `options`                  | --               | Options provided externally (for consumer-managed async).             | `MultiselectOption[]`                  | `undefined`   |
+| `panelWidth`               | `panel-width`    | Width of the dropdown panel. Defaults to the trigger width.           | `string`                               | `undefined`   |
 | `placeholder`              | `placeholder`    | Placeholder text for the search input.                                | `string`                               | `'Select...'` |
 | `required`                 | `required`       | Whether the multiselect is required.                                  | `boolean`                              | `false`       |
+| `triggerWidth`             | `trigger-width`  | Width of the trigger button (and reference for dropdown positioning). | `string`                               | `'100%'`      |
 | `value`                    | --               | Array of selected option values.                                      | `string[]`                             | `[]`          |
 
 

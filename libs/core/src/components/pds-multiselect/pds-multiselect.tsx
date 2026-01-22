@@ -91,6 +91,21 @@ export class PdsMultiselect {
   @Prop() maxHeight: string = '300px';
 
   /**
+   * Width of the trigger button (and reference for dropdown positioning).
+   */
+  @Prop() triggerWidth: string = '100%';
+
+  /**
+   * Minimum width of the dropdown panel.
+   */
+  @Prop() minWidth: string = '250px';
+
+  /**
+   * Width of the dropdown panel. Defaults to the trigger width.
+   */
+  @Prop() panelWidth?: string;
+
+  /**
    * Visually hides the label but keeps it accessible.
    */
   @Prop() hideLabel: boolean = false;
@@ -558,19 +573,23 @@ export class PdsMultiselect {
 
   private positionDropdown() {
     if (!this.containerEl || !this.panelEl) return;
+    const referenceEl = this.triggerEl || this.containerEl;
+
+    const { minWidth, panelWidth } = this;
 
     const updatePosition = () => {
-      computePosition(this.containerEl!, this.panelEl!, {
+      computePosition(referenceEl!, this.panelEl!, {
         placement: 'bottom-start',
         strategy: 'absolute',
         middleware: [
-          offset(4),
+          offset(12),
           flip(),
           shift({ padding: 8 }),
           size({
-            apply({ rects, elements }) {
+            apply: ({ rects, elements }) => {
               Object.assign(elements.floating.style, {
-                width: `${rects.reference.width}px`,
+                width: panelWidth ?? `${rects.reference.width}px`,
+                minWidth,
               });
             },
           }),
@@ -588,7 +607,7 @@ export class PdsMultiselect {
 
     // Set up auto-update for window resize and scroll
     this.cleanupAutoUpdate = autoUpdate(
-      this.containerEl,
+      referenceEl!,
       this.panelEl,
       updatePosition
     );
@@ -696,6 +715,7 @@ export class PdsMultiselect {
       <div
         class="pds-multiselect__panel"
         ref={el => (this.panelEl = el)}
+        style={{ minWidth: this.minWidth }}
       >
         {/* Search input */}
         <div class="pds-multiselect__search">
@@ -825,6 +845,7 @@ export class PdsMultiselect {
             class="pds-multiselect__wrapper"
             ref={el => (this.containerEl = el)}
             onFocusout={this.handleContainerFocusOut}
+            style={{ width: this.triggerWidth }}
           >
             <button
               ref={el => (this.triggerEl = el)}

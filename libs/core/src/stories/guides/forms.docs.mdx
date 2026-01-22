@@ -7,7 +7,7 @@ import { DocCanvas } from '@pine-ds/doc-components';
 
 ## Overview
 
-Pine Design System (PDS) form components such as `pds-input`, `pds-checkbox`, `pds-button`, `pds-radio`, `pds-switch`, `pds-combobox`, and `pds-textarea` are designed to work seamlessly within standard HTML `<form>` elements. These components ensure accessibility and consistency while providing enhanced styling and behavior.
+Pine Design System (PDS) form components such as `pds-input`, `pds-checkbox`, `pds-button`, `pds-radio`, `pds-switch`, `pds-combobox`, `pds-multiselect`, and `pds-textarea` are designed to work seamlessly within standard HTML `<form>` elements. These components ensure accessibility and consistency while providing enhanced styling and behavior.
 
 ## Examples for Demo Purposes
 
@@ -55,17 +55,18 @@ The web component example utilizes vanilla JavaScript to access values directly 
           timeOfDay: '',
           favoriteColor: 'blue',
           status: 'published',
+          favoriteTags: [],
         });
 
         const handleSubmit = (e) => {
           e.preventDefault();
           // Validate required fields
-          const { name, email, subscribe, direction, notifications, message, timeOfDay, favoriteColor, status } = formData;
+          const { name, email, subscribe, direction, notifications, message, timeOfDay, favoriteColor, status, favoriteTags } = formData;
           if (!name || !email) {
             alert('Please fill out all required fields');
             return;
           }
-          console.log('Form Data:', JSON.stringify({ name, email, subscribe, direction, notifications, message, timeOfDay, favoriteColor, status }));
+          console.log('Form Data:', JSON.stringify({ name, email, subscribe, direction, notifications, message, timeOfDay, favoriteColor, status, favoriteTags }));
         };
 
         const handleChange = (e) => {
@@ -73,6 +74,13 @@ The web component example utilizes vanilla JavaScript to access values directly 
           setFormData((prevData) => ({
             ...prevData,
             [name]: type === 'checkbox' || type === 'radio' ? checked : value,
+          }));
+        };
+
+        const handleTagsChange = (e) => {
+          setFormData((prevData) => ({
+            ...prevData,
+            favoriteTags: e.detail.values,
           }));
         };
 
@@ -187,6 +195,23 @@ The web component example utilizes vanilla JavaScript to access values directly 
                 </pds-combobox>
               </pds-box>
 
+              {/* Multiselect */}
+              <pds-box display="block" padding="sm" margin="sm">
+                <pds-multiselect
+                  component-id="favoriteTags"
+                  label="Favorite Tags"
+                  name="favoriteTags"
+                  placeholder="Select tags..."
+                  value={formData.favoriteTags}
+                  onPdsMultiselectChange={handleTagsChange}
+                >
+                  <option value="marketing">Marketing</option>
+                  <option value="sales">Sales</option>
+                  <option value="support">Support</option>
+                  <option value="engineering">Engineering</option>
+                </pds-multiselect>
+              </pds-box>
+
               {/* Status Combobox - Chip Trigger */}
               <pds-box display="block" padding="sm" margin="sm">
                 <pds-combobox
@@ -240,7 +265,8 @@ The web component example utilizes vanilla JavaScript to access values directly 
             message: form.querySelector('[component-id="message"]').value,
             timeOfDay: form.querySelector('[component-id="timeOfDay"]').value,
             favoriteColor: form.querySelector('[component-id="favoriteColor"]').value,
-            status: form.querySelector('[component-id="status"]').value
+            status: form.querySelector('[component-id="status"]').value,
+            favoriteTags: form.querySelector('[component-id="favoriteTags"]').value
           });
         }}>
           <pds-box display="block" padding="sm">
@@ -288,6 +314,15 @@ The web component example utilizes vanilla JavaScript to access values directly 
           </pds-box>
 
           <pds-box display="block" padding="sm">
+            <pds-multiselect component-id="favoriteTags" label="Favorite Tags" name="favoriteTags" placeholder="Select tags...">
+              <option value="marketing">Marketing</option>
+              <option value="sales">Sales</option>
+              <option value="support">Support</option>
+              <option value="engineering">Engineering</option>
+            </pds-multiselect>
+          </pds-box>
+
+          <pds-box display="block" padding="sm">
             <pds-combobox component-id="status" label="Status" name="status" trigger="chip" mode="select-only" value="published">
               <option value="draft" chip-sentiment="neutral" chip-dot="true">Draft</option>
               <option value="published" chip-sentiment="success" chip-dot="true">Published</option>
@@ -332,7 +367,8 @@ The web component example utilizes vanilla JavaScript to access values directly 
       message: form.querySelector('[component-id="message"]')?.value,
       timeOfDay: form.querySelector('[component-id="timeOfDay"]')?.value,
       favoriteColor: form.querySelector('[component-id="favoriteColor"]')?.value,
-      status: form.querySelector('[component-id="status"]')?.value
+      status: form.querySelector('[component-id="status"]')?.value,
+      favoriteTags: form.querySelector('[component-id="favoriteTags"]')?.value
     });
 
     // Log native form elements
@@ -355,6 +391,7 @@ The web component example utilizes vanilla JavaScript to access values directly 
       'pds-input': customElements.get('pds-input') ? '✅ Defined' : '❌ Not defined',
       'pds-select': customElements.get('pds-select') ? '✅ Defined' : '❌ Not defined',
       'pds-combobox': customElements.get('pds-combobox') ? '✅ Defined' : '❌ Not defined',
+      'pds-multiselect': customElements.get('pds-multiselect') ? '✅ Defined' : '❌ Not defined',
       'pds-textarea': customElements.get('pds-textarea') ? '✅ Defined' : '❌ Not defined',
       'pds-checkbox': customElements.get('pds-checkbox') ? '✅ Defined' : '❌ Not defined',
       'pds-radio': customElements.get('pds-radio') ? '✅ Defined' : '❌ Not defined',
@@ -371,6 +408,7 @@ The web component example utilizes vanilla JavaScript to access values directly 
       select: form.querySelector('pds-select[component-id="timeOfDay"]'),
       comboboxColor: form.querySelector('pds-combobox[component-id="favoriteColor"]'),
       comboboxStatus: form.querySelector('pds-combobox[component-id="status"]'),
+      multiselect: form.querySelector('pds-multiselect[component-id="favoriteTags"]'),
       textarea: form.querySelector('pds-textarea[component-id="message"]')
     };
 
@@ -434,6 +472,15 @@ The web component example utilizes vanilla JavaScript to access values directly 
     </pds-box>
 
     <pds-box display="block" padding="sm">
+      <pds-multiselect component-id="favoriteTags" label="Favorite Tags" name="favoriteTags" placeholder="Select tags...">
+        <option value="marketing">Marketing</option>
+        <option value="sales">Sales</option>
+        <option value="support">Support</option>
+        <option value="engineering">Engineering</option>
+      </pds-multiselect>
+    </pds-box>
+
+    <pds-box display="block" padding="sm">
       <pds-combobox component-id="status" label="Status" name="status" trigger="chip" mode="select-only" value="published">
         <option value="draft" chip-sentiment="neutral" chip-dot="true">Draft</option>
         <option value="published" chip-sentiment="success" chip-dot="true">Published</option>
@@ -474,6 +521,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('pds-input defined:', customElements.get('pds-input'));
       console.log('pds-select defined:', customElements.get('pds-select'));
       console.log('pds-combobox defined:', customElements.get('pds-combobox'));
+      console.log('pds-multiselect defined:', customElements.get('pds-multiselect'));
       console.log('pds-textarea defined:', customElements.get('pds-textarea'));
       console.log('pds-checkbox defined:', customElements.get('pds-checkbox'));
       console.log('pds-radio defined:', customElements.get('pds-radio'));
@@ -490,6 +538,7 @@ document.addEventListener('DOMContentLoaded', () => {
         notifications: form.elements.namedItem('notifications'),
         favoriteColor: form.elements.namedItem('favoriteColor'),
         status: form.elements.namedItem('status'),
+        favoriteTags: form.elements.namedItem('favoriteTags'),
         message: form.elements.namedItem('message')
       });
 
@@ -498,6 +547,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const pdsSelect = document.querySelector('pds-select');
       const pdsComboboxColor = document.querySelector('pds-combobox[component-id="favoriteColor"]');
       const pdsComboboxStatus = document.querySelector('pds-combobox[component-id="status"]');
+      const pdsMultiselect = document.querySelector('pds-multiselect[component-id="favoriteTags"]');
       const pdsTextarea = document.querySelector('pds-textarea');
       const pdsCheckbox = document.querySelector('pds-checkbox');
       const pdsRadio = document.querySelector('pds-radio');
@@ -508,18 +558,20 @@ document.addEventListener('DOMContentLoaded', () => {
         select: pdsSelect,
         comboboxColor: pdsComboboxColor,
         comboboxStatus: pdsComboboxStatus,
+        multiselect: pdsMultiselect,
         textarea: pdsTextarea,
         checkbox: pdsCheckbox,
         radio: pdsRadio,
         switch: pdsSwitch
       });
 
-      if (pdsInput || pdsSelect || pdsComboboxColor || pdsTextarea) {
+      if (pdsInput || pdsSelect || pdsComboboxColor || pdsMultiselect || pdsTextarea) {
         console.log('🔧 Component internals:', {
           inputInternals: pdsInput?.internals,
           selectInternals: pdsSelect?.internals,
           comboboxColorInternals: pdsComboboxColor?.internals,
           comboboxStatusInternals: pdsComboboxStatus?.internals,
+          multiselectInternals: pdsMultiselect?.internals,
           textareaInternals: pdsTextarea?.internals,
           checkboxInternals: pdsCheckbox?.internals,
           radioInternals: pdsRadio?.internals,
@@ -532,6 +584,7 @@ document.addEventListener('DOMContentLoaded', () => {
           selectFormAssociated: pdsSelect?.constructor?.formAssociated,
           comboboxColorFormAssociated: pdsComboboxColor?.constructor?.formAssociated,
           comboboxStatusFormAssociated: pdsComboboxStatus?.constructor?.formAssociated,
+          multiselectFormAssociated: pdsMultiselect?.constructor?.formAssociated,
           textareaFormAssociated: pdsTextarea?.constructor?.formAssociated,
           checkboxFormAssociated: pdsCheckbox?.constructor?.formAssociated,
           radioFormAssociated: pdsRadio?.constructor?.formAssociated,
@@ -564,6 +617,9 @@ document.addEventListener('DOMContentLoaded', () => {
         notifications: form.querySelector('[name="notifications"]')?.checked,
         message: form.querySelector('[name="message"]')?.value,
         timeOfDay: form.querySelector('[name="timeOfDay"]')?.value,
+        favoriteColor: form.querySelector('[name="favoriteColor"]')?.value,
+        status: form.querySelector('[name="status"]')?.value,
+        favoriteTags: form.querySelector('[name="favoriteTags"]')?.value,
         favoriteAnimal: form.querySelector('[name="favoriteAnimal"]')?.value
       });
 

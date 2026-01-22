@@ -1382,6 +1382,11 @@ export namespace Components {
          */
         "maxSelections"?: number;
         /**
+          * Minimum width of the dropdown panel.
+          * @default '250px'
+         */
+        "minWidth": string;
+        /**
           * The name of the form control for form submission.
          */
         "name"?: string;
@@ -1389,6 +1394,10 @@ export namespace Components {
           * Options provided externally (for consumer-managed async).
          */
         "options"?: MultiselectOption[];
+        /**
+          * Width of the dropdown panel. Defaults to the trigger width.
+         */
+        "panelWidth"?: string;
         /**
           * Placeholder text for the search input.
           * @default 'Select...'
@@ -1403,6 +1412,11 @@ export namespace Components {
           * Sets focus on the trigger button.
          */
         "setFocus": () => Promise<void>;
+        /**
+          * Width of the trigger button (and reference for dropdown positioning).
+          * @default '100%'
+         */
+        "triggerWidth": string;
         /**
           * Array of selected option values.
           * @default []
@@ -4281,6 +4295,11 @@ declare namespace LocalJSX {
          */
         "maxSelections"?: number;
         /**
+          * Minimum width of the dropdown panel.
+          * @default '250px'
+         */
+        "minWidth"?: string;
+        /**
           * The name of the form control for form submission.
          */
         "name"?: string;
@@ -4301,6 +4320,10 @@ declare namespace LocalJSX {
          */
         "options"?: MultiselectOption[];
         /**
+          * Width of the dropdown panel. Defaults to the trigger width.
+         */
+        "panelWidth"?: string;
+        /**
           * Placeholder text for the search input.
           * @default 'Select...'
          */
@@ -4310,6 +4333,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "required"?: boolean;
+        /**
+          * Width of the trigger button (and reference for dropdown positioning).
+          * @default '100%'
+         */
+        "triggerWidth"?: string;
         /**
           * Array of selected option values.
           * @default []

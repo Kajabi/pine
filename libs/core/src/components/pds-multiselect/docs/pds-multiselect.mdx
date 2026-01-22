@@ -180,6 +180,55 @@ Limit the number of items that can be selected.
   </pds-multiselect>
 </DocCanvas>
 
+### Custom Widths
+
+Use `trigger-width` to control the trigger size and `panel-width` to control the dropdown panel size. `min-width` sets a floor for the panel.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="widths-select"
+  label="Narrow Trigger, Wide Panel"
+  placeholder="Select..."
+  trigger-width="200px"
+  panel-width="320px"
+  min-width="250px"
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+  <option value="4">Engineering</option>
+</pds-multiselect>`,
+    react: `<PdsMultiselect
+  componentId="widths-select"
+  label="Narrow Trigger, Wide Panel"
+  placeholder="Select..."
+  triggerWidth="200px"
+  panelWidth="320px"
+  minWidth="250px"
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+  <option value="4">Engineering</option>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="widths-select"
+    label="Narrow Trigger, Wide Panel"
+    placeholder="Select..."
+    trigger-width="200px"
+    panel-width="320px"
+    min-width="250px"
+  >
+    <option value="1">Marketing</option>
+    <option value="2">Sales</option>
+    <option value="3">Support</option>
+    <option value="4">Engineering</option>
+  </pds-multiselect>
+</DocCanvas>
+
 ### Async with URL
 
 Fetch options from a remote API endpoint. The component expects responses in the format `{ results: [{ id, text }], totalCount }`.
@@ -292,15 +341,6 @@ Display validation errors with the `errorMessage` prop.
   </pds-multiselect>
 </DocCanvas>
 
-## Keyboard Navigation
-
-| Key | Action |
-|-----|--------|
-| `↓` / `↑` | Navigate through options in the dropdown |
-| `Enter` | Toggle selection of highlighted option |
-| `Escape` | Close dropdown |
-| `Tab` | Close dropdown and move focus |
-
 ## Form Integration
 
 `pds-multiselect` is a form-associated custom element. It participates in form submission using the `name` attribute.
@@ -308,14 +348,6 @@ Display validation errors with the `errorMessage` prop.
 - Selected values are submitted as multiple entries with the same name (native `<select multiple>` behavior)
 - Works with `FormData` API
 - Supports form reset
-
-## Events
-
-| Event | Payload | Description |
-|-------|---------|-------------|
-| `pdsMultiselectChange` | `{ values: string[], items: Option[] }` | Fired when selection changes |
-| `pdsMultiselectSearch` | `{ query: string }` | Fired on search input (debounced) |
-| `pdsMultiselectLoadOptions` | `{ query: string, page: number }` | Fired when infinite scroll loads more |
 
 ## Playground
 

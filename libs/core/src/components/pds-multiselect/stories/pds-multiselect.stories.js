@@ -7,7 +7,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: 'A multiselect component with a filter-style dropdown. Displays selected count in the trigger, with search and selected items shown in the dropdown panel.',
+        component: 'A multiselect component with a filter-style dropdown. Displays selected count in the trigger, with search and selected items shown in the dropdown panel. Use triggerWidth, panelWidth, and minWidth to control sizing.',
       },
     },
   },
@@ -35,6 +35,18 @@ export default {
     maxHeight: {
       control: 'text',
       description: 'Maximum height of the dropdown',
+    },
+    minWidth: {
+      control: 'text',
+      description: 'Minimum width of the dropdown panel',
+    },
+    triggerWidth: {
+      control: 'text',
+      description: 'Width of the trigger button (and reference for dropdown positioning)',
+    },
+    panelWidth: {
+      control: 'text',
+      description: 'Width of the dropdown panel (defaults to trigger width)',
     },
     hideLabel: {
       control: 'boolean',
@@ -258,6 +270,32 @@ export const LongList = {
       <option value="ng">Nigeria</option>
       <option value="eg">Egypt</option>
       <option value="se">Sweden</option>
+    </pds-multiselect>
+  `,
+};
+
+export const CustomWidths = {
+  args: {
+    componentId: 'multiselect-widths',
+    label: 'Narrow Trigger, Wide Panel',
+    placeholder: 'Select...',
+    triggerWidth: '200px',
+    panelWidth: '320px',
+    minWidth: '250px',
+    value: [],
+  },
+  render: (args, { updateArgs }) => html`
+    <pds-multiselect
+      component-id="${args.componentId}"
+      label="${args.label}"
+      placeholder="${args.placeholder}"
+      trigger-width="${args.triggerWidth}"
+      panel-width="${args.panelWidth}"
+      min-width="${args.minWidth}"
+      .value=${args.value}
+      @pdsMultiselectChange=${(e) => updateArgs({ value: e.detail.values })}
+    >
+      ${unsafeHTML(defaultOptions)}
     </pds-multiselect>
   `,
 };
