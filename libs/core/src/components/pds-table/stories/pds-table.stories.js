@@ -198,6 +198,8 @@ const SortableTemplate = (args) => html`
   ?responsive=${args.responsive}
   ?row-dividers=${args.rowDividers}
   ?selectable=${args.selectable}
+  default-sort-column="${args.defaultSortColumn}"
+  default-sort-direction="${args.defaultSortDirection}"
 >
   <pds-table-head
     ?border=${args.border}
@@ -382,6 +384,8 @@ Sortable.args = {
   rowDividers: false,
   selectable: false,
   sortable: true,
+  defaultSortColumn: 'Name',
+  defaultSortDirection: 'asc',
 };
 
 export const DefaultSorting = DefaultSortTemplate.bind();
