@@ -1776,6 +1776,10 @@ export namespace Components {
          */
         "cellAlign"?: 'start' | 'center' | 'end' | 'justify';
         /**
+          * Clears the active sort state from this column. Used internally when another column becomes active.
+         */
+        "clearActiveSort": () => Promise<void>;
+        /**
           * Programmatically sets this column as the active sort column with the specified direction. Used by pds-table to apply a default sort on initial load.
           * @param direction - The sort direction to apply ('asc' or 'desc')
          */
