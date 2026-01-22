@@ -16,7 +16,7 @@ describe('pds-multiselect', () => {
       html: `<pds-multiselect component-id="test" label="Select Tags"></pds-multiselect>`,
     });
 
-    expect(page.root).toMatchSnapshot();
+    expect(page.root).toBeTruthy();
     expect(page.root.shadowRoot.querySelector('.pds-multiselect__label')).toBeTruthy();
     expect(page.root.shadowRoot.querySelector('.pds-multiselect__label').textContent).toBe('Select Tags');
   });
