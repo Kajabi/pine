@@ -196,6 +196,11 @@ export class PdsTableHeadCell {
 
   private toggleSort = () => {
     if (this.sortable) {
+      // Guard: return early if tableRef is not available
+      if (!this.tableRef || !(this.tableRef instanceof Element)) {
+        return;
+      }
+
       const column = this.hostElement.innerText.trim();
       
       // Always toggle the direction (preserves original behavior)
