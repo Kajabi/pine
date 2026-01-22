@@ -2,12 +2,11 @@ import { newSpecPage } from '@stencil/core/testing';
 import { PdsMultiselect } from '../pds-multiselect';
 
 // Mock MutationObserver for testing environment
-if (typeof MutationObserver === 'undefined') {
-  (global as any).MutationObserver = class {
-    observe() {}
-    disconnect() {}
-  };
-}
+global.MutationObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  disconnect: jest.fn(),
+  takeRecords: jest.fn(),
+}));
 
 describe('pds-multiselect', () => {
   it('renders with label', async () => {
