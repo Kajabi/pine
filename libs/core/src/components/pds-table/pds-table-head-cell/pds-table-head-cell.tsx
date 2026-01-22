@@ -198,25 +198,21 @@ export class PdsTableHeadCell {
     if (this.sortable) {
       const column = this.hostElement.innerText.trim();
       
-      // If this column is already active, toggle the direction
-      if (this.isActive) {
-        this.sortingDirection = this.sortingDirection === 'asc' ? 'desc' : 'asc';
-        // Ensure the class is maintained
-        this.hostElement.classList.add('is-active');
-      } else {
-        // Reset all OTHER head cells to inactive state (skip the current one)
-        this.tableRef.querySelectorAll('pds-table-head-cell').forEach(async (headCell) => {
-          // Skip clearing the current cell
-          if (headCell !== this.hostElement) {
-            const headCellComponent = headCell as HTMLPdsTableHeadCellElement;
-            await headCellComponent.clearActiveSort();
-          }
-        });
-        // Set this column as active with ascending as default
-        this.sortingDirection = 'asc';
-        this.isActive = true;
-        this.hostElement.classList.add('is-active');
-      }
+      // Always toggle the direction (preserves original behavior)
+      this.sortingDirection = this.sortingDirection === 'asc' ? 'desc' : 'asc';
+      
+      // Reset all OTHER head cells to inactive state (skip the current one)
+      this.tableRef.querySelectorAll('pds-table-head-cell').forEach(async (headCell) => {
+        // Skip clearing the current cell
+        if (headCell !== this.hostElement) {
+          const headCellComponent = headCell as HTMLPdsTableHeadCellElement;
+          await headCellComponent.clearActiveSort();
+        }
+      });
+      
+      // Mark this column as active
+      this.isActive = true;
+      this.hostElement.classList.add('is-active');
 
       // Emit the sort event with the current direction
       this.pdsTableSort.emit({ column, direction: this.sortingDirection });

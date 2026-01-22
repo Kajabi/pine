@@ -47,7 +47,7 @@ describe('pds-table-head-cell', () => {
     await tableHeadCell.setActiveSort('asc');
     await page.waitForChanges();
 
-    const icon = page.root.shadowRoot.querySelector('pds-icon');
+    const icon = tableHeadCell.shadowRoot.querySelector('pds-icon');
     expect(icon).toBeTruthy();
     expect(icon.getAttribute('icon')).toBe(upSmall);
   });
@@ -255,7 +255,7 @@ describe('pds-table-head-cell', () => {
       expect.objectContaining({
         detail: {
           column: 'Column Name',
-          direction: 'asc',
+          direction: 'desc',
         },
       })
     );
@@ -279,22 +279,22 @@ describe('pds-table-head-cell', () => {
     expect(tableHeadCell).toHaveClass('sort-asc');
     expect(tableHeadCell).not.toHaveClass('is-active');
 
-    // First click: sets to active with 'asc'
-    tableHeadCell.click();
-    await page.waitForChanges();
-    expect(tableHeadCell).toHaveClass('sort-asc');
-    expect(tableHeadCell).toHaveClass('is-active');
-
-    // Second click: toggles to 'desc' (already active)
+    // First click: toggles to 'desc' and sets active
     tableHeadCell.click();
     await page.waitForChanges();
     expect(tableHeadCell).toHaveClass('sort-desc');
     expect(tableHeadCell).toHaveClass('is-active');
 
-    // Third click: toggles back to 'asc' (already active)
+    // Second click: toggles back to 'asc'
     tableHeadCell.click();
     await page.waitForChanges();
     expect(tableHeadCell).toHaveClass('sort-asc');
+    expect(tableHeadCell).toHaveClass('is-active');
+
+    // Third click: toggles to 'desc' again
+    tableHeadCell.click();
+    await page.waitForChanges();
+    expect(tableHeadCell).toHaveClass('sort-desc');
     expect(tableHeadCell).toHaveClass('is-active');
   });
 
