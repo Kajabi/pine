@@ -45,7 +45,7 @@
   min-height: var(--pine-dimension-550);
   padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
   position: relative;
-  text-align: left;
+  text-align: start;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   width: 100%;
 
@@ -114,7 +114,7 @@
 
 .pds-multiselect__search {
   align-items: center;
-  border-bottom: var(--pine-border);
+  border-block-end: var(--pine-border);
   display: flex;
   gap: var(--pine-dimension-xs);
   padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
@@ -141,7 +141,7 @@
 }
 
 .pds-multiselect__selected-section {
-  border-bottom: var(--pine-border-subtle);
+  border-block-end: var(--pine-border-subtle);
   padding: var(--pine-dimension-xs);
 }
 
