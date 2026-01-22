@@ -197,7 +197,7 @@ export class PdsTableHeadCell {
   private toggleSort = () => {
     if (this.sortable) {
       // Guard: return early if tableRef is not available
-      if (!this.tableRef || !(this.tableRef instanceof Element)) {
+      if (!this.tableRef) {
         return;
       }
 
