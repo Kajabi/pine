@@ -30,6 +30,7 @@ export class PdsMultiselect {
   private panelEl?: HTMLElement;
   private internals?: ElementInternals;
   private abortController?: AbortController;
+  private fetchDebounceTimer?: number;
   private observer?: MutationObserver;
   private cleanupAutoUpdate?: () => void;
 
@@ -213,8 +214,8 @@ export class PdsMultiselect {
 
   disconnectedCallback() {
     this.observer?.disconnect();
-    this.abortController?.abort();
     this.cleanupAutoUpdate?.();
+    this.clearAsyncFetchState();
   }
 
   @Watch('debounceMs')
@@ -309,6 +310,29 @@ export class PdsMultiselect {
     if (options.length > 0 && !this.asyncUrl && !this.options) {
       this.internalOptions = options;
     }
+  }
+
+  private clearAsyncFetchState() {
+    if (this.fetchDebounceTimer !== undefined) {
+      window.clearTimeout(this.fetchDebounceTimer);
+      this.fetchDebounceTimer = undefined;
+    }
+    this.abortController?.abort();
+    this.abortController = undefined;
+  }
+
+  private debouncedFetchAsyncOptions(query: string, page: number = 1) {
+    if (!this.asyncUrl) return;
+
+    if (this.fetchDebounceTimer !== undefined) {
+      window.clearTimeout(this.fetchDebounceTimer);
+    }
+
+    const delay = Math.max(0, this.debounceMs ?? 0);
+    this.fetchDebounceTimer = window.setTimeout(() => {
+      this.fetchDebounceTimer = undefined;
+      this.fetchOptions(query, page);
+    }, delay);
   }
 
   private syncSelectedItems() {
@@ -477,7 +501,7 @@ export class PdsMultiselect {
 
     // Fetch from async URL if configured
     if (this.asyncUrl) {
-      this.fetchOptions(this.searchQuery, 1);
+      this.debouncedFetchAsyncOptions(this.searchQuery, 1);
     }
   };
 
@@ -545,7 +569,7 @@ export class PdsMultiselect {
 
     // Trigger initial fetch if async
     if (this.asyncUrl && this.internalOptions.length === 0) {
-      this.fetchOptions(this.searchQuery, 1);
+      this.debouncedFetchAsyncOptions(this.searchQuery, 1);
     }
 
     requestAnimationFrame(() => {
@@ -606,11 +630,15 @@ export class PdsMultiselect {
     updatePosition();
 
     // Set up auto-update for window resize and scroll
-    this.cleanupAutoUpdate = autoUpdate(
+    const cleanupAutoUpdate = autoUpdate(
       referenceEl!,
       this.panelEl,
       updatePosition
     );
+    this.cleanupAutoUpdate = () => {
+      cleanupAutoUpdate();
+      this.clearAsyncFetchState();
+    };
   }
 
   private scrollOptionIntoView() {
@@ -682,7 +710,7 @@ export class PdsMultiselect {
         query: this.searchQuery,
         page: this.currentPage + 1,
       });
-      this.fetchOptions(this.searchQuery, this.currentPage + 1);
+      this.debouncedFetchAsyncOptions(this.searchQuery, this.currentPage + 1);
     }
   };
 
@@ -862,8 +890,12 @@ export class PdsMultiselect {
               aria-required={this.required ? 'true' : undefined}
               aria-expanded={this.isOpen ? 'true' : 'false'}
               aria-haspopup="listbox"
-              aria-describedby={assignDescription(this.componentId, this.invalid, this.errorMessage || this.helperMessage)}
-              aria-invalid={this.invalid ? 'true' : undefined}
+              aria-describedby={assignDescription(
+                this.componentId,
+                this.invalid || !!this.errorMessage,
+                this.errorMessage || this.helperMessage
+              )}
+              aria-invalid={this.invalid || !!this.errorMessage ? 'true' : undefined}
               onClick={this.handleTriggerClick}
               onKeyDown={this.handleTriggerKeyDown}
             >
