@@ -1,8 +1,10 @@
 @mixin generate-spacing-classes($directions, $tokens) {
   @each $direction in $directions {
     @each $key, $value in $tokens {
-      /* stylelint-disable-next-line function-no-unknown */
-      $class-name: if($direction, 'pds-spacing-#{$direction}-#{$key}', 'pds-spacing-#{$key}');
+      $class-name: 'pds-spacing-#{$key}';
+      @if $direction {
+        $class-name: 'pds-spacing-#{$direction}-#{$key}';
+      }
       .#{$class-name} {
         @if $direction == 'top' {
           margin-block-start: $value;
@@ -22,8 +24,10 @@
 
 @mixin generate-columns($prefix, $columns) {
   @for $i from 0 through $columns {
-    /* stylelint-disable-next-line function-no-unknown */
-    $class-name: if($prefix, 'pds-box-#{$prefix}-#{$i}', 'pds-box-#{$i}');
+    $class-name: 'pds-box-#{$i}';
+    @if $prefix {
+      $class-name: 'pds-box-#{$prefix}-#{$i}';
+    }
     .#{$class-name} {
       @if $i == 0 {
         display: none;
@@ -38,8 +42,10 @@
 
 @mixin generate-column-offsets($prefix, $columns) {
   @for $i from 0 through $columns {
-    /* stylelint-disable-next-line function-no-unknown */
-    $class-name: if($prefix, 'pds-box-offset-#{$prefix}-#{$i}', 'pds-box-offset-#{$i}');
+    $class-name: 'pds-box-offset-#{$i}';
+    @if $prefix {
+      $class-name: 'pds-box-offset-#{$prefix}-#{$i}';
+    }
     .#{$class-name} {
       @if $i == 0 {
         margin-inline-start: 0;
