@@ -47,12 +47,12 @@ export class PdsMultiselect {
   @Prop() label?: string;
 
   /**
-   * Placeholder text for the search input.
+   * Placeholder text for the input field.
    */
   @Prop() placeholder?: string = 'Select...';
 
   /**
-   * The name of the form control for form submission.
+   * Specifies the name. Submitted with the form as part of a name/value pair.
    */
   @Prop() name?: string;
 
@@ -62,7 +62,7 @@ export class PdsMultiselect {
   @Prop({ mutable: true }) value: string[] = [];
 
   /**
-   * Whether the multiselect is disabled.
+   * If true, the multiselect is disabled.
    */
   @Prop() disabled: boolean = false;
 
@@ -122,12 +122,12 @@ export class PdsMultiselect {
   @Prop() helperMessage?: string;
 
   /**
-   * Whether the component is in an invalid state.
+   * If true, the multiselect is in an invalid state.
    */
   @Prop() invalid?: boolean;
 
   /**
-   * Whether the multiselect is required.
+   * If true, the multiselect is required.
    */
   @Prop() required: boolean = false;
 

@@ -1338,7 +1338,7 @@ export namespace Components {
          */
         "debounceMs": number;
         /**
-          * Whether the multiselect is disabled.
+          * If true, the multiselect is disabled.
           * @default false
          */
         "disabled": boolean;
@@ -1360,7 +1360,7 @@ export namespace Components {
          */
         "hideLabel": boolean;
         /**
-          * Whether the component is in an invalid state.
+          * If true, the multiselect is in an invalid state.
          */
         "invalid"?: boolean;
         /**
@@ -1387,7 +1387,7 @@ export namespace Components {
          */
         "minWidth": string;
         /**
-          * The name of the form control for form submission.
+          * Specifies the name. Submitted with the form as part of a name/value pair.
          */
         "name"?: string;
         /**
@@ -1399,12 +1399,12 @@ export namespace Components {
          */
         "panelWidth"?: string;
         /**
-          * Placeholder text for the search input.
+          * Placeholder text for the input field.
           * @default 'Select...'
          */
         "placeholder"?: string;
         /**
-          * Whether the multiselect is required.
+          * If true, the multiselect is required.
           * @default false
          */
         "required": boolean;
@@ -4251,7 +4251,7 @@ declare namespace LocalJSX {
          */
         "debounceMs"?: number;
         /**
-          * Whether the multiselect is disabled.
+          * If true, the multiselect is disabled.
           * @default false
          */
         "disabled"?: boolean;
@@ -4273,7 +4273,7 @@ declare namespace LocalJSX {
          */
         "hideLabel"?: boolean;
         /**
-          * Whether the component is in an invalid state.
+          * If true, the multiselect is in an invalid state.
          */
         "invalid"?: boolean;
         /**
@@ -4300,7 +4300,7 @@ declare namespace LocalJSX {
          */
         "minWidth"?: string;
         /**
-          * The name of the form control for form submission.
+          * Specifies the name. Submitted with the form as part of a name/value pair.
          */
         "name"?: string;
         /**
@@ -4324,12 +4324,12 @@ declare namespace LocalJSX {
          */
         "panelWidth"?: string;
         /**
-          * Placeholder text for the search input.
+          * Placeholder text for the input field.
           * @default 'Select...'
          */
         "placeholder"?: string;
         /**
-          * Whether the multiselect is required.
+          * If true, the multiselect is required.
           * @default false
          */
         "required"?: boolean;
