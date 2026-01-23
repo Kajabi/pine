@@ -29,6 +29,7 @@ import { defineCustomElement as definePdsModal } from '@pine-ds/core/components/
 import { defineCustomElement as definePdsModalContent } from '@pine-ds/core/components/pds-modal-content.js';
 import { defineCustomElement as definePdsModalFooter } from '@pine-ds/core/components/pds-modal-footer.js';
 import { defineCustomElement as definePdsModalHeader } from '@pine-ds/core/components/pds-modal-header.js';
+import { defineCustomElement as definePdsMultiselect } from '@pine-ds/core/components/pds-multiselect.js';
 import { defineCustomElement as definePdsPopover } from '@pine-ds/core/components/pds-popover.js';
 import { defineCustomElement as definePdsProgress } from '@pine-ds/core/components/pds-progress.js';
 import { defineCustomElement as definePdsProperty } from '@pine-ds/core/components/pds-property.js';
@@ -77,6 +78,7 @@ export const PdsModal = /*@__PURE__*/createReactComponent<JSX.PdsModal, HTMLPdsM
 export const PdsModalContent = /*@__PURE__*/createReactComponent<JSX.PdsModalContent, HTMLPdsModalContentElement>('pds-modal-content', undefined, undefined, definePdsModalContent);
 export const PdsModalFooter = /*@__PURE__*/createReactComponent<JSX.PdsModalFooter, HTMLPdsModalFooterElement>('pds-modal-footer', undefined, undefined, definePdsModalFooter);
 export const PdsModalHeader = /*@__PURE__*/createReactComponent<JSX.PdsModalHeader, HTMLPdsModalHeaderElement>('pds-modal-header', undefined, undefined, definePdsModalHeader);
+export const PdsMultiselect = /*@__PURE__*/createReactComponent<JSX.PdsMultiselect, HTMLPdsMultiselectElement>('pds-multiselect', undefined, undefined, definePdsMultiselect);
 export const PdsPopover = /*@__PURE__*/createReactComponent<JSX.PdsPopover, HTMLPdsPopoverElement>('pds-popover', undefined, undefined, definePdsPopover);
 export const PdsProgress = /*@__PURE__*/createReactComponent<JSX.PdsProgress, HTMLPdsProgressElement>('pds-progress', undefined, undefined, definePdsProgress);
 export const PdsProperty = /*@__PURE__*/createReactComponent<JSX.PdsProperty, HTMLPdsPropertyElement>('pds-property', undefined, undefined, definePdsProperty);

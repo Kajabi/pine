@@ -3,6 +3,6 @@
     "stylelint"
   ],
   "*.{js,jsx,ts,tsx}": [
-    "eslint "
+    "eslint"
   ]
 }

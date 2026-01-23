@@ -1,0 +1,251 @@
+:host {
+  display: block;
+}
+
+:host([aria-disabled="true"]) {
+  .pds-multiselect__trigger {
+    background: var(--pine-color-background-container-disabled);
+    border-color: var(--pine-color-border-disabled);
+    color: var(--pine-color-text-disabled);
+    cursor: not-allowed;
+  }
+
+  .pds-multiselect__icon {
+    color: var(--pine-color-text-disabled);
+  }
+}
+
+.pds-multiselect {
+  position: relative;
+}
+
+.pds-multiselect__label {
+  color: var(--pine-color-text-label);
+  display: block;
+  font: var(--pine-typography-body-medium);
+  letter-spacing: var(--pine-letter-spacing);
+  margin-block-end: var(--pine-dimension-2xs);
+}
+
+.pds-multiselect__wrapper {
+  position: relative;
+}
+
+.pds-multiselect__trigger {
+  align-items: center;
+  background: var(--pine-color-background-container);
+  border: var(--pine-border);
+  border-radius: var(--pine-dimension-125);
+  cursor: pointer;
+  display: flex;
+  font: var(--pine-typography-body);
+  gap: var(--pine-dimension-xs);
+  justify-content: space-between;
+  letter-spacing: var(--pine-letter-spacing);
+  min-height: var(--pine-dimension-550);
+  padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
+  position: relative;
+  text-align: start;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+
+  &:hover:not(.pds-multiselect__trigger--disabled) {
+    border-color: var(--pine-color-border-hover);
+  }
+
+  &:focus:not(.pds-multiselect__trigger--disabled) {
+    border-color: var(--pine-color-border-active);
+    outline: var(--pine-outline-focus);
+    outline-offset: var(--pine-border-width);
+  }
+
+  &.pds-multiselect__trigger--open {
+    border-color: var(--pine-color-border-active);
+  }
+
+  &.pds-multiselect__trigger--invalid {
+    background-color: var(--pine-color-red-050);
+    border-color: var(--pine-color-border-danger);
+
+    &:focus {
+      outline-color: var(--pine-color-focus-ring-danger);
+    }
+  }
+
+  &.pds-multiselect__trigger--disabled {
+    background: var(--pine-color-background-container-disabled);
+    border-color: var(--pine-color-border-disabled);
+    color: var(--pine-color-text-disabled);
+    cursor: not-allowed;
+  }
+}
+
+.pds-multiselect__trigger-text {
+  color: var(--pine-color-text-strong);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &.pds-multiselect__trigger-text--placeholder {
+    color: var(--pine-color-text-placeholder);
+  }
+
+  .pds-multiselect__trigger--disabled & {
+    color: var(--pine-color-text-disabled);
+  }
+}
+
+.pds-multiselect__icon {
+  color: var(--pine-color-icon);
+  flex-shrink: var(--pine-dimension-none);
+}
+
+.pds-multiselect__panel {
+  background: var(--pine-color-background-container);
+  border-radius: var(--pine-dimension-125);
+  box-shadow: var(--pine-box-shadow);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  z-index: var(--pine-z-index-raised);
+}
+
+.pds-multiselect__search {
+  align-items: center;
+  border-block-end: var(--pine-border);
+  border-block-end-color: var(--pine-color-border-subtle);
+  display: flex;
+  gap: var(--pine-dimension-xs);
+  padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
+
+  pds-icon {
+    color: var(--pine-color-text-muted);
+    flex-shrink: var(--pine-dimension-none);
+  }
+}
+
+.pds-multiselect__search-input {
+  background: transparent;
+  border: var(--pine-dimension-none);
+  color: var(--pine-color-text-strong);
+  flex: 1;
+  font: var(--pine-typography-body);
+  letter-spacing: var(--pine-letter-spacing);
+  min-width: var(--pine-dimension-none);
+  outline: none;
+
+  &::placeholder {
+    color: var(--pine-color-text-placeholder);
+  }
+}
+
+.pds-multiselect__selected-section {
+  border-block-end: var(--pine-border);
+  border-block-end-color: var(--pine-color-border-subtle);
+  padding: var(--pine-dimension-xs);
+}
+
+.pds-multiselect__selected-list {
+  list-style: none;
+  margin: var(--pine-dimension-none);
+  padding: var(--pine-dimension-none);
+}
+
+.pds-multiselect__selected-item {
+  color: var(--pine-color-text-strong);
+  font: var(--pine-typography-body);
+  letter-spacing: var(--pine-letter-spacing);
+  overflow: hidden;
+  padding: var(--pine-dimension-2xs) var(--pine-dimension-xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pds-multiselect__listbox {
+  background: transparent;
+  border: var(--pine-dimension-none);
+  box-sizing: border-box;
+  list-style: none;
+  margin: var(--pine-dimension-none);
+  overflow-y: auto;
+  padding: var(--pine-dimension-xs);
+}
+
+.pds-multiselect__option {
+  align-items: center;
+  background: transparent;
+  border-radius: var(--pine-dimension-xs);
+  cursor: pointer;
+  display: flex;
+  padding: var(--pine-dimension-2xs) var(--pine-dimension-xs);
+  transition: background 0.15s;
+
+  // Prevent checkbox label from triggering double events
+  pds-checkbox {
+    pointer-events: none;
+    width: 100%;
+  }
+
+  &:hover,
+  &.pds-multiselect__option--highlighted {
+    background: var(--pine-color-background-muted);
+  }
+
+  &:focus-visible {
+    outline: var(--pine-dimension-none);
+  }
+}
+
+.pds-multiselect__empty,
+.pds-multiselect__loading {
+  align-items: center;
+  color: var(--pine-color-text-muted);
+  display: flex;
+  font: var(--pine-typography-body);
+  justify-content: center;
+  padding: var(--pine-dimension-sm);
+}
+
+.pds-multiselect__load-more {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  padding: var(--pine-dimension-xs);
+}
+
+.pds-multiselect__helper {
+  color: var(--pine-color-text-message);
+  font: var(--pine-typography-body-sm);
+  margin-block-start: var(--pine-dimension-2xs);
+  margin-inline-start: var(--pine-dimension-none);
+}
+
+.pds-multiselect__error {
+  align-items: flex-start;
+  color: var(--pine-color-text-message-danger);
+  display: flex;
+  font: var(--pine-typography-body-sm);
+  gap: var(--pine-dimension-2xs);
+  margin-block-start: var(--pine-dimension-2xs);
+  margin-inline-start: var(--pine-dimension-none);
+
+  pds-icon {
+    flex-shrink: var(--pine-dimension-none);
+    margin-block-start: var(--pine-dimension-025);
+  }
+}
+
+.visually-hidden {
+  border: var(--pine-dimension-none);
+  clip: rect(0 0 0 0);
+  clip-path: polygon(0 0, 0 0, 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: var(--pine-dimension-none);
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}

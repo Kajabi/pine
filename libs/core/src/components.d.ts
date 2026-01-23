@@ -11,6 +11,7 @@ import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-in
 import { ChipSentimentType, ChipVariantType, PlacementType } from "./utils/types";
 import { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 import { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
+import { MultiselectChangeEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
 import { PdsPopoverEventDetail } from "./components/pds-popover/popover-interface";
 import { RadioGroupChangeEventDetail } from "./components/pds-radio-group/radio-group-interface";
 import { SortableEvent } from "sortablejs";
@@ -21,6 +22,7 @@ export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-in
 export { ChipSentimentType, ChipVariantType, PlacementType } from "./utils/types";
 export { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
+export { MultiselectChangeEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
 export { PdsPopoverEventDetail } from "./components/pds-popover/popover-interface";
 export { RadioGroupChangeEventDetail } from "./components/pds-radio-group/radio-group-interface";
 export { SortableEvent } from "sortablejs";
@@ -1316,6 +1318,111 @@ export namespace Components {
     }
     interface PdsModalHeader {
     }
+    interface PdsMultiselect {
+        /**
+          * HTTP method for async requests.
+          * @default 'GET'
+         */
+        "asyncMethod": 'GET' | 'POST';
+        /**
+          * URL endpoint for async data fetching.
+         */
+        "asyncUrl"?: string;
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * Debounce delay in milliseconds for search/fetch.
+          * @default 300
+         */
+        "debounce": number;
+        /**
+          * Determines whether or not the multiselect is disabled.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Error message to display.
+         */
+        "errorMessage"?: string;
+        /**
+          * Function to format async results. Receives raw API response item.
+         */
+        "formatResult"?: (item: unknown) => MultiselectOption;
+        /**
+          * Helper message to display below the input.
+         */
+        "helperMessage"?: string;
+        /**
+          * Visually hides the label but keeps it accessible.
+          * @default false
+         */
+        "hideLabel": boolean;
+        /**
+          * If true, the multiselect is in an invalid state.
+         */
+        "invalid"?: boolean;
+        /**
+          * Text to be displayed as the multiselect label.
+         */
+        "label"?: string;
+        /**
+          * Whether the component is currently loading async options.
+          * @default false
+         */
+        "loading": boolean;
+        /**
+          * Maximum height of the dropdown before scrolling.
+          * @default '300px'
+         */
+        "maxHeight": string;
+        /**
+          * Maximum number of selections allowed.
+         */
+        "maxSelections"?: number;
+        /**
+          * Minimum width of the dropdown panel.
+          * @default '250px'
+         */
+        "minWidth": string;
+        /**
+          * Specifies the name. Submitted with the form as part of a name/value pair.
+         */
+        "name"?: string;
+        /**
+          * Options provided externally (for consumer-managed async).
+         */
+        "options"?: MultiselectOption[];
+        /**
+          * Width of the dropdown panel. Defaults to the trigger width.
+         */
+        "panelWidth"?: string;
+        /**
+          * Placeholder text for the input field.
+          * @default 'Select...'
+         */
+        "placeholder"?: string;
+        /**
+          * If true, the multiselect is required.
+          * @default false
+         */
+        "required": boolean;
+        /**
+          * Sets focus on the trigger button.
+         */
+        "setFocus": () => Promise<void>;
+        /**
+          * Width of the trigger button (and reference for dropdown positioning).
+          * @default '100%'
+         */
+        "triggerWidth": string;
+        /**
+          * Array of selected option values.
+          * @default []
+         */
+        "value": string[];
+    }
     interface PdsPopover {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -2097,6 +2204,10 @@ export interface PdsModalCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsModalElement;
 }
+export interface PdsMultiselectCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLPdsMultiselectElement;
+}
 export interface PdsPopoverCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLPdsPopoverElement;
@@ -2435,6 +2546,25 @@ declare global {
         prototype: HTMLPdsModalHeaderElement;
         new (): HTMLPdsModalHeaderElement;
     };
+    interface HTMLPdsMultiselectElementEventMap {
+        "pdsMultiselectChange": MultiselectChangeEventDetail;
+        "pdsMultiselectSearch": MultiselectSearchEventDetail;
+        "pdsMultiselectLoadOptions": MultiselectLoadOptionsEventDetail;
+    }
+    interface HTMLPdsMultiselectElement extends Components.PdsMultiselect, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLPdsMultiselectElementEventMap>(type: K, listener: (this: HTMLPdsMultiselectElement, ev: PdsMultiselectCustomEvent<HTMLPdsMultiselectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLPdsMultiselectElementEventMap>(type: K, listener: (this: HTMLPdsMultiselectElement, ev: PdsMultiselectCustomEvent<HTMLPdsMultiselectElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLPdsMultiselectElement: {
+        prototype: HTMLPdsMultiselectElement;
+        new (): HTMLPdsMultiselectElement;
+    };
     interface HTMLPdsPopoverElementEventMap {
         "pdsPopoverOpen": PdsPopoverEventDetail;
         "pdsPopoverClose": PdsPopoverEventDetail;
@@ -2750,6 +2880,7 @@ declare global {
         "pds-modal-content": HTMLPdsModalContentElement;
         "pds-modal-footer": HTMLPdsModalFooterElement;
         "pds-modal-header": HTMLPdsModalHeaderElement;
+        "pds-multiselect": HTMLPdsMultiselectElement;
         "pds-popover": HTMLPdsPopoverElement;
         "pds-progress": HTMLPdsProgressElement;
         "pds-property": HTMLPdsPropertyElement;
@@ -4104,6 +4235,119 @@ declare namespace LocalJSX {
     }
     interface PdsModalHeader {
     }
+    interface PdsMultiselect {
+        /**
+          * HTTP method for async requests.
+          * @default 'GET'
+         */
+        "asyncMethod"?: 'GET' | 'POST';
+        /**
+          * URL endpoint for async data fetching.
+         */
+        "asyncUrl"?: string;
+        /**
+          * A unique identifier used for the underlying component `id` attribute.
+         */
+        "componentId": string;
+        /**
+          * Debounce delay in milliseconds for search/fetch.
+          * @default 300
+         */
+        "debounce"?: number;
+        /**
+          * Determines whether or not the multiselect is disabled.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Error message to display.
+         */
+        "errorMessage"?: string;
+        /**
+          * Function to format async results. Receives raw API response item.
+         */
+        "formatResult"?: (item: unknown) => MultiselectOption;
+        /**
+          * Helper message to display below the input.
+         */
+        "helperMessage"?: string;
+        /**
+          * Visually hides the label but keeps it accessible.
+          * @default false
+         */
+        "hideLabel"?: boolean;
+        /**
+          * If true, the multiselect is in an invalid state.
+         */
+        "invalid"?: boolean;
+        /**
+          * Text to be displayed as the multiselect label.
+         */
+        "label"?: string;
+        /**
+          * Whether the component is currently loading async options.
+          * @default false
+         */
+        "loading"?: boolean;
+        /**
+          * Maximum height of the dropdown before scrolling.
+          * @default '300px'
+         */
+        "maxHeight"?: string;
+        /**
+          * Maximum number of selections allowed.
+         */
+        "maxSelections"?: number;
+        /**
+          * Minimum width of the dropdown panel.
+          * @default '250px'
+         */
+        "minWidth"?: string;
+        /**
+          * Specifies the name. Submitted with the form as part of a name/value pair.
+         */
+        "name"?: string;
+        /**
+          * Emitted when selection changes.
+         */
+        "onPdsMultiselectChange"?: (event: PdsMultiselectCustomEvent<MultiselectChangeEventDetail>) => void;
+        /**
+          * Emitted to request more options (pagination).
+         */
+        "onPdsMultiselectLoadOptions"?: (event: PdsMultiselectCustomEvent<MultiselectLoadOptionsEventDetail>) => void;
+        /**
+          * Emitted on search input (for consumer-managed async).
+         */
+        "onPdsMultiselectSearch"?: (event: PdsMultiselectCustomEvent<MultiselectSearchEventDetail>) => void;
+        /**
+          * Options provided externally (for consumer-managed async).
+         */
+        "options"?: MultiselectOption[];
+        /**
+          * Width of the dropdown panel. Defaults to the trigger width.
+         */
+        "panelWidth"?: string;
+        /**
+          * Placeholder text for the input field.
+          * @default 'Select...'
+         */
+        "placeholder"?: string;
+        /**
+          * If true, the multiselect is required.
+          * @default false
+         */
+        "required"?: boolean;
+        /**
+          * Width of the trigger button (and reference for dropdown positioning).
+          * @default '100%'
+         */
+        "triggerWidth"?: string;
+        /**
+          * Array of selected option values.
+          * @default []
+         */
+        "value"?: string[];
+    }
     interface PdsPopover {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -4916,6 +5160,7 @@ declare namespace LocalJSX {
         "pds-modal-content": PdsModalContent;
         "pds-modal-footer": PdsModalFooter;
         "pds-modal-header": PdsModalHeader;
+        "pds-multiselect": PdsMultiselect;
         "pds-popover": PdsPopover;
         "pds-progress": PdsProgress;
         "pds-property": PdsProperty;
@@ -4979,6 +5224,7 @@ declare module "@stencil/core" {
             "pds-modal-content": LocalJSX.PdsModalContent & JSXBase.HTMLAttributes<HTMLPdsModalContentElement>;
             "pds-modal-footer": LocalJSX.PdsModalFooter & JSXBase.HTMLAttributes<HTMLPdsModalFooterElement>;
             "pds-modal-header": LocalJSX.PdsModalHeader & JSXBase.HTMLAttributes<HTMLPdsModalHeaderElement>;
+            "pds-multiselect": LocalJSX.PdsMultiselect & JSXBase.HTMLAttributes<HTMLPdsMultiselectElement>;
             "pds-popover": LocalJSX.PdsPopover & JSXBase.HTMLAttributes<HTMLPdsPopoverElement>;
             "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-property": LocalJSX.PdsProperty & JSXBase.HTMLAttributes<HTMLPdsPropertyElement>;
