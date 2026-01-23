@@ -2,7 +2,7 @@ import { html } from 'lit';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
 export default {
-  title: 'omponents/Multiselect',
+  title: 'components/Multiselect',
   component: 'pds-multiselect',
   parameters: {
     docs: {

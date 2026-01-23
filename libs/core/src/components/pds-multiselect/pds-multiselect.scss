@@ -141,7 +141,8 @@
 }
 
 .pds-multiselect__selected-section {
-  border-block-end: var(--pine-color-border-subtle);
+  border-block-end: var(--pine-border);
+  border-block-end-color: var(--pine-color-border-subtle);
   padding: var(--pine-dimension-xs);
 }
 
