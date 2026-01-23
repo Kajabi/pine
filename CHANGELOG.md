@@ -1,3 +1,15 @@
+## 3.14.1 (2026-01-23)
+
+### Bug Fixes 🐛
+
+- rollback typescript-eslint to v6 with proper version compatibility ([#641](https://github.com/Kajabi/pine/pull/641))
+- **pds-dropdown-menu:** prevent clipping in overflow containers ([#643](https://github.com/Kajabi/pine/pull/643))
+- **pds-table:** improve sort indicator clarity ([#640](https://github.com/Kajabi/pine/pull/640))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+
 ## 3.14.0 (2026-01-15)
 
 ### Features 🚀
