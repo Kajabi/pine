@@ -79,7 +79,7 @@ export class PdsMultiselect {
   /**
    * Debounce delay in milliseconds for search/fetch.
    */
-  @Prop() debounceMs: number = 300;
+  @Prop() debounce: number = 300;
 
   /**
    * Maximum number of selections allowed.
@@ -218,12 +218,12 @@ export class PdsMultiselect {
     this.clearAsyncFetchState();
   }
 
-  @Watch('debounceMs')
+  @Watch('debounce')
   protected setupDebounce() {
-    const { pdsMultiselectSearch, debounceMs, originalSearchEmitter } = this;
-    this.pdsMultiselectSearch = debounceMs === undefined
+    const { pdsMultiselectSearch, debounce, originalSearchEmitter } = this;
+    this.pdsMultiselectSearch = debounce === undefined
       ? originalSearchEmitter ?? pdsMultiselectSearch
-      : debounceEvent(pdsMultiselectSearch, debounceMs);
+      : debounceEvent(pdsMultiselectSearch, debounce);
   }
 
   @Watch('value')
@@ -328,7 +328,7 @@ export class PdsMultiselect {
       window.clearTimeout(this.fetchDebounceTimer);
     }
 
-    const delay = Math.max(0, this.debounceMs ?? 0);
+    const delay = Math.max(0, this.debounce ?? 0);
     this.fetchDebounceTimer = window.setTimeout(() => {
       this.fetchDebounceTimer = undefined;
       this.fetchOptions(query, page);

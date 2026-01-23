@@ -22,7 +22,7 @@ A multiselect component that allows users to select multiple options from a sear
 | `asyncMethod`              | `async-method`   | HTTP method for async requests.                                           | `"GET" \| "POST"`                      | `'GET'`       |
 | `asyncUrl`                 | `async-url`      | URL endpoint for async data fetching.                                     | `string`                               | `undefined`   |
 | `componentId` _(required)_ | `component-id`   | A unique identifier used for the underlying component `id` attribute.     | `string`                               | `undefined`   |
-| `debounceMs`               | `debounce-ms`    | Debounce delay in milliseconds for search/fetch.                          | `number`                               | `300`         |
+| `debounce`                 | `debounce`       | Debounce delay in milliseconds for search/fetch.                          | `number`                               | `300`         |
 | `disabled`                 | `disabled`       | Determines whether or not the multiselect is disabled.                    | `boolean`                              | `false`       |
 | `errorMessage`             | `error-message`  | Error message to display.                                                 | `string`                               | `undefined`   |
 | `formatResult`             | --               | Function to format async results. Receives raw API response item.         | `(item: unknown) => MultiselectOption` | `undefined`   |

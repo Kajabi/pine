@@ -1336,7 +1336,7 @@ export namespace Components {
           * Debounce delay in milliseconds for search/fetch.
           * @default 300
          */
-        "debounceMs": number;
+        "debounce": number;
         /**
           * Determines whether or not the multiselect is disabled.
           * @default false
@@ -4249,7 +4249,7 @@ declare namespace LocalJSX {
           * Debounce delay in milliseconds for search/fetch.
           * @default 300
          */
-        "debounceMs"?: number;
+        "debounce"?: number;
         /**
           * Determines whether or not the multiselect is disabled.
           * @default false
