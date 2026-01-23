@@ -62,7 +62,7 @@ export class PdsMultiselect {
   @Prop({ mutable: true }) value: string[] = [];
 
   /**
-   * If true, the multiselect is disabled.
+   * Determines whether or not the multiselect is disabled.
    */
   @Prop() disabled: boolean = false;
 

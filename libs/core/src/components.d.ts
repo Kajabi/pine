@@ -1338,7 +1338,7 @@ export namespace Components {
          */
         "debounceMs": number;
         /**
-          * If true, the multiselect is disabled.
+          * Determines whether or not the multiselect is disabled.
           * @default false
          */
         "disabled": boolean;
@@ -4251,7 +4251,7 @@ declare namespace LocalJSX {
          */
         "debounceMs"?: number;
         /**
-          * If true, the multiselect is disabled.
+          * Determines whether or not the multiselect is disabled.
           * @default false
          */
         "disabled"?: boolean;

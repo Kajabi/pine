@@ -64,7 +64,7 @@
   }
 
   &.pds-multiselect__trigger--invalid {
-    background-color: var(--pine-select-color-background-danger);
+    background-color: var(--pine-color-red-050);
     border-color: var(--pine-color-border-danger);
 
     &:focus {
@@ -141,7 +141,7 @@
 }
 
 .pds-multiselect__selected-section {
-  border-block-end: var(--pine-border-subtle);
+  border-block-end: var(--pine-color-border-subtle);
   padding: var(--pine-dimension-xs);
 }
 

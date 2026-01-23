@@ -2,7 +2,7 @@ import { html } from 'lit';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
 export default {
-  title: 'components/Multiselect',
+  title: 'omponents/Multiselect',
   component: 'pds-multiselect',
   parameters: {
     docs: {
@@ -143,7 +143,7 @@ export const MaxSelections = {
   `,
 };
 
-export const WithHelperMessage = {
+export const WithMessage = {
   args: {
     componentId: 'multiselect-helper',
     label: 'Categories',
@@ -165,7 +165,7 @@ export const WithHelperMessage = {
   `,
 };
 
-export const WithError = {
+export const Invalid = {
   args: {
     componentId: 'multiselect-error',
     label: 'Required Tags',
