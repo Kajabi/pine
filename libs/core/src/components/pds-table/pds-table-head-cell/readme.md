@@ -22,6 +22,17 @@
 
 ## Methods
 
+### `clearActiveSort() => Promise<void>`
+
+Clears the active sort state from this column.
+Used internally when another column becomes active.
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
 ### `setActiveSort(direction: "asc" | "desc") => Promise<void>`
 
 Programmatically sets this column as the active sort column with the specified direction.

@@ -23,7 +23,7 @@ describe('pds-table-head-cell', () => {
     `);
   });
 
-  it('renders sortable with icon when prop is set', async () => {
+  it('renders sortable without icon when not active', async () => {
     const page = await newSpecPage({
       components: [PdsTableHeadCell],
       html: `<pds-table-head-cell sortable="true"></pds-table-head-cell>`,
@@ -32,10 +32,24 @@ describe('pds-table-head-cell', () => {
       <pds-table-head-cell class="is-sortable sort-asc" role="columnheader" sortable="true" part="head-cell">
         <mock:shadow-root>
           <slot></slot>
-          <pds-icon icon="${upSmall}"></pds-icon>
         </mock:shadow-root>
       </pds-table-head-cell>
     `);
+  });
+
+  it('renders sortable with icon when active', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableHeadCell, PdsTable],
+      html: `<pds-table><pds-table-head-cell sortable="true">Column</pds-table-head-cell></pds-table>`,
+    });
+
+    const tableHeadCell = page.body.querySelector('pds-table-head-cell') as any;
+    await tableHeadCell.setActiveSort('asc');
+    await page.waitForChanges();
+
+    const icon = tableHeadCell.shadowRoot.querySelector('pds-icon');
+    expect(icon).toBeTruthy();
+    expect(icon.getAttribute('icon')).toBe(upSmall);
   });
 
   it('renders with is-compact class when tableRef is compact', async () => {
@@ -263,14 +277,25 @@ describe('pds-table-head-cell', () => {
 
     const tableHeadCell = page.body.querySelector('pds-table-head-cell') as HTMLElement;
     expect(tableHeadCell).toHaveClass('sort-asc');
+    expect(tableHeadCell).not.toHaveClass('is-active');
 
+    // First click: toggles to 'desc' and sets active
     tableHeadCell.click();
     await page.waitForChanges();
     expect(tableHeadCell).toHaveClass('sort-desc');
+    expect(tableHeadCell).toHaveClass('is-active');
 
+    // Second click: toggles back to 'asc'
     tableHeadCell.click();
     await page.waitForChanges();
     expect(tableHeadCell).toHaveClass('sort-asc');
+    expect(tableHeadCell).toHaveClass('is-active');
+
+    // Third click: toggles to 'desc' again
+    tableHeadCell.click();
+    await page.waitForChanges();
+    expect(tableHeadCell).toHaveClass('sort-desc');
+    expect(tableHeadCell).toHaveClass('is-active');
   });
 
   it('cleans up scroll listener on disconnect', async () => {
