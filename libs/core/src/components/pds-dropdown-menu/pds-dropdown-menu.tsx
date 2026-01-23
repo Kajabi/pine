@@ -99,6 +99,7 @@ export class PdsDropdownMenu implements BasePdsProps {
     const updatePosition = () => {
       computePosition(this.triggerEl, this.panelEl as HTMLElement, {
         placement: this.placement,
+        strategy: 'fixed',
         middleware: [offset(6), flip(), shift({padding: 5})],
       }).then(({ x, y }) => {
         Object.assign(this.panelEl.style, {
