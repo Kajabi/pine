@@ -142,7 +142,7 @@ const ResponsiveTemplate = (args) => html`
     <pds-table-head-cell>Column Title</pds-table-head-cell>
     <pds-table-head-cell>Column Title</pds-table-head-cell>
     <pds-table-head-cell>Column Title</pds-table-head-cell>
-    <pds-table-head-cell>Column Title</pds-table-head-cell>
+    <pds-table-head-cell>Actions</pds-table-head-cell>
   </pds-table-head>
   <pds-table-body>
     <pds-table-row value="responsive1">
@@ -157,7 +157,15 @@ const ResponsiveTemplate = (args) => html`
       <pds-table-cell>Row Item Juliett</pds-table-cell>
       <pds-table-cell>Row Item Kilo</pds-table-cell>
       <pds-table-cell>Row Item Lima</pds-table-cell>
-      <pds-table-cell>Row Item Mike</pds-table-cell>
+      <pds-table-cell>
+        <pds-dropdown-menu placement="bottom-end">
+          <pds-button slot="trigger" size="sm" variant="icon-only"><pds-icon name="dot-menu-horizontal"></pds-icon></pds-button>
+          <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
+          <pds-dropdown-menu-item>Duplicate</pds-dropdown-menu-item>
+          <pds-dropdown-menu-separator></pds-dropdown-menu-separator>
+          <pds-dropdown-menu-item destructive>Delete</pds-dropdown-menu-item>
+        </pds-dropdown-menu>
+      </pds-table-cell>
     </pds-table-row>
     <pds-table-row value="responsive2">
       <pds-table-cell>Row Item Alpha</pds-table-cell>
@@ -171,7 +179,15 @@ const ResponsiveTemplate = (args) => html`
       <pds-table-cell>Row Item Juliett</pds-table-cell>
       <pds-table-cell>Row Item Kilo</pds-table-cell>
       <pds-table-cell>Row Item Lima</pds-table-cell>
-      <pds-table-cell>Row Item Mike</pds-table-cell>
+      <pds-table-cell>
+        <pds-dropdown-menu placement="bottom-end">
+          <pds-button slot="trigger" size="sm" variant="icon-only"><pds-icon name="dot-menu-horizontal"></pds-icon></pds-button>
+          <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
+          <pds-dropdown-menu-item>Duplicate</pds-dropdown-menu-item>
+          <pds-dropdown-menu-separator></pds-dropdown-menu-separator>
+          <pds-dropdown-menu-item destructive>Delete</pds-dropdown-menu-item>
+        </pds-dropdown-menu>
+      </pds-table-cell>
     </pds-table-row>
     <pds-table-row value="responsive3">
       <pds-table-cell>Row Item Alpha</pds-table-cell>
@@ -185,7 +201,15 @@ const ResponsiveTemplate = (args) => html`
       <pds-table-cell>Row Item Juliett</pds-table-cell>
       <pds-table-cell>Row Item Kilo</pds-table-cell>
       <pds-table-cell>Row Item Lima</pds-table-cell>
-      <pds-table-cell>Row Item Mike</pds-table-cell>
+      <pds-table-cell>
+        <pds-dropdown-menu placement="bottom-end">
+          <pds-button slot="trigger" size="sm" variant="icon-only"><pds-icon name="dot-menu-horizontal"></pds-icon></pds-button>
+          <pds-dropdown-menu-item>Edit</pds-dropdown-menu-item>
+          <pds-dropdown-menu-item>Duplicate</pds-dropdown-menu-item>
+          <pds-dropdown-menu-separator></pds-dropdown-menu-separator>
+          <pds-dropdown-menu-item destructive>Delete</pds-dropdown-menu-item>
+        </pds-dropdown-menu>
+      </pds-table-cell>
     </pds-table-row>
   </pds-table-body>
 </pds-table>`;

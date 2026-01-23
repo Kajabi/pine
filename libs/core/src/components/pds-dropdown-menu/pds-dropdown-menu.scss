@@ -12,7 +12,7 @@
   left: var(--pine-dimension-none);
   min-width: 170px;
   padding: var(--pine-dimension-xs);
-  position: absolute;
+  position: fixed;
   z-index: var(--pine-z-index-overlay);
 
   :host-context([data-theme="dark"]) & {
