@@ -1,3 +1,13 @@
+## 3.14.2-dev.0 (2026-01-27)
+
+### Bug Fixes 🐛
+
+- prevent crashes when components are double-initialized via CDN and React ([bbe31ed5](https://github.com/Kajabi/pine/commit/bbe31ed5))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+
 ## 3.14.1 (2026-01-23)
 
 ### Bug Fixes 🐛
