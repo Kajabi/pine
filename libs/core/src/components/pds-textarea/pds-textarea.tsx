@@ -308,8 +308,8 @@ export class PdsTextarea {
 
   connectedCallback() {
     this.debounceChanged();
-    // Initialize ElementInternals for form association
-    if (this.el.attachInternals) {
+    // Initialize ElementInternals for form association (only once per element instance)
+    if (this.el.attachInternals && !this.internals) {
       this.internals = this.el.attachInternals();
     }
   }
