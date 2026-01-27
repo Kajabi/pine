@@ -53,7 +53,7 @@ export class PdsLoader {
     }
   }
 
-  private style = () => {
+  private getSvgStyle = () => {
     if (this.size !== undefined) {
       return {
         height: this.loaderSize(),
@@ -67,7 +67,7 @@ export class PdsLoader {
       <Host class={`pds-loader ${this.isLoading ? '' : 'pds-loader--hidden'}`} aria-hidden={!this.isLoading} aria-busy={this.isLoading} aria-live="polite">
         {this.variant === 'spinner' && (
           <div class="pds-loader--spinner">
-            <svg style={this.style()} viewBox="0 0 200 200" fill="none" part="loader-svg">
+            <svg style={this.getSvgStyle()} viewBox="0 0 200 200" fill="none" part="loader-svg">
               <defs>
                 <linearGradient id="spinner-secondHalf">
                   <stop offset="0%" stop-opacity="0" stop-color="currentColor" />
