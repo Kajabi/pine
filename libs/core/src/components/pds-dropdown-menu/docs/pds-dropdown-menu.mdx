@@ -157,6 +157,62 @@ The dropdown menu can also display a separator between items.
 </div>
 </DocCanvas>
 
+### With Icons
+
+Menu items can display icons before the text by including a `pds-icon` component within the item.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+<PdsDropdownMenu>
+  <PdsButton slot="trigger">Actions</PdsButton>
+  <PdsDropdownMenuItem>
+    <PdsIcon name="edit" /> Edit
+  </PdsDropdownMenuItem>
+  <PdsDropdownMenuItem>
+    <PdsIcon name="copy" /> Duplicate
+  </PdsDropdownMenuItem>
+  <PdsDropdownMenuItem>
+    <PdsIcon name="download" /> Download
+  </PdsDropdownMenuItem>
+  <PdsDropdownMenuSeparator />
+  <PdsDropdownMenuItem destructive>
+    <PdsIcon name="trash" /> Delete
+  </PdsDropdownMenuItem>
+</PdsDropdownMenu>
+`,
+    webComponent:`
+<pds-dropdown-menu>
+  <pds-button slot="trigger">Actions</pds-button>
+  <pds-dropdown-menu-item>
+    <pds-icon name="edit"></pds-icon> Edit
+  </pds-dropdown-menu-item>
+  <pds-dropdown-menu-item>
+    <pds-icon name="copy"></pds-icon> Duplicate
+  </pds-dropdown-menu-item>
+  <pds-dropdown-menu-item>
+    <pds-icon name="download"></pds-icon> Download
+  </pds-dropdown-menu-item>
+  <pds-dropdown-menu-separator />
+  <pds-dropdown-menu-item destructive>
+    <pds-icon name="trash"></pds-icon> Delete
+  </pds-dropdown-menu-item>
+</pds-dropdown-menu>
+`
+  }}
+>
+<div style={{ height: '250px', width: '100%', textAlign: 'center' }}>
+  <pds-dropdown-menu>
+    <pds-button slot="trigger">Actions</pds-button>
+    <pds-dropdown-menu-item><pds-icon name="pen"></pds-icon> Edit</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item><pds-icon name="copy"></pds-icon> Duplicate</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item><pds-icon name="download"></pds-icon> Download</pds-dropdown-menu-item>
+    <pds-dropdown-menu-separator />
+    <pds-dropdown-menu-item destructive><pds-icon name="trash"></pds-icon> Delete</pds-dropdown-menu-item>
+  </pds-dropdown-menu>
+</div>
+</DocCanvas>
+
 ### With Links
 
 Menu items can function as links by using the href attribute.

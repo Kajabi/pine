@@ -29,8 +29,6 @@ export class PdsDropdownMenuItem implements BasePdsProps {
 
   /**
    *  If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button.
-   *  @example
-   *  <pds-dropdown-menu-item href="/dashboard">Dashboard</pds-dropdown-menu-item>
    */
   @Prop() href: string | undefined;
 
@@ -38,8 +36,6 @@ export class PdsDropdownMenuItem implements BasePdsProps {
    * Determines whether the link should open in a new tab and display an external icon.
    * This is a simpler alternative to using `target="_blank"` for the common case.
    * @defaultValue false
-   * @example
-   * <pds-dropdown-menu-item href="https://example.com" external>External Link</pds-dropdown-menu-item>
    */
   @Prop() external: boolean = false;
 
@@ -48,8 +44,6 @@ export class PdsDropdownMenuItem implements BasePdsProps {
    * Takes precedence over the `external` prop if both are set.
    * Only applies when href is set.
    * @defaultValue undefined
-   * @example
-   * <pds-dropdown-menu-item href="https://example.com" target="_blank">External Link</pds-dropdown-menu-item>
    */
   @Prop() target?: '_blank' | '_self' | '_parent' | '_top';
 

@@ -32,11 +32,9 @@ export class PdsLink {
 
   /**
    * Specifies where to open the linked document.
-   * Takes precedence over the external prop if both are set.
-   * When set to `_blank`, automatically displays an external icon.
    * @defaultValue undefined
    * @example
-   * <pds-link href="https://example.com" target="_blank">External Link</pds-link>
+   * <pds-link href="https://example.com" target="_blank">Opens in new tab</pds-link>
    */
   @Prop() target?: '_blank' | '_self' | '_parent' | '_top';
 
@@ -87,7 +85,7 @@ export class PdsLink {
 
   render() {
     const targetValue = this.target || (this.external ? '_blank' : undefined);
-    const showExternalIcon = targetValue === '_blank';
+    const showExternalIcon = this.external;
     const relValue = targetValue === '_blank' ? 'noopener noreferrer' : undefined;
 
     return (

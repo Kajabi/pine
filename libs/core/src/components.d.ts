@@ -1029,18 +1029,15 @@ export namespace Components {
         /**
           * Determines whether the link should open in a new tab and display an external icon. This is a simpler alternative to using `target="_blank"` for the common case.
           * @defaultValue false
-          * @example <pds-dropdown-menu-item href="https://example.com" external>External Link</pds-dropdown-menu-item>
          */
         "external": boolean;
         /**
           * If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button.
-          * @example <pds-dropdown-menu-item href="/dashboard">Dashboard</pds-dropdown-menu-item>
          */
         "href": string | undefined;
         /**
           * Specifies where to open the linked document when href is provided. Takes precedence over the `external` prop if both are set. Only applies when href is set.
           * @defaultValue undefined
-          * @example <pds-dropdown-menu-item href="https://example.com" target="_blank">External Link</pds-dropdown-menu-item>
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
     }
@@ -1255,9 +1252,9 @@ export namespace Components {
          */
         "href": string;
         /**
-          * Specifies where to open the linked document. Takes precedence over the external prop if both are set. When set to `_blank`, automatically displays an external icon.
+          * Specifies where to open the linked document.
           * @defaultValue undefined
-          * @example <pds-link href="https://example.com" target="_blank">External Link</pds-link>
+          * @example <pds-link href="https://example.com" target="_blank">Opens in new tab</pds-link>
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
         /**
@@ -3942,12 +3939,10 @@ declare namespace LocalJSX {
         /**
           * Determines whether the link should open in a new tab and display an external icon. This is a simpler alternative to using `target="_blank"` for the common case.
           * @defaultValue false
-          * @example <pds-dropdown-menu-item href="https://example.com" external>External Link</pds-dropdown-menu-item>
          */
         "external"?: boolean;
         /**
           * If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button.
-          * @example <pds-dropdown-menu-item href="/dashboard">Dashboard</pds-dropdown-menu-item>
          */
         "href"?: string | undefined;
         /**
@@ -3957,7 +3952,6 @@ declare namespace LocalJSX {
         /**
           * Specifies where to open the linked document when href is provided. Takes precedence over the `external` prop if both are set. Only applies when href is set.
           * @defaultValue undefined
-          * @example <pds-dropdown-menu-item href="https://example.com" target="_blank">External Link</pds-dropdown-menu-item>
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
     }
@@ -4192,9 +4186,9 @@ declare namespace LocalJSX {
          */
         "href": string;
         /**
-          * Specifies where to open the linked document. Takes precedence over the external prop if both are set. When set to `_blank`, automatically displays an external icon.
+          * Specifies where to open the linked document.
           * @defaultValue undefined
-          * @example <pds-link href="https://example.com" target="_blank">External Link</pds-link>
+          * @example <pds-link href="https://example.com" target="_blank">Opens in new tab</pds-link>
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
         /**

@@ -87,18 +87,21 @@ An `external` link is styled with an icon to indicate that it will redirect user
 
 ### Target
 
-The `target` prop specifies where to open the linked document. This provides more control than the `external` prop and supports all standard target values (`_blank`, `_self`, `_parent`, `_top`). When set to `_blank`, it automatically shows the external icon.
+The `target` prop specifies where to open the linked document and supports all standard target values (`_blank`, `_self`, `_parent`, `_top`). This controls link behavior independently from the `external` prop, which controls icon display.
 
->Note: The `target` prop takes precedence over the `external` prop when both are set.
+>Note: Use `external` to show the external icon. The `target` prop only controls where the link opens.
 
 <DocCanvas
   mdxSource={{
-    react: `<PdsLink href="https://example.com" target="_blank">Opens in new tab</PdsLink>
+    react: `<PdsLink href="https://example.com" target="_blank" external>External link in new tab</PdsLink>
+    <PdsLink href="/internal" target="_blank">Internal link in new tab</PdsLink>
     <PdsLink href="#section" target="_self">Opens in same frame</PdsLink>`,
-    webComponent: `<pds-link href="https://example.com" target="_blank">Opens in new tab</pds-link>
+    webComponent: `<pds-link href="https://example.com" target="_blank" external>External link in new tab</pds-link>
+    <pds-link href="/internal" target="_blank">Internal link in new tab</pds-link>
     <pds-link href="#section" target="_self">Opens in same frame</pds-link>`
 }}>
-  <pds-link href="https://example.com" target="_blank">Opens in new tab</pds-link>
+  <pds-link href="https://example.com" target="_blank" external>External link in new tab</pds-link>
+  <pds-link href="/internal" target="_blank">Internal link in new tab</pds-link>
   <pds-link href="#section" target="_self">Opens in same frame</pds-link>
 </DocCanvas>
 
