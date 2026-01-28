@@ -58,6 +58,16 @@ export class PdsTable {
   @Prop() defaultSortDirection?: 'asc' | 'desc' = 'asc';
 
   /**
+   * Enables server-side sorting mode. When enabled, clicking sortable columns will only
+   * dispatch the `pdsTableSort` event without performing client-side DOM manipulation.
+   * The consuming application is responsible for handling sort logic and re-rendering
+   * the table with sorted data via server request or state management.
+   * Use `defaultSortColumn` and `defaultSortDirection` to display the correct sort indicator.
+   * @defaultValue false
+   */
+  @Prop() serverSideSorting: boolean = false;
+
+  /**
    * The name of the column being sorted.
    * @defaultValue null
    */
@@ -286,6 +296,14 @@ export class PdsTable {
   @Listen('pdsTableSort')
   handleTableSort(event: CustomEvent<{ column: string; direction: 'asc' | 'desc' }>) {
     if (event.defaultPrevented) return;
+
+    // Skip client-side sorting if server-side mode is enabled
+    if (this.serverSideSorting) {
+      // Just update state for visual indicators, don't manipulate DOM
+      this.sortingColumn = event.detail.column;
+      this.sortingDirection = event.detail.direction;
+      return;
+    }
 
     const { direction } = event.detail;
     this.sortTable(event.detail.column, direction);

@@ -1843,6 +1843,11 @@ export namespace Components {
           * Determines if the table displays checkboxes for selectable rows.
          */
         "selectable": boolean;
+        /**
+          * Enables server-side sorting mode. When enabled, clicking sortable columns will only dispatch the `pdsTableSort` event without performing client-side DOM manipulation. The consuming application is responsible for handling sort logic and re-rendering the table with sorted data via server request or state management. Use `defaultSortColumn` and `defaultSortDirection` to display the correct sort indicator.
+          * @defaultValue false
+         */
+        "serverSideSorting": boolean;
     }
     interface PdsTableBody {
     }
@@ -4805,6 +4810,11 @@ declare namespace LocalJSX {
           * Determines if the table displays checkboxes for selectable rows.
          */
         "selectable"?: boolean;
+        /**
+          * Enables server-side sorting mode. When enabled, clicking sortable columns will only dispatch the `pdsTableSort` event without performing client-side DOM manipulation. The consuming application is responsible for handling sort logic and re-rendering the table with sorted data via server request or state management. Use `defaultSortColumn` and `defaultSortDirection` to display the correct sort indicator.
+          * @defaultValue false
+         */
+        "serverSideSorting"?: boolean;
     }
     interface PdsTableBody {
     }

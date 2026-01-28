@@ -1328,6 +1328,144 @@ document.addEventListener('pdsTableSort', (event) => {
 </pds-table>
 </DocCanvas>
 
+### Server-Side Sorting
+
+For tables with pagination or large datasets where sorting must be handled server-side, use the `server-side-sorting` attribute. This prevents client-side DOM manipulation and allows your application to handle sorting via server requests or state management.
+
+**When server-side sorting is enabled:**
+- Clicking sortable columns dispatches the `pdsTableSort` event without modifying the DOM
+- Your application handles the sort request (e.g., API call, database query)
+- Update the table data and provide the current sort state via `default-sort-column` and `default-sort-direction`
+
+**Rails/Hotwire Example:**
+```erb
+<turbo-frame id="products_table">
+  <pds-table 
+    component-id="products" 
+    server-side-sorting
+    <% if params[:sort].present? %>
+      default-sort-column="<%= column_label_for(params[:sort]) %>"
+      default-sort-direction="<%= params[:direction] || 'asc' %>"
+    <% end %>
+  >
+    <pds-table-head>
+      <pds-table-head-cell sortable>Name</pds-table-head-cell>
+      <pds-table-head-cell sortable>Members</pds-table-head-cell>
+      <pds-table-head-cell sortable>Created</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <% @products.each do |product| %>
+        <pds-table-row>
+          <pds-table-cell><%= product.name %></pds-table-cell>
+          <pds-table-cell><%= product.members_count %></pds-table-cell>
+          <pds-table-cell><%= product.created_at.to_date %></pds-table-cell>
+        </pds-table-row>
+      <% end %>
+    </pds-table-body>
+  </pds-table>
+</turbo-frame>
+
+<script>
+  document.addEventListener('pdsTableSort', (event) => {
+    const { column, direction } = event.detail;
+    const url = new URL(window.location.href);
+    url.searchParams.set('sort', columnKeyFor(column));
+    url.searchParams.set('direction', direction);
+    url.searchParams.delete('page'); // Reset to page 1
+    
+    // Turbo Frame will fetch sorted data
+    document.getElementById('products_table').src = url.toString();
+  });
+</script>
+```
+
+**React Example:**
+```jsx
+function ServerSideTable() {
+  const [sortColumn, setSortColumn] = useState('name');
+  const [sortDirection, setSortDirection] = useState('asc');
+  const [data, setData] = useState([]);
+
+  // Load data when sort changes
+  useEffect(() => {
+    fetch(`/api/products?sort=${sortColumn}&direction=${sortDirection}`)
+      .then(res => res.json())
+      .then(setData);
+  }, [sortColumn, sortDirection]);
+
+  const handleSort = (event) => {
+    setSortColumn(event.detail.column);
+    setSortDirection(event.detail.direction);
+  };
+
+  return (
+    <pds-table 
+      component-id="products"
+      server-side-sorting
+      default-sort-column={sortColumn}
+      default-sort-direction={sortDirection}
+      onPdsTableSort={handleSort}
+    >
+      <pds-table-head>
+        <pds-table-head-cell sortable>Name</pds-table-head-cell>
+        <pds-table-head-cell sortable>Email</pds-table-head-cell>
+      </pds-table-head>
+      <pds-table-body>
+        {data.map(item => (
+          <pds-table-row key={item.id}>
+            <pds-table-cell>{item.name}</pds-table-cell>
+            <pds-table-cell>{item.email}</pds-table-cell>
+          </pds-table-row>
+        ))}
+      </pds-table-body>
+    </pds-table>
+  );
+}
+```
+
+**Vanilla JavaScript Example:**
+```html
+<pds-table 
+  component-id="users" 
+  server-side-sorting 
+  default-sort-column="Name"
+  default-sort-direction="asc"
+>
+  <pds-table-head>
+    <pds-table-head-cell sortable>Name</pds-table-head-cell>
+    <pds-table-head-cell sortable>Email</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body id="table-body">
+    <!-- Rows populated dynamically -->
+  </pds-table-body>
+</pds-table>
+
+<script>
+  const table = document.querySelector('pds-table');
+  
+  table.addEventListener('pdsTableSort', async (event) => {
+    const { column, direction } = event.detail;
+    
+    // Fetch sorted data from server
+    const response = await fetch(`/api/users?sort=${column}&dir=${direction}`);
+    const users = await response.json();
+    
+    // Update table with sorted data
+    const tbody = document.getElementById('table-body');
+    tbody.innerHTML = users.map(user => `
+      <pds-table-row>
+        <pds-table-cell>${user.name}</pds-table-cell>
+        <pds-table-cell>${user.email}</pds-table-cell>
+      </pds-table-row>
+    `).join('');
+    
+    // Update sort indicators
+    table.defaultSortColumn = column;
+    table.defaultSortDirection = direction;
+  });
+</script>
+```
+
 ### Default Sort
 
 To display the table with a pre-sorted column on initial load, use the `defaultSortColumn` and `defaultSortDirection` properties. The `defaultSortColumn` value must match the text content of a sortable column header exactly.

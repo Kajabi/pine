@@ -30,14 +30,6 @@
 | `"tab-list"` | Exposes the container element that holds all the tab buttons for styling. |
 
 
-## CSS Custom Properties
-
-| Name                                | Description                    |
-| ----------------------------------- | ------------------------------ |
-| `--tabs-dimension-panel-margin-top` | Optional margin-top for panels |
-| `--tabs-dimension-panel-padding`    | Optional padding for panels    |
-
-
 ----------------------------------------------
 
 

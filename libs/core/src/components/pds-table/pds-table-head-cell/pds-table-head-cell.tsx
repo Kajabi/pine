@@ -202,24 +202,34 @@ export class PdsTableHeadCell {
       }
 
       const column = this.hostElement.innerText.trim();
-      
-      // Always toggle the direction (preserves original behavior)
-      this.sortingDirection = this.sortingDirection === 'asc' ? 'desc' : 'asc';
-      
-      // Reset all OTHER head cells to inactive state (skip the current one)
-      this.tableRef.querySelectorAll('pds-table-head-cell').forEach(async (headCell) => {
-        // Skip clearing the current cell
-        if (headCell !== this.hostElement) {
-          const headCellComponent = headCell as HTMLPdsTableHeadCellElement;
-          await headCellComponent.clearActiveSort();
-        }
-      });
-      
-      // Mark this column as active
-      this.isActive = true;
-      this.hostElement.classList.add('is-active');
 
-      // Emit the sort event with the current direction
+      // Check if parent table has server-side sorting enabled
+      const isServerSide = this.tableRef.serverSideSorting;
+
+      // In server-side mode, don't update visual state - let the server response handle it
+      if (!isServerSide) {
+        // Always toggle the direction (preserves original behavior)
+        this.sortingDirection = this.sortingDirection === 'asc' ? 'desc' : 'asc';
+
+        // Reset all OTHER head cells to inactive state (skip the current one)
+        this.tableRef.querySelectorAll('pds-table-head-cell').forEach(async (headCell) => {
+          // Skip clearing the current cell
+          if (headCell !== this.hostElement) {
+            const headCellComponent = headCell as HTMLPdsTableHeadCellElement;
+            await headCellComponent.clearActiveSort();
+          }
+        });
+
+        // Mark this column as active
+        this.isActive = true;
+        this.hostElement.classList.add('is-active');
+      } else {
+        // Server-side mode: Calculate the next direction for the event
+        // but don't update visual state yet
+        this.sortingDirection = this.sortingDirection === 'asc' ? 'desc' : 'asc';
+      }
+
+      // Always emit the sort event
       this.pdsTableSort.emit({ column, direction: this.sortingDirection });
     }
   }

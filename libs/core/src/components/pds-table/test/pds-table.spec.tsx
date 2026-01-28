@@ -553,4 +553,162 @@ describe('pds-table', () => {
     const headCell = page.body.querySelector('pds-table-head-cell');
     expect(headCell).toHaveClass('is-active');
   });
+
+  describe('server-side sorting', () => {
+    it('does not manipulate DOM when server-side-sorting is enabled', async () => {
+      const page = await newSpecPage({
+        components: [PdsTable, PdsTableHead, PdsTableHeadCell, PdsTableBody, PdsTableRow, PdsTableCell],
+        html: `
+          <pds-table component-id="server-side-test" server-side-sorting>
+            <pds-table-head>
+              <pds-table-head-cell sortable>Name</pds-table-head-cell>
+            </pds-table-head>
+            <pds-table-body>
+              <pds-table-row>
+                <pds-table-cell>Charlie</pds-table-cell>
+              </pds-table-row>
+              <pds-table-row>
+                <pds-table-cell>Alice</pds-table-cell>
+              </pds-table-row>
+              <pds-table-row>
+                <pds-table-cell>Bob</pds-table-cell>
+              </pds-table-row>
+            </pds-table-body>
+          </pds-table>
+        `,
+      });
+
+      const table = page.body.querySelector('pds-table') as HTMLElement;
+      const tableBody = page.body.querySelector('pds-table-body') as HTMLElement;
+
+      // Trigger sort event
+      table.dispatchEvent(
+        new CustomEvent('pdsTableSort', {
+          detail: { column: 'Name', direction: 'asc' },
+        }),
+      );
+
+      await page.waitForChanges();
+
+      // Rows should remain in original order (not sorted)
+      const rows = Array.from(tableBody.querySelectorAll('pds-table-row')) as any;
+      const values = rows.map((row) => row.querySelector('pds-table-cell').textContent?.trim());
+
+      expect(values).toEqual(['Charlie', 'Alice', 'Bob']);
+    });
+
+    it('updates sorting state when server-side-sorting is enabled', async () => {
+      const page = await newSpecPage({
+        components: [PdsTable, PdsTableHead, PdsTableHeadCell, PdsTableBody, PdsTableRow, PdsTableCell],
+        html: `
+          <pds-table component-id="server-side-state-test" server-side-sorting>
+            <pds-table-head>
+              <pds-table-head-cell sortable>Name</pds-table-head-cell>
+            </pds-table-head>
+            <pds-table-body>
+              <pds-table-row>
+                <pds-table-cell>Charlie</pds-table-cell>
+              </pds-table-row>
+            </pds-table-body>
+          </pds-table>
+        `,
+      });
+
+      const table = page.body.querySelector('pds-table') as HTMLElement;
+      const pdsTable = page.rootInstance;
+
+      // Trigger sort event
+      table.dispatchEvent(
+        new CustomEvent('pdsTableSort', {
+          detail: { column: 'Name', direction: 'desc' },
+        }),
+      );
+
+      await page.waitForChanges();
+
+      // Internal state should be updated
+      expect(pdsTable.sortingColumn).toBe('Name');
+      expect(pdsTable.sortingDirection).toBe('desc');
+    });
+
+    it('still dispatches pdsTableSort event with server-side-sorting enabled', async () => {
+      const page = await newSpecPage({
+        components: [PdsTable, PdsTableHead, PdsTableHeadCell, PdsTableBody, PdsTableRow, PdsTableCell],
+        html: `
+          <pds-table component-id="server-side-event-test" server-side-sorting>
+            <pds-table-head>
+              <pds-table-head-cell sortable>Name</pds-table-head-cell>
+            </pds-table-head>
+            <pds-table-body>
+              <pds-table-row>
+                <pds-table-cell>Alice</pds-table-cell>
+              </pds-table-row>
+            </pds-table-body>
+          </pds-table>
+        `,
+      });
+
+      const table = page.body.querySelector('pds-table') as HTMLElement;
+      let eventFired = false;
+      let eventDetail: any = null;
+
+      table.addEventListener('pdsTableSort', (e: any) => {
+        eventFired = true;
+        eventDetail = e.detail;
+      });
+
+      // Trigger sort event
+      table.dispatchEvent(
+        new CustomEvent('pdsTableSort', {
+          detail: { column: 'Name', direction: 'asc' },
+          bubbles: true,
+        }),
+      );
+
+      await page.waitForChanges();
+
+      // Event should have been dispatched
+      expect(eventFired).toBe(true);
+      expect(eventDetail).toEqual({ column: 'Name', direction: 'asc' });
+    });
+
+    it('works with default-sort-column in server-side mode', async () => {
+      const page = await newSpecPage({
+        components: [PdsTable, PdsTableHead, PdsTableHeadCell, PdsTableBody, PdsTableRow, PdsTableCell],
+        html: `
+          <pds-table 
+            component-id="server-side-default-test" 
+            server-side-sorting
+            default-sort-column="Name"
+            default-sort-direction="desc"
+          >
+            <pds-table-head>
+              <pds-table-head-cell sortable>Name</pds-table-head-cell>
+            </pds-table-head>
+            <pds-table-body>
+              <pds-table-row>
+                <pds-table-cell>Charlie</pds-table-cell>
+              </pds-table-row>
+              <pds-table-row>
+                <pds-table-cell>Alice</pds-table-cell>
+              </pds-table-row>
+            </pds-table-body>
+          </pds-table>
+        `,
+      });
+
+      await page.waitForChanges();
+
+      const tableBody = page.body.querySelector('pds-table-body') as HTMLElement;
+      const headCell = page.body.querySelector('pds-table-head-cell');
+
+      // Rows should remain in original order (server provides sorted data)
+      const rows = Array.from(tableBody.querySelectorAll('pds-table-row')) as any;
+      const values = rows.map((row) => row.querySelector('pds-table-cell').textContent?.trim());
+      expect(values).toEqual(['Charlie', 'Alice']);
+
+      // Header cell should be marked active
+      expect(headCell).toHaveClass('is-active');
+    });
+  });
 });
