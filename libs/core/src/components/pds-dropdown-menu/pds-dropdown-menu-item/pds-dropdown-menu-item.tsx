@@ -33,6 +33,21 @@ export class PdsDropdownMenuItem implements BasePdsProps {
   @Prop() href: string | undefined;
 
   /**
+   * Determines whether the link should open in a new tab and display an external icon.
+   * This is a simpler alternative to using `target="_blank"` for the common case.
+   * @defaultValue false
+   */
+  @Prop() external: boolean = false;
+
+  /**
+   * Specifies where to open the linked document when href is provided.
+   * Takes precedence over the `external` prop if both are set.
+   * Only applies when href is set.
+   * @defaultValue undefined
+   */
+  @Prop() target?: '_blank' | '_self' | '_parent' | '_top';
+
+  /**
    * Emitted when the dropdown-item is clicked.
    *
    */
@@ -79,6 +94,8 @@ export class PdsDropdownMenuItem implements BasePdsProps {
       return (
         <pds-link
           href={this.disabled ? null : this.href}
+          external={this.external}
+          target={this.target}
           class={{
             'pds-dropdown-menu-item__content': true,
             'has-focus': this.hasFocus

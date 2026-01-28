@@ -26,8 +26,17 @@ export class PdsLink {
   /**
    * Determines whether the link should open in a new tab.
    * @defaultValue false
+   * @deprecated Consider using the `target` prop for more control. This prop will be maintained for backward compatibility.
    */
   @Prop() external = false;
+
+  /**
+   * Specifies where to open the linked document.
+   * @defaultValue undefined
+   * @example
+   * <pds-link href="https://example.com" target="_blank">Opens in new tab</pds-link>
+   */
+  @Prop() target?: '_blank' | '_self' | '_parent' | '_top';
 
   /**
    * Sets the link variant styles.
@@ -75,6 +84,9 @@ export class PdsLink {
   }
 
   render() {
+    const targetValue = this.target || (this.external ? '_blank' : undefined);
+    const showExternalIcon = this.external;
+    const relValue = targetValue === '_blank' ? 'noopener noreferrer' : undefined;
 
     return (
       <a
@@ -82,11 +94,12 @@ export class PdsLink {
         href={this.href}
         id={this.componentId}
         part="link"
-        target={this.external ? '_blank' : undefined}
+        target={targetValue}
+        rel={relValue}
         style={this.setLinkStyles()}
       >
         <slot>{this.href}</slot>
-        {this.external &&
+        {showExternalIcon &&
           <pds-icon icon={launch} size={this.fontSize}></pds-icon>
         }
       </a>
