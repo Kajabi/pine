@@ -2,11 +2,20 @@ import { Component, Element, Event, EventEmitter, h, Host, Prop, State, Watch, M
 import type { BasePdsProps } from '@utils/interfaces';
 import type { ChipSentimentType } from '@utils/types';
 import { computePosition, flip, offset, shift } from '@floating-ui/dom';
+import { debounceEvent } from '@utils/utils';
 import DOMPurify from 'dompurify';
+import type {
+  ComboboxOption,
+  ComboboxSearchEventDetail,
+  ComboboxLoadOptionsEventDetail,
+  AsyncResponse,
+} from './combobox-interface';
 
 /**
  * @slot option - Option elements for the combobox dropdown
  * @slot trigger-content - Custom content for the button trigger when customTriggerContent is true
+ * @slot empty - Custom empty state message when no options match
+ * @slot loading - Custom loading indicator
  */
 @Component({
   tag: 'pds-combobox',
@@ -136,9 +145,49 @@ export class PdsCombobox implements BasePdsProps {
   @Prop({ mutable: true }) value: string = '';
 
   /**
+   * URL endpoint for async data fetching.
+   */
+  @Prop() asyncUrl?: string;
+
+  /**
+   * HTTP method for async requests.
+   */
+  @Prop() asyncMethod: 'GET' | 'POST' = 'GET';
+
+  /**
+   * Debounce delay in milliseconds for search/fetch.
+   */
+  @Prop() debounce: number = 300;
+
+  /**
+   * Whether the component is currently loading async options.
+   */
+  @Prop({ mutable: true }) loading: boolean = false;
+
+  /**
+   * Options provided externally (for consumer-managed async).
+   */
+  @Prop() options?: ComboboxOption[];
+
+  /**
+   * Function to format async results. Receives raw API response item.
+   */
+  @Prop() formatResult?: (item: unknown) => ComboboxOption;
+
+  /**
    * Emitted when the value changes.
    */
   @Event() pdsComboboxChange!: EventEmitter<{ value: string }>;
+
+  /**
+   * Emitted on search input (for consumer-managed async).
+   */
+  @Event() pdsComboboxSearch!: EventEmitter<ComboboxSearchEventDetail>;
+
+  /**
+   * Emitted to request more options (pagination).
+   */
+  @Event() pdsComboboxLoadOptions!: EventEmitter<ComboboxLoadOptionsEventDetail>;
 
   /**
    * Internal state for the display text shown in the input/trigger
@@ -175,6 +224,21 @@ export class PdsCombobox implements BasePdsProps {
    */
   @State() selectedOptionChipProps: any = null;
 
+  /**
+   * Internal state for async options.
+   */
+  @State() internalOptions: ComboboxOption[] = [];
+
+  /**
+   * Internal state for current page (pagination).
+   */
+  @State() currentPage: number = 1;
+
+  /**
+   * Internal state for hasMore (pagination).
+   */
+  @State() hasMore: boolean = false;
+
   private inputEl?: HTMLInputElement;
   private optionEls: HTMLOptionElement[] = [];
   private allItems: (HTMLOptionElement | HTMLOptGroupElement | HTMLPdsTextElement)[] = [];
@@ -182,6 +246,10 @@ export class PdsCombobox implements BasePdsProps {
   private listboxEl?: HTMLElement;
   private internals?: ElementInternals;
   private isUpdatingFromSelection: boolean = false;
+  private abortController?: AbortController;
+  private fetchDebounceTimer?: number;
+  private observer?: MutationObserver;
+  private originalSearchEmitter?: EventEmitter<ComboboxSearchEventDetail>;
 
   connectedCallback() {
     // Initialize ElementInternals for form association (only once per element instance)
@@ -191,10 +259,13 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   componentWillLoad() {
+    this.originalSearchEmitter = this.pdsComboboxSearch;
     this.updateOptions();
   }
 
   componentDidLoad() {
+    this.setupDebounce();
+
     // Check for value-based preselection if no option is selected yet
     if (!this.selectedOption && this.value && this.optionEls.length > 0) {
       const matchingOption = this.optionEls.find(opt => opt.value === this.value);
@@ -214,6 +285,27 @@ export class PdsCombobox implements BasePdsProps {
       } catch (e) {
         // ElementInternals.setFormValue not available in unit tests
       }
+    }
+  }
+
+  disconnectedCallback() {
+    this.observer?.disconnect();
+    this.clearAsyncFetchState();
+  }
+
+  @Watch('debounce')
+  protected setupDebounce() {
+    const { pdsComboboxSearch, debounce, originalSearchEmitter } = this;
+    this.pdsComboboxSearch = debounce === undefined
+      ? originalSearchEmitter ?? pdsComboboxSearch
+      : debounceEvent(pdsComboboxSearch, debounce);
+  }
+
+  @Watch('options')
+  protected optionsChanged() {
+    if (this.options) {
+      this.internalOptions = [...this.options];
+      this.updateOptionsFromAsync();
     }
   }
 
@@ -286,7 +378,120 @@ export class PdsCombobox implements BasePdsProps {
     }
   }
 
+  private clearAsyncFetchState() {
+    if (this.fetchDebounceTimer !== undefined) {
+      window.clearTimeout(this.fetchDebounceTimer);
+      this.fetchDebounceTimer = undefined;
+    }
+    this.abortController?.abort();
+    this.abortController = undefined;
+  }
+
+  private debouncedFetchAsyncOptions(query: string, page: number = 1) {
+    if (!this.asyncUrl) return;
+
+    if (this.fetchDebounceTimer !== undefined) {
+      window.clearTimeout(this.fetchDebounceTimer);
+    }
+
+    const delay = Math.max(0, this.debounce ?? 0);
+    this.fetchDebounceTimer = window.setTimeout(() => {
+      this.fetchDebounceTimer = undefined;
+      this.fetchOptions(query, page);
+    }, delay);
+  }
+
+  private async fetchOptions(query: string, page: number = 1) {
+    if (!this.asyncUrl) return;
+
+    this.abortController?.abort();
+    this.abortController = new AbortController();
+
+    this.loading = true;
+
+    try {
+      const url = new URL(this.asyncUrl, window.location.origin);
+      if (this.asyncMethod === 'GET') {
+        url.searchParams.set('search', query);
+        url.searchParams.set('page', String(page));
+      }
+
+      const response = await fetch(url.toString(), {
+        method: this.asyncMethod,
+        signal: this.abortController.signal,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        ...(this.asyncMethod === 'POST' && {
+          body: JSON.stringify({ search: query, page }),
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch options');
+
+      const data: AsyncResponse = await response.json();
+
+      const formattedResults = data.results.map(item => {
+        if (this.formatResult) {
+          return this.formatResult(item);
+        }
+        return {
+          id: item.id,
+          text: item.text,
+          ...item,
+        };
+      });
+
+      if (page === 1) {
+        this.internalOptions = formattedResults;
+      } else {
+        this.internalOptions = [...this.internalOptions, ...formattedResults];
+      }
+
+      this.hasMore = data.totalCount ? this.internalOptions.length < data.totalCount : false;
+      this.currentPage = page;
+
+      // Update DOM options from async data
+      this.updateOptionsFromAsync();
+
+    } catch (error) {
+      if ((error as Error).name !== 'AbortError') {
+        console.error('PdsCombobox: Failed to fetch options', error);
+      }
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  private updateOptionsFromAsync() {
+    if (!this.asyncUrl && !this.options) return;
+
+    // Clear existing slot-based options when using async
+    this.optionEls = [];
+    this.allItems = [];
+
+    // Create option elements from async data
+    const asyncOptions = this.options || this.internalOptions;
+    asyncOptions.forEach(opt => {
+      const optionEl = document.createElement('option') as HTMLOptionElement;
+      optionEl.value = String(opt.id);
+      optionEl.textContent = opt.text;
+
+      this.optionEls.push(optionEl);
+      this.allItems.push(optionEl);
+    });
+
+    this.filterOptions();
+  }
+
   private updateOptions() {
+    // Skip slot-based options if using async
+    if (this.asyncUrl || this.options) {
+      this.updateOptionsFromAsync();
+      return;
+    }
+
     // Get all elements from the slot
     const slot = this.el.shadowRoot?.querySelector('slot[name="option"], slot:not([name])');
     if (slot) {
@@ -511,6 +716,15 @@ export class PdsCombobox implements BasePdsProps {
     this.displayText = target.value;
     this.isOpen = true;
     this.filterOptions();
+
+    // Emit search event for consumer-managed async
+    this.pdsComboboxSearch.emit({ query: this.displayText });
+
+    // Fetch from async URL if configured
+    if (this.asyncUrl) {
+      this.debouncedFetchAsyncOptions(this.displayText, 1);
+    }
+
     setTimeout(() => this.openDropdownPositioning(), 0);
   };
 
@@ -519,6 +733,12 @@ export class PdsCombobox implements BasePdsProps {
     if (!this.isOpen) {
       this.isOpen = true;
       this.filterOptions();
+
+      // Trigger initial fetch if async and no options loaded yet
+      if (this.asyncUrl && this.internalOptions.length === 0) {
+        this.debouncedFetchAsyncOptions(this.displayText, 1);
+      }
+
       this.setInitialHighlightedIndex();
       setTimeout(() => this.openDropdownPositioning(), 0);
     }
@@ -937,6 +1157,12 @@ export class PdsCombobox implements BasePdsProps {
     this.isOpen = !this.isOpen;
     if (this.isOpen) {
       this.filterOptions();
+
+      // Trigger initial fetch if async and no options loaded yet
+      if (this.asyncUrl && this.internalOptions.length === 0) {
+        this.debouncedFetchAsyncOptions(this.displayText, 1);
+      }
+
       // Set highlighted index and prepare for keyboard navigation
       this.setInitialHighlightedIndex();
       // For button trigger, prepare for arrow-key navigation mode
@@ -1017,10 +1243,29 @@ export class PdsCombobox implements BasePdsProps {
     this.pdsComboboxChange.emit({ value: option.value });
   }
 
+  private handleScroll = (e: Event) => {
+    if (!this.asyncUrl || !this.hasMore || this.loading) return;
+
+    const target = e.target as HTMLElement;
+    const scrollBottom = target.scrollHeight - target.scrollTop - target.clientHeight;
+
+    // Load more when near bottom (within 50px)
+    if (scrollBottom < 50) {
+      this.pdsComboboxLoadOptions.emit({
+        query: this.displayText,
+        page: this.currentPage + 1,
+      });
+      this.debouncedFetchAsyncOptions(this.displayText, this.currentPage + 1);
+    }
+  };
+
   private renderDropdown() {
-    if (!this.isOpen || this.filteredItems.length === 0) {
+    if (!this.isOpen) {
       return null;
     }
+
+    const hasSlottedEmpty = !!this.el.querySelector('[slot="empty"]');
+    const hasSlottedLoading = !!this.el.querySelector('[slot="loading"]');
 
     let optionIndex = 0;
     const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION') as HTMLOptionElement[];
@@ -1033,7 +1278,28 @@ export class PdsCombobox implements BasePdsProps {
         aria-label={this.label || 'Options'}
         aria-multiselectable="false"
         ref={el => (this.listboxEl = el as HTMLElement)}
+        onScroll={this.handleScroll}
       >
+        {this.loading && (
+          <li class="pds-combobox__loading" role="presentation">
+            {hasSlottedLoading ? (
+              <slot name="loading" />
+            ) : (
+              <pds-loader size="small" />
+            )}
+          </li>
+        )}
+
+        {!this.loading && this.filteredItems.length === 0 && (
+          <li class="pds-combobox__empty" role="presentation">
+            {hasSlottedEmpty ? (
+              <slot name="empty" />
+            ) : (
+              <span>No options found</span>
+            )}
+          </li>
+        )}
+
         {this.filteredItems.map((item, itemIdx) => {
           if (item.tagName === 'OPTGROUP') {
             const optgroup = item as HTMLOptGroupElement;
@@ -1101,6 +1367,12 @@ export class PdsCombobox implements BasePdsProps {
           }
           return null;
         })}
+
+        {this.hasMore && !this.loading && (
+          <li class="pds-combobox__load-more" role="presentation">
+            <pds-loader size="small" />
+          </li>
+        )}
       </ul>
     );
   }
