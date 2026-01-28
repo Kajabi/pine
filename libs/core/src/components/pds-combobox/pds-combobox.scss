@@ -467,3 +467,26 @@
   }
 }
 
+// Loading state
+.pds-combobox__loading {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  padding: var(--pine-dimension-150);
+}
+
+// Empty state
+.pds-combobox__empty {
+  color: var(--pine-color-text-tertiary);
+  padding: var(--pine-dimension-150) var(--pine-dimension-sm);
+  text-align: center;
+}
+
+// Load more indicator
+.pds-combobox__load-more {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  padding: var(--pine-dimension-150);
+}
+
