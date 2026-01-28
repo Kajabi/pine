@@ -88,6 +88,7 @@ export class PdsLink {
   render() {
     const targetValue = this.target || (this.external ? '_blank' : undefined);
     const showExternalIcon = targetValue === '_blank';
+    const relValue = targetValue === '_blank' ? 'noopener noreferrer' : undefined;
 
     return (
       <a
@@ -96,6 +97,7 @@ export class PdsLink {
         id={this.componentId}
         part="link"
         target={targetValue}
+        rel={relValue}
         style={this.setLinkStyles()}
       >
         <slot>{this.href}</slot>
