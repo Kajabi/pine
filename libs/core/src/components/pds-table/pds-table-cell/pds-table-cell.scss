@@ -11,7 +11,7 @@
   letter-spacing: var(--pine-letter-spacing);
   line-height: var(--pine-line-height-body);
   padding: var(--pine-dimension-sm);
-  vertical-align: inherit;
+  vertical-align: middle;
 }
 
 :host(.is-compact) {
