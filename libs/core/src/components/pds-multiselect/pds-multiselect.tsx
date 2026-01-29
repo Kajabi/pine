@@ -495,6 +495,9 @@ export class PdsMultiselect {
   private async createOption(query: string) {
     if (!this.createUrl || !query.trim()) return;
 
+    // Reentrancy guard: prevent duplicate POSTs if creation is already in-flight
+    if (this.creating) return;
+
     this.creating = true;
 
     try {
@@ -740,7 +743,10 @@ export class PdsMultiselect {
   private toggleOption(option: MultiselectOption) {
     // Handle create option
     if (option.isCreateOption || option.id === '__create__') {
-      this.createOption(this.searchQuery);
+      // Prevent multiple create calls while one is in-flight
+      if (!this.creating) {
+        this.createOption(this.searchQuery);
+      }
       return;
     }
 
@@ -901,6 +907,7 @@ export class PdsMultiselect {
             const isHighlighted = index === this.highlightedIndex;
             const optionId = `${this.componentId}-option-${index}`;
             const isCreateOption = option.isCreateOption;
+            const isCreateDisabled = isCreateOption && this.creating;
 
             return (
               <li
@@ -911,9 +918,11 @@ export class PdsMultiselect {
                   'pds-multiselect__option--highlighted': isHighlighted,
                   'pds-multiselect__option--selected': isSelected,
                   'pds-multiselect__option--create': isCreateOption,
+                  'pds-multiselect__option--disabled': isCreateDisabled,
                 }}
                 role="option"
                 aria-selected={isSelected ? 'true' : 'false'}
+                aria-disabled={isCreateDisabled ? 'true' : undefined}
                 aria-label={isCreateOption ? `Create new tag: ${option.text}` : undefined}
                 data-index={index}
                 onMouseDown={this.handleOptionMouseDown(option)}
