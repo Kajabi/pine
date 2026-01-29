@@ -33,9 +33,9 @@
 
 ### Used by
 
- - [pds-button](../pds-button)
- - [pds-combobox](../pds-combobox)
- - [pds-multiselect](../pds-multiselect)
+- [pds-button](../pds-button)
+- [pds-combobox](../pds-combobox)
+- [pds-multiselect](../pds-multiselect)
 
 ### Graph
 ```mermaid
