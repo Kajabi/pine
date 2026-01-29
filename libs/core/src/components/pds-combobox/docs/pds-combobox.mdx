@@ -1113,6 +1113,236 @@ Both `<optgroup>` and `<pds-text>` group labels are rendered as presentational i
 
 **Recommendation**: Use `<optgroup>` when semantic grouping is important for accessibility and screen reader users. Use `<pds-text>` when you only need visual organization without semantic meaning.
 
+## Async Data Loading
+
+The combobox supports loading options asynchronously from a server endpoint or through consumer-managed async operations. This is useful for large datasets, search-as-you-type interfaces, or when options need to be fetched from an API.
+
+### Built-in Async Fetching
+
+Use the `asyncUrl` prop to enable automatic async data fetching. The combobox will handle debouncing, loading states, and pagination automatically.
+
+**Key Props:**
+
+- `asyncUrl`: API endpoint URL for fetching options
+- `asyncMethod`: HTTP method ('GET' or 'POST', defaults to 'GET')
+- `debounce`: Debounce delay in milliseconds (defaults to 300ms)
+- `fetchTimeout`: Request timeout in milliseconds (defaults to 30000ms)
+- `formatResult`: Optional function to transform API response items into combobox options
+
+**Expected API Response Format:**
+
+```json
+{
+  "results": [
+    { "id": "value1", "text": "Label 1" },
+    { "id": "value2", "text": "Label 2" }
+  ],
+  "totalCount": 100
+}
+```
+
+**Basic Example:**
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-combobox
+  component-id="combobox-async-basic"
+  label="Search Users"
+  placeholder="Type to search..."
+  async-url="/api/users"
+  debounce="300">
+</pds-combobox>`,
+    react: `<PdsCombobox
+  componentId="combobox-async-basic"
+  label="Search Users"
+  placeholder="Type to search..."
+  asyncUrl="/api/users"
+  debounce={300}>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox
+    component-id="combobox-async-basic"
+    label="Search Users"
+    placeholder="Type to search..."
+    async-url="/api/users"
+    debounce="300">
+  </pds-combobox>
+</DocCanvas>
+
+### Custom Result Formatting
+
+Use the `formatResult` function to transform API response items into the expected option format:
+
+```javascript
+// Web Component
+const combobox = document.querySelector('pds-combobox');
+combobox.formatResult = (item) => ({
+  id: item.userId,
+  text: `${item.firstName} ${item.lastName}`,
+});
+
+// React
+const formatResult = (item) => ({
+  id: item.userId,
+  text: `${item.firstName} ${item.lastName}`,
+});
+
+<PdsCombobox
+  asyncUrl="/api/users"
+  formatResult={formatResult}
+/>
+```
+
+### Pagination Support
+
+The combobox automatically handles infinite scroll pagination when the API response includes a `totalCount` property. As users scroll near the bottom of the dropdown, additional pages are loaded automatically.
+
+The `pdsComboboxLoadOptions` event is emitted when more data is needed, allowing you to monitor pagination requests if needed.
+
+### Consumer-Managed Async
+
+For more control over async operations, you can manage the data fetching yourself using the `options` prop and `pdsComboboxSearch` event.
+
+**Key Props and Events:**
+
+- `options`: Array of option objects to display
+- `loading`: Boolean to control loading state
+- `pdsComboboxSearch`: Event emitted when user types (debounced)
+- `pdsComboboxLoadOptions`: Event emitted when more options are needed (pagination)
+
+**Example:**
+
+```javascript
+// Web Component
+const combobox = document.querySelector('pds-combobox');
+combobox.loading = false;
+combobox.options = [];
+
+combobox.addEventListener('pdsComboboxSearch', async (e) => {
+  const query = e.detail.query;
+  combobox.loading = true;
+
+  const response = await fetch(`/api/search?q=${query}`);
+  const data = await response.json();
+
+  combobox.options = data.results;
+  combobox.loading = false;
+});
+
+// React
+const [options, setOptions] = useState([]);
+const [loading, setLoading] = useState(false);
+
+const handleSearch = async (e) => {
+  const query = e.detail.query;
+  setLoading(true);
+
+  const response = await fetch(`/api/search?q=${query}`);
+  const data = await response.json();
+
+  setOptions(data.results);
+  setLoading(false);
+};
+
+<PdsCombobox
+  options={options}
+  loading={loading}
+  onPdsComboboxSearch={handleSearch}
+/>
+```
+
+### Loading States
+
+The combobox displays a loading indicator automatically when `loading` is `true`. You can customize the loading indicator using the `loading` slot:
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-combobox
+  component-id="combobox-async-loading"
+  label="Search Users"
+  placeholder="Type to search..."
+  async-url="/api/users">
+  <div slot="loading">
+    <pds-loader size="small"></pds-loader>
+    <span>Loading results...</span>
+  </div>
+</pds-combobox>`,
+    react: `<PdsCombobox
+  componentId="combobox-async-loading"
+  label="Search Users"
+  placeholder="Type to search..."
+  asyncUrl="/api/users">
+  <div slot="loading">
+    <PdsLoader size="small"></PdsLoader>
+    <span>Loading results...</span>
+  </div>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox
+    component-id="combobox-async-loading"
+    label="Search Users"
+    placeholder="Type to search..."
+    async-url="/api/users">
+    <div slot="loading">
+      <pds-loader size="small"></pds-loader>
+      <span>Loading results...</span>
+    </div>
+  </pds-combobox>
+</DocCanvas>
+
+### Empty States
+
+Customize the message shown when no results are found using the `empty` slot:
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-combobox
+  component-id="combobox-async-empty"
+  label="Search Users"
+  placeholder="Type to search..."
+  async-url="/api/users">
+  <div slot="empty">
+    <pds-icon icon="search"></pds-icon>
+    <span>No users found. Try a different search.</span>
+  </div>
+</pds-combobox>`,
+    react: `<PdsCombobox
+  componentId="combobox-async-empty"
+  label="Search Users"
+  placeholder="Type to search..."
+  asyncUrl="/api/users">
+  <div slot="empty">
+    <PdsIcon icon="search"></PdsIcon>
+    <span>No users found. Try a different search.</span>
+  </div>
+</PdsCombobox>`,
+  }}
+>
+  <pds-combobox
+    component-id="combobox-async-empty"
+    label="Search Users"
+    placeholder="Type to search..."
+    async-url="/api/users">
+    <div slot="empty">
+      <pds-icon icon="search"></pds-icon>
+      <span>No users found. Try a different search.</span>
+    </div>
+  </pds-combobox>
+</DocCanvas>
+
+### Best Practices
+
+When using async data loading:
+
+1. **Set appropriate debounce**: Use 300-500ms to balance responsiveness with server load
+2. **Handle errors gracefully**: Show meaningful error messages in the empty slot
+3. **Provide loading feedback**: Always indicate when data is being fetched
+4. **Consider pagination**: For large datasets, ensure your API supports pagination
+5. **Test timeout behavior**: Set `fetchTimeout` based on your API's typical response time
+6. **Validate formatResult**: Ensure the function always returns objects with `id` and `text` properties
+
 ## Form Integration
 
 `pds-combobox` is a <pds-link href="https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals/formAssociated" external>form-associated custom element</pds-link>. This means the component participates in `<form>` submission just like native `<select>` / `<input>` controls.
