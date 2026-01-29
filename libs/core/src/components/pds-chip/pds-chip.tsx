@@ -152,11 +152,24 @@ export class PdsChip {
         if (this.removeHttpMethod) {
           linkAttrs['data-method'] = this.removeHttpMethod;
           linkAttrs['data-turbo-method'] = this.removeHttpMethod;
+        }
 
-          // Add rel="nofollow" for non-GET methods (best practice)
-          if (this.removeHttpMethod !== 'get') {
-            linkAttrs.rel = 'nofollow';
-          }
+        // Build rel attribute by collecting all required values
+        const relValues = [];
+
+        // Add noopener noreferrer if target is _blank
+        if (this.removeTarget === '_blank') {
+          relValues.push('noopener', 'noreferrer');
+        }
+
+        // Add nofollow for non-GET methods (best practice)
+        if (this.removeHttpMethod && this.removeHttpMethod !== 'get') {
+          relValues.push('nofollow');
+        }
+
+        // Set rel attribute if we have any values
+        if (relValues.length > 0) {
+          linkAttrs.rel = relValues.join(' ');
         }
 
         return linkAttrs;
