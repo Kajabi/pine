@@ -930,6 +930,11 @@ export namespace Components {
          */
         "dropdownWidth": string;
         /**
+          * Timeout in milliseconds for async fetch requests.
+          * @default 30000
+         */
+        "fetchTimeout": number;
+        /**
           * Function to format async results. Receives raw API response item.
          */
         "formatResult"?: (item: unknown) => ComboboxOption;
@@ -1408,6 +1413,11 @@ export namespace Components {
           * Error message to display.
          */
         "errorMessage"?: string;
+        /**
+          * Timeout in milliseconds for async fetch requests.
+          * @default 30000
+         */
+        "fetchTimeout": number;
         /**
           * Function to format async results. Receives raw API response item.
          */
@@ -3890,6 +3900,11 @@ declare namespace LocalJSX {
          */
         "dropdownWidth"?: string;
         /**
+          * Timeout in milliseconds for async fetch requests.
+          * @default 30000
+         */
+        "fetchTimeout"?: number;
+        /**
           * Function to format async results. Receives raw API response item.
          */
         "formatResult"?: (item: unknown) => ComboboxOption;
@@ -4396,6 +4411,11 @@ declare namespace LocalJSX {
           * Error message to display.
          */
         "errorMessage"?: string;
+        /**
+          * Timeout in milliseconds for async fetch requests.
+          * @default 30000
+         */
+        "fetchTimeout"?: number;
         /**
           * Function to format async results. Receives raw API response item.
          */

@@ -160,6 +160,11 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() debounce: number = 300;
 
   /**
+   * Timeout in milliseconds for async fetch requests.
+   */
+  @Prop() fetchTimeout: number = 30000;
+
+  /**
    * Whether the component is currently loading async options.
    */
   @Prop({ mutable: true }) loading: boolean = false;
@@ -248,6 +253,7 @@ export class PdsCombobox implements BasePdsProps {
   private isUpdatingFromSelection: boolean = false;
   private abortController?: AbortController;
   private fetchDebounceTimer?: number;
+  private fetchTimeoutTimer?: number;
   private observer?: MutationObserver;
   private originalSearchEmitter?: EventEmitter<ComboboxSearchEventDetail>;
 
@@ -383,6 +389,10 @@ export class PdsCombobox implements BasePdsProps {
       window.clearTimeout(this.fetchDebounceTimer);
       this.fetchDebounceTimer = undefined;
     }
+    if (this.fetchTimeoutTimer !== undefined) {
+      window.clearTimeout(this.fetchTimeoutTimer);
+      this.fetchTimeoutTimer = undefined;
+    }
     this.abortController?.abort();
     this.abortController = undefined;
   }
@@ -404,13 +414,31 @@ export class PdsCombobox implements BasePdsProps {
   private async fetchOptions(query: string, page: number = 1) {
     if (!this.asyncUrl) return;
 
+    // Abort any pending request and clear existing timeout
     this.abortController?.abort();
-    this.abortController = new AbortController();
+    if (this.fetchTimeoutTimer !== undefined) {
+      window.clearTimeout(this.fetchTimeoutTimer);
+      this.fetchTimeoutTimer = undefined;
+    }
 
+    this.abortController = new AbortController();
     this.loading = true;
 
+    // Set up timeout for fetch request
+    this.fetchTimeoutTimer = window.setTimeout(() => {
+      this.abortController?.abort();
+      this.fetchTimeoutTimer = undefined;
+    }, this.fetchTimeout);
+
     try {
-      const url = new URL(this.asyncUrl, window.location.origin);
+      // Guard against malformed asyncUrl
+      let url: URL;
+      try {
+        url = new URL(this.asyncUrl, window.location.origin);
+      } catch (urlError) {
+        throw new TypeError(`Invalid asyncUrl: ${this.asyncUrl}`);
+      }
+
       if (this.asyncMethod === 'GET') {
         url.searchParams.set('search', query);
         url.searchParams.set('page', String(page));
@@ -428,19 +456,36 @@ export class PdsCombobox implements BasePdsProps {
         }),
       });
 
+      // Clear timeout on successful response
+      if (this.fetchTimeoutTimer !== undefined) {
+        window.clearTimeout(this.fetchTimeoutTimer);
+        this.fetchTimeoutTimer = undefined;
+      }
+
       if (!response.ok) throw new Error('Failed to fetch options');
 
       const data: AsyncResponse = await response.json();
 
       const formattedResults = data.results.map(item => {
+        // If formatResult is provided, use it
         if (this.formatResult) {
           return this.formatResult(item);
         }
+
+        // Defensive check: ensure item is an object before spreading
+        if (typeof item === 'object' && item !== null) {
+          return {
+            id: item.id,
+            text: item.text,
+            ...item,
+          } as ComboboxOption;
+        }
+
+        // Handle primitives by converting to safe shape
         return {
-          id: item.id,
-          text: item.text,
-          ...item,
-        };
+          id: String(item),
+          text: String(item),
+        } as ComboboxOption;
       });
 
       if (page === 1) {
@@ -456,6 +501,12 @@ export class PdsCombobox implements BasePdsProps {
       this.updateOptionsFromAsync();
 
     } catch (error) {
+      // Clear timeout on error
+      if (this.fetchTimeoutTimer !== undefined) {
+        window.clearTimeout(this.fetchTimeoutTimer);
+        this.fetchTimeoutTimer = undefined;
+      }
+
       if ((error as Error).name !== 'AbortError') {
         console.error('PdsCombobox: Failed to fetch options', error);
       }

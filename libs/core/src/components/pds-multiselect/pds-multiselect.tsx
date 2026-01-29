@@ -33,6 +33,7 @@ export class PdsMultiselect {
   private internals?: ElementInternals;
   private abortController?: AbortController;
   private fetchDebounceTimer?: number;
+  private fetchTimeoutTimer?: number;
   private observer?: MutationObserver;
   private cleanupAutoUpdate?: () => void;
 
@@ -82,6 +83,11 @@ export class PdsMultiselect {
    * Debounce delay in milliseconds for search/fetch.
    */
   @Prop() debounce: number = 300;
+
+  /**
+   * Timeout in milliseconds for async fetch requests.
+   */
+  @Prop() fetchTimeout: number = 30000;
 
   /**
    * Maximum number of selections allowed.
@@ -331,6 +337,10 @@ export class PdsMultiselect {
       window.clearTimeout(this.fetchDebounceTimer);
       this.fetchDebounceTimer = undefined;
     }
+    if (this.fetchTimeoutTimer !== undefined) {
+      window.clearTimeout(this.fetchTimeoutTimer);
+      this.fetchTimeoutTimer = undefined;
+    }
     this.abortController?.abort();
     this.abortController = undefined;
   }
@@ -435,13 +445,31 @@ export class PdsMultiselect {
   private async fetchOptions(query: string, page: number = 1) {
     if (!this.asyncUrl) return;
 
+    // Abort any pending request and clear existing timeout
     this.abortController?.abort();
-    this.abortController = new AbortController();
+    if (this.fetchTimeoutTimer !== undefined) {
+      window.clearTimeout(this.fetchTimeoutTimer);
+      this.fetchTimeoutTimer = undefined;
+    }
 
+    this.abortController = new AbortController();
     this.loading = true;
 
+    // Set up timeout for fetch request
+    this.fetchTimeoutTimer = window.setTimeout(() => {
+      this.abortController?.abort();
+      this.fetchTimeoutTimer = undefined;
+    }, this.fetchTimeout);
+
     try {
-      const url = new URL(this.asyncUrl, window.location.origin);
+      // Guard against malformed asyncUrl
+      let url: URL;
+      try {
+        url = new URL(this.asyncUrl, window.location.origin);
+      } catch (urlError) {
+        throw new TypeError(`Invalid asyncUrl: ${this.asyncUrl}`);
+      }
+
       if (this.asyncMethod === 'GET') {
         url.searchParams.set('search', query);
         url.searchParams.set('page', String(page));
@@ -459,19 +487,36 @@ export class PdsMultiselect {
         }),
       });
 
+      // Clear timeout on successful response
+      if (this.fetchTimeoutTimer !== undefined) {
+        window.clearTimeout(this.fetchTimeoutTimer);
+        this.fetchTimeoutTimer = undefined;
+      }
+
       if (!response.ok) throw new Error('Failed to fetch options');
 
       const data: AsyncResponse = await response.json();
 
       const formattedResults = data.results.map(item => {
+        // If formatResult is provided, use it
         if (this.formatResult) {
           return this.formatResult(item);
         }
+
+        // Defensive check: ensure item is an object before spreading
+        if (typeof item === 'object' && item !== null) {
+          return {
+            id: item.id,
+            text: item.text,
+            ...item,
+          } as MultiselectOption;
+        }
+
+        // Handle primitives by converting to safe shape
         return {
-          id: item.id,
-          text: item.text,
-          ...item,
-        };
+          id: String(item),
+          text: String(item),
+        } as MultiselectOption;
       });
 
       if (page === 1) {
@@ -484,6 +529,12 @@ export class PdsMultiselect {
       this.currentPage = page;
 
     } catch (error) {
+      // Clear timeout on error
+      if (this.fetchTimeoutTimer !== undefined) {
+        window.clearTimeout(this.fetchTimeoutTimer);
+        this.fetchTimeoutTimer = undefined;
+      }
+
       if ((error as Error).name !== 'AbortError') {
         console.error('PdsMultiselect: Failed to fetch options', error);
       }
