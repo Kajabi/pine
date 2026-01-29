@@ -24,7 +24,7 @@ A multiselect component that allows users to select multiple options from a sear
 | `componentId` _(required)_ | `component-id`   | A unique identifier used for the underlying component `id` attribute.                      | `string`                               | `undefined`   |
 | `createUrl`                | `create-url`     | URL endpoint for creating new options. When set, shows "Add" option when no matches found. | `string`                               | `undefined`   |
 | `debounce`                 | `debounce`       | Debounce delay in milliseconds for search/fetch.                                           | `number`                               | `300`         |
-| `disabled`                 | `disabled`       | Determines whether the multiselect is disabled.                                            | `boolean`                              | `false`       |
+| `disabled`                 | `disabled`       | Determines whether or not the multiselect is disabled.                                     | `boolean`                              | `false`       |
 | `errorMessage`             | `error-message`  | Error message to display.                                                                  | `string`                               | `undefined`   |
 | `formatResult`             | --               | Function to format async results. Receives raw API response item.                          | `(item: unknown) => MultiselectOption` | `undefined`   |
 | `helperMessage`            | `helper-message` | Helper message to display below the input.                                                 | `string`                               | `undefined`   |
@@ -82,6 +82,8 @@ Type: `Promise<void>`
 
 - pds-icon
 - [pds-loader](../pds-loader)
+- [pds-box](../pds-box)
+- [pds-text](../pds-text)
 - [pds-checkbox](../pds-checkbox)
 
 ### Graph
@@ -89,6 +91,8 @@ Type: `Promise<void>`
 graph TD;
   pds-multiselect --> pds-icon
   pds-multiselect --> pds-loader
+  pds-multiselect --> pds-box
+  pds-multiselect --> pds-text
   pds-multiselect --> pds-checkbox
   pds-checkbox --> pds-icon
   style pds-multiselect fill:#f9f,stroke:#333,stroke-width:4px

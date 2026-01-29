@@ -904,9 +904,9 @@ export class PdsMultiselect {
 
           {filteredOptions.map((option, index) => {
             const isSelected = valueArray.includes(String(option.id));
-            const isHighlighted = index === this.highlightedIndex;
-            const optionId = `${this.componentId}-option-${index}`;
             const isCreateOption = option.isCreateOption;
+            const isHighlighted = index === this.highlightedIndex && !isCreateOption;
+            const optionId = `${this.componentId}-option-${index}`;
             const isCreateDisabled = isCreateOption && this.creating;
 
             return (
@@ -929,10 +929,10 @@ export class PdsMultiselect {
                 onMouseEnter={this.handleOptionMouseEnter(index)}
               >
                 {isCreateOption ? (
-                  <div class="pds-multiselect__create-option">
+                  <pds-box class="pds-multiselect__create-option" align-items="center" gap="xs">
                     <pds-icon name="add" size="small" />
-                    <span>Add "{option.text}"</span>
-                  </div>
+                    <pds-text>Add "{option.text}"</pds-text>
+                  </pds-box>
                 ) : (
                   <pds-checkbox
                     componentId={`${this.componentId}-checkbox-${index}`}

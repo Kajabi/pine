@@ -136,6 +136,7 @@
  - [pds-alert](../pds-alert)
  - [pds-combobox](../pds-combobox)
  - [pds-dropdown-menu](../pds-dropdown-menu)
+ - [pds-multiselect](../pds-multiselect)
  - [pds-property](../pds-property)
 
 ### Graph
@@ -144,6 +145,7 @@ graph TD;
   pds-alert --> pds-box
   pds-combobox --> pds-box
   pds-dropdown-menu --> pds-box
+  pds-multiselect --> pds-box
   pds-property --> pds-box
   style pds-box fill:#f9f,stroke:#333,stroke-width:4px
 ```
