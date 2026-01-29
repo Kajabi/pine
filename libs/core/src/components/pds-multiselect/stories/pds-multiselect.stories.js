@@ -400,12 +400,12 @@ export const WithCreateOption = {
         ${unsafeHTML(defaultOptions)}
       </pds-multiselect>
       <p style="margin-top: var(--pine-dimension-sm); color: var(--pine-color-text-secondary);">
-        Type a search query that doesn't match any options to see the "Add" option.
-        Open console to see create and change events.
+        Type a search query that doesn't match any options to see the "Add" option appear.
+        Note: In Storybook, the POST request will fail and create events will not be emitted.
       </p>
       <p style="margin-top: var(--pine-dimension-xs); color: var(--pine-color-text-muted); font-size: 0.875rem;">
-        Note: In Storybook, the POST request will fail (expected). In production with a real API endpoint,
-        new tags are created and automatically selected.
+        In production with a real API endpoint, clicking "Add" creates the new tag, emits the create event,
+        and automatically selects the newly created option.
       </p>
     `;
   },

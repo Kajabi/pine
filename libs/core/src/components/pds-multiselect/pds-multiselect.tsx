@@ -742,7 +742,7 @@ export class PdsMultiselect {
 
   private toggleOption(option: MultiselectOption) {
     // Handle create option
-    if (option.isCreateOption || option.id === '__create__') {
+    if (option.isCreateOption) {
       // Prevent multiple create calls while one is in-flight
       if (!this.creating) {
         this.createOption(this.searchQuery);
