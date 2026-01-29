@@ -341,12 +341,53 @@ describe('pds-chip', () => {
     <pds-chip class="pds-chip pds-chip--neutral pds-chip--tag" variant="tag" remove-url="/clear" remove-target="_blank">
       <mock:shadow-root>
         <span class="pds-chip__label"><slot></slot></span>
-        <a class="pds-chip__close" href="/clear" aria-label="Remove" target="_blank">
+        <a class="pds-chip__close" href="/clear" aria-label="Remove" target="_blank" rel="noopener noreferrer">
           <pds-icon icon="${removeIcon}" size="12px"></pds-icon>
         </a>
       </mock:shadow-root>
     </pds-chip>
     `);
+  });
+
+  it('adds rel="noopener noreferrer" when removeTarget is "_blank"', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip variant="tag" remove-url="/clear" remove-target="_blank" />`,
+    });
+
+    const chip = page.body.querySelector('pds-chip');
+    const closeLink = chip?.shadowRoot?.querySelector('.pds-chip__close') as HTMLAnchorElement;
+
+    expect(closeLink.getAttribute('rel')).toBe('noopener noreferrer');
+    expect(closeLink.getAttribute('target')).toBe('_blank');
+  });
+
+  it('combines rel tokens when removeTarget="_blank" and removeHttpMethod is non-GET', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip variant="tag" remove-url="/tags/1" remove-target="_blank" remove-http-method="delete" />`,
+    });
+
+    const chip = page.body.querySelector('pds-chip');
+    const closeLink = chip?.shadowRoot?.querySelector('.pds-chip__close') as HTMLAnchorElement;
+
+    expect(closeLink.getAttribute('rel')).toBe('noopener noreferrer nofollow');
+    expect(closeLink.getAttribute('target')).toBe('_blank');
+    expect(closeLink.getAttribute('data-method')).toBe('delete');
+    expect(closeLink.getAttribute('data-turbo-method')).toBe('delete');
+  });
+
+  it('adds only nofollow when removeHttpMethod is non-GET without target="_blank"', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip variant="tag" remove-url="/tags/1" remove-http-method="post" />`,
+    });
+
+    const chip = page.body.querySelector('pds-chip');
+    const closeLink = chip?.shadowRoot?.querySelector('.pds-chip__close') as HTMLAnchorElement;
+
+    expect(closeLink.getAttribute('rel')).toBe('nofollow');
+    expect(closeLink.getAttribute('target')).toBeNull();
   });
 
   it('emits pdsTagCloseClick event when close link is clicked', async () => {
