@@ -9,7 +9,15 @@ if (typeof MutationObserver === 'undefined') {
   };
 }
 
+// Capture original fetch for cleanup
+const originalFetch = global.fetch;
+
 describe('pds-multiselect', () => {
+  afterEach(() => {
+    // Restore original fetch and clean up all mocks after each test
+    global.fetch = originalFetch;
+    jest.restoreAllMocks();
+  });
   it('renders with label', async () => {
     const page = await newSpecPage({
       components: [PdsMultiselect],
