@@ -9,6 +9,7 @@ import { BoxColumnType, BoxShadowSizeType, BoxSpacingType } from "./utils/types"
 import { Event } from "@stencil/core";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 import { ChipSentimentType, ChipVariantType, PlacementType } from "./utils/types";
+import { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
 import { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 import { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 import { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
@@ -20,6 +21,7 @@ export { BoxColumnType, BoxShadowSizeType, BoxSpacingType } from "./utils/types"
 export { Event } from "@stencil/core";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 export { ChipSentimentType, ChipVariantType, PlacementType } from "./utils/types";
+export { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
 export { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
 export { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
@@ -866,6 +868,15 @@ export namespace Components {
     }
     interface PdsCombobox {
         /**
+          * HTTP method for async requests.
+          * @default 'GET'
+         */
+        "asyncMethod": 'GET' | 'POST';
+        /**
+          * URL endpoint for async data fetching.
+         */
+        "asyncUrl"?: string;
+        /**
           * Whether a dot should be displayed on the chip trigger.
           * @default false
          */
@@ -899,6 +910,11 @@ export namespace Components {
          */
         "customTriggerContent": boolean;
         /**
+          * Debounce delay in milliseconds for search/fetch.
+          * @default 300
+         */
+        "debounce": number;
+        /**
           * If true, the combobox is disabled.
           * @default false
          */
@@ -914,6 +930,15 @@ export namespace Components {
          */
         "dropdownWidth": string;
         /**
+          * Timeout in milliseconds for async fetch requests.
+          * @default 30000
+         */
+        "fetchTimeout": number;
+        /**
+          * Function to format async results. Receives raw API response item.
+         */
+        "formatResult"?: (item: unknown) => ComboboxOption;
+        /**
           * Gets the value of the currently selected option.
          */
         "getSelectedValue": () => Promise<string | null>;
@@ -927,6 +952,11 @@ export namespace Components {
          */
         "label"?: string;
         /**
+          * Whether the component is currently loading async options.
+          * @default false
+         */
+        "loading": boolean;
+        /**
           * Maximum height of the dropdown. Can be any valid CSS height value (e.g., '200px', '10rem'). When content exceeds this height, the dropdown will scroll.
          */
         "maxHeight"?: string;
@@ -939,6 +969,10 @@ export namespace Components {
           * The name of the form control. Submitted with the form as part of a name/value pair.
          */
         "name"?: string;
+        /**
+          * Options provided externally (for consumer-managed async).
+         */
+        "options"?: ComboboxOption[];
         /**
           * Placeholder text for the input field.
          */
@@ -1379,6 +1413,11 @@ export namespace Components {
           * Error message to display.
          */
         "errorMessage"?: string;
+        /**
+          * Timeout in milliseconds for async fetch requests.
+          * @default 30000
+         */
+        "fetchTimeout": number;
         /**
           * Function to format async results. Receives raw API response item.
          */
@@ -2406,6 +2445,8 @@ declare global {
     };
     interface HTMLPdsComboboxElementEventMap {
         "pdsComboboxChange": { value: string };
+        "pdsComboboxSearch": ComboboxSearchEventDetail;
+        "pdsComboboxLoadOptions": ComboboxLoadOptionsEventDetail;
     }
     interface HTMLPdsComboboxElement extends Components.PdsCombobox, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsComboboxElementEventMap>(type: K, listener: (this: HTMLPdsComboboxElement, ev: PdsComboboxCustomEvent<HTMLPdsComboboxElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3797,6 +3838,15 @@ declare namespace LocalJSX {
     }
     interface PdsCombobox {
         /**
+          * HTTP method for async requests.
+          * @default 'GET'
+         */
+        "asyncMethod"?: 'GET' | 'POST';
+        /**
+          * URL endpoint for async data fetching.
+         */
+        "asyncUrl"?: string;
+        /**
           * Whether a dot should be displayed on the chip trigger.
           * @default false
          */
@@ -3830,6 +3880,11 @@ declare namespace LocalJSX {
          */
         "customTriggerContent"?: boolean;
         /**
+          * Debounce delay in milliseconds for search/fetch.
+          * @default 300
+         */
+        "debounce"?: number;
+        /**
           * If true, the combobox is disabled.
           * @default false
          */
@@ -3845,6 +3900,15 @@ declare namespace LocalJSX {
          */
         "dropdownWidth"?: string;
         /**
+          * Timeout in milliseconds for async fetch requests.
+          * @default 30000
+         */
+        "fetchTimeout"?: number;
+        /**
+          * Function to format async results. Receives raw API response item.
+         */
+        "formatResult"?: (item: unknown) => ComboboxOption;
+        /**
           * Visually hides the label text for instances where only the combobox should be displayed. Label remains accessible to assistive technology such as screen readers.
           * @default false
          */
@@ -3853,6 +3917,11 @@ declare namespace LocalJSX {
           * Text to be displayed as the combobox label.
          */
         "label"?: string;
+        /**
+          * Whether the component is currently loading async options.
+          * @default false
+         */
+        "loading"?: boolean;
         /**
           * Maximum height of the dropdown. Can be any valid CSS height value (e.g., '200px', '10rem'). When content exceeds this height, the dropdown will scroll.
          */
@@ -3870,6 +3939,18 @@ declare namespace LocalJSX {
           * Emitted when the value changes.
          */
         "onPdsComboboxChange"?: (event: PdsComboboxCustomEvent<{ value: string }>) => void;
+        /**
+          * Emitted to request more options (pagination).
+         */
+        "onPdsComboboxLoadOptions"?: (event: PdsComboboxCustomEvent<ComboboxLoadOptionsEventDetail>) => void;
+        /**
+          * Emitted on search input (for consumer-managed async).
+         */
+        "onPdsComboboxSearch"?: (event: PdsComboboxCustomEvent<ComboboxSearchEventDetail>) => void;
+        /**
+          * Options provided externally (for consumer-managed async).
+         */
+        "options"?: ComboboxOption[];
         /**
           * Placeholder text for the input field.
          */
@@ -4330,6 +4411,11 @@ declare namespace LocalJSX {
           * Error message to display.
          */
         "errorMessage"?: string;
+        /**
+          * Timeout in milliseconds for async fetch requests.
+          * @default 30000
+         */
+        "fetchTimeout"?: number;
         /**
           * Function to format async results. Receives raw API response item.
          */

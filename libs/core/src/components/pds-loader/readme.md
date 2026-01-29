@@ -33,13 +33,15 @@
 
 ### Used by
 
- - [pds-button](../pds-button)
- - [pds-multiselect](../pds-multiselect)
+- [pds-button](../pds-button)
+- [pds-combobox](../pds-combobox)
+- [pds-multiselect](../pds-multiselect)
 
 ### Graph
 ```mermaid
 graph TD;
   pds-button --> pds-loader
+  pds-combobox --> pds-loader
   pds-multiselect --> pds-loader
   style pds-loader fill:#f9f,stroke:#333,stroke-width:4px
 ```
