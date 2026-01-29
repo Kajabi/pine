@@ -7,14 +7,15 @@ Link is mainly used as navigational element and usually appear within or directl
 
 ## Properties
 
-| Property            | Attribute      | Description                                                                                        | Type                   | Default     |
-| ------------------- | -------------- | -------------------------------------------------------------------------------------------------- | ---------------------- | ----------- |
-| `color`             | `color`        | Sets the link color.                                                                               | `string`               | `undefined` |
-| `componentId`       | `component-id` | A unique identifier used for the underlying component `id` attribute.                              | `string`               | `undefined` |
-| `external`          | `external`     | Determines whether the link should open in a new tab.                                              | `boolean`              | `false`     |
-| `fontSize`          | `font-size`    | The font size of the link's text.                                                                  | `"lg" \| "md" \| "sm"` | `'lg'`      |
-| `href` _(required)_ | `href`         | The hyperlink's destination URL. If no text is provided in the custom slot, the href will be used. | `string`               | `undefined` |
-| `variant`           | `variant`      | Sets the link variant styles.                                                                      | `"inline" \| "plain"`  | `'inline'`  |
+| Property            | Attribute      | Description                                                                                                                                                                                                                | Type                                         | Default     |
+| ------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- | ----------- |
+| `color`             | `color`        | Sets the link color.                                                                                                                                                                                                       | `string`                                     | `undefined` |
+| `componentId`       | `component-id` | A unique identifier used for the underlying component `id` attribute.                                                                                                                                                      | `string`                                     | `undefined` |
+| `external`          | `external`     | <span style="color:red">**[DEPRECATED]**</span> Consider using the `target` prop for more control. This prop will be maintained for backward compatibility.<br/><br/>Determines whether the link should open in a new tab. | `boolean`                                    | `false`     |
+| `fontSize`          | `font-size`    | The font size of the link's text.                                                                                                                                                                                          | `"lg" \| "md" \| "sm"`                       | `'lg'`      |
+| `href` _(required)_ | `href`         | The hyperlink's destination URL. If no text is provided in the custom slot, the href will be used.                                                                                                                         | `string`                                     | `undefined` |
+| `target`            | `target`       | Specifies where to open the linked document.                                                                                                                                                                               | `"_blank" \| "_parent" \| "_self" \| "_top"` | `undefined` |
+| `variant`           | `variant`      | Sets the link variant styles.                                                                                                                                                                                              | `"inline" \| "plain"`                        | `'inline'`  |
 
 
 ## Slots

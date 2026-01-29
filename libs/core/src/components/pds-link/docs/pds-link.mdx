@@ -85,6 +85,26 @@ An `external` link is styled with an icon to indicate that it will redirect user
   <pds-link href="#some-anchor" external="true"></pds-link>
 </DocCanvas>
 
+### Target
+
+The `target` prop specifies where to open the linked document and supports all standard target values (`_blank`, `_self`, `_parent`, `_top`). This controls link behavior independently from the `external` prop, which controls icon display.
+
+>Note: Use `external` to show the external icon. The `target` prop only controls where the link opens.
+
+<DocCanvas
+  mdxSource={{
+    react: `<PdsLink href="https://example.com" target="_blank" external>External link in new tab</PdsLink>
+    <PdsLink href="/internal" target="_blank">Internal link in new tab</PdsLink>
+    <PdsLink href="#section" target="_self">Opens in same frame</PdsLink>`,
+    webComponent: `<pds-link href="https://example.com" target="_blank" external>External link in new tab</pds-link>
+    <pds-link href="/internal" target="_blank">Internal link in new tab</pds-link>
+    <pds-link href="#section" target="_self">Opens in same frame</pds-link>`
+}}>
+  <pds-link href="https://example.com" target="_blank" external>External link in new tab</pds-link>
+  <pds-link href="/internal" target="_blank">Internal link in new tab</pds-link>
+  <pds-link href="#section" target="_self">Opens in same frame</pds-link>
+</DocCanvas>
+
 ### Font Size
 
 The `font-size` prop can be used to adjust the size of the link text. `sm` is 12px, `md` is 14px, and `lg` is 16px. `md` is the default size.

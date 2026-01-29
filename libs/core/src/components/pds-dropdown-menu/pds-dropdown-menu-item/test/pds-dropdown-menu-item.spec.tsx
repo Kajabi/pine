@@ -43,6 +43,58 @@ describe('pds-dropdown-menu-item', () => {
     expect(linkElement?.href).toBe('https://example.com');
   });
 
+  it('renders as a link with external prop when both href and external are provided', async () => {
+    const page = await newSpecPage({
+      components: [PdsDropdownMenuItem, PdsLink],
+      html: `<pds-dropdown-menu-item href="https://example.com" external>External Link</pds-dropdown-menu-item>`,
+    });
+    
+    if (!page.root || !page.root.shadowRoot) {
+      fail('Root or shadow root not found');
+    }
+    
+    const shadowRoot = page.root.shadowRoot;
+    const linkElement = shadowRoot.querySelector('pds-link');
+    expect(linkElement).not.toBeNull();
+    expect(linkElement?.href).toBe('https://example.com');
+    expect(linkElement?.external).toBe(true);
+  });
+
+  it('renders as a link with target="_blank" when both href and target are provided', async () => {
+    const page = await newSpecPage({
+      components: [PdsDropdownMenuItem, PdsLink],
+      html: `<pds-dropdown-menu-item href="https://example.com" target="_blank">External Link</pds-dropdown-menu-item>`,
+    });
+    
+    if (!page.root || !page.root.shadowRoot) {
+      fail('Root or shadow root not found');
+    }
+    
+    const shadowRoot = page.root.shadowRoot;
+    const linkElement = shadowRoot.querySelector('pds-link');
+    expect(linkElement).not.toBeNull();
+    expect(linkElement?.href).toBe('https://example.com');
+    expect(linkElement?.target).toBe('_blank');
+  });
+
+  it('target prop takes precedence over external when both are set', async () => {
+    const page = await newSpecPage({
+      components: [PdsDropdownMenuItem, PdsLink],
+      html: `<pds-dropdown-menu-item href="https://example.com" external target="_self">Link</pds-dropdown-menu-item>`,
+    });
+    
+    if (!page.root || !page.root.shadowRoot) {
+      fail('Root or shadow root not found');
+    }
+    
+    const shadowRoot = page.root.shadowRoot;
+    const linkElement = shadowRoot.querySelector('pds-link');
+    expect(linkElement).not.toBeNull();
+    // Both props are passed through, pds-link handles precedence
+    expect(linkElement?.external).toBe(true);
+    expect(linkElement?.target).toBe('_self');
+  });
+
   it('sets href to null when link is disabled', async () => {
     const page = await newSpecPage({
       components: [PdsDropdownMenuItem, PdsLink],
