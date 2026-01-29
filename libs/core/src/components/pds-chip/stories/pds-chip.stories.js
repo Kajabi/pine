@@ -16,6 +16,9 @@ const BaseTemplate = (args) => html`
   ?large=${args.large}
   sentiment="${args.sentiment}"
   variant="${args.variant}"
+  remove-url="${args.removeUrl}"
+  remove-http-method="${args.removeHttpMethod}"
+  remove-target="${args.removeTarget}"
 >
   ${args.slot}
 </pds-chip>`;
@@ -88,4 +91,39 @@ Large.args = {
   sentiment: "neutral",
   slot: "label",
   variant: "tag",
+}
+
+export const TagWithRemoveUrl = BaseTemplate.bind();
+TagWithRemoveUrl.args = {
+  dot: false,
+  icon: "",
+  large: false,
+  sentiment: "neutral",
+  slot: "Filter Applied",
+  variant: "tag",
+  removeUrl: "/filters/remove/1",
+}
+
+export const TagWithHttpMethod = BaseTemplate.bind();
+TagWithHttpMethod.args = {
+  dot: false,
+  icon: "",
+  large: false,
+  sentiment: "danger",
+  slot: "Delete Me",
+  variant: "tag",
+  removeUrl: "/tags/1",
+  removeHttpMethod: "delete",
+}
+
+export const TagWithRemoveTarget = BaseTemplate.bind();
+TagWithRemoveTarget.args = {
+  dot: false,
+  icon: "",
+  large: false,
+  sentiment: "info",
+  slot: "Clear Filters (New Tab)",
+  variant: "tag",
+  removeUrl: "/clear-filters",
+  removeTarget: "_blank",
 }

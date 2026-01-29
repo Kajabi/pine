@@ -49,6 +49,26 @@ export class PdsChip {
   @Prop() variant: ChipVariantType = 'text';
 
   /**
+   * URL to navigate to when the remove button is clicked.
+   * When provided, renders the close button as a link instead of a button.
+   * Only applies to tag variant.
+   */
+  @Prop() removeUrl?: string;
+
+  /**
+   * HTTP method to use for the remove action.
+   * Adds data-method and data-turbo-method attributes for Rails/Turbo compatibility.
+   * Only applies when removeUrl is provided.
+   */
+  @Prop() removeHttpMethod?: 'get' | 'post' | 'put' | 'patch' | 'delete';
+
+  /**
+   * Specifies where to open the linked document when removeUrl is provided.
+   * Only applies when removeUrl is set.
+   */
+  @Prop() removeTarget?: '_blank' | '_self' | '_parent' | '_top';
+
+  /**
    * Event emitted when the close button is clicked on a tag variant chip.
    */
   @Event() pdsTagCloseClick: EventEmitter<void>;
@@ -111,15 +131,70 @@ export class PdsChip {
     return chipContent;
   }
 
+  private renderCloseButton() {
+    const CloseElement = this.removeUrl ? 'a' : 'button';
+
+    const closeAttributes = () => {
+      if (this.removeUrl) {
+        // Link attributes
+        const linkAttrs: any = {
+          class: 'pds-chip__close',
+          href: this.removeUrl,
+          'aria-label': 'Remove',
+        };
+
+        // Add target if specified
+        if (this.removeTarget) {
+          linkAttrs.target = this.removeTarget;
+        }
+
+        // Add HTTP method attributes if specified
+        if (this.removeHttpMethod) {
+          linkAttrs['data-method'] = this.removeHttpMethod;
+          linkAttrs['data-turbo-method'] = this.removeHttpMethod;
+        }
+
+        // Build rel attribute by collecting all required values
+        const relValues = [];
+
+        // Add noopener noreferrer if target is _blank
+        if (this.removeTarget === '_blank') {
+          relValues.push('noopener', 'noreferrer');
+        }
+
+        // Add nofollow for non-GET methods (best practice)
+        if (this.removeHttpMethod && this.removeHttpMethod !== 'get') {
+          relValues.push('nofollow');
+        }
+
+        // Set rel attribute if we have any values
+        if (relValues.length > 0) {
+          linkAttrs.rel = relValues.join(' ');
+        }
+
+        return linkAttrs;
+      }
+
+      // Button attributes
+      return {
+        class: 'pds-chip__close',
+        type: 'button',
+        'aria-label': 'Remove',
+      };
+    };
+
+    return (
+      <CloseElement {...closeAttributes()} onClick={this.handleCloseClick}>
+        <pds-icon icon={remove} size={this.iconSize}></pds-icon>
+      </CloseElement>
+    );
+  }
+
   render() {
     return (
       <Host class={this.classNames()} id={this.componentId}>
         {this.setChipContent()}
-        {this.effectiveVariant === 'tag' && (
-          <button class="pds-chip__close" type="button" onClick={this.handleCloseClick} aria-label="Remove">
-            <pds-icon icon={remove} size={this.iconSize}></pds-icon>
-          </button>
-        )}
+        {this.effectiveVariant === 'tag' && this.renderCloseButton()}
       </Host>
     );
   }

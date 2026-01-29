@@ -224,6 +224,66 @@ Tag is often used to represent a selected item or a removable element and includ
   <pds-chip sentiment="warning" variant="tag">Warning</pds-chip>
 </DocCanvas>
 
+#### Tag with Remove URL
+
+The `remove-url` property allows the tag's close button to function as a link, enabling URL-based removal actions. This is particularly useful in data tables and filters where you want to remove items by navigating to a URL instead of handling removal with JavaScript.
+
+When `remove-url` is provided, the close button is rendered as an `<a>` element instead of a `<button>`, and the `pdsTagCloseClick` event is still emitted for backward compatibility.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+    <PdsChip sentiment="neutral" variant="tag" removeUrl="/filters/remove/1">Filter 1</PdsChip>
+    <PdsChip sentiment="info" variant="tag" removeUrl="/tags/active">Active</PdsChip>
+    `,
+    webComponent: `
+    <pds-chip sentiment="neutral" variant="tag" remove-url="/filters/remove/1">Filter 1</pds-chip>
+    <pds-chip sentiment="info" variant="tag" remove-url="/tags/active">Active</pds-chip>
+    `
+}}>
+  <pds-chip sentiment="neutral" variant="tag" remove-url="/filters/remove/1">Filter 1</pds-chip>
+  <pds-chip sentiment="info" variant="tag" remove-url="/tags/active">Active</pds-chip>
+</DocCanvas>
+
+#### Tag with HTTP Method
+
+The `remove-http-method` property adds `data-method` and `data-turbo-method` attributes to the remove link, enabling Rails/Turbo framework compatibility for non-GET HTTP requests. This is useful for DELETE operations or other HTTP methods.
+
+> **Note**: The `remove-http-method` property only applies when `remove-url` is provided.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+    <PdsChip sentiment="danger" variant="tag" removeUrl="/tags/1" removeHttpMethod="delete">Delete Me</PdsChip>
+    <PdsChip sentiment="warning" variant="tag" removeUrl="/tags/2" removeHttpMethod="post">Post Action</PdsChip>
+    `,
+    webComponent: `
+    <pds-chip sentiment="danger" variant="tag" remove-url="/tags/1" remove-http-method="delete">Delete Me</pds-chip>
+    <pds-chip sentiment="warning" variant="tag" remove-url="/tags/2" remove-http-method="post">Post Action</pds-chip>
+    `
+}}>
+  <pds-chip sentiment="danger" variant="tag" remove-url="/tags/1" remove-http-method="delete">Delete Me</pds-chip>
+  <pds-chip sentiment="warning" variant="tag" remove-url="/tags/2" remove-http-method="post">Post Action</pds-chip>
+</DocCanvas>
+
+#### Tag with Remove Target
+
+The `remove-target` property specifies where to open the linked document when the remove button is clicked. This is useful when you want the removal action to open in a new tab or specific browsing context.
+
+> **Note**: The `remove-target` property only applies when `remove-url` is provided.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+    <PdsChip sentiment="info" variant="tag" removeUrl="/clear-filters" removeTarget="_blank">Clear (New Tab)</PdsChip>
+    `,
+    webComponent: `
+    <pds-chip sentiment="info" variant="tag" remove-url="/clear-filters" remove-target="_blank">Clear (New Tab)</pds-chip>
+    `
+}}>
+  <pds-chip sentiment="info" variant="tag" remove-url="/clear-filters" remove-target="_blank">Clear (New Tab)</pds-chip>
+</DocCanvas>
+
 ### Large
 
 Large chips will be displayed with a larger visual footprint compared to the default size.

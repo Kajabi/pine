@@ -280,4 +280,147 @@ describe('pds-chip', () => {
 
     expect(eventSpy).toHaveBeenCalled();
   });
+
+  it('renders close button as link when removeUrl prop is provided', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip variant="tag" remove-url="/filters/remove/1" />`,
+    });
+
+    expect(page.root).toEqualHtml(`
+    <pds-chip class="pds-chip pds-chip--neutral pds-chip--tag" variant="tag" remove-url="/filters/remove/1">
+      <mock:shadow-root>
+        <span class="pds-chip__label"><slot></slot></span>
+        <a class="pds-chip__close" href="/filters/remove/1" aria-label="Remove">
+          <pds-icon icon="${removeIcon}" size="12px"></pds-icon>
+        </a>
+      </mock:shadow-root>
+    </pds-chip>
+    `);
+  });
+
+  it('adds data-method and data-turbo-method attributes when removeHttpMethod is provided', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip variant="tag" remove-url="/tags/1" remove-http-method="delete" />`,
+    });
+
+    expect(page.root).toEqualHtml(`
+    <pds-chip class="pds-chip pds-chip--neutral pds-chip--tag" variant="tag" remove-url="/tags/1" remove-http-method="delete">
+      <mock:shadow-root>
+        <span class="pds-chip__label"><slot></slot></span>
+        <a class="pds-chip__close" href="/tags/1" aria-label="Remove" data-method="delete" data-turbo-method="delete" rel="nofollow">
+          <pds-icon icon="${removeIcon}" size="12px"></pds-icon>
+        </a>
+      </mock:shadow-root>
+    </pds-chip>
+    `);
+  });
+
+  it('does not add rel="nofollow" for GET method', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip variant="tag" remove-url="/tags/1" remove-http-method="get" />`,
+    });
+
+    const chip = page.body.querySelector('pds-chip');
+    const closeLink = chip?.shadowRoot?.querySelector('.pds-chip__close') as HTMLAnchorElement;
+
+    expect(closeLink.getAttribute('rel')).toBeNull();
+    expect(closeLink.getAttribute('data-method')).toBe('get');
+    expect(closeLink.getAttribute('data-turbo-method')).toBe('get');
+  });
+
+  it('adds target attribute when removeTarget is provided', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip variant="tag" remove-url="/clear" remove-target="_blank" />`,
+    });
+
+    expect(page.root).toEqualHtml(`
+    <pds-chip class="pds-chip pds-chip--neutral pds-chip--tag" variant="tag" remove-url="/clear" remove-target="_blank">
+      <mock:shadow-root>
+        <span class="pds-chip__label"><slot></slot></span>
+        <a class="pds-chip__close" href="/clear" aria-label="Remove" target="_blank" rel="noopener noreferrer">
+          <pds-icon icon="${removeIcon}" size="12px"></pds-icon>
+        </a>
+      </mock:shadow-root>
+    </pds-chip>
+    `);
+  });
+
+  it('adds rel="noopener noreferrer" when removeTarget is "_blank"', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip variant="tag" remove-url="/clear" remove-target="_blank" />`,
+    });
+
+    const chip = page.body.querySelector('pds-chip');
+    const closeLink = chip?.shadowRoot?.querySelector('.pds-chip__close') as HTMLAnchorElement;
+
+    expect(closeLink.getAttribute('rel')).toBe('noopener noreferrer');
+    expect(closeLink.getAttribute('target')).toBe('_blank');
+  });
+
+  it('combines rel tokens when removeTarget="_blank" and removeHttpMethod is non-GET', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip variant="tag" remove-url="/tags/1" remove-target="_blank" remove-http-method="delete" />`,
+    });
+
+    const chip = page.body.querySelector('pds-chip');
+    const closeLink = chip?.shadowRoot?.querySelector('.pds-chip__close') as HTMLAnchorElement;
+
+    expect(closeLink.getAttribute('rel')).toBe('noopener noreferrer nofollow');
+    expect(closeLink.getAttribute('target')).toBe('_blank');
+    expect(closeLink.getAttribute('data-method')).toBe('delete');
+    expect(closeLink.getAttribute('data-turbo-method')).toBe('delete');
+  });
+
+  it('adds only nofollow when removeHttpMethod is non-GET without target="_blank"', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip variant="tag" remove-url="/tags/1" remove-http-method="post" />`,
+    });
+
+    const chip = page.body.querySelector('pds-chip');
+    const closeLink = chip?.shadowRoot?.querySelector('.pds-chip__close') as HTMLAnchorElement;
+
+    expect(closeLink.getAttribute('rel')).toBe('nofollow');
+    expect(closeLink.getAttribute('target')).toBeNull();
+  });
+
+  it('emits pdsTagCloseClick event when close link is clicked', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip variant="tag" remove-url="/filters/remove/1">Filter</pds-chip>`,
+    });
+
+    const chip = page.body.querySelector('pds-chip');
+    const eventSpy = jest.fn();
+    const closeLink = chip?.shadowRoot?.querySelector('.pds-chip__close') as HTMLElement;
+
+    page.root?.addEventListener('pdsTagCloseClick', eventSpy);
+    closeLink?.dispatchEvent(new Event('click'));
+    await page.waitForChanges();
+
+    expect(eventSpy).toHaveBeenCalled();
+  });
+
+  it('supports all HTTP methods', async () => {
+    const methods = ['get', 'post', 'put', 'patch', 'delete'];
+
+    for (const method of methods) {
+      const page = await newSpecPage({
+        components: [PdsChip],
+        html: `<pds-chip variant="tag" remove-url="/action" remove-http-method="${method}" />`,
+      });
+
+      const chip = page.body.querySelector('pds-chip');
+      const closeLink = chip?.shadowRoot?.querySelector('.pds-chip__close') as HTMLAnchorElement;
+
+      expect(closeLink.getAttribute('data-method')).toBe(method);
+      expect(closeLink.getAttribute('data-turbo-method')).toBe(method);
+    }
+  });
 });

@@ -842,6 +842,18 @@ export namespace Components {
          */
         "large": boolean;
         /**
+          * HTTP method to use for the remove action. Adds data-method and data-turbo-method attributes for Rails/Turbo compatibility. Only applies when removeUrl is provided.
+         */
+        "removeHttpMethod"?: 'get' | 'post' | 'put' | 'patch' | 'delete';
+        /**
+          * Specifies where to open the linked document when removeUrl is provided. Only applies when removeUrl is set.
+         */
+        "removeTarget"?: '_blank' | '_self' | '_parent' | '_top';
+        /**
+          * URL to navigate to when the remove button is clicked. When provided, renders the close button as a link instead of a button. Only applies to tag variant.
+         */
+        "removeUrl"?: string;
+        /**
           * Defines the color scheme of the chip.
           * @defaultValue 'neutral'
          */
@@ -3755,6 +3767,18 @@ declare namespace LocalJSX {
           * Event emitted when the close button is clicked on a tag variant chip.
          */
         "onPdsTagCloseClick"?: (event: PdsChipCustomEvent<void>) => void;
+        /**
+          * HTTP method to use for the remove action. Adds data-method and data-turbo-method attributes for Rails/Turbo compatibility. Only applies when removeUrl is provided.
+         */
+        "removeHttpMethod"?: 'get' | 'post' | 'put' | 'patch' | 'delete';
+        /**
+          * Specifies where to open the linked document when removeUrl is provided. Only applies when removeUrl is set.
+         */
+        "removeTarget"?: '_blank' | '_self' | '_parent' | '_top';
+        /**
+          * URL to navigate to when the remove button is clicked. When provided, renders the close button as a link instead of a button. Only applies to tag variant.
+         */
+        "removeUrl"?: string;
         /**
           * Defines the color scheme of the chip.
           * @defaultValue 'neutral'
