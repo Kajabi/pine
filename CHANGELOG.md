@@ -1,3 +1,22 @@
+## 3.15.0 (2026-01-29)
+
+### Features 🚀
+
+- add external prop to dropdown menu ([#648](https://github.com/Kajabi/pine/pull/648))
+- **pds-chip:** add remove url support ([#653](https://github.com/Kajabi/pine/pull/653))
+- **pds-combobox:** add async to pds-combobox ([#651](https://github.com/Kajabi/pine/pull/651))
+- **pds-multiselect:** add create tag functionality to pds-multiselect ([#652](https://github.com/Kajabi/pine/pull/652))
+
+### Styles 🎨
+
+- **pds-chip:** adjust padding values ([#645](https://github.com/Kajabi/pine/pull/645))
+- **pds-table-cell:** update vertical align styles ([#650](https://github.com/Kajabi/pine/pull/650))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.14.2 (2026-01-27)
 
 ### Bug Fixes 🐛
