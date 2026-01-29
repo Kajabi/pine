@@ -196,6 +196,26 @@
   &:focus-visible {
     outline: var(--pine-dimension-none);
   }
+
+  &.pds-multiselect__option--create {
+    border-top: var(--pine-border);
+    border-top-color: var(--pine-color-border-subtle);
+    margin-top: var(--pine-dimension-xs);
+    padding-top: var(--pine-dimension-xs);
+  }
+}
+
+.pds-multiselect__create-option {
+  align-items: center;
+  color: var(--pine-color-text-strong);
+  display: flex;
+  gap: var(--pine-dimension-xs);
+  width: 100%;
+
+  pds-icon {
+    color: var(--pine-color-text-muted);
+    flex-shrink: var(--pine-dimension-none);
+  }
 }
 
 .pds-multiselect__empty,

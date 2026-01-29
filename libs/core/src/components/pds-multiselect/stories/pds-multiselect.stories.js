@@ -369,3 +369,44 @@ export const CustomEmptyState = {
     </pds-multiselect>
   `,
 };
+
+export const WithCreateOption = {
+  args: {
+    componentId: 'multiselect-create',
+    label: 'Manage Tags',
+    placeholder: 'Select or create tags...',
+    value: [],
+  },
+  render: (args, { updateArgs } = {}) => {
+    return html`
+      <pds-multiselect
+        id="create-example"
+        component-id="${args.componentId}"
+        label="${args.label}"
+        placeholder="${args.placeholder}"
+        create-url="/api/tags"
+        .value=${args.value}
+        @pdsMultiselectCreate=${async (e) => {
+          console.log('Creating new tag:', e.detail.query);
+          // In a real app, the component handles the POST request
+          // This event is just for notification/logging
+        }}
+        @pdsMultiselectChange=${(e) => {
+          console.log('Selected values:', e.detail.values);
+          console.log('Selected items:', e.detail.items);
+          updateArgs?.({ value: e.detail.values });
+        }}
+      >
+        ${unsafeHTML(defaultOptions)}
+      </pds-multiselect>
+      <p style="margin-top: var(--pine-dimension-sm); color: var(--pine-color-text-secondary);">
+        Type a search query that doesn't match any options to see the "Add" option.
+        Open console to see create and change events.
+      </p>
+      <p style="margin-top: var(--pine-dimension-xs); color: var(--pine-color-text-muted); font-size: 0.875rem;">
+        Note: In Storybook, the POST request will fail (expected). In production with a real API endpoint,
+        new tags are created and automatically selected.
+      </p>
+    `;
+  },
+};

@@ -702,4 +702,308 @@ describe('pds-multiselect', () => {
     });
   });
 
+  describe('create option functionality', () => {
+    it('should show create option when createUrl is set and no matches found', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" create-url="/api/tags"></pds-multiselect>`,
+      });
+
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Marketing' },
+        { id: '2', text: 'Sales' },
+      ];
+      page.rootInstance.searchQuery = 'NewTag';
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      const options = page.root.shadowRoot.querySelectorAll('.pds-multiselect__option');
+      expect(options.length).toBe(1);
+      expect(options[0].classList.contains('pds-multiselect__option--create')).toBe(true);
+      expect(options[0].textContent).toContain('Add "NewTag"');
+    });
+
+    it('should not show create option when createUrl is not set', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Marketing' },
+      ];
+      page.rootInstance.searchQuery = 'NewTag';
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      const emptyEl = page.root.shadowRoot.querySelector('.pds-multiselect__empty');
+      expect(emptyEl).toBeTruthy();
+      expect(emptyEl.textContent).toContain('No options found');
+    });
+
+    it('should not show create option when query is empty', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" create-url="/api/tags"></pds-multiselect>`,
+      });
+
+      page.rootInstance.internalOptions = [];
+      page.rootInstance.searchQuery = '';
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      const emptyEl = page.root.shadowRoot.querySelector('.pds-multiselect__empty');
+      expect(emptyEl).toBeTruthy();
+    });
+
+    it('should not show create option when query is only whitespace', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" create-url="/api/tags"></pds-multiselect>`,
+      });
+
+      page.rootInstance.internalOptions = [];
+      page.rootInstance.searchQuery = '   ';
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      const emptyEl = page.root.shadowRoot.querySelector('.pds-multiselect__empty');
+      expect(emptyEl).toBeTruthy();
+    });
+
+    it('should POST to createUrl when create option is clicked', async () => {
+      const mockFetch = jest.fn(() =>
+        Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ id: '3', text: 'NewTag' }),
+        })
+      );
+      global.fetch = mockFetch as any;
+
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" create-url="/api/tags"></pds-multiselect>`,
+      });
+
+      page.rootInstance.searchQuery = 'NewTag';
+      page.rootInstance.internalOptions = [];
+
+      // Call createOption directly
+      await page.rootInstance['createOption']('NewTag');
+      await page.waitForChanges();
+
+      expect(mockFetch).toHaveBeenCalledWith(
+        expect.stringContaining('/api/tags'),
+        expect.objectContaining({
+          method: 'POST',
+          headers: expect.objectContaining({
+            'Content-Type': 'application/json',
+          }),
+          body: JSON.stringify({ text: 'NewTag' }),
+        })
+      );
+    });
+
+    it('should add newly created option to the list and select it', async () => {
+      const mockFetch = jest.fn(() =>
+        Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ id: '3', text: 'NewTag' }),
+        })
+      );
+      global.fetch = mockFetch as any;
+
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" create-url="/api/tags"></pds-multiselect>`,
+      });
+
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Marketing' },
+        { id: '2', text: 'Sales' },
+      ];
+
+      await page.rootInstance['createOption']('NewTag');
+      await page.waitForChanges();
+
+      expect(page.rootInstance.internalOptions.length).toBe(3);
+      expect(page.rootInstance.internalOptions[2].text).toBe('NewTag');
+      expect(page.rootInstance.value).toContain('3');
+    });
+
+    it('should emit pdsMultiselectCreate event on successful creation', async () => {
+      const mockFetch = jest.fn(() =>
+        Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ id: '3', text: 'NewTag' }),
+        })
+      );
+      global.fetch = mockFetch as any;
+
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" create-url="/api/tags"></pds-multiselect>`,
+      });
+
+      const createSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectCreate', createSpy);
+
+      await page.rootInstance['createOption']('NewTag');
+      await page.waitForChanges();
+
+      expect(createSpy).toHaveBeenCalled();
+      expect(createSpy.mock.calls[0][0].detail).toEqual({
+        query: 'NewTag',
+        newOption: expect.objectContaining({
+          id: '3',
+          text: 'NewTag',
+        }),
+      });
+    });
+
+    it('should emit pdsMultiselectChange event after creation', async () => {
+      const mockFetch = jest.fn(() =>
+        Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ id: '3', text: 'NewTag' }),
+        })
+      );
+      global.fetch = mockFetch as any;
+
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" create-url="/api/tags"></pds-multiselect>`,
+      });
+
+      const changeSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectChange', changeSpy);
+
+      await page.rootInstance['createOption']('NewTag');
+      await page.waitForChanges();
+
+      expect(changeSpy).toHaveBeenCalled();
+      expect(changeSpy.mock.calls[0][0].detail.values).toContain('3');
+    });
+
+    it('should show loading state during creation', async () => {
+      let resolveCreate;
+      const mockFetch = jest.fn(() =>
+        new Promise(resolve => {
+          resolveCreate = () =>
+            resolve({
+              ok: true,
+              json: () => Promise.resolve({ id: '3', text: 'NewTag' }),
+            });
+        })
+      );
+      global.fetch = mockFetch as any;
+
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" create-url="/api/tags"></pds-multiselect>`,
+      });
+
+      const createPromise = page.rootInstance['createOption']('NewTag');
+      await page.waitForChanges();
+
+      expect(page.rootInstance.creating).toBe(true);
+
+      resolveCreate();
+      await createPromise;
+      await page.waitForChanges();
+
+      expect(page.rootInstance.creating).toBe(false);
+    });
+
+    it('should handle create request failures gracefully', async () => {
+      const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+      const mockFetch = jest.fn(() =>
+        Promise.resolve({
+          ok: false,
+          status: 500,
+        })
+      );
+      global.fetch = mockFetch as any;
+
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" create-url="/api/tags"></pds-multiselect>`,
+      });
+
+      await page.rootInstance['createOption']('NewTag');
+      await page.waitForChanges();
+
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'PdsMultiselect: Failed to create option',
+        expect.any(Error)
+      );
+      expect(page.rootInstance.creating).toBe(false);
+
+      consoleSpy.mockRestore();
+    });
+
+    it('should clear search query after successful creation', async () => {
+      const mockFetch = jest.fn(() =>
+        Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ id: '3', text: 'NewTag' }),
+        })
+      );
+      global.fetch = mockFetch as any;
+
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" create-url="/api/tags"></pds-multiselect>`,
+      });
+
+      page.rootInstance.searchQuery = 'NewTag';
+      await page.rootInstance['createOption']('NewTag');
+      await page.waitForChanges();
+
+      expect(page.rootInstance.searchQuery).toBe('');
+    });
+
+    it('should trim whitespace from query before creating', async () => {
+      const mockFetch = jest.fn(() =>
+        Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ id: '3', text: 'NewTag' }),
+        })
+      );
+      global.fetch = mockFetch as any;
+
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" create-url="/api/tags"></pds-multiselect>`,
+      });
+
+      await page.rootInstance['createOption']('  NewTag  ');
+      await page.waitForChanges();
+
+      expect(mockFetch).toHaveBeenCalledWith(
+        expect.stringContaining('/api/tags'),
+        expect.objectContaining({
+          body: JSON.stringify({ text: 'NewTag' }),
+        })
+      );
+    });
+
+    it('should have proper accessibility attributes on create option', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" create-url="/api/tags"></pds-multiselect>`,
+      });
+
+      page.rootInstance.searchQuery = 'NewTag';
+      page.rootInstance.internalOptions = [];
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      const createOption = page.root.shadowRoot.querySelector('.pds-multiselect__option--create');
+      expect(createOption).toBeTruthy();
+      expect(createOption.getAttribute('aria-label')).toBe('Create new tag: NewTag');
+      expect(createOption.getAttribute('role')).toBe('option');
+    });
+  });
+
 });

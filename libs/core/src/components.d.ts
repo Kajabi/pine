@@ -11,7 +11,7 @@ import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-in
 import { ChipSentimentType, ChipVariantType, PlacementType } from "./utils/types";
 import { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 import { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
-import { MultiselectChangeEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
+import { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
 import { PdsPopoverEventDetail } from "./components/pds-popover/popover-interface";
 import { RadioGroupChangeEventDetail } from "./components/pds-radio-group/radio-group-interface";
 import { SortableEvent } from "sortablejs";
@@ -22,7 +22,7 @@ export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-in
 export { ChipSentimentType, ChipVariantType, PlacementType } from "./utils/types";
 export { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
-export { MultiselectChangeEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
+export { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
 export { PdsPopoverEventDetail } from "./components/pds-popover/popover-interface";
 export { RadioGroupChangeEventDetail } from "./components/pds-radio-group/radio-group-interface";
 export { SortableEvent } from "sortablejs";
@@ -1333,6 +1333,10 @@ export namespace Components {
          */
         "componentId": string;
         /**
+          * URL endpoint for creating new options. When set, shows "Add" option when no matches found.
+         */
+        "createUrl"?: string;
+        /**
           * Debounce delay in milliseconds for search/fetch.
           * @default 300
          */
@@ -2550,6 +2554,7 @@ declare global {
         "pdsMultiselectChange": MultiselectChangeEventDetail;
         "pdsMultiselectSearch": MultiselectSearchEventDetail;
         "pdsMultiselectLoadOptions": MultiselectLoadOptionsEventDetail;
+        "pdsMultiselectCreate": MultiselectCreateEventDetail;
     }
     interface HTMLPdsMultiselectElement extends Components.PdsMultiselect, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsMultiselectElementEventMap>(type: K, listener: (this: HTMLPdsMultiselectElement, ev: PdsMultiselectCustomEvent<HTMLPdsMultiselectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4250,6 +4255,10 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
+          * URL endpoint for creating new options. When set, shows "Add" option when no matches found.
+         */
+        "createUrl"?: string;
+        /**
           * Debounce delay in milliseconds for search/fetch.
           * @default 300
          */
@@ -4311,6 +4320,10 @@ declare namespace LocalJSX {
           * Emitted when selection changes.
          */
         "onPdsMultiselectChange"?: (event: PdsMultiselectCustomEvent<MultiselectChangeEventDetail>) => void;
+        /**
+          * Emitted when a new option is created.
+         */
+        "onPdsMultiselectCreate"?: (event: PdsMultiselectCustomEvent<MultiselectCreateEventDetail>) => void;
         /**
           * Emitted to request more options (pagination).
          */
