@@ -198,6 +198,16 @@
   }
 }
 
+.pds-multiselect__create-option {
+  color: var(--pine-color-text-strong);
+  width: 100%;
+
+  pds-icon {
+    color: var(--pine-color-text-muted);
+    flex-shrink: var(--pine-dimension-none);
+  }
+}
+
 .pds-multiselect__empty,
 .pds-multiselect__loading {
   align-items: center;

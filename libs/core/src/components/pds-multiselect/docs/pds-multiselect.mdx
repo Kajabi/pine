@@ -21,7 +21,6 @@ The multiselect component allows users to select multiple options from a searcha
 ### When not to use
 - For single selection - use `pds-combobox` or `pds-select` instead
 - For very short lists (3-4 items) - consider using checkboxes directly
-- When users need to create new options - consider a tag input component
 
 ### Accessibility
 - Implements WAI-ARIA Combobox pattern with multiselect support
@@ -340,6 +339,77 @@ Display validation errors with the `errorMessage` prop.
     <option value="2">Tag B</option>
   </pds-multiselect>
 </DocCanvas>
+
+### With Create Option
+
+Enable users to create new options when no matches are found by setting the `create-url` prop. When a user types a search query that doesn't match any existing options, they'll see an "Add" option that posts to the specified endpoint.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="tags-create"
+  label="Manage Tags"
+  placeholder="Select or create tags..."
+  create-url="/api/tags"
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+</pds-multiselect>`,
+    react: `<PdsMultiselect
+  componentId="tags-create"
+  label="Manage Tags"
+  placeholder="Select or create tags..."
+  createUrl="/api/tags"
+  onPdsMultiselectCreate={(e) => console.log('Created:', e.detail.newOption)}
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="tags-create"
+    label="Manage Tags"
+    placeholder="Select or create tags..."
+    create-url="/api/tags"
+  >
+    <option value="1">Marketing</option>
+    <option value="2">Sales</option>
+    <option value="3">Support</option>
+  </pds-multiselect>
+</DocCanvas>
+
+> **Note:** The live preview uses static options. In production with `create-url` set, typing a query with no matches shows "Add 'query'" option.
+
+#### Create Option API Contract
+
+When the create option is clicked, the component sends a POST request:
+
+**Request:**
+```json
+POST /api/tags
+Content-Type: application/json
+
+{
+  "text": "New Tag Name"
+}
+```
+
+**Expected Response:**
+```json
+{
+  "id": "4",
+  "text": "New Tag Name"
+}
+```
+
+The newly created option is automatically added to the list and selected. The component emits:
+- `pdsMultiselectCreate` - Contains the query and new option details
+- `pdsMultiselectChange` - Updated selection including the new option
+
+**Error Handling:** If the create request fails, an error is logged to the console and the component remains in a usable state. Consider implementing your own error handling by monitoring the `pdsMultiselectCreate` event or network requests.
 
 ## Form Integration
 

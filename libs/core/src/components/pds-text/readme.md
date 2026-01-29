@@ -32,11 +32,13 @@
 ### Used by
 
  - [pds-alert](../pds-alert)
+ - [pds-multiselect](../pds-multiselect)
 
 ### Graph
 ```mermaid
 graph TD;
   pds-alert --> pds-text
+  pds-multiselect --> pds-text
   style pds-text fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

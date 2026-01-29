@@ -8,7 +8,9 @@ import type {
   MultiselectChangeEventDetail,
   MultiselectSearchEventDetail,
   MultiselectLoadOptionsEventDetail,
+  MultiselectCreateEventDetail,
   AsyncResponse,
+  CreateResponse,
 } from './multiselect-interface';
 
 /**
@@ -146,6 +148,11 @@ export class PdsMultiselect {
    */
   @Prop() formatResult?: (item: unknown) => MultiselectOption;
 
+  /**
+   * URL endpoint for creating new options. When set, shows "Add" option when no matches found.
+   */
+  @Prop() createUrl?: string;
+
   // Internal state
   @State() isOpen: boolean = false;
   @State() searchQuery: string = '';
@@ -154,6 +161,7 @@ export class PdsMultiselect {
   @State() selectedItems: MultiselectOption[] = [];
   @State() currentPage: number = 1;
   @State() hasMore: boolean = false;
+  @State() creating: boolean = false;
 
   // Flag to prevent focusout from closing during open transition
   private isOpening: boolean = false;
@@ -172,6 +180,11 @@ export class PdsMultiselect {
    * Emitted to request more options (pagination).
    */
   @Event() pdsMultiselectLoadOptions!: EventEmitter<MultiselectLoadOptionsEventDetail>;
+
+  /**
+   * Emitted when a new option is created.
+   */
+  @Event() pdsMultiselectCreate!: EventEmitter<MultiselectCreateEventDetail>;
 
   private originalSearchEmitter?: EventEmitter<MultiselectSearchEventDetail>;
 
@@ -372,13 +385,24 @@ export class PdsMultiselect {
     const allOptions = this.getAllOptions();
     const query = this.searchQuery.toLowerCase();
 
-    return allOptions.filter(opt => {
+    const filtered = allOptions.filter(opt => {
       // Filter by search query only - don't filter out selected items
       if (query) {
         return opt.text.toLowerCase().includes(query);
       }
       return true;
     });
+
+    // Add create option if enabled and no matches found
+    if (this.createUrl && this.searchQuery.trim() && filtered.length === 0) {
+      return [{
+        id: '__create__',
+        text: this.searchQuery.trim(),
+        isCreateOption: true,
+      }];
+    }
+
+    return filtered;
   }
 
   private updateFormValue() {
@@ -465,6 +489,73 @@ export class PdsMultiselect {
       }
     } finally {
       this.loading = false;
+    }
+  }
+
+  private async createOption(query: string) {
+    if (!this.createUrl || !query.trim()) return;
+
+    // Reentrancy guard: prevent duplicate POSTs if creation is already in-flight
+    if (this.creating) return;
+
+    this.creating = true;
+
+    try {
+      const url = new URL(this.createUrl, window.location.origin);
+
+      const response = await fetch(url.toString(), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({ text: query.trim() }),
+      });
+
+      if (!response.ok) throw new Error('Failed to create option');
+
+      const data: CreateResponse = await response.json();
+
+      const newOption: MultiselectOption = {
+        id: data.id,
+        text: data.text,
+        ...data,
+      };
+
+      // Add to internal options
+      this.internalOptions = [...this.internalOptions, newOption];
+
+      // Select the new option
+      this.value = [...this.value, String(newOption.id)];
+
+      // Sync selected items
+      this.syncSelectedItems();
+
+      // Emit create event
+      this.pdsMultiselectCreate.emit({
+        query: query.trim(),
+        newOption,
+      });
+
+      // Emit change event
+      this.pdsMultiselectChange.emit({
+        values: this.value,
+        items: this.selectedItems,
+      });
+
+      // Clear search and keep dropdown open
+      this.searchQuery = '';
+      this.highlightedIndex = -1;
+
+      // Focus back on search input
+      requestAnimationFrame(() => {
+        this.searchInputEl?.focus();
+      });
+
+    } catch (error) {
+      console.error('PdsMultiselect: Failed to create option', error);
+    } finally {
+      this.creating = false;
     }
   }
 
@@ -650,6 +741,15 @@ export class PdsMultiselect {
   }
 
   private toggleOption(option: MultiselectOption) {
+    // Handle create option
+    if (option.isCreateOption) {
+      // Prevent multiple create calls while one is in-flight
+      if (!this.creating) {
+        this.createOption(this.searchQuery);
+      }
+      return;
+    }
+
     const isSelected = this.value.includes(String(option.id));
 
     if (isSelected) {
@@ -804,8 +904,10 @@ export class PdsMultiselect {
 
           {filteredOptions.map((option, index) => {
             const isSelected = valueArray.includes(String(option.id));
-            const isHighlighted = index === this.highlightedIndex;
+            const isCreateOption = option.isCreateOption;
+            const isHighlighted = index === this.highlightedIndex && !isCreateOption;
             const optionId = `${this.componentId}-option-${index}`;
+            const isCreateDisabled = isCreateOption && this.creating;
 
             return (
               <li
@@ -815,19 +917,30 @@ export class PdsMultiselect {
                   'pds-multiselect__option': true,
                   'pds-multiselect__option--highlighted': isHighlighted,
                   'pds-multiselect__option--selected': isSelected,
+                  'pds-multiselect__option--create': isCreateOption,
+                  'pds-multiselect__option--disabled': isCreateDisabled,
                 }}
                 role="option"
                 aria-selected={isSelected ? 'true' : 'false'}
+                aria-disabled={isCreateDisabled ? 'true' : undefined}
+                aria-label={isCreateOption ? `Create new tag: ${option.text}` : undefined}
                 data-index={index}
                 onMouseDown={this.handleOptionMouseDown(option)}
                 onMouseEnter={this.handleOptionMouseEnter(index)}
               >
-                <pds-checkbox
-                  componentId={`${this.componentId}-checkbox-${index}`}
-                  checked={isSelected}
-                  label={option.text}
-                  style={{ pointerEvents: 'none' }}
-                />
+                {isCreateOption ? (
+                  <pds-box class="pds-multiselect__create-option" align-items="center" gap="xs">
+                    <pds-icon name="add" size="small" />
+                    <pds-text>Add "{option.text}"</pds-text>
+                  </pds-box>
+                ) : (
+                  <pds-checkbox
+                    componentId={`${this.componentId}-checkbox-${index}`}
+                    checked={isSelected}
+                    label={option.text}
+                    style={{ pointerEvents: 'none' }}
+                  />
+                )}
               </li>
             );
           })}
@@ -912,7 +1025,7 @@ export class PdsMultiselect {
             {this.renderDropdown()}
           </div>
 
-          {this.helperMessage && !this.errorMessage && (
+          {this.helperMessage && !(this.errorMessage && this.errorMessage.length > 0) && (
             <p class="pds-multiselect__helper" id={messageId(this.componentId, 'helper')}>
               {this.helperMessage}
             </p>
