@@ -37,7 +37,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
    * This is a simpler alternative to using `target="_blank"` for the common case.
    * @defaultValue false
    */
-  @Prop() external: boolean = false;
+  @Prop({ reflect: true }) external: boolean = false;
 
   /**
    * Specifies where to open the linked document when href is provided.
@@ -45,7 +45,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
    * Only applies when href is set.
    * @defaultValue undefined
    */
-  @Prop() target?: '_blank' | '_self' | '_parent' | '_top';
+  @Prop({ reflect: true }) target?: '_blank' | '_self' | '_parent' | '_top';
 
   /**
    * Emitted when the dropdown-item is clicked.
