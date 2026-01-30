@@ -1,3 +1,18 @@
+## 3.15.1 (2026-01-30)
+
+### Bug Fixes 🐛
+
+- **pds-multiselect:** add csrf token support and fix selected items d… ([#654](https://github.com/Kajabi/pine/pull/654))
+
+### Styles 🎨
+
+- **pds-table-row:** update interactive token color ([#655](https://github.com/Kajabi/pine/pull/655))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.15.0 (2026-01-29)
 
 ### Features 🚀
