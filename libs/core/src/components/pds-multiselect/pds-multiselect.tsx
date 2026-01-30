@@ -222,12 +222,6 @@ export class PdsMultiselect {
     requestAnimationFrame(() => {
       this.updateOptionsFromSlot();
       this.syncSelectedItems();
-
-      // If using async-url with preselected values, fetch initial options
-      // Skip fetch if consumer provided external options
-      if (this.asyncUrl && this.value.length > 0 && this.internalOptions.length === 0 && (!this.options || this.options.length === 0)) {
-        this.fetchOptions('', 1);
-      }
     });
   }
 
@@ -389,14 +383,10 @@ export class PdsMultiselect {
         // If not in options but exists in current selectedItems, preserve it
         // This handles the case where async data hasn't loaded yet or newly created items
         newSelectedItems.push(existingItemsMap.get(String(val))!);
-      } else {
-        // Last resort: create a placeholder with just the ID
-        // This handles initial render with preselected values before options load
-        newSelectedItems.push({
-          id: val,
-          text: val,
-        });
       }
+      // Note: We don't create placeholders for values without matching options.
+      // This ensures selectedItems remains empty until options are actually loaded,
+      // which matches the expected behavior for preselected values.
     });
 
     this.selectedItems = newSelectedItems;
@@ -522,13 +512,9 @@ export class PdsMultiselect {
 
       const csrfToken = this.getCsrfToken();
       const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
         'Accept': 'application/json',
       };
-
-      // Only add Content-Type when request has a body (avoids CORS preflight for GET)
-      if (this.asyncMethod !== 'GET') {
-        headers['Content-Type'] = 'application/json';
-      }
 
       if (csrfToken) {
         headers['X-CSRF-Token'] = csrfToken;
