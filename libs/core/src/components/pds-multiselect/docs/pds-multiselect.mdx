@@ -411,6 +411,100 @@ The newly created option is automatically added to the list and selected. The co
 
 **Error Handling:** If the create request fails, an error is logged to the console and the component remains in a usable state. Consider implementing your own error handling by monitoring the `pdsMultiselectCreate` event or network requests.
 
+## CSRF Token Support
+
+When making API requests (async fetching or creating new options), you can configure CSRF token support to include authentication tokens in request headers.
+
+### Configuration
+
+Use the `csrf-token` and `csrf-header-name` props to configure CSRF protection:
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="secure-select"
+  label="Select Tags"
+  placeholder="Select..."
+  async-url="/api/tags"
+  create-url="/api/tags"
+  csrf-token="abc123xyz"
+  csrf-header-name="X-CSRF-Token"
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+</pds-multiselect>`,
+    react: `<PdsMultiselect
+  componentId="secure-select"
+  label="Select Tags"
+  placeholder="Select..."
+  asyncUrl="/api/tags"
+  createUrl="/api/tags"
+  csrfToken="abc123xyz"
+  csrfHeaderName="X-CSRF-Token"
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="secure-select"
+    label="Select Tags"
+    placeholder="Select..."
+    csrf-token="abc123xyz"
+    csrf-header-name="X-CSRF-Token"
+  >
+    <option value="1">Marketing</option>
+    <option value="2">Sales</option>
+  </pds-multiselect>
+</DocCanvas>
+
+### How It Works
+
+When both `csrf-token` and `csrf-header-name` are provided:
+- All async fetch requests (GET) include the CSRF token in the specified header
+- All create requests (POST) include the CSRF token in the specified header
+- The token is automatically included in all API calls made by the component
+
+**Request Example with CSRF Token:**
+```http
+POST /api/tags
+Content-Type: application/json
+X-CSRF-Token: abc123xyz
+
+{
+  "text": "New Tag Name"
+}
+```
+
+### Common Header Names
+
+Different frameworks use different CSRF header conventions:
+- Rails: `X-CSRF-Token`
+- Django: `X-CSRFToken`
+- Express (csurf): `X-CSRF-Token` or `X-XSRF-Token`
+
+Consult your backend framework's documentation for the correct header name.
+
+### Retrieving CSRF Tokens
+
+Common approaches to get the CSRF token:
+- Read from a meta tag: `document.querySelector('meta[name="csrf-token"]')?.content`
+- Read from a cookie (for cookie-based CSRF)
+- Retrieve from your application's authentication state
+
+**React Example:**
+```tsx
+const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+<PdsMultiselect
+  componentId="secure-tags"
+  csrfToken={csrfToken}
+  csrfHeaderName="X-CSRF-Token"
+  asyncUrl="/api/tags"
+/>
+```
+
 ## Form Integration
 
 `pds-multiselect` is a form-associated custom element. It participates in form submission using the `name` attribute.
