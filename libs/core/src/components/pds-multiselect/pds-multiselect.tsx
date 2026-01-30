@@ -159,6 +159,11 @@ export class PdsMultiselect {
    */
   @Prop() createUrl?: string;
 
+  /**
+   * CSRF token for authenticated requests. If not provided, attempts to read from meta tag.
+   */
+  @Prop() csrfToken?: string;
+
   // Internal state
   @State() isOpen: boolean = false;
   @State() searchQuery: string = '';
@@ -363,9 +368,28 @@ export class PdsMultiselect {
     // Ensure value is an array (may be string from HTML attribute)
     const valueArray = this.ensureValueArray();
     const allOptions = this.getAllOptions();
-    this.selectedItems = valueArray
-      .map(val => allOptions.find(opt => String(opt.id) === String(val)))
-      .filter((opt): opt is MultiselectOption => opt !== undefined);
+
+    // Map values to options, preserving existing selectedItems for values not yet in options
+    const newSelectedItems: MultiselectOption[] = [];
+    const existingItemsMap = new Map(this.selectedItems.map(item => [String(item.id), item]));
+
+    valueArray.forEach(val => {
+      // First try to find in available options
+      const option = allOptions.find(opt => String(opt.id) === String(val));
+
+      if (option) {
+        newSelectedItems.push(option);
+      } else if (existingItemsMap.has(String(val))) {
+        // If not in options but exists in current selectedItems, preserve it
+        // This handles the case where async data hasn't loaded yet or newly created items
+        newSelectedItems.push(existingItemsMap.get(String(val))!);
+      }
+      // Note: We don't create placeholders for values without matching options.
+      // This ensures selectedItems remains empty until options are actually loaded,
+      // which matches the expected behavior for preselected values.
+    });
+
+    this.selectedItems = newSelectedItems;
   }
 
   private ensureValueArray(): string[] {
@@ -442,6 +466,17 @@ export class PdsMultiselect {
     }
   }
 
+  private getCsrfToken(): string | null {
+    // Use provided token if available
+    if (this.csrfToken) {
+      return this.csrfToken;
+    }
+
+    // Try to read from meta tag
+    const metaTag = document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement;
+    return metaTag?.content || null;
+  }
+
   private async fetchOptions(query: string, page: number = 1) {
     if (!this.asyncUrl) return;
 
@@ -475,13 +510,20 @@ export class PdsMultiselect {
         url.searchParams.set('page', String(page));
       }
 
+      const csrfToken = this.getCsrfToken();
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      if (csrfToken) {
+        headers['X-CSRF-Token'] = csrfToken;
+      }
+
       const response = await fetch(url.toString(), {
         method: this.asyncMethod,
         signal: this.abortController.signal,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
+        headers,
         ...(this.asyncMethod === 'POST' && {
           body: JSON.stringify({ search: query, page }),
         }),
@@ -554,12 +596,19 @@ export class PdsMultiselect {
     try {
       const url = new URL(this.createUrl, window.location.origin);
 
+      const csrfToken = this.getCsrfToken();
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
+
+      if (csrfToken) {
+        headers['X-CSRF-Token'] = csrfToken;
+      }
+
       const response = await fetch(url.toString(), {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
+        headers,
         body: JSON.stringify({ text: query.trim() }),
       });
 
@@ -573,13 +622,13 @@ export class PdsMultiselect {
         ...data,
       };
 
-      // Add to internal options
+      // Add to internal options first
       this.internalOptions = [...this.internalOptions, newOption];
 
       // Select the new option
       this.value = [...this.value, String(newOption.id)];
 
-      // Sync selected items
+      // Sync selected items to update display with new option
       this.syncSelectedItems();
 
       // Emit create event
@@ -588,7 +637,7 @@ export class PdsMultiselect {
         newOption,
       });
 
-      // Emit change event
+      // Emit change event with synced items
       this.pdsMultiselectChange.emit({
         values: this.value,
         items: this.selectedItems,
@@ -805,31 +854,24 @@ export class PdsMultiselect {
 
     if (isSelected) {
       // Remove from selection
-      const newValue = this.value.filter(v => v !== String(option.id));
-      this.value = newValue;
-
-      const newSelectedItems = this.selectedItems.filter(item => String(item.id) !== String(option.id));
-
-      this.pdsMultiselectChange.emit({
-        values: newValue,
-        items: newSelectedItems,
-      });
+      this.value = this.value.filter(v => v !== String(option.id));
     } else {
       // Add to selection
       if (this.maxSelections && this.value.length >= this.maxSelections) {
         return;
       }
 
-      const newValue = [...this.value, String(option.id)];
-      this.value = newValue;
-
-      const newSelectedItems = [...this.selectedItems, option];
-
-      this.pdsMultiselectChange.emit({
-        values: newValue,
-        items: newSelectedItems,
-      });
+      this.value = [...this.value, String(option.id)];
     }
+
+    // Sync selected items to ensure no duplicates and accurate state
+    this.syncSelectedItems();
+
+    // Emit change event with synced items
+    this.pdsMultiselectChange.emit({
+      values: this.value,
+      items: this.selectedItems,
+    });
 
     // Keep focus on search input, don't close dropdown
     this.searchInputEl?.focus();
