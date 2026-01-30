@@ -1400,6 +1400,10 @@ export namespace Components {
          */
         "createUrl"?: string;
         /**
+          * CSRF token for authenticated requests. If not provided, attempts to read from meta tag.
+         */
+        "csrfToken"?: string;
+        /**
           * Debounce delay in milliseconds for search/fetch.
           * @default 300
          */
@@ -4397,6 +4401,10 @@ declare namespace LocalJSX {
           * URL endpoint for creating new options. When set, shows "Add" option when no matches found.
          */
         "createUrl"?: string;
+        /**
+          * CSRF token for authenticated requests. If not provided, attempts to read from meta tag.
+         */
+        "csrfToken"?: string;
         /**
           * Debounce delay in milliseconds for search/fetch.
           * @default 300

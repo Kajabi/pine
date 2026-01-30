@@ -23,6 +23,7 @@ A multiselect component that allows users to select multiple options from a sear
 | `asyncUrl`                 | `async-url`      | URL endpoint for async data fetching.                                                      | `string`                               | `undefined`   |
 | `componentId` _(required)_ | `component-id`   | A unique identifier used for the underlying component `id` attribute.                      | `string`                               | `undefined`   |
 | `createUrl`                | `create-url`     | URL endpoint for creating new options. When set, shows "Add" option when no matches found. | `string`                               | `undefined`   |
+| `csrfToken`                | `csrf-token`     | CSRF token for authenticated requests. If not provided, attempts to read from meta tag.    | `string`                               | `undefined`   |
 | `debounce`                 | `debounce`       | Debounce delay in milliseconds for search/fetch.                                           | `number`                               | `300`         |
 | `disabled`                 | `disabled`       | Determines whether or not the multiselect is disabled.                                     | `boolean`                              | `false`       |
 | `errorMessage`             | `error-message`  | Error message to display.                                                                  | `string`                               | `undefined`   |
