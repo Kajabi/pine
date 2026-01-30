@@ -1,13 +1,3 @@
-## 3.15.2-dev.0 (2026-01-30)
-
-### Bug Fixes 🐛
-
-- **dropdown-menu-item:** update prop reflect ([a2f7cb17](https://github.com/Kajabi/pine/commit/a2f7cb17))
-
-### ❤️ Thank You
-
-- Quinton Jason
-
 ## 3.15.1 (2026-01-30)
 
 ### Bug Fixes 🐛
