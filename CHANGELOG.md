@@ -1,3 +1,13 @@
+## 3.15.2 (2026-02-02)
+
+### Bug Fixes 🐛
+
+- **pds-dropdown-menu-item:** add reflect option to target and external props ([#656](https://github.com/Kajabi/pine/pull/656))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 3.15.1 (2026-01-30)
 
 ### Bug Fixes 🐛
