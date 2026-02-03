@@ -17,33 +17,34 @@ A multiselect component that allows users to select multiple options from a sear
 
 ## Properties
 
-| Property                   | Attribute        | Description                                                                                | Type                                   | Default       |
-| -------------------------- | ---------------- | ------------------------------------------------------------------------------------------ | -------------------------------------- | ------------- |
-| `asyncMethod`              | `async-method`   | HTTP method for async requests.                                                            | `"GET" \| "POST"`                      | `'GET'`       |
-| `asyncUrl`                 | `async-url`      | URL endpoint for async data fetching.                                                      | `string`                               | `undefined`   |
-| `componentId` _(required)_ | `component-id`   | A unique identifier used for the underlying component `id` attribute.                      | `string`                               | `undefined`   |
-| `createUrl`                | `create-url`     | URL endpoint for creating new options. When set, shows "Add" option when no matches found. | `string`                               | `undefined`   |
-| `csrfToken`                | `csrf-token`     | CSRF token for authenticated requests. If not provided, attempts to read from meta tag.    | `string`                               | `undefined`   |
-| `debounce`                 | `debounce`       | Debounce delay in milliseconds for search/fetch.                                           | `number`                               | `300`         |
-| `disabled`                 | `disabled`       | Determines whether or not the multiselect is disabled.                                     | `boolean`                              | `false`       |
-| `errorMessage`             | `error-message`  | Error message to display.                                                                  | `string`                               | `undefined`   |
-| `fetchTimeout`             | `fetch-timeout`  | Timeout in milliseconds for async fetch requests.                                          | `number`                               | `30000`       |
-| `formatResult`             | --               | Function to format async results. Receives raw API response item.                          | `(item: unknown) => MultiselectOption` | `undefined`   |
-| `helperMessage`            | `helper-message` | Helper message to display below the input.                                                 | `string`                               | `undefined`   |
-| `hideLabel`                | `hide-label`     | Visually hides the label but keeps it accessible.                                          | `boolean`                              | `false`       |
-| `invalid`                  | `invalid`        | If true, the multiselect is in an invalid state.                                           | `boolean`                              | `undefined`   |
-| `label`                    | `label`          | Text to be displayed as the multiselect label.                                             | `string`                               | `undefined`   |
-| `loading`                  | `loading`        | Whether the component is currently loading async options.                                  | `boolean`                              | `false`       |
-| `maxHeight`                | `max-height`     | Maximum height of the dropdown before scrolling.                                           | `string`                               | `'300px'`     |
-| `maxSelections`            | `max-selections` | Maximum number of selections allowed.                                                      | `number`                               | `undefined`   |
-| `minWidth`                 | `min-width`      | Minimum width of the dropdown panel.                                                       | `string`                               | `'250px'`     |
-| `name`                     | `name`           | Specifies the name. Submitted with the form as part of a name/value pair.                  | `string`                               | `undefined`   |
-| `options`                  | --               | Options provided externally (for consumer-managed async).                                  | `MultiselectOption[]`                  | `undefined`   |
-| `panelWidth`               | `panel-width`    | Width of the dropdown panel. Defaults to the trigger width.                                | `string`                               | `undefined`   |
-| `placeholder`              | `placeholder`    | Placeholder text for the input field.                                                      | `string`                               | `'Select...'` |
-| `required`                 | `required`       | If true, the multiselect is required.                                                      | `boolean`                              | `false`       |
-| `triggerWidth`             | `trigger-width`  | Width of the trigger button (and reference for dropdown positioning).                      | `string`                               | `'100%'`      |
-| `value`                    | --               | Array of selected option values.                                                           | `string[]`                             | `[]`          |
+| Property                   | Attribute          | Description                                                                                | Type                                   | Default          |
+| -------------------------- | ------------------ | ------------------------------------------------------------------------------------------ | -------------------------------------- | ---------------- |
+| `asyncMethod`              | `async-method`     | HTTP method for async requests.                                                            | `"GET" \| "POST"`                      | `'GET'`          |
+| `asyncUrl`                 | `async-url`        | URL endpoint for async data fetching.                                                      | `string`                               | `undefined`      |
+| `componentId` _(required)_ | `component-id`     | A unique identifier used for the underlying component `id` attribute.                      | `string`                               | `undefined`      |
+| `createUrl`                | `create-url`       | URL endpoint for creating new options. When set, shows "Add" option when no matches found. | `string`                               | `undefined`      |
+| `csrfHeaderName`           | `csrf-header-name` | CSRF header name for authenticated requests. Defaults to `X-CSRF-Token`.                   | `string`                               | `'X-CSRF-Token'` |
+| `csrfToken`                | `csrf-token`       | CSRF token for authenticated requests. If not provided, attempts to read from meta tag.    | `string`                               | `undefined`      |
+| `debounce`                 | `debounce`         | Debounce delay in milliseconds for search/fetch.                                           | `number`                               | `300`            |
+| `disabled`                 | `disabled`         | Determines whether or not the multiselect is disabled.                                     | `boolean`                              | `false`          |
+| `errorMessage`             | `error-message`    | Error message to display.                                                                  | `string`                               | `undefined`      |
+| `fetchTimeout`             | `fetch-timeout`    | Timeout in milliseconds for async fetch requests.                                          | `number`                               | `30000`          |
+| `formatResult`             | --                 | Function to format async results. Receives raw API response item.                          | `(item: unknown) => MultiselectOption` | `undefined`      |
+| `helperMessage`            | `helper-message`   | Helper message to display below the input.                                                 | `string`                               | `undefined`      |
+| `hideLabel`                | `hide-label`       | Visually hides the label but keeps it accessible.                                          | `boolean`                              | `false`          |
+| `invalid`                  | `invalid`          | If true, the multiselect is in an invalid state.                                           | `boolean`                              | `undefined`      |
+| `label`                    | `label`            | Text to be displayed as the multiselect label.                                             | `string`                               | `undefined`      |
+| `loading`                  | `loading`          | Whether the component is currently loading async options.                                  | `boolean`                              | `false`          |
+| `maxHeight`                | `max-height`       | Maximum height of the dropdown before scrolling.                                           | `string`                               | `'300px'`        |
+| `maxSelections`            | `max-selections`   | Maximum number of selections allowed.                                                      | `number`                               | `undefined`      |
+| `minWidth`                 | `min-width`        | Minimum width of the dropdown panel.                                                       | `string`                               | `'250px'`        |
+| `name`                     | `name`             | Specifies the name. Submitted with the form as part of a name/value pair.                  | `string`                               | `undefined`      |
+| `options`                  | --                 | Options provided externally (for consumer-managed async).                                  | `MultiselectOption[]`                  | `undefined`      |
+| `panelWidth`               | `panel-width`      | Width of the dropdown panel. Defaults to the trigger width.                                | `string`                               | `undefined`      |
+| `placeholder`              | `placeholder`      | Placeholder text for the input field.                                                      | `string`                               | `'Select...'`    |
+| `required`                 | `required`         | If true, the multiselect is required.                                                      | `boolean`                              | `false`          |
+| `triggerWidth`             | `trigger-width`    | Width of the trigger button (and reference for dropdown positioning).                      | `string`                               | `'100%'`         |
+| `value`                    | --                 | Array of selected option values.                                                           | `string[]`                             | `[]`             |
 
 
 ## Events
