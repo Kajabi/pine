@@ -1,3 +1,13 @@
+## 3.15.3 (2026-02-03)
+
+### Styles 🎨
+
+- **pds-tab:** display not-allowed cursor for disabled tabs ([#658](https://github.com/Kajabi/pine/pull/658))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+
 ## 3.15.2 (2026-02-02)
 
 ### Bug Fixes 🐛
