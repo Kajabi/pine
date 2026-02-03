@@ -164,6 +164,11 @@ export class PdsMultiselect {
    */
   @Prop() csrfToken?: string;
 
+  /**
+   * CSRF header name for authenticated requests. Defaults to `X-CSRF-Token`.
+   */
+  @Prop() csrfHeaderName?: string = 'X-CSRF-Token';
+
   // Internal state
   @State() isOpen: boolean = false;
   @State() searchQuery: string = '';
@@ -517,7 +522,8 @@ export class PdsMultiselect {
       };
 
       if (csrfToken) {
-        headers['X-CSRF-Token'] = csrfToken;
+        const headerName = this.csrfHeaderName || 'X-CSRF-Token';
+        headers[headerName] = csrfToken;
       }
 
       const response = await fetch(url.toString(), {
@@ -603,7 +609,8 @@ export class PdsMultiselect {
       };
 
       if (csrfToken) {
-        headers['X-CSRF-Token'] = csrfToken;
+        const headerName = this.csrfHeaderName || 'X-CSRF-Token';
+        headers[headerName] = csrfToken;
       }
 
       const response = await fetch(url.toString(), {

@@ -1400,6 +1400,11 @@ export namespace Components {
          */
         "createUrl"?: string;
         /**
+          * CSRF header name for authenticated requests. Defaults to `X-CSRF-Token`.
+          * @default 'X-CSRF-Token'
+         */
+        "csrfHeaderName"?: string;
+        /**
           * CSRF token for authenticated requests. If not provided, attempts to read from meta tag.
          */
         "csrfToken"?: string;
@@ -4401,6 +4406,11 @@ declare namespace LocalJSX {
           * URL endpoint for creating new options. When set, shows "Add" option when no matches found.
          */
         "createUrl"?: string;
+        /**
+          * CSRF header name for authenticated requests. Defaults to `X-CSRF-Token`.
+          * @default 'X-CSRF-Token'
+         */
+        "csrfHeaderName"?: string;
         /**
           * CSRF token for authenticated requests. If not provided, attempts to read from meta tag.
          */
