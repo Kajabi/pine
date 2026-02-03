@@ -58,7 +58,6 @@ pds-tab {
   &.is-disabled {
     color: var(--pine-color-text-disabled);
     cursor: not-allowed;
-    pointer-events: none;
   }
 
   .pds-tab__content {
