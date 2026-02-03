@@ -1,13 +1,3 @@
-## 3.15.3-dev.0 (2026-02-03)
-
-### Bug Fixes 🐛
-
-- **pds-multiselect:** add csrfHeaderName prop ([bb29f04c](https://github.com/Kajabi/pine/commit/bb29f04c))
-
-### ❤️ Thank You
-
-- Quinton Jason
-
 ## 3.15.2 (2026-02-02)
 
 ### Bug Fixes 🐛
