@@ -284,6 +284,120 @@ Menu items can open links in a new tab using the `external` boolean prop. This d
 
 >**Note:** You can also use the `target` prop for more control (e.g., `target="_blank"`, `target="_parent"`). The `target` prop takes precedence over `external` if both are set.
 
+### With HTTP Methods
+
+Menu items support non-GET HTTP methods (`post`, `put`, `patch`, `delete`). When `http-method` is specified, the component handles form submission internally, which is useful for actions that modify data on the server.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+<PdsDropdownMenu>
+  <PdsButton slot="trigger">Actions</PdsButton>
+  <PdsDropdownMenuItem href="/items/123">View</PdsDropdownMenuItem>
+  <PdsDropdownMenuItem href="/items/123/duplicate" httpMethod="post">
+    <PdsIcon name="copy" /> Duplicate
+  </PdsDropdownMenuItem>
+  <PdsDropdownMenuSeparator />
+  <PdsDropdownMenuItem href="/items/123" httpMethod="delete" destructive>
+    <PdsIcon name="trash" /> Delete
+  </PdsDropdownMenuItem>
+</PdsDropdownMenu>
+`,
+    webComponent:`
+<pds-dropdown-menu>
+  <pds-button slot="trigger">Actions</pds-button>
+  <pds-dropdown-menu-item href="/items/123">View</pds-dropdown-menu-item>
+  <pds-dropdown-menu-item href="/items/123/duplicate" http-method="post">
+    <pds-icon name="copy"></pds-icon> Duplicate
+  </pds-dropdown-menu-item>
+  <pds-dropdown-menu-separator />
+  <pds-dropdown-menu-item href="/items/123" http-method="delete" destructive>
+    <pds-icon name="trash"></pds-icon> Delete
+  </pds-dropdown-menu-item>
+</pds-dropdown-menu>
+`
+  }}
+>
+<div style={{ height: '250px', width: '100%', textAlign: 'center' }}>
+  <pds-dropdown-menu>
+    <pds-button slot="trigger">Actions</pds-button>
+    <pds-dropdown-menu-item href="/items/123">View</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item href="/items/123/duplicate" http-method="post"><pds-icon name="copy"></pds-icon> Duplicate</pds-dropdown-menu-item>
+    <pds-dropdown-menu-separator />
+    <pds-dropdown-menu-item href="/items/123" http-method="delete" destructive><pds-icon name="trash"></pds-icon> Delete</pds-dropdown-menu-item>
+  </pds-dropdown-menu>
+</div>
+</DocCanvas>
+
+>**How it works:** For non-GET methods, clicking the menu item creates a hidden form with the proper `action`, adds the CSRF token (if available via `meta[name="csrf-token"]`), adds a `_method` field for method override, and submits the form. The internal anchor also receives `data-method` and `data-turbo-method` attributes.
+
+### With Data Attributes
+
+Menu items can add common data attributes to the internal anchor element using the `turbo-frame` and `turbo` props. These are useful for integration with JavaScript frameworks that rely on data attributes for navigation behavior.
+
+<DocCanvas
+  mdxSource={{
+    react: `
+<PdsDropdownMenu>
+  <PdsButton slot="trigger">Navigation</PdsButton>
+  <PdsDropdownMenuItem href="/items/123" turboFrame="content">
+    Target Frame
+  </PdsDropdownMenuItem>
+  <PdsDropdownMenuItem href="/items/123" turboFrame="_top">
+    Full Page Navigation
+  </PdsDropdownMenuItem>
+  <PdsDropdownMenuItem href="/items/123" turbo={false}>
+    Disable Framework Handling
+  </PdsDropdownMenuItem>
+</PdsDropdownMenu>
+`,
+    webComponent:`
+<pds-dropdown-menu>
+  <pds-button slot="trigger">Navigation</pds-button>
+  <pds-dropdown-menu-item href="/items/123" turbo-frame="content">
+    Target Frame
+  </pds-dropdown-menu-item>
+  <pds-dropdown-menu-item href="/items/123" turbo-frame="_top">
+    Full Page Navigation
+  </pds-dropdown-menu-item>
+  <pds-dropdown-menu-item href="/items/123" turbo="false">
+    Disable Framework Handling
+  </pds-dropdown-menu-item>
+</pds-dropdown-menu>
+`
+  }}
+>
+<div style={{ height: '200px', width: '100%', textAlign: 'center' }}>
+  <pds-dropdown-menu>
+    <pds-button slot="trigger">Navigation</pds-button>
+    <pds-dropdown-menu-item href="/items/123" turbo-frame="content">Target Frame</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item href="/items/123" turbo-frame="_top">Full Page Navigation</pds-dropdown-menu-item>
+    <pds-dropdown-menu-item href="/items/123" turbo="false">Disable Framework Handling</pds-dropdown-menu-item>
+  </pds-dropdown-menu>
+</div>
+</DocCanvas>
+
+### Intercepting Form Submission
+
+The `pdsBeforeSubmit` event is emitted before form submission for non-GET methods. You can cancel this event to handle the submission yourself (e.g., to show a confirmation dialog).
+
+```javascript
+// Example: Intercept delete to show confirmation
+menuItem.addEventListener('pdsBeforeSubmit', (event) => {
+  event.preventDefault(); // Cancel automatic form submission
+  
+  if (confirm('Are you sure you want to delete this item?')) {
+    // Manually submit if confirmed
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = event.detail.href;
+    // Add CSRF token and _method field...
+    document.body.appendChild(form);
+    form.submit();
+  }
+});
+```
+
 ### With Disabled Items
 
 Menu items can be disabled using the disabled attribute.
