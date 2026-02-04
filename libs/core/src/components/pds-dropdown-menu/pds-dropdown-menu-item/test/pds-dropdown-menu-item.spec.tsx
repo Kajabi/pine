@@ -1,6 +1,5 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsDropdownMenuItem } from '../pds-dropdown-menu-item';
-import { PdsLink } from '../../../pds-link/pds-link';
 
 describe('pds-dropdown-menu-item', () => {
   it('renders as a button by default', async () => {
@@ -28,7 +27,7 @@ describe('pds-dropdown-menu-item', () => {
 
   it('renders as a link when href is provided', async () => {
     const page = await newSpecPage({
-      components: [PdsDropdownMenuItem, PdsLink],
+      components: [PdsDropdownMenuItem],
       html: `<pds-dropdown-menu-item href="https://example.com">Link Item</pds-dropdown-menu-item>`,
     });
     
@@ -37,15 +36,14 @@ describe('pds-dropdown-menu-item', () => {
     }
     
     const shadowRoot = page.root.shadowRoot;
-    const linkElement = shadowRoot.querySelector('pds-link');
+    const linkElement = shadowRoot.querySelector('a');
     expect(linkElement).not.toBeNull();
-    // The href is set as a property, not an attribute in the spec test
-    expect(linkElement?.href).toBe('https://example.com');
+    expect(linkElement?.getAttribute('href')).toBe('https://example.com');
   });
 
   it('renders as a link with external prop when both href and external are provided', async () => {
     const page = await newSpecPage({
-      components: [PdsDropdownMenuItem, PdsLink],
+      components: [PdsDropdownMenuItem],
       html: `<pds-dropdown-menu-item href="https://example.com" external>External Link</pds-dropdown-menu-item>`,
     });
     
@@ -54,15 +52,19 @@ describe('pds-dropdown-menu-item', () => {
     }
     
     const shadowRoot = page.root.shadowRoot;
-    const linkElement = shadowRoot.querySelector('pds-link');
+    const linkElement = shadowRoot.querySelector('a');
     expect(linkElement).not.toBeNull();
-    expect(linkElement?.href).toBe('https://example.com');
-    expect(linkElement?.external).toBe(true);
+    expect(linkElement?.getAttribute('href')).toBe('https://example.com');
+    expect(linkElement?.getAttribute('target')).toBe('_blank');
+    expect(linkElement?.getAttribute('rel')).toBe('noopener noreferrer');
+    // Check for external icon
+    const icon = shadowRoot.querySelector('pds-icon');
+    expect(icon).not.toBeNull();
   });
 
   it('renders as a link with target="_blank" when both href and target are provided', async () => {
     const page = await newSpecPage({
-      components: [PdsDropdownMenuItem, PdsLink],
+      components: [PdsDropdownMenuItem],
       html: `<pds-dropdown-menu-item href="https://example.com" target="_blank">External Link</pds-dropdown-menu-item>`,
     });
     
@@ -71,15 +73,16 @@ describe('pds-dropdown-menu-item', () => {
     }
     
     const shadowRoot = page.root.shadowRoot;
-    const linkElement = shadowRoot.querySelector('pds-link');
+    const linkElement = shadowRoot.querySelector('a');
     expect(linkElement).not.toBeNull();
-    expect(linkElement?.href).toBe('https://example.com');
-    expect(linkElement?.target).toBe('_blank');
+    expect(linkElement?.getAttribute('href')).toBe('https://example.com');
+    expect(linkElement?.getAttribute('target')).toBe('_blank');
+    expect(linkElement?.getAttribute('rel')).toBe('noopener noreferrer');
   });
 
   it('target prop takes precedence over external when both are set', async () => {
     const page = await newSpecPage({
-      components: [PdsDropdownMenuItem, PdsLink],
+      components: [PdsDropdownMenuItem],
       html: `<pds-dropdown-menu-item href="https://example.com" external target="_self">Link</pds-dropdown-menu-item>`,
     });
     
@@ -88,16 +91,17 @@ describe('pds-dropdown-menu-item', () => {
     }
     
     const shadowRoot = page.root.shadowRoot;
-    const linkElement = shadowRoot.querySelector('pds-link');
+    const linkElement = shadowRoot.querySelector('a');
     expect(linkElement).not.toBeNull();
-    // Both props are passed through, pds-link handles precedence
-    expect(linkElement?.external).toBe(true);
-    expect(linkElement?.target).toBe('_self');
+    // Target prop takes precedence over external's default _blank
+    expect(linkElement?.getAttribute('target')).toBe('_self');
+    // No rel needed for _self target
+    expect(linkElement?.getAttribute('rel')).toBeNull();
   });
 
-  it('sets href to null when link is disabled', async () => {
+  it('sets href to undefined when link is disabled', async () => {
     const page = await newSpecPage({
-      components: [PdsDropdownMenuItem, PdsLink],
+      components: [PdsDropdownMenuItem],
       html: `<pds-dropdown-menu-item href="https://example.com" disabled>Disabled Link</pds-dropdown-menu-item>`,
     });
     
@@ -106,10 +110,10 @@ describe('pds-dropdown-menu-item', () => {
     }
     
     const shadowRoot = page.root.shadowRoot;
-    const linkElement = shadowRoot.querySelector('pds-link');
+    const linkElement = shadowRoot.querySelector('a');
     expect(linkElement).not.toBeNull();
-    // The href should be null for disabled links
-    expect(linkElement?.getAttribute('href')).toBe(null);
+    // The href should not be set for disabled links
+    expect(linkElement?.hasAttribute('href')).toBe(false);
   });
 
   it('applies disabled class and attributes when disabled', async () => {
@@ -310,5 +314,210 @@ describe('pds-dropdown-menu-item', () => {
     page.root.dispatchEvent(enterEvent);
     
     expect(clickSpy).not.toHaveBeenCalled();
+  });
+
+  describe('Rails/Turbo compatibility props', () => {
+    it('does NOT add data attributes when props are not provided (backward compat)', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item href="/items/123">Edit</pds-dropdown-menu-item>`,
+      });
+
+      if (!page.root || !page.root.shadowRoot) {
+        fail('Root or shadow root not found');
+      }
+
+      const linkElement = page.root.shadowRoot.querySelector('a');
+      expect(linkElement).not.toBeNull();
+
+      // CRITICAL: No data attributes when props not provided
+      expect(linkElement?.hasAttribute('data-method')).toBe(false);
+      expect(linkElement?.hasAttribute('data-turbo-method')).toBe(false);
+      expect(linkElement?.hasAttribute('data-turbo-frame')).toBe(false);
+      expect(linkElement?.hasAttribute('data-turbo')).toBe(false);
+    });
+
+    it('adds data-method and data-turbo-method when httpMethod is provided', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item href="/items/123" http-method="delete">Delete</pds-dropdown-menu-item>`,
+      });
+
+      if (!page.root || !page.root.shadowRoot) {
+        fail('Root or shadow root not found');
+      }
+
+      const linkElement = page.root.shadowRoot.querySelector('a');
+      expect(linkElement?.getAttribute('data-method')).toBe('delete');
+      expect(linkElement?.getAttribute('data-turbo-method')).toBe('delete');
+    });
+
+    it('adds data-turbo-frame when turboFrame is provided', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item href="/items/123" turbo-frame="_top">Edit</pds-dropdown-menu-item>`,
+      });
+
+      if (!page.root || !page.root.shadowRoot) {
+        fail('Root or shadow root not found');
+      }
+
+      const linkElement = page.root.shadowRoot.querySelector('a');
+      expect(linkElement?.getAttribute('data-turbo-frame')).toBe('_top');
+    });
+
+    it('adds data-turbo when turbo prop is provided as false', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item href="/items/123" turbo="false">Edit</pds-dropdown-menu-item>`,
+      });
+
+      if (!page.root || !page.root.shadowRoot) {
+        fail('Root or shadow root not found');
+      }
+
+      const linkElement = page.root.shadowRoot.querySelector('a');
+      expect(linkElement?.getAttribute('data-turbo')).toBe('false');
+    });
+
+    it('adds data-turbo when turbo prop is provided as true', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item href="/items/123" turbo="true">Edit</pds-dropdown-menu-item>`,
+      });
+
+      if (!page.root || !page.root.shadowRoot) {
+        fail('Root or shadow root not found');
+      }
+
+      const linkElement = page.root.shadowRoot.querySelector('a');
+      expect(linkElement?.getAttribute('data-turbo')).toBe('true');
+    });
+
+    it('adds all data attributes when all props are provided', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item href="/items/123" http-method="delete" turbo-frame="_top" turbo="false">Delete</pds-dropdown-menu-item>`,
+      });
+
+      if (!page.root || !page.root.shadowRoot) {
+        fail('Root or shadow root not found');
+      }
+
+      const linkElement = page.root.shadowRoot.querySelector('a');
+      expect(linkElement?.getAttribute('data-method')).toBe('delete');
+      expect(linkElement?.getAttribute('data-turbo-method')).toBe('delete');
+      expect(linkElement?.getAttribute('data-turbo-frame')).toBe('_top');
+      expect(linkElement?.getAttribute('data-turbo')).toBe('false');
+    });
+  });
+
+  describe('pdsBeforeSubmit event', () => {
+    it('emits pdsBeforeSubmit before form submission for non-GET methods', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item href="/items/123" http-method="delete">Delete</pds-dropdown-menu-item>`,
+      });
+
+      if (!page.root || !page.root.shadowRoot) {
+        fail('Root or shadow root not found');
+      }
+
+      const beforeSubmitSpy = jest.fn();
+      page.root.addEventListener('pdsBeforeSubmit', beforeSubmitSpy);
+
+      // Click the link element directly
+      const linkElement = page.root.shadowRoot.querySelector('a');
+      linkElement?.click();
+
+      expect(beforeSubmitSpy).toHaveBeenCalled();
+      expect(beforeSubmitSpy.mock.calls[0][0].detail).toEqual({
+        href: '/items/123',
+        method: 'delete',
+      });
+    });
+
+    it('does NOT emit pdsBeforeSubmit for GET method', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item href="/items/123" http-method="get">View</pds-dropdown-menu-item>`,
+      });
+
+      if (!page.root || !page.root.shadowRoot) {
+        fail('Root or shadow root not found');
+      }
+
+      const beforeSubmitSpy = jest.fn();
+      page.root.addEventListener('pdsBeforeSubmit', beforeSubmitSpy);
+
+      const linkElement = page.root.shadowRoot.querySelector('a');
+      linkElement?.click();
+
+      // pdsBeforeSubmit should NOT be emitted for GET
+      expect(beforeSubmitSpy).not.toHaveBeenCalled();
+    });
+
+    it('does NOT emit pdsBeforeSubmit when httpMethod is not set', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item href="/items/123">View</pds-dropdown-menu-item>`,
+      });
+
+      if (!page.root || !page.root.shadowRoot) {
+        fail('Root or shadow root not found');
+      }
+
+      const beforeSubmitSpy = jest.fn();
+      page.root.addEventListener('pdsBeforeSubmit', beforeSubmitSpy);
+
+      const linkElement = page.root.shadowRoot.querySelector('a');
+      linkElement?.click();
+
+      // pdsBeforeSubmit should NOT be emitted when httpMethod is not set
+      expect(beforeSubmitSpy).not.toHaveBeenCalled();
+    });
+
+    it('emits pdsClick even when httpMethod is set (backward compat)', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item href="/items/123" http-method="delete">Delete</pds-dropdown-menu-item>`,
+      });
+
+      if (!page.root || !page.root.shadowRoot) {
+        fail('Root or shadow root not found');
+      }
+
+      const clickSpy = jest.fn();
+      page.root.addEventListener('pdsClick', clickSpy);
+
+      const linkElement = page.root.shadowRoot.querySelector('a');
+      linkElement?.click();
+
+      // CRITICAL: pdsClick must still emit for Stimulus patterns to work
+      expect(clickSpy).toHaveBeenCalled();
+    });
+
+    it('emits pdsBeforeSubmit for POST method', async () => {
+      const page = await newSpecPage({
+        components: [PdsDropdownMenuItem],
+        html: `<pds-dropdown-menu-item href="/items/123/duplicate" http-method="post">Duplicate</pds-dropdown-menu-item>`,
+      });
+
+      if (!page.root || !page.root.shadowRoot) {
+        fail('Root or shadow root not found');
+      }
+
+      const beforeSubmitSpy = jest.fn();
+      page.root.addEventListener('pdsBeforeSubmit', beforeSubmitSpy);
+
+      const linkElement = page.root.shadowRoot.querySelector('a');
+      linkElement?.click();
+
+      expect(beforeSubmitSpy).toHaveBeenCalled();
+      expect(beforeSubmitSpy.mock.calls[0][0].detail).toEqual({
+        href: '/items/123/duplicate',
+        method: 'post',
+      });
+    });
   });
 });
