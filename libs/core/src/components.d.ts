@@ -1082,10 +1082,25 @@ export namespace Components {
          */
         "href": string | undefined;
         /**
+          * HTTP method to use for link navigation. For non-GET methods (post, put, patch, delete), the component will handle form submission internally. Also adds data-method and data-turbo-method attributes to the internal anchor for framework integration. Only applies when href is provided.
+          * @defaultValue undefined (link navigates normally)
+         */
+        "httpMethod"?: 'get' | 'post' | 'put' | 'patch' | 'delete';
+        /**
           * Specifies where to open the linked document when href is provided. Takes precedence over the `external` prop if both are set. Only applies when href is set.
           * @defaultValue undefined
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
+        /**
+          * Sets data-turbo attribute on the internal anchor. Useful for enabling or disabling framework-specific navigation handling. Only applies when href is provided.
+          * @defaultValue undefined (no data-turbo attribute)
+         */
+        "turbo"?: boolean;
+        /**
+          * Sets data-turbo-frame attribute on the internal anchor. Useful for framework integration with frame-based navigation. Only applies when href is provided.
+          * @defaultValue undefined (no data-turbo-frame attribute)
+         */
+        "turboFrame"?: string;
     }
     interface PdsDropdownMenuSeparator {
         /**
@@ -2502,6 +2517,7 @@ declare global {
     };
     interface HTMLPdsDropdownMenuItemElementEventMap {
         "pdsClick": {itemIndex: number, item: HTMLPdsDropdownMenuItemElement, content: string};
+        "pdsBeforeSubmit": { href: string; method: string };
     }
     interface HTMLPdsDropdownMenuItemElement extends Components.PdsDropdownMenuItem, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsDropdownMenuItemElementEventMap>(type: K, listener: (this: HTMLPdsDropdownMenuItemElement, ev: PdsDropdownMenuItemCustomEvent<HTMLPdsDropdownMenuItemElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4065,6 +4081,15 @@ declare namespace LocalJSX {
          */
         "href"?: string | undefined;
         /**
+          * HTTP method to use for link navigation. For non-GET methods (post, put, patch, delete), the component will handle form submission internally. Also adds data-method and data-turbo-method attributes to the internal anchor for framework integration. Only applies when href is provided.
+          * @defaultValue undefined (link navigates normally)
+         */
+        "httpMethod"?: 'get' | 'post' | 'put' | 'patch' | 'delete';
+        /**
+          * Emitted before form submission for non-GET http methods. Call event.preventDefault() to cancel the submission and handle it yourself. Useful for custom confirmation dialogs or app-specific handling.
+         */
+        "onPdsBeforeSubmit"?: (event: PdsDropdownMenuItemCustomEvent<{ href: string; method: string }>) => void;
+        /**
           * Emitted when the dropdown-item is clicked.
          */
         "onPdsClick"?: (event: PdsDropdownMenuItemCustomEvent<{itemIndex: number, item: HTMLPdsDropdownMenuItemElement, content: string}>) => void;
@@ -4073,6 +4098,16 @@ declare namespace LocalJSX {
           * @defaultValue undefined
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
+        /**
+          * Sets data-turbo attribute on the internal anchor. Useful for enabling or disabling framework-specific navigation handling. Only applies when href is provided.
+          * @defaultValue undefined (no data-turbo attribute)
+         */
+        "turbo"?: boolean;
+        /**
+          * Sets data-turbo-frame attribute on the internal anchor. Useful for framework integration with frame-based navigation. Only applies when href is provided.
+          * @defaultValue undefined (no data-turbo-frame attribute)
+         */
+        "turboFrame"?: string;
     }
     interface PdsDropdownMenuSeparator {
         /**

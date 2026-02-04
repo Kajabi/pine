@@ -29,6 +29,7 @@
   margin: calc(var(--pine-border-width) + 2px);
   padding: var(--pine-dimension-xs);
   text-align: start; /* Ensure text aligns properly */
+  text-decoration: none; /* Prevent underline on anchor elements */
   width: 100%; /* Ensure full width */
 
   &:hover {
@@ -44,6 +45,10 @@
     outline-offset: var(--pine-border-width);
   }
 
+  /* External icon spacing */
+  pds-icon {
+    margin-inline-start: var(--pine-dimension-2xs);
+  }
 }
 
 :host(.destructive) {
@@ -66,17 +71,3 @@
   }
 }
 
-/* Remove outline on contained links using the custom property */
-pds-link::part(link):focus,
-pds-link::part(link):focus-visible {
-  box-shadow: none;
-  outline: none;
-}
-
-pds-link::part(link) {
-  display: block;
-  margin: calc(var(--pine-dimension-xs) * -1);
-  padding: var(--pine-dimension-xs);
-  text-decoration: none;
-  width: calc(100% + var(--pine-dimension-xs) * 2);
-}

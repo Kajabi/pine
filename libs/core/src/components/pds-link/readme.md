@@ -34,10 +34,6 @@ Link is mainly used as navigational element and usually appear within or directl
 
 ## Dependencies
 
-### Used by
-
- - [pds-dropdown-menu-item](../pds-dropdown-menu/pds-dropdown-menu-item)
-
 ### Depends on
 
 - pds-icon
@@ -46,7 +42,6 @@ Link is mainly used as navigational element and usually appear within or directl
 ```mermaid
 graph TD;
   pds-link --> pds-icon
-  pds-dropdown-menu-item --> pds-link
   style pds-link fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
