@@ -86,9 +86,12 @@ export class PdsTable {
     }
 
     // Apply default sort if specified
+    // Use requestAnimationFrame to defer until child components are fully initialized
     if (this.defaultSortColumn) {
-      void this.applyDefaultSort().catch((err) => {
-        console.warn('Failed to apply default sort.', err);
+      requestAnimationFrame(() => {
+        void this.applyDefaultSort().catch((err) => {
+          console.warn('Failed to apply default sort.', err);
+        });
       });
     }
   }
