@@ -106,7 +106,7 @@ describe('pds-dropdown-menu', () => {
     expect(component.menuItems.length).toBe(2);
   });
 
-  it('throws error when invalid elements are in the slot', async () => {
+  it('warns when invalid elements are in the slot', async () => {
     const page = await newSpecPage({
       components: [PdsDropdownMenu, PdsBox],
       html: `
@@ -126,8 +126,134 @@ describe('pds-dropdown-menu', () => {
       assignedElements: () => [page.body.querySelector('div')]
     };
 
-    // Call should throw an error
-    expect(() => component.handleSlotChange(mockEvent as any)).toThrow();
+    // Spy on console.warn
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+    // Call should warn (not throw)
+    component.handleSlotChange(mockEvent as any);
+
+    // Verify warning was logged
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining('Unexpected element(s) found: div')
+    );
+
+    warnSpy.mockRestore();
+  });
+
+  it('allows raw <a> elements in the slot', async () => {
+    const page = await newSpecPage({
+      components: [PdsDropdownMenu, PdsDropdownMenuItem, PdsBox],
+      html: `
+        <pds-dropdown-menu>
+          <button slot="trigger">Toggle Menu</button>
+          <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
+          <a href="/delete" data-method="delete">Delete</a>
+        </pds-dropdown-menu>
+      `,
+    });
+
+    const component = page.rootInstance;
+    const contentSlot = page.root.shadowRoot?.querySelector('pds-box > slot');
+
+    // Create a mock event with menu item and raw anchor
+    const mockEvent = {
+      target: contentSlot,
+      assignedElements: () => [
+        page.body.querySelector('pds-dropdown-menu-item'),
+        page.body.querySelector('a')
+      ]
+    };
+
+    // Spy on console.warn to ensure no warning is logged
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+    // Call should not warn
+    component.handleSlotChange(mockEvent as any);
+
+    // No warning should be logged for allowed elements
+    expect(warnSpy).not.toHaveBeenCalled();
+
+    // Both elements should be in menuItems for keyboard navigation
+    expect(component.menuItems.length).toBe(2);
+
+    warnSpy.mockRestore();
+  });
+
+  it('allows raw <button> elements in the slot', async () => {
+    const page = await newSpecPage({
+      components: [PdsDropdownMenu, PdsDropdownMenuItem, PdsBox],
+      html: `
+        <pds-dropdown-menu>
+          <button slot="trigger">Toggle Menu</button>
+          <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
+          <button type="button">Raw Button</button>
+        </pds-dropdown-menu>
+      `,
+    });
+
+    const component = page.rootInstance;
+    const contentSlot = page.root.shadowRoot?.querySelector('pds-box > slot');
+
+    // Get the raw button (not the trigger)
+    const rawButton = page.body.querySelectorAll('button')[1];
+
+    // Create a mock event with menu item and raw button
+    const mockEvent = {
+      target: contentSlot,
+      assignedElements: () => [
+        page.body.querySelector('pds-dropdown-menu-item'),
+        rawButton
+      ]
+    };
+
+    // Spy on console.warn to ensure no warning is logged
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+    // Call should not warn
+    component.handleSlotChange(mockEvent as any);
+
+    // No warning should be logged for allowed elements
+    expect(warnSpy).not.toHaveBeenCalled();
+
+    // Both elements should be in menuItems for keyboard navigation
+    expect(component.menuItems.length).toBe(2);
+
+    warnSpy.mockRestore();
+  });
+
+  it('skips disabled items during keyboard navigation', async () => {
+    const page = await newSpecPage({
+      components: [PdsDropdownMenu, PdsDropdownMenuItem, PdsBox],
+      html: `
+        <pds-dropdown-menu>
+          <button slot="trigger">Toggle Menu</button>
+          <pds-dropdown-menu-item>Item 1</pds-dropdown-menu-item>
+          <pds-dropdown-menu-item disabled>Item 2 (Disabled)</pds-dropdown-menu-item>
+          <pds-dropdown-menu-item>Item 3</pds-dropdown-menu-item>
+        </pds-dropdown-menu>
+      `,
+    });
+
+    const component = page.rootInstance;
+    component.isOpen = true;
+
+    // Setup slot change to populate menuItems
+    const contentSlot = page.root?.shadowRoot?.querySelector('pds-box > slot');
+    const mockEvent = {
+      target: contentSlot,
+      assignedElements: () => Array.from(page.body.querySelectorAll('pds-dropdown-menu-item'))
+    };
+    component.handleSlotChange(mockEvent as any);
+
+    // Verify we have 3 items
+    expect(component.menuItems.length).toBe(3);
+
+    // Start at first item
+    component.currentFocusIndex = 0;
+
+    // Call focusNextItem - should skip disabled item 2 and go to item 3
+    component.focusNextItem();
+    expect(component.currentFocusIndex).toBe(2); // Should skip index 1 (disabled)
   });
 
   it('applies specified placement', async () => {
@@ -368,11 +494,11 @@ describe('pds-dropdown-menu', () => {
     const mockTrigger = document.createElement('button');
     component.triggerEl = mockTrigger;
 
-    // Create menu items for testing with first item available
+    // Create menu items for testing with proper tagName property
     component.menuItems = [
-      { disabled: false, focus: jest.fn() } as any,
-      { disabled: false, focus: jest.fn() } as any,
-      { disabled: true, focus: jest.fn() } as any
+      { tagName: 'PDS-DROPDOWN-MENU-ITEM', disabled: false, focus: jest.fn() } as any,
+      { tagName: 'PDS-DROPDOWN-MENU-ITEM', disabled: false, focus: jest.fn() } as any,
+      { tagName: 'PDS-DROPDOWN-MENU-ITEM', disabled: true, focus: jest.fn() } as any
     ];
 
     // Mock document.activeElement to be the trigger
