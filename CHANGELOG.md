@@ -1,3 +1,13 @@
+## 3.16.0 (2026-02-05)
+
+### Features 🚀
+
+- **pds-dropdown-menu:** allow raw anchor and button elements ([#661](https://github.com/Kajabi/pine/pull/661))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+
 ## 3.15.3 (2026-02-03)
 
 ### Styles 🎨
