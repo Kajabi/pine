@@ -6,6 +6,9 @@ import { PdsTableBody } from '../pds-table-body/pds-table-body';
 import { PdsTableRow } from '../pds-table-row/pds-table-row';
 import { PdsTableCell } from '../pds-table-cell/pds-table-cell';
 
+// Helper to wait for requestAnimationFrame to complete
+const flushAnimationFrame = () => new Promise((resolve) => requestAnimationFrame(resolve));
+
 describe('pds-table', () => {
   it('renders', async () => {
     const page = await newSpecPage({
@@ -399,6 +402,7 @@ describe('pds-table', () => {
       `,
     });
 
+    await flushAnimationFrame();
     await page.waitForChanges();
 
     const tableBody = page.body.querySelector('pds-table-body') as HTMLElement;
@@ -436,6 +440,7 @@ describe('pds-table', () => {
       `,
     });
 
+    await flushAnimationFrame();
     await page.waitForChanges();
 
     const tableBody = page.body.querySelector('pds-table-body') as HTMLElement;
@@ -465,6 +470,7 @@ describe('pds-table', () => {
       `,
     });
 
+    await flushAnimationFrame();
     await page.waitForChanges();
 
     const headCells = page.body.querySelectorAll('pds-table-head-cell');
@@ -496,6 +502,7 @@ describe('pds-table', () => {
       `,
     });
 
+    await flushAnimationFrame();
     await page.waitForChanges();
 
     expect(consoleWarnSpy).toHaveBeenCalledWith('Default sort column "NonExistent" not found.');
@@ -547,6 +554,7 @@ describe('pds-table', () => {
       `,
     });
 
+    await flushAnimationFrame();
     await page.waitForChanges();
 
     // Should not throw and header should still be marked active
