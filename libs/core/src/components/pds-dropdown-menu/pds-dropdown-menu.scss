@@ -19,3 +19,44 @@
     border: var(--pine-border);
   }
 }
+
+// Styles for raw <a> and <button> elements slotted into the menu
+// These are allowed for edge cases requiring native browser/framework behavior
+// (e.g., Rails UJS, Turbo) that cannot work through Shadow DOM.
+//
+// Note: ::slotted() cannot be combined with pseudo-classes like :hover or :focus.
+// Raw elements will receive base styling here; hover/focus states must be handled
+// by the consuming application's CSS if needed.
+::slotted(a),
+::slotted(button) {
+  align-items: center;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-radius: var(--pine-dimension-xs);
+  box-sizing: border-box;
+  color: var(--pine-color-text);
+  cursor: pointer;
+  display: flex;
+  flex-grow: 1;
+  font: var(--pine-typography-body-medium);
+  gap: var(--pine-dimension-xs);
+  margin: calc(var(--pine-border-width) + 2px);
+  padding: var(--pine-dimension-xs);
+  text-align: start;
+  text-decoration: none;
+  width: calc(100% - calc(var(--pine-border-width) + 2px) * 2);
+}
+
+// Destructive variant for raw elements
+::slotted(.destructive) {
+  color: var(--pine-color-danger);
+}
+
+// Disabled state for raw elements (using attribute selectors, not pseudo-classes)
+::slotted([aria-disabled="true"]),
+::slotted([disabled]) {
+  cursor: not-allowed;
+  opacity: 0.5;
+  pointer-events: none;
+}
