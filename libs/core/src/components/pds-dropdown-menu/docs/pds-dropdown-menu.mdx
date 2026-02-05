@@ -284,6 +284,118 @@ Menu items can open links in a new tab using the `external` boolean prop. This d
 
 >**Note:** You can also use the `target` prop for more control (e.g., `target="_blank"`, `target="_parent"`). The `target` prop takes precedence over `external` if both are set.
 
+### Mixing Menu Items with Raw Elements
+
+In most cases, use `pds-dropdown-menu-item` for menu options. However, for edge cases requiring native browser or framework behavior (such as handling non-GET HTTP methods or framework-specific data attributes), you can mix in raw `<a>` or `<button>` elements. These elements are included in keyboard navigation but require additional CSS in your application for hover and focus states (see example below).
+
+The example below demonstrates mixing a standard menu item with raw `<a>` and `<button>` elements that use framework-specific data attributes.
+
+<DocCanvas
+  mdxSource={{
+    react:`
+{/* Hover/focus styles for raw elements (add to your app's CSS) */}
+<style>{\`
+  pds-dropdown-menu > a:hover,
+  pds-dropdown-menu > button:hover {
+    background-color: var(--pine-color-background-muted);
+  }
+  pds-dropdown-menu > a:focus,
+  pds-dropdown-menu > button:focus {
+    outline: var(--pine-outline-focus);
+    outline-offset: var(--pine-border-width);
+  }
+  pds-dropdown-menu > a.destructive:hover {
+    background-color: var(--pine-color-danger-disabled);
+  }
+  pds-dropdown-menu > a.destructive:focus {
+    outline: var(--pine-outline-focus-danger);
+  }
+\`}</style>
+
+<PdsDropdownMenu>
+  <PdsButton slot="trigger">Actions</PdsButton>
+  <PdsDropdownMenuItem href="/view">View</PdsDropdownMenuItem>
+  <PdsDropdownMenuSeparator />
+  <a href="/edit" data-remote="true">Edit</a>
+  <a href="/archive" data-method="post">Archive</a>
+  <PdsDropdownMenuSeparator />
+  <button type="button" data-action="modal#open">Open Modal</button>
+  <a href="/delete" data-method="delete" className="destructive">Delete</a>
+</PdsDropdownMenu>
+`,
+    webComponent:`
+<!-- Hover/focus styles for raw elements (add to your app's CSS) -->
+<style>
+  pds-dropdown-menu > a:hover,
+  pds-dropdown-menu > button:hover {
+    background-color: var(--pine-color-background-muted);
+  }
+  pds-dropdown-menu > a:focus,
+  pds-dropdown-menu > button:focus {
+    outline: var(--pine-outline-focus);
+    outline-offset: var(--pine-border-width);
+  }
+  pds-dropdown-menu > a.destructive:hover {
+    background-color: var(--pine-color-danger-disabled);
+  }
+  pds-dropdown-menu > a.destructive:focus {
+    outline: var(--pine-outline-focus-danger);
+  }
+</style>
+
+<pds-dropdown-menu>
+  <pds-button slot="trigger">Actions</pds-button>
+  <pds-dropdown-menu-item href="/view">View</pds-dropdown-menu-item>
+  <pds-dropdown-menu-separator />
+  <a href="/edit" data-remote="true">Edit</a>
+  <a href="/archive" data-method="post">Archive</a>
+  <pds-dropdown-menu-separator />
+  <button type="button" data-action="modal#open">Open Modal</button>
+  <a href="/delete" data-method="delete" class="destructive">Delete</a>
+</pds-dropdown-menu>
+`
+  }}
+>
+<style>
+{`
+  .raw-elements-example pds-dropdown-menu > a:hover,
+  .raw-elements-example pds-dropdown-menu > button:hover {
+    background-color: var(--pine-color-background-muted);
+  }
+  .raw-elements-example pds-dropdown-menu > a:focus,
+  .raw-elements-example pds-dropdown-menu > button:focus {
+    outline: var(--pine-outline-focus);
+    outline-offset: var(--pine-border-width);
+  }
+  .raw-elements-example pds-dropdown-menu > a.destructive:hover {
+    background-color: var(--pine-color-danger-disabled);
+  }
+  .raw-elements-example pds-dropdown-menu > a.destructive:focus {
+    outline: var(--pine-outline-focus-danger);
+  }
+`}
+</style>
+<div className="raw-elements-example" style={{ height: '275px', width: '100%', textAlign: 'center' }}>
+  <pds-dropdown-menu>
+    <pds-button slot="trigger">Actions</pds-button>
+    <pds-dropdown-menu-item href="/view">View</pds-dropdown-menu-item>
+    <pds-dropdown-menu-separator></pds-dropdown-menu-separator>
+    <a href="/edit" data-remote="true">Edit</a>
+    <a href="/archive" data-method="post">Archive</a>
+    <pds-dropdown-menu-separator></pds-dropdown-menu-separator>
+    <button type="button" data-action="modal#open">Open Modal</button>
+    <a href="/delete" data-method="delete" className="destructive">Delete</a>
+  </pds-dropdown-menu>
+</div>
+</DocCanvas>
+
+**Raw element attributes:**
+- Add `class="destructive"` for danger/destructive text color
+- Add `aria-disabled="true"` to visually disable an anchor element
+- Add `disabled` attribute to visually disable a button element
+
+>**Note:** Use `pds-dropdown-menu-item` for most cases. Raw elements should only be used when you need native browser behavior that cannot work through the component's Shadow DOM (e.g., framework-specific data attributes for form submissions). Due to Shadow DOM limitations, hover and focus states for raw elements must be styled by the consuming application's CSS.
+
 ### With Disabled Items
 
 Menu items can be disabled using the disabled attribute.

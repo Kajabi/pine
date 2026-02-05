@@ -9,6 +9,11 @@ import {  computePosition,
 } from '@floating-ui/dom';
 
 /**
+ * Union type for focusable menu items (component or raw elements)
+ */
+type MenuItemElement = HTMLPdsDropdownMenuItemElement | HTMLAnchorElement | HTMLButtonElement;
+
+/**
  * @part menu-panel - Exposes the dropdown menu container for styling.
  */
 @Component({
@@ -21,7 +26,7 @@ export class PdsDropdownMenu implements BasePdsProps {
   private triggerEl: HTMLElement;
   private panelEl: HTMLPdsBoxElement;
   private isOpen: boolean = false;
-  private menuItems: HTMLPdsDropdownMenuItemElement[] = [];
+  private menuItems: MenuItemElement[] = [];
   private cleanupAutoUpdate: (() => void) | null = null;
 
   @Element() host: HTMLPdsDropdownMenuElement;
@@ -70,17 +75,28 @@ export class PdsDropdownMenu implements BasePdsProps {
     // Get all elements assigned to this slot
     const assignedElements = this.slotEl.assignedElements();
 
-    // ensure assignedElements only contains pds-dropdown-menu-item or pds-dropdown-menu-separator
-    // if there are other elements, throw an error
-    const invalidElements = assignedElements.filter(el => el.tagName.toLowerCase() !== 'pds-dropdown-menu-item' && el.tagName.toLowerCase() !== 'pds-dropdown-menu-separator');
+    // Allowed elements: pds-dropdown-menu-item, pds-dropdown-menu-separator, <a>, <button>
+    // Raw <a> and <button> elements are allowed for edge cases requiring native browser/framework
+    // behavior (e.g., Rails UJS, Turbo) that cannot work through Shadow DOM.
+    const allowedTags = ['pds-dropdown-menu-item', 'pds-dropdown-menu-separator', 'a', 'button'];
+    const invalidElements = assignedElements.filter(
+      el => !allowedTags.includes(el.tagName.toLowerCase())
+    );
+
     if (invalidElements.length > 0) {
-      throw new Error(`pds-dropdown-menu only accepts pds-dropdown-menu-item and pds-dropdown-menu-separator elements`);
+      const invalidTags = invalidElements.map(el => el.tagName.toLowerCase()).join(', ');
+      console.warn(
+        `pds-dropdown-menu: Unexpected element(s) found: ${invalidTags}. ` +
+        `Expected: ${allowedTags.join(', ')}`
+      );
     }
 
-    // Store all menu items for keyboard navigation
-    this.menuItems = assignedElements.filter(
-      el => el.tagName.toLowerCase() === 'pds-dropdown-menu-item'
-    ) as HTMLPdsDropdownMenuItemElement[];
+    // Store all focusable items for keyboard navigation
+    // This includes pds-dropdown-menu-item components and raw <a>/<button> elements
+    this.menuItems = assignedElements.filter(el => {
+      const tag = el.tagName.toLowerCase();
+      return tag === 'pds-dropdown-menu-item' || tag === 'a' || tag === 'button';
+    }) as MenuItemElement[];
   }
 
   // Toggle dropdown open/closed
@@ -152,30 +168,65 @@ export class PdsDropdownMenu implements BasePdsProps {
     this.toggleDropdown();
   }
 
+  // Check if a menu item is disabled (handles both component and raw elements)
+  private isItemDisabled(item: MenuItemElement): boolean {
+    const tagName = item.tagName.toLowerCase();
+
+    if (tagName === 'pds-dropdown-menu-item') {
+      return (item as HTMLPdsDropdownMenuItemElement).disabled;
+    } else if (tagName === 'button') {
+      return (item as HTMLButtonElement).disabled;
+    } else if (tagName === 'a') {
+      return item.getAttribute('aria-disabled') === 'true';
+    }
+    return false;
+  }
+
   // Get the index of the currently focused menu item
   private getFocusedItemIndex(): number {
-    const activeElement = document.activeElement as HTMLPdsDropdownMenuItemElement | null;
+    const activeElement = document.activeElement as MenuItemElement | null;
     if (!activeElement) return -1;
-    return this.menuItems.findIndex(item => item === activeElement);
+
+    // For raw elements, check direct match
+    // For pds-dropdown-menu-item, also check if the active element is inside the shadow root
+    return this.menuItems.findIndex(item => {
+      if (item === activeElement) return true;
+
+      // Check if activeElement is inside the item's shadow root (for pds-dropdown-menu-item)
+      if (item.tagName.toLowerCase() === 'pds-dropdown-menu-item') {
+        const shadowRoot = (item as HTMLPdsDropdownMenuItemElement).shadowRoot;
+        if (shadowRoot?.contains(activeElement)) return true;
+      }
+
+      return false;
+    });
   }
 
   // Focus a specific menu item by index
   private focusItemByIndex(index: number): void {
     if (index >= 0 && index < this.menuItems.length) {
       this.currentFocusIndex = index;
+      const item = this.menuItems[index];
+      const tagName = item.tagName.toLowerCase();
 
-      // Focus the inner button/link instead of the host element
-      const menuItem = this.menuItems[index];
-      const innerButton = menuItem.shadowRoot?.querySelector('button');
-      const innerLink = menuItem.shadowRoot?.querySelector('pds-link')?.shadowRoot?.querySelector('a');
+      if (tagName === 'pds-dropdown-menu-item') {
+        // For pds-dropdown-menu-item, focus the inner element
+        const menuItem = item as HTMLPdsDropdownMenuItemElement;
+        const innerButton = menuItem.shadowRoot?.querySelector('button');
+        const innerLink = menuItem.shadowRoot?.querySelector('pds-link')?.shadowRoot?.querySelector('a')
+          || menuItem.shadowRoot?.querySelector('a');
 
-      if (innerButton) {
-        return innerButton.focus();
-      } else if (innerLink) {
-        return innerLink.focus();
+        if (innerButton) {
+          innerButton.focus();
+        } else if (innerLink) {
+          innerLink.focus();
+        } else {
+          // Fallback to focusing the host
+          menuItem.focus();
+        }
       } else {
-        // Fallback to focusing the host if we can't find the inner element
-        menuItem.focus();
+        // For raw <a> or <button> elements, focus directly
+        (item as HTMLElement).focus();
       }
     }
   }
@@ -188,7 +239,7 @@ export class PdsDropdownMenu implements BasePdsProps {
     let attempts = 0;
     const maxAttempts = this.menuItems.length;
 
-    while (attempts < maxAttempts && this.menuItems[nextIndex].disabled) {
+    while (attempts < maxAttempts && this.isItemDisabled(this.menuItems[nextIndex])) {
       nextIndex = (nextIndex + 1) % this.menuItems.length;
       attempts++;
     }
@@ -209,7 +260,7 @@ export class PdsDropdownMenu implements BasePdsProps {
     let attempts = 0;
     const maxAttempts = this.menuItems.length;
 
-    while (attempts < maxAttempts && this.menuItems[prevIndex].disabled) {
+    while (attempts < maxAttempts && this.isItemDisabled(this.menuItems[prevIndex])) {
       prevIndex = prevIndex <= 0 ? this.menuItems.length - 1 : prevIndex - 1;
       attempts++;
     }
@@ -246,7 +297,7 @@ export class PdsDropdownMenu implements BasePdsProps {
         if (this.menuItems.length > 0) {
           // Find first non-disabled item
           let firstIndex = 0;
-          while (firstIndex < this.menuItems.length && this.menuItems[firstIndex].disabled) {
+          while (firstIndex < this.menuItems.length && this.isItemDisabled(this.menuItems[firstIndex])) {
             firstIndex++;
           }
           if (firstIndex < this.menuItems.length) {
@@ -260,7 +311,7 @@ export class PdsDropdownMenu implements BasePdsProps {
         if (this.menuItems.length > 0) {
           // Find last non-disabled item
           let lastIndex = this.menuItems.length - 1;
-          while (lastIndex >= 0 && this.menuItems[lastIndex].disabled) {
+          while (lastIndex >= 0 && this.isItemDisabled(this.menuItems[lastIndex])) {
             lastIndex--;
           }
           if (lastIndex >= 0) {
@@ -293,7 +344,7 @@ export class PdsDropdownMenu implements BasePdsProps {
 
             // Find the first non-disabled item
             let firstFocusableIndex = 0;
-            while (firstFocusableIndex < this.menuItems.length && this.menuItems[firstFocusableIndex].disabled) {
+            while (firstFocusableIndex < this.menuItems.length && this.isItemDisabled(this.menuItems[firstFocusableIndex])) {
               firstFocusableIndex++;
             }
 
@@ -306,7 +357,7 @@ export class PdsDropdownMenu implements BasePdsProps {
 
             // Find the first non-disabled item
             let firstFocusableIndex = 0;
-            while (firstFocusableIndex < this.menuItems.length && this.menuItems[firstFocusableIndex].disabled) {
+            while (firstFocusableIndex < this.menuItems.length && this.isItemDisabled(this.menuItems[firstFocusableIndex])) {
               firstFocusableIndex++;
             }
 
