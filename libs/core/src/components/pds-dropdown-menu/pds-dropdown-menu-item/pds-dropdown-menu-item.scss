@@ -43,7 +43,6 @@
     outline: var(--pine-outline-focus);
     outline-offset: var(--pine-border-width);
   }
-
 }
 
 :host(.destructive) {
@@ -74,7 +73,9 @@ pds-link::part(link):focus-visible {
 }
 
 pds-link::part(link) {
-  display: block;
+  align-items: center;
+  display: flex;
+  gap: var(--pine-dimension-xs);
   margin: calc(var(--pine-dimension-xs) * -1);
   padding: var(--pine-dimension-xs);
   text-decoration: none;
