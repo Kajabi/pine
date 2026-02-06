@@ -71,6 +71,14 @@ Email.args = {
   value: 'user123@test.com'
 };
 
+export const Search = BaseTemplate.bind({});
+Search.args = {
+  componentId: 'pds-input-search-example',
+  label: 'Search',
+  type: 'search',
+  placeholder: 'Search...',
+};
+
 export const Required = BaseTemplate.bind({});
 Required.args = {
   componentId: 'pds-input-required-example',
