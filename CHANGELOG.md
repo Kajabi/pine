@@ -1,3 +1,20 @@
+## 3.16.1 (2026-02-06)
+
+### Bug Fixes 🐛
+
+- **pds-dropdown-menu-item:** update destructive color for pds link shadow ([#664](https://github.com/Kajabi/pine/pull/664))
+- **pds-input:** style native search clear button with custom icon ([#665](https://github.com/Kajabi/pine/pull/665))
+- **pds-multiselect:** resolve async with preselected values not showing selection count on initial render ([#663](https://github.com/Kajabi/pine/pull/663))
+
+### Styles 🎨
+
+- **pds-dropdown-menu-item:** add flex alignment and spacing ([#662](https://github.com/Kajabi/pine/pull/662))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.16.0 (2026-02-05)
 
 ### Features 🚀
