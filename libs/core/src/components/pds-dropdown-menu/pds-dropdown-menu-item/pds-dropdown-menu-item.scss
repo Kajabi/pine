@@ -47,6 +47,10 @@
 
 :host(.destructive) {
   .pds-dropdown-menu-item__content {
+    // Set context variables so pds-link's shadow DOM picks up the destructive colors
+    --pds-context-link-color: var(--pine-color-danger);
+    --pds-context-link-color-hover: var(--pine-color-danger-hover);
+
     align-items: center;
     color: var(--pine-color-danger);
 
