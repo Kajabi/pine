@@ -183,6 +183,8 @@ export class PdsMultiselect {
   private isOpening: boolean = false;
   // Flag to track if initial async fetch has been triggered (prevents double fetch)
   private initialAsyncFetchTriggered: boolean = false;
+  // Flag to track if value changed during loading and needs resolution after fetch completes
+  private pendingUnresolvedFetch: boolean = false;
 
   /**
    * Emitted when selection changes.
@@ -286,11 +288,16 @@ export class PdsMultiselect {
 
     // If using asyncUrl and some values couldn't be resolved, fetch options
     // This handles programmatic value changes where the options aren't loaded yet
-    if (this.asyncUrl && !this.loading) {
+    if (this.asyncUrl) {
       const valueArray = this.ensureValueArray();
       const hasUnresolvedValues = valueArray.length > 0 && this.selectedItems.length < valueArray.length;
       if (hasUnresolvedValues) {
-        this.fetchOptions('', 1);
+        if (this.loading) {
+          // Mark that we need to re-check after current fetch completes
+          this.pendingUnresolvedFetch = true;
+        } else {
+          this.fetchOptions('', 1);
+        }
       }
     }
   }
@@ -607,6 +614,16 @@ export class PdsMultiselect {
       }
     } finally {
       this.loading = false;
+
+      // Check if value changed during loading and still has unresolved values
+      if (this.pendingUnresolvedFetch) {
+        this.pendingUnresolvedFetch = false;
+        const valueArray = this.ensureValueArray();
+        const hasUnresolvedValues = valueArray.length > 0 && this.selectedItems.length < valueArray.length;
+        if (hasUnresolvedValues) {
+          this.fetchOptions('', 1);
+        }
+      }
     }
   }
 
