@@ -181,6 +181,8 @@ export class PdsMultiselect {
 
   // Flag to prevent focusout from closing during open transition
   private isOpening: boolean = false;
+  // Flag to track if initial async fetch has been triggered (prevents double fetch)
+  private initialAsyncFetchTriggered: boolean = false;
 
   /**
    * Emitted when selection changes.
@@ -228,6 +230,13 @@ export class PdsMultiselect {
       this.updateOptionsFromSlot();
       this.syncSelectedItems();
     });
+
+    // If we have preselected values and asyncUrl, fetch options to resolve them
+    // This ensures the trigger shows "X items" instead of placeholder on initial render
+    if (this.asyncUrl && this.ensureValueArray().length > 0) {
+      this.initialAsyncFetchTriggered = true;
+      this.fetchOptions('', 1);
+    }
   }
 
   private setupSlotChangeListener() {
@@ -766,10 +775,12 @@ export class PdsMultiselect {
     this.isOpen = true;
     this.highlightedIndex = -1;
 
-    // Trigger initial fetch if async
-    if (this.asyncUrl && this.internalOptions.length === 0) {
+    // Trigger initial fetch if async (skip if already fetching from componentDidLoad)
+    if (this.asyncUrl && this.internalOptions.length === 0 && !this.initialAsyncFetchTriggered) {
       this.debouncedFetchAsyncOptions(this.searchQuery, 1);
     }
+    // Reset the flag so subsequent opens can fetch if needed
+    this.initialAsyncFetchTriggered = false;
 
     requestAnimationFrame(() => {
       this.positionDropdown();
