@@ -283,6 +283,16 @@ export class PdsMultiselect {
     }
     this.syncSelectedItems();
     this.updateFormValue();
+
+    // If using asyncUrl and some values couldn't be resolved, fetch options
+    // This handles programmatic value changes where the options aren't loaded yet
+    if (this.asyncUrl && !this.loading) {
+      const valueArray = this.ensureValueArray();
+      const hasUnresolvedValues = valueArray.length > 0 && this.selectedItems.length < valueArray.length;
+      if (hasUnresolvedValues) {
+        this.fetchOptions('', 1);
+      }
+    }
   }
 
   @Watch('options')
