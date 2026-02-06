@@ -327,3 +327,15 @@
   white-space: nowrap;
   width: 1px;
 }
+
+  // Custom styling for the search clear (x) button
+  &::-webkit-search-cancel-button {
+    appearance: none;
+    background-color: var(--pds-input-placeholder-color);
+    cursor: pointer;
+    height: var(--pine-dimension-sm);
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.646 3.646a.5.5 0 0 1 .708 0L8 7.293l3.646-3.647a.5.5 0 0 1 .708.708L8.707 8l3.647 3.646a.5.5 0 0 1-.708.708L8 8.707l-3.646 3.647a.5.5 0 0 1-.708-.708L7.293 8 3.646 4.354a.5.5 0 0 1 0-.708'/%3E%3C/svg%3E");
+    mask-size: contain;
+    width: var(--pine-dimension-sm);
+  }
+
