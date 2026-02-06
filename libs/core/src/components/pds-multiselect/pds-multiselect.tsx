@@ -181,6 +181,10 @@ export class PdsMultiselect {
 
   // Flag to prevent focusout from closing during open transition
   private isOpening: boolean = false;
+  // Flag to track if initial async fetch has been triggered (prevents double fetch)
+  private initialAsyncFetchTriggered: boolean = false;
+  // Flag to track if value changed during loading and needs resolution after fetch completes
+  private pendingUnresolvedFetch: boolean = false;
 
   /**
    * Emitted when selection changes.
@@ -228,6 +232,13 @@ export class PdsMultiselect {
       this.updateOptionsFromSlot();
       this.syncSelectedItems();
     });
+
+    // If we have preselected values and asyncUrl, fetch options to resolve them
+    // This ensures the trigger shows "X items" instead of placeholder on initial render
+    if (this.asyncUrl && this.ensureValueArray().length > 0) {
+      this.initialAsyncFetchTriggered = true;
+      this.fetchOptions('', 1);
+    }
   }
 
   private setupSlotChangeListener() {
@@ -274,6 +285,21 @@ export class PdsMultiselect {
     }
     this.syncSelectedItems();
     this.updateFormValue();
+
+    // If using asyncUrl and some values couldn't be resolved, fetch options
+    // This handles programmatic value changes where the options aren't loaded yet
+    if (this.asyncUrl) {
+      const valueArray = this.ensureValueArray();
+      const hasUnresolvedValues = valueArray.length > 0 && this.selectedItems.length < valueArray.length;
+      if (hasUnresolvedValues) {
+        if (this.loading) {
+          // Mark that we need to re-check after current fetch completes
+          this.pendingUnresolvedFetch = true;
+        } else {
+          this.fetchOptions('', 1);
+        }
+      }
+    }
   }
 
   @Watch('options')
@@ -588,6 +614,16 @@ export class PdsMultiselect {
       }
     } finally {
       this.loading = false;
+
+      // Check if value changed during loading and still has unresolved values
+      if (this.pendingUnresolvedFetch) {
+        this.pendingUnresolvedFetch = false;
+        const valueArray = this.ensureValueArray();
+        const hasUnresolvedValues = valueArray.length > 0 && this.selectedItems.length < valueArray.length;
+        if (hasUnresolvedValues) {
+          this.fetchOptions('', 1);
+        }
+      }
     }
   }
 
@@ -766,10 +802,12 @@ export class PdsMultiselect {
     this.isOpen = true;
     this.highlightedIndex = -1;
 
-    // Trigger initial fetch if async
-    if (this.asyncUrl && this.internalOptions.length === 0) {
+    // Trigger initial fetch if async (skip if already fetching from componentDidLoad)
+    if (this.asyncUrl && this.internalOptions.length === 0 && !this.initialAsyncFetchTriggered) {
       this.debouncedFetchAsyncOptions(this.searchQuery, 1);
     }
+    // Reset the flag so subsequent opens can fetch if needed
+    this.initialAsyncFetchTriggered = false;
 
     requestAnimationFrame(() => {
       this.positionDropdown();
