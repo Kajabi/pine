@@ -37,6 +37,8 @@ export const isRequired = (target, component) => {
  * @param type - The type value (string literal) or a getter function that returns the type
  */
 export function exposeTypeProperty(element: Element, type: string | (() => string)) {
+  if (Object.getOwnPropertyDescriptor(element, 'type')) return;
+
   Object.defineProperty(element, 'type', {
     get: typeof type === 'function' ? type : () => type,
     enumerable: true,
