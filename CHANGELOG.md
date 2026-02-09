@@ -1,3 +1,13 @@
+## 3.16.2 (2026-02-09)
+
+### Bug Fixes 🐛
+
+- **pds-dropdown-menu-item:** add reflect prop ([#666](https://github.com/Kajabi/pine/pull/666))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 3.16.1 (2026-02-06)
 
 ### Bug Fixes 🐛
