@@ -24,7 +24,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
    * It determines whether or not the dropdown-item is disabled.
    * @defaultValue false
    */
-  @Prop() disabled: boolean = false;
+  @Prop({ reflect: true }) disabled: boolean = false;
 
 
   /**
