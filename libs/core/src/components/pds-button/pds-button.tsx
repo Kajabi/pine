@@ -207,28 +207,24 @@ export class PdsButton {
     return classNames.join(' ');
   }
 
-  private hasSlotContent(slotName: string): boolean {
-    const elements = this.el.querySelectorAll(`[slot="${slotName}"]`);
-    return elements.length > 0;
-  }
-
   private renderStartContent() {
-    const hasIcon = this.icon && this.variant !== 'disclosure' && this.variant !== 'filter';
-    const hasStartSlot = this.hasSlotContent('start');
-
     if (this.variant === 'filter') {
       return (
         <pds-icon class={this.loading ? 'pds-button__icon--hidden' : ''} icon={addCircle} part="icon" aria-hidden="true"></pds-icon>
       );
-    } else if (Boolean(hasIcon)) {
+    }
+
+    // Deprecated icon prop still takes precedence over start slot
+    const hasIcon = this.icon && this.variant !== 'disclosure';
+    if (Boolean(hasIcon)) {
       return (
         <pds-icon class={this.loading ? 'pds-button__icon--hidden' : ''} name={this.icon} part="icon" aria-hidden="true"></pds-icon>
       );
-    } else if (Boolean(hasStartSlot)) {
-      return <span class={`pds-button__icon ${this.loading ? 'pds-button__icon--hidden' : ''}`}><slot name="start" /></span>;
     }
 
-    return null;
+    // Always render the start slot so slotted content is projected reliably.
+    // CSS hides the wrapper when no content is slotted (prevents empty gap space).
+    return <span class={`pds-button__icon ${this.loading ? 'pds-button__icon--hidden' : ''}`}><slot name="start" /></span>;
   }
 
   private renderEndContent() {
@@ -240,11 +236,11 @@ export class PdsButton {
       return (
         <pds-icon class={this.loading ? 'pds-button__icon--hidden' : ''} icon={caretDown} part="caret" aria-hidden="true"></pds-icon>
       );
-    } else if (this.hasSlotContent('end')) {
-      return <span class={`pds-button__icon ${this.loading ? 'pds-button__icon--hidden' : ''}`}><slot name="end" /></span>;
     }
 
-    return null;
+    // Always render the end slot so slotted content is projected reliably.
+    // CSS hides the wrapper when no content is slotted (prevents empty gap space).
+    return <span class={`pds-button__icon ${this.loading ? 'pds-button__icon--hidden' : ''}`}><slot name="end" /></span>;
   }
 
   render() {
