@@ -1,3 +1,17 @@
+## 3.16.3 (2026-02-10)
+
+### Bug Fixes 🐛
+
+- **pds-button:** always render start/end slots for reliable content projection ([#668](https://github.com/Kajabi/pine/pull/668))
+
+### Styles 🎨
+
+- **pds-dropdown-menu:** add important to slotted element base styles ([#669](https://github.com/Kajabi/pine/pull/669))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 3.16.2 (2026-02-09)
 
 ### Bug Fixes 🐛
