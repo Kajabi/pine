@@ -13,9 +13,11 @@ describe('pds-button', () => {
         <mock:shadow-root>
           <button class="pds-button pds-button--primary" part="button" type="button">
             <div class="pds-button__content" part="button-content">
+              <span class="pds-button__icon"><slot name="start"></slot></span>
               <span class="pds-button__text" part="button-text">
                 <slot></slot>
               </span>
+              <span class="pds-button__icon"><slot name="end"></slot></span>
             </div>
           </button>
         </mock:shadow-root>
@@ -33,9 +35,11 @@ describe('pds-button', () => {
         <mock:shadow-root>
           <button class="pds-button pds-button--accent" part="button" type="button">
             <div class="pds-button__content" part="button-content">
+              <span class="pds-button__icon"><slot name="start"></slot></span>
               <span class="pds-button__text" part="button-text">
                 <slot></slot>
               </span>
+              <span class="pds-button__icon"><slot name="end"></slot></span>
             </div>
           </button>
         </mock:shadow-root>
@@ -53,9 +57,11 @@ describe('pds-button', () => {
         <mock:shadow-root>
           <button class="pds-button pds-button--tertiary" part="button" type="button">
             <div class="pds-button__content" part="button-content">
+              <span class="pds-button__icon"><slot name="start"></slot></span>
               <span class="pds-button__text" part="button-text">
                 <slot></slot>
               </span>
+              <span class="pds-button__icon"><slot name="end"></slot></span>
             </div>
           </button>
         </mock:shadow-root>
@@ -73,9 +79,11 @@ describe('pds-button', () => {
         <mock:shadow-root>
           <button class="pds-button pds-button--primary pds-button--small" part="button" type="button">
             <div class="pds-button__content" part="button-content">
+              <span class="pds-button__icon"><slot name="start"></slot></span>
               <span class="pds-button__text" part="button-text">
                 <slot></slot>
               </span>
+              <span class="pds-button__icon"><slot name="end"></slot></span>
             </div>
           </button>
         </mock:shadow-root>
@@ -93,9 +101,11 @@ describe('pds-button', () => {
         <mock:shadow-root>
           <button class="pds-button pds-button--primary pds-button--micro" part="button" type="button">
             <div class="pds-button__content" part="button-content">
+              <span class="pds-button__icon"><slot name="start"></slot></span>
               <span class="pds-button__text" part="button-text">
                 <slot></slot>
               </span>
+              <span class="pds-button__icon"><slot name="end"></slot></span>
             </div>
           </button>
         </mock:shadow-root>
@@ -157,9 +167,11 @@ describe('pds-button', () => {
         <mock:shadow-root>
           <button class="pds-button pds-button--unstyled" part="button" type="button">
             <div class="pds-button__content" part="button-content">
+              <span class="pds-button__icon"><slot name="start"></slot></span>
               <span class="pds-button__text" part="button-text">
                 <slot></slot>
               </span>
+              <span class="pds-button__icon"><slot name="end"></slot></span>
             </div>
           </button>
         </mock:shadow-root>
@@ -177,9 +189,11 @@ describe('pds-button', () => {
         <mock:shadow-root>
           <button class="pds-button pds-button--primary" part="button" type="button" disabled>
             <div class="pds-button__content" part="button-content">
+              <span class="pds-button__icon"><slot name="start"></slot></span>
               <span class="pds-button__text" part="button-text">
                 <slot></slot>
               </span>
+              <span class="pds-button__icon"><slot name="end"></slot></span>
             </div>
           </button>
         </mock:shadow-root>
@@ -198,9 +212,11 @@ describe('pds-button', () => {
         <mock:shadow-root>
           <button class="pds-button pds-button--primary" part="button" type="button">
             <div class="pds-button__content" part="button-content">
+              <span class="pds-button__icon"><slot name="start"></slot></span>
               <span class="pds-button__text" part="button-text">
                 <slot></slot>
               </span>
+              <span class="pds-button__icon"><slot name="end"></slot></span>
             </div>
           </button>
         </mock:shadow-root>
@@ -222,6 +238,7 @@ describe('pds-button', () => {
               <span class="pds-button__text" part="button-text">
                 <slot></slot>
               </span>
+              <span class="pds-button__icon"><slot name="end"></slot></span>
             </div>
           </button>
         </mock:shadow-root>
@@ -240,6 +257,7 @@ describe('pds-button', () => {
         <mock:shadow-root>
           <button class="pds-button pds-button--primary" part="button" type="button">
             <div class="pds-button__content" part="button-content">
+              <span class="pds-button__icon"><slot name="start"></slot></span>
               <span class="pds-button__text" part="button-text">
                 <slot></slot>
               </span>
@@ -267,6 +285,7 @@ describe('pds-button', () => {
               <span class="pds-button__text" part="button-text">
                 <slot></slot>
               </span>
+              <span class="pds-button__icon"><slot name="end"></slot></span>
             </div>
           </button>
         </mock:shadow-root>
@@ -286,12 +305,14 @@ describe('pds-button', () => {
         <mock:shadow-root>
           <button aria-busy="true" aria-live="polite" class="pds-button pds-button--primary pds-button--loading" part="button" type="button">
             <div class="pds-button__content" part="button-content">
+              <span class="pds-button__icon pds-button__icon--hidden"><slot name="start"></slot></span>
               <span class="pds-button__text pds-button__text--hidden" part="button-text">
                 <slot></slot>
               </span>
               <span class="pds-button__loader">
                 <pds-loader is-loading size="var(--pine-font-size-body-2xl)" variant="spinner" exportparts="loader-svg">Loading...</pds-loader>
               </span>
+              <span class="pds-button__icon pds-button__icon--hidden"><slot name="end"></slot></span>
             </div>
           </button>
         </mock:shadow-root>
@@ -352,9 +373,11 @@ describe('pds-button', () => {
         <mock:shadow-root>
           <button class="pds-button pds-button--primary" part="button" type="button">
             <div class="pds-button__content" part="button-content">
+              <span class="pds-button__icon"><slot name="start"></slot></span>
               <span class="pds-button__text" part="button-text">
                 <slot></slot>
               </span>
+              <span class="pds-button__icon"><slot name="end"></slot></span>
             </div>
           </button>
         </mock:shadow-root>
@@ -412,9 +435,11 @@ describe('pds-button', () => {
         <mock:shadow-root>
           <a class="pds-button pds-button--primary" part="button" href="https://example.com" target="_blank">
             <div class="pds-button__content" part="button-content">
+              <span class="pds-button__icon"><slot name="start"></slot></span>
               <span class="pds-button__text" part="button-text">
                 <slot></slot>
               </span>
+              <span class="pds-button__icon"><slot name="end"></slot></span>
             </div>
           </a>
         </mock:shadow-root>
@@ -593,9 +618,9 @@ describe('pds-button', () => {
       expect(filterIcon).toBeTruthy();
       expect(filterIcon?.getAttribute('icon')).toBe(addCircle);
 
-      // Should not render start slot
-      const slotSpan = root?.shadowRoot?.querySelector('.pds-button__icon');
-      expect(slotSpan).toBeFalsy();
+      // Should not render start slot (filter variant overrides with its own icon)
+      const startSlot = root?.shadowRoot?.querySelector('slot[name="start"]');
+      expect(startSlot).toBeFalsy();
     });
 
     it('renders filter variant as anchor when href is provided', async () => {

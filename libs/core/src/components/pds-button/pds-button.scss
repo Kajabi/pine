@@ -217,6 +217,13 @@
 
 .pds-button__icon {
   display: inline-flex;
+
+  // Hide slot wrapper when no content is slotted to prevent empty flex gap space.
+  // Named slots (start/end) are always rendered in the shadow DOM so the browser
+  // can project light DOM content reliably regardless of render timing.
+  &:not(:has(::slotted(*))) {
+    display: none;
+  }
 }
 
 .pds-button__text {
