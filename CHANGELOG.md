@@ -1,3 +1,13 @@
+## 3.17.0 (2026-02-12)
+
+### Features 🚀
+
+- **pds-multiselect:** add hideSelectedItems prop ([#671](https://github.com/Kajabi/pine/pull/671))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+
 ## 3.16.3 (2026-02-10)
 
 ### Bug Fixes 🐛
