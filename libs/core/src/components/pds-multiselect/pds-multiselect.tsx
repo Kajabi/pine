@@ -120,6 +120,11 @@ export class PdsMultiselect {
   @Prop() hideLabel: boolean = false;
 
   /**
+   * Hides the selected items summary section in the dropdown panel.
+   */
+  @Prop() hideSelectedItems: boolean = false;
+
+  /**
    * Error message to display.
    */
   @Prop() errorMessage?: string;
@@ -955,7 +960,7 @@ export class PdsMultiselect {
 
 
   private renderSelectedItemsList() {
-    if (this.selectedItems.length === 0) return null;
+    if (this.hideSelectedItems || this.selectedItems.length === 0) return null;
 
     return (
       <div class="pds-multiselect__selected-section">

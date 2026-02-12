@@ -52,6 +52,10 @@ export default {
       control: 'boolean',
       description: 'Visually hide the label (keeps it accessible)',
     },
+    hideSelectedItems: {
+      control: 'boolean',
+      description: 'Hides the selected items summary section in the dropdown panel',
+    },
     errorMessage: {
       control: 'text',
       description: 'Error message to display',
@@ -90,6 +94,7 @@ export const Default = {
       component-id="${args.componentId}"
       label="${args.label}"
       placeholder="${args.placeholder}"
+      ?hide-selected-items=${args.hideSelectedItems}
       .value=${args.value}
       @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
     >
@@ -110,6 +115,7 @@ export const WithPreselectedValues = {
       component-id="${args.componentId}"
       label="${args.label}"
       placeholder="${args.placeholder}"
+      ?hide-selected-items=${args.hideSelectedItems}
       .value=${args.value}
       @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
     >
@@ -132,6 +138,7 @@ export const MaxSelections = {
       label="${args.label}"
       placeholder="${args.placeholder}"
       max-selections="${args.maxSelections}"
+      ?hide-selected-items=${args.hideSelectedItems}
       .value=${args.value}
       @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
     >
@@ -157,6 +164,7 @@ export const WithMessage = {
       label="${args.label}"
       placeholder="${args.placeholder}"
       helper-message="${args.helperMessage}"
+      ?hide-selected-items=${args.hideSelectedItems}
       .value=${args.value}
       @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
     >
@@ -181,6 +189,7 @@ export const Invalid = {
       placeholder="${args.placeholder}"
       error-message="${args.errorMessage}"
       ?invalid=${args.invalid}
+      ?hide-selected-items=${args.hideSelectedItems}
       .value=${args.value}
       @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
     >
@@ -203,6 +212,7 @@ export const Disabled = {
       label="${args.label}"
       placeholder="${args.placeholder}"
       ?disabled=${args.disabled}
+      ?hide-selected-items=${args.hideSelectedItems}
       .value=${args.value}
       @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
     >
@@ -225,6 +235,29 @@ export const HiddenLabel = {
       label="${args.label}"
       placeholder="${args.placeholder}"
       ?hide-label=${args.hideLabel}
+      ?hide-selected-items=${args.hideSelectedItems}
+      .value=${args.value}
+      @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
+    >
+      ${unsafeHTML(defaultOptions)}
+    </pds-multiselect>
+  `,
+};
+
+export const HiddenSelectedItems = {
+  args: {
+    componentId: 'multiselect-hidden-selected',
+    label: 'Departments',
+    placeholder: 'Select...',
+    hideSelectedItems: true,
+    value: ['1', '2', '3'],
+  },
+  render: (args, { updateArgs } = {}) => html`
+    <pds-multiselect
+      component-id="${args.componentId}"
+      label="${args.label}"
+      placeholder="${args.placeholder}"
+      ?hide-selected-items=${args.hideSelectedItems}
       .value=${args.value}
       @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
     >
@@ -247,6 +280,7 @@ export const LongList = {
       label="${args.label}"
       placeholder="${args.placeholder}"
       max-height="${args.maxHeight}"
+      ?hide-selected-items=${args.hideSelectedItems}
       .value=${args.value}
       @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
     >
@@ -292,6 +326,7 @@ export const CustomWidths = {
       trigger-width="${args.triggerWidth}"
       panel-width="${args.panelWidth}"
       min-width="${args.minWidth}"
+      ?hide-selected-items=${args.hideSelectedItems}
       .value=${args.value}
       @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
     >
@@ -325,6 +360,7 @@ export const ConsumerManagedAsync = {
         label="${args.label}"
         placeholder="${args.placeholder}"
         .options=${allContacts}
+        ?hide-selected-items=${args.hideSelectedItems}
         .value=${args.value}
         @pdsMultiselectSearch=${(e) => {
           console.log('Search query:', e.detail.query);
@@ -357,6 +393,7 @@ export const CustomEmptyState = {
       label="${args.label}"
       placeholder="${args.placeholder}"
       .options=${[]}
+      ?hide-selected-items=${args.hideSelectedItems}
       .value=${args.value}
       @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
     >
@@ -385,6 +422,7 @@ export const WithCreateOption = {
         label="${args.label}"
         placeholder="${args.placeholder}"
         create-url="/api/tags"
+        ?hide-selected-items=${args.hideSelectedItems}
         .value=${args.value}
         @pdsMultiselectCreate=${async (e) => {
           console.log('Creating new tag:', e.detail.query);

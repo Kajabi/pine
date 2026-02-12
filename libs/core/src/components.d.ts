@@ -1441,6 +1441,11 @@ export namespace Components {
          */
         "hideLabel": boolean;
         /**
+          * Hides the selected items summary section in the dropdown panel.
+          * @default false
+         */
+        "hideSelectedItems": boolean;
+        /**
           * If true, the multiselect is in an invalid state.
          */
         "invalid"?: boolean;
@@ -4447,6 +4452,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "hideLabel"?: boolean;
+        /**
+          * Hides the selected items summary section in the dropdown panel.
+          * @default false
+         */
+        "hideSelectedItems"?: boolean;
         /**
           * If true, the multiselect is in an invalid state.
          */
