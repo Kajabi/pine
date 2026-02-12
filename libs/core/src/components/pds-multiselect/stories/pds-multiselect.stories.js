@@ -52,6 +52,10 @@ export default {
       control: 'boolean',
       description: 'Visually hide the label (keeps it accessible)',
     },
+    hideSelectedItems: {
+      control: 'boolean',
+      description: 'Hides the selected items summary section in the dropdown panel',
+    },
     errorMessage: {
       control: 'text',
       description: 'Error message to display',
@@ -225,6 +229,28 @@ export const HiddenLabel = {
       label="${args.label}"
       placeholder="${args.placeholder}"
       ?hide-label=${args.hideLabel}
+      .value=${args.value}
+      @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
+    >
+      ${unsafeHTML(defaultOptions)}
+    </pds-multiselect>
+  `,
+};
+
+export const HiddenSelectedItems = {
+  args: {
+    componentId: 'multiselect-hidden-selected',
+    label: 'Departments',
+    placeholder: 'Select...',
+    hideSelectedItems: true,
+    value: ['1', '2', '3'],
+  },
+  render: (args, { updateArgs } = {}) => html`
+    <pds-multiselect
+      component-id="${args.componentId}"
+      label="${args.label}"
+      placeholder="${args.placeholder}"
+      ?hide-selected-items=${args.hideSelectedItems}
       .value=${args.value}
       @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
     >

@@ -542,6 +542,47 @@ describe('pds-multiselect', () => {
       const selectedSection = page.root.shadowRoot.querySelector('.pds-multiselect__selected-section');
       expect(selectedSection).toBeNull();
     });
+
+    it('does not render selected items section when hideSelectedItems is true', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" hide-selected-items></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['1', '2'];
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+        { id: '3', text: 'Option 3' },
+      ];
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      const selectedSection = page.root.shadowRoot.querySelector('.pds-multiselect__selected-section');
+      expect(selectedSection).toBeNull();
+    });
+
+    it('still emits pdsMultiselectChange when hideSelectedItems is true', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" hide-selected-items></pds-multiselect>`,
+      });
+
+      const changeSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectChange', changeSpy);
+
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+      ];
+      await page.waitForChanges();
+
+      page.rootInstance.toggleOption({ id: '1', text: 'Option 1' });
+      await page.waitForChanges();
+
+      expect(changeSpy).toHaveBeenCalled();
+      expect(changeSpy.mock.calls[0][0].detail.values).toEqual(['1']);
+    });
   });
 
   describe('required validation', () => {
