@@ -229,14 +229,6 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
 
-      - name: Report pine production deployment to GetDX
-        if: ${{ success() }}
-        uses: Kajabi/getdx-deployment-identifier-action@main
-        with:
-          getdx-instance-name: 'kajabi'
-          getdx-token: ${{ secrets.GETDX_DEPLOYMENT_TOKEN }}
-          service-name: 'pine'
-
   send-slack-notification:
     runs-on: ubuntu-latest
     needs: release
