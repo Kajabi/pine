@@ -1,0 +1,41 @@
+---
+description: Pine Design System project conventions, git workflow, and build commands
+alwaysApply: true
+---
+
+# Pine Design System
+
+Stencil.js web component library in an Nx monorepo. Core components live in `libs/core/src/components/`.
+
+## Component Structure
+
+- All components are prefixed with `pds-` (e.g., `pds-button`, `pds-table`)
+- Each component may include: `*.tsx`, `*.scss`, `*.figma.ts`, `stories/`, `docs/`, `test/`, and auto-generated `readme.md`
+- Composite components have nested subcomponent directories (e.g., `pds-table/pds-table-row/`)
+- React wrappers are generated in `libs/react/`
+- Generate new components: `npm run stencil.generate pds-[name]` — choose `*.scss Format`, then copy `stories/` and `docs/` from an existing component
+
+## Git Conventions
+
+- Lefthook enforces commitlint, validate-branch-name, and lint-staged — never skip hooks
+- Branch names: `{type}/{description}` — do NOT include ticket/issue numbers
+- Accepted branch types: `chore`, `ci`, `docs`, `feat`, `fix`, `hotfix`, `perf`, `refactor`, `revert`, `style`, `test`
+- Commit scope = component name (e.g., `feat(pds-table):`, `fix(pds-button):`), single line, no ticket numbers
+- Commit type by file: `feat:` for new component code/props, `fix:` for bug fixes, `test:` for specs/e2e, `docs:` for MDX/stories/docs, `style:` for SCSS only, `refactor:` for restructuring, `chore:` for tooling/config/deps
+- PR titles: `type(scope): description` — use the template at `.github/pull_request_template.md`
+- If your branch is behind `main`, rebase before pushing — requires at least two approved reviews before merging
+
+## Build & Test
+
+- Build all: `npm run build.all`
+- Test all: `npm run test.all`
+- Lint all: `npm run lint.all`
+- Target core only: `npx nx run @pine-ds/core:build`, `npx nx run @pine-ds/core:test`
+- After modifying `*.tsx`, rebuild to regenerate `components.d.ts` and `readme.md`
+- Dev server: `npm run start` (Storybook at localhost:6006)
+
+## Boundaries
+
+- **Always:** follow existing patterns, run lint/tests before committing, use conventional commits with component scope
+- **Ask first:** adding dependencies, creating files outside component dirs, breaking API changes, modifying CI/build config
+- **Never:** skip lefthook hooks, edit auto-generated files (`readme.md`, `components.d.ts`), commit secrets or `.env`
