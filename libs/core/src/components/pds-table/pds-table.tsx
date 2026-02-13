@@ -39,6 +39,13 @@ export class PdsTable {
   @Prop() selectable: boolean;
 
   /**
+   * Hides the select-all checkbox in the table header while keeping individual row checkboxes functional.
+   * Only applies when `selectable` is true.
+   * @defaultValue false
+   */
+  @Prop() disableSelectAll: boolean = false;
+
+  /**
    * Adds divider borders between table rows. The last row will not have a bottom border.
    * @defaultValue false
    */
@@ -319,8 +326,10 @@ export class PdsTable {
     if (!pdsTableHead) return;
 
     const headerCheckbox = pdsTableHead.shadowRoot.querySelector('pds-checkbox');
-    headerCheckbox.checked = allSelectedRows;
-    headerCheckbox.indeterminate = !allSelectedRows && !noneSelectedRows;
+    if (headerCheckbox) {
+      headerCheckbox.checked = allSelectedRows;
+      headerCheckbox.indeterminate = !allSelectedRows && !noneSelectedRows;
+    }
   }
 
   render() {

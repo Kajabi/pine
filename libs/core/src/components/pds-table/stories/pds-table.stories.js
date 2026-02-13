@@ -24,6 +24,10 @@ export default {
       control: { type: 'boolean' },
       description: 'Adds divider borders between table rows. The last row will not have a bottom border',
     },
+    disableSelectAll: {
+      control: { type: 'boolean' },
+      description: 'Hides the select-all checkbox in the table header while keeping individual row checkboxes functional. Only applies when selectable is true.',
+    },
     defaultSortColumn: {
       control: { type: 'text' },
       description: 'The name of the column to sort by on initial load. Must match the text content of a sortable column header.',
@@ -50,6 +54,7 @@ const BaseTemplate = (args) => html`
   ?responsive=${args.responsive}
   ?row-dividers=${args.rowDividers}
   ?selectable=${args.selectable}
+  ?disable-select-all=${args.disableSelectAll}
 >
   <pds-table-head
     ?border=${args.border}
@@ -371,6 +376,19 @@ Selectable.args = {
   responsive: false,
   rowDividers: false,
   selectable: true,
+};
+
+export const DisableSelectAll = BaseTemplate.bind();
+DisableSelectAll.args = {
+  compact: false,
+  componentId: 'selectable-no-select-all',
+  fixedColumn: false,
+  border: false,
+  background: false,
+  responsive: false,
+  rowDividers: false,
+  selectable: true,
+  disableSelectAll: true,
 };
 
 export const Responsive = ResponsiveTemplate.bind();

@@ -129,6 +129,29 @@ describe('pds-table-head', () => {
     expect((head as unknown as PdsTableHead).isSelected).toBe(true);
   });
 
+  it('does not render pds-checkbox when disableSelectAll is set on parent table', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableHead, PdsTable],
+      html: `
+        <pds-table selectable="true" disable-select-all="true">
+          <pds-table-head>
+            <pds-table-head-cell>Column Title</pds-table-head-cell>
+            <pds-table-head-cell>Column Title</pds-table-head-cell>
+            <pds-table-head-cell>Column Title</pds-table-head-cell>
+          </pds-table-head>
+        </pds-table>`,
+    });
+
+    const head = page.root?.querySelector('pds-table-head');
+    const checkbox = head?.shadowRoot?.querySelector('pds-checkbox');
+    const headCell = head?.shadowRoot?.querySelector('pds-table-head-cell');
+
+    // Checkbox should not be rendered
+    expect(checkbox).toBeNull();
+    // But the container cell should still exist for column alignment
+    expect(headCell).not.toBeNull();
+  });
+
   it('renders with border attribute when border prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsTableHead],
