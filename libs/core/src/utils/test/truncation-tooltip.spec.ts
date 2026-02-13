@@ -57,7 +57,7 @@ describe('truncation-tooltip', () => {
     jest.useRealTimers();
     document.body.innerHTML = '';
     // Remove injected style elements
-    document.querySelectorAll('[data-pds-truncation-tooltip]').forEach(el => el.remove());
+    document.querySelectorAll('[data-pds-truncation-tooltip]').forEach((el) => { el.remove(); });
   });
 
   it('returns a cleanup function', () => {
