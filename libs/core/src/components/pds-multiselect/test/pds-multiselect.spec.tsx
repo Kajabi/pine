@@ -815,6 +815,30 @@ describe('pds-multiselect', () => {
 
       expect(dismissSpy).not.toHaveBeenCalled();
     });
+
+    it('emits dismiss event on focus out (click outside)', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      const dismissSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectDismiss', dismissSpy);
+
+      page.rootInstance.internalOptions = [{ id: '1', text: 'Option 1' }];
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      // Simulate focus leaving the component (click outside)
+      page.rootInstance.handleContainerFocusOut();
+
+      // Wait for setTimeout in handleContainerFocusOut
+      await new Promise(resolve => setTimeout(resolve, 10));
+      await page.waitForChanges();
+
+      expect(dismissSpy).toHaveBeenCalled();
+      expect(page.rootInstance.isOpen).toBe(false);
+    });
   });
 
   describe('closePanelOnSelect prop', () => {
@@ -854,6 +878,30 @@ describe('pds-multiselect', () => {
       await page.waitForChanges();
 
       expect(page.rootInstance.isOpen).toBe(false);
+    });
+
+    it('does not emit dismiss event when panel closes via selection with closePanelOnSelect', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" close-panel-on-select="true"></pds-multiselect>`,
+      });
+
+      const dismissSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectDismiss', dismissSpy);
+
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+      ];
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      // Select an option - panel should close but dismiss event should NOT fire
+      page.rootInstance.toggleOption({ id: '1', text: 'Option 1' });
+      await page.waitForChanges();
+
+      expect(page.rootInstance.isOpen).toBe(false);
+      expect(dismissSpy).not.toHaveBeenCalled();
     });
   });
 

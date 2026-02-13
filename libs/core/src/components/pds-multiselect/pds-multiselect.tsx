@@ -223,8 +223,15 @@ export class PdsMultiselect {
   @Event() pdsMultiselectCreate!: EventEmitter<MultiselectCreateEventDetail>;
 
   /**
-   * Emitted when the dropdown is dismissed via escape key or click outside
-   * (not when closed by selection). Equivalent to Sage's onEscapeHook.
+   * Emitted when the dropdown is dismissed via Escape key or click outside.
+   *
+   * This event fires only when the user explicitly dismisses the panel without making a selection:
+   * - ✅ Fires: Pressing Escape key while dropdown is open
+   * - ✅ Fires: Clicking outside the component while dropdown is open
+   * - ❌ Does NOT fire: When panel closes due to selection (including when `closePanelOnSelect` is true)
+   * - ❌ Does NOT fire: When panel closes programmatically via `closeDropdown()`
+   *
+   * Equivalent to Sage's `onEscapeHook`. Use this to restore parent UI state or run cleanup when the user cancels their interaction.
    */
   @Event() pdsMultiselectDismiss!: EventEmitter<void>;
 
@@ -1147,7 +1154,6 @@ export class PdsMultiselect {
     if (count === 0) {
       return this.placeholder || 'Select...';
     }
-
     return `${count} item${count === 1 ? '' : 's'}`;
   }
 
