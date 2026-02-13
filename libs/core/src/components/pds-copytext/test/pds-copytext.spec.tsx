@@ -178,4 +178,92 @@ describe('pds-copytext', () => {
     page.root!.remove();
     await page.waitForChanges();
   });
+
+  it('shows tooltip when text overflows', async () => {
+    const page = await newSpecPage({
+      components: [PdsCopytext],
+      html: `<pds-copytext value="This is a very long text that will definitely overflow the container" truncate="true"></pds-copytext>`,
+    });
+
+    // Get the value span element from shadow root
+    const valueSpan = page.root!.shadowRoot!.querySelector('span') as HTMLElement;
+    expect(valueSpan).toBeTruthy();
+
+    // Mock overflow by setting scrollWidth > clientWidth
+    Object.defineProperty(valueSpan, 'scrollWidth', { value: 500, configurable: true });
+    Object.defineProperty(valueSpan, 'clientWidth', { value: 100, configurable: true });
+
+    // Simulate mouseenter on the host element
+    page.root!.dispatchEvent(new MouseEvent('mouseenter'));
+    await page.waitForChanges();
+
+    // Check that a tooltip portal was created
+    const tooltip = document.querySelector('.pds-truncation-tooltip');
+    expect(tooltip).toBeTruthy();
+    expect(tooltip?.getAttribute('role')).toBe('tooltip');
+    expect(tooltip?.textContent).toContain('This is a very long text');
+
+    // Cleanup
+    page.root!.dispatchEvent(new MouseEvent('mouseleave'));
+  });
+
+  it('does not show tooltip when text fits', async () => {
+    const page = await newSpecPage({
+      components: [PdsCopytext],
+      html: `<pds-copytext value="Short" truncate="true"></pds-copytext>`,
+    });
+
+    // Get the value span element from shadow root
+    const valueSpan = page.root!.shadowRoot!.querySelector('span') as HTMLElement;
+    expect(valueSpan).toBeTruthy();
+
+    // Mock no overflow: scrollWidth <= clientWidth
+    Object.defineProperty(valueSpan, 'scrollWidth', { value: 50, configurable: true });
+    Object.defineProperty(valueSpan, 'clientWidth', { value: 100, configurable: true });
+
+    // Simulate mouseenter
+    page.root!.dispatchEvent(new MouseEvent('mouseenter'));
+    await page.waitForChanges();
+
+    // Check that no tooltip was created
+    const tooltip = document.querySelector('.pds-truncation-tooltip');
+    expect(tooltip).toBeNull();
+  });
+
+  it('updates tooltip when value changes', async () => {
+    const page = await newSpecPage({
+      components: [PdsCopytext],
+      html: `<pds-copytext value="Original text" truncate="true"></pds-copytext>`,
+    });
+
+    // Get the value span element from shadow root
+    const valueSpan = page.root!.shadowRoot!.querySelector('span') as HTMLElement;
+    expect(valueSpan).toBeTruthy();
+
+    // Mock overflow
+    Object.defineProperty(valueSpan, 'scrollWidth', { value: 500, configurable: true });
+    Object.defineProperty(valueSpan, 'clientWidth', { value: 100, configurable: true });
+
+    // Show tooltip with original value
+    page.root!.dispatchEvent(new MouseEvent('mouseenter'));
+    await page.waitForChanges();
+
+    let tooltip = document.querySelector('.pds-truncation-tooltip');
+    expect(tooltip?.textContent).toContain('Original text');
+
+    // Hide tooltip
+    page.root!.dispatchEvent(new MouseEvent('mouseleave'));
+    await page.waitForChanges();
+
+    // Change the value
+    page.rootInstance.value = 'Updated text';
+    await page.waitForChanges();
+
+    // Show tooltip again
+    page.root!.dispatchEvent(new MouseEvent('mouseenter'));
+    await page.waitForChanges();
+
+    tooltip = document.querySelector('.pds-truncation-tooltip');
+    expect(tooltip?.textContent).toContain('Updated text');
+  });
 });

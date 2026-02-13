@@ -155,4 +155,74 @@ describe('pds-text', () => {
     page.root!.remove();
     await page.waitForChanges();
   });
+
+  it('shows tooltip when text overflows', async () => {
+    const page = await newSpecPage({
+      components: [PdsText],
+      html: `<pds-text tag="p" truncate>This is a very long text that will definitely overflow the container</pds-text>`,
+    });
+
+    // Get the content element from shadow root
+    const contentEl = page.root!.shadowRoot!.querySelector('[part="content"]') as HTMLElement;
+    expect(contentEl).toBeTruthy();
+
+    // Mock overflow by setting scrollWidth > clientWidth
+    Object.defineProperty(contentEl, 'scrollWidth', { value: 500, configurable: true });
+    Object.defineProperty(contentEl, 'clientWidth', { value: 100, configurable: true });
+
+    // Simulate mouseenter
+    page.root!.dispatchEvent(new MouseEvent('mouseenter'));
+    await page.waitForChanges();
+
+    // Check that a tooltip portal was created in the document
+    const tooltip = document.querySelector('.pds-truncation-tooltip');
+    expect(tooltip).toBeTruthy();
+    expect(tooltip?.getAttribute('role')).toBe('tooltip');
+
+    // Cleanup
+    page.root!.dispatchEvent(new MouseEvent('mouseleave'));
+  });
+
+  it('does not show tooltip when text fits', async () => {
+    const page = await newSpecPage({
+      components: [PdsText],
+      html: `<pds-text tag="p" truncate>Short</pds-text>`,
+    });
+
+    // Get the content element from shadow root
+    const contentEl = page.root!.shadowRoot!.querySelector('[part="content"]') as HTMLElement;
+    expect(contentEl).toBeTruthy();
+
+    // Mock no overflow: scrollWidth <= clientWidth
+    Object.defineProperty(contentEl, 'scrollWidth', { value: 50, configurable: true });
+    Object.defineProperty(contentEl, 'clientWidth', { value: 100, configurable: true });
+
+    // Simulate mouseenter
+    page.root!.dispatchEvent(new MouseEvent('mouseenter'));
+    await page.waitForChanges();
+
+    // Check that no tooltip was created
+    const tooltip = document.querySelector('.pds-truncation-tooltip');
+    expect(tooltip).toBeNull();
+  });
+
+  it('adds tabindex="0" when truncate is enabled', async () => {
+    const page = await newSpecPage({
+      components: [PdsText],
+      html: `<pds-text tag="p" truncate>Text</pds-text>`,
+    });
+
+    const contentEl = page.root!.shadowRoot!.querySelector('[part="content"]') as HTMLElement;
+    expect(contentEl.getAttribute('tabindex')).toBe('0');
+  });
+
+  it('does not add tabindex when truncate is disabled', async () => {
+    const page = await newSpecPage({
+      components: [PdsText],
+      html: `<pds-text tag="p">Text</pds-text>`,
+    });
+
+    const contentEl = page.root!.shadowRoot!.querySelector('[part="content"]') as HTMLElement;
+    expect(contentEl.getAttribute('tabindex')).toBeNull();
+  });
 });

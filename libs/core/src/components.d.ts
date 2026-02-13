@@ -1938,7 +1938,7 @@ export namespace Components {
          */
         "cellAlign"?: 'start' | 'center' | 'end' | 'justify';
         /**
-          * Truncates content to a max width and adds an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus.
+          * Truncates content to a max width and adds an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: When truncate is enabled, the element automatically receives tabindex="0" for keyboard accessibility.
          */
         "truncate": boolean;
     }
@@ -2083,7 +2083,7 @@ export namespace Components {
   | 'strong'
   | 'em';
         /**
-          * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus.
+          * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: When truncate is enabled, the element automatically receives tabindex="0" for keyboard accessibility.
          */
         "truncate"?: boolean;
         /**
@@ -4999,7 +4999,7 @@ declare namespace LocalJSX {
          */
         "cellAlign"?: 'start' | 'center' | 'end' | 'justify';
         /**
-          * Truncates content to a max width and adds an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus.
+          * Truncates content to a max width and adds an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: When truncate is enabled, the element automatically receives tabindex="0" for keyboard accessibility.
          */
         "truncate"?: boolean;
     }
@@ -5147,7 +5147,7 @@ declare namespace LocalJSX {
   | 'strong'
   | 'em';
         /**
-          * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus.
+          * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: When truncate is enabled, the element automatically receives tabindex="0" for keyboard accessibility.
          */
         "truncate"?: boolean;
         /**

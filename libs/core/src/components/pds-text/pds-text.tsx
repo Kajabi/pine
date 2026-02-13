@@ -96,6 +96,7 @@ export class PdsText {
   /**
    * If set or `true`, the text will be truncated. Must add a `width` to the element.
    * When text overflows, a tooltip showing the full text will appear on hover/focus.
+   * Note: When truncate is enabled, the element automatically receives tabindex="0" for keyboard accessibility.
    */
   @Prop({ reflect: true }) truncate?: boolean;
 
@@ -151,7 +152,13 @@ export class PdsText {
     `;
 
     return (
-      <Tag ref={(el) => this.contentEl = el} style={this.color && setColor(this.color)} class={typeClasses} part="content">
+      <Tag
+        ref={(el) => this.contentEl = el}
+        style={this.color && setColor(this.color)}
+        class={typeClasses}
+        part="content"
+        tabIndex={this.truncate ? 0 : undefined}
+      >
         <slot />
       </Tag>
     );

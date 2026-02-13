@@ -83,6 +83,7 @@ export class PdsTableCell {
   /**
    * Truncates content to a max width and adds an ellipsis.
    * When text overflows, a tooltip showing the full text will appear on hover/focus.
+   * Note: When truncate is enabled, the element automatically receives tabindex="0" for keyboard accessibility.
    */
   @Prop() truncate: boolean;
 
@@ -163,6 +164,7 @@ export class PdsTableCell {
         class={this.classNames()}
         role="gridcell"
         part="cell"
+        tabIndex={this.truncate ? 0 : undefined}
         style={
           this.tableRef &&
           this.tableRef.fixedColumn &&

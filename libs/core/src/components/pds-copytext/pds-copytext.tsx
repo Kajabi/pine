@@ -51,6 +51,13 @@ export class PdsCopytext {
     }
   }
 
+  @Watch('value')
+  handleValueChange() {
+    if (this.truncate) {
+      this.initTruncationTooltip();
+    }
+  }
+
   componentDidLoad() {
     if (this.truncate) {
       this.initTruncationTooltip();

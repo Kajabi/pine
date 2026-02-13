@@ -24,6 +24,15 @@ const TOOLTIP_CLASS = 'pds-truncation-tooltip';
  * Injects the truncation tooltip styles into the document head.
  * Uses the same design tokens as pds-tooltip for visual consistency.
  * Only injects once — checks the DOM to avoid duplicates.
+ *
+ * Z-Index Strategy:
+ * Uses --pine-z-index-nuclear (9999) to ensure tooltips appear above all other UI elements.
+ * This is necessary because tooltips are portaled to document.body and must overlay:
+ * - Modal dialogs
+ * - Dropdown menus
+ * - Other floating UI elements
+ * If you encounter z-index conflicts, ensure your overlays use Pine's z-index tokens
+ * or adjust --pine-z-index-nuclear in your theme.
  */
 function injectStyles(): void {
   if (document.querySelector('[data-pds-truncation-tooltip]')) return;
@@ -89,14 +98,22 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
   let isFocused = false;
   let hideTimeout: ReturnType<typeof setTimeout> | null = null;
   let resizeObserver: ResizeObserver | null = null;
+  let resizeDebounce: ReturnType<typeof setTimeout> | null = null;
 
   // Use ResizeObserver to re-evaluate overflow when the element resizes
+  // Debounced to prevent performance issues during rapid window resizing
   if (typeof ResizeObserver !== 'undefined') {
     resizeObserver = new ResizeObserver(() => {
-      // If tooltip is showing but text no longer overflows, hide it
-      if (portalEl && !isOverflowing(contentEl)) {
-        hideTooltip();
+      if (resizeDebounce) {
+        clearTimeout(resizeDebounce);
       }
+      resizeDebounce = setTimeout(() => {
+        resizeDebounce = null;
+        // If tooltip is showing but text no longer overflows, hide it
+        if (portalEl && portalEl.isConnected && !isOverflowing(contentEl)) {
+          hideTooltip();
+        }
+      }, 100);
     });
     resizeObserver.observe(contentEl);
   }
@@ -145,11 +162,18 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
         top: `${y}px`,
       });
     } catch {
-      // Fallback: position above the element
+      // Fallback: position above the element with bounds checking
       if (portalEl) {
         const rect = hostEl.getBoundingClientRect();
-        portalEl.style.left = `${rect.left}px`;
-        portalEl.style.top = `${rect.top - 8}px`;
+        const portalRect = portalEl.getBoundingClientRect();
+        const padding = 5;
+
+        // Ensure tooltip stays within viewport bounds
+        const left = Math.max(padding, Math.min(rect.left, window.innerWidth - portalRect.width - padding));
+        const top = Math.max(padding, rect.top - portalRect.height - 8);
+
+        portalEl.style.left = `${left}px`;
+        portalEl.style.top = `${top}px`;
       }
     }
   }
@@ -159,8 +183,13 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
       portalEl.removeEventListener('mouseenter', handlePortalMouseEnter);
       portalEl.removeEventListener('mouseleave', handlePortalMouseLeave);
       portalEl.classList.remove(`${TOOLTIP_CLASS}--visible`);
-      if (portalEl.parentNode) {
-        portalEl.parentNode.removeChild(portalEl);
+      // Check if portal is still in the DOM before removing
+      if (portalEl.parentNode && portalEl.isConnected) {
+        try {
+          portalEl.parentNode.removeChild(portalEl);
+        } catch (e) {
+          // Portal was already removed, ignore error
+        }
       }
       portalEl = null;
     }
@@ -186,8 +215,11 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
 
   /**
    * Schedules tooltip removal after a short delay.
-   * This gives the user time to move their cursor from the
-   * truncated text to the tooltip portal without it closing.
+   *
+   * The 100ms delay serves two purposes:
+   * 1. Gives users time to move their cursor from the truncated text to the tooltip portal
+   *    without it closing, enabling text selection/copying from the tooltip
+   * 2. Prevents flickering when the user briefly moves the cursor during normal interaction
    */
   function scheduleHide(): void {
     cancelHideTimeout();
@@ -235,6 +267,10 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
   // Return cleanup function
   return () => {
     cancelHideTimeout();
+    if (resizeDebounce) {
+      clearTimeout(resizeDebounce);
+      resizeDebounce = null;
+    }
     if (resizeObserver) {
       resizeObserver.disconnect();
     }
