@@ -79,15 +79,17 @@ export class PdsTableHead {
       <Host role="row" part="head">
         {this.tableRef && this.tableRef.selectable && (
           <pds-table-head-cell part={this.tableRef.selectable ? 'checkbox-cell' : ''}>
-            <pds-checkbox
-              componentId={this.generateUniqueId()}
-              indeterminate={this.indeterminate}
-              onInput={this.handleInput}
-              label={"Select All Rows"}
-              hideLabel={true}
-              checked={this.isSelected}
-              part="select-all-checkbox"
-            />
+            {!this.tableRef.disableSelectAll && (
+              <pds-checkbox
+                componentId={this.generateUniqueId()}
+                indeterminate={this.indeterminate}
+                onInput={this.handleInput}
+                label={"Select All Rows"}
+                hideLabel={true}
+                checked={this.isSelected}
+                part="select-all-checkbox"
+              />
+            )}
           </pds-table-head-cell>
         )}
         <slot></slot>

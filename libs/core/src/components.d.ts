@@ -1913,6 +1913,11 @@ export namespace Components {
          */
         "defaultSortDirection"?: 'asc' | 'desc';
         /**
+          * Hides the select-all checkbox in the table header while keeping individual row checkboxes functional. Only applies when `selectable` is true.
+          * @defaultValue false
+         */
+        "disableSelectAll": boolean;
+        /**
           * Determines if the should display a fixed first column.
          */
         "fixedColumn": boolean;
@@ -4965,6 +4970,11 @@ declare namespace LocalJSX {
           * @defaultValue 'asc'
          */
         "defaultSortDirection"?: 'asc' | 'desc';
+        /**
+          * Hides the select-all checkbox in the table header while keeping individual row checkboxes functional. Only applies when `selectable` is true.
+          * @defaultValue false
+         */
+        "disableSelectAll"?: boolean;
         /**
           * Determines if the should display a fixed first column.
          */
