@@ -1,6 +1,7 @@
-import { Component, Event, EventEmitter, Host, h, Prop } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
 
 import { copy as copyIcon } from '@pine-ds/icons/icons';
+import { setupTruncationTooltip } from '../../utils/truncation-tooltip';
 
 @Component({
   tag: 'pds-copytext',
@@ -8,6 +9,10 @@ import { copy as copyIcon } from '@pine-ds/icons/icons';
   shadow: true,
 })
 export class PdsCopytext {
+  @Element() el: HTMLPdsCopytextElement;
+  private truncationCleanup: (() => void) | null = null;
+  private valueSpanEl: HTMLSpanElement;
+
   /**
    * Determines whether `copytext` should have a visible border.
    * @defaultValue true
@@ -27,6 +32,7 @@ export class PdsCopytext {
 
   /**
    * Determines whether the `value` should truncate and display with an ellipsis.
+   * When text overflows, a tooltip showing the full value will appear on hover/focus.
    * @defaultValue false
    */
   @Prop() truncate = false;
@@ -35,6 +41,44 @@ export class PdsCopytext {
    * The string displayed that is also copied to the clipboard upon interaction.
    */
   @Prop() value!: string;
+
+  @Watch('truncate')
+  handleTruncateChange(newValue: boolean) {
+    if (newValue) {
+      this.initTruncationTooltip();
+    } else {
+      this.destroyTruncationTooltip();
+    }
+  }
+
+  componentDidLoad() {
+    if (this.truncate) {
+      this.initTruncationTooltip();
+    }
+  }
+
+  disconnectedCallback() {
+    this.destroyTruncationTooltip();
+  }
+
+  private initTruncationTooltip() {
+    this.destroyTruncationTooltip();
+
+    if (this.valueSpanEl) {
+      this.truncationCleanup = setupTruncationTooltip({
+        hostEl: this.el,
+        contentEl: this.valueSpanEl,
+        getTooltipText: () => this.value || '',
+      });
+    }
+  }
+
+  private destroyTruncationTooltip() {
+    if (this.truncationCleanup) {
+      this.truncationCleanup();
+      this.truncationCleanup = null;
+    }
+  }
 
   /**
    * Event fired when copyText button is clicked.
@@ -78,7 +122,7 @@ export class PdsCopytext {
     return (
       <Host class={this.classNames()} id={this.componentId}>
         <pds-button type="button" variant="unstyled" onClick={this.handleClick}>
-          <span>{this.value}</span>
+          <span ref={(el) => this.valueSpanEl = el}>{this.value}</span>
           <pds-icon icon={copyIcon} size="16px"></pds-icon>
         </pds-button>
       </Host>

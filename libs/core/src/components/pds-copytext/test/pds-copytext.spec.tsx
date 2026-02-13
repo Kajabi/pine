@@ -2,6 +2,13 @@ import { newSpecPage } from '@stencil/core/testing';
 import { PdsCopytext } from '../pds-copytext';
 import { copy as copyIcon } from '@pine-ds/icons/icons';
 
+// Mock ResizeObserver for truncation tooltip tests
+(globalThis as any).ResizeObserver = (globalThis as any).ResizeObserver || class {
+  observe = jest.fn();
+  unobserve = jest.fn();
+  disconnect = jest.fn();
+};
+
 describe('pds-copytext', () => {
   it('renders', async () => {
     const page = await newSpecPage({
@@ -148,5 +155,27 @@ describe('pds-copytext', () => {
 
     expect(emitSpy).toHaveBeenCalledWith('Error writing text to clipboard: Error: Clipboard write error');
     expect(writeTextSpy).toHaveBeenCalledWith('custom value text');
+  });
+
+  it('initializes truncation tooltip when truncate is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsCopytext],
+      html: `<pds-copytext value="very long text content" truncate="true"></pds-copytext>`,
+    });
+
+    // Verify the component loaded without errors
+    expect(page.root).toBeTruthy();
+    expect(page.rootInstance.truncate).toBe(true);
+  });
+
+  it('cleans up truncation tooltip on disconnect', async () => {
+    const page = await newSpecPage({
+      components: [PdsCopytext],
+      html: `<pds-copytext value="text" truncate="true"></pds-copytext>`,
+    });
+
+    // Should not throw when disconnected
+    page.root!.remove();
+    await page.waitForChanges();
   });
 });

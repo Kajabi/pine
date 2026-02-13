@@ -2,6 +2,13 @@ import { newSpecPage } from '@stencil/core/testing';
 import { PdsTableCell } from '../pds-table-cell';
 import { PdsTable } from '../../pds-table';
 
+// Mock ResizeObserver for truncation tooltip tests
+(globalThis as any).ResizeObserver = (globalThis as any).ResizeObserver || class {
+  observe = jest.fn();
+  unobserve = jest.fn();
+  disconnect = jest.fn();
+};
+
 describe('pds-table-cell', () => {
   it('renders', async () => {
     const page = await newSpecPage({
@@ -156,5 +163,27 @@ describe('pds-table-cell', () => {
     const tableCell = page.body.querySelector('pds-table-cell') as HTMLElement;
     expect(tableCell).toHaveClass('pds-table-cell--align-center');
     expect(tableCell).toHaveClass('is-truncated');
+  });
+
+  it('initializes truncation tooltip when truncate is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableCell],
+      html: `<pds-table-cell truncate="true">Long text content</pds-table-cell>`,
+    });
+
+    // Verify the component loaded without errors
+    expect(page.root).toBeTruthy();
+    expect(page.rootInstance.truncate).toBe(true);
+  });
+
+  it('cleans up truncation tooltip on disconnect', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableCell],
+      html: `<pds-table-cell truncate="true">Long text</pds-table-cell>`,
+    });
+
+    // Should not throw when disconnected
+    page.root!.remove();
+    await page.waitForChanges();
   });
 });

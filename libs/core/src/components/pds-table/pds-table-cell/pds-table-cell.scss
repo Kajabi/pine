@@ -31,7 +31,7 @@
 }
 
 :host(.is-truncated) {
-  max-width: 100px;
+  max-width: var(--pds-table-cell-truncate-max-width, 100px);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

@@ -1,6 +1,13 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsText } from '../pds-text';
 
+// Mock ResizeObserver for truncation tooltip tests
+(globalThis as any).ResizeObserver = class {
+  observe = jest.fn();
+  unobserve = jest.fn();
+  disconnect = jest.fn();
+};
+
 describe('pds-text', () => {
   it('renders', async () => {
     const page = await newSpecPage({
@@ -115,5 +122,37 @@ describe('pds-text', () => {
     expect(contentElement).toBeTruthy();
     expect(contentElement!.getAttribute('part')).toBe('content');
     expect(contentElement!.tagName.toLowerCase()).toBe('p');
+  });
+
+  it('renders with truncate attribute when prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsText],
+      html: `<pds-text tag="p" truncate>Truncated text content</pds-text>`,
+    });
+
+    expect(page.root).toBeTruthy();
+    expect(page.root!.hasAttribute('truncate')).toBe(true);
+  });
+
+  it('initializes truncation tooltip on componentDidLoad when truncate is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsText],
+      html: `<pds-text tag="p" truncate>Some long text</pds-text>`,
+    });
+
+    // Verify the component loaded without errors
+    expect(page.root).toBeTruthy();
+    expect(page.rootInstance.truncate).toBe(true);
+  });
+
+  it('cleans up truncation tooltip on disconnect', async () => {
+    const page = await newSpecPage({
+      components: [PdsText],
+      html: `<pds-text tag="p" truncate>Some long text</pds-text>`,
+    });
+
+    // Should not throw when disconnected
+    page.root!.remove();
+    await page.waitForChanges();
   });
 });

@@ -437,3 +437,43 @@ RowDividers.args = {
   rowDividers: true,
   selectable: false,
 };
+
+const TruncateTemplate = (args) => html`
+<pds-table
+  component-id="truncate"
+  ?row-dividers=${args.rowDividers}
+>
+  <pds-table-head ?border=${args.border}>
+    <pds-table-head-cell>Name</pds-table-head-cell>
+    <pds-table-head-cell>Email</pds-table-head-cell>
+    <pds-table-head-cell>Description</pds-table-head-cell>
+    <pds-table-head-cell>Status</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell truncate>Jonathan Alexander Bartholomew III</pds-table-cell>
+      <pds-table-cell truncate>jonathan.alexander.bartholomew.iii@longcompanyname.example.com</pds-table-cell>
+      <pds-table-cell truncate>Senior Principal Staff Software Engineer, Platform Infrastructure & Developer Experience</pds-table-cell>
+      <pds-table-cell>Active</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell truncate>Jane Smith</pds-table-cell>
+      <pds-table-cell truncate>jane@example.com</pds-table-cell>
+      <pds-table-cell truncate>Product Manager</pds-table-cell>
+      <pds-table-cell>Active</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell truncate>Alexandra Christina Rodriguez-Fitzgerald</pds-table-cell>
+      <pds-table-cell truncate>alexandra.rodriguez-fitzgerald@international-enterprise-solutions.co.uk</pds-table-cell>
+      <pds-table-cell truncate>Vice President of Customer Success and Strategic Partnerships, EMEA Region</pds-table-cell>
+      <pds-table-cell>Pending</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
+<pds-text tag="p" size="xs" color="secondary" gutter="sm">Hover over truncated cells to see the full content in a tooltip.</pds-text>`;
+
+export const Truncate = TruncateTemplate.bind();
+Truncate.args = {
+  border: true,
+  rowDividers: true,
+};
