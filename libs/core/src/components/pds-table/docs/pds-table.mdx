@@ -380,6 +380,86 @@ When the `selectable` prop is set to `true`, the table will render a checkbox in
   </pds-table>
 </DocCanvas>
 
+### Selectable without Select All
+
+When the `disable-select-all` prop is set to `true` alongside `selectable`, the select-all checkbox in the header is hidden while individual row checkboxes remain functional. This is useful when bulk selection is not appropriate but per-row selection is still needed.
+
+<DocCanvas mdxSource={{
+  react: `<PdsTable componentId="selectable-no-select-all" selectable={true} disableSelectAll={true}>
+  <PdsTableHead>
+    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
+    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
+    <PdsTableHeadCell>Column Title</PdsTableHeadCell>
+  </PdsTableHead>
+  <PdsTableBody>
+    <PdsTableRow>
+      <PdsTableCell>Row Item Alpha</PdsTableCell>
+      <PdsTableCell>Row Item Beta</PdsTableCell>
+      <PdsTableCell>Row Item Charlie</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>Row Item Alpha</PdsTableCell>
+      <PdsTableCell>Row Item Beta</PdsTableCell>
+      <PdsTableCell>Row Item Charlie</PdsTableCell>
+    </PdsTableRow>
+    <PdsTableRow>
+      <PdsTableCell>Row Item Alpha</PdsTableCell>
+      <PdsTableCell>Row Item Beta</PdsTableCell>
+      <PdsTableCell>Row Item Charlie</PdsTableCell>
+    </PdsTableRow>
+  </PdsTableBody>
+</PdsTable>`,
+  webComponent: `<pds-table component-id="selectable-no-select-all" selectable disable-select-all>
+  <pds-table-head>
+    <pds-table-head-cell>Column Title</pds-table-head-cell>
+    <pds-table-head-cell>Column Title</pds-table-head-cell>
+    <pds-table-head-cell>Column Title</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell>Row Item Alpha</pds-table-cell>
+      <pds-table-cell>Row Item Beta</pds-table-cell>
+      <pds-table-cell>Row Item Charlie</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Row Item Alpha</pds-table-cell>
+      <pds-table-cell>Row Item Beta</pds-table-cell>
+      <pds-table-cell>Row Item Charlie</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Row Item Alpha</pds-table-cell>
+      <pds-table-cell>Row Item Beta</pds-table-cell>
+      <pds-table-cell>Row Item Charlie</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
+`}}>
+  <pds-table component-id="selectable-no-select-all" selectable disable-select-all>
+    <pds-table-head>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+      <pds-table-head-cell>Column Title</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Row Item Alpha</pds-table-cell>
+        <pds-table-cell>Row Item Beta</pds-table-cell>
+        <pds-table-cell>Row Item Charlie</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</DocCanvas>
+
 
 ### Responsive
 
