@@ -55,6 +55,17 @@ export class PdsMultiselect {
   @Prop() placeholder?: string = 'Select...';
 
   /**
+   * Placeholder text for the search input inside the dropdown panel.
+   */
+  @Prop() searchPlaceholder: string = 'Find...';
+
+  /**
+   * Whether to close the panel after an option is selected.
+   * Defaults to `false` (panel stays open for multi-select).
+   */
+  @Prop() closePanelOnSelect: boolean = false;
+
+  /**
    * Specifies the name. Submitted with the form as part of a name/value pair.
    */
   @Prop() name?: string;
@@ -211,6 +222,19 @@ export class PdsMultiselect {
    */
   @Event() pdsMultiselectCreate!: EventEmitter<MultiselectCreateEventDetail>;
 
+  /**
+   * Emitted when the dropdown is dismissed via Escape key or click outside.
+   *
+   * This event fires only when the user explicitly dismisses the panel without making a selection:
+   * - ✅ Fires: Pressing Escape key while dropdown is open
+   * - ✅ Fires: Clicking outside the component while dropdown is open
+   * - ❌ Does NOT fire: When panel closes due to selection (including when `closePanelOnSelect` is true)
+   * - ❌ Does NOT fire: When panel closes programmatically via `closeDropdown()`
+   *
+   * Equivalent to Sage's `onEscapeHook`. Use this to restore parent UI state or run cleanup when the user cancels their interaction.
+   */
+  @Event() pdsMultiselectDismiss!: EventEmitter<void>;
+
   private originalSearchEmitter?: EventEmitter<MultiselectSearchEventDetail>;
 
   connectedCallback() {
@@ -330,6 +354,21 @@ export class PdsMultiselect {
   }
 
   /**
+   * Clears all selected values and resets the component.
+   */
+  @Method()
+  async clear() {
+    this.value = [];
+    this.searchQuery = '';
+    this.syncSelectedItems();
+    this.updateFormValue();
+    this.pdsMultiselectChange.emit({
+      values: [],
+      items: [],
+    });
+  }
+
+  /**
    * Handle global keyboard events for accessibility.
    * Closes dropdown on Escape key press regardless of focus location.
    */
@@ -339,6 +378,7 @@ export class PdsMultiselect {
 
     if (event.key === 'Escape') {
       event.preventDefault();
+      this.pdsMultiselectDismiss.emit();
       this.closeDropdown();
       this.triggerEl?.focus();
     }
@@ -449,6 +489,10 @@ export class PdsMultiselect {
 
   private getAllOptions(): MultiselectOption[] {
     return this.options || this.internalOptions;
+  }
+
+  private get shouldCloseOnSelect(): boolean {
+    return this.closePanelOnSelect;
   }
 
   private getFilteredOptions(): MultiselectOption[] {
@@ -795,6 +839,7 @@ export class PdsMultiselect {
       const isOnHost = activeElement === this.el;
 
       if (!isInShadowRoot && !isOnHost) {
+        this.pdsMultiselectDismiss.emit();
         this.closeDropdown();
       }
     }, 0);
@@ -900,18 +945,19 @@ export class PdsMultiselect {
       return;
     }
 
-    const isSelected = this.value.includes(String(option.id));
+    const optionId = String(option.id);
+    const isSelected = this.value.includes(optionId);
 
     if (isSelected) {
       // Remove from selection
-      this.value = this.value.filter(v => v !== String(option.id));
+      this.value = this.value.filter(v => v !== optionId);
     } else {
       // Add to selection
       if (this.maxSelections && this.value.length >= this.maxSelections) {
         return;
       }
 
-      this.value = [...this.value, String(option.id)];
+      this.value = [...this.value, optionId];
     }
 
     // Sync selected items to ensure no duplicates and accurate state
@@ -923,8 +969,13 @@ export class PdsMultiselect {
       items: this.selectedItems,
     });
 
-    // Keep focus on search input, don't close dropdown
-    this.searchInputEl?.focus();
+    if (this.shouldCloseOnSelect) {
+      this.closeDropdown();
+      this.triggerEl?.focus();
+    } else {
+      // Keep focus on search input, don't close dropdown
+      this.searchInputEl?.focus();
+    }
   }
 
   private selectOption(option: MultiselectOption) {
@@ -996,7 +1047,7 @@ export class PdsMultiselect {
             ref={el => (this.searchInputEl = el)}
             type="text"
             class="pds-multiselect__search-input"
-            placeholder="Find..."
+            placeholder={this.searchPlaceholder}
             value={this.searchQuery}
             aria-label="Search options"
             aria-controls={`${this.componentId}-listbox`}
