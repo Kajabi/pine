@@ -2,6 +2,13 @@ import { newSpecPage } from '@stencil/core/testing';
 import { PdsTableCell } from '../pds-table-cell';
 import { PdsTable } from '../../pds-table';
 
+// Mock ResizeObserver for truncation tooltip tests
+(globalThis as any).ResizeObserver = (globalThis as any).ResizeObserver || class {
+  observe = jest.fn();
+  unobserve = jest.fn();
+  disconnect = jest.fn();
+};
+
 describe('pds-table-cell', () => {
   it('renders', async () => {
     const page = await newSpecPage({
@@ -25,7 +32,7 @@ describe('pds-table-cell', () => {
     });
 
     expect(page.root).toEqualHtml(`
-      <pds-table-cell role="gridcell" truncate="true" class="is-truncated" part="cell">
+      <pds-table-cell role="gridcell" truncate="true" class="is-truncated" part="cell" tabindex="0">
         <mock:shadow-root>
           <slot></slot>
         </mock:shadow-root>
@@ -156,5 +163,93 @@ describe('pds-table-cell', () => {
     const tableCell = page.body.querySelector('pds-table-cell') as HTMLElement;
     expect(tableCell).toHaveClass('pds-table-cell--align-center');
     expect(tableCell).toHaveClass('is-truncated');
+  });
+
+  it('initializes truncation tooltip when truncate is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableCell],
+      html: `<pds-table-cell truncate="true">Long text content</pds-table-cell>`,
+    });
+
+    // Verify the component loaded without errors
+    expect(page.root).toBeTruthy();
+    expect(page.rootInstance.truncate).toBe(true);
+  });
+
+  it('cleans up truncation tooltip on disconnect', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableCell],
+      html: `<pds-table-cell truncate="true">Long text</pds-table-cell>`,
+    });
+
+    // Should not throw when disconnected
+    page.root!.remove();
+    await page.waitForChanges();
+  });
+
+  it('shows tooltip when text overflows', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableCell],
+      html: `<pds-table-cell truncate="true">This is a very long text that will definitely overflow</pds-table-cell>`,
+    });
+
+    const tableCell = page.root as HTMLElement;
+    expect(tableCell).toBeTruthy();
+
+    // Mock overflow by setting scrollWidth > clientWidth
+    Object.defineProperty(tableCell, 'scrollWidth', { value: 500, configurable: true });
+    Object.defineProperty(tableCell, 'clientWidth', { value: 100, configurable: true });
+
+    // Simulate mouseenter
+    tableCell.dispatchEvent(new MouseEvent('mouseenter'));
+    await page.waitForChanges();
+
+    // Check that a tooltip portal was created
+    const tooltip = document.querySelector('.pds-truncation-tooltip');
+    expect(tooltip).toBeTruthy();
+    expect(tooltip?.getAttribute('role')).toBe('tooltip');
+
+    // Cleanup
+    tableCell.dispatchEvent(new MouseEvent('mouseleave'));
+  });
+
+  it('does not show tooltip when text fits', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableCell],
+      html: `<pds-table-cell truncate="true">Short</pds-table-cell>`,
+    });
+
+    const tableCell = page.root as HTMLElement;
+    expect(tableCell).toBeTruthy();
+
+    // Mock no overflow: scrollWidth <= clientWidth
+    Object.defineProperty(tableCell, 'scrollWidth', { value: 50, configurable: true });
+    Object.defineProperty(tableCell, 'clientWidth', { value: 100, configurable: true });
+
+    // Simulate mouseenter
+    tableCell.dispatchEvent(new MouseEvent('mouseenter'));
+    await page.waitForChanges();
+
+    // Check that no tooltip was created
+    const tooltip = document.querySelector('.pds-truncation-tooltip');
+    expect(tooltip).toBeNull();
+  });
+
+  it('adds tabindex="0" when truncate is enabled', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableCell],
+      html: `<pds-table-cell truncate="true">Text</pds-table-cell>`,
+    });
+
+    expect(page.root?.getAttribute('tabindex')).toBe('0');
+  });
+
+  it('does not add tabindex when truncate is disabled', async () => {
+    const page = await newSpecPage({
+      components: [PdsTableCell],
+      html: `<pds-table-cell>Text</pds-table-cell>`,
+    });
+
+    expect(page.root?.getAttribute('tabindex')).toBeNull();
   });
 });

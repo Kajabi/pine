@@ -1018,7 +1018,7 @@ export namespace Components {
          */
         "fullWidth": boolean;
         /**
-          * Determines whether the `value` should truncate and display with an ellipsis.
+          * Determines whether the `value` should truncate and display with an ellipsis. When text overflows, a tooltip showing the full value will appear on hover/focus.
           * @defaultValue false
          */
         "truncate": boolean;
@@ -1943,7 +1943,7 @@ export namespace Components {
          */
         "cellAlign"?: 'start' | 'center' | 'end' | 'justify';
         /**
-          * Truncates content to a max width of 100px and adds an ellipsis.
+          * Truncates content to a max width and adds an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: When truncate is enabled, the element automatically receives tabindex="0" for keyboard accessibility.
          */
         "truncate": boolean;
     }
@@ -2088,7 +2088,7 @@ export namespace Components {
   | 'strong'
   | 'em';
         /**
-          * If set or `true`, the text will be truncated. Must add a `width` to the element.
+          * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: When truncate is enabled, the element automatically receives tabindex="0" for keyboard accessibility.
          */
         "truncate"?: boolean;
         /**
@@ -4015,7 +4015,7 @@ declare namespace LocalJSX {
          */
         "onPdsCopyTextClick"?: (event: PdsCopytextCustomEvent<string>) => void;
         /**
-          * Determines whether the `value` should truncate and display with an ellipsis.
+          * Determines whether the `value` should truncate and display with an ellipsis. When text overflows, a tooltip showing the full value will appear on hover/focus.
           * @defaultValue false
          */
         "truncate"?: boolean;
@@ -5009,7 +5009,7 @@ declare namespace LocalJSX {
          */
         "cellAlign"?: 'start' | 'center' | 'end' | 'justify';
         /**
-          * Truncates content to a max width of 100px and adds an ellipsis.
+          * Truncates content to a max width and adds an ellipsis. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: When truncate is enabled, the element automatically receives tabindex="0" for keyboard accessibility.
          */
         "truncate"?: boolean;
     }
@@ -5157,7 +5157,7 @@ declare namespace LocalJSX {
   | 'strong'
   | 'em';
         /**
-          * If set or `true`, the text will be truncated. Must add a `width` to the element.
+          * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: When truncate is enabled, the element automatically receives tabindex="0" for keyboard accessibility.
          */
         "truncate"?: boolean;
         /**

@@ -1,5 +1,6 @@
-import { Component, h, Prop, Element } from '@stencil/core';
+import { Component, h, Prop, Element, Watch } from '@stencil/core';
 import { setColor } from '../../utils/utils';
+import { setupTruncationTooltip } from '../../utils/truncation-tooltip';
 
 /**
  * @part content - The text content container
@@ -11,6 +12,8 @@ import { setColor } from '../../utils/utils';
 })
 export class PdsText {
   @Element() el: HTMLPdsTextElement;
+  private contentEl: HTMLElement;
+  private truncationCleanup: (() => void) | null = null;
   /**
    * Sets the text alignment.
    */
@@ -92,8 +95,49 @@ export class PdsText {
 
   /**
    * If set or `true`, the text will be truncated. Must add a `width` to the element.
+   * When text overflows, a tooltip showing the full text will appear on hover/focus.
+   * Note: When truncate is enabled, the element automatically receives tabindex="0" for keyboard accessibility.
    */
   @Prop({ reflect: true }) truncate?: boolean;
+
+  @Watch('truncate')
+  handleTruncateChange(newValue: boolean) {
+    if (newValue) {
+      this.initTruncationTooltip();
+    } else {
+      this.destroyTruncationTooltip();
+    }
+  }
+
+  componentDidLoad() {
+    if (this.truncate) {
+      this.initTruncationTooltip();
+    }
+  }
+
+  disconnectedCallback() {
+    this.destroyTruncationTooltip();
+  }
+
+  private initTruncationTooltip() {
+    // Clean up any existing tooltip before setting up a new one
+    this.destroyTruncationTooltip();
+
+    if (this.contentEl) {
+      this.truncationCleanup = setupTruncationTooltip({
+        hostEl: this.el,
+        contentEl: this.contentEl,
+        getTooltipText: () => this.el.textContent || '',
+      });
+    }
+  }
+
+  private destroyTruncationTooltip() {
+    if (this.truncationCleanup) {
+      this.truncationCleanup();
+      this.truncationCleanup = null;
+    }
+  }
 
   render() {
     const Tag = this.tag;
@@ -108,7 +152,13 @@ export class PdsText {
     `;
 
     return (
-      <Tag style={this.color && setColor(this.color)} class={typeClasses} part="content">
+      <Tag
+        ref={(el) => this.contentEl = el}
+        style={this.color && setColor(this.color)}
+        class={typeClasses}
+        part="content"
+        tabIndex={this.truncate ? 0 : undefined}
+      >
         <slot />
       </Tag>
     );
