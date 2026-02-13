@@ -20,6 +20,11 @@ class MockResizeObserver {
   }
 }
 
+// Small helper to advance past the hide delay (100ms)
+function advanceHideDelay() {
+  jest.advanceTimersByTime(150);
+}
+
 describe('truncation-tooltip', () => {
   let hostEl: HTMLElement;
   let contentEl: HTMLElement;
@@ -35,6 +40,7 @@ describe('truncation-tooltip', () => {
   });
 
   beforeEach(() => {
+    jest.useFakeTimers();
     MockResizeObserver.instances = [];
 
     hostEl = document.createElement('div');
@@ -48,6 +54,7 @@ describe('truncation-tooltip', () => {
   });
 
   afterEach(() => {
+    jest.useRealTimers();
     document.body.innerHTML = '';
     // Remove injected style elements
     document.querySelectorAll('[data-pds-truncation-tooltip]').forEach(el => el.remove());
@@ -129,7 +136,7 @@ describe('truncation-tooltip', () => {
     cleanup();
   });
 
-  it('removes tooltip portal on mouseleave', async () => {
+  it('removes tooltip portal on mouseleave after delay', async () => {
     Object.defineProperty(contentEl, 'scrollWidth', { value: 300, configurable: true });
     Object.defineProperty(contentEl, 'clientWidth', { value: 100, configurable: true });
 
@@ -143,6 +150,12 @@ describe('truncation-tooltip', () => {
     expect(document.querySelector('.pds-truncation-tooltip')).not.toBeNull();
 
     hostEl.dispatchEvent(new MouseEvent('mouseleave'));
+
+    // Tooltip stays briefly to allow moving cursor to it
+    expect(document.querySelector('.pds-truncation-tooltip')).not.toBeNull();
+
+    // After delay, tooltip is removed
+    advanceHideDelay();
     expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
 
     cleanup();
@@ -166,7 +179,7 @@ describe('truncation-tooltip', () => {
     cleanup();
   });
 
-  it('removes tooltip on focusout', () => {
+  it('removes tooltip on focusout after delay', () => {
     Object.defineProperty(contentEl, 'scrollWidth', { value: 300, configurable: true });
     Object.defineProperty(contentEl, 'clientWidth', { value: 100, configurable: true });
 
@@ -180,6 +193,7 @@ describe('truncation-tooltip', () => {
     expect(document.querySelector('.pds-truncation-tooltip')).not.toBeNull();
 
     hostEl.dispatchEvent(new FocusEvent('focusout'));
+    advanceHideDelay();
     expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
 
     cleanup();
@@ -201,13 +215,67 @@ describe('truncation-tooltip', () => {
 
     // Mouse leaves but focus remains
     hostEl.dispatchEvent(new MouseEvent('mouseleave'));
+    advanceHideDelay();
 
     // Tooltip should still be visible because focus is active
     expect(document.querySelector('.pds-truncation-tooltip')).not.toBeNull();
 
     // Focus leaves too
     hostEl.dispatchEvent(new FocusEvent('focusout'));
+    advanceHideDelay();
     expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
+
+    cleanup();
+  });
+
+  it('keeps tooltip visible when user hovers from host to portal', () => {
+    Object.defineProperty(contentEl, 'scrollWidth', { value: 300, configurable: true });
+    Object.defineProperty(contentEl, 'clientWidth', { value: 100, configurable: true });
+
+    const cleanup = setupTruncationTooltip({
+      hostEl,
+      contentEl,
+      getTooltipText: () => 'Full text to copy',
+    });
+
+    // Hover the host to show tooltip
+    hostEl.dispatchEvent(new MouseEvent('mouseenter'));
+    const portal = document.querySelector('.pds-truncation-tooltip') as HTMLElement;
+    expect(portal).not.toBeNull();
+
+    // Mouse leaves host (heading toward tooltip)
+    hostEl.dispatchEvent(new MouseEvent('mouseleave'));
+
+    // Mouse enters the portal before the hide delay fires
+    portal.dispatchEvent(new MouseEvent('mouseenter'));
+
+    // Even after the delay, tooltip should remain because portal is hovered
+    advanceHideDelay();
+    expect(document.querySelector('.pds-truncation-tooltip')).not.toBeNull();
+
+    // Mouse leaves the portal
+    portal.dispatchEvent(new MouseEvent('mouseleave'));
+    advanceHideDelay();
+    expect(document.querySelector('.pds-truncation-tooltip')).toBeNull();
+
+    cleanup();
+  });
+
+  it('tooltip text is selectable (user-select: text)', () => {
+    Object.defineProperty(contentEl, 'scrollWidth', { value: 300, configurable: true });
+    Object.defineProperty(contentEl, 'clientWidth', { value: 100, configurable: true });
+
+    const cleanup = setupTruncationTooltip({
+      hostEl,
+      contentEl,
+      getTooltipText: () => 'Selectable text',
+    });
+
+    hostEl.dispatchEvent(new MouseEvent('mouseenter'));
+
+    const styleEl = document.querySelector('[data-pds-truncation-tooltip]');
+    expect(styleEl?.textContent).toContain('user-select: text');
+    expect(styleEl?.textContent).toContain('cursor: text');
 
     cleanup();
   });

@@ -32,7 +32,6 @@ function injectStyles(): void {
   style.setAttribute('data-pds-truncation-tooltip', '');
   style.textContent = `
     .${TOOLTIP_CLASS} {
-      pointer-events: none;
       position: fixed;
       z-index: var(--pine-z-index-nuclear, 9999);
     }
@@ -41,6 +40,7 @@ function injectStyles(): void {
       border-radius: calc(var(--pine-dimension-xs, 4px) * 1.25);
       box-shadow: var(--pine-box-shadow, 0 2px 8px rgba(0,0,0,0.15));
       color: var(--pine-color-text-primary, #fff);
+      cursor: text;
       font-family: var(--pine-font-family-body, sans-serif);
       font-size: var(--pine-font-size-body-sm, 0.875rem);
       letter-spacing: var(--pine-letter-spacing, normal);
@@ -49,6 +49,7 @@ function injectStyles(): void {
       opacity: 0;
       padding: var(--pine-dimension-xs, 4px) calc(var(--pine-dimension-md, 12px) / 2);
       transition: opacity 0.15s ease-in-out, visibility 0.15s ease-in-out;
+      user-select: text;
       visibility: hidden;
       width: max-content;
       word-break: break-word;
@@ -84,7 +85,9 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
 
   let portalEl: HTMLElement | null = null;
   let isHovering = false;
+  let isHoveringPortal = false;
   let isFocused = false;
+  let hideTimeout: ReturnType<typeof setTimeout> | null = null;
   let resizeObserver: ResizeObserver | null = null;
 
   // Use ResizeObserver to re-evaluate overflow when the element resizes
@@ -116,6 +119,10 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     portalEl.appendChild(contentDiv);
     document.body.appendChild(portalEl);
 
+    // Allow the user to hover into the tooltip to select/copy text
+    portalEl.addEventListener('mouseenter', handlePortalMouseEnter);
+    portalEl.addEventListener('mouseleave', handlePortalMouseLeave);
+
     positionTooltip().then(() => {
       if (portalEl) {
         portalEl.classList.add(`${TOOLTIP_CLASS}--visible`);
@@ -130,7 +137,7 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
       const { x, y } = await computePosition(hostEl, portalEl, {
         placement,
         strategy: 'fixed',
-        middleware: [offset(8), flip(), shift({ padding: 5 })],
+        middleware: [offset(4), flip(), shift({ padding: 5 })],
       });
 
       Object.assign(portalEl.style, {
@@ -149,6 +156,8 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
 
   function removePortal(): void {
     if (portalEl) {
+      portalEl.removeEventListener('mouseenter', handlePortalMouseEnter);
+      portalEl.removeEventListener('mouseleave', handlePortalMouseLeave);
       portalEl.classList.remove(`${TOOLTIP_CLASS}--visible`);
       if (portalEl.parentNode) {
         portalEl.parentNode.removeChild(portalEl);
@@ -157,14 +166,35 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
     }
   }
 
+  function cancelHideTimeout(): void {
+    if (hideTimeout !== null) {
+      clearTimeout(hideTimeout);
+      hideTimeout = null;
+    }
+  }
+
   function showTooltip(): void {
+    cancelHideTimeout();
     if (!isOverflowing(contentEl)) return;
     createPortal();
   }
 
   function hideTooltip(): void {
-    if (isHovering || isFocused) return;
+    if (isHovering || isHoveringPortal || isFocused) return;
     removePortal();
+  }
+
+  /**
+   * Schedules tooltip removal after a short delay.
+   * This gives the user time to move their cursor from the
+   * truncated text to the tooltip portal without it closing.
+   */
+  function scheduleHide(): void {
+    cancelHideTimeout();
+    hideTimeout = setTimeout(() => {
+      hideTimeout = null;
+      hideTooltip();
+    }, 100);
   }
 
   function handleMouseEnter(): void {
@@ -174,7 +204,17 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
 
   function handleMouseLeave(): void {
     isHovering = false;
-    hideTooltip();
+    scheduleHide();
+  }
+
+  function handlePortalMouseEnter(): void {
+    isHoveringPortal = true;
+    cancelHideTimeout();
+  }
+
+  function handlePortalMouseLeave(): void {
+    isHoveringPortal = false;
+    scheduleHide();
   }
 
   function handleFocusIn(): void {
@@ -184,7 +224,7 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
 
   function handleFocusOut(): void {
     isFocused = false;
-    hideTooltip();
+    scheduleHide();
   }
 
   hostEl.addEventListener('mouseenter', handleMouseEnter);
@@ -194,6 +234,7 @@ export function setupTruncationTooltip(options: TruncationTooltipOptions): () =>
 
   // Return cleanup function
   return () => {
+    cancelHideTimeout();
     if (resizeObserver) {
       resizeObserver.disconnect();
     }
