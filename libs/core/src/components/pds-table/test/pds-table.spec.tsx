@@ -542,6 +542,112 @@ describe('pds-table', () => {
     expect(values).toEqual(['Charlie', 'Alice', 'Bob']);
   });
 
+  it('does not render header checkbox when disableSelectAll is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable, PdsTableHead, PdsTableBody, PdsTableRow, PdsTableCell],
+      html: `
+        <pds-table selectable disable-select-all>
+          <pds-table-head>
+            <pds-table-head-cell>Column Title</pds-table-head-cell>
+            <pds-table-head-cell>Column Title</pds-table-head-cell>
+            <pds-table-head-cell>Column Title</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>Row 1, Column 1</pds-table-cell>
+              <pds-table-cell>Row 1, Column 2</pds-table-cell>
+              <pds-table-cell>Row 1, Column 3</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      `,
+    });
+
+    const head = page.root?.querySelector('pds-table-head');
+    const headerCheckbox = head?.shadowRoot?.querySelector('pds-checkbox');
+
+    // Checkbox should NOT be rendered
+    expect(headerCheckbox).toBeNull();
+  });
+
+  it('still renders the header checkbox cell for column alignment when disableSelectAll is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable, PdsTableHead, PdsTableBody, PdsTableRow, PdsTableCell],
+      html: `
+        <pds-table selectable disable-select-all>
+          <pds-table-head>
+            <pds-table-head-cell>Column Title</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>Row 1</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      `,
+    });
+
+    const head = page.root?.querySelector('pds-table-head');
+    const headCells = head?.shadowRoot?.querySelectorAll('pds-table-head-cell');
+
+    // The checkbox cell container should still exist (for column alignment)
+    expect(headCells?.length).toBeGreaterThan(0);
+  });
+
+  it('row checkboxes still render when disableSelectAll is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable, PdsTableHead, PdsTableBody, PdsTableRow, PdsTableCell],
+      html: `
+        <pds-table selectable disable-select-all>
+          <pds-table-head>
+            <pds-table-head-cell>Column Title</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>Row 1</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      `,
+    });
+
+    const row = page.root?.querySelector('pds-table-row');
+    const rowCheckbox = row?.shadowRoot?.querySelector('pds-checkbox');
+
+    // Row checkbox should still be rendered
+    expect(rowCheckbox).not.toBeNull();
+  });
+
+  it('does not throw when row is selected and header checkbox is absent (disableSelectAll)', async () => {
+    const page = await newSpecPage({
+      components: [PdsTable, PdsTableHead, PdsTableBody, PdsTableRow, PdsTableCell],
+      html: `
+        <pds-table selectable disable-select-all>
+          <pds-table-head>
+            <pds-table-head-cell>Column Title</pds-table-head-cell>
+          </pds-table-head>
+          <pds-table-body>
+            <pds-table-row>
+              <pds-table-cell>Row 1</pds-table-cell>
+            </pds-table-row>
+          </pds-table-body>
+        </pds-table>
+      `,
+    });
+
+    const table = page.root;
+
+    // Should not throw when dispatching row selection event
+    expect(() => {
+      table?.dispatchEvent(
+        new CustomEvent('pdsTableRowSelected', {
+          detail: { rowIndex: 0, isSelected: true },
+          bubbles: true,
+        })
+      );
+    }).not.toThrow();
+  });
+
   it('does not crash when sorting a table without a body', async () => {
     const page = await newSpecPage({
       components: [PdsTable, PdsTableHead, PdsTableHeadCell],
