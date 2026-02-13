@@ -1392,6 +1392,15 @@ export namespace Components {
          */
         "asyncUrl"?: string;
         /**
+          * Clears all selected values and resets the component.
+         */
+        "clear": () => Promise<void>;
+        /**
+          * Whether to close the panel after an option is selected. Defaults to `false` (panel stays open for multi-select).
+          * @default false
+         */
+        "closePanelOnSelect": boolean;
+        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
@@ -1494,6 +1503,11 @@ export namespace Components {
           * @default false
          */
         "required": boolean;
+        /**
+          * Placeholder text for the search input inside the dropdown panel.
+          * @default 'Find...'
+         */
+        "searchPlaceholder": string;
         /**
           * Sets focus on the trigger button.
          */
@@ -2639,6 +2653,7 @@ declare global {
         "pdsMultiselectSearch": MultiselectSearchEventDetail;
         "pdsMultiselectLoadOptions": MultiselectLoadOptionsEventDetail;
         "pdsMultiselectCreate": MultiselectCreateEventDetail;
+        "pdsMultiselectDismiss": void;
     }
     interface HTMLPdsMultiselectElement extends Components.PdsMultiselect, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsMultiselectElementEventMap>(type: K, listener: (this: HTMLPdsMultiselectElement, ev: PdsMultiselectCustomEvent<HTMLPdsMultiselectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4404,6 +4419,11 @@ declare namespace LocalJSX {
          */
         "asyncUrl"?: string;
         /**
+          * Whether to close the panel after an option is selected. Defaults to `false` (panel stays open for multi-select).
+          * @default false
+         */
+        "closePanelOnSelect"?: boolean;
+        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
@@ -4497,6 +4517,10 @@ declare namespace LocalJSX {
          */
         "onPdsMultiselectCreate"?: (event: PdsMultiselectCustomEvent<MultiselectCreateEventDetail>) => void;
         /**
+          * Emitted when the dropdown is dismissed via escape key or click outside (not when closed by selection). Equivalent to Sage's onEscapeHook.
+         */
+        "onPdsMultiselectDismiss"?: (event: PdsMultiselectCustomEvent<void>) => void;
+        /**
           * Emitted to request more options (pagination).
          */
         "onPdsMultiselectLoadOptions"?: (event: PdsMultiselectCustomEvent<MultiselectLoadOptionsEventDetail>) => void;
@@ -4522,6 +4546,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "required"?: boolean;
+        /**
+          * Placeholder text for the search input inside the dropdown panel.
+          * @default 'Find...'
+         */
+        "searchPlaceholder"?: string;
         /**
           * Width of the trigger button (and reference for dropdown positioning).
           * @default '100%'
