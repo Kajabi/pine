@@ -78,11 +78,6 @@ export class PdsTable {
 
 
   /**
-   * Event that is emitted when the checkbox is clicked, carrying the rowIndex and selected value.
-   */
-  @Event() pdsTableSelect: EventEmitter<{ rowIndex: number; isSelected: boolean }>;
-
-  /**
    * Event that is emitted when the select all checkbox is clicked, carrying the selected value.
    */
   @Event() pdsTableSelectAll: EventEmitter<{ isSelected: boolean }>;
