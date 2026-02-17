@@ -6,6 +6,7 @@
   border-radius: inherit;
   box-sizing: border-box;
   display: table;
+  isolation: isolate;
   width: 100%;
 }
 
