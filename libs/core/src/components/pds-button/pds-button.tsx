@@ -158,11 +158,11 @@ export class PdsButton {
 
 
   private handleStartSlotChange = (event: Event) => {
-    this.hasStartContent = (event.target as HTMLSlotElement).assignedNodes().length > 0;
+    this.hasStartContent = (event.target as HTMLSlotElement).assignedElements({ flatten: true }).length > 0;
   };
 
   private handleEndSlotChange = (event: Event) => {
-    this.hasEndContent = (event.target as HTMLSlotElement).assignedNodes().length > 0;
+    this.hasEndContent = (event.target as HTMLSlotElement).assignedElements({ flatten: true }).length > 0;
   };
 
   private handleClick = (ev: Event) => {

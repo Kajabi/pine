@@ -224,6 +224,8 @@ describe('pds-button', () => {
     `);
   });
 
+  // Note: Snapshot still shows --empty on slot wrappers because newSpecPage does not
+  // fire slotchange events. The "slot empty class" suite below covers that behavior.
   it('renders a leading icon', async () => {
     const { root } = await newSpecPage({
       components: [PdsButton],
@@ -247,6 +249,7 @@ describe('pds-button', () => {
     `);
   });
 
+  // Note: See above — newSpecPage doesn't fire slotchange, so --empty persists in snapshot.
   it('renders a trailing icon', async () => {
     const { root } = await newSpecPage({
       components: [PdsButton],
@@ -664,7 +667,7 @@ describe('pds-button', () => {
       // Simulate slotchange since newSpecPage doesn't fire it automatically
       const slotchangeEvent = new Event('slotchange');
       Object.defineProperty(slotchangeEvent, 'target', {
-        value: { assignedNodes: () => [document.createElement('pds-icon')] },
+        value: { assignedElements: () => [document.createElement('pds-icon')] },
       });
       startSlot?.dispatchEvent(slotchangeEvent);
       await page.waitForChanges();
@@ -684,7 +687,7 @@ describe('pds-button', () => {
       // Simulate slotchange since newSpecPage doesn't fire it automatically
       const slotchangeEvent = new Event('slotchange');
       Object.defineProperty(slotchangeEvent, 'target', {
-        value: { assignedNodes: () => [document.createElement('pds-icon')] },
+        value: { assignedElements: () => [document.createElement('pds-icon')] },
       });
       endSlot?.dispatchEvent(slotchangeEvent);
       await page.waitForChanges();
