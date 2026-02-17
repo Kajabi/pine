@@ -19,7 +19,7 @@ describe('pds-table-row', () => {
     `);
 
     const row = await page.find('pds-table-row');
-    const checkbox = await page.find('pds-table-row >>> pds-checkbox');
+    const checkbox = await page.find('pds-table-row >>> pds-checkbox >>> input');
 
     await checkbox.click();
     await page.waitForChanges();
@@ -41,7 +41,7 @@ describe('pds-table-row', () => {
     `);
 
     const row = await page.find('pds-table-row');
-    const checkbox = await page.find('pds-table-row >>> pds-checkbox');
+    const checkbox = await page.find('pds-table-row >>> pds-checkbox >>> input');
 
     const pdsTableSelectSpy = await row.spyOnEvent('pdsTableRowSelected');
 

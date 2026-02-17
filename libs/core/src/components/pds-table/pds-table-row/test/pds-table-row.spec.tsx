@@ -33,7 +33,10 @@ describe('pds-table-row', () => {
     const row = page.root?.querySelector('pds-table-row');
     const checkbox = row?.shadowRoot?.querySelector('pds-checkbox') as HTMLElement;
 
-    checkbox.click();
+    checkbox.dispatchEvent(new CustomEvent('pdsCheckboxChange', {
+      detail: { checked: true, value: '' },
+      bubbles: true,
+    }));
     await page.waitForChanges();
 
     expect(row?.classList.contains('is-selected')).toBe(true);
@@ -55,7 +58,7 @@ describe('pds-table-row', () => {
     expect(cell?.classList.contains('is-fixed')).toBe(true);
   });
 
-  it('emits pdsTableRowSelected event when isSelected is set', async () => {
+  it('clears indeterminate when checkbox changes', async () => {
     const page = await newSpecPage({
       components: [PdsTable, PdsTableBody, PdsTableRow],
       html: `
@@ -70,8 +73,10 @@ describe('pds-table-row', () => {
     const row = page.root?.querySelector('pds-table-row');
     const checkbox = row?.shadowRoot?.querySelector('pds-checkbox') as HTMLElement;
 
-
-    checkbox.click();
+    checkbox.dispatchEvent(new CustomEvent('pdsCheckboxChange', {
+      detail: { checked: false, value: '' },
+      bubbles: true,
+    }));
     await page.waitForChanges();
 
     expect((row as HTMLPdsTableRowElement).indeterminate).toBe(false);
