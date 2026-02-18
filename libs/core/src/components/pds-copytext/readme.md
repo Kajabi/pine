@@ -7,13 +7,13 @@
 
 ## Properties
 
-| Property             | Attribute      | Description                                                                     | Type      | Default     |
-| -------------------- | -------------- | ------------------------------------------------------------------------------- | --------- | ----------- |
-| `border`             | `border`       | Determines whether `copytext` should have a visible border.                     | `boolean` | `true`      |
-| `componentId`        | `component-id` | A unique identifier used for the underlying component `id` attribute.           | `string`  | `undefined` |
-| `fullWidth`          | `full-width`   | Determines whether `copytext` should expand to the full width of its container. | `boolean` | `false`     |
-| `truncate`           | `truncate`     | Determines whether the `value` should truncate and display with an ellipsis.    | `boolean` | `false`     |
-| `value` _(required)_ | `value`        | The string displayed that is also copied to the clipboard upon interaction.     | `string`  | `undefined` |
+| Property             | Attribute      | Description                                                                                                                                                    | Type      | Default     |
+| -------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ----------- |
+| `border`             | `border`       | Determines whether `copytext` should have a visible border.                                                                                                    | `boolean` | `true`      |
+| `componentId`        | `component-id` | A unique identifier used for the underlying component `id` attribute.                                                                                          | `string`  | `undefined` |
+| `fullWidth`          | `full-width`   | Determines whether `copytext` should expand to the full width of its container.                                                                                | `boolean` | `false`     |
+| `truncate`           | `truncate`     | Determines whether the `value` should truncate and display with an ellipsis. When text overflows, a tooltip showing the full value will appear on hover/focus. | `boolean` | `false`     |
+| `value` _(required)_ | `value`        | The string displayed that is also copied to the clipboard upon interaction.                                                                                    | `string`  | `undefined` |
 
 
 ## Events
