@@ -1,5 +1,6 @@
 import { Component, Element, Host, h, Event, EventEmitter, Prop, State } from '@stencil/core';
 
+import { CheckboxChangeEventDetail } from '../../pds-checkbox/checkbox-interface';
 import { closest } from '../../../utils/closest';
 
 @Component({
@@ -40,8 +41,8 @@ export class PdsTableRow {
    */
   @Event() pdsTableRowSelected: EventEmitter<{ rowIndex: number; isSelected: boolean; }>;
 
-  private handleClick = () => {
-    this.isSelected = !this.isSelected; // Toggle the selected state
+  private handleCheckboxChange = (event: CustomEvent<CheckboxChangeEventDetail>) => {
+    this.isSelected = event.detail.checked;
     this.handleSelect(this.isSelected);
   }
 
@@ -196,7 +197,7 @@ export class PdsTableRow {
           <pds-table-cell part={this.tableRef.fixedColumn ? 'checkbox-cell' : 'checkbox-cell'} class={this.tableRef.selectable ? 'has-checkbox' : ''} >
             <pds-checkbox
               componentId={this.generateUniqueId()}
-              onClick={this.handleClick}
+              onPdsCheckboxChange={this.handleCheckboxChange}
               indeterminate={this.indeterminate}
               label={"Select Row"}
               hideLabel={true}
