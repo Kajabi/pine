@@ -2807,7 +2807,6 @@ declare global {
         new (): HTMLPdsTabElement;
     };
     interface HTMLPdsTableElementEventMap {
-        "pdsTableSelect": { rowIndex: number; isSelected: boolean };
         "pdsTableSelectAll": { isSelected: boolean };
     }
     interface HTMLPdsTableElement extends Components.PdsTable, HTMLStencilElement {
@@ -4979,10 +4978,6 @@ declare namespace LocalJSX {
           * Determines if the should display a fixed first column.
          */
         "fixedColumn"?: boolean;
-        /**
-          * Event that is emitted when the checkbox is clicked, carrying the rowIndex and selected value.
-         */
-        "onPdsTableSelect"?: (event: PdsTableCustomEvent<{ rowIndex: number; isSelected: boolean }>) => void;
         /**
           * Event that is emitted when the select all checkbox is clicked, carrying the selected value.
          */
