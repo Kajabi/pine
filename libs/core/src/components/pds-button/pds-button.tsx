@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, Host, h, Listen, Prop } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, h, Listen, Prop, State } from '@stencil/core';
 import { hasShadowDom } from '../../utils/utils';
 
 import { caretDown, addCircle } from '@pine-ds/icons/icons';
@@ -99,6 +99,9 @@ export class PdsButton {
    */
   @Prop() variant: 'primary' | 'secondary' | 'tertiary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled' | 'filter' = 'primary';
 
+  @State() hasStartContent = false;
+  @State() hasEndContent = false;
+
   @Event() pdsClick: EventEmitter<Event>;
 
   /**
@@ -153,6 +156,14 @@ export class PdsButton {
     }
   }
 
+
+  private handleStartSlotChange = (event: Event) => {
+    this.hasStartContent = (event.target as HTMLSlotElement).assignedElements({ flatten: true }).length > 0;
+  };
+
+  private handleEndSlotChange = (event: Event) => {
+    this.hasEndContent = (event.target as HTMLSlotElement).assignedElements({ flatten: true }).length > 0;
+  };
 
   private handleClick = (ev: Event) => {
     if (this.loading) {
@@ -223,8 +234,9 @@ export class PdsButton {
     }
 
     // Always render the start slot so slotted content is projected reliably.
-    // CSS hides the wrapper when no content is slotted (prevents empty gap space).
-    return <span class={`pds-button__icon ${this.loading ? 'pds-button__icon--hidden' : ''}`}><slot name="start" /></span>;
+    // The --empty class hides the wrapper when no content is slotted (prevents empty gap space).
+    const startClasses = `pds-button__icon${this.hasStartContent ? '' : ' pds-button__icon--empty'}${this.loading ? ' pds-button__icon--hidden' : ''}`;
+    return <span class={startClasses}><slot name="start" onSlotchange={this.handleStartSlotChange} /></span>;
   }
 
   private renderEndContent() {
@@ -239,8 +251,9 @@ export class PdsButton {
     }
 
     // Always render the end slot so slotted content is projected reliably.
-    // CSS hides the wrapper when no content is slotted (prevents empty gap space).
-    return <span class={`pds-button__icon ${this.loading ? 'pds-button__icon--hidden' : ''}`}><slot name="end" /></span>;
+    // The --empty class hides the wrapper when no content is slotted (prevents empty gap space).
+    const endClasses = `pds-button__icon${this.hasEndContent ? '' : ' pds-button__icon--empty'}${this.loading ? ' pds-button__icon--hidden' : ''}`;
+    return <span class={endClasses}><slot name="end" onSlotchange={this.handleEndSlotChange} /></span>;
   }
 
   render() {
