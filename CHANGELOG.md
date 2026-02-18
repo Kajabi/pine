@@ -1,3 +1,22 @@
+## 3.18.0 (2026-02-18)
+
+### Features 🚀
+
+- **pds-multiselect:** add searchPlaceholder, closePanelOnSelect, dis… ([#674](https://github.com/Kajabi/pine/pull/674))
+- **pds-table:** add disableSelectAll prop to hide header checkbox ([#673](https://github.com/Kajabi/pine/pull/673))
+- **truncation:** add automatic tooltip on truncated text ([#672](https://github.com/Kajabi/pine/pull/672))
+
+### Bug Fixes 🐛
+
+- **pds-button:** fix empty icon slot wrapper spacing ([#678](https://github.com/Kajabi/pine/pull/678))
+- **pds-table:** remove unused pdsTableSelect event declaration ([#675](https://github.com/Kajabi/pine/pull/675))
+- **pds-table-row:** fix checkbox double-fire and z-index bleed-through ([#679](https://github.com/Kajabi/pine/pull/679))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.17.0 (2026-02-12)
 
 ### Features 🚀
