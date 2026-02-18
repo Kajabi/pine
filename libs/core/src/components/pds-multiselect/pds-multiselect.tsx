@@ -197,6 +197,8 @@ export class PdsMultiselect {
 
   // Flag to prevent focusout from closing during open transition
   private isOpening: boolean = false;
+  // Flag to suppress dismiss event when panel closes due to selection (not user dismissal)
+  private isClosingViaSelection: boolean = false;
   // Flag to track if initial async fetch has been triggered (prevents double fetch)
   private initialAsyncFetchTriggered: boolean = false;
   // Flag to track if value changed during loading and needs resolution after fetch completes
@@ -827,8 +829,9 @@ export class PdsMultiselect {
     // Use setTimeout to delay the check - this allows click events and focus transitions to complete
     // before we decide to close the dropdown
     setTimeout(() => {
-      // Don't close if we're in the middle of opening or already closed
-      if (!this.isOpen || this.isOpening) return;
+      // Don't close if we're in the middle of opening, already closed,
+      // or closing due to a selection (not a user dismissal)
+      if (!this.isOpen || this.isOpening || this.isClosingViaSelection) return;
 
       const activeElement = document.activeElement;
 
@@ -874,6 +877,13 @@ export class PdsMultiselect {
     this.isOpen = false;
     this.highlightedIndex = -1;
     this.searchQuery = '';
+
+    // Reset the selection-close guard after the focusout handler's setTimeout has resolved
+    if (this.isClosingViaSelection) {
+      setTimeout(() => {
+        this.isClosingViaSelection = false;
+      }, 0);
+    }
 
     // Clean up auto-update
     if (this.cleanupAutoUpdate) {
@@ -970,6 +980,7 @@ export class PdsMultiselect {
     });
 
     if (this.shouldCloseOnSelect) {
+      this.isClosingViaSelection = true;
       this.closeDropdown();
       this.triggerEl?.focus();
     } else {
