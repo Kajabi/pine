@@ -56,6 +56,7 @@ export class PdsMultiselect {
 
   /**
    * Placeholder text for the search input inside the dropdown panel.
+   * @default 'Find...'
    */
   @Prop() searchPlaceholder: string = 'Find...';
 
@@ -360,14 +361,14 @@ export class PdsMultiselect {
    */
   @Method()
   async clear() {
+    const hadValues = this.value.length > 0 || this.searchQuery !== '';
     this.value = [];
     this.searchQuery = '';
     this.syncSelectedItems();
     this.updateFormValue();
-    this.pdsMultiselectChange.emit({
-      values: [],
-      items: [],
-    });
+    if (hadValues) {
+      this.pdsMultiselectChange.emit({ values: [], items: [] });
+    }
   }
 
   /**
@@ -493,9 +494,6 @@ export class PdsMultiselect {
     return this.options || this.internalOptions;
   }
 
-  private get shouldCloseOnSelect(): boolean {
-    return this.closePanelOnSelect;
-  }
 
   private getFilteredOptions(): MultiselectOption[] {
     const allOptions = this.getAllOptions();
@@ -979,7 +977,7 @@ export class PdsMultiselect {
       items: this.selectedItems,
     });
 
-    if (this.shouldCloseOnSelect) {
+    if (this.closePanelOnSelect) {
       this.isClosingViaSelection = true;
       this.closeDropdown();
       this.triggerEl?.focus();

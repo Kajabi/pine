@@ -309,7 +309,7 @@ export const ClosePanelOnSelect = {
       component-id="${args.componentId}"
       label="${args.label}"
       placeholder="${args.placeholder}"
-      close-panel-on-select="${args.closePanelOnSelect}"
+      .closePanelOnSelect=${args.closePanelOnSelect}
       .value=${args.value}
       @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
     >
