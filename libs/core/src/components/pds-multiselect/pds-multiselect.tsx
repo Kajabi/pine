@@ -55,6 +55,18 @@ export class PdsMultiselect {
   @Prop() placeholder?: string = 'Select...';
 
   /**
+   * Placeholder text for the search input inside the dropdown panel.
+   * @default 'Find...'
+   */
+  @Prop() searchPlaceholder: string = 'Find...';
+
+  /**
+   * Whether to close the panel after an option is selected.
+   * Defaults to `false` (panel stays open for multi-select).
+   */
+  @Prop() closePanelOnSelect: boolean = false;
+
+  /**
    * Specifies the name. Submitted with the form as part of a name/value pair.
    */
   @Prop() name?: string;
@@ -186,6 +198,8 @@ export class PdsMultiselect {
 
   // Flag to prevent focusout from closing during open transition
   private isOpening: boolean = false;
+  // Flag to suppress dismiss event when panel closes due to selection (not user dismissal)
+  private isClosingViaSelection: boolean = false;
   // Flag to track if initial async fetch has been triggered (prevents double fetch)
   private initialAsyncFetchTriggered: boolean = false;
   // Flag to track if value changed during loading and needs resolution after fetch completes
@@ -210,6 +224,19 @@ export class PdsMultiselect {
    * Emitted when a new option is created.
    */
   @Event() pdsMultiselectCreate!: EventEmitter<MultiselectCreateEventDetail>;
+
+  /**
+   * Emitted when the dropdown is dismissed via Escape key or click outside.
+   *
+   * This event fires only when the user explicitly dismisses the panel without making a selection:
+   * - ✅ Fires: Pressing Escape key while dropdown is open
+   * - ✅ Fires: Clicking outside the component while dropdown is open
+   * - ❌ Does NOT fire: When panel closes due to selection (including when `closePanelOnSelect` is true)
+   * - ❌ Does NOT fire: When panel closes programmatically via `closeDropdown()`
+   *
+   * Equivalent to Sage's `onEscapeHook`. Use this to restore parent UI state or run cleanup when the user cancels their interaction.
+   */
+  @Event() pdsMultiselectDismiss!: EventEmitter<void>;
 
   private originalSearchEmitter?: EventEmitter<MultiselectSearchEventDetail>;
 
@@ -330,6 +357,21 @@ export class PdsMultiselect {
   }
 
   /**
+   * Clears all selected values and resets the component.
+   */
+  @Method()
+  async clear() {
+    const hadValues = this.value.length > 0 || this.searchQuery !== '';
+    this.value = [];
+    this.searchQuery = '';
+    this.syncSelectedItems();
+    this.updateFormValue();
+    if (hadValues) {
+      this.pdsMultiselectChange.emit({ values: [], items: [] });
+    }
+  }
+
+  /**
    * Handle global keyboard events for accessibility.
    * Closes dropdown on Escape key press regardless of focus location.
    */
@@ -339,6 +381,7 @@ export class PdsMultiselect {
 
     if (event.key === 'Escape') {
       event.preventDefault();
+      this.pdsMultiselectDismiss.emit();
       this.closeDropdown();
       this.triggerEl?.focus();
     }
@@ -450,6 +493,7 @@ export class PdsMultiselect {
   private getAllOptions(): MultiselectOption[] {
     return this.options || this.internalOptions;
   }
+
 
   private getFilteredOptions(): MultiselectOption[] {
     const allOptions = this.getAllOptions();
@@ -783,8 +827,9 @@ export class PdsMultiselect {
     // Use setTimeout to delay the check - this allows click events and focus transitions to complete
     // before we decide to close the dropdown
     setTimeout(() => {
-      // Don't close if we're in the middle of opening or already closed
-      if (!this.isOpen || this.isOpening) return;
+      // Don't close if we're in the middle of opening, already closed,
+      // or closing due to a selection (not a user dismissal)
+      if (!this.isOpen || this.isOpening || this.isClosingViaSelection) return;
 
       const activeElement = document.activeElement;
 
@@ -795,6 +840,7 @@ export class PdsMultiselect {
       const isOnHost = activeElement === this.el;
 
       if (!isInShadowRoot && !isOnHost) {
+        this.pdsMultiselectDismiss.emit();
         this.closeDropdown();
       }
     }, 0);
@@ -829,6 +875,13 @@ export class PdsMultiselect {
     this.isOpen = false;
     this.highlightedIndex = -1;
     this.searchQuery = '';
+
+    // Reset the selection-close guard after the focusout handler's setTimeout has resolved
+    if (this.isClosingViaSelection) {
+      setTimeout(() => {
+        this.isClosingViaSelection = false;
+      }, 0);
+    }
 
     // Clean up auto-update
     if (this.cleanupAutoUpdate) {
@@ -900,18 +953,19 @@ export class PdsMultiselect {
       return;
     }
 
-    const isSelected = this.value.includes(String(option.id));
+    const optionId = String(option.id);
+    const isSelected = this.value.includes(optionId);
 
     if (isSelected) {
       // Remove from selection
-      this.value = this.value.filter(v => v !== String(option.id));
+      this.value = this.value.filter(v => v !== optionId);
     } else {
       // Add to selection
       if (this.maxSelections && this.value.length >= this.maxSelections) {
         return;
       }
 
-      this.value = [...this.value, String(option.id)];
+      this.value = [...this.value, optionId];
     }
 
     // Sync selected items to ensure no duplicates and accurate state
@@ -923,8 +977,14 @@ export class PdsMultiselect {
       items: this.selectedItems,
     });
 
-    // Keep focus on search input, don't close dropdown
-    this.searchInputEl?.focus();
+    if (this.closePanelOnSelect) {
+      this.isClosingViaSelection = true;
+      this.closeDropdown();
+      this.triggerEl?.focus();
+    } else {
+      // Keep focus on search input, don't close dropdown
+      this.searchInputEl?.focus();
+    }
   }
 
   private selectOption(option: MultiselectOption) {
@@ -996,7 +1056,7 @@ export class PdsMultiselect {
             ref={el => (this.searchInputEl = el)}
             type="text"
             class="pds-multiselect__search-input"
-            placeholder="Find..."
+            placeholder={this.searchPlaceholder}
             value={this.searchQuery}
             aria-label="Search options"
             aria-controls={`${this.componentId}-listbox`}

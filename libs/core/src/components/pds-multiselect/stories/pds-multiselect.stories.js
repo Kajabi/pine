@@ -24,6 +24,14 @@ export default {
       control: 'text',
       description: 'Placeholder text shown in the trigger when no items are selected. When items are selected, shows "X item(s)" instead.',
     },
+    searchPlaceholder: {
+      control: 'text',
+      description: 'Placeholder text for the search input inside the dropdown panel.',
+    },
+    closePanelOnSelect: {
+      control: 'boolean',
+      description: 'Whether to close the panel after an option is selected.',
+    },
     disabled: {
       control: 'boolean',
       description: 'Whether the component is disabled',
@@ -263,6 +271,53 @@ export const HiddenSelectedItems = {
     >
       ${unsafeHTML(defaultOptions)}
     </pds-multiselect>
+  `,
+};
+
+export const CustomSearchPlaceholder = {
+  args: {
+    componentId: 'multiselect-search-placeholder',
+    label: 'Filter Offers',
+    placeholder: 'Select...',
+    searchPlaceholder: 'Search offers...',
+    value: [],
+  },
+  render: (args, { updateArgs } = {}) => html`
+    <pds-multiselect
+      component-id="${args.componentId}"
+      label="${args.label}"
+      placeholder="${args.placeholder}"
+      search-placeholder="${args.searchPlaceholder}"
+      .value=${args.value}
+      @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
+    >
+      ${unsafeHTML(defaultOptions)}
+    </pds-multiselect>
+  `,
+};
+
+export const ClosePanelOnSelect = {
+  args: {
+    componentId: 'multiselect-close-on-select',
+    label: 'Quick Tags (closes on each pick)',
+    placeholder: 'Select...',
+    closePanelOnSelect: true,
+    value: [],
+  },
+  render: (args, { updateArgs } = {}) => html`
+    <pds-multiselect
+      component-id="${args.componentId}"
+      label="${args.label}"
+      placeholder="${args.placeholder}"
+      .closePanelOnSelect=${args.closePanelOnSelect}
+      .value=${args.value}
+      @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
+    >
+      ${unsafeHTML(defaultOptions)}
+    </pds-multiselect>
+    <p style="margin-top: var(--pine-dimension-sm); color: var(--pine-color-text-secondary);">
+      Multi-select mode but the panel closes after each selection. Re-open to select more.
+    </p>
   `,
 };
 

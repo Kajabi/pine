@@ -551,6 +551,195 @@ const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribut
 />
 ```
 
+### Custom Search Placeholder
+
+Override the default "Find..." placeholder text in the search input with the `search-placeholder` prop.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="search-placeholder-select"
+  label="Filter Offers"
+  placeholder="Select..."
+  search-placeholder="Search offers..."
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+  <option value="4">Engineering</option>
+</pds-multiselect>`,
+    react: `<PdsMultiselect
+  componentId="search-placeholder-select"
+  label="Filter Offers"
+  placeholder="Select..."
+  searchPlaceholder="Search offers..."
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+  <option value="4">Engineering</option>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="search-placeholder-select"
+    label="Filter Offers"
+    placeholder="Select..."
+    search-placeholder="Search offers..."
+  >
+    <option value="1">Marketing</option>
+    <option value="2">Sales</option>
+    <option value="3">Support</option>
+    <option value="4">Engineering</option>
+  </pds-multiselect>
+</DocCanvas>
+
+### Close Panel on Select
+
+Use `close-panel-on-select` to automatically close the dropdown after each selection. Useful when users typically pick one item at a time and reopen to add more.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="close-on-select"
+  label="Quick Tags"
+  placeholder="Select..."
+  close-panel-on-select
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+  <option value="4">Engineering</option>
+</pds-multiselect>`,
+    react: `<PdsMultiselect
+  componentId="close-on-select"
+  label="Quick Tags"
+  placeholder="Select..."
+  closePanelOnSelect
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+  <option value="4">Engineering</option>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="close-on-select"
+    label="Quick Tags"
+    placeholder="Select..."
+    close-panel-on-select
+  >
+    <option value="1">Marketing</option>
+    <option value="2">Sales</option>
+    <option value="3">Support</option>
+    <option value="4">Engineering</option>
+  </pds-multiselect>
+</DocCanvas>
+
+### Dismiss Event
+
+The `pdsMultiselectDismiss` event fires when the dropdown is closed via the Escape key or by clicking outside the component. This is useful for restoring parent UI state or running side effects when the user explicitly dismisses the panel.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="dismiss-example"
+  label="Tags"
+  placeholder="Select..."
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+</pds-multiselect>
+
+<script>
+  document.querySelector('#dismiss-example')
+    .addEventListener('pdsMultiselectDismiss', () => {
+      console.log('Panel dismissed');
+    });
+</script>`,
+    react: `<PdsMultiselect
+  componentId="dismiss-example"
+  label="Tags"
+  placeholder="Select..."
+  onPdsMultiselectDismiss={() => console.log('Panel dismissed')}
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="dismiss-example"
+    label="Tags"
+    placeholder="Select..."
+  >
+    <option value="1">Marketing</option>
+    <option value="2">Sales</option>
+  </pds-multiselect>
+</DocCanvas>
+
+> **Note:** Open the console, then press Escape or click outside while the dropdown is open to see the dismiss event logged.
+
+### Programmatic Clear
+
+Call the `clear()` method to programmatically reset all selections, clear the search query, and emit a change event with empty values. This is useful for "reset" buttons or when a parent form is cleared.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  id="clearable-select"
+  component-id="clearable-select"
+  label="Tags"
+  placeholder="Select..."
+  value='["1", "2"]'
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+</pds-multiselect>
+
+<pds-button variant="secondary" size="sm" onclick="document.querySelector('#clearable-select').clear()">
+  Reset
+</pds-button>`,
+    react: `const multiselectRef = useRef(null);
+
+<PdsMultiselect
+  ref={multiselectRef}
+  componentId="clearable-select"
+  label="Tags"
+  placeholder="Select..."
+  value={['1', '2']}
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+</PdsMultiselect>
+
+<button onClick={() => multiselectRef.current?.clear()}>
+  Reset
+</button>`,
+  }}
+>
+  <div>
+    <pds-multiselect
+      id="clearable-select"
+      component-id="clearable-select"
+      label="Tags"
+      placeholder="Select..."
+      value='["1", "2"]'
+    >
+      <option value="1">Marketing</option>
+      <option value="2">Sales</option>
+      <option value="3">Support</option>
+    </pds-multiselect>
+    <pds-button style={{ marginTop: 'var(--pine-dimension-sm)' }} variant="secondary" size="sm" onClick={() => {
+      const el = document.querySelector('#clearable-select');
+      if (el) el.clear();
+    }}>Reset</pds-button>
+  </div>
+</DocCanvas>
+
 ## Form Integration
 
 `pds-multiselect` is a form-associated custom element. It participates in form submission using the `name` attribute.

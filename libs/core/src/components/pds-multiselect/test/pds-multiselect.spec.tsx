@@ -751,6 +751,209 @@ describe('pds-multiselect', () => {
     });
   });
 
+  describe('searchPlaceholder prop', () => {
+    it('uses custom search placeholder text', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" search-placeholder="Search offers..."></pds-multiselect>`,
+      });
+
+      page.rootInstance.internalOptions = [{ id: '1', text: 'Option 1' }];
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      const searchInput = page.root.shadowRoot.querySelector('.pds-multiselect__search-input');
+      expect(searchInput.getAttribute('placeholder')).toBe('Search offers...');
+    });
+
+    it('defaults to Find... when searchPlaceholder is not set', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      page.rootInstance.internalOptions = [{ id: '1', text: 'Option 1' }];
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      const searchInput = page.root.shadowRoot.querySelector('.pds-multiselect__search-input');
+      expect(searchInput.getAttribute('placeholder')).toBe('Find...');
+    });
+  });
+
+  describe('pdsMultiselectDismiss event', () => {
+    it('emits dismiss event on Escape key', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      const dismissSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectDismiss', dismissSpy);
+
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      page.rootInstance.handleWindowKeyDown(new KeyboardEvent('keydown', { key: 'Escape' }));
+      await page.waitForChanges();
+
+      expect(dismissSpy).toHaveBeenCalled();
+      expect(page.rootInstance.isOpen).toBe(false);
+    });
+
+    it('does not emit dismiss event when dropdown is already closed', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      const dismissSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectDismiss', dismissSpy);
+
+      page.rootInstance.handleWindowKeyDown(new KeyboardEvent('keydown', { key: 'Escape' }));
+      await page.waitForChanges();
+
+      expect(dismissSpy).not.toHaveBeenCalled();
+    });
+
+    it('emits dismiss event on focus out (click outside)', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      const dismissSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectDismiss', dismissSpy);
+
+      page.rootInstance.internalOptions = [{ id: '1', text: 'Option 1' }];
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      // Simulate focus leaving the component (click outside)
+      page.rootInstance.handleContainerFocusOut();
+
+      // Wait for setTimeout in handleContainerFocusOut
+      await new Promise(resolve => setTimeout(resolve, 10));
+      await page.waitForChanges();
+
+      expect(dismissSpy).toHaveBeenCalled();
+      expect(page.rootInstance.isOpen).toBe(false);
+    });
+  });
+
+  describe('closePanelOnSelect prop', () => {
+    it('keeps panel open by default', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+      ];
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      page.rootInstance.toggleOption({ id: '1', text: 'Option 1' });
+      await page.waitForChanges();
+
+      expect(page.rootInstance.isOpen).toBe(true);
+    });
+
+    it('closes panel when closePanelOnSelect is true', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" close-panel-on-select="true"></pds-multiselect>`,
+      });
+
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+      ];
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      page.rootInstance.toggleOption({ id: '1', text: 'Option 1' });
+      await page.waitForChanges();
+
+      expect(page.rootInstance.isOpen).toBe(false);
+    });
+
+    it('does not emit dismiss event when panel closes via selection with closePanelOnSelect', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" close-panel-on-select="true"></pds-multiselect>`,
+      });
+
+      const dismissSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectDismiss', dismissSpy);
+
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+      ];
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      // Select an option - panel should close but dismiss event should NOT fire
+      page.rootInstance.toggleOption({ id: '1', text: 'Option 1' });
+      await page.waitForChanges();
+
+      expect(page.rootInstance.isOpen).toBe(false);
+      expect(dismissSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('clear method', () => {
+    it('clears all selected values', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['1', '2'];
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+      ];
+      page.rootInstance.selectedItems = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+      ];
+      await page.waitForChanges();
+
+      const changeSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectChange', changeSpy);
+
+      await page.rootInstance.clear();
+      await page.waitForChanges();
+
+      expect(page.rootInstance.value).toEqual([]);
+      expect(page.rootInstance.searchQuery).toBe('');
+      expect(changeSpy).toHaveBeenCalled();
+      expect(changeSpy.mock.calls[0][0].detail.values).toEqual([]);
+      expect(changeSpy.mock.calls[0][0].detail.items).toEqual([]);
+    });
+
+    it('resets trigger text to placeholder after clear', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" placeholder="Pick one..."></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['1'];
+      page.rootInstance.internalOptions = [{ id: '1', text: 'Option 1' }];
+      await page.waitForChanges();
+
+      await page.rootInstance.clear();
+      await page.waitForChanges();
+
+      const triggerText = page.root.shadowRoot.querySelector('.pds-multiselect__trigger-text');
+      expect(triggerText.textContent).toBe('Pick one...');
+    });
+  });
+
   describe('create option functionality', () => {
     it('should show create option when createUrl is set and no matches found', async () => {
       const page = await newSpecPage({
