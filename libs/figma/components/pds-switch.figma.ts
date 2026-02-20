@@ -10,11 +10,11 @@ figma.connect('<FIGMA_SWITCH>', {
       disabled: "true",
     }),
     label: figma.boolean("Label", {
-      true: "Helper message text",
+      true: "Enable notifications",
       false: undefined,
     }),
     helperMessage: figma.boolean("Supporting text", {
-      true: "Helper message text",
+      true: "You will receive email updates",
       false: undefined,
     }),
   },

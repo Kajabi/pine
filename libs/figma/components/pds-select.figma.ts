@@ -17,7 +17,7 @@ figma.connect('<FIGMA_SELECT>', {
       false: undefined,
     }),
     label: figma.boolean("Label", {
-      true: "Helper message text",
+      true: "Label text",
       false: undefined,
     }),
     readonly: figma.enum("State", {
