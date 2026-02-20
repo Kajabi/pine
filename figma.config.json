@@ -1,6 +1,6 @@
 {
   "codeConnect": {
-    "include": ["libs/core/src/components/**/*.figma.ts"],
+    "include": ["libs/figma/**/*.figma.ts"],
     "parser": "html",
     "importPaths": {
       "@pine-ds/core/*": "pine"

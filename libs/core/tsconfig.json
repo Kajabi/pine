@@ -30,7 +30,6 @@
     "**/*.stories.mdx",
     "**/*.stories.ts",
     "**/*.stories.tsx",
-    "**/*.figma.ts",
     "scripts/custom-elements",
     "**/stories/_helpers/**/*"
   ]
