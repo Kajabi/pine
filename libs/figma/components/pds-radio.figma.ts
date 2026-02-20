@@ -6,8 +6,8 @@ figma.connect('<FIGMA_RADIO>', {
     disabled: figma.enum("State", {
       disabled: "true",
     }),
-    helperMessage: figma.boolean("Supporting text", {
-      true: figma.string("↪️ Message"),
+    helperMessage: figma.boolean("Helper message", {
+      true: "Helper message text",
       false: undefined,
     }),
     label: figma.string("Label content"),

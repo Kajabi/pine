@@ -1,4 +1,4 @@
-import figma, { html } from "@figma/code-connect";
+import figma, { html } from '@figma/code-connect/html';
 
 // PATTERNS
 figma.connect("<FIGMA_SORTABLE_ITEM_SIMPLE>", {

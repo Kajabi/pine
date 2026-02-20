@@ -10,11 +10,11 @@ figma.connect('<FIGMA_SWITCH>', {
       disabled: "true",
     }),
     label: figma.boolean("Label", {
-      true: figma.string("↪️ Message"),
+      true: "Helper message text",
       false: undefined,
     }),
     helperMessage: figma.boolean("Supporting text", {
-      true: figma.string("↪️ Message"),
+      true: "Helper message text",
       false: undefined,
     }),
   },
