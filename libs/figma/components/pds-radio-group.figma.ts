@@ -6,6 +6,10 @@ figma.connect('<FIGMA_RADIO_GROUP>', {
       true: "true",
       false: undefined,
     }),
+    direction: figma.boolean("has-border", {
+      true: "row",
+      false: undefined,
+    }),
     invalid: figma.boolean("Invalid", {
       true: "true",
       false: undefined,
@@ -22,6 +26,7 @@ figma.connect('<FIGMA_RADIO_GROUP>', {
   example: (props) => html`\
     <pds-radio-group
       component-id="radio-group-example"
+      direction=${props.direction}
       error-message=${props.errorMessage}
       group-label="Group label"
       invalid=${props.invalid}
