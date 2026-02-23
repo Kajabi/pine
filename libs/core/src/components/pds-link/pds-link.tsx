@@ -19,6 +19,13 @@ export class PdsLink {
   @Prop() color?: string;
 
   /**
+   * Prompts the user to save the linked URL instead of navigating to it.
+   * Can be used without a value to download with the default filename,
+   * or with a string value to suggest a specific filename for the download.
+   */
+  @Prop() download?: string;
+
+  /**
    * A unique identifier used for the underlying component `id` attribute.
    */
   @Prop() componentId: string;
@@ -91,6 +98,7 @@ export class PdsLink {
     return (
       <a
         class={this.classNames()}
+        download={this.download}
         href={this.href}
         id={this.componentId}
         part="link"

@@ -98,4 +98,24 @@ describe('pds-link', () => {
     const linkTag = root?.shadowRoot?.querySelector('a.pds-link--plain');
     expect(linkTag).not.toBeNull();
   });
+
+  it('renders with download attribute when download prop is set', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsLink],
+      html: `<pds-link href="/file.pdf" download="">Download</pds-link>`,
+    });
+
+    const anchor = root?.shadowRoot?.querySelector('a');
+    expect(anchor?.getAttribute('download')).toBe('');
+  });
+
+  it('renders with download attribute with a custom filename', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsLink],
+      html: `<pds-link href="/file.pdf" download="my-file.pdf">Download</pds-link>`,
+    });
+
+    const anchor = root?.shadowRoot?.querySelector('a');
+    expect(anchor?.getAttribute('download')).toBe('my-file.pdf');
+  });
 });
