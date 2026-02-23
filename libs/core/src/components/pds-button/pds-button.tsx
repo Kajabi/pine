@@ -30,7 +30,7 @@ export class PdsButton {
 
   /**
    * Prompts the user to save the linked URL instead of navigating to it.
-   * Can be used without a value to download with the default filename,
+   * It can be used without a value to download with the default filename,
    * or with a string value to suggest a specific filename for the download.
    * Only applies when href is set.
    */

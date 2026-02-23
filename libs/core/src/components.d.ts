@@ -721,7 +721,7 @@ export namespace Components {
          */
         "disabled"?: boolean;
         /**
-          * Prompts the user to save the linked URL instead of navigating to it. Can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download. Only applies when href is set.
+          * Prompts the user to save the linked URL instead of navigating to it. It can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download. Only applies when href is set.
          */
         "download"?: string;
         /**
@@ -1077,7 +1077,7 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * Prompts the user to save the linked URL instead of navigating to it. Can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download. Only applies when href is set.
+          * Prompts the user to save the linked URL instead of navigating to it. It can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download. Only applies when href is set.
          */
         "download"?: string;
         /**
@@ -1291,7 +1291,7 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Prompts the user to save the linked URL instead of navigating to it. Can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download.
+          * Prompts the user to save the linked URL instead of navigating to it. It can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download.
          */
         "download"?: string;
         /**
@@ -3726,7 +3726,7 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Prompts the user to save the linked URL instead of navigating to it. Can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download. Only applies when href is set.
+          * Prompts the user to save the linked URL instead of navigating to it. It can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download. Only applies when href is set.
          */
         "download"?: string;
         /**
@@ -4096,7 +4096,7 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * Prompts the user to save the linked URL instead of navigating to it. Can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download. Only applies when href is set.
+          * Prompts the user to save the linked URL instead of navigating to it. It can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download. Only applies when href is set.
          */
         "download"?: string;
         /**
@@ -4334,7 +4334,7 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
-          * Prompts the user to save the linked URL instead of navigating to it. Can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download.
+          * Prompts the user to save the linked URL instead of navigating to it. It can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download.
          */
         "download"?: string;
         /**
