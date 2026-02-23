@@ -1604,7 +1604,7 @@ export class PdsCombobox implements BasePdsProps {
     const triggerClass = `pds-combobox__button-trigger pds-combobox__button-trigger--${this.triggerVariant}`;
     return (
       <Host>
-        <div class="pds-combobox" tabIndex={-1} onFocusout={this.onComboboxFocusOut}>
+        <div class="pds-combobox" tabIndex={-1} onFocusout={this.onComboboxFocusOut} part="combobox">
           {this.label && (
             <label htmlFor={this.componentId} class="pds-combobox__label">
               <span class={this.hideLabel ? 'visually-hidden' : ''}>{this.label}</span>

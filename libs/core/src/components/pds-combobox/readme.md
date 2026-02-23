@@ -86,6 +86,7 @@ Type: `Promise<void>`
 | ------------------ | ----------- |
 | `"button-trigger"` |             |
 | `"chip-trigger"`   |             |
+| `"combobox"`       |             |
 | `"input"`          |             |
 
 
