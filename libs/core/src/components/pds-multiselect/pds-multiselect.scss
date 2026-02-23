@@ -1,4 +1,6 @@
 :host {
+  --pds-multiselect-trigger-min-height: 36px;
+
   display: block;
 }
 
@@ -38,11 +40,11 @@
   border-radius: var(--pine-dimension-125);
   cursor: pointer;
   display: flex;
-  font: var(--pine-typography-body);
+  font: var(--pine-typography-body-medium);
   gap: var(--pine-dimension-xs);
   justify-content: space-between;
   letter-spacing: var(--pine-letter-spacing);
-  min-height: var(--pine-dimension-550);
+  min-height: var(--pds-multiselect-trigger-min-height);
   padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
   position: relative;
   text-align: start;
