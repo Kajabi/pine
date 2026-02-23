@@ -450,6 +450,17 @@ describe('pds-button', () => {
     `);
   });
 
+  it('renders download attribute on anchor when href and download are set', async () => {
+    const { root } = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button href="/file.pdf" download="report.pdf">Download</pds-button>`,
+    });
+
+    const anchor = root?.shadowRoot?.querySelector('a');
+    expect(anchor).not.toBeNull();
+    expect(anchor?.getAttribute('download')).toBe('report.pdf');
+  });
+
   describe('Enter key form submission', () => {
     it('renders submit button that can be used for form submission', async () => {
       const page = await newSpecPage({
