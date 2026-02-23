@@ -22,7 +22,7 @@ describe('pds-combobox', () => {
     expect(root).toEqualHtml(`
       <pds-combobox component-id="test-combobox">
         <mock:shadow-root>
-          <div class="pds-combobox" tabindex="-1">
+          <div class="pds-combobox" tabindex="-1" part="combobox">
             <div class="pds-combobox__input-wrapper" style="width: fit-content;">
               <input aria-autocomplete="list" aria-controls="pds-combobox-listbox" aria-disabled="false" aria-expanded="false" autocomplete="off" class="pds-combobox__input" id="test-combobox" part="input" role="combobox" type="text" value="" />
               <pds-icon aria-hidden="true" class="pds-combobox__input-icon" icon="enlarge"></pds-icon>
@@ -1619,6 +1619,16 @@ describe('pds-combobox', () => {
   });
 
   describe('Accessibility', () => {
+    it('renders combobox wrapper with proper CSS part', async () => {
+      const { root } = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox"></pds-combobox>`,
+      });
+
+      const comboboxWrapper = root?.shadowRoot?.querySelector('.pds-combobox');
+      expect(comboboxWrapper?.getAttribute('part')).toBe('combobox');
+    });
+
     it('renders with proper CSS parts for external styling', async () => {
       const { root } = await newSpecPage({
         components: [PdsCombobox],
