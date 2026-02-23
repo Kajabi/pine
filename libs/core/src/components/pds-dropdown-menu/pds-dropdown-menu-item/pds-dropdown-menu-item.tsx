@@ -28,6 +28,14 @@ export class PdsDropdownMenuItem implements BasePdsProps {
 
 
   /**
+   * Prompts the user to save the linked URL instead of navigating to it.
+   * Can be used without a value to download with the default filename,
+   * or with a string value to suggest a specific filename for the download.
+   * Only applies when href is set.
+   */
+  @Prop() download?: string;
+
+  /**
    *  If provided, renders the dropdown-item as an anchor (`<a>`) element instead of a button.
    */
   @Prop() href: string | undefined;
@@ -93,6 +101,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
     if (this.href !== undefined) {
       return (
         <pds-link
+          download={this.download}
           href={this.disabled ? null : this.href}
           external={this.external}
           target={this.target}

@@ -292,6 +292,22 @@ describe('pds-dropdown-menu-item', () => {
     expect(clickSpy).not.toHaveBeenCalled();
   });
   
+  it('passes download prop through to pds-link when href and download are set', async () => {
+    const page = await newSpecPage({
+      components: [PdsDropdownMenuItem, PdsLink],
+      html: `<pds-dropdown-menu-item href="https://example.com/file.pdf" download="report.pdf">Download Report</pds-dropdown-menu-item>`,
+    });
+
+    if (!page.root || !page.root.shadowRoot) {
+      fail('Root or shadow root not found');
+    }
+
+    const shadowRoot = page.root.shadowRoot;
+    const linkElement = shadowRoot.querySelector('pds-link');
+    expect(linkElement).not.toBeNull();
+    expect(linkElement?.download).toBe('report.pdf');
+  });
+
   it('does not handle keyboard events when disabled', async () => {
     const page = await newSpecPage({
       components: [PdsDropdownMenuItem],
