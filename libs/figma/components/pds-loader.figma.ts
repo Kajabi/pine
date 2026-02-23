@@ -3,7 +3,7 @@ import figma, { html } from '@figma/code-connect/html';
 figma.connect('<FIGMA_LOADER>', {
   props: {
     showLabel: figma.boolean("Show text", {
-        true: figma.string("↳ ✏️Text"),
+        true: "Loading...",
         false: undefined,
     }),
     size: figma.enum("Size", {

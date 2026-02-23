@@ -1,25 +1,29 @@
 import figma, { html } from '@figma/code-connect/html';
 
-figma.connect('<FIGMA_RADIO>', {
+figma.connect('<FIGMA_SWITCH>', {
   props: {
-    checked: figma.boolean("Checked"),
+    checked: figma.boolean('Pressed', {
+      true: "true",
+      false: undefined,
+    }),
     disabled: figma.enum("State", {
       disabled: "true",
     }),
-    helperMessage: figma.boolean("Supporting text", {
-      true: figma.string("↪️ Message"),
+    label: figma.boolean("Label", {
+      true: "Enable notifications",
       false: undefined,
     }),
-    label: figma.string("Label content"),
+    helperMessage: figma.boolean("Supporting text", {
+      true: "You will receive email updates",
+      false: undefined,
+    }),
   },
   example: (props) => html`\
-    <pds-radio
+    <pds-switch
       checked=${props.checked}
-      component-id="radio-example"
       disabled=${props.disabled}
       helper-message=${props.helperMessage}
       label=${props.label}
-      name="radio-example"
-    ></pds-radio>
+    ></pds-switch>
   `,
 });

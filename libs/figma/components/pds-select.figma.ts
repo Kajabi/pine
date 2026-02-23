@@ -9,7 +9,7 @@ figma.connect('<FIGMA_SELECT>', {
       text: figma.string("Error content"),
     }),
     helperMessage: figma.boolean("Help text", {
-      true: figma.string("↪️ Message"),
+      true: "Helper message text",
       false: undefined,
     }),
     highlight: figma.boolean("Highlight", {
@@ -17,7 +17,7 @@ figma.connect('<FIGMA_SELECT>', {
       false: undefined,
     }),
     label: figma.boolean("Label", {
-      true: figma.string("↪️ Message"),
+      true: "Label text",
       false: undefined,
     }),
     readonly: figma.enum("State", {

@@ -10,7 +10,7 @@ figma.connect('<FIGMA_CHECKBOX>', {
       disabled: "true",
     }),
     helperMessage: figma.boolean("Helper message", {
-      true: figma.string("↳ ✏️Message"),
+      true: "Save my login details for next time.",
       false: undefined,
     }),
     indeterminate: figma.boolean('Indeterminate', {
@@ -18,7 +18,7 @@ figma.connect('<FIGMA_CHECKBOX>', {
       false: undefined,
     }),
     label: figma.boolean("Label", {
-      true: figma.string("↳ ✏️Message"),
+      true: "Remember me",
       false: undefined,
     }),
   },
