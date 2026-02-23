@@ -1,6 +1,4 @@
 :host {
-  --pds-multiselect-trigger-min-height: 36px;
-
   display: block;
 }
 
@@ -44,7 +42,7 @@
   gap: var(--pine-dimension-xs);
   justify-content: space-between;
   letter-spacing: var(--pine-letter-spacing);
-  min-height: var(--pds-multiselect-trigger-min-height);
+  min-height: var(--pine-dimension-450);
   padding: var(--pine-dimension-xs) var(--pine-dimension-sm);
   position: relative;
   text-align: start;
