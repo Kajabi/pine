@@ -127,6 +127,16 @@ describe('pds-chip', () => {
     `);
   });
 
+  it('explicit size="md" takes precedence over large prop', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip size="md" large="true" />`,
+    });
+
+    expect(page.root.className).not.toContain('pds-chip--lg');
+    expect(page.root.className).not.toContain('pds-chip--sm');
+  });
+
   it('renders small size when size prop is sm', async () => {
     const page = await newSpecPage({
       components: [PdsChip],
