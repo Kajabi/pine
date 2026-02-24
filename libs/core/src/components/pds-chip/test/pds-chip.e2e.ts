@@ -9,6 +9,30 @@ describe('pds-chip', () => {
     expect(element).toHaveClass('hydrated');
   });
 
+  it('renders small size with pds-chip--sm class', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-chip size="sm">Small</pds-chip>');
+
+    const element = await page.find('pds-chip');
+    expect(element).toHaveClass('pds-chip--sm');
+  });
+
+  it('renders large size via size prop with pds-chip--lg class', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-chip size="lg">Large</pds-chip>');
+
+    const element = await page.find('pds-chip');
+    expect(element).toHaveClass('pds-chip--lg');
+  });
+
+  it('renders large size via deprecated large prop with pds-chip--lg class', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-chip large>Large</pds-chip>');
+
+    const element = await page.find('pds-chip');
+    expect(element).toHaveClass('pds-chip--lg');
+  });
+
   it('emits "pdsTagCloseClick" event when close button is clicked in tag variant', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-chip variant="tag" label="Tag Chip" />');

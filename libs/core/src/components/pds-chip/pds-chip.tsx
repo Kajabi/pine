@@ -1,6 +1,6 @@
 import { downSmall, remove } from '@pine-ds/icons/icons';
 import { Component, Host, h, Prop, Event, EventEmitter } from '@stencil/core';
-import type { ChipSentimentType, ChipVariantType } from '@utils/types';
+import type { ChipSentimentType, ChipSizeType, ChipVariantType } from '@utils/types';
 
 /**
  * @slot (default) - The chip's label text.
@@ -30,10 +30,17 @@ export class PdsChip {
   @Prop() icon?: string;
 
   /**
-   * Determines whether the chip should be displayed in a larger size.
+   * Determines whether the chip should be displayed in a larger size. DEPRECATED.
    * @defaultValue false
+   * @deprecated Use `size` prop instead. Set `size="lg"` for the large variant.
    */
   @Prop() large = false;
+
+  /**
+   * Sets the size of the chip.
+   * @defaultValue 'md'
+   */
+  @Prop() size?: ChipSizeType;
 
   /**
    * Defines the color scheme of the chip.
@@ -77,11 +84,18 @@ export class PdsChip {
     this.pdsTagCloseClick.emit();
   };
 
+  private get effectiveSize(): ChipSizeType {
+    if (this.size != null) return this.size;
+    if (this.large) return 'lg';
+    return 'md';
+  }
+
   private classNames() {
     const classNames = ['pds-chip'];
 
-    if (this.large) {
-      classNames.push('pds-chip--large');
+    const size = this.effectiveSize;
+    if (size && size !== 'md') {
+      classNames.push('pds-chip--' + size);
     }
 
     // For brand sentiment, always use text variant
@@ -103,8 +117,11 @@ export class PdsChip {
   }
 
   private get iconSize() {
-    // Icon size based on large prop
-    return this.large ? '14px' : '12px';
+    switch (this.effectiveSize) {
+      case 'sm': return '10px';
+      case 'lg': return '14px';
+      default: return '12px';
+    }
   }
 
   private setChipContent() {

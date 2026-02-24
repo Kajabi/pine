@@ -77,7 +77,7 @@ The `sentiment` property represents the named color scheme of the chip component
 
 #### Brand
 
-> **IMPORTANT**: The `brand` sentiment is a special case where only `icon` and `large` properties are supported.
+> **IMPORTANT**: The `brand` sentiment is a special case where only `icon` and `size` properties are supported.
 > The `dot`, `dropdown`, and `tag` properties are not supported by design.
 
 <DocCanvas
@@ -85,17 +85,17 @@ The `sentiment` property represents the named color scheme of the chip component
     react: `
     <PdsChip sentiment="brand">Brand</PdsChip>
     <PdsChip sentiment="brand" icon="product">Brand</PdsChip>
-    <PdsChip sentiment="brand" large>Brand</PdsChip>
+    <PdsChip sentiment="brand" size="lg">Brand</PdsChip>
     `,
     webComponent: `
     <pds-chip sentiment="brand">Brand</pds-chip>
     <pds-chip sentiment="brand" icon="product">Brand</pds-chip>
-    <pds-chip sentiment="brand" large>Brand</pds-chip>
+    <pds-chip sentiment="brand" size="lg">Brand</pds-chip>
     `
 }}>
   <pds-chip sentiment="brand">Brand</pds-chip>
   <pds-chip sentiment="brand" icon="product">Brand</pds-chip>
-  <pds-chip sentiment="brand" large>Brand</pds-chip>
+  <pds-chip sentiment="brand" size="lg">Brand</pds-chip>
 </DocCanvas>
 
 ### Dot
@@ -284,32 +284,61 @@ The `remove-target` property specifies where to open the linked document when th
   <pds-chip sentiment="info" variant="tag" remove-url="/clear-filters" remove-target="_blank">Clear (New Tab)</pds-chip>
 </DocCanvas>
 
-### Large
+### Sizes
 
-Large chips will be displayed with a larger visual footprint compared to the default size.
+The `size` property controls the visual size of the chip. Available sizes are `sm` (small), `md` (medium/default), and `lg` (large).
 
 <DocCanvas
   mdxSource={{
     react: `
-    <PdsChip sentiment="accent" large>Accent</PdsChip>
-    <PdsChip sentiment="brand" large>Brand</PdsChip>
-    <PdsChip sentiment="danger" dot large>Danger</PdsChip>
-    <PdsChip sentiment="info" variant="dropdown" large>Info</PdsChip>
-    <PdsChip sentiment="success" variant="tag" large>Success</PdsChip>
+    <PdsChip size="sm">Small</PdsChip>
+    <PdsChip>Medium</PdsChip>
+    <PdsChip size="lg">Large</PdsChip>
     `,
     webComponent: `
-    <pds-chip sentiment="accent" large>Accent</pds-chip>
-    <pds-chip sentiment="brand" large>Brand</pds-chip>
-    <pds-chip sentiment="danger" dot large>Danger</pds-chip>
-    <pds-chip sentiment="info" variant="dropdown" large>Info</pds-chip>
-    <pds-chip sentiment="success" variant="tag" large>Success</pds-chip>
+    <pds-chip size="sm">Small</pds-chip>
+    <pds-chip>Medium</pds-chip>
+    <pds-chip size="lg">Large</pds-chip>
     `
 }}>
-  <pds-chip sentiment="accent" large>Accent</pds-chip>
-  <pds-chip sentiment="brand" large>Brand</pds-chip>
-  <pds-chip sentiment="danger" dot large>Danger</pds-chip>
-  <pds-chip sentiment="info" variant="dropdown" large>Info</pds-chip>
-  <pds-chip sentiment="success" variant="tag" large>Success</pds-chip>
+  <pds-chip size="sm">Small</pds-chip>
+  <pds-chip>Medium</pds-chip>
+  <pds-chip size="lg">Large</pds-chip>
+</DocCanvas>
+
+Sizes work across all variants and sentiments:
+
+<DocCanvas
+  mdxSource={{
+    react: `
+    <PdsChip sentiment="success" size="sm" dot>Small</PdsChip>
+    <PdsChip sentiment="danger" size="sm" variant="tag">Small</PdsChip>
+    <PdsChip sentiment="info" size="sm" variant="dropdown">Small</PdsChip>
+    <PdsChip sentiment="warning" size="sm" icon="warning">Small</PdsChip>
+    <PdsChip sentiment="success" size="lg" dot>Large</PdsChip>
+    <PdsChip sentiment="danger" size="lg" variant="tag">Large</PdsChip>
+    <PdsChip sentiment="info" size="lg" variant="dropdown">Large</PdsChip>
+    <PdsChip sentiment="warning" size="lg" icon="warning">Large</PdsChip>
+    `,
+    webComponent: `
+    <pds-chip sentiment="success" size="sm" dot>Small</pds-chip>
+    <pds-chip sentiment="danger" size="sm" variant="tag">Small</pds-chip>
+    <pds-chip sentiment="info" size="sm" variant="dropdown">Small</pds-chip>
+    <pds-chip sentiment="warning" size="sm" icon="warning">Small</pds-chip>
+    <pds-chip sentiment="success" size="lg" dot>Large</pds-chip>
+    <pds-chip sentiment="danger" size="lg" variant="tag">Large</pds-chip>
+    <pds-chip sentiment="info" size="lg" variant="dropdown">Large</pds-chip>
+    <pds-chip sentiment="warning" size="lg" icon="warning">Large</pds-chip>
+    `
+}}>
+  <pds-chip sentiment="success" size="sm" dot>Small</pds-chip>
+  <pds-chip sentiment="danger" size="sm" variant="tag">Small</pds-chip>
+  <pds-chip sentiment="info" size="sm" variant="dropdown">Small</pds-chip>
+  <pds-chip sentiment="warning" size="sm" icon="warning">Small</pds-chip>
+  <pds-chip sentiment="success" size="lg" dot>Large</pds-chip>
+  <pds-chip sentiment="danger" size="lg" variant="tag">Large</pds-chip>
+  <pds-chip sentiment="info" size="lg" variant="dropdown">Large</pds-chip>
+  <pds-chip sentiment="warning" size="lg" icon="warning">Large</pds-chip>
 </DocCanvas>
 
 ## Playground

@@ -8,7 +8,7 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { BoxColumnType, BoxShadowSizeType, BoxSpacingType } from "./utils/types";
 import { Event } from "@stencil/core";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
-import { ChipSentimentType, ChipVariantType, PlacementType } from "./utils/types";
+import { ChipSentimentType, ChipSizeType, ChipVariantType, PlacementType } from "./utils/types";
 import { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
 import { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 import { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
@@ -20,7 +20,7 @@ import { TextareaChangeEventDetail, TextareaInputEventDetail } from "./component
 export { BoxColumnType, BoxShadowSizeType, BoxSpacingType } from "./utils/types";
 export { Event } from "@stencil/core";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
-export { ChipSentimentType, ChipVariantType, PlacementType } from "./utils/types";
+export { ChipSentimentType, ChipSizeType, ChipVariantType, PlacementType } from "./utils/types";
 export { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
 export { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
@@ -843,8 +843,9 @@ export namespace Components {
          */
         "icon"?: string;
         /**
-          * Determines whether the chip should be displayed in a larger size.
+          * Determines whether the chip should be displayed in a larger size. DEPRECATED.
           * @defaultValue false
+          * @deprecated Use `size` prop instead. Set `size="lg"` for the large variant.
          */
         "large": boolean;
         /**
@@ -864,6 +865,11 @@ export namespace Components {
           * @defaultValue 'neutral'
          */
         "sentiment": ChipSentimentType;
+        /**
+          * Sets the size of the chip.
+          * @defaultValue 'md'
+         */
+        "size"?: ChipSizeType;
         /**
           * Sets the style variant of the chip. Note: This prop is ignored when sentiment is 'brand'.
           * @defaultValue 'text'
@@ -3854,8 +3860,9 @@ declare namespace LocalJSX {
          */
         "icon"?: string;
         /**
-          * Determines whether the chip should be displayed in a larger size.
+          * Determines whether the chip should be displayed in a larger size. DEPRECATED.
           * @defaultValue false
+          * @deprecated Use `size` prop instead. Set `size="lg"` for the large variant.
          */
         "large"?: boolean;
         /**
@@ -3879,6 +3886,11 @@ declare namespace LocalJSX {
           * @defaultValue 'neutral'
          */
         "sentiment"?: ChipSentimentType;
+        /**
+          * Sets the size of the chip.
+          * @defaultValue 'md'
+         */
+        "size"?: ChipSizeType;
         /**
           * Sets the style variant of the chip. Note: This prop is ignored when sentiment is 'brand'.
           * @defaultValue 'text'
