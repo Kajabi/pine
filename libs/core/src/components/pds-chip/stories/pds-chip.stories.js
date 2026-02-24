@@ -96,11 +96,21 @@ Tag.args = {
   variant: "tag",
 }
 
-export const Size = BaseTemplate.bind();
-Size.args = {
+export const Small = BaseTemplate.bind();
+Small.args = {
   dot: false,
   icon: "",
   size: "sm",
+  sentiment: "neutral",
+  slot: "label",
+  variant: "text",
+}
+
+export const Large = BaseTemplate.bind();
+Large.args = {
+  dot: false,
+  icon: "",
+  size: "lg",
   sentiment: "neutral",
   slot: "label",
   variant: "text",
