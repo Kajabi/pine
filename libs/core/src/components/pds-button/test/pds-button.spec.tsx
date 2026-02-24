@@ -182,10 +182,10 @@ describe('pds-button', () => {
   it('renders disabled button', async () => {
     const {root} = await newSpecPage({
       components: [PdsButton],
-      html: `<pds-button disabled="true"></pds-button>`,
+      html: `<pds-button disabled></pds-button>`,
     });
     expect(root).toEqualHtml(`
-      <pds-button disabled="true" aria-disabled="true" variant="primary">
+      <pds-button disabled aria-disabled="true" variant="primary">
         <mock:shadow-root>
           <button class="pds-button pds-button--primary" part="button" type="button" disabled>
             <div class="pds-button__content" part="button-content">
@@ -199,6 +199,18 @@ describe('pds-button', () => {
         </mock:shadow-root>
       </pds-button>
     `);
+  });
+
+  it('does not set disabled or aria-disabled when disabled prop is not set', async () => {
+    const page = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button></pds-button>`,
+    });
+
+    expect(page.root?.hasAttribute('disabled')).toBe(false);
+    expect(page.root?.getAttribute('aria-disabled')).toBe(null);
+    const button = page.root?.shadowRoot?.querySelector('button');
+    expect(button?.hasAttribute('disabled')).toBe(false);
   });
 
   it('renders with id when prop is set', async () => {

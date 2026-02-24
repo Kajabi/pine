@@ -40,7 +40,7 @@ export class PdsButton {
    * Determines the button's disabled state.
    * @defaultValue false
    */
-  @Prop() disabled? = false;
+  @Prop({ reflect: true }) disabled: boolean = false;
 
   /**
    * Determines if the button should take up the full width of its container.
