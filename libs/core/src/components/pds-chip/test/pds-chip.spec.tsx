@@ -82,19 +82,129 @@ describe('pds-chip', () => {
     `);
   });
 
-  it('renders large size when large prop is set', async () => {
+  it('renders large size when size prop is lg', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip size="lg" />`,
+    });
+
+    expect(page.root).toEqualHtml(`
+    <pds-chip class="pds-chip pds-chip--lg pds-chip--neutral pds-chip--text" size="lg">
+      <mock:shadow-root>
+        <span class="pds-chip__label"><slot></slot></span>
+      </mock:shadow-root>
+    </pds-chip>
+    `);
+  });
+
+  it('renders large size when deprecated large prop is set (backward compat)', async () => {
     const page = await newSpecPage({
       components: [PdsChip],
       html: `<pds-chip large="true" />`,
     });
 
     expect(page.root).toEqualHtml(`
-    <pds-chip class="pds-chip pds-chip--neutral pds-chip--large pds-chip--text" large="true">
+    <pds-chip class="pds-chip pds-chip--lg pds-chip--neutral pds-chip--text" large="true">
       <mock:shadow-root>
         <span class="pds-chip__label"><slot></slot></span>
       </mock:shadow-root>
     </pds-chip>
     `);
+  });
+
+  it('size prop takes precedence over large prop when both are set', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip size="sm" large="true" />`,
+    });
+
+    expect(page.root).toEqualHtml(`
+    <pds-chip class="pds-chip pds-chip--sm pds-chip--neutral pds-chip--text" size="sm" large="true">
+      <mock:shadow-root>
+        <span class="pds-chip__label"><slot></slot></span>
+      </mock:shadow-root>
+    </pds-chip>
+    `);
+  });
+
+  it('renders small size when size prop is sm', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip size="sm" />`,
+    });
+
+    expect(page.root).toEqualHtml(`
+    <pds-chip class="pds-chip pds-chip--sm pds-chip--neutral pds-chip--text" size="sm">
+      <mock:shadow-root>
+        <span class="pds-chip__label"><slot></slot></span>
+      </mock:shadow-root>
+    </pds-chip>
+    `);
+  });
+
+  it('renders small icon when size is sm', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip size="sm" icon="archive" />`,
+    });
+
+    expect(page.root).toEqualHtml(`
+    <pds-chip class="pds-chip pds-chip--sm pds-chip--neutral pds-chip--text" size="sm" icon="archive">
+      <mock:shadow-root>
+        <span class="pds-chip__label">
+          <pds-icon icon="archive" size="10px" aria-hidden="true"></pds-icon>
+          <slot></slot>
+        </span>
+      </mock:shadow-root>
+    </pds-chip>
+    `);
+  });
+
+  it('renders small tag variant with close icon at 10px', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip size="sm" variant="tag" />`,
+    });
+
+    expect(page.root).toEqualHtml(`
+    <pds-chip class="pds-chip pds-chip--sm pds-chip--neutral pds-chip--tag" size="sm" variant="tag">
+      <mock:shadow-root>
+        <span class="pds-chip__label"><slot></slot></span>
+        <button class="pds-chip__close" type="button" aria-label="Remove">
+          <pds-icon icon="${removeIcon}" size="10px"></pds-icon>
+        </button>
+      </mock:shadow-root>
+    </pds-chip>
+    `);
+  });
+
+  it('renders small dropdown variant with icons at 10px', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip size="sm" variant="dropdown" />`,
+    });
+
+    expect(page.root).toEqualHtml(`
+    <pds-chip class="pds-chip pds-chip--sm pds-chip--dropdown pds-chip--neutral" size="sm" variant="dropdown">
+      <mock:shadow-root>
+        <button class="pds-chip__button" type="button">
+          <slot></slot>
+          <pds-icon icon="${downSmall}" size="10px" aria-hidden="true"></pds-icon>
+        </button>
+      </mock:shadow-root>
+    </pds-chip>
+    `);
+  });
+
+  it('does not add a size class when size is md (default)', async () => {
+    const page = await newSpecPage({
+      components: [PdsChip],
+      html: `<pds-chip size="md" />`,
+    });
+
+    expect(page.root.className).not.toContain('pds-chip--md');
+    expect(page.root.className).not.toContain('pds-chip--sm');
+    expect(page.root.className).not.toContain('pds-chip--lg');
   });
 
   it('renders with tag variant when variant prop is set as tag', async () => {
@@ -170,14 +280,14 @@ describe('pds-chip', () => {
     `);
   });
 
-  it('renders with large icon when icon and large props are set', async () => {
+  it('renders with large icon when icon and size lg are set', async () => {
     const page = await newSpecPage({
       components: [PdsChip],
-      html: `<pds-chip icon="archive" large="true" />`,
+      html: `<pds-chip icon="archive" size="lg" />`,
     });
 
     expect(page.root).toEqualHtml(`
-    <pds-chip class="pds-chip pds-chip--neutral pds-chip--large pds-chip--text" icon="archive" large="true">
+    <pds-chip class="pds-chip pds-chip--lg pds-chip--neutral pds-chip--text" icon="archive" size="lg">
       <mock:shadow-root>
         <span class="pds-chip__label">
           <pds-icon icon="archive" size="14px" aria-hidden="true"></pds-icon>
@@ -225,14 +335,14 @@ describe('pds-chip', () => {
     `);
   });
 
-  it('renders with large icons in tag variant when large prop is set', async () => {
+  it('renders with large icons in tag variant when size is lg', async () => {
     const page = await newSpecPage({
       components: [PdsChip],
-      html: `<pds-chip variant="tag" large="true" />`,
+      html: `<pds-chip variant="tag" size="lg" />`,
     });
 
     expect(page.root).toEqualHtml(`
-    <pds-chip class="pds-chip pds-chip--neutral pds-chip--large pds-chip--tag" variant="tag" large="true">
+    <pds-chip class="pds-chip pds-chip--lg pds-chip--neutral pds-chip--tag" variant="tag" size="lg">
       <mock:shadow-root>
         <span class="pds-chip__label"><slot></slot></span>
         <button class="pds-chip__close" type="button" aria-label="Remove" >
