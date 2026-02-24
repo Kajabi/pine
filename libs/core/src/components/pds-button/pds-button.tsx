@@ -29,6 +29,14 @@ export class PdsButton {
   @Prop() componentId: string;
 
   /**
+   * Prompts the user to save the linked URL instead of navigating to it.
+   * It can be used without a value to download with the default filename,
+   * or with a string value to suggest a specific filename for the download.
+   * Only applies when href is set.
+   */
+  @Prop() download?: string;
+
+  /**
    * Determines the button's disabled state.
    * @defaultValue false
    */
@@ -268,6 +276,7 @@ export class PdsButton {
         return {
           // Anchor element props
           ...commonProps,
+          download: this.download,
           href: this.disabled ? null : this.href,
           target: this.target,
         };

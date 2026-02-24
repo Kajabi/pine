@@ -721,6 +721,10 @@ export namespace Components {
          */
         "disabled"?: boolean;
         /**
+          * Prompts the user to save the linked URL instead of navigating to it. It can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download. Only applies when href is set.
+         */
+        "download"?: string;
+        /**
           * Determines if the button should take up the full width of its container.
           * @defaultValue false
          */
@@ -1073,6 +1077,10 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
+          * Prompts the user to save the linked URL instead of navigating to it. It can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download. Only applies when href is set.
+         */
+        "download"?: string;
+        /**
           * Determines whether the link should open in a new tab and display an external icon. This is a simpler alternative to using `target="_blank"` for the common case.
           * @defaultValue false
          */
@@ -1282,6 +1290,10 @@ export namespace Components {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
+        /**
+          * Prompts the user to save the linked URL instead of navigating to it. It can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download.
+         */
+        "download"?: string;
         /**
           * Determines whether the link should open in a new tab.
           * @defaultValue false
@@ -3714,6 +3726,10 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
+          * Prompts the user to save the linked URL instead of navigating to it. It can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download. Only applies when href is set.
+         */
+        "download"?: string;
+        /**
           * Determines if the button should take up the full width of its container.
           * @defaultValue false
          */
@@ -4080,6 +4096,10 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
+          * Prompts the user to save the linked URL instead of navigating to it. It can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download. Only applies when href is set.
+         */
+        "download"?: string;
+        /**
           * Determines whether the link should open in a new tab and display an external icon. This is a simpler alternative to using `target="_blank"` for the common case.
           * @defaultValue false
          */
@@ -4313,6 +4333,10 @@ declare namespace LocalJSX {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId"?: string;
+        /**
+          * Prompts the user to save the linked URL instead of navigating to it. It can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download.
+         */
+        "download"?: string;
         /**
           * Determines whether the link should open in a new tab.
           * @defaultValue false
