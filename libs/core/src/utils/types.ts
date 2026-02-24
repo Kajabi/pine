@@ -74,6 +74,11 @@ export type ChipSentimentType =
   | 'success'
   | 'warning';
 
+export type ChipSizeType =
+  'sm'
+  | 'md'
+  | 'lg';
+
 export type ChipVariantType =
   'text'
   | 'tag'
