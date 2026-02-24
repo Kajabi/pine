@@ -719,7 +719,7 @@ export namespace Components {
           * Determines the button's disabled state.
           * @defaultValue false
          */
-        "disabled"?: boolean;
+        "disabled": boolean;
         /**
           * Prompts the user to save the linked URL instead of navigating to it. It can be used without a value to download with the default filename, or with a string value to suggest a specific filename for the download. Only applies when href is set.
          */

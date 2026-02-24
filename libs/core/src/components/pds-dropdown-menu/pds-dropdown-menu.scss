@@ -54,8 +54,11 @@
 }
 
 // Disabled state for raw elements (using attribute selectors, not pseudo-classes)
+// ::slotted([disabled]) is an attribute-presence selector — it matches even when
+// disabled="false" is set as a string (e.g. by React on custom elements). The
+// :not([disabled="false"]) guard ensures only a truly-disabled attribute applies.
 ::slotted([aria-disabled="true"]),
-::slotted([disabled]) {
+::slotted([disabled]:not([disabled="false"])) {
   cursor: not-allowed;
   opacity: 0.5;
   pointer-events: none;
