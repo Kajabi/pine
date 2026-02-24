@@ -157,9 +157,36 @@ $pds-chip-sentiment-hover: (
   }
 }
 
+// small
+
+:host(.pds-chip--sm) {
+  --sizing-close: var(--pine-dimension-100);
+  padding-block: var(--pine-dimension-025);
+  padding-inline: var(--pine-dimension-100);
+
+  .pds-chip__label, .pds-chip__button {
+    font: var(--pine-typography-body-sm-medium);
+    letter-spacing: var(--pine-letter-spacing);
+  }
+}
+
+:host(.pds-chip--sm.pds-chip--dropdown) {
+  padding: var(--pine-dimension-none);
+
+  .pds-chip__button {
+    padding: var(--pine-dimension-025) var(--pine-dimension-100);
+  }
+}
+
+:host(.pds-chip--sm.pds-chip--brand) {
+  .pds-chip__label {
+    padding: var(--pine-dimension-025) var(--pine-dimension-100);
+  }
+}
+
 // large
 
-:host(.pds-chip--large) {
+:host(.pds-chip--lg) {
   padding-block: var(--pine-dimension-025);
   padding-inline: var(--pine-dimension-150);
 
@@ -171,7 +198,7 @@ $pds-chip-sentiment-hover: (
   }
 }
 
-:host(.pds-chip--large.pds-chip--dropdown) {
+:host(.pds-chip--lg.pds-chip--dropdown) {
   padding: var(--pine-dimension-none);
 
   .pds-chip__button {
