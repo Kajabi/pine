@@ -40,7 +40,7 @@ export class PdsChip {
    * Sets the size of the chip.
    * @defaultValue 'md'
    */
-  @Prop() size?: ChipSizeType = 'md';
+  @Prop() size?: ChipSizeType;
 
   /**
    * Defines the color scheme of the chip.
@@ -85,7 +85,7 @@ export class PdsChip {
   };
 
   private get effectiveSize(): ChipSizeType {
-    if (this.size !== 'md') return this.size;
+    if (this.size != null) return this.size;
     if (this.large) return 'lg';
     return 'md';
   }
