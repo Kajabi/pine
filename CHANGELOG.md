@@ -1,3 +1,24 @@
+## 3.19.0 (2026-02-25)
+
+### Features 🚀
+
+- add download attribute support to link, button, & dropdown-menu-item ([#681](https://github.com/Kajabi/pine/pull/681))
+- **pds-chip:** add size prop with sm, md, and lg options ([#684](https://github.com/Kajabi/pine/pull/684))
+
+### Bug Fixes 🐛
+
+- **pds-button:** add reflect to disabled prop and guard slotted disabled selector ([#685](https://github.com/Kajabi/pine/pull/685))
+- **pds-combobox:** add part=combobox to wrapper for external styling ([#682](https://github.com/Kajabi/pine/pull/682))
+
+### Styles 🎨
+
+- **pds-multiselect:** align trigger height to 36px and font-weight … ([#683](https://github.com/Kajabi/pine/pull/683))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.18.0 (2026-02-18)
 
 ### Features 🚀
