@@ -88,6 +88,7 @@ export class PdsText {
   | 'h5'
   | 'h6'
   | 'p'
+  | 'span'
   | 'code'
   | 'pre'
   | 'strong'
