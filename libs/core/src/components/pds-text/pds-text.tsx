@@ -42,17 +42,48 @@ export class PdsText {
   /**
    * Sets the font size.
    */
-  @Prop() size?: '2xl' | 'xl' | 'lg' | 'md' | 'sm' | 'xs' | '2xs' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+  @Prop() size?:
+    | '2xl'
+    | 'xl'
+    | 'lg'
+    | 'md'
+    | 'sm'
+    | 'xs'
+    | '2xs'
+    | 'h1'
+    | 'h2'
+    | 'h3'
+    | 'h4'
+    | 'h5'
+    | 'h6';
 
   /**
    * Sets the font weight.
    */
-  @Prop() weight?: 'extra-light' | 'light' | 'regular' | 'medium' | 'semibold' | 'bold';
+  @Prop() weight?:
+    | 'extra-light'
+    | 'light'
+    | 'regular'
+    | 'medium'
+    | 'semibold'
+    | 'bold';
 
   /**
    * Determines what semantic text tag to render.
    */
-  @Prop() tag: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' | 'code' | 'pre' | 'strong' | 'em' = 'p';
+  @Prop() tag:
+    | 'h1'
+    | 'h2'
+    | 'h3'
+    | 'h4'
+    | 'h5'
+    | 'h6'
+    | 'p'
+    | 'span'
+    | 'code'
+    | 'pre'
+    | 'strong'
+    | 'em' = 'p';
 
   /**
    * If set or `true`, the text will be truncated. Must add a `width` to the element.
@@ -105,15 +136,41 @@ export class PdsText {
 
     const typeClasses = `
       pds-text
-      ${this.align !== undefined && this.align.trim() !== '' ? `pds-text--align-${this.align}` : ''}
-      ${this.gutter !== undefined && this.gutter.trim() !== '' ? `pds-text--gutter-${this.gutter}` : ''}
-      ${this.size !== undefined && this.size.trim() !== '' ? `pds-text--size-${this.size}` : ''}
-      ${this.weight !== undefined && this.weight.trim() !== '' ? `pds-text--weight-${this.weight}` : ''}
-      ${this.decoration !== undefined && this.decoration.trim() !== '' ? `pds-text--decoration-${this.decoration}` : ''}
+      ${
+        this.align !== undefined && this.align.trim() !== ''
+          ? `pds-text--align-${this.align}`
+          : ''
+      }
+      ${
+        this.gutter !== undefined && this.gutter.trim() !== ''
+          ? `pds-text--gutter-${this.gutter}`
+          : ''
+      }
+      ${
+        this.size !== undefined && this.size.trim() !== ''
+          ? `pds-text--size-${this.size}`
+          : ''
+      }
+      ${
+        this.weight !== undefined && this.weight.trim() !== ''
+          ? `pds-text--weight-${this.weight}`
+          : ''
+      }
+      ${
+        this.decoration !== undefined && this.decoration.trim() !== ''
+          ? `pds-text--decoration-${this.decoration}`
+          : ''
+      }
     `;
 
     return (
-      <Tag ref={(el) => (this.contentEl = el)} style={this.color && setColor(this.color)} class={typeClasses} part="content" tabIndex={this.truncate ? 0 : undefined}>
+      <Tag
+        ref={(el) => (this.contentEl = el)}
+        style={this.color && setColor(this.color)}
+        class={typeClasses}
+        part="content"
+        tabIndex={this.truncate ? 0 : undefined}
+      >
         <slot />
       </Tag>
     );
