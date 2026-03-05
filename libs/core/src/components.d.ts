@@ -2084,12 +2084,35 @@ export namespace Components {
         /**
           * Sets the font size.
          */
-        "size"?: '2xl' | 'xl' | 'lg' | 'md' | 'sm' | 'xs' | '2xs' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+        "size"?: | '2xl'
+    | 'xl'
+    | 'lg'
+    | 'md'
+    | 'sm'
+    | 'xs'
+    | '2xs'
+    | 'h1'
+    | 'h2'
+    | 'h3'
+    | 'h4'
+    | 'h5'
+    | 'h6';
         /**
           * Determines what semantic text tag to render.
           * @default 'p'
          */
-        "tag": 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' | 'code' | 'pre' | 'strong' | 'em';
+        "tag": | 'h1'
+    | 'h2'
+    | 'h3'
+    | 'h4'
+    | 'h5'
+    | 'h6'
+    | 'p'
+    | 'span'
+    | 'code'
+    | 'pre'
+    | 'strong'
+    | 'em';
         /**
           * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: When truncate is enabled, the element automatically receives tabindex="0" for keyboard accessibility.
          */
@@ -2097,7 +2120,12 @@ export namespace Components {
         /**
           * Sets the font weight.
          */
-        "weight"?: 'extra-light' | 'light' | 'regular' | 'medium' | 'semibold' | 'bold';
+        "weight"?: | 'extra-light'
+    | 'light'
+    | 'regular'
+    | 'medium'
+    | 'semibold'
+    | 'bold';
     }
     interface PdsTextarea {
         /**
@@ -5147,12 +5175,35 @@ declare namespace LocalJSX {
         /**
           * Sets the font size.
          */
-        "size"?: '2xl' | 'xl' | 'lg' | 'md' | 'sm' | 'xs' | '2xs' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+        "size"?: | '2xl'
+    | 'xl'
+    | 'lg'
+    | 'md'
+    | 'sm'
+    | 'xs'
+    | '2xs'
+    | 'h1'
+    | 'h2'
+    | 'h3'
+    | 'h4'
+    | 'h5'
+    | 'h6';
         /**
           * Determines what semantic text tag to render.
           * @default 'p'
          */
-        "tag"?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' | 'code' | 'pre' | 'strong' | 'em';
+        "tag"?: | 'h1'
+    | 'h2'
+    | 'h3'
+    | 'h4'
+    | 'h5'
+    | 'h6'
+    | 'p'
+    | 'span'
+    | 'code'
+    | 'pre'
+    | 'strong'
+    | 'em';
         /**
           * If set or `true`, the text will be truncated. Must add a `width` to the element. When text overflows, a tooltip showing the full text will appear on hover/focus. Note: When truncate is enabled, the element automatically receives tabindex="0" for keyboard accessibility.
          */
@@ -5160,7 +5211,12 @@ declare namespace LocalJSX {
         /**
           * Sets the font weight.
          */
-        "weight"?: 'extra-light' | 'light' | 'regular' | 'medium' | 'semibold' | 'bold';
+        "weight"?: | 'extra-light'
+    | 'light'
+    | 'regular'
+    | 'medium'
+    | 'semibold'
+    | 'bold';
     }
     interface PdsTextarea {
         /**
