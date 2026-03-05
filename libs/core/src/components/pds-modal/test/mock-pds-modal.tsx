@@ -134,6 +134,7 @@ export class MockPdsModal {
           role="dialog"
           aria-modal="true"
           aria-labelledby={this.componentId ? `${this.componentId}-heading` : null}
+          part="modal"
         >
           <div class="pds-modal__header">
             <slot name="header"></slot>

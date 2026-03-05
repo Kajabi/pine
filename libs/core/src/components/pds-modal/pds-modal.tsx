@@ -313,6 +313,7 @@ export class PdsModal {
             [`pds-modal--${this.size}`]: true,
             'pds-modal--scrollable': this.scrollable
           }}
+          part="modal"
         >
           <slot></slot>
         </div>

@@ -390,6 +390,16 @@ Modals come in four sizes:
 - `lg` (900px) - For complex forms or detailed content
 - `fullscreen` - Takes up the entire viewport
 
+#### Custom Width
+
+For widths outside the preset sizes, target the `dialog` CSS part. This lets you apply any `max-width` without relying on an undocumented size value:
+
+```css
+pds-modal::part(modal) {
+  max-width: 1100px;
+}
+```
+
 <div>
   <pds-box gap="sm">
     <pds-button onClick={() => {
