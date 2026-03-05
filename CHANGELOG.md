@@ -1,3 +1,13 @@
+## 3.20.0 (2026-03-05)
+
+### Features 🚀
+
+- **pds-modal:** expose modal CSS part for custom sizing ([#691](https://github.com/Kajabi/pine/pull/691))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 3.19.0 (2026-02-25)
 
 ### Features 🚀
