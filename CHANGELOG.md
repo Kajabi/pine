@@ -1,3 +1,13 @@
+## 3.21.0 (2026-03-18)
+
+### Features 🚀
+
+- **pds-accordion:** emit pdsAccordionToggle event on open state change ([#692](https://github.com/Kajabi/pine/pull/692))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 3.20.0 (2026-03-05)
 
 ### Features 🚀
