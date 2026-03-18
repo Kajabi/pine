@@ -1,3 +1,13 @@
+## 3.21.1 (2026-03-18)
+
+### Bug Fixes 🐛
+
+- **pds-combobox:** preselect matching option when async options load … ([#693](https://github.com/Kajabi/pine/pull/693))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 3.21.0 (2026-03-18)
 
 ### Features 🚀
