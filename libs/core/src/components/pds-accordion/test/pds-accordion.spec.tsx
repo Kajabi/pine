@@ -118,7 +118,7 @@ describe('pds-accordion', () => {
     `);
   });
 
-  it('emits pdsAccordionToggle with true when details is opened', async () => {
+  it('emits pdsAccordionToggle with true when isOpen is set to true', async () => {
     const page = await newSpecPage({
       components: [PdsAccordion],
       html: `<pds-accordion></pds-accordion>`,
@@ -128,17 +128,14 @@ describe('pds-accordion', () => {
     const toggleSpy = jest.fn();
     accordion.addEventListener('pdsAccordionToggle', toggleSpy);
 
-    // Simulate the native details toggle firing with open = true
-    const details = page.root.shadowRoot.querySelector('details') as HTMLDetailsElement;
-    details.open = true;
-    details.dispatchEvent(new Event('toggle'));
+    accordion.isOpen = true;
     await page.waitForChanges();
 
     expect(toggleSpy).toHaveBeenCalledTimes(1);
     expect((toggleSpy.mock.calls[0][0] as CustomEvent).detail).toBe(true);
   });
 
-  it('emits pdsAccordionToggle with false when details is closed', async () => {
+  it('emits pdsAccordionToggle with false when isOpen is set to false', async () => {
     const page = await newSpecPage({
       components: [PdsAccordion],
       html: `<pds-accordion open></pds-accordion>`,
@@ -148,9 +145,7 @@ describe('pds-accordion', () => {
     const toggleSpy = jest.fn();
     accordion.addEventListener('pdsAccordionToggle', toggleSpy);
 
-    const details = page.root.shadowRoot.querySelector('details') as HTMLDetailsElement;
-    details.open = false;
-    details.dispatchEvent(new Event('toggle'));
+    accordion.isOpen = false;
     await page.waitForChanges();
 
     expect(toggleSpy).toHaveBeenCalledTimes(1);

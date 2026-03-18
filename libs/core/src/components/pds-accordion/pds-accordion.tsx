@@ -39,12 +39,11 @@ export class PdsAccordion {
 
   @Watch('isOpen')
   handleOpenState(newValue: boolean) {
-    this.isOpen = newValue;
+    this.pdsAccordionToggle.emit(newValue);
   }
 
   private handleToggle = () => {
     this.isOpen = this.detailsEl.open;
-    this.pdsAccordionToggle.emit(this.isOpen);
   };
 
   private getOpenAttribute = () => {
