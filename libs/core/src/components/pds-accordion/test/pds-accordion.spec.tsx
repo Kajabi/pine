@@ -118,6 +118,40 @@ describe('pds-accordion', () => {
     `);
   });
 
+  it('emits pdsAccordionToggle with true when isOpen is set to true', async () => {
+    const page = await newSpecPage({
+      components: [PdsAccordion],
+      html: `<pds-accordion></pds-accordion>`,
+    });
+
+    const accordion = page.root as HTMLPdsAccordionElement;
+    const toggleSpy = jest.fn();
+    accordion.addEventListener('pdsAccordionToggle', toggleSpy);
+
+    accordion.isOpen = true;
+    await page.waitForChanges();
+
+    expect(toggleSpy).toHaveBeenCalledTimes(1);
+    expect((toggleSpy.mock.calls[0][0] as CustomEvent).detail).toBe(true);
+  });
+
+  it('emits pdsAccordionToggle with false when isOpen is set to false', async () => {
+    const page = await newSpecPage({
+      components: [PdsAccordion],
+      html: `<pds-accordion open></pds-accordion>`,
+    });
+
+    const accordion = page.root as HTMLPdsAccordionElement;
+    const toggleSpy = jest.fn();
+    accordion.addEventListener('pdsAccordionToggle', toggleSpy);
+
+    accordion.isOpen = false;
+    await page.waitForChanges();
+
+    expect(toggleSpy).toHaveBeenCalledTimes(1);
+    expect((toggleSpy.mock.calls[0][0] as CustomEvent).detail).toBe(false);
+  });
+
   it('renders summary slot content and details slot content when both are set', async () => {
     const page = await newSpecPage({
       components: [PdsAccordion],
