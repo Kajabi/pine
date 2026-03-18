@@ -1,4 +1,4 @@
-import { Component, h, Host, Prop, Watch } from '@stencil/core';
+import { Component, Event, EventEmitter, h, Host, Prop, Watch } from '@stencil/core';
 import { downSmall } from '@pine-ds/icons/icons';
 
 /**
@@ -32,6 +32,11 @@ export class PdsAccordion {
     reflect: true,
   }) isOpen: boolean = false;
 
+  /**
+   * Emitted when the accordion open state changes.
+   */
+  @Event() pdsAccordionToggle: EventEmitter<boolean>;
+
   @Watch('isOpen')
   handleOpenState(newValue: boolean) {
     this.isOpen = newValue;
@@ -39,6 +44,7 @@ export class PdsAccordion {
 
   private handleToggle = () => {
     this.isOpen = this.detailsEl.open;
+    this.pdsAccordionToggle.emit(this.isOpen);
   };
 
   private getOpenAttribute = () => {
