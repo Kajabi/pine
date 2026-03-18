@@ -1711,7 +1711,7 @@ describe('pds-combobox', () => {
 
       // Manually select a different option (user has interacted)
       const newOption = component.optionEls.find((o: HTMLOptionElement) => o.value === '2');
-      component.selectedOption = newOption;
+      component.setSelectedOption(newOption);
       await page.waitForChanges();
 
       // Updating options again should not reset to the original value

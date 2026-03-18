@@ -538,7 +538,7 @@ export class PdsCombobox implements BasePdsProps {
     if (this.value && !this.selectedOption) {
       const matchingOption = this.optionEls.find(opt => opt.value === this.value);
       if (matchingOption) {
-        this.selectedOption = matchingOption;
+        this.setSelectedOption(matchingOption);
       }
     }
 
