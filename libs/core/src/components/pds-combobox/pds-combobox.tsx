@@ -533,6 +533,15 @@ export class PdsCombobox implements BasePdsProps {
       this.allItems.push(optionEl);
     });
 
+    // Re-apply preselection if a value is set but no option has been selected yet.
+    // This handles the case where `value` is set before async options have loaded.
+    if (this.value && !this.selectedOption) {
+      const matchingOption = this.optionEls.find(opt => opt.value === this.value);
+      if (matchingOption) {
+        this.selectedOption = matchingOption;
+      }
+    }
+
     this.filterOptions();
   }
 

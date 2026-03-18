@@ -1672,4 +1672,57 @@ describe('pds-combobox', () => {
       expect(option?.getAttribute('aria-selected')).toBe('false');
     });
   });
+
+  describe('async options preselection', () => {
+    it('preselects the matching option when options prop is set after value', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox" value="2"></pds-combobox>`,
+      });
+
+      const component = page.rootInstance;
+
+      // Simulate async options arriving after mount
+      component.options = [
+        { id: '1', text: 'Option One' },
+        { id: '2', text: 'Option Two' },
+        { id: '3', text: 'Option Three' },
+      ];
+      await page.waitForChanges();
+
+      expect(component.selectedOption).not.toBeNull();
+      expect(component.selectedOption?.value).toBe('2');
+      expect(component.displayText).toBe('Option Two');
+    });
+
+    it('does not overwrite an already-selected option when options are updated', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="test-combobox" value="1"></pds-combobox>`,
+      });
+
+      const component = page.rootInstance;
+
+      component.options = [
+        { id: '1', text: 'Option One' },
+        { id: '2', text: 'Option Two' },
+      ];
+      await page.waitForChanges();
+
+      // Manually select a different option (user has interacted)
+      const newOption = component.optionEls.find((o: HTMLOptionElement) => o.value === '2');
+      component.selectedOption = newOption;
+      await page.waitForChanges();
+
+      // Updating options again should not reset to the original value
+      component.options = [
+        { id: '1', text: 'Option One' },
+        { id: '2', text: 'Option Two' },
+        { id: '3', text: 'Option Three' },
+      ];
+      await page.waitForChanges();
+
+      expect(component.selectedOption?.value).toBe('2');
+    });
+  });
 });
