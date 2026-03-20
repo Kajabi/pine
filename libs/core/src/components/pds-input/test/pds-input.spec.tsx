@@ -666,20 +666,31 @@ describe('pds-input', () => {
     }
   });
 
-  it('should not recalculate addon widths on focus', async () => {
-    const page = await newSpecPage({
-      components: [PdsInput],
-      html: `
-        <pds-input component-id="field-1">
-          <div slot="prefix">Prefix Content</div>
-        </pds-input>
-      `
+  describe('ResizeObserver', () => {
+    beforeAll(() => {
+      global.ResizeObserver = jest.fn(() => ({
+        observe: jest.fn(),
+        disconnect: jest.fn(),
+        unobserve: jest.fn(),
+      })) as any;
     });
 
-    const component = page.rootInstance;
-    const root = page.root;
+    afterAll(() => {
+      delete (global as any).ResizeObserver;
+    });
 
-    if (root?.shadowRoot) {
+    it('should not recalculate addon widths on focus', async () => {
+      const page = await newSpecPage({
+        components: [PdsInput],
+        html: `
+          <pds-input component-id="field-1">
+            <div slot="prefix">Prefix Content</div>
+          </pds-input>
+        `
+      });
+
+      const component = page.rootInstance;
+      const root = page.root;
       const prefixEl = root.shadowRoot.querySelector('.pds-input__prefix');
 
       // Mock offsetWidth and set initial width
@@ -687,15 +698,14 @@ describe('pds-input', () => {
       component.updateAddonWidths();
       await new Promise(resolve => requestAnimationFrame(resolve));
 
-      const initialWidth = root.style.getPropertyValue('--prefix-width');
-      expect(initialWidth).toBe('100px');
+      expect(root.style.getPropertyValue('--prefix-width')).toBe('100px');
 
       // Spy on updateAddonWidths to ensure focus doesn't trigger it
       const updateSpy = jest.spyOn(component, 'updateAddonWidths');
 
       // Trigger focus on the native input
       const nativeInput = root.shadowRoot.querySelector('input');
-      nativeInput?.dispatchEvent(new Event('focus'));
+      nativeInput.dispatchEvent(new Event('focus'));
       await page.waitForChanges();
 
       // updateAddonWidths should not have been called by the focus-triggered re-render
@@ -703,50 +713,43 @@ describe('pds-input', () => {
 
       // Prefix width should remain unchanged
       expect(root.style.getPropertyValue('--prefix-width')).toBe('100px');
-    }
-  });
-
-  it('should clean up ResizeObserver on disconnect', async () => {
-    const page = await newSpecPage({
-      components: [PdsInput],
-      html: `
-        <pds-input component-id="field-1">
-          <div slot="prefix">Prefix Content</div>
-        </pds-input>
-      `
     });
 
-    const component = page.rootInstance;
+    it('should clean up ResizeObserver on disconnect', async () => {
+      const page = await newSpecPage({
+        components: [PdsInput],
+        html: `
+          <pds-input component-id="field-1">
+            <div slot="prefix">Prefix Content</div>
+          </pds-input>
+        `
+      });
 
-    // If ResizeObserver is available in the test env, verify cleanup
-    if (component.resizeObserver) {
+      const component = page.rootInstance;
+
+      expect(component.resizeObserver).toBeDefined();
       const disconnectSpy = jest.spyOn(component.resizeObserver, 'disconnect');
       component.disconnectedCallback();
       expect(disconnectSpy).toHaveBeenCalled();
-    }
-  });
-
-  it('should re-establish ResizeObserver on reconnection', async () => {
-    const page = await newSpecPage({
-      components: [PdsInput],
-      html: `
-        <pds-input component-id="field-1">
-          <div slot="prefix">Prefix Content</div>
-        </pds-input>
-      `
+      expect(component.resizeObserver).toBeUndefined();
     });
 
-    const component = page.rootInstance;
-    const root = page.root;
+    it('should re-establish ResizeObserver on reconnection', async () => {
+      const page = await newSpecPage({
+        components: [PdsInput],
+        html: `
+          <pds-input component-id="field-1">
+            <div slot="prefix">Prefix Content</div>
+          </pds-input>
+        `
+      });
 
-    // Ensure component is loaded and observer is set up
-    await page.waitForChanges();
-
-    if (root?.shadowRoot && typeof ResizeObserver !== 'undefined') {
+      const component = page.rootInstance;
+      const root = page.root;
       const prefixEl = root.shadowRoot.querySelector('.pds-input__prefix');
       Object.defineProperty(prefixEl, 'offsetWidth', { value: 100 });
 
-      // Simulate disconnection
+      // Simulate disconnect
       component.disconnectedCallback();
       expect(component.resizeObserver).toBeUndefined();
 
@@ -754,17 +757,14 @@ describe('pds-input', () => {
       const observeSpy = jest.spyOn(component, 'observeAddonResize');
       const updateSpy = jest.spyOn(component, 'updateAddonWidths');
 
-      // Simulate reconnection (prefixEl ref still exists from prior render)
+      // Simulate reconnection
       component.connectedCallback();
       await page.waitForChanges();
 
-      // Both methods should be called on reconnection
       expect(observeSpy).toHaveBeenCalled();
       expect(updateSpy).toHaveBeenCalled();
-
-      // Observer should be re-established
       expect(component.resizeObserver).toBeDefined();
-    }
+    });
   });
 
   describe('action slot', () => {
