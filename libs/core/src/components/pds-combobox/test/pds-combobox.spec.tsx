@@ -14,6 +14,31 @@ const createMockOption = (value: string, label: string, selected: boolean = fals
 } as unknown as HTMLOptionElement);
 
 describe('pds-combobox', () => {
+  const mockInternals = {
+    setFormValue: jest.fn(),
+    setValidity: jest.fn(),
+  };
+  let originalAttachInternals: unknown;
+
+  beforeAll(() => {
+    originalAttachInternals = (HTMLElement.prototype as { attachInternals?: unknown }).attachInternals;
+    Object.defineProperty(HTMLElement.prototype, 'attachInternals', {
+      configurable: true,
+      value: () => mockInternals,
+    });
+  });
+
+  afterAll(() => {
+    if (originalAttachInternals) {
+      Object.defineProperty(HTMLElement.prototype, 'attachInternals', {
+        configurable: true,
+        value: originalAttachInternals,
+      });
+    } else {
+      delete (HTMLElement.prototype as { attachInternals?: unknown }).attachInternals;
+    }
+  });
+
   it('renders default combobox with input trigger', async () => {
     const { root } = await newSpecPage({
       components: [PdsCombobox],
