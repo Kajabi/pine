@@ -140,6 +140,39 @@ describe('pds-input', () => {
     expect(await component.getAttribute('has-action')).toBe('true');
   });
 
+  it('does not shift prefix padding on focus', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-input component-id="test-prefix" label="Search" hide-label>
+        <pds-icon name="search" slot="prefix"></pds-icon>
+      </pds-input>
+    `);
+
+    // Wait for icon to fully render
+    await page.waitForChanges();
+
+    const input = await page.find('pds-input >>> input');
+
+    // Get the padding before focus
+    const paddingBefore = await page.evaluate(() => {
+      const input = document.querySelector('pds-input')?.shadowRoot?.querySelector('input');
+      return input ? getComputedStyle(input).paddingInlineStart : '';
+    });
+
+    // Focus the input
+    await input.focus();
+    await page.waitForChanges();
+
+    // Get the padding after focus
+    const paddingAfter = await page.evaluate(() => {
+      const input = document.querySelector('pds-input')?.shadowRoot?.querySelector('input');
+      return input ? getComputedStyle(input).paddingInlineStart : '';
+    });
+
+    // Padding should remain the same after focus
+    expect(paddingBefore).toBe(paddingAfter);
+  });
+
   it('applies highlight styling when highlight prop is set', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-input highlight value="test"></pds-input>');

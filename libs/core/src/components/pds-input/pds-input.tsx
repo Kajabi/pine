@@ -29,6 +29,7 @@ export class PdsInput {
   private focusedValue?: string | number | null;
   private originalPdsInput?: EventEmitter<InputInputEventDetail>;
   private internals?: ElementInternals;
+  private resizeObserver?: ResizeObserver;
 
   @Element() el!: HTMLPdsInputElement;
 
@@ -219,6 +220,22 @@ export class PdsInput {
    */
   @State() hasFocus = false;
 
+  private observeAddonResize() {
+    if (typeof ResizeObserver === 'undefined') return;
+
+    this.resizeObserver = new ResizeObserver(() => {
+      this.updateAddonWidths();
+    });
+
+    if (this.prefixEl) {
+      this.resizeObserver.observe(this.prefixEl);
+    }
+
+    if (this.suffixEl) {
+      this.resizeObserver.observe(this.suffixEl);
+    }
+  }
+
   private updateAddonWidths() {
     requestAnimationFrame(() => {
       if (this.prefixEl) {
@@ -314,15 +331,16 @@ export class PdsInput {
     }
   }
 
+  disconnectedCallback() {
+    this.resizeObserver?.disconnect();
+  }
+
   componentDidLoad() {
     this.debounceChanged();
     this.updateAddonWidths();
+    this.observeAddonResize();
     // Set initial form value
     this.updateFormValue();
-  }
-
-  componentDidUpdate() {
-    this.updateAddonWidths();
   }
 
   @Watch('debounce')

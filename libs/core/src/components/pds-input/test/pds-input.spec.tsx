@@ -666,6 +666,66 @@ describe('pds-input', () => {
     }
   });
 
+  it('should not recalculate addon widths on focus', async () => {
+    const page = await newSpecPage({
+      components: [PdsInput],
+      html: `
+        <pds-input component-id="field-1">
+          <div slot="prefix">Prefix Content</div>
+        </pds-input>
+      `
+    });
+
+    const component = page.rootInstance;
+    const root = page.root;
+
+    if (root?.shadowRoot) {
+      const prefixEl = root.shadowRoot.querySelector('.pds-input__prefix');
+
+      // Mock offsetWidth and set initial width
+      Object.defineProperty(prefixEl, 'offsetWidth', { value: 100 });
+      component.updateAddonWidths();
+      await new Promise(resolve => requestAnimationFrame(resolve));
+
+      const initialWidth = root.style.getPropertyValue('--prefix-width');
+      expect(initialWidth).toBe('100px');
+
+      // Spy on updateAddonWidths to ensure focus doesn't trigger it
+      const updateSpy = jest.spyOn(component, 'updateAddonWidths');
+
+      // Trigger focus on the native input
+      const nativeInput = root.shadowRoot.querySelector('input');
+      nativeInput?.dispatchEvent(new Event('focus'));
+      await page.waitForChanges();
+
+      // updateAddonWidths should not have been called by the focus-triggered re-render
+      expect(updateSpy).not.toHaveBeenCalled();
+
+      // Prefix width should remain unchanged
+      expect(root.style.getPropertyValue('--prefix-width')).toBe('100px');
+    }
+  });
+
+  it('should clean up ResizeObserver on disconnect', async () => {
+    const page = await newSpecPage({
+      components: [PdsInput],
+      html: `
+        <pds-input component-id="field-1">
+          <div slot="prefix">Prefix Content</div>
+        </pds-input>
+      `
+    });
+
+    const component = page.rootInstance;
+
+    // If ResizeObserver is available in the test env, verify cleanup
+    if (component.resizeObserver) {
+      const disconnectSpy = jest.spyOn(component.resizeObserver, 'disconnect');
+      component.disconnectedCallback();
+      expect(disconnectSpy).toHaveBeenCalled();
+    }
+  });
+
   describe('action slot', () => {
     it('renders action slot content when provided', async () => {
       const { root } = await newSpecPage({
