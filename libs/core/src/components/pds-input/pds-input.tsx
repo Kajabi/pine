@@ -329,6 +329,12 @@ export class PdsInput {
     if (this.el.attachInternals && !this.internals) {
       this.internals = this.el.attachInternals();
     }
+
+    // Re-establish ResizeObserver on reconnection (refs exist after first render)
+    if (this.prefixEl || this.suffixEl) {
+      this.updateAddonWidths();
+      this.observeAddonResize();
+    }
   }
 
   disconnectedCallback() {

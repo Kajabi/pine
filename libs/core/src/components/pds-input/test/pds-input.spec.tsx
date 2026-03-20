@@ -726,6 +726,38 @@ describe('pds-input', () => {
     }
   });
 
+  it('should re-establish ResizeObserver on reconnection', async () => {
+    const page = await newSpecPage({
+      components: [PdsInput],
+      html: `
+        <pds-input component-id="field-1">
+          <div slot="prefix">Prefix Content</div>
+        </pds-input>
+      `
+    });
+
+    const component = page.rootInstance;
+    const root = page.root;
+
+    if (root?.shadowRoot) {
+      const prefixEl = root.shadowRoot.querySelector('.pds-input__prefix');
+      Object.defineProperty(prefixEl, 'offsetWidth', { value: 100 });
+
+      // Simulate disconnect
+      component.disconnectedCallback();
+
+      // Spy on observeAddonResize to verify reconnection restores it
+      const observeSpy = jest.spyOn(component, 'observeAddonResize');
+      const updateSpy = jest.spyOn(component, 'updateAddonWidths');
+
+      // Simulate reconnection (prefixEl ref still exists from prior render)
+      component.connectedCallback();
+
+      expect(observeSpy).toHaveBeenCalled();
+      expect(updateSpy).toHaveBeenCalled();
+    }
+  });
+
   describe('action slot', () => {
     it('renders action slot content when provided', async () => {
       const { root } = await newSpecPage({
