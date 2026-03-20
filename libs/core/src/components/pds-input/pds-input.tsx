@@ -29,6 +29,8 @@ export class PdsInput {
   private focusedValue?: string | number | null;
   private originalPdsInput?: EventEmitter<InputInputEventDetail>;
   private internals?: ElementInternals;
+  private resizeObserver?: ResizeObserver;
+  private hasLoaded = false;
 
   @Element() el!: HTMLPdsInputElement;
 
@@ -219,6 +221,25 @@ export class PdsInput {
    */
   @State() hasFocus = false;
 
+  private observeAddonResize() {
+    if (typeof ResizeObserver === 'undefined') return;
+
+    // Disconnect existing observer before creating a new one
+    this.resizeObserver?.disconnect();
+
+    this.resizeObserver = new ResizeObserver(() => {
+      this.updateAddonWidths();
+    });
+
+    if (this.prefixEl) {
+      this.resizeObserver.observe(this.prefixEl);
+    }
+
+    if (this.suffixEl) {
+      this.resizeObserver.observe(this.suffixEl);
+    }
+  }
+
   private updateAddonWidths() {
     requestAnimationFrame(() => {
       if (this.prefixEl) {
@@ -312,17 +333,27 @@ export class PdsInput {
     if (this.el.attachInternals && !this.internals) {
       this.internals = this.el.attachInternals();
     }
+
+    // Re-establish ResizeObserver after DOM reconnection
+    // Only run if component has already loaded (refs are available)
+    if (this.hasLoaded && !this.resizeObserver) {
+      this.updateAddonWidths();
+      this.observeAddonResize();
+    }
+  }
+
+  disconnectedCallback() {
+    this.resizeObserver?.disconnect();
+    this.resizeObserver = undefined;
   }
 
   componentDidLoad() {
+    this.hasLoaded = true;
     this.debounceChanged();
     this.updateAddonWidths();
+    this.observeAddonResize();
     // Set initial form value
     this.updateFormValue();
-  }
-
-  componentDidUpdate() {
-    this.updateAddonWidths();
   }
 
   @Watch('debounce')
