@@ -739,22 +739,31 @@ describe('pds-input', () => {
     const component = page.rootInstance;
     const root = page.root;
 
-    if (root?.shadowRoot) {
+    // Ensure component is loaded and observer is set up
+    await page.waitForChanges();
+
+    if (root?.shadowRoot && typeof ResizeObserver !== 'undefined') {
       const prefixEl = root.shadowRoot.querySelector('.pds-input__prefix');
       Object.defineProperty(prefixEl, 'offsetWidth', { value: 100 });
 
-      // Simulate disconnect
+      // Simulate disconnection
       component.disconnectedCallback();
+      expect(component.resizeObserver).toBeUndefined();
 
-      // Spy on observeAddonResize to verify reconnection restores it
+      // Spy on methods to verify reconnection restores observer
       const observeSpy = jest.spyOn(component, 'observeAddonResize');
       const updateSpy = jest.spyOn(component, 'updateAddonWidths');
 
       // Simulate reconnection (prefixEl ref still exists from prior render)
       component.connectedCallback();
+      await page.waitForChanges();
 
+      // Both methods should be called on reconnection
       expect(observeSpy).toHaveBeenCalled();
       expect(updateSpy).toHaveBeenCalled();
+
+      // Observer should be re-established
+      expect(component.resizeObserver).toBeDefined();
     }
   });
 

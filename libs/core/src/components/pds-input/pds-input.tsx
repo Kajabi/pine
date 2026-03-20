@@ -30,6 +30,7 @@ export class PdsInput {
   private originalPdsInput?: EventEmitter<InputInputEventDetail>;
   private internals?: ElementInternals;
   private resizeObserver?: ResizeObserver;
+  private hasLoaded = false;
 
   @Element() el!: HTMLPdsInputElement;
 
@@ -223,6 +224,9 @@ export class PdsInput {
   private observeAddonResize() {
     if (typeof ResizeObserver === 'undefined') return;
 
+    // Disconnect existing observer before creating a new one
+    this.resizeObserver?.disconnect();
+
     this.resizeObserver = new ResizeObserver(() => {
       this.updateAddonWidths();
     });
@@ -330,8 +334,9 @@ export class PdsInput {
       this.internals = this.el.attachInternals();
     }
 
-    // Re-establish ResizeObserver on reconnection (refs exist after first render)
-    if (this.prefixEl || this.suffixEl) {
+    // Re-establish ResizeObserver after DOM reconnection
+    // Only run if component has already loaded (refs are available)
+    if (this.hasLoaded && !this.resizeObserver) {
       this.updateAddonWidths();
       this.observeAddonResize();
     }
@@ -339,9 +344,11 @@ export class PdsInput {
 
   disconnectedCallback() {
     this.resizeObserver?.disconnect();
+    this.resizeObserver = undefined;
   }
 
   componentDidLoad() {
+    this.hasLoaded = true;
     this.debounceChanged();
     this.updateAddonWidths();
     this.observeAddonResize();
