@@ -101,6 +101,45 @@
   flex-shrink: var(--pine-dimension-none);
 }
 
+// Pill list — shared base
+.pds-multiselect__pill-list {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pine-dimension-2xs);
+}
+
+// Inline: lives inside the trigger
+.pds-multiselect__pill-list--inline {
+  flex: 1;
+  min-width: 0;
+}
+
+// Below: outside the trigger
+.pds-multiselect__pill-list--below {
+  margin-block-start: var(--pine-dimension-2xs);
+}
+
+// Overflow badge
+.pds-multiselect__pill-overflow {
+  color: var(--pine-color-text-muted);
+  font: var(--pine-typography-body-sm-medium);
+  white-space: nowrap;
+}
+
+// Pill-inline trigger modifier — supports wrapping chips
+.pds-multiselect__trigger--pill-inline {
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--pine-dimension-2xs);
+  min-height: var(--pine-dimension-450);
+  padding: var(--pine-dimension-2xs) var(--pine-dimension-sm);
+
+  &.pds-multiselect__trigger--open {
+    border-color: var(--pine-color-border-active);
+  }
+}
+
 .pds-multiselect__panel {
   background: var(--pine-color-background-container);
   border-radius: var(--pine-dimension-125);
