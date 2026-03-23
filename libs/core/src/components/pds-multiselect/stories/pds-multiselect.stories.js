@@ -76,6 +76,20 @@ export default {
       control: 'object',
       description: 'Array of selected option values',
     },
+    selectedDisplay: {
+      control: 'select',
+      options: ['count', 'pill'],
+      description: 'Controls how selected items are displayed outside the dropdown panel.',
+    },
+    pillPosition: {
+      control: 'select',
+      options: ['inline', 'below'],
+      description: 'Controls where pill chips render when selectedDisplay is pill.',
+    },
+    maxInlinePills: {
+      control: 'number',
+      description: 'Maximum chips shown inline before collapsing to a "+N more" badge.',
+    },
   },
 };
 
@@ -608,4 +622,110 @@ export const WithCreateOption = {
       </p>
     `;
   },
+};
+
+export const PillInline = {
+  args: {
+    componentId: 'multiselect-pill-inline',
+    label: 'Departments',
+    placeholder: 'Select...',
+    selectedDisplay: 'pill',
+    pillPosition: 'inline',
+    value: ['1', '2', '3'],
+  },
+  render: (args, { updateArgs } = {}) => html`
+    <pds-multiselect
+      component-id="${args.componentId}"
+      label="${args.label}"
+      placeholder="${args.placeholder}"
+      selected-display="${args.selectedDisplay}"
+      pill-position="${args.pillPosition}"
+      .value=${args.value}
+      @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
+    >
+      ${unsafeHTML(defaultOptions)}
+    </pds-multiselect>
+  `,
+};
+
+export const PillBelow = {
+  args: {
+    componentId: 'multiselect-pill-below',
+    label: 'Departments',
+    placeholder: 'Select...',
+    selectedDisplay: 'pill',
+    pillPosition: 'below',
+    value: ['1', '2', '3', '4'],
+  },
+  render: (args, { updateArgs } = {}) => html`
+    <pds-multiselect
+      component-id="${args.componentId}"
+      label="${args.label}"
+      placeholder="${args.placeholder}"
+      selected-display="${args.selectedDisplay}"
+      pill-position="${args.pillPosition}"
+      .value=${args.value}
+      @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
+    >
+      ${unsafeHTML(defaultOptions)}
+    </pds-multiselect>
+  `,
+};
+
+export const PillInlineOverflow = {
+  args: {
+    componentId: 'multiselect-pill-overflow',
+    label: 'Departments (max 2 inline)',
+    placeholder: 'Select...',
+    selectedDisplay: 'pill',
+    pillPosition: 'inline',
+    maxInlinePills: 2,
+    value: ['1', '2', '3', '4', '5'],
+  },
+  render: (args, { updateArgs } = {}) => html`
+    <pds-multiselect
+      component-id="${args.componentId}"
+      label="${args.label}"
+      placeholder="${args.placeholder}"
+      selected-display="${args.selectedDisplay}"
+      pill-position="${args.pillPosition}"
+      max-inline-pills="${args.maxInlinePills}"
+      .value=${args.value}
+      @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
+    >
+      ${unsafeHTML(defaultOptions)}
+    </pds-multiselect>
+    <p style="margin-top: var(--pine-dimension-sm); color: var(--pine-color-text-secondary);">
+      Shows 2 chips inline, "+3 more" badge for the rest.
+    </p>
+  `,
+};
+
+export const PillDisabled = {
+  args: {
+    componentId: 'multiselect-pill-disabled',
+    label: 'Disabled Pill Multiselect',
+    placeholder: 'Cannot select...',
+    selectedDisplay: 'pill',
+    pillPosition: 'inline',
+    disabled: true,
+    value: ['1', '2'],
+  },
+  render: (args, { updateArgs } = {}) => html`
+    <pds-multiselect
+      component-id="${args.componentId}"
+      label="${args.label}"
+      placeholder="${args.placeholder}"
+      selected-display="${args.selectedDisplay}"
+      pill-position="${args.pillPosition}"
+      ?disabled=${args.disabled}
+      .value=${args.value}
+      @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
+    >
+      ${unsafeHTML(defaultOptions)}
+    </pds-multiselect>
+    <p style="margin-top: var(--pine-dimension-sm); color: var(--pine-color-text-secondary);">
+      Disabled state: chips show as text variant without close buttons.
+    </p>
+  `,
 };
