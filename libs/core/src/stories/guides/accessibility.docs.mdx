@@ -1,4 +1,5 @@
 import { Meta } from '@storybook/addon-docs/blocks';
+import { DocCanvas } from '@pine-ds/doc-components';
 
 <Meta title="Guides/Accessibility" parameters={{ previewTabs: { canvas: { hidden: true } } }} />
 
@@ -30,34 +31,64 @@ Users who rely on keyboard navigation must be able to reach and operate every in
 
 ### Labels
 
-Prefer visible labels. When a visible label is not possible, use `aria-label` or `aria-labelledby`:
+Prefer visible labels. When a visible label is not possible, use `aria-label` or `aria-labelledby`.
 
-```html
-<!-- Preferred: visible label via the component's label prop -->
-<pds-input label="Email address" name="email"></pds-input>
+**Preferred: visible label via the `label` prop**
 
-<!-- Acceptable: aria-label for icon-only buttons -->
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-input label="Email address" name="email"></pds-input>`,
+    react: `<PdsInput label="Email address" name="email"></PdsInput>`
+  }}>
+  <pds-input label="Email address" name="email"></pds-input>
+</DocCanvas>
+
+**`aria-label` for icon-only buttons**
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `
 <pds-button aria-label="Close dialog">
   <pds-icon name="x" aria-hidden="true"></pds-icon>
-</pds-button>
-```
+</pds-button>`,
+    react: `
+<PdsButton aria-label="Close dialog">
+  <PdsIcon name="x" aria-hidden="true"></PdsIcon>
+</PdsButton>`
+  }}>
+  <pds-button aria-label="Close dialog">
+    <pds-icon name="x" aria-hidden="true"></pds-icon>
+  </pds-button>
+</DocCanvas>
 
-Use `aria-labelledby` when pointing to an existing visible element:
+**`aria-labelledby` pointing to an existing visible element**
 
-```html
+<DocCanvas
+  mdxSource={{
+    webComponent: `
 <h2 id="section-heading">Billing details</h2>
-<pds-input aria-labelledby="section-heading" name="billing-name"></pds-input>
-```
+<pds-input aria-labelledby="section-heading" name="billing-name"></pds-input>`,
+    react: `
+<h2 id="section-heading">Billing details</h2>
+<PdsInput aria-labelledby="section-heading" name="billing-name"></PdsInput>`
+  }}>
+  <h2 id="section-heading">Billing details</h2>
+  <pds-input aria-labelledby="section-heading" name="billing-name"></pds-input>
+</DocCanvas>
 
 ### Decorative Icons
 
 Always mark decorative icons as hidden from assistive technologies:
 
-```html
-<pds-icon name="star" aria-hidden="true"></pds-icon>
-```
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-icon name="star" aria-hidden="true"></pds-icon>`,
+    react: `<PdsIcon name="star" aria-hidden="true"></PdsIcon>`
+  }}>
+  <pds-icon name="star" aria-hidden="true"></pds-icon>
+</DocCanvas>
 
-When an icon conveys meaning with no adjacent label, provide an `aria-label` on the parent interactive element instead (see button example above).
+When an icon conveys meaning with no adjacent label, provide an `aria-label` on the parent interactive element instead (see icon-only button example above).
 
 ### Landmark Roles
 
@@ -162,15 +193,23 @@ Form accessibility patterns in Pine:
 
 **Always pair inputs with labels** using the `label` prop — never use `placeholder` as a substitute:
 
-```html
-<pds-input label="Password" type="password" name="password"></pds-input>
-```
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-input label="Password" type="password" name="password"></pds-input>`,
+    react: `<PdsInput label="Password" type="password" name="password"></PdsInput>`
+  }}>
+  <pds-input label="Password" type="password" name="password"></pds-input>
+</DocCanvas>
 
 **Inline validation:** set `invalid` and `error` on the component in response to user input:
 
-```html
-<pds-input label="Email" invalid error="Please enter a valid email address." name="email"></pds-input>
-```
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-input label="Email" invalid error="Please enter a valid email address." name="email"></pds-input>`,
+    react: `<PdsInput label="Email" invalid="true" error="Please enter a valid email address." name="email"></PdsInput>`
+  }}>
+  <pds-input label="Email" invalid error="Please enter a valid email address." name="email"></pds-input>
+</DocCanvas>
 
 **Summary validation:** after a failed submission, render a `pds-alert` listing all errors and move focus to it:
 
@@ -186,9 +225,13 @@ document.querySelector('#form-errors').focus();
 
 **Async validation:** indicate loading state and signal pending updates to assistive technologies:
 
-```html
-<pds-button loading aria-busy="true">Checking availability…</pds-button>
-```
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-button loading aria-busy="true">Checking availability…</pds-button>`,
+    react: `<PdsButton loading="true" aria-busy="true">Checking availability…</PdsButton>`
+  }}>
+  <pds-button loading aria-busy="true">Checking availability…</pds-button>
+</DocCanvas>
 
 See <pds-link href="../?path=/docs/guides-forms--docs">Using Pine Form Components</pds-link> for full form examples.
 
