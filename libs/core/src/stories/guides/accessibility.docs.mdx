@@ -1,0 +1,209 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Guides/Accessibility" parameters={{ previewTabs: { canvas: { hidden: true } } }} />
+
+# Accessibility
+
+Pine targets **WCAG 2.1 Level AA** compliance across all components. This guide covers the patterns, attributes, and testing approaches that help you build accessible experiences with Pine.
+
+Every component doc also includes a dedicated **Accessibility** section with component-specific guidance.
+
+> **Tip:** Use the **Accessibility** tab in Storybook's bottom panel (powered by `@storybook/addon-a11y`) to run automated checks against any live story.
+
+---
+
+## Keyboard Navigation
+
+Users who rely on keyboard navigation must be able to reach and operate every interactive element.
+
+**Core principles:**
+- Interactive elements must be reachable via `Tab` and `Shift+Tab`
+- Do not remove or override `tabIndex` unless you have a deliberate focus management strategy
+- Custom interactive elements (e.g. `pds-button`, `pds-checkbox`, `pds-switch`) manage keyboard interaction internally — do not suppress their default behavior
+- Avoid using `disabled` solely to prevent keyboard access; prefer `aria-disabled` when the element should remain discoverable
+
+**Trap focus in overlays.** When `pds-modal` is open, focus must remain within it until it is dismissed. Pine handles this automatically — do not break this behavior by rendering focusable elements outside the modal while it is open.
+
+---
+
+## ARIA Patterns
+
+### Labels
+
+Prefer visible labels. When a visible label is not possible, use `aria-label` or `aria-labelledby`:
+
+```html
+<!-- Preferred: visible label via the component's label prop -->
+<pds-input label="Email address" name="email"></pds-input>
+
+<!-- Acceptable: aria-label for icon-only buttons -->
+<pds-button aria-label="Close dialog">
+  <pds-icon name="x" aria-hidden="true"></pds-icon>
+</pds-button>
+```
+
+Use `aria-labelledby` when pointing to an existing visible element:
+
+```html
+<h2 id="section-heading">Billing details</h2>
+<pds-input aria-labelledby="section-heading" name="billing-name"></pds-input>
+```
+
+### Decorative Icons
+
+Always mark decorative icons as hidden from assistive technologies:
+
+```html
+<pds-icon name="star" aria-hidden="true"></pds-icon>
+```
+
+When an icon conveys meaning with no adjacent label, provide an `aria-label` on the parent interactive element instead (see button example above).
+
+### Landmark Roles
+
+Structure page regions with landmark roles so screen reader users can navigate quickly:
+
+```html
+<header role="banner">…</header>
+<nav role="navigation" aria-label="Main">…</nav>
+<main role="main">…</main>
+<footer role="contentinfo">…</footer>
+```
+
+### Live Regions
+
+Use live regions to announce dynamic content changes (e.g. loading results, validation summaries) without moving focus:
+
+```html
+<div aria-live="polite" aria-atomic="true">
+  <!-- Content injected here is announced by screen readers -->
+</div>
+```
+
+Use `aria-live="assertive"` only for critical errors that must interrupt the user immediately.
+
+---
+
+## Color and Contrast
+
+Pine enforces semantic token usage to maintain contrast ratios:
+
+| Context | Minimum ratio |
+|---|---|
+| Normal text (< 18pt) | 4.5 : 1 |
+| Large text (≥ 18pt or ≥ 14pt bold) | 3 : 1 |
+| UI components and focus indicators | 3 : 1 |
+
+Do not use raw hex values or core tokens for text and UI colors in application code. Reference semantic tokens (e.g. `--pine-color-text-default`) so that contrast is maintained across themes.
+
+See <pds-link href="../?path=/docs/foundations-color-linting--docs">Color Linting</pds-link> for automated enforcement in your IDE.
+
+---
+
+## Focus Management
+
+Move focus programmatically when the user's context changes:
+
+| Scenario | Where to move focus |
+|---|---|
+| Modal opens | First focusable element inside the modal |
+| Modal closes | The element that triggered the modal |
+| Toast appears | Toast does not receive focus — use `aria-live` instead |
+| Page-level error summary displayed | The summary container or its heading |
+| Route / page change (SPA) | The page `<h1>` or a skip-to-content target |
+
+Pine's `pds-modal` handles open/close focus management internally. For custom focus movement:
+
+```js
+document.querySelector('#my-target').focus();
+```
+
+---
+
+## Forms
+
+Form accessibility patterns in Pine:
+
+**Always pair inputs with labels** using the `label` prop — never use `placeholder` as a substitute:
+
+```html
+<pds-input label="Password" type="password" name="password"></pds-input>
+```
+
+**Inline validation:** set `invalid` and `error` on the component in response to user input:
+
+```html
+<pds-input label="Email" invalid error="Please enter a valid email address." name="email"></pds-input>
+```
+
+**Summary validation:** after a failed submission, render a `pds-alert` listing all errors and move focus to it:
+
+```html
+<pds-alert variant="error" id="form-errors">
+  Please correct the following errors before submitting.
+</pds-alert>
+```
+
+```js
+document.querySelector('#form-errors').focus();
+```
+
+**Async validation:** indicate loading state and signal pending updates to assistive technologies:
+
+```html
+<pds-button loading aria-busy="true">Checking availability…</pds-button>
+```
+
+See <pds-link href="../?path=/docs/guides-forms--docs">Using Pine Form Components</pds-link> for full form examples.
+
+---
+
+## Screen Reader Guidance
+
+- Test with **VoiceOver** (macOS/iOS) and **NVDA** (Windows) as a smoke test
+- Announce status changes via `aria-live` regions rather than moving focus unexpectedly
+- Use `role="status"` for non-critical updates (equivalent to `aria-live="polite"`)
+- Avoid `display: none` or `visibility: hidden` on elements that should be visually hidden but accessible — use the `.visually-hidden` CSS pattern instead:
+
+```css
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+```
+
+---
+
+## Testing Checklist
+
+Use this checklist when reviewing a feature for accessibility:
+
+- [ ] All interactive elements are reachable by `Tab` key
+- [ ] Focus order matches visual reading order
+- [ ] All inputs have visible, programmatically associated labels
+- [ ] Error messages are associated with their inputs (`error` prop sets `aria-describedby` internally)
+- [ ] Focus is trapped inside open modals
+- [ ] Focus is restored when modals close
+- [ ] Decorative images and icons have `aria-hidden="true"`
+- [ ] Color is not the only way information is conveyed
+- [ ] Text meets 4.5:1 contrast ratio (check with Storybook a11y panel or browser DevTools)
+- [ ] Dynamic content updates are announced via `aria-live`
+- [ ] Page works end-to-end using only a keyboard
+- [ ] VoiceOver or NVDA smoke test passes for key user flows
+
+---
+
+## Resources
+
+- <pds-link href="https://www.w3.org/WAI/WCAG21/quickref/" external>WCAG 2.1 Quick Reference</pds-link>
+- <pds-link href="https://www.a11yproject.com/checklist/" external>A11y Project Checklist</pds-link>
+- <pds-link href="https://dequeuniversity.com/rules/axe/" external>axe Rules Reference</pds-link>
+- <pds-link href="../?path=/docs/foundations-color-linting--docs">Pine Color Linting</pds-link>
+- <pds-link href="../?path=/docs/guides-forms--docs">Pine Forms Guide</pds-link>

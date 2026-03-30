@@ -1,0 +1,217 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Guides/Patterns" parameters={{ previewTabs: { canvas: { hidden: true } } }} />
+
+# UX Patterns
+
+This guide covers composed UI patterns built from Pine components. Each pattern includes when to use it, which components to reach for, and a code example.
+
+---
+
+## Empty States
+
+Use empty states to fill space when no content exists yet. There are three distinct contexts:
+
+| Context | Description |
+|---|---|
+| **Zero data** | The user has not created anything yet |
+| **No results** | A search or filter returned nothing |
+| **First use** | The feature is available but hasn't been configured |
+
+**Components:** `pds-box`, `pds-text`, `pds-button`
+
+```html
+<!-- Zero data empty state -->
+<pds-box display="flex" direction="column" align="center" padding="xl" gap="md">
+  <pds-icon name="folder-open" size="48" aria-hidden="true"></pds-icon>
+  <pds-text tag="h2" size="lg" weight="semibold">No products yet</pds-text>
+  <pds-text color="subtle">Create your first product to get started.</pds-text>
+  <pds-button>Create product</pds-button>
+</pds-box>
+```
+
+```html
+<!-- No results empty state -->
+<pds-box display="flex" direction="column" align="center" padding="xl" gap="md">
+  <pds-icon name="search" size="48" aria-hidden="true"></pds-icon>
+  <pds-text tag="h2" size="lg" weight="semibold">No results found</pds-text>
+  <pds-text color="subtle">Try adjusting your search or filter criteria.</pds-text>
+  <pds-button variant="secondary">Clear filters</pds-button>
+</pds-box>
+```
+
+**Guidelines:**
+- Keep messaging concise — one sentence is usually enough
+- Include a clear call to action when the user can do something about it
+- Avoid empty states that leave the user with nowhere to go
+
+---
+
+## Loading States
+
+Use loading states to signal that content is being fetched or an action is in progress.
+
+### Spinner (indeterminate)
+
+Use when duration is unknown. `pds-loader` renders a spinning indicator.
+
+```html
+<pds-box display="flex" justify="center" padding="xl">
+  <pds-loader aria-label="Loading content"></pds-loader>
+</pds-box>
+```
+
+### Button loading
+
+Use `loading` on `pds-button` to disable interaction and show a spinner inline:
+
+```html
+<pds-button loading>Saving…</pds-button>
+```
+
+Pair with `aria-busy="true"` on the containing form when waiting for async results:
+
+```html
+<form aria-busy="true">
+  <pds-button loading>Submitting</pds-button>
+</form>
+```
+
+### Progress bar (determinate)
+
+Use `pds-progress` when a percentage or step count is known:
+
+```html
+<pds-progress value="60" max="100" label="Upload progress"></pds-progress>
+```
+
+### Skeleton placeholder
+
+For content-heavy views, use `pds-box` with a muted background to approximate the layout while data loads. Apply `aria-hidden="true"` so screen readers skip the placeholder:
+
+```html
+<pds-box aria-hidden="true" display="flex" direction="column" gap="sm">
+  <pds-box style="height: 1rem; background: var(--pine-color-background-subtle); border-radius: var(--pine-border-radius-sm);"></pds-box>
+  <pds-box style="height: 1rem; width: 70%; background: var(--pine-color-background-subtle); border-radius: var(--pine-border-radius-sm);"></pds-box>
+</pds-box>
+```
+
+---
+
+## Error States
+
+### Inline field error
+
+Use `invalid` and `error` on form inputs to surface field-level errors:
+
+```html
+<pds-input
+  label="Email address"
+  name="email"
+  value="not-an-email"
+  invalid
+  error="Please enter a valid email address."
+></pds-input>
+```
+
+### Page-level error summary
+
+After form submission fails, render a `pds-alert` listing all errors and move focus to it:
+
+```html
+<pds-alert variant="error" id="form-error-summary" tabindex="-1">
+  <strong>There are 2 errors in this form:</strong>
+  <ul>
+    <li>Email address is required.</li>
+    <li>Password must be at least 8 characters.</li>
+  </ul>
+</pds-alert>
+```
+
+```js
+document.querySelector('#form-error-summary').focus();
+```
+
+### Network / unexpected error
+
+For 500 or connectivity failures, use a full-width `pds-alert` with a retry action:
+
+```html
+<pds-alert variant="error">
+  Something went wrong. Please try again, or contact support if the problem persists.
+  <pds-link slot="action" href="#">Retry</pds-link>
+</pds-alert>
+```
+
+---
+
+## Confirmation Dialogs
+
+Use `pds-modal` for destructive actions that cannot be undone. Confirmation dialogs require explicit user intent — do not perform the action until the user confirms.
+
+```html
+<pds-modal id="delete-modal" open="false">
+  <pds-modal-header slot="header">Delete product?</pds-modal-header>
+
+  <pds-text>This will permanently delete <strong>Product Name</strong> and all its content. This action cannot be undone.</pds-text>
+
+  <pds-modal-footer slot="footer">
+    <pds-button variant="secondary" id="cancel-delete">Cancel</pds-button>
+    <pds-button variant="danger" id="confirm-delete">Delete product</pds-button>
+  </pds-modal-footer>
+</pds-modal>
+```
+
+**Guidelines:**
+- Label the confirm button with the specific action (e.g. "Delete product"), not just "Confirm" or "OK"
+- The cancel button should be the first focusable element, or ensure focus lands on it by default
+- State the exact consequence so users understand what they're agreeing to
+
+---
+
+## Success Feedback
+
+### Transient (toast)
+
+Use `pds-toast` for brief confirmations after a completed action. Toasts are non-blocking and auto-dismiss.
+
+```html
+<pds-toast variant="success" open>
+  Product saved successfully.
+</pds-toast>
+```
+
+Do not move focus to a toast. Use `aria-live="polite"` on the toast container so screen readers announce the message.
+
+### Persistent (alert)
+
+Use `pds-alert variant="success"` when the outcome needs to remain visible, such as after a multi-step process completes:
+
+```html
+<pds-alert variant="success">
+  Your changes have been published. It may take a few minutes to appear for members.
+</pds-alert>
+```
+
+---
+
+## Disabled States
+
+Use `disabled` when an action is temporarily unavailable due to missing prerequisites. Avoid disabling interactive elements without explanation.
+
+```html
+<!-- Acceptable: disabled with adjacent context -->
+<pds-button disabled>Publish</pds-button>
+<pds-text size="sm" color="subtle">Add at least one lesson before publishing.</pds-text>
+```
+
+**When to use `disabled` vs read-only:**
+
+| | `disabled` | `readonly` |
+|---|---|---|
+| Keyboard focusable | No | Yes |
+| Screen reader readable | No | Yes |
+| Form submitted | No | Yes |
+| Use when | User cannot act right now | User can see but not edit |
+
+> **Accessibility note:** Disabled buttons are not read by all screen readers. If the action is important, keep the button enabled and surface an error when clicked, or use `aria-disabled="true"` to keep it discoverable while preventing the action.
