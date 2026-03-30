@@ -48,16 +48,19 @@ Prefer visible labels. When a visible label is not possible, use `aria-label` or
 <DocCanvas
   mdxSource={{
     webComponent: `
-<pds-button aria-label="Close dialog">
+<pds-button icon-only>
   <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+  Close dialog
 </pds-button>`,
     react: `
-<PdsButton aria-label="Close dialog">
+<PdsButton icon-only>
   <PdsIcon slot="start" name="remove" aria-hidden="true"></PdsIcon>
+  Close dialog
 </PdsButton>`
   }}>
-  <pds-button aria-label="Close dialog">
+  <pds-button icon-only>
     <pds-icon slot="start" name="remove" aria-hidden="true"></pds-icon>
+    Close dialog
   </pds-button>
 </DocCanvas>
 
