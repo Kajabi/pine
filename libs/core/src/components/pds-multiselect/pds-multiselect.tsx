@@ -1195,6 +1195,7 @@ export class PdsMultiselect {
             <button
               ref={el => (this.triggerEl = el)}
               type="button"
+              part="trigger"
               class={{
                 'pds-multiselect__trigger': true,
                 'pds-multiselect__trigger--open': this.isOpen,
