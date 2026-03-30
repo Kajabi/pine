@@ -12,11 +12,26 @@ This guide covers composed UI patterns built from Pine components. Each pattern 
 
 Use empty states to fill space when no content exists yet. There are three distinct contexts:
 
-| Context | Description |
-|---|---|
-| **Zero data** | The user has not created anything yet |
-| **No results** | A search or filter returned nothing |
-| **First use** | The feature is available but hasn't been configured |
+<pds-table component-id="empty-state-contexts" compact row-dividers>
+  <pds-table-head>
+    <pds-table-head-cell>Context</pds-table-head-cell>
+    <pds-table-head-cell>Description</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell><strong>Zero data</strong></pds-table-cell>
+      <pds-table-cell>The user has not created anything yet</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><strong>No results</strong></pds-table-cell>
+      <pds-table-cell>A search or filter returned nothing</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell><strong>First use</strong></pds-table-cell>
+      <pds-table-cell>The feature is available but hasn't been configured</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
 
 **Components:** `pds-box`, `pds-text`, `pds-button`
 
@@ -207,11 +222,34 @@ Use `disabled` when an action is temporarily unavailable due to missing prerequi
 
 **When to use `disabled` vs read-only:**
 
-| | `disabled` | `readonly` |
-|---|---|---|
-| Keyboard focusable | No | Yes |
-| Screen reader readable | No | Yes |
-| Form submitted | No | Yes |
-| Use when | User cannot act right now | User can see but not edit |
+<pds-table component-id="disabled-vs-readonly" compact row-dividers>
+  <pds-table-head>
+    <pds-table-head-cell></pds-table-head-cell>
+    <pds-table-head-cell><code>disabled</code></pds-table-head-cell>
+    <pds-table-head-cell><code>readonly</code></pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell>Keyboard focusable</pds-table-cell>
+      <pds-table-cell>No</pds-table-cell>
+      <pds-table-cell>Yes</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Screen reader readable</pds-table-cell>
+      <pds-table-cell>No</pds-table-cell>
+      <pds-table-cell>Yes</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Form submitted</pds-table-cell>
+      <pds-table-cell>No</pds-table-cell>
+      <pds-table-cell>Yes</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Use when</pds-table-cell>
+      <pds-table-cell>User cannot act right now</pds-table-cell>
+      <pds-table-cell>User can see but not edit</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
 
 > **Accessibility note:** Disabled buttons are not read by all screen readers. If the action is important, keep the button enabled and surface an error when clicked, or use `aria-disabled="true"` to keep it discoverable while preventing the action.

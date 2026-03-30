@@ -88,11 +88,26 @@ Use `aria-live="assertive"` only for critical errors that must interrupt the use
 
 Pine enforces semantic token usage to maintain contrast ratios:
 
-| Context | Minimum ratio |
-|---|---|
-| Normal text (< 18pt) | 4.5 : 1 |
-| Large text (≥ 18pt or ≥ 14pt bold) | 3 : 1 |
-| UI components and focus indicators | 3 : 1 |
+<pds-table component-id="contrast-ratios" compact row-dividers>
+  <pds-table-head>
+    <pds-table-head-cell>Context</pds-table-head-cell>
+    <pds-table-head-cell>Minimum ratio</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell>Normal text (&lt; 18pt)</pds-table-cell>
+      <pds-table-cell>4.5 : 1</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Large text (≥ 18pt or ≥ 14pt bold)</pds-table-cell>
+      <pds-table-cell>3 : 1</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>UI components and focus indicators</pds-table-cell>
+      <pds-table-cell>3 : 1</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
 
 Do not use raw hex values or core tokens for text and UI colors in application code. Reference semantic tokens (e.g. `--pine-color-text-default`) so that contrast is maintained across themes.
 
@@ -104,13 +119,34 @@ See <pds-link href="../?path=/docs/foundations-color-linting--docs">Color Lintin
 
 Move focus programmatically when the user's context changes:
 
-| Scenario | Where to move focus |
-|---|---|
-| Modal opens | First focusable element inside the modal |
-| Modal closes | The element that triggered the modal |
-| Toast appears | Toast does not receive focus — use `aria-live` instead |
-| Page-level error summary displayed | The summary container or its heading |
-| Route / page change (SPA) | The page `<h1>` or a skip-to-content target |
+<pds-table component-id="focus-management" compact row-dividers>
+  <pds-table-head>
+    <pds-table-head-cell>Scenario</pds-table-head-cell>
+    <pds-table-head-cell>Where to move focus</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell>Modal opens</pds-table-cell>
+      <pds-table-cell>First focusable element inside the modal</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Modal closes</pds-table-cell>
+      <pds-table-cell>The element that triggered the modal</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Toast appears</pds-table-cell>
+      <pds-table-cell>Toast does not receive focus — use <code>aria-live</code> instead</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Page-level error summary displayed</pds-table-cell>
+      <pds-table-cell>The summary container or its heading</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Route / page change (SPA)</pds-table-cell>
+      <pds-table-cell>The page <code>h1</code> or a skip-to-content target</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
 
 Pine's `pds-modal` handles open/close focus management internally. For custom focus movement:
 
