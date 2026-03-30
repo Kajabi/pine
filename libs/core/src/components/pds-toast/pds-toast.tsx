@@ -146,6 +146,7 @@ export class PdsToast {
           {this.dismissible && (
             <button
               type="button"
+              part="dismiss"
               class="pds-toast__button"
               onClick={() => {
                 this.dismiss();

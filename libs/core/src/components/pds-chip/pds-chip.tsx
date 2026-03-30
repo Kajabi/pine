@@ -131,7 +131,7 @@ export class PdsChip {
     const showDot = this.sentiment === 'brand' ? false : this.dot;
 
     const chipContent = isDropdown ? (
-      <button class="pds-chip__button" type="button">
+      <button class="pds-chip__button" type="button" part="button">
         {this.icon && <pds-icon icon={this.icon} size={this.iconSize} aria-hidden="true"></pds-icon>}
         {showDot && <i class="pds-chip__dot" aria-hidden="true"></i>}
         <slot></slot>

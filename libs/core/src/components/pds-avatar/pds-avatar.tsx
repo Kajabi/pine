@@ -98,7 +98,7 @@ export class PdsAvatar {
     return (
       this.dropdown
         ?
-        <button class="pds-avatar__button" type="button" aria-label="Avatar dropdown trigger">
+        <button class="pds-avatar__button" type="button" part="button" aria-label="Avatar dropdown trigger">
         {this.renderAssetWrapper()}
         </button>
         :

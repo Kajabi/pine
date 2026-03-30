@@ -128,6 +128,7 @@ export class PdsDropdownMenuItem implements BasePdsProps {
         }}
         tabIndex={this.disabled ? -1 : 0}
         type="button"
+        part="button"
         onKeyDown={this.handleKeyDown}
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
