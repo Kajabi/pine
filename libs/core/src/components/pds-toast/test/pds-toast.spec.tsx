@@ -14,7 +14,7 @@ describe('pds-toast', () => {
             <span class="pds-toast__message">
               <slot></slot>
             </span>
-            <button aria-label="Dismiss message" class="pds-toast__button" type="button">
+            <button aria-label="Dismiss message" class="pds-toast__button" part="dismiss" type="button">
               <pds-icon name="remove"></pds-icon>
             </button>
           </div>
@@ -36,7 +36,7 @@ describe('pds-toast', () => {
             <span class="pds-toast__message">
               <slot></slot>
             </span>
-            <button aria-label="Dismiss message" class="pds-toast__button" type="button">
+            <button aria-label="Dismiss message" class="pds-toast__button" part="dismiss" type="button">
               <pds-icon name="remove"></pds-icon>
             </button>
           </div>
@@ -62,7 +62,7 @@ describe('pds-toast', () => {
             <span class="pds-toast__message">
               <slot></slot>
             </span>
-            <button aria-label="Dismiss message" class="pds-toast__button" type="button">
+            <button aria-label="Dismiss message" class="pds-toast__button" part="dismiss" type="button">
               <pds-icon name="remove"></pds-icon>
             </button>
           </div>
@@ -83,7 +83,7 @@ describe('pds-toast', () => {
             <span class="pds-toast__message">
               <slot></slot>
             </span>
-            <button aria-label="Dismiss message" class="pds-toast__button" type="button">
+            <button aria-label="Dismiss message" class="pds-toast__button" part="dismiss" type="button">
               <pds-icon name="remove"></pds-icon>
             </button>
           </div>
@@ -127,7 +127,7 @@ describe('pds-toast', () => {
             <span class="pds-toast__message">
               <slot></slot>
             </span>
-            <button aria-label="Dismiss message" class="pds-toast__button" type="button">
+            <button aria-label="Dismiss message" class="pds-toast__button" part="dismiss" type="button">
               <pds-icon name="remove"></pds-icon>
             </button>
           </div>

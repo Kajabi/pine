@@ -75,7 +75,6 @@ export class PdsTab {
       <Host variant={this.variant} slot="tabs" index={this.index}>
         <button
           role="tab"
-          part="tab"
           id={this.parentComponentId + "__" + this.name}
           aria-controls={this.parentComponentId + "__" + this.name + "-panel"}
           tabindex={this.disabled ? "-1" : (this.selected ? "0" : "-1")}
