@@ -1,4 +1,5 @@
 import { Meta } from '@storybook/addon-docs/blocks';
+import { DocCanvas } from '@pine-ds/doc-components';
 
 <Meta title="Guides/Patterns" parameters={{ previewTabs: { canvas: { hidden: true } } }} />
 
@@ -35,25 +36,59 @@ Use empty states to fill space when no content exists yet. There are three disti
 
 **Components:** `pds-box`, `pds-text`, `pds-button`
 
-```html
-<!-- Zero data empty state -->
+### Zero data
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `
 <pds-box display="flex" direction="column" align="center" padding="xl" gap="md">
   <pds-icon name="folder-open" size="48" aria-hidden="true"></pds-icon>
   <pds-text tag="h2" size="lg" weight="semibold">No products yet</pds-text>
   <pds-text color="subtle">Create your first product to get started.</pds-text>
   <pds-button>Create product</pds-button>
-</pds-box>
-```
+</pds-box>`,
+    react: `
+<PdsBox display="flex" direction="column" align="center" padding="xl" gap="md">
+  <PdsIcon name="folder-open" size="48" aria-hidden="true"></PdsIcon>
+  <PdsText tag="h2" size="lg" weight="semibold">No products yet</PdsText>
+  <PdsText color="subtle">Create your first product to get started.</PdsText>
+  <PdsButton>Create product</PdsButton>
+</PdsBox>`
+  }}>
+  <pds-box display="flex" direction="column" align="center" padding="xl" gap="md">
+    <pds-icon name="folder-open" size="48" aria-hidden="true"></pds-icon>
+    <pds-text tag="h2" size="lg" weight="semibold">No products yet</pds-text>
+    <pds-text color="subtle">Create your first product to get started.</pds-text>
+    <pds-button>Create product</pds-button>
+  </pds-box>
+</DocCanvas>
 
-```html
-<!-- No results empty state -->
+### No results
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `
 <pds-box display="flex" direction="column" align="center" padding="xl" gap="md">
   <pds-icon name="search" size="48" aria-hidden="true"></pds-icon>
   <pds-text tag="h2" size="lg" weight="semibold">No results found</pds-text>
   <pds-text color="subtle">Try adjusting your search or filter criteria.</pds-text>
   <pds-button variant="secondary">Clear filters</pds-button>
-</pds-box>
-```
+</pds-box>`,
+    react: `
+<PdsBox display="flex" direction="column" align="center" padding="xl" gap="md">
+  <PdsIcon name="search" size="48" aria-hidden="true"></PdsIcon>
+  <PdsText tag="h2" size="lg" weight="semibold">No results found</PdsText>
+  <PdsText color="subtle">Try adjusting your search or filter criteria.</PdsText>
+  <PdsButton variant="secondary">Clear filters</PdsButton>
+</PdsBox>`
+  }}>
+  <pds-box display="flex" direction="column" align="center" padding="xl" gap="md">
+    <pds-icon name="search" size="48" aria-hidden="true"></pds-icon>
+    <pds-text tag="h2" size="lg" weight="semibold">No results found</pds-text>
+    <pds-text color="subtle">Try adjusting your search or filter criteria.</pds-text>
+    <pds-button variant="secondary">Clear filters</pds-button>
+  </pds-box>
+</DocCanvas>
 
 **Guidelines:**
 - Keep messaging concise — one sentence is usually enough
@@ -70,19 +105,33 @@ Use loading states to signal that content is being fetched or an action is in pr
 
 Use when duration is unknown. `pds-loader` renders a spinning indicator.
 
-```html
+<DocCanvas
+  mdxSource={{
+    webComponent: `
 <pds-box display="flex" justify="center" padding="xl">
   <pds-loader aria-label="Loading content"></pds-loader>
-</pds-box>
-```
+</pds-box>`,
+    react: `
+<PdsBox display="flex" justify="center" padding="xl">
+  <PdsLoader aria-label="Loading content"></PdsLoader>
+</PdsBox>`
+  }}>
+  <pds-box display="flex" justify="center" padding="xl">
+    <pds-loader aria-label="Loading content"></pds-loader>
+  </pds-box>
+</DocCanvas>
 
 ### Button loading
 
 Use `loading` on `pds-button` to disable interaction and show a spinner inline:
 
-```html
-<pds-button loading>Saving…</pds-button>
-```
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-button loading>Saving…</pds-button>`,
+    react: `<PdsButton loading="true">Saving…</PdsButton>`
+  }}>
+  <pds-button loading>Saving…</pds-button>
+</DocCanvas>
 
 Pair with `aria-busy="true"` on the containing form when waiting for async results:
 
@@ -96,9 +145,13 @@ Pair with `aria-busy="true"` on the containing form when waiting for async resul
 
 Use `pds-progress` when a percentage or step count is known:
 
-```html
-<pds-progress value="60" max="100" label="Upload progress"></pds-progress>
-```
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-progress value="60" max="100"></pds-progress>`,
+    react: `<PdsProgress value="60" max="100"></PdsProgress>`
+  }}>
+  <pds-progress value="60" max="100"></pds-progress>
+</DocCanvas>
 
 ### Skeleton placeholder
 
@@ -119,15 +172,33 @@ For content-heavy views, use `pds-box` with a muted background to approximate th
 
 Use `invalid` and `error` on form inputs to surface field-level errors:
 
-```html
+<DocCanvas
+  mdxSource={{
+    webComponent: `
 <pds-input
   label="Email address"
   name="email"
   value="not-an-email"
   invalid
   error="Please enter a valid email address."
-></pds-input>
-```
+></pds-input>`,
+    react: `
+<PdsInput
+  label="Email address"
+  name="email"
+  value="not-an-email"
+  invalid="true"
+  error="Please enter a valid email address."
+></PdsInput>`
+  }}>
+  <pds-input
+    label="Email address"
+    name="email"
+    value="not-an-email"
+    invalid
+    error="Please enter a valid email address."
+  ></pds-input>
+</DocCanvas>
 
 ### Page-level error summary
 
@@ -151,12 +222,21 @@ document.querySelector('#form-error-summary').focus();
 
 For 500 or connectivity failures, use a full-width `pds-alert` with a retry action:
 
-```html
+<DocCanvas
+  mdxSource={{
+    webComponent: `
 <pds-alert variant="error">
   Something went wrong. Please try again, or contact support if the problem persists.
-  <pds-link slot="action" href="#">Retry</pds-link>
-</pds-alert>
-```
+</pds-alert>`,
+    react: `
+<PdsAlert variant="error">
+  Something went wrong. Please try again, or contact support if the problem persists.
+</PdsAlert>`
+  }}>
+  <pds-alert variant="error">
+    Something went wrong. Please try again, or contact support if the problem persists.
+  </pds-alert>
+</DocCanvas>
 
 ---
 
@@ -177,6 +257,19 @@ Use `pds-modal` for destructive actions that cannot be undone. Confirmation dial
 </pds-modal>
 ```
 
+```jsx
+<PdsModal id="delete-modal" open="false">
+  <PdsModalHeader slot="header">Delete product?</PdsModalHeader>
+
+  <PdsText>This will permanently delete <strong>Product Name</strong> and all its content. This action cannot be undone.</PdsText>
+
+  <PdsModalFooter slot="footer">
+    <PdsButton variant="secondary" id="cancel-delete">Cancel</PdsButton>
+    <PdsButton variant="danger" id="confirm-delete">Delete product</PdsButton>
+  </PdsModalFooter>
+</PdsModal>
+```
+
 **Guidelines:**
 - Label the confirm button with the specific action (e.g. "Delete product"), not just "Confirm" or "OK"
 - The cancel button should be the first focusable element, or ensure focus lands on it by default
@@ -190,11 +283,13 @@ Use `pds-modal` for destructive actions that cannot be undone. Confirmation dial
 
 Use `pds-toast` for brief confirmations after a completed action. Toasts are non-blocking and auto-dismiss.
 
-```html
-<pds-toast variant="success" open>
-  Product saved successfully.
-</pds-toast>
-```
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-toast variant="success" open>Product saved successfully.</pds-toast>`,
+    react: `<PdsToast variant="success" open="true">Product saved successfully.</PdsToast>`
+  }}>
+  <pds-toast variant="success" open>Product saved successfully.</pds-toast>
+</DocCanvas>
 
 Do not move focus to a toast. Use `aria-live="polite"` on the toast container so screen readers announce the message.
 
@@ -202,11 +297,21 @@ Do not move focus to a toast. Use `aria-live="polite"` on the toast container so
 
 Use `pds-alert variant="success"` when the outcome needs to remain visible, such as after a multi-step process completes:
 
-```html
+<DocCanvas
+  mdxSource={{
+    webComponent: `
 <pds-alert variant="success">
   Your changes have been published. It may take a few minutes to appear for members.
-</pds-alert>
-```
+</pds-alert>`,
+    react: `
+<PdsAlert variant="success">
+  Your changes have been published. It may take a few minutes to appear for members.
+</PdsAlert>`
+  }}>
+  <pds-alert variant="success">
+    Your changes have been published. It may take a few minutes to appear for members.
+  </pds-alert>
+</DocCanvas>
 
 ---
 
@@ -214,11 +319,18 @@ Use `pds-alert variant="success"` when the outcome needs to remain visible, such
 
 Use `disabled` when an action is temporarily unavailable due to missing prerequisites. Avoid disabling interactive elements without explanation.
 
-```html
-<!-- Acceptable: disabled with adjacent context -->
+<DocCanvas
+  mdxSource={{
+    webComponent: `
 <pds-button disabled>Publish</pds-button>
-<pds-text size="sm" color="subtle">Add at least one lesson before publishing.</pds-text>
-```
+<pds-text size="sm" color="subtle">Add at least one lesson before publishing.</pds-text>`,
+    react: `
+<PdsButton disabled="true">Publish</PdsButton>
+<PdsText size="sm" color="subtle">Add at least one lesson before publishing.</PdsText>`
+  }}>
+  <pds-button disabled>Publish</pds-button>
+  <pds-text size="sm" color="subtle">Add at least one lesson before publishing.</pds-text>
+</DocCanvas>
 
 **When to use `disabled` vs read-only:**
 
