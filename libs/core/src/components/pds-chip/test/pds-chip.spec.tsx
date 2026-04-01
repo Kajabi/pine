@@ -197,7 +197,7 @@ describe('pds-chip', () => {
     expect(page.root).toEqualHtml(`
     <pds-chip class="pds-chip pds-chip--sm pds-chip--dropdown pds-chip--neutral" size="sm" variant="dropdown">
       <mock:shadow-root>
-        <button class="pds-chip__button" type="button">
+        <button class="pds-chip__button" part="button" type="button">
           <slot></slot>
           <pds-icon icon="${downSmall}" size="10px" aria-hidden="true"></pds-icon>
         </button>
@@ -244,7 +244,7 @@ describe('pds-chip', () => {
     expect(page.root).toEqualHtml(`
     <pds-chip class="pds-chip pds-chip--neutral pds-chip--dropdown" variant="dropdown">
       <mock:shadow-root>
-        <button class="pds-chip__button" type="button">
+        <button class="pds-chip__button" part="button" type="button">
           <slot></slot>
           <pds-icon icon="${downSmall}" size="12px" aria-hidden="true"></pds-icon>
         </button>
@@ -280,7 +280,7 @@ describe('pds-chip', () => {
     expect(page.root).toEqualHtml(`
     <pds-chip class="pds-chip pds-chip--neutral pds-chip--dropdown" icon="archive" variant="dropdown">
       <mock:shadow-root>
-        <button class="pds-chip__button" type="button">
+        <button class="pds-chip__button" part="button" type="button">
           <pds-icon icon="archive" size="12px" aria-hidden="true"></pds-icon>
           <slot></slot>
           <pds-icon icon="${downSmall}" size="12px" aria-hidden="true"></pds-icon>
@@ -372,7 +372,7 @@ describe('pds-chip', () => {
     expect(page.root).toEqualHtml(`
     <pds-chip class="pds-chip pds-chip--neutral pds-chip--dropdown" variant="dropdown" dot="true">
       <mock:shadow-root>
-        <button class="pds-chip__button" type="button">
+        <button class="pds-chip__button" part="button" type="button">
           <i class="pds-chip__dot" aria-hidden="true"></i>
           <slot></slot>
           <pds-icon icon="${downSmall}" size="12px" aria-hidden="true"></pds-icon>

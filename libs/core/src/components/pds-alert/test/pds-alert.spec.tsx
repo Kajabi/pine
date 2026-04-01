@@ -123,7 +123,7 @@ describe('pds-alert', () => {
                   </pds-text>
                 </div>
               </pds-box>
-              <button aria-label="Dismiss alert" class="pds-alert__dismiss" type="button">
+              <button aria-label="Dismiss alert" class="pds-alert__dismiss" part="dismiss" type="button">
                 <pds-icon aria-hidden="true" color="var(--pds-alert-color-dismiss)" icon="remove" size="var(--pds-alert-icon-size)"></pds-icon>
               </button>
             </pds-box>

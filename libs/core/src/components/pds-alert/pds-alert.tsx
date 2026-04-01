@@ -133,7 +133,7 @@ export class PdsAlert {
             </pds-box>
 
             {this.dismissible && (
-              <button class="pds-alert__dismiss" type="button" aria-label="Dismiss alert" onClick={this.handleCloseClick}>
+              <button class="pds-alert__dismiss" type="button" part="dismiss" aria-label="Dismiss alert" onClick={this.handleCloseClick}>
                 <pds-icon icon="remove" size="var(--pds-alert-icon-size)" aria-hidden="true" color="var(--pds-alert-color-dismiss)" />
               </button>
             )}
