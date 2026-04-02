@@ -1,3 +1,18 @@
+## 3.22.0 (2026-04-02)
+
+### Features 🚀
+
+- **css-parts:** expose inner button elements as CSS shadow parts ([#695](https://github.com/Kajabi/pine/pull/695))
+
+### Bug Fixes 🐛
+
+- **pds-input:** prevent prefix padding shift on focus ([#694](https://github.com/Kajabi/pine/pull/694))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.21.1 (2026-03-18)
 
 ### Bug Fixes 🐛
