@@ -27,7 +27,7 @@
     "@nx/js": "20.4.6",
     "@storybook/addon-docs": "^10.1.10",
     "@swc-node/register": "~1.9.1",
-    "@swc/core": "~1.5.7",
+    "@swc/core": "~1.15.24",
     "@swc/helpers": "~0.5.11",
     "commitizen": "^4.2.5",
     "lefthook": "^1.8.2",
