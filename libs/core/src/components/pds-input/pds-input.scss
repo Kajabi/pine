@@ -235,9 +235,7 @@
   letter-spacing: var(--pine-letter-spacing);
   min-height: var(--pds-input-field-min-height);
   min-width: var(--pine-dimension-none);
-  overflow: hidden;
   padding: var(--pds-input-padding-y) var(--pds-input-padding-x);
-  text-overflow: ellipsis;
   transition: border-color 0.2s ease;
   width: 100%;
 
@@ -281,6 +279,10 @@
 
   &::placeholder {
     color: var(--pds-input-placeholder-color);
+  }
+
+  &:placeholder-shown {
+    text-overflow: ellipsis;
   }
 
   .has-error & {
