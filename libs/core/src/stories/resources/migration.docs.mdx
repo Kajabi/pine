@@ -1,0 +1,106 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Resources/Migration Guide" parameters={{ previewTabs: { canvas: { hidden: true } } }} />
+
+# Migration Guide
+
+This guide covers how Pine communicates breaking changes, how to migrate between major versions, and how to stay current with releases.
+
+For the full version history, see <pds-link href="../?path=/docs/resources-changelog--docs">Changelog</pds-link>.
+
+---
+
+## Deprecation Policy
+
+Pine follows a staged deprecation process before removing or changing any public API:
+
+1. **Deprecation notice** — a browser console warning is emitted when the deprecated prop, attribute, or pattern is used. The Storybook story for the affected component is updated with a deprecation notice.
+2. **Deprecation period** — the deprecated API remains functional for at least one minor version cycle, giving consumers time to migrate.
+3. **Removal** — the API is removed in the next **major** version bump and documented in the `### ⚠️ Breaking Changes` section of the changelog.
+
+If you see a deprecation warning in the console, address it before the next major release.
+
+---
+
+## Breaking Change Format
+
+Breaking changes are marked with `⚠️` in the changelog and grouped under `### ⚠️ Breaking Changes`:
+
+```
+# 3.0.0 (2025-04-11)
+
+### ⚠️ Breaking Changes
+
+- ⚠️  **chip:** move value to slot (#364)
+```
+
+A major version bump (`2.x → 3.x`) always signals that breaking changes are present. Minor and patch releases are non-breaking.
+
+---
+
+## Version Migration Examples
+
+### v2.x → v3.0.0
+
+#### `pds-chip`: `value` prop moved to slot
+
+**Before (v2.x):**
+```html
+<pds-chip value="Design systems"></pds-chip>
+```
+
+**After (v3.x):**
+```html
+<pds-chip>Design systems</pds-chip>
+```
+
+**Why:** Moving `value` to the default slot allows richer content inside chips and aligns with standard web component slot conventions.
+
+#### `pds-checkbox`: `label-hidden` renamed to `hide-label`
+
+**Before (v2.x):**
+```html
+<pds-checkbox label="Agree" label-hidden></pds-checkbox>
+```
+
+**After (v3.x):**
+```html
+<pds-checkbox label="Agree" hide-label></pds-checkbox>
+```
+
+In React:
+```jsx
+// Before
+<PdsCheckbox label="Agree" labelHidden />
+
+// After
+<PdsCheckbox label="Agree" hideLabel />
+```
+
+---
+
+## Token Changes
+
+Design token renames are tracked separately in the <pds-link href="https://github.com/Kajabi/ds-tokens/releases" external>ds-tokens releases</pds-link>.
+
+When tokens are renamed, the old token is aliased to the new one during a deprecation period. After removal, any usage of the old token name resolves to `unset` or produces no value.
+
+**How to catch stale token usage:** Enable Pine's color linting rules in your IDE — they flag usages of deprecated or non-existent tokens as you type. See <pds-link href="../?path=/docs/design-tokens-color-linting--docs">Color Linting</pds-link>.
+
+---
+
+## Staying Current
+
+**Subscribe to releases:**
+- <pds-link href="https://github.com/Kajabi/pine/releases" external>Pine GitHub releases</pds-link> — watch for release notifications
+- <pds-link href="https://github.com/Kajabi/pine-icons/releases" external>Pine Icons releases</pds-link>
+- <pds-link href="https://github.com/Kajabi/ds-tokens/releases" external>Design Tokens releases</pds-link>
+
+**Slack channels:**
+- <pds-link href="https://kajabi.slack.com/archives/C046HHS5KTN" external>#design-system-discussion</pds-link> — the team announces notable releases and changes here
+
+**Before upgrading a major version:**
+1. Read the full changelog section for the new major version
+2. Search your codebase for any `⚠️ Breaking Changes` listed (grep for deprecated prop/attribute names)
+3. Run `npm run lint.all` after upgrading — linting rules may surface newly invalid patterns
+4. Run `npm run test.all` to catch any visual or behavioral regressions

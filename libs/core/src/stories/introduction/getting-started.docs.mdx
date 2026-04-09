@@ -1,0 +1,123 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { DocCanvas } from '@pine-ds/doc-components';
+
+<Meta title="Introduction/Getting Started" parameters={{ previewTabs: { canvas: { hidden: true } } }} />
+
+# Getting Started
+
+Welcome to Pine. This guide gets you up and running quickly, whether you're a designer or a developer.
+
+---
+
+## For Designers
+
+### 1. Access the Figma library
+
+Pine's component library and token set are maintained in Figma. Request access through <pds-link href="https://kajabi.slack.com/archives/C01A424HY8Y" external>#ds-support</pds-link> if the library isn't already enabled in your Figma workspace.
+
+### 2. Use Pine tokens
+
+All spacing, color, and typography values in Figma are backed by Pine design tokens. Use token-named styles (e.g. `color/background/default`) rather than raw hex values so your designs stay in sync with the coded components.
+
+See <pds-link href="../?path=/docs/design-tokens-tokens--docs">Design Tokens</pds-link> for the full token reference.
+
+### 3. Map designs to component docs
+
+Every Pine component has a Storybook doc page with usage guidelines, prop options, and live examples. Reference these when specifying designs to ensure what you're handing off is buildable with existing components.
+
+Browse components in the **Components** section of the sidebar.
+
+### 4. Request components or file issues
+
+If a component you need doesn't exist or a token is missing, file a request in <pds-link href="https://kajabi.slack.com/archives/C01A424HY8Y" external>#ds-support</pds-link> or open a GitHub issue on the <pds-link href="https://github.com/Kajabi/pine" external>Pine repository</pds-link>.
+
+### 5. Contribute
+
+Designers can contribute to Pine too. See <pds-link href="../?path=/docs/introduction-contributing--docs">Contributing</pds-link> for the process.
+
+---
+
+## For Developers
+
+### 1. Install Pine
+
+**React projects:**
+
+```bash
+npm install @pine-ds/react
+```
+
+**Non-React / HTML projects (CDN):**
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@pine-ds/core@[VERSION]/dist/pine-core/pine-core.css" />
+<script type="module" src="https://cdn.jsdelivr.net/npm/@pine-ds/core@[VERSION]/dist/pine-core/pine-core.esm.js"></script>
+<script nomodule src="https://cdn.jsdelivr.net/npm/@pine-ds/core@[VERSION]/dist/pine-core/index.esm.js"></script>
+```
+
+Replace `[VERSION]` with the latest release from <pds-link href="https://github.com/Kajabi/pine/releases" external>GitHub Releases</pds-link>.
+
+### 2. Render your first component
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-button>Get started</pds-button>`,
+    react: `<PdsButton>Get started</PdsButton>`
+  }}>
+  <pds-button>Get started</pds-button>
+</DocCanvas>
+
+### 3. Style with tokens
+
+Pine components use CSS custom properties (design tokens) internally. You can reference the same tokens in your own styles:
+
+```css
+.my-card {
+  background-color: var(--pine-color-background-container);
+  border-radius: var(--pine-border-radius-md);
+  padding: var(--pine-dimension-300);
+}
+```
+
+Tokens are available after the Pine CSS file is loaded. See <pds-link href="../?path=/docs/design-tokens-tokens--docs">Design Tokens</pds-link> for the full list.
+
+### 4. Run Storybook locally
+
+To browse components with live examples, run the Pine dev server:
+
+```bash
+npm run start
+```
+
+Storybook will open at `http://localhost:6006`. See <pds-link href="../?path=/docs/introduction-contributing--docs">Contributing</pds-link> for the full local setup steps.
+
+### 5. Get help
+
+- <pds-link href="https://kajabi.slack.com/archives/C01A424HY8Y" external>#ds-support</pds-link> — usage questions and support
+- <pds-link href="https://kajabi.slack.com/archives/C046HHS5KTN" external>#design-system-discussion</pds-link> — design system conversation
+- <pds-link href="https://linear.app/kajabi/team/DSS/all" external>Linear board</pds-link> — track what the Pine team is working on
+- <pds-link href="https://github.com/Kajabi/pine" external>GitHub</pds-link> — source code, issues, and releases
+
+---
+
+## Common Gotchas
+
+**Components not rendering?**
+Ensure the Pine CSS and JS are loaded before any `<pds-*>` elements are used. In React, the npm package handles this; in HTML/CDN setups, place the `<link>` and `<script>` tags in `<head>`.
+
+**Storybook hot reload breaks rendering?**
+Re-run `npm run start`. Hot reload in Stencil dev mode can occasionally lose component registration.
+
+**Tokens not resolving?**
+Custom properties require the Pine stylesheet to be loaded in scope. Confirm `pine-core.css` is imported at the root of your app.
+
+**React prop names differ from web component attribute names?**
+React wrappers use camelCase props (e.g. `hideLabel`) while web component attributes are kebab-case (e.g. `hide-label`). Refer to each component's **Properties** table for both.
+
+---
+
+## Next Steps
+
+- Browse the <pds-link href="../?path=/docs/guides-forms--docs">Forms Guide</pds-link> to see how Pine components work together in a complete form
+- Review the <pds-link href="../?path=/docs/guides-layout--docs">Layout Guide</pds-link> to understand `pds-box` and `pds-row`
+- Read the <pds-link href="../?path=/docs/guides-accessibility--docs">Accessibility Guide</pds-link> before shipping any consumer-facing UI
