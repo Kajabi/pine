@@ -9,6 +9,7 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
+    versioning-strategy: lockfile-only
     allow:
     - dependency-name: "@pine-ds/icons"
     - dependency-name: "@kajabi-ui/styles"
