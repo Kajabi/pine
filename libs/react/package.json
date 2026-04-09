@@ -39,7 +39,7 @@
   "dependencies": {
     "@kajabi-ui/styles": "*",
     "@pine-ds/core": "^3.22.1",
-    "@pine-ds/icons": "*",
+    "@pine-ds/icons": "^9.21.0",
     "tslib": "*"
   },
   "devDependencies": {
