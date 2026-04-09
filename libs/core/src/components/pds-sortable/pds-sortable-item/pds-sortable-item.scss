@@ -46,6 +46,17 @@
       cursor: grab;
     }
   }
+
+  // styles when sortable is disabled
+  .pds-sortable--disabled & {
+    cursor: default;
+    opacity: 0.5;
+    pointer-events: none;
+
+    .pds-sortable-item__handle {
+      cursor: default;
+    }
+  }
 }
 
 :host(.pds-sortable-item):hover {
