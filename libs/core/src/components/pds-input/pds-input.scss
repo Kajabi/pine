@@ -281,6 +281,10 @@
     color: var(--pds-input-placeholder-color);
   }
 
+  &:placeholder-shown {
+    text-overflow: ellipsis;
+  }
+
   .has-error & {
     background-color: var(--pds-input-error-background);
     border-color: var(--pds-input-error-border);
