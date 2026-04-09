@@ -1,3 +1,18 @@
+## 3.22.1 (2026-04-09)
+
+### Bug Fixes 🐛
+
+- update @swc/core to resolve peer dependency conflict ([#700](https://github.com/Kajabi/pine/pull/700))
+
+### Styles 🎨
+
+- **pds-input:** add text-overflow ellipsis to pds-input placeholder text ([#699](https://github.com/Kajabi/pine/pull/699))
+
+### ❤️ Thank You
+
+- keaton-adams
+- Phillip Lovelace
+
 ## 3.22.0 (2026-04-02)
 
 ### Features 🚀
