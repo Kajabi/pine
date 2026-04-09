@@ -49,12 +49,11 @@
 
   // styles when sortable is disabled
   .pds-sortable--disabled & {
-    cursor: default;
+    cursor: not-allowed;
     opacity: 0.5;
-    pointer-events: none;
 
     .pds-sortable-item__handle {
-      cursor: default;
+      cursor: not-allowed;
     }
   }
 }
