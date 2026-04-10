@@ -97,9 +97,10 @@ if (lockfile.lockfileVersion !== 3) {
 
 const workspaces = getWorkspacePackages(rootPkg);
 
-// False negative guard
-if (workspaces.length === 0) {
-  console.error('No workspace packages found. Check that package.json "workspaces" is configured correctly.');
+// False negative guard — root is always included, so length must be > 1
+// to confirm workspace packages were actually discovered
+if (workspaces.length <= 1) {
+  console.error('No workspace packages found (only root). Check that package.json "workspaces" is configured correctly.');
   process.exit(1);
 }
 
