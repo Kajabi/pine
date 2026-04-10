@@ -1,6 +1,7 @@
 export interface MultiselectOption {
   id: string | number;
   text: string;
+  group?: string;
   isCreateOption?: boolean;
   [key: string]: unknown;
 }

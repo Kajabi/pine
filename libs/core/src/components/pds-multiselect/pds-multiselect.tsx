@@ -402,12 +402,26 @@ export class PdsMultiselect {
     const slot = this.el.shadowRoot?.querySelector('slot:not([name])') as HTMLSlotElement;
     if (!slot) return;
 
-    const options = slot.assignedElements({ flatten: true })
-      .filter((el): el is HTMLOptionElement => el.tagName === 'OPTION')
-      .map(opt => ({
-        id: opt.value,
-        text: opt.textContent || opt.value,
-      }));
+    const options: MultiselectOption[] = [];
+
+    slot.assignedElements({ flatten: true }).forEach(el => {
+      if (el.tagName === 'OPTGROUP') {
+        const groupLabel = (el as HTMLOptGroupElement).label || '';
+        el.querySelectorAll('option').forEach((opt: HTMLOptionElement) => {
+          options.push({
+            id: opt.value,
+            text: opt.textContent?.trim() || opt.value,
+            group: groupLabel,
+          });
+        });
+      } else if (el.tagName === 'OPTION') {
+        const opt = el as HTMLOptionElement;
+        options.push({
+          id: opt.value,
+          text: opt.textContent?.trim() || opt.value,
+        });
+      }
+    });
 
     // Only update if we actually found options AND we're not using async/external options
     // Don't clear internalOptions if slot returns empty (might be mid-DOM-update)
@@ -1021,6 +1035,31 @@ export class PdsMultiselect {
   };
 
 
+  private getGroupedRenderItems(filteredOptions: MultiselectOption[]): Array<
+    | { type: 'header'; group: string }
+    | { type: 'option'; option: MultiselectOption; index: number }
+  > {
+    const items: Array<
+      | { type: 'header'; group: string }
+      | { type: 'option'; option: MultiselectOption; index: number }
+    > = [];
+
+    let lastGroup: string | undefined = undefined;
+
+    filteredOptions.forEach((option, index) => {
+      const group = option.group;
+      if (group !== undefined && group !== lastGroup) {
+        items.push({ type: 'header', group });
+        lastGroup = group;
+      } else if (group === undefined) {
+        lastGroup = undefined;
+      }
+      items.push({ type: 'option', option, index });
+    });
+
+    return items;
+  }
+
   private renderSelectedItemsList() {
     if (this.hideSelectedItems || this.selectedItems.length === 0) return null;
 
@@ -1107,7 +1146,21 @@ export class PdsMultiselect {
             </li>
           )}
 
-          {filteredOptions.map((option, index) => {
+          {this.getGroupedRenderItems(filteredOptions).map(item => {
+            if (item.type === 'header') {
+              return (
+                <li
+                  key={`group-${item.group}`}
+                  class="pds-multiselect__group-header"
+                  role="presentation"
+                  aria-hidden="true"
+                >
+                  {item.group}
+                </li>
+              );
+            }
+
+            const { option, index } = item;
             const isSelected = valueArray.includes(String(option.id));
             const isCreateOption = option.isCreateOption;
             const isHighlighted = index === this.highlightedIndex && !isCreateOption;

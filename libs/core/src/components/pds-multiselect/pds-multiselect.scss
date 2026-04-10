@@ -173,6 +173,19 @@
   padding: var(--pine-dimension-xs);
 }
 
+.pds-multiselect__group-header {
+  color: var(--pine-color-text-muted);
+  font: var(--pine-typography-body-sm-medium);
+  letter-spacing: var(--pine-letter-spacing);
+  padding: var(--pine-dimension-sm) var(--pine-dimension-xs) var(--pine-dimension-2xs);
+  text-transform: uppercase;
+
+  &:first-child {
+    padding-block-start: var(--pine-dimension-xs);
+  }
+
+}
+
 .pds-multiselect__option {
   align-items: center;
   background: transparent;

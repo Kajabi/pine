@@ -93,6 +93,13 @@ Type: `Promise<void>`
 | `"loading"`   | Custom loading indicator                         |
 
 
+## Shadow Parts
+
+| Part        | Description |
+| ----------- | ----------- |
+| `"trigger"` |             |
+
+
 ## Dependencies
 
 ### Depends on
