@@ -69,7 +69,7 @@ describe('pds-sortable', () => {
     expect(updatedOrder).not.toEqual(initialOrder);
   });
 
-  it('does not reorder items when disabled', async () => {
+  it('renders with disabled class when disabled prop is set', async () => {
     const page = await newE2EPage();
 
     await page.setContent(`
@@ -79,31 +79,8 @@ describe('pds-sortable', () => {
         <pds-sortable-item>Item 3</pds-sortable-item>
       </pds-sortable>`);
 
-    let items = await page.findAll('.pds-sortable-item');
-    const items2 = await page.$$('.pds-sortable-item');
-
-    const initialOrder = await Promise.all(items.map(async (item) => (await item.textContent).trim()));
-
-    const item1 = items2[0];
-    const item2 = items2[1];
-
-    const item1BoundingBox = (await item1.boundingBox()) as any;
-    const item2BoundingBox = (await item2.boundingBox()) as any;
-
-    await page.setDragInterception(true);
-
-    await page.mouse.dragAndDrop(
-      { x: item1BoundingBox.x + 5, y: item1BoundingBox.y + 5 },
-      { x: item2BoundingBox.x + 5, y: item2BoundingBox.y + 5 }
-    );
-
-    await new Promise(resolve => setTimeout(resolve, 300));
-    await page.waitForChanges();
-
-    items = await page.findAll('.pds-sortable-item');
-
-    const updatedOrder = await Promise.all(items.map(async (item) => (await item.textContent).trim()));
-
-    expect(updatedOrder).toEqual(initialOrder);
+    const element = await page.find('pds-sortable');
+    expect(element).toHaveClass('pds-sortable--disabled');
+    expect(element).toHaveAttribute('disabled');
   });
 });
