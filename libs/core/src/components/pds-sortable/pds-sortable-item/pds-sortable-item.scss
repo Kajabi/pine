@@ -59,10 +59,16 @@
 }
 
 :host(.pds-sortable-item):hover {
-  background-color: var(--pine-color-background-container-hover);
+  .pds-sortable--disabled & {
+    background-color: transparent;
+  }
 
-  pds-icon {
-    color: var(--pine-color-info)
+  .pds-sortable:not(.pds-sortable--disabled) & {
+    background-color: var(--pine-color-background-container-hover);
+
+    pds-icon {
+      color: var(--pine-color-info)
+    }
   }
 }
 
