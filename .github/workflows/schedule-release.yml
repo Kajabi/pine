@@ -94,7 +94,7 @@ jobs:
           token: ${{ secrets.NPM_TOKEN }}
 
       - name: Install Dependencies
-        run: npm ci --legacy-peer-deps
+        run: npm ci
         shell: bash
 
       - name: Build Core
@@ -200,7 +200,7 @@ jobs:
       #     filename: DocComponentsBuild.zip
 
       - name: Install Dependencies
-        run: npm ci --ignore-scripts --legacy-peer-deps
+        run: npm ci --ignore-scripts
         shell: bash
 
       - name: Build All
