@@ -1,5 +1,6 @@
 import { Component, Element, Event, EventEmitter, h, Host, Prop, State, Watch, Method } from '@stencil/core';
 import type { BasePdsProps } from '@utils/interfaces';
+import { isSpecTest } from '../../utils/form';
 import type { ChipSentimentType } from '@utils/types';
 import { computePosition, flip, offset, shift } from '@floating-ui/dom';
 import { debounceEvent } from '@utils/utils';
@@ -285,13 +286,7 @@ export class PdsCombobox implements BasePdsProps {
     }
 
     // Initialize form value with current value
-    if (this.internals) {
-      try {
-        this.internals.setFormValue(this.selectedOption?.value ?? this.value ?? '');
-      } catch (e) {
-        // ElementInternals.setFormValue not available in unit tests
-      }
-    }
+    this.updateFormValue(this.selectedOption?.value ?? this.value ?? '');
   }
 
   disconnectedCallback() {
@@ -319,13 +314,7 @@ export class PdsCombobox implements BasePdsProps {
   handleValueChange() {
     this.filterOptions();
     // Sync with form internals for form association
-    if (this.internals) {
-      try {
-        this.internals.setFormValue(this.value);
-      } catch (e) {
-        // ElementInternals.setFormValue not available in unit tests
-      }
-    }
+    this.updateFormValue(this.value);
 
     // Find and select option that matches the value (for external value changes)
     // Only do this if we're not already updating from a selection
@@ -364,23 +353,19 @@ export class PdsCombobox implements BasePdsProps {
       this.displayText = this.getOptionLabel(this.selectedOption);
       this.value = this.selectedOption.value;
       // Update form internals with the actual option value
-      if (this.internals) {
-        try {
-          this.internals.setFormValue(this.selectedOption.value);
-        } catch (e) {
-          // ElementInternals.setFormValue not available in unit tests
-        }
-      }
+      this.updateFormValue(this.selectedOption.value);
     } else {
       this.displayText = '';
       this.value = '';
-      if (this.internals) {
-        try {
-          this.internals.setFormValue('');
-        } catch (e) {
-          // ElementInternals.setFormValue not available in unit tests
-        }
-      }
+      this.updateFormValue('');
+    }
+  }
+
+  private updateFormValue(value: string) {
+    if (isSpecTest()) return;
+
+    if (this.internals) {
+      this.internals.setFormValue(value);
     }
   }
 
