@@ -105,6 +105,29 @@ When `dividers` is set to `true`, a border will display between items.
   </pds-sortable>
 </DocCanvas>
 
+### Disabled
+
+When `disabled` is set to `true`, sorting is prevented and items appear dimmed with a `not-allowed` cursor.
+
+<DocCanvas display="block" mdxSource={{
+  react: `<PdsSortable disabled border dividers componentId="disabled">
+  <PdsSortableItem>Item 1</PdsSortableItem>
+  <PdsSortableItem>Item 2</PdsSortableItem>
+  <PdsSortableItem>Item 3</PdsSortableItem>
+</PdsSortable>`,
+  webComponent: `<pds-sortable disabled border dividers component-id="disabled">
+  <pds-sortable-item>Item 1</pds-sortable-item>
+  <pds-sortable-item>Item 2</pds-sortable-item>
+  <pds-sortable-item>Item 3</pds-sortable-item>
+</pds-sortable>
+`}}>
+  <pds-sortable disabled border dividers component-id="disabled">
+    <pds-sortable-item>Item 1</pds-sortable-item>
+    <pds-sortable-item>Item 2</pds-sortable-item>
+    <pds-sortable-item>Item 3</pds-sortable-item>
+  </pds-sortable>
+</DocCanvas>
+
 ### Handle
 
 When `show-handle` is set to `true` on a `pds-sortable-item`, a handle icon will be displayed within an item.
