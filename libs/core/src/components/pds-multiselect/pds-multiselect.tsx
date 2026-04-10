@@ -1191,10 +1191,10 @@ export class PdsMultiselect {
             </li>
           )}
 
-          {this.getGroupedRenderItems(filteredOptions).map(item => {
+          {this.getGroupedRenderItems(filteredOptions).map((item, itemIndex) => {
             if (item.type === 'group') {
               return (
-                <li key={`group-${item.group}`} role="presentation">
+                <li key={`group-${itemIndex}`} role="presentation">
                   <span class="pds-multiselect__group-header" aria-hidden="true">
                     {item.group}
                   </span>
