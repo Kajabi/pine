@@ -95,29 +95,29 @@ Type: `Promise<void>`
 
 ## Shadow Parts
 
-| Part        | Description |
-| ----------- | ----------- |
-| `"trigger"` |             |
+| Part        | Description                                      |
+| ----------- | ------------------------------------------------ |
+| `"trigger"` | The trigger button that opens the dropdown panel |
 
 
 ## Dependencies
 
 ### Depends on
 
-- pds-icon
-- [pds-loader](../pds-loader)
 - [pds-box](../pds-box)
+- pds-icon
 - [pds-text](../pds-text)
 - [pds-checkbox](../pds-checkbox)
+- [pds-loader](../pds-loader)
 
 ### Graph
 ```mermaid
 graph TD;
-  pds-multiselect --> pds-icon
-  pds-multiselect --> pds-loader
   pds-multiselect --> pds-box
+  pds-multiselect --> pds-icon
   pds-multiselect --> pds-text
   pds-multiselect --> pds-checkbox
+  pds-multiselect --> pds-loader
   pds-checkbox --> pds-icon
   style pds-multiselect fill:#f9f,stroke:#333,stroke-width:4px
 ```

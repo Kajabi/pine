@@ -17,6 +17,7 @@ import type {
  * @slot (default) - Static option elements for the multiselect
  * @slot empty - Custom empty state message when no options match
  * @slot loading - Custom loading indicator
+ * @part trigger - The trigger button that opens the dropdown panel
  */
 @Component({
   tag: 'pds-multiselect',
@@ -1036,28 +1037,72 @@ export class PdsMultiselect {
 
 
   private getGroupedRenderItems(filteredOptions: MultiselectOption[]): Array<
-    | { type: 'header'; group: string }
+    | { type: 'group'; group: string; options: Array<{ option: MultiselectOption; index: number }> }
     | { type: 'option'; option: MultiselectOption; index: number }
   > {
-    const items: Array<
-      | { type: 'header'; group: string }
-      | { type: 'option'; option: MultiselectOption; index: number }
-    > = [];
-
-    let lastGroup: string | undefined = undefined;
+    type GroupItem = { type: 'group'; group: string; options: Array<{ option: MultiselectOption; index: number }> };
+    type OptionItem = { type: 'option'; option: MultiselectOption; index: number };
+    const items: Array<GroupItem | OptionItem> = [];
+    let currentGroup: GroupItem | null = null;
 
     filteredOptions.forEach((option, index) => {
       const group = option.group;
-      if (group !== undefined && group !== lastGroup) {
-        items.push({ type: 'header', group });
-        lastGroup = group;
-      } else if (group === undefined) {
-        lastGroup = undefined;
+      if (group !== undefined) {
+        if (!currentGroup || currentGroup.group !== group) {
+          currentGroup = { type: 'group', group, options: [] };
+          items.push(currentGroup);
+        }
+        currentGroup.options.push({ option, index });
+      } else {
+        currentGroup = null;
+        items.push({ type: 'option', option, index });
       }
-      items.push({ type: 'option', option, index });
     });
 
     return items;
+  }
+
+  private renderOption(option: MultiselectOption, index: number, valueArray: string[]) {
+    const isSelected = valueArray.includes(String(option.id));
+    const isCreateOption = option.isCreateOption;
+    const isHighlighted = index === this.highlightedIndex && !isCreateOption;
+    const optionId = `${this.componentId}-option-${index}`;
+    const isCreateDisabled = isCreateOption && this.creating;
+
+    return (
+      <li
+        key={String(option.id)}
+        id={optionId}
+        class={{
+          'pds-multiselect__option': true,
+          'pds-multiselect__option--highlighted': isHighlighted,
+          'pds-multiselect__option--selected': isSelected,
+          'pds-multiselect__option--create': isCreateOption,
+          'pds-multiselect__option--disabled': isCreateDisabled,
+        }}
+        role="option"
+        aria-selected={isSelected ? 'true' : 'false'}
+        aria-disabled={isCreateDisabled ? 'true' : undefined}
+        aria-label={isCreateOption ? `Create new tag: ${option.text}` : undefined}
+        data-index={index}
+        onMouseDown={this.handleOptionMouseDown(option)}
+        onMouseEnter={this.handleOptionMouseEnter(index)}
+      >
+        {isCreateOption ? (
+          <pds-box class="pds-multiselect__create-option" align-items="center" gap="xs">
+            <pds-icon name="add" size="small" />
+            <pds-text>Add "{option.text}"</pds-text>
+          </pds-box>
+        ) : (
+          <pds-checkbox
+            componentId={`${this.componentId}-checkbox-${index}`}
+            checked={isSelected}
+            label={option.text}
+            style={{ pointerEvents: 'none' }}
+          />
+        )}
+      </li>
+    );
   }
 
   private renderSelectedItemsList() {
@@ -1147,60 +1192,20 @@ export class PdsMultiselect {
           )}
 
           {this.getGroupedRenderItems(filteredOptions).map(item => {
-            if (item.type === 'header') {
+            if (item.type === 'group') {
               return (
-                <li
-                  key={`group-${item.group}`}
-                  class="pds-multiselect__group-header"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  {item.group}
+                <li key={`group-${item.group}`} role="presentation">
+                  <span class="pds-multiselect__group-header" aria-hidden="true">
+                    {item.group}
+                  </span>
+                  <ul role="group" aria-label={item.group} class="pds-multiselect__group-list">
+                    {item.options.map(({ option, index }) => this.renderOption(option, index, valueArray))}
+                  </ul>
                 </li>
               );
             }
 
-            const { option, index } = item;
-            const isSelected = valueArray.includes(String(option.id));
-            const isCreateOption = option.isCreateOption;
-            const isHighlighted = index === this.highlightedIndex && !isCreateOption;
-            const optionId = `${this.componentId}-option-${index}`;
-            const isCreateDisabled = isCreateOption && this.creating;
-
-            return (
-              <li
-                key={String(option.id)}
-                id={optionId}
-                class={{
-                  'pds-multiselect__option': true,
-                  'pds-multiselect__option--highlighted': isHighlighted,
-                  'pds-multiselect__option--selected': isSelected,
-                  'pds-multiselect__option--create': isCreateOption,
-                  'pds-multiselect__option--disabled': isCreateDisabled,
-                }}
-                role="option"
-                aria-selected={isSelected ? 'true' : 'false'}
-                aria-disabled={isCreateDisabled ? 'true' : undefined}
-                aria-label={isCreateOption ? `Create new tag: ${option.text}` : undefined}
-                data-index={index}
-                onMouseDown={this.handleOptionMouseDown(option)}
-                onMouseEnter={this.handleOptionMouseEnter(index)}
-              >
-                {isCreateOption ? (
-                  <pds-box class="pds-multiselect__create-option" align-items="center" gap="xs">
-                    <pds-icon name="add" size="small" />
-                    <pds-text>Add "{option.text}"</pds-text>
-                  </pds-box>
-                ) : (
-                  <pds-checkbox
-                    componentId={`${this.componentId}-checkbox-${index}`}
-                    checked={isSelected}
-                    label={option.text}
-                    style={{ pointerEvents: 'none' }}
-                  />
-                )}
-              </li>
-            );
+            return this.renderOption(item.option, item.index, valueArray);
           })}
 
           {this.hasMore && !this.loading && (

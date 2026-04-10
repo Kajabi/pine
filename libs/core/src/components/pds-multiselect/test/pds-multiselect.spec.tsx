@@ -1279,7 +1279,7 @@ describe('pds-multiselect', () => {
       expect(headers[1].textContent).toBe('Newsletters');
     });
 
-    it('group headers have role="presentation" and aria-hidden', async () => {
+    it('group header span has aria-hidden and group list has role="group" with aria-label', async () => {
       const page = await newSpecPage({
         components: [PdsMultiselect],
         html: `<pds-multiselect component-id="test"></pds-multiselect>`,
@@ -1292,8 +1292,11 @@ describe('pds-multiselect', () => {
       await page.waitForChanges();
 
       const header = page.root.shadowRoot.querySelector('.pds-multiselect__group-header');
-      expect(header.getAttribute('role')).toBe('presentation');
       expect(header.getAttribute('aria-hidden')).toBe('true');
+
+      const groupList = page.root.shadowRoot.querySelector('.pds-multiselect__group-list');
+      expect(groupList.getAttribute('role')).toBe('group');
+      expect(groupList.getAttribute('aria-label')).toBe('Group 1');
     });
 
     it('does not render group headers when options have no group property', async () => {
