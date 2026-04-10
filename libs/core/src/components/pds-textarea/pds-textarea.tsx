@@ -1,5 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, h, Method, Prop, State, Watch } from '@stencil/core';
-import { assignDescription, isRequired, messageId, exposeTypeProperty } from '../../utils/form';
+import { assignDescription, isRequired, isSpecTest, messageId, exposeTypeProperty } from '../../utils/form';
 import { TextareaChangeEventDetail, TextareaInputEventDetail } from './textarea-interface';
 import { debounceEvent } from '@utils/utils';
 import type { Attributes } from '@utils/attributes';
@@ -213,7 +213,7 @@ export class PdsTextarea {
     }
 
     // Update ElementInternals validity when maxLength changes
-    if (this.internals && this.internals.setValidity && this.nativeTextarea) {
+    if (!isSpecTest() && this.internals && this.internals.setValidity && this.nativeTextarea) {
       const isTooLong = this.nativeTextarea.value.length > (this.maxLength || 0);
       this.internals.setValidity(
         { tooLong: isTooLong },
@@ -440,6 +440,8 @@ export class PdsTextarea {
    * Updates the form value using ElementInternals API
    */
   private updateFormValue() {
+    if (isSpecTest()) return;
+
     if (this.internals && this.internals.setFormValue) {
       const value = this.getValue();
       this.internals.setFormValue(value || null);

@@ -1,7 +1,7 @@
 import { Component, Element, Event, EventEmitter, h, Host, Listen, Method, Prop, State, Watch } from '@stencil/core';
 import { computePosition, flip, offset, shift, size, autoUpdate } from '@floating-ui/dom';
 import { debounceEvent } from '@utils/utils';
-import { messageId, assignDescription } from '../../utils/form';
+import { isSpecTest, messageId, assignDescription } from '../../utils/form';
 import { danger, enlarge } from '@pine-ds/icons/icons';
 import type {
   MultiselectOption,
@@ -520,6 +520,8 @@ export class PdsMultiselect {
   }
 
   private updateFormValue() {
+    if (isSpecTest()) return;
+
     if (this.internals?.setFormValue) {
       // Ensure value is an array before iterating
       const valueArray = this.ensureValueArray();

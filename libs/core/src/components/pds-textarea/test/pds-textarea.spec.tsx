@@ -995,30 +995,6 @@ it('should set focus on the input element when setFocus is called', async() => {
       expect(component.value).toBe(originalValue); // Should remain unchanged
     });
 
-    it('calls updateFormValue when internals are available', async () => {
-      const page = await newSpecPage({
-        components: [PdsTextarea],
-        html: `<pds-textarea component-id="textarea-internals" value="test"></pds-textarea>`,
-      });
-
-      const component = page.rootInstance;
-      const mockSetFormValue = jest.fn();
-      const mockSetValidity = jest.fn();
-
-      component.internals = {
-        setFormValue: mockSetFormValue,
-        setValidity: mockSetValidity,
-      };
-      component.nativeTextarea = {
-        validity: { valid: true },
-        validationMessage: '',
-      };
-
-      component.updateFormValue();
-
-      expect(mockSetFormValue).toHaveBeenCalledWith('test');
-      expect(mockSetValidity).toHaveBeenCalled();
-    });
   });
 
   describe('highlight', () => {

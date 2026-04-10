@@ -1,5 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
-import { assignDescription, messageId, exposeTypeProperty } from '../../utils/form';
+import { assignDescription, isSpecTest, messageId, exposeTypeProperty } from '../../utils/form';
 import { danger } from '@pine-ds/icons/icons';
 
 import { inheritAriaAttributes } from '@utils/attributes';
@@ -122,9 +122,7 @@ export class PdsSwitch {
   }
 
   private updateFormValue() {
-    if (typeof jest !== 'undefined' || typeof process !== 'undefined' && process.env?.NODE_ENV === 'test') {
-      return;
-    }
+    if (isSpecTest()) return;
 
     if (this.internals && this.internals.setFormValue) {
       // For switches, only send the value when checked, otherwise send null

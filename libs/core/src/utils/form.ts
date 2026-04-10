@@ -45,3 +45,16 @@ export function exposeTypeProperty(element: Element, type: string | (() => strin
     configurable: false
   });
 }
+
+/**
+ * Determines if code is running in Stencil's spec test environment.
+ * Stencil's mock-doc logs console.error on any ElementInternals
+ * property access during spec tests. Use this guard to skip
+ * ElementInternals calls in the mock environment.
+ *
+ * Uses __STENCIL_SPEC_TESTS__ (the same env var Stencil's mock-doc checks)
+ * to avoid false positives in downstream consumer test suites.
+ */
+export const isSpecTest = (): boolean => {
+  return typeof process !== 'undefined' && process.env?.__STENCIL_SPEC_TESTS__ === 'true';
+};

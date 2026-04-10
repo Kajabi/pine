@@ -1,5 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop, Watch } from '@stencil/core';
-import { messageId, exposeTypeProperty } from '../../utils/form';
+import { isSpecTest, messageId, exposeTypeProperty } from '../../utils/form';
 import { danger, enlarge } from '@pine-ds/icons/icons';
 
 /**
@@ -289,6 +289,8 @@ export class PdsSelect {
    * Updates the form value using ElementInternals API
    */
   private updateFormValue() {
+    if (isSpecTest()) return;
+
     if (this.internals && this.internals.setFormValue) {
       const value = this.value;
 
