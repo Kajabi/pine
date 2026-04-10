@@ -33,7 +33,8 @@ function getWorkspacePackages(rootPkg) {
   const packages = [{ key: '', dir: ROOT }]; // root package
 
   for (const pattern of patterns) {
-    // Patterns are simple globs like "apps/*" and "libs/*"
+    // Only supports single-level globs (e.g., "apps/*", "libs/*").
+    // Multi-level globs (e.g., "packages/**") would need a glob library.
     const baseDir = path.join(ROOT, pattern.replace('/*', ''));
     if (!fs.existsSync(baseDir)) continue;
 
