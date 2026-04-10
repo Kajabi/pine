@@ -364,7 +364,7 @@ export class PdsCombobox implements BasePdsProps {
   private updateFormValue(value: string) {
     if (isSpecTest()) return;
 
-    if (this.internals) {
+    if (this.internals && this.internals.setFormValue) {
       this.internals.setFormValue(value);
     }
   }
