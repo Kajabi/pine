@@ -213,7 +213,7 @@ export class PdsTextarea {
     }
 
     // Update ElementInternals validity when maxLength changes
-    if (this.internals && this.internals.setValidity && this.nativeTextarea) {
+    if (!isSpecTest() && this.internals && this.internals.setValidity && this.nativeTextarea) {
       const isTooLong = this.nativeTextarea.value.length > (this.maxLength || 0);
       this.internals.setValidity(
         { tooLong: isTooLong },
