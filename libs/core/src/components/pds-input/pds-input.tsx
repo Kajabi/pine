@@ -1,5 +1,5 @@
 import { Component, Element, Event, EventEmitter, h, Host, Method, Prop, State, Watch } from '@stencil/core';
-import { assignDescription, messageId } from '../../utils/form';
+import { assignDescription, isSpecTest, messageId } from '../../utils/form';
 import { inheritAriaAttributes } from '@utils/attributes';
 import type { Attributes } from '@utils/attributes';
 import { InputChangeEventDetail, InputInputEventDetail } from './input-interface';
@@ -456,6 +456,8 @@ export class PdsInput {
    * Updates the form value using ElementInternals API
    */
   private updateFormValue() {
+    if (isSpecTest()) return;
+
     if (this.internals && this.internals.setFormValue) {
       const value = this.getValue();
       this.internals.setFormValue(value || null);
