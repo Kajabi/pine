@@ -1,5 +1,5 @@
 import { Component, Element, h, Prop, Host, Event, EventEmitter, Watch } from '@stencil/core';
-import { assignDescription, messageId, exposeTypeProperty } from '../../utils/form';
+import { assignDescription, isSpecTest, messageId, exposeTypeProperty } from '../../utils/form';
 import { CheckboxChangeEventDetail } from './checkbox-interface';
 import { danger } from '@pine-ds/icons/icons';
 
@@ -146,9 +146,7 @@ export class PdsCheckbox {
   }
 
   private updateFormValue() {
-    if (typeof jest !== 'undefined' || typeof process !== 'undefined' && process.env?.NODE_ENV === 'test') {
-      return;
-    }
+    if (isSpecTest()) return;
 
     if (this.internals && this.internals.setFormValue) {
       // For checkboxes, only send the value when checked, otherwise send null
