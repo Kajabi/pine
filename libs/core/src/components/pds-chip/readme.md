@@ -35,6 +35,13 @@
 | `"(default)"` | The chip's label text. |
 
 
+## Shadow Parts
+
+| Part       | Description |
+| ---------- | ----------- |
+| `"button"` |             |
+
+
 ## Dependencies
 
 ### Used by

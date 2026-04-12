@@ -164,6 +164,8 @@ export class PdsMultiselect {
 
   /**
    * Options provided externally (for consumer-managed async).
+   * When using `group` on options, keep each group block contiguous in the array.
+   * The same `group` label appearing again after other items produces a separate header (same as native `<optgroup>`).
    */
   @Prop() options?: MultiselectOption[];
 
@@ -1194,11 +1196,16 @@ export class PdsMultiselect {
           {this.getGroupedRenderItems(filteredOptions).map((item, itemIndex) => {
             if (item.type === 'group') {
               return (
-                <li key={`group-${itemIndex}`} role="presentation">
+                <li
+                  key={`group-${itemIndex}`}
+                  role="group"
+                  aria-label={item.group}
+                  class="pds-multiselect__group"
+                >
                   <span class="pds-multiselect__group-header" aria-hidden="true">
                     {item.group}
                   </span>
-                  <ul role="group" aria-label={item.group} class="pds-multiselect__group-list">
+                  <ul class="pds-multiselect__group-list">
                     {item.options.map(({ option, index }) => this.renderOption(option, index, valueArray))}
                   </ul>
                 </li>

@@ -807,7 +807,7 @@ Use `<optgroup>` elements in the slot to organize options under labeled group he
   </pds-multiselect>
 </DocCanvas>
 
-For dynamic or async data, add a `group` field to each item in the `options` prop instead:
+For dynamic or async data, add a `group` field to each item in the `options` prop instead. Items that share a `group` label must appear **contiguously** in the array; if the same label appears again after other options, a second header is shown (same behavior as native `<optgroup>`).
 
 <DocCanvas
   mdxSource={{

@@ -1504,7 +1504,7 @@ export namespace Components {
          */
         "name"?: string;
         /**
-          * Options provided externally (for consumer-managed async).
+          * Options provided externally (for consumer-managed async). When using `group` on options, keep each group block contiguous in the array. The same `group` label appearing again after other items produces a separate header (same as native `<optgroup>`).
          */
         "options"?: MultiselectOption[];
         /**
@@ -1541,12 +1541,6 @@ export namespace Components {
          */
         "value": string[];
     }
-    /**
-     * The portaled panel is a `div.pds-popover` appended to `document.body`. Override panel chrome with
-     * `--pds-popover-max-width` (also synced from the `maxWidth` prop), `--pds-popover-background`,
-     * `--pds-popover-border-radius`, `--pds-popover-box-shadow`, `--pds-popover-margin`, and
-     * `--pds-popover-padding`.
-     */
     interface PdsPopover {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -2711,12 +2705,6 @@ declare global {
         "pdsPopoverOpen": PdsPopoverEventDetail;
         "pdsPopoverClose": PdsPopoverEventDetail;
     }
-    /**
-     * The portaled panel is a `div.pds-popover` appended to `document.body`. Override panel chrome with
-     * `--pds-popover-max-width` (also synced from the `maxWidth` prop), `--pds-popover-background`,
-     * `--pds-popover-border-radius`, `--pds-popover-box-shadow`, `--pds-popover-margin`, and
-     * `--pds-popover-padding`.
-     */
     interface HTMLPdsPopoverElement extends Components.PdsPopover, HTMLStencilElement {
         addEventListener<K extends keyof HTMLPdsPopoverElementEventMap>(type: K, listener: (this: HTMLPdsPopoverElement, ev: PdsPopoverCustomEvent<HTMLPdsPopoverElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
         addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4594,7 +4582,7 @@ declare namespace LocalJSX {
          */
         "onPdsMultiselectSearch"?: (event: PdsMultiselectCustomEvent<MultiselectSearchEventDetail>) => void;
         /**
-          * Options provided externally (for consumer-managed async).
+          * Options provided externally (for consumer-managed async). When using `group` on options, keep each group block contiguous in the array. The same `group` label appearing again after other items produces a separate header (same as native `<optgroup>`).
          */
         "options"?: MultiselectOption[];
         /**
@@ -4627,12 +4615,6 @@ declare namespace LocalJSX {
          */
         "value"?: string[];
     }
-    /**
-     * The portaled panel is a `div.pds-popover` appended to `document.body`. Override panel chrome with
-     * `--pds-popover-max-width` (also synced from the `maxWidth` prop), `--pds-popover-background`,
-     * `--pds-popover-border-radius`, `--pds-popover-box-shadow`, `--pds-popover-margin`, and
-     * `--pds-popover-padding`.
-     */
     interface PdsPopover {
         /**
           * A unique identifier used for the underlying component `id` attribute.
@@ -5505,12 +5487,6 @@ declare module "@stencil/core" {
             "pds-modal-footer": LocalJSX.PdsModalFooter & JSXBase.HTMLAttributes<HTMLPdsModalFooterElement>;
             "pds-modal-header": LocalJSX.PdsModalHeader & JSXBase.HTMLAttributes<HTMLPdsModalHeaderElement>;
             "pds-multiselect": LocalJSX.PdsMultiselect & JSXBase.HTMLAttributes<HTMLPdsMultiselectElement>;
-            /**
-             * The portaled panel is a `div.pds-popover` appended to `document.body`. Override panel chrome with
-             * `--pds-popover-max-width` (also synced from the `maxWidth` prop), `--pds-popover-background`,
-             * `--pds-popover-border-radius`, `--pds-popover-box-shadow`, `--pds-popover-margin`, and
-             * `--pds-popover-padding`.
-             */
             "pds-popover": LocalJSX.PdsPopover & JSXBase.HTMLAttributes<HTMLPdsPopoverElement>;
             "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
             "pds-property": LocalJSX.PdsProperty & JSXBase.HTMLAttributes<HTMLPdsPropertyElement>;

@@ -182,6 +182,11 @@
   text-transform: uppercase;
 }
 
+// First group sits directly under search; slightly tighter top padding than subsequent groups
+.pds-multiselect__listbox > li:first-child > .pds-multiselect__group-header {
+  padding-block-start: var(--pine-dimension-xs);
+}
+
 .pds-multiselect__group-list {
   list-style: none;
   margin: var(--pine-dimension-none);

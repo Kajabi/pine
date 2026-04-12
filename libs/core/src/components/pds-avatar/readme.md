@@ -24,6 +24,7 @@
 | Part              | Description                                                  |
 | ----------------- | ------------------------------------------------------------ |
 | `"asset-wrapper"` |                                                              |
+| `"button"`        |                                                              |
 | `"image"`         | The main image element that represents the avatar component. |
 
 

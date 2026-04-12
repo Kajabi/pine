@@ -1279,7 +1279,7 @@ describe('pds-multiselect', () => {
       expect(headers[1].textContent).toBe('Newsletters');
     });
 
-    it('group header span has aria-hidden and group list has role="group" with aria-label', async () => {
+    it('group wrapper is role="group" with aria-label; header is aria-hidden for screen readers', async () => {
       const page = await newSpecPage({
         components: [PdsMultiselect],
         html: `<pds-multiselect component-id="test"></pds-multiselect>`,
@@ -1291,12 +1291,37 @@ describe('pds-multiselect', () => {
       page.rootInstance.isOpen = true;
       await page.waitForChanges();
 
+      const groupWrapper = page.root.shadowRoot.querySelector('.pds-multiselect__group');
+      expect(groupWrapper.getAttribute('role')).toBe('group');
+      expect(groupWrapper.getAttribute('aria-label')).toBe('Group 1');
+
       const header = page.root.shadowRoot.querySelector('.pds-multiselect__group-header');
       expect(header.getAttribute('aria-hidden')).toBe('true');
 
       const groupList = page.root.shadowRoot.querySelector('.pds-multiselect__group-list');
-      expect(groupList.getAttribute('role')).toBe('group');
-      expect(groupList.getAttribute('aria-label')).toBe('Group 1');
+      expect(groupList.getAttribute('role')).toBeNull();
+      expect(groupList.getAttribute('aria-label')).toBeNull();
+    });
+
+    it('creates separate group headers for the same label when options are not contiguous', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'A in Group X', group: 'Group X' },
+        { id: '2', text: 'B in Other', group: 'Other' },
+        { id: '3', text: 'C in Group X again', group: 'Group X' },
+      ];
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      const headers = page.root.shadowRoot.querySelectorAll('.pds-multiselect__group-header');
+      expect(headers.length).toBe(3);
+      expect(headers[0].textContent).toBe('Group X');
+      expect(headers[1].textContent).toBe('Other');
+      expect(headers[2].textContent).toBe('Group X');
     });
 
     it('does not render group headers when options have no group property', async () => {
