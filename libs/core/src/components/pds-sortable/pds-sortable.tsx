@@ -23,7 +23,7 @@ export class PdsSortable {
   @Prop({ reflect: true }) border = false;
 
   /**
-   * Determines whether sorting is disabled.
+   * Determines whether or not the sortable is disabled.
    * @defaultValue false
    */
   @Prop({ reflect: true }) disabled = false;
