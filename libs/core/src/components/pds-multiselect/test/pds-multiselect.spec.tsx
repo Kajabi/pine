@@ -1666,7 +1666,7 @@ describe('pds-multiselect', () => {
 
       const trigger = page.root.shadowRoot.querySelector('.pds-multiselect__trigger');
       expect(trigger.tagName.toLowerCase()).toBe('div');
-      expect(trigger.getAttribute('role')).toBe('combobox');
+      expect(trigger.getAttribute('role')).toBe('button');
 
       const placeholderSpan = page.root.shadowRoot.querySelector('.pds-multiselect__trigger-text--placeholder');
       expect(placeholderSpan).toBeTruthy();
@@ -1692,7 +1692,7 @@ describe('pds-multiselect', () => {
 
       const trigger = page.root.shadowRoot.querySelector('.pds-multiselect__trigger');
       expect(trigger.tagName.toLowerCase()).toBe('div');
-      expect(trigger.getAttribute('role')).toBe('combobox');
+      expect(trigger.getAttribute('role')).toBe('button');
       expect(trigger.getAttribute('aria-haspopup')).toBe('listbox');
       expect(trigger.getAttribute('aria-expanded')).toBe('false');
 

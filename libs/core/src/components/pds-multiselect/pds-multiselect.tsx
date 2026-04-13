@@ -141,7 +141,7 @@ export class PdsMultiselect {
    * Controls how selected items are displayed outside the dropdown panel.
    * `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders
    * selected items as dismissable pds-chip tags.
-   * @defaultValue 'count'
+   * @default 'count'
    */
   @Prop() selectedDisplay: 'count' | 'pill' = 'count';
 
@@ -149,14 +149,14 @@ export class PdsMultiselect {
    * Controls where pill chips render when `selectedDisplay` is `'pill'`.
    * `'inline'` places chips inside the trigger; `'below'` places chips in a
    * flex-wrap row directly below the trigger.
-   * @defaultValue 'inline'
+   * @default 'inline'
    */
   @Prop() pillPosition: 'inline' | 'below' = 'inline';
 
   /**
    * Maximum chips shown inline before collapsing to a "+N more" badge.
    * Only applies when `selectedDisplay='pill'` and `pillPosition='inline'`.
-   * @defaultValue 3
+   * @default 3
    */
   @Prop() maxInlinePills: number = 3;
 
@@ -1284,6 +1284,7 @@ export class PdsMultiselect {
     this.syncSelectedItems();
     this.pdsMultiselectChange.emit({ values: this.value, items: this.selectedItems });
     this.removalAnnouncement = `${item.text} removed`;
+    this.isClosingViaSelection = true;
     this.triggerEl?.focus();
   };
 
@@ -1359,7 +1360,7 @@ export class PdsMultiselect {
       <Host
         aria-disabled={this.disabled ? 'true' : null}
       >
-        <div class="pds-multiselect">
+        <div class="pds-multiselect" onFocusout={this.handleContainerFocusOut}>
           {this.label && (
             <label
               htmlFor={this.componentId}
@@ -1376,13 +1377,12 @@ export class PdsMultiselect {
           <div
             class="pds-multiselect__wrapper"
             ref={el => (this.containerEl = el)}
-            onFocusout={this.handleContainerFocusOut}
             style={{ width: this.triggerWidth }}
           >
             {this.selectedDisplay === 'pill' && this.pillPosition === 'inline' ? (
               <div
                 ref={el => (this.triggerEl = el as HTMLDivElement)}
-                role="combobox"
+                role="button"
                 tabindex={this.disabled ? -1 : 0}
                 part="trigger"
                 class={{
