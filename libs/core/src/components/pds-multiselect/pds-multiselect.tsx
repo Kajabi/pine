@@ -1372,6 +1372,7 @@ export class PdsMultiselect {
         <div class="pds-multiselect" onFocusout={this.handleContainerFocusOut}>
           {this.label && (
             <label
+              id={`${this.componentId}-label`}
               htmlFor={this.componentId}
               class={{
                 'pds-multiselect__label': true,
@@ -1404,6 +1405,7 @@ export class PdsMultiselect {
                 }}
                 aria-expanded={this.isOpen ? 'true' : 'false'}
                 aria-haspopup="listbox"
+                aria-labelledby={this.label ? `${this.componentId}-label` : undefined}
                 aria-required={this.required ? 'true' : undefined}
                 aria-disabled={this.disabled ? 'true' : undefined}
                 aria-describedby={assignDescription(
