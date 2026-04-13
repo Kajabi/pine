@@ -27,6 +27,7 @@ import type {
 })
 export class PdsMultiselect {
   private triggerEl?: HTMLButtonElement | HTMLDivElement;
+  private pillInlineTriggerEl?: HTMLDivElement;
   private searchInputEl?: HTMLInputElement;
   private containerEl?: HTMLElement;
   private listboxEl?: HTMLElement;
@@ -968,7 +969,9 @@ export class PdsMultiselect {
 
   private positionDropdown() {
     if (!this.containerEl || !this.panelEl) return;
-    const referenceEl = this.triggerEl || this.containerEl;
+    // In inline pill mode, triggerEl is the small chevron button — use the full-width
+    // wrapper div as the Floating UI reference so the panel aligns with the whole trigger.
+    const referenceEl = this.pillInlineTriggerEl || this.triggerEl || this.containerEl;
 
     const { minWidth, panelWidth } = this;
 
@@ -1399,6 +1402,7 @@ export class PdsMultiselect {
           >
             {this.selectedDisplay === 'pill' && this.pillPosition === 'inline' ? (
               <div
+                ref={el => (this.pillInlineTriggerEl = el || undefined)}
                 class={{
                   'pds-multiselect__trigger': true,
                   'pds-multiselect__trigger--open': this.isOpen,
