@@ -229,6 +229,37 @@ export const Disabled = {
   `,
 };
 
+export const DisabledOptions = {
+  args: {
+    componentId: 'multiselect-disabled-options',
+    label: 'Products',
+    placeholder: 'Select products...',
+    value: [],
+  },
+  render: (args, { updateArgs } = {}) => html`
+    <pds-multiselect
+      component-id="${args.componentId}"
+      label="${args.label}"
+      placeholder="${args.placeholder}"
+      .value=${args.value}
+      @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
+    >
+      <option value="ec-1">Classical Guitar Learning Path</option>
+      <option value="ec-2" disabled>Piano Lessons (unavailable)</option>
+      <option value="ec-3">Music Theory 101</option>
+      <option value="cc-1" disabled>Spring Bootcamp 2025 (sold out)</option>
+      <option value="cc-2">Fall Workshop Series</option>
+    </pds-multiselect>
+  `,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Individual options can be disabled using the `disabled` attribute on `<option>` elements, or by setting `disabled: true` on items in the `options` prop. Disabled options are non-interactive and visually muted.',
+      },
+    },
+  },
+};
+
 export const HiddenLabel = {
   args: {
     componentId: 'multiselect-hidden-label',

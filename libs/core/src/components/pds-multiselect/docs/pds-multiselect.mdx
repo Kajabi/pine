@@ -740,6 +740,49 @@ Call the `clear()` method to programmatically reset all selections, clear the se
   </div>
 </DocCanvas>
 
+### Disabled Options
+
+Individual options can be disabled using the `disabled` attribute on `<option>` elements, or by setting `disabled: true` on items in the `options` prop. Disabled options are rendered as non-interactive and visually muted — they cannot be selected via click or keyboard navigation. Disabling an `<optgroup>` propagates to all its child options.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="disabled-options-select"
+  label="Products"
+  placeholder="Select products..."
+>
+  <option value="ec-1">Classical Guitar Learning Path</option>
+  <option value="ec-2" disabled>Piano Lessons (unavailable)</option>
+  <option value="ec-3">Music Theory 101</option>
+  <option value="cc-1" disabled>Spring Bootcamp 2025 (sold out)</option>
+  <option value="cc-2">Fall Workshop Series</option>
+</pds-multiselect>`,
+    react: `<PdsMultiselect
+  componentId="disabled-options-select"
+  label="Products"
+  placeholder="Select products..."
+>
+  <option value="ec-1">Classical Guitar Learning Path</option>
+  <option value="ec-2" disabled>Piano Lessons (unavailable)</option>
+  <option value="ec-3">Music Theory 101</option>
+  <option value="cc-1" disabled>Spring Bootcamp 2025 (sold out)</option>
+  <option value="cc-2">Fall Workshop Series</option>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="disabled-options-select"
+    label="Products"
+    placeholder="Select products..."
+  >
+    <option value="ec-1">Classical Guitar Learning Path</option>
+    <option value="ec-2" disabled>Piano Lessons (unavailable)</option>
+    <option value="ec-3">Music Theory 101</option>
+    <option value="cc-1" disabled>Spring Bootcamp 2025 (sold out)</option>
+    <option value="cc-2">Fall Workshop Series</option>
+  </pds-multiselect>
+</DocCanvas>
+
 ### Grouped Options
 
 Use `<optgroup>` elements in the slot to organize options under labeled group headers. Groups are rendered as non-interactive uppercase headings that collapse automatically when search filters out all items in a group.
