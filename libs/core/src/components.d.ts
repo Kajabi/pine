@@ -1832,6 +1832,11 @@ export namespace Components {
          */
         "componentId": string;
         /**
+          * Determines whether sorting is disabled.
+          * @defaultValue false
+         */
+        "disabled": boolean;
+        /**
           * Deternines whether `sortable` items should be divided with border.
           * @default false
          */
@@ -4925,6 +4930,11 @@ declare namespace LocalJSX {
           * A unique identifier used for the sortable container `id` attribute.
          */
         "componentId": string;
+        /**
+          * Determines whether sorting is disabled.
+          * @defaultValue false
+         */
+        "disabled"?: boolean;
         /**
           * Deternines whether `sortable` items should be divided with border.
           * @default false

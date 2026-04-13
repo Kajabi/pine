@@ -46,13 +46,29 @@
       cursor: grab;
     }
   }
+
+  // styles when sortable is disabled
+  .pds-sortable--disabled & {
+    cursor: not-allowed;
+    opacity: 0.5;
+
+    .pds-sortable-item__handle {
+      cursor: not-allowed;
+    }
+  }
 }
 
 :host(.pds-sortable-item):hover {
-  background-color: var(--pine-color-background-container-hover);
+  .pds-sortable--disabled & {
+    background-color: transparent;
+  }
 
-  pds-icon {
-    color: var(--pine-color-info)
+  .pds-sortable:not(.pds-sortable--disabled) & {
+    background-color: var(--pine-color-background-container-hover);
+
+    pds-icon {
+      color: var(--pine-color-info)
+    }
   }
 }
 

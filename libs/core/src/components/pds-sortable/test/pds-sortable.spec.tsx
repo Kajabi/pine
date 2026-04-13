@@ -49,4 +49,17 @@ describe('pds-sortable', () => {
       <pds-sortable class="pds-sortable pds-sortable--handle-type-handle" handle-type="handle">Content</pds-sortable>
     `);
   });
+
+  it('renders with disabled class when disabled prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsSortable],
+      html: `<pds-sortable disabled>Content</pds-sortable>`,
+    });
+
+    expect(page.root).toEqualHtml(`
+      <pds-sortable class="pds-sortable pds-sortable--disabled pds-sortable--handle-type-row" disabled="">
+        Content
+      </pds-sortable>
+    `);
+  });
 });

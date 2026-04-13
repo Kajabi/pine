@@ -68,4 +68,19 @@ describe('pds-sortable', () => {
 
     expect(updatedOrder).not.toEqual(initialOrder);
   });
+
+  it('renders with disabled class when disabled prop is set', async () => {
+    const page = await newE2EPage();
+
+    await page.setContent(`
+      <pds-sortable component-id="test-disabled" disabled>
+        <pds-sortable-item>Item 1</pds-sortable-item>
+        <pds-sortable-item>Item 2</pds-sortable-item>
+        <pds-sortable-item>Item 3</pds-sortable-item>
+      </pds-sortable>`);
+
+    const element = await page.find('pds-sortable');
+    expect(element).toHaveClass('pds-sortable--disabled');
+    expect(element).toHaveAttribute('disabled');
+  });
 });
