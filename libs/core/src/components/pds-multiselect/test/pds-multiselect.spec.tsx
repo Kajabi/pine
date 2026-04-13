@@ -1881,6 +1881,73 @@ describe('pds-multiselect', () => {
       const chip = page.root.shadowRoot.querySelector('pds-chip');
       expect(chip.getAttribute('component-id')).toBe('ms-test-pill-42');
     });
+
+    it('handleTriggerKeyDown: Enter on trigger itself opens the dropdown', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="inline" label="Test"></pds-multiselect>`,
+      });
+
+      const triggerEl = page.root.shadowRoot.querySelector('.pds-multiselect__trigger') as HTMLElement;
+      page.rootInstance.triggerEl = triggerEl;
+
+      const event = { key: 'Enter', target: triggerEl, preventDefault: jest.fn() } as unknown as KeyboardEvent;
+      page.rootInstance.handleTriggerKeyDown(event);
+      await page.waitForChanges();
+
+      expect(event.preventDefault).toHaveBeenCalled();
+      expect(page.rootInstance.isOpen).toBe(true);
+    });
+
+    it('handleTriggerKeyDown: Enter bubbled from a chip does not open the dropdown', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="inline" label="Test"></pds-multiselect>`,
+      });
+
+      const triggerEl = page.root.shadowRoot.querySelector('.pds-multiselect__trigger') as HTMLElement;
+      page.rootInstance.triggerEl = triggerEl;
+
+      // Simulate event whose target is a chip (retargeted after crossing shadow boundary)
+      const chipEl = document.createElement('pds-chip');
+      const event = { key: 'Enter', target: chipEl, preventDefault: jest.fn() } as unknown as KeyboardEvent;
+      page.rootInstance.handleTriggerKeyDown(event);
+      await page.waitForChanges();
+
+      expect(event.preventDefault).not.toHaveBeenCalled();
+      expect(page.rootInstance.isOpen).toBe(false);
+    });
+
+    it('ARIA live region: re-announces when the same chip is removed twice', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="inline"></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['1', '2'];
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Marketing' },
+        { id: '2', text: 'Sales' },
+      ];
+      await page.waitForChanges();
+
+      // First removal
+      page.rootInstance.handlePillRemove({ id: '1', text: 'Marketing' })();
+      await page.waitForChanges();
+
+      const liveRegion = page.root.shadowRoot.querySelector('[aria-live="polite"]');
+      expect(liveRegion.textContent).toBe('Marketing removed');
+
+      // Re-add and remove the same item again
+      page.rootInstance.value = ['1', '2'];
+      page.rootInstance.syncSelectedItems();
+      await page.waitForChanges();
+
+      page.rootInstance.handlePillRemove({ id: '1', text: 'Marketing' })();
+      await page.waitForChanges();
+
+      expect(liveRegion.textContent).toBe('Marketing removed');
+    });
   });
 
 });

@@ -819,6 +819,9 @@ export class PdsMultiselect {
   };
 
   private handleTriggerKeyDown = (e: KeyboardEvent) => {
+    // Ignore keydown events that bubbled from child elements (e.g. chip close buttons).
+    // Only handle keys when the trigger itself is the event target.
+    if (e.target !== this.triggerEl) return;
     switch (e.key) {
       case 'ArrowDown':
       case 'ArrowUp':
@@ -1290,7 +1293,9 @@ export class PdsMultiselect {
     this.value = this.value.filter(v => v !== optionId);
     this.syncSelectedItems();
     this.pdsMultiselectChange.emit({ values: this.value, items: this.selectedItems });
-    this.removalAnnouncement = `${item.text} removed`;
+    // Clear first so screen readers re-announce even when the same item is removed twice
+    this.removalAnnouncement = '';
+    queueMicrotask(() => { this.removalAnnouncement = `${item.text} removed`; });
     // Prevent the bubbling native click from also toggling the dropdown
     this.isPillCloseClick = true;
     // Safety reset in case the click event doesn't reach handleTriggerClick
