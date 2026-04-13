@@ -1401,4 +1401,164 @@ describe('pds-multiselect', () => {
     });
   });
 
+  describe('disabled options', () => {
+    it('renders a disabled option with aria-disabled and disabled class', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Enabled Option' },
+        { id: '2', text: 'Disabled Option', disabled: true },
+      ];
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      const options = page.root.shadowRoot.querySelectorAll('.pds-multiselect__option');
+      expect(options[1].classList.contains('pds-multiselect__option--disabled')).toBe(true);
+      expect(options[1].getAttribute('aria-disabled')).toBe('true');
+    });
+
+    it('passes disabled prop to pds-checkbox for disabled options', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Disabled Option', disabled: true },
+      ];
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      const checkbox = page.root.shadowRoot.querySelector('pds-checkbox');
+      // Stencil sets boolean props as empty-string attributes on mock elements
+      expect(checkbox.hasAttribute('disabled')).toBe(true);
+    });
+
+    it('does not select a disabled option when clicked', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Disabled Option', disabled: true },
+      ];
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      const valueBefore = [...page.rootInstance.value];
+      page.rootInstance.toggleOption({ id: '1', text: 'Disabled Option', disabled: true });
+      await page.waitForChanges();
+
+      expect(page.rootInstance.value).toEqual(valueBefore);
+    });
+
+    it('skips disabled options on ArrowDown', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Disabled', disabled: true },
+        { id: '2', text: 'Enabled' },
+      ];
+      page.rootInstance.isOpen = true;
+      page.rootInstance.highlightedIndex = -1;
+      await page.waitForChanges();
+
+      const input = page.root.shadowRoot.querySelector('.pds-multiselect__search-input');
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+      await page.waitForChanges();
+
+      // Should skip index 0 (disabled) and land on index 1
+      expect(page.rootInstance.highlightedIndex).toBe(1);
+    });
+
+    it('skips disabled options on ArrowUp', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Enabled' },
+        { id: '2', text: 'Disabled', disabled: true },
+        { id: '3', text: 'Enabled 2' },
+      ];
+      page.rootInstance.isOpen = true;
+      page.rootInstance.highlightedIndex = 2;
+      await page.waitForChanges();
+
+      const input = page.root.shadowRoot.querySelector('.pds-multiselect__search-input');
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true }));
+      await page.waitForChanges();
+
+      // Should skip index 1 (disabled) and land on index 0
+      expect(page.rootInstance.highlightedIndex).toBe(0);
+    });
+
+    it('parses disabled attribute from slotted <option> elements', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      const makeOption = (value: string, text: string, disabled = false) => {
+        const opt = document.createElement('option') as HTMLOptionElement;
+        opt.value = value;
+        opt.textContent = text;
+        opt.disabled = disabled;
+        return opt;
+      };
+
+      const mockSlot = {
+        assignedElements: () => [
+          makeOption('1', 'Enabled Option'),
+          makeOption('2', 'Disabled Option', true),
+        ],
+      };
+
+      jest.spyOn(page.rootInstance.el.shadowRoot!, 'querySelector').mockReturnValue(mockSlot as any);
+      page.rootInstance.updateOptionsFromSlot();
+
+      const opts = page.rootInstance.internalOptions;
+      expect(opts[0].disabled).toBeFalsy();
+      expect(opts[1].disabled).toBe(true);
+    });
+
+    it('propagates disabled from <optgroup disabled> to all child options', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      const makeOption = (value: string, text: string) => {
+        const opt = document.createElement('option') as HTMLOptionElement;
+        opt.value = value;
+        opt.textContent = text;
+        return opt;
+      };
+
+      const optgroup = document.createElement('optgroup') as HTMLOptGroupElement;
+      optgroup.label = 'Locked Group';
+      optgroup.disabled = true;
+      optgroup.appendChild(makeOption('1', 'Option A'));
+      optgroup.appendChild(makeOption('2', 'Option B'));
+      optgroup.querySelectorAll = (() => optgroup.children) as typeof optgroup.querySelectorAll;
+
+      const mockSlot = { assignedElements: () => [optgroup] };
+      jest.spyOn(page.rootInstance.el.shadowRoot!, 'querySelector').mockReturnValue(mockSlot as any);
+      page.rootInstance.updateOptionsFromSlot();
+
+      const opts = page.rootInstance.internalOptions;
+      expect(opts.length).toBe(2);
+      expect(opts[0].disabled).toBe(true);
+      expect(opts[1].disabled).toBe(true);
+    });
+  });
+
 });
