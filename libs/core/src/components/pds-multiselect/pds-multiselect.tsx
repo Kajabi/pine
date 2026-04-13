@@ -409,11 +409,14 @@ export class PdsMultiselect {
 
     slot.assignedElements({ flatten: true }).forEach(el => {
       if (el.tagName === 'OPTGROUP') {
-        const groupLabel = (el as HTMLOptGroupElement).label;
-        el.querySelectorAll('option').forEach((opt: HTMLOptionElement) => {
+        const optgroup = el as HTMLOptGroupElement;
+        const groupLabel = optgroup.label;
+        const groupDisabled = optgroup.disabled;
+        optgroup.querySelectorAll('option').forEach((opt: HTMLOptionElement) => {
           const option: MultiselectOption = {
             id: opt.value,
             text: opt.textContent?.trim() || opt.value,
+            disabled: opt.disabled || groupDisabled || undefined,
           };
           if (groupLabel) {
             option.group = groupLabel;
@@ -425,6 +428,7 @@ export class PdsMultiselect {
         options.push({
           id: opt.value,
           text: opt.textContent?.trim() || opt.value,
+          disabled: opt.disabled || undefined,
         });
       }
     });
@@ -815,17 +819,31 @@ export class PdsMultiselect {
     const filteredOptions = this.getFilteredOptions();
 
     switch (e.key) {
-      case 'ArrowDown':
+      case 'ArrowDown': {
         e.preventDefault();
-        this.highlightedIndex = Math.min(this.highlightedIndex + 1, filteredOptions.length - 1);
-        this.scrollOptionIntoView();
+        let nextIndex = this.highlightedIndex + 1;
+        while (nextIndex < filteredOptions.length && filteredOptions[nextIndex]?.disabled) {
+          nextIndex++;
+        }
+        if (nextIndex < filteredOptions.length) {
+          this.highlightedIndex = nextIndex;
+          this.scrollOptionIntoView();
+        }
         break;
+      }
 
-      case 'ArrowUp':
+      case 'ArrowUp': {
         e.preventDefault();
-        this.highlightedIndex = Math.max(this.highlightedIndex - 1, 0);
-        this.scrollOptionIntoView();
+        let prevIndex = this.highlightedIndex - 1;
+        while (prevIndex >= 0 && filteredOptions[prevIndex]?.disabled) {
+          prevIndex--;
+        }
+        if (prevIndex >= 0) {
+          this.highlightedIndex = prevIndex;
+          this.scrollOptionIntoView();
+        }
         break;
+      }
 
       case 'Enter':
         e.preventDefault();
@@ -966,6 +984,8 @@ export class PdsMultiselect {
   }
 
   private toggleOption(option: MultiselectOption) {
+    if (option.disabled) return;
+
     // Handle create option
     if (option.isCreateOption) {
       // Prevent multiple create calls while one is in-flight
@@ -1070,6 +1090,7 @@ export class PdsMultiselect {
   private renderOption(option: MultiselectOption, index: number, valueArray: string[]) {
     const isSelected = valueArray.includes(String(option.id));
     const isCreateOption = option.isCreateOption;
+    const isDisabled = option.disabled;
     const isHighlighted = index === this.highlightedIndex && !isCreateOption;
     const optionId = `${this.componentId}-option-${index}`;
     const isCreateDisabled = isCreateOption && this.creating;
@@ -1083,11 +1104,11 @@ export class PdsMultiselect {
           'pds-multiselect__option--highlighted': isHighlighted,
           'pds-multiselect__option--selected': isSelected,
           'pds-multiselect__option--create': isCreateOption,
-          'pds-multiselect__option--disabled': isCreateDisabled,
+          'pds-multiselect__option--disabled': isDisabled || isCreateDisabled,
         }}
         role="option"
         aria-selected={isSelected ? 'true' : 'false'}
-        aria-disabled={isCreateDisabled ? 'true' : undefined}
+        aria-disabled={isDisabled || isCreateDisabled ? 'true' : undefined}
         aria-label={isCreateOption ? `Create new tag: ${option.text}` : undefined}
         data-index={index}
         onMouseDown={this.handleOptionMouseDown(option)}
@@ -1103,6 +1124,7 @@ export class PdsMultiselect {
             componentId={`${this.componentId}-checkbox-${index}`}
             checked={isSelected}
             label={option.text}
+            disabled={isDisabled}
             style={{ pointerEvents: 'none' }}
           />
         )}
