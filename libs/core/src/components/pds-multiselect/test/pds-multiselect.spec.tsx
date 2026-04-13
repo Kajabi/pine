@@ -1501,6 +1501,49 @@ describe('pds-multiselect', () => {
       expect(page.rootInstance.highlightedIndex).toBe(0);
     });
 
+    it('ArrowUp from initial state (-1) highlights the first enabled option', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Enabled' },
+        { id: '2', text: 'Enabled 2' },
+      ];
+      page.rootInstance.isOpen = true;
+      page.rootInstance.highlightedIndex = -1;
+      await page.waitForChanges();
+
+      const input = page.root.shadowRoot.querySelector('.pds-multiselect__search-input');
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true }));
+      await page.waitForChanges();
+
+      expect(page.rootInstance.highlightedIndex).toBe(0);
+    });
+
+    it('ArrowUp from initial state skips disabled first option', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Disabled', disabled: true },
+        { id: '2', text: 'Enabled' },
+      ];
+      page.rootInstance.isOpen = true;
+      page.rootInstance.highlightedIndex = -1;
+      await page.waitForChanges();
+
+      const input = page.root.shadowRoot.querySelector('.pds-multiselect__search-input');
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true }));
+      await page.waitForChanges();
+
+      // Index 0 is disabled so highlightedIndex should not change
+      expect(page.rootInstance.highlightedIndex).toBe(-1);
+    });
+
     it('parses disabled attribute from slotted <option> elements', async () => {
       const page = await newSpecPage({
         components: [PdsMultiselect],

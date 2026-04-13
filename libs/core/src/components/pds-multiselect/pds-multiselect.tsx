@@ -834,11 +834,12 @@ export class PdsMultiselect {
 
       case 'ArrowUp': {
         e.preventDefault();
-        let prevIndex = this.highlightedIndex - 1;
-        while (prevIndex >= 0 && filteredOptions[prevIndex]?.disabled) {
+        // Clamp to 0 so ArrowUp from uninitialised state (-1) still lands on the first option
+        let prevIndex = Math.max(this.highlightedIndex - 1, 0);
+        while (prevIndex > 0 && filteredOptions[prevIndex]?.disabled) {
           prevIndex--;
         }
-        if (prevIndex >= 0) {
+        if (!filteredOptions[prevIndex]?.disabled) {
           this.highlightedIndex = prevIndex;
           this.scrollOptionIntoView();
         }
