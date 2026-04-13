@@ -1299,7 +1299,7 @@ describe('pds-multiselect', () => {
       expect(header.getAttribute('aria-hidden')).toBe('true');
 
       const groupList = page.root.shadowRoot.querySelector('.pds-multiselect__group-list');
-      expect(groupList.getAttribute('role')).toBeNull();
+      expect(groupList.getAttribute('role')).toBe('presentation');
       expect(groupList.getAttribute('aria-label')).toBeNull();
     });
 
