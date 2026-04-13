@@ -1664,9 +1664,12 @@ describe('pds-multiselect', () => {
 
       await page.waitForChanges();
 
-      const trigger = page.root.shadowRoot.querySelector('.pds-multiselect__trigger');
-      expect(trigger.tagName.toLowerCase()).toBe('div');
-      expect(trigger.getAttribute('role')).toBe('button');
+      // Wrapper is a plain div (no role="button"); toggle is a native button inside
+      const wrapper = page.root.shadowRoot.querySelector('.pds-multiselect__trigger');
+      expect(wrapper.tagName.toLowerCase()).toBe('div');
+      expect(wrapper.getAttribute('role')).toBeNull();
+      const toggleBtn = page.root.shadowRoot.querySelector('.pds-multiselect__pill-toggle');
+      expect(toggleBtn.tagName.toLowerCase()).toBe('button');
 
       const placeholderSpan = page.root.shadowRoot.querySelector('.pds-multiselect__trigger-text--placeholder');
       expect(placeholderSpan).toBeTruthy();
@@ -1690,11 +1693,13 @@ describe('pds-multiselect', () => {
       ];
       await page.waitForChanges();
 
-      const trigger = page.root.shadowRoot.querySelector('.pds-multiselect__trigger');
-      expect(trigger.tagName.toLowerCase()).toBe('div');
-      expect(trigger.getAttribute('role')).toBe('button');
-      expect(trigger.getAttribute('aria-haspopup')).toBe('listbox');
-      expect(trigger.getAttribute('aria-expanded')).toBe('false');
+      // Wrapper div has no role; ARIA attributes are on the toggle button inside
+      const wrapper = page.root.shadowRoot.querySelector('.pds-multiselect__trigger');
+      expect(wrapper.tagName.toLowerCase()).toBe('div');
+      expect(wrapper.getAttribute('role')).toBeNull();
+      const toggleBtn = page.root.shadowRoot.querySelector('.pds-multiselect__pill-toggle');
+      expect(toggleBtn.getAttribute('aria-haspopup')).toBe('listbox');
+      expect(toggleBtn.getAttribute('aria-expanded')).toBe('false');
 
       const chips = page.root.shadowRoot.querySelectorAll('pds-chip');
       expect(chips.length).toBe(2);
@@ -1888,10 +1893,10 @@ describe('pds-multiselect', () => {
         html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="inline" label="Test"></pds-multiselect>`,
       });
 
-      const triggerEl = page.root.shadowRoot.querySelector('.pds-multiselect__trigger') as HTMLElement;
-      page.rootInstance.triggerEl = triggerEl;
+      const toggleBtn = page.root.shadowRoot.querySelector('.pds-multiselect__pill-toggle') as HTMLElement;
+      page.rootInstance.triggerEl = toggleBtn;
 
-      const event = { key: 'Enter', target: triggerEl, preventDefault: jest.fn() } as unknown as KeyboardEvent;
+      const event = { key: 'Enter', target: toggleBtn, preventDefault: jest.fn() } as unknown as KeyboardEvent;
       page.rootInstance.handleTriggerKeyDown(event);
       await page.waitForChanges();
 
@@ -1905,8 +1910,8 @@ describe('pds-multiselect', () => {
         html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="inline" label="Test"></pds-multiselect>`,
       });
 
-      const triggerEl = page.root.shadowRoot.querySelector('.pds-multiselect__trigger') as HTMLElement;
-      page.rootInstance.triggerEl = triggerEl;
+      const toggleBtn = page.root.shadowRoot.querySelector('.pds-multiselect__pill-toggle') as HTMLElement;
+      page.rootInstance.triggerEl = toggleBtn;
 
       // Simulate event whose target is a chip (retargeted after crossing shadow boundary)
       const chipEl = document.createElement('pds-chip');

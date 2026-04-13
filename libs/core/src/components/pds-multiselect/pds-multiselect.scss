@@ -138,6 +138,37 @@
   &.pds-multiselect__trigger--open {
     border-color: var(--pine-color-border-active);
   }
+
+  // Focus ring via :focus-within — the native button inside receives focus
+  &:focus-within:not(.pds-multiselect__trigger--disabled) {
+    border-color: var(--pine-color-border-active);
+    outline: var(--pine-outline-focus);
+    outline-offset: var(--pine-border-width);
+  }
+
+  &.pds-multiselect__trigger--invalid:focus-within {
+    outline-color: var(--pine-color-focus-ring-danger);
+  }
+}
+
+// Toggle button inside pill-inline trigger — wraps only the chevron icon
+.pds-multiselect__pill-toggle {
+  align-items: center;
+  appearance: none;
+  background: none;
+  border-width: 0;
+  cursor: pointer;
+  display: flex;
+  padding: 0;
+
+  &:focus {
+    outline: none; // Focus ring displayed on parent wrapper via :focus-within
+  }
+
+  .pds-multiselect__trigger--disabled & {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 }
 
 .pds-multiselect__panel {

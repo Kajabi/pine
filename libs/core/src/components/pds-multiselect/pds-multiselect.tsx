@@ -140,7 +140,7 @@ export class PdsMultiselect {
   /**
    * Controls how selected items are displayed outside the dropdown panel.
    * `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders
-   * selected items as dismissable pds-chip tags.
+   * selected items as dismissible pds-chip tags.
    * @default 'count'
    */
   @Prop() selectedDisplay: 'count' | 'pill' = 'count';
@@ -1313,7 +1313,7 @@ export class PdsMultiselect {
       );
     }
     const variant = this.disabled ? 'text' : 'tag';
-    const visibleItems = this.selectedItems.slice(0, this.maxInlinePills);
+    const visibleItems = this.selectedItems.slice(0, Math.max(1, this.maxInlinePills));
     const overflowCount = this.selectedItems.length - visibleItems.length;
     return (
       <div
@@ -1383,7 +1383,6 @@ export class PdsMultiselect {
                 'pds-multiselect__label': true,
                 'visually-hidden': this.hideLabel,
               }}
-              onClick={this.selectedDisplay === 'pill' && this.pillPosition === 'inline' ? this.handleTriggerClick : undefined}
             >
               {this.label}
             </label>
@@ -1396,10 +1395,6 @@ export class PdsMultiselect {
           >
             {this.selectedDisplay === 'pill' && this.pillPosition === 'inline' ? (
               <div
-                ref={el => (this.triggerEl = el as HTMLDivElement)}
-                role="button"
-                tabindex={this.disabled ? -1 : 0}
-                part="trigger"
                 class={{
                   'pds-multiselect__trigger': true,
                   'pds-multiselect__trigger--open': this.isOpen,
@@ -1408,23 +1403,30 @@ export class PdsMultiselect {
                   'pds-multiselect__trigger--has-value': hasSelections,
                   'pds-multiselect__trigger--pill-inline': true,
                 }}
-                aria-expanded={this.isOpen ? 'true' : 'false'}
-                aria-haspopup="listbox"
-                aria-labelledby={this.label ? `${this.componentId}-label` : undefined}
-                aria-required={this.required ? 'true' : undefined}
-                aria-disabled={this.disabled ? 'true' : undefined}
-                aria-describedby={assignDescription(
-                  this.componentId,
-                  this.invalid || !!this.errorMessage,
-                  this.errorMessage || this.helperMessage
-                )}
-                aria-invalid={this.invalid || !!this.errorMessage ? 'true' : undefined}
-                id={this.componentId}
                 onClick={this.handleTriggerClick}
-                onKeyDown={this.handleTriggerKeyDown}
               >
                 {this.renderInlinePills()}
-                <pds-icon class="pds-multiselect__icon" icon={enlarge} />
+                <button
+                  ref={el => (this.triggerEl = el)}
+                  type="button"
+                  id={this.componentId}
+                  part="trigger"
+                  class="pds-multiselect__pill-toggle"
+                  disabled={this.disabled}
+                  aria-expanded={this.isOpen ? 'true' : 'false'}
+                  aria-haspopup="listbox"
+                  aria-labelledby={this.label ? `${this.componentId}-label` : undefined}
+                  aria-required={this.required ? 'true' : undefined}
+                  aria-describedby={assignDescription(
+                    this.componentId,
+                    this.invalid || !!this.errorMessage,
+                    this.errorMessage || this.helperMessage
+                  )}
+                  aria-invalid={this.invalid || !!this.errorMessage ? 'true' : undefined}
+                  onKeyDown={this.handleTriggerKeyDown}
+                >
+                  <pds-icon class="pds-multiselect__icon" icon={enlarge} />
+                </button>
               </div>
             ) : (
               <button
