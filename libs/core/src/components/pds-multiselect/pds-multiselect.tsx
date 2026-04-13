@@ -1039,7 +1039,8 @@ export class PdsMultiselect {
     this.toggleOption(option);
   };
 
-  private handleOptionMouseEnter = (index: number) => () => {
+  private handleOptionMouseEnter = (index: number, option: MultiselectOption) => () => {
+    if (option.disabled) return;
     this.highlightedIndex = index;
   };
 
@@ -1112,7 +1113,7 @@ export class PdsMultiselect {
         aria-label={isCreateOption ? `Create new tag: ${option.text}` : undefined}
         data-index={index}
         onMouseDown={this.handleOptionMouseDown(option)}
-        onMouseEnter={this.handleOptionMouseEnter(index)}
+        onMouseEnter={this.handleOptionMouseEnter(index, option)}
       >
         {isCreateOption ? (
           <pds-box class="pds-multiselect__create-option" align-items="center" gap="xs">

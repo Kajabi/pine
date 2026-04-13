@@ -1559,6 +1559,27 @@ describe('pds-multiselect', () => {
       expect(opts[0].disabled).toBe(true);
       expect(opts[1].disabled).toBe(true);
     });
+
+    it('does not set highlightedIndex when hovering a disabled option', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Enabled' },
+        { id: '2', text: 'Disabled', disabled: true },
+      ];
+      page.rootInstance.isOpen = true;
+      page.rootInstance.highlightedIndex = 0;
+      await page.waitForChanges();
+
+      // Hovering a disabled option should not change highlightedIndex
+      page.rootInstance.handleOptionMouseEnter(1, { id: '2', text: 'Disabled', disabled: true })();
+      await page.waitForChanges();
+
+      expect(page.rootInstance.highlightedIndex).toBe(0);
+    });
   });
 
 });
