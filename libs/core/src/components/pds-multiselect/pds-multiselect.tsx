@@ -1296,10 +1296,14 @@ export class PdsMultiselect {
     // Clear first so screen readers re-announce even when the same item is removed twice
     this.removalAnnouncement = '';
     queueMicrotask(() => { this.removalAnnouncement = `${item.text} removed`; });
-    // Prevent the bubbling native click from also toggling the dropdown
-    this.isPillCloseClick = true;
-    // Safety reset in case the click event doesn't reach handleTriggerClick
-    setTimeout(() => { this.isPillCloseClick = false; }, 0);
+    // In inline mode, the chip's click event bubbles to the wrapper div's onClick handler.
+    // Set a flag so handleTriggerClick knows to ignore it. Not needed for below mode
+    // where chips are outside the trigger entirely.
+    if (this.pillPosition === 'inline') {
+      this.isPillCloseClick = true;
+      // Safety reset in case the click event doesn't reach handleTriggerClick
+      setTimeout(() => { this.isPillCloseClick = false; }, 0);
+    }
     this.triggerEl?.focus();
   };
 
