@@ -227,6 +227,8 @@ export class PdsMultiselect {
   private isOpening: boolean = false;
   // Flag to suppress dismiss event when panel closes due to selection (not user dismissal)
   private isClosingViaSelection: boolean = false;
+  // Flag to prevent a chip close-button click from also toggling the dropdown
+  private isPillCloseClick: boolean = false;
   // Flag to track if initial async fetch has been triggered (prevents double fetch)
   private initialAsyncFetchTriggered: boolean = false;
   // Flag to track if value changed during loading and needs resolution after fetch completes
@@ -802,6 +804,11 @@ export class PdsMultiselect {
   }
 
   private handleTriggerClick = () => {
+    // Ignore clicks that originated from a chip close button (handled by handlePillRemove)
+    if (this.isPillCloseClick) {
+      this.isPillCloseClick = false;
+      return;
+    }
     if (this.disabled) return;
 
     if (this.isOpen) {
@@ -1284,7 +1291,10 @@ export class PdsMultiselect {
     this.syncSelectedItems();
     this.pdsMultiselectChange.emit({ values: this.value, items: this.selectedItems });
     this.removalAnnouncement = `${item.text} removed`;
-    this.isClosingViaSelection = true;
+    // Prevent the bubbling native click from also toggling the dropdown
+    this.isPillCloseClick = true;
+    // Safety reset in case the click event doesn't reach handleTriggerClick
+    setTimeout(() => { this.isPillCloseClick = false; }, 0);
     this.triggerEl?.focus();
   };
 
@@ -1304,7 +1314,6 @@ export class PdsMultiselect {
       <div
         class="pds-multiselect__pill-list pds-multiselect__pill-list--inline"
         aria-label="Selected items"
-        onClick={(e: MouseEvent) => e.stopPropagation()}
       >
         {visibleItems.map(item => (
           <pds-chip
