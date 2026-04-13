@@ -844,15 +844,8 @@ For dynamic or async data, add a `group` field to each item in the `options` pro
     component-id="grouped-options-select"
     label="Products"
     placeholder="Select products..."
+    options='[{"id":"ec-1","text":"Classical Guitar Learning Path","group":"Evergreen Courses"},{"id":"ec-2","text":"Piano Lessons","group":"Evergreen Courses"},{"id":"nl-1","text":"Weekly Digest","group":"Newsletters"},{"id":"nl-2","text":"Product Updates","group":"Newsletters"}]'
   >
-    <optgroup label="Evergreen Courses">
-      <option value="ec-1">Classical Guitar Learning Path</option>
-      <option value="ec-2">Piano Lessons</option>
-    </optgroup>
-    <optgroup label="Newsletters">
-      <option value="nl-1">Weekly Digest</option>
-      <option value="nl-2">Product Updates</option>
-    </optgroup>
   </pds-multiselect>
 </DocCanvas>
 
