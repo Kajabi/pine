@@ -17,7 +17,8 @@
     "setup": "npm install",
     "start": "npx nx run-many -t start",
     "stencil.generate": "npx nx run @pine-ds/core:generate",
-    "test.all": "npx nx run-many --target=test"
+    "test.all": "npx nx run-many --target=test",
+    "verify-lockfile": "node scripts/verify-lockfile-sync.cjs"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",

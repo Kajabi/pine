@@ -22,6 +22,8 @@ pre-push:
   commands:
     validate-branch:
       run: npx validate-branch-name
+    verify-lockfile:
+      run: node scripts/verify-lockfile-sync.cjs
 
 commit-msg:
   commands:
