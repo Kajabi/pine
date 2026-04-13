@@ -34,7 +34,7 @@ export class PdsSortable {
   @Prop() componentId!: string;
 
   /**
-   * Deternines whether `sortable` items should be divided with border.
+   * Determines whether `sortable` items should be divided with border.
    */
   @Prop({ reflect: true }) dividers = false;
 
