@@ -1279,7 +1279,7 @@ describe('pds-multiselect', () => {
       expect(headers[1].textContent).toBe('Newsletters');
     });
 
-    it('group list is role="group" with aria-label; outer li is presentation; header is aria-hidden', async () => {
+    it('group wrapper is role="group" with aria-label; inner ul is presentation; header is aria-hidden', async () => {
       const page = await newSpecPage({
         components: [PdsMultiselect],
         html: `<pds-multiselect component-id="test"></pds-multiselect>`,
@@ -1292,15 +1292,15 @@ describe('pds-multiselect', () => {
       await page.waitForChanges();
 
       const groupWrapper = page.root.shadowRoot.querySelector('.pds-multiselect__group');
-      expect(groupWrapper.getAttribute('role')).toBe('presentation');
-      expect(groupWrapper.getAttribute('aria-label')).toBeNull();
+      expect(groupWrapper.getAttribute('role')).toBe('group');
+      expect(groupWrapper.getAttribute('aria-label')).toBe('Group 1');
 
       const header = page.root.shadowRoot.querySelector('.pds-multiselect__group-header');
       expect(header.getAttribute('aria-hidden')).toBe('true');
 
       const groupList = page.root.shadowRoot.querySelector('.pds-multiselect__group-list');
-      expect(groupList.getAttribute('role')).toBe('group');
-      expect(groupList.getAttribute('aria-label')).toBe('Group 1');
+      expect(groupList.getAttribute('role')).toBe('presentation');
+      expect(groupList.getAttribute('aria-label')).toBeNull();
     });
 
     it('creates separate group headers for the same label when options are not contiguous', async () => {
@@ -1377,6 +1377,27 @@ describe('pds-multiselect', () => {
       const options = page.root.shadowRoot.querySelectorAll('.pds-multiselect__option');
       expect(headers.length).toBe(1);
       expect(options.length).toBe(2);
+    });
+
+    it('options from an optgroup with no label are rendered as flat ungrouped options', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      // Simulate updateOptionsFromSlot result for an optgroup with empty label
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Option A' },
+      ];
+      page.rootInstance.isOpen = true;
+      await page.waitForChanges();
+
+      // No group header should render, and the option is available as flat
+      const headers = page.root.shadowRoot.querySelectorAll('.pds-multiselect__group-header');
+      expect(headers.length).toBe(0);
+
+      const options = page.root.shadowRoot.querySelectorAll('.pds-multiselect__option');
+      expect(options.length).toBe(1);
     });
   });
 

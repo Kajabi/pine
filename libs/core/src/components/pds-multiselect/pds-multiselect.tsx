@@ -409,13 +409,16 @@ export class PdsMultiselect {
 
     slot.assignedElements({ flatten: true }).forEach(el => {
       if (el.tagName === 'OPTGROUP') {
-        const groupLabel = (el as HTMLOptGroupElement).label || '';
+        const groupLabel = (el as HTMLOptGroupElement).label;
         el.querySelectorAll('option').forEach((opt: HTMLOptionElement) => {
-          options.push({
+          const option: MultiselectOption = {
             id: opt.value,
             text: opt.textContent?.trim() || opt.value,
-            group: groupLabel,
-          });
+          };
+          if (groupLabel) {
+            option.group = groupLabel;
+          }
+          options.push(option);
         });
       } else if (el.tagName === 'OPTION') {
         const opt = el as HTMLOptionElement;
@@ -1198,17 +1201,14 @@ export class PdsMultiselect {
               return (
                 <li
                   key={`group-${itemIndex}`}
-                  role="presentation"
+                  role="group"
+                  aria-label={item.group}
                   class="pds-multiselect__group"
                 >
                   <span class="pds-multiselect__group-header" aria-hidden="true">
                     {item.group}
                   </span>
-                  <ul
-                    role="group"
-                    aria-label={item.group}
-                    class="pds-multiselect__group-list"
-                  >
+                  <ul class="pds-multiselect__group-list" role="presentation">
                     {item.options.map(({ option, index }) => this.renderOption(option, index, valueArray))}
                   </ul>
                 </li>
