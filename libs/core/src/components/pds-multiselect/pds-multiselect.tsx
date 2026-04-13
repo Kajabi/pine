@@ -1303,6 +1303,7 @@ export class PdsMultiselect {
       <div
         class="pds-multiselect__pill-list pds-multiselect__pill-list--inline"
         aria-label="Selected items"
+        onClick={(e: MouseEvent) => e.stopPropagation()}
       >
         {visibleItems.map(item => (
           <pds-chip
@@ -1366,6 +1367,7 @@ export class PdsMultiselect {
                 'pds-multiselect__label': true,
                 'visually-hidden': this.hideLabel,
               }}
+              onClick={this.selectedDisplay === 'pill' && this.pillPosition === 'inline' ? this.handleTriggerClick : undefined}
             >
               {this.label}
             </label>
