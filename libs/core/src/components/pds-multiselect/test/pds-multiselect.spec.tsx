@@ -1279,7 +1279,7 @@ describe('pds-multiselect', () => {
       expect(headers[1].textContent).toBe('Newsletters');
     });
 
-    it('group wrapper is role="group" with aria-label; header is aria-hidden for screen readers', async () => {
+    it('group list is role="group" with aria-label; outer li is presentation; header is aria-hidden', async () => {
       const page = await newSpecPage({
         components: [PdsMultiselect],
         html: `<pds-multiselect component-id="test"></pds-multiselect>`,
@@ -1292,15 +1292,15 @@ describe('pds-multiselect', () => {
       await page.waitForChanges();
 
       const groupWrapper = page.root.shadowRoot.querySelector('.pds-multiselect__group');
-      expect(groupWrapper.getAttribute('role')).toBe('group');
-      expect(groupWrapper.getAttribute('aria-label')).toBe('Group 1');
+      expect(groupWrapper.getAttribute('role')).toBe('presentation');
+      expect(groupWrapper.getAttribute('aria-label')).toBeNull();
 
       const header = page.root.shadowRoot.querySelector('.pds-multiselect__group-header');
       expect(header.getAttribute('aria-hidden')).toBe('true');
 
       const groupList = page.root.shadowRoot.querySelector('.pds-multiselect__group-list');
-      expect(groupList.getAttribute('role')).toBe('presentation');
-      expect(groupList.getAttribute('aria-label')).toBeNull();
+      expect(groupList.getAttribute('role')).toBe('group');
+      expect(groupList.getAttribute('aria-label')).toBe('Group 1');
     });
 
     it('creates separate group headers for the same label when options are not contiguous', async () => {

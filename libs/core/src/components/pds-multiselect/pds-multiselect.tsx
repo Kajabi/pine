@@ -1198,14 +1198,17 @@ export class PdsMultiselect {
               return (
                 <li
                   key={`group-${itemIndex}`}
-                  role="group"
-                  aria-label={item.group}
+                  role="presentation"
                   class="pds-multiselect__group"
                 >
                   <span class="pds-multiselect__group-header" aria-hidden="true">
                     {item.group}
                   </span>
-                  <ul class="pds-multiselect__group-list" role="presentation">
+                  <ul
+                    role="group"
+                    aria-label={item.group}
+                    class="pds-multiselect__group-list"
+                  >
                     {item.options.map(({ option, index }) => this.renderOption(option, index, valueArray))}
                   </ul>
                 </li>
