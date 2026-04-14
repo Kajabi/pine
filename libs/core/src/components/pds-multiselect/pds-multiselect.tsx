@@ -17,7 +17,8 @@ import type {
  * @slot (default) - Static option elements for the multiselect
  * @slot empty - Custom empty state message when no options match
  * @slot loading - Custom loading indicator
- * @part trigger - The trigger button that opens the dropdown panel
+ * @part trigger - The trigger surface that opens the dropdown panel
+ * @part pill-toggle - The chevron button inside the inline pill trigger
  */
 @Component({
   tag: 'pds-multiselect',
@@ -139,7 +140,7 @@ export class PdsMultiselect {
   @Prop() hideSelectedItems: boolean = false;
 
   /**
-   * Controls how selected items are displayed outside the dropdown panel.
+   * Display mode for selected items outside the dropdown panel.
    * `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders
    * selected items as dismissible pds-chip tags.
    * @default 'count'
@@ -147,7 +148,7 @@ export class PdsMultiselect {
   @Prop() selectedDisplay: 'count' | 'pill' = 'count';
 
   /**
-   * Controls where pill chips render when `selectedDisplay` is `'pill'`.
+   * Position of pill chips when `selectedDisplay` is `'pill'`.
    * `'inline'` places chips inside the trigger; `'below'` places chips in a
    * flex-wrap row directly below the trigger.
    * @default 'inline'
@@ -228,8 +229,6 @@ export class PdsMultiselect {
   private isOpening: boolean = false;
   // Flag to suppress dismiss event when panel closes due to selection (not user dismissal)
   private isClosingViaSelection: boolean = false;
-  // Flag to prevent a chip close-button click from also toggling the dropdown
-  private isPillCloseClick: boolean = false;
   // Flag to track if initial async fetch has been triggered (prevents double fetch)
   private initialAsyncFetchTriggered: boolean = false;
   // Flag to track if value changed during loading and needs resolution after fetch completes
@@ -805,11 +804,6 @@ export class PdsMultiselect {
   }
 
   private handleTriggerClick = () => {
-    // Ignore clicks that originated from a chip close button (handled by handlePillRemove)
-    if (this.isPillCloseClick) {
-      this.isPillCloseClick = false;
-      return;
-    }
     if (this.disabled) return;
 
     if (this.isOpen) {
@@ -1299,15 +1293,11 @@ export class PdsMultiselect {
     // Clear first so screen readers re-announce even when the same item is removed twice
     this.removalAnnouncement = '';
     queueMicrotask(() => { this.removalAnnouncement = `${item.text} removed`; });
-    // In inline mode, the chip's click event bubbles to the wrapper div's onClick handler.
-    // Set a flag so handleTriggerClick knows to ignore it. Not needed for below mode
-    // where chips are outside the trigger entirely.
-    if (this.pillPosition === 'inline') {
-      this.isPillCloseClick = true;
-      // Safety reset in case the click event doesn't reach handleTriggerClick
-      setTimeout(() => { this.isPillCloseClick = false; }, 0);
+    if (this.isOpen) {
+      this.searchInputEl?.focus();
+    } else {
+      this.triggerEl?.focus();
     }
-    this.triggerEl?.focus();
   };
 
   private renderInlinePills() {
@@ -1326,6 +1316,7 @@ export class PdsMultiselect {
       <div
         class="pds-multiselect__pill-list pds-multiselect__pill-list--inline"
         aria-label="Selected items"
+        onClick={e => e.stopPropagation()}
       >
         {visibleItems.map(item => (
           <pds-chip
@@ -1368,7 +1359,7 @@ export class PdsMultiselect {
 
   private getTriggerText(): string {
     const count = this.selectedItems.length;
-    if (count === 0) {
+    if (count === 0 || (this.selectedDisplay === 'pill' && this.pillPosition === 'below')) {
       return this.placeholder || 'Select...';
     }
     return `${count} item${count === 1 ? '' : 's'}`;
@@ -1403,6 +1394,7 @@ export class PdsMultiselect {
             {this.selectedDisplay === 'pill' && this.pillPosition === 'inline' ? (
               <div
                 ref={el => (this.pillInlineTriggerEl = el || undefined)}
+                part="trigger"
                 class={{
                   'pds-multiselect__trigger': true,
                   'pds-multiselect__trigger--open': this.isOpen,
@@ -1418,7 +1410,7 @@ export class PdsMultiselect {
                   ref={el => (this.triggerEl = el)}
                   type="button"
                   id={this.componentId}
-                  part="trigger"
+                  part="pill-toggle"
                   class="pds-multiselect__pill-toggle"
                   disabled={this.disabled}
                   aria-expanded={this.isOpen ? 'true' : 'false'}
@@ -1464,7 +1456,7 @@ export class PdsMultiselect {
               >
                 <span class={{
                   'pds-multiselect__trigger-text': true,
-                  'pds-multiselect__trigger-text--placeholder': !hasSelections,
+                  'pds-multiselect__trigger-text--placeholder': !hasSelections || (this.selectedDisplay === 'pill' && this.pillPosition === 'below'),
                 }}>
                   {this.getTriggerText()}
                 </span>

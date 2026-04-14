@@ -44,11 +44,11 @@ A multiselect component that allows users to select multiple options from a sear
 | `name`                     | `name`                  | Specifies the name. Submitted with the form as part of a name/value pair.                                                                                                                                                                                  | `string`                               | `undefined`      |
 | `options`                  | --                      | Options provided externally (for consumer-managed async). When using `group` on options, keep each group block contiguous in the array. The same `group` label appearing again after other items produces a separate header (same as native `<optgroup>`). | `MultiselectOption[]`                  | `undefined`      |
 | `panelWidth`               | `panel-width`           | Width of the dropdown panel. Defaults to the trigger width.                                                                                                                                                                                                | `string`                               | `undefined`      |
-| `pillPosition`             | `pill-position`         | Controls where pill chips render when `selectedDisplay` is `'pill'`. `'inline'` places chips inside the trigger; `'below'` places chips in a flex-wrap row directly below the trigger.                                                                     | `"below" \| "inline"`                  | `'inline'`       |
+| `pillPosition`             | `pill-position`         | Position of pill chips when `selectedDisplay` is `'pill'`. `'inline'` places chips inside the trigger; `'below'` places chips in a flex-wrap row directly below the trigger.                                                                               | `"below" \| "inline"`                  | `'inline'`       |
 | `placeholder`              | `placeholder`           | Placeholder text for the input field.                                                                                                                                                                                                                      | `string`                               | `'Select...'`    |
 | `required`                 | `required`              | If true, the multiselect is required.                                                                                                                                                                                                                      | `boolean`                              | `false`          |
 | `searchPlaceholder`        | `search-placeholder`    | Placeholder text for the search input inside the dropdown panel.                                                                                                                                                                                           | `string`                               | `'Find...'`      |
-| `selectedDisplay`          | `selected-display`      | Controls how selected items are displayed outside the dropdown panel. `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders selected items as dismissible pds-chip tags.                                                             | `"count" \| "pill"`                    | `'count'`        |
+| `selectedDisplay`          | `selected-display`      | Display mode for selected items outside the dropdown panel. `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders selected items as dismissible pds-chip tags.                                                                       | `"count" \| "pill"`                    | `'count'`        |
 | `triggerWidth`             | `trigger-width`         | Width of the trigger button (and reference for dropdown positioning).                                                                                                                                                                                      | `string`                               | `'100%'`         |
 | `value`                    | --                      | Array of selected option values.                                                                                                                                                                                                                           | `string[]`                             | `[]`             |
 
@@ -98,9 +98,10 @@ Type: `Promise<void>`
 
 ## Shadow Parts
 
-| Part        | Description                                      |
-| ----------- | ------------------------------------------------ |
-| `"trigger"` | The trigger button that opens the dropdown panel |
+| Part            | Description                                       |
+| --------------- | ------------------------------------------------- |
+| `"pill-toggle"` | The chevron button inside the inline pill trigger |
+| `"trigger"`     | The trigger surface that opens the dropdown panel |
 
 
 ## Dependencies

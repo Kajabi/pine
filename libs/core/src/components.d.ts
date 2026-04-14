@@ -1517,7 +1517,7 @@ export namespace Components {
          */
         "panelWidth"?: string;
         /**
-          * Controls where pill chips render when `selectedDisplay` is `'pill'`. `'inline'` places chips inside the trigger; `'below'` places chips in a flex-wrap row directly below the trigger.
+          * Position of pill chips when `selectedDisplay` is `'pill'`. `'inline'` places chips inside the trigger; `'below'` places chips in a flex-wrap row directly below the trigger.
           * @default 'inline'
          */
         "pillPosition": 'inline' | 'below';
@@ -1537,7 +1537,7 @@ export namespace Components {
          */
         "searchPlaceholder": string;
         /**
-          * Controls how selected items are displayed outside the dropdown panel. `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders selected items as dismissible pds-chip tags.
+          * Display mode for selected items outside the dropdown panel. `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders selected items as dismissible pds-chip tags.
           * @default 'count'
          */
         "selectedDisplay": 'count' | 'pill';
@@ -4615,7 +4615,7 @@ declare namespace LocalJSX {
          */
         "panelWidth"?: string;
         /**
-          * Controls where pill chips render when `selectedDisplay` is `'pill'`. `'inline'` places chips inside the trigger; `'below'` places chips in a flex-wrap row directly below the trigger.
+          * Position of pill chips when `selectedDisplay` is `'pill'`. `'inline'` places chips inside the trigger; `'below'` places chips in a flex-wrap row directly below the trigger.
           * @default 'inline'
          */
         "pillPosition"?: 'inline' | 'below';
@@ -4635,7 +4635,7 @@ declare namespace LocalJSX {
          */
         "searchPlaceholder"?: string;
         /**
-          * Controls how selected items are displayed outside the dropdown panel. `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders selected items as dismissible pds-chip tags.
+          * Display mode for selected items outside the dropdown panel. `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders selected items as dismissible pds-chip tags.
           * @default 'count'
          */
         "selectedDisplay"?: 'count' | 'pill';

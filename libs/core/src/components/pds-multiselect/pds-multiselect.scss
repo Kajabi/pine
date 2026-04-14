@@ -130,6 +130,7 @@
 // Pill-inline trigger modifier — supports wrapping chips
 .pds-multiselect__trigger--pill-inline {
   align-items: center;
+  box-sizing: border-box;
   flex-wrap: wrap;
   gap: var(--pine-dimension-2xs);
   min-height: var(--pine-dimension-450);
@@ -162,7 +163,7 @@
   padding: 0;
 
   &:focus {
-    outline: none; // Focus ring displayed on parent wrapper via :focus-within
+    outline: 3px solid transparent; // Focus ring displayed on parent wrapper via :focus-within
   }
 
   .pds-multiselect__trigger--disabled & {
