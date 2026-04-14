@@ -2,6 +2,7 @@ import { Component, Host, h, Prop, Event, EventEmitter, Element, State } from '@
 
 /**
  * @slot actions - Slot for alert actions.
+ * @part dismiss
  */
 
 @Component({
