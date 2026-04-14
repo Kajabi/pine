@@ -208,9 +208,14 @@
     width: 100%;
   }
 
-  &:hover,
-  &.pds-multiselect__option--highlighted {
+  &:hover:not(.pds-multiselect__option--disabled),
+  &.pds-multiselect__option--highlighted:not(.pds-multiselect__option--disabled) {
     background: var(--pine-color-background-muted);
+  }
+
+  &.pds-multiselect__option--disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
   }
 
   &:focus-visible {

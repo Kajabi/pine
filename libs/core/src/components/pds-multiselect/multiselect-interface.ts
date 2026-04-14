@@ -1,6 +1,8 @@
 export interface MultiselectOption {
   id: string | number;
   text: string;
+  /** When `true`, the option is rendered as non-interactive and cannot be selected. */
+  disabled?: boolean;
   /**
    * Optional section label for grouped rendering (with `options` prop or parsed slots).
    * Options that share a `group` value must be contiguous in the array; non-contiguous
