@@ -1492,7 +1492,7 @@ export namespace Components {
         "maxHeight": string;
         /**
           * Maximum chips shown inline before collapsing to a "+N more" badge. Only applies when `selectedDisplay='pill'` and `pillPosition='inline'`.
-          * @defaultValue 3
+          * @default 3
          */
         "maxInlinePills": number;
         /**
@@ -1518,7 +1518,7 @@ export namespace Components {
         "panelWidth"?: string;
         /**
           * Controls where pill chips render when `selectedDisplay` is `'pill'`. `'inline'` places chips inside the trigger; `'below'` places chips in a flex-wrap row directly below the trigger.
-          * @defaultValue 'inline'
+          * @default 'inline'
          */
         "pillPosition": 'inline' | 'below';
         /**
@@ -1537,8 +1537,8 @@ export namespace Components {
          */
         "searchPlaceholder": string;
         /**
-          * Controls how selected items are displayed outside the dropdown panel. `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders selected items as dismissable pds-chip tags.
-          * @defaultValue 'count'
+          * Controls how selected items are displayed outside the dropdown panel. `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders selected items as dismissible pds-chip tags.
+          * @default 'count'
          */
         "selectedDisplay": 'count' | 'pill';
         /**
@@ -4570,7 +4570,7 @@ declare namespace LocalJSX {
         "maxHeight"?: string;
         /**
           * Maximum chips shown inline before collapsing to a "+N more" badge. Only applies when `selectedDisplay='pill'` and `pillPosition='inline'`.
-          * @defaultValue 3
+          * @default 3
          */
         "maxInlinePills"?: number;
         /**
@@ -4616,7 +4616,7 @@ declare namespace LocalJSX {
         "panelWidth"?: string;
         /**
           * Controls where pill chips render when `selectedDisplay` is `'pill'`. `'inline'` places chips inside the trigger; `'below'` places chips in a flex-wrap row directly below the trigger.
-          * @defaultValue 'inline'
+          * @default 'inline'
          */
         "pillPosition"?: 'inline' | 'below';
         /**
@@ -4635,8 +4635,8 @@ declare namespace LocalJSX {
          */
         "searchPlaceholder"?: string;
         /**
-          * Controls how selected items are displayed outside the dropdown panel. `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders selected items as dismissable pds-chip tags.
-          * @defaultValue 'count'
+          * Controls how selected items are displayed outside the dropdown panel. `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders selected items as dismissible pds-chip tags.
+          * @default 'count'
          */
         "selectedDisplay"?: 'count' | 'pill';
         /**
