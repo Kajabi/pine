@@ -30,6 +30,13 @@
 | `"actions"` | Slot for alert actions. |
 
 
+## Shadow Parts
+
+| Part        | Description |
+| ----------- | ----------- |
+| `"dismiss"` |             |
+
+
 ## Dependencies
 
 ### Depends on

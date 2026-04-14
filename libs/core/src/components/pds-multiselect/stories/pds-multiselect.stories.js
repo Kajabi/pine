@@ -462,6 +462,81 @@ export const CustomEmptyState = {
   `,
 };
 
+export const GroupedOptions = {
+  args: {
+    componentId: 'multiselect-grouped',
+    label: 'Products',
+    placeholder: 'Select products...',
+    value: [],
+  },
+  render: (args, { updateArgs } = {}) => html`
+    <pds-multiselect
+      component-id="${args.componentId}"
+      label="${args.label}"
+      placeholder="${args.placeholder}"
+      ?hide-selected-items=${args.hideSelectedItems}
+      .value=${args.value}
+      @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
+    >
+      <optgroup label="Evergreen Courses">
+        <option value="ec-1">Classical Guitar Learning Path</option>
+        <option value="ec-2">Piano Lessons</option>
+        <option value="ec-3">Music Theory 101</option>
+      </optgroup>
+      <optgroup label="Cohort Courses">
+        <option value="cc-1">Spring Bootcamp 2025</option>
+        <option value="cc-2">Fall Workshop Series</option>
+      </optgroup>
+      <optgroup label="Newsletters">
+        <option value="nl-1">Weekly Digest</option>
+        <option value="nl-2">Product Updates</option>
+      </optgroup>
+      <optgroup label="Communities">
+        <option value="cm-1">Guitar Players Community</option>
+        <option value="cm-2">Producers Hub</option>
+      </optgroup>
+    </pds-multiselect>
+  `,
+};
+
+export const GroupedOptionsViaOptions = {
+  args: {
+    componentId: 'multiselect-grouped-options',
+    label: 'Products',
+    placeholder: 'Select products...',
+    value: [],
+  },
+  render: (args, { updateArgs } = {}) => {
+    const groupedProducts = [
+      { id: 'ec-1', text: 'Classical Guitar Learning Path', group: 'Evergreen Courses' },
+      { id: 'ec-2', text: 'Piano Lessons', group: 'Evergreen Courses' },
+      { id: 'ec-3', text: 'Music Theory 101', group: 'Evergreen Courses' },
+      { id: 'cc-1', text: 'Spring Bootcamp 2025', group: 'Cohort Courses' },
+      { id: 'cc-2', text: 'Fall Workshop Series', group: 'Cohort Courses' },
+      { id: 'nl-1', text: 'Weekly Digest', group: 'Newsletters' },
+      { id: 'nl-2', text: 'Product Updates', group: 'Newsletters' },
+      { id: 'cm-1', text: 'Guitar Players Community', group: 'Communities' },
+      { id: 'cm-2', text: 'Producers Hub', group: 'Communities' },
+    ];
+
+    return html`
+      <pds-multiselect
+        component-id="${args.componentId}"
+        label="${args.label}"
+        placeholder="${args.placeholder}"
+        ?hide-selected-items=${args.hideSelectedItems}
+        .options=${groupedProducts}
+        .value=${args.value}
+        @pdsMultiselectChange=${(e) => updateArgs?.({ value: e.detail.values })}
+      >
+      </pds-multiselect>
+      <p style="margin-top: var(--pine-dimension-sm); color: var(--pine-color-text-muted);">
+        Uses the <code>options</code> prop with a <code>group</code> field on each item — useful for dynamic/async data.
+      </p>
+    `;
+  },
+};
+
 export const WithCreateOption = {
   args: {
     componentId: 'multiselect-create',

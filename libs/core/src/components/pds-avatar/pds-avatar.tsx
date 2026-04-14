@@ -2,6 +2,8 @@ import { Component, Host, h, Prop } from '@stencil/core';
 import { checkCircleFilled, userFilled } from '@pine-ds/icons/icons';
 
 /**
+ * @part asset-wrapper
+ * @part button
  * @part image - The main image element that represents the avatar component.
 */
 @Component({

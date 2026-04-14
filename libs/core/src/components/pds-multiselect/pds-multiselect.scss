@@ -173,6 +173,26 @@
   padding: var(--pine-dimension-xs);
 }
 
+.pds-multiselect__group-header {
+  color: var(--pine-color-text-muted);
+  display: block;
+  font: var(--pine-typography-body-sm-medium);
+  letter-spacing: var(--pine-letter-spacing);
+  padding: var(--pine-dimension-sm) var(--pine-dimension-xs) var(--pine-dimension-2xs);
+  text-transform: uppercase;
+}
+
+// First group sits directly under search; slightly tighter top padding than subsequent groups
+.pds-multiselect__listbox > li:first-child > .pds-multiselect__group-header {
+  padding-block-start: var(--pine-dimension-xs);
+}
+
+.pds-multiselect__group-list {
+  list-style: none;
+  margin: var(--pine-dimension-none);
+  padding: var(--pine-dimension-none);
+}
+
 .pds-multiselect__option {
   align-items: center;
   background: transparent;

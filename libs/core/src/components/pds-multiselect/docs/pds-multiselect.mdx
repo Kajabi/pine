@@ -740,6 +740,115 @@ Call the `clear()` method to programmatically reset all selections, clear the se
   </div>
 </DocCanvas>
 
+### Grouped Options
+
+Use `<optgroup>` elements in the slot to organize options under labeled group headers. Groups are rendered as non-interactive uppercase headings that collapse automatically when search filters out all items in a group.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="grouped-select"
+  label="Products"
+  placeholder="Select products..."
+>
+  <optgroup label="Evergreen Courses">
+    <option value="ec-1">Classical Guitar Learning Path</option>
+    <option value="ec-2">Piano Lessons</option>
+    <option value="ec-3">Music Theory 101</option>
+  </optgroup>
+  <optgroup label="Cohort Courses">
+    <option value="cc-1">Spring Bootcamp 2025</option>
+    <option value="cc-2">Fall Workshop Series</option>
+  </optgroup>
+  <optgroup label="Newsletters">
+    <option value="nl-1">Weekly Digest</option>
+    <option value="nl-2">Product Updates</option>
+  </optgroup>
+</pds-multiselect>`,
+    react: `<PdsMultiselect
+  componentId="grouped-select"
+  label="Products"
+  placeholder="Select products..."
+>
+  <optgroup label="Evergreen Courses">
+    <option value="ec-1">Classical Guitar Learning Path</option>
+    <option value="ec-2">Piano Lessons</option>
+    <option value="ec-3">Music Theory 101</option>
+  </optgroup>
+  <optgroup label="Cohort Courses">
+    <option value="cc-1">Spring Bootcamp 2025</option>
+    <option value="cc-2">Fall Workshop Series</option>
+  </optgroup>
+  <optgroup label="Newsletters">
+    <option value="nl-1">Weekly Digest</option>
+    <option value="nl-2">Product Updates</option>
+  </optgroup>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="grouped-select"
+    label="Products"
+    placeholder="Select products..."
+  >
+    <optgroup label="Evergreen Courses">
+      <option value="ec-1">Classical Guitar Learning Path</option>
+      <option value="ec-2">Piano Lessons</option>
+      <option value="ec-3">Music Theory 101</option>
+    </optgroup>
+    <optgroup label="Cohort Courses">
+      <option value="cc-1">Spring Bootcamp 2025</option>
+      <option value="cc-2">Fall Workshop Series</option>
+    </optgroup>
+    <optgroup label="Newsletters">
+      <option value="nl-1">Weekly Digest</option>
+      <option value="nl-2">Product Updates</option>
+    </optgroup>
+  </pds-multiselect>
+</DocCanvas>
+
+For dynamic or async data, add a `group` field to each item in the `options` prop instead. Items that share a `group` label must appear **contiguously** in the array; if the same label appears again after other options, a second header is shown (same behavior as native `<optgroup>`).
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="grouped-options-select"
+  label="Products"
+  placeholder="Select products..."
+/>
+
+<script>
+  document.querySelector('#grouped-options-select').options = [
+    { id: 'ec-1', text: 'Classical Guitar Learning Path', group: 'Evergreen Courses' },
+    { id: 'ec-2', text: 'Piano Lessons', group: 'Evergreen Courses' },
+    { id: 'nl-1', text: 'Weekly Digest', group: 'Newsletters' },
+    { id: 'nl-2', text: 'Product Updates', group: 'Newsletters' },
+  ];
+</script>`,
+    react: `const products = [
+  { id: 'ec-1', text: 'Classical Guitar Learning Path', group: 'Evergreen Courses' },
+  { id: 'ec-2', text: 'Piano Lessons', group: 'Evergreen Courses' },
+  { id: 'nl-1', text: 'Weekly Digest', group: 'Newsletters' },
+  { id: 'nl-2', text: 'Product Updates', group: 'Newsletters' },
+];
+
+<PdsMultiselect
+  componentId="grouped-options-select"
+  label="Products"
+  placeholder="Select products..."
+  options={products}
+/>`,
+  }}
+>
+  <pds-multiselect
+    component-id="grouped-options-select"
+    label="Products"
+    placeholder="Select products..."
+    options='[{"id":"ec-1","text":"Classical Guitar Learning Path","group":"Evergreen Courses"},{"id":"ec-2","text":"Piano Lessons","group":"Evergreen Courses"},{"id":"nl-1","text":"Weekly Digest","group":"Newsletters"},{"id":"nl-2","text":"Product Updates","group":"Newsletters"}]'
+  >
+  </pds-multiselect>
+</DocCanvas>
+
 ## Form Integration
 
 `pds-multiselect` is a form-associated custom element. It participates in form submission using the `name` attribute.

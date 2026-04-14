@@ -1,5 +1,8 @@
 import { Component, Event, EventEmitter, h, Host, Method, Prop, State, Watch } from '@stencil/core';
 
+/**
+ * @part dismiss
+ */
 @Component({
   tag: 'pds-toast',
   styleUrl: 'pds-toast.scss',

@@ -1,6 +1,9 @@
 import { Component, Element, Event, EventEmitter, h, Host, Method, Prop, State } from '@stencil/core';
 import type { BasePdsProps } from '@utils/interfaces';
 
+/**
+ * @part button
+ */
 @Component({
   tag: 'pds-dropdown-menu-item',
   styleUrl: 'pds-dropdown-menu-item.scss',

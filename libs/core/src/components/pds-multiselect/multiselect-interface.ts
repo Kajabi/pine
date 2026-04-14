@@ -1,6 +1,12 @@
 export interface MultiselectOption {
   id: string | number;
   text: string;
+  /**
+   * Optional section label for grouped rendering (with `options` prop or parsed slots).
+   * Options that share a `group` value must be contiguous in the array; non-contiguous
+   * rows with the same label produce separate headers (mirrors native `<optgroup>`).
+   */
+  group?: string;
   isCreateOption?: boolean;
   [key: string]: unknown;
 }

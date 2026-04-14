@@ -4,6 +4,7 @@ import type { ChipSentimentType, ChipSizeType, ChipVariantType } from '@utils/ty
 
 /**
  * @slot (default) - The chip's label text.
+ * @part button
  */
 
 @Component({

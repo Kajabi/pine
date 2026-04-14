@@ -1504,7 +1504,7 @@ export namespace Components {
          */
         "name"?: string;
         /**
-          * Options provided externally (for consumer-managed async).
+          * Options provided externally (for consumer-managed async). When using `group` on options, keep each group block contiguous in the array. The same `group` label appearing again after other items produces a separate header (same as native `<optgroup>`).
          */
         "options"?: MultiselectOption[];
         /**
@@ -4587,7 +4587,7 @@ declare namespace LocalJSX {
          */
         "onPdsMultiselectSearch"?: (event: PdsMultiselectCustomEvent<MultiselectSearchEventDetail>) => void;
         /**
-          * Options provided externally (for consumer-managed async).
+          * Options provided externally (for consumer-managed async). When using `group` on options, keep each group block contiguous in the array. The same `group` label appearing again after other items produces a separate header (same as native `<optgroup>`).
          */
         "options"?: MultiselectOption[];
         /**
