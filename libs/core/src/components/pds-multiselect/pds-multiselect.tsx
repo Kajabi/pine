@@ -834,7 +834,8 @@ export class PdsMultiselect {
 
       case 'ArrowUp': {
         e.preventDefault();
-        // Clamp to 0 so ArrowUp from uninitialised state (-1) still lands on the first option
+        // Clamp to 0 so ArrowUp from uninitialised state (-1) attempts the first option;
+        // stays at -1 if that option is disabled.
         let prevIndex = Math.max(this.highlightedIndex - 1, 0);
         while (prevIndex > 0 && filteredOptions[prevIndex]?.disabled) {
           prevIndex--;
