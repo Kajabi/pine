@@ -72,7 +72,8 @@ export class PdsCombobox implements BasePdsProps {
 
   /**
    * Visually hides the label text for instances where only the combobox should be displayed.
-   * Label remains accessible to assistive technology such as screen readers.
+   * The visible `<label>` is omitted (same pattern as `pds-select`) so label spacing does not reserve layout;
+   * the trigger uses `aria-label` so the name stays available to assistive technology.
    */
   @Prop() hideLabel: boolean = false;
 
@@ -115,6 +116,13 @@ export class PdsCombobox implements BasePdsProps {
    * @default 'secondary'
    */
   @Prop() triggerVariant: 'secondary' | 'primary' | 'accent' | 'destructive' = 'secondary';
+
+  /**
+   * The shape of the button trigger. Use 'input' to render the trigger with input-like styling
+   * (subtle border radius, input height) for use in form or filter rows alongside PdsSelect and PdsMultiselect.
+   * @default 'pill'
+   */
+  @Prop() triggerShape: 'pill' | 'input' = 'pill';
 
   /**
    * The sentiment for the chip trigger. Matches Pine chip sentiments.
@@ -1595,13 +1603,19 @@ export class PdsCombobox implements BasePdsProps {
 
 
   render() {
-    const triggerClass = `pds-combobox__button-trigger pds-combobox__button-trigger--${this.triggerVariant}`;
+    const triggerClass = [
+      'pds-combobox__button-trigger',
+      `pds-combobox__button-trigger--${this.triggerVariant}`,
+      this.triggerShape === 'input' && 'pds-combobox__button-trigger--input-shape',
+    ]
+      .filter(Boolean)
+      .join(' ');
     return (
       <Host>
         <div class="pds-combobox" tabIndex={-1} onFocusout={this.onComboboxFocusOut} part="combobox">
-          {this.label && (
+          {this.label && !this.hideLabel && (
             <label htmlFor={this.componentId} class="pds-combobox__label">
-              <span class={this.hideLabel ? 'visually-hidden' : ''}>{this.label}</span>
+              {this.label}
             </label>
           )}
           {this.trigger === 'input' ? (
