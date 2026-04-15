@@ -1301,6 +1301,7 @@ export class PdsMultiselect {
     // Clear first so screen readers re-announce even when the same item is removed twice
     this.removalAnnouncement = '';
     queueMicrotask(() => { this.removalAnnouncement = `${item.text} removed`; });
+    this.isClosingViaSelection = true;
     if (this.isOpen) {
       this.searchInputEl?.focus();
     } else {
