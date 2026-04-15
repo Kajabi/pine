@@ -8,25 +8,47 @@ name: Dependabot Manifest Cleaner
 on:
   pull_request:
     types: [opened, synchronize]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to clean manifest changes from'
+        required: true
+        type: string
 
 jobs:
   clean-manifest-changes:
-    if: github.actor == 'dependabot[bot]'
+    if: github.actor == 'dependabot[bot]' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
     steps:
+      - name: Resolve PR refs
+        id: refs
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            PR_DATA=$(gh pr view ${{ inputs.pr_number }} --repo ${{ github.repository }} --json headRefName,baseRefName)
+            HEAD_REF=$(echo "$PR_DATA" | jq -r '.headRefName')
+            BASE_REF=$(echo "$PR_DATA" | jq -r '.baseRefName')
+          else
+            HEAD_REF="${{ github.head_ref }}"
+            BASE_REF="${{ github.base_ref }}"
+          fi
+          echo "head_ref=$HEAD_REF" >> "$GITHUB_OUTPUT"
+          echo "base_ref=$BASE_REF" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}
+          ref: ${{ steps.refs.outputs.head_ref }}
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Detect manifest changes
         id: detect
         run: |
-          MANIFESTS=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD" \
+          MANIFESTS=$(git diff --name-only "origin/${{ steps.refs.outputs.base_ref }}...HEAD" \
             | grep -E '(^|/)package\.json$' || true)
 
           if [ -n "$MANIFESTS" ]; then
@@ -44,10 +66,10 @@ jobs:
           git config user.name "DSS Automation Bot"
           git config user.email "dev+github-bot@kajabi.com"
 
-          git diff --name-only "origin/${{ github.base_ref }}...HEAD" \
+          git diff --name-only "origin/${{ steps.refs.outputs.base_ref }}...HEAD" \
             | grep -E '(^|/)package\.json$' \
             | while read -r file; do
-                git checkout "origin/${{ github.base_ref }}" -- "$file"
+                git checkout "origin/${{ steps.refs.outputs.base_ref }}" -- "$file"
                 echo "Reverted: $file"
               done
 
