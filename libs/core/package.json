@@ -73,7 +73,7 @@
   "dependencies": {
     "@floating-ui/dom": "^1.7.0",
     "@kajabi-ui/styles": "*",
-    "@pine-ds/icons": "^10.0.0",
+    "@pine-ds/icons": "*",
     "@stencil/core": "4.38.3",
     "@types/dompurify": "^3.0.5",
     "dompurify": "^3.2.6",
