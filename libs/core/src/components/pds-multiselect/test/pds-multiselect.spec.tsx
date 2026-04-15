@@ -1923,6 +1923,42 @@ describe('pds-multiselect', () => {
       expect(page.rootInstance.isOpen).toBe(false);
     });
 
+    it('handleTriggerClick: chip body click does not toggle the dropdown', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="inline"></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['1'];
+      page.rootInstance.internalOptions = [{ id: '1', text: 'Marketing' }];
+      await page.waitForChanges();
+
+      const chipEl = document.createElement('pds-chip');
+      const event = { composedPath: () => [chipEl], } as unknown as MouseEvent;
+      page.rootInstance.handleTriggerClick(event);
+      await page.waitForChanges();
+
+      expect(page.rootInstance.isOpen).toBe(false);
+    });
+
+    it('handleTriggerClick: whitespace click (no chip in path) toggles the dropdown', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="inline"></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['1'];
+      page.rootInstance.internalOptions = [{ id: '1', text: 'Marketing' }];
+      await page.waitForChanges();
+
+      const divEl = document.createElement('div');
+      const event = { composedPath: () => [divEl], } as unknown as MouseEvent;
+      page.rootInstance.handleTriggerClick(event);
+      await page.waitForChanges();
+
+      expect(page.rootInstance.isOpen).toBe(true);
+    });
+
     it('ARIA live region: re-announces when the same chip is removed twice', async () => {
       const page = await newSpecPage({
         components: [PdsMultiselect],

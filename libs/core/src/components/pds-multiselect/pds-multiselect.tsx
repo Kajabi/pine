@@ -803,8 +803,16 @@ export class PdsMultiselect {
     }
   }
 
-  private handleTriggerClick = () => {
+  private handleTriggerClick = (e?: MouseEvent) => {
     if (this.disabled) return;
+    // In inline-pill mode, ignore clicks that originated inside a pds-chip.
+    // Chip close-button clicks are handled by handlePillRemove; chip body clicks should not toggle the panel.
+    if (e && this.selectedDisplay === 'pill' && this.pillPosition === 'inline') {
+      const fromChip = e.composedPath().some(
+        el => (el as { tagName?: string }).tagName?.toLowerCase() === 'pds-chip'
+      );
+      if (fromChip) return;
+    }
 
     if (this.isOpen) {
       this.closeDropdown();
@@ -1316,7 +1324,6 @@ export class PdsMultiselect {
       <div
         class="pds-multiselect__pill-list pds-multiselect__pill-list--inline"
         aria-label="Selected items"
-        onClick={e => e.stopPropagation()}
       >
         {visibleItems.map(item => (
           <pds-chip
