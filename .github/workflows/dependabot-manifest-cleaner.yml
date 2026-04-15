@@ -1,0 +1,81 @@
+name: Dependabot Manifest Cleaner
+
+# Dependabot is configured with versioning-strategy: lockfile-only, but has
+# recently been observed updating package.json manifests as well (see PR #709).
+# This workflow detects and reverts those manifest changes, keeping only the
+# intended lockfile (package-lock.json) updates.
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to clean manifest changes from'
+        required: true
+        type: string
+
+jobs:
+  clean-manifest-changes:
+    if: github.actor == 'dependabot[bot]' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Resolve PR refs
+        id: refs
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            PR_DATA=$(gh pr view ${{ inputs.pr_number }} --repo ${{ github.repository }} --json headRefName,baseRefName)
+            HEAD_REF=$(echo "$PR_DATA" | jq -r '.headRefName')
+            BASE_REF=$(echo "$PR_DATA" | jq -r '.baseRefName')
+          else
+            HEAD_REF="${{ github.head_ref }}"
+            BASE_REF="${{ github.base_ref }}"
+          fi
+          echo "head_ref=$HEAD_REF" >> "$GITHUB_OUTPUT"
+          echo "base_ref=$BASE_REF" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.refs.outputs.head_ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Detect manifest changes
+        id: detect
+        run: |
+          MANIFESTS=$(git diff --name-only "origin/${{ steps.refs.outputs.base_ref }}...HEAD" \
+            | grep -E '(^|/)package\.json$' || true)
+
+          if [ -n "$MANIFESTS" ]; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+            echo "Manifest files changed by Dependabot:"
+            echo "$MANIFESTS"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            echo "No manifest changes found — nothing to do"
+          fi
+
+      - name: Revert manifest changes
+        if: steps.detect.outputs.found == 'true'
+        run: |
+          git config user.name "DSS Automation Bot"
+          git config user.email "dev+github-bot@kajabi.com"
+
+          git diff --name-only "origin/${{ steps.refs.outputs.base_ref }}...HEAD" \
+            | grep -E '(^|/)package\.json$' \
+            | while read -r file; do
+                git checkout "origin/${{ steps.refs.outputs.base_ref }}" -- "$file"
+                echo "Reverted: $file"
+              done
+
+          if git diff --staged --quiet; then
+            echo "Nothing staged — manifests already match base, skipping commit"
+          else
+            git commit -m "chore: revert dependabot manifest changes (lockfile-only update)"
+            git push
+          fi
