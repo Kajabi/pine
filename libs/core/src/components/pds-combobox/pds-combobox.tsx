@@ -117,6 +117,13 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() triggerVariant: 'secondary' | 'primary' | 'accent' | 'destructive' = 'secondary';
 
   /**
+   * The shape of the button trigger. Use 'input' to render the trigger with input-like styling
+   * (subtle border radius, input height) for use in form or filter rows alongside PdsSelect and PdsMultiselect.
+   * @default 'pill'
+   */
+  @Prop() triggerShape: 'pill' | 'input' = 'pill';
+
+  /**
    * The sentiment for the chip trigger. Matches Pine chip sentiments.
    * @default 'neutral'
    */
@@ -1595,7 +1602,13 @@ export class PdsCombobox implements BasePdsProps {
 
 
   render() {
-    const triggerClass = `pds-combobox__button-trigger pds-combobox__button-trigger--${this.triggerVariant}`;
+    const triggerClass = [
+      'pds-combobox__button-trigger',
+      `pds-combobox__button-trigger--${this.triggerVariant}`,
+      this.triggerShape === 'input' && 'pds-combobox__button-trigger--input-shape',
+    ]
+      .filter(Boolean)
+      .join(' ');
     return (
       <Host>
         <div class="pds-combobox" tabIndex={-1} onFocusout={this.onComboboxFocusOut} part="combobox">

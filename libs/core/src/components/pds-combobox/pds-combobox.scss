@@ -212,6 +212,11 @@
   text-align: start;
 }
 
+.pds-combobox__button-trigger--input-shape {
+  border-radius: var(--pine-dimension-125);
+  min-height: var(--pine-dimension-500);
+}
+
 .pds-combobox__button-trigger-chevron {
   color: currentColor;
   margin-inline-start: var(--pine-dimension-150);
