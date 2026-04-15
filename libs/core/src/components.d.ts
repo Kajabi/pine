@@ -953,7 +953,7 @@ export namespace Components {
          */
         "getSelectedValue": () => Promise<string | null>;
         /**
-          * Visually hides the label text for instances where only the combobox should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the combobox should be displayed. The visible `<label>` is omitted (same pattern as `pds-select`) so label spacing does not reserve layout; the trigger uses `aria-label` so the name stays available to assistive technology.
           * @default false
          */
         "hideLabel": boolean;
@@ -996,6 +996,11 @@ export namespace Components {
           * @default 'input'
          */
         "trigger": 'input' | 'button' | 'chip';
+        /**
+          * The shape of the button trigger. Use 'input' to render the trigger with input-like styling (subtle border radius, input height) for use in form or filter rows alongside PdsSelect and PdsMultiselect.
+          * @default 'pill'
+         */
+        "triggerShape": 'pill' | 'input';
         /**
           * The visual variant for the button trigger. Matches Pine button variants.
           * @default 'secondary'
@@ -1832,12 +1837,12 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Determines whether sorting is disabled.
+          * Determines whether or not the sortable is disabled.
           * @defaultValue false
          */
         "disabled": boolean;
         /**
-          * Deternines whether `sortable` items should be divided with border.
+          * Determines whether `sortable` items should be divided with border.
           * @default false
          */
         "dividers": boolean;
@@ -3988,7 +3993,7 @@ declare namespace LocalJSX {
          */
         "formatResult"?: (item: unknown) => ComboboxOption;
         /**
-          * Visually hides the label text for instances where only the combobox should be displayed. Label remains accessible to assistive technology such as screen readers.
+          * Visually hides the label text for instances where only the combobox should be displayed. The visible `<label>` is omitted (same pattern as `pds-select`) so label spacing does not reserve layout; the trigger uses `aria-label` so the name stays available to assistive technology.
           * @default false
          */
         "hideLabel"?: boolean;
@@ -4039,6 +4044,11 @@ declare namespace LocalJSX {
           * @default 'input'
          */
         "trigger"?: 'input' | 'button' | 'chip';
+        /**
+          * The shape of the button trigger. Use 'input' to render the trigger with input-like styling (subtle border radius, input height) for use in form or filter rows alongside PdsSelect and PdsMultiselect.
+          * @default 'pill'
+         */
+        "triggerShape"?: 'pill' | 'input';
         /**
           * The visual variant for the button trigger. Matches Pine button variants.
           * @default 'secondary'
@@ -4931,12 +4941,12 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
-          * Determines whether sorting is disabled.
+          * Determines whether or not the sortable is disabled.
           * @defaultValue false
          */
         "disabled"?: boolean;
         /**
-          * Deternines whether `sortable` items should be divided with border.
+          * Determines whether `sortable` items should be divided with border.
           * @default false
          */
         "dividers"?: boolean;

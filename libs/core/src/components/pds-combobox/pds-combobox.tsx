@@ -1615,7 +1615,7 @@ export class PdsCombobox implements BasePdsProps {
         <div class="pds-combobox" tabIndex={-1} onFocusout={this.onComboboxFocusOut} part="combobox">
           {this.label && !this.hideLabel && (
             <label htmlFor={this.componentId} class="pds-combobox__label">
-              <span>{this.label}</span>
+              {this.label}
             </label>
           )}
           {this.trigger === 'input' ? (
