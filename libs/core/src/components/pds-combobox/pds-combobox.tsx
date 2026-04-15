@@ -72,7 +72,8 @@ export class PdsCombobox implements BasePdsProps {
 
   /**
    * Visually hides the label text for instances where only the combobox should be displayed.
-   * Label remains accessible to assistive technology such as screen readers.
+   * The visible `<label>` is omitted (same pattern as `pds-select`) so label spacing does not reserve layout;
+   * the trigger uses `aria-label` so the name stays available to assistive technology.
    */
   @Prop() hideLabel: boolean = false;
 
@@ -1612,9 +1613,9 @@ export class PdsCombobox implements BasePdsProps {
     return (
       <Host>
         <div class="pds-combobox" tabIndex={-1} onFocusout={this.onComboboxFocusOut} part="combobox">
-          {this.label && (
+          {this.label && !this.hideLabel && (
             <label htmlFor={this.componentId} class="pds-combobox__label">
-              <span class={this.hideLabel ? 'visually-hidden' : ''}>{this.label}</span>
+              <span>{this.label}</span>
             </label>
           )}
           {this.trigger === 'input' ? (
