@@ -1307,6 +1307,7 @@ export class PdsMultiselect {
     } else {
       this.triggerEl?.focus();
     }
+    setTimeout(() => { this.isClosingViaSelection = false; }, 0);
   };
 
   private renderInlinePills() {
