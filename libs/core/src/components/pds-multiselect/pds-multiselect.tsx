@@ -17,7 +17,8 @@ import type {
  * @slot (default) - Static option elements for the multiselect
  * @slot empty - Custom empty state message when no options match
  * @slot loading - Custom loading indicator
- * @part trigger - The trigger button that opens the dropdown panel
+ * @part trigger - The trigger surface that opens the dropdown panel
+ * @part pill-toggle - The chevron button inside the inline pill trigger
  */
 @Component({
   tag: 'pds-multiselect',
@@ -26,7 +27,8 @@ import type {
   formAssociated: true,
 })
 export class PdsMultiselect {
-  private triggerEl?: HTMLButtonElement;
+  private triggerEl?: HTMLButtonElement | HTMLDivElement;
+  private pillInlineTriggerEl?: HTMLDivElement;
   private searchInputEl?: HTMLInputElement;
   private containerEl?: HTMLElement;
   private listboxEl?: HTMLElement;
@@ -138,6 +140,29 @@ export class PdsMultiselect {
   @Prop() hideSelectedItems: boolean = false;
 
   /**
+   * Display mode for selected items outside the dropdown panel.
+   * `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders
+   * selected items as dismissible pds-chip tags.
+   * @default 'count'
+   */
+  @Prop() selectedDisplay: 'count' | 'pill' = 'count';
+
+  /**
+   * Position of pill chips when `selectedDisplay` is `'pill'`.
+   * `'inline'` places chips inside the trigger; `'below'` places chips in a
+   * flex-wrap row directly below the trigger.
+   * @default 'inline'
+   */
+  @Prop() pillPosition: 'inline' | 'below' = 'inline';
+
+  /**
+   * Maximum chips shown inline before collapsing to a "+N more" badge.
+   * Only applies when `selectedDisplay='pill'` and `pillPosition='inline'`.
+   * @default 3
+   */
+  @Prop() maxInlinePills: number = 3;
+
+  /**
    * Error message to display.
    */
   @Prop() errorMessage?: string;
@@ -198,6 +223,7 @@ export class PdsMultiselect {
   @State() currentPage: number = 1;
   @State() hasMore: boolean = false;
   @State() creating: boolean = false;
+  @State() private removalAnnouncement: string = '';
 
   // Flag to prevent focusout from closing during open transition
   private isOpening: boolean = false;
@@ -777,8 +803,16 @@ export class PdsMultiselect {
     }
   }
 
-  private handleTriggerClick = () => {
+  private handleTriggerClick = (e?: MouseEvent) => {
     if (this.disabled) return;
+    // In inline-pill mode, ignore clicks that originated inside a pds-chip.
+    // Chip close-button clicks are handled by handlePillRemove; chip body clicks should not toggle the panel.
+    if (e && this.selectedDisplay === 'pill' && this.pillPosition === 'inline') {
+      const fromChip = e.composedPath().some(
+        el => (el as { tagName?: string }).tagName?.toLowerCase() === 'pds-chip'
+      );
+      if (fromChip) return;
+    }
 
     if (this.isOpen) {
       this.closeDropdown();
@@ -788,6 +822,9 @@ export class PdsMultiselect {
   };
 
   private handleTriggerKeyDown = (e: KeyboardEvent) => {
+    // Ignore keydown events that bubbled from child elements (e.g. chip close buttons).
+    // Only handle keys when the trigger itself is the event target.
+    if (e.target !== this.triggerEl) return;
     switch (e.key) {
       case 'ArrowDown':
       case 'ArrowUp':
@@ -934,7 +971,9 @@ export class PdsMultiselect {
 
   private positionDropdown() {
     if (!this.containerEl || !this.panelEl) return;
-    const referenceEl = this.triggerEl || this.containerEl;
+    // In inline pill mode, triggerEl is the small chevron button — use the full-width
+    // wrapper div as the Floating UI reference so the panel aligns with the whole trigger.
+    const referenceEl = this.pillInlineTriggerEl || this.triggerEl || this.containerEl;
 
     const { minWidth, panelWidth } = this;
 
@@ -1253,9 +1292,83 @@ export class PdsMultiselect {
     );
   }
 
+  private handlePillRemove = (item: MultiselectOption) => () => {
+    if (this.disabled) return;
+    const optionId = String(item.id);
+    this.value = this.value.filter(v => v !== optionId);
+    this.syncSelectedItems();
+    this.pdsMultiselectChange.emit({ values: this.value, items: this.selectedItems });
+    // Clear first so screen readers re-announce even when the same item is removed twice
+    this.removalAnnouncement = '';
+    queueMicrotask(() => { this.removalAnnouncement = `${item.text} removed`; });
+    this.isClosingViaSelection = true;
+    if (this.isOpen) {
+      this.searchInputEl?.focus();
+    } else {
+      this.triggerEl?.focus();
+    }
+    setTimeout(() => { this.isClosingViaSelection = false; }, 0);
+  };
+
+  private renderInlinePills() {
+    const hasSelections = this.selectedItems.length > 0;
+    if (!hasSelections) {
+      return (
+        <span class="pds-multiselect__trigger-text pds-multiselect__trigger-text--placeholder">
+          {this.placeholder || 'Select...'}
+        </span>
+      );
+    }
+    const variant = this.disabled ? 'text' : 'tag';
+    const visibleItems = this.selectedItems.slice(0, Math.max(1, this.maxInlinePills));
+    const overflowCount = this.selectedItems.length - visibleItems.length;
+    return (
+      <div
+        class="pds-multiselect__pill-list pds-multiselect__pill-list--inline"
+        aria-label="Selected items"
+      >
+        {visibleItems.map(item => (
+          <pds-chip
+            key={String(item.id)}
+            component-id={`${this.componentId}-pill-${item.id}`}
+            variant={variant}
+            size="sm"
+            sentiment="neutral"
+            onPdsTagCloseClick={this.handlePillRemove(item)}
+          >{item.text}</pds-chip>
+        ))}
+        {overflowCount > 0 && (
+          <span class="pds-multiselect__pill-overflow">+{overflowCount}</span>
+        )}
+      </div>
+    );
+  }
+
+  private renderBelowPills() {
+    if (this.selectedItems.length === 0) return null;
+    const variant = this.disabled ? 'text' : 'tag';
+    return (
+      <div
+        class="pds-multiselect__pill-list pds-multiselect__pill-list--below"
+        aria-label="Selected items"
+      >
+        {this.selectedItems.map(item => (
+          <pds-chip
+            key={String(item.id)}
+            component-id={`${this.componentId}-pill-${item.id}`}
+            variant={variant}
+            size="md"
+            sentiment="neutral"
+            onPdsTagCloseClick={this.handlePillRemove(item)}
+          >{item.text}</pds-chip>
+        ))}
+      </div>
+    );
+  }
+
   private getTriggerText(): string {
     const count = this.selectedItems.length;
-    if (count === 0) {
+    if (count === 0 || (this.selectedDisplay === 'pill' && this.pillPosition === 'below')) {
       return this.placeholder || 'Select...';
     }
     return `${count} item${count === 1 ? '' : 's'}`;
@@ -1268,9 +1381,10 @@ export class PdsMultiselect {
       <Host
         aria-disabled={this.disabled ? 'true' : null}
       >
-        <div class="pds-multiselect">
+        <div class="pds-multiselect" onFocusout={this.handleContainerFocusOut}>
           {this.label && (
             <label
+              id={`${this.componentId}-label`}
               htmlFor={this.componentId}
               class={{
                 'pds-multiselect__label': true,
@@ -1284,45 +1398,93 @@ export class PdsMultiselect {
           <div
             class="pds-multiselect__wrapper"
             ref={el => (this.containerEl = el)}
-            onFocusout={this.handleContainerFocusOut}
             style={{ width: this.triggerWidth }}
           >
-            <button
-              ref={el => (this.triggerEl = el)}
-              type="button"
-              part="trigger"
-              class={{
-                'pds-multiselect__trigger': true,
-                'pds-multiselect__trigger--open': this.isOpen,
-                'pds-multiselect__trigger--disabled': this.disabled,
-                'pds-multiselect__trigger--invalid': this.invalid || !!this.errorMessage,
-                'pds-multiselect__trigger--has-value': hasSelections,
-              }}
-              id={this.componentId}
-              disabled={this.disabled}
-              aria-required={this.required ? 'true' : undefined}
-              aria-expanded={this.isOpen ? 'true' : 'false'}
-              aria-haspopup="listbox"
-              aria-describedby={assignDescription(
-                this.componentId,
-                this.invalid || !!this.errorMessage,
-                this.errorMessage || this.helperMessage
-              )}
-              aria-invalid={this.invalid || !!this.errorMessage ? 'true' : undefined}
-              onClick={this.handleTriggerClick}
-              onKeyDown={this.handleTriggerKeyDown}
-            >
-              <span class={{
-                'pds-multiselect__trigger-text': true,
-                'pds-multiselect__trigger-text--placeholder': !hasSelections,
-              }}>
-                {this.getTriggerText()}
-              </span>
-              <pds-icon class="pds-multiselect__icon" icon={enlarge} />
-            </button>
+            {this.selectedDisplay === 'pill' && this.pillPosition === 'inline' ? (
+              <div
+                ref={el => (this.pillInlineTriggerEl = el || undefined)}
+                part="trigger"
+                class={{
+                  'pds-multiselect__trigger': true,
+                  'pds-multiselect__trigger--open': this.isOpen,
+                  'pds-multiselect__trigger--disabled': this.disabled,
+                  'pds-multiselect__trigger--invalid': this.invalid || !!this.errorMessage,
+                  'pds-multiselect__trigger--has-value': hasSelections,
+                  'pds-multiselect__trigger--pill-inline': true,
+                }}
+                onClick={this.handleTriggerClick}
+              >
+                {this.renderInlinePills()}
+                <button
+                  ref={el => (this.triggerEl = el)}
+                  type="button"
+                  id={this.componentId}
+                  part="pill-toggle"
+                  class="pds-multiselect__pill-toggle"
+                  disabled={this.disabled}
+                  aria-expanded={this.isOpen ? 'true' : 'false'}
+                  aria-haspopup="listbox"
+                  aria-labelledby={this.label ? `${this.componentId}-label` : undefined}
+                  aria-required={this.required ? 'true' : undefined}
+                  aria-describedby={assignDescription(
+                    this.componentId,
+                    this.invalid || !!this.errorMessage,
+                    this.errorMessage || this.helperMessage
+                  )}
+                  aria-invalid={this.invalid || !!this.errorMessage ? 'true' : undefined}
+                  onKeyDown={this.handleTriggerKeyDown}
+                >
+                  <pds-icon class="pds-multiselect__icon" icon={enlarge} />
+                </button>
+              </div>
+            ) : (
+              <button
+                ref={el => (this.triggerEl = el)}
+                type="button"
+                part="trigger"
+                class={{
+                  'pds-multiselect__trigger': true,
+                  'pds-multiselect__trigger--open': this.isOpen,
+                  'pds-multiselect__trigger--disabled': this.disabled,
+                  'pds-multiselect__trigger--invalid': this.invalid || !!this.errorMessage,
+                  'pds-multiselect__trigger--has-value': hasSelections,
+                }}
+                id={this.componentId}
+                disabled={this.disabled}
+                aria-required={this.required ? 'true' : undefined}
+                aria-expanded={this.isOpen ? 'true' : 'false'}
+                aria-haspopup="listbox"
+                aria-describedby={assignDescription(
+                  this.componentId,
+                  this.invalid || !!this.errorMessage,
+                  this.errorMessage || this.helperMessage
+                )}
+                aria-invalid={this.invalid || !!this.errorMessage ? 'true' : undefined}
+                onClick={this.handleTriggerClick}
+                onKeyDown={this.handleTriggerKeyDown}
+              >
+                <span class={{
+                  'pds-multiselect__trigger-text': true,
+                  'pds-multiselect__trigger-text--placeholder': !hasSelections || (this.selectedDisplay === 'pill' && this.pillPosition === 'below'),
+                }}>
+                  {this.getTriggerText()}
+                </span>
+                <pds-icon class="pds-multiselect__icon" icon={enlarge} />
+              </button>
+            )}
 
             {this.renderDropdown()}
           </div>
+
+          {this.selectedDisplay === 'pill' && this.pillPosition === 'below' && this.renderBelowPills()}
+
+          <span
+            class="visually-hidden"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            {this.removalAnnouncement}
+          </span>
 
           {this.helperMessage && !(this.errorMessage && this.errorMessage.length > 0) && (
             <p class="pds-multiselect__helper" id={messageId(this.componentId, 'helper')}>

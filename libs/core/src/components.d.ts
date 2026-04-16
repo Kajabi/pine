@@ -1496,6 +1496,11 @@ export namespace Components {
          */
         "maxHeight": string;
         /**
+          * Maximum chips shown inline before collapsing to a "+N more" badge. Only applies when `selectedDisplay='pill'` and `pillPosition='inline'`.
+          * @default 3
+         */
+        "maxInlinePills": number;
+        /**
           * Maximum number of selections allowed.
          */
         "maxSelections"?: number;
@@ -1517,6 +1522,11 @@ export namespace Components {
          */
         "panelWidth"?: string;
         /**
+          * Position of pill chips when `selectedDisplay` is `'pill'`. `'inline'` places chips inside the trigger; `'below'` places chips in a flex-wrap row directly below the trigger.
+          * @default 'inline'
+         */
+        "pillPosition": 'inline' | 'below';
+        /**
           * Placeholder text for the input field.
           * @default 'Select...'
          */
@@ -1531,6 +1541,11 @@ export namespace Components {
           * @default 'Find...'
          */
         "searchPlaceholder": string;
+        /**
+          * Display mode for selected items outside the dropdown panel. `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders selected items as dismissible pds-chip tags.
+          * @default 'count'
+         */
+        "selectedDisplay": 'count' | 'pill';
         /**
           * Sets focus on the trigger button.
          */
@@ -4564,6 +4579,11 @@ declare namespace LocalJSX {
          */
         "maxHeight"?: string;
         /**
+          * Maximum chips shown inline before collapsing to a "+N more" badge. Only applies when `selectedDisplay='pill'` and `pillPosition='inline'`.
+          * @default 3
+         */
+        "maxInlinePills"?: number;
+        /**
           * Maximum number of selections allowed.
          */
         "maxSelections"?: number;
@@ -4605,6 +4625,11 @@ declare namespace LocalJSX {
          */
         "panelWidth"?: string;
         /**
+          * Position of pill chips when `selectedDisplay` is `'pill'`. `'inline'` places chips inside the trigger; `'below'` places chips in a flex-wrap row directly below the trigger.
+          * @default 'inline'
+         */
+        "pillPosition"?: 'inline' | 'below';
+        /**
           * Placeholder text for the input field.
           * @default 'Select...'
          */
@@ -4619,6 +4644,11 @@ declare namespace LocalJSX {
           * @default 'Find...'
          */
         "searchPlaceholder"?: string;
+        /**
+          * Display mode for selected items outside the dropdown panel. `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders selected items as dismissible pds-chip tags.
+          * @default 'count'
+         */
+        "selectedDisplay"?: 'count' | 'pill';
         /**
           * Width of the trigger button (and reference for dropdown positioning).
           * @default '100%'

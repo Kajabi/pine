@@ -1625,4 +1625,370 @@ describe('pds-multiselect', () => {
     });
   });
 
+  describe('pill variant', () => {
+    it('has correct default values for new props', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      expect(page.rootInstance.selectedDisplay).toBe('count');
+      expect(page.rootInstance.pillPosition).toBe('inline');
+      expect(page.rootInstance.maxInlinePills).toBe(3);
+    });
+
+    it('count mode: trigger shows item count text (unchanged behavior)', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test"></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['1', '2'];
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+      ];
+      await page.waitForChanges();
+
+      const trigger = page.root.shadowRoot.querySelector('.pds-multiselect__trigger');
+      expect(trigger.tagName.toLowerCase()).toBe('button');
+      const triggerText = page.root.shadowRoot.querySelector('.pds-multiselect__trigger-text');
+      expect(triggerText.textContent).toBe('2 items');
+    });
+
+    it('pill inline empty: shows placeholder span, no chips', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="inline" placeholder="Select items..."></pds-multiselect>`,
+      });
+
+      await page.waitForChanges();
+
+      // Wrapper is a plain div (no role="button"); toggle is a native button inside
+      const wrapper = page.root.shadowRoot.querySelector('.pds-multiselect__trigger');
+      expect(wrapper.tagName.toLowerCase()).toBe('div');
+      expect(wrapper.getAttribute('role')).toBeNull();
+      const toggleBtn = page.root.shadowRoot.querySelector('.pds-multiselect__pill-toggle');
+      expect(toggleBtn.tagName.toLowerCase()).toBe('button');
+
+      const placeholderSpan = page.root.shadowRoot.querySelector('.pds-multiselect__trigger-text--placeholder');
+      expect(placeholderSpan).toBeTruthy();
+      expect(placeholderSpan.textContent).toBe('Select items...');
+
+      const chips = page.root.shadowRoot.querySelectorAll('pds-chip');
+      expect(chips.length).toBe(0);
+    });
+
+    it('pill inline with selections: renders chips inside trigger div', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="inline"></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['1', '2'];
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+        { id: '3', text: 'Option 3' },
+      ];
+      await page.waitForChanges();
+
+      // Wrapper div has no role; ARIA attributes are on the toggle button inside
+      const wrapper = page.root.shadowRoot.querySelector('.pds-multiselect__trigger');
+      expect(wrapper.tagName.toLowerCase()).toBe('div');
+      expect(wrapper.getAttribute('role')).toBeNull();
+      const toggleBtn = page.root.shadowRoot.querySelector('.pds-multiselect__pill-toggle');
+      expect(toggleBtn.getAttribute('aria-haspopup')).toBe('listbox');
+      expect(toggleBtn.getAttribute('aria-expanded')).toBe('false');
+
+      const chips = page.root.shadowRoot.querySelectorAll('pds-chip');
+      expect(chips.length).toBe(2);
+      expect(chips[0].getAttribute('size')).toBe('sm');
+      expect(chips[0].getAttribute('variant')).toBe('tag');
+      expect(chips[0].getAttribute('sentiment')).toBe('neutral');
+    });
+
+    it('pill inline overflow: shows visible chips and +N badge', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="inline" max-inline-pills="2"></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['1', '2', '3', '4', '5'];
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+        { id: '3', text: 'Option 3' },
+        { id: '4', text: 'Option 4' },
+        { id: '5', text: 'Option 5' },
+      ];
+      await page.waitForChanges();
+
+      const chips = page.root.shadowRoot.querySelectorAll('pds-chip');
+      expect(chips.length).toBe(2);
+
+      const overflow = page.root.shadowRoot.querySelector('.pds-multiselect__pill-overflow');
+      expect(overflow).toBeTruthy();
+      expect(overflow.textContent).toBe('+3');
+    });
+
+    it('pill below: chips rendered outside the trigger with size md', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="below"></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['1', '2'];
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+      ];
+      await page.waitForChanges();
+
+      // Trigger should be a button (not div) in below mode
+      const trigger = page.root.shadowRoot.querySelector('.pds-multiselect__trigger');
+      expect(trigger.tagName.toLowerCase()).toBe('button');
+
+      const belowList = page.root.shadowRoot.querySelector('.pds-multiselect__pill-list--below');
+      expect(belowList).toBeTruthy();
+
+      const chips = page.root.shadowRoot.querySelectorAll('pds-chip');
+      expect(chips.length).toBe(2);
+      expect(chips[0].getAttribute('size')).toBe('md');
+    });
+
+    it('pill below: not rendered when no selections', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="below"></pds-multiselect>`,
+      });
+
+      await page.waitForChanges();
+
+      const belowList = page.root.shadowRoot.querySelector('.pds-multiselect__pill-list--below');
+      expect(belowList).toBeNull();
+    });
+
+    it('disabled: chips render with text variant (no close button)', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="inline" disabled></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['1', '2'];
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+      ];
+      await page.waitForChanges();
+
+      const chips = page.root.shadowRoot.querySelectorAll('pds-chip');
+      expect(chips.length).toBe(2);
+      chips.forEach(chip => {
+        expect(chip.getAttribute('variant')).toBe('text');
+      });
+    });
+
+    it('disabled below: chips render with text variant', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="below" disabled></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['1'];
+      page.rootInstance.internalOptions = [{ id: '1', text: 'Option 1' }];
+      await page.waitForChanges();
+
+      const chips = page.root.shadowRoot.querySelectorAll('pds-chip');
+      expect(chips.length).toBe(1);
+      expect(chips[0].getAttribute('variant')).toBe('text');
+    });
+
+    it('chip removal: handlePillRemove deselects item and emits change event', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="inline"></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['1', '2'];
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+      ];
+      await page.waitForChanges();
+
+      const changeSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectChange', changeSpy);
+
+      // Call handlePillRemove for Option 1
+      page.rootInstance.handlePillRemove({ id: '1', text: 'Option 1' })();
+      await page.waitForChanges();
+
+      expect(changeSpy).toHaveBeenCalled();
+      expect(changeSpy.mock.calls[0][0].detail.values).toEqual(['2']);
+      expect(page.rootInstance.value).toEqual(['2']);
+    });
+
+    it('chip removal: does nothing when disabled', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="inline" disabled></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['1', '2'];
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+      ];
+      await page.waitForChanges();
+
+      const changeSpy = jest.fn();
+      page.root.addEventListener('pdsMultiselectChange', changeSpy);
+
+      page.rootInstance.handlePillRemove({ id: '1', text: 'Option 1' })();
+      await page.waitForChanges();
+
+      expect(changeSpy).not.toHaveBeenCalled();
+      expect(page.rootInstance.value).toEqual(['1', '2']);
+    });
+
+    it('ARIA live region: announces removed chip text', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="inline"></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['1', '2'];
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Marketing' },
+        { id: '2', text: 'Sales' },
+      ];
+      await page.waitForChanges();
+
+      page.rootInstance.handlePillRemove({ id: '1', text: 'Marketing' })();
+      await page.waitForChanges();
+
+      const liveRegion = page.root.shadowRoot.querySelector('[aria-live="polite"]');
+      expect(liveRegion).toBeTruthy();
+      expect(liveRegion.textContent).toBe('Marketing removed');
+    });
+
+    it('chip component-id attribute is set correctly', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="ms-test" selected-display="pill" pill-position="inline"></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['42'];
+      page.rootInstance.internalOptions = [{ id: '42', text: 'Engineering' }];
+      await page.waitForChanges();
+
+      const chip = page.root.shadowRoot.querySelector('pds-chip');
+      expect(chip.getAttribute('component-id')).toBe('ms-test-pill-42');
+    });
+
+    it('handleTriggerKeyDown: Enter on trigger itself opens the dropdown', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="inline" label="Test"></pds-multiselect>`,
+      });
+
+      const toggleBtn = page.root.shadowRoot.querySelector('.pds-multiselect__pill-toggle') as HTMLElement;
+      page.rootInstance.triggerEl = toggleBtn;
+
+      const event = { key: 'Enter', target: toggleBtn, preventDefault: jest.fn() } as unknown as KeyboardEvent;
+      page.rootInstance.handleTriggerKeyDown(event);
+      await page.waitForChanges();
+
+      expect(event.preventDefault).toHaveBeenCalled();
+      expect(page.rootInstance.isOpen).toBe(true);
+    });
+
+    it('handleTriggerKeyDown: Enter bubbled from a chip does not open the dropdown', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="inline" label="Test"></pds-multiselect>`,
+      });
+
+      const toggleBtn = page.root.shadowRoot.querySelector('.pds-multiselect__pill-toggle') as HTMLElement;
+      page.rootInstance.triggerEl = toggleBtn;
+
+      // Simulate event whose target is a chip (retargeted after crossing shadow boundary)
+      const chipEl = document.createElement('pds-chip');
+      const event = { key: 'Enter', target: chipEl, preventDefault: jest.fn() } as unknown as KeyboardEvent;
+      page.rootInstance.handleTriggerKeyDown(event);
+      await page.waitForChanges();
+
+      expect(event.preventDefault).not.toHaveBeenCalled();
+      expect(page.rootInstance.isOpen).toBe(false);
+    });
+
+    it('handleTriggerClick: chip body click does not toggle the dropdown', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="inline"></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['1'];
+      page.rootInstance.internalOptions = [{ id: '1', text: 'Marketing' }];
+      await page.waitForChanges();
+
+      const chipEl = document.createElement('pds-chip');
+      const event = { composedPath: () => [chipEl], } as unknown as MouseEvent;
+      page.rootInstance.handleTriggerClick(event);
+      await page.waitForChanges();
+
+      expect(page.rootInstance.isOpen).toBe(false);
+    });
+
+    it('handleTriggerClick: whitespace click (no chip in path) toggles the dropdown', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="inline"></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['1'];
+      page.rootInstance.internalOptions = [{ id: '1', text: 'Marketing' }];
+      await page.waitForChanges();
+
+      const divEl = document.createElement('div');
+      const event = { composedPath: () => [divEl], } as unknown as MouseEvent;
+      page.rootInstance.handleTriggerClick(event);
+      await page.waitForChanges();
+
+      expect(page.rootInstance.isOpen).toBe(true);
+    });
+
+    it('ARIA live region: re-announces when the same chip is removed twice', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-display="pill" pill-position="inline"></pds-multiselect>`,
+      });
+
+      page.rootInstance.value = ['1', '2'];
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Marketing' },
+        { id: '2', text: 'Sales' },
+      ];
+      await page.waitForChanges();
+
+      // First removal
+      page.rootInstance.handlePillRemove({ id: '1', text: 'Marketing' })();
+      await page.waitForChanges();
+
+      const liveRegion = page.root.shadowRoot.querySelector('[aria-live="polite"]');
+      expect(liveRegion.textContent).toBe('Marketing removed');
+
+      // Re-add and remove the same item again
+      page.rootInstance.value = ['1', '2'];
+      page.rootInstance.syncSelectedItems();
+      await page.waitForChanges();
+
+      page.rootInstance.handlePillRemove({ id: '1', text: 'Marketing' })();
+      await page.waitForChanges();
+
+      expect(liveRegion.textContent).toBe('Marketing removed');
+    });
+  });
+
 });

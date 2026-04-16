@@ -888,7 +888,218 @@ For dynamic or async data, add a `group` field to each item in the `options` pro
     label="Products"
     placeholder="Select products..."
     options='[{"id":"ec-1","text":"Classical Guitar Learning Path","group":"Evergreen Courses"},{"id":"ec-2","text":"Piano Lessons","group":"Evergreen Courses"},{"id":"nl-1","text":"Weekly Digest","group":"Newsletters"},{"id":"nl-2","text":"Product Updates","group":"Newsletters"}]'
+  ></pds-multiselect>
+</DocCanvas>
+
+## Selected Display: Pills
+
+Use `selected-display="pill"` to render selected items as removable pill chips instead of a count. Control placement with `pill-position`.
+
+### Inline Pills
+
+Pills appear inside the trigger button alongside a chevron. This keeps the form field compact while showing exactly what's selected.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="pill-inline"
+  label="Departments"
+  placeholder="Select..."
+  selected-display="pill"
+  pill-position="inline"
+  value='["1", "2", "3"]'
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+  <option value="4">Engineering</option>
+  <option value="5">Design</option>
+</pds-multiselect>`,
+    react: `<PdsMultiselect
+  componentId="pill-inline"
+  label="Departments"
+  placeholder="Select..."
+  selectedDisplay="pill"
+  pillPosition="inline"
+  value={['1', '2', '3']}
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+  <option value="4">Engineering</option>
+  <option value="5">Design</option>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="pill-inline"
+    label="Departments"
+    placeholder="Select..."
+    selected-display="pill"
+    pill-position="inline"
+    value='["1", "2", "3"]'
   >
+    <option value="1">Marketing</option>
+    <option value="2">Sales</option>
+    <option value="3">Support</option>
+    <option value="4">Engineering</option>
+    <option value="5">Design</option>
+  </pds-multiselect>
+</DocCanvas>
+
+### Pills Below
+
+Pills render below the trigger in a wrapping row. Useful when you want the trigger to stay a fixed height and show all selections at a glance.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="pill-below"
+  label="Departments"
+  placeholder="Select..."
+  selected-display="pill"
+  pill-position="below"
+  value='["1", "2", "3", "4"]'
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+  <option value="4">Engineering</option>
+  <option value="5">Design</option>
+</pds-multiselect>`,
+    react: `<PdsMultiselect
+  componentId="pill-below"
+  label="Departments"
+  placeholder="Select..."
+  selectedDisplay="pill"
+  pillPosition="below"
+  value={['1', '2', '3', '4']}
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+  <option value="4">Engineering</option>
+  <option value="5">Design</option>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="pill-below"
+    label="Departments"
+    placeholder="Select..."
+    selected-display="pill"
+    pill-position="below"
+    value='["1", "2", "3", "4"]'
+  >
+    <option value="1">Marketing</option>
+    <option value="2">Sales</option>
+    <option value="3">Support</option>
+    <option value="4">Engineering</option>
+    <option value="5">Design</option>
+  </pds-multiselect>
+</DocCanvas>
+
+### Inline Pill Overflow
+
+Use `max-inline-pills` to cap how many chips are shown inline. Selections beyond the limit collapse into a "+N more" badge.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="pill-overflow"
+  label="Departments (max 2 inline)"
+  placeholder="Select..."
+  selected-display="pill"
+  pill-position="inline"
+  max-inline-pills="2"
+  value='["1", "2", "3", "4", "5"]'
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+  <option value="4">Engineering</option>
+  <option value="5">Design</option>
+</pds-multiselect>`,
+    react: `<PdsMultiselect
+  componentId="pill-overflow"
+  label="Departments (max 2 inline)"
+  placeholder="Select..."
+  selectedDisplay="pill"
+  pillPosition="inline"
+  maxInlinePills={2}
+  value={['1', '2', '3', '4', '5']}
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+  <option value="4">Engineering</option>
+  <option value="5">Design</option>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="pill-overflow"
+    label="Departments (max 2 inline)"
+    placeholder="Select..."
+    selected-display="pill"
+    pill-position="inline"
+    max-inline-pills="2"
+    value='["1", "2", "3", "4", "5"]'
+  >
+    <option value="1">Marketing</option>
+    <option value="2">Sales</option>
+    <option value="3">Support</option>
+    <option value="4">Engineering</option>
+    <option value="5">Design</option>
+  </pds-multiselect>
+</DocCanvas>
+
+### Disabled Pills
+
+In the disabled state, pills render without close buttons and the trigger is non-interactive.
+
+<DocCanvas
+  mdxSource={{
+    webComponent: `<pds-multiselect
+  component-id="pill-disabled"
+  label="Disabled Pill Multiselect"
+  placeholder="Cannot select..."
+  selected-display="pill"
+  pill-position="inline"
+  disabled
+  value='["1", "2"]'
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+</pds-multiselect>`,
+    react: `<PdsMultiselect
+  componentId="pill-disabled"
+  label="Disabled Pill Multiselect"
+  placeholder="Cannot select..."
+  selectedDisplay="pill"
+  pillPosition="inline"
+  disabled
+  value={['1', '2']}
+>
+  <option value="1">Marketing</option>
+  <option value="2">Sales</option>
+  <option value="3">Support</option>
+</PdsMultiselect>`,
+  }}
+>
+  <pds-multiselect
+    component-id="pill-disabled"
+    label="Disabled Pill Multiselect"
+    placeholder="Cannot select..."
+    selected-display="pill"
+    pill-position="inline"
+    disabled
+    value='["1", "2"]'
+  >
+    <option value="1">Marketing</option>
+    <option value="2">Sales</option>
+    <option value="3">Support</option>
   </pds-multiselect>
 </DocCanvas>
 
