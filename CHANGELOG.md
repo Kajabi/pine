@@ -1,3 +1,22 @@
+## 3.23.0 (2026-04-17)
+
+### Features 🚀
+
+- **pds-combobox:** input trigger shape and hide-label spacing ([#710](https://github.com/Kajabi/pine/pull/710))
+- **pds-multiselect:** add grouped options support ([#705](https://github.com/Kajabi/pine/pull/705))
+- **pds-multiselect:** support disabled individual options ([#708](https://github.com/Kajabi/pine/pull/708))
+- **pds-multiselect:** add pills variant ([#707](https://github.com/Kajabi/pine/pull/707))
+- **pds-sortable:** add disabled prop to prevent sorting ([#703](https://github.com/Kajabi/pine/pull/703))
+
+### Bug Fixes 🐛
+
+- suppress mock ElementInternals console errors in spec tests ([#704](https://github.com/Kajabi/pine/pull/704))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.22.1 (2026-04-09)
 
 ### Bug Fixes 🐛
