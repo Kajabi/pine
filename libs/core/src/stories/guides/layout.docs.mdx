@@ -37,6 +37,24 @@ The `pds-row` component defines a horizontal container for multiple columns (`pd
 - `pds-row` supports responsive design with properties like `size-xs` or `offset-md`. The size modifier is the trigger for responsive behavior.
 - It ensures that the total column size per row does not exceed 12, maintaining the integrity of the grid system.
 
+## pds-container
+
+The `pds-container` component constrains its children to a semantic maximum width and centers them horizontally. Use it to wrap forms, settings pages, and full-page flows — anywhere content should stop growing beyond a meaningful reading width.
+
+It is separate from the column grid: `pds-box` and `pds-row` control how content is divided into columns; `pds-container` controls how wide the overall content area can be.
+
+**Named sizes:**
+
+| Size | Max-width | Common use |
+|------|-----------|------------|
+| `sm` | 340px | Narrow forms, confirmations |
+| `md` | 520px | Standard forms, settings panels |
+| `lg` | 700px | Wide panels, content pages |
+| `xl` | 1064px | Page-level wrappers |
+| `full` | 1440px | Max-width site container |
+
+Any valid CSS length (e.g. `size="640px"`) can be passed directly when named tokens don't fit.
+
 ## Best Practices for Layouts
 
 Use `pds-box` for Single-Column Layouts:
@@ -1348,3 +1366,4 @@ If you encounter issues with your layout, here are some common problems and thei
 ## Related Components
 - <pds-link href="../?path=/docs/components-box--docs">Box</pds-link>
 - <pds-link href="../?path=/docs/components-row--docs">Row</pds-link>
+- <pds-link href="../?path=/docs/components-container--docs">Container</pds-link>
