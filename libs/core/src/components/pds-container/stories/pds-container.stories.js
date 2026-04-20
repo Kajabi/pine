@@ -1,18 +1,18 @@
 import { html } from 'lit';
 
 export default {
-  component: 'pds-layout',
-  title: 'components/Layout',
+  component: 'pds-container',
+  title: 'components/Container',
 }
 
 const BaseTemplate = (args) => html`
-<pds-layout
+<pds-container
   size="${args.size}"
   tag="${args.tag}"
   ?centered="${args.centered}"
 >
   ${args.slot}
-</pds-layout>`;
+</pds-container>`;
 
 export const Default = BaseTemplate.bind();
 Default.args = {
@@ -78,12 +78,12 @@ NotCentered.args = {
 };
 
 export const SemanticTag = (args) => html`
-<pds-layout size="${args.size}" tag="main">
+<pds-container size="${args.size}" tag="main">
   <pds-box background-color="secondary" padding="md">
     <pds-text tag="h1">Page title</pds-text>
     <pds-text tag="p">Using tag="main" as the inner container element.</pds-text>
   </pds-box>
-</pds-layout>`;
+</pds-container>`;
 SemanticTag.args = {
   size: 'lg',
 };

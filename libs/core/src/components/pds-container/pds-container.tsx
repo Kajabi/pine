@@ -6,13 +6,13 @@ const NAMED_SIZES = new Set(['sm', 'md', 'lg', 'xl', 'full']);
  * @part container - The inner semantic container element
  */
 @Component({
-  tag: 'pds-layout',
-  styleUrl: 'pds-layout.scss',
+  tag: 'pds-container',
+  styleUrl: 'pds-container.scss',
   shadow: true,
 })
-export class PdsLayout {
+export class PdsContainer {
   /**
-   * Sets the maximum width of the layout container. Accepts a named size token
+   * Sets the maximum width of the container. Accepts a named size token
    * (`'sm'` | `'md'` | `'lg'` | `'xl'` | `'full'`) or any valid CSS length value (e.g. `'640px'`, `'50rem'`).
    * When omitted, no max-width is applied.
    */
@@ -36,12 +36,12 @@ export class PdsLayout {
     const customSize = this.size !== undefined && !isNamed ? this.size : undefined;
 
     const hostStyle: Record<string, string> = {};
-    if (customSize) hostStyle['--pine-layout-max-width'] = customSize;
+    if (customSize) hostStyle['--pine-container-max-width'] = customSize;
     if (!this.centered) hostStyle['margin-inline'] = '0';
 
     return (
       <Host
-        class={{ [`pds-layout--${this.size}`]: isNamed }}
+        class={{ [`pds-container--${this.size}`]: isNamed }}
         style={Object.keys(hostStyle).length ? (hostStyle as any) : undefined}
       >
         <Tag part="container">

@@ -1,0 +1,134 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as stories from '../stories/pds-container.stories.js';
+
+import {DocArgsTable, DocCanvas} from '@pine-ds/doc-components';
+import { components } from '../../../../dist/docs.json';
+
+<Meta of={stories} />
+
+# Container
+
+Container constrains its children to a semantic max-width, centering them within the available space. Use it to wrap form panels, settings pages, and full-page flows.
+
+## Guidelines
+
+### When to use
+
+- Form panels and dialogs where content should be narrower than the viewport
+- Settings pages and content areas that need a consistent reading width
+- Page-level wrappers that cap the maximum site width
+
+### Named sizes
+
+| Size | Max-width | Common use |
+|------|-----------|------------|
+| `sm` | 340px | Narrow forms, confirmations |
+| `md` | 520px | Standard forms, settings panels |
+| `lg` | 700px | Wide panels, content pages |
+| `xl` | 1064px | Page-level wrappers |
+| `full` | 1440px | Max-width site container |
+
+### Arbitrary sizes
+
+Pass any valid CSS length string to `size` when the named tokens don't fit (e.g. `size="640px"` or `size="50rem"`). Named tokens are preferred for consistency.
+
+## Properties
+
+<DocArgsTable componentName="pds-container" docSource={components} />
+
+## Examples
+
+### Default
+
+Without a `size`, the container grows to fill its parent with no max-width constraint.
+
+<DocCanvas
+  display="block"
+  mdxSource={{
+    react: `<PdsContainer><div>Content</div></PdsContainer>`,
+    webComponent: `<pds-container><div>Content</div></pds-container>`
+  }}>
+  <pds-container>
+    <pds-box background-color="secondary" padding="md">
+      <pds-text tag="p">No max-width applied.</pds-text>
+    </pds-box>
+  </pds-container>
+</DocCanvas>
+
+### Named Sizes
+
+<DocCanvas
+  display="block"
+  mdxSource={{
+    react: `
+<PdsContainer size="sm"><div>sm — 340px</div></PdsContainer>
+<PdsContainer size="md"><div>md — 520px</div></PdsContainer>
+<PdsContainer size="lg"><div>lg — 700px</div></PdsContainer>
+<PdsContainer size="xl"><div>xl — 1064px</div></PdsContainer>
+<PdsContainer size="full"><div>full — 1440px</div></PdsContainer>
+    `,
+    webComponent: `
+<pds-container size="sm"><div>sm — 340px</div></pds-container>
+<pds-container size="md"><div>md — 520px</div></pds-container>
+<pds-container size="lg"><div>lg — 700px</div></pds-container>
+<pds-container size="xl"><div>xl — 1064px</div></pds-container>
+<pds-container size="full"><div>full — 1440px</div></pds-container>
+    `
+  }}>
+  <pds-box display="flex" flex-direction="column" gap="sm">
+    <pds-container size="sm"><pds-box background-color="secondary" padding="sm"><pds-text tag="p" size="sm">sm — 340px</pds-text></pds-box></pds-container>
+    <pds-container size="md"><pds-box background-color="secondary" padding="sm"><pds-text tag="p" size="sm">md — 520px</pds-text></pds-box></pds-container>
+    <pds-container size="lg"><pds-box background-color="secondary" padding="sm"><pds-text tag="p" size="sm">lg — 700px</pds-text></pds-box></pds-container>
+    <pds-container size="xl"><pds-box background-color="secondary" padding="sm"><pds-text tag="p" size="sm">xl — 1064px</pds-text></pds-box></pds-container>
+    <pds-container size="full"><pds-box background-color="secondary" padding="sm"><pds-text tag="p" size="sm">full — 1440px</pds-text></pds-box></pds-container>
+  </pds-box>
+</DocCanvas>
+
+### Arbitrary Size
+
+<DocCanvas
+  display="block"
+  mdxSource={{
+    react: `<PdsContainer size="640px"><div>Custom 640px max-width</div></PdsContainer>`,
+    webComponent: `<pds-container size="640px"><div>Custom 640px max-width</div></pds-container>`
+  }}>
+  <pds-container size="640px">
+    <pds-box background-color="secondary" padding="md">
+      <pds-text tag="p">Custom 640px max-width.</pds-text>
+    </pds-box>
+  </pds-container>
+</DocCanvas>
+
+### Not Centered
+
+Set `centered="false"` to align the container to the start of its parent instead of centering it.
+
+<DocCanvas
+  display="block"
+  mdxSource={{
+    react: `<PdsContainer size="md" centered={false}><div>Left-aligned</div></PdsContainer>`,
+    webComponent: `<pds-container size="md" centered="false"><div>Left-aligned</div></pds-container>`
+  }}>
+  <pds-container size="md" centered="false">
+    <pds-box background-color="secondary" padding="md">
+      <pds-text tag="p">Left-aligned — centered=false.</pds-text>
+    </pds-box>
+  </pds-container>
+</DocCanvas>
+
+### Semantic Tag
+
+Use `tag` to render the inner container as a semantic HTML element.
+
+<DocCanvas
+  display="block"
+  mdxSource={{
+    react: `<PdsContainer size="lg" tag="main"><h1>Page title</h1></PdsContainer>`,
+    webComponent: `<pds-container size="lg" tag="main"><h1>Page title</h1></pds-container>`
+  }}>
+  <pds-container size="lg" tag="main">
+    <pds-box background-color="secondary" padding="md">
+      <pds-text tag="h2">Page title inside tag="main"</pds-text>
+    </pds-box>
+  </pds-container>
+</DocCanvas>
