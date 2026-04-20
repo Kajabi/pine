@@ -79,7 +79,7 @@ NotCentered.args = {
 
 export const SemanticTag = (args) => html`
 <pds-container size="${args.size}" tag="main">
-  <pds-box background-color="secondary" padding="md">
+  <pds-box direction="column" background-color="secondary" padding="md">
     <pds-text tag="h1">Page title</pds-text>
     <pds-text tag="p">Using tag="main" as the inner container element.</pds-text>
   </pds-box>

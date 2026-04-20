@@ -20,13 +20,30 @@ Container constrains its children to a semantic max-width, centering them within
 
 ### Named sizes
 
-| Size | Max-width | Common use |
-|------|-----------|------------|
-| `sm` | 340px | Narrow forms, confirmations |
-| `md` | 520px | Standard forms, settings panels |
-| `lg` | 700px | Wide panels, content pages |
-| `xl` | 1064px | Page-level wrappers |
-| `full` | 1440px | Max-width site container |
+<pds-table compact>
+  <pds-table-head>
+    <pds-table-head-cell>Size</pds-table-head-cell>
+    <pds-table-head-cell>Max-width</pds-table-head-cell>
+    <pds-table-head-cell>Common use</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell>lg</pds-table-cell>
+      <pds-table-cell>700px</pds-table-cell>
+      <pds-table-cell>Wide panels, content pages</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>xl</pds-table-cell>
+      <pds-table-cell>1064px</pds-table-cell>
+      <pds-table-cell>Page-level wrappers</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>full</pds-table-cell>
+      <pds-table-cell>1440px</pds-table-cell>
+      <pds-table-cell>Max-width site container</pds-table-cell>
+    </pds-table-row >
+  </pds-table-body>
+</pds-table>
 
 ### Arbitrary sizes
 
@@ -132,3 +149,9 @@ Use `tag` to render the inner container as a semantic HTML element.
     </pds-box>
   </pds-container>
 </DocCanvas>
+
+## Playground
+
+<Canvas of={stories.Default} />
+
+<Controls of={stories.Default} />
