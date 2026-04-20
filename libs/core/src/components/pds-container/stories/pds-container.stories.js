@@ -2,7 +2,7 @@ import { html } from 'lit';
 
 export default {
   component: 'pds-container',
-  title: 'components/Container',
+  title: 'components/Layout/Container',
 }
 
 const BaseTemplate = (args) => html`
