@@ -7,9 +7,9 @@ export default {
 
 const BaseTemplate = (args) => html`
 <pds-container
-  size="${args.size}"
+  ${args.size ? `size="${args.size}"` : ''}
   tag="${args.tag}"
-  ?centered="${args.centered}"
+  centered="${args.centered}"
 >
   ${args.slot}
 </pds-container>`;
