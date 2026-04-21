@@ -7,10 +7,7 @@ import image from '../../stories/assets/offers.png';
 
 # Layout
 
-The layout system is a flexible and customizable framework based on the `pds-box` and `pds-row` components,
-designed to create responsive, adaptable, and aesthetically pleasing grid layouts. This system leverages a 12-column
-grid, intuitive alignment properties, and powerful nesting capabilities to support a wide variety of use cases, from
-simple to highly complex layouts.
+The layout system is a flexible and customizable framework based on three components: `pds-container` caps content to a meaningful max-width; `pds-row` and `pds-box` divide that content into a responsive 12-column grid. Use them together or independently to support layouts ranging from simple single-column forms to complex multi-column pages.
 
 ## pds-box
 
@@ -36,6 +33,51 @@ The `pds-row` component defines a horizontal container for multiple columns (`pd
 
 - `pds-row` supports responsive design with properties like `size-xs` or `offset-md`. The size modifier is the trigger for responsive behavior.
 - It ensures that the total column size per row does not exceed 12, maintaining the integrity of the grid system.
+
+## pds-container
+
+The `pds-container` component constrains its children to a semantic maximum width and centers them horizontally. Use it to wrap forms, settings pages, and full-page flows — anywhere content should stop growing beyond a meaningful reading width.
+
+It is separate from the column grid: `pds-box` and `pds-row` control how content is divided into columns; `pds-container` controls how wide the overall content area can be. Nest a `pds-row` inside `pds-container` when you need both max-width capping and column layout.
+
+**Named sizes:**
+
+<pds-table compact>
+  <pds-table-head>
+    <pds-table-head-cell>Size</pds-table-head-cell>
+    <pds-table-head-cell>Max-width</pds-table-head-cell>
+    <pds-table-head-cell>Common use</pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell>sm</pds-table-cell>
+      <pds-table-cell>340px</pds-table-cell>
+      <pds-table-cell>Narrow forms, confirmations</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>md</pds-table-cell>
+      <pds-table-cell>520px</pds-table-cell>
+      <pds-table-cell>Standard forms, settings panels</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>lg</pds-table-cell>
+      <pds-table-cell>700px</pds-table-cell>
+      <pds-table-cell>Wide panels, content pages</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>xl</pds-table-cell>
+      <pds-table-cell>1064px</pds-table-cell>
+      <pds-table-cell>Page-level wrappers</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>full</pds-table-cell>
+      <pds-table-cell>1440px</pds-table-cell>
+      <pds-table-cell>Max-width site container</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
+
+Any valid CSS length (e.g. `size="640px"`) can be passed directly when named tokens don't fit.
 
 ## Best Practices for Layouts
 
@@ -140,6 +182,47 @@ Use `pds-row` for Multi-Column Layouts:
       </pds-box>
     </pds-row>
   </pds-box>
+</DocCanvas>
+
+Use `pds-container` to constrain content width before applying the grid:
+
+<DocCanvas client:only
+  mdxSource={{
+    react: `
+      <PdsContainer size="lg">
+        <PdsRow colGap="sm">
+          <PdsBox size="8">
+            <PdsBox border padding="md">Main content</PdsBox>
+          </PdsBox>
+          <PdsBox size="4">
+            <PdsBox border padding="md">Sidebar</PdsBox>
+          </PdsBox>
+        </PdsRow>
+      </PdsContainer>
+    `,
+    webComponent: `
+      <pds-container size="lg">
+        <pds-row col-gap="sm">
+          <pds-box size="8">
+            <pds-box border padding="md">Main content</pds-box>
+          </pds-box>
+          <pds-box size="4">
+            <pds-box border padding="md">Sidebar</pds-box>
+          </pds-box>
+        </pds-row>
+      </pds-container>
+    `
+}}>
+  <pds-container size="lg">
+    <pds-row col-gap="sm">
+      <pds-box size="8">
+        <pds-box border padding="md">Main content</pds-box>
+      </pds-box>
+      <pds-box size="4">
+        <pds-box border padding="md">Sidebar</pds-box>
+      </pds-box>
+    </pds-row>
+  </pds-container>
 </DocCanvas>
 
 #### Make it responsive
@@ -1348,3 +1431,4 @@ If you encounter issues with your layout, here are some common problems and thei
 ## Related Components
 - <pds-link href="../?path=/docs/components-box--docs">Box</pds-link>
 - <pds-link href="../?path=/docs/components-row--docs">Row</pds-link>
+- <pds-link href="../?path=/docs/components-container--docs">Container</pds-link>

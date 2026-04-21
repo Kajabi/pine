@@ -1017,6 +1017,22 @@ export namespace Components {
          */
         "value": string;
     }
+    interface PdsContainer {
+        /**
+          * If `true`, the container is centered horizontally using `margin-inline: auto`.
+          * @default true
+         */
+        "centered": boolean;
+        /**
+          * Sets the maximum width of the container. Accepts a named size token (`'sm'` | `'md'` | `'lg'` | `'xl'` | `'full'`) or any valid CSS length value (e.g. `'640px'`, `'50rem'`). When omitted, no max-width is applied.
+         */
+        "size"?: string;
+        /**
+          * Sets the semantic HTML tag rendered as the inner container element.
+          * @default 'div'
+         */
+        "tag": 'div' | 'main' | 'section' | 'article';
+    }
     interface PdsCopytext {
         /**
           * Determines whether `copytext` should have a visible border.
@@ -2547,6 +2563,12 @@ declare global {
         prototype: HTMLPdsComboboxElement;
         new (): HTMLPdsComboboxElement;
     };
+    interface HTMLPdsContainerElement extends Components.PdsContainer, HTMLStencilElement {
+    }
+    var HTMLPdsContainerElement: {
+        prototype: HTMLPdsContainerElement;
+        new (): HTMLPdsContainerElement;
+    };
     interface HTMLPdsCopytextElementEventMap {
         "pdsCopyTextClick": string;
     }
@@ -3025,6 +3047,7 @@ declare global {
         "pds-checkbox": HTMLPdsCheckboxElement;
         "pds-chip": HTMLPdsChipElement;
         "pds-combobox": HTMLPdsComboboxElement;
+        "pds-container": HTMLPdsContainerElement;
         "pds-copytext": HTMLPdsCopytextElement;
         "pds-divider": HTMLPdsDividerElement;
         "pds-dropdown-menu": HTMLPdsDropdownMenuElement;
@@ -4079,6 +4102,22 @@ declare namespace LocalJSX {
           * @default ''
          */
         "value"?: string;
+    }
+    interface PdsContainer {
+        /**
+          * If `true`, the container is centered horizontally using `margin-inline: auto`.
+          * @default true
+         */
+        "centered"?: boolean;
+        /**
+          * Sets the maximum width of the container. Accepts a named size token (`'sm'` | `'md'` | `'lg'` | `'xl'` | `'full'`) or any valid CSS length value (e.g. `'640px'`, `'50rem'`). When omitted, no max-width is applied.
+         */
+        "size"?: string;
+        /**
+          * Sets the semantic HTML tag rendered as the inner container element.
+          * @default 'div'
+         */
+        "tag"?: 'div' | 'main' | 'section' | 'article';
     }
     interface PdsCopytext {
         /**
@@ -5457,6 +5496,7 @@ declare namespace LocalJSX {
         "pds-checkbox": PdsCheckbox;
         "pds-chip": PdsChip;
         "pds-combobox": PdsCombobox;
+        "pds-container": PdsContainer;
         "pds-copytext": PdsCopytext;
         "pds-divider": PdsDivider;
         "pds-dropdown-menu": PdsDropdownMenu;
@@ -5515,6 +5555,7 @@ declare module "@stencil/core" {
             "pds-checkbox": LocalJSX.PdsCheckbox & JSXBase.HTMLAttributes<HTMLPdsCheckboxElement>;
             "pds-chip": LocalJSX.PdsChip & JSXBase.HTMLAttributes<HTMLPdsChipElement>;
             "pds-combobox": LocalJSX.PdsCombobox & JSXBase.HTMLAttributes<HTMLPdsComboboxElement>;
+            "pds-container": LocalJSX.PdsContainer & JSXBase.HTMLAttributes<HTMLPdsContainerElement>;
             "pds-copytext": LocalJSX.PdsCopytext & JSXBase.HTMLAttributes<HTMLPdsCopytextElement>;
             "pds-divider": LocalJSX.PdsDivider & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
             "pds-dropdown-menu": LocalJSX.PdsDropdownMenu & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuElement>;

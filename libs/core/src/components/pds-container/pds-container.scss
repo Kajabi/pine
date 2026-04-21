@@ -1,0 +1,27 @@
+:host {
+  display: block;
+  margin-inline: auto;
+  max-width: var(--pine-container-max-width, none);
+  width: 100%;
+}
+
+// Named size tokens — sm: 340px, md: 520px, lg: 700px, xl: 1064px, full: 1440px
+:host(.pds-container--sm) {
+  --pine-container-max-width: 340px;
+}
+
+:host(.pds-container--md) {
+  --pine-container-max-width: 520px;
+}
+
+:host(.pds-container--lg) {
+  --pine-container-max-width: 700px;
+}
+
+:host(.pds-container--xl) {
+  --pine-container-max-width: 1064px;
+}
+
+:host(.pds-container--full) {
+  --pine-container-max-width: 1440px;
+}
