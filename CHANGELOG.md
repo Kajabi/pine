@@ -1,3 +1,18 @@
+## 3.24.0 (2026-04-21)
+
+### Features 🚀
+
+- **pds-container:** add container component ([#713](https://github.com/Kajabi/pine/pull/713))
+
+### Documentation 📄
+
+- tighten component description first paragraphs ([#712](https://github.com/Kajabi/pine/pull/712))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.23.0 (2026-04-17)
 
 ### Features 🚀
