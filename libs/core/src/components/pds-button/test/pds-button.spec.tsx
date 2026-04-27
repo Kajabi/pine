@@ -524,6 +524,48 @@ describe('pds-button', () => {
       expect(button).toBeFalsy();
       expect(anchor?.href).toContain('/test');
     });
+
+    it('synthesizes a click when Enter is pressed from a form input', async () => {
+      const page = await newSpecPage({
+        components: [PdsButton],
+        html: `
+          <form>
+            <input type="text" id="test-input" />
+            <pds-button type="submit">Submit</pds-button>
+          </form>
+        `,
+      });
+      const input = page.doc.querySelector<HTMLInputElement>('#test-input');
+      const clickSpy = jest.spyOn(page.root as HTMLPdsButtonElement, 'click');
+      const event = new KeyboardEvent('keydown', { key: 'Enter', cancelable: true });
+
+      Object.defineProperty(event, 'target', { value: input });
+      page.rootInstance.handleFormKeyDown(event);
+
+      expect(event.defaultPrevented).toBe(true);
+      expect(clickSpy).toHaveBeenCalled();
+    });
+
+    it('does not synthesize a click when Enter keydown is already defaultPrevented', async () => {
+      const page = await newSpecPage({
+        components: [PdsButton],
+        html: `
+          <form>
+            <input type="text" id="test-input" />
+            <pds-button type="submit">Submit</pds-button>
+          </form>
+        `,
+      });
+      const input = page.doc.querySelector<HTMLInputElement>('#test-input');
+      const clickSpy = jest.spyOn(page.root as HTMLPdsButtonElement, 'click');
+      const event = new KeyboardEvent('keydown', { key: 'Enter', cancelable: true });
+
+      Object.defineProperty(event, 'target', { value: input });
+      event.preventDefault();
+      page.rootInstance.handleFormKeyDown(event);
+
+      expect(clickSpy).not.toHaveBeenCalled();
+    });
   });
 
   describe('disclosure variant coverage', () => {
