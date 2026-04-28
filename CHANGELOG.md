@@ -1,3 +1,18 @@
+## 3.24.1 (2026-04-28)
+
+### Bug Fixes 🐛
+
+- **pds-button:** honor event.defaultPrevented in implicit-submit listener ([a205ef48](https://github.com/Kajabi/pine/commit/a205ef48))
+
+### Styles 🎨
+
+- **fonts:** remove Greet @font-face declarations ([#715](https://github.com/Kajabi/pine/pull/715))
+
+### ❤️ Thank You
+
+- Alex Peterson
+- Quinton Jason
+
 ## 3.24.0 (2026-04-21)
 
 ### Features 🚀
