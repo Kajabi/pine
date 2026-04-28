@@ -239,6 +239,66 @@ describe('pds-button', () => {
       expect(formSubmitEvent).toHaveReceivedEvent();
     });
 
+    it('does not submit form when an earlier handler calls preventDefault on the Enter keydown', async () => {
+      const page = await newE2EPage({
+        html: `
+          <form>
+            <input type="text" id="test-input" />
+            <pds-button type="submit">Submit</pds-button>
+          </form>
+        `
+      });
+
+      // Earlier handler that cancels the keydown — simulates a consumer
+      // (e.g. a chip-input) that wants Enter to do something other than submit.
+      await page.evaluate(() => {
+        document.querySelector<HTMLInputElement>('#test-input')!
+          .addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') e.preventDefault();
+          });
+      });
+
+      const form = await page.find('form');
+      const input = await page.find('#test-input');
+      const formSubmitEvent = await form.spyOnEvent('submit');
+
+      await input.focus();
+      await page.keyboard.press('Enter');
+      await page.waitForChanges();
+
+      expect(formSubmitEvent).not.toHaveReceivedEvent();
+    });
+
+    it('does not submit form when an ancestor handler calls preventDefault on the Enter keydown', async () => {
+      const page = await newE2EPage({
+        html: `
+          <form id="test-form">
+            <input type="text" id="test-input" />
+            <pds-button type="submit">Submit</pds-button>
+          </form>
+        `
+      });
+
+      // Ancestor-level handler that cancels the keydown — simulates a consumer
+      // attaching the handler to a parent element rather than the input itself.
+      await page.evaluate(() => {
+        document.querySelector<HTMLFormElement>('#test-form')!
+          .addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') e.preventDefault();
+          });
+      });
+
+      const form = await page.find('form');
+      const input = await page.find('#test-input');
+      const formSubmitEvent = await form.spyOnEvent('submit');
+
+      await input.focus();
+      await page.keyboard.press('Enter');
+      await page.waitForChanges();
+
+      expect(formSubmitEvent).not.toHaveReceivedEvent();
+    });
+
   });
 
   describe('size prop E2E', () => {
