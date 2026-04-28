@@ -118,6 +118,12 @@ export class PdsButton {
   @Listen('keydown', { target: 'body' })
 
   handleFormKeyDown(event: KeyboardEvent) {
+    // Skip if an earlier handler already canceled the event — matches the browser's
+    // native implicit-submit behavior, which honors defaultPrevented.
+    if (event.defaultPrevented) {
+      return;
+    }
+
     // Only handle Enter key for submit buttons that are not disabled
     if (event.key !== 'Enter' || this.type !== 'submit' || this.href || this.disabled) {
       return;
