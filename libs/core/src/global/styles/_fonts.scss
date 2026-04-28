@@ -5,10 +5,28 @@
 ////
 $body-font-version: 1;
 
-$sage-font-cdn-root: 'https://sage.kajabi-cdn.com/fonts';
+// CDN URL still uses sage.kajabi-cdn.com; CDN domain migration is a separate effort
+$pine-font-cdn-root: 'https://sage.kajabi-cdn.com/fonts';
+
+// Deprecated: $sage-* aliases kept for backwards compatibility with consumers that override
+// font paths before importing. Switch to the $pine-* equivalents.
+/* stylelint-disable-next-line annotation-no-unknown */
+$sage-font-cdn-root: $pine-font-cdn-root !default;
+/* stylelint-disable-next-line annotation-no-unknown */
+$sage-greet-font-path: "#{$sage-font-cdn-root}/greet" !default;
+/* stylelint-disable-next-line annotation-no-unknown */
+$sage-inter-font-path: "#{$sage-font-cdn-root}/inter" !default;
+/* stylelint-disable-next-line annotation-no-unknown */
+$sage-sprig-font-path: "#{$sage-font-cdn-root}/sprig" !default;
+/* stylelint-disable-next-line annotation-no-unknown */
+$sage-noto-arabic-font-path: "#{$sage-font-cdn-root}/noto" !default;
+/* stylelint-disable-next-line annotation-no-unknown */
+$sage-noto-hebrew-font-path: "#{$sage-font-cdn-root}/noto" !default;
+/* stylelint-disable-next-line annotation-no-unknown */
+$sage-noto-devanagari-font-path: "#{$sage-font-cdn-root}/noto" !default;
 
 /* stylelint-disable-next-line annotation-no-unknown */
-$sage-greet-font-path: "#{$sage-font-cdn-root}/greet" !default; // pathname of font directory
+$pine-greet-font-path: $sage-greet-font-path !default; // pathname of font directory
 $greet-file-name: "greetstandard";
 $greet-standard-font-family-name: "Greet Standard";
 
@@ -16,27 +34,27 @@ $greet-condensed-file-name: "Greet-Condensed";
 $greet-condensed-font-family-name: "Greet Condensed";
 
 /* stylelint-disable-next-line annotation-no-unknown */
-$sage-inter-font-path: "#{$sage-font-cdn-root}/inter" !default; // pathname of font directory
+$pine-inter-font-path: $sage-inter-font-path !default; // pathname of font directory
 $inter-file-name: "Inter";
 $inter-font-family-name: "Inter";
 
 /* stylelint-disable-next-line annotation-no-unknown */
-$sage-sprig-font-path: "#{$sage-font-cdn-root}/sprig" !default; // pathname of font directory
+$pine-sprig-font-path: $sage-sprig-font-path !default; // pathname of font directory
 $sprig-file-name: "FAIRE-Sprig";
 $sprig-font-family-name: "FAIRE Sprig";
 
 /* stylelint-disable-next-line annotation-no-unknown */
-$sage-noto-arabic-font-path: "#{$sage-font-cdn-root}/noto" !default; // pathname of font directory
+$pine-noto-arabic-font-path: $sage-noto-arabic-font-path !default; // pathname of font directory
 $noto-arabic-file-name: "Noto-Sans-Arabic";
 $noto-arabic-font-family-name: "Noto Sans Arabic";
 
 /* stylelint-disable-next-line annotation-no-unknown */
-$sage-noto-hebrew-font-path: "#{$sage-font-cdn-root}/noto" !default; // pathname of font directory
+$pine-noto-hebrew-font-path: $sage-noto-hebrew-font-path !default; // pathname of font directory
 $noto-hebrew-file-name: "Noto-Sans-Hebrew";
 $noto-hebrew-font-family-name: "Noto Sans Hebrew";
 
 /* stylelint-disable-next-line annotation-no-unknown */
-$sage-noto-devanagari-font-path: "#{$sage-font-cdn-root}/noto" !default; // pathname of font directory
+$pine-noto-devanagari-font-path: $sage-noto-devanagari-font-path !default; // pathname of font directory
 $noto-devanagari-file-name: "Noto-Sans-Devanagari";
 $noto-devanagari-font-family-name: "Noto Sans Devanagari";
 
@@ -47,8 +65,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: 300;
   src: local("#{$greet-file-name}-light"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-light.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-light.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-light.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-light.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Light Italic
@@ -58,8 +76,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 300;
   src: local("#{$greet-file-name}-lightitalic"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-lightitalic.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-lightitalic.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-lightitalic.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-lightitalic.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Regular
@@ -69,8 +87,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: 400;
   src: local("#{$greet-file-name}-regular"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-regular.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-regular.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-regular.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-regular.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Regular Italic
@@ -80,8 +98,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 400;
   src: local("#{$greet-file-name}-regularitalic"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-regularitalic.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-regularitalic.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-regularitalic.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-regularitalic.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Medium
@@ -91,8 +109,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: 500;
   src: local("#{$greet-file-name}-medium"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-medium.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-medium.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-medium.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-medium.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Medium Italic
@@ -102,8 +120,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 500;
   src: local("#{$greet-file-name}-mediumitalic"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-mediumitalic.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-mediumitalic.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-mediumitalic.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-mediumitalic.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Semi-Bold
@@ -113,8 +131,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal ;
   font-weight: 600 ;
   src: local("#{$greet-file-name}-semibold"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-semibold.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-semibold.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-semibold.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-semibold.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Semi-Bold Italic
@@ -124,8 +142,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic ;
   font-weight: 600 ;
   src: local("#{$greet-file-name}-semibolditalic"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-semibolditalic.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-semibolditalic.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-semibolditalic.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-semibolditalic.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Bold
@@ -135,8 +153,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal ;
   font-weight: 700 ;
   src: local("#{$greet-file-name}-bold"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-bold.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-bold.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-bold.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-bold.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Bold Italic
@@ -146,8 +164,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic ;
   font-weight: 700 ;
   src: local("#{$greet-file-name}-bolditalic"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-bolditalic.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-bolditalic.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-bolditalic.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-bolditalic.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Heavy (Black)
@@ -157,8 +175,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: "normal";
   font-weight: 900;
   src: local("#{$greet-file-name}-heavy"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-heavy.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-heavy.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-heavy.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-heavy.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Heavy (Black) Italic
@@ -168,8 +186,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 900;
   src: local("#{$greet-file-name}-heavyitalic"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-heavyitalic.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-file-name}-heavyitalic.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-heavyitalic.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-file-name}-heavyitalic.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Greet Condensed
@@ -181,8 +199,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: 300;
   src: local("#{$greet-condensed-file-name}Light"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}Light.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}Light.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}Light.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}Light.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Light Italic
@@ -192,8 +210,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 300;
   src: local("#{$greet-condensed-file-name}LightItalic"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}LightItalic.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}LightItalic.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}LightItalic.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}LightItalic.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Regular
@@ -203,8 +221,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: 400;
   src: local("#{$greet-condensed-file-name}Regular"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}Regular.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}Regular.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}Regular.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}Regular.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Regular Italic
@@ -214,8 +232,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 400;
   src: local("#{$greet-condensed-file-name}RegularItalic"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}RegularItalic.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}RegularItalic.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}RegularItalic.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}RegularItalic.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Medium
@@ -225,8 +243,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: 500;
   src: local("#{$greet-condensed-file-name}Medium"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}Medium.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}Medium.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}Medium.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}Medium.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Medium Italic
@@ -236,8 +254,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 500;
   src: local("#{$greet-condensed-file-name}MediumItalic"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}MediumItalic.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}MediumItalic.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}MediumItalic.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}MediumItalic.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Semi-Bold
@@ -247,8 +265,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: 600;
   src: local("#{$greet-condensed-file-name}SemiBold"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}SemiBold.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}SemiBold.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}SemiBold.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}SemiBold.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Semi-Bold Italic
@@ -258,8 +276,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 600;
   src: local("#{$greet-condensed-file-name}SemiBoldItalic"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}SemiBoldItalic.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}SemiBoldItalic.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}SemiBoldItalic.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}SemiBoldItalic.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Bold
@@ -269,8 +287,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: 700;
   src: local("#{$greet-condensed-file-name}Bold"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}Bold.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}Bold.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}Bold.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}Bold.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Bold Italic
@@ -280,8 +298,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 700;
   src: local("#{$greet-condensed-file-name}BoldItalic"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}BoldItalic.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}BoldItalic.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}BoldItalic.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}BoldItalic.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Heavy (Black)
@@ -291,8 +309,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: "normal";
   font-weight: 900;
   src: local("#{$greet-condensed-file-name}Heavy"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}Heavy.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}Heavy.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}Heavy.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}Heavy.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Heavy (Black) Italic
@@ -302,8 +320,8 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 900;
   src: local("#{$greet-condensed-file-name}HeavyItalic"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}HeavyItalic.woff2?v=#{$body-font-version}") format("woff2"),
-    url("#{$sage-greet-font-path}/#{$greet-condensed-file-name}HeavyItalic.woff?v=#{$body-font-version}") format("woff");
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}HeavyItalic.woff2?v=#{$body-font-version}") format("woff2"),
+    url("#{$pine-greet-font-path}/#{$greet-condensed-file-name}HeavyItalic.woff?v=#{$body-font-version}") format("woff");
 }
 
 // Inter
@@ -315,7 +333,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: 100;
   src: local("#{$inter-file-name}-Thin"),
-    url("#{$sage-inter-font-path}/#{$inter-file-name}-Thin.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-inter-font-path}/#{$inter-file-name}-Thin.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Thin Italic
@@ -325,7 +343,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 100;
   src: local("#{$inter-file-name}-ThinItalic"),
-    url("#{$sage-inter-font-path}/#{$inter-file-name}-ThinItalic.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-inter-font-path}/#{$inter-file-name}-ThinItalic.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Extra Light
@@ -335,7 +353,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: 200;
   src: local("#{$inter-file-name}-ExtraLight"),
-    url("#{$sage-inter-font-path}/#{$inter-file-name}-ExtraLight.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-inter-font-path}/#{$inter-file-name}-ExtraLight.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Extra Light Italic
@@ -345,7 +363,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 200;
   src: local("#{$inter-file-name}-ExtraLightItalic"),
-    url("#{$sage-inter-font-path}/#{$inter-file-name}-ExtraLightItalic.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-inter-font-path}/#{$inter-file-name}-ExtraLightItalic.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Light
@@ -355,7 +373,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: 300;
   src: local("#{$inter-file-name}-Light"),
-    url("#{$sage-inter-font-path}/#{$inter-file-name}-Light.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-inter-font-path}/#{$inter-file-name}-Light.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Light Italic
@@ -365,7 +383,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 300;
   src: local("#{$inter-file-name}-LightItalic"),
-    url("#{$sage-inter-font-path}/#{$inter-file-name}-LightItalic.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-inter-font-path}/#{$inter-file-name}-LightItalic.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Regular
@@ -375,7 +393,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: 400;
   src: local("#{$inter-file-name}-Regular"),
-    url("#{$sage-inter-font-path}/#{$inter-file-name}-Regular.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-inter-font-path}/#{$inter-file-name}-Regular.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Italic
@@ -385,7 +403,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 400;
   src: local("#{$inter-file-name}-Italic"),
-    url("#{$sage-inter-font-path}/#{$inter-file-name}-Italic.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-inter-font-path}/#{$inter-file-name}-Italic.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Medium
@@ -395,7 +413,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: 500;
   src: local("#{$inter-file-name}-Medium"),
-    url("#{$sage-inter-font-path}/#{$inter-file-name}-Medium.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-inter-font-path}/#{$inter-file-name}-Medium.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Medium Italic
@@ -405,25 +423,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 500;
   src: local("#{$inter-file-name}-MediumItalic"),
-    url("#{$sage-inter-font-path}/#{$inter-file-name}-MediumItalic.woff2?v=#{$body-font-version}") format("woff2");
-}
-
-@font-face {
-  font-display: swap;
-  font-family: "#{$inter-font-family-name}";
-  font-style: normal;
-  font-weight: 600;
-  src: local("#{$inter-file-name}-Thin"),
-    url("#{$sage-inter-font-path}/#{$inter-file-name}-SemiBold.woff2?v=#{$body-font-version}") format("woff2");
-}
-
-@font-face {
-  font-display: swap;
-  font-family: "#{$inter-font-family-name}";
-  font-style: italic;
-  font-weight: 600;
-  src: local("#{$inter-file-name}-Thin"),
-    url("#{$sage-inter-font-path}/#{$inter-file-name}-SemiBoldItalic.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-inter-font-path}/#{$inter-file-name}-MediumItalic.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Semi-Bold
@@ -431,9 +431,29 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-display: swap;
   font-family: "#{$inter-font-family-name}";
   font-style: normal;
-  font-weight: 700;
+  font-weight: 600;
   src: local("#{$inter-file-name}-SemiBold"),
-    url("#{$sage-inter-font-path}/#{$inter-file-name}-Bold.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-inter-font-path}/#{$inter-file-name}-SemiBold.woff2?v=#{$body-font-version}") format("woff2");
+}
+
+// Semi-Bold Italic
+@font-face {
+  font-display: swap;
+  font-family: "#{$inter-font-family-name}";
+  font-style: italic;
+  font-weight: 600;
+  src: local("#{$inter-file-name}-SemiBoldItalic"),
+    url("#{$pine-inter-font-path}/#{$inter-file-name}-SemiBoldItalic.woff2?v=#{$body-font-version}") format("woff2");
+}
+
+// Bold
+@font-face {
+  font-display: swap;
+  font-family: "#{$inter-font-family-name}";
+  font-style: normal;
+  font-weight: 700;
+  src: local("#{$inter-file-name}-Bold"),
+    url("#{$pine-inter-font-path}/#{$inter-file-name}-Bold.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Bold Italic
@@ -443,7 +463,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 700;
   src: local("#{$inter-file-name}-BoldItalic"),
-    url("#{$sage-inter-font-path}/#{$inter-file-name}-BoldItalic.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-inter-font-path}/#{$inter-file-name}-BoldItalic.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Extra Bold
@@ -453,7 +473,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: 800;
   src: local("#{$inter-file-name}-ExtraBold"),
-    url("#{$sage-inter-font-path}/#{$inter-file-name}-ExtraBold.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-inter-font-path}/#{$inter-file-name}-ExtraBold.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Extra Bold Italic
@@ -463,7 +483,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 800;
   src: local("#{$inter-file-name}-ExtraBoldItalic"),
-    url("#{$sage-inter-font-path}/#{$inter-file-name}-ExtraBoldItalic.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-inter-font-path}/#{$inter-file-name}-ExtraBoldItalic.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Black
@@ -473,7 +493,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: 900;
   src: local("#{$inter-file-name}-Black"),
-    url("#{$sage-inter-font-path}/#{$inter-file-name}-Black.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-inter-font-path}/#{$inter-file-name}-Black.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Black Italic
@@ -483,7 +503,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 900;
   src: local("#{$inter-file-name}-BlackItalic"),
-    url("#{$sage-inter-font-path}/#{$inter-file-name}-BlackItalic.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-inter-font-path}/#{$inter-file-name}-BlackItalic.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // FAIRE Sprig
@@ -495,7 +515,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: 200;
   src: local("#{$sprig-file-name}-Thin"),
-    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-Thin.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-sprig-font-path}/#{$sprig-file-name}-Thin.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Thin Italic
@@ -505,7 +525,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 200;
   src: local("#{$sprig-file-name}-ThinItalic"),
-    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-ThinItalic.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-sprig-font-path}/#{$sprig-file-name}-ThinItalic.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Light
@@ -515,7 +535,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: 300;
   src: local("#{$sprig-file-name}-Light"),
-    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-Light.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-sprig-font-path}/#{$sprig-file-name}-Light.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Light Italic
@@ -525,7 +545,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 300;
   src: local("#{$sprig-file-name}-LightItalic"),
-    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-LightItalic.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-sprig-font-path}/#{$sprig-file-name}-LightItalic.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Regular
@@ -535,7 +555,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: 400;
   src: local("#{$sprig-file-name}-Regular"),
-    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-Regular.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-sprig-font-path}/#{$sprig-file-name}-Regular.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Regular Italic
@@ -545,7 +565,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 400;
   src: local("#{$sprig-file-name}-RegularItalic"),
-    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-RegularItalic.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-sprig-font-path}/#{$sprig-file-name}-RegularItalic.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Medium
@@ -555,7 +575,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: 500;
   src: local("#{$sprig-file-name}-Medium"),
-    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-Medium.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-sprig-font-path}/#{$sprig-file-name}-Medium.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Medium Italic
@@ -565,7 +585,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 500;
   src: local("#{$sprig-file-name}-MediumItalic"),
-    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-MediumItalic.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-sprig-font-path}/#{$sprig-file-name}-MediumItalic.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Bold
@@ -575,7 +595,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: 700;
   src: local("#{$sprig-file-name}-Bold"),
-    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-Bold.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-sprig-font-path}/#{$sprig-file-name}-Bold.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Bold Italic
@@ -585,7 +605,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 700;
   src: local("#{$sprig-file-name}-BoldItalic"),
-    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-BoldItalic.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-sprig-font-path}/#{$sprig-file-name}-BoldItalic.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Super
@@ -595,7 +615,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: 900;
   src: local("#{$sprig-file-name}-Super"),
-    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-Super.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-sprig-font-path}/#{$sprig-file-name}-Super.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Super Italic
@@ -605,7 +625,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: italic;
   font-weight: 900;
   src: local("#{$sprig-file-name}-SuperItalic"),
-    url("#{$sage-sprig-font-path}/#{$sprig-file-name}-SuperItalic.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-sprig-font-path}/#{$sprig-file-name}-SuperItalic.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Arabic font (Noto Sans Arabic)
@@ -615,7 +635,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: normal;
   src: local("#{$noto-arabic-file-name}"),
-    url("#{$sage-noto-arabic-font-path}/#{$noto-arabic-file-name}.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-noto-arabic-font-path}/#{$noto-arabic-file-name}.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Hebrew font (Noto Sans Hebrew)
@@ -625,7 +645,7 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: normal;
   src: local("#{$noto-hebrew-file-name}"),
-    url("#{$sage-noto-hebrew-font-path}/#{$noto-hebrew-file-name}.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-noto-hebrew-font-path}/#{$noto-hebrew-file-name}.woff2?v=#{$body-font-version}") format("woff2");
 }
 
 // Devanagari font (Noto Sans Devanagari)
@@ -635,5 +655,5 @@ $noto-devanagari-font-family-name: "Noto Sans Devanagari";
   font-style: normal;
   font-weight: normal;
   src: local("#{$noto-devanagari-file-name}"),
-    url("#{$sage-noto-devanagari-font-path}/#{$noto-devanagari-file-name}.woff2?v=#{$body-font-version}") format("woff2");
+    url("#{$pine-noto-devanagari-font-path}/#{$noto-devanagari-file-name}.woff2?v=#{$body-font-version}") format("woff2");
 }
