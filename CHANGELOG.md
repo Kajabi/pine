@@ -1,3 +1,13 @@
+## 3.24.2 (2026-04-29)
+
+### Bug Fixes 🐛
+
+- sync package-lock.json with package.json ([#719](https://github.com/Kajabi/pine/pull/719))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 3.24.1 (2026-04-28)
 
 ### Bug Fixes 🐛
