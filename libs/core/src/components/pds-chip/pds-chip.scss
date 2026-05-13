@@ -19,16 +19,14 @@ $pds-chip-sentiment: (
   warning: var(--pine-chip-color-warning),
 );
 
-/* stylelint-disable pine-design-system/prefer-semantic-tokens */
 $pds-chip-sentiment-text: (
-  accent: var(--pine-color-text-accent),
-  danger: var(--pine-color-text-danger),
-  info: var(--pine-color-text-info),
-  neutral: var(--pine-color-grey-900),
-  success: var(--pine-color-text-success),
-  warning: var(--pine-color-text-warning),
+  accent: var(--pine-chip-color-accent-text),
+  danger: var(--pine-chip-color-danger-text),
+  info: var(--pine-chip-color-info-text),
+  neutral: var(--pine-chip-color-neutral-text),
+  success: var(--pine-chip-color-success-text),
+  warning: var(--pine-chip-color-warning-text),
 );
-/* stylelint-enable pine-design-system/prefer-semantic-tokens */
 
 $pds-chip-sentiment-dots: (
   accent: var(--pine-chip-color-accent-dot),
