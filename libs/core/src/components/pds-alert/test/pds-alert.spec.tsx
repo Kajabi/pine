@@ -237,6 +237,18 @@ describe('pds-alert', () => {
     }
   });
 
+  it('hides the icon when hide-icon prop is set', async () => {
+    const page = await newSpecPage({
+      components: [PdsAlert],
+      html: `<pds-alert hide-icon="true">Alert without icon</pds-alert>`,
+    });
+
+    if (page.root && page.root.shadowRoot) {
+      const icon = page.root.shadowRoot.querySelector('pds-icon.pds-alert__icon');
+      expect(icon).toBeNull();
+    }
+  });
+
   it('falls back to default icon when invalid variant is provided', async () => {
     const page = await newSpecPage({
       components: [PdsAlert],

@@ -36,6 +36,12 @@ export class PdsAlert {
   @Prop() dismissible = false;
 
   /**
+   * If true, the leading icon is hidden.
+   * @defaultValue false
+   */
+  @Prop() hideIcon = false;
+
+  /**
    * Sets the style variant of the alert.
    * @defaultValue 'default'
    */
@@ -117,12 +123,14 @@ export class PdsAlert {
           display="block"
         >
           <pds-box gap="sm" display="flex">
-            <pds-icon
-              class={`pds-alert__icon ${this.small ? 'pds-alert__icon--small' : ''}`}
-              color="var(--pds-alert-color-icon)"
-              icon={iconName}
-              size="var(--pds-alert-icon-size)"
-            />
+            {!this.hideIcon && (
+              <pds-icon
+                class={`pds-alert__icon ${this.small ? 'pds-alert__icon--small' : ''}`}
+                color="var(--pds-alert-color-icon)"
+                icon={iconName}
+                size="var(--pds-alert-icon-size)"
+              />
+            )}
             <pds-box class="pds-alert__content-wrapper" direction="column" gap="xs" flex="grow">
               {this.heading && !this.small && (
                 <pds-text class="pds-alert__heading" color="var(--pds-alert-color-text)" size="h5" tag="h3" weight="medium">
