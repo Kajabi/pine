@@ -23,6 +23,7 @@ const ActionsTemplate = (args) => html` <pds-alert
   heading="${args.heading}"
   ?small=${args.small}
   ?dismissible=${args.dismissible}
+  ?hide-icon=${args.hideIcon}
 >
   ${args.description}
   <pds-button slot="actions" variant="primary">Button</pds-button>
@@ -35,6 +36,7 @@ const SmallActionsTemplate = (args) => html` <pds-alert
   heading="${args.heading}"
   ?small=${args.small}
   ?dismissible=${args.dismissible}
+  ?hide-icon=${args.hideIcon}
 >
   ${args.description}
   <pds-link slot="actions" variant="plain" href="#">Link</pds-link>
@@ -49,6 +51,7 @@ Default.args = {
   description: 'Alerts can also have description text that can be used to provide more information about the alert.',
   small: false,
   dismissible: false,
+  hideIcon: false,
 };
 
 export const Small = BaseTemplate.bind();
@@ -59,6 +62,7 @@ Small.args = {
   description: 'Small alerts use the description to provide more information about the alert, but are truncated when the text becomes too long for the alert to fit the screen.',
   small: true,
   dismissible: true,
+  hideIcon: false,
 };
 
 export const Actions = ActionsTemplate.bind();
@@ -69,6 +73,7 @@ Actions.args = {
   description: 'This alert includes action button and link in the actions slot.',
   small: false,
   dismissible: true,
+  hideIcon: false,
 };
 
 export const SmallActions = SmallActionsTemplate.bind();
@@ -79,6 +84,7 @@ SmallActions.args = {
   description: 'This small alert has an inline action link which is displayed on the same line as the description.',
   small: true,
   dismissible: false,
+  hideIcon: false,
 };
 
 export const Dismissible = BaseTemplate.bind();
@@ -89,6 +95,7 @@ Dismissible.args = {
   description: 'This alert can be dismissed by the user.',
   small: false,
   dismissible: true,
+  hideIcon: false,
 };
 
 export const HideIcon = BaseTemplate.bind();
