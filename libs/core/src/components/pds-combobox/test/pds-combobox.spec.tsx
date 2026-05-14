@@ -319,6 +319,63 @@ describe('pds-combobox', () => {
     expect(filteredOptions[0].value).toBe('cat');
   });
 
+  it('shows all options when reopening in filter mode with a committed selection', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" mode="filter"></pds-combobox>`,
+    });
+
+    const component = page.rootInstance as any;
+    const react = createMockOption('react', 'React');
+    const svelte = createMockOption('svelte', 'Svelte');
+    const mockOptions = [react, svelte];
+    component.optionEls = mockOptions;
+    component.allItems = mockOptions;
+    component.setSelectedOption(react);
+    component.displayText = 'React';
+    component.isOpen = false;
+    await page.waitForChanges();
+
+    component.prepareExpandFilterListOnOpen();
+    component.filterOptions();
+    const optionsShown = component.filteredItems.filter((item: Element) => item.tagName === 'OPTION');
+    expect(optionsShown.length).toBe(2);
+    expect(optionsShown.map((o: HTMLOptionElement) => o.value).sort()).toEqual(['react', 'svelte']);
+  });
+
+  it('resumes filtering after input changes following an expanded reopen', async () => {
+    const page = await newSpecPage({
+      components: [PdsCombobox],
+      html: `<pds-combobox component-id="test-combobox" mode="filter"></pds-combobox>`,
+    });
+
+    const component = page.rootInstance as any;
+    const react = createMockOption('react', 'React');
+    const svelte = createMockOption('svelte', 'Svelte');
+    component.optionEls = [react, svelte];
+    component.allItems = [react, svelte];
+    component.setSelectedOption(react);
+    component.displayText = 'React';
+    await page.waitForChanges();
+
+    component.prepareExpandFilterListOnOpen();
+    component.filterOptions();
+    expect(component.filteredItems.filter((item: Element) => item.tagName === 'OPTION').length).toBe(2);
+
+    const inputEvent = new Event('input');
+    Object.defineProperty(inputEvent, 'target', {
+      value: { value: 'S' },
+      enumerable: true,
+    });
+    component.handleInput(inputEvent);
+    await page.waitForChanges();
+
+    expect(component.expandFilterListWhileOpen).toBe(false);
+    const filtered = component.filteredItems.filter((item: Element) => item.tagName === 'OPTION');
+    expect(filtered.length).toBe(1);
+    expect(filtered[0].value).toBe('svelte');
+  });
+
     it('does not filter options in select-only mode', async () => {
     const page = await newSpecPage({
       components: [PdsCombobox],
