@@ -18,6 +18,14 @@ runs:
       with:
         node-version-file: '.nvmrc'
 
+    - name: Pin npm to the version declared in package.json (packageManager)
+      shell: bash
+      run: |
+        NPM_VERSION=$(node -p "require('./package.json').packageManager.replace('npm@', '')")
+        echo "Pinning npm to ${NPM_VERSION}"
+        npm install -g "npm@${NPM_VERSION}"
+        npm --version
+
     - name: Verify NPM Cache
       shell: bash
       run: npm cache verify
