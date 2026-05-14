@@ -1,3 +1,17 @@
+## 3.25.0 (2026-05-14)
+
+### Features 🚀
+
+- **pds-alert:** add hide-icon prop to suppress leading icon ([#729](https://github.com/Kajabi/pine/pull/729))
+
+### Bug Fixes 🐛
+
+- regenerate lockfile to resolve peer dep sync after styles bump ([#728](https://github.com/Kajabi/pine/pull/728))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 3.24.4 (2026-05-14)
 
 ### Bug Fixes 🐛
