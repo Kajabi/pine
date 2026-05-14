@@ -95,6 +95,11 @@ export namespace Components {
          */
         "heading": string;
         /**
+          * If true, the leading icon is hidden.
+          * @defaultValue false
+         */
+        "hideIcon": boolean;
+        /**
           * If true, the alert is displayed in a smaller size and description text is truncated. Heading is not displayed.
           * @default false
          */
@@ -3162,6 +3167,11 @@ declare namespace LocalJSX {
           * Text displayed as the heading of the alert.
          */
         "heading"?: string;
+        /**
+          * If true, the leading icon is hidden.
+          * @defaultValue false
+         */
+        "hideIcon"?: boolean;
         /**
           * Event emitted when the dismiss button is clicked.
          */

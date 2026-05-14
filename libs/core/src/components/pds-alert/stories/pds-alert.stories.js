@@ -14,6 +14,7 @@ const BaseTemplate = (args) => html` <pds-alert
   heading="${args.heading}"
   ?small=${args.small}
   ?dismissible=${args.dismissible}
+  ?hide-icon=${args.hideIcon}
 >${args.description}</pds-alert>`;
 
 const ActionsTemplate = (args) => html` <pds-alert
@@ -88,4 +89,15 @@ Dismissible.args = {
   description: 'This alert can be dismissed by the user.',
   small: false,
   dismissible: true,
+};
+
+export const HideIcon = BaseTemplate.bind();
+HideIcon.args = {
+  componentId: 'hide-icon-alert',
+  variant: 'info',
+  heading: 'Alert without icon',
+  description: 'This alert has the leading icon hidden.',
+  small: false,
+  dismissible: false,
+  hideIcon: true,
 };
