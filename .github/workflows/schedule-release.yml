@@ -259,6 +259,14 @@ jobs:
             echo "::error::Regenerated lockfile is identical to the broken one; aborting to avoid an infinite heal loop."
             exit 1
           fi
+          # Verify the regenerated lockfile actually passes npm ci before
+          # pushing — otherwise we could ship a different-but-still-broken
+          # lockfile that keeps feature branches red.
+          rm -rf node_modules
+          if ! npm ci --ignore-scripts; then
+            echo "::error::Regenerated lockfile still fails npm ci — aborting heal without pushing."
+            exit 1
+          fi
           git add package-lock.json
           # Use chore: so the next nx release run does not treat the heal as a
           # bug fix and trigger another patch version bump for plumbing.
