@@ -260,7 +260,9 @@ jobs:
             exit 1
           fi
           git add package-lock.json
-          git commit -m "fix: sync package-lock.json after release"
+          # Use chore: so the next nx release run does not treat the heal as a
+          # bug fix and trigger another patch version bump for plumbing.
+          git commit -m "chore: sync package-lock.json after release"
           git push
 
   send-slack-notification:
