@@ -237,6 +237,32 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
 
+      # `nx release` runs `npm install` internally to refresh the lockfile after
+      # version bumps. In some environments that resolves transitive peer deps
+      # differently than `npm ci` expects, producing a lockfile that release
+      # commits successfully but every downstream `npm ci` then rejects with
+      # "Missing: X from lock file". When that happens, regenerate the lockfile
+      # and push a fix-up commit so feature branches see a green main.
+      - name: Self-heal lockfile if release produced an npm-ci-incompatible state
+        shell: bash
+        run: |
+          set -euo pipefail
+          git pull --rebase --autostash
+          rm -rf node_modules
+          if npm ci --ignore-scripts; then
+            echo "Lockfile is npm-ci compatible. No heal needed."
+            exit 0
+          fi
+          echo "::warning::Lockfile drifted during release — regenerating."
+          npm install --ignore-scripts
+          if git diff --quiet -- package-lock.json; then
+            echo "::error::Regenerated lockfile is identical to the broken one; aborting to avoid an infinite heal loop."
+            exit 1
+          fi
+          git add package-lock.json
+          git commit -m "fix: sync package-lock.json after release"
+          git push
+
   send-slack-notification:
     runs-on: ubuntu-latest
     needs: release
