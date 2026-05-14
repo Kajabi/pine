@@ -1,3 +1,17 @@
+## 3.24.4 (2026-05-14)
+
+### Bug Fixes 🐛
+
+- **release:** pin origin remote to PAT to bypass branch protection ([#727](https://github.com/Kajabi/pine/pull/727))
+
+### Styles 🎨
+
+- **pds-chip:** adopt chip-namespaced dark-mode-aware text tokens ([#725](https://github.com/Kajabi/pine/pull/725))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 3.24.3 (2026-04-29)
 
 ### Bug Fixes 🐛
