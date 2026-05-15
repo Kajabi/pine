@@ -6,9 +6,15 @@ permissions:
   contents: read
 
 on:
-  ## We will uncomment this when we settle on a deployment schedule
+  # Release cadence today is **manual / on-demand** via `workflow_dispatch` (and `workflow_call`
+  # from other automation). There is no weekly cron publish yet.
+  #
+  # When the team wants a fixed cadence (for example weekly npm publishes), uncomment and adjust:
   # schedule:
-  #  - cron: '00 04 * * 1' # 4 am UTC (9 am CST) Monday
+  #   - cron: '00 04 * * 1' # example: 4 am UTC Mondays
+  #
+  # Until then, maintainers cut versions from the default branch using the dispatch form in GitHub
+  # Actions for this workflow ("Pine Continuous Deployment").
 
   workflow_call:
     inputs:

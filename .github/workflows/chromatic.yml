@@ -1,0 +1,52 @@
+name: Chromatic
+
+on:
+  push:
+    branches: [main, next]
+  pull_request:
+    branches: [main, next]
+
+concurrency:
+  group: chromatic-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    # Fork PRs cannot use repository secrets; skip to avoid failing checks.
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Check out latest
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build doc components
+        run: npx nx run @pine-ds/doc-components:build
+
+      - name: Build Stencil (Storybook consumes dist)
+        run: npx nx run @pine-ds/core:build
+
+      - name: Build Storybook static
+        run: npx nx run @pine-ds/core:build.storybook
+
+      - name: Publish to Chromatic
+        uses: chromaui/action@v16.9.1
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          workingDir: libs/core
+          storybookBuildDir: storybook-static
+          token: ${{ secrets.GITHUB_TOKEN }}
