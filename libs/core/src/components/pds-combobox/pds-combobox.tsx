@@ -931,23 +931,13 @@ export class PdsCombobox implements BasePdsProps {
         continue;
       }
 
-      const root = current.getRootNode();
-      if (root instanceof ShadowRoot && root.host) {
-        current = root.host;
-        continue;
-      }
-
       break;
     }
 
     const pineModal = from.closest('pds-modal');
     if (pineModal) {
       const pineDialog = pineModal.querySelector('dialog');
-      if (
-        pineDialog &&
-        pineDialog.nodeType === Node.ELEMENT_NODE &&
-        (pineDialog as Element).localName === 'dialog'
-      ) {
+      if (pineDialog) {
         return pineDialog as HTMLDialogElement;
       }
     }
