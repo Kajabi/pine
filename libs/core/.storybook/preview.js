@@ -138,10 +138,35 @@ const withTheme = (StoryFn, context) => {
   return StoryFn();
 };
 
+// Direction decorator that applies `dir` attribute for RTL/LTR previews.
+// Pair this with the audit checklist at
+// Guides/RTL and localization when verifying component behavior.
+const withDirection = (StoryFn, context) => {
+  const direction = context.globals.direction || 'ltr';
+
+  document.documentElement.setAttribute('dir', direction);
+  document.body.setAttribute('dir', direction);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('dir', direction);
+    document.body.setAttribute('dir', direction);
+
+    try {
+      window.parent.document.documentElement.setAttribute('dir', direction);
+      window.parent.document.body.setAttribute('dir', direction);
+    } catch (e) {
+      // Cross-origin access may fail, that's ok
+    }
+  }, [direction]);
+
+  return StoryFn();
+};
+
 const preview = {
   decorators: [
     withCustomEventActions,
     withTheme,
+    withDirection,
   ],
 
   globalTypes: {
@@ -157,10 +182,23 @@ const preview = {
         dynamicTitle: true,
       },
     },
+    direction: {
+      description: 'Document direction (LTR or RTL)',
+      toolbar: {
+        title: 'Direction',
+        icon: 'transfer',
+        items: [
+          { value: 'ltr', title: 'LTR', right: 'Left-to-right' },
+          { value: 'rtl', title: 'RTL', right: 'Right-to-left' },
+        ],
+        dynamicTitle: true,
+      },
+    },
   },
 
   initialGlobals: {
     theme: 'light',
+    direction: 'ltr',
   },
 
   parameters: {
