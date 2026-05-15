@@ -31,21 +31,31 @@ export interface RunAxeOptions {
   rules?: Record<string, { enabled: boolean }>;
 }
 
-const DEFAULT_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
+/**
+ * Default tag filter applied by `runAxe`. Mirrors WCAG 2.0 + 2.1 levels A
+ * and AA. Override with `{ tags: [...] }` to widen or narrow the scope.
+ */
+export const DEFAULT_AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] as const;
 
 /**
- * Page-level rules that fire on the bare HTML harness Stencil's E2E
- * provides (no <title>, no <html lang>, no landmarks, no <h1>). They are
- * not meaningful at component-scope and are disabled by default.
- * Tests can opt back in by passing `{ rules: { 'document-title': { enabled: true } } }`.
+ * Page-level axe rules that fire on the bare HTML harness Stencil's E2E
+ * provides (no `<title>`, no `<html lang>`, no landmarks, no `<h1>`).
+ * They are disabled by default because they describe document chrome,
+ * not component behavior — flagging them at component scope yields noise.
+ *
+ * Tests can opt back in for a specific case:
+ *
+ * ```ts
+ * await runAxe(page, { rules: { 'document-title': { enabled: true } } });
+ * ```
  */
-const PAGE_LEVEL_RULES = [
+export const DEFAULT_DISABLED_RULES = [
   'document-title',
   'html-has-lang',
   'landmark-one-main',
   'page-has-heading-one',
   'region',
-];
+] as const;
 
 /**
  * Injects axe-core into an active Stencil E2EPage and returns any
@@ -72,7 +82,7 @@ export async function runAxe(page: E2EPage, options: RunAxeOptions = {}): Promis
 
   await page.addScriptTag({ path: axePath });
 
-  const defaultRules = PAGE_LEVEL_RULES.reduce<Record<string, { enabled: boolean }>>(
+  const defaultRules = DEFAULT_DISABLED_RULES.reduce<Record<string, { enabled: boolean }>>(
     (acc, rule) => {
       acc[rule] = { enabled: false };
       return acc;
@@ -83,7 +93,7 @@ export async function runAxe(page: E2EPage, options: RunAxeOptions = {}): Promis
   const runOptions = {
     runOnly: {
       type: 'tag' as const,
-      values: options.tags ?? DEFAULT_TAGS,
+      values: options.tags ?? [...DEFAULT_AXE_TAGS],
     },
     rules: { ...defaultRules, ...(options.rules ?? {}) },
   };
