@@ -21,11 +21,13 @@ See [`0000-template.md`](./0000-template.md).
 
 | # | Title | Status |
 | --- | --- | --- |
-| [0001](./0001-externalized-token-package.md) | Externalize design tokens to `@kajabi-ui/styles` | Accepted |
-| [0002](./0002-stencil-and-nx-monorepo.md) | Stencil.js components in an Nx monorepo | Accepted |
-| [0003](./0003-pine-custom-lint-plugins.md) | Custom Pine lint plugins enforce semantic-token usage | Accepted |
-| [0004](./0004-mcp-server-delivery.md) | Ship a Pine MCP server for AI tooling | Accepted |
-| [0005](./0005-dark-mode-via-semantic-tokens.md) | Roll out dark mode via semantic-token migration | Accepted |
+| [0001](./0001-externalized-token-package.md) | Externalize design tokens to `@kajabi-ui/styles` | Accepted (retrospective) |
+| [0002](./0002-stencil-and-nx-monorepo.md) | Stencil.js components in an Nx monorepo | Accepted (retrospective) |
+| [0003](./0003-pine-custom-lint-plugins.md) | Custom Pine lint plugins enforce semantic-token usage | Accepted (retrospective) |
+| [0004](./0004-mcp-server-delivery.md) | Ship a Pine MCP server for AI tooling | Accepted (retrospective) |
+| [0005](./0005-dark-mode-via-semantic-tokens.md) | Roll out dark mode via semantic-token migration | Accepted (retrospective) |
+
+ADRs 0001–0005 were authored retrospectively to capture decisions already in the codebase. The **Maintainers** field on each names the team that owns the area today, not the original deciders.
 
 ## When to write a new ADR
 
