@@ -50,3 +50,13 @@ jobs:
           workingDir: libs/core
           storybookBuildDir: storybook-static
           token: ${{ secrets.GITHUB_TOKEN }}
+          # PRs: do not fail the workflow on visual changes — Chromatic
+          # posts its own PR status check that blocks merge when changes
+          # are unapproved. This keeps the workflow itself green so other
+          # required checks can render their state independently.
+          exitZeroOnChanges: true
+          # Main (and next): accept visual diffs into the baseline
+          # automatically. By the time something is on main it has been
+          # reviewed, so re-approving in Chromatic adds friction without
+          # catching anything new.
+          autoAcceptChanges: main
