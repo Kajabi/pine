@@ -1,5 +1,6 @@
 import { newE2EPage } from '@stencil/core/testing';
 import { caretDown, addCircle } from '@pine-ds/icons/icons';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-button', () => {
   it('renders', async () => {
@@ -529,6 +530,33 @@ describe('pds-button', () => {
       await page.waitForChanges();
 
       expect(clickEvent).toHaveReceivedEvent();
+    });
+  });
+
+  describe('accessibility', () => {
+    it('has no axe violations with default text content', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button>Save changes</pds-button>');
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+
+    it('has no axe violations when disabled', async () => {
+      const page = await newE2EPage();
+      await page.setContent('<pds-button disabled>Save changes</pds-button>');
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+
+    it('has no axe violations as a submit button inside a form', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <form aria-label="Account settings">
+          <pds-button type="submit">Save changes</pds-button>
+        </form>
+      `);
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
     });
   });
 });
