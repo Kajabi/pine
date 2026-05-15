@@ -87,6 +87,10 @@ git rebase main
 
 The branch can now be pushed. When creating your pull request, please fill out the template with as much info as necessary, including before and after screenshots. Please tag `Kajabi/dss-devs` to notify the Design System team. Our standards require at least two accepted reviews before merging.
 
+## Architecture Decisions
+
+Significant, long-lived decisions are recorded as [Architecture Decision Records](./docs/adr/README.md) under `docs/adr/`. Read the index before proposing changes that reshape architecture, lock in conventions, or trade off something material — and add a new ADR in the same PR if your change qualifies.
+
 ## Troubleshooting
 
 Sometimes, the development environment will experience rendering issues while hot reloading. In most cases, this can be fixed by re-running the `npm run start` command. For any cases where this doesn't resolve the issue, please feel free to reach out to the team for support.
