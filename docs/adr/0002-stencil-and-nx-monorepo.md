@@ -1,8 +1,8 @@
 # 0002. Stencil.js components in an Nx monorepo
 
-- **Status:** Accepted
+- **Status:** Accepted (retrospective)
 - **Date:** 2026-05-15
-- **Deciders:** @Kajabi/dss-devs
+- **Maintainers:** @Kajabi/dss-devs
 
 ## Context
 

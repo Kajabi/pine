@@ -1,8 +1,8 @@
 # 0005. Roll out dark mode via incremental semantic-token migration
 
-- **Status:** Accepted
+- **Status:** Accepted (retrospective)
 - **Date:** 2026-05-15
-- **Deciders:** @Kajabi/dss-devs
+- **Maintainers:** @Kajabi/dss-devs
 
 ## Context
 
@@ -18,7 +18,7 @@ Adopt a **per-component, semantic-token-led migration**:
 
 1. Every component that uses **semantic tokens** (e.g., `--pine-color-text-primary`) inherits dark mode automatically, because the token resolves differently under `[data-theme="dark"]`.
 2. The `pine-design-system/prefer-semantic-tokens` lint rule (see ADR-0003) blocks core-token usage in new SCSS and is being applied component-by-component to existing SCSS.
-3. Each migrated component lands as a small `style(pds-name): adopt … dark-mode-aware tokens` PR. Example: PR #725, `style(pds-chip): adopt chip-namespaced dark-mode-aware text tokens`.
+3. Each migrated component lands as a small `style(pds-name): adopt … dark-mode-aware tokens` PR. Example: commit `6cf3324e`, `style(pds-chip): adopt chip-namespaced dark-mode-aware text tokens`.
 
 No global dark-mode launch — readiness is per-component, tracked in `libs/core/src/stories/resources/component-status.docs.mdx` (once landed).
 
@@ -45,6 +45,6 @@ No global dark-mode launch — readiness is per-component, tracked in `libs/core
 ## References
 
 - `libs/core/lint-plugins/stylelint-plugin-pine-semantic-tokens.cjs`
-- Recent migration PRs: #725 (pds-chip), #620 (pds-alert link hover)
+- Recent migration commits: `6cf3324e` (pds-chip namespaced dark-mode tokens), `ed4a457f` (pds-alert link hover)
 - ADR-0001 (externalized tokens)
 - ADR-0003 (lint plugins)

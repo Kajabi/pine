@@ -1,8 +1,8 @@
 # 0004. Ship a Pine MCP server for AI tooling
 
-- **Status:** Accepted
+- **Status:** Accepted (retrospective)
 - **Date:** 2026-05-15
-- **Deciders:** @Kajabi/dss-devs
+- **Maintainers:** @Kajabi/dss-devs
 
 ## Context
 
@@ -28,9 +28,9 @@ Setup docs live in `libs/core/src/stories/resources/mcp.docs.mdx`. A dedicated S
 
 **Negative / accepted costs**
 
-- Pine team now operates an externally-hosted service (Netlify), not just an npm package.
-- Schema drift risk — the MCP server has to stay in sync with the Stencil `components.d.ts` and token releases. Owned via the build pipeline.
-- Auth/quotas/abuse — currently public; revisit if traffic warrants.
+- Pine surface now includes an externally-hosted endpoint in addition to the npm packages.
+- Schema drift risk — the MCP server needs to stay in sync with the Stencil `components.d.ts` and token releases.
+- Auth/quotas/abuse — revisit if traffic warrants.
 
 ## Alternatives considered
 

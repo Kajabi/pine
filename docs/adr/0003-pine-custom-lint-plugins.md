@@ -1,8 +1,8 @@
 # 0003. Custom Pine lint plugins enforce semantic-token usage
 
-- **Status:** Accepted
+- **Status:** Accepted (retrospective)
 - **Date:** 2026-05-15
-- **Deciders:** @Kajabi/dss-devs
+- **Maintainers:** @Kajabi/dss-devs
 
 ## Context
 
