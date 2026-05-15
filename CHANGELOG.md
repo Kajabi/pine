@@ -1,3 +1,13 @@
+## 3.25.1 (2026-05-15)
+
+### Bug Fixes 🐛
+
+- **pds-combobox:** show full list on reopen until query changes ([#730](https://github.com/Kajabi/pine/pull/730))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 3.25.0 (2026-05-14)
 
 ### Features 🚀
