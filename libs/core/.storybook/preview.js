@@ -186,7 +186,7 @@ const preview = {
       description: 'Document direction (LTR or RTL)',
       toolbar: {
         title: 'Direction',
-        icon: 'transfer',
+        icon: 'direction',
         items: [
           { value: 'ltr', title: 'LTR', right: 'Left-to-right' },
           { value: 'rtl', title: 'RTL', right: 'Right-to-left' },
