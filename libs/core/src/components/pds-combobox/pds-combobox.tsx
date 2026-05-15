@@ -73,9 +73,10 @@ export class PdsCombobox implements BasePdsProps {
   /**
    * Where to mount the dropdown listbox (`host` or `body`, sometimes called “append to body”).
    * Use `body` inside scrollable containers (for example modals) so the list is not clipped by
-   * `overflow: hidden` ancestors. The portal is appended to the nearest `<dialog>` ancestor when
-   * present (including `pds-modal`), so the list stays in the same top layer as `showModal()`;
-   * otherwise it is appended to `document.body`. Keyboard focus remains on the trigger via
+   * `overflow: hidden` ancestors. The portal is appended to the nearest `<dialog>` when present
+   * (including `pds-modal` / `showModal()`), using a composed ascent so shadow DOM and slot
+   * boundaries do not hide the dialog from discovery; otherwise it is appended to `document.body`.
+   * Keyboard focus remains on the trigger via
    * `aria-activedescendant` so modal focus traps continue to work. Custom `empty` and `loading`
    * slots are not supported when `body` is used; the default empty and loading content is shown instead.
    * @default 'host'
@@ -896,7 +897,62 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   private getPortalMountRoot(): HTMLElement {
-    return this.el.closest('dialog') ?? document.body;
+    return this.findNearestDialogForPortal(this.el) ?? document.body;
+  }
+
+  /**
+   * Resolves the native `<dialog>` to host the portaled listbox so it stays in the same top layer
+   * as `showModal()`. `Element.closest('dialog')` stops at shadow boundaries and can miss a
+   * dialog that only wraps slotted content; this walks assigned slots and shadow hosts, and
+   * falls back to `pds-modal`'s dialog when the combobox lives inside that subtree.
+   */
+  private findNearestDialogForPortal(from: HTMLElement): HTMLDialogElement | null {
+    const seen = new Set<Node>();
+    let current: Node | null = from;
+
+    while (current && !seen.has(current)) {
+      seen.add(current);
+
+      if (current.nodeType === Node.ELEMENT_NODE && (current as Element).localName === 'dialog') {
+        return current as HTMLDialogElement;
+      }
+
+      if (current.nodeType === Node.ELEMENT_NODE) {
+        const assigned = (current as HTMLElement).assignedSlot;
+        if (assigned) {
+          current = assigned;
+          continue;
+        }
+      }
+
+      const parent = current.parentNode;
+      if (parent) {
+        current = parent instanceof ShadowRoot ? parent.host : parent;
+        continue;
+      }
+
+      const root = current.getRootNode();
+      if (root instanceof ShadowRoot && root.host) {
+        current = root.host;
+        continue;
+      }
+
+      break;
+    }
+
+    const pineModal = from.closest('pds-modal');
+    if (pineModal) {
+      const pineDialog = pineModal.querySelector('dialog');
+      if (
+        pineDialog &&
+        pineDialog.nodeType === Node.ELEMENT_NODE &&
+        (pineDialog as Element).localName === 'dialog'
+      ) {
+        return pineDialog as HTMLDialogElement;
+      }
+    }
+
+    return null;
   }
 
   private ensureBodyPortal(): HTMLElement {

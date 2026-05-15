@@ -1,4 +1,5 @@
 import { newSpecPage } from '@stencil/core/testing';
+import { PdsModal } from '../../pds-modal/pds-modal';
 import { PdsCombobox } from '../pds-combobox';
 
 // Helper function to create mock options
@@ -1821,6 +1822,30 @@ describe('pds-combobox', () => {
 
       const dialog = page.doc.querySelector('dialog');
       const input = page.root?.shadowRoot?.querySelector('input') as HTMLInputElement;
+      input?.click();
+      await page.waitForChanges();
+
+      const portal = dialog?.querySelector('.pds-combobox-dropdown-portal');
+      expect(portal).not.toBeNull();
+      expect(portal?.parentElement).toBe(dialog);
+    });
+
+    it('appends the portal inside pds-modal native dialog (nested slots / shadow)', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox, PdsModal],
+        html: `<pds-modal component-id="cb-portal-modal" open="false">
+          <pds-combobox component-id="cb-in-pine-modal" dropdown-mount="body" label="Pick">
+            <option value="a">A</option>
+          </pds-combobox>
+        </pds-modal>`,
+      });
+
+      const modal = page.doc.querySelector('pds-modal');
+      const dialog = modal?.querySelector('dialog');
+      expect(dialog).not.toBeNull();
+
+      const combobox = page.doc.querySelector('pds-combobox');
+      const input = combobox?.shadowRoot?.querySelector('input') as HTMLInputElement;
       input?.click();
       await page.waitForChanges();
 
