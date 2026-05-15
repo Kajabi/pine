@@ -13,8 +13,8 @@ runs:
       run: git pull
       shell: bash
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
+    - name: Set up Node.js (pinned npm)
+      uses: ./.github/workflows/actions/setup-node-with-pinned-npm
       with:
         node-version-file: '.nvmrc'
 

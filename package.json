@@ -7,6 +7,7 @@
   "engines": {
     "node": ">= 16"
   },
+  "packageManager": "npm@10.8.2",
   "scripts": {
     "build.all": "npx nx run-many --target=build",
     "commit": "npx cz",
