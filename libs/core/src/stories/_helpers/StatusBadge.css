@@ -1,0 +1,39 @@
+.pine-status-badge {
+  align-items: center;
+  background-color: var(--pine-color-background-subtle);
+  border-radius: 999px;
+  color: var(--pine-color-text-primary);
+  display: inline-flex;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  gap: 0.5rem;
+  line-height: 1.2;
+  margin: 0 0 1rem;
+  padding: 0.25rem 0.625rem;
+}
+
+.pine-status-badge__dot {
+  background-color: currentColor;
+  border-radius: 50%;
+  display: inline-block;
+  flex: 0 0 auto;
+  height: 0.5rem;
+  width: 0.5rem;
+}
+
+.pine-status-badge__note {
+  color: var(--pine-color-text-secondary);
+  font-weight: 400;
+}
+
+.pine-status-badge[data-status='stable'] {
+  color: var(--pine-color-text-success);
+}
+
+.pine-status-badge[data-status='beta'] {
+  color: var(--pine-color-text-warning);
+}
+
+.pine-status-badge[data-status='deprecated'] {
+  color: var(--pine-color-text-danger);
+}
