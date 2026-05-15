@@ -1,0 +1,25 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Guides/Motion" />
+
+# Motion
+
+Motion should reinforce hierarchy and feedback without slowing tasks or causing vestibular discomfort. Pine does not yet expose a dedicated **motion token** scale in documentation; until those tokens land in the shared design language, follow the practices below.
+
+## Principles
+
+1. **Purpose** — Animate only to explain a change of state (open/close, enter/leave, loading, success/error), not for decoration.
+2. **Speed** — Prefer short durations (roughly **120–200ms** for micro-interactions, **200–300ms** for overlays). Longer transitions belong to marketing or illustrative surfaces, not dense app chrome.
+3. **Easing** — Use **ease-out** for elements entering or gaining focus; **ease-in** for exit; **ease-in-out** for properties that move both ways (for example height on expand/collapse).
+4. **Choreography** — Stagger list items sparingly; default to a single coherent transition per layout region.
+5. **Respect `prefers-reduced-motion`** — When implementing motion in Pine components or consuming apps, gate non-essential animation behind a media query and provide an instant state change for reduced-motion users.
+
+## Implementation hints
+
+- Prefer **CSS transitions** on `opacity`, `transform`, and `visibility` over animating layout-heavy properties (`width`, `height`, `top`) where possible.
+- Keep **focus management** paired with motion: if a dialog animates open, focus should move predictably when the animation completes (or immediately when reduced motion applies).
+- Coordinate with **design** on shared curves and durations so Stencil, React host apps, and marketing pages do not fight each other.
+
+## Tokens and docs
+
+When semantic motion tokens are published in the Kajabi design token set, this page should link to their Storybook entries alongside color, spacing, and typography. Until then, treat motion as **component-local** (scoped SCSS) plus the principles above.
