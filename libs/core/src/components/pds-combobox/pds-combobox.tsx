@@ -71,9 +71,11 @@ export class PdsCombobox implements BasePdsProps {
   @Prop() dropdownWidth: string = '236px';
 
   /**
-   * Where to mount the dropdown listbox. Use `body` inside scrollable containers (for example modals)
-   * so the list is not clipped by `overflow: hidden` ancestors. Custom `empty` and `loading` slots are
-   * not supported when `body` is used; the default empty and loading content is shown instead.
+   * Where to mount the dropdown listbox (`host` or `body`, sometimes called “append to body”).
+   * Use `body` inside scrollable containers (for example modals) so the list is not clipped by
+   * `overflow: hidden` ancestors. Keyboard focus remains on the trigger via `aria-activedescendant`
+   * so modal focus traps continue to work. Custom `empty` and `loading` slots are not supported when
+   * `body` is used; the default empty and loading content is shown instead.
    * @default 'host'
    */
   @Prop() dropdownMount: 'host' | 'body' = 'host';
@@ -270,6 +272,7 @@ export class PdsCombobox implements BasePdsProps {
   private listboxEl?: HTMLElement;
   private portalEl: HTMLElement | null = null;
   private cleanupPositionAutoUpdate?: () => void;
+  private bodyPortalAutoUpdateActive = false;
   private internals?: ElementInternals;
   private isUpdatingFromSelection: boolean = false;
   private abortController?: AbortController;
@@ -840,13 +843,23 @@ export class PdsCombobox implements BasePdsProps {
     }
 
     void this.positionDropdown();
+  }
 
-    if (this.usesBodyPortal) {
-      this.cleanupPositionAutoUpdate?.();
-      this.cleanupPositionAutoUpdate = autoUpdate(this.triggerEl, this.listboxEl, () => {
-        void this.positionDropdown();
-      });
+  private startBodyPortalAutoUpdate() {
+    if (this.bodyPortalAutoUpdateActive || !this.triggerEl || !this.listboxEl) {
+      return;
     }
+
+    this.cleanupPositionAutoUpdate = autoUpdate(this.triggerEl, this.listboxEl, () => {
+      void this.positionDropdown();
+    });
+    this.bodyPortalAutoUpdateActive = true;
+  }
+
+  private stopBodyPortalAutoUpdate() {
+    this.cleanupPositionAutoUpdate?.();
+    this.cleanupPositionAutoUpdate = undefined;
+    this.bodyPortalAutoUpdateActive = false;
   }
 
   private ensureBodyPortal(): HTMLElement {
@@ -868,14 +881,13 @@ export class PdsCombobox implements BasePdsProps {
     const portal = this.ensureBodyPortal();
     if (this.listboxEl.parentElement !== portal) {
       portal.appendChild(this.listboxEl);
+      void this.positionDropdown();
+      this.startBodyPortalAutoUpdate();
     }
-
-    this.openDropdownPositioning();
   }
 
   private removeBodyPortal() {
-    this.cleanupPositionAutoUpdate?.();
-    this.cleanupPositionAutoUpdate = undefined;
+    this.stopBodyPortalAutoUpdate();
 
     if (this.portalEl?.parentNode) {
       this.portalEl.parentNode.removeChild(this.portalEl);
@@ -1094,31 +1106,35 @@ export class PdsCombobox implements BasePdsProps {
    * Focus management helper - actually focuses the first option when opened via arrow keys
    */
   private focusFirstOptionForArrowKeys() {
-    if (this.isOpen) {
-      // Set arrow-key navigation mode
-      this.isArrowKeyNavigationMode = true;
+    if (!this.isOpen) {
+      return;
+    }
 
-      const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION');
-      if (selectableOptions.length > 0) {
-        this.setInitialHighlightedIndex();
-        // For arrow key navigation, actually focus the highlighted option
-        if (this.listboxEl) {
-          const optionElements = this.listboxEl.querySelectorAll('[role="option"]');
-          const highlightedOption = optionElements[this.highlightedIndex] as HTMLElement;
-          if (highlightedOption) {
-            // Remove tabindex from all options first
-            optionElements.forEach(option => {
-              (option as HTMLElement).setAttribute('tabindex', '-1');
-            });
-            // Set tabindex and focus on highlighted option
-            highlightedOption.setAttribute('tabindex', '0');
-            highlightedOption.focus();
-            highlightedOption.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-          }
+    // Body-mounted listboxes stay outside modal focus traps; keep focus on the trigger.
+    if (this.usesBodyPortal) {
+      this.isArrowKeyNavigationMode = true;
+      this.focusFirstOption();
+      return;
+    }
+
+    this.isArrowKeyNavigationMode = true;
+
+    const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION');
+    if (selectableOptions.length > 0) {
+      this.setInitialHighlightedIndex();
+      if (this.listboxEl) {
+        const optionElements = this.listboxEl.querySelectorAll('[role="option"]');
+        const highlightedOption = optionElements[this.highlightedIndex] as HTMLElement;
+        if (highlightedOption) {
+          optionElements.forEach(option => {
+            (option as HTMLElement).setAttribute('tabindex', '-1');
+          });
+          highlightedOption.setAttribute('tabindex', '0');
+          highlightedOption.focus();
+          highlightedOption.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
         }
-        // Update aria-activedescendant on trigger
-        this.updateAriaActiveDescendant();
       }
+      this.updateAriaActiveDescendant();
     }
   }
 
@@ -1139,8 +1155,10 @@ export class PdsCombobox implements BasePdsProps {
       // Check if any option currently has focus OR if we're in arrow-key navigation mode
       const hasOptionFocus = Array.from(optionElements).some(el => el === document.activeElement);
 
-      if (hasOptionFocus || this.isArrowKeyNavigationMode) {
-        // We're in arrow-key navigation mode, so actually move focus between options
+      const shouldFocusOption =
+        !this.usesBodyPortal && (hasOptionFocus || this.isArrowKeyNavigationMode);
+
+      if (shouldFocusOption) {
         optionElements.forEach(option => {
           (option as HTMLElement).setAttribute('tabindex', '-1');
         });
@@ -1531,7 +1549,7 @@ export class PdsCombobox implements BasePdsProps {
                 aria-setsize={selectableOptions.length}
                 aria-posinset={currentOptionIndex + 1}
                 aria-label={isLayout || isChip ? option.getAttribute('aria-label') || this.getOptionLabel(option) : undefined}
-                tabindex={isHighlighted ? '0' : '-1'}
+                tabindex={this.usesBodyPortal ? '-1' : isHighlighted ? '0' : '-1'}
                 class={{
                   'pds-combobox__option': true,
                   'pds-combobox__option--highlighted': isHighlighted,
