@@ -1,0 +1,36 @@
+name: 'Set up Node.js with pinned npm'
+description: 'Runs actions/setup-node then installs the npm version from package.json packageManager.'
+
+inputs:
+  node-version:
+    description: 'Node.js version (omit or leave empty when using only node-version-file).'
+    required: false
+    default: ''
+  node-version-file:
+    description: 'File with Node version (e.g. .nvmrc).'
+    required: false
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Node.js (explicit version)
+      if: ${{ inputs.node-version != '' }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        node-version-file: ${{ inputs.node-version-file }}
+
+    - name: Set up Node.js (version file only)
+      if: ${{ inputs.node-version == '' }}
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: ${{ inputs.node-version-file }}
+
+    - name: Pin npm to package.json packageManager
+      shell: bash
+      run: |
+        NPM_VERSION=$(node -p "require('./package.json').packageManager.replace('npm@', '')")
+        echo "Pinning npm to ${NPM_VERSION}"
+        npm install -g "npm@${NPM_VERSION}"
+        npm --version

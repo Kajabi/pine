@@ -13,18 +13,10 @@ runs:
       run: git pull
       shell: bash
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
+    - name: Set up Node.js (pinned npm)
+      uses: ./.github/workflows/actions/setup-node-with-pinned-npm
       with:
         node-version-file: '.nvmrc'
-
-    - name: Pin npm to the version declared in package.json (packageManager)
-      shell: bash
-      run: |
-        NPM_VERSION=$(node -p "require('./package.json').packageManager.replace('npm@', '')")
-        echo "Pinning npm to ${NPM_VERSION}"
-        npm install -g "npm@${NPM_VERSION}"
-        npm --version
 
     - name: Verify NPM Cache
       shell: bash
