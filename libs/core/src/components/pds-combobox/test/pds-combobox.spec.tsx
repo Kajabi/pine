@@ -1809,6 +1809,26 @@ describe('pds-combobox', () => {
       expect(page.root?.shadowRoot?.querySelector('ul[role="listbox"]')).toBeNull();
     });
 
+    it('appends the portal inside an open dialog ancestor when present', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<dialog open>
+          <pds-combobox component-id="portal-in-dialog" dropdown-mount="body" label="Pick">
+            <option value="a">A</option>
+          </pds-combobox>
+        </dialog>`,
+      });
+
+      const dialog = page.doc.querySelector('dialog');
+      const input = page.root?.shadowRoot?.querySelector('input') as HTMLInputElement;
+      input?.click();
+      await page.waitForChanges();
+
+      const portal = dialog?.querySelector('.pds-combobox-dropdown-portal');
+      expect(portal).not.toBeNull();
+      expect(portal?.parentElement).toBe(dialog);
+    });
+
     it('removes the portal container when the dropdown closes', async () => {
       const page = await newSpecPage({
         components: [PdsCombobox],

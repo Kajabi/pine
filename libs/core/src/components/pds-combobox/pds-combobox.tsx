@@ -73,9 +73,11 @@ export class PdsCombobox implements BasePdsProps {
   /**
    * Where to mount the dropdown listbox (`host` or `body`, sometimes called “append to body”).
    * Use `body` inside scrollable containers (for example modals) so the list is not clipped by
-   * `overflow: hidden` ancestors. Keyboard focus remains on the trigger via `aria-activedescendant`
-   * so modal focus traps continue to work. Custom `empty` and `loading` slots are not supported when
-   * `body` is used; the default empty and loading content is shown instead.
+   * `overflow: hidden` ancestors. The portal is appended to the nearest `<dialog>` ancestor when
+   * present (including `pds-modal`), so the list stays in the same top layer as `showModal()`;
+   * otherwise it is appended to `document.body`. Keyboard focus remains on the trigger via
+   * `aria-activedescendant` so modal focus traps continue to work. Custom `empty` and `loading`
+   * slots are not supported when `body` is used; the default empty and loading content is shown instead.
    * @default 'host'
    */
   @Prop() dropdownMount: 'host' | 'body' = 'host';
@@ -273,7 +275,7 @@ export class PdsCombobox implements BasePdsProps {
   private portalEl: HTMLElement | null = null;
   private cleanupPositionAutoUpdate?: () => void;
   private bodyPortalAutoUpdateActive = false;
-  /** Deferred so portal teardown runs after Stencil reconciles `isOpen === false` (see Bugbot #741). */
+  /** Deferred so portal teardown runs after Stencil reconciles `isOpen === false`. */
   private deferredPortalTeardownId?: ReturnType<typeof setTimeout>;
   private internals?: ElementInternals;
   private isUpdatingFromSelection: boolean = false;
@@ -838,7 +840,7 @@ export class PdsCombobox implements BasePdsProps {
 
     const strategy = this.usesBodyPortal ? 'fixed' : 'absolute';
     const zIndex = this.usesBodyPortal
-      ? 'var(--pine-z-index-overlay)'
+      ? 'var(--pine-z-index-priority)'
       : 'var(--pine-z-index-raised)';
 
     this.listboxEl.style.width = this.dropdownWidth;
@@ -893,14 +895,22 @@ export class PdsCombobox implements BasePdsProps {
     this.bodyPortalAutoUpdateActive = false;
   }
 
+  private getPortalMountRoot(): HTMLElement {
+    return this.el.closest('dialog') ?? document.body;
+  }
+
   private ensureBodyPortal(): HTMLElement {
     if (this.portalEl !== null) {
+      const target = this.getPortalMountRoot();
+      if (this.portalEl.parentElement !== target) {
+        target.appendChild(this.portalEl);
+      }
       return this.portalEl;
     }
 
     this.portalEl = document.createElement('div');
     this.portalEl.className = 'pds-combobox-dropdown-portal';
-    document.body.appendChild(this.portalEl);
+    this.getPortalMountRoot().appendChild(this.portalEl);
     return this.portalEl;
   }
 
