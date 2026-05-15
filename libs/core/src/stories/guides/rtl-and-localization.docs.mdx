@@ -1,0 +1,52 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Guides/RTL and localization" />
+
+# RTL and localization
+
+Pine targets **English-first** Kajabi product surfaces today. Right-to-left (RTL) locales and full internationalization (i18n) are **directional goals**: components should not block RTL or translated copy, but **parity is not guaranteed** until each component is explicitly validated.
+
+## What teams should assume today
+
+1. **Document text direction** at the app shell (`dir="rtl"` / `lang`) when you ship RTL; Pine does not yet ship a single global RTL QA matrix.
+2. **Prefer tokens and logical intent** when writing new styles in consuming apps (for example spacing and alignment that should mirror under RTL). Pine SCSS continues to align with shared Kajabi token practices; report gaps in Slack (`#ds-support`).
+3. **Strings live in the product**, not inside Pine primitives—pass translated `label`, `aria-label`, and slot content from your app’s i18n layer.
+
+## Component backlog (audit)
+
+Use this list as a **working checklist** for RTL and locale-sensitive behavior (mirroring, collision placement, iconography, truncation). Check items off in the issue or PR that proves behavior (visual + keyboard + screen reader where applicable).
+
+- [ ] `pds-accordion`
+- [ ] `pds-alert`
+- [ ] `pds-avatar`
+- [ ] `pds-box` / `pds-row` / `pds-container`
+- [ ] `pds-button`
+- [ ] `pds-checkbox`
+- [ ] `pds-chip`
+- [ ] `pds-combobox`
+- [ ] `pds-copytext`
+- [ ] `pds-divider`
+- [ ] `pds-dropdown-menu`
+- [ ] `pds-filters` / `pds-filter`
+- [ ] `pds-icon`
+- [ ] `pds-image`
+- [ ] `pds-input`
+- [ ] `pds-link`
+- [ ] `pds-loader`
+- [ ] `pds-modal` (+ header / footer / content)
+- [ ] `pds-multiselect`
+- [ ] `pds-popover`
+- [ ] `pds-progress`
+- [ ] `pds-property`
+- [ ] `pds-radio` / `pds-radio-group`
+- [ ] `pds-select`
+- [ ] `pds-sortable`
+- [ ] `pds-switch`
+- [ ] `pds-table` (+ row / cell / head)
+- [ ] `pds-tabs`
+- [ ] `pds-text`
+- [ ] `pds-textarea`
+- [ ] `pds-toast`
+- [ ] `pds-tooltip`
+
+When an audit completes for a component, prefer capturing **fixed behavior** in Stencil spec/e2e tests and a short Storybook example (for example an RTL story wrapper) so regressions are caught in CI.

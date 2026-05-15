@@ -1,0 +1,58 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Resources/Component status" parameters={{ previewTabs: { canvas: { hidden: true } } }} />
+
+# Component status
+
+Lifecycle labels describe **API and visual stability** for product teams—not Storybook polish. They are updated when a component’s contract or usage is intentionally changing.
+
+## Definitions
+
+| Label | Meaning |
+| --- | --- |
+| **Stable** | Safe for broad production use; breaking changes follow semver and migration notes. |
+| **Beta** | API or visuals may still shift; prefer new work here only when you accept occasional churn. |
+| **Deprecated** | Do not use in new UI; plan migration; removal is scheduled with notice in the changelog. |
+
+## Pine web components
+
+All components below are **Stable** unless noted. Subcomponents (for example `pds-table-row`) follow the parent unless called out separately.
+
+| Component | Status | Notes |
+| --- | --- | --- |
+| `pds-accordion` | Stable | |
+| `pds-alert` | Stable | |
+| `pds-avatar` | Stable | |
+| `pds-box` | Stable | |
+| `pds-button` | Stable | |
+| `pds-checkbox` | Stable | |
+| `pds-chip` | Stable | |
+| `pds-combobox` | Stable | |
+| `pds-container` | Stable | |
+| `pds-copytext` | Stable | |
+| `pds-divider` | Stable | |
+| `pds-dropdown-menu` | Stable | |
+| `pds-filters` / `pds-filter` | Stable | |
+| `pds-icon` | Stable | Icons ship from `@pine-ds/icons`. |
+| `pds-image` | Stable | |
+| `pds-input` | Stable | |
+| `pds-link` | Stable | |
+| `pds-loader` | Stable | |
+| `pds-modal` | Stable | |
+| `pds-multiselect` | Stable | |
+| `pds-popover` | Stable | |
+| `pds-progress` | Stable | |
+| `pds-property` | Stable | |
+| `pds-radio` / `pds-radio-group` | Stable | |
+| `pds-row` | Stable | |
+| `pds-select` | Stable | |
+| `pds-sortable` | Stable | |
+| `pds-switch` | Stable | |
+| `pds-table` | Stable | |
+| `pds-tabs` | Stable | |
+| `pds-text` | Stable | |
+| `pds-textarea` | Stable | |
+| `pds-toast` | Stable | |
+| `pds-tooltip` | Stable | |
+
+When a component moves to **Beta** or **Deprecated**, update this table in the same pull request as the changelog entry and any Storybook migration callouts.
