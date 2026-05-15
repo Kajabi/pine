@@ -90,6 +90,8 @@ export class PdsCombobox implements BasePdsProps {
 
   /**
    * Determines the combobox mode: 'filter' (filter options as you type) or 'select-only' (show all options).
+   * In filter mode, reopening the menu while the input still shows the label of the selected option temporarily lists
+   * all options until you type (so you can switch to a different choice without clearing the field first).
    * @default 'filter'
    */
   @Prop() mode: 'filter' | 'select-only' = 'filter';
@@ -265,6 +267,13 @@ export class PdsCombobox implements BasePdsProps {
   private fetchTimeoutTimer?: number;
   private observer?: MutationObserver;
   private originalSearchEmitter?: EventEmitter<ComboboxSearchEventDetail>;
+
+  /**
+   * In filter mode, after choosing an option the input still shows the label and would
+   * otherwise filter the list to matching substrings only. While this flag is true,
+   * the list shows every option until the user types (then normal filtering applies).
+   */
+  private expandFilterListWhileOpen = false;
 
   connectedCallback() {
     // Initialize ElementInternals for form association (only once per element instance)
@@ -695,7 +704,7 @@ export class PdsCombobox implements BasePdsProps {
       this.allItems = [...this.optionEls];
     }
 
-    if (this.mode === 'select-only') {
+    if (this.mode === 'select-only' || this.expandFilterListWhileOpen) {
       this.filteredItems = [...this.allItems];
     } else {
       const val = this.displayText.toLowerCase();
@@ -736,7 +745,27 @@ export class PdsCombobox implements BasePdsProps {
     this.highlightedIndex = -1;
   }
 
-          private openDropdownPositioning() {
+  private clearExpandFilterList() {
+    this.expandFilterListWhileOpen = false;
+  }
+
+  /**
+   * When reopening the dropdown in filter mode with the input still showing the
+   * committed selection label, show the full option list until the user edits the query.
+   */
+  private prepareExpandFilterListOnOpen() {
+    if (
+      this.mode === 'filter' &&
+      this.selectedOption &&
+      this.displayText === this.getOptionLabel(this.selectedOption)
+    ) {
+      this.expandFilterListWhileOpen = true;
+    } else {
+      this.expandFilterListWhileOpen = false;
+    }
+  }
+
+  private openDropdownPositioning() {
     if (this.triggerEl && this.listboxEl) {
       // Apply width and max-height BEFORE positioning calculations
       this.listboxEl.style.width = this.dropdownWidth;
@@ -766,6 +795,7 @@ export class PdsCombobox implements BasePdsProps {
 
   private handleInput = (e: Event) => {
     const target = e.target as HTMLInputElement;
+    this.clearExpandFilterList();
     this.displayText = target.value;
     this.isOpen = true;
     this.filterOptions();
@@ -785,6 +815,7 @@ export class PdsCombobox implements BasePdsProps {
     // Open dropdown when input is clicked (but not when tabbed into)
     if (!this.isOpen) {
       this.isOpen = true;
+      this.prepareExpandFilterListOnOpen();
       this.filterOptions();
 
       // Trigger initial fetch if async and no options loaded yet
@@ -793,7 +824,12 @@ export class PdsCombobox implements BasePdsProps {
       }
 
       this.setInitialHighlightedIndex();
-      setTimeout(() => this.openDropdownPositioning(), 0);
+      setTimeout(() => {
+        this.openDropdownPositioning();
+        if (this.trigger === 'input' && this.expandFilterListWhileOpen && this.inputEl) {
+          this.inputEl.select();
+        }
+      }, 0);
     }
   };
 
@@ -801,6 +837,7 @@ export class PdsCombobox implements BasePdsProps {
     if (!this.isOpen && (e.key === 'ArrowDown' || e.key === 'ArrowUp' || (e.altKey && e.key === 'ArrowDown'))) {
       e.preventDefault();
       this.isOpen = true;
+      this.prepareExpandFilterListOnOpen();
       this.filterOptions();
       // Set highlighted index immediately for testing
       this.setInitialHighlightedIndex();
@@ -893,6 +930,7 @@ export class PdsCombobox implements BasePdsProps {
         e.preventDefault();
         this.isOpen = false;
         this.highlightedIndex = -1;
+        this.clearExpandFilterList();
         this.isArrowKeyNavigationMode = false; // Reset arrow-key navigation mode
         this.restoreFocusToTrigger();
         break;
@@ -900,6 +938,7 @@ export class PdsCombobox implements BasePdsProps {
         // Allow normal tab behavior to close dropdown and move focus
         this.isOpen = false;
         this.highlightedIndex = -1;
+        this.clearExpandFilterList();
         this.isArrowKeyNavigationMode = false; // Reset arrow-key navigation mode
         break;
     }
@@ -1209,6 +1248,7 @@ export class PdsCombobox implements BasePdsProps {
   private onButtonTriggerClick = () => {
     this.isOpen = !this.isOpen;
     if (this.isOpen) {
+      this.prepareExpandFilterListOnOpen();
       this.filterOptions();
 
       // Trigger initial fetch if async and no options loaded yet
@@ -1223,6 +1263,7 @@ export class PdsCombobox implements BasePdsProps {
       setTimeout(() => this.openDropdownPositioning(), 0);
     } else {
       // Reset navigation mode when closing
+      this.clearExpandFilterList();
       this.isArrowKeyNavigationMode = false;
     }
   };
@@ -1234,6 +1275,7 @@ export class PdsCombobox implements BasePdsProps {
       e.stopPropagation(); // Prevent the event from bubbling and triggering click
 
       this.isOpen = true;
+      this.prepareExpandFilterListOnOpen();
       this.filterOptions();
       // Set highlighted index immediately
       this.setInitialHighlightedIndex();
@@ -1247,6 +1289,7 @@ export class PdsCombobox implements BasePdsProps {
       if (this.isOpen) {
         this.isOpen = false;
         this.highlightedIndex = -1;
+        this.clearExpandFilterList();
         this.updateAriaActiveDescendant(); // Clear aria-activedescendant
         this.restoreFocusToTrigger();
       }
@@ -1276,6 +1319,7 @@ export class PdsCombobox implements BasePdsProps {
     if (!isRelatedTargetInCombobox && !isRelatedTargetInListbox) {
       this.isOpen = false;
       this.highlightedIndex = -1;
+      this.clearExpandFilterList();
       this.isArrowKeyNavigationMode = false; // Reset arrow-key navigation mode
       this.updateAriaActiveDescendant(); // Clear aria-activedescendant
 
@@ -1287,12 +1331,13 @@ export class PdsCombobox implements BasePdsProps {
     }
   };
 
-    private handleOptionClick(option: HTMLOptionElement) {
+  private handleOptionClick(option: HTMLOptionElement) {
     // Update reactive state - single source of truth
     // The @Watch('selectedOption') will handle displayText, value, and form internals
     this.setSelectedOption(option);
 
     this.isOpen = false;
+    this.clearExpandFilterList();
     this.pdsComboboxChange.emit({ value: option.value });
   }
 
