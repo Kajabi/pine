@@ -13,7 +13,7 @@
   opacity: 0;
   padding: 0;
   position: fixed;
-  transition: opacity 0.2s ease, visibility 0.2s ease;
+  transition: opacity var(--pine-motion-duration-base) var(--pine-motion-easing-out), visibility var(--pine-motion-duration-base) var(--pine-motion-easing-out);
   visibility: hidden;
   width: 100%;
   z-index: var(--pine-z-index-modal);

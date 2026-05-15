@@ -42,7 +42,12 @@ Pine ships a Pine-internal motion token set in `libs/core/src/global/styles/_mot
 
 ### Reduced motion
 
-The duration tokens collapse to `0ms` under `prefers-reduced-motion: reduce`, so components that use them inherit the system-level override automatically. No additional media-query wrapping is required at the component level for the duration values.
+The duration tokens collapse to `0ms` under `prefers-reduced-motion: reduce`, so CSS transitions that reference `var(--pine-motion-duration-*)` inherit the system-level override automatically — no extra media-query wrapping is required at the component level.
+
+**Limitations:**
+
+- The override only affects duration. Easing tokens still resolve to their normal curves, which is fine for 0ms transitions but worth knowing if you compose tokens elsewhere.
+- JavaScript-driven animations (`element.animate`, `requestAnimationFrame` loops) do not read CSS custom properties; you have to check `window.matchMedia('(prefers-reduced-motion: reduce)')` yourself.
 
 ### Roadmap
 

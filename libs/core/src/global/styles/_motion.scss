@@ -1,14 +1,17 @@
 ////
-/// Motion tokens (Pine-internal)
+/// Motion tokens (Pine-internal until upstream consolidation)
 ///
-/// Named duration and easing values for component transitions. Until
-/// motion tokens land in the shared @kajabi-ui/styles package these are
-/// Pine-local — keep usage inside libs/core/ so consumer apps stay on
-/// the shared token surface.
+/// Named duration and easing values for component transitions.
 ///
-/// Component SCSS should reference the CSS custom properties (via
-/// `var(--pine-motion-...)`) so that future consolidation upstream is
-/// a token-swap, not a search-and-replace across every component.
+/// Namespace contract: these CSS custom properties use the canonical
+/// `--pine-motion-*` namespace that `@kajabi-ui/styles` will own once
+/// motion is published upstream. Pine defines them here so component
+/// SCSS can adopt the names today; when upstream lands a motion token
+/// release, this file is removed in the same PR that bumps the
+/// `@kajabi-ui/styles` version. Component SCSS does not change.
+///
+/// If upstream ever publishes different values under the same names,
+/// remove these fallbacks immediately to avoid divergent definitions.
 ///
 /// @group pine
 ////
