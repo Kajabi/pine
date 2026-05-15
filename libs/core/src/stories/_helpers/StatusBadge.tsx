@@ -1,13 +1,31 @@
 import React from 'react';
 
+import componentStatus from '../resources/component-status.json';
 import './StatusBadge.css';
 
 export type ComponentStatus = 'stable' | 'beta' | 'deprecated';
 
 export interface StatusBadgeProps {
-  /** Lifecycle label as defined in the central component-status table. */
-  status: ComponentStatus;
+  /**
+   * Component tag (for example `pds-button`). When provided the badge
+   * reads the lifecycle label from `component-status.json` so the badge
+   * and the central status table cannot drift.
+   */
+  component?: string;
+
+  /**
+   * Lifecycle label override. Only used when `component` is omitted, or
+   * to force a status that differs from the central table (rare —
+   * prefer updating the JSON manifest).
+   */
+  status?: ComponentStatus;
+
   /** Optional inline note (for example: 'Replaced by `pds-property`'). */
+  note?: string;
+}
+
+interface ComponentEntry {
+  status: ComponentStatus;
   note?: string;
 }
 
@@ -17,23 +35,36 @@ const STATUS_LABELS: Record<ComponentStatus, string> = {
   deprecated: 'Deprecated',
 };
 
+const COMPONENTS = componentStatus.components as Record<string, ComponentEntry>;
+
 /**
  * Renders the per-component lifecycle label that mirrors the central
  * Resources/Component status table. Apply once at the top of each
  * component's MDX page so consumers see stability state without
  * navigating elsewhere.
  *
- * Source of truth: `libs/core/src/stories/resources/component-status.docs.mdx`.
- * Keep this badge in sync with that table when a component is promoted
- * or deprecated.
+ * Source of truth: `libs/core/src/stories/resources/component-status.json`.
+ * Pass the component tag (`component="pds-button"`) so the badge stays
+ * in sync automatically.
  */
-export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, note }) => {
-  const label = STATUS_LABELS[status];
+export const StatusBadge: React.FC<StatusBadgeProps> = ({ component, status, note }) => {
+  const entry = component !== undefined ? COMPONENTS[component] : undefined;
+  const resolvedStatus: ComponentStatus = entry?.status ?? status ?? 'stable';
+  const resolvedNote = note ?? entry?.note;
+  const label = STATUS_LABELS[resolvedStatus];
+
   return (
-    <div className="pine-status-badge" data-status={status} role="note" aria-label={`Component status: ${label}`}>
+    <div
+      className="pine-status-badge"
+      data-status={resolvedStatus}
+      role="note"
+      aria-label={`Component status: ${label}`}
+    >
       <span className="pine-status-badge__dot" aria-hidden="true" />
       <span className="pine-status-badge__label">{label}</span>
-      {note !== undefined && note !== '' ? <span className="pine-status-badge__note">— {note}</span> : null}
+      {resolvedNote !== undefined && resolvedNote !== '' ? (
+        <span className="pine-status-badge__note">— {resolvedNote}</span>
+      ) : null}
     </div>
   );
 };
