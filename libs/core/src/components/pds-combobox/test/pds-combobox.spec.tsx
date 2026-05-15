@@ -1854,6 +1854,30 @@ describe('pds-combobox', () => {
       expect(portal?.parentElement).toBe(dialog);
     });
 
+    it('does not leave duplicate listboxes in the portal on rapid reopen', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="portal-rapid" dropdown-mount="body" label="Pick">
+          <option value="a">A</option>
+        </pds-combobox>`,
+      });
+
+      const input = page.root?.shadowRoot?.querySelector('input') as HTMLInputElement;
+      const component = page.rootInstance as PdsCombobox;
+
+      input?.click();
+      await page.waitForChanges();
+
+      component.isOpen = false;
+      await page.waitForChanges();
+      component.isOpen = true;
+      await page.waitForChanges();
+
+      const portal = document.querySelector('.pds-combobox-dropdown-portal');
+      const listboxes = portal?.querySelectorAll('ul[role="listbox"]');
+      expect(listboxes?.length).toBe(1);
+    });
+
     it('removes the portal container when the dropdown closes', async () => {
       const page = await newSpecPage({
         components: [PdsCombobox],

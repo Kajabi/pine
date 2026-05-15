@@ -347,6 +347,13 @@ export class PdsCombobox implements BasePdsProps {
       this.deferredPortalTeardownId = undefined;
     }
 
+    if (isOpen && this.usesBodyPortal) {
+      // Rapid reopen can cancel deferred teardown while the portal still holds the previous
+      // listbox node; clear portal state before the next render attaches the new listbox, and
+      // reset Floating UI autoUpdate bookkeeping.
+      this.removeBodyPortal();
+    }
+
     if (!isOpen && this.usesBodyPortal) {
       if (this.deferredPortalTeardownId !== undefined) {
         clearTimeout(this.deferredPortalTeardownId);
@@ -966,6 +973,12 @@ export class PdsCombobox implements BasePdsProps {
     }
 
     const portal = this.ensureBodyPortal();
+    for (const stale of Array.from(portal.children)) {
+      if (stale !== this.listboxEl) {
+        stale.remove();
+      }
+    }
+
     if (this.listboxEl.parentElement !== portal) {
       portal.appendChild(this.listboxEl);
       void this.positionDropdown();
