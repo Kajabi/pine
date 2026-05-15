@@ -1,5 +1,15 @@
 @use '~@kajabi-ui/styles/dist/pine/pine';
 @use 'fonts';
+@use '../../components/pds-combobox/pds-combobox-dropdown-panel.scss' as *;
+
+// Body-portaled combobox listbox (outside shadow roots — see pds-combobox `dropdown-mount="body"`)
+.pds-combobox-dropdown-portal {
+  @include pds-combobox-dropdown-panel;
+
+  .pds-combobox__listbox {
+    z-index: var(--pine-z-index-overlay);
+  }
+}
 
 // Fix issue with web components not being hidden when attribute is set
 [hidden] {

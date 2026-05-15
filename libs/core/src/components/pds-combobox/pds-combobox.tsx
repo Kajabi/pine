@@ -346,6 +346,10 @@ export class PdsCombobox implements BasePdsProps {
     return `${this.componentId}-listbox`;
   }
 
+  private optionDomId(optionIndex: number): string {
+    return `${this.componentId}-option-${optionIndex}`;
+  }
+
   @Watch('debounce')
   protected setupDebounce() {
     const { pdsComboboxSearch, debounce, originalSearchEmitter } = this;
@@ -1179,7 +1183,7 @@ export class PdsCombobox implements BasePdsProps {
    */
   private updateAriaActiveDescendant() {
     if (this.triggerEl && this.highlightedIndex >= 0) {
-      this.triggerEl.setAttribute('aria-activedescendant', `pds-combobox-option-${this.highlightedIndex}`);
+      this.triggerEl.setAttribute('aria-activedescendant', this.optionDomId(this.highlightedIndex));
     } else if (this.triggerEl) {
       this.triggerEl.removeAttribute('aria-activedescendant');
     }
@@ -1543,7 +1547,7 @@ export class PdsCombobox implements BasePdsProps {
             return (
               <li
                 key={option.value}
-                id={`pds-combobox-option-${currentOptionIndex}`}
+                id={this.optionDomId(currentOptionIndex)}
                 role="option"
                 aria-selected={isSelected ? 'true' : 'false'}
                 aria-setsize={selectableOptions.length}
@@ -1785,7 +1789,7 @@ export class PdsCombobox implements BasePdsProps {
                 role="combobox"
                 aria-autocomplete="list"
                 aria-controls={this.listboxId}
-                aria-activedescendant={this.isOpen && this.highlightedIndex >= 0 ? `pds-combobox-option-${this.highlightedIndex}` : undefined}
+                aria-activedescendant={this.isOpen && this.highlightedIndex >= 0 ? this.optionDomId(this.highlightedIndex) : undefined}
                 aria-expanded={this.isOpen ? 'true' : 'false'}
                 aria-disabled={this.disabled ? 'true' : 'false'}
                 aria-label={this.hideLabel ? this.label : undefined}
@@ -1808,7 +1812,7 @@ export class PdsCombobox implements BasePdsProps {
               role="combobox"
               aria-haspopup="listbox"
               aria-controls={this.listboxId}
-              aria-activedescendant={this.isOpen && this.highlightedIndex >= 0 ? `pds-combobox-option-${this.highlightedIndex}` : undefined}
+              aria-activedescendant={this.isOpen && this.highlightedIndex >= 0 ? this.optionDomId(this.highlightedIndex) : undefined}
               aria-expanded={this.isOpen ? 'true' : 'false'}
               aria-disabled={this.disabled ? 'true' : 'false'}
               aria-label={this.hideLabel ? this.label : undefined}
@@ -1830,7 +1834,7 @@ export class PdsCombobox implements BasePdsProps {
               role="combobox"
               aria-haspopup="listbox"
               aria-controls={this.listboxId}
-              aria-activedescendant={this.isOpen && this.highlightedIndex >= 0 ? `pds-combobox-option-${this.highlightedIndex}` : undefined}
+              aria-activedescendant={this.isOpen && this.highlightedIndex >= 0 ? this.optionDomId(this.highlightedIndex) : undefined}
               aria-expanded={this.isOpen ? 'true' : 'false'}
               aria-disabled={this.disabled ? 'true' : 'false'}
               aria-label={this.hideLabel ? this.label : undefined}

@@ -1190,7 +1190,7 @@ describe('pds-combobox', () => {
     component.isOpen = true;
     await page.waitForChanges();
 
-    expect(input?.getAttribute('aria-activedescendant')).toBe('pds-combobox-option-0');
+    expect(input?.getAttribute('aria-activedescendant')).toBe('test-combobox-option-0');
   });
 
   it('updates aria-activedescendant for button trigger when option is highlighted', async () => {
@@ -1206,7 +1206,7 @@ describe('pds-combobox', () => {
     component.isOpen = true;
     await page.waitForChanges();
 
-    expect(button?.getAttribute('aria-activedescendant')).toBe('pds-combobox-option-0');
+    expect(button?.getAttribute('aria-activedescendant')).toBe('test-combobox-option-0');
   });
 
   it('renders options with proper ARIA attributes', async () => {
