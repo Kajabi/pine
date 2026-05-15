@@ -401,6 +401,7 @@ Preselection also works with input triggers, showing the selected option's text 
 You can control the dropdown's placement, width, and height, as well as the trigger width using the following props:
 
 - `dropdownPlacement`: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end' (default: 'bottom-start')
+- `dropdownMount`: 'host' | 'body' (default: 'host') — use `body` inside scrollable modals or other `overflow: hidden` containers so the list is not clipped
 - `dropdownWidth`: Any valid CSS width value (default: '236px')
 - `triggerWidth`: Any valid CSS width value for both input and button triggers (default: 'fit-content')
 - `max-height`: Any valid CSS height value (e.g., '200px', '10rem') to limit dropdown height with scrolling

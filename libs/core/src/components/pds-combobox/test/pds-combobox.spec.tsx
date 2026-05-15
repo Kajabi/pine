@@ -24,7 +24,7 @@ describe('pds-combobox', () => {
         <mock:shadow-root>
           <div class="pds-combobox" tabindex="-1" part="combobox">
             <div class="pds-combobox__input-wrapper" style="width: fit-content;">
-              <input aria-autocomplete="list" aria-controls="pds-combobox-listbox" aria-disabled="false" aria-expanded="false" autocomplete="off" class="pds-combobox__input" id="test-combobox" part="input" role="combobox" type="text" value="" />
+              <input aria-autocomplete="list" aria-controls="test-combobox-listbox" aria-disabled="false" aria-expanded="false" autocomplete="off" class="pds-combobox__input" id="test-combobox" part="input" role="combobox" type="text" value="" />
               <pds-icon aria-hidden="true" class="pds-combobox__input-icon" icon="enlarge"></pds-icon>
             </div>
             <div style="display: none;">
@@ -1150,7 +1150,7 @@ describe('pds-combobox', () => {
     const input = root?.shadowRoot?.querySelector('input');
     expect(input?.getAttribute('role')).toBe('combobox');
     expect(input?.getAttribute('aria-autocomplete')).toBe('list');
-    expect(input?.getAttribute('aria-controls')).toBe('pds-combobox-listbox');
+    expect(input?.getAttribute('aria-controls')).toBe('test-combobox-listbox');
     expect(input?.getAttribute('aria-expanded')).toBe('false');
     expect(input?.getAttribute('autocomplete')).toBe('off');
   });
@@ -1778,6 +1778,54 @@ describe('pds-combobox', () => {
       await page.waitForChanges();
 
       expect(component.selectedOption?.value).toBe('2');
+    });
+  });
+
+  describe('dropdownMount body', () => {
+    afterEach(() => {
+      document.querySelectorAll('.pds-combobox-dropdown-portal').forEach(el => el.remove());
+    });
+
+    it('renders the listbox in document.body when open', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="portal-combobox" dropdown-mount="body" label="Pick">
+          <option value="a">A</option>
+          <option value="b">B</option>
+        </pds-combobox>`,
+      });
+
+      const input = page.root?.shadowRoot?.querySelector('input') as HTMLInputElement;
+      expect(input?.getAttribute('aria-controls')).toBe('portal-combobox-listbox');
+      expect(document.querySelector('.pds-combobox-dropdown-portal')).toBeNull();
+
+      input?.click();
+      await page.waitForChanges();
+
+      const portal = document.querySelector('.pds-combobox-dropdown-portal');
+      expect(portal).not.toBeNull();
+      const listbox = portal?.querySelector('ul[role="listbox"]');
+      expect(listbox?.id).toBe('portal-combobox-listbox');
+      expect(page.root?.shadowRoot?.querySelector('ul[role="listbox"]')).toBeNull();
+    });
+
+    it('removes the portal container when the dropdown closes', async () => {
+      const page = await newSpecPage({
+        components: [PdsCombobox],
+        html: `<pds-combobox component-id="portal-combobox-2" dropdown-mount="body" label="Pick">
+          <option value="a">A</option>
+        </pds-combobox>`,
+      });
+
+      const input = page.root?.shadowRoot?.querySelector('input') as HTMLInputElement;
+      input?.click();
+      await page.waitForChanges();
+      expect(document.querySelector('.pds-combobox-dropdown-portal')).not.toBeNull();
+
+      input?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+      await page.waitForChanges();
+
+      expect(document.querySelector('.pds-combobox-dropdown-portal')).toBeNull();
     });
   });
 });

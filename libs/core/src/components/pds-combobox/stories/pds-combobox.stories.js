@@ -8,6 +8,7 @@ export default {
     customTriggerContent: false,
     disabled: false,
     dropdownPlacement: 'bottom-start',
+    dropdownMount: 'host',
     dropdownWidth: '236px',
     hideLabel: false,
     maxHeight: null,
@@ -35,6 +36,7 @@ const BaseTemplate = (args) => html`
   custom-trigger-content=${args.customTriggerContent}
   disabled=${args.disabled}
   dropdown-placement=${args.dropdownPlacement}
+  dropdown-mount=${args.dropdownMount}
   dropdown-width=${args.dropdownWidth}
   hide-label=${args.hideLabel}
   max-height=${args.maxHeight}
@@ -364,4 +366,60 @@ OptionGroupsPdsText.args = {
   triggerWidth: '300px',
   dropdownWidth: '300px',
   maxHeight: '280px',
+};
+
+export const InScrollableModal = (args) => html`
+  <div>
+    <pds-button onClick="document.querySelector('#${args.modalId}').open = true">
+      Open modal
+    </pds-button>
+    <pds-modal
+      id="${args.modalId}"
+      component-id="${args.modalId}"
+      size="md"
+      scrollable="true"
+    >
+      <pds-modal-header>
+        <pds-box direction="column" fit padding="md">
+          <pds-text tag="h2" size="h3">Offer selector</pds-text>
+        </pds-box>
+      </pds-modal-header>
+      <pds-modal-content>
+        <pds-box fit direction="column" gap="md" padding-inline-start="md" padding-inline-end="md">
+          <p>Scroll this content and open the combobox. With <code>dropdown-mount="body"</code>, the list is not clipped by the modal.</p>
+          ${Array.from({ length: 8 }, (_, i) => html`<p>Scrollable filler paragraph ${i + 1}.</p>`)}
+          <pds-combobox
+            component-id=${args.componentId}
+            dropdown-mount="body"
+            label=${args.label}
+            placeholder=${args.placeholder}
+            mode=${args.mode}
+            trigger-width="100%"
+            dropdown-width="100%"
+            max-height="200px"
+          >
+            <option value="react">React</option>
+            <option value="vue">Vue.js</option>
+            <option value="svelte">Svelte</option>
+            <option value="angular">Angular</option>
+          </pds-combobox>
+          ${Array.from({ length: 8 }, (_, i) => html`<p>More filler paragraph ${i + 9}.</p>`)}
+        </pds-box>
+      </pds-modal-content>
+      <pds-modal-footer>
+        <pds-box fit padding="md" justify-content="end" gap="sm">
+          <pds-button variant="secondary" onClick="document.querySelector('#${args.modalId}').open = false">Cancel</pds-button>
+          <pds-button variant="primary" onClick="document.querySelector('#${args.modalId}').open = false">Save</pds-button>
+        </pds-box>
+      </pds-modal-footer>
+    </pds-modal>
+  </div>
+`;
+
+InScrollableModal.args = {
+  modalId: 'combobox-modal-demo',
+  componentId: 'combobox-in-modal',
+  label: 'Technology',
+  placeholder: 'Select a technology',
+  mode: 'filter',
 };

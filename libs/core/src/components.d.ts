@@ -935,6 +935,11 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
+          * Where to mount the dropdown listbox. Use `body` inside scrollable containers (for example modals) so the list is not clipped by `overflow: hidden` ancestors. Custom `empty` and `loading` slots are not supported when `body` is used; the default empty and loading content is shown instead.
+          * @default 'host'
+         */
+        "dropdownMount": 'host' | 'body';
+        /**
           * Placement of the dropdown relative to the trigger.
           * @default 'bottom-start'
          */
@@ -4021,6 +4026,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "disabled"?: boolean;
+        /**
+          * Where to mount the dropdown listbox. Use `body` inside scrollable containers (for example modals) so the list is not clipped by `overflow: hidden` ancestors. Custom `empty` and `loading` slots are not supported when `body` is used; the default empty and loading content is shown instead.
+          * @default 'host'
+         */
+        "dropdownMount"?: 'host' | 'body';
         /**
           * Placement of the dropdown relative to the trigger.
           * @default 'bottom-start'

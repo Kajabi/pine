@@ -2,7 +2,7 @@ import { Component, Element, Event, EventEmitter, h, Host, Prop, State, Watch, M
 import type { BasePdsProps } from '@utils/interfaces';
 import { isSpecTest } from '../../utils/form';
 import type { ChipSentimentType } from '@utils/types';
-import { computePosition, flip, offset, shift } from '@floating-ui/dom';
+import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
 import { debounceEvent } from '@utils/utils';
 import DOMPurify from 'dompurify';
 import type {
@@ -69,6 +69,14 @@ export class PdsCombobox implements BasePdsProps {
    * @default '236px'
    */
   @Prop() dropdownWidth: string = '236px';
+
+  /**
+   * Where to mount the dropdown listbox. Use `body` inside scrollable containers (for example modals)
+   * so the list is not clipped by `overflow: hidden` ancestors. Custom `empty` and `loading` slots are
+   * not supported when `body` is used; the default empty and loading content is shown instead.
+   * @default 'host'
+   */
+  @Prop() dropdownMount: 'host' | 'body' = 'host';
 
   /**
    * Visually hides the label text for instances where only the combobox should be displayed.
@@ -260,6 +268,8 @@ export class PdsCombobox implements BasePdsProps {
   private allItems: (HTMLOptionElement | HTMLOptGroupElement | HTMLPdsTextElement)[] = [];
   private triggerEl?: HTMLElement;
   private listboxEl?: HTMLElement;
+  private portalEl: HTMLElement | null = null;
+  private cleanupPositionAutoUpdate?: () => void;
   private internals?: ElementInternals;
   private isUpdatingFromSelection: boolean = false;
   private abortController?: AbortController;
@@ -309,6 +319,28 @@ export class PdsCombobox implements BasePdsProps {
   disconnectedCallback() {
     this.observer?.disconnect();
     this.clearAsyncFetchState();
+    this.removeBodyPortal();
+  }
+
+  componentDidRender() {
+    if (this.usesBodyPortal && this.isOpen) {
+      this.syncBodyPortal();
+    }
+  }
+
+  @Watch('isOpen')
+  protected isOpenChanged(isOpen: boolean) {
+    if (!isOpen) {
+      this.removeBodyPortal();
+    }
+  }
+
+  private get usesBodyPortal(): boolean {
+    return this.dropdownMount === 'body';
+  }
+
+  private get listboxId(): string {
+    return `${this.componentId}-listbox`;
   }
 
   @Watch('debounce')
@@ -765,32 +797,91 @@ export class PdsCombobox implements BasePdsProps {
     }
   }
 
-  private openDropdownPositioning() {
-    if (this.triggerEl && this.listboxEl) {
-      // Apply width and max-height BEFORE positioning calculations
-      this.listboxEl.style.width = this.dropdownWidth;
+  private positionDropdown() {
+    if (!this.triggerEl || !this.listboxEl) {
+      return;
+    }
 
-      if (this.maxHeight) {
-        this.listboxEl.style.maxHeight = this.maxHeight;
-        this.listboxEl.style.overflowY = 'auto';
+    const strategy = this.usesBodyPortal ? 'fixed' : 'absolute';
+    const zIndex = this.usesBodyPortal
+      ? 'var(--pine-z-index-overlay)'
+      : 'var(--pine-z-index-raised)';
+
+    this.listboxEl.style.width = this.dropdownWidth;
+
+    if (this.maxHeight) {
+      this.listboxEl.style.maxHeight = this.maxHeight;
+      this.listboxEl.style.overflowY = 'auto';
+    }
+
+    this.listboxEl.offsetHeight;
+
+    return computePosition(this.triggerEl, this.listboxEl, {
+      placement: this.dropdownPlacement,
+      strategy,
+      middleware: [offset(12), flip(), shift({ padding: 5 })],
+    }).then(({ x, y }) => {
+      if (!this.listboxEl) {
+        return;
       }
 
-      // Force a reflow to ensure dimensions are calculated
-      this.listboxEl.offsetHeight;
+      Object.assign(this.listboxEl.style, {
+        left: `${x}px`,
+        top: `${y}px`,
+        position: strategy,
+        zIndex,
+      });
+    });
+  }
 
-      computePosition(this.triggerEl, this.listboxEl, {
-        placement: this.dropdownPlacement,
-        strategy: 'absolute',
-        middleware: [offset(12), flip(), shift({ padding: 5 })],
-      }).then(({ x, y }) => {
-        Object.assign(this.listboxEl.style, {
-          left: `${x}px`,
-          top: `${y}px`,
-          position: 'absolute',
-          zIndex: 'var(--pine-z-index-raised)',
-        });
+  private openDropdownPositioning() {
+    if (!this.triggerEl || !this.listboxEl) {
+      return;
+    }
+
+    void this.positionDropdown();
+
+    if (this.usesBodyPortal) {
+      this.cleanupPositionAutoUpdate?.();
+      this.cleanupPositionAutoUpdate = autoUpdate(this.triggerEl, this.listboxEl, () => {
+        void this.positionDropdown();
       });
     }
+  }
+
+  private ensureBodyPortal(): HTMLElement {
+    if (this.portalEl !== null) {
+      return this.portalEl;
+    }
+
+    this.portalEl = document.createElement('div');
+    this.portalEl.className = 'pds-combobox-dropdown-portal';
+    document.body.appendChild(this.portalEl);
+    return this.portalEl;
+  }
+
+  private syncBodyPortal() {
+    if (!this.listboxEl) {
+      return;
+    }
+
+    const portal = this.ensureBodyPortal();
+    if (this.listboxEl.parentElement !== portal) {
+      portal.appendChild(this.listboxEl);
+    }
+
+    this.openDropdownPositioning();
+  }
+
+  private removeBodyPortal() {
+    this.cleanupPositionAutoUpdate?.();
+    this.cleanupPositionAutoUpdate = undefined;
+
+    if (this.portalEl?.parentNode) {
+      this.portalEl.parentNode.removeChild(this.portalEl);
+    }
+
+    this.portalEl = null;
   }
 
   private handleInput = (e: Event) => {
@@ -1311,8 +1402,9 @@ export class PdsCombobox implements BasePdsProps {
   private onComboboxFocusOut = (event: FocusEvent) => {
     const relatedTarget = event.relatedTarget as Node | null;
 
-    // Check if the related target is within our shadow DOM (listbox options)
-    const isRelatedTargetInListbox = relatedTarget && this.listboxEl?.contains(relatedTarget);
+    const isRelatedTargetInListbox =
+      relatedTarget &&
+      (this.listboxEl?.contains(relatedTarget) || this.portalEl?.contains(relatedTarget));
     const isRelatedTargetInCombobox = this.el.contains(relatedTarget);
 
     // Don't close if focus is moving to an option in the listbox or staying within the combobox
@@ -1362,8 +1454,8 @@ export class PdsCombobox implements BasePdsProps {
       return null;
     }
 
-    const hasSlottedEmpty = !!this.el.querySelector('[slot="empty"]');
-    const hasSlottedLoading = !!this.el.querySelector('[slot="loading"]');
+    const hasSlottedEmpty = !this.usesBodyPortal && !!this.el.querySelector('[slot="empty"]');
+    const hasSlottedLoading = !this.usesBodyPortal && !!this.el.querySelector('[slot="loading"]');
 
     let optionIndex = 0;
     const selectableOptions = this.filteredItems.filter(item => item.tagName === 'OPTION') as HTMLOptionElement[];
@@ -1372,7 +1464,7 @@ export class PdsCombobox implements BasePdsProps {
       <ul
         class="pds-combobox__listbox"
         role="listbox"
-        id="pds-combobox-listbox"
+        id={this.listboxId}
         aria-label={this.label || 'Options'}
         aria-multiselectable="false"
         ref={el => (this.listboxEl = el as HTMLElement)}
@@ -1674,7 +1766,7 @@ export class PdsCombobox implements BasePdsProps {
                 type="text"
                 role="combobox"
                 aria-autocomplete="list"
-                aria-controls="pds-combobox-listbox"
+                aria-controls={this.listboxId}
                 aria-activedescendant={this.isOpen && this.highlightedIndex >= 0 ? `pds-combobox-option-${this.highlightedIndex}` : undefined}
                 aria-expanded={this.isOpen ? 'true' : 'false'}
                 aria-disabled={this.disabled ? 'true' : 'false'}
@@ -1697,7 +1789,7 @@ export class PdsCombobox implements BasePdsProps {
               style={{ width: this.triggerWidth }}
               role="combobox"
               aria-haspopup="listbox"
-              aria-controls="pds-combobox-listbox"
+              aria-controls={this.listboxId}
               aria-activedescendant={this.isOpen && this.highlightedIndex >= 0 ? `pds-combobox-option-${this.highlightedIndex}` : undefined}
               aria-expanded={this.isOpen ? 'true' : 'false'}
               aria-disabled={this.disabled ? 'true' : 'false'}
@@ -1719,7 +1811,7 @@ export class PdsCombobox implements BasePdsProps {
               style={{ width: this.triggerWidth }}
               role="combobox"
               aria-haspopup="listbox"
-              aria-controls="pds-combobox-listbox"
+              aria-controls={this.listboxId}
               aria-activedescendant={this.isOpen && this.highlightedIndex >= 0 ? `pds-combobox-option-${this.highlightedIndex}` : undefined}
               aria-expanded={this.isOpen ? 'true' : 'false'}
               aria-disabled={this.disabled ? 'true' : 'false'}
