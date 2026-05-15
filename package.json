@@ -18,7 +18,9 @@
     "setup": "npm install",
     "start": "npx nx run-many -t start",
     "stencil.generate": "npx nx run @pine-ds/core:generate",
-    "test.all": "npx nx run-many --target=test"
+    "test.all": "npx nx run-many --target=test",
+    "size": "size-limit",
+    "size.why": "size-limit --why"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",
@@ -26,6 +28,7 @@
     "@kajabi-ui/styles": "^1.2.0",
     "@nx/devkit": "20.4.6",
     "@nx/js": "20.4.6",
+    "@size-limit/file": "^11.1.6",
     "@storybook/addon-docs": "^10.1.10",
     "@swc-node/register": "~1.9.1",
     "@swc/core": "~1.15.24",
@@ -38,6 +41,7 @@
     "nx-cloud": "19.1.0",
     "prettier": "^2.6.2",
     "semver": "^7.3.8",
+    "size-limit": "^11.1.6",
     "validate-branch-name": "^1.3.0"
   },
   "config": {
