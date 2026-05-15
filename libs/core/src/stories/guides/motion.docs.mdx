@@ -4,7 +4,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 # Motion
 
-Motion should reinforce hierarchy and feedback without slowing tasks or causing vestibular discomfort. Pine does not yet expose a dedicated **motion token** scale in documentation; until those tokens land in the shared design language, follow the practices below.
+Motion should reinforce hierarchy and feedback without slowing tasks or causing vestibular discomfort. Pine exposes a small **Pine-internal** motion token set covering durations and easing curves; full publication into the shared design language is a follow-up (see Tokens below).
 
 ## Principles
 
@@ -20,6 +20,30 @@ Motion should reinforce hierarchy and feedback without slowing tasks or causing 
 - Keep **focus management** paired with motion: if a dialog animates open, focus should move predictably when the animation completes (or immediately when reduced motion applies).
 - Coordinate with **design** on shared curves and durations so Stencil, React host apps, and marketing pages do not fight each other.
 
-## Tokens and docs
+## Tokens
 
-When semantic motion tokens are published in the Kajabi design token set, this page should link to their Storybook entries alongside color, spacing, and typography. Until then, treat motion as **component-local** (scoped SCSS) plus the principles above.
+Pine ships a Pine-internal motion token set in `libs/core/src/global/styles/_motion.scss`. Component SCSS should reference the CSS custom properties (not the raw values), so that consolidating these tokens upstream into `@kajabi-ui/styles` is a future token-swap and not a search-and-replace across every component.
+
+### Durations
+
+| Token | Default | Use for |
+| --- | --- | --- |
+| `--pine-motion-duration-fast` | `120ms` | Micro-interactions (hover, focus, small toggles). |
+| `--pine-motion-duration-base` | `200ms` | Default for most state changes; the safe pick. |
+| `--pine-motion-duration-slow` | `300ms` | Overlays entering or leaving (modal, popover, drawer). |
+
+### Easing
+
+| Token | Curve | Use for |
+| --- | --- | --- |
+| `--pine-motion-easing-out` | `cubic-bezier(0, 0, 0.2, 1)` | Elements **entering** the view or gaining focus. |
+| `--pine-motion-easing-in` | `cubic-bezier(0.4, 0, 1, 1)` | Elements **exiting** the view. |
+| `--pine-motion-easing-in-out` | `cubic-bezier(0.4, 0, 0.2, 1)` | Properties that move both ways (for example expanding height). |
+
+### Reduced motion
+
+The duration tokens collapse to `0ms` under `prefers-reduced-motion: reduce`, so components that use them inherit the system-level override automatically. No additional media-query wrapping is required at the component level for the duration values.
+
+### Roadmap
+
+When motion tokens are published in `@kajabi-ui/styles` alongside color, spacing, and typography, the CSS variable names above stay the same — the source of truth moves upstream. Track that work in `#ds-support`.
