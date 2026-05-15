@@ -35,13 +35,15 @@
     }
   }
 
-  .pds-combobox__option--layout .pds-combobox__option-layout-wrapper {
+  // Modifier is on the same <li> as `pds-combobox__option` — use compound
+  // selectors so we do not rely on a descendant chain between those classes.
+  .pds-combobox__option.pds-combobox__option--layout .pds-combobox__option-layout-wrapper {
     align-items: center;
     display: flex;
     width: 100%;
   }
 
-  .pds-combobox__option--chip .pds-combobox__option-chip {
+  .pds-combobox__option.pds-combobox__option--chip .pds-combobox__option-chip {
     align-items: center;
     display: flex;
     width: 100%;
