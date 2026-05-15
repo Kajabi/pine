@@ -273,6 +273,8 @@ export class PdsCombobox implements BasePdsProps {
   private portalEl: HTMLElement | null = null;
   private cleanupPositionAutoUpdate?: () => void;
   private bodyPortalAutoUpdateActive = false;
+  /** Deferred so portal teardown runs after Stencil reconciles `isOpen === false` (see Bugbot #741). */
+  private deferredPortalTeardownId?: ReturnType<typeof setTimeout>;
   private internals?: ElementInternals;
   private isUpdatingFromSelection: boolean = false;
   private abortController?: AbortController;
@@ -320,6 +322,10 @@ export class PdsCombobox implements BasePdsProps {
   }
 
   disconnectedCallback() {
+    if (this.deferredPortalTeardownId !== undefined) {
+      clearTimeout(this.deferredPortalTeardownId);
+      this.deferredPortalTeardownId = undefined;
+    }
     this.observer?.disconnect();
     this.clearAsyncFetchState();
     this.removeBodyPortal();
@@ -333,6 +339,27 @@ export class PdsCombobox implements BasePdsProps {
 
   @Watch('isOpen')
   protected isOpenChanged(isOpen: boolean) {
+    if (isOpen && this.deferredPortalTeardownId !== undefined) {
+      clearTimeout(this.deferredPortalTeardownId);
+      this.deferredPortalTeardownId = undefined;
+    }
+
+    if (!isOpen && this.usesBodyPortal) {
+      if (this.deferredPortalTeardownId !== undefined) {
+        clearTimeout(this.deferredPortalTeardownId);
+      }
+      this.deferredPortalTeardownId = setTimeout(() => {
+        this.deferredPortalTeardownId = undefined;
+        if (!this.el.isConnected) {
+          return;
+        }
+        if (!this.isOpen) {
+          this.removeBodyPortal();
+        }
+      }, 0);
+      return;
+    }
+
     if (!isOpen) {
       this.removeBodyPortal();
     }
@@ -898,6 +925,10 @@ export class PdsCombobox implements BasePdsProps {
     }
 
     this.portalEl = null;
+
+    if (this.listboxEl && !this.listboxEl.isConnected) {
+      this.listboxEl = undefined;
+    }
   }
 
   private handleInput = (e: Event) => {

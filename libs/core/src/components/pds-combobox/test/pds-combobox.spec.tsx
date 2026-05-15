@@ -1824,6 +1824,7 @@ describe('pds-combobox', () => {
 
       input?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
       await page.waitForChanges();
+      await new Promise(resolve => setTimeout(resolve, 0));
 
       expect(document.querySelector('.pds-combobox-dropdown-portal')).toBeNull();
     });
