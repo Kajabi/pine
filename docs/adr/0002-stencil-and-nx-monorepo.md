@@ -6,26 +6,27 @@
 
 ## Context
 
-Pine ships UI primitives that need to work in framework-agnostic contexts (legacy Kajabi Rails surfaces, marketing pages, third-party embeds) **and** in modern React apps. The repo also holds a React wrapper package, a Figma Code Connect package, a compositions package, and a doc-components package — distinct deliverables that share build tooling, lint configuration, and release cadence.
+Pine ships UI primitives that need to work in framework-agnostic contexts (legacy Kajabi Rails surfaces, marketing pages, third-party embeds) **and** in modern React apps. The repo also holds a React wrapper package (`libs/react/`), doc-components (`libs/doc-components/`), Figma Code Connect sources (`libs/figma/`), and Stencil build outputs under `libs/compositions/` — distinct deliverables that share workspace tooling, lint configuration, and release cadence.
 
 ## Decision
 
-Component primitives are authored as **Stencil.js** web components (`libs/core/`). The repo is structured as an **Nx monorepo** so that `core`, `react`, `compositions`, `compositions-react`, `doc-components`, and `figma` can be built, tested, linted, and released through a single shared toolchain with task caching and dependency-graph awareness.
+Component primitives are authored as **Stencil.js** web components (`libs/core/`). The repo is structured as an **Nx monorepo** so the published packages — **`@pine-ds/core`**, **`@pine-ds/react`**, and **`@pine-ds/doc-components`** — share cached `build`, `test`, and `lint` targets with dependency-graph awareness. `libs/figma/` is Code Connect source (wired via root `figma.config.json`, not an Nx project). `libs/compositions/` and `libs/compositions-react/` hold Stencil build artifacts, not versioned npm packages.
 
 ## Consequences
 
 **Positive**
 
 - One implementation of each component runs everywhere the browser does — no framework lock-in for consumers.
-- Nx provides cached `build`, `test`, `lint`, and `e2e` targets across packages; CI is fast.
+- Nx provides cached `build`, `test`, and `lint` targets on the published packages; CI is fast.
 - React wrappers are generated from Stencil output, keeping API parity automatic.
-- Per-package CHANGELOGs and independent versioning let `react` ship without bumping `core` for cosmetic-only changes.
+- Per-package CHANGELOGs (`libs/core`, `libs/react`, `libs/doc-components`) document package-level changes; `nx release` versions them together on a shared semver.
 
 **Negative / accepted costs**
 
 - Stencil's runtime carries some overhead vs. hand-rolled web components or a pure React library.
 - Shadow DOM styling requires CSS Shadow Parts / `::part()` for consumer overrides — a learning-curve item for non-Pine contributors.
 - Nx orchestration adds a layer of abstraction over plain npm/yarn workspaces.
+- Spec and e2e tests run through `@pine-ds/core` only; `react` and `doc-components` do not expose separate e2e targets.
 
 ## Alternatives considered
 

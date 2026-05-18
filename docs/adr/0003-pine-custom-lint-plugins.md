@@ -15,11 +15,12 @@ Stylelint's built-in rules can't express "prefer this token over that one" with 
 
 ## Decision
 
-Ship **custom Stylelint plugins** under `libs/core/lint-plugins/`:
+Ship **custom Stylelint plugins** under `libs/core/lint-plugins/` and enforce them in CI:
 
 - `stylelint-plugin-pine-colors.cjs` — `pine-design-system/no-hardcoded-colors`
 - `stylelint-plugin-pine-semantic-tokens.cjs` — `pine-design-system/prefer-semantic-tokens`
-- `eslint-plugin-pine-colors.cjs` — ESLint counterpart for TS/TSX strings
+
+An **`eslint-plugin-pine-colors.cjs`** counterpart for TS/TSX strings also lives in that directory but is **not wired into ESLint today** (see `libs/core/lint-plugins/README.md`).
 
 Token mappings are loaded from `@kajabi-ui/styles/lint-mappings` (see ADR-0001) so the rules stay in lockstep with the upstream token source.
 
@@ -27,12 +28,13 @@ Token mappings are loaded from `@kajabi-ui/styles/lint-mappings` (see ADR-0001) 
 
 **Positive**
 
-- Hardcoded colors and core-token misuse fail CI, not human review.
+- Hardcoded colors and core-token misuse in **SCSS** fail CI via Stylelint, not human review.
 - Dark-mode rollout (see ADR-0005) becomes mechanical — semantic tokens already encode light/dark variants.
 - New contributors get immediate, named suggestions instead of generic "don't do that."
 
 **Negative / accepted costs**
 
+- Hardcoded colors in **TS/TSX** strings are not blocked until the ESLint plugin is enabled.
 - Pine-only lint rules are not shareable with consumer apps without extracting them to a separate plugin package.
 - The plugin loader has to handle three resolution paths (published package, monorepo `node_modules`, sibling `ds-tokens` checkout).
 - Adding a new core token also requires a lint-mapping update in `@kajabi-ui/styles`.
@@ -47,5 +49,7 @@ Token mappings are loaded from `@kajabi-ui/styles/lint-mappings` (see ADR-0001) 
 
 - `libs/core/lint-plugins/stylelint-plugin-pine-colors.cjs`
 - `libs/core/lint-plugins/stylelint-plugin-pine-semantic-tokens.cjs`
+- `libs/core/lint-plugins/eslint-plugin-pine-colors.cjs` (not enabled)
+- `libs/core/lint-plugins/README.md`
 - ADR-0001 (externalized tokens)
 - ADR-0005 (dark mode via semantic tokens)
