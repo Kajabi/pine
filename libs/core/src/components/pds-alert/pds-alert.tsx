@@ -122,7 +122,7 @@ export class PdsAlert {
           border
           display="block"
         >
-          <pds-box gap="sm" display="flex">
+          <pds-box gap="sm" display="flex" align-items={this.small ? "center" : undefined}>
             {!this.hideIcon && (
               <pds-icon
                 class={`pds-alert__icon ${this.small ? 'pds-alert__icon--small' : ''}`}
