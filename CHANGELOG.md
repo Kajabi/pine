@@ -1,3 +1,13 @@
+## 3.26.0 (2026-05-18)
+
+### Features 🚀
+
+- **pds-combobox:** portal dropdown to body for scrollable modals ([#741](https://github.com/Kajabi/pine/pull/741))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 3.25.1 (2026-05-15)
 
 ### Bug Fixes 🐛
