@@ -305,10 +305,12 @@ jobs:
       - name: Send Slack Notification
         uses: slackapi/slack-github-action@v3.0.3
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           DATE: ${{ env.CURRENT_DATE }}
           RELEASE_URL: ${{ env.RELEASE_URL }}
+          SLACK_CHANNEL: ${{ vars.SLACK_CHANNEL_NAME }}
           VERSION: ${{ env.VERSION }}
         with:
-          channel-id: ${{ vars.SLACK_CHANNEL_NAME }}
+          method: chat.postMessage
+          token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload-file-path: "./.github/workflows/slack_payloads/release-info.json"
+          payload-templated: true
