@@ -935,6 +935,11 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
+          * Where to mount the dropdown listbox (`host` or `body`, sometimes called “append to body”). Use `body` inside scrollable containers (for example modals) so the list is not clipped by `overflow: hidden` ancestors. The portal is appended to the nearest `<dialog>` when present (including `pds-modal` / `showModal()`), using a composed ascent so shadow DOM and slot boundaries do not hide the dialog from discovery; otherwise it is appended to `document.body`. Keyboard focus remains on the trigger via `aria-activedescendant` so modal focus traps continue to work. Custom `empty` and `loading` slots are not supported when `body` is used; the default empty and loading content is shown instead.
+          * @default 'host'
+         */
+        "dropdownMount": 'host' | 'body';
+        /**
           * Placement of the dropdown relative to the trigger.
           * @default 'bottom-start'
          */
@@ -4021,6 +4026,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "disabled"?: boolean;
+        /**
+          * Where to mount the dropdown listbox (`host` or `body`, sometimes called “append to body”). Use `body` inside scrollable containers (for example modals) so the list is not clipped by `overflow: hidden` ancestors. The portal is appended to the nearest `<dialog>` when present (including `pds-modal` / `showModal()`), using a composed ascent so shadow DOM and slot boundaries do not hide the dialog from discovery; otherwise it is appended to `document.body`. Keyboard focus remains on the trigger via `aria-activedescendant` so modal focus traps continue to work. Custom `empty` and `loading` slots are not supported when `body` is used; the default empty and loading content is shown instead.
+          * @default 'host'
+         */
+        "dropdownMount"?: 'host' | 'body';
         /**
           * Placement of the dropdown relative to the trigger.
           * @default 'bottom-start'

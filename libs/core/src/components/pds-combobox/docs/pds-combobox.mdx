@@ -401,6 +401,8 @@ Preselection also works with input triggers, showing the selected option's text 
 You can control the dropdown's placement, width, and height, as well as the trigger width using the following props:
 
 - `dropdownPlacement`: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end' (default: 'bottom-start')
+- `dropdownMount`: 'host' | 'body' (default: 'host') — also known as an “append to body” pattern; use `body` inside scrollable modals or other `overflow: hidden` containers so the list is not clipped. When `body` is used, the portal mounts inside the nearest `<dialog>` when present (including `pds-modal` / `showModal()`), resolving through slots and shadow roots so the list stays in the top layer; otherwise on `document.body`. Keyboard focus stays on the trigger (via `aria-activedescendant`) so modal focus traps keep working.
+- Listbox `id` and `aria-controls` use `${componentId}-listbox` (for example `my-combobox-listbox`), not a shared `pds-combobox-listbox` id. Option row `id` values use `${componentId}-option-${index}` for unique `aria-activedescendant` when multiple comboboxes exist on the page.
 - `dropdownWidth`: Any valid CSS width value (default: '236px')
 - `triggerWidth`: Any valid CSS width value for both input and button triggers (default: 'fit-content')
 - `max-height`: Any valid CSS height value (e.g., '200px', '10rem') to limit dropdown height with scrolling
