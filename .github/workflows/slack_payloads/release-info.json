@@ -1,4 +1,5 @@
 {
+	"channel": "${{ env.SLACK_CHANNEL }}",
 	"blocks": [
 		{
 			"type": "header",
