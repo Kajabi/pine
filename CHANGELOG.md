@@ -1,3 +1,13 @@
+## 3.26.1 (2026-05-18)
+
+### Bug Fixes 🐛
+
+- **pds-alert:** center-align icon and content in small variant ([#743](https://github.com/Kajabi/pine/pull/743))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 3.26.0 (2026-05-18)
 
 ### Features 🚀
