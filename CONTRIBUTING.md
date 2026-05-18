@@ -67,6 +67,17 @@ For spec and e2e testing, run:
 npm run test.all
 ```
 
+### Bundle size budgets
+
+PR CI enforces gzipped size budgets on core CDN bundles via `size-limit`. Build core, then check budgets locally:
+
+```zsh
+npx nx run @pine-ds/core:build
+npm run size
+```
+
+Use `npm run size.why` for a detailed breakdown when a budget fails.
+
 ### Submitting a Pull Request
 
 Once the desired changes have been made, add and commit the necessary files. We use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/), so please be sure that your commit messages adhere to these standards.
