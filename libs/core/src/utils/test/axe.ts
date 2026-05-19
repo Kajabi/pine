@@ -1,5 +1,8 @@
 import type { E2EPage } from '@stencil/core/testing';
 
+/** axe-core selector path; nested arrays represent iframe/shadow boundaries. */
+export type AxeTarget = (string | string[])[];
+
 /**
  * Subset of an axe-core violation surfaced for test assertions. The shape
  * mirrors `axe.AxeResults['violations'][number]` without pulling axe-core's
@@ -12,7 +15,7 @@ export interface AxeViolation {
   help: string;
   helpUrl: string;
   nodes: Array<{
-    target: string[];
+    target: AxeTarget;
     html: string;
     failureSummary?: string;
   }>;
@@ -113,6 +116,16 @@ export async function runAxe(page: E2EPage, options: RunAxeOptions = {}): Promis
 }
 
 /**
+ * Formats an axe target selector, including nested arrays for shadow DOM
+ * and iframe boundaries (axe's `UnlabelledFrameSelector` shape).
+ */
+export function formatAxeTarget(target: AxeTarget): string {
+  return target
+    .map((segment) => (Array.isArray(segment) ? segment.join(' ') : segment))
+    .join(' >> ');
+}
+
+/**
  * Formats an array of axe violations into a readable failure message for
  * use in test output. Returns an empty string when there are no
  * violations, so it can be passed directly into `expect(...).toBe('')`.
@@ -121,7 +134,7 @@ export function formatViolations(violations: AxeViolation[]): string {
   if (violations.length === 0) return '';
   return violations
     .map((v) => {
-      const targets = v.nodes.map((n) => n.target.join(' ')).join(', ');
+      const targets = v.nodes.map((n) => formatAxeTarget(n.target)).join(', ');
       return `• [${v.impact ?? 'unknown'}] ${v.id} — ${v.help}\n    ${targets}\n    ${v.helpUrl}`;
     })
     .join('\n\n');
