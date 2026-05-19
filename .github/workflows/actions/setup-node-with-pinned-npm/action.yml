@@ -32,5 +32,13 @@ runs:
       run: |
         NPM_VERSION=$(node -p "require('./package.json').packageManager.replace('npm@', '')")
         echo "Pinning npm to ${NPM_VERSION}"
-        npm install -g "npm@${NPM_VERSION}"
+        for attempt in 1 2 3; do
+          npm install -g "npm@${NPM_VERSION}" && break
+          if [ "$attempt" -eq 3 ]; then
+            echo "npm install -g failed after 3 attempts"
+            exit 1
+          fi
+          echo "npm install -g failed (attempt ${attempt}), retrying in $((attempt * 5))s..."
+          sleep $((attempt * 5))
+        done
         npm --version

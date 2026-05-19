@@ -19,8 +19,7 @@
     "start": "npx nx run-many -t start",
     "stencil.generate": "npx nx run @pine-ds/core:generate",
     "test.all": "npx nx run-many --target=test",
-    "size": "size-limit",
-    "size.why": "size-limit --why"
+    "size": "size-limit"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",

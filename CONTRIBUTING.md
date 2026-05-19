@@ -76,7 +76,7 @@ npx nx run @pine-ds/core:build
 npm run size
 ```
 
-Use `npm run size.why` for a detailed breakdown when a budget fails.
+When a budget fails, the CLI prints each tracked file with its gzipped size and limit.
 
 ### Submitting a Pull Request
 
