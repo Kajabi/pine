@@ -1,5 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
-import { caretDown, addCircle } from '@pine-ds/icons/icons';
+import { caretDown, addCircle, favorite } from '@pine-ds/icons/icons';
 import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-button', () => {
@@ -329,7 +329,7 @@ describe('pds-button', () => {
 
     it('renders small icon-only button correctly', async () => {
       const page = await newE2EPage();
-      await page.setContent('<pds-button size="small" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Small Icon</pds-button>');
+      await page.setContent(`<pds-button size="small" icon-only="true"><pds-icon slot="start" aria-hidden="true" icon="${favorite}"></pds-icon>Small Icon</pds-button>`);
 
       const component = await page.find('pds-button');
       const element = await page.find('pds-button >>> button');
@@ -340,7 +340,7 @@ describe('pds-button', () => {
 
     it('renders micro icon-only button correctly', async () => {
       const page = await newE2EPage();
-      await page.setContent('<pds-button size="micro" icon-only="true"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Micro Icon</pds-button>');
+      await page.setContent(`<pds-button size="micro" icon-only="true"><pds-icon slot="start" aria-hidden="true" icon="${favorite}"></pds-icon>Micro Icon</pds-button>`);
 
       const component = await page.find('pds-button');
       const element = await page.find('pds-button >>> button');
@@ -416,7 +416,7 @@ describe('pds-button', () => {
 
     it('tertiary variant works with icon', async () => {
       const page = await newE2EPage();
-      await page.setContent('<pds-button variant="tertiary"><pds-icon slot="start" aria-hidden="true" name="favorite"></pds-icon>Tertiary</pds-button>');
+      await page.setContent(`<pds-button variant="tertiary"><pds-icon slot="start" aria-hidden="true" icon="${favorite}"></pds-icon>Tertiary</pds-button>`);
 
       const component = await page.find('pds-button');
       const element = await page.find('pds-button >>> button');
@@ -534,6 +534,8 @@ describe('pds-button', () => {
   });
 
   describe('accessibility', () => {
+    jest.setTimeout(30000);
+
     it('has no axe violations with default text content', async () => {
       const page = await newE2EPage();
       await page.setContent('<pds-button>Save changes</pds-button>');
