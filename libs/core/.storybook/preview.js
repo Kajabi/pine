@@ -138,9 +138,10 @@ const withTheme = (StoryFn, context) => {
   return StoryFn();
 };
 
-// Direction decorator that applies `dir` attribute for RTL/LTR previews.
-// Pair this with the audit checklist at
-// Guides/RTL and localization when verifying component behavior.
+// Direction decorator that applies `dir` on the preview iframe only.
+// Unlike data-theme, `dir` is interpreted by the browser and must not be set on
+// window.parent (that would flip Storybook manager/docs chrome).
+// Pair with the audit checklist at Guides/RTL and localization.
 const withDirection = (StoryFn, context) => {
   const direction = context.globals.direction || 'ltr';
 
@@ -150,13 +151,6 @@ const withDirection = (StoryFn, context) => {
   useEffect(() => {
     document.documentElement.setAttribute('dir', direction);
     document.body.setAttribute('dir', direction);
-
-    try {
-      window.parent.document.documentElement.setAttribute('dir', direction);
-      window.parent.document.body.setAttribute('dir', direction);
-    } catch (e) {
-      // Cross-origin access may fail, that's ok
-    }
   }, [direction]);
 
   return StoryFn();
