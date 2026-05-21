@@ -5,6 +5,9 @@ describe('pds-modal', () => {
     const page = await newE2EPage();
     await page.setContent('<pds-modal></pds-modal>');
 
+    // Wait for initial render to complete
+    await page.waitForChanges();
+
     const element = await page.find('pds-modal');
     expect(element).toHaveClass('hydrated');
   });

@@ -5,6 +5,9 @@ describe('pds-progress', () => {
     const page = await newE2EPage();
     await page.setContent('<pds-progress></pds-progress>');
 
+    // Wait for initial render to complete
+    await page.waitForChanges();
+
     const element = await page.find('pds-progress');
     expect(element).toHaveClass('hydrated');
   });

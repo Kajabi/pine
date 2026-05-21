@@ -41,8 +41,11 @@ describe('pds-input', () => {
     await page.waitForChanges();
 
     const inputSpy = await page.spyOnEvent('pdsInput');
-    await page.keyboard.type('Hello');
+
+    // Use direct input typing instead of keyboard events (fixes timeout issues)
+    await input.type('Hello');
     await page.waitForChanges();
+
     value = await input.getProperty('value');
     expect(inputSpy).toHaveReceivedEvent();
   });

@@ -5,14 +5,19 @@ describe('pds-checkbox', () => {
     const page = await newE2EPage();
     await page.setContent('<pds-checkbox component-id="default" label="Label text" />');
 
+    // Wait for initial render to complete
+    await page.waitForChanges();
+
     const component = await page.find('pds-checkbox');
     expect(component).toHaveClass('hydrated');
 
     const checkbox = await page.find('pds-checkbox >>> input');
     await checkbox.click();
+    await page.waitForChanges();
     expect(await checkbox.getProperty('checked')).toBeTruthy();
 
     await checkbox.click();
+    await page.waitForChanges();
     expect(await checkbox.getProperty('checked')).toBeFalsy();
   });
 
@@ -22,7 +27,7 @@ describe('pds-checkbox', () => {
     const component = await page.find('pds-checkbox');
     expect(component).toHaveClass('hydrated');
 
-    let checkbox = await page.find('pds-checkbox >>> input');
+    const checkbox = await page.find('pds-checkbox >>> input');
     component.setProperty('disabled', false);
     await page.waitForChanges();
     expect(await checkbox.getProperty('disabled')).toBe(false);
