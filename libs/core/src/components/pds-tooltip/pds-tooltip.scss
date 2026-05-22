@@ -44,7 +44,7 @@
     .pds-tooltip--right & {
       border-inline-end-color: var(--pine-color-primary);
       border-width: var(--tooltip-border-width-arrow-left);
-      left: calc(var(--tooltip-sizing-arrow) * -1);
+      inset-inline-start: calc(var(--tooltip-sizing-arrow) * -1);
       top: 50%;
       transform: translateY(-50%);
     }
@@ -53,14 +53,14 @@
       border-inline-end-color: var(--pine-color-primary);
       border-width: var(--tooltip-border-width-arrow-left);
       bottom: var(--tooltip-sizing-arrow-offset);
-      left: calc(var(--tooltip-sizing-arrow) * -1);
+      inset-inline-start: calc(var(--tooltip-sizing-arrow) * -1);
       top: initial;
     }
 
     .pds-tooltip--right-start & {
       border-inline-end-color: var(--pine-color-primary);
       border-width: var(--tooltip-border-width-arrow-left);
-      left: calc(var(--tooltip-sizing-arrow) * -1);
+      inset-inline-start: calc(var(--tooltip-sizing-arrow) * -1);
       top: var(--tooltip-sizing-arrow-offset);
     }
 
@@ -68,7 +68,7 @@
       border-block-start-color: var(--pine-color-primary);
       border-width: var(--tooltip-border-width-arrow-down);
       bottom: calc(var(--tooltip-sizing-arrow) * -1);
-      left: 50%;
+      inset-inline-start: 50%;
       top: initial;
       transform: translateX(-50%);
     }
@@ -77,7 +77,7 @@
       border-block-start-color: var(--pine-color-primary);
       border-width: var(--tooltip-border-width-arrow-down);
       bottom: calc(var(--tooltip-sizing-arrow) * -1);
-      left: var(--tooltip-sizing-arrow-offset);
+      inset-inline-start: var(--tooltip-sizing-arrow-offset);
       top: initial;
     }
 
@@ -85,16 +85,16 @@
       border-block-start-color: var(--pine-color-primary);
       border-width: var(--tooltip-border-width-arrow-down);
       bottom: calc(var(--tooltip-sizing-arrow) * -1);
-      left: initial;
-      right: var(--tooltip-sizing-arrow-offset);
+      inset-inline-end: var(--tooltip-sizing-arrow-offset);
+      inset-inline-start: initial;
       top: initial;
     }
 
     .pds-tooltip--left & {
       border-inline-start-color: var(--pine-color-primary);
       border-width: var(--tooltip-border-width-arrow-right);
-      left: initial;
-      right: calc(var(--tooltip-sizing-arrow) * -1);
+      inset-inline-end: calc(var(--tooltip-sizing-arrow) * -1);
+      inset-inline-start: initial;
       top: 50%;
       transform: translateY(-50%);
     }
@@ -103,23 +103,23 @@
       border-inline-start-color: var(--pine-color-primary);
       border-width: var(--tooltip-border-width-arrow-right);
       bottom: var(--tooltip-sizing-arrow-offset);
-      left: initial;
-      right: calc(var(--tooltip-sizing-arrow) * -1);
+      inset-inline-end: calc(var(--tooltip-sizing-arrow) * -1);
+      inset-inline-start: initial;
       top: initial;
     }
 
     .pds-tooltip--left-start & {
       border-inline-start-color: var(--pine-color-primary);
       border-width: var(--tooltip-border-width-arrow-right);
-      left: initial;
-      right: calc(var(--tooltip-sizing-arrow) * -1);
+      inset-inline-end: calc(var(--tooltip-sizing-arrow) * -1);
+      inset-inline-start: initial;
       top: var(--tooltip-sizing-arrow-offset);
     }
 
     .pds-tooltip--bottom & {
       border-block-end-color: var(--pine-color-primary);
       border-width: var(--tooltip-border-width-arrow-up);
-      left: 50%;
+      inset-inline-start: 50%;
       top: calc(var(--tooltip-sizing-arrow) * -1);
       transform: translateX(-50%);
     }
@@ -127,15 +127,15 @@
     .pds-tooltip--bottom-end & {
       border-block-end-color: var(--pine-color-primary);
       border-width: var(--tooltip-border-width-arrow-up);
-      left: initial;
-      right: var(--tooltip-sizing-arrow-offset);
+      inset-inline-end: var(--tooltip-sizing-arrow-offset);
+      inset-inline-start: initial;
       top: calc(var(--tooltip-sizing-arrow) * -1);
     }
 
     .pds-tooltip--bottom-start & {
       border-block-end-color: var(--pine-color-primary);
       border-width: var(--tooltip-border-width-arrow-up);
-      left: var(--tooltip-sizing-arrow-offset);
+      inset-inline-start: var(--tooltip-sizing-arrow-offset);
       top: calc(var(--tooltip-sizing-arrow) * -1);
     }
 

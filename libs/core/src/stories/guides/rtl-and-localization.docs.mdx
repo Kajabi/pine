@@ -4,49 +4,16 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 # RTL and localization
 
-Pine targets **English-first** Kajabi product surfaces today. Right-to-left (RTL) locales and full internationalization (i18n) are **directional goals**: components should not block RTL or translated copy, but **parity is not guaranteed** until each component is explicitly validated.
+Pine targets **English-first** Kajabi product surfaces today. Components are built to work in RTL when the app sets `dir="rtl"` and passes translated copy from the product i18n layer. Layout styles in Pine SCSS use **CSS logical properties** (`margin-inline`, `padding-inline`, `inset-inline`, `border-*-start/end`, and similar) so mirroring does not require per-locale stylesheets.
 
 ## What teams should assume today
 
-1. **Document text direction** at the app shell (`dir="rtl"` / `lang`) when you ship RTL; Pine does not yet ship a single global RTL QA matrix.
-2. **Prefer tokens and logical intent** when writing new styles in consuming apps (for example spacing and alignment that should mirror under RTL). Pine SCSS continues to align with shared Kajabi token practices; report gaps in Slack (`#ds-support`).
+1. **Document text direction** at the app shell (`dir="rtl"` / `lang`) when you ship RTL.
+2. **Prefer tokens and logical properties** in consuming apps for spacing and alignment that should mirror under RTL. Report gaps in Slack (`#ds-support`).
 3. **Strings live in the product**, not inside Pine primitives—pass translated `label`, `aria-label`, and slot content from your app’s i18n layer.
 
-## Component backlog (audit)
+## Verifying in Storybook
 
-Use this list as a **working checklist** for RTL and locale-sensitive behavior (mirroring, collision placement, iconography, truncation). Check items off in the issue or PR that proves behavior (visual + keyboard + screen reader where applicable).
+Use the **Direction** toolbar (LTR / RTL) when available ([#739](https://github.com/Kajabi/pine/pull/739)) to spot-check components: mirroring, overlay placement, iconography, truncation, keyboard, and screen reader behavior where applicable.
 
-- [ ] `pds-accordion`
-- [ ] `pds-alert`
-- [ ] `pds-avatar`
-- [ ] `pds-box` / `pds-row` / `pds-container`
-- [ ] `pds-button`
-- [ ] `pds-checkbox`
-- [ ] `pds-chip`
-- [ ] `pds-combobox`
-- [ ] `pds-copytext`
-- [ ] `pds-divider`
-- [ ] `pds-dropdown-menu`
-- [ ] `pds-filters` / `pds-filter`
-- [ ] `pds-icon`
-- [ ] `pds-image`
-- [ ] `pds-input`
-- [ ] `pds-link`
-- [ ] `pds-loader`
-- [ ] `pds-modal` (+ header / footer / content)
-- [ ] `pds-multiselect`
-- [ ] `pds-popover`
-- [ ] `pds-progress`
-- [ ] `pds-property`
-- [ ] `pds-radio` / `pds-radio-group`
-- [ ] `pds-select`
-- [ ] `pds-sortable`
-- [ ] `pds-switch`
-- [ ] `pds-table` (+ row / cell / head)
-- [ ] `pds-tabs`
-- [ ] `pds-text`
-- [ ] `pds-textarea`
-- [ ] `pds-toast`
-- [ ] `pds-tooltip`
-
-When an audit completes for a component, prefer capturing **fixed behavior** in Stencil spec/e2e tests and a short Storybook example (for example an RTL story wrapper) so regressions are caught in CI.
+When you change component layout or positioning, add or update Stencil tests and a short RTL Storybook example where it helps catch regressions in CI.

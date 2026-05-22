@@ -138,11 +138,35 @@ export class PdsTable {
   }
 
   /**
+   * Distance scrolled from the inline-start edge (LTR: left, RTL: right).
+   */
+  private getScrollOffsetFromStart(container: HTMLElement): number {
+    const isRtl = getComputedStyle(container).direction === 'rtl';
+    const { scrollLeft, scrollWidth, clientWidth } = container;
+    const maxScroll = scrollWidth - clientWidth;
+
+    if (maxScroll <= 0) {
+      return 0;
+    }
+
+    if (!isRtl) {
+      return scrollLeft;
+    }
+
+    // RTL: WebKit/Blink use 0 at inline-start then negative values as you scroll
+    if (scrollLeft <= 0) {
+      return -scrollLeft;
+    }
+
+    return maxScroll - scrollLeft;
+  }
+
+  /**
    * Sets up responsive scrolling behavior for the table.
    *
    * This method creates a horizontal scrolling system where:
    * - The table content can scroll horizontally when it exceeds the container width
-   * - Scroll shadows appear at the left/right edges to indicate scrollable content
+   * - Scroll shadows appear at the inline-start/end edges to indicate scrollable content
    * - Fixed columns remain sticky during horizontal scrolling
    * - Shadows respect border-radius and don't appear when there's nothing to scroll
    *
@@ -165,20 +189,21 @@ export class PdsTable {
 
     /**
      * Updates the visibility of scroll shadows based on current scroll position.
-     * Left shadow: Shows when scrolled away from start (hidden if fixedColumn is enabled)
-     * Right shadow: Shows when there's content to scroll and not at the end
+     * Inline-start shadow: shows when scrolled away from start (hidden if fixedColumn is enabled)
+     * Inline-end shadow: shows when there is content to scroll and not at the end
      */
     this._responsiveHandleScroll = () => {
       if (!this.scrollContainer) return;
 
-      const scrollLeft = this.scrollContainer.scrollLeft;
-      const maxScrollLeft = this.scrollContainer.scrollWidth - this.scrollContainer.clientWidth;
+      const { scrollWidth, clientWidth } = this.scrollContainer;
+      const maxScroll = scrollWidth - clientWidth;
+      const scrollOffset = this.getScrollOffsetFromStart(this.scrollContainer);
 
-      // Show left shadow when scrolled away from start, but not if there's a fixed column
-      leftShadow.style.opacity = (scrollLeft > 0 && !this.fixedColumn) ? '1' : '0';
+      // Inline-start shadow when scrolled away from start, but not if there's a fixed column
+      leftShadow.style.opacity = (scrollOffset > 0 && !this.fixedColumn) ? '1' : '0';
 
-      // Show right shadow only if there's content to scroll AND not at end
-      rightShadow.style.opacity = (maxScrollLeft > 0 && scrollLeft < maxScrollLeft - 1) ? '1' : '0';
+      // Inline-end shadow when there is content to scroll and not at the end
+      rightShadow.style.opacity = (maxScroll > 0 && scrollOffset < maxScroll - 1) ? '1' : '0';
     };
 
     // Add scroll event listener to container element

@@ -48,14 +48,14 @@
     border-end-start-radius: var(--pds-input-border-radius);
     border-inline-end: var(--pine-border-width-none);
     border-start-start-radius: var(--pds-input-border-radius);
-    left: var(--pds-input-padding-x);
+    inset-inline-start: var(--pds-input-padding-x);
   }
 
   &::part(suffix) {
     border-end-end-radius: var(--pds-input-border-radius);
     border-inline-start: var(--pine-border-width-none);
     border-start-end-radius: var(--pds-input-border-radius);
-    right: var(--pds-input-padding-x);
+    inset-inline-end: var(--pds-input-padding-x);
   }
 
   &::part(prepend),
