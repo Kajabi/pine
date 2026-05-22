@@ -1,6 +1,7 @@
 import { Component, Element, Host, Prop, h, Event, EventEmitter, State, Method } from '@stencil/core';
 
 import { downSmall, upSmall } from '@pine-ds/icons/icons';
+import { isScrolledFromInlineStart } from '../../../utils/scroll';
 
 @Component({
   tag: 'pds-table-head-cell',
@@ -188,7 +189,7 @@ export class PdsTableHeadCell {
     }
 
     try {
-      this.tableScrolling = this.scrollContainer.scrollLeft > 0;
+      this.tableScrolling = isScrolledFromInlineStart(this.scrollContainer);
     } catch (error) {
       console.warn('Scroll handler error:', error);
     }

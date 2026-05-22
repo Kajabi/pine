@@ -1,4 +1,5 @@
 import { Component, Element, Host, Prop, State, Watch, h } from '@stencil/core';
+import { isScrolledFromInlineStart } from '../../../utils/scroll';
 import { setupTruncationTooltip } from '../../../utils/truncation-tooltip';
 
 @Component({
@@ -152,7 +153,7 @@ export class PdsTableCell {
     }
 
     try {
-      this.tableScrolling = this.scrollContainer.scrollLeft > 0;
+      this.tableScrolling = isScrolledFromInlineStart(this.scrollContainer);
     } catch (error) {
       console.warn('Scroll handler error:', error);
     }
