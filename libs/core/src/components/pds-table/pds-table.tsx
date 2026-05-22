@@ -1,4 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop, State, Listen } from '@stencil/core';
+import { getScrollOffsetFromStart } from '../../utils/scroll';
 
 @Component({
   tag: 'pds-table',
@@ -138,30 +139,6 @@ export class PdsTable {
   }
 
   /**
-   * Distance scrolled from the inline-start edge (LTR: left, RTL: right).
-   */
-  private getScrollOffsetFromStart(container: HTMLElement): number {
-    const isRtl = getComputedStyle(container).direction === 'rtl';
-    const { scrollLeft, scrollWidth, clientWidth } = container;
-    const maxScroll = scrollWidth - clientWidth;
-
-    if (maxScroll <= 0) {
-      return 0;
-    }
-
-    if (!isRtl) {
-      return scrollLeft;
-    }
-
-    // RTL: WebKit/Blink use 0 at inline-start then negative values as you scroll
-    if (scrollLeft <= 0) {
-      return -scrollLeft;
-    }
-
-    return maxScroll - scrollLeft;
-  }
-
-  /**
    * Sets up responsive scrolling behavior for the table.
    *
    * This method creates a horizontal scrolling system where:
@@ -197,7 +174,7 @@ export class PdsTable {
 
       const { scrollWidth, clientWidth } = this.scrollContainer;
       const maxScroll = scrollWidth - clientWidth;
-      const scrollOffset = this.getScrollOffsetFromStart(this.scrollContainer);
+      const scrollOffset = getScrollOffsetFromStart(this.scrollContainer);
 
       // Inline-start shadow when scrolled away from start, but not if there's a fixed column
       leftShadow.style.opacity = (scrollOffset > 0 && !this.fixedColumn) ? '1' : '0';
