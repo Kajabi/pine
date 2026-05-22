@@ -141,7 +141,7 @@ const withTheme = (StoryFn, context) => {
 // Direction decorator that applies `dir` on the preview iframe only.
 // Unlike data-theme, `dir` is interpreted by the browser and must not be set on
 // window.parent (that would flip Storybook manager/docs chrome).
-// Pair with the audit checklist at Guides/RTL and localization.
+// See Guides/RTL and localization for usage.
 const withDirection = (StoryFn, context) => {
   const direction = context.globals.direction || 'ltr';
 
