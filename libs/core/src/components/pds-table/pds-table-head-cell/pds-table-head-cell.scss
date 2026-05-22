@@ -24,7 +24,7 @@
 
 :host(.is-fixed) {
   background: var(--pine-color-background-container);
-  left: var(--pine-dimension-none);
+  inset-inline-start: var(--pine-dimension-none);
   position: sticky;
   z-index: var(--pine-z-index-raised);
 }
