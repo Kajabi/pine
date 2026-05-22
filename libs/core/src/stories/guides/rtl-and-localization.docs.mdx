@@ -12,8 +12,6 @@ Pine targets **English-first** Kajabi product surfaces today. Components are bui
 2. **Prefer tokens and logical properties** in consuming apps for spacing and alignment that should mirror under RTL. Report gaps in Slack (`#ds-support`).
 3. **Strings live in the product**, not inside Pine primitives—pass translated `label`, `aria-label`, and slot content from your app’s i18n layer.
 
-## Verifying in Storybook
+## Storybook tooling
 
-Use the **Direction** toolbar (LTR / RTL) when available ([#739](https://github.com/Kajabi/pine/pull/739)) to spot-check components: mirroring, overlay placement, iconography, truncation, keyboard, and screen reader behavior where applicable.
-
-When you change component layout or positioning, add or update Stencil tests and a short RTL Storybook example where it helps catch regressions in CI.
+**Pending:** The **Direction** toolbar (LTR / RTL) for spot-checking components in Storybook ships in [#739](https://github.com/Kajabi/pine/pull/739). Audit steps and usage notes will live in this guide once that PR merges.
