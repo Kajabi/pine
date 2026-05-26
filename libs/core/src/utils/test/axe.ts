@@ -102,16 +102,19 @@ export async function runAxe(page: E2EPage, options: RunAxeOptions = {}): Promis
     rules: { ...defaultRules, ...(options.rules ?? {}) },
   };
 
-  const violations = await page.evaluate(async (opts) => {
-    // axe is injected on the page via addScriptTag above.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const axe = (window as any).axe;
-    if (!axe) {
-      throw new Error('axe-core failed to load on the page.');
-    }
-    const results = await axe.run(document, opts);
-    return results.violations;
-  }, runOptions);
+  // Use a string function body so Istanbul coverage instrumentation is not
+  // serialized into the browser context (cov_* globals are undefined there).
+  const violations = await page.evaluate(
+    `async (opts) => {
+      const axe = window.axe;
+      if (!axe) {
+        throw new Error('axe-core failed to load on the page.');
+      }
+      const results = await axe.run(document, opts);
+      return results.violations;
+    }`,
+    runOptions,
+  );
 
   return violations as AxeViolation[];
 }
