@@ -102,19 +102,20 @@ export async function runAxe(page: E2EPage, options: RunAxeOptions = {}): Promis
     rules: { ...defaultRules, ...(options.rules ?? {}) },
   };
 
-  // Use a string function body so Istanbul coverage instrumentation is not
-  // serialized into the browser context (cov_* globals are undefined there).
-  const violations = await page.evaluate(
-    `async (opts) => {
+  // Embed options in a string-evaluated IIFE so Istanbul does not instrument
+  // the browser-side function (cov_* globals are undefined in Puppeteer).
+  const optsJson = JSON.stringify(runOptions);
+  const violations = await page.evaluate(`
+    (async () => {
+      const opts = ${optsJson};
       const axe = window.axe;
       if (!axe) {
         throw new Error('axe-core failed to load on the page.');
       }
       const results = await axe.run(document, opts);
       return results.violations;
-    }`,
-    runOptions,
-  );
+    })()
+  `);
 
   return violations as AxeViolation[];
 }
