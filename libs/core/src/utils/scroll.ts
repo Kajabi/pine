@@ -17,12 +17,17 @@ export function getRtlScrollType(): RtlScrollType {
   }
 
   const probe = document.createElement('div');
-  probe.style.width = '4px';
-  probe.style.height = '1px';
+  probe.style.width = '100px';
+  probe.style.height = '100px';
   probe.style.position = 'absolute';
   probe.style.top = '-1000px';
   probe.style.overflow = 'scroll';
   probe.style.direction = 'rtl';
+
+  const inner = document.createElement('div');
+  inner.style.width = '200px';
+  inner.style.height = '100px';
+  probe.appendChild(inner);
 
   document.body.appendChild(probe);
 
@@ -43,6 +48,26 @@ export function resetRtlScrollTypeCache(): void {
 }
 
 /**
+ * RTL scroll offset from inline-start for a known browser scrollLeft model.
+ * @see https://github.com/othree/jquery.rtl-scroll-type#3-types-of-scrollleft-scrollwidth--100
+ */
+export function getRtlScrollOffsetFromStart(
+  scrollLeft: number,
+  maxScroll: number,
+  rtlType: RtlScrollType,
+): number {
+  switch (rtlType) {
+    case 'negative':
+      return Math.max(0, -scrollLeft);
+    case 'reverse':
+      return Math.max(0, scrollLeft);
+    case 'default':
+    default:
+      return Math.max(0, maxScroll - scrollLeft);
+  }
+}
+
+/**
  * Distance scrolled from the inline-start edge (LTR: left, RTL: right).
  */
 export function getScrollOffsetFromStart(container: HTMLElement): number {
@@ -58,17 +83,7 @@ export function getScrollOffsetFromStart(container: HTMLElement): number {
     return scrollLeft;
   }
 
-  const rtlType = getRtlScrollType();
-
-  switch (rtlType) {
-    case 'negative':
-      return Math.max(0, -scrollLeft);
-    case 'reverse':
-      return Math.max(0, maxScroll - scrollLeft);
-    case 'default':
-    default:
-      return scrollLeft;
-  }
+  return getRtlScrollOffsetFromStart(scrollLeft, maxScroll, getRtlScrollType());
 }
 
 /** True when the container is scrolled away from its inline-start edge. */
