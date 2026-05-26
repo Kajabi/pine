@@ -13,8 +13,12 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    # Fork PRs cannot use repository secrets; skip to avoid failing checks.
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    # Fork PRs cannot use repository secrets; skip when the token is not configured yet.
+    if: >-
+      ${{
+        secrets.CHROMATIC_PROJECT_TOKEN != '' &&
+        (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+      }}
     permissions:
       contents: read
       pull-requests: write
