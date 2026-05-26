@@ -1,3 +1,4 @@
+/* istanbul ignore file -- page.evaluate runs in the browser; coverage globals are unavailable there */
 import type { E2EPage } from '@stencil/core/testing';
 
 /** axe-core selector path; nested arrays represent iframe/shadow boundaries. */
