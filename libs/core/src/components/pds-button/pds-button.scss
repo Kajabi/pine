@@ -39,7 +39,6 @@
   pointer-events: none;
 }
 
-:host([disabled]),
 :host([aria-disabled="true"]) {
   pointer-events: none;
 }

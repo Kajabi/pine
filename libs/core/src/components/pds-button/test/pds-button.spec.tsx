@@ -394,6 +394,23 @@ describe('pds-button', () => {
     expect(clickSpy).not.toHaveBeenCalled();
   });
 
+  it('allows click when disabled="false"', async () => {
+    const page = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button disabled="false"></pds-button>`,
+    });
+
+    expect(page.root?.getAttribute('aria-disabled')).toBe(null);
+
+    const clickSpy = jest.fn();
+    page.root?.addEventListener('pdsClick', clickSpy);
+
+    page.root?.click();
+    await page.waitForChanges();
+
+    expect(clickSpy).toHaveBeenCalled();
+  });
+
   it('renders full width button', async () => {
     const {root} = await newSpecPage({
       components: [PdsButton],
