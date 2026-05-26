@@ -378,6 +378,22 @@ describe('pds-button', () => {
     expect(clickSpy).not.toHaveBeenCalled();
   });
 
+  it('prevents click when disabled', async () => {
+    const page = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button disabled></pds-button>`,
+    });
+
+    const button = page.root;
+    const clickSpy = jest.fn();
+    button?.addEventListener('pdsClick', clickSpy);
+
+    button?.click();
+    await page.waitForChanges();
+
+    expect(clickSpy).not.toHaveBeenCalled();
+  });
+
   it('renders full width button', async () => {
     const {root} = await newSpecPage({
       components: [PdsButton],
