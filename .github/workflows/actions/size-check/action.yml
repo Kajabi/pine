@@ -1,10 +1,10 @@
-name: 'Build Core'
-description: 'Builds the Core Design System library'
+name: 'Size Check'
+description: 'Enforces core CDN bundle size budgets via size-limit'
 
 inputs:
   node-version:
     description: 'The version of node to use'
-    default: 22
+    required: true
 
 runs:
   using: 'composite'
@@ -21,39 +21,33 @@ runs:
         node-version: ${{ inputs.node-version }}
         node-version-file: '.nvmrc'
 
-    - name: Verify NPM Cache
-      shell: bash
-      run: npm cache verify
-
     - name: Get NPM cache directory
       id: npm-cache-dir
       shell: bash
       run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
 
-    - name: Cache node_modules
+    - name: Cache npm
       uses: actions/cache@v4
-      id: cache-node-modules
       with:
         path: ${{ steps.npm-cache-dir.outputs.dir }}
-        key: ${{ runner.os }}-build-${{ github.sha }}-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ runner.os }}-npm-${{ github.sha }}-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-
-
-    - name: Set SHA
-      uses: nrwl/nx-set-shas@v4
+          ${{ runner.os }}-npm-
 
     - name: Install Dependencies
-      if: steps.cache-node-modules.outputs.cache-hit != true
       run: npm ci
       shell: bash
 
-    - name: Build Core
-      run: npx nx run @pine-ds/core:build
-      shell: bash
-
-    - name: Upload core dist for size-check
-      uses: ./.github/workflows/actions/upload-archive
+    - name: Download core dist from build-core
+      uses: actions/download-artifact@v4
       with:
         name: pine-core-dist-${{ inputs.node-version }}-${{ github.sha }}
-        output: core-dist.zip
-        paths: libs/core/dist
+        path: /tmp/pine-core-dist
+
+    - name: Extract core dist
+      run: unzip -q -o /tmp/pine-core-dist/core-dist.zip -d .
+      shell: bash
+
+    - name: Run size-limit
+      run: npx size-limit
+      shell: bash

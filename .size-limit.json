@@ -1,0 +1,50 @@
+[
+  {
+    "name": "CDN loader (pine-core.esm.js, gzipped)",
+    "path": "libs/core/dist/pine-core/pine-core.esm.js",
+    "limit": "6 KB",
+    "gzip": true
+  },
+  {
+    "name": "CDN global CSS (pine-core.css, gzipped)",
+    "path": "libs/core/dist/pine-core/pine-core.css",
+    "limit": "6 KB",
+    "gzip": true
+  },
+  {
+    "name": "All CDN component chunks (p-*.entry.js, gzipped)",
+    "path": "libs/core/dist/pine-core/p-*.entry.js",
+    "limit": "320 KB",
+    "gzip": true
+  },
+  {
+    "name": "pds-table entry (gzipped)",
+    "path": "libs/core/dist/esm/pds-table.entry.js",
+    "limit": "5 KB",
+    "gzip": true
+  },
+  {
+    "name": "pds-modal entry (gzipped)",
+    "path": "libs/core/dist/esm/pds-modal.entry.js",
+    "limit": "5 KB",
+    "gzip": true
+  },
+  {
+    "name": "pds-combobox entry (gzipped)",
+    "path": "libs/core/dist/esm/pds-combobox.entry.js",
+    "limit": "36 KB",
+    "gzip": true
+  },
+  {
+    "name": "pds-multiselect entry (gzipped)",
+    "path": "libs/core/dist/esm/pds-multiselect.entry.js",
+    "limit": "15 KB",
+    "gzip": true
+  },
+  {
+    "name": "pds-filters entry (gzipped)",
+    "path": "libs/core/dist/esm/pds-filters.entry.js",
+    "limit": "2 KB",
+    "gzip": true
+  }
+]
