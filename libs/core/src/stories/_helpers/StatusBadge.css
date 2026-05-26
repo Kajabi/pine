@@ -37,3 +37,7 @@
 .pine-status-badge[data-status='deprecated'] {
   color: var(--pine-color-text-danger);
 }
+
+.pine-status-badge[data-status='unknown'] {
+  color: var(--pine-color-text-warning);
+}

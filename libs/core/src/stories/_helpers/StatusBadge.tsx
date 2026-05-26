@@ -5,6 +5,9 @@ import './StatusBadge.css';
 
 export type ComponentStatus = 'stable' | 'beta' | 'deprecated';
 
+/** Display-only when manifest lookup fails or status is invalid. */
+type ResolvedStatus = ComponentStatus | 'unknown';
+
 export interface StatusBadgeProps {
   /**
    * Component tag (for example `pds-button`). When provided the badge
@@ -14,9 +17,9 @@ export interface StatusBadgeProps {
   component?: string;
 
   /**
-   * Lifecycle label override. Only used when `component` is omitted, or
-   * to force a status that differs from the central table (rare —
-   * prefer updating the JSON manifest).
+   * Lifecycle label override. Takes priority over the JSON manifest when
+   * both are set — use to force a status that differs from the central
+   * table (rare; prefer updating the JSON manifest).
    */
   status?: ComponentStatus;
 
@@ -29,13 +32,65 @@ interface ComponentEntry {
   note?: string;
 }
 
-const STATUS_LABELS: Record<ComponentStatus, string> = {
+const VALID_STATUSES: readonly ComponentStatus[] = ['stable', 'beta', 'deprecated'];
+
+const STATUS_LABELS: Record<ResolvedStatus, string> = {
   stable: 'Stable',
   beta: 'Beta',
   deprecated: 'Deprecated',
+  unknown: 'Unknown',
 };
 
 const COMPONENTS = componentStatus.components as Record<string, ComponentEntry>;
+
+function isComponentStatus(value: unknown): value is ComponentStatus {
+  return typeof value === 'string' && (VALID_STATUSES as readonly string[]).includes(value);
+}
+
+function warnDev(message: string): void {
+  if (typeof process !== 'undefined' && process.env.NODE_ENV !== 'production') {
+    // eslint-disable-next-line no-console
+    console.warn(`[StatusBadge] ${message}`);
+  }
+}
+
+function resolveStatus(
+  component: string | undefined,
+  status: ComponentStatus | undefined,
+  entry: ComponentEntry | undefined,
+): ResolvedStatus {
+  if (status !== undefined) {
+    if (!isComponentStatus(status)) {
+      warnDev(`Invalid status prop "${status}".`);
+      return 'unknown';
+    }
+    return status;
+  }
+
+  if (entry !== undefined) {
+    if (!isComponentStatus(entry.status)) {
+      warnDev(
+        `Invalid status "${String(entry.status)}" for "${component ?? 'component'}" in component-status.json.`,
+      );
+      return 'unknown';
+    }
+    return entry.status;
+  }
+
+  if (component !== undefined) {
+    warnDev(`"${component}" is not listed in component-status.json.`);
+    return 'unknown';
+  }
+
+  return 'stable';
+}
+
+function buildAriaLabel(label: string, note: string | undefined): string {
+  if (note !== undefined && note !== '') {
+    return `Component status: ${label}. ${note}`;
+  }
+  return `Component status: ${label}`;
+}
 
 /**
  * Renders the per-component lifecycle label that mirrors the central
@@ -49,16 +104,17 @@ const COMPONENTS = componentStatus.components as Record<string, ComponentEntry>;
  */
 export const StatusBadge: React.FC<StatusBadgeProps> = ({ component, status, note }) => {
   const entry = component !== undefined ? COMPONENTS[component] : undefined;
-  const resolvedStatus: ComponentStatus = entry?.status ?? status ?? 'stable';
+  const resolvedStatus = resolveStatus(component, status, entry);
   const resolvedNote = note ?? entry?.note;
   const label = STATUS_LABELS[resolvedStatus];
+  const ariaLabel = buildAriaLabel(label, resolvedNote);
 
   return (
     <div
       className="pine-status-badge"
       data-status={resolvedStatus}
       role="note"
-      aria-label={`Component status: ${label}`}
+      aria-label={ariaLabel}
     >
       <span className="pine-status-badge__dot" aria-hidden="true" />
       <span className="pine-status-badge__label">{label}</span>
@@ -68,5 +124,3 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ component, status, not
     </div>
   );
 };
-
-export default StatusBadge;
