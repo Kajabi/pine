@@ -19,8 +19,8 @@ wrappers and Figma Code Connect mappings.
 
 ## Review Process
 
-1. **Identify changes** — `git diff main...HEAD --name-only`
-2. **Read each changed file** — `git diff main...HEAD -- <file>`
+1. **Identify changes** — `git diff origin/main...HEAD --name-only`
+2. **Read each changed file** — `git diff origin/main...HEAD -- <file>`
 3. **Determine affected components** — extract `pds-<name>` from
    directory paths or `@Component({ tag })`
 4. **Check against the pine-review-code skill** — apply all relevant

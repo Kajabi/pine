@@ -25,7 +25,7 @@ You never raise BLOCKER. This is an advisory pass.
 ## Review Process
 
 1. **List new files** —
-   `git diff main...HEAD --diff-filter=A --name-only`
+   `git diff origin/main...HEAD --diff-filter=A --name-only`
 2. **Filter to conventional directories:**
    - `libs/core/src/components/pds-<name>/` — new components
    - `libs/core/src/components/pds-<parent>/pds-<sub>/` — sub-components

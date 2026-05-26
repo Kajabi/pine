@@ -40,7 +40,7 @@ story files (`stories/`), generated files (`dist/`, `readme.md`,
 ## Review Process
 
 1. **Identify new files** —
-   `git diff main...HEAD --diff-filter=A --name-only`
+   `git diff origin/main...HEAD --diff-filter=A --name-only`
 2. **Filter** to the directories above; ignore specs, stories, and
    generated files.
 3. **Extract concrete names:**
