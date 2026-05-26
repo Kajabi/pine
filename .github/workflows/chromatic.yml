@@ -24,7 +24,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Check out latest
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -48,7 +48,8 @@ jobs:
         run: npx nx run @pine-ds/core:build.storybook
 
       - name: Publish to Chromatic
-        uses: chromaui/action@v16.9.1
+        # Pin to full SHA (v16.9.1) for supply-chain security
+        uses: chromaui/action@c231f99a49d72bfcf68eca3f1ef3187f471e352b
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           workingDir: libs/core
