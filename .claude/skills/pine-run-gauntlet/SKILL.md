@@ -63,7 +63,7 @@ Classify changed files:
 - **Figma Code Connect** (`**/*.figma.ts`) →
   design-reviewer
 - **Stories** (`libs/core/src/components/**/stories/*.tsx`,
-  `**/stories/*.mdx`) → code-reviewer + design-reviewer
+  `**/stories/*.mdx`) → code-reviewer + security-reviewer + design-reviewer
 - **Spec / e2e tests only** (`*.spec.tsx`, `*.e2e.ts`) → code-reviewer
 - **Token sources** (`libs/core/src/tokens/`, `libs/styles/` shared
   tokens) → design-reviewer + existence-reviewer
