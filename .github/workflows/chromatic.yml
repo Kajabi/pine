@@ -13,40 +13,57 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    # Fork PRs cannot use repository secrets; skip when the token is not configured yet.
+    # Fork PRs cannot use repository secrets.
     if: >-
-      ${{
-        secrets.CHROMATIC_PROJECT_TOKEN != '' &&
-        (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
-      }}
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
     permissions:
       contents: read
       pull-requests: write
     steps:
+      - name: Check Chromatic token is configured
+        id: chromatic-token
+        env:
+          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+        run: |
+          if [ -n "$CHROMATIC_PROJECT_TOKEN" ]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "CHROMATIC_PROJECT_TOKEN is not configured; skipping Chromatic publish."
+          fi
+
       - name: Check out latest
+        if: steps.chromatic-token.outputs.configured == 'true'
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Set up Node.js (pinned npm)
+        if: steps.chromatic-token.outputs.configured == 'true'
         uses: ./.github/workflows/actions/setup-node-with-pinned-npm
         with:
           node-version-file: '.nvmrc'
 
       - name: Install dependencies
+        if: steps.chromatic-token.outputs.configured == 'true'
         run: npm ci
 
       - name: Build doc components
+        if: steps.chromatic-token.outputs.configured == 'true'
         run: npx nx run @pine-ds/doc-components:build
 
       - name: Build Stencil (Storybook consumes dist)
+        if: steps.chromatic-token.outputs.configured == 'true'
         run: npx nx run @pine-ds/core:build
 
       - name: Build Storybook static
+        if: steps.chromatic-token.outputs.configured == 'true'
         run: npx nx run @pine-ds/core:build.storybook
 
       - name: Publish to Chromatic
+        if: steps.chromatic-token.outputs.configured == 'true'
         # Pin to full SHA (v16.9.1) for supply-chain security
         uses: chromaui/action@c231f99a49d72bfcf68eca3f1ef3187f471e352b
         with:
@@ -59,8 +76,7 @@ jobs:
           # are unapproved. This keeps the workflow itself green so other
           # required checks can render their state independently.
           exitZeroOnChanges: true
-          # Main (and next): accept visual diffs into the baseline
-          # automatically. By the time something is on main it has been
-          # reviewed, so re-approving in Chromatic adds friction without
-          # catching anything new.
-          autoAcceptChanges: 'main|next'
+          # Main and next: accept visual diffs into the baseline automatically.
+          # By the time something is on main or next it has been reviewed, so
+          # re-approving in Chromatic adds friction without catching anything new.
+          autoAcceptChanges: '@(main|next)'
