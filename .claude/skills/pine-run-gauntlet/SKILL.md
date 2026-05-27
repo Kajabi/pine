@@ -164,6 +164,7 @@ Section headers still show per-section counts.
 
 **Reviewers:** [which reviewers ran]
 **Files Reviewed:** [list]
+**Components Affected:** [pds-<names> from changed paths, or "none (tooling/docs only)"]
 **Overall Assessment:** APPROVED | NEEDS CHANGES | BLOCKER
 
 ---
@@ -228,69 +229,94 @@ By default the gauntlet output stays in the conversation between the
 developer running it and the agent — the assumption is that's the same
 person as the PR author, so a verbal-only result is enough.
 
-**Opt in to posting** when any of the following is true:
+**Whether to post — apply in this order (first match wins):**
 
-- The gauntlet is being run against **someone else's PR** (the original
-  author needs to see the findings).
-- The user explicitly asks: "post the gauntlet findings to the PR,"
-  "leave a review on the PR," "comment on the PR with the findings,"
-  or similar.
-- The findings include at least one BLOCKER or SHOULD FIX and the PR
-  is open for review (so the post is actionable, not just informational
-  noise).
+1. User opted out ("don't post," "just tell me here") → **do not post**
+2. Findings are empty or **What's Good** only → **do not post** (label
+   is enough; applies even on someone else's PR)
+3. User explicitly asked to post ("post the findings," "leave a review
+   on the PR," etc.) → **post** (if there is at least one BLOCKER,
+   SHOULD FIX, or CONSIDER item)
+4. Gauntlet ran on **someone else's open PR** with at least one BLOCKER
+   or SHOULD FIX → **post** (author needs actionable findings)
+5. Findings include BLOCKER or SHOULD FIX on an open PR (own or other's)
+   → **post** when the PR is open for review
+6. Default (own PR pre-push, conversational run) → **do not post**
 
-**Do not post by default** when:
+**Once per PR:** Before posting, check existing PR reviews/comments for
+a body containing `Posted by \`pine-run-gauntlet\``. If one exists, **do
+not post again** unless the user explicitly asks to re-post (e.g. "post
+updated findings after the fix"). The label step still runs every time.
 
-- The gauntlet ran against the developer's own PR pre-push (they're
-  going to read the conversation output anyway).
-- All sections are empty / "What's Good" only (label is enough signal).
-- The user explicitly opted out ("don't post," "just tell me here").
+**Order of operations:** Apply the `ran-gauntlet` label first (see above).
+Only post after the label step succeeds or you have noted label failure.
 
-**Format:** post the full structured output as a single `gh pr review`
-comment so sequential numbering, severity headers, and per-finding
-file:line refs are preserved. Inline per-line comments would fragment
-the output and lose cross-finding ordering.
+**Format:** Post the **same** structured body as **Output Format** above
+(single `gh pr review` comment). Copy every `#### N.` item with
+`file:line` refs — do not summarize with `…` placeholders. Inline
+per-line comments would fragment the output and lose cross-finding
+ordering.
 
-**Command:**
+**Command** (use a temp file so markdown quotes/backticks do not break
+the shell; always pass `--repo Kajabi/pine`):
 
 ```bash
-gh pr review <PR#> --repo Kajabi/pine --comment --body "$(cat <<'EOF'
+BODY_FILE=$(mktemp)
+trap 'rm -f "$BODY_FILE"' EXIT
+cat >"$BODY_FILE" <<'EOF'
 ## Pine Gauntlet Results
 
-**Reviewers launched:** [list]
+**Reviewers:** [which reviewers ran]
 **Files Reviewed:** [list]
-**Components Affected:** [pds-<names>]
+**Components Affected:** [pds-<names>, or "none (tooling/docs only)"]
 **Overall Assessment:** APPROVED | NEEDS CHANGES | BLOCKER
 
+---
+
 ### BLOCKERS ([count])
-…
+
+#### 1. [Issue Title] (flagged by: [reviewer(s)])
+- **File:** `path/to/file:line`
+- **Issue:** [description]
+- **Fix:** [specific action]
 
 ### SHOULD FIX ([count])
-…
+
+#### 2. [Issue Title] (flagged by: [reviewer(s)])
+- **File:** `path/to/file:line`
+- **Issue:** [description]
+- **Fix:** [specific action]
 
 ### CONSIDER ([count])
-…
+
+#### 3. [Issue Title] (flagged by: [reviewer(s)])
+- **File:** `path/to/file:line`
+- **Suggestion:** [description]
 
 ### What's Good
-…
+- [Positive observations from reviewers]
 
 ---
-_Posted by \`pine-run-gauntlet\`. The \`ran-gauntlet\` label has also
-been applied. Findings ordered by severity; numbering is sequential
-across sections._
+_Posted by `pine-run-gauntlet`. Findings ordered by severity; numbering
+is sequential across sections. The `ran-gauntlet` label has been applied
+to this PR._
 EOF
-)"
+
+gh pr review <PR#> --repo Kajabi/pine --comment --body-file "$BODY_FILE"
 ```
 
-The footer line is required — it tells human reviewers the comment was
-machine-generated and signals where to look for the criteria (the
-`ran-gauntlet` label).
+If the label step failed, replace the footer sentence about the label
+with: _The `ran-gauntlet` label could not be applied (see gauntlet log)._
 
-**Permissions:** `gh pr review --comment` requires you to be a
-collaborator on the repo or to have read+pull-request-write scopes on
-your `gh auth`. If it fails with a 403 / 404, fall back to
-`gh pr comment <PR#> --body "…"` which creates a normal PR conversation
-comment instead of a formal review.
+**Permissions:** `gh pr review --comment` requires collaborator access or
+`read` + `pull-request-write` on `gh auth`. On 403 / 404, fall back to:
+
+```bash
+gh pr comment <PR#> --repo Kajabi/pine --body-file "$BODY_FILE"
+```
+
+Same `--body-file` and `--repo` — do not pass the markdown body as a
+double-quoted `--body` string.
 
 ### Present results and offer options
 
@@ -299,7 +325,9 @@ comment instead of a formal review.
 3. **Proceed to PR** — Open PR against `main` with current state
 4. **Discuss** — Talk through specific issues
 
-**Max re-run cycles:** 2 (to prevent infinite loops)
+**Max re-run cycles:** 2 (to prevent infinite loops). Re-runs do not post
+a second PR comment unless the user asks to re-post (see **Once per PR**
+above).
 
 ## Pine specifics
 
