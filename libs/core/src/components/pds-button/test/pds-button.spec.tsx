@@ -411,6 +411,24 @@ describe('pds-button', () => {
     expect(clickSpy).toHaveBeenCalled();
   });
 
+  it('prevents click when disabled link button', async () => {
+    const page = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button href="https://example.com" disabled></pds-button>`,
+    });
+
+    const anchor = page.root?.shadowRoot?.querySelector('a');
+    expect(anchor?.getAttribute('href')).toBeNull();
+
+    const clickSpy = jest.fn();
+    page.root?.addEventListener('pdsClick', clickSpy);
+
+    page.root?.click();
+    await page.waitForChanges();
+
+    expect(clickSpy).not.toHaveBeenCalled();
+  });
+
   it('renders full width button', async () => {
     const {root} = await newSpecPage({
       components: [PdsButton],

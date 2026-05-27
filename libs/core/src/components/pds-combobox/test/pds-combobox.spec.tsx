@@ -162,6 +162,7 @@ describe('pds-combobox', () => {
     const input = root?.shadowRoot?.querySelector('input');
     expect(input?.disabled).toBe(true);
     expect(input?.getAttribute('aria-disabled')).toBe('true');
+    expect(root?.getAttribute('aria-disabled')).toBe('true');
   });
 
   it('renders with button trigger', async () => {

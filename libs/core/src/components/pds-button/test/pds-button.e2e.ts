@@ -91,6 +91,24 @@ describe('pds-button', () => {
     expect(clickEvent).toHaveReceivedEventTimes(0);
   });
 
+  it('does not emit pdsClick when disabled link button', async () => {
+    const page = await newE2EPage();
+    await page.setContent(
+      '<pds-button href="https://example.com" disabled>Disabled link</pds-button>',
+    );
+
+    const component = await page.find('pds-button');
+    const anchor = await page.find('pds-button >>> a');
+    const clickEvent = await component.spyOnEvent('pdsClick');
+
+    expect(await anchor.getAttribute('href')).toBeNull();
+
+    await component.click();
+    await page.waitForChanges();
+
+    expect(clickEvent).toHaveReceivedEventTimes(0);
+  });
+
   it('renders caret-down icon when variant is disclosure', async () => {
     const page = await newE2EPage();
 
