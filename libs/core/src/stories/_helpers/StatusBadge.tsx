@@ -47,6 +47,10 @@ function isComponentStatus(value: unknown): value is ComponentStatus {
   return typeof value === 'string' && (VALID_STATUSES as readonly string[]).includes(value);
 }
 
+function isComponentEntry(value: unknown): value is ComponentEntry {
+  return value != null && typeof value === 'object';
+}
+
 function warnDev(message: string): void {
   if (typeof process !== 'undefined' && process.env.NODE_ENV !== 'production') {
     // eslint-disable-next-line no-console
@@ -67,7 +71,7 @@ function resolveStatus(
     return status;
   }
 
-  if (entry !== undefined) {
+  if (isComponentEntry(entry)) {
     if (!isComponentStatus(entry.status)) {
       warnDev(
         `Invalid status "${String(entry.status)}" for "${component ?? 'component'}" in component-status.json.`,
@@ -103,9 +107,21 @@ function buildAriaLabel(label: string, note: string | undefined): string {
  * in sync automatically.
  */
 export const StatusBadge: React.FC<StatusBadgeProps> = ({ component, status, note }) => {
-  const entry = component !== undefined ? COMPONENTS[component] : undefined;
+  const rawEntry = component !== undefined ? COMPONENTS[component] : undefined;
+  let entry: ComponentEntry | undefined;
+
+  if (rawEntry === undefined) {
+    entry = undefined;
+  } else if (isComponentEntry(rawEntry)) {
+    entry = rawEntry;
+  } else {
+    warnDev(`Invalid entry for "${component}" in component-status.json.`);
+    entry = undefined;
+  }
+
   const resolvedStatus = resolveStatus(component, status, entry);
-  const resolvedNote = note ?? entry?.note;
+  const resolvedNote =
+    note ?? (status === undefined && entry !== undefined ? entry.note : undefined);
   const label = STATUS_LABELS[resolvedStatus];
   const ariaLabel = buildAriaLabel(label, resolvedNote);
 
