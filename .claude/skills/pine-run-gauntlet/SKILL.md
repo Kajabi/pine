@@ -34,7 +34,7 @@ Stencil component library.
 | Code reviewer | `pine-code-reviewer` | Stencil decorators (`@Component`, `@Prop`, `@Event`, `@Method`), TypeScript types, JSDoc consistency across components, lifecycle methods, spec + e2e test coverage, auto-generated file hygiene | Always when `*.tsx` / `*.ts` files change |
 | Security reviewer | `pine-security-reviewer` | XSS via `innerHTML` / `dangerouslySetInnerHTML`, slot sanitization, URL-prop validation, event handler injection, secret leakage | Always when component code or stories change |
 | Design reviewer | `pine-design-reviewer` | Token discipline (`*.tokens.scss` patterns, `:host` CSS custom properties), `:host-context([data-theme=dark])` dark-mode support, accessibility (keyboard, ARIA, focus, semantic HTML), Figma Code Connect alignment | Always when `*.scss`, `*.tokens.scss`, `*.figma.ts`, or any rendered markup changes |
-| Existence reviewer | `pine-existence-reviewer` | Duplication: new component overlapping an existing one, new prop overlapping a sibling component's prop, new token aliasing an existing one | Only if the diff introduces new files under `libs/core/src/components/` or `libs/core/src/tokens/` |
+| Existence reviewer | `pine-existence-reviewer` | Duplication: new component overlapping an existing one, new prop overlapping a sibling component's prop, new token aliasing an existing one | Only if the diff introduces new files under `libs/core/src/components/` (including `*.tokens.scss`), `libs/core/src/global/`, or bumps `@kajabi-ui/styles` |
 
 Accessibility lives inside the design reviewer (matching the kp pattern)
 rather than as a separate agent. Pine components are leaf-level UI, so a11y
@@ -65,24 +65,30 @@ Classify changed files:
 - **Stories** (`libs/core/src/components/**/stories/*.tsx`,
   `**/stories/*.mdx`) → code-reviewer + security-reviewer + design-reviewer
 - **Spec / e2e tests only** (`*.spec.tsx`, `*.e2e.ts`) → code-reviewer
-- **Token sources** (`libs/core/src/tokens/`, `libs/styles/` shared
-  tokens) → design-reviewer + existence-reviewer
+- **Token sources** (`libs/core/src/global/styles/`, component
+  `*.tokens.scss`, `package.json` / lockfile changes to
+  `@kajabi-ui/styles`) → design-reviewer + existence-reviewer
 - **React wrapper sources** (`libs/react/src/`) → code-reviewer
   (auto-generated wrappers are out of scope — see below)
-- **Documentation only** (`*.md`, `docs/`) → skip the gauntlet,
-  manual review
-- **Auto-generated files** (component `readme.md`,
-  `libs/core/src/components.d.ts`, `libs/core/dist/`, `libs/react/dist/`)
-  → **never review and never edit by hand**; if these appear in the diff
-  without a corresponding `*.tsx` change, that's a red flag the
-  code-reviewer should catch
+- **Documentation only** (hand-authored: `docs/`, `**/*.mdx`,
+  `libs/core/src/stories/**`, repo-root ADRs, `.claude/**/*.md`) → skip
+  the gauntlet, manual review. **Do not** treat auto-generated component
+  `readme.md` as docs-only.
+- **Auto-generated files** (component `readme.md` under
+  `libs/core/src/components/**/`, `libs/core/src/components.d.ts`,
+  `libs/core/dist/`, `libs/react/dist/`) → **never review and never edit
+  by hand**; if any appear in the diff, launch code-reviewer. If the diff
+  is **only** auto-generated artifacts with no matching `*.tsx` (or
+  `*.scss` / `*.tokens.scss`) change in the same component directory,
+  that's a red flag (stale regen or hand-edit).
 
 Additionally, check whether the diff introduces any **new files** via
 `git diff main...HEAD --diff-filter=A --name-only` in:
 
-- `libs/core/src/components/` — new components or sub-components
-- `libs/core/src/tokens/` — new token files
-- Shared utility / mixin paths in `libs/core/src/`
+- `libs/core/src/components/` — new components, sub-components, or
+  `*.tokens.scss` files
+- `libs/core/src/global/` — new global style / token wiring files
+- Shared utility / mixin paths in `libs/core/src/utils/`
 
 If yes, also launch `pine-existence-reviewer`. If the only new files are
 specs, stories, or changelog entries, skip the existence reviewer.
@@ -113,7 +119,7 @@ Agent(subagent_type: "pine-design-reviewer"):
 Agent(subagent_type: "pine-existence-reviewer"):
   "Run an existence/duplication review on new files introduced by this
    branch. Run git diff main...HEAD --diff-filter=A --name-only to find
-   them, then grep libs/core/src/components/ and libs/core/src/tokens/
+   them, then grep libs/core/src/components/ and libs/core/src/global/
    for similar existing implementations. Flag SHOULD FIX or CONSIDER
    only — never BLOCKER. Follow the pine-existence-review skill format."
 ```

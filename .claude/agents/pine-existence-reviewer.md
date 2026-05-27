@@ -32,8 +32,8 @@ You never raise BLOCKER. This is an advisory pass.
    - `libs/core/src/components/pds-<name>/*.tokens.scss` — component
      tokens
    - `libs/core/src/utils/` — shared types / helpers
-   - `libs/core/src/tokens/` (and shared `@kajabi-ui/styles`) —
-     design tokens
+   - `libs/core/src/global/` — global style / token wiring
+   - `@kajabi-ui/styles` dependency bumps in `package.json`
 3. **Skip** spec files, e2e tests, story files, changelog entries,
    config, and generated files (`dist/`, `readme.md`,
    `components.d.ts`).
@@ -82,6 +82,6 @@ the repo, never to the filesystem root.**
 - **Never** run `find /`, `grep -r /`, `rg /`, or any search rooted at
   `/`.
 - Scope searches to `libs/core/src/components/` or
-  `libs/core/src/tokens/` via the `path` arg.
+  `libs/core/src/global/` via the `path` arg.
 - If `Grep` / `Glob` returns nothing, the symbol isn't in the repo —
   don't escalate to a wider filesystem search.

@@ -13,7 +13,8 @@ costly because it creates competing sources of truth for consumers.
 ## When to Use
 
 - As part of the gauntlet, automatically whenever the diff introduces
-  new files under `libs/core/src/components/` or `libs/core/src/tokens/`
+  new files under `libs/core/src/components/` (including `*.tokens.scss`),
+  `libs/core/src/global/`, or `@kajabi-ui/styles` version bumps
 - When reviewing a PR that adds new components, sub-components, tokens,
   or utility modules
 
@@ -29,7 +30,7 @@ edits to existing files are out of scope.
 | Component tokens | `libs/core/src/components/pds-<name>/*.tokens.scss` | New `<name>.tokens.scss` file |
 | Shared types | `libs/core/src/utils/types.ts` (and friends) | New exported type alias |
 | Shared utilities | `libs/core/src/utils/`, mixin SCSS files | New `.ts` or `_*.scss` file |
-| Design tokens (root) | `libs/core/src/tokens/` or shared `@kajabi-ui/styles` | New token entry |
+| Design tokens (root) | `libs/core/src/global/styles/` or `@kajabi-ui/styles` (external package) | New global wiring or dependency bump |
 | Figma Code Connect | `libs/core/src/components/pds-<name>/*.figma.ts` | New `*.figma.ts` (usually paired with a new component) |
 
 **Out of scope:** spec files (`*.spec.tsx`), e2e tests (`*.e2e.ts`),
