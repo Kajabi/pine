@@ -27,13 +27,12 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Set up Node.js (pinned npm)
+        uses: ./.github/workflows/actions/setup-node-with-pinned-npm
         with:
           node-version-file: '.nvmrc'
-          cache: npm
-          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
         run: npm ci
@@ -64,4 +63,4 @@ jobs:
           # automatically. By the time something is on main it has been
           # reviewed, so re-approving in Chromatic adds friction without
           # catching anything new.
-          autoAcceptChanges: main
+          autoAcceptChanges: 'main|next'
