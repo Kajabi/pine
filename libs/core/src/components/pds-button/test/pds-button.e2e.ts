@@ -534,8 +534,6 @@ describe('pds-button', () => {
   });
 
   describe('accessibility', () => {
-    jest.setTimeout(30000);
-
     it('has no axe violations with default text content', async () => {
       const page = await newE2EPage();
       await page.setContent('<pds-button>Save changes</pds-button>');

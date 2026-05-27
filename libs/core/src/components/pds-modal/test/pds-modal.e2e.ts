@@ -120,8 +120,10 @@ describe('pds-modal', () => {
         </pds-modal>
       `);
       const modal = await page.find('pds-modal');
+      const openSpy = await page.spyOnEvent('pdsModalOpen');
       await modal.callMethod('showModal');
       await page.waitForChanges();
+      expect(openSpy).toHaveReceivedEvent();
 
       const violations = await runAxe(page);
       expect(formatViolations(violations)).toBe('');
