@@ -164,6 +164,7 @@ Section headers still show per-section counts.
 
 **Reviewers:** [which reviewers ran]
 **Files Reviewed:** [list]
+**Components Affected:** [pds-<names> from changed paths, or "none (tooling/docs only)"]
 **Overall Assessment:** APPROVED | NEEDS CHANGES | BLOCKER
 
 ---
@@ -222,6 +223,101 @@ gh label create ran-gauntlet \
 
 Then re-run the add-label command.
 
+### Post results to the PR (optional)
+
+By default the gauntlet output stays in the conversation between the
+developer running it and the agent — the assumption is that's the same
+person as the PR author, so a verbal-only result is enough.
+
+**Whether to post — apply in this order (first match wins):**
+
+1. User opted out ("don't post," "just tell me here") → **do not post**
+2. Findings are empty or **What's Good** only → **do not post** (label
+   is enough; applies even on someone else's PR)
+3. User explicitly asked to post ("post the findings," "leave a review
+   on the PR," etc.) → **post** (if there is at least one BLOCKER,
+   SHOULD FIX, or CONSIDER item)
+4. Gauntlet ran on **someone else's open PR** with at least one BLOCKER
+   or SHOULD FIX → **post** (author needs actionable findings)
+5. Findings include BLOCKER or SHOULD FIX on an open PR (own or other's)
+   → **post** when the PR is open for review
+6. Default (own PR pre-push, conversational run) → **do not post**
+
+**Once per PR:** Before posting, check existing PR reviews/comments for
+a body containing `Posted by \`pine-run-gauntlet\``. If one exists, **do
+not post again** unless the user explicitly asks to re-post (e.g. "post
+updated findings after the fix"). The label step still runs every time.
+
+**Order of operations:** Apply the `ran-gauntlet` label first (see above).
+Only post after the label step succeeds or you have noted label failure.
+
+**Format:** Post the **same** structured body as **Output Format** above
+(single `gh pr review` comment). Copy every `#### N.` item with
+`file:line` refs — do not summarize with `…` placeholders. Inline
+per-line comments would fragment the output and lose cross-finding
+ordering.
+
+**Command** (use a temp file so markdown quotes/backticks do not break
+the shell; always pass `--repo Kajabi/pine`):
+
+```bash
+BODY_FILE=$(mktemp)
+trap 'rm -f "$BODY_FILE"' EXIT
+cat >"$BODY_FILE" <<'EOF'
+## Pine Gauntlet Results
+
+**Reviewers:** [which reviewers ran]
+**Files Reviewed:** [list]
+**Components Affected:** [pds-<names>, or "none (tooling/docs only)"]
+**Overall Assessment:** APPROVED | NEEDS CHANGES | BLOCKER
+
+---
+
+### BLOCKERS ([count])
+
+#### 1. [Issue Title] (flagged by: [reviewer(s)])
+- **File:** `path/to/file:line`
+- **Issue:** [description]
+- **Fix:** [specific action]
+
+### SHOULD FIX ([count])
+
+#### 2. [Issue Title] (flagged by: [reviewer(s)])
+- **File:** `path/to/file:line`
+- **Issue:** [description]
+- **Fix:** [specific action]
+
+### CONSIDER ([count])
+
+#### 3. [Issue Title] (flagged by: [reviewer(s)])
+- **File:** `path/to/file:line`
+- **Suggestion:** [description]
+
+### What's Good
+- [Positive observations from reviewers]
+
+---
+_Posted by `pine-run-gauntlet`. Findings ordered by severity; numbering
+is sequential across sections. The `ran-gauntlet` label has been applied
+to this PR._
+EOF
+
+gh pr review <PR#> --repo Kajabi/pine --comment --body-file "$BODY_FILE"
+```
+
+If the label step failed, replace the footer sentence about the label
+with: _The `ran-gauntlet` label could not be applied (see gauntlet log)._
+
+**Permissions:** `gh pr review --comment` requires collaborator access or
+`read` + `pull-request-write` on `gh auth`. On 403 / 404, fall back to:
+
+```bash
+gh pr comment <PR#> --repo Kajabi/pine --body-file "$BODY_FILE"
+```
+
+Same `--body-file` and `--repo` — do not pass the markdown body as a
+double-quoted `--body` string.
+
 ### Present results and offer options
 
 1. **Fix blockers** — Address BLOCKER issues, optionally re-run gauntlet
@@ -229,7 +325,9 @@ Then re-run the add-label command.
 3. **Proceed to PR** — Open PR against `main` with current state
 4. **Discuss** — Talk through specific issues
 
-**Max re-run cycles:** 2 (to prevent infinite loops)
+**Max re-run cycles:** 2 (to prevent infinite loops). Re-runs do not post
+a second PR comment unless the user asks to re-post (see **Once per PR**
+above).
 
 ## Pine specifics
 
