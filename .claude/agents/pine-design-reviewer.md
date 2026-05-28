@@ -2,7 +2,7 @@
 name: pine-design-reviewer
 description: Design-token, SCSS, accessibility, and Figma Code Connect reviewer for Pine. Checks component token files (*.tokens.scss), `:host` custom-property patterns, `:host-context([data-theme=dark])` dark-mode support, keyboard / ARIA / focus / semantic HTML, and `.figma.ts` alignment with public props.
 tools: Read, Grep, Glob, Bash
-model: opus
+model: sonnet
 skills: pine-design-review
 ---
 

@@ -2,7 +2,7 @@
 name: pine-code-reviewer
 description: Code review expert for the Pine design system (Stencil web components). Reviews changes against Stencil decorators, TypeScript types, JSDoc consistency, lifecycle, test coverage, and auto-generated artifact hygiene. Provides structured feedback by severity.
 tools: Read, Grep, Glob, Bash
-model: opus
+model: sonnet
 skills: pine-review-code
 ---
 

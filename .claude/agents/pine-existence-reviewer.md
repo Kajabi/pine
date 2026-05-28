@@ -2,7 +2,7 @@
 name: pine-existence-reviewer
 description: Existence/duplication reviewer for Pine. Given a diff, flags new pds-* components, sub-components, tokens, and shared utilities that appear to duplicate something already in the library. Advisory only — never raises BLOCKER.
 tools: Read, Grep, Glob, Bash
-model: opus
+model: sonnet
 skills: pine-existence-review
 ---
 

@@ -62,8 +62,8 @@ Classify changed files:
   `**/*.tokens.scss`) → design-reviewer
 - **Figma Code Connect** (`**/*.figma.ts`) →
   design-reviewer
-- **Stories** (`libs/core/src/components/**/stories/*.tsx`,
-  `**/stories/*.mdx`) → code-reviewer + security-reviewer + design-reviewer
+- **Stories** (`libs/core/src/components/**/stories/*.stories.js`) →
+  code-reviewer + security-reviewer + design-reviewer
 - **Spec / e2e tests only** (`*.spec.tsx`, `*.e2e.ts`) → code-reviewer
 - **Token sources** (`libs/core/src/global/styles/`, component
   `*.tokens.scss`, `package.json` / lockfile changes to

@@ -2,7 +2,7 @@
 name: pine-security-reviewer
 description: Security reviewer for Pine web components. Focuses on XSS via innerHTML / dangerouslySetInnerHTML, slot sanitization, URL-prop validation (javascript: scheme guard), event handler injection, and secret leakage in source / fixtures / stories.
 tools: Read, Grep, Glob, Bash
-model: opus
+model: sonnet
 skills: pine-security-review
 ---
 
