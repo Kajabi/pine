@@ -45,7 +45,7 @@ visual review keeps the gauntlet lean.
 
 ### Step 1: Identify Changes
 
-Run `git diff main...HEAD --name-only` to determine which files have
+Run `git diff origin/main...HEAD --name-only` to determine which files have
 changed. Pine's base branch is `main`.
 
 If working with staged changes pre-PR, fall back to
@@ -72,8 +72,9 @@ Classify changed files:
   (auto-generated wrappers are out of scope — see below)
 - **Documentation only** (hand-authored: `docs/`, `**/*.mdx`,
   `libs/core/src/stories/**`, repo-root ADRs, `.claude/**/*.md`) → skip
-  the gauntlet, manual review. **Do not** treat auto-generated component
-  `readme.md` as docs-only.
+  the gauntlet, manual review. This includes changes to the gauntlet's
+  own skills and agents under `.claude/`. **Do not** treat auto-generated
+  component `readme.md` as docs-only.
 - **Auto-generated files** (component `readme.md` under
   `libs/core/src/components/**/`, `libs/core/src/components.d.ts`,
   `libs/core/dist/`, `libs/react/dist/`) → **never review and never edit
@@ -83,7 +84,7 @@ Classify changed files:
   that's a red flag (stale regen or hand-edit).
 
 Additionally, check whether the diff introduces any **new files** via
-`git diff main...HEAD --diff-filter=A --name-only` in:
+`git diff origin/main...HEAD --diff-filter=A --name-only` in:
 
 - `libs/core/src/components/` — new components, sub-components, or
   `*.tokens.scss` files
@@ -100,25 +101,25 @@ Launch all applicable reviewers in a **single message** using the Agent tool:
 ```
 Agent(subagent_type: "pine-code-reviewer"):
   "Review the current changes on this branch against Pine standards.
-   Run git diff main...HEAD to see all changes. Provide a structured
+   Run git diff origin/main...HEAD to see all changes. Provide a structured
    review following the pine-review-code skill format."
 
 Agent(subagent_type: "pine-security-reviewer"):
   "Run a security review on the current changes on this branch.
-   Run git diff main...HEAD. Check XSS via innerHTML, slot sanitization,
+   Run git diff origin/main...HEAD. Check XSS via innerHTML, slot sanitization,
    URL-prop validation, event handler injection, and secrets.
    Follow the pine-security-review skill format."
 
 Agent(subagent_type: "pine-design-reviewer"):
   "Review token, SCSS, .figma.ts, and accessibility-relevant changes on
-   this branch. Run git diff main...HEAD. Check token discipline, :host
+   this branch. Run git diff origin/main...HEAD. Check token discipline, :host
    custom properties, dark-mode support, keyboard / ARIA / focus,
    semantic HTML, and Figma Code Connect alignment.
    Follow the pine-design-review skill format."
 
 Agent(subagent_type: "pine-existence-reviewer"):
   "Run an existence/duplication review on new files introduced by this
-   branch. Run git diff main...HEAD --diff-filter=A --name-only to find
+   branch. Run git diff origin/main...HEAD --diff-filter=A --name-only to find
    them, then grep libs/core/src/components/ and libs/core/src/global/
    for similar existing implementations. Flag SHOULD FIX or CONSIDER
    only — never BLOCKER. Follow the pine-existence-review skill format."
@@ -208,6 +209,18 @@ performed on this branch," not "N agents executed."
 
 If no PR exists yet (common when running the gauntlet before PR creation),
 add the label at PR creation time or immediately after the PR is opened.
+
+**First-time setup:** If `gh pr edit … --add-label ran-gauntlet` returns
+`'ran-gauntlet' not found`, the repo doesn't have the label yet. Create
+it once:
+
+```bash
+gh label create ran-gauntlet \
+  --description "Multi-agent review gauntlet has been run on this branch" \
+  --color "0E8A16"
+```
+
+Then re-run the add-label command.
 
 ### Present results and offer options
 

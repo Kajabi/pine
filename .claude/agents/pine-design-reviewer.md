@@ -21,10 +21,10 @@ high.
 
 ## Review Process
 
-1. **Identify changes** — `git diff main...HEAD --name-only` and
+1. **Identify changes** — `git diff origin/main...HEAD --name-only` and
    filter for `*.scss`, `*.tokens.scss`, `*.figma.ts`, and `*.tsx`
    where rendered markup or `className`s changed
-2. **Read each changed file** — `git diff main...HEAD -- <file>`
+2. **Read each changed file** — `git diff origin/main...HEAD -- <file>`
 3. **Check token discipline** —
    - Component tokens live in `<component>.tokens.scss`, exposed on
      `:host`

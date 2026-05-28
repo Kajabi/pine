@@ -17,7 +17,7 @@ components. Provide structured, actionable feedback.
 
 ## Review Process
 
-1. **Identify changes** — `git diff main...HEAD --name-only`
+1. **Identify changes** — `git diff origin/main...HEAD --name-only`
 2. **Run automated checks** for changed components:
    ```bash
    npx nx run @pine-ds/core:lint

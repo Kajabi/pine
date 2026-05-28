@@ -31,8 +31,8 @@ into consuming apps:
 
 ## Review Process
 
-1. **Identify changes** — `git diff main...HEAD --name-only`
-2. **Read each changed file** — `git diff main...HEAD -- <file>`
+1. **Identify changes** — `git diff origin/main...HEAD --name-only`
+2. **Read each changed file** — `git diff origin/main...HEAD -- <file>`
 3. **Grep for risky patterns** in the touched files:
    - `innerHTML`, `outerHTML`, `insertAdjacentHTML`,
      `dangerouslySetInnerHTML`
