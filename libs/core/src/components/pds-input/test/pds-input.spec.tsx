@@ -934,7 +934,7 @@ describe('pds-input', () => {
       const labelSpan = root?.shadowRoot?.querySelector('.pds-input__label span');
 
       expect(labelWrapper).not.toBeNull();
-      expect(labelSpan?.classList.contains('visually-hidden')).toBe(true);
+      expect(labelWrapper?.classList.contains('visually-hidden')).toBe(true);
       expect(labelSpan?.textContent?.trim()).toBe('Name');
     });
 
@@ -976,7 +976,7 @@ describe('pds-input', () => {
       const labelSpan = root?.shadowRoot?.querySelector('.pds-input__label span');
 
       expect(labelWrapper).not.toBeNull();
-      expect(labelSpan?.classList.contains('visually-hidden')).toBe(false);
+      expect(labelWrapper?.classList.contains('visually-hidden')).toBe(false);
       expect(labelSpan?.textContent?.trim()).toBe('Name');
     });
 
