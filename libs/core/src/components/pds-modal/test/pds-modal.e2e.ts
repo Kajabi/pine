@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-modal', () => {
   it('renders', async () => {
@@ -90,5 +91,42 @@ describe('pds-modal', () => {
 
     const modal = await page.find('pds-modal');
     expect(await modal.getProperty('backdropDismiss')).toBe(false);
+  });
+
+  describe('accessibility', () => {
+    it('has no axe violations when closed', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="test-modal">
+          <div slot="header">Modal Header</div>
+          <div>Modal content</div>
+          <div slot="footer">Modal Footer</div>
+        </pds-modal>
+      `);
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
+
+    it('has no axe violations when open with header, content, and footer', async () => {
+      const page = await newE2EPage();
+      await page.setContent(`
+        <pds-modal component-id="test-modal">
+          <h2 slot="header">Confirm action</h2>
+          <p>Are you sure you want to continue?</p>
+          <div slot="footer">
+            <pds-button variant="secondary">Cancel</pds-button>
+            <pds-button>Confirm</pds-button>
+          </div>
+        </pds-modal>
+      `);
+      const modal = await page.find('pds-modal');
+      const openSpy = await page.spyOnEvent('pdsModalOpen');
+      await modal.callMethod('showModal');
+      await page.waitForChanges();
+      expect(openSpy).toHaveReceivedEvent();
+
+      const violations = await runAxe(page);
+      expect(formatViolations(violations)).toBe('');
+    });
   });
 });
