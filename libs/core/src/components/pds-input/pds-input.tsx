@@ -539,9 +539,14 @@ export class PdsInput {
       >
         <div class="pds-input">
           {label && (
-            <div class="pds-input__label-wrapper">
+            <div
+              class={{
+                'pds-input__label-wrapper': true,
+                'visually-hidden': this.hideLabel,
+              }}
+            >
               <label htmlFor={componentId} class="pds-input__label">
-                <span class={this.hideLabel ? 'visually-hidden' : ''}>
+                <span>
                   {label}
                   {this.required && <span class="pds-input__required-indicator"> *</span>}
                 </span>
