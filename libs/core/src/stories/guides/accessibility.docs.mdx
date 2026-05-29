@@ -240,6 +240,44 @@ See <pds-link href="../?path=/docs/guides-forms--docs">Using Pine Form Component
 
 ---
 
+## Disabled vs Read-only
+
+Choose the right pattern when a control should not accept input. `disabled`, `readonly`, and `aria-disabled` are not interchangeable — each has different keyboard, screen-reader, and form-submission behavior.
+
+<pds-table component-id="disabled-vs-readonly" compact row-dividers>
+  <pds-table-head>
+    <pds-table-head-cell></pds-table-head-cell>
+    <pds-table-head-cell><code>disabled</code></pds-table-head-cell>
+    <pds-table-head-cell><code>readonly</code></pds-table-head-cell>
+  </pds-table-head>
+  <pds-table-body>
+    <pds-table-row>
+      <pds-table-cell>Keyboard focusable</pds-table-cell>
+      <pds-table-cell>No</pds-table-cell>
+      <pds-table-cell>Yes</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Screen reader readable</pds-table-cell>
+      <pds-table-cell>No</pds-table-cell>
+      <pds-table-cell>Yes</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Form submitted</pds-table-cell>
+      <pds-table-cell>No</pds-table-cell>
+      <pds-table-cell>Yes</pds-table-cell>
+    </pds-table-row>
+    <pds-table-row>
+      <pds-table-cell>Use when</pds-table-cell>
+      <pds-table-cell>User cannot act right now</pds-table-cell>
+      <pds-table-cell>User can see but not edit</pds-table-cell>
+    </pds-table-row>
+  </pds-table-body>
+</pds-table>
+
+> **Accessibility note:** Disabled buttons are not read by all screen readers. If the action is important, keep the button enabled and surface an error when clicked, or use `aria-disabled="true"` to keep it discoverable while preventing activation.
+
+---
+
 ## Screen Reader Guidance
 
 - Test with **VoiceOver** (macOS/iOS) and **NVDA** (Windows) as a smoke test
