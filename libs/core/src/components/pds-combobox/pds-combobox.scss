@@ -4,7 +4,7 @@
   display: block;
 }
 
-:host([disabled="true"]) {
+:host([aria-disabled="true"]) {
   .pds-combobox__input-icon {
     color: var(--pine-color-text-disabled);
     pointer-events: none;

@@ -1870,7 +1870,7 @@ export class PdsCombobox implements BasePdsProps {
       .filter(Boolean)
       .join(' ');
     return (
-      <Host>
+      <Host aria-disabled={this.disabled ? 'true' : null}>
         <div class="pds-combobox" tabIndex={-1} onFocusout={this.onComboboxFocusOut} part="combobox">
           {this.label && !this.hideLabel && (
             <label htmlFor={this.componentId} class="pds-combobox__label">

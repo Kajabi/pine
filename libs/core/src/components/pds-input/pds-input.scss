@@ -134,7 +134,7 @@
   }
 }
 
-:host([disabled="true"]) {
+:host([aria-disabled="true"]) {
   &::part(prepend),
   &::part(append) {
     background-color: var(--pds-input-disabled-background);

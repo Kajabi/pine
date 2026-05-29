@@ -378,6 +378,57 @@ describe('pds-button', () => {
     expect(clickSpy).not.toHaveBeenCalled();
   });
 
+  it('prevents click when disabled', async () => {
+    const page = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button disabled></pds-button>`,
+    });
+
+    const button = page.root;
+    const clickSpy = jest.fn();
+    button?.addEventListener('pdsClick', clickSpy);
+
+    button?.click();
+    await page.waitForChanges();
+
+    expect(clickSpy).not.toHaveBeenCalled();
+  });
+
+  it('allows click when disabled="false"', async () => {
+    const page = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button disabled="false"></pds-button>`,
+    });
+
+    expect(page.root?.getAttribute('aria-disabled')).toBe(null);
+
+    const clickSpy = jest.fn();
+    page.root?.addEventListener('pdsClick', clickSpy);
+
+    page.root?.click();
+    await page.waitForChanges();
+
+    expect(clickSpy).toHaveBeenCalled();
+  });
+
+  it('prevents click when disabled link button', async () => {
+    const page = await newSpecPage({
+      components: [PdsButton],
+      html: `<pds-button href="https://example.com" disabled></pds-button>`,
+    });
+
+    const anchor = page.root?.shadowRoot?.querySelector('a');
+    expect(anchor?.getAttribute('href')).toBeNull();
+
+    const clickSpy = jest.fn();
+    page.root?.addEventListener('pdsClick', clickSpy);
+
+    page.root?.click();
+    await page.waitForChanges();
+
+    expect(clickSpy).not.toHaveBeenCalled();
+  });
+
   it('renders full width button', async () => {
     const {root} = await newSpecPage({
       components: [PdsButton],
