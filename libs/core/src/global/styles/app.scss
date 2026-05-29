@@ -1,5 +1,6 @@
 @use '~@kajabi-ui/styles/dist/pine/pine';
 @use 'fonts';
+@use 'motion';
 @use '../../components/pds-combobox/pds-combobox-dropdown-panel.scss' as *;
 
 // Body-portaled combobox listbox (outside shadow roots; see `dropdown-mount="body"` on pds-combobox)

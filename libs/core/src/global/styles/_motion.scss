@@ -1,0 +1,39 @@
+////
+/// Motion tokens (Pine-internal until upstream consolidation)
+///
+/// Named duration and easing values for component transitions.
+///
+/// Namespace contract: these CSS custom properties use the canonical
+/// `--pine-motion-*` namespace that `@kajabi-ui/styles` will own once
+/// motion is published upstream. Pine defines them here so component
+/// SCSS can adopt the names today; when upstream lands a motion token
+/// release, this file is removed in the same PR that bumps the
+/// `@kajabi-ui/styles` version. Component SCSS does not change.
+///
+/// If upstream ever publishes different values under the same names,
+/// remove these fallbacks immediately to avoid divergent definitions.
+///
+/// @group pine
+////
+
+:root {
+  // Durations
+  --pine-motion-duration-fast: 120ms;
+  --pine-motion-duration-base: 200ms;
+  --pine-motion-duration-slow: 300ms;
+
+  // Easing curves (match the bands documented in Guides/Motion)
+  --pine-motion-easing-out: cubic-bezier(0, 0, 0.2, 1);
+  --pine-motion-easing-in: cubic-bezier(0.4, 0, 1, 1);
+  --pine-motion-easing-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// Honor user preference for reduced motion. Components that opt-in to
+// the tokens above inherit the override automatically.
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --pine-motion-duration-fast: 0ms;
+    --pine-motion-duration-base: 0ms;
+    --pine-motion-duration-slow: 0ms;
+  }
+}
