@@ -1,0 +1,56 @@
+.pine-status-badge {
+  --pine-status-badge-bg: var(--pine-color-background-subtle);
+  --pine-status-badge-fg: var(--pine-color-text-primary);
+  --pine-status-badge-dot: currentColor;
+
+  align-items: center;
+  background-color: var(--pine-status-badge-bg);
+  border-radius: 999px;
+  color: var(--pine-status-badge-fg);
+  display: inline-flex;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  gap: 0.5rem;
+  line-height: 1.2;
+  margin: 0 0 1rem;
+  padding: 0.25rem 0.625rem;
+}
+
+.pine-status-badge__dot {
+  background-color: var(--pine-status-badge-dot);
+  border-radius: 50%;
+  display: inline-block;
+  flex: 0 0 auto;
+  height: 0.5rem;
+  width: 0.5rem;
+}
+
+.pine-status-badge__note {
+  color: inherit;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.pine-status-badge[data-status='stable'] {
+  --pine-status-badge-bg: var(--pine-color-success-disabled);
+  --pine-status-badge-fg: var(--pine-color-text-success);
+  --pine-status-badge-dot: var(--pine-color-success-hover);
+}
+
+.pine-status-badge[data-status='beta'] {
+  --pine-status-badge-bg: var(--pine-color-warning-disabled);
+  --pine-status-badge-fg: var(--pine-color-text-warning);
+  --pine-status-badge-dot: var(--pine-color-warning-hover);
+}
+
+.pine-status-badge[data-status='deprecated'] {
+  --pine-status-badge-bg: var(--pine-color-danger-disabled);
+  --pine-status-badge-fg: var(--pine-color-text-danger);
+  --pine-status-badge-dot: var(--pine-color-danger-hover);
+}
+
+.pine-status-badge[data-status='unknown'] {
+  --pine-status-badge-bg: var(--pine-color-warning-disabled);
+  --pine-status-badge-fg: var(--pine-color-text-warning);
+  --pine-status-badge-dot: var(--pine-color-warning-hover);
+}

@@ -1,0 +1,222 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Resources/Component status" parameters={{ previewTabs: { canvas: { hidden: true } } }} />
+
+# Component status
+
+Lifecycle labels describe **API and visual stability** for product teams—not Storybook polish. They are updated when a component’s contract or usage is intentionally changing.
+
+> **Source of truth:** `libs/core/src/stories/resources/component-status.json` drives both this table and the `StatusBadge` rendered on each component MDX page. When you promote or deprecate a component, edit the JSON manifest **and** the table below in the same PR.
+
+## Definitions
+
+<pds-box border border-radius="sm" fit>
+  <pds-table component-id="status-definitions-table" responsive>
+    <pds-table-head>
+      <pds-table-head-cell>Label</pds-table-head-cell>
+      <pds-table-head-cell>Meaning</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell><strong>Stable</strong></pds-table-cell>
+        <pds-table-cell>Safe for broad production use; breaking changes follow semver and migration notes.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><strong>Beta</strong></pds-table-cell>
+        <pds-table-cell>API or visuals may still shift; prefer new work here only when you accept occasional churn.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><strong>Deprecated</strong></pds-table-cell>
+        <pds-table-cell>Do not use in new UI; plan migration; removal is scheduled with notice in the changelog.</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
+
+## Pine web components
+
+All components below are **Stable** unless noted. Subcomponents (for example `pds-table-row`) follow the parent unless called out separately.
+
+<pds-box border border-radius="sm" fit>
+  <pds-table component-id="component-status-table" responsive>
+    <pds-table-head>
+      <pds-table-head-cell>Component</pds-table-head-cell>
+      <pds-table-head-cell>Status</pds-table-head-cell>
+      <pds-table-head-cell>Notes</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell><code>pds-accordion</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-alert</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-avatar</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-box</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-button</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-checkbox</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-chip</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-combobox</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-container</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-copytext</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-divider</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-dropdown-menu</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-filters</code> / <code>pds-filter</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-icon</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell>Icons ship from <code>@pine-ds/icons</code>.</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-image</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-input</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-link</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-loader</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-modal</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-multiselect</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-popover</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-progress</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-property</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-radio</code> / <code>pds-radio-group</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-row</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-select</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-sortable</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-switch</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-table</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-tabs</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-text</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-textarea</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-toast</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>pds-tooltip</code></pds-table-cell>
+        <pds-table-cell>Stable</pds-table-cell>
+        <pds-table-cell></pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
+
+When a component moves to **Beta** or **Deprecated**, update this table in the same pull request as the changelog entry and any Storybook migration callouts.

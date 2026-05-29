@@ -1,0 +1,56 @@
+{
+  "$schema": "./component-status.schema.json",
+  "description": "Lifecycle status for every Pine component. Source of truth for StatusBadge and the central Component status table. Update both when a component is promoted to Beta or Deprecated.",
+  "statuses": {
+    "stable": {
+      "label": "Stable",
+      "summary": "Safe for broad production use; breaking changes follow semver and migration notes."
+    },
+    "beta": {
+      "label": "Beta",
+      "summary": "API or visuals may still shift; prefer new work here only when you accept occasional churn."
+    },
+    "deprecated": {
+      "label": "Deprecated",
+      "summary": "Do not use in new UI; plan migration; removal is scheduled with notice in the changelog."
+    }
+  },
+  "components": {
+    "pds-accordion": { "status": "stable" },
+    "pds-alert": { "status": "stable" },
+    "pds-avatar": { "status": "stable" },
+    "pds-box": { "status": "stable" },
+    "pds-button": { "status": "stable" },
+    "pds-checkbox": { "status": "stable" },
+    "pds-chip": { "status": "stable" },
+    "pds-combobox": { "status": "stable" },
+    "pds-container": { "status": "stable" },
+    "pds-copytext": { "status": "stable" },
+    "pds-divider": { "status": "stable" },
+    "pds-dropdown-menu": { "status": "stable" },
+    "pds-filters": { "status": "stable" },
+    "pds-filter": { "status": "stable", "note": "Subcomponent of pds-filters." },
+    "pds-icon": { "status": "stable", "note": "Icons ship from `@pine-ds/icons`." },
+    "pds-image": { "status": "stable" },
+    "pds-input": { "status": "stable" },
+    "pds-link": { "status": "stable" },
+    "pds-loader": { "status": "stable" },
+    "pds-modal": { "status": "stable" },
+    "pds-multiselect": { "status": "stable" },
+    "pds-popover": { "status": "stable" },
+    "pds-progress": { "status": "stable" },
+    "pds-property": { "status": "stable" },
+    "pds-radio": { "status": "stable" },
+    "pds-radio-group": { "status": "stable" },
+    "pds-row": { "status": "stable" },
+    "pds-select": { "status": "stable" },
+    "pds-sortable": { "status": "stable" },
+    "pds-switch": { "status": "stable" },
+    "pds-table": { "status": "stable" },
+    "pds-tabs": { "status": "stable" },
+    "pds-text": { "status": "stable" },
+    "pds-textarea": { "status": "stable" },
+    "pds-toast": { "status": "stable" },
+    "pds-tooltip": { "status": "stable" }
+  }
+}
