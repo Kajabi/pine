@@ -61,6 +61,7 @@
     "generate": "stencil generate",
     "lint": "run-p lint.*",
     "lint.eslint": "eslint src",
+    "lint.status": "node scripts/check-component-status.mjs",
     "lint.styles": "stylelint \"./src/**/*.*css\"",
     "prettier": "prettier \"./src/**/*.{html,ts,tsx,js,jsx}\"",
     "prestart": "npm run build",
