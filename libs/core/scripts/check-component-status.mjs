@@ -43,9 +43,16 @@ function topLevelComponents() {
  */
 function allComponentDirs() {
   const names = new Set();
+  // Top-level pds-* components.
   for (const top of topLevelComponents()) {
     names.add(top);
-    for (const nested of pdsDirs(path.join(COMPONENTS_DIR, top))) {
+  }
+  // Nested pds-* subcomponents under ANY top-level directory — including
+  // non-pds-* parents like `_internal/` (e.g. `_internal/pds-label`) — so a
+  // deliberate subcomponent manifest entry is not falsely reported as stale.
+  for (const entry of fs.readdirSync(COMPONENTS_DIR, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    for (const nested of pdsDirs(path.join(COMPONENTS_DIR, entry.name))) {
       names.add(nested);
     }
   }
@@ -65,7 +72,7 @@ function readManifestKeys() {
   } catch (err) {
     throw new Error(`Manifest ${MANIFEST_REL} is not valid JSON: ${err.message}`);
   }
-  if (!parsed.components || typeof parsed.components !== 'object') {
+  if (!parsed.components || typeof parsed.components !== 'object' || Array.isArray(parsed.components)) {
     throw new Error(`Manifest ${MANIFEST_REL} is missing a "components" object`);
   }
   return Object.keys(parsed.components);
