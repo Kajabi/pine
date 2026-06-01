@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-link', () => {
   it('renders', async () => {
@@ -33,5 +34,14 @@ describe('pds-link', () => {
 
     const element = await page.find('pds-link');
     expect(element.textContent).toEqual(`This is slot content`);
+  });
+});
+
+describe('pds-link accessibility', () => {
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-link href="#section">Read more</pds-link>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
   });
 });

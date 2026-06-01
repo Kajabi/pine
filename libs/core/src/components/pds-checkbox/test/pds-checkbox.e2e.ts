@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-checkbox', () => {
   it('toggles checked and unchecked', async () => {
@@ -22,7 +23,7 @@ describe('pds-checkbox', () => {
     const component = await page.find('pds-checkbox');
     expect(component).toHaveClass('hydrated');
 
-    let checkbox = await page.find('pds-checkbox >>> input');
+    const checkbox = await page.find('pds-checkbox >>> input');
     component.setProperty('disabled', false);
     await page.waitForChanges();
     expect(await checkbox.getProperty('disabled')).toBe(false);
@@ -52,5 +53,14 @@ describe('pds-checkbox', () => {
 
     await checkbox.press('Space');
     expect(eventSpy).not.toHaveReceivedEvent();
+  });
+});
+
+describe('pds-checkbox accessibility', () => {
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-checkbox component-id="terms" label="Accept the terms"></pds-checkbox>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
   });
 });

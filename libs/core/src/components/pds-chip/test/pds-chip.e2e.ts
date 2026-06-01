@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-chip', () => {
   it('renders', async () => {
@@ -80,5 +81,14 @@ describe('pds-chip', () => {
     await closeLink.click();
 
     expect(eventSpy).toHaveReceivedEvent();
+  });
+});
+
+describe('pds-chip accessibility', () => {
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-chip>Active</pds-chip>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
   });
 });

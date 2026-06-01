@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-radio', () => {
   it('renders', async () => {
@@ -114,5 +115,14 @@ describe('pds-radio', () => {
     expect(component).toHaveClass('has-border');
     expect(component).toHaveClass('is-invalid');
     expect(component).toHaveClass('is-disabled');
+  });
+});
+
+describe('pds-radio accessibility', () => {
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-radio component-id="opt-1" label="Option one"></pds-radio>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
   });
 });
