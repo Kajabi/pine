@@ -33,9 +33,16 @@ export function topLevelComponents() {
  */
 export function allComponentDirs() {
   const names = new Set();
+  // Top-level pds-* components.
   for (const top of topLevelComponents()) {
     names.add(top);
-    for (const nested of pdsDirs(path.join(COMPONENTS_DIR, top))) {
+  }
+  // Nested pds-* subcomponents under ANY top-level directory — including
+  // non-pds-* parents like `_internal/` (e.g. `_internal/pds-label`) — so a
+  // deliberate subcomponent reference is not falsely rejected.
+  for (const entry of fs.readdirSync(COMPONENTS_DIR, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    for (const nested of pdsDirs(path.join(COMPONENTS_DIR, entry.name))) {
       names.add(nested);
     }
   }

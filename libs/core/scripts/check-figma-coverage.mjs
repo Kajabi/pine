@@ -47,7 +47,7 @@ function readWaivers() {
   } catch (err) {
     throw new Error(`Waivers file ${WAIVERS_REL} is not valid JSON: ${err.message}`);
   }
-  if (!parsed.waived || typeof parsed.waived !== 'object') {
+  if (!parsed.waived || typeof parsed.waived !== 'object' || Array.isArray(parsed.waived)) {
     throw new Error(`Waivers file ${WAIVERS_REL} is missing a "waived" object`);
   }
   return new Set(Object.keys(parsed.waived));
