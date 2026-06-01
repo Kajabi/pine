@@ -58,11 +58,11 @@ select {
   appearance: none;
   background-color: var(--pds-select-background);
   border: var(--pds-select-border);
+  border-end-end-radius: var(--pds-select-border-radius-end-end, var(--pds-select-border-radius));
+  border-end-start-radius: var(--pds-select-border-radius-end-start, var(--pds-select-border-radius));
   border-radius: var(--pds-select-border-radius);
-  border-bottom-left-radius: var(--pds-select-border-radius-end-start, var(--pds-select-border-radius));
-  border-bottom-right-radius: var(--pds-select-border-radius-end-end, var(--pds-select-border-radius));
-  border-top-left-radius: var(--pds-select-border-radius-start-start, var(--pds-select-border-radius));
-  border-top-right-radius: var(--pds-select-border-radius-start-end, var(--pds-select-border-radius));
+  border-start-end-radius: var(--pds-select-border-radius-start-end, var(--pds-select-border-radius));
+  border-start-start-radius: var(--pds-select-border-radius-start-start, var(--pds-select-border-radius));
   color: var(--pine-color-text);
   font: var(--pine-typography-body);
   grid-area: field;
@@ -101,6 +101,12 @@ select {
     &:focus-visible {
       outline-color: var(--pine-color-focus-ring-danger);
     }
+  }
+}
+
+:host(.is-disabled) {
+  .pds-select__select-icon {
+    color: var(--pine-color-text-disabled);
   }
 }
 
