@@ -65,13 +65,7 @@ describe('pds-copytext accessibility', () => {
   it('has no axe violations', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-copytext value="Copy me"></pds-copytext>');
-    // `role-img-alt` is disabled here: the copy-button icon (pds-icon) renders
-    // role="img" without an accessible name. This mirrors the documented
-    // suppression in the pds-input test and is tracked separately; remove the
-    // override once pds-icon exposes an accessible label.
-    const violations = await runAxe(page, {
-      rules: { 'role-img-alt': { enabled: false } },
-    });
+    const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
   });
 });
