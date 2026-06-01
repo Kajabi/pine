@@ -237,12 +237,7 @@ describe('pds-input', () => {
       await page.setContent(
         '<pds-input label="Email" component-id="email" error-message="Enter a valid email address" invalid></pds-input>',
       );
-      // `role-img-alt` is disabled here pending a fix on the internal error
-      // icon (it renders without an accessible name). Tracked separately;
-      // remove this override once the icon exposes a label.
-      const violations = await runAxe(page, {
-        rules: { 'role-img-alt': { enabled: false } },
-      });
+      const violations = await runAxe(page);
       expect(formatViolations(violations)).toBe('');
     });
   });

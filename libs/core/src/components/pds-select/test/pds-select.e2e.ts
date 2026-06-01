@@ -150,13 +150,7 @@ describe('pds-select accessibility', () => {
         <option value="ca">Canada</option>
       </pds-select>
     `);
-    // `role-img-alt` is disabled here: the select's dropdown chevron (pds-icon)
-    // renders role="img" without an accessible name. Matches the documented
-    // suppression in the pds-input test — remove once pds-icon exposes an
-    // accessible label.
-    const violations = await runAxe(page, {
-      rules: { 'role-img-alt': { enabled: false } },
-    });
+    const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
   });
 });
