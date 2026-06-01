@@ -34,7 +34,7 @@ function readManifestKeys() {
   } catch (err) {
     throw new Error(`Manifest ${MANIFEST_REL} is not valid JSON: ${err.message}`);
   }
-  if (!parsed.components || typeof parsed.components !== 'object') {
+  if (!parsed.components || typeof parsed.components !== 'object' || Array.isArray(parsed.components)) {
     throw new Error(`Manifest ${MANIFEST_REL} is missing a "components" object`);
   }
   return Object.keys(parsed.components);
