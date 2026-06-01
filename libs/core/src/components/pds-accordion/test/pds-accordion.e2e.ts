@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-accordion', () => {
   it('renders', async () => {
@@ -66,7 +67,7 @@ describe('pds-accordion', () => {
     const page = await newE2EPage();
     await page.setContent('<pds-accordion></pds-accordion>');
 
-    const el = (await page.find('pds-accordion'));
+    const el = await page.find('pds-accordion');
     expect(el).not.toHaveProperty('isOpen');
 
     el.setProperty('isOpen', true);
@@ -74,5 +75,25 @@ describe('pds-accordion', () => {
 
     expect(el.getProperty('isOpen')).toBeTruthy();
     expect(el).toHaveAttribute('open');
+  });
+});
+
+describe('pds-accordion accessibility', () => {
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-accordion>
+        <span slot="label">Section title</span>
+        <p>Panel content</p>
+      </pds-accordion>
+    `);
+    // `role-img-alt` is disabled here: the accordion trigger's chevron
+    // (pds-icon) renders role="img" without an accessible name. Matches the
+    // documented suppression in the pds-input test; tracked separately —
+    // remove once pds-icon exposes an accessible label.
+    const violations = await runAxe(page, {
+      rules: { 'role-img-alt': { enabled: false } },
+    });
+    expect(formatViolations(violations)).toBe('');
   });
 });

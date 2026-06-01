@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-table', () => {
   it('renders', async () => {
@@ -54,5 +55,27 @@ describe('pds-table', () => {
 
     // Assert that the values are different after sorting
     expect(values).not.toEqual(['Row 1, Column 1', 'Row 2, Column 1']);
+  });
+});
+
+describe('pds-table accessibility', () => {
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-table component-id="people">
+        <pds-table-head>
+          <pds-table-head-cell>Name</pds-table-head-cell>
+          <pds-table-head-cell>Email</pds-table-head-cell>
+        </pds-table-head>
+        <pds-table-body>
+          <pds-table-row>
+            <pds-table-cell>Jane Doe</pds-table-cell>
+            <pds-table-cell>jane@example.com</pds-table-cell>
+          </pds-table-row>
+        </pds-table-body>
+      </pds-table>
+    `);
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
   });
 });

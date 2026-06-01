@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-tabs', () => {
   it('renders', async () => {
@@ -60,7 +61,7 @@ describe('pds-tabs', () => {
       </pds-tabs>
     `);
     const expectedActiveButton = await page.find(`pds-tab[name="two"] > button`);
-    expect(expectedActiveButton.getAttribute('aria-selected')).toMatch("true");
+    expect(expectedActiveButton.getAttribute('aria-selected')).toMatch('true');
     const expectedActivePanel = await page.find(`pds-tabpanel[name="two"] > div`);
     expect(expectedActivePanel).toHaveClass('is-active');
   });
@@ -98,7 +99,7 @@ describe('pds-tabs', () => {
     const expectedActiveButton = await page.find(`pds-tab[name="one"] > button`);
     const expectedActivePanel = await page.find(`pds-tabpanel[name="one"] > div`);
 
-    expect(expectedActiveButton.getAttribute('aria-selected')).toMatch("true");
+    expect(expectedActiveButton.getAttribute('aria-selected')).toMatch('true');
     expect(expectedActivePanel).toHaveClass('is-active');
   });
 
@@ -117,17 +118,17 @@ describe('pds-tabs', () => {
     tab.click();
     await page.waitForChanges();
     // Move focus to second tab
-    page.keyboard.down("ArrowRight");
+    page.keyboard.down('ArrowRight');
     await page.waitForChanges();
     // Confirm focus on second tab
     tab = await page.find('pds-tab[name="two"] > button');
-    expect(tab.getAttribute('aria-selected')).toMatch("true");
+    expect(tab.getAttribute('aria-selected')).toMatch('true');
     // Move focus to past end of tabs forcing a loop to first tab
-    page.keyboard.down("ArrowRight");
+    page.keyboard.down('ArrowRight');
     await page.waitForChanges();
     // Confirm focus on second tab
     tab = await page.find(`pds-tab[name="one"] > button`);
-    expect(tab.getAttribute('aria-selected')).toMatch("true");
+    expect(tab.getAttribute('aria-selected')).toMatch('true');
   });
 
   it('renders new activeTab when arrows move focus to left', async () => {
@@ -145,17 +146,17 @@ describe('pds-tabs', () => {
     tab.click();
     await page.waitForChanges();
     // Move focus to first tab
-    page.keyboard.down("ArrowLeft");
+    page.keyboard.down('ArrowLeft');
     await page.waitForChanges();
     // Confirm focus on first tab
     tab = await page.find('pds-tab[name="one"] > button');
-    expect(tab.getAttribute('aria-selected')).toMatch("true");
+    expect(tab.getAttribute('aria-selected')).toMatch('true');
     // Move focus to past end of tabs forcing a loop to last tab
-    page.keyboard.down("ArrowLeft");
+    page.keyboard.down('ArrowLeft');
     await page.waitForChanges();
     // Confirm focus on second tab
     tab = await page.find('pds-tab[name="two"] > button');
-    expect(tab.getAttribute('aria-selected')).toMatch("true");
+    expect(tab.getAttribute('aria-selected')).toMatch('true');
   });
 
   it('renders new activeTab when Home and End keys are pressed', async () => {
@@ -172,27 +173,27 @@ describe('pds-tabs', () => {
     `);
     // Check that second tab is active
     let tab = await page.find(`pds-tab[name="one"] > button`);
-    expect(tab.getAttribute('aria-selected')).toMatch("true");
+    expect(tab.getAttribute('aria-selected')).toMatch('true');
     // Click inactive tab
     tab = await page.find('pds-tab[name="two"] > button');
     tab.click();
     await page.waitForChanges();
 
     // Add a small wait to ensure state updates are complete
-    await new Promise(resolve => setTimeout(resolve, 300));
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
     // Move focus to first tab
-    page.keyboard.down("Home");
+    page.keyboard.down('Home');
     await page.waitForChanges();
     // Confirm focus on first tab
     tab = await page.find('pds-tab[name="one"] > button');
-    expect(tab.getAttribute('aria-selected')).toMatch("true");
+    expect(tab.getAttribute('aria-selected')).toMatch('true');
     // Move focus to last tab
-    page.keyboard.down("End");
+    page.keyboard.down('End');
     await page.waitForChanges();
     // Confirm focus on last tab
     tab = await page.find('pds-tab[name="three"] > button');
-    expect(tab.getAttribute('aria-selected')).toMatch("true");
+    expect(tab.getAttribute('aria-selected')).toMatch('true');
   });
 
   it('renders a11y correctly', async () => {
@@ -207,26 +208,26 @@ describe('pds-tabs', () => {
     `);
     // Confirm active tab a11y
     let tab = await page.find('pds-tab[name="two"] > button');
-    expect(tab.getAttribute('aria-selected')).toMatch("true");
-    expect(tab.getAttribute('role')).toMatch("tab");
-    expect(tab.getAttribute('aria-controls')).toMatch("two-panel");
-    expect(tab.getAttribute('tabindex')).toMatch("0");
+    expect(tab.getAttribute('aria-selected')).toMatch('true');
+    expect(tab.getAttribute('role')).toMatch('tab');
+    expect(tab.getAttribute('aria-controls')).toMatch('two-panel');
+    expect(tab.getAttribute('tabindex')).toMatch('0');
 
     //Confirm active tabpanel a11y
     let tabpanel = await page.find('pds-tabpanel[name="two"] > div');
-    expect(tabpanel.getAttribute('aria-labelledby')).toMatch("two");
-    expect(tabpanel.getAttribute('role')).toMatch("tabpanel");
+    expect(tabpanel.getAttribute('aria-labelledby')).toMatch('two');
+    expect(tabpanel.getAttribute('role')).toMatch('tabpanel');
 
     // Confirm inactive tab a11y
     tab = await page.find('pds-tab[name="one"] > button');
-    expect(tab.getAttribute('aria-selected')).toMatch("false");
-    expect(tab.getAttribute('aria-controls')).toMatch("one-panel");
-    expect(tab.getAttribute('tabindex')).toMatch("-1");
+    expect(tab.getAttribute('aria-selected')).toMatch('false');
+    expect(tab.getAttribute('aria-controls')).toMatch('one-panel');
+    expect(tab.getAttribute('tabindex')).toMatch('-1');
 
     //Confirm inactive tabpanel a11y
     tabpanel = await page.find('pds-tabpanel[name="one"] > div');
-    expect(tabpanel.getAttribute('aria-labelledby')).toMatch("one");
-    expect(tabpanel.getAttribute('role')).toMatch("tabpanel");
+    expect(tabpanel.getAttribute('aria-labelledby')).toMatch('one');
+    expect(tabpanel.getAttribute('role')).toMatch('tabpanel');
 
     // Click inactive tab and wait for event
     const event = await page.spyOnEvent('pdsTabClick');
@@ -240,24 +241,40 @@ describe('pds-tabs', () => {
 
     // Confirm previously active tab a11y
     tab = await page.find('pds-tab[name="two"] > button');
-    expect(tab.getAttribute('aria-selected')).toMatch("false");
-    expect(tab.getAttribute('aria-controls')).toMatch("two-panel");
-    expect(tab.getAttribute('tabindex')).toMatch("-1");
+    expect(tab.getAttribute('aria-selected')).toMatch('false');
+    expect(tab.getAttribute('aria-controls')).toMatch('two-panel');
+    expect(tab.getAttribute('tabindex')).toMatch('-1');
 
     //Confirm previously active tabpanel a11y
     tabpanel = await page.find('pds-tabpanel[name="two"] > div');
-    expect(tabpanel.getAttribute('aria-labelledby')).toMatch("two");
-    expect(tabpanel.getAttribute('role')).toMatch("tabpanel");
+    expect(tabpanel.getAttribute('aria-labelledby')).toMatch('two');
+    expect(tabpanel.getAttribute('role')).toMatch('tabpanel');
 
     // Confirm new active tab a11y
     tab = await page.find('pds-tab[name="one"] > button');
-    expect(tab.getAttribute('aria-selected')).toMatch("true");
-    expect(tab.getAttribute('aria-controls')).toMatch("one-panel");
-    expect(tab.getAttribute('tabindex')).toMatch("0");
+    expect(tab.getAttribute('aria-selected')).toMatch('true');
+    expect(tab.getAttribute('aria-controls')).toMatch('one-panel');
+    expect(tab.getAttribute('tabindex')).toMatch('0');
 
     //Confirm new active tabpanel a11y
     tabpanel = await page.find('pds-tabpanel[name="one"] > div');
-    expect(tabpanel.getAttribute('aria-labelledby')).toMatch("one");
-    expect(tabpanel.getAttribute('role')).toMatch("tabpanel");
+    expect(tabpanel.getAttribute('aria-labelledby')).toMatch('one');
+    expect(tabpanel.getAttribute('role')).toMatch('tabpanel');
+  });
+});
+
+describe('pds-tabs accessibility', () => {
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-tabs active-tab-name="one" tablist-label="Account settings" component-id="settings">
+        <pds-tab name="one">Profile</pds-tab>
+        <pds-tab name="two">Security</pds-tab>
+        <pds-tabpanel name="one">Profile content</pds-tabpanel>
+        <pds-tabpanel name="two">Security content</pds-tabpanel>
+      </pds-tabs>
+    `);
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
   });
 });

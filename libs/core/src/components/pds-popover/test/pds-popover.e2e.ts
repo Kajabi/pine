@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-popover', () => {
   it('renders', async () => {
@@ -311,5 +312,19 @@ describe('pds-popover', () => {
       const portalEl = await page.find('#link-popover-portal');
       expect(await portalEl.isVisible()).toBe(true);
     });
+  });
+});
+
+describe('pds-popover accessibility', () => {
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-popover component-id="my-popover" popover-target-action="toggle">
+        <button slot="trigger">Show popover</button>
+        <p>Popover content</p>
+      </pds-popover>
+    `);
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
   });
 });
