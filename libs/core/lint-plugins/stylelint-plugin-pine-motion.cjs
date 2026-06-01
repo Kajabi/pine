@@ -39,8 +39,10 @@ const DURATION_TOKENS = {
   '.3s': 'slow',
 };
 
-// Matches a CSS time value (e.g. `200ms`, `0.2s`, `.15s`).
-const TIME_REGEX = /(\d*\.?\d+)(ms|s)\b/g;
+// Matches a CSS time value (e.g. `200ms`, `0.2s`, `.15s`). The leading
+// negative lookbehind prevents matching time-like substrings inside
+// identifiers / custom-property names (e.g. `var(--app-delay-200ms)`).
+const TIME_REGEX = /(?<![\w-])(\d*\.?\d+)(ms|s)\b/g;
 
 function isZeroTime(raw) {
   return /^0*\.?0+(ms|s)$/.test(raw);
@@ -83,7 +85,10 @@ module.exports = stylelint.createPlugin(ruleName, (primaryOption, _secondaryOpti
             `justified \`stylelint-disable-next-line ${ruleName}\` when an off-grid value is intentional.`;
 
         if (tokenVar && context && context.fix) {
-          replacements.push({ original: raw, replacement: tokenVar });
+          // Record position + length so the fix is applied by index (not by a
+          // first-match string replace, which could rewrite the wrong
+          // occurrence in a multi-segment shorthand).
+          replacements.push({ index: match.index, length: raw.length, replacement: tokenVar });
           continue;
         }
 
@@ -97,9 +102,10 @@ module.exports = stylelint.createPlugin(ruleName, (primaryOption, _secondaryOpti
       }
 
       if (context && context.fix && replacements.length > 0) {
+        // Apply right-to-left so earlier indices stay valid as the string length changes.
         let newValue = value;
-        for (const { original, replacement } of replacements) {
-          newValue = newValue.replace(original, replacement);
+        for (const { index, length, replacement } of replacements.reverse()) {
+          newValue = newValue.slice(0, index) + replacement + newValue.slice(index + length);
         }
         decl.value = newValue;
       }
