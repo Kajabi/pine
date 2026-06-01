@@ -47,6 +47,11 @@ export function resetRtlScrollTypeCache(): void {
   cachedRtlScrollType = null;
 }
 
+/** True when the element's used text direction is RTL (inherits from ancestors). */
+export function isRtlDirection(element: Element): boolean {
+  return getComputedStyle(element).direction === 'rtl';
+}
+
 /**
  * RTL scroll offset from inline-start for a known browser scrollLeft model.
  * @see https://github.com/othree/jquery.rtl-scroll-type#3-types-of-scrollleft-scrollwidth--100
@@ -78,7 +83,7 @@ export function getScrollOffsetFromStart(container: HTMLElement): number {
     return 0;
   }
 
-  const isRtl = getComputedStyle(container).direction === 'rtl';
+  const isRtl = isRtlDirection(container);
   if (!isRtl) {
     return scrollLeft;
   }

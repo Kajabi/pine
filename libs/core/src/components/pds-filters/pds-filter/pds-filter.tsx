@@ -1,5 +1,6 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop, State, Method, Listen } from '@stencil/core';
 import type { BasePdsProps } from '@utils/interfaces';
+import { isRtlDirection } from '@utils/scroll';
 import type { PdsFilterOpenEventDetail, PdsFilterCloseEventDetail, PdsFilterClearEventDetail, PdsFilterVariant } from './filter-interface';
 
 import { enlarge, trash } from '@pine-ds/icons/icons';
@@ -256,7 +257,7 @@ export class PdsFilter implements BasePdsProps {
 
     // Boundary detection for flipping (inline-end overflow respects document direction)
     const bufferSpace = 20;
-    const isRtl = document.documentElement.dir === 'rtl';
+    const isRtl = isRtlDirection(this.el);
     const wouldOverflowInlineEnd = isRtl
       ? (triggerRect.left - popoverWidth - bufferSpace) < 0
       : (triggerRect.left + popoverWidth + bufferSpace) > viewportWidth;
