@@ -16,41 +16,10 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { CORE_ROOT, topLevelComponents, allComponentDirs } from './lib/components.mjs';
 
-const CORE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const COMPONENTS_DIR = path.join(CORE_ROOT, 'src', 'components');
 const MANIFEST_PATH = path.join(CORE_ROOT, 'src', 'stories', 'resources', 'component-status.json');
 const MANIFEST_REL = path.relative(CORE_ROOT, MANIFEST_PATH);
-
-/** Directory names under `src/components` matching `pds-*`. */
-function pdsDirs(dir) {
-  return fs
-    .readdirSync(dir, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory() && entry.name.startsWith('pds-'))
-    .map((entry) => entry.name);
-}
-
-/** Top-level components — these each require a status entry. */
-function topLevelComponents() {
-  return pdsDirs(COMPONENTS_DIR).sort();
-}
-
-/**
- * Every `pds-*` directory, including nested subcomponents. Used to validate
- * manifest entries so a deliberate subcomponent entry (e.g. `pds-filter`) is
- * accepted while a typo or removed component is not.
- */
-function allComponentDirs() {
-  const names = new Set();
-  for (const top of topLevelComponents()) {
-    names.add(top);
-    for (const nested of pdsDirs(path.join(COMPONENTS_DIR, top))) {
-      names.add(nested);
-    }
-  }
-  return names;
-}
 
 function readManifestKeys() {
   let raw;
