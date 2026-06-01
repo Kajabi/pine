@@ -167,7 +167,7 @@ const preview = {
     options: {
       storySort: {
         method: 'alphabetical',
-        order: ['Introduction', ['Welcome',], 'Foundations', 'Design Tokens', ['Tokens'], 'Guides', 'Components', 'Resources'],
+        order: ['Introduction', ['Welcome', 'Getting Started', 'Get Support'], 'Foundations', 'Design Tokens', ['Tokens'], 'Guides', ['Forms', 'Accessibility', 'Events', 'Assets'], 'Components', 'Resources', ['Changelog', 'Migration Guide', 'Icon Management', 'Pine MCP']],
         locales: 'en-US',
       },
     }
