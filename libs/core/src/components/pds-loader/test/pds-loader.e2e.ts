@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-loader', () => {
   it('is not visible when isLoading prop is false', async () => {
@@ -85,7 +86,7 @@ describe('pds-loader', () => {
       const loaders = document.querySelectorAll('pds-loader');
       const colors: (string | null)[] = [];
 
-      loaders.forEach(loader => {
+      loaders.forEach((loader) => {
         const svg = loader.shadowRoot?.querySelector('svg[part="loader-svg"]');
         colors.push(svg ? window.getComputedStyle(svg).color : null);
       });
@@ -96,5 +97,14 @@ describe('pds-loader', () => {
     expect(colors[0]).toBe('rgb(255, 0, 0)'); // red
     expect(colors[1]).toBe('rgb(0, 0, 255)'); // blue
     expect(colors[2]).toBe('rgb(0, 128, 0)'); // green
+  });
+});
+
+describe('pds-loader accessibility', () => {
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-loader is-loading="true"></pds-loader>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
   });
 });

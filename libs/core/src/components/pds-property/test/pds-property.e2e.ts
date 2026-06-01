@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-property', () => {
   it('renders', async () => {
@@ -9,7 +10,7 @@ describe('pds-property', () => {
     expect(element).toBeTruthy();
   });
 
-      it('renders with icon and text', async () => {
+  it('renders with icon and text', async () => {
     const page = await newE2EPage();
     await page.setContent('<pds-property icon="check-circle">Property text</pds-property>');
 
@@ -24,7 +25,7 @@ describe('pds-property', () => {
     expect(element.textContent).toBe('Property text');
   });
 
-    it('renders with slot content', async () => {
+  it('renders with slot content', async () => {
     const page = await newE2EPage();
     await page.setContent(`
       <pds-property icon="info-circle">
@@ -52,5 +53,14 @@ describe('pds-property', () => {
     expect(iconName).toBe('star');
 
     expect(element.textContent).toBe('Property text without icon');
+  });
+});
+
+describe('pds-property accessibility', () => {
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-property>Property text</pds-property>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
   });
 });

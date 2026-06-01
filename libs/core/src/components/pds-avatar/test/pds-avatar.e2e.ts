@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-avatar', () => {
   it('renders', async () => {
@@ -36,5 +37,14 @@ describe('pds-avatar', () => {
 
     const avatar = await page.find('pds-avatar');
     expect(avatar.shadowRoot.querySelector('pds-icon')).toBeNull();
-  })
+  });
+});
+
+describe('pds-avatar accessibility', () => {
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-avatar image="/avatar.jpg" alt="Jane Doe"></pds-avatar>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
 });

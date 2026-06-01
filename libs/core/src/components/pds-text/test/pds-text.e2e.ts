@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-text', () => {
   it('renders', async () => {
@@ -25,5 +26,14 @@ describe('pds-text', () => {
     const el = await page.find('pds-text >>> h1');
 
     expect((await el.getComputedStyle()).getPropertyValue('text-overflow')).toBe('ellipsis');
+  });
+});
+
+describe('pds-text accessibility', () => {
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-text>Body text</pds-text>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
   });
 });
