@@ -259,7 +259,7 @@ label:has(input:disabled) {
     justify-content: center;
     overflow: hidden;
     position: relative;
-    transition: all 0.2s ease;
+    transition: all var(--pine-motion-duration-base) ease;
 
     &:hover {
       border-color: var(--pine-color-border-hover);

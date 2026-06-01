@@ -240,7 +240,7 @@
   min-height: var(--pds-input-field-min-height);
   min-width: var(--pine-dimension-none);
   padding: var(--pds-input-padding-y) var(--pds-input-padding-x);
-  transition: border-color 0.2s ease;
+  transition: border-color var(--pine-motion-duration-base) ease;
   width: 100%;
 
   &:hover:not(:disabled) {
