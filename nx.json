@@ -32,7 +32,7 @@
   "release": {
     "changelog": {
       "workspaceChangelog": {
-        "createRelease": "github"
+        "createRelease": false
       }
     },
     "conventionalCommits": {
@@ -93,7 +93,11 @@
     "projects": ["libs/*"],
     "version": {
       "conventionalCommits": true,
-      "preVersionCommand": "npx nx run-many -t build"
+      "preVersionCommand": "npx nx run-many -t build",
+      "generatorOptions": {
+        "installIgnoreScripts": true,
+        "skipLockFileUpdate": true
+      }
     }
   }
 }

@@ -237,41 +237,78 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
 
-      # `nx release` runs `npm install` internally to refresh the lockfile after
-      # version bumps. In some environments that resolves transitive peer deps
-      # differently than `npm ci` expects, producing a lockfile that release
-      # commits successfully but every downstream `npm ci` then rejects with
-      # "Missing: X from lock file". When that happens, regenerate the lockfile
-      # and push a fix-up commit so feature branches see a green main.
-      - name: Self-heal lockfile if release produced an npm-ci-incompatible state
+      # nx release commits locally but does not push (createRelease: false). We
+      # regenerate the lockfile with the same npm CI uses, amend it into the
+      # release commit, fix the commit message, verify npm ci, then push once.
+      - name: Finalize release commit, push, and create GitHub release
         shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.KAJABI_CI_GH_TOKEN }}
         run: |
           set -euo pipefail
-          git pull --rebase --autostash
-          rm -rf node_modules
-          if npm ci --ignore-scripts; then
-            echo "Lockfile is npm-ci compatible. No heal needed."
+          git fetch origin main
+          git pull --rebase --autostash origin main
+
+          if git merge-base --is-ancestor HEAD origin/main; then
+            echo "Release did not create a new commit; nothing to finalize."
             exit 0
           fi
-          echo "::warning::Lockfile drifted during release — regenerating."
+
+          VERSION=$(node -p "require('./libs/core/package.json').version")
+          TAG="v${VERSION}"
+          COMMIT_MSG="chore(release): release ${VERSION}"
+
+          rm -rf node_modules
           npm install --ignore-scripts
-          if git diff --quiet -- package-lock.json; then
-            echo "::error::Regenerated lockfile is identical to the broken one; aborting to avoid an infinite heal loop."
-            exit 1
+
+          NEEDS_AMEND=false
+          if ! git diff --quiet -- package-lock.json; then
+            git add package-lock.json
+            NEEDS_AMEND=true
           fi
-          # Verify the regenerated lockfile actually passes npm ci before
-          # pushing — otherwise we could ship a different-but-still-broken
-          # lockfile that keeps feature branches red.
+          if [[ "$(git log -1 --format=%s)" != "$COMMIT_MSG" ]]; then
+            NEEDS_AMEND=true
+          fi
+          if [[ "$NEEDS_AMEND" == "true" ]]; then
+            git commit --amend -m "$COMMIT_MSG"
+          fi
+
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            git tag -f "$TAG"
+            TAG_FORCE_PUSH=true
+          else
+            git tag "$TAG"
+            TAG_FORCE_PUSH=false
+          fi
+
           rm -rf node_modules
           if ! npm ci --ignore-scripts; then
-            echo "::error::Regenerated lockfile still fails npm ci — aborting heal without pushing."
+            echo "::error::Lockfile still fails npm ci after regeneration."
             exit 1
           fi
-          git add package-lock.json
-          # Use chore: so the next nx release run does not treat the heal as a
-          # bug fix and trigger another patch version bump for plumbing.
-          git commit -m "chore: sync package-lock.json after release"
-          git push
+
+          git push origin HEAD:main
+          if [[ "$TAG_FORCE_PUSH" == "true" ]]; then
+            git push origin "$TAG" --force
+          else
+            git push origin "$TAG"
+          fi
+
+          NOTES_FILE=$(mktemp)
+          trap 'rm -f "$NOTES_FILE"' EXIT
+          awk -v ver="$VERSION" '/^## / { if (found) exit; if ($2 == ver) found=1; next } found { print }' CHANGELOG.md > "$NOTES_FILE"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            if [[ -s "$NOTES_FILE" ]]; then
+              gh release edit "$TAG" --title "$TAG" --notes-file "$NOTES_FILE"
+            else
+              echo "::warning::No changelog section found for ${VERSION}; leaving existing release notes."
+            fi
+          elif [[ -s "$NOTES_FILE" ]]; then
+            gh release create "$TAG" --title "$TAG" --notes-file "$NOTES_FILE"
+          else
+            echo "::warning::No changelog section found for ${VERSION}; using generated notes."
+            gh release create "$TAG" --title "$TAG" --generate-notes
+          fi
 
   send-slack-notification:
     runs-on: ubuntu-latest
