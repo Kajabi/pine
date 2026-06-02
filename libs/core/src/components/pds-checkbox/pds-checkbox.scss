@@ -47,10 +47,10 @@
       content: "";
       display: block;
       height: 7px;
-      left: 50%;
+      inset-block-start: 50%;
+      inset-inline-start: 50%;
       position: absolute;
-      top: 50%;
-      transform: rotate(90deg) translate3d(-103%, 32%, 0);
+      transform: translate(-50%, -50%) rotate(90deg);
       width: 4px;
     }
   }
@@ -90,10 +90,10 @@ input {
       content: "";
       display: block;
       height: 7px;
-      left: 50%;
+      inset-block-start: 50%;
+      inset-inline-start: 50%;
       position: absolute;
-      top: 50%;
-      transform: rotate(43deg) translate3d(-110%, -30%, 0);
+      transform: translate(-50%, -60%) rotate(43deg);
       width: 4px;
     }
   }
@@ -123,6 +123,12 @@ input {
 
   &:focus-visible {
     outline: var(--pine-outline-focus);
+  }
+}
+
+:host-context([dir='rtl']) {
+  input:checked::after {
+    transform: translate(-50%, -60%) rotate(-43deg);
   }
 }
 

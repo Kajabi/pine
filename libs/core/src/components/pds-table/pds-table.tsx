@@ -1,4 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop, State, Listen } from '@stencil/core';
+import { getScrollOffsetFromStart } from '../../utils/scroll';
 
 @Component({
   tag: 'pds-table',
@@ -142,7 +143,7 @@ export class PdsTable {
    *
    * This method creates a horizontal scrolling system where:
    * - The table content can scroll horizontally when it exceeds the container width
-   * - Scroll shadows appear at the left/right edges to indicate scrollable content
+   * - Scroll shadows appear at the inline-start/end edges to indicate scrollable content
    * - Fixed columns remain sticky during horizontal scrolling
    * - Shadows respect border-radius and don't appear when there's nothing to scroll
    *
@@ -165,20 +166,21 @@ export class PdsTable {
 
     /**
      * Updates the visibility of scroll shadows based on current scroll position.
-     * Left shadow: Shows when scrolled away from start (hidden if fixedColumn is enabled)
-     * Right shadow: Shows when there's content to scroll and not at the end
+     * Inline-start shadow: shows when scrolled away from start (hidden if fixedColumn is enabled)
+     * Inline-end shadow: shows when there is content to scroll and not at the end
      */
     this._responsiveHandleScroll = () => {
       if (!this.scrollContainer) return;
 
-      const scrollLeft = this.scrollContainer.scrollLeft;
-      const maxScrollLeft = this.scrollContainer.scrollWidth - this.scrollContainer.clientWidth;
+      const { scrollWidth, clientWidth } = this.scrollContainer;
+      const maxScroll = scrollWidth - clientWidth;
+      const scrollOffset = getScrollOffsetFromStart(this.scrollContainer);
 
-      // Show left shadow when scrolled away from start, but not if there's a fixed column
-      leftShadow.style.opacity = (scrollLeft > 0 && !this.fixedColumn) ? '1' : '0';
+      // Inline-start shadow when scrolled away from start, but not if there's a fixed column
+      leftShadow.style.opacity = (scrollOffset > 0 && !this.fixedColumn) ? '1' : '0';
 
-      // Show right shadow only if there's content to scroll AND not at end
-      rightShadow.style.opacity = (maxScrollLeft > 0 && scrollLeft < maxScrollLeft - 1) ? '1' : '0';
+      // Inline-end shadow when there is content to scroll and not at the end
+      rightShadow.style.opacity = (maxScroll > 0 && scrollOffset < maxScroll - 1) ? '1' : '0';
     };
 
     // Add scroll event listener to container element

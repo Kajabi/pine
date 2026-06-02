@@ -1,5 +1,6 @@
 import { Component, Element, Event, EventEmitter, Host, h, Prop, State, Method, Listen } from '@stencil/core';
 import type { BasePdsProps } from '@utils/interfaces';
+import { isRtlDirection } from '@utils/scroll';
 import type { PdsFilterOpenEventDetail, PdsFilterCloseEventDetail, PdsFilterClearEventDetail, PdsFilterVariant } from './filter-interface';
 
 import { enlarge, trash } from '@pine-ds/icons/icons';
@@ -254,16 +255,19 @@ export class PdsFilter implements BasePdsProps {
     const popoverWidth = 228;
     const popoverHeight = this.popoverEl.getBoundingClientRect().height || 200;
 
-    // Boundary detection for flipping
+    // Boundary detection for flipping (inline-end overflow respects document direction)
     const bufferSpace = 20;
-    const wouldOverflowRight = (triggerRect.left + popoverWidth + bufferSpace) > viewportWidth;
+    const isRtl = isRtlDirection(this.el);
+    const wouldOverflowInlineEnd = isRtl
+      ? (triggerRect.right - popoverWidth - bufferSpace) < 0
+      : (triggerRect.left + popoverWidth + bufferSpace) > viewportWidth;
     const wouldOverflowBottom = (triggerRect.bottom + 8 + popoverHeight + bufferSpace) > viewportHeight;
 
     if (supportsAnchorPositioning) {
       // Modern browsers: CSS anchor positioning + JavaScript-controlled flipping
       this.popoverEl.classList.remove('popover-flip-horizontal', 'popover-flip-vertical');
 
-      if (wouldOverflowRight) {
+      if (wouldOverflowInlineEnd) {
         this.popoverEl.classList.add('popover-flip-horizontal');
       }
 
@@ -273,15 +277,15 @@ export class PdsFilter implements BasePdsProps {
 
     } else {
       // Fallback browsers: JavaScript positioning with boundary detection
-      let left = triggerRect.left;
+      let left = isRtl ? triggerRect.right - popoverWidth : triggerRect.left;
       let top = triggerRect.bottom + 8;
-      let transformOrigin = 'top left';
+      let transformOrigin = isRtl ? 'top right' : 'top left';
 
       // Apply horizontal flipping if needed
-      if (wouldOverflowRight) {
+      if (wouldOverflowInlineEnd) {
         const actualPopoverWidth = this.popoverEl.getBoundingClientRect().width || popoverWidth;
-        left = triggerRect.right - actualPopoverWidth;
-        transformOrigin = 'top right';
+        left = isRtl ? triggerRect.left : triggerRect.right - actualPopoverWidth;
+        transformOrigin = isRtl ? 'top left' : 'top right';
       }
 
       // Apply vertical flipping if needed

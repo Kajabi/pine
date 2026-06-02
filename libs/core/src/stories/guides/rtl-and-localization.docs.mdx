@@ -1,0 +1,21 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Guides/RTL and localization" />
+
+# RTL and localization
+
+Pine targets **English-first** Kajabi product surfaces today. Components are built to work in RTL when the app sets `dir="rtl"` and passes translated copy from the product i18n layer. Layout styles in Pine SCSS use **CSS logical properties** (`margin-inline`, `padding-inline`, `inset-inline`, `border-*-start/end`, and similar) so mirroring does not require per-locale stylesheets.
+
+## What teams should assume today
+
+1. **Document text direction** at the app shell (`dir="rtl"` / `lang`) when you ship RTL.
+2. **Prefer tokens and logical properties** in consuming apps for spacing and alignment that should mirror under RTL. Report gaps in Slack (`#ds-support`).
+3. **Strings live in the product**, not inside Pine primitives—pass translated `label`, `aria-label`, and slot content from your app’s i18n layer.
+
+## Verifying in Storybook
+
+Storybook includes a **Direction** toolbar control (LTR / RTL). Switching it applies `dir` on the preview iframe’s `<html>` and `<body>`, matching the consumer-app contract for RTL surfaces.
+
+Use the toggle to spot-check components: mirroring, overlay placement, iconography, truncation, keyboard, and screen reader behavior where applicable.
+
+When you change component layout or positioning, add or update Stencil tests and a short RTL Storybook example where it helps catch regressions in CI.

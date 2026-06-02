@@ -138,10 +138,29 @@ const withTheme = (StoryFn, context) => {
   return StoryFn();
 };
 
+// Direction decorator that applies `dir` on the preview iframe only.
+// Unlike data-theme, `dir` is interpreted by the browser and must not be set on
+// window.parent (that would flip Storybook manager/docs chrome).
+// See Guides/RTL and localization for usage.
+const withDirection = (StoryFn, context) => {
+  const direction = context.globals.direction || 'ltr';
+
+  document.documentElement.setAttribute('dir', direction);
+  document.body.setAttribute('dir', direction);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('dir', direction);
+    document.body.setAttribute('dir', direction);
+  }, [direction]);
+
+  return StoryFn();
+};
+
 const preview = {
   decorators: [
     withCustomEventActions,
     withTheme,
+    withDirection,
   ],
 
   globalTypes: {
@@ -157,10 +176,23 @@ const preview = {
         dynamicTitle: true,
       },
     },
+    direction: {
+      description: 'Document direction (LTR or RTL)',
+      toolbar: {
+        title: 'Direction',
+        icon: 'transfer',
+        items: [
+          { value: 'ltr', title: 'LTR', right: 'Left-to-right' },
+          { value: 'rtl', title: 'RTL', right: 'Right-to-left' },
+        ],
+        dynamicTitle: true,
+      },
+    },
   },
 
   initialGlobals: {
     theme: 'light',
+    direction: 'ltr',
   },
 
   parameters: {

@@ -179,7 +179,7 @@
   /* Modern browsers: CSS anchor positioning with JavaScript-controlled flipping */
   @supports (anchor-name: --test) {
     inset-block-start: calc(anchor(--filter-trigger bottom) + var(--pine-dimension-100));
-    inset-inline-start: anchor(--filter-trigger left);
+    inset-inline-start: anchor(--filter-trigger start);
     position: fixed; /* Anchor positioning requires fixed positioning */
     /* stylelint-disable-next-line property-no-unknown */
     position-anchor: --filter-trigger;
@@ -188,8 +188,8 @@
 
     /* Flipping classes applied by JavaScript for precise control */
     &.popover-flip-horizontal {
-      inset-inline-start: anchor(--filter-trigger right);
-      transform: translateX(-100%);
+      inset-inline-end: anchor(--filter-trigger end);
+      inset-inline-start: auto;
     }
 
     &.popover-flip-vertical {
@@ -199,14 +199,15 @@
 
     &.popover-flip-horizontal.popover-flip-vertical {
       inset-block-start: anchor(--filter-trigger top);
-      inset-inline-start: anchor(--filter-trigger right);
-      transform: translate(-100%, calc(-100% - var(--pine-dimension-100)));
+      inset-inline-end: anchor(--filter-trigger end);
+      inset-inline-start: auto;
+      transform: translateY(calc(-100% - var(--pine-dimension-100)));
     }
 
     /* Ensure fallback class works with flipping in modern browsers */
     &.is-open.popover-flip-horizontal {
-      inset-inline-start: anchor(--filter-trigger right);
-      transform: translateX(-100%);
+      inset-inline-end: anchor(--filter-trigger end);
+      inset-inline-start: auto;
     }
 
     &.is-open.popover-flip-vertical {
@@ -216,8 +217,9 @@
 
     &.is-open.popover-flip-horizontal.popover-flip-vertical {
       inset-block-start: anchor(--filter-trigger top);
-      inset-inline-start: anchor(--filter-trigger right);
-      transform: translate(-100%, calc(-100% - var(--pine-dimension-100)));
+      inset-inline-end: anchor(--filter-trigger end);
+      inset-inline-start: auto;
+      transform: translateY(calc(-100% - var(--pine-dimension-100)));
     }
 
   }

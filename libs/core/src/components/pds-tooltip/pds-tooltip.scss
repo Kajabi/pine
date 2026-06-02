@@ -17,6 +17,7 @@
   max-width: var(--tooltip-dimension-max-width);
   opacity: 0;
   padding: var(--pine-dimension-xs) calc(var(--pine-dimension-md) / 2);
+  position: relative;
   visibility: hidden;
   width: max-content;
 
@@ -28,7 +29,7 @@
   }
 
   .pds-tooltip.pds-tooltip--has-html-content & {
-    width: auto;
+    width: fit-content;
   }
 
   &::after {
@@ -41,6 +42,7 @@
     position: absolute;
     width: 0;
 
+    // Arrow placement uses physical left/right to match Floating UI placement names.
     .pds-tooltip--right & {
       border-inline-end-color: var(--pine-color-primary);
       border-width: var(--tooltip-border-width-arrow-left);
