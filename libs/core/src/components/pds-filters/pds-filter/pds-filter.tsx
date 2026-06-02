@@ -259,7 +259,7 @@ export class PdsFilter implements BasePdsProps {
     const bufferSpace = 20;
     const isRtl = isRtlDirection(this.el);
     const wouldOverflowInlineEnd = isRtl
-      ? (triggerRect.left - popoverWidth - bufferSpace) < 0
+      ? (triggerRect.right - popoverWidth - bufferSpace) < 0
       : (triggerRect.left + popoverWidth + bufferSpace) > viewportWidth;
     const wouldOverflowBottom = (triggerRect.bottom + 8 + popoverHeight + bufferSpace) > viewportHeight;
 
