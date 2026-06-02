@@ -1,3 +1,22 @@
+## 3.26.2 (2026-06-02)
+
+### Bug Fixes 🐛
+
+- **pds-button:** block clicks when disabled attribute is reflected ([#747](https://github.com/Kajabi/pine/pull/747))
+- **pds-input:** remove label wrapper margin when label is hidden ([#749](https://github.com/Kajabi/pine/pull/749))
+
+### Documentation 📄
+
+- add ADR log with 5 backfilled records ([#733](https://github.com/Kajabi/pine/pull/733))
+- add per-component lifecycle status badges ([#738](https://github.com/Kajabi/pine/pull/738))
+- **storybook:** add StatusBadge to all component docs pages ([#748](https://github.com/Kajabi/pine/pull/748))
+- **storybook:** add accessibility, getting started, and migration guide docs ([#696](https://github.com/Kajabi/pine/pull/696))
+
+### ❤️ Thank You
+
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.26.1 (2026-05-18)
 
 ### Bug Fixes 🐛
