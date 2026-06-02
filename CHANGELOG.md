@@ -1,3 +1,13 @@
+## 3.26.3 (2026-06-02)
+
+### Documentation 📄
+
+- **foundations:** add motion, RTL, status, and Code Connect coverage docs ([#736](https://github.com/Kajabi/pine/pull/736))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 3.26.2 (2026-06-02)
 
 ### Bug Fixes 🐛
