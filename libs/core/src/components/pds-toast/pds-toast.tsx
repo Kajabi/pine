@@ -1,4 +1,7 @@
-import { Component, Event, EventEmitter, h, Host, Method, Prop, State, Watch } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, h, Host, Method, Prop, State, Watch } from '@stencil/core';
+
+/** Fallback when computed `--animation-duration` is unavailable (matches `--pine-motion-duration-slow`). */
+const TOAST_DISMISS_ANIMATION_MS = 300;
 
 /**
  * @part dismiss
@@ -9,6 +12,8 @@ import { Component, Event, EventEmitter, h, Host, Method, Prop, State, Watch } f
   shadow: true,
 })
 export class PdsToast {
+  @Element() el!: HTMLPdsToastElement;
+
   // Props
   /**
    * A unique identifier used for the underlying component `id` attribute.
@@ -90,8 +95,7 @@ export class PdsToast {
     // Start the animation out
     this.isAnimatingOut = true;
 
-    // Wait for animation to complete before hiding and cleanup
-    await new Promise((resolve) => setTimeout(resolve, 300)); // Match --animation-duration
+    await this.waitForDismissAnimation();
 
     this.isVisible = false;
     this.cleanup();
@@ -99,6 +103,48 @@ export class PdsToast {
   }
 
   // Private methods
+  private waitForDismissAnimation(): Promise<void> {
+    const durationMs = this.getDismissAnimationDurationMs();
+    if (durationMs <= 0) {
+      return Promise.resolve();
+    }
+    return new Promise((resolve) => window.setTimeout(resolve, durationMs));
+  }
+
+  private getDismissAnimationDurationMs(): number {
+    if (typeof window === 'undefined') {
+      return TOAST_DISMISS_ANIMATION_MS;
+    }
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return 0;
+    }
+
+    const fromCss = this.parseCssDurationToMs(
+      getComputedStyle(this.el).getPropertyValue('--animation-duration').trim(),
+    );
+
+    return fromCss ?? TOAST_DISMISS_ANIMATION_MS;
+  }
+
+  private parseCssDurationToMs(value: string): number | undefined {
+    if (!value) {
+      return undefined;
+    }
+    if (value === '0' || value === '0ms' || value === '0s') {
+      return 0;
+    }
+    if (value.endsWith('ms')) {
+      const ms = Number.parseFloat(value);
+      return Number.isFinite(ms) ? ms : undefined;
+    }
+    if (value.endsWith('s')) {
+      const seconds = Number.parseFloat(value);
+      return Number.isFinite(seconds) ? seconds * 1000 : undefined;
+    }
+    return undefined;
+  }
+
   private cleanup(): void {
     if (this.dismissTimer) {
       window.clearTimeout(this.dismissTimer);

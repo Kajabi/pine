@@ -25,7 +25,7 @@
   line-height: var(--pine-line-height-150);
   padding: var(--pine-dimension-025) var(--pine-dimension-125);
   position: relative;
-  transition: all 0.2s ease;
+  transition: all var(--pine-motion-duration-base) ease;
 
   pds-icon {
     block-size: var(--pine-font-size-100);

@@ -169,6 +169,52 @@ describe('pds-toast', () => {
     expect(dismissSpy).toHaveBeenCalledWith({ componentId: 'test-toast' });
   });
 
+  it('should dismiss without exit-animation delay when prefers-reduced-motion is reduce', async () => {
+    const originalMatchMedia = window.matchMedia;
+    const setTimeoutSpy = jest.spyOn(window, 'setTimeout');
+
+    Object.defineProperty(window, 'matchMedia', {
+      configurable: true,
+      writable: true,
+      value: (query: string) =>
+        ({
+          matches: query.includes('prefers-reduced-motion'),
+          media: query,
+          onchange: null,
+          addListener: jest.fn(),
+          removeListener: jest.fn(),
+          addEventListener: jest.fn(),
+          removeEventListener: jest.fn(),
+          dispatchEvent: jest.fn(),
+        }) as MediaQueryList,
+    });
+
+    try {
+      const page = await newSpecPage({
+        components: [PdsToast],
+        html: `<pds-toast component-id="test-toast" duration="0"></pds-toast>`,
+      });
+
+      const component = page.rootInstance as PdsToast;
+
+      await component.dismiss();
+
+      const exitAnimationDelays = setTimeoutSpy.mock.calls
+        .map(([, delay]) => delay)
+        .filter((delay) => delay === 300);
+
+      expect(exitAnimationDelays).toHaveLength(0);
+      expect(component.isVisible).toBe(false);
+    } finally {
+      setTimeoutSpy.mockRestore();
+      Object.defineProperty(window, 'matchMedia', {
+        configurable: true,
+        writable: true,
+        value: originalMatchMedia,
+      });
+    }
+  });
+
   // Test for button onClick calling dismiss
   it('should dismiss when dismiss button is clicked', async () => {
     const page = await newSpecPage({
