@@ -247,7 +247,7 @@ export class PdsPopover {
     this.portalEl.style.display = 'none';
     this.portalEl.style.opacity = '0';
     this.portalEl.style.visibility = 'hidden';
-    this.portalEl.style.backgroundColor = 'var(--pine-color-background-container)';
+    this.portalEl.style.backgroundColor = 'var(--pine-color-background-overlay)';
     this.portalEl.style.borderRadius = 'var(--pine-dimension-125)';
     this.portalEl.style.boxShadow = 'var(--pine-box-shadow-200)';
     this.portalEl.style.margin = 'var(--pine-dimension-none)';

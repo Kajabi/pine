@@ -24,7 +24,7 @@
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",
-    "@kajabi-ui/styles": "^1.3.0",
+    "@kajabi-ui/styles": "^1.4.0",
     "@nx/devkit": "20.4.6",
     "@nx/js": "20.4.6",
     "@size-limit/file": "^11.1.6",
