@@ -12,6 +12,17 @@ export interface PatternPreviewProps {
   html: string;
 }
 
+type PdsModalElement = HTMLElement & { open?: boolean };
+
+/** Storybook previews mount every pattern at once; never leave modals open. */
+function closeModalsForPreview(root: ParentNode): void {
+  root.querySelectorAll('pds-modal').forEach((modal) => {
+    const el = modal as PdsModalElement;
+    el.removeAttribute('open');
+    el.open = false;
+  });
+}
+
 /**
  * Mounts verified Pine web-component markup from mcp-patterns.json in Storybook.
  * Uses DOMParser + node import — not innerHTML — because html is static repo content.
@@ -23,6 +34,7 @@ function mountPatternMarkup(container: HTMLElement, html: string): void {
   Array.from(doc.body.childNodes).forEach((node) => {
     fragment.appendChild(document.importNode(node, true));
   });
+  closeModalsForPreview(fragment);
   container.append(fragment);
 }
 
