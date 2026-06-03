@@ -6,7 +6,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 Map common Sage-era and raw HTML/CSS habits from the Kajabi monolith onto their Pine equivalents. Most violations in admin UI are not "wrong Pine" — they are Sage habits (div stacks, utility classes, raw headings, max-width wrappers) that were never translated. Use this when converting existing markup to Pine, or when an AI assistant is editing a file that still contains Sage/HTML layout.
 
-> **pine-mcp note:** `get_pine_design_doc` currently runs pulled `.docs.mdx` through an MDX parser that moves fenced code blocks into a separate "Examples" section, which breaks inline before/after pairing. This guide uses **comparison tables** instead of fenced blocks so before/after stay together. If pine-mcp preserves fenced code for `guides/` docs, fenced examples can be added later.
+> **pine-mcp note:** `get_pine_design_doc` currently runs pulled `.docs.mdx` through an MDX parser that moves fenced code blocks into a separate "Examples" section, which breaks inline before/after pairing. This guide uses **comparison tables** (`pds-table`) instead of fenced blocks so before/after stay together. If pine-mcp preserves fenced code for `guides/` docs, fenced examples can be added later.
 
 ## The mental model shift
 
@@ -23,54 +23,152 @@ Spacing comes from props (`gap`, `padding`), not margin utilities or inline styl
 
 ## Quick mapping
 
-| Sage / monolith habit | Pine approach |
-|---|---|
-| `<div class="container">` / CSS `max-width` wrapper | `pds-container` (`size="sm…full"`) |
-| Bootstrap `row` / `col-md-6` grids | `pds-row` + `pds-box size-md="6"` |
-| `<div style="display:flex; flex-direction:column">` stack | `pds-box direction="column" gap="…"` |
-| Margin/padding utility classes (`mt-3`, `mb-2`) | `gap` on the parent box/row; `padding`/`margin-*` props |
-| `<h1>`, `<h2>`, `<p>`, `.sage-heading` text | `pds-text tag="h1"` / `tag="p"` |
-| `<button>`, Sage `<Button>` | `pds-button variant="…"` |
-| `<input>`, `<select>`, `<textarea>` | `pds-input` / `pds-select` / `pds-textarea` |
-| Inline `style="…"` / hardcoded hex colors | Pine props + design tokens (`get_pine_tokens`) |
+<pds-box border border-radius="sm" fit>
+  <pds-table component-id="sage-to-pine-quick-mapping" compact row-dividers responsive>
+    <pds-table-head>
+      <pds-table-head-cell>Sage / monolith habit</pds-table-head-cell>
+      <pds-table-head-cell>Pine approach</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell><code>&lt;div class="container"&gt;</code> / CSS <code>max-width</code> wrapper</pds-table-cell>
+        <pds-table-cell><code>pds-container</code> (<code>size="sm…full"</code>)</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Bootstrap <code>row</code> / <code>col-md-6</code> grids</pds-table-cell>
+        <pds-table-cell><code>pds-row</code> + <code>pds-box size-md="6"</code></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>&lt;div style="display:flex; flex-direction:column"&gt;</code> stack</pds-table-cell>
+        <pds-table-cell><code>pds-box direction="column" gap="…"</code></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Margin/padding utility classes (<code>mt-3</code>, <code>mb-2</code>)</pds-table-cell>
+        <pds-table-cell><code>gap</code> on the parent box/row; <code>padding</code>/<code>margin-*</code> props</pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>&lt;h1&gt;</code>, <code>&lt;h2&gt;</code>, <code>&lt;p&gt;</code>, <code>.sage-heading</code> text</pds-table-cell>
+        <pds-table-cell><code>pds-text tag="h1"</code> / <code>tag="p"</code></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>&lt;button&gt;</code>, Sage <code>&lt;Button&gt;</code></pds-table-cell>
+        <pds-table-cell><code>pds-button variant="…"</code></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell><code>&lt;input&gt;</code>, <code>&lt;select&gt;</code>, <code>&lt;textarea&gt;</code></pds-table-cell>
+        <pds-table-cell><code>pds-input</code> / <code>pds-select</code> / <code>pds-textarea</code></pds-table-cell>
+      </pds-table-row>
+      <pds-table-row>
+        <pds-table-cell>Inline <code>style="…"</code> / hardcoded hex colors</pds-table-cell>
+        <pds-table-cell>Pine props + design tokens (<code>get_pine_tokens</code>)</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
 
 ## Patterns (before → after)
 
 ### 1. Max-width wrapper → pds-container
 
-| Before (Sage / CSS) | After (Pine) |
-|---|---|
-| `<div class="page-wrapper" style="max-width: 960px; margin: 0 auto;">` … `</div>` | `<pds-container size="lg">` … `</pds-container>` |
+<pds-box border border-radius="sm" fit>
+  <pds-table component-id="sage-to-pine-pattern-container" compact row-dividers responsive>
+    <pds-table-head>
+      <pds-table-head-cell>Before (Sage / CSS)</pds-table-head-cell>
+      <pds-table-head-cell>After (Pine)</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell><code>&lt;div class="page-wrapper" style="max-width: 960px; margin: 0 auto;"&gt;</code> … <code>&lt;/div&gt;</code></pds-table-cell>
+        <pds-table-cell><code>&lt;pds-container size="lg"&gt;</code> … <code>&lt;/pds-container&gt;</code></pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
 
 ### 2. Vertical div stack → pds-box direction="column"
 
-| Before (Sage) | After (Pine) |
-|---|---|
-| `<div style="display:flex; flex-direction:column" class="gap-stack">` with `<div class="mb-3">` children | `<pds-box direction="column" gap="md">` with `<pds-box>` children (gap replaces per-child margins) |
+<pds-box border border-radius="sm" fit>
+  <pds-table component-id="sage-to-pine-pattern-column-stack" compact row-dividers responsive>
+    <pds-table-head>
+      <pds-table-head-cell>Before (Sage)</pds-table-head-cell>
+      <pds-table-head-cell>After (Pine)</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell><code>&lt;div style="display:flex; flex-direction:column" class="gap-stack"&gt;</code> with <code>&lt;div class="mb-3"&gt;</code> children</pds-table-cell>
+        <pds-table-cell><code>&lt;pds-box direction="column" gap="md"&gt;</code> with <code>&lt;pds-box&gt;</code> children (gap replaces per-child margins)</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
 
 ### 3. Bootstrap-style grid → pds-row + pds-box size-*
 
-| Before (Sage) | After (Pine) |
-|---|---|
-| `<div class="row"><div class="col-md-8">Main</div><div class="col-md-4">Sidebar</div></div>` | `<pds-row col-gap="md"><pds-box size-xs="12" size-md="8">Main</pds-box><pds-box size-xs="12" size-md="4">Sidebar</pds-box></pds-row>` (mobile-first; use `size-xs` baseline, not base `size`) |
+<pds-box border border-radius="sm" fit>
+  <pds-table component-id="sage-to-pine-pattern-grid" compact row-dividers responsive>
+    <pds-table-head>
+      <pds-table-head-cell>Before (Sage)</pds-table-head-cell>
+      <pds-table-head-cell>After (Pine)</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell><code>&lt;div class="row"&gt;&lt;div class="col-md-8"&gt;Main&lt;/div&gt;&lt;div class="col-md-4"&gt;Sidebar&lt;/div&gt;&lt;/div&gt;</code></pds-table-cell>
+        <pds-table-cell><code>&lt;pds-row col-gap="md"&gt;&lt;pds-box size-xs="12" size-md="8"&gt;Main&lt;/pds-box&gt;&lt;pds-box size-xs="12" size-md="4"&gt;Sidebar&lt;/pds-box&gt;&lt;/pds-row&gt;</code> (mobile-first; use <code>size-xs</code> baseline, not base <code>size</code>)</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
 
 ### 4. Headings & body text → pds-text
 
-| Before (Sage) | After (Pine) |
-|---|---|
-| `<h1 class="sage-heading">Settings</h1>` and `<p class="text-muted">Manage your account.</p>` | `<pds-text tag="h1">Settings</pds-text>` and `<pds-text tag="p" color="--pine-color-text-secondary">Manage your account.</pds-text>` |
+<pds-box border border-radius="sm" fit>
+  <pds-table component-id="sage-to-pine-pattern-text" compact row-dividers responsive>
+    <pds-table-head>
+      <pds-table-head-cell>Before (Sage)</pds-table-head-cell>
+      <pds-table-head-cell>After (Pine)</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell><code>&lt;h1 class="sage-heading"&gt;Settings&lt;/h1&gt;</code> and <code>&lt;p class="text-muted"&gt;Manage your account.&lt;/p&gt;</code></pds-table-cell>
+        <pds-table-cell><code>&lt;pds-text tag="h1"&gt;Settings&lt;/pds-text&gt;</code> and <code>&lt;pds-text tag="p" color="--pine-color-text-secondary"&gt;Manage your account.&lt;/pds-text&gt;</code></pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
 
 ### 5. Spacing utilities → gap
 
-| Before (Sage) | After (Pine) |
-|---|---|
-| Flex row with `<button class="mr-2">Save</button>` | `<pds-box gap="sm"><pds-button variant="primary">Save</pds-button><pds-button variant="secondary">Cancel</pds-button></pds-box>` |
+<pds-box border border-radius="sm" fit>
+  <pds-table component-id="sage-to-pine-pattern-gap" compact row-dividers responsive>
+    <pds-table-head>
+      <pds-table-head-cell>Before (Sage)</pds-table-head-cell>
+      <pds-table-head-cell>After (Pine)</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell>Flex row with <code>&lt;button class="mr-2"&gt;Save&lt;/button&gt;</code></pds-table-cell>
+        <pds-table-cell><code>&lt;pds-box gap="sm"&gt;&lt;pds-button variant="primary"&gt;Save&lt;/pds-button&gt;&lt;pds-button variant="secondary"&gt;Cancel&lt;/pds-button&gt;&lt;/pds-box&gt;</code></pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
 
 ### 6. Raw / Sage controls → semantic Pine components
 
-| Before (Sage) | After (Pine) |
-|---|---|
-| Separate `<label>`, `<input type="email" />`, `<button class="btn btn-primary">` | `<pds-input label="Email" type="email"></pds-input>` and `<pds-button variant="primary">Save</pds-button>` (label is a prop; never raw form/button elements) |
+<pds-box border border-radius="sm" fit>
+  <pds-table component-id="sage-to-pine-pattern-controls" compact row-dividers responsive>
+    <pds-table-head>
+      <pds-table-head-cell>Before (Sage)</pds-table-head-cell>
+      <pds-table-head-cell>After (Pine)</pds-table-head-cell>
+    </pds-table-head>
+    <pds-table-body>
+      <pds-table-row>
+        <pds-table-cell>Separate <code>&lt;label&gt;</code>, <code>&lt;input type="email" /&gt;</code>, <code>&lt;button class="btn btn-primary"&gt;</code></pds-table-cell>
+        <pds-table-cell><code>&lt;pds-input label="Email" type="email"&gt;&lt;/pds-input&gt;</code> and <code>&lt;pds-button variant="primary"&gt;Save&lt;/pds-button&gt;</code> (label is a prop; never raw form/button elements)</pds-table-cell>
+      </pds-table-row>
+    </pds-table-body>
+  </pds-table>
+</pds-box>
 
 ## Gotchas when migrating
 
