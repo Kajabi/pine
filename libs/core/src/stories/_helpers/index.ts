@@ -32,6 +32,8 @@ export const customArgsWithIconControl = ({property}: Omit<IconControlArgs, 'com
 
 export { ChangelogLoader } from './ChangelogLoader';
 export { ChangelogRenderer } from './ChangelogRenderer';
+export { PatternCatalog } from './PatternCatalog';
+export { PatternPreview } from './PatternPreview';
 export { StatusBadge } from './StatusBadge';
 export type { ComponentStatus, StatusBadgeProps } from './StatusBadge';
 
