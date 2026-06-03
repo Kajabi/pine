@@ -1,3 +1,14 @@
+## 3.26.4 (2026-06-03)
+
+### Styles 🎨
+
+- adopt pine motion duration tokens for component transitions ([#755](https://github.com/Kajabi/pine/pull/755))
+- adopt background-overlay token for overlay panel surfaces ([#760](https://github.com/Kajabi/pine/pull/760))
+
+### ❤️ Thank You
+
+- Quinton Jason
+
 ## 3.26.3 (2026-06-02)
 
 ### Documentation 📄
