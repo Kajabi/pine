@@ -1,71 +1,126 @@
 {
   "patterns": [
     {
-      "id": "settings-page",
-      "name": "Settings page",
+      "id": "page-heading-actions",
+      "name": "Page heading with actions",
       "category": "admin",
-      "description": "A single-column settings/edit form capped to a readable width with a save/cancel action row.",
-      "when": "Account settings, profile edits, configuration screens — anywhere a form should not stretch across a wide viewport.",
-      "code": "<pds-container size=\"md\">\n  <pds-box direction=\"column\" gap=\"lg\">\n    <pds-text tag=\"h1\">Settings</pds-text>\n\n    <pds-box direction=\"column\" gap=\"md\">\n      <pds-input label=\"Name\" value=\"Ada Lovelace\"></pds-input>\n      <pds-input label=\"Email\" type=\"email\" value=\"ada@example.com\"></pds-input>\n      <pds-textarea label=\"Bio\"></pds-textarea>\n      <pds-switch label=\"Email notifications\" checked></pds-switch>\n    </pds-box>\n\n    <pds-box gap=\"sm\">\n      <pds-button variant=\"primary\">Save changes</pds-button>\n      <pds-button variant=\"secondary\">Cancel</pds-button>\n    </pds-box>\n  </pds-box>\n</pds-container>",
+      "description": "Page title with a primary action aligned to the right — the Pine equivalent of Sage PageHeading during Kajabi admin migration.",
+      "when": "Top of any admin index or detail screen that needs a title plus one or more header actions (create, save, export).",
+      "code": "<pds-box justify-content=\"space-between\" align-items=\"center\" fit margin-block-end=\"md\">\n  <pds-text tag=\"h1\">Agents</pds-text>\n  <pds-button variant=\"primary\">\n    <pds-icon slot=\"start\" name=\"add\" aria-hidden=\"true\"></pds-icon>\n    New chatbot\n  </pds-button>\n</pds-box>",
       "notes": [
-        "pds-container caps the form width (size=\"md\"); the form itself is a single column, so no pds-row is needed.",
-        "direction=\"column\" + gap on pds-box replaces per-field margins.",
-        "Form fields use label as a prop (pds-input/pds-textarea/pds-switch) — never a separate <label>.",
-        "Primary action first, secondary (cancel) second; grouped in their own gap row."
+        "Matches kajabi-products list/detail screens that still use Sage PageHeading with a PdsButton in actions — compose this pds-box row in new Pine-only UI.",
+        "justify-content=\"space-between\" align-items=\"center\" keeps the CTA on the trailing edge; use gap=\"sm\" on a nested pds-box when there are multiple actions (Save + Cancel).",
+        "Icon-in-button uses slot=\"start\" with a valid icon name (add), not the deprecated icon prop.",
+        "Pair with table-in-card below the heading on index pages."
+      ]
+    },
+    {
+      "id": "table-in-card",
+      "name": "Table in card",
+      "category": "admin",
+      "description": "A responsive pds-table inside a bordered, shadowed pds-box — how kajabi-products wraps list tables (expert agents, referrals, commerce).",
+      "when": "Any admin data table that should read as a card on the page background rather than a bare grid.",
+      "code": "<pds-box border-radius=\"lg\" shadow=\"100\" display=\"block\" fit>\n  <pds-table component-id=\"expert-agents-table\" responsive row-dividers>\n    <pds-table-head background>\n      <pds-table-row>\n        <pds-table-head-cell>Name</pds-table-head-cell>\n        <pds-table-head-cell>Status</pds-table-head-cell>\n        <pds-table-head-cell>Created</pds-table-head-cell>\n        <pds-table-head-cell>Actions</pds-table-head-cell>\n      </pds-table-row>\n    </pds-table-head>\n    <pds-table-body>\n      <pds-table-row>\n        <pds-table-cell>Teaching Assistant</pds-table-cell>\n        <pds-table-cell>Active</pds-table-cell>\n        <pds-table-cell>Mar 3, 2026</pds-table-cell>\n        <pds-table-cell>⋯</pds-table-cell>\n      </pds-table-row>\n    </pds-table-body>\n  </pds-table>\n</pds-box>",
+      "notes": [
+        "Matches ExpertAgentsList: PdsBox borderRadius=\"lg\" shadow=\"100\" display=\"block\" fit wrapping PdsTable responsive.",
+        "Use pds-table-head background and optional border; kajabi-products wraps head cells in pds-table-row (both this and head-cell-only layouts work).",
+        "responsive enables horizontal scroll for wide column sets; row-dividers adds row separators.",
+        "Sits directly under page-heading-actions — no pds-container wrapper on typical full-width admin lists."
       ]
     },
     {
       "id": "list-page",
-      "name": "List page (header + table)",
+      "name": "List page (heading + table)",
       "category": "admin",
-      "description": "A full-width index page: a heading row with a primary action, above a data table.",
-      "when": "Resource index screens (products, members, orders) that show a table with a 'create new' action.",
-      "code": "<pds-container size=\"full\">\n  <pds-box direction=\"column\" gap=\"md\">\n    <pds-box justify-content=\"space-between\" align-items=\"center\">\n      <pds-text tag=\"h1\">Products</pds-text>\n      <pds-button variant=\"primary\">\n        <pds-icon slot=\"start\" name=\"add\"></pds-icon>\n        New product\n      </pds-button>\n    </pds-box>\n\n    <pds-table component-id=\"products\">\n      <pds-table-head>\n        <pds-table-head-cell>Name</pds-table-head-cell>\n        <pds-table-head-cell>Status</pds-table-head-cell>\n        <pds-table-head-cell>Price</pds-table-head-cell>\n      </pds-table-head>\n      <pds-table-body>\n        <pds-table-row>\n          <pds-table-cell>Intro to Design</pds-table-cell>\n          <pds-table-cell>Published</pds-table-cell>\n          <pds-table-cell>$49</pds-table-cell>\n        </pds-table-row>\n        <pds-table-row>\n          <pds-table-cell>Advanced Pine</pds-table-cell>\n          <pds-table-cell>Draft</pds-table-cell>\n          <pds-table-cell>$99</pds-table-cell>\n        </pds-table-row>\n      </pds-table-body>\n    </pds-table>\n  </pds-box>\n</pds-container>",
+      "description": "Full kajabi-products-style index page: page heading with primary action, then a card-wrapped responsive table.",
+      "when": "Resource index screens (agents, products, orders) with a create action and a data table.",
+      "code": "<pds-box direction=\"column\" gap=\"md\" fit>\n  <pds-box justify-content=\"space-between\" align-items=\"center\" fit>\n    <pds-text tag=\"h1\">Agents</pds-text>\n    <pds-button variant=\"primary\">\n      <pds-icon slot=\"start\" name=\"add\" aria-hidden=\"true\"></pds-icon>\n      New chatbot\n    </pds-button>\n  </pds-box>\n\n  <pds-box border-radius=\"lg\" shadow=\"100\" display=\"block\" fit>\n    <pds-table component-id=\"agents\" responsive row-dividers>\n      <pds-table-head background>\n        <pds-table-row>\n          <pds-table-head-cell>Name</pds-table-head-cell>\n          <pds-table-head-cell>Status</pds-table-head-cell>\n          <pds-table-head-cell>Created</pds-table-head-cell>\n        </pds-table-row>\n      </pds-table-head>\n      <pds-table-body>\n        <pds-table-row>\n          <pds-table-cell>Teaching Assistant</pds-table-cell>\n          <pds-table-cell>Active</pds-table-cell>\n          <pds-table-cell>Mar 3, 2026</pds-table-cell>\n        </pds-table-row>\n      </pds-table-body>\n    </pds-table>\n  </pds-box>\n</pds-box>",
       "notes": [
-        "Header row uses justify-content=\"space-between\" align-items=\"center\" to push the action to the right.",
-        "Table structure: pds-table-head holds pds-table-head-cell directly; pds-table-body holds pds-table-row > pds-table-cell.",
-        "Icon-in-button uses slot=\"start\" with a valid icon name (add), not the deprecated icon prop.",
-        "size=\"full\" lets the table use the available width."
+        "Composes page-heading-actions + table-in-card — the target Pine layout for kajabi-products list screens.",
+        "While migrating, teams may still use Sage PageHeading for the title row; replace it with the heading pds-box when touching the file.",
+        "Loading state: return <pds-loader is-loading size=\"md\"></pds-loader> alone (see empty-and-loading). Zero rows: use empty-state-pine."
       ]
     },
     {
       "id": "list-with-filters",
       "name": "List page with filters",
       "category": "admin",
-      "description": "A list page with a pds-filters bar between the heading and the table.",
-      "when": "Index screens that need filtering/segmenting before the table (orders, contacts, transactions).",
-      "code": "<pds-container size=\"full\">\n  <pds-box direction=\"column\" gap=\"md\">\n    <pds-text tag=\"h1\">Orders</pds-text>\n\n    <pds-filters>\n      <pds-filter component-id=\"status\" variant=\"default\" text=\"Status\" icon=\"switch-vertical\"></pds-filter>\n      <pds-filter component-id=\"date\" variant=\"default\" text=\"Date\" icon=\"switch-vertical\"></pds-filter>\n      <pds-filter component-id=\"more\" variant=\"more\" text=\"More filters\" icon=\"add-circle\"></pds-filter>\n      <pds-filter component-id=\"clear\" variant=\"clear\" text=\"Clear filters\"></pds-filter>\n    </pds-filters>\n\n    <pds-table component-id=\"orders\">\n      <pds-table-head>\n        <pds-table-head-cell>Order</pds-table-head-cell>\n        <pds-table-head-cell>Customer</pds-table-head-cell>\n        <pds-table-head-cell>Status</pds-table-head-cell>\n      </pds-table-head>\n      <pds-table-body>\n        <pds-table-row>\n          <pds-table-cell>#1024</pds-table-cell>\n          <pds-table-cell>Grace Hopper</pds-table-cell>\n          <pds-table-cell>Paid</pds-table-cell>\n        </pds-table-row>\n      </pds-table-body>\n    </pds-table>\n  </pds-box>\n</pds-container>",
+      "description": "Index page with page heading, pds-filters bar, and card-wrapped table — matches workflows AutomationFilters + table layouts.",
+      "when": "Index screens that need filtering before the table (automations, orders, contacts).",
+      "code": "<pds-box direction=\"column\" gap=\"md\" fit>\n  <pds-text tag=\"h1\">Automations</pds-text>\n\n  <pds-filters>\n    <pds-filter component-id=\"trigger\" variant=\"default\" text=\"Trigger\" icon=\"flash\"></pds-filter>\n    <pds-filter component-id=\"action\" variant=\"default\" text=\"Action\" icon=\"activity\"></pds-filter>\n    <pds-filter component-id=\"more\" variant=\"more\" text=\"More filters\" icon=\"add-circle\"></pds-filter>\n    <pds-filter component-id=\"clear\" variant=\"clear\" text=\"Clear filters\"></pds-filter>\n  </pds-filters>\n\n  <pds-box border-radius=\"lg\" shadow=\"100\" display=\"block\" fit>\n    <pds-table component-id=\"automations\" responsive row-dividers>\n      <pds-table-head background>\n        <pds-table-row>\n          <pds-table-head-cell>Name</pds-table-head-cell>\n          <pds-table-head-cell>Trigger</pds-table-head-cell>\n          <pds-table-head-cell>Status</pds-table-head-cell>\n        </pds-table-row>\n      </pds-table-head>\n      <pds-table-body>\n        <pds-table-row>\n          <pds-table-cell>Welcome sequence</pds-table-cell>\n          <pds-table-cell>Form submit</pds-table-cell>\n          <pds-table-cell>Active</pds-table-cell>\n        </pds-table-row>\n      </pds-table-body>\n    </pds-table>\n  </pds-box>\n</pds-box>",
       "notes": [
-        "pds-filters wraps pds-filter triggers; each pds-filter takes component-id, variant (default | selected | more | clear), text, and an optional icon.",
-        "Use variant=\"more\" for the overflow trigger and variant=\"clear\" for reset.",
-        "Filters sit in the same column flow as the table, separated by the parent gap — no extra margins."
+        "Real kajabi-products filters (AutomationFilters) slot dropdown panels inside pds-filter and toggle variant=\"selected\" on applied chips — this recipe shows the static trigger row.",
+        "Use variant=\"more\" for overflow and variant=\"clear\" for reset; icons should match filter semantics (flash, activity, add-circle).",
+        "Filters sit in the column flow between heading and table-in-card, separated by the parent gap.",
+        "Compose with page-heading-actions when the index also needs a header CTA."
+      ]
+    },
+    {
+      "id": "settings-page",
+      "name": "Settings / edit form page",
+      "category": "admin",
+      "description": "Kajabi admin edit form: Save/Cancel in the page heading, main fields in a wide column, optional sidebar — matches commerce coupon forms.",
+      "when": "Create/edit flows (coupons, offers, configuration) with header actions and a main + sidebar field layout.",
+      "code": "<pds-box direction=\"column\" gap=\"lg\" fit>\n  <pds-box justify-content=\"space-between\" align-items=\"center\" fit>\n    <pds-text tag=\"h1\">Edit coupon</pds-text>\n    <pds-box gap=\"sm\">\n      <pds-button variant=\"secondary\">Cancel</pds-button>\n      <pds-button variant=\"primary\">Save</pds-button>\n    </pds-box>\n  </pds-box>\n\n  <pds-box direction=\"row\" justify-content=\"space-between\" align-items=\"start\" fit>\n    <pds-box flex=\"0 0 60%\">\n      <pds-box direction=\"column\" gap=\"md\">\n        <pds-input label=\"Coupon code\" value=\"SUMMER20\"></pds-input>\n        <pds-input label=\"Name\" value=\"Summer sale\"></pds-input>\n      </pds-box>\n    </pds-box>\n    <pds-box flex=\"0 0 30%\">\n      <pds-text tag=\"h3\">Summary</pds-text>\n      <pds-text color=\"--pine-color-text-secondary\">Review discount details before saving.</pds-text>\n    </pds-box>\n  </pds-box>\n</pds-box>",
+      "notes": [
+        "Matches CouponFormLayout: Cancel + Save in the page heading actions (secondary first, primary last), not a bottom button row.",
+        "Main column ~60% + sidebar ~30% via flex=\"0 0 …\" on pds-box inside a fit row — not pds-container size=\"md\" unless the whole flow is a narrow single column.",
+        "Form fields use label as a prop — never a separate <label>.",
+        "For narrow single-column settings only, nest fields in pds-container size=\"md\" instead of the 60/30 split."
+      ]
+    },
+    {
+      "id": "delete-modal-full",
+      "name": "Delete confirmation modal (production)",
+      "category": "admin",
+      "description": "Production kajabi-products delete dialog: header with title + close, padded content (optional confirm checkbox), footer actions end-aligned.",
+      "when": "Delete/disable confirmations in commerce, expert agents, documents — any irreversible admin action.",
+      "code": "<pds-modal component-id=\"delete-upload\" size=\"sm\">\n  <pds-modal-header>\n    <pds-box align-items=\"center\" fit justify-content=\"space-between\" padding-block-start=\"md\" padding-inline-start=\"md\" padding-inline-end=\"md\">\n      <pds-text tag=\"h3\" size=\"h3\">Delete this file?</pds-text>\n      <pds-button class=\"pds-modal__close\" variant=\"unstyled\" icon-only aria-label=\"Close modal\">\n        <pds-icon slot=\"start\" name=\"remove\" aria-hidden=\"true\"></pds-icon>\n      </pds-button>\n    </pds-box>\n  </pds-modal-header>\n  <pds-modal-content>\n    <pds-box fit padding-block-start=\"xxs\" padding-block-end=\"xxs\" padding-inline-start=\"md\" padding-inline-end=\"md\" direction=\"column\" gap=\"md\">\n      <pds-text>\"Intro to Design\" will be removed. This cannot be undone.</pds-text>\n      <pds-checkbox component-id=\"confirm-delete\" label=\"Yes, I would like to delete this file.\"></pds-checkbox>\n    </pds-box>\n  </pds-modal-content>\n  <pds-modal-footer>\n    <pds-box fit justify-content=\"end\" gap=\"sm\" padding=\"md\">\n      <pds-button variant=\"secondary\">Cancel</pds-button>\n      <pds-button variant=\"destructive\">Delete</pds-button>\n    </pds-box>\n  </pds-modal-footer>\n</pds-modal>",
+      "notes": [
+        "Matches DeleteUploadModal + DeleteExpertAgentContent in kajabi-products: padded pds-box inside each modal subcomponent, close button with class=\"pds-modal__close\".",
+        "Footer: pds-box justify-content=\"end\" gap=\"sm\" — Cancel (secondary) then Delete (destructive). Disable Delete until checkbox confirmed when using pds-checkbox.",
+        "Control open via the open boolean prop in app code; omit open in static examples. size=\"sm\" suits confirmations.",
+        "Some legacy screens still use Sage Modal with PdsButton in the footer — migrate to this structure."
       ]
     },
     {
       "id": "confirm-modal",
-      "name": "Confirmation modal",
+      "name": "Confirmation modal (minimal)",
       "category": "admin",
-      "description": "A destructive-action confirmation dialog using modal subcomponents and a footer button pair.",
-      "when": "Delete/disable confirmations and other irreversible actions that need an explicit confirm step.",
-      "code": "<pds-modal component-id=\"delete-confirm\" open size=\"sm\">\n  <pds-modal-header>Delete product?</pds-modal-header>\n  <pds-modal-content>\n    <pds-text>This permanently deletes \"Intro to Design\". This can't be undone.</pds-text>\n  </pds-modal-content>\n  <pds-modal-footer>\n    <pds-button variant=\"secondary\">Cancel</pds-button>\n    <pds-button variant=\"destructive\">Delete</pds-button>\n  </pds-modal-footer>\n</pds-modal>",
+      "description": "Minimal destructive confirmation skeleton without header close or checkbox — prefer delete-modal-full for kajabi-products admin.",
+      "when": "Quick MCP examples or docs-only dialogs; use delete-modal-full for production admin UI.",
+      "code": "<pds-modal component-id=\"delete-confirm\" size=\"sm\">\n  <pds-modal-header>Delete product?</pds-modal-header>\n  <pds-modal-content>\n    <pds-text>This permanently deletes \"Intro to Design\". This can't be undone.</pds-text>\n  </pds-modal-content>\n  <pds-modal-footer>\n    <pds-button variant=\"secondary\">Cancel</pds-button>\n    <pds-button variant=\"destructive\">Delete</pds-button>\n  </pds-modal-footer>\n</pds-modal>",
       "notes": [
-        "pds-modal owns open (boolean) and size (sm | md | lg | fullscreen); sm suits confirmations.",
-        "Compose with the subcomponents: pds-modal-header, pds-modal-content, pds-modal-footer.",
-        "Footer keeps the safe choice (Cancel, secondary) first and the destructive action (variant=\"destructive\") last.",
-        "Pair with the delete-confirmation UX standards before wiring the confirm handler."
+        "Minimal variant for teaching modal subcomponent structure only.",
+        "Production kajabi-products modals should follow delete-modal-full (header close, padded boxes, optional confirm checkbox).",
+        "Footer keeps Cancel (secondary) first and Delete (variant=\"destructive\") last."
       ]
     },
     {
       "id": "empty-and-loading",
-      "name": "Empty & loading states",
+      "name": "Loading states",
       "category": "admin",
-      "description": "Centered loading and empty states for a content area, using pds-loader and pds-text.",
-      "when": "Async content regions and zero-data states for lists, tables, and panels.",
-      "code": "<!-- Loading -->\n<pds-box direction=\"column\" align-items=\"center\" gap=\"sm\" padding=\"xl\">\n  <pds-loader></pds-loader>\n  <pds-text>Loading…</pds-text>\n</pds-box>\n\n<!-- Empty -->\n<pds-box direction=\"column\" align-items=\"center\" gap=\"sm\" padding=\"xl\">\n  <pds-icon name=\"folder\" size=\"large\"></pds-icon>\n  <pds-text tag=\"h3\">No products yet</pds-text>\n  <pds-text color=\"--pine-color-text-secondary\">Create your first product to get started.</pds-text>\n  <pds-button variant=\"primary\">\n    <pds-icon slot=\"start\" name=\"add\"></pds-icon>\n    New product\n  </pds-button>\n</pds-box>",
+      "description": "How kajabi-products admin screens load async data — usually a standalone pds-loader, optionally centered when inline.",
+      "when": "Initial page load or refetch while a list/detail region is empty.",
+      "code": "<!-- Default (ExpertAgentsList, ExpertAgentShow) -->\n<pds-loader is-loading size=\"md\"></pds-loader>\n\n<!-- Inline region with label -->\n<pds-box direction=\"column\" align-items=\"center\" gap=\"sm\" padding=\"xl\">\n  <pds-loader is-loading size=\"md\"></pds-loader>\n  <pds-text>Loading agents…</pds-text>\n</pds-box>",
       "notes": [
-        "Center both states with direction=\"column\" align-items=\"center\" and generous padding.",
-        "pds-loader renders a spinner by default (isLoading defaults true); pair with a short pds-text label.",
-        "Empty state: a decorative pds-icon (valid name, e.g. folder), a heading, a one-line explanation in a secondary color token, and a primary CTA."
+        "kajabi-products default: return <pds-loader is-loading size=\"md\"></pds-loader> while the query is loading — no extra wrapper.",
+        "Use the centered box + label variant only when loading a subsection (panel, modal body) that needs context.",
+        "Pair with empty-state-pine when data resolves to zero rows."
+      ]
+    },
+    {
+      "id": "empty-state-pine",
+      "name": "Empty state (Pine)",
+      "category": "admin",
+      "description": "Pine-native zero-data panel with icon badge, title, description, and actions — matches kajabi_partner ReferralsTableEmptyState.",
+      "when": "Replace Sage EmptyState on migrated admin screens when a list or table has no rows.",
+      "code": "<pds-box padding=\"xl\" background-color=\"var(--pine-color-background-container)\" border-radius=\"lg\" direction=\"column\" align-items=\"center\" justify-content=\"center\" gap=\"md\" fit>\n  <pds-box border-radius=\"circle\" background-color=\"var(--pine-color-red-300)\" padding=\"xl\">\n    <pds-icon name=\"users\" size=\"40px\" color=\"white\"></pds-icon>\n  </pds-box>\n  <pds-text weight=\"semibold\" align=\"center\" size=\"2xl\">No referrals</pds-text>\n  <pds-text align=\"center\" size=\"md\" color=\"--pine-color-text-secondary\">Referrals will display here as they join Kajabi using your referral links.</pds-text>\n  <pds-box gap=\"sm\">\n    <pds-button variant=\"secondary\">Learn more</pds-button>\n    <pds-button variant=\"primary\">Refer now</pds-button>\n  </pds-box>\n</pds-box>",
+      "notes": [
+        "Matches ReferralsTableEmptyState: circular icon badge, semibold 2xl title, md body copy, secondary + primary actions.",
+        "Many kajabi-products screens still use Sage EmptyState (e.g. ExpertAgentsList) — migrate to this layout when converting the file.",
+        "Pick a semantic icon (users, folder, add) and a token background color for the badge circle.",
+        "Use fit on the outer box so the empty panel spans the content area width."
       ]
     }
   ]
