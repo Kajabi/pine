@@ -59,41 +59,14 @@
       "id": "settings-page",
       "name": "Settings / edit form page",
       "category": "admin",
-      "description": "Kajabi admin edit form: Save/Cancel in the page heading, main fields in a wide column, optional sidebar — matches commerce coupon forms.",
-      "when": "Create/edit flows (coupons, offers, configuration) with header actions and a main + sidebar field layout.",
-      "code": "<pds-box direction=\"column\" gap=\"lg\" fit>\n  <pds-box justify-content=\"space-between\" align-items=\"center\" fit>\n    <pds-text tag=\"h1\">Edit coupon</pds-text>\n    <pds-box gap=\"sm\">\n      <pds-button variant=\"secondary\">Cancel</pds-button>\n      <pds-button variant=\"primary\">Save</pds-button>\n    </pds-box>\n  </pds-box>\n\n  <pds-box direction=\"row\" justify-content=\"space-between\" align-items=\"start\" fit>\n    <pds-box flex=\"0 0 60%\">\n      <pds-box direction=\"column\" gap=\"md\">\n        <pds-input label=\"Coupon code\" value=\"SUMMER20\"></pds-input>\n        <pds-input label=\"Name\" value=\"Summer sale\"></pds-input>\n      </pds-box>\n    </pds-box>\n    <pds-box flex=\"0 0 30%\">\n      <pds-text tag=\"h3\">Summary</pds-text>\n      <pds-text color=\"--pine-color-text-secondary\">Review discount details before saving.</pds-text>\n    </pds-box>\n  </pds-box>\n</pds-box>",
+      "description": "Kajabi admin edit form: page heading row with Save/Cancel, 60/30 body, field sections in card boxes — matches commerce coupon forms.",
+      "when": "Create/edit flows (coupons, offers, configuration) with header actions, stacked field sections, and an optional sidebar.",
+      "code": "<pds-box direction=\"column\" gap=\"md\" fit>\n  <pds-box fit direction=\"row\" justify-content=\"space-between\" align-items=\"center\" margin-block-end=\"md\">\n    <pds-text tag=\"h1\">Edit coupon</pds-text>\n    <pds-box direction=\"row\" gap=\"sm\">\n      <pds-button variant=\"secondary\">Cancel</pds-button>\n      <pds-button variant=\"primary\">Save</pds-button>\n    </pds-box>\n  </pds-box>\n\n  <pds-box direction=\"row\" justify-content=\"space-between\" align-items=\"start\" fit>\n    <pds-box flex=\"0 0 60%\">\n      <pds-box direction=\"column\" gap=\"md\">\n        <pds-box direction=\"column\" gap=\"sm\" padding=\"md\" shadow=\"100\" border-radius=\"md\" background-color=\"var(--pine-color-background-container)\">\n          <pds-text tag=\"h6\" size=\"lg\" weight=\"semibold\">Details</pds-text>\n          <pds-input label=\"Coupon code\" value=\"SUMMER20\"></pds-input>\n          <pds-input label=\"Name\" value=\"Summer sale\"></pds-input>\n        </pds-box>\n        <pds-box direction=\"column\" gap=\"sm\" padding=\"md\" shadow=\"100\" border-radius=\"md\" background-color=\"var(--pine-color-background-container)\">\n          <pds-text tag=\"h6\" size=\"lg\" weight=\"semibold\">Discount</pds-text>\n          <pds-input label=\"Percent off\" value=\"20\"></pds-input>\n        </pds-box>\n      </pds-box>\n    </pds-box>\n    <pds-box flex=\"0 0 30%\">\n      <pds-box direction=\"column\" gap=\"sm\" padding=\"md\" shadow=\"100\" border-radius=\"md\" background-color=\"var(--pine-color-background-container)\">\n        <pds-text tag=\"h6\" size=\"lg\" weight=\"semibold\">Summary</pds-text>\n        <pds-text color=\"--pine-color-text-secondary\">Review discount details before saving.</pds-text>\n      </pds-box>\n    </pds-box>\n  </pds-box>\n</pds-box>",
       "notes": [
-        "Matches CouponFormLayout: Cancel + Save in the page heading actions (secondary first, primary last), not a bottom button row.",
-        "Main column ~60% + sidebar ~30% via flex=\"0 0 …\" on pds-box inside a fit row — not pds-container size=\"md\" unless the whole flow is a narrow single column.",
-        "Form fields use label as a prop — never a separate <label>.",
-        "For narrow single-column settings only, nest fields in pds-container size=\"md\" instead of the 60/30 split."
-      ]
-    },
-    {
-      "id": "delete-modal-full",
-      "name": "Delete confirmation modal (production)",
-      "category": "admin",
-      "description": "Production kajabi-products delete dialog: header with title + close, padded content (optional confirm checkbox), footer actions end-aligned.",
-      "when": "Delete/disable confirmations in commerce, expert agents, documents — any irreversible admin action.",
-      "code": "<pds-modal component-id=\"delete-upload\" size=\"sm\">\n  <pds-modal-header>\n    <pds-box align-items=\"center\" fit justify-content=\"space-between\" padding-block-start=\"md\" padding-inline-start=\"md\" padding-inline-end=\"md\">\n      <pds-text tag=\"h3\" size=\"h3\">Delete this file?</pds-text>\n      <pds-button class=\"pds-modal__close\" variant=\"unstyled\" icon-only aria-label=\"Close modal\">\n        <pds-icon slot=\"start\" name=\"remove\" aria-hidden=\"true\"></pds-icon>\n      </pds-button>\n    </pds-box>\n  </pds-modal-header>\n  <pds-modal-content>\n    <pds-box fit padding-block-start=\"xxs\" padding-block-end=\"xxs\" padding-inline-start=\"md\" padding-inline-end=\"md\" direction=\"column\" gap=\"md\">\n      <pds-text>\"Intro to Design\" will be removed. This cannot be undone.</pds-text>\n      <pds-checkbox component-id=\"confirm-delete\" label=\"Yes, I would like to delete this file.\"></pds-checkbox>\n    </pds-box>\n  </pds-modal-content>\n  <pds-modal-footer>\n    <pds-box fit justify-content=\"end\" gap=\"sm\" padding=\"md\">\n      <pds-button variant=\"secondary\">Cancel</pds-button>\n      <pds-button variant=\"destructive\">Delete</pds-button>\n    </pds-box>\n  </pds-modal-footer>\n</pds-modal>",
-      "notes": [
-        "Matches DeleteUploadModal + DeleteExpertAgentContent in kajabi-products: padded pds-box inside each modal subcomponent, close button with class=\"pds-modal__close\".",
-        "Footer: pds-box justify-content=\"end\" gap=\"sm\" — Cancel (secondary) then Delete (destructive). Disable Delete until checkbox confirmed when using pds-checkbox.",
-        "Control open via the open boolean prop in app code; omit open in static examples. size=\"sm\" suits confirmations.",
-        "Some legacy screens still use Sage Modal with PdsButton in the footer — migrate to this structure."
-      ]
-    },
-    {
-      "id": "confirm-modal",
-      "name": "Confirmation modal (minimal)",
-      "category": "admin",
-      "description": "Minimal destructive confirmation skeleton without header close or checkbox — prefer delete-modal-full for kajabi-products admin.",
-      "when": "Quick MCP examples or docs-only dialogs; use delete-modal-full for production admin UI.",
-      "code": "<pds-modal component-id=\"delete-confirm\" size=\"sm\">\n  <pds-modal-header>Delete product?</pds-modal-header>\n  <pds-modal-content>\n    <pds-text>This permanently deletes \"Intro to Design\". This can't be undone.</pds-text>\n  </pds-modal-content>\n  <pds-modal-footer>\n    <pds-button variant=\"secondary\">Cancel</pds-button>\n    <pds-button variant=\"destructive\">Delete</pds-button>\n  </pds-modal-footer>\n</pds-modal>",
-      "notes": [
-        "Minimal variant for teaching modal subcomponent structure only.",
-        "Production kajabi-products modals should follow delete-modal-full (header close, padded boxes, optional confirm checkbox).",
-        "Footer keeps Cancel (secondary) first and Delete (variant=\"destructive\") last."
+        "Matches CouponsPageHeading + CouponFormLayout: heading uses direction=\"row\" (not a nested title/actions split), Cancel + Save in a trailing pds-box gap=\"sm\".",
+        "Body row: flex=\"0 0 60%\" main column + flex=\"0 0 30%\" sidebar — only on pds-box, not inside pds-row.",
+        "Stack field groups in card boxes (padding=\"md\" shadow=\"100\" border-radius=\"md\" background-color=\"var(--pine-color-background-container)\") with an h6 section title, like DetailsSection and DiscountSection.",
+        "For narrow single-column settings, drop the 60/30 split and use one stacked column of section cards instead."
       ]
     },
     {
