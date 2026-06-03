@@ -89,4 +89,17 @@
   body {
     background-color: var(--pine-color-background-app);
   }
+
+  /* Guides/Sage to Pine: single-line code in comparison tables; scroll via pds-table responsive */
+  .sage-to-pine-guide pds-table-cell,
+  .sage-to-pine-guide pds-table-head-cell {
+    white-space: nowrap;
+  }
+
+  .sage-to-pine-guide pds-table-cell code,
+  .sage-to-pine-guide pds-table-head-cell code {
+    white-space: nowrap;
+    word-break: normal;
+    overflow-wrap: normal;
+  }
 </style>

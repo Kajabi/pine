@@ -2,6 +2,8 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 <Meta title="Guides/Sage to Pine" parameters={{ previewTabs: { canvas: { hidden: true } } }} />
 
+<div className="sage-to-pine-guide">
+
 # Sage → Pine migration
 
 Map common Sage-era and raw HTML/CSS habits from the Kajabi monolith onto their Pine equivalents. Most violations in admin UI are not "wrong Pine" — they are Sage habits (div stacks, utility classes, raw headings, max-width wrappers) that were never translated. Use this when converting existing markup to Pine, or when an AI assistant is editing a file that still contains Sage/HTML layout.
@@ -185,3 +187,5 @@ Spacing comes from props (`gap`, `padding`), not margin utilities or inline styl
 - `get_pine_context_for_generation` → generate → `validate_ui_generation` → `fix_layout_issues` — run this loop when converting a file.
 - `get_pine_component({ componentName: "pds-container" | "pds-text" | "pds-input" })` — exact props for each target component.
 - Repo skills (where present): the `sage-to-pine-*` skills automate specific component conversions (e.g. Sage Alert → `pds-alert`).
+
+</div>
