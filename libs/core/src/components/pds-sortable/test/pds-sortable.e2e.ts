@@ -95,8 +95,8 @@ describe('pds-sortable accessibility', () => {
     `);
     // `role-img-alt` is disabled here: each item's drag handle (pds-icon)
     // renders role="img" without an accessible name. Matches the documented
-    // suppression in the pds-input test; tracked separately — remove once
-    // pds-icon exposes an accessible label.
+    // suppression in the pds-input test — remove once pds-icon exposes an
+    // accessible label.
     const violations = await runAxe(page, {
       rules: { 'role-img-alt': { enabled: false } },
     });

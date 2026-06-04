@@ -223,9 +223,7 @@ describe('pds-filters accessibility', () => {
     `);
     // `color-contrast` is disabled here: axe flags `.pds-filter__button-text`
     // in the bare e2e harness, which renders without the full theme/global
-    // styles, so contrast can't be measured reliably here. Verify the filter
-    // trigger contrast in a themed context (Storybook) and re-enable; tracked
-    // as a follow-up.
+    // styles, so contrast can't be measured reliably here.
     const violations = await runAxe(page, {
       rules: { 'color-contrast': { enabled: false } },
     });

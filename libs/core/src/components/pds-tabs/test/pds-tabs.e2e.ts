@@ -267,7 +267,7 @@ describe('pds-tabs accessibility', () => {
   it('has no axe violations', async () => {
     const page = await newE2EPage();
     await page.setContent(`
-      <pds-tabs active-tab-name="one" tablist-label="Account settings" component-id="settings">
+      <pds-tabs active-tab-name="one" tablist-label="Account settings" component-id="settings" variant="primary">
         <pds-tab name="one">Profile</pds-tab>
         <pds-tab name="two">Security</pds-tab>
         <pds-tabpanel name="one">Profile content</pds-tabpanel>

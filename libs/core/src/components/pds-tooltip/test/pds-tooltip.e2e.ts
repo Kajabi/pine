@@ -100,10 +100,19 @@ describe('pds-tooltip accessibility', () => {
   it('has no axe violations', async () => {
     const page = await newE2EPage();
     await page.setContent(`
-      <pds-tooltip content="More information">
+      <pds-tooltip content="More information" opened="true">
         <button>Help</button>
       </pds-tooltip>
     `);
+    await page.waitForChanges();
+    await page.waitForFunction(
+      () => {
+        const tooltipPortal = document.querySelector('.pds-tooltip.pds-tooltip--is-open');
+        const content = tooltipPortal?.querySelector('.pds-tooltip__content');
+        return tooltipPortal !== null && content?.getAttribute('aria-hidden') === 'false';
+      },
+      { timeout: 2000 },
+    );
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
   });

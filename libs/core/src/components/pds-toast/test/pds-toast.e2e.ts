@@ -305,8 +305,6 @@ describe('pds-toast accessibility', () => {
     // `color-contrast` is disabled here: axe flags the message text in the bare
     // e2e harness, which renders without the full theme/global styles, so
     // contrast can't be measured reliably (the result is flaky run-to-run).
-    // Verify toast text contrast in a themed context (Storybook) and re-enable;
-    // tracked as a follow-up.
     const violations = await runAxe(page, {
       rules: { 'color-contrast': { enabled: false } },
     });
