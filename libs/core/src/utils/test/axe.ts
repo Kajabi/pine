@@ -43,9 +43,10 @@ export const DEFAULT_AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] as 
 
 /**
  * Page-level axe rules that fire on the bare HTML harness Stencil's E2E
- * provides (no `<title>`, no `<html lang>`, no landmarks, no `<h1>`).
- * They are disabled by default because they describe document chrome,
- * not component behavior — flagging them at component scope yields noise.
+ * provides (no `<title>`, no `<html lang>`, no landmarks, no `<h1>`, and
+ * often without the full theme/global stylesheet).
+ * They are disabled by default because they describe document chrome or
+ * need themed context — flagging them at component scope yields noise or flakes.
  *
  * Tests can opt back in for a specific case:
  *
@@ -59,6 +60,11 @@ export const DEFAULT_DISABLED_RULES = [
   'landmark-one-main',
   'page-has-heading-one',
   'region',
+  // `color-contrast` cannot be measured reliably on the bare E2E harness: it
+  // renders without the full theme/global stylesheet and with fonts that may
+  // fail to load, so axe computes contrast against incidental colors (results
+  // are flaky run-to-run). Verify contrast in a themed context (Storybook).
+  'color-contrast',
 ] as const;
 
 /**
