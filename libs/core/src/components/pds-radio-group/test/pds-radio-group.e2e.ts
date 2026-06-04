@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-radio-group', () => {
   it('renders', async () => {
@@ -340,3 +341,16 @@ describe('pds-radio-group', () => {
   });
 });
 
+describe('pds-radio-group accessibility', () => {
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-radio-group name="plan">
+        <pds-radio component-id="plan-basic" label="Basic" value="basic"></pds-radio>
+        <pds-radio component-id="plan-pro" label="Pro" value="pro"></pds-radio>
+      </pds-radio-group>
+    `);
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
+});

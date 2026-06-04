@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-switch', () => {
   it('renders a checked input when toggled', async () => {
@@ -52,7 +53,7 @@ describe('pds-switch', () => {
     await page.waitForChanges();
 
     value = el.getAttribute('aria-invalid');
-    expect(value).toBe("true");
+    expect(value).toBe('true');
   });
 
   it('renders an invalid input with error message when toggled', async () => {
@@ -67,14 +68,16 @@ describe('pds-switch', () => {
     const ariaDesc = el.getAttribute('aria-describedby');
     const ariaInvalid = el.getAttribute('aria-invalid');
 
-    expect(ariaInvalid).toBe("true");
-    expect(ariaDesc).toBe("switch-with-error__error-message");
+    expect(ariaInvalid).toBe('true');
+    expect(ariaDesc).toBe('switch-with-error__error-message');
     expect(errText.textContent).toEqual(`Please correct this item`);
   });
 
   it('renders a helper and error message and assigns the aria-description to the input', async () => {
     const page = await newE2EPage();
-    await page.setContent('<pds-switch component-id="switch-with-description" invalid="true" helper-message="This is a helper message" error-message="This is an error message"></pds-switch>');
+    await page.setContent(
+      '<pds-switch component-id="switch-with-description" invalid="true" helper-message="This is a helper message" error-message="This is an error message"></pds-switch>',
+    );
 
     const component = await page.find('pds-switch');
     const el = await page.find('pds-switch >>> input');
@@ -86,9 +89,18 @@ describe('pds-switch', () => {
     const ariaDesc = el.getAttribute('aria-describedby');
     const ariaInvalid = el.getAttribute('aria-invalid');
 
-    expect(ariaInvalid).toBe("true");
+    expect(ariaInvalid).toBe('true');
     expect(ariaDesc).toBe('switch-with-description__error-message');
     expect(helperMessage.textContent).toEqual(`This is a helper message`);
     expect(errorMessage.textContent).toEqual(`This is an error message`);
+  });
+});
+
+describe('pds-switch accessibility', () => {
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-switch component-id="notify" label="Enable notifications"></pds-switch>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
   });
 });

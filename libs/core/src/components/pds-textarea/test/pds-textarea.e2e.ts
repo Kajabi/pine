@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-textarea', () => {
   it('renders', async () => {
@@ -258,5 +259,14 @@ describe('pds-textarea', () => {
 
     // Should not have highlight attribute
     expect(component).not.toHaveAttribute('highlight');
+  });
+});
+
+describe('pds-textarea accessibility', () => {
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-textarea component-id="bio" label="Bio"></pds-textarea>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
   });
 });
