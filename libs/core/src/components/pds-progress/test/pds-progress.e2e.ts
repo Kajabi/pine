@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-progress', () => {
   it('renders', async () => {
@@ -44,5 +45,14 @@ describe('pds-progress', () => {
 
     const element = await page.find('pds-progress >>> .pds-progress__percentage');
     expect(element.textContent).toBe('23%');
+  });
+});
+
+describe('pds-progress accessibility', () => {
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-progress component-id="upload" label="Upload progress" percent="25"></pds-progress>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
   });
 });

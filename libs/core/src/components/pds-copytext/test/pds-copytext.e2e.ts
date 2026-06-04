@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 const mockClipboardPermission = async () => {
   // Mock clipboard-read permission
@@ -57,5 +58,14 @@ describe('pds-copytext', () => {
 
     const clipboardText = await page.evaluate(() => navigator.clipboard.readText());
     expect(clipboardText).toBe('Copy me');
+  });
+});
+
+describe('pds-copytext accessibility', () => {
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<pds-copytext value="Copy me"></pds-copytext>');
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
   });
 });

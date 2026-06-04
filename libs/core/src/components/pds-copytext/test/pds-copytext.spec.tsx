@@ -20,7 +20,7 @@ describe('pds-copytext', () => {
         <mock:shadow-root>
           <pds-button type="button" variant="unstyled">
             <span></span>
-            <pds-icon icon="${copyIcon}" size="16px"></pds-icon>
+            <pds-icon aria-hidden="true" icon="${copyIcon}" size="16px"></pds-icon>
           </pds-button>
         </mock:shadow-root>
       </pds-copytext>
@@ -37,7 +37,7 @@ describe('pds-copytext', () => {
         <mock:shadow-root>
           <pds-button type="button" variant="unstyled">
             <span></span>
-            <pds-icon icon="${copyIcon}" size="16px"></pds-icon>
+            <pds-icon aria-hidden="true" icon="${copyIcon}" size="16px"></pds-icon>
           </pds-button>
         </mock:shadow-root>
       </pds-copytext>
@@ -54,7 +54,7 @@ describe('pds-copytext', () => {
         <mock:shadow-root>
           <pds-button type="button" variant="unstyled">
             <span></span>
-            <pds-icon icon="${copyIcon}" size="16px"></pds-icon>
+            <pds-icon aria-hidden="true" icon="${copyIcon}" size="16px"></pds-icon>
           </pds-button>
         </mock:shadow-root>
       </pds-copytext>
@@ -71,7 +71,7 @@ describe('pds-copytext', () => {
         <mock:shadow-root>
           <pds-button type="button" variant="unstyled">
             <span></span>
-            <pds-icon icon="${copyIcon}" size="16px"></pds-icon>
+            <pds-icon aria-hidden="true" icon="${copyIcon}" size="16px"></pds-icon>
           </pds-button>
         </mock:shadow-root>
       </pds-copytext>
@@ -88,7 +88,7 @@ describe('pds-copytext', () => {
         <mock:shadow-root>
           <pds-button type="button" variant="unstyled">
             <span>custom value text</span>
-            <pds-icon icon="${copyIcon}" size="16px"></pds-icon>
+            <pds-icon aria-hidden="true" icon="${copyIcon}" size="16px"></pds-icon>
           </pds-button>
         </mock:shadow-root>
       </pds-copytext>
