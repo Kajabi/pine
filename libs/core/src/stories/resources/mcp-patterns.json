@@ -71,14 +71,26 @@
     },
     {
       "id": "empty-and-loading",
-      "name": "Loading states",
+      "name": "Loading state (default)",
       "category": "admin",
-      "description": "How kajabi-products admin screens load async data — usually a standalone pds-loader, optionally centered when inline.",
+      "description": "Standalone pds-loader while async admin data loads — the kajabi-products default (ExpertAgentsList, ExpertAgentShow).",
       "when": "Initial page load or refetch while a list/detail region is empty.",
-      "code": "<!-- Default (ExpertAgentsList, ExpertAgentShow) -->\n<pds-loader is-loading size=\"md\"></pds-loader>\n\n<!-- Inline region with label -->\n<pds-box direction=\"column\" align-items=\"center\" gap=\"sm\" padding=\"xl\">\n  <pds-loader is-loading size=\"md\"></pds-loader>\n  <pds-text>Loading agents…</pds-text>\n</pds-box>",
+      "code": "<pds-loader is-loading size=\"md\"></pds-loader>",
       "notes": [
         "kajabi-products default: return <pds-loader is-loading size=\"md\"></pds-loader> while the query is loading — no extra wrapper.",
-        "Use the centered box + label variant only when loading a subsection (panel, modal body) that needs context.",
+        "For a labeled loader inside a panel or modal body, use the loading-inline-centered pattern instead.",
+        "Pair with empty-state-pine when data resolves to zero rows."
+      ]
+    },
+    {
+      "id": "loading-inline-centered",
+      "name": "Loading state (inline, centered)",
+      "category": "admin",
+      "description": "Centered loader with label inside a subsection — use when the loading region needs context (panel, modal body).",
+      "when": "Loading a bounded region that should show a short status message with the spinner.",
+      "code": "<pds-box direction=\"column\" align-items=\"center\" gap=\"sm\" padding=\"xl\">\n  <pds-loader is-loading size=\"md\"></pds-loader>\n  <pds-text>Loading agents…</pds-text>\n</pds-box>",
+      "notes": [
+        "Do not combine with loading-default on the same screen — pick one recipe per loading state.",
         "Pair with empty-state-pine when data resolves to zero rows."
       ]
     },
