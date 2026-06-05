@@ -91,6 +91,7 @@
   min-height: var(--pine-dimension-450);
   outline: none;
   padding: 0 var(--pine-dimension-sm);
+  /* stylelint-disable-next-line pine-design-system/no-hardcoded-motion -- 0.15s off-grid micro-transition; no exact motion token */
   transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
   width: fit-content;
 
@@ -226,6 +227,7 @@
   outline: none;
   padding-block: var(--pine-dimension-025);
   padding-inline: var(--pine-dimension-150);
+  /* stylelint-disable-next-line pine-design-system/no-hardcoded-motion -- 0.15s off-grid micro-transition; no exact motion token */
   transition: all 0.15s ease;
   width: fit-content;
 

@@ -271,6 +271,7 @@
   cursor: pointer;
   display: flex;
   padding: var(--pine-dimension-2xs) var(--pine-dimension-xs);
+  /* stylelint-disable-next-line pine-design-system/no-hardcoded-motion -- 0.15s off-grid micro-transition; no exact motion token */
   transition: background 0.15s;
 
   // Prevent checkbox label from triggering double events
