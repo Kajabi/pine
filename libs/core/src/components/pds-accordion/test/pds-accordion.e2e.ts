@@ -82,11 +82,12 @@ describe('pds-accordion accessibility', () => {
   it('has no axe violations', async () => {
     const page = await newE2EPage();
     await page.setContent(`
-      <pds-accordion>
+      <pds-accordion open>
         <span slot="label">Section title</span>
         <p>Panel content</p>
       </pds-accordion>
     `);
+    await page.waitForChanges();
     // `role-img-alt` is disabled here: the accordion trigger's chevron
     // (pds-icon) renders role="img" without an accessible name. Matches the
     // documented suppression in the pds-input test — remove once pds-icon
