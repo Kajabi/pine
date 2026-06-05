@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-filters e2e', () => {
   it('renders', async () => {
@@ -204,5 +205,33 @@ describe('pds-filters e2e', () => {
       }
     }
     expect(visiblePopovers.length).toBeLessThanOrEqual(1);
+  });
+});
+
+describe('pds-filters accessibility', () => {
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-filters>
+        <pds-filter component-id="filter1" text="Filter 1">
+          <p>Content 1</p>
+        </pds-filter>
+        <pds-filter component-id="filter2" text="Filter 2">
+          <p>Content 2</p>
+        </pds-filter>
+      </pds-filters>
+    `);
+    const trigger1 = await page.find('pds-filter[component-id="filter1"] >>> .pds-filter__trigger');
+    await trigger1.click();
+    await page.waitForChanges();
+    const popover1 = await page.find('pds-filter[component-id="filter1"] >>> .pds-filter__popover');
+    expect(await popover1.isVisible()).toBe(true);
+    // `color-contrast` is disabled here: axe flags `.pds-filter__button-text`
+    // in the bare e2e harness, which renders without the full theme/global
+    // styles, so contrast can't be measured reliably here.
+    const violations = await runAxe(page, {
+      rules: { 'color-contrast': { enabled: false } },
+    });
+    expect(formatViolations(violations)).toBe('');
   });
 });

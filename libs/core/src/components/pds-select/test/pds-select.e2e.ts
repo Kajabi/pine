@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-select', () => {
   it('should handle option selection', async () => {
@@ -137,5 +138,25 @@ describe('pds-select', () => {
 
     // Should not have highlight attribute
     expect(component).not.toHaveAttribute('highlight');
+  });
+});
+
+describe('pds-select accessibility', () => {
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-select component-id="country" label="Country">
+        <option value="us">United States</option>
+        <option value="ca">Canada</option>
+      </pds-select>
+    `);
+    // `role-img-alt` is disabled here: the select's dropdown chevron (pds-icon)
+    // renders role="img" without an accessible name. Matches the documented
+    // suppression in the pds-input test — remove once pds-icon exposes an
+    // accessible label.
+    const violations = await runAxe(page, {
+      rules: { 'role-img-alt': { enabled: false } },
+    });
+    expect(formatViolations(violations)).toBe('');
   });
 });

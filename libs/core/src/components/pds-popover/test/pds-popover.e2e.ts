@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-popover', () => {
   it('renders', async () => {
@@ -311,5 +312,28 @@ describe('pds-popover', () => {
       const portalEl = await page.find('#link-popover-portal');
       expect(await portalEl.isVisible()).toBe(true);
     });
+  });
+});
+
+describe('pds-popover accessibility', () => {
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-popover component-id="my-popover" popover-target-action="toggle">
+        <button slot="trigger">Show popover</button>
+        <p>Popover content</p>
+      </pds-popover>
+    `);
+    const triggerButton = await page.find('button[slot="trigger"]');
+    await triggerButton.click();
+    await page.waitForChanges();
+    const portalEl = await page.find('#my-popover-portal');
+    expect(await portalEl.isVisible()).toBe(true);
+    // `aria-allowed-attr` is disabled here: the body portal sets `aria-modal="false"`
+    // on a non-dialog element — remove once popover portal ARIA is corrected.
+    const violations = await runAxe(page, {
+      rules: { 'aria-allowed-attr': { enabled: false } },
+    });
+    expect(formatViolations(violations)).toBe('');
   });
 });

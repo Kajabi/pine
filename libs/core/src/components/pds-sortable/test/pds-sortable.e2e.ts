@@ -1,4 +1,5 @@
 import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-sortable', () => {
   it('renders', async () => {
@@ -21,7 +22,7 @@ describe('pds-sortable', () => {
 
     const item = await page.find('.pds-sortable-item');
     expect(await item.getProperty('showHandle')).toBe(true);
-  })
+  });
 
   it('reorders items when an item is dragged and dropped', async () => {
     const page = await newE2EPage();
@@ -51,13 +52,10 @@ describe('pds-sortable', () => {
     await page.setDragInterception(true); // Enable drag interception.
 
     // Simulate drag-and-drop interaction between the first and second items.
-    await page.mouse.dragAndDrop(
-      { x: item1BoundingBox.x + 5, y: item1BoundingBox.y + 5 },
-      { x: item2BoundingBox.x + 5, y: item2BoundingBox.y + 5 }
-    );
+    await page.mouse.dragAndDrop({ x: item1BoundingBox.x + 5, y: item1BoundingBox.y + 5 }, { x: item2BoundingBox.x + 5, y: item2BoundingBox.y + 5 });
 
     // Replace waitForTimeout with a Promise-based delay
-    await new Promise(resolve => setTimeout(resolve, 300));
+    await new Promise((resolve) => setTimeout(resolve, 300));
     await page.waitForChanges();
 
     // Update references to items after the interaction.
@@ -82,5 +80,26 @@ describe('pds-sortable', () => {
     const element = await page.find('pds-sortable');
     expect(element).toHaveClass('pds-sortable--disabled');
     expect(element).toHaveAttribute('disabled');
+  });
+});
+
+describe('pds-sortable accessibility', () => {
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-sortable component-id="list" handle-type="handle">
+        <pds-sortable-item>Item 1</pds-sortable-item>
+        <pds-sortable-item>Item 2</pds-sortable-item>
+        <pds-sortable-item>Item 3</pds-sortable-item>
+      </pds-sortable>
+    `);
+    // `role-img-alt` is disabled here: each item's drag handle (pds-icon)
+    // renders role="img" without an accessible name. Matches the documented
+    // suppression in the pds-input test — remove once pds-icon exposes an
+    // accessible label.
+    const violations = await runAxe(page, {
+      rules: { 'role-img-alt': { enabled: false } },
+    });
+    expect(formatViolations(violations)).toBe('');
   });
 });

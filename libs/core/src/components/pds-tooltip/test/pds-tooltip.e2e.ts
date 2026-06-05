@@ -1,4 +1,5 @@
-import { newE2EPage } from "@stencil/core/testing";
+import { newE2EPage } from '@stencil/core/testing';
+import { formatViolations, runAxe } from '../../../utils/test/axe';
 
 describe('pds-tooltip', () => {
   // Mock MutationObserver
@@ -31,25 +32,17 @@ describe('pds-tooltip', () => {
         x: rect?.left,
         y: rect?.top,
         width: rect?.width,
-        height: rect?.height
+        height: rect?.height,
       };
     }, '#trigger');
 
     // Check if boundingBox or its properties are undefined
-    if (
-      boundingBox.x === undefined ||
-      boundingBox.y === undefined ||
-      boundingBox.width === undefined ||
-      boundingBox.height === undefined
-    ) {
+    if (boundingBox.x === undefined || boundingBox.y === undefined || boundingBox.width === undefined || boundingBox.height === undefined) {
       throw new Error('Trigger element not found or dimensions are undefined');
     }
 
     // Move mouse to center of trigger
-    await page.mouse.move(
-      boundingBox.x + boundingBox.width / 2,
-      boundingBox.y + boundingBox.height / 2
-    );
+    await page.mouse.move(boundingBox.x + boundingBox.width / 2, boundingBox.y + boundingBox.height / 2);
     await page.waitForChanges();
 
     // Wait for the tooltip to be visible
@@ -57,10 +50,9 @@ describe('pds-tooltip', () => {
       () => {
         const tooltipPortal = document.querySelector('.pds-tooltip');
         const contentOverlay = tooltipPortal?.querySelector('.pds-tooltip__content');
-        return tooltipPortal?.classList.contains('pds-tooltip--is-open') &&
-               contentOverlay?.getAttribute('aria-hidden') === 'false';
+        return tooltipPortal?.classList.contains('pds-tooltip--is-open') && contentOverlay?.getAttribute('aria-hidden') === 'false';
       },
-      { timeout: 2000 }
+      { timeout: 2000 },
     );
 
     expect(isVisible).toBeTruthy();
@@ -89,7 +81,7 @@ describe('pds-tooltip', () => {
         // Check if the portal element is gone OR if it's marked as not open
         return !tooltipPortal || !tooltipPortal.classList.contains('pds-tooltip--is-open');
       },
-      { timeout: 2000 }
+      { timeout: 2000 },
     );
 
     expect(isClosed).toBeTruthy();
@@ -101,5 +93,27 @@ describe('pds-tooltip', () => {
       return tooltipPortal.classList.contains('pds-tooltip--is-open');
     });
     expect(isStillOpenAfterMouseOut).toBe(false);
+  });
+});
+
+describe('pds-tooltip accessibility', () => {
+  it('has no axe violations', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-tooltip content="More information" opened="true">
+        <button>Help</button>
+      </pds-tooltip>
+    `);
+    await page.waitForChanges();
+    await page.waitForFunction(
+      () => {
+        const tooltipPortal = document.querySelector('.pds-tooltip.pds-tooltip--is-open');
+        const content = tooltipPortal?.querySelector('.pds-tooltip__content');
+        return tooltipPortal !== null && content?.getAttribute('aria-hidden') === 'false';
+      },
+      { timeout: 2000 },
+    );
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
   });
 });
