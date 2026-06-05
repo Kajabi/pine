@@ -39,7 +39,7 @@ describe('pds-sortable-item', () => {
     expect(page.root).toEqualHtml(`
       <pds-sortable-item class="pds-sortable-item" show-handle="true">
         <div class="pds-sortable-item__handle">
-          <pds-icon icon="${handleIcon}"></pds-icon>
+          <pds-icon aria-hidden="true" icon="${handleIcon}"></pds-icon>
         </div>
       </pds-sortable-item>
     `);

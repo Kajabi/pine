@@ -63,7 +63,7 @@ export class PdsAccordion {
         <details {...this.getOpenAttribute()} ref={(el) => (this.detailsEl = el as HTMLDetailsElement)}>
           <summary part="accordion-button">
             <slot name="label">Details</slot>
-            <pds-icon icon={downSmall} part="accordion-icon" />
+            <pds-icon aria-hidden="true" icon={downSmall} part="accordion-icon" />
           </summary>
           <div part="accordion-body" class="pds-accordion__body">
             <slot />

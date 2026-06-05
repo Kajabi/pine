@@ -22,7 +22,7 @@ describe('pds-select', () => {
             <div aria-hidden="true" class="hidden">
               <slot></slot>
             </div>
-            <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
+            <pds-icon aria-hidden="true" class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-select>
@@ -68,7 +68,7 @@ describe('pds-select', () => {
             <div aria-hidden="true" class="hidden">
               <slot></slot>
             </div>
-            <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
+            <pds-icon aria-hidden="true" class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
           </div>
         </mock:shadow-root>
         <option value="1">Option 1</option>
@@ -95,7 +95,7 @@ describe('pds-select', () => {
             <div aria-hidden="true" class="hidden">
               <slot></slot>
             </div>
-            <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
+            <pds-icon aria-hidden="true" class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-select>
@@ -147,7 +147,7 @@ describe('pds-select', () => {
             <div aria-hidden="true" class="hidden">
               <slot></slot>
             </div>
-            <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
+            <pds-icon aria-hidden="true" class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-select>
@@ -177,7 +177,7 @@ describe('pds-select', () => {
             <div aria-hidden="true" class="hidden">
               <slot></slot>
             </div>
-            <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
+            <pds-icon aria-hidden="true" class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-select>
@@ -203,7 +203,7 @@ describe('pds-select', () => {
             <div aria-hidden="true" class="hidden">
               <slot></slot>
             </div>
-            <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
+            <pds-icon aria-hidden="true" class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-select>
@@ -229,7 +229,7 @@ describe('pds-select', () => {
             <div aria-hidden="true" class="hidden">
               <slot></slot>
             </div>
-            <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
+            <pds-icon aria-hidden="true" class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-select>
@@ -724,7 +724,7 @@ describe('action slot', () => {
             <div aria-hidden="true" class="hidden">
               <slot></slot>
             </div>
-            <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
+            <pds-icon aria-hidden="true" class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
           </div>
         </mock:shadow-root>
         <span slot="action">Help</span>
@@ -753,7 +753,7 @@ describe('action slot', () => {
             <div aria-hidden="true" class="hidden">
               <slot></slot>
             </div>
-            <pds-icon class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
+            <pds-icon aria-hidden="true" class="pds-select__select-icon" icon="${enlarge}"></pds-icon>
           </div>
         </mock:shadow-root>
       </pds-select>

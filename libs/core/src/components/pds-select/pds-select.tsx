@@ -247,7 +247,7 @@ export class PdsSelect {
   private getErrorMessage() {
     return this.errorMessage && (
       <p class="pds-select__error-message" id={messageId(this.componentId, 'error')} aria-live="assertive">
-        <pds-icon icon={danger} size="small"></pds-icon>
+        <pds-icon aria-hidden="true" icon={danger} size="small"></pds-icon>
         {this.errorMessage}
       </p>
     );
@@ -391,7 +391,7 @@ export class PdsSelect {
             <slot onSlotchange={this.handleSlotChange}></slot>
           </div>
           {this.renderMessages()}
-          {!this.multiple && <pds-icon class="pds-select__select-icon" icon={enlarge} />}
+          {!this.multiple && <pds-icon aria-hidden="true" class="pds-select__select-icon" icon={enlarge} />}
         </div>
       </Host>
     );
