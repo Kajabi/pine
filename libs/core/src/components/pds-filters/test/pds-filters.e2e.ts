@@ -221,6 +221,11 @@ describe('pds-filters accessibility', () => {
         </pds-filter>
       </pds-filters>
     `);
+    const trigger1 = await page.find('pds-filter[component-id="filter1"] >>> .pds-filter__trigger');
+    await trigger1.click();
+    await page.waitForChanges();
+    const popover1 = await page.find('pds-filter[component-id="filter1"] >>> .pds-filter__popover');
+    expect(await popover1.isVisible()).toBe(true);
     // `color-contrast` is disabled here: axe flags `.pds-filter__button-text`
     // in the bare e2e harness, which renders without the full theme/global
     // styles, so contrast can't be measured reliably here.
