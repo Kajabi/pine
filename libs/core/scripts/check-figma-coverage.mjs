@@ -11,7 +11,10 @@
  * waiver list cannot rot.
  *
  * Runs as `lint.figma` via `run-p lint.*`, gated through the existing
- * `nx affected --target=lint` CI job — no workflow changes needed.
+ * `nx affected --target=lint` CI job. `@pine-ds/core` declares an implicit
+ * dependency on `@pine-ds/figma` so figma-only PRs still schedule core lint,
+ * and the core `lint` target inputs include waiver/mapping paths so Nx cache
+ * invalidates when those files change.
  *
  * Exits 0 when coverage is accounted for, 1 (with an actionable report) otherwise.
  */

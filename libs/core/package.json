@@ -127,7 +127,15 @@
     "webpack": "^5.74.0"
   },
   "nx": {
+    "implicitDependencies": ["@pine-ds/figma"],
     "targets": {
+      "lint": {
+        "inputs": [
+          "default",
+          "{workspaceRoot}/libs/figma/code-connect-waivers.json",
+          "{workspaceRoot}/libs/figma/components/**/*.figma.ts"
+        ]
+      },
       "start.stencil": {
         "dependsOn": [
           {
