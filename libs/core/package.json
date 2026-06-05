@@ -61,6 +61,8 @@
     "generate": "stencil generate",
     "lint": "run-p lint.*",
     "lint.eslint": "eslint src",
+    "lint.figma": "node scripts/check-figma-coverage.mjs",
+    "lint.status": "node scripts/check-component-status.mjs",
     "lint.styles": "stylelint \"./src/**/*.*css\"",
     "prettier": "prettier \"./src/**/*.{html,ts,tsx,js,jsx}\"",
     "prestart": "npm run build",
@@ -125,7 +127,15 @@
     "webpack": "^5.74.0"
   },
   "nx": {
+    "implicitDependencies": ["@pine-ds/figma"],
     "targets": {
+      "lint": {
+        "inputs": [
+          "default",
+          "{workspaceRoot}/libs/figma/code-connect-waivers.json",
+          "{workspaceRoot}/libs/figma/components/**/*.figma.ts"
+        ]
+      },
       "start.stencil": {
         "dependsOn": [
           {
