@@ -1353,6 +1353,38 @@ export namespace Components {
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
         /**
+          * Enables or disables Turbo Drive for this link. Maps to the `data-turbo` attribute on the inner anchor element.
+         */
+        "turbo"?: string;
+        /**
+          * Controls the Turbo visit action type. Maps to the `data-turbo-action` attribute on the inner anchor element.
+         */
+        "turboAction"?: 'advance' | 'replace';
+        /**
+          * Displays a confirmation dialog before navigating. Maps to the `data-turbo-confirm` attribute on the inner anchor element.
+         */
+        "turboConfirm"?: string;
+        /**
+          * Specifies the Turbo Frame to target for navigation. Maps to the `data-turbo-frame` attribute on the inner anchor element.
+         */
+        "turboFrame"?: string;
+        /**
+          * Changes the HTTP method for the link request. Maps to the `data-turbo-method` attribute on the inner anchor element.
+         */
+        "turboMethod"?: 'get' | 'post' | 'put' | 'patch' | 'delete';
+        /**
+          * Controls link prefetching on hover. Maps to the `data-turbo-prefetch` attribute on the inner anchor element.
+         */
+        "turboPrefetch"?: string;
+        /**
+          * Eagerly preloads the link's destination into cache. Maps to the `data-turbo-preload` attribute on the inner anchor element.
+         */
+        "turboPreload"?: string;
+        /**
+          * Accepts Turbo Stream responses for GET requests. Maps to the `data-turbo-stream` attribute on the inner anchor element.
+         */
+        "turboStream"?: string;
+        /**
           * Sets the link variant styles.
           * @defaultValue inline
          */
@@ -4472,6 +4504,38 @@ declare namespace LocalJSX {
           * @example <pds-link href="https://example.com" target="_blank">Opens in new tab</pds-link>
          */
         "target"?: '_blank' | '_self' | '_parent' | '_top';
+        /**
+          * Enables or disables Turbo Drive for this link. Maps to the `data-turbo` attribute on the inner anchor element.
+         */
+        "turbo"?: string;
+        /**
+          * Controls the Turbo visit action type. Maps to the `data-turbo-action` attribute on the inner anchor element.
+         */
+        "turboAction"?: 'advance' | 'replace';
+        /**
+          * Displays a confirmation dialog before navigating. Maps to the `data-turbo-confirm` attribute on the inner anchor element.
+         */
+        "turboConfirm"?: string;
+        /**
+          * Specifies the Turbo Frame to target for navigation. Maps to the `data-turbo-frame` attribute on the inner anchor element.
+         */
+        "turboFrame"?: string;
+        /**
+          * Changes the HTTP method for the link request. Maps to the `data-turbo-method` attribute on the inner anchor element.
+         */
+        "turboMethod"?: 'get' | 'post' | 'put' | 'patch' | 'delete';
+        /**
+          * Controls link prefetching on hover. Maps to the `data-turbo-prefetch` attribute on the inner anchor element.
+         */
+        "turboPrefetch"?: string;
+        /**
+          * Eagerly preloads the link's destination into cache. Maps to the `data-turbo-preload` attribute on the inner anchor element.
+         */
+        "turboPreload"?: string;
+        /**
+          * Accepts Turbo Stream responses for GET requests. Maps to the `data-turbo-stream` attribute on the inner anchor element.
+         */
+        "turboStream"?: string;
         /**
           * Sets the link variant styles.
           * @defaultValue inline
