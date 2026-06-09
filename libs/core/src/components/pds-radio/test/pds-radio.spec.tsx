@@ -27,7 +27,7 @@ describe('pds-radio', () => {
 
     expect(page.root).toEqualHtml(`
       <pds-radio component-id="default" label="Label text">
-        <label htmlfor="default">
+        <label for="default">
           <input id="default" type="radio">
           <span>Label text</span>
         </label>
@@ -73,7 +73,7 @@ describe('pds-radio', () => {
 
     expect(page.root).toEqualHtml(`
       <pds-radio class="is-invalid" component-id="default" label="Label text" invalid>
-        <label htmlfor="default">
+        <label for="default">
           <input aria-invalid="true" id="default" type="radio">
           <span>Label text</span>
         </label>
@@ -89,7 +89,7 @@ describe('pds-radio', () => {
 
     expect(page.root).toEqualHtml(`
       <pds-radio component-id="default" label="This is label text">
-        <label htmlfor="default">
+        <label for="default">
           <input id="default" type="radio">
           <span>This is label text</span>
         </label>
@@ -105,7 +105,7 @@ describe('pds-radio', () => {
 
     expect(page.root).toEqualHtml(`
       <pds-radio component-id="default" label="Label text" helper-message="This is short message text.">
-        <label htmlfor="default">
+        <label for="default">
           <input aria-describedby="default__helper-message" id="default" type="radio">
           <span>Label text</span>
         </label>
@@ -124,7 +124,7 @@ describe('pds-radio', () => {
 
     expect(page.root).toEqualHtml(`
       <pds-radio class="is-invalid" component-id="default" error-message="This is a short error message." invalid="true" label="Label text">
-        <label htmlfor="default">
+        <label for="default">
           <input aria-invalid="true" id="default" type="radio">
           <span>Label text</span>
         </label>

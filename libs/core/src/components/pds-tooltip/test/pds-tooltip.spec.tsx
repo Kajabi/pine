@@ -15,22 +15,26 @@ global.ResizeObserver = jest.fn().mockImplementation(() => ({
   disconnect: jest.fn(),
 }));
 
-// Mock floating-ui/dom
-jest.mock('@floating-ui/dom', () => ({
-  computePosition: jest.fn().mockResolvedValue({
-    x: 100,
-    y: 200,
-    placement: 'bottom',
-  }),
-  flip: jest.fn().mockReturnValue({}),
-  offset: jest.fn().mockReturnValue({}),
-  shift: jest.fn().mockReturnValue({}),
-}));
+// floating-ui/dom resolves to a CommonJS module whose exports are configurable,
+// so we spy on the required module — the same object the component reads
+// `computePosition` from at call time. A jest.mock() factory is not used here:
+// the spec runtime does not hoist jest.mock() above imports, so a factory mock
+// never intercepts (and the `import *` namespace copy is non-configurable).
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const floatingUI = require('@floating-ui/dom');
 
 describe('pds-tooltip', () => {
   beforeEach(() => {
     // Reset mocks before each test
     jest.clearAllMocks();
+    // Force computePosition to resolve a placement that differs from the
+    // requested one, so tests can verify the component applies the *resolved*
+    // placement returned by floating-ui.
+    jest.spyOn(floatingUI, 'computePosition').mockResolvedValue({
+      x: 100,
+      y: 200,
+      placement: 'bottom',
+    });
   });
 
   it('renders the trigger with hidden content slot wrapper', async () => {

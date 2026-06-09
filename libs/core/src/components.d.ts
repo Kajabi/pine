@@ -3100,6 +3100,8 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    type OneOf<K extends string, PropT, AttrT = PropT> = { [P in K]: PropT } & { [P in `attr:${K}` | `prop:${K}`]?: never } | { [P in `attr:${K}`]: AttrT } & { [P in K | `prop:${K}`]?: never } | { [P in `prop:${K}`]: PropT } & { [P in K | `attr:${K}`]?: never };
+
     /**
      * Mock PdsModal component for testing purposes
      * This component mimics the real PdsModal but without using the Popover API
@@ -3884,6 +3886,10 @@ declare namespace LocalJSX {
          */
         "errorMessage"?: string;
         /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
           * String used for helper message below checkbox.
          */
         "helperMessage"?: string;
@@ -4046,6 +4052,10 @@ declare namespace LocalJSX {
           * @default 30000
          */
         "fetchTimeout"?: number;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
         /**
           * Function to format async results. Receives raw API response item.
          */
@@ -4344,6 +4354,10 @@ declare namespace LocalJSX {
          */
         "errorMessage"?: string;
         /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
           * Determines whether or not the input field takes full width of its container.
          */
         "fullWidth"?: boolean;
@@ -4601,6 +4615,10 @@ declare namespace LocalJSX {
           * @default 30000
          */
         "fetchTimeout"?: number;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
         /**
           * Function to format async results. Receives raw API response item.
          */
@@ -4965,6 +4983,10 @@ declare namespace LocalJSX {
          */
         "errorMessage"?: string;
         /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
           * Displays helper message text below select.
          */
         "helperMessage"?: string;
@@ -5084,6 +5106,10 @@ declare namespace LocalJSX {
           * Displays message text describing an invalid state.
          */
         "errorMessage"?: string;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
         /**
           * Displays help text for additional description of an input.
          */
@@ -5369,6 +5395,10 @@ declare namespace LocalJSX {
          */
         "errorMessage"?: string;
         /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
           * Displays a message or hint below the textarea field.
          */
         "helperMessage"?: string;
@@ -5506,56 +5536,643 @@ declare namespace LocalJSX {
          */
         "placement"?: PlacementType;
     }
+
+    interface MockPdsModalAttributes {
+        "componentId": string;
+        "size": 'sm' | 'md' | 'lg' | 'fullscreen';
+        "scrollable": boolean;
+        "backdropDismiss": boolean;
+        "open": boolean;
+    }
+    interface PdsAccordionAttributes {
+        "componentId": string;
+        "isOpen": boolean;
+    }
+    interface PdsAlertAttributes {
+        "componentId": string;
+        "heading": string;
+        "small": boolean;
+        "dismissible": boolean;
+        "hideIcon": boolean;
+        "variant": 'default' | 'danger' | 'info' | 'success' | 'warning';
+    }
+    interface PdsAvatarAttributes {
+        "alt": string | null;
+        "badge": boolean;
+        "componentId": string;
+        "dropdown": boolean;
+        "image": string | null;
+        "initials": string | null;
+        "size": | 'xl' // 64px
+  | 'lg' // 56px
+  | 'md' // 40px
+  | 'sm' // 32px
+  | 'xs' // 24px
+  | string;
+        "variant": 'customer' | 'admin';
+    }
+    interface PdsBoxAttributes {
+        "alignItems": `start` | `center` | `end` | `baseline` | `stretch`;
+        "alignItemsXs": `start` | `center` | `end` | `baseline` | `stretch`;
+        "alignItemsSm": `start` | `center` | `end` | `baseline` | `stretch`;
+        "alignItemsMd": `start` | `center` | `end` | `baseline` | `stretch`;
+        "alignItemsLg": `start` | `center` | `end` | `baseline` | `stretch`;
+        "alignItemsXl": `start` | `center` | `end` | `baseline` | `stretch`;
+        "alignSelf": `start` | `center` | `end` | `baseline` | `stretch`;
+        "alignSelfXs": `start` | `center` | `end` | `baseline` | `stretch`;
+        "alignSelfSm": `start` | `center` | `end` | `baseline` | `stretch`;
+        "alignSelfMd": `start` | `center` | `end` | `baseline` | `stretch`;
+        "alignSelfLg": `start` | `center` | `end` | `baseline` | `stretch`;
+        "alignSelfXl": `start` | `center` | `end` | `baseline` | `stretch`;
+        "auto": boolean;
+        "autoXs": boolean;
+        "autoSm": boolean;
+        "autoMd": boolean;
+        "autoLg": boolean;
+        "autoXl": boolean;
+        "backgroundColor": string;
+        "border": boolean;
+        "borderColor": string;
+        "borderRadius": `none` | `xs`| `sm` | `md` | `lg` | `circle`;
+        "direction": `row` | `column`;
+        "display": `flex` | `inline-flex` | `block` | `inline-block`;
+        "fit": boolean;
+        "fitXs": boolean;
+        "fitSm": boolean;
+        "fitMd": boolean;
+        "fitLg": boolean;
+        "fitXl": boolean;
+        "gap": BoxSpacingType;
+        "gapXs": BoxSpacingType;
+        "gapSm": BoxSpacingType;
+        "gapMd": BoxSpacingType;
+        "gapLg": BoxSpacingType;
+        "gapXl": BoxSpacingType;
+        "wrap": boolean;
+        "wrapXs": boolean;
+        "wrapSm": boolean;
+        "wrapMd": boolean;
+        "wrapLg": boolean;
+        "wrapXl": boolean;
+        "flex": `none` | `grow` | `shrink` | string;
+        "justifyContent": `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
+        "justifyContentXs": `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
+        "justifyContentSm": `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
+        "justifyContentMd": `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
+        "justifyContentLg": `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
+        "justifyContentXl": `start` | `center` | `end` | `space-between` | `space-around` | `space-evenly`;
+        "marginBlockStart": BoxSpacingType;
+        "marginBlockStartXs": BoxSpacingType;
+        "marginBlockStartSm": BoxSpacingType;
+        "marginBlockStartMd": BoxSpacingType;
+        "marginBlockStartLg": BoxSpacingType;
+        "marginBlockStartXl": BoxSpacingType;
+        "marginInlineStart": BoxSpacingType;
+        "marginInlineStartXs": BoxSpacingType;
+        "marginInlineStartSm": BoxSpacingType;
+        "marginInlineStartMd": BoxSpacingType;
+        "marginInlineStartLg": BoxSpacingType;
+        "marginInlineStartXl": BoxSpacingType;
+        "marginInlineEnd": BoxSpacingType;
+        "marginInlineEndXs": BoxSpacingType;
+        "marginInlineEndSm": BoxSpacingType;
+        "marginInlineEndMd": BoxSpacingType;
+        "marginInlineEndLg": BoxSpacingType;
+        "marginInlineEndXl": BoxSpacingType;
+        "marginBlockEnd": BoxSpacingType;
+        "marginBlockEndXs": BoxSpacingType;
+        "marginBlockEndSm": BoxSpacingType;
+        "marginBlockEndMd": BoxSpacingType;
+        "marginBlockEndLg": BoxSpacingType;
+        "marginBlockEndXl": BoxSpacingType;
+        "minHeight": string;
+        "minWidth": string;
+        "offset": BoxColumnType;
+        "offsetXs": BoxColumnType;
+        "offsetSm": BoxColumnType;
+        "offsetMd": BoxColumnType;
+        "offsetLg": BoxColumnType;
+        "offsetXl": BoxColumnType;
+        "padding": BoxSpacingType;
+        "paddingXs": BoxSpacingType;
+        "paddingSm": BoxSpacingType;
+        "paddingMd": BoxSpacingType;
+        "paddingLg": BoxSpacingType;
+        "paddingXl": BoxSpacingType;
+        "paddingBlockStart": BoxSpacingType;
+        "paddingBlockStartXs": BoxSpacingType;
+        "paddingBlockStartSm": BoxSpacingType;
+        "paddingBlockStartMd": BoxSpacingType;
+        "paddingBlockStartLg": BoxSpacingType;
+        "paddingBlockStartXl": BoxSpacingType;
+        "paddingBlockEnd": BoxSpacingType;
+        "paddingBlockEndXs": BoxSpacingType;
+        "paddingBlockEndSm": BoxSpacingType;
+        "paddingBlockEndMd": BoxSpacingType;
+        "paddingBlockEndLg": BoxSpacingType;
+        "paddingBlockEndXl": BoxSpacingType;
+        "paddingInlineStart": BoxSpacingType;
+        "paddingInlineStartXs": BoxSpacingType;
+        "paddingInlineStartSm": BoxSpacingType;
+        "paddingInlineStartMd": BoxSpacingType;
+        "paddingInlineStartLg": BoxSpacingType;
+        "paddingInlineStartXl": BoxSpacingType;
+        "paddingInlineEnd": BoxSpacingType;
+        "paddingInlineEndXs": BoxSpacingType;
+        "paddingInlineEndSm": BoxSpacingType;
+        "paddingInlineEndMd": BoxSpacingType;
+        "paddingInlineEndLg": BoxSpacingType;
+        "paddingInlineEndXl": BoxSpacingType;
+        "shadow": BoxShadowSizeType;
+        "size": BoxColumnType;
+        "sizeXs": BoxColumnType;
+        "sizeSm": BoxColumnType;
+        "sizeMd": BoxColumnType;
+        "sizeLg": BoxColumnType;
+        "sizeXl": BoxColumnType;
+    }
+    interface PdsButtonAttributes {
+        "componentId": string;
+        "download": string;
+        "disabled": boolean;
+        "fullWidth": boolean;
+        "href": string;
+        "icon": string;
+        "iconOnly": boolean;
+        "loading": boolean;
+        "name": string;
+        "target": '_blank' | '_self' | '_parent' | '_top';
+        "type": 'button' | 'reset' | 'submit';
+        "value": string;
+        "size": 'default' | 'small' | 'micro';
+        "variant": 'primary' | 'secondary' | 'tertiary' | 'accent' | 'disclosure' | 'destructive' | 'unstyled' | 'filter';
+    }
+    interface PdsCheckboxAttributes {
+        "checked": boolean;
+        "componentId": string;
+        "disabled": boolean;
+        "errorMessage": string;
+        "helperMessage": string;
+        "indeterminate": boolean;
+        "invalid": boolean;
+        "label": string;
+        "hideLabel": boolean;
+        "name": string;
+        "required": boolean;
+        "value": string;
+    }
+    interface PdsChipAttributes {
+        "componentId": string;
+        "dot": boolean;
+        "icon": string;
+        "large": boolean;
+        "size": ChipSizeType;
+        "sentiment": ChipSentimentType;
+        "variant": ChipVariantType;
+        "removeUrl": string;
+        "removeHttpMethod": 'get' | 'post' | 'put' | 'patch' | 'delete';
+        "removeTarget": '_blank' | '_self' | '_parent' | '_top';
+    }
+    interface PdsComboboxAttributes {
+        "componentId": string;
+        "name": string;
+        "customOptionLayouts": boolean;
+        "customTriggerContent": boolean;
+        "disabled": boolean;
+        "dropdownPlacement": 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
+        "dropdownWidth": string;
+        "dropdownMount": 'host' | 'body';
+        "hideLabel": boolean;
+        "label": string;
+        "maxHeight": string;
+        "mode": 'filter' | 'select-only';
+        "placeholder": string;
+        "trigger": 'input' | 'button' | 'chip';
+        "triggerWidth": string;
+        "triggerVariant": 'secondary' | 'primary' | 'accent' | 'destructive';
+        "triggerShape": 'pill' | 'input';
+        "chipSentiment": ChipSentimentType;
+        "chipLarge": boolean;
+        "chipIcon": string;
+        "chipDot": boolean;
+        "value": string;
+        "asyncUrl": string;
+        "asyncMethod": 'GET' | 'POST';
+        "debounce": number;
+        "fetchTimeout": number;
+        "loading": boolean;
+    }
+    interface PdsContainerAttributes {
+        "size": string;
+        "tag": 'div' | 'main' | 'section' | 'article';
+        "centered": boolean;
+    }
+    interface PdsCopytextAttributes {
+        "border": boolean;
+        "componentId": string;
+        "fullWidth": boolean;
+        "truncate": boolean;
+        "value": string;
+    }
+    interface PdsDividerAttributes {
+        "componentId": string;
+        "offset": 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+        "vertical": boolean;
+    }
+    interface PdsDropdownMenuAttributes {
+        "componentId": string;
+        "placement": PlacementType;
+    }
+    interface PdsDropdownMenuItemAttributes {
+        "componentId": string;
+        "destructive": boolean;
+        "disabled": boolean;
+        "download": string;
+        "href": string | undefined;
+        "external": boolean;
+        "target": '_blank' | '_self' | '_parent' | '_top';
+    }
+    interface PdsDropdownMenuSeparatorAttributes {
+        "componentId": string;
+        "disabled": boolean;
+    }
+    interface PdsFilterAttributes {
+        "componentId": string;
+        "variant": PdsFilterVariant;
+        "icon": string;
+        "text": string;
+    }
+    interface PdsFiltersAttributes {
+        "componentId": string;
+    }
+    interface PdsImageAttributes {
+        "alt": string;
+        "componentId": string;
+        "height": number;
+        "loading": 'eager' | 'lazy';
+        "sizes": string;
+        "src": string;
+        "srcset": string;
+        "width": number;
+    }
+    interface PdsInputAttributes {
+        "autocomplete": string;
+        "componentId": string;
+        "debounce": number;
+        "disabled": boolean;
+        "errorMessage": string;
+        "helperMessage": string;
+        "invalid": boolean;
+        "label": string;
+        "hideLabel": boolean;
+        "max": string;
+        "maxlength": string;
+        "min": string;
+        "minlength": string;
+        "name": string;
+        "pattern": string;
+        "placeholder": string;
+        "readonly": boolean;
+        "required": boolean;
+        "step": string;
+        "type": string;
+        "value": string;
+        "fullWidth": boolean;
+        "highlight": boolean;
+    }
+    interface PdsLinkAttributes {
+        "color": string;
+        "download": string;
+        "componentId": string;
+        "external": boolean;
+        "target": '_blank' | '_self' | '_parent' | '_top';
+        "variant": 'inline' | 'plain';
+        "fontSize": 'sm' | 'md' | 'lg';
+        "href": string;
+    }
+    interface PdsLoaderAttributes {
+        "isLoading": boolean;
+        "showLabel": boolean;
+        "size": | 'xs' // 24px
+  | 'sm' // 32px
+  | 'md' // 48px
+  | 'lg' // 64px
+  | 'xl' // 80px
+  | string;
+        "variant": 'spinner' | 'typing';
+    }
+    interface PdsModalAttributes {
+        "backdropDismiss": boolean;
+        "componentId": string;
+        "open": boolean;
+        "size": 'sm' | 'md' | 'lg' | 'fullscreen';
+        "scrollable": boolean;
+    }
+    interface PdsModalContentAttributes {
+        "border": 'none' | 'both' | 'top' | 'bottom';
+    }
+    interface PdsMultiselectAttributes {
+        "componentId": string;
+        "label": string;
+        "placeholder": string;
+        "searchPlaceholder": string;
+        "closePanelOnSelect": boolean;
+        "name": string;
+        "disabled": boolean;
+        "asyncUrl": string;
+        "asyncMethod": 'GET' | 'POST';
+        "debounce": number;
+        "fetchTimeout": number;
+        "maxSelections": number;
+        "maxHeight": string;
+        "triggerWidth": string;
+        "minWidth": string;
+        "panelWidth": string;
+        "hideLabel": boolean;
+        "hideSelectedItems": boolean;
+        "selectedDisplay": 'count' | 'pill';
+        "pillPosition": 'inline' | 'below';
+        "maxInlinePills": number;
+        "errorMessage": string;
+        "helperMessage": string;
+        "invalid": boolean;
+        "required": boolean;
+        "loading": boolean;
+        "createUrl": string;
+        "csrfToken": string;
+        "csrfHeaderName": string;
+    }
+    interface PdsPopoverAttributes {
+        "popoverTargetAction": 'show' | 'toggle' | 'hide';
+        "popoverType": 'auto' | 'manual';
+        "componentId": string;
+        "maxWidth": number;
+        "placement": PlacementType;
+    }
+    interface PdsProgressAttributes {
+        "animated": boolean;
+        "componentId": string;
+        "fillColor": string;
+        "label": string;
+        "percent": number;
+        "showPercent": boolean;
+    }
+    interface PdsPropertyAttributes {
+        "componentId": string;
+        "icon": string;
+    }
+    interface PdsRadioAttributes {
+        "checked": boolean;
+        "componentId": string;
+        "disabled": boolean;
+        "errorMessage": string;
+        "helperMessage": string;
+        "hasBorder": boolean;
+        "invalid": boolean;
+        "label": string;
+        "hideLabel": boolean;
+        "name": string;
+        "required": boolean;
+        "value": string;
+    }
+    interface PdsRadioGroupAttributes {
+        "componentId": string;
+        "direction": 'row' | 'column';
+        "errorMessage": string;
+        "helperMessage": string;
+        "gap": string;
+        "disabled": boolean;
+        "invalid": boolean;
+        "groupLabel": string;
+        "name": string;
+        "required": boolean;
+    }
+    interface PdsRowAttributes {
+        "alignItems": `start` | `center` | `end` | `baseline` | `stretch`;
+        "border": boolean;
+        "colGap": BoxSpacingType | null;
+        "colGapBlock": BoxSpacingType | null;
+        "colGapInline": BoxSpacingType | null;
+        "componentId": string;
+        "justifyContent": `start` | `center` | `end` | `space-between` | `space-around`;
+        "minHeight": string;
+        "noWrap": boolean;
+    }
+    interface PdsSelectAttributes {
+        "autocomplete": string;
+        "componentId": string;
+        "disabled": boolean;
+        "errorMessage": string;
+        "hideLabel": boolean;
+        "helperMessage": string;
+        "invalid": boolean;
+        "label": string;
+        "multiple": boolean;
+        "name": string;
+        "required": boolean;
+        "highlight": boolean;
+        "value": string | string[];
+    }
+    interface PdsSortableAttributes {
+        "border": boolean;
+        "disabled": boolean;
+        "componentId": string;
+        "dividers": boolean;
+        "handleType": 'handle' | 'row';
+    }
+    interface PdsSortableItemAttributes {
+        "enableActions": boolean;
+        "componentId": string;
+        "showHandle": boolean;
+    }
+    interface PdsSwitchAttributes {
+        "componentId": string;
+        "checked": boolean;
+        "disabled": boolean;
+        "errorMessage": string;
+        "hideLabel": boolean;
+        "helperMessage": string;
+        "invalid": boolean;
+        "label": string;
+        "name": string;
+        "required": boolean;
+        "value": string;
+    }
+    interface PdsTabAttributes {
+        "disabled": boolean;
+        "name": string;
+        "parentComponentId": string;
+        "variant": string;
+        "index": number;
+        "selected": boolean;
+    }
+    interface PdsTableAttributes {
+        "compact": boolean;
+        "componentId": string;
+        "responsive": boolean;
+        "fixedColumn": boolean;
+        "selectable": boolean;
+        "disableSelectAll": boolean;
+        "rowDividers": boolean;
+        "defaultSortColumn": string;
+        "defaultSortDirection": 'asc' | 'desc';
+    }
+    interface PdsTableCellAttributes {
+        "cellAlign": 'start' | 'center' | 'end' | 'justify';
+        "truncate": boolean;
+    }
+    interface PdsTableHeadAttributes {
+        "indeterminate": boolean;
+        "isSelected": boolean;
+        "border": boolean;
+        "background": boolean;
+    }
+    interface PdsTableHeadCellAttributes {
+        "cellAlign": 'start' | 'center' | 'end' | 'justify';
+        "sortable": boolean;
+    }
+    interface PdsTableRowAttributes {
+        "indeterminate": boolean;
+        "isSelected": boolean;
+    }
+    interface PdsTabpanelAttributes {
+        "name": string;
+        "parentComponentId": string;
+        "variant": string;
+        "selected": boolean;
+    }
+    interface PdsTabsAttributes {
+        "tablistLabel": string;
+        "componentId": string;
+        "variant": 'primary' | 'availability' | 'filter' | 'pill';
+        "activeTabName": string;
+        "activeTabIndex": number;
+    }
+    interface PdsTextAttributes {
+        "align": 'start' | 'center' | 'end' | 'justify';
+        "color": string;
+        "decoration": 'strikethrough' | 'underline-dotted';
+        "gutter": '2xl' | 'xl' | 'lg' | 'md' | 'sm' | 'xs' | '2xs';
+        "italic": boolean;
+        "size": | '2xl'
+    | 'xl'
+    | 'lg'
+    | 'md'
+    | 'sm'
+    | 'xs'
+    | '2xs'
+    | 'h1'
+    | 'h2'
+    | 'h3'
+    | 'h4'
+    | 'h5'
+    | 'h6';
+        "weight": | 'extra-light'
+    | 'light'
+    | 'regular'
+    | 'medium'
+    | 'semibold'
+    | 'bold';
+        "tag": | 'h1'
+    | 'h2'
+    | 'h3'
+    | 'h4'
+    | 'h5'
+    | 'h6'
+    | 'p'
+    | 'span'
+    | 'code'
+    | 'pre'
+    | 'strong'
+    | 'em';
+        "truncate": boolean;
+    }
+    interface PdsTextareaAttributes {
+        "autocomplete": string;
+        "componentId": string;
+        "disabled": boolean;
+        "debounce": number;
+        "errorMessage": string;
+        "helperMessage": string;
+        "invalid": boolean;
+        "label": string;
+        "hideLabel": boolean;
+        "name": string;
+        "placeholder": string;
+        "readonly": boolean;
+        "required": boolean;
+        "rows": number;
+        "maxLength": number;
+        "highlight": boolean;
+        "value": string | null;
+    }
+    interface PdsToastAttributes {
+        "componentId": string;
+        "dismissible": boolean;
+        "duration": number;
+        "icon": string;
+        "type": 'default' | 'danger' | 'loading';
+    }
+    interface PdsTooltipAttributes {
+        "content": string;
+        "componentId": string;
+        "hasArrow": boolean;
+        "htmlContent": boolean;
+        "placement": PlacementType;
+        "maxWidth": string;
+        "opened": boolean;
+    }
+
     interface IntrinsicElements {
-        "mock-pds-modal": MockPdsModal;
-        "pds-accordion": PdsAccordion;
-        "pds-alert": PdsAlert;
-        "pds-avatar": PdsAvatar;
-        "pds-box": PdsBox;
-        "pds-button": PdsButton;
-        "pds-checkbox": PdsCheckbox;
-        "pds-chip": PdsChip;
-        "pds-combobox": PdsCombobox;
-        "pds-container": PdsContainer;
-        "pds-copytext": PdsCopytext;
-        "pds-divider": PdsDivider;
-        "pds-dropdown-menu": PdsDropdownMenu;
-        "pds-dropdown-menu-item": PdsDropdownMenuItem;
-        "pds-dropdown-menu-separator": PdsDropdownMenuSeparator;
-        "pds-filter": PdsFilter;
-        "pds-filters": PdsFilters;
-        "pds-image": PdsImage;
-        "pds-input": PdsInput;
-        "pds-link": PdsLink;
-        "pds-loader": PdsLoader;
-        "pds-modal": PdsModal;
-        "pds-modal-content": PdsModalContent;
+        "mock-pds-modal": Omit<MockPdsModal, keyof MockPdsModalAttributes> & { [K in keyof MockPdsModal & keyof MockPdsModalAttributes]?: MockPdsModal[K] } & { [K in keyof MockPdsModal & keyof MockPdsModalAttributes as `attr:${K}`]?: MockPdsModalAttributes[K] } & { [K in keyof MockPdsModal & keyof MockPdsModalAttributes as `prop:${K}`]?: MockPdsModal[K] };
+        "pds-accordion": Omit<PdsAccordion, keyof PdsAccordionAttributes> & { [K in keyof PdsAccordion & keyof PdsAccordionAttributes]?: PdsAccordion[K] } & { [K in keyof PdsAccordion & keyof PdsAccordionAttributes as `attr:${K}`]?: PdsAccordionAttributes[K] } & { [K in keyof PdsAccordion & keyof PdsAccordionAttributes as `prop:${K}`]?: PdsAccordion[K] };
+        "pds-alert": Omit<PdsAlert, keyof PdsAlertAttributes> & { [K in keyof PdsAlert & keyof PdsAlertAttributes]?: PdsAlert[K] } & { [K in keyof PdsAlert & keyof PdsAlertAttributes as `attr:${K}`]?: PdsAlertAttributes[K] } & { [K in keyof PdsAlert & keyof PdsAlertAttributes as `prop:${K}`]?: PdsAlert[K] };
+        "pds-avatar": Omit<PdsAvatar, keyof PdsAvatarAttributes> & { [K in keyof PdsAvatar & keyof PdsAvatarAttributes]?: PdsAvatar[K] } & { [K in keyof PdsAvatar & keyof PdsAvatarAttributes as `attr:${K}`]?: PdsAvatarAttributes[K] } & { [K in keyof PdsAvatar & keyof PdsAvatarAttributes as `prop:${K}`]?: PdsAvatar[K] };
+        "pds-box": Omit<PdsBox, keyof PdsBoxAttributes> & { [K in keyof PdsBox & keyof PdsBoxAttributes]?: PdsBox[K] } & { [K in keyof PdsBox & keyof PdsBoxAttributes as `attr:${K}`]?: PdsBoxAttributes[K] } & { [K in keyof PdsBox & keyof PdsBoxAttributes as `prop:${K}`]?: PdsBox[K] };
+        "pds-button": Omit<PdsButton, keyof PdsButtonAttributes> & { [K in keyof PdsButton & keyof PdsButtonAttributes]?: PdsButton[K] } & { [K in keyof PdsButton & keyof PdsButtonAttributes as `attr:${K}`]?: PdsButtonAttributes[K] } & { [K in keyof PdsButton & keyof PdsButtonAttributes as `prop:${K}`]?: PdsButton[K] };
+        "pds-checkbox": Omit<PdsCheckbox, keyof PdsCheckboxAttributes> & { [K in keyof PdsCheckbox & keyof PdsCheckboxAttributes]?: PdsCheckbox[K] } & { [K in keyof PdsCheckbox & keyof PdsCheckboxAttributes as `attr:${K}`]?: PdsCheckboxAttributes[K] } & { [K in keyof PdsCheckbox & keyof PdsCheckboxAttributes as `prop:${K}`]?: PdsCheckbox[K] } & OneOf<"componentId", PdsCheckbox["componentId"], PdsCheckboxAttributes["componentId"]>;
+        "pds-chip": Omit<PdsChip, keyof PdsChipAttributes> & { [K in keyof PdsChip & keyof PdsChipAttributes]?: PdsChip[K] } & { [K in keyof PdsChip & keyof PdsChipAttributes as `attr:${K}`]?: PdsChipAttributes[K] } & { [K in keyof PdsChip & keyof PdsChipAttributes as `prop:${K}`]?: PdsChip[K] };
+        "pds-combobox": Omit<PdsCombobox, keyof PdsComboboxAttributes> & { [K in keyof PdsCombobox & keyof PdsComboboxAttributes]?: PdsCombobox[K] } & { [K in keyof PdsCombobox & keyof PdsComboboxAttributes as `attr:${K}`]?: PdsComboboxAttributes[K] } & { [K in keyof PdsCombobox & keyof PdsComboboxAttributes as `prop:${K}`]?: PdsCombobox[K] } & OneOf<"componentId", PdsCombobox["componentId"], PdsComboboxAttributes["componentId"]>;
+        "pds-container": Omit<PdsContainer, keyof PdsContainerAttributes> & { [K in keyof PdsContainer & keyof PdsContainerAttributes]?: PdsContainer[K] } & { [K in keyof PdsContainer & keyof PdsContainerAttributes as `attr:${K}`]?: PdsContainerAttributes[K] } & { [K in keyof PdsContainer & keyof PdsContainerAttributes as `prop:${K}`]?: PdsContainer[K] };
+        "pds-copytext": Omit<PdsCopytext, keyof PdsCopytextAttributes> & { [K in keyof PdsCopytext & keyof PdsCopytextAttributes]?: PdsCopytext[K] } & { [K in keyof PdsCopytext & keyof PdsCopytextAttributes as `attr:${K}`]?: PdsCopytextAttributes[K] } & { [K in keyof PdsCopytext & keyof PdsCopytextAttributes as `prop:${K}`]?: PdsCopytext[K] } & OneOf<"value", PdsCopytext["value"], PdsCopytextAttributes["value"]>;
+        "pds-divider": Omit<PdsDivider, keyof PdsDividerAttributes> & { [K in keyof PdsDivider & keyof PdsDividerAttributes]?: PdsDivider[K] } & { [K in keyof PdsDivider & keyof PdsDividerAttributes as `attr:${K}`]?: PdsDividerAttributes[K] } & { [K in keyof PdsDivider & keyof PdsDividerAttributes as `prop:${K}`]?: PdsDivider[K] };
+        "pds-dropdown-menu": Omit<PdsDropdownMenu, keyof PdsDropdownMenuAttributes> & { [K in keyof PdsDropdownMenu & keyof PdsDropdownMenuAttributes]?: PdsDropdownMenu[K] } & { [K in keyof PdsDropdownMenu & keyof PdsDropdownMenuAttributes as `attr:${K}`]?: PdsDropdownMenuAttributes[K] } & { [K in keyof PdsDropdownMenu & keyof PdsDropdownMenuAttributes as `prop:${K}`]?: PdsDropdownMenu[K] };
+        "pds-dropdown-menu-item": Omit<PdsDropdownMenuItem, keyof PdsDropdownMenuItemAttributes> & { [K in keyof PdsDropdownMenuItem & keyof PdsDropdownMenuItemAttributes]?: PdsDropdownMenuItem[K] } & { [K in keyof PdsDropdownMenuItem & keyof PdsDropdownMenuItemAttributes as `attr:${K}`]?: PdsDropdownMenuItemAttributes[K] } & { [K in keyof PdsDropdownMenuItem & keyof PdsDropdownMenuItemAttributes as `prop:${K}`]?: PdsDropdownMenuItem[K] };
+        "pds-dropdown-menu-separator": Omit<PdsDropdownMenuSeparator, keyof PdsDropdownMenuSeparatorAttributes> & { [K in keyof PdsDropdownMenuSeparator & keyof PdsDropdownMenuSeparatorAttributes]?: PdsDropdownMenuSeparator[K] } & { [K in keyof PdsDropdownMenuSeparator & keyof PdsDropdownMenuSeparatorAttributes as `attr:${K}`]?: PdsDropdownMenuSeparatorAttributes[K] } & { [K in keyof PdsDropdownMenuSeparator & keyof PdsDropdownMenuSeparatorAttributes as `prop:${K}`]?: PdsDropdownMenuSeparator[K] };
+        "pds-filter": Omit<PdsFilter, keyof PdsFilterAttributes> & { [K in keyof PdsFilter & keyof PdsFilterAttributes]?: PdsFilter[K] } & { [K in keyof PdsFilter & keyof PdsFilterAttributes as `attr:${K}`]?: PdsFilterAttributes[K] } & { [K in keyof PdsFilter & keyof PdsFilterAttributes as `prop:${K}`]?: PdsFilter[K] } & OneOf<"componentId", PdsFilter["componentId"], PdsFilterAttributes["componentId"]>;
+        "pds-filters": Omit<PdsFilters, keyof PdsFiltersAttributes> & { [K in keyof PdsFilters & keyof PdsFiltersAttributes]?: PdsFilters[K] } & { [K in keyof PdsFilters & keyof PdsFiltersAttributes as `attr:${K}`]?: PdsFiltersAttributes[K] } & { [K in keyof PdsFilters & keyof PdsFiltersAttributes as `prop:${K}`]?: PdsFilters[K] };
+        "pds-image": Omit<PdsImage, keyof PdsImageAttributes> & { [K in keyof PdsImage & keyof PdsImageAttributes]?: PdsImage[K] } & { [K in keyof PdsImage & keyof PdsImageAttributes as `attr:${K}`]?: PdsImageAttributes[K] } & { [K in keyof PdsImage & keyof PdsImageAttributes as `prop:${K}`]?: PdsImage[K] };
+        "pds-input": Omit<PdsInput, keyof PdsInputAttributes> & { [K in keyof PdsInput & keyof PdsInputAttributes]?: PdsInput[K] } & { [K in keyof PdsInput & keyof PdsInputAttributes as `attr:${K}`]?: PdsInputAttributes[K] } & { [K in keyof PdsInput & keyof PdsInputAttributes as `prop:${K}`]?: PdsInput[K] } & OneOf<"componentId", PdsInput["componentId"], PdsInputAttributes["componentId"]>;
+        "pds-link": Omit<PdsLink, keyof PdsLinkAttributes> & { [K in keyof PdsLink & keyof PdsLinkAttributes]?: PdsLink[K] } & { [K in keyof PdsLink & keyof PdsLinkAttributes as `attr:${K}`]?: PdsLinkAttributes[K] } & { [K in keyof PdsLink & keyof PdsLinkAttributes as `prop:${K}`]?: PdsLink[K] } & OneOf<"href", PdsLink["href"], PdsLinkAttributes["href"]>;
+        "pds-loader": Omit<PdsLoader, keyof PdsLoaderAttributes> & { [K in keyof PdsLoader & keyof PdsLoaderAttributes]?: PdsLoader[K] } & { [K in keyof PdsLoader & keyof PdsLoaderAttributes as `attr:${K}`]?: PdsLoaderAttributes[K] } & { [K in keyof PdsLoader & keyof PdsLoaderAttributes as `prop:${K}`]?: PdsLoader[K] };
+        "pds-modal": Omit<PdsModal, keyof PdsModalAttributes> & { [K in keyof PdsModal & keyof PdsModalAttributes]?: PdsModal[K] } & { [K in keyof PdsModal & keyof PdsModalAttributes as `attr:${K}`]?: PdsModalAttributes[K] } & { [K in keyof PdsModal & keyof PdsModalAttributes as `prop:${K}`]?: PdsModal[K] };
+        "pds-modal-content": Omit<PdsModalContent, keyof PdsModalContentAttributes> & { [K in keyof PdsModalContent & keyof PdsModalContentAttributes]?: PdsModalContent[K] } & { [K in keyof PdsModalContent & keyof PdsModalContentAttributes as `attr:${K}`]?: PdsModalContentAttributes[K] } & { [K in keyof PdsModalContent & keyof PdsModalContentAttributes as `prop:${K}`]?: PdsModalContent[K] };
         "pds-modal-footer": PdsModalFooter;
         "pds-modal-header": PdsModalHeader;
-        "pds-multiselect": PdsMultiselect;
-        "pds-popover": PdsPopover;
-        "pds-progress": PdsProgress;
-        "pds-property": PdsProperty;
-        "pds-radio": PdsRadio;
-        "pds-radio-group": PdsRadioGroup;
-        "pds-row": PdsRow;
-        "pds-select": PdsSelect;
-        "pds-sortable": PdsSortable;
-        "pds-sortable-item": PdsSortableItem;
-        "pds-switch": PdsSwitch;
-        "pds-tab": PdsTab;
-        "pds-table": PdsTable;
+        "pds-multiselect": Omit<PdsMultiselect, keyof PdsMultiselectAttributes> & { [K in keyof PdsMultiselect & keyof PdsMultiselectAttributes]?: PdsMultiselect[K] } & { [K in keyof PdsMultiselect & keyof PdsMultiselectAttributes as `attr:${K}`]?: PdsMultiselectAttributes[K] } & { [K in keyof PdsMultiselect & keyof PdsMultiselectAttributes as `prop:${K}`]?: PdsMultiselect[K] } & OneOf<"componentId", PdsMultiselect["componentId"], PdsMultiselectAttributes["componentId"]>;
+        "pds-popover": Omit<PdsPopover, keyof PdsPopoverAttributes> & { [K in keyof PdsPopover & keyof PdsPopoverAttributes]?: PdsPopover[K] } & { [K in keyof PdsPopover & keyof PdsPopoverAttributes as `attr:${K}`]?: PdsPopoverAttributes[K] } & { [K in keyof PdsPopover & keyof PdsPopoverAttributes as `prop:${K}`]?: PdsPopover[K] };
+        "pds-progress": Omit<PdsProgress, keyof PdsProgressAttributes> & { [K in keyof PdsProgress & keyof PdsProgressAttributes]?: PdsProgress[K] } & { [K in keyof PdsProgress & keyof PdsProgressAttributes as `attr:${K}`]?: PdsProgressAttributes[K] } & { [K in keyof PdsProgress & keyof PdsProgressAttributes as `prop:${K}`]?: PdsProgress[K] } & OneOf<"componentId", PdsProgress["componentId"], PdsProgressAttributes["componentId"]> & OneOf<"label", PdsProgress["label"], PdsProgressAttributes["label"]>;
+        "pds-property": Omit<PdsProperty, keyof PdsPropertyAttributes> & { [K in keyof PdsProperty & keyof PdsPropertyAttributes]?: PdsProperty[K] } & { [K in keyof PdsProperty & keyof PdsPropertyAttributes as `attr:${K}`]?: PdsPropertyAttributes[K] } & { [K in keyof PdsProperty & keyof PdsPropertyAttributes as `prop:${K}`]?: PdsProperty[K] };
+        "pds-radio": Omit<PdsRadio, keyof PdsRadioAttributes> & { [K in keyof PdsRadio & keyof PdsRadioAttributes]?: PdsRadio[K] } & { [K in keyof PdsRadio & keyof PdsRadioAttributes as `attr:${K}`]?: PdsRadioAttributes[K] } & { [K in keyof PdsRadio & keyof PdsRadioAttributes as `prop:${K}`]?: PdsRadio[K] } & OneOf<"componentId", PdsRadio["componentId"], PdsRadioAttributes["componentId"]>;
+        "pds-radio-group": Omit<PdsRadioGroup, keyof PdsRadioGroupAttributes> & { [K in keyof PdsRadioGroup & keyof PdsRadioGroupAttributes]?: PdsRadioGroup[K] } & { [K in keyof PdsRadioGroup & keyof PdsRadioGroupAttributes as `attr:${K}`]?: PdsRadioGroupAttributes[K] } & { [K in keyof PdsRadioGroup & keyof PdsRadioGroupAttributes as `prop:${K}`]?: PdsRadioGroup[K] };
+        "pds-row": Omit<PdsRow, keyof PdsRowAttributes> & { [K in keyof PdsRow & keyof PdsRowAttributes]?: PdsRow[K] } & { [K in keyof PdsRow & keyof PdsRowAttributes as `attr:${K}`]?: PdsRowAttributes[K] } & { [K in keyof PdsRow & keyof PdsRowAttributes as `prop:${K}`]?: PdsRow[K] };
+        "pds-select": Omit<PdsSelect, keyof PdsSelectAttributes> & { [K in keyof PdsSelect & keyof PdsSelectAttributes]?: PdsSelect[K] } & { [K in keyof PdsSelect & keyof PdsSelectAttributes as `attr:${K}`]?: PdsSelectAttributes[K] } & { [K in keyof PdsSelect & keyof PdsSelectAttributes as `prop:${K}`]?: PdsSelect[K] } & OneOf<"componentId", PdsSelect["componentId"], PdsSelectAttributes["componentId"]> & OneOf<"name", PdsSelect["name"], PdsSelectAttributes["name"]>;
+        "pds-sortable": Omit<PdsSortable, keyof PdsSortableAttributes> & { [K in keyof PdsSortable & keyof PdsSortableAttributes]?: PdsSortable[K] } & { [K in keyof PdsSortable & keyof PdsSortableAttributes as `attr:${K}`]?: PdsSortableAttributes[K] } & { [K in keyof PdsSortable & keyof PdsSortableAttributes as `prop:${K}`]?: PdsSortable[K] } & OneOf<"componentId", PdsSortable["componentId"], PdsSortableAttributes["componentId"]>;
+        "pds-sortable-item": Omit<PdsSortableItem, keyof PdsSortableItemAttributes> & { [K in keyof PdsSortableItem & keyof PdsSortableItemAttributes]?: PdsSortableItem[K] } & { [K in keyof PdsSortableItem & keyof PdsSortableItemAttributes as `attr:${K}`]?: PdsSortableItemAttributes[K] } & { [K in keyof PdsSortableItem & keyof PdsSortableItemAttributes as `prop:${K}`]?: PdsSortableItem[K] };
+        "pds-switch": Omit<PdsSwitch, keyof PdsSwitchAttributes> & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes]?: PdsSwitch[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `attr:${K}`]?: PdsSwitchAttributes[K] } & { [K in keyof PdsSwitch & keyof PdsSwitchAttributes as `prop:${K}`]?: PdsSwitch[K] } & OneOf<"componentId", PdsSwitch["componentId"], PdsSwitchAttributes["componentId"]> & OneOf<"label", PdsSwitch["label"], PdsSwitchAttributes["label"]>;
+        "pds-tab": Omit<PdsTab, keyof PdsTabAttributes> & { [K in keyof PdsTab & keyof PdsTabAttributes]?: PdsTab[K] } & { [K in keyof PdsTab & keyof PdsTabAttributes as `attr:${K}`]?: PdsTabAttributes[K] } & { [K in keyof PdsTab & keyof PdsTabAttributes as `prop:${K}`]?: PdsTab[K] } & OneOf<"name", PdsTab["name"], PdsTabAttributes["name"]>;
+        "pds-table": Omit<PdsTable, keyof PdsTableAttributes> & { [K in keyof PdsTable & keyof PdsTableAttributes]?: PdsTable[K] } & { [K in keyof PdsTable & keyof PdsTableAttributes as `attr:${K}`]?: PdsTableAttributes[K] } & { [K in keyof PdsTable & keyof PdsTableAttributes as `prop:${K}`]?: PdsTable[K] } & OneOf<"componentId", PdsTable["componentId"], PdsTableAttributes["componentId"]>;
         "pds-table-body": PdsTableBody;
-        "pds-table-cell": PdsTableCell;
-        "pds-table-head": PdsTableHead;
-        "pds-table-head-cell": PdsTableHeadCell;
-        "pds-table-row": PdsTableRow;
-        "pds-tabpanel": PdsTabpanel;
-        "pds-tabs": PdsTabs;
-        "pds-text": PdsText;
-        "pds-textarea": PdsTextarea;
-        "pds-toast": PdsToast;
-        "pds-tooltip": PdsTooltip;
+        "pds-table-cell": Omit<PdsTableCell, keyof PdsTableCellAttributes> & { [K in keyof PdsTableCell & keyof PdsTableCellAttributes]?: PdsTableCell[K] } & { [K in keyof PdsTableCell & keyof PdsTableCellAttributes as `attr:${K}`]?: PdsTableCellAttributes[K] } & { [K in keyof PdsTableCell & keyof PdsTableCellAttributes as `prop:${K}`]?: PdsTableCell[K] };
+        "pds-table-head": Omit<PdsTableHead, keyof PdsTableHeadAttributes> & { [K in keyof PdsTableHead & keyof PdsTableHeadAttributes]?: PdsTableHead[K] } & { [K in keyof PdsTableHead & keyof PdsTableHeadAttributes as `attr:${K}`]?: PdsTableHeadAttributes[K] } & { [K in keyof PdsTableHead & keyof PdsTableHeadAttributes as `prop:${K}`]?: PdsTableHead[K] };
+        "pds-table-head-cell": Omit<PdsTableHeadCell, keyof PdsTableHeadCellAttributes> & { [K in keyof PdsTableHeadCell & keyof PdsTableHeadCellAttributes]?: PdsTableHeadCell[K] } & { [K in keyof PdsTableHeadCell & keyof PdsTableHeadCellAttributes as `attr:${K}`]?: PdsTableHeadCellAttributes[K] } & { [K in keyof PdsTableHeadCell & keyof PdsTableHeadCellAttributes as `prop:${K}`]?: PdsTableHeadCell[K] };
+        "pds-table-row": Omit<PdsTableRow, keyof PdsTableRowAttributes> & { [K in keyof PdsTableRow & keyof PdsTableRowAttributes]?: PdsTableRow[K] } & { [K in keyof PdsTableRow & keyof PdsTableRowAttributes as `attr:${K}`]?: PdsTableRowAttributes[K] } & { [K in keyof PdsTableRow & keyof PdsTableRowAttributes as `prop:${K}`]?: PdsTableRow[K] };
+        "pds-tabpanel": Omit<PdsTabpanel, keyof PdsTabpanelAttributes> & { [K in keyof PdsTabpanel & keyof PdsTabpanelAttributes]?: PdsTabpanel[K] } & { [K in keyof PdsTabpanel & keyof PdsTabpanelAttributes as `attr:${K}`]?: PdsTabpanelAttributes[K] } & { [K in keyof PdsTabpanel & keyof PdsTabpanelAttributes as `prop:${K}`]?: PdsTabpanel[K] } & OneOf<"name", PdsTabpanel["name"], PdsTabpanelAttributes["name"]>;
+        "pds-tabs": Omit<PdsTabs, keyof PdsTabsAttributes> & { [K in keyof PdsTabs & keyof PdsTabsAttributes]?: PdsTabs[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `attr:${K}`]?: PdsTabsAttributes[K] } & { [K in keyof PdsTabs & keyof PdsTabsAttributes as `prop:${K}`]?: PdsTabs[K] } & OneOf<"tablistLabel", PdsTabs["tablistLabel"], PdsTabsAttributes["tablistLabel"]> & OneOf<"componentId", PdsTabs["componentId"], PdsTabsAttributes["componentId"]> & OneOf<"variant", PdsTabs["variant"], PdsTabsAttributes["variant"]> & OneOf<"activeTabName", PdsTabs["activeTabName"], PdsTabsAttributes["activeTabName"]>;
+        "pds-text": Omit<PdsText, keyof PdsTextAttributes> & { [K in keyof PdsText & keyof PdsTextAttributes]?: PdsText[K] } & { [K in keyof PdsText & keyof PdsTextAttributes as `attr:${K}`]?: PdsTextAttributes[K] } & { [K in keyof PdsText & keyof PdsTextAttributes as `prop:${K}`]?: PdsText[K] };
+        "pds-textarea": Omit<PdsTextarea, keyof PdsTextareaAttributes> & { [K in keyof PdsTextarea & keyof PdsTextareaAttributes]?: PdsTextarea[K] } & { [K in keyof PdsTextarea & keyof PdsTextareaAttributes as `attr:${K}`]?: PdsTextareaAttributes[K] } & { [K in keyof PdsTextarea & keyof PdsTextareaAttributes as `prop:${K}`]?: PdsTextarea[K] } & OneOf<"componentId", PdsTextarea["componentId"], PdsTextareaAttributes["componentId"]>;
+        "pds-toast": Omit<PdsToast, keyof PdsToastAttributes> & { [K in keyof PdsToast & keyof PdsToastAttributes]?: PdsToast[K] } & { [K in keyof PdsToast & keyof PdsToastAttributes as `attr:${K}`]?: PdsToastAttributes[K] } & { [K in keyof PdsToast & keyof PdsToastAttributes as `prop:${K}`]?: PdsToast[K] } & OneOf<"componentId", PdsToast["componentId"], PdsToastAttributes["componentId"]>;
+        "pds-tooltip": Omit<PdsTooltip, keyof PdsTooltipAttributes> & { [K in keyof PdsTooltip & keyof PdsTooltipAttributes]?: PdsTooltip[K] } & { [K in keyof PdsTooltip & keyof PdsTooltipAttributes as `attr:${K}`]?: PdsTooltipAttributes[K] } & { [K in keyof PdsTooltip & keyof PdsTooltipAttributes as `prop:${K}`]?: PdsTooltip[K] };
     }
 }
 export { LocalJSX as JSX };
@@ -5566,61 +6183,61 @@ declare module "@stencil/core" {
              * Mock PdsModal component for testing purposes
              * This component mimics the real PdsModal but without using the Popover API
              */
-            "mock-pds-modal": LocalJSX.MockPdsModal & JSXBase.HTMLAttributes<HTMLMockPdsModalElement>;
-            "pds-accordion": LocalJSX.PdsAccordion & JSXBase.HTMLAttributes<HTMLPdsAccordionElement>;
-            "pds-alert": LocalJSX.PdsAlert & JSXBase.HTMLAttributes<HTMLPdsAlertElement>;
-            "pds-avatar": LocalJSX.PdsAvatar & JSXBase.HTMLAttributes<HTMLPdsAvatarElement>;
-            "pds-box": LocalJSX.PdsBox & JSXBase.HTMLAttributes<HTMLPdsBoxElement>;
-            "pds-button": LocalJSX.PdsButton & JSXBase.HTMLAttributes<HTMLPdsButtonElement>;
-            "pds-checkbox": LocalJSX.PdsCheckbox & JSXBase.HTMLAttributes<HTMLPdsCheckboxElement>;
-            "pds-chip": LocalJSX.PdsChip & JSXBase.HTMLAttributes<HTMLPdsChipElement>;
-            "pds-combobox": LocalJSX.PdsCombobox & JSXBase.HTMLAttributes<HTMLPdsComboboxElement>;
-            "pds-container": LocalJSX.PdsContainer & JSXBase.HTMLAttributes<HTMLPdsContainerElement>;
-            "pds-copytext": LocalJSX.PdsCopytext & JSXBase.HTMLAttributes<HTMLPdsCopytextElement>;
-            "pds-divider": LocalJSX.PdsDivider & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
-            "pds-dropdown-menu": LocalJSX.PdsDropdownMenu & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuElement>;
-            "pds-dropdown-menu-item": LocalJSX.PdsDropdownMenuItem & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuItemElement>;
-            "pds-dropdown-menu-separator": LocalJSX.PdsDropdownMenuSeparator & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuSeparatorElement>;
+            "mock-pds-modal": LocalJSX.IntrinsicElements["mock-pds-modal"] & JSXBase.HTMLAttributes<HTMLMockPdsModalElement>;
+            "pds-accordion": LocalJSX.IntrinsicElements["pds-accordion"] & JSXBase.HTMLAttributes<HTMLPdsAccordionElement>;
+            "pds-alert": LocalJSX.IntrinsicElements["pds-alert"] & JSXBase.HTMLAttributes<HTMLPdsAlertElement>;
+            "pds-avatar": LocalJSX.IntrinsicElements["pds-avatar"] & JSXBase.HTMLAttributes<HTMLPdsAvatarElement>;
+            "pds-box": LocalJSX.IntrinsicElements["pds-box"] & JSXBase.HTMLAttributes<HTMLPdsBoxElement>;
+            "pds-button": LocalJSX.IntrinsicElements["pds-button"] & JSXBase.HTMLAttributes<HTMLPdsButtonElement>;
+            "pds-checkbox": LocalJSX.IntrinsicElements["pds-checkbox"] & JSXBase.HTMLAttributes<HTMLPdsCheckboxElement>;
+            "pds-chip": LocalJSX.IntrinsicElements["pds-chip"] & JSXBase.HTMLAttributes<HTMLPdsChipElement>;
+            "pds-combobox": LocalJSX.IntrinsicElements["pds-combobox"] & JSXBase.HTMLAttributes<HTMLPdsComboboxElement>;
+            "pds-container": LocalJSX.IntrinsicElements["pds-container"] & JSXBase.HTMLAttributes<HTMLPdsContainerElement>;
+            "pds-copytext": LocalJSX.IntrinsicElements["pds-copytext"] & JSXBase.HTMLAttributes<HTMLPdsCopytextElement>;
+            "pds-divider": LocalJSX.IntrinsicElements["pds-divider"] & JSXBase.HTMLAttributes<HTMLPdsDividerElement>;
+            "pds-dropdown-menu": LocalJSX.IntrinsicElements["pds-dropdown-menu"] & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuElement>;
+            "pds-dropdown-menu-item": LocalJSX.IntrinsicElements["pds-dropdown-menu-item"] & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuItemElement>;
+            "pds-dropdown-menu-separator": LocalJSX.IntrinsicElements["pds-dropdown-menu-separator"] & JSXBase.HTMLAttributes<HTMLPdsDropdownMenuSeparatorElement>;
             /**
              * Individual filter component with cross-browser popover positioning.
              * Uses a hybrid approach for optimal cross-browser compatibility:
              * - Modern browsers: CSS anchor positioning + JavaScript flip classes
              * - Fallback browsers: JavaScript positioning with viewport boundary detection
              */
-            "pds-filter": LocalJSX.PdsFilter & JSXBase.HTMLAttributes<HTMLPdsFilterElement>;
-            "pds-filters": LocalJSX.PdsFilters & JSXBase.HTMLAttributes<HTMLPdsFiltersElement>;
-            "pds-image": LocalJSX.PdsImage & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
-            "pds-input": LocalJSX.PdsInput & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
-            "pds-link": LocalJSX.PdsLink & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
-            "pds-loader": LocalJSX.PdsLoader & JSXBase.HTMLAttributes<HTMLPdsLoaderElement>;
-            "pds-modal": LocalJSX.PdsModal & JSXBase.HTMLAttributes<HTMLPdsModalElement>;
-            "pds-modal-content": LocalJSX.PdsModalContent & JSXBase.HTMLAttributes<HTMLPdsModalContentElement>;
-            "pds-modal-footer": LocalJSX.PdsModalFooter & JSXBase.HTMLAttributes<HTMLPdsModalFooterElement>;
-            "pds-modal-header": LocalJSX.PdsModalHeader & JSXBase.HTMLAttributes<HTMLPdsModalHeaderElement>;
-            "pds-multiselect": LocalJSX.PdsMultiselect & JSXBase.HTMLAttributes<HTMLPdsMultiselectElement>;
-            "pds-popover": LocalJSX.PdsPopover & JSXBase.HTMLAttributes<HTMLPdsPopoverElement>;
-            "pds-progress": LocalJSX.PdsProgress & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
-            "pds-property": LocalJSX.PdsProperty & JSXBase.HTMLAttributes<HTMLPdsPropertyElement>;
-            "pds-radio": LocalJSX.PdsRadio & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
-            "pds-radio-group": LocalJSX.PdsRadioGroup & JSXBase.HTMLAttributes<HTMLPdsRadioGroupElement>;
-            "pds-row": LocalJSX.PdsRow & JSXBase.HTMLAttributes<HTMLPdsRowElement>;
-            "pds-select": LocalJSX.PdsSelect & JSXBase.HTMLAttributes<HTMLPdsSelectElement>;
-            "pds-sortable": LocalJSX.PdsSortable & JSXBase.HTMLAttributes<HTMLPdsSortableElement>;
-            "pds-sortable-item": LocalJSX.PdsSortableItem & JSXBase.HTMLAttributes<HTMLPdsSortableItemElement>;
-            "pds-switch": LocalJSX.PdsSwitch & JSXBase.HTMLAttributes<HTMLPdsSwitchElement>;
-            "pds-tab": LocalJSX.PdsTab & JSXBase.HTMLAttributes<HTMLPdsTabElement>;
-            "pds-table": LocalJSX.PdsTable & JSXBase.HTMLAttributes<HTMLPdsTableElement>;
-            "pds-table-body": LocalJSX.PdsTableBody & JSXBase.HTMLAttributes<HTMLPdsTableBodyElement>;
-            "pds-table-cell": LocalJSX.PdsTableCell & JSXBase.HTMLAttributes<HTMLPdsTableCellElement>;
-            "pds-table-head": LocalJSX.PdsTableHead & JSXBase.HTMLAttributes<HTMLPdsTableHeadElement>;
-            "pds-table-head-cell": LocalJSX.PdsTableHeadCell & JSXBase.HTMLAttributes<HTMLPdsTableHeadCellElement>;
-            "pds-table-row": LocalJSX.PdsTableRow & JSXBase.HTMLAttributes<HTMLPdsTableRowElement>;
-            "pds-tabpanel": LocalJSX.PdsTabpanel & JSXBase.HTMLAttributes<HTMLPdsTabpanelElement>;
-            "pds-tabs": LocalJSX.PdsTabs & JSXBase.HTMLAttributes<HTMLPdsTabsElement>;
-            "pds-text": LocalJSX.PdsText & JSXBase.HTMLAttributes<HTMLPdsTextElement>;
-            "pds-textarea": LocalJSX.PdsTextarea & JSXBase.HTMLAttributes<HTMLPdsTextareaElement>;
-            "pds-toast": LocalJSX.PdsToast & JSXBase.HTMLAttributes<HTMLPdsToastElement>;
-            "pds-tooltip": LocalJSX.PdsTooltip & JSXBase.HTMLAttributes<HTMLPdsTooltipElement>;
+            "pds-filter": LocalJSX.IntrinsicElements["pds-filter"] & JSXBase.HTMLAttributes<HTMLPdsFilterElement>;
+            "pds-filters": LocalJSX.IntrinsicElements["pds-filters"] & JSXBase.HTMLAttributes<HTMLPdsFiltersElement>;
+            "pds-image": LocalJSX.IntrinsicElements["pds-image"] & JSXBase.HTMLAttributes<HTMLPdsImageElement>;
+            "pds-input": LocalJSX.IntrinsicElements["pds-input"] & JSXBase.HTMLAttributes<HTMLPdsInputElement>;
+            "pds-link": LocalJSX.IntrinsicElements["pds-link"] & JSXBase.HTMLAttributes<HTMLPdsLinkElement>;
+            "pds-loader": LocalJSX.IntrinsicElements["pds-loader"] & JSXBase.HTMLAttributes<HTMLPdsLoaderElement>;
+            "pds-modal": LocalJSX.IntrinsicElements["pds-modal"] & JSXBase.HTMLAttributes<HTMLPdsModalElement>;
+            "pds-modal-content": LocalJSX.IntrinsicElements["pds-modal-content"] & JSXBase.HTMLAttributes<HTMLPdsModalContentElement>;
+            "pds-modal-footer": LocalJSX.IntrinsicElements["pds-modal-footer"] & JSXBase.HTMLAttributes<HTMLPdsModalFooterElement>;
+            "pds-modal-header": LocalJSX.IntrinsicElements["pds-modal-header"] & JSXBase.HTMLAttributes<HTMLPdsModalHeaderElement>;
+            "pds-multiselect": LocalJSX.IntrinsicElements["pds-multiselect"] & JSXBase.HTMLAttributes<HTMLPdsMultiselectElement>;
+            "pds-popover": LocalJSX.IntrinsicElements["pds-popover"] & JSXBase.HTMLAttributes<HTMLPdsPopoverElement>;
+            "pds-progress": LocalJSX.IntrinsicElements["pds-progress"] & JSXBase.HTMLAttributes<HTMLPdsProgressElement>;
+            "pds-property": LocalJSX.IntrinsicElements["pds-property"] & JSXBase.HTMLAttributes<HTMLPdsPropertyElement>;
+            "pds-radio": LocalJSX.IntrinsicElements["pds-radio"] & JSXBase.HTMLAttributes<HTMLPdsRadioElement>;
+            "pds-radio-group": LocalJSX.IntrinsicElements["pds-radio-group"] & JSXBase.HTMLAttributes<HTMLPdsRadioGroupElement>;
+            "pds-row": LocalJSX.IntrinsicElements["pds-row"] & JSXBase.HTMLAttributes<HTMLPdsRowElement>;
+            "pds-select": LocalJSX.IntrinsicElements["pds-select"] & JSXBase.HTMLAttributes<HTMLPdsSelectElement>;
+            "pds-sortable": LocalJSX.IntrinsicElements["pds-sortable"] & JSXBase.HTMLAttributes<HTMLPdsSortableElement>;
+            "pds-sortable-item": LocalJSX.IntrinsicElements["pds-sortable-item"] & JSXBase.HTMLAttributes<HTMLPdsSortableItemElement>;
+            "pds-switch": LocalJSX.IntrinsicElements["pds-switch"] & JSXBase.HTMLAttributes<HTMLPdsSwitchElement>;
+            "pds-tab": LocalJSX.IntrinsicElements["pds-tab"] & JSXBase.HTMLAttributes<HTMLPdsTabElement>;
+            "pds-table": LocalJSX.IntrinsicElements["pds-table"] & JSXBase.HTMLAttributes<HTMLPdsTableElement>;
+            "pds-table-body": LocalJSX.IntrinsicElements["pds-table-body"] & JSXBase.HTMLAttributes<HTMLPdsTableBodyElement>;
+            "pds-table-cell": LocalJSX.IntrinsicElements["pds-table-cell"] & JSXBase.HTMLAttributes<HTMLPdsTableCellElement>;
+            "pds-table-head": LocalJSX.IntrinsicElements["pds-table-head"] & JSXBase.HTMLAttributes<HTMLPdsTableHeadElement>;
+            "pds-table-head-cell": LocalJSX.IntrinsicElements["pds-table-head-cell"] & JSXBase.HTMLAttributes<HTMLPdsTableHeadCellElement>;
+            "pds-table-row": LocalJSX.IntrinsicElements["pds-table-row"] & JSXBase.HTMLAttributes<HTMLPdsTableRowElement>;
+            "pds-tabpanel": LocalJSX.IntrinsicElements["pds-tabpanel"] & JSXBase.HTMLAttributes<HTMLPdsTabpanelElement>;
+            "pds-tabs": LocalJSX.IntrinsicElements["pds-tabs"] & JSXBase.HTMLAttributes<HTMLPdsTabsElement>;
+            "pds-text": LocalJSX.IntrinsicElements["pds-text"] & JSXBase.HTMLAttributes<HTMLPdsTextElement>;
+            "pds-textarea": LocalJSX.IntrinsicElements["pds-textarea"] & JSXBase.HTMLAttributes<HTMLPdsTextareaElement>;
+            "pds-toast": LocalJSX.IntrinsicElements["pds-toast"] & JSXBase.HTMLAttributes<HTMLPdsToastElement>;
+            "pds-tooltip": LocalJSX.IntrinsicElements["pds-tooltip"] & JSXBase.HTMLAttributes<HTMLPdsTooltipElement>;
         }
     }
 }

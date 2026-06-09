@@ -30,7 +30,7 @@ describe('pds-checkbox', () => {
     expect(page.root).toEqualHtml(`
       <pds-checkbox component-id="default" label="Label text">
         <mock:shadow-root>
-          <label htmlfor="default">
+          <label for="default">
             <input type="checkbox" id="default">
             <span>Label text</span>
           </label>
@@ -68,7 +68,7 @@ describe('pds-checkbox', () => {
     expect(page.root).toEqualHtml(`
       <pds-checkbox class="is-invalid" component-id="default" label="Label text" invalid>
         <mock:shadow-root>
-          <label htmlfor="default">
+          <label for="default">
             <input aria-invalid="true" type="checkbox" id="default">
             <span>Label text</span>
           </label>
@@ -86,7 +86,7 @@ describe('pds-checkbox', () => {
     expect(page.root).toEqualHtml(`
       <pds-checkbox class="is-indeterminate" component-id="default" label="Label text" indeterminate>
         <mock:shadow-root>
-          <label htmlfor="default">
+          <label for="default">
             <input indeterminate="" type="checkbox" id="default">
             <span>Label text</span>
           </label>
@@ -104,7 +104,7 @@ describe('pds-checkbox', () => {
     expect(page.root).toEqualHtml(`
       <pds-checkbox component-id="default" label="This is label text">
         <mock:shadow-root>
-          <label htmlfor="default">
+          <label for="default">
             <input type="checkbox" id="default">
             <span>This is label text</span>
           </label>
@@ -122,7 +122,7 @@ describe('pds-checkbox', () => {
     expect(page.root).toEqualHtml(`
       <pds-checkbox component-id="default" label="This is label text" hide-label>
         <mock:shadow-root>
-          <label htmlfor="default">
+          <label for="default">
             <input type="checkbox" id="default">
             <span class="visually-hidden">This is label text</span>
           </label>
@@ -140,7 +140,7 @@ describe('pds-checkbox', () => {
     expect(page.root).toEqualHtml(`
       <pds-checkbox component-id="default" label="Label text" helper-message="This is short message text.">
         <mock:shadow-root>
-          <label htmlfor="default">
+          <label for="default">
             <input aria-describedby="default__helper-message" type="checkbox" id="default">
             <span>Label text</span>
           </label>
@@ -159,7 +159,7 @@ describe('pds-checkbox', () => {
     expect(page.root).toEqualHtml(`
       <pds-checkbox class="is-invalid" component-id="default" error-message="This is a short error message." invalid="true" label="Label text">
         <mock:shadow-root>
-          <label htmlfor="default">
+          <label for="default">
             <input aria-describedby="default__error-message" aria-invalid="true" id="default" type="checkbox">
             <span>Label text</span>
           </label>
