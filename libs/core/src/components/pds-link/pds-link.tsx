@@ -62,6 +62,54 @@ export class PdsLink {
    */
   @Prop() href!: string;
 
+  /**
+   * Enables or disables Turbo Drive for this link.
+   * Maps to the `data-turbo` attribute on the inner anchor element.
+   */
+  @Prop() turbo?: string;
+
+  /**
+   * Specifies the Turbo Frame to target for navigation.
+   * Maps to the `data-turbo-frame` attribute on the inner anchor element.
+   */
+  @Prop() turboFrame?: string;
+
+  /**
+   * Controls the Turbo visit action type.
+   * Maps to the `data-turbo-action` attribute on the inner anchor element.
+   */
+  @Prop() turboAction?: 'advance' | 'replace';
+
+  /**
+   * Changes the HTTP method for the link request.
+   * Maps to the `data-turbo-method` attribute on the inner anchor element.
+   */
+  @Prop() turboMethod?: 'get' | 'post' | 'put' | 'patch' | 'delete';
+
+  /**
+   * Displays a confirmation dialog before navigating.
+   * Maps to the `data-turbo-confirm` attribute on the inner anchor element.
+   */
+  @Prop() turboConfirm?: string;
+
+  /**
+   * Accepts Turbo Stream responses for GET requests.
+   * Maps to the `data-turbo-stream` attribute on the inner anchor element.
+   */
+  @Prop() turboStream?: string;
+
+  /**
+   * Controls link prefetching on hover.
+   * Maps to the `data-turbo-prefetch` attribute on the inner anchor element.
+   */
+  @Prop() turboPrefetch?: string;
+
+  /**
+   * Eagerly preloads the link's destination into cache.
+   * Maps to the `data-turbo-preload` attribute on the inner anchor element.
+   */
+  @Prop() turboPreload?: string;
+
   private classNames() {
     const classNames = ['pds-link'];
 
@@ -105,6 +153,14 @@ export class PdsLink {
         target={targetValue}
         rel={relValue}
         style={this.setLinkStyles()}
+        data-turbo={this.turbo || undefined}
+        data-turbo-frame={this.turboFrame || undefined}
+        data-turbo-action={this.turboAction || undefined}
+        data-turbo-method={this.turboMethod || undefined}
+        data-turbo-confirm={this.turboConfirm || undefined}
+        data-turbo-stream={this.turboStream || undefined}
+        data-turbo-prefetch={this.turboPrefetch || undefined}
+        data-turbo-preload={this.turboPreload || undefined}
       >
         <slot>{this.href}</slot>
         {showExternalIcon &&
