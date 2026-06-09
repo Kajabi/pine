@@ -13,7 +13,7 @@ describe('pds-select', () => {
         <mock:shadow-root>
           <div class="pds-select">
             <div class="pds-select__label-wrapper">
-              <label htmlfor="field-1">
+              <label for="field-1">
                 <span></span>
               </label>
             </div>
@@ -57,7 +57,7 @@ describe('pds-select', () => {
         <mock:shadow-root>
           <div class="pds-select">
             <div class="pds-select__label-wrapper">
-              <label htmlfor="field-1">
+              <label for="field-1">
                 <span>Name</span>
               </label>
             </div>
@@ -87,7 +87,7 @@ describe('pds-select', () => {
         <mock:shadow-root>
           <div class="pds-select">
             <div class="pds-select__label-wrapper">
-              <label htmlfor="field-1">
+              <label for="field-1">
                 <span>Name</span>
               </label>
             </div>
@@ -137,7 +137,7 @@ describe('pds-select', () => {
         <mock:shadow-root>
           <div class="pds-select">
             <div class="pds-select__label-wrapper">
-              <label htmlfor="field-1">
+              <label for="field-1">
                 <span>Disabled</span>
               </label>
             </div>
@@ -167,7 +167,7 @@ describe('pds-select', () => {
         <mock:shadow-root>
           <div class="pds-select">
             <div class="pds-select__label-wrapper">
-              <label htmlfor="field-1">
+              <label for="field-1">
                 <span></span>
               </label>
             </div>
@@ -195,7 +195,7 @@ describe('pds-select', () => {
         <mock:shadow-root>
           <div class="pds-select">
             <div class="pds-select__label-wrapper">
-              <label htmlfor="field-1">
+              <label for="field-1">
                 <span>Name</span>
               </label>
             </div>
@@ -221,7 +221,7 @@ describe('pds-select', () => {
         <mock:shadow-root>
           <div class="pds-select">
             <div class="pds-select__label-wrapper">
-              <label htmlfor="field-1">
+              <label for="field-1">
                 <span>Name</span>
               </label>
             </div>
@@ -247,7 +247,7 @@ describe('pds-select', () => {
         <mock:shadow-root>
           <div class="pds-select">
             <div class="pds-select__label-wrapper">
-              <label htmlfor="field-1">
+              <label for="field-1">
                 <span></span>
               </label>
             </div>
@@ -713,7 +713,7 @@ describe('action slot', () => {
         <mock:shadow-root>
           <div class="pds-select">
             <div class="pds-select__label-wrapper">
-              <label htmlfor="select-1">
+              <label for="select-1">
                 <span>Country</span>
               </label>
               <div class="pds-select__action" part="action">
@@ -745,7 +745,7 @@ describe('action slot', () => {
         <mock:shadow-root>
           <div class="pds-select">
             <div class="pds-select__label-wrapper">
-              <label htmlfor="select-1">
+              <label for="select-1">
                 <span>Country</span>
               </label>
             </div>

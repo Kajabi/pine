@@ -216,7 +216,7 @@ describe('pds-textarea', () => {
         <mock:shadow-root>
           <div class="pds-textarea">
             <div class="pds-textarea__label-wrapper">
-              <label htmlFor="pds-textarea-id">
+              <label for="pds-textarea-id">
                 <span>
                   label
                 </span>
@@ -288,7 +288,7 @@ describe('pds-textarea', () => {
         <mock:shadow-root>
           <div class="pds-textarea">
             <div class="pds-textarea__label-wrapper">
-              <label htmlFor="textarea-with-description">
+              <label for="textarea-with-description">
                 <span>
                   Textarea with description
                 </span>
@@ -515,7 +515,7 @@ it('should set focus on the input element when setFocus is called', async() => {
         <mock:shadow-root>
           <div class="pds-textarea">
             <div class="pds-textarea__label-wrapper">
-              <label htmlFor="textarea-1">
+              <label for="textarea-1">
                 <span>
                   Description
                 </span>
@@ -545,7 +545,7 @@ it('should set focus on the input element when setFocus is called', async() => {
         <mock:shadow-root>
           <div class="pds-textarea">
             <div class="pds-textarea__label-wrapper">
-              <label htmlFor="textarea-1">
+              <label for="textarea-1">
                 <span>
                   Description
                 </span>
@@ -634,7 +634,7 @@ it('should set focus on the input element when setFocus is called', async() => {
         <mock:shadow-root>
           <div class="pds-textarea">
             <div class="pds-textarea__label-wrapper">
-              <label htmlFor="textarea-1">
+              <label for="textarea-1">
                 <span>
                   Bio
                 </span>

@@ -29,7 +29,7 @@ describe('pds-progress', () => {
       <pds-progress component-id="default" label="Label text">
         <mock:shadow-root>
           <div class="pds-progress">
-            <label class="pds-progress__label" htmlfor="default">Label text</label>
+            <label class="pds-progress__label" for="default">Label text</label>
             <progress id="default" max="100" value="0"></progress>
           </div>
         </mock:shadow-root>
@@ -47,7 +47,7 @@ describe('pds-progress', () => {
       <pds-progress component-id="default" label="Label text" animated="true" class="is-animated">
         <mock:shadow-root>
           <div class="pds-progress">
-            <label class="pds-progress__label" htmlfor="default">Label text</label>
+            <label class="pds-progress__label" for="default">Label text</label>
             <progress id="default" max="100" value="0"></progress>
           </div>
         </mock:shadow-root>
@@ -65,7 +65,7 @@ describe('pds-progress', () => {
       <pds-progress component-id="default" label="Label text" percent="38">
         <mock:shadow-root>
           <div class="pds-progress">
-            <label class="pds-progress__label" htmlfor="default">Label text</label>
+            <label class="pds-progress__label" for="default">Label text</label>
             <progress id="default" max="100" value="38"></progress>
           </div>
         </mock:shadow-root>
@@ -83,7 +83,7 @@ describe('pds-progress', () => {
       <pds-progress component-id="default" label="Label text" show-percent="true">
         <mock:shadow-root>
           <div class="pds-progress">
-            <label class="pds-progress__label" htmlfor="default">Label text</label>
+            <label class="pds-progress__label" for="default">Label text</label>
             <progress id="default" max="100" value="0"></progress>
           </div>
           <div class="pds-progress__percentage">0%</div>
@@ -102,7 +102,7 @@ describe('pds-progress', () => {
       <pds-progress component-id="default" label="Label text" fill-color="#333333">
         <mock:shadow-root>
           <div class="pds-progress">
-            <label class="pds-progress__label" htmlfor="default">Label text</label>
+            <label class="pds-progress__label" for="default">Label text</label>
             <progress id="default" max="100" value="0" style="--color-progress-fill: #333333;"></progress>
           </div>
         </mock:shadow-root>

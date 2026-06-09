@@ -17,7 +17,7 @@ describe('pds-switch', () => {
     expect(page.root).toEqualHtml(`
       <pds-switch component-id="pds-switch-e1" class="pds-switch" label="Switch label">
         <mock:shadow-root>
-          <label htmlFor="pds-switch-e1">
+          <label for="pds-switch-e1">
             <input id="pds-switch-e1" name="pds-switch-e1" class="pds-switch__input" type="checkbox">
             <span>Switch label</span>
           </label>
@@ -38,7 +38,7 @@ describe('pds-switch', () => {
     expect(page.root).toEqualHtml(`
       <pds-switch component-id="pds-switch-e1" class="pds-switch" label="Switch label" hide-label="true">
         <mock:shadow-root>
-          <label htmlFor="pds-switch-e1">
+          <label for="pds-switch-e1">
             <input id="pds-switch-e1" name="pds-switch-e1" class="pds-switch__input" type="checkbox">
             <span class="visually-hidden">Switch label</span>
           </label>
@@ -62,7 +62,7 @@ describe('pds-switch', () => {
     expect(page.root).toEqualHtml(`
       <pds-switch component-id="pds-switch-disabled" class="pds-switch" label="Switch disabled" aria-disabled="true" disabled="true">
         <mock:shadow-root>
-          <label htmlFor="pds-switch-disabled">
+          <label for="pds-switch-disabled">
             <input id="pds-switch-disabled" name="pds-switch-disabled" class="pds-switch__input" type="checkbox" disabled>
             <span>Switch disabled</span>
           </label>
@@ -86,7 +86,7 @@ describe('pds-switch', () => {
     expect(page.root).toEqualHtml(`
       <pds-switch component-id="pds-switch-required" class="pds-switch" label="Switch required" required="true">
         <mock:shadow-root>
-          <label htmlFor="pds-switch-required">
+          <label for="pds-switch-required">
             <input id="pds-switch-required" name="pds-switch-required" class="pds-switch__input" type="checkbox" required>
             <span>Switch required</span>
           </label>
@@ -110,7 +110,7 @@ describe('pds-switch', () => {
     expect(page.root).toEqualHtml(`
       <pds-switch component-id="pds-switch-msg" class="pds-switch pds-switch--message" label="Switch helper message" helper-message="Direct trade next level slow-carb, hashtag distillery">
         <mock:shadow-root>
-          <label htmlFor="pds-switch-msg">
+          <label for="pds-switch-msg">
             <input aria-describedby="pds-switch-msg__helper-message" id="pds-switch-msg" name="pds-switch-msg" class="pds-switch__input" type="checkbox">
             <span>Switch helper message</span>
           </label>
@@ -136,7 +136,7 @@ describe('pds-switch', () => {
     expect(page.root).toEqualHtml(`
       <pds-switch component-id="pds-switch-err" class="pds-switch pds-switch--error" label="Switch error message" error-message="La croix blue bottle narwhal fam" invalid="true">
         <mock:shadow-root>
-          <label htmlFor="pds-switch-err">
+          <label for="pds-switch-err">
             <input aria-describedby="pds-switch-err__error-message" aria-invalid="true" id="pds-switch-err" name="pds-switch-err" class="pds-switch__input" type="checkbox">
             <span>Switch error message</span>
           </label>
@@ -166,7 +166,7 @@ describe('pds-switch', () => {
     expect(page.root).toEqualHtml(`
       <pds-switch component-id="switch-with-description" class="pds-switch pds-switch--message pds-switch--error" label="Switch with description" helper-message="This is a helper message" error-message="This is an error message" invalid="true">
         <mock:shadow-root>
-          <label htmlFor="switch-with-description">
+          <label for="switch-with-description">
             <input aria-describedby="switch-with-description__error-message" aria-invalid="true" id="switch-with-description" name="switch-with-description" class="pds-switch__input" type="checkbox">
             <span>Switch with description</span>
           </label>
@@ -192,7 +192,7 @@ describe('pds-switch', () => {
     expect(page.root).toEqualHtml(`
       <pds-switch component-id="pds-switch-name" class="pds-switch" name="pds-switch-name" label="Switch name">
         <mock:shadow-root>
-          <label htmlFor="pds-switch-name">
+          <label for="pds-switch-name">
             <input id="pds-switch-name" name="pds-switch-name" class="pds-switch__input" type="checkbox">
             <span>Switch name</span>
           </label>

@@ -30,7 +30,7 @@ describe('pds-input', () => {
       <mock:shadow-root>
         <div class="pds-input">
           <div class="pds-input__label-wrapper">
-            <label class="pds-input__label" htmlFor="field-1">
+            <label class="pds-input__label" for="field-1">
               <span>
                 Name
               </span>
@@ -149,7 +149,7 @@ describe('pds-input', () => {
       <mock:shadow-root>
         <div class="pds-input">
           <div class="pds-input__label-wrapper">
-            <label class="pds-input__label" htmlFor="pds-input-invalid">
+            <label class="pds-input__label" for="pds-input-invalid">
               <span>
                 Name
               </span>
@@ -783,7 +783,7 @@ describe('pds-input', () => {
           <mock:shadow-root>
             <div class="pds-input">
               <div class="pds-input__label-wrapper">
-                <label class="pds-input__label" htmlFor="field-1">
+                <label class="pds-input__label" for="field-1">
                   <span>
                     Email
                   </span>
@@ -813,7 +813,7 @@ describe('pds-input', () => {
           <mock:shadow-root>
             <div class="pds-input">
               <div class="pds-input__label-wrapper">
-                <label class="pds-input__label" htmlFor="field-1">
+                <label class="pds-input__label" for="field-1">
                   <span>
                     Email
                   </span>
@@ -902,7 +902,7 @@ describe('pds-input', () => {
           <mock:shadow-root>
             <div class="pds-input">
               <div class="pds-input__label-wrapper">
-                <label class="pds-input__label" htmlFor="field-1">
+                <label class="pds-input__label" for="field-1">
                   <span>
                     Email
                     <span class="pds-input__required-indicator"> *</span>
