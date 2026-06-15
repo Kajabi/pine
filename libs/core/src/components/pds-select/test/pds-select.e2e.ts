@@ -153,4 +153,16 @@ describe('pds-select accessibility', () => {
     const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
   });
+
+  it('has no axe violations with an error message', async () => {
+    const page = await newE2EPage();
+    await page.setContent(`
+      <pds-select component-id="country" label="Country" error-message="Please select a country">
+        <option value="us">United States</option>
+        <option value="ca">Canada</option>
+      </pds-select>
+    `);
+    const violations = await runAxe(page);
+    expect(formatViolations(violations)).toBe('');
+  });
 });
