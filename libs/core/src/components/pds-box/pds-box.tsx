@@ -1,4 +1,4 @@
-import { Component, h, Host, Prop } from '@stencil/core';
+import { Component, h, Host, Prop, Watch } from '@stencil/core';
 
 import { BoxColumnType, BoxSpacingType, BoxShadowSizeType, BoxTagType, isBoxTag } from '../../utils/types';
 import { normalizeColorValue } from '../../utils/utils';
@@ -8,7 +8,6 @@ import { normalizeColorValue } from '../../utils/utils';
   styleUrl: 'pds-box.scss',
 })
 export class PdsBox {
-  private resolvedTag: BoxTagType = 'div';
   /**
    * Defines how items within the box are aligned.
    * @defaultValue stretch
@@ -701,14 +700,21 @@ export class PdsBox {
    */
   @Prop() tag: BoxTagType = 'div';
 
+  private resolveTag(): BoxTagType {
+    return isBoxTag(this.tag) ? this.tag : 'div';
+  }
+
   componentWillLoad() {
     if (!isBoxTag(this.tag)) {
       console.warn(`pds-box: invalid tag "${this.tag}", falling back to "div".`);
-      this.resolvedTag = 'div';
-      return;
     }
+  }
 
-    this.resolvedTag = this.tag;
+  @Watch('tag')
+  tagChanged(newValue: string) {
+    if (!isBoxTag(newValue)) {
+      console.warn(`pds-box: invalid tag "${newValue}", falling back to "div".`);
+    }
   }
 
   render() {
@@ -846,18 +852,23 @@ export class PdsBox {
       ...(this.flex && !['none', 'grow', 'shrink'].includes(this.flex) && { 'flex': this.flex }),
     };
 
-    if (this.resolvedTag === 'div') {
+    if (this.resolveTag() === 'div') {
       return (
         <Host class={boxClasses} style={boxInlineStyles}>
         </Host>
       );
     }
 
-    const Tag = this.resolvedTag;
+    const Tag = this.resolveTag();
 
     return (
-      <Host class="pds-box--semantic">
-        <Tag class={boxClasses} style={boxInlineStyles}>
+      <Host class="pds-host--contents">
+        <Tag
+          class={boxClasses}
+          style={boxInlineStyles}
+          {...(this.minHeight ? { 'min-height': this.minHeight } : {})}
+          {...(this.minWidth ? { 'min-width': this.minWidth } : {})}
+        >
           <slot />
         </Tag>
       </Host>

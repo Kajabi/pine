@@ -32,7 +32,7 @@ describe('pds-box', () => {
 
         const semanticEl = page.root.querySelector(tag);
 
-        expect(page.root).toHaveClass('pds-box--semantic');
+        expect(page.root).toHaveClass('pds-host--contents');
         expect(semanticEl).not.toBeNull();
         expect(semanticEl).toHaveClass('pds-box');
         expect(semanticEl).toHaveClass('pds-box-gap-sm');
@@ -61,13 +61,41 @@ describe('pds-box', () => {
 
       expect(page.root).toHaveClass('pds-box');
       expect(page.root).toHaveClass('pds-box-gap-sm');
-      expect(page.root).not.toHaveClass('pds-box--semantic');
+      expect(page.root).not.toHaveClass('pds-host--contents');
       expect(page.root.querySelector('script')).toBeNull();
       expect(warnSpy).toHaveBeenCalledWith(
         'pds-box: invalid tag "script", falling back to "div".',
       );
 
       warnSpy.mockRestore();
+    });
+
+    it('renders min-height on the inner semantic element', async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box tag="header" min-height="175px"></pds-box>`,
+      });
+
+      const header = page.root.querySelector('header');
+
+      expect(header).toEqualAttribute('min-height', '175px');
+      expect(header).toEqualAttribute('style', '--sizing-min-height-box: 175px;');
+    });
+
+    it('updates the semantic element when tag changes after load', async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box tag="header"></pds-box>`,
+      });
+
+      expect(page.root.querySelector('header')).not.toBeNull();
+      expect(page.root.querySelector('footer')).toBeNull();
+
+      page.root.tag = 'footer';
+      await page.waitForChanges();
+
+      expect(page.root.querySelector('header')).toBeNull();
+      expect(page.root.querySelector('footer')).not.toBeNull();
     });
   });
 
