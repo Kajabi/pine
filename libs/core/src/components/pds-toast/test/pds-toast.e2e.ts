@@ -302,12 +302,7 @@ describe('pds-toast accessibility', () => {
         <span>This is a status message</span>
       </pds-toast>
     `);
-    // `color-contrast` is disabled here: axe flags the message text in the bare
-    // e2e harness, which renders without the full theme/global styles, so
-    // contrast can't be measured reliably (the result is flaky run-to-run).
-    const violations = await runAxe(page, {
-      rules: { 'color-contrast': { enabled: false } },
-    });
+    const violations = await runAxe(page);
     expect(formatViolations(violations)).toBe('');
   });
 });

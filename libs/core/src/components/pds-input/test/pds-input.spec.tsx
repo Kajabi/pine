@@ -309,6 +309,9 @@ describe('pds-input', () => {
 
     const errorMessage = root.shadowRoot.querySelector('.pds-input__error-message');
     expect(errorMessage).not.toBeNull();
+
+    const errorIcon = errorMessage?.querySelector('pds-icon');
+    expect(errorIcon?.getAttribute('aria-hidden')).toBe('true');
   });
 
   it('renders a prefix', async () => {

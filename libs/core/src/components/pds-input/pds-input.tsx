@@ -599,7 +599,7 @@ export class PdsInput {
 
           {errorMessage && (
             <p class="pds-input__error-message" id={messageId(componentId, 'error')}>
-              <pds-icon icon={danger} size="small" />
+              <pds-icon aria-hidden="true" icon={danger} size="small" />
               {errorMessage}
             </p>
           )}

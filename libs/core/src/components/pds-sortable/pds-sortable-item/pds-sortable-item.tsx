@@ -44,7 +44,7 @@ export class PdsSortableItem {
       <Host class="pds-sortable-item" id={this.componentId}>
         {this.showHandle && (
           <div class="pds-sortable-item__handle">
-            <pds-icon icon={handleIcon}></pds-icon>
+            <pds-icon aria-hidden="true" icon={handleIcon}></pds-icon>
           </div>
         )}
         <slot></slot>
