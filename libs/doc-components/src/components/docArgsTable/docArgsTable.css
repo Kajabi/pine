@@ -73,7 +73,7 @@
   }
 }
 
-section {
+.args-section {
   background-color: var(--doc-canvas-green);
   border: 1px solid var(--doc-canvas-border-color);
   box-shadow: -1px 0 3px var(--doc-canvas-shadow);
