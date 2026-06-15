@@ -69,3 +69,18 @@ Default.args = {
   minHeight: '100px',
   tag: 'div',
 };
+
+export const SemanticTag = () => html`
+<pds-box direction="column" gap="md">
+  <pds-box tag="header" border padding="md" align-items="center" gap="sm">
+    <pds-text tag="span" weight="semibold">Site header</pds-text>
+    <pds-text tag="span">Navigation</pds-text>
+  </pds-box>
+  <pds-box tag="main" border padding="lg" direction="column" gap="sm">
+    <pds-text tag="h1">Page title</pds-text>
+    <pds-text tag="p">Main content rendered with tag="main".</pds-text>
+  </pds-box>
+  <pds-box tag="footer" border padding="md">
+    <pds-text tag="p" size="sm">Footer content</pds-text>
+  </pds-box>
+</pds-box>`;
