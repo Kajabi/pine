@@ -8,6 +8,10 @@ pds-box {
   display: block;
 }
 
+.pds-box--semantic {
+  display: contents;
+}
+
 [class*='pds-box'] {
   background-color: var(--color-background-box);
   box-sizing: border-box;
@@ -22,7 +26,8 @@ pds-box {
   }
 
   // The immediate child of the row will fit the width of the row
-  .pds-row > & {
+  .pds-row > &,
+  .pds-row > pds-box > & {
     position: relative;
     width: 100%;
 
@@ -104,7 +109,8 @@ $pine-spacing-tokens: (
   flex-grow: 1;
 }
 
-.pds-row > .pds-box[class*='pds-box-'] {
+.pds-row > .pds-box[class*='pds-box-'],
+.pds-row > pds-box > [class*='pds-box-'] {
   flex-basis: auto;
 }
 

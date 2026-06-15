@@ -685,6 +685,11 @@ export namespace Components {
          */
         "sizeXs"?: BoxColumnType;
         /**
+          * Sets the semantic HTML tag rendered as the inner box element.
+          * @defaultValue div
+         */
+        "tag": 'div' | 'main' | 'section' | 'article' | 'header' | 'footer' | 'nav' | 'aside';
+        /**
           * Defines whether flex items are forced onto one line or can wrap onto multiple lines.
           * @defaultValue false
          */
@@ -3768,6 +3773,11 @@ declare namespace LocalJSX {
           * At the XS breakpoint, this prop will take the number of columns specified. This overrides the base size prop for this specific range.
          */
         "sizeXs"?: BoxColumnType;
+        /**
+          * Sets the semantic HTML tag rendered as the inner box element.
+          * @defaultValue div
+         */
+        "tag"?: 'div' | 'main' | 'section' | 'article' | 'header' | 'footer' | 'nav' | 'aside';
         /**
           * Defines whether flex items are forced onto one line or can wrap onto multiple lines.
           * @defaultValue false

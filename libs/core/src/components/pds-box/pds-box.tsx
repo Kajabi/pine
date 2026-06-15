@@ -689,7 +689,11 @@ export class PdsBox {
    */
   @Prop() sizeXl?: BoxColumnType;
 
-
+  /**
+   * Sets the semantic HTML tag rendered as the inner box element.
+   * @defaultValue div
+   */
+  @Prop() tag: 'div' | 'main' | 'section' | 'article' | 'header' | 'footer' | 'nav' | 'aside' = 'div';
 
   render() {
     const boxClasses = `
@@ -826,8 +830,20 @@ export class PdsBox {
       ...(this.flex && !['none', 'grow', 'shrink'].includes(this.flex) && { 'flex': this.flex }),
     };
 
+    if (this.tag === 'div') {
+      return (
+        <Host class={boxClasses} style={boxInlineStyles}>
+        </Host>
+      );
+    }
+
+    const Tag = this.tag;
+
     return (
-      <Host class={boxClasses} style={boxInlineStyles}>
+      <Host class="pds-box--semantic">
+        <Tag class={boxClasses} style={boxInlineStyles}>
+          <slot />
+        </Tag>
       </Host>
     );
   }

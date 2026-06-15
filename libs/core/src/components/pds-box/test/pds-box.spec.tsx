@@ -10,6 +10,36 @@ describe('pds-box', () => {
     expect(page.root).toBeTruthy();
   });
 
+  describe('tag prop', () => {
+    it('renders styles and classes on the host when tag is div (default)', async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box gap="sm"></pds-box>`,
+      });
+
+      expect(page.root).toHaveClass('pds-box');
+      expect(page.root).toHaveClass('pds-box-gap-sm');
+      expect(page.root.querySelector('header')).toBeNull();
+    });
+
+    it.each(['main', 'section', 'article', 'header', 'footer', 'nav', 'aside'])(
+      'renders <%s> as the inner semantic box element',
+      async (tag) => {
+        const page = await newSpecPage({
+          components: [PdsBox],
+          html: `<pds-box tag="${tag}" gap="sm"></pds-box>`,
+        });
+
+        const semanticEl = page.root.querySelector(tag);
+
+        expect(page.root).toHaveClass('pds-box--semantic');
+        expect(semanticEl).not.toBeNull();
+        expect(semanticEl).toHaveClass('pds-box');
+        expect(semanticEl).toHaveClass('pds-box-gap-sm');
+      },
+    );
+  });
+
   it('renders a border-color when prop is set', async () => {
     const page = await newSpecPage({
       components: [PdsBox],

@@ -3,6 +3,13 @@ import { html } from 'lit-html';
 export default {
   args: {
     border: false,
+    tag: 'div',
+  },
+  argTypes: {
+    tag: {
+      control: 'select',
+      options: ['div', 'main', 'section', 'article', 'header', 'footer', 'nav', 'aside'],
+    },
   },
   component: 'pds-box',
   title: 'components/Layout/Box',
@@ -47,6 +54,7 @@ const BaseTemplate = (args) => html`
   size-md="${args.sizeMd}"
   size-lg="${args.sizeLg}"
   size-xl="${args.sizeXl}"
+  tag="${args.tag}"
 >
   Box content
 </pds-box>`;
