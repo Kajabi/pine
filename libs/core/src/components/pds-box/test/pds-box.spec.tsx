@@ -38,6 +38,37 @@ describe('pds-box', () => {
         expect(semanticEl).toHaveClass('pds-box-gap-sm');
       },
     );
+
+    it('renders slotted content inside the semantic wrapper', async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box tag="header">Header content</pds-box>`,
+      });
+
+      const header = page.root.querySelector('header');
+
+      expect(header).not.toBeNull();
+      expect(header.textContent).toContain('Header content');
+    });
+
+    it('falls back to div when tag is invalid', async () => {
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
+
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box tag="script" gap="sm"></pds-box>`,
+      });
+
+      expect(page.root).toHaveClass('pds-box');
+      expect(page.root).toHaveClass('pds-box-gap-sm');
+      expect(page.root).not.toHaveClass('pds-box--semantic');
+      expect(page.root.querySelector('script')).toBeNull();
+      expect(warnSpy).toHaveBeenCalledWith(
+        'pds-box: invalid tag "script", falling back to "div".',
+      );
+
+      warnSpy.mockRestore();
+    });
   });
 
   it('renders a border-color when prop is set', async () => {

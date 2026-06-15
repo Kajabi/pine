@@ -5,7 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { BoxColumnType, BoxShadowSizeType, BoxSpacingType } from "./utils/types";
+import { BoxColumnType, BoxShadowSizeType, BoxSpacingType, BoxTagType } from "./utils/types";
 import { Event } from "@stencil/core";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 import { ChipSentimentType, ChipSizeType, ChipVariantType, PlacementType } from "./utils/types";
@@ -17,7 +17,7 @@ import { PdsPopoverEventDetail } from "./components/pds-popover/popover-interfac
 import { RadioGroupChangeEventDetail } from "./components/pds-radio-group/radio-group-interface";
 import { SortableEvent } from "sortablejs";
 import { TextareaChangeEventDetail, TextareaInputEventDetail } from "./components/pds-textarea/textarea-interface";
-export { BoxColumnType, BoxShadowSizeType, BoxSpacingType } from "./utils/types";
+export { BoxColumnType, BoxShadowSizeType, BoxSpacingType, BoxTagType } from "./utils/types";
 export { Event } from "@stencil/core";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 export { ChipSentimentType, ChipSizeType, ChipVariantType, PlacementType } from "./utils/types";
@@ -685,10 +685,10 @@ export namespace Components {
          */
         "sizeXs"?: BoxColumnType;
         /**
-          * Sets the semantic HTML tag rendered as the inner box element.
+          * Sets the semantic HTML tag rendered as the inner box element. When using landmark tags such as `nav`, `header`, or `footer`, provide a distinct accessible name via `aria-label` or `aria-labelledby` if multiple instances appear on the same page. For non-`div` tags, the host uses `display: contents` so layout props apply to the inner semantic element.
           * @defaultValue div
          */
-        "tag": 'div' | 'main' | 'section' | 'article' | 'header' | 'footer' | 'nav' | 'aside';
+        "tag": BoxTagType;
         /**
           * Defines whether flex items are forced onto one line or can wrap onto multiple lines.
           * @defaultValue false
@@ -3774,10 +3774,10 @@ declare namespace LocalJSX {
          */
         "sizeXs"?: BoxColumnType;
         /**
-          * Sets the semantic HTML tag rendered as the inner box element.
+          * Sets the semantic HTML tag rendered as the inner box element. When using landmark tags such as `nav`, `header`, or `footer`, provide a distinct accessible name via `aria-label` or `aria-labelledby` if multiple instances appear on the same page. For non-`div` tags, the host uses `display: contents` so layout props apply to the inner semantic element.
           * @defaultValue div
          */
-        "tag"?: 'div' | 'main' | 'section' | 'article' | 'header' | 'footer' | 'nav' | 'aside';
+        "tag"?: BoxTagType;
         /**
           * Defines whether flex items are forced onto one line or can wrap onto multiple lines.
           * @defaultValue false

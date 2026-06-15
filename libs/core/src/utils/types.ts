@@ -65,6 +65,30 @@ export type BoxShadowSizeType =
   | '400'
   | '500'
 
+export type BoxTagType =
+  | 'div'
+  | 'main'
+  | 'section'
+  | 'article'
+  | 'header'
+  | 'footer'
+  | 'nav'
+  | 'aside';
+
+export const BOX_TAG_VALUES: readonly BoxTagType[] = [
+  'div',
+  'main',
+  'section',
+  'article',
+  'header',
+  'footer',
+  'nav',
+  'aside',
+];
+
+export const isBoxTag = (value: string): value is BoxTagType =>
+  (BOX_TAG_VALUES as readonly string[]).includes(value);
+
 export type ChipSentimentType =
   'accent'
   | 'brand'

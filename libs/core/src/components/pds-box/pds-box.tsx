@@ -1,6 +1,6 @@
 import { Component, h, Host, Prop } from '@stencil/core';
 
-import { BoxColumnType, BoxSpacingType, BoxShadowSizeType } from '../../utils/types';
+import { BoxColumnType, BoxSpacingType, BoxShadowSizeType, BoxTagType, isBoxTag } from '../../utils/types';
 import { normalizeColorValue } from '../../utils/utils';
 
 @Component({
@@ -8,6 +8,7 @@ import { normalizeColorValue } from '../../utils/utils';
   styleUrl: 'pds-box.scss',
 })
 export class PdsBox {
+  private resolvedTag: BoxTagType = 'div';
   /**
    * Defines how items within the box are aligned.
    * @defaultValue stretch
@@ -691,9 +692,24 @@ export class PdsBox {
 
   /**
    * Sets the semantic HTML tag rendered as the inner box element.
+   * When using landmark tags such as `nav`, `header`, or `footer`, provide a
+   * distinct accessible name via `aria-label` or `aria-labelledby` if multiple
+   * instances appear on the same page.
+   * For non-`div` tags, the host uses `display: contents` so layout props apply
+   * to the inner semantic element.
    * @defaultValue div
    */
-  @Prop() tag: 'div' | 'main' | 'section' | 'article' | 'header' | 'footer' | 'nav' | 'aside' = 'div';
+  @Prop() tag: BoxTagType = 'div';
+
+  componentWillLoad() {
+    if (!isBoxTag(this.tag)) {
+      console.warn(`pds-box: invalid tag "${this.tag}", falling back to "div".`);
+      this.resolvedTag = 'div';
+      return;
+    }
+
+    this.resolvedTag = this.tag;
+  }
 
   render() {
     const boxClasses = `
@@ -830,14 +846,14 @@ export class PdsBox {
       ...(this.flex && !['none', 'grow', 'shrink'].includes(this.flex) && { 'flex': this.flex }),
     };
 
-    if (this.tag === 'div') {
+    if (this.resolvedTag === 'div') {
       return (
         <Host class={boxClasses} style={boxInlineStyles}>
         </Host>
       );
     }
 
-    const Tag = this.tag;
+    const Tag = this.resolvedTag;
 
     return (
       <Host class="pds-box--semantic">
