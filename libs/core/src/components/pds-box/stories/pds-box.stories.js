@@ -1,5 +1,7 @@
 import { html } from 'lit-html';
 
+const TAG_OPTIONS = ['div', 'main', 'section', 'article', 'header', 'footer', 'nav', 'aside'];
+
 export default {
   args: {
     border: false,
@@ -7,8 +9,9 @@ export default {
   },
   argTypes: {
     tag: {
-      control: 'select',
-      options: ['div', 'main', 'section', 'article', 'header', 'footer', 'nav', 'aside'],
+      control: { type: 'select' },
+      options: TAG_OPTIONS,
+      table: { category: 'Layout & Direction' },
     },
   },
   component: 'pds-box',
@@ -64,4 +67,5 @@ Default.args = {
   componentId: 'opt0',
   border: true,
   minHeight: '100px',
+  tag: 'div',
 };
