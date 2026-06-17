@@ -74,7 +74,7 @@
     "@floating-ui/dom": "^1.7.0",
     "@kajabi-ui/styles": "*",
     "@pine-ds/icons": "*",
-    "@stencil/core": "4.38.3",
+    "@stencil/core": "4.43.5",
     "@types/dompurify": "^3.0.5",
     "dompurify": "^3.2.6",
     "sortablejs": "^1.15.0",

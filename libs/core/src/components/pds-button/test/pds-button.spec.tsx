@@ -296,7 +296,7 @@ describe('pds-button', () => {
         <mock:shadow-root>
           <button class="pds-button pds-button--primary" part="button" type="button">
             <div class="pds-button__content" part="button-content">
-              <pds-icon aria-hidden="true" name="trash"></pds-icon>
+              <pds-icon aria-hidden="true" name="trash" part="icon"></pds-icon>
               <span class="pds-button__text" part="button-text">
                 <slot></slot>
               </span>
