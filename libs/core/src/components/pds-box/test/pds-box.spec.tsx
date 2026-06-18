@@ -130,10 +130,49 @@ describe('pds-box', () => {
         html: `<pds-box tag="nav" aria-label="Main navigation"></pds-box>`,
       });
 
+      await page.waitForChanges();
+
       const nav = page.root.querySelector('nav');
 
       expect(nav).toEqualAttribute('aria-label', 'Main navigation');
       expect(page.root.getAttribute('aria-label')).toBeNull();
+    });
+
+    it('does not drop forwarded aria when sync removal mutations are delivered later', async () => {
+      const priorObserver = global.MutationObserver;
+      let mutationCallback: MutationCallback | undefined;
+
+      global.MutationObserver = jest.fn().mockImplementation((callback: MutationCallback) => ({
+        observe: jest.fn(() => {
+          mutationCallback = callback;
+        }),
+        disconnect: jest.fn(),
+        takeRecords: jest.fn(),
+      }));
+
+      try {
+        const page = await newSpecPage({
+          components: [PdsBox],
+          html: `<pds-box tag="nav" aria-label="Main navigation"></pds-box>`,
+        });
+
+        await page.waitForChanges();
+
+        mutationCallback?.(
+          [{
+            type: 'attributes',
+            attributeName: 'aria-label',
+            oldValue: 'Main navigation',
+            target: page.root,
+          } as MutationRecord],
+          {} as MutationObserver,
+        );
+        await page.waitForChanges();
+
+        expect(page.root.querySelector('nav')).toEqualAttribute('aria-label', 'Main navigation');
+      } finally {
+        global.MutationObserver = priorObserver;
+      }
     });
 
     it('forwards aria-labelledby to the inner semantic element', async () => {

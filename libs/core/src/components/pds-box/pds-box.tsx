@@ -11,7 +11,7 @@ import { normalizeColorValue } from '../../utils/utils';
 })
 export class PdsBox {
   private ariaObserver?: MutationObserver;
-  private isSyncingAria = false;
+  private isObservingAria = false;
   private semanticAriaAttributes: Attributes = {};
 
   @Element() el!: HTMLPdsBoxElement;
@@ -726,35 +726,59 @@ export class PdsBox {
     return attributeName === 'role' || attributeName?.startsWith('aria-') === true;
   }
 
-  private syncSemanticAriaFromHost() {
-    if (!this.isSemanticTag()) {
-      this.restoreAriaToHost();
+  private observeAriaAttributes() {
+    if (typeof MutationObserver === 'undefined') {
       return;
     }
 
-    this.isSyncingAria = true;
-    const fromHost = inheritAriaAttributes(this.el);
-    this.isSyncingAria = false;
+    if (!this.ariaObserver) {
+      this.ariaObserver = new MutationObserver(this.handleAriaMutation);
+    }
 
+    if (!this.isObservingAria) {
+      this.ariaObserver.observe(this.el, {
+        attributes: true,
+        attributeOldValue: true,
+      });
+      this.isObservingAria = true;
+    }
+  }
+
+  private unobserveAriaAttributes() {
+    if (this.ariaObserver && this.isObservingAria) {
+      this.ariaObserver.disconnect();
+      this.isObservingAria = false;
+    }
+  }
+
+  private syncSemanticAriaFromHost() {
+    if (!this.isSemanticTag()) {
+      this.unobserveAriaAttributes();
+      this.restoreAriaToHost();
+      this.observeAriaAttributes();
+      return;
+    }
+
+    this.unobserveAriaAttributes();
+    const fromHost = inheritAriaAttributes(this.el);
     this.semanticAriaAttributes = {
       ...this.semanticAriaAttributes,
       ...fromHost,
     };
+    this.observeAriaAttributes();
   }
 
   private restoreAriaToHost() {
-    this.isSyncingAria = true;
     Object.entries(this.semanticAriaAttributes).forEach(([attr, value]) => {
       if (value != null) {
         this.el.setAttribute(attr, String(value));
       }
     });
-    this.isSyncingAria = false;
     this.semanticAriaAttributes = {};
   }
 
   private handleAriaMutation = (mutations: MutationRecord[]) => {
-    if (this.isSyncingAria || !this.isSemanticTag()) {
+    if (!this.isSemanticTag()) {
       return;
     }
 
@@ -769,10 +793,13 @@ export class PdsBox {
 
       if (this.el.hasAttribute(attr)) {
         this.semanticAriaAttributes[attr] = this.el.getAttribute(attr);
-        this.isSyncingAria = true;
+        this.unobserveAriaAttributes();
         this.el.removeAttribute(attr);
-        this.isSyncingAria = false;
-      } else if (mutation.oldValue !== null) {
+        this.observeAriaAttributes();
+      } else if (
+        mutation.oldValue !== null &&
+        this.semanticAriaAttributes[attr] !== mutation.oldValue
+      ) {
         delete this.semanticAriaAttributes[attr];
       }
 
@@ -784,20 +811,12 @@ export class PdsBox {
     }
   };
 
-  connectedCallback() {
-    if (typeof MutationObserver === 'undefined') {
-      return;
-    }
-
-    this.ariaObserver = new MutationObserver(this.handleAriaMutation);
-    this.ariaObserver.observe(this.el, {
-      attributes: true,
-      attributeOldValue: true,
-    });
+  componentDidLoad() {
+    this.observeAriaAttributes();
   }
 
   disconnectedCallback() {
-    this.ariaObserver?.disconnect();
+    this.unobserveAriaAttributes();
   }
 
   private getAriaAttributesForRender(): Attributes {
