@@ -82,6 +82,30 @@ describe('pds-box', () => {
       expect(header).toEqualAttribute('style', '--sizing-min-height-box: 175px;');
     });
 
+    it('forwards aria-label to the inner semantic element', async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box tag="nav" aria-label="Main navigation"></pds-box>`,
+      });
+
+      const nav = page.root.querySelector('nav');
+
+      expect(nav).toEqualAttribute('aria-label', 'Main navigation');
+      expect(page.root.getAttribute('aria-label')).toBeNull();
+    });
+
+    it('forwards aria-labelledby to the inner semantic element', async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box tag="header" aria-labelledby="site-header-label"></pds-box>`,
+      });
+
+      const header = page.root.querySelector('header');
+
+      expect(header).toEqualAttribute('aria-labelledby', 'site-header-label');
+      expect(page.root.getAttribute('aria-labelledby')).toBeNull();
+    });
+
     it('updates the semantic element when tag changes after load', async () => {
       const page = await newSpecPage({
         components: [PdsBox],

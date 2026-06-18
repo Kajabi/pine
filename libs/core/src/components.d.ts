@@ -685,7 +685,7 @@ export namespace Components {
          */
         "sizeXs"?: BoxColumnType;
         /**
-          * Sets the semantic HTML tag rendered as the inner box element. When using landmark tags such as `nav`, `header`, or `footer`, provide a distinct accessible name via `aria-label` or `aria-labelledby` if multiple instances appear on the same page. For non-`div` tags, the host uses `display: contents` so layout props apply to the inner semantic element.
+          * Sets the semantic HTML tag rendered as the inner box element. When using landmark tags such as `nav`, `header`, or `footer`, provide a distinct accessible name via `aria-label` or `aria-labelledby` if multiple instances appear on the same page. For non-`div` tags, those ARIA attributes are forwarded to the inner semantic element. For non-`div` tags, the host uses `display: contents` so layout props apply to the inner semantic element.
           * @defaultValue div
          */
         "tag": BoxTagType;
@@ -3774,7 +3774,7 @@ declare namespace LocalJSX {
          */
         "sizeXs"?: BoxColumnType;
         /**
-          * Sets the semantic HTML tag rendered as the inner box element. When using landmark tags such as `nav`, `header`, or `footer`, provide a distinct accessible name via `aria-label` or `aria-labelledby` if multiple instances appear on the same page. For non-`div` tags, the host uses `display: contents` so layout props apply to the inner semantic element.
+          * Sets the semantic HTML tag rendered as the inner box element. When using landmark tags such as `nav`, `header`, or `footer`, provide a distinct accessible name via `aria-label` or `aria-labelledby` if multiple instances appear on the same page. For non-`div` tags, those ARIA attributes are forwarded to the inner semantic element. For non-`div` tags, the host uses `display: contents` so layout props apply to the inner semantic element.
           * @defaultValue div
          */
         "tag"?: BoxTagType;

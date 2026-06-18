@@ -1,5 +1,7 @@
-import { Component, h, Host, Prop, Watch } from '@stencil/core';
+import { Component, Element, h, Host, Prop, Watch } from '@stencil/core';
 
+import { inheritAriaAttributes } from '@utils/attributes';
+import type { Attributes } from '@utils/attributes';
 import { BoxColumnType, BoxSpacingType, BoxShadowSizeType, BoxTagType, isBoxTag } from '../../utils/types';
 import { normalizeColorValue } from '../../utils/utils';
 
@@ -8,6 +10,10 @@ import { normalizeColorValue } from '../../utils/utils';
   styleUrl: 'pds-box.scss',
 })
 export class PdsBox {
+  private inheritedAttributes: Attributes = {};
+
+  @Element() el!: HTMLPdsBoxElement;
+
   /**
    * Defines how items within the box are aligned.
    * @defaultValue stretch
@@ -693,7 +699,8 @@ export class PdsBox {
    * Sets the semantic HTML tag rendered as the inner box element.
    * When using landmark tags such as `nav`, `header`, or `footer`, provide a
    * distinct accessible name via `aria-label` or `aria-labelledby` if multiple
-   * instances appear on the same page.
+   * instances appear on the same page. For non-`div` tags, those ARIA attributes
+   * are forwarded to the inner semantic element.
    * For non-`div` tags, the host uses `display: contents` so layout props apply
    * to the inner semantic element.
    * @defaultValue div
@@ -704,10 +711,23 @@ export class PdsBox {
     return isBoxTag(this.tag) ? this.tag : 'div';
   }
 
+  private inheritSemanticAttributes() {
+    if (this.resolveTag() === 'div') {
+      return;
+    }
+
+    this.inheritedAttributes = {
+      ...this.inheritedAttributes,
+      ...inheritAriaAttributes(this.el),
+    };
+  }
+
   componentWillLoad() {
     if (!isBoxTag(this.tag)) {
       console.warn(`pds-box: invalid tag "${this.tag}", falling back to "div".`);
     }
+
+    this.inheritSemanticAttributes();
   }
 
   @Watch('tag')
@@ -715,6 +735,8 @@ export class PdsBox {
     if (!isBoxTag(newValue)) {
       console.warn(`pds-box: invalid tag "${newValue}", falling back to "div".`);
     }
+
+    this.inheritSemanticAttributes();
   }
 
   render() {
@@ -866,6 +888,7 @@ export class PdsBox {
         <Tag
           class={boxClasses}
           style={boxInlineStyles}
+          {...this.inheritedAttributes}
           {...(this.minHeight ? { 'min-height': this.minHeight } : {})}
           {...(this.minWidth ? { 'min-width': this.minWidth } : {})}
         >
