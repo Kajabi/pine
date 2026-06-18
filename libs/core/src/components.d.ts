@@ -5700,6 +5700,7 @@ declare namespace LocalJSX {
         "sizeMd": BoxColumnType;
         "sizeLg": BoxColumnType;
         "sizeXl": BoxColumnType;
+        "tag": BoxTagType;
     }
     interface PdsButtonAttributes {
         "componentId": string;
