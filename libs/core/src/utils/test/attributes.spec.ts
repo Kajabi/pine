@@ -1,4 +1,4 @@
-import { inheritAttributes, inheritAriaAttributes } from '../attributes';
+import { inheritAttributes, inheritAriaAttributes, readAriaAttributes } from '../attributes';
 
 describe('inheritAttributes()', () => {
   it('should create an attribute inheritance object', () => {
@@ -79,4 +79,21 @@ describe('inheritAriaAttributes()', () => {
     });
   });
 
+});
+
+describe('readAriaAttributes()', () => {
+  it('should read ARIA attributes without removing them from the element', () => {
+    const el = document.createElement('div');
+    el.setAttribute('aria-label', 'myLabel');
+    el.setAttribute('role', 'navigation');
+
+    const attributeObject = readAriaAttributes(el);
+
+    expect(attributeObject).toEqual({
+      'aria-label': 'myLabel',
+      role: 'navigation',
+    });
+    expect(el.getAttribute('aria-label')).toBe('myLabel');
+    expect(el.getAttribute('role')).toBe('navigation');
+  });
 });

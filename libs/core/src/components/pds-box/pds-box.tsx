@@ -1,6 +1,6 @@
-import { Component, Element, h, Host, Prop, Watch } from '@stencil/core';
+import { Component, Element, h, Host, Prop, State, Watch } from '@stencil/core';
 
-import { inheritAriaAttributes } from '@utils/attributes';
+import { inheritAriaAttributes, readAriaAttributes } from '@utils/attributes';
 import type { Attributes } from '@utils/attributes';
 import { BoxColumnType, BoxSpacingType, BoxShadowSizeType, BoxTagType, isBoxTag } from '../../utils/types';
 import { normalizeColorValue } from '../../utils/utils';
@@ -10,9 +10,16 @@ import { normalizeColorValue } from '../../utils/utils';
   styleUrl: 'pds-box.scss',
 })
 export class PdsBox {
-  private inheritedAttributes: Attributes = {};
+  private ariaObserver?: MutationObserver;
+  private isSyncingAria = false;
+  private semanticAriaAttributes: Attributes = {};
 
   @Element() el!: HTMLPdsBoxElement;
+
+  /**
+   * Bumped when host ARIA attributes change so semantic inner elements re-render.
+   */
+  @State() private ariaRevision = 0;
 
   /**
    * Defines how items within the box are aligned.
@@ -711,14 +718,98 @@ export class PdsBox {
     return isBoxTag(this.tag) ? this.tag : 'div';
   }
 
-  private inheritSemanticAttributes() {
-    if (this.resolveTag() === 'div') {
+  private isSemanticTag(): boolean {
+    return this.resolveTag() !== 'div';
+  }
+
+  private isAriaAttribute(attributeName: string | null): boolean {
+    return attributeName === 'role' || attributeName?.startsWith('aria-') === true;
+  }
+
+  private syncSemanticAriaFromHost() {
+    if (!this.isSemanticTag()) {
+      this.restoreAriaToHost();
       return;
     }
 
-    this.inheritedAttributes = {
-      ...this.inheritedAttributes,
-      ...inheritAriaAttributes(this.el),
+    this.isSyncingAria = true;
+    const fromHost = inheritAriaAttributes(this.el);
+    this.isSyncingAria = false;
+
+    this.semanticAriaAttributes = {
+      ...this.semanticAriaAttributes,
+      ...fromHost,
+    };
+  }
+
+  private restoreAriaToHost() {
+    this.isSyncingAria = true;
+    Object.entries(this.semanticAriaAttributes).forEach(([attr, value]) => {
+      if (value != null) {
+        this.el.setAttribute(attr, String(value));
+      }
+    });
+    this.isSyncingAria = false;
+    this.semanticAriaAttributes = {};
+  }
+
+  private handleAriaMutation = (mutations: MutationRecord[]) => {
+    if (this.isSyncingAria || !this.isSemanticTag()) {
+      return;
+    }
+
+    let shouldRender = false;
+
+    mutations.forEach((mutation) => {
+      if (mutation.type !== 'attributes' || !this.isAriaAttribute(mutation.attributeName)) {
+        return;
+      }
+
+      const attr = mutation.attributeName as string;
+
+      if (this.el.hasAttribute(attr)) {
+        this.semanticAriaAttributes[attr] = this.el.getAttribute(attr);
+        this.isSyncingAria = true;
+        this.el.removeAttribute(attr);
+        this.isSyncingAria = false;
+      } else if (mutation.oldValue !== null) {
+        delete this.semanticAriaAttributes[attr];
+      }
+
+      shouldRender = true;
+    });
+
+    if (shouldRender) {
+      this.ariaRevision++;
+    }
+  };
+
+  connectedCallback() {
+    if (typeof MutationObserver === 'undefined') {
+      return;
+    }
+
+    this.ariaObserver = new MutationObserver(this.handleAriaMutation);
+    this.ariaObserver.observe(this.el, {
+      attributes: true,
+      attributeOldValue: true,
+    });
+  }
+
+  disconnectedCallback() {
+    this.ariaObserver?.disconnect();
+  }
+
+  private getAriaAttributesForRender(): Attributes {
+    if (!this.isSemanticTag()) {
+      return {};
+    }
+
+    void this.ariaRevision;
+
+    return {
+      ...this.semanticAriaAttributes,
+      ...readAriaAttributes(this.el),
     };
   }
 
@@ -727,7 +818,7 @@ export class PdsBox {
       console.warn(`pds-box: invalid tag "${this.tag}", falling back to "div".`);
     }
 
-    this.inheritSemanticAttributes();
+    this.syncSemanticAriaFromHost();
   }
 
   @Watch('tag')
@@ -736,7 +827,7 @@ export class PdsBox {
       console.warn(`pds-box: invalid tag "${newValue}", falling back to "div".`);
     }
 
-    this.inheritSemanticAttributes();
+    this.syncSemanticAriaFromHost();
   }
 
   render() {
@@ -874,6 +965,8 @@ export class PdsBox {
       ...(this.flex && !['none', 'grow', 'shrink'].includes(this.flex) && { 'flex': this.flex }),
     };
 
+    const ariaAttributes = this.getAriaAttributesForRender();
+
     if (this.resolveTag() === 'div') {
       return (
         <Host class={boxClasses} style={boxInlineStyles}>
@@ -888,7 +981,7 @@ export class PdsBox {
         <Tag
           class={boxClasses}
           style={boxInlineStyles}
-          {...this.inheritedAttributes}
+          {...ariaAttributes}
           {...(this.minHeight ? { 'min-height': this.minHeight } : {})}
           {...(this.minWidth ? { 'min-width': this.minWidth } : {})}
         >

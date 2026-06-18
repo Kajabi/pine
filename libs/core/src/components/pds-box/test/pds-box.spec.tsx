@@ -1,6 +1,48 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsBox } from '../pds-box';
 
+global.MutationObserver = jest.fn().mockImplementation((callback: MutationCallback) => ({
+  observe: jest.fn((target: Element) => {
+    const originalSetAttribute = target.setAttribute.bind(target);
+    target.setAttribute = (name: string, value: string) => {
+      const oldValue = target.getAttribute(name);
+      originalSetAttribute(name, value);
+
+      if (name === 'role' || name.startsWith('aria-')) {
+        callback(
+          [{
+            type: 'attributes',
+            attributeName: name,
+            oldValue,
+            target,
+          } as MutationRecord],
+          {} as MutationObserver,
+        );
+      }
+    };
+
+    const originalRemoveAttribute = target.removeAttribute.bind(target);
+    target.removeAttribute = (name: string) => {
+      const oldValue = target.getAttribute(name);
+      originalRemoveAttribute(name);
+
+      if (name === 'role' || name.startsWith('aria-')) {
+        callback(
+          [{
+            type: 'attributes',
+            attributeName: name,
+            oldValue,
+            target,
+          } as MutationRecord],
+          {} as MutationObserver,
+        );
+      }
+    };
+  }),
+  disconnect: jest.fn(),
+  takeRecords: jest.fn(),
+}));
+
 describe('pds-box', () => {
   it('renders', async () => {
     const page = await newSpecPage({
@@ -104,6 +146,34 @@ describe('pds-box', () => {
 
       expect(header).toEqualAttribute('aria-labelledby', 'site-header-label');
       expect(page.root.getAttribute('aria-labelledby')).toBeNull();
+    });
+
+    it('updates aria-label on the inner semantic element after load', async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box tag="nav" aria-label="Main navigation"></pds-box>`,
+      });
+
+      page.root.setAttribute('aria-label', 'Updated navigation');
+      await page.waitForChanges();
+
+      const nav = page.root.querySelector('nav');
+
+      expect(nav).toEqualAttribute('aria-label', 'Updated navigation');
+      expect(page.root.getAttribute('aria-label')).toBeNull();
+    });
+
+    it('restores aria attributes to the host when tag changes to div', async () => {
+      const page = await newSpecPage({
+        components: [PdsBox],
+        html: `<pds-box tag="header" aria-label="Site header"></pds-box>`,
+      });
+
+      page.root.tag = 'div';
+      await page.waitForChanges();
+
+      expect(page.root.querySelector('header')).toBeNull();
+      expect(page.root).toEqualAttribute('aria-label', 'Site header');
     });
 
     it('updates the semantic element when tag changes after load', async () => {

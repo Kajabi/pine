@@ -82,6 +82,18 @@ const ariaAttributes = [
 ];
 
 
+export const readAriaAttributes = (el: Element): Attributes => {
+  const attributeObject: Attributes = {};
+
+  ariaAttributes.forEach((attr) => {
+    if (el.hasAttribute(attr)) {
+      attributeObject[attr] = el.getAttribute(attr);
+    }
+  });
+
+  return attributeObject;
+};
+
  export const inheritAriaAttributes = (el: Element, ignoreList?: string[]) => {
   let attributesToInherit = ariaAttributes;
   if (ignoreList && ignoreList.length > 0) {
