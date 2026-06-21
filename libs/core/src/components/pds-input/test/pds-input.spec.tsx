@@ -2,6 +2,30 @@ import { newSpecPage } from '@stencil/core/testing';
 import { PdsInput } from '../pds-input';
 
 describe('pds-input', () => {
+  const mockInternals = {
+    setFormValue: jest.fn(),
+    setValidity: jest.fn(),
+  };
+  let originalAttachInternals: unknown;
+
+  beforeAll(() => {
+    originalAttachInternals = (HTMLElement.prototype as { attachInternals?: unknown }).attachInternals;
+    Object.defineProperty(HTMLElement.prototype, 'attachInternals', {
+      configurable: true,
+      value: () => mockInternals,
+    });
+  });
+
+  afterAll(() => {
+    if (originalAttachInternals) {
+      Object.defineProperty(HTMLElement.prototype, 'attachInternals', {
+        configurable: true,
+        value: originalAttachInternals,
+      });
+    } else {
+      delete (HTMLElement.prototype as { attachInternals?: unknown }).attachInternals;
+    }
+  });
   it('renders a value when prop is set', async () => {
     const { root } = await newSpecPage({
       components: [PdsInput],

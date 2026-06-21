@@ -3,6 +3,31 @@ import { PdsSwitch } from '../pds-switch';
 import { danger } from '@pine-ds/icons/icons';
 
 describe('pds-switch', () => {
+  const mockInternals = {
+    setFormValue: jest.fn(),
+    setValidity: jest.fn(),
+  };
+  let originalAttachInternals: unknown;
+
+  beforeAll(() => {
+    originalAttachInternals = (HTMLElement.prototype as { attachInternals?: unknown }).attachInternals;
+    Object.defineProperty(HTMLElement.prototype, 'attachInternals', {
+      configurable: true,
+      value: () => mockInternals,
+    });
+  });
+
+  afterAll(() => {
+    if (originalAttachInternals) {
+      Object.defineProperty(HTMLElement.prototype, 'attachInternals', {
+        configurable: true,
+        value: originalAttachInternals,
+      });
+    } else {
+      delete (HTMLElement.prototype as { attachInternals?: unknown }).attachInternals;
+    }
+  });
+
   it('renders an input as a checkbox with label', async () => {
     const page = await newSpecPage({
       components: [PdsSwitch],
