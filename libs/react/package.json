@@ -37,7 +37,7 @@
     "tsc": "tsc -p ."
   },
   "dependencies": {
-    "@kajabi-ui/styles": "*",
+    "@kajabi-ui/styles": "^1.4.0",
     "@pine-ds/core": "^3.26.4",
     "@pine-ds/icons": "*",
     "tslib": "*"
