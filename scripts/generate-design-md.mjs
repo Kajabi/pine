@@ -18,7 +18,7 @@
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { dirname, resolve } from 'node:path';
+import { basename, dirname, resolve } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -29,7 +29,9 @@ const DESIGN = resolve(ROOT, 'DESIGN.md');
 const START = '# AUTOGEN:tokens:start';
 const END = '# AUTOGEN:tokens:end';
 
-const readJSON = (f) => JSON.parse(readFileSync(resolve(TOKENS, f), 'utf8'));
+// basename() strips any path segment, so reads are confined to TOKENS — the
+// argument is always a literal token filename, never external input.
+const readJSON = (f) => JSON.parse(readFileSync(resolve(TOKENS, basename(f)), 'utf8'));
 const core = readJSON('core.json');
 const semantic = readJSON('semantic.json');
 
@@ -44,7 +46,10 @@ const deref = (ref) => {
   if (typeof ref !== 'string' || !ref.startsWith('{')) return ref;
   const path = ref.slice(1, -1).split('.');
   let node = core;
-  for (const p of path) node = node?.[p];
+  for (const p of path) {
+    if (p === '__proto__' || p === 'constructor' || p === 'prototype') return ref;
+    node = node?.[p];
+  }
   return node?.value ?? ref;
 };
 
