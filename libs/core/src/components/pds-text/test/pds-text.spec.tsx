@@ -225,4 +225,56 @@ describe('pds-text', () => {
     const contentEl = page.root!.shadowRoot!.querySelector('[part="content"]') as HTMLElement;
     expect(contentEl.getAttribute('tabindex')).toBeNull();
   });
+
+  describe('size validation', () => {
+    let warnSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      warnSpy = jest.spyOn(console, 'warn').mockImplementation();
+    });
+
+    afterEach(() => {
+      warnSpy.mockRestore();
+    });
+
+    it('warns when size is not a supported value', async () => {
+      await newSpecPage({
+        components: [PdsText],
+        html: `<pds-text size="body-sm">Hi</pds-text>`,
+      });
+
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('invalid size "body-sm"'));
+    });
+
+    it('does not warn for a supported size value', async () => {
+      await newSpecPage({
+        components: [PdsText],
+        html: `<pds-text size="lg">Hi</pds-text>`,
+      });
+
+      expect(warnSpy).not.toHaveBeenCalled();
+    });
+
+    it('does not warn when size is not set', async () => {
+      await newSpecPage({
+        components: [PdsText],
+        html: `<pds-text>Hi</pds-text>`,
+      });
+
+      expect(warnSpy).not.toHaveBeenCalled();
+    });
+
+    it('warns when size is updated to an invalid value', async () => {
+      const page = await newSpecPage({
+        components: [PdsText],
+        html: `<pds-text size="lg">Hi</pds-text>`,
+      });
+      expect(warnSpy).not.toHaveBeenCalled();
+
+      page.rootInstance.size = 'body-md';
+      await page.waitForChanges();
+
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('invalid size "body-md"'));
+    });
+  });
 });
