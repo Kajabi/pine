@@ -112,7 +112,7 @@ push(`  border_width: ${flow(bw)}`);
 // typography
 const fs = Object.fromEntries(
   Object.entries(core['font-size'])
-    .map(([k, v]) => [k, v.value])
+    .map(([k, v]) => [norm(k), v.value])
     .sort((a, b) => byNum(a[0], b[0]))
 );
 push(`  font_size: ${flow(fs)}`);
@@ -165,7 +165,10 @@ if (!re.test(md)) {
 const next = md.replace(re, block);
 
 if (process.argv.includes('--check')) {
-  if (next !== md) {
+  // Normalize CRLF so Windows / autocrlf checkouts don't spuriously fail when
+  // the token data is identical (generated block always uses \n).
+  const normalize = (s) => s.replace(/\r\n/g, '\n');
+  if (normalize(next) !== normalize(md)) {
     console.error('✘ DESIGN.md token block is stale. Run: npm run design.tokens');
     process.exit(1);
   }
