@@ -14,6 +14,7 @@
     "postinstall": "node libs/core/scripts/vscode-settings-patcher.cjs || true",
     "coverage": "open libs/core/coverage/lcov-report/index.html",
     "deploy": "npx nx run-many -t deploy -p core",
+    "design.tokens": "node scripts/generate-design-md.mjs",
     "lint.all": "npx nx run-many --target=lint",
     "setup": "npm install",
     "start": "npx nx run-many -t start",

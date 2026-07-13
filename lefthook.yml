@@ -22,6 +22,8 @@ pre-push:
   commands:
     validate-branch:
       run: npx validate-branch-name
+    design-tokens-drift:
+      run: npm run design.tokens -- --check
 
 commit-msg:
   commands:
