@@ -83,3 +83,24 @@ export type ChipVariantType =
   'text'
   | 'tag'
   | 'dropdown';
+
+// Single source of truth for `pds-text` `size` values. The `as const` tuple is
+// readable at runtime (for validation) and `TextSizeType` is derived from it,
+// so the supported list and the prop type cannot drift apart.
+export const TEXT_SIZES = [
+  '2xl',
+  'xl',
+  'lg',
+  'md',
+  'sm',
+  'xs',
+  '2xs',
+  'h1',
+  'h2',
+  'h3',
+  'h4',
+  'h5',
+  'h6',
+] as const;
+
+export type TextSizeType = (typeof TEXT_SIZES)[number];

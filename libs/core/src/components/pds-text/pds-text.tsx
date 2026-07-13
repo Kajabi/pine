@@ -1,6 +1,7 @@
 import { Component, h, Prop, Element, Watch } from '@stencil/core';
 import { setColor } from '../../utils/utils';
 import { setupTruncationTooltip } from '../../utils/truncation-tooltip';
+import { TEXT_SIZES, TextSizeType } from '../../utils/types';
 
 /**
  * @part content - The text content container
@@ -42,20 +43,7 @@ export class PdsText {
   /**
    * Sets the font size.
    */
-  @Prop() size?:
-    | '2xl'
-    | 'xl'
-    | 'lg'
-    | 'md'
-    | 'sm'
-    | 'xs'
-    | '2xs'
-    | 'h1'
-    | 'h2'
-    | 'h3'
-    | 'h4'
-    | 'h5'
-    | 'h6';
+  @Prop() size?: TextSizeType;
 
   /**
    * Sets the font weight.
@@ -99,6 +87,29 @@ export class PdsText {
     } else {
       this.destroyTruncationTooltip();
     }
+  }
+
+  @Watch('size')
+  validateSize(newValue?: string) {
+    // Skip when the prop is omitted or explicitly cleared (an empty string is a
+    // common "unset" sentinel). Any other unsupported value — including a
+    // whitespace-only string — is a developer mistake worth warning about.
+    if (newValue === undefined || newValue === '') {
+      return;
+    }
+
+    if (!(TEXT_SIZES as readonly string[]).includes(newValue)) {
+      const display = newValue.length > 80 ? `${newValue.slice(0, 80)}…` : newValue;
+      console.warn(
+        `pds-text: invalid size "${display}". Valid values are: ${TEXT_SIZES.join(', ')}.`,
+      );
+    }
+  }
+
+  componentWillLoad() {
+    // Validate the initial value before the first render so the warning precedes
+    // any attempt to apply an unknown size class. @Watch covers later changes.
+    this.validateSize(this.size);
   }
 
   componentDidLoad() {
