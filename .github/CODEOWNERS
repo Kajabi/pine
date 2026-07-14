@@ -3,6 +3,9 @@
 # https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 
 # Global owners
+# NOTE: `*` matches all files. A bare `-` here previously matched only a file
+# literally named "-", so no code-owner review was actually enforced on general
+# files. Maintained by the two remaining DSS maintainers after the team wound down.
 
-- @Kajabi/dss-devs
+* @QuintonJason @pixelflips
 /.github/ @kajabi/production-engineering
