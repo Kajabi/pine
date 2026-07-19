@@ -6,12 +6,19 @@
 /// `0`, and `h1`/`h2` adopt a tight tracking matching Tailwind's
 /// `tracking-tight` (`-0.025em`); the remaining heading roles sit at `0`.
 ///
+/// Note: `--pine-letter-spacing-heading-6` is also consumed as label tracking
+/// by `pds-chip`, `pds-combobox`, and `pds-radio-group`, so zeroing it here
+/// removes their `0.16px` label tracking too (intentional). Removing this file
+/// would therefore restore positive tracking on those labels, not just headings.
+///
 /// Namespace contract: these CSS custom properties use the canonical
 /// `--pine-letter-spacing*` namespace owned by `@kajabi-ui/styles`. Pine
 /// redefines the values here (this file is `@use`d after the upstream import
-/// in `app.scss`, so these win) without renaming the tokens. When upstream
-/// publishes matching values, remove this file in the same PR that bumps the
-/// `@kajabi-ui/styles` version. Component SCSS does not change.
+/// in `app.scss`, so these win) without renaming the tokens. Remove this file
+/// in the same PR that bumps `@kajabi-ui/styles` to a version that ships these
+/// exact values (`--pine-letter-spacing: 0`, `--pine-letter-spacing-heading-1`
+/// and `-2` at `-0.025em`, and `--pine-letter-spacing-heading-3` through `-6`
+/// at `0`). Component SCSS does not change.
 ///
 /// @group pine
 ////
