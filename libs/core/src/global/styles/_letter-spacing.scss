@@ -1,0 +1,27 @@
+////
+/// Letter spacing token overrides (Pine-internal until upstream consolidation)
+///
+/// Removes the small positive tracking that `@kajabi-ui/styles` applies to
+/// Inter headings, which reads as too spread out. Body copy is normalized to
+/// `0`, and `h1`/`h2` adopt a tight tracking matching Tailwind's
+/// `tracking-tight` (`-0.025em`); the remaining heading roles sit at `0`.
+///
+/// Namespace contract: these CSS custom properties use the canonical
+/// `--pine-letter-spacing*` namespace owned by `@kajabi-ui/styles`. Pine
+/// redefines the values here (this file is `@use`d after the upstream import
+/// in `app.scss`, so these win) without renaming the tokens. When upstream
+/// publishes matching values, remove this file in the same PR that bumps the
+/// `@kajabi-ui/styles` version. Component SCSS does not change.
+///
+/// @group pine
+////
+
+:root {
+  --pine-letter-spacing: 0; // body/default (cleans up the invalid upstream value)
+  --pine-letter-spacing-heading-1: -0.025em; // Tailwind tracking-tight
+  --pine-letter-spacing-heading-2: -0.025em; // Tailwind tracking-tight
+  --pine-letter-spacing-heading-3: 0;
+  --pine-letter-spacing-heading-4: 0;
+  --pine-letter-spacing-heading-5: 0;
+  --pine-letter-spacing-heading-6: 0;
+}
