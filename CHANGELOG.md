@@ -1,3 +1,33 @@
+## 3.27.0 (2026-07-20)
+
+### Features 🚀
+
+- **pds-link:** add turbo data attribute props for Shadow DOM compatibility ([78600e06](https://github.com/Kajabi/pine/commit/78600e06))
+
+### Bug Fixes 🐛
+
+- hide decorative pds-icon from assistive tech + stop suppressing harness color-contrast ([#757](https://github.com/Kajabi/pine/pull/757))
+- **pds-button:** namespace internal color custom properties to prevent ancestor leakage ([7e433734](https://github.com/Kajabi/pine/commit/7e433734))
+- **pds-text:** warn on invalid size prop values ([#774](https://github.com/Kajabi/pine/pull/774))
+
+### Documentation 📄
+
+- add versioning and deprecation policy ([#772](https://github.com/Kajabi/pine/pull/772))
+- add ADRs for React wrappers, slots-vs-props, distribution, and runtime deps ([#775](https://github.com/Kajabi/pine/pull/775))
+- **resources:** add MCP patterns and Sage-to-Pine guide for pine-mcp ([#761](https://github.com/Kajabi/pine/pull/761))
+
+### Styles 🎨
+
+- **doc-components:** scope args-table section background to .args-section ([#763](https://github.com/Kajabi/pine/pull/763))
+- **status-badge:** add dark mode contrast overrides for status badge ([#762](https://github.com/Kajabi/pine/pull/762))
+
+### ❤️ Thank You
+
+- Andrew Dally
+- Joe Pickert
+- Phillip Lovelace
+- Quinton Jason
+
 ## 3.26.4 (2026-06-03)
 
 ### Styles 🎨
