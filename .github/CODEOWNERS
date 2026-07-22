@@ -5,7 +5,7 @@
 # Global owners
 # NOTE: `*` matches all files. A bare `-` here previously matched only a file
 # literally named "-", so no code-owner review was actually enforced on general
-# files. Maintained by the two remaining DSS maintainers after the team wound down.
+# files. Routed to the @Kajabi/dss-devs team (still active, admin on this repo).
 
-* @QuintonJason @pixelflips
+* @Kajabi/dss-devs
 /.github/ @kajabi/production-engineering
