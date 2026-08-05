@@ -1991,4 +1991,45 @@ describe('pds-multiselect', () => {
     });
   });
 
+  describe('i18n (selected-count plural forms)', () => {
+    const triggerTextOf = (page: { root: HTMLElement }) =>
+      page.root.shadowRoot.querySelector('.pds-multiselect__trigger-text')?.textContent;
+
+    const selectTwo = async (page: Awaited<ReturnType<typeof newSpecPage>>) => {
+      page.rootInstance.value = ['1', '2'];
+      page.rootInstance.internalOptions = [
+        { id: '1', text: 'Option 1' },
+        { id: '2', text: 'Option 2' },
+      ];
+      await page.waitForChanges();
+    };
+
+    it('uses translated one/other count labels', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-count-label-one="{count} elemento" selected-count-label-other="{count} elementos"></pds-multiselect>`,
+      });
+      await selectTwo(page);
+      expect(triggerTextOf(page)).toBe('2 elementos');
+    });
+
+    it('uses full CLDR forms from a JSON selected-count-labels attribute (Polish "few")', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" lang="pl" selected-count-labels='{"one":"{count} element","few":"{count} elementy","many":"{count} elementów","other":"{count} elementu"}'></pds-multiselect>`,
+      });
+      await selectTwo(page); // count 2 → Polish "few" (locale from the element's lang)
+      expect(triggerTextOf(page)).toBe('2 elementy');
+    });
+
+    it('degrades to the one/other defaults when selected-count-labels is malformed JSON', async () => {
+      const page = await newSpecPage({
+        components: [PdsMultiselect],
+        html: `<pds-multiselect component-id="test" selected-count-labels="not json"></pds-multiselect>`,
+      });
+      await selectTwo(page);
+      expect(triggerTextOf(page)).toBe('2 items');
+    });
+  });
+
 });

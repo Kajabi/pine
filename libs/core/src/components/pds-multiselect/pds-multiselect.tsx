@@ -4,6 +4,7 @@ import { debounceEvent } from '@utils/utils';
 import { isSpecTest, messageId, assignDescription } from '../../utils/form';
 import { danger, enlarge } from '@pine-ds/icons/icons';
 import { formatMessage, pluralize } from '../../i18n';
+import type { PluralForms } from '../../i18n';
 import type {
   MultiselectOption,
   MultiselectChangeEventDetail,
@@ -91,11 +92,23 @@ export class PdsMultiselect {
   @Prop() selectedCountLabelOne = '{count} item';
 
   /**
-   * Plural form of the selected-count trigger text (also the fallback for
-   * locales with additional plural categories). `{count}` is interpolated.
+   * Plural form of the selected-count trigger text. Used for English and as the
+   * fallback for any locale whose selected plural category isn't supplied via
+   * `selectedCountLabels`. `{count}` is interpolated.
    * @defaultValue '{count} items'
    */
   @Prop() selectedCountLabelOther = '{count} items';
+
+  /**
+   * Full CLDR plural forms for the selected-count trigger text, for locales with
+   * more than the English `one`/`other` categories (e.g. Polish `few`/`many`,
+   * Arabic `zero`/`two`). Accepts an object property or a JSON string attribute,
+   * keyed by CLDR category — `{ one, other, few, many, two, zero }`. Any form
+   * omitted here falls back to `selectedCountLabelOne`/`selectedCountLabelOther`,
+   * then to the `other` form. `{count}` is interpolated.
+   * @defaultValue undefined
+   */
+  @Prop() selectedCountLabels?: PluralForms | string;
 
   /**
    * Whether to close the panel after an option is selected.
@@ -1403,12 +1416,34 @@ export class PdsMultiselect {
   private getTriggerText(): string {
     const count = this.selectedItems.length;
     if (count === 0 || (this.selectedDisplay === 'pill' && this.pillPosition === 'below')) {
+      // An explicit empty `placeholder` is honored (renders no text); the prop
+      // defaults to 'Select...' so the un-configured case is unchanged.
       return this.placeholder;
     }
-    return pluralize(this.el, count, {
+    return pluralize(this.el, count, this.resolveCountForms());
+  }
+
+  /**
+   * The `one`/`other` props are the ergonomic English defaults; `selectedCountLabels`
+   * (object or JSON-string attribute) layers full CLDR forms on top for locales
+   * that need `few`/`many`/`two`/`zero`. Malformed JSON degrades to the defaults.
+   */
+  private resolveCountForms(): PluralForms {
+    const base: PluralForms = {
       one: this.selectedCountLabelOne,
       other: this.selectedCountLabelOther,
-    });
+    };
+    const extra = this.selectedCountLabels;
+    if (!extra) return base;
+    if (typeof extra === 'string') {
+      try {
+        const parsed = JSON.parse(extra);
+        return parsed && typeof parsed === 'object' ? { ...base, ...parsed } : base;
+      } catch {
+        return base; // not valid JSON → fall back to the English-shape defaults
+      }
+    }
+    return { ...base, ...extra };
   }
 
   render() {

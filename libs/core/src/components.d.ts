@@ -12,6 +12,7 @@ import { ChipSentimentType, ChipSizeType, ChipVariantType, PlacementType } from 
 import { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
 import { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 import { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
+import { PluralForms } from "./i18n";
 import { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
 import { PdsPopoverEventDetail } from "./components/pds-popover/popover-interface";
 import { RadioGroupChangeEventDetail } from "./components/pds-radio-group/radio-group-interface";
@@ -24,6 +25,7 @@ export { ChipSentimentType, ChipSizeType, ChipVariantType, PlacementType } from 
 export { ComboboxLoadOptionsEventDetail, ComboboxOption, ComboboxSearchEventDetail } from "./components/pds-combobox/combobox-interface";
 export { PdsFilterClearEventDetail, PdsFilterCloseEventDetail, PdsFilterOpenEventDetail, PdsFilterVariant } from "./components/pds-filters/pds-filter/filter-interface";
 export { InputChangeEventDetail, InputInputEventDetail } from "./components/pds-input/input-interface";
+export { PluralForms } from "./i18n";
 export { MultiselectChangeEventDetail, MultiselectCreateEventDetail, MultiselectLoadOptionsEventDetail, MultiselectOption, MultiselectSearchEventDetail } from "./components/pds-multiselect/multiselect-interface";
 export { PdsPopoverEventDetail } from "./components/pds-popover/popover-interface";
 export { RadioGroupChangeEventDetail } from "./components/pds-radio-group/radio-group-interface";
@@ -1593,10 +1595,15 @@ export namespace Components {
          */
         "selectedCountLabelOne": string;
         /**
-          * Plural form of the selected-count trigger text (also the fallback for locales with additional plural categories). `{count}` is interpolated.
+          * Plural form of the selected-count trigger text. Used for English and as the fallback for any locale whose selected plural category isn't supplied via `selectedCountLabels`. `{count}` is interpolated.
           * @defaultValue '{count} items'
          */
         "selectedCountLabelOther": string;
+        /**
+          * Full CLDR plural forms for the selected-count trigger text, for locales with more than the English `one`/`other` categories (e.g. Polish `few`/`many`, Arabic `zero`/`two`). Accepts an object property or a JSON string attribute, keyed by CLDR category — `{ one, other, few, many, two, zero }`. Any form omitted here falls back to `selectedCountLabelOne`/`selectedCountLabelOther`, then to the `other` form. `{count}` is interpolated.
+          * @defaultValue undefined
+         */
+        "selectedCountLabels"?: PluralForms | string;
         /**
           * Display mode for selected items outside the dropdown panel. `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders selected items as dismissible pds-chip tags.
           * @default 'count'
@@ -4780,10 +4787,15 @@ declare namespace LocalJSX {
          */
         "selectedCountLabelOne"?: string;
         /**
-          * Plural form of the selected-count trigger text (also the fallback for locales with additional plural categories). `{count}` is interpolated.
+          * Plural form of the selected-count trigger text. Used for English and as the fallback for any locale whose selected plural category isn't supplied via `selectedCountLabels`. `{count}` is interpolated.
           * @defaultValue '{count} items'
          */
         "selectedCountLabelOther"?: string;
+        /**
+          * Full CLDR plural forms for the selected-count trigger text, for locales with more than the English `one`/`other` categories (e.g. Polish `few`/`many`, Arabic `zero`/`two`). Accepts an object property or a JSON string attribute, keyed by CLDR category — `{ one, other, few, many, two, zero }`. Any form omitted here falls back to `selectedCountLabelOne`/`selectedCountLabelOther`, then to the `other` form. `{count}` is interpolated.
+          * @defaultValue undefined
+         */
+        "selectedCountLabels"?: PluralForms | string;
         /**
           * Display mode for selected items outside the dropdown panel. `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders selected items as dismissible pds-chip tags.
           * @default 'count'
@@ -5949,6 +5961,7 @@ declare namespace LocalJSX {
         "itemRemovedLabel": string;
         "selectedCountLabelOne": string;
         "selectedCountLabelOther": string;
+        "selectedCountLabels": PluralForms | string;
         "closePanelOnSelect": boolean;
         "name": string;
         "disabled": boolean;

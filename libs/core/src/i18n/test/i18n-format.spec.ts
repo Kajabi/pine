@@ -66,5 +66,9 @@ describe('i18n-format', () => {
     it('falls back to the "other" form when the selected category is absent', () => {
       expect(pluralize(null, 1, { other: '{count} items' })).toBe('1 items');
     });
+
+    it('never returns empty — falls back to the bare {count} when no usable form exists', () => {
+      expect(pluralize(null, 3, {})).toBe('3');
+    });
   });
 });

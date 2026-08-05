@@ -45,6 +45,8 @@ export function pluralize(
   } catch {
     /* invalid locale tag → fall back to 'other' */
   }
-  const template = forms[category] ?? forms.other ?? '';
+  // Prefer the selected category, then the required `other`, then `one`; never
+  // return empty — a bare `{count}` still shows the number rather than nothing.
+  const template = forms[category] ?? forms.other ?? forms.one ?? '{count}';
   return formatMessage(template, { count, ...vars });
 }
