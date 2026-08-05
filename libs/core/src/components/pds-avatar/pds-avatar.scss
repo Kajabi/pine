@@ -55,6 +55,41 @@ div {
   position: absolute;
 }
 
+// Presence status colour, driven by the `status` prop and shared by the dot and
+// the optional ring. `offline` uses a neutral inset surface; online/away use the
+// core success/warning hues (no semantic sentiment-fill token exists yet).
+:host([status='online']) {
+  --pds-avatar-status-color: var(--pine-color-green-500);
+}
+
+:host([status='away']) {
+  --pds-avatar-status-color: var(--pine-color-yellow-500);
+}
+
+:host([status='offline']) {
+  --pds-avatar-status-color: var(--pine-color-background-inset-emphasized);
+}
+
+// Presence dot, positioned bottom-end like the badge and scaled to the avatar.
+// The surface-coloured ring keeps it legible against any avatar fill.
+.pds-avatar__status {
+  background-color: var(--pds-avatar-status-color, var(--pine-color-background-inset-emphasized));
+  block-size: 28%;
+  border-radius: var(--pine-border-radius-full);
+  box-shadow: 0 0 0 var(--pine-border-width-thick) var(--pine-color-background-container);
+  inline-size: 28%;
+  inset-block-end: var(--pine-dimension-none);
+  inset-inline-end: var(--pine-dimension-none);
+  min-block-size: var(--pine-dimension-100);
+  min-inline-size: var(--pine-dimension-100);
+  position: absolute;
+}
+
+// Optional ring around the whole avatar in the status colour.
+:host(.pds-avatar--status-ring) div {
+  box-shadow: 0 0 0 var(--pine-border-width-thick) var(--pds-avatar-status-color, var(--pine-color-background-inset-emphasized));
+}
+
 img {
   border-radius: var(--border-radius-admin-round, var(--pine-border-radius-full));
   height: 100%;
