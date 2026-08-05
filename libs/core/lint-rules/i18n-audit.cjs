@@ -2,16 +2,20 @@
 'use strict';
 
 /**
- * P3 i18n enforcement audit — burndown runner.
+ * i18n baked-string audit — burndown runner.
  *
- * Runs pine-i18n/no-hardcoded-a11y-string over every real component .tsx
- * (excluding test/docs/stories) and prints the burndown grouped by component.
- * Audit-only: exits 0 by default. Pass --error to exit non-zero when any
- * finding remains (the CI-gate mode, once the backlog is drained).
+ * Runs the two pine-i18n rules over every component .tsx (excluding
+ * test/docs/stories) and prints the findings grouped by component. Exits 0 by
+ * default; `--error` exits non-zero when any finding remains.
  *
  * Usage:
  *   node libs/core/lint-rules/i18n-audit.cjs
  *   node libs/core/lint-rules/i18n-audit.cjs --error
+ *
+ * Note: uses the ESLint 8 programmatic API (Linter#defineParser / defineRule
+ * and an eslintrc-shaped config), which was removed in ESLint 9. On an ESLint 9
+ * upgrade this runner must move to flat config + Linter#verify without the
+ * define* helpers.
  */
 
 const fs = require('fs');

@@ -3,15 +3,18 @@
 /**
  * ESLint rule: pine-i18n/no-hardcoded-a11y-string
  *
- * Flags hard-coded user-facing text on Pine components — the attributes that a
- * screen reader announces or a user reads but that a consumer cannot translate
- * unless the value is a prop (English-defaulted) they can override. A string
- * LITERAL on one of the target attributes is a finding; a JSX expression (a prop
- * ref, or the i18n helpers — e.g. `{this.dismissLabel}` /
- * `{formatMessage(this.charCountLabel, vars)}`) is assumed localizable and passes.
+ * Flags hard-coded user-facing text on the attributes a screen reader announces
+ * or a user reads (aria-label, title, alt, placeholder, …) — text a consumer
+ * cannot translate unless it comes from a prop they can override. A string
+ * literal on a target attribute is a finding, as is an interpolated template
+ * that bakes English words into one (e.g. `aria-label={`${n} of ${m} chars`}`).
+ * A prop ref or an i18n-helper call (`{this.dismissLabel}`,
+ * `{formatMessage(this.characterCountLabel, vars)}`) is assumed localizable and
+ * passes.
  *
- * Audit-first (mirrors sage-lint): run as a warning + burndown, flip to error in
- * CI once the backlog is drained. Purely syntactic — no type info required.
+ * Conditional (`a ? b : c`) and logical (`a || b`) expressions are searched on
+ * both operands, so a literal hidden in a branch — `{cond ? 'Label' : undefined}`,
+ * `{this.label || 'Options'}` — is still caught. Purely syntactic; no type info.
  */
 
 const DEFAULT_ATTRS = [
@@ -65,63 +68,62 @@ module.exports = {
       return null;
     };
 
-    // Returns the literal string value, or null if the value is dynamic/absent.
-    const literalString = (valueNode) => {
-      if (!valueNode) return null;
-      if (valueNode.type === 'Literal' && typeof valueNode.value === 'string') {
-        return valueNode.value;
-      }
-      if (valueNode.type === 'JSXExpressionContainer') {
-        const e = valueNode.expression;
-        if (e.type === 'Literal' && typeof e.value === 'string') return e.value;
-        // template literal with no interpolations, e.g. {`Selected items`}
-        if (e.type === 'TemplateLiteral' && e.expressions.length === 0) {
-          return e.quasis.map((q) => q.value.cooked).join('');
-        }
-      }
-      return null;
-    };
-
-    // An interpolated template whose static parts contain English words baked
-    // into an a11y attribute, e.g. `${n} of ${m} characters`. Returns a preview
-    // string, or null when the template is purely dynamic (IDs, no words).
-    const interpolatedWithWords = (valueNode) => {
-      if (!valueNode || valueNode.type !== 'JSXExpressionContainer') return null;
-      const e = valueNode.expression;
-      if (e.type !== 'TemplateLiteral' || e.expressions.length === 0) return null;
-      // Preserve the original static text (no injected separators) and look for a
-      // whitespace-delimited word. Sentences have space-bounded words ("of",
-      // "characters"); id fragments are hyphen/underscore-joined ("-listbox") and
-      // are left alone.
-      const staticText = e.quasis.map((q) => q.value.cooked).join('');
-      if (!/(^|\s)[A-Za-z]{2,}(\s|$)/.test(staticText)) return null;
-      return e.quasis.map((q) => q.value.cooked).join('${…}');
-    };
-
     const truncate = (s) => (s.length > 40 ? `${s.slice(0, 40)}…` : s);
+
+    // A whitespace-delimited word marks human text ("of", "characters"); id
+    // fragments are hyphen/underscore-joined ("-listbox") and are left alone.
+    const hasWord = (s) => /(^|\s)[A-Za-z]{2,}(\s|$)/.test(s);
+
+    // Walk an expression, collecting any baked-string findings. Recurses through
+    // conditional/logical operands so a literal in any branch is still reached.
+    const collectFindings = (expr, out) => {
+      if (!expr) return;
+      switch (expr.type) {
+        case 'Literal':
+          if (typeof expr.value === 'string' && expr.value.trim() !== '') {
+            out.push({ messageId: 'hardcoded', value: expr.value });
+          }
+          return;
+        case 'TemplateLiteral': {
+          const staticText = expr.quasis.map((q) => q.value.cooked).join('');
+          if (expr.expressions.length === 0) {
+            if (staticText.trim() !== '') out.push({ messageId: 'hardcoded', value: staticText });
+          } else if (hasWord(staticText)) {
+            out.push({ messageId: 'interpolated', value: expr.quasis.map((q) => q.value.cooked).join('${…}') });
+          }
+          return;
+        }
+        case 'ConditionalExpression':
+          collectFindings(expr.consequent, out);
+          collectFindings(expr.alternate, out);
+          return;
+        case 'LogicalExpression':
+          collectFindings(expr.left, out);
+          collectFindings(expr.right, out);
+          return;
+        default:
+          return; // identifiers, member/call expressions, etc. → assumed localizable
+      }
+    };
 
     return {
       JSXAttribute(node) {
         const name = attrName(node);
         if (!name || !attrs.has(name)) return;
 
-        const value = literalString(node.value);
-        if (value !== null) {
-          if (value.trim() === '') return; // empty (e.g. decorative alt="") → not user text
-          context.report({
-            node,
-            messageId: 'hardcoded',
-            data: { attr: name, value: truncate(value) },
-          });
-          return;
+        const value = node.value;
+        const findings = [];
+        if (value && value.type === 'Literal') {
+          collectFindings(value, findings);
+        } else if (value && value.type === 'JSXExpressionContainer') {
+          collectFindings(value.expression, findings);
         }
 
-        const interpolated = interpolatedWithWords(node.value);
-        if (interpolated !== null) {
+        for (const f of findings) {
           context.report({
             node,
-            messageId: 'interpolated',
-            data: { attr: name, value: truncate(interpolated) },
+            messageId: f.messageId,
+            data: { attr: name, value: truncate(f.value) },
           });
         }
       },

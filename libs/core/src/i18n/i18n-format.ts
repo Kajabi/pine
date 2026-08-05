@@ -10,6 +10,22 @@ export type PluralForms = Partial<Record<Intl.LDMLPluralRule, string>>;
  * translated template, and picking the right plural form. No stored strings, no
  * locale registry; the locale is read from the DOM (`lang`), the web-standard
  * signal a consumer already sets.
+ *
+ * Two limitations of DOM-`lang` locale resolution, both inherent to inferring
+ * locale from the DOM rather than being told it:
+ *
+ * 1. Not reactive. `resolveLocale` is read during render; Stencil has no
+ *    reactive dependency on a DOM attribute, so changing `lang` at runtime
+ *    (`document.documentElement.lang = 'pl'`) does NOT re-render mounted
+ *    components — the plural form stays stale until unrelated state forces a
+ *    render. Fine when locale changes via full-page navigation; a consumer that
+ *    switches locale client-side should pass the already-formatted/pluralized
+ *    string as the prop instead.
+ * 2. Does not cross shadow boundaries. `el.closest('[lang]')` stops at the host's
+ *    shadow root. A Pine component nested inside another custom element whose
+ *    `lang` sits on that outer host will not see it and falls back to
+ *    `document.documentElement.lang`. Set `lang` on (or above) the Pine element
+ *    in the same tree, or pass a pre-formatted string, when that matters.
  */
 
 /** Replace `{token}` placeholders with `vars`; unknown tokens stay literal. */

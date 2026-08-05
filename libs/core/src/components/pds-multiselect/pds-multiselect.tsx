@@ -55,57 +55,79 @@ export class PdsMultiselect {
   @Prop() label?: string;
 
   /**
-   * Placeholder text for the input field. Pass a translated string to localize.
+   * Placeholder text for the input field. Pass a translated string to localize it; defaults to English.
    * @defaultValue 'Select...'
    */
   @Prop() placeholder = 'Select...';
 
   /**
-   * Placeholder text for the search input inside the dropdown panel. Pass a
-   * translated string to localize.
+   * Placeholder text for the search input inside the dropdown panel. Pass a translated string to localize it; defaults to English.
    * @defaultValue 'Find...'
    */
   @Prop() searchPlaceholder = 'Find...';
 
   /**
-   * Accessible label for the search input. Pass a translated string to localize.
+   * Accessible label for the search input. Pass a translated string to localize it; defaults to English.
    * @defaultValue 'Search options'
    */
   @Prop() searchOptionsLabel = 'Search options';
 
   /**
-   * Accessible label for the selected-items region. Pass a translated string to localize.
+   * Accessible label for the selected-items region. Pass a translated string to localize it; defaults to English.
    * @defaultValue 'Selected items'
    */
   @Prop() selectedItemsLabel = 'Selected items';
 
   /**
-   * Screen-reader announcement when an item is removed. `{item}` is interpolated.
+   * Accessible label for the options listbox (falls back to this when `label` is unset). Pass a translated string to localize it; defaults to English.
+   * @defaultValue 'Options'
+   */
+  @Prop() optionsLabel = 'Options';
+
+  /**
+   * Text shown when no options match the search. Pass a translated string to localize it; defaults to English.
+   * @defaultValue 'No options found'
+   */
+  @Prop() noOptionsFoundLabel = 'No options found';
+
+  /**
+   * Visible label for the create-new-option row. Pass a translated string to localize it; `{text}` is interpolated.
+   * @defaultValue 'Add "{text}"'
+   */
+  @Prop() createOptionLabel = 'Add "{text}"';
+
+  /**
+   * Accessible label for the create-new-option row. Pass a translated string to localize it; `{text}` is interpolated.
+   * @defaultValue 'Create new tag: {text}'
+   */
+  @Prop() createOptionAriaLabel = 'Create new tag: {text}';
+
+  /**
+   * Screen-reader announcement when an item is removed. Pass a translated string to localize it; `{item}` is interpolated.
    * @defaultValue '{item} removed'
    */
   @Prop() itemRemovedLabel = '{item} removed';
 
   /**
-   * Singular form of the selected-count trigger text. `{count}` is interpolated.
+   * Accessible label for the remove button on each selected-item pill. Pass a translated string to localize it; defaults to English.
+   * @defaultValue 'Remove'
+   */
+  @Prop() pillRemoveLabel = 'Remove';
+
+  /**
+   * Singular form of the selected-count trigger text. Pass a translated string to localize it; `{count}` is interpolated.
    * @defaultValue '{count} item'
    */
   @Prop() selectedCountLabelOne = '{count} item';
 
   /**
-   * Plural form of the selected-count trigger text. Used for English and as the
-   * fallback for any locale whose selected plural category isn't supplied via
-   * `selectedCountLabels`. `{count}` is interpolated.
+   * Plural (and fallback) form of the selected-count trigger text — used for English and any locale whose selected plural category isn't supplied via `selectedCountLabels`. Pass a translated string to localize it; `{count}` is interpolated.
    * @defaultValue '{count} items'
    */
   @Prop() selectedCountLabelOther = '{count} items';
 
   /**
-   * Full CLDR plural forms for the selected-count trigger text, for locales with
-   * more than the English `one`/`other` categories (e.g. Polish `few`/`many`,
-   * Arabic `zero`/`two`). Accepts an object property or a JSON string attribute,
-   * keyed by CLDR category — `{ one, other, few, many, two, zero }`. Any form
-   * omitted here falls back to `selectedCountLabelOne`/`selectedCountLabelOther`,
-   * then to the `other` form. `{count}` is interpolated.
+   * Full CLDR plural forms for the selected-count trigger text, for locales with more than the English `one`/`other` categories (e.g. Polish `few`/`many`, Arabic `zero`/`two`). Accepts an object property or a JSON string attribute keyed by CLDR category — `{ one, other, few, many, two, zero }`. Any form omitted here falls back to `selectedCountLabelOne`/`selectedCountLabelOther`. `{count}` is interpolated.
    * @defaultValue undefined
    */
   @Prop() selectedCountLabels?: PluralForms | string;
@@ -1198,7 +1220,7 @@ export class PdsMultiselect {
         role="option"
         aria-selected={isSelected ? 'true' : 'false'}
         aria-disabled={isDisabled || isCreateDisabled ? 'true' : undefined}
-        aria-label={isCreateOption ? `Create new tag: ${option.text}` : undefined}
+        aria-label={isCreateOption ? formatMessage(this.createOptionAriaLabel, { text: option.text }) : undefined}
         data-index={index}
         onMouseDown={this.handleOptionMouseDown(option)}
         onMouseEnter={this.handleOptionMouseEnter(index, option)}
@@ -1206,7 +1228,7 @@ export class PdsMultiselect {
         {isCreateOption ? (
           <pds-box class="pds-multiselect__create-option" align-items="center" gap="xs">
             <pds-icon name="add" size="small" />
-            <pds-text>Add "{option.text}"</pds-text>
+            <pds-text>{formatMessage(this.createOptionLabel, { text: option.text })}</pds-text>
           </pds-box>
         ) : (
           <pds-checkbox
@@ -1281,7 +1303,7 @@ export class PdsMultiselect {
           class="pds-multiselect__listbox"
           role="listbox"
           aria-multiselectable="true"
-          aria-label={this.label || 'Options'}
+          aria-label={this.label || this.optionsLabel}
           id={`${this.componentId}-listbox`}
           ref={el => (this.listboxEl = el)}
           style={{ maxHeight: this.maxHeight }}
@@ -1302,7 +1324,7 @@ export class PdsMultiselect {
               {hasSlottedEmpty ? (
                 <slot name="empty" />
               ) : (
-                <span>No options found</span>
+                <span>{this.noOptionsFoundLabel}</span>
               )}
             </li>
           )}
@@ -1362,7 +1384,7 @@ export class PdsMultiselect {
     if (!hasSelections) {
       return (
         <span class="pds-multiselect__trigger-text pds-multiselect__trigger-text--placeholder">
-          {this.placeholder}
+          {this.placeholder || 'Select...'}
         </span>
       );
     }
@@ -1381,6 +1403,7 @@ export class PdsMultiselect {
             variant={variant}
             size="sm"
             sentiment="neutral"
+            dismiss-label={this.pillRemoveLabel}
             onPdsTagCloseClick={this.handlePillRemove(item)}
           >{item.text}</pds-chip>
         ))}
@@ -1406,6 +1429,7 @@ export class PdsMultiselect {
             variant={variant}
             size="md"
             sentiment="neutral"
+            dismiss-label={this.pillRemoveLabel}
             onPdsTagCloseClick={this.handlePillRemove(item)}
           >{item.text}</pds-chip>
         ))}
@@ -1416,9 +1440,10 @@ export class PdsMultiselect {
   private getTriggerText(): string {
     const count = this.selectedItems.length;
     if (count === 0 || (this.selectedDisplay === 'pill' && this.pillPosition === 'below')) {
-      // An explicit empty `placeholder` is honored (renders no text); the prop
-      // defaults to 'Select...' so the un-configured case is unchanged.
-      return this.placeholder;
+      // Fall back to a non-empty string: the trigger's accessible name comes from
+      // this text, so an empty/undefined placeholder must never leave it nameless
+      // (WCAG 4.1.2). The prop is localizable; this last-resort default is not.
+      return this.placeholder || 'Select...';
     }
     return pluralize(this.el, count, this.resolveCountForms());
   }

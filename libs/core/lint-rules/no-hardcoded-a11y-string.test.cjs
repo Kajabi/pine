@@ -22,6 +22,10 @@ ruleTester.run('no-hardcoded-a11y-string', rule, {
     { code: 'const a = <span aria-label={pluralize(this.el, n, forms)} />;' },
     // interpolated template with NO words (pure id/handle) → dynamic, allowed
     { code: 'const a = <div aria-label={`${id}-listbox`} />;' },
+    // conditional whose branches are all dynamic (prop refs / undefined) → allowed
+    { code: 'const a = <li aria-label={isCreate ? this.createLabel : undefined} />;' },
+    // logical fallback to another prop, no literal → allowed
+    { code: 'const a = <ul aria-label={this.label || this.optionsLabel} />;' },
     // non-targeted attribute with a literal is fine
     { code: 'const a = <button type="button" role="status" part="dismiss" />;' },
     // decorative empty alt
@@ -49,6 +53,16 @@ ruleTester.run('no-hardcoded-a11y-string', rule, {
     {
       code: 'const a = <img alt="User avatar" title="Profile" />;',
       errors: [{ messageId: 'hardcoded' }, { messageId: 'hardcoded' }],
+    },
+    {
+      // literal hidden in a conditional branch is still caught
+      code: 'const a = <li aria-label={isCreate ? `Create new tag: ${text}` : undefined} />;',
+      errors: [{ messageId: 'interpolated' }],
+    },
+    {
+      // literal hidden in a logical fallback is still caught
+      code: 'const a = <ul aria-label={this.label || "Options"} />;',
+      errors: [{ messageId: 'hardcoded' }],
     },
   ],
 });
