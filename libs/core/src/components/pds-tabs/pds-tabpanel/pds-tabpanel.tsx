@@ -31,9 +31,18 @@ export class PdsTabpanel {
   /** @internal */
   @Prop({mutable: true}) selected = false;          // eslint-disable-line @stencil-community/strict-mutable
 
+  /**
+   * Keeps track of the parent `stretch` state so the active panel can fill height, this property is passed by parent component
+   */
+  /** @internal */
+  @Prop() stretch = false;
+
   render() {
     return (
-      <Host slot="tabpanels">
+      <Host
+        slot="tabpanels"
+        class={this.stretch && this.selected ? "pds-tabpanel--stretch-active" : undefined}
+      >
         <div
           role="tabpanel"
           id={this.parentComponentId + "__" + this.name + '-panel'}

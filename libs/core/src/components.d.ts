@@ -2194,6 +2194,10 @@ export namespace Components {
           * @default false
          */
         "selected": boolean;
+        /**
+          * @default false
+         */
+        "stretch": boolean;
         "variant": string;
     }
     interface PdsTabs {
@@ -2206,6 +2210,16 @@ export namespace Components {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
+        /**
+          * Adds a divider rule beneath the tab list.
+          * @defaultValue false
+         */
+        "divider"?: boolean;
+        /**
+          * Stretches the component so the active tab panel fills the remaining height. Requires the component to have a constrained height (e.g. a flex parent).
+          * @defaultValue false
+         */
+        "stretch"?: boolean;
         /**
           * Sets the aria-label attached to the tablist element
          */
@@ -5488,6 +5502,10 @@ declare namespace LocalJSX {
           * @default false
          */
         "selected"?: boolean;
+        /**
+          * @default false
+         */
+        "stretch"?: boolean;
         "variant"?: string;
     }
     interface PdsTabs {
@@ -5500,6 +5518,16 @@ declare namespace LocalJSX {
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
+        /**
+          * Adds a divider rule beneath the tab list.
+          * @defaultValue false
+         */
+        "divider"?: boolean;
+        /**
+          * Stretches the component so the active tab panel fills the remaining height. Requires the component to have a constrained height (e.g. a flex parent).
+          * @defaultValue false
+         */
+        "stretch"?: boolean;
         /**
           * Sets the aria-label attached to the tablist element
          */
@@ -6054,6 +6082,14 @@ declare namespace LocalJSX {
         "variant": 'inline' | 'plain';
         "fontSize": 'sm' | 'md' | 'lg';
         "href": string;
+        "turbo": string;
+        "turboFrame": string;
+        "turboAction": 'advance' | 'replace';
+        "turboMethod": 'get' | 'post' | 'put' | 'patch' | 'delete';
+        "turboConfirm": string;
+        "turboStream": string;
+        "turboPrefetch": string;
+        "turboPreload": string;
     }
     interface PdsLoaderAttributes {
         "isLoading": boolean;
@@ -6256,11 +6292,14 @@ declare namespace LocalJSX {
         "parentComponentId": string;
         "variant": string;
         "selected": boolean;
+        "stretch": boolean;
     }
     interface PdsTabsAttributes {
         "tablistLabel": string;
         "componentId": string;
         "variant": 'primary' | 'availability' | 'filter' | 'pill';
+        "divider": boolean;
+        "stretch": boolean;
         "activeTabName": string;
         "activeTabIndex": number;
     }

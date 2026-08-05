@@ -17,6 +17,24 @@
   gap: var(--pine-dimension-md);
 }
 
+// Optional divider rule beneath the tab list.
+:host(.pds-tabs--divider) .pds-tabs__tablist {
+  border-block-end: var(--pine-border-width-thin) solid var(--pine-color-border-subtle);
+}
+
+// Stretch: make the component a flex column so the active tab panel fills the
+// remaining height (the tab list stays fixed at the top). The active
+// `pds-tabpanel` opts into `flex: 1` via `.pds-tabpanel--stretch-active`.
+:host(.pds-tabs--stretch) {
+  block-size: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+:host(.pds-tabs--stretch) .pds-tabs__tablist {
+  flex: 0 0 auto;
+}
+
 :host(.pds-tabs--availability) .pds-tabs__tablist {
   gap: var(--pine-dimension-xs);
 }

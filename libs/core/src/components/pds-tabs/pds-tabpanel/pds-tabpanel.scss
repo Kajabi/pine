@@ -2,6 +2,17 @@
   display: block;
 }
 
+// When the parent `pds-tabs` has `stretch`, the active panel fills the height
+// the tabs column hands it (the host is a flex item of that column).
+:host(.pds-tabpanel--stretch-active) {
+  flex: 1 1 auto;
+  min-block-size: 0;
+}
+
+:host(.pds-tabpanel--stretch-active) .pds-tabpanel.is-active {
+  block-size: 100%;
+}
+
 .pds-tabpanel {
   display: none;
   margin-top: var(--tabs-dimension-panel-margin-top);
