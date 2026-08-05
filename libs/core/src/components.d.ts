@@ -5,7 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { BoxColumnType, BoxShadowSizeType, BoxSpacingType } from "./utils/types";
+import { BoxColumnType, BoxShadowSizeType, BoxSpacingType, TextSizeType } from "./utils/types";
 import { Event } from "@stencil/core";
 import { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 import { ChipSentimentType, ChipSizeType, ChipVariantType, PlacementType } from "./utils/types";
@@ -17,7 +17,7 @@ import { PdsPopoverEventDetail } from "./components/pds-popover/popover-interfac
 import { RadioGroupChangeEventDetail } from "./components/pds-radio-group/radio-group-interface";
 import { SortableEvent } from "sortablejs";
 import { TextareaChangeEventDetail, TextareaInputEventDetail } from "./components/pds-textarea/textarea-interface";
-export { BoxColumnType, BoxShadowSizeType, BoxSpacingType } from "./utils/types";
+export { BoxColumnType, BoxShadowSizeType, BoxSpacingType, TextSizeType } from "./utils/types";
 export { Event } from "@stencil/core";
 export { CheckboxChangeEventDetail } from "./components/pds-checkbox/checkbox-interface";
 export { ChipSentimentType, ChipSizeType, ChipVariantType, PlacementType } from "./utils/types";
@@ -86,6 +86,10 @@ export namespace Components {
          */
         "componentId": string;
         /**
+          * Accessible label for the dismiss button. Overrides the localized default (`pds-alert.dismiss` via PineI18n) for this instance only.
+         */
+        "dismissLabel"?: string;
+        /**
           * If true, shows the dismiss button. If false, the dismiss button is hidden.
           * @defaultValue false
          */
@@ -150,6 +154,10 @@ export namespace Components {
   | 'sm' // 32px
   | 'xs' // 24px
   | string;
+        /**
+          * Accessible label for the dropdown trigger button. Overrides the localized default (`pds-avatar.trigger` via PineI18n) for this instance only.
+         */
+        "triggerLabel"?: string;
         /**
           * Determines the variant of avatar. Changes appearance accordingly.
           * @defaultValue customer
@@ -1553,8 +1561,7 @@ export namespace Components {
          */
         "pillPosition": 'inline' | 'below';
         /**
-          * Placeholder text for the input field.
-          * @default 'Select...'
+          * Placeholder text for the input field. When unset, falls back to the localized default (`pds-multiselect.placeholder` via PineI18n, "Select...").
          */
         "placeholder"?: string;
         /**
@@ -1563,10 +1570,9 @@ export namespace Components {
          */
         "required": boolean;
         /**
-          * Placeholder text for the search input inside the dropdown panel.
-          * @default 'Find...'
+          * Placeholder text for the search input inside the dropdown panel. When unset, falls back to the localized default (`pds-multiselect.searchPlaceholder` via PineI18n, "Find...").
          */
-        "searchPlaceholder": string;
+        "searchPlaceholder"?: string;
         /**
           * Display mode for selected items outside the dropdown panel. `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders selected items as dismissible pds-chip tags.
           * @default 'count'
@@ -2135,19 +2141,7 @@ export namespace Components {
         /**
           * Sets the font size.
          */
-        "size"?: | '2xl'
-    | 'xl'
-    | 'lg'
-    | 'md'
-    | 'sm'
-    | 'xs'
-    | '2xs'
-    | 'h1'
-    | 'h2'
-    | 'h3'
-    | 'h4'
-    | 'h5'
-    | 'h6';
+        "size"?: TextSizeType;
         /**
           * Determines what semantic text tag to render.
           * @default 'p'
@@ -2264,6 +2258,10 @@ export namespace Components {
          */
         "componentId": string;
         "dismiss": () => Promise<void>;
+        /**
+          * Accessible label for the dismiss button. Overrides the localized default (`pds-toast.dismiss` via PineI18n) for this instance only.
+         */
+        "dismissLabel"?: string;
         /**
           * Whether the toast can be dismissed manually via the close button. Note: This only controls manual dismissal. Auto-dismissal via duration still applies.
           * @default true
@@ -3166,6 +3164,10 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
+          * Accessible label for the dismiss button. Overrides the localized default (`pds-alert.dismiss` via PineI18n) for this instance only.
+         */
+        "dismissLabel"?: string;
+        /**
           * If true, shows the dismiss button. If false, the dismiss button is hidden.
           * @defaultValue false
          */
@@ -3234,6 +3236,10 @@ declare namespace LocalJSX {
   | 'sm' // 32px
   | 'xs' // 24px
   | string;
+        /**
+          * Accessible label for the dropdown trigger button. Overrides the localized default (`pds-avatar.trigger` via PineI18n) for this instance only.
+         */
+        "triggerLabel"?: string;
         /**
           * Determines the variant of avatar. Changes appearance accordingly.
           * @defaultValue customer
@@ -4707,8 +4713,7 @@ declare namespace LocalJSX {
          */
         "pillPosition"?: 'inline' | 'below';
         /**
-          * Placeholder text for the input field.
-          * @default 'Select...'
+          * Placeholder text for the input field. When unset, falls back to the localized default (`pds-multiselect.placeholder` via PineI18n, "Select...").
          */
         "placeholder"?: string;
         /**
@@ -4717,8 +4722,7 @@ declare namespace LocalJSX {
          */
         "required"?: boolean;
         /**
-          * Placeholder text for the search input inside the dropdown panel.
-          * @default 'Find...'
+          * Placeholder text for the search input inside the dropdown panel. When unset, falls back to the localized default (`pds-multiselect.searchPlaceholder` via PineI18n, "Find...").
          */
         "searchPlaceholder"?: string;
         /**
@@ -5329,19 +5333,7 @@ declare namespace LocalJSX {
         /**
           * Sets the font size.
          */
-        "size"?: | '2xl'
-    | 'xl'
-    | 'lg'
-    | 'md'
-    | 'sm'
-    | 'xs'
-    | '2xs'
-    | 'h1'
-    | 'h2'
-    | 'h3'
-    | 'h4'
-    | 'h5'
-    | 'h6';
+        "size"?: TextSizeType;
         /**
           * Determines what semantic text tag to render.
           * @default 'p'
@@ -5478,6 +5470,10 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
+          * Accessible label for the dismiss button. Overrides the localized default (`pds-toast.dismiss` via PineI18n) for this instance only.
+         */
+        "dismissLabel"?: string;
+        /**
           * Whether the toast can be dismissed manually via the close button. Note: This only controls manual dismissal. Auto-dismissal via duration still applies.
           * @default true
          */
@@ -5555,6 +5551,7 @@ declare namespace LocalJSX {
         "dismissible": boolean;
         "hideIcon": boolean;
         "variant": 'default' | 'danger' | 'info' | 'success' | 'warning';
+        "dismissLabel": string;
     }
     interface PdsAvatarAttributes {
         "alt": string | null;
@@ -5570,6 +5567,7 @@ declare namespace LocalJSX {
   | 'xs' // 24px
   | string;
         "variant": 'customer' | 'admin';
+        "triggerLabel": string;
     }
     interface PdsBoxAttributes {
         "alignItems": `start` | `center` | `end` | `baseline` | `stretch`;
@@ -6054,19 +6052,7 @@ declare namespace LocalJSX {
         "decoration": 'strikethrough' | 'underline-dotted';
         "gutter": '2xl' | 'xl' | 'lg' | 'md' | 'sm' | 'xs' | '2xs';
         "italic": boolean;
-        "size": | '2xl'
-    | 'xl'
-    | 'lg'
-    | 'md'
-    | 'sm'
-    | 'xs'
-    | '2xs'
-    | 'h1'
-    | 'h2'
-    | 'h3'
-    | 'h4'
-    | 'h5'
-    | 'h6';
+        "size": TextSizeType;
         "weight": | 'extra-light'
     | 'light'
     | 'regular'
@@ -6112,6 +6098,7 @@ declare namespace LocalJSX {
         "duration": number;
         "icon": string;
         "type": 'default' | 'danger' | 'loading';
+        "dismissLabel": string;
     }
     interface PdsTooltipAttributes {
         "content": string;

@@ -1,5 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsTextarea } from '../pds-textarea';
+import { PineI18n } from '../../../i18n';
 import { danger } from '@pine-ds/icons/icons';
 
 describe('pds-textarea', () => {
@@ -1049,6 +1050,39 @@ it('should set focus on the input element when setFocus is called', async() => {
       // Disabled state should apply (CSS selector excludes disabled)
       const textarea = root?.shadowRoot?.querySelector('textarea');
       expect(textarea?.hasAttribute('disabled')).toBe(true);
+    });
+  });
+
+  describe('i18n (PineI18n pass-through)', () => {
+    afterEach(() => {
+      PineI18n.reset();
+    });
+
+    const counterLabelOf = (page: { root: HTMLElement }) =>
+      page.root.shadowRoot
+        .querySelector('.pds-textarea__character-counter')
+        ?.getAttribute('aria-label');
+
+    it('renders the char-counter aria-label via PineI18n with {current}/{max} interpolation', async () => {
+      const page = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="ta-i18n" label="Bio" max-length="150"></pds-textarea>`,
+      });
+      expect(counterLabelOf(page)).toBe('0 of 150 characters');
+    });
+
+    it('re-renders the char-counter label when the active locale catalog changes', async () => {
+      const page = await newSpecPage({
+        components: [PdsTextarea],
+        html: `<pds-textarea component-id="ta-i18n" label="Bio" max-length="150"></pds-textarea>`,
+      });
+      expect(counterLabelOf(page)).toBe('0 of 150 characters');
+
+      PineI18n.set('es', { 'pds-textarea.charCount': '{current} de {max} caracteres' });
+      PineI18n.setLocale('es');
+      await page.waitForChanges();
+
+      expect(counterLabelOf(page)).toBe('0 de 150 caracteres');
     });
   });
 });

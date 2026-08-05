@@ -1,5 +1,6 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsAvatar } from '../pds-avatar';
+import { PineI18n } from '../../../i18n';
 
 import { checkCircleFilled, userFilled } from '@pine-ds/icons/icons';
 
@@ -236,6 +237,45 @@ describe('pds-avatar', () => {
         </mock:shadow-root>
       </pds-avatar>
     `);
+  });
+
+  describe('i18n (PineI18n pass-through)', () => {
+    afterEach(() => {
+      PineI18n.reset();
+    });
+
+    const triggerLabelOf = (page: { root: HTMLElement }) =>
+      page.root.shadowRoot.querySelector('.pds-avatar__button')?.getAttribute('aria-label');
+
+    it('uses the localized default aria-label on the dropdown trigger', async () => {
+      const page = await newSpecPage({
+        components: [PdsAvatar],
+        html: `<pds-avatar dropdown="true"></pds-avatar>`,
+      });
+      expect(triggerLabelOf(page)).toBe('Avatar dropdown trigger');
+    });
+
+    it('lets a per-instance trigger-label prop override the default', async () => {
+      const page = await newSpecPage({
+        components: [PdsAvatar],
+        html: `<pds-avatar dropdown="true" trigger-label="Open account menu"></pds-avatar>`,
+      });
+      expect(triggerLabelOf(page)).toBe('Open account menu');
+    });
+
+    it('re-renders the trigger label when the active locale catalog changes', async () => {
+      const page = await newSpecPage({
+        components: [PdsAvatar],
+        html: `<pds-avatar dropdown="true"></pds-avatar>`,
+      });
+      expect(triggerLabelOf(page)).toBe('Avatar dropdown trigger');
+
+      PineI18n.set('es', { 'pds-avatar.trigger': 'Menú de la cuenta' });
+      PineI18n.setLocale('es');
+      await page.waitForChanges();
+
+      expect(triggerLabelOf(page)).toBe('Menú de la cuenta');
+    });
   });
 
 });

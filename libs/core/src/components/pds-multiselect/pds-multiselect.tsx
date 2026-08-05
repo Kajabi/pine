@@ -3,6 +3,7 @@ import { computePosition, flip, offset, shift, size, autoUpdate } from '@floatin
 import { debounceEvent } from '@utils/utils';
 import { isSpecTest, messageId, assignDescription } from '../../utils/form';
 import { danger, enlarge } from '@pine-ds/icons/icons';
+import { PineI18n } from '../../i18n';
 import type {
   MultiselectOption,
   MultiselectChangeEventDetail,
@@ -53,15 +54,17 @@ export class PdsMultiselect {
   @Prop() label?: string;
 
   /**
-   * Placeholder text for the input field.
+   * Placeholder text for the input field. When unset, falls back to the
+   * localized default (`pds-multiselect.placeholder` via PineI18n, "Select...").
    */
-  @Prop() placeholder?: string = 'Select...';
+  @Prop() placeholder?: string;
 
   /**
-   * Placeholder text for the search input inside the dropdown panel.
-   * @default 'Find...'
+   * Placeholder text for the search input inside the dropdown panel. When unset,
+   * falls back to the localized default (`pds-multiselect.searchPlaceholder` via
+   * PineI18n, "Find...").
    */
-  @Prop() searchPlaceholder: string = 'Find...';
+  @Prop() searchPlaceholder?: string;
 
   /**
    * Whether to close the panel after an option is selected.
@@ -219,6 +222,12 @@ export class PdsMultiselect {
   @State() searchQuery: string = '';
   @State() highlightedIndex: number = -1;
   @State() internalOptions: MultiselectOption[] = [];
+
+  // Bumped when the active locale/catalog changes so the component re-renders
+  // and re-resolves its PineI18n strings.
+  @State() private i18nVersion = 0;
+
+  private unsubscribeI18n?: () => void;
   @State() selectedItems: MultiselectOption[] = [];
   @State() currentPage: number = 1;
   @State() hasMore: boolean = false;
@@ -274,6 +283,9 @@ export class PdsMultiselect {
     if (this.el.attachInternals && !this.internals) {
       this.internals = this.el.attachInternals();
     }
+    this.unsubscribeI18n = PineI18n.subscribe(() => {
+      this.i18nVersion++;
+    });
   }
 
   componentWillLoad() {
@@ -318,6 +330,7 @@ export class PdsMultiselect {
     this.observer?.disconnect();
     this.cleanupAutoUpdate?.();
     this.clearAsyncFetchState();
+    this.unsubscribeI18n?.();
   }
 
   @Watch('debounce')
@@ -1211,9 +1224,9 @@ export class PdsMultiselect {
             ref={el => (this.searchInputEl = el)}
             type="text"
             class="pds-multiselect__search-input"
-            placeholder={this.searchPlaceholder}
+            placeholder={this.searchPlaceholder ?? PineI18n.get('pds-multiselect.searchPlaceholder')}
             value={this.searchQuery}
-            aria-label="Search options"
+            aria-label={PineI18n.get('pds-multiselect.searchOptions')}
             aria-controls={`${this.componentId}-listbox`}
             aria-activedescendant={this.highlightedIndex >= 0 ? `${this.componentId}-option-${this.highlightedIndex}` : undefined}
             role="combobox"
@@ -1300,7 +1313,7 @@ export class PdsMultiselect {
     this.pdsMultiselectChange.emit({ values: this.value, items: this.selectedItems });
     // Clear first so screen readers re-announce even when the same item is removed twice
     this.removalAnnouncement = '';
-    queueMicrotask(() => { this.removalAnnouncement = `${item.text} removed`; });
+    queueMicrotask(() => { this.removalAnnouncement = PineI18n.get('pds-multiselect.itemRemoved', { item: item.text }); });
     this.isClosingViaSelection = true;
     if (this.isOpen) {
       this.searchInputEl?.focus();
@@ -1315,7 +1328,7 @@ export class PdsMultiselect {
     if (!hasSelections) {
       return (
         <span class="pds-multiselect__trigger-text pds-multiselect__trigger-text--placeholder">
-          {this.placeholder || 'Select...'}
+          {this.placeholder || PineI18n.get('pds-multiselect.placeholder')}
         </span>
       );
     }
@@ -1325,7 +1338,7 @@ export class PdsMultiselect {
     return (
       <div
         class="pds-multiselect__pill-list pds-multiselect__pill-list--inline"
-        aria-label="Selected items"
+        aria-label={PineI18n.get('pds-multiselect.selectedItems')}
       >
         {visibleItems.map(item => (
           <pds-chip
@@ -1350,7 +1363,7 @@ export class PdsMultiselect {
     return (
       <div
         class="pds-multiselect__pill-list pds-multiselect__pill-list--below"
-        aria-label="Selected items"
+        aria-label={PineI18n.get('pds-multiselect.selectedItems')}
       >
         {this.selectedItems.map(item => (
           <pds-chip
@@ -1369,9 +1382,9 @@ export class PdsMultiselect {
   private getTriggerText(): string {
     const count = this.selectedItems.length;
     if (count === 0 || (this.selectedDisplay === 'pill' && this.pillPosition === 'below')) {
-      return this.placeholder || 'Select...';
+      return this.placeholder || PineI18n.get('pds-multiselect.placeholder');
     }
-    return `${count} item${count === 1 ? '' : 's'}`;
+    return PineI18n.plural('pds-multiselect.itemCount', count);
   }
 
   render() {
