@@ -61,3 +61,29 @@ Availability.args = {
   variant: 'availability',
   tablistLabel: "Foo",
 }
+
+export const Divider = () => html`
+<pds-tabs active-tab-name="Dollop" component-id="divider" tablist-label="Foo" variant="primary" divider>
+  <pds-tab name="Sturdy">Sturdy</pds-tab>
+  <pds-tab name="Dollop">Dollop</pds-tab>
+  <pds-tab name="Waffle">Waffle</pds-tab>
+  <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
+  <pds-tabpanel name="Dollop">Content Dollop</pds-tabpanel>
+  <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+</pds-tabs>
+`;
+
+export const Stretch = () => html`
+<div style="block-size: 240px; border: var(--pine-border-width-thin) solid var(--pine-color-border-subtle); display: flex;">
+  <pds-tabs active-tab-name="Dollop" component-id="stretch" tablist-label="Foo" variant="primary" divider stretch>
+    <pds-tab name="Sturdy">Sturdy</pds-tab>
+    <pds-tab name="Dollop">Dollop</pds-tab>
+    <pds-tab name="Waffle">Waffle</pds-tab>
+    <pds-tabpanel name="Sturdy">Content Sturdy</pds-tabpanel>
+    <pds-tabpanel name="Dollop">
+      <div style="align-items: end; background-color: var(--pine-color-background-muted); block-size: 100%; display: flex;">Composer pinned to the bottom</div>
+    </pds-tabpanel>
+    <pds-tabpanel name="Waffle">Content Waffle</pds-tabpanel>
+  </pds-tabs>
+</div>
+`;
