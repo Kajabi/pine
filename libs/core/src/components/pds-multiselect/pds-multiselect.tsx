@@ -3,7 +3,7 @@ import { computePosition, flip, offset, shift, size, autoUpdate } from '@floatin
 import { debounceEvent } from '@utils/utils';
 import { isSpecTest, messageId, assignDescription } from '../../utils/form';
 import { danger, enlarge } from '@pine-ds/icons/icons';
-import { PineI18n } from '../../i18n';
+import { formatMessage, pluralize } from '../../i18n';
 import type {
   MultiselectOption,
   MultiselectChangeEventDetail,
@@ -54,17 +54,48 @@ export class PdsMultiselect {
   @Prop() label?: string;
 
   /**
-   * Placeholder text for the input field. When unset, falls back to the
-   * localized default (`pds-multiselect.placeholder` via PineI18n, "Select...").
+   * Placeholder text for the input field. Pass a translated string to localize.
+   * @defaultValue 'Select...'
    */
-  @Prop() placeholder?: string;
+  @Prop() placeholder = 'Select...';
 
   /**
-   * Placeholder text for the search input inside the dropdown panel. When unset,
-   * falls back to the localized default (`pds-multiselect.searchPlaceholder` via
-   * PineI18n, "Find...").
+   * Placeholder text for the search input inside the dropdown panel. Pass a
+   * translated string to localize.
+   * @defaultValue 'Find...'
    */
-  @Prop() searchPlaceholder?: string;
+  @Prop() searchPlaceholder = 'Find...';
+
+  /**
+   * Accessible label for the search input. Pass a translated string to localize.
+   * @defaultValue 'Search options'
+   */
+  @Prop() searchOptionsLabel = 'Search options';
+
+  /**
+   * Accessible label for the selected-items region. Pass a translated string to localize.
+   * @defaultValue 'Selected items'
+   */
+  @Prop() selectedItemsLabel = 'Selected items';
+
+  /**
+   * Screen-reader announcement when an item is removed. `{item}` is interpolated.
+   * @defaultValue '{item} removed'
+   */
+  @Prop() itemRemovedLabel = '{item} removed';
+
+  /**
+   * Singular form of the selected-count trigger text. `{count}` is interpolated.
+   * @defaultValue '{count} item'
+   */
+  @Prop() selectedCountLabelOne = '{count} item';
+
+  /**
+   * Plural form of the selected-count trigger text (also the fallback for
+   * locales with additional plural categories). `{count}` is interpolated.
+   * @defaultValue '{count} items'
+   */
+  @Prop() selectedCountLabelOther = '{count} items';
 
   /**
    * Whether to close the panel after an option is selected.
@@ -222,12 +253,6 @@ export class PdsMultiselect {
   @State() searchQuery: string = '';
   @State() highlightedIndex: number = -1;
   @State() internalOptions: MultiselectOption[] = [];
-
-  // Bumped when the active locale/catalog changes so the component re-renders
-  // and re-resolves its PineI18n strings.
-  @State() private i18nVersion = 0;
-
-  private unsubscribeI18n?: () => void;
   @State() selectedItems: MultiselectOption[] = [];
   @State() currentPage: number = 1;
   @State() hasMore: boolean = false;
@@ -283,9 +308,6 @@ export class PdsMultiselect {
     if (this.el.attachInternals && !this.internals) {
       this.internals = this.el.attachInternals();
     }
-    this.unsubscribeI18n = PineI18n.subscribe(() => {
-      this.i18nVersion++;
-    });
   }
 
   componentWillLoad() {
@@ -330,7 +352,6 @@ export class PdsMultiselect {
     this.observer?.disconnect();
     this.cleanupAutoUpdate?.();
     this.clearAsyncFetchState();
-    this.unsubscribeI18n?.();
   }
 
   @Watch('debounce')
@@ -1224,9 +1245,9 @@ export class PdsMultiselect {
             ref={el => (this.searchInputEl = el)}
             type="text"
             class="pds-multiselect__search-input"
-            placeholder={this.searchPlaceholder ?? PineI18n.get('pds-multiselect.searchPlaceholder')}
+            placeholder={this.searchPlaceholder}
             value={this.searchQuery}
-            aria-label={PineI18n.get('pds-multiselect.searchOptions')}
+            aria-label={this.searchOptionsLabel}
             aria-controls={`${this.componentId}-listbox`}
             aria-activedescendant={this.highlightedIndex >= 0 ? `${this.componentId}-option-${this.highlightedIndex}` : undefined}
             role="combobox"
@@ -1313,7 +1334,7 @@ export class PdsMultiselect {
     this.pdsMultiselectChange.emit({ values: this.value, items: this.selectedItems });
     // Clear first so screen readers re-announce even when the same item is removed twice
     this.removalAnnouncement = '';
-    queueMicrotask(() => { this.removalAnnouncement = PineI18n.get('pds-multiselect.itemRemoved', { item: item.text }); });
+    queueMicrotask(() => { this.removalAnnouncement = formatMessage(this.itemRemovedLabel, { item: item.text }); });
     this.isClosingViaSelection = true;
     if (this.isOpen) {
       this.searchInputEl?.focus();
@@ -1328,7 +1349,7 @@ export class PdsMultiselect {
     if (!hasSelections) {
       return (
         <span class="pds-multiselect__trigger-text pds-multiselect__trigger-text--placeholder">
-          {this.placeholder || PineI18n.get('pds-multiselect.placeholder')}
+          {this.placeholder}
         </span>
       );
     }
@@ -1338,7 +1359,7 @@ export class PdsMultiselect {
     return (
       <div
         class="pds-multiselect__pill-list pds-multiselect__pill-list--inline"
-        aria-label={PineI18n.get('pds-multiselect.selectedItems')}
+        aria-label={this.selectedItemsLabel}
       >
         {visibleItems.map(item => (
           <pds-chip
@@ -1363,7 +1384,7 @@ export class PdsMultiselect {
     return (
       <div
         class="pds-multiselect__pill-list pds-multiselect__pill-list--below"
-        aria-label={PineI18n.get('pds-multiselect.selectedItems')}
+        aria-label={this.selectedItemsLabel}
       >
         {this.selectedItems.map(item => (
           <pds-chip
@@ -1382,9 +1403,12 @@ export class PdsMultiselect {
   private getTriggerText(): string {
     const count = this.selectedItems.length;
     if (count === 0 || (this.selectedDisplay === 'pill' && this.pillPosition === 'below')) {
-      return this.placeholder || PineI18n.get('pds-multiselect.placeholder');
+      return this.placeholder;
     }
-    return PineI18n.plural('pds-multiselect.itemCount', count);
+    return pluralize(this.el, count, {
+      one: this.selectedCountLabelOne,
+      other: this.selectedCountLabelOther,
+    });
   }
 
   render() {

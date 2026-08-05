@@ -5,7 +5,7 @@ import { debounceEvent } from '@utils/utils';
 import type { Attributes } from '@utils/attributes';
 import { inheritAttributes, inheritAriaAttributes } from '@utils/attributes';
 import { danger } from '@pine-ds/icons/icons';
-import { PineI18n } from '../../i18n';
+import { formatMessage } from '../../i18n';
 
 /**
  * @slot action - Content to be displayed in the label area, typically for help icons or links
@@ -174,11 +174,12 @@ export class PdsTextarea {
    */
   @State() hasAction = false;
 
-  // Bumped when the active locale/catalog changes so the component re-renders
-  // and re-resolves its PineI18n strings.
-  @State() private i18nVersion = 0;
-
-  private unsubscribeI18n?: () => void;
+  /**
+   * Template for the character-counter's accessible label. Pass a translated
+   * string to localize it; `{current}` and `{max}` are interpolated.
+   * @defaultValue '{current} of {max} characters'
+   */
+  @Prop() characterCountLabel = '{current} of {max} characters';
 
   @Watch('debounce')
   protected debounceChanged() {
@@ -319,9 +320,6 @@ export class PdsTextarea {
     if (this.el.attachInternals && !this.internals) {
       this.internals = this.el.attachInternals();
     }
-    this.unsubscribeI18n = PineI18n.subscribe(() => {
-      this.i18nVersion++;
-    });
   }
 
   disconnectedCallback() {
@@ -329,7 +327,6 @@ export class PdsTextarea {
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
-    this.unsubscribeI18n?.();
   }
 
   componentWillLoad() {
@@ -428,7 +425,7 @@ export class PdsTextarea {
         ref={(el) => this.characterCounter = el}
         role="status"
         aria-live="polite"
-        aria-label={PineI18n.get('pds-textarea.charCount', { current: currentLength, max: this.maxLength })}
+        aria-label={formatMessage(this.characterCountLabel, { current: currentLength, max: this.maxLength })}
       >
         {currentLength} / {this.maxLength}
       </div>

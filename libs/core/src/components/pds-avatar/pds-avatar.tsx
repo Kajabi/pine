@@ -1,6 +1,5 @@
-import { Component, Host, h, Prop, State } from '@stencil/core';
+import { Component, Host, h, Prop } from '@stencil/core';
 import { checkCircleFilled, userFilled } from '@pine-ds/icons/icons';
-import { PineI18n } from '../../i18n';
 
 /**
  * @part asset-wrapper
@@ -68,26 +67,11 @@ export class PdsAvatar {
   @Prop({ reflect: true }) variant?: 'customer' | 'admin' = 'customer';
 
   /**
-   * Accessible label for the dropdown trigger button. Overrides the localized
-   * default (`pds-avatar.trigger` via PineI18n) for this instance only.
+   * Accessible label for the dropdown trigger button. Pass a translated string
+   * to localize it; defaults to English.
+   * @defaultValue 'Avatar dropdown trigger'
    */
-  @Prop() triggerLabel?: string;
-
-  // Bumped when the active locale/catalog changes so the component re-renders
-  // and re-resolves its PineI18n strings.
-  @State() private i18nVersion = 0;
-
-  private unsubscribeI18n?: () => void;
-
-  connectedCallback() {
-    this.unsubscribeI18n = PineI18n.subscribe(() => {
-      this.i18nVersion++;
-    });
-  }
-
-  disconnectedCallback() {
-    this.unsubscribeI18n?.();
-  }
+  @Prop() triggerLabel = 'Avatar dropdown trigger';
 
   private avatarSize() {
     const sizes: { [key: string]: any } = {
@@ -123,7 +107,7 @@ export class PdsAvatar {
     return (
       this.dropdown
         ?
-        <button class="pds-avatar__button" type="button" part="button" aria-label={this.triggerLabel ?? PineI18n.get('pds-avatar.trigger')}>
+        <button class="pds-avatar__button" type="button" part="button" aria-label={this.triggerLabel}>
         {this.renderAssetWrapper()}
         </button>
         :

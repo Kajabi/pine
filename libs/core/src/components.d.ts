@@ -86,9 +86,10 @@ export namespace Components {
          */
         "componentId": string;
         /**
-          * Accessible label for the dismiss button. Overrides the localized default (`pds-alert.dismiss` via PineI18n) for this instance only.
+          * Accessible label for the dismiss button. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Dismiss alert'
          */
-        "dismissLabel"?: string;
+        "dismissLabel": string;
         /**
           * If true, shows the dismiss button. If false, the dismiss button is hidden.
           * @defaultValue false
@@ -155,9 +156,10 @@ export namespace Components {
   | 'xs' // 24px
   | string;
         /**
-          * Accessible label for the dropdown trigger button. Overrides the localized default (`pds-avatar.trigger` via PineI18n) for this instance only.
+          * Accessible label for the dropdown trigger button. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Avatar dropdown trigger'
          */
-        "triggerLabel"?: string;
+        "triggerLabel": string;
         /**
           * Determines the variant of avatar. Changes appearance accordingly.
           * @defaultValue customer
@@ -1516,6 +1518,11 @@ export namespace Components {
          */
         "invalid"?: boolean;
         /**
+          * Screen-reader announcement when an item is removed. `{item}` is interpolated.
+          * @defaultValue '{item} removed'
+         */
+        "itemRemovedLabel": string;
+        /**
           * Text to be displayed as the multiselect label.
          */
         "label"?: string;
@@ -1561,23 +1568,45 @@ export namespace Components {
          */
         "pillPosition": 'inline' | 'below';
         /**
-          * Placeholder text for the input field. When unset, falls back to the localized default (`pds-multiselect.placeholder` via PineI18n, "Select...").
+          * Placeholder text for the input field. Pass a translated string to localize.
+          * @defaultValue 'Select...'
          */
-        "placeholder"?: string;
+        "placeholder": string;
         /**
           * If true, the multiselect is required.
           * @default false
          */
         "required": boolean;
         /**
-          * Placeholder text for the search input inside the dropdown panel. When unset, falls back to the localized default (`pds-multiselect.searchPlaceholder` via PineI18n, "Find...").
+          * Accessible label for the search input. Pass a translated string to localize.
+          * @defaultValue 'Search options'
          */
-        "searchPlaceholder"?: string;
+        "searchOptionsLabel": string;
+        /**
+          * Placeholder text for the search input inside the dropdown panel. Pass a translated string to localize.
+          * @defaultValue 'Find...'
+         */
+        "searchPlaceholder": string;
+        /**
+          * Singular form of the selected-count trigger text. `{count}` is interpolated.
+          * @defaultValue '{count} item'
+         */
+        "selectedCountLabelOne": string;
+        /**
+          * Plural form of the selected-count trigger text (also the fallback for locales with additional plural categories). `{count}` is interpolated.
+          * @defaultValue '{count} items'
+         */
+        "selectedCountLabelOther": string;
         /**
           * Display mode for selected items outside the dropdown panel. `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders selected items as dismissible pds-chip tags.
           * @default 'count'
          */
         "selectedDisplay": 'count' | 'pill';
+        /**
+          * Accessible label for the selected-items region. Pass a translated string to localize.
+          * @defaultValue 'Selected items'
+         */
+        "selectedItemsLabel": string;
         /**
           * Sets focus on the trigger button.
          */
@@ -2178,6 +2207,11 @@ export namespace Components {
          */
         "autocomplete": string;
         /**
+          * Template for the character-counter's accessible label. Pass a translated string to localize it; `{current}` and `{max}` are interpolated.
+          * @defaultValue '{current} of {max} characters'
+         */
+        "characterCountLabel": string;
+        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
@@ -2259,9 +2293,10 @@ export namespace Components {
         "componentId": string;
         "dismiss": () => Promise<void>;
         /**
-          * Accessible label for the dismiss button. Overrides the localized default (`pds-toast.dismiss` via PineI18n) for this instance only.
+          * Accessible label for the dismiss button. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Dismiss message'
          */
-        "dismissLabel"?: string;
+        "dismissLabel": string;
         /**
           * Whether the toast can be dismissed manually via the close button. Note: This only controls manual dismissal. Auto-dismissal via duration still applies.
           * @default true
@@ -3164,7 +3199,8 @@ declare namespace LocalJSX {
          */
         "componentId"?: string;
         /**
-          * Accessible label for the dismiss button. Overrides the localized default (`pds-alert.dismiss` via PineI18n) for this instance only.
+          * Accessible label for the dismiss button. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Dismiss alert'
          */
         "dismissLabel"?: string;
         /**
@@ -3237,7 +3273,8 @@ declare namespace LocalJSX {
   | 'xs' // 24px
   | string;
         /**
-          * Accessible label for the dropdown trigger button. Overrides the localized default (`pds-avatar.trigger` via PineI18n) for this instance only.
+          * Accessible label for the dropdown trigger button. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Avatar dropdown trigger'
          */
         "triggerLabel"?: string;
         /**
@@ -4648,6 +4685,11 @@ declare namespace LocalJSX {
          */
         "invalid"?: boolean;
         /**
+          * Screen-reader announcement when an item is removed. `{item}` is interpolated.
+          * @defaultValue '{item} removed'
+         */
+        "itemRemovedLabel"?: string;
+        /**
           * Text to be displayed as the multiselect label.
          */
         "label"?: string;
@@ -4713,7 +4755,8 @@ declare namespace LocalJSX {
          */
         "pillPosition"?: 'inline' | 'below';
         /**
-          * Placeholder text for the input field. When unset, falls back to the localized default (`pds-multiselect.placeholder` via PineI18n, "Select...").
+          * Placeholder text for the input field. Pass a translated string to localize.
+          * @defaultValue 'Select...'
          */
         "placeholder"?: string;
         /**
@@ -4722,14 +4765,35 @@ declare namespace LocalJSX {
          */
         "required"?: boolean;
         /**
-          * Placeholder text for the search input inside the dropdown panel. When unset, falls back to the localized default (`pds-multiselect.searchPlaceholder` via PineI18n, "Find...").
+          * Accessible label for the search input. Pass a translated string to localize.
+          * @defaultValue 'Search options'
+         */
+        "searchOptionsLabel"?: string;
+        /**
+          * Placeholder text for the search input inside the dropdown panel. Pass a translated string to localize.
+          * @defaultValue 'Find...'
          */
         "searchPlaceholder"?: string;
+        /**
+          * Singular form of the selected-count trigger text. `{count}` is interpolated.
+          * @defaultValue '{count} item'
+         */
+        "selectedCountLabelOne"?: string;
+        /**
+          * Plural form of the selected-count trigger text (also the fallback for locales with additional plural categories). `{count}` is interpolated.
+          * @defaultValue '{count} items'
+         */
+        "selectedCountLabelOther"?: string;
         /**
           * Display mode for selected items outside the dropdown panel. `'count'` shows "N item(s)" text in the trigger (default). `'pill'` renders selected items as dismissible pds-chip tags.
           * @default 'count'
          */
         "selectedDisplay"?: 'count' | 'pill';
+        /**
+          * Accessible label for the selected-items region. Pass a translated string to localize.
+          * @defaultValue 'Selected items'
+         */
+        "selectedItemsLabel"?: string;
         /**
           * Width of the trigger button (and reference for dropdown positioning).
           * @default '100%'
@@ -5370,6 +5434,11 @@ declare namespace LocalJSX {
          */
         "autocomplete"?: string;
         /**
+          * Template for the character-counter's accessible label. Pass a translated string to localize it; `{current}` and `{max}` are interpolated.
+          * @defaultValue '{current} of {max} characters'
+         */
+        "characterCountLabel"?: string;
+        /**
           * A unique identifier used for the underlying component `id` attribute.
          */
         "componentId": string;
@@ -5470,7 +5539,8 @@ declare namespace LocalJSX {
          */
         "componentId": string;
         /**
-          * Accessible label for the dismiss button. Overrides the localized default (`pds-toast.dismiss` via PineI18n) for this instance only.
+          * Accessible label for the dismiss button. Pass a translated string to localize it; defaults to English.
+          * @defaultValue 'Dismiss message'
          */
         "dismissLabel"?: string;
         /**
@@ -5874,6 +5944,11 @@ declare namespace LocalJSX {
         "label": string;
         "placeholder": string;
         "searchPlaceholder": string;
+        "searchOptionsLabel": string;
+        "selectedItemsLabel": string;
+        "itemRemovedLabel": string;
+        "selectedCountLabelOne": string;
+        "selectedCountLabelOther": string;
         "closePanelOnSelect": boolean;
         "name": string;
         "disabled": boolean;
@@ -6091,6 +6166,7 @@ declare namespace LocalJSX {
         "maxLength": number;
         "highlight": boolean;
         "value": string | null;
+        "characterCountLabel": string;
     }
     interface PdsToastAttributes {
         "componentId": string;

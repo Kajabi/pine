@@ -1,6 +1,5 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsToast } from '../pds-toast';
-import { PineI18n } from '../../../i18n';
 
 describe('pds-toast', () => {
   it('renders', async () => {
@@ -319,15 +318,11 @@ describe('pds-toast', () => {
     expect(component.isVisible).toBe(true);
   });
 
-  describe('i18n (PineI18n pass-through)', () => {
-    afterEach(() => {
-      PineI18n.reset();
-    });
-
+  describe('i18n (dismissLabel prop)', () => {
     const dismissLabelOf = (page: { root: HTMLElement }) =>
       page.root.shadowRoot.querySelector('.pds-toast__button')?.getAttribute('aria-label');
 
-    it('uses the localized default aria-label on the dismiss button', async () => {
+    it('defaults the dismiss aria-label to English', async () => {
       const page = await newSpecPage({
         components: [PdsToast],
         html: `<pds-toast component-id="test-toast"></pds-toast>`,
@@ -335,25 +330,11 @@ describe('pds-toast', () => {
       expect(dismissLabelOf(page)).toBe('Dismiss message');
     });
 
-    it('lets a per-instance dismiss-label prop override the default', async () => {
+    it('uses a translated dismiss-label when provided', async () => {
       const page = await newSpecPage({
         components: [PdsToast],
-        html: `<pds-toast component-id="test-toast" dismiss-label="Close notification"></pds-toast>`,
+        html: `<pds-toast component-id="test-toast" dismiss-label="Descartar mensaje"></pds-toast>`,
       });
-      expect(dismissLabelOf(page)).toBe('Close notification');
-    });
-
-    it('re-renders the dismiss label when the active locale catalog changes', async () => {
-      const page = await newSpecPage({
-        components: [PdsToast],
-        html: `<pds-toast component-id="test-toast"></pds-toast>`,
-      });
-      expect(dismissLabelOf(page)).toBe('Dismiss message');
-
-      PineI18n.set('es', { 'pds-toast.dismiss': 'Descartar mensaje' });
-      PineI18n.setLocale('es');
-      await page.waitForChanges();
-
       expect(dismissLabelOf(page)).toBe('Descartar mensaje');
     });
   });

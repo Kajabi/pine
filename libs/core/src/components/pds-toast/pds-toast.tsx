@@ -1,5 +1,4 @@
 import { Component, Element, Event, EventEmitter, h, Host, Method, Prop, State, Watch } from '@stencil/core';
-import { PineI18n } from '../../i18n';
 
 /** Fallback when computed `--animation-duration` is unavailable (matches `--pine-motion-duration-slow`). */
 const TOAST_DISMISS_ANIMATION_MS = 300;
@@ -50,10 +49,11 @@ export class PdsToast {
   @Prop() type: 'default' | 'danger' | 'loading' = 'default';
 
   /**
-   * Accessible label for the dismiss button. Overrides the localized default
-   * (`pds-toast.dismiss` via PineI18n) for this instance only.
+   * Accessible label for the dismiss button. Pass a translated string to
+   * localize it; defaults to English.
+   * @defaultValue 'Dismiss message'
    */
-  @Prop() dismissLabel?: string;
+  @Prop() dismissLabel = 'Dismiss message';
 
   /**
    * Whether the toast is currently visible.
@@ -71,22 +71,10 @@ export class PdsToast {
    */
   private dismissTimer?: number;
 
-  // Bumped when the active locale/catalog changes so the component re-renders
-  // and re-resolves its PineI18n strings.
-  @State() private i18nVersion = 0;
-
-  private unsubscribeI18n?: () => void;
-
   /**
    * Event emitted when the toast is dismissed, either manually or automatically.
    */
   @Event() pdsToastDismissed: EventEmitter<{ componentId?: string }>;
-
-  connectedCallback() {
-    this.unsubscribeI18n = PineI18n.subscribe(() => {
-      this.i18nVersion++;
-    });
-  }
 
   componentDidLoad() {
     if (this.duration > 0) {
@@ -96,7 +84,6 @@ export class PdsToast {
 
   disconnectedCallback() {
     this.cleanup();
-    this.unsubscribeI18n?.();
   }
 
   @Watch('duration')
@@ -220,7 +207,7 @@ export class PdsToast {
               onClick={() => {
                 this.dismiss();
               }}
-              aria-label={this.dismissLabel ?? PineI18n.get('pds-toast.dismiss')}
+              aria-label={this.dismissLabel}
             >
               <pds-icon name="remove" />
             </button>

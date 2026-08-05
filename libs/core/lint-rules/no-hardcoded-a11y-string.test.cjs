@@ -14,12 +14,12 @@ void parser;
 
 ruleTester.run('no-hardcoded-a11y-string', rule, {
   valid: [
-    // routed through the registry
-    { code: 'const a = <button aria-label={PineI18n.get("pds-alert.dismiss")} />;' },
-    // prop with registry fallback
-    { code: 'const a = <button aria-label={this.dismissLabel ?? PineI18n.get("pds-toast.dismiss")} />;' },
-    // fully resolved via the plural helper
-    { code: 'const a = <span aria-label={PineI18n.plural("pds-multiselect.itemCount", n)} />;' },
+    // a prop reference (English-defaulted, consumer-overridable)
+    { code: 'const a = <button aria-label={this.dismissLabel} />;' },
+    // interpolated via the format helper
+    { code: 'const a = <div aria-label={formatMessage(this.charCountLabel, { current, max })} />;' },
+    // pluralized via the helper
+    { code: 'const a = <span aria-label={pluralize(this.el, n, forms)} />;' },
     // interpolated template with NO words (pure id/handle) → dynamic, allowed
     { code: 'const a = <div aria-label={`${id}-listbox`} />;' },
     // non-targeted attribute with a literal is fine

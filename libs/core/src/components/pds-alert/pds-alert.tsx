@@ -1,5 +1,4 @@
 import { Component, Host, h, Prop, Event, EventEmitter, Element, State } from '@stencil/core';
-import { PineI18n } from '../../i18n';
 
 /**
  * @slot actions - Slot for alert actions.
@@ -49,10 +48,11 @@ export class PdsAlert {
   @Prop() variant: 'default' | 'danger' | 'info' | 'success' | 'warning' = 'default';
 
   /**
-   * Accessible label for the dismiss button. Overrides the localized default
-   * (`pds-alert.dismiss` via PineI18n) for this instance only.
+   * Accessible label for the dismiss button. Pass a translated string to
+   * localize it; defaults to English.
+   * @defaultValue 'Dismiss alert'
    */
-  @Prop() dismissLabel?: string;
+  @Prop() dismissLabel = 'Dismiss alert';
 
   /**
    * Event emitted when the dismiss button is clicked.
@@ -61,25 +61,9 @@ export class PdsAlert {
 
   @State() hasActionsContent = false;
 
-  // Bumped when the active locale/catalog changes so the component re-renders
-  // and re-resolves its PineI18n strings.
-  @State() private i18nVersion = 0;
-
-  private unsubscribeI18n?: () => void;
-
   private handleCloseClick = () => {
     this.pdsAlertDismissClick.emit();
   };
-
-  connectedCallback() {
-    this.unsubscribeI18n = PineI18n.subscribe(() => {
-      this.i18nVersion++;
-    });
-  }
-
-  disconnectedCallback() {
-    this.unsubscribeI18n?.();
-  }
 
   componentWillRender() {
     // Check if the actions slot has any content.
@@ -165,7 +149,7 @@ export class PdsAlert {
             </pds-box>
 
             {this.dismissible && (
-              <button class="pds-alert__dismiss" type="button" part="dismiss" aria-label={this.dismissLabel ?? PineI18n.get('pds-alert.dismiss')} onClick={this.handleCloseClick}>
+              <button class="pds-alert__dismiss" type="button" part="dismiss" aria-label={this.dismissLabel} onClick={this.handleCloseClick}>
                 <pds-icon icon="remove" size="var(--pds-alert-icon-size)" aria-hidden="true" color="var(--pds-alert-color-dismiss)" />
               </button>
             )}

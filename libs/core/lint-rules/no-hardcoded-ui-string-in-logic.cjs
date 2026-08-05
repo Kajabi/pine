@@ -37,14 +37,15 @@ module.exports = {
     type: 'problem',
     docs: {
       description:
-        'Disallow hard-coded user-facing text in Pine component logic (this.* assignments / returns); route it through PineI18n.',
+        'Disallow hard-coded user-facing text in Pine component logic (this.* assignments / returns); drive it from a prop, interpolating with the i18n helpers.',
       recommended: false,
     },
     schema: [],
     messages: {
       logic:
         'Hard-coded UI text "{{value}}" in component logic is not localizable. ' +
-        'Route it through PineI18n.get(id[, vars]) / PineI18n.plural(id, count).',
+        'Drive it from an English-defaulted prop and interpolate with the i18n ' +
+        'formatMessage / pluralize helpers.',
     },
   },
 

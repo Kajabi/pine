@@ -5,10 +5,10 @@
  *
  * Flags hard-coded user-facing text on Pine components — the attributes that a
  * screen reader announces or a user reads but that a consumer cannot translate
- * unless the value flows through PineI18n (or a prop). A string LITERAL on one
- * of the target attributes is a finding; a JSX expression (prop, member, call,
- * conditional — e.g. `{this.dismissLabel ?? PineI18n.get('pds-alert.dismiss')}`)
- * is assumed localizable and passes.
+ * unless the value is a prop (English-defaulted) they can override. A string
+ * LITERAL on one of the target attributes is a finding; a JSX expression (a prop
+ * ref, or the i18n helpers — e.g. `{this.dismissLabel}` /
+ * `{formatMessage(this.charCountLabel, vars)}`) is assumed localizable and passes.
  *
  * Audit-first (mirrors sage-lint): run as a warning + burndown, flip to error in
  * CI once the backlog is drained. Purely syntactic — no type info required.
@@ -30,7 +30,7 @@ module.exports = {
     type: 'problem',
     docs: {
       description:
-        'Disallow hard-coded user-facing / a11y string literals on Pine components; route them through PineI18n or a prop so consumers can localize them.',
+        'Disallow hard-coded user-facing / a11y string literals on Pine components; expose them as a prop (English-defaulted) so consumers can localize them.',
       recommended: false,
     },
     schema: [
@@ -44,11 +44,12 @@ module.exports = {
     ],
     messages: {
       hardcoded:
-        'Hard-coded "{{attr}}" text "{{value}}" is not localizable. Route it through ' +
-        "PineI18n.get('pds-<component>.<key>') (with an optional prop override) so consumers can translate it.",
+        'Hard-coded "{{attr}}" text "{{value}}" is not localizable. Expose it as a ' +
+        'prop with an English default so consumers can pass a translation.',
       interpolated:
         'Interpolated "{{attr}}" text ("{{value}}") bakes English words into an a11y ' +
-        "attribute. Route it through PineI18n.get(id, vars) / PineI18n.plural(id, count) so the surrounding words are localizable.",
+        'attribute. Expose the template as a prop and interpolate with the i18n ' +
+        'formatMessage / pluralize helpers so the surrounding words are localizable.',
     },
   },
 

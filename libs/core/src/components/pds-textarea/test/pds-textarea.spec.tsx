@@ -1,6 +1,5 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsTextarea } from '../pds-textarea';
-import { PineI18n } from '../../../i18n';
 import { danger } from '@pine-ds/icons/icons';
 
 describe('pds-textarea', () => {
@@ -1053,17 +1052,13 @@ it('should set focus on the input element when setFocus is called', async() => {
     });
   });
 
-  describe('i18n (PineI18n pass-through)', () => {
-    afterEach(() => {
-      PineI18n.reset();
-    });
-
+  describe('i18n (characterCountLabel prop)', () => {
     const counterLabelOf = (page: { root: HTMLElement }) =>
       page.root.shadowRoot
         .querySelector('.pds-textarea__character-counter')
         ?.getAttribute('aria-label');
 
-    it('renders the char-counter aria-label via PineI18n with {current}/{max} interpolation', async () => {
+    it('interpolates {current}/{max} into the default English char-counter label', async () => {
       const page = await newSpecPage({
         components: [PdsTextarea],
         html: `<pds-textarea component-id="ta-i18n" label="Bio" max-length="150"></pds-textarea>`,
@@ -1071,17 +1066,11 @@ it('should set focus on the input element when setFocus is called', async() => {
       expect(counterLabelOf(page)).toBe('0 of 150 characters');
     });
 
-    it('re-renders the char-counter label when the active locale catalog changes', async () => {
+    it('interpolates into a translated character-count-label when provided', async () => {
       const page = await newSpecPage({
         components: [PdsTextarea],
-        html: `<pds-textarea component-id="ta-i18n" label="Bio" max-length="150"></pds-textarea>`,
+        html: `<pds-textarea component-id="ta-i18n" label="Bio" max-length="150" character-count-label="{current} de {max} caracteres"></pds-textarea>`,
       });
-      expect(counterLabelOf(page)).toBe('0 of 150 characters');
-
-      PineI18n.set('es', { 'pds-textarea.charCount': '{current} de {max} caracteres' });
-      PineI18n.setLocale('es');
-      await page.waitForChanges();
-
       expect(counterLabelOf(page)).toBe('0 de 150 caracteres');
     });
   });

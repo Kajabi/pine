@@ -1,6 +1,5 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsAvatar } from '../pds-avatar';
-import { PineI18n } from '../../../i18n';
 
 import { checkCircleFilled, userFilled } from '@pine-ds/icons/icons';
 
@@ -239,15 +238,11 @@ describe('pds-avatar', () => {
     `);
   });
 
-  describe('i18n (PineI18n pass-through)', () => {
-    afterEach(() => {
-      PineI18n.reset();
-    });
-
+  describe('i18n (triggerLabel prop)', () => {
     const triggerLabelOf = (page: { root: HTMLElement }) =>
       page.root.shadowRoot.querySelector('.pds-avatar__button')?.getAttribute('aria-label');
 
-    it('uses the localized default aria-label on the dropdown trigger', async () => {
+    it('defaults the dropdown-trigger aria-label to English', async () => {
       const page = await newSpecPage({
         components: [PdsAvatar],
         html: `<pds-avatar dropdown="true"></pds-avatar>`,
@@ -255,25 +250,11 @@ describe('pds-avatar', () => {
       expect(triggerLabelOf(page)).toBe('Avatar dropdown trigger');
     });
 
-    it('lets a per-instance trigger-label prop override the default', async () => {
+    it('uses a translated trigger-label when provided', async () => {
       const page = await newSpecPage({
         components: [PdsAvatar],
-        html: `<pds-avatar dropdown="true" trigger-label="Open account menu"></pds-avatar>`,
+        html: `<pds-avatar dropdown="true" trigger-label="Menú de la cuenta"></pds-avatar>`,
       });
-      expect(triggerLabelOf(page)).toBe('Open account menu');
-    });
-
-    it('re-renders the trigger label when the active locale catalog changes', async () => {
-      const page = await newSpecPage({
-        components: [PdsAvatar],
-        html: `<pds-avatar dropdown="true"></pds-avatar>`,
-      });
-      expect(triggerLabelOf(page)).toBe('Avatar dropdown trigger');
-
-      PineI18n.set('es', { 'pds-avatar.trigger': 'Menú de la cuenta' });
-      PineI18n.setLocale('es');
-      await page.waitForChanges();
-
       expect(triggerLabelOf(page)).toBe('Menú de la cuenta');
     });
   });

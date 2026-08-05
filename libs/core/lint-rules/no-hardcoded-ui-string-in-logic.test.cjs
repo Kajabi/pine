@@ -18,9 +18,9 @@ ruleTester.run('no-hardcoded-ui-string-in-logic', rule, {
     { code: 'function f() { return `${this.componentId}-listbox`; }' },
     { code: 'class C { m() { this.contentMaxHeight = `calc(100vh - ${x}px)`; } }' },
     { code: 'function f() { return `var(--pine-dimension-${gap})`; }' },
-    // already routed through the registry
-    { code: 'class C { m() { this.removalAnnouncement = PineI18n.get("pds-multiselect.itemRemoved", { item }); } }' },
-    { code: 'function f() { return PineI18n.plural("pds-multiselect.itemCount", n); }' },
+    // driven from a prop via the i18n helpers
+    { code: 'class C { m() { this.removalAnnouncement = formatMessage(this.itemRemovedLabel, { item }); } }' },
+    { code: 'function f() { return pluralize(this.el, n, forms); }' },
     // single-word assignment to a non-user-facing prop
     { code: 'class C { m() { this.variant = "default"; } }' },
   ],

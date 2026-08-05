@@ -1,6 +1,5 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { PdsAlert } from '../pds-alert';
-import { PineI18n } from '../../../i18n';
 
 describe('pds-alert', () => {
   it('renders', async () => {
@@ -161,15 +160,11 @@ describe('pds-alert', () => {
     }
   });
 
-  describe('i18n (PineI18n pass-through)', () => {
-    afterEach(() => {
-      PineI18n.reset();
-    });
-
+  describe('i18n (dismissLabel prop)', () => {
     const dismissLabelOf = (page: { root: HTMLElement }) =>
       page.root.shadowRoot.querySelector('.pds-alert__dismiss')?.getAttribute('aria-label');
 
-    it('uses the localized default aria-label on the dismiss button', async () => {
+    it('defaults the dismiss aria-label to English', async () => {
       const page = await newSpecPage({
         components: [PdsAlert],
         html: `<pds-alert dismissible="true"></pds-alert>`,
@@ -177,36 +172,12 @@ describe('pds-alert', () => {
       expect(dismissLabelOf(page)).toBe('Dismiss alert');
     });
 
-    it('lets a per-instance dismiss-label prop override the default', async () => {
+    it('uses a translated dismiss-label when provided', async () => {
       const page = await newSpecPage({
         components: [PdsAlert],
-        html: `<pds-alert dismissible="true" dismiss-label="Close this"></pds-alert>`,
+        html: `<pds-alert dismissible="true" dismiss-label="Descartar alerta"></pds-alert>`,
       });
-      expect(dismissLabelOf(page)).toBe('Close this');
-    });
-
-    it('re-renders the dismiss label when the active locale catalog changes', async () => {
-      const page = await newSpecPage({
-        components: [PdsAlert],
-        html: `<pds-alert dismissible="true"></pds-alert>`,
-      });
-      expect(dismissLabelOf(page)).toBe('Dismiss alert');
-
-      PineI18n.set('es', { 'pds-alert.dismiss': 'Descartar alerta' });
-      PineI18n.setLocale('es');
-      await page.waitForChanges();
-
       expect(dismissLabelOf(page)).toBe('Descartar alerta');
-    });
-
-    it('prop still wins over an active locale catalog', async () => {
-      PineI18n.set('es', { 'pds-alert.dismiss': 'Descartar alerta' });
-      PineI18n.setLocale('es');
-      const page = await newSpecPage({
-        components: [PdsAlert],
-        html: `<pds-alert dismissible="true" dismiss-label="Fermer"></pds-alert>`,
-      });
-      expect(dismissLabelOf(page)).toBe('Fermer');
     });
   });
 
