@@ -62,7 +62,9 @@ export function pluralize(
     /* invalid locale tag → fall back to 'other' */
   }
   // Prefer the selected category, then the required `other`, then `one`; never
-  // return empty — a bare `{count}` still shows the number rather than nothing.
-  const template = forms[category] ?? forms.other ?? forms.one ?? '{count}';
+  // return empty. `||` (not `??`) so an empty-string form is skipped too, not
+  // treated as present — a bare `{count}` still shows the number rather than
+  // leaving the trigger with no accessible name.
+  const template = forms[category] || forms.other || forms.one || '{count}';
   return formatMessage(template, { count, ...vars });
 }

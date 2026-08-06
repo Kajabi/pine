@@ -70,5 +70,10 @@ describe('i18n-format', () => {
     it('never returns empty — falls back to the bare {count} when no usable form exists', () => {
       expect(pluralize(null, 3, {})).toBe('3');
     });
+
+    it('skips empty-string forms (not just missing ones) so the result is never blank', () => {
+      expect(pluralize(null, 1, { one: '', other: '' })).toBe('1');
+      expect(pluralize(null, 1, { one: '', other: '{count} items' })).toBe('1 items');
+    });
   });
 });
